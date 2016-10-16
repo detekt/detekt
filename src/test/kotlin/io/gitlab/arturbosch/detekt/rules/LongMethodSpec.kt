@@ -1,0 +1,23 @@
+package io.gitlab.arturbosch.detekt.rules
+
+import io.gitlab.arturbosch.detekt.Case
+import io.gitlab.arturbosch.detekt.load
+import org.jetbrains.spek.api.SubjectSpek
+import org.jetbrains.spek.api.dsl.describe
+import org.jetbrains.spek.api.dsl.it
+import kotlin.test.assertEquals
+
+/**
+ * @author Artur Bosch
+ */
+class LongMethodSpec : SubjectSpek<LongMethod>({
+	subject { LongMethod() }
+
+	describe("nested functions can be long") {
+		it("should find two long methods") {
+			val root = load(Case.NestedLongMethods)
+			subject.visit(root)
+			assertEquals(subject.findings.size, 2)
+		}
+	}
+})
