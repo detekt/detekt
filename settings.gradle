@@ -1,2 +1,6 @@
 rootProject.name = 'detekt'
+include 'detekt-api'
+include 'detekt-core'
+include 'detekt-rules'
+include 'detekt-cli'
 
