@@ -20,4 +20,13 @@ class LongMethodSpec : SubjectSpek<LongMethod>({
 			assertEquals(subject.findings.size, 2)
 		}
 	}
+
+	describe("nested classes can contain long methods") {
+		it("should detect one nested long method") {
+			val root = load(Case.NestedClasses)
+			subject.visit(root)
+			assertEquals(subject.findings.size, 1)
+		}
+
+	}
 })

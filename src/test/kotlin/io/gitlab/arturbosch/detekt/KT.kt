@@ -15,6 +15,7 @@ private val compiler = KtCompiler()
 enum class Case(val file: String) {
 	CasesFolder("/cases"),
 	Default("/cases/Default.kt"),
+	NestedClasses("/cases/NestedClasses.kt"),
 	NestedLongMethods("/cases/NestedLongMethods.kt");
 
 	fun path(): Path = Paths.get(Case::class.java.getResource(file).path)
