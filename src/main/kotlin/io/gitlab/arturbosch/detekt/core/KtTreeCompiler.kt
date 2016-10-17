@@ -27,7 +27,7 @@ class KtTreeCompiler(val project: Path,
 			)
 		} else {
 			throw IllegalArgumentException("Provided project path $project is not a file/dir." +
-					" Defekt cannot work with it!")
+					" Detekt cannot work with it!")
 		}
 	}
 

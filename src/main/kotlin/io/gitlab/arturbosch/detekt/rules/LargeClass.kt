@@ -42,6 +42,7 @@ class LargeClass(threshold: Int = 70) : MetricThresholdCodeSmellRule("LargeClass
 	}
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
+		if (function.isTopLevel) return
 		val body: KtBlockExpression? = function.bodyExpression.asBlockExpression()
 		body?.let { addToHead(body.statements.size) }
 		super.visitNamedFunction(function)

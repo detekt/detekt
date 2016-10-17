@@ -26,7 +26,10 @@ open class Detekt(project: Path,
 	fun run(): Map<String, List<Finding>> {
 		val ktFiles = compiler.compile()
 		val providers = loadProviders()
-		return providers.map { it.instance().acceptAll(ktFiles) }.toMap()
+		val futures = providers.map {
+			task { it.instance().acceptAll(ktFiles) }
+		}
+		return awaitAll(futures).toMap()
 	}
 
 	private fun loadProviders(): ServiceLoader<RuleSetProvider> {
