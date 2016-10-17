@@ -153,3 +153,4 @@ target/
 /classes/
 /out/
 /src/test/kotlin/io/gitlab/arturbosch/detekt/ReproduceSpec.kt
+*/build/
