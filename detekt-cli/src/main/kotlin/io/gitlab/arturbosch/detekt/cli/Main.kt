@@ -1,30 +1,57 @@
 package io.gitlab.arturbosch.detekt.cli
 
+import com.beust.jcommander.JCommander
+import com.beust.jcommander.Parameter
+import com.beust.jcommander.ParameterException
 import io.gitlab.arturbosch.detekt.core.Detekt
-import java.nio.file.Files
+import io.gitlab.arturbosch.detekt.core.PathFilter
 import java.nio.file.Path
-import java.nio.file.Paths
 
 /**
  * @author Artur Bosch
  */
+private class CLI {
+
+	@Parameter(names = arrayOf("--project", "-p"), required = true,
+			converter = PathConverter::class, description = "Project path to analyze (path/to/project).")
+	lateinit var project: Path
+
+	@Parameter(names = arrayOf("--filters", "-f"), description = "Path filters defined through regex with separator ';' (\".*test.*\").")
+	val filters: String = "" // Using a converter for List<PathFilter> resulted into a ClassClassException
+
+	@Parameter(names = arrayOf("--config", "-c"), description = "Path to the config file (path/to/config).",
+			converter = PathConverter::class)
+	var config: Path? = null
+
+	@Parameter(names = arrayOf("--help", "-h"), help = true, description = "Shows the usage.")
+	var help: Boolean = false
+
+}
+
 fun main(args: Array<String>) {
-	val params = validateArguments(args)
-	val results = Detekt(params.path, pathFilters = params.filters).run()
+	val cli = parseAndValidateArgs(args)
+	val pathFilters = cli.filters.split(";").map(::PathFilter)
+	val results = Detekt(cli.project, pathFilters = pathFilters).run()
 	printFindings(results)
 }
 
-data class Params(val path: Path, val filters: List<String>)
+private fun parseAndValidateArgs(args: Array<String>): CLI {
+	val cli = CLI()
+	val jCommander = JCommander(cli)
+	jCommander.setProgramName("detekt")
 
-private fun validateArguments(args: Array<String>): Params {
-	if (args.size == 0)
-		throw IllegalArgumentException("You have to specify a project path as minimal configuration")
+	try {
+		jCommander.parse(*args)
+	} catch (ex: ParameterException) {
+		println(ex.message)
+		println()
+		jCommander.usage()
+		System.exit(-1)
+	}
 
-	val project = Paths.get(args[0])
-	if (Files.notExists(project))
-		throw IllegalArgumentException("Provided project path does not exist!")
-
-	val filters = if (args.size == 2) args[1].split("[,.;:]") else listOf()
-
-	return Params(project, filters)
+	if (cli.help) {
+		jCommander.usage()
+		System.exit(-1)
+	}
+	return cli
 }

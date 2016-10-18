@@ -40,6 +40,7 @@ dependencies {
 	compile project(':detekt-core')
 	compile project(':detekt-rules')
 	compile project(':detekt-api')
+	compile "com.beust:jcommander:1.48"
 	compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 	compile "org.jetbrains.kotlin:kotlin-compiler:$kotlin_version"
 	testCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"

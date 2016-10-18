@@ -11,16 +11,15 @@ import java.util.ServiceLoader
  * @author Artur Bosch
  */
 class Detekt(project: Path,
-				  val ruleSets: List<Path> = listOf(),
-				  pathFilters: List<String> = listOf(),
-				  parallelCompilation: Boolean = false) {
+			 val ruleSets: List<Path> = listOf(),
+			 pathFilters: List<PathFilter> = listOf(),
+			 parallelCompilation: Boolean = false) {
 
 	private val compiler: KtTreeCompiler
 
 	init {
 		require(Files.exists(project)) { "Given project path does not exist!" }
-		val filters = pathFilters.map(::PathFilter)
-		compiler = KtTreeCompiler(project, filters, parallelCompilation)
+		compiler = KtTreeCompiler(project, pathFilters, parallelCompilation)
 	}
 
 	fun run(): Map<String, List<Finding>> {
