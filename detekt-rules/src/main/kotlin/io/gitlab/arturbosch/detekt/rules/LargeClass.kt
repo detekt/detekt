@@ -1,8 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
+import io.gitlab.arturbosch.detekt.api.CodeSmellThresholdRule
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Location
-import io.gitlab.arturbosch.detekt.api.MetricThresholdCodeSmellRule
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -17,7 +18,7 @@ import java.util.ArrayDeque
 /**
  * @author Artur Bosch
  */
-class LargeClass(threshold: Int = 70) : MetricThresholdCodeSmellRule("LargeClass", threshold) {
+class LargeClass(config: Config = Config.EMPTY, threshold: Int = 70) : CodeSmellThresholdRule("LargeClass", config, threshold) {
 
 	private val locStack = ArrayDeque<Int>()
 
@@ -36,7 +37,7 @@ class LargeClass(threshold: Int = 70) : MetricThresholdCodeSmellRule("LargeClass
 		}
 		incHead() // for class body
 		super.visitClassOrObject(classOrObject)
-		if (locStack.pop() > 70) {
+		if (locStack.pop() > threshold) {
 			addFindings(CodeSmell(id, Location.of(classOrObject)))
 		}
 	}

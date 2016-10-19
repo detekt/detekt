@@ -15,11 +15,7 @@ class ConfigSpec : Spek({
 
 	describe("load yaml config") {
 		val configPath = Paths.get(ConfigSpec::class.java.getResource("/detekt.yml").path)
-		val config = Config.load(configPath)
-
-		it("should successfully load map of string to any with size two") {
-			assertTrue { config.properties.size == 2 }
-		}
+		val config = YamlConfig.load(configPath)
 
 		it("should create a sub config") {
 			try {
@@ -38,7 +34,6 @@ class ConfigSpec : Spek({
 			try {
 				val subConfig = config.subConfig("style")
 				val subSubConfig = subConfig.subConfig("WildcardImport")
-				assertTrue { subSubConfig.properties["active"] as Boolean }
 				assertTrue { subSubConfig.valueOrDefault("active") { false } }
 				assertTrue { subSubConfig.valueOrDefault("NotFound") { true } }
 			} catch (ignored: Config.InvalidConfigurationError) {

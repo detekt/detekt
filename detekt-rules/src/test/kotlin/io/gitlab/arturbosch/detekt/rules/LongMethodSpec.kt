@@ -9,7 +9,7 @@ import kotlin.test.assertEquals
  * @author Artur Bosch
  */
 class LongMethodSpec : SubjectSpek<LongMethod>({
-	subject { LongMethod() }
+	subject { LongMethod(threshold = 10) }
 
 	describe("nested functions can be long") {
 		it("should find two long methods") {

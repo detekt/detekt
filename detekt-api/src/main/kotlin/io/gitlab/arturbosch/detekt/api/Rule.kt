@@ -5,11 +5,15 @@ import com.intellij.lang.ASTNode
 /**
  * @author Artur Bosch
  */
-abstract class Rule(val id: String, val severity: Severity = Rule.Severity.Minor) : KastVisitor() {
+abstract class Rule(val id: String,
+					val severity: Severity = Rule.Severity.Minor,
+					val config: Config = Config.EMPTY) : KastVisitor() {
 
 	enum class Severity {
 		CodeSmell, Style, Warning, Defect, Minor, Major, Security
 	}
+
+	private val active = config.valueOrDefault("active") { true }
 
 	private var _findings: MutableList<Finding> = mutableListOf()
 	val findings: List<Finding>
@@ -20,10 +24,18 @@ abstract class Rule(val id: String, val severity: Severity = Rule.Severity.Minor
 	}
 
 	open fun visit(root: ASTNode) {
-		clearFindings()
-		preVisit(root)
-		root.visit(this)
-		postVisit(root)
+		ifRuleActive {
+			preVisit(root)
+			root.visit(this)
+			postVisit(root)
+		}
+	}
+
+	internal fun ifRuleActive(block: () -> Unit) {
+		if (active) {
+			clearFindings()
+			block()
+		}
 	}
 
 	internal fun clearFindings() {

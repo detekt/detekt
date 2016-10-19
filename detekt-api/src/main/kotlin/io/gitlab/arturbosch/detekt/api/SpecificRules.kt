@@ -4,6 +4,8 @@ package io.gitlab.arturbosch.detekt.api
  * @author Artur Bosch
  */
 
-abstract class MetricThresholdRule(id: String, val threshold: Int, severity: Severity = Rule.Severity.Minor) : Rule(id, severity)
+abstract class CodeSmellRule(id: String, config: Config) : Rule(id, Rule.Severity.CodeSmell, config)
 
-abstract class MetricThresholdCodeSmellRule(id: String, threshold: Int) : MetricThresholdRule(id, threshold, Rule.Severity.CodeSmell)
+abstract class CodeSmellThresholdRule(id: String, config: Config, threshold: Int) : CodeSmellRule(id, config) {
+	protected val threshold = config.valueOrDefault("threshold") { threshold }
+}

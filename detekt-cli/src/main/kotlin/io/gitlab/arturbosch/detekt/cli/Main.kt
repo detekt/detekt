@@ -4,6 +4,7 @@ import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.ParameterException
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.YamlConfig
 import io.gitlab.arturbosch.detekt.core.Detekt
 import io.gitlab.arturbosch.detekt.core.PathFilter
 import java.nio.file.Path
@@ -18,7 +19,7 @@ private class Main {
 	private lateinit var project: Path
 
 	@Parameter(names = arrayOf("--filters", "-f"), description = "Path filters defined through regex with separator ';' (\".*test.*\").")
-	private val filters: String = "" // Using a converter for List<PathFilter> resulted into a ClassClassException
+	private val filters: String = "" // Using a converter for List<PathFilter> resulted into a ClassCastException
 
 	@Parameter(names = arrayOf("--config", "-c"), description = "Path to the config file (path/to/config).",
 			converter = PathConverter::class)
@@ -34,7 +35,7 @@ private class Main {
 			val cli = parseAndValidateArgs(args)
 			val pathFilters = cli.filters.split(";").map(::PathFilter)
 			val configPath = cli.config
-			val config = if (configPath != null) Config.load(configPath) else Config.EMPTY
+			val config = if (configPath != null) YamlConfig.load(configPath) else Config.EMPTY
 			val results = Detekt(cli.project, config, pathFilters = pathFilters).run()
 			printFindings(results)
 		}

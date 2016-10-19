@@ -9,7 +9,6 @@ import java.nio.file.Paths
 /**
  * @author Artur Bosch
  */
-
 class PathConverter : IStringConverter<Path> {
 	override fun convert(value: String): Path {
 		val config = Paths.get(value)

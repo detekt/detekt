@@ -1,15 +1,16 @@
 package io.gitlab.arturbosch.detekt.rules
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
+import io.gitlab.arturbosch.detekt.api.CodeSmellThresholdRule
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Location
-import io.gitlab.arturbosch.detekt.api.MetricThresholdCodeSmellRule
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
  * @author Artur Bosch
  */
-class LongMethod(threshold: Int = 10) : MetricThresholdCodeSmellRule("LongMethod", threshold) {
+class LongMethod(config: Config = Config.EMPTY, threshold: Int = 20) : CodeSmellThresholdRule("LongMethod", config, threshold) {
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		val body: KtBlockExpression? = function.bodyExpression.asBlockExpression()

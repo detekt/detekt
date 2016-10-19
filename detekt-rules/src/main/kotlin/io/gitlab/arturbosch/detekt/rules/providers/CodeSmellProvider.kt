@@ -12,10 +12,12 @@ import io.gitlab.arturbosch.detekt.rules.LongParameterList
  */
 class CodeSmellProvider : RuleSetProvider {
 	override fun instance(config: Config): RuleSet {
-		return RuleSet("code-smell", listOf(
-				LongParameterList(),
-				LongMethod(),
-				LargeClass()
+		val providerId = "code-smell"
+		val subConfig = config.subConfig(providerId)
+		return RuleSet(providerId, listOf(
+				LongParameterList(subConfig),
+				LongMethod(subConfig),
+				LargeClass(subConfig)
 		))
 	}
 }
