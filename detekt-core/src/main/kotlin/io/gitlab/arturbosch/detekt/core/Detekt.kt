@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.core
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import java.net.URLClassLoader
@@ -11,6 +12,7 @@ import java.util.ServiceLoader
  * @author Artur Bosch
  */
 class Detekt(project: Path,
+			 val config: Config = Config.EMPTY,
 			 val ruleSets: List<Path> = listOf(),
 			 pathFilters: List<PathFilter> = listOf(),
 			 parallelCompilation: Boolean = false) {
@@ -26,7 +28,7 @@ class Detekt(project: Path,
 		val ktFiles = compiler.compile()
 		val providers = loadProviders()
 		val futures = providers.map {
-			task { it.instance().acceptAll(ktFiles) }
+			task { it.instance(config).acceptAll(ktFiles) }
 		}
 		return awaitAll(futures).toMap()
 	}

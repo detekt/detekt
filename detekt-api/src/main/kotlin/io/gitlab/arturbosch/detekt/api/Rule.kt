@@ -20,16 +20,20 @@ abstract class Rule(val id: String, val severity: Severity = Rule.Severity.Minor
 	}
 
 	open fun visit(root: ASTNode) {
+		clearFindings()
 		preVisit(root)
 		root.visit(this)
 		postVisit(root)
+	}
+
+	internal fun clearFindings() {
+		_findings = mutableListOf()
 	}
 
 	protected open fun postVisit(root: ASTNode) {
 	}
 
 	protected open fun preVisit(root: ASTNode) {
-		_findings = mutableListOf()
 	}
 
 	protected fun addFindings(vararg finding: Finding) {
