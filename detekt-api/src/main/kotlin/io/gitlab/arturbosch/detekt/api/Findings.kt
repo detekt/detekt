@@ -15,9 +15,15 @@ interface Finding {
 	fun compact(): String
 }
 
-data class CodeSmell(override val id: String, val location: Location) : Finding {
+class ThresholdedCodeSmell(id: String, location: Location, val value: Int, val threshold: Int) : CodeSmell(id, location) {
 	override fun compact(): String {
-		return "$id - ${location.text} - ${location.file}"
+		return "$id - $value/$threshold - l/c${location.source} - ${location.text} - ${location.file}"
+	}
+}
+
+open class CodeSmell(override val id: String, val location: Location) : Finding {
+	override fun compact(): String {
+		return "$id - l/c${location.source} - ${location.text} - ${location.file}"
 	}
 }
 
