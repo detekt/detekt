@@ -11,8 +11,8 @@ import org.jetbrains.spek.api.dsl.it
 /**
  * @author Artur Bosch
  */
-class UselessSemicolonSpec : SubjectSpek<UselessSemicolon>({
-	subject { UselessSemicolon() }
+class UselessSemicolonSpec : SubjectSpek<OptionalSemicolon>({
+	subject { OptionalSemicolon() }
 
 	describe("common semicolon cases") {
 		it("finds useless semicolon") {
@@ -51,7 +51,7 @@ class UselessSemicolonSpec : SubjectSpek<UselessSemicolon>({
 
 })
 
-private fun SubjectDsl<UselessSemicolon>.execute(code: String) {
+private fun SubjectDsl<OptionalSemicolon>.execute(code: String) {
 	val root = loadAsFile(code)
 	subject.visit(root)
 }

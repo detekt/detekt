@@ -27,6 +27,10 @@ class Default {
 		ArrayList<Any>()
 	}
 
+	fun returnsUnit(): Unit {
+
+	}
+
 	/**
 	 * 8, no else
 	 */
