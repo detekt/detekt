@@ -27,7 +27,7 @@ echo.
 echo ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH.
 echo.
 echo Please set the JAVA_HOME variable in your environment to match the
-echo location of your Java installation.
+echo location from your Java installation.
 
 goto fail
 
@@ -41,7 +41,7 @@ echo.
 echo ERROR: JAVA_HOME is set to an invalid directory: %JAVA_HOME%
 echo.
 echo Please set the JAVA_HOME variable in your environment to match the
-echo location of your Java installation.
+echo location from your Java installation.
 
 goto fail
 
@@ -79,7 +79,7 @@ set CLASSPATH=%APP_HOME%\gradle\wrapper\gradle-wrapper.jar
 if "%ERRORLEVEL%"=="0" goto mainEnd
 
 :fail
-rem Set variable GRADLE_EXIT_CONSOLE if you need the _script_ return code instead of
+rem Set variable GRADLE_EXIT_CONSOLE if you need the _script_ return code instead from
 rem the _cmd.exe /c_ return code!
 if  not "" == "%GRADLE_EXIT_CONSOLE%" exit 1
 exit /b 1

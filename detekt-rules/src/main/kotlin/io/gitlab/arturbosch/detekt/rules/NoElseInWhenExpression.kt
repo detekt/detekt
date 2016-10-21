@@ -12,7 +12,7 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
 class NoElseInWhenExpression(config: Config = Config.EMPTY) : Rule("NoElseInWhenExpression", Severity.Defect, config) {
 
 	override fun visitWhenExpression(expression: KtWhenExpression) {
-		if (expression.elseExpression == null) addFindings(CodeSmell(id, Location.of(expression)))
+		if (expression.elseExpression == null) addFindings(CodeSmell(id, Location.from(expression)))
 	}
 
 }

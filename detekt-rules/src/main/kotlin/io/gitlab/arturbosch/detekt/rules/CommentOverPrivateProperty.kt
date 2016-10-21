@@ -16,7 +16,7 @@ class CommentOverPrivateProperty(config: Config = Config.EMPTY) : CodeSmellRule(
 		val modifierList = property.modifierList
 		if (modifierList != null && property.docComment != null) {
 			if (modifierList.hasModifier(KtTokens.PRIVATE_KEYWORD)) {
-				addFindings(CodeSmell(id, Location.of(property.docComment!!)))
+				addFindings(CodeSmell(id, Location.from(property.docComment!!)))
 			}
 		}
 	}

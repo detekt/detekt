@@ -38,7 +38,7 @@ class LargeClass(config: Config = Config.EMPTY, threshold: Int = 70) : CodeSmell
 		incHead() // for class body
 		super.visitClassOrObject(classOrObject)
 		if (locStack.pop() > threshold) {
-			addFindings(CodeSmell(id, Location.of(classOrObject)))
+			addFindings(CodeSmell(id, Location.from(classOrObject)))
 		}
 	}
 

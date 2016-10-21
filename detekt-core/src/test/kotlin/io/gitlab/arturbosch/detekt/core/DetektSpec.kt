@@ -14,7 +14,7 @@ class DetektSpec : Spek({
 
 		val detekt = Detekt(path)
 
-		it("should detect findings of more than one provider") {
+		it("should detect findings from more than one provider") {
 			assertTrue { detekt.run().size >= 1 }
 		}
 

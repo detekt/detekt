@@ -16,7 +16,7 @@ class LongMethod(config: Config = Config.EMPTY, threshold: Int = 20) : CodeSmell
 		val body: KtBlockExpression? = function.bodyExpression.asBlockExpression()
 		body?.let {
 			val size = body.statements.size
-			if (size > threshold) addFindings(CodeSmell(id, Location.of(function)))
+			if (size > threshold) addFindings(CodeSmell(id, Location.from(function)))
 		}
 		super.visitNamedFunction(function)
 	}

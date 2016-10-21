@@ -10,7 +10,7 @@ interface Config {
 	fun <T : Any> valueOrDefault(key: String, default: () -> T): T
 
 	class InvalidConfigurationError(msg: String = "Provided configuration file is invalid:" +
-			" Structure must be of type Map<String,Any>!") : RuntimeException(msg)
+			" Structure must be from type Map<String,Any>!") : RuntimeException(msg)
 
 	companion object {
 		val EMPTY: Config = YamlConfig(mapOf())

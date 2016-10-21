@@ -13,7 +13,7 @@ class LongParameterList(config: Config = Config.EMPTY, threshold: Int = 5) : Cod
 
 	override fun visitParameterList(list: KtParameterList) {
 		if (list.parameters.size > threshold) {
-			addFindings(CodeSmell(id, Location.of(list)))
+			addFindings(CodeSmell(id, Location.from(list)))
 		}
 	}
 }

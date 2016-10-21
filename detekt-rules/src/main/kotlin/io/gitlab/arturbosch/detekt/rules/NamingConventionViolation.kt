@@ -23,13 +23,13 @@ class NamingConventionViolation(config: Config = Config.EMPTY) : Rule("NamingCon
 		declaration.nameIdentifier?.parent?.javaClass?.let {
 			val name = declaration.nameAsSafeName.asString()
 			if (declaration is KtVariableDeclaration && !name.matches(variablePattern)) {
-				addFindings(CodeSmell(id, Location.of(declaration)))
+				addFindings(CodeSmell(id, Location.from(declaration)))
 			}
 			if (declaration is KtNamedFunction && !name.matches(methodPattern)) {
-				addFindings(CodeSmell(id, Location.of(declaration)))
+				addFindings(CodeSmell(id, Location.from(declaration)))
 			}
 			if (declaration is KtClassOrObject && !name.matches(classPattern)) {
-				addFindings(CodeSmell(id, Location.of(declaration)))
+				addFindings(CodeSmell(id, Location.from(declaration)))
 			}
 		}
 		super.visitNamedDeclaration(declaration)
