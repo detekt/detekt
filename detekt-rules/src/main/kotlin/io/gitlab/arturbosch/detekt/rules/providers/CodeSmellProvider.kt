@@ -3,8 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.providers
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.rules.CommentOverPrivateMethod
-import io.gitlab.arturbosch.detekt.rules.CommentOverPrivateProperty
 import io.gitlab.arturbosch.detekt.rules.ComplexMethod
 import io.gitlab.arturbosch.detekt.rules.LargeClass
 import io.gitlab.arturbosch.detekt.rules.LongMethod
@@ -21,8 +19,6 @@ class CodeSmellProvider : RuleSetProvider {
 				LongParameterList(subConfig),
 				LongMethod(subConfig),
 				LargeClass(subConfig),
-				CommentOverPrivateMethod(config),
-				CommentOverPrivateProperty(config),
 				ComplexMethod(config)
 		))
 	}
