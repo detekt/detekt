@@ -29,4 +29,8 @@ class KtCompiler {
 		val content = String(Files.readAllBytes(file))
 		return psiFileFactory.createFileFromText(file.fileName.toString(), KotlinLanguage.INSTANCE, content) as KtFile
 	}
+
+	fun compileFromText(content: String): KtFile {
+		return psiFileFactory.createFileFromText(KotlinLanguage.INSTANCE, content) as KtFile
+	}
 }

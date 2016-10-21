@@ -23,3 +23,8 @@ enum class Case(val file: String) {
 fun load(case: Case): ASTNode {
 	return compiler.compile(case.path()).node
 }
+
+fun loadAsFile(content: String): ASTNode {
+	return compiler.compileFromText(content).node
+}
+

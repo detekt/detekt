@@ -9,6 +9,18 @@ import java.util.*
 class Default {
 
 	/**
+	 * Documented!
+	 */
+	private val documented = "comment smell!"
+
+	/**
+	 * Comment smell!
+	 */
+	private fun documented() {
+
+	}
+
+	/**
 	 * Used for wildcard import spec
 	 */
 	fun noop() {

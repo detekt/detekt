@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.api
 
+import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.diagnostics.DiagnosticUtils
-import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
 import org.jetbrains.kotlin.psi.psiUtil.getTextWithLocation
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
@@ -27,16 +27,17 @@ data class Location(val source: SourceLocation,
 					val file: String) {
 
 	companion object {
-		fun of(element: KtElement): Location {
+
+		fun of(element: PsiElement): Location {
 			val start = startLineAndColumn(element)
 			val sourceLocation = SourceLocation(start.line, start.column)
 			val textLocation = TextLocation(element.startOffset, element.endOffset)
 			return Location(sourceLocation, textLocation,
-					element.getTextWithLocation(), element.getContainingKtFile().name)
+					element.getTextWithLocation(), element.containingFile.name)
 		}
 
-		private fun startLineAndColumn(element: KtElement) = DiagnosticUtils.getLineAndColumnInPsiFile(
-				element.getContainingKtFile(), element.textRange)
+		private fun startLineAndColumn(element: PsiElement) = DiagnosticUtils.getLineAndColumnInPsiFile(
+				element.containingFile, element.textRange)
 	}
 
 }

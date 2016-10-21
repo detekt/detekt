@@ -34,6 +34,7 @@ dependencies {
 	compile "org.jetbrains.kotlin:kotlin-compiler:$kotlin_version"
 	testCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
 	testCompile "org.jetbrains.spek:spek-api:$spek_version"
+	testCompile 'com.natpryce:hamkrest:1.2.3.0'
 	testRuntime 'org.junit.platform:junit-platform-launcher:1.0.0-M2'
 	testRuntime "org.jetbrains.spek:spek-junit-platform-engine:$spek_version"
 }
