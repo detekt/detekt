@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules
 
 import io.gitlab.arturbosch.detekt.api.CodeSmellThresholdRule
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.KastVisitor
+import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -24,7 +24,7 @@ class ComplexMethod(config: Config = Config.EMPTY, threshold: Int = 10) : CodeSm
 		}
 	}
 
-	internal class MccVisitor : KastVisitor() {
+	internal class MccVisitor : DetektVisitor() {
 
 		private var mcc = 1
 

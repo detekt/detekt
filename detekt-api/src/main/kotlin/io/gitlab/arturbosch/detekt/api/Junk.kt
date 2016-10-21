@@ -19,6 +19,6 @@ fun ASTNode.visitTokens(currentNode: (node: ASTNode) -> Unit) {
 	getChildren(null).forEach { it.visitTokens(currentNode) }
 }
 
-fun ASTNode.visit(visitor: KastVisitor) {
+fun ASTNode.visit(visitor: DetektVisitor) {
 	KtPsiUtil.visitChildren(this.psi as KtElement, visitor, null)
 }

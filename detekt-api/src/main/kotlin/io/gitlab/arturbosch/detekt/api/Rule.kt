@@ -7,7 +7,7 @@ import com.intellij.lang.ASTNode
  */
 abstract class Rule(val id: String,
 					val severity: Severity = Rule.Severity.Minor,
-					val config: Config = Config.EMPTY) : KastVisitor() {
+					val config: Config = Config.EMPTY) : DetektVisitor() {
 
 	enum class Severity {
 		CodeSmell, Style, Warning, Defect, Minor, Maintainability, Security

@@ -44,9 +44,9 @@ class ThresholdedCodeSmell(id: String, entity: Entity, val value: Int, val thres
 
 open class CodeSmell(override val id: String,
 					 override val entity: Entity,
+					 override val description: String = "",
 					 override val metrics: List<Metric> = listOf(),
 					 override val references: List<Entity> = listOf()) : Finding {
-	override val description: String = ""
 	override fun compact(): String {
 		return "$id - ${entity.compact()}"
 	}
