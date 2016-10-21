@@ -15,7 +15,6 @@ class NamingConventionViolationSpec : SubjectSpek<NamingConventionViolation>({
 	it("should find all wrong namings") {
 		val root = load(Case.NamingConventions)
 		subject.visit(root)
-		subject.findings.map { it.compact() }.forEach { println(it) }
 		assertThat(subject.findings, hasSize(equalTo(9)))
 	}
 
