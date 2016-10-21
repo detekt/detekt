@@ -10,7 +10,7 @@ abstract class Rule(val id: String,
 					val config: Config = Config.EMPTY) : KastVisitor() {
 
 	enum class Severity {
-		CodeSmell, Style, Warning, Defect, Minor, Major, Security
+		CodeSmell, Style, Warning, Defect, Minor, Maintainability, Security
 	}
 
 	private val active = config.valueOrDefault("active") { true }

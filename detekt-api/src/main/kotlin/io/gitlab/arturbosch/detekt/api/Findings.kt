@@ -34,6 +34,15 @@ data class Location(val source: SourceLocation,
 
 	companion object {
 
+		fun from(startElement: PsiElement, endElementExclusively: PsiElement?): Location {
+			if (endElementExclusively == null) return of(startElement)
+			val start = startLineAndColumn(startElement)
+			val sourceLocation = SourceLocation(start.line, start.column)
+			val textLocation = TextLocation(startElement.startOffset, endElementExclusively.startOffset - 1)
+			return Location(sourceLocation, textLocation,
+					startElement.getTextWithLocation(), startElement.containingFile.name)
+		}
+
 		fun of(element: PsiElement): Location {
 			val start = startLineAndColumn(element)
 			val sourceLocation = SourceLocation(start.line, start.column)

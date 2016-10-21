@@ -16,6 +16,7 @@ enum class Case(val file: String) {
 	Default("/cases/Default.kt"),
 	NamingConventions("/cases/NamingConventions.kt"),
 	ComplexClass("/cases/ComplexClass.kt"),
+	Comments("/cases/Comments.kt"),
 	NestedClasses("/cases/NestedClasses.kt"),
 	NestedLongMethods("/cases/NestedLongMethods.kt");
 
