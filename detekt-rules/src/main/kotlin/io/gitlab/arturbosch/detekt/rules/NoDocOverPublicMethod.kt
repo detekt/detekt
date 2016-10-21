@@ -4,8 +4,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
-import org.jetbrains.kotlin.lexer.KtTokens
-import org.jetbrains.kotlin.psi.KtModifierList
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
@@ -21,7 +19,7 @@ class NoDocOverPublicMethod(config: Config = Config.EMPTY) : Rule("NoDocOverPubl
 				addFindings(CodeSmell(id, methodHeaderLocation(function)))
 			}
 			if (modifierList != null) {
-				if (modifierList.mustBePublic()) {
+				if (function.isPublicNotOverriden()) {
 					addFindings(CodeSmell(id, methodHeaderLocation(function)))
 				}
 			}
@@ -30,7 +28,4 @@ class NoDocOverPublicMethod(config: Config = Config.EMPTY) : Rule("NoDocOverPubl
 
 	private fun methodHeaderLocation(function: KtNamedFunction) = Location.from(function, function.colon)
 
-	private fun KtModifierList.mustBePublic() = (this.hasModifier(KtTokens.PRIVATE_KEYWORD)
-			|| this.hasModifier(KtTokens.PROTECTED_KEYWORD)
-			|| this.hasModifier(KtTokens.INTERNAL_KEYWORD)).not()
 }
