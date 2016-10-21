@@ -18,5 +18,5 @@ abstract class TokenRule(id: String,
 		}
 	}
 
-	abstract fun procedure(node: ASTNode): Unit
+	abstract fun procedure(node: ASTNode)
 }

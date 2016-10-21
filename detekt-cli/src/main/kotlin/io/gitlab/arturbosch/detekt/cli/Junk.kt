@@ -6,11 +6,11 @@ import io.gitlab.arturbosch.detekt.api.Finding
  * @author Artur Bosch
  */
 
-inline fun <T> Collection<T>.each(action: (T) -> Unit): Unit {
+inline fun <T> Collection<T>.each(action: (T) -> Unit) {
 	for (element in this) action(element)
 }
 
-fun Any?.print(prefix: String = "", suffix: String = ""): Unit {
+fun Any?.print(prefix: String = "", suffix: String = "") {
 	println("$prefix$this$suffix")
 }
 
