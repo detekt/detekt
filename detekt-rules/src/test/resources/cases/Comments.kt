@@ -6,6 +6,7 @@ package cases
 @Suppress("unused")
 open class Comments {
 
+	public class INeedComment
 	private class NoNeedForComments{}
 
 	fun ohNoComment() {}
