@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Location
+import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
@@ -26,6 +26,6 @@ class NoDocOverPublicMethod(config: Config = Config.EMPTY) : Rule("NoDocOverPubl
 		}
 	}
 
-	private fun methodHeaderLocation(function: KtNamedFunction) = Location.from(function, function.colon)
+	private fun methodHeaderLocation(function: KtNamedFunction) = Entity.from(function, function.colon)
 
 }

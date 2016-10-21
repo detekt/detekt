@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Location
+import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
@@ -23,13 +23,13 @@ class NamingConventionViolation(config: Config = Config.EMPTY) : Rule("NamingCon
 		declaration.nameIdentifier?.parent?.javaClass?.let {
 			val name = declaration.nameAsSafeName.asString()
 			if (declaration is KtVariableDeclaration && !name.matches(variablePattern)) {
-				addFindings(CodeSmell(id, Location.from(declaration)))
+				addFindings(CodeSmell(id, Entity.from(declaration)))
 			}
 			if (declaration is KtNamedFunction && !name.matches(methodPattern)) {
-				addFindings(CodeSmell(id, Location.from(declaration)))
+				addFindings(CodeSmell(id, Entity.from(declaration)))
 			}
 			if (declaration is KtClassOrObject && !name.matches(classPattern)) {
-				addFindings(CodeSmell(id, Location.from(declaration)))
+				addFindings(CodeSmell(id, Entity.from(declaration)))
 			}
 		}
 		super.visitNamedDeclaration(declaration)

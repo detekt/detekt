@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.CodeSmellRule
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Location
+import io.gitlab.arturbosch.detekt.api.Entity
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtProperty
 
@@ -16,7 +16,7 @@ class CommentOverPrivateProperty(config: Config = Config.EMPTY) : CodeSmellRule(
 		val modifierList = property.modifierList
 		if (modifierList != null && property.docComment != null) {
 			if (modifierList.hasModifier(KtTokens.PRIVATE_KEYWORD)) {
-				addFindings(CodeSmell(id, Location.from(property.docComment!!)))
+				addFindings(CodeSmell(id, Entity.from(property.docComment!!)))
 			}
 		}
 	}

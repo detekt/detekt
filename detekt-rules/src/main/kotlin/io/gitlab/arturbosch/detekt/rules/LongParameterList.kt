@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.CodeSmellThresholdRule
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Location
+import io.gitlab.arturbosch.detekt.api.Entity
 import org.jetbrains.kotlin.psi.KtParameterList
 
 /**
@@ -13,7 +13,7 @@ class LongParameterList(config: Config = Config.EMPTY, threshold: Int = 5) : Cod
 
 	override fun visitParameterList(list: KtParameterList) {
 		if (list.parameters.size > threshold) {
-			addFindings(CodeSmell(id, Location.from(list)))
+			addFindings(CodeSmell(id, Entity.from(list)))
 		}
 	}
 }

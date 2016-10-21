@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Location
+import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
@@ -17,7 +17,7 @@ class OptionalUnit(config: Config = Config.EMPTY) : Rule("OptionalUnit", Severit
 			val typeReference = function.typeReference
 			typeReference?.typeElement?.text?.let {
 				if (it == "Unit") {
-					addFindings(CodeSmell(id, Location.from(typeReference)))
+					addFindings(CodeSmell(id, Entity.from(typeReference)))
 				}
 			}
 		}

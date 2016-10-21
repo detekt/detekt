@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.CodeSmellThresholdRule
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Location
+import io.gitlab.arturbosch.detekt.api.Entity
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
@@ -16,7 +16,7 @@ class LongMethod(config: Config = Config.EMPTY, threshold: Int = 20) : CodeSmell
 		val body: KtBlockExpression? = function.bodyExpression.asBlockExpression()
 		body?.let {
 			val size = body.statements.size
-			if (size > threshold) addFindings(CodeSmell(id, Location.from(function)))
+			if (size > threshold) addFindings(CodeSmell(id, Entity.from(function)))
 		}
 		super.visitNamedFunction(function)
 	}

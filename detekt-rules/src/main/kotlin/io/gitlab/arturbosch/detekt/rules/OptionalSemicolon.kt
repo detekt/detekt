@@ -8,7 +8,7 @@ import com.intellij.psi.impl.source.tree.LeafPsiElement
 import com.intellij.psi.util.PsiTreeUtil
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Location
+import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.TokenRule
 import org.jetbrains.kotlin.psi.KtEnumEntry
@@ -24,11 +24,11 @@ class OptionalSemicolon(config: Config = Config.EMPTY) : TokenRule("OptionalSemi
 		val psi = node.psi
 		if (psi.isNoErrorElement() && psi.isNotPartOfEnum() && psi.isNotPartOfString()) {
 			if (psi.isDoubleSemicolon()) {
-				addFindings(CodeSmell(id, Location.from(psi)))
+				addFindings(CodeSmell(id, Entity.from(psi)))
 			} else if (psi.isSemicolon()) {
 				val nextLeaf = PsiTreeUtil.nextLeaf(psi)
 				if (isSemicolonOrEOF(nextLeaf) || nextTokenHasSpaces(nextLeaf)) {
-					addFindings(CodeSmell(id, Location.from(psi)))
+					addFindings(CodeSmell(id, Entity.from(psi)))
 				}
 			}
 		}
