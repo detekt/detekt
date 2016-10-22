@@ -1,0 +1,76 @@
+package io.gitlab.arturbosch.detekt.api
+
+import com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.asJava.namedUnwrappedElement
+import org.jetbrains.kotlin.psi.KtClassOrObject
+import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.psiUtil.endOffset
+import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
+import org.jetbrains.kotlin.psi.psiUtil.parents
+import org.jetbrains.kotlin.psi.psiUtil.startOffset
+
+/**
+ * @author Artur Bosch
+ */
+
+
+internal fun PsiElement.searchName(): String {
+	return this.namedUnwrappedElement?.name ?: "<NoNameFound>"
+}
+
+internal fun PsiElement.searchClass(): String {
+	val classElement = this.getNonStrictParentOfType(KtClassOrObject::class.java)
+	val className = classElement?.name
+	return className ?: this.containingFile.name
+}
+
+internal fun PsiElement.buildFullSignature(): String {
+	val signature = this.searchSignature()
+	val fullClassSignature = this.parents.filter { it is KtClassOrObject }
+			.map { it.searchClass() }
+			.fold("") { sig, sig2 -> "$sig2${dotOrNot(sig, sig2)}$sig" }
+	val filename = this.containingFile.name
+	return (if (!fullClassSignature.startsWith(filename)) filename + "\$" else "") +
+			(if (fullClassSignature.isNotEmpty()) "$fullClassSignature\$$signature" else signature)
+}
+
+internal fun PsiElement.searchSignature(): String {
+	return when (this) {
+		is KtNamedFunction -> buildFunctionSignature(this)
+		is KtClassOrObject -> buildClassSignature(this)
+		else -> this.text
+	}
+}
+
+private fun dotOrNot(sig: String, sig2: String) = if (sig.isNotEmpty() && sig2.isNotEmpty()) "." else ""
+
+private fun buildClassSignature(classOrObject: KtClassOrObject): String {
+	var baseName = classOrObject.nameAsSafeName.asString()
+	val typeParameters = classOrObject.typeParameters
+	if (typeParameters.size > 0) {
+		baseName += "<"
+		baseName += typeParameters.joinToString(", ") { it.text }
+		baseName += ">"
+	}
+	val extendedEntries = classOrObject.getSuperTypeListEntries()
+	if (extendedEntries.size > 0) baseName += " : "
+	extendedEntries.forEach { baseName += it.typeAsUserType?.referencedName ?: "" }
+	return baseName
+}
+
+private fun buildFunctionSignature(element: KtNamedFunction): String {
+	val methodStart = 0
+	var methodEnd = element.endOffset - element.startOffset
+	val typeReference = element.typeReference
+	if (typeReference != null) {
+		methodEnd = typeReference.endOffset - element.startOffset
+	} else {
+		element.valueParameterList?.let {
+			methodEnd = it.endOffset - element.startOffset
+		}
+	}
+	require(methodStart < methodEnd) {
+		"Error building function signature with range $methodStart - $methodEnd for element: ${element.text}"
+	}
+	return element.text.substring(methodStart, methodEnd)
+}
