@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.core
 
 import com.intellij.openapi.util.Disposer
 import com.intellij.psi.PsiFileFactory
+import com.intellij.testFramework.LightVirtualFile
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.config.CompilerConfiguration
@@ -25,9 +26,10 @@ class KtCompiler {
 
 	fun compile(path: Path): KtFile {
 		require(path.isFile()) { "Given path should be a regular file!" }
-		val file = path.normalize()
+		val file = path.normalize().toAbsolutePath()
 		val content = String(Files.readAllBytes(file))
-		return psiFileFactory.createFileFromText(file.fileName.toString(), KotlinLanguage.INSTANCE, content) as KtFile
+		return psiFileFactory.createFileFromText(file.fileName.toString(), KotlinLanguage.INSTANCE,
+				content, true, true, false, LightVirtualFile(file.toString())) as KtFile
 	}
 
 	fun compileFromText(content: String): KtFile {

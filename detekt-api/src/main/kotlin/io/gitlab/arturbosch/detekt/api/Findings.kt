@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.api
 
 import com.intellij.psi.PsiElement
+import com.intellij.testFramework.LightVirtualFile
 import org.jetbrains.kotlin.diagnostics.DiagnosticUtils
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
 import org.jetbrains.kotlin.psi.psiUtil.getTextWithLocation
@@ -101,7 +102,7 @@ data class Location(val source: SourceLocation,
 					val file: String) : Compactable {
 
 	override fun compact(): String {
-		return "Line/Column=$source - CharRange=$text - $file"
+		return "Line/Column=$source - CharRange=$text - Path=$file"
 	}
 
 	companion object {
@@ -109,8 +110,13 @@ data class Location(val source: SourceLocation,
 			val start = startLineAndColumn(element)
 			val sourceLocation = SourceLocation(start.line, start.column)
 			val textLocation = TextLocation(element.startOffset, element.endOffset)
+			val fileName = element.originalFilePath() ?: element.containingFile.name
 			return Location(sourceLocation, textLocation,
-					element.getTextWithLocation(), element.containingFile.name)
+					element.getTextWithLocation(), fileName)
+		}
+
+		private fun PsiElement.originalFilePath(): String? {
+			return (this.containingFile.viewProvider.virtualFile as LightVirtualFile).originalFile?.name
 		}
 
 		private fun startLineAndColumn(element: PsiElement) = DiagnosticUtils.getLineAndColumnInPsiFile(
