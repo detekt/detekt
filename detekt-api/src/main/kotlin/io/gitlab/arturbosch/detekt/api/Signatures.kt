@@ -42,12 +42,12 @@ internal fun PsiElement.buildFullSignature(): String {
 private fun PsiElement.extractClassName() =
 		this.getNonStrictParentOfType(KtClassOrObject::class.java)?.nameAsSafeName?.asString() ?: ""
 
-internal fun PsiElement.searchSignature(): String {
+private fun PsiElement.searchSignature(): String {
 	return when (this) {
 		is KtNamedFunction -> buildFunctionSignature(this)
 		is KtClassOrObject -> buildClassSignature(this)
 		else -> this.text
-	}
+	}.replace('\n', ' ').replace(Regex("\\s(\\s|\t)+")," ")
 }
 
 private fun dotOrNot(sig: String, sig2: String) = if (sig.isNotEmpty() && sig2.isNotEmpty()) "." else ""
@@ -67,7 +67,10 @@ private fun buildClassSignature(classOrObject: KtClassOrObject): String {
 }
 
 private fun buildFunctionSignature(element: KtNamedFunction): String {
-	val methodStart = 0
+	var methodStart = 0
+	element.docComment?.let {
+		methodStart = it.endOffset - it.startOffset
+	}
 	var methodEnd = element.endOffset - element.startOffset
 	val typeReference = element.typeReference
 	if (typeReference != null) {
