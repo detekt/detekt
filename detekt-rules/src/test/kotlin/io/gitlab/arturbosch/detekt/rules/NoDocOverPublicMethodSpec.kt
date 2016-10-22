@@ -12,9 +12,9 @@ import org.jetbrains.spek.api.dsl.it
 class NoDocOverPublicMethodSpec : SubjectSpek<NoDocOverPublicMethod>({
 	subject { NoDocOverPublicMethod() }
 
-	it("finds two undocumented functions") {
+	it("finds three undocumented functions") {
 		val root = load(Case.Comments)
 		subject.visit(root)
-		assertThat(subject.findings, hasSize(equalTo(2)))
+		assertThat(subject.findings, hasSize(equalTo(3)))
 	}
 })

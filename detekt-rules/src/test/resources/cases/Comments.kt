@@ -1,10 +1,16 @@
 package cases
 
+import java.io.Serializable
+
 /**
  * @author Artur Bosch
  */
 @Suppress("unused")
-open class Comments {
+open class Comments<T : K, out K> : Serializable {
+
+	companion object {
+		fun withinCompanionNeedComment(){}
+	}
 
 	public class INeedComment
 	private class NoNeedForComments{}

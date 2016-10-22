@@ -12,7 +12,7 @@ import org.jetbrains.spek.api.dsl.it
 class NoDocOverPublicClassSpec : SubjectSpek<NoDocOverPublicClass>({
 	subject { NoDocOverPublicClass() }
 
-	it("finds undocumented class") {
+	it("finds two undocumented classes") {
 		val root = load(Case.Comments)
 		subject.visit(root)
 		assertThat(subject.findings, hasSize(equalTo(2)))

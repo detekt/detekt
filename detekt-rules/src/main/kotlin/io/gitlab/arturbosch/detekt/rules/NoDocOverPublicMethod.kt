@@ -13,6 +13,7 @@ class NoDocOverPublicMethod(config: Config = Config.EMPTY) : Rule("NoDocOverPubl
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		if (function.funKeyword == null && function.isLocal) return
+
 		val modifierList = function.modifierList
 		if (function.docComment == null) {
 			if (modifierList == null) {
@@ -26,6 +27,6 @@ class NoDocOverPublicMethod(config: Config = Config.EMPTY) : Rule("NoDocOverPubl
 		}
 	}
 
-	private fun methodHeaderLocation(function: KtNamedFunction) = Entity.from(function, function.colon)
+	private fun methodHeaderLocation(function: KtNamedFunction) = Entity.from(function)
 
 }

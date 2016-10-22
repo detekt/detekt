@@ -4,18 +4,32 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Rule
-import org.jetbrains.kotlin.psi.KtClassOrObject
+import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtObjectDeclaration
 
 /**
  * @author Artur Bosch
  */
 class NoDocOverPublicClass(config: Config = Config.EMPTY) : Rule("NoDocOverPublicClass", Severity.Maintainability, config) {
 
-	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-		if (classOrObject.isPublicNotOverriden()) {
-			addFindings(CodeSmell(id, Entity.from(classOrObject, classOrObject.getBody())))
+	override fun visitClass(klass: KtClass) {
+		if (klass.isPublicNotOverriden()) {
+			addFindings(CodeSmell(id, Entity.from(klass)))
 		}
-		super.visitClassOrObject(classOrObject)
+		super.visitClass(klass)
 	}
+
+	override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
+		if (declaration.isCompanionWithoutName())
+			return
+
+		if (declaration.isPublicNotOverriden()) {
+			addFindings(CodeSmell(id, Entity.from(declaration)))
+		}
+		super.visitObjectDeclaration(declaration)
+	}
+
+	private fun KtObjectDeclaration.isCompanionWithoutName() =
+			this.isCompanion() && this.nameAsSafeName.asString() == "Companion"
 
 }
