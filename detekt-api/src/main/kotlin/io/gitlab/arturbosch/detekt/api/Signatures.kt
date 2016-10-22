@@ -20,19 +20,27 @@ internal fun PsiElement.searchName(): String {
 
 internal fun PsiElement.searchClass(): String {
 	val classElement = this.getNonStrictParentOfType(KtClassOrObject::class.java)
-	val className = classElement?.name
+	var className = classElement?.name
+	if (className != null && className == "Companion") {
+		classElement?.parent?.getNonStrictParentOfType(KtClassOrObject::class.java)?.name?.let {
+			className = it + ".$className"
+		}
+	}
 	return className ?: this.containingFile.name
 }
 
 internal fun PsiElement.buildFullSignature(): String {
 	val signature = this.searchSignature()
 	val fullClassSignature = this.parents.filter { it is KtClassOrObject }
-			.map { it.searchClass() }
+			.map { it.extractClassName() }
 			.fold("") { sig, sig2 -> "$sig2${dotOrNot(sig, sig2)}$sig" }
 	val filename = this.containingFile.name
 	return (if (!fullClassSignature.startsWith(filename)) filename + "\$" else "") +
 			(if (fullClassSignature.isNotEmpty()) "$fullClassSignature\$$signature" else signature)
 }
+
+private fun PsiElement.extractClassName() =
+		this.getNonStrictParentOfType(KtClassOrObject::class.java)?.nameAsSafeName?.asString() ?: ""
 
 internal fun PsiElement.searchSignature(): String {
 	return when (this) {
