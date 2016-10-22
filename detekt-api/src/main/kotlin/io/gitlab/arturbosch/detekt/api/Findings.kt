@@ -10,13 +10,32 @@ import kotlin.reflect.memberProperties
 /**
  * @author Artur Bosch
  */
-interface Finding : Compactable, Describable, Reflective {
+interface Finding : Compactable, Describable, Reflective, HasEntity, HasMetrics {
 	val id: String
+	val references: List<Entity>
+}
+
+interface HasEntity {
+	val entity: Entity
 	val location: Location
 		get() = entity.location
-	val entity: Entity
+	val locationAsString: String
+		get() = location.locationString
+	val startPosition: SourceLocation
+		get() = location.source
+	val charPosition: TextLocation
+		get() = location.text
+	val name: String
+		get() = entity.name
+	val inClass: String
+		get() = entity.className
+	val signature: String
+		get() = entity.signature
+}
+
+interface HasMetrics {
 	val metrics: List<Metric>
-	val references: List<Entity>
+	fun metricByType(type: String): Metric? = metrics.find { it.type == type }
 }
 
 interface Reflective {
@@ -57,7 +76,24 @@ open class CodeSmell(override val id: String,
 data class Metric(val type: String,
 				  val value: Int,
 				  val threshold: Int,
-				  val isDouble: Boolean = false)
+				  val isDouble: Boolean = false,
+				  val conversionFactor: Int = 100) {
+
+	constructor(type: String,
+				value: Double,
+				threshold: Double,
+				conversionFactor: Int) : this(type, value = (value * conversionFactor).toInt(),
+			threshold = (threshold * conversionFactor).toInt(),
+			isDouble = true, conversionFactor = conversionFactor) {
+
+	}
+
+	fun doubleValue(): Double = value.convertAsDouble()
+	fun doubleThreshold(): Double = threshold.convertAsDouble()
+
+	private fun Int.convertAsDouble() = if (isDouble) (this.toDouble() / conversionFactor)
+	else throw IllegalStateException("This metric was not marked as double!")
+}
 
 data class Location(val source: SourceLocation,
 					val text: TextLocation,
