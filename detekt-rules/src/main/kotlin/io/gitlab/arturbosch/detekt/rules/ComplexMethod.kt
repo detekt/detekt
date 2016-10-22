@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.CodeSmellThresholdRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
@@ -20,7 +21,7 @@ class ComplexMethod(config: Config = Config.EMPTY, threshold: Int = 10) : CodeSm
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		val mcc = MccVisitor().visit(function)
 		if (mcc > threshold) {
-			addFindings(ThresholdedCodeSmell(id, Entity.from(function), mcc, threshold))
+			addFindings(ThresholdedCodeSmell(id, Entity.from(function), Metric("MCC", mcc, threshold)))
 		}
 	}
 

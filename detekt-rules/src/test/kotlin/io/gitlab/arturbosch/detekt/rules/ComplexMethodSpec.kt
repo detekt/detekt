@@ -18,6 +18,7 @@ class ComplexMethodSpec : Spek({
 		subject.visit(root)
 		assertThat(subject.findings, hasSize(equalTo(1)))
 		assertThat((subject.findings[0] as ThresholdedCodeSmell).value, equalTo(13))
+		assertThat((subject.findings[0] as ThresholdedCodeSmell).threshold, equalTo(10))
 	}
 })
 

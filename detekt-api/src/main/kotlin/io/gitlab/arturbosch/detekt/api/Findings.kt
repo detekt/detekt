@@ -33,9 +33,14 @@ interface Describable {
 	val description: String
 }
 
-class ThresholdedCodeSmell(id: String, entity: Entity, val value: Int, val threshold: Int) : CodeSmell(id, entity) {
+class ThresholdedCodeSmell(id: String, entity: Entity, val metric: Metric) : CodeSmell(id, entity, metrics = listOf(metric)) {
+	val value: Int
+		get() = metric.value
+	val threshold: Int
+		get() = metric.threshold
+
 	override fun compact(): String {
-		return "$id - $value/$threshold - l/c${location.source} - ${location.text} - ${location.file}"
+		return "$id - ${metric.value}/${metric.threshold} - ${entity.compact()}"
 	}
 }
 
@@ -52,7 +57,7 @@ open class CodeSmell(override val id: String,
 data class Metric(val type: String,
 				  val value: Int,
 				  val threshold: Int,
-				  val isDouble: Boolean)
+				  val isDouble: Boolean = false)
 
 data class Location(val source: SourceLocation,
 					val text: TextLocation,

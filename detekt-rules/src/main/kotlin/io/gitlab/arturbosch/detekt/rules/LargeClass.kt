@@ -1,9 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.CodeSmellThresholdRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Metric
+import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -37,8 +38,9 @@ class LargeClass(config: Config = Config.EMPTY, threshold: Int = 70) : CodeSmell
 		}
 		incHead() // for class body
 		super.visitClassOrObject(classOrObject)
-		if (locStack.pop() > threshold) {
-			addFindings(CodeSmell(id, Entity.from(classOrObject)))
+		val loc = locStack.pop()
+		if (loc > threshold) {
+			addFindings(ThresholdedCodeSmell(id, Entity.from(classOrObject), Metric("SIZE", loc, threshold)))
 		}
 	}
 
