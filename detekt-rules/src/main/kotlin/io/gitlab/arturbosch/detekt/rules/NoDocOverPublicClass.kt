@@ -13,11 +13,16 @@ import org.jetbrains.kotlin.psi.KtObjectDeclaration
 class NoDocOverPublicClass(config: Config = Config.EMPTY) : Rule("NoDocOverPublicClass", Severity.Maintainability, config) {
 
 	override fun visitClass(klass: KtClass) {
+
 		if (klass.isPublicNotOverriden()) {
 			addFindings(CodeSmell(id, Entity.from(klass)))
 		}
-		super.visitClass(klass)
+		if (klass.notEnum()) { // Stop considering enum entries
+			super.visitClass(klass)
+		}
 	}
+
+	private fun KtClass.notEnum() = !this.isEnum()
 
 	override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
 		if (declaration.isCompanionWithoutName())
