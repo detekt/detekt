@@ -27,9 +27,9 @@ class Detekt(project: Path,
 	fun run(): Map<String, List<Finding>> {
 		val ktFiles = compiler.compile()
 		val providers = loadProviders()
-		val futures = providers.map {
-			task { it.instance(config).acceptAll(ktFiles) }
-		}
+		val futures = providers.map { it.buildRuleset(config) }
+				.filterNotNull()
+				.map { task { it.acceptAll(ktFiles) } }
 		return awaitAll(futures).toMap()
 	}
 

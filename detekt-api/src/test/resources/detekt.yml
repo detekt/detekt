@@ -19,3 +19,6 @@ style:
     active: true
   NoElseInWhenExpression:
     active: true
+
+comments:
+  active: false
