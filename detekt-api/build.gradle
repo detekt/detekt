@@ -14,11 +14,21 @@ buildscript {
 
 apply plugin: 'kotlin'
 apply plugin: 'org.junit.platform.gradle.plugin'
+apply plugin: 'maven-publish'
 
 repositories {
 	mavenCentral()
+	mavenLocal()
 	maven {
 		url "http://dl.bintray.com/jetbrains/spek"
+	}
+}
+
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			from components.java
+		}
 	}
 }
 
