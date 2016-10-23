@@ -1,7 +1,7 @@
 
 buildscript {
 	ext.kotlin_version = '1.0.4'
-	ext.spek_version = '1.1.18'
+	ext.spek_version = '1.1.19'
 
 	repositories {
 		mavenCentral()
