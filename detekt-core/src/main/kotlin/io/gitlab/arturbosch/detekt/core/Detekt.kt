@@ -34,6 +34,8 @@ class Detekt(project: Path,
 		val providers = loadProviders()
 		val futures = providers.map { it.buildRuleset(config) }
 				.filterNotNull()
+				.sortedBy { it.id }
+				.distinctBy { it.id }
 				.map { task { it.acceptAll(ktFiles) } }
 		return awaitAll(futures).toMap()
 	}

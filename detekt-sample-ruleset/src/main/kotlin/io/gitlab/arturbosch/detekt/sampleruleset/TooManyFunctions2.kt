@@ -11,12 +11,11 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 /**
  * @author Artur Bosch
  */
-class TooManyFunctions2(config: Config) : Rule("TooManyFunctions2", Severity.Maintainability, config) {
+class TooManyFunctions2(config: Config) : Rule("TooManyFunctionsTwo", Severity.Maintainability, config) {
 
 	private var amount: Int = 0
 
 	override fun visitFile(file: PsiFile) {
-		amount = 0
 		super.visitFile(file)
 		if (amount > 10) {
 			addFindings(CodeSmell(
