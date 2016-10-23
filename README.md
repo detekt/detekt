@@ -139,3 +139,11 @@ class TooManyFunctions2(config: Config) : Rule("TooManyFunctionsTwo", Severity.M
 
 If your using maven to build rule sets or use detekt as a dependency, you have to run the additional task `publishToMavenLocal`
 
+#### Testing your rules
+
+To test your rules you need a KtFile object and use it's _visit_ method.
+There are two predefined methods to help obtaining a KtFile:
+
+- compileContentForTest(content: String): KtFile
+- compileForTest(path: Path): KtFile
+
