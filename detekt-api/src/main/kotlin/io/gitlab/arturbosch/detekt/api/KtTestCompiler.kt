@@ -7,11 +7,16 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.idea.KotlinLanguage
 import org.jetbrains.kotlin.psi.KtFile
+import java.nio.file.Files
+import java.nio.file.Path
 
 /**
+ * This is basically an enhanced version of the KtCompiler from the core project which allows plain text to be
+ * compiled to a KtFile.
+ *
  * @author Artur Bosch
  */
-private object KtTestCompiler {
+internal object KtTestCompiler {
 
 	private val psiFileFactory: PsiFileFactory
 
@@ -24,6 +29,21 @@ private object KtTestCompiler {
 	fun compileFromText(content: String): KtFile {
 		return psiFileFactory.createFileFromText(KotlinLanguage.INSTANCE, content) as KtFile
 	}
+
+	fun compile(path: Path): KtFile {
+		require(Files.isRegularFile(path)) { "Given path should be a regular file!" }
+		val file = path.normalize().toAbsolutePath()
+		val content = String(Files.readAllBytes(file))
+		return psiFileFactory.createFileFromText(file.fileName.toString(), KotlinLanguage.INSTANCE, content) as KtFile
+	}
 }
 
+/**
+ * Use this method if you define a kt file/class as a plain string in your test.
+ */
 fun compileContentForTest(content: String) = KtTestCompiler.compileFromText(content)
+
+/**
+ * Use this method if you test a kt file/class in the test resources.
+ */
+fun compileForTest(path: Path) = KtTestCompiler.compile(path)
