@@ -18,7 +18,8 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 #### Parameters of CLI
 The CLI uses jcommander for argument parsing. This is the generated help text:
 
-```The following option is required: --project, -p 
+```
+The following option is required: --project, -p 
 
 Usage: detekt [options]
   Options:
