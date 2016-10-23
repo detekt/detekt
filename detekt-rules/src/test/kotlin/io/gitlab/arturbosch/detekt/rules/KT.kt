@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules
 
-import com.intellij.lang.ASTNode
 import io.gitlab.arturbosch.detekt.core.KtCompiler
+import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -23,11 +23,6 @@ enum class Case(val file: String) {
 	fun path(): Path = Paths.get(Case::class.java.getResource(file).path)
 }
 
-fun load(case: Case): ASTNode {
-	return compiler.compile(case.path()).node
+fun load(case: Case): KtFile {
+	return compiler.compile(case.path())
 }
-
-fun loadAsFile(content: String): ASTNode {
-	return compiler.compileFromText(content).node
-}
-

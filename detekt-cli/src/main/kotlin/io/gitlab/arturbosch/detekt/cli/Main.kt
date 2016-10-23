@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.YamlConfig
 import io.gitlab.arturbosch.detekt.core.Detekt
 import io.gitlab.arturbosch.detekt.core.PathFilter
 import java.nio.file.Path
+import java.nio.file.Paths
 
 /**
  * @author Artur Bosch
@@ -25,6 +26,9 @@ private class Main {
 			converter = PathConverter::class)
 	private var config: Path? = null
 
+	@Parameter(names = arrayOf("--rules", "-r"), description = "Extra paths to ruleset jars separated by ';'.")
+	private val rules: String = ""
+
 	@Parameter(names = arrayOf("--help", "-h"), help = true, description = "Shows the usage.")
 	private var help: Boolean = false
 
@@ -34,9 +38,10 @@ private class Main {
 		fun main(args: Array<String>) {
 			val cli = parseAndValidateArgs(args)
 			val pathFilters = cli.filters.split(";").map(::PathFilter)
+			val rules = cli.rules.split(";").map { Paths.get(it) }
 			val configPath = cli.config
 			val config = if (configPath != null) YamlConfig.load(configPath) else Config.EMPTY
-			val results = Detekt(cli.project, config, pathFilters = pathFilters).run()
+			val results = Detekt(cli.project, config, rules, pathFilters = pathFilters).run()
 			printFindings(results)
 		}
 

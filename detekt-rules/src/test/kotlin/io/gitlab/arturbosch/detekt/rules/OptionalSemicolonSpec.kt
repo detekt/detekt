@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import com.natpryce.hamkrest.hasSize
+import io.gitlab.arturbosch.detekt.api.compileContentForTest
 import org.jetbrains.spek.api.SubjectSpek
 import org.jetbrains.spek.api.dsl.SubjectDsl
 import org.jetbrains.spek.api.dsl.describe
@@ -52,6 +53,6 @@ class UselessSemicolonSpec : SubjectSpek<OptionalSemicolon>({
 })
 
 private fun SubjectDsl<OptionalSemicolon>.execute(code: String) {
-	val root = loadAsFile(code)
+	val root = compileContentForTest(code)
 	subject.visit(root)
 }

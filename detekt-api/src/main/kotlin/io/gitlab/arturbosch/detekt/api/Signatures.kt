@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.api
 import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.asJava.namedUnwrappedElement
 import org.jetbrains.kotlin.psi.KtClassOrObject
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
@@ -46,9 +47,12 @@ private fun PsiElement.searchSignature(): String {
 	return when (this) {
 		is KtNamedFunction -> buildFunctionSignature(this)
 		is KtClassOrObject -> buildClassSignature(this)
+		is KtFile -> fileSignature()
 		else -> this.text
-	}.replace('\n', ' ').replace(Regex("\\s(\\s|\t)+")," ")
+	}.replace('\n', ' ').replace(Regex("\\s(\\s|\t)+"), " ")
 }
+
+private fun KtFile.fileSignature() = "${this.packageFqName.asString()}.${this.name}"
 
 private fun dotOrNot(sig: String, sig2: String) = if (sig.isNotEmpty() && sig2.isNotEmpty()) "." else ""
 

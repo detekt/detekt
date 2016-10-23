@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
-import com.intellij.lang.ASTNode
+import org.jetbrains.kotlin.psi.KtFile
 
 /**
  * @author Artur Bosch
@@ -23,10 +23,10 @@ abstract class Rule(val id: String,
 		validateIdentifier(id)
 	}
 
-	open fun visit(root: ASTNode) {
+	open fun visit(root: KtFile) {
 		ifRuleActive {
 			preVisit(root)
-			root.visit(this)
+			root.accept(this)
 			postVisit(root)
 		}
 	}
@@ -42,10 +42,10 @@ abstract class Rule(val id: String,
 		_findings = mutableListOf()
 	}
 
-	protected open fun postVisit(root: ASTNode) {
+	protected open fun postVisit(root: KtFile) {
 	}
 
-	protected open fun preVisit(root: ASTNode) {
+	protected open fun preVisit(root: KtFile) {
 	}
 
 	protected fun addFindings(vararg finding: Finding) {

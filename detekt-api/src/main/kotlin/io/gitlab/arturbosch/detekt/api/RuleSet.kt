@@ -17,9 +17,8 @@ class RuleSet(val id: String, val rules: List<Rule>) {
 
 	private fun accept(file: KtFile): List<Finding> {
 		val findings: MutableList<Finding> = mutableListOf()
-		val root = file.node
 		rules.forEach {
-			it.visit(root)
+			it.visit(file)
 			findings += it.findings
 		}
 		return findings

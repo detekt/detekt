@@ -1,20 +1,17 @@
-package io.gitlab.arturbosch.detekt.core
+package io.gitlab.arturbosch.detekt.api
 
 import com.intellij.openapi.util.Disposer
 import com.intellij.psi.PsiFileFactory
-import com.intellij.testFramework.LightVirtualFile
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.idea.KotlinLanguage
 import org.jetbrains.kotlin.psi.KtFile
-import java.nio.file.Files
-import java.nio.file.Path
 
 /**
  * @author Artur Bosch
  */
-class KtCompiler {
+private object KtTestCompiler {
 
 	private val psiFileFactory: PsiFileFactory
 
@@ -24,12 +21,9 @@ class KtCompiler {
 		psiFileFactory = PsiFileFactory.getInstance(project)
 	}
 
-	fun compile(path: Path): KtFile {
-		require(path.isFile()) { "Given path should be a regular file!" }
-		val file = path.normalize().toAbsolutePath()
-		val content = String(Files.readAllBytes(file))
-		return psiFileFactory.createFileFromText(file.fileName.toString(), KotlinLanguage.INSTANCE,
-				content, true, true, false, LightVirtualFile(file.toString())) as KtFile
+	fun compileFromText(content: String): KtFile {
+		return psiFileFactory.createFileFromText(KotlinLanguage.INSTANCE, content) as KtFile
 	}
-
 }
+
+fun compileContentForTest(content: String) = KtTestCompiler.compileFromText(content)

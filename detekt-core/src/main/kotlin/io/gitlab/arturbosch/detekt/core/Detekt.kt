@@ -21,6 +21,11 @@ class Detekt(project: Path,
 
 	init {
 		require(Files.exists(project)) { "Given project path does not exist!" }
+		ruleSets.forEach {
+			require(Files.exists(it) && it.toString().endsWith("jar")) {
+				"Given ruleset $it does not exist or has no jar ending!"
+			}
+		}
 		compiler = KtTreeCompiler(project, pathFilters, parallelCompilation)
 	}
 
