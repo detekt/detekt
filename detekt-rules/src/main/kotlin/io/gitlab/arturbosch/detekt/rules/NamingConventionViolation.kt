@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Rule
+import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -15,6 +16,7 @@ import org.jetbrains.kotlin.psi.KtVariableDeclaration
 class NamingConventionViolation(config: Config = Config.EMPTY) : Rule("NamingConventionViolation", Severity.Style, config) {
 
 	private val variablePattern = Regex("^(_)?[a-z$][a-zA-Z$0-9]*$")
+	private val constantPattern = Regex("^[A-Z]*$")
 	private val methodPattern = Regex("^[a-z$][a-zA-Z$0-9]*$")
 	private val classPattern = Regex("^[A-Z$][a-zA-Z$]*$")
 
@@ -22,17 +24,36 @@ class NamingConventionViolation(config: Config = Config.EMPTY) : Rule("NamingCon
 		if (declaration.nameAsSafeName.isSpecial) return
 		declaration.nameIdentifier?.parent?.javaClass?.let {
 			val name = declaration.nameAsSafeName.asString()
-			if (declaration is KtVariableDeclaration && !name.matches(variablePattern)) {
-				addFindings(CodeSmell(id, Entity.from(declaration)))
+			if (declaration is KtVariableDeclaration) {
+				handleVariableNamings(declaration, name)
 			}
 			if (declaration is KtNamedFunction && !name.matches(methodPattern)) {
-				addFindings(CodeSmell(id, Entity.from(declaration)))
+				add(declaration)
 			}
 			if (declaration is KtClassOrObject && !name.matches(classPattern)) {
-				addFindings(CodeSmell(id, Entity.from(declaration)))
+				add(declaration)
 			}
 		}
 		super.visitNamedDeclaration(declaration)
+	}
+
+	private fun handleVariableNamings(declaration: KtVariableDeclaration, name: String) {
+		if (declaration.hasConstModifier()) {
+			if (!name.matches(constantPattern)) {
+				add(declaration)
+			}
+		} else if (!name.matches(variablePattern)) {
+			add(declaration)
+		}
+	}
+
+	private fun KtVariableDeclaration.hasConstModifier(): Boolean {
+		val modifierList = this.modifierList
+		return modifierList != null && modifierList.hasModifier(KtTokens.CONST_KEYWORD)
+	}
+
+	private fun add(declaration: KtNamedDeclaration) {
+		addFindings(CodeSmell(id, Entity.from(declaration)))
 	}
 
 }
