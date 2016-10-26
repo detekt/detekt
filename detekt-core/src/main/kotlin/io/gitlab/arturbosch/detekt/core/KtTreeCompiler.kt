@@ -12,7 +12,7 @@ class KtTreeCompiler(val project: Path,
 					 val filters: List<PathFilter> = listOf(),
 					 val parallel: Boolean = false) {
 
-	private val compiler = KtCompiler()
+	private val compiler = KtCompiler(project)
 
 	fun compile(): List<KtFile> {
 		return if (project.isFile()) {

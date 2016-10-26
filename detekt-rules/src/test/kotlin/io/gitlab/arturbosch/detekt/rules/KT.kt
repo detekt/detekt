@@ -9,7 +9,7 @@ import java.nio.file.Paths
  * @author Artur Bosch
  */
 
-private val compiler = KtCompiler()
+private val compiler = KtCompiler(Case.CasesFolder.path())
 
 enum class Case(val file: String) {
 	CasesFolder("/cases"),

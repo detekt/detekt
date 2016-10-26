@@ -14,7 +14,7 @@ import java.nio.file.Path
 /**
  * @author Artur Bosch
  */
-class KtCompiler {
+class KtCompiler(val project: Path) {
 
 	private val psiFileFactory: PsiFileFactory
 
@@ -24,12 +24,12 @@ class KtCompiler {
 		psiFileFactory = PsiFileFactory.getInstance(project)
 	}
 
-	fun compile(path: Path): KtFile {
-		require(path.isFile()) { "Given path should be a regular file!" }
-		val file = path.normalize().toAbsolutePath()
-		val content = String(Files.readAllBytes(file))
-		return psiFileFactory.createFileFromText(file.fileName.toString(), KotlinLanguage.INSTANCE,
-				content, true, true, false, LightVirtualFile(file.toString())) as KtFile
+	fun compile(subPath: Path): KtFile {
+		require(subPath.isFile()) { "Given sub path should be a regular file!" }
+		val relativePath = project.relativize(subPath)
+		val content = String(Files.readAllBytes(subPath))
+		return psiFileFactory.createFileFromText(relativePath.fileName.toString(), KotlinLanguage.INSTANCE,
+				content, true, true, false, LightVirtualFile(relativePath.toString())) as KtFile
 	}
 
 }
