@@ -1,0 +1,29 @@
+code-smell:
+  active: true
+  LongMethod:
+    threshold: 20
+  LongParameterList:
+    threshold: 5
+  LargeClass:
+    threshold: 70
+  ComplexMethod:
+    threshold: 10
+
+style:
+  active: true
+  WildcardImport:
+  NoElseInWhenExpression:
+  OptionalSemicolon:
+  OptionalUnit:
+  NamingConventionViolation:
+
+comments:
+  active: false
+  CommentOverPrivateMethod:
+    active: true
+  CommentOverPrivateProperty:
+    active: true
+  NoDocOverPublicClass:
+    active: false
+  NoDocOverPublicMethod:
+    active: false
