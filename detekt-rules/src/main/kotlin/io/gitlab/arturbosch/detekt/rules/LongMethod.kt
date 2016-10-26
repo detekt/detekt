@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 /**
  * @author Artur Bosch
  */
-class LongMethod(config: Config = Config.EMPTY, threshold: Int = 20) : CodeSmellThresholdRule("LongMethod", config, threshold) {
+class LongMethod(config: Config = Config.empty, threshold: Int = 20) : CodeSmellThresholdRule("LongMethod", config, threshold) {
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		val body: KtBlockExpression? = function.bodyExpression.asBlockExpression()

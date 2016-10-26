@@ -40,7 +40,7 @@ private class Main {
 			val pathFilters = cli.filters?.split(";")?.map(::PathFilter) ?: listOf()
 			val rules = cli.rules?.split(";")?.map { Paths.get(it) } ?: listOf()
 			val configPath = cli.config
-			val config = if (configPath != null) YamlConfig.load(configPath) else Config.EMPTY
+			val config = if (configPath != null) YamlConfig.load(configPath) else Config.empty
 			val results = Detekt(cli.project, config, rules, pathFilters = pathFilters).run()
 			printFindings(results)
 		}

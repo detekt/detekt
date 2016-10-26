@@ -10,7 +10,7 @@ import org.jetbrains.kotlin.psi.KtProperty
 /**
  * @author Artur Bosch
  */
-class CommentOverPrivateProperty(config: Config = Config.EMPTY) : CodeSmellRule("CommentOverPrivateProperty", config) {
+class CommentOverPrivateProperty(config: Config = Config.empty) : CodeSmellRule("CommentOverPrivateProperty", config) {
 
 	override fun visitProperty(property: KtProperty) {
 		val modifierList = property.modifierList

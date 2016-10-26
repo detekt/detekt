@@ -8,7 +8,7 @@ import org.jetbrains.kotlin.psi.KtFile
  */
 abstract class TokenRule(id: String,
 						 severity: Severity = Rule.Severity.Minor,
-						 config: Config = Config.EMPTY) : Rule(id, severity, config) {
+						 config: Config = Config.empty) : Rule(id, severity, config) {
 
 	override fun visit(root: KtFile) {
 		ifRuleActive {

@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 /**
  * @author Artur Bosch
  */
-class OptionalSemicolon(config: Config = Config.EMPTY) : TokenRule("OptionalSemicolon", Rule.Severity.Style, config) {
+class OptionalSemicolon(config: Config = Config.empty) : TokenRule("OptionalSemicolon", Rule.Severity.Style, config) {
 
 	override fun procedure(node: ASTNode) {
 		val psi = node.psi

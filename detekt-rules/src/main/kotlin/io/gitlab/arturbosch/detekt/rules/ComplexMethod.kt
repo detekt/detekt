@@ -16,7 +16,7 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
 /**
  * @author Artur Bosch
  */
-class ComplexMethod(config: Config = Config.EMPTY, threshold: Int = 10) : CodeSmellThresholdRule("ComplexMethod", config, threshold) {
+class ComplexMethod(config: Config = Config.empty, threshold: Int = 10) : CodeSmellThresholdRule("ComplexMethod", config, threshold) {
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		val mcc = MccVisitor().visit(function)

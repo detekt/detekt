@@ -7,7 +7,7 @@ import org.jetbrains.kotlin.psi.KtFile
  */
 abstract class Rule(val id: String,
 					val severity: Severity = Rule.Severity.Minor,
-					val config: Config = Config.EMPTY) : DetektVisitor() {
+					val config: Config = Config.empty) : DetektVisitor() {
 
 	enum class Severity {
 		CodeSmell, Style, Warning, Defect, Minor, Maintainability, Security

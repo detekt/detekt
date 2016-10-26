@@ -9,7 +9,7 @@ import org.jetbrains.kotlin.psi.KtImportDirective
 /**
  * @author Artur Bosch
  */
-class WildcardImport(config: Config = Config.EMPTY) : Rule("WildcardImport", Severity.Style, config) {
+class WildcardImport(config: Config = Config.empty) : Rule("WildcardImport", Severity.Style, config) {
 
 	override fun visitImportDirective(importDirective: KtImportDirective) {
 		val import = importDirective.importPath?.pathStr

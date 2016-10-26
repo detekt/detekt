@@ -10,7 +10,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 /**
  * @author Artur Bosch
  */
-class CommentOverPrivateMethod(config: Config = Config.EMPTY) : CodeSmellRule("CommentOverPrivateMethod", config) {
+class CommentOverPrivateMethod(config: Config = Config.empty) : CodeSmellRule("CommentOverPrivateMethod", config) {
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		val modifierList = function.modifierList

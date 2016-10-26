@@ -10,7 +10,7 @@ import org.jetbrains.kotlin.psi.KtObjectDeclaration
 /**
  * @author Artur Bosch
  */
-class NoDocOverPublicClass(config: Config = Config.EMPTY) : Rule("NoDocOverPublicClass", Severity.Maintainability, config) {
+class NoDocOverPublicClass(config: Config = Config.empty) : Rule("NoDocOverPublicClass", Severity.Maintainability, config) {
 
 	override fun visitClass(klass: KtClass) {
 

@@ -13,7 +13,7 @@ interface Config {
 			" Structure must be from type Map<String,Any>!") : RuntimeException(msg)
 
 	companion object {
-		val EMPTY: Config = YamlConfig(mapOf())
+		val empty: Config = YamlConfig(mapOf())
 	}
 }
 

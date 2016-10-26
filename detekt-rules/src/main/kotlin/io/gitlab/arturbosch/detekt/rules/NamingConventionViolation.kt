@@ -13,7 +13,7 @@ import org.jetbrains.kotlin.psi.KtVariableDeclaration
 /**
  * @author Artur Bosch
  */
-class NamingConventionViolation(config: Config = Config.EMPTY) : Rule("NamingConventionViolation", Severity.Style, config) {
+class NamingConventionViolation(config: Config = Config.empty) : Rule("NamingConventionViolation", Severity.Style, config) {
 
 	private val variablePattern = Regex("^(_)?[a-z$][a-zA-Z$0-9]*$")
 	private val constantPattern = Regex("^[A-Z]*$")

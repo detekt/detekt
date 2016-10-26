@@ -10,7 +10,7 @@ import org.jetbrains.kotlin.psi.KtParameterList
 /**
  * @author Artur Bosch
  */
-class LongParameterList(config: Config = Config.EMPTY, threshold: Int = 5) : CodeSmellThresholdRule("LongParameterList", config, threshold) {
+class LongParameterList(config: Config = Config.empty, threshold: Int = 5) : CodeSmellThresholdRule("LongParameterList", config, threshold) {
 
 	override fun visitParameterList(list: KtParameterList) {
 		val size = list.parameters.size

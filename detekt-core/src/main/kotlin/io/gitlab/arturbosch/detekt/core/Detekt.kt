@@ -12,7 +12,7 @@ import java.util.ServiceLoader
  * @author Artur Bosch
  */
 class Detekt(project: Path,
-			 val config: Config = Config.EMPTY,
+			 val config: Config = Config.empty,
 			 val ruleSets: List<Path> = listOf(),
 			 pathFilters: List<PathFilter> = listOf(),
 			 parallelCompilation: Boolean = false) {

@@ -9,7 +9,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 /**
  * @author Artur Bosch
  */
-class NoDocOverPublicMethod(config: Config = Config.EMPTY) : Rule("NoDocOverPublicMethod", Severity.Maintainability, config) {
+class NoDocOverPublicMethod(config: Config = Config.empty) : Rule("NoDocOverPublicMethod", Severity.Maintainability, config) {
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		if (function.funKeyword == null && function.isLocal) return

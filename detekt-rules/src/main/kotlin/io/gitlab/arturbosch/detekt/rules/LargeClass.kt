@@ -19,7 +19,7 @@ import java.util.ArrayDeque
 /**
  * @author Artur Bosch
  */
-class LargeClass(config: Config = Config.EMPTY, threshold: Int = 70) : CodeSmellThresholdRule("LargeClass", config, threshold) {
+class LargeClass(config: Config = Config.empty, threshold: Int = 70) : CodeSmellThresholdRule("LargeClass", config, threshold) {
 
 	private val locStack = ArrayDeque<Int>()
 
