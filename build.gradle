@@ -1,6 +1,6 @@
 allprojects {
 	group 'io.gitlab.arturbosch.detekt'
-	version '1.0.0.M1'
+	version '1.0.0.M2'
 }
 
 

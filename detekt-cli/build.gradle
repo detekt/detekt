@@ -36,6 +36,9 @@ junitPlatform {
 	}
 }
 
+group 'io.gitlab.arturbosch.detekt'
+version '1.0.0.M2'
+
 dependencies {
 	compile project(':detekt-core')
 	compile project(':detekt-rules')
