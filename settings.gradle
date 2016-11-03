@@ -4,4 +4,5 @@ include 'detekt-core'
 include 'detekt-rules'
 include 'detekt-cli'
 include 'detekt-sample-ruleset'
+include 'detekt-gradle-plugin'
 

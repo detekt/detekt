@@ -13,7 +13,7 @@ import java.nio.file.Paths
 /**
  * @author Artur Bosch
  */
-private class Main {
+class Main {
 
 	@Parameter(names = arrayOf("--project", "-p"), required = true,
 			converter = PathConverter::class, description = "Project path to analyze (path/to/project).")

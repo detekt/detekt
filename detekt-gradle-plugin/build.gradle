@@ -1,0 +1,43 @@
+apply plugin: 'kotlin'
+
+buildscript {
+	ext.kotlin_version = '1.0.4'
+
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+	}
+}
+
+
+dependencies {
+	compile gradleApi()
+}
+
+apply plugin: 'maven'
+
+repositories {
+	mavenCentral()
+	mavenLocal()
+}
+
+dependencies {
+	compile "io.gitlab.arturbosch.detekt:detekt-cli:1.0.0.M2"
+	compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+	testCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
+	testCompile 'com.natpryce:hamkrest:1.2.3.0'
+	testCompile 'junit:junit:4.12'
+}
+
+uploadArchives {
+	repositories {
+		mavenDeployer {
+			repository(url: uri('../repo'))
+		}
+	}
+}
+
+group 'io.gitlab.arturbosch.detekt'
+version '1.0.0.M2'

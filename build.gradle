@@ -2,5 +2,24 @@ allprojects {
 	group 'io.gitlab.arturbosch.detekt'
 	version '1.0.0.M2'
 }
+buildscript {
+	ext.kotlin_version = '1.0.4'
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+	}
+}
+apply plugin: 'kotlin'
+repositories {
+	mavenCentral()
+}
+dependencies {
+	compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+}
+sourceSets {
+	main.java.srcDirs += 'src/main/kotlin'
+}
 
 
