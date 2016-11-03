@@ -37,14 +37,15 @@ class Main {
 		@JvmStatic
 		fun main(args: Array<String>) {
 			val cli = parseAndValidateArgs(args)
-			val pathFilters = cli.filters?.split(";")?.map(::PathFilter) ?: listOf()
-			val rules = cli.rules?.split(";")?.map { Paths.get(it) } ?: listOf()
+			val pathFilters = cli.filters.letIf { split(";").map(::PathFilter) }
+			val rules = cli.rules.letIf { split(";").map { Paths.get(it) } }
 			val configPath = cli.config
 			val config = if (configPath != null) YamlConfig.load(configPath) else Config.empty
 			val results = Detekt(cli.project, config, rules, pathFilters = pathFilters).run()
 			printFindings(results)
 		}
 
+		private fun <T> String?.letIf(init: String.() -> List<T>): List<T> = if (this == null || this.isEmpty()) listOf<T>() else this.init()
 		private fun parseAndValidateArgs(args: Array<String>): Main {
 			val cli = Main()
 			val jCommander = JCommander(cli)
@@ -67,3 +68,5 @@ class Main {
 		}
 	}
 }
+
+
