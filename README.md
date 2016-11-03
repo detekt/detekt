@@ -124,7 +124,7 @@ To allow your rule to be configurable, pass it a Config object from within your 
 You can also specify a _Severity_ type for your rule.
 
 Example of a custom rule:
-```$java
+```kotlin
 class TooManyFunctions : Rule("TooManyFunctions") {
 
 	private var amount: Int = 0
@@ -144,7 +144,7 @@ class TooManyFunctions : Rule("TooManyFunctions") {
 ```
 
 Example of a much preciser rule in terms of more specific CodeSmell constructor and Rule attributes:
-```$java
+```kotlin
 class TooManyFunctions2(config: Config) : Rule("TooManyFunctionsTwo", Severity.Maintainability, config) {
 
 	private var amount: Int = 0
