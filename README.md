@@ -44,6 +44,38 @@ Filters can for example be used to exclude all test directories.
 With --rules you can point to additional ruleset.jar's creating by yourself or others. 
 More on this topic see section _Custom RuleSets_.
 
+#### Using detekt in custom gradle projects
+
+1. Make sure you run `gradle build publishToMavenLocal` to install detekt-cli to your local maven repo.
+2. Add following lines to your build.gradle file.
+3. Run `gradle detekt`
+4. Add `check.dependsOn detekt` if you want to run detekt on every `build`
+
+```groovy
+repositories {
+	mavenLocal()
+}
+
+configurations {
+	detekt
+}
+
+task detekt(type: JavaExec) {
+	main = "io.gitlab.arturbosch.detekt.cli.Main"
+	classpath = configurations.detekt
+	def input = "$project.projectDir.absolutePath"
+	def config = "$project.projectDir/detekt.yml"
+	def filters = ".*test.*"
+	def rulesets = ""
+	def params = [ '-p', input, '-c', config, '-f', filters, '-r', rulesets]
+	args(params)
+}
+
+dependencies {
+	detekt 'io.gitlab.arturbosch.detekt:detekt-cli:1.0.0.M2'
+}
+```
+
 ### RuleSets
 
 Currently there are three rule sets which are used per default when running the cli.
@@ -92,7 +124,7 @@ To allow your rule to be configurable, pass it a Config object from within your 
 You can also specify a _Severity_ type for your rule.
 
 Example of a custom rule:
-```java
+```$java
 class TooManyFunctions : Rule("TooManyFunctions") {
 
 	private var amount: Int = 0
@@ -112,7 +144,7 @@ class TooManyFunctions : Rule("TooManyFunctions") {
 ```
 
 Example of a much preciser rule in terms of more specific CodeSmell constructor and Rule attributes:
-```java
+```$java
 class TooManyFunctions2(config: Config) : Rule("TooManyFunctionsTwo", Severity.Maintainability, config) {
 
 	private var amount: Int = 0
