@@ -130,7 +130,7 @@ data class Entity(val name: String,
 				  val location: Location) : Compactable {
 
 	override fun compact(): String {
-		return "[$signature] - ${location.compact()}"
+		return "[$name] - ${location.compact()}"
 	}
 
 	companion object {
