@@ -14,6 +14,7 @@ private val compiler = KtCompiler(Case.CasesFolder.path())
 enum class Case(val file: String) {
 	CasesFolder("/cases"),
 	Default("/cases/Default.kt"),
+	Empty("/cases/Empty.kt"),
 	NamingConventions("/cases/NamingConventions.kt"),
 	ComplexClass("/cases/ComplexClass.kt"),
 	Comments("/cases/Comments.kt"),
