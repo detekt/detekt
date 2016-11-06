@@ -3,6 +3,8 @@ package io.gitlab.arturbosch.detekt.api
 import org.jetbrains.kotlin.psi.KtFile
 
 /**
+ * A rule set is a collection of rules and must be defined within a rule set provider implementation.
+ *
  * @author Artur Bosch
  */
 class RuleSet(val id: String, val rules: List<Rule>) {
@@ -11,6 +13,9 @@ class RuleSet(val id: String, val rules: List<Rule>) {
 		validateIdentifier(id)
 	}
 
+	/**
+	 * Iterates over the given kotlin file list by visiting them.
+	 */
 	fun acceptAll(files: List<KtFile>): Pair<String, List<Finding>> {
 		return id to files.flatMap { accept(it) }
 	}

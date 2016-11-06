@@ -3,7 +3,8 @@ package io.gitlab.arturbosch.detekt.api
 import org.jetbrains.kotlin.psi.KtTreeVisitorVoid
 
 /**
- * @author artur
+ * Base visitor for detekt rules.
+ *
+ * @author Artur Bosch
  */
-open class DetektVisitor : KtTreeVisitorVoid() {
-}
+open class DetektVisitor : KtTreeVisitorVoid()

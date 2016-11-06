@@ -26,11 +26,11 @@ internal object KtTestCompiler {
 		psiFileFactory = PsiFileFactory.getInstance(project)
 	}
 
-	fun compileFromText(content: String): KtFile {
+	internal fun compileFromText(content: String): KtFile {
 		return psiFileFactory.createFileFromText(KotlinLanguage.INSTANCE, content) as KtFile
 	}
 
-	fun compile(path: Path): KtFile {
+	internal fun compile(path: Path): KtFile {
 		require(Files.isRegularFile(path)) { "Given path should be a regular file!" }
 		val file = path.normalize().toAbsolutePath()
 		val content = String(Files.readAllBytes(file))

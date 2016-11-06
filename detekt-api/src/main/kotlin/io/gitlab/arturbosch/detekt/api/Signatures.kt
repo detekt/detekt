@@ -65,7 +65,7 @@ private fun buildClassSignature(classOrObject: KtClassOrObject): String {
 		baseName += ">"
 	}
 	val extendedEntries = classOrObject.getSuperTypeListEntries()
-	if (extendedEntries.size > 0) baseName += " : "
+	if (extendedEntries.isNotEmpty()) baseName += " : "
 	extendedEntries.forEach { baseName += it.typeAsUserType?.referencedName ?: "" }
 	return baseName
 }

@@ -9,6 +9,12 @@ import org.jetbrains.kotlin.psi.psiUtil.startOffset
 import kotlin.reflect.memberProperties
 
 /**
+ * Base interface of detection findings. Inherits a bunch of useful behaviour
+ * from sub interfaces.
+ *
+ * Basic behaviour of a finding is that is can be assigned to an id and a source code position described as
+ * an entity. Metrics and entity references can also considered for deeper characterization.
+ *
  * @author Artur Bosch
  */
 interface Finding : Compactable, Describable, Reflective, HasEntity, HasMetrics {
@@ -16,6 +22,9 @@ interface Finding : Compactable, Describable, Reflective, HasEntity, HasMetrics 
 	val references: List<Entity>
 }
 
+/**
+ * Describes a source code position.
+ */
 interface HasEntity {
 	val entity: Entity
 	val location: Location
@@ -34,26 +43,42 @@ interface HasEntity {
 		get() = entity.signature
 }
 
+/**
+ * Adds metric container behaviour.
+ */
 interface HasMetrics {
 	val metrics: List<Metric>
 	fun metricByType(type: String): Metric? = metrics.find { it.type == type }
 }
 
+/**
+ * Allows to iterate over attributes reflectively.
+ */
 interface Reflective {
 	fun findAttribute(name: String): Any? {
 		return this.javaClass.kotlin.memberProperties.find { it.name == name }?.get(this)
 	}
 }
 
+/**
+ * Provides a compact string representation.
+ */
 interface Compactable {
 	fun compact(): String
 }
 
+/**
+ * Provides a description attribute.
+ */
 interface Describable {
 	val description: String
 }
 
-class ThresholdedCodeSmell(id: String, entity: Entity, val metric: Metric) : CodeSmell(id, entity, metrics = listOf(metric)) {
+/**
+ * Represents a code smell for which a specific metric can be determined which is responsible
+ * for the existence of a rule violation.
+ */
+open class ThresholdedCodeSmell(id: String, entity: Entity, val metric: Metric) : CodeSmell(id, entity, metrics = listOf(metric)) {
 	val value: Int
 		get() = metric.value
 	val threshold: Int
@@ -64,6 +89,10 @@ class ThresholdedCodeSmell(id: String, entity: Entity, val metric: Metric) : Cod
 	}
 }
 
+/**
+ * A code smell is a finding, implementing its behaviour. Use this class to store
+ * rule violations.
+ */
 open class CodeSmell(override val id: String,
 					 override val entity: Entity,
 					 override val description: String = "",
@@ -74,6 +103,10 @@ open class CodeSmell(override val id: String,
 	}
 }
 
+/**
+ * Metric type, can be an integer or double value. Internally it is stored as an integer,
+ * but the conversion factor and is double attributes can be used to retrieve it as a double value.
+ */
 data class Metric(val type: String,
 				  val value: Int,
 				  val threshold: Int,
@@ -96,6 +129,9 @@ data class Metric(val type: String,
 	else throw IllegalStateException("This metric was not marked as double!")
 }
 
+/**
+ * Specifies a position within a source code fragment.
+ */
 data class Location(val source: SourceLocation,
 					val text: TextLocation,
 					val locationString: String,
@@ -124,6 +160,9 @@ data class Location(val source: SourceLocation,
 	}
 }
 
+/**
+ * Stores information about a specific code fragment.
+ */
 data class Entity(val name: String,
 				  val className: String,
 				  val signature: String,
@@ -144,12 +183,18 @@ data class Entity(val name: String,
 
 }
 
+/**
+ * Stores line and column information of a location.
+ */
 data class SourceLocation(val line: Int, val column: Int) {
 	override fun toString(): String {
 		return "($line,$column)"
 	}
 }
 
+/**
+ * Stores character start and end positions of an text file.
+ */
 data class TextLocation(val start: Int, val end: Int) {
 	override fun toString(): String {
 		return "($start,$end)"
