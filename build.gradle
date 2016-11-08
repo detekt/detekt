@@ -8,6 +8,7 @@ buildscript {
 	}
 	dependencies {
 		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+		classpath "org.junit.platform:junit-platform-gradle-plugin:$junitPlatformVersion"
 	}
 }
 
@@ -32,6 +33,7 @@ subprojects {
 		}
 	}
 
+	apply plugin: 'org.junit.platform.gradle.plugin'
 	apply plugin: 'kotlin'
 	apply plugin: 'maven'
 	apply plugin: 'com.github.ben-manes.versions'
@@ -40,6 +42,12 @@ subprojects {
 	if (it.name.startsWith("detekt-cli")) {
 		apply plugin: 'application'
 		apply plugin: 'com.github.johnrengelman.shadow'
+	}
+
+	junitPlatform {
+		engines {
+			include 'spek'
+		}
 	}
 
 	uploadArchives {
