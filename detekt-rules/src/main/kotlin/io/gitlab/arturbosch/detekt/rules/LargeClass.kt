@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules
 
+import com.intellij.psi.PsiFile
 import io.gitlab.arturbosch.detekt.api.CodeSmellThresholdRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
@@ -29,6 +30,11 @@ class LargeClass(config: Config = Config.empty, threshold: Int = 70) : CodeSmell
 
 	private fun addToHead(amount: Int) {
 		locStack.push(locStack.pop() + amount)
+	}
+
+	override fun visitFile(file: PsiFile?) {
+		locStack.clear()
+		super.visitFile(file)
 	}
 
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
