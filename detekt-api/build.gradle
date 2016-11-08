@@ -4,6 +4,7 @@ buildscript {
 
 	repositories {
 		mavenCentral()
+		mavenLocal()
 	}
 	dependencies {
 		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
@@ -13,7 +14,7 @@ buildscript {
 
 apply plugin: 'kotlin'
 apply plugin: 'org.junit.platform.gradle.plugin'
-apply plugin: 'maven-publish'
+apply plugin: 'maven'
 
 repositories {
 	mavenCentral()
@@ -23,10 +24,10 @@ repositories {
 	}
 }
 
-publishing {
-	publications {
-		mavenJava(MavenPublication) {
-			from components.java
+uploadArchives {
+	repositories {
+		mavenDeployer {
+			repository(url: uri('../repo'))
 		}
 	}
 }

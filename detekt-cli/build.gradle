@@ -56,7 +56,6 @@ dependencies {
 	testRuntime "org.jetbrains.spek:spek-junit-platform-engine:$spek_version"
 }
 
-
 uploadArchives {
 	repositories {
 		mavenDeployer {
