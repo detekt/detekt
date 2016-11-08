@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.rules
+package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
@@ -12,7 +12,8 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
 class NoElseInWhenExpression(config: Config = Config.empty) : Rule("NoElseInWhenExpression", Severity.Defect, config) {
 
 	override fun visitWhenExpression(expression: KtWhenExpression) {
-		if (expression.elseExpression == null) addFindings(CodeSmell(id, Entity.from(expression)))
+		if (expression.elseExpression == null)
+			addFindings(CodeSmell(id, Entity.from(expression)))
 	}
 
 }

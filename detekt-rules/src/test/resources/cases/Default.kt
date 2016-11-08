@@ -53,6 +53,11 @@ class Default {
 		when(true) {
 			false -> println()
 		}
+		when("hello") {
+			"hello" -> println()
+			"hello" -> println()
+			else -> println()
+		}
 	}
 
 	/**
