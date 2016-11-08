@@ -3,8 +3,9 @@ package io.gitlab.arturbosch.detekt.rules.providers
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.rules.bugs.NoElseInWhenExpression
 import io.gitlab.arturbosch.detekt.rules.bugs.DuplicateCaseInWhenExpression
+import io.gitlab.arturbosch.detekt.rules.bugs.EqualsWithHashCodeExist
+import io.gitlab.arturbosch.detekt.rules.bugs.NoElseInWhenExpression
 
 /**
  * @author Artur Bosch
@@ -12,9 +13,10 @@ import io.gitlab.arturbosch.detekt.rules.bugs.DuplicateCaseInWhenExpression
 class PotentialBugProvider : RuleSetProvider {
 
 	override fun instance(config: Config): RuleSet {
-		return RuleSet("potential_bugs", listOf(
+		return RuleSet("potential-bugs", listOf(
 				NoElseInWhenExpression(config),
-				DuplicateCaseInWhenExpression(config)
+				DuplicateCaseInWhenExpression(config),
+				EqualsWithHashCodeExist(config)
 		))
 	}
 

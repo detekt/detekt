@@ -160,4 +160,13 @@ class Default {
 		println()
 		println()
 	}
+
+	// EqualsWithHashCode Rule
+//	override fun hashCode(): Int {
+//		return 1
+//	}
+
+	override fun equals(other: Any?): Boolean {
+		return false
+	}
 }
