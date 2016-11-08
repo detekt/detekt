@@ -1,36 +1,13 @@
 buildscript {
-	ext.kotlin_version = '1.0.4'
-	ext.spek_version = '1.1.19'
-
 	repositories {
 		mavenCentral()
-		mavenLocal()
 	}
 	dependencies {
-		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-		classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0-M2'
+		classpath "org.junit.platform:junit-platform-gradle-plugin:$junitPlatformVersion"
 	}
 }
 
-apply plugin: 'kotlin'
 apply plugin: 'org.junit.platform.gradle.plugin'
-apply plugin: 'maven'
-
-repositories {
-	mavenCentral()
-	mavenLocal()
-	maven {
-		url "http://dl.bintray.com/jetbrains/spek"
-	}
-}
-
-uploadArchives {
-	repositories {
-		mavenDeployer {
-			repository(url: uri('../repo'))
-		}
-	}
-}
 
 junitPlatform {
 	engines {
@@ -38,15 +15,14 @@ junitPlatform {
 	}
 }
 
-group 'io.gitlab.arturbosch.detekt'
-version '1.0.0.M2'
+configurations {
+	compile.extendsFrom kotlin
+	testCompile.extendsFrom kotlinTest
+//	testRuntime.extendsFrom junitPlatform
+}
 
 dependencies {
-	compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-	compile "org.jetbrains.kotlin:kotlin-compiler:$kotlin_version"
-	compile group: 'org.yaml', name: 'snakeyaml', version: '1.17'
-	testCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
-	testCompile "org.jetbrains.spek:spek-api:$spek_version"
-	testRuntime 'org.junit.platform:junit-platform-launcher:1.0.0-M2'
-	testRuntime "org.jetbrains.spek:spek-junit-platform-engine:$spek_version"
+	compile "org.yaml:snakeyaml:$yamlVersion"
+	testRuntime "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
+	testRuntime "org.jetbrains.spek:spek-junit-platform-engine:$spekVersion"
 }
