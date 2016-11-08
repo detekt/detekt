@@ -25,6 +25,9 @@ class Empty {
 		} else {
 
 		}
+		when(true) {
+
+		}
 		for (i in 1..10) {
 
 		}

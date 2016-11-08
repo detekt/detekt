@@ -11,6 +11,7 @@ import io.gitlab.arturbosch.detekt.rules.empty.EmptyFinallyBlock
 import io.gitlab.arturbosch.detekt.rules.empty.EmptyForBlock
 import io.gitlab.arturbosch.detekt.rules.empty.EmptyFunctionBlock
 import io.gitlab.arturbosch.detekt.rules.empty.EmptyIfBlock
+import io.gitlab.arturbosch.detekt.rules.empty.EmptyWhenBlock
 import io.gitlab.arturbosch.detekt.rules.empty.EmptyWhileBlock
 
 /**
@@ -28,7 +29,8 @@ class EmptyCodeProvider : RuleSetProvider {
 				EmptyForBlock(config),
 				EmptyElseBlock(config),
 				EmptyFunctionBlock(config),
-				EmptyClassBlock(config)
+				EmptyClassBlock(config),
+				EmptyWhenBlock(config)
 		))
 	}
 

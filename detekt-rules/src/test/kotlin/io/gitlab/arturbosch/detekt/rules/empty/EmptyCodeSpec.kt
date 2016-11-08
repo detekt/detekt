@@ -61,6 +61,11 @@ class EmptyCodeSpec {
 		test { EmptyClassBlock(Config.empty) }
 	}
 
+	@Test
+	fun findsEmptyWhen() {
+		test { EmptyWhenBlock(Config.empty) }
+	}
+
 	private fun test(block: () -> Rule) {
 		val rule = block()
 		rule.visit(root)
