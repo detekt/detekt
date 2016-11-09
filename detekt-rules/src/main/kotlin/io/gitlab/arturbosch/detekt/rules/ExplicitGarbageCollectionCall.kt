@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtSimpleNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
 
@@ -15,11 +16,15 @@ class ExplicitGarbageCollectionCall(config: Config) : Rule("ExplicitGarbageColle
 
 	override fun visitCallExpression(expression: KtCallExpression) {
 		expression.getCallNameExpression()?.let {
-			if (it.textMatches("gc") || it.textMatches("runFinalization")) {
-				it.getReceiverExpression()?.let {
-					when (it.text) {
-						"System", "Runtime.getRuntime()" -> addFindings(CodeSmell(id, Entity.from(expression)))
-					}
+			matchesGCCall(expression, it)
+		}
+	}
+
+	private fun matchesGCCall(expression: KtCallExpression, it: KtSimpleNameExpression) {
+		if (it.textMatches("gc") || it.textMatches("runFinalization")) {
+			it.getReceiverExpression()?.let {
+				when (it.text) {
+					"System", "Runtime.getRuntime()" -> addFindings(CodeSmell(id, Entity.from(expression)))
 				}
 			}
 		}
