@@ -9,7 +9,7 @@ import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.rules.CommonSpec
 import org.jetbrains.spek.api.SubjectSpek
 import org.jetbrains.spek.api.dsl.itBehavesLike
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 /**
  * @author Artur Bosch

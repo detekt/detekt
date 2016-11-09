@@ -6,7 +6,7 @@ import com.natpryce.hamkrest.hasSize
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.compileForTest
 import io.gitlab.arturbosch.detekt.rules.Case
-import org.junit.Test
+import org.junit.jupiter.api.Test
 
 /**
  * @author Artur Bosch
