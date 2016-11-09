@@ -15,13 +15,18 @@ enum class Case(val file: String) {
 	CasesFolder("/cases"),
 	Default("/cases/Default.kt"),
 	Empty("/cases/Empty.kt"),
+	Exceptions("/cases/Exceptions.kt"),
 	NamingConventions("/cases/NamingConventions.kt"),
 	ComplexClass("/cases/ComplexClass.kt"),
 	Comments("/cases/Comments.kt"),
 	NestedClasses("/cases/NestedClasses.kt"),
 	NestedLongMethods("/cases/NestedLongMethods.kt");
 
-	fun path(): Path = Paths.get(Case::class.java.getResource(file).path)
+	fun path(): Path {
+		val resource = Case::class.java.getResource(file)
+		requireNotNull(resource)
+		return Paths.get(resource.path)
+	}
 }
 
 fun load(case: Case): KtFile {

@@ -1,0 +1,55 @@
+package io.gitlab.arturbosch.detekt.rules.exceptions
+
+import com.natpryce.hamkrest.assertion.assertThat
+import com.natpryce.hamkrest.equalTo
+import com.natpryce.hamkrest.hasSize
+import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.rules.Case
+import io.gitlab.arturbosch.detekt.rules.load
+import org.junit.Test
+
+/**
+ * @author Artur Bosch
+ */
+class ExceptionsSpec {
+
+	val root = load(Case.Exceptions)
+
+	@Test
+	fun findArrayIndexOOBE() {
+		findOne { CatchArrayIndexOutOfBoundsException() }
+	}
+
+	@Test
+	fun findError() {
+		findOne { CatchError() }
+	}
+
+	@Test
+	fun findException() {
+		findOne { CatchException() }
+	}
+
+	@Test
+	fun findIndexOOBE() {
+		findOne { CatchArrayIndexOutOfBoundsException() }
+	}
+
+	@Test
+	fun findNPE() {
+		findOne { CatchNullPointerException() }
+	}
+
+	@Test
+	fun findRuntimeException() {
+		findOne { CatchRuntimeException() }
+	}
+
+	private fun findOne(block: () -> Rule) {
+		val rule = block()
+		rule.visit(root)
+		assertThat(rule.findings, hasSize(equalTo(1)))
+	}
+
+
+}
