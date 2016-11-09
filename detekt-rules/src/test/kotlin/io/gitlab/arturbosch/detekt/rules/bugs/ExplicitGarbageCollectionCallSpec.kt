@@ -6,7 +6,6 @@ import com.natpryce.hamkrest.hasSize
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.compileForTest
 import io.gitlab.arturbosch.detekt.rules.Case
-import io.gitlab.arturbosch.detekt.rules.ExplicitGarbageCollectionCall
 import org.junit.Test
 
 /**

@@ -29,6 +29,15 @@ class NestedClasses {
 			}
 
 			fun nestedLongMethod() {
+				if (true) {
+					if (true) {
+						if (true) {
+							if (true) {
+
+							}
+						}
+					}
+				}
 				fun nestedLocalMethod() {
 					println()
 					println()

@@ -37,6 +37,18 @@ class Default {
 		System.runFinalization()
 	}
 
+	fun nestedBlockDepthOfGreaterThree() {
+		if (true) {
+			if (true) {
+				if (true) {
+					if (true) {
+
+					}
+				}
+			}
+		}
+	}
+
 	/**
 	 * 8, no else
 	 */

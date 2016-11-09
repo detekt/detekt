@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.rules.ComplexMethod
 import io.gitlab.arturbosch.detekt.rules.LargeClass
 import io.gitlab.arturbosch.detekt.rules.LongMethod
 import io.gitlab.arturbosch.detekt.rules.LongParameterList
+import io.gitlab.arturbosch.detekt.rules.NestedBlockDepth
 
 /**
  * @author Artur Bosch
@@ -19,7 +20,8 @@ class CodeSmellProvider : RuleSetProvider {
 				LongParameterList(subConfig),
 				LongMethod(subConfig),
 				LargeClass(subConfig),
-				ComplexMethod(config)
+				ComplexMethod(subConfig),
+				NestedBlockDepth(subConfig)
 		))
 	}
 }

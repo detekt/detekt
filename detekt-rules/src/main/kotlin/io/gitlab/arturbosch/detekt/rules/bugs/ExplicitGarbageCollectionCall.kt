@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.rules
+package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
@@ -24,7 +24,7 @@ class ExplicitGarbageCollectionCall(config: Config) : Rule("ExplicitGarbageColle
 		if (it.textMatches("gc") || it.textMatches("runFinalization")) {
 			it.getReceiverExpression()?.let {
 				when (it.text) {
-					"System", "Runtime.getRuntime()" -> addFindings(CodeSmell(id, Entity.from(expression)))
+					"System", "Runtime.getRuntime()" -> addFindings(CodeSmell(id, Entity.Companion.from(expression)))
 				}
 			}
 		}
