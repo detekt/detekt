@@ -31,6 +31,12 @@ class Default {
 
 	}
 
+	fun explicitGCCall() {
+		System.gc()
+		Runtime.getRuntime().gc()
+		System.runFinalization()
+	}
+
 	/**
 	 * 8, no else
 	 */
