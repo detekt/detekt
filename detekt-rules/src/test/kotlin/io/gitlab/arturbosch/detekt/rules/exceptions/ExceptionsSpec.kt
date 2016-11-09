@@ -16,6 +16,31 @@ class ExceptionsSpec {
 	val root = load(Case.Exceptions)
 
 	@Test
+	fun findThrowError() {
+		findOne { ThrowError() }
+	}
+
+	@Test
+	fun findThrowRuntimeException() {
+		findOne { ThrowRuntimeException() }
+	}
+
+	@Test
+	fun findThrowNullPointerException() {
+		findOne { ThrowNullPointerException() }
+	}
+
+	@Test
+	fun findThrowException() {
+		findOne { ThrowException() }
+	}
+
+	@Test
+	fun findThrowThrowable() {
+		findOne { ThrowThrowable() }
+	}
+
+	@Test
 	fun findArrayIndexOOBE() {
 		findOne { CatchArrayIndexOutOfBoundsException() }
 	}

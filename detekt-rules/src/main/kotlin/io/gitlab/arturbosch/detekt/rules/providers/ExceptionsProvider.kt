@@ -9,6 +9,11 @@ import io.gitlab.arturbosch.detekt.rules.exceptions.CatchException
 import io.gitlab.arturbosch.detekt.rules.exceptions.CatchIndexOutOfBoundsException
 import io.gitlab.arturbosch.detekt.rules.exceptions.CatchNullPointerException
 import io.gitlab.arturbosch.detekt.rules.exceptions.CatchRuntimeException
+import io.gitlab.arturbosch.detekt.rules.exceptions.ThrowError
+import io.gitlab.arturbosch.detekt.rules.exceptions.ThrowException
+import io.gitlab.arturbosch.detekt.rules.exceptions.ThrowNullPointerException
+import io.gitlab.arturbosch.detekt.rules.exceptions.ThrowRuntimeException
+import io.gitlab.arturbosch.detekt.rules.exceptions.ThrowThrowable
 
 /**
  * @author Artur Bosch
@@ -24,7 +29,12 @@ class ExceptionsProvider : RuleSetProvider {
 				CatchRuntimeException(subConfig),
 				CatchError(subConfig),
 				CatchNullPointerException(subConfig),
-				CatchException(subConfig)
+				CatchException(subConfig),
+				ThrowError(subConfig),
+				ThrowException(subConfig),
+				ThrowRuntimeException(subConfig),
+				ThrowNullPointerException(subConfig),
+				ThrowThrowable(subConfig)
 		))
 	}
 
