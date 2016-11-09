@@ -70,9 +70,11 @@ class NestedBlockDepth(config: Config = Config.empty, threshold: Int = 3) : Code
 
 		override fun visitCallExpression(expression: KtCallExpression) {
 			val lambdaArguments = expression.lambdaArguments
-			insideLambdaDo(lambdaArguments) { inc() }
-			super.visitCallExpression(expression)
-			insideLambdaDo(lambdaArguments) { dec() }
+			if (expression.isUsedForNesting()) {
+				insideLambdaDo(lambdaArguments) { inc() }
+				super.visitCallExpression(expression)
+				insideLambdaDo(lambdaArguments) { dec() }
+			}
 		}
 
 		private fun insideLambdaDo(lambdaArguments: List<KtLambdaArgument>, function: () -> Unit) {

@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules
 
+import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import org.jetbrains.spek.api.SubjectSpek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
@@ -18,6 +19,7 @@ class NestedBlockDepthSpec : SubjectSpek<NestedBlockDepth>({
 			val root = load(Case.NestedClasses)
 			subject.visit(root)
 			assertEquals(subject.findings.size, 1)
+			assertEquals((subject.findings[0] as ThresholdedCodeSmell).value, 5)
 		}
 	}
 

@@ -60,11 +60,13 @@ class ComplexMethod(config: Config = Config.empty, threshold: Int = 10) : CodeSm
 		}
 
 		override fun visitCallExpression(expression: KtCallExpression) {
-			val lambdaArguments = expression.lambdaArguments
-			if (lambdaArguments.size > 0) {
-				val lambdaArgument = lambdaArguments[0]
-				lambdaArgument.getLambdaExpression().bodyExpression?.let {
-					inc()
+			if (expression.isUsedForNesting()) {
+				val lambdaArguments = expression.lambdaArguments
+				if (lambdaArguments.size > 0) {
+					val lambdaArgument = lambdaArguments[0]
+					lambdaArgument.getLambdaExpression().bodyExpression?.let {
+						inc()
+					}
 				}
 			}
 			super.visitCallExpression(expression)
