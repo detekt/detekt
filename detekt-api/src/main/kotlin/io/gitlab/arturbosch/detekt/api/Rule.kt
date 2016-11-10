@@ -13,9 +13,10 @@ import org.jetbrains.kotlin.psi.KtFile
  *
  * @author Artur Bosch
  */
+
 abstract class Rule(val id: String,
 					val severity: Severity = Rule.Severity.Minor,
-					val config: Config = Config.empty) : DetektVisitor() {
+					private val config: Config = Config.empty) : DetektVisitor() {
 
 	/**
 	 * Rules can classified into different severity grades. Maintainer can choose
@@ -25,7 +26,9 @@ abstract class Rule(val id: String,
 		CodeSmell, Style, Warning, Defect, Minor, Maintainability, Security
 	}
 
-	private val active = config.subConfig(id).valueOrDefault("active") { true }
+	private val active = withConfig {
+		valueOrDefault("active") { true }
+	}
 
 	private var _findings: MutableList<Finding> = mutableListOf()
 	/**
@@ -48,6 +51,10 @@ abstract class Rule(val id: String,
 			root.accept(this)
 			postVisit(root)
 		}
+	}
+
+	protected fun <T> withConfig(block: Config.() -> T): T {
+		return config.subConfig(id).block()
 	}
 
 	protected fun ifRuleActive(block: () -> Unit) {

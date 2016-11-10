@@ -16,7 +16,9 @@ abstract class TokenRule(id: String,
 						 severity: Severity = Rule.Severity.Minor,
 						 config: Config = Config.empty) : Rule(id, severity, config) {
 
-	protected val autoCorrect: Boolean = config.valueOrDefault("autoCorrect") { false }
+	protected val autoCorrect: Boolean = withConfig {
+		valueOrDefault("autoCorrect") { false }
+	}
 
 	override fun visit(root: KtFile) {
 		ifRuleActive {
@@ -31,4 +33,5 @@ abstract class TokenRule(id: String,
 	 * Every ASTNode is considered in isolation. Use 'is' operator to search for wished elements.
 	 */
 	abstract fun procedure(node: ASTNode)
+
 }
