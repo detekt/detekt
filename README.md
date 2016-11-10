@@ -168,6 +168,22 @@ class TooManyFunctions2(config: Config) : Rule("TooManyFunctionsTwo", Severity.M
 }
 ```
 
+If you want your rule to be configurable, write down your properties inside the detekt.yml file
+ and use the `withConfig` function:
+
+```yaml
+MyRuleSet:
+  MyRule:
+    MyMetric: 5
+    threshold: 10
+  OtherRule:
+    active: false
+```
+
+By specifying the rule set and rule ids, detekt will use the sub configuration of MyRule:
+
+```val threshold = withConfig { valueOrDefault("threshold") { threshold } }```
+
 #### Maven
 
 If your using maven to build rule sets or use detekt as a dependency, you have to run the additional task `publishToMavenLocal`
