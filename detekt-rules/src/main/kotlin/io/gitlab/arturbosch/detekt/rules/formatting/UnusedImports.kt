@@ -21,7 +21,6 @@ class UnusedImports(config: Config) : TokenRule("UnusedImports", Severity.Style,
 			"modAssign", "equals", "compareTo")
 	private val ref = mutableSetOf("*")
 
-
 	override fun procedure(node: ASTNode) {
 		if (node.elementType == KtStubElementTypes.FILE) {
 			node.visit { node ->
