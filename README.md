@@ -53,7 +53,12 @@ More on this topic see section _Custom RuleSets_.
 
 ```groovy
 repositories {
+    // if you 'gradle install' all detekt modules
 	mavenLocal()
+	// or when all modules should be provided
+	maven {
+        url  "http://dl.bintray.com/arturbosch/code-analysis"
+    }
 }
 
 configurations {
