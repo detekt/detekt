@@ -11,16 +11,21 @@ package io.gitlab.arturbosch.detekt.api
 interface RuleSetProvider {
 
 	/**
+	 * Every rule set must be pre-configured with an ID to validate if this rule set
+	 * must be created for current analysis.
+	 */
+	val ruleSetId: String
+
+	/**
 	 * Can return a rule set if this specific rule set is not considered as ignore.
 	 *
 	 * Api notice: As the rule set id is not known before creating the rule set instance,
 	 * we must first create the rule set and then check if it is active.
 	 */
 	fun buildRuleset(config: Config): RuleSet? {
-		val ruleSet = instance(config)
-		val subConfig = config.subConfig(ruleSet.id)
+		val subConfig = config.subConfig(ruleSetId)
 		val active = subConfig.valueOrDefault("active") { true }
-		return if (active) ruleSet else null
+		return if (active) instance(subConfig) else null
 	}
 
 	/**

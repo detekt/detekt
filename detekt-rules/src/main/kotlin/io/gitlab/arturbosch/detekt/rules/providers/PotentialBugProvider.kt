@@ -13,8 +13,10 @@ import io.gitlab.arturbosch.detekt.rules.bugs.NoElseInWhenExpression
  */
 class PotentialBugProvider : RuleSetProvider {
 
+	override val ruleSetId: String = "potential-bugs"
+
 	override fun instance(config: Config): RuleSet {
-		return RuleSet("potential-bugs", listOf(
+		return RuleSet(ruleSetId, listOf(
 				NoElseInWhenExpression(config),
 				DuplicateCaseInWhenExpression(config),
 				EqualsWithHashCodeExist(config),

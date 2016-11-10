@@ -8,8 +8,11 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
  * @author Artur Bosch
  */
 object DebugRuleSetProvider : RuleSetProvider {
+
+	override val ruleSetId: String = "debug"
+
 	override fun instance(config: Config): RuleSet {
-		return RuleSet("debug", listOf(
+		return RuleSet(ruleSetId, listOf(
 				ElementPrinter(),
 				TokenPrinter()
 		))

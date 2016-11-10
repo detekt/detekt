@@ -7,9 +7,9 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 /**
  * @author Artur Bosch
  */
-class SampleProvider : RuleSetProvider {
+class SampleProvider(override val ruleSetId: String = "sample") : RuleSetProvider {
 	override fun instance(config: Config): RuleSet {
-		return RuleSet("sample", listOf(
+		return RuleSet(ruleSetId, listOf(
 				TooManyFunctions(),
 				TooManyFunctions2(config)
 		))

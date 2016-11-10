@@ -12,13 +12,13 @@ import java.nio.file.Paths
 
 val path: Path = Paths.get(KtTreeCompilerSpec::class.java.getResource("/cases").path)
 
-class TestProvider : RuleSetProvider {
+class TestProvider(override val ruleSetId: String = "Test") : RuleSetProvider {
 	override fun instance(config: Config): RuleSet {
 		return RuleSet("Test", listOf())
 	}
 }
 
-class TestProvider2 : RuleSetProvider {
+class TestProvider2(override val ruleSetId: String = "Test2") : RuleSetProvider {
 	override fun instance(config: Config): RuleSet {
 		return RuleSet("Test", listOf())
 	}

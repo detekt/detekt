@@ -9,6 +9,14 @@ code-smell:
   ComplexMethod:
     threshold: 10
 
+formatting:
+  active: true
+  autoCorrect: false
+  Indentation:
+    active: false
+  ConsecutiveBlankLines:
+    active: false
+
 style:
   active: true
   WildcardImport:
@@ -18,7 +26,7 @@ style:
   NamingConventionViolation:
 
 comments:
-  active: false
+  active: true
   CommentOverPrivateMethod:
     active: true
   CommentOverPrivateProperty:

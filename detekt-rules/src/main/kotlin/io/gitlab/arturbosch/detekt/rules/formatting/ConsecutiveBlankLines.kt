@@ -20,9 +20,9 @@ class ConsecutiveBlankLines(config: Config) : TokenRule("ConsecutiveBlankLines",
 			val split = node.getText().split("\n")
 			if (split.size > 3) {
 				addFindings(CodeSmell(id, Entity.from(node), "Needless blank line(s)"))
-				if (autoCorrect) {
-					(node as LeafPsiElement).replaceWithText("${split.first()}\n\n${split.last()}")
-				}
+//				if (autoCorrect) {
+//					(node as LeafPsiElement).replaceWithText("${split.first()}\n\n${split.last()}")
+//				}
 			}
 		}
 	}

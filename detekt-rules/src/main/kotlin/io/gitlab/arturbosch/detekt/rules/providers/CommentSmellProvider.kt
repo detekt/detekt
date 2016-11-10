@@ -13,8 +13,10 @@ import io.gitlab.arturbosch.detekt.rules.NoDocOverPublicMethod
  */
 class CommentSmellProvider : RuleSetProvider {
 
+	override val ruleSetId: String = "comments"
+
 	override fun instance(config: Config): RuleSet {
-		return RuleSet("comments", listOf(
+		return RuleSet(ruleSetId, listOf(
 				CommentOverPrivateMethod(config),
 				CommentOverPrivateProperty(config),
 				NoDocOverPublicClass(config),

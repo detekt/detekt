@@ -10,12 +10,13 @@ import io.gitlab.arturbosch.detekt.rules.formatting.Indentation
  * @author Artur Bosch
  */
 class FormattingProvider : RuleSetProvider {
+
+	override val ruleSetId: String = "formatting"
+
 	override fun instance(config: Config): RuleSet {
-		val providerId = "formatting"
-		val subConfig = config.subConfig(providerId)
-		return RuleSet(providerId, listOf(
-				Indentation(subConfig),
-				ConsecutiveBlankLines(subConfig)
+		return RuleSet(ruleSetId, listOf(
+				Indentation(config),
+				ConsecutiveBlankLines(config)
 		))
 	}
 }

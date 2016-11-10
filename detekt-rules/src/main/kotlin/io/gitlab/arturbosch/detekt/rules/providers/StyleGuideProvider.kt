@@ -12,8 +12,11 @@ import io.gitlab.arturbosch.detekt.rules.WildcardImport
  * @author Artur Bosch
  */
 class StyleGuideProvider : RuleSetProvider {
+
+	override val ruleSetId: String = "style"
+
 	override fun instance(config: Config): RuleSet {
-		return RuleSet("style", listOf(
+		return RuleSet(ruleSetId, listOf(
 				WildcardImport(config),
 				OptionalSemicolon(config),
 				OptionalUnit(config),

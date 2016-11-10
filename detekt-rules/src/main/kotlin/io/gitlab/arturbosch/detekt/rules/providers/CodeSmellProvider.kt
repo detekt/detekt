@@ -13,15 +13,16 @@ import io.gitlab.arturbosch.detekt.rules.NestedBlockDepth
  * @author Artur Bosch
  */
 class CodeSmellProvider : RuleSetProvider {
+
+	override val ruleSetId: String = "code-smell"
+
 	override fun instance(config: Config): RuleSet {
-		val providerId = "code-smell"
-		val subConfig = config.subConfig(providerId)
-		return RuleSet(providerId, listOf(
-				LongParameterList(subConfig),
-				LongMethod(subConfig),
-				LargeClass(subConfig),
-				ComplexMethod(subConfig),
-				NestedBlockDepth(subConfig)
+		return RuleSet(ruleSetId, listOf(
+				LongParameterList(config),
+				LongMethod(config),
+				LargeClass(config),
+				ComplexMethod(config),
+				NestedBlockDepth(config)
 		))
 	}
 }

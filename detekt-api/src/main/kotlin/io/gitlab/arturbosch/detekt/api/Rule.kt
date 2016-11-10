@@ -25,7 +25,7 @@ abstract class Rule(val id: String,
 		CodeSmell, Style, Warning, Defect, Minor, Maintainability, Security
 	}
 
-	private val active = config.valueOrDefault("active") { true }
+	private val active = config.subConfig(id).valueOrDefault("active") { true }
 
 	private var _findings: MutableList<Finding> = mutableListOf()
 	/**
@@ -50,7 +50,7 @@ abstract class Rule(val id: String,
 		}
 	}
 
-	internal fun ifRuleActive(block: () -> Unit) {
+	protected fun ifRuleActive(block: () -> Unit) {
 		if (active) {
 			clearFindings()
 			block()

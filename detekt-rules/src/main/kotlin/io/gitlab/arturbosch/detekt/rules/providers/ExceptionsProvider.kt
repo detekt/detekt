@@ -20,21 +20,21 @@ import io.gitlab.arturbosch.detekt.rules.exceptions.ThrowThrowable
  */
 class ExceptionsProvider : RuleSetProvider {
 
+	override val ruleSetId: String = "exceptions"
+
 	override fun instance(config: Config): RuleSet {
-		val providerId = "exceptions"
-		val subConfig = config.subConfig(providerId)
-		return RuleSet(providerId, listOf(
-				CatchArrayIndexOutOfBoundsException(subConfig),
-				CatchIndexOutOfBoundsException(subConfig),
-				CatchRuntimeException(subConfig),
-				CatchError(subConfig),
-				CatchNullPointerException(subConfig),
-				CatchException(subConfig),
-				ThrowError(subConfig),
-				ThrowException(subConfig),
-				ThrowRuntimeException(subConfig),
-				ThrowNullPointerException(subConfig),
-				ThrowThrowable(subConfig)
+		return RuleSet(ruleSetId, listOf(
+				CatchArrayIndexOutOfBoundsException(config),
+				CatchIndexOutOfBoundsException(config),
+				CatchRuntimeException(config),
+				CatchError(config),
+				CatchNullPointerException(config),
+				CatchException(config),
+				ThrowError(config),
+				ThrowException(config),
+				ThrowRuntimeException(config),
+				ThrowNullPointerException(config),
+				ThrowThrowable(config)
 		))
 	}
 
