@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.core
 
 import com.intellij.testFramework.LightVirtualFile
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import org.jetbrains.kotlin.psi.KtFile
 import java.net.URLClassLoader
@@ -19,6 +18,7 @@ class Detekt(val project: Path,
 			 pathFilters: List<PathFilter> = listOf(),
 			 parallelCompilation: Boolean = false) {
 
+	private val notifications: MutableList<Notification> = mutableListOf()
 	private val compiler: KtTreeCompiler
 
 	init {
@@ -31,7 +31,7 @@ class Detekt(val project: Path,
 		compiler = KtTreeCompiler(project, pathFilters, parallelCompilation)
 	}
 
-	fun run(): Map<String, List<Finding>> {
+	fun run(): Detektion {
 		val ktFiles = compiler.compile()
 		val providers = loadProviders()
 		val futures = providers.map { it.buildRuleset(config) }
@@ -41,15 +41,7 @@ class Detekt(val project: Path,
 				.map { task { it.acceptAll(ktFiles) } }
 		val findings = awaitAll(futures).toMap()
 		saveModifiedFilesIfAutoCorrectEnabled(ktFiles)
-		return findings
-	}
-
-	private fun saveModifiedFilesIfAutoCorrectEnabled(ktFiles: List<KtFile>) {
-		ktFiles.filter { it.modificationStamp > 0 }
-				.map { it.relativePath to it.text }
-				.filter { it.first != null }
-				.map { project.resolve(it.first) to it.second }
-				.forEach { println(it.first)/*Files.write(it.first, it.second.toByteArray())*/ }
+		return DetektResult(findings, notifications)
 	}
 
 	private fun loadProviders(): ServiceLoader<RuleSetProvider> {
@@ -58,7 +50,21 @@ class Detekt(val project: Path,
 		return ServiceLoader.load(RuleSetProvider::class.java, detektLoader)
 	}
 
+	private fun saveModifiedFilesIfAutoCorrectEnabled(ktFiles: List<KtFile>) {
+		if (config.valueOrDefault("autoCorrect") { false }) {
+			ktFiles.filter { it.modificationStamp > 0 }
+					.map { it.relativePath to it.text }
+					.filter { it.first != null }
+					.map { project.resolve(it.first) to it.second }
+					.forEach {
+						notifications.add(ModificationNotification(it.first))
+						Files.write(it.first, it.second.toByteArray())
+					}
+		}
+	}
+
+	private val KtFile.relativePath: String?
+		get() = (this.containingFile.viewProvider.virtualFile as LightVirtualFile).originalFile?.name
+
 }
 
-private val KtFile.relativePath: String?
-	get() = (this.containingFile.viewProvider.virtualFile as LightVirtualFile).originalFile?.name

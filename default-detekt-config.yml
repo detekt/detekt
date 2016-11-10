@@ -1,5 +1,4 @@
-detekt:
-  autoCorrect: true
+autoCorrect: true
 
 code-smell:
   active: true

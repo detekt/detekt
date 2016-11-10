@@ -3,12 +3,7 @@ package io.gitlab.arturbosch.detekt.cli
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.ParameterException
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.YamlConfig
-import io.gitlab.arturbosch.detekt.core.Detekt
-import io.gitlab.arturbosch.detekt.core.PathFilter
 import java.nio.file.Path
-import java.nio.file.Paths
 
 /**
  * @author Artur Bosch
@@ -17,17 +12,17 @@ class Main {
 
 	@Parameter(names = arrayOf("--project", "-p"), required = true,
 			converter = PathConverter::class, description = "Project path to analyze (path/to/project).")
-	private lateinit var project: Path
+	lateinit var project: Path
 
 	@Parameter(names = arrayOf("--filters", "-f"), description = "Path filters defined through regex with separator ';' (\".*test.*\").")
-	private val filters: String? = null // Using a converter for List<PathFilter> resulted into a ClassCastException
+	val filters: String? = null // Using a converter for List<PathFilter> resulted into a ClassCastException
 
 	@Parameter(names = arrayOf("--config", "-c"), description = "Path to the config file (path/to/config).",
 			converter = PathConverter::class)
-	private var config: Path? = null
+	var config: Path? = null
 
 	@Parameter(names = arrayOf("--rules", "-r"), description = "Extra paths to ruleset jars separated by ';'.")
-	private val rules: String? = null
+	val rules: String? = null
 
 	@Parameter(names = arrayOf("--help", "-h"), help = true, description = "Shows the usage.")
 	private var help: Boolean = false
@@ -36,16 +31,10 @@ class Main {
 
 		@JvmStatic
 		fun main(args: Array<String>) {
-			val cli = parseAndValidateArgs(args)
-			val pathFilters = cli.filters.letIf { split(";").map(::PathFilter) }
-			val rules = cli.rules.letIf { split(";").map { Paths.get(it) } }
-			val configPath = cli.config
-			val config = if (configPath != null) YamlConfig.load(configPath) else Config.empty
-			val results = Detekt(cli.project, config, rules, pathFilters = pathFilters).run()
-			printFindings(results)
+			val main = parseAndValidateArgs(args)
+			Runner().runWith(main)
 		}
 
-		private fun <T> String?.letIf(init: String.() -> List<T>): List<T> = if (this == null || this.isEmpty()) listOf<T>() else this.init()
 		private fun parseAndValidateArgs(args: Array<String>): Main {
 			val cli = Main()
 			val jCommander = JCommander(cli)
@@ -68,5 +57,4 @@ class Main {
 		}
 	}
 }
-
 

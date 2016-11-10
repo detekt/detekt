@@ -14,7 +14,6 @@ import org.jetbrains.kotlin.psi.psiUtil.startOffset
  * @author Artur Bosch
  */
 
-
 internal fun PsiElement.searchName(): String {
 	return this.namedUnwrappedElement?.name ?: "<NoNameFound>"
 }
