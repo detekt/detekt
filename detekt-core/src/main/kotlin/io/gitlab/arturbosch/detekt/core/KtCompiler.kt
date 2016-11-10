@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.core
 
+import com.intellij.mock.MockProject
 import com.intellij.openapi.util.Disposer
 import com.intellij.psi.PsiFileFactory
 import com.intellij.testFramework.LightVirtualFile
@@ -21,6 +22,7 @@ class KtCompiler(val project: Path) {
 	init {
 		val project = KotlinCoreEnvironment.createForProduction(Disposer.newDisposable(),
 				CompilerConfiguration(), EnvironmentConfigFiles.JVM_CONFIG_FILES).project
+		MutableAST.forProject(project as MockProject)
 		psiFileFactory = PsiFileFactory.getInstance(project)
 	}
 

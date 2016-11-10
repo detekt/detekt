@@ -1,3 +1,6 @@
+detekt:
+  autoCorrect: true
+
 code-smell:
   active: true
   LongMethod:
@@ -11,11 +14,12 @@ code-smell:
 
 formatting:
   active: true
-  autoCorrect: false
   Indentation:
     active: false
+    autoCorrect: false
   ConsecutiveBlankLines:
     active: true
+    autoCorrect: true
 
 style:
   active: true

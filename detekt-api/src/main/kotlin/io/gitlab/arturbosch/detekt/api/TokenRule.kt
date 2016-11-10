@@ -16,10 +16,6 @@ abstract class TokenRule(id: String,
 						 severity: Severity = Rule.Severity.Minor,
 						 config: Config = Config.empty) : Rule(id, severity, config) {
 
-	protected val autoCorrect: Boolean = withConfig {
-		valueOrDefault("autoCorrect") { false }
-	}
-
 	override fun visit(root: KtFile) {
 		ifRuleActive {
 			clearFindings()

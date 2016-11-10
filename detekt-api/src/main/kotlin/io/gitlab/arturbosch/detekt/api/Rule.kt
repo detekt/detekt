@@ -30,6 +30,10 @@ abstract class Rule(val id: String,
 		valueOrDefault("active") { true }
 	}
 
+	private val autoCorrect: Boolean = withConfig {
+		valueOrDefault("autoCorrect") { false }
+	}
+
 	private var _findings: MutableList<Finding> = mutableListOf()
 	/**
 	 * Returns a list of violations of this rule.
@@ -53,8 +57,23 @@ abstract class Rule(val id: String,
 		}
 	}
 
+	/**
+	 * If custom configurable attributes are provided, use this method to retrieve
+	 * properties from the sub configuration specified by the rule id.
+	 */
 	protected fun <T> withConfig(block: Config.() -> T): T {
 		return config.subConfig(id).block()
+	}
+
+	/**
+	 * If your rule supports to automatically correct the misbehaviour of underlying smell,
+	 * specify your code inside this method call, to allow the user of your rule to trigger autocorrection
+	 * only when needed.
+	 */
+	protected fun withAutoCorrect(block: () -> Unit) {
+		if (autoCorrect) {
+			block()
+		}
 	}
 
 	protected fun ifRuleActive(block: () -> Unit) {

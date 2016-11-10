@@ -12,6 +12,7 @@ import io.gitlab.arturbosch.detekt.api.TokenRule
  * Based on KtLint.
  *
  * @author Shyiko
+ * @author Artur Bosch
  */
 class ConsecutiveBlankLines(config: Config) : TokenRule("ConsecutiveBlankLines", Severity.Style, config) {
 
@@ -20,9 +21,9 @@ class ConsecutiveBlankLines(config: Config) : TokenRule("ConsecutiveBlankLines",
 			val split = node.getText().split("\n")
 			if (split.size > 3) {
 				addFindings(CodeSmell(id, Entity.from(node), "Needless blank line(s)"))
-//				if (autoCorrect) {
-//					(node as LeafPsiElement).replaceWithText("${split.first()}\n\n${split.last()}")
-//				}
+				withAutoCorrect {
+					(node as LeafPsiElement).replaceWithText("${split.first()}\n\n${split.last()}")
+				}
 			}
 		}
 	}

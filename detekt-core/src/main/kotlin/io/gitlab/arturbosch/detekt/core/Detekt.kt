@@ -1,8 +1,10 @@
 package io.gitlab.arturbosch.detekt.core
 
+import com.intellij.testFramework.LightVirtualFile
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import org.jetbrains.kotlin.psi.KtFile
 import java.net.URLClassLoader
 import java.nio.file.Files
 import java.nio.file.Path
@@ -11,7 +13,7 @@ import java.util.ServiceLoader
 /**
  * @author Artur Bosch
  */
-class Detekt(project: Path,
+class Detekt(val project: Path,
 			 val config: Config = Config.empty,
 			 val ruleSets: List<Path> = listOf(),
 			 pathFilters: List<PathFilter> = listOf(),
@@ -37,7 +39,17 @@ class Detekt(project: Path,
 				.sortedBy { it.id }
 				.distinctBy { it.id }
 				.map { task { it.acceptAll(ktFiles) } }
-		return awaitAll(futures).toMap()
+		val findings = awaitAll(futures).toMap()
+		saveModifiedFilesIfAutoCorrectEnabled(ktFiles)
+		return findings
+	}
+
+	private fun saveModifiedFilesIfAutoCorrectEnabled(ktFiles: List<KtFile>) {
+		ktFiles.filter { it.modificationStamp > 0 }
+				.map { it.relativePath to it.text }
+				.filter { it.first != null }
+				.map { project.resolve(it.first) to it.second }
+				.forEach { println(it.first)/*Files.write(it.first, it.second.toByteArray())*/ }
 	}
 
 	private fun loadProviders(): ServiceLoader<RuleSetProvider> {
@@ -47,3 +59,6 @@ class Detekt(project: Path,
 	}
 
 }
+
+private val KtFile.relativePath: String?
+	get() = (this.containingFile.viewProvider.virtualFile as LightVirtualFile).originalFile?.name
