@@ -31,7 +31,7 @@ abstract class Rule(val id: String,
 	}
 
 	private val autoCorrect: Boolean = withConfig {
-		valueOrDefault("autoCorrect") { false }
+		valueOrDefault("autoCorrect") { true }
 	}
 
 	private var _findings: MutableList<Finding> = mutableListOf()
