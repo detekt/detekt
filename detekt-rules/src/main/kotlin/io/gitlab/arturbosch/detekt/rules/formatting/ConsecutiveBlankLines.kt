@@ -18,6 +18,7 @@ class ConsecutiveBlankLines(config: Config) : TokenRule("ConsecutiveBlankLines",
 	override fun procedure(node: ASTNode) {
 		if (node is PsiWhiteSpace) {
 			val split = node.getText().split("\n")
+			println(split)
 			if (split.size > 3) {
 				addFindings(CodeSmell(id, Entity.from(node), "Needless blank line(s)"))
 				withAutoCorrect {
