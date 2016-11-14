@@ -19,6 +19,30 @@ formatting:
   ConsecutiveBlankLines:
     active: true
     autoCorrect: true
+  MultipleSpaces:
+    active: true
+    autoCorrect: true
+  SpacingAfterComma:
+    active: true
+    autoCorrect: true
+  SpacingAfterKeyword:
+    active: true
+    autoCorrect: true
+  SpacingAroundColon:
+    active: true
+    autoCorrect: true
+  SpacingAroundCurlyBraces:
+    active: true
+    autoCorrect: true
+  SpacingAroundOperator:
+    active: true
+    autoCorrect: true
+  TrailingSpaces:
+    active: true
+    autoCorrect: false
+  UnusedImports:
+    active: true
+    autoCorrect: true
 
 style:
   active: true
