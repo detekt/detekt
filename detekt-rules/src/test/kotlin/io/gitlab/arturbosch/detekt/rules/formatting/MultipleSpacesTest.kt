@@ -10,14 +10,14 @@ import io.gitlab.arturbosch.detekt.rules.lint
 import org.junit.jupiter.api.Test
 
 /**
- * @author Artur Bosch
+ * @author Shyiko
  */
 class MultipleSpacesTest : RuleTest {
 
 	override val rule: Rule = MultipleSpaces(Config.empty)
 
 	@Test
-	fun test() {
+	fun testLint() {
 		assertThat(rule.lint("fun main() { x(1, 3);  x(1, 3)\n  \n  }"), hasSize(equalTo(1)))
 	}
 

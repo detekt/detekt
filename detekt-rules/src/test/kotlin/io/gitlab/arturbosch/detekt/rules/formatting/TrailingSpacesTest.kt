@@ -12,17 +12,18 @@ import org.junit.jupiter.api.Test
 /**
  * @author Shyiko
  */
-class ConsecutiveBlankLinesTest : RuleTest {
+class TrailingSpacesTest : RuleTest {
 
-	override val rule: Rule = ConsecutiveBlankLines(Config.empty)
+	override val rule: Rule = TrailingSpaces(Config.empty)
 
 	@Test
-	fun threeNewLinesAreTooMuch() {
-		assertThat(rule.lint("fun main() {\n\n\n}"), hasSize(equalTo(1)))
+	fun testLint() {
+		assertThat(rule.lint("fun main() {\n    val a = 1\n\n \n} "), hasSize(equalTo(2)))
 	}
 
 	@Test
 	fun testFormat() {
-		assertThat(rule.format("fun main() {\n\n\n}\n\n"), equalTo("fun main() {\n\n}\n"))
+		assertThat(rule.format("fun main() {\n    val a = 1 \n  \n \n} "),
+				equalTo("fun main() {\n    val a = 1\n\n\n}"))
 	}
 }

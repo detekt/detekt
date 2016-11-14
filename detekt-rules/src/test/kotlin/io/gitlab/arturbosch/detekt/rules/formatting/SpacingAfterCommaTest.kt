@@ -12,17 +12,19 @@ import org.junit.jupiter.api.Test
 /**
  * @author Shyiko
  */
-class ConsecutiveBlankLinesTest : RuleTest {
+class SpacingAfterCommaTest : RuleTest {
 
-	override val rule: Rule = ConsecutiveBlankLines(Config.empty)
+	override val rule: Rule = SpacingAfterComma(Config.empty)
 
 	@Test
-	fun threeNewLinesAreTooMuch() {
-		assertThat(rule.lint("fun main() {\n\n\n}"), hasSize(equalTo(1)))
+	fun testLint() {
+		assertThat(rule.lint("fun main() { x(1,3); x(1, 3); println(\",\") }"), hasSize(equalTo(1)))
+		assertThat(rule.lint("enum class E { A, B,C }"), hasSize(equalTo(1)))
 	}
 
 	@Test
 	fun testFormat() {
-		assertThat(rule.format("fun main() {\n\n\n}\n\n"), equalTo("fun main() {\n\n}\n"))
+		assertThat(rule.format("fun main() { x(1,3); x(1, 3) }"),
+				equalTo("fun main() { x(1, 3); x(1, 3) }"))
 	}
 }

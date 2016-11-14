@@ -9,7 +9,7 @@ import io.gitlab.arturbosch.detekt.rules.lint
 import org.junit.jupiter.api.Test
 
 /**
- * @author Artur Bosch
+ * @author Shyiko
  */
 class IndentationTest : RuleTest {
 
