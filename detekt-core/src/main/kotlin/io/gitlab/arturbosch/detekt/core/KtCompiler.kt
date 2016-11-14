@@ -4,6 +4,7 @@ import com.intellij.mock.MockProject
 import com.intellij.openapi.util.Disposer
 import com.intellij.psi.PsiFileFactory
 import com.intellij.testFramework.LightVirtualFile
+import io.gitlab.arturbosch.detekt.api.Unstable
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.config.CompilerConfiguration
@@ -32,6 +33,11 @@ class KtCompiler(val project: Path) {
 		val content = String(Files.readAllBytes(subPath))
 		return psiFileFactory.createFileFromText(relativePath.fileName.toString(), KotlinLanguage.INSTANCE,
 				content, true, true, false, LightVirtualFile(relativePath.toString())) as KtFile
+	}
+
+	@Unstable
+	fun compileFromText(content: String): KtFile {
+		return psiFileFactory.createFileFromText(KotlinLanguage.INSTANCE, content) as KtFile
 	}
 
 }
