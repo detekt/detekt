@@ -19,28 +19,27 @@ class TrailingSpaces(config: Config) : TokenRule("TrailingSpaces", Severity.Styl
 
 	override fun procedure(node: ASTNode) {
 		if (node is PsiWhiteSpace && node is LeafPsiElement) {
-			val split = node.getText().split("\n")
-			if (split.size > 1) {
-				if (checkForTrailingSpaces(split.head(), node)) {
-					withAutoCorrect {
-						node.replaceWithText("\n".repeat(split.size - 1) + split.last())
-					}
-				}
-			} else
-				if (PsiTreeUtil.nextLeaf(node) == null /* eof */) {
-					if (checkForTrailingSpaces(split, node)) {
-						withAutoCorrect {
-							node.replaceWithText("\n".repeat(split.size - 1))
-						}
-					}
-				}
+			val candidates = node.getText().split("\n")
+			if (candidates.size > 1) {
+				replaceTracingSpaces(node, candidates.head(), replaceWith = "\n".repeat(candidates.size - 1) + candidates.last())
+			} else if (PsiTreeUtil.nextLeaf(node) == null /* eof */) {
+				replaceTracingSpaces(node, candidates, replaceWith = "\n".repeat(candidates.size - 1))
+			}
 		}
 	}
 
-	private fun checkForTrailingSpaces(split: List<String>, node: PsiElement): Boolean {
+	private fun replaceTracingSpaces(node: LeafPsiElement, candidates: List<String>, replaceWith: String) {
+		if (checkForTrailingSpaces(candidates, node)) {
+			withAutoCorrect {
+				node.replaceWithText(replaceWith)
+			}
+		}
+	}
+
+	private fun checkForTrailingSpaces(candidates: List<String>, node: PsiElement): Boolean {
 		var violationOffset = 0
 		var changed = false
-		split.forEach {
+		candidates.forEach {
 			if (!it.isEmpty()) {
 				changed = true
 				addFindings(CodeSmell(id, Entity.from(node, offset = violationOffset), "Trailing space(s)"))

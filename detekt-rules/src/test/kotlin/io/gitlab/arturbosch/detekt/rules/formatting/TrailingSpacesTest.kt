@@ -8,7 +8,6 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.test.RuleTest
 import io.gitlab.arturbosch.detekt.test.format
 import io.gitlab.arturbosch.detekt.test.lint
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 /**
