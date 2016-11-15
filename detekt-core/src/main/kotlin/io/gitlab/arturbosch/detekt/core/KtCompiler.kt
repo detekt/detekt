@@ -16,9 +16,9 @@ import java.nio.file.Path
 /**
  * @author Artur Bosch
  */
-class KtCompiler(val project: Path) {
+open class KtCompiler(val project: Path) {
 
-	private val psiFileFactory: PsiFileFactory
+	protected val psiFileFactory: PsiFileFactory
 
 	init {
 		val project = KotlinCoreEnvironment.createForProduction(Disposer.newDisposable(),
