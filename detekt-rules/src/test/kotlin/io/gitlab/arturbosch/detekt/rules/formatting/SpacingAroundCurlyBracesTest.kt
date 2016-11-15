@@ -6,6 +6,7 @@ import com.natpryce.hamkrest.hasSize
 import com.natpryce.hamkrest.isEmpty
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.Unstable
 import io.gitlab.arturbosch.detekt.test.RuleTest
 import io.gitlab.arturbosch.detekt.test.format
 import io.gitlab.arturbosch.detekt.test.lint
@@ -14,9 +15,10 @@ import org.junit.jupiter.api.Test
 /**
  * @author Shyiko
  */
+@Unstable("Remove debug flag on #47 done")
 class SpacingAroundCurlyBracesTest : RuleTest {
 
-	override val rule: Rule = SpacingAroundCurlyBraces(Config.empty)
+	override val rule: Rule = SpacingAroundCurlyBraces(Config.empty, debug = true)
 
 	@Test
 	fun testLint() {
@@ -32,7 +34,7 @@ class SpacingAroundCurlyBracesTest : RuleTest {
 
 	@Test
 	fun testFormat() {
-		assertThat(rule.format(
+		assertThat(SpacingAroundCurlyBraces(Config.empty, debug = false).format(
 				"""
             fun main() {
                 val v = if (true){return ""}
@@ -45,7 +47,7 @@ class SpacingAroundCurlyBracesTest : RuleTest {
                 try{call()}catch (e: Exception){}
                 call({}, {})
                 a.let{}.apply({})
-                f({ if (true) {r.add(v) }; r })
+                f({ if (true) {r.add(v)};r})
             }
             """
 		), equalTo(
@@ -61,9 +63,9 @@ class SpacingAroundCurlyBracesTest : RuleTest {
                 try { call() } catch (e: Exception) {}
                 call({}, {})
                 a.let {}.apply({})
-                f({ if (true) { r.add(v) }; r })
+                f({ if (true) { r.add(v) };r })
             }
-            """.trimIndent()//TODO #47
+            """.trimIndent()
 		))
 	}
 }

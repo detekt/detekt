@@ -9,16 +9,17 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.TokenRule
+import io.gitlab.arturbosch.detekt.api.Unstable
 import io.gitlab.arturbosch.detekt.rules.isPartOfString
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 
 /**
- * Based on KtLint.
- *
  * @author Shyiko
+ * @author Artur Bosch
  */
-class SpacingAroundCurlyBraces(config: Config) : TokenRule("SpacingAroundCurlyBraces", Severity.Style, config) {
+@Unstable("This Rule does not add findings as stated in #47")
+class SpacingAroundCurlyBraces(config: Config, val debug: Boolean = false) : TokenRule("SpacingAroundCurlyBraces", Severity.Style, config) {
 
 	override fun procedure(node: ASTNode) {
 		if (node is LeafPsiElement && !node.isPartOfString()) {
@@ -45,20 +46,20 @@ class SpacingAroundCurlyBraces(config: Config) : TokenRule("SpacingAroundCurlyBr
 				}
 			when {
 				!spacingBefore && !spacingAfter -> {
-					addFindings(CodeSmell(id, Entity.from(node), "Missing spacing around \":\""))
+					if (debug) addFindings(CodeSmell(id, Entity.from(node), "Missing spacing around \"${node.text}\""))
 					withAutoCorrect {
 						node.rawInsertBeforeMe(PsiWhiteSpaceImpl(" "))
 						node.rawInsertAfterMe(PsiWhiteSpaceImpl(" "))
 					}
 				}
 				!spacingBefore -> {
-					addFindings(CodeSmell(id, Entity.from(node), "Missing spacing before \":\""))
+					if (debug) addFindings(CodeSmell(id, Entity.from(node), "Missing spacing before \"${node.text}\""))
 					withAutoCorrect {
 						node.rawInsertBeforeMe(PsiWhiteSpaceImpl(" "))
 					}
 				}
 				!spacingAfter -> {
-					addFindings(CodeSmell(id, Entity.from(node), "Missing spacing after \":\""))
+					if (debug) addFindings(CodeSmell(id, Entity.from(node, offset = 1), "Missing spacing after \"${node.text}\""))
 					withAutoCorrect {
 						node.rawInsertAfterMe(PsiWhiteSpaceImpl(" "))
 					}
