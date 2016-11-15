@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules
 
+import io.gitlab.arturbosch.detekt.api.Unstable
 import io.gitlab.arturbosch.detekt.core.KtCompiler
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
@@ -9,6 +10,7 @@ import java.nio.file.Paths
  * @author Artur Bosch
  */
 
+@Unstable
 private val compiler = KtCompiler(Case.CasesFolder.path())
 
 enum class Case(val file: String) {
@@ -29,6 +31,7 @@ enum class Case(val file: String) {
 	}
 }
 
+@Unstable
 fun load(case: Case): KtFile {
 	return compiler.compile(case.path())
 }
