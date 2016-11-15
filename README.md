@@ -201,3 +201,8 @@ There are two predefined methods to help obtaining a KtFile:
 - compileContentForTest(content: String): KtFile
 - compileForTest(path: Path): KtFile
 
+New with M3 there is a special detekt-test module, which specifies above two methods but also
+Rule extension functions that allow allow to skip compilation, ktFile and visit procedures.
+
+- Rule.lint(StringContent/Path) returns just the findings for given content
+- Rule.format(StringContent/Path) returns just the new modified content for given content
