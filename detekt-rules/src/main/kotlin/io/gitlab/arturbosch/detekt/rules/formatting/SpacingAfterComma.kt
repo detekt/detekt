@@ -21,7 +21,7 @@ class SpacingAfterComma(config: Config) : TokenRule("SpacingAfterComma", Severit
 	override fun procedure(node: ASTNode) {
 		if (node is LeafPsiElement && (node.textMatches(",") || node.textMatches(";")) && !node.isPartOfString() &&
 				PsiTreeUtil.nextLeaf(node) !is PsiWhiteSpace) {
-			addFindings(CodeSmell(id, Entity.from(node), "Missing spacing after \"${node.text}\""))
+			addFindings(CodeSmell(id, Entity.from(node, offset = 1), "Missing spacing after \"${node.text}\""))
 			withAutoCorrect {
 				node.rawInsertAfterMe(PsiWhiteSpaceImpl(" "))
 			}

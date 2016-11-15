@@ -44,7 +44,7 @@ class SpacingAroundColon(config: Config) : TokenRule("SpacingAroundColon", Sever
 					}
 				}
 				missingSpacingAfter -> {
-					addFindings(CodeSmell(id, Entity.from(node), "Missing spacing after \":\""))
+					addFindings(CodeSmell(id, Entity.from(node, offset = 1), "Missing spacing after \":\""))
 					withAutoCorrect {
 						node.rawInsertAfterMe(PsiWhiteSpaceImpl(" "))
 					}

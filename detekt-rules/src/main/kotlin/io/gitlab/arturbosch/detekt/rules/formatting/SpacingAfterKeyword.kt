@@ -34,7 +34,7 @@ class SpacingAfterKeyword(config: Config) : TokenRule("SpacingAfterKeyword", Sev
 	override fun procedure(node: ASTNode) {
 		if (tokenSet.contains(node.elementType) && node is LeafPsiElement &&
 				PsiTreeUtil.nextLeaf(node) !is PsiWhiteSpace) {
-			addFindings(CodeSmell(id, Entity.from(node), "Missing spacing after \"${node.text}\""))
+			addFindings(CodeSmell(id, Entity.from(node, offset = node.text.length), "Missing spacing after \"${node.text}\""))
 			withAutoCorrect {
 				node.rawInsertAfterMe(PsiWhiteSpaceImpl(" "))
 			}

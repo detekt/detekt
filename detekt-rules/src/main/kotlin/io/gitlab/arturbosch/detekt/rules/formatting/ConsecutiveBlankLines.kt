@@ -19,7 +19,7 @@ class ConsecutiveBlankLines(config: Config) : TokenRule("ConsecutiveBlankLines",
 		if (node is PsiWhiteSpace) {
 			val split = node.getText().split("\n")
 			if (split.size > 3) {
-				addFindings(CodeSmell(id, Entity.from(node), "Needless blank line(s)"))
+				addFindings(CodeSmell(id, Entity.from(node, offset = 2), "Needless blank line(s)"))
 				withAutoCorrect {
 					(node as LeafPsiElement).replaceWithText("${split.first()}\n\n${split.last()}")
 				}

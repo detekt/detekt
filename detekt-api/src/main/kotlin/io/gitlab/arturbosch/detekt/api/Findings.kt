@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
+import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.testFramework.LightVirtualFile
 import org.jetbrains.kotlin.diagnostics.DiagnosticUtils
@@ -142,21 +143,23 @@ data class Location(val source: SourceLocation,
 	}
 
 	companion object {
-		fun from(element: PsiElement): Location {
-			val start = startLineAndColumn(element)
+		fun from(element: PsiElement, offset: Int = 0): Location {
+			val start = startLineAndColumn(element, offset)
 			val sourceLocation = SourceLocation(start.line, start.column)
-			val textLocation = TextLocation(element.startOffset, element.endOffset)
+			val textLocation = TextLocation(element.startOffset + offset, element.endOffset + offset)
 			val fileName = element.originalFilePath() ?: element.containingFile.name
-			return Location(sourceLocation, textLocation,
-					element.getTextWithLocation(), fileName)
+			return Location(sourceLocation, textLocation, element.getTextWithLocation(), fileName)
 		}
 
 		private fun PsiElement.originalFilePath(): String? {
 			return (this.containingFile.viewProvider.virtualFile as LightVirtualFile).originalFile?.name
 		}
 
-		private fun startLineAndColumn(element: PsiElement) = DiagnosticUtils.getLineAndColumnInPsiFile(
-				element.containingFile, element.textRange)
+		private fun startLineAndColumn(element: PsiElement, offset: Int): DiagnosticUtils.LineAndColumn {
+			val range = element.textRange
+			return DiagnosticUtils.getLineAndColumnInPsiFile(element.containingFile,
+					TextRange(range.startOffset + offset, range.endOffset + offset))
+		}
 	}
 }
 
@@ -173,11 +176,11 @@ data class Entity(val name: String,
 	}
 
 	companion object {
-		fun from(element: PsiElement): Entity {
+		fun from(element: PsiElement, offset: Int = 0): Entity {
 			val name = element.searchName()
 			val signature = element.buildFullSignature()
 			val clazz = element.searchClass()
-			return Entity(name, clazz, signature, Location.from(element))
+			return Entity(name, clazz, signature, Location.from(element, offset))
 		}
 	}
 

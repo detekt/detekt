@@ -17,7 +17,7 @@ class MultipleSpaces(config: Config) : TokenRule("MultipleSpaces", Severity.Styl
 
 	override fun procedure(node: ASTNode) {
 		if (node is PsiWhiteSpace && !node.textContains('\n') && node.getTextLength() > 1) {
-			addFindings(CodeSmell(id, Entity.from(node), "Unnecessary space(s)"))
+			addFindings(CodeSmell(id, Entity.from(node, offset = 1), "Unnecessary space(s)"))
 			withAutoCorrect {
 				(node as LeafPsiElement).replaceWithText(" ")
 			}

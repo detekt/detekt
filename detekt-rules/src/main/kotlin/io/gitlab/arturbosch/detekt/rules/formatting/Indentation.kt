@@ -24,7 +24,7 @@ class Indentation(config: Config) : TokenRule("Indentation", Severity.Style, con
 				var offset = node.startOffset + split.first().length + 1
 				split.tail().forEach {
 					if (it.length % 4 != 0) {
-						addFindings(CodeSmell(id, Entity.from(node), "Unexpected indentation (${it.length})"))
+						addFindings(CodeSmell(id, Entity.from(node, offset = 1), "Unexpected indentation (${it.length})"))
 					}
 					offset += it.length + 1
 				}

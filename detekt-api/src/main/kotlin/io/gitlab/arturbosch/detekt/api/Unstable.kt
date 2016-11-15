@@ -5,4 +5,4 @@ package io.gitlab.arturbosch.detekt.api
  *
  * @author Artur Bosch
  */
-annotation class Unstable
+annotation class Unstable(val value: String = "")

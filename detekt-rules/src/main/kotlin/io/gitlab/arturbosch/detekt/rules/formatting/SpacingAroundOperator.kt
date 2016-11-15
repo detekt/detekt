@@ -75,7 +75,7 @@ class SpacingAroundOperator(config: Config) : TokenRule("SpacingAroundOperator",
 					}
 				}
 				!spacingAfter -> {
-					addFindings(CodeSmell(id, Entity.from(node), "Missing spacing after \":\""))
+					addFindings(CodeSmell(id, Entity.from(node, offset = 1), "Missing spacing after \":\""))
 					withAutoCorrect {
 						node.rawInsertAfterMe(PsiWhiteSpaceImpl(" "))
 					}
