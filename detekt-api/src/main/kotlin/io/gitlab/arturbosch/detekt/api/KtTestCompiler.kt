@@ -16,7 +16,7 @@ import java.nio.file.Path
  *
  * @author Artur Bosch
  */
-@Unstable
+@Unstable(removedIn = "M4")
 internal object KtTestCompiler {
 
 	private val psiFileFactory: PsiFileFactory
@@ -42,11 +42,11 @@ internal object KtTestCompiler {
 /**
  * Use this method if you define a kt file/class as a plain string in your test.
  */
-@Unstable
+@Unstable(removedIn = "M4")
 fun compileContentForTest(content: String) = KtTestCompiler.compileFromText(content)
 
 /**
  * Use this method if you test a kt file/class in the test resources.
  */
-@Unstable
+@Unstable(removedIn = "M4")
 fun compileForTest(path: Path) = KtTestCompiler.compile(path)

@@ -29,13 +29,13 @@ open class KtCompiler(val project: Path) {
 
 	fun compile(subPath: Path): KtFile {
 		require(subPath.isFile()) { "Given sub path should be a regular file!" }
-		val relativePath = project.relativize(subPath)
+		val relativePath = if (project == subPath) subPath else project.relativize(subPath)
 		val content = String(Files.readAllBytes(subPath))
 		return psiFileFactory.createFileFromText(relativePath.fileName.toString(), KotlinLanguage.INSTANCE,
 				content, true, true, false, LightVirtualFile(relativePath.toString())) as KtFile
 	}
 
-	@Unstable
+	@Unstable(removedIn = "M4")
 	fun compileFromText(content: String): KtFile {
 		return psiFileFactory.createFileFromText(KotlinLanguage.INSTANCE, content) as KtFile
 	}
