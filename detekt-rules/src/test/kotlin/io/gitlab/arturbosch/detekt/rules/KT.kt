@@ -9,10 +9,6 @@ import java.nio.file.Paths
 /**
  * @author Artur Bosch
  */
-
-@Unstable
-private val compiler = KtCompiler(Case.CasesFolder.path())
-
 enum class Case(val file: String) {
 	CasesFolder("/cases"),
 	Default("/cases/Default.kt"),
@@ -30,6 +26,9 @@ enum class Case(val file: String) {
 		return Paths.get(resource.path)
 	}
 }
+
+@Unstable
+private val compiler = KtCompiler(Case.CasesFolder.path())
 
 @Unstable
 fun load(case: Case): KtFile {
