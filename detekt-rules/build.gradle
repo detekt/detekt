@@ -6,7 +6,7 @@ configurations {
 
 dependencies {
 	compile project(':detekt-api')
-	testCompile project(':detekt-core')
+	testCompile project(':detekt-test')
 	testRuntime "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
 	testRuntime "org.jetbrains.spek:spek-junit-platform-engine:$spekVersion"
 }

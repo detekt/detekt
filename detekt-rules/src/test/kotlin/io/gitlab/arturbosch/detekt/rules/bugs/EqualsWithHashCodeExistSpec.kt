@@ -4,9 +4,9 @@ import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import com.natpryce.hamkrest.hasSize
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.compileForTest
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.rules.CommonSpec
+import io.gitlab.arturbosch.detekt.test.compileForTest
 import org.jetbrains.spek.api.SubjectSpek
 import org.jetbrains.spek.api.dsl.itBehavesLike
 import org.junit.jupiter.api.Test

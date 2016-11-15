@@ -1,8 +1,5 @@
 package io.gitlab.arturbosch.detekt.rules
 
-import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.compileContentForTest
 import io.gitlab.arturbosch.detekt.core.KtCompiler
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
@@ -30,18 +27,6 @@ enum class Case(val file: String) {
 		requireNotNull(resource)
 		return Paths.get(resource.path)
 	}
-}
-
-fun Rule.lint(content: String): List<Finding> {
-	val ktFile = compiler.compileFromText(content.trimIndent())
-	this.visit(ktFile)
-	return this.findings
-}
-
-fun Rule.format(content: String): String {
-	val ktFile = compiler.compileFromText(content.trimIndent())
-	this.visit(ktFile)
-	return ktFile.text
 }
 
 fun load(case: Case): KtFile {

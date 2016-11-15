@@ -1,20 +1,3 @@
-buildscript {
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath "org.junit.platform:junit-platform-gradle-plugin:$junitPlatformVersion"
-	}
-}
-
-apply plugin: 'org.junit.platform.gradle.plugin'
-
-junitPlatform {
-	engines {
-		include 'spek'
-	}
-}
-
 configurations {
 	compile.extendsFrom kotlin
 	testCompile.extendsFrom kotlinTest
@@ -23,7 +6,7 @@ configurations {
 
 dependencies {
 	compile project(':detekt-api')
-	testCompile project(':detekt-core')
+	testCompile project(':detekt-test')
 	testRuntime "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
 	testRuntime "org.jetbrains.spek:spek-junit-platform-engine:$spekVersion"
 }

@@ -4,8 +4,8 @@ import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
 import com.natpryce.hamkrest.hasSize
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.compileForTest
 import io.gitlab.arturbosch.detekt.rules.Case
+import io.gitlab.arturbosch.detekt.test.compileForTest
 import org.junit.jupiter.api.Test
 
 /**

@@ -5,7 +5,8 @@ import com.natpryce.hamkrest.equalTo
 import com.natpryce.hamkrest.hasSize
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.lint
+import io.gitlab.arturbosch.detekt.test.RuleTest
+import io.gitlab.arturbosch.detekt.test.lint
 import org.junit.jupiter.api.Test
 
 /**
