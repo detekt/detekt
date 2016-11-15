@@ -39,6 +39,7 @@ class SpacingAfterKeywordTest : RuleTest {
                 if (true) {}
                 while(true) {}
                 do {} while(true)
+                try{}catch(){}
             }
             """
 		), equalTo(
@@ -48,6 +49,7 @@ class SpacingAfterKeywordTest : RuleTest {
                 if (true) {}
                 while (true) {}
                 do {} while (true)
+                try {} catch () {}
             }
             """.trimIndent()
 		))

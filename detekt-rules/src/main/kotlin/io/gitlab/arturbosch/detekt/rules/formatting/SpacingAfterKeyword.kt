@@ -4,6 +4,7 @@ import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.impl.source.tree.LeafPsiElement
 import com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl
+import com.intellij.psi.impl.source.tree.TreeElement
 import com.intellij.psi.tree.TokenSet
 import com.intellij.psi.util.PsiTreeUtil
 import io.gitlab.arturbosch.detekt.api.CodeSmell
@@ -19,11 +20,11 @@ import org.jetbrains.kotlin.lexer.KtTokens.IF_KEYWORD
 import org.jetbrains.kotlin.lexer.KtTokens.TRY_KEYWORD
 import org.jetbrains.kotlin.lexer.KtTokens.WHEN_KEYWORD
 import org.jetbrains.kotlin.lexer.KtTokens.WHILE_KEYWORD
+import org.jetbrains.kotlin.psi.KtCatchClause
 
 /**
- * Based on KtLint.
- *
  * @author Shyiko
+ * @author Artur Bosch
  */
 class SpacingAfterKeyword(config: Config) : TokenRule("SpacingAfterKeyword", Severity.Style, config) {
 
@@ -36,7 +37,27 @@ class SpacingAfterKeyword(config: Config) : TokenRule("SpacingAfterKeyword", Sev
 				PsiTreeUtil.nextLeaf(node) !is PsiWhiteSpace) {
 			addFindings(CodeSmell(id, Entity.from(node, offset = node.text.length), "Missing spacing after \"${node.text}\""))
 			withAutoCorrect {
+				handleCatchCase(node)
 				node.rawInsertAfterMe(PsiWhiteSpaceImpl(" "))
+			}
+		}
+	}
+
+	private fun handleCatchCase(node: LeafPsiElement) {
+		if (node.elementType == CATCH_KEYWORD) {
+			node.rawInsertBeforeMe(PsiWhiteSpaceImpl(" "))
+			val parent = node.parent
+			if (parent is KtCatchClause) {
+				handleSpaceAfterCaseParameterList(parent)
+			}
+		}
+	}
+
+	private fun handleSpaceAfterCaseParameterList(parent: KtCatchClause) {
+		parent.parameterList?.let {
+			val paramList = it.node
+			if (PsiTreeUtil.nextLeaf(it) !is PsiWhiteSpace && paramList is TreeElement) {
+				paramList.rawInsertAfterMe(PsiWhiteSpaceImpl(" "))
 			}
 		}
 	}
