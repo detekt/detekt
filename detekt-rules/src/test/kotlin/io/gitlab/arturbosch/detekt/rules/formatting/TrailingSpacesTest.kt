@@ -24,7 +24,6 @@ class TrailingSpacesTest : RuleTest {
 	}
 
 	@Test
-	@Disabled
 	fun testFormat() {
 		assertThat(rule.format("fun main() {\n    val a = 1 \n  \n \n} "),
 				equalTo("fun main() {\n    val a = 1\n\n\n}"))
