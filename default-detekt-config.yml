@@ -13,6 +13,7 @@ code-smell:
 
 formatting:
   active: true
+  useTabs: true
   Indentation:
     active: false
     autoCorrect: false
@@ -39,7 +40,7 @@ formatting:
     autoCorrect: true
   TrailingSpaces:
     active: true
-    autoCorrect: false
+    autoCorrect: true
   UnusedImports:
     active: true
     autoCorrect: true

@@ -22,8 +22,7 @@ class FormattingProvider : RuleSetProvider {
 	override val ruleSetId: String = "formatting"
 
 	override fun instance(config: Config): RuleSet {
-		return RuleSet(ruleSetId, listOf(
-				Indentation(config),
+		return RuleSet(ruleSetId, mutableListOf(
 				ConsecutiveBlankLines(config),
 				MultipleSpaces(config),
 				SpacingAfterComma(config),
@@ -33,6 +32,10 @@ class FormattingProvider : RuleSetProvider {
 				SpacingAroundOperator(config),
 				TrailingSpaces(config),
 				UnusedImports(config)
-		))
+		).apply {
+			if (!config.valueOrDefault("useTabs") { false }) {
+				add(Indentation(config))
+			}
+		})
 	}
 }
