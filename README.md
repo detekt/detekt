@@ -7,7 +7,7 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 
 #### Building all submodules
 - cd detekt
-- gradle clean build
+- gradle clean build (install)
 
 #### Using the command line interface
 
@@ -15,8 +15,8 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 - gradle shadow
 - java -jar build/libs/detekt-cli-[version]-all.jar
 
-#### Parameters of CLI
-The CLI uses jcommander for argument parsing. This is the generated help text:
+#### Parameters for CLI
+The CLI uses jcommander for argument parsing.
 
 ```
 The following option is required: --project, -p 
@@ -38,10 +38,10 @@ Usage: detekt [options]
        Default: <empty string>
 ```
 
---project can either be a directory or a single Kotlin file.
-The currently only supported configuration format is yaml. --config should point to one.
-Filters can for example be used to exclude all test directories.
-With --rules you can point to additional ruleset.jar's creating by yourself or others. 
+`project` can either be a directory or a single Kotlin file.
+The currently only supported configuration format is yaml. `config` should point to one.
+`filters` can be used for example to exclude all test directories.
+With `rules` you can point to additional ruleset.jar's creating by yourself or others. 
 More on this topic see section _Custom RuleSets_.
 
 #### Using detekt in custom gradle projects
@@ -83,11 +83,16 @@ dependencies {
 
 ### RuleSets
 
-Currently there are three rule sets which are used per default when running the cli.
+Currently there are seven rule sets which are used per default when running the cli.
 
 - code-smell    - has rules to detect _LongMethod, LongParameterList, LargeClass, ComplexMethod ..._ smells
 - style         - has rules to detect optional keywords, wildcast imports and implements rules according to Kotlin's [coding conventions ](https://kotlinlang.org/docs/reference/coding-conventions.html)
 - comments      - has rules to detect missing KDoc over public members and unnecessary KDoc over private members
+- formatting    - detects indentation and spacing problems in code
+- exceptions    - too general exceptions are used in throw and catch statements like RuntimeException
+- empty         - finds empty block statements
+- potential-bugs    - code is structured in a way it can lead to bugs like 'only equals but not hashcode is implemented',
+no else case in when statements, explicit garbage collection calls
 
 ### RuleSet Configuration
 
@@ -113,6 +118,21 @@ style:
 comments:
   active: false
 ```
+
+```yaml
+autoCorrect: true
+formatting:
+  ConsecutiveBlankLines:
+    autoCorrect: true
+  ...
+```
+
+Every rule of the default rule sets can be turned off. Thresholded code-smell rules can have an additional field `threshold`.
+`Formatting` rules can be configured to `autoCorrect` the style mistake.
+
+`Active` keyword is only needed if you want to turn off the rule. `Active` on the rule set level turn off whole rule set.
+`autoCorrect` on the top level must be set to true or else all configured formatting rules are ignored.
+This is done to prevent you from changing your project files if your not 100% sure about it.
 
 ### Custom RuleSets
 
@@ -189,9 +209,54 @@ By specifying the rule set and rule ids, detekt will use the sub configuration o
 
 ```val threshold = withConfig { valueOrDefault("threshold") { threshold } }```
 
+#### Formatting
+
+[KtLint](https://github.com/shyiko/ktlint) was first to support auto correct formatting according to the kotlin [coding conventions](https://kotlinlang.org/docs/reference/coding-conventions.html).
+In Detekt I made an effort to port over all available formatting rules to detect style violations and auto correct them.
+
+Following configuration I use to check the style for `detekt`. If your like me who prefer tabs over spaces, use `useTabs` in the
+rule set level to turn off indentation check for spaces (or simple turn off `Indentation` rule).
+
+```yaml
+autoCorrect: true
+formatting:
+  active: true
+  useTabs: true
+  Indentation:
+    active: false
+    autoCorrect: false
+  ConsecutiveBlankLines:
+    active: true
+    autoCorrect: true
+  MultipleSpaces:
+    active: true
+    autoCorrect: true
+  SpacingAfterComma:
+    active: true
+    autoCorrect: true
+  SpacingAfterKeyword:
+    active: true
+    autoCorrect: true
+  SpacingAroundColon:
+    active: true
+    autoCorrect: true
+  SpacingAroundCurlyBraces:
+    active: true
+    autoCorrect: true
+  SpacingAroundOperator:
+    active: true
+    autoCorrect: true
+  TrailingSpaces:
+    active: true
+    autoCorrect: true
+  UnusedImports:
+    active: true
+    autoCorrect: true
+```
+
 #### Maven
 
-If your using maven to build rule sets or use detekt as a dependency, you have to run the additional task `publishToMavenLocal`
+If your using maven to build rule sets or use detekt as a dependency, you have to run the additional task `install`
 
 #### Testing your rules
 
