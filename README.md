@@ -7,9 +7,10 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 
 ### Usage/Build
 
-#### Building all submodules
+#### Building all submodules ( + executables)
+
 - cd detekt
-- gradle clean build (install)
+- gradle clean build (install shadow)
 
 #### Using the command line interface
 
@@ -79,7 +80,7 @@ task detekt(type: JavaExec) {
 }
 
 dependencies {
-	detekt 'io.gitlab.arturbosch.detekt:detekt-cli:1.0.0.M2'
+	detekt 'io.gitlab.arturbosch.detekt:detekt-cli:1.0.0.M3'
 }
 ```
 
@@ -99,6 +100,7 @@ no else case in when statements, explicit garbage collection calls
 ### RuleSet Configuration
 
 To turn off specific rules/rule sets or change threshold values for certain rules a yaml configuration file can be used.
+Copy and modify the `default-detekt-config.yml` from the detekt folder for your needs.
 
 ```yml
 code-smell:

@@ -1,9 +1,8 @@
 mainClassName = 'io.gitlab.arturbosch.detekt.cli.Main'
 
 configurations {
-	compile.extendsFrom kotlin
+	//compile.extendsFrom kotlin is not enough for using cli in a gradle task - #58
 	testCompile.extendsFrom kotlinTest
-//	testRuntime.extendsFrom junitPlatform
 }
 
 dependencies {
@@ -11,6 +10,8 @@ dependencies {
 	compile project(':detekt-rules')
 	compile project(':detekt-api')
 	compile "com.beust:jcommander:1.48"
+	compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+	compile "org.jetbrains.kotlin:kotlin-compiler:$kotlinVersion"
 	testRuntime "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
 	testRuntime "org.jetbrains.spek:spek-junit-platform-engine:$spekVersion"
 }
