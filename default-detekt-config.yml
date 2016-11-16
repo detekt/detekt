@@ -9,7 +9,7 @@ code-smell:
   LargeClass:
     threshold: 70
   ComplexMethod:
-    threshold: 10
+    threshold: 6
 
 formatting:
   active: true
