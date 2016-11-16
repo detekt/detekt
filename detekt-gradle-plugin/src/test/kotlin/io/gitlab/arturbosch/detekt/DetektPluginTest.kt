@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt
 
 import org.gradle.testfixtures.ProjectBuilder
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import kotlin.test.assertTrue
 
 /**
