@@ -51,10 +51,9 @@ More on this topic see section _Custom RuleSets_.
 
 #### Using detekt in custom gradle projects
 
-1. Make sure you run `gradle build publishToMavenLocal` to install detekt-cli to your local maven repo.
-2. Add following lines to your build.gradle file.
-3. Run `gradle detekt`
-4. Add `check.dependsOn detekt` if you want to run detekt on every `build`
+1. Add following lines to your build.gradle file.
+2. Run `gradle detekt`
+3. Add `check.dependsOn detekt` if you want to run detekt on every `build`
 
 ```groovy
 repositories {
@@ -82,8 +81,48 @@ task detekt(type: JavaExec) {
 }
 
 dependencies {
-	detekt 'io.gitlab.arturbosch.detekt:detekt-cli:1.0.0.M3'
+	detekt 'io.gitlab.arturbosch.detekt:detekt-cli:1.0.0.M4'
 }
+```
+
+### Using detekt in Maven Projects
+
+1. Add following lines to your pom.xml.
+2. Run `mvn verify` (when using the verify phase as I did here)
+
+
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-antrun-plugin</artifactId>
+    <version>1.8</version>
+    <executions>
+        <execution>
+            <id>detekt</id>
+            <phase>verify</phase>
+            <configuration>
+                <target name="detekt">
+                    <java taskname="detekt" dir="${basedir}" fork="true" failonerror="true"
+                          classname="io.gitlab.arturbosch.detekt.cli.Main" classpathref="maven.plugin.classpath">
+                        <arg value="-p"/>
+                        <arg value="${basedir}/src"/>
+                        <arg value="-f"/>
+                        <arg value=".*test.*"/>
+                        <arg value="--useTabs"/>
+                    </java>
+                </target>
+            </configuration>
+            <goals><goal>run</goal></goals>
+        </execution>
+    </executions>
+    <dependencies>
+        <dependency>
+            <groupId>io.gitlab.arturbosch.detekt</groupId>
+            <artifactId>detekt-cli</artifactId>
+            <version>1.0.0.M4</version>
+        </dependency>
+    </dependencies>
+</plugin>
 ```
 
 ### RuleSets
