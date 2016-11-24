@@ -34,14 +34,16 @@ class Detekt(val project: Path,
 	fun run(): Detektion {
 		val ktFiles = compiler.compile()
 		val providers = loadProviders()
-		val futures = providers.map { it.buildRuleset(config) }
-				.filterNotNull()
-				.sortedBy { it.id }
-				.distinctBy { it.id }
-				.map { task { it.acceptAll(ktFiles) } }
-		val findings = awaitAll(futures).toMap()
-		saveModifiedFilesIfAutoCorrectEnabled(ktFiles)
-		return DetektResult(findings, notifications)
+		return withExecutor {
+			val futures = providers.map { it.buildRuleset(config) }
+					.filterNotNull()
+					.sortedBy { it.id }
+					.distinctBy { it.id }
+					.map { task(this) { it.acceptAll(ktFiles) } }
+			val findings = awaitAll(futures).toMap()
+			saveModifiedFilesIfAutoCorrectEnabled(ktFiles)
+			DetektResult(findings, notifications)
+		}
 	}
 
 	private fun loadProviders(): ServiceLoader<RuleSetProvider> {
