@@ -24,6 +24,15 @@ class Main {
 	@Parameter(names = arrayOf("--rules", "-r"), description = "Extra paths to ruleset jars separated by ';'.")
 	val rules: String? = null
 
+	@Parameter(names = arrayOf("--format"), description = "Enables formatting of source code. Cannot be used together with --config.")
+	val formatting: Boolean = false
+
+	@Parameter(names = arrayOf("--parallel"), description = "Enables parallel compilation of source files. Should only be used if the analyzing project has more than ~200 kotlin files.")
+	val parallel: Boolean = false
+
+	@Parameter(names = arrayOf("--useTabs"), description = "Tells the formatter that indentation with tabs are valid.")
+	val useTabs: Boolean = false
+
 	@Parameter(names = arrayOf("--help", "-h"), help = true, description = "Shows the usage.")
 	private var help: Boolean = false
 
