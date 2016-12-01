@@ -18,6 +18,21 @@ class UnusedImportsTest : RuleTest {
 	override val rule: Rule = UnusedImports(Config.empty)
 
 	@Test
+	fun infixOperators() {
+		assertThat(rule.lint(
+				"""
+            import tasks.success
+
+            fun main() {
+				task {
+				} success {
+				}
+            }
+            """
+		), hasSize(equalTo(0)))
+	}
+
+	@Test
 	fun testLint() {
 		assertThat(rule.lint(
 				"""

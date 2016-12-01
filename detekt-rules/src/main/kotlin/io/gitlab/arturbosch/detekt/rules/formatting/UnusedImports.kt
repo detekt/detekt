@@ -1,49 +1,56 @@
 package io.gitlab.arturbosch.detekt.rules.formatting
 
-import com.intellij.lang.ASTNode
+import com.intellij.psi.PsiFile
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.TokenRule
+import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.isPartOf
 import org.jetbrains.kotlin.psi.KtImportDirective
-import org.jetbrains.kotlin.psi.stubs.elements.KtStubElementTypes
+import org.jetbrains.kotlin.psi.KtImportList
+import org.jetbrains.kotlin.psi.KtReferenceExpression
 
 /**
- * Based on KtLint.
- *
- * @author Shyiko
+ * @author Artur Bosch
  */
-class UnusedImports(config: Config) : TokenRule("UnusedImports", Severity.Style, config) {
+class UnusedImports(config: Config) : Rule("UnusedImports", Severity.Style, config) {
 
 	private val operatorSet = setOf("unaryPlus", "unaryMinus", "not", "inc", "dec", "plus", "minus", "times", "div",
 			"mod", "rangeTo", "contains", "get", "set", "invoke", "plusAssign", "minusAssign", "timesAssign", "divAssign",
 			"modAssign", "equals", "compareTo")
-	private val ref = mutableSetOf("*")
 
-	override fun procedure(node: ASTNode) {
-		if (node.elementType == KtStubElementTypes.FILE) {
-			node.visit { node ->
-				if (node.elementType == KtStubElementTypes.REFERENCE_EXPRESSION &&
-						!node.psi.isPartOf(KtImportDirective::class)) {
-					ref.add(node.text.trim('`'))
-				}
-			}
-		} else if (node.elementType == KtStubElementTypes.IMPORT_DIRECTIVE) {
-			val importDirective = node.psi as KtImportDirective
-			val name = importDirective.importPath?.importedName?.asString()
-			if (name != null && !ref.contains(name) && !operatorSet.contains(name)) {
-				addFindings(CodeSmell(id, Entity.from(importDirective), "Unused import"))
-				withAutoCorrect {
-					importDirective.delete()
-				}
+	private var imports = mutableListOf<Pair<String, KtImportDirective>>()
+
+	override fun visitFile(file: PsiFile?) {
+		imports.clear()
+		super.visitFile(file)
+		imports.forEach {
+			addFindings(CodeSmell(id, Entity.from(it.second), "Unused import"))
+			withAutoCorrect {
+				it.second.delete()
 			}
 		}
 	}
 
-	private fun ASTNode.visit(cb: (node: ASTNode) -> Unit) {
-		cb(this)
-		this.getChildren(null).forEach { it.visit(cb) }
+	override fun visitImportList(importList: KtImportList) {
+		imports = importList.imports.filter { it.isValidImport }
+				.filter { it.importPath?.importedName?.identifier?.contains("*")?.not() ?: false }
+				.filter { it.importPath?.importedName?.identifier != null }
+				.filter { !operatorSet.contains(it.importPath?.importedName?.identifier) }
+				.map { it.importPath?.importedName?.identifier!! to it }
+				.toMutableList()
+		super.visitImportList(importList)
+	}
+
+	override fun visitReferenceExpression(expression: KtReferenceExpression) {
+		if (expression.isPartOf(KtImportDirective::class)) return
+
+		val reference = expression.text.trim('`')
+		imports.find { it.first == reference }?.let {
+			imports.remove(it)
+		}
+
+		super.visitReferenceExpression(expression)
 	}
 
 }
