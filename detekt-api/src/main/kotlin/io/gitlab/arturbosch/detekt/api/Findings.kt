@@ -148,7 +148,10 @@ data class Location(val source: SourceLocation,
 			val sourceLocation = SourceLocation(start.line, start.column)
 			val textLocation = TextLocation(element.startOffset + offset, element.endOffset + offset)
 			val fileName = element.originalFilePath() ?: element.containingFile.name
-			return Location(sourceLocation, textLocation, element.getTextWithLocation(), fileName)
+			val locationText = withPsiTextRuntimeError({ element.searchName() }) {
+				element.getTextWithLocation()
+			}
+			return Location(sourceLocation, textLocation, locationText, fileName)
 		}
 
 		private fun PsiElement.originalFilePath(): String? {

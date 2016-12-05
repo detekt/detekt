@@ -86,5 +86,7 @@ private fun buildFunctionSignature(element: KtNamedFunction): String {
 	require(methodStart < methodEnd) {
 		"Error building function signature with range $methodStart - $methodEnd for element: ${element.text}"
 	}
-	return element.text.substring(methodStart, methodEnd)
+	return withPsiTextRuntimeError({ element.nameAsSafeName.identifier }) {
+		element.text.substring(methodStart, methodEnd)
+	}
 }
