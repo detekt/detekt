@@ -2,12 +2,15 @@ package io.gitlab.arturbosch.detekt.core
 
 import com.intellij.testFramework.LightVirtualFile
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import org.jetbrains.kotlin.psi.KtFile
 import java.net.URLClassLoader
 import java.nio.file.Files
 import java.nio.file.Path
+import java.util.HashMap
 import java.util.ServiceLoader
+import java.util.concurrent.CompletableFuture
 
 /**
  * @author Artur Bosch
@@ -35,14 +38,24 @@ class Detekt(val project: Path,
 		val ktFiles = compiler.compile()
 		val providers = loadProviders()
 		return withExecutor {
-			val futures = providers.map { it.buildRuleset(config) }
-					.filterNotNull()
-					.sortedBy { it.id }
-					.distinctBy { it.id }
-					.map { task(this) { it.acceptAll(ktFiles) } }
-			val findings = awaitAll(futures).toMap()
+
+			val futures = mutableListOf<CompletableFuture<Pair<String, List<Finding>>>>()
+
+			ktFiles.forEach {
+				futures.addAll(providers.map { it.buildRuleset(config) }
+						.filterNotNull()
+						.sortedBy { it.id }
+						.distinctBy { it.id }
+						.map { rule -> task(this) { rule.acceptAll(listOf(it)) } })
+			}
+
+			val findings = HashMap<String, MutableList<Finding>>()
+			awaitAll(futures).forEach {
+				findings.merge(it.first, it.second.toMutableList(), { l1, l2 -> l1.apply { addAll(l2) } })
+			}
+
 			saveModifiedFilesIfAutoCorrectEnabled(ktFiles)
-			DetektResult(findings, notifications)
+			DetektResult(findings.toSortedMap(), notifications)
 		}
 	}
 
