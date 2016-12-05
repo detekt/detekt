@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules
 import com.intellij.psi.PsiFile
 import io.gitlab.arturbosch.detekt.api.CodeSmellThresholdRule
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
@@ -43,52 +44,55 @@ class LargeClass(config: Config = Config.empty, threshold: Int = 70) : CodeSmell
 			addToHead(it.declarations.size)
 		}
 		incHead() // for class body
-		super.visitClassOrObject(classOrObject)
+		largeClassVisitor.visitClassOrObject(classOrObject)
 		val loc = locStack.pop()
 		if (loc > threshold) {
 			addFindings(ThresholdedCodeSmell(id, Entity.from(classOrObject), Metric("SIZE", loc, threshold)))
 		}
 	}
 
-	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (function.isTopLevel) return
-		val body: KtBlockExpression? = function.bodyExpression.asBlockExpression()
-		body?.let { addToHead(body.statements.size) }
-		super.visitNamedFunction(function)
-	}
-
-	override fun visitIfExpression(expression: KtIfExpression) {
-		expression.then?.let { addToHead(it.children.size) }
-		expression.`else`?.let { addToHead(it.children.size) }
-		super.visitIfExpression(expression)
-	}
-
-	override fun visitLoopExpression(loopExpression: KtLoopExpression) {
-		loopExpression.body?.let { addToHead(it.children.size) }
-		super.visitLoopExpression(loopExpression)
-	}
-
-	override fun visitWhenExpression(expression: KtWhenExpression) {
-		addToHead(expression.children.filter { it is KtWhenEntry }.size)
-		super.visitWhenExpression(expression)
-	}
-
-	override fun visitTryExpression(expression: KtTryExpression) {
-		addToHead(expression.tryBlock.statements.size)
-		addToHead(expression.catchClauses.size)
-		expression.catchClauses.map { it.catchBody?.children?.size }.forEach { addToHead(it ?: 0) }
-		expression.finallyBlock?.finalExpression?.statements?.size?.let { addToHead(it) }
-		super.visitTryExpression(expression)
-	}
-
-	override fun visitCallExpression(expression: KtCallExpression) {
-		val lambdaArguments = expression.lambdaArguments
-		if (lambdaArguments.size > 0) {
-			val lambdaArgument = lambdaArguments[0]
-			lambdaArgument.getLambdaExpression().bodyExpression?.let {
-				addToHead(it.statements.size)
-			}
+	val largeClassVisitor = object : DetektVisitor() {
+		override fun visitNamedFunction(function: KtNamedFunction) {
+			if (function.isTopLevel) return
+			val body: KtBlockExpression? = function.bodyExpression.asBlockExpression()
+			body?.let { addToHead(body.statements.size) }
+			super.visitNamedFunction(function)
 		}
-		super.visitCallExpression(expression)
+
+		override fun visitIfExpression(expression: KtIfExpression) {
+			expression.then?.let { addToHead(it.children.size) }
+			expression.`else`?.let { addToHead(it.children.size) }
+			super.visitIfExpression(expression)
+		}
+
+		override fun visitLoopExpression(loopExpression: KtLoopExpression) {
+			loopExpression.body?.let { addToHead(it.children.size) }
+			super.visitLoopExpression(loopExpression)
+		}
+
+		override fun visitWhenExpression(expression: KtWhenExpression) {
+			addToHead(expression.children.filter { it is KtWhenEntry }.size)
+			super.visitWhenExpression(expression)
+		}
+
+		override fun visitTryExpression(expression: KtTryExpression) {
+			addToHead(expression.tryBlock.statements.size)
+			addToHead(expression.catchClauses.size)
+			expression.catchClauses.map { it.catchBody?.children?.size }.forEach { addToHead(it ?: 0) }
+			expression.finallyBlock?.finalExpression?.statements?.size?.let { addToHead(it) }
+			super.visitTryExpression(expression)
+		}
+
+		override fun visitCallExpression(expression: KtCallExpression) {
+			val lambdaArguments = expression.lambdaArguments
+			if (lambdaArguments.size > 0) {
+				val lambdaArgument = lambdaArguments[0]
+				lambdaArgument.getLambdaExpression().bodyExpression?.let {
+					addToHead(it.statements.size)
+				}
+			}
+			super.visitCallExpression(expression)
+		}
 	}
+
 }
