@@ -35,9 +35,4 @@ open class KtCompiler(val project: Path) {
 				content, true, true, false, LightVirtualFile(relativePath.toString())) as KtFile
 	}
 
-	@Unstable(removedIn = "M4")
-	fun compileFromText(content: String): KtFile {
-		return psiFileFactory.createFileFromText(KotlinLanguage.INSTANCE, content) as KtFile
-	}
-
 }
