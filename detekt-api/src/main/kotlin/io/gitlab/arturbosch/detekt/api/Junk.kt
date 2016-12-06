@@ -21,3 +21,18 @@ internal fun ASTNode.visitTokens(currentNode: (node: ASTNode) -> Unit) {
 internal fun ASTNode.visit(visitor: DetektVisitor) {
 	KtPsiUtil.visitChildren(this.psi as KtElement, visitor, null)
 }
+
+/**
+ * When analyzing sub path 'testData' of the kotlin project, CompositeElement.getText() throws
+ * a RuntimeException stating 'Underestimated text length' - #65.
+ */
+fun withPsiTextRuntimeError(defaultValue: () -> String, block: () -> String): String {
+	return try {
+		block()
+	} catch (e: RuntimeException) {
+		val message = e.message
+		if (message != null && message.contains("Underestimated text length")) {
+			return defaultValue() + "!<UnderestimatedTextLengthException>"
+		} else throw e
+	}
+}
