@@ -1,5 +1,17 @@
 autoCorrect: false
 
+potential-bugs:
+  active: true
+
+exceptions:
+  active: true
+
+comments:
+  active: true
+
+empty:
+  active: true
+
 code-smell:
   active: true
   LongMethod:
