@@ -35,3 +35,7 @@ class NamingConventions {
 //invalid
 class _NamingConventions{}
 class namingConventions{}
+
+object Bla {
+	val STUFF = "stuff"
+}

@@ -8,7 +8,9 @@ import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtVariableDeclaration
+import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 
 /**
  * @author Artur Bosch
@@ -42,6 +44,10 @@ class NamingConventionViolation(config: Config = Config.empty) : Rule("NamingCon
 			if (!name.matches(constantPattern)) {
 				add(declaration)
 			}
+		} else if(declaration.withinObjectDeclaration()) {
+			if (!name.matches(constantPattern) && !name.matches(variablePattern)) {
+				add(declaration)
+			}
 		} else if (!name.matches(variablePattern)) {
 			add(declaration)
 		}
@@ -50,6 +56,10 @@ class NamingConventionViolation(config: Config = Config.empty) : Rule("NamingCon
 	private fun KtVariableDeclaration.hasConstModifier(): Boolean {
 		val modifierList = this.modifierList
 		return modifierList != null && modifierList.hasModifier(KtTokens.CONST_KEYWORD)
+	}
+
+	private fun KtVariableDeclaration.withinObjectDeclaration(): Boolean {
+		return this.getNonStrictParentOfType(KtObjectDeclaration::class.java) != null
 	}
 
 	private fun add(declaration: KtNamedDeclaration) {

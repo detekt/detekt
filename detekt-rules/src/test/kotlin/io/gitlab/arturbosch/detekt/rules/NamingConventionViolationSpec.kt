@@ -23,6 +23,7 @@ class NamingConventionViolationSpec : SubjectSpek<NamingConventionViolation>({
 })
 
 class NamingConventionTest {
+
 	@Test
 	fun lint() {
 		assertThat(NamingConventionViolation().lint(
@@ -32,5 +33,16 @@ class NamingConventionTest {
             const val MyNAME = "Artur"
             """
 		), hasSize(equalTo(1)))
+	}
+
+	@Test
+	fun uppercaseAllowedForVariablesInsideObjectDeclaration() {
+		assertThat(NamingConventionViolation().lint(
+				"""
+			object Bla {
+				val MY_NAME = "Artur"
+			}
+            """
+		), hasSize(equalTo(0)))
 	}
 }
