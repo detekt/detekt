@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.core
 
-import com.intellij.testFramework.LightVirtualFile
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import org.jetbrains.kotlin.fileClasses.javaFileFacadeFqName
 import org.jetbrains.kotlin.psi.KtFile
 import java.net.URLClassLoader
 import java.nio.file.Files
@@ -68,7 +68,7 @@ class Detekt(val project: Path,
 	private fun saveModifiedFilesIfAutoCorrectEnabled(ktFiles: List<KtFile>) {
 		if (config.valueOrDefault("autoCorrect") { false }) {
 			ktFiles.filter { it.modificationStamp > 0 }
-					.map { it.relativePath to it.text }
+					.map { it.relativePath to it.unnormalizedContent() }
 					.filter { it.first != null }
 					.map { project.resolve(it.first) to it.second }
 					.forEach {
@@ -78,8 +78,15 @@ class Detekt(val project: Path,
 		}
 	}
 
+	private fun  KtFile.unnormalizedContent(): String {
+		val lineSeparator = this.getUserData(KtCompiler.LINE_SEPARATOR)
+		require(lineSeparator != null) { "No line separator entry for ktFile ${this.javaFileFacadeFqName.asString()}" }
+		return this.text.replace("\n", lineSeparator!!)
+	}
+
 	private val KtFile.relativePath: String?
-		get() = (this.containingFile.viewProvider.virtualFile as LightVirtualFile).originalFile?.name
+		get() = this.getUserData(KtCompiler.RELATIVE_PATH)
 
 }
+
 
