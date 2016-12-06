@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 import com.intellij.psi.PsiFile
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -32,13 +31,12 @@ class EqualsWithHashCodeExist(config: Config = Config.empty) : Rule("EqualsWithH
 		if (isDataClass) return
 
 		queue.push(ViolationHolder())
-		equalsHashAwareMethodVisitor.visitClassOrObject(classOrObject)
-
+		super.visitClassOrObject(classOrObject)
 		if (queue.pop().violation()) addFindings(CodeSmell(id, Entity.from(classOrObject)))
 	}
 
-	val equalsHashAwareMethodVisitor = object : DetektVisitor() {
-		override fun visitNamedFunction(function: KtNamedFunction) {
+	override fun visitNamedFunction(function: KtNamedFunction) {
+		if (!function.isTopLevel) {
 			function.name?.let {
 				if (it == "equals") queue.peek().equals = true
 				if (it == "hashCode") queue.peek().hashCode = true
