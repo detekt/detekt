@@ -16,6 +16,10 @@ fun <T> withExecutor(block: Executor.() -> T): T {
 	}
 }
 
+fun <T> Executor.runAsync(block: () -> T): CompletableFuture<T> {
+	return task(this) { block() }
+}
+
 fun <T> task(executor: Executor, task: () -> T): CompletableFuture<T> {
 	return CompletableFuture.supplyAsync(Supplier { task() }, executor)
 }

@@ -1,4 +1,4 @@
-autoCorrect: true
+autoCorrect: false
 
 code-smell:
   active: true
@@ -12,7 +12,7 @@ code-smell:
     threshold: 6
 
 formatting:
-  active: true
+  active: false
   useTabs: true
   Indentation:
     active: false
@@ -48,10 +48,15 @@ formatting:
 style:
   active: true
   WildcardImport:
+    active: true
   NoElseInWhenExpression:
+    active: true
   OptionalSemicolon:
+    active: true
   OptionalUnit:
+    active: true
   NamingConventionViolation:
+    active: true
 
 comments:
   active: true

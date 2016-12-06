@@ -3,14 +3,11 @@ package io.gitlab.arturbosch.detekt.core
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import org.jetbrains.kotlin.fileClasses.javaFileFacadeFqName
 import org.jetbrains.kotlin.psi.KtFile
 import java.net.URLClassLoader
 import java.nio.file.Files
 import java.nio.file.Path
-import java.util.HashMap
 import java.util.ServiceLoader
-import java.util.concurrent.CompletableFuture
 
 /**
  * @author Artur Bosch
@@ -36,25 +33,18 @@ class Detekt(val project: Path,
 
 	fun run(): Detektion {
 		val ktFiles = compiler.compile()
-		val providers = loadProviders()
+		val providers = loadProviders().asIterable().toList()
 		return withExecutor {
 
-			val futures = mutableListOf<CompletableFuture<Pair<String, List<Finding>>>>()
+			val futures = ktFiles.map { file -> runAsync { file.detekt(providers) } }
+			val findings = awaitAll(futures).flatMap { it }.toMergedMap()
 
-			ktFiles.forEach {
-				futures.addAll(providers.map { it.buildRuleset(config) }
-						.filterNotNull()
-						.sortedBy { it.id }
-						.distinctBy { it.id }
-						.map { rule -> task(this) { rule.acceptAll(listOf(it)) } })
+			if (config.valueOrDefault("autoCorrect") { false }) {
+				ktFiles.saveModifiedFiles(project) {
+					notifications.add(it)
+				}
 			}
 
-			val findings = HashMap<String, MutableList<Finding>>()
-			awaitAll(futures).forEach {
-				findings.merge(it.first, it.second.toMutableList(), { l1, l2 -> l1.apply { addAll(l2) } })
-			}
-
-			saveModifiedFilesIfAutoCorrectEnabled(ktFiles)
 			DetektResult(findings.toSortedMap(), notifications)
 		}
 	}
@@ -65,27 +55,13 @@ class Detekt(val project: Path,
 		return ServiceLoader.load(RuleSetProvider::class.java, detektLoader)
 	}
 
-	private fun saveModifiedFilesIfAutoCorrectEnabled(ktFiles: List<KtFile>) {
-		if (config.valueOrDefault("autoCorrect") { false }) {
-			ktFiles.filter { it.modificationStamp > 0 }
-					.map { it.relativePath to it.unnormalizedContent() }
-					.filter { it.first != null }
-					.map { project.resolve(it.first) to it.second }
-					.forEach {
-						notifications.add(ModificationNotification(it.first))
-						Files.write(it.first, it.second.toByteArray())
-					}
-		}
+	private fun KtFile.detekt(providers: List<RuleSetProvider>): List<Pair<String, List<Finding>>> {
+		return providers.map { it.buildRuleset(config) }
+				.filterNotNull()
+				.sortedBy { it.id }
+				.distinctBy { it.id }
+				.map { rule -> rule.id to rule.accept(this) }
 	}
-
-	private fun  KtFile.unnormalizedContent(): String {
-		val lineSeparator = this.getUserData(KtCompiler.LINE_SEPARATOR)
-		require(lineSeparator != null) { "No line separator entry for ktFile ${this.javaFileFacadeFqName.asString()}" }
-		return this.text.replace("\n", lineSeparator!!)
-	}
-
-	private val KtFile.relativePath: String?
-		get() = this.getUserData(KtCompiler.RELATIVE_PATH)
 
 }
 
