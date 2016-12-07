@@ -5,6 +5,9 @@
 - move formatting to own rule set project
 - rewrite formatting to fix line/column issue or just allow to auto correct without report
 - OptionalUnit and -Semicolon should be auto correctable and moved to formatting
+- logging and progress while waiting for the analysis
+
+More issues: https://gitlab.com/arturbosch/detekt/milestones/6
 
 #### M5
 
@@ -20,7 +23,7 @@ as line and column values are sometimes not correctly determined by the AST.
 One idea of mine is to threat formatting as an extern rule set and only allow auto correcting
 the source code without an report to skip line/column problem.
 
-https://gitlab.com/arturbosch/detekt/milestones/5
+More issues: https://gitlab.com/arturbosch/detekt/milestones/5
 
 #### M4
 
