@@ -81,7 +81,7 @@ task detekt(type: JavaExec) {
 }
 
 dependencies {
-	detekt 'io.gitlab.arturbosch.detekt:detekt-cli:1.0.0.M4'
+	detekt 'io.gitlab.arturbosch.detekt:detekt-cli:1.0.0.M5'
 }
 ```
 
@@ -119,7 +119,7 @@ dependencies {
         <dependency>
             <groupId>io.gitlab.arturbosch.detekt</groupId>
             <artifactId>detekt-cli</artifactId>
-            <version>1.0.0.M4</version>
+            <version>1.0.0.M5</version>
         </dependency>
     </dependencies>
 </plugin>
