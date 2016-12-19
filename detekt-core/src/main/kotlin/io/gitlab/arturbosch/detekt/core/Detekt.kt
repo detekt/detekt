@@ -51,7 +51,7 @@ class Detekt(val project: Path,
 
 	private fun loadProviders(): ServiceLoader<RuleSetProvider> {
 		val urls = ruleSets.map { it.toUri().toURL() }.toTypedArray()
-		val detektLoader = URLClassLoader(urls)
+		val detektLoader = URLClassLoader(urls, javaClass.classLoader)
 		return ServiceLoader.load(RuleSetProvider::class.java, detektLoader)
 	}
 
