@@ -15,15 +15,18 @@ import kotlin.system.measureTimeMillis
  */
 class Runner {
 
-	fun runWith(main: Main) {
+	fun runWith(main: Main): Int {
 		val pathFilters = with(Main) { main.filters.letIf { split(";").map(::PathFilter) } }
 		val rules = with(Main) { main.rules.letIf { split(";").map { Paths.get(it) } } }
 		val config = loadConfiguration(main.config, main)
+		var amountOfSmells = 0
 		measureTimeMillis {
 			val detektion = Detekt(main.project, config, rules, pathFilters, main.parallel).run()
 			printModifications(detektion.notifications)
 			printFindings(detektion.findings)
+			amountOfSmells = detektion.findings.flatMap { it.value }.size
 		}.let { println("\ndetekt run within $it ms") }
+		return amountOfSmells
 	}
 
 	private fun loadConfiguration(configPath: Path?, main: Main): Config {

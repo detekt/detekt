@@ -1,5 +1,9 @@
 autoCorrect: false
 
+build:
+  warningThreshold: 5
+  failThreshold: 10
+
 potential-bugs:
   active: true
 

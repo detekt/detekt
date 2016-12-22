@@ -41,7 +41,8 @@ class Main {
 		@JvmStatic
 		fun main(args: Array<String>) {
 			val main = parseAndValidateArgs(args)
-			Runner().runWith(main)
+			val amountOfSmells = Runner().runWith(main)
+			if (amountOfSmells > 10) throw IllegalArgumentException("Too many smells!!! $amountOfSmells")
 		}
 
 		private fun parseAndValidateArgs(args: Array<String>): Main {
