@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.core.Detekt
 import io.gitlab.arturbosch.detekt.core.PathFilter
 import java.nio.file.Path
 import java.nio.file.Paths
-import kotlin.system.measureTimeMillis
 
 /**
  * @author Artur Bosch
@@ -17,11 +16,14 @@ object Runner {
 		val pathFilters = with(Main) { main.filters.letIf { split(";").map(::PathFilter) } }
 		val rules = with(Main) { main.rules.letIf { split(";").map { Paths.get(it) } } }
 		val config = loadConfiguration(main.config, main)
-		measureTimeMillis {
-			val detektion = Detekt(main.project, config, rules, pathFilters, main.parallel).run()
-			Output(detektion, main).report()
-			SmellBorder(config, main).check(detektion)
-		}.let { println("\ndetekt run within $it ms") }
+
+		val start = System.currentTimeMillis()
+		val detektion = Detekt(main.project, config, rules, pathFilters, main.parallel).run()
+		Output(detektion, main).report()
+		val end = System.currentTimeMillis() - start
+		println("\ndetekt run within $end ms")
+
+		SmellBorder(config, main).check(detektion)
 	}
 
 	private fun loadConfiguration(configPath: Path?, main: Main): Config {
