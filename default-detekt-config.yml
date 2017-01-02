@@ -19,13 +19,13 @@ empty:
 code-smell:
   active: true
   LongMethod:
-    threshold: 12
+    threshold: 20
   LongParameterList:
     threshold: 5
   LargeClass:
-    threshold: 70
+    threshold: 150
   ComplexMethod:
-    threshold: 6
+    threshold: 10
 
 formatting:
   active: false

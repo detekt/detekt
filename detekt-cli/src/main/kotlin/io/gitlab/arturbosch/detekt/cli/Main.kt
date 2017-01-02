@@ -40,12 +40,11 @@ class Main {
 
 		@JvmStatic
 		fun main(args: Array<String>) {
-			val main = parseAndValidateArgs(args)
-			val amountOfSmells = Runner().runWith(main)
-			if (amountOfSmells > 10) throw IllegalArgumentException("Too many smells!!! $amountOfSmells")
+			val main = parseArguments(args)
+			Runner.runWith(main)
 		}
 
-		private fun parseAndValidateArgs(args: Array<String>): Main {
+		private fun parseArguments(args: Array<String>): Main {
 			val cli = Main()
 			val jCommander = JCommander(cli)
 			jCommander.setProgramName("detekt")

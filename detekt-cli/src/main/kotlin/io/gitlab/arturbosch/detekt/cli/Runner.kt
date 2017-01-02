@@ -13,20 +13,19 @@ import kotlin.system.measureTimeMillis
 /**
  * @author Artur Bosch
  */
-class Runner {
+object Runner {
 
-	fun runWith(main: Main): Int {
+	fun runWith(main: Main) {
 		val pathFilters = with(Main) { main.filters.letIf { split(";").map(::PathFilter) } }
 		val rules = with(Main) { main.rules.letIf { split(";").map { Paths.get(it) } } }
 		val config = loadConfiguration(main.config, main)
-		var amountOfSmells = 0
 		measureTimeMillis {
 			val detektion = Detekt(main.project, config, rules, pathFilters, main.parallel).run()
 			printModifications(detektion.notifications)
 			printFindings(detektion.findings)
-			amountOfSmells = detektion.findings.flatMap { it.value }.size
+			val amount = detektion.findings.flatMap { it.value }.size
+			SmellBorder.check(amount, config)
 		}.let { println("\ndetekt run within $it ms") }
-		return amountOfSmells
 	}
 
 	private fun loadConfiguration(configPath: Path?, main: Main): Config {
@@ -40,7 +39,7 @@ class Runner {
 				@Suppress("UNCHECKED_CAST")
 				return when (key) {
 					"autoCorrect" -> true as T
-					"useTabs" -> (if (main.useTabs) true else false) as T
+					"useTabs" -> (main.useTabs) as T
 					else -> default()
 				}
 			}

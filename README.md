@@ -179,6 +179,15 @@ Every rule of the default rule sets can be turned off. Thresholded code-smell ru
 `autoCorrect` on the top level must be set to true or else all configured formatting rules are ignored.
 This is done to prevent you from changing your project files if your not 100% sure about it.
 
+### Configure build failure thresholds
+
+detekt now can throw a SmellThresholdReachedError and let the build fail with following config parameters:
+```yaml
+build:
+  warningThreshold: 5
+  failThreshold: 10
+```
+
 ### Custom RuleSets
 
 _detekt_ uses a ServiceLoader to collect all instances of _RuleSetProvider_-interfaces. So it is possible
