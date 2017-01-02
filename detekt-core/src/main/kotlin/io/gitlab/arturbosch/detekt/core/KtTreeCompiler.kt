@@ -31,13 +31,18 @@ class KtTreeCompiler(val project: Path,
 		}
 	}
 
-	private fun compileInternal(sequentialStream: Stream<Path>): List<KtFile> {
-		return sequentialStream
-				.filter(Path::isFile)
-				.filter { it.hasEnding("kt") }
+	private fun compileInternal(stream: Stream<Path>): List<KtFile> {
+		return stream.filter(Path::isFile)
+				.filter { it.isKotlinFile() }
 				.filter { notIgnored(it) }
 				.map { compiler.compile(it) }
 				.toList()
+	}
+
+	private fun Path.isKotlinFile(): Boolean {
+		val fullPath = this.toAbsolutePath().toString()
+		val kotlinEnding = fullPath.substring(fullPath.lastIndexOf('.') + 1)
+		return kotlinEnding.length == 2 && kotlinEnding.endsWith("kt")
 	}
 
 	private fun notIgnored(path: Path) = !filters.any { it.matches(path) }

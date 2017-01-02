@@ -19,7 +19,7 @@ class Detekt(val project: Path,
 			 parallelCompilation: Boolean = false) {
 
 	private val notifications: MutableList<Notification> = mutableListOf()
-	private val compiler: KtTreeCompiler
+	private val compiler: KtTreeCompiler = KtTreeCompiler(project, pathFilters, parallelCompilation)
 
 	init {
 		require(Files.exists(project)) { "Given project path does not exist!" }
@@ -28,7 +28,6 @@ class Detekt(val project: Path,
 				"Given ruleset $it does not exist or has no jar ending!"
 			}
 		}
-		compiler = KtTreeCompiler(project, pathFilters, parallelCompilation)
 	}
 
 	fun run(): Detektion {

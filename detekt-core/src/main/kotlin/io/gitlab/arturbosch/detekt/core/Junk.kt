@@ -22,4 +22,3 @@ fun <K, V> List<Pair<K, List<V>>>.toMergedMap(): Map<K, List<V>> {
 
 fun Path.isFile(): Boolean = Files.isRegularFile(this)
 fun Path.isDirectory(): Boolean = Files.isDirectory(this)
-fun Path.hasEnding(ending: String): Boolean = this.toAbsolutePath().toString().endsWith(ending)
