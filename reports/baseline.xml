@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<SmellBaseline>
+    <Blacklist timestamp="1483383847042"/>
+    <Whitelist timestamp="1483384022131">
+        <ID>NestedBlockDepth:OptionalSemicolon.kt$OptionalSemicolon$override fun procedure(node: ASTNode)</ID>
+        <ID>NestedBlockDepth:Indentation.kt$Indentation$override fun procedure(node: ASTNode)</ID>
+        <ID>EmptyFunctionBlock:Rule.kt$Rule${ }</ID>
+        <ID>EmptyFunctionBlock:Rule.kt$Rule${ }</ID>
+        <ID>CatchRuntimeException:Junk.kt$e: RuntimeException</ID>
+        <ID>NoElseInWhenExpression:ExplicitGarbageCollectionCall.kt$ExplicitGarbageCollectionCall$when (it.text) { "System", "Runtime.getRuntime()" -&gt; addFindings(CodeSmell(id, Entity.Companion.from(expression))) }</ID>
+        <ID>NoElseInWhenExpression:SpacingAroundCurlyBraces.kt$SpacingAroundCurlyBraces$when { !spacingBefore &amp;&amp; !spacingAfter -&gt; { if (debug) addFindings(CodeSmell(id, Entity.from(node), "Missing spacing around \"${node.text}\"")) withAutoCorrect { node.rawInsertBeforeMe(PsiWhiteSpaceImpl(" ")) node.rawInsertAfterMe(PsiWhiteSpaceImpl(" ")) } } !spacingBefore -&gt; { if (debug) addFindings(CodeSmell(id, Entity.from(node), "Missing spacing before \"${node.text}\"")) withAutoCorrect { node.rawInsertBeforeMe(PsiWhiteSpaceImpl(" ")) } } !spacingAfter -&gt; { if (debug) addFindings(CodeSmell(id, Entity.from(node, offset = 1), "Missing spacing after \"${node.text}\"")) withAutoCorrect { node.rawInsertAfterMe(PsiWhiteSpaceImpl(" ")) } } }</ID>
+        <ID>NoElseInWhenExpression:SpacingAroundColon.kt$SpacingAroundColon$when { missingSpacingBefore &amp;&amp; missingSpacingAfter -&gt; { addFindings(CodeSmell(id, Entity.from(node), "Missing spacing around \":\"")) withAutoCorrect { node.rawInsertBeforeMe(PsiWhiteSpaceImpl(" ")) node.rawInsertAfterMe(PsiWhiteSpaceImpl(" ")) } } missingSpacingBefore -&gt; { addFindings(CodeSmell(id, Entity.from(node), "Missing spacing before \":\"")) withAutoCorrect { node.rawInsertBeforeMe(PsiWhiteSpaceImpl(" ")) } } missingSpacingAfter -&gt; { addFindings(CodeSmell(id, Entity.from(node, offset = 1), "Missing spacing after \":\"")) withAutoCorrect { node.rawInsertAfterMe(PsiWhiteSpaceImpl(" ")) } } }</ID>
+        <ID>NoElseInWhenExpression:SpacingAroundOperator.kt$SpacingAroundOperator$when { !spacingBefore &amp;&amp; !spacingAfter -&gt; { addFindings(CodeSmell(id, Entity.from(node), "Missing spacing around \":\"")) withAutoCorrect { node.rawInsertBeforeMe(PsiWhiteSpaceImpl(" ")) node.rawInsertAfterMe(PsiWhiteSpaceImpl(" ")) } } !spacingBefore -&gt; { addFindings(CodeSmell(id, Entity.from(node), "Missing spacing before \":\"")) withAutoCorrect { node.rawInsertBeforeMe(PsiWhiteSpaceImpl(" ")) } } !spacingAfter -&gt; { addFindings(CodeSmell(id, Entity.from(node, offset = 1), "Missing spacing after \":\"")) withAutoCorrect { node.rawInsertAfterMe(PsiWhiteSpaceImpl(" ")) } } }</ID>
+        <ID>NamingConventionViolation:TooManyFunctions2.kt$TooManyFunctions2 : Rule</ID>
+    </Whitelist>
+</SmellBaseline>

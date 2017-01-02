@@ -3,14 +3,21 @@ package io.gitlab.arturbosch.detekt.cli
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.core.Detektion
 import io.gitlab.arturbosch.detekt.core.Notification
+import io.gitlab.arturbosch.detekt.core.isDirectory
 import java.nio.file.Files
 import java.nio.file.Path
 
 /**
  * @author Artur Bosch
  */
-class Output(detektion: Detektion) {
+class Output(detektion: Detektion, args: Main) {
 
+	companion object {
+		private const val OUTPUT_FILE = "report.detekt"
+	}
+
+	private val withBaseline: Boolean = args.baseline
+	private val reportDirectory: Path? = args.reportDirectory
 	private val findings: Map<String, List<Finding>> = detektion.findings
 	private val notifications: List<Notification> = detektion.notifications
 
@@ -19,15 +26,19 @@ class Output(detektion: Detektion) {
 		printFindings()
 	}
 
-	fun write(outputPath: Path?) {
-		if (outputPath != null) {
-			outputPath.createParentFoldersIfNeeded()
-			val smellData = findings
-					.flatMap { it.value }
-					.map { it.compact() }
+	fun report() {
+		if (reportDirectory != null) {
+			reportDirectory.createFoldersIfNeeded()
+			val smells = findings.flatMap { it.value }
+			val smellData = smells.map { it.compact() }
 					.joinToString("\n")
-			Files.write(outputPath, smellData.toByteArray())
-			println("\n Successfully wrote findings to $outputPath")
+			val reportFile = reportDirectory.resolve(OUTPUT_FILE)
+			Files.write(reportFile, smellData.toByteArray())
+			println("\n Successfully wrote findings to $reportFile")
+			if (withBaseline) {
+				DetektBaselineFormat.create(smells, reportDirectory)
+				println("\n Successfully wrote smell baseline to $reportDirectory/${DetektBaselineFormat.BASELINE_FILE}")
+			}
 		}
 	}
 
@@ -43,9 +54,12 @@ class Output(detektion: Detektion) {
 		}
 	}
 
-	private fun Path.createParentFoldersIfNeeded() {
-		val parent = this.parent
-		Files.createDirectories(parent)
+	private fun Path.createFoldersIfNeeded() {
+		if (Files.exists(this) && !this.isDirectory()) {
+			throw IllegalArgumentException("Report path must be a directory!")
+		} else {
+			Files.createDirectories(this)
+		}
 	}
 
 }

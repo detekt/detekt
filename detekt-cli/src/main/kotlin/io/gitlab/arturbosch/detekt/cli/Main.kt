@@ -15,7 +15,7 @@ class Main {
 	lateinit var project: Path
 
 	@Parameter(names = arrayOf("--filters", "-f"), description = "Path filters defined through regex with separator ';' (\".*test.*\").")
-	val filters: String? = null // Using a converter for List<PathFilter> resulted into a ClassCastException
+	val filters: String? = null // Using a converter for List<PathFilter> resulted in a ClassCastException
 
 	@Parameter(names = arrayOf("--config", "-c"), description = "Path to the config file (path/to/config).",
 			converter = ExistingPathConverter::class)
@@ -23,7 +23,7 @@ class Main {
 
 	@Parameter(names = arrayOf("--output", "-o"), description = "Path to the output file where findings should be stored (path/to/output).",
 			converter = PathConverter::class)
-	var output: Path? = null
+	var reportDirectory: Path? = null
 
 	@Parameter(names = arrayOf("--rules", "-r"), description = "Extra paths to ruleset jars separated by ';'.")
 	val rules: String? = null
@@ -36,6 +36,9 @@ class Main {
 
 	@Parameter(names = arrayOf("--useTabs"), description = "Tells the formatter that indentation with tabs are valid.")
 	val useTabs: Boolean = false
+
+	@Parameter(names = arrayOf("--baseline", "-b"), description = "Treats current analysis findings as a smell baseline for further detekt runs. If a baseline xml file exists, only new code smells not in the baseline are printed in the console.")
+	var baseline: Boolean = false
 
 	@Parameter(names = arrayOf("--help", "-h"), help = true, description = "Shows the usage.")
 	private var help: Boolean = false

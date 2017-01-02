@@ -1,7 +1,7 @@
 mainClassName = 'io.gitlab.arturbosch.detekt.cli.Main'
 
 configurations {
-	//compile.extendsFrom kotlin is not enough for using cli in a gradle task - #58
+	// compile.extendsFrom kotlin is not enough for using cli in a gradle task - #58
 	testCompile.extendsFrom kotlinTest
 }
 
@@ -9,6 +9,7 @@ dependencies {
 	compile project(':detekt-core')
 	compile project(':detekt-rules')
 	compile project(':detekt-api')
+	compile "io.gitlab.arturbosch:codesmell-baseline-format:1.0.0"
 	compile "com.beust:jcommander:1.48"
 	compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 	compile "org.jetbrains.kotlin:kotlin-compiler:$kotlinVersion"
