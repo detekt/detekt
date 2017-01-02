@@ -1,0 +1,10 @@
+NestedBlockDepth - 4/3 - [procedure] - Line/Column=(23,2) - CharRange=(836,1281) - Path=detekt-rules/src/main/kotlin/io/gitlab/arturbosch/detekt/rules/OptionalSemicolon.kt
+NestedBlockDepth - 4/3 - [procedure] - Line/Column=(20,2) - CharRange=(585,1037) - Path=detekt-rules/src/main/kotlin/io/gitlab/arturbosch/detekt/rules/formatting/Indentation.kt
+EmptyFunctionBlock - [postVisit] - Line/Column=(94,45) - CharRange=(2575,2579) - Path=detekt-api/src/main/kotlin/io/gitlab/arturbosch/detekt/api/Rule.kt
+EmptyFunctionBlock - [preVisit] - Line/Column=(101,44) - CharRange=(2751,2755) - Path=detekt-api/src/main/kotlin/io/gitlab/arturbosch/detekt/api/Rule.kt
+CatchRuntimeException - [e] - Line/Column=(32,11) - CharRange=(998,1017) - Path=detekt-api/src/main/kotlin/io/gitlab/arturbosch/detekt/api/Junk.kt
+NoElseInWhenExpression - [<anonymous>] - Line/Column=(26,5) - CharRange=(968,1093) - Path=detekt-rules/src/main/kotlin/io/gitlab/arturbosch/detekt/rules/bugs/ExplicitGarbageCollectionCall.kt
+NoElseInWhenExpression - [procedure] - Line/Column=(47,4) - CharRange=(2017,2760) - Path=detekt-rules/src/main/kotlin/io/gitlab/arturbosch/detekt/rules/formatting/SpacingAroundCurlyBraces.kt
+NoElseInWhenExpression - [procedure] - Line/Column=(32,4) - CharRange=(1259,1960) - Path=detekt-rules/src/main/kotlin/io/gitlab/arturbosch/detekt/rules/formatting/SpacingAroundColon.kt
+NoElseInWhenExpression - [procedure] - Line/Column=(63,4) - CharRange=(2862,3539) - Path=detekt-rules/src/main/kotlin/io/gitlab/arturbosch/detekt/rules/formatting/SpacingAroundOperator.kt
+NamingConventionViolation - [TooManyFunctions2] - Line/Column=(11,1) - CharRange=(363,974) - Path=detekt-sample-ruleset/src/main/kotlin/io/gitlab/arturbosch/detekt/sampleruleset/TooManyFunctions2.kt
