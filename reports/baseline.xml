@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <SmellBaseline>
     <Blacklist timestamp="1483388204705"/>
-    <Whitelist timestamp="1483388204705">
+    <Whitelist timestamp="1483389619579">
         <ID>NestedBlockDepth:OptionalSemicolon.kt$OptionalSemicolon$override fun procedure(node: ASTNode)</ID>
         <ID>NestedBlockDepth:Indentation.kt$Indentation$override fun procedure(node: ASTNode)</ID>
         <ID>EmptyFunctionBlock:Rule.kt$Rule${ }</ID>

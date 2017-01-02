@@ -21,7 +21,7 @@ class Main {
 			converter = ExistingPathConverter::class)
 	var config: Path? = null
 
-	@Parameter(names = arrayOf("--output", "-o"), description = "Path to the output file where findings should be stored (path/to/output).",
+	@Parameter(names = arrayOf("--report", "-rp"), description = "Path to the report directory where findings should be stored (if --output) and baseline.xml generated (if --baseline).",
 			converter = PathConverter::class)
 	var reportDirectory: Path? = null
 
@@ -39,6 +39,9 @@ class Main {
 
 	@Parameter(names = arrayOf("--baseline", "-b"), description = "Treats current analysis findings as a smell baseline for further detekt runs. If a baseline xml file exists, only new code smells not in the baseline are printed in the console.")
 	var baseline: Boolean = false
+
+	@Parameter(names = arrayOf("--output", "-o"), description = "True if findings should be written into a report.detekt file inside the report folder.")
+	var output: Boolean = false
 
 	@Parameter(names = arrayOf("--help", "-h"), help = true, description = "Shows the usage.")
 	private var help: Boolean = false

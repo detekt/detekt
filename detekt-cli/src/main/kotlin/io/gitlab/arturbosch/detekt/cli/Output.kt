@@ -16,6 +16,7 @@ class Output(detektion: Detektion, args: Main) {
 		private const val OUTPUT_FILE = "report.detekt"
 	}
 
+	private val withOutput: Boolean = args.output
 	private val withBaseline: Boolean = args.baseline
 	private val reportDirectory: Path? = args.reportDirectory
 	private val findings: Map<String, List<Finding>> = detektion.findings
@@ -30,11 +31,12 @@ class Output(detektion: Detektion, args: Main) {
 		if (reportDirectory != null) {
 			reportDirectory.createFoldersIfNeeded()
 			val smells = findings.flatMap { it.value }
-			val smellData = smells.map { it.compact() }
-					.joinToString("\n")
-			val reportFile = reportDirectory.resolve(OUTPUT_FILE)
-			Files.write(reportFile, smellData.toByteArray())
-			println("\n Successfully wrote findings to $reportFile")
+			if (withOutput) {
+				val smellData = smells.map { it.compact() }.joinToString("\n")
+				val reportFile = reportDirectory.resolve(OUTPUT_FILE)
+				Files.write(reportFile, smellData.toByteArray())
+				println("\n Successfully wrote findings to $reportFile")
+			}
 			if (withBaseline) {
 				DetektBaselineFormat.create(smells, reportDirectory)
 			}
@@ -48,6 +50,7 @@ class Output(detektion: Detektion, args: Main) {
 
 	private fun printFindings() {
 		val listings = DetektBaselineFormat.listings(reportDirectory)
+		if (listings != null) println("Only new findings are printed as baseline.xml is found:\n")
 
 		findings.forEach {
 			it.key.print("Ruleset: ")

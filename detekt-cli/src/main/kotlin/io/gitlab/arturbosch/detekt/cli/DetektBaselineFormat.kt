@@ -32,7 +32,7 @@ object DetektBaselineFormat {
 		val ids = smells.map { it.baselineId }
 		val smellBaseline = SmellBaseline(blacklist, Whitelist(ids, timestamp))
 		baseline.write(smellBaseline, baselinePath)
-		println("Successfully wrote smell baseline to $baselinePath")
+		println(" Successfully wrote smell baseline to $baselinePath")
 	}
 
 	fun load(path: Path): SmellBaseline = baseline.read(path)
@@ -40,7 +40,6 @@ object DetektBaselineFormat {
 	fun listings(path: Path?): Pair<Whitelist, Blacklist>? {
 		val baselinePath = fullPath(path)
 		return if (DetektBaselineFormat.exist(baselinePath)) {
-			println("Only new findings are printed as baseline.xml is found:\n")
 			val format = DetektBaselineFormat.load(baselinePath!!)
 			format.whitelist to format.blacklist
 		} else null
