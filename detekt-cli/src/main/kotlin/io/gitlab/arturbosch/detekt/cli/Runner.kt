@@ -20,7 +20,7 @@ object Runner {
 		measureTimeMillis {
 			val detektion = Detekt(main.project, config, rules, pathFilters, main.parallel).run()
 			Output(detektion, main).report()
-			SmellBorder(config).check(detektion)
+			SmellBorder(config, main).check(detektion)
 		}.let { println("\ndetekt run within $it ms") }
 	}
 

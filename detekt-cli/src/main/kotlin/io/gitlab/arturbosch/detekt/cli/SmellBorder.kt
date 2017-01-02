@@ -2,11 +2,12 @@ package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.core.Detektion
+import java.nio.file.Path
 
 /**
  * @author Artur Bosch
  */
-class SmellBorder(config: Config) {
+class SmellBorder(config: Config, main: Main) {
 
 	private val subConfig = config.subConfig("build")
 	private val warning = subConfig.valueOrDefault("warningThreshold") { -1 }

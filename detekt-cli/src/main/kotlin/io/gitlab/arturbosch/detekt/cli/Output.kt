@@ -37,20 +37,22 @@ class Output(detektion: Detektion, args: Main) {
 			println("\n Successfully wrote findings to $reportFile")
 			if (withBaseline) {
 				DetektBaselineFormat.create(smells, reportDirectory)
-				println("\n Successfully wrote smell baseline to $reportDirectory/${DetektBaselineFormat.BASELINE_FILE}")
 			}
 		}
 	}
 
 	private fun printNotifications() {
-		notifications.forEach(::println)
+		for (notification in notifications) println(notification)
 		println()
 	}
 
 	private fun printFindings() {
+		val listings = DetektBaselineFormat.listings(reportDirectory)
+
 		findings.forEach {
 			it.key.print("Ruleset: ")
-			it.value.forEach { it.compact().print("\t") }
+			val values = it.value.filterListedFindings(listings)
+			values.forEach { it.compact().print("\t") }
 		}
 	}
 

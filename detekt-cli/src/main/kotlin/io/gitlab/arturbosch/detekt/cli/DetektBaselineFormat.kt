@@ -19,19 +19,40 @@ object DetektBaselineFormat {
 
 	private val baseline = BaselineFormat()
 
+	fun fullPath(reportsPath: Path?): Path? = reportsPath?.resolve(BASELINE_FILE)
+
 	fun create(smells: List<Finding>, path: Path) {
-		val baselinePath = path.resolve(BASELINE_FILE)
+		val baselinePath = fullPath(path)!!
 		val timestamp = Instant.now().toEpochMilli().toString()
-		val blacklist = if (baselinePath.exists() && baselinePath.isFile()) {
-			loadFormat(baselinePath).blacklist
+		val blacklist = if (exist(baselinePath)) {
+			load(baselinePath).blacklist
 		} else {
 			Blacklist(emptyList(), timestamp)
 		}
-		val ids = smells.map { it.id + ":" + it.signature }
+		val ids = smells.map { it.baselineId }
 		val smellBaseline = SmellBaseline(blacklist, Whitelist(ids, timestamp))
 		baseline.write(smellBaseline, baselinePath)
+		println("Successfully wrote smell baseline to $baselinePath")
 	}
 
-	private fun loadFormat(path: Path): SmellBaseline = baseline.read(path)
+	fun load(path: Path): SmellBaseline = baseline.read(path)
 
+	fun listings(path: Path?): Pair<Whitelist, Blacklist>? {
+		val baselinePath = fullPath(path)
+		return if (DetektBaselineFormat.exist(baselinePath)) {
+			println("Only new findings are printed as baseline.xml is found:\n")
+			val format = DetektBaselineFormat.load(baselinePath!!)
+			format.whitelist to format.blacklist
+		} else null
+	}
+
+	private fun exist(baselinePath: Path?) = baselinePath != null && baselinePath.exists() && baselinePath.isFile()
+
+}
+
+fun List<Finding>.filterListedFindings(listings: Pair<Whitelist, Blacklist>?): List<Finding> {
+	return if (listings != null) {
+		this.filter { finding -> listings.first.ids.any { it != finding.baselineId } }
+				.filter { finding -> listings.second.ids.any { it != finding.baselineId } }
+	} else this
 }
