@@ -9,11 +9,17 @@ import java.nio.file.Paths
 /**
  * @author Artur Bosch
  */
-class PathConverter : IStringConverter<Path> {
+class ExistingPathConverter : IStringConverter<Path> {
 	override fun convert(value: String): Path {
 		val config = Paths.get(value)
 		if (Files.notExists(config))
 			throw ParameterException("Provided path '$value' does not exist!")
 		return config
+	}
+}
+
+class PathConverter : IStringConverter<Path> {
+	override fun convert(value: String): Path {
+		return Paths.get(value)
 	}
 }

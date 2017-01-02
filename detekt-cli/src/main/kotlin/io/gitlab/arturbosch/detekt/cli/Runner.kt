@@ -1,10 +1,8 @@
 package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.YamlConfig
 import io.gitlab.arturbosch.detekt.core.Detekt
-import io.gitlab.arturbosch.detekt.core.Notification
 import io.gitlab.arturbosch.detekt.core.PathFilter
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -21,10 +19,8 @@ object Runner {
 		val config = loadConfiguration(main.config, main)
 		measureTimeMillis {
 			val detektion = Detekt(main.project, config, rules, pathFilters, main.parallel).run()
-			printModifications(detektion.notifications)
-			printFindings(detektion.findings)
-			val amount = detektion.findings.flatMap { it.value }.size
-			SmellBorder.check(amount, config)
+			Output(detektion).write(main.output)
+			SmellBorder(config).check(detektion)
 		}.let { println("\ndetekt run within $it ms") }
 	}
 
@@ -44,18 +40,6 @@ object Runner {
 				}
 			}
 		} else Config.empty
-	}
-
-	private fun printModifications(notifications: List<Notification>) {
-		notifications.forEach(::println)
-		println()
-	}
-
-	private fun printFindings(result: Map<String, List<Finding>>) {
-		result.forEach {
-			it.key.print("Ruleset: ")
-			it.value.each { it.compact().print("\t") }
-		}
 	}
 
 	private fun <T> String?.letIf(init: String.() -> List<T>): List<T> =

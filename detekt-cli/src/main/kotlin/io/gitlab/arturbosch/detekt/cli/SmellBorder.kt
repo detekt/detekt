@@ -1,18 +1,21 @@
 package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.core.Detektion
 
 /**
  * @author Artur Bosch
  */
-object SmellBorder {
+class SmellBorder(config: Config) {
+
+	private val subConfig = config.subConfig("build")
+	private val warning = subConfig.valueOrDefault("warningThreshold") { -1 }
+	private val fail = subConfig.valueOrDefault("failThreshold") { -1 }
 
 	class SmellThresholdReachedError(override val message: String?) : RuntimeException(message)
 
-	fun check(amount: Int, config: Config) {
-		val subConfig = config.subConfig("build")
-		val warning = subConfig.valueOrDefault("warningThreshold") { -1 }
-		val fail = subConfig.valueOrDefault("failThreshold") { -1 }
+	fun check(detektion: Detektion) {
+		val amount = detektion.findings.flatMap { it.value }.size
 
 		println("\n")
 		if (fail.reached(amount)) {

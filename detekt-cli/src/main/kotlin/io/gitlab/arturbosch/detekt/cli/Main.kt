@@ -11,15 +11,19 @@ import java.nio.file.Path
 class Main {
 
 	@Parameter(names = arrayOf("--project", "-p"), required = true,
-			converter = PathConverter::class, description = "Project path to analyze (path/to/project).")
+			converter = ExistingPathConverter::class, description = "Project path to analyze (path/to/project).")
 	lateinit var project: Path
 
 	@Parameter(names = arrayOf("--filters", "-f"), description = "Path filters defined through regex with separator ';' (\".*test.*\").")
 	val filters: String? = null // Using a converter for List<PathFilter> resulted into a ClassCastException
 
 	@Parameter(names = arrayOf("--config", "-c"), description = "Path to the config file (path/to/config).",
-			converter = PathConverter::class)
+			converter = ExistingPathConverter::class)
 	var config: Path? = null
+
+	@Parameter(names = arrayOf("--output", "-o"), description = "Path to the output file where findings should be stored (path/to/output).",
+			converter = PathConverter::class)
+	var output: Path? = null
 
 	@Parameter(names = arrayOf("--rules", "-r"), description = "Extra paths to ruleset jars separated by ';'.")
 	val rules: String? = null
