@@ -62,17 +62,28 @@ class Main {
 			try {
 				jCommander.parse(*args)
 			} catch (ex: ParameterException) {
-				println(ex.message)
-				println()
-				jCommander.usage()
-				System.exit(-1)
+				val message = ex.message
+				failWithErrorMessage(jCommander, message)
 			}
 
 			if (cli.help) {
 				jCommander.usage()
 				System.exit(-1)
 			}
+
+			if (cli.reportDirectory == null && (cli.output || cli.baseline)) {
+				val message = "If using --output and/or --baseline the --report path must be given!"
+				failWithErrorMessage(jCommander, message)
+			}
+
 			return cli
+		}
+
+		private fun failWithErrorMessage(jCommander: JCommander, message: String?) {
+			println(message)
+			println()
+			jCommander.usage()
+			System.exit(-1)
 		}
 	}
 }
