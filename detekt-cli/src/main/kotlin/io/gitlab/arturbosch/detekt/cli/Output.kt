@@ -32,7 +32,7 @@ class Output(detektion: Detektion, args: Main) {
 			reportDirectory.createFoldersIfNeeded()
 			val smells = findings.flatMap { it.value }
 			if (withOutput) {
-				val smellData = smells.map { it.compact() }.joinToString("\n")
+				val smellData = smells.map { it.compactWithSignature() }.joinToString("\n")
 				val reportFile = reportDirectory.resolve(OUTPUT_FILE)
 				Files.write(reportFile, smellData.toByteArray())
 				println("\n Successfully wrote findings to $reportFile")

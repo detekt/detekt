@@ -66,6 +66,7 @@ interface Reflective {
  */
 interface Compactable {
 	fun compact(): String
+	fun compactWithSignature(): String = compact()
 }
 
 /**
@@ -99,8 +100,13 @@ open class CodeSmell(override val id: String,
 					 override val description: String = "",
 					 override val metrics: List<Metric> = listOf(),
 					 override val references: List<Entity> = listOf()) : Finding {
+
 	override fun compact(): String {
 		return "$id - ${entity.compact()}"
+	}
+
+	override fun compactWithSignature(): String {
+		return compact() + " - Signature=" + entity.signature
 	}
 }
 
@@ -119,9 +125,7 @@ data class Metric(val type: String,
 				threshold: Double,
 				conversionFactor: Int) : this(type, value = (value * conversionFactor).toInt(),
 			threshold = (threshold * conversionFactor).toInt(),
-			isDouble = true, conversionFactor = conversionFactor) {
-
-	}
+			isDouble = true, conversionFactor = conversionFactor)
 
 	fun doubleValue(): Double = value.convertAsDouble()
 	fun doubleThreshold(): Double = threshold.convertAsDouble()
@@ -139,7 +143,7 @@ data class Location(val source: SourceLocation,
 					val file: String) : Compactable {
 
 	override fun compact(): String {
-		return "Line/Column=$source - CharRange=$text - Path=$file"
+		return "Line/Column=$source - Path=$file"
 	}
 
 	companion object {
