@@ -51,7 +51,8 @@ object DetektBaselineFormat {
 
 fun List<Finding>.filterListedFindings(listings: Pair<Whitelist, Blacklist>?): List<Finding> {
 	return if (listings != null) {
-		this.filter { finding -> listings.first.ids.any { it != finding.baselineId } }
-				.filter { finding -> listings.second.ids.any { it != finding.baselineId } }
+		val whiteFiltered = this.filterNot { finding -> listings.first.ids.contains(finding.baselineId) }
+		val blackFiltered = whiteFiltered.filterNot { finding -> listings.second.ids.contains(finding.baselineId) }
+		blackFiltered
 	} else this
 }
