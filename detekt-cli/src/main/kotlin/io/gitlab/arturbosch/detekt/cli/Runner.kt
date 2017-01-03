@@ -18,7 +18,10 @@ object Runner {
 		val config = loadConfiguration(main.config, main)
 
 		val start = System.currentTimeMillis()
-		val detektion = Detekt(main.project, config, rules, pathFilters, main.parallel).run()
+		val detektion = Detekt(main.project, config,
+				rules, pathFilters, main.parallel,
+				listOf(DetektProgressListener())
+		).run()
 		Output(detektion, main).report()
 		val end = System.currentTimeMillis() - start
 		println("\ndetekt run within $end ms")

@@ -16,7 +16,8 @@ class Detekt(val project: Path,
 			 val config: Config = Config.empty,
 			 val ruleSets: List<Path> = listOf(),
 			 pathFilters: List<PathFilter> = listOf(),
-			 parallelCompilation: Boolean = false) {
+			 parallelCompilation: Boolean = false,
+			 private val changeListeners: List<FileProcessListener> = emptyList()) {
 
 	private val notifications: MutableList<Notification> = mutableListOf()
 	private val compiler: KtTreeCompiler = KtTreeCompiler(project, pathFilters, parallelCompilation)
@@ -32,10 +33,17 @@ class Detekt(val project: Path,
 
 	fun run(): Detektion {
 		val ktFiles = compiler.compile()
-		val providers = loadProviders().asIterable().toList()
+		val providers = loadProviders()
 		return withExecutor {
 
-			val futures = ktFiles.map { file -> runAsync { file.detekt(providers) } }
+			changeListeners.forEach { it.onStart(ktFiles) }
+			val futures = ktFiles.map { file ->
+				runAsync {
+					file.detekt(providers)
+				}.thenApply { future ->
+					changeListeners.forEach { it.onProcess(file) }; future
+				}
+			}
 			val findings = awaitAll(futures).flatMap { it }.toMergedMap()
 
 			if (config.valueOrDefault("autoCorrect") { false }) {
@@ -44,14 +52,15 @@ class Detekt(val project: Path,
 				}
 			}
 
+			changeListeners.forEach { it.onFinish(ktFiles) }
 			DetektResult(findings.toSortedMap(), notifications)
 		}
 	}
 
-	private fun loadProviders(): ServiceLoader<RuleSetProvider> {
+	private fun loadProviders(): List<RuleSetProvider> {
 		val urls = ruleSets.map { it.toUri().toURL() }.toTypedArray()
 		val detektLoader = URLClassLoader(urls, javaClass.classLoader)
-		return ServiceLoader.load(RuleSetProvider::class.java, detektLoader)
+		return ServiceLoader.load(RuleSetProvider::class.java, detektLoader).asIterable().toList()
 	}
 
 	private fun KtFile.detekt(providers: List<RuleSetProvider>): List<Pair<String, List<Finding>>> {
@@ -62,6 +71,12 @@ class Detekt(val project: Path,
 				.map { rule -> rule.id to rule.accept(this) }
 	}
 
+}
+
+interface FileProcessListener {
+	fun onStart(files: List<KtFile>)
+	fun onProcess(file: KtFile)
+	fun onFinish(files: List<KtFile>)
 }
 
 
