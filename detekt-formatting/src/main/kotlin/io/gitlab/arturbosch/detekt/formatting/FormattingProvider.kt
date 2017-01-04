@@ -20,7 +20,9 @@ class FormattingProvider : RuleSetProvider {
 				SpacingAroundCurlyBraces(config),
 				SpacingAroundOperator(config),
 				TrailingSpaces(config),
-				UnusedImports(config)
+				UnusedImports(config),
+				OptionalSemicolon(config),
+				OptionalUnit(config)
 		).apply {
 			if (!config.valueOrDefault("useTabs") { false }) {
 				add(Indentation(config))

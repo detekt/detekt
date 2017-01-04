@@ -79,4 +79,3 @@ interface FileProcessListener {
 	fun onFinish(files: List<KtFile>)
 }
 
-

@@ -44,7 +44,7 @@ class NamingConventionViolation(config: Config = Config.empty) : Rule("NamingCon
 			if (!name.matches(constantPattern)) {
 				add(declaration)
 			}
-		} else if(declaration.withinObjectDeclaration()) {
+		} else if (declaration.withinObjectDeclaration()) {
 			if (!name.matches(constantPattern) && !name.matches(variablePattern)) {
 				add(declaration)
 			}
