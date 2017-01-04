@@ -2,10 +2,8 @@ package io.gitlab.arturbosch.detekt.formatting
 
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.equalTo
-import com.natpryce.hamkrest.hasSize
-import io.gitlab.arturbosch.detekt.test.compileContentForTest
+import io.gitlab.arturbosch.detekt.test.format
 import org.jetbrains.spek.api.SubjectSpek
-import org.jetbrains.spek.api.dsl.SubjectDsl
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 
@@ -17,42 +15,66 @@ class UselessSemicolonSpec : SubjectSpek<OptionalSemicolon>({
 
 	describe("common semicolon cases") {
 		it("finds useless semicolon") {
-			val code = """
+			val actual = subject.format("""
 			// here is a ; semicolon
             fun main() {
                 fun name() { a(); return b }
                 println(";")
                 println();
             }
-			"""
-			execute(code)
-			assertThat(subject.findings, hasSize(equalTo(1)))
+			""")
+			val expected = """
+			// here is a ; semicolon
+            fun main() {
+                fun name() { a(); return b }
+                println(";")
+                println()
+            }
+			""".trimIndent()
+			assertThat(actual, equalTo(expected))
 		}
 
 		it("does not deletes statement separation semicolon") {
-			val code = """
+			val actual = subject.format("""
             fun main() {
                 fun name() { a();return b }
             };
-            """
-			execute(code)
-			assertThat(subject.findings, hasSize(equalTo(1)))
+            """)
+			val expected = """
+            fun main() {
+                fun name() { a();return b }
+            }
+			""".trimIndent()
+			assertThat(actual, equalTo(expected))
 		}
 
-		it("should find two double semicolons") {
-			val code = """
+		it("does not deletes statement separation semicolon (format test)") {
+			val actual = subject.format("""
+            fun main() {
+                fun name() { a();return b }
+            };
+            """)
+			val expected = """
+            fun main() {
+                fun name() { a();return b }
+            }
+			""".trimIndent()
+			assertThat(actual, equalTo(expected))
+		}
+
+		it("should not delete all semicolons") {
+			val actual = subject.format("""
             fun main() {
                 println();;;;println()
             }
-            """
-			execute(code)
-			assertThat(subject.findings, hasSize(equalTo(2)))
+            """)
+			val expected = """
+            fun main() {
+                println();println()
+            }
+			""".trimIndent()
+			assertThat(actual, equalTo(expected))
 		}
 	}
 
 })
-
-private fun SubjectDsl<OptionalSemicolon>.execute(code: String) {
-	val root = compileContentForTest(code)
-	subject.visit(root)
-}

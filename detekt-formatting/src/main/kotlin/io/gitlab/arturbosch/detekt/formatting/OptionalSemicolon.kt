@@ -23,13 +23,26 @@ class OptionalSemicolon(config: Config = Config.empty) : TokenRule("OptionalSemi
 		val psi = node.psi
 		if (psi.isNoErrorElement() && psi.isNotPartOfEnum() && psi.isNotPartOfString()) {
 			if (psi.isDoubleSemicolon()) {
-				addFindings(CodeSmell(id, Entity.Companion.from(psi)))
+				addFindings(CodeSmell(id, Entity.from(psi)))
+				withAutoCorrect {
+					deleteOneOrTwoSemicolons(node, psi)
+				}
 			} else if (psi.isSemicolon()) {
 				val nextLeaf = PsiTreeUtil.nextLeaf(psi)
 				if (isSemicolonOrEOF(nextLeaf) || nextTokenHasSpaces(nextLeaf)) {
-					addFindings(CodeSmell(id, Entity.Companion.from(psi)))
+					addFindings(CodeSmell(id, Entity.from(psi)))
+					withAutoCorrect { psi.delete() }
 				}
 			}
+		}
+	}
+
+	private fun deleteOneOrTwoSemicolons(node: ASTNode, psi: PsiElement) {
+		val nextLeaf = PsiTreeUtil.nextLeaf(psi)
+		if (isSemicolonOrEOF(nextLeaf) || nextTokenHasSpaces(nextLeaf)) {
+			psi.delete()
+		} else {
+			(node as LeafPsiElement).replaceWithText(";")
 		}
 	}
 
@@ -42,7 +55,7 @@ class OptionalSemicolon(config: Config = Config.empty) : TokenRule("OptionalSemi
 	private fun nextTokenHasSpaces(nextLeaf: PsiElement?) = nextLeaf is PsiWhiteSpace &&
 			(nextLeaf.text.contains("\n") || isSemicolonOrEOF(PsiTreeUtil.nextLeaf(nextLeaf)))
 
-	private fun isSemicolonOrEOF(nextLeaf: PsiElement?) = nextLeaf == null || nextLeaf.isSemicolon()
+	private fun isSemicolonOrEOF(nextLeaf: PsiElement?) = nextLeaf == null || nextLeaf.isSemicolon() || nextLeaf.isDoubleSemicolon()
 
 }
 
