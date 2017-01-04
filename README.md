@@ -1,6 +1,7 @@
 # __detekt__
 
 [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
+[ ![Download](https://api.bintray.com/packages/arturbosch/code-analysis/detekt/images/download.svg) ](https://bintray.com/arturbosch/code-analysis/detekt/_latestVersion)
 
 Meet _detekt_, a static code analysis tool for the _Kotlin_ programming language.
 It operates on the abstract syntax tree provided by the Kotlin compiler.
@@ -104,6 +105,7 @@ task detekt(type: JavaExec) {
 
 dependencies {
 	detekt 'io.gitlab.arturbosch.detekt:detekt-cli:1.0.0.M6'
+	detekt 'io.gitlab.arturbosch.detekt:detekt-formatting:1.0.0.M6'
 }
 ```
 
