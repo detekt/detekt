@@ -28,9 +28,8 @@ subprojects {
 	repositories {
 		mavenCentral()
 		mavenLocal()
-		maven {
-			url "http://dl.bintray.com/jetbrains/spek"
-		}
+		maven { url "http://dl.bintray.com/jetbrains/spek" }
+		maven { url "http://dl.bintray.com/arturbosch/code-analysis" }
 	}
 
 	apply plugin: 'org.junit.platform.gradle.plugin'
