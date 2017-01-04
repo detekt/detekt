@@ -12,7 +12,7 @@ import kotlin.test.assertTrue
  */
 internal class DetektBaselineFormatTest {
 
-	private val path = File("./src/test/resources").toPath()
+	private val path = File(javaClass.getResource("/").path).toPath()
 	private val fullPath = path.resolve(DetektBaselineFormat.BASELINE_FILE)
 
 	@AfterEach
