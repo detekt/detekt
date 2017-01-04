@@ -1,13 +1,29 @@
 # Detekt - Changelog
 
-#### M6 - Upcoming
+#### M7 - Upcoming
 
-- move formatting to own rule set project
 - rewrite formatting to fix line/column issue or just allow to auto correct without report
-- OptionalUnit and -Semicolon should be auto correctable and moved to formatting
-- logging and progress while waiting for the analysis
+- more fixes
 
-More issues: https://gitlab.com/arturbosch/detekt/milestones/6
+See all issues at: https://gitlab.com/arturbosch/detekt/milestones/6
+
+#### M6
+
+##### New features
+
+- allow to fail builds on code smell thresholds (configurable), see 'Configure build failure thresholds' in README
+- blacklist code smells which are false positives
+- generate a baseline whitelist of code smells if your project is already old and has many smells, so only new
+smells are shown in analysis (see 'Code Smell baseline and ignore list' in README)
+
+##### Improvements
+
+- move formatting to own rule set project as formatting works great on my kotlin projects but line/column calculation 
+from within PsiElements is wrong (!?)
+- OptionalUnit and -Semicolon should be auto correctable and moved to formatting
+- show progress while waiting for the analysis
+
+See all issues at: https://gitlab.com/arturbosch/detekt/milestones/6
 
 #### M5
 

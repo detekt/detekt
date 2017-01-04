@@ -9,12 +9,12 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 
 ### Usage/Build
 
-#### Building all submodules ( + executables)
+##### Building all submodules ( + executables)
 
 - cd detekt
 - gradle clean build (install shadow)
 
-#### Using the command line interface
+##### Using the command line interface
 
 - cd detekt-cli
 - gradle shadow
@@ -28,19 +28,39 @@ The following option is required: --project, -p
 
 Usage: detekt [options]
   Options:
+    --baseline, -b
+       Treats current analysis findings as a smell baseline for further detekt
+       runs. If a baseline xml file exists, only new code smells not in the baseline
+       are printed in the console.
+       Default: false
     --config, -c
        Path to the config file (path/to/config).
     --filters, -f
        Path filters defined through regex with separator ';' (".*test.*").
-       Default: <empty string>
+    --format
+       Enables formatting of source code. Cannot be used together with --config.
+       Default: false
     --help, -h
        Shows the usage.
        Default: false
+    --output, -o
+       True if findings should be written into a report.detekt file inside the
+       report folder.
+       Default: false
+    --parallel
+       Enables parallel compilation of source files. Should only be used if the
+       analyzing project has more than ~200 kotlin files.
+       Default: false
   * --project, -p
        Project path to analyze (path/to/project).
+    --report, -rp
+       Path to the report directory where findings should be stored (if
+       --output) and baseline.xml generated (if --baseline).
     --rules, -r
        Extra paths to ruleset jars separated by ';'.
-       Default: <empty string>
+    --useTabs
+       Tells the formatter that indentation with tabs are valid.
+       Default: false
 ```
 
 `project` can either be a directory or a single Kotlin file.
@@ -48,6 +68,8 @@ The currently only supported configuration format is yaml. `config` should point
 `filters` can be used for example to exclude all test directories.
 With `rules` you can point to additional ruleset.jar's creating by yourself or others. 
 More on this topic see section _Custom RuleSets_.
+
+The `report` parameter is optional and when used, it should point to
 
 #### Using detekt in custom gradle projects
 
@@ -81,11 +103,11 @@ task detekt(type: JavaExec) {
 }
 
 dependencies {
-	detekt 'io.gitlab.arturbosch.detekt:detekt-cli:1.0.0.M5'
+	detekt 'io.gitlab.arturbosch.detekt:detekt-cli:1.0.0.M6'
 }
 ```
 
-### Using detekt in Maven Projects
+#### Using detekt in Maven Projects
 
 1. Add following lines to your pom.xml.
 2. Run `mvn verify` (when using the verify phase as I did here)
@@ -119,7 +141,7 @@ dependencies {
         <dependency>
             <groupId>io.gitlab.arturbosch.detekt</groupId>
             <artifactId>detekt-cli</artifactId>
-            <version>1.0.0.M5</version>
+            <version>1.0.0.M6</version>
         </dependency>
     </dependencies>
 </plugin>
@@ -127,16 +149,22 @@ dependencies {
 
 ### RuleSets
 
-Currently there are seven rule sets which are used per default when running the cli.
+Currently there are six rule sets which are used per default when running the cli.
 
 - code-smell    - has rules to detect _LongMethod, LongParameterList, LargeClass, ComplexMethod ..._ smells
-- style         - has rules to detect optional keywords, wildcast imports and implements rules according to Kotlin's [coding conventions ](https://kotlinlang.org/docs/reference/coding-conventions.html)
+- style         - detects wildcast imports and naming violations
 - comments      - has rules to detect missing KDoc over public members and unnecessary KDoc over private members
-- formatting    - detects indentation and spacing problems in code
 - exceptions    - too general exceptions are used in throw and catch statements like RuntimeException
 - empty         - finds empty block statements
 - potential-bugs    - code is structured in a way it can lead to bugs like 'only equals but not hashcode is implemented',
 no else case in when statements, explicit garbage collection calls
+
+##### Additional RuleSets 
+
+* formatting: detects indentation, spacing problems and optional semicolons in code
+
+As of milestone six, the formatting rule set is shipped as an standalone plugin which must be linked to a detekt run
+through the --rules "path/to/jar" parameter.
 
 ### RuleSet Configuration
 
@@ -263,7 +291,25 @@ By specifying the rule set and rule ids, detekt will use the sub configuration o
 
 ```val threshold = withConfig { valueOrDefault("threshold") { threshold } }```
 
-#### Formatting
+#### Maven
+
+If your using maven to build rule sets or use detekt as a dependency, you have to run the additional task `install`
+
+#### Testing your rules
+
+To test your rules you need a KtFile object and use it's _visit_ method.
+There are two predefined methods to help obtaining a KtFile:
+
+- compileContentForTest(content: String): KtFile
+- compileForTest(path: Path): KtFile
+
+New with M3 there is a special detekt-test module, which specifies above two methods but also
+Rule extension functions that allow allow to skip compilation, ktFile and visit procedures.
+
+- Rule.lint(StringContent/Path) returns just the findings for given content
+- Rule.format(StringContent/Path) returns just the new modified content for given content
+
+### Formatting
 
 [KtLint](https://github.com/shyiko/ktlint) was first to support auto correct formatting according to the kotlin [coding conventions](https://kotlinlang.org/docs/reference/coding-conventions.html).
 In Detekt I made an effort to port over all available formatting rules to detect style violations and auto correct them.
@@ -308,20 +354,30 @@ formatting:
     autoCorrect: true
 ```
 
-#### Maven
+### Code Smell baseline and ignore list
 
-If your using maven to build rule sets or use detekt as a dependency, you have to run the additional task `install`
+Specify a report directory with `--report` parameter.
+ 
+Now with --output you can generate a `report.detekt` inside your
+report directory which holds all findings of current analysis.
 
-#### Testing your rules
+With `--baseline` you generate a `baseline.xml` where code smells are white- or blacklisted.
 
-To test your rules you need a KtFile object and use it's _visit_ method.
-There are two predefined methods to help obtaining a KtFile:
+```xml
+<SmellBaseline>
+    <Blacklist timestamp="1483388204705">
+        <ID>CatchRuntimeException:Junk.kt$e: RuntimeException</ID>
+    </Blacklist>
+    <Whitelist timestamp="1483446226153">
+        <ID>NestedBlockDepth:OptionalSemicolon.kt$OptionalSemicolon$override fun procedure(node: ASTNode)</ID>
+        <ID>NestedBlockDepth:Indentation.kt$Indentation$override fun procedure(node: ASTNode)</ID>
+        <ID>EmptyFunctionBlock:Rule.kt$Rule${ }</ID>
+        <ID>NoElseInWhenExpression:ExplicitGarbageCollectionCall.kt$ExplicitGarbageCollectionCall$when (it.text) { "System", "Runtime.getRuntime()" -&gt; addFindings(CodeSmell(id, Entity.Companion.from(expression))) }</ID>
+        <ID>NamingConventionViolation:TooManyFunctions2.kt$TooManyFunctions2 : Rule</ID>
+    </Whitelist>
+</SmellBaseline>
+```
 
-- compileContentForTest(content: String): KtFile
-- compileForTest(path: Path): KtFile
-
-New with M3 there is a special detekt-test module, which specifies above two methods but also
-Rule extension functions that allow allow to skip compilation, ktFile and visit procedures.
-
-- Rule.lint(StringContent/Path) returns just the findings for given content
-- Rule.format(StringContent/Path) returns just the new modified content for given content
+The intention of a whitelist is that only new code smells are printed on further analysis. The blacklist can be used
+to write down false positive detections. The `ID` node must be build of `<RuleID>:<Signature>`. Both values can be found
+inside the `report.detekt` file.
