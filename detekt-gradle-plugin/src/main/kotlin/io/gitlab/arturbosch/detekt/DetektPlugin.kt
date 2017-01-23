@@ -23,10 +23,10 @@ open class DetektTask : DefaultTask() {
 		val detektConfig = project.extensions.getByName("detekt") as DetektConfig
 		val args = mutableListOf<String>()
 		with(detektConfig) {
-			input?.let { args.add("-p"); args.add(it) }
-			config?.let { args.add("-c"); args.add(it) }
-			filters?.let { args.add("-f"); args.add(it) }
-			rulesets?.let { args.add("-r"); args.add(it) }
+			input?.let { args.add("--project"); args.add(it) }
+			config?.let { args.add("--config"); args.add(it) }
+			filters?.let { args.add("--filters"); args.add(it) }
+			rulesets?.let { args.add("--rules"); args.add(it) }
 		}
 		Main.main(args.toTypedArray())
 	}
