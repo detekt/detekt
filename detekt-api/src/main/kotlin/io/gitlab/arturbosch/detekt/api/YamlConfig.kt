@@ -1,6 +1,8 @@
 package io.gitlab.arturbosch.detekt.api
 
 import org.yaml.snakeyaml.Yaml
+import java.io.BufferedReader
+import java.net.URL
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -28,7 +30,19 @@ class YamlConfig internal constructor(val properties: Map<String, Any>) : Config
 		 */
 		fun load(path: Path): Config {
 			require(Files.exists(path) && path.toString().endsWith("yml"))
-			return Files.newBufferedReader(path).use {
+			return load(Files.newBufferedReader(path))
+		}
+
+		/**
+		 * Factory method to load a yaml configuration from a URL.
+		 */
+		fun loadResource(url: URL): Config {
+			val reader = url.openStream().bufferedReader()
+			return load(reader)
+		}
+
+		private fun load(reader: BufferedReader): Config {
+			return reader.use {
 				val map = Yaml().loadAll(it).iterator().next()
 				if (map is Map<*, *>) {
 					YamlConfig(map as Map<String, Any>)
