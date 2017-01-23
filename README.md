@@ -1,5 +1,6 @@
 # __detekt__
 
+[![build status](https://gitlab.com/arturbosch/detekt/badges/master/build.svg)](https://gitlab.com/arturbosch/detekt/commits/master)
 [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
 [ ![Download](https://api.bintray.com/packages/arturbosch/code-analysis/detekt/images/download.svg) ](https://bintray.com/arturbosch/code-analysis/detekt/_latestVersion)
 
