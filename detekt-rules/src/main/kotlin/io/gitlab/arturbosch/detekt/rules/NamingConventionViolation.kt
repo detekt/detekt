@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 class NamingConventionViolation(config: Config = Config.empty) : Rule("NamingConventionViolation", Severity.Style, config) {
 
 	private val variablePattern = Regex("^(_)?[a-z$][a-zA-Z$0-9]*$")
-	private val constantPattern = Regex("^[A-Z_]*$")
+	private val constantPattern = Regex("^([A-Z_]*|serialVersionUID)$")
 	private val methodPattern = Regex("^[a-z$][a-zA-Z$0-9]*$")
 	private val classPattern = Regex("^[A-Z$][a-zA-Z$]*$")
 

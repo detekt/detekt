@@ -31,6 +31,7 @@ class NamingConventionTest {
             const val MY_NAME = "Artur"
             const val MYNAME = "Artur"
             const val MyNAME = "Artur"
+            const val serialVersionUID = 42L
             """
 		), hasSize(equalTo(1)))
 	}
