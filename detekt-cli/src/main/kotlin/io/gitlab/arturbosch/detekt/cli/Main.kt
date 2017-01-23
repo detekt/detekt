@@ -22,7 +22,7 @@ class Main {
 			converter = ExistingPathConverter::class)
 	var config: Path? = null
 
-	@Parameter(names = arrayOf("--config-resource"), description = "Path to the config resource on detekt's classpath (path/to/config.yml).",
+	@Parameter(names = arrayOf("--config-resource", "-cr"), description = "Path to the config resource on detekt's classpath (path/to/config.yml).",
 			converter = ClasspathResourceConverter::class)
 	var configResource: URL? = null
 
@@ -56,7 +56,7 @@ class Main {
 		@JvmStatic
 		fun main(args: Array<String>) {
 			val main = parseArguments(args)
-			Runner.runWith(main)
+			Runner(main).execute()
 		}
 
 		private fun parseArguments(args: Array<String>): Main {

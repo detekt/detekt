@@ -11,12 +11,15 @@ import java.nio.file.Paths
 /**
  * @author Artur Bosch
  */
-object Runner {
+class Runner(private val main: Main) {
 
-	fun runWith(main: Main) {
+	private val configURL: URL? = main.configResource
+	private val configPath: Path? = main.config
+
+	fun execute() {
 		val pathFilters = with(Main) { main.filters.letIf { split(";").map(::PathFilter) } }
 		val rules = with(Main) { main.rules.letIf { split(";").map { Paths.get(it) } } }
-		val config = loadConfiguration(main, main.config, main.configResource)
+		val config = loadConfiguration()
 
 		val start = System.currentTimeMillis()
 		val detektion = Detekt(main.project, config,
@@ -30,7 +33,7 @@ object Runner {
 		SmellBorder(config, main).check(detektion)
 	}
 
-	private fun loadConfiguration(main: Main, configPath: Path?, configURL: URL?): Config {
+	private fun loadConfiguration(): Config {
 		return if (configPath != null) YamlConfig.load(configPath)
 		else if (configURL != null) YamlConfig.loadResource(configURL)
 		else if (main.formatting) object : Config {
