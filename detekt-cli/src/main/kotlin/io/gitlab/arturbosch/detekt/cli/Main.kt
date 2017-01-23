@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.cli
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.ParameterException
+import java.net.URL
 import java.nio.file.Path
 
 /**
@@ -17,9 +18,13 @@ class Main {
 	@Parameter(names = arrayOf("--filters", "-f"), description = "Path filters defined through regex with separator ';' (\".*test.*\").")
 	val filters: String? = null // Using a converter for List<PathFilter> resulted in a ClassCastException
 
-	@Parameter(names = arrayOf("--config", "-c"), description = "Path to the config file (path/to/config).",
+	@Parameter(names = arrayOf("--config", "-c"), description = "Path to the config file (path/to/config.yml).",
 			converter = ExistingPathConverter::class)
 	var config: Path? = null
+
+	@Parameter(names = arrayOf("--config-resource"), description = "Path to the config resource on detekt's classpath (path/to/config.yml).",
+			converter = ClasspathResourceConverter::class)
+	var configResource: URL? = null
 
 	@Parameter(names = arrayOf("--report", "-rp"), description = "Path to the report directory where findings should be stored (if --output) and baseline.xml generated (if --baseline).",
 			converter = PathConverter::class)

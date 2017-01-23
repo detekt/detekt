@@ -25,6 +25,7 @@ open class DetektTask : DefaultTask() {
 		with(detektConfig) {
 			input?.let { args.add("--project"); args.add(it) }
 			config?.let { args.add("--config"); args.add(it) }
+			configResource?.let { args.add("--config-resource"); args.add(it) }
 			filters?.let { args.add("--filters"); args.add(it) }
 			rulesets?.let { args.add("--rules"); args.add(it) }
 		}
@@ -34,5 +35,6 @@ open class DetektTask : DefaultTask() {
 
 open class DetektConfig(var message: String = "World",
 						var config: String? = null,
+						var configResource: String? = null,
 						var filters: String? = null,
 						var rulesets: String? = null)

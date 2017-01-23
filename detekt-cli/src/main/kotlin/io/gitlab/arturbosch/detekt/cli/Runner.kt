@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.YamlConfig
 import io.gitlab.arturbosch.detekt.core.Detekt
 import io.gitlab.arturbosch.detekt.core.PathFilter
+import java.net.URL
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -15,7 +16,7 @@ object Runner {
 	fun runWith(main: Main) {
 		val pathFilters = with(Main) { main.filters.letIf { split(";").map(::PathFilter) } }
 		val rules = with(Main) { main.rules.letIf { split(";").map { Paths.get(it) } } }
-		val config = loadConfiguration(main.config, main)
+		val config = loadConfiguration(main, main.config, main.configResource)
 
 		val start = System.currentTimeMillis()
 		val detektion = Detekt(main.project, config,
@@ -29,8 +30,9 @@ object Runner {
 		SmellBorder(config, main).check(detektion)
 	}
 
-	private fun loadConfiguration(configPath: Path?, main: Main): Config {
+	private fun loadConfiguration(main: Main, configPath: Path?, configURL: URL?): Config {
 		return if (configPath != null) YamlConfig.load(configPath)
+		else if (configURL != null) YamlConfig.loadResource(configURL)
 		else if (main.formatting) object : Config {
 			override fun subConfig(key: String): Config {
 				return this
