@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.cli
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.ParameterException
+import io.gitlab.arturbosch.detekt.cli.debug.Debugger
 import java.net.URL
 import java.nio.file.Path
 
@@ -48,6 +49,9 @@ class Main {
 	@Parameter(names = arrayOf("--output", "-o"), description = "True if findings should be written into a report.detekt file inside the report folder.")
 	var output: Boolean = false
 
+	@Parameter(names = arrayOf("--debug", "-d"), description = "Debugs given ktFile by printing its elements.")
+	private var debug: Boolean = false
+
 	@Parameter(names = arrayOf("--help", "-h"), help = true, description = "Shows the usage.")
 	private var help: Boolean = false
 
@@ -56,6 +60,10 @@ class Main {
 		@JvmStatic
 		fun main(args: Array<String>) {
 			val main = parseArguments(args)
+			if (main.debug) {
+				Debugger(main).execute()
+				return
+			}
 			Runner(main).execute()
 		}
 
@@ -92,4 +100,3 @@ class Main {
 		}
 	}
 }
-

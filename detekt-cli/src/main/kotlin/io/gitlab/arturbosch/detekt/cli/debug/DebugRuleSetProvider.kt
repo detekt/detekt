@@ -13,8 +13,8 @@ object DebugRuleSetProvider : RuleSetProvider {
 
 	override fun instance(config: Config): RuleSet {
 		return RuleSet(ruleSetId, listOf(
-				ElementPrinter(),
-				TokenPrinter()
+				TokenPrinter(),
+				ElementPrinter()
 		))
 	}
 }
