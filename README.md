@@ -234,12 +234,21 @@ This is done to prevent you from changing your project files if your not 100% su
 
 ### Configure build failure thresholds
 
-detekt now can throw a SmellThresholdReachedError and let the build fail with following config parameters:
+detekt now can throw a BuildFailure(Exception) and let the build fail with following config parameters:
 ```yaml
 build:
   warningThreshold: 5
   failThreshold: 10
+  weights:
+    code-smell: 2
+    LongParameterList: 1
 ```
+
+Every rule and rule set can be attached with an integer value which is the weight of the finding.
+For example: If you have 5 findings of the category _code-smell_, then your failThreshold of 10 is reached as
+5 x 2 = 10. 
+
+The formula for weights: RuleID > RuleSetID > 1 
 
 ### Custom RuleSets
 

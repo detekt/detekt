@@ -3,6 +3,9 @@ autoCorrect: true
 build:
   warningThreshold: 5
   failThreshold: 10
+  weights:
+    code-smell: 2
+    LongParameterList: 1
 
 potential-bugs:
   active: true

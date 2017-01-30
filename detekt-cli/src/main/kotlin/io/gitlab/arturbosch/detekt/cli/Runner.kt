@@ -17,8 +17,8 @@ class Runner(private val main: Main) {
 	private val configPath: Path? = main.config
 
 	fun execute() {
-		val pathFilters = with(Main) { main.filters.letIf { split(";").map(::PathFilter) } }
-		val rules = with(Main) { main.rules.letIf { split(";").map { Paths.get(it) } } }
+		val pathFilters = with(Main) { main.filters.letIfNonEmpty { split(";").map(::PathFilter) } }
+		val rules = with(Main) { main.rules.letIfNonEmpty { split(";").map { Paths.get(it) } } }
 		val config = loadConfiguration()
 
 		val start = System.currentTimeMillis()
@@ -30,7 +30,7 @@ class Runner(private val main: Main) {
 		val end = System.currentTimeMillis() - start
 		println("\ndetekt run within $end ms")
 
-		SmellBorder(config, main).check(detektion)
+		SmellThreshold(config, main).check(detektion)
 	}
 
 	private fun loadConfiguration(): Config {
@@ -52,7 +52,7 @@ class Runner(private val main: Main) {
 		} else Config.empty
 	}
 
-	private fun <T> String?.letIf(init: String.() -> List<T>): List<T> =
+	private fun <T> String?.letIfNonEmpty(init: String.() -> List<T>): List<T> =
 			if (this == null || this.isEmpty()) listOf<T>() else this.init()
 
 }
