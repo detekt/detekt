@@ -5,9 +5,11 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.KtVariableDeclaration
 
 /**
  * @author Artur Bosch
@@ -25,7 +27,7 @@ class FeatureEnvy(config: Config = Config.empty) : CodeSmellRule("FeatureEnvy", 
 
 	class FeatureEnvyClassVisitor(val className: String,
 								  val properties: List<KtProperty>,
-								  val functions: List<KtNamedFunction>) : DetektVisitor() {
+								  val functions: List<KtNamedFunction>) {
 
 		fun run() {
 			functions.filter { it.funKeyword != null }
@@ -35,7 +37,15 @@ class FeatureEnvy(config: Config = Config.empty) : CodeSmellRule("FeatureEnvy", 
 
 		private fun analyzeFunction(function: KtNamedFunction) {
 			val allCalls = function.collectByType<KtCallExpression>()
-			println("${function.name} " + allCalls.map { 1 }.sum())
+			val sumCalls = allCalls.map { 1 }.sum()
+			println("${function.name} " + sumCalls)
+			val parameters = function.valueParameters
+			val locals = function.collectByType<KtVariableDeclaration>()
+			println(locals.map { it.text })
+
+			allCalls.map { it.parent }.filterIsInstance(KtDotQualifiedExpression::class.java).forEach { call ->
+				println(call.receiverExpression.text)
+			}
 		}
 	}
 }
