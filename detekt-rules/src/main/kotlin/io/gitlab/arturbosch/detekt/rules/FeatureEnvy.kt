@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.CodeSmellRule
+import io.gitlab.arturbosch.detekt.api.CodeSmellWithReferenceAndMetric
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Metric
@@ -71,9 +71,8 @@ class FeatureEnvy(config: Config = Config.empty) : CodeSmellRule("FeatureEnvy", 
 				println(ktElement.text)
 				println("factor: $value")
 				if (threshold < value) {
-					addFindings(CodeSmell(id, entityOfFunction,
-							metrics = listOf(Metric("FeatureEnvyFactor", value, threshold, 100)),
-							references = listOf(Entity.from(ktElement))))
+					addFindings(CodeSmellWithReferenceAndMetric(id, entityOfFunction,
+							Entity.from(ktElement), Metric("FeatureEnvyFactor", value, threshold, 100)))
 				}
 			}
 		}

@@ -76,18 +76,27 @@ interface Describable {
 	val description: String
 }
 
+open class CodeSmellWithReferenceAndMetric(id: String, entity: Entity, val reference: Entity, metric: Metric) :
+		ThresholdedCodeSmell(id, entity, metric, references = listOf(reference)) {
+
+	override fun compact(): String {
+		return "$id - $metric - ref=${reference.name} - ${entity.compact()}"
+	}
+}
+
 /**
  * Represents a code smell for which a specific metric can be determined which is responsible
  * for the existence of a rule violation.
  */
-open class ThresholdedCodeSmell(id: String, entity: Entity, val metric: Metric) : CodeSmell(id, entity, metrics = listOf(metric)) {
+open class ThresholdedCodeSmell(id: String, entity: Entity, val metric: Metric, references: List<Entity> = emptyList())
+	: CodeSmell(id, entity, metrics = listOf(metric), references = references) {
 	val value: Int
 		get() = metric.value
 	val threshold: Int
 		get() = metric.threshold
 
 	override fun compact(): String {
-		return "$id - ${metric.value}/${metric.threshold} - ${entity.compact()}"
+		return "$id - $metric - ${entity.compact()}"
 	}
 }
 
@@ -132,6 +141,12 @@ data class Metric(val type: String,
 
 	private fun Int.convertAsDouble() = if (isDouble) (this.toDouble() / conversionFactor)
 	else throw IllegalStateException("This metric was not marked as double!")
+
+	override fun toString(): String {
+		return if (isDouble) "${doubleValue()}/${doubleThreshold()}" else "$value/$threshold"
+	}
+
+
 }
 
 /**
