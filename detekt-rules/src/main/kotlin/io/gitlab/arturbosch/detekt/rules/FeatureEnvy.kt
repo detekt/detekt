@@ -83,9 +83,9 @@ class FeatureEnvy(config: Config = Config.empty) : CodeSmellRule("FeatureEnvy", 
 
 	}
 
-	inner class FeatureEnvyFactor(val threshold: Double = 0.52,
+	inner class FeatureEnvyFactor(val threshold: Double = 0.5,
 								  private val base: Double = 0.5,
-								  private val weight: Double = 0.5) {
+								  private val weight: Double = 0.45) {
 
 		internal fun calc(entityCalls: Int, allCalls: Int): Double {
 			if (allCalls == 0 || allCalls == 1) {
