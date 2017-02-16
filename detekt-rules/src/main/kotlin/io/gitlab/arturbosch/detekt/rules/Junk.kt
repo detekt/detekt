@@ -7,7 +7,6 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtModifierListOwner
-import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 
 /**
@@ -34,7 +33,7 @@ inline fun <K, V> MutableMap<K, V>.merge(key: K, value: V, mergeFunction: (V, V)
 	}
 }
 
-inline fun <reified T : KtElement> KtNamedFunction.collectByType(): List<T> {
+inline fun <reified T : KtElement> KtElement.collectByType(): List<T> {
 	val list = mutableListOf<T>()
 	this.accept(object : DetektVisitor() {
 		override fun visitKtElement(element: KtElement) {
