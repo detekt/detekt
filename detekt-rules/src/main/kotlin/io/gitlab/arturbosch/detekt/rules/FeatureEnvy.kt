@@ -26,15 +26,14 @@ class FeatureEnvy(config: Config = Config.empty) : CodeSmellRule("FeatureEnvy", 
 
 	override fun visitClass(klass: KtClass) {
 		val properties = klass.getProperties()
-		val functions = klass.declarations
-				.filterIsInstance(KtNamedFunction::class.java)
-		val visitor = FeatureEnvyClassVisitor(properties, functions)
+		val functions = klass.declarations.filterIsInstance(KtNamedFunction::class.java)
+		val visitor = FeatureEnvyMethodInspector(properties, functions)
 		visitor.run()
 		super.visitClass(klass)
 	}
 
-	inner class FeatureEnvyClassVisitor(val properties: List<KtProperty>,
-										val functions: List<KtNamedFunction>) {
+	inner class FeatureEnvyMethodInspector(val properties: List<KtProperty>,
+										   val functions: List<KtNamedFunction>) {
 
 		fun run() {
 			functions.filter { it.funKeyword != null }
