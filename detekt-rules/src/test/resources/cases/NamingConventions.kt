@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package cases
 
 // both valid
@@ -16,7 +18,6 @@ fun FileMethod() {
 fun _fileMethod() {
 }
 
-@Suppress("unused")
 class NamingConventions {
 
 	//invalid
