@@ -3,13 +3,11 @@ package io.gitlab.arturbosch.detekt.rules
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.CodeSmellRule
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Metric
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
-import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -96,26 +94,4 @@ class FeatureEnvy(config: Config = Config.empty) : CodeSmellRule("FeatureEnvy", 
 			return weight * (entityCalls / allCalls) + (1 - weight) * (1 - Math.pow(base, entityCalls.toDouble()))
 		}
 	}
-}
-
-inline fun <K, V> MutableMap<K, V>.merge(key: K, value: V, mergeFunction: (V, V) -> V) {
-	val oldValue = this[key]
-	if (oldValue == null) {
-		this.put(key, value)
-	} else {
-		this.put(key, mergeFunction(oldValue, value))
-	}
-}
-
-inline fun <reified T : KtElement> KtNamedFunction.collectByType(): List<T> {
-	val list = mutableListOf<T>()
-	this.accept(object : DetektVisitor() {
-		override fun visitKtElement(element: KtElement) {
-			if (element is T) {
-				list.add(element)
-			}
-			element.children.forEach { it.accept(this) }
-		}
-	})
-	return list
 }
