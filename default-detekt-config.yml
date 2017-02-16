@@ -29,6 +29,10 @@ code-smell:
     threshold: 150
   ComplexMethod:
     threshold: 10
+  FeatureEnvy:
+    threshold: 0.5
+    weight: 0.45
+    base: 0.5
 
 formatting:
   active: true
