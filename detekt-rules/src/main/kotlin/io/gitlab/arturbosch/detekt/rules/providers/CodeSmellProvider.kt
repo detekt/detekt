@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.rules.ComplexMethod
+import io.gitlab.arturbosch.detekt.rules.FeatureEnvy
 import io.gitlab.arturbosch.detekt.rules.LargeClass
 import io.gitlab.arturbosch.detekt.rules.LongMethod
 import io.gitlab.arturbosch.detekt.rules.LongParameterList
@@ -22,7 +23,8 @@ class CodeSmellProvider : RuleSetProvider {
 				LongMethod(config),
 				LargeClass(config),
 				ComplexMethod(config),
-				NestedBlockDepth(config)
+				NestedBlockDepth(config),
+				FeatureEnvy(config)
 		))
 	}
 }
