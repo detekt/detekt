@@ -10,6 +10,6 @@ internal class FeatureEnvySpec {
 
 	@Test
 	fun findOne() {
-		FeatureEnvy().lint(Case.Default.path())
+		FeatureEnvy().lint(Case.FeatureEnvy.path())
 	}
 }
