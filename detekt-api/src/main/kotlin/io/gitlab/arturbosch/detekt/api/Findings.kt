@@ -146,7 +146,6 @@ data class Metric(val type: String,
 		return if (isDouble) "${doubleValue()}/${doubleThreshold()}" else "$value/$threshold"
 	}
 
-
 }
 
 /**
