@@ -10,11 +10,7 @@ interface Notification {
 }
 
 class ModificationNotification(path: Path) : Notification {
-	override val message: String
-
-	init {
-		message = "File $path was modified."
-	}
+	override val message: String = "File $path was modified."
 
 	override fun toString(): String {
 		return message
