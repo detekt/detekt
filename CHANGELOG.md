@@ -2,10 +2,31 @@
 
 #### M7 - Upcoming
 
-- rewrite formatting to fix line/column issue or just allow to auto correct without report
-- more fixes
+##### defect
 
-See all issues at: https://gitlab.com/arturbosch/detekt/milestones/6
+- SpacingAroundCurlyBraces throw IndexOutOfFound when determinating Location.of(node) as LineAndColumn calculation is simple wrong (of Idea?) - [#47](https://gitlab.com/arturbosch/detekt/issues/47)
+
+##### feature
+
+- As an user I want to give more weight to some rule sets than to others - [#83](https://gitlab.com/arturbosch/detekt/issues/83)
+- Integrate debug rule set provider into cli - [#70](https://gitlab.com/arturbosch/detekt/issues/70)
+- Implement FeatureEnvy rule - [#36](https://gitlab.com/arturbosch/detekt/issues/36)
+
+##### feedback
+
+- [Test] Analyze Kotlin project (30.000+ KtFiles) - [#85](https://gitlab.com/arturbosch/detekt/issues/85)
+
+##### improvement
+
+- Consider other than BodyExpression expressions inside current rules - [#1](https://gitlab.com/arturbosch/detekt/issues/1)
+
+##### release
+
+- As an user I want to get more often releases to try out the new stuff - [#87](https://gitlab.com/arturbosch/detekt/issues/87)
+- Update to kotlin 1.0.6 - [#84](https://gitlab.com/arturbosch/detekt/issues/84)
+
+
+See all issues at: [M7](https://gitlab.com/arturbosch/detekt/milestones/7)
 
 #### M6
 
