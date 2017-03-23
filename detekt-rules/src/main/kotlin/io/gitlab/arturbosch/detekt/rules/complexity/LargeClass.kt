@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.rules
+package io.gitlab.arturbosch.detekt.rules.complexity
 
 import com.intellij.psi.PsiFile
 import io.gitlab.arturbosch.detekt.api.CodeSmellThresholdRule
@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.rules.asBlockExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -47,7 +48,7 @@ class LargeClass(config: Config = Config.empty, threshold: Int = 70) : CodeSmell
 		super.visitClassOrObject(classOrObject)
 		val loc = locStack.pop()
 		if (loc > threshold) {
-			addFindings(ThresholdedCodeSmell(id, Entity.from(classOrObject), Metric("SIZE", loc, threshold)))
+			addFindings(ThresholdedCodeSmell(id, Entity.Companion.from(classOrObject), Metric("SIZE", loc, threshold)))
 		}
 	}
 

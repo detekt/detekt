@@ -3,11 +3,11 @@ package io.gitlab.arturbosch.detekt.rules.providers
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.rules.ComplexMethod
-import io.gitlab.arturbosch.detekt.rules.LargeClass
-import io.gitlab.arturbosch.detekt.rules.LongMethod
-import io.gitlab.arturbosch.detekt.rules.LongParameterList
-import io.gitlab.arturbosch.detekt.rules.NestedBlockDepth
+import io.gitlab.arturbosch.detekt.rules.complexity.ComplexMethod
+import io.gitlab.arturbosch.detekt.rules.complexity.LargeClass
+import io.gitlab.arturbosch.detekt.rules.complexity.LongMethod
+import io.gitlab.arturbosch.detekt.rules.complexity.LongParameterList
+import io.gitlab.arturbosch.detekt.rules.complexity.NestedBlockDepth
 
 /**
  * @author Artur Bosch

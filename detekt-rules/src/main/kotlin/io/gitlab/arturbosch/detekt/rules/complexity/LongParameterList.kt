@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.rules
+package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.api.CodeSmellThresholdRule
 import io.gitlab.arturbosch.detekt.api.Config
@@ -22,7 +22,7 @@ class LongParameterList(config: Config = Config.empty, threshold: Int = 5) : Cod
 	private fun KtParameterList.checkThreshold() {
 		val size = parameters.size
 		if (size > threshold) {
-			addFindings(ThresholdedCodeSmell(id, Entity.from(this), Metric("SIZE", size, threshold)))
+			addFindings(ThresholdedCodeSmell(id, Entity.Companion.from(this), Metric("SIZE", size, threshold)))
 		}
 	}
 }

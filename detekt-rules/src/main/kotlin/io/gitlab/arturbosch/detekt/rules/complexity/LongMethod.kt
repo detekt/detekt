@@ -1,10 +1,11 @@
-package io.gitlab.arturbosch.detekt.rules
+package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.api.CodeSmellThresholdRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.rules.asBlockExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
@@ -18,7 +19,7 @@ class LongMethod(config: Config = Config.empty, threshold: Int = 20) : CodeSmell
 		body?.let {
 			val size = body.statements.size
 			if (size > threshold) addFindings(
-					ThresholdedCodeSmell(id, Entity.from(function), Metric("SIZE", size, threshold)))
+					ThresholdedCodeSmell(id, Entity.Companion.from(function), Metric("SIZE", size, threshold)))
 		}
 		super.visitNamedFunction(function)
 	}
