@@ -15,12 +15,12 @@ import java.util.ServiceLoader
 class Detekt(val project: Path,
 			 val config: Config = Config.empty,
 			 val ruleSets: List<Path> = listOf(),
-			 pathFilters: List<PathFilter> = listOf(),
-			 parallelCompilation: Boolean = false,
-			 private val changeListeners: List<FileProcessListener> = emptyList()) {
+			 settings: ProcessingSettings = ProcessingSettings()) {
 
 	private val notifications: MutableList<Notification> = mutableListOf()
-	private val compiler: KtTreeCompiler = KtTreeCompiler(project, pathFilters, parallelCompilation)
+	private val compiler: KtTreeCompiler = KtTreeCompiler(project,
+			settings.pathFilters, settings.parallelCompilation)
+	private val changeListeners: List<FileProcessListener> = settings.changeListeners
 
 	init {
 		require(Files.exists(project)) { "Given project path does not exist!" }

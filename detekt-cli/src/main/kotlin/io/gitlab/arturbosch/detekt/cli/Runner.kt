@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.YamlConfig
 import io.gitlab.arturbosch.detekt.core.Detekt
 import io.gitlab.arturbosch.detekt.core.PathFilter
+import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import java.net.URL
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -22,10 +23,9 @@ class Runner(private val main: Main) {
 		val config = loadConfiguration()
 
 		val start = System.currentTimeMillis()
+		val settings = ProcessingSettings(pathFilters, main.parallel, listOf(DetektProgressListener()))
 		val detektion = Detekt(main.project, config,
-				rules, pathFilters, main.parallel,
-				listOf(DetektProgressListener())
-		).run()
+				rules, settings).run()
 		Output(detektion, main).report()
 		val end = System.currentTimeMillis() - start
 		println("\ndetekt run within $end ms")
