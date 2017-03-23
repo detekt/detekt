@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules
 
 import io.gitlab.arturbosch.detekt.api.Rule
-import org.assertj.core.api.Assertions.assertThat
 import io.gitlab.arturbosch.detekt.rules.style.WildcardImport
+import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.SubjectSpek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
