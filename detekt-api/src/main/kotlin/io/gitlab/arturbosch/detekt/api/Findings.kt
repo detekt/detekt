@@ -7,7 +7,7 @@ import org.jetbrains.kotlin.diagnostics.DiagnosticUtils
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
 import org.jetbrains.kotlin.psi.psiUtil.getTextWithLocation
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
-import kotlin.reflect.memberProperties
+import kotlin.reflect.full.memberProperties
 
 /**
  * Base interface of detection findings. Inherits a bunch of useful behaviour

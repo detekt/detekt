@@ -1,11 +1,9 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import com.natpryce.hamkrest.assertion.assertThat
-import com.natpryce.hamkrest.greaterThanOrEqualTo
-import com.natpryce.hamkrest.hasSize
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Unstable
 import io.gitlab.arturbosch.detekt.test.compileForTest
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -21,7 +19,7 @@ class FormattingProviderTest {
 	@Test
 	fun test() {
 		val ruleSet = FormattingProvider().instance(Config.empty)
-		val (id, findings) = ruleSet.acceptAll(listOf(compileForTest(path)))
-		assertThat(findings.groupBy { it.id }.values, hasSize(greaterThanOrEqualTo(7)))
+		val (_, findings) = ruleSet.acceptAll(listOf(compileForTest(path)))
+		assertThat(findings.groupBy { it.id }.values.size).isGreaterThanOrEqualTo(7)
 	}
 }

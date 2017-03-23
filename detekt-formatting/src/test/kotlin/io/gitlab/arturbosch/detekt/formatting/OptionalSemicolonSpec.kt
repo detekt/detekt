@@ -1,8 +1,7 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import com.natpryce.hamkrest.assertion.assertThat
-import com.natpryce.hamkrest.equalTo
 import io.gitlab.arturbosch.detekt.test.format
+import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.SubjectSpek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
@@ -31,7 +30,7 @@ class UselessSemicolonSpec : SubjectSpek<OptionalSemicolon>({
                 println()
             }
 			""".trimIndent()
-			assertThat(actual, equalTo(expected))
+			assertThat(actual).isEqualTo(expected)
 		}
 
 		it("does not deletes statement separation semicolon") {
@@ -45,7 +44,7 @@ class UselessSemicolonSpec : SubjectSpek<OptionalSemicolon>({
                 fun name() { a();return b }
             }
 			""".trimIndent()
-			assertThat(actual, equalTo(expected))
+			assertThat(actual).isEqualTo(expected)
 		}
 
 		it("does not deletes statement separation semicolon (format test)") {
@@ -59,7 +58,7 @@ class UselessSemicolonSpec : SubjectSpek<OptionalSemicolon>({
                 fun name() { a();return b }
             }
 			""".trimIndent()
-			assertThat(actual, equalTo(expected))
+			assertThat(actual).isEqualTo(expected)
 		}
 
 		it("should not delete all semicolons") {
@@ -73,7 +72,7 @@ class UselessSemicolonSpec : SubjectSpek<OptionalSemicolon>({
                 println();println()
             }
 			""".trimIndent()
-			assertThat(actual, equalTo(expected))
+			assertThat(actual).isEqualTo(expected)
 		}
 	}
 
