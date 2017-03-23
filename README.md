@@ -9,15 +9,6 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 
 ![detekt in action](img/output.png "detekt in action")
 
-### Versioning
-
-As of M7 I try to release more often to bintray. So there will be more releases for each milestone.
-
-With the 1.0.0.M7.b1 release I try to use this Versioning scheme: Major.Minor.Fix.Milestone.Build, where Major.Minor.Fix
-will stay at 1.0.0 until I'm sure detekt works properly without big issues. 
-
-For current milestones there will be _build_ releases until all issues are closed. Then for example a 1.0.0.M7 tag will be created.
-
 ### Usage/Build
 
 ##### Building all submodules ( + executables)

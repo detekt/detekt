@@ -1,16 +1,23 @@
 # Detekt - Changelog
 
-#### M7 - Upcoming
+#### M8 - Upcoming
+
+##### feature
+
+- Introduce complexity ruleset - [#4](https://github.com/arturbosch/detekt/issues/4)
+
+<!-- - Implement FeatureEnvy rule - [#36](https://gitlab.com/arturbosch/detekt/issues/36)  -->
+
+#### M7
 
 ##### defect
 
-- SpacingAroundCurlyBraces throw IndexOutOfFound when determinating Location.of(node) as LineAndColumn calculation is simple wrong (of Idea?) - [#47](https://gitlab.com/arturbosch/detekt/issues/47)
+- Remove NoElseInWhenExpression rule [#10](https://github.com/arturbosch/detekt/issues/10)
 
 ##### feature
 
 - As an user I want to give more weight to some rule sets than to others - [#83](https://gitlab.com/arturbosch/detekt/issues/83)
 - Integrate debug rule set provider into cli - [#70](https://gitlab.com/arturbosch/detekt/issues/70)
-- Implement FeatureEnvy rule - [#36](https://gitlab.com/arturbosch/detekt/issues/36)
 
 ##### feedback
 
@@ -24,7 +31,8 @@
 
 - As an user I want to get more often releases to try out the new stuff - [#87](https://gitlab.com/arturbosch/detekt/issues/87)
 - Update to kotlin 1.0.6 - [#84](https://gitlab.com/arturbosch/detekt/issues/84)
-
+- Update to kotlin 1.1.1 - [#2](https://github.com/arturbosch/detekt/issues/2)
+- Get rid of hamkrest - [#9](https://github.com/arturbosch/detekt/issues/9)
 
 See all issues at: [M7](https://gitlab.com/arturbosch/detekt/milestones/7)
 
