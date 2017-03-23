@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.rules
+package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
@@ -63,7 +63,7 @@ class NamingConventionViolation(config: Config = Config.empty) : Rule("NamingCon
 	}
 
 	private fun add(declaration: KtNamedDeclaration) {
-		addFindings(CodeSmell(id, Entity.from(declaration)))
+		addFindings(CodeSmell(id, Entity.Companion.from(declaration)))
 	}
 
 }

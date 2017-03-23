@@ -1,10 +1,8 @@
-package io.gitlab.arturbosch.detekt.rules.providers
+package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.rules.NamingConventionViolation
-import io.gitlab.arturbosch.detekt.rules.WildcardImport
 
 /**
  * @author Artur Bosch

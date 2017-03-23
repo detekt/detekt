@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.rules
+package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
@@ -14,7 +14,7 @@ class WildcardImport(config: Config = Config.empty) : Rule("WildcardImport", Sev
 	override fun visitImportDirective(importDirective: KtImportDirective) {
 		val import = importDirective.importPath?.pathStr
 		if (import != null && import.contains("*")) {
-			addFindings(CodeSmell(id, Entity.from(importDirective)))
+			addFindings(CodeSmell(id, Entity.Companion.from(importDirective)))
 		}
 	}
 }
