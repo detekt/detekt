@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.rules
+package io.gitlab.arturbosch.detekt.rules.documentation
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.CodeSmellRule
@@ -16,7 +16,7 @@ class CommentOverPrivateMethod(config: Config = Config.empty) : CodeSmellRule("C
 		val modifierList = function.modifierList
 		if (modifierList != null && function.docComment != null) {
 			if (modifierList.hasModifier(KtTokens.PRIVATE_KEYWORD)) {
-				addFindings(CodeSmell(id, Entity.from(function.docComment!!)))
+				addFindings(CodeSmell(id, Entity.Companion.from(function.docComment!!)))
 			}
 		}
 	}

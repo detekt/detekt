@@ -96,6 +96,7 @@ allprojects {
 
 	dependencies {
 		kotlinCompile "org.jetbrains.kotlin:kotlin-compiler:$kotlinVersion"
+		kotlinCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 		kotlinTest "org.junit.jupiter:junit-jupiter-api:$junitEngineVersion"
 		kotlinTest "com.natpryce:hamkrest:$hamkrestVersion"
 		kotlinTest "org.jetbrains.kotlin:kotlin-test:$kotlinVersion"

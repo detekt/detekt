@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.rules
+package io.gitlab.arturbosch.detekt.rules.documentation
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.CodeSmellRule

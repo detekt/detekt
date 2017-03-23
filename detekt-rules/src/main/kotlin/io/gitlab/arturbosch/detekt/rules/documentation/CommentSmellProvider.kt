@@ -1,12 +1,12 @@
-package io.gitlab.arturbosch.detekt.rules.providers
+package io.gitlab.arturbosch.detekt.rules.documentation
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.rules.CommentOverPrivateMethod
-import io.gitlab.arturbosch.detekt.rules.CommentOverPrivateProperty
-import io.gitlab.arturbosch.detekt.rules.NoDocOverPublicClass
-import io.gitlab.arturbosch.detekt.rules.NoDocOverPublicMethod
+import io.gitlab.arturbosch.detekt.rules.documentation.CommentOverPrivateMethod
+import io.gitlab.arturbosch.detekt.rules.documentation.CommentOverPrivateProperty
+import io.gitlab.arturbosch.detekt.rules.documentation.NoDocOverPublicClass
+import io.gitlab.arturbosch.detekt.rules.documentation.NoDocOverPublicMethod
 
 /**
  * @author Artur Bosch
