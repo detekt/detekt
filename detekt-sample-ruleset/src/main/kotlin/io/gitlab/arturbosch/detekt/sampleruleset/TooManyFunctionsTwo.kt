@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 /**
  * @author Artur Bosch
  */
-class TooManyFunctions2(config: Config) : Rule("TooManyFunctionsTwo", Severity.Maintainability, config) {
+class TooManyFunctionsTwo(config: Config) : Rule("TooManyFunctionsTwo", Severity.Maintainability, config) {
 
 	private var amount: Int = 0
 

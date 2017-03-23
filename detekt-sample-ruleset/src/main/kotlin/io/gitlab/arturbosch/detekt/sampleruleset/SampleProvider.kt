@@ -11,7 +11,7 @@ class SampleProvider(override val ruleSetId: String = "sample") : RuleSetProvide
 	override fun instance(config: Config): RuleSet {
 		return RuleSet(ruleSetId, listOf(
 				TooManyFunctions(),
-				TooManyFunctions2(config)
+				TooManyFunctionsTwo(config)
 		))
 	}
 }
