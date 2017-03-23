@@ -1,14 +1,11 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import com.natpryce.hamkrest.assertion.assertThat
-import com.natpryce.hamkrest.equalTo
-import com.natpryce.hamkrest.hasSize
-import com.natpryce.hamkrest.isEmpty
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.test.RuleTest
 import io.gitlab.arturbosch.detekt.test.format
 import io.gitlab.arturbosch.detekt.test.lint
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 /**
@@ -33,7 +30,7 @@ class SpacingAroundColonTest : RuleTest {
             interface C: D
             interface C2 : D
             """
-		), hasSize(equalTo(4)))
+		)).hasSize(4)
 	}
 
 	@Test
@@ -48,7 +45,7 @@ class SpacingAroundColonTest : RuleTest {
             }
             fun @receiver:Fancy String.myExtension() { }
             """
-		), isEmpty)
+		)).isEmpty()
 	}
 
 	@Test
@@ -59,7 +56,7 @@ class SpacingAroundColonTest : RuleTest {
                 val x = Foo::class
             }
             """
-		), isEmpty)
+		)).isEmpty()
 	}
 
 	@Test
@@ -74,7 +71,7 @@ class SpacingAroundColonTest : RuleTest {
             interface D
             interface C: D
             """
-		), equalTo(
+		)).isEqualTo(
 				"""
             class A : B
             fun main() {
@@ -84,6 +81,6 @@ class SpacingAroundColonTest : RuleTest {
             interface D
             interface C : D
             """.trimIndent()
-		))
+		)
 	}
 }

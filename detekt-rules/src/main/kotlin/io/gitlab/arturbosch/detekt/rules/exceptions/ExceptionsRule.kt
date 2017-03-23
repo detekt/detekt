@@ -12,7 +12,7 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  */
 open class ExceptionsRule(id: String, config: Config, severity: Severity = Rule.Severity.Maintainability) : Rule(id, severity, config) {
 
-	inline fun KtCatchClause.addFindingIfExceptionClassMatchesExact(exception: () -> String) {
+	fun KtCatchClause.addFindingIfExceptionClassMatchesExact(exception: () -> String) {
 		this.catchParameter?.let {
 			val text = it.typeReference?.text
 			if (text != null && text == exception())
@@ -20,7 +20,7 @@ open class ExceptionsRule(id: String, config: Config, severity: Severity = Rule.
 		}
 	}
 
-	inline fun KtThrowExpression.addFindingIfThrowingClassMatchesExact(exception: () -> String) {
+	fun KtThrowExpression.addFindingIfThrowingClassMatchesExact(exception: () -> String) {
 		thrownExpression?.text?.substringBefore("(")?.let {
 			if (it == exception()) addFindings(CodeSmell(id, Entity.from(this)))
 		}

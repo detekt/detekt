@@ -1,10 +1,8 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import com.natpryce.hamkrest.assertion.assertThat
-import com.natpryce.hamkrest.equalTo
-import com.natpryce.hamkrest.hasSize
 import io.gitlab.arturbosch.detekt.test.format
 import io.gitlab.arturbosch.detekt.test.lint
+import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
@@ -19,7 +17,7 @@ class OptionalUnitSpec : Spek({
 				fun returnsUnit(): Unit {
 				}
 			""")
-			assertThat(findings, hasSize(equalTo(1)))
+			assertThat(findings).hasSize(1)
 		}
 
 		it("should delete Unit return type") {
@@ -31,7 +29,7 @@ class OptionalUnitSpec : Spek({
 				fun returnsUnit() {
 				}
 			""".trimIndent()
-			assertThat(actual, equalTo(expected))
+			assertThat(actual).isEqualTo(expected)
 		}
 	}
 })

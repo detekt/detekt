@@ -1,9 +1,7 @@
 package io.gitlab.arturbosch.detekt.sampleruleset
 
-import com.natpryce.hamkrest.assertion.assertThat
-import com.natpryce.hamkrest.equalTo
-import com.natpryce.hamkrest.hasSize
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
+import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.SubjectSpek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
@@ -18,7 +16,7 @@ class TooManyFunctionsSpec : SubjectSpek<TooManyFunctions>({
 		it("should find one file with too many functions") {
 			val ktFile = compileContentForTest(code)
 			subject.visit(ktFile)
-			assertThat(subject.findings, hasSize(equalTo(1)))
+			assertThat(subject.findings).hasSize(1)
 		}
 	}
 
