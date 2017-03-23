@@ -1,11 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
-import com.natpryce.hamkrest.assertion.assertThat
-import com.natpryce.hamkrest.equalTo
-import com.natpryce.hamkrest.hasSize
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.rules.load
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 /**
@@ -73,7 +71,7 @@ class ExceptionsSpec {
 	private fun findOne(block: () -> Rule) {
 		val rule = block()
 		rule.visit(root)
-		assertThat(rule.findings, hasSize(equalTo(1)))
+		assertThat(rule.findings).hasSize(1)
 	}
 
 

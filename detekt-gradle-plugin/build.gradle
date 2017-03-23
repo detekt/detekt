@@ -1,5 +1,5 @@
 configurations {
-	compile.extendsFrom kotlin
+	compile.extendsFrom kotlinCompile
 	testCompile.extendsFrom kotlinTest
 //	testRuntime.extendsFrom junitPlatform
 }

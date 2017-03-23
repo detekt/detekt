@@ -1,8 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules
 
-import com.natpryce.hamkrest.assertion.assertThat
-import com.natpryce.hamkrest.equalTo
-import com.natpryce.hamkrest.hasSize
+import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.SubjectSpek
 import org.jetbrains.spek.api.dsl.it
 
@@ -15,7 +13,7 @@ class NoDocOverPublicClassSpec : SubjectSpek<NoDocOverPublicClass>({
 	it("finds two undocumented classes") {
 		val root = load(Case.Comments)
 		subject.visit(root)
-		assertThat(subject.findings, hasSize(equalTo(2)))
+		assertThat(subject.findings).hasSize(2)
 	}
 
 })

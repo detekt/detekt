@@ -10,8 +10,7 @@ dependencies {
 	compile project(':detekt-rules')
 	compile project(':detekt-api')
 	compile "io.gitlab.arturbosch:codesmell-baseline-format:1.0.0"
-	compile "com.beust:jcommander:1.48"
-	compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+	compile "com.beust:jcommander:$jcommanderVersion"
 	compile "org.jetbrains.kotlin:kotlin-compiler:$kotlinVersion"
 	testRuntime "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
 	testRuntime "org.junit.platform:junit-platform-console:$junitPlatformVersion"

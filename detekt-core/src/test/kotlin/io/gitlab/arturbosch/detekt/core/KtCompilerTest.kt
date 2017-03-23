@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.core
 
-import com.natpryce.hamkrest.assertion.assertThat
-import com.natpryce.hamkrest.equalTo
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 /**
@@ -15,8 +14,8 @@ internal class KtCompilerTest {
 
 		val ktFile = ktCompiler.compile(path.resolve("Default.kt"))
 
-		assertThat(ktFile.getUserData(KtCompiler.LINE_SEPARATOR), equalTo("\n"))
-		assertThat(ktFile.getUserData(KtCompiler.RELATIVE_PATH), equalTo("Default.kt"))
+		assertThat(ktFile.getUserData(KtCompiler.LINE_SEPARATOR)).isEqualTo("\n")
+		assertThat(ktFile.getUserData(KtCompiler.RELATIVE_PATH)).isEqualTo("Default.kt")
 	}
 
 }

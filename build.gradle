@@ -89,17 +89,17 @@ allprojects {
 	}
 
 	configurations {
-		kotlin
+		kotlinCompile
 		kotlinTest
 		junitPlatform
 	}
 
 	dependencies {
-		kotlin "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
-		kotlin "org.jetbrains.kotlin:kotlin-compiler:$kotlinVersion"
+		kotlinCompile "org.jetbrains.kotlin:kotlin-compiler:$kotlinVersion"
 		kotlinTest "org.junit.jupiter:junit-jupiter-api:$junitEngineVersion"
-		kotlinTest "com.natpryce:hamkrest:$hamkrestVersion"
 		kotlinTest "org.jetbrains.kotlin:kotlin-test:$kotlinVersion"
+		kotlinTest "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+		kotlinTest "org.assertj:assertj-core:$assertjVersion"
 		kotlinTest "org.jetbrains.spek:spek-api:$spekVersion"
 		kotlinTest "org.junit.jupiter:junit-jupiter-engine:$junitEngineVersion"
 		junitPlatform "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"

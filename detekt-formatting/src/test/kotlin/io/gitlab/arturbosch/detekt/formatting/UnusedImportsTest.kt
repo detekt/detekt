@@ -1,13 +1,11 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import com.natpryce.hamkrest.assertion.assertThat
-import com.natpryce.hamkrest.equalTo
-import com.natpryce.hamkrest.hasSize
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.test.RuleTest
 import io.gitlab.arturbosch.detekt.test.format
 import io.gitlab.arturbosch.detekt.test.lint
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 /**
@@ -29,7 +27,7 @@ class UnusedImportsTest : RuleTest {
 				}
             }
             """
-		), hasSize(equalTo(0)))
+		)).hasSize(0)
 	}
 
 	@Test
@@ -52,7 +50,7 @@ class UnusedImportsTest : RuleTest {
                 `when`()
             }
             """
-		), hasSize(equalTo(4)))
+		)).hasSize(4)
 	}
 
 	@Test
@@ -74,7 +72,7 @@ class UnusedImportsTest : RuleTest {
                 `when`()
             }
             """
-		), equalTo(
+		)).isEqualTo(
 				"""
             import p.a
             import p2.B as B2
@@ -88,6 +86,6 @@ class UnusedImportsTest : RuleTest {
                 `when`()
             }
             """.trimIndent()
-		))
+		)
 	}
 }

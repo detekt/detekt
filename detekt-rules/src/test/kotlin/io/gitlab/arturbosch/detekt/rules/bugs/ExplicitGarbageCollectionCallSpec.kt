@@ -1,11 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
-import com.natpryce.hamkrest.assertion.assertThat
-import com.natpryce.hamkrest.equalTo
-import com.natpryce.hamkrest.hasSize
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.compileForTest
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 /**
@@ -20,7 +18,7 @@ class ExplicitGarbageCollectionCallSpec {
 
 		subject.visit(file)
 
-		assertThat(subject.findings, hasSize(equalTo(3)))
+		assertThat(subject.findings).hasSize(3)
 	}
 
 }

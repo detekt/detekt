@@ -1,15 +1,12 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import com.natpryce.hamkrest.assertion.assertThat
-import com.natpryce.hamkrest.equalTo
-import com.natpryce.hamkrest.hasSize
-import com.natpryce.hamkrest.isEmpty
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Unstable
 import io.gitlab.arturbosch.detekt.test.RuleTest
 import io.gitlab.arturbosch.detekt.test.format
 import io.gitlab.arturbosch.detekt.test.lint
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 /**
@@ -22,14 +19,14 @@ class SpacingAroundCurlyBracesTest : RuleTest {
 
 	@Test
 	fun testLint() {
-		assertThat(rule.lint("fun emit() { }"), isEmpty)
-		assertThat(rule.lint("fun emit() {}"), isEmpty)
-		assertThat(rule.lint("fun main() { val v = if (true) { return 0 } }"), isEmpty)
-		assertThat(rule.lint("fun main() { fn({ a -> a }, 0) }"), isEmpty)
-		assertThat(rule.lint("fun main() { fn({}, 0) && fn2({ }, 0) }"), isEmpty)
-		assertThat(rule.lint("fun main() { find { it.default ?: false }?.phone }"), isEmpty)
-		assertThat(rule.lint("fun main() { val v = if (true){return 0} }"), hasSize(equalTo(2)))
-		assertThat(rule.lint("fun main() { fn({a -> a}, 0) }"), hasSize(equalTo(2)))
+		assertThat(rule.lint("fun emit() { }")).isEmpty()
+		assertThat(rule.lint("fun emit() {}")).isEmpty()
+		assertThat(rule.lint("fun main() { val v = if (true) { return 0 } }")).isEmpty()
+		assertThat(rule.lint("fun main() { fn({ a -> a }, 0) }")).isEmpty()
+		assertThat(rule.lint("fun main() { fn({}, 0) && fn2({ }, 0) }")).isEmpty()
+		assertThat(rule.lint("fun main() { find { it.default ?: false }?.phone }")).isEmpty()
+		assertThat(rule.lint("fun main() { val v = if (true){return 0} }")).hasSize(2)
+		assertThat(rule.lint("fun main() { fn({a -> a}, 0) }")).hasSize(2)
 	}
 
 	@Test
@@ -50,7 +47,7 @@ class SpacingAroundCurlyBracesTest : RuleTest {
                 f({ if (true) {r.add(v)};r})
             }
             """
-		), equalTo(
+		)).isEqualTo(
 				"""
             fun main() {
                 val v = if (true) { return "" }
@@ -66,6 +63,6 @@ class SpacingAroundCurlyBracesTest : RuleTest {
                 f({ if (true) { r.add(v) };r })
             }
             """.trimIndent()
-		))
+		)
 	}
 }
