@@ -19,7 +19,7 @@ comments:
 empty:
   active: true
 
-code-smell:
+complexity:
   active: true
   LongMethod:
     threshold: 20
@@ -29,6 +29,11 @@ code-smell:
     threshold: 150
   ComplexMethod:
     threshold: 10
+  TooManyFunctions:
+    threshold: 10
+
+code-smell:
+  active: true
   FeatureEnvy:
     threshold: 0.5
     weight: 0.45
