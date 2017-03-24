@@ -24,15 +24,6 @@ fun KtCallExpression.isUsedForNesting(): Boolean = when (getCallNameExpression()
 	else -> false
 }
 
-inline fun <K, V> MutableMap<K, V>.merge(key: K, value: V, mergeFunction: (V, V) -> V) {
-	val oldValue = this[key]
-	if (oldValue == null) {
-		this.put(key, value)
-	} else {
-		this.put(key, mergeFunction(oldValue, value))
-	}
-}
-
 inline fun <reified T : KtElement> KtElement.collectByType(): List<T> {
 	val list = mutableListOf<T>()
 	this.accept(object : DetektVisitor() {

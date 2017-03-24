@@ -18,7 +18,8 @@ class ComplexityProvider : RuleSetProvider {
 				LargeClass(config),
 				ComplexMethod(config),
 				NestedBlockDepth(config),
-				TooManyFunctions(config)
+				TooManyFunctions(config),
+				ComplexCondition(config)
 		))
 	}
 }

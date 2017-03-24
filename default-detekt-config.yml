@@ -31,6 +31,8 @@ complexity:
     threshold: 10
   TooManyFunctions:
     threshold: 10
+  ComplexCondition:
+    threshold: 3
 
 code-smell:
   active: true
