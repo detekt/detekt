@@ -39,9 +39,9 @@ class Detekt(val project: Path,
 			changeListeners.forEach { it.onStart(ktFiles) }
 			val futures = ktFiles.map { file ->
 				runAsync {
-					file.detekt(providers)
-				}.thenApply { future ->
-					changeListeners.forEach { it.onProcess(file) }; future
+					file.detekt(providers).apply {
+						changeListeners.forEach { it.onProcess(file) }
+					}
 				}
 			}
 			val findings = awaitAll(futures).flatMap { it }.toMergedMap()
@@ -52,8 +52,11 @@ class Detekt(val project: Path,
 				}
 			}
 
-			changeListeners.forEach { it.onFinish(ktFiles) }
-			DetektResult(findings.toSortedMap(), notifications)
+			DetektResult(findings.toSortedMap(), notifications).apply {
+				changeListeners.forEach {
+					it.onFinish(ktFiles, this)
+				}
+			}
 		}
 	}
 
@@ -73,9 +76,4 @@ class Detekt(val project: Path,
 
 }
 
-interface FileProcessListener {
-	fun onStart(files: List<KtFile>)
-	fun onProcess(file: KtFile)
-	fun onFinish(files: List<KtFile>)
-}
 

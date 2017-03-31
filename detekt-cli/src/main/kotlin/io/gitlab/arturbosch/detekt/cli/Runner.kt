@@ -5,6 +5,8 @@ import io.gitlab.arturbosch.detekt.api.YamlConfig
 import io.gitlab.arturbosch.detekt.core.Detekt
 import io.gitlab.arturbosch.detekt.core.PathFilter
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
+import io.gitlab.arturbosch.detekt.core.ProjectComplexityProcessor
+import io.gitlab.arturbosch.detekt.core.ProjectLLOCProcessor
 import java.net.URL
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -23,7 +25,7 @@ class Runner(private val main: Main) {
 		val config = loadConfiguration()
 
 		val start = System.currentTimeMillis()
-		val settings = ProcessingSettings(pathFilters, main.parallel, listOf(DetektProgressListener()))
+		val settings = ProcessingSettings(pathFilters, main.parallel, createProcessors())
 		val detektion = Detekt(main.project, config,
 				rules, settings).run()
 		Output(detektion, main).report()
@@ -32,6 +34,8 @@ class Runner(private val main: Main) {
 
 		SmellThreshold(config, main).check(detektion)
 	}
+
+	private fun createProcessors() = listOf(ProjectLLOCProcessor(), ProjectComplexityProcessor(), DetektProgressListener())
 
 	private fun loadConfiguration(): Config {
 		return if (configPath != null) YamlConfig.load(configPath)

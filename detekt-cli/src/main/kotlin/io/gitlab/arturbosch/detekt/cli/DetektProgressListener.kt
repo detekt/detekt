@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.cli
 
+import io.gitlab.arturbosch.detekt.core.Detektion
 import io.gitlab.arturbosch.detekt.core.FileProcessListener
 import org.jetbrains.kotlin.psi.KtFile
 
@@ -15,7 +16,7 @@ class DetektProgressListener : FileProcessListener {
 		kotlin.io.print(".")
 	}
 
-	override fun onFinish(files: List<KtFile>) {
+	override fun onFinish(files: List<KtFile>, result: Detektion) {
 		kotlin.io.println()
 	}
 }
