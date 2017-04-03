@@ -1,6 +1,8 @@
 package io.gitlab.arturbosch.detekt.core
 
 import com.intellij.openapi.util.Key
+import io.gitlab.arturbosch.detekt.core.visitors.ComplexityVisitor
+import io.gitlab.arturbosch.detekt.core.visitors.LLOCVisitor
 import org.jetbrains.kotlin.psi.KtFile
 
 /**
@@ -14,7 +16,11 @@ interface FileProcessListener {
 
 class ProjectComplexityProcessor : FileProcessListener {
 
+	private val complexityVisitor = ComplexityVisitor()
+
 	override fun onProcess(file: KtFile) {
+		val value = complexityVisitor.visitAndReturn(file)
+		file.putUserData(COMPLEXITY_KEY, value)
 	}
 
 	override fun onFinish(files: List<KtFile>, result: Detektion) {
@@ -22,14 +28,18 @@ class ProjectComplexityProcessor : FileProcessListener {
 				.map { it.getUserData(COMPLEXITY_KEY) }
 				.filterNotNull()
 				.sum()
-		result.addData(LLOC_KEY, complexity)
+		result.addData(COMPLEXITY_KEY, complexity)
 	}
 
 }
 
 class ProjectLLOCProcessor : FileProcessListener {
 
+	private val llocVisitor = LLOCVisitor()
+
 	override fun onProcess(file: KtFile) {
+		val value = llocVisitor.visitAndReturn(file)
+		file.putUserData(LLOC_KEY, value)
 	}
 
 	override fun onFinish(files: List<KtFile>, result: Detektion) {
