@@ -13,7 +13,8 @@ abstract class ReturningVisitor<T> : DetektVisitor() {
 	fun visitAndReturn(file: KtFile): T {
 		file.accept(this)
 		val result = value
-		return value
+		reset()
+		return result
 	}
 
 	protected abstract fun reset()
