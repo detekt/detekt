@@ -5,6 +5,8 @@
 ##### feature
 
 - Introduce complexity ruleset - [#4](https://github.com/arturbosch/detekt/issues/4)
+- Provide a new screenshot showing detekt in action [#13](https://github.com/arturbosch/detekt/issues/13)
+- Update Readme/Rulesets for changes in code-smell/complexity rulesets [#14](https://github.com/arturbosch/detekt/issues/14)
 
 <!-- - Implement FeatureEnvy rule - [#36](https://gitlab.com/arturbosch/detekt/issues/36)  -->
 
