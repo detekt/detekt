@@ -9,6 +9,16 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 
 ![detekt in action](img/detekt_in_action.png "detekt in action")
 
+### Features
+
+- code smell analysis for your kotlin projects
+- complexity report based on logical lines of code, McCabe complexity and amount of code smells
+- highly configurable (rule set or rule level)
+- specify code smell thresholds to break your build or print a warning
+- extensible by own rule sets and `FileProcessListener's`
+- format your code with the formatting rule set
+- code Smell baseline and ignore lists for legacy projects
+
 ### Usage/Build
 
 ##### Building all submodules ( + executables)
@@ -105,8 +115,8 @@ task detekt(type: JavaExec) {
 }
 
 dependencies {
-	detekt 'io.gitlab.arturbosch.detekt:detekt-cli:1.0.0.M7'
-	detekt 'io.gitlab.arturbosch.detekt:detekt-formatting:1.0.0.M7'
+	detekt 'io.gitlab.arturbosch.detekt:detekt-cli:1.0.0.[CURRENT_MILESTONE]'
+	detekt 'io.gitlab.arturbosch.detekt:detekt-formatting:1.0.0.[CURRENT_MILESTONE]'
 }
 ```
 
@@ -147,7 +157,7 @@ dependencies {
                 <dependency>
                     <groupId>io.gitlab.arturbosch.detekt</groupId>
                     <artifactId>detekt-cli</artifactId>
-                    <version>1.0.0.M7</version>
+                    <version>1.0.0.[CURRENT_MILESTONE]</version>
                 </dependency>
             </dependencies>
         </plugin>
@@ -174,22 +184,23 @@ dependencies {
 
 ### RuleSets
 
-Currently there are six rule sets which are used per default when running the cli.
+Currently there are seven rule sets which are used per default when running the cli.
 
-- code-smell    - has rules to detect _LongMethod, LongParameterList, LargeClass, ComplexMethod ..._ smells
+- complexity    - has rules to detect _LongMethod, LongParameterList, LargeClass, ComplexMethod ..._ smells
+- code-smell    - other rules which can be classified as code smells but do not fit into the complexity category
 - style         - detects wildcast imports and naming violations
 - comments      - has rules to detect missing KDoc over public members and unnecessary KDoc over private members
-- exceptions    - too general exceptions are used in throw and catch statements like RuntimeException
+- exceptions    - too general exceptions are used in throw and catch statements like RuntimeException, Error or Throwable
 - empty         - finds empty block statements
-- potential-bugs    - code is structured in a way it can lead to bugs like 'only equals but not hashcode is implemented',
-no else case in when statements, explicit garbage collection calls
+- potential-bugs    - code is structured in a way it can lead to bugs like 'only equals but not hashcode is implemented' or explicit garbage
+ collection calls
 
 ##### Additional RuleSets 
 
 * formatting: detects indentation, spacing problems and optional semicolons in code
 
 As of milestone six, the formatting rule set is shipped as an standalone plugin which must be linked to a detekt run
-through the --rules "path/to/jar" parameter.
+through the --rules "path/to/jar" parameter or via gralde/maven classpath setup.
 
 ### RuleSet Configuration
 
