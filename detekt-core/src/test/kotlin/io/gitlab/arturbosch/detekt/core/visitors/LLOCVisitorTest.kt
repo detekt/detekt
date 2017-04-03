@@ -17,4 +17,12 @@ internal class LLOCVisitorTest {
 
 		assertThat(lloc).isEqualTo(2)
 	}
+
+	@Test
+	fun llocOfComplexClass() {
+		val file = compileForTest(path.resolve("ComplexClass.kt"))
+		val lloc = LLOCVisitor().visitAndReturn(file)
+
+		assertThat(lloc).isEqualTo(85)
+	}
 }

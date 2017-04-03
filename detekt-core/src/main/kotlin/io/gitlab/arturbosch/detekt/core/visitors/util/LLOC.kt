@@ -53,7 +53,7 @@ object LLOC {
 
 			if (trimmed.contains("{")) {
 				openedBrackets += frequency(trimmed, "{")
-			} else if (trimmed.isAnnotationOrBraceletsDeclaration()) {
+			} else if (trimmed.length != 1) {
 				counter++
 			}
 
@@ -75,9 +75,6 @@ object LLOC {
 				counter++
 			}
 		}
-
-		private fun String.isAnnotationOrBraceletsDeclaration() = startsWith("@")/* annotations */ ||
-				contains("class ") /* sealed data enum annotation class etc */ || contains("interface ")
 
 		private fun isEscaped(trimmed: String, rules: Array<String>): Boolean {
 			return rules.any { trimmed.startsWith(it) }

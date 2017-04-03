@@ -14,16 +14,21 @@ import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
  */
 class McCabeVisitor : DetektVisitor() {
 
-	var mcc = 1
+	var mcc = 0
 
 	private fun inc() {
 		mcc++
 	}
 
 	fun visit(function: KtNamedFunction): Int {
-		mcc = 1
+		mcc = 0
 		super.visitNamedFunction(function)
 		return mcc
+	}
+
+	override fun visitNamedFunction(function: KtNamedFunction) {
+		inc()
+		super.visitNamedFunction(function)
 	}
 
 	override fun visitIfExpression(expression: KtIfExpression) {
