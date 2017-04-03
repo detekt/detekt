@@ -1,4 +1,4 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "RemoveEmptyClassBody")
 
 package cases
 
@@ -8,6 +8,8 @@ val _variable = 5
 // invalid start with _ is optional, but then lowercase!
 val V_riable = 5
 val _Variable = 5
+// topLevel vars count as if were declared in objects
+val ALLOWED_AS_UPPERCASE = 5
 
 //valid
 fun fileMethod() {

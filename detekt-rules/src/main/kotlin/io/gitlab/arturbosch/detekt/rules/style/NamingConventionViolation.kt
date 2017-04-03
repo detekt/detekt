@@ -9,6 +9,7 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
+import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtVariableDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 
@@ -44,7 +45,7 @@ class NamingConventionViolation(config: Config = Config.empty) : Rule("NamingCon
 			if (!name.matches(constantPattern)) {
 				add(declaration)
 			}
-		} else if (declaration.withinObjectDeclaration()) {
+		} else if (declaration.withinObjectDeclaration() || declaration.isTopLevel()) {
 			if (!name.matches(constantPattern) && !name.matches(variablePattern)) {
 				add(declaration)
 			}
@@ -65,5 +66,7 @@ class NamingConventionViolation(config: Config = Config.empty) : Rule("NamingCon
 	private fun add(declaration: KtNamedDeclaration) {
 		addFindings(CodeSmell(id, Entity.Companion.from(declaration)))
 	}
+
+	private fun KtVariableDeclaration.isTopLevel(): Boolean = this is KtProperty && this.isTopLevel
 
 }
