@@ -19,6 +19,7 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 - format your code with the formatting rule set
 - code Smell baseline and ignore lists for legacy projects
 
+
 ### Usage/Build
 
 ##### Building all submodules ( + executables)
@@ -119,6 +120,8 @@ dependencies {
 	detekt 'io.gitlab.arturbosch.detekt:detekt-formatting:1.0.0.[CURRENT_MILESTONE]'
 }
 ```
+
+![detekt in gradle](img/gradle-detekt.png "detekt in gradle")
 
 #### Using detekt in Maven Projects
 
