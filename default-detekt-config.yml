@@ -85,10 +85,12 @@ style:
   active: true
   WildcardImport:
     active: true
-  NoElseInWhenExpression:
-    active: true
   NamingConventionViolation:
     active: true
+    variablePattern: '^(_)?[a-z$][a-zA-Z$0-9]*$'
+    constantPattern: '^([A-Z_]*|serialVersionUID)$'
+    methodPattern: '^[a-z$][a-zA-Z$0-9]*$'
+    classPattern: '[A-Z$][a-zA-Z$]*'
 
 comments:
   active: true
