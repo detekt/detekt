@@ -73,7 +73,7 @@ class Output(private val detektion: Detektion, args: Main) {
 	private fun printComplexity() {
 		val mcc = detektion.getData(COMPLEXITY_KEY)
 		val lloc = detektion.getData(LLOC_KEY)
-		if (mcc != null && lloc != null) {
+		if (mcc != null && lloc != null && lloc > 0) {
 			val numberOfSmells = findings.entries.sumBy { it.value.size }
 			val smellPerThousandLines = numberOfSmells * 1000 / lloc
 			val mccPerThousandLines = mcc * 1000 / lloc
