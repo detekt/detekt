@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
+import org.jetbrains.kotlin.preprocessor.typeReferenceName
 import org.jetbrains.kotlin.psi.KtFile
 
 /**
@@ -9,7 +10,7 @@ import org.jetbrains.kotlin.psi.KtFile
  *
  * A rule is implemented using the visitor pattern and should be started using the visit(KtFile)
  * function. If calculations must be done before or after the visiting process, here are
- * two predefined (preVisit/postVisit) functions which can be overriden.
+ * two predefined (preVisit/postVisit) functions which can be overriden to setup/teardown additional data.
  *
  * @author Artur Bosch
  */
@@ -51,10 +52,18 @@ abstract class Rule(val id: String,
 	 */
 	open fun visit(root: KtFile) {
 		ifRuleActive {
-			preVisit(root)
-			root.accept(this)
-			postVisit(root)
+			if (!root.isSuppressed()) {
+				preVisit(root)
+				root.accept(this)
+				postVisit(root)
+			}
 		}
+	}
+
+	private fun KtFile.isSuppressed(): Boolean {
+		return annotationEntries.find { it.typeReferenceName == "SuppressWarnings" }
+				?.valueArguments
+				?.find { it.getArgumentExpression()?.text?.replace("\"", "") == id } != null
 	}
 
 	/**
