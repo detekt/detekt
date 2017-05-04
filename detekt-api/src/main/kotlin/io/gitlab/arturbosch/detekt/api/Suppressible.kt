@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
+import com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.kotlin.preprocessor.typeReferenceName
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtElement
@@ -10,9 +11,11 @@ import org.jetbrains.kotlin.psi.KtElement
 
 /**
  * Checks if this psi element is suppressed by @Suppress or @SuppressWarnings annotations.
+ * If this element cannot have annotations, the first annotative parent is searched.
  */
 fun KtElement.isSuppressedBy(id: String): Boolean {
-	return this is KtAnnotated && this.isSuppressedBy(id)
+	return this is KtAnnotated && this.isSuppressedBy(id) ||
+			PsiTreeUtil.getParentOfType(this, KtAnnotated::class.java, true)?.isSuppressedBy(id) ?: false
 }
 
 /**

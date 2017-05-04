@@ -19,7 +19,8 @@ enum class Case(val file: String) {
 	Comments("/cases/Comments.kt"),
 	NestedClasses("/cases/NestedClasses.kt"),
 	NestedLongMethods("/cases/NestedLongMethods.kt"),
-	FeatureEnvy("/cases/FeatureEnvy.kt");
+	FeatureEnvy("/cases/FeatureEnvy.kt"),
+	SuppressedElements("/SuppressedElements.kt");
 
 	fun path(): Path {
 		val resource = Case::class.java.getResource(file)

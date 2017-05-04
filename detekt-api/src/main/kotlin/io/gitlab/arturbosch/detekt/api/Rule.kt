@@ -110,9 +110,10 @@ abstract class Rule(val id: String,
 	 * by @Suppress or @SuppressWarnings annotations.
 	 */
 	protected fun addFindings(vararg finding: Finding) {
-		_findings.addAll(finding.filter {
+		val filtered = finding.filter {
 			val ktElement = it.entity.ktElement
 			ktElement == null || !ktElement.isSuppressedBy(id)
-		})
+		}
+		_findings.addAll(filtered)
 	}
 }
