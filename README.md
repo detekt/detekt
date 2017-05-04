@@ -14,13 +14,28 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 - code smell analysis for your kotlin projects
 - complexity report based on logical lines of code, McCabe complexity and amount of code smells
 - highly configurable (rule set or rule level)
+- suppress findings with Kotlin's @Suppress and Java's @SuppressWarnings annotations
 - specify code smell thresholds to break your build or print a warning
 - extensible by own rule sets and `FileProcessListener's`
 - format your code with the formatting rule set
 - code Smell baseline and ignore lists for legacy projects
 
 
-### Usage/Build
+### Table of contents
+1. [Usage/Build](#build)
+2. [Parameters for CLI](#cli)
+3. [As gradle task](#gradle)
+4. [As maven task](#maven)
+5. [Rule sets](#rulesets)
+6. [Rule set configuration](#rulesetconfig)
+7. [Suppress rules](#suppress)
+7. [Build failure](#failure)
+7. [Custom rule sets](#customruleset)
+8. [Rule testing](#testing)
+9. [Formatting - Code Style](#formatting)
+10. [Black- and Whitelist code smells](#baseline)
+
+### <a name="build">Usage/Build</a>
 
 ##### Building all submodules ( + executables)
 
@@ -33,7 +48,7 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 - gradle shadow
 - java -jar build/libs/detekt-cli-[version]-all.jar
 
-#### Parameters for CLI
+#### <a name="cli">Parameters for CLI</a>
 The CLI uses jcommander for argument parsing.
 
 ```
@@ -84,7 +99,7 @@ More on this topic see section _Custom RuleSets_.
 
 The `report` parameter is optional and when used, it should point to
 
-#### Using detekt in custom gradle projects
+#### <a name="gradle">Using detekt in custom gradle projects</a>
 
 1. Add following lines to your build.gradle file.
 2. Run `gradle detekt`
@@ -123,7 +138,7 @@ dependencies {
 
 ![detekt in gradle](img/gradle-detekt.png "detekt in gradle")
 
-#### Using detekt in Maven Projects
+#### <a name="maven">Using detekt in Maven Projects</a>
 
 1. Add following lines to your pom.xml.
 2. Run `mvn verify` (when using the verify phase as I did here)
@@ -185,7 +200,7 @@ dependencies {
 </pluginRepositories>
 ```
 
-### RuleSets
+### <a name="rulesets">RuleSets</a>
 
 Currently there are seven rule sets which are used per default when running the cli.
 
@@ -205,7 +220,7 @@ Currently there are seven rule sets which are used per default when running the 
 As of milestone six, the formatting rule set is shipped as an standalone plugin which must be linked to a detekt run
 through the --rules "path/to/jar" parameter or via gralde/maven classpath setup.
 
-### RuleSet Configuration
+### <a name="rulesetconfig">RuleSet Configuration</a>
 
 To turn off specific rules/rule sets or change threshold values for certain rules a yaml configuration file can be used.
 Copy and modify the `default-detekt-config.yml` from the detekt folder for your needs.
@@ -246,7 +261,11 @@ Every rule of the default rule sets can be turned off. Thresholded code-smell ru
 `autoCorrect` on the top level must be set to true or else all configured formatting rules are ignored.
 This is done to prevent you from changing your project files if your not 100% sure about it.
 
-### Configure build failure thresholds
+### <a name="suppress">Suppress code smell rules</a>
+
+detekt supports the Java (@SuppressWarnings) and Kotlin (@Suppress) style suppression. If both annotations are present, only Kotlin's annotation is used! To suppress a rule, the id of the rule must be written inside the values field of the annotation e.g. @Suppress("LongMethod", "LongParameterList", ...)
+
+### <a name="failure">Configure build failure thresholds</a>
 
 detekt now can throw a BuildFailure(Exception) and let the build fail with following config parameters:
 ```yaml
@@ -264,7 +283,7 @@ For example: If you have 5 findings of the category _code-smell_, then your fail
 
 The formula for weights: RuleID > RuleSetID > 1 
 
-### Custom RuleSets
+### <a name="customruleset">Custom RuleSets</a>
 
 _detekt_ uses a ServiceLoader to collect all instances of _RuleSetProvider_-interfaces. So it is possible
 to define rules/rule sets and enhance detekt with your own flavor. 
@@ -343,7 +362,7 @@ By specifying the rule set and rule ids, detekt will use the sub configuration o
 
 If your using maven to build rule sets or use detekt as a dependency, you have to run the additional task `install`
 
-#### Testing your rules
+#### <a name="testing">Testing your rules</a>
 
 To test your rules you need a KtFile object and use it's _visit_ method.
 There are two predefined methods to help obtaining a KtFile:
@@ -357,7 +376,7 @@ Rule extension functions that allow allow to skip compilation, ktFile and visit 
 - Rule.lint(StringContent/Path) returns just the findings for given content
 - Rule.format(StringContent/Path) returns just the new modified content for given content
 
-### Formatting
+### <a name="formatting">Formatting</a>
 
 [KtLint](https://github.com/shyiko/ktlint) was first to support auto correct formatting according to the kotlin [coding conventions](https://kotlinlang.org/docs/reference/coding-conventions.html).
 In Detekt I made an effort to port over all available formatting rules to detect style violations and auto correct them.
@@ -402,7 +421,7 @@ formatting:
     autoCorrect: true
 ```
 
-### Code Smell baseline and ignore list
+### <a name="baseline">Code Smell baseline and ignore list</a>
 
 Specify a report directory with `--report` parameter.
  
