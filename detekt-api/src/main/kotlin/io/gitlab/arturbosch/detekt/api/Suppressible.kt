@@ -4,6 +4,7 @@ import com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.kotlin.preprocessor.typeReferenceName
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtFile
 
 /**
  * @author Artur Bosch
@@ -14,8 +15,18 @@ import org.jetbrains.kotlin.psi.KtElement
  * If this element cannot have annotations, the first annotative parent is searched.
  */
 fun KtElement.isSuppressedBy(id: String): Boolean {
-	return this is KtAnnotated && this.isSuppressedBy(id) ||
-			PsiTreeUtil.getParentOfType(this, KtAnnotated::class.java, true)?.isSuppressedBy(id) ?: false
+	return this is KtAnnotated && this.isSuppressedBy(id) || findAnnotatedSuppressedParent(id)
+}
+
+private fun KtElement.findAnnotatedSuppressedParent(id: String): Boolean {
+	val parent = PsiTreeUtil.getParentOfType(this, KtAnnotated::class.java, true)
+
+	if (parent != null && parent !is KtFile) {
+		if (parent.isSuppressedBy(id)) return true
+		else return parent.findAnnotatedSuppressedParent(id)
+	}
+
+	return false
 }
 
 /**
