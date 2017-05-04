@@ -13,7 +13,7 @@ import org.jetbrains.kotlin.psi.KtFile
  *
  * @author Artur Bosch
  */
-
+@Suppress("EmptyFunctionBlock")
 abstract class Rule(val id: String,
 					val severity: Severity = Rule.Severity.Minor,
 					private val config: Config = Config.empty) : DetektVisitor() {
