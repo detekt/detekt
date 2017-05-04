@@ -6,6 +6,6 @@
 object SuppressedObject {
 
 	fun stuff() {
-		println("Stuff")
+		println("FAILED TEST")
 	}
 }

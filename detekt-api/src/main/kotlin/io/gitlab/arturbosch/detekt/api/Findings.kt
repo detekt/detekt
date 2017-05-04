@@ -4,6 +4,7 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.testFramework.LightVirtualFile
 import org.jetbrains.kotlin.diagnostics.DiagnosticUtils
+import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
 import org.jetbrains.kotlin.psi.psiUtil.getTextWithLocation
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
@@ -172,14 +173,14 @@ data class Location(val source: SourceLocation,
 			return Location(sourceLocation, textLocation, locationText, fileName)
 		}
 
-		private fun PsiElement.originalFilePath(): String? {
-			return (this.containingFile.viewProvider.virtualFile as LightVirtualFile).originalFile?.name
-		}
-
-		private fun startLineAndColumn(element: PsiElement, offset: Int): DiagnosticUtils.LineAndColumn {
+		fun startLineAndColumn(element: PsiElement, offset: Int = 0): DiagnosticUtils.LineAndColumn {
 			val range = element.textRange
 			return DiagnosticUtils.getLineAndColumnInPsiFile(element.containingFile,
 					TextRange(range.startOffset + offset, range.endOffset + offset))
+		}
+
+		private fun PsiElement.originalFilePath(): String? {
+			return (this.containingFile.viewProvider.virtualFile as LightVirtualFile).originalFile?.name
 		}
 	}
 }
@@ -190,7 +191,8 @@ data class Location(val source: SourceLocation,
 data class Entity(val name: String,
 				  val className: String,
 				  val signature: String,
-				  val location: Location) : Compactable {
+				  val location: Location,
+				  val ktElement: KtElement? = null) : Compactable {
 
 	override fun compact(): String {
 		return "[$name] - ${location.compact()}"
@@ -201,7 +203,8 @@ data class Entity(val name: String,
 			val name = element.searchName()
 			val signature = element.buildFullSignature()
 			val clazz = element.searchClass()
-			return Entity(name, clazz, signature, Location.from(element, offset))
+			return Entity(name, clazz, signature, Location.from(element, offset),
+					if (element is KtElement) element else null)
 		}
 	}
 

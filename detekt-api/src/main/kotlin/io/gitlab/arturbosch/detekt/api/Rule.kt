@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.api
 
-import org.jetbrains.kotlin.preprocessor.typeReferenceName
 import org.jetbrains.kotlin.psi.KtFile
 
 /**
@@ -52,18 +51,12 @@ abstract class Rule(val id: String,
 	 */
 	open fun visit(root: KtFile) {
 		ifRuleActive {
-			if (!root.isSuppressed()) {
+			if (!root.isSuppressedBy(id)) {
 				preVisit(root)
 				root.accept(this)
 				postVisit(root)
 			}
 		}
-	}
-
-	private fun KtFile.isSuppressed(): Boolean {
-		return annotationEntries.find { it.typeReferenceName == "SuppressWarnings" }
-				?.valueArguments
-				?.find { it.getArgumentExpression()?.text?.replace("\"", "") == id } != null
 	}
 
 	/**
@@ -112,8 +105,14 @@ abstract class Rule(val id: String,
 
 	/**
 	 * The only way to add code smell findings.
+	 *
+	 * Before adding a finding, it is checked if it is not suppressed
+	 * by @Suppress or @SuppressWarnings annotations.
 	 */
 	protected fun addFindings(vararg finding: Finding) {
-		_findings.addAll(finding)
+		_findings.addAll(finding.filter {
+			val ktElement = it.entity.ktElement
+			ktElement == null || !ktElement.isSuppressedBy(id)
+		})
 	}
 }
