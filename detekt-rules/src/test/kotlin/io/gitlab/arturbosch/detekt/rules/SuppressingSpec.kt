@@ -14,8 +14,28 @@ import org.jetbrains.spek.api.dsl.it
  */
 class SuppressingSpec : Spek({
 
-	it("all findings are suppressed on different levels") {
+	it("all findings are suppressed on element levels") {
 		val ktFile = compileForTest(Case.SuppressedElements.path())
+		val ruleSet = RuleSet("Test", listOf(LongMethod(), LongParameterList(), ComplexCondition()))
+		val findings = ruleSet.accept(ktFile)
+		findings.forEach {
+			println(it.compact())
+		}
+		assertThat(findings).hasSize(0)
+	}
+
+	it("all findings are suppressed on file levels") {
+		val ktFile = compileForTest(Case.SuppressedElementsByFile.path())
+		val ruleSet = RuleSet("Test", listOf(LongMethod(), LongParameterList(), ComplexCondition()))
+		val findings = ruleSet.accept(ktFile)
+		findings.forEach {
+			println(it.compact())
+		}
+		assertThat(findings).hasSize(0)
+	}
+
+	it("all findings are suppressed on class levels") {
+		val ktFile = compileForTest(Case.SuppressedElementsByClass.path())
 		val ruleSet = RuleSet("Test", listOf(LongMethod(), LongParameterList(), ComplexCondition()))
 		val findings = ruleSet.accept(ktFile)
 		findings.forEach {

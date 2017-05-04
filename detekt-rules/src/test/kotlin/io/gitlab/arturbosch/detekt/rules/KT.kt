@@ -20,7 +20,9 @@ enum class Case(val file: String) {
 	NestedClasses("/cases/NestedClasses.kt"),
 	NestedLongMethods("/cases/NestedLongMethods.kt"),
 	FeatureEnvy("/cases/FeatureEnvy.kt"),
-	SuppressedElements("/SuppressedElements.kt");
+	SuppressedElements("/SuppressedByElementAnnotation.kt"),
+	SuppressedElementsByFile("/SuppressedElementsByFileAnnotation.kt"),
+	SuppressedElementsByClass("/SuppressedElementsByClassAnnotation.kt");
 
 	fun path(): Path {
 		val resource = Case::class.java.getResource(file)

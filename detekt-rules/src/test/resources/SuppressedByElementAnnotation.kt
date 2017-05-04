@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 /**
  * @author Artur Bosch
  */
