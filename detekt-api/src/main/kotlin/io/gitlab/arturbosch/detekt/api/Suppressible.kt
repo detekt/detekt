@@ -22,7 +22,7 @@ fun KtElement.isSuppressedBy(id: String): Boolean {
  * Checks if this kt element is suppressed by @Suppress or @SuppressWarnings annotations.
  */
 fun KtAnnotated.isSuppressedBy(id: String): Boolean {
-	return annotationEntries.find { it.typeReferenceName == "SuppressWarnings" }
+	return annotationEntries.find { it.typeReferenceName.let { it == "Suppress" || it == "SuppressWarnings" } }
 			?.valueArguments
 			?.find { it.getArgumentExpression()?.text?.replace("\"", "") == id } != null
 }
