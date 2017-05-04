@@ -1,8 +1,15 @@
 # Detekt - Changelog
 
-#### M9 - upcoming
+#### M10 - upcoming
 
 - TBA
+
+#### M9
+
+- Support suppressing rules (@SuppressWarnings, @Suppress) - [#6](https://github.com/arturbosch/detekt/issues/6)
+- Allow easier navigation in README - [#24](https://github.com/arturbosch/detekt/issues/24)
+
+See all issues at: [M9](https://github.com/arturbosch/detekt/milestone/2)
 
 #### M8, M8.1
 
@@ -17,6 +24,8 @@
 ##### bugs fixed
 
 - Prevent division by zero (thx @olivierlemasle)
+
+See all issues at: [M8](https://github.com/arturbosch/detekt/milestone/1)
 
 #### M7
 
