@@ -25,7 +25,7 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 1. [Usage/Build](#build)
 2. [Parameters for CLI](#cli)
 3. [As gradle task](#gradle)
-4. [As maven task](#maven)
+4. [As maven task](#maventask)
 5. [Rule sets](#rulesets)
 6. [Rule set configuration](#rulesetconfig)
 7. [Suppress rules](#suppress)
@@ -138,7 +138,7 @@ dependencies {
 
 ![detekt in gradle](img/gradle-detekt.png "detekt in gradle")
 
-#### <a name="maven">Using detekt in Maven Projects</a>
+#### <a name="maventask">Using detekt in Maven Projects</a>
 
 1. Add following lines to your pom.xml.
 2. Run `mvn verify` (when using the verify phase as I did here)
@@ -263,7 +263,7 @@ This is done to prevent you from changing your project files if your not 100% su
 
 ### <a name="suppress">Suppress code smell rules</a>
 
-detekt supports the Java (@SuppressWarnings) and Kotlin (@Suppress) style suppression. If both annotations are present, only Kotlin's annotation is used! To suppress a rule, the id of the rule must be written inside the values field of the annotation e.g. @Suppress("LongMethod", "LongParameterList", ...)
+detekt supports the Java (`@SuppressWarnings`) and Kotlin (`@Suppress`) style suppression. If both annotations are present, only Kotlin's annotation is used! To suppress a rule, the id of the rule must be written inside the values field of the annotation e.g. `@Suppress("LongMethod", "LongParameterList", ...)`
 
 ### <a name="failure">Configure build failure thresholds</a>
 
