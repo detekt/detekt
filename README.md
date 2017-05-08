@@ -136,6 +136,8 @@ dependencies {
 }
 ```
 
+`Attention Android Developers! the dependencies section must be at the bottom, after the repository, configurations and task sections!`
+
 ![detekt in gradle](img/gradle-detekt.png "detekt in gradle")
 
 #### <a name="maventask">Using detekt in Maven Projects</a>
