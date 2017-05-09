@@ -5,8 +5,8 @@ import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.rules.CommonSpec
 import io.gitlab.arturbosch.detekt.test.compileForTest
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.SubjectSpek
-import org.jetbrains.spek.api.dsl.itBehavesLike
+import org.jetbrains.spek.subject.SubjectSpek
+import org.jetbrains.spek.subject.itBehavesLike
 import org.junit.jupiter.api.Test
 
 /**
@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test
  */
 class EqualsWithHashCodeExistSpec : SubjectSpek<EqualsWithHashCodeExist>({
 	subject { EqualsWithHashCodeExist(Config.empty) }
-	itBehavesLike(CommonSpec::class)
+	itBehavesLike(CommonSpec())
 })
 
 class EqualsWithHashCodeExistTest {

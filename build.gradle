@@ -45,8 +45,10 @@ allprojects {
 	}
 
 	junitPlatform {
-		engines {
-			include 'spek', "junit-jupiter"
+		filters {
+			engines {
+				include 'spek', "junit-jupiter"
+			}
 		}
 	}
 
@@ -102,6 +104,7 @@ allprojects {
 		kotlinTest "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
 		kotlinTest "org.assertj:assertj-core:$assertjVersion"
 		kotlinTest "org.jetbrains.spek:spek-api:$spekVersion"
+		kotlinTest "org.jetbrains.spek:spek-subject-extension:$spekVersion"
 		kotlinTest "org.junit.jupiter:junit-jupiter-engine:$junitEngineVersion"
 		junitPlatform "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
 		junitPlatform "org.junit.platform:junit-platform-console:$junitPlatformVersion"

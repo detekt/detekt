@@ -20,4 +20,3 @@ class ComplexMethodSpec : Spek({
 		assertThat((subject.findings[0] as ThresholdedCodeSmell).threshold).isEqualTo(10)
 	}
 })
-
