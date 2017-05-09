@@ -34,5 +34,8 @@ class RuleSetLocator(val includeDefaultRuleSets: Boolean,
 				.toList()
 	}
 
-	private fun RuleSetProvider.provided() = true
+	private fun RuleSetProvider.provided() = ruleSetId in defaultRuleSetIds
+
+	private val defaultRuleSetIds = listOf("code-smell", "comments", "complexity", "empty",
+			"exceptions", "potential-bugs", "style")
 }
