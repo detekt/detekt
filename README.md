@@ -107,11 +107,12 @@ The `report` parameter is optional and when used, it should point to
 
 ```groovy
 repositories {
-    // if you 'gradle install' all detekt modules
+	// if you 'gradle install' all detekt modules
 	mavenLocal()
 	// or when all modules should be provided
 	maven {
-        url  "http://dl.bintray.com/arturbosch/code-analysis"
+        	url  "http://dl.bintray.com/arturbosch/code-analysis"
+	}
     }
 }
 
