@@ -64,7 +64,6 @@ class McCabeVisitor : DetektVisitor() {
 		super.visitCallExpression(expression)
 	}
 
-
 	fun KtCallExpression.isUsedForNesting(): Boolean = when (getCallNameExpression()?.text) {
 		"run", "let", "apply", "with", "use", "forEach" -> true
 		else -> false

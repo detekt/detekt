@@ -2,8 +2,6 @@ package io.gitlab.arturbosch.detekt.core
 
 import org.jetbrains.kotlin.fileClasses.javaFileFacadeFqName
 import org.jetbrains.kotlin.psi.KtFile
-import java.nio.file.Files
-import java.nio.file.Path
 
 /**
  * @author Artur Bosch
