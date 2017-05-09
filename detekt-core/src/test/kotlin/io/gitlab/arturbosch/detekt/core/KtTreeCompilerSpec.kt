@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.core
 
+import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
@@ -23,6 +24,14 @@ class KtTreeCompilerSpec : Spek({
 			val ktFiles = KtTreeCompiler(path, listOf(filter)).compile()
 			val ktFile = ktFiles.find { it.name == "Default.kt" }
 			assertNull(ktFile, "It should have no Default.kt file")
+		}
+
+		it("should work with two or more filters") {
+			val filter = PathFilter(".*Default.kt")
+			val filterTwo = PathFilter(".*Test.*")
+			val filterThree = PathFilter(".*Complex.*")
+			val ktFiles = KtTreeCompiler(path, listOf(filter, filterTwo, filterThree)).compile()
+			assertThat(ktFiles).isEmpty()
 		}
 
 		it("should also compile regular files") {
