@@ -14,6 +14,16 @@ class KtTreeCompiler(val project: Path,
 
 	private val compiler = KtCompiler(project)
 
+	init {
+		require(Files.exists(project)) { "Given project path does not exist!" }
+	}
+
+	companion object {
+		fun instance(settings: ProcessingSettings) = with(settings) {
+			KtTreeCompiler(project, pathFilters, parallelCompilation)
+		}
+	}
+
 	fun compile(): List<KtFile> {
 		return if (project.isFile()) {
 			listOf(compiler.compile(project))
@@ -46,4 +56,15 @@ class KtTreeCompiler(val project: Path,
 	}
 
 	private fun notIgnored(path: Path) = !filters.any { it.matches(path) }
+
+	fun saveModifiedFiles(ktFiles: List<KtFile>, notification: (Notification) -> Unit) {
+		ktFiles.filter { it.modificationStamp > 0 }
+				.map { it.relativePath to it.unnormalizedContent() }
+				.filter { it.first != null }
+				.map { project.resolve(it.first) to it.second }
+				.forEach {
+					notification.invoke(ModificationNotification(it.first))
+					Files.write(it.first, it.second.toByteArray())
+				}
+	}
 }

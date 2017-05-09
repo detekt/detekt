@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.YamlConfig
-import io.gitlab.arturbosch.detekt.core.Detekt
+import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.PathFilter
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.ProjectComplexityProcessor
@@ -25,9 +25,9 @@ class Runner(private val main: Main) {
 		val config = loadConfiguration()
 
 		val start = System.currentTimeMillis()
-		val settings = ProcessingSettings(pathFilters, main.parallel, createProcessors())
-		val detektion = Detekt(main.project, config,
-				rules, settings).run()
+		val settings = ProcessingSettings(main.project, config, pathFilters,
+				main.parallel, true, rules, createProcessors())
+		val detektion = DetektFacade.instance(settings).run()
 		Output(detektion, main).report()
 		val end = System.currentTimeMillis() - start
 		println("\ndetekt run within $end ms")

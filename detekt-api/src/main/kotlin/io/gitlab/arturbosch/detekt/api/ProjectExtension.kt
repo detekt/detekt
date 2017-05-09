@@ -21,13 +21,8 @@ val PROJECT = KotlinCoreEnvironment.createForProduction(Disposer.newDisposable()
 	makeMutable(this as MockProject)
 }
 
-/**
- * Based on KtLint.
- *
- * @author Shyiko
- * @author Artur Bosch
- */
 private fun makeMutable(project: MockProject) {
+	// Based on KtLint by Shyiko
 	val pomModel: PomModel = object : UserDataHolderBase(), PomModel {
 
 		override fun runTransaction(transaction: PomTransaction) {
