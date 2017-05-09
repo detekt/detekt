@@ -1,12 +1,12 @@
 package io.gitlab.arturbosch.detekt.migration
 
-import com.intellij.openapi.util.Disposer
+import com.intellij.psi.impl.source.codeStyle.CodeEditUtil
+import com.intellij.psi.impl.source.tree.CompositeElement
+import io.gitlab.arturbosch.detekt.api.PROJECT
 import io.gitlab.arturbosch.detekt.api.Rule
-import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.psi.KtImportList
 import org.jetbrains.kotlin.psi.KtImportsFactory
+import org.jetbrains.kotlin.resolve.ImportPath
 
 /**
  * @author Artur Bosch
@@ -18,20 +18,13 @@ class MigrateImports(private val toReplace: String,
 
 	override fun visitImportList(importList: KtImportList) {
 		importList.imports
-		importList.imports.iterator().forEach {
-			if (it.importedFqName?.toString() == toReplace) {
-				println(it.importedReference?.text)
-//				it.delete()
-//				importList.add(factory.createImportDirective(ImportPath.fromString(replaceWith)))
-//				it.importedReference?.replace()
-//				it.replaceChildInternal(it.importedFqName!!, FqName(replaceWith))
-//				importList.replaceChild(it,
-//						factory.createImportDirective(ImportPath.fromString(replaceWith)))
-			}
-		}
+				.filter { it.importedFqName?.toString() == toReplace }
+				.forEach {
+					val node = it.importedReference?.node as CompositeElement
+					CodeEditUtil.removeChildren(node, node.firstChildNode, node.lastChildNode)
+					val newImport = factory.createImportDirective(ImportPath.fromString(replaceWith))
+					node.addChild(newImport.importedReference?.node!!)
+				}
 	}
 
 }
-
-private val PROJECT = KotlinCoreEnvironment.createForProduction(Disposer.newDisposable(),
-		CompilerConfiguration(), EnvironmentConfigFiles.JVM_CONFIG_FILES).project

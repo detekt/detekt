@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.migration
 
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 /**
@@ -10,7 +9,6 @@ import org.junit.jupiter.api.Test
  */
 internal class MigrateImportsTest {
 
-	@Disabled
 	@Test
 	fun migrate() {
 		val ktFile = compileContentForTest(

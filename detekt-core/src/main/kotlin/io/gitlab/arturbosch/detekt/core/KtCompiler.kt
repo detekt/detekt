@@ -1,13 +1,9 @@
 package io.gitlab.arturbosch.detekt.core
 
-import com.intellij.mock.MockProject
-import com.intellij.openapi.util.Disposer
 import com.intellij.openapi.util.Key
 import com.intellij.psi.PsiFileFactory
 import com.intellij.testFramework.LightVirtualFile
-import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.jetbrains.kotlin.config.CompilerConfiguration
+import io.gitlab.arturbosch.detekt.api.PROJECT
 import org.jetbrains.kotlin.idea.KotlinLanguage
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Files
@@ -18,14 +14,7 @@ import java.nio.file.Path
  */
 open class KtCompiler(val project: Path) {
 
-	protected val psiFileFactory: PsiFileFactory
-
-	init {
-		val project = KotlinCoreEnvironment.createForProduction(Disposer.newDisposable(),
-				CompilerConfiguration(), EnvironmentConfigFiles.JVM_CONFIG_FILES).project
-		MutableAST.forProject(project as MockProject)
-		psiFileFactory = PsiFileFactory.getInstance(project)
-	}
+	protected val psiFileFactory: PsiFileFactory = PsiFileFactory.getInstance(PROJECT)
 
 	fun compile(subPath: Path): KtFile {
 		require(subPath.isFile()) { "Given sub path should be a regular file!" }
