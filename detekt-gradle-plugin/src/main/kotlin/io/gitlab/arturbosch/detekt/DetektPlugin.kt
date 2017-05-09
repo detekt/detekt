@@ -40,6 +40,13 @@ class DetektPlugin : Plugin<Project> {
 				it.classpath = configuration
 				it.args(args)
 			}
+
+			project.tasks.create("detektFormat", JavaExec::class.java) {
+				it.description = "Format your kotlin code with detekt!"
+				it.main = "io.gitlab.arturbosch.detekt.cli.Main"
+				it.classpath = configuration
+				it.args(args)
+			}
 		}
 
 	}

@@ -20,19 +20,25 @@ class Runner(private val main: Main) {
 	private val configPath: Path? = main.config
 
 	fun execute() {
-		val pathFilters = with(Main) { main.filters.letIfNonEmpty { split(";").map(::PathFilter) } }
-		val rules = with(Main) { main.rules.letIfNonEmpty { split(";").map { Paths.get(it) } } }
-		val config = loadConfiguration()
+		val (settings, config) = createSettingsAndConfig()
 
 		val start = System.currentTimeMillis()
-		val settings = ProcessingSettings(main.project, config, pathFilters,
-				main.parallel, true, rules, createProcessors())
 		val detektion = DetektFacade.instance(settings).run()
 		Output(detektion, main).report()
 		val end = System.currentTimeMillis() - start
-		println("\ndetekt run within $end ms")
 
+		println("\ndetekt run within $end ms")
 		SmellThreshold(config, main).check(detektion)
+	}
+
+	private fun createSettingsAndConfig(): Pair<ProcessingSettings, Config> {
+		val pathFilters = with(Main) { main.filters.letIfNonEmpty { split(";").map(::PathFilter) } }
+		val rules = with(Main) { main.rules.letIfNonEmpty { split(";").map { Paths.get(it) } } }
+		val config = loadConfiguration()
+		val enableDefaultRuleSets = !main.disableDefaultRulesets
+		val changeListeners = createProcessors()
+		return ProcessingSettings(main.project, config, pathFilters,
+				main.parallel, enableDefaultRuleSets, rules, changeListeners) to config
 	}
 
 	private fun createProcessors() = listOf(ProjectLLOCProcessor(), ProjectComplexityProcessor(), DetektProgressListener())
