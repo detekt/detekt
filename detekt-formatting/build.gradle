@@ -1,3 +1,5 @@
+mainClassName = 'io.gitlab.arturbosch.detekt.formatting.Formatting'
+
 configurations {
 	compile.extendsFrom kotlinCompile
 	testCompile.extendsFrom kotlinTest
@@ -5,7 +7,7 @@ configurations {
 }
 
 dependencies {
-	compile project(':detekt-api')
+	compile project(':detekt-cli')
 	testCompile project(':detekt-test')
 	testRuntime "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
 	testRuntime "org.junit.platform:junit-platform-console:$junitPlatformVersion"
