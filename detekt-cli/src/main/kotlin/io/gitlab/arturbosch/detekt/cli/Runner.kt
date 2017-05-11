@@ -28,10 +28,9 @@ class Runner(private val main: Main) {
 			val pathFilters = createPathFilters()
 			val rules = createRulePaths()
 			val config = loadConfiguration()
-			val enableDefaultRuleSets = !disableDefaultRuleSets
 			val changeListeners = createProcessors()
 			return ProcessingSettings(project, config, pathFilters, parallel,
-					enableDefaultRuleSets, rules, changeListeners) to config
+					disableDefaultRuleSets, rules, changeListeners) to config
 		}
 	}
 

@@ -11,6 +11,6 @@ data class ProcessingSettings(val project: Path,
 							  val config: Config = Config.empty,
 							  val pathFilters: List<PathFilter> = listOf(),
 							  val parallelCompilation: Boolean = false,
-							  val includeDefaultRuleSets: Boolean = true,
+							  val excludeDefaultRuleSets: Boolean = true,
 							  val ruleSets: List<Path> = emptyList(),
 							  val changeListeners: List<FileProcessListener> = emptyList())
