@@ -1,8 +1,6 @@
 package io.gitlab.arturbosch.detekt.cli
 
-import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
-import com.beust.jcommander.ParameterException
 import io.gitlab.arturbosch.detekt.cli.debug.Debugger
 import java.net.URL
 import java.nio.file.Path
@@ -50,19 +48,19 @@ class Main {
 	var output: Boolean = false
 
 	@Parameter(names = arrayOf("--disableDefaultRuleSets", "-dd"), description = "Disables default rule sets.")
-	var disableDefaultRulesets: Boolean = false
+	var disableDefaultRuleSets: Boolean = false
 
 	@Parameter(names = arrayOf("--debug", "-d"), description = "Debugs given ktFile by printing its elements.")
-	private var debug: Boolean = false
+	var debug: Boolean = false
 
 	@Parameter(names = arrayOf("--help", "-h"), help = true, description = "Shows the usage.")
-	private var help: Boolean = false
+	var help: Boolean = false
 
 	companion object {
 
 		@JvmStatic
 		fun main(args: Array<String>) {
-			val main = parseArguments(args)
+			val main = parseArgumentsCheckingReportDirectory(args)
 			if (main.debug) {
 				Debugger(main).execute()
 				return
@@ -70,36 +68,14 @@ class Main {
 			Runner(main).execute()
 		}
 
-		private fun parseArguments(args: Array<String>): Main {
-			val cli = Main()
-			val jCommander = JCommander(cli)
-			jCommander.setProgramName("detekt")
-
-			try {
-				jCommander.parse(*args)
-			} catch (ex: ParameterException) {
-				val message = ex.message
-				failWithErrorMessage(jCommander, message)
-			}
-
-			if (cli.help) {
-				jCommander.usage()
-				System.exit(-1)
-			}
+		private fun parseArgumentsCheckingReportDirectory(args: Array<String>): Main {
+			val cli = parseArguments(args)
 
 			if (cli.reportDirectory == null && (cli.output || cli.baseline)) {
 				val message = "If using --output and/or --baseline the --report path must be given!"
-				failWithErrorMessage(jCommander, message)
+				failWithErrorMessage(message)
 			}
-
 			return cli
-		}
-
-		private fun failWithErrorMessage(jCommander: JCommander, message: String?) {
-			println(message)
-			println()
-			jCommander.usage()
-			System.exit(-1)
 		}
 	}
 }
