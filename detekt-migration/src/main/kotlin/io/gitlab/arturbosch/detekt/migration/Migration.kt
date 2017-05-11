@@ -21,7 +21,7 @@ class Migration {
 			with(parseArguments(args)) {
 				val config = loadConfiguration() as? YamlConfig ?:
 						throw IllegalStateException("Yaml configuration with migrations rules must be provided!")
-
+				if (debug) println(config.properties)
 				val settings = ProcessingSettings(project, config, createPathFilters(), parallel, false)
 				val detektor = Detektor(settings, KtTreeCompiler.instance(settings), listOf(MigrationRuleSetProvider()))
 				val detektion = detektor.run()
