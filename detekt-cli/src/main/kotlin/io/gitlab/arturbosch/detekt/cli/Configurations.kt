@@ -17,7 +17,6 @@ fun Main.createRulePaths(): List<Path> = rules.letIfNonEmpty { split(";", ",").m
 private fun <T> String?.letIfNonEmpty(init: String.() -> List<T>): List<T> =
 		if (this == null || this.isEmpty()) listOf<T>() else this.init()
 
-
 fun Main.loadConfiguration(): Config {
 	return if (config != null) YamlConfig.load(config!!)
 	else if (configResource != null) YamlConfig.loadResource(configResource!!)

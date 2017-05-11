@@ -74,5 +74,4 @@ class ExceptionsSpec {
 		assertThat(rule.findings).hasSize(1)
 	}
 
-
 }

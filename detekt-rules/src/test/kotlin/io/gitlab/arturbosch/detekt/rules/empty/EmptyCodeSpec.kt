@@ -70,5 +70,4 @@ class EmptyCodeSpec {
 		assertThat(rule.findings).hasSize(1)
 	}
 
-
 }
