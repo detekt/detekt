@@ -13,6 +13,6 @@ data class ImportMigration(private val toReplace: String,
 	override val id: String = "ImportMigration"
 	override val references: List<Entity> = emptyList()
 	override val metrics: List<Metric> = emptyList()
-	override val description: String = "$toReplace migrated to $replacement @ ${entity.location.compact()}"
+	override val description: String = "$id - $toReplace migrated to $replacement @ ${entity.location.compact()}"
 	override fun compact(): String = description
 }

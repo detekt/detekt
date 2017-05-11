@@ -15,8 +15,7 @@ import org.jetbrains.kotlin.resolve.ImportPath
  */
 class MigrateImportsRule(config: Config) : Rule("MigrateImports", Severity.Defect) {
 
-	private val replacements: HashMap<String, String> = config.subConfig("migration")
-			.valueOrDefault("imports") { HashMap<String, String>() }
+	private val replacements: HashMap<String, String> = config.valueOrDefault("imports") { HashMap<String, String>() }
 	private val toReplaces = replacements.keys
 
 	private val factory = KtImportsFactory(PROJECT)

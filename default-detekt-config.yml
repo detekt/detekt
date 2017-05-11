@@ -103,3 +103,12 @@ comments:
     active: false
   NoDocOverPublicMethod:
     active: false
+
+# *experimental feature*
+# Migration rules can be defined in the same config file or a new one
+migration:
+  active: true
+  imports:
+    # your.package.Class: new.package.or.Class
+    # for example:
+    # io.gitlab.arturbosch.detekt.api.Rule: io.gitlab.arturbosch.detekt.rule.Rule
