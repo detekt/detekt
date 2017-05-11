@@ -19,8 +19,6 @@ class DetektPlugin : Plugin<Project> {
 
 		val formatting = project.configurations.maybeCreate("detektFormat")
 		project.dependencies.add(formatting.name, DefaultExternalModuleDependency(
-				"io.gitlab.arturbosch.detekt", "detekt-cli", detektConfig.version))
-		project.dependencies.add(formatting.name, DefaultExternalModuleDependency(
 				"io.gitlab.arturbosch.detekt", "detekt-formatting", detektConfig.version))
 
 		val migration = project.configurations.maybeCreate("detektMigrate")
@@ -31,7 +29,7 @@ class DetektPlugin : Plugin<Project> {
 
 		project.afterEvaluate {
 
-			val args = detektConfig.configure()
+			val args = detektConfig.convertToArguments()
 			if (detektConfig.debug) println(args)
 
 			project.tasks.create("detekt", JavaExec::class.java) {
@@ -43,7 +41,7 @@ class DetektPlugin : Plugin<Project> {
 
 			project.tasks.create("detektFormat", JavaExec::class.java) {
 				it.description = "Format your kotlin code with detekt."
-				it.main = "io.gitlab.arturbosch.detekt.cli.Main"
+				it.main = "io.gitlab.arturbosch.detekt.formatting.Formatting"
 				it.classpath = formatting
 				it.args(args.plus(listOf(formatString, disableDefaults)))
 			}
@@ -58,7 +56,7 @@ class DetektPlugin : Plugin<Project> {
 
 	}
 
-	private fun DetektConfig.configure(): MutableList<String> {
+	private fun DetektConfig.convertToArguments(): MutableList<String> {
 		val args = mutableListOf<String>()
 		input?.let { args.add("--project"); args.add(it) }
 		config?.let { args.add("--config"); args.add(it) }
