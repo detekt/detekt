@@ -23,6 +23,7 @@ class NamingConventionViolation(config: Config = Config.empty) : Rule("NamingCon
 	private val constantPattern = Regex(withConfig { valueOrDefault("constantPattern") { "^([A-Z_]*|serialVersionUID)$" } })
 	private val methodPattern = Regex(withConfig { valueOrDefault("methodPattern") { "^[a-z$][a-zA-Z$0-9]*$" } })
 	private val classPattern = Regex(withConfig { valueOrDefault("classPattern") { "^[A-Z$][a-zA-Z$]*$" } })
+	private val enumEntryPattern = Regex(withConfig { valueOrDefault("enumEntryPattern") { "^[A-Z$][A-Z_$]*$" } })
 
 	override fun visitNamedDeclaration(declaration: KtNamedDeclaration) {
 		if (declaration.nameAsSafeName.isSpecial) return
@@ -31,7 +32,7 @@ class NamingConventionViolation(config: Config = Config.empty) : Rule("NamingCon
 			when (declaration) {
 				is KtVariableDeclaration -> handleVariableNamings(declaration, name)
 				is KtNamedFunction -> if (!name.matches(methodPattern)) add(declaration)
-				is KtEnumEntry -> if (!name.matches(constantPattern)) add(declaration)
+				is KtEnumEntry -> if (!name.matches(enumEntryPattern)) add(declaration)
 				is KtClassOrObject -> if (!name.matches(classPattern)) add(declaration)
 			}
 		}

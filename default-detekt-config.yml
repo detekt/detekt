@@ -91,6 +91,7 @@ style:
     constantPattern: '^([A-Z_]*|serialVersionUID)$'
     methodPattern: '^[a-z$][a-zA-Z$0-9]*$'
     classPattern: '[A-Z$][a-zA-Z$]*'
+    enumEntryPattern: '^[A-Z$][A-Z_$]*$'
 
 comments:
   active: true
