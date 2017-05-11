@@ -39,7 +39,8 @@ allprojects {
 	apply plugin: 'com.github.ben-manes.versions'
 //	apply plugin: 'com.github.hierynomus.license'
 
-	if (it.name.startsWith("detekt-cli")) {
+	def projectName = it.name
+	if (projectName == "detekt-cli" || projectName == "detekt-migration") {
 		apply plugin: 'application'
 		apply plugin: 'com.github.johnrengelman.shadow'
 	}
