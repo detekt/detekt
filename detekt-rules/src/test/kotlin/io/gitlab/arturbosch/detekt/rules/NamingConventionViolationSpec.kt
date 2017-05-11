@@ -45,4 +45,17 @@ class NamingConventionTest {
             """
 		)).hasSize(0)
 	}
+
+	@Test
+	fun uppercaseAndUnderscoreAreAllowedForEnumEntries() {
+		val lint = NamingConventionViolation().lint(
+				"""
+enum class WorkFlow {
+    ACTIVE, NOT_ACTIVE
+}
+            """
+		)
+		lint.forEach { println(it.compact()) }
+		assertThat(lint).hasSize(0)
+	}
 }

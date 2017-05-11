@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClassOrObject
+import org.jetbrains.kotlin.psi.KtEnumEntry
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
@@ -27,14 +28,11 @@ class NamingConventionViolation(config: Config = Config.empty) : Rule("NamingCon
 		if (declaration.nameAsSafeName.isSpecial) return
 		declaration.nameIdentifier?.parent?.javaClass?.let {
 			val name = declaration.nameAsSafeName.asString()
-			if (declaration is KtVariableDeclaration) {
-				handleVariableNamings(declaration, name)
-			}
-			if (declaration is KtNamedFunction && !name.matches(methodPattern)) {
-				add(declaration)
-			}
-			if (declaration is KtClassOrObject && !name.matches(classPattern)) {
-				add(declaration)
+			when (declaration) {
+				is KtVariableDeclaration -> handleVariableNamings(declaration, name)
+				is KtNamedFunction -> if (!name.matches(methodPattern)) add(declaration)
+				is KtEnumEntry -> if (!name.matches(constantPattern)) add(declaration)
+				is KtClassOrObject -> if (!name.matches(classPattern)) add(declaration)
 			}
 		}
 		super.visitNamedDeclaration(declaration)
