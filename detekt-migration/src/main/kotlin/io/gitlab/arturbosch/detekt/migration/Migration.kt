@@ -25,7 +25,10 @@ class Migration {
 				val settings = ProcessingSettings(project, config, createPathFilters(), parallel, excludeDefaultRuleSets = true)
 				val detektor = Detektor(settings, KtTreeCompiler.instance(settings), listOf(MigrationRuleSetProvider()))
 				val detektion = detektor.run()
-				Output(detektion, this) // prints results
+				with(Output(detektion, this)) {
+					printNotifications()
+					printFindings()
+				}
 			}
 
 		}

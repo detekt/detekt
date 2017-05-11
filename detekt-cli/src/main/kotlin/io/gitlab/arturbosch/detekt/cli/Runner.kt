@@ -16,7 +16,10 @@ class Runner(private val main: Main) {
 
 		val start = System.currentTimeMillis()
 		val detektion = DetektFacade.instance(settings).run()
-		Output(detektion, main).report()
+		with(Output(detektion, main)) {
+			runFacade()
+			report()
+		}
 		val end = System.currentTimeMillis() - start
 
 		println("\ndetekt run within $end ms")

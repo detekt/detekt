@@ -24,10 +24,42 @@ class Output(private val detektion: Detektion, args: Main) {
 	private val findings: Map<String, List<Finding>> = detektion.findings
 	private val notifications: List<Notification> = detektion.notifications
 
-	init {
+	fun runFacade() {
 		printNotifications()
 		printFindings()
 		printComplexity()
+	}
+
+	fun printNotifications() {
+		for (notification in notifications) println(notification)
+		println()
+	}
+
+	fun printFindings() {
+		val listings = DetektBaselineFormat.listings(reportDirectory)
+		if (listings != null) println("Only new findings are printed as baseline.xml is found:\n")
+
+		findings.forEach {
+			it.key.print("Ruleset: ")
+			val values = it.value.filterListedFindings(listings)
+			values.forEach { it.compact().print("\t") }
+		}
+	}
+
+	fun printComplexity() {
+		val mcc = detektion.getData(COMPLEXITY_KEY)
+		val lloc = detektion.getData(LLOC_KEY)
+		if (mcc != null && lloc != null && lloc > 0) {
+			val numberOfSmells = findings.entries.sumBy { it.value.size }
+			val smellPerThousandLines = numberOfSmells * 1000 / lloc
+			val mccPerThousandLines = mcc * 1000 / lloc
+			println()
+			println("Complexity Report:")
+			println("\t- $lloc logical lines of code (lloc)")
+			println("\t- $mcc McCabe complexity (mcc)")
+			println("\t- $mccPerThousandLines mcc per 1000 lloc")
+			println("\t- $smellPerThousandLines code smells per 1000 lloc")
+		}
 	}
 
 	fun report() {
@@ -46,43 +78,11 @@ class Output(private val detektion: Detektion, args: Main) {
 		}
 	}
 
-	private fun printNotifications() {
-		for (notification in notifications) println(notification)
-		println()
-	}
-
-	private fun printFindings() {
-		val listings = DetektBaselineFormat.listings(reportDirectory)
-		if (listings != null) println("Only new findings are printed as baseline.xml is found:\n")
-
-		findings.forEach {
-			it.key.print("Ruleset: ")
-			val values = it.value.filterListedFindings(listings)
-			values.forEach { it.compact().print("\t") }
-		}
-	}
-
 	private fun Path.createFoldersIfNeeded() {
 		if (Files.exists(this) && !this.isDirectory()) {
 			throw IllegalArgumentException("Report path must be a directory!")
 		} else {
 			Files.createDirectories(this)
-		}
-	}
-
-	private fun printComplexity() {
-		val mcc = detektion.getData(COMPLEXITY_KEY)
-		val lloc = detektion.getData(LLOC_KEY)
-		if (mcc != null && lloc != null && lloc > 0) {
-			val numberOfSmells = findings.entries.sumBy { it.value.size }
-			val smellPerThousandLines = numberOfSmells * 1000 / lloc
-			val mccPerThousandLines = mcc * 1000 / lloc
-			println()
-			println("Complexity Report:")
-			println("\t- $lloc logical lines of code (lloc)")
-			println("\t- $mcc McCabe complexity (mcc)")
-			println("\t- $mccPerThousandLines mcc per 1000 lloc")
-			println("\t- $smellPerThousandLines code smells per 1000 lloc")
 		}
 	}
 
