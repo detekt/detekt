@@ -19,11 +19,13 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 - extensible by own rule sets and `FileProcessListener's`
 - format your code with the formatting rule set
 - code Smell baseline and ignore lists for legacy projects
+- **NEW** - [gradle plugin](#gradleplugin) for code analysis, formatting and import migration
 
 
 ### Table of contents
 1. [Usage/Build](#build)
 2. [Parameters for CLI](#cli)
+3. [As gradle plugin](#gradleplugin)
 3. [As gradle task](#gradle)
 4. [As maven task](#maventask)
 5. [Rule sets](#rulesets)
@@ -98,6 +100,66 @@ With `rules` you can point to additional ruleset.jar's creating by yourself or o
 More on this topic see section _Custom RuleSets_.
 
 The `report` parameter is optional and when used, it should point to
+
+
+#### <a name="gradleplugin">Using the detekt-gradle-plugin</a>
+
+1. Add detekt-gradle-plugin next to the kotlin classpath buildscript dependencies
+2. Apply the `io.gitlab.arturbosch.detekt` plugin
+3. Add my code-analysis repository to the repositories
+
+
+Note: *When publishing to jcenter is accepted* `plugins {
+                                             	id "io.gitlab.arturbosch.detekt" version "1.0.0.M10"
+                                             }` *can be used instead of the buildscript block.*
+
+```groovy
+buildscript {
+	ext.kotlin_version = '1.1.2'
+
+	repositories {
+		mavenCentral()
+		maven { url "http://dl.bintray.com/arturbosch/code-analysis" }
+	}
+	dependencies {
+		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+		classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.0.0.M10"
+	}
+}
+
+apply plugin: 'io.gitlab.arturbosch.detekt'
+
+repositories {
+	maven { url "http://dl.bintray.com/arturbosch/code-analysis" }
+}
+
+detekt {
+    input = "$input/src/main/kotlin"
+    config = "$project.projectDir/detekt.yml"
+    filters = ".*test.*, .*/resources/.*"
+    rulesets = "other/optional/ruleset.jar"
+}
+```
+
+Now three new tasks are available: 
+- `detekt` - runs normal detekt analysis and complexity report
+- `detektFormat` - formats your kotlin code, needs `config` parameter (see [Formatting - Code Style](#formatting))
+- `detektMigrate` - migrates imports, needs `config` parameter (experimental)
+
+##### Migration
+
+Migration rules can be configured in your `detekt.yml` file. For now only migration of imports is supported.
+
+```yaml
+# *experimental feature*
+# Migration rules can be defined in the same config file or a new one
+migration:
+  active: true
+  imports:
+    # your.package.Class: new.package.or.Class
+    # for example:
+    # io.gitlab.arturbosch.detekt.api.Rule: io.gitlab.arturbosch.detekt.rule.Rule
+```
 
 #### <a name="gradle">Using detekt in custom gradle projects</a>
 
