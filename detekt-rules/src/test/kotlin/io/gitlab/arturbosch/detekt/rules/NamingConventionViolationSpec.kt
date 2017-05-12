@@ -1,10 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.style.NamingConventionViolation
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.subject.SubjectSpek
 import org.jetbrains.spek.api.dsl.it
+import org.jetbrains.spek.subject.SubjectSpek
 import org.junit.jupiter.api.Test
 
 /**
@@ -57,5 +58,71 @@ enum class WorkFlow {
 		)
 		lint.forEach { println(it.compact()) }
 		assertThat(lint).hasSize(1)
+	}
+}
+
+class NamingConventionCustomPatter {
+	private val configCustomRules =
+			object : Config {
+				override fun subConfig(key: String): Config = Config.empty
+
+				@Suppress("UNCHECKED_CAST")
+				override fun <T : Any> valueOrDefault(key: String, default: () -> T): T =
+						when (key) {
+							NamingConventionViolation.METHOD_PATTERN -> "^`.+`$" as T
+							NamingConventionViolation.CLASS_PATTERN -> "^aBbD$" as T
+							NamingConventionViolation.VARIABLE_PATTERN -> "^123var$" as T
+							NamingConventionViolation.CONSTANT_PATTERN -> "^lowerCaseConst$" as T
+							NamingConventionViolation.ENUM_PATTERN -> "^(enum1)|(enum2)$" as T
+							else -> default()
+						}
+			}
+	private val config = object : Config {
+		override fun subConfig(key: String): Config =
+				if (key == NamingConventionViolation.RULE_SUB_CONFIG) {
+					configCustomRules
+				} else {
+					Config.empty
+				}
+
+		override fun <T : Any> valueOrDefault(key: String, default: () -> T): T = default()
+	}
+	private val rule = NamingConventionViolation(config)
+
+	@Test
+	fun shouldUseCustomNameForMethodAndClass() {
+		assertThat(rule.lint("""
+            class aBbD{
+                fun `name with back ticks`(){
+                  val 123var = ""
+                }
+
+                companion object {
+                  const val lowerCaseConst = ""
+                }
+            }
+        """)).hasSize(0)
+	}
+
+	@Test
+	fun shouldUseCustomNameForConstant() {
+		assertThat(rule.lint("""
+            class aBbD{
+                companion object {
+                  const val lowerCaseConst = ""
+                }
+            }
+        """)).hasSize(0)
+	}
+
+	@Test
+	fun shouldUseCustomNameForEnum() {
+		assertThat(rule.lint("""
+            class aBbD{
+                enum class aBbD {
+                    enum1, enum2
+                }
+            }
+        """)).hasSize(0)
 	}
 }
