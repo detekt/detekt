@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.name.SpecialNames
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtEnumEntry
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
@@ -17,18 +18,18 @@ import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 /**
  * @author Artur Bosch
  */
-class NamingConventionViolation(config: Config = Config.empty) : Rule("NamingConventionViolation", Severity.Style, config) {
+class NamingConventionViolation(config: Config = Config.empty) : Rule(RULE_SUB_CONFIG, Severity.Style, config) {
 
-	private val variablePattern = Regex(withConfig { valueOrDefault("variablePattern") { "^(_)?[a-z$][a-zA-Z$0-9]*$" } })
-	private val constantPattern = Regex(withConfig { valueOrDefault("constantPattern") { "^([A-Z_]*|serialVersionUID)$" } })
-	private val methodPattern = Regex(withConfig { valueOrDefault("methodPattern") { "^[a-z$][a-zA-Z$0-9]*$" } })
-	private val classPattern = Regex(withConfig { valueOrDefault("classPattern") { "^[A-Z$][a-zA-Z$]*$" } })
-	private val enumEntryPattern = Regex(withConfig { valueOrDefault("enumEntryPattern") { "^[A-Z$][A-Z_$]*$" } })
+	private val variablePattern = Regex(withConfig { valueOrDefault(VARIABLE_PATTERN) { "^(_)?[a-z$][a-zA-Z$0-9]*$" } })
+	private val constantPattern = Regex(withConfig { valueOrDefault(CONSTANT_PATTERN) { "^([A-Z_]*|serialVersionUID)$" } })
+	private val methodPattern = Regex(withConfig { valueOrDefault(METHOD_PATTERN) { "^[a-z$][a-zA-Z$0-9]*$" } })
+	private val classPattern = Regex(withConfig { valueOrDefault(CLASS_PATTERN) { "^[A-Z$][a-zA-Z$]*$" } })
+	private val enumEntryPattern = Regex(withConfig { valueOrDefault(ENUM_PATTERN) { "^[A-Z$][A-Z_$]*$" } })
 
 	override fun visitNamedDeclaration(declaration: KtNamedDeclaration) {
 		if (declaration.nameAsSafeName.isSpecial) return
 		declaration.nameIdentifier?.parent?.javaClass?.let {
-			val name = declaration.nameAsSafeName.asString()
+			val name = declaration.nameIdentifier?.text ?: SpecialNames.NO_NAME_PROVIDED.asString()
 			when (declaration) {
 				is KtVariableDeclaration -> handleVariableNamings(declaration, name)
 				is KtNamedFunction -> if (!name.matches(methodPattern)) add(declaration)
@@ -67,5 +68,14 @@ class NamingConventionViolation(config: Config = Config.empty) : Rule("NamingCon
 	}
 
 	private fun KtVariableDeclaration.isTopLevel(): Boolean = this is KtProperty && this.isTopLevel
+
+	companion object {
+		const val RULE_SUB_CONFIG = "NamingConventionViolation"
+		const val VARIABLE_PATTERN = "variablePattern"
+		const val CONSTANT_PATTERN = "constantPattern"
+		const val METHOD_PATTERN = "methodPattern"
+		const val CLASS_PATTERN = "classPattern"
+		const val ENUM_PATTERN = "enumEntryPattern"
+	}
 
 }
