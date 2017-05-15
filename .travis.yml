@@ -1,6 +1,8 @@
 language: java
 jdk: oraclejdk8
-script: ./gradlew build --no-daemon
+script:
+  - ./gradlew build
+  - ./gradlew detekt
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
