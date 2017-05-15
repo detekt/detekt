@@ -2,9 +2,8 @@ buildscript {
 	repositories {
 		mavenCentral()
 		mavenLocal()
-		maven {
-			url "http://dl.bintray.com/jetbrains/spek"
-		}
+		maven { url "http://dl.bintray.com/jetbrains/spek" }
+		maven { url "http://dl.bintray.com/arturbosch/code-analysis" }
 	}
 	dependencies {
 		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
@@ -13,6 +12,7 @@ buildscript {
 }
 
 plugins {
+	id "io.gitlab.arturbosch.detekt" version "1.0.0.M10"
 	id "com.jfrog.bintray" version "1.7.3"
 	id 'com.github.ben-manes.versions' version '0.13.0'
 	id "com.github.johnrengelman.shadow" version "1.2.3"
@@ -118,22 +118,12 @@ allprojects {
 	}
 }
 
-configurations {
-	detekt
+detekt {
+	config = "$project.projectDir/default-detekt-config.yml"
+	filters = '.*/test/.*'
+	debug = true
 }
 
-dependencies {
-	detekt 'io.gitlab.arturbosch.detekt:detekt-cli:1.0.0.M7'
-	detekt 'io.gitlab.arturbosch.detekt:detekt-formatting:1.0.0.M7'
-}
-
-task detekt(type: JavaExec) {
-	main = "io.gitlab.arturbosch.detekt.cli.Main"
-	classpath = configurations.detekt
-	def input = "$project.projectDir.absolutePath"
-	def config = "$project.projectDir/default-detekt-config.yml"
-	def filters = ".*test.*"
-	def rulesets = ""
-	def params = ['-p', input, '-c', config, '-f', filters, '-r', rulesets]
-	args(params)
+repositories {
+	maven { url "http://dl.bintray.com/arturbosch/code-analysis" }
 }
