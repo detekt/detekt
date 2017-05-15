@@ -1,4 +1,5 @@
 language: java
+jdk: oraclejdk8
 script: ./gradlew build --no-daemon
 
 before_cache:
