@@ -1,3 +1,16 @@
+buildscript {
+	repositories {
+		maven {
+			url "https://plugins.gradle.org/m2/"
+		}
+	}
+	dependencies {
+		classpath "com.gradle.publish:plugin-publish-plugin:0.9.7"
+	}
+}
+
+apply plugin: "com.gradle.plugin-publish"
+
 configurations {
 	compile.extendsFrom kotlinCompile
 	testCompile.extendsFrom kotlinTest
@@ -10,4 +23,18 @@ dependencies {
 	testRuntime "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
 	testRuntime "org.junit.platform:junit-platform-console:$junitPlatformVersion"
 	testRuntime "org.jetbrains.spek:spek-junit-platform-engine:$spekVersion"
+}
+
+pluginBundle {
+	website = 'https://github.com/arturbosch/detekt'
+	vcsUrl = 'https://github.com/arturbosch/detekt'
+	description = 'Static code analysis for Kotlin'
+	tags = ['kotlin', 'detekt', 'code-analysis', 'badsmells', 'codesmells']
+
+	plugins {
+		detektPlugin {
+			id = 'io.gitlab.arturbosch.detekt'
+			displayName = 'Static code analysis for Kotlin'
+		}
+	}
 }
