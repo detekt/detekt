@@ -1,9 +1,17 @@
 # Detekt - Changelog
 
-#### M10 - upcoming
+#### M11 - upcoming
 
-- TBA
+- formatting rework
 
+#### M10, M10.1
+
+- detekt-gradle-plugin - [#16](https://github.com/arturbosch/detekt/issues/16)
+- experimental migration module which can migrate imports- [#30](https://github.com/arturbosch/detekt/issues/30)
+- NamingConventionViolation is now aware about backticks - [contributed by Svyatoslav Chatchenko](https://github.com/arturbosch/detekt/pull/34) 
+- cli and core module refactorings, jcenter publishing, travis ci
+
+See all issues at: [M10](https://github.com/arturbosch/detekt/milestone/4)
 #### M9
 
 - Support suppressing rules (@SuppressWarnings, @Suppress) - [#6](https://github.com/arturbosch/detekt/issues/6)
