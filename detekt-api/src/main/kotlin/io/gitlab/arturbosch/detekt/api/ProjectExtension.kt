@@ -14,12 +14,15 @@ import com.intellij.psi.impl.source.tree.TreeCopyHandler
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.config.CompilerConfiguration
+import org.jetbrains.kotlin.psi.KtPsiFactory
 import sun.reflect.ReflectionFactory
 
 val PROJECT = KotlinCoreEnvironment.createForProduction(Disposer.newDisposable(),
 		CompilerConfiguration(), EnvironmentConfigFiles.JVM_CONFIG_FILES).project.apply {
 	makeMutable(this as MockProject)
 }
+
+val FACTORY = KtPsiFactory(PROJECT, false)
 
 private fun makeMutable(project: MockProject) {
 	// Based on KtLint by Shyiko
