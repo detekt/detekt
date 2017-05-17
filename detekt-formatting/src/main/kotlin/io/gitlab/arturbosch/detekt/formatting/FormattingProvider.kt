@@ -22,7 +22,8 @@ class FormattingProvider : RuleSetProvider {
 				TrailingSpaces(config),
 				UnusedImports(config),
 				OptionalSemicolon(config),
-				OptionalUnit(config)
+				OptionalUnit(config),
+				SingleExpressionEqualsOnSameLine(config)
 		).apply {
 			if (!config.valueOrDefault("useTabs") { false }) {
 				add(Indentation(config))
