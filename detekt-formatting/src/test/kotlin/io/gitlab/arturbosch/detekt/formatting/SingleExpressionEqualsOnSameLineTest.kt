@@ -16,7 +16,7 @@ internal class SingleExpressionEqualsOnSameLineTest : RuleTest {
 	override val rule: Rule = SingleExpressionEqualsOnSameLine(Config.Companion.empty)
 
 	@Test
-	fun testLint() {
+	fun onlyExpressionSyntaxIsChecked() {
 		assertThat(rule.lint("""
 fun stuff() =
  	5
@@ -28,12 +28,19 @@ fun stuff2() {
 	}
 
 	@Test
-	fun testFormat() {
+	fun formatEqualsOnSameLineCases() {
 		assertThat(rule.format("""
 fun stuff() =
  	5
 """
 		)).isEqualTo("fun stuff() = 5")
+
+		assertThat(rule.format("""
+fun stuff()
+	=
+	5
+"""
+		)).isEqualTo("fun stuff()\n\t= 5")
 
 		assertThat(rule.format("""
 fun stuff() =
@@ -53,4 +60,29 @@ fun stuff() =
 		)).isEqualTo("fun stuff() = // ups comment\n5")
 	}
 
+	@Test
+	fun formatIfMethodChainOnSameLine() {
+		assertThat(rule.format("""
+fun stuff()
+	=
+ 		future { 5 }.onSuccess { 6 }
+"""
+		)).isEqualTo("fun stuff()\n\t= future { 5 }.onSuccess { 6 }")
+	}
+
+	@Test
+	fun doNotFormatIfMethodChainNotOnOneLine() {
+		val content = """
+fun stuff()
+	=
+ 		future {
+			5
+		}
+ 		.onSuccess {
+ 			6
+		}
+""".trimIndent()
+		assertThat(rule.format(content)).isEqualTo(content)
+
+	}
 }

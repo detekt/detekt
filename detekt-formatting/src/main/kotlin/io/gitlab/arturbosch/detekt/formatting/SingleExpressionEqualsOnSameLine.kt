@@ -23,8 +23,8 @@ class SingleExpressionEqualsOnSameLine(config: Config = Config.empty) : Rule("Si
 		function.equalsToken?.let { equals ->
 			function.bodyExpression?.let {
 				val equalsLine = Location.startLineAndColumn(equals).line
-				val exprLine = Location.startLineAndColumn(it).line
-				if (equalsLine != exprLine) {
+				val (exprStart, exprEnd) = it.startAndEndLine()
+				if (equalsLine != exprStart && exprStart == exprEnd) {
 					addFindings(CodeSmell(id, Entity.from(equals)))
 					withAutoCorrect { alignExpressionToEqualsToken(it, function.equalsToken!!) }
 				}
