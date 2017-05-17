@@ -23,7 +23,8 @@ class FormattingProvider : RuleSetProvider {
 				UnusedImports(config),
 				OptionalSemicolon(config),
 				OptionalUnit(config),
-				SingleExpressionEqualsOnSameLine(config)
+				SingleExpressionEqualsOnSameLine(config),
+				SingleReturnExpressionSyntax(config)
 		).apply {
 			if (!config.valueOrDefault("useTabs") { false }) {
 				add(Indentation(config))
