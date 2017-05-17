@@ -5,7 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.test.RuleTest
 import io.gitlab.arturbosch.detekt.test.format
 import io.gitlab.arturbosch.detekt.test.lint
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 /**
@@ -17,24 +17,40 @@ internal class SingleExpressionEqualsOnSameLineTest : RuleTest {
 
 	@Test
 	fun testLint() {
-		Assertions.assertThat(rule.lint(
-				"""
+		assertThat(rule.lint("""
 fun stuff() =
  	5
 fun stuff2() {
 	5
 }
-""")).hasSize(1)
+"""
+		)).hasSize(1)
 	}
 
 	@Test
 	fun testFormat() {
-		Assertions.assertThat(rule.format(
-				"""
+		assertThat(rule.format("""
 fun stuff() =
  	5
+"""
+		)).isEqualTo("fun stuff() = 5")
 
-""")).isEqualTo("fun stuff() = 5")
+		assertThat(rule.format("""
+fun stuff() =
+
+ 	println()
+"""
+		)).isEqualTo("fun stuff() = println()")
+
+		assertThat(rule.format("""
+fun stuff() =
+
+	// ups comment
+
+
+ 	5
+"""
+		)).isEqualTo("fun stuff() = // ups comment\n5")
 	}
 
 }
