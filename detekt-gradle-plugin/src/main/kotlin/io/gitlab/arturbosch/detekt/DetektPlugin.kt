@@ -12,25 +12,24 @@ class DetektPlugin : Plugin<Project> {
 
 	override fun apply(project: Project) {
 		val detektExtension = project.extensions.create("detekt", DetektExtension::class.java)
-
-		val configuration = project.configurations.maybeCreate("detekt")
-		project.dependencies.add(configuration.name, DefaultExternalModuleDependency(
-				"io.gitlab.arturbosch.detekt", "detekt-cli", detektExtension.version))
-
-		val formatting = project.configurations.maybeCreate("detektFormat")
-		project.dependencies.add(formatting.name, DefaultExternalModuleDependency(
-				"io.gitlab.arturbosch.detekt", "detekt-formatting", detektExtension.version))
-
-		val migration = project.configurations.maybeCreate("detektMigrate")
-		project.dependencies.add(migration.name, DefaultExternalModuleDependency(
-				"io.gitlab.arturbosch.detekt", "detekt-migration", detektExtension.version))
-
 		detektExtension.input = project.projectDir.absolutePath
 
 		project.afterEvaluate {
 
+			val configuration = project.buildscript.configurations.maybeCreate("detekt")
+			project.buildscript.dependencies.add(configuration.name, DefaultExternalModuleDependency(
+					"io.gitlab.arturbosch.detekt", "detekt-cli", detektExtension.version))
+
+			val formatting = project.buildscript.configurations.maybeCreate("detektFormat")
+			project.buildscript.dependencies.add(formatting.name, DefaultExternalModuleDependency(
+					"io.gitlab.arturbosch.detekt", "detekt-formatting", detektExtension.version))
+
+			val migration = project.buildscript.configurations.maybeCreate("detektMigrate")
+			project.buildscript.dependencies.add(migration.name, DefaultExternalModuleDependency(
+					"io.gitlab.arturbosch.detekt", "detekt-migration", detektExtension.version))
+
 			val args = detektExtension.convertToArguments()
-			if (detektExtension.debug) println(args)
+			if (detektExtension.debug) println("detekt version: ${detektExtension.version}: " + args)
 
 			project.tasks.create("detekt", JavaExec::class.java) {
 				it.description = "Analyze your kotlin code with detekt."

@@ -104,40 +104,28 @@ The `report` parameter is optional and when used, it should point to
 
 #### <a name="gradleplugin">Using the detekt-gradle-plugin</a>
 
-1. Add detekt-gradle-plugin next to the kotlin classpath buildscript dependencies
-2. Apply the `io.gitlab.arturbosch.detekt` plugin
-3. Add my code-analysis repository to the repositories
-
-
-Note: *When publishing to jcenter is accepted* `plugins {
-                                             	id "io.gitlab.arturbosch.detekt" version "1.0.0.M10"
-                                             }` *can be used instead of the buildscript block.*
 
 ```groovy
 buildscript {
-	ext.kotlin_version = '1.1.2'
-
-	repositories {
-		mavenCentral()
-		maven { url "http://dl.bintray.com/arturbosch/code-analysis" }
-	}
-	dependencies {
-		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-		classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.0.0.M10"
-	}
+    repositories {
+        // As of 1.0.0.M10.1 detekt is published to jcenter
+        // if it does not work yet properly add my bintray repo:
+        maven { url "http://dl.bintray.com/arturbosch/code-analysis" }
+    }
 }
 
-apply plugin: 'io.gitlab.arturbosch.detekt'
-
-repositories {
-	maven { url "http://dl.bintray.com/arturbosch/code-analysis" }
+plugins {
+    // DO NOT USE EARLIER VERSIONS
+    // gradle-plugin versioning will later be independent of detekt version
+    id "io.gitlab.arturbosch.detekt" version "1.0.0.M10.2"
 }
 
 detekt {
-    input = "$input/src/main/kotlin"
-    config = "$project.projectDir/detekt.yml"
-    filters = ".*test.*, .*/resources/.*"
-    rulesets = "other/optional/ruleset.jar"
+    version = "1.0.0.M10.1"  // Specify current detekt version
+    input = "$input/src/main/kotlin" // input is preconfigured to 'project.projectDir.absolutePath'
+    config = "$project.projectDir/detekt.yml" // Use $project.projectDir to navigate inside your project 
+    filters = ".*test.*, .*/resources/.*" // What paths to exclude? Use comma oder semicolon to separate
+    rulesets = "other/optional/ruleset.jar" // Custom rule sets can be linked to this, use comma oder semicolon to separate 
 }
 ```
 
