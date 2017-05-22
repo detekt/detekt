@@ -12,7 +12,7 @@ buildscript {
 }
 
 plugins {
-	id "io.gitlab.arturbosch.detekt" version "1.0.0.M10"
+	id "io.gitlab.arturbosch.detekt" version "1.0.0.M10.2"
 	id "com.jfrog.bintray" version "1.7.3"
 	id 'com.github.ben-manes.versions' version '0.13.0'
 	id "com.github.johnrengelman.shadow" version "1.2.3"
@@ -86,14 +86,8 @@ allprojects {
 		from sourceSets.main.allSource
 	}
 
-	task javadocJar(type: Jar, dependsOn: javadoc) {
-		classifier = 'javadoc'
-		from javadoc.destinationDir
-	}
-
 	artifacts {
 		archives sourcesJar
-		archives javadocJar
 	}
 
 	def pomConfig = {
@@ -122,7 +116,6 @@ allprojects {
 			DetektPublication(MavenPublication) {
 				from components.java
 				artifact sourcesJar
-				artifact javadocJar
 				groupId project.group
 				artifactId project.name
 				version project.version
@@ -169,6 +162,3 @@ detekt {
 	debug = true
 }
 
-repositories {
-	maven { url "http://dl.bintray.com/arturbosch/code-analysis" }
-}
