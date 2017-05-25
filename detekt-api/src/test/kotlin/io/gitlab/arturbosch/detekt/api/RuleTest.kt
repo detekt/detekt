@@ -35,6 +35,13 @@ internal class RuleTest : Spek({
 		assertEquals(0, findings.size)
 	}
 
+	it("rule should be suppressed by ALL") {
+		val ktFile = compilerFor("SuppressedByAllObject.kt")
+		val rule = TestRule()
+		rule.visit(ktFile)
+		assertNotNull(rule.expected)
+	}
+
 })
 
 fun compilerFor(resource: String) = Compiler.compileFromContent(
