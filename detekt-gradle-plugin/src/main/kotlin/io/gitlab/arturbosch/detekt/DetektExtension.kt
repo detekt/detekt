@@ -8,6 +8,7 @@ open class DetektExtension(var version: String = "1.0.0.M10",
 						   var input: String? = null,
 						   var config: String? = null,
 						   var configResource: String? = null,
+						   var generateConfig: Boolean = false,
 						   var filters: String? = null,
 						   var rulesets: String? = null,
 						   var report: String? = null,
@@ -24,6 +25,7 @@ open class DetektExtension(var version: String = "1.0.0.M10",
 			input?.let { add("--project"); add(it) }
 			config?.let { add("--config"); add(it) }
 			configResource?.let { add("--config-resource"); add(it) }
+			if (generateConfig) add("--generate-config")
 			filters?.let { add("--filters"); add(it) }
 			rulesets?.let { add("--rules"); add(it) }
 			report?.let { add("--report"); add(it) }
