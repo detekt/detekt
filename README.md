@@ -54,43 +54,51 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 The CLI uses jcommander for argument parsing.
 
 ```
-The following option is required: --project, -p 
+The following option is required: --project, -p
 
 Usage: detekt [options]
   Options:
     --baseline, -b
-       Treats current analysis findings as a smell baseline for further detekt
-       runs. If a baseline xml file exists, only new code smells not in the baseline
-       are printed in the console.
-       Default: false
+      Treats current analysis findings as a smell baseline for further detekt
+      runs. If a baseline xml file exists, only new code smells not in the
+      baseline are printed in the console.
+      Default: false
     --config, -c
-       Path to the config file (path/to/config).
+      Path to the config file (path/to/config.yml).
+    --config-resource, -cr
+      Path to the config resource on detekt's classpath (path/to/config.yml).
+    --debug, -d
+      Debugs given ktFile by printing its elements.
+      Default: false
+    --disableDefaultRuleSets, -dd
+      Disables default rule sets.
+      Default: false
     --filters, -f
-       Path filters defined through regex with separator ';' (".*test.*").
+      Path filters defined through regex with separator ';' (".*test.*").
     --format
-       Enables formatting of source code. Cannot be used together with --config.
-       Default: false
+      Enables formatting of source code. Cannot be used together with
+      --config.
+      Default: false
     --help, -h
-       Shows the usage.
-       Default: false
+      Shows the usage.
     --output, -o
-       True if findings should be written into a report.detekt file inside the
-       report folder.
-       Default: false
+      True if findings should be written into a report.detekt file inside the
+      report folder.
+      Default: false
     --parallel
-       Enables parallel compilation of source files. Should only be used if the
-       analyzing project has more than ~200 kotlin files.
-       Default: false
+      Enables parallel compilation of source files. Should only be used if the
+      analyzing project has more than ~200 kotlin files.
+      Default: false
   * --project, -p
-       Project path to analyze (path/to/project).
+      Project path to analyze (path/to/project).
     --report, -rp
-       Path to the report directory where findings should be stored (if
-       --output) and baseline.xml generated (if --baseline).
+      Path to the report directory where findings should be stored (if
+      --output) and baseline.xml generated (if --baseline).
     --rules, -r
-       Extra paths to ruleset jars separated by ';'.
+      Extra paths to ruleset jars separated by ';'.
     --useTabs
-       Tells the formatter that indentation with tabs are valid.
-       Default: false
+      Tells the formatter that indentation with tabs are valid.
+      Default: false
 ```
 
 `project` can either be a directory or a single Kotlin file.
