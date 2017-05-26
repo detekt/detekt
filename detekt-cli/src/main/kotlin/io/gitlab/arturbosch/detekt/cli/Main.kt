@@ -67,6 +67,7 @@ class Main {
 			val main = parseArgumentsCheckingReportDirectory(args)
 			val executable = when {
 				main.debug -> Debugger(main)
+				main.generateConfig -> ConfigExporter(main)
 				else -> Runner(main)
 			}
 			executable.execute()
