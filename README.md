@@ -138,7 +138,7 @@ detekt {
 ```
 
 Now three new tasks are available: 
-- `detekt` - runs normal detekt analysis and complexity report
+- `detekt` - runs normal _detekt_ analysis and complexity report
 - `detektFormat` - formats your kotlin code, needs `config` parameter (see [Formatting - Code Style](#formatting))
 - `detektMigrate` - migrates imports, needs `config` parameter (experimental)
 
@@ -157,11 +157,11 @@ migration:
     # io.gitlab.arturbosch.detekt.api.Rule: io.gitlab.arturbosch.detekt.rule.Rule
 ```
 
-#### <a name="gradle">Using detekt in custom gradle projects</a>
+#### <a name="gradle">Using _detekt_ in custom gradle projects</a>
 
 1. Add following lines to your build.gradle file.
 2. Run `gradle detekt`
-3. Add `check.dependsOn detekt` if you want to run detekt on every `build`
+3. Add `check.dependsOn detekt` if you want to run _detekt_ on every `build`
 
 ```groovy
 repositories {
@@ -196,9 +196,9 @@ dependencies {
 
 `Attention Android Developers! the dependencies section must be at the bottom, after the repository, configurations and task sections!`
 
-![detekt in gradle](img/gradle-detekt.png "detekt in gradle")
+![_detekt_ in gradle](img/gradle-detekt.png "detekt in gradle")
 
-#### <a name="maventask">Using detekt in Maven Projects</a>
+#### <a name="maventask">Using _detekt_ in Maven Projects</a>
 
 1. Add following lines to your pom.xml.
 2. Run `mvn verify` (when using the verify phase as I did here)
@@ -277,13 +277,13 @@ Currently there are seven rule sets which are used per default when running the 
 
 * formatting: detects indentation, spacing problems and optional semicolons in code
 
-As of milestone six, the formatting rule set is shipped as an standalone plugin which must be linked to a detekt run
+As of milestone six, the formatting rule set is shipped as an standalone plugin which must be linked to a _detekt_ run
 through the --rules "path/to/jar" parameter or via gradle/maven classpath setup.
 
 ### <a name="rulesetconfig">RuleSet Configuration</a>
 
 To turn off specific rules/rule sets or change threshold values for certain rules a yaml configuration file can be used.
-Copy and modify the `default-detekt-config.yml` from the detekt folder for your needs.
+Copy and modify the `default-detekt-config.yml` from the _detekt_ folder for your needs.
 
 ```yml
 code-smell:
@@ -323,11 +323,11 @@ This is done to prevent you from changing your project files if your not 100% su
 
 ### <a name="suppress">Suppress code smell rules</a>
 
-detekt supports the Java (`@SuppressWarnings`) and Kotlin (`@Suppress`) style suppression. If both annotations are present, only Kotlin's annotation is used! To suppress a rule, the id of the rule must be written inside the values field of the annotation e.g. `@Suppress("LongMethod", "LongParameterList", ...)`
+_detekt_ supports the Java (`@SuppressWarnings`) and Kotlin (`@Suppress`) style suppression. If both annotations are present, only Kotlin's annotation is used! To suppress a rule, the id of the rule must be written inside the values field of the annotation e.g. `@Suppress("LongMethod", "LongParameterList", ...)`
 
 ### <a name="failure">Configure build failure thresholds</a>
 
-detekt now can throw a BuildFailure(Exception) and let the build fail with following config parameters:
+_detekt_ now can throw a BuildFailure(Exception) and let the build fail with following config parameters:
 ```yaml
 build:
   warningThreshold: 5
@@ -346,7 +346,7 @@ The formula for weights: RuleID > RuleSetID > 1
 ### <a name="customruleset">Custom RuleSets</a>
 
 _detekt_ uses a ServiceLoader to collect all instances of _RuleSetProvider_-interfaces. So it is possible
-to define rules/rule sets and enhance detekt with your own flavor. 
+to define rules/rule sets and enhance _detekt_ with your own flavor. 
 Attention: You need a `resources/META-INF/services/io.gitlab.arturbosch.detekt.api.RuleSetProvider` file which 
 has as content the fully qualified name of your RuleSetProvider e.g. _io.gitlab.arturbosch.detekt.sampleruleset.SampleProvider_.
 
@@ -414,13 +414,13 @@ MyRuleSet:
     active: false
 ```
 
-By specifying the rule set and rule ids, detekt will use the sub configuration of MyRule:
+By specifying the rule set and rule ids, _detekt_ will use the sub configuration of MyRule:
 
 ```val threshold = withConfig { valueOrDefault("threshold") { threshold } }```
 
 #### Maven
 
-If your using maven to build rule sets or use detekt as a dependency, you have to run the additional task `install`
+If your using maven to build rule sets or use _detekt_ as a dependency, you have to run the additional task `install`
 
 #### <a name="testing">Testing your rules</a>
 
@@ -439,9 +439,9 @@ Rule extension functions that allow allow to skip compilation, ktFile and visit 
 ### <a name="formatting">Formatting</a>
 
 [KtLint](https://github.com/shyiko/ktlint) was first to support auto correct formatting according to the kotlin [coding conventions](https://kotlinlang.org/docs/reference/coding-conventions.html).
-In detekt I made an effort to port over all available formatting rules to detect style violations and auto correct them.
+In _detekt_ I made an effort to port over all available formatting rules to detect style violations and auto correct them.
 
-Following configuration I use to check the style for `detekt`. If your like me who prefer tabs over spaces, use `useTabs` in the
+Following configuration I use to check the style for _detekt_. If your like me who prefer tabs over spaces, use `useTabs` in the
 rule set level to turn off indentation check for spaces (or simple turn off `Indentation` rule).
 
 ```yaml
