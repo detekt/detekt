@@ -266,7 +266,7 @@ Currently there are seven rule sets which are used per default when running the 
 
 - complexity    - has rules to detect _LongMethod, LongParameterList, LargeClass, ComplexMethod ..._ smells
 - code-smell    - other rules which can be classified as code smells but do not fit into the complexity category
-- style         - detects wildcast imports and naming violations
+- style         - detects wildcard imports and naming violations
 - comments      - has rules to detect missing KDoc over public members and unnecessary KDoc over private members
 - exceptions    - too general exceptions are used in throw and catch statements like RuntimeException, Error or Throwable
 - empty         - finds empty block statements
@@ -278,7 +278,7 @@ Currently there are seven rule sets which are used per default when running the 
 * formatting: detects indentation, spacing problems and optional semicolons in code
 
 As of milestone six, the formatting rule set is shipped as an standalone plugin which must be linked to a detekt run
-through the --rules "path/to/jar" parameter or via gralde/maven classpath setup.
+through the --rules "path/to/jar" parameter or via gradle/maven classpath setup.
 
 ### <a name="rulesetconfig">RuleSet Configuration</a>
 
