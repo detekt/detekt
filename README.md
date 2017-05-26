@@ -107,8 +107,6 @@ The currently only supported configuration format is yaml. `config` should point
 With `rules` you can point to additional ruleset.jar's creating by yourself or others. 
 More on this topic see section _Custom RuleSets_.
 
-The `report` parameter is optional and when used, it should point to
-
 
 #### <a name="gradleplugin">Using the detekt-gradle-plugin</a>
 
