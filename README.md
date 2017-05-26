@@ -439,7 +439,7 @@ Rule extension functions that allow allow to skip compilation, ktFile and visit 
 ### <a name="formatting">Formatting</a>
 
 [KtLint](https://github.com/shyiko/ktlint) was first to support auto correct formatting according to the kotlin [coding conventions](https://kotlinlang.org/docs/reference/coding-conventions.html).
-In Detekt I made an effort to port over all available formatting rules to detect style violations and auto correct them.
+In detekt I made an effort to port over all available formatting rules to detect style violations and auto correct them.
 
 Following configuration I use to check the style for `detekt`. If your like me who prefer tabs over spaces, use `useTabs` in the
 rule set level to turn off indentation check for spaces (or simple turn off `Indentation` rule).
