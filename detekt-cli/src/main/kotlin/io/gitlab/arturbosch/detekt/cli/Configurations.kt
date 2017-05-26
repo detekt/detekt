@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.YamlConfig
 import io.gitlab.arturbosch.detekt.core.PathFilter
 import java.nio.file.Path
 import java.nio.file.Paths
+import java.io.File
 
 /**
  * @author Artur Bosch
@@ -37,4 +38,17 @@ class FormatConfig(private val useTabs: Boolean) : Config {
 			else -> default()
 		}
 	}
+}
+
+/**
+ * @author lummax
+ */
+class ConfigExporter(val main: Main) : Executable {
+
+	override fun execute() {
+		val defaultConfig = javaClass.getResourceAsStream("/default-detekt-config.yml") ?:
+				throw IllegalStateException("Unable to load default-detekt-config.yml from resources.")
+		defaultConfig.copyTo(File("default-detekt-config.yml").outputStream())
+	}
+
 }
