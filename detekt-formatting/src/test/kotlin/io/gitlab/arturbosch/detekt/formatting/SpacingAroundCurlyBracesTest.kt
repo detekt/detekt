@@ -19,14 +19,21 @@ class SpacingAroundCurlyBracesTest : RuleTest {
 
 	@Test
 	fun testLint() {
-		assertThat(rule.lint("fun emit() { }")).isEmpty()
-		assertThat(rule.lint("fun emit() {}")).isEmpty()
+		assertThat(rule.lint("fun main() { }")).isEmpty()
+		assertThat(rule.lint("fun main() {}")).isEmpty()
 		assertThat(rule.lint("fun main() { val v = if (true) { return 0 } }")).isEmpty()
 		assertThat(rule.lint("fun main() { fn({ a -> a }, 0) }")).isEmpty()
 		assertThat(rule.lint("fun main() { fn({}, 0) && fn2({ }, 0) }")).isEmpty()
 		assertThat(rule.lint("fun main() { find { it.default ?: false }?.phone }")).isEmpty()
 		assertThat(rule.lint("fun main() { val v = if (true){return 0} }")).hasSize(2)
 		assertThat(rule.lint("fun main() { fn({a -> a}, 0) }")).hasSize(2)
+		assertThat(rule.lint("fun main() { find { it.default ?: false }?.phone }")).isEmpty()
+		assertThat(rule.lint("""
+            fun main() {
+                emptyList<String>().find { true } !!.hashCode()
+                emptyList<String>().find { true }!!.hashCode()
+            }
+            """)).hasSize(1)
 	}
 
 	@Test
@@ -45,6 +52,8 @@ class SpacingAroundCurlyBracesTest : RuleTest {
                 call({}, {})
                 a.let{}.apply({})
                 f({ if (true) {r.add(v)};r})
+                emptyList<String>().find { true }!!.hashCode()
+                emptyList<String>().find { true } !!.hashCode()
             }
             """
 		)).isEqualTo(
@@ -61,6 +70,8 @@ class SpacingAroundCurlyBracesTest : RuleTest {
                 call({}, {})
                 a.let {}.apply({})
                 f({ if (true) { r.add(v) };r })
+                emptyList<String>().find { true }!!.hashCode()
+                emptyList<String>().find { true }!!.hashCode()
             }
             """.trimIndent()
 		)

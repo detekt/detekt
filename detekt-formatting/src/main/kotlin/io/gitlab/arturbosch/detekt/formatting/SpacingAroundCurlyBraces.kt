@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.formatting
 
 import com.intellij.lang.ASTNode
+import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.impl.source.tree.LeafPsiElement
 import com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl
@@ -30,19 +31,19 @@ class SpacingAroundCurlyBraces(config: Config, val debug: Boolean = false) : Tok
 				spacingBefore = prevLeaf is PsiWhiteSpace || (prevLeaf?.node?.elementType == KtTokens.LPAR &&
 						(node.parent is KtLambdaExpression || node.parent.parent is KtLambdaExpression))
 				spacingAfter = nextLeaf is PsiWhiteSpace || nextLeaf?.node?.elementType == KtTokens.RBRACE
-			} else
-				if (node.textMatches("}")) {
-					spacingBefore = prevLeaf is PsiWhiteSpace || prevLeaf?.node?.elementType == KtTokens.LBRACE
-					val nextElementType = nextLeaf?.node?.elementType
-					spacingAfter = nextLeaf == null || nextLeaf is PsiWhiteSpace ||
-							nextElementType == KtTokens.DOT ||
-							nextElementType == KtTokens.COMMA ||
-							nextElementType == KtTokens.RPAR ||
-							nextElementType == KtTokens.SEMICOLON ||
-							nextElementType == KtTokens.SAFE_ACCESS
-				} else {
-					return
+			} else if (node.textMatches("}")) {
+				spacingBefore = prevLeaf is PsiWhiteSpace || prevLeaf?.node?.elementType == KtTokens.LBRACE
+				spacingAfter = nextLeaf == null || nextLeaf is PsiWhiteSpace || shouldNotToBeSeparatedBySpace(nextLeaf)
+				if (nextLeaf is PsiWhiteSpace && !nextLeaf.textContains('\n') &&
+						shouldNotToBeSeparatedBySpace(PsiTreeUtil.nextLeaf(nextLeaf, true))) {
+					if (debug) addFindings(CodeSmell(id, Entity.from(node), "Unexpected space after \"${node.text}\""))
+					withAutoCorrect {
+						nextLeaf.delete()
+					}
 				}
+			} else {
+				return
+			}
 			when {
 				!spacingBefore && !spacingAfter -> {
 					if (debug) addFindings(CodeSmell(id, Entity.from(node), "Missing spacing around \"${node.text}\""))
@@ -65,6 +66,17 @@ class SpacingAroundCurlyBraces(config: Config, val debug: Boolean = false) : Tok
 				}
 			}
 		}
+	}
+
+	fun shouldNotToBeSeparatedBySpace(leaf: PsiElement?): Boolean {
+		val nextElementType = leaf?.node?.elementType
+		return nextElementType != null &&
+				nextElementType == KtTokens.DOT ||
+				nextElementType == KtTokens.COMMA ||
+				nextElementType == KtTokens.RPAR ||
+				nextElementType == KtTokens.SEMICOLON ||
+				nextElementType == KtTokens.SAFE_ACCESS ||
+				nextElementType == KtTokens.EXCLEXCL
 	}
 
 }
