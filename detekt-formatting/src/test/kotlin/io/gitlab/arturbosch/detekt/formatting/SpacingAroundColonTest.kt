@@ -24,13 +24,13 @@ class SpacingAroundColonTest : RuleTest {
             fun main() {
                 var x:Boolean // 1
                 var y: Boolean
-                call(object: DefaultConsumer(channel) { })
+                call(object: DefaultConsumer(channel) { }) // 1
             }
             interface D
             interface C: D // 1
             interface C2 : D
             """
-		)).hasSize(3)
+		)).hasSize(4)
 	}
 
 	@Test
@@ -60,6 +60,24 @@ class SpacingAroundColonTest : RuleTest {
 	}
 
 	@Test
+	fun spaceAfterTryCatchParameterColon() {
+		assertThat(rule.format("fun main() { try {} catch(e:Exception) {} }"))
+				.isEqualTo("fun main() { try {} catch(e: Exception) {} }")
+	}
+
+	@Test
+	fun spaceAroundObjectDeclarationColon() {
+		assertThat(rule.format("fun main() { call(object:DefaultConsumer(channel) { }) }"))
+				.isEqualTo("fun main() { call(object : DefaultConsumer(channel) { }) }")
+	}
+
+	@Test
+	fun spaceAfterFunctionParametersAndReturnType() {
+		assertThat(rule.format("fun main(x:Int, y:String):Boolean {}"))
+				.isEqualTo("fun main(x: Int, y: String): Boolean {}")
+	}
+
+	@Test
 	fun testFormat() {
 		assertThat(rule.format(
 				"""
@@ -68,7 +86,6 @@ class SpacingAroundColonTest : RuleTest {
             fun main() {
                 var x:Boolean
                 var y: Boolean
-                call(object:DefaultConsumer(channel) { })
             }
             interface D
             interface C: D
@@ -81,7 +98,6 @@ class SpacingAroundColonTest : RuleTest {
             fun main() {
                 var x: Boolean
                 var y: Boolean
-                call(object: DefaultConsumer(channel) { })
             }
             interface D
             interface C : D
