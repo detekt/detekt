@@ -9,7 +9,7 @@ import org.jetbrains.spek.subject.SubjectSpek
 /**
  * @author Artur Bosch
  */
-class UselessSemicolonSpec : SubjectSpek<OptionalSemicolon>({
+class OptionalSemicolonSpec : SubjectSpek<OptionalSemicolon>({
 	subject { OptionalSemicolon() }
 
 	describe("common semicolon cases") {

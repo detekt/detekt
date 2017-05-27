@@ -1,20 +1,15 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import com.intellij.psi.PsiElement
 import com.intellij.psi.impl.source.tree.LeafPsiElement
-import com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.FACTORY
 import io.gitlab.arturbosch.detekt.api.Rule
-import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
-import org.jetbrains.kotlin.psi.psiUtil.nextLeaf
-import org.jetbrains.kotlin.psi.psiUtil.prevLeaf
 
 /**
  * @author Artur Bosch
@@ -46,30 +41,6 @@ class SingleReturnExpressionSyntax(config: Config = Config.empty) : Rule("Single
 			if (it == 1 && statements[0] is KtReturnExpression) {
 				return statements[0] as KtReturnExpression
 			} else null
-		}
-	}
-
-	private fun LeafPsiElement.trimSpacesAround() {
-		trimSpaces { it.prevLeaf() }
-		trimSpaces(before = false) { it.nextLeaf() }
-	}
-
-	private fun LeafPsiElement.trimSpaces(before: Boolean = true, function: (PsiElement) -> PsiElement?) {
-		var iteration = 0
-		var parent = function(this)
-		while (parent?.node != null && parent.node.elementType == KtTokens.WHITE_SPACE) {
-			val prevParent = function(parent)
-			when {
-				prevParent?.node?.elementType == KtTokens.WHITE_SPACE -> parent.delete()
-				parent.node.text.length > 1 -> (parent as LeafPsiElement).rawReplaceWithText(" ")
-				else -> return
-			}
-			parent = prevParent
-			iteration++
-		}
-		if (iteration == 0) {
-			val whiteSpace = PsiWhiteSpaceImpl(" ")
-			if (before) rawInsertBeforeMe(whiteSpace) else rawInsertAfterMe(whiteSpace)
 		}
 	}
 
