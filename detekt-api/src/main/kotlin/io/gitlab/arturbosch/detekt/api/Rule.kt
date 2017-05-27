@@ -18,32 +18,33 @@ abstract class Rule(val id: String,
 					val severity: Severity = Rule.Severity.Minor,
 					private val config: Config = Config.empty) : DetektVisitor() {
 
+	init {
+		validateIdentifier(id)
+	}
+
 	/**
 	 * Rules can classified into different severity grades. Maintainer can choose
 	 * a grade which is most harmful to their projects.
 	 */
 	enum class Severity {
 		CodeSmell, Style, Warning, Defect, Minor, Maintainability, Security
+
 	}
 
-	private val active = withConfig {
-		valueOrDefault("active") { true }
-	}
-
-	private val autoCorrect: Boolean = withConfig {
-		valueOrDefault("autoCorrect") { true }
-	}
-
-	private var _findings: MutableList<Finding> = mutableListOf()
 	/**
 	 * Returns a list of violations of this rule.
 	 */
 	val findings: List<Finding>
 		get() = _findings.toList()
 
-	init {
-		validateIdentifier(id)
+	protected val autoCorrect: Boolean = withConfig {
+		valueOrDefault("autoCorrect") { true }
 	}
+	private val active = withConfig {
+		valueOrDefault("active") { true }
+	}
+
+	private var _findings: MutableList<Finding> = mutableListOf()
 
 	/**
 	 * Before starting visiting kotlin elements, a check is performed if this rule should be triggered.
@@ -69,7 +70,7 @@ abstract class Rule(val id: String,
 
 	/**
 	 * If your rule supports to automatically correct the misbehaviour of underlying smell,
-	 * specify your code inside this method call, to allow the user of your rule to trigger autocorrection
+	 * specify your code inside this method call, to allow the user of your rule to trigger auto correction
 	 * only when needed.
 	 */
 	protected fun withAutoCorrect(block: () -> Unit) {
