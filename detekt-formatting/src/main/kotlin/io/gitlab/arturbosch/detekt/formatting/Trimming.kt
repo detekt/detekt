@@ -11,34 +11,49 @@ import org.jetbrains.kotlin.psi.psiUtil.prevLeaf
  * @author Artur Bosch
  */
 
-fun LeafPsiElement.trimSpacesAround() {
-	trimSpaces { it.prevLeaf() }
-	trimSpaces(before = false) { it.nextLeaf() }
+fun LeafPsiElement.trimSpacesAround(autoCorrect: Boolean = true): Boolean {
+	val before = trimSpaces(autoCorrect) { it.prevLeaf() }
+	val after = trimSpaces(autoCorrect, before = false) { it.nextLeaf() }
+	return before || after
 }
 
-fun LeafPsiElement.trimSpacesAfter() {
-	trimSpaces(before = false) { it.nextLeaf() }
-}
+fun LeafPsiElement.trimSpacesAfter(autoCorrect: Boolean = true) =
+		trimSpaces(autoCorrect, before = false) { it.nextLeaf() }
 
-fun LeafPsiElement.trimSpacesBefore() {
-	trimSpaces { it.prevLeaf() }
-}
+fun LeafPsiElement.trimSpacesBefore(autoCorrect: Boolean = true) = trimSpaces(autoCorrect) { it.prevLeaf() }
 
-private fun LeafPsiElement.trimSpaces(before: Boolean = true, function: (PsiElement) -> PsiElement?) {
+private fun LeafPsiElement.trimSpaces(
+		autoCorrect: Boolean = true,
+		before: Boolean = true,
+		function: (PsiElement) -> PsiElement?): Boolean {
+
 	var iteration = 0
+	var modified = false
 	var parent = function(this)
 	while (parent?.node != null && parent.node.elementType == KtTokens.WHITE_SPACE) {
 		val prevParent = function(parent)
 		when {
-			prevParent?.node?.elementType == KtTokens.WHITE_SPACE -> parent.delete()
-			parent.node.text.length > 1 -> (parent as LeafPsiElement).rawReplaceWithText(" ")
-			else -> return
+			prevParent?.node?.elementType == KtTokens.WHITE_SPACE -> {
+				if (autoCorrect) parent.delete()
+				modified = true
+			}
+			parent.node.text.length > 1 -> {
+				if (autoCorrect) (parent as LeafPsiElement).rawReplaceWithText(" ")
+				modified = true
+			}
+			else -> return modified
 		}
 		parent = prevParent
 		iteration++
 	}
 	if (iteration == 0) {
-		val whiteSpace = PsiWhiteSpaceImpl(" ")
-		if (before) rawInsertBeforeMe(whiteSpace) else rawInsertAfterMe(whiteSpace)
+		if (autoCorrect) {
+			val whiteSpace = PsiWhiteSpaceImpl(" ")
+			if (before) rawInsertBeforeMe(whiteSpace)
+			else rawInsertAfterMe(whiteSpace)
+		}
+		modified = true
 	}
+
+	return modified
 }
