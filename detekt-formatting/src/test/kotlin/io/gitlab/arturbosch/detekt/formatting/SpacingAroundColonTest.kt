@@ -9,28 +9,28 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 /**
- * @author Shyiko
+ * Adapted from KtLint formatting project.
  */
 class SpacingAroundColonTest : RuleTest {
 
-	override val rule: Rule = SpacingAroundColon(Config.Companion.empty)
+	override val rule: Rule = SpacingAroundColon(Config.empty)
 
 	@Test
 	fun testLint() {
 		assertThat(rule.lint(
 				"""
-            class A:B
+            class A:B // 1
             class A2 : B2
             fun main() {
-                var x:Boolean
+                var x:Boolean // 1
                 var y: Boolean
                 call(object: DefaultConsumer(channel) { })
             }
             interface D
-            interface C: D
+            interface C: D // 1
             interface C2 : D
             """
-		)).hasSize(4)
+		)).hasSize(3)
 	}
 
 	@Test
@@ -64,22 +64,28 @@ class SpacingAroundColonTest : RuleTest {
 		assertThat(rule.format(
 				"""
             class A:B
+            class C :D
             fun main() {
                 var x:Boolean
                 var y: Boolean
+                call(object:DefaultConsumer(channel) { })
             }
             interface D
             interface C: D
+            interface C2 : D
             """
 		)).isEqualTo(
 				"""
             class A : B
+            class C : D
             fun main() {
                 var x: Boolean
                 var y: Boolean
+                call(object: DefaultConsumer(channel) { })
             }
             interface D
             interface C : D
+            interface C2 : D
             """.trimIndent()
 		)
 	}
