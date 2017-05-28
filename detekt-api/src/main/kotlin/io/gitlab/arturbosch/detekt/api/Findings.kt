@@ -77,8 +77,9 @@ interface Describable {
 	val description: String
 }
 
-open class CodeSmellWithReferenceAndMetric(id: String, entity: Entity, val reference: Entity, metric: Metric) :
-		ThresholdedCodeSmell(id, entity, metric, references = listOf(reference)) {
+open class CodeSmellWithReferenceAndMetric(
+		id: String, entity: Entity, val reference: Entity, metric: Metric) : ThresholdedCodeSmell(
+		id, entity, metric, references = listOf(reference)) {
 
 	override fun compact(): String {
 		return "$id - $metric - ref=${reference.name} - ${entity.compact()}"
@@ -89,8 +90,9 @@ open class CodeSmellWithReferenceAndMetric(id: String, entity: Entity, val refer
  * Represents a code smell for which a specific metric can be determined which is responsible
  * for the existence of a rule violation.
  */
-open class ThresholdedCodeSmell(id: String, entity: Entity, val metric: Metric, references: List<Entity> = emptyList())
-	: CodeSmell(id, entity, metrics = listOf(metric), references = references) {
+open class ThresholdedCodeSmell(
+		id: String, entity: Entity, val metric: Metric, references: List<Entity> = emptyList()) : CodeSmell(
+		id, entity, metrics = listOf(metric), references = references) {
 	val value: Int
 		get() = metric.value
 	val threshold: Int
