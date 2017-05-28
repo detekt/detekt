@@ -1,8 +1,10 @@
 package io.gitlab.arturbosch.detekt.formatting
 
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.impl.source.tree.LeafPsiElement
 import com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl
+import com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.psiUtil.nextLeaf
 import org.jetbrains.kotlin.psi.psiUtil.prevLeaf
@@ -10,6 +12,8 @@ import org.jetbrains.kotlin.psi.psiUtil.prevLeaf
 /**
  * @author Artur Bosch
  */
+
+fun LeafPsiElement.nextLeafIsWhiteSpace() = PsiTreeUtil.nextLeaf(this) is PsiWhiteSpace
 
 fun LeafPsiElement.trimSpacesAround(autoCorrect: Boolean = true): Boolean {
 	val before = trimSpaces(autoCorrect) { it.prevLeaf() }
