@@ -22,6 +22,7 @@ class ConsecutiveBlankLinesTest : RuleTest {
 
 	@Test
 	fun testFormat() {
-		assertThat(rule.format("fun main() {\n\n\n}\n\n")).isEqualTo("fun main() {\n\n}\n")
+		assertThat(rule.format("fun main() {\n\n\n\tcall()\n}\n\n\n")).isEqualTo("fun main() {\n\n\tcall()\n}\n\n")
 	}
+
 }
