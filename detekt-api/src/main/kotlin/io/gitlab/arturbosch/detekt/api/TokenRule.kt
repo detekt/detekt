@@ -45,11 +45,15 @@ abstract class TokenRule(id: String,
 			"{" -> visitRightBrace(leaf)
 			":" -> visitColon(leaf)
 			";" -> visitSemicolon(leaf)
+			";;" -> visitDoubleSemicolon(leaf)
 			"," -> visitComma(leaf)
 		}
 	}
 
 	protected open fun visitSemicolon(leaf: LeafPsiElement) {
+	}
+
+	protected open fun visitDoubleSemicolon(leaf: LeafPsiElement) {
 	}
 
 	protected open fun visitComma(leaf: LeafPsiElement) {
