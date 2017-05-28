@@ -74,6 +74,21 @@ class OptionalSemicolonSpec : SubjectSpek<OptionalSemicolon>({
 			""".trimIndent()
 			assertThat(actual).isEqualTo(expected)
 		}
+
+		it("does not delete :: in class references") {
+			val actual = subject.format("""
+            fun main() {
+                val s = String::class
+            }
+            """)
+			val expected = """
+            fun main() {
+                val s = String::class
+            }
+			""".trimIndent()
+			assertThat(actual).isEqualTo(expected)
+
+		}
 	}
 
 })

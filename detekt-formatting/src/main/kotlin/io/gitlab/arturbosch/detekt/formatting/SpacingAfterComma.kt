@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.impl.source.tree.LeafPsiElement
 import com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl
@@ -11,20 +10,27 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.TokenRule
 
 /**
- * Based on KtLint.
- *
- * @author Shyiko
+ * @author Artur Bosch
  */
 class SpacingAfterComma(config: Config) : TokenRule("SpacingAfterComma", Severity.Style, config) {
 
-	override fun procedure(node: ASTNode) {
-		if (node is LeafPsiElement && (node.textMatches(",") || node.textMatches(";")) && !node.isPartOfString() &&
-				PsiTreeUtil.nextLeaf(node) !is PsiWhiteSpace) {
-			addFindings(CodeSmell(id, Entity.Companion.from(node, offset = 1), "Missing spacing after \"${node.text}\""))
+	override fun visitComma(leaf: LeafPsiElement) {
+		checkSpace(leaf)
+	}
+
+	override fun visitSemicolon(leaf: LeafPsiElement) {
+		checkSpace(leaf)
+	}
+
+	private fun checkSpace(leaf: LeafPsiElement) {
+		if (leaf.isSpaceMissing()) {
+			addFindings(CodeSmell(id, Entity.from(leaf, offset = 1)))
 			withAutoCorrect {
-				node.rawInsertAfterMe(PsiWhiteSpaceImpl(" "))
+				leaf.rawInsertAfterMe(PsiWhiteSpaceImpl(" "))
 			}
 		}
 	}
+
+	private fun LeafPsiElement.isSpaceMissing() = !isPartOfString() && PsiTreeUtil.nextLeaf(this) !is PsiWhiteSpace
 
 }
