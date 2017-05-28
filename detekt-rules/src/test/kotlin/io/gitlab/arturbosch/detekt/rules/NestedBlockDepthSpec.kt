@@ -1,11 +1,16 @@
 package io.gitlab.arturbosch.detekt.rules
 
+import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.rules.complexity.NestedBlockDepth
+import io.gitlab.arturbosch.detekt.test.RuleTest
+import io.gitlab.arturbosch.detekt.test.lint
+import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 import org.jetbrains.spek.subject.itBehavesLike
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 /**
@@ -25,3 +30,33 @@ class NestedBlockDepthSpec : SubjectSpek<NestedBlockDepth>({
 	}
 
 })
+
+class NestedBlockDepthTest : RuleTest {
+
+	override val rule: Rule = NestedBlockDepth()
+
+	@Test
+	fun elseIfDoesNotCountAsTwo() {
+		val actual = """
+	override fun procedure(node: ASTNode) {
+		val psi = node.psi
+		if (psi.isNotPartOfEnum() && psi.isNotPartOfString()) {
+			if (psi.isDoubleSemicolon()) {
+				addFindings(CodeSmell(id, Entity.from(psi)))
+				withAutoCorrect {
+					deleteOneOrTwoSemicolons(node as LeafPsiElement)
+				}
+			} else if (psi.isSemicolon()) {
+				val nextLeaf = psi.nextLeaf()
+				if (nextLeaf.isSemicolonOrEOF() || nextTokenHasSpaces(nextLeaf)) {
+					addFindings(CodeSmell(id, Entity.from(psi)))
+					withAutoCorrect { psi.delete() }
+				}
+			}
+		}
+	}
+"""
+		assertThat(rule.lint(actual)).isEmpty()
+	}
+
+}
