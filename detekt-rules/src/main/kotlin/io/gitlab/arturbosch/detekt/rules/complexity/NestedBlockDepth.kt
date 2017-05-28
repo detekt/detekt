@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.rules.isUsedForNesting
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtContainerNodeForControlStructureBody
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtLambdaArgument
 import org.jetbrains.kotlin.psi.KtLoopExpression
@@ -46,9 +47,12 @@ class NestedBlockDepth(config: Config = Config.empty, threshold: Int = 3) : Code
 		}
 
 		override fun visitIfExpression(expression: KtIfExpression) {
-			inc()
-			super.visitIfExpression(expression)
-			dec()
+			// Prevents else if (...) to count as two
+			if (expression.parent !is KtContainerNodeForControlStructureBody) {
+				inc()
+				super.visitIfExpression(expression)
+				dec()
+			}
 		}
 
 		override fun visitLoopExpression(loopExpression: KtLoopExpression) {
