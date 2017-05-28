@@ -17,7 +17,7 @@ class ConsecutiveBlankLinesTest : RuleTest {
 
 	@Test
 	fun threeNewLinesAreTooMuch() {
-		assertThat(rule.lint("fun main() {\n\n\n\tcall()\n}")).hasSize(1)
+		assertThat(rule.lint("fun main() {\n\n\n\tcall()\n\n\n}")).hasSize(2)
 	}
 
 	@Test

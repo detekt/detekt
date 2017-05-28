@@ -9,20 +9,21 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 /**
- * @author Shyiko
+ * @author Artur Bosch
  */
 class MultipleSpacesTest : RuleTest {
 
-	override val rule: Rule = MultipleSpaces(Config.Companion.empty)
+	override val rule: Rule = MultipleSpaces(Config.empty)
 
 	@Test
 	fun testLint() {
-		assertThat(rule.lint("fun main() { x(1, 3);  x(1, 3)\n  \n  }")).hasSize(1)
+		assertThat(rule.lint("""fun  main()  {  call(x, y);  call(x, y)\n  \n  }""")).hasSize(6)
 	}
 
 	@Test
 	fun testFormat() {
-		assertThat(rule.format("""fun main() { x(1, 3);  x(1, 3)\n  \n  }""")).isEqualTo("""fun main() { x(1, 3); x(1, 3)\n \n }""")
+		assertThat(rule.format("""fun  main()  {  call(x, y);  call(x, y)\n  \n  }"""))
+				.isEqualTo("""fun main() { call(x, y); call(x, y)\n \n }""")
 	}
 
 }
