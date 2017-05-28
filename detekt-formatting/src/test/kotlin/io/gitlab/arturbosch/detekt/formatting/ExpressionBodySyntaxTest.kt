@@ -9,9 +9,9 @@ import org.junit.jupiter.api.Test
 /**
  * @author Artur Bosch
  */
-internal class SingleReturnExpressionSyntaxTest : RuleTest {
+internal class ExpressionBodySyntaxTest : RuleTest {
 
-	override val rule: Rule = SingleReturnExpressionSyntax()
+	override val rule: Rule = ExpressionBodySyntax()
 
 	@Test
 	fun transformEasyReturnBlock() {

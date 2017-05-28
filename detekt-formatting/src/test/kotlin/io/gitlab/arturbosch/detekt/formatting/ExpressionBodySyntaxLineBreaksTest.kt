@@ -11,9 +11,9 @@ import org.junit.jupiter.api.Test
 /**
  * @author Artur Bosch
  */
-internal class SingleExpressionEqualsOnSameLineTest : RuleTest {
+internal class ExpressionBodySyntaxLineBreaksTest : RuleTest {
 
-	override val rule: Rule = SingleExpressionEqualsOnSameLine(Config.Companion.empty)
+	override val rule: Rule = ExpressionBodySyntaxLineBreaks(Config.empty)
 
 	@Test
 	fun onlyExpressionSyntaxIsChecked() {
@@ -71,8 +71,8 @@ fun stuff()
 	}
 
 	@Test
-	fun doNotFormatIfMethodChainNotOnOneLine() {
-		val content = """
+	fun alignEqualsToMethodHeaderIfMultilineExpressionBodySyntax() {
+		assertThat(rule.format("""
 fun stuff()
 	=
  		future {
@@ -81,8 +81,15 @@ fun stuff()
  		.onSuccess {
  			6
 		}
-""".trimIndent()
-		assertThat(rule.format(content)).isEqualTo(content)
+""")).isEqualTo("""
+fun stuff() =
+ 		future {
+			5
+		}
+ 		.onSuccess {
+ 			6
+		}
+""".trimIndent())
 
 	}
 }
