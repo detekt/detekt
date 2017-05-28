@@ -1,11 +1,8 @@
 package io.gitlab.arturbosch.detekt.formatting
 
 import com.intellij.lang.ASTNode
-import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.impl.source.tree.LeafPsiElement
-import com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl
 import com.intellij.psi.tree.TokenSet
-import com.intellij.psi.util.PsiTreeUtil
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
@@ -35,14 +32,15 @@ import org.jetbrains.kotlin.lexer.KtTokens.PLUS
 import org.jetbrains.kotlin.lexer.KtTokens.PLUSEQ
 import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.kotlin.psi.KtPrefixExpression
+import org.jetbrains.kotlin.psi.KtSuperExpression
 import org.jetbrains.kotlin.psi.KtTypeArgumentList
 import org.jetbrains.kotlin.psi.KtTypeParameterList
 import org.jetbrains.kotlin.psi.KtValueArgument
 
 /**
- * Based on KtLint.
+ * Adapted from KtLint.
  *
- * @author Shyiko
+ * @author Artur Bosch
  */
 class SpacingAroundOperator(config: Config) : TokenRule("SpacingAroundOperator", Severity.Style, config) {
 
@@ -55,31 +53,13 @@ class SpacingAroundOperator(config: Config) : TokenRule("SpacingAroundOperator",
 				!node.isPartOf(KtTypeParameterList::class) && // fun <T>fn(): T {}
 				!node.isPartOf(KtTypeArgumentList::class) && // C<T>
 				!node.isPartOf(KtValueArgument::class) && // fn(*array)
-				!node.isPartOf(KtImportDirective::class) // import *
-		) {
-			val spacingBefore = PsiTreeUtil.prevLeaf(node, true) is PsiWhiteSpace
-			val spacingAfter = PsiTreeUtil.nextLeaf(node, true) is PsiWhiteSpace
-			when {
-				!spacingBefore && !spacingAfter -> {
-					addFindings(CodeSmell(id, Entity.from(node), "Missing spacing around \":\""))
-					withAutoCorrect {
-						node.rawInsertBeforeMe(PsiWhiteSpaceImpl(" "))
-						node.rawInsertAfterMe(PsiWhiteSpaceImpl(" "))
-					}
-				}
-				!spacingBefore -> {
-					addFindings(CodeSmell(id, Entity.from(node), "Missing spacing before \":\""))
-					withAutoCorrect {
-						node.rawInsertBeforeMe(PsiWhiteSpaceImpl(" "))
-					}
-				}
-				!spacingAfter -> {
-					addFindings(CodeSmell(id, Entity.from(node, offset = 1), "Missing spacing after \":\""))
-					withAutoCorrect {
-						node.rawInsertAfterMe(PsiWhiteSpaceImpl(" "))
-					}
-				}
+				!node.isPartOf(KtImportDirective::class) && // import *
+				!node.isPartOf(KtSuperExpression::class) /*super<T>*/) {
+
+			if (node.trimSpacesAround(autoCorrect)) {
+				addFindings(CodeSmell(id, Entity.from(node)))
 			}
+
 		}
 	}
 
