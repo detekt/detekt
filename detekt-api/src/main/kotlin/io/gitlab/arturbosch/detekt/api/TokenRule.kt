@@ -1,6 +1,8 @@
 package io.gitlab.arturbosch.detekt.api
 
 import com.intellij.lang.ASTNode
+import com.intellij.psi.PsiWhiteSpace
+import com.intellij.psi.impl.source.tree.LeafPsiElement
 import org.jetbrains.kotlin.psi.KtFile
 
 /**
@@ -12,6 +14,7 @@ import org.jetbrains.kotlin.psi.KtFile
  *
  * @author Artur Bosch
  */
+@Suppress("EmptyFunctionBlock")
 abstract class TokenRule(id: String,
 						 severity: Severity = Rule.Severity.Minor,
 						 config: Config = Config.empty) : Rule(id, severity, config) {
@@ -28,6 +31,31 @@ abstract class TokenRule(id: String,
 	/**
 	 * Every ASTNode is considered in isolation. Use 'is' operator to search for wished elements.
 	 */
-	abstract fun procedure(node: ASTNode)
+	open fun procedure(node: ASTNode) {
+		if (node is LeafPsiElement) visitLeaf(node)
+	}
 
+	open fun visitLeaf(leaf: LeafPsiElement) {
+		if (leaf is PsiWhiteSpace) {
+			visitSpaces(leaf)
+			return
+		}
+		when (leaf.text) {
+			"}" -> visitLeftBrace(leaf)
+			"{" -> visitRightBrace(leaf)
+			":" -> visitColon(leaf)
+		}
+	}
+
+	open fun visitColon(colon: LeafPsiElement) {
+	}
+
+	open fun visitLeftBrace(brace: LeafPsiElement) {
+	}
+
+	open fun visitRightBrace(brace: LeafPsiElement) {
+	}
+
+	open fun visitSpaces(space: PsiWhiteSpace) {
+	}
 }
