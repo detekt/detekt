@@ -32,30 +32,38 @@ abstract class TokenRule(id: String,
 	 * Every ASTNode is considered in isolation. Use 'is' operator to search for wished elements.
 	 */
 	open fun procedure(node: ASTNode) {
-		if (node is LeafPsiElement) visitLeaf(node)
+		when (node) {
+			is PsiWhiteSpace -> visitSpaces(node)
+			is LeafPsiElement -> visitLeaf(node)
+
+		}
 	}
 
 	open fun visitLeaf(leaf: LeafPsiElement) {
-		if (leaf is PsiWhiteSpace) {
-			visitSpaces(leaf)
-			return
-		}
 		when (leaf.text) {
 			"}" -> visitLeftBrace(leaf)
 			"{" -> visitRightBrace(leaf)
 			":" -> visitColon(leaf)
+			";" -> visitSemicolon(leaf)
+			"," -> visitComma(leaf)
 		}
 	}
 
-	open fun visitColon(colon: LeafPsiElement) {
+	protected open fun visitSemicolon(leaf: LeafPsiElement) {
 	}
 
-	open fun visitLeftBrace(brace: LeafPsiElement) {
+	protected open fun visitComma(leaf: LeafPsiElement) {
 	}
 
-	open fun visitRightBrace(brace: LeafPsiElement) {
+	protected open fun visitColon(colon: LeafPsiElement) {
 	}
 
-	open fun visitSpaces(space: PsiWhiteSpace) {
+	protected open fun visitLeftBrace(brace: LeafPsiElement) {
+	}
+
+	protected open fun visitRightBrace(brace: LeafPsiElement) {
+	}
+
+	protected open fun visitSpaces(space: PsiWhiteSpace) {
 	}
 }

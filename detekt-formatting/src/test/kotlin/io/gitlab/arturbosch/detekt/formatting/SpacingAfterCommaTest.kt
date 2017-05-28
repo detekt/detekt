@@ -9,20 +9,25 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 /**
- * @author Shyiko
+ * @author Artur Bosch
  */
 class SpacingAfterCommaTest : RuleTest {
 
-	override val rule: Rule = SpacingAfterComma(Config.Companion.empty)
+	override val rule: Rule = SpacingAfterComma(Config.empty)
 
 	@Test
-	fun testLint() {
-		assertThat(rule.lint("fun main() { x(1,3); x(1, 3); println(\",\") }")).hasSize(1)
-		assertThat(rule.lint("enum class E { A, B,C }")).hasSize(1)
+	fun findFourSpacesAfterSemicolonsAndCommas() {
+		assertThat(rule.lint("fun main() { x(1,3);x(1,3);println(\",;\") }")).hasSize(4)
+		assertThat(rule.lint("enum class E { A,B,C }")).hasSize(2)
 	}
 
 	@Test
-	fun testFormat() {
-		assertThat(rule.format("fun main() { x(1,3); x(1, 3) }")).isEqualTo("fun main() { x(1, 3); x(1, 3) }")
+	fun noSpacesWithinStrings() {
+		assertThat(rule.lint("fun main() { println(\",;,,,,;;\") }")).isEmpty()
+	}
+
+	@Test
+	fun spacesAfterSemicolonsAndCommas() {
+		assertThat(rule.format("fun main() { x(1,3);x(1,3) }")).isEqualTo("fun main() { x(1, 3); x(1, 3) }")
 	}
 }
