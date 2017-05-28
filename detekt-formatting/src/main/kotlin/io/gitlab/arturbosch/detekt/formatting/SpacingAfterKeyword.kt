@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.impl.source.tree.LeafPsiElement
 import com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl
@@ -11,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.TokenRule
+import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.lexer.KtTokens.CATCH_KEYWORD
 import org.jetbrains.kotlin.lexer.KtTokens.DO_KEYWORD
 import org.jetbrains.kotlin.lexer.KtTokens.ELSE_KEYWORD
@@ -21,24 +21,29 @@ import org.jetbrains.kotlin.lexer.KtTokens.TRY_KEYWORD
 import org.jetbrains.kotlin.lexer.KtTokens.WHEN_KEYWORD
 import org.jetbrains.kotlin.lexer.KtTokens.WHILE_KEYWORD
 import org.jetbrains.kotlin.psi.KtCatchClause
+import org.jetbrains.kotlin.psi.psiUtil.nextLeaf
 
 /**
- * @author Shyiko
  * @author Artur Bosch
  */
 class SpacingAfterKeyword(config: Config) : TokenRule("SpacingAfterKeyword", Severity.Style, config) {
 
-	private val tokenSet = TokenSet.create(FOR_KEYWORD, IF_KEYWORD, ELSE_KEYWORD, WHILE_KEYWORD, DO_KEYWORD,
+	private val keywords = TokenSet.create(FOR_KEYWORD, IF_KEYWORD, ELSE_KEYWORD, WHILE_KEYWORD, DO_KEYWORD,
 			TRY_KEYWORD, CATCH_KEYWORD, FINALLY_KEYWORD, WHEN_KEYWORD)
-	// todo: but not after fun(, get(, set(
 
-	override fun procedure(node: ASTNode) {
-		if (tokenSet.contains(node.elementType) && node is LeafPsiElement &&
-				PsiTreeUtil.nextLeaf(node) !is PsiWhiteSpace) {
-			addFindings(CodeSmell(id, Entity.from(node, offset = node.text.length), "Missing spacing after \"${node.text}\""))
+	private val keywordsWithoutSpaces = TokenSet.create(KtTokens.GET_KEYWORD, KtTokens.SET_KEYWORD)
+
+	override fun visitLeaf(leaf: LeafPsiElement) {
+		if (keywords.contains(leaf.elementType) && !leaf.nextLeafIsWhiteSpace()) {
+			addFindings(CodeSmell(id, Entity.from(leaf, offset = leaf.text.length)))
 			withAutoCorrect {
-				handleCatchCase(node)
-				node.rawInsertAfterMe(PsiWhiteSpaceImpl(" "))
+				handleCatchCase(leaf)
+				leaf.rawInsertAfterMe(PsiWhiteSpaceImpl(" "))
+			}
+		} else if (keywordsWithoutSpaces.contains(leaf.elementType) && leaf.nextLeafIsWhiteSpace()) {
+			addFindings(CodeSmell(id, Entity.from(leaf, offset = leaf.text.length)))
+			withAutoCorrect {
+				leaf.nextLeaf()?.delete()
 			}
 		}
 	}
