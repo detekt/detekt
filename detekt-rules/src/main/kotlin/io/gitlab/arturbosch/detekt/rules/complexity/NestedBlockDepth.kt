@@ -47,7 +47,7 @@ class NestedBlockDepth(config: Config = Config.empty, threshold: Int = 3) : Code
 		}
 
 		override fun visitIfExpression(expression: KtIfExpression) {
-			// Prevents else if (...) to count as two
+			// Prevents else if (...) to count as two - #51C
 			if (expression.parent !is KtContainerNodeForControlStructureBody) {
 				inc()
 				super.visitIfExpression(expression)
