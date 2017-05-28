@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.isPartOf
 import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.kotlin.psi.KtImportList
 import org.jetbrains.kotlin.psi.KtReferenceExpression

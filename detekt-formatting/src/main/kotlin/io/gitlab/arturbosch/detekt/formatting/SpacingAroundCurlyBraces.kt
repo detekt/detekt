@@ -11,6 +11,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.TokenRule
 import io.gitlab.arturbosch.detekt.api.Unstable
+import io.gitlab.arturbosch.detekt.api.isPartOfString
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 
