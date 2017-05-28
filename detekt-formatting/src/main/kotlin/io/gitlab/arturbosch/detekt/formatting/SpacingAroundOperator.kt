@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.TokenRule
+import io.gitlab.arturbosch.detekt.api.isPartOf
 import org.jetbrains.kotlin.lexer.KtTokens.ANDAND
 import org.jetbrains.kotlin.lexer.KtTokens.ARROW
 import org.jetbrains.kotlin.lexer.KtTokens.DIV

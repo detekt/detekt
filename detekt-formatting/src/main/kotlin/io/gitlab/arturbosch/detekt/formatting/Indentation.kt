@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.TokenRule
+import io.gitlab.arturbosch.detekt.api.isPartOf
 
 /**
  * Based on KtLint.
