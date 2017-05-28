@@ -32,7 +32,7 @@ open class DetektExtension(var version: String = "1.0.0.M10",
 			if (parallel) add("--parallel")
 			if (format) add("--format")
 			if (useTabs) add("--useTabs")
-			if (disableDefaultRuleSets) add("--disable")
+			if (disableDefaultRuleSets) add("--disable-default-rulesets")
 		}
 	}
 
