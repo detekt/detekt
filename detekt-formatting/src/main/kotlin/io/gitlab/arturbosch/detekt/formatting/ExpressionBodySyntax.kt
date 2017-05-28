@@ -14,8 +14,8 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
 /**
  * @author Artur Bosch
  */
-class SingleReturnExpressionSyntax(config: Config = Config.empty) : Rule("SingleReturnExpressionSyntax",
-		Severity.Style, config) {
+class ExpressionBodySyntax(config: Config = Config.empty) : Rule(
+		"ExpressionBodySyntax", Severity.Style, config) {
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		if (function.bodyExpression != null) {
