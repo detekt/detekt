@@ -20,7 +20,7 @@ class Indentation(config: Config) : TokenRule("Indentation", Severity.Style, con
 			val split = node.getText().split("\n")
 			if (split.size > 1) {
 				var offset = node.startOffset + split.first().length + 1
-				split.tail().forEach {
+				split.dropFirst().forEach {
 					if (it.length % 4 != 0) {
 						addFindings(CodeSmell(id, Entity.from(node, offset = 1), "Unexpected indentation (${it.length})"))
 					}

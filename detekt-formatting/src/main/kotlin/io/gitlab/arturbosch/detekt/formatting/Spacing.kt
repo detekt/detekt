@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.formatting
 
 import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiWhiteSpace
 import com.intellij.psi.impl.source.tree.LeafPsiElement
 import com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -13,10 +14,11 @@ fun LeafPsiElement.trimSpacesAround(autoCorrect: Boolean = true): Boolean {
 	return before || after
 }
 
-fun LeafPsiElement.trimSpacesAfter(autoCorrect: Boolean = true) =
-		trimSpaces(autoCorrect, before = false) { it.nextLeaf() }
+fun LeafPsiElement.trimSpacesAfter(autoCorrect: Boolean = true)
+		= trimSpaces(autoCorrect, before = false) { it.nextLeaf() }
 
-fun LeafPsiElement.trimSpacesBefore(autoCorrect: Boolean = true) = trimSpaces(autoCorrect) { it.prevLeaf() }
+fun LeafPsiElement.trimSpacesBefore(autoCorrect: Boolean = true)
+		= trimSpaces(autoCorrect) { it.prevLeaf() }
 
 private fun LeafPsiElement.trimSpaces(
 		autoCorrect: Boolean = true,
@@ -42,7 +44,8 @@ private fun LeafPsiElement.trimSpaces(
 		parent = prevParent
 		iteration++
 	}
-	if (iteration == 0) {
+
+	if (iteration == 0 && this !is PsiWhiteSpace) {
 		if (autoCorrect) {
 			val whiteSpace = PsiWhiteSpaceImpl(" ")
 			if (before) rawInsertBeforeMe(whiteSpace)

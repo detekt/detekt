@@ -9,11 +9,11 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 /**
- * @author Shyiko
+ * @author Artur Bosch
  */
 class TrailingSpacesTest : RuleTest {
 
-	override val rule: Rule = TrailingSpaces(Config.Companion.empty)
+	override val rule: Rule = TrailingSpaces(Config.empty)
 
 	@Test
 	fun testLint() {
@@ -22,6 +22,8 @@ class TrailingSpacesTest : RuleTest {
 
 	@Test
 	fun testFormat() {
-		assertThat(rule.format("fun main() {\n    val a = 1 \n  \n \n} ")).isEqualTo("fun main() {\n    val a = 1\n\n\n}")
+		assertThat(rule.format("fun main() {   \n    val a = 1 \n  \n \n    call()\n} \n\n"))
+				.isEqualTo("fun main() {\n    val a = 1\n\n\n    call()\n}\n")
 	}
+
 }
