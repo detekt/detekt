@@ -9,7 +9,9 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 /**
- * @author Shyiko
+ * Adapted from KtLint formatting project.
+ *
+ * @author Artur Bosch
  */
 class SpacingAfterKeywordTest : RuleTest {
 
@@ -22,7 +24,7 @@ class SpacingAfterKeywordTest : RuleTest {
             fun main() {
                 if(true) {}
                 while(true) {}
-                do {} while(true)
+                do{} while (true)
             }
             """
 		)).hasSize(3)
@@ -36,7 +38,7 @@ class SpacingAfterKeywordTest : RuleTest {
                 if(true) {}
                 if (true) {}
                 while(true) {}
-                do {} while(true)
+                do{} while(true)
                 try{}catch(){}
             }
             """
@@ -49,6 +51,31 @@ class SpacingAfterKeywordTest : RuleTest {
                 do {} while (true)
                 try {} catch () {}
             }
+            """.trimIndent()
+		)
+	}
+
+	@Test
+	fun noSpaceAfterGetterAndSetterFunction() {
+		assertThat(rule.format(
+				"""
+        var x: String
+			get () {
+				return ""
+			}
+			set (value) {
+				x = value
+			}
+            """
+		)).isEqualTo(
+				"""
+        var x: String
+			get() {
+				return ""
+			}
+			set(value) {
+				x = value
+			}
             """.trimIndent()
 		)
 	}
