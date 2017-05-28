@@ -9,19 +9,19 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 /**
- * @author Shyiko
+ * @author Artur Bosch
  */
 class ConsecutiveBlankLinesTest : RuleTest {
 
-	override val rule: Rule = ConsecutiveBlankLines(Config.Companion.empty)
+	override val rule: Rule = ConsecutiveBlankLines(Config.empty)
 
 	@Test
 	fun threeNewLinesAreTooMuch() {
-		assertThat(rule.lint("fun main() {\n\n\n}")).hasSize(1)
+		assertThat(rule.lint("fun main() {\n\n\n\tcall()\n}")).hasSize(1)
 	}
 
 	@Test
-	fun testFormat() {
+	fun newLinesTrimmedIndentationPreserved() {
 		assertThat(rule.format("fun main() {\n\n\n\tcall()\n}\n\n\n")).isEqualTo("fun main() {\n\n\tcall()\n}\n\n")
 	}
 
