@@ -17,8 +17,8 @@ internal fun PsiElement.isPartOfString() = isPartOf(org.jetbrains.kotlin.psi.KtS
 internal fun PsiElement.isNotPartOfString() = !isPartOfString()
 internal fun PsiElement.isNotPartOfEnum() = getNonStrictParentOfType(KtEnumEntry::class.java) == null
 
-internal fun <T> List<T>.head() = this.subList(0, this.size - 1)
-internal fun <T> List<T>.tail() = this.subList(1, this.size)
+internal fun <T> List<T>.dropLast() = this.subList(0, this.size - 1)
+internal fun <T> List<T>.dropFirst() = this.subList(1, this.size)
 
 internal fun PsiElement.startAndEndLine(): Pair<Int, Int> =
 		Location.startLineAndColumn(this).line to
