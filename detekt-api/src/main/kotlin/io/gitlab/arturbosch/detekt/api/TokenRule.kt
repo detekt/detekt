@@ -40,13 +40,15 @@ abstract class TokenRule(id: String,
 	}
 
 	open fun visitLeaf(leaf: LeafPsiElement) {
-		when (leaf.text) {
-			"}" -> visitLeftBrace(leaf)
-			"{" -> visitRightBrace(leaf)
-			":" -> visitColon(leaf)
-			";" -> visitSemicolon(leaf)
-			";;" -> visitDoubleSemicolon(leaf)
-			"," -> visitComma(leaf)
+		if (!leaf.isPartOfString()) {
+			when (leaf.text) {
+				"}" -> visitLeftBrace(leaf)
+				"{" -> visitRightBrace(leaf)
+				":" -> visitColon(leaf)
+				";" -> visitSemicolon(leaf)
+				";;" -> visitDoubleSemicolon(leaf)
+				"," -> visitComma(leaf)
+			}
 		}
 	}
 

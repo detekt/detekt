@@ -5,15 +5,13 @@ package io.gitlab.arturbosch.detekt.formatting
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiWhiteSpace
 import io.gitlab.arturbosch.detekt.api.Location
+import io.gitlab.arturbosch.detekt.api.isPartOfString
 import org.jetbrains.kotlin.psi.KtEnumEntry
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.nextLeaf
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
-import kotlin.reflect.KClass
 
-internal fun PsiElement.isPartOf(clazz: KClass<out PsiElement>) = getNonStrictParentOfType(clazz.java) != null
-internal fun PsiElement.isPartOfString() = isPartOf(org.jetbrains.kotlin.psi.KtStringTemplateEntry::class)
 internal fun PsiElement.isNotPartOfString() = !isPartOfString()
 internal fun PsiElement.isNotPartOfEnum() = getNonStrictParentOfType(KtEnumEntry::class.java) == null
 

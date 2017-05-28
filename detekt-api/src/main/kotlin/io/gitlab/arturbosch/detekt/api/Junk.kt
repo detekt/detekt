@@ -1,8 +1,12 @@
 package io.gitlab.arturbosch.detekt.api
 
 import com.intellij.lang.ASTNode
+import com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtPsiUtil
+import org.jetbrains.kotlin.psi.KtStringTemplateEntry
+import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
+import kotlin.reflect.KClass
 
 private val identifierRegex = Regex("[aA-zZ]+([-][aA-zZ]+)*")
 
@@ -36,3 +40,13 @@ fun withPsiTextRuntimeError(defaultValue: () -> String, block: () -> String): St
 		} else throw e
 	}
 }
+
+/**
+ * Tests if this element is part of given PsiElement.
+ */
+fun PsiElement.isPartOf(clazz: KClass<out PsiElement>) = getNonStrictParentOfType(clazz.java) != null
+
+/**
+ * Tests of this element is part of a kotlin string.
+ */
+fun PsiElement.isPartOfString() = isPartOf(KtStringTemplateEntry::class)
