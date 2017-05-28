@@ -10,6 +10,8 @@ import org.junit.jupiter.api.Test
 
 /**
  * Adapted from KtLint formatting project.
+ *
+ * @author Artur Bosch
  */
 class SpacingAroundColonTest : RuleTest {
 
