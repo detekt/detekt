@@ -47,7 +47,7 @@ class Main {
 	@Parameter(names = arrayOf("--output", "-o"), description = "True if findings should be written into a report.detekt file inside the report folder.")
 	var output: Boolean = false
 
-	@Parameter(names = arrayOf("--disableDefaultRuleSets", "-dd"), description = "Disables default rule sets.")
+	@Parameter(names = arrayOf("--disable-default-rulesets", "-dd"), description = "Disables default rule sets.")
 	var disableDefaultRuleSets: Boolean = false
 
 	@Parameter(names = arrayOf("--debug", "-d"), description = "Debugs given ktFile by printing its elements.")

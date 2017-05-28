@@ -8,7 +8,7 @@ import org.gradle.api.tasks.JavaExec
 class DetektPlugin : Plugin<Project> {
 
 	private val formatString = "--format"
-	private val disableDefaults = "--disableDefaultRuleSets"
+	private val disableDefaults = "--disable-default-rulesets"
 
 	override fun apply(project: Project) {
 		val detektExtension = project.extensions.create("detekt", DetektExtension::class.java)
