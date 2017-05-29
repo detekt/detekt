@@ -6,12 +6,16 @@ import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.ProjectComplexityProcessor
 import io.gitlab.arturbosch.detekt.core.ProjectLLOCProcessor
 
+interface Executable {
+	fun execute()
+}
+
 /**
  * @author Artur Bosch
  */
-class Runner(private val main: Main) {
+class Runner(private val main: Main) : Executable {
 
-	fun execute() {
+	override fun execute() {
 		val (settings, config) = createSettingsAndConfig()
 
 		val start = System.currentTimeMillis()

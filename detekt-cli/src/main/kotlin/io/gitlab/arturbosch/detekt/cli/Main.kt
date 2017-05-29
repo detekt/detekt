@@ -65,11 +65,11 @@ class Main {
 		@JvmStatic
 		fun main(args: Array<String>) {
 			val main = parseArgumentsCheckingReportDirectory(args)
-			if (main.debug) {
-				Debugger(main).execute()
-				return
+			val executable = when {
+				main.debug -> Debugger(main)
+				else -> Runner(main)
 			}
-			Runner(main).execute()
+			executable.execute()
 		}
 
 		private fun parseArgumentsCheckingReportDirectory(args: Array<String>): Main {
