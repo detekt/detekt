@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.formatting
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Unstable
 import io.gitlab.arturbosch.detekt.test.RuleTest
 import io.gitlab.arturbosch.detekt.test.format
 import io.gitlab.arturbosch.detekt.test.lint
@@ -14,10 +13,9 @@ import org.junit.jupiter.api.Test
  *
  * @author Artur Bosch
  */
-@Unstable("Remove debug flag on #47 done")
 class SpacingAroundBracesTest : RuleTest {
 
-	override val rule: Rule = SpacingAroundBraces(Config.empty, debug = true)
+	override val rule: Rule = SpacingAroundBraces(Config.empty)
 
 	@Test
 	fun testLint() {
@@ -40,7 +38,7 @@ class SpacingAroundBracesTest : RuleTest {
 
 	@Test
 	fun testFormat() {
-		assertThat(SpacingAroundBraces(Config.empty, debug = false).format(
+		assertThat(rule.format(
 				"""
             fun main() {
                 val v = if (true){return ""}
@@ -53,7 +51,7 @@ class SpacingAroundBracesTest : RuleTest {
                 try{call()}catch (e: Exception){}
                 call({}, {})
                 a.let{}.apply({})
-                f({ if (true) {r.add(v)};r})
+                f({ if (true) {r.add(v)}; r})
                 emptyList<String>().find { true }!!.hashCode()
                 emptyList<String>().find { true } !!.hashCode()
             }
@@ -71,11 +69,12 @@ class SpacingAroundBracesTest : RuleTest {
                 try { call() } catch (e: Exception) {}
                 call({}, {})
                 a.let {}.apply({})
-                f({ if (true) { r.add(v) };r })
+                f({ if (true) { r.add(v) }; r })
                 emptyList<String>().find { true }!!.hashCode()
                 emptyList<String>().find { true }!!.hashCode()
             }
             """.trimIndent()
 		)
 	}
+
 }
