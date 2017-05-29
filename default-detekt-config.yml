@@ -4,19 +4,24 @@ build:
   warningThreshold: 5
   failThreshold: 10
   weights:
-    code-smell: 2
+    complexity: 2
+    formatting: 0
     LongParameterList: 1
+    comments: 0.5
 
 potential-bugs:
   active: true
+  DuplicateCaseInWhenExpression:
+    active: true
+  EqualsWithHashCodeExist:
+    active: true
+  ExplicitGarbageCollectionCall:
+    active: true
 
 exceptions:
   active: true
 
-comments:
-  active: true
-
-empty:
+empty-blocks:
   active: true
 
 complexity:
@@ -79,6 +84,12 @@ formatting:
     autoCorrect: true
   OptionalUnit:
     active: true
+    autoCorrect: true
+  ExpressionBodySyntax:
+    active: false
+    autoCorrect: true
+  ExpressionBodySyntaxLineBreaks:
+    active: false
     autoCorrect: true
 
 style:
