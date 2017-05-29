@@ -75,4 +75,17 @@ class SpacingAroundOperatorsTest : RuleTest {
             """.trimIndent()
 		)
 	}
+
+	@Test
+	fun lineBreaksCanSeparateOperands() {
+		assertThat(rule.lint("val x = 0 +\n\t0")).isEmpty()
+		assertThat(rule.lint("""
+		fun main(): Boolean {
+			return nextElementType != null &&
+					nextElementType == KtTokens.DOT ||
+					nextElementType == KtTokens.COMMA ||
+					nextElementType == KtTokens.RPAR
+			}
+		""")).isEmpty()
+	}
 }
