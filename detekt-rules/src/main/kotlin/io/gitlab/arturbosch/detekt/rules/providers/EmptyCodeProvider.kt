@@ -19,7 +19,7 @@ import io.gitlab.arturbosch.detekt.rules.empty.EmptyWhileBlock
  */
 class EmptyCodeProvider : RuleSetProvider {
 
-	override val ruleSetId: String = "empty"
+	override val ruleSetId: String = "empty-blocks"
 
 	override fun instance(config: Config): RuleSet {
 		return RuleSet(ruleSetId, listOf(
