@@ -157,7 +157,7 @@ allprojects {
 }
 
 detekt {
-	config = "$project.projectDir/default-detekt-config.yml"
+	config = "$project.projectDir/detekt-cli/src/main/resources/default-detekt-config.yml"
 	filters = '.*/test/.*'
 	debug = true
 }
