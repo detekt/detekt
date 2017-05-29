@@ -8,20 +8,21 @@ import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.psiUtil.nextLeaf
 import org.jetbrains.kotlin.psi.psiUtil.prevLeaf
 
-fun LeafPsiElement.trimSpacesAround(autoCorrect: Boolean = true): Boolean {
-	val before = trimSpaces(autoCorrect) { it.prevLeaf() }
-	val after = trimSpaces(autoCorrect, before = false) { it.nextLeaf() }
+fun LeafPsiElement.trimSpacesAround(autoCorrect: Boolean = true, ignoreLineBreaks: Boolean = false): Boolean {
+	val before = trimSpaces(autoCorrect, ignoreLineBreaks) { it.prevLeaf() }
+	val after = trimSpaces(autoCorrect, ignoreLineBreaks, before = false) { it.nextLeaf() }
 	return before || after
 }
 
-fun LeafPsiElement.trimSpacesAfter(autoCorrect: Boolean = true)
-		= trimSpaces(autoCorrect, before = false) { it.nextLeaf() }
+fun LeafPsiElement.trimSpacesAfter(autoCorrect: Boolean = true, ignoreLineBreaks: Boolean = false)
+		= trimSpaces(autoCorrect, ignoreLineBreaks, before = false) { it.nextLeaf() }
 
-fun LeafPsiElement.trimSpacesBefore(autoCorrect: Boolean = true)
-		= trimSpaces(autoCorrect) { it.prevLeaf() }
+fun LeafPsiElement.trimSpacesBefore(autoCorrect: Boolean = true, ignoreLineBreaks: Boolean = false)
+		= trimSpaces(autoCorrect, ignoreLineBreaks) { it.prevLeaf() }
 
 private fun LeafPsiElement.trimSpaces(
 		autoCorrect: Boolean = true,
+		ignoreLineBreaks: Boolean = false,
 		before: Boolean = true,
 		function: (PsiElement) -> PsiElement?): Boolean {
 
@@ -35,7 +36,7 @@ private fun LeafPsiElement.trimSpaces(
 				if (autoCorrect) parent.delete()
 				modified = true
 			}
-			parent.node.text.length > 1 -> {
+			if (!ignoreLineBreaks) parent.node.text.length > 1 && "\n" !in parent.text else parent.node.text.length > 1 -> {
 				if (autoCorrect) (parent as LeafPsiElement).rawReplaceWithText(" ")
 				modified = true
 			}
