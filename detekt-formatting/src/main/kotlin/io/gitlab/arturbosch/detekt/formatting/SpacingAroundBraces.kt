@@ -8,7 +8,6 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.TokenRule
-import io.gitlab.arturbosch.detekt.api.Unstable
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.psiUtil.nextLeaf
@@ -19,8 +18,7 @@ import org.jetbrains.kotlin.psi.psiUtil.prevLeaf
  *
  * @author Artur Bosch
  */
-@Unstable("This Rule does not add findings as stated in #47")
-class SpacingAroundBraces(config: Config, val debug: Boolean = false) : TokenRule(
+class SpacingAroundBraces(config: Config) : TokenRule(
 		"SpacingAroundBraces", Severity.Style, config) {
 
 	override fun visitLeftBrace(brace: LeafPsiElement) {
@@ -43,7 +41,7 @@ class SpacingAroundBraces(config: Config, val debug: Boolean = false) : TokenRul
 	private fun PsiElement?.checkForInvalidSpace(brace: LeafPsiElement) {
 		if (this is PsiWhiteSpace && !textContains('\n') &&
 				shouldNotToBeSeparatedBySpace(nextLeaf(skipEmptyElements = true))) {
-			if (debug) addFindings(CodeSmell(id, Entity.from(brace)))
+			addFindings(CodeSmell(id, Entity.from(brace)))
 			withAutoCorrect { delete() }
 		}
 	}
@@ -62,7 +60,7 @@ class SpacingAroundBraces(config: Config, val debug: Boolean = false) : TokenRul
 			}
 		}
 
-		if (debug && (!spacingBefore || !spacingAfter)) {
+		if (!spacingBefore || !spacingAfter) {
 			addFindings(CodeSmell(id, Entity.from(this)))
 		}
 	}
