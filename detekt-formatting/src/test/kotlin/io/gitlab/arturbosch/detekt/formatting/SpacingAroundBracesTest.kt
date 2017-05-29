@@ -10,12 +10,14 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 /**
- * @author Shyiko
+ * Adapted from KtLint.
+ *
+ * @author Artur Bosch
  */
 @Unstable("Remove debug flag on #47 done")
-class SpacingAroundCurlyBracesTest : RuleTest {
+class SpacingAroundBracesTest : RuleTest {
 
-	override val rule: Rule = SpacingAroundCurlyBraces(Config.Companion.empty, debug = true)
+	override val rule: Rule = SpacingAroundBraces(Config.empty, debug = true)
 
 	@Test
 	fun testLint() {
@@ -38,7 +40,7 @@ class SpacingAroundCurlyBracesTest : RuleTest {
 
 	@Test
 	fun testFormat() {
-		assertThat(SpacingAroundCurlyBraces(Config.Companion.empty, debug = false).format(
+		assertThat(SpacingAroundBraces(Config.empty, debug = false).format(
 				"""
             fun main() {
                 val v = if (true){return ""}
