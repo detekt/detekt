@@ -31,6 +31,49 @@ class UnusedImportsTest : RuleTest {
 	}
 
 	@Test
+	fun shouldTakeIntoAccountDocumentation() {
+		assertThat(rule.lint(
+				"""
+            import tasks.success
+            import tasks.failure
+						import tasks.undefined
+
+						/**
+						*  Reference to [failure]
+						*/
+						class Test{
+							/** Reference to [undefined]*/
+							fun main() {
+								task {
+								} success {
+								}
+							}
+						}
+            """
+		)).isEmpty()
+	}
+
+	@Test
+	internal fun shouldIgnoreLabelForLink() {
+		assertThat(rule.lint(
+				"""
+            import tasks.success
+            import tasks.failure
+						import tasks.undefined
+
+						/**
+						* Reference [undefined][failure]
+						*/
+						fun main() {
+							task {
+							} success {
+							}
+						}
+            """
+		)).hasSize(1)
+	}
+
+	@Test
 	fun testLint() {
 		assertThat(rule.lint(
 				"""
@@ -64,7 +107,9 @@ class UnusedImportsTest : RuleTest {
             import p.C
             import escaped.`when`
             import escaped.`foo`
+            import p.D
 
+						/** reference to [D] */
             fun main() {
                 println(a())
                 C.call()
@@ -78,7 +123,9 @@ class UnusedImportsTest : RuleTest {
             import p2.B as B2
             import p.C
             import escaped.`when`
+            import p.D
 
+						/** reference to [D] */
             fun main() {
                 println(a())
                 C.call()

@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.isPartOf
+import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.kotlin.psi.KtImportList
 import org.jetbrains.kotlin.psi.KtReferenceExpression
@@ -20,6 +21,7 @@ class UnusedImports(config: Config) : Rule("UnusedImports", Severity.Style, conf
 			"modAssign", "equals", "compareTo")
 
 	private var imports = mutableListOf<Pair<String, KtImportDirective>>()
+	val kotlinDocReferencesRegExp = Regex("\\[([^\\]]+)\\](?!\\[)")
 
 	override fun visitFile(file: PsiFile?) {
 		imports.clear()
@@ -34,10 +36,10 @@ class UnusedImports(config: Config) : Rule("UnusedImports", Severity.Style, conf
 
 	override fun visitImportList(importList: KtImportList) {
 		imports = importList.imports.filter { it.isValidImport }
-				.filter { it.importPath?.importedName?.identifier?.contains("*")?.not() ?: false }
-				.filter { it.importPath?.importedName?.identifier != null }
-				.filter { !operatorSet.contains(it.importPath?.importedName?.identifier) }
-				.map { it.importPath?.importedName?.identifier!! to it }
+				.filter { it.identifier()?.contains("*")?.not() ?: false }
+				.filter { it.identifier() != null }
+				.filter { !operatorSet.contains(it.identifier()) }
+				.map { it.identifier()!! to it }
 				.toMutableList()
 		super.visitImportList(importList)
 	}
@@ -53,4 +55,18 @@ class UnusedImports(config: Config) : Rule("UnusedImports", Severity.Style, conf
 		super.visitReferenceExpression(expression)
 	}
 
+	override fun visitDeclaration(dcl: KtDeclaration) {
+		dcl.docComment?.getDefaultSection()?.getContent()?.let {
+			kotlinDocReferencesRegExp.findAll(it, 0)
+					.map { it.groupValues[1] }
+					.forEach {
+						imports.find { pair -> pair.second.identifier() == it }?.let {
+							imports.remove(it)
+						}
+					}
+		}
+		super.visitDeclaration(dcl)
+	}
 }
+
+private fun KtImportDirective.identifier() = this.importPath?.importedName?.identifier
