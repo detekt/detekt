@@ -281,7 +281,7 @@ through the --rules "path/to/jar" parameter or via gradle/maven classpath setup.
 ### <a name="rulesetconfig">RuleSet Configuration</a>
 
 To turn off specific rules/rule sets or change threshold values for certain rules a yaml configuration file can be used.
-Copy and modify the `default-detekt-config.yml` from the _detekt_ folder for your needs.
+Export the default config with the `--generate-config` flag or copy and modify the `detekt-cli/src/main/resources/default-detekt-config.yml` for your needs.
 
 ```yml
 code-smell:
