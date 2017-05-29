@@ -42,8 +42,8 @@ abstract class TokenRule(id: String,
 	open fun visitLeaf(leaf: LeafPsiElement) {
 		if (!leaf.isPartOfString()) {
 			when (leaf.text) {
-				"}" -> visitLeftBrace(leaf)
-				"{" -> visitRightBrace(leaf)
+				"}" -> visitRightBrace(leaf)
+				"{" -> visitLeftBrace(leaf)
 				":" -> visitColon(leaf)
 				";" -> visitSemicolon(leaf)
 				";;" -> visitDoubleSemicolon(leaf)

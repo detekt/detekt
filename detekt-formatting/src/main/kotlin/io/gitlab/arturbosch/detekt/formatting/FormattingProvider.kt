@@ -17,7 +17,7 @@ class FormattingProvider : RuleSetProvider {
 				SpacingAfterComma(config),
 				SpacingAfterKeyword(config),
 				SpacingAroundColon(config),
-				SpacingAroundCurlyBraces(config),
+				SpacingAroundBraces(config),
 				SpacingAroundOperator(config),
 				TrailingSpaces(config),
 				UnusedImports(config),
