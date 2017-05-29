@@ -34,7 +34,7 @@ class ExpressionBodySyntaxLineBreaks(config: Config = Config.empty) : Rule(
 				addFindings(CodeSmell(id, Entity.from(equals)))
 				withAutoCorrect { body.alignToEqualsToken(equals) }
 			} else {
-				if (equals.trimSpacesBefore(autoCorrect)) {
+				if (equals.trimSpacesBefore(autoCorrect, ignoreLineBreaks = true)) {
 					addFindings(CodeSmell(id, Entity.from(equals)))
 				}
 			}
