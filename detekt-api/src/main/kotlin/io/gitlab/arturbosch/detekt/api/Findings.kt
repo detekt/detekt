@@ -6,7 +6,6 @@ import com.intellij.testFramework.LightVirtualFile
 import org.jetbrains.kotlin.diagnostics.DiagnosticUtils
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
-import org.jetbrains.kotlin.psi.psiUtil.getTextWithLocation
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
 import kotlin.reflect.full.memberProperties
 
@@ -169,16 +168,20 @@ data class Location(val source: SourceLocation,
 			val sourceLocation = SourceLocation(start.line, start.column)
 			val textLocation = TextLocation(element.startOffset + offset, element.endOffset + offset)
 			val fileName = element.originalFilePath() ?: element.containingFile.name
-			val locationText = withPsiTextRuntimeError({ element.searchName() }) {
-				element.getTextWithLocation()
-			}
+			val locationText = element.getTextAtLocationSafe()
 			return Location(sourceLocation, textLocation, locationText, fileName)
 		}
 
+		@Suppress("CatchIndexOutOfBoundsException")
 		fun startLineAndColumn(element: PsiElement, offset: Int = 0): DiagnosticUtils.LineAndColumn {
-			val range = element.textRange
-			return DiagnosticUtils.getLineAndColumnInPsiFile(element.containingFile,
-					TextRange(range.startOffset + offset, range.endOffset + offset))
+			try {
+				val range = element.textRange
+				return DiagnosticUtils.getLineAndColumnInPsiFile(element.containingFile,
+						TextRange(range.startOffset + offset, range.endOffset + offset))
+			} catch (e: IndexOutOfBoundsException) {
+				// #18 - somehow the TextRange is out of bound on '}' leaf nodes, returning fail safe -1
+				return DiagnosticUtils.LineAndColumn(-1, -1, null)
+			}
 		}
 
 		private fun PsiElement.originalFilePath(): String? {

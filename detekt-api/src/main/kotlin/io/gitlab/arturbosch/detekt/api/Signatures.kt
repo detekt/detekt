@@ -7,6 +7,7 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
+import org.jetbrains.kotlin.psi.psiUtil.getTextWithLocation
 import org.jetbrains.kotlin.psi.psiUtil.parents
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
 
@@ -14,8 +15,10 @@ import org.jetbrains.kotlin.psi.psiUtil.startOffset
  * @author Artur Bosch
  */
 
+fun PsiElement.getTextAtLocationSafe(): String = getTextSafe(defaultValue = { searchName() }) { getTextWithLocation() }
+
 internal fun PsiElement.searchName(): String {
-	return this.namedUnwrappedElement?.name ?: "<NoNameFound>"
+	return this.namedUnwrappedElement?.name ?: "<UnknownName>"
 }
 
 internal fun PsiElement.searchClass(): String {
@@ -63,7 +66,7 @@ private fun buildClassSignature(classOrObject: KtClassOrObject): String {
 		baseName += typeParameters.joinToString(", ") { it.text }
 		baseName += ">"
 	}
-	val extendedEntries = classOrObject.getSuperTypeListEntries()
+	val extendedEntries = classOrObject.superTypeListEntries
 	if (extendedEntries.isNotEmpty()) baseName += " : "
 	extendedEntries.forEach { baseName += it.typeAsUserType?.referencedName ?: "" }
 	return baseName
@@ -86,7 +89,26 @@ private fun buildFunctionSignature(element: KtNamedFunction): String {
 	require(methodStart < methodEnd) {
 		"Error building function signature with range $methodStart - $methodEnd for element: ${element.text}"
 	}
-	return withPsiTextRuntimeError({ element.nameAsSafeName.identifier }) {
+	return getTextSafe(defaultValue = { element.nameAsSafeName.identifier }) {
 		element.text.substring(methodStart, methodEnd)
 	}
 }
+
+/**
+ * When analyzing sub path 'testData' of the kotlin project, CompositeElement.getText() throws
+ * a RuntimeException stating 'Underestimated text length' - #65.
+ */
+@Suppress("CatchRuntimeException")
+private fun getTextSafe(defaultValue: () -> String, block: () -> String): String {
+	return try {
+		block()
+	} catch (e: RuntimeException) {
+		val message = e.message
+		if (message != null && message.contains("Underestimated text length")) {
+			return defaultValue() + "!<UnderestimatedTextLengthException>"
+		} else {
+			return defaultValue()
+		}
+	}
+}
+
