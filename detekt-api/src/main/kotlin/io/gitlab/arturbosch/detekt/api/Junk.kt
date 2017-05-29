@@ -27,21 +27,6 @@ internal fun ASTNode.visit(visitor: DetektVisitor) {
 }
 
 /**
- * When analyzing sub path 'testData' of the kotlin project, CompositeElement.getText() throws
- * a RuntimeException stating 'Underestimated text length' - #65.
- */
-fun withPsiTextRuntimeError(defaultValue: () -> String, block: () -> String): String {
-	return try {
-		block()
-	} catch (e: RuntimeException) {
-		val message = e.message
-		if (message != null && message.contains("Underestimated text length")) {
-			return defaultValue() + "!<UnderestimatedTextLengthException>"
-		} else throw e
-	}
-}
-
-/**
  * Tests if this element is part of given PsiElement.
  */
 fun PsiElement.isPartOf(clazz: KClass<out PsiElement>) = getNonStrictParentOfType(clazz.java) != null
