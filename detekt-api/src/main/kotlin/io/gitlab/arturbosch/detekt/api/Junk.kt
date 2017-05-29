@@ -35,3 +35,19 @@ fun PsiElement.isPartOf(clazz: KClass<out PsiElement>) = getNonStrictParentOfTyp
  * Tests of this element is part of a kotlin string.
  */
 fun PsiElement.isPartOfString() = isPartOf(KtStringTemplateEntry::class)
+
+/*
+ * When analyzing sub path 'testData' of the kotlin project, CompositeElement.getText() throws
+ * a RuntimeException stating 'Underestimated text length' - #65.
+ */
+@Suppress("CatchRuntimeException")
+internal fun getTextSafe(defaultValue: () -> String, block: () -> String) = try {
+	block()
+} catch (e: RuntimeException) {
+	val message = e.message
+	if (message != null && message.contains("Underestimated text length")) {
+		defaultValue() + "!<UnderestimatedTextLengthException>"
+	} else {
+		defaultValue()
+	}
+}

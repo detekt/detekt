@@ -7,15 +7,8 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
-import org.jetbrains.kotlin.psi.psiUtil.getTextWithLocation
 import org.jetbrains.kotlin.psi.psiUtil.parents
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
-
-/**
- * @author Artur Bosch
- */
-
-fun PsiElement.getTextAtLocationSafe(): String = getTextSafe(defaultValue = { searchName() }) { getTextWithLocation() }
 
 internal fun PsiElement.searchName(): String {
 	return this.namedUnwrappedElement?.name ?: "<UnknownName>"
@@ -93,22 +86,3 @@ private fun buildFunctionSignature(element: KtNamedFunction): String {
 		element.text.substring(methodStart, methodEnd)
 	}
 }
-
-/**
- * When analyzing sub path 'testData' of the kotlin project, CompositeElement.getText() throws
- * a RuntimeException stating 'Underestimated text length' - #65.
- */
-@Suppress("CatchRuntimeException")
-private fun getTextSafe(defaultValue: () -> String, block: () -> String): String {
-	return try {
-		block()
-	} catch (e: RuntimeException) {
-		val message = e.message
-		if (message != null && message.contains("Underestimated text length")) {
-			return defaultValue() + "!<UnderestimatedTextLengthException>"
-		} else {
-			return defaultValue()
-		}
-	}
-}
-
