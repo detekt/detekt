@@ -110,7 +110,8 @@ More on this topic see section _Custom RuleSets_.
 
 #### <a name="gradleplugin">Using the detekt-gradle-plugin</a>
 
-
+For gradle version >= 2.1
+ 
 ```groovy
 buildscript {
     repositories {
@@ -132,6 +133,26 @@ detekt {
     config = "$project.projectDir/detekt.yml" // Use $project.projectDir to navigate inside your project 
     filters = ".*test.*, .*/resources/.*" // What paths to exclude? Use comma oder semicolon to separate
     rulesets = "other/optional/ruleset.jar" // Custom rule sets can be linked to this, use comma oder semicolon to separate 
+}
+```
+
+For all gradle versions:
+
+```groovy
+buildscript {
+  repositories {
+    maven { url "http://dl.bintray.com/arturbosch/code-analysis" }
+    maven { url "https://plugins.gradle.org/m2/" }
+  }
+  dependencies {
+    classpath "gradle.plugin.io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.0.0.M10.2"
+  }
+}
+
+apply plugin: "io.gitlab.arturbosch.detekt"
+
+detekt {
+    ...
 }
 ```
 
