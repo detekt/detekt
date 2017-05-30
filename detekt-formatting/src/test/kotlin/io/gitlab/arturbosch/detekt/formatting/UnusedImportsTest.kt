@@ -36,19 +36,19 @@ class UnusedImportsTest : RuleTest {
 				"""
             import tasks.success
             import tasks.failure
-						import tasks.undefined
+            import tasks.undefined
 
-						/**
-						*  Reference to [failure]
-						*/
-						class Test{
-							/** Reference to [undefined]*/
-							fun main() {
-								task {
-								} success {
-								}
-							}
-						}
+            /**
+            *  Reference to [failure]
+            */
+            class Test{
+              /** Reference to [undefined]*/
+              fun main() {
+                task {
+                } success {
+                }
+              }
+            }
             """
 		)).isEmpty()
 	}
@@ -59,16 +59,16 @@ class UnusedImportsTest : RuleTest {
 				"""
             import tasks.success
             import tasks.failure
-						import tasks.undefined
+            import tasks.undefined
 
-						/**
-						* Reference [undefined][failure]
-						*/
-						fun main() {
-							task {
-							} success {
-							}
-						}
+            /**
+            * Reference [undefined][failure]
+            */
+            fun main() {
+            task {
+            } success {
+            }
+}
             """
 		)).hasSize(1)
 	}
@@ -109,7 +109,7 @@ class UnusedImportsTest : RuleTest {
             import escaped.`foo`
             import p.D
 
-						/** reference to [D] */
+            /** reference to [D] */
             fun main() {
                 println(a())
                 C.call()
@@ -125,7 +125,7 @@ class UnusedImportsTest : RuleTest {
             import escaped.`when`
             import p.D
 
-						/** reference to [D] */
+            /** reference to [D] */
             fun main() {
                 println(a())
                 C.call()
