@@ -19,7 +19,7 @@ data class Location(val source: SourceLocation,
 					val file: String) : Compactable {
 
 	override fun compact(): String {
-		return "Line/Column=$source - Path=$file"
+		return "$file:$source"
 	}
 
 	companion object {
@@ -58,7 +58,7 @@ data class Location(val source: SourceLocation,
  */
 data class SourceLocation(val line: Int, val column: Int) {
 	override fun toString(): String {
-		return "($line,$column)"
+		return "$line:$column"
 	}
 }
 
@@ -67,6 +67,6 @@ data class SourceLocation(val line: Int, val column: Int) {
  */
 data class TextLocation(val start: Int, val end: Int) {
 	override fun toString(): String {
-		return "($start,$end)"
+		return "$start:$end"
 	}
 }
