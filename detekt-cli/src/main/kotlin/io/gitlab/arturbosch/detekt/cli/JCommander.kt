@@ -3,9 +3,6 @@ package io.gitlab.arturbosch.detekt.cli
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.ParameterException
 
-/**
- * @author Artur Bosch
- */
 private val jCommander = JCommander()
 
 fun parseArguments(args: Array<String>): Main {
