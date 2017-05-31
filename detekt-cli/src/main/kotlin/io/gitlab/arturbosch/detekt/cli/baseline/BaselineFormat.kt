@@ -1,0 +1,65 @@
+package io.gitlab.arturbosch.detekt.cli.baseline
+
+import com.sun.xml.internal.txw2.output.IndentingXMLStreamWriter
+import java.io.OutputStream
+import java.nio.charset.StandardCharsets
+import java.nio.file.Files
+import java.nio.file.Path
+import javax.xml.parsers.SAXParserFactory
+import javax.xml.stream.XMLOutputFactory
+import javax.xml.stream.XMLStreamException
+import javax.xml.stream.XMLStreamWriter
+
+/**
+ * @author Artur Bosch
+ */
+object BaselineFormat {
+
+	private val UTF_8 = StandardCharsets.UTF_8.name()
+	private val outputFactory by lazy { XMLOutputFactory.newFactory() }
+	private val inputFactory by lazy { SAXParserFactory.newInstance() }
+	private fun xmlReader() = inputFactory.newSAXParser()
+	private fun xmlWriter(out: OutputStream) = outputFactory.createXMLStreamWriter(out, UTF_8)
+
+	fun read(path: Path): Baseline {
+		try {
+			Files.newInputStream(path).use {
+				val reader = xmlReader()
+				val handler = BaselineHandler()
+				reader.parse(it, handler)
+				return handler.createBaseline()
+			}
+		} catch (error: XMLStreamException) {
+			throw InvalidBaselineState("Error while reading the baseline xml file!", error)
+		}
+	}
+
+	fun write(baseline: Baseline, path: Path) {
+		try {
+			Files.newOutputStream(path).use {
+				val writer = IndentingXMLStreamWriter(xmlWriter(it))
+				writer.save(baseline)
+			}
+		} catch (error: XMLStreamException) {
+			throw InvalidBaselineState("Error while writing the baseline xml file!", error)
+		}
+	}
+
+	private fun XMLStreamWriter.save(baseline: Baseline) {
+		document {
+			tag(SMELL_BASELINE) {
+				tag(BLACKLIST) {
+					val (ids, timestamp) = baseline.blacklist
+					attribute(TIMESTAMP, timestamp)
+					ids.forEach { tag(ID, it) }
+				}
+				tag(WHITELIST) {
+					val (ids, timestamp) = baseline.whitelist
+					attribute(TIMESTAMP, timestamp)
+					ids.forEach { tag(ID, it) }
+				}
+			}
+		}
+	}
+}
+

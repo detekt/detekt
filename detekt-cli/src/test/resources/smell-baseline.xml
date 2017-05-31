@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<SmellBaseline>
+    <Blacklist timestamp="123456789">
+        <ID>Type:Signature</ID>
+        <ID>Type:Signature2</ID>
+    </Blacklist>
+    <Whitelist timestamp="123456789">
+        <ID>Type:Signature</ID>
+        <ID>Type:Signature2</ID>
+    </Whitelist>
+</SmellBaseline>
