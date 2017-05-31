@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.cli.baseline
 
 import com.sun.xml.internal.txw2.output.IndentingXMLStreamWriter
+import org.xml.sax.SAXParseException
 import java.io.OutputStream
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
@@ -15,11 +16,10 @@ import javax.xml.stream.XMLStreamWriter
  */
 object BaselineFormat {
 
-	private val UTF_8 = StandardCharsets.UTF_8.name()
 	private val outputFactory by lazy { XMLOutputFactory.newFactory() }
 	private val inputFactory by lazy { SAXParserFactory.newInstance() }
 	private fun xmlReader() = inputFactory.newSAXParser()
-	private fun xmlWriter(out: OutputStream) = outputFactory.createXMLStreamWriter(out, UTF_8)
+	private fun xmlWriter(out: OutputStream) = outputFactory.createXMLStreamWriter(out, StandardCharsets.UTF_8.name())
 
 	fun read(path: Path): Baseline {
 		try {
@@ -29,7 +29,7 @@ object BaselineFormat {
 				reader.parse(it, handler)
 				return handler.createBaseline()
 			}
-		} catch (error: XMLStreamException) {
+		} catch (error: SAXParseException) {
 			throw InvalidBaselineState("Error while reading the baseline xml file!", error)
 		}
 	}
