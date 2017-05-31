@@ -25,11 +25,14 @@ class YamlConfig internal constructor(val properties: Map<String, Any>) : Config
 	}
 
 	companion object {
+
+		val YAML = ".yml"
+
 		/**
 		 * Factory method to load a yaml configuration. Given path must exist and end with "yml".
 		 */
 		fun load(path: Path): Config {
-			require(Files.exists(path) && path.toString().endsWith("yml"))
+			require(Files.exists(path) && path.toString().endsWith(YAML))
 			return load(Files.newBufferedReader(path))
 		}
 
@@ -41,9 +44,12 @@ class YamlConfig internal constructor(val properties: Map<String, Any>) : Config
 			return load(reader)
 		}
 
-		private fun load(reader: BufferedReader): Config {
-			return reader.use {
-				val map = Yaml().loadAll(it).iterator().next()
+		private fun load(reader: BufferedReader): Config = reader.use {
+			val yamlInput = it.readText()
+			if (yamlInput.isEmpty()) {
+				Config.empty
+			} else {
+				val map = Yaml().load(yamlInput)
 				if (map is Map<*, *>) {
 					YamlConfig(map as Map<String, Any>)
 				} else {
@@ -51,5 +57,7 @@ class YamlConfig internal constructor(val properties: Map<String, Any>) : Config
 				}
 			}
 		}
+
+		private fun BufferedReader.readText() = lineSequence().joinToString("\n")
 	}
 }

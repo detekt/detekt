@@ -47,6 +47,18 @@ class ConfigSpec : Spek({
 				val ignored = config.valueOrDefault("style") { "" }
 			}
 		}
+
+	}
+
+	describe("loading empty configurations") {
+
+		it("empty yaml file is equivalent to empty config") {
+			YamlConfig.loadResource(javaClass.getResource("/empty.yml"))
+		}
+
+		it("single item in yaml file is valid") {
+			YamlConfig.loadResource(javaClass.getResource("/oneitem.yml"))
+		}
 	}
 
 })
