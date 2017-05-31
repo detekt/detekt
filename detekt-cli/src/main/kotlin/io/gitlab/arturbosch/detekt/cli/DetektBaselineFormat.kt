@@ -1,12 +1,12 @@
 package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.cli.baseline.Baseline
+import io.gitlab.arturbosch.detekt.cli.baseline.BaselineFormat
+import io.gitlab.arturbosch.detekt.cli.baseline.Blacklist
+import io.gitlab.arturbosch.detekt.cli.baseline.Whitelist
 import io.gitlab.arturbosch.detekt.core.exists
 import io.gitlab.arturbosch.detekt.core.isFile
-import io.gitlab.arturbosch.quide.format.BaselineFormat
-import io.gitlab.arturbosch.quide.format.xml.Blacklist
-import io.gitlab.arturbosch.quide.format.xml.SmellBaseline
-import io.gitlab.arturbosch.quide.format.xml.Whitelist
 import java.nio.file.Path
 import java.time.Instant
 
@@ -17,7 +17,7 @@ object DetektBaselineFormat {
 
 	const val BASELINE_FILE = "baseline.xml"
 
-	private val baseline = BaselineFormat()
+	private val baseline = BaselineFormat
 
 	fun fullPath(reportsPath: Path?): Path? = reportsPath?.resolve(BASELINE_FILE)
 
@@ -30,12 +30,12 @@ object DetektBaselineFormat {
 			Blacklist(emptyList(), timestamp)
 		}
 		val ids = smells.map { it.baselineId }
-		val smellBaseline = SmellBaseline(blacklist, Whitelist(ids, timestamp))
+		val smellBaseline = Baseline(blacklist, Whitelist(ids, timestamp))
 		baseline.write(smellBaseline, baselinePath)
 		println(" Successfully wrote smell baseline to $baselinePath")
 	}
 
-	fun load(path: Path): SmellBaseline = baseline.read(path)
+	fun load(path: Path): Baseline = baseline.read(path)
 
 	fun listings(path: Path?): Pair<Whitelist, Blacklist>? {
 		val baselinePath = fullPath(path)
