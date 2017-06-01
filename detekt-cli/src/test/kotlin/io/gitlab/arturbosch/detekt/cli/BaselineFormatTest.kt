@@ -21,18 +21,21 @@ internal class BaselineFormatTest {
 		val (blacklist, whitelist) = BaselineFormat.read(path)
 
 		assertThat(blacklist.ids).hasSize(2)
+		assertThat(blacklist.ids[0]).startsWith("LongParameterList")
+		assertThat(blacklist.ids[1]).startsWith("LongMethod")
 		assertThat(blacklist.timestamp).isEqualTo("123456789")
-		assertThat(whitelist.ids).hasSize(2)
-		assertThat(whitelist.timestamp).isEqualTo("123456789")
+		assertThat(whitelist.ids).hasSize(1)
+		assertThat(whitelist.ids[0]).startsWith("FeatureEnvy")
+		assertThat(whitelist.timestamp).isEqualTo("987654321")
 	}
 
 	@Test
-	fun savedbaselinesavedAndLoadedXmlAreEqual() {
-		val now = Instant.now().toString()
+	fun savedAndLoadedXmlAreEqual() {
+		val now = Instant.now().toEpochMilli().toString()
 		val tempFile = Files.createTempFile("baseline", now)
 
 		val savedBaseline = Baseline(
-				Blacklist(listOf("1", "2", "3"), now),
+				Blacklist(listOf("4", "2", "2"), now),
 				Whitelist(listOf("1", "2", "3"), now))
 
 		BaselineFormat.write(savedBaseline, tempFile)
