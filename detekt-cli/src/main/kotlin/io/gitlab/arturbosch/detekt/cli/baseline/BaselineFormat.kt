@@ -30,7 +30,8 @@ object BaselineFormat {
 				return handler.createBaseline()
 			}
 		} catch (error: SAXParseException) {
-			throw InvalidBaselineState("Error while reading the baseline xml file!", error)
+			val (line, column) = error.lineNumber to error.columnNumber
+			throw InvalidBaselineState("Error on position $line:$column while reading the baseline xml file!", error)
 		}
 	}
 
@@ -41,9 +42,13 @@ object BaselineFormat {
 				writer.save(baseline)
 			}
 		} catch (error: XMLStreamException) {
-			throw InvalidBaselineState("Error while writing the baseline xml file!", error)
+			val (line, column) = error.positions
+			throw InvalidBaselineState("Error on position $line:$column while writing the baseline xml file!", error)
 		}
 	}
+
+	private val XMLStreamException.positions
+		get() = location.lineNumber to location.columnNumber
 
 	private fun XMLStreamWriter.save(baseline: Baseline) {
 		document {

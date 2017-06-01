@@ -40,10 +40,11 @@ class BaselineHandler : DefaultHandler() {
 					WHITELIST -> whiteIds.add(content!!)
 				}
 			}
+			BLACKLIST, WHITELIST -> current == null
 		}
 	}
 
 	override fun characters(ch: CharArray, start: Int, length: Int) {
-		content = String(ch, start, length)
+		if (current != null) content = String(ch, start, length)
 	}
 }

@@ -11,8 +11,8 @@ data class Baseline(val blacklist: Blacklist, val whitelist: Whitelist) {
 }
 
 val SMELL_BASELINE = "SmellBaseline"
-val BLACKLIST = "Whitelist"
-val WHITELIST = "Blacklist"
+val BLACKLIST = "Blacklist"
+val WHITELIST = "Whitelist"
 val TIMESTAMP = "timestamp"
 val ID = "ID"
 

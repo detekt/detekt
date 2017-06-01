@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <SmellBaseline>
     <Blacklist timestamp="123456789">
-        <ID>Type:Signature</ID>
-        <ID>Type:Signature2</ID>
+        <ID>LongParameterList:Signature</ID>
+        <ID>LongMethod:Signature</ID>
     </Blacklist>
-    <Whitelist timestamp="123456789">
-        <ID>Type:Signature</ID>
-        <ID>Type:Signature2</ID>
+    <Whitelist timestamp="987654321">
+        <ID>FeatureEnvy:Signature</ID>
     </Whitelist>
 </SmellBaseline>
