@@ -4,7 +4,7 @@
 
 - formatting rework
 
-#### M10, M10.1
+#### M10
 
 - detekt-gradle-plugin - [#16](https://github.com/arturbosch/detekt/issues/16)
 - experimental migration module which can migrate imports- [#30](https://github.com/arturbosch/detekt/issues/30)
