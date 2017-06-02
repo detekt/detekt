@@ -1,6 +1,6 @@
 # __detekt__
 
-[![build status](https://gitlab.com/arturbosch/detekt/badges/master/build.svg)](https://gitlab.com/arturbosch/detekt/commits/master)
+[![build status](https://travis-ci.org/arturbosch/detekt.svg?branch=master)](https://gitlab.com/arturbosch/detekt/commits/master)
 [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
 [ ![Download](https://api.bintray.com/packages/arturbosch/code-analysis/detekt/images/download.svg) ](https://bintray.com/arturbosch/code-analysis/detekt/_latestVersion)
 
@@ -115,24 +115,20 @@ For gradle version >= 2.1
 ```groovy
 buildscript {
     repositories {
-        // As of 1.0.0.M10.1 detekt is published to jcenter
-        // if it does not work yet properly add my bintray repo:
-        maven { url "http://dl.bintray.com/arturbosch/code-analysis" }
+        jcenter()
     }
 }
 
 plugins {
-    // DO NOT USE EARLIER VERSIONS
-    // gradle-plugin versioning will later be independent of detekt version
-    id "io.gitlab.arturbosch.detekt" version "1.0.0.M10.2"
+    id "io.gitlab.arturbosch.detekt" version "1.0.0.M10.3"
 }
 
 detekt {
-    version = "1.0.0.M10.1"  // Specify current detekt version
+    version = "1.0.0.M10.3"  // Specify current detekt version
     input = "$input/src/main/kotlin" // input is preconfigured to 'project.projectDir.absolutePath'
     config = "$project.projectDir/detekt.yml" // Use $project.projectDir to navigate inside your project 
     filters = ".*test.*, .*/resources/.*" // What paths to exclude? Use comma oder semicolon to separate
-    rulesets = "other/optional/ruleset.jar" // Custom rule sets can be linked to this, use comma oder semicolon to separate 
+    rulesets = "other/optional/ruleset.jar" // Custom rule sets can be linked to this, use comma oder semicolon to separate, remove if unused.
 }
 ```
 
@@ -141,11 +137,11 @@ For all gradle versions:
 ```groovy
 buildscript {
   repositories {
-    maven { url "http://dl.bintray.com/arturbosch/code-analysis" }
+    jcenter
     maven { url "https://plugins.gradle.org/m2/" }
   }
   dependencies {
-    classpath "gradle.plugin.io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.0.0.M10.2"
+    classpath "gradle.plugin.io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.0.0.M10.3"
   }
 }
 
@@ -184,12 +180,7 @@ migration:
 
 ```groovy
 repositories {
-    // if you 'gradle install' all detekt modules
-	mavenLocal()
-	// or when all modules should be provided
-	maven {
-        url  "http://dl.bintray.com/arturbosch/code-analysis"
-    }
+    jcenter()
 }
 
 configurations {
