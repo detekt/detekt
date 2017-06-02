@@ -3,7 +3,6 @@ buildscript {
 		mavenCentral()
 		mavenLocal()
 		maven { url "http://dl.bintray.com/jetbrains/spek" }
-		maven { url "http://dl.bintray.com/arturbosch/code-analysis" }
 	}
 	dependencies {
 		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
@@ -12,7 +11,7 @@ buildscript {
 }
 
 plugins {
-	id "io.gitlab.arturbosch.detekt" version "1.0.0.M10.2"
+	id "io.gitlab.arturbosch.detekt" version "1.0.0.M10.3"
 	id "com.jfrog.bintray" version "1.7.3"
 	id 'com.github.ben-manes.versions' version '0.13.0'
 	id "com.github.johnrengelman.shadow" version "1.2.3"
@@ -28,7 +27,6 @@ allprojects {
 		mavenCentral()
 		mavenLocal()
 		maven { url "http://dl.bintray.com/jetbrains/spek" }
-		maven { url "http://dl.bintray.com/arturbosch/code-analysis" }
 	}
 
 	apply plugin: 'org.junit.platform.gradle.plugin'
