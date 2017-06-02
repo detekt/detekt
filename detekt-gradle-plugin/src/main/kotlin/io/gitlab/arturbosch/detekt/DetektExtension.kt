@@ -4,7 +4,7 @@ package io.gitlab.arturbosch.detekt
  * @author Artur Bosch
  */
 @Suppress("LongParameterList")
-open class DetektExtension(var version: String = "1.0.0.M10",
+open class DetektExtension(var version: String = "1.0.0.M10.3",
 						   var input: String? = null,
 						   var config: String? = null,
 						   var configResource: String? = null,

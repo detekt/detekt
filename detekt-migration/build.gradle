@@ -1,5 +1,3 @@
-mainClassName = 'io.gitlab.arturbosch.detekt.migration.Migration'
-
 configurations {
 	compile.extendsFrom kotlinCompile
 	testCompile.extendsFrom kotlinTest
