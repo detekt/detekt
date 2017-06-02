@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.cli
+package io.gitlab.arturbosch.detekt.cli.out
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
@@ -8,22 +8,21 @@ import java.util.HashMap
 /**
  * @author Artur Bosch
  */
-class SmellThreshold(config: Config, main: Main) {
+class SmellThreshold(config: Config,
+					 private val baselineFormat: DetektBaselineFormat?) {
 
 	private val buildConfig = config.subConfig("build")
 	private val weightsConfig = buildConfig.subConfig("weights")
 	private val warning = buildConfig.valueOrDefault("warningThreshold") { -1 }
 	private val fail = buildConfig.valueOrDefault("failThreshold") { -1 }
-	private val reportDirectory = main.reportDirectory
 
 	class BuildFailure(override val message: String?) : RuntimeException(message)
 
 	fun check(detektion: Detektion) {
-		val listings = DetektBaselineFormat.listings(reportDirectory)
 		val smells = detektion.findings.flatMap { it.value }
 		val ruleToRulesetId = extractRuleToRulesetIdMap(detektion)
 
-		val filteredSmells = smells.filterListedFindings(listings)
+		val filteredSmells = baselineFormat?.filter(smells) ?: smells
 		val amount = filteredSmells.map { it.weighted(ruleToRulesetId) }.sum()
 
 		println("\n")

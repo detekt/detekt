@@ -19,15 +19,19 @@ class Runner(private val main: Main) : Executable {
 		val (settings, config) = createSettingsAndConfig()
 
 		val start = System.currentTimeMillis()
+
 		val detektion = DetektFacade.instance(settings).run()
-		with(Output(detektion, main)) {
-			runFacade()
-			report()
+		val facade = OutputFacade(main, config, detektion)
+
+		facade.run {
+			consoleFacade()
+			reportFacade()
 		}
+
 		val end = System.currentTimeMillis() - start
 
 		println("\ndetekt run within $end ms")
-		SmellThreshold(config, main).check(detektion)
+		facade.buildErrorCheck()
 	}
 
 	private fun createSettingsAndConfig(): Pair<ProcessingSettings, Config> {

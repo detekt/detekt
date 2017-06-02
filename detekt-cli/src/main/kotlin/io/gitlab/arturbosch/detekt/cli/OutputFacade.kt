@@ -1,6 +1,10 @@
 package io.gitlab.arturbosch.detekt.cli
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.cli.out.DetektBaselineFormat
+import io.gitlab.arturbosch.detekt.cli.out.OutputFormat
+import io.gitlab.arturbosch.detekt.cli.out.SmellThreshold
 import io.gitlab.arturbosch.detekt.core.COMPLEXITY_KEY
 import io.gitlab.arturbosch.detekt.core.Detektion
 import io.gitlab.arturbosch.detekt.core.LLOC_KEY
@@ -12,19 +16,20 @@ import java.nio.file.Path
 /**
  * @author Artur Bosch
  */
-class Output(private val detektion: Detektion, args: Main) {
+class OutputFacade(args: Main,
+				   config: Config,
+				   private val detektion: Detektion) {
 
-	companion object {
-		private const val OUTPUT_FILE = "report.detekt"
-	}
-
-	private val withOutput: Boolean = args.output
-	private val withBaseline: Boolean = args.baseline
+	private val generateOutput = args.output
+	private val generateBaseline = args.baseline
 	private val reportDirectory: Path? = args.reportDirectory
 	private val findings: Map<String, List<Finding>> = detektion.findings
 	private val notifications: List<Notification> = detektion.notifications
+	private val baselineFormat = reportDirectory?.let { DetektBaselineFormat(it) }
+	private val outputFormat = reportDirectory?.let { OutputFormat(it) }
+	private val smellThreshold = SmellThreshold(config, baselineFormat)
 
-	fun runFacade() {
+	fun consoleFacade() {
 		printNotifications()
 		printFindings()
 		printComplexity()
@@ -36,12 +41,11 @@ class Output(private val detektion: Detektion, args: Main) {
 	}
 
 	fun printFindings() {
-		val listings = DetektBaselineFormat.listings(reportDirectory)
-		if (listings != null) println("Only new findings are printed as baseline.xml is found:\n")
+		if (baselineFormat != null) println("Only new findings are printed as baseline.xml is found:\n")
 
 		findings.forEach {
 			it.key.print("Ruleset: ")
-			val values = it.value.filterListedFindings(listings)
+			val values = baselineFormat?.filter(it.value) ?: it.value
 			values.forEach { it.compact().print("\t") }
 		}
 	}
@@ -62,20 +66,18 @@ class Output(private val detektion: Detektion, args: Main) {
 		}
 	}
 
-	fun report() {
+	fun reportFacade() {
 		if (reportDirectory != null) {
 			reportDirectory.createFoldersIfNeeded()
 			val smells = findings.flatMap { it.value }
-			if (withOutput) {
-				val smellData = smells.map { it.compactWithSignature() }.joinToString("\n")
-				val reportFile = reportDirectory.resolve(OUTPUT_FILE)
-				Files.write(reportFile, smellData.toByteArray())
-				println("\n Successfully wrote findings to $reportFile")
-			}
-			if (withBaseline) {
-				DetektBaselineFormat.create(smells, reportDirectory)
-			}
+			if (generateOutput || generateBaseline) println()
+			if (generateOutput) outputFormat?.create(smells)
+			if (generateBaseline) baselineFormat?.create(smells)
 		}
+	}
+
+	fun buildErrorCheck() {
+		smellThreshold.check(detektion)
 	}
 
 	private fun Path.createFoldersIfNeeded() {
