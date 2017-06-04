@@ -51,7 +51,7 @@ formatting:
   useTabs: true
   Indentation:
     active: false
-    autoCorrect: false
+    indentSize: 4
   ConsecutiveBlankLines:
     active: true
     autoCorrect: true

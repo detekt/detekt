@@ -3,16 +3,19 @@ package io.gitlab.arturbosch.detekt.formatting
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.test.RuleTest
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 /**
- * @author Shyiko
+ * Adapted from KtLint.
+ *
+ * @author Artur Bosch
  */
 class IndentationTest : RuleTest {
 
-	override val rule: Rule = Indentation(Config.Companion.empty)
+	override val rule: Rule = Indentation(Config.empty)
 
 	@Test
 	fun declarationOfBHasWrongIndentation() {
@@ -40,5 +43,64 @@ class IndentationTest : RuleTest {
             }
             """
 		)).hasSize(1)
+	}
+
+	@Test
+	fun verticallyAlignedParametersDoNotTriggerAnError() {
+		assertThat(rule.lint(
+				"""
+            data class D(val a: Any,
+                         @Test val b: Any,
+                         val c: Any = 0) {
+            }
+
+            data class D2(
+                val a: Any,
+                val b: Any,
+                val c: Any
+            ) {
+            }
+
+            fun f(val a: Any,
+                  val b: Any,
+                  val c: Any) {
+            }
+
+            fun f2(
+                val a: Any,
+                val b: Any,
+                val c: Any
+            ) {
+            }
+            """.trimIndent()
+		)).isEmpty()
+		assertThat(rule.lint(
+				"""
+            class A(
+               //
+            ) {}
+            """.trimIndent()
+		)).hasSize(1)
+	}
+
+	@Test
+	fun testWithCustomIndentSize() {
+		assertThat(Indentation(TestConfig(mapOf("indentSize" to "2"))).lint(
+				"""
+            /**
+             * _
+             */
+            fun main() {
+              val v = ""
+              println(v)
+            }
+
+            class A {
+              var x: String
+                get() = ""
+                set(v: String) { x = v }
+            }
+            """.trimIndent()
+		)).isEmpty()
 	}
 }

@@ -1,5 +1,5 @@
 /**
- * Test cases where migrated from KtLint project and written by Shyiko.
+ * Test cases where migrated from KtLint project and initially written by Shyiko.
  *
  * @author Artur Bosch
  */
