@@ -4,7 +4,7 @@ package io.gitlab.arturbosch.detekt
  * @author Artur Bosch
  */
 @Suppress("LongParameterList")
-open class DetektExtension(var version: String = "1.0.0.M10.3",
+open class DetektExtension(var version: String = "1.0.0.M11",
 						   var input: String? = null,
 						   var config: String? = null,
 						   var configResource: String? = null,
@@ -20,7 +20,9 @@ open class DetektExtension(var version: String = "1.0.0.M10.3",
 						   var disableDefaultRuleSets: Boolean = false,
 						   var debug: Boolean = false) {
 
-	fun convertToArguments(): MutableList<String> {
+	val argumentList: MutableList<String> by lazy { convertToArguments() }
+
+	private fun convertToArguments(): MutableList<String> {
 		return mutableListOf<String>().apply {
 			input?.let { add("--project"); add(it) }
 			config?.let { add("--config"); add(it) }
@@ -35,6 +37,7 @@ open class DetektExtension(var version: String = "1.0.0.M10.3",
 			if (format) add("--format")
 			if (useTabs) add("--useTabs")
 			if (disableDefaultRuleSets) add("--disable-default-rulesets")
+			if (debug) println("detekt version: ${version}: " + this)
 		}
 	}
 
