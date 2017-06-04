@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt
 
+import io.gitlab.arturbosch.detekt.cli.out.SmellThreshold
 import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.InputStreamReader
@@ -16,6 +17,8 @@ fun startProcess(args: Array<String>) {
 	}
 	BufferedReader(InputStreamReader(BufferedInputStream(process.errorStream))).use {
 		val errors = it.readLines().joinToString("\n")
-		println(errors)
+		if (errors.isNotEmpty()) {
+			throw SmellThreshold.BuildFailure(errors)
+		}
 	}
 }
