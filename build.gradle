@@ -7,16 +7,18 @@ buildscript {
 	dependencies {
 		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
 		classpath "org.junit.platform:junit-platform-gradle-plugin:$junitPlatformVersion"
+		classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.0.0.M11"
 	}
 }
 
 plugins {
-	id "io.gitlab.arturbosch.detekt" version "1.0.0.M10.3"
 	id "com.jfrog.bintray" version "1.7.3"
 	id 'com.github.ben-manes.versions' version '0.13.0'
 	id "com.github.johnrengelman.shadow" version "1.2.3"
 //		id "com.github.hierynomus.license" version "0.13.1"
 }
+
+apply plugin: 'io.gitlab.arturbosch.detekt'
 
 allprojects {
 
@@ -153,9 +155,18 @@ allprojects {
 	}
 }
 
+String USER_HOME = System.getProperty("user.home")
+
 detekt {
-	config = "$project.projectDir/detekt-cli/src/main/resources/default-detekt-config.yml"
-	filters = '.*/test/.*'
 	debug = true
+	filters = '.*/test/.*'
+	config = "$project.projectDir/detekt-cli/src/main/resources/default-detekt-config.yml"
+	report = "$project.projectDir/reports"
+	idea {
+		path = "$USER_HOME/.idea"
+		codeStyleScheme = "$USER_HOME/.idea/idea-code-style.xml"
+		inspectionsProfile = "$USER_HOME/.idea/inspect.xml"
+		mask = "*.kt,"
+	}
 }
 

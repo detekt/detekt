@@ -21,4 +21,6 @@ fun startProcess(args: Array<String>) {
 			throw SmellThreshold.BuildFailure(errors)
 		}
 	}
+
+	process.destroy()
 }
