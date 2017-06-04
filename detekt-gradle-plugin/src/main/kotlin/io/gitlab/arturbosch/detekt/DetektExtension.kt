@@ -23,7 +23,9 @@ open class DetektExtension(open var version: String = "1.0.0.M11",
 						   open var debug: Boolean = false,
 						   open var ideaExtension: IdeaExtension = IdeaExtension()) {
 
-	val argumentList: MutableList<String> by lazy { convertToArguments() }
+	val detektArgs: MutableList<String> by lazy { convertToArguments() }
+	val ideaFormatArgs get() = ideaExtension.formatArgs(this)
+	val ideaInspectArgs get() = ideaExtension.inspectArgs(this)
 
 	fun idea(configuration: Action<in IdeaExtension>) {
 		configuration.execute(ideaExtension)

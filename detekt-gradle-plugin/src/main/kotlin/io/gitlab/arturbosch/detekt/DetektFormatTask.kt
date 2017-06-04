@@ -27,7 +27,7 @@ open class DetektFormatTask : DefaultTask() {
 		project.javaexec {
 			it.main = "io.gitlab.arturbosch.detekt.formatting.Formatting"
 			it.classpath = formatting
-			it.args(detektExtension.argumentList.plus(listOf(formatString, disableDefaults)))
+			it.args(detektExtension.detektArgs.plus(listOf(formatString, disableDefaults)))
 		}
 	}
 

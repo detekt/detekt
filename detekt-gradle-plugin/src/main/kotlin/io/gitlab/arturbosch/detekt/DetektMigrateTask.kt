@@ -24,7 +24,7 @@ open class DetektMigrateTask : DefaultTask() {
 		project.javaexec {
 			it.main = "io.gitlab.arturbosch.detekt.migration.Migration"
 			it.classpath = migration
-			it.args(detektExtension.argumentList)
+			it.args(detektExtension.detektArgs)
 		}
 	}
 
