@@ -12,6 +12,8 @@ class DetektPlugin : Plugin<Project> {
 		project.task(mapOf("type" to DetektCheckTask::class.java), "detektCheck")
 		project.task(mapOf("type" to DetektFormatTask::class.java), "detektFormat")
 		project.task(mapOf("type" to DetektMigrateTask::class.java), "detektMigrate")
+		project.task(mapOf("type" to DetektIdeaFormatTask::class.java), "detektIdeaFormat")
+		project.task(mapOf("type" to DetektIdeaInspectionTask::class.java), "detektIdeaInspect")
 	}
 
 }

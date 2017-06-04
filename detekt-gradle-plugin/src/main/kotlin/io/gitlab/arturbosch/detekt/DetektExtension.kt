@@ -1,26 +1,33 @@
 package io.gitlab.arturbosch.detekt
 
+import org.gradle.api.Action
+
 /**
  * @author Artur Bosch
  */
 @Suppress("LongParameterList")
-open class DetektExtension(var version: String = "1.0.0.M11",
-						   var input: String? = null,
-						   var config: String? = null,
-						   var configResource: String? = null,
-						   var generateConfig: Boolean = false,
-						   var filters: String? = null,
-						   var rulesets: String? = null,
-						   var report: String? = null,
-						   var output: Boolean = false,
-						   var baseline: Boolean = false,
-						   var parallel: Boolean = false,
-						   var format: Boolean = false,
-						   var useTabs: Boolean = false,
-						   var disableDefaultRuleSets: Boolean = false,
-						   var debug: Boolean = false) {
+open class DetektExtension(open var version: String = "1.0.0.M11",
+						   open var input: String? = null,
+						   open var config: String? = null,
+						   open var configResource: String? = null,
+						   open var generateConfig: Boolean = false,
+						   open var filters: String? = null,
+						   open var rulesets: String? = null,
+						   open var report: String? = null,
+						   open var output: Boolean = false,
+						   open var baseline: Boolean = false,
+						   open var parallel: Boolean = false,
+						   open var format: Boolean = false,
+						   open var useTabs: Boolean = false,
+						   open var disableDefaultRuleSets: Boolean = false,
+						   open var debug: Boolean = false,
+						   open var ideaExtension: IdeaExtension = IdeaExtension()) {
 
 	val argumentList: MutableList<String> by lazy { convertToArguments() }
+
+	fun idea(configuration: Action<in IdeaExtension>) {
+		configuration.execute(ideaExtension)
+	}
 
 	private fun convertToArguments(): MutableList<String> {
 		return mutableListOf<String>().apply {
@@ -37,7 +44,7 @@ open class DetektExtension(var version: String = "1.0.0.M11",
 			if (format) add("--format")
 			if (useTabs) add("--useTabs")
 			if (disableDefaultRuleSets) add("--disable-default-rulesets")
-			if (debug) println("detekt version: ${version}: " + this)
+			if (debug) println("detekt version: $version: " + this)
 		}
 	}
 
