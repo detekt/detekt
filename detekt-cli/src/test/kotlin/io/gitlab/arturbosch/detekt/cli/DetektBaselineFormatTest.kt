@@ -14,7 +14,7 @@ internal class DetektBaselineFormatTest {
 	private val fullPath = path.resolve(DetektBaselineFormat.BASELINE_FILE)
 
 	@Test
-	fun  create() {
+	fun create() {
 		val format = DetektBaselineFormat(path)
 		format.create(emptyList())
 		BaselineFormat.read(fullPath)

@@ -14,7 +14,9 @@ open class DetektIdeaFormatTask : DefaultTask() {
 
 	@TaskAction
 	fun format() {
-		val detektExtension = project.extensions.getByName("detekt") as DetektExtension
-		println("Hello from idea format! ${detektExtension.ideaExtension}")
+		with(project.extensions.getByName("detekt") as DetektExtension) {
+			if (debug) println("$ideaExtension")
+			startProcess(ideaFormatArgs)
+		}
 	}
 }

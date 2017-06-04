@@ -14,6 +14,9 @@ open class DetektIdeaInspectionTask : DefaultTask() {
 
 	@TaskAction
 	fun format() {
-		println("Hello from idea inspect!")
+		with(project.extensions.getByName("detekt") as DetektExtension) {
+			if (debug) println("$ideaExtension")
+			startProcess(ideaInspectArgs)
+		}
 	}
 }
