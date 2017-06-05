@@ -3,9 +3,9 @@ package io.gitlab.arturbosch.detekt.cli
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.YamlConfig
 import io.gitlab.arturbosch.detekt.core.PathFilter
+import java.io.File
 import java.nio.file.Path
 import java.nio.file.Paths
-import java.io.File
 
 /**
  * @author Artur Bosch

@@ -136,7 +136,7 @@ allprojects {
 	}
 
 	dependencies {
-		kotlinCompile "org.jetbrains.kotlin:kotlin-compiler:$kotlinVersion"
+		kotlinCompile "org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion"
 		kotlinCompile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 		kotlinTest "org.junit.jupiter:junit-jupiter-api:$junitEngineVersion"
 		kotlinTest "org.jetbrains.kotlin:kotlin-test:$kotlinVersion"

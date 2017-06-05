@@ -1,12 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
-import com.intellij.psi.PsiFile
 import io.gitlab.arturbosch.detekt.api.CodeSmellThresholdRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.rules.asBlockExpression
+import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -34,7 +34,7 @@ class LargeClass(config: Config = Config.empty, threshold: Int = 70) : CodeSmell
 		locStack.push(locStack.pop() + amount)
 	}
 
-	override fun visitFile(file: PsiFile?) {
+	override fun visitFile(file: PsiFile?) { //TODO
 		locStack.clear()
 		super.visitFile(file)
 	}

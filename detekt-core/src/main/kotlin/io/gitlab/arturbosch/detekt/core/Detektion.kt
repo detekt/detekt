@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.core
 
-import com.intellij.openapi.util.Key
-import com.intellij.util.keyFMap.KeyFMap
 import io.gitlab.arturbosch.detekt.api.Finding
+import org.jetbrains.kotlin.com.intellij.openapi.util.Key
+import org.jetbrains.kotlin.com.intellij.util.keyFMap.KeyFMap
 
 /**
  * @author Artur Bosch

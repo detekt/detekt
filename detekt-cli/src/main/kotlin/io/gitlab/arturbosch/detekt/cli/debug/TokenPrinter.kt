@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.cli.debug
 
-import com.intellij.lang.ASTNode
 import io.gitlab.arturbosch.detekt.api.TokenRule
 import io.gitlab.arturbosch.detekt.cli.print
+import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 
 /**
  * @author Artur Bosch
