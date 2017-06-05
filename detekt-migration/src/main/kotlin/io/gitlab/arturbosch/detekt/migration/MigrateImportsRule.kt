@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.migration
 
-import com.intellij.psi.impl.source.codeStyle.CodeEditUtil
-import com.intellij.psi.impl.source.tree.CompositeElement
+import org.jetbrains.kotlin.com.intellij.psi.impl.source.codeStyle.CodeEditUtil
+import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.CompositeElement
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.PROJECT

@@ -46,7 +46,7 @@ private fun makeMutable(project: MockProject) {
 		}
 
 	}
-	val extensionPoint = "com.intellij.treeCopyHandler"
+	val extensionPoint = "org.jetbrains.kotlin.com.intellij.treeCopyHandler"
 	val extensionClassName = TreeCopyHandler::class.java.name!!
 	arrayOf(Extensions.getArea(project), Extensions.getArea(null))
 			.filter { !it.hasExtensionPoint(extensionPoint) }
