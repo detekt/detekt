@@ -1,6 +1,6 @@
 package cases
 
-import java.util.ArrayList
+import java.util.*
 
 /**
  * @author Artur Bosch
