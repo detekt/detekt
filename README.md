@@ -148,7 +148,33 @@ buildscript {
 apply plugin: "io.gitlab.arturbosch.detekt"
 
 detekt {
-    ...
+    version = "1.0.0.M10.3"  // Specify current detekt version
+    input = "$input/src/main/kotlin" // input is preconfigured to 'project.projectDir.absolutePath'
+    config = "$project.projectDir/detekt.yml" // Use $project.projectDir to navigate inside your project 
+    filters = ".*test.*, .*/resources/.*" // What paths to exclude? Use comma oder semicolon to separate
+    rulesets = "other/optional/ruleset.jar" // Custom rule sets can be linked to this, use comma oder semicolon to separate, remove if unused.
+}
+```
+
+For gradle-script-kotlin:
+
+```kotlin
+import io.gitlab.arturbosch.detekt.DetektExtension
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+}
+plugins {
+    id("io.gitlab.arturbosch.detekt").version("1.0.0.M10.3")
+}
+
+configure<DetektExtension> {
+    version = "1.0.0.M10.3"  // Specify current detekt version
+    config = "${project.projectDir}/detekt.yml" // Use $project.projectDir to navigate inside your project
+    filters = ".*test.*,.*/resources/.*,.*/tmp/.*" // What paths to exclude? Use comma oder semicolon to separate    
+    // rulesets = "other/optional/ruleset.jar" // Custom rule sets can be linked to this, use comma oder semicolon to separate, remove if unused.
 }
 ```
 
