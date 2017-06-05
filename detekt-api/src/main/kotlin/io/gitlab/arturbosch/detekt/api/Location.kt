@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.api
 
-import com.intellij.openapi.util.TextRange
-import com.intellij.psi.PsiElement
-import com.intellij.testFramework.LightVirtualFile
+import org.jetbrains.kotlin.com.intellij.openapi.util.TextRange
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.com.intellij.testFramework.LightVirtualFile
 import org.jetbrains.kotlin.diagnostics.DiagnosticUtils
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
 import org.jetbrains.kotlin.psi.psiUtil.getTextWithLocation

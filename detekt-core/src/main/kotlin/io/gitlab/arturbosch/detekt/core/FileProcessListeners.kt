@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.core
 
-import com.intellij.openapi.util.Key
 import io.gitlab.arturbosch.detekt.core.visitors.ComplexityVisitor
 import io.gitlab.arturbosch.detekt.core.visitors.LLOCVisitor
+import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.psi.KtFile
 
 /**

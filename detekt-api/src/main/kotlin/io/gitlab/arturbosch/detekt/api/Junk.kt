@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.api
 
-import com.intellij.lang.ASTNode
-import com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.com.intellij.lang.ASTNode
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtPsiUtil
 import org.jetbrains.kotlin.psi.KtStringTemplateEntry

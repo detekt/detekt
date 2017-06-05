@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.cli.debug
 
-import com.intellij.psi.PsiElement
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.cli.print
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 
 /**
  * @author Artur Bosch

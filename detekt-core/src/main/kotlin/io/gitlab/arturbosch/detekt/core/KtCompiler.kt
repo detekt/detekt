@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.core
 
-import com.intellij.openapi.util.Key
-import com.intellij.psi.PsiFileFactory
-import com.intellij.testFramework.LightVirtualFile
 import io.gitlab.arturbosch.detekt.api.PROJECT
+import org.jetbrains.kotlin.com.intellij.openapi.util.Key
+import org.jetbrains.kotlin.com.intellij.psi.PsiFileFactory
+import org.jetbrains.kotlin.com.intellij.testFramework.LightVirtualFile
 import org.jetbrains.kotlin.idea.KotlinLanguage
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Files

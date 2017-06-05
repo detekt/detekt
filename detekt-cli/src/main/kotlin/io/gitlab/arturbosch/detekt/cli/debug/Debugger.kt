@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.cli.debug
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.cli.Main
 import io.gitlab.arturbosch.detekt.cli.Executable
+import io.gitlab.arturbosch.detekt.cli.Main
 import io.gitlab.arturbosch.detekt.core.KtCompiler
 
 /**
