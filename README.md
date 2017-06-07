@@ -36,6 +36,7 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 8. [Rule testing](#testing)
 9. [Formatting - Code Style](#formatting)
 10. [Black- and Whitelist code smells](#baseline)
+10. [Contributors](#contributors)
 
 ### <a name="build">Usage/Build</a>
 
@@ -544,3 +545,11 @@ With `--baseline` you generate a `baseline.xml` where code smells are white- or 
 The intention of a whitelist is that only new code smells are printed on further analysis. The blacklist can be used
 to write down false positive detections. The `ID` node must be build of `<RuleID>:<Signature>`. Both values can be found
 inside the `report.detekt` file.
+
+### <a name="contributors">Contributors</a>
+
+- [Artur Bosch](https://github.com/arturbosch): Maintainer
+- [lummax](https://github.com/lummax): Cli enhancements
+- [Sean Flanigan](https://github.com/seanf): Config from classpath resource
+- [Sebastian Schuberth](https://github.com/sschuberth): Dep. update
+- [Olivier Lemasle](https://github.com/olivierlemasle): Bug fix
