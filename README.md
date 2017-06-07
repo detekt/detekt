@@ -23,9 +23,8 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 
 
 ### Table of contents
-1. [Usage/Build](#build)
-2. [Parameters for CLI](#cli)
-3. [As gradle plugin](#gradleplugin)
+1. [Commandline interface](#build)
+2. [As gradle plugin](#gradleplugin)
 3. [As gradle task](#gradle)
 4. [As maven task](#maventask)
 5. [Rule sets](#rulesets)
@@ -38,21 +37,15 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 10. [Black- and Whitelist code smells](#baseline)
 10. [Contributors](#contributors)
 
-### <a name="build">Usage/Build</a>
+### <a name="build">Build & run the commandline interface</a>
 
-##### Building all submodules ( + executables)
+- `git clone https://github.com/arturbosch/detekt`
+- `cd detekt`
+- `gradle build shadow`
+- `java -jar detekt-cli/build/libs/detekt-cli-[version]-all.jar [parameters]*`
 
-- cd detekt
-- gradle clean build (install shadow)
-
-##### Using the command line interface
-
-- cd detekt-cli
-- gradle shadow
-- java -jar build/libs/detekt-cli-[version]-all.jar
-
-#### <a name="cli">Parameters for CLI</a>
-The CLI uses jcommander for argument parsing.
+##### Parameters for CLI
+The CLI uses jcommander for argument parsing. Following is shown when `-h` is entered:
 
 ```
 The following option is required: --project, -p
