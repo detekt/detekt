@@ -41,15 +41,15 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 10. [Black- and Whitelist code smells](#baseline)
 10. [Contributors](#contributors)
 
-### <a name="build">Build & run the commandline interface</a>
+### <a name="build">Build & use the commandline interface</a>
 
 - `git clone https://github.com/arturbosch/detekt`
 - `cd detekt`
-- `gradle build shadow`
+- `./gradlew build shadow`
 - `java -jar detekt-cli/build/libs/detekt-cli-[version]-all.jar [parameters]*`
 
 ##### Parameters for CLI
-The CLI uses jcommander for argument parsing. Following parameters are shown when `-h` is entered:
+The CLI uses jcommander for argument parsing. Following parameters are shown when `--help` is entered:
 
 ```
 The following option is required: --project, -p
@@ -126,8 +126,8 @@ plugins {
 detekt {
     version = "1.0.0.[version]"
     input = "$input/src/main/kotlin"
-    config = "$input/detekt.yml" 
-    filters = ".*test.*, .*/resources/.*"
+    config = "project.projectDir/detekt.yml" 
+    filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
 }
 ```
 
@@ -150,7 +150,7 @@ detekt {
     version = "1.0.0.[version]"
     input = "$input/src/main/kotlin"
     config = "$project.projectDir/detekt.yml"
-    filters = ".*test.*, .*/resources/.*"
+    filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
 }
 ```
 
@@ -179,7 +179,7 @@ configure<DetektExtension> {
 
 #### <a name="tasks">Available plugin tasks</a>
 
-- `detektCheck` - Runs a _detekt_ analysis and complexity report. Configure the analysis inside the `detekt {}`-closure. By default the default rule set is used without output report or  black- and whitelist checks.
+- `detektCheck` - Runs a _detekt_ analysis and complexity report. Configure the analysis inside the `detekt-closure`. By default the standard rule set is used without output report or  black- and whitelist checks.
 - `detektFormat` - Formats your kotlin code by using the formatting rule set. Specify which rules should be turned on/off and which should be auto corrected. (see [Formatting - Code Style](#formatting)). Pay attention that this formatting rule set is not as powerful as `intellij's inspection` and never will be. It is recommend to use the `detektIdeaFormat` task which needs some pre configurations.
 - `detektMigrate` - Experimental feature for now. Just supports migration of specified imports. See [migration section](#migration).
 - `detektIdeaFormat` - Uses a local `idea` installation to format your kotlin (and other) code according to the specified `code-style.xml`.
@@ -192,6 +192,7 @@ configure<DetektExtension> {
 - let detekt know about idea inside the `detekt-closure`
 - extract `code-style.xml` and `inpect.xml` from idea settings (`Settings>CodeStyle>Scheme` and `Settings>Inspections>Profile`)
 - run `detektIdeaFormat` or `detektIdeaInspect`
+- all parameters in the following detekt-closure are mandatory for both tasks
 
 ```groovy
 String USER_HOME = System.getProperty("user.home")
@@ -367,24 +368,58 @@ To turn off specific rules/rule sets or change threshold values for certain rule
 Export the default config with the `--generate-config` flag or copy and modify the `detekt-cli/src/main/resources/default-detekt-config.yml` for your needs.
 
 ```yml
-code-smell:
+complexity:
+  active: true
   LongMethod:
-    active: true
     threshold: 20
   LongParameterList:
-    active: false
     threshold: 5
   LargeClass:
-    active: false
-    threshold: 70
-  ...
+    threshold: 150
+  ComplexMethod:
+    threshold: 10
+  TooManyFunctions:
+    threshold: 10
+  ComplexCondition:
+    threshold: 3
 
 style:
   active: true
-  ...
+  WildcardImport:
+    active: true
+  NamingConventionViolation:
+    active: true
+    variablePattern: '^(_)?[a-z$][a-zA-Z$0-9]*$'
+    constantPattern: '^([A-Z_]*|serialVersionUID)$'
+    methodPattern: '^[a-z$][a-zA-Z$0-9]*$'
+    classPattern: '[A-Z$][a-zA-Z$]*'
+    enumEntryPattern: '^[A-Z$][a-zA-Z_$]*$'
 
 comments:
-  active: false
+  active: true
+  CommentOverPrivateMethod:
+    active: true
+  CommentOverPrivateProperty:
+    active: true
+  NoDocOverPublicClass:
+    active: false
+  NoDocOverPublicMethod:
+    active: false
+    
+potential-bugs:
+  active: true
+  DuplicateCaseInWhenExpression:
+    active: true
+  EqualsWithHashCodeExist:
+    active: true
+  ExplicitGarbageCollectionCall:
+    active: true
+
+exceptions:
+  active: true
+
+empty-blocks:
+  active: true
 ```
 
 ```yaml
@@ -411,18 +446,19 @@ _detekt_ supports the Java (`@SuppressWarnings`) and Kotlin (`@Suppress`) style 
 _detekt_ now can throw a BuildFailure(Exception) and let the build fail with following config parameters:
 ```yaml
 build:
-  warningThreshold: 5
-  failThreshold: 10
+  warningThreshold: 5 // Five weighted findings 
+  failThreshold: 10 // Ten weighted smells to fail the build
   weights:
-    code-smell: 2
-    LongParameterList: 1
+    complexity: 2 // Whole complexity rule should add two for each finding.
+    LongParameterList: 1 // The specific rule should not add two.
+    comments: 0 // Comments should not fail the build at all?!
 ```
 
 Every rule and rule set can be attached with an integer value which is the weight of the finding.
 For example: If you have 5 findings of the category _code-smell_, then your failThreshold of 10 is reached as
 5 x 2 = 10. 
 
-The formula for weights: RuleID > RuleSetID > 1 
+The formula for weights: RuleID > RuleSetID > 1. Only integer values are supported.
 
 ### <a name="customruleset">Custom RuleSets</a>
 
