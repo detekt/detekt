@@ -24,15 +24,19 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 
 ### Table of contents
 1. [Commandline interface](#build)
-2. [As gradle plugin](#gradleplugin)
-3. [As gradle task](#gradle)
-4. [As maven task](#maventask)
+2. [Gradle plugin](#gradleplugin)
+    1. [in groovy dsl](#gradlegroovy)
+    2. [in kotlin dsl](#gradlekotlin)
+    3. [plugin tasks](#tasks)
+    4. [detekt-closure](#closure)
+3. [Standalone gradle task](#gradle)
+4. [Standalone maven task](#maventask)
 5. [Rule sets](#rulesets)
 6. [Rule set configuration](#rulesetconfig)
 7. [Suppress rules](#suppress)
 7. [Build failure](#failure)
 7. [Custom rule sets](#customruleset)
-8. [Rule testing](#testing)
+    1. [Rule testing](#testing)
 9. [Formatting - Code Style](#formatting)
 10. [Black- and Whitelist code smells](#baseline)
 10. [Contributors](#contributors)
@@ -101,9 +105,11 @@ The currently only supported configuration format is yaml. `config` should point
 With `rules` you can point to additional ruleset.jar's creating by yourself or others. 
 More on this topic see section _Custom RuleSets_.
 
-
 #### <a name="gradleplugin">Using the detekt-gradle-plugin</a>
 
+Use the groovy or kotlin dsl of gradle and configure the detekt closure as described [here](#closure).
+
+##### <a name="gradlegroovy">Configuration when using groovy dsl</a>
 For gradle version >= 2.1
  
 ```groovy
@@ -114,15 +120,14 @@ buildscript {
 }
 
 plugins {
-    id "io.gitlab.arturbosch.detekt" version "1.0.0.M10.3"
+    id "io.gitlab.arturbosch.detekt" version "1.0.0.[version]"
 }
 
 detekt {
-    version = "1.0.0.M10.3"  // Specify current detekt version
-    input = "$input/src/main/kotlin" // input is preconfigured to 'project.projectDir.absolutePath'
-    config = "$project.projectDir/detekt.yml" // Use $project.projectDir to navigate inside your project 
-    filters = ".*test.*, .*/resources/.*" // What paths to exclude? Use comma oder semicolon to separate
-    rulesets = "other/optional/ruleset.jar" // Custom rule sets can be linked to this, use comma oder semicolon to separate, remove if unused.
+    version = "1.0.0.[version]"
+    input = "$input/src/main/kotlin"
+    config = "$input/detekt.yml" 
+    filters = ".*test.*, .*/resources/.*"
 }
 ```
 
@@ -135,22 +140,22 @@ buildscript {
     maven { url "https://plugins.gradle.org/m2/" }
   }
   dependencies {
-    classpath "gradle.plugin.io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.0.0.M10.3"
+    classpath "gradle.plugin.io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.0.0.[version]"
   }
 }
 
 apply plugin: "io.gitlab.arturbosch.detekt"
 
 detekt {
-    version = "1.0.0.M10.3"  // Specify current detekt version
-    input = "$input/src/main/kotlin" // input is preconfigured to 'project.projectDir.absolutePath'
-    config = "$project.projectDir/detekt.yml" // Use $project.projectDir to navigate inside your project 
-    filters = ".*test.*, .*/resources/.*" // What paths to exclude? Use comma oder semicolon to separate
-    rulesets = "other/optional/ruleset.jar" // Custom rule sets can be linked to this, use comma oder semicolon to separate, remove if unused.
+    version = "1.0.0.[version]"
+    input = "$input/src/main/kotlin"
+    config = "$project.projectDir/detekt.yml"
+    filters = ".*test.*, .*/resources/.*"
 }
 ```
 
-For gradle-script-kotlin:
+##### <a name="gradlekotlin">Configuration when using kotlin dsl</a>
+For gradle version >= 3.5
 
 ```kotlin
 import io.gitlab.arturbosch.detekt.DetektExtension
@@ -161,23 +166,71 @@ buildscript {
     }
 }
 plugins {
-    id("io.gitlab.arturbosch.detekt").version("1.0.0.M10.3")
+    id("io.gitlab.arturbosch.detekt").version("1.0.0.[version]")
 }
 
 configure<DetektExtension> {
-    version = "1.0.0.M10.3"  // Specify current detekt version
-    config = "${project.projectDir}/detekt.yml" // Use $project.projectDir to navigate inside your project
-    filters = ".*test.*,.*/resources/.*,.*/tmp/.*" // What paths to exclude? Use comma oder semicolon to separate    
-    // rulesets = "other/optional/ruleset.jar" // Custom rule sets can be linked to this, use comma oder semicolon to separate, remove if unused.
+    version = "1.0.0.[version]"
+    input = "$input/src/main/kotlin"
+    config = "${project.projectDir}/detekt.yml"
+    filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
 }
 ```
 
-Now three new tasks are available: 
-- `detekt` - runs normal _detekt_ analysis and complexity report
-- `detektFormat` - formats your kotlin code, needs `config` parameter (see [Formatting - Code Style](#formatting))
-- `detektMigrate` - migrates imports, needs `config` parameter (experimental)
+#### <a name="tasks">Available plugin tasks</a>
 
-##### Migration
+- `detektCheck` - Runs a _detekt_ analysis and complexity report. Configure the analysis inside the `detekt {}`-closure. By default the default rule set is used without output report or  black- and whitelist checks.
+- `detektFormat` - Formats your kotlin code by using the formatting rule set. Specify which rules should be turned on/off and which should be auto corrected. (see [Formatting - Code Style](#formatting)). Pay attention that this formatting rule set is not as powerful as `intellij's inspection` and never will be. It is recommend to use the `detektIdeaFormat` task which needs some pre configurations.
+- `detektMigrate` - Experimental feature for now. Just supports migration of specified imports. See [migration section](#migration).
+- `detektIdeaFormat` - Uses a local `idea` installation to format your kotlin (and other) code according to the specified `code-style.xml`.
+- `detektIdeaInspect` Uses a local `idea` installation to run inspections on your kotlin (and other) code according to the specified `inspections.xml` profile.
+
+##### Configure a local idea for detekt
+
+- download the community edition of [intellij](https://www.jetbrains.com/idea/download/)
+- extract the file to your preferred location eg. `~/.idea`
+- let detekt know about idea inside the `detekt-closure`
+- extract `code-style.xml` and `inpect.xml` from idea settings (`Settings>CodeStyle>Scheme` and `Settings>Inspections>Profile`)
+- run `detektIdeaFormat` or `detektIdeaInspect`
+
+```groovy
+String USER_HOME = System.getProperty("user.home")
+
+detekt {    
+    input = "$input/src/main/kotlin"
+    report = "$input/reports"
+    idea {
+        path = "$USER_HOME/.idea"
+        codeStyleScheme = "$USER_HOME/.idea/idea-code-style.xml"
+        inspectionsProfile = "$USER_HOME/.idea/inspect.xml"
+        mask = "*.kt,"
+    }
+}
+```
+
+For more information on using idea as a headless formatting/inspection tool see [here](https://www.jetbrains.com/help/idea/working-with-intellij-idea-features-from-command-line.html).
+
+##### <a name="closure">Options for detekt configuration closure</a>
+
+```groovy
+detekt {
+    version = "1.0.0.[version]"  // Specify latest detekt version, when unspecified plugins default version is used
+    input = "$input/src/main/kotlin" // input is pre configured to 'project.projectDir.absolutePath'
+    config = "$project.projectDir/detekt.yml" // Use $project.projectDir or to navigate inside your project 
+    configResource = "/detekt.yml" // Use this parameter instead of config if your detekt yaml file is inside your resources. Is needed for multi project maven tasks.
+    filters = ".*test.*, .*/resources/.*" // What paths to exclude? Use comma oder semicolon to separate
+    rulesets = "other/optional/ruleset.jar" // Custom rule sets can be linked to this, use comma oder semicolon to separate, remove if unused.
+    disableDefaultRuleSets = false // Disables the default rule set. Just use detekt as the detection engine with your custom rule sets.
+    report = "$project.projectDir/reports" // Specifies where reports should be saved. This path must exist for output and baseline parameters.
+    output = true // If true prints the findings into a txt file.
+    baseline = false // If true all current findings are saved in a baseline.xml to only consider new code smells for further runs.
+    parallel = true // Use this flag if your project has more than 200 files. 
+    useTabs = false // Turns of indentation check for spaces if true, default is false and does not need to be specified
+    generateConfig = true // Use this flag to generate a default configuration yaml file which can be used for further tuning detekt. Remove this after the generation
+}
+```
+
+##### <a name="migration">Migration</a>
 
 Migration rules can be configured in your `detekt.yml` file. For now only migration of imports is supported.
 
@@ -219,14 +272,12 @@ task detekt(type: JavaExec) {
 }
 
 dependencies {
-	detekt 'io.gitlab.arturbosch.detekt:detekt-cli:1.0.0.[CURRENT_MILESTONE]'
-	detekt 'io.gitlab.arturbosch.detekt:detekt-formatting:1.0.0.[CURRENT_MILESTONE]'
+	detekt 'io.gitlab.arturbosch.detekt:detekt-cli:1.0.0.[version]'
+	detekt 'io.gitlab.arturbosch.detekt:detekt-formatting:1.0.0.[version]'
 }
 ```
 
 `Attention Android Developers! the dependencies section must be at the bottom, after the repository, configurations and task sections!`
-
-![_detekt_ in gradle](img/gradle-detekt.png "detekt in gradle")
 
 #### <a name="maventask">Using _detekt_ in Maven Projects</a>
 
@@ -468,6 +519,8 @@ Rule extension functions that allow allow to skip compilation, ktFile and visit 
 
 ### <a name="formatting">Formatting</a>
 
+>As of `M11` the `detektIdeaFormat`-task makes the formatting rule set obsolete to a big part. It is highly advised to use that gradle task for indentation and spacing. Rules like removing OptionalUnit and converting to ExpressionBodySyntax for single return statements can still be useful.
+
 [KtLint](https://github.com/shyiko/ktlint) was first to support auto correct formatting according to the kotlin [coding conventions](https://kotlinlang.org/docs/reference/coding-conventions.html).
 In _detekt_ I made an effort to port over all available formatting rules to detect style violations and auto correct them.
 
@@ -475,13 +528,12 @@ Following configuration I use to check the style for _detekt_. If your like me w
 rule set level to turn off indentation check for spaces (or simple turn off `Indentation` rule).
 
 ```yaml
-autoCorrect: true
 formatting:
   active: true
   useTabs: true
   Indentation:
     active: false
-    autoCorrect: false
+    indentSize: 4
   ConsecutiveBlankLines:
     active: true
     autoCorrect: true
@@ -509,6 +561,18 @@ formatting:
   UnusedImports:
     active: true
     autoCorrect: true
+  OptionalSemicolon:
+    active: true
+    autoCorrect: true
+  OptionalUnit:
+    active: true
+    autoCorrect: true
+  ExpressionBodySyntax:
+    active: false
+    autoCorrect: true
+  ExpressionBodySyntaxLineBreaks:
+    active: false
+    autoCorrect: true
 ```
 
 ### <a name="baseline">Code Smell baseline and ignore list</a>
@@ -522,16 +586,15 @@ With `--baseline` you generate a `baseline.xml` where code smells are white- or 
 
 ```xml
 <SmellBaseline>
-    <Blacklist timestamp="1483388204705">
-        <ID>CatchRuntimeException:Junk.kt$e: RuntimeException</ID>
-    </Blacklist>
-    <Whitelist timestamp="1483446226153">
-        <ID>NestedBlockDepth:OptionalSemicolon.kt$OptionalSemicolon$override fun procedure(node: ASTNode)</ID>
-        <ID>NestedBlockDepth:Indentation.kt$Indentation$override fun procedure(node: ASTNode)</ID>
-        <ID>EmptyFunctionBlock:Rule.kt$Rule${ }</ID>
-        <ID>NoElseInWhenExpression:ExplicitGarbageCollectionCall.kt$ExplicitGarbageCollectionCall$when (it.text) { "System", "Runtime.getRuntime()" -&gt; addFindings(CodeSmell(id, Entity.Companion.from(expression))) }</ID>
-        <ID>NamingConventionViolation:TooManyFunctions2.kt$TooManyFunctions2 : Rule</ID>
-    </Whitelist>
+  <Blacklist timestamp="1483388204705">
+    <ID>CatchRuntimeException:Junk.kt$e: RuntimeException</ID>
+  </Blacklist>
+  <Whitelist timestamp="1496432564542">
+    <ID>NestedBlockDepth:Indentation.kt$Indentation$override fun procedure(node: ASTNode)</ID>
+    <ID>ComplexCondition:SpacingAroundOperator.kt$SpacingAroundOperator$tokenSet.contains(node.elementType) &amp;&amp; node is LeafPsiElement &amp;&amp; !node.isPartOf(KtPrefixExpression::class) &amp;&amp; // not unary !node.isPartOf(KtTypeParameterList::class) &amp;&amp; // fun &lt;T&gt;fn(): T {} !node.isPartOf(KtTypeArgumentList::class) &amp;&amp; // C&lt;T&gt; !node.isPartOf(KtValueArgument::class) &amp;&amp; // fn(*array) !node.isPartOf(KtImportDirective::class) &amp;&amp; // import * !node.isPartOf(KtSuperExpression::class)</ID>
+    <ID>TooManyFunctions:LargeClass.kt$io.gitlab.arturbosch.detekt.rules.complexity.LargeClass.kt</ID>
+    <ID>ComplexMethod:DetektExtension.kt$DetektExtension$fun convertToArguments(): MutableList&lt;String&gt;</ID>
+  </Whitelist>
 </SmellBaseline>
 ```
 
@@ -541,11 +604,11 @@ inside the `report.detekt` file.
 
 ### <a name="contributors">Contributors</a>
 
-- [Artur Bosch](https://github.com/arturbosch): Maintainer
-- [lummax](https://github.com/lummax): Cli enhancements
-- [Sean Flanigan](https://github.com/seanf): Config from classpath resource
-- [Sebastian Schuberth](https://github.com/sschuberth): Dep. update
-- [Olivier Lemasle](https://github.com/olivierlemasle): Bug fix
+- [Artur Bosch](https://github.com/arturbosch) - Maintainer
+- [lummax](https://github.com/lummax) - Cli enhancements
+- [Sean Flanigan](https://github.com/seanf) - Config from classpath resource
+- [Sebastian Schuberth](https://github.com/sschuberth) - Dep. update
+- [Olivier Lemasle](https://github.com/olivierlemasle) - Bug fix
 
 #### Credits
 - [Stanley Shyiko](https://github.com/shyiko): `detekt` migrated the formatting rules from [ktlint](https://github.com/shyiko/ktlint)
