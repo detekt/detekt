@@ -18,10 +18,10 @@ class UnusedImports(config: Config) : Rule("UnusedImports", Severity.Style, conf
 
 	private val operatorSet = setOf("unaryPlus", "unaryMinus", "not", "inc", "dec", "plus", "minus", "times", "div",
 			"mod", "rangeTo", "contains", "get", "set", "invoke", "plusAssign", "minusAssign", "timesAssign", "divAssign",
-			"modAssign", "equals", "compareTo")
+			"modAssign", "equals", "compareTo", "iterator", "getValue", "setValue")
 
 	private var imports = mutableListOf<Pair<String, KtImportDirective>>()
-	val kotlinDocReferencesRegExp = Regex("\\[([^\\]]+)\\](?!\\[)")
+	private val kotlinDocReferencesRegExp = Regex("\\[([^]]+)](?!\\[)")
 
 	override fun visitFile(file: PsiFile?) {
 		imports.clear()
@@ -59,14 +59,11 @@ class UnusedImports(config: Config) : Rule("UnusedImports", Severity.Style, conf
 		dcl.docComment?.getDefaultSection()?.getContent()?.let {
 			kotlinDocReferencesRegExp.findAll(it, 0)
 					.map { it.groupValues[1] }
-					.forEach {
-						imports.find { pair -> pair.second.identifier() == it }?.let {
-							imports.remove(it)
-						}
-					}
+					.forEach { imports.removeIf { pair -> pair.second.identifier() == it } }
 		}
 		super.visitDeclaration(dcl)
 	}
-}
 
-private fun KtImportDirective.identifier() = this.importPath?.importedName?.identifier
+	private fun KtImportDirective.identifier() = this.importPath?.importedName?.identifier
+
+}
