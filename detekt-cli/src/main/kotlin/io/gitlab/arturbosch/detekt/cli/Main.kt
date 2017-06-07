@@ -25,8 +25,7 @@ class Main {
 			converter = ClasspathResourceConverter::class)
 	var configResource: URL? = null
 
-	@Parameter(names = arrayOf("--generate-config", "-gc"), help = true,
-			description = "Export default config to default-detekt-config.yml.")
+	@Parameter(names = arrayOf("--generate-config", "-gc"), description = "Export default config to default-detekt-config.yml.")
 	var generateConfig: Boolean = false
 
 	@Parameter(names = arrayOf("--report", "-rp"), description = "Path to the report directory where findings should be stored (if --output) and baseline.xml generated (if --baseline).",

@@ -7,7 +7,7 @@ buildscript {
 	dependencies {
 		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
 		classpath "org.junit.platform:junit-platform-gradle-plugin:$junitPlatformVersion"
-		classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.0.0.M10.3"
+		classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$usedDetektGradlePlugin"
 	}
 }
 
@@ -159,15 +159,15 @@ String USER_HOME = System.getProperty("user.home")
 
 detekt {
 	debug = true
-	version = "1.0.0.M11"
+	version = "1.0.0.M10.3"
 	filters = '.*/test/.*'
 	config = "$project.projectDir/detekt-cli/src/main/resources/default-detekt-config.yml"
 	report = "$project.projectDir/reports"
-//	idea {
-//		path = "$USER_HOME/.idea"
-//		codeStyleScheme = "$USER_HOME/.idea/idea-code-style.xml"
-//		inspectionsProfile = "$USER_HOME/.idea/inspect.xml"
-//		mask = "*.kt,"
-//	}
+	idea {
+		path = "$USER_HOME/.idea"
+		codeStyleScheme = "$USER_HOME/.idea/idea-code-style.xml"
+		inspectionsProfile = "$USER_HOME/.idea/inspect.xml"
+		mask = "*.kt,"
+	}
 }
 

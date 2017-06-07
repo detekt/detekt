@@ -180,6 +180,7 @@ configure<DetektExtension> {
 #### <a name="tasks">Available plugin tasks</a>
 
 - `detektCheck` - Runs a _detekt_ analysis and complexity report. Configure the analysis inside the `detekt-closure`. By default the standard rule set is used without output report or  black- and whitelist checks.
+- `detektGenerateConfig` - Generates a default detekt config file into your projects location.
 - `detektFormat` - Formats your kotlin code by using the formatting rule set. Specify which rules should be turned on/off and which should be auto corrected. (see [Formatting - Code Style](#formatting)). Pay attention that this formatting rule set is not as powerful as `intellij's inspection` and never will be. It is recommend to use the `detektIdeaFormat` task which needs some pre configurations.
 - `detektMigrate` - Experimental feature for now. Just supports migration of specified imports. See [migration section](#migration).
 - `detektIdeaFormat` - Uses a local `idea` installation to format your kotlin (and other) code according to the specified `code-style.xml`.
