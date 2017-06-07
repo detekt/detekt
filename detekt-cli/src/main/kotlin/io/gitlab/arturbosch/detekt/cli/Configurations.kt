@@ -40,15 +40,18 @@ class FormatConfig(private val useTabs: Boolean) : Config {
 	}
 }
 
+private val DEFAULT_CONFIG = "default-detekt-config.yml"
+
 /**
  * @author lummax
  */
 class ConfigExporter(val main: Main) : Executable {
 
 	override fun execute() {
-		val defaultConfig = javaClass.getResourceAsStream("/default-detekt-config.yml") ?:
-				throw IllegalStateException("Unable to load default-detekt-config.yml from resources.")
-		defaultConfig.copyTo(File("default-detekt-config.yml").outputStream())
+		val defaultConfig = javaClass.getResourceAsStream("/$DEFAULT_CONFIG") ?:
+				throw IllegalStateException("Unable to load $DEFAULT_CONFIG from resources.")
+		defaultConfig.copyTo(File(DEFAULT_CONFIG).outputStream())
+		println("\nSuccessfully copied $DEFAULT_CONFIG to project location.")
 	}
 
 }
