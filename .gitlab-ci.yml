@@ -14,7 +14,7 @@ cache:
 build:
   stage: build
   script:
-    - ./gradlew build install
+    - ./gradlew build install detektCheck
   artifacts:
     paths:
       - build/libs/*.jar
