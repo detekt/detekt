@@ -45,7 +45,7 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 - `java -jar detekt-cli/build/libs/detekt-cli-[version]-all.jar [parameters]*`
 
 ##### Parameters for CLI
-The CLI uses jcommander for argument parsing. Following is shown when `-h` is entered:
+The CLI uses jcommander for argument parsing. Following parameters are shown when `-h` is entered:
 
 ```
 The following option is required: --project, -p
@@ -546,3 +546,6 @@ inside the `report.detekt` file.
 - [Sean Flanigan](https://github.com/seanf): Config from classpath resource
 - [Sebastian Schuberth](https://github.com/sschuberth): Dep. update
 - [Olivier Lemasle](https://github.com/olivierlemasle): Bug fix
+
+#### Credits
+- [Stanley Shyiko](https://github.com/shyiko): `detekt` migrated the formatting rules from [ktlint](https://github.com/shyiko/ktlint)
