@@ -21,6 +21,7 @@ import org.jetbrains.kotlin.lexer.KtTokens.TRY_KEYWORD
 import org.jetbrains.kotlin.lexer.KtTokens.WHEN_KEYWORD
 import org.jetbrains.kotlin.lexer.KtTokens.WHILE_KEYWORD
 import org.jetbrains.kotlin.psi.KtCatchClause
+import org.jetbrains.kotlin.psi.KtPropertyAccessor
 import org.jetbrains.kotlin.psi.psiUtil.nextLeaf
 
 /**
@@ -41,9 +42,12 @@ class SpacingAfterKeyword(config: Config) : TokenRule("SpacingAfterKeyword", Sev
 				leaf.rawInsertAfterMe(PsiWhiteSpaceImpl(" "))
 			}
 		} else if (keywordsWithoutSpaces.contains(leaf.elementType) && leaf.nextLeafIsWhiteSpace()) {
-			addFindings(CodeSmell(id, Entity.from(leaf, offset = leaf.text.length)))
-			withAutoCorrect {
-				leaf.nextLeaf()?.delete()
+			val parent = leaf.parent // property accessors without body need no check #71
+			if (parent is KtPropertyAccessor && parent.hasBody()) {
+				addFindings(CodeSmell(id, Entity.from(leaf, offset = leaf.text.length)))
+				withAutoCorrect {
+					leaf.nextLeaf()?.delete()
+				}
 			}
 		}
 	}

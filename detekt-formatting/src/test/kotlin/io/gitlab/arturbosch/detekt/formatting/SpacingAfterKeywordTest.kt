@@ -63,7 +63,7 @@ class SpacingAfterKeywordTest : RuleTest {
 			get () {
 				return ""
 			}
-			set (value) {
+			private set (value) {
 				x = value
 			}
             """
@@ -73,10 +73,25 @@ class SpacingAfterKeywordTest : RuleTest {
 			get() {
 				return ""
 			}
-			set(value) {
+			private set(value) {
 				x = value
 			}
             """.trimIndent()
 		)
+	}
+
+	@Test
+	fun visibilityOrInjectProperty() {
+		val findings = rule.lint(
+				"""
+        var setterVisibility: String = "abc"
+            private set
+        var setterWithAnnotation: Any? = null
+            @Inject set
+        var setterOnNextLine: String
+            private set
+            (value) { setterOnNextLine = value}
+            """)
+		assertThat(findings).hasSize(1)
 	}
 }
