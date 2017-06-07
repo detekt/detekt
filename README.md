@@ -642,6 +642,7 @@ inside the `report.detekt` file.
 
 - [Artur Bosch](https://github.com/arturbosch) - Maintainer
 - [lummax](https://github.com/lummax) - Cli enhancements
+- [Svyatoslav Chatchenko](https://github.com/MyDogTom) - NamingConventions and UnusedImport fixes
 - [Sean Flanigan](https://github.com/seanf) - Config from classpath resource
 - [Sebastian Schuberth](https://github.com/sschuberth) - Dep. update
 - [Olivier Lemasle](https://github.com/olivierlemasle) - Bug fix
