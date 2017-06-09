@@ -19,7 +19,7 @@ class TooManyFunctions(config: Config = Config.empty, threshold: Int = 10) : Cod
 		super.visitFile(file)
 		if (amount > threshold) {
 			addFindings(ThresholdedCodeSmell(
-					id = id, entity = Entity.from(file),
+					id = id, severity = severity, entity = Entity.from(file),
 					metric = Metric(type = "SIZE", value = amount, threshold = 10))
 			)
 		}

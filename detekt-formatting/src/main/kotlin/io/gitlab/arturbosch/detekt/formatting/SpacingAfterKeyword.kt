@@ -36,7 +36,7 @@ class SpacingAfterKeyword(config: Config) : TokenRule("SpacingAfterKeyword", Sev
 
 	override fun visitLeaf(leaf: LeafPsiElement) {
 		if (keywords.contains(leaf.elementType) && !leaf.nextLeafIsWhiteSpace()) {
-			addFindings(CodeSmell(id, Entity.from(leaf, offset = leaf.text.length)))
+			addFindings(CodeSmell(id, severity, Entity.from(leaf, offset = leaf.text.length)))
 			withAutoCorrect {
 				handleCatchCase(leaf)
 				leaf.rawInsertAfterMe(PsiWhiteSpaceImpl(" "))
@@ -44,7 +44,7 @@ class SpacingAfterKeyword(config: Config) : TokenRule("SpacingAfterKeyword", Sev
 		} else if (keywordsWithoutSpaces.contains(leaf.elementType) && leaf.nextLeafIsWhiteSpace()) {
 			val parent = leaf.parent // property accessors without body need no check #71
 			if (parent is KtPropertyAccessor && parent.hasBody()) {
-				addFindings(CodeSmell(id, Entity.from(leaf, offset = leaf.text.length)))
+				addFindings(CodeSmell(id, severity, Entity.from(leaf, offset = leaf.text.length)))
 				withAutoCorrect {
 					leaf.nextLeaf()?.delete()
 				}

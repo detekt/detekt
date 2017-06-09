@@ -14,7 +14,7 @@ class WildcardImport(config: Config = Config.empty) : Rule("WildcardImport", Sev
 	override fun visitImportDirective(importDirective: KtImportDirective) {
 		val import = importDirective.importPath?.pathStr
 		if (import != null && import.contains("*")) {
-			addFindings(CodeSmell(id, Entity.Companion.from(importDirective)))
+			addFindings(CodeSmell(id, severity, Entity.Companion.from(importDirective)))
 		}
 	}
 }

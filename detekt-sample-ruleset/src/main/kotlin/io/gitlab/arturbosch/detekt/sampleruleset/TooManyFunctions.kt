@@ -16,7 +16,7 @@ class TooManyFunctions : Rule("TooManyFunctions") {
 	override fun visitFile(file: PsiFile) {
 		super.visitFile(file)
 		if (amount > 10) {
-			addFindings(CodeSmell(id, Entity.from(file)))
+			addFindings(CodeSmell(id, severity, Entity.from(file)))
 		}
 	}
 

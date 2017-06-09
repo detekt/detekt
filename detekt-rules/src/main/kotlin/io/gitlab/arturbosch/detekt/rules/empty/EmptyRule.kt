@@ -14,7 +14,7 @@ open class EmptyRule(id: String, config: Config, severity: Severity = Rule.Sever
 
 	fun KtExpression.addFindingIfBlockExprIsEmpty() {
 		this.asBlockExpression()?.statements?.let {
-			if (it.isEmpty()) addFindings(CodeSmell(id, Entity.from(this)))
+			if (it.isEmpty()) addFindings(CodeSmell(id, severity, Entity.from(this)))
 		}
 	}
 }
