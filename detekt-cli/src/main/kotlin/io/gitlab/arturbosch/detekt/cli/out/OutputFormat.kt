@@ -7,18 +7,13 @@ import java.nio.file.Path
 /**
  * @author Artur Bosch
  */
-class OutputFormat(reportsPath: Path) {
-
-	companion object {
-		private const val OUTPUT_FILE = "report.detekt"
-	}
-
-	private val outputPath = reportsPath.resolve(OUTPUT_FILE)
+class OutputFormat(val report: Path) {
 
 	fun create(smells: List<Finding>) {
+		report.parent?.let { Files.createDirectories(it) }
 		val smellData = smells.map { it.compactWithSignature() }.joinToString("\n")
-		Files.write(outputPath, smellData.toByteArray())
-		println("Successfully wrote findings to $outputPath")
+		Files.write(report, smellData.toByteArray())
+		println("Successfully wrote findings to $report")
 
 	}
 

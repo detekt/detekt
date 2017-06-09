@@ -21,9 +21,9 @@ open class IdeaExtension(open var path: String? = null,
 	fun inspectArgs(ext: DetektExtension): Array<String> {
 		require(path != null) { "Make sure the idea path is specified to run idea tasks!" }
 		require(ext.input != null) { "Make sure the project path is specified!" }
-		require(ext.report != null) { "Make sure the report path is specified where idea inspections are stored!" }
+		require(ext.output != null) { "Make sure the output file is specified where idea inspections are stored!" }
 		require(inspectionsProfile != null) { "Make sure the path to an inspection profile is provided!" }
-		return arrayOf("$path/bin/inspect.sh", ext.input!!, inspectionsProfile!!, ext.report!!)
+		return arrayOf("$path/bin/inspect.sh", ext.input!!, inspectionsProfile!!, ext.output!!)
 	}
 
 	override fun toString(): String {

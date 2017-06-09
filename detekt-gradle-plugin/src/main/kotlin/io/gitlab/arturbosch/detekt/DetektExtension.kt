@@ -13,9 +13,8 @@ open class DetektExtension(open var version: String = "1.0.0.M11",
 						   open var generateConfig: Boolean = false,
 						   open var filters: String? = null,
 						   open var rulesets: String? = null,
-						   open var report: String? = null,
-						   open var output: Boolean = false,
-						   open var baseline: Boolean = false,
+						   open var output: String? = null,
+						   open var baseline: String? = null,
 						   open var parallel: Boolean = false,
 						   open var format: Boolean = false,
 						   open var useTabs: Boolean = false,
@@ -39,9 +38,8 @@ open class DetektExtension(open var version: String = "1.0.0.M11",
 			if (generateConfig) add("--generate-config")
 			filters?.let { add("--filters"); add(it) }
 			rulesets?.let { add("--rules"); add(it) }
-			report?.let { add("--report"); add(it) }
-			if (output) add("--output")
-			if (baseline) add("--baseline")
+			output?.let { add("--output"); add(it) }
+			baseline?.let { add("--baseline"); add(it) }
 			if (parallel) add("--parallel")
 			if (format) add("--format")
 			if (useTabs) add("--useTabs")
