@@ -19,7 +19,7 @@ class LongMethod(config: Config = Config.empty, threshold: Int = 20) : CodeSmell
 		body?.let {
 			val size = body.statements.size
 			if (size > threshold) addFindings(
-					ThresholdedCodeSmell(id, Entity.Companion.from(function), Metric("SIZE", size, threshold)))
+					ThresholdedCodeSmell(id, severity, Entity.Companion.from(function), Metric("SIZE", size, threshold)))
 		}
 		super.visitNamedFunction(function)
 	}

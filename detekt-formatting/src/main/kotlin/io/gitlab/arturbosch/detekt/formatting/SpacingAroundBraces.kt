@@ -41,7 +41,7 @@ class SpacingAroundBraces(config: Config) : TokenRule(
 	private fun PsiElement?.checkForInvalidSpace(brace: LeafPsiElement) {
 		if (this is PsiWhiteSpace && !textContains('\n') &&
 				shouldNotToBeSeparatedBySpace(nextLeaf(skipEmptyElements = true))) {
-			addFindings(CodeSmell(id, Entity.from(brace)))
+			addFindings(CodeSmell(id, severity, Entity.from(brace)))
 			withAutoCorrect { delete() }
 		}
 	}
@@ -61,7 +61,7 @@ class SpacingAroundBraces(config: Config) : TokenRule(
 		}
 
 		if (!spacingBefore || !spacingAfter) {
-			addFindings(CodeSmell(id, Entity.from(this)))
+			addFindings(CodeSmell(id, severity, Entity.from(this)))
 		}
 	}
 

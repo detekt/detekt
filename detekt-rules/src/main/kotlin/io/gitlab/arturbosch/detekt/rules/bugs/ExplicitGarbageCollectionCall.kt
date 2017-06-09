@@ -24,7 +24,7 @@ class ExplicitGarbageCollectionCall(config: Config) : Rule("ExplicitGarbageColle
 		if (it.textMatches("gc") || it.textMatches("runFinalization")) {
 			it.getReceiverExpression()?.let {
 				when (it.text) {
-					"System", "Runtime.getRuntime()" -> addFindings(CodeSmell(id, Entity.Companion.from(expression)))
+					"System", "Runtime.getRuntime()" -> addFindings(CodeSmell(id, severity, Entity.Companion.from(expression)))
 				}
 			}
 		}

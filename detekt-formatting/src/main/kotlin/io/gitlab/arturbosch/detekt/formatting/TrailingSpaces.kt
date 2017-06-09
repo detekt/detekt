@@ -29,7 +29,7 @@ class TrailingSpaces(config: Config) : TokenRule("TrailingSpaces", Severity.Styl
 
 	private fun replaceTracingSpaces(node: PsiWhiteSpace, candidates: List<String>, replaceWith: String) {
 		if (candidates.find { !it.isEmpty() } != null) {
-			addFindings(CodeSmell(id, Entity.from(node)))
+			addFindings(CodeSmell(id, severity, Entity.from(node)))
 			withAutoCorrect {
 				(node as LeafPsiElement).replaceWithText(replaceWith)
 			}

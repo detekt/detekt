@@ -64,7 +64,7 @@ class NamingConventionViolation(config: Config = Config.empty) : Rule(RULE_SUB_C
 	}
 
 	private fun add(declaration: KtNamedDeclaration) {
-		addFindings(CodeSmell(id, Entity.Companion.from(declaration)))
+		addFindings(CodeSmell(id, severity, Entity.Companion.from(declaration)))
 	}
 
 	private fun KtVariableDeclaration.isTopLevel(): Boolean = this is KtProperty && this.isTopLevel
