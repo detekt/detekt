@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.cli
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.cli.out.DetektBaselineFormat
-import io.gitlab.arturbosch.detekt.cli.out.OutputFormat
+import io.gitlab.arturbosch.detekt.cli.out.format.OutputFormat
 import io.gitlab.arturbosch.detekt.cli.out.SmellThreshold
 import io.gitlab.arturbosch.detekt.core.COMPLEXITY_KEY
 import io.gitlab.arturbosch.detekt.core.Detektion
@@ -17,10 +17,11 @@ class OutputFacade(args: Main,
 				   config: Config,
 				   private val detektion: Detektion) {
 
+	private val outputFormatter: OutputFormat.Formatter = args.outputFormatter
 	private val findings: Map<String, List<Finding>> = detektion.findings
 	private val notifications: List<Notification> = detektion.notifications
 	private val baselineFormat = args.baseline?.let { DetektBaselineFormat(it) }
-	private val outputFormat = args.output?.let { OutputFormat(it) }
+	private val outputFormat = args.output?.let { outputFormatter.create(it) }
 	private val smellThreshold = SmellThreshold(config, baselineFormat)
 
 	fun consoleFacade() {
