@@ -58,7 +58,7 @@ class SpacingAroundOperator(config: Config) : TokenRule("SpacingAroundOperator",
 				!node.isPartOf(KtSuperExpression::class) /*super<T>*/) {
 
 			if (node.trimSpacesAround(autoCorrect)) {
-				addFindings(CodeSmell(id, Entity.from(node)))
+				addFindings(CodeSmell(id, severity, Entity.from(node)))
 			}
 
 		}

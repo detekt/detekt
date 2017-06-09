@@ -16,7 +16,7 @@ class NoDocOverPublicClass(config: Config = Config.empty) : Rule("NoDocOverPubli
 	override fun visitClass(klass: KtClass) {
 
 		if (klass.isPublicNotOverriden()) {
-			addFindings(CodeSmell(id, Entity.Companion.from(klass)))
+			addFindings(CodeSmell(id, severity, Entity.Companion.from(klass)))
 		}
 		if (klass.notEnum()) { // Stop considering enum entries
 			super.visitClass(klass)
@@ -30,7 +30,7 @@ class NoDocOverPublicClass(config: Config = Config.empty) : Rule("NoDocOverPubli
 			return
 
 		if (declaration.isPublicNotOverriden()) {
-			addFindings(CodeSmell(id, Entity.Companion.from(declaration)))
+			addFindings(CodeSmell(id, severity, Entity.Companion.from(declaration)))
 		}
 		super.visitObjectDeclaration(declaration)
 	}

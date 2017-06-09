@@ -74,13 +74,13 @@ class TestLM : Rule("LongMethod") {
 		val start = Location.startLineAndColumn(function.funKeyword!!).line
 		val end = Location.startLineAndColumn(function.lastBlockStatementOrThis()).line
 		val offset = end - start
-		if (offset > 10) addFindings(CodeSmell(id, Entity.from(function)))
+		if (offset > 10) addFindings(CodeSmell(id, severity, Entity.from(function)))
 	}
 }
 
 class TestLPL : Rule("LongParameterList") {
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		val size = function.valueParameters.size
-		if (size > 5) addFindings(CodeSmell(id, Entity.from(function)))
+		if (size > 5) addFindings(CodeSmell(id, severity, Entity.from(function)))
 	}
 }

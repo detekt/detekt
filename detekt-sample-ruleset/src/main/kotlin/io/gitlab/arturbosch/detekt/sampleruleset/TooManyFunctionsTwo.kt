@@ -19,7 +19,9 @@ class TooManyFunctionsTwo(config: Config) : Rule("TooManyFunctionsTwo", Severity
 		super.visitFile(file)
 		if (amount > 10) {
 			addFindings(CodeSmell(
-					id = id, entity = Entity.from(file),
+					id = id,
+					severity = severity,
+					entity = Entity.from(file),
 					description = "Too many functions can make the maintainability of a file more costly",
 					metrics = listOf(Metric(type = "SIZE", value = amount, threshold = 10)),
 					references = listOf())
