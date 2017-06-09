@@ -71,7 +71,7 @@ class FeatureEnvy(config: Config = Config.empty) : CodeSmellRule("FeatureEnvy", 
 				println(ktElement.text)
 				println("factor: $value")
 				if (threshold < value) {
-					addFindings(CodeSmellWithReferenceAndMetric(id, entityOfFunction,
+					addFindings(CodeSmellWithReferenceAndMetric(id, severity, entityOfFunction,
 							Entity.from(ktElement), Metric("FeatureEnvyFactor", value, threshold, 100)))
 				}
 			}

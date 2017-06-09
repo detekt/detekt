@@ -48,7 +48,7 @@ class LargeClass(config: Config = Config.empty, threshold: Int = 70) : CodeSmell
 		super.visitClassOrObject(classOrObject)
 		val loc = locStack.pop()
 		if (loc > threshold) {
-			addFindings(ThresholdedCodeSmell(id, Entity.Companion.from(classOrObject), Metric("SIZE", loc, threshold)))
+			addFindings(ThresholdedCodeSmell(id, severity, Entity.Companion.from(classOrObject), Metric("SIZE", loc, threshold)))
 		}
 	}
 

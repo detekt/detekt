@@ -27,7 +27,7 @@ class UnusedImports(config: Config) : Rule("UnusedImports", Severity.Style, conf
 		imports.clear()
 		super.visitFile(file)
 		imports.forEach {
-			addFindings(CodeSmell(id, Entity.from(it.second), "Unused import"))
+			addFindings(CodeSmell(id, severity, Entity.from(it.second), "Unused import"))
 			withAutoCorrect {
 				it.second.delete()
 			}

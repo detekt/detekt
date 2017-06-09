@@ -18,11 +18,11 @@ class NoDocOverPublicMethod(config: Config = Config.empty) : Rule("NoDocOverPubl
 		val modifierList = function.modifierList
 		if (function.docComment == null) {
 			if (modifierList == null) {
-				addFindings(CodeSmell(id, methodHeaderLocation(function)))
+				addFindings(CodeSmell(id, severity, methodHeaderLocation(function)))
 			}
 			if (modifierList != null) {
 				if (function.isPublicNotOverriden()) {
-					addFindings(CodeSmell(id, methodHeaderLocation(function)))
+					addFindings(CodeSmell(id, severity, methodHeaderLocation(function)))
 				}
 			}
 		}

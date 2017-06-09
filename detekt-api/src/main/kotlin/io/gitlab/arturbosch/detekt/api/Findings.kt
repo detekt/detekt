@@ -13,6 +13,7 @@ import kotlin.reflect.full.memberProperties
  */
 interface Finding : Compactable, Describable, Reflective, HasEntity, HasMetrics {
 	val id: String
+	val severity: Rule.Severity
 	val references: List<Entity>
 }
 
