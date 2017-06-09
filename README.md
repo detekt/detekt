@@ -58,9 +58,8 @@ Usage: detekt [options]
   Options:
     --baseline, -b
       Treats current analysis findings as a smell baseline for further detekt
-      runs. If a baseline xml file exists, only new code smells not in the
-      baseline are printed in the console.
-      Default: false
+      runs. If a baseline xml file is passed in, only new code smells not in
+      the baseline are printed in the console.
     --config, -c
       Path to the config file (path/to/config.yml).
     --config-resource, -cr
@@ -68,7 +67,7 @@ Usage: detekt [options]
     --debug, -d
       Debugs given ktFile by printing its elements.
       Default: false
-    --disableDefaultRuleSets, -dd
+    --disable-default-rulesets, -dd
       Disables default rule sets.
       Default: false
     --filters, -f
@@ -77,21 +76,20 @@ Usage: detekt [options]
       Enables formatting of source code. Cannot be used together with
       --config.
       Default: false
+    --generate-config, -gc
+      Export default config to default-detekt-config.yml.
+      Default: false
     --help, -h
       Shows the usage.
     --output, -o
-      True if findings should be written into a report.detekt file inside the
-      report folder.
-      Default: false
+      Specify the file to output to.
+      Default: reports/detekt.xml
     --parallel
       Enables parallel compilation of source files. Should only be used if the
       analyzing project has more than ~200 kotlin files.
       Default: false
   * --project, -p
       Project path to analyze (path/to/project).
-    --report, -rp
-      Path to the report directory where findings should be stored (if
-      --output) and baseline.xml generated (if --baseline).
     --rules, -r
       Extra paths to ruleset jars separated by ';'.
     --useTabs
@@ -223,9 +221,8 @@ detekt {
     filters = ".*test.*, .*/resources/.*" // What paths to exclude? Use comma oder semicolon to separate
     rulesets = "other/optional/ruleset.jar" // Custom rule sets can be linked to this, use comma oder semicolon to separate, remove if unused.
     disableDefaultRuleSets = false // Disables the default rule set. Just use detekt as the detection engine with your custom rule sets.
-    report = "$project.projectDir/reports" // Specifies where reports should be saved. This path must exist for output and baseline parameters.
-    output = true // If true prints the findings into a txt file.
-    baseline = false // If true all current findings are saved in a baseline.xml to only consider new code smells for further runs.
+    output = "$project.projectDir/reports/detekt.xml" // If present, prints all findings into that file.
+    baseline = "$project.projectDir/reports/baseline.xml" // If present all current findings are saved in a baseline.xml to only consider new code smells for further runs.
     parallel = true // Use this flag if your project has more than 200 files. 
     useTabs = false // Turns of indentation check for spaces if true, default is false and does not need to be specified
     generateConfig = true // Use this flag to generate a default configuration yaml file which can be used for further tuning detekt. Remove this after the generation
@@ -614,10 +611,8 @@ formatting:
 
 ### <a name="baseline">Code Smell baseline and ignore list</a>
 
-Specify a report directory with `--report` parameter.
- 
-Now with --output you can generate a `report.detekt` inside your
-report directory which holds all findings of current analysis.
+Specify a report output with `--output` parameter.
+Now you can generate a report which holds all findings of current analysis.
 
 With `--baseline` you generate a `baseline.xml` where code smells are white- or blacklisted.
 
@@ -637,7 +632,7 @@ With `--baseline` you generate a `baseline.xml` where code smells are white- or 
 
 The intention of a whitelist is that only new code smells are printed on further analysis. The blacklist can be used
 to write down false positive detections. The `ID` node must be build of `<RuleID>:<Signature>`. Both values can be found
-inside the `report.detekt` file.
+inside the report file.
 
 ### <a name="contributors">Contributors</a>
 

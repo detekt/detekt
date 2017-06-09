@@ -9,9 +9,6 @@ import io.gitlab.arturbosch.detekt.core.COMPLEXITY_KEY
 import io.gitlab.arturbosch.detekt.core.Detektion
 import io.gitlab.arturbosch.detekt.core.LLOC_KEY
 import io.gitlab.arturbosch.detekt.core.Notification
-import io.gitlab.arturbosch.detekt.core.isDirectory
-import java.nio.file.Files
-import java.nio.file.Path
 
 /**
  * @author Artur Bosch
@@ -20,13 +17,10 @@ class OutputFacade(args: Main,
 				   config: Config,
 				   private val detektion: Detektion) {
 
-	private val generateOutput = args.output
-	private val generateBaseline = args.baseline
-	private val reportDirectory: Path? = args.reportDirectory
 	private val findings: Map<String, List<Finding>> = detektion.findings
 	private val notifications: List<Notification> = detektion.notifications
-	private val baselineFormat = reportDirectory?.let { DetektBaselineFormat(it) }
-	private val outputFormat = reportDirectory?.let { OutputFormat(it) }
+	private val baselineFormat = args.baseline?.let { DetektBaselineFormat(it) }
+	private val outputFormat = args.output?.let { OutputFormat(it) }
 	private val smellThreshold = SmellThreshold(config, baselineFormat)
 
 	fun consoleFacade() {
@@ -67,26 +61,13 @@ class OutputFacade(args: Main,
 	}
 
 	fun reportFacade() {
-		if (reportDirectory != null) {
-			reportDirectory.createFoldersIfNeeded()
-			val smells = findings.flatMap { it.value }
-			if (generateOutput || generateBaseline) println()
-			if (generateOutput) outputFormat?.create(smells)
-			if (generateBaseline) baselineFormat?.create(smells)
-		}
+		val smells = findings.flatMap { it.value }
+		println()
+		outputFormat?.create(smells)
+		baselineFormat?.create(smells)
 	}
 
 	fun buildErrorCheck() {
 		smellThreshold.check(detektion)
 	}
-
-	private fun Path.createFoldersIfNeeded() {
-		if (Files.exists(this) && !this.isDirectory()) {
-			throw IllegalArgumentException("Report path must be a directory!")
-		} else {
-			Files.createDirectories(this)
-		}
-	}
-
 }
-

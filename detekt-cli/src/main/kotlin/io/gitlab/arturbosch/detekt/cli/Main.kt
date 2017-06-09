@@ -2,8 +2,12 @@ package io.gitlab.arturbosch.detekt.cli
 
 import com.beust.jcommander.Parameter
 import io.gitlab.arturbosch.detekt.cli.debug.Debugger
+import io.gitlab.arturbosch.detekt.core.isDirectory
+import org.jetbrains.kotlin.utils.addToStdlib.ifNotEmpty
 import java.net.URL
+import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
 
 /**
  * @author Artur Bosch
@@ -28,10 +32,6 @@ class Main {
 	@Parameter(names = arrayOf("--generate-config", "-gc"), description = "Export default config to default-detekt-config.yml.")
 	var generateConfig: Boolean = false
 
-	@Parameter(names = arrayOf("--report", "-rp"), description = "Path to the report directory where findings should be stored (if --output) and baseline.xml generated (if --baseline).",
-			converter = PathConverter::class)
-	var reportDirectory: Path? = null
-
 	@Parameter(names = arrayOf("--rules", "-r"), description = "Extra paths to ruleset jars separated by ';'.")
 	var rules: String? = null
 
@@ -44,11 +44,13 @@ class Main {
 	@Parameter(names = arrayOf("--useTabs"), description = "Tells the formatter that indentation with tabs are valid.")
 	var useTabs: Boolean = false
 
-	@Parameter(names = arrayOf("--baseline", "-b"), description = "Treats current analysis findings as a smell baseline for further detekt runs. If a baseline xml file exists, only new code smells not in the baseline are printed in the console.")
-	var baseline: Boolean = false
+	@Parameter(names = arrayOf("--baseline", "-b"), description = "Treats current analysis findings as a smell baseline for further detekt runs. If a baseline xml file is passed in, only new code smells not in the baseline are printed in the console.",
+			converter = PathConverter::class)
+	var baseline: Path? = null
 
-	@Parameter(names = arrayOf("--output", "-o"), description = "True if findings should be written into a report.detekt file inside the report folder.")
-	var output: Boolean = false
+	@Parameter(names = arrayOf("--output", "-o"), description = "Specify the file to output to.",
+			converter = PathConverter::class)
+	var output: Path? = null
 
 	@Parameter(names = arrayOf("--disable-default-rulesets", "-dd"), description = "Disables default rule sets.")
 	var disableDefaultRuleSets: Boolean = false
@@ -74,12 +76,21 @@ class Main {
 
 		private fun parseArgumentsCheckingReportDirectory(args: Array<String>): Main {
 			val cli = parseArguments(args)
-
-			if (cli.reportDirectory == null && (cli.output || cli.baseline)) {
-				val message = "If using --output and/or --baseline the --report path must be given!"
-				failWithErrorMessage(message)
+			val messages = validateCli(cli)
+			messages.ifNotEmpty {
+				failWithErrorMessages(messages)
 			}
 			return cli
+		}
+
+		private fun validateCli(cli: Main): List<String> {
+			val violations = ArrayList<String>()
+			cli.output?.let {
+				if (Files.exists(it) && it.isDirectory()) {
+					violations += "Output file must not be a directory."
+				}
+			}
+			return violations
 		}
 	}
 }

@@ -14,7 +14,7 @@ fun parseArguments(args: Array<String>): Main {
 		jCommander.parse(*args)
 	} catch (ex: ParameterException) {
 		val message = ex.message
-		failWithErrorMessage(message)
+		failWithErrorMessages(message)
 	}
 
 	if (cli.help) {
@@ -25,8 +25,14 @@ fun parseArguments(args: Array<String>): Main {
 	return cli
 }
 
-fun failWithErrorMessage(message: String?) {
-	println(message)
+fun failWithErrorMessages(vararg messages: String?) {
+	failWithErrorMessages(messages.asIterable())
+}
+
+fun failWithErrorMessages(messages: Iterable<String?>) {
+	messages.forEach {
+		println(it)
+	}
 	println()
 	jCommander.usage()
 	System.exit(-1)
