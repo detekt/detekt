@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<checkstyle version="4.3">
+<file name="detekt-formatting/src/main/kotlin/io/gitlab/arturbosch/detekt/formatting/Indentation.kt">
+	<error line="33" column="2" severity="warning" message="(NestedBlockDepth)" source="detekt.NestedBlockDepth" />
+</file>
+<file name="detekt-formatting/src/main/kotlin/io/gitlab/arturbosch/detekt/formatting/SpacingAroundOperator.kt">
+	<error line="52" column="7" severity="warning" message="(ComplexCondition)" source="detekt.ComplexCondition" />
+</file>
+<file name="detekt-gradle-plugin/src/main/kotlin/io/gitlab/arturbosch/detekt/DetektExtension.kt">
+	<error line="34" column="2" severity="warning" message="(ComplexMethod)" source="detekt.ComplexMethod" />
+</file>
+<file name="detekt-rules/src/main/kotlin/io/gitlab/arturbosch/detekt/rules/complexity/LargeClass.kt">
+	<error line="1" column="1" severity="warning" message="(TooManyFunctions)" source="detekt.TooManyFunctions" />
+</file>
+</checkstyle>

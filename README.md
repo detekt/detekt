@@ -84,6 +84,10 @@ Usage: detekt [options]
     --output, -o
       Specify the file to output to.
       Default: reports/detekt.xml
+    --output-format, -of
+      Specify the output format.
+      Default: PLAIN
+      Possible Values: [PLAIN, XML]
     --parallel
       Enables parallel compilation of source files. Should only be used if the
       analyzing project has more than ~200 kotlin files.
@@ -222,6 +226,7 @@ detekt {
     rulesets = "other/optional/ruleset.jar" // Custom rule sets can be linked to this, use comma oder semicolon to separate, remove if unused.
     disableDefaultRuleSets = false // Disables the default rule set. Just use detekt as the detection engine with your custom rule sets.
     output = "$project.projectDir/reports/detekt.xml" // If present, prints all findings into that file.
+    outputFormat = "xml" // Can be either 'xml' or 'plain'
     baseline = "$project.projectDir/reports/baseline.xml" // If present all current findings are saved in a baseline.xml to only consider new code smells for further runs.
     parallel = true // Use this flag if your project has more than 200 files. 
     useTabs = false // Turns of indentation check for spaces if true, default is false and does not need to be specified
@@ -611,7 +616,7 @@ formatting:
 
 ### <a name="baseline">Code Smell baseline and ignore list</a>
 
-Specify a report output with `--output` parameter.
+Specify a report output with `--output` parameter and specify its format with `--output-format`.
 Now you can generate a report which holds all findings of current analysis.
 
 With `--baseline` you generate a `baseline.xml` where code smells are white- or blacklisted.

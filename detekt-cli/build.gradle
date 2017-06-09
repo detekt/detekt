@@ -9,6 +9,7 @@ dependencies {
 	compile project(':detekt-core')
 	compile project(':detekt-rules')
 	compile project(':detekt-api')
+	compile "org.apache.commons:commons-lang3:$apacheLangVersion"
 	compile "com.beust:jcommander:$jcommanderVersion"
 	compile "org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion"
 	testRuntime "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"

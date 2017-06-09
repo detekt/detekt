@@ -2,12 +2,12 @@ package io.gitlab.arturbosch.detekt.cli
 
 import com.beust.jcommander.Parameter
 import io.gitlab.arturbosch.detekt.cli.debug.Debugger
+import io.gitlab.arturbosch.detekt.cli.out.format.OutputFormat
 import io.gitlab.arturbosch.detekt.core.isDirectory
 import org.jetbrains.kotlin.utils.addToStdlib.ifNotEmpty
 import java.net.URL
 import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
 
 /**
  * @author Artur Bosch
@@ -51,6 +51,9 @@ class Main {
 	@Parameter(names = arrayOf("--output", "-o"), description = "Specify the file to output to.",
 			converter = PathConverter::class)
 	var output: Path? = null
+
+	@Parameter(names = arrayOf("--output-format", "-of"), description = "Specify the output format.")
+	var outputFormatter: OutputFormat.Formatter = OutputFormat.Formatter.PLAIN
 
 	@Parameter(names = arrayOf("--disable-default-rulesets", "-dd"), description = "Disables default rule sets.")
 	var disableDefaultRuleSets: Boolean = false
