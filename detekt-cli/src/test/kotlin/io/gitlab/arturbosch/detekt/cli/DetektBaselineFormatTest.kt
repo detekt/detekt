@@ -11,11 +11,11 @@ import java.nio.file.Files
 internal class DetektBaselineFormatTest {
 
 	private val path = Files.createTempDirectory("baseline_format")
-	private val fullPath = path.resolve(DetektBaselineFormat.BASELINE_FILE)
+	private val fullPath = path.resolve("baseline.xml")
 
 	@Test
 	fun create() {
-		val format = DetektBaselineFormat(path)
+		val format = DetektBaselineFormat(fullPath)
 		format.create(emptyList())
 		BaselineFormat.read(fullPath)
 	}
