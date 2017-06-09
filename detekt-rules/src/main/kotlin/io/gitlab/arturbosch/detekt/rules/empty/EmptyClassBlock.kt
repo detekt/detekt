@@ -12,7 +12,7 @@ class EmptyClassBlock(config: Config) : EmptyRule("EmptyClassBlock", config = co
 
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
 		classOrObject.getBody()?.declarations?.let {
-			if (it.isEmpty()) addFindings(CodeSmell(id, Entity.from(classOrObject)))
+			if (it.isEmpty()) addFindings(CodeSmell(id, severity, Entity.from(classOrObject)))
 		}
 	}
 

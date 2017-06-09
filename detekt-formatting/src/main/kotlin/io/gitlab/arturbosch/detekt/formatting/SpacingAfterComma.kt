@@ -23,7 +23,7 @@ class SpacingAfterComma(config: Config) : TokenRule("SpacingAfterComma", Severit
 
 	private fun checkSpace(leaf: LeafPsiElement) {
 		if (leaf.isSpaceMissing()) {
-			addFindings(CodeSmell(id, Entity.from(leaf, offset = 1)))
+			addFindings(CodeSmell(id, severity, Entity.from(leaf, offset = 1)))
 			withAutoCorrect {
 				leaf.rawInsertAfterMe(PsiWhiteSpaceImpl(" "))
 			}

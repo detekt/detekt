@@ -7,6 +7,7 @@ package io.gitlab.arturbosch.detekt.api
  * @author Artur Bosch
  */
 open class CodeSmell(override val id: String,
+					 override val severity: Rule.Severity,
 					 override val entity: Entity,
 					 override val description: String = "",
 					 override val metrics: List<Metric> = listOf(),
@@ -26,8 +27,8 @@ open class CodeSmell(override val id: String,
  * for the existence of this rule violation.
  */
 open class CodeSmellWithReferenceAndMetric(
-		id: String, entity: Entity, val reference: Entity, metric: Metric) : ThresholdedCodeSmell(
-		id, entity, metric, references = listOf(reference)) {
+		id: String, severity: Rule.Severity, entity: Entity, val reference: Entity, metric: Metric) : ThresholdedCodeSmell(
+		id, severity, entity, metric, references = listOf(reference)) {
 
 	override fun compact(): String {
 		return "$id - $metric - ref=${reference.name} - ${entity.compact()}"
@@ -39,8 +40,8 @@ open class CodeSmellWithReferenceAndMetric(
  * for the existence of this rule violation.
  */
 open class ThresholdedCodeSmell(
-		id: String, entity: Entity, val metric: Metric, references: List<Entity> = emptyList()) : CodeSmell(
-		id, entity, metrics = listOf(metric), references = references) {
+		id: String, severity: Rule.Severity, entity: Entity, val metric: Metric, references: List<Entity> = emptyList()) : CodeSmell(
+		id, severity, entity, metrics = listOf(metric), references = references) {
 	val value: Int
 		get() = metric.value
 	val threshold: Int
