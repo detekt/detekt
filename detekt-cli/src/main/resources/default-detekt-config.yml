@@ -98,7 +98,7 @@ style:
     active: true
   MaxLineLength:
     active: true
-    maxLineLength: 100
+    maxLineLength: 120
   NamingConventionViolation:
     active: true
     variablePattern: '^(_)?[a-z$][a-zA-Z$0-9]*$'
