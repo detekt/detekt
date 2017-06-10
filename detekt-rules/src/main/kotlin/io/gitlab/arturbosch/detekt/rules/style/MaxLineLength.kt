@@ -5,18 +5,14 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtFile
-import java.io.BufferedReader
-import java.io.InputStreamReader
 
 class MaxLineLength(config: Config = Config.empty) : Rule("MaxLineLength", Severity.Style, config) {
 
-	private val maxLineLength: Int = withConfig { valueOrDefault(MAX_LINE_LENGTH) { "100" } }.toInt()
+	private val maxLineLength: Int = withConfig { valueOrDefault(MAX_LINE_LENGTH) { "120" } }.toInt()
 
 	override fun visit(root: KtFile) {
-		val bufferedReader = BufferedReader(InputStreamReader(root.text.byteInputStream()))
-
 		var offset = 0
-		bufferedReader.lines()
+		root.text.splitToSequence("\n")
 				.map { it.length }
 				.forEach {
 					offset += it
