@@ -96,6 +96,9 @@ style:
   active: true
   WildcardImport:
     active: true
+  MaxLineLength:
+    active: true
+    maxLineLength: 100
   NamingConventionViolation:
     active: true
     variablePattern: '^(_)?[a-z$][a-zA-Z$0-9]*$'

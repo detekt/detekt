@@ -14,6 +14,7 @@ class StyleGuideProvider : RuleSetProvider {
 	override fun instance(config: Config): RuleSet {
 		return RuleSet(ruleSetId, listOf(
 				WildcardImport(config),
+				MaxLineLength(config),
 				NamingConventionViolation(config)
 		))
 	}
