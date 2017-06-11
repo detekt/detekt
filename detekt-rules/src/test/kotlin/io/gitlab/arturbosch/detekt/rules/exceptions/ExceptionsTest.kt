@@ -2,7 +2,8 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.Case
-import io.gitlab.arturbosch.detekt.rules.load
+import io.gitlab.arturbosch.detekt.test.compileForTest
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -11,7 +12,7 @@ import org.junit.jupiter.api.Test
  */
 class ExceptionsTest {
 
-	val root = load(Case.Exceptions)
+	val file = compileForTest(Case.Exceptions.path())
 
 	@Test
 	fun findThrowError() {
@@ -70,7 +71,7 @@ class ExceptionsTest {
 
 	private fun findOne(block: () -> Rule) {
 		val rule = block()
-		rule.visit(root)
+		rule.lint(file.text)
 		assertThat(rule.findings).hasSize(1)
 	}
 

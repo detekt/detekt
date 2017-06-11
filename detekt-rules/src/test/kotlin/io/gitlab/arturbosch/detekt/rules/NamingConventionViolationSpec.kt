@@ -15,8 +15,7 @@ class NamingConventionViolationSpec : SubjectSpek<NamingConventionViolation>({
 	subject { NamingConventionViolation() }
 
 	it("should find all wrong namings") {
-		val root = load(Case.NamingConventions)
-		subject.visit(root)
+		subject.lint(Case.NamingConventions.path())
 		assertThat(subject.findings).hasSize(9)
 	}
 

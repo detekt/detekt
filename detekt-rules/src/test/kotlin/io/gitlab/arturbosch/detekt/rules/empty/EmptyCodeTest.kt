@@ -3,7 +3,8 @@ package io.gitlab.arturbosch.detekt.rules.empty
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.Case
-import io.gitlab.arturbosch.detekt.rules.load
+import io.gitlab.arturbosch.detekt.test.compileForTest
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -12,7 +13,7 @@ import org.junit.jupiter.api.Test
  */
 class EmptyCodeTest {
 
-	val root = load(Case.Empty)
+	val file = compileForTest(Case.Empty.path())
 
 	@Test
 	fun findsEmptyCatch() {
@@ -66,7 +67,7 @@ class EmptyCodeTest {
 
 	private fun test(block: () -> Rule) {
 		val rule = block()
-		rule.visit(root)
+		rule.lint(file.text)
 		assertThat(rule.findings).hasSize(1)
 	}
 
