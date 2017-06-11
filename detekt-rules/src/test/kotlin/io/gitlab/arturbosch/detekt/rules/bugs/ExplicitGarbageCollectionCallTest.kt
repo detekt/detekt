@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 /**
  * @author Artur Bosch
  */
-class ExplicitGarbageCollectionCallSpec {
+class ExplicitGarbageCollectionCallTest {
 
 	@Test
 	fun systemGC() {
