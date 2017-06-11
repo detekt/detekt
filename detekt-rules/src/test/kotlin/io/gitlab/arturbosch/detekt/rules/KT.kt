@@ -1,8 +1,5 @@
 package io.gitlab.arturbosch.detekt.rules
 
-import io.gitlab.arturbosch.detekt.api.Unstable
-import io.gitlab.arturbosch.detekt.core.KtCompiler
-import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -30,12 +27,4 @@ enum class Case(val file: String) {
 		requireNotNull(resource)
 		return Paths.get(resource.path)
 	}
-}
-
-@Unstable
-private val compiler = KtCompiler(Case.CasesFolder.path())
-
-@Unstable
-fun load(case: Case): KtFile {
-	return compiler.compile(case.path())
 }

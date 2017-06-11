@@ -22,8 +22,7 @@ class NestedBlockDepthSpec : SubjectSpek<NestedBlockDepth>({
 
 	describe("nested classes are also considered") {
 		it("should detect only the nested large class") {
-			val root = load(Case.NestedClasses)
-			subject.visit(root)
+			subject.lint(Case.NestedClasses.path())
 			assertEquals(subject.findings.size, 1)
 			assertEquals((subject.findings[0] as ThresholdedCodeSmell).value, 5)
 		}
