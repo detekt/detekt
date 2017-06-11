@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 /**
  * @author Artur Bosch
  */
-class EmptyCodeSpec {
+class EmptyCodeTest {
 
 	val root = load(Case.Empty)
 

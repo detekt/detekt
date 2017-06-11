@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 /**
  * @author Artur Bosch
  */
-class ExceptionsSpec {
+class ExceptionsTest {
 
 	val root = load(Case.Exceptions)
 
