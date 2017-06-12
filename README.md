@@ -83,7 +83,6 @@ Usage: detekt [options]
       Shows the usage.
     --output, -o
       Specify the file to output to.
-      Default: reports/detekt.xml
     --output-format, -of
       Specify the output format.
       Default: PLAIN
@@ -202,11 +201,13 @@ String USER_HOME = System.getProperty("user.home")
 
 detekt {    
     input = "$input/src/main/kotlin"
-    report = "$input/reports"
+    output = "$input/reports/report.xml"
+    outputFormat = "xml"
     idea {
         path = "$USER_HOME/.idea"
         codeStyleScheme = "$USER_HOME/.idea/idea-code-style.xml"
         inspectionsProfile = "$USER_HOME/.idea/inspect.xml"
+        report = "$input/reports"
         mask = "*.kt,"
     }
 }

@@ -62,10 +62,12 @@ class OutputFacade(args: Main,
 	}
 
 	fun reportFacade() {
-		val smells = findings.flatMap { it.value }
-		println()
-		outputFormat?.create(smells)
-		baselineFormat?.create(smells)
+		if (outputFormat != null || baselineFormat != null) {
+			val smells = findings.flatMap { it.value }
+			println()
+			outputFormat?.create(smells)
+			baselineFormat?.create(smells)
+		}
 	}
 
 	fun buildErrorCheck() {
