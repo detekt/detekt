@@ -1,10 +1,6 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.TokenRule
-import io.gitlab.arturbosch.detekt.api.isPartOf
+import io.gitlab.arturbosch.detekt.api.*
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.com.intellij.openapi.util.TextRange
 import org.jetbrains.kotlin.com.intellij.psi.PsiComment
@@ -21,16 +17,17 @@ import org.jetbrains.kotlin.psi.psiUtil.startOffset
  *
  * @author Artur Bosch
  */
-class Indentation(config: Config) : TokenRule("Indentation", Severity.Style, config) {
+class Indentation(config: Config) : TokenRule("Indentation", config) {
 
 	companion object {
 		private const val DEFAULT_INDENT = "4"
 		private const val INDENT_SIZE = "indentSize"
+		val ISSUE = Issue("Indentation", Issue.Severity.Style)
 	}
 
 	private var indent = withConfig { valueOrDefault(INDENT_SIZE, DEFAULT_INDENT) }.toInt()
 
-	override fun procedure(node: ASTNode) {
+	override fun procedure(context: Context, node: ASTNode) {
 		if (node is PsiWhiteSpace && !node.isPartOf(PsiComment::class)) {
 			val split = node.getText().split("\n")
 			if (split.size > 1) {
@@ -49,12 +46,12 @@ class Indentation(config: Config) : TokenRule("Indentation", Severity.Style, con
 					if (it.length % indent != 0) {
 						if (node.isPartOf(KtParameterList::class) && firstParameterColumn.value != 0) {
 							if (firstParameterColumn.value - 1 != it.length) {
-								addFindings(CodeSmell(id, severity, Entity.from(node, offset = 1),
+								context.report(CodeSmell(ISSUE, Entity.from(node, offset = 1),
 										"Unexpected indentation (${it.length}) (" +
 												"parameters should be either vertically aligned or indented by the multiple of 4)"))
 							}
 						} else {
-							addFindings(CodeSmell(id, severity, Entity.from(node, offset = 1),
+							context.report(CodeSmell(ISSUE, Entity.from(node, offset = 1),
 									"Unexpected indentation (${it.length}) (it should be multiple of $indent)"))
 						}
 					}
@@ -63,5 +60,4 @@ class Indentation(config: Config) : TokenRule("Indentation", Severity.Style, con
 			}
 		}
 	}
-
 }

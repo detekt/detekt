@@ -12,6 +12,7 @@ import java.nio.file.Path
 /**
  * @author Artur Bosch
  */
+@Suppress("MaxLineLength")
 class Main {
 
 	@Parameter(names = arrayOf("--project", "-p"), required = true,

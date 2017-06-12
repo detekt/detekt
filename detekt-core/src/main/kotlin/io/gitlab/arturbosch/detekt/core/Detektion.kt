@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.core
 
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.Issue
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.com.intellij.util.keyFMap.KeyFMap
 
@@ -8,14 +9,14 @@ import org.jetbrains.kotlin.com.intellij.util.keyFMap.KeyFMap
  * @author Artur Bosch
  */
 interface Detektion {
-	val findings: Map<String, List<Finding>>
+	val findings: Map<Issue, List<Finding>>
 	val notifications: List<Notification>
 
 	fun <V> getData(key: Key<V>): V?
 	fun <V> addData(key: Key<V>, value: V)
 }
 
-data class DetektResult(override val findings: Map<String, List<Finding>>,
+data class DetektResult(override val findings: Map<Issue, List<Finding>>,
 						override val notifications: List<Notification>) : Detektion {
 
 	private var userData = KeyFMap.EMPTY_MAP

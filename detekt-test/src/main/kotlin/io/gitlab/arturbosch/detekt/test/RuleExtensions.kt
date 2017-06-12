@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.test
 
+import io.gitlab.arturbosch.detekt.api.Context
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtFile
@@ -16,8 +17,9 @@ fun Rule.lint(path: Path): List<Finding> {
 }
 
 private fun Rule.findingsAfterVisit(ktFile: KtFile): List<Finding> {
-	this.visit(ktFile)
-	return this.findings
+	val context = Context()
+	this.visit(context, ktFile)
+	return context.findings
 }
 
 fun Rule.format(content: String): String {
@@ -31,6 +33,7 @@ fun Rule.format(path: Path): String {
 }
 
 private fun Rule.contentAfterVisit(ktFile: KtFile): String {
-	this.visit(ktFile)
+	val context = Context()
+	this.visit(context, ktFile)
 	return ktFile.text
 }

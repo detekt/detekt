@@ -1,8 +1,9 @@
-package io.gitlab.arturbosch.detekt.rules.complexity
+package io.gitlab.arturbosch.detekt.rules.providers
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.rules.complexity.*
 
 /**
  * @author Artur Bosch

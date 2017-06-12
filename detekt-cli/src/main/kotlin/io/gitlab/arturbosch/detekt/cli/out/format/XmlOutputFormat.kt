@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.cli.out.format
 
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.Issue
 import java.nio.file.Path
 
 /**
@@ -28,8 +28,8 @@ class XmlOutputFormat(report: Path) : OutputFormat(report) {
                         "\t<error line=\"${it.location.source.line.toXmlString()}\"",
                         "column=\"${it.location.source.column.toXmlString()}\"",
                         "severity=\"${it.messageType.label.toXmlString()}\"",
-                        "message=\"${(it.description + "(${it.id})").toXmlString()}\"",
-                        "source=\"${"detekt.${it.id.toXmlString()}"}\" />"
+                        "message=\"${(it.message + "(${it.issue.id})").toXmlString()}\"",
+                        "source=\"${"detekt.${it.issue.id.toXmlString()}"}\" />"
                 ).joinToString(separator = " ")
             }
             lines += "</file>"
@@ -40,14 +40,14 @@ class XmlOutputFormat(report: Path) : OutputFormat(report) {
     }
 
     private val Finding.messageType: MessageType
-        get() = when (severity) {
-            Rule.Severity.CodeSmell -> MessageType.Warning()
-            Rule.Severity.Style -> MessageType.Warning()
-            Rule.Severity.Warning -> MessageType.Warning()
-            Rule.Severity.Maintainability -> MessageType.Warning()
-            Rule.Severity.Defect -> MessageType.Error()
-            Rule.Severity.Minor -> MessageType.Info()
-            Rule.Severity.Security -> MessageType.Fatal()
+        get() = when (issue.severity) {
+            Issue.Severity.CodeSmell -> MessageType.Warning()
+            Issue.Severity.Style -> MessageType.Warning()
+            Issue.Severity.Warning -> MessageType.Warning()
+            Issue.Severity.Maintainability -> MessageType.Warning()
+            Issue.Severity.Defect -> MessageType.Error()
+            Issue.Severity.Minor -> MessageType.Info()
+            Issue.Severity.Security -> MessageType.Fatal()
         }
 
     private fun Any.toXmlString() = XmlEscape.escapeXml(toString().trim())

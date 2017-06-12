@@ -71,8 +71,8 @@ class ExceptionsTest {
 
 	private fun findOne(block: () -> Rule) {
 		val rule = block()
-		rule.lint(file.text)
-		assertThat(rule.findings).hasSize(1)
+		val findings = rule.lint(file.text)
+		assertThat(findings).hasSize(1)
 	}
 
 }

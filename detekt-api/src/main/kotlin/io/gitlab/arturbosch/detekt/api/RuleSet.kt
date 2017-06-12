@@ -16,21 +16,15 @@ class RuleSet(val id: String, val rules: List<Rule>) {
 	/**
 	 * Iterates over the given kotlin file list and calling the accept method.
 	 */
-	fun acceptAll(files: List<KtFile>): Pair<String, List<Finding>> {
-		return id to files.flatMap { accept(it) }
+	fun acceptAll(context: Context, files: List<KtFile>) {
+		return files.forEach { accept(context, it) }
 	}
 
 	/**
 	 * Visits given file with all rules of this rule set, returning a list
 	 * of all code smell findings.
 	 */
-	fun accept(file: KtFile): List<Finding> {
-		val findings: MutableList<Finding> = mutableListOf()
-		rules.forEach {
-			it.visit(file)
-			findings += it.findings
-		}
-		return findings
+	fun accept(context: Context, file: KtFile) {
+		rules.forEach { it.visit(context, file) }
 	}
-
 }

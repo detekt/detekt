@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Context
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.compileForTest
 import org.assertj.core.api.Assertions.assertThat
@@ -15,10 +16,11 @@ class ExplicitGarbageCollectionCallTest {
 	fun systemGC() {
 		val subject = ExplicitGarbageCollectionCall(Config.empty)
 		val file = compileForTest(Case.Default.path())
+		val context = Context()
 
-		subject.visit(file)
+		subject.visit(context, file)
 
-		assertThat(subject.findings).hasSize(3)
+		assertThat(context.findings).hasSize(3)
 	}
 
 }

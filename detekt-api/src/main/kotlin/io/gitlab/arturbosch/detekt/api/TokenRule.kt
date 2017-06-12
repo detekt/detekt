@@ -16,60 +16,58 @@ import org.jetbrains.kotlin.psi.KtFile
  */
 @Suppress("EmptyFunctionBlock")
 abstract class TokenRule(id: String,
-						 severity: Severity = Rule.Severity.Minor,
-						 config: Config = Config.empty) : Rule(id, severity, config) {
+						 config: Config = Config.empty) : Rule(id, config) {
 
-	override fun visit(root: KtFile) {
+	override fun visit(context: Context, root: KtFile) {
 		ifRuleActive {
-			clearFindings()
-			preVisit(root)
-			root.node.visitTokens { procedure(it) }
-			postVisit(root)
+			preVisit(context, root)
+			root.node.visitTokens { procedure(context, it) }
+			postVisit(context, root)
 		}
 	}
 
 	/**
 	 * Every ASTNode is considered in isolation. Use 'is' operator to search for wished elements.
 	 */
-	open fun procedure(node: ASTNode) {
+	open fun procedure(context: Context, node: ASTNode) {
 		when (node) {
-			is PsiWhiteSpace -> visitSpaces(node)
-			is LeafPsiElement -> visitLeaf(node)
+			is PsiWhiteSpace -> visitSpaces(context, node)
+			is LeafPsiElement -> visitLeaf(context, node)
 
 		}
 	}
 
-	open fun visitLeaf(leaf: LeafPsiElement) {
+	open fun visitLeaf(context: Context, leaf: LeafPsiElement) {
 		if (!leaf.isPartOfString()) {
 			when (leaf.text) {
-				"}" -> visitRightBrace(leaf)
-				"{" -> visitLeftBrace(leaf)
-				":" -> visitColon(leaf)
-				";" -> visitSemicolon(leaf)
-				";;" -> visitDoubleSemicolon(leaf)
-				"," -> visitComma(leaf)
+				"}" -> visitRightBrace(context, leaf)
+				"{" -> visitLeftBrace(context, leaf)
+				":" -> visitColon(context, leaf)
+				";" -> visitSemicolon(context, leaf)
+				";;" -> visitDoubleSemicolon(context, leaf)
+				"," -> visitComma(context, leaf)
 			}
 		}
 	}
 
-	protected open fun visitSemicolon(leaf: LeafPsiElement) {
+	protected open fun visitSemicolon(context: Context, leaf: LeafPsiElement) {
 	}
 
-	protected open fun visitDoubleSemicolon(leaf: LeafPsiElement) {
+	protected open fun visitDoubleSemicolon(context: Context, leaf: LeafPsiElement) {
 	}
 
-	protected open fun visitComma(leaf: LeafPsiElement) {
+	protected open fun visitComma(context: Context, leaf: LeafPsiElement) {
 	}
 
-	protected open fun visitColon(colon: LeafPsiElement) {
+	protected open fun visitColon(context: Context, colon: LeafPsiElement) {
 	}
 
-	protected open fun visitLeftBrace(brace: LeafPsiElement) {
+	protected open fun visitLeftBrace(context: Context, brace: LeafPsiElement) {
 	}
 
-	protected open fun visitRightBrace(brace: LeafPsiElement) {
+	protected open fun visitRightBrace(context: Context, brace: LeafPsiElement) {
 	}
 
-	protected open fun visitSpaces(space: PsiWhiteSpace) {
+	protected open fun visitSpaces(context: Context, space: PsiWhiteSpace) {
 	}
 }

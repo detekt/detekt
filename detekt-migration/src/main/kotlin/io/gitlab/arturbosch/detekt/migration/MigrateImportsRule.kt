@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.migration
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Context
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.PROJECT
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -13,14 +14,14 @@ import org.jetbrains.kotlin.resolve.ImportPath
 /**
  * @author Artur Bosch
  */
-class MigrateImportsRule(config: Config) : Rule("MigrateImports", Severity.Defect) {
+class MigrateImportsRule(config: Config) : Rule("MigrateImports") {
 
 	private val replacements: HashMap<String, String> = config.valueOrDefault("imports", HashMap<String, String>())
 	private val toReplaces = replacements.keys
 
 	private val factory = KtImportsFactory(PROJECT)
 
-	override fun visitImportList(importList: KtImportList) {
+	override fun visitImportList(context: Context, importList: KtImportList) {
 
 		importList.imports
 				.filter { it.importedFqName?.toString() in toReplaces }
@@ -31,9 +32,8 @@ class MigrateImportsRule(config: Config) : Rule("MigrateImports", Severity.Defec
 						CodeEditUtil.removeChildren(node, node.firstChildNode, node.lastChildNode)
 						val newImport = factory.createImportDirective(ImportPath.fromString(it))
 						node.addChild(newImport.importedReference?.node!!)
-						addFindings(ImportMigration(key!!, it, Entity.from(import)))
+						context.report(ImportMigration(key!!, it, Entity.from(import)))
 					}
 				}
 	}
-
 }

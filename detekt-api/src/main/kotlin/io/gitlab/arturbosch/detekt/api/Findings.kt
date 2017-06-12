@@ -12,8 +12,7 @@ import kotlin.reflect.full.memberProperties
  * @author Artur Bosch
  */
 interface Finding : Compactable, Describable, Reflective, HasEntity, HasMetrics {
-	val id: String
-	val severity: Rule.Severity
+	val issue: Issue
 	val references: List<Entity>
 }
 
@@ -64,8 +63,8 @@ interface Compactable {
 }
 
 /**
- * Provides a description attribute.
+ * Provides a message attribute to explain the specific finding.
  */
 interface Describable {
-	val description: String
+	val message: String
 }

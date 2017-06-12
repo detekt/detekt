@@ -1,6 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Context
+import io.gitlab.arturbosch.detekt.api.Issue
 import org.jetbrains.kotlin.psi.KtThrowExpression
 
 /**
@@ -8,8 +10,11 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  */
 class ThrowNullPointerException(config: Config = Config.empty) : ExceptionsRule("ThrowNullPointerException", config) {
 
-	override fun visitThrowExpression(expression: KtThrowExpression) {
-		expression.addFindingIfThrowingClassMatchesExact { "NullPointerException" }
+	override fun visitThrowExpression(context: Context, expression: KtThrowExpression) {
+		expression.addFindingIfThrowingClassMatchesExact(context, ISSUE) { "NullPointerException" }
 	}
 
+	companion object {
+		val ISSUE = Issue("ThrowNullPointerException", Issue.Severity.Maintainability)
+	}
 }

@@ -1,8 +1,6 @@
 package io.gitlab.arturbosch.detekt.core
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.api.*
 import org.jetbrains.kotlin.psi.KtFile
 
 /**
@@ -23,12 +21,15 @@ class Detektor(settings: ProcessingSettings,
 			changeListeners.forEach { it.onStart(ktFiles) }
 			val futures = ktFiles.map { file ->
 				runAsync {
-					file.analyze().apply {
-						changeListeners.forEach { it.onProcess(file) }
+					val context = Context()
+					file.analyze(context).apply {
+						changeListeners.forEach { it.onProcess(context, file) }
 					}
 				}
 			}
-			val findings = awaitAll(futures).flatMap { it }.toMergedMap()
+			val findings: Map<Issue, List<Finding>> = awaitAll(futures)
+					.flatMap { it.findings }
+					.groupBy { it.issue }
 
 			if (config.valueOrDefault("autoCorrect", false)) {
 				compiler.saveModifiedFiles(ktFiles) {
@@ -36,7 +37,7 @@ class Detektor(settings: ProcessingSettings,
 				}
 			}
 
-			DetektResult(findings.toSortedMap(), notifications).apply {
+			DetektResult(findings, notifications).apply {
 				changeListeners.forEach {
 					it.onFinish(ktFiles, this)
 				}
@@ -44,11 +45,12 @@ class Detektor(settings: ProcessingSettings,
 		}
 	}
 
-	private fun KtFile.analyze(): List<Pair<String, List<Finding>>> {
-		return providers.map { it.buildRuleset(config) }
+	private fun KtFile.analyze(context: Context): Context {
+		providers.map { it.buildRuleset(config) }
 				.filterNotNull()
 				.sortedBy { it.id }
 				.distinctBy { it.id }
-				.map { rule -> rule.id to rule.accept(this) }
+				.forEach { rule -> rule.accept(context, this) }
+		return context
 	}
 }

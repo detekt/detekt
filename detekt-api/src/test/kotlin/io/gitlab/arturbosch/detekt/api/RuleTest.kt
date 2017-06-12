@@ -22,23 +22,26 @@ import kotlin.test.assertNotNull
 internal class RuleTest : Spek({
 
 	it("rule should be suppressed") {
+		val context = Context()
 		val ktFile = compilerFor("SuppressedObject.kt")
 		val rule = TestRule()
-		rule.visit(ktFile)
+		rule.visit(context, ktFile)
 		assertNotNull(rule.expected)
 	}
 
 	it("findings are suppressed") {
+		val context = Context()
 		val ktFile = compilerFor("SuppressedElements.kt")
 		val ruleSet = RuleSet("Test", listOf(TestLM(), TestLPL()))
-		val findings = ruleSet.accept(ktFile)
-		assertEquals(0, findings.size)
+		ruleSet.accept(context, ktFile)
+		assertEquals(0, context.findings.size)
 	}
 
 	it("rule should be suppressed by ALL") {
+		val context = Context()
 		val ktFile = compilerFor("SuppressedByAllObject.kt")
 		val rule = TestRule()
-		rule.visit(ktFile)
+		rule.visit(context, ktFile)
 		assertNotNull(rule.expected)
 	}
 
@@ -64,23 +67,31 @@ internal object Compiler {
 
 class TestRule : Rule("Test") {
 	var expected: String? = "Test"
-	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
+	override fun visitClassOrObject(context: Context, classOrObject: KtClassOrObject) {
 		expected = null
 	}
 }
 
 class TestLM : Rule("LongMethod") {
-	override fun visitNamedFunction(function: KtNamedFunction) {
+	override fun visitNamedFunction(context: Context, function: KtNamedFunction) {
 		val start = Location.startLineAndColumn(function.funKeyword!!).line
 		val end = Location.startLineAndColumn(function.lastBlockStatementOrThis()).line
 		val offset = end - start
-		if (offset > 10) addFindings(CodeSmell(id, severity, Entity.from(function)))
+		if (offset > 10) context.report(CodeSmell(ISSUE, Entity.from(function)))
+	}
+
+	companion object {
+		val ISSUE = Issue("LongMethod")
 	}
 }
 
 class TestLPL : Rule("LongParameterList") {
-	override fun visitNamedFunction(function: KtNamedFunction) {
+	override fun visitNamedFunction(context: Context, function: KtNamedFunction) {
 		val size = function.valueParameters.size
-		if (size > 5) addFindings(CodeSmell(id, severity, Entity.from(function)))
+		if (size > 5) context.report(CodeSmell(ISSUE, Entity.from(function)))
+	}
+
+	companion object {
+		val ISSUE = Issue("LongParameterList")
 	}
 }

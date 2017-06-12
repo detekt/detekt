@@ -1,11 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
-import io.gitlab.arturbosch.detekt.api.CodeSmellThresholdRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.DetektVisitor
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Metric
-import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.api.*
 import io.gitlab.arturbosch.detekt.rules.isUsedForNesting
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
@@ -17,12 +12,13 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
 /**
  * @author Artur Bosch
  */
-class ComplexMethod(config: Config = Config.empty, threshold: Int = 10) : CodeSmellThresholdRule("ComplexMethod", config, threshold) {
+class ComplexMethod(config: Config = Config.empty, threshold: Int = 10) :
+		ThresholdRule("ComplexMethod", config, threshold) {
 
-	override fun visitNamedFunction(function: KtNamedFunction) {
-		val mcc = MccVisitor().visit(function)
+	override fun visitNamedFunction(context: Context, function: KtNamedFunction) {
+		val mcc = MccVisitor().visit(context, function)
 		if (mcc > threshold) {
-			addFindings(ThresholdedCodeSmell(id, severity, Entity.Companion.from(function), Metric("MCC", mcc, threshold)))
+			context.report(ThresholdedCodeSmell(ISSUE, Entity.Companion.from(function), Metric("MCC", mcc, threshold)))
 		}
 	}
 
@@ -34,33 +30,33 @@ class ComplexMethod(config: Config = Config.empty, threshold: Int = 10) : CodeSm
 			mcc++
 		}
 
-		fun visit(function: KtNamedFunction): Int {
+		fun visit(context: Context, function: KtNamedFunction): Int {
 			mcc = 1
-			super.visitNamedFunction(function)
+			super.visitNamedFunction(context, function)
 			return mcc
 		}
 
-		override fun visitIfExpression(expression: KtIfExpression) {
+		override fun visitIfExpression(context: Context, expression: KtIfExpression) {
 			inc()
-			super.visitIfExpression(expression)
+			super.visitIfExpression(context, expression)
 		}
 
-		override fun visitLoopExpression(loopExpression: KtLoopExpression) {
+		override fun visitLoopExpression(context: Context, loopExpression: KtLoopExpression) {
 			inc()
-			super.visitLoopExpression(loopExpression)
+			super.visitLoopExpression(context, loopExpression)
 		}
 
-		override fun visitWhenExpression(expression: KtWhenExpression) {
+		override fun visitWhenExpression(context: Context, expression: KtWhenExpression) {
 			inc()
-			super.visitWhenExpression(expression)
+			super.visitWhenExpression(context, expression)
 		}
 
-		override fun visitTryExpression(expression: KtTryExpression) {
+		override fun visitTryExpression(context: Context, expression: KtTryExpression) {
 			inc()
-			super.visitTryExpression(expression)
+			super.visitTryExpression(context, expression)
 		}
 
-		override fun visitCallExpression(expression: KtCallExpression) {
+		override fun visitCallExpression(context: Context, expression: KtCallExpression) {
 			if (expression.isUsedForNesting()) {
 				val lambdaArguments = expression.lambdaArguments
 				if (lambdaArguments.size > 0) {
@@ -70,7 +66,11 @@ class ComplexMethod(config: Config = Config.empty, threshold: Int = 10) : CodeSm
 					}
 				}
 			}
-			super.visitCallExpression(expression)
+			super.visitCallExpression(context, expression)
 		}
+	}
+
+	companion object {
+		val ISSUE = Issue("ComplexMethod", Issue.Severity.CodeSmell)
 	}
 }

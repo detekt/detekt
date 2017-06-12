@@ -18,8 +18,8 @@ class CommonSpec : SubjectSpek<Rule>({
 
 	describe("running specified rule") {
 		it("should detect one finding") {
-			subject.lint(file.text)
-			assertThat(subject.findings).hasSize(1)
+			val findings = subject.lint(file.text)
+			assertThat(findings).hasSize(1)
 		}
 	}
 })

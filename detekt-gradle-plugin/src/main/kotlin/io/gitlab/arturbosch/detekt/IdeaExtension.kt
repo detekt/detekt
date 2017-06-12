@@ -28,7 +28,10 @@ open class IdeaExtension(open var path: String? = null,
 	}
 
 	override fun toString(): String {
-		return "IdeaExtension(path=$path, codeStyleScheme=$codeStyleScheme, inspectionsProfile=$inspectionsProfile, mask='$mask')"
+		return "IdeaExtension(" +
+				"path=$path, " +
+				"codeStyleScheme=$codeStyleScheme, " +
+				"inspectionsProfile=$inspectionsProfile, mask='$mask')"
 	}
 }
 

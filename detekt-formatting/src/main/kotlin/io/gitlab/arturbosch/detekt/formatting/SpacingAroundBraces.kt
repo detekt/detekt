@@ -1,9 +1,6 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.TokenRule
+import io.gitlab.arturbosch.detekt.api.*
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.LeafPsiElement
@@ -19,34 +16,34 @@ import org.jetbrains.kotlin.psi.psiUtil.prevLeaf
  * @author Artur Bosch
  */
 class SpacingAroundBraces(config: Config) : TokenRule(
-		"SpacingAroundBraces", Severity.Style, config) {
+		"SpacingAroundBraces", config) {
 
-	override fun visitLeftBrace(brace: LeafPsiElement) {
+	override fun visitLeftBrace(context: Context, brace: LeafPsiElement) {
 		val prevLeaf = brace.prevLeaf(skipEmptyElements = true)
 		val nextLeaf = brace.nextLeaf(skipEmptyElements = true)
 		val spacingBefore = prevLeaf is PsiWhiteSpace || brace.isPartOfLambda(prevLeaf)
 		val spacingAfter = nextLeaf is PsiWhiteSpace || nextLeaf?.node?.elementType == KtTokens.RBRACE
-		brace.evaluate(spacingBefore, spacingAfter)
+		brace.evaluate(context, spacingBefore, spacingAfter)
 	}
 
-	override fun visitRightBrace(brace: LeafPsiElement) {
+	override fun visitRightBrace(context: Context, brace: LeafPsiElement) {
 		val prevLeaf = brace.prevLeaf(skipEmptyElements = true)
 		val nextLeaf = brace.nextLeaf(skipEmptyElements = true)
 		val spacingBefore = prevLeaf is PsiWhiteSpace || prevLeaf?.node?.elementType == KtTokens.LBRACE
 		val spacingAfter = nextLeaf == null || nextLeaf is PsiWhiteSpace || shouldNotToBeSeparatedBySpace(nextLeaf)
-		nextLeaf.checkForInvalidSpace(brace)
-		brace.evaluate(spacingBefore, spacingAfter)
+		nextLeaf.checkForInvalidSpace(context, brace)
+		brace.evaluate(context, spacingBefore, spacingAfter)
 	}
 
-	private fun PsiElement?.checkForInvalidSpace(brace: LeafPsiElement) {
+	private fun PsiElement?.checkForInvalidSpace(context: Context, brace: LeafPsiElement) {
 		if (this is PsiWhiteSpace && !textContains('\n') &&
 				shouldNotToBeSeparatedBySpace(nextLeaf(skipEmptyElements = true))) {
-			addFindings(CodeSmell(id, severity, Entity.from(brace)))
+			context.report(CodeSmell(ISSUE, Entity.from(brace)))
 			withAutoCorrect { delete() }
 		}
 	}
 
-	private fun LeafPsiElement.evaluate(spacingBefore: Boolean, spacingAfter: Boolean) {
+	private fun LeafPsiElement.evaluate(context: Context, spacingBefore: Boolean, spacingAfter: Boolean) {
 		when {
 			!spacingBefore && !spacingAfter -> withAutoCorrect {
 				rawInsertBeforeMe(PsiWhiteSpaceImpl(" "))
@@ -61,7 +58,7 @@ class SpacingAroundBraces(config: Config) : TokenRule(
 		}
 
 		if (!spacingBefore || !spacingAfter) {
-			addFindings(CodeSmell(id, severity, Entity.from(this)))
+			context.report(CodeSmell(ISSUE, Entity.from(this)))
 		}
 	}
 
@@ -80,4 +77,7 @@ class SpacingAroundBraces(config: Config) : TokenRule(
 				nextElementType == KtTokens.EXCLEXCL
 	}
 
+	companion object {
+		val ISSUE = Issue("SpacingAroundBraces", Issue.Severity.Style)
+	}
 }

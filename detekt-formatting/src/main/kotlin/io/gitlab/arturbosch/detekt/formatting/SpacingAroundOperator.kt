@@ -1,10 +1,6 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.TokenRule
-import io.gitlab.arturbosch.detekt.api.isPartOf
+import io.gitlab.arturbosch.detekt.api.*
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.LeafPsiElement
 import org.jetbrains.kotlin.com.intellij.psi.tree.TokenSet
@@ -43,12 +39,12 @@ import org.jetbrains.kotlin.psi.KtValueArgument
  *
  * @author Artur Bosch
  */
-class SpacingAroundOperator(config: Config) : TokenRule("SpacingAroundOperator", Severity.Style, config) {
+class SpacingAroundOperator(config: Config) : TokenRule("SpacingAroundOperator", config) {
 
 	private val tokenSet = TokenSet.create(MUL, PLUS, MINUS, DIV, PERC, LT, GT, LTEQ, GTEQ, EQEQEQ, EXCLEQEQEQ, EQEQ,
 			EXCLEQ, ANDAND, OROR, ELVIS, EQ, MULTEQ, DIVEQ, PERCEQ, PLUSEQ, MINUSEQ, ARROW)
 
-	override fun procedure(node: ASTNode) {
+	override fun procedure(context: Context, node: ASTNode) {
 		if (tokenSet.contains(node.elementType) && node is LeafPsiElement &&
 				!node.isPartOf(KtPrefixExpression::class) && // not unary
 				!node.isPartOf(KtTypeParameterList::class) && // fun <T>fn(): T {}
@@ -58,10 +54,12 @@ class SpacingAroundOperator(config: Config) : TokenRule("SpacingAroundOperator",
 				!node.isPartOf(KtSuperExpression::class) /*super<T>*/) {
 
 			if (node.trimSpacesAround(autoCorrect)) {
-				addFindings(CodeSmell(id, severity, Entity.from(node)))
+				context.report(CodeSmell(ISSUE, Entity.from(node)))
 			}
-
 		}
 	}
 
+	companion object {
+		val ISSUE = Issue("SpacingAroundOperator", Issue.Severity.Style)
+	}
 }

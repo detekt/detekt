@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.sampleruleset
 
+import io.gitlab.arturbosch.detekt.api.Context
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.dsl.describe
@@ -14,9 +15,10 @@ class TooManyFunctionsSpec : SubjectSpek<TooManyFunctions>({
 
 	describe("a simple test") {
 		it("should find one file with too many functions") {
+			val context = Context()
 			val ktFile = compileContentForTest(code)
-			subject.visit(ktFile)
-			assertThat(subject.findings).hasSize(1)
+			subject.visit(context, ktFile)
+			assertThat(context.findings).hasSize(1)
 		}
 	}
 

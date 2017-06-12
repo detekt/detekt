@@ -1,29 +1,25 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.TokenRule
-import io.gitlab.arturbosch.detekt.api.isPartOfString
+import io.gitlab.arturbosch.detekt.api.*
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.LeafPsiElement
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl
 
 /**
  * @author Artur Bosch
  */
-class SpacingAfterComma(config: Config) : TokenRule("SpacingAfterComma", Severity.Style, config) {
+class SpacingAfterComma(config: Config) : TokenRule("SpacingAfterComma", config) {
 
-	override fun visitComma(leaf: LeafPsiElement) {
-		checkSpace(leaf)
+	override fun visitComma(context: Context, leaf: LeafPsiElement) {
+		checkSpace(context, leaf)
 	}
 
-	override fun visitSemicolon(leaf: LeafPsiElement) {
-		checkSpace(leaf)
+	override fun visitSemicolon(context: Context, leaf: LeafPsiElement) {
+		checkSpace(context, leaf)
 	}
 
-	private fun checkSpace(leaf: LeafPsiElement) {
+	private fun checkSpace(context: Context, leaf: LeafPsiElement) {
 		if (leaf.isSpaceMissing()) {
-			addFindings(CodeSmell(id, severity, Entity.from(leaf, offset = 1)))
+			context.report(CodeSmell(ISSUE, Entity.from(leaf, offset = 1)))
 			withAutoCorrect {
 				leaf.rawInsertAfterMe(PsiWhiteSpaceImpl(" "))
 			}
@@ -32,4 +28,7 @@ class SpacingAfterComma(config: Config) : TokenRule("SpacingAfterComma", Severit
 
 	private fun LeafPsiElement.isSpaceMissing() = !isPartOfString() && !nextLeafIsWhiteSpace()
 
+	companion object {
+		val ISSUE = Issue("SpacingAfterComma", Issue.Severity.Style)
+	}
 }

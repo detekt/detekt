@@ -5,7 +5,7 @@ import io.gitlab.arturbosch.detekt.test.lint
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
-import kotlin.test.assertEquals
+import org.assertj.core.api.Assertions.assertThat
 
 /**
  * @author Artur Bosch
@@ -15,15 +15,15 @@ class LongMethodSpec : SubjectSpek<LongMethod>({
 
 	describe("nested functions can be long") {
 		it("should find two long methods") {
-			subject.lint(Case.NestedLongMethods.path())
-			assertEquals(subject.findings.size, 2)
+            val findings = subject.lint(Case.NestedLongMethods.path())
+            assertThat(findings).hasSize(2)
 		}
 	}
 
 	describe("nested classes can contain long methods") {
 		it("should detect one nested long method") {
-			subject.lint(Case.NestedClasses.path())
-			assertEquals(subject.findings.size, 1)
+            val findings = subject.lint(Case.NestedClasses.path())
+            assertThat(findings).hasSize(1)
 		}
 
 	}

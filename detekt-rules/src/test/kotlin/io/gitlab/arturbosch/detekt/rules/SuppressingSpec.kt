@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules
 
+import io.gitlab.arturbosch.detekt.api.Context
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.rules.complexity.ComplexCondition
 import io.gitlab.arturbosch.detekt.rules.complexity.LongMethod
@@ -17,7 +18,9 @@ class SuppressingSpec : Spek({
 	it("all findings are suppressed on element levels") {
 		val ktFile = compileForTest(Case.SuppressedElements.path())
 		val ruleSet = RuleSet("Test", listOf(LongMethod(), LongParameterList(), ComplexCondition()))
-		val findings = ruleSet.accept(ktFile)
+		val context = Context()
+		ruleSet.accept(context, ktFile)
+		val findings = context.findings.flatMap { it.value }
 		findings.forEach {
 			println(it.compact())
 		}
@@ -27,7 +30,9 @@ class SuppressingSpec : Spek({
 	it("all findings are suppressed on file levels") {
 		val ktFile = compileForTest(Case.SuppressedElementsByFile.path())
 		val ruleSet = RuleSet("Test", listOf(LongMethod(), LongParameterList(), ComplexCondition()))
-		val findings = ruleSet.accept(ktFile)
+		val context = Context()
+		ruleSet.accept(context, ktFile)
+		val findings = context.findings.flatMap { it.value }
 		findings.forEach {
 			println(it.compact())
 		}
@@ -37,7 +42,9 @@ class SuppressingSpec : Spek({
 	it("all findings are suppressed on class levels") {
 		val ktFile = compileForTest(Case.SuppressedElementsByClass.path())
 		val ruleSet = RuleSet("Test", listOf(LongMethod(), LongParameterList(), ComplexCondition()))
-		val findings = ruleSet.accept(ktFile)
+		val context = Context()
+		ruleSet.accept(context, ktFile)
+		val findings = context.findings.flatMap { it.value }
 		findings.forEach {
 			println(it.compact())
 		}

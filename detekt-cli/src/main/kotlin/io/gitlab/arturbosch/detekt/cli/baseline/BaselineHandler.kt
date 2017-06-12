@@ -16,7 +16,8 @@ class BaselineHandler : DefaultHandler() {
 	private val whiteIds = mutableListOf<String>()
 	private val blackIds = mutableListOf<String>()
 
-	internal fun createBaseline() = Baseline(Blacklist(blackIds, blackstamp ?: now()), Whitelist(whiteIds, whitestamp ?: now()))
+	internal fun createBaseline() =
+			Baseline(Blacklist(blackIds, blackstamp ?: now()), Whitelist(whiteIds, whitestamp ?: now()))
 	private fun now() = Instant.now().toEpochMilli().toString()
 
 	override fun startElement(uri: String, localName: String, qName: String, attributes: Attributes) {
