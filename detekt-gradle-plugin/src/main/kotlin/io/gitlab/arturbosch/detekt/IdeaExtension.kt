@@ -6,6 +6,7 @@ package io.gitlab.arturbosch.detekt
 open class IdeaExtension(open var path: String? = null,
 						 open var codeStyleScheme: String? = null,
 						 open var inspectionsProfile: String? = null,
+						 open var report: String? = null,
 						 open var mask: String = "*.kt") {
 
 	fun formatArgs(ext: DetektExtension): Array<String> {
@@ -21,9 +22,9 @@ open class IdeaExtension(open var path: String? = null,
 	fun inspectArgs(ext: DetektExtension): Array<String> {
 		require(path != null) { "Make sure the idea path is specified to run idea tasks!" }
 		require(ext.input != null) { "Make sure the project path is specified!" }
-		require(ext.output != null) { "Make sure the output file is specified where idea inspections are stored!" }
+		require(report != null) { "Make sure the report path is specified where idea inspections are stored!" }
 		require(inspectionsProfile != null) { "Make sure the path to an inspection profile is provided!" }
-		return arrayOf("$path/bin/inspect.sh", ext.input!!, inspectionsProfile!!, ext.output!!)
+		return arrayOf("$path/bin/inspect.sh", ext.input!!, inspectionsProfile!!, report!!)
 	}
 
 	override fun toString(): String {
