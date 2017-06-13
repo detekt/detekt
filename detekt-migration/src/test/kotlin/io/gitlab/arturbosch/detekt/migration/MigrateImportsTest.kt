@@ -38,7 +38,7 @@ fun main(args: Array<String>) {}
 	}
 }
 
-object MigrationTestConfig : Config {
+object MigrationTestConfig : Config() {
 
 	private val map = hashMapOf("imports" to hashMapOf("hello.hello" to "bye.bye"))
 
