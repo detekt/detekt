@@ -38,7 +38,7 @@ fun main(args: Array<String>) {}
 	}
 }
 
-object MigrationTestConfig : Config {
+object MigrationTestConfig : Config() {
 
 	private val map = hashMapOf("imports" to hashMapOf("hello.hello" to "bye.bye"))
 
@@ -46,9 +46,9 @@ object MigrationTestConfig : Config {
 		if (key == "migration") return this else return Config.empty
 	}
 
-	override fun <T : Any> valueOrDefault(key: String, default: () -> T): T {
+	override fun <T : Any> valueOrDefault(key: String, default: T): T {
 		@Suppress("UNCHECKED_CAST")
-		return map[key] as T? ?: default()
+		return map[key] as T? ?: default
 	}
 
 }

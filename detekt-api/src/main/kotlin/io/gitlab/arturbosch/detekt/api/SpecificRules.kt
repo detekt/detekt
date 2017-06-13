@@ -14,5 +14,5 @@ abstract class CodeSmellThresholdRule(id: String, config: Config, threshold: Int
 	/**
 	 * The used threshold for this rule is loaded from the configuration or used from the constructor value.
 	 */
-	protected val threshold = withConfig { valueOrDefault("threshold") { threshold } }
+	protected val threshold = withConfig { valueOrDefault("threshold", threshold) }
 }

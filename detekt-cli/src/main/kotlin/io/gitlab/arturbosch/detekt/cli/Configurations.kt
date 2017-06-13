@@ -25,17 +25,17 @@ fun Main.loadConfiguration(): Config {
 	else Config.empty
 }
 
-class FormatConfig(private val useTabs: Boolean) : Config {
+class FormatConfig(private val useTabs: Boolean) : Config() {
 	override fun subConfig(key: String): Config {
 		return this
 	}
 
-	override fun <T : Any> valueOrDefault(key: String, default: () -> T): T {
+	override fun <T : Any> valueOrDefault(key: String, default: T): T {
 		@Suppress("UNCHECKED_CAST")
 		return when (key) {
 			"autoCorrect" -> true as T
 			"useTabs" -> (useTabs) as T
-			else -> default()
+			else -> default
 		}
 	}
 }

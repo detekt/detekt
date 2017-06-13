@@ -62,21 +62,21 @@ enum class WorkFlow {
 
 class NamingConventionCustomPatter {
 	private val configCustomRules =
-			object : Config {
+			object : Config() {
 				override fun subConfig(key: String): Config = Config.empty
 
 				@Suppress("UNCHECKED_CAST")
-				override fun <T : Any> valueOrDefault(key: String, default: () -> T): T =
+				override fun <T : Any> valueOrDefault(key: String, default: T): T =
 						when (key) {
 							NamingConventionViolation.METHOD_PATTERN -> "^`.+`$" as T
 							NamingConventionViolation.CLASS_PATTERN -> "^aBbD$" as T
 							NamingConventionViolation.VARIABLE_PATTERN -> "^123var$" as T
 							NamingConventionViolation.CONSTANT_PATTERN -> "^lowerCaseConst$" as T
 							NamingConventionViolation.ENUM_PATTERN -> "^(enum1)|(enum2)$" as T
-							else -> default()
+							else -> default
 						}
 			}
-	private val config = object : Config {
+	private val config = object : Config() {
 		override fun subConfig(key: String): Config =
 				if (key == NamingConventionViolation.RULE_SUB_CONFIG) {
 					configCustomRules
@@ -84,7 +84,7 @@ class NamingConventionCustomPatter {
 					Config.empty
 				}
 
-		override fun <T : Any> valueOrDefault(key: String, default: () -> T): T = default()
+		override fun <T : Any> valueOrDefault(key: String, default: T): T = default
 	}
 	private val rule = NamingConventionViolation(config)
 
