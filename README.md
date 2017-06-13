@@ -648,6 +648,7 @@ inside the report file.
 - [Sean Flanigan](https://github.com/seanf) - Config from classpath resource
 - [Sebastian Schuberth](https://github.com/sschuberth) - Dep. update
 - [Olivier Lemasle](https://github.com/olivierlemasle) - Bug fix
+- [Marc Prengemann](https://github.com/winterDroid) - Support for custom reports
 
 #### Credits
 - [Stanley Shyiko](https://github.com/shyiko): `detekt` migrated the formatting rules from [ktlint](https://github.com/shyiko/ktlint)
