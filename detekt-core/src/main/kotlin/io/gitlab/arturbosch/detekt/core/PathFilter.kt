@@ -1,23 +1,22 @@
 package io.gitlab.arturbosch.detekt.core
 
 import java.nio.file.Path
-import java.util.regex.Pattern
 import java.util.regex.PatternSyntaxException
 
 /**
  * @author Artur Bosch
  */
-class PathFilter(val regex: String) {
+class PathFilter(pattern: String) {
+
+	private val regex: Regex
 
 	init {
 		try {
-			Pattern.compile(regex)
+			regex = Regex(pattern)
 		} catch (exception: PatternSyntaxException) {
-			throw IllegalArgumentException("Provided regex is not valid: $regex")
+			throw IllegalArgumentException("Provided regex is not valid: $pattern")
 		}
 	}
 
-	fun matches(path: Path): Boolean {
-		return path.toAbsolutePath().toString().matches(Regex(regex))
-	}
+	fun matches(path: Path): Boolean = path.toAbsolutePath().toString().matches(regex)
 }
