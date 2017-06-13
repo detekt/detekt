@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.cli.out.format
 
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
-import org.apache.commons.lang3.StringEscapeUtils
 import java.nio.file.Path
 
 /**
@@ -51,5 +50,5 @@ class XmlOutputFormat(report: Path) : OutputFormat(report) {
             Rule.Severity.Security -> MessageType.Fatal()
         }
 
-    private fun Any.toXmlString() = StringEscapeUtils.escapeXml10(toString().trim())!!
+    private fun Any.toXmlString() = XmlEscape.escapeXml(toString().trim())
 }
