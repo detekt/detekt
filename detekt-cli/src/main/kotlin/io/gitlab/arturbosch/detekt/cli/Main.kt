@@ -44,9 +44,12 @@ class Main {
 	@Parameter(names = arrayOf("--useTabs"), description = "Tells the formatter that indentation with tabs are valid.")
 	var useTabs: Boolean = false
 
-	@Parameter(names = arrayOf("--baseline", "-b"), description = "Treats current analysis findings as a smell baseline for further detekt runs. If a baseline xml file is passed in, only new code smells not in the baseline are printed in the console.",
+	@Parameter(names = arrayOf("--baseline", "-b"), description = "If a baseline xml file is passed in, only new code smells not in the baseline are printed in the console.",
 			converter = PathConverter::class)
 	var baseline: Path? = null
+
+	@Parameter(names = arrayOf("--create-baseline", "-cb"), description = "Treats current analysis findings as a smell baseline for further detekt runs.")
+	var createBaseline: Boolean = false
 
 	@Parameter(names = arrayOf("--output", "-o"), description = "Specify the file to output to.",
 			converter = PathConverter::class)
@@ -88,9 +91,14 @@ class Main {
 
 		private fun validateCli(cli: Main): List<String> {
 			val violations = ArrayList<String>()
-			cli.output?.let {
-				if (Files.exists(it) && it.isDirectory()) {
-					violations += "Output file must not be a directory."
+			with(cli) {
+				output?.let {
+					if (Files.exists(it) && it.isDirectory()) {
+						violations += "Output file must not be a directory."
+					}
+				}
+				if (createBaseline && baseline == null) {
+					violations += "Creating a baseline.xml requires the --baseline parameter to specify a path."
 				}
 			}
 			return violations
