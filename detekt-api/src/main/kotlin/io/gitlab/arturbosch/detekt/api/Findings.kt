@@ -29,12 +29,14 @@ interface HasEntity {
 		get() = location.source
 	val charPosition: TextLocation
 		get() = location.text
+	val file: String
+		get() = location.file
+	val signature: String
+		get() = entity.signature
 	val name: String
 		get() = entity.name
 	val inClass: String
 		get() = entity.className
-	val signature: String
-		get() = entity.signature
 }
 
 /**

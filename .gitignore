@@ -156,3 +156,4 @@ target/
 .gradletasknamecache
 /detekt-cli/src/test/kotlin/io/gitlab/arturbosch/detekt/cli/ReproduceSpec.kt
 /detekt-cli/src/test/kotlin/io/gitlab/arturbosch/detekt/cli/Test.kt
+*.iml
