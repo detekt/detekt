@@ -8,7 +8,7 @@ import org.jetbrains.kotlin.psi.KtFile
 
 class MaxLineLength(config: Config = Config.empty) : Rule("MaxLineLength", Severity.Style, config) {
 
-	private val maxLineLength: Int = withConfig { valueOrDefault(MAX_LINE_LENGTH) { "120" } }.toInt()
+	private val maxLineLength: Int = withConfig { valueOrDefault(MAX_LINE_LENGTH, 120) }
 
 	override fun visit(root: KtFile) {
 		var offset = 0

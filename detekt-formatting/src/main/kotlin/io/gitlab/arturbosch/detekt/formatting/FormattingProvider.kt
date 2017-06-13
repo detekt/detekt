@@ -26,7 +26,7 @@ class FormattingProvider : RuleSetProvider {
 				ExpressionBodySyntaxLineBreaks(config),
 				ExpressionBodySyntax(config)
 		).apply {
-			if (!config.valueOrDefault("useTabs") { false }) {
+			if (!config.valueOrDefault("useTabs", false)) {
 				add(Indentation(config))
 			}
 		})
