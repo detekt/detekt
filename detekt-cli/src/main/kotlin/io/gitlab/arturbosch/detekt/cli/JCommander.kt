@@ -8,7 +8,7 @@ private val jCommander = JCommander()
 fun parseArguments(args: Array<String>): Main {
 	val cli = Main()
 	jCommander.addObject(cli)
-	jCommander.setProgramName("detekt")
+	jCommander.programName = "detekt"
 
 	try {
 		jCommander.parse(*args)
