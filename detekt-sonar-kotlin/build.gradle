@@ -1,0 +1,40 @@
+plugins {
+	id "com.iadams.sonar-packaging" version "0.1.4"
+}
+
+configurations {
+	compile.extendsFrom kotlinCompile
+	testCompile.extendsFrom kotlinTest
+//	testRuntime.extendsFrom junitPlatform
+}
+
+dependencies {
+	compile project(':detekt-core')
+	compile project(':detekt-formatting')
+	compile project(':detekt-rules')
+	compile "org.sonarsource.sonarqube:sonar-plugin-api:$sonarVersion"
+	testCompile "org.sonarsource.sonarqube:sonar-testing-harness:$sonarVersion"
+	testRuntime "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
+	testRuntime "org.junit.platform:junit-platform-console:$junitPlatformVersion"
+	testRuntime "org.jetbrains.spek:spek-junit-platform-engine:$spekVersion"
+}
+
+sonarPackaging {
+	serverUrl = 'http://localhost:9000'
+	pluginDir = '/tmp/sonarqube/extensions/plugins'
+	pluginKey = 'example'
+	pluginClass = 'io.gitlab.arturbosch.detekt.sonar.DetektPlugin'
+	pluginName = 'Sonar kotlin plugin using detekt.'
+	pluginDescription = 'Work in progress kotlin sonar plugin.'
+	pluginParent = null
+	pluginLicense = 'APACHE 2.0'
+	requirePlugins = null
+	pluginUrl = 'http://github.com/arturbosch/detekt'
+	pluginIssueTrackerUrl = 'http://github.com/arturbosch/detekt/issues'
+	pluginTermsConditionsUrl = 'http://github.com/arturbosch/detekt'
+	pluginSourceUrl = 'http://github.com/arturbosch/detekt'
+	pluginDevelopers = 'Artur Bosch'
+	skipDependenciesPackaging = false
+	useChildFirstClassLoader = false
+	basePlugin = ''
+}
