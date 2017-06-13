@@ -13,8 +13,8 @@ class SmellThreshold(config: Config,
 
 	private val buildConfig = config.subConfig("build")
 	private val weightsConfig = buildConfig.subConfig("weights")
-	private val warning = buildConfig.valueOrDefault("warningThreshold") { -1 }
-	private val fail = buildConfig.valueOrDefault("failThreshold") { -1 }
+	private val warning = buildConfig.valueOrDefault("warningThreshold", -1)
+	private val fail = buildConfig.valueOrDefault("failThreshold", -1)
 
 	class BuildFailure(override val message: String?) : RuntimeException(message)
 
@@ -44,9 +44,8 @@ class SmellThreshold(config: Config,
 
 	private fun Finding.weighted(ids: Map<String, String>): Int {
 		val key = ids[id] // entry of ID > entry of RulesetID > default weight 1
-		return weightsConfig.valueOrDefault(id) {
-			if (key != null) weightsConfig.valueOrDefault(key) { 1 } else 1
-		}
+		return weightsConfig.valueOrDefault(id,
+				if (key != null) weightsConfig.valueOrDefault(key, 1) else 1)
 	}
 
 }

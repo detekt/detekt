@@ -38,10 +38,10 @@ abstract class Rule(val id: String,
 		get() = _findings.toList()
 
 	protected val autoCorrect: Boolean = withConfig {
-		valueOrDefault("autoCorrect") { true }
+		valueOrDefault("autoCorrect", true)
 	}
 	private val active = withConfig {
-		valueOrDefault("active") { true }
+		valueOrDefault("active", true)
 	}
 
 	private var _findings: MutableList<Finding> = mutableListOf()

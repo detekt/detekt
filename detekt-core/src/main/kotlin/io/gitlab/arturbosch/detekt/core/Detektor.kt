@@ -30,7 +30,7 @@ class Detektor(settings: ProcessingSettings,
 			}
 			val findings = awaitAll(futures).flatMap { it }.toMergedMap()
 
-			if (config.valueOrDefault("autoCorrect") { false }) {
+			if (config.valueOrDefault("autoCorrect", false)) {
 				compiler.saveModifiedFiles(ktFiles) {
 					notifications.add(it)
 				}

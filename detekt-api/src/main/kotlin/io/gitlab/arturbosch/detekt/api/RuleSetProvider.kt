@@ -24,7 +24,7 @@ interface RuleSetProvider {
 	 */
 	fun buildRuleset(config: Config): RuleSet? {
 		val subConfig = config.subConfig(ruleSetId)
-		val active = subConfig.valueOrDefault("active") { true }
+		val active = subConfig.valueOrDefault("active", true)
 		return if (active) instance(subConfig) else null
 	}
 

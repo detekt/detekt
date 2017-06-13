@@ -13,15 +13,16 @@ import java.nio.file.Path
  * @author Artur Bosch
  */
 @Suppress("UNCHECKED_CAST")
-class YamlConfig internal constructor(val properties: Map<String, Any>) : Config {
+class YamlConfig internal constructor(val properties: Map<String, Any>) : Config() {
 
 	override fun subConfig(key: String): Config {
 		val subProperties = properties.getOrElse(key) { mapOf<String, Any>() }
 		return YamlConfig(subProperties as Map<String, Any>)
 	}
 
-	override fun <T : Any> valueOrDefault(key: String, default: () -> T): T {
-		return properties.getOrElse(key) { default() } as T
+	override fun <T : Any> valueOrDefault(key: String, default: T): T {
+		val result = properties[key]
+		return valueOrDefaultInternal(result, default) as T
 	}
 
 	companion object {

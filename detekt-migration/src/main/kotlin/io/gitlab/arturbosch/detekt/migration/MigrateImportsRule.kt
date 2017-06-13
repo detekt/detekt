@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.migration
 
-import org.jetbrains.kotlin.com.intellij.psi.impl.source.codeStyle.CodeEditUtil
-import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.CompositeElement
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.PROJECT
 import io.gitlab.arturbosch.detekt.api.Rule
+import org.jetbrains.kotlin.com.intellij.psi.impl.source.codeStyle.CodeEditUtil
+import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.CompositeElement
 import org.jetbrains.kotlin.psi.KtImportList
 import org.jetbrains.kotlin.psi.KtImportsFactory
 import org.jetbrains.kotlin.resolve.ImportPath
@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.resolve.ImportPath
  */
 class MigrateImportsRule(config: Config) : Rule("MigrateImports", Severity.Defect) {
 
-	private val replacements: HashMap<String, String> = config.valueOrDefault("imports") { HashMap<String, String>() }
+	private val replacements: HashMap<String, String> = config.valueOrDefault("imports", HashMap<String, String>())
 	private val toReplaces = replacements.keys
 
 	private val factory = KtImportsFactory(PROJECT)
