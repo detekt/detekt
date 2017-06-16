@@ -16,6 +16,7 @@ open class DetektExtension(open var version: String = "1.0.0.M11",
                            open var output: String? = null,
                            open var outputFormat: String? = null,
                            open var baseline: String? = null,
+						   open var createBaseline: Boolean = false,
 						   open var parallel: Boolean = false,
 						   open var format: Boolean = false,
 						   open var useTabs: Boolean = false,
@@ -42,6 +43,7 @@ open class DetektExtension(open var version: String = "1.0.0.M11",
 			output?.let { add("--output"); add(it) }
 			outputFormat?.let { add("--output-format"); add(it) }
 			baseline?.let { add("--baseline"); add(it) }
+			if (createBaseline) add("--create-baseline")
 			if (parallel) add("--parallel")
 			if (format) add("--format")
 			if (useTabs) add("--useTabs")
