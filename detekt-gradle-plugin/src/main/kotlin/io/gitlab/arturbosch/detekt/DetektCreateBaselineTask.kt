@@ -7,24 +7,27 @@ import org.gradle.api.tasks.TaskAction
 /**
  * @author Artur Bosch
  */
-open class DetektCheckTask : DefaultTask() {
+open class DetektCreateBaselineTask : DefaultTask() {
 
 	init {
-		description = "Analyze your kotlin code with detekt."
+		description = "Creates a detekt baseline on the given --baseline path."
 	}
 
+	private val createBaseline = "--create-baseline"
+
 	@TaskAction
-	fun check() {
+	fun baseline() {
 		val detektExtension = project.extensions.getByName("detekt") as DetektExtension
 
-		val configuration = project.buildscript.configurations.maybeCreate("detektCheck")
+		val configuration = project.buildscript.configurations.maybeCreate("detektBaseline")
 		project.buildscript.dependencies.add(configuration.name, DefaultExternalModuleDependency(
 				"io.gitlab.arturbosch.detekt", "detekt-cli", detektExtension.version))
 
 		project.javaexec {
 			it.main = "io.gitlab.arturbosch.detekt.cli.Main"
 			it.classpath = configuration
-			it.args(detektExtension.detektArgs)
+			it.args(detektExtension.detektArgs.plus(createBaseline))
 		}
 	}
+
 }
