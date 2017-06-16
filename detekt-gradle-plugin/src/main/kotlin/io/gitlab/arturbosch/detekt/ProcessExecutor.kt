@@ -15,6 +15,7 @@ fun startProcess(args: Array<String>) {
 		val inputs = it.readLines().joinToString("\n")
 		println(inputs)
 	}
+
 	BufferedReader(InputStreamReader(BufferedInputStream(process.errorStream))).use {
 		val errors = it.readLines().joinToString("\n")
 		if (errors.isNotEmpty()) {
