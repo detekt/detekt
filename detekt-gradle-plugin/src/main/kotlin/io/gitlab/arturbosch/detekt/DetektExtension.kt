@@ -7,21 +7,17 @@ import org.gradle.api.Action
  */
 @Suppress("LongParameterList")
 open class DetektExtension(open var version: String = "1.0.0.M11",
+						   open var debug: Boolean = false,
 						   open var input: String? = null,
 						   open var config: String? = null,
 						   open var configResource: String? = null,
-						   open var generateConfig: Boolean = false,
 						   open var filters: String? = null,
 						   open var rulesets: String? = null,
-                           open var output: String? = null,
-                           open var outputFormat: String? = null,
-                           open var baseline: String? = null,
-						   open var createBaseline: Boolean = false,
+						   open var output: String? = null,
+						   open var outputFormat: String? = null,
+						   open var baseline: String? = null,
 						   open var parallel: Boolean = false,
-						   open var format: Boolean = false,
-						   open var useTabs: Boolean = false,
 						   open var disableDefaultRuleSets: Boolean = false,
-						   open var debug: Boolean = false,
 						   open var ideaExtension: IdeaExtension = IdeaExtension()) {
 
 	val detektArgs: MutableList<String> by lazy { convertToArguments() }
@@ -37,16 +33,12 @@ open class DetektExtension(open var version: String = "1.0.0.M11",
 			input?.let { add("--project"); add(it) }
 			config?.let { add("--config"); add(it) }
 			configResource?.let { add("--config-resource"); add(it) }
-			if (generateConfig) add("--generate-config")
 			filters?.let { add("--filters"); add(it) }
 			rulesets?.let { add("--rules"); add(it) }
 			output?.let { add("--output"); add(it) }
 			outputFormat?.let { add("--output-format"); add(it) }
 			baseline?.let { add("--baseline"); add(it) }
-			if (createBaseline) add("--create-baseline")
 			if (parallel) add("--parallel")
-			if (format) add("--format")
-			if (useTabs) add("--useTabs")
 			if (disableDefaultRuleSets) add("--disable-default-rulesets")
 			if (debug) println("detekt version: $version: " + this)
 		}
