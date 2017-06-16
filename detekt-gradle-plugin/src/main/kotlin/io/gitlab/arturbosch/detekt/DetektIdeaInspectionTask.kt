@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt
 
+import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 

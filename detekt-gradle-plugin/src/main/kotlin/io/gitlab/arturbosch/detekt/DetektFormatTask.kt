@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt
 
+import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.DefaultTask
 import org.gradle.api.internal.artifacts.dependencies.DefaultExternalModuleDependency
 import org.gradle.api.tasks.TaskAction
@@ -27,7 +28,8 @@ open class DetektFormatTask : DefaultTask() {
 		project.javaexec {
 			it.main = "io.gitlab.arturbosch.detekt.formatting.Formatting"
 			it.classpath = formatting
-			it.args(detektExtension.detektArgs.plus(listOf(formatString, disableDefaults)))
+			it.args(detektExtension.profileArgumentsOrDefault(project)
+					.plus(listOf(formatString, disableDefaults)))
 		}
 	}
 
