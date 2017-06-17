@@ -15,27 +15,7 @@ import org.jetbrains.kotlin.psi.KtFile
  */
 @Suppress("EmptyFunctionBlock")
 abstract class Rule(val id: String,
-					val severity: Severity = Rule.Severity.Minor,
 					private val config: Config = Config.empty) : DetektVisitor() {
-
-	init {
-		validateIdentifier(id)
-	}
-
-	/**
-	 * Rules can classified into different severity grades. Maintainer can choose
-	 * a grade which is most harmful to their projects.
-	 */
-	enum class Severity {
-		CodeSmell, Style, Warning, Defect, Minor, Maintainability, Security
-
-	}
-
-	/**
-	 * Returns a list of violations of this rule.
-	 */
-	val findings: List<Finding>
-		get() = _findings.toList()
 
 	protected val autoCorrect: Boolean = withConfig {
 		valueOrDefault("autoCorrect", true)
@@ -44,18 +24,16 @@ abstract class Rule(val id: String,
 		valueOrDefault("active", true)
 	}
 
-	private var _findings: MutableList<Finding> = mutableListOf()
-
 	/**
 	 * Before starting visiting kotlin elements, a check is performed if this rule should be triggered.
 	 * Pre- and post-visit-hooks are executed before/after the visiting process.
 	 */
-	open fun visit(root: KtFile) {
+	open fun visit(context: Context, root: KtFile) {
 		ifRuleActive {
 			if (!root.isSuppressedBy(id)) {
-				preVisit(root)
-				root.accept(this)
-				postVisit(root)
+				preVisit(context, root)
+				root.accept(this, context)
+				postVisit(context, root)
 			}
 		}
 	}
@@ -81,40 +59,40 @@ abstract class Rule(val id: String,
 
 	protected fun ifRuleActive(block: () -> Unit) {
 		if (active) {
-			clearFindings()
 			block()
 		}
-	}
-
-	internal fun clearFindings() {
-		_findings = mutableListOf()
 	}
 
 	/**
 	 * Could be overriden by subclasses to specify a behaviour which should be done before
 	 * visiting kotlin elements.
 	 */
-	protected open fun postVisit(root: KtFile) {
+	protected open fun postVisit(context: Context, root: KtFile) {
 	}
 
 	/**
 	 * Could be overriden by subclasses to specify a behaviour which should be done after
 	 * visiting kotlin elements.
 	 */
-	protected open fun preVisit(root: KtFile) {
+	protected open fun preVisit(context: Context, root: KtFile) {
+	}
+}
+
+/**
+ * Class describing the metadata of a {@link #Rule}.
+ */
+data class Issue(val id: String,
+				 val severity: Severity = Severity.Minor,
+				 val description: String = "") {
+	init {
+	    validateIdentifier(id)
 	}
 
 	/**
-	 * The only way to add code smell findings.
-	 *
-	 * Before adding a finding, it is checked if it is not suppressed
-	 * by @Suppress or @SuppressWarnings annotations.
+	 * Issues can be classified into different severity grades. Maintainer can choose
+	 * a grade which is most harmful to their projects.
 	 */
-	protected fun addFindings(vararg finding: Finding) {
-		val filtered = finding.filter {
-			val ktElement = it.entity.ktElement
-			ktElement == null || !ktElement.isSuppressedBy(id)
-		}
-		_findings.addAll(filtered)
+	enum class Severity {
+		CodeSmell, Style, Warning, Defect, Minor, Maintainability, Security
 	}
 }

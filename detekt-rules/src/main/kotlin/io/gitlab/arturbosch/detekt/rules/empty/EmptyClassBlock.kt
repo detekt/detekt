@@ -1,8 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.empty
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.*
 import org.jetbrains.kotlin.psi.KtClassOrObject
 
 /**
@@ -10,10 +8,13 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
  */
 class EmptyClassBlock(config: Config) : EmptyRule("EmptyClassBlock", config = config) {
 
-	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
+	override fun visitClassOrObject(context: Context, classOrObject: KtClassOrObject) {
 		classOrObject.getBody()?.declarations?.let {
-			if (it.isEmpty()) addFindings(CodeSmell(id, severity, Entity.from(classOrObject)))
+			if (it.isEmpty()) context.report(CodeSmell(ISSUE, Entity.from(classOrObject)))
 		}
 	}
 
+	companion object {
+		val ISSUE = Issue("EmptyClassBlock", Issue.Severity.Minor)
+	}
 }

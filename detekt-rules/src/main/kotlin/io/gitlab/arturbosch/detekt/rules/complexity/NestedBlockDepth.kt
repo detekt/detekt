@@ -1,11 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
-import io.gitlab.arturbosch.detekt.api.CodeSmellThresholdRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.DetektVisitor
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Metric
-import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.api.*
 import io.gitlab.arturbosch.detekt.rules.isUsedForNesting
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtContainerNodeForControlStructureBody
@@ -19,14 +14,14 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
 /**
  * @author Artur Bosch
  */
-class NestedBlockDepth(config: Config = Config.empty, threshold: Int = 3) : CodeSmellThresholdRule("NestedBlockDepth", config, threshold) {
+class NestedBlockDepth(config: Config = Config.empty, threshold: Int = 3) :
+		ThresholdRule("NestedBlockDepth", config, threshold) {
 
-	override fun visitNamedFunction(function: KtNamedFunction) {
+	override fun visitNamedFunction(context: Context, function: KtNamedFunction) {
 		val visitor = FunctionDepthVisitor(threshold)
-		visitor.visitNamedFunction(function)
+		visitor.visitNamedFunction(context, function)
 		if (visitor.isTooDeep)
-			addFindings(ThresholdedCodeSmell(id, severity,
-					Entity.from(function), Metric("SIZE", visitor.maxDepth, threshold)))
+			context.report(ThresholdedCodeSmell(ISSUE, Entity.from(function), Metric("SIZE", visitor.maxDepth, threshold)))
 	}
 
 	private class FunctionDepthVisitor(val threshold: Int) : DetektVisitor() {
@@ -46,38 +41,38 @@ class NestedBlockDepth(config: Config = Config.empty, threshold: Int = 3) : Code
 			depth--
 		}
 
-		override fun visitIfExpression(expression: KtIfExpression) {
+		override fun visitIfExpression(context: Context, expression: KtIfExpression) {
 			// Prevents else if (...) to count as two - #51C
 			if (expression.parent !is KtContainerNodeForControlStructureBody) {
 				inc()
-				super.visitIfExpression(expression)
+				super.visitIfExpression(context, expression)
 				dec()
 			}
 		}
 
-		override fun visitLoopExpression(loopExpression: KtLoopExpression) {
+		override fun visitLoopExpression(context: Context, loopExpression: KtLoopExpression) {
 			inc()
-			super.visitLoopExpression(loopExpression)
+			super.visitLoopExpression(context, loopExpression)
 			dec()
 		}
 
-		override fun visitWhenExpression(expression: KtWhenExpression) {
+		override fun visitWhenExpression(context: Context, expression: KtWhenExpression) {
 			inc()
-			super.visitWhenExpression(expression)
+			super.visitWhenExpression(context, expression)
 			dec()
 		}
 
-		override fun visitTryExpression(expression: KtTryExpression) {
+		override fun visitTryExpression(context: Context, expression: KtTryExpression) {
 			inc()
-			super.visitTryExpression(expression)
+			super.visitTryExpression(context, expression)
 			dec()
 		}
 
-		override fun visitCallExpression(expression: KtCallExpression) {
+		override fun visitCallExpression(context: Context, expression: KtCallExpression) {
 			val lambdaArguments = expression.lambdaArguments
 			if (expression.isUsedForNesting()) {
 				insideLambdaDo(lambdaArguments) { inc() }
-				super.visitCallExpression(expression)
+				super.visitCallExpression(context, expression)
 				insideLambdaDo(lambdaArguments) { dec() }
 			}
 		}
@@ -90,5 +85,9 @@ class NestedBlockDepth(config: Config = Config.empty, threshold: Int = 3) : Code
 				}
 			}
 		}
+	}
+
+	companion object {
+		val ISSUE = Issue("NestedBlockDepth", Issue.Severity.CodeSmell)
 	}
 }

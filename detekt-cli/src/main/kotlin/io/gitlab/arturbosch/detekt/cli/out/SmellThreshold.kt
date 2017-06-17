@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.cli.out
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.core.Detektion
 import java.util.HashMap
 
@@ -34,18 +35,18 @@ class SmellThreshold(config: Config,
 
 	}
 
-	private fun extractRuleToRulesetIdMap(detektion: Detektion): HashMap<String, String> {
-		return detektion.findings.mapValues { it.value.map { it.id }.toSet() }
+	private fun extractRuleToRulesetIdMap(detektion: Detektion): HashMap<String, Issue> {
+		return detektion.findings.mapValues { it.value.map { it.issue.id }.toSet() }
 				.map { map -> map.value.map { it to map.key }.toMap() }
-				.fold(HashMap<String, String>()) { result, map -> result.putAll(map); result }
+				.fold(HashMap<String, Issue>()) { result, map -> result.putAll(map); result }
 	}
 
 	private fun Int.reached(amount: Int): Boolean = this != -1 && this <= amount
 
-	private fun Finding.weighted(ids: Map<String, String>): Int {
-		val key = ids[id] // entry of ID > entry of RulesetID > default weight 1
-		return weightsConfig.valueOrDefault(id,
-				if (key != null) weightsConfig.valueOrDefault(key, 1) else 1)
+	private fun Finding.weighted(ids: Map<String, Issue>): Int {
+		val key = ids[issue.id] // entry of ID > entry of RulesetID > default weight 1
+		return weightsConfig.valueOrDefault(issue.id,
+				if (key != null) weightsConfig.valueOrDefault(key.id, 1) else 1)
 	}
 
 }

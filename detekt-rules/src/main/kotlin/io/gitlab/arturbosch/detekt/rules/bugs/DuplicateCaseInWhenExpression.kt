@@ -1,17 +1,14 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.*
 import org.jetbrains.kotlin.psi.KtWhenExpression
 
 /**
  * @author Artur Bosch
  */
-class DuplicateCaseInWhenExpression(config: Config) : Rule("DuplicateCaseInWhenExpression", Severity.Defect, config) {
+class DuplicateCaseInWhenExpression(config: Config) : Rule("DuplicateCaseInWhenExpression", config) {
 
-	override fun visitWhenExpression(expression: KtWhenExpression) {
+	override fun visitWhenExpression(context: Context, expression: KtWhenExpression) {
 		val numberOfEntries = expression.entries.size
 		val distinctNumber = expression.entries
 				.map { it.conditions }
@@ -21,7 +18,11 @@ class DuplicateCaseInWhenExpression(config: Config) : Rule("DuplicateCaseInWhenE
 				.distinct().size
 
 		if (numberOfEntries > distinctNumber) {
-			addFindings(CodeSmell(id, severity, Entity.from(expression)))
+			context.report(CodeSmell(ISSUE, Entity.from(expression)))
 		}
+	}
+
+	companion object {
+		val ISSUE = Issue("DuplicateCaseInWhenExpression", Issue.Severity.Defect)
 	}
 }

@@ -1,10 +1,6 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Location
-import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.*
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.LeafPsiElement
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -16,26 +12,26 @@ import org.jetbrains.kotlin.psi.psiUtil.prevLeaf
  * @author Artur Bosch
  */
 class ExpressionBodySyntaxLineBreaks(config: Config = Config.empty) : Rule(
-		"ExpressionBodySyntaxLineBreaks", Severity.Style, config) {
+		"ExpressionBodySyntaxLineBreaks", config) {
 
-	override fun visitNamedFunction(function: KtNamedFunction) {
+	override fun visitNamedFunction(context: Context, function: KtNamedFunction) {
 		function.equalsToken?.let { equals ->
 			function.bodyExpression?.let { body ->
-				checkLineBreaks(equals as LeafPsiElement, body)
+				checkLineBreaks(context, equals as LeafPsiElement, body)
 			}
 		}
 	}
 
-	private fun checkLineBreaks(equals: LeafPsiElement, body: KtExpression) {
+	private fun checkLineBreaks(context: Context, equals: LeafPsiElement, body: KtExpression) {
 		val equalsLine = Location.startLineAndColumn(equals).line
 		val (exprStart, exprEnd) = body.startAndEndLine()
 		if (equalsLine != exprStart) {
 			if (exprStart == exprEnd) {
-				addFindings(CodeSmell(id, severity, Entity.from(equals)))
+				context.report(CodeSmell(ISSUE, Entity.from(equals)))
 				withAutoCorrect { body.alignToEqualsToken(equals) }
 			} else {
 				if (equals.trimSpacesBefore(autoCorrect, ignoreLineBreaks = true)) {
-					addFindings(CodeSmell(id, severity, Entity.from(equals)))
+					context.report(CodeSmell(ISSUE, Entity.from(equals)))
 				}
 			}
 		}
@@ -56,5 +52,9 @@ class ExpressionBodySyntaxLineBreaks(config: Config = Config.empty) : Rule(
 			leaf = parent
 		}
 		equals.rawInsertAfterMe(PsiWhiteSpaceImpl(" "))
+	}
+
+	companion object {
+		val ISSUE = Issue("ExpressionBodySyntaxLineBreaks", Issue.Severity.Style)
 	}
 }

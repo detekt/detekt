@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.visitors
 
+import io.gitlab.arturbosch.detekt.api.Context
 import io.gitlab.arturbosch.detekt.core.path
 import io.gitlab.arturbosch.detekt.test.compileForTest
 import org.assertj.core.api.Assertions.assertThat
@@ -13,7 +14,8 @@ internal class LLOCVisitorTest {
 	@Test
 	fun defaultCaseHasOneClassAndAnnotationLine() {
 		val file = compileForTest(path.resolve("Default.kt"))
-		val lloc = LLOCVisitor().visitAndReturn(file)
+		val context = Context()
+		val lloc = LLOCVisitor().visitAndReturn(context, file)
 
 		assertThat(lloc).isEqualTo(2)
 	}
@@ -21,7 +23,8 @@ internal class LLOCVisitorTest {
 	@Test
 	fun llocOfComplexClass() {
 		val file = compileForTest(path.resolve("ComplexClass.kt"))
-		val lloc = LLOCVisitor().visitAndReturn(file)
+		val context = Context()
+		val lloc = LLOCVisitor().visitAndReturn(context, file)
 
 		assertThat(lloc).isEqualTo(85)
 	}

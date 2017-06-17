@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Context
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.rules.CommonSpec
 import io.gitlab.arturbosch.detekt.test.compileForTest
@@ -23,9 +24,10 @@ class EqualsWithHashCodeExistTest {
 	fun nestedClasses() {
 		val subject = EqualsWithHashCodeExist(Config.empty)
 		val file = compileForTest(Case.NestedClasses.path())
+		val context = Context()
 
-		subject.visit(file)
+		subject.visit(context, file)
 
-		assertThat(subject.findings).hasSize(2)
+		assertThat(context.findings).hasSize(2)
 	}
 }

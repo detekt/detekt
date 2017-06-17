@@ -1,10 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
-import io.gitlab.arturbosch.detekt.api.CodeSmellThresholdRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Metric
-import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.api.*
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameterList
@@ -12,17 +8,22 @@ import org.jetbrains.kotlin.psi.KtParameterList
 /**
  * @author Artur Bosch
  */
-class LongParameterList(config: Config = Config.empty, threshold: Int = 5) : CodeSmellThresholdRule("LongParameterList", config, threshold) {
+class LongParameterList(config: Config = Config.empty, threshold: Int = 5) :
+		ThresholdRule("LongParameterList", config, threshold) {
 
-	override fun visitNamedFunction(function: KtNamedFunction) {
+	override fun visitNamedFunction(context: Context, function: KtNamedFunction) {
 		if (function.hasModifier(KtTokens.OVERRIDE_KEYWORD)) return
-		function.valueParameterList?.checkThreshold()
+		function.valueParameterList?.checkThreshold(context)
 	}
 
-	private fun KtParameterList.checkThreshold() {
+	private fun KtParameterList.checkThreshold(context: Context) {
 		val size = parameters.size
 		if (size > threshold) {
-			addFindings(ThresholdedCodeSmell(id, severity, Entity.Companion.from(this), Metric("SIZE", size, threshold)))
+			context.report(ThresholdedCodeSmell(ISSUE, Entity.Companion.from(this), Metric("SIZE", size, threshold)))
 		}
+	}
+
+	companion object {
+		val ISSUE = Issue("LongParameterList", Issue.Severity.CodeSmell)
 	}
 }

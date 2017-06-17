@@ -13,8 +13,8 @@ class NoDocOverPublicClassSpec : SubjectSpek<NoDocOverPublicClass>({
 	subject { NoDocOverPublicClass() }
 
 	it("finds two undocumented classes") {
-		subject.lint(Case.Comments.path())
-		assertThat(subject.findings).hasSize(2)
+        val findings = subject.lint(Case.Comments.path())
+		assertThat(findings).hasSize(2)
 	}
 
 })

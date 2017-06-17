@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.migration
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Context
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -31,8 +32,9 @@ import bye.bye
 
 fun main(args: Array<String>) {}
 				"""
+		val context = Context()
 
-		MigrateImportsRule(MigrationTestConfig).visit(ktFile)
+		MigrateImportsRule(MigrationTestConfig).visit(context, ktFile)
 
 		assertThat(ktFile.text).isEqualTo(expected)
 	}

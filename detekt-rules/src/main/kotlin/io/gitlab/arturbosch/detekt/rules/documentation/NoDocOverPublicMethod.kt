@@ -1,28 +1,25 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.*
 import io.gitlab.arturbosch.detekt.rules.isPublicNotOverriden
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
  * @author Artur Bosch
  */
-class NoDocOverPublicMethod(config: Config = Config.empty) : Rule("NoDocOverPublicMethod", Severity.Maintainability, config) {
+class NoDocOverPublicMethod(config: Config = Config.empty) : Rule("NoDocOverPublicMethod", config) {
 
-	override fun visitNamedFunction(function: KtNamedFunction) {
+	override fun visitNamedFunction(context: Context, function: KtNamedFunction) {
 		if (function.funKeyword == null && function.isLocal) return
 
 		val modifierList = function.modifierList
 		if (function.docComment == null) {
 			if (modifierList == null) {
-				addFindings(CodeSmell(id, severity, methodHeaderLocation(function)))
+				context.report(CodeSmell(ISSUE, methodHeaderLocation(function)))
 			}
 			if (modifierList != null) {
 				if (function.isPublicNotOverriden()) {
-					addFindings(CodeSmell(id, severity, methodHeaderLocation(function)))
+					context.report(CodeSmell(ISSUE, methodHeaderLocation(function)))
 				}
 			}
 		}
@@ -30,4 +27,7 @@ class NoDocOverPublicMethod(config: Config = Config.empty) : Rule("NoDocOverPubl
 
 	private fun methodHeaderLocation(function: KtNamedFunction) = Entity.from(function)
 
+	companion object {
+		val ISSUE = Issue("NoDocOverPublicMethod", Issue.Severity.Maintainability)
+	}
 }

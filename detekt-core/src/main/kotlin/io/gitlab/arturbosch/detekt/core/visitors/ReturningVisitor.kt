@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.visitors
 
+import io.gitlab.arturbosch.detekt.api.Context
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import org.jetbrains.kotlin.psi.KtFile
 
@@ -10,8 +11,8 @@ abstract class ReturningVisitor<T> : DetektVisitor() {
 
 	protected abstract var value: T
 
-	fun visitAndReturn(file: KtFile): T {
-		file.accept(this)
+	fun visitAndReturn(context: Context, file: KtFile): T {
+		file.accept(this, context)
 		val result = value
 		reset()
 		return result

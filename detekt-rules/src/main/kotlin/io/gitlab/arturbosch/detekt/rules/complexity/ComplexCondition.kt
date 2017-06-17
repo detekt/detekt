@@ -1,10 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
-import io.gitlab.arturbosch.detekt.api.CodeSmellThresholdRule
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Metric
-import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.api.*
 import io.gitlab.arturbosch.detekt.rules.collectByType
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtDoWhileExpression
@@ -15,28 +11,29 @@ import org.jetbrains.kotlin.psi.KtWhileExpression
 /**
  * @author Artur Bosch
  */
-class ComplexCondition(config: Config = Config.empty, threshold: Int = 3) : CodeSmellThresholdRule("ComplexCondition", config, threshold) {
+class ComplexCondition(config: Config = Config.empty, threshold: Int = 3) :
+		ThresholdRule("ComplexCondition", config, threshold) {
 
-	override fun visitIfExpression(expression: KtIfExpression) {
+	override fun visitIfExpression(context: Context, expression: KtIfExpression) {
 		val condition = expression.condition
-		checkIfComplex(condition)
-		super.visitIfExpression(expression)
+		checkIfComplex(context, condition)
+		super.visitIfExpression(context, expression)
 	}
 
-	override fun visitDoWhileExpression(expression: KtDoWhileExpression) {
+	override fun visitDoWhileExpression(context: Context, expression: KtDoWhileExpression) {
 		val condition = expression.condition
-		checkIfComplex(condition)
-		super.visitDoWhileExpression(expression)
+		checkIfComplex(context, condition)
+		super.visitDoWhileExpression(context, expression)
 	}
 
-	override fun visitWhileExpression(expression: KtWhileExpression) {
+	override fun visitWhileExpression(context: Context, expression: KtWhileExpression) {
 		val condition = expression.condition
-		checkIfComplex(condition)
-		super.visitWhileExpression(expression)
+		checkIfComplex(context, condition)
+		super.visitWhileExpression(context, expression)
 	}
 
-	private fun checkIfComplex(condition: KtExpression?) {
-		val binaryExpressions = condition?.collectByType<KtBinaryExpression>()
+	private fun checkIfComplex(context: Context, condition: KtExpression?) {
+		val binaryExpressions = condition?.collectByType<KtBinaryExpression>(context)
 
 		if (binaryExpressions != null && binaryExpressions.size > 1) {
 			val longestBinExpr = binaryExpressions.reduce { acc, binExpr ->
@@ -45,7 +42,7 @@ class ComplexCondition(config: Config = Config.empty, threshold: Int = 3) : Code
 			val conditionString = longestBinExpr.text
 			val count = frequency(conditionString, "&&") + frequency(conditionString, "||") + 1
 			if (count > threshold) {
-				addFindings(ThresholdedCodeSmell(id, severity, Entity.from(condition), Metric("SIZE", count, threshold)))
+				context.report(ThresholdedCodeSmell(ISSUE, Entity.from(condition), Metric("SIZE", count, threshold)))
 			}
 		}
 	}
@@ -65,5 +62,9 @@ class ComplexCondition(config: Config = Config.empty, threshold: Int = 3) : Code
 		}
 
 		return count
+	}
+
+	companion object {
+		val ISSUE = Issue("ComplexCondition", Issue.Severity.CodeSmell)
 	}
 }

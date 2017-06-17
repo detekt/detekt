@@ -13,7 +13,7 @@ class NoDocOverPublicMethodSpec : SubjectSpek<NoDocOverPublicMethod>({
 	subject { NoDocOverPublicMethod() }
 
 	it("finds three undocumented functions") {
-		subject.lint(Case.Comments.path())
-		assertThat(subject.findings).hasSize(3)
+        val findings = subject.lint(Case.Comments.path())
+		assertThat(findings).hasSize(3)
 	}
 })

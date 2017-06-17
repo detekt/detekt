@@ -31,7 +31,8 @@ class PathConverter : IStringConverter<Path> {
 class ClasspathResourceConverter : IStringConverter<URL> {
 	override fun convert(resource: String): URL {
 		val relativeResource = if (resource.startsWith("/")) resource else "/" + resource
-		val url = javaClass.getResource(relativeResource) ?: throw ParameterException("Classpath resource '$resource' does not exist!")
+		val url = javaClass.getResource(relativeResource) ?:
+				throw ParameterException("Classpath resource '$resource' does not exist!")
 		return url
 	}
 }

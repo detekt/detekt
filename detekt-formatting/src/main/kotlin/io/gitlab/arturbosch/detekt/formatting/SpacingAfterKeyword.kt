@@ -1,9 +1,6 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.TokenRule
+import io.gitlab.arturbosch.detekt.api.*
 import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.LeafPsiElement
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl
@@ -27,16 +24,16 @@ import org.jetbrains.kotlin.psi.psiUtil.nextLeaf
 /**
  * @author Artur Bosch
  */
-class SpacingAfterKeyword(config: Config) : TokenRule("SpacingAfterKeyword", Severity.Style, config) {
+class SpacingAfterKeyword(config: Config) : TokenRule("SpacingAfterKeyword", config) {
 
 	private val keywords = TokenSet.create(FOR_KEYWORD, IF_KEYWORD, ELSE_KEYWORD, WHILE_KEYWORD, DO_KEYWORD,
 			TRY_KEYWORD, CATCH_KEYWORD, FINALLY_KEYWORD, WHEN_KEYWORD)
 
 	private val keywordsWithoutSpaces = TokenSet.create(KtTokens.GET_KEYWORD, KtTokens.SET_KEYWORD)
 
-	override fun visitLeaf(leaf: LeafPsiElement) {
+	override fun visitLeaf(context: Context, leaf: LeafPsiElement) {
 		if (keywords.contains(leaf.elementType) && !leaf.nextLeafIsWhiteSpace()) {
-			addFindings(CodeSmell(id, severity, Entity.from(leaf, offset = leaf.text.length)))
+			context.report(CodeSmell(ISSUE, Entity.from(leaf, offset = leaf.text.length)))
 			withAutoCorrect {
 				handleCatchCase(leaf)
 				leaf.rawInsertAfterMe(PsiWhiteSpaceImpl(" "))
@@ -44,7 +41,7 @@ class SpacingAfterKeyword(config: Config) : TokenRule("SpacingAfterKeyword", Sev
 		} else if (keywordsWithoutSpaces.contains(leaf.elementType) && leaf.nextLeafIsWhiteSpace()) {
 			val parent = leaf.parent // property accessors without body need no check #71
 			if (parent is KtPropertyAccessor && parent.hasBody()) {
-				addFindings(CodeSmell(id, severity, Entity.from(leaf, offset = leaf.text.length)))
+				context.report(CodeSmell(ISSUE, Entity.from(leaf, offset = leaf.text.length)))
 				withAutoCorrect {
 					leaf.nextLeaf()?.delete()
 				}
@@ -71,4 +68,7 @@ class SpacingAfterKeyword(config: Config) : TokenRule("SpacingAfterKeyword", Sev
 		}
 	}
 
+	companion object {
+		val ISSUE = Issue("SpacingAfterKeyword", Issue.Severity.Style)
+	}
 }

@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.formatting
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Context
 import io.gitlab.arturbosch.detekt.test.compileForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -17,7 +18,10 @@ class FormattingProviderTest {
 	@Test
 	fun test() {
 		val ruleSet = FormattingProvider().instance(Config.empty)
-		val (_, findings) = ruleSet.acceptAll(listOf(compileForTest(path)))
-		assertThat(findings.groupBy { it.id }.values.size).isGreaterThanOrEqualTo(8)
+		val context = Context()
+
+		ruleSet.acceptAll(context, listOf(compileForTest(path)))
+
+		assertThat(context.findings.values.size).isGreaterThanOrEqualTo(8)
 	}
 }

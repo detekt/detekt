@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.core.visitors
 
+import io.gitlab.arturbosch.detekt.api.Context
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
@@ -20,38 +21,38 @@ class McCabeVisitor : DetektVisitor() {
 		mcc++
 	}
 
-	fun visit(function: KtNamedFunction): Int {
+	fun visit(context: Context, function: KtNamedFunction): Int {
 		mcc = 0
-		super.visitNamedFunction(function)
+		super.visitNamedFunction(context, function)
 		return mcc
 	}
 
-	override fun visitNamedFunction(function: KtNamedFunction) {
+	override fun visitNamedFunction(context: Context, function: KtNamedFunction) {
 		inc()
-		super.visitNamedFunction(function)
+		super.visitNamedFunction(context, function)
 	}
 
-	override fun visitIfExpression(expression: KtIfExpression) {
+	override fun visitIfExpression(context: Context, expression: KtIfExpression) {
 		inc()
-		super.visitIfExpression(expression)
+		super.visitIfExpression(context, expression)
 	}
 
-	override fun visitLoopExpression(loopExpression: KtLoopExpression) {
+	override fun visitLoopExpression(context: Context, loopExpression: KtLoopExpression) {
 		inc()
-		super.visitLoopExpression(loopExpression)
+		super.visitLoopExpression(context, loopExpression)
 	}
 
-	override fun visitWhenExpression(expression: KtWhenExpression) {
+	override fun visitWhenExpression(context: Context, expression: KtWhenExpression) {
 		inc()
-		super.visitWhenExpression(expression)
+		super.visitWhenExpression(context, expression)
 	}
 
-	override fun visitTryExpression(expression: KtTryExpression) {
+	override fun visitTryExpression(context: Context, expression: KtTryExpression) {
 		inc()
-		super.visitTryExpression(expression)
+		super.visitTryExpression(context, expression)
 	}
 
-	override fun visitCallExpression(expression: KtCallExpression) {
+	override fun visitCallExpression(context: Context, expression: KtCallExpression) {
 		if (expression.isUsedForNesting()) {
 			val lambdaArguments = expression.lambdaArguments
 			if (lambdaArguments.size > 0) {
@@ -61,7 +62,7 @@ class McCabeVisitor : DetektVisitor() {
 				}
 			}
 		}
-		super.visitCallExpression(expression)
+		super.visitCallExpression(context, expression)
 	}
 
 	fun KtCallExpression.isUsedForNesting(): Boolean = when (getCallNameExpression()?.text) {

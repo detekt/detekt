@@ -1,28 +1,25 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.*
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtThrowExpression
 
 /**
  * @author Artur Bosch
  */
-open class ExceptionsRule(id: String, config: Config, severity: Severity = Rule.Severity.Maintainability) : Rule(id, severity, config) {
+open class ExceptionsRule(id: String, config: Config) : Rule(id, config) {
 
-	fun KtCatchClause.addFindingIfExceptionClassMatchesExact(exception: () -> String) {
+	fun KtCatchClause.addFindingIfExceptionClassMatchesExact(context: Context, issue: Issue, exception: () -> String) {
 		this.catchParameter?.let {
 			val text = it.typeReference?.text
 			if (text != null && text == exception())
-				addFindings(CodeSmell(id, severity, Entity.from(it)))
+				context.report(CodeSmell(issue, Entity.from(it)))
 		}
 	}
 
-	fun KtThrowExpression.addFindingIfThrowingClassMatchesExact(exception: () -> String) {
+	fun KtThrowExpression.addFindingIfThrowingClassMatchesExact(context: Context, issue: Issue, exception: () -> String) {
 		thrownExpression?.text?.substringBefore("(")?.let {
-			if (it == exception()) addFindings(CodeSmell(id, severity, Entity.from(this)))
+			if (it == exception()) context.report(CodeSmell(issue, Entity.from(this)))
 		}
 	}
 

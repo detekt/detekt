@@ -1,9 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.*
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.SpecialNames
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -18,7 +15,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 /**
  * @author Artur Bosch
  */
-class NamingConventionViolation(config: Config = Config.empty) : Rule(RULE_SUB_CONFIG, Severity.Style, config) {
+class NamingConventionViolation(config: Config = Config.empty) : Rule(RULE_SUB_CONFIG, config) {
 
 	private val variablePattern = Regex(withConfig { valueOrDefault(VARIABLE_PATTERN, "^(_)?[a-z$][a-zA-Z$0-9]*$") })
 	private val constantPattern = Regex(withConfig { valueOrDefault(CONSTANT_PATTERN, "^([A-Z_]*|serialVersionUID)$") })
@@ -26,31 +23,31 @@ class NamingConventionViolation(config: Config = Config.empty) : Rule(RULE_SUB_C
 	private val classPattern = Regex(withConfig { valueOrDefault(CLASS_PATTERN, "^[A-Z$][a-zA-Z$]*$") })
 	private val enumEntryPattern = Regex(withConfig { valueOrDefault(ENUM_PATTERN, "^[A-Z$][A-Z_$]*$") })
 
-	override fun visitNamedDeclaration(declaration: KtNamedDeclaration) {
+	override fun visitNamedDeclaration(context: Context, declaration: KtNamedDeclaration) {
 		if (declaration.nameAsSafeName.isSpecial) return
 		declaration.nameIdentifier?.parent?.javaClass?.let {
 			val name = declaration.nameIdentifier?.text ?: SpecialNames.NO_NAME_PROVIDED.asString()
 			when (declaration) {
-				is KtVariableDeclaration -> handleVariableNamings(declaration, name)
-				is KtNamedFunction -> if (!name.matches(methodPattern)) add(declaration)
-				is KtEnumEntry -> if (!name.matches(enumEntryPattern)) add(declaration)
-				is KtClassOrObject -> if (!name.matches(classPattern)) add(declaration)
+				is KtVariableDeclaration -> handleVariableNamings(context, declaration, name)
+				is KtNamedFunction -> if (!name.matches(methodPattern)) add(context, declaration)
+				is KtEnumEntry -> if (!name.matches(enumEntryPattern)) add(context, declaration)
+				is KtClassOrObject -> if (!name.matches(classPattern)) add(context, declaration)
 			}
 		}
-		super.visitNamedDeclaration(declaration)
+		super.visitNamedDeclaration(context, declaration)
 	}
 
-	private fun handleVariableNamings(declaration: KtVariableDeclaration, name: String) {
+	private fun handleVariableNamings(context: Context, declaration: KtVariableDeclaration, name: String) {
 		if (declaration.hasConstModifier()) {
 			if (!name.matches(constantPattern)) {
-				add(declaration)
+				add(context, declaration)
 			}
 		} else if (declaration.withinObjectDeclaration() || declaration.isTopLevel()) {
 			if (!name.matches(constantPattern) && !name.matches(variablePattern)) {
-				add(declaration)
+				add(context, declaration)
 			}
 		} else if (!name.matches(variablePattern)) {
-			add(declaration)
+			add(context, declaration)
 		}
 	}
 
@@ -63,8 +60,8 @@ class NamingConventionViolation(config: Config = Config.empty) : Rule(RULE_SUB_C
 		return this.getNonStrictParentOfType(KtObjectDeclaration::class.java) != null
 	}
 
-	private fun add(declaration: KtNamedDeclaration) {
-		addFindings(CodeSmell(id, severity, Entity.Companion.from(declaration)))
+	private fun add(context: Context, declaration: KtNamedDeclaration) {
+		context.report(CodeSmell(ISSUE, Entity.Companion.from(declaration)))
 	}
 
 	private fun KtVariableDeclaration.isTopLevel(): Boolean = this is KtProperty && this.isTopLevel
@@ -76,6 +73,7 @@ class NamingConventionViolation(config: Config = Config.empty) : Rule(RULE_SUB_C
 		const val METHOD_PATTERN = "methodPattern"
 		const val CLASS_PATTERN = "classPattern"
 		const val ENUM_PATTERN = "enumEntryPattern"
-	}
 
+		val ISSUE = Issue(RULE_SUB_CONFIG, Issue.Severity.Style)
+	}
 }

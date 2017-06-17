@@ -7,4 +7,4 @@ fun Any?.print(prefix: String = "", suffix: String = "") {
 }
 
 val Finding.baselineId: String
-	get() = this.id + ":" + this.signature
+	get() = this.issue.id + ":" + this.signature

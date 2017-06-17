@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.cli.out.DetektBaselineFormat
 import io.gitlab.arturbosch.detekt.cli.out.SmellThreshold
 import io.gitlab.arturbosch.detekt.cli.out.format.OutputFormat
@@ -18,7 +19,7 @@ class OutputFacade(args: Main,
 				   private val detektion: Detektion) {
 
 	private val outputFormatter: OutputFormat.Formatter = args.outputFormatter
-	private val findings: Map<String, List<Finding>> = detektion.findings
+	private val findings: Map<Issue, List<Finding>> = detektion.findings
 	private val notifications: List<Notification> = detektion.notifications
 	private val baselineFormat = args.baseline?.let { DetektBaselineFormat(it) }
 	private val createBaseline = args.createBaseline

@@ -1,8 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.empty
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.*
 import org.jetbrains.kotlin.psi.KtWhenExpression
 
 /**
@@ -10,10 +8,14 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  */
 class EmptyWhenBlock(config: Config) : EmptyRule("EmptyWhenBlock", config = config) {
 
-	override fun visitWhenExpression(expression: KtWhenExpression) {
+	override fun visitWhenExpression(context: Context, expression: KtWhenExpression) {
 		if (expression.entries.isEmpty()) {
-			addFindings(CodeSmell(id, severity, Entity.from(expression)))
+			context.report(CodeSmell(ISSUE, Entity.from(expression)))
 		}
+	}
+
+	companion object {
+		val ISSUE = Issue("EmptyWhenBlock", Issue.Severity.Minor)
 	}
 
 }
