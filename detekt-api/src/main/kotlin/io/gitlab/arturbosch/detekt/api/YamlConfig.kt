@@ -33,7 +33,7 @@ class YamlConfig internal constructor(val properties: Map<String, Any>) : Config
 		 * Factory method to load a yaml configuration. Given path must exist and end with "yml".
 		 */
 		fun load(path: Path): Config {
-			require(Files.exists(path) && path.toString().endsWith(YAML))
+			require(Files.exists(path) && path.toString().endsWith(YAML)) { "File does not exist or end with .yaml!" }
 			return load(Files.newBufferedReader(path))
 		}
 
