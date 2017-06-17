@@ -26,8 +26,6 @@ class ExpressionBodySyntax(config: Config = Config.empty) : Rule(
 					val equals = FACTORY.createEQ().node
 					val returnedExpression = returnStmt.returnedExpression!!
 					function.node.replaceChild(body.node, returnedExpression.node)
-					function.node.removeChild(function.typeReference!!.node)
-					function.node.removeChild(function.colon!!.node)
 					function.node.addChild(equals, returnedExpression.node)
 					(equals as LeafPsiElement).trimSpacesAround()
 				}
