@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.cli.debug.Debugger
 import io.gitlab.arturbosch.detekt.cli.out.format.OutputFormat
 import io.gitlab.arturbosch.detekt.core.isDirectory
 import org.jetbrains.kotlin.utils.addToStdlib.ifNotEmpty
-import java.net.URL
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -21,13 +20,12 @@ class Main {
 	@Parameter(names = arrayOf("--filters", "-f"), description = "Path filters defined through regex with separator ';' (\".*test.*\").")
 	var filters: String? = null // Using a converter for List<PathFilter> resulted in a ClassCastException
 
-	@Parameter(names = arrayOf("--config", "-c"), description = "Path to the config file (path/to/config.yml).",
-			converter = ExistingPathConverter::class)
-	var config: Path? = null
+	@Parameter(names = arrayOf("--config", "-c"), description = "Path to the config file (path/to/config.yml).")
+	var config: String? = null
 
 	@Parameter(names = arrayOf("--config-resource", "-cr"), description = "Path to the config resource on detekt's classpath (path/to/config.yml).",
-			converter = ClasspathResourceConverter::class)
-	var configResource: URL? = null
+			converter = MultipleClasspathResourceConverter::class)
+	var configResource: String? = null
 
 	@Parameter(names = arrayOf("--generate-config", "-gc"), description = "Export default config to default-detekt-config.yml.")
 	var generateConfig: Boolean = false

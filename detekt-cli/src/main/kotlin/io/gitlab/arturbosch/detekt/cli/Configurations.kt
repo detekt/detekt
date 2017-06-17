@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.cli
 
+import io.gitlab.arturbosch.detekt.api.CompositeConfig
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.YamlConfig
 import io.gitlab.arturbosch.detekt.core.PathFilter
@@ -18,11 +19,29 @@ fun Main.createRulePaths(): List<Path> = rules.letIfNonEmpty { split(";", ",").m
 private fun <T> String?.letIfNonEmpty(init: String.() -> List<T>): List<T> =
 		if (this == null || this.isEmpty()) listOf<T>() else this.init()
 
-fun Main.loadConfiguration(): Config {
-	return if (config != null) YamlConfig.load(config!!)
-	else if (configResource != null) YamlConfig.loadResource(configResource!!)
-	else if (formatting) FormatConfig(useTabs)
-	else Config.empty
+fun Main.loadConfiguration(): Config = when {
+	!config.isNullOrBlank() -> parsePathConfig(config!!)
+	!configResource.isNullOrBlank() -> parseResourceConfig(configResource!!)
+	formatting -> FormatConfig(useTabs)
+	else -> Config.empty
+}
+
+private fun parseResourceConfig(config: String): Config {
+	val urls = MultipleClasspathResourceConverter().convert(config)
+	return if (urls.size == 1) {
+		YamlConfig.loadResource(urls[0])
+	} else {
+		urls.map { YamlConfig.loadResource(it) }.reduce { composite, config -> CompositeConfig(config, composite) }
+	}
+}
+
+private fun parsePathConfig(config: String): Config {
+	val paths = MultipleExistingPathConverter().convert(config)
+	return if (paths.size == 1) {
+		YamlConfig.load(paths[0])
+	} else {
+		paths.map { YamlConfig.load(it) }.reduce { composite, config -> CompositeConfig(config, composite) }
+	}
 }
 
 class FormatConfig(private val useTabs: Boolean) : Config() {
