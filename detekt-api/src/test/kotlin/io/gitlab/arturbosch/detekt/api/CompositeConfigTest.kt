@@ -24,5 +24,9 @@ class CompositeConfigTest : Spek({
 			val codeSmellConfig = compositeConfig.subConfig("code-smell").subConfig("LongMethod")
 			assertThat(codeSmellConfig.valueOrDefault("threshold", -1)).isEqualTo(20)
 		}
+
+		it("should use the default as both part configurations do not have the value") {
+			assertThat(compositeConfig.valueOrDefault("TEST", 42)).isEqualTo(42)
+		}
 	}
 })
