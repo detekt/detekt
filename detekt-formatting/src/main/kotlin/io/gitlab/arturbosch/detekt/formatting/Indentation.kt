@@ -24,11 +24,11 @@ import org.jetbrains.kotlin.psi.psiUtil.startOffset
 class Indentation(config: Config) : TokenRule("Indentation", Severity.Style, config) {
 
 	companion object {
-		private const val DEFAULT_INDENT = "4"
+		private const val DEFAULT_INDENT = 4
 		private const val INDENT_SIZE = "indentSize"
 	}
 
-	private var indent = withConfig { valueOrDefault(INDENT_SIZE, DEFAULT_INDENT) }.toInt()
+	private var indent = withConfig { valueOrDefault(INDENT_SIZE, DEFAULT_INDENT) }
 
 	override fun procedure(node: ASTNode) {
 		if (node is PsiWhiteSpace && !node.isPartOf(PsiComment::class)) {
