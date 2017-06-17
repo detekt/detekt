@@ -20,7 +20,7 @@ fun stuff(): Int {
 	return 5
 }
 """
-		)).isEqualTo("fun stuff() = 5")
+		)).isEqualTo("fun stuff(): Int = 5")
 	}
 
 	@Test
@@ -30,7 +30,7 @@ fun stuff(): Int {
 	return moreStuff().getStuff().stuffStuff()
 }
 """
-		)).isEqualTo("fun stuff() = moreStuff().getStuff().stuffStuff()")
+		)).isEqualTo("fun stuff(): Int = moreStuff().getStuff().stuffStuff()")
 	}
 
 	@Test
@@ -42,6 +42,6 @@ fun stuff(): Int {
 	.stuffStuff()
 }
 """
-		)).isEqualTo("fun stuff() = moreStuff()\n\t.getStuff()\n\t.stuffStuff()")
+		)).isEqualTo("fun stuff(): Int = moreStuff()\n\t.getStuff()\n\t.stuffStuff()")
 	}
 }
