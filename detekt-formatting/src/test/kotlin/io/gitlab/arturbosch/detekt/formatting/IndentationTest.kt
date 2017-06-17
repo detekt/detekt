@@ -95,8 +95,8 @@ class IndentationTest : RuleTest {
              * _
              */
             fun main() {
-                val v = ""
-                println(v)
+              val v = ""
+              println(v)
             }
 
             class A {
