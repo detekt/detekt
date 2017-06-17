@@ -1,0 +1,5 @@
+style:
+  WildcardImport:
+    active: false
+  NoElseInWhenExpression:
+    active: false
