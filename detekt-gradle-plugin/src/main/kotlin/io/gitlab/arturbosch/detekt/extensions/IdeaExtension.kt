@@ -10,8 +10,7 @@ open class IdeaExtension(open var path: String? = null,
 						 open var mask: String = "*.kt") {
 
 	fun formatArgs(ext: DetektExtension): Array<String> {
-		val input = ext.systemOrDefaultProfile?.input
-		if (ext.debug) println("input: $input")
+		val input = ext.profileInputPath
 		require(path != null) { "Make sure the idea path is specified to run idea tasks!" }
 		require(input != null) { "Make sure the project path is specified!" }
 		return if (codeStyleScheme != null) {
@@ -22,13 +21,16 @@ open class IdeaExtension(open var path: String? = null,
 	}
 
 	fun inspectArgs(ext: DetektExtension): Array<String> {
-		val input = ext.systemOrDefaultProfile?.input
-		if (ext.debug) println("input: $input")
+		val input = ext.profileInputPath
 		require(path != null) { "Make sure the idea path is specified to run idea tasks!" }
 		require(input != null) { "Make sure the project path is specified!" }
 		require(report != null) { "Make sure the report path is specified where idea inspections are stored!" }
 		require(inspectionsProfile != null) { "Make sure the path to an inspection profile is provided!" }
 		return arrayOf("$path/bin/inspect.sh", input!!, inspectionsProfile!!, report!!)
+	}
+
+	private val DetektExtension.profileInputPath get() = systemOrDefaultProfile?.input?.apply {
+		if (debug) println("input: $this")
 	}
 
 	override fun toString(): String = this.reflectiveToString()
