@@ -160,7 +160,7 @@ String USER_HOME = System.getProperty("user.home")
 
 detekt {
 	debug = true
-	version = "1.0.0.M11"
+	version = "1.0.0.M10.3"
 	filters = '.*/test/.*'
 	config = "$project.projectDir/detekt-cli/src/main/resources/default-detekt-config.yml"
 	report = "$project.projectDir/reports"
