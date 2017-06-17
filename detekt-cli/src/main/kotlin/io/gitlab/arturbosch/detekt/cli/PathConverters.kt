@@ -25,6 +25,25 @@ class PathConverter : IStringConverter<Path> {
 	}
 }
 
+interface CommaSeparatedStringConverter<T> : IStringConverter<List<T>> {
+	val converter: IStringConverter<T>
+	override fun convert(value: String): List<T>
+			= value.splitToSequence(",", ";")
+			.map { it.trim() }
+			.map { converter.convert(it) }
+			.toList().apply {
+		if (isEmpty()) throw IllegalStateException("Given input '$value' was impossible to parse!")
+	}
+}
+
+class MultipleClasspathResourceConverter : CommaSeparatedStringConverter<URL> {
+	override val converter = ClasspathResourceConverter()
+}
+
+class MultipleExistingPathConverter : CommaSeparatedStringConverter<Path> {
+	override val converter = ExistingPathConverter()
+}
+
 /**
  * @author Sean Flanigan <a href="mailto:sflaniga@redhat.com">sflaniga@redhat.com</a>
  */
