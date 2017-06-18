@@ -649,6 +649,7 @@ inside the report file.
 - [Sean Flanigan](https://github.com/seanf) - Config from classpath resource
 - [Sebastian Schuberth](https://github.com/sschuberth) - Dep. update
 - [Olivier Lemasle](https://github.com/olivierlemasle) - Bug fix
+- [Marvin Ramin](https://github.com/Mauin) - MaxLineLength rule and test cleanups
 - [Marc Prengemann](https://github.com/winterDroid) - Support for custom reports
 
 #### Credits
