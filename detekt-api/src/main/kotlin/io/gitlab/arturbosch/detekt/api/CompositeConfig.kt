@@ -13,4 +13,8 @@ class CompositeConfig(private val lookFirst: Config, private val lookSecond: Con
 		return if (firstResult != default) firstResult else lookSecond.valueOrDefault(key, default)
 	}
 
+	override fun toString(): String {
+		return "CompositeConfig(lookFirst=$lookFirst, lookSecond=$lookSecond)"
+	}
+
 }
