@@ -6,9 +6,9 @@ import org.gradle.api.Project
 /**
  * @author Artur Bosch
  */
-open class DetektExtension(open var version: String = "1.0.0.M11",
-						   open var debug: Boolean = false,
-						   open var profile: String = "main",
+open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
+						   open var debug: Boolean = DEBUG_PARAMETER,
+						   open var profile: String = DEFAULT_PROFILE_NAME,
 						   open var ideaExtension: IdeaExtension = IdeaExtension()) {
 
 	val profiles: MutableList<ProfileExtension> = mutableListOf()
@@ -57,12 +57,12 @@ open class DetektExtension(open var version: String = "1.0.0.M11",
 			= if (value == "true" || value == "false") listOf(key) else listOf(key, value)
 
 	private fun multipleConfigAware(key: String, v1: String, v2: String)
-			= if (key == CONFIG || key == CONFIG_RESOURCE) "$v1,$v2" else v2
+			= if (key == CONFIG_PARAMETER || key == CONFIG_RESOURCE_PARAMETER) "$v1,$v2" else v2
 
 	private fun Project.fallbackArguments() = listOf(
-			"--project", projectDir.absolutePath,
-			CONFIG_RESOURCE, "/default-detekt-config.yml",
-			"--filters", ".*/test/.*,.*/resources/.*,.*/build/.*,.*/target/.*")
+			PROJECT_PARAMETER, projectDir.absolutePath,
+			CONFIG_RESOURCE_PARAMETER, DEFAULT_DETEKT_CONFIG_RESOURCE,
+			FILTERS_PARAMETER, DEFAULT_PATH_EXCLUDES)
 
 	private fun specifiedProfileNameThroughSystemProperty(): String = System.getProperty(DETEKT_PROFILE) ?: profile
 
