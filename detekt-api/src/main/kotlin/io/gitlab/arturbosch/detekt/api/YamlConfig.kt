@@ -25,6 +25,10 @@ class YamlConfig internal constructor(val properties: Map<String, Any>) : Config
 		return valueOrDefaultInternal(result, default) as T
 	}
 
+	override fun toString(): String {
+		return "YamlConfig(properties=$properties)"
+	}
+
 	companion object {
 
 		val YAML = ".yml"
