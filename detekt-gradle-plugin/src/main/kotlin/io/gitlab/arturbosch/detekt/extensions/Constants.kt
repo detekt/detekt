@@ -5,6 +5,21 @@ package io.gitlab.arturbosch.detekt.extensions
  */
 
 const val DETEKT_PROFILE = "detekt.profile"
+const val SUPPORTED_DETEKT_VERSION = "1.0.0.M11"
+const val DEBUG_PARAMETER = false
 
-const val CONFIG_RESOURCE = "--config-resource"
-const val CONFIG = "--config"
+const val DEFAULT_PROFILE_NAME = "main"
+const val DEFAULT_TRUE = "true"
+const val DEFAULT_DETEKT_CONFIG_RESOURCE = "/default-detekt-config.yml"
+const val DEFAULT_PATH_EXCLUDES = ".*/test/.*,.*/resources/.*,.*/build/.*,.*/target/.*"
+
+const val CONFIG_RESOURCE_PARAMETER = "--config-resource"
+const val FILTERS_PARAMETER = "--filters"
+const val PROJECT_PARAMETER = "--project"
+const val CONFIG_PARAMETER = "--config"
+const val RULES_PARAMETER = "--rules"
+const val OUTPUT_PARAMETER = "--output"
+const val OUTPUT_FORMAT_PARAMETER = "--output-format"
+const val BASELINE_PARAMETER = "--baseline"
+const val PARALLEL_PARAMETER = "--parallel"
+const val DISABLE_DEFAULT_RULESETS_PARAMETER = "--disable-default-rulesets"
