@@ -18,16 +18,16 @@ open class ProfileExtension(val name: String,
 
 	fun arguments(): MutableMap<String, String> {
 		return mutableMapOf<String, String>().apply {
-			input?.let { put("--project", it) }
-			config?.let { put("--config", it) }
-			configResource?.let { put("--config-resource", it) }
-			filters?.let { put("--filters", it) }
-			ruleSets?.let { put("--rules", it) }
-			output?.let { put("--output", it) }
-			outputFormat?.let { put("--output-format", it) }
-			baseline?.let { put("--baseline", it) }
-			if (parallel) put("--parallel", "true")
-			if (disableDefaultRuleSets) put("--disable-default-rulesets", "true")
+			input?.let { put(PROJECT_PARAMETER, it) }
+			config?.let { put(CONFIG_PARAMETER, it) }
+			configResource?.let { put(CONFIG_RESOURCE_PARAMETER, it) }
+			filters?.let { put(FILTERS_PARAMETER, it) }
+			ruleSets?.let { put(RULES_PARAMETER, it) }
+			output?.let { put(OUTPUT_PARAMETER, it) }
+			outputFormat?.let { put(OUTPUT_FORMAT_PARAMETER, it) }
+			baseline?.let { put(BASELINE_PARAMETER, it) }
+			if (parallel) put(PARALLEL_PARAMETER, DEFAULT_TRUE)
+			if (disableDefaultRuleSets) put(DISABLE_DEFAULT_RULESETS_PARAMETER, DEFAULT_TRUE)
 		}
 	}
 
