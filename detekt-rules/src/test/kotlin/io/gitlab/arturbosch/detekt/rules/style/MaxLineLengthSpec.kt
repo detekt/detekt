@@ -19,7 +19,7 @@ class MaxLineLengthSpec : Spek({
 			val rule = MaxLineLength(TestConfig(mapOf("maxLineLength" to "200")))
 
 			val findings = rule.lint(file)
-			Assertions.assertThat(findings).hasSize(0)
+			Assertions.assertThat(findings).isEmpty()
 		}
 
 		it("should report all errors with default maxLineLength") {
