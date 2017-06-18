@@ -39,7 +39,11 @@ open class DetektExtension(open var version: String = "1.0.0.M11",
 	private fun createArgumentsForProfile(): List<String> {
 		val allArguments = defaultProfile?.arguments() ?: mutableMapOf<String, String>()
 		val overriddenArguments = systemProfile?.arguments() ?: mutableMapOf<String, String>()
-		overriddenArguments.forEach { allArguments.merge(it.key, it.value) { _, v2 -> v2 } }
+		overriddenArguments.forEach {
+			allArguments.merge(it.key, it.value) { v1, v2 ->
+				multipleConfigAware(it.key, v1, v2)
+			}
+		}
 		return allArguments.flatMap { filterBooleans(it.key, it.value) }.apply {
 			if (debug) {
 				val name = systemOrDefaultProfile?.name ?: "_fallback_"
@@ -49,15 +53,18 @@ open class DetektExtension(open var version: String = "1.0.0.M11",
 		}
 	}
 
-	private fun Project.fallbackArguments() = listOf(
-			"--project", projectDir.absolutePath,
-			"--config-resource", "/default-detekt-config.yml",
-			"--filters", ".*/test/.*,.*/resources/.*,.*/build/.*,.*/target/.*")
-
 	private fun filterBooleans(key: String, value: String)
 			= if (value == "true" || value == "false") listOf(key) else listOf(key, value)
 
-	private fun specifiedProfileNameThroughSystemProperty(): String = System.getProperty("detekt.profile") ?: profile
+	private fun multipleConfigAware(key: String, v1: String, v2: String)
+			= if (key == CONFIG || key == CONFIG_RESOURCE) "$v1,$v2" else v2
+
+	private fun Project.fallbackArguments() = listOf(
+			"--project", projectDir.absolutePath,
+			CONFIG_RESOURCE, "/default-detekt-config.yml",
+			"--filters", ".*/test/.*,.*/resources/.*,.*/build/.*,.*/target/.*")
+
+	private fun specifiedProfileNameThroughSystemProperty(): String = System.getProperty(DETEKT_PROFILE) ?: profile
 
 	override fun toString(): String = this.reflectiveToString()
 
