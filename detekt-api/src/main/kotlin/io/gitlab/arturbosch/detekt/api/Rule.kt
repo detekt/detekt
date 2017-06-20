@@ -16,7 +16,8 @@ import org.jetbrains.kotlin.psi.KtFile
 @Suppress("EmptyFunctionBlock")
 abstract class Rule(val id: String,
 					val severity: Severity = Rule.Severity.Minor,
-					private val config: Config = Config.empty) : DetektVisitor() {
+					private val config: Config = Config.empty,
+					private var context: Context = DefaultContext()) : DetektVisitor(), Context by context {
 
 	init {
 		validateIdentifier(id)
@@ -31,20 +32,13 @@ abstract class Rule(val id: String,
 
 	}
 
-	/**
-	 * Returns a list of violations of this rule.
-	 */
-	val findings: List<Finding>
-		get() = _findings.toList()
-
 	protected val autoCorrect: Boolean = withConfig {
 		valueOrDefault("autoCorrect", true)
 	}
-	private val active = withConfig {
+
+	protected val active = withConfig {
 		valueOrDefault("active", true)
 	}
-
-	private var _findings: MutableList<Finding> = mutableListOf()
 
 	/**
 	 * Before starting visiting kotlin elements, a check is performed if this rule should be triggered.
@@ -86,10 +80,6 @@ abstract class Rule(val id: String,
 		}
 	}
 
-	internal fun clearFindings() {
-		_findings = mutableListOf()
-	}
-
 	/**
 	 * Could be overriden by subclasses to specify a behaviour which should be done before
 	 * visiting kotlin elements.
@@ -104,17 +94,4 @@ abstract class Rule(val id: String,
 	protected open fun preVisit(root: KtFile) {
 	}
 
-	/**
-	 * The only way to add code smell findings.
-	 *
-	 * Before adding a finding, it is checked if it is not suppressed
-	 * by @Suppress or @SuppressWarnings annotations.
-	 */
-	protected fun addFindings(vararg finding: Finding) {
-		val filtered = finding.filter {
-			val ktElement = it.entity.ktElement
-			ktElement == null || !ktElement.isSuppressedBy(id)
-		}
-		_findings.addAll(filtered)
-	}
 }

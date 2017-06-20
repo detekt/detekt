@@ -21,7 +21,6 @@ abstract class TokenRule(id: String,
 
 	override fun visit(root: KtFile) {
 		ifRuleActive {
-			clearFindings()
 			preVisit(root)
 			root.node.visitTokens { procedure(it) }
 			postVisit(root)
