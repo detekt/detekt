@@ -13,7 +13,7 @@ import java.nio.file.Path
  * @author Artur Bosch
  */
 @Suppress("UNCHECKED_CAST")
-class YamlConfig internal constructor(val properties: Map<String, Any>) : Config() {
+class YamlConfig internal constructor(val properties: Map<String, Any>) : BaseConfig() {
 
 	override fun subConfig(key: String): Config {
 		val subProperties = properties.getOrElse(key) { mapOf<String, Any>() }

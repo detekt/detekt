@@ -62,7 +62,7 @@ enum class WorkFlow {
 
 class NamingConventionCustomPatter {
 	private val configCustomRules =
-			object : Config() {
+			object : Config {
 				override fun subConfig(key: String): Config = Config.empty
 
 				@Suppress("UNCHECKED_CAST")
@@ -76,7 +76,7 @@ class NamingConventionCustomPatter {
 							else -> default
 						}
 			}
-	private val config = object : Config() {
+	private val config = object : Config {
 		override fun subConfig(key: String): Config =
 				if (key == NamingConventionViolation.RULE_SUB_CONFIG) {
 					configCustomRules
