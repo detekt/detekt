@@ -17,7 +17,7 @@ class MaxLineLength(config: Config = Config.empty) : Rule("MaxLineLength", Sever
 				.forEach {
 					offset += it
 					if (it > maxLineLength) {
-						addFindings(CodeSmell(id, severity, Entity.Companion.from(file, offset)))
+						report(CodeSmell(id, severity, Entity.Companion.from(file, offset)))
 					}
 				}
 	}

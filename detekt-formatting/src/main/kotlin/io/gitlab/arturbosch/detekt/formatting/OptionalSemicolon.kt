@@ -18,7 +18,7 @@ class OptionalSemicolon(config: Config = Config.empty) : TokenRule("OptionalSemi
 		if (leaf.isNotPartOfEnum() && leaf.isNotPartOfString()) {
 			val nextLeaf = leaf.nextLeaf()
 			if (nextLeaf.isSemicolonOrEOF() || nextTokenHasSpaces(nextLeaf)) {
-				addFindings(CodeSmell(id, severity, Entity.from(leaf)))
+				report(CodeSmell(id, severity, Entity.from(leaf)))
 				withAutoCorrect { leaf.delete() }
 			}
 		}
@@ -26,7 +26,7 @@ class OptionalSemicolon(config: Config = Config.empty) : TokenRule("OptionalSemi
 
 	override fun visitDoubleSemicolon(leaf: LeafPsiElement) {
 		if (leaf.isNotPartOfEnum() && leaf.isNotPartOfString()) {
-			addFindings(CodeSmell(id, severity, Entity.from(leaf)))
+			report(CodeSmell(id, severity, Entity.from(leaf)))
 			withAutoCorrect {
 				deleteOneOrTwoSemicolons(leaf)
 			}

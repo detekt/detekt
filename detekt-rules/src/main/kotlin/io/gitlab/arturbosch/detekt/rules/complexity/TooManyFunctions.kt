@@ -18,7 +18,7 @@ class TooManyFunctions(config: Config = Config.empty, threshold: Int = 10) : Cod
 	override fun visitFile(file: PsiFile) {// TODO
 		super.visitFile(file)
 		if (amount > threshold) {
-			addFindings(ThresholdedCodeSmell(
+			report(ThresholdedCodeSmell(
 					id = id, severity = severity, entity = Entity.from(file),
 					metric = Metric(type = "SIZE", value = amount, threshold = 10))
 			)

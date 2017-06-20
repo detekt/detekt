@@ -18,7 +18,7 @@ class TooManyFunctionsTwo(config: Config) : Rule("TooManyFunctionsTwo", Severity
 	override fun visitFile(file: PsiFile) {
 		super.visitFile(file)
 		if (amount > 10) {
-			addFindings(CodeSmell(
+			report(CodeSmell(
 					id = id,
 					severity = severity,
 					entity = Entity.from(file),
