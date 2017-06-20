@@ -20,8 +20,7 @@ class ProjectComplexityProcessor : FileProcessListener {
 	private val complexityVisitor = ComplexityVisitor()
 
 	override fun onProcess(file: KtFile) {
-		val value = complexityVisitor.visitAndReturn(file)
-		file.putUserData(COMPLEXITY_KEY, value)
+		file.accept(complexityVisitor)
 	}
 
 	override fun onFinish(files: List<KtFile>, result: Detektion) {
@@ -39,8 +38,7 @@ class ProjectLLOCProcessor : FileProcessListener {
 	private val llocVisitor = LLOCVisitor()
 
 	override fun onProcess(file: KtFile) {
-		val value = llocVisitor.visitAndReturn(file)
-		file.putUserData(LLOC_KEY, value)
+		file.accept(llocVisitor)
 	}
 
 	override fun onFinish(files: List<KtFile>, result: Detektion) {
