@@ -16,13 +16,13 @@ open class ExceptionsRule(id: String, config: Config, severity: Severity = Rule.
 		this.catchParameter?.let {
 			val text = it.typeReference?.text
 			if (text != null && text == exception())
-				addFindings(CodeSmell(id, severity, Entity.from(it)))
+				report(CodeSmell(id, severity, Entity.from(it)))
 		}
 	}
 
 	fun KtThrowExpression.addFindingIfThrowingClassMatchesExact(exception: () -> String) {
 		thrownExpression?.text?.substringBefore("(")?.let {
-			if (it == exception()) addFindings(CodeSmell(id, severity, Entity.from(this)))
+			if (it == exception()) report(CodeSmell(id, severity, Entity.from(this)))
 		}
 	}
 

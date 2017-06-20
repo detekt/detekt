@@ -16,7 +16,7 @@ class CommentOverPrivateMethod(config: Config = Config.empty) : CodeSmellRule("C
 		val modifierList = function.modifierList
 		if (modifierList != null && function.docComment != null) {
 			if (modifierList.hasModifier(KtTokens.PRIVATE_KEYWORD)) {
-				addFindings(CodeSmell(id, severity, Entity.Companion.from(function.docComment!!)))
+				report(CodeSmell(id, severity, Entity.Companion.from(function.docComment!!)))
 			}
 		}
 	}

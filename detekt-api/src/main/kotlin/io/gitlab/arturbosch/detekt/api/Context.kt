@@ -6,7 +6,6 @@ package io.gitlab.arturbosch.detekt.api
 interface Context {
 	val findings: List<Finding>
 	fun report(finding: Finding)
-	fun addFindings(vararg finding: Finding)
 	fun clearFindings()
 }
 
@@ -33,20 +32,6 @@ open class DefaultContext : Context {
 		if (ktElement == null || !ktElement.isSuppressedBy(finding.id)) {
 			_findings.add(finding)
 		}
-	}
-
-	/**
-	 * The only way to add code smell findings.
-	 *
-	 * Before adding a finding, it is checked if it is not suppressed
-	 * by @Suppress or @SuppressWarnings annotations.
-	 */
-	override fun addFindings(vararg finding: Finding) {
-		val filtered = finding.filter {
-			val ktElement = it.entity.ktElement
-			ktElement == null || !ktElement.isSuppressedBy(it.id)
-		}
-		_findings.addAll(filtered)
 	}
 
 	override final fun clearFindings() {

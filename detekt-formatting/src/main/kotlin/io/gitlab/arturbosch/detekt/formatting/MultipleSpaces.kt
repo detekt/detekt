@@ -14,7 +14,7 @@ class MultipleSpaces(config: Config) : TokenRule("MultipleSpaces", Severity.Styl
 
 	override fun visitSpaces(space: PsiWhiteSpace) {
 		if (!space.textContains('\n') && space.textLength > 1) {
-			addFindings(CodeSmell(id, severity, Entity.from(space, offset = 1)))
+			report(CodeSmell(id, severity, Entity.from(space, offset = 1)))
 			withAutoCorrect {
 				(space as LeafPsiElement).replaceWithText(" ")
 			}

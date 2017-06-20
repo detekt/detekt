@@ -31,11 +31,11 @@ class ExpressionBodySyntaxLineBreaks(config: Config = Config.empty) : Rule(
 		val (exprStart, exprEnd) = body.startAndEndLine()
 		if (equalsLine != exprStart) {
 			if (exprStart == exprEnd) {
-				addFindings(CodeSmell(id, severity, Entity.from(equals)))
+				report(CodeSmell(id, severity, Entity.from(equals)))
 				withAutoCorrect { body.alignToEqualsToken(equals) }
 			} else {
 				if (equals.trimSpacesBefore(autoCorrect, ignoreLineBreaks = true)) {
-					addFindings(CodeSmell(id, severity, Entity.from(equals)))
+					report(CodeSmell(id, severity, Entity.from(equals)))
 				}
 			}
 		}
