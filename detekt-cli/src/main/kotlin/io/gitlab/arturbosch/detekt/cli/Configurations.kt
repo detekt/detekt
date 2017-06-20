@@ -44,7 +44,7 @@ private fun parsePathConfig(config: String): Config {
 	}
 }
 
-class FormatConfig(private val useTabs: Boolean) : Config() {
+class FormatConfig(private val useTabs: Boolean) : Config {
 	override fun subConfig(key: String): Config {
 		return this
 	}
