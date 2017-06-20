@@ -5,18 +5,34 @@ package io.gitlab.arturbosch.detekt.api
  *
  * @author Artur Bosch
  */
-abstract class Config {
+interface Config {
 
 	/**
 	 * Tries to retrieve part of the configuration based on given key.
 	 */
-	abstract fun subConfig(key: String): Config
+	fun subConfig(key: String): Config
 
 	/**
 	 * Retrieves a sub configuration of value based on given key. If configuration property cannot be found
 	 * the specified default value is returned.
 	 */
-	abstract fun <T : Any> valueOrDefault(key: String, default: T): T
+	fun <T : Any> valueOrDefault(key: String, default: T): T
+
+	/**
+	 * Is thrown when loading a configuration results in errors.
+	 */
+	class InvalidConfigurationError(msg: String = "Provided configuration file is invalid:" +
+			" Structure must be from type Map<String,Any>!") : RuntimeException(msg)
+
+	companion object {
+		/**
+		 * A yaml based configuration with no properties.
+		 */
+		val empty: Config = YamlConfig(mapOf())
+	}
+}
+
+abstract class BaseConfig : Config {
 
 	protected fun valueOrDefaultInternal(result: Any?, default: Any): Any {
 		return try {
@@ -45,17 +61,5 @@ abstract class Config {
 		}
 	}
 
-	/**
-	 * Is thrown when loading a configuration results in errors.
-	 */
-	class InvalidConfigurationError(msg: String = "Provided configuration file is invalid:" +
-			" Structure must be from type Map<String,Any>!") : RuntimeException(msg)
-
-	companion object {
-		/**
-		 * A yaml based configuration with no properties.
-		 */
-		val empty: Config = YamlConfig(mapOf())
-	}
 }
 
