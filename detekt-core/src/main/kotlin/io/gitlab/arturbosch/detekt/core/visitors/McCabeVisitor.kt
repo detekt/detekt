@@ -20,12 +20,6 @@ class McCabeVisitor : DetektVisitor() {
 		mcc++
 	}
 
-	fun visit(function: KtNamedFunction): Int {
-		mcc = 0
-		super.visitNamedFunction(function)
-		return mcc
-	}
-
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		inc()
 		super.visitNamedFunction(function)
