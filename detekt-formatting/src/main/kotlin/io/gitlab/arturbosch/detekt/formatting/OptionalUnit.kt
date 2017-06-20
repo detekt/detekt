@@ -22,7 +22,7 @@ class OptionalUnit(config: Config = Config.empty) : Rule("OptionalUnit", Severit
 			val typeReference = function.typeReference
 			typeReference?.typeElement?.text?.let {
 				if (it == "Unit") {
-					addFindings(CodeSmell(id, severity, Entity.from(typeReference)))
+					report(CodeSmell(id, severity, Entity.from(typeReference)))
 					withAutoCorrect {
 						deleteUnitReturnType(colon, typeReference)
 					}

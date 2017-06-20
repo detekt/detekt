@@ -21,7 +21,7 @@ class ExpressionBodySyntax(config: Config = Config.empty) : Rule(
 		if (function.bodyExpression != null) {
 			val body = function.bodyExpression!!
 			body.singleReturnStatement()?.let { returnStmt ->
-				addFindings(CodeSmell(id, severity, Entity.from(body)))
+				report(CodeSmell(id, severity, Entity.from(body)))
 				withAutoCorrect {
 					val equals = FACTORY.createEQ().node
 					val returnedExpression = returnStmt.returnedExpression!!

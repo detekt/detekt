@@ -31,7 +31,7 @@ class MigrateImportsRule(config: Config) : Rule("MigrateImports", Severity.Defec
 						CodeEditUtil.removeChildren(node, node.firstChildNode, node.lastChildNode)
 						val newImport = factory.createImportDirective(ImportPath.fromString(it))
 						node.addChild(newImport.importedReference?.node!!)
-						addFindings(ImportMigration(key!!, it, Entity.from(import)))
+						report(ImportMigration(key!!, it, Entity.from(import)))
 					}
 				}
 	}

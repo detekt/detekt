@@ -21,7 +21,7 @@ class DuplicateCaseInWhenExpression(config: Config) : Rule("DuplicateCaseInWhenE
 				.distinct().size
 
 		if (numberOfEntries > distinctNumber) {
-			addFindings(CodeSmell(id, severity, Entity.from(expression)))
+			report(CodeSmell(id, severity, Entity.from(expression)))
 		}
 	}
 }

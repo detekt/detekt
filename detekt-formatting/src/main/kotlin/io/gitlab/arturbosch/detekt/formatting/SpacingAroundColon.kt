@@ -29,7 +29,7 @@ class SpacingAroundColon(config: Config) : TokenRule("SpacingAroundColon", Sever
 			else -> false
 		}
 		if (modified) {
-			addFindings(CodeSmell(id, severity, Entity.from(colon)))
+			report(CodeSmell(id, severity, Entity.from(colon)))
 		}
 	}
 

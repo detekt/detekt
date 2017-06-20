@@ -22,7 +22,7 @@ class ComplexMethod(config: Config = Config.empty, threshold: Int = 10) : CodeSm
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		val mcc = MccVisitor().visit(function)
 		if (mcc > threshold) {
-			addFindings(ThresholdedCodeSmell(id, severity, Entity.Companion.from(function), Metric("MCC", mcc, threshold)))
+			report(ThresholdedCodeSmell(id, severity, Entity.Companion.from(function), Metric("MCC", mcc, threshold)))
 		}
 	}
 
