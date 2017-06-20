@@ -20,11 +20,10 @@ import java.util.IdentityHashMap
  */
 class FeatureEnvy(config: Config = Config.empty) : CodeSmellRule("FeatureEnvy", config) {
 
-	private val factor = withConfig {
-		FeatureEnvyFactor(valueOrDefault("threshold", 0.5),
-				valueOrDefault("base", 0.5),
-				valueOrDefault("weight", 0.45))
-	}
+	private val factor = FeatureEnvyFactor(
+			valueOrDefault("threshold", 0.5),
+			valueOrDefault("base", 0.5),
+			valueOrDefault("weight", 0.45))
 
 	override fun visitClass(klass: KtClass) {
 		val properties = klass.getProperties()

@@ -28,7 +28,7 @@ class Indentation(config: Config) : TokenRule("Indentation", Severity.Style, con
 		private const val INDENT_SIZE = "indentSize"
 	}
 
-	private var indent = withConfig { valueOrDefault(INDENT_SIZE, DEFAULT_INDENT) }
+	private var indent = valueOrDefault(INDENT_SIZE, DEFAULT_INDENT)
 
 	override fun procedure(node: ASTNode) {
 		if (node is PsiWhiteSpace && !node.isPartOf(PsiComment::class)) {
