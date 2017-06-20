@@ -14,10 +14,11 @@ import org.jetbrains.kotlin.psi.KtFile
  * @author Artur Bosch
  */
 @Suppress("EmptyFunctionBlock")
-abstract class Rule(val id: String,
+abstract class Rule(final override val id: String,
 					val severity: Severity = Rule.Severity.Minor,
-					private val config: Config = Config.empty,
-					private var context: Context = DefaultContext()) : DetektVisitor(), Context by context {
+					override val config: Config = Config.empty,
+					private val context: Context = DefaultContext()) :
+		DetektVisitor(), Context by context, ConfigAware {
 
 	init {
 		validateIdentifier(id)
@@ -30,14 +31,6 @@ abstract class Rule(val id: String,
 	enum class Severity {
 		CodeSmell, Style, Warning, Defect, Minor, Maintainability, Security
 
-	}
-
-	protected val autoCorrect: Boolean = withConfig {
-		valueOrDefault("autoCorrect", true)
-	}
-
-	protected val active = withConfig {
-		valueOrDefault("active", true)
 	}
 
 	/**
@@ -55,32 +48,6 @@ abstract class Rule(val id: String,
 	}
 
 	/**
-	 * If custom configurable attributes are provided, use this method to retrieve
-	 * properties from the sub configuration specified by the rule id.
-	 */
-	protected fun <T> withConfig(block: Config.() -> T): T {
-		return config.subConfig(id).block()
-	}
-
-	/**
-	 * If your rule supports to automatically correct the misbehaviour of underlying smell,
-	 * specify your code inside this method call, to allow the user of your rule to trigger auto correction
-	 * only when needed.
-	 */
-	protected fun withAutoCorrect(block: () -> Unit) {
-		if (autoCorrect) {
-			block()
-		}
-	}
-
-	protected fun ifRuleActive(block: () -> Unit) {
-		if (active) {
-			clearFindings()
-			block()
-		}
-	}
-
-	/**
 	 * Could be overriden by subclasses to specify a behaviour which should be done before
 	 * visiting kotlin elements.
 	 */
@@ -92,6 +59,13 @@ abstract class Rule(val id: String,
 	 * visiting kotlin elements.
 	 */
 	protected open fun preVisit(root: KtFile) {
+	}
+
+	internal fun ifRuleActive(block: () -> Unit) {
+		if (active) {
+			clearFindings()
+			block()
+		}
 	}
 
 }
