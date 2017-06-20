@@ -20,11 +20,11 @@ import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
  */
 class NamingConventionViolation(config: Config = Config.empty) : Rule(RULE_SUB_CONFIG, Severity.Style, config) {
 
-	private val variablePattern = Regex(withConfig { valueOrDefault(VARIABLE_PATTERN, "^(_)?[a-z$][a-zA-Z$0-9]*$") })
-	private val constantPattern = Regex(withConfig { valueOrDefault(CONSTANT_PATTERN, "^([A-Z_]*|serialVersionUID)$") })
-	private val methodPattern = Regex(withConfig { valueOrDefault(METHOD_PATTERN, "^[a-z$][a-zA-Z$0-9]*$") })
-	private val classPattern = Regex(withConfig { valueOrDefault(CLASS_PATTERN, "^[A-Z$][a-zA-Z$]*$") })
-	private val enumEntryPattern = Regex(withConfig { valueOrDefault(ENUM_PATTERN, "^[A-Z$][A-Z_$]*$") })
+	private val variablePattern = Regex(valueOrDefault(VARIABLE_PATTERN, "^(_)?[a-z$][a-zA-Z$0-9]*$"))
+	private val constantPattern = Regex(valueOrDefault(CONSTANT_PATTERN, "^([A-Z_]*|serialVersionUID)$"))
+	private val methodPattern = Regex(valueOrDefault(METHOD_PATTERN, "^[a-z$][a-zA-Z$0-9]*$"))
+	private val classPattern = Regex(valueOrDefault(CLASS_PATTERN, "^[A-Z$][a-zA-Z$]*$"))
+	private val enumEntryPattern = Regex(valueOrDefault(ENUM_PATTERN, "^[A-Z$][A-Z_$]*$"))
 
 	override fun visitNamedDeclaration(declaration: KtNamedDeclaration) {
 		if (declaration.nameAsSafeName.isSpecial) return
