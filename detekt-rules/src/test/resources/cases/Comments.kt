@@ -2,9 +2,6 @@ package cases
 
 import java.io.Serializable
 
-/**
- * @author Artur Bosch
- */
 @Suppress("unused")
 open class Comments<T : K, out K> : Serializable {
 

@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isPublicNotOverriden
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 
 /**
@@ -18,12 +19,17 @@ class NoDocOverPublicClass(config: Config = Config.empty) : Rule(config) {
 	override val issue = Issue("NoDocOverPublicClass", Severity.Maintainability, "")
 
 	override fun visitClass(klass: KtClass) {
-
-		if (klass.isPublicNotOverriden()) {
-			report(CodeSmell(issue, Entity.Companion.from(klass)))
-		}
+		reportIfNoDoc(klass)
 		if (klass.notEnum()) { // Stop considering enum entries
 			super.visitClass(klass)
+		}
+	}
+
+	private fun reportIfNoDoc(element: KtClassOrObject) {
+		if (element.isPublicNotOverriden()) {
+			if (element.docComment == null) {
+				report(CodeSmell(issue, Entity.Companion.from(element)))
+			}
 		}
 	}
 
@@ -33,9 +39,7 @@ class NoDocOverPublicClass(config: Config = Config.empty) : Rule(config) {
 		if (declaration.isCompanionWithoutName())
 			return
 
-		if (declaration.isPublicNotOverriden()) {
-			report(CodeSmell(issue, Entity.Companion.from(declaration)))
-		}
+		reportIfNoDoc(declaration)
 		super.visitObjectDeclaration(declaration)
 	}
 
