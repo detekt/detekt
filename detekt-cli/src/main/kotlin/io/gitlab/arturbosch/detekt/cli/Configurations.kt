@@ -24,6 +24,8 @@ fun Main.loadConfiguration(): Config = when {
 	!configResource.isNullOrBlank() -> parseResourceConfig(configResource!!)
 	formatting -> FormatConfig(useTabs)
 	else -> Config.empty
+}.apply {
+	if (debug) println(this)
 }
 
 private fun parseResourceConfig(config: String): Config {

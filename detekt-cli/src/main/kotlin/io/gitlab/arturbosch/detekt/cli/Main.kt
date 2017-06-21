@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.cli
 
 import com.beust.jcommander.Parameter
-import io.gitlab.arturbosch.detekt.cli.debug.Debugger
 import io.gitlab.arturbosch.detekt.cli.out.format.OutputFormat
 import io.gitlab.arturbosch.detekt.core.isDirectory
 import org.jetbrains.kotlin.utils.addToStdlib.ifNotEmpty
@@ -71,7 +70,6 @@ class Main {
 		fun main(args: Array<String>) {
 			val main = parseArgumentsCheckingReportDirectory(args)
 			val executable = when {
-				main.debug -> Debugger(main)
 				main.generateConfig -> ConfigExporter(main)
 				else -> Runner(main)
 			}
