@@ -19,7 +19,6 @@ class Formatting {
 		fun main(args: Array<String>) {
 			with(parseArguments(args)) {
 				val config = loadConfiguration()
-				if (debug) println(config)
 				val settings = ProcessingSettings(project, config, createPathFilters(), parallel, excludeDefaultRuleSets = true)
 				val detektor = Detektor(settings, KtTreeCompiler.instance(settings), listOf(FormattingProvider()))
 				val detektion = detektor.run()
