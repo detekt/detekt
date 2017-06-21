@@ -12,14 +12,7 @@ class RuleSet(val id: String, val rules: List<Rule>) {
 	init {
 		validateIdentifier(id)
 	}
-
-	/**
-	 * Iterates over the given kotlin file list and calling the accept method.
-	 */
-	fun acceptAll(files: List<KtFile>): Pair<String, List<Finding>> {
-		return id to files.flatMap { accept(it) }
-	}
-
+	
 	/**
 	 * Visits given file with all rules of this rule set, returning a list
 	 * of all code smell findings.

@@ -17,7 +17,7 @@ class FormattingProviderTest {
 	@Test
 	fun test() {
 		val ruleSet = FormattingProvider().instance(Config.empty)
-		val (_, findings) = ruleSet.acceptAll(listOf(compileForTest(path)))
-		assertThat(findings.groupBy { it.id }.values.size).isGreaterThanOrEqualTo(8)
+		val findings = ruleSet.accept(compileForTest(path))
+		assertThat(findings.size).isGreaterThanOrEqualTo(8)
 	}
 }
