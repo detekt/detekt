@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.formatting
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.test.RuleTest
 import io.gitlab.arturbosch.detekt.test.format
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 /**
@@ -15,7 +15,7 @@ internal class ExpressionBodySyntaxTest : RuleTest {
 
 	@Test
 	fun transformEasyReturnBlock() {
-		Assertions.assertThat(rule.format("""
+		assertThat(rule.format("""
 fun stuff(): Int {
 	return 5
 }
@@ -25,7 +25,7 @@ fun stuff(): Int {
 
 	@Test
 	fun transformComplexReturnBlock() {
-		Assertions.assertThat(rule.format("""
+		assertThat(rule.format("""
 fun stuff(): Int {
 	return moreStuff().getStuff().stuffStuff()
 }
@@ -35,13 +35,30 @@ fun stuff(): Int {
 
 	@Test
 	fun transformMultiLineReturnBlock() {
-		Assertions.assertThat(rule.format("""
+		val content = """
 fun stuff(): Int {
 	return moreStuff()
 	.getStuff()
 	.stuffStuff()
 }
 """
-		)).isEqualTo("fun stuff(): Int = moreStuff()\n\t.getStuff()\n\t.stuffStuff()")
+		assertThat(rule.format(content))
+				.isEqualTo("fun stuff(): Int = moreStuff()\n\t.getStuff()\n\t.stuffStuff()")
 	}
+
+	@Test
+	fun removeTrailingReturnStatements() {
+		val content = """
+fun stuff(): Int {
+    return if (true) return 5 else return 3
+}
+fun stuff(): Int {
+    return try { return 5 } catch (e: Exception) { return 3 }
+}
+"""
+		assertThat(rule.format(content))
+				.isEqualTo("fun stuff(): Int = if (true) 5 else 3" +
+						"\nfun stuff(): Int = try { 5 } catch (e: Exception) { 3 }")
+	}
+
 }
