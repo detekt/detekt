@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import io.gitlab.arturbosch.detekt.api.YamlConfig
 import io.gitlab.arturbosch.detekt.cli.OutputFacade
 import io.gitlab.arturbosch.detekt.cli.createPathFilters
 import io.gitlab.arturbosch.detekt.cli.loadConfiguration
@@ -19,9 +18,8 @@ class Formatting {
 		@JvmStatic
 		fun main(args: Array<String>) {
 			with(parseArguments(args)) {
-				val config = loadConfiguration() as? YamlConfig ?:
-						throw IllegalStateException("Yaml configuration with migrations rules must be provided!")
-				if (debug) println(config.properties)
+				val config = loadConfiguration()
+				if (debug) println(config)
 				val settings = ProcessingSettings(project, config, createPathFilters(), parallel, excludeDefaultRuleSets = true)
 				val detektor = Detektor(settings, KtTreeCompiler.instance(settings), listOf(FormattingProvider()))
 				val detektion = detektor.run()
