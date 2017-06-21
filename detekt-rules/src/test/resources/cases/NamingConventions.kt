@@ -14,9 +14,11 @@ val ALLOWED_AS_UPPERCASE = 5
 //valid
 fun fileMethod() {
 }
+
 //invalid
 fun FileMethod() {
 }
+
 fun _fileMethod() {
 }
 
@@ -27,17 +29,21 @@ class NamingConventions {
 	//valid
 	val _classVariable = 5
 	val classVariable = 5
-	fun classMethod(){
+	fun classMethod() {
 	}
+
 	//invalid
-	fun _classmethod(){
+	fun _classmethod() {
 	}
-	fun Classmethod(){
+
+	fun Classmethod() {
 	}
 }
+
 //invalid
-class _NamingConventions{}
-class namingConventions{}
+class _NamingConventions {}
+
+class namingConventions {}
 
 object Bla {
 	val STUFF = "stuff"
