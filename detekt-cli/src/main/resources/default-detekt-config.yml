@@ -86,11 +86,14 @@ formatting:
     active: true
     autoCorrect: true
   ExpressionBodySyntax:
-    active: false
-    autoCorrect: true
+    active: true
+    autoCorrect: false
   ExpressionBodySyntaxLineBreaks:
-    active: false
-    autoCorrect: true
+    active: true
+    autoCorrect: false
+  OptionalReturnKeyword:
+    active: true
+    autoCorrect: false
 
 style:
   active: true
