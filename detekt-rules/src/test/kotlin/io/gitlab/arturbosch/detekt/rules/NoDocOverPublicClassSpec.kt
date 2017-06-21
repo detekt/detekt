@@ -17,4 +17,24 @@ class NoDocOverPublicClassSpec : SubjectSpek<NoDocOverPublicClass>({
 		assertThat(subject.findings).hasSize(2)
 	}
 
+	it("should not report no doc over public object") {
+		val file = """
+/**
+ * Class docs not being recognized.
+ */
+object Main {
+    /**
+     * The entry point for the application.
+     *
+     * @param args The list of process arguments.
+     */
+    @JvmStatic
+    fun main(args: Array<String>) {
+    }
+}
+"""
+
+		assertThat(subject.lint(file)).isEmpty()
+	}
+
 })
