@@ -37,8 +37,8 @@ open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 	}
 
 	private fun createArgumentsForProfile(): List<String> {
-		val allArguments = defaultProfile?.arguments() ?: mutableMapOf<String, String>()
-		val overriddenArguments = systemProfile?.arguments() ?: mutableMapOf<String, String>()
+		val allArguments = defaultProfile?.arguments(debug) ?: mutableMapOf<String, String>()
+		val overriddenArguments = systemProfile?.arguments(debug) ?: mutableMapOf<String, String>()
 		overriddenArguments.forEach {
 			allArguments.merge(it.key, it.value) { v1, v2 ->
 				multipleConfigAware(it.key, v1, v2)

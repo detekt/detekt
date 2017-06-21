@@ -16,7 +16,7 @@ open class ProfileExtension(val name: String,
 							open var parallel: Boolean = false,
 							open var disableDefaultRuleSets: Boolean = false) {
 
-	fun arguments(): MutableMap<String, String> {
+	fun arguments(debug: Boolean = false): MutableMap<String, String> {
 		return mutableMapOf<String, String>().apply {
 			input?.let { put(PROJECT_PARAMETER, it) }
 			config?.let { put(CONFIG_PARAMETER, it) }
@@ -28,6 +28,7 @@ open class ProfileExtension(val name: String,
 			baseline?.let { put(BASELINE_PARAMETER, it) }
 			if (parallel) put(PARALLEL_PARAMETER, DEFAULT_TRUE)
 			if (disableDefaultRuleSets) put(DISABLE_DEFAULT_RULESETS_PARAMETER, DEFAULT_TRUE)
+			if (debug) put("--debug", DEFAULT_TRUE)
 		}
 	}
 
