@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.FACTORY
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.formatting.visitors.ConditionalPathVisitor
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.LeafPsiElement
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -32,6 +33,9 @@ class ExpressionBodySyntax(config: Config = Config.empty) : Rule(config) {
 					function.node.replaceChild(body.node, returnedExpression.node)
 					function.node.addChild(equals, returnedExpression.node)
 					(equals as LeafPsiElement).trimSpacesAround()
+					returnedExpression.accept(ConditionalPathVisitor {
+						it.returnKeyword.delete()
+					})
 				}
 			}
 		}
