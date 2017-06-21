@@ -1,17 +1,55 @@
 # Detekt - Changelog
 
-#### M11 - upcoming
+#### M12
 
-- formatting rework
+- Script to generate release notes from milestone - [#102](https://api.github.com/repos/arturbosch/detekt/issues/102)
+- Encapsulate common fields of Rule and Finding in Issue class - [#97](https://api.github.com/repos/arturbosch/detekt/issues/97)
+- Separate findings logic from rule logic - [#93](https://api.github.com/repos/arturbosch/detekt/issues/93)
+- Add support for composable configurations - [#92](https://api.github.com/repos/arturbosch/detekt/issues/92)
+- ClassCastException: java.lang.Integer cannot be cast to java.lang.String - [#89](https://api.github.com/repos/arturbosch/detekt/issues/89)
+- Baseline does not work anymore as expected due to inner restructure for the new output formats  - [#83](https://api.github.com/repos/arturbosch/detekt/issues/83)
+- Prevent ClassCastExceptions in Configurations - [#82](https://api.github.com/repos/arturbosch/detekt/issues/82)
+- Migrate away from load() method in tests - [#77](https://api.github.com/repos/arturbosch/detekt/issues/77)
+- Support any common report file format - [#66](https://api.github.com/repos/arturbosch/detekt/issues/66)
+- Not all return keywords are removed when using ExpressionBodySyntax quickfix - [#58](https://api.github.com/repos/arturbosch/detekt/issues/58)
+- Rule: Max line length - [#56](https://api.github.com/repos/arturbosch/detekt/issues/56)
+- Rule: SingleExpression statements with multiple return paths - [#45](https://api.github.com/repos/arturbosch/detekt/issues/45)
 
+See all issues at: [M12](https://api.github.com/repos/arturbosch/detekt/milestones/8)
+
+#### M11
+- False positive SpacingAfterKeyword - [#71](https://api.github.com/repos/arturbosch/detekt/issues/71)
+- Embedabble compiler - [#70](https://api.github.com/repos/arturbosch/detekt/issues/70)
+- Support for Android? Failed to apply plugin [id 'com.android.application'] - [#69](https://api.github.com/repos/arturbosch/detekt/issues/69)
+- Add gradle task to integrate idea formatting/inspection - [#67](https://api.github.com/repos/arturbosch/detekt/issues/67)
+- Crash when detekt.yml is empty - [#64](https://api.github.com/repos/arturbosch/detekt/issues/64)
+- Add Support For GSK - [#59](https://api.github.com/repos/arturbosch/detekt/issues/59)
+- Decouple/Rewrite/Publish smell-baseline-format - [#57](https://api.github.com/repos/arturbosch/detekt/issues/57)
+- Export Config with `--generate-config` - [#54](https://api.github.com/repos/arturbosch/detekt/issues/54)
+- Support indentation formatting in different formats (X spaces, x spaces for tabs etc) - [#53](https://api.github.com/repos/arturbosch/detekt/issues/53)
+- NestedBlockDepth: Elif-Structure counts as two - [#51](https://api.github.com/repos/arturbosch/detekt/issues/51)
+- Generate default yaml configuration on cli flag - [#48](https://api.github.com/repos/arturbosch/detekt/issues/48)
+- Support @Suppress("ALL") - [#47](https://api.github.com/repos/arturbosch/detekt/issues/47)
+- [WIP] Formatting rework - [#46](https://api.github.com/repos/arturbosch/detekt/issues/46)
+- Rule: Expression-syntax line breaks - [#36](https://api.github.com/repos/arturbosch/detekt/issues/36)
+- Rule: Expression syntax - [#35](https://api.github.com/repos/arturbosch/detekt/issues/35)
+- Allow Indentation check to handle "align when multiline" option - [#25](https://api.github.com/repos/arturbosch/detekt/issues/25)
+- SpacingAroundCurlyBraces throw IndexOutOfFound when determinating Location.of(node) as LineAndColumn calculation is simple wrong (of Idea?) - [#18](https://api.github.com/repos/arturbosch/detekt/issues/18)
+
+See all issues at: [M11](https://api.github.com/repos/arturbosch/detekt/milestones/5)  
+See all issues at: [Formatting](https://api.github.com/repos/arturbosch/detekt/milestones/6)
 #### M10
 
 - detekt-gradle-plugin - [#16](https://github.com/arturbosch/detekt/issues/16)
 - experimental migration module which can migrate imports- [#30](https://github.com/arturbosch/detekt/issues/30)
 - NamingConventionViolation is now aware about backticks - [contributed by Svyatoslav Chatchenko](https://github.com/arturbosch/detekt/pull/34) 
 - cli and core module refactorings, jcenter publishing, travis ci
+- gradle-plugin version is not configurable, task configurations should be in `afterEvaluate` - [#41](https://api.github.com/repos/arturbosch/detekt/issues/41)
+- Add Contributing Guide - [#37](https://api.github.com/repos/arturbosch/detekt/issues/37)
+- NamingConventionViolation is now aware about backticks “`” - [#34](https://api.github.com/repos/arturbosch/detekt/issues/34)
 
-See all issues at: [M10](https://github.com/arturbosch/detekt/milestone/4)
+See all issues at: [M10](https://github.com/arturbosch/detekt/milestone/4)  
+See all issues at: [M10.1](https://api.github.com/repos/arturbosch/detekt/milestones/7)
 #### M9
 
 - Support suppressing rules (@SuppressWarnings, @Suppress) - [#6](https://github.com/arturbosch/detekt/issues/6)
