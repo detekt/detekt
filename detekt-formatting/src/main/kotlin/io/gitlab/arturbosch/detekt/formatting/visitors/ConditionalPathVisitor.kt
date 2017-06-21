@@ -5,6 +5,7 @@ import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtDeclarationWithBody
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
+import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.KtTryExpression
 import org.jetbrains.kotlin.psi.KtWhenExpression
@@ -44,13 +45,13 @@ class ConditionalPathVisitor(private val block: (KtReturnExpression) -> Unit) : 
 	private fun KtExpression.isLastStatement(): Boolean {
 		val parent = parent
 		parent is KtBlockExpression
-		if (parent is KtReturnExpression) return true
-		if (parent is KtDeclarationWithBody) {
-			val block = parent.bodyExpression
-			return this == block
-		}
-		if (parent is KtBlockExpression) {
-			parent.statements.lastOrNull()?.let {
+		when (parent) {
+			is KtReturnExpression, is KtProperty -> return true
+			is KtDeclarationWithBody -> {
+				val block = parent.bodyExpression
+				return this == block
+			}
+			is KtBlockExpression -> parent.statements.lastOrNull()?.let {
 				return it == this
 			}
 		}

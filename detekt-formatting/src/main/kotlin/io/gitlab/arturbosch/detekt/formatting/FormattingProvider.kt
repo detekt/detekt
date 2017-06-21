@@ -25,7 +25,8 @@ class FormattingProvider : RuleSetProvider {
 				OptionalSemicolon(config),
 				OptionalUnit(config),
 				ExpressionBodySyntaxLineBreaks(config),
-				ExpressionBodySyntax(config)
+				ExpressionBodySyntax(config),
+				OptionalReturnKeyword(config)
 		).apply {
 			if (!config.valueOrDefault("useTabs", false)) {
 				add(Indentation(config))
