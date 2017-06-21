@@ -15,9 +15,7 @@ import org.jetbrains.kotlin.psi.KtFile
  * @author Artur Bosch
  */
 @Suppress("EmptyFunctionBlock")
-abstract class TokenRule(id: String,
-						 severity: Severity = Rule.Severity.Minor,
-						 config: Config = Config.empty) : Rule(id, severity, config) {
+abstract class TokenRule(config: Config = Config.empty) : Rule(config) {
 
 	override fun visit(root: KtFile) {
 		ifRuleActive {

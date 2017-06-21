@@ -1,9 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
-import io.gitlab.arturbosch.detekt.api.CodeSmellThresholdRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Metric
+import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.rules.asBlockExpression
 import org.jetbrains.kotlin.com.intellij.psi.PsiFile
@@ -22,7 +24,9 @@ import java.util.ArrayDeque
 /**
  * @author Artur Bosch
  */
-class LargeClass(config: Config = Config.empty, threshold: Int = 70) : CodeSmellThresholdRule("LargeClass", config, threshold) {
+class LargeClass(config: Config = Config.empty, threshold: Int = 70) : ThresholdRule(config, threshold) {
+
+	override val issue = Issue("LargeClass", Severity.Maintainability, "")
 
 	private val locStack = ArrayDeque<Int>()
 
@@ -48,7 +52,7 @@ class LargeClass(config: Config = Config.empty, threshold: Int = 70) : CodeSmell
 		super.visitClassOrObject(classOrObject)
 		val loc = locStack.pop()
 		if (loc > threshold) {
-			report(ThresholdedCodeSmell(id, severity, Entity.Companion.from(classOrObject), Metric("SIZE", loc, threshold)))
+			report(ThresholdedCodeSmell(issue, Entity.from(classOrObject), Metric("SIZE", loc, threshold)))
 		}
 	}
 

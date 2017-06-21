@@ -8,11 +8,11 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
 /**
  * @author Artur Bosch
  */
-class EmptyClassBlock(config: Config) : EmptyRule("EmptyClassBlock", config = config) {
+class EmptyClassBlock(config: Config) : EmptyRule(config) {
 
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
 		classOrObject.getBody()?.declarations?.let {
-			if (it.isEmpty()) report(CodeSmell(id, severity, Entity.from(classOrObject)))
+			if (it.isEmpty()) report(CodeSmell(issue, Entity.from(classOrObject)))
 		}
 	}
 

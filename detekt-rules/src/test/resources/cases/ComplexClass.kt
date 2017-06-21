@@ -6,12 +6,13 @@ import org.jetbrains.kotlin.utils.sure
  * @author Artur Bosch
  */
 @Suppress("unused")
-class ComplexClass {// McCabe: 32
+class ComplexClass {
+	// McCabe: 32
 	fun complex() {
 		try {//4
 			while (true) {
 				if (true) {
-					when("string") {
+					when ("string") {
 						"" -> println()
 						else -> println()
 					}
@@ -42,7 +43,8 @@ class ComplexClass {// McCabe: 32
 				}
 			}
 		}
-		(1..10).forEach {//1
+		(1..10).forEach {
+			//1
 			println()
 		}
 		for (i in 1..10) {//1
@@ -61,6 +63,7 @@ class ComplexClass {// McCabe: 32
 			}
 		}
 	}
+
 	fun manyClosures2() {//5
 		true.let {
 			true.apply {
@@ -72,6 +75,7 @@ class ComplexClass {// McCabe: 32
 			}
 		}
 	}
+
 	fun manyClosures3() {//5
 		true.let {
 			true.apply {
@@ -83,6 +87,7 @@ class ComplexClass {// McCabe: 32
 			}
 		}
 	}
+
 	fun manyClosures4() {//5
 		true.let {
 			true.apply {

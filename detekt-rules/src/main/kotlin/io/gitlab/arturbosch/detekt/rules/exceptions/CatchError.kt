@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.psi.KtCatchClause
 /**
  * @author Artur Bosch
  */
-class CatchError(config: Config = Config.empty) : ExceptionsRule("CatchError", config) {
+class CatchError(config: Config = Config.empty) : ExceptionsRule(config) {
 
 	override fun visitCatchSection(catchClause: KtCatchClause) {
 		catchClause.addFindingIfExceptionClassMatchesExact { "Error" }

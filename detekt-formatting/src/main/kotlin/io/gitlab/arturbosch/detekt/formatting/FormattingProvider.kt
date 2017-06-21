@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
  * @author Artur Bosch
  */
 class FormattingProvider : RuleSetProvider {
+
 	override val ruleSetId: String = "formatting"
 
 	override fun instance(config: Config): RuleSet {

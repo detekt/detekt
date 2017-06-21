@@ -1,6 +1,6 @@
 package cases
 
-import java.util.*
+import java.util.ArrayList
 
 /**
  * @author Artur Bosch
@@ -68,10 +68,10 @@ class Default {
 
 	fun NoElseInWhen() {
 		// no else in when
-		when(true) {
+		when (true) {
 			false -> println()
 		}
-		when("hello") {
+		when ("hello") {
 			"hello" -> println()
 			"hello" -> println()
 			else -> println()

@@ -1,9 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
-import io.gitlab.arturbosch.detekt.api.CodeSmellThresholdRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Metric
+import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.rules.collectByType
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -15,7 +17,9 @@ import org.jetbrains.kotlin.psi.KtWhileExpression
 /**
  * @author Artur Bosch
  */
-class ComplexCondition(config: Config = Config.empty, threshold: Int = 3) : CodeSmellThresholdRule("ComplexCondition", config, threshold) {
+class ComplexCondition(config: Config = Config.empty, threshold: Int = 3) : ThresholdRule(config, threshold) {
+
+	override val issue = Issue("ComplexCondition", Severity.Maintainability, "")
 
 	override fun visitIfExpression(expression: KtIfExpression) {
 		val condition = expression.condition
@@ -45,7 +49,7 @@ class ComplexCondition(config: Config = Config.empty, threshold: Int = 3) : Code
 			val conditionString = longestBinExpr.text
 			val count = frequency(conditionString, "&&") + frequency(conditionString, "||") + 1
 			if (count > threshold) {
-				report(ThresholdedCodeSmell(id, severity, Entity.from(condition), Metric("SIZE", count, threshold)))
+				report(ThresholdedCodeSmell(issue, Entity.from(condition), Metric("SIZE", count, threshold)))
 			}
 		}
 	}

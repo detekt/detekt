@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
 /**
  * @author Artur Bosch
  */
-class ThrowError(config: Config = Config.empty) : ExceptionsRule("ThrowError", config) {
+class ThrowError(config: Config = Config.empty) : ExceptionsRule(config) {
 
 	override fun visitThrowExpression(expression: KtThrowExpression) {
 		expression.addFindingIfThrowingClassMatchesExact { "Error" }

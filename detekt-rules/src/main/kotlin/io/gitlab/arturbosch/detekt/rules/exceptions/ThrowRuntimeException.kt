@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
 /**
  * @author Artur Bosch
  */
-class ThrowRuntimeException(config: Config = Config.empty) : ExceptionsRule("ThrowRuntimeException", config) {
+class ThrowRuntimeException(config: Config = Config.empty) : ExceptionsRule(config) {
 
 	override fun visitThrowExpression(expression: KtThrowExpression) {
 		expression.addFindingIfThrowingClassMatchesExact { "RuntimeException" }

@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.psi.KtCatchClause
 /**
  * @author Artur Bosch
  */
-class CatchNullPointerException(config: Config = Config.empty) : ExceptionsRule("CatchNullPointerException", config) {
+class CatchNullPointerException(config: Config = Config.empty) : ExceptionsRule(config) {
 
 	override fun visitCatchSection(catchClause: KtCatchClause) {
 		catchClause.addFindingIfExceptionClassMatchesExact { "NullPointerException" }

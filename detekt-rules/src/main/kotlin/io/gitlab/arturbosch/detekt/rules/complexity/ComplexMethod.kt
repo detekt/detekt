@@ -1,10 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
-import io.gitlab.arturbosch.detekt.api.CodeSmellThresholdRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Metric
+import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.rules.isUsedForNesting
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -17,12 +19,14 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
 /**
  * @author Artur Bosch
  */
-class ComplexMethod(config: Config = Config.empty, threshold: Int = 10) : CodeSmellThresholdRule("ComplexMethod", config, threshold) {
+class ComplexMethod(config: Config = Config.empty, threshold: Int = 10) : ThresholdRule(config, threshold) {
+
+	override val issue = Issue("ComplexMethod", Severity.Maintainability, "")
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		val mcc = MccVisitor().visit(function)
 		if (mcc > threshold) {
-			report(ThresholdedCodeSmell(id, severity, Entity.Companion.from(function), Metric("MCC", mcc, threshold)))
+			report(ThresholdedCodeSmell(issue, Entity.from(function), Metric("MCC", mcc, threshold)))
 		}
 	}
 

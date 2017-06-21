@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.psi.KtCatchClause
 /**
  * @author Artur Bosch
  */
-class EmptyCatchBlock(config: Config) : EmptyRule("EmptyCatchBlock", config = config) {
+class EmptyCatchBlock(config: Config) : EmptyRule(config = config) {
 
 	override fun visitCatchSection(catchClause: KtCatchClause) {
 		catchClause.catchBody?.addFindingIfBlockExprIsEmpty()

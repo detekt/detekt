@@ -6,12 +6,12 @@ package io.gitlab.arturbosch.detekt.api
  *
  * @author Artur Bosch
  */
-open class CodeSmell(override val id: String,
-					 override val severity: Rule.Severity,
+open class CodeSmell(final override val issue: Issue,
 					 override val entity: Entity,
-					 override val description: String = "",
 					 override val metrics: List<Metric> = listOf(),
 					 override val references: List<Entity> = listOf()) : Finding {
+
+	override val id: String = issue.id
 
 	override fun compact(): String {
 		return "$id - ${entity.compact()}"
@@ -27,8 +27,8 @@ open class CodeSmell(override val id: String,
  * for the existence of this rule violation.
  */
 open class CodeSmellWithReferenceAndMetric(
-		id: String, severity: Rule.Severity, entity: Entity, val reference: Entity, metric: Metric) : ThresholdedCodeSmell(
-		id, severity, entity, metric, references = listOf(reference)) {
+		issue: Issue, entity: Entity, val reference: Entity, metric: Metric) : ThresholdedCodeSmell(
+		issue, entity, metric, references = listOf(reference)) {
 
 	override fun compact(): String {
 		return "$id - $metric - ref=${reference.name} - ${entity.compact()}"
@@ -40,8 +40,8 @@ open class CodeSmellWithReferenceAndMetric(
  * for the existence of this rule violation.
  */
 open class ThresholdedCodeSmell(
-		id: String, severity: Rule.Severity, entity: Entity, val metric: Metric, references: List<Entity> = emptyList()) : CodeSmell(
-		id, severity, entity, metrics = listOf(metric), references = references) {
+		issue: Issue, entity: Entity, val metric: Metric, references: List<Entity> = emptyList()) : CodeSmell(
+		issue, entity, metrics = listOf(metric), references = references) {
 	val value: Int
 		get() = metric.value
 	val threshold: Int

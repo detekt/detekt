@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.psi.KtWhileExpression
 /**
  * @author Artur Bosch
  */
-class EmptyWhileBlock(config: Config) : EmptyRule("EmptyWhileBlock", config = config) {
+class EmptyWhileBlock(config: Config) : EmptyRule(config) {
 
 	override fun visitWhileExpression(expression: KtWhileExpression) {
 		expression.body?.addFindingIfBlockExprIsEmpty()

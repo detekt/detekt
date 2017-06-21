@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.psi.KtCatchClause
 /**
  * @author Artur Bosch
  */
-class CatchRuntimeException(config: Config = Config.empty) : ExceptionsRule("CatchRuntimeException", config) {
+class CatchRuntimeException(config: Config = Config.empty) : ExceptionsRule(config) {
 
 	override fun visitCatchSection(catchClause: KtCatchClause) {
 		catchClause.addFindingIfExceptionClassMatchesExact { "RuntimeException" }
