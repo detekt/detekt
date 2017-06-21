@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.psi.KtForExpression
 /**
  * @author Artur Bosch
  */
-class EmptyForBlock(config: Config) : EmptyRule("EmptyForBlock", config = config) {
+class EmptyForBlock(config: Config) : EmptyRule(config) {
 
 	override fun visitForExpression(expression: KtForExpression) {
 		expression.body?.addFindingIfBlockExprIsEmpty()

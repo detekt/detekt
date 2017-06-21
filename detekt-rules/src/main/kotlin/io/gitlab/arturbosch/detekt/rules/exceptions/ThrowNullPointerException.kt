@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
 /**
  * @author Artur Bosch
  */
-class ThrowNullPointerException(config: Config = Config.empty) : ExceptionsRule("ThrowNullPointerException", config) {
+class ThrowNullPointerException(config: Config = Config.empty) : ExceptionsRule(config) {
 
 	override fun visitThrowExpression(expression: KtThrowExpression) {
 		expression.addFindingIfThrowingClassMatchesExact { "NullPointerException" }

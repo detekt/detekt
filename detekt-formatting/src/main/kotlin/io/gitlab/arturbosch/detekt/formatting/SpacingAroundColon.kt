@@ -2,7 +2,10 @@ package io.gitlab.arturbosch.detekt.formatting
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Dept
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.TokenRule
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.LeafPsiElement
 import org.jetbrains.kotlin.psi.KtAnnotatedExpression
@@ -15,7 +18,9 @@ import org.jetbrains.kotlin.psi.KtVariableDeclaration
 /**
  * @author Artur Bosch
  */
-class SpacingAroundColon(config: Config) : TokenRule("SpacingAroundColon", Severity.Style, config) {
+class SpacingAroundColon(config: Config) : TokenRule(config) {
+
+	override val issue = Issue(javaClass.simpleName, Severity.Style, "", Dept.FIVE_MINS)
 
 	override fun visitColon(colon: LeafPsiElement) {
 		val parent = colon.parent
@@ -29,7 +34,7 @@ class SpacingAroundColon(config: Config) : TokenRule("SpacingAroundColon", Sever
 			else -> false
 		}
 		if (modified) {
-			report(CodeSmell(id, severity, Entity.from(colon)))
+			report(CodeSmell(issue, Entity.from(colon)))
 		}
 	}
 

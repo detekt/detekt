@@ -1,10 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules
 
-import io.gitlab.arturbosch.detekt.api.CodeSmellRule
 import io.gitlab.arturbosch.detekt.api.CodeSmellWithReferenceAndMetric
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Metric
+import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
@@ -18,7 +20,9 @@ import java.util.IdentityHashMap
 /**
  * @author Artur Bosch
  */
-class FeatureEnvy(config: Config = Config.empty) : CodeSmellRule("FeatureEnvy", config) {
+class FeatureEnvy(config: Config = Config.empty) : Rule(config) {
+
+	override val issue = Issue(javaClass.simpleName, Severity.Style, "")
 
 	private val factor = FeatureEnvyFactor(
 			valueOrDefault("threshold", 0.5),
@@ -70,7 +74,7 @@ class FeatureEnvy(config: Config = Config.empty) : CodeSmellRule("FeatureEnvy", 
 				println(ktElement.text)
 				println("factor: $value")
 				if (threshold < value) {
-					report(CodeSmellWithReferenceAndMetric(id, severity, entityOfFunction,
+					report(CodeSmellWithReferenceAndMetric(issue, entityOfFunction,
 							Entity.from(ktElement), Metric("FeatureEnvyFactor", value, threshold, 100)))
 				}
 			}

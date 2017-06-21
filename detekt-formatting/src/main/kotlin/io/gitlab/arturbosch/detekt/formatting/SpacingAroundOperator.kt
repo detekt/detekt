@@ -2,7 +2,10 @@ package io.gitlab.arturbosch.detekt.formatting
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Dept
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.TokenRule
 import io.gitlab.arturbosch.detekt.api.isPartOf
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
@@ -43,7 +46,9 @@ import org.jetbrains.kotlin.psi.KtValueArgument
  *
  * @author Artur Bosch
  */
-class SpacingAroundOperator(config: Config) : TokenRule("SpacingAroundOperator", Severity.Style, config) {
+class SpacingAroundOperator(config: Config) : TokenRule(config) {
+
+	override val issue = Issue(javaClass.simpleName, Severity.Style, "", Dept.FIVE_MINS)
 
 	private val tokenSet = TokenSet.create(MUL, PLUS, MINUS, DIV, PERC, LT, GT, LTEQ, GTEQ, EQEQEQ, EXCLEQEQEQ, EQEQ,
 			EXCLEQ, ANDAND, OROR, ELVIS, EQ, MULTEQ, DIVEQ, PERCEQ, PLUSEQ, MINUSEQ, ARROW)
@@ -58,7 +63,7 @@ class SpacingAroundOperator(config: Config) : TokenRule("SpacingAroundOperator",
 				!node.isPartOf(KtSuperExpression::class) /*super<T>*/) {
 
 			if (node.trimSpacesAround(autoCorrect)) {
-				report(CodeSmell(id, severity, Entity.from(node)))
+				report(CodeSmell(issue, Entity.from(node)))
 			}
 
 		}

@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.psi.KtIfExpression
 /**
  * @author Artur Bosch
  */
-class EmptyElseBlock(config: Config) : EmptyRule("EmptyElseBlock", config = config) {
+class EmptyElseBlock(config: Config) : EmptyRule(config) {
 
 	override fun visitIfExpression(expression: KtIfExpression) {
 		expression.`else`?.addFindingIfBlockExprIsEmpty()

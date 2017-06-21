@@ -1,10 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
-import io.gitlab.arturbosch.detekt.api.CodeSmellThresholdRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Metric
+import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.rules.isUsedForNesting
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -19,14 +21,15 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
 /**
  * @author Artur Bosch
  */
-class NestedBlockDepth(config: Config = Config.empty, threshold: Int = 3) : CodeSmellThresholdRule("NestedBlockDepth", config, threshold) {
+class NestedBlockDepth(config: Config = Config.empty, threshold: Int = 3) : ThresholdRule(config, threshold) {
+
+	override val issue = Issue("NestedBlockDepth", Severity.Maintainability, "")
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		val visitor = FunctionDepthVisitor(threshold)
 		visitor.visitNamedFunction(function)
 		if (visitor.isTooDeep)
-			report(ThresholdedCodeSmell(id, severity,
-					Entity.from(function), Metric("SIZE", visitor.maxDepth, threshold)))
+			report(ThresholdedCodeSmell(issue, Entity.from(function), Metric("SIZE", visitor.maxDepth, threshold)))
 	}
 
 	private class FunctionDepthVisitor(val threshold: Int) : DetektVisitor() {

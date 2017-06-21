@@ -8,11 +8,11 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
 /**
  * @author Artur Bosch
  */
-class EmptyWhenBlock(config: Config) : EmptyRule("EmptyWhenBlock", config = config) {
+class EmptyWhenBlock(config: Config) : EmptyRule(config) {
 
 	override fun visitWhenExpression(expression: KtWhenExpression) {
 		if (expression.entries.isEmpty()) {
-			report(CodeSmell(id, severity, Entity.from(expression)))
+			report(CodeSmell(issue, Entity.from(expression)))
 		}
 	}
 

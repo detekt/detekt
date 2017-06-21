@@ -2,8 +2,10 @@ package io.gitlab.arturbosch.detekt.migration
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.PROJECT
 import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.codeStyle.CodeEditUtil
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.CompositeElement
 import org.jetbrains.kotlin.psi.KtImportList
@@ -13,7 +15,9 @@ import org.jetbrains.kotlin.resolve.ImportPath
 /**
  * @author Artur Bosch
  */
-class MigrateImportsRule(config: Config) : Rule("MigrateImports", Severity.Defect) {
+class MigrateImportsRule(config: Config) : Rule(config) {
+
+	override val issue = Issue("MigrateImports", Severity.Defect, "")
 
 	private val replacements: HashMap<String, String> = config.valueOrDefault("imports", HashMap<String, String>())
 	private val toReplaces = replacements.keys

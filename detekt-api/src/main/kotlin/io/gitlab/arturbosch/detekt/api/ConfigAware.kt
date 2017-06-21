@@ -9,6 +9,7 @@ interface ConfigAware : Config {
 	 * Id which is used to retrieve the sub config for this rule.
 	 */
 	val id: String
+
 	/**
 	 * Wrapped configuration to use for specified id.
 	 */
