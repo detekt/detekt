@@ -4,5 +4,5 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import java.nio.file.Path
 
 class PlainOutputFormat(report: Path) : OutputFormat(report) {
-    override fun render(smells: List<Finding>): String = smells.map { it.compactWithSignature() }.joinToString("\n")
+	override fun render(smells: List<Finding>): String = smells.map { it.compactWithSignature() }.joinToString("\n")
 }

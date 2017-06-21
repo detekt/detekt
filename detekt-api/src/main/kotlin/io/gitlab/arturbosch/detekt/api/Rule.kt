@@ -14,24 +14,12 @@ import org.jetbrains.kotlin.psi.KtFile
  * @author Artur Bosch
  */
 @Suppress("EmptyFunctionBlock")
-abstract class Rule(final override val id: String,
-					val severity: Severity = Rule.Severity.Minor,
-					override val config: Config = Config.empty,
+abstract class Rule(override val config: Config = Config.empty,
 					private val context: Context = DefaultContext()) :
 		DetektVisitor(), Context by context, ConfigAware {
 
-	init {
-		validateIdentifier(id)
-	}
-
-	/**
-	 * Rules can classified into different severity grades. Maintainer can choose
-	 * a grade which is most harmful to their projects.
-	 */
-	enum class Severity {
-		CodeSmell, Style, Warning, Defect, Minor, Maintainability, Security
-
-	}
+	abstract val issue: Issue
+	final override val id: String by lazy(LazyThreadSafetyMode.NONE) { issue.id }
 
 	/**
 	 * Before starting visiting kotlin elements, a check is performed if this rule should be triggered.

@@ -2,9 +2,12 @@ package io.gitlab.arturbosch.detekt.formatting
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Dept
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.LeafPsiElement
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.PsiWhiteSpaceImpl
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -15,8 +18,9 @@ import org.jetbrains.kotlin.psi.psiUtil.prevLeaf
 /**
  * @author Artur Bosch
  */
-class ExpressionBodySyntaxLineBreaks(config: Config = Config.empty) : Rule(
-		"ExpressionBodySyntaxLineBreaks", Severity.Style, config) {
+class ExpressionBodySyntaxLineBreaks(config: Config = Config.empty) : Rule(config) {
+
+	override val issue = Issue(javaClass.simpleName, Severity.Style, "", Dept.FIVE_MINS)
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		function.equalsToken?.let { equals ->
@@ -31,11 +35,11 @@ class ExpressionBodySyntaxLineBreaks(config: Config = Config.empty) : Rule(
 		val (exprStart, exprEnd) = body.startAndEndLine()
 		if (equalsLine != exprStart) {
 			if (exprStart == exprEnd) {
-				report(CodeSmell(id, severity, Entity.from(equals)))
+				report(CodeSmell(issue, Entity.from(equals)))
 				withAutoCorrect { body.alignToEqualsToken(equals) }
 			} else {
 				if (equals.trimSpacesBefore(autoCorrect, ignoreLineBreaks = true)) {
-					report(CodeSmell(id, severity, Entity.from(equals)))
+					report(CodeSmell(issue, Entity.from(equals)))
 				}
 			}
 		}

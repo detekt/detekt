@@ -2,7 +2,10 @@ package io.gitlab.arturbosch.detekt.formatting
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Dept
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.TokenRule
 import io.gitlab.arturbosch.detekt.api.isPartOf
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
@@ -21,12 +24,14 @@ import org.jetbrains.kotlin.psi.psiUtil.startOffset
  *
  * @author Artur Bosch
  */
-class Indentation(config: Config) : TokenRule("Indentation", Severity.Style, config) {
+class Indentation(config: Config) : TokenRule(config) {
 
 	companion object {
 		private const val DEFAULT_INDENT = 4
 		private const val INDENT_SIZE = "indentSize"
 	}
+
+	override val issue = Issue(javaClass.simpleName, Severity.Style, "Unexpected indentation", Dept.FIVE_MINS)
 
 	private var indent = valueOrDefault(INDENT_SIZE, DEFAULT_INDENT)
 
@@ -49,13 +54,10 @@ class Indentation(config: Config) : TokenRule("Indentation", Severity.Style, con
 					if (it.length % indent != 0) {
 						if (node.isPartOf(KtParameterList::class) && firstParameterColumn.value != 0) {
 							if (firstParameterColumn.value - 1 != it.length) {
-								report(CodeSmell(id, severity, Entity.from(node, offset = 1),
-										"Unexpected indentation (${it.length}) (" +
-												"parameters should be either vertically aligned or indented by the multiple of 4)"))
+								report(CodeSmell(issue, Entity.from(node, offset = 1)))
 							}
 						} else {
-							report(CodeSmell(id, severity, Entity.from(node, offset = 1),
-									"Unexpected indentation (${it.length}) (it should be multiple of $indent)"))
+							report(CodeSmell(issue, Entity.from(node, offset = 1)))
 						}
 					}
 					offset += it.length + 1

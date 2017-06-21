@@ -2,8 +2,11 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Dept
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.SpecialNames
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -18,7 +21,9 @@ import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 /**
  * @author Artur Bosch
  */
-class NamingConventionViolation(config: Config = Config.empty) : Rule(RULE_SUB_CONFIG, Severity.Style, config) {
+class NamingConventionViolation(config: Config = Config.empty) : Rule(config) {
+
+	override val issue = Issue(javaClass.simpleName, Severity.Style, "", Dept.FIVE_MINS)
 
 	private val variablePattern = Regex(valueOrDefault(VARIABLE_PATTERN, "^(_)?[a-z$][a-zA-Z$0-9]*$"))
 	private val constantPattern = Regex(valueOrDefault(CONSTANT_PATTERN, "^([A-Z_]*|serialVersionUID)$"))
@@ -64,7 +69,7 @@ class NamingConventionViolation(config: Config = Config.empty) : Rule(RULE_SUB_C
 	}
 
 	private fun add(declaration: KtNamedDeclaration) {
-		report(CodeSmell(id, severity, Entity.Companion.from(declaration)))
+		report(CodeSmell(issue, Entity.from(declaration)))
 	}
 
 	private fun KtVariableDeclaration.isTopLevel(): Boolean = this is KtProperty && this.isTopLevel

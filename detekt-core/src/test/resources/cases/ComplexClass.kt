@@ -13,7 +13,7 @@ class ComplexClass {// McCabe: 42, LLOC: 1+2+29+29+24
 			try {//4
 				while (true) {
 					if (true) {
-						when("string") {
+						when ("string") {
 							"" -> println()
 							else -> println()
 						}
@@ -44,7 +44,8 @@ class ComplexClass {// McCabe: 42, LLOC: 1+2+29+29+24
 					}
 				}
 			}
-			(1..10).forEach {//1
+			(1..10).forEach {
+				//1
 				println()
 			}
 			for (i in 1..10) {//1
@@ -88,7 +89,8 @@ class ComplexClass {// McCabe: 42, LLOC: 1+2+29+29+24
 				}
 			}
 		}
-		(1..10).forEach {//1
+		(1..10).forEach {
+			//1
 			println()
 		}
 		for (i in 1..10) {//1
@@ -107,6 +109,7 @@ class ComplexClass {// McCabe: 42, LLOC: 1+2+29+29+24
 			}
 		}
 	}
+
 	fun manyClosures2() {//4
 		true.let {
 			true.apply {
@@ -118,6 +121,7 @@ class ComplexClass {// McCabe: 42, LLOC: 1+2+29+29+24
 			}
 		}
 	}
+
 	fun manyClosures3() {//4
 		true.let {
 			true.apply {
@@ -129,6 +133,7 @@ class ComplexClass {// McCabe: 42, LLOC: 1+2+29+29+24
 			}
 		}
 	}
+
 	fun manyClosures4() {//4
 		true.let {
 			true.apply {

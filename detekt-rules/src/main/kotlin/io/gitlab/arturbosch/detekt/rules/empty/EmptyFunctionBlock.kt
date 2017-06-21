@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 /**
  * @author Artur Bosch
  */
-class EmptyFunctionBlock(config: Config) : EmptyRule("EmptyFunctionBlock", config = config) {
+class EmptyFunctionBlock(config: Config) : EmptyRule(config) {
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		function.bodyExpression?.addFindingIfBlockExprIsEmpty()

@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.psi.KtCatchClause
 /**
  * @author Artur Bosch
  */
-class CatchArrayIndexOutOfBoundsException(config: Config = Config.empty) : ExceptionsRule("CatchArrayIndexOutOfBoundsException", config) {
+class CatchArrayIndexOutOfBoundsException(config: Config = Config.empty) : ExceptionsRule(config) {
 
 	override fun visitCatchSection(catchClause: KtCatchClause) {
 		catchClause.addFindingIfExceptionClassMatchesExact { "ArrayIndexOutOfBoundsException" }
