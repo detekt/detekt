@@ -4,7 +4,9 @@ import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.rules.complexity.ComplexCondition
 import io.gitlab.arturbosch.detekt.rules.complexity.LongMethod
 import io.gitlab.arturbosch.detekt.rules.complexity.LongParameterList
+import io.gitlab.arturbosch.detekt.rules.complexity.TooManyFunctions
 import io.gitlab.arturbosch.detekt.test.compileForTest
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.it
@@ -42,6 +44,12 @@ class SuppressingSpec : Spek({
 			println(it.compact())
 		}
 		assertThat(findings).hasSize(0)
+	}
+
+	it("should suppress TooManyFunctionsRule on class level") {
+		val findings = TooManyFunctions(threshold = 0).lint(Case.SuppressedElementsByClass.path())
+
+		assertThat(findings).isEmpty()
 	}
 
 })

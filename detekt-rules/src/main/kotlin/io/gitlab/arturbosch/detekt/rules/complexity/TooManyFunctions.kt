@@ -7,7 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
-import org.jetbrains.kotlin.com.intellij.psi.PsiFile
+import org.jetbrains.kotlin.psi.KtClassOrObject
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
@@ -19,17 +20,30 @@ class TooManyFunctions(config: Config = Config.empty, threshold: Int = 10) : Thr
 
 	private var amount: Int = 0
 
-	override fun visitFile(file: PsiFile) {// TODO
+	override fun visitKtFile(file: KtFile) {
 		super.visitFile(file)
 		if (amount > threshold) {
-			report(ThresholdedCodeSmell(issue, Entity.from(file),
-					Metric("SIZE", value = amount, threshold = 10))
-			)
+			report(ThresholdedCodeSmell(issue, Entity.from(file), Metric("SIZE", amount, threshold)))
 		}
+		amount = 0
+	}
+
+	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
+		classOrObject.getBody()?.declarations
+				?.filterIsInstance<KtNamedFunction>()
+				?.sumBy { 1 }
+				?.let {
+					if (it > threshold) {
+						report(ThresholdedCodeSmell(issue, Entity.from(classOrObject), Metric("SIZE", it, threshold)))
+					}
+				}
+		super.visitClassOrObject(classOrObject)
 	}
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
-		amount++
+		if (function.isTopLevel) {
+			amount++
+		}
 	}
 
 }
