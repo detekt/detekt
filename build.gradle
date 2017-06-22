@@ -159,14 +159,18 @@ String USER_HOME = System.getProperty("user.home")
 
 detekt {
 	debug = true
-	version = "1.0.0.M10.3"
-	filters = '.*/test/.*'
-	config = "$project.projectDir/detekt-cli/src/main/resources/default-detekt-config.yml"
-	report = "$project.projectDir/reports"
+	version = "1.0.0.M12"
+	profile("main") {
+		input = "$project.projectDir"
+		filters = '.*/test/.*, .*/resources/.*, .*/build/.*'
+		config = "$project.projectDir/detekt-cli/src/main/resources/default-detekt-config.yml"
+		baseline = "$project.projectDir/reports/baseline.xml"
+	}
 	idea {
 		path = "$USER_HOME/.idea"
 		codeStyleScheme = "$USER_HOME/.idea/idea-code-style.xml"
 		inspectionsProfile = "$USER_HOME/.idea/inspect.xml"
+		report = "$project.projectDir/reports"
 		mask = "*.kt,"
 	}
 }
