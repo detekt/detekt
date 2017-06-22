@@ -12,7 +12,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 /**
  * @author Artur Bosch
  */
-class NoDocOverPublicMethod(config: Config = Config.empty) : Rule(config) {
+class UndocumentedPublicFunction(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName, Severity.Maintainability, "")
 

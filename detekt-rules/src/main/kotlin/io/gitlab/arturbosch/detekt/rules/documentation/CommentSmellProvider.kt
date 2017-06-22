@@ -15,8 +15,8 @@ class CommentSmellProvider : RuleSetProvider {
 		return RuleSet(ruleSetId, listOf(
 				CommentOverPrivateMethod(config),
 				CommentOverPrivateProperty(config),
-				NoDocOverPublicClass(config),
-				NoDocOverPublicMethod(config)
+				UndocumentedPublicClass(config),
+				UndocumentedPublicFunction(config)
 		))
 	}
 

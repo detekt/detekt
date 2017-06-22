@@ -14,9 +14,9 @@ import org.jetbrains.kotlin.psi.KtObjectDeclaration
 /**
  * @author Artur Bosch
  */
-class NoDocOverPublicClass(config: Config = Config.empty) : Rule(config) {
+class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue("NoDocOverPublicClass", Severity.Maintainability, "")
+	override val issue = Issue(javaClass.simpleName, Severity.Maintainability, "")
 
 	override fun visitClass(klass: KtClass) {
 		reportIfNoDoc(klass)
