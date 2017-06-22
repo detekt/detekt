@@ -19,8 +19,9 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 - extensible by own rule sets and `FileProcessListener's`
 - format your code with the formatting rule set
 - code Smell baseline and ignore lists for legacy projects
-- **NEW** - [gradle plugin](#gradleplugin) for code analysis, formatting and import migration
-
+- [gradle plugin](#gradleplugin) for code analysis, formatting and import migration
+- **NEW** - gradle tasks to use local `intellij` distribution for [formatting and inspecting](#idea) kotlin code
+- **NEW** - optionally configure detekt for each sub module by using [profiles](#closure) (gradle-plugin)
 
 ### Table of contents
 1. [Commandline interface](#build)
@@ -64,6 +65,9 @@ Usage: detekt [options]
       Path to the config file (path/to/config.yml).
     --config-resource, -cr
       Path to the config resource on detekt's classpath (path/to/config.yml).
+    --create-baseline, -cb
+      Treats current analysis findings as a smell baseline for further detekt runs.
+      Default: false
     --debug, -d
       Debugs given ktFile by printing its elements.
       Default: false
@@ -100,8 +104,8 @@ Usage: detekt [options]
       Default: false
 ```
 
-`project` can either be a directory or a single Kotlin file.
-The currently only supported configuration format is yaml. `config` should point to one.
+`--project` can either be a directory or a single Kotlin file.
+The currently only supported configuration format is yaml. `--config` should point to one. Generating a default configuration file is as easy as using the `--generate-config` parameter.
 `filters` can be used for example to exclude all test directories.
 With `rules` you can point to additional ruleset.jar's creating by yourself or others. 
 More on this topic see section _Custom RuleSets_.
@@ -126,9 +130,11 @@ plugins {
 
 detekt {
     version = "1.0.0.[version]"
-    input = "$input/src/main/kotlin"
-    config = "project.projectDir/detekt.yml" 
-    filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
+    profile("main") {
+        input = "$input/src/main/kotlin"
+        config = "project.projectDir/detekt.yml" 
+        filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
+    }
 }
 ```
 
@@ -149,9 +155,11 @@ apply plugin: "io.gitlab.arturbosch.detekt"
 
 detekt {
     version = "1.0.0.[version]"
-    input = "$input/src/main/kotlin"
-    config = "$project.projectDir/detekt.yml"
-    filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
+    profile("main") {
+        input = "$input/src/main/kotlin"
+        config = "project.projectDir/detekt.yml" 
+        filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
+    }
 }
 ```
 
@@ -172,9 +180,11 @@ plugins {
 
 configure<DetektExtension> {
     version = "1.0.0.[version]"
-    input = "$input/src/main/kotlin"
-    config = "${project.projectDir}/detekt.yml"
-    filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
+    profile("main") {
+        input = "$input/src/main/kotlin"
+        config = "${project.projectDir}/detekt.yml"
+        filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
+    }
 }
 ```
 
@@ -188,7 +198,37 @@ configure<DetektExtension> {
 - `detektIdeaFormat` - Uses a local `idea` installation to format your kotlin (and other) code according to the specified `code-style.xml`.
 - `detektIdeaInspect` Uses a local `idea` installation to run inspections on your kotlin (and other) code according to the specified `inspections.xml` profile.
 
-##### Configure a local idea for detekt
+##### <a name="closure">Options for detekt configuration closure</a>
+
+```groovy
+detekt {
+    version = "1.0.0.[version]"  // Specify latest detekt version, when unspecified plugins default version is used
+    
+     // A profile basically abstracts over the argument vector passed to detekt. 
+     // Different profiles can be specified and used for different sub modules or testing code.
+    profile("main") {
+        input = "$input/src/main/kotlin" // input is pre configured to 'project.projectDir.absolutePath'
+        config = "$project.projectDir/detekt.yml" // Use $project.projectDir or to navigate inside your project 
+        configResource = "/detekt.yml" // Use this parameter instead of config if your detekt yaml file is inside your resources. Is needed for multi project maven tasks.
+        filters = ".*test.*, .*/resources/.*" // What paths to exclude? Use comma oder semicolon to separate
+        rulesets = "other/optional/ruleset.jar" // Custom rule sets can be linked to this, use comma oder semicolon to separate, remove if unused.
+        disableDefaultRuleSets = false // Disables the default rule set. Just use detekt as the detection engine with your custom rule sets.
+        output = "$project.projectDir/reports/detekt.xml" // If present, prints all findings into that file.
+        outputFormat = "xml" // Can be either 'xml' or 'plain', default is 'xml'
+        baseline = "$project.projectDir/reports/baseline.xml" // If present all current findings are saved in a baseline.xml to only consider new code smells for further runs.
+        parallel = true // Use this flag if your project has more than 200 files. 
+        useTabs = false // Turns off the indentation check for spaces if true, default is false and does not need to be specified
+   }
+   
+   // Definines a secondary profile `gradle detektCheck -Ddetekt.profile=override` will use this profile. 
+   // The main profile gets always loaded but specified profiles override main profiles parameters.
+   profile("override") {
+       config = "$project.projectDir/detekt-test-config.yml"
+   }
+}
+```
+
+##### <a name="idea">Configure a local idea for detekt</a>
 
 - download the community edition of [intellij](https://www.jetbrains.com/idea/download/)
 - extract the file to your preferred location eg. `~/.idea`
@@ -200,41 +240,23 @@ configure<DetektExtension> {
 ```groovy
 String USER_HOME = System.getProperty("user.home")
 
-detekt {    
-    input = "$input/src/main/kotlin"
-    output = "$input/reports/report.xml"
-    outputFormat = "xml"
+detekt {  
+    profile("main") {
+        input = "$project.projectDir/src/main/kotlin"
+        output = "$project.projectDir/reports/report.xml"
+        outputFormat = "xml"
+    }
     idea {
         path = "$USER_HOME/.idea"
         codeStyleScheme = "$USER_HOME/.idea/idea-code-style.xml"
         inspectionsProfile = "$USER_HOME/.idea/inspect.xml"
-        report = "$input/reports"
+        report = "project.projectDir/reports"
         mask = "*.kt,"
     }
 }
 ```
 
 For more information on using idea as a headless formatting/inspection tool see [here](https://www.jetbrains.com/help/idea/working-with-intellij-idea-features-from-command-line.html).
-
-##### <a name="closure">Options for detekt configuration closure</a>
-
-```groovy
-detekt {
-    version = "1.0.0.[version]"  // Specify latest detekt version, when unspecified plugins default version is used
-    input = "$input/src/main/kotlin" // input is pre configured to 'project.projectDir.absolutePath'
-    config = "$project.projectDir/detekt.yml" // Use $project.projectDir or to navigate inside your project 
-    configResource = "/detekt.yml" // Use this parameter instead of config if your detekt yaml file is inside your resources. Is needed for multi project maven tasks.
-    filters = ".*test.*, .*/resources/.*" // What paths to exclude? Use comma oder semicolon to separate
-    rulesets = "other/optional/ruleset.jar" // Custom rule sets can be linked to this, use comma oder semicolon to separate, remove if unused.
-    disableDefaultRuleSets = false // Disables the default rule set. Just use detekt as the detection engine with your custom rule sets.
-    output = "$project.projectDir/reports/detekt.xml" // If present, prints all findings into that file.
-    outputFormat = "xml" // Can be either 'xml' or 'plain'
-    baseline = "$project.projectDir/reports/baseline.xml" // If present all current findings are saved in a baseline.xml to only consider new code smells for further runs.
-    parallel = true // Use this flag if your project has more than 200 files. 
-    useTabs = false // Turns of indentation check for spaces if true, default is false and does not need to be specified
-    generateConfig = true // Use this flag to generate a default configuration yaml file which can be used for further tuning detekt. Remove this after the generation
-}
-```
 
 ##### <a name="migration">Migration</a>
 

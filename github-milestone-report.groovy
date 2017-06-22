@@ -42,5 +42,5 @@ println(footer)
 
 println()
 def tempFile = File.createTempFile(repo, "_$milestone.title")
-tempFile.write("$section\n$issuesString\nfooter")
+tempFile.write("$section\n$issuesString\n$footer")
 println("Content saved to $tempFile.path")
