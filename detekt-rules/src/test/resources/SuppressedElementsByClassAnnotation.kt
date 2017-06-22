@@ -1,7 +1,7 @@
 /**
  * @author Artur Bosch
  */
-@Suppress("unused", "LongMethod", "LongParameterList", "ComplexCondition")
+@Suppress("unused", "LongMethod", "LongParameterList", "ComplexCondition", "TooManyFunctions")
 class SuppressedElements3 {
 
 	fun lpl(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int) = (a + b + c + d + e + f).apply {
