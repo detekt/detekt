@@ -12,7 +12,7 @@ class RuleSet(val id: String, val rules: List<Rule>) {
 	init {
 		validateIdentifier(id)
 	}
-	
+
 	/**
 	 * Visits given file with all rules of this rule set, returning a list
 	 * of all code smell findings.
