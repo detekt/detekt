@@ -31,7 +31,6 @@ interface ConfigAware : Config {
 	 */
 	val autoCorrect: Boolean get() = valueOrDefault("autoCorrect", true)
 
-
 	/**
 	 * Is this rule specified as active in configuration?
 	 */
