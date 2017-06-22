@@ -169,7 +169,6 @@ object XmlEscape {
  */
 private object Xml10EscapeSymbolsInitializer {
 
-
 	internal class XmlCodepointValidator {
 
 		/*
@@ -351,7 +350,6 @@ private object Xml10EscapeSymbolsInitializer {
 		 * on this array.
 		 */
 		val SORTED_CODEPOINTS_BY_CER: IntArray
-
 
 		init {
 
