@@ -53,7 +53,7 @@ class Main {
 	var output: Path? = null
 
 	@Parameter(names = arrayOf("--output-format", "-of"), description = "Specify the output format.")
-	var outputFormatter: OutputFormat.Formatter = OutputFormat.Formatter.PLAIN
+	var outputFormatter: OutputFormat.Formatter = OutputFormat.Formatter.XML
 
 	@Parameter(names = arrayOf("--disable-default-rulesets", "-dd"), description = "Disables default rule sets.")
 	var disableDefaultRuleSets: Boolean = false
