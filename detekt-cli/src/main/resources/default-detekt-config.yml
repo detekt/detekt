@@ -116,9 +116,9 @@ comments:
     active: true
   CommentOverPrivateProperty:
     active: true
-  NoDocOverPublicClass:
+  UndocumentedPublicClass:
     active: false
-  NoDocOverPublicMethod:
+  UndocumentedPublicFunction:
     active: false
 
 # *experimental feature*
