@@ -2,6 +2,9 @@
 
 #### M12
 
+- Suppress for TooManyFunctions is not considered in detekt - [#108](https://api.github.com/repos/arturbosch/detekt/issues/108)
+- Update documentation and migration guide for M12 - [#105](https://api.github.com/repos/arturbosch/detekt/issues/105)
+- NoDocOverPublicClass always reported for objects - [#104](https://api.github.com/repos/arturbosch/detekt/issues/104)
 - Script to generate release notes from milestone - [#102](https://api.github.com/repos/arturbosch/detekt/issues/102)
 - Encapsulate common fields of Rule and Finding in Issue class - [#97](https://api.github.com/repos/arturbosch/detekt/issues/97)
 - Separate findings logic from rule logic - [#93](https://api.github.com/repos/arturbosch/detekt/issues/93)
@@ -14,6 +17,8 @@
 - Not all return keywords are removed when using ExpressionBodySyntax quickfix - [#58](https://api.github.com/repos/arturbosch/detekt/issues/58)
 - Rule: Max line length - [#56](https://api.github.com/repos/arturbosch/detekt/issues/56)
 - Rule: SingleExpression statements with multiple return paths - [#45](https://api.github.com/repos/arturbosch/detekt/issues/45)
+- Allow different naming conventions for tests - [#24](https://api.github.com/repos/arturbosch/detekt/issues/24)
+
 
 See all issues at: [M12](https://api.github.com/repos/arturbosch/detekt/milestones/8)
 
