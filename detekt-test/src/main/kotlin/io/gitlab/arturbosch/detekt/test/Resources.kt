@@ -13,6 +13,4 @@ fun resource(name: String): URI {
 	return resource.toURI()
 }
 
-fun resourcePath(name: String): String = resource(name).path
-
-fun resourceAsString(name: String): String = String(Files.readAllBytes(Paths.get(resourcePath(name))))
+fun resourceAsString(name: String): String = String(Files.readAllBytes(Paths.get(resource(name))))
