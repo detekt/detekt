@@ -1,8 +1,8 @@
+@file:Suppress("unused")
 package cases
 
 import java.io.Serializable
 
-@Suppress("unused")
 open class Comments<T : K, out K> : Serializable {
 
 	companion object {
@@ -25,3 +25,5 @@ open class Comments<T : K, out K> : Serializable {
 	private fun nope3(){}
 
 }
+
+object MissMyDocObject
