@@ -19,11 +19,10 @@ class Report {
 	}
 }
 
-if (args.size() < 3) throw new IllegalArgumentException("Usage: [userId] [repositoryId] [milestoneId]")
+if (args.size() > 3) throw new IllegalArgumentException("Usage: [userId] [repositoryId] [milestoneId]")
 
-def user = args[0] ?: "arturbosch"
-def repo = args[1] ?: "detekt"
-def mId = args[2].toInteger() ?: 8
+def user = args.size() > 0 ? args[0] : "arturbosch"
+def repo = args.size() > 1 ? args[1] : "detekt"
 
 def github = GitHub.connectAnonymously()
 def repository = github.getUser(user).getRepository(repo)
