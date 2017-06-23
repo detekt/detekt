@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.cli.baseline.Baseline
 import io.gitlab.arturbosch.detekt.cli.baseline.BaselineFormat
 import io.gitlab.arturbosch.detekt.cli.baseline.Blacklist
 import io.gitlab.arturbosch.detekt.cli.baseline.Whitelist
+import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
@@ -17,7 +18,7 @@ internal class BaselineFormatTest {
 
 	@Test
 	fun loadBaseline() {
-		val path = Paths.get(javaClass.getResource("/smell-baseline.xml").path)
+		val path = Paths.get(resource("/smell-baseline.xml"))
 		val (blacklist, whitelist) = BaselineFormat.read(path)
 
 		assertThat(blacklist.ids).hasSize(2)

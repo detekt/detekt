@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.cli
 
+import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
@@ -19,9 +20,9 @@ internal class ConfigurationsSpec : Spek({
 	}
 
 	describe("parse different path based configuration settings") {
-		val pathOne = javaClass.getResource("/configs/one.yml").path
-		val pathTwo = javaClass.getResource("/configs/two.yml").path
-		val pathThree = javaClass.getResource("/configs/three.yml").path
+		val pathOne = resource("/configs/one.yml").path
+		val pathTwo = resource("/configs/two.yml").path
+		val pathThree = resource("/configs/three.yml").path
 
 		it("should load single config") {
 			val config = Main().apply { config = pathOne }.loadConfiguration()
