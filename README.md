@@ -91,7 +91,7 @@ Usage: detekt [options]
       Specify the file to output to.
     --output-format, -of
       Specify the output format.
-      Default: PLAIN
+      Default: XML
       Possible Values: [PLAIN, XML]
     --parallel
       Enables parallel compilation of source files. Should only be used if the
