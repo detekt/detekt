@@ -14,10 +14,14 @@ class UndocumentedPublicClassSpec : SubjectSpek<UndocumentedPublicClass>({
 
 	it("finds two undocumented classes") {
 		subject.lint(Case.Comments.path())
-		assertThat(subject.findings).hasSize(2)
+		assertThat(subject.findings).hasSize(3)
 	}
 
-	it("should not report no doc over public object") {
+	it("should report missing doc over object decl") {
+		assertThat(subject.lint(""" object o { } """)).hasSize(1)
+	}
+
+	it("should not report for documented public object") {
 		val file = """
 /**
  * Class docs not being recognized.
