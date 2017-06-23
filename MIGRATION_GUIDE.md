@@ -68,6 +68,9 @@ Rename this id's in your configuration
 
 - `detekt` task was renamed to `detektCheck` (gradle-plugin)
 
+##### Renamings
+- `empty` -> `empty-blocks`
+
 ### M9 -> M10
 
 - `code-smell` rule set was renamed to `complexity` rule set (config)
