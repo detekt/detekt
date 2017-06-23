@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.test
 
-import java.net.URL
+import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Paths
 
-fun resource(name: String): URL = KtTestCompiler::class.java.getResource("/$name")
+fun resource(name: String): URI = KtTestCompiler::class.java.getResource("/$name").toURI()
 
 fun resourcePath(name: String): String = resource(name).path
 

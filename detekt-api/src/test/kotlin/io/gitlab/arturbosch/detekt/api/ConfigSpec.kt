@@ -14,7 +14,7 @@ import kotlin.test.fail
 class ConfigSpec : Spek({
 
 	describe("load yaml config") {
-		val configPath = Paths.get(ConfigSpec::class.java.getResource("/detekt.yml").path)
+		val configPath = Paths.get(ConfigSpec::class.java.getResource("/detekt.yml").toURI())
 		val config = YamlConfig.load(configPath)
 
 		it("should create a sub config") {
