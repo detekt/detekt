@@ -11,6 +11,7 @@ dependencies {
 	compile project(':detekt-api')
 	compile "com.beust:jcommander:$jcommanderVersion"
 	compile "org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion"
+	testCompile project(':detekt-test')
 	testRuntime "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
 	testRuntime "org.junit.platform:junit-platform-console:$junitPlatformVersion"
 	testRuntime "org.jetbrains.spek:spek-junit-platform-engine:$spekVersion"
