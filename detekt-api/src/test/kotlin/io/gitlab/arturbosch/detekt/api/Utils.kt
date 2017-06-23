@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiFileFactory
 import org.jetbrains.kotlin.idea.KotlinLanguage
 import org.jetbrains.kotlin.psi.KtFile
 import java.io.File
+import java.net.URI
 
 /**
  * @author Artur Bosch
@@ -21,3 +22,5 @@ fun compilerFor(resource: String) = Compiler.compileFromContent(
 		File(Compiler.javaClass.getResource("/$resource").path).readText())
 
 fun yamlConfig(resource: String) = YamlConfig.loadResource(Compiler.javaClass.getResource("/$resource"))
+
+fun resource(name: String): URI = Compiler::class.java.getResource(if (name.startsWith("/")) name else "/$name").toURI()

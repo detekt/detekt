@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules
 
+import io.gitlab.arturbosch.detekt.test.resource
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -22,9 +23,5 @@ enum class Case(val file: String) {
 	SuppressedElementsByFile("/SuppressedElementsByFileAnnotation.kt"),
 	SuppressedElementsByClass("/SuppressedElementsByClassAnnotation.kt");
 
-	fun path(): Path {
-		val resource = Case::class.java.getResource(file)
-		requireNotNull(resource)
-		return Paths.get(resource.path)
-	}
+	fun path(): Path = Paths.get(resource(file))
 }
