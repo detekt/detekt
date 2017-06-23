@@ -1,7 +1,7 @@
 /**
  * @author Artur Bosch
  */
-@Suppress("unused", "LongMethod", "LongParameterList", "ComplexCondition", "TooManyFunctions")
+@Suppress("unused", "LongMethod", "LongParameterList", "ComplexCondition", "TooManyFunctions", "MaxLineLength")
 class SuppressedElements3 {
 
 	fun lpl(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int) = (a + b + c + d + e + f).apply {
@@ -39,4 +39,7 @@ class SuppressedElements3 {
 		assert(false) { "FAILED TEST" }
 	}
 
+	fun lineLength() {
+		val s = "Lorem ipsum dolor sit amet, wisi nominavi usu ne. Sea in impedit patrioque, vis cu moderatius quaerendum scribentur. Ex cum appareat ocurreret delicatissimi. Usu harum labores te. Natum signiferumque no nam, est id oratio blandit. Temporibus consectetuer consequuntur ei est, his in dolorum vituperata."
+	}
 }

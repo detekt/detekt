@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.rules.complexity.ComplexCondition
 import io.gitlab.arturbosch.detekt.rules.complexity.LongMethod
 import io.gitlab.arturbosch.detekt.rules.complexity.LongParameterList
 import io.gitlab.arturbosch.detekt.rules.complexity.TooManyFunctions
+import io.gitlab.arturbosch.detekt.rules.style.MaxLineLength
 import io.gitlab.arturbosch.detekt.test.compileForTest
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
@@ -18,7 +19,10 @@ class SuppressingSpec : Spek({
 
 	it("all findings are suppressed on element levels") {
 		val ktFile = compileForTest(Case.SuppressedElements.path())
-		val ruleSet = RuleSet("Test", listOf(LongMethod(), LongParameterList(), ComplexCondition()))
+		val ruleSet = RuleSet("Test", listOf(LongMethod(),
+				LongParameterList(),
+				ComplexCondition(),
+				MaxLineLength()))
 		val findings = ruleSet.accept(ktFile)
 		findings.forEach {
 			println(it.compact())
@@ -28,7 +32,10 @@ class SuppressingSpec : Spek({
 
 	it("all findings are suppressed on file levels") {
 		val ktFile = compileForTest(Case.SuppressedElementsByFile.path())
-		val ruleSet = RuleSet("Test", listOf(LongMethod(), LongParameterList(), ComplexCondition()))
+		val ruleSet = RuleSet("Test", listOf(LongMethod(),
+				LongParameterList(),
+				ComplexCondition(),
+				MaxLineLength()))
 		val findings = ruleSet.accept(ktFile)
 		findings.forEach {
 			println(it.compact())
@@ -38,7 +45,10 @@ class SuppressingSpec : Spek({
 
 	it("all findings are suppressed on class levels") {
 		val ktFile = compileForTest(Case.SuppressedElementsByClass.path())
-		val ruleSet = RuleSet("Test", listOf(LongMethod(), LongParameterList(), ComplexCondition()))
+		val ruleSet = RuleSet("Test", listOf(LongMethod(),
+				LongParameterList(),
+				ComplexCondition(),
+				MaxLineLength()))
 		val findings = ruleSet.accept(ktFile)
 		findings.forEach {
 			println(it.compact())
