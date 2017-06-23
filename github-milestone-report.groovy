@@ -27,6 +27,10 @@ def mId = args[2].toInteger() ?: 8
 
 def github = GitHub.connectAnonymously()
 def repository = github.getUser(user).getRepository(repo)
+
+def milestones = repository.listMilestones(GHIssueState.OPEN)
+def sortedMilestones = milestones.sort { it.number }
+def mId = args.size() > 2 ? args[2].toInteger() : sortedMilestones.last().number
 def milestone = repository.getMilestone(mId)
 def issues = repository.getIssues(GHIssueState.ALL, milestone)
 
