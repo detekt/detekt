@@ -33,11 +33,11 @@ def mId = args.size() > 2 ? args[2].toInteger() : sortedMilestones.last().number
 def milestone = repository.getMilestone(mId)
 def issues = repository.getIssues(GHIssueState.ALL, milestone)
 
-def section = Report.section(milestone.title) + "\n"
+def section = Report.section(milestone.title.trim()) + "\n"
 def issuesString = issues.collect {
-	(Report.entry(it.title, it.number, it.url))
+	(Report.entry(it.title.trim(), it.number, it.getHtmlUrl()))
 }.join("\n") + "\n"
-def footer = Report.footer(milestone.title, milestone.url)
+def footer = Report.footer(milestone.title.trim(), milestone.getHtmlUrl())
 
 println(section)
 println(issuesString)
