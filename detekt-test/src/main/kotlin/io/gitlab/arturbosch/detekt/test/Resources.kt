@@ -4,8 +4,14 @@ import java.net.URI
 import java.nio.file.Files
 import java.nio.file.Paths
 
-fun resource(name: String): URI = KtTestCompiler::class.java.getResource(
-		if (name.startsWith("/")) name else "/$name").toURI()
+internal object Resources
+
+fun resource(name: String): URI {
+	val explicitName = if (name.startsWith("/")) name else "/$name"
+	val resource = Resources::class.java.getResource(explicitName)
+	requireNotNull(resource) { "Make sure the resource '$name' exists!" }
+	return resource.toURI()
+}
 
 fun resourcePath(name: String): String = resource(name).path
 
