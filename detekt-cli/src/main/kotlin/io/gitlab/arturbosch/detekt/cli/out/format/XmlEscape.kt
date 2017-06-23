@@ -17,6 +17,8 @@
  * 
  * =============================================================================
  */
+@file:Suppress("ALL")
+
 package io.gitlab.arturbosch.detekt.cli.out.format
 
 import java.util.ArrayList
@@ -31,7 +33,6 @@ import java.util.Collections
  * @author Daniel Fernndez
  * @since 1.0.0
  */
-@Suppress("ALL")
 object XmlEscape {
 
 	private val REFERENCE_HEXA_PREFIX = "&#x".toCharArray()
