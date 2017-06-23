@@ -160,7 +160,7 @@ String USER_HOME = System.getProperty("user.home")
 
 detekt {
 	debug = true
-	version = "1.0.0.M12"
+	version = "1.0.0.M12.1"
 	profile("main") {
 		input = "$project.projectDir"
 		filters = '.*/test/.*, .*/resources/.*, .*/build/.*'
