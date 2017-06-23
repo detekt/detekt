@@ -45,9 +45,9 @@ class SuppressingSpec : Spek({
 
 	it("all findings are suppressed on class levels") {
 		val ktFile = compileForTest(Case.SuppressedElementsByClass.path())
-		val ruleSet = RuleSet("Test", listOf(LongMethod(threshold = 0),
-				LongParameterList(threshold = 0),
-				ComplexCondition(threshold = 0),
+		val ruleSet = RuleSet("Test", listOf(LongMethod(),
+				LongParameterList(),
+				ComplexCondition(),
 				MaxLineLength()))
 		val findings = ruleSet.accept(ktFile)
 		findings.forEach {
