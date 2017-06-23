@@ -12,10 +12,7 @@ open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 						   open var ideaExtension: IdeaExtension = IdeaExtension()) {
 
 	val profiles: MutableList<ProfileExtension> = mutableListOf()
-
-	val defaultProfile get() = profiles.find { it.name == profile }
-	val systemProfile get() = profiles.find { it.name == specifiedProfileNameThroughSystemProperty() }
-	val systemOrDefaultProfile get() = systemProfile ?: defaultProfile
+	val systemOrDefaultProfile get() = getSystemProfile() ?: getDefaultProfile()
 
 	val ideaFormatArgs get() = ideaExtension.formatArgs(this)
 	val ideaInspectArgs get() = ideaExtension.inspectArgs(this)
@@ -37,8 +34,15 @@ open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 	}
 
 	private fun createArgumentsForProfile(): List<String> {
-		val allArguments = defaultProfile?.arguments(debug) ?: mutableMapOf<String, String>()
-		val overriddenArguments = systemProfile?.arguments(debug) ?: mutableMapOf<String, String>()
+		val default = getDefaultProfile()
+		val system = getSystemProfile()
+
+		val allArguments = default?.arguments(debug) ?: mutableMapOf<String, String>()
+
+		val fallbackEmptyArguments = mutableMapOf<String, String>()
+		val overriddenArguments = if (system?.name == default?.name) fallbackEmptyArguments
+		else system?.arguments(debug) ?: fallbackEmptyArguments
+
 		overriddenArguments.forEach {
 			allArguments.merge(it.key, it.value) { v1, v2 ->
 				multipleConfigAware(it.key, v1, v2)
@@ -52,6 +56,9 @@ open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 			}
 		}
 	}
+
+	private fun getDefaultProfile() = profiles.find { it.name == profile }
+	private fun getSystemProfile() = profiles.find { it.name == specifiedProfileNameThroughSystemProperty() }
 
 	private fun filterBooleans(key: String, value: String)
 			= if (value == "true" || value == "false") listOf(key) else listOf(key, value)
