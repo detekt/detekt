@@ -17,7 +17,6 @@ class PathFilter(pattern: String) {
 	init {
 		try {
 			val independentPattern = if (IS_WINDOWS) pattern.replace("/", "\\\\") else pattern
-			println(independentPattern)
 			regex = Regex(independentPattern)
 		} catch (exception: PatternSyntaxException) {
 			throw IllegalArgumentException("Provided regex is not valid: $pattern")
