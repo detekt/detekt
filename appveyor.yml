@@ -17,4 +17,4 @@ install:
 build_script:
   - gradlew.bat -u -i assemble
 test_script:
-  - gradlew.bat -u -i -S test detektCheck
+  - gradlew.bat -u -i -S test
