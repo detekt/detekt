@@ -8,11 +8,16 @@ import java.util.regex.PatternSyntaxException
  */
 class PathFilter(pattern: String) {
 
+	companion object {
+		val IS_WINDOWS = System.getProperty("os.name").contains("Windows")
+	}
+
 	private val regex: Regex
 
 	init {
 		try {
-			val independentPattern = if (IS_WINDOWS) pattern.replace('/', '\\') else pattern
+			val independentPattern = if (IS_WINDOWS) pattern.replace("/", "\\\\") else pattern
+			println(independentPattern)
 			regex = Regex(independentPattern)
 		} catch (exception: PatternSyntaxException) {
 			throw IllegalArgumentException("Provided regex is not valid: $pattern")
@@ -21,5 +26,3 @@ class PathFilter(pattern: String) {
 
 	fun matches(path: Path): Boolean = path.toAbsolutePath().toString().matches(regex)
 }
-
-val IS_WINDOWS = System.getProperty("os.name").contains("Windows")
