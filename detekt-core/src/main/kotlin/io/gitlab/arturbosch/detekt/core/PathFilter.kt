@@ -12,7 +12,8 @@ class PathFilter(pattern: String) {
 
 	init {
 		try {
-			regex = Regex(pattern)
+			val independentPattern = if (IS_WINDOWS) pattern.replace('/', '\\') else pattern
+			regex = Regex(independentPattern)
 		} catch (exception: PatternSyntaxException) {
 			throw IllegalArgumentException("Provided regex is not valid: $pattern")
 		}
@@ -20,3 +21,5 @@ class PathFilter(pattern: String) {
 
 	fun matches(path: Path): Boolean = path.toAbsolutePath().toString().matches(regex)
 }
+
+val IS_WINDOWS = System.getProperty("os.name").contains("Windows")
