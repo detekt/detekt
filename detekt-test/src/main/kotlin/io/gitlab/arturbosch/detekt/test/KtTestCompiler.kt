@@ -10,10 +10,9 @@ import java.nio.file.Paths
  *
  * @author Artur Bosch
  */
-internal object KtTestCompiler : KtCompiler(Paths.get(KtCompiler::class.java.getResource("/").path)) {
+internal object KtTestCompiler : KtCompiler(Paths.get(resource("/"))) {
 
-	fun compileFromContent(content: String): KtFile {
-		return psiFileFactory.createFileFromText(KotlinLanguage.INSTANCE, content) as KtFile
-	}
+	fun compileFromContent(content: String): KtFile
+			= psiFileFactory.createFileFromText(KotlinLanguage.INSTANCE, content) as KtFile
 
 }
