@@ -14,10 +14,14 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 	override val issue = Issue(javaClass.simpleName, Severity.Style, "", Dept.FIVE_MINS)
 
 	private val maxLineLength: Int = valueOrDefault(MAX_LINE_LENGTH, DEFAULT_IDEA_LINE_LENGTH)
+	private val excludePackageStatements: Boolean = valueOrDefault(EXCLUDE_PACKAGE_STATEMENTS, DEFAULT_VALUE_PACKAGE_EXCLUDE)
+	private val excludeImportStatements: Boolean = valueOrDefault(EXCLUDE_IMPORT_STATEMENTS, DEFAULT_VALUE_IMPORTS_EXCLUDE)
 
 	override fun visitKtFile(file: KtFile) {
 		var offset = 0
 		file.text.splitToSequence("\n")
+				.filter { filterPackageStatements(it) }
+				.filter { filterImportStatements(it) }
 				.map { it.length }
 				.forEach {
 					offset += it
@@ -27,9 +31,29 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 				}
 	}
 
+	private fun filterPackageStatements(line: String): Boolean {
+		if (excludePackageStatements) {
+			return !line.startsWith("package ")
+		}
+		return true
+	}
+
+	private fun filterImportStatements(line: String): Boolean {
+		if (excludeImportStatements) {
+			return !line.startsWith("import ")
+		}
+		return true
+	}
+
 	companion object {
-		val MAX_LINE_LENGTH = "maxLineLength"
-		val DEFAULT_IDEA_LINE_LENGTH = 120
+		const val MAX_LINE_LENGTH = "maxLineLength"
+		const val DEFAULT_IDEA_LINE_LENGTH = 120
+
+		const val EXCLUDE_PACKAGE_STATEMENTS = "excludePackageStatements"
+		const val DEFAULT_VALUE_PACKAGE_EXCLUDE = false
+
+		const val EXCLUDE_IMPORT_STATEMENTS = "excludeImportStatements"
+		const val DEFAULT_VALUE_IMPORTS_EXCLUDE = false
 	}
 }
 
