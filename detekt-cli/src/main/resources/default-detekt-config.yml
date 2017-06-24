@@ -99,6 +99,8 @@ style:
   active: true
   WildcardImport:
     active: true
+  LateinitUsage:
+    active: false
   MaxLineLength:
     active: true
     maxLineLength: 120
