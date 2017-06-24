@@ -416,6 +416,8 @@ style:
   active: true
   WildcardImport:
     active: true
+  LateinitUsage:
+    active: false
   NamingConventionViolation:
     active: true
     variablePattern: '^(_)?[a-z$][a-zA-Z$0-9]*$'
