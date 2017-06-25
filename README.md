@@ -416,8 +416,6 @@ style:
   active: true
   WildcardImport:
     active: true
-  LateinitUsage:
-    active: false
   NamingConventionViolation:
     active: true
     variablePattern: '^(_)?[a-z$][a-zA-Z$0-9]*$'
@@ -450,6 +448,8 @@ potential-bugs:
     active: true
   ExplicitGarbageCollectionCall:
     active: true
+  LateinitUsage:
+    active: false
 
 exceptions:
   active: true
