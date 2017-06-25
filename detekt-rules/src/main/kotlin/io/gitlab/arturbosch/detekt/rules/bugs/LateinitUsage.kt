@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.psi.psiUtil.allChildren
 
 class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName, Severity.Style, "Usage of lateinit")
+	override val issue = Issue(javaClass.simpleName, Severity.Style, "Usage of lateinit. Using lateinit for property initialization is error prone, try using constructor injection or delegation.")
 
 	override fun visitProperty(property: KtProperty) {
 		val lateinitModifiers = property.modifierList
