@@ -1,6 +1,5 @@
-package io.gitlab.arturbosch.detekt.rules.style
+package io.gitlab.arturbosch.detekt.rules.bugs
 
-import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions
 import org.jetbrains.spek.api.Spek
@@ -17,13 +16,8 @@ class LateinitUsageSpec : Spek({
 			}
 		"""
 
-		val file = compileContentForTest(code).text
-
 		it("should report lateinit usages") {
-			val rule = LateinitUsage()
-
-			println(file)
-			val findings = rule.lint(file)
+			val findings = LateinitUsage().lint(code)
 			Assertions.assertThat(findings).hasSize(2)
 		}
 	}

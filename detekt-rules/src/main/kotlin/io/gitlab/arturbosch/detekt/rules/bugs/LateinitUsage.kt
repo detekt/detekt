@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.rules.style
+package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.*
 import org.jetbrains.kotlin.psi.KtProperty
