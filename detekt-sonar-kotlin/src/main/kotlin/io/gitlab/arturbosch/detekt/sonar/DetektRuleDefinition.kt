@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.sonar
 
 import org.sonar.api.server.rule.RulesDefinition
 
-
 /**
  * @author Artur Bosch
  */

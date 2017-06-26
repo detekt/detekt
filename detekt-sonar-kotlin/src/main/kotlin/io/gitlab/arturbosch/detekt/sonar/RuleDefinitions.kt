@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.sonar
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.formatting.FormattingProvider
 import io.gitlab.arturbosch.detekt.rules.complexity.ComplexityProvider
@@ -12,7 +13,7 @@ import io.gitlab.arturbosch.detekt.rules.providers.PotentialBugProvider
 import io.gitlab.arturbosch.detekt.rules.style.StyleGuideProvider
 import org.sonar.api.rule.RuleKey
 import org.sonar.api.rule.RuleStatus
-import org.sonar.api.rule.Severity
+import org.sonar.api.rule.Severity as SonarSeverity
 import org.sonar.api.server.rule.RulesDefinition
 
 private val CONFIG = Config.empty
@@ -53,18 +54,18 @@ fun RulesDefinition.NewRepository.createRules() = this.apply {
 private fun RulesDefinition.NewRepository.defineRule(rule: Rule, dept: String) {
 	val newRule = createRule(rule.id).setName(rule.id)
 			.setHtmlDescription("No description yet for ${rule.id}!")
-			.setTags(rule.severity.name.toLowerCase())
+			.setTags(rule.issue.severity.name.toLowerCase())
 			.setStatus(RuleStatus.READY)
-			.setSeverity(severityMap[rule.severity])
+			.setSeverity(severityMap[rule.issue.severity])
 	newRule.setDebtRemediationFunction(newRule.debtRemediationFunctions().linear(dept))
 }
 
 private val severityMap = mapOf(
-		Rule.Severity.CodeSmell to Severity.MAJOR,
-		Rule.Severity.Defect to Severity.CRITICAL,
-		Rule.Severity.Maintainability to Severity.MAJOR,
-		Rule.Severity.Minor to Severity.MINOR,
-		Rule.Severity.Security to Severity.BLOCKER,
-		Rule.Severity.Style to Severity.INFO,
-		Rule.Severity.Warning to Severity.INFO
+		Severity.CodeSmell to SonarSeverity.MAJOR,
+		Severity.Defect to SonarSeverity.CRITICAL,
+		Severity.Maintainability to SonarSeverity.MAJOR,
+		Severity.Minor to SonarSeverity.MINOR,
+		Severity.Security to SonarSeverity.BLOCKER,
+		Severity.Style to SonarSeverity.INFO,
+		Severity.Warning to SonarSeverity.INFO
 )

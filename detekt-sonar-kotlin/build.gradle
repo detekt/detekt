@@ -1,5 +1,5 @@
 plugins {
-	id "com.iadams.sonar-packaging" version "0.1.4"
+	id "com.iadams.sonar-packaging" version "1.0-RC1"
 }
 
 configurations {
@@ -12,17 +12,19 @@ dependencies {
 	compile project(':detekt-core')
 	compile project(':detekt-formatting')
 	compile project(':detekt-rules')
-	compile "org.sonarsource.sonarqube:sonar-plugin-api:$sonarVersion"
+	provided "org.sonarsource.sonarqube:sonar-plugin-api:$sonarVersion"
 	testCompile "org.sonarsource.sonarqube:sonar-testing-harness:$sonarVersion"
 	testRuntime "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
 	testRuntime "org.junit.platform:junit-platform-console:$junitPlatformVersion"
 	testRuntime "org.jetbrains.spek:spek-junit-platform-engine:$spekVersion"
 }
 
+def USER_HOME = System.getProperty("user.home")
+
 sonarPackaging {
 	serverUrl = 'http://localhost:9000'
-	pluginDir = '/tmp/sonarqube/extensions/plugins'
-	pluginKey = 'example'
+	pluginDir = "$USER_HOME/Downloads/sonarqube-5.6.6/extensions/plugins"
+	pluginKey = ''
 	pluginClass = 'io.gitlab.arturbosch.detekt.sonar.DetektPlugin'
 	pluginName = 'Sonar kotlin plugin using detekt.'
 	pluginDescription = 'Work in progress kotlin sonar plugin.'
