@@ -423,6 +423,11 @@ style:
     methodPattern: '^[a-z$][a-zA-Z$0-9]*$'
     classPattern: '[A-Z$][a-zA-Z$]*'
     enumEntryPattern: '^[A-Z$][a-zA-Z_$]*$'
+  MaxLineLength:
+    active: true
+    maxLineLength: 120
+    excludePackageStatements: false
+    excludeImportStatements: false
 
 comments:
   active: true

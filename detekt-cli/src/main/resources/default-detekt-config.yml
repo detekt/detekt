@@ -102,6 +102,8 @@ style:
   MaxLineLength:
     active: true
     maxLineLength: 120
+    excludePackageStatements: false
+    excludeImportStatements: false
   NamingConventionViolation:
     active: true
     variablePattern: '^(_)?[a-z$][a-zA-Z$0-9]*$'
