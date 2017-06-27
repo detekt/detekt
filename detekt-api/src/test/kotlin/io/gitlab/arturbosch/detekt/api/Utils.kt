@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
+import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import org.jetbrains.kotlin.com.intellij.psi.PsiFileFactory
 import org.jetbrains.kotlin.idea.KotlinLanguage
 import org.jetbrains.kotlin.psi.KtFile
@@ -14,7 +15,7 @@ internal object Compiler {
 	private val psiFileFactory: PsiFileFactory = PsiFileFactory.getInstance(PROJECT)
 
 	fun compileFromContent(content: String): KtFile {
-		return psiFileFactory.createFileFromText(KotlinLanguage.INSTANCE, content) as KtFile
+		return psiFileFactory.createFileFromText(KotlinLanguage.INSTANCE, StringUtilRt.convertLineSeparators(content)) as KtFile
 	}
 }
 
