@@ -29,7 +29,7 @@ class PathConverter : IStringConverter<Path> {
 interface CommaSeparatedStringConverter<T> : IStringConverter<List<T>> {
 	val converter: IStringConverter<T>
 	override fun convert(value: String): List<T>
-			= value.splitToSequence(",", ";")
+			= value.splitToSequence(*SEPARATORS)
 			.map { it.trim() }
 			.map { converter.convert(it) }
 			.toList().apply {

@@ -12,9 +12,9 @@ import java.nio.file.Paths
  * @author Artur Bosch
  */
 
-fun Main.createPathFilters(): List<PathFilter> = filters.letIfNonEmpty { split(";", ",").map(::PathFilter) }
+fun Main.createPathFilters(): List<PathFilter> = filters.letIfNonEmpty { split(*SEPARATORS).map(::PathFilter) }
 
-fun Main.createRulePaths(): List<Path> = rules.letIfNonEmpty { split(";", ",").map { Paths.get(it) } }
+fun Main.createRulePaths(): List<Path> = rules.letIfNonEmpty { split(*SEPARATORS).map { Paths.get(it) } }
 
 private fun <T> String?.letIfNonEmpty(init: String.() -> List<T>): List<T> =
 		if (this == null || this.isEmpty()) listOf<T>() else this.init()
@@ -25,7 +25,7 @@ fun Main.loadConfiguration(): Config = when {
 	formatting -> FormatConfig(useTabs)
 	else -> Config.empty
 }.apply {
-	if (debug) println(this)
+	if (debug) println("\n$this\n")
 }
 
 private fun parseResourceConfig(config: String): Config {
