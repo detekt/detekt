@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.cli
 
 import com.beust.jcommander.IStringConverter
 import com.beust.jcommander.ParameterException
-import java.net.URI
+import java.io.File
 import java.net.URL
 import java.nio.file.Files
 import java.nio.file.Path
@@ -13,7 +13,7 @@ import java.nio.file.Paths
  */
 class ExistingPathConverter : IStringConverter<Path> {
 	override fun convert(value: String): Path {
-		val config = Paths.get(URI.create("file://$value"))
+		val config = File(value).toPath()
 		if (Files.notExists(config))
 			throw ParameterException("Provided path '$value' does not exist!")
 		return config
