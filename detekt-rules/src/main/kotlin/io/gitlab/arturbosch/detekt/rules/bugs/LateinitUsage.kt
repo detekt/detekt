@@ -1,12 +1,14 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
-import io.gitlab.arturbosch.detekt.api.*
-import org.jetbrains.kotlin.com.intellij.psi.util.PsiTreeUtil
+import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.CodeSmell
+import io.gitlab.arturbosch.detekt.api.Entity
 import org.jetbrains.kotlin.lexer.KtTokens
-import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtPsiUtil
-import org.jetbrains.kotlin.utils.ifEmpty
 
 class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 
@@ -15,20 +17,28 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 	private val excludeAnnotatedProperties: List<String> = valueOrDefault(EXCLUDE_ANNOTATED_PROPERTIES, "").split(",")
 
 	override fun visitProperty(property: KtProperty) {
-		val isLateinitProperty = property.modifierList?.hasModifier(KtTokens.LATEINIT_KEYWORD) ?: false
-		if (!isLateinitProperty) {
+		if (!isLateinitProperty(property)) {
 			return
 		}
 
-		val isExcluded = property.annotationEntries
-				.map { KtPsiUtil.getShortName(it).toString() }
-				.filter { excludeAnnotatedProperties.contains(it) }
-				.count() != 0
-		if (isExcluded) {
+		if (isExcludedByAnnotation(property, excludeAnnotatedProperties)) {
 			return
 		}
 
 		report(CodeSmell(issue, Entity.from(property)))
+	}
+
+	private fun isLateinitProperty(property: KtProperty): Boolean {
+		return property.modifierList?.hasModifier(KtTokens.LATEINIT_KEYWORD) ?: false
+	}
+
+	private fun isExcludedByAnnotation(property: KtProperty, exclude: List<String>): Boolean {
+		return property.annotationEntries
+				.map { KtPsiUtil.getShortName(it) }
+				.filterNotNull()
+				.map { it.toString() }
+				.filter { excludeAnnotatedProperties.contains(it) }
+				.count() != 0
 	}
 
 	companion object {
