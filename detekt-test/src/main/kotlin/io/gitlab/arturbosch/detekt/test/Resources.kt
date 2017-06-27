@@ -1,8 +1,7 @@
 package io.gitlab.arturbosch.detekt.test
 
+import java.io.File
 import java.net.URI
-import java.nio.file.Files
-import java.nio.file.Paths
 
 internal object Resources
 
@@ -13,4 +12,4 @@ fun resource(name: String): URI {
 	return resource.toURI()
 }
 
-fun resourceAsString(name: String): String = String(Files.readAllBytes(Paths.get(resource(name))))
+fun resourceAsString(name: String): String = File(resource(name)).readText()
