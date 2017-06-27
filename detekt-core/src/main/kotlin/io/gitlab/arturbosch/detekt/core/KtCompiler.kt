@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.core
 
 import io.gitlab.arturbosch.detekt.api.PROJECT
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
+import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import org.jetbrains.kotlin.com.intellij.psi.PsiFileFactory
 import org.jetbrains.kotlin.com.intellij.testFramework.LightVirtualFile
 import org.jetbrains.kotlin.idea.KotlinLanguage
@@ -21,7 +22,7 @@ open class KtCompiler(val project: Path) {
 		val relativePath = if (project == subPath) subPath else project.relativize(subPath)
 		val content = subPath.toFile().readText()
 		val lineSeparator = content.determineLineSeparator()
-		val normalizedContent = content.normalize()
+		val normalizedContent = StringUtilRt.convertLineSeparators(content)
 		val ktFile = createKtFile(normalizedContent, relativePath)
 		ktFile.putExtraInformation(lineSeparator, relativePath)
 		return ktFile
@@ -33,10 +34,8 @@ open class KtCompiler(val project: Path) {
 	}
 
 	private fun createKtFile(content: String, relativePath: Path) = psiFileFactory.createFileFromText(
-			relativePath.fileName.toString(), KotlinLanguage.INSTANCE, content,
+			relativePath.fileName.toString(), KotlinLanguage.INSTANCE, StringUtilRt.convertLineSeparators(content),
 			true, true, false, LightVirtualFile(relativePath.toString())) as KtFile
-
-	private fun String.normalize() = this.replace("\r\n", "\n").replace("\r", "\n")
 
 	private fun String.determineLineSeparator(): String {
 		val i = this.lastIndexOf('\n')
