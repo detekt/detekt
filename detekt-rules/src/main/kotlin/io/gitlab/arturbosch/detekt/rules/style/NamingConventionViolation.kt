@@ -23,7 +23,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
  */
 class NamingConventionViolation(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName, Severity.Style, "", Dept.FIVE_MINS)
+	override val issue = Issue(javaClass.simpleName, Severity.Style, "All names in the codebase should be matching the naming convention of the codebase.", Dept.FIVE_MINS)
 
 	private val variablePattern = Regex(valueOrDefault(VARIABLE_PATTERN, "^(_)?[a-z$][a-zA-Z$0-9]*$"))
 	private val constantPattern = Regex(valueOrDefault(CONSTANT_PATTERN, "^([A-Z_]*|serialVersionUID)$"))
