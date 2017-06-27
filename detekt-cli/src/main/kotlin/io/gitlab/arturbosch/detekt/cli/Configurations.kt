@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.YamlConfig
 import io.gitlab.arturbosch.detekt.core.PathFilter
 import java.io.File
 import java.nio.file.Path
-import java.nio.file.Paths
 
 /**
  * @author Artur Bosch
@@ -14,7 +13,9 @@ import java.nio.file.Paths
 
 fun Main.createPathFilters(): List<PathFilter> = filters.letIfNonEmpty { split(*SEPARATORS).map(::PathFilter) }
 
-fun Main.createRulePaths(): List<Path> = rules.letIfNonEmpty { split(*SEPARATORS).map { Paths.get(it) } }
+fun Main.createRulePaths(): List<Path> = rules.letIfNonEmpty {
+	MultipleExistingPathConverter().convert(this)
+}
 
 private fun <T> String?.letIfNonEmpty(init: String.() -> List<T>): List<T> =
 		if (this == null || this.isEmpty()) listOf<T>() else this.init()
