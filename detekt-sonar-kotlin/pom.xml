@@ -54,12 +54,12 @@
         <dependency>
             <groupId>io.gitlab.arturbosch.detekt</groupId>
             <artifactId>detekt-formatting</artifactId>
-            <version>1.0.0.M11</version>
+            <version>1.0.0.M12.2</version>
         </dependency>
         <dependency>
             <groupId>io.gitlab.arturbosch.detekt</groupId>
             <artifactId>detekt-rules</artifactId>
-            <version>1.0.0.M11</version>
+            <version>1.0.0.M12.2</version>
         </dependency>
 
 
