@@ -13,7 +13,8 @@ val LLOC_PROJECT: Metric<Int> = Metric.Builder("lloc", "Logical Lines of Code", 
 		.setDomain(CoreMetrics.DOMAIN_GENERAL)
 		.create<Int>()
 
-val MCCABE_PROJECT: Metric<Int> = Metric.Builder("project_complexity", "Project Cyclomatic Complexity", Metric.ValueType.INT)
+val MCCABE_PROJECT: Metric<Int> = Metric.Builder("project_complexity",
+		"Project Cyclomatic Complexity", Metric.ValueType.INT)
 		.setDescription("Complexity of the whole project based on McCabe.")
 		.setDirection(Metric.DIRECTION_NONE)
 		.setQualitative(false)
