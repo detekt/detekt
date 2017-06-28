@@ -133,8 +133,8 @@ plugins {
 detekt {
     version = "1.0.0.[version]"
     profile("main") {
-        input = "$input/src/main/kotlin"
-        config = "project.projectDir/detekt.yml" 
+        input = "$projectDir/src/main/kotlin"
+        config = "$projectDir/detekt.yml"
         filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
     }
 }
@@ -158,8 +158,8 @@ apply plugin: "io.gitlab.arturbosch.detekt"
 detekt {
     version = "1.0.0.[version]"
     profile("main") {
-        input = "$input/src/main/kotlin"
-        config = "project.projectDir/detekt.yml" 
+        input = "$projectDir/src/main/kotlin"
+        config = "$projectDir/detekt.yml"
         filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
     }
 }
@@ -183,8 +183,8 @@ plugins {
 configure<DetektExtension> {
     version = "1.0.0.[version]"
     profile("main") {
-        input = "$input/src/main/kotlin"
-        config = "${project.projectDir}/detekt.yml"
+        input = "$projectDir/src/main/kotlin"
+        config = "$projectDir/detekt.yml"
         filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
     }
 }
@@ -209,8 +209,8 @@ detekt {
      // A profile basically abstracts over the argument vector passed to detekt. 
      // Different profiles can be specified and used for different sub modules or testing code.
     profile("main") {
-        input = "$input/src/main/kotlin" // input is pre configured to 'project.projectDir.absolutePath'
-        config = "$project.projectDir/detekt.yml" // Use $project.projectDir or to navigate inside your project 
+        input = "$projectDir/src/main/kotlin" // input is pre configured to 'project.projectDir.absolutePath'
+        config = "$projectDir/detekt.yml" // Use $project.projectDir or to navigate inside your project 
         configResource = "/detekt.yml" // Use this parameter instead of config if your detekt yaml file is inside your resources. Is needed for multi project maven tasks.
         filters = ".*test.*, .*/resources/.*" // What paths to exclude? Use comma oder semicolon to separate
         rulesets = "other/optional/ruleset.jar" // Custom rule sets can be linked to this, use comma oder semicolon to separate, remove if unused.
@@ -225,7 +225,7 @@ detekt {
    // Definines a secondary profile `gradle detektCheck -Ddetekt.profile=override` will use this profile. 
    // The main profile gets always loaded but specified profiles override main profiles parameters.
    profile("override") {
-       config = "$project.projectDir/detekt-test-config.yml"
+       config = "$projectDir/detekt-test-config.yml"
    }
 }
 ```
@@ -244,8 +244,8 @@ String USER_HOME = System.getProperty("user.home")
 
 detekt {  
     profile("main") {
-        input = "$project.projectDir/src/main/kotlin"
-        output = "$project.projectDir/reports/report.xml"
+        input = "$pprojectDir/src/main/kotlin"
+        output = "$projectDir/reports/report.xml"
         outputFormat = "xml"
     }
     idea {
@@ -293,8 +293,8 @@ configurations {
 task detekt(type: JavaExec) {
 	main = "io.gitlab.arturbosch.detekt.cli.Main"
 	classpath = configurations.detekt
-	def input = "$project.projectDir.absolutePath"
-	def config = "$project.projectDir/detekt.yml"
+	def input = "$projectDir"
+	def config = "$projectDir/detekt.yml"
 	def filters = ".*test.*"
 	def rulesets = ""
 	def params = [ '-p', input, '-c', config, '-f', filters, '-r', rulesets]
