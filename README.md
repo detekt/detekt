@@ -448,6 +448,8 @@ potential-bugs:
     active: true
   ExplicitGarbageCollectionCall:
     active: true
+  LateinitUsage:
+    active: false
 
 exceptions:
   active: true
@@ -676,10 +678,10 @@ inside the report file.
 - [lummax](https://github.com/lummax) - Cli enhancements
 - [Svyatoslav Chatchenko](https://github.com/MyDogTom) - NamingConventions and UnusedImport fixes
 - [Sean Flanigan](https://github.com/seanf) - Config from classpath resource
-- [Sebastian Schuberth](https://github.com/sschuberth) - Dep. update
-- [Olivier Lemasle](https://github.com/olivierlemasle) - Bug fix
-- [Marvin Ramin](https://github.com/Mauin) - MaxLineLength rule and test cleanups
-- [Marc Prengemann](https://github.com/winterDroid) - Support for custom reports
-
+- [Sebastian Schuberth](https://github.com/sschuberth) - Windows support
+- [Olivier Lemasle](https://github.com/olivierlemasle) - NP-Bugfix
+- [Marvin Ramin](https://github.com/Mauin) - Rules: MaxLineLength & LateinitUsagerule, dept and test cleanups
+- [Marc Prengemann](https://github.com/winterDroid) - Support for custom output formats, prototyped Rule-Context-Issue separation
+- [Sebastiano Poggi](https://github.com/rock3r) - Enhanced milestone report script
 #### Credits
 - [Stanley Shyiko](https://github.com/shyiko): `detekt` migrated the formatting rules from [ktlint](https://github.com/shyiko/ktlint)

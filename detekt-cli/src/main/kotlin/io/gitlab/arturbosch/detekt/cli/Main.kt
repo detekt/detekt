@@ -32,7 +32,8 @@ class Main {
 			description = "Export default config to default-detekt-config.yml.")
 	var generateConfig: Boolean = false
 
-	@Parameter(names = arrayOf("--rules", "-r"), description = "Extra paths to ruleset jars separated by ';'.")
+	@Parameter(names = arrayOf("--rules", "-r"),
+			description = "Extra paths to ruleset jars separated by ',' or ';'.")
 	var rules: String? = null
 
 	@Parameter(names = arrayOf("--format"),

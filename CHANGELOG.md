@@ -1,5 +1,21 @@
 # Detekt - Changelog
 
+#### M12.1 & M12.2
+
+- Convert Kotlin source code strings to Unix line endings - [#137](https://github.com/arturbosch/detekt/pull/137)
+- Simplify reading resource files - [#136](https://github.com/arturbosch/detekt/pull/136)
+- [WIP] Windows support - [#135](https://github.com/arturbosch/detekt/pull/135)
+- M12.1 fails with "URISyntaxException: Illegal character in authority at index 7" under windows - [#128](https://github.com/arturbosch/detekt/issues/128)
+- Rule to find `lateinit` usages - [#127](https://github.com/arturbosch/detekt/pull/127)
+- Wrong link format in Changelog - [#121](https://github.com/arturbosch/detekt/issues/121)
+- Setup appveyor for windows builds - [#118](https://github.com/arturbosch/detekt/issues/118)
+- Duplicate main profile - [#116](https://github.com/arturbosch/detekt/issues/116)
+- Referring to custom detekt.yml config results in InvalidPathExceptionon Windows - [#115](https://github.com/arturbosch/detekt/issues/115)
+- MaxLineLength should allow excluding import and package statements - [#111](https://github.com/arturbosch/detekt/issues/111)
+- Rule: Prohibite usage of `lateinit` - [#106](https://github.com/arturbosch/detekt/issues/106)
+
+See all issues at: [M12.2](https://github.com/arturbosch/detekt/milestone/9)
+
 #### M12
 
 - Suppress for TooManyFunctions is not considered in detekt - [#108](https://github.com/arturbosch/detekt/issues/108)
