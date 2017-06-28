@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.psi.KtFile
 fun KtFile.unnormalizedContent(): String {
 	val lineSeparator = this.getUserData(KtCompiler.LINE_SEPARATOR)
 	require(lineSeparator != null) { "No line separator entry for ktFile ${this.javaFileFacadeFqName.asString()}" }
-	return StringUtilRt.convertLineSeparators("\n", lineSeparator!!)
+	return StringUtilRt.convertLineSeparators(text, lineSeparator!!)
 }
 
 val KtFile.relativePath: String?
