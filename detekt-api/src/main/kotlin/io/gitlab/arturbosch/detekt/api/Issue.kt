@@ -39,7 +39,7 @@ data class Dept(val days: Int, val hours: Int, val mins: Int) {
 		return with(StringBuilder()) {
 			if (days > 0) append("${days}d ")
 			if (hours > 0) append("${hours}h ")
-			if (mins > 0) append("${mins}m")
+			if (mins > 0) append("${mins}min")
 			toString()
 		}.trim()
 	}
