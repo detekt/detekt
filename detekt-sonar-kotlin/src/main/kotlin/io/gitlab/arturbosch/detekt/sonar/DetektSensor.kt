@@ -45,14 +45,12 @@ class DetektSensor : Sensor {
 		detektion.findings.forEach { ruleSet, findings ->
 			println("RuleSet: $ruleSet - ${findings.size}")
 			findings.forEach { issue ->
-				println(issue.compact())
 				val inputFile = fileSystem.inputFile(fileSystem.predicates().`is`(baseDir.resolve(issue.location.file)))
 				if (inputFile != null) {
 					val newIssue = context.newIssue()
 							.forRule(findKey(issue.id))
 							.gap(2.0) // TODO how to setup?
 							.primaryLocation(issue, inputFile)
-					println(newIssue)
 					newIssue.save()
 				} else {
 					println("No file found for ${issue.location.file}")
@@ -62,11 +60,11 @@ class DetektSensor : Sensor {
 	}
 
 	private fun NewIssue.primaryLocation(issue: Finding, inputFile: InputFile): NewIssue {
-		val (line, _) = issue.startPosition
+		val line = issue.startPosition.line
 		val newIssueLocation = newLocation()
 				.on(inputFile)
 				.at(inputFile.selectLine(line))
-				.message("What does this do?")
+				.message(issue.issue.description)
 		return this.at(newIssueLocation)
 	}
 
