@@ -2,6 +2,8 @@ plugins {
 	id "com.iadams.sonar-packaging" version "1.0-RC1"
 }
 
+version = "$detektSonarVersion"
+
 configurations {
 	compile.extendsFrom kotlinCompile
 	testCompile.extendsFrom kotlinTest
