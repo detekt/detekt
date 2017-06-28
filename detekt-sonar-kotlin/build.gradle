@@ -39,4 +39,5 @@ sonarPackaging {
 	skipDependenciesPackaging = false
 	useChildFirstClassLoader = false
 	basePlugin = ''
+	sonarQubeMinVersion = '5.6'
 }
