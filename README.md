@@ -2,8 +2,11 @@
 
 [![build status](https://travis-ci.org/arturbosch/detekt.svg?branch=master)](https://travis-ci.org/arturbosch/detekt)
 [![build status windows](https://ci.appveyor.com/api/projects/status/3q9g98vveiul7yut/branch/master?svg=true)](https://ci.appveyor.com/project/arturbosch/detekt)
-[![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
 [ ![Download](https://api.bintray.com/packages/arturbosch/code-analysis/detekt/images/download.svg) ](https://bintray.com/arturbosch/code-analysis/detekt/_latestVersion)
+
+[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/androidweekly-259-orange.svg?style=flat-square)](http://androidweekly.net/issues/issue-259)
+[![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
 
 Meet _detekt_, a static code analysis tool for the _Kotlin_ programming language.
 It operates on the abstract syntax tree provided by the Kotlin compiler.
@@ -208,7 +211,7 @@ detekt {
      // A profile basically abstracts over the argument vector passed to detekt. 
      // Different profiles can be specified and used for different sub modules or testing code.
     profile("main") {
-        input = "$projectDir/src/main/kotlin" // input is pre configured to 'project.projectDir.absolutePath'
+        input = "$projectDir/src/main/kotlin" // Which part of your project should be analyzed?
         config = "$projectDir/detekt.yml" // Use $project.projectDir or to navigate inside your project 
         configResource = "/detekt.yml" // Use this parameter instead of config if your detekt yaml file is inside your resources. Is needed for multi project maven tasks.
         filters = ".*test.*, .*/resources/.*" // What paths to exclude? Use comma oder semicolon to separate
@@ -243,7 +246,7 @@ String USER_HOME = System.getProperty("user.home")
 
 detekt {  
     profile("main") {
-        input = "$pprojectDir/src/main/kotlin"
+        input = "$projectDir/src/main/kotlin"
         output = "$projectDir/reports/report.xml"
         outputFormat = "xml"
     }
