@@ -4,7 +4,11 @@ package cases
 /**
  * @author Artur Bosch
  */
-class Empty {
+class Empty : Runnable {
+
+	override fun run() {
+
+	}
 
 	fun emptyMethod() {
 

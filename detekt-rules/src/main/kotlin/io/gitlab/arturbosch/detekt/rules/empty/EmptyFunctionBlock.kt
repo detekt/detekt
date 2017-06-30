@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.empty
 
 import io.gitlab.arturbosch.detekt.api.Config
+import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
@@ -9,7 +10,9 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 class EmptyFunctionBlock(config: Config) : EmptyRule(config) {
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
-		function.bodyExpression?.addFindingIfBlockExprIsEmpty()
+		if (!function.hasModifier(KtTokens.OVERRIDE_KEYWORD)) {
+			function.bodyExpression?.addFindingIfBlockExprIsEmpty()
+		}
 	}
 
 }
