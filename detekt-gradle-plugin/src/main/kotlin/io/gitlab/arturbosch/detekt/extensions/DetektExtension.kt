@@ -29,17 +29,26 @@ open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 	}
 
 	fun profileArgumentsOrDefault(project: Project): List<String> {
-		val arguments = createArgumentsForProfile()
-		return if (arguments.isNotEmpty()) arguments else project.fallbackArguments()
+		return with(createArgumentsForProfile()) {
+			if (isNotEmpty()) {
+				if (!contains(PROJECT_PARAMETER)) {
+					add(PROJECT_PARAMETER)
+					add(project.projectDir.toString())
+				}
+				this
+			} else {
+				project.fallbackArguments()
+			}
+		}
 	}
 
-	private fun createArgumentsForProfile(): List<String> {
+	private fun createArgumentsForProfile(): MutableList<String> {
 		val default = getDefaultProfile()
 		val system = getSystemProfile()
 
 		val allArguments = default?.arguments(debug) ?: mutableMapOf<String, String>()
-
 		val fallbackEmptyArguments = mutableMapOf<String, String>()
+
 		val overriddenArguments = if (system?.name == default?.name) fallbackEmptyArguments
 		else system?.arguments(debug) ?: fallbackEmptyArguments
 
@@ -48,7 +57,7 @@ open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 				multipleConfigAware(it.key, v1, v2)
 			}
 		}
-		return allArguments.flatMap { filterBooleans(it.key, it.value) }.apply {
+		return allArguments.flatMapTo(ArrayList<String>()) { flattenBoolValues(it.key, it.value) }.apply {
 			if (debug) {
 				val name = systemOrDefaultProfile?.name ?: "_fallback_"
 				println("detekt version: $version - usedProfile: $name")
@@ -60,7 +69,7 @@ open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 	private fun getDefaultProfile() = profiles.find { it.name == profile }
 	private fun getSystemProfile() = profiles.find { it.name == specifiedProfileNameThroughSystemProperty() }
 
-	private fun filterBooleans(key: String, value: String)
+	private fun flattenBoolValues(key: String, value: String)
 			= if (value == "true" || value == "false") listOf(key) else listOf(key, value)
 
 	private fun multipleConfigAware(key: String, v1: String, v2: String)
