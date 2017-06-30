@@ -30,7 +30,7 @@ class DetektSensor : Sensor {
 
 		val filters = ".*/test/.*,.*/resources/.*,.*/build/.*".split(",").map { PathFilter(it) }
 		val config = YamlConfig.loadResource(ClasspathResourceConverter().convert("/default-detekt-config.yml"))
-		val settings = ProcessingSettings(baseDir.toPath(), config = config, pathFilters = filters)
+		val settings = ProcessingSettings(baseDir.toPath(), config = NoAutoCorrectConfig(config), pathFilters = filters)
 
 		val detektor = DetektFacade.instance(settings)
 		val detektion = detektor.run()
