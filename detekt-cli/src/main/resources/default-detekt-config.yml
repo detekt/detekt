@@ -88,10 +88,10 @@ formatting:
     active: true
     autoCorrect: true
   ExpressionBodySyntax:
-    active: true
+    active: false
     autoCorrect: false
   ExpressionBodySyntaxLineBreaks:
-    active: true
+    active: false
     autoCorrect: false
   OptionalReturnKeyword:
     active: true
