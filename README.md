@@ -206,7 +206,7 @@ configure<DetektExtension> {
 
 ```groovy
 detekt {
-    version = "1.0.0.[version]"  // Specify latest detekt version, when unspecified plugins default version is used
+    version = "1.0.0.[version]"  // When unspecified the latest detekt version found, will be used. Override to stay on the same version.
     
      // A profile basically abstracts over the argument vector passed to detekt. 
      // Different profiles can be specified and used for different sub modules or testing code.
