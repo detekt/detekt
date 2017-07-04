@@ -26,7 +26,7 @@ import java.util.ArrayDeque
  */
 class LargeClass(config: Config = Config.empty, threshold: Int = 70) : ThresholdRule(config, threshold) {
 
-	override val issue = Issue("LargeClass", Severity.Maintainability, "")
+	override val issue = Issue("LargeClass", Severity.Maintainability, "Split up large classes into smaller classes that are easier to understand.")
 
 	private val locStack = ArrayDeque<Int>()
 

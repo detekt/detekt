@@ -14,7 +14,7 @@ import org.jetbrains.kotlin.psi.KtProperty
  */
 class CommentOverPrivateProperty(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue("CommentOverPrivateProperty", Severity.Maintainability, "")
+	override val issue = Issue("CommentOverPrivateProperty", Severity.Maintainability, "Private properties should be named such that they explain themselves.")
 
 	override fun visitProperty(property: KtProperty) {
 		val modifierList = property.modifierList

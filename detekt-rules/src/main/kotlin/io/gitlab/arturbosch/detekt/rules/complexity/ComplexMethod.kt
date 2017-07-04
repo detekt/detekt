@@ -21,7 +21,7 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  */
 class ComplexMethod(config: Config = Config.empty, threshold: Int = 10) : ThresholdRule(config, threshold) {
 
-	override val issue = Issue("ComplexMethod", Severity.Maintainability, "")
+	override val issue = Issue("ComplexMethod", Severity.Maintainability, "Prefer splitting up complex methods into smaller, easier to understand methods.")
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		val mcc = MccVisitor().visit(function)

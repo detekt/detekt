@@ -16,7 +16,7 @@ import org.jetbrains.kotlin.psi.KtParameterList
  */
 class LongParameterList(config: Config = Config.empty, threshold: Int = 5) : ThresholdRule(config, threshold) {
 
-	override val issue = Issue("LongParameterList", Severity.Maintainability, "")
+	override val issue = Issue("LongParameterList", Severity.Maintainability, "Prefer methods with short parameter lists.")
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		if (function.hasModifier(KtTokens.OVERRIDE_KEYWORD)) return
