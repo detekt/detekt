@@ -62,7 +62,7 @@ class FormatConfig(private val useTabs: Boolean) : Config {
 	}
 }
 
-private val DEFAULT_CONFIG = "default-detekt-config.yml"
+val DEFAULT_CONFIG = "default-detekt-config.yml"
 
 /**
  * @author lummax

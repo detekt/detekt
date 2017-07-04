@@ -28,10 +28,21 @@ interface Config {
 		/**
 		 * A yaml based configuration with no properties.
 		 */
-		val empty: Config = YamlConfig(mapOf())
+		val empty: Config = EmptyConfig
 	}
 }
 
+/**
+ * NOP-implementation of a config object.
+ */
+internal object EmptyConfig : Config {
+	override fun subConfig(key: String) = this
+	override fun <T : Any> valueOrDefault(key: String, default: T): T = default
+}
+
+/**
+ * Convenient base configuration which parses/casts the a configuration value based on the type of the default value.
+ */
 abstract class BaseConfig : Config {
 
 	protected fun valueOrDefaultInternal(result: Any?, default: Any): Any {
