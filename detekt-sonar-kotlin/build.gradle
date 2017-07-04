@@ -7,7 +7,6 @@ version = "$detektSonarVersion"
 configurations {
 	compile.extendsFrom kotlinCompile
 	testCompile.extendsFrom kotlinTest
-//	testRuntime.extendsFrom junitPlatform
 }
 
 dependencies {
@@ -15,10 +14,6 @@ dependencies {
 	compile project(':detekt-formatting')
 	compile project(':detekt-rules')
 	provided "org.sonarsource.sonarqube:sonar-plugin-api:$sonarVersion"
-	testCompile "org.sonarsource.sonarqube:sonar-testing-harness:$sonarVersion"
-	testRuntime "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
-	testRuntime "org.junit.platform:junit-platform-console:$junitPlatformVersion"
-	testRuntime "org.jetbrains.spek:spek-junit-platform-engine:$spekVersion"
 }
 
 def USER_HOME = System.getProperty("user.home")
