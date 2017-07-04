@@ -23,7 +23,7 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  */
 class NestedBlockDepth(config: Config = Config.empty, threshold: Int = 3) : ThresholdRule(config, threshold) {
 
-	override val issue = Issue("NestedBlockDepth", Severity.Maintainability, "")
+	override val issue = Issue("NestedBlockDepth", Severity.Maintainability, "Excessive nesting leads to hidden complexity. Prefer extracting code to make it easier to understand.")
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		val visitor = FunctionDepthVisitor(threshold)

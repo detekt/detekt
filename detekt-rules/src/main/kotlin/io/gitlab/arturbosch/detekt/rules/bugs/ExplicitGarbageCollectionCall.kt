@@ -16,7 +16,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
  */
 class ExplicitGarbageCollectionCall(config: Config) : Rule(config) {
 
-	override val issue = Issue("ExplicitGarbageCollectionCall", Severity.Defect, "")
+	override val issue = Issue("ExplicitGarbageCollectionCall", Severity.Defect, "Manual calls for garbage collection should be avoided.")
 
 	override fun visitCallExpression(expression: KtCallExpression) {
 		expression.getCallNameExpression()?.let {

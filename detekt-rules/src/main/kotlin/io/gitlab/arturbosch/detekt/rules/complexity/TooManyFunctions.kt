@@ -16,7 +16,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  */
 class TooManyFunctions(config: Config = Config.empty, threshold: Int = 10) : ThresholdRule(config, threshold) {
 
-	override val issue = Issue("TooManyFunctions", Severity.Maintainability, "")
+	override val issue = Issue("TooManyFunctions", Severity.Maintainability, "Class contains too many functions.")
 
 	private var amount: Int = 0
 
