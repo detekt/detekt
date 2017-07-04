@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.sonar
 
+import io.gitlab.arturbosch.detekt.sonar.sensor.DetektSensor
 import org.sonar.api.Plugin
 
 /**
@@ -14,6 +15,7 @@ class DetektPlugin : Plugin {
 				DetektSensor::class.java,
 				DetektRulesDefinition::class.java
 		))
+		context.addExtensions(PROPERTIES)
 	}
 
 }

@@ -1,14 +1,15 @@
-package io.gitlab.arturbosch.detekt.sonar
+package io.gitlab.arturbosch.detekt.sonar.sensor
 
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.YamlConfig
-import io.gitlab.arturbosch.detekt.cli.ClasspathResourceConverter
 import io.gitlab.arturbosch.detekt.core.COMPLEXITY_KEY
-import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.Detektion
 import io.gitlab.arturbosch.detekt.core.LLOC_KEY
-import io.gitlab.arturbosch.detekt.core.PathFilter
-import io.gitlab.arturbosch.detekt.core.ProcessingSettings
+import io.gitlab.arturbosch.detekt.sonar.DETEKT_SENSOR
+import io.gitlab.arturbosch.detekt.sonar.KOTLIN_KEY
+import io.gitlab.arturbosch.detekt.sonar.LLOC_PROJECT
+import io.gitlab.arturbosch.detekt.sonar.LOG
+import io.gitlab.arturbosch.detekt.sonar.MCCABE_PROJECT
+import io.gitlab.arturbosch.detekt.sonar.findKey
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.sensor.Sensor
 import org.sonar.api.batch.sensor.SensorContext
@@ -25,35 +26,27 @@ class DetektSensor : Sensor {
 	}
 
 	override fun execute(context: SensorContext) {
-		val fileSystem = context.fileSystem()
-		val baseDir = fileSystem.baseDir()
-
-		val filters = ".*/test/.*,.*/resources/.*,.*/build/.*".split(",").map { PathFilter(it) }
-		val config = YamlConfig.loadResource(ClasspathResourceConverter().convert("/default-detekt-config.yml"))
-		val settings = ProcessingSettings(baseDir.toPath(), config = NoAutoCorrectConfig(config), pathFilters = filters)
-
-		val detektor = DetektFacade.instance(settings)
+		val detektor = configureDetektor(context)
 		val detektion = detektor.run()
 
-		projectIssues(detektion, context)
-		projectMetrics(detektion, context)
+		reportIssues(detektion, context)
+		reportMetrics(detektion, context)
 	}
 
-	private fun projectIssues(detektion: Detektion, context: SensorContext) {
+	private fun reportIssues(detektion: Detektion, context: SensorContext) {
 		val fileSystem = context.fileSystem()
 		val baseDir = fileSystem.baseDir()
 		detektion.findings.forEach { ruleSet, findings ->
-			println("RuleSet: $ruleSet - ${findings.size}")
+			LOG.info("RuleSet: $ruleSet - ${findings.size}")
 			findings.forEach { issue ->
 				val inputFile = fileSystem.inputFile(fileSystem.predicates().`is`(baseDir.resolve(issue.location.file)))
 				if (inputFile != null) {
 					val newIssue = context.newIssue()
 							.forRule(findKey(issue.id))
-							.gap(2.0) // TODO how to setup?
 							.primaryLocation(issue, inputFile)
 					newIssue.save()
 				} else {
-					println("No file found for ${issue.location.file}")
+					LOG.info("No file found for ${issue.location.file}")
 				}
 			}
 		}
@@ -68,7 +61,7 @@ class DetektSensor : Sensor {
 		return this.at(newIssueLocation)
 	}
 
-	private fun projectMetrics(detektion: Detektion, context: SensorContext) {
+	private fun reportMetrics(detektion: Detektion, context: SensorContext) {
 		detektion.getData(COMPLEXITY_KEY)?.let {
 			context.newMeasure<Int>()
 					.withValue(it)
