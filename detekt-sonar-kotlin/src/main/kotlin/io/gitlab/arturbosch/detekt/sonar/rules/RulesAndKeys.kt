@@ -12,7 +12,7 @@ import org.sonar.api.rule.RuleKey
 import java.util.ServiceLoader
 import org.sonar.api.rule.Severity as SonarSeverity
 
-private val CONFIG = YamlConfig.loadResource(ClasspathResourceConverter().convert(DEFAULT_CONFIG)).apply {
+val DEFAULT_YAML_CONFIG = YamlConfig.loadResource(ClasspathResourceConverter().convert(DEFAULT_CONFIG)).apply {
 	LOG.info(this.toString())
 }
 
@@ -20,7 +20,7 @@ val ALL_LOADED_RULES = ServiceLoader.load(RuleSetProvider::class.java,
 		Config::javaClass.javaClass.classLoader)
 		.asIterable()
 		.flatMap { ruleSet ->
-			val subConfig = CONFIG.subConfig(ruleSet.ruleSetId)
+			val subConfig = DEFAULT_YAML_CONFIG.subConfig(ruleSet.ruleSetId)
 			ruleSet.instance(subConfig).rules
 		}
 

@@ -1,9 +1,6 @@
 package io.gitlab.arturbosch.detekt.sonar.sensor
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.YamlConfig
-import io.gitlab.arturbosch.detekt.cli.ClasspathResourceConverter
-import io.gitlab.arturbosch.detekt.cli.DEFAULT_CONFIG
 import io.gitlab.arturbosch.detekt.cli.Main
 import io.gitlab.arturbosch.detekt.cli.SEPARATORS
 import io.gitlab.arturbosch.detekt.cli.loadConfiguration
@@ -17,6 +14,7 @@ import io.gitlab.arturbosch.detekt.sonar.foundation.LOG
 import io.gitlab.arturbosch.detekt.sonar.foundation.NoAutoCorrectConfig
 import io.gitlab.arturbosch.detekt.sonar.foundation.PATH_FILTERS_DEFAULTS
 import io.gitlab.arturbosch.detekt.sonar.foundation.PATH_FILTERS_KEY
+import io.gitlab.arturbosch.detekt.sonar.rules.DEFAULT_YAML_CONFIG
 import org.sonar.api.batch.sensor.SensorContext
 import org.sonar.api.config.Settings
 import java.io.File
@@ -63,8 +61,7 @@ private fun chooseConfig(baseDir: File, settings: Settings): Config {
 	val bestConfigMatchOrDefault = bestConfigMatch.let {
 		if (it == Config.empty) {
 			LOG.info("No detekt yaml configuration file found, using the default configuration.")
-			val defaultConfig = ClasspathResourceConverter().convert(DEFAULT_CONFIG)
-			YamlConfig.loadResource(defaultConfig)
+			DEFAULT_YAML_CONFIG
 		} else it
 	}
 
