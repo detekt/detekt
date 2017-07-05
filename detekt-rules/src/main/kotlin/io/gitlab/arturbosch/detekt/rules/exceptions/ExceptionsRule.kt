@@ -14,7 +14,10 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  */
 open class ExceptionsRule(config: Config) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName, Severity.Defect, "Caught exception is too generic. Prefer catching specific Exceptions to handle specific error cases.")
+	override val issue = Issue(javaClass.simpleName,
+			Severity.Defect,
+			"Caught exception is too generic. " +
+					"Prefer catching specific Exceptions to handle specific error cases.")
 
 	fun KtCatchClause.addFindingIfExceptionClassMatchesExact(exception: () -> String) {
 		this.catchParameter?.let {

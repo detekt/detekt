@@ -11,7 +11,10 @@ import org.jetbrains.kotlin.psi.KtFile
 
 class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName, Severity.Style, "Line detected that is longer than the defined maximum line length in the code style.", Dept.FIVE_MINS)
+	override val issue = Issue(javaClass.simpleName,
+			Severity.Style,
+			"Line detected that is longer than the defined maximum line length in the code style.",
+			Dept.FIVE_MINS)
 
 	private val maxLineLength: Int
 			= valueOrDefault(MAX_LINE_LENGTH, DEFAULT_IDEA_LINE_LENGTH)

@@ -10,14 +10,16 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import java.util.ArrayDeque
+import java.util.*
 
 /**
  * @author Artur Bosch
  */
 class EqualsWithHashCodeExist(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue("EqualsWithHashCodeExist", Severity.Defect, "")
+	override val issue = Issue("EqualsWithHashCodeExist",
+			Severity.Defect,
+			"")
 
 	private val queue = ArrayDeque<ViolationHolder>(5)
 

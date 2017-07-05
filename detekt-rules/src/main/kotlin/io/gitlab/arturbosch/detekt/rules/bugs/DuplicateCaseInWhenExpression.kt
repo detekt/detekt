@@ -14,7 +14,11 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  */
 class DuplicateCaseInWhenExpression(config: Config) : Rule(config) {
 
-	override val issue = Issue("DuplicateCaseInWhenExpression", Severity.Warning, "Duplicated case statements in when expression. Both cases should be merged.", Dept.TEN_MINS)
+	override val issue = Issue("DuplicateCaseInWhenExpression",
+			Severity.Warning,
+			"Duplicated case statements in when expression. " +
+					"Both cases should be merged.",
+			Dept.TEN_MINS)
 
 	override fun visitWhenExpression(expression: KtWhenExpression) {
 		val numberOfEntries = expression.entries.size

@@ -14,7 +14,10 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  */
 class WildcardImport(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName, Severity.Style, "Wildcard imports should be replaced with imports using fully qualified class names.", Dept.FIVE_MINS)
+	override val issue = Issue(javaClass.simpleName,
+			Severity.Style,
+			"Wildcard imports should be replaced with imports using fully qualified class names.",
+			Dept.FIVE_MINS)
 
 	override fun visitImportDirective(importDirective: KtImportDirective) {
 		val import = importDirective.importPath?.pathStr

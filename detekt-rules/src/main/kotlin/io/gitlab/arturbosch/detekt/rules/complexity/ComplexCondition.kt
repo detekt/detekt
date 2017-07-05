@@ -19,7 +19,10 @@ import org.jetbrains.kotlin.psi.KtWhileExpression
  */
 class ComplexCondition(config: Config = Config.empty, threshold: Int = 3) : ThresholdRule(config, threshold) {
 
-	override val issue = Issue("ComplexCondition", Severity.Maintainability, "Complex conditions should be simplified and extracted into well-named methods if necessary.")
+	override val issue = Issue("ComplexCondition",
+			Severity.Maintainability,
+			"Complex conditions should be simplified and extracted " +
+					"into well-named methods if necessary.")
 
 	override fun visitIfExpression(expression: KtIfExpression) {
 		val condition = expression.condition
