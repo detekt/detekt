@@ -99,9 +99,6 @@ class Main {
 		private fun validateCli(cli: Main): List<String> {
 			val violations = ArrayList<String>()
 			with(cli) {
-				if (project == null) {
-					violations += "Path to project must be provided via the --project parameter"
-				}
 				output?.let {
 					if (Files.exists(it) && it.isDirectory()) {
 						violations += "Output file must not be a directory."
