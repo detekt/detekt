@@ -3,49 +3,33 @@ package io.gitlab.arturbosch.detekt.sonar.rules
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.YamlConfig
+import io.gitlab.arturbosch.detekt.cli.ClasspathResourceConverter
+import io.gitlab.arturbosch.detekt.cli.DEFAULT_CONFIG
 import io.gitlab.arturbosch.detekt.sonar.foundation.DETEKT_REPOSITORY
+import io.gitlab.arturbosch.detekt.sonar.foundation.LOG
 import org.sonar.api.rule.RuleKey
-import org.sonar.api.rule.RuleStatus
-import org.sonar.api.server.rule.RulesDefinition
 import java.util.ServiceLoader
 import org.sonar.api.rule.Severity as SonarSeverity
 
-private val CONFIG = Config.empty
+private val CONFIG = YamlConfig.loadResource(ClasspathResourceConverter().convert(DEFAULT_CONFIG)).apply {
+	LOG.info(this.toString())
+}
 
 val ALL_LOADED_RULES = ServiceLoader.load(RuleSetProvider::class.java,
 		Config::javaClass.javaClass.classLoader)
 		.asIterable()
-		.flatMap { it.instance(CONFIG).rules }
+		.flatMap { ruleSet ->
+			val subConfig = CONFIG.subConfig(ruleSet.ruleSetId)
+			ruleSet.instance(subConfig).rules
+		}
 
-val RULE_KEYS = ALL_LOADED_RULES.map { defineRuleKey(it.id) }
-private fun defineRuleKey(id: String): RuleKey = RuleKey.of(DETEKT_REPOSITORY, id)
+val RULE_KEYS = ALL_LOADED_RULES.map { defineRuleKey(it) }
+
+data class DetektRuleKey(val repositoryKey: String,
+						 val ruleKey: String,
+						 val active: Boolean) : RuleKey(repositoryKey, ruleKey)
+
+private fun defineRuleKey(rule: Rule) = DetektRuleKey(DETEKT_REPOSITORY, rule.id, rule.active)
 
 fun findKey(id: String) = RULE_KEYS.find { it.rule() == id }
-
-fun RulesDefinition.NewRepository.createRules() = this.apply {
-	ALL_LOADED_RULES.map { defineRule(it) }
-}
-
-private fun RulesDefinition.NewRepository.defineRule(rule: Rule) {
-	var description = rule.issue.description
-	// TODO remove this after all rules have descriptions
-	if (description.isNullOrBlank()) description = "No description yet!"
-	val newRule = createRule(rule.id).setName(rule.id)
-			.setHtmlDescription(description)
-			.setTags(rule.issue.severity.name.toLowerCase())
-			.setStatus(RuleStatus.READY)
-			.setSeverity(severityMap[rule.issue.severity])
-	newRule.setDebtRemediationFunction(
-			newRule.debtRemediationFunctions().linear(rule.issue.dept.toString()))
-}
-
-private val severityMap = mapOf(
-		Severity.CodeSmell to org.sonar.api.rule.Severity.MAJOR,
-		Severity.Defect to org.sonar.api.rule.Severity.CRITICAL,
-		Severity.Maintainability to org.sonar.api.rule.Severity.MAJOR,
-		Severity.Minor to org.sonar.api.rule.Severity.MINOR,
-		Severity.Security to org.sonar.api.rule.Severity.BLOCKER,
-		Severity.Style to org.sonar.api.rule.Severity.INFO,
-		Severity.Warning to org.sonar.api.rule.Severity.INFO
-)
