@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.sonar
+package io.gitlab.arturbosch.detekt.sonar.foundation
 
 import org.sonar.api.resources.AbstractLanguage
 

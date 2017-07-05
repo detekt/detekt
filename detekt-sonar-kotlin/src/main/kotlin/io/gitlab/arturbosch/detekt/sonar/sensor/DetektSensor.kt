@@ -4,12 +4,10 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.core.COMPLEXITY_KEY
 import io.gitlab.arturbosch.detekt.core.Detektion
 import io.gitlab.arturbosch.detekt.core.LLOC_KEY
-import io.gitlab.arturbosch.detekt.sonar.DETEKT_SENSOR
-import io.gitlab.arturbosch.detekt.sonar.KOTLIN_KEY
-import io.gitlab.arturbosch.detekt.sonar.LLOC_PROJECT
-import io.gitlab.arturbosch.detekt.sonar.LOG
-import io.gitlab.arturbosch.detekt.sonar.MCCABE_PROJECT
-import io.gitlab.arturbosch.detekt.sonar.findKey
+import io.gitlab.arturbosch.detekt.sonar.foundation.DETEKT_SENSOR
+import io.gitlab.arturbosch.detekt.sonar.foundation.KOTLIN_KEY
+import io.gitlab.arturbosch.detekt.sonar.foundation.LOG
+import io.gitlab.arturbosch.detekt.sonar.rules.findKey
 import org.sonar.api.batch.fs.InputFile
 import org.sonar.api.batch.sensor.Sensor
 import org.sonar.api.batch.sensor.SensorContext

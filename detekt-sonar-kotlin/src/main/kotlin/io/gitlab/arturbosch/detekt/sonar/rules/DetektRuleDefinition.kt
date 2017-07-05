@@ -1,5 +1,8 @@
-package io.gitlab.arturbosch.detekt.sonar
+package io.gitlab.arturbosch.detekt.sonar.rules
 
+import io.gitlab.arturbosch.detekt.sonar.foundation.DETEKT_ANALYZER
+import io.gitlab.arturbosch.detekt.sonar.foundation.DETEKT_REPOSITORY
+import io.gitlab.arturbosch.detekt.sonar.foundation.KOTLIN_KEY
 import org.sonar.api.server.rule.RulesDefinition
 
 /**

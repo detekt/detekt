@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.sonar
+package io.gitlab.arturbosch.detekt.sonar.sensor
 
 import org.sonar.api.measures.CoreMetrics
 import org.sonar.api.measures.Metric

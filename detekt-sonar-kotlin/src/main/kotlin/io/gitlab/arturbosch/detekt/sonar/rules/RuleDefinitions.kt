@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.sonar
+package io.gitlab.arturbosch.detekt.sonar.rules
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -11,6 +11,7 @@ import io.gitlab.arturbosch.detekt.rules.providers.EmptyCodeProvider
 import io.gitlab.arturbosch.detekt.rules.providers.ExceptionsProvider
 import io.gitlab.arturbosch.detekt.rules.providers.PotentialBugProvider
 import io.gitlab.arturbosch.detekt.rules.providers.StyleGuideProvider
+import io.gitlab.arturbosch.detekt.sonar.foundation.DETEKT_REPOSITORY
 import org.sonar.api.rule.RuleKey
 import org.sonar.api.rule.RuleStatus
 import org.sonar.api.server.rule.RulesDefinition

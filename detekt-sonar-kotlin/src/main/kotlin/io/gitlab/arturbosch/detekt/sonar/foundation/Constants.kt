@@ -1,5 +1,6 @@
-package io.gitlab.arturbosch.detekt.sonar
+package io.gitlab.arturbosch.detekt.sonar.foundation
 
+import io.gitlab.arturbosch.detekt.sonar.DetektPlugin
 import org.sonar.api.utils.log.Logger
 import org.sonar.api.utils.log.Loggers
 
