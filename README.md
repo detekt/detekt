@@ -148,7 +148,7 @@ For all gradle versions:
 ```groovy
 buildscript {
   repositories {
-    jcenter
+    jcenter()
     maven { url "https://plugins.gradle.org/m2/" }
   }
   dependencies {
