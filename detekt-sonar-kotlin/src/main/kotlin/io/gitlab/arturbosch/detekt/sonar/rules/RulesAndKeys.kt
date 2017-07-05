@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.sonar.rules
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.YamlConfig
@@ -28,8 +29,9 @@ val RULE_KEYS = ALL_LOADED_RULES.map { defineRuleKey(it) }
 
 data class DetektRuleKey(val repositoryKey: String,
 						 val ruleKey: String,
-						 val active: Boolean) : RuleKey(repositoryKey, ruleKey)
+						 val active: Boolean,
+						 val issue: Issue) : RuleKey(repositoryKey, ruleKey)
 
-private fun defineRuleKey(rule: Rule) = DetektRuleKey(DETEKT_REPOSITORY, rule.id, rule.active)
+private fun defineRuleKey(rule: Rule) = DetektRuleKey(DETEKT_REPOSITORY, rule.id, rule.active, rule.issue)
 
 fun findKey(id: String) = RULE_KEYS.find { it.rule() == id }

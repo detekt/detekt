@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.sonar.rules
 
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.sonar.foundation.DETEKT_ANALYZER
 import io.gitlab.arturbosch.detekt.sonar.foundation.DETEKT_REPOSITORY
 import io.gitlab.arturbosch.detekt.sonar.foundation.KOTLIN_KEY
@@ -34,17 +33,7 @@ private fun RulesDefinition.NewRepository.defineRule(rule: Rule) {
 			.setHtmlDescription(description)
 			.setTags(rule.issue.severity.name.toLowerCase())
 			.setStatus(RuleStatus.READY)
-			.setSeverity(severityMap[rule.issue.severity])
+			.setSeverity(severityTranslations[rule.issue.severity])
 	newRule.setDebtRemediationFunction(
 			newRule.debtRemediationFunctions().linear(rule.issue.dept.toString()))
 }
-
-private val severityMap = mapOf(
-		Severity.CodeSmell to org.sonar.api.rule.Severity.MAJOR,
-		Severity.Defect to org.sonar.api.rule.Severity.CRITICAL,
-		Severity.Maintainability to org.sonar.api.rule.Severity.MAJOR,
-		Severity.Minor to org.sonar.api.rule.Severity.MINOR,
-		Severity.Security to org.sonar.api.rule.Severity.BLOCKER,
-		Severity.Style to org.sonar.api.rule.Severity.INFO,
-		Severity.Warning to org.sonar.api.rule.Severity.INFO
-)
