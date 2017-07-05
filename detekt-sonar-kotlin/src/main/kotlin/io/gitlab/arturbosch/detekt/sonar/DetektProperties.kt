@@ -14,7 +14,7 @@ const val CONFIG_PATH_DEFAULT = ""
 
 const val CONFIG_RESOURCE_KEY = "detekt.sonar.kotlin.config.resource"
 const val CONFIG_RESOURCE_DESCRIPTION = "Resource name of the detekt yaml config inside a custom rule set." +
-		" Only one of the configurations will be choosen: ConfigPath > ConfigResource."
+		" Only one of the configurations will be chosen: ConfigPath > ConfigResource."
 const val CONFIG_RESOURCE_DEFAULT = ""
 
 const val PATH_FILTERS_KEY = "detekt.sonar.kotlin.filters"
@@ -29,26 +29,31 @@ const val QUALITY_PROFILES_DESCRIPTION = "Use absolute paths to detekt yaml conf
 		" default. It may be used as a reference configuration."
 const val QUALITY_PROFILES_DEFAULT = ""
 
+const val QUALITY_PROFILES_NAME = "Custom quality profile based on detekt configurations"
+const val CONFIG_PATH_NAME = "Detekt yaml config path"
+const val CONFIG_RESOURCE_NAME = "Detekt yaml resource config"
+const val PATH_FILTERS_NAME = "Detekt path filters"
+
 val PROPERTIES = listOf<PropertyDefinition>(
 		PropertyDefinition.builder(QUALITY_PROFILES_KEY)
-				.name("Custom quality profile based on detekt configurations")
+				.name(QUALITY_PROFILES_NAME)
 				.defaultValue(QUALITY_PROFILES_DEFAULT)
 				.description(QUALITY_PROFILES_DESCRIPTION)
 				.build(),
 		PropertyDefinition.builder(CONFIG_PATH_KEY)
-				.name("Detekt yaml config path")
+				.name(CONFIG_PATH_NAME)
 				.defaultValue(CONFIG_PATH_DEFAULT)
 				.description(CONFIG_PATH_DESCRIPTION)
 				.onQualifiers(listOf(Qualifiers.PROJECT))
 				.build(),
 		PropertyDefinition.builder(CONFIG_RESOURCE_KEY)
-				.name("Detekt yaml resource config")
+				.name(CONFIG_RESOURCE_NAME)
 				.defaultValue(CONFIG_RESOURCE_DEFAULT)
 				.description(CONFIG_RESOURCE_DESCRIPTION)
 				.onQualifiers(listOf(Qualifiers.PROJECT))
 				.build(),
 		PropertyDefinition.builder(PATH_FILTERS_KEY)
-				.name("Detekt path filters")
+				.name(PATH_FILTERS_NAME)
 				.defaultValue(PATH_FILTERS_DEFAULTS)
 				.description(PATH_FILTERS_DESCRIPTIONS)
 				.onQualifiers(listOf(Qualifiers.PROJECT))
