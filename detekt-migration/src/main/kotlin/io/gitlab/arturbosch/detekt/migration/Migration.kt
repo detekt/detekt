@@ -19,7 +19,7 @@ class Migration {
 		fun main(args: Array<String>) {
 			with(parseArguments(args)) {
 				val config = loadConfiguration()
-				val settings = ProcessingSettings(project, config, createPathFilters(), parallel, excludeDefaultRuleSets = true)
+				val settings = ProcessingSettings(projectPath, config, createPathFilters(), parallel, excludeDefaultRuleSets = true)
 				val detektor = Detektor(settings, KtTreeCompiler.instance(settings), listOf(MigrationRuleSetProvider()))
 				val detektion = detektor.run()
 				OutputFacade(this, config, detektion).run {
