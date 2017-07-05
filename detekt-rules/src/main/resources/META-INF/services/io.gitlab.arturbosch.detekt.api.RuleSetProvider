@@ -3,5 +3,6 @@ io.gitlab.arturbosch.detekt.rules.providers.CodeSmellProvider
 io.gitlab.arturbosch.detekt.rules.providers.StyleGuideProvider
 io.gitlab.arturbosch.detekt.rules.providers.CommentSmellProvider
 io.gitlab.arturbosch.detekt.rules.providers.EmptyCodeProvider
+io.gitlab.arturbosch.detekt.rules.providers.PerformanceProvider
 io.gitlab.arturbosch.detekt.rules.providers.PotentialBugProvider
 io.gitlab.arturbosch.detekt.rules.providers.ExceptionsProvider

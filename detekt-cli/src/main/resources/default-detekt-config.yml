@@ -20,6 +20,11 @@ potential-bugs:
   LateinitUsage:
     active: false
 
+performance:
+  active: true
+  ForEachOnRange:
+    active: true
+
 exceptions:
   active: true
 

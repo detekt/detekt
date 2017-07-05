@@ -387,6 +387,7 @@ Currently there are seven rule sets which are used per default when running the 
 - empty         - finds empty block statements
 - potential-bugs    - code is structured in a way it can lead to bugs like 'only equals but not hashcode is implemented' or explicit garbage
  collection calls
+- performance   - finds potential performance issues
 
 ##### Additional RuleSets 
 
@@ -454,6 +455,11 @@ potential-bugs:
     active: true
   LateinitUsage:
     active: false
+
+performance:
+  active: true
+  ForEachOnRange:
+    active: true
 
 exceptions:
   active: true
