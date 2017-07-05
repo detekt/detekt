@@ -18,7 +18,7 @@ data class Issue(val id: String,
  * a grade which is most harmful to their projects.
  */
 enum class Severity {
-	CodeSmell, Style, Warning, Defect, Minor, Maintainability, Security
+	CodeSmell, Style, Warning, Defect, Minor, Maintainability, Security, Performance
 
 }
 

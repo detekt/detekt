@@ -48,6 +48,7 @@ class XmlOutputFormat(report: Path) : OutputFormat(report) {
 			Severity.Defect -> MessageType.Error()
 			Severity.Minor -> MessageType.Info()
 			Severity.Security -> MessageType.Fatal()
+			Severity.Performance -> MessageType.Warning()
 		}
 
 	private fun Any.toXmlString() = XmlEscape.escapeXml(toString().trim())
