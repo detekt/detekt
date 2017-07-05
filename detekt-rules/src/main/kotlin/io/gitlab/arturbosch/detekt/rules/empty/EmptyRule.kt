@@ -15,7 +15,10 @@ import org.jetbrains.kotlin.psi.KtExpression
  */
 abstract class EmptyRule(config: Config) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName, Severity.Minor, "Empty block of code detected. As they serve no purpose they should be removed.", Dept.FIVE_MINS)
+	override val issue = Issue(javaClass.simpleName,
+			Severity.Minor,
+			"Empty block of code detected. As they serve no purpose they should be removed.",
+			Dept.FIVE_MINS)
 
 	fun KtExpression.addFindingIfBlockExprIsEmpty() {
 		this.asBlockExpression()?.statements?.let {

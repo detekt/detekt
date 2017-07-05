@@ -12,7 +12,10 @@ import org.jetbrains.kotlin.psi.KtPsiUtil
 
 class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName, Severity.Style, "Usage of lateinit. Using lateinit for property initialization is error prone, try using constructor injection or delegation.")
+	override val issue = Issue(javaClass.simpleName,
+			Severity.Style,
+			"Usage of lateinit. Using lateinit for property initialization " +
+					"is error prone, try using constructor injection or delegation.")
 
 	private val excludeAnnotatedProperties: List<String>
 			= valueOrDefault(EXCLUDE_ANNOTATED_PROPERTIES, "").split(",")

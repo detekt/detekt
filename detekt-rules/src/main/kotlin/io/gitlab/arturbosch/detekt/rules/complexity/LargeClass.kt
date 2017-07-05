@@ -19,14 +19,16 @@ import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtTryExpression
 import org.jetbrains.kotlin.psi.KtWhenEntry
 import org.jetbrains.kotlin.psi.KtWhenExpression
-import java.util.ArrayDeque
+import java.util.*
 
 /**
  * @author Artur Bosch
  */
 class LargeClass(config: Config = Config.empty, threshold: Int = 70) : ThresholdRule(config, threshold) {
 
-	override val issue = Issue("LargeClass", Severity.Maintainability, "Split up large classes into smaller classes that are easier to understand.")
+	override val issue = Issue("LargeClass",
+			Severity.Maintainability,
+			"Split up large classes into smaller classes that are easier to understand.")
 
 	private val locStack = ArrayDeque<Int>()
 

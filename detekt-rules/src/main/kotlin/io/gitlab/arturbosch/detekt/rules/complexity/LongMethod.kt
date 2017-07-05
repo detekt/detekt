@@ -16,7 +16,9 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  */
 class LongMethod(config: Config = Config.empty, threshold: Int = 20) : ThresholdRule(config, threshold) {
 
-	override val issue = Issue("LongMethod", Severity.Maintainability, "Prefer smaller methods to make them easier to understand.")
+	override val issue = Issue("LongMethod",
+			Severity.Maintainability,
+			"Prefer smaller methods to make them easier to understand.")
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		val body: KtBlockExpression? = function.bodyExpression.asBlockExpression()
