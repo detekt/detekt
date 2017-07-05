@@ -14,7 +14,7 @@ class Main {
 
 	@Parameter(names = arrayOf("--project", "-p"), required = true,
 			converter = ExistingPathConverter::class, description = "Project path to analyze (path/to/project).")
-	lateinit var project: Path
+	private var project: Path? = null
 
 	@Parameter(names = arrayOf("--filters", "-f"),
 			description = "Path filters defined through regex with separator ';' (\".*test.*\").")
@@ -72,6 +72,9 @@ class Main {
 	@Parameter(names = arrayOf("--help", "-h"), help = true, description = "Shows the usage.")
 	var help: Boolean = false
 
+	val projectPath : Path
+		get() = project!!
+
 	companion object {
 
 		@JvmStatic
@@ -96,6 +99,9 @@ class Main {
 		private fun validateCli(cli: Main): List<String> {
 			val violations = ArrayList<String>()
 			with(cli) {
+				if (project == null) {
+					violations += "Path to project must be provided via the --project parameter"
+				}
 				output?.let {
 					if (Files.exists(it) && it.isDirectory()) {
 						violations += "Output file must not be a directory."
