@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.core.Detektion
 import io.gitlab.arturbosch.detekt.core.LLOC_KEY
 import io.gitlab.arturbosch.detekt.sonar.foundation.DETEKT_SENSOR
 import io.gitlab.arturbosch.detekt.sonar.foundation.KOTLIN_KEY
+import io.gitlab.arturbosch.detekt.sonar.foundation.KotlinSyntax
 import io.gitlab.arturbosch.detekt.sonar.foundation.LOG
 import io.gitlab.arturbosch.detekt.sonar.rules.findKey
 import org.sonar.api.batch.fs.InputFile
@@ -27,8 +28,19 @@ class DetektSensor : Sensor {
 		val detektor = configureDetektor(context)
 		val detektion = detektor.run()
 
+		highlightFiles(context)
 		reportIssues(detektion, context)
 		reportMetrics(detektion, context)
+	}
+
+	private fun highlightFiles(context: SensorContext) {
+		val fileSystem = context.fileSystem()
+		fileSystem.inputFiles {
+			val language = it.language()
+			language != null && language == KOTLIN_KEY
+		}.forEach {
+			KotlinSyntax.processFile(it, context)
+		}
 	}
 
 	private fun reportIssues(detektion: Detektion, context: SensorContext) {
