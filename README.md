@@ -27,6 +27,7 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 - [gradle plugin](#gradleplugin) for code analysis, formatting and import migration
 - **NEW** - gradle tasks to use local `intellij` distribution for [formatting and inspecting](#idea) kotlin code
 - **NEW** - optionally configure detekt for each sub module by using [profiles](#closure) (gradle-plugin)
+- **NEW** - [sonarqube integration](https://github.com/arturbosch/sonar-kotlin)
 
 ### Table of contents
 1. [Commandline interface](#build)
