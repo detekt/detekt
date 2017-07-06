@@ -57,6 +57,7 @@ class OutputFacade(args: Main,
 			println("Complexity Report:")
 			println("\t- $lloc logical lines of code (lloc)")
 			println("\t- $mcc McCabe complexity (mcc)")
+			println("\t- $numberOfSmells number of total code smells")
 			println("\t- $mccPerThousandLines mcc per 1000 lloc")
 			println("\t- $smellPerThousandLines code smells per 1000 lloc")
 		}
