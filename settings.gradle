@@ -8,5 +8,3 @@ include 'detekt-sample-ruleset'
 include 'detekt-gradle-plugin'
 include 'detekt-formatting'
 include 'detekt-migration'
-include 'detekt-sonar-kotlin'
-
