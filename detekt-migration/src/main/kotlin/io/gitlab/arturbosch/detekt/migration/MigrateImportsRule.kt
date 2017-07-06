@@ -33,7 +33,8 @@ class MigrateImportsRule(config: Config) : Rule(config) {
 					val node = import.importedReference?.node as CompositeElement
 					replacements[key]?.let {
 						CodeEditUtil.removeChildren(node, node.firstChildNode, node.lastChildNode)
-						val newImport = factory.createImportDirective(ImportPath.fromString(it))
+						val importPath = ImportPath.fromString(it)
+						val newImport = factory.createImportDirectives(listOf(importPath)).toList()[0]
 						node.addChild(newImport.importedReference?.node!!)
 						report(ImportMigration(key!!, it, Entity.from(import)))
 					}
