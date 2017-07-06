@@ -2,8 +2,6 @@ package io.gitlab.arturbosch.detekt.api
 
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.psi.KtElement
-import org.jetbrains.kotlin.psi.KtPsiUtil
 import org.jetbrains.kotlin.psi.KtStringTemplateEntry
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 import kotlin.reflect.KClass
@@ -13,17 +11,13 @@ private val identifierRegex = Regex("[aA-zZ]+([-][aA-zZ]+)*")
 /**
  * Checks if given string matches the criteria of an id - [aA-zZ]+([-][aA-zZ]+)* .
  */
-fun validateIdentifier(id: String) {
+internal fun validateIdentifier(id: String) {
 	require(id.matches(identifierRegex), { "id must match [aA-zZ]+([-][aA-zZ]+)*" })
 }
 
-fun ASTNode.visitTokens(currentNode: (node: ASTNode) -> Unit) {
+internal fun ASTNode.visitTokens(currentNode: (node: ASTNode) -> Unit) {
 	currentNode(this)
 	getChildren(null).forEach { it.visitTokens(currentNode) }
-}
-
-fun ASTNode.visit(visitor: DetektVisitor) {
-	KtPsiUtil.visitChildren(this.psi as KtElement, visitor, null)
 }
 
 /**

@@ -29,8 +29,8 @@ fun Main.loadConfiguration(): Config = when {
 	if (debug) println("\n$this\n")
 }
 
-private fun parseResourceConfig(config: String): Config {
-	val urls = MultipleClasspathResourceConverter().convert(config)
+private fun parseResourceConfig(configPath: String): Config {
+	val urls = MultipleClasspathResourceConverter().convert(configPath)
 	return if (urls.size == 1) {
 		YamlConfig.loadResource(urls[0])
 	} else {
@@ -38,8 +38,8 @@ private fun parseResourceConfig(config: String): Config {
 	}
 }
 
-private fun parsePathConfig(config: String): Config {
-	val paths = MultipleExistingPathConverter().convert(config)
+private fun parsePathConfig(configPath: String): Config {
+	val paths = MultipleExistingPathConverter().convert(configPath)
 	return if (paths.size == 1) {
 		YamlConfig.load(paths[0])
 	} else {
@@ -62,7 +62,7 @@ class FormatConfig(private val useTabs: Boolean) : Config {
 	}
 }
 
-val DEFAULT_CONFIG = "default-detekt-config.yml"
+private val DEFAULT_CONFIG = "default-detekt-config.yml"
 
 /**
  * @author lummax
