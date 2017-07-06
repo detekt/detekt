@@ -12,7 +12,7 @@
 - Duplicate main profile - [#116](https://github.com/arturbosch/detekt/issues/116)
 - Referring to custom detekt.yml config results in InvalidPathExceptionon Windows - [#115](https://github.com/arturbosch/detekt/issues/115)
 - MaxLineLength should allow excluding import and package statements - [#111](https://github.com/arturbosch/detekt/issues/111)
-- Rule: Prohibite usage of `lateinit` - [#106](https://github.com/arturbosch/detekt/issues/106)
+- Rule: Prohibit usage of `lateinit` - [#106](https://github.com/arturbosch/detekt/issues/106)
 - Use the latest version in gradle-plugin as default - [#151](https://github.com/arturbosch/detekt/issues/151)
 - False positive for EmptyFunctionBlock with overriden function - [#151](https://github.com/arturbosch/detekt/issues/148)
 
