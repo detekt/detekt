@@ -12,6 +12,7 @@ open class DetektGenerateConfigTask : DefaultTask() {
 
 	init {
 		description = "Generate a detekt configuration file inside your project."
+		group = "verification"
 	}
 
 	@TaskAction

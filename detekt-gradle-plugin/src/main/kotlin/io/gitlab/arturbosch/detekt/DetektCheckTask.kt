@@ -12,6 +12,7 @@ open class DetektCheckTask : DefaultTask() {
 
 	init {
 		description = "Analyze your kotlin code with detekt."
+		group = "verification"
 	}
 
 	@TaskAction
