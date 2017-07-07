@@ -11,6 +11,7 @@ open class DetektIdeaFormatTask : DefaultTask() {
 
 	init {
 		description = "Uses an extern idea installation to format your code."
+		group = "verification"
 	}
 
 	@TaskAction

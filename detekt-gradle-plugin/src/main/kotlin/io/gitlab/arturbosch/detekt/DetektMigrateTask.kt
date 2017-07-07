@@ -12,6 +12,7 @@ open class DetektMigrateTask : DefaultTask() {
 
 	init {
 		description = "Migrate your kotlin code with detekt."
+		group = "verification"
 	}
 
 	@TaskAction

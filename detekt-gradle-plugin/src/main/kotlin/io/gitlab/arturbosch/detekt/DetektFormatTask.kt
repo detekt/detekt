@@ -12,6 +12,7 @@ open class DetektFormatTask : DefaultTask() {
 
 	init {
 		description = "Format your kotlin code with detekt."
+		group = "verification"
 	}
 
 	private val formatString = "--format"

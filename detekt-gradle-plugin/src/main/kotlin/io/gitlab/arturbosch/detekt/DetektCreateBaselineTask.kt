@@ -12,6 +12,7 @@ open class DetektCreateBaselineTask : DefaultTask() {
 
 	init {
 		description = "Creates a detekt baseline on the given --baseline path."
+		group = "verification"
 	}
 
 	private val createBaseline = "--create-baseline"
