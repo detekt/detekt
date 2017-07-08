@@ -25,6 +25,7 @@ class Formatting {
 				OutputFacade(this, config, detektion).run {
 					printNotifications()
 					printFindings()
+					buildErrorCheck()
 				}
 			}
 
