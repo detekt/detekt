@@ -20,13 +20,20 @@ fun Main.createRulePaths(): List<Path> = rules.letIfNonEmpty {
 private fun <T> String?.letIfNonEmpty(init: String.() -> List<T>): List<T> =
 		if (this == null || this.isEmpty()) listOf<T>() else this.init()
 
-fun Main.loadConfiguration(): Config = when {
-	!config.isNullOrBlank() -> parsePathConfig(config!!)
-	!configResource.isNullOrBlank() -> parseResourceConfig(configResource!!)
-	formatting -> FormatConfig(useTabs)
-	else -> Config.empty
-}.apply {
-	if (debug) println("\n$this\n")
+fun Main.loadConfiguration(): Config {
+	var config = when {
+		!config.isNullOrBlank() -> parsePathConfig(config!!)
+		!configResource.isNullOrBlank() -> parseResourceConfig(configResource!!)
+		formatting -> FormatConfig(useTabs)
+		else -> Config.empty
+	}
+
+	if (config.valueOrDefault("failFast", false)) {
+		config = FailFastConfig(config, loadDefaultConfig())
+	}
+
+	if (debug) println("\n$config\n")
+	return config
 }
 
 private fun parseResourceConfig(configPath: String): Config {
@@ -48,9 +55,7 @@ private fun parsePathConfig(configPath: String): Config {
 }
 
 class FormatConfig(private val useTabs: Boolean) : Config {
-	override fun subConfig(key: String): Config {
-		return this
-	}
+	override fun subConfig(key: String) = this
 
 	override fun <T : Any> valueOrDefault(key: String, default: T): T {
 		@Suppress("UNCHECKED_CAST")
@@ -61,6 +66,21 @@ class FormatConfig(private val useTabs: Boolean) : Config {
 		}
 	}
 }
+
+class FailFastConfig(private val originalConfig: Config, private val defaultConfig: Config) : Config {
+	override fun subConfig(key: String) = FailFastConfig(originalConfig.subConfig(key), defaultConfig.subConfig(key))
+
+	override fun <T : Any> valueOrDefault(key: String, default: T): T {
+		@Suppress("UNCHECKED_CAST")
+		return when (key) {
+			"active" -> originalConfig.valueOrDefault(key, true) as T
+			"warningThreshold", "failThreshold" -> originalConfig.valueOrDefault(key, 0) as T
+			else -> originalConfig.valueOrDefault(key, defaultConfig.valueOrDefault(key, default))
+		}
+	}
+}
+
+private fun loadDefaultConfig() = YamlConfig.loadResource(ClasspathResourceConverter().convert(DEFAULT_CONFIG))
 
 private val DEFAULT_CONFIG = "default-detekt-config.yml"
 
