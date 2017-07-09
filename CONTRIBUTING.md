@@ -18,3 +18,11 @@
 - ... do not forget to add the new rule to a `RuleSetProvider`
 - ... do not forget to add the new rule to the `default-detekt-config.yml` in the `detekt-cli-resources`
 - ... do not forget to write a description for the issue of the new rule
+
+### Release checklist
+
+- new features? -> Update README.md / from `1.x.x` Wiki
+- add changes in CHANGELOG.md -> `groovy github-milestone-report.groovy arturbosch/detekt [milestone-number]`
+- migrations expected? -> Update MIGRATION_GUIDE.md
+- all new contributors mentioned? -> README.md>Contributors, Update `all contributors`-Badge
+- new gradle-plugin release? -> Update gradle-version badge
