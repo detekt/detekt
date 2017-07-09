@@ -1,7 +1,5 @@
 package io.gitlab.arturbosch.detekt.rules.performance
 
-import io.gitlab.arturbosch.detekt.rules.bugs.LateinitUsage
-import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions
 import org.jetbrains.spek.api.Spek
