@@ -21,6 +21,8 @@ potential-bugs:
     active: false
   UnsafeCallOnNullableType:
     active: false
+  UnsafeCast:
+    active: false
 
 performance:
   active: true
