@@ -13,12 +13,14 @@ import org.jetbrains.kotlin.psi.KtUnaryExpression
  * @author Ivan Balaksha
  */
 class UnsafeCallOnNullableType(config: Config = Config.empty) : Rule(config) {
-    override val issue: Issue = Issue("UnsafeCallOnNullableType", Severity.Defect, "")
+	override val issue: Issue = Issue("UnsafeCallOnNullableType",
+			Severity.Defect,
+			"It will throw NullPointerException in runtime if your nullable value is null.")
 
-    override fun visitUnaryExpression(expression: KtUnaryExpression) {
-        super.visitUnaryExpression(expression)
-        if (expression.operationToken == KtTokens.EXCLEXCL) {
-            report(CodeSmell(issue, Entity.from(expression)))
-        }
-    }
+	override fun visitUnaryExpression(expression: KtUnaryExpression) {
+		super.visitUnaryExpression(expression)
+		if (expression.operationToken == KtTokens.EXCLEXCL) {
+			report(CodeSmell(issue, Entity.from(expression)))
+		}
+	}
 }
