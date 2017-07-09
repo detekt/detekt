@@ -12,12 +12,12 @@ import org.jetbrains.kotlin.psi.KtExpressionWithLabel
  * @author Ivan Balaksha
  */
 class LabeledExpression(config: Config = Config.empty) : Rule(config) {
-    override val issue: Issue = Issue("LabeledExpression", Severity.Maintainability, "")
+	override val issue: Issue = Issue("LabeledExpression", Severity.Maintainability, "")
 
-    override fun visitExpressionWithLabel(expression: KtExpressionWithLabel) {
-        super.visitExpressionWithLabel(expression)
-        expression.getLabelName()?.let {
-            report(CodeSmell(issue, Entity.from(expression)))
-        }
-    }
+	override fun visitExpressionWithLabel(expression: KtExpressionWithLabel) {
+		super.visitExpressionWithLabel(expression)
+		expression.getLabelName()?.let {
+			report(CodeSmell(issue, Entity.from(expression)))
+		}
+	}
 }
