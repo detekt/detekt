@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.rules.bugs.DuplicateCaseInWhenExpression
 import io.gitlab.arturbosch.detekt.rules.bugs.EqualsWithHashCodeExist
 import io.gitlab.arturbosch.detekt.rules.bugs.ExplicitGarbageCollectionCall
 import io.gitlab.arturbosch.detekt.rules.bugs.LateinitUsage
+import io.gitlab.arturbosch.detekt.rules.bugs.UnsafeCallOnNullableType
 
 /**
  * @author Artur Bosch
@@ -20,7 +21,8 @@ class PotentialBugProvider : RuleSetProvider {
 				DuplicateCaseInWhenExpression(config),
 				EqualsWithHashCodeExist(config),
 				ExplicitGarbageCollectionCall(config),
-				LateinitUsage(config)
+				LateinitUsage(config),
+				UnsafeCallOnNullableType(config)
 		))
 	}
 
