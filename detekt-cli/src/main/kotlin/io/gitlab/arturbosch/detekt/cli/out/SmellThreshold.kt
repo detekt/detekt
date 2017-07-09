@@ -40,8 +40,6 @@ class SmellThreshold(config: Config,
 				.fold(HashMap<String, String>()) { result, map -> result.putAll(map); result }
 	}
 
-	private fun Int.reached(amount: Int): Boolean = !(this == 0 && amount == 0) && this != -1 && this <= amount
-
 	private fun Finding.weighted(ids: Map<String, String>): Int {
 		val key = ids[id] // entry of ID > entry of RulesetID > default weight 1
 		return weightsConfig.valueOrDefault(id,
@@ -49,3 +47,6 @@ class SmellThreshold(config: Config,
 	}
 
 }
+
+// TODO make internal after https://youtrack.jetbrains.com/issue/KT-16497
+fun Int.reached(amount: Int): Boolean = !(this == 0 && amount == 0) && this != -1 && this <= amount
