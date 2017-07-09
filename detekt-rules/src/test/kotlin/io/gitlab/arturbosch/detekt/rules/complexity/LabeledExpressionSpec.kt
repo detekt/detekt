@@ -6,6 +6,9 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 import org.assertj.core.api.Assertions.assertThat
 
+/**
+ * @author Ivan Balaksha
+ */
 class LabeledExpressionSpec : SubjectSpek<LabeledExpression>({
     subject { LabeledExpression() }
     describe("") {
