@@ -14,7 +14,7 @@ import org.jetbrains.kotlin.psi.KtExpressionWithLabel
 class LabeledExpression(config: Config = Config.empty) : Rule(config) {
 	override val issue: Issue = Issue("LabeledExpression",
 			Severity.Maintainability,
-			"Expression with labels increase complexity and affect maintainability")
+			"Expression with labels increase complexity and affect maintainability.")
 
 	override fun visitExpressionWithLabel(expression: KtExpressionWithLabel) {
 		super.visitExpressionWithLabel(expression)
