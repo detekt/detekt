@@ -114,6 +114,8 @@ style:
   active: true
   WildcardImport:
     active: true
+  TodoComment:
+    active: true
   MaxLineLength:
     active: true
     maxLineLength: 120
