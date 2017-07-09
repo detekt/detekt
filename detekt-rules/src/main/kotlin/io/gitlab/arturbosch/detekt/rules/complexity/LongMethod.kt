@@ -18,7 +18,8 @@ class LongMethod(config: Config = Config.empty, threshold: Int = 20) : Threshold
 
 	override val issue = Issue("LongMethod",
 			Severity.Maintainability,
-			"Prefer smaller methods to make them easier to understand.")
+			"One method should have one responsibility. Long methods tend to handle many things at once. " +
+					"Prefer smaller methods to make them easier to understand.")
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		val body: KtBlockExpression? = function.bodyExpression.asBlockExpression()

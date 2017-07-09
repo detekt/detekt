@@ -18,7 +18,9 @@ class TooManyFunctions(config: Config = Config.empty, threshold: Int = 10) : Thr
 
 	override val issue = Issue("TooManyFunctions",
 			Severity.Maintainability,
-			"Class contains too many functions.")
+			"Classes with many functions tend to do too many things and often come in conjunction with " +
+					"large classes and can quickly become God classes. " +
+					"Consider extracting methods to (new) classes better matching their responsibility.")
 
 	private var amount: Int = 0
 

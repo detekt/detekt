@@ -10,7 +10,7 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import java.util.*
+import java.util.ArrayDeque
 
 /**
  * @author Artur Bosch
@@ -19,7 +19,10 @@ class EqualsWithHashCodeExist(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue("EqualsWithHashCodeExist",
 			Severity.Defect,
-			"")
+			"Always override hashCode when you override equals. " +
+					"All hash-based collections depend on objects meeting the equals-contract. " +
+					"Two equal objects must produce the same hashcode. When inheriting equals or hashcode, " +
+					"override the inherited and call the super method for clarification.")
 
 	private val queue = ArrayDeque<ViolationHolder>(5)
 
