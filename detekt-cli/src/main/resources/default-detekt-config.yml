@@ -24,6 +24,8 @@ performance:
   active: true
   ForEachOnRange:
     active: true
+  SpreadOperator:
+    active: true
 
 exceptions:
   active: true
