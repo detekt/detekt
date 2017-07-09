@@ -19,6 +19,8 @@ potential-bugs:
     active: true
   LateinitUsage:
     active: false
+  UnsafeCallOnNullableType:
+    active: false
 
 performance:
   active: true
