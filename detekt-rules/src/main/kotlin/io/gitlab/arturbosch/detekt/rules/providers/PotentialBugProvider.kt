@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.rules.bugs.EqualsWithHashCodeExist
 import io.gitlab.arturbosch.detekt.rules.bugs.ExplicitGarbageCollectionCall
 import io.gitlab.arturbosch.detekt.rules.bugs.LateinitUsage
 import io.gitlab.arturbosch.detekt.rules.bugs.UnsafeCallOnNullableType
+import io.gitlab.arturbosch.detekt.rules.bugs.UnsafeCast
 
 /**
  * @author Artur Bosch
@@ -22,7 +23,8 @@ class PotentialBugProvider : RuleSetProvider {
 				EqualsWithHashCodeExist(config),
 				ExplicitGarbageCollectionCall(config),
 				LateinitUsage(config),
-				UnsafeCallOnNullableType(config)
+				UnsafeCallOnNullableType(config),
+				UnsafeCast(config)
 		))
 	}
 
