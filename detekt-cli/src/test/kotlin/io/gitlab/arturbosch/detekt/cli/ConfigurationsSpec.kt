@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.test.resource
-import jdk.nashorn.internal.runtime.regexp.joni.encoding.CharacterType.W
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
