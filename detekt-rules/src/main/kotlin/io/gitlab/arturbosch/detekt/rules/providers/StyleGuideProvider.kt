@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.rules.style.MaxLineLength
 import io.gitlab.arturbosch.detekt.rules.style.NamingConventionViolation
+import io.gitlab.arturbosch.detekt.rules.style.TodoComment
 import io.gitlab.arturbosch.detekt.rules.style.WildcardImport
 
 /**
@@ -18,6 +19,7 @@ class StyleGuideProvider : RuleSetProvider {
 		return RuleSet(ruleSetId, listOf(
 				WildcardImport(config),
 				MaxLineLength(config),
+				TodoComment(config),
 				NamingConventionViolation(config)
 		))
 	}
