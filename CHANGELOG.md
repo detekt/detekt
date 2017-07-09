@@ -1,5 +1,36 @@
 # Detekt - Changelog
 
+#### M13
+
+- Fix issue when default config should from the resources by the cli - [#178](https://github.com/arturbosch/detekt/pull/178)
+- Rule: SpreadOperator - [#177](https://github.com/arturbosch/detekt/pull/177)
+- Update readme, contributors, changelog, migration guide for M13 - [#176](https://github.com/arturbosch/detekt/issues/176)
+- Rule: Expression with label - [#175](https://github.com/arturbosch/detekt/pull/175)
+- Rule: Report unsafe call on nullable types - [#174](https://github.com/arturbosch/detekt/pull/174)
+- Rule: Expression with label - [#173](https://github.com/arturbosch/detekt/issues/173)
+- Rule: Report unsafe call on nullable types - [#172](https://github.com/arturbosch/detekt/issues/172)
+- Fix off by one error in Int.reached regarding SmellThreshold. - [#170](https://github.com/arturbosch/detekt/pull/170)
+- Set the group to verification on all gradle tasks. - [#168](https://github.com/arturbosch/detekt/pull/168)
+- Fix a typo in CHANGELOG.md - [#165](https://github.com/arturbosch/detekt/pull/165)
+- Update kotlin version to 1.1.3-2 - closes #124 - [#164](https://github.com/arturbosch/detekt/pull/164)
+- Added missed brackets to repository name in readme - [#163](https://github.com/arturbosch/detekt/pull/163)
+- Rule: Find usages of forEach on Ranges - [#161](https://github.com/arturbosch/detekt/pull/161)
+- Running formatting checks without formatting the code on CI - [#159](https://github.com/arturbosch/detekt/issues/159)
+- Remove lateinit usage in Main.kt - [#156](https://github.com/arturbosch/detekt/pull/156)
+- Rule: Report forEach usages on Ranges - [#155](https://github.com/arturbosch/detekt/issues/155)
+- More descriptions to for most rules - [#154](https://github.com/arturbosch/detekt/pull/154)
+- Always show the absolute number of code smells - [#152](https://github.com/arturbosch/detekt/issues/152)
+- Use the latest version in gradle-plugin as default - [#151](https://github.com/arturbosch/detekt/issues/151)
+- Turn off auto correction for sonar analysis - [#147](https://github.com/arturbosch/detekt/pull/147)
+- Fix AppVeyor badge in `README.md` - [#146](https://github.com/arturbosch/detekt/pull/146)
+- README: Fix various issues with variables in code examples - [#142](https://github.com/arturbosch/detekt/pull/142)
+- add descriptions to rules in style, empty, exceptions - [#140](https://github.com/arturbosch/detekt/pull/140)
+- Remove lateinit in project property in Main class - [#132](https://github.com/arturbosch/detekt/issues/132)
+- Should rule providers have their own package or live in the according package - [#131](https://github.com/arturbosch/detekt/issues/131)
+- Issue descriptions for each rule (also displayed in `Detekt way` - sonar plugin) - [#110](https://github.com/arturbosch/detekt/issues/110)
+
+See all issues at: [M13](https://github.com/arturbosch/detekt/milestone/12)
+
 #### M12.1 & M12.2 & M12.3 & M12.4
 
 - Convert Kotlin source code strings to Unix line endings - [#137](https://github.com/arturbosch/detekt/pull/137)
