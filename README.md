@@ -701,7 +701,6 @@ detekt findings
 - [Ivan Balaksha](https://github.com/tagantroy) - Rules: UnsafeCast, SpreadOperator, UnsafeCallOnNullableType, LabeledExpression
 
 #### Credits
-- [Stanley Shyiko](https://github.com/shyiko) - `detekt` migrated the formatting rules from [ktlint](https://github
-.com/shyiko/ktlint)
+- [Stanley Shyiko](https://github.com/shyiko) - `detekt` migrated the formatting rules from [ktlint](https://github.com/shyiko/ktlint)
 - [Kotlin](https://github.com/Kotlin) - Being an awesome language
 - [JetBrains](https://github.com/jetbrains/) - Creating awesome Intellij + Kotlin

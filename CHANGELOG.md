@@ -2,6 +2,7 @@
 
 #### M13
 
+- Convert single line methods to Expression Bodys. - [#185](https://github.com/arturbosch/detekt/pull/185)
 - Fix issue when default config should from the resources by the cli - [#178](https://github.com/arturbosch/detekt/pull/178)
 - Rule: SpreadOperator - [#177](https://github.com/arturbosch/detekt/pull/177)
 - Update readme, contributors, changelog, migration guide for M13 - [#176](https://github.com/arturbosch/detekt/issues/176)
