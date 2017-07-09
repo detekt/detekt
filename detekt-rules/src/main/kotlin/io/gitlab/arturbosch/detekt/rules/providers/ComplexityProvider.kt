@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.rules.complexity.LongParameterList
 import io.gitlab.arturbosch.detekt.rules.complexity.NestedBlockDepth
 import io.gitlab.arturbosch.detekt.rules.complexity.TooManyFunctions
 import io.gitlab.arturbosch.detekt.rules.complexity.ComplexCondition
+import io.gitlab.arturbosch.detekt.rules.complexity.LabeledExpression
 
 /**
  * @author Artur Bosch
@@ -26,7 +27,8 @@ class ComplexityProvider : RuleSetProvider {
 				ComplexMethod(config),
 				NestedBlockDepth(config),
 				TooManyFunctions(config),
-				ComplexCondition(config)
+				ComplexCondition(config),
+				LabeledExpression(config)
 		))
 	}
 }
