@@ -13,6 +13,7 @@ enum class Case(val file: String) {
 	Empty("/cases/Empty.kt"),
 	Exceptions("/cases/Exceptions.kt"),
 	NamingConventions("/cases/NamingConventions.kt"),
+	NewLineAtEndOfFile("/cases/NewLineAtEndOfFile.kt"),
 	MaxLineLength("/cases/MaxLineLength.kt"),
 	ComplexClass("/cases/ComplexClass.kt"),
 	Comments("/cases/Comments.kt"),
