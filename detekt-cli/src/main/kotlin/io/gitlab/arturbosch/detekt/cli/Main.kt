@@ -20,12 +20,12 @@ class Main {
 			description = "Path filters defined through regex with separator ';' (\".*test.*\").")
 	var filters: String? = null // Using a converter for List<PathFilter> resulted in a ClassCastException
 
-	@Parameter(names = arrayOf("--config", "-c"), description = "Path to the config file (path/to/config.yml).")
+	@Parameter(names = arrayOf("--config", "-c"),
+			description = "Path to the config file (path/to/config.yml).")
 	var config: String? = null
 
 	@Parameter(names = arrayOf("--config-resource", "-cr"),
-			description = "Path to the config resource on detekt's classpath (path/to/config.yml).",
-			converter = MultipleClasspathResourceConverter::class)
+			description = "Path to the config resource on detekt's classpath (path/to/config.yml).")
 	var configResource: String? = null
 
 	@Parameter(names = arrayOf("--generate-config", "-gc"),
@@ -44,7 +44,8 @@ class Main {
 			" Should only be used if the analyzing project has more than ~200 kotlin files.")
 	var parallel: Boolean = false
 
-	@Parameter(names = arrayOf("--useTabs"), description = "Tells the formatter that indentation with tabs are valid.")
+	@Parameter(names = arrayOf("--useTabs"),
+			description = "Tells the formatter that indentation with tabs are valid.")
 	var useTabs: Boolean = false
 
 	@Parameter(names = arrayOf("--baseline", "-b"), description = "If a baseline xml file is passed in," +
@@ -72,7 +73,7 @@ class Main {
 	@Parameter(names = arrayOf("--help", "-h"), help = true, description = "Shows the usage.")
 	var help: Boolean = false
 
-	val projectPath : Path
+	val projectPath: Path
 		get() = project!!
 
 	companion object {
