@@ -34,4 +34,5 @@ interface RuleSetProvider {
 	 * to be self configurable.
 	 */
 	fun instance(config: Config): RuleSet
+
 }

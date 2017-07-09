@@ -64,5 +64,6 @@ class YamlConfig internal constructor(val properties: Map<String, Any>) : BaseCo
 		}
 
 		private fun BufferedReader.readText() = lineSequence().joinToString("\n")
+
 	}
 }
