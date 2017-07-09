@@ -8,6 +8,9 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtExpressionWithLabel
 
+/**
+ * @author Ivan Balaksha
+ */
 class LabeledExpression(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue("LabeledExpression", Severity.Maintainability, "")
 
