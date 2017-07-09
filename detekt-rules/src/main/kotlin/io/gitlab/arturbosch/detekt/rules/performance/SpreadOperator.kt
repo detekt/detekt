@@ -17,8 +17,7 @@ class SpreadOperator(config: Config = Config.empty) : Rule() {
 
 	override fun visitValueArgumentList(list: KtValueArgumentList) {
 		super.visitValueArgumentList(list)
-		list.arguments
-				.filter { it.firstChild.textMatches(KtTokens.MUL.value) }
+		list.arguments.filter { it.firstChild.textMatches(KtTokens.MUL.value) }
 				.forEach {
 					report(CodeSmell(issue, Entity.from(list)))
 				}
