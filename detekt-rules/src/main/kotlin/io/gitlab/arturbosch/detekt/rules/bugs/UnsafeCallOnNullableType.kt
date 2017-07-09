@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.psi.KtUnaryExpression
 class UnsafeCallOnNullableType(config: Config = Config.empty) : Rule(config) {
 	override val issue: Issue = Issue("UnsafeCallOnNullableType",
 			Severity.Defect,
-			"It will throw NullPointerException in runtime if your nullable value is null.")
+			"It will throw NullPointerException at runtime if your nullable value is null.")
 
 	override fun visitUnaryExpression(expression: KtUnaryExpression) {
 		super.visitUnaryExpression(expression)
