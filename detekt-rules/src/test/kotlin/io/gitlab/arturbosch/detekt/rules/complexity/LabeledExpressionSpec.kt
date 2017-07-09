@@ -11,7 +11,9 @@ import org.assertj.core.api.Assertions.assertThat
  */
 class LabeledExpressionSpec : SubjectSpek<LabeledExpression>({
 	subject { LabeledExpression() }
+
 	describe("") {
+
 		it("break with label") {
 			val code = """
 				fun breakWithLabel() {
@@ -23,6 +25,7 @@ class LabeledExpressionSpec : SubjectSpek<LabeledExpression>({
 				}"""
 			assertThat(subject.lint(code)).hasSize(2)
 		}
+
 		it("continue with label") {
 			val code = """
 				fun continueWithLabel() {
@@ -34,6 +37,7 @@ class LabeledExpressionSpec : SubjectSpek<LabeledExpression>({
 				}"""
 			assertThat(subject.lint(code)).hasSize(2)
 		}
+
 		it("implicit return with label") {
 			val code = """
 				fun implicitReturnWithLabel(range: IntRange) {
@@ -44,6 +48,7 @@ class LabeledExpressionSpec : SubjectSpek<LabeledExpression>({
 				}"""
 			assertThat(subject.lint(code)).hasSize(1)
 		}
+
 		it("return with label") {
 			val code = """
 				fun returnWithLabel(range: IntRange) {
