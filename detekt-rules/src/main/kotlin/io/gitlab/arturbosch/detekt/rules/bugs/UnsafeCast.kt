@@ -9,6 +9,9 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
 import org.jetbrains.kotlin.psi.KtPsiUtil
 
+/**
+ * @author Ivan Balaksha
+ */
 class UnsafeCast(config: Config = Config.empty) : Rule(config) {
 	override val issue: Issue = Issue("UnsafeCast",
 			Severity.Defect,
