@@ -12,3 +12,6 @@
         else -> ...
     }
 ```
+
+- When implementing new rules, do not forget to add the new rule to a `RuleSetProvider`
+- When implementing new rules, do not forget to add the new rule to the `default-detekt-config.yml` in the `detekt-cli-resources`
