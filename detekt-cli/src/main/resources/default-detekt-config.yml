@@ -48,7 +48,7 @@ complexity:
   ComplexCondition:
     threshold: 3
   LabeledExpression:
-    active: true
+    active: false
 
 code-smell:
   active: true
