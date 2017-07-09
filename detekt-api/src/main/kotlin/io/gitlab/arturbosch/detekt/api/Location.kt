@@ -18,9 +18,7 @@ data class Location(val source: SourceLocation,
 					val locationString: String,
 					val file: String) : Compactable {
 
-	override fun compact(): String {
-		return "$file:$source"
-	}
+	override fun compact() = "$file:$source"
 
 	companion object {
 		fun from(element: PsiElement, offset: Int = 0): Location {
@@ -44,10 +42,10 @@ data class Location(val source: SourceLocation,
 			}
 		}
 
-		private fun PsiElement.originalFilePath(): String?
+		private fun PsiElement.originalFilePath()
 				= (this.containingFile.viewProvider.virtualFile as LightVirtualFile).originalFile?.name
 
-		private fun PsiElement.getTextAtLocationSafe(): String
+		private fun PsiElement.getTextAtLocationSafe()
 				= getTextSafe(defaultValue = { searchName() }) { getTextWithLocation() }
 	}
 
@@ -57,16 +55,12 @@ data class Location(val source: SourceLocation,
  * Stores line and column information of a location.
  */
 data class SourceLocation(val line: Int, val column: Int) {
-	override fun toString(): String {
-		return "$line:$column"
-	}
+	override fun toString() = "$line:$column"
 }
 
 /**
  * Stores character start and end positions of an text file.
  */
 data class TextLocation(val start: Int, val end: Int) {
-	override fun toString(): String {
-		return "$start:$end"
-	}
+	override fun toString() = "$start:$end"
 }

@@ -52,9 +52,7 @@ interface HasMetrics {
  * Allows to iterate over attributes reflectively.
  */
 interface Reflective {
-	fun findAttribute(name: String): Any? {
-		return this.javaClass.kotlin.memberProperties.find { it.name == name }?.get(this)
-	}
+	fun findAttribute(name: String): Any? = this.javaClass.kotlin.memberProperties.find { it.name == name }?.get(this)
 }
 
 /**

@@ -69,4 +69,5 @@ abstract class TokenRule(config: Config = Config.empty) : Rule(config) {
 
 	protected open fun visitSpaces(space: PsiWhiteSpace) {
 	}
+
 }

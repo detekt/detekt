@@ -62,15 +62,13 @@ abstract class BaseConfig : Config {
 		}
 	}
 
-	private fun tryParseBasedOnDefault(result: String, defaultResult: Any): Any {
-		return when (defaultResult) {
-			is Int -> java.lang.Integer.parseInt(result)
-			is Boolean -> java.lang.Boolean.parseBoolean(result)
-			is Double -> java.lang.Double.parseDouble(result)
-			is String -> result
-			else -> throw ClassCastException()
-		}
-	}
+	private fun tryParseBasedOnDefault(result: String, defaultResult: Any): Any = when (defaultResult) {
+    is Int -> java.lang.Integer.parseInt(result)
+    is Boolean -> java.lang.Boolean.parseBoolean(result)
+    is Double -> java.lang.Double.parseDouble(result)
+    is String -> result
+    else -> throw ClassCastException()
+  }
 
 }
 

@@ -13,13 +13,9 @@ open class CodeSmell(final override val issue: Issue,
 
 	override val id: String = issue.id
 
-	override fun compact(): String {
-		return "$id - ${entity.compact()}"
-	}
+	override fun compact() = "$id - ${entity.compact()}"
 
-	override fun compactWithSignature(): String {
-		return compact() + " - Signature=" + entity.signature
-	}
+	override fun compactWithSignature() = compact() + " - Signature=" + entity.signature
 }
 
 /**
@@ -30,9 +26,7 @@ open class CodeSmellWithReferenceAndMetric(
 		issue: Issue, entity: Entity, val reference: Entity, metric: Metric) : ThresholdedCodeSmell(
 		issue, entity, metric, references = listOf(reference)) {
 
-	override fun compact(): String {
-		return "$id - $metric - ref=${reference.name} - ${entity.compact()}"
-	}
+	override fun compact() = "$id - $metric - ref=${reference.name} - ${entity.compact()}"
 }
 
 /**
@@ -47,7 +41,5 @@ open class ThresholdedCodeSmell(
 	val threshold: Int
 		get() = metric.threshold
 
-	override fun compact(): String {
-		return "$id - $metric - ${entity.compact()}"
-	}
+	override fun compact() = "$id - $metric - ${entity.compact()}"
 }

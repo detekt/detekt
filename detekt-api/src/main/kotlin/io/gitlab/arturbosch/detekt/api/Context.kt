@@ -16,7 +16,7 @@ open class DefaultContext : Context {
 	 * Resets the context.
 	 *
 	 */
-	override val findings: List<Finding>
+	override val findings
 		get() = _findings.toList()
 
 	private var _findings: MutableList<Finding> = mutableListOf()
