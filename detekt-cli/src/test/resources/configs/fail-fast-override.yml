@@ -1,0 +1,13 @@
+failFast: true
+
+build:
+  warningThreshold: 1
+  failThreshold: 1
+
+style:
+  MaxLineLength:
+    maxLineLength: 100
+
+comments:
+  CommentOverPrivateMethod:
+    active: false

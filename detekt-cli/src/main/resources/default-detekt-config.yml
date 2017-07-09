@@ -1,4 +1,5 @@
 autoCorrect: true
+failFast: false
 
 build:
   warningThreshold: 5
