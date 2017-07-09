@@ -24,7 +24,7 @@ class UnsafeCallOnNullableTypeSpec : SubjectSpek<UnsafeCallOnNullableType>({
         }
         it("safe call on nullable type") {
             val code = """
-            class UnsafeCallOnNullable {
+            class SafeCallOnNullable {
                 fun test(str: String?) {
                     println(str?.length)
                 }
@@ -33,7 +33,7 @@ class UnsafeCallOnNullableTypeSpec : SubjectSpek<UnsafeCallOnNullableType>({
         }
         it("elvis") {
             val code = """
-            class UnsafeCallOnNullable {
+            class ElvisCallOnNullable {
                 fun test(str: String?) {
                     println(str?.length ?: 0)
                 }
