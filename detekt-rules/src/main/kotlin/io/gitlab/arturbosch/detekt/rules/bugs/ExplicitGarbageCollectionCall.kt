@@ -18,7 +18,9 @@ class ExplicitGarbageCollectionCall(config: Config) : Rule(config) {
 
 	override val issue = Issue("ExplicitGarbageCollectionCall",
 			Severity.Defect,
-			"Manual calls for garbage collection should be avoided.")
+			"Don't try to be smarter than the JVM. Your code should work independently if the garbage " +
+					"collector is disabled or not. If you face memory issues, " +
+					"try tuning the JVM options instead of relying on code itself.")
 
 	override fun visitCallExpression(expression: KtCallExpression) {
 		expression.getCallNameExpression()?.let {

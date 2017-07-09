@@ -18,7 +18,9 @@ class LongParameterList(config: Config = Config.empty, threshold: Int = 5) : Thr
 
 	override val issue = Issue("LongParameterList",
 			Severity.Maintainability,
-			"Prefer methods with short parameter lists.")
+			"The more parameters a method has the more complex it is. Long parameter lists are often " +
+					"used to control complex algorithms and violate the Single Responsibility Principle. " +
+					"Prefer methods with short parameter lists.")
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		if (function.hasModifier(KtTokens.OVERRIDE_KEYWORD)) return
