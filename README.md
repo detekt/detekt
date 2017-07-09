@@ -5,7 +5,7 @@
 [ ![Download](https://api.bintray.com/packages/arturbosch/code-analysis/detekt/images/download.svg) ](https://bintray.com/arturbosch/code-analysis/detekt/_latestVersion)
 [![All Contributors](https://img.shields.io/badge/gradle_plugin-1.0.0.M12.4-blue.svg?style=flat-square)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-13-orange.svg?style=flat-square)](#contributors)
 [![All Contributors](https://img.shields.io/badge/androidweekly-259-orange.svg?style=flat-square)](http://androidweekly.net/issues/issue-259)
 [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
 
@@ -686,12 +686,22 @@ inside the report file.
 
 - [Artur Bosch](https://github.com/arturbosch) - Maintainer
 - [lummax](https://github.com/lummax) - Cli enhancements
-- [Svyatoslav Chatchenko](https://github.com/MyDogTom) - NamingConventions and UnusedImport fixes
+- [Svyatoslav Chatchenko](https://github.com/MyDogTom) - Active on Issues, NamingConventions and UnusedImport fixes
 - [Sean Flanigan](https://github.com/seanf) - Config from classpath resource
-- [Sebastian Schuberth](https://github.com/sschuberth) - Windows support
+- [Sebastian Schuberth](https://github.com/sschuberth) - Active on Issues, Windows support
 - [Olivier Lemasle](https://github.com/olivierlemasle) - NP-Bugfix
-- [Marvin Ramin](https://github.com/Mauin) - Rules: MaxLineLength & LateinitUsagerule, dept and test cleanups
+- [Marvin Ramin](https://github.com/Mauin) - Rules: MaxLineLength + LateinitUsage rule, Active on Issues, sdept and 
+test cleanups
 - [Marc Prengemann](https://github.com/winterDroid) - Support for custom output formats, prototyped Rule-Context-Issue separation
 - [Sebastiano Poggi](https://github.com/rock3r) - Enhanced milestone report script
+- [Ilya Tretyakov](https://github.com/jvilya) - Sonar runs should not auto correct formatting.
+- [Andrey T](https://github.com/mr-procrastinator) - Readme fix
+- [Niklas Baudy](https://github.com/vanniktech) - Active on Issues, Bug fix, documentation fixes, 
+detekt findings
+- [Ivan Balaksha](https://github.com/tagantroy) - Rules: UnsafeCast, SpreadOperator, UnsafeCallOnNullableType, LabeledExpression
+
 #### Credits
-- [Stanley Shyiko](https://github.com/shyiko): `detekt` migrated the formatting rules from [ktlint](https://github.com/shyiko/ktlint)
+- [Stanley Shyiko](https://github.com/shyiko) - `detekt` migrated the formatting rules from [ktlint](https://github
+.com/shyiko/ktlint)
+- [Kotlin](https://github.com/Kotlin) - Being an awesome language
+- [JetBrains](https://github.com/jetbrains/) - Creating awesome Intellij + Kotlin
