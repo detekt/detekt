@@ -2,6 +2,8 @@
 
 #### M13
 
+- Add missing unit test for Int.reached. - [#191](https://github.com/arturbosch/detekt/pull/191)
+- Add failFast option to the configuration. - [#186](https://github.com/arturbosch/detekt/pull/186)
 - Convert single line methods to Expression Bodys. - [#185](https://github.com/arturbosch/detekt/pull/185)
 - Fix issue when default config should from the resources by the cli - [#178](https://github.com/arturbosch/detekt/pull/178)
 - Rule: SpreadOperator - [#177](https://github.com/arturbosch/detekt/pull/177)
