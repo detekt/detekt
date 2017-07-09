@@ -13,5 +13,8 @@
     }
 ```
 
-- When implementing new rules, do not forget to add the new rule to a `RuleSetProvider`
-- When implementing new rules, do not forget to add the new rule to the `default-detekt-config.yml` in the `detekt-cli-resources`
+### When implementing new rules ...
+
+- ... do not forget to add the new rule to a `RuleSetProvider`
+- ... do not forget to add the new rule to the `default-detekt-config.yml` in the `detekt-cli-resources`
+- ... do not forget to write a description for the issue of the new rule
