@@ -21,8 +21,7 @@ data class Entity(val name: String,
 			val name = element.searchName()
 			val signature = element.buildFullSignature()
 			val clazz = element.searchClass()
-			return Entity(name, clazz, signature, Location.from(element, offset),
-					if (element is KtElement) element else null)
+			return Entity(name, clazz, signature, Location.from(element, offset), element as? KtElement)
 		}
 	}
 }
