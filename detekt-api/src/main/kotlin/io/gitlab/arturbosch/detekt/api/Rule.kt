@@ -14,9 +14,8 @@ import org.jetbrains.kotlin.psi.KtFile
  * @author Artur Bosch
  */
 @Suppress("EmptyFunctionBlock")
-abstract class Rule(override val config: Config = Config.empty,
-					private val context: Context = DefaultContext()) :
-		DetektVisitor(), Context by context, ConfigAware {
+abstract class Rule(override val config: Config = Config.empty) :
+		DetektVisitor(), ConfigAware {
 
 	abstract val issue: Issue
 	final override val id: String by lazy(LazyThreadSafetyMode.NONE) { issue.id }
@@ -25,7 +24,7 @@ abstract class Rule(override val config: Config = Config.empty,
 	 * Before starting visiting kotlin elements, a check is performed if this rule should be triggered.
 	 * Pre- and post-visit-hooks are executed before/after the visiting process.
 	 */
-	open fun visit(root: KtFile) {
+	override fun visit(root: KtFile) {
 		ifRuleActive {
 			if (!root.isSuppressedBy(id)) {
 				preVisit(root)

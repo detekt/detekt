@@ -7,7 +7,7 @@ import org.jetbrains.kotlin.psi.KtFile
  *
  * @author Artur Bosch
  */
-class RuleSet(val id: String, val rules: List<Rule>) {
+class RuleSet(val id: String, val rules: List<DetektVisitor>) {
 
 	init {
 		validateIdentifier(id)
