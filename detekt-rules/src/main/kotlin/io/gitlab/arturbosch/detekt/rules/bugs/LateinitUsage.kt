@@ -18,7 +18,9 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 					"is error prone, try using constructor injection or delegation.")
 
 	private val excludeAnnotatedProperties: List<String>
-			= valueOrDefault(EXCLUDE_ANNOTATED_PROPERTIES, "").split(",")
+			= valueOrDefault(EXCLUDE_ANNOTATED_PROPERTIES, "")
+					.split(",")
+					.map { it.removeSuffix("*") }
 
 	override fun visitProperty(property: KtProperty) {
 		if (!isLateinitProperty(property)) {
@@ -32,18 +34,13 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 		report(CodeSmell(issue, Entity.from(property)))
 	}
 
-	private fun isLateinitProperty(property: KtProperty): Boolean {
-		return property.modifierList?.hasModifier(KtTokens.LATEINIT_KEYWORD) ?: false
-	}
+	private fun isLateinitProperty(property: KtProperty) = property.modifierList?.hasModifier(KtTokens.LATEINIT_KEYWORD) ?: false
 
-	private fun isExcludedByAnnotation(property: KtProperty): Boolean {
-		return property.annotationEntries
-				.map { KtPsiUtil.getShortName(it) }
-				.filterNotNull()
-				.map { it.toString() }
-				.filter { excludeAnnotatedProperties.contains(it) }
-				.count() != 0
-	}
+	private fun isExcludedByAnnotation(property: KtProperty) = property.annotationEntries
+      .map { "${KtPsiUtil.getPackageName(it)}.${KtPsiUtil.getShortName(it)}" }
+      .none { annotationFqn ->
+        excludeAnnotatedProperties.none { it.isNotBlank() && annotationFqn.contains(it) }
+      }
 
 	companion object {
 		const val EXCLUDE_ANNOTATED_PROPERTIES = "excludeAnnotatedProperties"
