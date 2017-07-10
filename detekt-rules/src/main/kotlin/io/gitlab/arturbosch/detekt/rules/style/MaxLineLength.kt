@@ -3,13 +3,25 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
+import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.SubRule
+import io.gitlab.arturbosch.detekt.rules.applyRule
 import org.jetbrains.kotlin.psi.KtFile
 
-class MaxLineLength(config: Config = Config.empty) : Rule(config) {
+class MaxLineLength(val config: Config = Config.empty) : DetektVisitor() {
+
+	override fun visitKtFile(file: KtFile) {
+		val lines = file.text.splitToSequence("\n")
+		lines.applyRule {
+			MaxLineLengthRule(config, file)
+		}.forEach { report(it) }
+	}
+}
+
+class MaxLineLengthRule(config: Config = Config.empty, private val file: KtFile) : SubRule<Sequence<String>>(config) {
 
 	override val issue = Issue(javaClass.simpleName,
 			Severity.Style,
@@ -17,16 +29,15 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 			Debt.FIVE_MINS)
 
 	private val maxLineLength: Int
-			= valueOrDefault(MAX_LINE_LENGTH, DEFAULT_IDEA_LINE_LENGTH)
+			= valueOrDefault(MaxLineLengthRule.MAX_LINE_LENGTH, MaxLineLengthRule.DEFAULT_IDEA_LINE_LENGTH)
 	private val excludePackageStatements: Boolean
-			= valueOrDefault(EXCLUDE_PACKAGE_STATEMENTS, DEFAULT_VALUE_PACKAGE_EXCLUDE)
+			= valueOrDefault(MaxLineLengthRule.EXCLUDE_PACKAGE_STATEMENTS, MaxLineLengthRule.DEFAULT_VALUE_PACKAGE_EXCLUDE)
 	private val excludeImportStatements: Boolean
-			= valueOrDefault(EXCLUDE_IMPORT_STATEMENTS, DEFAULT_VALUE_IMPORTS_EXCLUDE)
+			= valueOrDefault(MaxLineLengthRule.EXCLUDE_IMPORT_STATEMENTS, MaxLineLengthRule.DEFAULT_VALUE_IMPORTS_EXCLUDE)
 
-	override fun visitKtFile(file: KtFile) {
+	override fun apply(element: Sequence<String>) {
 		var offset = 0
-		file.text.splitToSequence("\n")
-				.filter { filterPackageStatements(it) }
+		element.filter { filterPackageStatements(it) }
 				.filter { filterImportStatements(it) }
 				.map { it.length }
 				.forEach {
