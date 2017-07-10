@@ -13,6 +13,8 @@ class LateinitUsageSpec : Spek({
 		val code = """
 			package foo
 
+			import kotlin.jvm.JvmField
+
 			class Test {
 				@JvmField lateinit var test: Int
 			}
@@ -28,13 +30,13 @@ class LateinitUsageSpec : Spek({
 			assertThat(findings).hasSize(0)
 		}
 
-		it("should not report lateinit properties matching foo.") {
-			val findings = LateinitUsage(TestConfig(mapOf(LateinitUsage.EXCLUDE_ANNOTATED_PROPERTIES to "foo."))).lint(code)
+		it("should not report lateinit properties matching kotlin.jvm.") {
+			val findings = LateinitUsage(TestConfig(mapOf(LateinitUsage.EXCLUDE_ANNOTATED_PROPERTIES to "kotlin.jvm."))).lint(code)
 			assertThat(findings).hasSize(0)
 		}
 
-		it("should not report lateinit properties matching foo.*") {
-			val findings = LateinitUsage(TestConfig(mapOf(LateinitUsage.EXCLUDE_ANNOTATED_PROPERTIES to "foo.*"))).lint(code)
+		it("should not report lateinit properties matching kotlin.jvm.*") {
+			val findings = LateinitUsage(TestConfig(mapOf(LateinitUsage.EXCLUDE_ANNOTATED_PROPERTIES to "kotlin.jvm.*"))).lint(code)
 			assertThat(findings).hasSize(0)
 		}
 
