@@ -1,12 +1,12 @@
 package io.gitlab.arturbosch.detekt.test
 
-import io.gitlab.arturbosch.detekt.api.DetektVisitor
+import io.gitlab.arturbosch.detekt.api.BaseRule
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
 
-fun DetektVisitor.lint(content: String): List<Finding> {
+fun BaseRule.lint(content: String): List<Finding> {
 	val ktFile = KtTestCompiler.compileFromContent(content.trimIndent())
 	return findingsAfterVisit(ktFile)
 }
@@ -16,8 +16,8 @@ fun Rule.lint(path: Path): List<Finding> {
 	return findingsAfterVisit(ktFile)
 }
 
-private fun DetektVisitor.findingsAfterVisit(ktFile: KtFile): List<Finding> {
-	this.visit(ktFile)
+private fun BaseRule.findingsAfterVisit(ktFile: KtFile): List<Finding> {
+	this.visitFile(ktFile)
 	return this.findings
 }
 

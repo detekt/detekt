@@ -7,7 +7,7 @@ import org.jetbrains.kotlin.psi.KtFile
  *
  * @author Artur Bosch
  */
-class RuleSet(val id: String, val rules: List<DetektVisitor>) {
+class RuleSet(val id: String, val rules: List<BaseRule>) {
 
 	init {
 		validateIdentifier(id)
@@ -20,7 +20,7 @@ class RuleSet(val id: String, val rules: List<DetektVisitor>) {
 	fun accept(file: KtFile): List<Finding> {
 		val findings: MutableList<Finding> = mutableListOf()
 		rules.forEach {
-			it.visit(file)
+			it.visitFile(file)
 			findings += it.findings
 		}
 		return findings
