@@ -40,7 +40,7 @@ class Runner(private val main: Main) : Executable {
 			val rules = createRulePaths()
 			val config = loadConfiguration()
 			val changeListeners = createProcessors()
-			return ProcessingSettings(projectPath, config, pathFilters, parallel,
+			return ProcessingSettings(inputPath, config, pathFilters, parallel,
 					disableDefaultRuleSets, rules, changeListeners) to config
 		}
 	}

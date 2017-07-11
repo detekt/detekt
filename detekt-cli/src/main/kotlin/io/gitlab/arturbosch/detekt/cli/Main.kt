@@ -12,9 +12,9 @@ import java.nio.file.Path
  */
 class Main {
 
-	@Parameter(names = arrayOf("--project", "-p"), required = true,
-			converter = ExistingPathConverter::class, description = "Project path to analyze (path/to/project).")
-	private var project: Path? = null
+	@Parameter(names = arrayOf("--input", "-i"), required = true,
+			converter = ExistingPathConverter::class, description = "Input path to analyze (path/to/project).")
+	private var input: Path? = null
 
 	@Parameter(names = arrayOf("--filters", "-f"),
 			description = "Path filters defined through regex with separator ';' (\".*test.*\").")
@@ -73,8 +73,8 @@ class Main {
 	@Parameter(names = arrayOf("--help", "-h"), help = true, description = "Shows the usage.")
 	var help: Boolean = false
 
-	val projectPath: Path
-		get() = project!!
+	val inputPath: Path
+		get() = input!!
 
 	companion object {
 

@@ -101,8 +101,8 @@ Usage: detekt [options]
       Enables parallel compilation of source files. Should only be used if the
       analyzing project has more than ~200 kotlin files.
       Default: false
-  * --project, -p
-      Project path to analyze (path/to/project).
+  * --input, -i
+      Input path to analyze (path/to/project).
     --rules, -r
       Extra paths to ruleset jars separated by ';'.
     --useTabs
@@ -110,7 +110,7 @@ Usage: detekt [options]
       Default: false
 ```
 
-`--project` can either be a directory or a single Kotlin file.
+`--input` can either be a directory or a single Kotlin file.
 The currently only supported configuration format is yaml. `--config` should point to one. Generating a default configuration file is as easy as using the `--generate-config` parameter.
 `filters` can be used for example to exclude all test directories.
 With `rules` you can point to additional ruleset.jar's creating by yourself or others. 
