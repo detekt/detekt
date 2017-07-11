@@ -64,9 +64,16 @@ class UnusedImports(config: Config) : Rule(config) {
 		dcl.docComment?.getDefaultSection()?.getContent()?.let {
 			kotlinDocReferencesRegExp.findAll(it, 0)
 					.map { it.groupValues[1] }
-					.forEach { imports.removeIf { pair -> pair.second.identifier() == it } }
+					.forEach { checkImports(it) }
 		}
 		super.visitDeclaration(dcl)
+	}
+
+	private fun checkImports(it: String) {
+		imports.removeIf { pair ->
+			val identifier = pair.second.identifier()
+			identifier != null && it.startsWith(identifier)
+		}
 	}
 
 	private fun KtImportDirective.identifier() = this.importPath?.importedName?.identifier
