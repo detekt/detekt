@@ -6,18 +6,19 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.SubRule
-import io.gitlab.arturbosch.detekt.rules.applyRule
+import io.gitlab.arturbosch.detekt.rules.reportFindings
 import org.jetbrains.kotlin.psi.KtFile
 
-class MaxLineLength(val config: Config = Config.empty) : DetektVisitor() {
+class MaxLineLength(val config: Config = Config.empty) : MultiRule() {
 
 	override fun visitKtFile(file: KtFile) {
 		val lines = file.text.splitToSequence("\n")
-		lines.applyRule {
-			MaxLineLengthRule(config, file)
-		}.forEach { report(it) }
+		lines.reportFindings(context) {
+			listOf(MaxLineLengthRule(config, file))
+		}
 	}
 }
 

@@ -6,6 +6,7 @@ package io.gitlab.arturbosch.detekt.api
 interface Context {
 	val findings: List<Finding>
 	fun report(finding: Finding)
+	fun report(findings: List<Finding>)
 	fun clearFindings()
 }
 
@@ -22,7 +23,7 @@ open class DefaultContext : Context {
 	private var _findings: MutableList<Finding> = mutableListOf()
 
 	/**
-	 * The only way to add code smell findings.
+	 * Reports a single code smell finding.
 	 *
 	 * Before adding a finding, it is checked if it is not suppressed
 	 * by @Suppress or @SuppressWarnings annotations.
@@ -32,6 +33,16 @@ open class DefaultContext : Context {
 		if (ktElement == null || !ktElement.isSuppressedBy(finding.id)) {
 			_findings.add(finding)
 		}
+	}
+
+	/**
+	 * Reports a list of code smell findings.
+	 *
+	 * Before adding a finding, it is checked if it is not suppressed
+	 * by @Suppress or @SuppressWarnings annotations.
+	 */
+	override fun report(findings: List<Finding>) {
+		findings.forEach { report(it) }
 	}
 
 	override final fun clearFindings() {

@@ -16,7 +16,7 @@ internal class SuppressionTest : Spek({
 	it("rule should be suppressed") {
 		val ktFile = compilerFor("SuppressedObject.kt")
 		val rule = TestRule()
-		rule.visit(ktFile)
+		rule.visitFile(ktFile)
 		assertNotNull(rule.expected)
 	}
 
@@ -30,7 +30,7 @@ internal class SuppressionTest : Spek({
 	it("rule should be suppressed by ALL") {
 		val ktFile = compilerFor("SuppressedByAllObject.kt")
 		val rule = TestRule()
-		rule.visit(ktFile)
+		rule.visitFile(ktFile)
 		assertNotNull(rule.expected)
 	}
 

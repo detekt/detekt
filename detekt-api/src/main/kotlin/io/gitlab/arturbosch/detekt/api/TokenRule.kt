@@ -18,11 +18,7 @@ import org.jetbrains.kotlin.psi.KtFile
 abstract class TokenRule(config: Config = Config.empty) : Rule(config) {
 
 	override fun visit(root: KtFile) {
-		ifRuleActive {
-			preVisit(root)
-			root.node.visitTokens { procedure(it) }
-			postVisit(root)
-		}
+		root.node.visitTokens { procedure(it) }
 	}
 
 	/**

@@ -1,16 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules
 
-import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.Context
 
-inline fun <T> T.applyRules(rules: () -> List<SubRule<T>>): List<Finding> {
-	val findings: ArrayList<Finding> = arrayListOf()
-	rules.invoke().forEach {
-		it.apply(this)
-		findings.addAll(it.findings)
-	}
-	return findings
-}
+inline fun <T> T.reportFindings(context: Context, rules: () -> List<SubRule<T>>) {
+	val findings = rules.invoke()
+			.map { it.findings }
+			.flatten()
 
-inline fun <T> T.applyRule(rule: () -> SubRule<T>): List<Finding> {
-	return this.applyRules { listOf(rule.invoke()) }
+	context.report(findings)
 }
