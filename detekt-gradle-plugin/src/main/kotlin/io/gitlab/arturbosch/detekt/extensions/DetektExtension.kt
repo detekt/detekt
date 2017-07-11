@@ -31,8 +31,8 @@ open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 	fun profileArgumentsOrDefault(project: Project): List<String> {
 		return with(createArgumentsForProfile()) {
 			if (isNotEmpty()) {
-				if (!contains(PROJECT_PARAMETER)) {
-					add(PROJECT_PARAMETER)
+				if (!contains(INPUT_PARAMETER)) {
+					add(INPUT_PARAMETER)
 					add(project.projectDir.toString())
 				}
 				this
@@ -82,6 +82,6 @@ open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 }
 
 internal fun Project.fallbackArguments() = listOf(
-		PROJECT_PARAMETER, projectDir.absolutePath,
+		INPUT_PARAMETER, projectDir.absolutePath,
 		CONFIG_RESOURCE_PARAMETER, DEFAULT_DETEKT_CONFIG_RESOURCE,
 		FILTERS_PARAMETER, DEFAULT_PATH_EXCLUDES)

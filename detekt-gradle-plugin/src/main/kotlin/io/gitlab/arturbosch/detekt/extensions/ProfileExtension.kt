@@ -18,7 +18,7 @@ open class ProfileExtension(val name: String,
 
 	fun arguments(debug: Boolean = false): MutableMap<String, String> {
 		return mutableMapOf<String, String>().apply {
-			input?.let { put(PROJECT_PARAMETER, it) }
+			input?.let { put(INPUT_PARAMETER, it) }
 			config?.let { put(CONFIG_PARAMETER, it) }
 			configResource?.let { put(CONFIG_RESOURCE_PARAMETER, it) }
 			filters?.let { put(FILTERS_PARAMETER, it) }

@@ -26,7 +26,7 @@ internal class DetektExtensionTest : Spek({
 			val main = Main().apply { JCommander(this).parse(*args.toTypedArray()) }
 			val fallback = Main().apply { JCommander(this).parse(*project.fallbackArguments().toTypedArray()) }
 
-			Assertions.assertThat(main.projectPath).isEqualTo(fallback.projectPath)
+			Assertions.assertThat(main.inputPath).isEqualTo(fallback.inputPath)
 			Assertions.assertThat(main.configResource).isEqualTo(fallback.configResource)
 			Assertions.assertThat(main.config).isEqualTo(fallback.config)
 			Assertions.assertThat(main.baseline).isEqualTo(fallback.baseline)
@@ -39,6 +39,6 @@ internal class DetektExtensionTest : Spek({
 
 // TODO remove after https://youtrack.jetbrains.com/issue/KT-16497
 internal fun Project.fallbackArguments() = listOf(
-		PROJECT_PARAMETER, projectDir.absolutePath,
+		INPUT_PARAMETER, projectDir.absolutePath,
 		CONFIG_RESOURCE_PARAMETER, DEFAULT_DETEKT_CONFIG_RESOURCE,
 		FILTERS_PARAMETER, DEFAULT_PATH_EXCLUDES)

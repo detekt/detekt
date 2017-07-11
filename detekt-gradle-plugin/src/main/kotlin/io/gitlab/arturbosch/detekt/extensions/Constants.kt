@@ -15,7 +15,7 @@ const val DEFAULT_PATH_EXCLUDES = ".*/test/.*,.*/resources/.*,.*/build/.*,.*/tar
 
 const val CONFIG_RESOURCE_PARAMETER = "--config-resource"
 const val FILTERS_PARAMETER = "--filters"
-const val PROJECT_PARAMETER = "--project"
+const val INPUT_PARAMETER = "--input"
 const val CONFIG_PARAMETER = "--config"
 const val RULES_PARAMETER = "--rules"
 const val OUTPUT_PARAMETER = "--output"
