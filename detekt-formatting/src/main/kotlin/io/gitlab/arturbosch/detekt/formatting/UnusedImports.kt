@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.formatting
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Dept
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -19,7 +19,7 @@ import org.jetbrains.kotlin.psi.KtReferenceExpression
  */
 class UnusedImports(config: Config) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName, Severity.Style, "Unused import", Dept.FIVE_MINS)
+	override val issue = Issue(javaClass.simpleName, Severity.Style, "Unused import", Debt.FIVE_MINS)
 
 	private val operatorSet = setOf("unaryPlus", "unaryMinus", "not", "inc", "dec", "plus", "minus", "times", "div",
 			"mod", "rangeTo", "contains", "get", "set", "invoke", "plusAssign", "minusAssign", "timesAssign", "divAssign",

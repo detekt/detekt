@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.formatting
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Dept
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -16,7 +16,7 @@ import org.jetbrains.kotlin.psi.KtProperty
  */
 class OptionalReturnKeyword(config: Config) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName, Severity.Style, "", Dept.TEN_MINS)
+	override val issue = Issue(javaClass.simpleName, Severity.Style, "", Debt.TEN_MINS)
 
 	private val visitor = ConditionalPathVisitor {
 		report(CodeSmell(issue, Entity.from(it)))

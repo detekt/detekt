@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Dept
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -20,7 +20,7 @@ class WildcardImport(config: Config = Config.empty) : Rule(config) {
 					"Wildcard imports can lead to naming conflicts. " +
 					"A library update can introduce naming clashes with your classes which " +
 					"results in compilation errors.",
-			Dept.FIVE_MINS)
+			Debt.FIVE_MINS)
 
 	override fun visitImportDirective(importDirective: KtImportDirective) {
 		val import = importDirective.importPath?.pathStr

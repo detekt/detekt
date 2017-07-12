@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Dept
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -14,7 +14,7 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 	override val issue = Issue(javaClass.simpleName,
 			Severity.Style,
 			"Line detected that is longer than the defined maximum line length in the code style.",
-			Dept.FIVE_MINS)
+			Debt.FIVE_MINS)
 
 	private val maxLineLength: Int
 			= valueOrDefault(MAX_LINE_LENGTH, DEFAULT_IDEA_LINE_LENGTH)
