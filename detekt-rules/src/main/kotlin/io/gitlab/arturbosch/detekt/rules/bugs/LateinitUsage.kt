@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtPsiUtil
 
@@ -22,22 +23,41 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 					.split(",")
 					.map { it.removeSuffix("*") }
 
+	private val properties = mutableListOf<KtProperty>()
+
 	override fun visitProperty(property: KtProperty) {
-		if (!isLateinitProperty(property)) {
-			return
+		if (isLateinitProperty(property)) {
+			properties.add(property)
 		}
+	}
 
-		if (isExcludedByAnnotation(property)) {
-			return
+	override fun visit(root: KtFile) {
+		super.visit(root)
+
+		val resolvedAnnotations = root.importList
+				?.imports
+				?.filterNot { it.isAllUnder }
+				?.map { it.importedFqName?.asString() }
+				?.filterNotNull()
+				?.map { Pair(it.split(".").last(), it) }
+				?.toMap()
+
+		properties.forEach {
+			if (isExcludedByAnnotation(it, resolvedAnnotations)) {
+				return
+			}
+
+			report(CodeSmell(issue, Entity.from(it)))
 		}
-
-		report(CodeSmell(issue, Entity.from(property)))
 	}
 
 	private fun isLateinitProperty(property: KtProperty) = property.modifierList?.hasModifier(KtTokens.LATEINIT_KEYWORD) ?: false
 
-	private fun isExcludedByAnnotation(property: KtProperty) = property.annotationEntries
-      .map { "${KtPsiUtil.getPackageName(it)}.${KtPsiUtil.getShortName(it)}" }
+	private fun isExcludedByAnnotation(property: KtProperty, resolvedAnnotations: Map<String, String>?) = property.annotationEntries
+      .map {
+				val shortName = KtPsiUtil.getShortName(it).toString()
+				resolvedAnnotations?.get(shortName) ?: shortName
+			}
       .none { annotationFqn ->
         excludeAnnotatedProperties.none { it.isNotBlank() && annotationFqn.contains(it) }
       }
