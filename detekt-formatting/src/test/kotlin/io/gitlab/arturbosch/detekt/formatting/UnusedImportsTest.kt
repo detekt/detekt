@@ -10,10 +10,12 @@ import org.junit.jupiter.api.Test
 
 /**
  * @author Shyiko
+ * @author Artur Bosch
+ * @author Mauin
  */
 class UnusedImportsTest : RuleTest {
 
-	override val rule: Rule = UnusedImports(Config.Companion.empty)
+	override val rule: Rule = UnusedImports(Config.empty)
 
 	@Test
 	fun infixOperators() {
@@ -72,6 +74,27 @@ class UnusedImportsTest : RuleTest {
             """
 		)).hasSize(1)
 	}
+
+	@Test
+	fun considerKdocReferencesWithMethodCalls() {
+		val code = """
+			package com.example
+
+			import android.text.TextWatcher
+
+			class Test {
+				/**
+				 * [TextWatcher.beforeTextChanged]
+				 */
+				fun test() {
+					TODO()
+				}
+			}
+		"""
+
+		assertThat(rule.lint(code)).hasSize(0)
+	}
+
 
 	@Test
 	fun testLint() {

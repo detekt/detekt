@@ -36,14 +36,14 @@ abstract class Rule(override val config: Config = Config.empty,
 	}
 
 	/**
-	 * Could be overriden by subclasses to specify a behaviour which should be done before
+	 * Could be overridden by subclasses to specify a behaviour which should be done before
 	 * visiting kotlin elements.
 	 */
 	protected open fun postVisit(root: KtFile) {
 	}
 
 	/**
-	 * Could be overriden by subclasses to specify a behaviour which should be done after
+	 * Could be overridden by subclasses to specify a behaviour which should be done after
 	 * visiting kotlin elements.
 	 */
 	protected open fun preVisit(root: KtFile) {

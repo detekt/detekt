@@ -26,7 +26,7 @@ interface Config {
 
 	companion object {
 		/**
-		 * A yaml based configuration with no properties.
+		 * An empty configuration with no properties.
 		 */
 		val empty: Config = EmptyConfig
 	}
@@ -41,7 +41,7 @@ internal object EmptyConfig : Config {
 }
 
 /**
- * Convenient base configuration which parses/casts the a configuration value based on the type of the default value.
+ * Convenient base configuration which parses/casts the configuration value based on the type of the default value.
  */
 abstract class BaseConfig : Config {
 
