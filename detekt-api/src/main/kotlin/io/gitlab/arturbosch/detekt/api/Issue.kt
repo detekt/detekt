@@ -23,7 +23,7 @@ enum class Severity {
 }
 
 /**
- * Debt describes the estimated amount of work needed to fix a given issues.
+ * Debt describes the estimated amount of work needed to fix a given issue.
  */
 data class Debt(val days: Int, val hours: Int, val mins: Int) {
 
