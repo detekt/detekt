@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.formatting
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Dept
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Severity
@@ -32,7 +32,7 @@ import org.jetbrains.kotlin.psi.psiUtil.nextLeaf
  */
 class SpacingAfterKeyword(config: Config) : TokenRule(config) {
 
-	override val issue = Issue(javaClass.simpleName, Severity.Style, "", Dept.FIVE_MINS)
+	override val issue = Issue(javaClass.simpleName, Severity.Style, "", Debt.FIVE_MINS)
 
 	private val keywords = TokenSet.create(FOR_KEYWORD, IF_KEYWORD, ELSE_KEYWORD, WHILE_KEYWORD, DO_KEYWORD,
 			TRY_KEYWORD, CATCH_KEYWORD, FINALLY_KEYWORD, WHEN_KEYWORD)

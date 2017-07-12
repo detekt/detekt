@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.formatting
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Dept
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
@@ -20,7 +20,7 @@ import org.jetbrains.kotlin.psi.psiUtil.prevLeaf
  */
 class ExpressionBodySyntaxLineBreaks(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName, Severity.Style, "", Dept.FIVE_MINS)
+	override val issue = Issue(javaClass.simpleName, Severity.Style, "", Debt.FIVE_MINS)
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		function.equalsToken?.let { equals ->

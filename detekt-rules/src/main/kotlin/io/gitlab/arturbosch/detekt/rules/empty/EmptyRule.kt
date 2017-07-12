@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.empty
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Dept
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -18,7 +18,7 @@ abstract class EmptyRule(config: Config) : Rule(config) {
 	override val issue = Issue(javaClass.simpleName,
 			Severity.Minor,
 			"Empty block of code detected. As they serve no purpose they should be removed.",
-			Dept.FIVE_MINS)
+			Debt.FIVE_MINS)
 
 	fun KtExpression.addFindingIfBlockExprIsEmpty() {
 		this.asBlockExpression()?.statements?.let {

@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.formatting
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Dept
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Severity
@@ -31,7 +31,7 @@ class Indentation(config: Config) : TokenRule(config) {
 		private const val INDENT_SIZE = "indentSize"
 	}
 
-	override val issue = Issue(javaClass.simpleName, Severity.Style, "Unexpected indentation", Dept.FIVE_MINS)
+	override val issue = Issue(javaClass.simpleName, Severity.Style, "Unexpected indentation", Debt.FIVE_MINS)
 
 	private var indent = valueOrDefault(INDENT_SIZE, DEFAULT_INDENT)
 

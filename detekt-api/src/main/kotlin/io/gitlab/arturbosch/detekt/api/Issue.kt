@@ -6,7 +6,7 @@ package io.gitlab.arturbosch.detekt.api
 data class Issue(val id: String,
 				 val severity: Severity,
 				 val description: String,
-				 val dept: Dept = Dept.TWENTY_MINS) {
+				 val debt: Debt = Debt.TWENTY_MINS) {
 
 	init {
 		validateIdentifier(id)
@@ -22,7 +22,10 @@ enum class Severity {
 
 }
 
-data class Dept(val days: Int, val hours: Int, val mins: Int) {
+/**
+ * Debt describes the estimated amount of work needed to fix a given issues.
+ */
+data class Debt(val days: Int, val hours: Int, val mins: Int) {
 
 	init {
 		require(days >= 0 && hours >= 0 && mins >= 0)
@@ -30,9 +33,9 @@ data class Dept(val days: Int, val hours: Int, val mins: Int) {
 	}
 
 	companion object {
-		val TWENTY_MINS = Dept(0, 0, 20)
-		val TEN_MINS = Dept(0, 0, 10)
-		val FIVE_MINS = Dept(0, 0, 5)
+		val TWENTY_MINS = Debt(0, 0, 20)
+		val TEN_MINS = Debt(0, 0, 10)
+		val FIVE_MINS = Debt(0, 0, 5)
 	}
 
 	override fun toString(): String {
