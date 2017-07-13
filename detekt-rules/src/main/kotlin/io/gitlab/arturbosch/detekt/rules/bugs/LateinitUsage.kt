@@ -7,8 +7,9 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.preprocessor.typeReferenceName
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtProperty
-import org.jetbrains.kotlin.psi.KtPsiUtil
 
 class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 
@@ -18,32 +19,52 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 					"is error prone, try using constructor injection or delegation.")
 
 	private val excludeAnnotatedProperties: List<String>
-			= valueOrDefault(EXCLUDE_ANNOTATED_PROPERTIES, "").split(",")
+			= valueOrDefault(EXCLUDE_ANNOTATED_PROPERTIES, "")
+					.split(",")
+					.map { it.trim() }
+					.filter { it.isNotBlank() }
+					.map { it.removeSuffix("*") }
+
+	private var properties = mutableListOf<KtProperty>()
 
 	override fun visitProperty(property: KtProperty) {
-		if (!isLateinitProperty(property)) {
-			return
+		if (isLateinitProperty(property)) {
+			properties.add(property)
 		}
-
-		if (isExcludedByAnnotation(property)) {
-			return
-		}
-
-		report(CodeSmell(issue, Entity.from(property)))
 	}
 
-	private fun isLateinitProperty(property: KtProperty): Boolean {
-		return property.modifierList?.hasModifier(KtTokens.LATEINIT_KEYWORD) ?: false
+	override fun visit(root: KtFile) {
+		properties = mutableListOf<KtProperty>()
+
+		super.visit(root)
+
+		val resolvedAnnotations = root.importList
+				?.imports
+				?.filterNot { it.isAllUnder }
+				?.map { it.importedFqName?.asString() }
+				?.filterNotNull()
+				?.map { Pair(it.split(".").last(), it) }
+				?.toMap()
+
+		properties.filter { !isExcludedByAnnotation(it, resolvedAnnotations) }
+				.forEach {
+					report(CodeSmell(issue, Entity.from(it)))
+				}
 	}
 
-	private fun isExcludedByAnnotation(property: KtProperty): Boolean {
-		return property.annotationEntries
-				.map { KtPsiUtil.getShortName(it) }
-				.filterNotNull()
-				.map { it.toString() }
-				.filter { excludeAnnotatedProperties.contains(it) }
-				.count() != 0
-	}
+	private fun isLateinitProperty(property: KtProperty)
+			= property.modifierList?.hasModifier(KtTokens.LATEINIT_KEYWORD) ?: false
+
+	private fun isExcludedByAnnotation(property: KtProperty, resolvedAnnotations: Map<String, String>?)
+			= property.annotationEntries
+					.map {
+						val shortName = it.typeReferenceName
+						resolvedAnnotations?.get(shortName) ?: shortName
+					}
+					.filterNotNull()
+					.none { annotationFqn ->
+						excludeAnnotatedProperties.none { annotationFqn.contains(it) }
+					}
 
 	companion object {
 		const val EXCLUDE_ANNOTATED_PROPERTIES = "excludeAnnotatedProperties"
