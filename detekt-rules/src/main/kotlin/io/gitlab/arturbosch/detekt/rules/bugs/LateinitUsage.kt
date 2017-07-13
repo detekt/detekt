@@ -7,9 +7,9 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.preprocessor.typeReferenceName
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtProperty
-import org.jetbrains.kotlin.psi.KtPsiUtil
 
 class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 
@@ -22,6 +22,7 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 			= valueOrDefault(EXCLUDE_ANNOTATED_PROPERTIES, "")
 					.split(",")
 					.map { it.trim() }
+					.filter { it.isNotBlank() }
 					.map { it.removeSuffix("*") }
 
 	private var properties = mutableListOf<KtProperty>()
@@ -57,11 +58,12 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 	private fun isExcludedByAnnotation(property: KtProperty, resolvedAnnotations: Map<String, String>?)
 			= property.annotationEntries
 					.map {
-						val shortName = KtPsiUtil.getShortName(it).toString()
+						val shortName = it.typeReferenceName
 						resolvedAnnotations?.get(shortName) ?: shortName
 					}
+					.filterNotNull()
 					.none { annotationFqn ->
-						excludeAnnotatedProperties.none { it.isNotBlank() && annotationFqn.contains(it) }
+						excludeAnnotatedProperties.none { annotationFqn.contains(it) }
 					}
 
 	companion object {
