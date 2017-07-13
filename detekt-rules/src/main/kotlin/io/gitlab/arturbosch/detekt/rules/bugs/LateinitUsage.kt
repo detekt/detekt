@@ -21,9 +21,10 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 	private val excludeAnnotatedProperties: List<String>
 			= valueOrDefault(EXCLUDE_ANNOTATED_PROPERTIES, "")
 					.split(",")
+					.map { it.trim() }
 					.map { it.removeSuffix("*") }
 
-	private val properties = mutableListOf<KtProperty>()
+	private var properties = mutableListOf<KtProperty>()
 
 	override fun visitProperty(property: KtProperty) {
 		if (isLateinitProperty(property)) {
@@ -32,6 +33,8 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 	}
 
 	override fun visit(root: KtFile) {
+		properties = mutableListOf<KtProperty>()
+
 		super.visit(root)
 
 		val resolvedAnnotations = root.importList
@@ -42,25 +45,24 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 				?.map { Pair(it.split(".").last(), it) }
 				?.toMap()
 
-		properties.forEach {
-			if (isExcludedByAnnotation(it, resolvedAnnotations)) {
-				return
-			}
-
-			report(CodeSmell(issue, Entity.from(it)))
-		}
+		properties.filter { !isExcludedByAnnotation(it, resolvedAnnotations) }
+				.forEach {
+					report(CodeSmell(issue, Entity.from(it)))
+				}
 	}
 
-	private fun isLateinitProperty(property: KtProperty) = property.modifierList?.hasModifier(KtTokens.LATEINIT_KEYWORD) ?: false
+	private fun isLateinitProperty(property: KtProperty)
+			= property.modifierList?.hasModifier(KtTokens.LATEINIT_KEYWORD) ?: false
 
-	private fun isExcludedByAnnotation(property: KtProperty, resolvedAnnotations: Map<String, String>?) = property.annotationEntries
-      .map {
-				val shortName = KtPsiUtil.getShortName(it).toString()
-				resolvedAnnotations?.get(shortName) ?: shortName
-			}
-      .none { annotationFqn ->
-        excludeAnnotatedProperties.none { it.isNotBlank() && annotationFqn.contains(it) }
-      }
+	private fun isExcludedByAnnotation(property: KtProperty, resolvedAnnotations: Map<String, String>?)
+			= property.annotationEntries
+					.map {
+						val shortName = KtPsiUtil.getShortName(it).toString()
+						resolvedAnnotations?.get(shortName) ?: shortName
+					}
+					.none { annotationFqn ->
+						excludeAnnotatedProperties.none { it.isNotBlank() && annotationFqn.contains(it) }
+					}
 
 	companion object {
 		const val EXCLUDE_ANNOTATED_PROPERTIES = "excludeAnnotatedProperties"

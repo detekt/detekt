@@ -30,6 +30,11 @@ class LateinitUsageSpec : Spek({
 			assertThat(findings).hasSize(0)
 		}
 
+		it("should not report lateinit properties annotated @JvmField with trailing whitespace") {
+			val findings = LateinitUsage(TestConfig(mapOf(LateinitUsage.EXCLUDE_ANNOTATED_PROPERTIES to " JvmField "))).lint(code)
+			assertThat(findings).hasSize(0)
+		}
+
 		it("should not report lateinit properties matching kotlin.jvm.") {
 			val findings = LateinitUsage(TestConfig(mapOf(LateinitUsage.EXCLUDE_ANNOTATED_PROPERTIES to "kotlin.jvm."))).lint(code)
 			assertThat(findings).hasSize(0)
