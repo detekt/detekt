@@ -1,5 +1,7 @@
 package io.gitlab.arturbosch.detekt.api
 
+import org.jetbrains.kotlin.psi.KtFile
+
 /**
  * A rule defines how one specific code structure should look like. If code is found
  * which does not meet this structure, it is considered as harmful regarding maintainability
@@ -19,5 +21,5 @@ abstract class Rule(override val config: Config = Config.empty,
 	abstract val issue: Issue
 	final override val id: String by lazy(LazyThreadSafetyMode.NONE) { issue.id }
 
-	override fun visitCondition() = active
+	override fun visitCondition(root: KtFile) = active && !root.isSuppressedBy(id)
 }
