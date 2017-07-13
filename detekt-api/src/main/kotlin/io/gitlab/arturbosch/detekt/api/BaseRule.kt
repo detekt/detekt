@@ -10,7 +10,7 @@ abstract class BaseRule(protected val context: Context = DefaultContext()) : Det
 	 * Pre- and post-visit-hooks are executed before/after the visiting process.
 	 */
 	fun visitFile(root: KtFile) {
-		if (visitCondition()) {
+		if (visitCondition(root)) {
 			clearFindings()
 			preVisit(root)
 			visit(root)
@@ -22,7 +22,7 @@ abstract class BaseRule(protected val context: Context = DefaultContext()) : Det
 		root.accept(this)
 	}
 
-	abstract fun visitCondition(): Boolean
+	abstract fun visitCondition(root: KtFile): Boolean
 
 	/**
 	 * Could be overridden by subclasses to specify a behaviour which should be done before
