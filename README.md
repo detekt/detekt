@@ -217,7 +217,7 @@ detekt {
         config = "$projectDir/detekt.yml" // Use $project.projectDir or to navigate inside your project 
         configResource = "/detekt.yml" // Use this parameter instead of config if your detekt yaml file is inside your resources. Is needed for multi project maven tasks.
         filters = ".*test.*, .*/resources/.*" // What paths to exclude? Use comma oder semicolon to separate
-        rulesets = "other/optional/ruleset.jar" // Custom rule sets can be linked to this, use comma oder semicolon to separate, remove if unused.
+        ruleSets = "other/optional/ruleset.jar" // Custom rule sets can be linked to this, use comma oder semicolon to separate, remove if unused.
         disableDefaultRuleSets = false // Disables the default rule set. Just use detekt as the detection engine with your custom rule sets.
         output = "$project.projectDir/reports/detekt.xml" // If present, prints all findings into that file.
         outputFormat = "xml" // Can be either 'xml' or 'plain', default is 'xml'
