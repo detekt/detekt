@@ -7,7 +7,7 @@ buildscript {
 	dependencies {
 		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
 		classpath "org.junit.platform:junit-platform-gradle-plugin:$junitPlatformVersion"
-		classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$usedDetektGradlePlugin"
+		classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$usedDetektGradleVersion"
 	}
 }
 
@@ -160,7 +160,7 @@ String USER_HOME = System.getProperty("user.home")
 
 detekt {
 	debug = true
-	version = "1.0.0.M12.3"
+	version = "$usedDetektVersion"
 	profile("main") {
 		input = "$project.projectDir"
 		filters = '.*/test/.*, .*/resources/.*, .*/build/.*'
