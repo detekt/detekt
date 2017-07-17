@@ -21,13 +21,13 @@ class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
 			"Public classes require documentation.")
 
 	override fun visitClass(klass: KtClass) {
-		reportIfNoDoc(klass)
+		reportIfUndocumented(klass)
 		if (klass.notEnum()) { // Stop considering enum entries
 			super.visitClass(klass)
 		}
 	}
 
-	private fun reportIfNoDoc(element: KtClassOrObject) {
+	private fun reportIfUndocumented(element: KtClassOrObject) {
 		if (element.isPublicNotOverriden()) {
 			if (element.docComment == null) {
 				report(CodeSmell(issue, Entity.Companion.from(element)))
@@ -42,7 +42,7 @@ class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
 			return
 		}
 
-		reportIfNoDoc(declaration)
+		reportIfUndocumented(declaration)
 		super.visitObjectDeclaration(declaration)
 	}
 
