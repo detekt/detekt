@@ -22,23 +22,33 @@ class UndocumentedPublicClassSpec : SubjectSpek<UndocumentedPublicClass>({
 	}
 
 	it("should not report for documented public object") {
-		val file = """
-/**
- * Class docs not being recognized.
- */
-object Main {
-    /**
-     * The entry point for the application.
-     *
-     * @param args The list of process arguments.
-     */
-    @JvmStatic
-    fun main(args: Array<String>) {
-    }
-}
-"""
+		val code = """
+			/**
+			 * Class docs not being recognized.
+			 */
+			object Main {
+				/**
+				 * The entry point for the application.
+				 *
+				 * @param args The list of process arguments.
+				 */
+				@JvmStatic
+				fun main(args: Array<String>) {
+				}
+			}
+		"""
 
-		assertThat(subject.lint(file)).isEmpty()
+		assertThat(subject.lint(code)).isEmpty()
+	}
+
+	it("should not report for anonymous objects") {
+		val code = """
+			fun main(args: Array<String>) {
+				recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {}
+			}
+		"""
+
+		assertThat(subject.lint(code)).isEmpty()
 	}
 
 })

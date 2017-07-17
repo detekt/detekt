@@ -38,8 +38,9 @@ class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
 	private fun KtClass.notEnum() = !this.isEnum()
 
 	override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
-		if (declaration.isCompanionWithoutName())
+		if (declaration.isCompanionWithoutName() || declaration.isLocal) {
 			return
+		}
 
 		reportIfNoDoc(declaration)
 		super.visitObjectDeclaration(declaration)
