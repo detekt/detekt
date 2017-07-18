@@ -24,8 +24,9 @@ class TooManyFunctions(config: Config = Config.empty, threshold: Int = 10) : Thr
 
 	private var amount: Int = 0
 
+
 	override fun visitKtFile(file: KtFile) {
-		super.visitFile(file)
+		super.visitKtFile(file)
 		if (amount > threshold) {
 			report(ThresholdedCodeSmell(issue, Entity.from(file), Metric("SIZE", amount, threshold)))
 		}

@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.MultiRule
@@ -12,17 +11,17 @@ import io.gitlab.arturbosch.detekt.rules.SubRule
 import io.gitlab.arturbosch.detekt.rules.reportFindings
 import org.jetbrains.kotlin.psi.KtFile
 
-class MaxLineLength(val config: Config = Config.empty) : MultiRule() {
+class FileParsingRule(val config: Config = Config.empty) : MultiRule() {
 
 	override fun visitKtFile(file: KtFile) {
 		val lines = file.text.splitToSequence("\n")
 		lines.reportFindings(context) {
-			listOf(MaxLineLengthRule(config, file))
+			listOf(MaxLineLength(config, file))
 		}
 	}
 }
 
-class MaxLineLengthRule(config: Config = Config.empty, private val file: KtFile) : SubRule<Sequence<String>>(config) {
+class MaxLineLength(config: Config = Config.empty, private val file: KtFile) : SubRule<Sequence<String>>(config, file) {
 
 	override val issue = Issue(javaClass.simpleName,
 			Severity.Style,
@@ -30,11 +29,11 @@ class MaxLineLengthRule(config: Config = Config.empty, private val file: KtFile)
 			Debt.FIVE_MINS)
 
 	private val maxLineLength: Int
-			= valueOrDefault(MaxLineLengthRule.MAX_LINE_LENGTH, MaxLineLengthRule.DEFAULT_IDEA_LINE_LENGTH)
+			= valueOrDefault(MaxLineLength.MAX_LINE_LENGTH, MaxLineLength.DEFAULT_IDEA_LINE_LENGTH)
 	private val excludePackageStatements: Boolean
-			= valueOrDefault(MaxLineLengthRule.EXCLUDE_PACKAGE_STATEMENTS, MaxLineLengthRule.DEFAULT_VALUE_PACKAGE_EXCLUDE)
+			= valueOrDefault(MaxLineLength.EXCLUDE_PACKAGE_STATEMENTS, MaxLineLength.DEFAULT_VALUE_PACKAGE_EXCLUDE)
 	private val excludeImportStatements: Boolean
-			= valueOrDefault(MaxLineLengthRule.EXCLUDE_IMPORT_STATEMENTS, MaxLineLengthRule.DEFAULT_VALUE_IMPORTS_EXCLUDE)
+			= valueOrDefault(MaxLineLength.EXCLUDE_IMPORT_STATEMENTS, MaxLineLength.DEFAULT_VALUE_IMPORTS_EXCLUDE)
 
 	override fun apply(element: Sequence<String>) {
 		var offset = 0
@@ -51,14 +50,14 @@ class MaxLineLengthRule(config: Config = Config.empty, private val file: KtFile)
 
 	private fun filterPackageStatements(line: String): Boolean {
 		if (excludePackageStatements) {
-			return !line.startsWith("package ")
+			return !line.trim().startsWith("package ")
 		}
 		return true
 	}
 
 	private fun filterImportStatements(line: String): Boolean {
 		if (excludeImportStatements) {
-			return !line.startsWith("import ")
+			return !line.trim().startsWith("import ")
 		}
 		return true
 	}
