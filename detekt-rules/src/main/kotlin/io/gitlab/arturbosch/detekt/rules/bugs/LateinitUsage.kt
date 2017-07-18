@@ -1,11 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.*
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.preprocessor.typeReferenceName
 import org.jetbrains.kotlin.psi.KtFile
@@ -18,12 +13,7 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 			"Usage of lateinit. Using lateinit for property initialization " +
 					"is error prone, try using constructor injection or delegation.")
 
-	private val excludeAnnotatedProperties: List<String>
-			= valueOrDefault(EXCLUDE_ANNOTATED_PROPERTIES, "")
-					.split(",")
-					.map { it.trim() }
-					.filter { it.isNotBlank() }
-					.map { it.removeSuffix("*") }
+	private val excludeAnnotatedProperties = Excludes(valueOrDefault(EXCLUDE_ANNOTATED_PROPERTIES, ""))
 
 	private var properties = mutableListOf<KtProperty>()
 
@@ -63,7 +53,7 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 					}
 					.filterNotNull()
 					.none { annotationFqn ->
-						excludeAnnotatedProperties.none { annotationFqn.contains(it) }
+						excludeAnnotatedProperties.none(annotationFqn)
 					}
 
 	companion object {
