@@ -1,12 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.*
 import org.jetbrains.kotlin.psi.KtImportDirective
 
 /**
@@ -19,14 +13,27 @@ class WildcardImport(config: Config = Config.empty) : Rule(config) {
 			"Wildcard imports should be replaced with imports using fully qualified class names. " +
 					"Wildcard imports can lead to naming conflicts. " +
 					"A library update can introduce naming clashes with your classes which " +
-					"results in compilation errors.",
+                    "results in compilation errors.",
 			Debt.FIVE_MINS)
+
+	private val excludedImports = Excludes(valueOrDefault(EXCLUDED_IMPORTS, ""))
 
 	override fun visitImportDirective(importDirective: KtImportDirective) {
 		val import = importDirective.importPath?.pathStr
-		if (import != null && import.contains("*")) {
+		import?.let {
+			if (!import.contains("*")) {
+				return
+			}
+
+			if (excludedImports.contains(import)) {
+				return
+			}
 			report(CodeSmell(issue, Entity.from(importDirective)))
 		}
+	}
+
+	companion object {
+		const val EXCLUDED_IMPORTS = "excludedImports"
 	}
 }
 

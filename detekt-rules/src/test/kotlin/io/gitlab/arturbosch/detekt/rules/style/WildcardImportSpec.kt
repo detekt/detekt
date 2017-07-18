@@ -15,6 +15,7 @@ class WildcardImportSpec : Spek({
 			package test
 
 			import io.gitlab.arturbosch.detekt.*
+			import test.test.detekt.*
 
 			class Test {
 			}
@@ -31,6 +32,13 @@ class WildcardImportSpec : Spek({
 
 		it("should report all wildcard imports") {
 			val rule = WildcardImport()
+
+			val findings = rule.lint(file)
+			Assertions.assertThat(findings).hasSize(2)
+		}
+
+		it("should not report excluded wildcard imports") {
+			val rule = WildcardImport(TestConfig(mapOf("excludedImports" to "test.test.*")))
 
 			val findings = rule.lint(file)
 			Assertions.assertThat(findings).hasSize(1)
