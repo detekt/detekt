@@ -33,7 +33,7 @@ class WildcardImport(config: Config = Config.empty) : Rule(config) {
 	}
 
 	companion object {
-		const val EXCLUDED_IMPORTS = "excludedImports"
+		const val EXCLUDED_IMPORTS = "excludeImports"
 	}
 }
 
