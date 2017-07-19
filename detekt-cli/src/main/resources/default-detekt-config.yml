@@ -115,6 +115,9 @@ style:
   active: true
   NewLineAtEndOfFile:
     active: true
+  ForbiddenComment:
+    active: true
+    values: 'TODO:,FIXME:,STOPSHIP:'
   WildcardImport:
     active: true
   MaxLineLength:
