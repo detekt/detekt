@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.lint
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
@@ -27,21 +27,35 @@ class WildcardImportSpec : Spek({
 			val rule = WildcardImport(TestConfig(mapOf("active" to "false")))
 
 			val findings = rule.lint(file)
-			Assertions.assertThat(findings).isEmpty()
+			assertThat(findings).isEmpty()
 		}
 
 		it("should report all wildcard imports") {
 			val rule = WildcardImport()
 
 			val findings = rule.lint(file)
-			Assertions.assertThat(findings).hasSize(2)
+			assertThat(findings).hasSize(2)
 		}
 
 		it("should not report excluded wildcard imports") {
-			val rule = WildcardImport(TestConfig(mapOf("excludedImports" to "test.test.*")))
+			val rule = WildcardImport(TestConfig(mapOf("excludeImports" to "test.test.*")))
 
 			val findings = rule.lint(file)
-			Assertions.assertThat(findings).hasSize(1)
+			assertThat(findings).hasSize(1)
+		}
+
+		it("should not report excluded wildcard imports when multiple are excluded") {
+			val rule = WildcardImport(TestConfig(mapOf("excludeImports" to "test.test.*, io.gitlab.arturbosch.detekt")))
+
+			val findings = rule.lint(file)
+			assertThat(findings).isEmpty()
+		}
+
+		it("ignores excludes that are not matching") {
+			val rule = WildcardImport(TestConfig(mapOf("excludeImports" to "other.test.*")))
+
+			val findings = rule.lint(file)
+			assertThat(findings).hasSize(2)
 		}
 	}
 
@@ -57,7 +71,7 @@ class WildcardImportSpec : Spek({
 
 		it("should not report any issues") {
 			val findings = WildcardImport().lint(code)
-			Assertions.assertThat(findings).isEmpty()
+			assertThat(findings).isEmpty()
 		}
 	}
 })
