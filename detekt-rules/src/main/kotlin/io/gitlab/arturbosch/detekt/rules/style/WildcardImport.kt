@@ -1,6 +1,13 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.*
+import io.gitlab.arturbosch.detekt.api.CodeSmell
+import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
+import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Excludes
+import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtImportDirective
 
 /**
@@ -13,7 +20,7 @@ class WildcardImport(config: Config = Config.empty) : Rule(config) {
 			"Wildcard imports should be replaced with imports using fully qualified class names. " +
 					"Wildcard imports can lead to naming conflicts. " +
 					"A library update can introduce naming clashes with your classes which " +
-                    "results in compilation errors.",
+					"results in compilation errors.",
 			Debt.FIVE_MINS)
 
 	private val excludedImports = Excludes(valueOrDefault(EXCLUDED_IMPORTS, ""))
