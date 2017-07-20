@@ -10,6 +10,7 @@ import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.preprocessor.typeReferenceName
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.psiUtil.containingClass
 
 class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 
@@ -24,6 +25,8 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 					.map { it.trim() }
 					.filter { it.isNotBlank() }
 					.map { it.removeSuffix("*") }
+
+	private val ignoreOnClassesPattern = Regex(valueOrDefault(IGNORE_ON_CLASSES_PATTERN, ""))
 
 	private var properties = mutableListOf<KtProperty>()
 
@@ -46,7 +49,8 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 				?.map { Pair(it.split(".").last(), it) }
 				?.toMap()
 
-		properties.filter { !isExcludedByAnnotation(it, resolvedAnnotations) }
+		properties.filterNot { isExcludedByAnnotation(it, resolvedAnnotations) }
+				.filterNot { it.containingClass()?.name?.matches(ignoreOnClassesPattern) ?: false }
 				.forEach {
 					report(CodeSmell(issue, Entity.from(it)))
 				}
@@ -68,5 +72,6 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 
 	companion object {
 		const val EXCLUDE_ANNOTATED_PROPERTIES = "excludeAnnotatedProperties"
+		const val IGNORE_ON_CLASSES_PATTERN = "ignoreOnClassesPattern"
 	}
 }

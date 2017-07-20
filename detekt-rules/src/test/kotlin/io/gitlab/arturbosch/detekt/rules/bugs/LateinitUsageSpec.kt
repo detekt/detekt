@@ -15,7 +15,7 @@ class LateinitUsageSpec : Spek({
 
 			import kotlin.jvm.JvmField
 
-			class Test {
+			class SomeRandomTest {
 				@JvmField lateinit var test: Int
 			}
 		"""
@@ -48,6 +48,16 @@ class LateinitUsageSpec : Spek({
 		it("should not exclude lateinit properties not matching the exclude pattern") {
 			val findings = LateinitUsage(TestConfig(mapOf(LateinitUsage.EXCLUDE_ANNOTATED_PROPERTIES to "IgnoreThis"))).lint(code)
 			assertThat(findings).hasSize(1)
+		}
+
+		it("should report lateinit properties when ignoreOnClassesPattern does not match") {
+			val findings = LateinitUsage(TestConfig(mapOf(LateinitUsage.IGNORE_ON_CLASSES_PATTERN to "[\\w]+Test1234"))).lint(code)
+			assertThat(findings).hasSize(1)
+		}
+
+		it("should not report lateinit properties when ignoreOnClassesPattern does match") {
+			val findings = LateinitUsage(TestConfig(mapOf(LateinitUsage.IGNORE_ON_CLASSES_PATTERN to "[\\w]+Test"))).lint(code)
+			assertThat(findings).hasSize(0)
 		}
 	}
 })
