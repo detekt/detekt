@@ -1,5 +1,34 @@
 # Detekt - Changelog
 
+#### M13.1
+
+- LateinitUsage: Add ignoreOnClassesPattern property. - [#226](https://github.com/arturbosch/detekt/pull/226)
+- Implement ForbiddenComment Rule. - [#225](https://github.com/arturbosch/detekt/pull/225)
+- Add Excludes to WildcardImport rule reusing logic from LateinitUsage - [#224](https://github.com/arturbosch/detekt/pull/224)
+- Excluding specific imports from the WildcardImport rule - [#223](https://github.com/arturbosch/detekt/issues/223)
+- Anonymous classes should not be checked for documentation - [#221](https://github.com/arturbosch/detekt/pull/221)
+- Provide a test case for custom rule sets - [#220](https://github.com/arturbosch/detekt/pull/220)
+- Update Detekt to 1.0.0.M13 and add usedDetektVersion to gradle.properties. - [#218](https://github.com/arturbosch/detekt/pull/218)
+- Change gradle task parametr 'rulesets' to 'ruleSets' - [#216](https://github.com/arturbosch/detekt/pull/216)
+- UndocumentedPublicClass for anonymous classes - [#213](https://github.com/arturbosch/detekt/issues/213)
+- rename dept to debt - [#211](https://github.com/arturbosch/detekt/pull/211)
+- LateInitUsage: Ignore this rule in tests - [#207](https://github.com/arturbosch/detekt/issues/207)
+- change cli parameter --project (-p) to --input (-i) - [#206](https://github.com/arturbosch/detekt/pull/206)
+- Meaning of Dept - [#205](https://github.com/arturbosch/detekt/issues/205)
+- Add new line to each kotlin file. - [#204](https://github.com/arturbosch/detekt/pull/204)
+- Fix unused import false positive in kdoc - closes#201 - [#203](https://github.com/arturbosch/detekt/pull/203)
+- False positive UnusedImports - [#201](https://github.com/arturbosch/detekt/issues/201)
+- Add Tests for WildcardImport and NamingConvention rules - [#200](https://github.com/arturbosch/detekt/pull/200)
+- Allow package matching via excludeAnnotatedProperties in LateinitUsage Rule. - [#199](https://github.com/arturbosch/detekt/pull/199)
+- UndocumentedPublicClass false positive with annotations - [#194](https://github.com/arturbosch/detekt/issues/194)
+- Rule TodoComment - [#182](https://github.com/arturbosch/detekt/issues/182)
+- Rule NewlineAtEndOfFile - [#181](https://github.com/arturbosch/detekt/issues/181)
+- Fail fast approach / configuration - [#179](https://github.com/arturbosch/detekt/issues/179)
+- Rule: SpreadOperator - [#167](https://github.com/arturbosch/detekt/issues/167)
+- Not providing a detekt-closure or profile should not crash the gradle-plugin but instead just use the default profile - [#166](https://github.com/arturbosch/detekt/issues/166)
+
+See all issues at: [M13.1](https://github.com/arturbosch/detekt/milestone/13)
+
 #### M13
 
 - Add missing unit test for Int.reached. - [#191](https://github.com/arturbosch/detekt/pull/191)

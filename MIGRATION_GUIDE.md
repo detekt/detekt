@@ -1,5 +1,10 @@
 # Migration Guide
 
+### M13 -> M13.1
+
+- Misspelled class `Dept` was renamed to `Debt`, if you using custom rule sets, please rebuild it
+- CLI parameter `--project` was renamed to `--input` to match the input parameter of the gradle plugin
+
 ### M11 -> M12
 
 ##### CLI
