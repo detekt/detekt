@@ -26,7 +26,7 @@ open class DetektGenerateConfigTask : DefaultTask() {
 		project.javaexec {
 			it.main = "io.gitlab.arturbosch.detekt.cli.Main"
 			it.classpath = configuration
-			it.args("--project", project.projectDir.absolutePath, "--generate-config")
+			it.args("--input", project.projectDir.absolutePath, "--generate-config")
 		}
 	}
 }
