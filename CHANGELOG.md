@@ -1,5 +1,14 @@
 # Detekt - Changelog
 
+#### M13.2
+
+- Always use the 'main' profile as default even if 'profile' parameter set but a profile with name 'main' exists - [#231](https://github.com/arturbosch/detekt/issues/231)
+- Fix DetektGenerateConfigTask to use --input instead of --project. - [#230](https://github.com/arturbosch/detekt/pull/230)
+- Run Detekt on Detekt [#212](https://github.com/arturbosch/detekt/pull/212)
+- Extend UndocumentedPublicClass with searchInNestedClass, searchInInnerClass & searchInInnerInterface properties. - [#210](https://github.com/arturbosch/detekt/pull/210)
+
+See all issues at: [M13.2](https://github.com/arturbosch/detekt/milestone/14)
+
 #### M13.1
 
 - LateinitUsage: Add ignoreOnClassesPattern property. - [#226](https://github.com/arturbosch/detekt/pull/226)
