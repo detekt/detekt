@@ -1,29 +1,43 @@
 package io.gitlab.arturbosch.detekt.sampleruleset
 
-import io.gitlab.arturbosch.detekt.test.compileContentForTest
+import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.test.RuleTest
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
+import org.junit.jupiter.api.Test
 
 /**
  * @author Artur Bosch
  */
 class TooManyFunctionsSpec : SubjectSpek<TooManyFunctions>({
+
 	subject { TooManyFunctions() }
 
 	describe("a simple test") {
+
 		it("should find one file with too many functions") {
-			val ktFile = compileContentForTest(code)
-			subject.visit(ktFile)
-			assertThat(subject.findings).hasSize(1)
+			val findings = subject.lint(code)
+			assertThat(findings).hasSize(1)
 		}
 	}
 
 })
 
-val code: String = {
-	"""
+class TooManyFunctionsTest : RuleTest {
+
+	override val rule: Rule = TooManyFunctions()
+
+	@Test fun findOneFile() {
+		val findings = rule.lint(code)
+		assertThat(findings).hasSize(1)
+	}
+}
+
+val code: String =
+		"""
 			class TooManyFunctions : Rule("TooManyFunctions") {
 
 				override fun visitUserType(type: KtUserType) {
@@ -92,4 +106,3 @@ val code: String = {
 
 			}
 		"""
-}.invoke()
