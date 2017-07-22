@@ -11,7 +11,9 @@ import java.nio.file.Path
  * @author Artur Bosch
  */
 
-fun Main.createPathFilters(): List<PathFilter> = filters.letIfNonEmpty { split(*SEPARATORS).map(::PathFilter) }
+fun Main.createPathFilters(): List<PathFilter> = filters.letIfNonEmpty {
+	split(SEPARATOR_COMMA, SEPARATOR_SEMICOLON).map(::PathFilter)
+}
 
 fun Main.createRulePaths(): List<Path> = rules.letIfNonEmpty {
 	MultipleExistingPathConverter().convert(this)

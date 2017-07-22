@@ -24,7 +24,4 @@ fun <T> task(executor: Executor, task: () -> T): CompletableFuture<T> {
 	return CompletableFuture.supplyAsync(Supplier { task() }, executor)
 }
 
-fun <T> awaitAll(futures: List<CompletableFuture<T>>): List<T> {
-	CompletableFuture.allOf(*futures.toTypedArray()).join()
-	return futures.map { it.get() }
-}
+fun <T> awaitAll(futures: List<CompletableFuture<T>>) = futures.map { it.join() }

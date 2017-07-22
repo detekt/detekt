@@ -39,8 +39,8 @@ private fun makeMutable(project: MockProject) {
 				// (check constructor signature and compare it to the source)
 				// (org.jetbrains.kotlin:kotlin-compiler-embeddable:1.0.3)
 				val constructor = ReflectionFactory.getReflectionFactory().newConstructorForSerialization(
-						aspect, Any::class.java.getDeclaredConstructor(*arrayOfNulls<Class<*>>(0)))
-				return constructor.newInstance(*emptyArray()) as T
+						aspect, Any::class.java.getDeclaredConstructor())
+				return constructor.newInstance() as T
 			}
 			return null
 		}

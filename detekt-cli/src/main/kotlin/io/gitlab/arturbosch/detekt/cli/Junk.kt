@@ -9,4 +9,5 @@ fun Any?.print(prefix: String = "", suffix: String = "") {
 val Finding.baselineId: String
 	get() = this.id + ":" + this.signature
 
-val SEPARATORS = arrayOf(",", ";")
+val SEPARATOR_COMMA = ","
+val SEPARATOR_SEMICOLON = ";"

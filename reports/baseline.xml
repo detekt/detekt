@@ -1,10 +1,11 @@
 <?xml version="1.0" ?>
 <SmellBaseline>
   <Blacklist timestamp="1496430248166"></Blacklist>
-  <Whitelist timestamp="1499614873452">
+  <Whitelist timestamp="1500749383368">
     <ID>ComplexCondition:SpacingAroundOperator.kt$SpacingAroundOperator$tokenSet.contains(node.elementType) &amp;&amp; node is LeafPsiElement &amp;&amp; !node.isPartOf(KtPrefixExpression::class) &amp;&amp; // not unary !node.isPartOf(KtTypeParameterList::class) &amp;&amp; // fun &lt;T&gt;fn(): T {} !node.isPartOf(KtTypeArgumentList::class) &amp;&amp; // C&lt;T&gt; !node.isPartOf(KtValueArgument::class) &amp;&amp; // fn(*array) !node.isPartOf(KtImportDirective::class) &amp;&amp; // import * !node.isPartOf(KtSuperExpression::class)</ID>
     <ID>NestedBlockDepth:Indentation.kt$Indentation$override fun procedure(node: ASTNode)</ID>
     <ID>ComplexMethod:ProfileExtension.kt$ProfileExtension$fun arguments(debug: Boolean = false): MutableMap&lt;String, String&gt;</ID>
     <ID>TooManyFunctions:LargeClass.kt$LargeClass : ThresholdRule</ID>
+    <ID>SpreadOperator:JCommander.kt$(*args)</ID>
   </Whitelist>
 </SmellBaseline>
