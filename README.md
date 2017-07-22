@@ -59,7 +59,7 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 The CLI uses jcommander for argument parsing. Following parameters are shown when `--help` is entered:
 
 ```
-The following option is required: --project, -p
+The following option is required: --input, -i
 
 Usage: detekt [options]
   Options:
