@@ -141,6 +141,9 @@ comments:
     active: true
   UndocumentedPublicClass:
     active: false
+    searchInNestedClass: true
+    searchInInnerClass: true
+    searchInInnerInterface: true
   UndocumentedPublicFunction:
     active: false
 
