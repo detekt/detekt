@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 
 fun KtExpression?.asBlockExpression(): KtBlockExpression? = if (this is KtBlockExpression) this else null
 
-fun KtModifierListOwner.isPublicNotOverriden() = this.hasModifier(KtTokens.PUBLIC_KEYWORD)
+fun KtModifierListOwner.isPublicNotOverridden() = this.hasModifier(KtTokens.PUBLIC_KEYWORD)
 		|| (this.hasModifier(KtTokens.PRIVATE_KEYWORD) || this.hasModifier(KtTokens.PROTECTED_KEYWORD)
 		|| this.hasModifier(KtTokens.INTERNAL_KEYWORD) || this.hasModifier(KtTokens.OVERRIDE_KEYWORD)).not()
 
