@@ -6,7 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.isPublicNotOverriden
+import io.gitlab.arturbosch.detekt.rules.isPublicNotOverridden
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
@@ -18,24 +18,19 @@ class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,
 			Severity.Maintainability,
-			"Public classes require documentation.")
+			"Public classes, interfaces and objects require documentation.")
+
+	private val searchInNestedClass = valueOrDefault(SEARCH_IN_NESTED_CLASS, true)
+	private val searchInInnerClass = valueOrDefault(SEARCH_IN_INNER_CLASS, true)
+	private val searchInInnerInterface = valueOrDefault(SEARCH_IN_INNER_INTERFACE, true)
 
 	override fun visitClass(klass: KtClass) {
-		reportIfUndocumented(klass)
-		if (klass.notEnum()) { // Stop considering enum entries
-			super.visitClass(klass)
+		if (klass.notEnum() && (klass.isTopLevel() || klass.isInnerClass() || klass.isNestedClass() || klass.isInnerInterface())) {
+			reportIfUndocumented(klass)
 		}
-	}
 
-	private fun reportIfUndocumented(element: KtClassOrObject) {
-		if (element.isPublicNotOverriden()) {
-			if (element.docComment == null) {
-				report(CodeSmell(issue, Entity.Companion.from(element)))
-			}
-		}
+		super.visitClass(klass)
 	}
-
-	private fun KtClass.notEnum() = !this.isEnum()
 
 	override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
 		if (declaration.isCompanionWithoutName() || declaration.isLocal) {
@@ -46,7 +41,26 @@ class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
 		super.visitObjectDeclaration(declaration)
 	}
 
-	private fun KtObjectDeclaration.isCompanionWithoutName() =
-			this.isCompanion() && this.nameAsSafeName.asString() == "Companion"
+	private fun reportIfUndocumented(element: KtClassOrObject) {
+		if (element.isPublicNotOverridden() && element.docComment == null) {
+			report(CodeSmell(issue, Entity.Companion.from(element)))
+		}
+	}
 
+	private fun KtObjectDeclaration.isCompanionWithoutName() =
+			isCompanion() && nameAsSafeName.asString() == "Companion"
+
+	private fun KtClass.isNestedClass() = !isInterface() && !isTopLevel() && !isInner() && searchInNestedClass
+
+	private fun KtClass.isInnerClass() = !isInterface() && isInner() && searchInInnerClass
+
+	private fun KtClass.isInnerInterface() = !isTopLevel() && isInterface() && searchInInnerInterface
+
+	private fun KtClass.notEnum() = !this.isEnum()
+
+	companion object {
+		const val SEARCH_IN_NESTED_CLASS = "searchInNestedClass"
+		const val SEARCH_IN_INNER_CLASS = "searchInInnerClass"
+		const val SEARCH_IN_INNER_INTERFACE = "searchInInnerInterface"
+	}
 }

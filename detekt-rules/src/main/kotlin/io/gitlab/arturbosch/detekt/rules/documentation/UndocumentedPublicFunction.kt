@@ -6,7 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.isPublicNotOverriden
+import io.gitlab.arturbosch.detekt.rules.isPublicNotOverridden
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
@@ -27,7 +27,7 @@ class UndocumentedPublicFunction(config: Config = Config.empty) : Rule(config) {
 				report(CodeSmell(issue, methodHeaderLocation(function)))
 			}
 			if (modifierList != null) {
-				if (function.isPublicNotOverriden()) {
+				if (function.isPublicNotOverridden()) {
 					report(CodeSmell(issue, methodHeaderLocation(function)))
 				}
 			}
