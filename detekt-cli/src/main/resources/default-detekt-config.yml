@@ -6,9 +6,9 @@ build:
   failThreshold: 10
   weights:
     complexity: 2
-    formatting: 0
+    formatting: 1
     LongParameterList: 1
-    comments: 0.5
+    comments: 1
 
 potential-bugs:
   active: true

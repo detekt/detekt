@@ -161,11 +161,15 @@ String USER_HOME = System.getProperty("user.home")
 detekt {
 	debug = true
 	version = "$usedDetektVersion"
+	profile = "failfast"
 	profile("main") {
-		input = "$project.projectDir"
+		input = "$projectDir"
 		filters = '.*/test/.*, .*/resources/.*, .*/build/.*'
-		config = "$project.projectDir/detekt-cli/src/main/resources/default-detekt-config.yml"
-		baseline = "$project.projectDir/reports/baseline.xml"
+		config = "$projectDir/detekt-cli/src/main/resources/default-detekt-config.yml"
+		baseline = "$projectDir/reports/baseline.xml"
+	}
+	profile("failfast") {
+		config = "$projectDir/reports/failfast.yml"
 	}
 	idea {
 		path = "$USER_HOME/.idea"
