@@ -25,12 +25,15 @@ class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
 	private val searchInInnerInterface = valueOrDefault(SEARCH_IN_INNER_INTERFACE, true)
 
 	override fun visitClass(klass: KtClass) {
-		if (klass.notEnum() && (klass.isTopLevel() || klass.isInnerClass() || klass.isNestedClass() || klass.isInnerInterface())) {
+		if (klass.notEnum() && requiresDocumentation(klass)) {
 			reportIfUndocumented(klass)
 		}
 
 		super.visitClass(klass)
 	}
+
+	private fun requiresDocumentation(
+			klass: KtClass) = (klass.isTopLevel() || klass.isInnerClass() || klass.isNestedClass() || klass.isInnerInterface())
 
 	override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
 		if (declaration.isCompanionWithoutName() || declaration.isLocal) {
