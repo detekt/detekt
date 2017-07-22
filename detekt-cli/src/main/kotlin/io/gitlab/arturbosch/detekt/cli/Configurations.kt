@@ -56,7 +56,7 @@ private fun parsePathConfig(configPath: String): Config {
 	}
 }
 
-class FormatConfig(private val useTabs: Boolean) : Config {
+data class FormatConfig(private val useTabs: Boolean) : Config {
 	override fun subConfig(key: String) = this
 
 	override fun <T : Any> valueOrDefault(key: String, default: T): T {
@@ -69,7 +69,7 @@ class FormatConfig(private val useTabs: Boolean) : Config {
 	}
 }
 
-class FailFastConfig(private val originalConfig: Config, private val defaultConfig: Config) : Config {
+data class FailFastConfig(private val originalConfig: Config, private val defaultConfig: Config) : Config {
 	override fun subConfig(key: String) = FailFastConfig(originalConfig.subConfig(key), defaultConfig.subConfig(key))
 
 	override fun <T : Any> valueOrDefault(key: String, default: T): T {

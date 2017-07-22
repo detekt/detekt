@@ -43,20 +43,22 @@ open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 	}
 
 	private fun createArgumentsForProfile(): MutableList<String> {
-		val default = getDefaultProfile()
-		val system = getSystemProfile()
+		val defaultProfile = getDefaultProfile()
+		val systemProfile = getSystemProfile()
+		val mainProfile = if (defaultProfile?.name != MAIN_PROFILE_NAME && systemProfile?.name != MAIN_PROFILE_NAME) {
+			searchProfileWithName(MAIN_PROFILE_NAME)
+		} else null
 
-		val allArguments = default?.arguments(debug) ?: mutableMapOf<String, String>()
+		val allArguments = mainProfile?.arguments(debug) ?: mutableMapOf<String, String>()
+		val defaultArguments = defaultProfile?.arguments(debug) ?: mutableMapOf<String, String>()
 		val fallbackEmptyArguments = mutableMapOf<String, String>()
 
-		val overriddenArguments = if (system?.name == default?.name) fallbackEmptyArguments
-		else system?.arguments(debug) ?: fallbackEmptyArguments
+		val overriddenArguments = if (systemProfile?.name == defaultProfile?.name) fallbackEmptyArguments
+		else systemProfile?.arguments(debug) ?: fallbackEmptyArguments
 
-		overriddenArguments.forEach {
-			allArguments.merge(it.key, it.value) { v1, v2 ->
-				multipleConfigAware(it.key, v1, v2)
-			}
-		}
+		defaultArguments.merge(allArguments)
+		overriddenArguments.merge(allArguments)
+
 		return allArguments.flatMapTo(ArrayList<String>()) { flattenBoolValues(it.key, it.value) }.apply {
 			if (debug) {
 				val name = systemOrDefaultProfile?.name ?: "_fallback_"
@@ -66,20 +68,29 @@ open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 		}
 	}
 
-	private fun getDefaultProfile() = profiles.find { it.name == profile }
-	private fun getSystemProfile() = profiles.find { it.name == specifiedProfileNameThroughSystemProperty() }
+	private fun searchProfileWithName(name: String) = profiles.find { it.name == name }
+	private fun getDefaultProfile() = searchProfileWithName(profile)
+	private fun getSystemProfile() = searchProfileWithName(System.getProperty(DETEKT_PROFILE) ?: profile)
 
 	private fun flattenBoolValues(key: String, value: String)
 			= if (value == "true" || value == "false") listOf(key) else listOf(key, value)
 
-	private fun multipleConfigAware(key: String, v1: String, v2: String)
-			= if (key == CONFIG_PARAMETER || key == CONFIG_RESOURCE_PARAMETER) "$v1,$v2" else v2
-
-	private fun specifiedProfileNameThroughSystemProperty(): String = System.getProperty(DETEKT_PROFILE) ?: profile
-
 	override fun toString(): String = this.reflectiveToString()
 
 }
+
+private val MAIN_PROFILE_NAME = "main"
+
+private fun MutableMap<String, String>.merge(other: MutableMap<String, String>) {
+	for ((key, value) in this) {
+		other.merge(key, value) { v1, v2 ->
+			multipleConfigAware(key, v1, v2)
+		}
+	}
+}
+
+private fun multipleConfigAware(key: String, v1: String, v2: String)
+		= if (key == CONFIG_PARAMETER || key == CONFIG_RESOURCE_PARAMETER) "$v1,$v2" else v2
 
 internal fun Project.fallbackArguments() = listOf(
 		INPUT_PARAMETER, projectDir.absolutePath,
