@@ -1,8 +1,13 @@
 package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.core.*
-import io.gitlab.arturbosch.detekt.core.processors.*
+import io.gitlab.arturbosch.detekt.core.DetektFacade
+import io.gitlab.arturbosch.detekt.core.ProcessingSettings
+import io.gitlab.arturbosch.detekt.core.processors.ClassCountProcessor
+import io.gitlab.arturbosch.detekt.core.processors.FieldCountProcessor
+import io.gitlab.arturbosch.detekt.core.processors.MethodCountProcessor
+import io.gitlab.arturbosch.detekt.core.processors.ProjectComplexityProcessor
+import io.gitlab.arturbosch.detekt.core.processors.ProjectLLOCProcessor
 
 interface Executable {
 	fun execute()
