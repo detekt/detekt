@@ -16,7 +16,7 @@ class SubRuleSpec : Spek({
 	val file = compileForTest(Case.Default.path())
 
 	given("a SubRule that always reports") {
-		val rule = object: SubRule<String>(TestConfig(emptyMap()), file) {
+		val rule = object: SubRule<String>(TestConfig(emptyMap())) {
 			override fun apply(element: String) {
 				report(CodeSmell(issue, Entity.from(file)))
 			}
@@ -26,14 +26,14 @@ class SubRuleSpec : Spek({
 
 		it("should report an issue") {
 			rule.verify("Test") {
-				Assertions.assertThat(rule.isActive()).isTrue()
+				Assertions.assertThat(rule.visitCondition(file)).isTrue()
 				Assertions.assertThat(it).hasSize(1)
 			}
 		}
 	}
 
 	given("a SubRule that always reports but is inactive") {
-		val rule = object: SubRule<String>(TestConfig(mapOf("active" to "false")), file) {
+		val rule = object: SubRule<String>(TestConfig(mapOf("active" to "false"))) {
 			override fun apply(element: String) {
 				report(CodeSmell(issue, Entity.from(file)))
 			}
@@ -42,7 +42,7 @@ class SubRuleSpec : Spek({
 		}
 
 		it("should not be active") {
-			Assertions.assertThat(rule.isActive()).isFalse()
+			Assertions.assertThat(rule.visitCondition(file)).isFalse()
 		}
 	}
 })

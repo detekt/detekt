@@ -13,15 +13,19 @@ import org.jetbrains.kotlin.psi.KtFile
 
 class FileParsingRule(val config: Config = Config.empty) : MultiRule() {
 
+	private val rules = listOf(MaxLineLength(config))
+
 	override fun visitKtFile(file: KtFile) {
 		val lines = file.text.splitToSequence("\n")
-		lines.reportFindings(context) {
-			listOf(MaxLineLength(config, file))
-		}
+		val fileContents = KtFileContent(file, lines)
+		fileContents.reportFindings(context, rules)
 	}
 }
 
-class MaxLineLength(config: Config = Config.empty, private val file: KtFile) : SubRule<Sequence<String>>(config, file) {
+abstract class File(open val file: KtFile)
+data class KtFileContent(override val file: KtFile, val content: Sequence<String>) : File(file)
+
+class MaxLineLength(config: Config = Config.empty) : SubRule<KtFileContent>(config) {
 
 	override val issue = Issue(javaClass.simpleName,
 			Severity.Style,
@@ -35,9 +39,11 @@ class MaxLineLength(config: Config = Config.empty, private val file: KtFile) : S
 	private val excludeImportStatements: Boolean
 			= valueOrDefault(MaxLineLength.EXCLUDE_IMPORT_STATEMENTS, MaxLineLength.DEFAULT_VALUE_IMPORTS_EXCLUDE)
 
-	override fun apply(element: Sequence<String>) {
+	override fun apply(element: KtFileContent) {
 		var offset = 0
-		element.filter { filterPackageStatements(it) }
+		val lines = element.content
+		val file = element.file
+		lines.filter { filterPackageStatements(it) }
 				.filter { filterImportStatements(it) }
 				.map { it.length }
 				.forEach {
