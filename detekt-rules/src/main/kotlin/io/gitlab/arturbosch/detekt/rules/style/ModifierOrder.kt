@@ -34,6 +34,9 @@ import org.jetbrains.kotlin.psi.KtModifierList
 import org.jetbrains.kotlin.psi.psiUtil.allChildren
 import java.util.Arrays
 
+/**
+ * Modifier order array taken from ktlint: https://github.com/shyiko/ktlint
+ */
 class ModifierOrder(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,
