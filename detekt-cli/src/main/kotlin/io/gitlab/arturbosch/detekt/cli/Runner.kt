@@ -5,7 +5,9 @@ import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.processors.ClassCountProcessor
 import io.gitlab.arturbosch.detekt.core.processors.FieldCountProcessor
+import io.gitlab.arturbosch.detekt.core.processors.KtFileCountProcessor
 import io.gitlab.arturbosch.detekt.core.processors.MethodCountProcessor
+import io.gitlab.arturbosch.detekt.core.processors.PackageCountProcessor
 import io.gitlab.arturbosch.detekt.core.processors.ProjectComplexityProcessor
 import io.gitlab.arturbosch.detekt.core.processors.ProjectLLOCProcessor
 
@@ -54,6 +56,8 @@ class Runner(private val main: Main) : Executable {
 			FieldCountProcessor(),
 			ClassCountProcessor(),
 			MethodCountProcessor(),
+			KtFileCountProcessor(),
+			PackageCountProcessor(),
 			DetektProgressListener())
 
 }
