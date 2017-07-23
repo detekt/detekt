@@ -3,11 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.providers
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.rules.style.ForbiddenComment
-import io.gitlab.arturbosch.detekt.rules.style.MaxLineLength
-import io.gitlab.arturbosch.detekt.rules.style.NamingConventionViolation
-import io.gitlab.arturbosch.detekt.rules.style.NewLineAtEndOfFile
-import io.gitlab.arturbosch.detekt.rules.style.WildcardImport
+import io.gitlab.arturbosch.detekt.rules.style.*
 
 /**
  * @author Artur Bosch
@@ -22,7 +18,8 @@ class StyleGuideProvider : RuleSetProvider {
 				WildcardImport(config),
 				MaxLineLength(config),
 				ForbiddenComment(config),
-				NamingConventionViolation(config)
+				NamingConventionViolation(config),
+				SafeCast(config)
 		))
 	}
 }
