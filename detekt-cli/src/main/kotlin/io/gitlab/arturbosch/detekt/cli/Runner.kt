@@ -1,10 +1,8 @@
 package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.core.DetektFacade
-import io.gitlab.arturbosch.detekt.core.ProcessingSettings
-import io.gitlab.arturbosch.detekt.core.ProjectComplexityProcessor
-import io.gitlab.arturbosch.detekt.core.ProjectLLOCProcessor
+import io.gitlab.arturbosch.detekt.core.*
+import io.gitlab.arturbosch.detekt.core.processors.*
 
 interface Executable {
 	fun execute()
@@ -45,6 +43,12 @@ class Runner(private val main: Main) : Executable {
 		}
 	}
 
-	private fun createProcessors() = listOf(ProjectLLOCProcessor(), ProjectComplexityProcessor(), DetektProgressListener())
+	private fun createProcessors() = listOf(
+			ProjectLLOCProcessor(),
+			ProjectComplexityProcessor(),
+			FieldCountProcessor(),
+			ClassCountProcessor(),
+			MethodCountProcessor(),
+			DetektProgressListener())
 
 }
