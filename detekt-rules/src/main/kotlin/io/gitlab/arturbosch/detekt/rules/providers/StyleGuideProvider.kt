@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.rules.style.ForbiddenComment
 import io.gitlab.arturbosch.detekt.rules.style.MaxLineLength
 import io.gitlab.arturbosch.detekt.rules.style.NamingConventionViolation
 import io.gitlab.arturbosch.detekt.rules.style.NewLineAtEndOfFile
+import io.gitlab.arturbosch.detekt.rules.style.SafeCast
 import io.gitlab.arturbosch.detekt.rules.style.WildcardImport
 
 /**
@@ -22,7 +23,8 @@ class StyleGuideProvider : RuleSetProvider {
 				WildcardImport(config),
 				MaxLineLength(config),
 				ForbiddenComment(config),
-				NamingConventionViolation(config)
+				NamingConventionViolation(config),
+				SafeCast(config)
 		))
 	}
 }
