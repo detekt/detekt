@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.api
 
 import org.jetbrains.kotlin.psi.KtFile
 
-
+@Suppress("EmptyFunctionBlock")
 abstract class BaseRule(protected val context: Context = DefaultContext()) : DetektVisitor(), Context by context {
 
 	/**
