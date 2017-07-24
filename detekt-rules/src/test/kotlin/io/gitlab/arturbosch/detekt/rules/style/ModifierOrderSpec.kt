@@ -82,7 +82,7 @@ class ModifierOrderSpec : Spek({
 			val rule = ModifierOrder()
 
 			val findings = rule.lint(file.text)
-			Assertions.assertThat(findings).hasSize(2)
+			Assertions.assertThat(findings).hasSize(3)
 		}
 	}
 

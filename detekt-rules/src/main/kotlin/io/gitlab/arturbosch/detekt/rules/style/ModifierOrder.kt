@@ -81,5 +81,3 @@ class ModifierOrder(config: Config = Config.empty) : Rule(config) {
 		}
 	}
 }
-
-data class Test(val test: String)
