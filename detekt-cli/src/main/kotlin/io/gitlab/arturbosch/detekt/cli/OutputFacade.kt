@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.cli.console.ComplexityReport
 import io.gitlab.arturbosch.detekt.cli.console.FindingsReport
 import io.gitlab.arturbosch.detekt.cli.console.NotificationReport
 import io.gitlab.arturbosch.detekt.cli.console.ProjectStatisticsReport
-import io.gitlab.arturbosch.detekt.cli.out.DetektBaselineFormat
+import io.gitlab.arturbosch.detekt.cli.baseline.BaselineFacade
 import io.gitlab.arturbosch.detekt.cli.out.Formatter
 
 /**
@@ -18,7 +18,7 @@ class OutputFacade(args: Main, private val detektion: Detektion) {
 	private val reportPath = args.output
 	private val outputFormatter: Formatter = args.outputFormatter
 	private val findings: Map<String, List<Finding>> = detektion.findings
-	private val baselineFormat = args.baseline?.let { DetektBaselineFormat(it) }
+	private val baselineFacade = args.baseline?.let { BaselineFacade(it) }
 	private val createBaseline = args.createBaseline
 
 	fun consoleFacade() {
@@ -36,6 +36,6 @@ class OutputFacade(args: Main, private val detektion: Detektion) {
 			outputFormatter.create().write(reportPath, smells)
 			println("Successfully wrote findings to $it")
 		}
-		if (createBaseline) baselineFormat?.create(smells)
+		if (createBaseline) baselineFacade?.create(smells)
 	}
 }
