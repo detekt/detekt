@@ -3,5 +3,3 @@ io.gitlab.arturbosch.detekt.cli.console.ComplexityReport
 io.gitlab.arturbosch.detekt.cli.console.FindingsReport
 io.gitlab.arturbosch.detekt.cli.console.NotificationReport
 io.gitlab.arturbosch.detekt.cli.console.ProjectStatisticsReport
-io.gitlab.arturbosch.detekt.cli.out.PlainOutputFormat
-io.gitlab.arturbosch.detekt.cli.out.XmlOutputFormat

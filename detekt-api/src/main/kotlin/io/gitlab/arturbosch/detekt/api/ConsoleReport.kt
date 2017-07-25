@@ -5,7 +5,7 @@ import java.io.PrintStream
 /**
  * @author Artur Bosch
  */
-abstract class ConsoleReport : Report {
+abstract class ConsoleReport : Extension {
 
 	fun print(printer: PrintStream, detektion: Detektion) {
 		render(detektion)?.let {
