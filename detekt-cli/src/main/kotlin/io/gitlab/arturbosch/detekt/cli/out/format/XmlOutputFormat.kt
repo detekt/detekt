@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.cli.out.format
 
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.OutputFormat
 import io.gitlab.arturbosch.detekt.api.Severity
 
 /**
