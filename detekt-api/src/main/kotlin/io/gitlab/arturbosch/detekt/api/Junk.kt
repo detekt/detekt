@@ -5,6 +5,7 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtStringTemplateEntry
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 import kotlin.reflect.KClass
+import kotlin.reflect.KProperty
 
 private val identifierRegex = Regex("[aA-zZ]+([-][aA-zZ]+)*")
 
@@ -43,5 +44,35 @@ internal fun getTextSafe(defaultValue: () -> String, block: () -> String) = try 
 		defaultValue() + "!<UnderestimatedTextLengthException>"
 	} else {
 		defaultValue()
+	}
+}
+
+const val PREFIX = "\t- "
+
+fun Any.format(prefix: String = "", suffix: String = "\n") = "$prefix$this$suffix"
+
+class SingleAssign<T> {
+
+	private var initialized = false
+	private var _value: Any? = UNINITIALIZED_VALUE
+
+	operator fun getValue(thisRef: Any?, property: KProperty<*>): T {
+		if (!initialized) {
+			throw IllegalStateException("Property ${property.name} has not been assigned yet!")
+		}
+		@Suppress("UNCHECKED_CAST")
+		return _value as T
+	}
+
+	operator fun setValue(thisRef: Any?, property: KProperty<*>, value: T) {
+		if (initialized) {
+			throw IllegalStateException("Property ${property.name} has already been assigned!")
+		}
+		_value = value
+		initialized = true
+	}
+
+	companion object {
+		private val UNINITIALIZED_VALUE = Any()
 	}
 }
