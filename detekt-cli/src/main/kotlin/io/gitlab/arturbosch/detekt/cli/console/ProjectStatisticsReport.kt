@@ -1,6 +1,9 @@
 package io.gitlab.arturbosch.detekt.cli.console
 
+import io.gitlab.arturbosch.detekt.api.ConsoleReport
 import io.gitlab.arturbosch.detekt.api.Detektion
+import io.gitlab.arturbosch.detekt.api.PREFIX
+import io.gitlab.arturbosch.detekt.api.format
 import io.gitlab.arturbosch.detekt.core.NUMBER_OF_CLASSES_KEY
 import io.gitlab.arturbosch.detekt.core.NUMBER_OF_FIELDS_KEY
 import io.gitlab.arturbosch.detekt.core.NUMBER_OF_FILES_KEY
@@ -11,6 +14,8 @@ import io.gitlab.arturbosch.detekt.core.NUMBER_OF_PACKAGES_KEY
  * @author Artur Bosch
  */
 class ProjectStatisticsReport : ConsoleReport() {
+
+	override val priority: Int = 1
 
 	override fun render(detektion: Detektion): String? {
 		return with(StringBuilder()) {
