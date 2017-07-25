@@ -1,15 +1,12 @@
 package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.ConsoleReport
+import io.gitlab.arturbosch.detekt.api.FileProcessListener
+import io.gitlab.arturbosch.detekt.api.OutputFormat
 import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
-import io.gitlab.arturbosch.detekt.core.processors.ClassCountProcessor
-import io.gitlab.arturbosch.detekt.core.processors.FieldCountProcessor
-import io.gitlab.arturbosch.detekt.core.processors.KtFileCountProcessor
-import io.gitlab.arturbosch.detekt.core.processors.MethodCountProcessor
-import io.gitlab.arturbosch.detekt.core.processors.PackageCountProcessor
-import io.gitlab.arturbosch.detekt.core.processors.ProjectComplexityProcessor
-import io.gitlab.arturbosch.detekt.core.processors.ProjectLLOCProcessor
+import java.util.ServiceLoader
 
 interface Executable {
 	fun execute()
@@ -21,18 +18,20 @@ interface Executable {
 class Runner(private val main: Main) : Executable {
 
 	override fun execute() {
-		val (settings, _) = createSettingsAndConfig()
+		val (settings, config) = createSettingsAndConfig()
 
 		val start = System.currentTimeMillis()
 
 		val detektion = DetektFacade.instance(settings).run()
-		val facade = OutputFacade(main, detektion)
 
-		facade.run {
-			consoleFacade()
-			reportFacade()
+		val reports = ReportLocator(settings).load()
+		for (report in reports) {
+			report.init(config)
+			when (report) {
+				is ConsoleReport -> report.print(System.out, detektion)
+				is OutputFormat -> main.output?.apply { report.write(this, detektion) }
+			}
 		}
-
 		val end = System.currentTimeMillis() - start
 
 		println("\ndetekt run within $end ms")
@@ -49,14 +48,6 @@ class Runner(private val main: Main) : Executable {
 		}
 	}
 
-	private fun createProcessors() = listOf(
-			ProjectLLOCProcessor(),
-			ProjectComplexityProcessor(),
-			FieldCountProcessor(),
-			ClassCountProcessor(),
-			MethodCountProcessor(),
-			KtFileCountProcessor(),
-			PackageCountProcessor(),
-			DetektProgressListener())
+	private fun createProcessors() = ServiceLoader.load(FileProcessListener::class.java).toList()
 
 }

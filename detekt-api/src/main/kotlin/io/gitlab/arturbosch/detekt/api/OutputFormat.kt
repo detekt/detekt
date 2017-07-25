@@ -6,16 +6,10 @@ import java.nio.file.Path
 /**
  * @author Artur Bosch
  */
-abstract class OutputFormat {
+abstract class OutputFormat : Report {
 
-	open val id: String = javaClass.simpleName
-	open val priority: Int = -1
-
-	@Suppress("EmptyFunctionBlock")
-	open fun init(config: Config) {
-	}
-
-	fun write(report: Path, smells: List<Finding>) {
+	fun write(report: Path, detektion: Detektion) {
+		val smells = detektion.findings.flatMap { it.value }
 		val smellData = render(smells)
 		smellData?.let {
 			report.parent?.let { Files.createDirectories(it) }

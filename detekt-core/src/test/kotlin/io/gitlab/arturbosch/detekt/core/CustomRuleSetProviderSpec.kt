@@ -17,7 +17,7 @@ class CustomRuleSetProviderSpec : Spek({
 		val sampleRuleSet = Paths.get(resource("sample-rule-set.jar"))
 
 		it("should load the sample provider") {
-			val settings = ProcessingSettings(path, excludeDefaultRuleSets = true, ruleSets = listOf(sampleRuleSet))
+			val settings = ProcessingSettings(path, excludeDefaultRuleSets = true, pluginPaths = listOf(sampleRuleSet))
 			val detekt = DetektFacade.instance(settings)
 			val result = detekt.run()
 
