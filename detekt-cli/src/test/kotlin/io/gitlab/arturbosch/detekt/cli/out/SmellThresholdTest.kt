@@ -4,6 +4,7 @@ import org.assertj.core.api.Java6Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 internal class SmellThresholdTest {
+
 	@Test
 	fun reached() {
 		assertThat(0.reached(0)).isEqualTo(false)
