@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.core.processors
 
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
-import io.gitlab.arturbosch.detekt.core.Detektion
-import io.gitlab.arturbosch.detekt.core.FileProcessListener
+import io.gitlab.arturbosch.detekt.api.Detektion
+import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.psi.KtFile
 
