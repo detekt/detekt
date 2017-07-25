@@ -1,14 +1,14 @@
 package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.cli.out.DetektBaselineFormat
 import io.gitlab.arturbosch.detekt.cli.out.SmellThreshold
 import io.gitlab.arturbosch.detekt.cli.out.format.OutputFormat
 import io.gitlab.arturbosch.detekt.core.COMPLEXITY_KEY
-import io.gitlab.arturbosch.detekt.core.Detektion
 import io.gitlab.arturbosch.detekt.core.LLOC_KEY
-import io.gitlab.arturbosch.detekt.core.Notification
 
 /**
  * @author Artur Bosch
