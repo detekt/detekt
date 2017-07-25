@@ -8,7 +8,7 @@ import io.gitlab.arturbosch.detekt.cli.console.FindingsReport
 import io.gitlab.arturbosch.detekt.cli.console.NotificationReport
 import io.gitlab.arturbosch.detekt.cli.console.ProjectStatisticsReport
 import io.gitlab.arturbosch.detekt.cli.out.DetektBaselineFormat
-import io.gitlab.arturbosch.detekt.cli.out.format.Formatter
+import io.gitlab.arturbosch.detekt.cli.out.Formatter
 
 /**
  * @author Artur Bosch

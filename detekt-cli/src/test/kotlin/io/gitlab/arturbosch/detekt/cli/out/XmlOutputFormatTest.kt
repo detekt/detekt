@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.cli.out.format
+package io.gitlab.arturbosch.detekt.cli.out
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Entity

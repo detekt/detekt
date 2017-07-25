@@ -19,7 +19,7 @@
  */
 @file:Suppress("ALL")
 
-package io.gitlab.arturbosch.detekt.cli.out.format
+package io.gitlab.arturbosch.detekt.cli.out
 
 import java.util.ArrayList
 import java.util.Arrays
@@ -312,7 +312,7 @@ private object Xml10EscapeSymbolsInitializer {
 			* whether such codepoint will be allowed in escaped output (escaped or not). Invalid codepoints
 			* will be simply discarded.
 			*/
-						 val CODEPOINT_VALIDATOR: Xml10EscapeSymbolsInitializer.XmlCodepointValidator) {
+						 val CODEPOINT_VALIDATOR: XmlCodepointValidator) {
 
 		/*
 		 * This array will hold the 'escape level' assigned to chars (not codepoints) up to LEVELS_LEN.

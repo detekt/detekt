@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.cli.out.format
+package io.gitlab.arturbosch.detekt.cli.out
 
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.OutputFormat
