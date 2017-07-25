@@ -1,10 +1,6 @@
-package io.gitlab.arturbosch.detekt.cli.out
+package io.gitlab.arturbosch.detekt.cli.baseline
 
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.cli.baseline.Baseline
-import io.gitlab.arturbosch.detekt.cli.baseline.BaselineFormat
-import io.gitlab.arturbosch.detekt.cli.baseline.Blacklist
-import io.gitlab.arturbosch.detekt.cli.baseline.Whitelist
 import io.gitlab.arturbosch.detekt.cli.baselineId
 import io.gitlab.arturbosch.detekt.core.exists
 import io.gitlab.arturbosch.detekt.core.isFile
@@ -15,7 +11,7 @@ import java.time.Instant
 /**
  * @author Artur Bosch
  */
-class DetektBaselineFormat(val baselineFile: Path) {
+class BaselineFacade(val baselineFile: Path) {
 
 	private val listings: Pair<Whitelist, Blacklist>? =
 			if (baselineExists()) {
