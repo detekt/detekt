@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.cli
 
 import com.beust.jcommander.Parameter
-import io.gitlab.arturbosch.detekt.cli.out.format.Formatter
+import io.gitlab.arturbosch.detekt.cli.out.Formatter
 import io.gitlab.arturbosch.detekt.core.isDirectory
 import org.jetbrains.kotlin.utils.addToStdlib.ifNotEmpty
 import java.nio.file.Files
