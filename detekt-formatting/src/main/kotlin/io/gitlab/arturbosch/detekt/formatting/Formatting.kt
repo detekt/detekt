@@ -22,7 +22,7 @@ class Formatting {
 				val settings = ProcessingSettings(inputPath, config, createPathFilters(), parallel, true)
 				val detektor = Detektor(settings, KtTreeCompiler.instance(settings), listOf(FormattingProvider()))
 				val detektion = detektor.run()
-				OutputFacade(this, detektion).consoleFacade()
+				OutputFacade(this, detektion, settings).run()
 			}
 
 		}

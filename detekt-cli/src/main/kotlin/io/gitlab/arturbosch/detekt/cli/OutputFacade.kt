@@ -1,41 +1,33 @@
 package io.gitlab.arturbosch.detekt.cli
 
+import io.gitlab.arturbosch.detekt.api.ConsoleReport
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.cli.baseline.BaselineFacade
-import io.gitlab.arturbosch.detekt.cli.console.BuildFailureReport
-import io.gitlab.arturbosch.detekt.cli.console.ComplexityReport
-import io.gitlab.arturbosch.detekt.cli.console.FindingsReport
-import io.gitlab.arturbosch.detekt.cli.console.NotificationReport
-import io.gitlab.arturbosch.detekt.cli.console.ProjectStatisticsReport
-import io.gitlab.arturbosch.detekt.cli.out.Formatter
+import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 
 /**
  * @author Artur Bosch
  */
-class OutputFacade(args: Main, private val detektion: Detektion) {
+class OutputFacade(private val main: Main,
+				   private val detektion: Detektion,
+				   private val settings: ProcessingSettings) {
 
-	private val reportPath = args.output
-	private val outputFormatter: Formatter = args.outputFormatter
-	private val findings: Map<String, List<Finding>> = detektion.findings
-	private val baselineFacade = args.baseline?.let { BaselineFacade(it) }
-	private val createBaseline = args.createBaseline
+	private val config = settings.config
+	private val baselineFacade = main.baseline?.let { BaselineFacade(it) }
+	private val createBaseline = main.createBaseline
 
-	fun consoleFacade() {
-		val out = System.out
-		NotificationReport().print(out, detektion)
-		FindingsReport().print(out, detektion)
-		ComplexityReport().print(out, detektion)
-		ProjectStatisticsReport().print(out, detektion)
-		BuildFailureReport().print(out, detektion)
-	}
-
-	fun reportFacade() {
-		val smells = findings.flatMap { it.value }
-		reportPath?.let {
-			outputFormatter.create().write(reportPath, detektion)
-			println("Successfully wrote findings to $it")
+	fun run() {
+		val reports = ReportLocator(settings).load()
+		reports.sortedBy { it.priority }.asReversed().forEach { report ->
+			report.init(config)
+			when (report) {
+				is ConsoleReport -> report.print(System.out, detektion)
+				is OutputReport -> main.output?.apply { report.write(this, detektion) }
+			}
 		}
+
+		val smells = detektion.findings.flatMap { it.value }
 		if (createBaseline) baselineFacade?.create(smells)
 	}
 }
