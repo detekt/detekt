@@ -51,5 +51,7 @@ class SingleAssign<T> {
 		initialized = true
 	}
 
-	companion object UNINITIALIZED_VALUE
+	companion object {
+		private val UNINITIALIZED_VALUE = Any()
+	}
 }

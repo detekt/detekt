@@ -14,7 +14,9 @@ class FindingsReport : ConsoleReport() {
 		return with(StringBuilder()) {
 			findings.forEach {
 				append(it.key.format("Ruleset: "))
-				append(it.value.joinToString { it.compact().format("\t") })
+				it.value.forEach {
+					append(it.compact().format("\t"))
+				}
 			}
 			toString()
 		}
