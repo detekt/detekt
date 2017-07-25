@@ -2,11 +2,9 @@ package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.ConsoleReport
-import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.OutputFormat
 import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
-import java.util.ServiceLoader
 
 interface Executable {
 	fun execute()
@@ -25,7 +23,8 @@ class Runner(private val main: Main) : Executable {
 		val detektion = DetektFacade.instance(settings).run()
 
 		val reports = ReportLocator(settings).load()
-		for (report in reports) {
+
+		reports.sortedBy { it.priority }.asReversed().forEach { report ->
 			report.init(config)
 			when (report) {
 				is ConsoleReport -> report.print(System.out, detektion)
@@ -42,12 +41,8 @@ class Runner(private val main: Main) : Executable {
 			val pathFilters = createPathFilters()
 			val rules = createRulePaths()
 			val config = loadConfiguration()
-			val changeListeners = createProcessors()
 			return ProcessingSettings(inputPath, config, pathFilters, parallel,
-					disableDefaultRuleSets, rules, changeListeners) to config
+					disableDefaultRuleSets, rules) to config
 		}
 	}
-
-	private fun createProcessors() = ServiceLoader.load(FileProcessListener::class.java).toList()
-
 }
