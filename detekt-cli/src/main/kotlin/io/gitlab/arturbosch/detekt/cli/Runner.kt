@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.ConsoleReport
-import io.gitlab.arturbosch.detekt.api.OutputFormat
+import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 
@@ -27,7 +27,7 @@ class Runner(private val main: Main) : Executable {
 			report.init(config)
 			when (report) {
 				is ConsoleReport -> report.print(System.out, detektion)
-				is OutputFormat -> main.output?.apply { report.write(this, detektion) }
+				is OutputReport -> main.output?.apply { report.write(this, detektion) }
 			}
 		}
 

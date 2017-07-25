@@ -6,16 +6,15 @@ import java.nio.file.Path
 /**
  * @author Artur Bosch
  */
-abstract class OutputFormat : Extension {
+abstract class OutputReport : Extension {
 
 	fun write(report: Path, detektion: Detektion) {
-		val smells = detektion.findings.flatMap { it.value }
-		val smellData = render(smells)
+		val smellData = render(detektion)
 		smellData?.let {
 			report.parent?.let { Files.createDirectories(it) }
 			Files.write(report, it.toByteArray())
 		}
 	}
 
-	abstract fun render(smells: List<Finding>): String?
+	abstract fun render(detektion: Detektion): String?
 }

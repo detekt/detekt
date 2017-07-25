@@ -1,13 +1,14 @@
 package io.gitlab.arturbosch.detekt.cli.out
 
+import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.OutputFormat
+import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.Severity
 
 /**
  * Generates an XML report following the structure of a Checkstyle report.
  */
-class XmlOutputFormat : OutputFormat() {
+class XmlOutputReport : OutputReport() {
 
 	private sealed class MessageType(val label: String) {
 		class Warning : MessageType("warning")
@@ -16,7 +17,9 @@ class XmlOutputFormat : OutputFormat() {
 		class Error : MessageType("error")
 	}
 
-	override fun render(smells: List<Finding>): String {
+	override fun render(detektion: Detektion): String {
+		val smells = detektion.findings.flatMap { it.value }
+
 		val lines = ArrayList<String>()
 		lines += "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
 		lines += "<checkstyle version=\"4.3\">"
