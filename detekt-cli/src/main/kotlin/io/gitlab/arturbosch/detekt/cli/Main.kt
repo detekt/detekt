@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.cli
 
 import com.beust.jcommander.Parameter
-import io.gitlab.arturbosch.detekt.cli.out.format.OutputFormat
+import io.gitlab.arturbosch.detekt.cli.out.format.Formatter
 import io.gitlab.arturbosch.detekt.core.isDirectory
 import org.jetbrains.kotlin.utils.addToStdlib.ifNotEmpty
 import java.nio.file.Files
@@ -62,7 +62,7 @@ class Main {
 	var output: Path? = null
 
 	@Parameter(names = arrayOf("--output-format", "-of"), description = "Specify the output format.")
-	var outputFormatter: OutputFormat.Formatter = OutputFormat.Formatter.XML
+	var outputFormatter: Formatter = Formatter.XML
 
 	@Parameter(names = arrayOf("--disable-default-rulesets", "-dd"), description = "Disables default rule sets.")
 	var disableDefaultRuleSets: Boolean = false

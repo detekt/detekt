@@ -8,24 +8,19 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.nio.file.Files
 import java.util.Collections
 
 internal class XmlOutputFormatTest {
 
-	private val entity1 = Entity("Sample1", "com.sample.Sample1", "", Location(SourceLocation(11, 1), TextLocation(0, 10), "abcd", "src/main/com/sample/Sample1.kt"))
-	private val entity2 = Entity("Sample2", "com.sample.Sample2", "", Location(SourceLocation(22, 2), TextLocation(0, 20), "efgh", "src/main/com/sample/Sample2.kt"))
+	private val entity1 = Entity("Sample1", "com.sample.Sample1", "",
+			Location(SourceLocation(11, 1), TextLocation(0, 10),
+					"abcd", "src/main/com/sample/Sample1.kt"))
+	private val entity2 = Entity("Sample2", "com.sample.Sample2", "",
+			Location(SourceLocation(22, 2), TextLocation(0, 20),
+					"efgh", "src/main/com/sample/Sample2.kt"))
 
-	private val path = Files.createTempDirectory("reports")
-	private val file = path.resolve("report.xml")
-	private lateinit var outputFormat: XmlOutputFormat
-
-	@BeforeEach
-	fun setUp() {
-		outputFormat = XmlOutputFormat(file)
-	}
+	private val outputFormat = XmlOutputFormat()
 
 	@Test
 	fun renderEmpty() {
