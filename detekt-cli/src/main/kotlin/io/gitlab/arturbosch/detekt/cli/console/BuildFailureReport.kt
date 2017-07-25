@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.ConsoleReport
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.SingleAssign
-import io.gitlab.arturbosch.detekt.cli.out.SmellThreshold
 import java.util.HashMap
 
 /**
@@ -33,7 +32,7 @@ class BuildFailureReport : ConsoleReport() {
 		val amount = smells.map { it.weighted(ruleToRuleSetId) }.sum()
 
 		if (fail.reached(amount)) {
-			throw SmellThreshold.BuildFailure("Build failure threshold of $fail reached with $amount weighted smells!")
+			throw BuildFailure("Build failure threshold of $fail reached with $amount weighted smells!")
 		} else if (warning.reached(amount)) {
 			return "Warning: $amount weighted code smells found. " +
 					"Warning threshold is $warning and fail threshold is $fail!"
@@ -53,9 +52,8 @@ class BuildFailureReport : ConsoleReport() {
 		return weightsConfig.valueOrDefault(id,
 				if (key != null) weightsConfig.valueOrDefault(key, 1) else 1)
 	}
-
-	companion object {
-		internal fun Int.reached(amount: Int): Boolean
-				= !(this == 0 && amount == 0) && this != -1 && this <= amount
-	}
 }
+
+internal fun Int.reached(amount: Int): Boolean = !(this == 0 && amount == 0) && this != -1 && this <= amount
+
+class BuildFailure(override val message: String?) : RuntimeException(message)

@@ -11,6 +11,10 @@ abstract class OutputFormat {
 	open val id: String = javaClass.simpleName
 	open val priority: Int = -1
 
+	@Suppress("EmptyFunctionBlock")
+	open fun init(config: Config) {
+	}
+
 	fun write(report: Path, smells: List<Finding>) {
 		val smellData = render(smells)
 		smellData?.let {

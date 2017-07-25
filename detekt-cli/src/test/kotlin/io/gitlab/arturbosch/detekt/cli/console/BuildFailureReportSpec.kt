@@ -57,4 +57,18 @@ internal class BuildFailureReportSpec : SubjectSpek<BuildFailureReport>({
 			}
 		}
 	}
+
+	describe("reached extension function tests") {
+		assertThat(0.reached(0)).isEqualTo(false)
+
+		assertThat((-1).reached(0)).isEqualTo(false)
+
+		assertThat(1.reached(0)).isEqualTo(false)
+		assertThat(1.reached(1)).isEqualTo(true)
+		assertThat(1.reached(2)).isEqualTo(true)
+
+		assertThat(12.reached(11)).isEqualTo(false)
+		assertThat(12.reached(12)).isEqualTo(true)
+		assertThat(12.reached(13)).isEqualTo(true)
+	}
 })
