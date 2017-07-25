@@ -30,7 +30,6 @@ class BuildFailureReport : ConsoleReport() {
 		val ruleToRuleSetId = extractRuleToRuleSetIdMap(detektion)
 		val amount = smells.map { it.weighted(ruleToRuleSetId) }.sum()
 
-		println("\n")
 		if (fail.reached(amount)) {
 			throw SmellThreshold.BuildFailure("Build failure threshold of $fail reached with $amount weighted smells!")
 		} else if (warning.reached(amount)) {
@@ -58,4 +57,3 @@ class BuildFailureReport : ConsoleReport() {
 				= !(this == 0 && amount == 0) && this != -1 && this <= amount
 	}
 }
-
