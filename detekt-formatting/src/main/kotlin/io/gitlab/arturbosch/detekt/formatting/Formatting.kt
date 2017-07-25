@@ -19,14 +19,10 @@ class Formatting {
 		fun main(args: Array<String>) {
 			with(parseArguments(args)) {
 				val config = loadConfiguration()
-				val settings = ProcessingSettings(inputPath, config, createPathFilters(), parallel, excludeDefaultRuleSets = true)
+				val settings = ProcessingSettings(inputPath, config, createPathFilters(), parallel, true)
 				val detektor = Detektor(settings, KtTreeCompiler.instance(settings), listOf(FormattingProvider()))
 				val detektion = detektor.run()
-				OutputFacade(this, config, detektion).run {
-					printNotifications()
-					printFindings()
-					buildErrorCheck()
-				}
+				OutputFacade(this, detektion).consoleFacade()
 			}
 
 		}

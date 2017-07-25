@@ -21,12 +21,12 @@ interface Executable {
 class Runner(private val main: Main) : Executable {
 
 	override fun execute() {
-		val (settings, config) = createSettingsAndConfig()
+		val (settings, _) = createSettingsAndConfig()
 
 		val start = System.currentTimeMillis()
 
 		val detektion = DetektFacade.instance(settings).run()
-		val facade = OutputFacade(main, config, detektion)
+		val facade = OutputFacade(main, detektion)
 
 		facade.run {
 			consoleFacade()
@@ -36,7 +36,6 @@ class Runner(private val main: Main) : Executable {
 		val end = System.currentTimeMillis() - start
 
 		println("\ndetekt run within $end ms")
-		facade.buildErrorCheck()
 	}
 
 	private fun createSettingsAndConfig(): Pair<ProcessingSettings, Config> {
