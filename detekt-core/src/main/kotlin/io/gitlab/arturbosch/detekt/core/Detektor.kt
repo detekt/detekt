@@ -13,21 +13,21 @@ import org.jetbrains.kotlin.psi.KtFile
  */
 class Detektor(settings: ProcessingSettings,
 			   val compiler: KtTreeCompiler,
-			   val providers: List<RuleSetProvider>) {
+			   val providers: List<RuleSetProvider>,
+			   val processors: List<FileProcessListener> = emptyList()) {
 
 	private val config: Config = settings.config
-	private val changeListeners: List<FileProcessListener> = settings.changeListeners
 	private val notifications: MutableList<Notification> = mutableListOf()
 
 	fun run(): Detektion {
 		val ktFiles = compiler.compile()
 		return withExecutor {
 
-			changeListeners.forEach { it.onStart(ktFiles) }
+			processors.forEach { it.onStart(ktFiles) }
 			val futures = ktFiles.map { file ->
 				runAsync {
 					file.analyze().apply {
-						changeListeners.forEach { it.onProcess(file) }
+						processors.forEach { it.onProcess(file) }
 					}
 				}
 			}
@@ -40,9 +40,7 @@ class Detektor(settings: ProcessingSettings,
 			}
 
 			DetektResult(findings.toSortedMap(), notifications).apply {
-				changeListeners.forEach {
-					it.onFinish(ktFiles, this)
-				}
+				processors.forEach { it.onFinish(ktFiles, this) }
 			}
 		}
 	}

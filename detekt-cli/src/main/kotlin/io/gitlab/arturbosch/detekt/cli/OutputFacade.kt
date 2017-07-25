@@ -2,12 +2,12 @@ package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.cli.baseline.BaselineFacade
 import io.gitlab.arturbosch.detekt.cli.console.BuildFailureReport
 import io.gitlab.arturbosch.detekt.cli.console.ComplexityReport
 import io.gitlab.arturbosch.detekt.cli.console.FindingsReport
 import io.gitlab.arturbosch.detekt.cli.console.NotificationReport
 import io.gitlab.arturbosch.detekt.cli.console.ProjectStatisticsReport
-import io.gitlab.arturbosch.detekt.cli.baseline.BaselineFacade
 import io.gitlab.arturbosch.detekt.cli.out.Formatter
 
 /**
@@ -33,7 +33,7 @@ class OutputFacade(args: Main, private val detektion: Detektion) {
 	fun reportFacade() {
 		val smells = findings.flatMap { it.value }
 		reportPath?.let {
-			outputFormatter.create().write(reportPath, smells)
+			outputFormatter.create().write(reportPath, detektion)
 			println("Successfully wrote findings to $it")
 		}
 		if (createBaseline) baselineFacade?.create(smells)

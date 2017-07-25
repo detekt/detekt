@@ -1,33 +1,24 @@
 package io.gitlab.arturbosch.detekt.core
 
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import java.net.URL
 import java.net.URLClassLoader
-import java.nio.file.Files
-import java.nio.file.Path
 import java.util.ServiceLoader
 
 /**
  * @author Artur Bosch
  */
 class RuleSetLocator(val excludeDefaultRuleSets: Boolean,
-					 val ruleSets: List<Path>) {
-	init {
-		ruleSets.forEach {
-			require(Files.exists(it) && it.toString().endsWith("jar")) {
-				"Given ruleset $it does not exist or has no jar ending!"
-			}
-		}
-	}
+					 val plugins: Array<URL>) {
 
 	companion object {
 		fun instance(settings: ProcessingSettings) = with(settings) {
-			RuleSetLocator(excludeDefaultRuleSets, ruleSets)
+			RuleSetLocator(excludeDefaultRuleSets, settings.pluginUrls)
 		}
 	}
 
-	fun loadProviders(): List<RuleSetProvider> {
-		val urls = ruleSets.map { it.toUri().toURL() }.toTypedArray()
-		val detektLoader = URLClassLoader(urls, javaClass.classLoader)
+	fun load(): List<RuleSetProvider> {
+		val detektLoader = URLClassLoader(plugins, javaClass.classLoader)
 		return ServiceLoader.load(RuleSetProvider::class.java, detektLoader).asIterable()
 				.map { it.nullIfDefaultAndExcluded() }
 				.filterNotNull()

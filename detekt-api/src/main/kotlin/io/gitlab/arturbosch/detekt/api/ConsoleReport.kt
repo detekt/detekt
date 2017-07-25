@@ -5,14 +5,7 @@ import java.io.PrintStream
 /**
  * @author Artur Bosch
  */
-abstract class ConsoleReport {
-
-	open val id: String = javaClass.simpleName
-	open val priority: Int = -1
-
-	@Suppress("EmptyFunctionBlock")
-	open fun init(config: Config) {
-	}
+abstract class ConsoleReport : Report {
 
 	fun print(printer: PrintStream, detektion: Detektion) {
 		render(detektion)?.let {
