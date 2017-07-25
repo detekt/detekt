@@ -7,26 +7,28 @@ import java.nio.file.Path
 /**
  * @author Artur Bosch
  */
-abstract class OutputFormat(val report: Path) {
+abstract class OutputFormat {
 
-	fun create(smells: List<Finding>) {
+	open val id: String = javaClass.simpleName
+	open val priority: Int = -1
+
+	fun write(report: Path, smells: List<Finding>) {
 		val smellData = render(smells)
 		smellData?.let {
 			report.parent?.let { Files.createDirectories(it) }
 			Files.write(report, it.toByteArray())
-			println("Successfully wrote findings to $report")
 		}
 	}
 
 	abstract fun render(smells: List<Finding>): String?
+}
 
-	enum class Formatter {
-		PLAIN,
-		XML;
+enum class Formatter {
+	PLAIN,
+	XML;
 
-		fun create(report: Path): OutputFormat = when (this) {
-			PLAIN -> PlainOutputFormat(report)
-			XML -> XmlOutputFormat(report)
-		}
+	fun create(): OutputFormat = when (this) {
+		PLAIN -> PlainOutputFormat()
+		XML -> XmlOutputFormat()
 	}
 }

@@ -2,12 +2,11 @@ package io.gitlab.arturbosch.detekt.cli.out.format
 
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Severity
-import java.nio.file.Path
 
 /**
  * Generates an XML report following the structure of a Checkstyle report.
  */
-class XmlOutputFormat(report: Path) : OutputFormat(report) {
+class XmlOutputFormat : OutputFormat() {
 
 	private sealed class MessageType(val label: String) {
 		class Warning : MessageType("warning")
@@ -28,7 +27,7 @@ class XmlOutputFormat(report: Path) : OutputFormat(report) {
 						"\t<error line=\"${it.location.source.line.toXmlString()}\"",
 						"column=\"${it.location.source.column.toXmlString()}\"",
 						"severity=\"${it.messageType.label.toXmlString()}\"",
-						"message=\"${(it.issue.description + "(${it.id})").toXmlString()}\"",
+						"message=\"${(it.issue.description).toXmlString()}\"",
 						"source=\"${"detekt.${it.id.toXmlString()}"}\" />"
 				).joinToString(separator = " ")
 			}
