@@ -24,7 +24,6 @@ class TooManyFunctions(config: Config = Config.empty, threshold: Int = 10) : Thr
 
 	private var amount: Int = 0
 
-
 	override fun visitKtFile(file: KtFile) {
 		super.visitKtFile(file)
 		if (amount > threshold) {
