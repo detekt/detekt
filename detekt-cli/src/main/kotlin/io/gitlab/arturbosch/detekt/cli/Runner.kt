@@ -19,11 +19,10 @@ class Runner(private val main: Main) : Executable {
 		val (settings, config) = createSettingsAndConfig()
 
 		val start = System.currentTimeMillis()
-
 		val detektion = DetektFacade.instance(settings).run()
+		val end = System.currentTimeMillis() - start
 
 		val reports = ReportLocator(settings).load()
-
 		reports.sortedBy { it.priority }.asReversed().forEach { report ->
 			report.init(config)
 			when (report) {
@@ -31,7 +30,6 @@ class Runner(private val main: Main) : Executable {
 				is OutputFormat -> main.output?.apply { report.write(this, detektion) }
 			}
 		}
-		val end = System.currentTimeMillis() - start
 
 		println("\ndetekt run within $end ms")
 	}
