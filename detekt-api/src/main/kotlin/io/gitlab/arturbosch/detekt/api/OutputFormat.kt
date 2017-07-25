@@ -6,7 +6,7 @@ import java.nio.file.Path
 /**
  * @author Artur Bosch
  */
-abstract class OutputFormat : Report {
+abstract class OutputFormat : Extension {
 
 	fun write(report: Path, detektion: Detektion) {
 		val smells = detektion.findings.flatMap { it.value }

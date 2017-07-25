@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.api
 /**
  * @author Artur Bosch
  */
-interface Report {
+interface Extension {
 	val id: String get() = javaClass.simpleName
 	val priority: Int get() = -1
 
