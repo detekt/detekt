@@ -8,7 +8,7 @@ import java.util.ServiceLoader
 /**
  * @author Artur Bosch
  */
-class FileProcessorLocator(val plugins: Array<URL>) {
+class FileProcessorLocator(private val plugins: Array<URL>) {
 
 	companion object {
 		fun instance(settings: ProcessingSettings) = with(settings) {
