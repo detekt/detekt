@@ -62,9 +62,7 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 				resolvedAnnotations?.get(shortName) ?: shortName
 			}
 			.filterNotNull()
-			.none { annotationFqn ->
-				excludeAnnotatedProperties.none(annotationFqn)
-			}
+			.any { !excludeAnnotatedProperties.none(it) }
 
 	companion object {
 		const val EXCLUDE_ANNOTATED_PROPERTIES = "excludeAnnotatedProperties"
