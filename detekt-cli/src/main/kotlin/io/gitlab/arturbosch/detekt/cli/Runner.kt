@@ -26,9 +26,9 @@ class Runner(private val arguments: Args) : Executable {
 	private fun createSettingsAndConfig(): ProcessingSettings {
 		with(arguments) {
 			val pathFilters = createPathFilters()
-			val rules = createRulePaths()
+			val plugins = createPlugins()
 			val config = loadConfiguration()
-			return ProcessingSettings(inputPath, config, pathFilters, parallel, disableDefaultRuleSets, rules)
+			return ProcessingSettings(inputPath, config, pathFilters, parallel, disableDefaultRuleSets, plugins)
 		}
 	}
 }
