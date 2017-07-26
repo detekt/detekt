@@ -31,7 +31,7 @@ internal class DetektExtensionTest : Spek({
 			Assertions.assertThat(main.config).isEqualTo(fallback.config)
 			Assertions.assertThat(main.baseline).isEqualTo(fallback.baseline)
 			Assertions.assertThat(main.createBaseline).isEqualTo(fallback.createBaseline)
-			Assertions.assertThat(main.rules).isEqualTo(fallback.rules)
+			Assertions.assertThat(main.plugins).isEqualTo(fallback.plugins)
 		}
 
 	}

@@ -15,7 +15,7 @@ fun Args.createPathFilters(): List<PathFilter> = filters.letIfNonEmpty {
 	split(SEPARATOR_COMMA, SEPARATOR_SEMICOLON).map(::PathFilter)
 }
 
-fun Args.createRulePaths(): List<Path> = rules.letIfNonEmpty {
+fun Args.createRulePaths(): List<Path> = plugins.letIfNonEmpty {
 	MultipleExistingPathConverter().convert(this)
 }
 
