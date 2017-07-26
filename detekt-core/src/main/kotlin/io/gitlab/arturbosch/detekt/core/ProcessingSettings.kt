@@ -18,7 +18,7 @@ data class ProcessingSettings(val project: Path,
 	init {
 		pluginPaths.forEach {
 			require(Files.exists(it) && it.toString().endsWith("jar")) {
-				"Given rule set $it does not exist or has no jar ending!"
+				"Given plugin $it does not exist or end with jar!"
 			}
 		}
 	}
