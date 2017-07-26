@@ -9,13 +9,13 @@ import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 /**
  * @author Artur Bosch
  */
-class OutputFacade(private val main: Main,
+class OutputFacade(private val arguments: Args,
 				   private val detektion: Detektion,
 				   private val settings: ProcessingSettings) {
 
 	private val config = settings.config
-	private val baselineFacade = main.baseline?.let { BaselineFacade(it) }
-	private val createBaseline = main.createBaseline
+	private val baselineFacade = arguments.baseline?.let { BaselineFacade(it) }
+	private val createBaseline = arguments.createBaseline
 
 	fun run() {
 		if (createBaseline) {
@@ -32,7 +32,7 @@ class OutputFacade(private val main: Main,
 			report.init(config)
 			when (report) {
 				is ConsoleReport -> report.print(System.out, result)
-				is OutputReport -> main.output?.apply { report.write(this, result) }
+				is OutputReport -> arguments.output?.apply { report.write(this, result) }
 			}
 		}
 	}

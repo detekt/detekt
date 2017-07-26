@@ -11,18 +11,18 @@ import java.nio.file.Path
  * @author Artur Bosch
  */
 
-fun Main.createPathFilters(): List<PathFilter> = filters.letIfNonEmpty {
+fun Args.createPathFilters(): List<PathFilter> = filters.letIfNonEmpty {
 	split(SEPARATOR_COMMA, SEPARATOR_SEMICOLON).map(::PathFilter)
 }
 
-fun Main.createRulePaths(): List<Path> = rules.letIfNonEmpty {
+fun Args.createRulePaths(): List<Path> = rules.letIfNonEmpty {
 	MultipleExistingPathConverter().convert(this)
 }
 
 private fun <T> String?.letIfNonEmpty(init: String.() -> List<T>): List<T> =
 		if (this == null || this.isEmpty()) listOf<T>() else this.init()
 
-fun Main.loadConfiguration(): Config {
+fun Args.loadConfiguration(): Config {
 	var config = when {
 		!config.isNullOrBlank() -> parsePathConfig(config!!)
 		!configResource.isNullOrBlank() -> parseResourceConfig(configResource!!)
@@ -89,7 +89,7 @@ private val DEFAULT_CONFIG = "default-detekt-config.yml"
 /**
  * @author lummax
  */
-class ConfigExporter(val main: Main) : Executable {
+class ConfigExporter : Executable {
 
 	override fun execute() {
 		val defaultConfig = ClasspathResourceConverter().convert(DEFAULT_CONFIG).openStream()
