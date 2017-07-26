@@ -29,9 +29,9 @@ class Args {
 			description = "Export default config to default-detekt-config.yml.")
 	var generateConfig: Boolean = false
 
-	@Parameter(names = arrayOf("--rules", "-r"),
-			description = "Extra paths to ruleset jars separated by ',' or ';'.")
-	var rules: String? = null
+	@Parameter(names = arrayOf("--plugins", "-p"),
+			description = "Extra paths to plugin jars separated by ',' or ';'.")
+	var plugins: String? = null
 
 	@Parameter(names = arrayOf("--format"),
 			description = "Enables formatting of source code. Cannot be used together with --config.")
@@ -64,7 +64,7 @@ class Args {
 	@Parameter(names = arrayOf("--disable-default-rulesets", "-dd"), description = "Disables default rule sets.")
 	var disableDefaultRuleSets: Boolean = false
 
-	@Parameter(names = arrayOf("--debug", "-d"), description = "Debugs given ktFile by printing its elements.")
+	@Parameter(names = arrayOf("--debug"), description = "Debugs given ktFile by printing its elements.")
 	var debug: Boolean = false
 
 	@Parameter(names = arrayOf("--help", "-h"), help = true, description = "Shows the usage.")
