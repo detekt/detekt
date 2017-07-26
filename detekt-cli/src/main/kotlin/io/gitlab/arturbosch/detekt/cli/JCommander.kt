@@ -5,8 +5,8 @@ import com.beust.jcommander.ParameterException
 
 private val jCommander = JCommander()
 
-fun parseArguments(args: Array<String>): Main {
-	val cli = Main()
+fun parseArguments(args: Array<String>): Args {
+	val cli = Args()
 	jCommander.addObject(cli)
 	jCommander.programName = "detekt"
 

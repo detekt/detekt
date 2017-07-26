@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.extensions
 
 import com.beust.jcommander.JCommander
-import io.gitlab.arturbosch.detekt.cli.Main
+import io.gitlab.arturbosch.detekt.cli.Args
 import org.assertj.core.api.Assertions
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
@@ -23,8 +23,8 @@ internal class DetektExtensionTest : Spek({
 			val detektExtension = DetektExtension()
 			val args = detektExtension.profileArgumentsOrDefault(project)
 
-			val main = Main().apply { JCommander(this).parse(*args.toTypedArray()) }
-			val fallback = Main().apply { JCommander(this).parse(*project.fallbackArguments().toTypedArray()) }
+			val main = Args().apply { JCommander(this).parse(*args.toTypedArray()) }
+			val fallback = Args().apply { JCommander(this).parse(*project.fallbackArguments().toTypedArray()) }
 
 			Assertions.assertThat(main.inputPath).isEqualTo(fallback.inputPath)
 			Assertions.assertThat(main.configResource).isEqualTo(fallback.configResource)

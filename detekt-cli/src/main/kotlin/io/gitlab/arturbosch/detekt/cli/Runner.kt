@@ -10,7 +10,7 @@ interface Executable {
 /**
  * @author Artur Bosch
  */
-class Runner(private val main: Main) : Executable {
+class Runner(private val arguments: Args) : Executable {
 
 	override fun execute() {
 		val settings = createSettingsAndConfig()
@@ -19,12 +19,12 @@ class Runner(private val main: Main) : Executable {
 		val detektion = DetektFacade.instance(settings).run()
 		val end = System.currentTimeMillis() - start
 
-		OutputFacade(main, detektion, settings).run()
+		OutputFacade(arguments, detektion, settings).run()
 		println("\ndetekt run within $end ms")
 	}
 
 	private fun createSettingsAndConfig(): ProcessingSettings {
-		with(main) {
+		with(arguments) {
 			val pathFilters = createPathFilters()
 			val rules = createRulePaths()
 			val config = loadConfiguration()
