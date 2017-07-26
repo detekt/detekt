@@ -18,16 +18,23 @@ class OutputFacade(private val main: Main,
 	private val createBaseline = main.createBaseline
 
 	fun run() {
+		if (createBaseline) {
+			val smells = detektion.findings.flatMap { it.value }
+			baselineFacade?.create(smells)
+		}
+
+		val result = if (baselineFacade != null) {
+			FilteredDetectionResult(detektion, baselineFacade)
+		} else detektion
+
 		val reports = ReportLocator(settings).load()
 		reports.sortedBy { it.priority }.asReversed().forEach { report ->
 			report.init(config)
 			when (report) {
-				is ConsoleReport -> report.print(System.out, detektion)
-				is OutputReport -> main.output?.apply { report.write(this, detektion) }
+				is ConsoleReport -> report.print(System.out, result)
+				is OutputReport -> main.output?.apply { report.write(this, result) }
 			}
 		}
-
-		val smells = detektion.findings.flatMap { it.value }
-		if (createBaseline) baselineFacade?.create(smells)
 	}
 }
+
