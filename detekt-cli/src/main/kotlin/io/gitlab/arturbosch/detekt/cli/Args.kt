@@ -71,5 +71,5 @@ class Args {
 	var help: Boolean = false
 
 	val inputPath: Path
-		get() = input!!
+		get() = input ?: throw IllegalStateException("Input path was not initialized by jcommander!")
 }
