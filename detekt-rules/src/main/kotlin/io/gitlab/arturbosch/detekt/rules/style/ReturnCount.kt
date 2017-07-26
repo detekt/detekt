@@ -30,6 +30,6 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
 	}
 
 	companion object {
-	  const val MAX = "max"
+		const val MAX = "max"
 	}
 }

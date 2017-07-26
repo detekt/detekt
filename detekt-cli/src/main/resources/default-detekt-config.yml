@@ -118,6 +118,8 @@ style:
     max: 2
   NewLineAtEndOfFile:
     active: true
+  OptionalAbstractKeyword:
+    active: true
   ForbiddenComment:
     active: true
     values: 'TODO:,FIXME:,STOPSHIP:'
