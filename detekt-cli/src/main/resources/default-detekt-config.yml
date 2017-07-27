@@ -122,6 +122,8 @@ style:
     active: true
   WildcardImport:
     active: true
+  SafeCast:
+    active: true
   MaxLineLength:
     active: true
     maxLineLength: 120
