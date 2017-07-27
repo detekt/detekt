@@ -421,6 +421,8 @@ style:
   active: true
   WildcardImport:
     active: true
+  ModifierOrder:
+    active: true
   NamingConventionViolation:
     active: true
     variablePattern: '^(_)?[a-z$][a-zA-Z$0-9]*$'

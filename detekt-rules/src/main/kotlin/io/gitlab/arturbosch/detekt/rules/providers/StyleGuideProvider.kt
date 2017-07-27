@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.rules.style.ForbiddenComment
 import io.gitlab.arturbosch.detekt.rules.style.FileParsingRule
+import io.gitlab.arturbosch.detekt.rules.style.ModifierOrder
 import io.gitlab.arturbosch.detekt.rules.style.NamingConventionViolation
 import io.gitlab.arturbosch.detekt.rules.style.NewLineAtEndOfFile
 import io.gitlab.arturbosch.detekt.rules.style.SafeCast
@@ -24,7 +25,8 @@ class StyleGuideProvider : RuleSetProvider {
 				FileParsingRule(config),
 				ForbiddenComment(config),
 				NamingConventionViolation(config),
-				SafeCast(config)
+				SafeCast(config),
+				ModifierOrder(config)
 		))
 	}
 }
