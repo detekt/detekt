@@ -115,6 +115,8 @@ style:
   active: true
   NewLineAtEndOfFile:
     active: true
+  AbstractInInterface:
+    active: true
   ForbiddenComment:
     active: true
     values: 'TODO:,FIXME:,STOPSHIP:'
