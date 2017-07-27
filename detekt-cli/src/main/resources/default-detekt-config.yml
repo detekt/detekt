@@ -120,6 +120,8 @@ style:
     values: 'TODO:,FIXME:,STOPSHIP:'
   WildcardImport:
     active: true
+  SafeCast:
+    active: true
   MaxLineLength:
     active: true
     maxLineLength: 120
