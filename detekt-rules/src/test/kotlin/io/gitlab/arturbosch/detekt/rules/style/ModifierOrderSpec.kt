@@ -65,23 +65,19 @@ class ModifierOrderSpec : Spek({
 	}
 
 	given("a kt file with correctly ordered modifiers") {
-		val file = compileForTest(Case.Default.path())
-
 		it("should not report modifiers") {
 			val rule = ModifierOrder()
 
-			val findings = rule.lint(file.text)
+			val findings = rule.lint(Case.Default.path())
 			Assertions.assertThat(findings).isEmpty()
 		}
 	}
 
 	given("a kt file with correctly ordered modifiers") {
-		val file = compileForTest(Case.ModifierOrder.path())
-
 		it("should not report modifiers") {
 			val rule = ModifierOrder()
 
-			val findings = rule.lint(file.text)
+			val findings = rule.lint(Case.ModifierOrder.path())
 			Assertions.assertThat(findings).hasSize(3)
 		}
 	}
