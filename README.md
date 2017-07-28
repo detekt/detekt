@@ -301,7 +301,7 @@ task detekt(type: JavaExec) {
 	def config = "$projectDir/detekt.yml"
 	def filters = ".*test.*"
 	def rulesets = ""
-	def params = [ '-p', input, '-c', config, '-f', filters, '-r', rulesets]
+	def params = [ '-i', input, '-c', config, '-f', filters, '-r', rulesets]
 	args(params)
 }
 
