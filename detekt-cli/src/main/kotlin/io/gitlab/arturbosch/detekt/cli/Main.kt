@@ -11,6 +11,7 @@ import java.nio.file.Files
  */
 fun main(args: Array<String>) {
 	val arguments = parseArgumentsCheckingReportDirectory(args)
+	LOG.active = arguments.debug
 	val executable = when {
 		arguments.generateConfig -> ConfigExporter()
 		else -> Runner(arguments)
