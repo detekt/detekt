@@ -6,10 +6,8 @@ import org.jetbrains.kotlin.psi.KtFile
 
 class PackageCountVisitor : DetektVisitor() {
 
-	private val packageNames: MutableSet<String> = HashSet<String>()
-
 	override fun visitKtFile(file: KtFile) {
-		packageNames.add(file.packageFqNameByTree.toString())
-		file.putUserData(NUMBER_OF_PACKAGES_KEY, packageNames.size)
+		val packageName = file.packageFqNameByTree.toString()
+		file.putUserData(NUMBER_OF_PACKAGES_KEY, packageName)
 	}
 }
