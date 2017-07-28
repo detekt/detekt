@@ -6,18 +6,18 @@ import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
-class MethodCountProcessor : AbstractProjectMetricProcessor() {
+class FunctionCountProcessor : AbstractProjectMetricProcessor() {
 
-	override val visitor = MethodCountVisitor()
-	override val key = NUMBER_OF_METHODS_KEY
+	override val visitor = FunctionCountVisitor()
+	override val key = NUMBER_OF_FUNCTIONS_KEY
 }
 
-val NUMBER_OF_METHODS_KEY = Key<Int>("number of methods")
+val NUMBER_OF_FUNCTIONS_KEY = Key<Int>("number of functions")
 
-class MethodCountVisitor : DetektVisitor() {
+class FunctionCountVisitor : DetektVisitor() {
 
 	override fun visitKtFile(file: KtFile) {
 		super.visitKtFile(file)
-		file.putUserData(NUMBER_OF_METHODS_KEY, file.collectByType<KtNamedFunction>().size)
+		file.putUserData(NUMBER_OF_FUNCTIONS_KEY, file.collectByType<KtNamedFunction>().size)
 	}
 }

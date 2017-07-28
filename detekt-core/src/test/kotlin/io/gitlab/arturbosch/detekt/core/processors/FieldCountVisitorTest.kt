@@ -11,7 +11,7 @@ class FieldCountVisitorTest {
 	fun defaultFieldCount() {
 		val file = compileForTest(path.resolve("../fields/ClassWithFields.kt"))
 		val count = with(file) {
-			accept(FieldCountVisitor())
+			accept(PropertyCountVisitor())
 			getUserData(NUMBER_OF_FIELDS_KEY)
 		}
 		assertThat(count).isEqualTo(2)

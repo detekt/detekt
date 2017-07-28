@@ -2,7 +2,7 @@ io.gitlab.arturbosch.detekt.cli.DetektProgressListener
 io.gitlab.arturbosch.detekt.core.processors.KtFileCountProcessor
 io.gitlab.arturbosch.detekt.core.processors.PackageCountProcessor
 io.gitlab.arturbosch.detekt.core.processors.ClassCountProcessor
-io.gitlab.arturbosch.detekt.core.processors.MethodCountProcessor
-io.gitlab.arturbosch.detekt.core.processors.FieldCountProcessor
+io.gitlab.arturbosch.detekt.core.processors.FunctionCountProcessor
+io.gitlab.arturbosch.detekt.core.processors.PropertyCountProcessor
 io.gitlab.arturbosch.detekt.core.processors.ProjectComplexityProcessor
 io.gitlab.arturbosch.detekt.core.processors.ProjectLLOCProcessor
