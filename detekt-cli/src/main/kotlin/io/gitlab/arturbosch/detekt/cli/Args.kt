@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.cli
 
 import com.beust.jcommander.Parameter
-import io.gitlab.arturbosch.detekt.cli.out.Formatter
 import java.nio.file.Path
 
 /**
@@ -54,12 +53,9 @@ class Args {
 			description = "Treats current analysis findings as a smell baseline for further detekt runs.")
 	var createBaseline: Boolean = false
 
-	@Parameter(names = arrayOf("--output", "-o"), description = "Specify the file to output to.",
+	@Parameter(names = arrayOf("--output", "-o"), description = "Directory where output reports are stored.",
 			converter = PathConverter::class)
 	var output: Path? = null
-
-	@Parameter(names = arrayOf("--output-format", "-of"), description = "Specify the output format.")
-	var outputFormatter: Formatter = Formatter.XML
 
 	@Parameter(names = arrayOf("--disable-default-rulesets", "-dd"), description = "Disables default rule sets.")
 	var disableDefaultRuleSets: Boolean = false

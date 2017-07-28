@@ -2,7 +2,7 @@
 
 package io.gitlab.arturbosch.detekt.cli
 
-import io.gitlab.arturbosch.detekt.core.isDirectory
+import io.gitlab.arturbosch.detekt.core.isFile
 import org.jetbrains.kotlin.utils.addToStdlib.ifNotEmpty
 import java.nio.file.Files
 
@@ -32,8 +32,8 @@ private fun validateCli(arguments: Args): List<String> {
 	val violations = ArrayList<String>()
 	with(arguments) {
 		output?.let {
-			if (Files.exists(it) && it.isDirectory()) {
-				violations += "Output file must not be a directory."
+			if (Files.exists(it) && it.isFile()) {
+				violations += "Output file must be a directory."
 			}
 		}
 		if (createBaseline && baseline == null) {
