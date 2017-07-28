@@ -242,6 +242,7 @@ detekt {
 - extract `code-style.xml` and `inpect.xml` from idea settings (`Settings>CodeStyle>Scheme` and `Settings>Inspections>Profile`)
 - run `detektIdeaFormat` or `detektIdeaInspect`
 - all parameters in the following detekt-closure are mandatory for both tasks
+- make sure that current or default profile have an input path specified!
 
 ```groovy
 String USER_HOME = System.getProperty("user.home")
