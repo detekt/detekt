@@ -10,7 +10,7 @@ import io.gitlab.arturbosch.detekt.api.format
  */
 class ProjectStatisticsReport : ConsoleReport() {
 
-	override val priority: Int = 1
+	override val priority: Int = 10
 
 	override fun render(detektion: Detektion): String? {
 		val metrics = detektion.metrics
