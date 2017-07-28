@@ -11,8 +11,8 @@ open class IdeaExtension(open var path: String? = null,
 
 	fun formatArgs(ext: DetektExtension): Array<String> {
 		val input = ext.profileInputPath
-		require(path != null) { "Make sure the idea path is specified to run idea tasks!" }
-		require(input != null) { "Make sure the project path is specified!" }
+		require(path != null) { IDEA_PATH_ERROR }
+		require(input != null) { INPUT_PATH_ERROR }
 		return if (codeStyleScheme != null) {
 			arrayOf("$path/bin/format.sh", "-r", input!!, "-s", codeStyleScheme!!, "-m", mask)
 		} else {
@@ -22,10 +22,10 @@ open class IdeaExtension(open var path: String? = null,
 
 	fun inspectArgs(ext: DetektExtension): Array<String> {
 		val input = ext.profileInputPath
-		require(path != null) { "Make sure the idea path is specified to run idea tasks!" }
-		require(input != null) { "Make sure the project path is specified!" }
-		require(report != null) { "Make sure the report path is specified where idea inspections are stored!" }
-		require(inspectionsProfile != null) { "Make sure the path to an inspection profile is provided!" }
+		require(path != null) { IDEA_PATH_ERROR }
+		require(input != null) { INPUT_PATH_ERROR }
+		require(report != null) { REPORT_PATH_ERROR }
+		require(inspectionsProfile != null) { INSPECTION_PROFILE_ERROR }
 		return arrayOf("$path/bin/inspect.sh", input!!, inspectionsProfile!!, report!!)
 	}
 
@@ -35,5 +35,13 @@ open class IdeaExtension(open var path: String? = null,
 
 	override fun toString(): String = this.reflectiveToString()
 
+	companion object {
+		private const val INPUT_PATH_ERROR = "Make sure the input path is specified!"
+		private const val IDEA_PATH_ERROR = "Make sure the idea path is specified to run idea tasks!"
+		private const val REPORT_PATH_ERROR =
+				"Make sure the report path is specified where idea inspections are stored!"
+		private const val INSPECTION_PROFILE_ERROR =
+				"Make sure the path to an inspection profile is provided!"
+	}
 }
 

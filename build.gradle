@@ -169,6 +169,7 @@ detekt {
 		baseline = "$projectDir/reports/baseline.xml"
 	}
 	profile("failfast") {
+		input = "$projectDir"
 		config = "$projectDir/reports/failfast.yml"
 	}
 	idea {
