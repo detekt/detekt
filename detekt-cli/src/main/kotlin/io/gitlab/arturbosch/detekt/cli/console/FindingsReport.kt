@@ -9,7 +9,7 @@ import io.gitlab.arturbosch.detekt.api.format
  */
 class FindingsReport : ConsoleReport() {
 
-	override val priority: Int = 3
+	override val priority: Int = 40
 
 	override fun render(detektion: Detektion): String? {
 		val findings = detektion.findings

@@ -8,7 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Detektion
  */
 class NotificationReport : ConsoleReport() {
 
-	override val priority: Int = 5
+	override val priority: Int = 50
 
 	override fun render(detektion: Detektion): String? {
 		val notifications = detektion.notifications

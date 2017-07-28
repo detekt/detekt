@@ -12,7 +12,7 @@ import io.gitlab.arturbosch.detekt.core.processors.LLOC_KEY
  */
 class ComplexityReport : ConsoleReport() {
 
-	override val priority: Int = 2
+	override val priority: Int = 20
 
 	override fun render(detektion: Detektion): String? {
 		val findings = detektion.findings
