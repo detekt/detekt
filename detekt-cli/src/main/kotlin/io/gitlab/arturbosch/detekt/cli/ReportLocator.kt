@@ -12,26 +12,46 @@ import java.util.ServiceLoader
  */
 class ReportLocator(private val settings: ProcessingSettings) {
 
-	private val consoleActive = settings.config
-			.subConfig("console-reports")
-			.valueOrDefault("active", true)
+	private val consoleSubConfig = settings.config.subConfig("console-reports")
+	private val consoleActive = consoleSubConfig.valueOrDefault(ACTIVE, true)
+	private val consoleExcludes = consoleSubConfig.valueOrDefault(EXCLUDE, emptyList<String>())
 
-	private val outputActive = settings.config
-			.subConfig("output-reports")
-			.valueOrDefault("active", true)
+	private val outputSubConfig = settings.config.subConfig("output-reports")
+	private val outputActive = outputSubConfig.valueOrDefault(ACTIVE, true)
+	private val outputExcludes = outputSubConfig.valueOrDefault(EXCLUDE, emptyList<String>())
 
 	fun load(): List<Extension> {
 		LOG.debug("console-report=$consoleActive")
 		LOG.debug("output-report=$outputActive")
 		val detektLoader = URLClassLoader(settings.pluginUrls, javaClass.classLoader)
-		val consoleReports =
-				if (consoleActive) ServiceLoader.load(ConsoleReport::class.java, detektLoader).toList()
-				else emptyList<ConsoleReport>()
+		val consoleReports = loadConsoleReports(detektLoader)
 		LOG.debug { "ConsoleReports: $consoleReports" }
-		val outputReports =
-				if (outputActive) ServiceLoader.load(OutputReport::class.java, detektLoader).toList()
-				else emptyList<OutputReport>()
+		val outputReports = loadOutputReports(detektLoader)
 		LOG.debug { "OutputReports: $outputReports" }
 		return consoleReports.plus(outputReports)
+	}
+
+	private fun loadOutputReports(detektLoader: URLClassLoader): List<OutputReport> {
+		return if (outputActive) {
+			ServiceLoader.load(OutputReport::class.java, detektLoader)
+					.filter { it.id !in outputExcludes }
+					.toList()
+		} else {
+			emptyList<OutputReport>()
+		}
+	}
+
+	private fun loadConsoleReports(detektLoader: URLClassLoader) =
+			if (consoleActive) {
+				ServiceLoader.load(ConsoleReport::class.java, detektLoader)
+						.filter { it.id !in consoleExcludes }
+						.toList()
+			} else {
+				emptyList<ConsoleReport>()
+			}
+
+	companion object {
+		private const val ACTIVE = "active"
+		private const val EXCLUDE = "exclude"
 	}
 }
