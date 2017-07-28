@@ -7,8 +7,11 @@ import org.jetbrains.kotlin.com.intellij.openapi.util.Key
  */
 interface Detektion {
 	val findings: Map<String, List<Finding>>
-	val notifications: List<Notification>
+	val notifications: Collection<Notification>
+	val metrics: Collection<ProjectMetric>
 
 	fun <V> getData(key: Key<V>): V?
 	fun <V> addData(key: Key<V>, value: V)
+	fun add(notification: Notification)
+	fun add(projectMetric: ProjectMetric)
 }

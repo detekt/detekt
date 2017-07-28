@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Notification
+import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
@@ -23,8 +24,11 @@ internal class BuildFailureReportSpec : SubjectSpek<BuildFailureReport>({
 
 		describe("empty code smell result") {
 			val detektion = object : Detektion {
+				override val metrics: Collection<ProjectMetric> = listOf()
 				override val findings: Map<String, List<Finding>> = mapOf()
 				override val notifications: List<Notification> = listOf()
+				override fun add(notification: Notification) = throw UnsupportedOperationException("not implemented")
+				override fun add(projectMetric: ProjectMetric) = throw UnsupportedOperationException("not implemented")
 				override fun <V> getData(key: Key<V>) = throw UnsupportedOperationException("not implemented")
 				override fun <V> addData(key: Key<V>, value: V) = throw UnsupportedOperationException("not implemented")
 			}
