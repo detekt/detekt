@@ -31,15 +31,14 @@ class ReportLocator(private val settings: ProcessingSettings) {
 		return consoleReports.plus(outputReports)
 	}
 
-	private fun loadOutputReports(detektLoader: URLClassLoader): List<OutputReport> {
-		return if (outputActive) {
-			ServiceLoader.load(OutputReport::class.java, detektLoader)
-					.filter { it.id !in outputExcludes }
-					.toList()
-		} else {
-			emptyList<OutputReport>()
-		}
-	}
+	private fun loadOutputReports(detektLoader: URLClassLoader) =
+			if (outputActive) {
+				ServiceLoader.load(OutputReport::class.java, detektLoader)
+						.filter { it.id !in outputExcludes }
+						.toList()
+			} else {
+				emptyList<OutputReport>()
+			}
 
 	private fun loadConsoleReports(detektLoader: URLClassLoader) =
 			if (consoleActive) {
