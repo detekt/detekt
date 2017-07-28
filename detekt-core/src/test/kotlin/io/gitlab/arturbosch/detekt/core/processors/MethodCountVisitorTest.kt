@@ -17,8 +17,8 @@ class MethodCountVisitorTest {
 
 	private fun getMethodCount(file: KtFile): Int {
 		return with(file) {
-			accept(MethodCountVisitor())
-			getUserData(NUMBER_OF_METHODS_KEY)!!
+			accept(FunctionCountVisitor())
+			getUserData(NUMBER_OF_FUNCTIONS_KEY)!!
 		}
 	}
 }

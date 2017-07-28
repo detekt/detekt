@@ -13,8 +13,8 @@ build:
 processors:
   active: true
   exclude:
-    # - 'MethodCountProcessor'
-    # - 'FieldCountProcessor'
+    # - 'FunctionCountProcessor'
+    # - 'PropertyCountProcessor'
 
 console-reports:
   active: true

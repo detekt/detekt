@@ -6,15 +6,15 @@ import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtProperty
 
-class FieldCountProcessor : AbstractProjectMetricProcessor() {
+class PropertyCountProcessor : AbstractProjectMetricProcessor() {
 
-	override val visitor = FieldCountVisitor()
+	override val visitor = PropertyCountVisitor()
 	override val key = NUMBER_OF_FIELDS_KEY
 }
 
-val NUMBER_OF_FIELDS_KEY = Key<Int>("number of fields")
+val NUMBER_OF_FIELDS_KEY = Key<Int>("number of properties")
 
-class FieldCountVisitor : DetektVisitor() {
+class PropertyCountVisitor : DetektVisitor() {
 
 	override fun visitKtFile(file: KtFile) {
 		super.visitKtFile(file)
