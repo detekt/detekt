@@ -8,11 +8,14 @@ import java.nio.file.Path
  */
 abstract class OutputReport : Extension {
 
+	abstract val fileName: String
+
 	fun write(report: Path, detektion: Detektion) {
 		val smellData = render(detektion)
 		smellData?.let {
-			report.parent?.let { Files.createDirectories(it) }
-			Files.write(report, it.toByteArray())
+			val filePath = report.resolve(fileName)
+			filePath.parent?.let { Files.createDirectories(it) }
+			Files.write(filePath, it.toByteArray())
 		}
 	}
 

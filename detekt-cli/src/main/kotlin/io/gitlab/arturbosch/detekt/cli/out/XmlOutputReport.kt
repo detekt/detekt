@@ -10,6 +10,8 @@ import io.gitlab.arturbosch.detekt.api.Severity
  */
 class XmlOutputReport : OutputReport() {
 
+	override val fileName = "detekt-checkstyle.xml"
+
 	private sealed class MessageType(val label: String) {
 		class Warning : MessageType("warning")
 		class Info : MessageType("info")
