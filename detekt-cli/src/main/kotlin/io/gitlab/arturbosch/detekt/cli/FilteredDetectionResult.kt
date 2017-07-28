@@ -17,5 +17,5 @@ class FilteredDetectionResult(detektion: Detektion, baselineFacade: BaselineFaca
 				.toMap()
 	}
 
-	override val findings: Map<String, List<Finding>> = filteredFindings
+	override val findings = filteredFindings
 }
