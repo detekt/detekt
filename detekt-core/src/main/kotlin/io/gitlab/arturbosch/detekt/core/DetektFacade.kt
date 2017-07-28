@@ -9,10 +9,8 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 object DetektFacade {
 
 	fun instance(settings: ProcessingSettings): Detektor {
-		val ruleSetLocator = RuleSetLocator.instance(settings)
-		val providers = ruleSetLocator.load()
-		val processorLocator = FileProcessorLocator.instance(settings)
-		val processors = processorLocator.load()
+		val providers = RuleSetLocator(settings).load()
+		val processors = FileProcessorLocator(settings).load()
 		return instance(settings, providers, processors)
 	}
 

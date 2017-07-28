@@ -9,14 +9,10 @@ import java.util.ServiceLoader
 /**
  * @author Artur Bosch
  */
-class FileProcessorLocator(private val plugins: Array<URL>,
-						   private val config: Config) {
+class FileProcessorLocator(settings: ProcessingSettings) {
 
-	companion object {
-		fun instance(settings: ProcessingSettings) = with(settings) {
-			FileProcessorLocator(settings.pluginUrls, settings.config)
-		}
-	}
+	private val plugins: Array<URL> = settings.pluginUrls
+	private val config: Config = settings.config
 
 	fun load(): List<FileProcessListener> {
 		val detektLoader = URLClassLoader(plugins, javaClass.classLoader)

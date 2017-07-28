@@ -8,14 +8,10 @@ import java.util.ServiceLoader
 /**
  * @author Artur Bosch
  */
-class RuleSetLocator(val excludeDefaultRuleSets: Boolean,
-					 val plugins: Array<URL>) {
+class RuleSetLocator(settings: ProcessingSettings) {
 
-	companion object {
-		fun instance(settings: ProcessingSettings) = with(settings) {
-			RuleSetLocator(excludeDefaultRuleSets, settings.pluginUrls)
-		}
-	}
+	val excludeDefaultRuleSets: Boolean = settings.excludeDefaultRuleSets
+	val plugins: Array<URL> = settings.pluginUrls
 
 	fun load(): List<RuleSetProvider> {
 		val detektLoader = URLClassLoader(plugins, javaClass.classLoader)
