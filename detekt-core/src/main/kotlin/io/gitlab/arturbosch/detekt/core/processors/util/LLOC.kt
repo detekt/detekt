@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.core.visitors.util
+package io.gitlab.arturbosch.detekt.core.processors.util
 
 /**
  * @author Artur Bosch
