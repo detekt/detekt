@@ -17,7 +17,9 @@ class ProjectStatisticsReport : ConsoleReport() {
 		if (metrics.isEmpty()) return null
 		return with(StringBuilder()) {
 			append("Project Statistics:".format())
-			metrics.forEach { append(it.toString().format(PREFIX)) }
+			metrics.sortedBy { it.priority }
+					.reversed()
+					.forEach { append(it.toString().format(PREFIX)) }
 			toString()
 		}
 	}
