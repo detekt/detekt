@@ -30,7 +30,7 @@ class ReturnCountSpec : Spek({
 			assertThat(findings).hasSize(0)
 		}
 
-		it("should not get flagged when max value is 1") {
+		it("should get flagged when max value is 1") {
 			val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "1"))).lint(code)
 			assertThat(findings).hasSize(1)
 		}
