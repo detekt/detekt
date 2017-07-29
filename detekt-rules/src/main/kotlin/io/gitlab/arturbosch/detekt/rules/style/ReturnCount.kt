@@ -14,7 +14,7 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
 class ReturnCount(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName, Severity.Style,
-			"Restricts the number of return statements in methods.", Debt.TEN_MINS)
+			"Restrict the number of return statements in methods.", Debt.TEN_MINS)
 
 	private val max = valueOrDefault(MAX, 2)
 
