@@ -5,9 +5,9 @@ import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 
-class AbstractInInterfaceTest : RuleTest {
+class OptionalAbstractKeywordTest : RuleTest {
 
-	override val rule = AbstractInInterface()
+	override val rule = OptionalAbstractKeyword()
 
 	@Test
 	fun noAbstractKeywordOnInterface() {
@@ -16,8 +16,14 @@ class AbstractInInterfaceTest : RuleTest {
 	}
 
 	@Test
-	fun abstractInterface() {
+	fun abstractInterfaceProperty() {
 		val code = "abstract interface A { abstract var x: Int }"
+		Assertions.assertThat(lint(code)).isEqualTo(2)
+	}
+
+	@Test
+	fun abstractInterfaceFunction() {
+		val code = "abstract interface A { abstract fun x() }"
 		Assertions.assertThat(lint(code)).isEqualTo(2)
 	}
 

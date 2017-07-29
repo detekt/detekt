@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.providers
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.rules.style.AbstractInInterface
+import io.gitlab.arturbosch.detekt.rules.style.OptionalAbstractKeyword
 import io.gitlab.arturbosch.detekt.rules.style.ForbiddenComment
 import io.gitlab.arturbosch.detekt.rules.style.FileParsingRule
 import io.gitlab.arturbosch.detekt.rules.style.NamingConventionViolation
@@ -26,7 +26,7 @@ class StyleGuideProvider : RuleSetProvider {
 				ForbiddenComment(config),
 				NamingConventionViolation(config),
 				SafeCast(config),
-				AbstractInInterface(config)
+				OptionalAbstractKeyword(config)
 		))
 	}
 }

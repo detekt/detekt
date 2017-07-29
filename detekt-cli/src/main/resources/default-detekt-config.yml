@@ -115,7 +115,7 @@ style:
   active: true
   NewLineAtEndOfFile:
     active: true
-  AbstractInInterface:
+  OptionalAbstractKeyword:
     active: true
   ForbiddenComment:
     active: true
