@@ -6,3 +6,4 @@ io.gitlab.arturbosch.detekt.core.processors.FunctionCountProcessor
 io.gitlab.arturbosch.detekt.core.processors.PropertyCountProcessor
 io.gitlab.arturbosch.detekt.core.processors.ProjectComplexityProcessor
 io.gitlab.arturbosch.detekt.core.processors.ProjectLLOCProcessor
+io.gitlab.arturbosch.detekt.core.processors.ProjectCLOCProcessor
