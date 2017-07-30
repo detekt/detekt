@@ -42,6 +42,8 @@ potential-bugs:
     active: true
   ExplicitGarbageCollectionCall:
     active: true
+  UnreachableCode:
+    active: true
   LateinitUsage:
     active: false
   UnsafeCallOnNullableType:
