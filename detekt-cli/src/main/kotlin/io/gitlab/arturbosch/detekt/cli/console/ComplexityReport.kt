@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.api.PREFIX
 import io.gitlab.arturbosch.detekt.api.format
 import io.gitlab.arturbosch.detekt.core.processors.COMPLEXITY_KEY
 import io.gitlab.arturbosch.detekt.core.processors.LLOC_KEY
+import io.gitlab.arturbosch.detekt.core.processors.NUMBER_OF_COMMENT_LINES_KEY
 
 /**
  * @author Artur Bosch
@@ -18,6 +19,7 @@ class ComplexityReport : ConsoleReport() {
 		val findings = detektion.findings
 		val mcc = detektion.getData(COMPLEXITY_KEY)
 		val lloc = detektion.getData(LLOC_KEY)
+		val cloc = detektion.getData(NUMBER_OF_COMMENT_LINES_KEY)
 		if (mcc != null && lloc != null && lloc > 0) {
 			val numberOfSmells = findings.entries.sumBy { it.value.size }
 			val smellPerThousandLines = numberOfSmells * 1000 / lloc
@@ -25,6 +27,7 @@ class ComplexityReport : ConsoleReport() {
 			return with(StringBuilder()) {
 				append("Complexity Report:".format())
 				append("$lloc logical lines of code (lloc)".format(PREFIX))
+				append("$cloc comment lines of code (cloc)".format(PREFIX))
 				append("$mcc McCabe complexity (mcc)".format(PREFIX))
 				append("$numberOfSmells number of total code smells".format(PREFIX))
 				append("$mccPerThousandLines mcc per 1000 lloc".format(PREFIX))
