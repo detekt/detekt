@@ -1,0 +1,53 @@
+package io.gitlab.arturbosch.detekt.rules.style
+
+import io.gitlab.arturbosch.detekt.api.CodeSmell
+import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
+import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.Severity
+import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.psi.KtConstantExpression
+import org.jetbrains.kotlin.psi.KtProperty
+
+class MagicNumber(config: Config = Config.empty) : Rule(config) {
+
+	override val issue = Issue(javaClass.simpleName, Severity.Style,
+			"Report magic numbers.", Debt.TEN_MINS)
+
+	private val ignoreNumbers = valueOrDefault(IGNORE_NUMBERS, "-1,0,1,2")
+			.split(",")
+			.map { it.toLongOrNull() }
+			.filterNotNull()
+
+	override fun visitConstantExpression(expression: KtConstantExpression) {
+		val parent = expression.parent
+
+		if (parent is KtProperty) {
+			val possibleNumber = getNumber(expression)
+			val isConst = parent.modifierList?.hasModifier(KtTokens.CONST_KEYWORD) ?: false
+
+			if (!isConst && !ignoreNumbers.contains(possibleNumber)) {
+				report(CodeSmell(issue, Entity.from(expression)))
+			}
+		}
+	}
+
+	private fun getNumber(element: KtConstantExpression): Long? {
+		val text = element.text
+
+		return when {
+      text.endsWith("L") -> text.replace("L", "").toLongOrNull()
+      text.startsWith("0x") -> text.substring("0x".length).toIntOrNull(HEX_RADIX)?.toLong()
+      text.contains(".") -> text.toFloatOrNull()?.toLong()
+      else -> text.toLongOrNull()
+    }
+	}
+
+	companion object {
+		const val IGNORE_NUMBERS = "ignoreNumbers"
+
+		const val HEX_RADIX = 16
+	}
+}
