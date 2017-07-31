@@ -183,4 +183,17 @@ class MagicNumberSpec : Spek({
 			assertThat(findings).hasSize(6)
 		}
 	}
+
+	given("a method containing variables with magic numbers") {
+		val code = """
+			fun test(x: Int) {
+				val i = 5
+			}
+		"""
+
+		it("it should be reported") {
+			val findings = MagicNumber().lint(code)
+			assertThat(findings).hasSize(1)
+		}
+	}
 })
