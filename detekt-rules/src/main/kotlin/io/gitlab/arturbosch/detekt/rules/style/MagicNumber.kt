@@ -14,7 +14,8 @@ import org.jetbrains.kotlin.psi.KtProperty
 class MagicNumber(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName, Severity.Style,
-			"Report magic numbers.", Debt.TEN_MINS)
+			"Report magic numbers. Magic number is a numeric literal that is not defined as a constant." +
+					"By default, -1, 0, 1, and 2 are not considered to be magic numbers. ", Debt.TEN_MINS)
 
 	private val ignoreNumbers = valueOrDefault(IGNORE_NUMBERS, "-1,0,1,2")
 			.split(",")
