@@ -6,14 +6,14 @@ class UnreachableCode {
 	fun return1(p: Int) {
 		if (p == 0) {
 			return
-			println()
+			println() // unreachable
 		}
 	}
 
 	fun return2(p: String) : Boolean {
 		p.let {
 			return it.length < 3
-			println()
+			println() // unreachable
 		}
 		return false
 	}
@@ -22,7 +22,7 @@ class UnreachableCode {
 		return ints.map f@{
 			if (it == 0) {
 				return@f 0
-				println()
+				println() // unreachable
 			}
 			return@f 1
 		}
@@ -38,7 +38,7 @@ class UnreachableCode {
 	fun throw1(p: Int): Int {
 		if (p == 0) {
 			throw IllegalArgumentException()
-			println()
+			println() // unreachable
 		}
 		throw IllegalArgumentException()
 	}
