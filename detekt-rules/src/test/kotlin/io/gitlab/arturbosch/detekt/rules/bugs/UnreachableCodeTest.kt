@@ -13,6 +13,6 @@ class UnreachableCodeTest {
 		val subject = UnreachableCode(Config.empty)
 		val file = compileForTest(Case.UnreachableCode.path())
 		subject.visit(file)
-		Assertions.assertThat(subject.findings).hasSize(3)
+		Assertions.assertThat(subject.findings).hasSize(4)
 	}
 }
