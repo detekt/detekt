@@ -1,6 +1,7 @@
-package io.gitlab.arturbosch.detekt.sampleruleset
+package io.gitlab.arturbosch.detekt.sample.extension
 
 import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.sample.extensions.TooManyFunctions
 import io.gitlab.arturbosch.detekt.test.RuleTest
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
