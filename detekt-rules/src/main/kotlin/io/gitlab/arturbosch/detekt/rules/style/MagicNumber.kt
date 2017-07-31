@@ -24,13 +24,11 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 	override fun visitConstantExpression(expression: KtConstantExpression) {
 		val parent = expression.parent
 
-		if (parent is KtProperty) {
-			val possibleNumber = getNumber(expression)
-			val isConst = parent.modifierList?.hasModifier(KtTokens.CONST_KEYWORD) ?: false
+		val isConst = parent is KtProperty && parent.modifierList?.hasModifier(KtTokens.CONST_KEYWORD) ?: false
+		val possibleNumber = getNumber(expression)
 
-			if (!isConst && !ignoreNumbers.contains(possibleNumber)) {
-				report(CodeSmell(issue, Entity.from(expression)))
-			}
+		if (!isConst && !ignoreNumbers.contains(possibleNumber)) {
+			report(CodeSmell(issue, Entity.from(expression)))
 		}
 	}
 
@@ -48,6 +46,6 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 	companion object {
 		const val IGNORE_NUMBERS = "ignoreNumbers"
 
-		const val HEX_RADIX = 16
+		private const val HEX_RADIX = 16
 	}
 }

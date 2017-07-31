@@ -157,4 +157,30 @@ class MagicNumberSpec : Spek({
 			assertThat(findings).hasSize(0)
 		}
 	}
+
+	given("an if statement with magic numbers") {
+		val code = "val myInt = if (5 < 6) 7 else 8"
+
+		it("it should be reported") {
+			val findings = MagicNumber().lint(code)
+			assertThat(findings).hasSize(4)
+		}
+	}
+
+	given("a when statement with magic numbers") {
+		val code = """
+			fun test(x: Int) {
+				when (x) {
+					5 -> return 5
+					4 -> return 4
+					3 -> return 3
+				}
+			}
+		"""
+
+		it("it should be reported") {
+			val findings = MagicNumber().lint(code)
+			assertThat(findings).hasSize(6)
+		}
+	}
 })
