@@ -8,7 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Excludes
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtImportList
 
 class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
 
@@ -17,14 +17,14 @@ class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
 
 	private val forbiddenImports = Excludes(valueOrDefault(IMPORTS, ""))
 
-	override fun visit(root: KtFile) {
-		super.visit(root)
+	override fun visitImportList(importList: KtImportList) {
+		super.visitImportList(importList)
 
-		root.importList
-				?.imports
-				?.filterNot { it.isAllUnder }
-				?.filter { forbiddenImports.contains(it.importedFqName?.asString() ?: "") }
-				?.forEach { report(CodeSmell(issue, Entity.from(it))) }
+		importList
+				.imports
+				.filterNot { it.isAllUnder }
+				.filter { forbiddenImports.contains(it.importedFqName?.asString() ?: "") }
+				.forEach { report(CodeSmell(issue, Entity.from(it))) }
 	}
 
 	companion object {
