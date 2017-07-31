@@ -16,23 +16,32 @@ val NUMBER_OF_COMMENT_LINES_KEY = Key<Int>("cloc")
 
 class CLOCVisitor : DetektVisitor() {
 
-	private var count = 0
-
 	override fun visitKtFile(file: KtFile) {
-		super.visitKtFile(file)
-		file.putUserData(NUMBER_OF_COMMENT_LINES_KEY, count)
+		with(CLOCCountVisitor()) {
+			file.accept(this)
+			file.putUserData(NUMBER_OF_COMMENT_LINES_KEY, count)
+		}
+	}
+}
+
+internal class CLOCCountVisitor : DetektVisitor() {
+
+	internal var count = 0
+
+	private fun increment(value: Int) {
+		count += value
 	}
 
 	override fun visitComment(comment: PsiComment?) {
 		if (comment != null) {
-			count += comment.text.split('\n').size
+			increment(comment.text.split('\n').size)
 		}
 	}
 
 	override fun visitDeclaration(dcl: KtDeclaration) {
 		val text = dcl.docComment?.text
 		if (text != null) {
-			count += text.split('\n').size
+			increment(text.split('\n').size)
 		}
 		super.visitDeclaration(dcl)
 	}
