@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.sampleruleset
+package io.gitlab.arturbosch.detekt.sample.extensions
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Entity
