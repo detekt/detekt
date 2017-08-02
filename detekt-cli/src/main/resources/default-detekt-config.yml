@@ -152,6 +152,9 @@ style:
     imports: ''
   ModifierOrder:
     active: true
+  MagicNumber:
+    active: true
+    ignoreNumbers: '-1,0,1,2'
   WildcardImport:
     active: true
   SafeCast:
