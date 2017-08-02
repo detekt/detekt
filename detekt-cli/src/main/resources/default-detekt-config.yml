@@ -147,6 +147,9 @@ style:
   ForbiddenComment:
     active: true
     values: 'TODO:,FIXME:,STOPSHIP:'
+  ForbiddenImport:
+    active: false
+    imports: ''
   ModifierOrder:
     active: true
   MagicNumber:

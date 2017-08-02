@@ -7,6 +7,6 @@ class Excludes(excludeParameter: String) {
 			.filter { it.isNotBlank() }
 			.map { it.removeSuffix("*") }
 
-	fun contains(value: String) = excludes.filter { value.contains(it) }.isNotEmpty()
+	fun contains(value: String) = excludes.any { value.contains(it) }
 	fun none(value: String) = !contains(value)
 }
