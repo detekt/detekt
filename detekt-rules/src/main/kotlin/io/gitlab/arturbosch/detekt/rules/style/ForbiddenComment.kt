@@ -13,7 +13,7 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,
 			Severity.Style,
-			"Flags a forbidden comment. Defaults values are TODO:, FIXME: or STHOPSHIP:",
+			"Flags a forbidden comment. Defaults values are TODO:, FIXME: or STOPSHIP:",
 			Debt.TEN_MINS)
 
 	private val values: List<String>
