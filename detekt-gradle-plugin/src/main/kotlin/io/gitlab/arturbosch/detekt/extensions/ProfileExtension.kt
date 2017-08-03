@@ -11,7 +11,7 @@ open class ProfileExtension(val name: String,
 							open var filters: String? = null,
 							open var ruleSets: String? = null,
 							open var output: String? = null,
-							open var outputFormat: String? = null,
+							open var outputName: String? = null,
 							open var baseline: String? = null,
 							open var parallel: Boolean = false,
 							open var disableDefaultRuleSets: Boolean = false) {
@@ -24,7 +24,7 @@ open class ProfileExtension(val name: String,
 			filters?.let { put(FILTERS_PARAMETER, it) }
 			ruleSets?.let { put(RULES_PARAMETER, it) }
 			output?.let { put(OUTPUT_PARAMETER, it) }
-			outputFormat?.let { put(OUTPUT_FORMAT_PARAMETER, it) }
+			outputName?.let { put(OUTPUT_NAME_PARAMETER, it) }
 			baseline?.let { put(BASELINE_PARAMETER, it) }
 			if (parallel) put(PARALLEL_PARAMETER, DEFAULT_TRUE)
 			if (disableDefaultRuleSets) put(DISABLE_DEFAULT_RULESETS_PARAMETER, DEFAULT_TRUE)
@@ -33,5 +33,4 @@ open class ProfileExtension(val name: String,
 	}
 
 	override fun toString(): String = this.reflectiveToString()
-
 }
