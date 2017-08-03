@@ -1,5 +1,10 @@
 # Migration Guide
 
+### M13.1 -> RC1
+
+- Attention: new `MagicNumber` and `ReturnCount` rules can let your CI fail
+- Sample project now reflects all possible custom extensions to detekt, see `extensions` section in README
+
 ### M13 -> M13.1
 
 - Misspelled class `Dept` was renamed to `Debt`, if you using custom rule sets, please rebuild it
