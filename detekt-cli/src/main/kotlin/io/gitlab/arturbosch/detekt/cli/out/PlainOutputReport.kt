@@ -5,7 +5,8 @@ import io.gitlab.arturbosch.detekt.api.OutputReport
 
 class PlainOutputReport : OutputReport() {
 
-	override val fileName = "detekt-plain.txt"
+	override var fileName = "detekt-plain"
+	override val ending: String = "txt"
 
 	override fun render(detektion: Detektion): String {
 		val smells = detektion.findings.flatMap { it.value }

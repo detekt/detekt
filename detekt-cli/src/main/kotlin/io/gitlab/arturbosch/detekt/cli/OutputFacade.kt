@@ -17,6 +17,7 @@ class OutputFacade(private val arguments: Args,
 	private val config = settings.config
 	private val baselineFacade = arguments.baseline?.let { BaselineFacade(it) }
 	private val createBaseline = arguments.createBaseline
+	private val fileName = arguments.outputName
 
 	fun run() {
 		if (createBaseline) {
@@ -40,6 +41,7 @@ class OutputFacade(private val arguments: Args,
 
 	private fun handleOutputReport(report: OutputReport, result: Detektion) {
 		arguments.output?.let {
+			fileName?.let { report.fileName = it }
 			report.write(it, result)
 			printStream.println("Successfully generated ${report.id}.")
 		}

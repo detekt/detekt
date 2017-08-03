@@ -8,7 +8,8 @@ import java.nio.file.Path
  */
 class Args {
 
-	@Parameter(names = arrayOf("--input", "-i"), required = true,
+	@Parameter(names = arrayOf("--input", "-i"),
+			required = true,
 			converter = ExistingPathConverter::class, description = "Input path to analyze (path/to/project).")
 	private var input: Path? = null
 
@@ -36,16 +37,18 @@ class Args {
 			description = "Enables formatting of source code. Cannot be used together with --config.")
 	var formatting: Boolean = false
 
-	@Parameter(names = arrayOf("--parallel"), description = "Enables parallel compilation of source files." +
-			" Should only be used if the analyzing project has more than ~200 kotlin files.")
+	@Parameter(names = arrayOf("--parallel"),
+			description = "Enables parallel compilation of source files." +
+					" Should only be used if the analyzing project has more than ~200 kotlin files.")
 	var parallel: Boolean = false
 
 	@Parameter(names = arrayOf("--useTabs"),
 			description = "Tells the formatter that indentation with tabs are valid.")
 	var useTabs: Boolean = false
 
-	@Parameter(names = arrayOf("--baseline", "-b"), description = "If a baseline xml file is passed in," +
-			" only new code smells not in the baseline are printed in the console.",
+	@Parameter(names = arrayOf("--baseline", "-b"),
+			description = "If a baseline xml file is passed in," +
+					" only new code smells not in the baseline are printed in the console.",
 			converter = PathConverter::class)
 	var baseline: Path? = null
 
@@ -53,17 +56,25 @@ class Args {
 			description = "Treats current analysis findings as a smell baseline for further detekt runs.")
 	var createBaseline: Boolean = false
 
-	@Parameter(names = arrayOf("--output", "-o"), description = "Directory where output reports are stored.",
+	@Parameter(names = arrayOf("--output", "-o"),
+			description = "Directory where output reports are stored.",
 			converter = PathConverter::class)
 	var output: Path? = null
 
-	@Parameter(names = arrayOf("--disable-default-rulesets", "-dd"), description = "Disables default rule sets.")
+	@Parameter(names = arrayOf("--output-name", "-on"),
+			description = "The base name for output reports are derived from this parameter.")
+	var outputName: String? = null
+
+	@Parameter(names = arrayOf("--disable-default-rulesets", "-dd"),
+			description = "Disables default rule sets.")
 	var disableDefaultRuleSets: Boolean = false
 
-	@Parameter(names = arrayOf("--debug"), description = "Debugs given ktFile by printing its elements.")
+	@Parameter(names = arrayOf("--debug"),
+			description = "Debugs given ktFile by printing its elements.")
 	var debug: Boolean = false
 
-	@Parameter(names = arrayOf("--help", "-h"), help = true, description = "Shows the usage.")
+	@Parameter(names = arrayOf("--help", "-h"),
+			help = true, description = "Shows the usage.")
 	var help: Boolean = false
 
 	val inputPath: Path
