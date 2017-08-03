@@ -1,5 +1,26 @@
 # Detekt - Changelog
 
+#### RC1
+
+- Rewrite sample project featuring processors, reports and rule sets - [#268](https://github.com/arturbosch/detekt/pull/268)
+- Update detekt-sample-ruleset - [#257](https://github.com/arturbosch/detekt/issues/257)
+- Fix input flag for standalone gradle task in README - [#256](https://github.com/arturbosch/detekt/pull/256)
+- Added rule for safe cast to config.yml - [#254](https://github.com/arturbosch/detekt/pull/254)
+- LateInitUsage: One annotation match is enough to let the property be ignored. - [#245](https://github.com/arturbosch/detekt/pull/245)
+- Exclude extensions by id or priority - [#243](https://github.com/arturbosch/detekt/issues/243)
+- Plugins & Extensions - [#242](https://github.com/arturbosch/detekt/pull/242)
+- Rule: ModifierOrder - [#239](https://github.com/arturbosch/detekt/pull/239)
+- Added metrics for packages and kt files - [#238](https://github.com/arturbosch/detekt/pull/238)
+- Added metrics for classes, methods and fields - [#237](https://github.com/arturbosch/detekt/pull/237)
+- Fix --project mention in README. - [#236](https://github.com/arturbosch/detekt/pull/236)
+- Use newest detekt with failfast profile in CI - [#234](https://github.com/arturbosch/detekt/pull/234)
+- Added rule for safe cast instead of if-else-null - [#233](https://github.com/arturbosch/detekt/pull/233)
+- Terminal Output customization - [#171](https://github.com/arturbosch/detekt/issues/171)
+- Change Main.rules to something like 'jars' or 'plugins' - [#134](https://github.com/arturbosch/detekt/issues/134)
+- FileProcessListener's should be loaded through a ServiceLoader - [#101](https://github.com/arturbosch/detekt/issues/101)
+
+See all issues at: [RC1](https://github.com/arturbosch/detekt/milestone/15)
+
 #### M13.2
 
 - Always use the 'main' profile as default even if 'profile' parameter set but a profile with name 'main' exists - [#231](https://github.com/arturbosch/detekt/issues/231)
