@@ -1,9 +1,13 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.*
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtConstantExpression
+import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
+import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.KtProperty
+import java.util.*
 
 class MagicNumber(config: Config = Config.empty) : Rule(config) {
 
@@ -15,29 +19,64 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 
 	private val ignoredNumbers = valueOrDefault(IGNORED_NUMBERS, "-1,0,1,2")
 			.split(",")
-			.map { it.toLongOrNull() }
-			.filterNotNull()
+			.filterNot { it.isEmpty() }
+			.map { parseAsDouble(it) }
+			.sorted()
 
 	override fun visitConstantExpression(expression: KtConstantExpression) {
 		val parent = expression.parent
 
-		val isConst = parent is KtProperty && parent.modifierList?.hasModifier(KtTokens.CONST_KEYWORD) ?: false
-		val possibleNumber = getNumber(expression)
+		if (parent.isConstantProperty()) {
+			return
+		}
 
-		if (!isConst && !ignoredNumbers.contains(possibleNumber)) {
+		val rawNumber = if (parent.hasUnaryMinusPrefix()) {
+			parent.text
+		} else {
+			expression.text
+		}
+
+		val number = parseAsDoubleOrNull(rawNumber) ?: return
+		if (!ignoredNumbers.contains(number)) {
 			report(CodeSmell(issue, Entity.from(expression)))
 		}
 	}
 
-	private fun getNumber(element: KtConstantExpression): Long? {
-		val text = element.text
+	private fun PsiElement.isConstantProperty(): Boolean {
+		return this is KtProperty && this.hasModifier(KtTokens.CONST_KEYWORD)
+	}
 
-		return when {
-			text.endsWith("L") -> text.replace("L", "").toLongOrNull()
-			text.startsWith("0x") -> text.substring("0x".length).toIntOrNull(HEX_RADIX)?.toLong()
-			text.contains(".") -> text.toFloatOrNull()?.toLong()
-			else -> text.toLongOrNull()
+	private fun PsiElement.hasUnaryMinusPrefix(): Boolean {
+		return this is KtPrefixExpression
+				&& (this.firstChild as? KtOperationReferenceExpression)?.operationSignTokenType == KtTokens.MINUS
+	}
+
+	private fun parseAsDoubleOrNull(rawToken: String?): Double? {
+		try {
+			return rawToken?.let { parseAsDouble(it) }
+		} catch (e: NumberFormatException) {
+			return null
 		}
+	}
+
+	private fun parseAsDouble(rawNumber: String): Double {
+		val normalizedText = normalizeForParsingAsDouble(rawNumber)
+		return if (normalizedText.startsWith("0x")) {
+			normalizedText.removePrefix("0x")
+					.toLong(HEX_RADIX)
+					.toDouble()
+		} else {
+			normalizedText.toDouble()
+		}
+	}
+
+	private fun normalizeForParsingAsDouble(text: String): String {
+		return text.trim()
+				.toLowerCase(Locale.US)
+				.replace("_", "")
+				.removeSuffix("l")
+				.removeSuffix("d")
+				.removeSuffix("f")
 	}
 
 	companion object {
