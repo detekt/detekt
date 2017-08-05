@@ -18,7 +18,7 @@ class MagicNumberSpec : Spek({
 		}
 
 		it("it should be reported when ignoreNumbers are overridden") {
-			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(code)
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORED_NUMBERS to ""))).lint(code)
 			assertThat(findings).hasSize(1)
 		}
 	}
@@ -32,7 +32,7 @@ class MagicNumberSpec : Spek({
 		}
 
 		it("it should not be reported when ignoreNumbers are overridden") {
-			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(code)
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORED_NUMBERS to ""))).lint(code)
 			assertThat(findings).hasSize(0)
 		}
 	}
@@ -46,7 +46,7 @@ class MagicNumberSpec : Spek({
 		}
 
 		it("it should be reported when ignoreNumbers are overridden") {
-			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(code)
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORED_NUMBERS to ""))).lint(code)
 			assertThat(findings).hasSize(1)
 		}
 	}
@@ -60,7 +60,7 @@ class MagicNumberSpec : Spek({
 		}
 
 		it("it should not be reported when ignoreNumbers are overridden") {
-			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(code)
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORED_NUMBERS to ""))).lint(code)
 			assertThat(findings).hasSize(0)
 		}
 	}
@@ -74,7 +74,7 @@ class MagicNumberSpec : Spek({
 		}
 
 		it("it should be reported when ignoreNumbers are overridden") {
-			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(code)
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORED_NUMBERS to ""))).lint(code)
 			assertThat(findings).hasSize(1)
 		}
 	}
@@ -88,7 +88,7 @@ class MagicNumberSpec : Spek({
 		}
 
 		it("it should not be reported when ignoreNumbers are overridden") {
-			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(code)
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORED_NUMBERS to ""))).lint(code)
 			assertThat(findings).hasSize(0)
 		}
 	}
@@ -102,7 +102,7 @@ class MagicNumberSpec : Spek({
 		}
 
 		it("it should be reported when ignoreNumbers are overridden") {
-			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(code)
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORED_NUMBERS to ""))).lint(code)
 			assertThat(findings).hasSize(1)
 		}
 	}
@@ -116,7 +116,7 @@ class MagicNumberSpec : Spek({
 		}
 
 		it("it should not be reported when ignoreNumbers are overridden") {
-			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(code)
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORED_NUMBERS to ""))).lint(code)
 			assertThat(findings).hasSize(0)
 		}
 	}
@@ -130,7 +130,7 @@ class MagicNumberSpec : Spek({
 		}
 
 		it("it should be reported when ignoreNumbers are overridden") {
-			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(code)
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORED_NUMBERS to ""))).lint(code)
 			assertThat(findings).hasSize(1)
 		}
 	}
@@ -144,7 +144,7 @@ class MagicNumberSpec : Spek({
 		}
 
 		it("it should not be reported when ignoreNumbers are overridden") {
-			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(code)
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORED_NUMBERS to ""))).lint(code)
 			assertThat(findings).hasSize(0)
 		}
 	}
@@ -153,7 +153,7 @@ class MagicNumberSpec : Spek({
 		val code = "val myInt = 300"
 
 		it("it should not be reported when ignoreNumbers contains 300") {
-			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "300"))).lint(code)
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORED_NUMBERS to "300"))).lint(code)
 			assertThat(findings).hasSize(0)
 		}
 	}

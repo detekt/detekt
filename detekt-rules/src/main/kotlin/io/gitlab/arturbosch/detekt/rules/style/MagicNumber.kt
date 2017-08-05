@@ -8,12 +8,12 @@ import org.jetbrains.kotlin.psi.KtProperty
 class MagicNumber(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName, Severity.Style,
-			"Report magic numbers. Magic number is a numeric literal that is not defined as a constant" +
+			"Report magic numbers. Magic number is a numeric literal that is not defined as a constant " +
 					"and hence it's unclear what the purpose of this number is. " +
 					"It's better to declare such numbers as constants and give them a proper name. " +
 					"By default, -1, 0, 1, and 2 are not considered to be magic numbers.", Debt.TEN_MINS)
 
-	private val ignoreNumbers = valueOrDefault(IGNORE_NUMBERS, "-1,0,1,2")
+	private val ignoredNumbers = valueOrDefault(IGNORED_NUMBERS, "-1,0,1,2")
 			.split(",")
 			.map { it.toLongOrNull() }
 			.filterNotNull()
@@ -24,7 +24,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 		val isConst = parent is KtProperty && parent.modifierList?.hasModifier(KtTokens.CONST_KEYWORD) ?: false
 		val possibleNumber = getNumber(expression)
 
-		if (!isConst && !ignoreNumbers.contains(possibleNumber)) {
+		if (!isConst && !ignoredNumbers.contains(possibleNumber)) {
 			report(CodeSmell(issue, Entity.from(expression)))
 		}
 	}
@@ -33,15 +33,15 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 		val text = element.text
 
 		return when {
-      text.endsWith("L") -> text.replace("L", "").toLongOrNull()
-      text.startsWith("0x") -> text.substring("0x".length).toIntOrNull(HEX_RADIX)?.toLong()
-      text.contains(".") -> text.toFloatOrNull()?.toLong()
-      else -> text.toLongOrNull()
-    }
+			text.endsWith("L") -> text.replace("L", "").toLongOrNull()
+			text.startsWith("0x") -> text.substring("0x".length).toIntOrNull(HEX_RADIX)?.toLong()
+			text.contains(".") -> text.toFloatOrNull()?.toLong()
+			else -> text.toLongOrNull()
+		}
 	}
 
 	companion object {
-		const val IGNORE_NUMBERS = "ignoreNumbers"
+		const val IGNORED_NUMBERS = "ignoredNumbers"
 
 		private const val HEX_RADIX = 16
 	}
