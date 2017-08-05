@@ -156,7 +156,7 @@ style:
     active: true
   MagicNumber:
     active: true
-    ignoreNumbers: '-1,0,1,2'
+    ignoredNumbers: '-1,0,1,2'
   WildcardImport:
     active: true
   SafeCast:
