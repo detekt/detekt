@@ -2,7 +2,7 @@ buildscript {
 	repositories {
 		mavenCentral()
 		mavenLocal()
-		maven { url "http://dl.bintray.com/jetbrains/spek" }
+		maven { url 'http://dl.bintray.com/jetbrains/spek' }
 	}
 	dependencies {
 		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
@@ -12,10 +12,10 @@ buildscript {
 }
 
 plugins {
-	id "com.jfrog.bintray" version "1.7.3"
+	id 'com.jfrog.bintray' version '1.7.3'
 	id 'com.github.ben-manes.versions' version '0.13.0'
-	id "com.github.johnrengelman.shadow" version "1.2.3"
-	id "org.sonarqube" version "2.5"
+	id 'com.github.johnrengelman.shadow' version '1.2.3'
+	id 'org.sonarqube' version '2.5'
 }
 
 apply plugin: 'io.gitlab.arturbosch.detekt'
@@ -23,12 +23,12 @@ apply plugin: 'io.gitlab.arturbosch.detekt'
 allprojects {
 
 	group 'io.gitlab.arturbosch.detekt'
-	version "$detektVersion"
+	version detektVersion
 
 	repositories {
 		mavenCentral()
 		mavenLocal()
-		maven { url "http://dl.bintray.com/jetbrains/spek" }
+		maven { url 'http://dl.bintray.com/jetbrains/spek' }
 	}
 
 	apply plugin: 'org.junit.platform.gradle.plugin'
@@ -39,7 +39,7 @@ allprojects {
 	apply plugin: 'com.github.ben-manes.versions'
 
 	def projectName = it.name
-	if (projectName == "detekt-cli") {
+	if (projectName == 'detekt-cli') {
 		apply plugin: 'application'
 		apply plugin: 'com.github.johnrengelman.shadow'
 	}
@@ -47,7 +47,7 @@ allprojects {
 	junitPlatform {
 		filters {
 			engines {
-				include 'spek', "junit-jupiter"
+				include 'spek', 'junit-jupiter'
 			}
 		}
 	}
@@ -61,16 +61,16 @@ allprojects {
 	}
 
 	bintray {
-		user = System.getenv("BINTRAY_USER") ?: ""
-		key = System.getenv("BINTRAY_API_KEY") ?: ""
-		publications = ["DetektPublication"]
+		user = System.getenv('BINTRAY_USER') ?: ''''''
+		key = System.getenv('BINTRAY_API_KEY') ?: ''''''
+		publications = ['DetektPublication']
 
 		pkg {
 			repo = 'code-analysis'
 			name = 'detekt'
 			userOrg = 'arturbosch'
 			licenses = ['Apache-2.0']
-			vcsUrl = "https://github.com/arturbosch/detekt"
+			vcsUrl = 'https://github.com/arturbosch/detekt'
 
 			version {
 				name = project.version
@@ -91,21 +91,21 @@ allprojects {
 	def pomConfig = {
 		licenses {
 			license {
-				name "The Apache Software License, Version 2.0"
-				url "http://www.apache.org/licenses/LICENSE-2.0.txt"
-				distribution "repo"
+				name 'The Apache Software License, Version 2.0'
+				url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+				distribution 'repo'
 			}
 		}
 		developers {
 			developer {
-				id "Artur Bosch"
-				name "Artur Bosch"
-				email "arturbosch@gmx.de"
+				id 'Artur Bosch'
+				name 'Artur Bosch'
+				email 'arturbosch@gmx.de'
 			}
 		}
 
 		scm {
-			url "https://github.com/arturbosch/detekt"
+			url 'https://github.com/arturbosch/detekt'
 		}
 	}
 
@@ -154,27 +154,30 @@ allprojects {
 	}
 }
 
-String USER_HOME = System.getProperty("user.home")
+String USER_HOME = System.getProperty('user.home')
 
 detekt {
 	debug = true
-	version = "$usedDetektVersion"
-	profile = "failfast"
-	profile("main") {
-		input = "$projectDir"
+	version = usedDetektVersion
+	profile = 'failfast'
+
+	profile('main') {
+		input = projectDir
 		filters = '.*/test/.*, .*/resources/.*, .*/build/.*'
 		config = "$projectDir/detekt-cli/src/main/resources/default-detekt-config.yml"
 		baseline = "$projectDir/reports/baseline.xml"
 	}
-	profile("failfast") {
-		input = "$projectDir"
+
+	profile('failfast') {
+		input = projectDir
 		config = "$projectDir/reports/failfast.yml"
 	}
+
 	idea {
 		path = "$USER_HOME/.idea"
 		codeStyleScheme = "$USER_HOME/.idea/idea-code-style.xml"
 		inspectionsProfile = "$USER_HOME/.idea/inspect.xml"
 		report = "$project.projectDir/reports"
-		mask = "*.kt,"
+		mask = '*.kt,'
 	}
 }
