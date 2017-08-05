@@ -4,6 +4,10 @@
 
 - Attention: new `MagicNumber` and `ReturnCount` rules can let your CI fail
 - Sample project now reflects all possible custom extensions to detekt, see `extensions` section in README
+- `--output` points to a directory now. This is due the fact that many output reports can be generated at once
+- Each `OutputReport` specifies a file name and ending. The parameter `--output-name` can be used to override the 
+default provided file name of the `OutputReport`. Unnecessary output reports for your project can be turned off in 
+the configuration.
 
 ### M13 -> M13.1
 

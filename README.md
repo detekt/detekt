@@ -3,7 +3,8 @@
 [![build status](https://travis-ci.org/arturbosch/detekt.svg?branch=master)](https://travis-ci.org/arturbosch/detekt)
 [![build status windows](https://ci.appveyor.com/api/projects/status/3q9g98vveiul7yut/branch/master?svg=true)](https://ci.appveyor.com/project/arturbosch/detekt)
 [ ![Download](https://api.bintray.com/packages/arturbosch/code-analysis/detekt/images/download.svg) ](https://bintray.com/arturbosch/code-analysis/detekt/_latestVersion)
-[![All Contributors](https://img.shields.io/badge/gradle_plugin-1.0.0.M13.2-blue.svg?style=flat-square)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
+[![All Contributors](https://img.shields.io/badge/gradle_plugin-1.0.0.RC1-blue.svg?style=flat-square)](https://plugins
+.gradle.org/plugin/io.gitlab.arturbosch.detekt)
 
 [![All Contributors](https://img.shields.io/badge/all_contributors-13-orange.svg?style=flat-square)](#contributors)
 [![All Contributors](https://img.shields.io/badge/androidweekly-259-orange.svg?style=flat-square)](http://androidweekly.net/issues/issue-259)
@@ -21,13 +22,13 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 - highly configurable (rule set or rule level)
 - suppress findings with Kotlin's @Suppress and Java's @SuppressWarnings annotations
 - specify code smell thresholds to break your build or print a warning
-- extensible by own rule sets and `FileProcessListener's`
 - format your code with the formatting rule set
 - code Smell baseline and ignore lists for legacy projects
 - [gradle plugin](#gradleplugin) for code analysis, formatting and import migration
-- **NEW** - gradle tasks to use local `intellij` distribution for [formatting and inspecting](#idea) kotlin code
-- **NEW** - optionally configure detekt for each sub module by using [profiles](#closure) (gradle-plugin)
-- **NEW** - [sonarqube integration](https://github.com/arturbosch/sonar-kotlin)
+- gradle tasks to use local `intellij` distribution for [formatting and inspecting](#idea) kotlin code
+- optionally configure detekt for each sub module by using [profiles](#closure) (gradle-plugin)
+- [sonarqube integration](https://github.com/arturbosch/sonar-kotlin)
+- **NEW** extensible by own rule sets and `FileProcessListener's`
 
 ### Table of contents
 1. [Commandline interface](#build)
@@ -42,8 +43,11 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 6. [Rule set configuration](#rulesetconfig)
 7. [Suppress rules](#suppress)
 7. [Build failure](#failure)
-7. [Custom rule sets](#customruleset)
-    1. [Rule testing](#testing)
+7. [Extending detekt](#extensions)
+    1. [RuleSets](#customrulesets)
+    2. [Processors](#customprocessors)
+    3. [Reports](#customreports)
+    4. [Rule testing](#testing)
 9. [Formatting - Code Style](#formatting)
 10. [Black- and Whitelist code smells](#baseline)
 10. [Contributors](#contributors)
@@ -93,10 +97,8 @@ Usage: detekt [options]
       Shows the usage.
     --output, -o
       Specify the file to output to.
-    --output-format, -of
-      Specify the output format.
-      Default: XML
-      Possible Values: [PLAIN, XML]
+    --output-name, -on
+      The base name for output reports is derived from this parameter.
     --parallel
       Enables parallel compilation of source files. Should only be used if the
       analyzing project has more than ~200 kotlin files.
@@ -220,7 +222,7 @@ detekt {
         ruleSets = "other/optional/ruleset.jar" // Custom rule sets can be linked to this, use comma oder semicolon to separate, remove if unused.
         disableDefaultRuleSets = false // Disables the default rule set. Just use detekt as the detection engine with your custom rule sets.
         output = "$project.projectDir/reports/detekt.xml" // If present, prints all findings into that file.
-        outputFormat = "xml" // Can be either 'xml' or 'plain', default is 'xml'
+        outputName = "my-module" // This parameter is used to derive the output report name
         baseline = "$project.projectDir/reports/baseline.xml" // If present all current findings are saved in a baseline.xml to only consider new code smells for further runs.
         parallel = true // Use this flag if your project has more than 200 files. 
         useTabs = false // Turns off the indentation check for spaces if true, default is false and does not need to be specified
@@ -509,7 +511,9 @@ For example: If you have 5 findings of the category _code-smell_, then your fail
 
 The formula for weights: RuleID > RuleSetID > 1. Only integer values are supported.
 
-### <a name="customruleset">Custom RuleSets</a>
+### <a name="extensions">Extending detekt</a>
+
+#### <a name="customrulesets">Custom RuleSets</a>
 
 _detekt_ uses a ServiceLoader to collect all instances of _RuleSetProvider_-interfaces. So it is possible
 to define rules/rule sets and enhance _detekt_ with your own flavor. 
@@ -584,9 +588,19 @@ By specifying the rule set and rule ids, _detekt_ will use the sub configuration
 
 ```val threshold = withConfig { valueOrDefault("threshold") { threshold } }```
 
-#### Maven
+##### Maven
 
 If your using maven to build rule sets or use _detekt_ as a dependency, you have to run the additional task `install`
+
+#### <a name="customprocessors">Custom Processors</a>
+
+TODO
+
+#### <a name="customreports">Custom Reports</a>
+
+_detekt_ allows you to extend the console output and to create custom output formats.
+
+For example if you do not like the default printing of findings, we can ... TODO
 
 #### <a name="testing">Testing your rules</a>
 
@@ -693,15 +707,16 @@ inside the report file.
 - [Sean Flanigan](https://github.com/seanf) - Config from classpath resource
 - [Sebastian Schuberth](https://github.com/sschuberth) - Active on Issues, Windows support
 - [Olivier Lemasle](https://github.com/olivierlemasle) - NP-Bugfix
-- [Marvin Ramin](https://github.com/Mauin) - Rules: MaxLineLength + LateinitUsage rule, Active on Issues, sdept and 
-test cleanups
+- [Marvin Ramin](https://github.com/Mauin) - Bunch of rules, Active on Issues, refactorings, MultiRule
 - [Marc Prengemann](https://github.com/winterDroid) - Support for custom output formats, prototyped Rule-Context-Issue separation
 - [Sebastiano Poggi](https://github.com/rock3r) - Enhanced milestone report script
 - [Ilya Tretyakov](https://github.com/jvilya) - Sonar runs should not auto correct formatting.
 - [Andrey T](https://github.com/mr-procrastinator) - Readme fix
 - [Niklas Baudy](https://github.com/vanniktech) - Active on Issues, Bug fix, documentation fixes, 
-detekt findings
+detekt findings, bunch of rules
 - [Ivan Balaksha](https://github.com/tagantroy) - Rules: UnsafeCast, SpreadOperator, UnsafeCallOnNullableType, LabeledExpression
+- [schalks](https://github.com/schalkms) - Rules: SafeCast, OptionalAbstractKeyword, Project metrics 
+- [Anna Y](https://github.com/Nevvea7) - Readme fix
 
 #### Credits
 - [Stanley Shyiko](https://github.com/shyiko) - `detekt` migrated the formatting rules from [ktlint](https://github.com/shyiko/ktlint)

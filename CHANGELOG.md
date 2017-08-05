@@ -2,6 +2,7 @@
 
 #### RC1
 
+- Allow to override the output name of output reports - [#272](https://github.com/arturbosch/detekt/pull/272)
 - Rewrite sample project featuring processors, reports and rule sets - [#268](https://github.com/arturbosch/detekt/pull/268)
 - Update detekt-sample-ruleset - [#257](https://github.com/arturbosch/detekt/issues/257)
 - Fix input flag for standalone gradle task in README - [#256](https://github.com/arturbosch/detekt/pull/256)

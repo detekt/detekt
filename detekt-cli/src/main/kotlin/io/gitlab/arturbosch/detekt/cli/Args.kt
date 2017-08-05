@@ -62,7 +62,7 @@ class Args {
 	var output: Path? = null
 
 	@Parameter(names = arrayOf("--output-name", "-on"),
-			description = "The base name for output reports are derived from this parameter.")
+			description = "The base name for output reports is derived from this parameter.")
 	var outputName: String? = null
 
 	@Parameter(names = arrayOf("--disable-default-rulesets", "-dd"),
