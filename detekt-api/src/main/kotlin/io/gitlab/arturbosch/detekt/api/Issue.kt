@@ -11,6 +11,10 @@ data class Issue(val id: String,
 	init {
 		validateIdentifier(id)
 	}
+
+	override fun toString(): String {
+		return "Issue(id='$id', severity=$severity, debt=$debt)"
+	}
 }
 
 /**

@@ -16,6 +16,10 @@ open class CodeSmell(final override val issue: Issue,
 	override fun compact() = "$id - ${entity.compact()}"
 
 	override fun compactWithSignature() = compact() + " - Signature=" + entity.signature
+
+	override fun toString(): String {
+		return "CodeSmell(issue=$issue, entity=$entity, metrics=$metrics, references=$references, id='$id')"
+	}
 }
 
 /**
