@@ -1,12 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.*
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtProperty
@@ -15,9 +9,9 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName, Severity.Style,
 			"Report magic numbers. Magic number is a numeric literal that is not defined as a constant" +
-					"and hence it's unclear what the purpose of this number is." +
-					"It's better to declare such numbers as constants and give them a proper name." +
-					"By default, -1, 0, 1, and 2 are not considered to be magic numbers. ", Debt.TEN_MINS)
+					"and hence it's unclear what the purpose of this number is. " +
+					"It's better to declare such numbers as constants and give them a proper name. " +
+					"By default, -1, 0, 1, and 2 are not considered to be magic numbers.", Debt.TEN_MINS)
 
 	private val ignoreNumbers = valueOrDefault(IGNORE_NUMBERS, "-1,0,1,2")
 			.split(",")
