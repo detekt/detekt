@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.core.processors.COMPLEXITY_KEY
 import io.gitlab.arturbosch.detekt.core.processors.LLOC_KEY
 import io.gitlab.arturbosch.detekt.core.processors.LOC_KEY
 import io.gitlab.arturbosch.detekt.core.processors.NUMBER_OF_COMMENT_LINES_KEY
+import io.gitlab.arturbosch.detekt.core.processors.SLOC_KEY
 
 /**
  * @author Artur Bosch
@@ -20,6 +21,7 @@ class ComplexityReport : ConsoleReport() {
 		val findings = detektion.findings
 		val mcc = detektion.getData(COMPLEXITY_KEY)
 		val loc = detektion.getData(LOC_KEY)
+		val sloc = detektion.getData(SLOC_KEY)
 		val lloc = detektion.getData(LLOC_KEY)
 		val cloc = detektion.getData(NUMBER_OF_COMMENT_LINES_KEY)
 		if (mcc != null && lloc != null && lloc > 0) {
@@ -29,6 +31,7 @@ class ComplexityReport : ConsoleReport() {
 			return with(StringBuilder()) {
 				append("Complexity Report:".format())
 				append("$loc lines of code (loc)".format(PREFIX))
+				append("$sloc source lines of code (sloc)".format(PREFIX))
 				append("$lloc logical lines of code (lloc)".format(PREFIX))
 				append("$cloc comment lines of code (cloc)".format(PREFIX))
 				append("$mcc McCabe complexity (mcc)".format(PREFIX))
