@@ -122,7 +122,7 @@ class MagicNumberSpec : Spek({
 	}
 
 	given("a hex of 1") {
-		val code = "val myHex = 0x0"
+		val code = "val myHex = 0x1"
 
 		it("it should not be reported by default") {
 			val findings = MagicNumber().lint(code)
@@ -136,7 +136,7 @@ class MagicNumberSpec : Spek({
 	}
 
 	given("a const hex of 1") {
-		val code = "const val MY_HEX = 0x0"
+		val code = "const val MY_HEX = 0x1"
 
 		it("it should not be reported by default") {
 			val findings = MagicNumber().lint(code)
