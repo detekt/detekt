@@ -1,12 +1,12 @@
 configurations {
-	compile.extendsFrom kotlinCompile
-	testCompile.extendsFrom kotlinTest
-//	testRuntime.extendsFrom junitPlatform
+	implementation.extendsFrom kotlinImplementation
+	testImplementation.extendsFrom kotlinTest
 }
 
 dependencies {
-	compile project(':detekt-api')
-	testCompile project(':detekt-test')
+	implementation project(':detekt-api')
+
+	testImplementation project(':detekt-test')
 	testRuntime "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
 	testRuntime "org.junit.platform:junit-platform-console:$junitPlatformVersion"
 	testRuntime "org.jetbrains.spek:spek-junit-platform-engine:$spekVersion"

@@ -14,14 +14,15 @@ apply plugin: "com.gradle.plugin-publish"
 version = "$detektGradleVersion"
 
 configurations {
-	compile.extendsFrom kotlinCompile
-	testCompile.extendsFrom kotlinTest
-//	testRuntime.extendsFrom junitPlatform
+	implementation.extendsFrom kotlinImplementation
+	testImplementation.extendsFrom kotlinTest
 }
 
 dependencies {
-	compile gradleApi()
-	compile project(':detekt-cli')
+	implementation gradleApi()
+	implementation project(':detekt-cli')
+	implementation "com.beust:jcommander:$jcommanderVersion"
+	
 	testRuntime "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
 	testRuntime "org.junit.platform:junit-platform-console:$junitPlatformVersion"
 	testRuntime "org.jetbrains.spek:spek-junit-platform-engine:$spekVersion"
