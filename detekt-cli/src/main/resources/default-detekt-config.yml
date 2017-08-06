@@ -57,6 +57,8 @@ performance:
     active: true
   SpreadOperator:
     active: true
+  UnnecessaryConversionTemporary:
+    active: true
 
 exceptions:
   active: true
