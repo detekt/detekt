@@ -21,14 +21,12 @@ class SLOCVisitor : DetektVisitor() {
 	private class SLOC {
 
 		private val comments = arrayOf("//", "/*", "*/", "*")
-		private var count = 0
 
 		fun count(lines: List<String>): Int {
-			lines
-					.map { it.trim() }
-					.filter { trim -> trim.isNotEmpty() && !comments.any { trim.startsWith(it) } }
-					.forEach { count++ }
-			return count
+			return lines
+						.map { it.trim() }
+						.filter { trim -> trim.isNotEmpty() && !comments.any { trim.startsWith(it) } }
+						.size
 		}
 	}
 }
