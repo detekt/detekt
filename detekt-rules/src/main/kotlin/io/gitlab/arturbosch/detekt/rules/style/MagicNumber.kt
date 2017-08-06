@@ -13,7 +13,7 @@ import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
 import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.KtProperty
-import java.util.*
+import java.util.Locale
 
 class MagicNumber(config: Config = Config.empty) : Rule(config) {
 
