@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.rules.performance.ForEachOnRange
 import io.gitlab.arturbosch.detekt.rules.performance.SpreadOperator
+import io.gitlab.arturbosch.detekt.rules.performance.UnnecessaryConversionTemporary
 
 class PerformanceProvider : RuleSetProvider {
 
@@ -13,7 +14,8 @@ class PerformanceProvider : RuleSetProvider {
 	override fun instance(config: Config): RuleSet {
 		return RuleSet(ruleSetId, listOf(
 				ForEachOnRange(config),
-				SpreadOperator(config)
+				SpreadOperator(config),
+				UnnecessaryConversionTemporary(config)
 		))
 	}
 }
