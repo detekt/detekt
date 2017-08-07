@@ -2,9 +2,10 @@ language: java
 jdk: oraclejdk8
 script:
   - ./gradlew build
-  - ./gradlew detektCheck
   - ./gradlew shadow
   - java -jar ./detekt-cli/build/libs/detekt-cli-*-all.jar --help
+  - java -jar ./detekt-cli/build/libs/detekt-cli-*-all.jar -i . --baseline ./reports/baseline.xml -f ".*/test/.*,.*/resources/.*, .*/build/.*" -c ./detekt-cli/src/main/resources/default-detekt-config.yml
+  - ./gradlew detektCheck
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
