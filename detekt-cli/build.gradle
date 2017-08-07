@@ -6,10 +6,10 @@ configurations {
 }
 
 dependencies {
-	implementation project(':detekt-core')
-	implementation project(':detekt-rules')
-	implementation "com.beust:jcommander:$jcommanderVersion"
-	implementation "org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion"
+	compile project(':detekt-core')
+	compile project(':detekt-rules')
+	compile "com.beust:jcommander:$jcommanderVersion"
+	compile "org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion"
 	
 	testImplementation project(':detekt-test')
 	testRuntime "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
