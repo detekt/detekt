@@ -3,6 +3,8 @@ jdk: oraclejdk8
 script:
   - ./gradlew build
   - ./gradlew detektCheck
+  - ./gradlew shadow
+  - java -jar ./detekt-cli/build/libs/detekt-cli-*-all.jar --help
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
