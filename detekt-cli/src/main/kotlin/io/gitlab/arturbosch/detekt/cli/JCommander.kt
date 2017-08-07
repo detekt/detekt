@@ -19,7 +19,7 @@ fun parseArguments(args: Array<String>): Args {
 
 	if (cli.help) {
 		jCommander.usage()
-		System.exit(-1)
+		System.exit(0)
 	}
 
 	return cli
