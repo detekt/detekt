@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.rules.exceptions.CatchException
 import io.gitlab.arturbosch.detekt.rules.exceptions.CatchIndexOutOfBoundsException
 import io.gitlab.arturbosch.detekt.rules.exceptions.CatchNullPointerException
 import io.gitlab.arturbosch.detekt.rules.exceptions.CatchRuntimeException
+import io.gitlab.arturbosch.detekt.rules.exceptions.RethrowCaughtException
 import io.gitlab.arturbosch.detekt.rules.exceptions.ThrowError
 import io.gitlab.arturbosch.detekt.rules.exceptions.ThrowException
 import io.gitlab.arturbosch.detekt.rules.exceptions.ThrowNullPointerException
@@ -34,7 +35,8 @@ class ExceptionsProvider : RuleSetProvider {
 				ThrowException(config),
 				ThrowRuntimeException(config),
 				ThrowNullPointerException(config),
-				ThrowThrowable(config)
+				ThrowThrowable(config),
+				RethrowCaughtException(config)
 		))
 	}
 
