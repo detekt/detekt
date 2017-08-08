@@ -6,15 +6,15 @@ import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
-class RethrowCaughtExceptionSpec : SubjectSpek<RethrowCaughtException>({
-	subject { RethrowCaughtException() }
+class ThrowingNewInstanceOfSameExceptionSpek : SubjectSpek<ThrowingNewInstanceOfSameException>({
+	subject { ThrowingNewInstanceOfSameException() }
 
-	given("a caught exception rethrown") {
+	given("a catch block which rethrows a new instance of the caught exception") {
 		val code = """
 			function x() {
 				try {
 				} catch (e: IllegalStateException) {
-					throw e
+					throw IllegalStateException(e)
 				}
 			}
 		"""
@@ -25,12 +25,28 @@ class RethrowCaughtExceptionSpec : SubjectSpek<RethrowCaughtException>({
 		}
 	}
 
-	given("a new exception thrown") {
+	given("a catch block which rethrows a new instance of another exception") {
 		val code = """
 			function x() {
 				try {
 				} catch (e: IllegalStateException) {
 					throw IllegalArgumentException(e)
+				}
+			}
+		"""
+
+		it("should not report") {
+			val findings = subject.lint(code)
+			Assertions.assertThat(findings).hasSize(0)
+		}
+	}
+
+	given("a catch block which throws a new instance of the same exception type without wrapping the caught exception") {
+		val code = """
+			function x() {
+				try {
+				} catch (e: IllegalStateException) {
+					throw IllegalStateException()
 				}
 			}
 		"""
