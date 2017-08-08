@@ -17,6 +17,7 @@ import io.gitlab.arturbosch.detekt.rules.exceptions.ThrowException
 import io.gitlab.arturbosch.detekt.rules.exceptions.ThrowNullPointerException
 import io.gitlab.arturbosch.detekt.rules.exceptions.ThrowRuntimeException
 import io.gitlab.arturbosch.detekt.rules.exceptions.ThrowThrowable
+import io.gitlab.arturbosch.detekt.rules.exceptions.ThrowingNewInstanceOfSameException
 
 /**
  * @author Artur Bosch
@@ -40,7 +41,8 @@ class ExceptionsProvider : RuleSetProvider {
 				ThrowNullPointerException(config),
 				ThrowThrowable(config),
 				ReturnFromFinally(config),
-				RethrowCaughtException(config)
+				RethrowCaughtException(config),
+				ThrowingNewInstanceOfSameException(config)
 		))
 	}
 
