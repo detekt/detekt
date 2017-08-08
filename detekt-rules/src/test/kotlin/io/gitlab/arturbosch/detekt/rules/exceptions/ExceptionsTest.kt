@@ -69,6 +69,11 @@ class ExceptionsTest {
 		findOne { CatchRuntimeException() }
 	}
 
+	@Test
+	fun findThrowable() {
+		findOne { CatchThrowable() }
+	}
+
 	private fun findOne(block: () -> Rule) {
 		val rule = block()
 		rule.lint(file.text)
