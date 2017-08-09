@@ -12,226 +12,226 @@ import kotlin.test.assertFailsWith
 class MagicNumberSpec : Spek({
 
 	given("a float of 1") {
-		val code = "val myFloat = 1.0f"
+		val ktFile = compileContentForTest("val myFloat = 1.0f")
 
 		it("should not be reported by default") {
-			val findings = MagicNumber().lint(code)
+			val findings = MagicNumber().lint(ktFile)
 			assertThat(findings).hasSize(0)
 		}
 
 		it("should be reported when ignoredNumbers is empty") {
-			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(code)
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
 			assertThat(findings).hasSize(1)
 		}
 	}
 
 	given("a const float of 1") {
-		val code = "const val MY_FLOAT = 1.0f"
+		val ktFile = compileContentForTest("const val MY_FLOAT = 1.0f")
 
 		it("should not be reported by default") {
-			val findings = MagicNumber().lint(code)
+			val findings = MagicNumber().lint(ktFile)
 			assertThat(findings).hasSize(0)
 		}
 
 		it("should not be reported when ignoredNumbers is empty") {
-			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(code)
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
 			assertThat(findings).hasSize(0)
 		}
 	}
 
 	given("an integer of 1") {
-		val code = "val myInt = 1"
+		val ktFile = compileContentForTest("val myInt = 1")
 
 		it("should not be reported by default") {
-			val findings = MagicNumber().lint(code)
+			val findings = MagicNumber().lint(ktFile)
 			assertThat(findings).hasSize(0)
 		}
 
 		it("should be reported when ignoredNumbers is empty") {
-			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(code)
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
 			assertThat(findings).hasSize(1)
 		}
 	}
 
 	given("a const integer of 1") {
-		val code = "const val MY_INT = 1"
+		val ktFile = compileContentForTest("const val MY_INT = 1")
 
 		it("should not be reported by default") {
-			val findings = MagicNumber().lint(code)
+			val findings = MagicNumber().lint(ktFile)
 			assertThat(findings).hasSize(0)
 		}
 
 		it("should not be reported when ignoredNumbers is empty") {
-			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(code)
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
 			assertThat(findings).hasSize(0)
 		}
 	}
 
 	given("a long of 1") {
-		val code = "val myLong = 1L"
+		val ktFile = compileContentForTest("val myLong = 1L")
 
 		it("should not be reported by default") {
-			val findings = MagicNumber().lint(code)
+			val findings = MagicNumber().lint(ktFile)
 			assertThat(findings).hasSize(0)
 		}
 
 		it("should be reported when ignoredNumbers is empty") {
-			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(code)
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
 			assertThat(findings).hasSize(1)
 		}
 	}
 
 	given("a long of -1") {
-		val code = "val myLong = -1L"
+		val ktFile = compileContentForTest("val myLong = -1L")
 
 		it("should not be reported by default") {
-			val findings = MagicNumber().lint(code)
+			val findings = MagicNumber().lint(ktFile)
 			assertThat(findings).hasSize(0)
 		}
 
 		it("should be reported when ignoredNumbers is empty") {
-			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(code)
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
 			assertThat(findings).hasSize(1)
 		}
 	}
 
 	given("a long of -2") {
-		val code = "val myLong = -2L"
+		val ktFile = compileContentForTest("val myLong = -2L")
 
 		it("should be reported by default") {
-			val findings = MagicNumber().lint(code)
+			val findings = MagicNumber().lint(ktFile)
 			assertThat(findings).hasSize(1)
 		}
 
 		it("should be ignored when ignoredNumbers contains it verbatim") {
-			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "-2L"))).lint(code)
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "-2L"))).lint(ktFile)
 			assertThat(findings).isEmpty()
 		}
 
 		it("should be ignored when ignoredNumbers contains it as floating point") {
-			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "-2f"))).lint(code)
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "-2f"))).lint(ktFile)
 			assertThat(findings).isEmpty()
 		}
 
 		it("should not be ignored when ignoredNumbers contains 2 but not -2") {
-			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "1,2,3,-1,0"))).lint(code)
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "1,2,3,-1,0"))).lint(ktFile)
 			assertThat(findings).hasSize(1)
 		}
 	}
 
 	given("a const long of 1") {
-		val code = "const val MY_LONG = 1L"
+		val ktFile = compileContentForTest("const val MY_LONG = 1L")
 
 		it("should not be reported by default") {
-			val findings = MagicNumber().lint(code)
+			val findings = MagicNumber().lint(ktFile)
 			assertThat(findings).hasSize(0)
 		}
 
 		it("should not be reported when ignoredNumbers is empty") {
-			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(code)
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
 			assertThat(findings).hasSize(0)
 		}
 	}
 
 	given("a double of 1") {
-		val code = "val myDouble = 1.0"
+		val ktFile = compileContentForTest("val myDouble = 1.0")
 
 		it("should not be reported by default") {
-			val findings = MagicNumber().lint(code)
+			val findings = MagicNumber().lint(ktFile)
 			assertThat(findings).hasSize(0)
 		}
 
 		it("should be reported when ignoredNumbers is empty") {
-			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(code)
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
 			assertThat(findings).hasSize(1)
 		}
 	}
 
 	given("a const double of 1") {
-		val code = "const val MY_DOUBLE = 1.0"
+		val ktFile = compileContentForTest("const val MY_DOUBLE = 1.0")
 
 		it("should not be reported by default") {
-			val findings = MagicNumber().lint(code)
+			val findings = MagicNumber().lint(ktFile)
 			assertThat(findings).hasSize(0)
 		}
 
 		it("should not be reported when ignoredNumbers is empty") {
-			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(code)
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
 			assertThat(findings).hasSize(0)
 		}
 	}
 
 	given("a hex of 1") {
-		val code = "val myHex = 0x1"
+		val ktFile = compileContentForTest("val myHex = 0x1")
 
 		it("should not be reported by default") {
-			val findings = MagicNumber().lint(code)
+			val findings = MagicNumber().lint(ktFile)
 			assertThat(findings).hasSize(0)
 		}
 
 		it("should be reported when ignoredNumbers is empty") {
-			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(code)
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
 			assertThat(findings).hasSize(1)
 		}
 	}
 
 	given("a const hex of 1") {
-		val code = "const val MY_HEX = 0x1"
+		val ktFile = compileContentForTest("const val MY_HEX = 0x1")
 
 		it("should not be reported by default") {
-			val findings = MagicNumber().lint(code)
+			val findings = MagicNumber().lint(ktFile)
 			assertThat(findings).hasSize(0)
 		}
 
 		it("should not be reported when ignoredNumbers is empty") {
-			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(code)
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
 			assertThat(findings).hasSize(0)
 		}
 	}
 
 	given("an integer of 300") {
-		val code = "val myInt = 300"
+		val ktFile = compileContentForTest("val myInt = 300")
 
 		it("should not be reported when ignoredNumbers contains 300") {
-			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "300"))).lint(code)
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "300"))).lint(ktFile)
 			assertThat(findings).hasSize(0)
 		}
 
 		it("should not be reported when ignoredNumbers contains a floating point 300") {
-			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "300.0"))).lint(code)
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "300.0"))).lint(ktFile)
 			assertThat(findings).hasSize(0)
 		}
 	}
 
 	given("a binary literal") {
-		val code = "val myBinary = 0b01001"
+		val ktFile = compileContentForTest("val myBinary = 0b01001")
 
 		it("should not be reported") {
-			val findings = MagicNumber().lint(code)
+			val findings = MagicNumber().lint(ktFile)
 			assertThat(findings).hasSize(0)
 		}
 	}
 
 	given("an integer literal with underscores") {
-		val code = "val myInt = 100_000"
+		val ktFile = compileContentForTest("val myInt = 100_000")
 
 		it("should be reported by default") {
-			val findings = MagicNumber().lint(code)
+			val findings = MagicNumber().lint(ktFile)
 			assertThat(findings).hasSize(1)
 		}
 
 		it("should not be reported when ignored verbatim") {
-			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "100_000"))).lint(code)
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "100_000"))).lint(ktFile)
 			assertThat(findings).isEmpty()
 		}
 
 		it("should not be reported when ignored with different underscores") {
-			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "10_00_00"))).lint(code)
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "10_00_00"))).lint(ktFile)
 			assertThat(findings).isEmpty()
 		}
 
 		it("should not be reported when ignored without underscores") {
-			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "100000"))).lint(code)
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "100000"))).lint(ktFile)
 			assertThat(findings).isEmpty()
 		}
 	}
@@ -298,7 +298,7 @@ class MagicNumberSpec : Spek({
 	}
 
 	given("a float of 0.5") {
-		val code = "val test = 0.5f"
+		val code = compileContentForTest("val test = 0.5f")
 
 		it("should be reported by default") {
 			val findings = MagicNumber().lint(code)
