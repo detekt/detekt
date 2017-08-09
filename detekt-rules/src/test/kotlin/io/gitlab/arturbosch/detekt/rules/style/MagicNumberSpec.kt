@@ -372,4 +372,13 @@ class MagicNumberSpec : Spek({
 			assertThat(findings).isEmpty()
 		}
 	}
+
+	given("a property without number number") {
+
+		val code = "private var pair: Pair<String, Int>? = null"
+
+		it("should not lead to a crash #276") {
+			assertThat(MagicNumber().lint(code)).isEmpty()
+		}
+	}
 })
