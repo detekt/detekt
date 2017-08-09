@@ -11,6 +11,7 @@ enum class Case(val file: String) {
 	CasesFolder("/cases"),
 	Default("/cases/Default.kt"),
 	Empty("/cases/Empty.kt"),
+	EmptyDefaultConstructor("/cases/EmptyDefaultConstructor.kt"),
 	Exceptions("/cases/Exceptions.kt"),
 	IteratorImpl("/cases/IteratorImpl.kt"),
 	NamingConventions("/cases/NamingConventions.kt"),
