@@ -158,7 +158,10 @@ style:
     active: true
   MagicNumber:
     active: true
-    ignoredNumbers: '-1,0,1,2'
+    ignoreNumbers: '-1,0,1,2'
+    ignoreHashCodeFunction: false
+    ignorePropertyDeclaration: false
+    ignoreAnnotation: false
   WildcardImport:
     active: true
   SafeCast:
