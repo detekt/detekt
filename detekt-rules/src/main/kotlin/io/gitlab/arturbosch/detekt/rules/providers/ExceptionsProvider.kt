@@ -11,6 +11,7 @@ import io.gitlab.arturbosch.detekt.rules.exceptions.CatchIndexOutOfBoundsExcepti
 import io.gitlab.arturbosch.detekt.rules.exceptions.CatchNullPointerException
 import io.gitlab.arturbosch.detekt.rules.exceptions.CatchRuntimeException
 import io.gitlab.arturbosch.detekt.rules.exceptions.CatchThrowable
+import io.gitlab.arturbosch.detekt.rules.exceptions.IteratorNotThrowingNoSuchElementException
 import io.gitlab.arturbosch.detekt.rules.exceptions.RethrowCaughtException
 import io.gitlab.arturbosch.detekt.rules.exceptions.ReturnFromFinally
 import io.gitlab.arturbosch.detekt.rules.exceptions.ThrowError
@@ -44,7 +45,8 @@ class ExceptionsProvider : RuleSetProvider {
 				ThrowThrowable(config),
 				ReturnFromFinally(config),
 				RethrowCaughtException(config),
-				ThrowingNewInstanceOfSameException(config)
+				ThrowingNewInstanceOfSameException(config),
+				IteratorNotThrowingNoSuchElementException(config)
 		))
 	}
 
