@@ -3,8 +3,6 @@ build:
 
 style:
   MagicNumber:
-    active: true
-    ignoreNumbers: '-1,0,1,2'
     ignoreHashCodeFunction: true
     ignorePropertyDeclaration: true
     ignoreAnnotation: true
