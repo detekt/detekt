@@ -60,6 +60,11 @@ class ExceptionsTest {
 	}
 
 	@Test
+	fun findIllegalMonitorStateException() {
+		findOne { CatchIllegalMonitorStateException() }
+	}
+
+	@Test
 	fun findNPE() {
 		findOne { CatchNullPointerException() }
 	}
