@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.rules.bugs.LateinitUsage
 import io.gitlab.arturbosch.detekt.rules.bugs.UnreachableCode
 import io.gitlab.arturbosch.detekt.rules.bugs.UnsafeCallOnNullableType
 import io.gitlab.arturbosch.detekt.rules.bugs.UnsafeCast
+import io.gitlab.arturbosch.detekt.rules.bugs.WrongEqualsTypeParameter
 
 /**
  * @author Artur Bosch
@@ -22,6 +23,7 @@ class PotentialBugProvider : RuleSetProvider {
 		return RuleSet(ruleSetId, listOf(
 				DuplicateCaseInWhenExpression(config),
 				EqualsWithHashCodeExist(config),
+				WrongEqualsTypeParameter(config),
 				ExplicitGarbageCollectionCall(config),
 				LateinitUsage(config),
 				UnreachableCode(config),

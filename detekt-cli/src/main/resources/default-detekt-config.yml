@@ -40,6 +40,8 @@ potential-bugs:
     active: true
   EqualsWithHashCodeExist:
     active: true
+  WrongEqualsTypeParameter:
+    active: true
   ExplicitGarbageCollectionCall:
     active: true
   UnreachableCode:
