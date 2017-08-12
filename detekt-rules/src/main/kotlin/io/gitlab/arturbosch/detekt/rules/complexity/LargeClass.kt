@@ -24,7 +24,8 @@ import java.util.ArrayDeque
 /**
  * @author Artur Bosch
  */
-class LargeClass(config: Config = Config.empty, threshold: Int = 70) : ThresholdRule(config, threshold) {
+class LargeClass(config: Config = Config.empty,
+				 threshold: Int = DEFAULT_ACCEPTED_CLASS_LENGTH) : ThresholdRule(config, threshold) {
 
 	override val issue = Issue("LargeClass",
 			Severity.Maintainability,
@@ -108,4 +109,7 @@ class LargeClass(config: Config = Config.empty, threshold: Int = 70) : Threshold
 		}
 		super.visitCallExpression(expression)
 	}
+
 }
+
+private const val DEFAULT_ACCEPTED_CLASS_LENGTH = 70

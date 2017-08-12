@@ -14,7 +14,8 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 /**
  * @author Artur Bosch
  */
-class LongMethod(config: Config = Config.empty, threshold: Int = 20) : ThresholdRule(config, threshold) {
+class LongMethod(config: Config = Config.empty,
+				 threshold: Int = DEFAULT_ACCEPTED_METHOD_LENGTH) : ThresholdRule(config, threshold) {
 
 	override val issue = Issue("LongMethod",
 			Severity.Maintainability,
@@ -30,4 +31,7 @@ class LongMethod(config: Config = Config.empty, threshold: Int = 20) : Threshold
 		}
 		super.visitNamedFunction(function)
 	}
+
 }
+
+private const val DEFAULT_ACCEPTED_METHOD_LENGTH = 20

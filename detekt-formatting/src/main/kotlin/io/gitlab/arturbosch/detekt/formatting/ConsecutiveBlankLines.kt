@@ -19,7 +19,7 @@ class ConsecutiveBlankLines(config: Config) : TokenRule(config) {
 
 	override fun visitSpaces(space: PsiWhiteSpace) {
 		val parts = space.text.split("\n")
-		if (parts.size > 3) {
+		if (parts.size > ENOUGH_BLANK_LINES) {
 			report(CodeSmell(issue, Entity.from(space, offset = 2)))
 			withAutoCorrect {
 				(space as LeafPsiElement).replaceWithText("${parts.first()}\n\n${parts.last()}")
@@ -28,3 +28,5 @@ class ConsecutiveBlankLines(config: Config) : TokenRule(config) {
 	}
 
 }
+
+private const val ENOUGH_BLANK_LINES = 3

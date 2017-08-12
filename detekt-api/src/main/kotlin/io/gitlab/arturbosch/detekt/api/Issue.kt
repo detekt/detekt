@@ -29,6 +29,7 @@ enum class Severity {
 /**
  * Debt describes the estimated amount of work needed to fix a given issue.
  */
+@Suppress("MagicNumber")
 data class Debt(val days: Int = 0, val hours: Int = 0, val mins: Int = 0) {
 
 	init {

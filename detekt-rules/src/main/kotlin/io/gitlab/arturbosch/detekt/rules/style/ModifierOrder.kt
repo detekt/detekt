@@ -76,8 +76,8 @@ class ModifierOrder(config: Config = Config.empty) : Rule(config) {
 			val modifierString = sortedModifiers.map { it.text }
 					.joinToString(" ")
 
-			report(CodeSmell(Issue(javaClass.simpleName, Severity.Style, "Modifier order should be: " +
-					"$modifierString", Debt(mins = 1)), Entity.from(list)))
+			report(CodeSmell(Issue(javaClass.simpleName, Severity.Style,
+					"Modifier order should be: $modifierString", Debt(mins = 1)), Entity.from(list)))
 		}
 	}
 }

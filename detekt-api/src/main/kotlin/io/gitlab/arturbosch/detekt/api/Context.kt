@@ -45,7 +45,7 @@ open class DefaultContext : Context {
 		findings.forEach { report(it) }
 	}
 
-	override final fun clearFindings() {
+	final override fun clearFindings() {
 		_findings = mutableListOf()
 	}
 }

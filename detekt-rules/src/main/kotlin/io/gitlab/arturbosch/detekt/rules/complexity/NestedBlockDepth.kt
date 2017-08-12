@@ -21,7 +21,8 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
 /**
  * @author Artur Bosch
  */
-class NestedBlockDepth(config: Config = Config.empty, threshold: Int = 3) : ThresholdRule(config, threshold) {
+class NestedBlockDepth(config: Config = Config.empty,
+					   threshold: Int = DEFAULT_ACCEPTED_NESTING) : ThresholdRule(config, threshold) {
 
 	override val issue = Issue("NestedBlockDepth",
 			Severity.Maintainability,
@@ -36,10 +37,10 @@ class NestedBlockDepth(config: Config = Config.empty, threshold: Int = 3) : Thre
 	}
 
 	private class FunctionDepthVisitor(val threshold: Int) : DetektVisitor() {
+
 		internal var depth = 0
 		internal var maxDepth = 0
 		internal var isTooDeep = false
-
 		private fun inc() {
 			depth++
 			if (depth > threshold) {
@@ -96,5 +97,8 @@ class NestedBlockDepth(config: Config = Config.empty, threshold: Int = 3) : Thre
 				}
 			}
 		}
+
 	}
 }
+
+private const val DEFAULT_ACCEPTED_NESTING = 3
