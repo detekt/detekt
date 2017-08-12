@@ -3,7 +3,7 @@
 [![build status](https://travis-ci.org/arturbosch/detekt.svg?branch=master)](https://travis-ci.org/arturbosch/detekt)
 [![build status windows](https://ci.appveyor.com/api/projects/status/3q9g98vveiul7yut/branch/master?svg=true)](https://ci.appveyor.com/project/arturbosch/detekt)
 [ ![Download](https://api.bintray.com/packages/arturbosch/code-analysis/detekt/images/download.svg) ](https://bintray.com/arturbosch/code-analysis/detekt/_latestVersion)
-[![All Contributors](https://img.shields.io/badge/gradle_plugin-1.0.0.RC1-blue.svg?style=flat-square)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
+[![All Contributors](https://img.shields.io/badge/gradle_plugin-1.0.0.RC2-blue.svg?style=flat-square)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
 
 [![All Contributors](https://img.shields.io/badge/all_contributors-15-orange.svg?style=flat-square)](#contributors)
 [![androidweekly](https://img.shields.io/badge/androidweekly-259-orange.svg?style=flat-square)](http://androidweekly.net/issues/issue-259)
@@ -708,13 +708,13 @@ inside the report file.
 - [Olivier Lemasle](https://github.com/olivierlemasle) - NP-Bugfix
 - [Marvin Ramin](https://github.com/Mauin) - Bunch of rules, Active on Issues, refactorings, MultiRule
 - [Marc Prengemann](https://github.com/winterDroid) - Support for custom output formats, prototyped Rule-Context-Issue separation
-- [Sebastiano Poggi](https://github.com/rock3r) - Enhanced milestone report script
+- [Sebastiano Poggi](https://github.com/rock3r) - Enhanced milestone report script, Magic number fixes
 - [Ilya Tretyakov](https://github.com/jvilya) - Sonar runs should not auto correct formatting.
 - [Andrey T](https://github.com/mr-procrastinator) - Readme fix
 - [Niklas Baudy](https://github.com/vanniktech) - Active on Issues, Bug fix, documentation fixes, 
 detekt findings, bunch of rules
 - [Ivan Balaksha](https://github.com/tagantroy) - Rules: UnsafeCast, SpreadOperator, UnsafeCallOnNullableType, LabeledExpression
-- [schalks](https://github.com/schalkms) - Rules: SafeCast, OptionalAbstractKeyword, Project metrics 
+- [schalks](https://github.com/schalkms) - Bunch of rules, Project metrics 
 - [Anna Y](https://github.com/Nevvea7) - Readme fix
 
 #### Credits

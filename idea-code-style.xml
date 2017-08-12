@@ -1,7 +1,6 @@
 <code_scheme name="Default (1)">
     <option name="CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND" value="99"/>
     <option name="NAMES_COUNT_TO_USE_IMPORT_ON_DEMAND" value="99"/>
-    <option name="RIGHT_MARGIN" value="140"/>
     <option name="WRAP_WHEN_TYPING_REACHES_RIGHT_MARGIN" value="true"/>
     <GroovyCodeStyleSettings>
         <option name="CLASS_COUNT_TO_USE_IMPORT_ON_DEMAND" value="99"/>
