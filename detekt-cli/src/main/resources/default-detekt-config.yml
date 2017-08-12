@@ -42,6 +42,8 @@ potential-bugs:
     active: true
   WrongEqualsTypeParameter:
     active: true
+  EqualsNullCall:
+    active: true
   ExplicitGarbageCollectionCall:
     active: true
   UnreachableCode:
