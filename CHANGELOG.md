@@ -1,5 +1,19 @@
 # Detekt - Changelog
 
+#### RC2
+
+- Remove magic numbers and other detekt issues - [#295](https://github.com/arturbosch/detekt/pull/295)
+- Ignore based on checkstyle for MagicNumber - [#289](https://github.com/arturbosch/detekt/pull/289)
+- Revert implementation configuration in cli module - [#283](https://github.com/arturbosch/detekt/pull/283)
+- Run cli on ci - [#282](https://github.com/arturbosch/detekt/pull/282)
+- Variables/Properties declaring numbers shouldn't be flagged for MagicNumber - [#280](https://github.com/arturbosch/detekt/issues/280)
+- Added UnnecessaryConversionTemporary rule - [#279](https://github.com/arturbosch/detekt/pull/279)
+- More metrics - [#277](https://github.com/arturbosch/detekt/pull/277)
+- MagicNumber rule throw report for null initialized variable - [#276](https://github.com/arturbosch/detekt/issues/276)
+- Improve build setup - [#275](https://github.com/arturbosch/detekt/pull/275)
+
+See all issues at: [RC2](https://github.com/arturbosch/detekt/milestone/16)
+
 #### RC1
 
 - Allow to override the output name of output reports - [#272](https://github.com/arturbosch/detekt/pull/272)

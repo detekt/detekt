@@ -15,9 +15,12 @@
 
 ### When implementing new rules ...
 
-- ... do not forget to add the new rule to a `RuleSetProvider`
-- ... do not forget to add the new rule to the `default-detekt-config.yml` in the `detekt-cli-resources`
-- ... do not forget to write a description for the issue of the new rule
+- ... do not forget to add the new rule to a `RuleSetProvider`.
+- ... do not forget to add the new rule to the `default-detekt-config.yml` in the `detekt-cli-resources`.
+- ... do not forget to write a description for the issue of the new rule.
+- be aware that your PR will stay open for at least two days so that other users can give feedback.
+- make sure to set the new rule `active: false` in the default config. Brave users can test it on demand. 
+After some time and testing there is a chance this rule will become active on default.
 
 ### Release checklist
 
