@@ -14,7 +14,8 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 /**
  * @author Artur Bosch
  */
-class TooManyFunctions(config: Config = Config.empty, threshold: Int = 10) : ThresholdRule(config, threshold) {
+class TooManyFunctions(config: Config = Config.empty,
+					   threshold: Int = DEFAULT_ACCEPTED_FUNCTIONS_IN_FILE) : ThresholdRule(config, threshold) {
 
 	override val issue = Issue("TooManyFunctions",
 			Severity.Maintainability,
@@ -33,14 +34,15 @@ class TooManyFunctions(config: Config = Config.empty, threshold: Int = 10) : Thr
 	}
 
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-		classOrObject.getBody()?.declarations
+		val amountOfFunctions = classOrObject.getBody()?.declarations
 				?.filterIsInstance<KtNamedFunction>()
-				?.sumBy { 1 }
-				?.let {
-					if (it > threshold) {
-						report(ThresholdedCodeSmell(issue, Entity.from(classOrObject), Metric("SIZE", it, threshold)))
-					}
-				}
+				?.size
+
+		if (amountOfFunctions != null && amountOfFunctions > threshold) {
+			report(ThresholdedCodeSmell(issue, Entity.from(classOrObject),
+					Metric("SIZE", amountOfFunctions, threshold)))
+		}
+
 		super.visitClassOrObject(classOrObject)
 	}
 
@@ -51,3 +53,5 @@ class TooManyFunctions(config: Config = Config.empty, threshold: Int = 10) : Thr
 	}
 
 }
+
+private val DEFAULT_ACCEPTED_FUNCTIONS_IN_FILE = 10

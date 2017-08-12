@@ -20,12 +20,16 @@ fun KtElement.isSuppressedBy(id: String)
 private fun KtElement.findAnnotatedSuppressedParent(id: String): Boolean {
 	val parent = PsiTreeUtil.getParentOfType(this, KtAnnotated::class.java, true)
 
+	var suppressed = false
 	if (parent != null && parent !is KtFile) {
-		if (parent.isSuppressedBy(id)) return true
-		else return parent.findAnnotatedSuppressedParent(id)
+		if (parent.isSuppressedBy(id)) {
+			suppressed = true
+		} else {
+			suppressed = parent.findAnnotatedSuppressedParent(id)
+		}
 	}
 
-	return false
+	return suppressed
 }
 
 /**

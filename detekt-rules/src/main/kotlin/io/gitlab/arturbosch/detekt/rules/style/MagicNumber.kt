@@ -40,11 +40,16 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 	override fun visitConstantExpression(expression: KtConstantExpression) {
 		val parent = expression.parent
 
-		when {
-			ignorePropertyDeclaration && parent is KtProperty && !parent.isLocal -> return
-			ignoreAnnotation && expression.isPartOf(KtAnnotationEntry::class) -> return
-			ignoreHashCodeFunction && expression.isPartOfHashCode() -> return
-			parent.isConstantProperty() -> return
+		val isIgnored = when {
+			ignorePropertyDeclaration && parent is KtProperty && !parent.isLocal -> true
+			ignoreAnnotation && expression.isPartOf(KtAnnotationEntry::class) -> true
+			ignoreHashCodeFunction && expression.isPartOfHashCode() -> true
+			parent.isConstantProperty() -> true
+			else -> false
+		}
+
+		if (isIgnored) {
+			return
 		}
 
 		val rawNumber = if (parent.hasUnaryMinusPrefix()) {

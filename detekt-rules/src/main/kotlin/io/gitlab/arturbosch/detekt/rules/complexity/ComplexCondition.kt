@@ -17,10 +17,10 @@ import org.jetbrains.kotlin.psi.KtWhileExpression
 /**
  * @author Artur Bosch
  */
-class ComplexCondition(config: Config = Config.empty, threshold: Int = 3) : ThresholdRule(config, threshold) {
+class ComplexCondition(config: Config = Config.empty,
+					   threshold: Int = DEFAULT_ACCEPTED_NESTING) : ThresholdRule(config, threshold) {
 
-	override val issue = Issue("ComplexCondition",
-			Severity.Maintainability,
+	override val issue = Issue("ComplexCondition", Severity.Maintainability,
 			"Complex conditions should be simplified and extracted " +
 					"into well-named methods if necessary.")
 
@@ -74,3 +74,5 @@ class ComplexCondition(config: Config = Config.empty, threshold: Int = 3) : Thre
 		return count
 	}
 }
+
+private const val DEFAULT_ACCEPTED_NESTING = 3

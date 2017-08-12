@@ -26,8 +26,8 @@ class ComplexityReport : ConsoleReport() {
 		val cloc = detektion.getData(NUMBER_OF_COMMENT_LINES_KEY)
 		if (mcc != null && lloc != null && lloc > 0) {
 			val numberOfSmells = findings.entries.sumBy { it.value.size }
-			val smellPerThousandLines = numberOfSmells * 1000 / lloc
-			val mccPerThousandLines = mcc * 1000 / lloc
+			val smellPerThousandLines = numberOfSmells * ONE_THOUSAND / lloc
+			val mccPerThousandLines = mcc * ONE_THOUSAND / lloc
 			return with(StringBuilder()) {
 				append("Complexity Report:".format())
 				append("$loc lines of code (loc)".format(PREFIX))
@@ -45,4 +45,7 @@ class ComplexityReport : ConsoleReport() {
 		}
 	}
 
+	companion object {
+		const val ONE_THOUSAND = 1000
+	}
 }
