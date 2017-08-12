@@ -38,6 +38,8 @@ potential-bugs:
   active: true
   DuplicateCaseInWhenExpression:
     active: true
+  EqualsAlwaysReturnsTrueOrFalse:
+    active: true
   EqualsWithHashCodeExist:
     active: true
   WrongEqualsTypeParameter:

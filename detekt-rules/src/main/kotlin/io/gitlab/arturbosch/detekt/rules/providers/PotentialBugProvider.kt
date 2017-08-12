@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.rules.bugs.DuplicateCaseInWhenExpression
 import io.gitlab.arturbosch.detekt.rules.bugs.EqualsNullCall
+import io.gitlab.arturbosch.detekt.rules.bugs.EqualsAlwaysReturnsTrueOrFalse
 import io.gitlab.arturbosch.detekt.rules.bugs.EqualsWithHashCodeExist
 import io.gitlab.arturbosch.detekt.rules.bugs.ExplicitGarbageCollectionCall
 import io.gitlab.arturbosch.detekt.rules.bugs.LateinitUsage
@@ -23,6 +24,7 @@ class PotentialBugProvider : RuleSetProvider {
 	override fun instance(config: Config): RuleSet {
 		return RuleSet(ruleSetId, listOf(
 				DuplicateCaseInWhenExpression(config),
+				EqualsAlwaysReturnsTrueOrFalse(config),
 				EqualsWithHashCodeExist(config),
 				WrongEqualsTypeParameter(config),
 				EqualsNullCall(config),
