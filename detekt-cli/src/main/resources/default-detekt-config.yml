@@ -82,6 +82,8 @@ complexity:
     threshold: 3
   LabeledExpression:
     active: false
+  StringLiteralDuplication:
+    threshold: 2
 
 code-smell:
   active: true
