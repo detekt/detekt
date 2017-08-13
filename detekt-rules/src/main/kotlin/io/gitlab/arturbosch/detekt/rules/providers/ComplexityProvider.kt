@@ -11,6 +11,7 @@ import io.gitlab.arturbosch.detekt.rules.complexity.NestedBlockDepth
 import io.gitlab.arturbosch.detekt.rules.complexity.TooManyFunctions
 import io.gitlab.arturbosch.detekt.rules.complexity.ComplexCondition
 import io.gitlab.arturbosch.detekt.rules.complexity.LabeledExpression
+import io.gitlab.arturbosch.detekt.rules.complexity.StringLiteralDuplication
 
 /**
  * @author Artur Bosch
@@ -25,6 +26,7 @@ class ComplexityProvider : RuleSetProvider {
 				LongMethod(config),
 				LargeClass(config),
 				ComplexMethod(config),
+				StringLiteralDuplication(config),
 				NestedBlockDepth(config),
 				TooManyFunctions(config),
 				ComplexCondition(config),
