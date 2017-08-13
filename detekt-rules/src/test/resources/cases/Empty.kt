@@ -28,6 +28,8 @@ class Empty : Runnable {
 		} catch (e: Exception) {
 
 		} catch (e: Exception) {
+			//no-op
+		} catch (e: Exception) {
 			println()
 		} finally {
 
