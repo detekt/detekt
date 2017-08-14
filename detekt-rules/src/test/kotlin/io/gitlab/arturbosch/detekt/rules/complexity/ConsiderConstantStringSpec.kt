@@ -73,6 +73,29 @@ class ConsiderConstantStringSpec : SubjectSpek<ConsiderConstantString>({
 			assertOneCodeFindingWithConfig(code, config)
 		}
 	}
+
+
+
+	given("strings in annotations") {
+
+		val code = """
+		@Suppress("unused")
+		class A
+		@Suppress("unused")
+		class B
+		@Suppress("unused")
+		class C
+		""""
+
+		it("does not report strings in annotations") {
+			assertCodeFindings(code, 0)
+		}
+
+		it("reports strings in annotations according to config") {
+			val config = TestConfig(mapOf(ConsiderConstantString.IGNORE_ANNOTATION to "false"))
+			assertOneCodeFindingWithConfig(code, config)
+		}
+	}
 })
 
 private fun SubjectProviderDsl<ConsiderConstantString>.assertCodeFindings(code: String, expected: Int) {
