@@ -12,12 +12,15 @@ import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtLiteralStringTemplateEntry
 
-class StringLiteralDuplication(config: Config = Config.empty,
-							   threshold: Int = DEFAULT_DUPLICATION) : ThresholdRule(config, threshold) {
+class ConsiderConstantString(config: Config = Config.empty,
+							 threshold: Int = ConsiderConstantString.DEFAULT_DUPLICATION) : ThresholdRule(config, threshold) {
 
 	override val issue = Issue(javaClass.simpleName, Severity.Maintainability,
 			"Multiple occurrences of the same string literal within a single kt file detected.",
 			Debt.FIVE_MINS)
+
+	private val ignoreWhitespaces = valueOrDefault(IGNORE_WHITESPACES, true)
+	private val ignoreStringsRegex = Regex(valueOrDefault(IGNORE_STRINGS_REGEX, """^((", ")|(",")|(". ")|("."))$"""))
 
 	override fun visitKtFile(file: KtFile) {
 		val visitor = StringLiteralVisitor()
@@ -31,6 +34,7 @@ class StringLiteralDuplication(config: Config = Config.empty,
 	internal inner class StringLiteralVisitor : DetektVisitor() {
 
 		private var literals = HashMap<String, Int>()
+		private val pass: Unit = Unit
 
 		fun getLiteralsOverThreshold(): Map<String, Int> {
 			return literals.filterValues { it > threshold }
@@ -38,9 +42,21 @@ class StringLiteralDuplication(config: Config = Config.empty,
 
 		override fun visitLiteralStringTemplateEntry(entry: KtLiteralStringTemplateEntry) {
 			val text = entry.text
+			when {
+				ignoreWhitespaces && text.trim().isEmpty() -> pass
+				text.matches(ignoreStringsRegex) -> pass
+				else -> add(text)
+			}
+		}
+
+		private fun add(text: String) {
 			literals.put(text, literals.getOrDefault(text, 0) + 1)
 		}
 	}
-}
 
-private const val DEFAULT_DUPLICATION = 2
+	companion object {
+		const val DEFAULT_DUPLICATION = 2
+		const val IGNORE_WHITESPACES = "ignoreWhitespaces"
+		const val IGNORE_STRINGS_REGEX = "ignoreStringsRegex"
+	}
+}
