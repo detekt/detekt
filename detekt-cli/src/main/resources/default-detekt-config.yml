@@ -90,6 +90,7 @@ complexity:
     active: false
     threshold: 2
     ignoreWhitespaces: true
+    ignoreAnnotation: true
     ignoreStringsRegex: '^((", ")|(",")|(". ")|("."))$'
 
 code-smell:
