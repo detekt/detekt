@@ -13,6 +13,7 @@ internal class ReportGenerator(private val metric: Metric) {
 
 	companion object Factory {
 		fun create(detektion: Detektion): ReportGenerator = ReportGenerator(Metric(detektion))
+		const val ONE_THOUSAND = 1000
 	}
 
 	fun generate(): String? {
@@ -40,8 +41,8 @@ internal class ReportGenerator(private val metric: Metric) {
 			metric.cloc == null -> true
 			else -> {
 				numberOfSmells = metric.findings.sumBy { it.value.size }
-				smellPerThousandLines = numberOfSmells * 1000 / metric.lloc
-				mccPerThousandLines = metric.mcc * 1000 / metric.lloc
+				smellPerThousandLines = numberOfSmells * ONE_THOUSAND / metric.lloc
+				mccPerThousandLines = metric.mcc * ONE_THOUSAND / metric.lloc
 				commentSourceRatio = metric.cloc * 100 / metric.sloc
 				false
 			}
