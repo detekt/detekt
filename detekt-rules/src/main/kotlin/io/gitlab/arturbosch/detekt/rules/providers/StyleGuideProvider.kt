@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.providers
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.rules.style.EqualsNullCall
 import io.gitlab.arturbosch.detekt.rules.empty.EmptyDefaultConstructor
 import io.gitlab.arturbosch.detekt.rules.empty.EmptyInitBlock
 import io.gitlab.arturbosch.detekt.rules.empty.EmptySecondaryConstructorBlock
