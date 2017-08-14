@@ -11,11 +11,7 @@ class ComplexityReport : ConsoleReport() {
 	override val priority: Int = 20
 
 	override fun render(detektion: Detektion): String? {
-		val reportGenerator = ReportGenerator.create(detektion)
-		return reportGenerator.generate()
-	}
-
-	companion object {
-		const val ONE_THOUSAND = 1000
+		val complexityReportGenerator = ComplexityReportGenerator.create(detektion)
+		return complexityReportGenerator.generate()
 	}
 }

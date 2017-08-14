@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.core.processors.LOC_KEY
 import io.gitlab.arturbosch.detekt.core.processors.NUMBER_OF_COMMENT_LINES_KEY
 import io.gitlab.arturbosch.detekt.core.processors.SLOC_KEY
 
-internal class Metric(detektion: Detektion) {
+internal class ComplexityMetric(detektion: Detektion) {
 
 	val mcc = detektion.getData(COMPLEXITY_KEY)
 	val loc = detektion.getData(LOC_KEY)
