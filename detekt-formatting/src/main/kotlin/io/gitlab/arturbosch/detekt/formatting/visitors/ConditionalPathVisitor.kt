@@ -45,17 +45,13 @@ class ConditionalPathVisitor(private val block: (KtReturnExpression) -> Unit) : 
 	private fun KtExpression.isLastStatement(): Boolean {
 		val parent = parent
 		parent is KtBlockExpression
-		when (parent) {
-			is KtReturnExpression, is KtProperty -> return true
-			is KtDeclarationWithBody -> {
-				val block = parent.bodyExpression
-				return this == block
-			}
-			is KtBlockExpression -> parent.statements.lastOrNull()?.let {
-				return it == this
-			}
+		val isLast = when (parent) {
+			is KtReturnExpression, is KtProperty -> true
+			is KtDeclarationWithBody -> parent.bodyExpression == this
+			is KtBlockExpression -> parent.statements.lastOrNull()?.let { it == this } ?: false
+			else -> false
 		}
-		return false
+		return isLast
 	}
 
 	private fun KtExpression.checkIfReturnStatement() {

@@ -60,6 +60,11 @@ class ExceptionsTest {
 	}
 
 	@Test
+	fun findIllegalMonitorStateException() {
+		findOne { CatchIllegalMonitorStateException() }
+	}
+
+	@Test
 	fun findNPE() {
 		findOne { CatchNullPointerException() }
 	}
@@ -67,6 +72,11 @@ class ExceptionsTest {
 	@Test
 	fun findRuntimeException() {
 		findOne { CatchRuntimeException() }
+	}
+
+	@Test
+	fun findThrowable() {
+		findOne { CatchThrowable() }
 	}
 
 	private fun findOne(block: () -> Rule) {

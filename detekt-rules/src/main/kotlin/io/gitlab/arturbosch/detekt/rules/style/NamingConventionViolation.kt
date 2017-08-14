@@ -14,6 +14,7 @@ import org.jetbrains.kotlin.psi.KtEnumEntry
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
+import org.jetbrains.kotlin.psi.KtPackageDirective
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtVariableDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
@@ -33,6 +34,15 @@ class NamingConventionViolation(config: Config = Config.empty) : Rule(config) {
 	private val methodPattern = Regex(valueOrDefault(METHOD_PATTERN, "^[a-z$][a-zA-Z$0-9]*$"))
 	private val classPattern = Regex(valueOrDefault(CLASS_PATTERN, "^[A-Z$][a-zA-Z$]*$"))
 	private val enumEntryPattern = Regex(valueOrDefault(ENUM_PATTERN, "^[A-Z$][A-Z_$]*$"))
+	private val packagePattern = Regex(valueOrDefault(PACKAGE_PATTERN, "^[a-z]+(\\.[a-z][a-z0-9]*)*$"))
+
+	override fun visitPackageDirective(directive: KtPackageDirective, data: Void?): Void? {
+		val name = directive.qualifiedName
+		if (name.isNotEmpty() && !name.matches(packagePattern)) {
+			report(CodeSmell(issue, Entity.from(directive)))
+		}
+		return null
+	}
 
 	override fun visitNamedDeclaration(declaration: KtNamedDeclaration) {
 		if (declaration.nameAsSafeName.isSpecial) return
@@ -84,6 +94,7 @@ class NamingConventionViolation(config: Config = Config.empty) : Rule(config) {
 		const val METHOD_PATTERN = "methodPattern"
 		const val CLASS_PATTERN = "classPattern"
 		const val ENUM_PATTERN = "enumEntryPattern"
+		const val PACKAGE_PATTERN = "packagePattern"
 	}
 
 }

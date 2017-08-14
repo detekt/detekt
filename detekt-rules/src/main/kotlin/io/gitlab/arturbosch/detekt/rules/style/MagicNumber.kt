@@ -7,12 +7,16 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.isPartOf
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtConstantExpression
+import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
 import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 import java.util.Locale
 
 class MagicNumber(config: Config = Config.empty) : Rule(config) {
@@ -23,16 +27,28 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 					"It's better to declare such numbers as constants and give them a proper name. " +
 					"By default, -1, 0, 1, and 2 are not considered to be magic numbers.", Debt.TEN_MINS)
 
-	private val ignoredNumbers = valueOrDefault(IGNORED_NUMBERS, "-1,0,1,2")
+	private val ignoredNumbers = valueOrDefault(IGNORE_NUMBERS, "-1,0,1,2")
 			.split(",")
 			.filterNot { it.isEmpty() }
 			.map { parseAsDouble(it) }
 			.sorted()
 
+	private val ignoreHashCodeFunction = valueOrDefault(IGNORE_HASH_CODE, false)
+	private val ignoreAnnotation = valueOrDefault(IGNORE_ANNOTATION, false)
+	private val ignorePropertyDeclaration = valueOrDefault(IGNORE_PROPERTY_DECLARATION, false)
+
 	override fun visitConstantExpression(expression: KtConstantExpression) {
 		val parent = expression.parent
 
-		if (parent.isConstantProperty()) {
+		val isIgnored = when {
+			ignorePropertyDeclaration && parent is KtProperty && !parent.isLocal -> true
+			ignoreAnnotation && expression.isPartOf(KtAnnotationEntry::class) -> true
+			ignoreHashCodeFunction && expression.isPartOfHashCode() -> true
+			parent.isConstantProperty() -> true
+			else -> false
+		}
+
+		if (isIgnored) {
 			return
 		}
 
@@ -48,21 +64,26 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 		}
 	}
 
-	private fun PsiElement.isConstantProperty(): Boolean {
-		return this is KtProperty && this.hasModifier(KtTokens.CONST_KEYWORD)
+	private fun KtConstantExpression.isPartOfHashCode(): Boolean {
+		val containingFunction = getNonStrictParentOfType(KtNamedFunction::class.java)
+		val name = containingFunction?.name
+		val returnType = containingFunction?.typeReference?.node?.text
+		return nameIsHashCode(name) && returnTypeIsInt(returnType)
 	}
 
-	private fun PsiElement.hasUnaryMinusPrefix(): Boolean {
-		return this is KtPrefixExpression
-				&& (this.firstChild as? KtOperationReferenceExpression)?.operationSignTokenType == KtTokens.MINUS
-	}
+	private fun returnTypeIsInt(returnType: String?) = returnType != null && returnType == "Int"
+	private fun nameIsHashCode(name: String?) = name != null && name == "hashCode"
 
-	private fun parseAsDoubleOrNull(rawToken: String?): Double? {
-		try {
-			return rawToken?.let { parseAsDouble(it) }
-		} catch (e: NumberFormatException) {
-			return null
-		}
+	private fun PsiElement.isConstantProperty(): Boolean =
+			this is KtProperty && this.hasModifier(KtTokens.CONST_KEYWORD)
+
+	private fun PsiElement.hasUnaryMinusPrefix(): Boolean = this is KtPrefixExpression
+			&& (this.firstChild as? KtOperationReferenceExpression)?.operationSignTokenType == KtTokens.MINUS
+
+	private fun parseAsDoubleOrNull(rawToken: String?): Double? = try {
+		rawToken?.let { parseAsDouble(it) }
+	} catch (e: NumberFormatException) {
+		null
 	}
 
 	private fun parseAsDouble(rawNumber: String): Double {
@@ -86,7 +107,10 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 	}
 
 	companion object {
-		const val IGNORED_NUMBERS = "ignoredNumbers"
+		const val IGNORE_NUMBERS = "ignoreNumbers"
+		const val IGNORE_HASH_CODE = "ignoreHashCodeFunction"
+		const val IGNORE_PROPERTY_DECLARATION = "ignorePropertyDeclaration"
+		const val IGNORE_ANNOTATION = "ignoreAnnotation"
 
 		private const val HEX_RADIX = 16
 	}

@@ -1,2 +1,8 @@
 build:
   failThreshold: 1
+
+style:
+  MagicNumber:
+    ignoreHashCodeFunction: true
+    ignorePropertyDeclaration: true
+    ignoreAnnotation: true

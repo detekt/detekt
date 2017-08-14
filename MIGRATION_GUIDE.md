@@ -1,5 +1,10 @@
 # Migration Guide
 
+### RC1 -> RC2
+
+- Make sure to upgrade! RC2 fixes a number of MagicNumber's issues 
+and adds properties to make this rule more configurable.
+
 ### M13.1 -> RC1
 
 - Attention: new `MagicNumber` and `ReturnCount` rules can let your CI fail

@@ -22,10 +22,10 @@ class TooManyFunctionsTwo(config: Config) : Rule(config) {
 
 	override fun visitFile(file: PsiFile) {
 		super.visitFile(file)
-		if (amount > 10) {
+		if (amount > THRESHOLD) {
 			report(CodeSmell(issue,
 					entity = Entity.from(file),
-					metrics = listOf(Metric(type = "SIZE", value = amount, threshold = 10)),
+					metrics = listOf(Metric(type = "SIZE", value = amount, threshold = THRESHOLD)),
 					references = listOf())
 			)
 		}
