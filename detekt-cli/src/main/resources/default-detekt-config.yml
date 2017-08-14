@@ -39,13 +39,11 @@ potential-bugs:
   DuplicateCaseInWhenExpression:
     active: true
   EqualsAlwaysReturnsTrueOrFalse:
-    active: true
+    active: false
   EqualsWithHashCodeExist:
     active: true
   WrongEqualsTypeParameter:
-    active: true
-  EqualsNullCall:
-    active: true
+    active: false
   ExplicitGarbageCollectionCall:
     active: true
   UnreachableCode:
@@ -154,6 +152,8 @@ style:
     active: true
   OptionalAbstractKeyword:
     active: true
+  EqualsNullCall:
+    active: false
   ForbiddenComment:
     active: true
     values: 'TODO:,FIXME:,STOPSHIP:'

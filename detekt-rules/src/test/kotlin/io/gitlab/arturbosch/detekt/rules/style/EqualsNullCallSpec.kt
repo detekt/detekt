@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.rules.bugs
+package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.lint
