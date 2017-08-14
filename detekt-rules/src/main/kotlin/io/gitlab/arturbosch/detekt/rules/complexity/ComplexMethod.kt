@@ -19,7 +19,8 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
 /**
  * @author Artur Bosch
  */
-class ComplexMethod(config: Config = Config.empty, threshold: Int = 10) : ThresholdRule(config, threshold) {
+class ComplexMethod(config: Config = Config.empty,
+					threshold: Int = DEFAULT_ACCEPTED_METHOD_COMPLEXITY) : ThresholdRule(config, threshold) {
 
 	override val issue = Issue("ComplexMethod",
 			Severity.Maintainability,
@@ -79,5 +80,8 @@ class ComplexMethod(config: Config = Config.empty, threshold: Int = 10) : Thresh
 			}
 			super.visitCallExpression(expression)
 		}
+
 	}
 }
+
+private const val DEFAULT_ACCEPTED_METHOD_COMPLEXITY = 10

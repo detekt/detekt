@@ -16,6 +16,8 @@ fun Rule.lint(path: Path): List<Finding> {
 	return findingsAfterVisit(ktFile)
 }
 
+fun Rule.lint(ktFile: KtFile) = findingsAfterVisit(ktFile)
+
 private fun BaseRule.findingsAfterVisit(ktFile: KtFile): List<Finding> {
 	this.visitFile(ktFile)
 	return this.findings

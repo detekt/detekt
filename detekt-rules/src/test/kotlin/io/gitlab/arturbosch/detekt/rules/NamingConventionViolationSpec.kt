@@ -47,6 +47,26 @@ class NamingConventionTest {
 	}
 
 	@Test
+	fun upperCasePackageDirectiveName() {
+		assertThat(NamingConventionViolation().lint("package FOO.BAR")).hasSize(1)
+	}
+
+	@Test
+	fun upperCamelCasePackageDirectiveName() {
+		assertThat(NamingConventionViolation().lint("package Foo.Bar")).hasSize(1)
+	}
+
+	@Test
+	fun camelCasePackageDirectiveName() {
+		assertThat(NamingConventionViolation().lint("package fOO.bAR")).hasSize(1)
+	}
+
+	@Test
+	fun correctPackageDirectiveName() {
+		assertThat(NamingConventionViolation().lint("package foo.bar")).hasSize(0)
+	}
+
+	@Test
 	fun uppercaseAndUnderscoreAreAllowedLowercaseNotForEnumEntries() {
 		val lint = NamingConventionViolation().lint(
 				"""

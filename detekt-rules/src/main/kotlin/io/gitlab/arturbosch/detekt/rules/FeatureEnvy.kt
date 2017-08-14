@@ -25,9 +25,9 @@ class FeatureEnvy(config: Config = Config.empty) : Rule(config) {
 	override val issue = Issue(javaClass.simpleName, Severity.Style, "")
 
 	private val factor = FeatureEnvyFactor(
-			valueOrDefault("threshold", 0.5),
-			valueOrDefault("base", 0.5),
-			valueOrDefault("weight", 0.45))
+			valueOrDefault("threshold", DEFAULT_FEF_THRESHOLD),
+			valueOrDefault("base", DEFAULT_FEF_BASE_MULTIPLIER),
+			valueOrDefault("weight", DEFAULT_FEF_WEIGHT_MULTIPLIER))
 
 	override fun visitClass(klass: KtClass) {
 		val properties = klass.getProperties()
@@ -75,7 +75,7 @@ class FeatureEnvy(config: Config = Config.empty) : Rule(config) {
 				println("factor: $value")
 				if (threshold < value) {
 					report(CodeSmellWithReferenceAndMetric(issue, entityOfFunction,
-							Entity.from(ktElement), Metric("FeatureEnvyFactor", value, threshold, 100)))
+							Entity.from(ktElement), Metric("FeatureEnvyFactor", value, threshold)))
 				}
 			}
 		}
@@ -89,9 +89,9 @@ class FeatureEnvy(config: Config = Config.empty) : Rule(config) {
 
 	}
 
-	inner class FeatureEnvyFactor(val threshold: Double = 0.5,
-								  private val base: Double = 0.5,
-								  private val weight: Double = 0.45) {
+	inner class FeatureEnvyFactor(val threshold: Double = DEFAULT_FEF_BASE_MULTIPLIER,
+								  private val base: Double = DEFAULT_FEF_BASE_MULTIPLIER,
+								  private val weight: Double = DEFAULT_FEF_WEIGHT_MULTIPLIER) {
 
 		internal fun calc(entityCalls: Int, allCalls: Int): Double {
 			if (allCalls == 0 || allCalls == 1) {
@@ -99,5 +99,11 @@ class FeatureEnvy(config: Config = Config.empty) : Rule(config) {
 			}
 			return weight * (entityCalls / allCalls) + (1 - weight) * (1 - Math.pow(base, entityCalls.toDouble()))
 		}
+	}
+
+	companion object {
+		const val DEFAULT_FEF_THRESHOLD = 0.5
+		const val DEFAULT_FEF_BASE_MULTIPLIER = 0.5
+		const val DEFAULT_FEF_WEIGHT_MULTIPLIER = 0.45
 	}
 }

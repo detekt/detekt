@@ -11,8 +11,8 @@ class ComplexityReport : ConsoleReport() {
 	override val priority: Int = 20
 
 	override fun render(detektion: Detektion): String? {
-		val reportGenerator = ReportGenerator.create(detektion)
-		return reportGenerator.generate()
+      val reportGenerator = ReportGenerator.create(detektion)
+		  return reportGenerator.generate()
 	}
 
 }

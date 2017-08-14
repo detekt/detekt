@@ -24,7 +24,7 @@ class EqualsWithHashCodeExist(config: Config = Config.empty) : Rule(config) {
 					"Two equal objects must produce the same hashcode. When inheriting equals or hashcode, " +
 					"override the inherited and call the super method for clarification.")
 
-	private val queue = ArrayDeque<ViolationHolder>(5)
+	private val queue = ArrayDeque<ViolationHolder>(MAXIMUM_EXPECTED_NESTED_CLASSES)
 
 	private data class ViolationHolder(var equals: Boolean = false, var hashCode: Boolean = false) {
 		internal fun violation() = equals && !hashCode || !equals && hashCode
@@ -54,3 +54,5 @@ class EqualsWithHashCodeExist(config: Config = Config.empty) : Rule(config) {
 	}
 
 }
+
+private const val MAXIMUM_EXPECTED_NESTED_CLASSES = 5

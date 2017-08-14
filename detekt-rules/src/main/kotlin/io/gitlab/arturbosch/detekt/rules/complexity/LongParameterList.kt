@@ -14,7 +14,8 @@ import org.jetbrains.kotlin.psi.KtParameterList
 /**
  * @author Artur Bosch
  */
-class LongParameterList(config: Config = Config.empty, threshold: Int = 5) : ThresholdRule(config, threshold) {
+class LongParameterList(config: Config = Config.empty,
+						threshold: Int = DEFAULT_ACCEPTED_PARAMETER_LENGTH) : ThresholdRule(config, threshold) {
 
 	override val issue = Issue("LongParameterList",
 			Severity.Maintainability,
@@ -34,3 +35,5 @@ class LongParameterList(config: Config = Config.empty, threshold: Int = 5) : Thr
 		}
 	}
 }
+
+private const val DEFAULT_ACCEPTED_PARAMETER_LENGTH = 5
