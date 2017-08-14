@@ -30,14 +30,14 @@ abstract class EmptyRule(config: Config) : Rule(config) {
 			if (it.isEmpty() && !blockExpression.hasCommentInside()) report(CodeSmell(issue, Entity.from(this)))
 		}
 	}
-}
 
-internal fun KtBlockExpression.hasCommentInside(): Boolean {
-	val commentKey = Key<Boolean>("comment")
-	this.acceptChildren(object : DetektVisitor() {
-		override fun visitComment(comment: PsiComment?) {
-			if (comment != null) putUserData(commentKey, true)
-		}
-	})
-	return getUserData(commentKey) ?: false
+	private fun KtBlockExpression.hasCommentInside(): Boolean {
+		val commentKey = Key<Boolean>("comment")
+		this.acceptChildren(object : DetektVisitor() {
+			override fun visitComment(comment: PsiComment?) {
+				if (comment != null) putUserData(commentKey, true)
+			}
+		})
+		return getUserData(commentKey) ?: false
+	}
 }
