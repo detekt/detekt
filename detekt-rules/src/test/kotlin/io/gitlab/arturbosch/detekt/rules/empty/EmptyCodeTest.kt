@@ -65,6 +65,24 @@ class EmptyCodeTest {
 		test { EmptyWhenBlock(Config.empty) }
 	}
 
+	@Test
+	fun findsEmptyInit() {
+		test { EmptyInitBlock(Config.empty) }
+	}
+
+	@Test
+	fun findsOneEmptySecondaryConstructor() {
+		test { EmptySecondaryConstructorBlock(Config.empty) }
+	}
+
+	@Test
+	fun findsEmptyDefaultConstructor() {
+		val rule = EmptyDefaultConstructor(Config.empty)
+		val text = compileForTest(Case.EmptyDefaultConstructor.path()).text
+		rule.lint(text)
+		assertThat(rule.findings).hasSize(2)
+	}
+
 	private fun test(block: () -> Rule) {
 		val rule = block()
 		rule.lint(file.text)

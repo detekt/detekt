@@ -6,6 +6,14 @@ package cases
  */
 class Empty : Runnable {
 
+	init {
+
+	}
+
+	constructor() {
+
+	}
+
 	override fun run() {
 
 	}
