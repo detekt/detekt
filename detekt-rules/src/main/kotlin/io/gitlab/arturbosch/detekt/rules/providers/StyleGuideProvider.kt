@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.providers
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.rules.style.EqualsNullCall
 import io.gitlab.arturbosch.detekt.rules.style.FileParsingRule
 import io.gitlab.arturbosch.detekt.rules.style.ForbiddenComment
 import io.gitlab.arturbosch.detekt.rules.style.ForbiddenImport
@@ -28,6 +29,7 @@ class StyleGuideProvider : RuleSetProvider {
 				NewLineAtEndOfFile(config),
 				WildcardImport(config),
 				FileParsingRule(config),
+				EqualsNullCall(config),
 				ForbiddenComment(config),
 				ForbiddenImport(config),
 				NamingConventionViolation(config),
