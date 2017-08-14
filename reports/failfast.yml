@@ -6,3 +6,4 @@ style:
     ignoreHashCodeFunction: true
     ignorePropertyDeclaration: true
     ignoreAnnotation: true
+    ignoreNumbers: '-1,0,1,2,100,1000'
