@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.extensions
 import com.beust.jcommander.JCommander
 import io.gitlab.arturbosch.detekt.cli.Args
 import org.assertj.core.api.Assertions
-import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
@@ -36,9 +35,3 @@ internal class DetektExtensionTest : Spek({
 
 	}
 })
-
-// TODO remove after https://youtrack.jetbrains.com/issue/KT-16497
-internal fun Project.fallbackArguments() = listOf(
-		INPUT_PARAMETER, projectDir.absolutePath,
-		CONFIG_RESOURCE_PARAMETER, DEFAULT_DETEKT_CONFIG_RESOURCE,
-		FILTERS_PARAMETER, DEFAULT_PATH_EXCLUDES)
