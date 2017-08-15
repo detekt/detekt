@@ -53,6 +53,6 @@ class BuildFailureReport : ConsoleReport() {
 	}
 }
 
-fun Int.reached(amount: Int): Boolean = !(this == 0 && amount == 0) && this != -1 && this <= amount
+internal fun Int.reached(amount: Int): Boolean = !(this == 0 && amount == 0) && this != -1 && this <= amount
 
 class BuildFailure(override val message: String?) : RuntimeException(message)
