@@ -12,13 +12,13 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 /**
  * @author Artur Bosch
  */
-class CommentOverPrivateMethod(config: Config = Config.empty) : Rule(config) {
+class CommentOverPrivateFunction(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue("CommentOverPrivateMethod",
+	override val issue = Issue("CommentOverPrivateFunction",
 			Severity.Maintainability,
-			"Comments for private methods should be avoided. " +
-					"Prefer giving the method an expressive name. " +
-					"Split it up in smaller, self-explaining methods if necessary.")
+			"Comments for private functions should be avoided. " +
+					"Prefer giving the function an expressive name. " +
+					"Split it up in smaller, self-explaining functions if necessary.")
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		val modifierList = function.modifierList
