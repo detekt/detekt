@@ -25,7 +25,7 @@ internal class ComplexityReportGenerator(private val complexityMetric: Complexit
 			append("${complexityMetric.cloc} comment lines of code (cloc)".format(PREFIX))
 			append("${complexityMetric.mcc} McCabe complexity (mcc)".format(PREFIX))
 			append("$numberOfSmells number of total code smells".format(PREFIX))
-			append("$commentSourceRatio comment source ratio".format(PREFIX))
+			append("$commentSourceRatio % comment source ratio".format(PREFIX))
 			append("$mccPerThousandLines mcc per 1000 lloc".format(PREFIX))
 			append("$smellPerThousandLines code smells per 1000 lloc".format(PREFIX))
 			toString()
