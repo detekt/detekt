@@ -13,7 +13,7 @@ import org.jetbrains.kotlin.psi.KtFile
 
 class FileParsingRule(val config: Config = Config.empty) : MultiRule() {
 
-	private val rules = listOf(MaxLineLength(config))
+	override val rules = listOf(MaxLineLength(config))
 
 	override fun visitKtFile(file: KtFile) {
 		val lines = file.text.splitToSequence("\n")
