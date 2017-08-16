@@ -16,7 +16,7 @@ class CommentOverPrivateProperty(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue("CommentOverPrivateProperty",
 			Severity.Maintainability,
-			"Private properties should be named such that they explain themselves.")
+			"Private properties should be named such that they explain themselves even without a comment.")
 
 	override fun visitProperty(property: KtProperty) {
 		val modifierList = property.modifierList

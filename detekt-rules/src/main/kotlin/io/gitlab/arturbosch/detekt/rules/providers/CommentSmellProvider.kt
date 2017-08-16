@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.providers
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.rules.documentation.CommentOverPrivateMethod
+import io.gitlab.arturbosch.detekt.rules.documentation.CommentOverPrivateFunction
 import io.gitlab.arturbosch.detekt.rules.documentation.CommentOverPrivateProperty
 import io.gitlab.arturbosch.detekt.rules.documentation.UndocumentedPublicClass
 import io.gitlab.arturbosch.detekt.rules.documentation.UndocumentedPublicFunction
@@ -17,7 +17,7 @@ class CommentSmellProvider : RuleSetProvider {
 
 	override fun instance(config: Config): RuleSet {
 		return RuleSet(ruleSetId, listOf(
-				CommentOverPrivateMethod(config),
+				CommentOverPrivateFunction(config),
 				CommentOverPrivateProperty(config),
 				UndocumentedPublicClass(config),
 				UndocumentedPublicFunction(config)
