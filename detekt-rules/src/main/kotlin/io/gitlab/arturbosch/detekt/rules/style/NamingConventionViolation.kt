@@ -35,6 +35,9 @@ class NamingConventionViolation(config: Config = Config.empty) : Rule(config) {
 	private val classPattern = Regex(valueOrDefault(CLASS_PATTERN, "^[A-Z$][a-zA-Z$]*$"))
 	private val enumEntryPattern = Regex(valueOrDefault(ENUM_PATTERN, "^[A-Z$][a-zA-Z_$]*$"))
 	private val packagePattern = Regex(valueOrDefault(PACKAGE_PATTERN, "^[a-z]+(\\.[a-z][a-z0-9]*)*$"))
+	private val minimumVariableNameLength = valueOrDefault(MINIMUM_VARIABLE_NAME_LENGTH, DEFAULT_MINIMUM_VARIABLE_NAME_LENGTH)
+	private val maximumVariableNameLength = valueOrDefault(MAXIMUM_VARIABLE_NAME_LENGTH, DEFAULT_MAXIMUM_VARIABLE_NAME_LENGTH)
+	private val minimumFunctionNameLength = valueOrDefault(MINIMUM_FUNCTION_NAME_LENGTH, DEFAULT_MINIMUM_FUNCTION_NAME_LENGTH)
 
 	override fun visitPackageDirective(directive: KtPackageDirective, data: Void?): Void? {
 		val name = directive.qualifiedName
@@ -50,25 +53,43 @@ class NamingConventionViolation(config: Config = Config.empty) : Rule(config) {
 			val name = declaration.nameIdentifier?.text ?: SpecialNames.NO_NAME_PROVIDED.asString()
 			when (declaration) {
 				is KtVariableDeclaration -> handleVariableNamings(declaration, name)
-				is KtNamedFunction -> if (!name.matches(methodPattern)) add(declaration)
-				is KtEnumEntry -> if (!name.matches(enumEntryPattern)) add(declaration)
-				is KtClassOrObject -> if (!name.matches(classPattern)) add(declaration)
+				is KtNamedFunction -> handleFunction(declaration, name)
+				is KtEnumEntry -> if (!name.matches(enumEntryPattern)) add(declaration, "Enum entry names should match the pattern: $enumEntryPattern")
+				is KtClassOrObject -> if (!name.matches(classPattern)) add(declaration, "$name should match the naming pattern: $classPattern")
 			}
 		}
 		super.visitNamedDeclaration(declaration)
 	}
 
+	private fun handleFunction(declaration: KtNamedDeclaration, name: String) {
+		if (name.length < minimumFunctionNameLength) {
+			add(declaration, "$name does not meet the minimum function name length of $minimumFunctionNameLength")
+		}
+
+		if (!name.matches(methodPattern)) {
+			add(declaration, "Function names should match the naming pattern: $methodPattern")
+		}
+	}
+
 	private fun handleVariableNamings(declaration: KtVariableDeclaration, name: String) {
+		if (name.length < minimumVariableNameLength) {
+			add(declaration, "$name does not meet the minimum variable name length of $minimumVariableNameLength.")
+		}
+
+		if (name.length > maximumVariableNameLength) {
+			add(declaration, "$name exceeds the maximum variable name length of $maximumVariableNameLength ($name is ${name.length} characters).")
+		}
+
 		if (declaration.hasConstModifier()) {
 			if (!name.matches(constantPattern)) {
-				add(declaration)
+				add(declaration, "Constants should match the naming pattern: $constantPattern")
 			}
 		} else if (declaration.withinObjectDeclaration() || declaration.isTopLevel()) {
 			if (!name.matches(constantPattern) && !name.matches(variablePattern)) {
 				add(declaration)
 			}
 		} else if (!name.matches(variablePattern)) {
-			add(declaration)
+			add(declaration, "Variables should match the naming pattern: $variablePattern")
 		}
 	}
 
@@ -81,8 +102,9 @@ class NamingConventionViolation(config: Config = Config.empty) : Rule(config) {
 		return this.getNonStrictParentOfType(KtObjectDeclaration::class.java) != null
 	}
 
-	private fun add(declaration: KtNamedDeclaration) {
-		report(CodeSmell(issue, Entity.from(declaration)))
+	private fun add(declaration: KtNamedDeclaration, description: String? = null) {
+		val issueToReport = if (description == null) issue else issue.copy(description = description)
+		report(CodeSmell(issueToReport, Entity.from(declaration)))
 	}
 
 	private fun KtVariableDeclaration.isTopLevel(): Boolean = this is KtProperty && this.isTopLevel
@@ -95,6 +117,13 @@ class NamingConventionViolation(config: Config = Config.empty) : Rule(config) {
 		const val CLASS_PATTERN = "classPattern"
 		const val ENUM_PATTERN = "enumEntryPattern"
 		const val PACKAGE_PATTERN = "packagePattern"
+		const val MINIMUM_VARIABLE_NAME_LENGTH = "minimumVariableNameLength"
+		const val MAXIMUM_VARIABLE_NAME_LENGTH = "maximumVariableNameLength"
+		const val MINIMUM_FUNCTION_NAME_LENGTH = "minimumFunctionNameLength"
+
+		private const val DEFAULT_MINIMUM_VARIABLE_NAME_LENGTH = 3
+		private const val DEFAULT_MAXIMUM_VARIABLE_NAME_LENGTH = 17
+		private const val DEFAULT_MINIMUM_FUNCTION_NAME_LENGTH = 3
 	}
 
 }
