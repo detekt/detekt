@@ -168,6 +168,7 @@ object XmlEscape {
 /**
  * This class initializes the XML10_SYMBOLS structure.
  */
+@Suppress("ALL")
 private object Xml10EscapeSymbolsInitializer {
 
 	internal class XmlCodepointValidator {

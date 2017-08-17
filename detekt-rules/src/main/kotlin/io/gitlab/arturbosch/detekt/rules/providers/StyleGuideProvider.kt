@@ -12,7 +12,7 @@ import io.gitlab.arturbosch.detekt.rules.style.ForbiddenComment
 import io.gitlab.arturbosch.detekt.rules.style.ForbiddenImport
 import io.gitlab.arturbosch.detekt.rules.style.MagicNumber
 import io.gitlab.arturbosch.detekt.rules.style.ModifierOrder
-import io.gitlab.arturbosch.detekt.rules.style.NamingConventionViolation
+import io.gitlab.arturbosch.detekt.rules.style.naming.NamingRules
 import io.gitlab.arturbosch.detekt.rules.style.NewLineAtEndOfFile
 import io.gitlab.arturbosch.detekt.rules.style.OptionalAbstractKeyword
 import io.gitlab.arturbosch.detekt.rules.style.ProtectedMemberInFinalClass
@@ -37,7 +37,7 @@ class StyleGuideProvider : RuleSetProvider {
 				EqualsNullCall(config),
 				ForbiddenComment(config),
 				ForbiddenImport(config),
-				NamingConventionViolation(config),
+				NamingRules(config),
 				SafeCast(config),
 				UnnecessaryParentheses(config),
 				OptionalAbstractKeyword(config),

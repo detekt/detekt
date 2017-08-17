@@ -11,7 +11,7 @@ fun BaseRule.lint(content: String): List<Finding> {
 	return findingsAfterVisit(ktFile)
 }
 
-fun Rule.lint(path: Path): List<Finding> {
+fun BaseRule.lint(path: Path): List<Finding> {
 	val ktFile = KtTestCompiler.compile(path)
 	return findingsAfterVisit(ktFile)
 }
