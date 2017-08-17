@@ -425,13 +425,36 @@ style:
     active: true
   ModifierOrder:
     active: true
-  NamingConventionViolation:
+  PackageNaming:
+    active: true
+    packagePattern: '^[a-z]+(\.[a-z][a-z0-9]*)*$'
+  ClassNaming:
+    active: true
+    classPattern: '[A-Z$][a-zA-Z$]*'
+  EnumNaming:
+    active: true
+    enumEntryPattern: '^[A-Z$][a-zA-Z_$]*$'
+  FunctionNaming :
+    active: true
+    functionPattern: '^[a-z$][a-zA-Z$0-9]*$'
+  FunctionMaxLength:
+    active: false
+    maximumFunctionNameLength: 25
+  FunctionMinLength:
+    active: false
+    minimumFunctionNameLength: 3
+  VariableNaming :
     active: true
     variablePattern: '^(_)?[a-z$][a-zA-Z$0-9]*$'
+  ConstantNaming :
+    active: true
     constantPattern: '^([A-Z_]*|serialVersionUID)$'
-    methodPattern: '^[a-z$][a-zA-Z$0-9]*$'
-    classPattern: '[A-Z$][a-zA-Z$]*'
-    enumEntryPattern: '^[A-Z$][a-zA-Z_$]*$'
+  VariableMaxLength:
+    active: false
+    maximumVariableNameLength: 17
+  VariableMinLength:
+    active: false
+    minimumVariableNameLength: 3
   MaxLineLength:
     active: true
     maxLineLength: 120

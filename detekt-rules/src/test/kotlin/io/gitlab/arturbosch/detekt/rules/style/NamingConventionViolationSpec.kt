@@ -3,6 +3,14 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.TestConfig
+import io.gitlab.arturbosch.detekt.rules.style.naming.ClassNaming
+import io.gitlab.arturbosch.detekt.rules.style.naming.ConstantNaming
+import io.gitlab.arturbosch.detekt.rules.style.naming.EnumNaming
+import io.gitlab.arturbosch.detekt.rules.style.naming.FunctionMaxLength
+import io.gitlab.arturbosch.detekt.rules.style.naming.FunctionNaming
+import io.gitlab.arturbosch.detekt.rules.style.naming.NamingRules
+import io.gitlab.arturbosch.detekt.rules.style.naming.PackageNaming
+import io.gitlab.arturbosch.detekt.rules.style.naming.VariableNaming
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.dsl.it
@@ -12,8 +20,8 @@ import org.junit.jupiter.api.Test
 /**
  * @author Artur Bosch
  */
-class NamingConventionViolationSpec : SubjectSpek<NamingConventionViolation>({
-	subject { NamingConventionViolation() }
+class NamingConventionViolationSpec : SubjectSpek<NamingRules>({
+	subject { NamingRules() }
 
 	it("should find all wrong namings") {
 		subject.lint(Case.NamingConventions.path())
@@ -32,7 +40,7 @@ class NamingConventionTest {
 
 	@Test
 	fun lint() {
-		assertThat(NamingConventionViolation().lint(
+		assertThat(NamingRules().lint(
 				"""
             const val MY_NAME = "Artur"
             const val MYNAME = "Artur"
@@ -44,7 +52,7 @@ class NamingConventionTest {
 
 	@Test
 	fun uppercaseAllowedForVariablesInsideObjectDeclaration() {
-		assertThat(NamingConventionViolation().lint(
+		assertThat(NamingRules().lint(
 				"""
 			object Bla {
 				val MY_NAME = "Artur"
@@ -55,27 +63,27 @@ class NamingConventionTest {
 
 	@Test
 	fun upperCasePackageDirectiveName() {
-		assertThat(NamingConventionViolation().lint("package FOO.BAR")).hasSize(1)
+		assertThat(NamingRules().lint("package FOO.BAR")).hasSize(1)
 	}
 
 	@Test
 	fun upperCamelCasePackageDirectiveName() {
-		assertThat(NamingConventionViolation().lint("package Foo.Bar")).hasSize(1)
+		assertThat(NamingRules().lint("package Foo.Bar")).hasSize(1)
 	}
 
 	@Test
 	fun camelCasePackageDirectiveName() {
-		assertThat(NamingConventionViolation().lint("package fOO.bAR")).hasSize(1)
+		assertThat(NamingRules().lint("package fOO.bAR")).hasSize(1)
 	}
 
 	@Test
 	fun correctPackageDirectiveName() {
-		assertThat(NamingConventionViolation().lint("package foo.bar")).hasSize(0)
+		assertThat(NamingRules().lint("package foo.bar")).hasSize(0)
 	}
 
 	@Test
 	fun uppercaseAndUnderscoreAreAllowedLowercaseNotForEnumEntries() {
-		val lint = NamingConventionViolation().lint(
+		val lint = NamingRules().lint(
 				"""
 enum class WorkFlow {
     ACTIVE, NOT_ACTIVE, Unknown
@@ -95,26 +103,31 @@ class NamingConventionCustomPattern {
 				@Suppress("UNCHECKED_CAST")
 				override fun <T : Any> valueOrDefault(key: String, default: T): T =
 						when (key) {
-							NamingConventionViolation.METHOD_PATTERN -> "^`.+`$" as T
-							NamingConventionViolation.CLASS_PATTERN -> "^aBbD$" as T
-							NamingConventionViolation.VARIABLE_PATTERN -> "^123var$" as T
-							NamingConventionViolation.CONSTANT_PATTERN -> "^lowerCaseConst$" as T
-							NamingConventionViolation.ENUM_PATTERN -> "^(enum1)|(enum2)$" as T
-							NamingConventionViolation.PACKAGE_PATTERN -> "^(package_1)$" as T
+							FunctionNaming.FUNCTION_PATTERN -> "^`.+`$" as T
+							ClassNaming.CLASS_PATTERN -> "^aBbD$" as T
+							VariableNaming.VARIABLE_PATTERN -> "^123var$" as T
+							ConstantNaming.CONSTANT_PATTERN -> "^lowerCaseConst$" as T
+							EnumNaming.ENUM_PATTERN -> "^(enum1)|(enum2)$" as T
+							PackageNaming.PACKAGE_PATTERN -> "^(package_1)$" as T
+							FunctionMaxLength.MAXIMUM_FUNCTION_NAME_LENGTH -> 50 as T
 							else -> default
 						}
 			}
 	private val config = object : Config {
 		override fun subConfig(key: String): Config =
-				if (key == NamingConventionViolation.RULE_SUB_CONFIG) {
-					configCustomRules
-				} else {
-					Config.empty
+				when (key) {
+					FunctionNaming::class.simpleName -> configCustomRules
+					FunctionMaxLength::class.simpleName -> configCustomRules
+					ClassNaming::class.simpleName -> configCustomRules
+					VariableNaming::class.simpleName -> configCustomRules
+					ConstantNaming::class.simpleName -> configCustomRules
+					EnumNaming::class.simpleName -> configCustomRules
+					else -> Config.empty
 				}
 
 		override fun <T : Any> valueOrDefault(key: String, default: T): T = default
 	}
-	private val rule = NamingConventionViolation(config)
+	private val rule = NamingRules(config)
 
 	@Test
 	fun shouldUseCustomNameForMethodAndClass() {
@@ -159,8 +172,8 @@ class NamingConventionCustomPattern {
 	}
 }
 
-class NamingConventionLengthSpec : SubjectSpek<NamingConventionViolation>({
-	subject { NamingConventionViolation() }
+class NamingConventionLengthSpec : SubjectSpek<NamingRules>({
+	subject { NamingRules() }
 
 	it("should report a variable name that is too short") {
 		val code = "private val a = 3"
@@ -182,6 +195,12 @@ class NamingConventionLengthSpec : SubjectSpek<NamingConventionViolation>({
 
 	it("should report a function name that is too short") {
 		val code = "private fun a = 3"
+		subject.lint(code)
+		assertThat(subject.findings).hasSize(1)
+	}
+
+	it("should report a function name that is too long") {
+		val code = "private fun thisFunctionIsDefinitelyWayTooLongAndShouldBeMuchShorter = 3"
 		subject.lint(code)
 		assertThat(subject.findings).hasSize(1)
 	}
