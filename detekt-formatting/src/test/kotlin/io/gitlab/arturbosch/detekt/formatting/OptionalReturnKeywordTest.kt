@@ -25,10 +25,41 @@ class OptionalReturnKeywordTest : RuleTest {
 
 	@Test
 	fun removeInComplexIfStatement() {
-		val actual = "val z = if (true) return if (true) { if (false) return b; return x } else a else return y"
-		val expected = "val z = if (true) if (true) { if (false) return b; x } else a else y"
+		val actual = """
+		val z =
+		if (true)
+			return if (true) {
+				if (false) return b;
+				return x
+			} else a
+		else return y"""
+		val expected = """
+		val z =
+		if (true)
+			if (true) {
+				if (false) return b;
+				x
+			} else a
+		else y
+		""".trimIndent()
 
 		assertThat(rule.lint(actual).size).isEqualTo(3)
 		assertThat(rule.format(actual)).isEqualTo(expected)
+	}
+
+	@Test
+	fun doNotRemoveMethodReturns() {
+		val actual = """
+		fun test() {
+			val a = try {
+				returnsIntOrThrows()
+			} catch (e: Exception) {
+				return
+			}
+			println(a)
+		}
+		"""
+
+		assertThat(rule.lint(actual).size).isEqualTo(0)
 	}
 }

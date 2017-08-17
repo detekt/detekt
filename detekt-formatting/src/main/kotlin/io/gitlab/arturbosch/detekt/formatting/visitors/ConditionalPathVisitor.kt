@@ -55,10 +55,10 @@ class ConditionalPathVisitor(private val block: (KtReturnExpression) -> Unit) : 
 	}
 
 	private fun KtExpression.checkIfReturnStatement() {
-		if (this is KtReturnExpression) block(this)
+		if (this is KtReturnExpression && this.returnedExpression != null) block(this)
 		else if (this is KtBlockExpression) {
 			val last = this.statements.lastOrNull()
-			if (last is KtReturnExpression) block(last)
+			if (last is KtReturnExpression && last.returnedExpression != null) block(last)
 		}
 	}
 
