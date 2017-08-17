@@ -80,7 +80,7 @@ enum class WorkFlow {
 	}
 }
 
-class NamingConventionCustomPatter {
+class NamingConventionCustomPattern {
 	private val configCustomRules =
 			object : Config {
 				override fun subConfig(key: String): Config = Config.empty
@@ -145,3 +145,38 @@ class NamingConventionCustomPatter {
         """)).hasSize(0)
 	}
 }
+
+class NamingConventionLengthSpec : SubjectSpek<NamingConventionViolation>({
+	subject { NamingConventionViolation() }
+
+	it("should report a variable name that is too short") {
+		val code = "private val a = 3"
+		subject.lint(code)
+		assertThat(subject.findings).hasSize(1)
+	}
+
+	it("should report a variable name that is too long") {
+		val code = "private val thisVariableIsDefinitelyWayTooLongAndShouldBeMuchShorter = 3"
+		subject.lint(code)
+		assertThat(subject.findings).hasSize(1)
+	}
+
+	it("should not report a variable name that is okay") {
+		val code = "private val thisOneIsCool = 3"
+		subject.lint(code)
+		assertThat(subject.findings).isEmpty()
+	}
+
+	it("should report a function name that is too short") {
+		val code = "private fun a = 3"
+		subject.lint(code)
+		assertThat(subject.findings).hasSize(1)
+	}
+
+	it("should report a function name that is okay") {
+		val code = "private fun three = 3"
+		subject.lint(code)
+		assertThat(subject.findings).isEmpty()
+	}
+})
+
