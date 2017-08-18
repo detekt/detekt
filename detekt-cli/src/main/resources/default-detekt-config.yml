@@ -190,6 +190,8 @@ style:
     methodPattern: '^[a-z$][a-zA-Z$0-9]*$'
     classPattern: '[A-Z$][a-zA-Z$]*'
     enumEntryPattern: '^[A-Z$][a-zA-Z_$]*$'
+  ProtectedMemberInFinalClass:
+    active: false
 
 comments:
   active: true

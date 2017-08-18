@@ -15,6 +15,7 @@ enum class Case(val file: String) {
 	EmptyIfNegative("/cases/EmptyIfNegative.kt"),
 	EmptyDefaultConstructor("/cases/EmptyDefaultConstructor.kt"),
 	Exceptions("/cases/Exceptions.kt"),
+	FinalClass("/cases/FinalClass.kt"),
 	IteratorImpl("/cases/IteratorImpl.kt"),
 	NamingConventions("/cases/NamingConventions.kt"),
 	NewLineAtEndOfFile("/cases/NewLineAtEndOfFile.kt"),
