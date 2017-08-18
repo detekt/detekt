@@ -47,7 +47,7 @@ class StringLiteralDuplication(config: Config = Config.empty,
 			val text = entry.text
 			when {
 				ignoreAnnotation &&	entry.isPartOf(KtAnnotationEntry::class) -> pass
-				excludeStringsWithLessThan5Characters && text.length < 5 -> pass
+				excludeStringsWithLessThan5Characters && text.length < STRING_EXCLUSION_LENGTH -> pass
 				text.matches(ignoreStringsRegex) -> pass
 				else -> add(text)
 			}
@@ -60,6 +60,7 @@ class StringLiteralDuplication(config: Config = Config.empty,
 
 	companion object {
 		const val DEFAULT_DUPLICATION = 2
+		const val STRING_EXCLUSION_LENGTH = 5
 		const val IGNORE_ANNOTATION = "ignoreAnnotation"
 		const val EXCLUDE_SHORT_STRING = "excludeStringsWithLessThan5Characters"
 		const val IGNORE_STRINGS_REGEX = "ignoreStringsRegex"
