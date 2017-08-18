@@ -21,8 +21,7 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		super.visitNamedFunction(function)
 
-		val numberOfReturns = function.collectByType<KtReturnExpression>()
-				.count { it is KtReturnExpression }
+		val numberOfReturns = function.collectByType<KtReturnExpression>().count()
 
 		if (numberOfReturns > max) {
 			report(CodeSmell(issue, Entity.from(function)))

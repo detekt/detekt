@@ -16,7 +16,6 @@ class PackageCountVisitorTest {
 		)
 		val count = files
 				.map { getData(it) }
-				.filterNotNull()
 				.distinct()
 				.count()
 		Assertions.assertThat(count).isEqualTo(2)

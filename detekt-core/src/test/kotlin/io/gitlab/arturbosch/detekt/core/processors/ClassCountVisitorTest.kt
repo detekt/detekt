@@ -38,7 +38,6 @@ class ClassCountVisitorTest {
 	private fun getClassCount(vararg files: KtFile): Int {
 		return files
 				.map { getData(it) }
-				.filterNotNull()
 				.sum()
 	}
 
