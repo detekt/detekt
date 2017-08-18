@@ -337,7 +337,7 @@ dependencies {
                         <target name="detekt">
                             <java taskname="detekt" dir="${basedir}" fork="true" failonerror="true"
                                   classname="io.gitlab.arturbosch.detekt.cli.Main" classpathref="maven.plugin.classpath">
-                                <arg value="-p"/>
+                                <arg value="-i"/>
                                 <arg value="${basedir}/src"/>
                                 <arg value="-f"/>
                                 <arg value=".*test.*"/>
