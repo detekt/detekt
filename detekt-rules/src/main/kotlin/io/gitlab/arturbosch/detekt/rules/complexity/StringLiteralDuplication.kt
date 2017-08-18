@@ -14,16 +14,16 @@ import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtLiteralStringTemplateEntry
 
-class ConsiderConstantString(config: Config = Config.empty,
-							 threshold: Int = ConsiderConstantString.DEFAULT_DUPLICATION) : ThresholdRule(config, threshold) {
+class StringLiteralDuplication(config: Config = Config.empty,
+							   threshold: Int = StringLiteralDuplication.DEFAULT_DUPLICATION) : ThresholdRule(config, threshold) {
 
 	override val issue = Issue(javaClass.simpleName, Severity.Maintainability,
 			"Multiple occurrences of the same string literal within a single kt file detected.",
 			Debt.FIVE_MINS)
 
-	private val ignoreWhitespaces = valueOrDefault(IGNORE_WHITESPACES, true)
 	private val ignoreAnnotation = valueOrDefault(IGNORE_ANNOTATION, true)
-	private val ignoreStringsRegex = Regex(valueOrDefault(IGNORE_STRINGS_REGEX, """^((", ")|(",")|(". ")|("."))$"""))
+	private val excludeStringsWithLessThan5Characters = valueOrDefault(EXCLUDE_SHORT_STRING, true)
+	private val ignoreStringsRegex = Regex(valueOrDefault(IGNORE_STRINGS_REGEX, "$^"))
 
 	override fun visitKtFile(file: KtFile) {
 		val visitor = StringLiteralVisitor()
@@ -46,8 +46,8 @@ class ConsiderConstantString(config: Config = Config.empty,
 		override fun visitLiteralStringTemplateEntry(entry: KtLiteralStringTemplateEntry) {
 			val text = entry.text
 			when {
-				ignoreWhitespaces && text.trim().isEmpty() -> pass
 				ignoreAnnotation &&	entry.isPartOf(KtAnnotationEntry::class) -> pass
+				excludeStringsWithLessThan5Characters && text.length < 5 -> pass
 				text.matches(ignoreStringsRegex) -> pass
 				else -> add(text)
 			}
@@ -60,8 +60,8 @@ class ConsiderConstantString(config: Config = Config.empty,
 
 	companion object {
 		const val DEFAULT_DUPLICATION = 2
-		const val IGNORE_WHITESPACES = "ignoreWhitespaces"
 		const val IGNORE_ANNOTATION = "ignoreAnnotation"
+		const val EXCLUDE_SHORT_STRING = "excludeStringsWithLessThan5Characters"
 		const val IGNORE_STRINGS_REGEX = "ignoreStringsRegex"
 	}
 }

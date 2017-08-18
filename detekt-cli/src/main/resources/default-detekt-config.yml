@@ -86,12 +86,12 @@ complexity:
     threshold: 3
   LabeledExpression:
     active: false
-  ConsiderConstantString:
+  StringLiteralDuplication:
     active: false
     threshold: 2
-    ignoreWhitespaces: true
     ignoreAnnotation: true
-    ignoreStringsRegex: '^((", ")|(",")|(". ")|("."))$'
+    excludeStringsWithLessThan5Characters: true
+    ignoreStringsRegex: '$^'
 
 code-smell:
   active: true
