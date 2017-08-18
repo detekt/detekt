@@ -16,7 +16,6 @@ class KtFileCountVisitorTest {
 		)
 		val count = files
 				.map { getData(it) }
-				.filterNotNull()
 				.sum()
 		Assertions.assertThat(count).isEqualTo(2)
 	}
