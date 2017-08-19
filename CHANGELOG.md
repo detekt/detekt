@@ -1,5 +1,21 @@
 # Detekt - Changelog
 
+#### RC3
+
+- Do not consider empty returns as OptionalReturnKeyword - [#314](https://github.com/arturbosch/detekt/pull/314)
+- Added % to comment-source ratio output - [#309](https://github.com/arturbosch/detekt/pull/309)
+- Add rules property for multirule - [#308](https://github.com/arturbosch/detekt/pull/308)
+- Use function instead of method in descriptions and ids of CommentOver… - [#307](https://github.com/arturbosch/detekt/pull/307)
+- update kotlin to v1.1.4 - [#306](https://github.com/arturbosch/detekt/pull/306)
+- OptionalReturnKeyword: Fails with expressions - [#304](https://github.com/arturbosch/detekt/issues/304)
+- Treat comment as non-empty block body - [#303](https://github.com/arturbosch/detekt/pull/303)
+- Added StringLiteralDuplication rule - [#300](https://github.com/arturbosch/detekt/pull/300)
+- Added naming rule for packages - [#299](https://github.com/arturbosch/detekt/pull/299)
+- Update used detekt to RC2 - [#298](https://github.com/arturbosch/detekt/pull/298)
+- Equals() smells - [#297](https://github.com/arturbosch/detekt/pull/297)
+
+See all issues at: [RC3](https://github.com/arturbosch/detekt/milestone/17)
+
 #### RC2
 
 - Remove magic numbers and other detekt issues - [#295](https://github.com/arturbosch/detekt/pull/295)

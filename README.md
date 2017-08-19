@@ -3,9 +3,9 @@
 [![build status](https://travis-ci.org/arturbosch/detekt.svg?branch=master)](https://travis-ci.org/arturbosch/detekt)
 [![build status windows](https://ci.appveyor.com/api/projects/status/3q9g98vveiul7yut/branch/master?svg=true)](https://ci.appveyor.com/project/arturbosch/detekt)
 [ ![Download](https://api.bintray.com/packages/arturbosch/code-analysis/detekt/images/download.svg) ](https://bintray.com/arturbosch/code-analysis/detekt/_latestVersion)
-[![All Contributors](https://img.shields.io/badge/gradle_plugin-1.0.0.RC2-blue.svg?style=flat-square)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
+[![All Contributors](https://img.shields.io/badge/gradle_plugin-1.0.0.RC3-blue.svg?style=flat-square)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-15-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-16-orange.svg?style=flat-square)](#contributors)
 [![androidweekly](https://img.shields.io/badge/androidweekly-259-orange.svg?style=flat-square)](http://androidweekly.net/issues/issue-259)
 [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
 
@@ -714,10 +714,12 @@ inside the report file.
 - [Niklas Baudy](https://github.com/vanniktech) - Active on Issues, Bug fix, documentation fixes, 
 detekt findings, bunch of rules
 - [Ivan Balaksha](https://github.com/tagantroy) - Rules: UnsafeCast, SpreadOperator, UnsafeCallOnNullableType, LabeledExpression
-- [schalks](https://github.com/schalkms) - Bunch of rules, Project metrics 
+- [schalks](https://github.com/schalkms) - Active on Issues, Bunch of rules, Project metrics 
 - [Anna Y](https://github.com/Nevvea7) - Readme fix
+- [Karol Wrótniak](https://github.com/koral--) - Treat comments as not empty blocks
 
 #### Credits
 - [Stanley Shyiko](https://github.com/shyiko) - `detekt` migrated the formatting rules from [ktlint](https://github.com/shyiko/ktlint)
-- [Kotlin](https://github.com/Kotlin) - Being an awesome language
-- [JetBrains](https://github.com/jetbrains/) - Creating awesome Intellij + Kotlin
+- [JetBrains](https://github.com/jetbrains/) - Creating Intellij + Kotlin
+- [PMD](https://github.com/pmd/pmd) & [Checkstyle](https://github.com/checkstyle/checkstyle) - Ideas for threshold 
+values and style rules  
