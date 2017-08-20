@@ -25,7 +25,7 @@ internal class ConditionalPathVisitorTest {
 
 		ktFile.accept(visitor)
 
-		assertThat(counter).isEqualTo(5)
+		assertThat(counter).isEqualTo(7)
 	}
 
 

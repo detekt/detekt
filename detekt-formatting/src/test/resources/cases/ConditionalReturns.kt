@@ -21,11 +21,10 @@ fun stuff(): Int {
 			}
 		}
 	} catch (e: Exception) {
-		when(5) {
+		return when(5) {
 			5 -> return 1
 			2 -> return 1
 			else -> 5
 		}
-		return 7
 	}
 }
