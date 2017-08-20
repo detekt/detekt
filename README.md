@@ -721,5 +721,4 @@ detekt findings, bunch of rules
 #### Credits
 - [Stanley Shyiko](https://github.com/shyiko) - `detekt` migrated the formatting rules from [ktlint](https://github.com/shyiko/ktlint)
 - [JetBrains](https://github.com/jetbrains/) - Creating Intellij + Kotlin
-- [PMD](https://github.com/pmd/pmd) & [Checkstyle](https://github.com/checkstyle/checkstyle) - Ideas for threshold 
-values and style rules  
+- [PMD](https://github.com/pmd/pmd) & [Checkstyle](https://github.com/checkstyle/checkstyle) & [KtLint](https://github.com/shyiko/ktlint) - Ideas for threshold values and style rules  
