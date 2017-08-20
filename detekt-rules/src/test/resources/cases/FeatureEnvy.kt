@@ -5,7 +5,7 @@ package cases
 /**
  * @author Artur Bosch
  */
-class FeatureEnvy {
+class FeatureEnvy1 {
 
 	object Stuff {
 		fun doStuff() {}
@@ -22,5 +22,14 @@ class FeatureEnvy {
 		stuff.doStuff()
 		val string = stuff.giveStuff()
 		println(string)
+	}
+}
+
+class FeatureEnvy2 {
+
+	val envy1 = FeatureEnvy1()
+
+	fun envy() {
+		envy1.envy()
 	}
 }
