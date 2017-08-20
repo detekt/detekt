@@ -1,8 +1,9 @@
-package io.gitlab.arturbosch.detekt.rules
+package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
-import io.gitlab.arturbosch.detekt.rules.complexity.NestedBlockDepth
+import io.gitlab.arturbosch.detekt.rules.Case
+import io.gitlab.arturbosch.detekt.rules.CommonSpec
 import io.gitlab.arturbosch.detekt.test.RuleTest
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat

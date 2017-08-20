@@ -55,8 +55,13 @@ class ExceptionsTest {
 	}
 
 	@Test
-	fun findIndexOOBE() {
+	fun findArrayIndexOutOfBoundsException() {
 		findOne { CatchArrayIndexOutOfBoundsException() }
+	}
+
+	@Test
+	fun findIndexOutOfBoundsException() {
+		findOne { CatchIndexOutOfBoundsException() }
 	}
 
 	@Test

@@ -1,6 +1,7 @@
-package io.gitlab.arturbosch.detekt.rules
+package io.gitlab.arturbosch.detekt.rules.complexity
 
-import io.gitlab.arturbosch.detekt.rules.complexity.LargeClass
+import io.gitlab.arturbosch.detekt.rules.Case
+import io.gitlab.arturbosch.detekt.rules.CommonSpec
 import io.gitlab.arturbosch.detekt.test.lint
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it

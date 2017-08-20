@@ -31,5 +31,13 @@ class WrongEqualsTypeParameterSpec  : SubjectSpek<WrongEqualsTypeParameter>({
 				}"""
 			Assertions.assertThat(subject.lint(code).size).isEqualTo(1)
 		}
+
+		it("uses an interface declaration") {
+			val code = """
+				interface EqualsInterf {
+					fun equals(other: String)
+				}"""
+			Assertions.assertThat(subject.lint(code).size).isEqualTo(0)
+		}
 	}
 })

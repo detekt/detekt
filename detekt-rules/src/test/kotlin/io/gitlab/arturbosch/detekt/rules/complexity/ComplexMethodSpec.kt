@@ -1,7 +1,7 @@
-package io.gitlab.arturbosch.detekt.rules
+package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
-import io.gitlab.arturbosch.detekt.rules.complexity.ComplexMethod
+import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.Spek
