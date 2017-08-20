@@ -1,6 +1,6 @@
-package io.gitlab.arturbosch.detekt.rules
+package io.gitlab.arturbosch.detekt.rules.documentation
 
-import io.gitlab.arturbosch.detekt.rules.documentation.CommentOverPrivateFunction
+import io.gitlab.arturbosch.detekt.rules.CommonSpec
 import org.jetbrains.spek.subject.SubjectSpek
 import org.jetbrains.spek.subject.itBehavesLike
 

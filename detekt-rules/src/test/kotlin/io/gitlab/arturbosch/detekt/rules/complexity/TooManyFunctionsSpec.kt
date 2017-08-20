@@ -16,6 +16,10 @@ class TooManyFunctionsSpec : SubjectSpek<TooManyFunctions>({
 		it("should find one file with too many functions") {
 			Assertions.assertThat(subject.lint(code)).hasSize(1)
 		}
+
+		it("should find one file with too many top level functions") {
+			Assertions.assertThat(subject.lint(scriptCode)).hasSize(1)
+		}
 	}
 
 })
@@ -90,3 +94,16 @@ val code: String =
 
 			}
 		"""
+
+val scriptCode = """
+				fun main(args : Array<String>) {}
+				fun a() {}
+				fun b() {}
+				fun c() {}
+				fun d() {}
+				fun e() {}
+				fun f() {}
+				fun g() {}
+				fun h() {}
+				fun i() {}
+				fun j() {}"""
