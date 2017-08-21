@@ -85,7 +85,7 @@ class EmptyCodeTest {
 
 	private fun test(block: () -> Rule) {
 		val rule = block()
-		rule.lint(file.text)
+		rule.lint(file)
 		assertThat(rule.findings).hasSize(1)
 	}
 
