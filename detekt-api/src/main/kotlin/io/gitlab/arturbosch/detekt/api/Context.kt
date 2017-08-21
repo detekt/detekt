@@ -14,8 +14,6 @@ open class DefaultContext : Context {
 
 	/**
 	 * Returns a copy of violations for this rule.
-	 * Resets the context.
-	 *
 	 */
 	override val findings
 		get() = _findings.toList()
