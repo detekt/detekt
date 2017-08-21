@@ -36,7 +36,7 @@ private fun KtElement.findAnnotatedSuppressedParent(id: String): Boolean {
  * Checks if this kt element is suppressed by @Suppress or @SuppressWarnings annotations.
  */
 fun KtAnnotated.isSuppressedBy(id: String): Boolean {
-	val valid = listOf(id, "ALL")
+	val valid = listOf(id, "ALL", "all")
 	return annotationEntries.find { it.typeReferenceName.let { it == "Suppress" || it == "SuppressWarnings" } }
 			?.valueArguments
 			?.find { it.getArgumentExpression()?.text?.replace("\"", "") in valid } != null
