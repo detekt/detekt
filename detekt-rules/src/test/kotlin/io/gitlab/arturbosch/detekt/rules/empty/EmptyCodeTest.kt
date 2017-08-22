@@ -72,7 +72,7 @@ class EmptyCodeTest {
 
 	@Test
 	fun findsOneEmptySecondaryConstructor() {
-		test { EmptySecondaryConstructorBlock(Config.empty) }
+		test { EmptySecondaryConstructor(Config.empty) }
 	}
 
 	@Test

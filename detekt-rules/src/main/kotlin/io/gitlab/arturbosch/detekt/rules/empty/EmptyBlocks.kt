@@ -33,7 +33,7 @@ class EmptyBlocks(val config: Config = Config.empty) : MultiRule() {
 	private val emptyFunctionBlock = EmptyFunctionBlock(config)
 	private val emptyIfBlock = EmptyIfBlock(config)
 	private val emptyInitBlock = EmptyInitBlock(config)
-	private val emptySecondaryConstructorBlock = EmptySecondaryConstructorBlock(config)
+	private val emptySecondaryConstructorBlock = EmptySecondaryConstructor(config)
 	private val emptyWhenBlock = EmptyWhenBlock(config)
 	private val emptyWhileBlock = EmptyWhileBlock(config)
 
