@@ -33,7 +33,7 @@ class NamingConventionViolation(config: Config = Config.empty) : Rule(config) {
 	private val constantPattern = Regex(valueOrDefault(CONSTANT_PATTERN, "^([A-Z_]*|serialVersionUID)$"))
 	private val methodPattern = Regex(valueOrDefault(METHOD_PATTERN, "^[a-z$][a-zA-Z$0-9]*$"))
 	private val classPattern = Regex(valueOrDefault(CLASS_PATTERN, "^[A-Z$][a-zA-Z$]*$"))
-	private val enumEntryPattern = Regex(valueOrDefault(ENUM_PATTERN, "^[A-Z$][A-Z_$]*$"))
+	private val enumEntryPattern = Regex(valueOrDefault(ENUM_PATTERN, "^[A-Z$][a-zA-Z_$]*$"))
 	private val packagePattern = Regex(valueOrDefault(PACKAGE_PATTERN, "^[a-z]+(\\.[a-z][a-z0-9]*)*$"))
 
 	override fun visitPackageDirective(directive: KtPackageDirective, data: Void?): Void? {
