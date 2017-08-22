@@ -28,8 +28,8 @@ class EmptyBlocksMultiRuleTest : SubjectSpek<EmptyBlocks>({
 			Assertions.assertThat(findings).hasSize(rulesSize)
 		}
 
-		it("should not report as all empty block rules are deactivated") {
-			val config = YamlConfig.loadResource(resource("deactive-empty-blocks.yml").toURL())
+		it("should not report any as all empty block rules are deactivated") {
+			val config = YamlConfig.loadResource(resource("deactivated-empty-blocks.yml").toURL())
 			val ruleSet = EmptyCodeProvider().buildRuleset(config)
 
 			val findings = ruleSet?.accept(file)
