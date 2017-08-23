@@ -17,7 +17,7 @@ class NamingConventionViolationSpec : SubjectSpek<NamingConventionViolation>({
 
 	it("should find all wrong namings") {
 		subject.lint(Case.NamingConventions.path())
-		assertThat(subject.findings).hasSize(9)
+		assertThat(subject.findings).hasSize(11)
 	}
 
 	it("should ignore all naming violations if rule is turned off") {
