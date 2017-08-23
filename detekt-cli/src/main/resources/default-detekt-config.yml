@@ -192,6 +192,8 @@ style:
     enumEntryPattern: '^[A-Z$][a-zA-Z_$]*$'
   ProtectedMemberInFinalClass:
     active: false
+  UnnecessaryParentheses:
+    active: false
 
 comments:
   active: true

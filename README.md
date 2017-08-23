@@ -437,6 +437,8 @@ style:
     maxLineLength: 120
     excludePackageStatements: false
     excludeImportStatements: false
+  UnnecessaryParentheses:
+    active: false
 
 comments:
   active: true

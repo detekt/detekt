@@ -18,6 +18,7 @@ import io.gitlab.arturbosch.detekt.rules.style.OptionalAbstractKeyword
 import io.gitlab.arturbosch.detekt.rules.style.ProtectedMemberInFinalClass
 import io.gitlab.arturbosch.detekt.rules.style.ReturnCount
 import io.gitlab.arturbosch.detekt.rules.style.SafeCast
+import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryParentheses
 import io.gitlab.arturbosch.detekt.rules.style.WildcardImport
 
 /**
@@ -38,6 +39,7 @@ class StyleGuideProvider : RuleSetProvider {
 				ForbiddenImport(config),
 				NamingConventionViolation(config),
 				SafeCast(config),
+				UnnecessaryParentheses(config),
 				OptionalAbstractKeyword(config),
 				ProtectedMemberInFinalClass(config),
 				MagicNumber(config),
