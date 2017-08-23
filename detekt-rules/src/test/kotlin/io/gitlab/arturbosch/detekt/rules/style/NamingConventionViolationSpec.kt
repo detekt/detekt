@@ -93,6 +93,7 @@ class NamingConventionCustomPatter {
 							NamingConventionViolation.VARIABLE_PATTERN -> "^123var$" as T
 							NamingConventionViolation.CONSTANT_PATTERN -> "^lowerCaseConst$" as T
 							NamingConventionViolation.ENUM_PATTERN -> "^(enum1)|(enum2)$" as T
+							NamingConventionViolation.PACKAGE_PATTERN -> "^(package_1)$" as T
 							else -> default
 						}
 			}
@@ -143,5 +144,10 @@ class NamingConventionCustomPatter {
                 }
             }
         """)).hasSize(0)
+	}
+
+	@Test
+	fun shouldUseCustomNameForPackage() {
+		assertThat(rule.lint("package package_1")).hasSize(0)
 	}
 }
