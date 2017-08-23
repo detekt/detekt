@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.Case
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.dsl.it
@@ -17,6 +18,12 @@ class NamingConventionViolationSpec : SubjectSpek<NamingConventionViolation>({
 	it("should find all wrong namings") {
 		subject.lint(Case.NamingConventions.path())
 		assertThat(subject.findings).hasSize(9)
+	}
+
+	it("should ignore all naming violations if rule is turned off") {
+		val rule = NamingConventionViolation(TestConfig(mapOf("active" to "false")))
+		rule.lint(Case.NamingConventions.path())
+		assertThat(rule.findings).hasSize(0)
 	}
 
 })
