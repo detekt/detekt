@@ -70,8 +70,8 @@ class SpacingAroundBraces(config: Config) : TokenRule(config) {
 	}
 
 	private fun LeafPsiElement.isPartOfLambda(prevLeaf: PsiElement?)
-			= (prevLeaf?.node?.elementType == KtTokens.LPAR &&
-			(parent is KtLambdaExpression || parent.parent is KtLambdaExpression))
+			= prevLeaf?.node?.elementType == KtTokens.LPAR &&
+			(parent is KtLambdaExpression || parent.parent is KtLambdaExpression)
 
 	private fun shouldNotToBeSeparatedBySpace(leaf: PsiElement?): Boolean {
 		val nextElementType = leaf?.node?.elementType

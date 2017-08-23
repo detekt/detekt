@@ -46,7 +46,7 @@ data class Location(val source: SourceLocation,
 				= (this.containingFile.viewProvider.virtualFile as LightVirtualFile).originalFile?.name
 
 		private fun PsiElement.getTextAtLocationSafe()
-				= getTextSafe(defaultValue = { searchName() }) { getTextWithLocation() }
+				= getTextSafe({ searchName() }, { getTextWithLocation() })
 	}
 
 }
