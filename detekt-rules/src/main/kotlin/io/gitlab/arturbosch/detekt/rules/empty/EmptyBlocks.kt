@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.empty
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.SingleAssign
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtClassInitializer
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -53,7 +54,7 @@ class EmptyBlocks(val config: Config = Config.empty) : MultiRule() {
 			emptyWhileBlock
 	)
 
-	private lateinit var activeRules: Set<Rule>
+	private var activeRules: Set<Rule> by SingleAssign()
 
 	override fun visitKtFile(file: KtFile) {
 		activeRules = rules.filterTo(HashSet()) { it.visitCondition(file) }
