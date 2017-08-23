@@ -33,7 +33,7 @@ class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
 	}
 
 	private fun requiresDocumentation(
-			klass: KtClass) = (klass.isTopLevel() || klass.isInnerClass() || klass.isNestedClass() || klass.isInnerInterface())
+			klass: KtClass) = klass.isTopLevel() || klass.isInnerClass() || klass.isNestedClass() || klass.isInnerInterface()
 
 	override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
 		if (declaration.isCompanionWithoutName() || declaration.isLocal) {

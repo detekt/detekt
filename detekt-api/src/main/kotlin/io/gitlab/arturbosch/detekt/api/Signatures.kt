@@ -32,7 +32,7 @@ internal fun PsiElement.buildFullSignature(): String {
 			.fold("") { sig, sig2 -> "$sig2${dotOrNot(sig, sig2)}$sig" }
 	val filename = this.containingFile.name
 	return (if (!fullClassSignature.startsWith(filename)) filename + "\$" else "") +
-			(if (fullClassSignature.isNotEmpty()) "$fullClassSignature\$$signature" else signature)
+			if (fullClassSignature.isNotEmpty()) "$fullClassSignature\$$signature" else signature
 }
 
 private fun PsiElement.extractClassName() =
@@ -82,7 +82,7 @@ private fun buildFunctionSignature(element: KtNamedFunction): String {
 	require(methodStart < methodEnd) {
 		"Error building function signature with range $methodStart - $methodEnd for element: ${element.text}"
 	}
-	return getTextSafe(defaultValue = { element.nameAsSafeName.identifier }) {
-		element.text.substring(methodStart, methodEnd)
-	}
+	return getTextSafe(
+			{ element.nameAsSafeName.identifier },
+			{ element.text.substring(methodStart, methodEnd) })
 }

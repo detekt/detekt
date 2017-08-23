@@ -63,7 +63,7 @@ data class FormatConfig(private val useTabs: Boolean) : Config {
 		@Suppress("UNCHECKED_CAST")
 		return when (key) {
 			"autoCorrect" -> true as T
-			"useTabs" -> (useTabs) as T
+			"useTabs" -> useTabs as T
 			else -> default
 		}
 	}
