@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.test.lint
-import org.assertj.core.api.Assertions
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
+import org.assertj.core.api.Assertions.assertThat
 
 class UselessIncrementSpec : SubjectSpek<UselessIncrement>({
 	subject { UselessIncrement() }
@@ -16,12 +16,12 @@ class UselessIncrementSpec : SubjectSpek<UselessIncrement>({
 				fun x() {
 					var i = 0
 					var j = 0
-					j = i++
-					i = i++
-					i = 1 + i++
+					j = i++ // invalid
+					i = i++ // invalid
+					i = 1 + i++ // invalid
 					i = i++ + 1
 				}"""
-			Assertions.assertThat(subject.lint(code)).hasSize(3)
+			assertThat(subject.lint(code)).hasSize(3)
 		}
 
 		it("returns no incremented value") {
@@ -31,7 +31,7 @@ class UselessIncrementSpec : SubjectSpek<UselessIncrement>({
 					if (i == 0) return 1 + j++
 					return i++
 				}"""
-			Assertions.assertThat(subject.lint(code)).hasSize(2)
+			assertThat(subject.lint(code)).hasSize(2)
 		}
 	}
 })
