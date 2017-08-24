@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.lint
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
@@ -14,17 +14,17 @@ class UnnecessaryParenthesesSpec : SubjectSpek<UnnecessaryParentheses>({
 
 		it("with unnecessary parentheses on val assignment") {
 			val code = "val local = (5)"
-			Assertions.assertThat(subject.lint(code).size).isEqualTo(1)
+			assertThat(subject.lint(code).size).isEqualTo(1)
 		}
 
 		it("with unnecessary parentheses on val assignment operation") {
 			val code = "val local = (5 + 3)"
-			Assertions.assertThat(subject.lint(code).size).isEqualTo(1)
+			assertThat(subject.lint(code).size).isEqualTo(1)
 		}
 
 		it("with unnecessary parentheses on function call") {
 			val code = "val local = 3.plus((5))"
-			Assertions.assertThat(subject.lint(code).size).isEqualTo(1)
+			assertThat(subject.lint(code).size).isEqualTo(1)
 		}
 
 		it("unnecessary parentheses in other parentheses") {
@@ -34,7 +34,7 @@ class UnnecessaryParenthesesSpec : SubjectSpek<UnnecessaryParentheses>({
 					 	println("Test")
 					}
 				}"""
-			Assertions.assertThat(subject.lint(code).size).isEqualTo(1)
+			assertThat(subject.lint(code).size).isEqualTo(1)
 		}
 
 		it("reports unnecessary parentheses around lambdas") {
@@ -47,7 +47,7 @@ class UnnecessaryParenthesesSpec : SubjectSpek<UnnecessaryParentheses>({
 					function({ input -> println(input) })
 				}
 				"""
-			Assertions.assertThat(subject.lint(code).size).isEqualTo(1)
+			assertThat(subject.lint(code).size).isEqualTo(1)
 		}
 
 		it("doesn't report function calls containing lambdas and other parameters") {
@@ -60,7 +60,7 @@ class UnnecessaryParenthesesSpec : SubjectSpek<UnnecessaryParentheses>({
 					function(1, { input -> println(input) })
 				}
 				"""
-			Assertions.assertThat(subject.lint(code).size).isEqualTo(0)
+			assertThat(subject.lint(code).size).isEqualTo(0)
 		}
 
 		it("does not report well behaved parentheses") {
@@ -70,7 +70,7 @@ class UnnecessaryParenthesesSpec : SubjectSpek<UnnecessaryParentheses>({
 					 	println("Test")
 					}
 				}"""
-			Assertions.assertThat(subject.lint(code).size).isEqualTo(0)
+			assertThat(subject.lint(code).size).isEqualTo(0)
 		}
 
 		it("does not report well behaved parentheses in super constructors") {
@@ -82,7 +82,7 @@ class UnnecessaryParenthesesSpec : SubjectSpek<UnnecessaryParentheses>({
 					}
 				})
 				"""
-			Assertions.assertThat(subject.lint(code).size).isEqualTo(0)
+			assertThat(subject.lint(code).size).isEqualTo(0)
 		}
 
 		it("does not report well behaved parentheses in constructors") {
@@ -94,7 +94,7 @@ class UnnecessaryParenthesesSpec : SubjectSpek<UnnecessaryParentheses>({
 					}
 				})
 				"""
-			Assertions.assertThat(subject.lint(code).size).isEqualTo(0)
+			assertThat(subject.lint(code).size).isEqualTo(0)
 		}
 	}
 })
