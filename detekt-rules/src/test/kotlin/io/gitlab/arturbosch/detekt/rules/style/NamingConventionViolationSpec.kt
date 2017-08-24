@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.Case
-import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.rules.style.naming.ClassNaming
 import io.gitlab.arturbosch.detekt.rules.style.naming.ConstantNaming
 import io.gitlab.arturbosch.detekt.rules.style.naming.EnumNaming
@@ -27,13 +26,6 @@ class NamingConventionViolationSpec : SubjectSpek<NamingRules>({
 		subject.lint(Case.NamingConventions.path())
 		assertThat(subject.findings).hasSize(11)
 	}
-
-	it("should ignore all naming violations if rule is turned off") {
-		val rule = NamingConventionViolation(TestConfig(mapOf("active" to "false")))
-		rule.lint(Case.NamingConventions.path())
-		assertThat(rule.findings).hasSize(0)
-	}
-
 })
 
 class NamingConventionTest {
