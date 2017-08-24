@@ -11,6 +11,7 @@ import io.gitlab.arturbosch.detekt.rules.bugs.LateinitUsage
 import io.gitlab.arturbosch.detekt.rules.bugs.UnreachableCode
 import io.gitlab.arturbosch.detekt.rules.bugs.UnsafeCallOnNullableType
 import io.gitlab.arturbosch.detekt.rules.bugs.UnsafeCast
+import io.gitlab.arturbosch.detekt.rules.bugs.UselessIncrement
 import io.gitlab.arturbosch.detekt.rules.bugs.WrongEqualsTypeParameter
 
 /**
@@ -25,6 +26,7 @@ class PotentialBugProvider : RuleSetProvider {
 				DuplicateCaseInWhenExpression(config),
 				EqualsAlwaysReturnsTrueOrFalse(config),
 				EqualsWithHashCodeExist(config),
+				UselessIncrement(config),
 				WrongEqualsTypeParameter(config),
 				ExplicitGarbageCollectionCall(config),
 				LateinitUsage(config),

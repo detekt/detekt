@@ -54,6 +54,8 @@ potential-bugs:
     active: false
   UnsafeCast:
     active: false
+  UselessIncrement:
+    active: false
 
 performance:
   active: true
