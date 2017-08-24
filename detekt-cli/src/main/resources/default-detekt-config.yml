@@ -203,6 +203,8 @@ style:
     active: true
   OptionalAbstractKeyword:
     active: true
+  OptionalWhenBraces:
+    active: false
   EqualsNullCall:
     active: false
   ForbiddenComment:
