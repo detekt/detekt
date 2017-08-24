@@ -1,0 +1,10 @@
+exceptions:
+  active: true
+  TooGenericExceptionCatched:
+    active: true
+    exceptions:
+      -
+  TooGenericExceptionThrown:
+    active: true
+    exceptions:
+      -
