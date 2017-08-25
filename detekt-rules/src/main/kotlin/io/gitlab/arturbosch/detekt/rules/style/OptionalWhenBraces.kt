@@ -7,8 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.hasCommentInside
 import org.jetbrains.kotlin.psi.KtBlockExpression
-import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtWhenExpression
 
 class OptionalWhenBraces(config: Config = Config.empty) : Rule(config) {
@@ -19,15 +19,14 @@ class OptionalWhenBraces(config: Config = Config.empty) : Rule(config) {
 	override fun visitWhenExpression(expression: KtWhenExpression) {
 		for (entry in expression.entries) {
 			val blockExpression = entry.expression as? KtBlockExpression
-			val statements = blockExpression?.statements
-			if (hasOneStatement(statements) && hasOptionalBrace(blockExpression)) {
+			if (hasOneStatement(blockExpression) && hasOptionalBrace(blockExpression)) {
 				report(CodeSmell(issue, Entity.from(entry)))
 			}
 		}
 	}
 
-	private fun hasOneStatement(statements: List<KtExpression>?) =
-			statements != null && statements.size == 1
+	private fun hasOneStatement(blockExpression: KtBlockExpression?) =
+			blockExpression?.statements?.size == 1 && !blockExpression.hasCommentInside()
 
 	private fun hasOptionalBrace(blockExpression: KtBlockExpression?) =
 			blockExpression != null && blockExpression.lBrace != null && blockExpression.rBrace != null
