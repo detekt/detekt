@@ -1,6 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules
 
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
+import org.jetbrains.kotlin.com.intellij.openapi.util.Key
+import org.jetbrains.kotlin.com.intellij.psi.PsiComment
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -22,6 +24,16 @@ fun KtModifierListOwner.isPublicNotOverridden() = this.hasModifier(KtTokens.PUBL
 fun KtCallExpression.isUsedForNesting(): Boolean = when (getCallNameExpression()?.text) {
 	"run", "let", "apply", "with", "use", "forEach" -> true
 	else -> false
+}
+
+fun KtBlockExpression.hasCommentInside(): Boolean {
+	val commentKey = Key<Boolean>("comment")
+	this.acceptChildren(object : DetektVisitor() {
+		override fun visitComment(comment: PsiComment?) {
+			if (comment != null) putUserData(commentKey, true)
+		}
+	})
+	return getUserData(commentKey) ?: false
 }
 
 inline fun <reified T : KtElement> KtElement.collectByType(): List<T> {
