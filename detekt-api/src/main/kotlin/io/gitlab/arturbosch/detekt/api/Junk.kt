@@ -35,7 +35,7 @@ fun PsiElement.isPartOfString() = isPartOf(KtStringTemplateEntry::class)
  * When analyzing sub path 'testData' of the kotlin project, CompositeElement.getText() throws
  * a RuntimeException stating 'Underestimated text length' - #65.
  */
-@Suppress("CatchRuntimeException")
+@Suppress("TooGenericExceptionCatched")
 internal fun getTextSafe(defaultValue: () -> String, block: () -> String) = try {
 	block()
 } catch (e: RuntimeException) {

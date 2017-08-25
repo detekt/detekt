@@ -113,7 +113,7 @@ empty-blocks:
   EmptyWhenBlock:
     active: true
   EmptyWhileBlock:
-
+    active: true
 
 complexity:
   active: true

@@ -30,7 +30,7 @@ data class Location(val source: SourceLocation,
 			return Location(sourceLocation, textLocation, locationText, fileName)
 		}
 
-		@Suppress("CatchIndexOutOfBoundsException")
+		@Suppress("TooGenericExceptionCatched")
 		fun startLineAndColumn(element: PsiElement, offset: Int = 0): DiagnosticUtils.LineAndColumn {
 			try {
 				val range = element.textRange
