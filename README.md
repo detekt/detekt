@@ -104,8 +104,8 @@ Usage: detekt [options]
       Default: false
   * --input, -i
       Input path to analyze (path/to/project).
-    --rules, -r
-      Extra paths to ruleset jars separated by ';'.
+    --plugins, -p
+      Extra paths to ruleset jars separated by ',' or ';'.
     --useTabs
       Tells the formatter that indentation with tabs are valid.
       Default: false
