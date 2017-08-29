@@ -11,45 +11,42 @@ import org.jetbrains.kotlin.psi.KtFile
 /**
  * @author Artur Bosch
  */
-class Detektor(settings: ProcessingSettings,
-			   val compiler: KtTreeCompiler,
-			   val providers: List<RuleSetProvider>,
-			   val processors: List<FileProcessListener> = emptyList()) {
+class Detektor(private val settings: ProcessingSettings,
+			   private val providers: List<RuleSetProvider>,
+			   private val processors: List<FileProcessListener> = emptyList()) {
 
 	private val config: Config = settings.config
+	private val modifier: KtFileModifier = KtFileModifier(settings.project)
 	private val notifications: MutableList<Notification> = mutableListOf()
 
-	fun run(): Detektion {
-		val ktFiles = compiler.compile()
-		return withExecutor {
+	fun run(compiler: KtTreeCompiler = KtTreeCompiler.instance(settings)): Detektion = run(compiler.compile())
 
-			processors.forEach { it.onStart(ktFiles) }
-			val futures = ktFiles.map { file ->
-				runAsync {
-					file.analyze().apply {
-						processors.forEach { it.onProcess(file) }
-					}
+	fun run(ktFiles: List<KtFile>): Detektion = withExecutor {
+
+		processors.forEach { it.onStart(ktFiles) }
+		val futures = ktFiles.map { file ->
+			runAsync {
+				file.analyze().apply {
+					processors.forEach { it.onProcess(file) }
 				}
 			}
-			val findings = awaitAll(futures).flatMap { it }.toMergedMap()
+		}
+		val findings = awaitAll(futures).flatMap { it }.toMergedMap()
 
-			if (config.valueOrDefault("autoCorrect", false)) {
-				compiler.saveModifiedFiles(ktFiles) {
-					notifications.add(it)
-				}
+		if (config.valueOrDefault("autoCorrect", false)) {
+			modifier.saveModifiedFiles(ktFiles) {
+				notifications.add(it)
 			}
+		}
 
-			DetektResult(findings.toSortedMap(), notifications).apply {
-				processors.forEach { it.onFinish(ktFiles, this) }
-			}
+		DetektResult(findings.toSortedMap(), notifications).apply {
+			processors.forEach { it.onFinish(ktFiles, this) }
 		}
 	}
 
-	private fun KtFile.analyze(): List<Pair<String, List<Finding>>> {
-		return providers.map { it.buildRuleset(config) }
-				.filterNotNull()
-				.sortedBy { it.id }
-				.distinctBy { it.id }
-				.map { rule -> rule.id to rule.accept(this) }
-	}
+	private fun KtFile.analyze(): List<Pair<String, List<Finding>>> = providers
+			.mapNotNull { it.buildRuleset(config) }
+			.sortedBy { it.id }
+			.distinctBy { it.id }
+			.map { rule -> rule.id to rule.accept(this) }
 }

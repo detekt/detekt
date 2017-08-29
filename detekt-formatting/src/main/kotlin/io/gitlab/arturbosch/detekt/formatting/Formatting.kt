@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.cli.createPathFilters
 import io.gitlab.arturbosch.detekt.cli.loadConfiguration
 import io.gitlab.arturbosch.detekt.cli.parseArguments
 import io.gitlab.arturbosch.detekt.core.Detektor
-import io.gitlab.arturbosch.detekt.core.KtTreeCompiler
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 
 /**
@@ -20,7 +19,7 @@ class Formatting {
 			with(parseArguments(args)) {
 				val config = loadConfiguration()
 				val settings = ProcessingSettings(inputPath, config, createPathFilters(), parallel, true)
-				val detektor = Detektor(settings, KtTreeCompiler.instance(settings), listOf(FormattingProvider()))
+				val detektor = Detektor(settings, listOf(FormattingProvider()))
 				val detektion = detektor.run()
 				OutputFacade(this, detektion, settings).run()
 			}
