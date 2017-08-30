@@ -32,5 +32,9 @@ open class ProfileExtension(val name: String,
 		}
 	}
 
-	override fun toString(): String = this.reflectiveToString()
+	override fun toString(): String = "ProfileExtension(name='$name', input=$input, config=$config, " +
+			"configResource=$configResource, filters=$filters, ruleSets=$ruleSets, output=$output, " +
+			"outputName=$outputName, baseline=$baseline, parallel=$parallel, " +
+			"disableDefaultRuleSets=$disableDefaultRuleSets)"
+
 }
