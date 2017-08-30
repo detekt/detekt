@@ -10,7 +10,7 @@ open class IdeaExtension(open var path: String? = null,
 						 open var mask: String = "*.kt") {
 
 	fun formatArgs(ext: DetektExtension): Array<String> {
-		val input = ext.profileInputPath
+		val input = ext.profileInputPath()
 		require(path != null) { IDEA_PATH_ERROR }
 		require(input != null) { INPUT_PATH_ERROR }
 		return if (codeStyleScheme != null) {
@@ -21,7 +21,7 @@ open class IdeaExtension(open var path: String? = null,
 	}
 
 	fun inspectArgs(ext: DetektExtension): Array<String> {
-		val input = ext.profileInputPath
+		val input = ext.profileInputPath()
 		require(path != null) { IDEA_PATH_ERROR }
 		require(input != null) { INPUT_PATH_ERROR }
 		require(report != null) { REPORT_PATH_ERROR }
@@ -29,11 +29,12 @@ open class IdeaExtension(open var path: String? = null,
 		return arrayOf("$path/bin/inspect.sh", input!!, inspectionsProfile!!, report!!)
 	}
 
-	private val DetektExtension.profileInputPath get() = systemOrDefaultProfile?.input?.apply {
+	private fun DetektExtension.profileInputPath() = systemOrDefaultProfile()?.input?.apply {
 		if (debug) println("input: $this")
 	}
 
-	override fun toString(): String = this.reflectiveToString()
+	override fun toString(): String = "IdeaExtension(path=$path, " +
+			"codeStyleScheme=$codeStyleScheme, inspectionsProfile=$inspectionsProfile, report=$report, mask='$mask')"
 
 	companion object {
 		private const val INPUT_PATH_ERROR = "Make sure the input path is specified!"

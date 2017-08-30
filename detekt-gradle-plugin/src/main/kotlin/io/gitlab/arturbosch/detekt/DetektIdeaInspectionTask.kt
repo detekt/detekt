@@ -15,10 +15,10 @@ open class DetektIdeaInspectionTask : DefaultTask() {
 	}
 
 	@TaskAction
-	fun format() {
+	fun inspect() {
 		with(project.extensions.getByName("detekt") as DetektExtension) {
 			if (debug) println("$ideaExtension")
-			startProcess(ideaInspectArgs)
+			startProcess(ideaInspectArgs())
 		}
 	}
 }

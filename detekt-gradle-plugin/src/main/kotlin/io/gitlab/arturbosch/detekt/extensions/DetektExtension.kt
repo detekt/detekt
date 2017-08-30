@@ -11,11 +11,11 @@ open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 						   open var profile: String = DEFAULT_PROFILE_NAME,
 						   open var ideaExtension: IdeaExtension = IdeaExtension()) {
 
-	val profiles: MutableList<ProfileExtension> = mutableListOf()
-	val systemOrDefaultProfile get() = getSystemProfile() ?: getDefaultProfile()
+	private val profiles: MutableList<ProfileExtension> = mutableListOf()
 
-	val ideaFormatArgs get() = ideaExtension.formatArgs(this)
-	val ideaInspectArgs get() = ideaExtension.inspectArgs(this)
+	fun systemOrDefaultProfile() = getSystemProfile() ?: getDefaultProfile()
+	fun ideaFormatArgs() = ideaExtension.formatArgs(this)
+	fun ideaInspectArgs() = ideaExtension.inspectArgs(this)
 
 	fun idea(configuration: Action<in IdeaExtension>) {
 		configuration.execute(ideaExtension)
@@ -49,8 +49,8 @@ open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 			searchProfileWithName(MAIN_PROFILE_NAME)
 		} else null
 
-		val allArguments = mainProfile?.arguments(debug) ?: mutableMapOf<String, String>()
-		val defaultArguments = defaultProfile?.arguments(debug) ?: mutableMapOf<String, String>()
+		val allArguments = mainProfile?.arguments(debug) ?: mutableMapOf()
+		val defaultArguments = defaultProfile?.arguments(debug) ?: mutableMapOf()
 		val fallbackEmptyArguments = mutableMapOf<String, String>()
 
 		val overriddenArguments = if (systemProfile?.name == defaultProfile?.name) fallbackEmptyArguments
@@ -59,9 +59,9 @@ open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 		defaultArguments.merge(allArguments)
 		overriddenArguments.merge(allArguments)
 
-		return allArguments.flatMapTo(ArrayList<String>()) { flattenBoolValues(it.key, it.value) }.apply {
+		return allArguments.flatMapTo(ArrayList()) { flattenBoolValues(it.key, it.value) }.apply {
 			if (debug) {
-				val name = systemOrDefaultProfile?.name ?: "_fallback_"
+				val name = systemOrDefaultProfile()?.name ?: "_fallback_"
 				println("detekt version: $version - usedProfile: $name")
 				println("Arguments: $this")
 			}
@@ -75,8 +75,8 @@ open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 	private fun flattenBoolValues(key: String, value: String)
 			= if (value == "true" || value == "false") listOf(key) else listOf(key, value)
 
-	override fun toString(): String = this.reflectiveToString()
-
+	override fun toString(): String = "DetektExtension(version='$version', " +
+			"debug=$debug, profile='$profile', ideaExtension=$ideaExtension, profiles=$profiles)"
 }
 
 private val MAIN_PROFILE_NAME = "main"

@@ -18,7 +18,7 @@ open class DetektIdeaFormatTask : DefaultTask() {
 	fun format() {
 		with(project.extensions.getByName("detekt") as DetektExtension) {
 			if (debug) println("$ideaExtension")
-			startProcess(ideaFormatArgs)
+			startProcess(ideaFormatArgs())
 		}
 	}
 }
