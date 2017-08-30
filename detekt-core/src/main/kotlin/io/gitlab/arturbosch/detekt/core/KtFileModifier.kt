@@ -14,7 +14,7 @@ class KtFileModifier(private val project: Path) {
 
 	fun saveModifiedFiles(ktFiles: List<KtFile>, notification: (Notification) -> Unit) {
 		ktFiles.filter { it.modificationStamp > 0 }
-				.map { relativePath(it) to unnormalizeContent(it) }
+				.map { it.relativePath() to it.unnormalizeContent() }
 				.filter { it.first != null }
 				.map { project.resolve(it.first) to it.second }
 				.forEach {
@@ -23,14 +23,14 @@ class KtFileModifier(private val project: Path) {
 				}
 	}
 
-	private fun unnormalizeContent(file: KtFile): String {
-		val lineSeparator = file.getUserData(KtCompiler.LINE_SEPARATOR)
+	private fun KtFile.unnormalizeContent(): String {
+		val lineSeparator = getUserData(KtCompiler.LINE_SEPARATOR)
 		require(lineSeparator != null) {
-			"No line separator entry for ktFile ${file.javaFileFacadeFqName.asString()}"
+			"No line separator entry for ktFile ${javaFileFacadeFqName.asString()}"
 		}
-		return StringUtilRt.convertLineSeparators(file.text, lineSeparator!!)
+		return StringUtilRt.convertLineSeparators(text, lineSeparator!!)
 	}
 
-	private fun relativePath(file: KtFile): String? = file.getUserData(KtCompiler.RELATIVE_PATH)
+	private fun KtFile.relativePath(): String? = getUserData(KtCompiler.RELATIVE_PATH)
 
 }
