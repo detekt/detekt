@@ -1,5 +1,5 @@
 build:
-  failThreshold: 1
+  failThreshold: 11
 
 style:
   MagicNumber:
