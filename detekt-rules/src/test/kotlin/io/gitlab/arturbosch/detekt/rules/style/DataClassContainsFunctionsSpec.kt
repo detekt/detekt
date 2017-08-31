@@ -90,7 +90,7 @@ class DataClassContainsFunctionsSpec : SubjectSpek<DataClassContainsFunctionsRul
 		Assertions.assertThat(subject.lint(code)).hasSize(0)
 	}
 
-	it("should not report issue for functions out of class"){
+	it("should not report issue for functions which don't belong to a class"){
 		val code = """
 			val test = "Test"
 			fun printTest(){
