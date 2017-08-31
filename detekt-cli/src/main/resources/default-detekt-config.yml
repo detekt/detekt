@@ -283,6 +283,8 @@ style:
     active: false
   UnnecessaryParentheses:
     active: false
+  DataClassContainsFunctions:
+    active: false
 
 comments:
   active: true
