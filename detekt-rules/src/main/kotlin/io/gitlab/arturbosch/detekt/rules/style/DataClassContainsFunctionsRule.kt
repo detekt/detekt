@@ -1,13 +1,13 @@
-package io.gitlab.arturbosch.detekt.rules.complexity
+package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.*
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
-class DataClassRule(config: Config = Config.empty) : Rule(config) {
-    override val issue: Issue = Issue("DataClassRule",
-            Severity.CodeSmell,
+class DataClassContainsFunctionsRule(config: Config = Config.empty) : Rule(config) {
+    override val issue: Issue = Issue("DataClassContainsFunctions",
+            Severity.Style,
             "Data class should be use to keep only the data.")
 
     override fun visitClass(klass: KtClass) {
