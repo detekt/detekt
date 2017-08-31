@@ -29,7 +29,7 @@ class DataClassContainsFunctionsRule(config: Config = Config.empty) : Rule(confi
 	}
 
 	private fun handleNamedFunction(function: KtNamedFunction) {
-		if (!(function.modifierList?.hasModifier(KtTokens.OVERRIDE_KEYWORD) ?: false)) {
+		if (function.modifierList?.hasModifier(KtTokens.OVERRIDE_KEYWORD) != true) {
 			report(CodeSmell(issue, Entity.from(function)))
 		}
 	}
