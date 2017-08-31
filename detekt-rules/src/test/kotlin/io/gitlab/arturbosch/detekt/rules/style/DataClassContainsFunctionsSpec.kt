@@ -74,4 +74,33 @@ class DataClassContainsFunctionsSpec : SubjectSpek<DataClassContainsFunctionsRul
 		"""
 		Assertions.assertThat(subject.lint(code)).hasSize(0)
 	}
+
+	it("should not report issue for functions in regular classes"){
+		val code = """
+			class Test(val test : String){
+				fun printTest(){
+					println(test)
+				}
+				fun printTestTwice(){
+					println(test)
+					println(test)
+				}
+			}
+		"""
+		Assertions.assertThat(subject.lint(code)).hasSize(0)
+	}
+
+	it("should not report issue for functions out of class"){
+		val code = """
+			val test = "Test"
+			fun printTest(){
+				println(test)
+			}
+			fun printTestTwice(){
+				println(test)
+				println(test)
+			}
+		"""
+		Assertions.assertThat(subject.lint(code)).hasSize(0)
+	}
 })
