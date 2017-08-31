@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.rules.complexity
+package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions
@@ -10,8 +10,8 @@ import org.jetbrains.spek.subject.SubjectSpek
  * @author Ivan Balaksha
  */
 
-class DataClassSpec : SubjectSpek<DataClassRule>({
-    subject { DataClassRule() }
+class DataClassContainsFunctionsSpec : SubjectSpek<DataClassContainsFunctionsRule>({
+    subject { DataClassContainsFunctionsRule() }
 
     describe("") {
 
