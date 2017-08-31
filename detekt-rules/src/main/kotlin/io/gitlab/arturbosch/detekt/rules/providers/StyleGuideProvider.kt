@@ -16,6 +16,7 @@ import io.gitlab.arturbosch.detekt.rules.style.ProtectedMemberInFinalClass
 import io.gitlab.arturbosch.detekt.rules.style.ReturnCount
 import io.gitlab.arturbosch.detekt.rules.style.SafeCast
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryParentheses
+import io.gitlab.arturbosch.detekt.rules.style.UseDataClassRule
 import io.gitlab.arturbosch.detekt.rules.style.WildcardImport
 import io.gitlab.arturbosch.detekt.rules.style.naming.NamingRules
 
@@ -42,7 +43,8 @@ class StyleGuideProvider : RuleSetProvider {
 				OptionalWhenBraces(config),
 				ProtectedMemberInFinalClass(config),
 				MagicNumber(config),
-				ModifierOrder(config)
+				ModifierOrder(config),
+				UseDataClassRule(config)
 		))
 	}
 }

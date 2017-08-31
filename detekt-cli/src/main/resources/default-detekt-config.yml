@@ -266,6 +266,8 @@ style:
     active: false
   UnnecessaryParentheses:
     active: false
+  UseDataClass:
+    active: false
 
 comments:
   active: true
