@@ -19,7 +19,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
 class UseDataClassRule(config: Config = Config.empty) : Rule(config) {
 	override val issue: Issue = Issue("UseDataClass",
 			Severity.Style,
-			"You can use data class if your class only keep data and doesn't provide any functions")
+			"If a class does nothing but hold data the developer can introduce a data class.")
 
 	private val defaultFunctionNames = listOf("hashCode", "equals", "toString", "copy")
 
