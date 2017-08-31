@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -15,16 +16,26 @@ class DataClassContainsFunctionsRule(config: Config = Config.empty) : Rule(confi
 			Severity.Style,
 			"Data class should be use to keep only the data.")
 
+	private val visitor = FunctionsVisitor(this)
+
 	override fun visitClass(klass: KtClass) {
-		if (!klass.isData()) return
+		if (klass.isData()) {
+			klass.getBody()?.declarations?.forEach {
+				it.accept(visitor)
+			}
+		}
 		super.visitClass(klass)
 	}
 
-	override fun visitNamedFunction(function: KtNamedFunction) {
-		super.visitNamedFunction(function)
-
+	private fun handleNamedFunction(function: KtNamedFunction) {
 		if (!(function.modifierList?.hasModifier(KtTokens.OVERRIDE_KEYWORD) ?: false)) {
 			report(CodeSmell(issue, Entity.from(function)))
+		}
+	}
+
+	private class FunctionsVisitor(val rule: DataClassContainsFunctionsRule) : DetektVisitor() {
+		override fun visitNamedFunction(function: KtNamedFunction) {
+			rule.handleNamedFunction(function)
 		}
 	}
 }
