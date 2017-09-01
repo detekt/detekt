@@ -742,6 +742,7 @@ detekt findings, bunch of rules
 - [schalks](https://github.com/schalkms) - Active on Issues, Bunch of rules, Project metrics 
 - [Anna Y](https://github.com/Nevvea7) - Readme fix
 - [Karol Wrótniak](https://github.com/koral--) - Treat comments as not empty blocks
+- [Radim Vaculik](https://github.com/radimvaculik) - VariableMaxLength - bugfix
 
 #### Credits
 - [Stanley Shyiko](https://github.com/shyiko) - `detekt` migrated the formatting rules from [ktlint](https://github.com/shyiko/ktlint)
