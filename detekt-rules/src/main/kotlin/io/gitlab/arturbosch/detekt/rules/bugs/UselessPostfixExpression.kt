@@ -11,10 +11,10 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtPostfixExpression
 import org.jetbrains.kotlin.psi.KtReturnExpression
 
-class UselessIncrement(config: Config = Config.empty) : Rule(config) {
+class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
 
-	override val issue: Issue = Issue("UselessIncrement", Severity.Defect,
-			"The incremented value is unused. The incremented value is replaced with the original value.")
+	override val issue: Issue = Issue("UselessPostfixExpression", Severity.Defect,
+			"The incremented or decremented value is unused. This value is replaced with the original value.")
 
 	override fun visitReturnExpression(expression: KtReturnExpression) {
 		val postfixExpression = expression.returnedExpression as? KtPostfixExpression
