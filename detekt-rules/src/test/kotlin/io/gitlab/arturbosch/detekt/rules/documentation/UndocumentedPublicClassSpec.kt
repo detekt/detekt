@@ -23,6 +23,12 @@ class UndocumentedPublicClassSpec : SubjectSpek<UndocumentedPublicClass>({
 				inner class Inner
 			}"""
 
+	val innerObject = """
+			/** Some doc */
+			class TestInner {
+				object Inner
+			}"""
+
 	val innerInterface = """
 			/** Some doc */
 			class TestInner {
@@ -39,6 +45,10 @@ class UndocumentedPublicClassSpec : SubjectSpek<UndocumentedPublicClass>({
 		assertThat(subject.lint(inner)).hasSize(1)
 	}
 
+	it("should report inner object by default") {
+		assertThat(subject.lint(innerObject)).hasSize(1)
+	}
+
 	it("should report inner interfaces by default") {
 		assertThat(subject.lint(innerInterface)).hasSize(1)
 	}
@@ -49,6 +59,11 @@ class UndocumentedPublicClassSpec : SubjectSpek<UndocumentedPublicClass>({
 
 	it("should not report inner classes when turned off") {
 		val findings = UndocumentedPublicClass(TestConfig(mapOf(UndocumentedPublicClass.SEARCH_IN_INNER_CLASS to "false"))).lint(inner)
+		assertThat(findings).isEmpty()
+	}
+
+	it("should not report inner objects when turned off") {
+		val findings = UndocumentedPublicClass(TestConfig(mapOf(UndocumentedPublicClass.SEARCH_IN_INNER_OBJECT to "false"))).lint(innerObject)
 		assertThat(findings).isEmpty()
 	}
 
