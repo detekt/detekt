@@ -23,7 +23,8 @@ class ProtectedMemberInFinalClass(config: Config = Config.empty) : Rule(config) 
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
 		val isNotAbstract = !classOrObject.hasModifier(KtTokens.ABSTRACT_KEYWORD)
 		val isFinal = !classOrObject.hasModifier(KtTokens.OPEN_KEYWORD)
-		if (isNotAbstract && isFinal) {
+		val isNotSealed = !classOrObject.hasModifier(KtTokens.SEALED_KEYWORD)
+		if (isNotAbstract && isFinal && isNotSealed) {
 			visitPrimaryConstructor(classOrObject)
 			visitKlassDeclarations(classOrObject)
 		} else {
