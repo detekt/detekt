@@ -277,6 +277,7 @@ comments:
     active: false
     searchInNestedClass: true
     searchInInnerClass: true
+    searchInInnerObject: true
     searchInInnerInterface: true
   UndocumentedPublicFunction:
     active: false
