@@ -232,6 +232,8 @@ style:
   ForbiddenImport:
     active: false
     imports: ''
+  PackageDeclarationStyle:
+    active: false
   ModifierOrder:
     active: true
   MagicNumber:
