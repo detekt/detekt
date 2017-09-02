@@ -11,14 +11,14 @@ import org.jetbrains.kotlin.psi.KtCatchClause
 /**
  * @author Artur Bosch
  */
-class TooGenericExceptionCatched(config: Config) : Rule(config) {
+class TooGenericExceptionCaught(config: Config) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,
 			Severity.Defect,
 			"Thrown exception is too generic. " +
 					"Prefer throwing project specific exceptions to handle error cases.")
 
-	private val exceptions: Set<String> = valueOrDefault(CATCHED_EXCEPTIONS_PROPERTY, CATCHED_EXCEPTIONS).toHashSet()
+	private val exceptions: Set<String> = valueOrDefault(CAUGHT_EXCEPTIONS_PROPERTY, CAUGHT_EXCEPTIONS).toHashSet()
 
 	override fun visitCatchSection(catchClause: KtCatchClause) {
 		catchClause.catchParameter?.let {
@@ -30,12 +30,13 @@ class TooGenericExceptionCatched(config: Config) : Rule(config) {
 	}
 }
 
-const val CATCHED_EXCEPTIONS_PROPERTY = "exceptions"
-val CATCHED_EXCEPTIONS = listOf(
+const val CAUGHT_EXCEPTIONS_PROPERTY = "exceptions"
+val CAUGHT_EXCEPTIONS = listOf(
 		"ArrayIndexOutOfBoundsException",
 		"Error",
 		"Exception",
 		"IllegalMonitorStateException",
+		"InterruptedException",
 		"NullPointerException",
 		"IndexOutOfBoundsException",
 		"RuntimeException",

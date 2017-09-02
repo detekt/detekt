@@ -10,7 +10,7 @@ import io.gitlab.arturbosch.detekt.rules.exceptions.RethrowCaughtException
 import io.gitlab.arturbosch.detekt.rules.exceptions.ReturnFromFinally
 import io.gitlab.arturbosch.detekt.rules.exceptions.ThrowingExceptionFromFinally
 import io.gitlab.arturbosch.detekt.rules.exceptions.ThrowingNewInstanceOfSameException
-import io.gitlab.arturbosch.detekt.rules.exceptions.TooGenericExceptionCatched
+import io.gitlab.arturbosch.detekt.rules.exceptions.TooGenericExceptionCaught
 import io.gitlab.arturbosch.detekt.rules.exceptions.TooGenericExceptionThrown
 
 /**
@@ -22,7 +22,7 @@ class ExceptionsProvider : RuleSetProvider {
 
 	override fun instance(config: Config): RuleSet {
 		return RuleSet(ruleSetId, listOf(
-				TooGenericExceptionCatched(config),
+				TooGenericExceptionCaught(config),
 				TooGenericExceptionThrown(config),
 				PrintExceptionStackTrace(config),
 				InstanceOfCheckForException(config),

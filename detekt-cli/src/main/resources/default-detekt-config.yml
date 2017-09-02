@@ -68,7 +68,7 @@ performance:
 
 exceptions:
   active: true
-  TooGenericExceptionCatched:
+  TooGenericExceptionCaught:
     active: true
     exceptions:
       - ArrayIndexOutOfBoundsException
@@ -76,6 +76,7 @@ exceptions:
       - Exception
       - IllegalMonitorStateException
       - IndexOutOfBoundsException
+      - InterruptedException
       - NullPointerException
       - RuntimeException
   TooGenericExceptionThrown:
