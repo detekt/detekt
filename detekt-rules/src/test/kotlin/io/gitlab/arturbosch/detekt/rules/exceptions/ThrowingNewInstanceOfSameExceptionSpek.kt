@@ -11,7 +11,7 @@ class ThrowingNewInstanceOfSameExceptionSpek : SubjectSpek<ThrowingNewInstanceOf
 
 	given("a catch block which rethrows a new instance of the caught exception") {
 		val code = """
-			function x() {
+			fun x() {
 				try {
 				} catch (e: IllegalStateException) {
 					throw IllegalStateException(e)
@@ -27,7 +27,7 @@ class ThrowingNewInstanceOfSameExceptionSpek : SubjectSpek<ThrowingNewInstanceOf
 
 	given("a catch block which rethrows a new instance of another exception") {
 		val code = """
-			function x() {
+			fun x() {
 				try {
 				} catch (e: IllegalStateException) {
 					throw IllegalArgumentException(e)
@@ -43,7 +43,7 @@ class ThrowingNewInstanceOfSameExceptionSpek : SubjectSpek<ThrowingNewInstanceOf
 
 	given("a catch block which throws a new instance of the same exception type without wrapping the caught exception") {
 		val code = """
-			function x() {
+			fun x() {
 				try {
 				} catch (e: IllegalStateException) {
 					throw IllegalStateException()

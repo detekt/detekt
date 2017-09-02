@@ -11,7 +11,7 @@ class RethrowCaughtExceptionSpec : SubjectSpek<RethrowCaughtException>({
 
 	given("a caught exception rethrown") {
 		val code = """
-			function x() {
+			fun x() {
 				try {
 				} catch (e: IllegalStateException) {
 					throw e
@@ -27,7 +27,7 @@ class RethrowCaughtExceptionSpec : SubjectSpek<RethrowCaughtException>({
 
 	given("a new exception thrown") {
 		val code = """
-			function x() {
+			fun x() {
 				try {
 				} catch (e: IllegalStateException) {
 					throw IllegalArgumentException(e)
