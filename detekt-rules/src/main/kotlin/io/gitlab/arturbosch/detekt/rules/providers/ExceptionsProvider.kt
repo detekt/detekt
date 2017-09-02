@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.rules.exceptions.PrintExceptionStackTrace
 import io.gitlab.arturbosch.detekt.rules.exceptions.RethrowCaughtException
 import io.gitlab.arturbosch.detekt.rules.exceptions.ReturnFromFinally
 import io.gitlab.arturbosch.detekt.rules.exceptions.ThrowingExceptionFromFinally
+import io.gitlab.arturbosch.detekt.rules.exceptions.ThrowingExceptionInMain
 import io.gitlab.arturbosch.detekt.rules.exceptions.ThrowingNewInstanceOfSameException
 import io.gitlab.arturbosch.detekt.rules.exceptions.TooGenericExceptionCaught
 import io.gitlab.arturbosch.detekt.rules.exceptions.TooGenericExceptionThrown
@@ -28,6 +29,7 @@ class ExceptionsProvider : RuleSetProvider {
 				InstanceOfCheckForException(config),
 				ReturnFromFinally(config),
 				ThrowingExceptionFromFinally(config),
+				ThrowingExceptionInMain(config),
 				RethrowCaughtException(config),
 				ThrowingNewInstanceOfSameException(config),
 				IteratorNotThrowingNoSuchElementException(config)
