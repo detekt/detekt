@@ -88,6 +88,22 @@ exceptions:
       - ThrowNullPointerException
       - ThrowRuntimeException
       - ThrowThrowable
+  InstanceOfCheckForException:
+    active: false
+  IteratorNotThrowingNoSuchElementException:
+    active: false
+  PrintExceptionStackTrace:
+    active: false
+  RethrowCaughtException:
+    active: false
+  ReturnFromFinally:
+    active: false
+  ThrowingExceptionFromFinally:
+    active: false
+  ThrowingExceptionInMain:
+    active: false
+  ThrowingNewInstanceOfSameException:
+    active: false
 
 empty-blocks:
   active: true
