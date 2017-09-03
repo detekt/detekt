@@ -1,5 +1,16 @@
 # Detekt - Changelog
 
+#### RC4-2 - Bugfix release for RC4
+
+- Bugfix FunctionMaxLength typo - [#367](https://github.com/arturbosch/detekt/pull/367)
+- Fixed protected member report in sealed class - [#362](https://github.com/arturbosch/detekt/pull/362)
+- Renamed UselessIncrement to UselessPostfixExp - [#360](https://github.com/arturbosch/detekt/pull/360)
+- Bugfix/variable max length const - [#359](https://github.com/arturbosch/detekt/pull/359)
+- UndocumentedPublicClass: Add searchInInnerObject configuration property. - [#358](https://github.com/arturbosch/detekt/pull/358)
+- fix link to default-detekt-config.yml in migration guide for RC4 - [#357](https://github.com/arturbosch/detekt/pull/357)
+
+See all issues at: [RC4-2](https://github.com/arturbosch/detekt/milestone/20)
+
 #### RC4
 
 - Do not use reflection for toString methods - closes #349 - [#351](https://github.com/arturbosch/detekt/pull/351)
