@@ -1,6 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.rules.Case
+import io.gitlab.arturbosch.detekt.test.compileForTest
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions
 import org.jetbrains.spek.api.dsl.describe
@@ -13,19 +15,8 @@ class EqualsAlwaysReturnsTrueOrFalseSpec : SubjectSpek<EqualsAlwaysReturnsTrueOr
 	describe("check if equals() method always returns true or false") {
 
 		it("returns constant boolean") {
-			val code = """
-				class A {
-					override fun equals(other: Any?): Boolean {
-						return true
-					}
-				}
-
-				class B {
-					override fun equals(other: Any?): Boolean {
-						return false
-					}
-				}"""
-			Assertions.assertThat(subject.lint(code)).hasSize(2)
+			val file = compileForTest(Case.EqualsAlwaysReturnsConstant.path())
+			Assertions.assertThat(subject.lint(file.text)).hasSize(2)
 		}
 	}
 })
