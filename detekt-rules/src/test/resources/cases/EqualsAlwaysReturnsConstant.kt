@@ -16,5 +16,3 @@ object B {
 		return false // violations
 	}
 }
-
-
