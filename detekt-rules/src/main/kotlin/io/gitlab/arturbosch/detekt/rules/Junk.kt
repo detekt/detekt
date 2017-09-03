@@ -15,11 +15,20 @@ import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
  * @author Artur Bosch
  */
 
-fun KtExpression?.asBlockExpression(): KtBlockExpression? = if (this is KtBlockExpression) this else null
+fun KtExpression?.asBlockExpression(): KtBlockExpression? = this as? KtBlockExpression
 
-fun KtModifierListOwner.isPublicNotOverridden() = this.hasModifier(KtTokens.PUBLIC_KEYWORD)
-		|| (this.hasModifier(KtTokens.PRIVATE_KEYWORD) || this.hasModifier(KtTokens.PROTECTED_KEYWORD)
-		|| this.hasModifier(KtTokens.INTERNAL_KEYWORD) || this.hasModifier(KtTokens.OVERRIDE_KEYWORD)).not()
+fun KtModifierListOwner.isPublicAndOverridden() =
+		isPublic() && this.hasModifier(KtTokens.OVERRIDE_KEYWORD)
+
+fun KtModifierListOwner.isPublicNotOverridden() =
+		isPublic() && !this.hasModifier(KtTokens.OVERRIDE_KEYWORD)
+
+fun KtModifierListOwner.isPublic(): Boolean {
+	return this.hasModifier(KtTokens.PUBLIC_KEYWORD)
+			|| !(this.hasModifier(KtTokens.PRIVATE_KEYWORD)
+				|| this.hasModifier(KtTokens.PROTECTED_KEYWORD)
+				|| this.hasModifier(KtTokens.INTERNAL_KEYWORD))
+}
 
 fun KtCallExpression.isUsedForNesting(): Boolean = when (getCallNameExpression()?.text) {
 	"run", "let", "apply", "with", "use", "forEach" -> true
