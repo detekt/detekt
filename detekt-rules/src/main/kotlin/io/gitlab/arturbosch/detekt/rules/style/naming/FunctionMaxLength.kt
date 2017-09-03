@@ -25,7 +25,7 @@ class FunctionMaxLength(config: Config = Config.empty) : SubRule<KtNamedFunction
 	}
 
 	companion object {
-		const val MAXIMUM_FUNCTION_NAME_LENGTH = "minimumFunctionNameLength"
+		const val MAXIMUM_FUNCTION_NAME_LENGTH = "maximumFunctionNameLength"
 		private const val DEFAULT_MAXIMUM_FUNCTION_NAME_LENGTH = 30
 	}
 }
