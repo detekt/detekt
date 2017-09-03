@@ -30,25 +30,27 @@ class PackageDeclarationStyle(config: Config = Config.empty) : Rule(config) {
 
 	private fun checkPackageDeclaration(importList: KtImportList) {
 		val prevSibling = importList.prevSibling
-		if (prevSibling is PsiWhiteSpace
-				|| prevSibling is KtPackageDirective && prevSibling.text.isNotEmpty()) {
-			checkSibling(prevSibling)
+		if (isPackageDeclaration(prevSibling) || prevSibling is PsiWhiteSpace) {
+			checkLinebreakAfterElement(prevSibling)
 		}
 	}
+
+	private fun isPackageDeclaration(element: PsiElement?) =
+			(element is KtPackageDirective && element.text.isNotEmpty())
 
 	private fun checkKtElementsDeclaration(importList: KtImportList) {
 		val hasKtElements = importList.siblings(withItself = false).any { it is KtElement }
 		val nextSibling = importList.nextSibling
 		if (hasKtElements
 				&& (nextSibling is PsiWhiteSpace || nextSibling is KtElement)) {
-			checkSibling(nextSibling)
+			checkLinebreakAfterElement(nextSibling)
 		}
 	}
 
-	private fun checkSibling(element: PsiElement?) {
+	private fun checkLinebreakAfterElement(element: PsiElement?) {
 		if (element is PsiWhiteSpace || element is KtElement) {
 			val count = element.text.count { it == '\n' }
-			if (count < 2) {
+			if (count != 2) {
 				report(CodeSmell(issue, Entity.from(element)))
 			}
 		}
