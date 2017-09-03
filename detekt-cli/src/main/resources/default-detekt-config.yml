@@ -68,6 +68,8 @@ performance:
 
 exceptions:
   active: true
+  ExceptionRaisedInUnexpectedLocation:
+    active: false
   SwallowedException:
     active: false
   TooGenericExceptionCatched:

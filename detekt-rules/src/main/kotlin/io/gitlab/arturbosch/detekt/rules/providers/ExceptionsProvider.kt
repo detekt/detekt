@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.providers
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.rules.exceptions.ExceptionRaisedInUnexpectedLocation
 import io.gitlab.arturbosch.detekt.rules.exceptions.IteratorNotThrowingNoSuchElementException
 import io.gitlab.arturbosch.detekt.rules.exceptions.RethrowCaughtException
 import io.gitlab.arturbosch.detekt.rules.exceptions.ReturnFromFinally
@@ -20,6 +21,7 @@ class ExceptionsProvider : RuleSetProvider {
 
 	override fun instance(config: Config): RuleSet {
 		return RuleSet(ruleSetId, listOf(
+				ExceptionRaisedInUnexpectedLocation(config),
 				TooGenericExceptionCatched(config),
 				TooGenericExceptionThrown(config),
 				ReturnFromFinally(config),
