@@ -29,7 +29,8 @@ enum class Case(val file: String) {
 	UnreachableCode("/cases/UnreachableCode.kt"),
 	SuppressedElements("/SuppressedByElementAnnotation.kt"),
 	SuppressedElementsByFile("/SuppressedElementsByFileAnnotation.kt"),
-	SuppressedElementsByClass("/SuppressedElementsByClassAnnotation.kt");
+	SuppressedElementsByClass("/SuppressedElementsByClassAnnotation.kt"),
+	SwallowedException("/cases/SwallowedException.kt");
 
 	fun path(): Path = Paths.get(resource(file))
 }

@@ -68,6 +68,8 @@ performance:
 
 exceptions:
   active: true
+  SwallowedException:
+    active: false
   TooGenericExceptionCaught:
     active: true
     exceptions:

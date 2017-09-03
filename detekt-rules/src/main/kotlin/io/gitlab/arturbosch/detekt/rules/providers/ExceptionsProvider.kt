@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.rules.exceptions.IteratorNotThrowingNoSuchEle
 import io.gitlab.arturbosch.detekt.rules.exceptions.PrintExceptionStackTrace
 import io.gitlab.arturbosch.detekt.rules.exceptions.RethrowCaughtException
 import io.gitlab.arturbosch.detekt.rules.exceptions.ReturnFromFinally
+import io.gitlab.arturbosch.detekt.rules.exceptions.SwallowedException
 import io.gitlab.arturbosch.detekt.rules.exceptions.ThrowingExceptionFromFinally
 import io.gitlab.arturbosch.detekt.rules.exceptions.ThrowingExceptionInMain
 import io.gitlab.arturbosch.detekt.rules.exceptions.ThrowingNewInstanceOfSameException
@@ -32,6 +33,7 @@ class ExceptionsProvider : RuleSetProvider {
 				ThrowingExceptionInMain(config),
 				RethrowCaughtException(config),
 				ThrowingNewInstanceOfSameException(config),
+				SwallowedException(config),
 				IteratorNotThrowingNoSuchElementException(config)
 		))
 	}
