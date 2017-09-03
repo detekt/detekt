@@ -57,6 +57,11 @@ class PackageDeclarationStyleSpec : SubjectSpek<PackageDeclarationStyle>({
 			assertCodeViolation(code, 2)
 		}
 
+		it("has two many blank lines") {
+			val code = "package test\n\n\nimport a.b\n\n\nclass A {}"
+			assertCodeViolation(code, 2)
+		}
+
 		it("has package declarations in same line") {
 			val code = "package test;import a.b;class A {}"
 			assertCodeViolation(code, 2)
