@@ -15,6 +15,7 @@ import io.gitlab.arturbosch.detekt.rules.style.OptionalWhenBraces
 import io.gitlab.arturbosch.detekt.rules.style.ProtectedMemberInFinalClass
 import io.gitlab.arturbosch.detekt.rules.style.ReturnCount
 import io.gitlab.arturbosch.detekt.rules.style.SafeCast
+import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryAbstractClass
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryParentheses
 import io.gitlab.arturbosch.detekt.rules.style.WildcardImport
 import io.gitlab.arturbosch.detekt.rules.style.naming.NamingRules
@@ -37,6 +38,7 @@ class StyleGuideProvider : RuleSetProvider {
 				ForbiddenImport(config),
 				NamingRules(config),
 				SafeCast(config),
+				UnnecessaryAbstractClass(config),
 				UnnecessaryParentheses(config),
 				OptionalAbstractKeyword(config),
 				OptionalWhenBraces(config),

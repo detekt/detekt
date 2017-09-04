@@ -27,6 +27,7 @@ enum class Case(val file: String) {
 	NestedLongMethods("/cases/NestedLongMethods.kt"),
 	FeatureEnvy("/cases/FeatureEnvy.kt"),
 	UnreachableCode("/cases/UnreachableCode.kt"),
+	UnnecessaryAbstractClass("/cases/UnnecessaryAbstractClass.kt"),
 	SuppressedElements("/SuppressedByElementAnnotation.kt"),
 	SuppressedElementsByFile("/SuppressedElementsByFileAnnotation.kt"),
 	SuppressedElementsByClass("/SuppressedElementsByClassAnnotation.kt");
