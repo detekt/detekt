@@ -42,4 +42,21 @@ class UnreachableCode {
 		}
 		throw IllegalArgumentException()
 	}
+
+	fun breakAndContinue() {
+		for (i in 1..2) {
+			break
+		}
+		for (i in 1..2) {
+			break
+			println() // unreachable
+		}
+		for (i in 1..2) {
+			continue
+		}
+		for (i in 1..2) {
+			continue
+			println() // unreachable
+		}
+	}
 }
