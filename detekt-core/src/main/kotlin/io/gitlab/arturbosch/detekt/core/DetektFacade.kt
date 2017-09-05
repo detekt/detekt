@@ -25,7 +25,6 @@ object DetektFacade {
 	fun instance(settings: ProcessingSettings,
 				 providers: List<RuleSetProvider>,
 				 processors: List<FileProcessListener>): Detektor {
-		val compiler = KtTreeCompiler.instance(settings)
-		return Detektor(settings, compiler, providers, processors)
+		return Detektor(settings, providers, processors)
 	}
 }

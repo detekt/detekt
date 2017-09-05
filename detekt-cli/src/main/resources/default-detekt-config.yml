@@ -54,7 +54,7 @@ potential-bugs:
     active: false
   UnsafeCast:
     active: false
-  UselessIncrement:
+  UselessPostfixExpression:
     active: false
 
 performance:
@@ -215,6 +215,8 @@ style:
   ForbiddenImport:
     active: false
     imports: ''
+  PackageDeclarationStyle:
+    active: false
   ModifierOrder:
     active: true
   MagicNumber:
@@ -241,7 +243,7 @@ style:
   EnumNaming:
     active: true
     enumEntryPattern: '^[A-Z$][a-zA-Z_$]*$'
-  FunctionNaming :
+  FunctionNaming:
     active: true
     functionPattern: '^[a-z$][a-zA-Z$0-9]*$'
   FunctionMaxLength:
@@ -250,10 +252,10 @@ style:
   FunctionMinLength:
     active: false
     minimumFunctionNameLength: 3
-  VariableNaming :
+  VariableNaming:
     active: true
     variablePattern: '^(_)?[a-z$][a-zA-Z$0-9]*$'
-  ConstantNaming :
+  ConstantNaming:
     active: true
     constantPattern: '^([A-Z_]*|serialVersionUID)$'
   VariableMaxLength:
@@ -268,6 +270,10 @@ style:
     active: false
   UnnecessaryAbstractClass:
     active: false
+  DataClassContainsFunctions:
+    active: false
+  UseDataClass:
+    active: false
 
 comments:
   active: true
@@ -279,6 +285,7 @@ comments:
     active: false
     searchInNestedClass: true
     searchInInnerClass: true
+    searchInInnerObject: true
     searchInInnerInterface: true
   UndocumentedPublicFunction:
     active: false

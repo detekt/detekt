@@ -52,5 +52,12 @@ open class OpenClass {
 	}
 }
 
+@Suppress("unused")
+sealed class SealedClass {
+
+	protected fun a() {}
+}
+
 // positive case
+@Suppress("unused")
 class FinalClassWithProtectedConstructor protected constructor()

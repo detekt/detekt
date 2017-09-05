@@ -47,13 +47,12 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
 	)
 
 	override fun postVisit(root: KtFile) {
-		super.postVisit(root)
-		rules.forEach { context.report(it.findings) }
+		report(rules.flatMap { it.findings })
 	}
 
 	override fun visitPackageDirective(directive: KtPackageDirective) {
 		super.visitPackageDirective(directive)
-		directive.reportFindings(context, packageNamingRule)
+		directive.reportFindings(packageNamingRule)
 	}
 
 	override fun visitNamedDeclaration(declaration: KtNamedDeclaration) {
@@ -72,24 +71,24 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
 	}
 
 	private fun handleFunction(declaration: KtNamedFunction) {
-		declaration.reportFindings(context, functionNamingRule)
-		declaration.reportFindings(context, functionMaxNameLengthRule)
-		declaration.reportFindings(context, functionMinNameLengthRule)
+		declaration.reportFindings(functionNamingRule)
+		declaration.reportFindings(functionMaxNameLengthRule)
+		declaration.reportFindings(functionMinNameLengthRule)
 	}
 
 	private fun handleVariable(declaration: KtVariableDeclaration) {
-		declaration.reportFindings(context, variableMaxNameLengthRule)
-		declaration.reportFindings(context, variableMinNameLengthRule)
+		declaration.reportFindings(variableMaxNameLengthRule)
+		declaration.reportFindings(variableMinNameLengthRule)
 
 		if (declaration.hasConstModifier()) {
-			declaration.reportFindings(context, constantNamingRule)
+			declaration.reportFindings(constantNamingRule)
 		} else if (declaration.withinObjectDeclaration() || declaration.isTopLevel()) {
 			if (variableNamingRule.doesntMatchPattern(declaration)
 					&& constantNamingRule.doesntMatchPattern(declaration)) {
-				declaration.reportFindings(context, variableNamingRule)
+				declaration.reportFindings(variableNamingRule)
 			}
 		} else {
-			declaration.reportFindings(context, variableNamingRule)
+			declaration.reportFindings(variableNamingRule)
 		}
 	}
 

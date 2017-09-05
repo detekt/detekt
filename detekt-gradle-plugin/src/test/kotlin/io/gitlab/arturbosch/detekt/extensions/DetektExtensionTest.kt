@@ -16,7 +16,7 @@ internal class DetektExtensionTest : Spek({
 	describe("parsing profiles") {
 
 		val project = ProjectBuilder.builder().build()
-		project.extensions.create("detekt", DetektExtension::class.java, *arrayOf())
+		project.extensions.create("detekt", DetektExtension::class.java)
 
 		it("should use the fallback arguments if no profile is specified") {
 			val detektExtension = DetektExtension()

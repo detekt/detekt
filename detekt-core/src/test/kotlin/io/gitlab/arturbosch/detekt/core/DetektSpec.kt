@@ -17,6 +17,5 @@ class DetektSpec : Spek({
 		it("should detect findings from more than one provider") {
 			assertTrue { detekt.run().findings.isNotEmpty() }
 		}
-
 	}
 })
