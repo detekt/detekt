@@ -19,6 +19,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
  * @author Ivan Balaksha
  */
 class UseDataClass(config: Config = Config.empty) : Rule(config) {
+
 	override val issue: Issue = Issue("UseDataClass",
 			Severity.Style,
 			"Classes that do nothing but hold data should be replaced with a data class.")
@@ -26,19 +27,16 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 	private val defaultFunctionNames = listOf("hashCode", "equals", "toString", "copy")
 
 	override fun visitClass(klass: KtClass) {
-		if (!klass.isData()
-				&& !klass.isAbstract()
-				&& !klass.hasModifier(KtTokens.OPEN_KEYWORD)
-				&& klass.superTypeListEntries.isEmpty()) {
+		if (!klass.isData() && klass.isClosedForExtension() && klass.doesNotExtendAnything()) {
 
-			val declarations = extractDeclarations(klass)
+			val declarations = klass.extractDeclarations()
 			val properties = declarations.filterIsInstance<KtProperty>()
 			val functions = declarations.filterIsInstance<KtNamedFunction>()
 
-			val propertyParameters = extractConstructorPropertyParameters(klass)
+			val propertyParameters = klass.extractConstructorPropertyParameters()
 
 			val containsFunctions = functions.none { !defaultFunctionNames.contains(it.name) }
-			val containsPropertyOrPropertyParameters = properties.isNotEmpty() || propertyParameters.isNotEmpty();
+			val containsPropertyOrPropertyParameters = properties.isNotEmpty() || propertyParameters.isNotEmpty()
 
 			if (containsFunctions && containsPropertyOrPropertyParameters) {
 				report(CodeSmell(issue, Entity.from(klass)))
@@ -47,13 +45,14 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 		super.visitClass(klass)
 	}
 
-	private fun extractDeclarations(klass: KtClass): List<KtDeclaration> {
-		return klass.getBody()?.declarations ?: emptyList()
-	}
+	private fun KtClass.doesNotExtendAnything() = superTypeListEntries.isEmpty()
 
-	private fun extractConstructorPropertyParameters(klass: KtClass): List<KtParameter> {
-		return klass.getPrimaryConstructorParameterList()?.parameters?.filter {
-			it.isPropertyParameter()
-		} ?: emptyList()
-	}
+	private fun KtClass.isClosedForExtension() = !isAbstract() && !hasModifier(KtTokens.OPEN_KEYWORD)
+
+	private fun KtClass.extractDeclarations(): List<KtDeclaration> = getBody()?.declarations ?: emptyList()
+
+	private fun KtClass.extractConstructorPropertyParameters(): List<KtParameter> =
+			getPrimaryConstructorParameterList()
+					?.parameters
+					?.filter { it.isPropertyParameter() } ?: emptyList()
 }
