@@ -36,5 +36,14 @@ class UseDataClassSpec : SubjectSpek<UseDataClassRule>({
 		"""
 		Assertions.assertThat(subject.lint(code)).hasSize(1)
 	}
+	it("should not report issue for object"){
+		val code = """
+			object Test{
+				val test = "Test"
+				val test2 = "Test2"
+			}
+		"""
+		Assertions.assertThat(subject.lint(code)).hasSize(0)
+	}
 })
 
