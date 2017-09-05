@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test
  * @author Artur Bosch
  */
 class NamingConventionViolationSpec : SubjectSpek<NamingRules>({
+
 	subject { NamingRules() }
 
 	it("should find all wrong namings") {
@@ -31,12 +32,12 @@ class NamingConventionViolationSpec : SubjectSpek<NamingRules>({
 class NamingConventionTest {
 
 	@Test
-	fun lint() {
+	fun differentKindsOfConstants() {
 		assertThat(NamingRules().lint(
 				"""
             const val MY_NAME = "Artur"
             const val MYNAME = "Artur"
-            const val MyNAME = "Artur"
+            const val MyNAME = "Artur" // positive
             const val serialVersionUID = 42L
             """
 		)).hasSize(1)
@@ -74,20 +75,20 @@ class NamingConventionTest {
 	}
 
 	@Test
-	fun uppercaseAndUnderscoreAreAllowedLowercaseNotForEnumEntries() {
+	fun numbersNotAllowedForEnumEntries() {
 		val lint = NamingRules().lint(
 				"""
-enum class WorkFlow {
-    ACTIVE, NOT_ACTIVE, Unknown
-}
-            """
+				enum class WorkFlow {
+					ACTIVE, NOT_ACTIVE, Unknown, Number1
+				}
+				"""
 		)
-		lint.forEach { println(it.compact()) }
 		assertThat(lint).hasSize(1)
 	}
 }
 
 class NamingConventionCustomPattern {
+
 	private val configCustomRules =
 			object : Config {
 				override fun subConfig(key: String): Config = Config.empty
@@ -114,6 +115,7 @@ class NamingConventionCustomPattern {
 					VariableNaming::class.simpleName -> configCustomRules
 					ConstantNaming::class.simpleName -> configCustomRules
 					EnumNaming::class.simpleName -> configCustomRules
+					PackageNaming::class.simpleName -> configCustomRules
 					else -> Config.empty
 				}
 
@@ -165,6 +167,7 @@ class NamingConventionCustomPattern {
 }
 
 class NamingConventionLengthSpec : SubjectSpek<NamingRules>({
+
 	subject { NamingRules() }
 
 	it("should report a variable name that is too short") {
@@ -203,4 +206,3 @@ class NamingConventionLengthSpec : SubjectSpek<NamingRules>({
 		assertThat(subject.findings).isEmpty()
 	}
 })
-
