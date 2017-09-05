@@ -10,6 +10,7 @@ import org.jetbrains.spek.subject.SubjectSpek
  * @author Ivan Balaksha
  */
 class UseDataClassSpec : SubjectSpek<UseDataClass>({
+
 	subject { UseDataClass(Config.empty) }
 
 	it("should report error for class w/ constructor properties and w/o functions") {
@@ -36,7 +37,7 @@ class UseDataClassSpec : SubjectSpek<UseDataClass>({
 		"""
 		Assertions.assertThat(subject.lint(code)).hasSize(1)
 	}
-	it("should not report issue for object"){
+	it("should not report issue for object") {
 		val code = """
 			object Test{
 				val test = "Test"
@@ -45,7 +46,7 @@ class UseDataClassSpec : SubjectSpek<UseDataClass>({
 		"""
 		Assertions.assertThat(subject.lint(code)).hasSize(0)
 	}
-	it("should not report issue for data class with overridden toString"){
+	it("should not report issue for data class with overridden toString") {
 		val code = """
 			data class Test(val test : String){
 				override fun toString(): String {
@@ -55,7 +56,7 @@ class UseDataClassSpec : SubjectSpek<UseDataClass>({
 		"""
 		Assertions.assertThat(subject.lint(code)).hasSize(0)
 	}
-	it("should report issue for class with all accepted functions"){
+	it("should report issue for class with all accepted functions") {
 		val code = """
 			class Test(val test : String){
 				override fun equals(other: Any?): Boolean {
@@ -74,7 +75,7 @@ class UseDataClassSpec : SubjectSpek<UseDataClass>({
 		"""
 		Assertions.assertThat(subject.lint(code)).hasSize(1)
 	}
-	it("should report issue for class with all accepted functions and one additional"){
+	it("should report issue for class with all accepted functions and one additional") {
 		val code = """
 			class Test(val test : String){
 				override fun equals(other: Any?): Boolean {
