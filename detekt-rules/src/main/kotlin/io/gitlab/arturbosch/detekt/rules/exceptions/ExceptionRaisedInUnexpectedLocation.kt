@@ -37,6 +37,6 @@ class ExceptionRaisedInUnexpectedLocation(config: Config = Config.empty) : Rule(
 	}
 
 	private fun hasThrowExpression(declaration: KtExpression?): Boolean {
-		return declaration?.collectByType<KtThrowExpression>()?.any() == true
+		return declaration?.collectByType<KtThrowExpression>()?.any() ?: false
 	}
 }
