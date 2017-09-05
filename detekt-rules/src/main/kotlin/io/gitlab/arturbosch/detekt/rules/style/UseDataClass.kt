@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
 /**
  * @author Ivan Balaksha
  */
-class UseDataClassRule(config: Config = Config.empty) : Rule(config) {
+class UseDataClass(config: Config = Config.empty) : Rule(config) {
 	override val issue: Issue = Issue("UseDataClass",
 			Severity.Style,
 			"Classes that do nothing but hold data should be replaced with a data class.")

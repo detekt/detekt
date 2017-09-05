@@ -9,8 +9,8 @@ import org.jetbrains.spek.subject.SubjectSpek
 /**
  * @author Ivan Balaksha
  */
-class UseDataClassSpec : SubjectSpek<UseDataClassRule>({
-	subject { UseDataClassRule(Config.empty) }
+class UseDataClassSpec : SubjectSpek<UseDataClass>({
+	subject { UseDataClass(Config.empty) }
 
 	it("should report error for class w/ constructor properties and w/o functions") {
 		val code = """
