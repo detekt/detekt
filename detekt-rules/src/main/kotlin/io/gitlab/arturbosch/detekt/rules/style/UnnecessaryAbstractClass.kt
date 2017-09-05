@@ -16,9 +16,12 @@ import org.jetbrains.kotlin.psi.psiUtil.isAbstract
 
 class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue("UnnecessaryAbstractClass", Severity.Style,
+	override val issue =
+			Issue("UnnecessaryAbstractClass", Severity.Style,
 			"An abstract class is unnecessary and can be refactored. " +
-					"An abstract class should have both abstract and concrete properties or functions.")
+						"An abstract class should have both abstract and concrete properties or functions. " +
+						"An abstract class without a concrete member can be refactored to an interface. " +
+						"An abstract class without an abstract member can be refactored to a concrete class.")
 
 	override fun visitClass(klass: KtClass) {
 		if (!klass.isInterface() && klass.isAbstract()) {
@@ -35,21 +38,21 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
 	private inner class NamedClassMembers(val klass: KtClass, val namedMembers: List<PsiElement>) {
 
 		fun detectAbstractAndConcreteType() {
-			val indexOfFirstAbstractType = indexOfFirstType(true)
-			if (indexOfFirstAbstractType == -1) {
+			val indexOfFirstAbstractMember = indexOfFirstMember(true)
+			if (indexOfFirstAbstractMember == -1) {
 				report(CodeSmell(issue, Entity.from(klass)))
-			} else if (indexOfFirstAbstractType == 0 && hasNoConcreteTypeLeft()) {
+			} else if (indexOfFirstAbstractMember == 0 && hasNoConcreteMemberLeft()) {
 				report(CodeSmell(issue, Entity.from(klass)))
 			}
 		}
 
-		private fun indexOfFirstType(isAbstract: Boolean, members: List<PsiElement> = this.namedMembers): Int {
+		private fun indexOfFirstMember(isAbstract: Boolean, members: List<PsiElement> = this.namedMembers): Int {
 			return members.indexOfFirst {
 				val namedDeclaration = it as? KtNamedDeclaration
 				namedDeclaration != null && namedDeclaration.hasModifier(KtTokens.ABSTRACT_KEYWORD) == isAbstract
 			}
 		}
 
-		private fun hasNoConcreteTypeLeft() = indexOfFirstType(false, namedMembers.drop(1)) == -1
+		private fun hasNoConcreteMemberLeft() = indexOfFirstMember(false, namedMembers.drop(1)) == -1
 	}
 }
