@@ -4,7 +4,7 @@ script:
   - ./gradlew build
   - ./gradlew shadow
   - java -jar ./detekt-cli/build/libs/detekt-cli-*-all.jar --help
-  - java -jar ./detekt-cli/build/libs/detekt-cli-*-all.jar -i . --baseline ./reports/baseline.xml -f ".*/test/.*,.*/resources/.*, .*/build/.*" -c ./detekt-cli/src/main/resources/default-detekt-config.yml
+  - java -jar ./detekt-cli/build/libs/detekt-cli-*-all.jar -i . --baseline ./reports/baseline.xml -f ".*/test/.*,.*/resources/.*, .*/build/.*" -c ./detekt-cli/src/main/resources/default-detekt-config.yml,./reports/failfast.yml
   - ./gradlew detektCheck
 
 before_cache:
