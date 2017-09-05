@@ -45,5 +45,56 @@ class UseDataClassSpec : SubjectSpek<UseDataClassRule>({
 		"""
 		Assertions.assertThat(subject.lint(code)).hasSize(0)
 	}
+	it("should not report issue for data class with overridden toString"){
+		val code = """
+			data class Test(val test : String){
+				override fun toString(): String {
+					return "TEST"
+				}
+			}
+		"""
+		Assertions.assertThat(subject.lint(code)).hasSize(0)
+	}
+	it("should report issue for class with all accepted functions"){
+		val code = """
+			class Test(val test : String){
+				override fun equals(other: Any?): Boolean {
+					return super.equals(other)
+				}
+
+				override fun hashCode(): Int {
+					return super.hashCode()
+				}
+
+				override fun toString(): String {
+					return super.toString()
+				}
+			}
+
+		"""
+		Assertions.assertThat(subject.lint(code)).hasSize(1)
+	}
+	it("should report issue for class with all accepted functions and one additional"){
+		val code = """
+			class Test(val test : String){
+				override fun equals(other: Any?): Boolean {
+					return super.equals(other)
+				}
+
+				override fun hashCode(): Int {
+					return super.hashCode()
+				}
+
+				override fun toString(): String {
+					return super.toString()
+				}
+				fun print(){
+					println(test)
+				}
+			}
+
+		"""
+		Assertions.assertThat(subject.lint(code)).hasSize(0)
+	}
 })
 
