@@ -1,5 +1,18 @@
 # Migration Guide
 
+### RC3 -> RC4
+
+- CatchXXX and ThrowXXX rules were reimplemented and combined into TooGenericExceptionCatched and 
+TooGenericExceptionThrown rules. Own exceptions can be added to the list.
+- EmptyXXXBlock rules were reimplemented and can be turned off individually 
+- The rule NamingConventions was reimplemented and now every case is separately configurable and new cases were added
+
+See [default-detekt-config.yaml](detekt-cli/src/main/resources/default-detekt-config.yaml)
+
+### RC2 -> RC3
+
+- MagicNumber rule has now different ignore properties
+
 ### RC1 -> RC2
 
 - Make sure to upgrade! RC2 fixes a number of MagicNumber's issues 

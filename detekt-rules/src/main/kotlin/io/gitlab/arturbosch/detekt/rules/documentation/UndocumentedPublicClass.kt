@@ -22,6 +22,7 @@ class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
 
 	private val searchInNestedClass = valueOrDefault(SEARCH_IN_NESTED_CLASS, true)
 	private val searchInInnerClass = valueOrDefault(SEARCH_IN_INNER_CLASS, true)
+	private val searchInInnerObject = valueOrDefault(SEARCH_IN_INNER_OBJECT, true)
 	private val searchInInnerInterface = valueOrDefault(SEARCH_IN_INNER_INTERFACE, true)
 
 	override fun visitClass(klass: KtClass) {
@@ -36,7 +37,7 @@ class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
 			klass: KtClass) = klass.isTopLevel() || klass.isInnerClass() || klass.isNestedClass() || klass.isInnerInterface()
 
 	override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
-		if (declaration.isCompanionWithoutName() || declaration.isLocal) {
+		if (declaration.isCompanionWithoutName() || declaration.isLocal || !searchInInnerObject) {
 			return
 		}
 
@@ -64,6 +65,7 @@ class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
 	companion object {
 		const val SEARCH_IN_NESTED_CLASS = "searchInNestedClass"
 		const val SEARCH_IN_INNER_CLASS = "searchInInnerClass"
+		const val SEARCH_IN_INNER_OBJECT = "searchInInnerObject"
 		const val SEARCH_IN_INNER_INTERFACE = "searchInInnerInterface"
 	}
 }
