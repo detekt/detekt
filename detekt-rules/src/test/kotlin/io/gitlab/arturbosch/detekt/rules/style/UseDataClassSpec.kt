@@ -97,4 +97,3 @@ class UseDataClassSpec : SubjectSpek<UseDataClass>({
 		Assertions.assertThat(subject.lint(code)).hasSize(0)
 	}
 })
-
