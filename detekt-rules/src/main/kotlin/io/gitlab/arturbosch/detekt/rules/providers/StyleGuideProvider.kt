@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.providers
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.rules.style.DataClassContainsFunctionsRule
 import io.gitlab.arturbosch.detekt.rules.style.EqualsNullCall
 import io.gitlab.arturbosch.detekt.rules.style.FileParsingRule
 import io.gitlab.arturbosch.detekt.rules.style.ForbiddenComment
@@ -44,7 +45,8 @@ class StyleGuideProvider : RuleSetProvider {
 				ProtectedMemberInFinalClass(config),
 				MagicNumber(config),
 				ModifierOrder(config),
-				UseDataClassRule(config)
+				DataClassContainsFunctionsRule(config),
+        UseDataClassRule(config)
 		))
 	}
 }

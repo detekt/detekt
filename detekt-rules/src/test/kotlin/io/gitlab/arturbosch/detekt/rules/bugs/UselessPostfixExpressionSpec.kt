@@ -6,8 +6,8 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 import org.assertj.core.api.Assertions.assertThat
 
-class UselessIncrementSpec : SubjectSpek<UselessIncrement>({
-	subject { UselessIncrement() }
+class UselessPostfixExpressionSpec : SubjectSpek<UselessPostfixExpression>({
+	subject { UselessPostfixExpression() }
 
 	describe("check several types of postfix increments") {
 
@@ -17,7 +17,7 @@ class UselessIncrementSpec : SubjectSpek<UselessIncrement>({
 					var i = 0
 					var j = 0
 					j = i++ // invalid
-					i = i++ // invalid
+					i = i-- // invalid
 					i = 1 + i++ // invalid
 					i = i++ + 1
 				}"""
