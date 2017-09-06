@@ -6,15 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.reportFindings
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.SpecialNames
-import org.jetbrains.kotlin.psi.KtClassOrObject
-import org.jetbrains.kotlin.psi.KtEnumEntry
-import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.psi.KtNamedDeclaration
-import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.KtObjectDeclaration
-import org.jetbrains.kotlin.psi.KtPackageDirective
-import org.jetbrains.kotlin.psi.KtProperty
-import org.jetbrains.kotlin.psi.KtVariableDeclaration
+import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 
 /**
@@ -32,6 +24,7 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
 	private val functionNamingRule = FunctionNaming(config)
 	private val functionMaxNameLengthRule = FunctionMaxLength(config)
 	private val functionMinNameLengthRule = FunctionMinLength(config)
+	private val forbiddenClassNameRule = ForbiddenClassName(config)
 
 	override val rules: List<Rule> = listOf(
 			variableNamingRule,
@@ -43,7 +36,8 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
 			enumEntryNamingRule,
 			functionNamingRule,
 			functionMaxNameLengthRule,
-			functionMinNameLengthRule
+			functionMinNameLengthRule,
+            forbiddenClassNameRule
 	)
 
 	override fun postVisit(root: KtFile) {
@@ -63,14 +57,19 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
 			when (declaration) {
 				is KtVariableDeclaration -> handleVariable(declaration)
 				is KtNamedFunction -> handleFunction(declaration)
-				is KtEnumEntry -> enumEntryNamingRule.apply(declaration)
-				is KtClassOrObject -> classOrObjectNamingRule.apply(declaration)
+				is KtEnumEntry -> declaration.reportFindings(enumEntryNamingRule)
+				is KtClassOrObject -> handleClassOrObject(declaration)
 			}
 		}
 		super.visitNamedDeclaration(declaration)
 	}
 
-	private fun handleFunction(declaration: KtNamedFunction) {
+    private fun handleClassOrObject(declaration: KtClassOrObject) {
+        declaration.reportFindings(classOrObjectNamingRule)
+        declaration.reportFindings(forbiddenClassNameRule)
+    }
+
+    private fun handleFunction(declaration: KtNamedFunction) {
 		declaration.reportFindings(functionNamingRule)
 		declaration.reportFindings(functionMaxNameLengthRule)
 		declaration.reportFindings(functionMinNameLengthRule)
