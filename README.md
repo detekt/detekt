@@ -434,7 +434,7 @@ style:
   EnumNaming:
     active: true
     enumEntryPattern: '^[A-Z$][a-zA-Z_$]*$'
-  FunctionNaming :
+  FunctionNaming:
     active: true
     functionPattern: '^[a-z$][a-zA-Z$0-9]*$'
   FunctionMaxLength:
@@ -443,10 +443,10 @@ style:
   FunctionMinLength:
     active: false
     minimumFunctionNameLength: 3
-  VariableNaming :
+  VariableNaming:
     active: true
     variablePattern: '^(_)?[a-z$][a-zA-Z$0-9]*$'
-  ConstantNaming :
+  ConstantNaming:
     active: true
     constantPattern: '^([A-Z_]*|serialVersionUID)$'
   VariableMaxLength:
@@ -455,6 +455,9 @@ style:
   VariableMinLength:
     active: false
     minimumVariableNameLength: 3
+  ForbiddenClassName:
+    active: false
+    forbiddenName: ''
   MaxLineLength:
     active: true
     maxLineLength: 120

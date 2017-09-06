@@ -264,6 +264,9 @@ style:
   VariableMinLength:
     active: false
     minimumVariableNameLength: 3
+  ForbiddenClassName:
+    active: false
+    forbiddenName: ''
   ProtectedMemberInFinalClass:
     active: false
   UnnecessaryParentheses:
