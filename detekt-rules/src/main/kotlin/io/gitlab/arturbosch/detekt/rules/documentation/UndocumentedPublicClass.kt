@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isPublicNotOverridden
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
+import org.jetbrains.kotlin.psi.KtEnumEntry
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 
 /**
@@ -26,7 +27,7 @@ class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
 	private val searchInInnerInterface = valueOrDefault(SEARCH_IN_INNER_INTERFACE, true)
 
 	override fun visitClass(klass: KtClass) {
-		if (klass.notEnum() && requiresDocumentation(klass)) {
+		if (requiresDocumentation(klass)) {
 			reportIfUndocumented(klass)
 		}
 
@@ -46,7 +47,7 @@ class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
 	}
 
 	private fun reportIfUndocumented(element: KtClassOrObject) {
-		if (element.isPublicNotOverridden() && element.docComment == null) {
+		if (element.isPublicNotOverridden() && element.notEnumEntry() && element.docComment == null) {
 			report(CodeSmell(issue, Entity.Companion.from(element)))
 		}
 	}
@@ -60,7 +61,7 @@ class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
 
 	private fun KtClass.isInnerInterface() = !isTopLevel() && isInterface() && searchInInnerInterface
 
-	private fun KtClass.notEnum() = !this.isEnum()
+	private fun KtClassOrObject.notEnumEntry() = this::class != KtEnumEntry::class
 
 	companion object {
 		const val SEARCH_IN_NESTED_CLASS = "searchInNestedClass"
