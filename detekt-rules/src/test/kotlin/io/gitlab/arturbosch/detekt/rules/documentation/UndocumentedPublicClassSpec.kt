@@ -111,4 +111,21 @@ class UndocumentedPublicClassSpec : SubjectSpek<UndocumentedPublicClass>({
 		assertThat(subject.lint(code)).isEmpty()
 	}
 
+	it("should report for enum classes") {
+		val code = "enum class Enum"
+
+		assertThat(subject.lint(code)).hasSize(1)
+	}
+
+	it("should not report for enum constants") {
+		val code = """
+			/** Some doc */
+			enum class Enum {
+				CONSTANT
+			}
+		"""
+
+		assertThat(subject.lint(code)).isEmpty()
+	}
+
 })
