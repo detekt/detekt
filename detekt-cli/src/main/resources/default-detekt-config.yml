@@ -70,6 +70,7 @@ exceptions:
   active: true
   ExceptionRaisedInUnexpectedLocation:
     active: false
+    methodNames: 'toString,hashCode,equals,finalize'
   SwallowedException:
     active: false
   TooGenericExceptionCatched:
