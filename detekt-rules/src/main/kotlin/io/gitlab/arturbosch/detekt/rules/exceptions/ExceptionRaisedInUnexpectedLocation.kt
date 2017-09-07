@@ -17,6 +17,11 @@ class ExceptionRaisedInUnexpectedLocation(config: Config = Config.empty) : Rule(
 	override val issue = Issue("ExceptionRaisedInUnexpectedLocation", Severity.CodeSmell,
 			"This method is not expected to throw exceptions. This can cause weird behavior.")
 
+	val methods: List<String>
+			= valueOrDefault(METHOD_NAMES, "toString,hashCode,equals,finalize")
+			.split(",")
+			.filter { it.isNotBlank() }
+
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		if (isPotentialMethod(function) && hasThrowExpression(function.bodyExpression)) {
 			report(CodeSmell(issue, Entity.from(function)))
@@ -30,13 +35,14 @@ class ExceptionRaisedInUnexpectedLocation(config: Config = Config.empty) : Rule(
 	}
 
 	private fun isPotentialMethod(function: KtNamedFunction): Boolean {
-		return when (function.name) {
-			"toString", "hashCode", "equals", "finalize" -> true
-			else -> false
-		}
+		return methods.contains(function.name)
 	}
 
 	private fun hasThrowExpression(declaration: KtExpression?): Boolean {
 		return declaration?.collectByType<KtThrowExpression>()?.any() ?: false
+	}
+
+	companion object {
+		const val METHOD_NAMES = "methodNames"
 	}
 }
