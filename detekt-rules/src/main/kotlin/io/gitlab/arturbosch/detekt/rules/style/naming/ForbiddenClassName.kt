@@ -16,11 +16,12 @@ class ForbiddenClassName(config: Config = Config.empty) : SubRule<KtClassOrObjec
 	private val forbiddenNames = valueOrDefault(FORBIDDEN_NAME, "")
 			.split(",")
 			.map { it.trim() }
+			.filter { it.isNotBlank() }
 
 	override fun apply(element: KtClassOrObject) {
 		val name = element.name ?: ""
 
-		val forbiddenEntries = forbiddenNames.filter { name.contains(it) }
+		val forbiddenEntries = forbiddenNames.filter { name.contains(it, ignoreCase = true) }
 
 		if (forbiddenEntries.isNotEmpty()) {
 			var description = "Class name $name is forbidden as it contains:"
