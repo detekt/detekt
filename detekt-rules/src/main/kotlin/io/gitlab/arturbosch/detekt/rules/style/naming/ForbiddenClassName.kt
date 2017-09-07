@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Excludes
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.SubRule
@@ -13,15 +14,11 @@ class ForbiddenClassName(config: Config = Config.empty) : SubRule<KtClassOrObjec
 	override val issue = Issue(javaClass.simpleName,
 			Severity.Style,
 			debt = Debt.FIVE_MINS)
-	private val forbiddenNames = valueOrDefault(FORBIDDEN_NAME, "")
-			.split(",")
-			.map { it.trim() }
-			.filter { it.isNotBlank() }
+	private val forbiddenNames = Excludes(valueOrDefault(FORBIDDEN_NAME, ""))
 
 	override fun apply(element: KtClassOrObject) {
 		val name = element.name ?: ""
-
-		val forbiddenEntries = forbiddenNames.filter { name.contains(it, ignoreCase = true) }
+		val forbiddenEntries = forbiddenNames.matches(name)
 
 		if (forbiddenEntries.isNotEmpty()) {
 			var description = "Class name $name is forbidden as it contains:"
