@@ -30,15 +30,15 @@ data class Location(val source: SourceLocation,
 			return Location(sourceLocation, textLocation, locationText, fileName)
 		}
 
-		@Suppress("TooGenericExceptionCatched")
+		@Suppress("TooGenericExceptionCaught")
 		fun startLineAndColumn(element: PsiElement, offset: Int = 0): DiagnosticUtils.LineAndColumn {
-			try {
+			return try {
 				val range = element.textRange
-				return DiagnosticUtils.getLineAndColumnInPsiFile(element.containingFile,
+				DiagnosticUtils.getLineAndColumnInPsiFile(element.containingFile,
 						TextRange(range.startOffset + offset, range.endOffset + offset))
 			} catch (e: IndexOutOfBoundsException) {
 				// #18 - somehow the TextRange is out of bound on '}' leaf nodes, returning fail safe -1
-				return DiagnosticUtils.LineAndColumn(-1, -1, null)
+				DiagnosticUtils.LineAndColumn(-1, -1, null)
 			}
 		}
 

@@ -3,9 +3,9 @@
 [![build status](https://travis-ci.org/arturbosch/detekt.svg?branch=master)](https://travis-ci.org/arturbosch/detekt)
 [![build status windows](https://ci.appveyor.com/api/projects/status/3q9g98vveiul7yut/branch/master?svg=true)](https://ci.appveyor.com/project/arturbosch/detekt)
 [ ![Download](https://api.bintray.com/packages/arturbosch/code-analysis/detekt/images/download.svg) ](https://bintray.com/arturbosch/code-analysis/detekt/_latestVersion)
-[![All Contributors](https://img.shields.io/badge/gradle_plugin-1.0.0.RC4.2-blue.svg?style=flat-square)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
+[![gradle plugin](https://img.shields.io/badge/gradle_plugin-1.0.0.RC4.3-blue.svg?style=flat-square)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-16-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-18-orange.svg?style=flat-square)](#contributors)
 [![androidweekly](https://img.shields.io/badge/androidweekly-259-orange.svg?style=flat-square)](http://androidweekly.net/issues/issue-259)
 [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
 
@@ -404,6 +404,111 @@ To turn off specific rules/rule sets or change threshold values for certain rule
 Export the default config with the `--generate-config` flag or copy and modify the `detekt-cli/src/main/resources/default-detekt-config.yml` for your needs.
 
 ```yml
+potential-bugs:
+  active: true
+  DuplicateCaseInWhenExpression:
+    active: true
+  EqualsAlwaysReturnsTrueOrFalse:
+    active: false
+  EqualsWithHashCodeExist:
+    active: true
+  WrongEqualsTypeParameter:
+    active: false
+  ExplicitGarbageCollectionCall:
+    active: true
+  UnreachableCode:
+    active: true
+  LateinitUsage:
+    active: false
+  UnsafeCallOnNullableType:
+    active: false
+  UnsafeCast:
+    active: false
+  UselessPostfixExpression:
+    active: false
+
+performance:
+  active: true
+  ForEachOnRange:
+    active: true
+  SpreadOperator:
+    active: true
+  UnnecessaryTemporaryInstantiation:
+    active: true
+
+exceptions:
+  active: true
+  ExceptionRaisedInUnexpectedLocation:
+    active: false
+    methodNames: 'toString,hashCode,equals,finalize'
+  SwallowedException:
+    active: false
+  TooGenericExceptionCaught:
+    active: true
+    exceptions:
+      - ArrayIndexOutOfBoundsException
+      - Error
+      - Exception
+      - IllegalMonitorStateException
+      - IndexOutOfBoundsException
+      - InterruptedException
+      - NullPointerException
+      - RuntimeException
+  TooGenericExceptionThrown:
+    active: true
+    exceptions:
+      - Throwable
+      - ThrowError
+      - ThrowException
+      - ThrowNullPointerException
+      - ThrowRuntimeException
+      - ThrowThrowable
+  InstanceOfCheckForException:
+    active: false
+  IteratorNotThrowingNoSuchElementException:
+    active: false
+  PrintExceptionStackTrace:
+    active: false
+  RethrowCaughtException:
+    active: false
+  ReturnFromFinally:
+    active: false
+  ThrowingExceptionFromFinally:
+    active: false
+  ThrowingExceptionInMain:
+    active: false
+  ThrowingNewInstanceOfSameException:
+    active: false
+
+empty-blocks:
+  active: true
+  EmptyCatchBlock:
+    active: true
+  EmptyClassBlock:
+    active: true
+  EmptyDefaultConstructor:
+    active: true
+  EmptyDoWhileBlock:
+    active: true
+  EmptyElseBlock:
+    active: true
+  EmptyFinallyBlock:
+    active: true
+  EmptyForBlock:
+    active: true
+  EmptyFunctionBlock:
+    active: true
+  EmptyIfBlock:
+    active: true
+  EmptyInitBlock:
+    active: true
+  EmptySecondaryConstructor:
+    active: true
+  EmptyWhenBlock:
+    active: true
+  EmptyWhileBlock:
+    active: true
+
 complexity:
   active: true
   LongMethod:
@@ -418,13 +523,53 @@ complexity:
     threshold: 10
   ComplexCondition:
     threshold: 3
+  LabeledExpression:
+    active: false
+  StringLiteralDuplication:
+    active: false
+    threshold: 2
+    ignoreAnnotation: true
+    excludeStringsWithLessThan5Characters: true
+    ignoreStringsRegex: '$^'
 
 style:
   active: true
-  WildcardImport:
+  ReturnCount:
     active: true
+    max: 2
+  NewLineAtEndOfFile:
+    active: true
+  OptionalAbstractKeyword:
+    active: true
+  OptionalWhenBraces:
+    active: false
+  EqualsNullCall:
+    active: false
+  ForbiddenComment:
+    active: true
+    values: 'TODO:,FIXME:,STOPSHIP:'
+  ForbiddenImport:
+    active: false
+    imports: ''
+  PackageDeclarationStyle:
+    active: false
   ModifierOrder:
     active: true
+  MagicNumber:
+    active: true
+    ignoreNumbers: '-1,0,1,2'
+    ignoreHashCodeFunction: false
+    ignorePropertyDeclaration: false
+    ignoreAnnotation: false
+  WildcardImport:
+    active: true
+  SafeCast:
+    active: true
+  MaxLineLength:
+    active: true
+    maxLineLength: 120
+    excludePackageStatements: false
+    excludeImportStatements: false
   PackageNaming:
     active: true
     packagePattern: '^[a-z]+(\.[a-z][a-z0-9]*)*$'
@@ -439,7 +584,7 @@ style:
     functionPattern: '^[a-z$][a-zA-Z$0-9]*$'
   FunctionMaxLength:
     active: false
-    maximumFunctionNameLength: 25
+    maximumFunctionNameLength: 30
   FunctionMinLength:
     active: false
     minimumFunctionNameLength: 3
@@ -451,19 +596,22 @@ style:
     constantPattern: '^([A-Z_]*|serialVersionUID)$'
   VariableMaxLength:
     active: false
-    maximumVariableNameLength: 17
+    maximumVariableNameLength: 30
   VariableMinLength:
     active: false
     minimumVariableNameLength: 3
   ForbiddenClassName:
     active: false
     forbiddenName: ''
-  MaxLineLength:
-    active: true
-    maxLineLength: 120
-    excludePackageStatements: false
-    excludeImportStatements: false
+  ProtectedMemberInFinalClass:
+    active: false
   UnnecessaryParentheses:
+    active: false
+  DataClassContainsFunctions:
+    active: false
+  UseDataClass:
+    active: false
+  UnnecessaryAbstractClass:
     active: false
 
 comments:
@@ -472,32 +620,14 @@ comments:
     active: true
   CommentOverPrivateProperty:
     active: true
-  NoDocOverPublicClass:
+  UndocumentedPublicClass:
     active: false
-  NoDocOverPublicMethod:
+    searchInNestedClass: true
+    searchInInnerClass: true
+    searchInInnerObject: true
+    searchInInnerInterface: true
+  UndocumentedPublicFunction:
     active: false
-    
-potential-bugs:
-  active: true
-  DuplicateCaseInWhenExpression:
-    active: true
-  EqualsWithHashCodeExist:
-    active: true
-  ExplicitGarbageCollectionCall:
-    active: true
-  LateinitUsage:
-    active: false
-
-performance:
-  active: true
-  ForEachOnRange:
-    active: true
-
-exceptions:
-  active: true
-
-empty-blocks:
-  active: true
 ```
 
 ```yaml
@@ -746,6 +876,7 @@ detekt findings, bunch of rules
 - [Anna Y](https://github.com/Nevvea7) - Readme fix
 - [Karol Wrótniak](https://github.com/koral--) - Treat comments as not empty blocks
 - [Radim Vaculik](https://github.com/radimvaculik) - VariableMaxLength - bugfix
+- [Martin Nonnenmacher](https://github.com/mnonnenmacher) - UndocumentedPublicClass - enum support
 
 #### Credits
 - [Stanley Shyiko](https://github.com/shyiko) - `detekt` migrated the formatting rules from [ktlint](https://github.com/shyiko/ktlint)

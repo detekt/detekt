@@ -1,5 +1,24 @@
 # Detekt - Changelog
 
+#### RC4-3 - Second bugfix release for RC4 with a bunch of new contributed rules!
+
+- UndocumentedPublicClass: Fix enum support - [#375](https://github.com/arturbosch/detekt/pull/375)
+- add rule to forbid certain class names - [#374](https://github.com/arturbosch/detekt/pull/374)
+- Tests are not executed anymore but skipped! - [#373](https://github.com/arturbosch/detekt/issues/373)
+- Use failfast configuration in CI - [#372](https://github.com/arturbosch/detekt/pull/372)
+- Added break and continue to unreachable code rule - [#371](https://github.com/arturbosch/detekt/pull/371)
+- A few more exception rules - [#370](https://github.com/arturbosch/detekt/pull/370)
+- Added UnnecessaryAbstractClass rule - [#369](https://github.com/arturbosch/detekt/pull/369)
+- remove spaces in default-detekt-config.yml - [#368](https://github.com/arturbosch/detekt/pull/368)
+- Advanced exception rules - [#366](https://github.com/arturbosch/detekt/pull/366)
+- Added PackageDeclaration style rule - [#364](https://github.com/arturbosch/detekt/pull/364)
+- Implement Data class rule - [#354](https://github.com/arturbosch/detekt/pull/354)
+- Feature/data class rule - [#353](https://github.com/arturbosch/detekt/pull/353)
+- Extend naming ruleset - [#302](https://github.com/arturbosch/detekt/issues/302)
+- Data class rule - [#263](https://github.com/arturbosch/detekt/issues/263)
+
+See all issues at: [RC4-3](https://github.com/arturbosch/detekt/milestone/21)
+
 #### RC4-2 - Bugfix release for RC4
 
 - Bugfix FunctionMaxLength typo - [#367](https://github.com/arturbosch/detekt/pull/367)
