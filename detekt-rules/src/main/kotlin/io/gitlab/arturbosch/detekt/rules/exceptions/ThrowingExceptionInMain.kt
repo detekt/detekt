@@ -33,7 +33,7 @@ class ThrowingExceptionInMain(config: Config = Config.empty) : Rule(config) {
 	}
 
 	private fun isStringArrayParameter(typeReference: KtTypeReference?): Boolean {
-		return typeReference?.text?.replace("\\s+","") == "Array<String>"
+		return typeReference?.text?.replace("\\s+", "") == "Array<String>"
 	}
 
 	private fun containsThrowExpression(function: KtNamedFunction): Boolean {
