@@ -26,8 +26,8 @@ class Detektor(private val settings: ProcessingSettings,
 		processors.forEach { it.onStart(ktFiles) }
 		val futures = ktFiles.map { file ->
 			runAsync {
+				processors.forEach { it.onProcess(file) }
 				file.analyze().apply {
-					processors.forEach { it.onProcess(file) }
 				}
 			}
 		}
