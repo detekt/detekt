@@ -28,6 +28,7 @@ class Detektor(private val settings: ProcessingSettings,
 			runAsync {
 				processors.forEach { it.onProcess(file) }
 				file.analyze().apply {
+					processors.forEach { it.onProcessComplete(file, this) }
 				}
 			}
 		}
