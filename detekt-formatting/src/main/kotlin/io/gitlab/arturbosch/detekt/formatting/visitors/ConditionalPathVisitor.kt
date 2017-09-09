@@ -48,7 +48,7 @@ class ConditionalPathVisitor(private val block: (KtReturnExpression) -> Unit) : 
 		return when (parent) {
 			is KtReturnExpression, is KtProperty -> true
 			is KtDeclarationWithBody -> parent.bodyExpression == this
-			is KtBlockExpression -> parent.statements.lastOrNull()?.let { it == this } ?: false
+			is KtBlockExpression -> parent.statements.lastOrNull()?.let { it == this } == true
 			else -> false
 		}
 	}

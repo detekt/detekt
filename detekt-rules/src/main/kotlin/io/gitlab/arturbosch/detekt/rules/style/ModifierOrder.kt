@@ -73,8 +73,7 @@ class ModifierOrder(config: Config = Config.empty) : Rule(config) {
 				.apply { sortWith(compareBy { order.indexOf(it.node.elementType) }) }
 
 		if (!Arrays.equals(modifiers, sortedModifiers)) {
-			val modifierString = sortedModifiers.map { it.text }
-					.joinToString(" ")
+			val modifierString = sortedModifiers.joinToString(" ") { it.text }
 
 			report(CodeSmell(Issue(javaClass.simpleName, Severity.Style,
 					"Modifier order should be: $modifierString", Debt(mins = 1)), Entity.from(list)))
