@@ -39,7 +39,7 @@ fun KtBlockExpression.hasCommentInside(): Boolean {
 			if (comment != null) putUserData(commentKey, true)
 		}
 	})
-	return getUserData(commentKey) ?: false
+	return getUserData(commentKey) == true
 }
 
 inline fun <reified T : KtElement> KtElement.collectByType(): List<T> {

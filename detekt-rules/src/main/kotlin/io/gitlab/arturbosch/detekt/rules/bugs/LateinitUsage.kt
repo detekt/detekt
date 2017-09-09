@@ -33,35 +33,33 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 	}
 
 	override fun visit(root: KtFile) {
-		properties = mutableListOf<KtProperty>()
+		properties = mutableListOf()
 
 		super.visit(root)
 
 		val resolvedAnnotations = root.importList
 				?.imports
 				?.filterNot { it.isAllUnder }
-				?.map { it.importedFqName?.asString() }
-				?.filterNotNull()
+				?.mapNotNull { it.importedFqName?.asString() }
 				?.map { Pair(it.split(".").last(), it) }
 				?.toMap()
 
 		properties.filterNot { isExcludedByAnnotation(it, resolvedAnnotations) }
-				.filterNot { it.containingClass()?.name?.matches(ignoreOnClassesPattern) ?: false }
+				.filterNot { it.containingClass()?.name?.matches(ignoreOnClassesPattern) == true }
 				.forEach {
 					report(CodeSmell(issue, Entity.from(it)))
 				}
 	}
 
 	private fun isLateinitProperty(property: KtProperty)
-			= property.modifierList?.hasModifier(KtTokens.LATEINIT_KEYWORD) ?: false
+			= property.modifierList?.hasModifier(KtTokens.LATEINIT_KEYWORD) == true
 
 	private fun isExcludedByAnnotation(property: KtProperty, resolvedAnnotations: Map<String, String>?)
 			= property.annotationEntries
-			.map {
+			.mapNotNull {
 				val shortName = it.typeReferenceName
 				resolvedAnnotations?.get(shortName) ?: shortName
 			}
-			.filterNotNull()
 			.any { !excludeAnnotatedProperties.none(it) }
 
 	companion object {

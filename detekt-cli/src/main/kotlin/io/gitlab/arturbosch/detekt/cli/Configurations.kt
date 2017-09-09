@@ -20,7 +20,7 @@ fun Args.createPlugins(): List<Path> = plugins.letIfNonEmpty {
 }
 
 private fun <T> String?.letIfNonEmpty(init: String.() -> List<T>): List<T> =
-		if (this == null || this.isEmpty()) listOf<T>() else this.init()
+		if (this == null || this.isEmpty()) listOf() else this.init()
 
 fun Args.loadConfiguration(): Config {
 	var config = when {
