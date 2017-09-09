@@ -24,7 +24,7 @@ class ExceptionRaisedInUnexpectedLocationSpec : SubjectSpek<ExceptionRaisedInUne
 	given("a configuration with a custom method") {
 
 		it("reports the configured method") {
-			val config = TestConfig(mapOf(ExceptionRaisedInUnexpectedLocation.METHOD_NAMES to "toDo"))
+			val config = TestConfig(mapOf(ExceptionRaisedInUnexpectedLocation.METHOD_NAMES to "toDo,todo2"))
 			val findings = ExceptionRaisedInUnexpectedLocation(config).lint("""
 				fun toDo() {
 					throw IllegalStateException()

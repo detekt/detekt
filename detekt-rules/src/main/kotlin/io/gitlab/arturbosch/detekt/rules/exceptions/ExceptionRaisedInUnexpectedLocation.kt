@@ -17,7 +17,7 @@ class ExceptionRaisedInUnexpectedLocation(config: Config = Config.empty) : Rule(
 	override val issue = Issue("ExceptionRaisedInUnexpectedLocation", Severity.CodeSmell,
 			"This method is not expected to throw exceptions. This can cause weird behavior.")
 
-	val methods: List<String>
+	private val methods: List<String>
 			= valueOrDefault(METHOD_NAMES, "toString,hashCode,equals,finalize")
 			.split(",")
 			.filter { it.isNotBlank() }
