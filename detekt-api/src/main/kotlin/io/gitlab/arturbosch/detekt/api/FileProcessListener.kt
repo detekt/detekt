@@ -18,6 +18,7 @@ interface FileProcessListener : Extension {
 	fun onStart(files: List<KtFile>) {}
 
 	/**
+	 * Called when processing of a file begins.
 	 * This method is called from a thread pool thread. Heavy computations allowed.
 	 */
 	fun onProcess(file: KtFile) {}
