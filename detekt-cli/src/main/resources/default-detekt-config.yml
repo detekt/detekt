@@ -84,15 +84,15 @@ exceptions:
       - InterruptedException
       - NullPointerException
       - RuntimeException
+      - Throwable
   TooGenericExceptionThrown:
     active: true
     exceptions:
+      - Error
+      - Exception
+      - NullPointerException
+      - RuntimeException
       - Throwable
-      - ThrowError
-      - ThrowException
-      - ThrowNullPointerException
-      - ThrowRuntimeException
-      - ThrowThrowable
   InstanceOfCheckForException:
     active: false
   IteratorNotThrowingNoSuchElementException:
@@ -143,6 +143,8 @@ complexity:
   active: true
   LongMethod:
     threshold: 20
+  NestedBlockDepth:
+    threshold: 3
   LongParameterList:
     threshold: 5
   LargeClass:
@@ -190,7 +192,7 @@ formatting:
   SpacingAroundColon:
     active: true
     autoCorrect: true
-  SpacingAroundCurlyBraces:
+  SpacingAroundBraces:
     active: true
     autoCorrect: true
   SpacingAroundOperator:
