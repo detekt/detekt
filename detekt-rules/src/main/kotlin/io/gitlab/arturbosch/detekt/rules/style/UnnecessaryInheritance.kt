@@ -9,7 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtClassOrObject
 
-class UnnecessarySuperTypeInheritance(config: Config = Config.empty) : Rule(config) {
+class UnnecessaryInheritance(config: Config = Config.empty) : Rule(config) {
 
 	override val issue: Issue = Issue(javaClass.simpleName, Severity.Style,
 			"The extended super type is unnecessary.", Debt.FIVE_MINS)

@@ -19,7 +19,7 @@ import io.gitlab.arturbosch.detekt.rules.style.ReturnCount
 import io.gitlab.arturbosch.detekt.rules.style.SafeCast
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryAbstractClass
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryParentheses
-import io.gitlab.arturbosch.detekt.rules.style.UnnecessarySuperTypeInheritance
+import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryInheritance
 import io.gitlab.arturbosch.detekt.rules.style.UseDataClass
 import io.gitlab.arturbosch.detekt.rules.style.WildcardImport
 import io.gitlab.arturbosch.detekt.rules.style.naming.NamingRules
@@ -45,7 +45,7 @@ class StyleGuideProvider : RuleSetProvider {
 				SafeCast(config),
 				UnnecessaryAbstractClass(config),
 				UnnecessaryParentheses(config),
-				UnnecessarySuperTypeInheritance(config),
+				UnnecessaryInheritance(config),
 				OptionalAbstractKeyword(config),
 				OptionalWhenBraces(config),
 				ProtectedMemberInFinalClass(config),

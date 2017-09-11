@@ -295,7 +295,7 @@ style:
     active: false
   UnnecessaryParentheses:
     active: false
-  UnnecessarySuperTypeInheritance:
+  UnnecessaryInheritance:
     active: false
   DataClassContainsFunctions:
     active: false
