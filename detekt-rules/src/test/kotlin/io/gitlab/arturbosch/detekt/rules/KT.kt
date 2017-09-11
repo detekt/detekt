@@ -38,7 +38,8 @@ enum class Case(val file: String) {
 	SwallowedException("/cases/SwallowedException.kt"),
 	TooManyFunctions("/cases/TooManyFunctions.kt"),
 	TooManyFunctionsTopLevel("/cases/TooManyFunctionsTopLevel.kt"),
-	UseDataClass("/cases/UseDataClass.kt");
+	UseDataClass("/cases/UseDataClass.kt"),
+	UnconditionalJumpStatementInLoop("/cases/UnconditionalJumpStatementInLoop.kt");
 
 	fun path(): Path = Paths.get(resource(file))
 }

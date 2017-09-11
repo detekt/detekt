@@ -46,6 +46,8 @@ potential-bugs:
     active: false
   ExplicitGarbageCollectionCall:
     active: true
+  UnconditionalJumpStatementInLoop:
+    active: false
   UnreachableCode:
     active: true
   LateinitUsage:
