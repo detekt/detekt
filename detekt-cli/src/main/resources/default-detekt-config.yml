@@ -243,6 +243,8 @@ style:
     imports: ''
   PackageDeclarationStyle:
     active: false
+  LoopWithTooManyJumpStatements:
+    active: false
   ModifierOrder:
     active: true
   MagicNumber:
