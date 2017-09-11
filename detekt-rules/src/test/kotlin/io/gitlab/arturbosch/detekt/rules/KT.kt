@@ -19,6 +19,7 @@ enum class Case(val file: String) {
 	ExceptionRaisedInMethods("/cases/ExceptionRaisedInMethods.kt"),
 	FinalClass("/cases/FinalClass.kt"),
 	IteratorImpl("/cases/IteratorImpl.kt"),
+	LoopWithTooManyJumpStatements("cases/LoopWithTooManyJumpStatements.kt"),
 	NamingConventions("/cases/NamingConventions.kt"),
 	NewLineAtEndOfFile("/cases/NewLineAtEndOfFile.kt"),
 	MaxLineLength("/cases/MaxLineLength.kt"),

@@ -54,3 +54,16 @@ inline fun <reified T : KtElement> KtElement.collectByType(): List<T> {
 	})
 	return list
 }
+
+inline fun KtElement.countDescendantsBy(crossinline predicate: (KtElement) -> kotlin.Boolean): Int {
+	var count = 0
+	this.accept(object : DetektVisitor() {
+		override fun visitKtElement(element: KtElement) {
+			if (predicate(element)) {
+				count++
+			}
+			element.children.forEach { it.accept(this) }
+		}
+	})
+	return count
+}
