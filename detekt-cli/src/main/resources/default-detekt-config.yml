@@ -42,6 +42,8 @@ potential-bugs:
     active: false
   EqualsWithHashCodeExist:
     active: true
+  InvalidLoopCondition:
+    active: false
   WrongEqualsTypeParameter:
     active: false
   ExplicitGarbageCollectionCall:
