@@ -7,8 +7,8 @@ import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
-class UnnecessarySuperTypeInheritanceSpec : SubjectSpek<UnnecessarySuperTypeInheritance>({
-	subject { UnnecessarySuperTypeInheritance(Config.empty) }
+class UnnecessaryInheritanceSpec : SubjectSpek<UnnecessaryInheritance>({
+	subject { UnnecessaryInheritance(Config.empty) }
 
 	describe("check inherit classes") {
 
