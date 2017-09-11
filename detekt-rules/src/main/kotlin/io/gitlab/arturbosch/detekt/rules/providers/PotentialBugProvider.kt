@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.rules.bugs.EqualsAlwaysReturnsTrueOrFalse
 import io.gitlab.arturbosch.detekt.rules.bugs.EqualsWithHashCodeExist
 import io.gitlab.arturbosch.detekt.rules.bugs.ExplicitGarbageCollectionCall
 import io.gitlab.arturbosch.detekt.rules.bugs.LateinitUsage
+import io.gitlab.arturbosch.detekt.rules.bugs.UnconditionalJumpStatementInLoop
 import io.gitlab.arturbosch.detekt.rules.bugs.UnreachableCode
 import io.gitlab.arturbosch.detekt.rules.bugs.UnsafeCallOnNullableType
 import io.gitlab.arturbosch.detekt.rules.bugs.UnsafeCast
@@ -30,6 +31,7 @@ class PotentialBugProvider : RuleSetProvider {
 				WrongEqualsTypeParameter(config),
 				ExplicitGarbageCollectionCall(config),
 				LateinitUsage(config),
+				UnconditionalJumpStatementInLoop(config),
 				UnreachableCode(config),
 				UnsafeCallOnNullableType(config),
 				UnsafeCast(config)

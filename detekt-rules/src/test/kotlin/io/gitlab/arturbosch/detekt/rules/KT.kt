@@ -33,7 +33,8 @@ enum class Case(val file: String) {
 	SuppressedElements("/SuppressedByElementAnnotation.kt"),
 	SuppressedElementsByFile("/SuppressedElementsByFileAnnotation.kt"),
 	SuppressedElementsByClass("/SuppressedElementsByClassAnnotation.kt"),
-	SwallowedException("/cases/SwallowedException.kt");
+	SwallowedException("/cases/SwallowedException.kt"),
+	UnconditionalJumpStatementInLoop("/cases/UnconditionalJumpStatementInLoop.kt");
 
 	fun path(): Path = Paths.get(resource(file))
 }
