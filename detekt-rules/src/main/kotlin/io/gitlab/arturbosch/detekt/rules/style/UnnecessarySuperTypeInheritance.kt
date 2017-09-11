@@ -9,17 +9,21 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtClassOrObject
 
-class UnnecessarySuperTypeDeclaration(config: Config = Config.empty) : Rule(config) {
+class UnnecessarySuperTypeInheritance(config: Config = Config.empty) : Rule(config) {
 
 	override val issue: Issue = Issue(javaClass.simpleName, Severity.Style,
-			"The super type declaration is unnecessary.", Debt.FIVE_MINS)
+			"The extended super type is unnecessary.", Debt.FIVE_MINS)
 
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-		if (hasUnnecessarySuperType(classOrObject)) {
-			report(CodeSmell(issue, Entity.from(classOrObject)))
+		for (superEntry in classOrObject.superTypeListEntries) {
+			when (superEntry.text) {
+				"Any()" -> report(classOrObject, "Unnecessary inheritance of 'Any'.")
+				"Object()" -> report(classOrObject, "Unnecessary inheritance of 'Object'.")
+			}
 		}
 	}
 
-	private fun hasUnnecessarySuperType(classOrObject: KtClassOrObject) =
-			classOrObject.superTypeListEntries.any { it.text == "Any()" || it.text == "Object()" }
+	private fun report(classOrObject: KtClassOrObject, newDescription: String) {
+		report(CodeSmell(issue.copy(description = newDescription), Entity.from(classOrObject)))
+	}
 }
