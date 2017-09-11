@@ -3,13 +3,14 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
+import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.countDescendantsBy
 import org.jetbrains.kotlin.psi.KtBreakExpression
 import org.jetbrains.kotlin.psi.KtContinueExpression
+import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtLoopExpression
 
@@ -30,6 +31,23 @@ class LoopWithTooManyJumpStatements(config: Config = Config.empty) : Rule(config
 		if (body == null) {
 			return 0
 		}
-		return body.countDescendantsBy { it is KtBreakExpression || it is KtContinueExpression }
+		return body.countBreakAndReturnStatementsInLoop()
+	}
+
+
+	private fun KtElement.countBreakAndReturnStatementsInLoop(): Int {
+		var count = 0
+		this.accept(object : DetektVisitor() {
+			override fun visitKtElement(element: KtElement) {
+				if (element is KtLoopExpression) {
+					return
+				}
+				if (element is KtBreakExpression || element is KtContinueExpression) {
+					count++
+				}
+				element.children.forEach { it.accept(this) }
+			}
+		})
+		return count
 	}
 }
