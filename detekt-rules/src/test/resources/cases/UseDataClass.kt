@@ -14,7 +14,7 @@ class NoDataClassCandidate(val i: Int) {
 
 	val i2: Int = 0
 
-	fun f(){
+	fun f() {
 		println()
 	}
 
@@ -53,4 +53,9 @@ class DataClassCandidateWithOverriddenMethods(val i: Int) { // reports 1
 	override fun toString(): String {
 		return super.toString()
 	}
+}
+
+sealed class NoDataClassbecauseItsSealed {
+	data class Success(val any: Any) : NoDataClassbecauseItsSealed()
+	data class Error(val error: Throwable) : NoDataClassbecauseItsSealed()
 }

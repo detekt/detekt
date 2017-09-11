@@ -27,7 +27,11 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 	private val defaultFunctionNames = listOf("hashCode", "equals", "toString", "copy")
 
 	override fun visitClass(klass: KtClass) {
-		if (!klass.isData() && klass.isClosedForExtension() && klass.doesNotExtendAnything()) {
+		if (klass.isData() || klass.isSealed()) {
+			return
+		}
+
+		if (klass.isClosedForExtension() && klass.doesNotExtendAnything()) {
 
 			val declarations = klass.extractDeclarations()
 			val properties = declarations.filterIsInstance<KtProperty>()
@@ -46,7 +50,6 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 	}
 
 	private fun KtClass.doesNotExtendAnything() = superTypeListEntries.isEmpty()
-
 	private fun KtClass.isClosedForExtension() = !isAbstract() && !hasModifier(KtTokens.OPEN_KEYWORD)
 
 	private fun KtClass.extractDeclarations(): List<KtDeclaration> = getBody()?.declarations ?: emptyList()
