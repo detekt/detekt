@@ -13,8 +13,7 @@ abstract class AbstractProjectMetricProcessor : AbstractProcessor() {
 
 	override fun onFinish(files: List<KtFile>, result: Detektion) {
 		val count = files
-				.map { it.getUserData(key) }
-				.filterNotNull()
+				.mapNotNull { it.getUserData(key) }
 				.sum()
 		result.add(ProjectMetric(type, count))
 	}

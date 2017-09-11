@@ -36,7 +36,7 @@ class EqualsWithHashCodeExist(config: Config = Config.empty) : Rule(config) {
 	}
 
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-		val isDataClass = classOrObject.modifierList?.hasModifier(KtTokens.DATA_KEYWORD) ?: false
+		val isDataClass = classOrObject.modifierList?.hasModifier(KtTokens.DATA_KEYWORD) == true
 		if (isDataClass) return
 
 		queue.push(ViolationHolder())

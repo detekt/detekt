@@ -1,17 +1,14 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
-import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.rules.CommonSpec
-import io.gitlab.arturbosch.detekt.test.RuleTest
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 import org.jetbrains.spek.subject.itBehavesLike
-import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 /**
@@ -27,17 +24,16 @@ class NestedBlockDepthSpec : SubjectSpek<NestedBlockDepth>({
 			assertEquals(subject.findings.size, 1)
 			assertEquals((subject.findings[0] as ThresholdedCodeSmell).value, 5)
 		}
+
+		it("should not count else if as two") {
+			subject.lint(nestedBlockCode)
+			assertThat(subject.findings).isEmpty()
+		}
 	}
 
 })
 
-class NestedBlockDepthTest : RuleTest {
-
-	override val rule: Rule = NestedBlockDepth()
-
-	@Test
-	fun elseIfDoesNotCountAsTwo() {
-		val actual = """
+val nestedBlockCode = 	"""
 	override fun procedure(node: ASTNode) {
 		val psi = node.psi
 		if (psi.isNotPartOfEnum() && psi.isNotPartOfString()) {
@@ -54,9 +50,4 @@ class NestedBlockDepthTest : RuleTest {
 				}
 			}
 		}
-	}
-"""
-		assertThat(rule.lint(actual)).isEmpty()
-	}
-
-}
+	}"""

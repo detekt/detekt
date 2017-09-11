@@ -41,7 +41,7 @@ class UnusedImports(config: Config) : Rule(config) {
 
 	override fun visitImportList(importList: KtImportList) {
 		imports = importList.imports.filter { it.isValidImport }
-				.filter { it.identifier()?.contains("*")?.not() ?: false }
+				.filter { it.identifier()?.contains("*")?.not() == true }
 				.filter { it.identifier() != null }
 				.filter { !operatorSet.contains(it.identifier()) }
 				.map { it.identifier()!! to it }

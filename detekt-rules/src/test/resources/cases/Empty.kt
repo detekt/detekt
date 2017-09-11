@@ -54,5 +54,6 @@ class Empty : Runnable {
 	}
 }
 
-class EmptyClass {
+@Suppress("unused")
+class EmptyClass() {
 }

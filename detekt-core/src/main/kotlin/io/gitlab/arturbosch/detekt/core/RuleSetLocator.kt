@@ -16,8 +16,7 @@ class RuleSetLocator(settings: ProcessingSettings) {
 	fun load(): List<RuleSetProvider> {
 		val detektLoader = URLClassLoader(plugins, javaClass.classLoader)
 		return ServiceLoader.load(RuleSetProvider::class.java, detektLoader).asIterable()
-				.map { it.nullIfDefaultAndExcluded() }
-				.filterNotNull()
+				.mapNotNull { it.nullIfDefaultAndExcluded() }
 				.toList()
 	}
 

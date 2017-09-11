@@ -9,6 +9,7 @@ import java.nio.file.Paths
  */
 enum class Case(val file: String) {
 	CasesFolder("/cases"),
+	DataClassContainsFunctions("/cases/DataClassContainsFunctions.kt"),
 	Default("/cases/Default.kt"),
 	Empty("/cases/Empty.kt"),
 	EmptyIfPositive("/cases/EmptyIfPositive.kt"),
@@ -21,6 +22,7 @@ enum class Case(val file: String) {
 	InvalidLoopCondition("/cases/InvalidLoopCondition.kt"),
 	IteratorImpl("/cases/IteratorImpl.kt"),
 	LoopWithTooManyJumpStatements("cases/LoopWithTooManyJumpStatements.kt"),
+	LabeledExpression("/cases/LabeledExpression.kt"),
 	NamingConventions("/cases/NamingConventions.kt"),
 	NewLineAtEndOfFile("/cases/NewLineAtEndOfFile.kt"),
 	MaxLineLength("/cases/MaxLineLength.kt"),
@@ -36,7 +38,10 @@ enum class Case(val file: String) {
 	SuppressedElementsByFile("/SuppressedElementsByFileAnnotation.kt"),
 	SuppressedElementsByClass("/SuppressedElementsByClassAnnotation.kt"),
 	SwallowedException("/cases/SwallowedException.kt"),
-	UnconditionalJumpStatementInLoop("/cases/UnconditionalJumpStatementInLoop.kt");
+	UnconditionalJumpStatementInLoop("/cases/UnconditionalJumpStatementInLoop.kt"),
+	TooManyFunctions("/cases/TooManyFunctions.kt"),
+	TooManyFunctionsTopLevel("/cases/TooManyFunctionsTopLevel.kt"),
+	UseDataClass("/cases/UseDataClass.kt");
 
 	fun path(): Path = Paths.get(resource(file))
 }
