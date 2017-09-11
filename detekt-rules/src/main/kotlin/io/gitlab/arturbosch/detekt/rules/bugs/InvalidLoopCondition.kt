@@ -18,19 +18,19 @@ class InvalidLoopCondition(config: Config = Config.empty) : Rule(config) {
 			"If a for loops condition is false before the first iteration, the loop will never get executed.",
 			Debt.TEN_MINS)
 
+	private val minimumSize = 3
+
 	override fun visitForExpression(expression: KtForExpression) {
 		val loopRange = expression.loopRange
 		val range = loopRange?.children
-		if (range != null && hasInvalidLoopRange(range)) {
+		if (range != null && range.size >= minimumSize
+				&& hasInvalidLoopRange(range)) {
 			report(CodeSmell(issue, Entity.from(loopRange)))
 		}
 		super.visitForExpression(expression)
 	}
 
 	private fun hasInvalidLoopRange(range: Array<PsiElement>): Boolean {
-		if (range.size < 3) {
-			return false
-		}
 		val lowerValue = getIntValueForElement(range[0])
 		val upperValue = getIntValueForElement(range[2])
 		if (lowerValue == null || upperValue == null) {
