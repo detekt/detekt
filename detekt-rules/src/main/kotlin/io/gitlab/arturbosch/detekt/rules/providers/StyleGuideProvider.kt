@@ -21,6 +21,7 @@ import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryAbstractClass
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryParentheses
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessarySuperTypeDeclaration
 import io.gitlab.arturbosch.detekt.rules.style.UseDataClass
+import io.gitlab.arturbosch.detekt.rules.style.UtilityClassWithPublicConstructor
 import io.gitlab.arturbosch.detekt.rules.style.WildcardImport
 import io.gitlab.arturbosch.detekt.rules.style.naming.NamingRules
 
@@ -46,6 +47,7 @@ class StyleGuideProvider : RuleSetProvider {
 				UnnecessaryAbstractClass(config),
 				UnnecessaryParentheses(config),
 				UnnecessarySuperTypeDeclaration(config),
+				UtilityClassWithPublicConstructor(config),
 				OptionalAbstractKeyword(config),
 				OptionalWhenBraces(config),
 				ProtectedMemberInFinalClass(config),
