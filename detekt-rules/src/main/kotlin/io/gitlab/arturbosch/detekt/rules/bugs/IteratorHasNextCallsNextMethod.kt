@@ -13,33 +13,29 @@ import io.gitlab.arturbosch.detekt.rules.collectByType
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.KtThrowExpression
 
-class IteratorNotThrowingNoSuchElementException(config: Config = Config.empty) : Rule(config) {
+class IteratorHasNextCallsNextMethod(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue("IteratorNotThrowingNoSuchElementException", Severity.Defect,
-			"The next() method of an Iterator implementation should throw a NoSuchElementException " +
-					"when there are no more elements to return",
+	override val issue = Issue("IteratorHasNextCallsNextMethod", Severity.Defect,
+			"The hasNext() method of an Iterator implementation should not call the next() method. " +
+					"The state of the iterator should not be changed inside the hasNext() method. " +
+					"The hasNext() method is not supposed to have any side effects.",
 			Debt.TEN_MINS)
+
 
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
 		if (classOrObject.isImplementingIterator()) {
-			val nextMethod = classOrObject.getMethod("next")
-			if (nextMethod != null && !isNoSuchElementExceptionThrown(nextMethod)) {
+			val hasNextMethod = classOrObject.getMethod("hasNext")
+			if (hasNextMethod != null && callsNextMethod(hasNextMethod)) {
 				report(CodeSmell(issue, Entity.from(classOrObject)))
 			}
 		}
 		super.visitClassOrObject(classOrObject)
 	}
 
-	private fun isNoSuchElementExpression(expression: KtThrowExpression): Boolean {
-		val calleeExpression = (expression.thrownExpression as? KtCallExpression)?.calleeExpression
-		return calleeExpression?.text == "NoSuchElementException"
-	}
-
-	private fun isNoSuchElementExceptionThrown(nextMethod: KtNamedFunction): Boolean {
-		return nextMethod.bodyExpression
-				?.collectByType<KtThrowExpression>()
-				?.any { isNoSuchElementExpression(it) } ?: false
+	private fun callsNextMethod(method: KtNamedFunction): Boolean {
+		return method.bodyExpression
+				?.collectByType<KtCallExpression>()
+				?.any { it.calleeExpression?.text == "next" } ?: false
 	}
 }
