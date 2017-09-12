@@ -20,6 +20,9 @@ class ProtectedMemberInFinalClass(config: Config = Config.empty) : Rule(config) 
 
 	private val visitor = DeclarationVisitor()
 
+	/**
+	 * Only classes and companion objects can contain protected members.
+	 */
 	override fun visitClass(klass: KtClass) {
 		if (hasModifiers(klass)) {
 			klass.primaryConstructor?.accept(visitor)
