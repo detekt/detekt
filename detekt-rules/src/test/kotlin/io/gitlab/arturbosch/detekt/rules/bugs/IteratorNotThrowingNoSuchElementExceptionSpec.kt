@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.rules.exceptions
+package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.compileForTest

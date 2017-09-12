@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.rules.exceptions
+package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config

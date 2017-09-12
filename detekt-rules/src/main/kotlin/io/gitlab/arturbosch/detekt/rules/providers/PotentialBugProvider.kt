@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.rules.bugs.EqualsAlwaysReturnsTrueOrFalse
 import io.gitlab.arturbosch.detekt.rules.bugs.EqualsWithHashCodeExist
 import io.gitlab.arturbosch.detekt.rules.bugs.ExplicitGarbageCollectionCall
 import io.gitlab.arturbosch.detekt.rules.bugs.InvalidLoopCondition
+import io.gitlab.arturbosch.detekt.rules.bugs.IteratorNotThrowingNoSuchElementException
 import io.gitlab.arturbosch.detekt.rules.bugs.LateinitUsage
 import io.gitlab.arturbosch.detekt.rules.bugs.UnconditionalJumpStatementInLoop
 import io.gitlab.arturbosch.detekt.rules.bugs.UnreachableCode
@@ -28,6 +29,7 @@ class PotentialBugProvider : RuleSetProvider {
 				DuplicateCaseInWhenExpression(config),
 				EqualsAlwaysReturnsTrueOrFalse(config),
 				EqualsWithHashCodeExist(config),
+				IteratorNotThrowingNoSuchElementException(config),
 				UselessPostfixExpression(config),
 				InvalidLoopCondition(config),
 				WrongEqualsTypeParameter(config),
