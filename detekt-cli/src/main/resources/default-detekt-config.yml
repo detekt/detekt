@@ -46,6 +46,8 @@ potential-bugs:
     active: false
   WrongEqualsTypeParameter:
     active: false
+  IteratorHasNextCallsNextMethod:
+    active: false
   ExplicitGarbageCollectionCall:
     active: true
   UnconditionalJumpStatementInLoop:
