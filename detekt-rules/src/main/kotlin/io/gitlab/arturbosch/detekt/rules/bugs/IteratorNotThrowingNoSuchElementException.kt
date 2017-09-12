@@ -7,12 +7,13 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.bugs.iterator.getMethod
+import io.gitlab.arturbosch.detekt.rules.bugs.iterator.isImplementingIterator
 import io.gitlab.arturbosch.detekt.rules.collectByType
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtThrowExpression
-import org.jetbrains.kotlin.psi.psiUtil.isAbstract
 
 class IteratorNotThrowingNoSuchElementException(config: Config = Config.empty) : Rule(config) {
 
@@ -21,20 +22,14 @@ class IteratorNotThrowingNoSuchElementException(config: Config = Config.empty) :
 					"when there are no more elements to return",
 			Debt.TEN_MINS)
 
-	override fun visitClass(klass: KtClass) {
-		if (!klass.isInterface() && !klass.isAbstract() && isImplementingIterator(klass)) {
-			val functions = klass.declarations.filterIsInstance(KtNamedFunction::class.java)
-			val nextMethod = functions.firstOrNull { it.name == "next" && it.valueParameters.isEmpty() }
-			if (!isNoSuchElementExceptionThrown(nextMethod)) {
-				report(CodeSmell(issue, Entity.from(klass)))
+	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
+		if (classOrObject.isImplementingIterator()) {
+			val nextMethod = classOrObject.getMethod("next")
+			if (nextMethod != null && !isNoSuchElementExceptionThrown(nextMethod)) {
+				report(CodeSmell(issue, Entity.from(classOrObject)))
 			}
 		}
-	}
-
-	private fun isImplementingIterator(klass: KtClass): Boolean {
-		val typeList = klass.getSuperTypeList()?.entries
-		val name = typeList?.firstOrNull()?.typeAsUserType?.referencedName
-		return name == "Iterator"
+		super.visitClassOrObject(classOrObject)
 	}
 
 	private fun isNoSuchElementExpression(expression: KtThrowExpression): Boolean {
