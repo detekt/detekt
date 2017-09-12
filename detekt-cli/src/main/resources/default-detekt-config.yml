@@ -303,6 +303,8 @@ style:
     active: false
   UnnecessaryInheritance:
     active: false
+  UtilityClassWithPublicConstructor:
+    active: false
   DataClassContainsFunctions:
     active: false
   UseDataClass:

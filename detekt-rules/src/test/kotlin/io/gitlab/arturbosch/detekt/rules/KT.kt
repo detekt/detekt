@@ -34,6 +34,7 @@ enum class Case(val file: String) {
 	FeatureEnvy("/cases/FeatureEnvy.kt"),
 	UnreachableCode("/cases/UnreachableCode.kt"),
 	UnnecessaryAbstractClass("/cases/UnnecessaryAbstractClass.kt"),
+	UtilityClasses("/cases/UtilityClasses.kt"),
 	SuppressedElements("/SuppressedByElementAnnotation.kt"),
 	SuppressedElementsByFile("/SuppressedElementsByFileAnnotation.kt"),
 	SuppressedElementsByClass("/SuppressedElementsByClassAnnotation.kt"),

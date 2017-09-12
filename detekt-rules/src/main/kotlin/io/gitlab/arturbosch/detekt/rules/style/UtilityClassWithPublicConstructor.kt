@@ -1,0 +1,60 @@
+package io.gitlab.arturbosch.detekt.rules.style
+
+import io.gitlab.arturbosch.detekt.api.CodeSmell
+import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
+import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.isPublic
+import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtClassInitializer
+import org.jetbrains.kotlin.psi.KtDeclaration
+import org.jetbrains.kotlin.psi.KtObjectDeclaration
+import org.jetbrains.kotlin.psi.KtPrimaryConstructor
+import org.jetbrains.kotlin.psi.KtSecondaryConstructor
+
+class UtilityClassWithPublicConstructor(config: Config = Config.empty) : Rule(config) {
+
+	override val issue: Issue = Issue(javaClass.simpleName,
+			Severity.Style,
+			"Utility classes are not meant to be instantiated. " +
+					"Hence, at least one non-public constructor should be defined",
+			Debt.FIVE_MINS)
+
+	override fun visitClass(klass: KtClass) {
+		if (!klass.isInterface()) {
+			val declarations = klass.getBody()?.declarations
+			if (hasOnlyUtilityClassMembers(declarations) && hasPublicConstructor(klass)) {
+				report(CodeSmell(issue, Entity.from(klass)))
+			}
+		}
+		super.visitClass(klass)
+	}
+
+	private fun hasOnlyUtilityClassMembers(declarations: List<KtDeclaration>?): Boolean {
+		return declarations?.all {
+			it is KtSecondaryConstructor || it is KtClassInitializer || isCompanionObject(it)
+		} ?: false
+	}
+
+	private fun isCompanionObject(declaration: KtDeclaration): Boolean {
+		return (declaration as? KtObjectDeclaration)?.isCompanion() == true
+	}
+
+	private fun hasPublicConstructor(klass: KtClass): Boolean {
+		val primaryConstructor = klass.primaryConstructor
+		val secondaryConstructors = klass.secondaryConstructors
+		if (primaryConstructor == null) {
+			return hasPublicConstructor(secondaryConstructors)
+		}
+		return hasPublicConstructor(primaryConstructor)
+	}
+
+	private fun hasPublicConstructor(primaryConstructor: KtPrimaryConstructor) =
+			primaryConstructor.isPublic() && primaryConstructor.valueParameters.isEmpty()
+
+	private fun hasPublicConstructor(secondaryConstructors: List<KtSecondaryConstructor>) =
+			secondaryConstructors.isEmpty() || secondaryConstructors.any { it.isPublic() }
+}
