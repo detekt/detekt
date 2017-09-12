@@ -50,6 +50,8 @@ potential-bugs:
     active: true
   UnconditionalJumpStatementInLoop:
     active: false
+  IteratorNotThrowingNoSuchElementException:
+    active: false
   UnreachableCode:
     active: true
   LateinitUsage:
@@ -98,8 +100,6 @@ exceptions:
       - RuntimeException
       - Throwable
   InstanceOfCheckForException:
-    active: false
-  IteratorNotThrowingNoSuchElementException:
     active: false
   PrintExceptionStackTrace:
     active: false
