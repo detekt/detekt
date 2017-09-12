@@ -21,13 +21,10 @@ class IteratorImplPositive : Iterator<String> {
 }
 
 @Suppress("unused")
-abstract class AbstractIterator : Iterator<String>
+abstract class AbstractIterator1 : Iterator<String>
 
 @Suppress("unused")
-class NoIteratorImpl
-
-@Suppress("unused")
-class IteratorImplNegative1 : Iterator<String> {
+abstract class AbstractIterator2 : Iterator<String> { // violation NotThrowingNoSuchElementException
 
 	override fun hasNext(): Boolean {
 		return true
@@ -39,13 +36,31 @@ class IteratorImplNegative1 : Iterator<String> {
 }
 
 @Suppress("unused")
-class IteratorImplNegative2 : Iterator<String> {
+class NoIteratorImpl
+
+@Suppress("unused")
+class IteratorImplNegative1 : Iterator<String> { // violation NotThrowingNoSuchElementException
 
 	override fun hasNext(): Boolean {
 		return true
 	}
 
 	override fun next(): String {
-		throw IllegalStateException()
+		return ""
+	}
+}
+
+@Suppress("unused")
+class IteratorImplContainer {
+
+	object IteratorImplNegative2 : Iterator<String> { // violation NotThrowingNoSuchElementException
+
+		override fun hasNext(): Boolean {
+			return true
+		}
+
+		override fun next(): String {
+			throw IllegalStateException()
+		}
 	}
 }
