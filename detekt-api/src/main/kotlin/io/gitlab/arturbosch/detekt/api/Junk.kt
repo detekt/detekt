@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtStringTemplateEntry
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
+import java.util.HashMap
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 
@@ -75,4 +76,12 @@ class SingleAssign<T> {
 	companion object {
 		private val UNINITIALIZED_VALUE = Any()
 	}
+}
+
+fun <K, V> List<Pair<K, List<V>>>.toMergedMap(): Map<K, List<V>> {
+    val map = HashMap<K, MutableList<V>>()
+    this.forEach {
+        map.merge(it.first, it.second.toMutableList(), { l1, l2 -> l1.apply { addAll(l2) } })
+    }
+    return map
 }
