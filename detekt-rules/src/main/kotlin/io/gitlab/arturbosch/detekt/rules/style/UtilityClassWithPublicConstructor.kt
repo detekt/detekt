@@ -19,8 +19,8 @@ class UtilityClassWithPublicConstructor(config: Config = Config.empty) : Rule(co
 
 	override val issue: Issue = Issue(javaClass.simpleName,
 			Severity.Style,
-			"Utility classes are not meant to be instantiated. " +
-					"Hence, at least one non-public constructor should be defined",
+			"The class declaration is unnecessary because it only contains utility functions. " +
+					"An object declaration should be used instead.",
 			Debt.FIVE_MINS)
 
 	override fun visitClass(klass: KtClass) {
@@ -36,7 +36,7 @@ class UtilityClassWithPublicConstructor(config: Config = Config.empty) : Rule(co
 	private fun hasOnlyUtilityClassMembers(declarations: List<KtDeclaration>?): Boolean {
 		return declarations?.all {
 			it is KtSecondaryConstructor || it is KtClassInitializer || isCompanionObject(it)
-		} ?: false
+		} == true
 	}
 
 	private fun isCompanionObject(declaration: KtDeclaration): Boolean {

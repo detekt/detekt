@@ -1,6 +1,7 @@
+@file:Suppress("unused", "ConvertSecondaryConstructorToPrimary")
+
 package cases
 
-@Suppress("unused")
 class UtilityClassWithDefaultConstructor { // violation
 
 	companion object {
@@ -8,7 +9,6 @@ class UtilityClassWithDefaultConstructor { // violation
 	}
 }
 
-@Suppress("unused")
 class UtilityClassWithPrimaryConstructor1 constructor() { // violation
 
 	companion object {
@@ -16,7 +16,6 @@ class UtilityClassWithPrimaryConstructor1 constructor() { // violation
 	}
 }
 
-@Suppress("unused")
 class UtilityClassWithPrimaryConstructor2() { // violation
 
 	companion object {
@@ -24,7 +23,6 @@ class UtilityClassWithPrimaryConstructor2() { // violation
 	}
 }
 
-@Suppress("unused")
 class UtilityClassWithPrimaryConstructorOk private constructor() {
 
 	companion object {
@@ -32,17 +30,15 @@ class UtilityClassWithPrimaryConstructorOk private constructor() {
 	}
 }
 
-@Suppress("unused")
 class UtilityClassWithSecondaryConstructor { // violation
 
-	public constructor()
+	constructor()
 
 	companion object {
 		val C = 0
 	}
 }
 
-@Suppress("unused")
 class UtilityClassWithSecondaryConstructorOk {
 
 	private constructor()
@@ -52,7 +48,6 @@ class UtilityClassWithSecondaryConstructorOk {
 	}
 }
 
-@Suppress("unused")
 class NoUtilityClasses {
 
 	private val i = 0
@@ -78,7 +73,6 @@ class NoUtilityClasses {
 	}
 }
 
-@Suppress("unused")
 interface InterfaceWithCompanionObject {
 
 	companion object {
