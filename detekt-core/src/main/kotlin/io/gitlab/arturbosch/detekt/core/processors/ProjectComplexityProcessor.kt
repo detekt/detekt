@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.core.processors
 
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
-import io.gitlab.arturbosch.detekt.core.processors.util.McCabeVisitor
+import io.gitlab.arturbosch.detekt.api.internal.McCabeVisitor
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.psi.KtFile
 

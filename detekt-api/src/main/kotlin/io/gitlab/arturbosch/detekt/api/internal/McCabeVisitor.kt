@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.core.processors.util
+package io.gitlab.arturbosch.detekt.api.internal
 
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -27,6 +27,9 @@ class McCabeVisitor : DetektVisitor() {
 
 	override fun visitIfExpression(expression: KtIfExpression) {
 		inc()
+		if (expression.`else` != null) {
+			inc()
+		}
 		super.visitIfExpression(expression)
 	}
 
@@ -36,12 +39,14 @@ class McCabeVisitor : DetektVisitor() {
 	}
 
 	override fun visitWhenExpression(expression: KtWhenExpression) {
-		inc()
+		mcc += expression.entries.size
 		super.visitWhenExpression(expression)
 	}
 
 	override fun visitTryExpression(expression: KtTryExpression) {
 		inc()
+		mcc += expression.catchClauses.size
+		expression.finallyBlock?.let { inc() }
 		super.visitTryExpression(expression)
 	}
 
@@ -57,9 +62,9 @@ class McCabeVisitor : DetektVisitor() {
 		}
 		super.visitCallExpression(expression)
 	}
+}
 
-	fun KtCallExpression.isUsedForNesting(): Boolean = when (getCallNameExpression()?.text) {
-		"run", "let", "apply", "with", "use", "forEach" -> true
-		else -> false
-	}
+fun KtCallExpression.isUsedForNesting(): Boolean = when (getCallNameExpression()?.text) {
+	"run", "let", "apply", "with", "use", "forEach" -> true
+	else -> false
 }
