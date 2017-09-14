@@ -16,7 +16,7 @@ class ComplexMethodSpec : Spek({
 		val subject = ComplexMethod()
 		subject.lint(Case.ComplexClass.path())
 		assertThat(subject.findings).hasSize(1)
-		assertThat((subject.findings[0] as ThresholdedCodeSmell).value).isEqualTo(13)
+		assertThat((subject.findings[0] as ThresholdedCodeSmell).value).isEqualTo(20)
 		assertThat((subject.findings[0] as ThresholdedCodeSmell).threshold).isEqualTo(10)
 	}
 })
