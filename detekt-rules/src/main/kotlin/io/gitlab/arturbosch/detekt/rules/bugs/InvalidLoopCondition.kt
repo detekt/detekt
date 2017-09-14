@@ -45,12 +45,7 @@ class InvalidLoopCondition(config: Config = Config.empty) : Rule(config) {
 	}
 
 	private fun getIntValueForElement(element: PsiElement): Int? {
-		val constant = element as? KtConstantExpression ?: return null
-		return try {
-			Integer.parseInt(constant.text)
-		} catch (e: NumberFormatException) {
-			null
-		}
+		return (element as? KtConstantExpression)?.text?.toIntOrNull()
 	}
 
 	private fun checkRangeTo(lower: Int, upper: Int) = lower > upper

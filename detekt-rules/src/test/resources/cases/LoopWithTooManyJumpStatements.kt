@@ -1,6 +1,6 @@
 package cases
 
-@Suppress("unused")
+@Suppress("unused", "ConstantConditionIf")
 class LoopWithTooManyJumpStatements {
 
 	fun tooManyJumps() { // reports 3
