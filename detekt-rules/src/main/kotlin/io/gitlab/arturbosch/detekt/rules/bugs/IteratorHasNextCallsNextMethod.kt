@@ -36,6 +36,6 @@ class IteratorHasNextCallsNextMethod(config: Config = Config.empty) : Rule(confi
 	private fun callsNextMethod(method: KtNamedFunction): Boolean {
 		return method.bodyExpression
 				?.collectByType<KtCallExpression>()
-				?.any { it.calleeExpression?.text == "next" } ?: false
+				?.any { it.calleeExpression?.text == "next" } == true
 	}
 }

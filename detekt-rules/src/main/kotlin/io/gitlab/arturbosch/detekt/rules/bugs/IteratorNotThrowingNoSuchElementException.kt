@@ -9,11 +9,8 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.bugs.iterator.getMethod
 import io.gitlab.arturbosch.detekt.rules.bugs.iterator.isImplementingIterator
-import io.gitlab.arturbosch.detekt.rules.collectByType
-import org.jetbrains.kotlin.psi.KtCallExpression
+import io.gitlab.arturbosch.detekt.rules.bugs.iterator.throwsNoSuchElementExceptionThrown
 import org.jetbrains.kotlin.psi.KtClassOrObject
-import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.KtThrowExpression
 
 class IteratorNotThrowingNoSuchElementException(config: Config = Config.empty) : Rule(config) {
 
@@ -25,21 +22,10 @@ class IteratorNotThrowingNoSuchElementException(config: Config = Config.empty) :
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
 		if (classOrObject.isImplementingIterator()) {
 			val nextMethod = classOrObject.getMethod("next")
-			if (nextMethod != null && !isNoSuchElementExceptionThrown(nextMethod)) {
+			if (nextMethod != null && !nextMethod.throwsNoSuchElementExceptionThrown()) {
 				report(CodeSmell(issue, Entity.from(classOrObject)))
 			}
 		}
 		super.visitClassOrObject(classOrObject)
-	}
-
-	private fun isNoSuchElementExpression(expression: KtThrowExpression): Boolean {
-		val calleeExpression = (expression.thrownExpression as? KtCallExpression)?.calleeExpression
-		return calleeExpression?.text == "NoSuchElementException"
-	}
-
-	private fun isNoSuchElementExceptionThrown(nextMethod: KtNamedFunction): Boolean {
-		return nextMethod.bodyExpression
-				?.collectByType<KtThrowExpression>()
-				?.any { isNoSuchElementExpression(it) } ?: false
 	}
 }
