@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.core.path
 import io.gitlab.arturbosch.detekt.test.compileForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import java.nio.file.Path
 
 /**
  * @author Artur Bosch
@@ -12,25 +13,24 @@ internal class ComplexityVisitorTest {
 
 	@Test
 	fun complexityOfDefaultCaseIsOne() {
-		val file = compileForTest(path.resolve("Default.kt"))
+		val path = path.resolve("Default.kt")
 
-		val mcc = with(file) {
-			accept(ComplexityVisitor())
-			getUserData(COMPLEXITY_KEY)
-		}
+		val mcc = calcComplexity(path)
 
 		assertThat(mcc).isEqualTo(0)
 	}
 
+	private fun calcComplexity(path: Path) = with(compileForTest(path)) {
+		accept(ComplexityVisitor())
+		getUserData(COMPLEXITY_KEY)
+	}
+
 	@Test
 	fun complexityOfComplexAndNestedClass() {
-		val file = compileForTest(path.resolve("ComplexClass.kt"))
+		val path = path.resolve("ComplexClass.kt")
 
-		val mcc = with(file) {
-			accept(ComplexityVisitor())
-			getUserData(COMPLEXITY_KEY)
-		}
+		val mcc = calcComplexity(path)
 
-		assertThat(mcc).isEqualTo(42)
+		assertThat(mcc).isEqualTo(56)
 	}
 }
