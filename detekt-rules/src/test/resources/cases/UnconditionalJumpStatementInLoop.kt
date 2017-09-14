@@ -1,6 +1,6 @@
 package cases
 
-@Suppress("unused")
+@Suppress("unused", "UNREACHABLE_CODE")
 class UnconditionalJumpStatementInLoop {
 
 	fun jumpStatementsInLoop() { // reports 6
