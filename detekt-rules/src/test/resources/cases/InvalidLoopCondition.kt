@@ -1,6 +1,6 @@
 package cases
 
-@Suppress("unused")
+@Suppress("unused", "EmptyRange")
 fun loopConditions() {
 	for (i in 2..2) { }
 	for (i in 2..1) { } // violation
