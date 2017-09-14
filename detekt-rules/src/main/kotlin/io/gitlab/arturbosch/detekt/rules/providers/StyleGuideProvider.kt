@@ -48,6 +48,7 @@ class StyleGuideProvider : RuleSetProvider {
 				SafeCast(config),
 				UnnecessaryAbstractClass(config),
 				UnnecessaryParentheses(config),
+				UtilityClassWithPublicConstructor(config),
 				UnnecessaryInheritance(config),
 				UtilityClassWithPublicConstructor(config),
 				OptionalAbstractKeyword(config),
