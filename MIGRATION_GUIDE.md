@@ -1,5 +1,10 @@
 # Migration Guide
 
+### RC4 -> RC5
+
+- McCabe calculation was corrected and can now be slightly higher which can result in unexpected `ComplexMethod` 
+findings.
+
 ### RC3 -> RC4
 
 - CatchXXX and ThrowXXX rules were reimplemented and combined into TooGenericExceptionCatched and 
