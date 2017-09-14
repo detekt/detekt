@@ -20,6 +20,7 @@ fun LeafPsiElement.trimSpacesAfter(autoCorrect: Boolean = true, ignoreLineBreaks
 fun LeafPsiElement.trimSpacesBefore(autoCorrect: Boolean = true, ignoreLineBreaks: Boolean = false)
 		= trimSpaces(autoCorrect, ignoreLineBreaks) { it.prevLeaf() }
 
+@Suppress("ComplexMethod")
 private fun LeafPsiElement.trimSpaces(
 		autoCorrect: Boolean = true,
 		ignoreLineBreaks: Boolean = false,
