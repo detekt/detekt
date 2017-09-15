@@ -615,6 +615,8 @@ style:
     active: false
   UnnecessaryAbstractClass:
     active: false
+  ExpressionBody:
+    active: false
 
 comments:
   active: true

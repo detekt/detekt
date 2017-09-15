@@ -60,6 +60,8 @@ potential-bugs:
     active: false
   UselessPostfixExpression:
     active: false
+  ExpressionBody:
+    active: false
 
 performance:
   active: true

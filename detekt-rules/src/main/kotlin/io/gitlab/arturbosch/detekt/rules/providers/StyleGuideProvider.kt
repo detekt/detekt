@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.providers
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.rules.style.BodyExpression
 import io.gitlab.arturbosch.detekt.rules.style.DataClassContainsFunctionsRule
 import io.gitlab.arturbosch.detekt.rules.style.EqualsNullCall
 import io.gitlab.arturbosch.detekt.rules.style.FileParsingRule
@@ -56,7 +57,8 @@ class StyleGuideProvider : RuleSetProvider {
 				MagicNumber(config),
 				ModifierOrder(config),
 				DataClassContainsFunctionsRule(config),
-				UseDataClass(config)
+				UseDataClass(config),
+				BodyExpression(config)
 		))
 	}
 }
