@@ -10,7 +10,7 @@ import org.gradle.api.tasks.TaskAction
 open class DetektIdeaInspectionTask : DefaultTask() {
 
 	init {
-		description = "Uses an extern idea installation to inspect your code."
+		description = "Uses an external idea installation to inspect your code."
 		group = "verification"
 	}
 
