@@ -27,6 +27,8 @@ import io.gitlab.arturbosch.detekt.rules.style.UseDataClass
 import io.gitlab.arturbosch.detekt.rules.style.UtilityClassWithPublicConstructor
 import io.gitlab.arturbosch.detekt.rules.style.WildcardImport
 import io.gitlab.arturbosch.detekt.rules.style.naming.NamingRules
+import io.gitlab.arturbosch.detekt.rules.style.optional.OptionalReturnKeyword
+import io.gitlab.arturbosch.detekt.rules.style.optional.OptionalUnit
 
 /**
  * @author Artur Bosch
@@ -55,6 +57,8 @@ class StyleGuideProvider : RuleSetProvider {
 				UtilityClassWithPublicConstructor(config),
 				OptionalAbstractKeyword(config),
 				OptionalWhenBraces(config),
+				OptionalReturnKeyword(config),
+				OptionalUnit(config),
 				ProtectedMemberInFinalClass(config),
 				SerialVersionUIDInSerializableClass(config),
 				MagicNumber(config),

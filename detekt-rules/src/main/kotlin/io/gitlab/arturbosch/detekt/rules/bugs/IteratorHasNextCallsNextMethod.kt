@@ -22,7 +22,6 @@ class IteratorHasNextCallsNextMethod(config: Config = Config.empty) : Rule(confi
 					"The hasNext() method is not supposed to have any side effects.",
 			Debt.TEN_MINS)
 
-
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
 		if (classOrObject.isImplementingIterator()) {
 			val hasNextMethod = classOrObject.getMethod("hasNext")
