@@ -26,7 +26,6 @@ fun Args.loadConfiguration(): Config {
 	var config = when {
 		!config.isNullOrBlank() -> parsePathConfig(config!!)
 		!configResource.isNullOrBlank() -> parseResourceConfig(configResource!!)
-		formatting -> FormatConfig(useTabs)
 		else -> loadDefaultConfig()
 	}
 
@@ -53,19 +52,6 @@ private fun parsePathConfig(configPath: String): Config {
 		YamlConfig.load(paths[0])
 	} else {
 		paths.map { YamlConfig.load(it) }.reduce { composite, config -> CompositeConfig(config, composite) }
-	}
-}
-
-data class FormatConfig(private val useTabs: Boolean) : Config {
-	override fun subConfig(key: String) = this
-
-	override fun <T : Any> valueOrDefault(key: String, default: T): T {
-		@Suppress("UNCHECKED_CAST")
-		return when (key) {
-			"autoCorrect" -> true as T
-			"useTabs" -> useTabs as T
-			else -> default
-		}
 	}
 }
 
