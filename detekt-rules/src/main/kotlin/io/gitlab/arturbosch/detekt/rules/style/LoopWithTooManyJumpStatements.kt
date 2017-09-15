@@ -31,7 +31,6 @@ class LoopWithTooManyJumpStatements(config: Config = Config.empty) : Rule(config
 		return body?.countBreakAndReturnStatementsInLoop() ?: 0
 	}
 
-
 	private fun KtElement.countBreakAndReturnStatementsInLoop(): Int {
 		var count = 0
 		this.accept(object : DetektVisitor() {
