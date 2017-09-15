@@ -8,3 +8,5 @@ include 'detekt-sample-extensions'
 include 'detekt-gradle-plugin'
 include 'detekt-formatting'
 include 'detekt-migration'
+include 'detekt-watch-service'
+

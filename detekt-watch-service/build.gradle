@@ -1,0 +1,14 @@
+mainClassName = 'io.gitlab.arturbosch.detekt.watchservice.MainKt'
+
+configurations {
+	compile.extendsFrom kotlinImplementation
+	testImplementation.extendsFrom kotlinTest
+}
+
+dependencies {
+	compile project(':detekt-cli')
+	testImplementation project(':detekt-test')
+	testRuntime "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
+	testRuntime "org.junit.platform:junit-platform-console:$junitPlatformVersion"
+	testRuntime "org.jetbrains.spek:spek-junit-platform-engine:$spekVersion"
+}

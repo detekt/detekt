@@ -39,7 +39,7 @@ allprojects {
 	apply plugin: 'com.github.ben-manes.versions'
 
 	def projectName = it.name
-	if (projectName == 'detekt-cli') {
+	if (projectName == 'detekt-cli' || projectName == 'detekt-watch-service') {
 		apply plugin: 'application'
 		apply plugin: 'com.github.johnrengelman.shadow'
 	}
