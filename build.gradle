@@ -13,7 +13,7 @@ buildscript {
 
 plugins {
 	id 'com.jfrog.bintray' version '1.7.3'
-	id 'com.github.ben-manes.versions' version '0.13.0'
+	id 'com.github.ben-manes.versions' version '0.15.0'
 	id 'com.github.johnrengelman.shadow' version '1.2.3'
 	id 'org.sonarqube' version '2.5'
 }
@@ -36,7 +36,6 @@ allprojects {
 	apply plugin: 'maven'
 	apply plugin: 'maven-publish'
 	apply plugin: 'com.jfrog.bintray'
-	apply plugin: 'com.github.ben-manes.versions'
 
 	def projectName = it.name
 	if (projectName == 'detekt-cli') {
