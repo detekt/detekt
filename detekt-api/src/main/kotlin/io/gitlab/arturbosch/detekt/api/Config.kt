@@ -27,6 +27,8 @@ interface Config {
 	companion object {
 		/**
 		 * An empty configuration with no properties.
+		 * This config should only be used in test cases.
+		 * Always returns the default value except when 'active' is queried, it returns true .
 		 */
 		val empty: Config = EmptyConfig
 	}
@@ -37,7 +39,11 @@ interface Config {
  */
 internal object EmptyConfig : Config {
 	override fun subConfig(key: String) = this
-	override fun <T : Any> valueOrDefault(key: String, default: T): T = default
+	@Suppress("UNCHECKED_CAST")
+	override fun <T : Any> valueOrDefault(key: String, default: T): T = when (key) {
+		"active" -> true as T
+		else -> default
+	}
 }
 
 /**
