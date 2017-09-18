@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.KtCompiler
 import io.gitlab.arturbosch.detekt.core.PathFilter
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
+import io.gitlab.arturbosch.detekt.core.RuleSetLocator
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
 
@@ -23,7 +24,7 @@ class DetektService(parameters: Parameters) {
 		)
 	}
 
-	private val detektor = DetektFacade.instance(settings)
+	private val detektor = DetektFacade.instance(settings, RuleSetLocator(settings).load(), emptyList())
 	private val reporter = FindingsReport()
 
 	fun check(dir: WatchedDir) {

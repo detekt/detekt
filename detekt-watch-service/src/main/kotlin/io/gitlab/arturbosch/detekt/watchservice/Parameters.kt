@@ -31,9 +31,6 @@ class Parameters {
 
 	}
 
-	fun extractConfig(): Config = with(config) {
-		if (this != null) YamlConfig.load(ExistingPathConverter().convert(this))
-		else Config.empty
-	}
-
+	fun extractConfig(): Config =
+			config?.let { YamlConfig.load(ExistingPathConverter().convert(it)) } ?: Config.empty
 }
