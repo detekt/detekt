@@ -17,7 +17,8 @@ class OptionalReturnKeyword(config: Config) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,
 			Severity.Style,
-			"",
+			"The last expressions inside conditional expressions are always returned. " +
+					"This makes the return keyword unnecessary and it can be safely removed.",
 			Debt.TEN_MINS)
 
 	private val visitor = ConditionalPathVisitor {
