@@ -21,6 +21,7 @@ import io.gitlab.arturbosch.detekt.rules.style.SafeCast
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryAbstractClass
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryInheritance
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryParentheses
+import io.gitlab.arturbosch.detekt.rules.style.UnusedImports
 import io.gitlab.arturbosch.detekt.rules.style.UseDataClass
 import io.gitlab.arturbosch.detekt.rules.style.UtilityClassWithPublicConstructor
 import io.gitlab.arturbosch.detekt.rules.style.WildcardImport
@@ -60,7 +61,8 @@ class StyleGuideProvider : RuleSetProvider {
 				MagicNumber(config),
 				ModifierOrder(config),
 				DataClassContainsFunctionsRule(config),
-				UseDataClass(config)
+				UseDataClass(config),
+				UnusedImports(config)
 		))
 	}
 }
