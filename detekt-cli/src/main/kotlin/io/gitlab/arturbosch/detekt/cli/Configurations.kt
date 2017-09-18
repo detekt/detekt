@@ -27,7 +27,7 @@ fun Args.loadConfiguration(): Config {
 		!config.isNullOrBlank() -> parsePathConfig(config!!)
 		!configResource.isNullOrBlank() -> parseResourceConfig(configResource!!)
 		formatting -> FormatConfig(useTabs)
-		else -> Config.empty
+		else -> loadDefaultConfig()
 	}
 
 	if (config.valueOrDefault("failFast", false)) {
