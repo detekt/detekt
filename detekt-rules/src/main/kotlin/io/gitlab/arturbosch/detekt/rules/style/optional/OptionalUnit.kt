@@ -14,7 +14,11 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  */
 class OptionalUnit(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName, Severity.Style, "", Debt.FIVE_MINS)
+	override val issue = Issue(
+			javaClass.simpleName,
+			Severity.Style,
+			"Return type of 'Unit' is unnecessary and can be safely removed.",
+			Debt.FIVE_MINS)
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		if (function.funKeyword == null) return
