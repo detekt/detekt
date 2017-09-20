@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.rules.style.DataClassContainsFunctionsRule
 import io.gitlab.arturbosch.detekt.rules.style.EqualsNullCall
+import io.gitlab.arturbosch.detekt.rules.style.ExpressionBodySyntax
 import io.gitlab.arturbosch.detekt.rules.style.FileParsingRule
 import io.gitlab.arturbosch.detekt.rules.style.ForbiddenComment
 import io.gitlab.arturbosch.detekt.rules.style.ForbiddenImport
@@ -62,7 +63,8 @@ class StyleGuideProvider : RuleSetProvider {
 				ModifierOrder(config),
 				DataClassContainsFunctionsRule(config),
 				UseDataClass(config),
-				UnusedImports(config)
+				UnusedImports(config),
+				ExpressionBodySyntax(config)
 		))
 	}
 }
