@@ -240,6 +240,9 @@ style:
   ReturnCount:
     active: true
     max: 2
+  ThrowsCount:
+    active: true
+    max: 2
   NewLineAtEndOfFile:
     active: true
   OptionalAbstractKeyword:
