@@ -328,6 +328,14 @@ style:
     active: false
   UnnecessaryAbstractClass:
     active: false
+  OptionalUnit:
+    active: false
+  OptionalReturnKeyword:
+    active: false
+  ExpressionBodySyntax:
+    active: false
+  UnusedImports:
+    active: false
 
 comments:
   active: true
