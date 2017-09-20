@@ -1,4 +1,3 @@
-autoCorrect: true
 failFast: false
 
 build:
@@ -177,55 +176,6 @@ code-smell:
     weight: 0.45
     base: 0.5
 
-formatting:
-  active: true
-  useTabs: true
-  Indentation:
-    active: false
-    indentSize: 4
-  ConsecutiveBlankLines:
-    active: true
-    autoCorrect: true
-  MultipleSpaces:
-    active: true
-    autoCorrect: true
-  SpacingAfterComma:
-    active: true
-    autoCorrect: true
-  SpacingAfterKeyword:
-    active: true
-    autoCorrect: true
-  SpacingAroundColon:
-    active: true
-    autoCorrect: true
-  SpacingAroundBraces:
-    active: true
-    autoCorrect: true
-  SpacingAroundOperator:
-    active: true
-    autoCorrect: true
-  TrailingSpaces:
-    active: true
-    autoCorrect: true
-  UnusedImports:
-    active: true
-    autoCorrect: true
-  OptionalSemicolon:
-    active: true
-    autoCorrect: true
-  OptionalUnit:
-    active: true
-    autoCorrect: true
-  ExpressionBodySyntax:
-    active: false
-    autoCorrect: false
-  ExpressionBodySyntaxLineBreaks:
-    active: false
-    autoCorrect: false
-  OptionalReturnKeyword:
-    active: true
-    autoCorrect: false
-
 style:
   active: true
   ReturnCount:
@@ -312,6 +262,14 @@ style:
   UseDataClass:
     active: false
   UnnecessaryAbstractClass:
+    active: false
+  OptionalUnit:
+    active: false
+  OptionalReturnKeyword:
+    active: false
+  ExpressionBodySyntax:
+    active: false
+  UnusedImports:
     active: false
 
 comments:

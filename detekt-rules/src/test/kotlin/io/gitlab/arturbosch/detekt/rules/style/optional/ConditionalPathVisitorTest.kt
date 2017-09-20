@@ -1,10 +1,7 @@
-package io.gitlab.arturbosch.detekt.formatting.visitors
+package io.gitlab.arturbosch.detekt.rules.style.optional
 
-import io.gitlab.arturbosch.detekt.formatting.ExpressionBodySyntax
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
-import io.gitlab.arturbosch.detekt.test.format
-import io.gitlab.arturbosch.detekt.test.resourceAsString
-import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 
 /**
@@ -13,29 +10,37 @@ import org.junit.jupiter.api.Test
 internal class ConditionalPathVisitorTest {
 
 	@Test
-	fun test() {
+	fun isState() {
 		var counter = 0
 
 		val visitor = ConditionalPathVisitor {
-			counter += 1
+			counter++
 		}
 
-		val content = resourceAsString("cases/ConditionalReturns.kt")
-		val ktFile = compileContentForTest(content)
+		val ktFile = compileContentForTest(isState)
 
 		ktFile.accept(visitor)
 
-		assertThat(counter).isEqualTo(7)
+		Assertions.assertThat(counter).isEqualTo(5)
 	}
 
-
 	@Test
-	fun removeAllNestedReturns() {
-		assertThat(ExpressionBodySyntax().format(actual)).isEqualTo(expected)
+	fun shouldState() {
+		var counter = 0
+
+		val visitor = ConditionalPathVisitor {
+			counter++
+		}
+
+		val ktFile = compileContentForTest(shouldState)
+
+		ktFile.accept(visitor)
+
+		Assertions.assertThat(counter).isEqualTo(0)
 	}
 }
 
-val actual = """
+val isState = """
 fun stuff(): Int {
 	return try {
 		return if (true) {
@@ -61,8 +66,7 @@ fun stuff(): Int {
 		return 7
 	}
 }""".trimIndent()
-
-val expected = """
+val shouldState = """
 fun stuff(): Int = try {
 		if (true) {
 			if (false) return -1

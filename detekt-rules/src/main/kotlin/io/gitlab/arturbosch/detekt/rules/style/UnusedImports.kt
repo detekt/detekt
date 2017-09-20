@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.formatting
+package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
@@ -19,7 +19,11 @@ import org.jetbrains.kotlin.psi.KtReferenceExpression
  */
 class UnusedImports(config: Config) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName, Severity.Style, "Unused import", Debt.FIVE_MINS)
+	override val issue = Issue(
+			javaClass.simpleName,
+			Severity.Style,
+			"Unused Imports are dead code and should be removed.",
+			Debt.FIVE_MINS)
 
 	private val operatorSet = setOf("unaryPlus", "unaryMinus", "not", "inc", "dec", "plus", "minus", "times", "div",
 			"mod", "rangeTo", "contains", "get", "set", "invoke", "plusAssign", "minusAssign", "timesAssign", "divAssign",
@@ -31,12 +35,7 @@ class UnusedImports(config: Config) : Rule(config) {
 	override fun visitFile(file: PsiFile?) {
 		imports.clear()
 		super.visitFile(file)
-		imports.forEach {
-			report(CodeSmell(issue, Entity.from(it.second)))
-			withAutoCorrect {
-				it.second.delete()
-			}
-		}
+		imports.forEach { report(CodeSmell(issue, Entity.from(it.second))) }
 	}
 
 	override fun visitImportList(importList: KtImportList) {

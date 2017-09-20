@@ -2,6 +2,8 @@
 
 ### RC4 -> RC5
 
+- Formatting rule set was removed. Use the `detektIdeaFormat` task, KtLint or wait for the official kotlin format 
+tool which will be released soon (Hadi mentioned it in a reply to a tweet somewhere).
 - McCabe calculation was corrected and can now be slightly higher which can result in unexpected `ComplexMethod` 
 findings.
 

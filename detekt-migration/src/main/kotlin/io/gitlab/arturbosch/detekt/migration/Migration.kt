@@ -1,11 +1,13 @@
 package io.gitlab.arturbosch.detekt.migration
 
+import io.gitlab.arturbosch.detekt.api.PROJECT
 import io.gitlab.arturbosch.detekt.cli.OutputFacade
 import io.gitlab.arturbosch.detekt.cli.createPathFilters
 import io.gitlab.arturbosch.detekt.cli.loadConfiguration
 import io.gitlab.arturbosch.detekt.cli.parseArguments
 import io.gitlab.arturbosch.detekt.core.Detektor
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
+import org.jetbrains.kotlin.com.intellij.mock.MockProject
 
 /**
  * @author Artur Bosch
@@ -17,6 +19,7 @@ class Migration {
 		@JvmStatic
 		fun main(args: Array<String>) {
 			with(parseArguments(args)) {
+				makeMutable(PROJECT as MockProject)
 				val config = loadConfiguration()
 				val settings = ProcessingSettings(inputPath, config, createPathFilters(), parallel, true)
 				val detektor = Detektor(settings, listOf(MigrationRuleSetProvider()))

@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.formatting.visitors
+package io.gitlab.arturbosch.detekt.rules.style.optional
 
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import org.jetbrains.kotlin.psi.KtBlockExpression
