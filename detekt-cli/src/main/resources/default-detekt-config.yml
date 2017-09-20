@@ -249,6 +249,7 @@ style:
     active: false
   LoopWithTooManyJumpStatements:
     active: false
+    maxJumpCount: 1
   ModifierOrder:
     active: true
   MagicNumber:
