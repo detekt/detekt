@@ -14,9 +14,9 @@ open class IdeaExtension(open var path: String? = null,
 		require(path != null) { IDEA_PATH_ERROR }
 		require(input != null) { INPUT_PATH_ERROR }
 		return if (codeStyleScheme != null) {
-			arrayOf("$path/bin/format.sh", "-r", input!!, "-s", codeStyleScheme!!, "-m", mask)
+			arrayOf(format(path!!), "-r", input!!, "-s", codeStyleScheme!!, "-m", mask)
 		} else {
-			arrayOf("$path/bin/format.sh", "-r", input!!, "-m", mask)
+			arrayOf(format(path!!), "-r", input!!, "-m", mask)
 		}
 	}
 
@@ -26,7 +26,7 @@ open class IdeaExtension(open var path: String? = null,
 		require(input != null) { INPUT_PATH_ERROR }
 		require(report != null) { REPORT_PATH_ERROR }
 		require(inspectionsProfile != null) { INSPECTION_PROFILE_ERROR }
-		return arrayOf("$path/bin/inspect.sh", input!!, inspectionsProfile!!, report!!)
+		return arrayOf(inspect(path!!), input!!, inspectionsProfile!!, report!!)
 	}
 
 	private fun DetektExtension.profileInputPath() = systemOrDefaultProfile()?.input?.apply {
@@ -35,14 +35,16 @@ open class IdeaExtension(open var path: String? = null,
 
 	override fun toString(): String = "IdeaExtension(path=$path, " +
 			"codeStyleScheme=$codeStyleScheme, inspectionsProfile=$inspectionsProfile, report=$report, mask='$mask')"
-
-	companion object {
-		private const val INPUT_PATH_ERROR = "Make sure the input path is specified!"
-		private const val IDEA_PATH_ERROR = "Make sure the idea path is specified to run idea tasks!"
-		private const val REPORT_PATH_ERROR =
-				"Make sure the report path is specified where idea inspections are stored!"
-		private const val INSPECTION_PROFILE_ERROR =
-				"Make sure the path to an inspection profile is provided!"
-	}
 }
 
+private val isWindows: Boolean = System.getProperty("os.name").contains("Windows")
+
+private const val INPUT_PATH_ERROR = "Make sure the input path is specified!"
+private const val IDEA_PATH_ERROR = "Make sure the idea path is specified to run idea tasks!"
+private const val REPORT_PATH_ERROR =
+		"Make sure the report path is specified where idea inspections are stored!"
+private const val INSPECTION_PROFILE_ERROR =
+		"Make sure the path to an inspection profile is provided!"
+
+private fun inspect(path: String): String = "$path/bin/" + if (isWindows) "inspect.bat" else "inspect.sh"
+private fun format(path: String): String = "$path/bin/" + if (isWindows) "format.bat" else "format.sh"
