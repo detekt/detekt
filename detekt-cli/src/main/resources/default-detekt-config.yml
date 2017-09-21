@@ -314,6 +314,8 @@ style:
     forbiddenName: ''
   ProtectedMemberInFinalClass:
     active: false
+  SerialVersionUIDInSerializableClass:
+    active: false
   UnnecessaryParentheses:
     active: false
   UnnecessaryInheritance:

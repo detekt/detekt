@@ -36,6 +36,7 @@ enum class Case(val file: String) {
 	UnreachableCode("/cases/UnreachableCode.kt"),
 	UnnecessaryAbstractClass("/cases/UnnecessaryAbstractClass.kt"),
 	UtilityClasses("/cases/UtilityClasses.kt"),
+	Serializable("/cases/Serializable.kt"),
 	SuppressedElements("/SuppressedByElementAnnotation.kt"),
 	SuppressedElementsByFile("/SuppressedElementsByFileAnnotation.kt"),
 	SuppressedElementsByClass("/SuppressedElementsByClassAnnotation.kt"),
