@@ -18,6 +18,7 @@ import io.gitlab.arturbosch.detekt.rules.style.PackageDeclarationStyle
 import io.gitlab.arturbosch.detekt.rules.style.ProtectedMemberInFinalClass
 import io.gitlab.arturbosch.detekt.rules.style.ReturnCount
 import io.gitlab.arturbosch.detekt.rules.style.SafeCast
+import io.gitlab.arturbosch.detekt.rules.style.SerialVersionUIDInSerializableClass
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryAbstractClass
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryInheritance
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryParentheses
@@ -53,6 +54,7 @@ class StyleGuideProvider : RuleSetProvider {
 				OptionalAbstractKeyword(config),
 				OptionalWhenBraces(config),
 				ProtectedMemberInFinalClass(config),
+				SerialVersionUIDInSerializableClass(config),
 				MagicNumber(config),
 				ModifierOrder(config),
 				DataClassContainsFunctionsRule(config),
