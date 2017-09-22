@@ -43,6 +43,16 @@ allprojects {
 		apply plugin: 'com.github.johnrengelman.shadow'
 	}
 
+	compileKotlin {
+		kotlinOptions.jvmTarget = "1.8"
+		kotlinOptions.freeCompilerArgs = ["-Xskip-runtime-version-check"]
+
+	}
+	compileTestKotlin {
+		kotlinOptions.jvmTarget = "1.8"
+		kotlinOptions.freeCompilerArgs = ["-Xskip-runtime-version-check"]
+	}
+
 	junitPlatform {
 		filters {
 			engines {
