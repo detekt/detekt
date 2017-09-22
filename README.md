@@ -442,7 +442,7 @@ Currently there are seven rule sets which are used per default when running the 
 * formatting: detects indentation, spacing problems and optional semicolons in code
 
 As of milestone six, the formatting rule set is shipped as an standalone plugin which must be linked to a _detekt_ run
-through the --rules "path/to/jar" parameter or via gradle/maven classpath setup.
+through the --plugins "path/to/jar" parameter or via gradle/maven classpath setup.
 
 ### <a name="rulesetconfig">RuleSet Configuration</a>
 
