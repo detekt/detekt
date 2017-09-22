@@ -200,8 +200,14 @@ class NamingConventionLengthSpec : SubjectSpek<NamingRules>({
 		assertThat(subject.findings).hasSize(1)
 	}
 
-	it("should report a function name that is okay") {
+	it("should not report a function name that is okay") {
 		val code = "private fun three = 3"
+		subject.lint(code)
+		assertThat(subject.findings).isEmpty()
+	}
+
+	it("should not report a function name that begins with a backtick, capitals, and spaces") {
+		val code = "private fun `Hi bye` = 3"
 		subject.lint(code)
 		assertThat(subject.findings).isEmpty()
 	}
