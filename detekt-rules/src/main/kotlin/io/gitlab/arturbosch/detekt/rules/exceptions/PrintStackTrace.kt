@@ -10,11 +10,22 @@ import io.gitlab.arturbosch.detekt.rules.collectByType
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
+import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
+import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
 
-class PrintExceptionStackTrace(config: Config = Config.empty) : Rule(config) {
+class PrintStackTrace(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue("PrintExceptionStackTrace", Severity.CodeSmell,
-			"Do not print an exception stack trace. Use a logger instead.")
+	override val issue = Issue("PrintStackTrace", Severity.CodeSmell,
+			"Do not print an stack trace. " +
+					"These debug statements should be replaced with a logger or removed.")
+
+	override fun visitCallExpression(expression: KtCallExpression) {
+		val callNameExpression = expression.getCallNameExpression()
+		if (callNameExpression?.text == "dumpStack"
+				&& callNameExpression.getReceiverExpression()?.text == "Thread") {
+			report(CodeSmell(issue, Entity.from(expression)))
+		}
+	}
 
 	override fun visitCatchSection(catchClause: KtCatchClause) {
 		catchClause.catchBody?.collectByType<KtNameReferenceExpression>()?.forEach {
