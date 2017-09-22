@@ -28,6 +28,14 @@ class ThrowsCountSpec : SubjectSpek<ThrowsCount>({
 					2 -> throw IOException()
 				}
 			}
+
+			override fun f3(x: Int) { // does not report overridden function
+				when (x) {
+					1 -> throw IOException()
+					2 -> throw IOException()
+					3 -> throw IOException()
+				}
+			}
 		"""
 
 		it("reports violation by default") {
