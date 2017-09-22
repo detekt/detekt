@@ -103,7 +103,7 @@ exceptions:
       - Throwable
   InstanceOfCheckForException:
     active: false
-  PrintExceptionStackTrace:
+  PrintStackTrace:
     active: false
   RethrowCaughtException:
     active: false
