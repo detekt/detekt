@@ -103,6 +103,8 @@ exceptions:
       - Throwable
   InstanceOfCheckForException:
     active: false
+  InstantiateIllegalArgumentExceptionCorrectly:
+    active: false
   PrintStackTrace:
     active: false
   RethrowCaughtException:
