@@ -1,5 +1,11 @@
 # Detekt - Changelog
 
+#### RC4-4
+
+- Updated Magic Number rule to ignore 
+[Named Arguments](https://kotlinlang.org/docs/reference/functions.html#named-arguments) 
+by *default* - [#415](https://github.com/arturbosch/detekt/issues/415) 
+
 #### RC4-3 - Second bugfix release for RC4 with a bunch of new contributed rules!
 
 - UndocumentedPublicClass: Fix enum support - [#375](https://github.com/arturbosch/detekt/pull/375)
