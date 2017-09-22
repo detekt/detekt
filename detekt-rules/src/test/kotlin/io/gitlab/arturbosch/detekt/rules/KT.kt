@@ -12,6 +12,7 @@ enum class Case(val file: String) {
 	DataClassContainsFunctions("/cases/DataClassContainsFunctions.kt"),
 	Default("/cases/Default.kt"),
 	Empty("/cases/Empty.kt"),
+	EmptyKtFile("/cases/EmptyKtFile.kt"),
 	EmptyIfPositive("/cases/EmptyIfPositive.kt"),
 	EmptyIfNegative("/cases/EmptyIfNegative.kt"),
 	EmptyDefaultConstructor("/cases/EmptyDefaultConstructor.kt"),
