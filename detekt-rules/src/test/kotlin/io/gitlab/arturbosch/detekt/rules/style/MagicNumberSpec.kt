@@ -381,4 +381,64 @@ class MagicNumberSpec : Spek({
 			assertThat(MagicNumber().lint(code)).isEmpty()
 		}
 	}
+
+	given("ignoring named arguments") {
+		given("in constructor invocation") {
+			fun code(integer: String) = compileContentForTest("""
+				data class Model(
+						val someVal: Int,
+						val other: String = "default"
+				)
+
+				var model = Model(someVal = $integer)
+			""")
+
+			it("should ignore int by default") {
+				assertThat(MagicNumber().lint(code("53")))
+						.isEmpty()
+			}
+
+			it("should ignore float by default") {
+				assertThat(MagicNumber().lint(code("53f")))
+						.isEmpty()
+			}
+
+			it("should ignore binary by default") {
+				assertThat(MagicNumber().lint(code("0b01001")))
+						.isEmpty()
+			}
+
+			it("should ignore integer with underscores") {
+				assertThat(MagicNumber().lint(code("101_000")))
+						.isEmpty()
+			}
+		}
+
+		given("in function invocation") {
+			fun code(integer: String) = compileContentForTest("""
+				fun tested(someVal: Int, other: String = "default")
+
+				tested(someVal = $integer)
+			""")
+			it("should ignore int by default") {
+				assertThat(MagicNumber().lint(code("53")))
+						.isEmpty()
+			}
+
+			it("should ignore float by default") {
+				assertThat(MagicNumber().lint(code("53f")))
+						.isEmpty()
+			}
+
+			it("should ignore binary by default") {
+				assertThat(MagicNumber().lint(code("0b01001")))
+						.isEmpty()
+			}
+
+			it("should ignore integer with underscores") {
+				assertThat(MagicNumber().lint(code("101_000")))
+						.isEmpty()
+			}
+		}
+	}
 })
