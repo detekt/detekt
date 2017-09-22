@@ -13,7 +13,7 @@ class FunctionNaming(config: Config = Config.empty) : SubRule<KtNamedFunction>(c
 	override val issue = Issue(javaClass.simpleName,
 			Severity.Style,
 			debt = Debt.FIVE_MINS)
-	private val functionPattern = Regex(valueOrDefault(FUNCTION_PATTERN, "^[a-z$][a-zA-Z$0-9]*$"))
+	private val functionPattern = Regex(valueOrDefault(FUNCTION_PATTERN, "^([a-z$][a-zA-Z$0-9]*)|(`.*`)$"))
 
 	override fun apply(element: KtNamedFunction) {
 		if (!element.identifierName().matches(functionPattern)) {
