@@ -33,8 +33,9 @@ interface ConfigAware : Config {
 
 	/**
 	 * Is this rule specified as active in configuration?
+	 * If an rule is not specified in the underlying configuration, we assume it should not be run.
 	 */
-	val active get() = valueOrDefault("active", true)
+	val active get() = valueOrDefault("active", false)
 
 	override fun subConfig(key: String): Config
 			= config.subConfig(id).subConfig(key)

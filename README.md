@@ -36,8 +36,9 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 2. [Gradle plugin](#gradleplugin)
     1. [in groovy dsl](#gradlegroovy)
     2. [in kotlin dsl](#gradlekotlin)
-    3. [plugin tasks](#tasks)
-    4. [detekt-closure](#closure)
+    3. [in android projects](#gradleandroid)
+    4. [plugin tasks](#tasks)
+    5. [detekt-closure](#closure)
 3. [Standalone gradle task](#gradle)
 4. [Standalone maven task](#maventask)
 5. [Rule sets](#rulesets)
@@ -191,6 +192,49 @@ configure<DetektExtension> {
     version = "1.0.0.[version]"
     profile("main") {
         input = "$projectDir/src/main/kotlin"
+        config = "$projectDir/detekt.yml"
+        filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
+    }
+}
+```
+
+##### <a name="gradleandroid">Configuration for Android projects</a>
+
+When using Android make sure to have detekt configured in the project level build.gradle file.
+The new preferred plugin configuration way is used, the old way is commented out.
+
+```groovy
+buildscript {
+    repositories {
+//        maven { url "https://plugins.gradle.org/m2/" }
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.3.3'
+//        classpath "gradle.plugin.io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.0.0.[version]"
+    }
+
+}
+plugins {
+    id "io.gitlab.arturbosch.detekt" version "1.0.0.[version]"
+}
+
+//apply plugin: 'io.gitlab.arturbosch.detekt'
+
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+detekt {
+    version = "1.0.0.[version]"
+    profile("main") {
+        input = "$projectDir/your/app"
         config = "$projectDir/detekt.yml"
         filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
     }

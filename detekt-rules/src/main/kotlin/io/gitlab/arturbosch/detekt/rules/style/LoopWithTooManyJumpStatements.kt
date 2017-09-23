@@ -20,8 +20,10 @@ class LoopWithTooManyJumpStatements(config: Config = Config.empty) : Rule(config
 			"The loop contains more than one break or continue statement. " +
 					"The code should be refactored to increase readability.", Debt.TEN_MINS)
 
+	private val maxJumpCount = valueOrDefault(MAX_JUMP_COUNT, 1)
+
 	override fun visitLoopExpression(loopExpression: KtLoopExpression) {
-		if (countBreakAndReturnStatements(loopExpression.body) > 1) {
+		if (countBreakAndReturnStatements(loopExpression.body) > maxJumpCount) {
 			report(CodeSmell(issue, Entity.from(loopExpression)))
 		}
 		super.visitLoopExpression(loopExpression)
@@ -30,7 +32,6 @@ class LoopWithTooManyJumpStatements(config: Config = Config.empty) : Rule(config
 	private fun countBreakAndReturnStatements(body: KtExpression?): Int {
 		return body?.countBreakAndReturnStatementsInLoop() ?: 0
 	}
-
 
 	private fun KtElement.countBreakAndReturnStatementsInLoop(): Int {
 		var count = 0
@@ -46,5 +47,9 @@ class LoopWithTooManyJumpStatements(config: Config = Config.empty) : Rule(config
 			}
 		})
 		return count
+	}
+
+	companion object {
+		const val MAX_JUMP_COUNT = "maxJumpCount"
 	}
 }

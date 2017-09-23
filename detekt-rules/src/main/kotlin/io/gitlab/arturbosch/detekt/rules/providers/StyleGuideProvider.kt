@@ -19,6 +19,7 @@ import io.gitlab.arturbosch.detekt.rules.style.ProtectedMemberInFinalClass
 import io.gitlab.arturbosch.detekt.rules.style.ReturnCount
 import io.gitlab.arturbosch.detekt.rules.style.SafeCast
 import io.gitlab.arturbosch.detekt.rules.style.SerialVersionUIDInSerializableClass
+import io.gitlab.arturbosch.detekt.rules.style.ThrowsCount
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryAbstractClass
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryInheritance
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryParentheses
@@ -37,6 +38,7 @@ class StyleGuideProvider : RuleSetProvider {
 	override fun instance(config: Config): RuleSet {
 		return RuleSet(ruleSetId, listOf(
 				ReturnCount(config),
+				ThrowsCount(config),
 				NewLineAtEndOfFile(config),
 				WildcardImport(config),
 				FileParsingRule(config),
