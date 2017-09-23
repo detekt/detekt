@@ -24,7 +24,8 @@ class EmptyBlocksMultiRuleTest : SubjectSpek<EmptyBlocks>({
 
 		it("should report one finding per rule") {
 			val findings = subject.lint(file)
-			val rulesSize = subject.rules.size
+			// -1 because the empty kt file rule doesn't get triggered in the 'Empty' test file
+			val rulesSize = subject.rules.size - 1
 			assertThat(findings).hasSize(rulesSize)
 		}
 

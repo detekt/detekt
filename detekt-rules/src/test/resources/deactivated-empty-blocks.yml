@@ -20,6 +20,8 @@ empty-blocks:
     active: false
   EmptyInitBlock:
     active: false
+  EmptyKtFile:
+    active: false
   EmptySecondaryConstructor:
     active: false
   EmptyWhenBlock:
