@@ -5,7 +5,7 @@ import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.rules.exceptions.ExceptionRaisedInUnexpectedLocation
 import io.gitlab.arturbosch.detekt.rules.exceptions.InstanceOfCheckForException
-import io.gitlab.arturbosch.detekt.rules.exceptions.InstantiateIllegalArgumentExceptionCorrectly
+import io.gitlab.arturbosch.detekt.rules.exceptions.InstantiateIllegalArgumentExceptionIncorrectly
 import io.gitlab.arturbosch.detekt.rules.exceptions.PrintStackTrace
 import io.gitlab.arturbosch.detekt.rules.exceptions.RethrowCaughtException
 import io.gitlab.arturbosch.detekt.rules.exceptions.ReturnFromFinally
@@ -30,7 +30,7 @@ class ExceptionsProvider : RuleSetProvider {
 				TooGenericExceptionThrown(config),
 				PrintStackTrace(config),
 				InstanceOfCheckForException(config),
-				InstantiateIllegalArgumentExceptionCorrectly(config),
+				InstantiateIllegalArgumentExceptionIncorrectly(config),
 				ReturnFromFinally(config),
 				ThrowingExceptionFromFinally(config),
 				ThrowingExceptionInMain(config),

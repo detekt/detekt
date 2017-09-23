@@ -9,9 +9,9 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtCallExpression
 
-class InstantiateIllegalArgumentExceptionCorrectly(config: Config = Config.empty) : Rule(config) {
+class InstantiateIllegalArgumentExceptionIncorrectly(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue("InstantiateIllegalArgumentExceptionCorrectly", Severity.Warning,
+	override val issue = Issue("InstantiateIllegalArgumentExceptionIncorrectly", Severity.Warning,
 			"A call to the default constructor of an IllegalArgumentException was detected. " +
 					"Instead one of the constructor overloads should be called. " +
 					"This allows to provide more meaningful exceptions.",

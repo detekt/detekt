@@ -6,8 +6,8 @@ import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
-class InstantiateIllegalArgumentExceptionCorrectlySpek : SubjectSpek<InstantiateIllegalArgumentExceptionCorrectly>({
-	subject { InstantiateIllegalArgumentExceptionCorrectly() }
+class InstantiateIllegalArgumentExceptionIncorrectlySpek : SubjectSpek<InstantiateIllegalArgumentExceptionIncorrectly>({
+	subject { InstantiateIllegalArgumentExceptionIncorrectly() }
 
 	given("several IllegalArgumentException calls") {
 
