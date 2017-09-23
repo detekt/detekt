@@ -6,7 +6,7 @@ import io.gitlab.arturbosch.detekt.rules.providers.EmptyCodeProvider
 import io.gitlab.arturbosch.detekt.test.compileForTest
 import io.gitlab.arturbosch.detekt.test.lint
 import io.gitlab.arturbosch.detekt.test.resource
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
@@ -25,7 +25,7 @@ class EmptyBlocksMultiRuleTest : SubjectSpek<EmptyBlocks>({
 		it("should report one finding per rule") {
 			val findings = subject.lint(file)
 			val rulesSize = subject.rules.size
-			Assertions.assertThat(findings).hasSize(rulesSize)
+			assertThat(findings).hasSize(rulesSize)
 		}
 
 		it("should not report any as all empty block rules are deactivated") {
@@ -34,7 +34,12 @@ class EmptyBlocksMultiRuleTest : SubjectSpek<EmptyBlocks>({
 
 			val findings = ruleSet?.accept(file)
 
-			Assertions.assertThat(findings).hasSize(0)
+			assertThat(findings).hasSize(0)
+		}
+
+		it("reports an empty kt file") {
+			val findings = subject.lint(Case.EmptyKtFile.path())
+			assertThat(findings).hasSize(1)
 		}
 	}
 })

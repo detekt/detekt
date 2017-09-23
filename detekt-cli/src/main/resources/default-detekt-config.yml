@@ -138,6 +138,8 @@ empty-blocks:
     active: true
   EmptyInitBlock:
     active: true
+  EmptyKtFile:
+    active: false
   EmptySecondaryConstructor:
     active: true
   EmptyWhenBlock:
