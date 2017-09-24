@@ -23,8 +23,7 @@ class InvalidLoopCondition(config: Config = Config.empty) : Rule(config) {
 	override fun visitForExpression(expression: KtForExpression) {
 		val loopRange = expression.loopRange
 		val range = loopRange?.children
-		if (range != null && range.size >= minimumSize
-				&& hasInvalidLoopRange(range)) {
+		if (range != null && range.size >= minimumSize && hasInvalidLoopRange(range)) {
 			report(CodeSmell(issue, Entity.from(loopRange)))
 		}
 		super.visitForExpression(expression)
