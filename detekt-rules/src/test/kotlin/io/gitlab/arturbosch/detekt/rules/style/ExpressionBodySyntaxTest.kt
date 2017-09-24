@@ -55,4 +55,14 @@ internal class ExpressionBodySyntaxTest : RuleTest {
 			}
 		""")).hasSize(2)
 	}
+
+	@Test
+	fun multipleReturnStmt() {
+		assertThat(rule.lint("""
+			fun stuff(): Int {
+				if (true) return true
+				return false
+			}
+		""")).hasSize(0)
+	}
 }
