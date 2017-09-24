@@ -9,19 +9,28 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtCallExpression
 
-class InstantiateIllegalArgumentExceptionIncorrectly(config: Config = Config.empty) : Rule(config) {
+class ThrowingExceptionsWithoutMessageOrCause(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue("InstantiateIllegalArgumentExceptionIncorrectly", Severity.Warning,
-			"A call to the default constructor of an IllegalArgumentException was detected. " +
+	override val issue = Issue("ThrowingExceptionsWithoutMessageOrCause", Severity.Warning,
+			"A call to the default constructor of an exception was detected. " +
 					"Instead one of the constructor overloads should be called. " +
 					"This allows to provide more meaningful exceptions.",
 			Debt.FIVE_MINS)
 
+	private val exceptions: List<String> =
+			valueOrDefault(EXCEPTIONS, "IllegalArgumentException,IllegalStateException,IOException")
+			.split(',')
+			.filter { it.isNotBlank() }
+
 	override fun visitCallExpression(expression: KtCallExpression) {
-		if (expression.calleeExpression?.text == "IllegalArgumentException" && expression.valueArguments.isEmpty()) {
+		val calleeExpressionText = expression.calleeExpression?.text
+		if (exceptions.contains(calleeExpressionText) && expression.valueArguments.isEmpty()) {
 			report(CodeSmell(issue, Entity.from(expression)))
 		}
 		super.visitCallExpression(expression)
 	}
-}
 
+	companion object {
+		const val EXCEPTIONS = "exceptions"
+	}
+}
