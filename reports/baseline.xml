@@ -7,6 +7,7 @@
     <ID>ComplexMethod:ProfileExtension.kt$ProfileExtension$fun arguments(debug: Boolean = false): MutableMap&lt;String, String&gt;</ID>
     <ID>TooManyFunctions:LargeClass.kt$LargeClass : ThresholdRule</ID>
     <ID>SpreadOperator:JCommander.kt$(*args)</ID>
+    <ID>SpreadOperator:Main.kt$(*args)</ID>
     <ID>TooManyFunctions:DetektExtension.kt$DetektExtension</ID>
   </Whitelist>
 </SmellBaseline>

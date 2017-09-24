@@ -7,3 +7,5 @@ include 'detekt-test'
 include 'detekt-sample-extensions'
 include 'detekt-gradle-plugin'
 include 'detekt-migration'
+include 'detekt-watch-service'
+
