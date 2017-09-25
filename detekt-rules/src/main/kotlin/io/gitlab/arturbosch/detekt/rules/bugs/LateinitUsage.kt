@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.gitlab.arturbosch.detekt.api.AnnotationExcluder
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
@@ -8,7 +9,6 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.lexer.KtTokens
-import org.jetbrains.kotlin.preprocessor.typeReferenceName
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
@@ -37,14 +37,9 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 
 		super.visit(root)
 
-		val resolvedAnnotations = root.importList
-				?.imports
-				?.filterNot { it.isAllUnder }
-				?.mapNotNull { it.importedFqName?.asString() }
-				?.map { Pair(it.split(".").last(), it) }
-				?.toMap()
+		val annotationExcluder = AnnotationExcluder(root, excludeAnnotatedProperties)
 
-		properties.filterNot { isExcludedByAnnotation(it, resolvedAnnotations) }
+		properties.filterNot { annotationExcluder.shouldExclude(it.annotationEntries) }
 				.filterNot { it.containingClass()?.name?.matches(ignoreOnClassesPattern) == true }
 				.forEach {
 					report(CodeSmell(issue, Entity.from(it)))
@@ -53,14 +48,6 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 
 	private fun isLateinitProperty(property: KtProperty)
 			= property.modifierList?.hasModifier(KtTokens.LATEINIT_KEYWORD) == true
-
-	private fun isExcludedByAnnotation(property: KtProperty, resolvedAnnotations: Map<String, String>?)
-			= property.annotationEntries
-			.mapNotNull {
-				val shortName = it.typeReferenceName
-				resolvedAnnotations?.get(shortName) ?: shortName
-			}
-			.any { !excludeAnnotatedProperties.none(it) }
 
 	companion object {
 		const val EXCLUDE_ANNOTATED_PROPERTIES = "excludeAnnotatedProperties"
