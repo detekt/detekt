@@ -156,6 +156,7 @@ allprojects {
 		junitPlatform "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
 		junitPlatform "org.junit.platform:junit-platform-console:$junitPlatformVersion"
 		junitPlatform "org.jetbrains.spek:spek-junit-platform-engine:$spekVersion"
+		compile 'org.reflections:reflections:0.9.11'
 	}
 
 	sourceSets {
