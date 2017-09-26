@@ -58,6 +58,8 @@ potential-bugs:
     active: true
   LateinitUsage:
     active: false
+    excludeAnnotatedProperties: ''
+    ignoreOnClassesPattern: ''
   UnsafeCallOnNullableType:
     active: false
   UnsafeCast:
