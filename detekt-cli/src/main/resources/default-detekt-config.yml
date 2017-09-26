@@ -103,6 +103,8 @@ exceptions:
       - Throwable
   InstanceOfCheckForException:
     active: false
+  NotImplementedDeclaration:
+    active: false
   ThrowingExceptionsWithoutMessageOrCause:
     active: false
     exceptions: 'IllegalArgumentException,IllegalStateException,IOException'
