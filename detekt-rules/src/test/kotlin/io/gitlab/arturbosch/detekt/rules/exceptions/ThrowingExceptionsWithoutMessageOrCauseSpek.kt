@@ -8,15 +8,19 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
 class ThrowingExceptionsWithoutMessageOrCauseSpek : SubjectSpek<ThrowingExceptionsWithoutMessageOrCause>({
-	subject { ThrowingExceptionsWithoutMessageOrCause() }
+	subject {
+		ThrowingExceptionsWithoutMessageOrCause(
+				TestConfig(mapOf(ThrowingExceptionsWithoutMessageOrCause.EXCEPTIONS to "IllegalArgumentException"))
+		)
+	}
 
 	given("several exception calls") {
 
 		val code = """
 				fun x() {
-					IllegalArgumentException(IOException())
+					IllegalArgumentException(IllegalArgumentException())
 					IllegalArgumentException("foo")
-					throw IllegalStateException()
+					throw IllegalArgumentException()
 				}"""
 
 		it("reports calls to the default constructor") {
