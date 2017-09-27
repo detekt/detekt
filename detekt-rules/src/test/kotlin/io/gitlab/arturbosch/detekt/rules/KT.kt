@@ -28,6 +28,7 @@ enum class Case(val file: String) {
 	NewLineAtEndOfFile("/cases/NewLineAtEndOfFile.kt"),
 	MaxLineLength("/cases/MaxLineLength.kt"),
 	ModifierOrder("/cases/ModifierOrder.kt"),
+	OverloadedMethods("/cases/OverloadedMethods.kt"),
 	ComplexClass("/cases/ComplexClass.kt"),
 	Comments("/cases/Comments.kt"),
 	NestedClasses("/cases/NestedClasses.kt"),
