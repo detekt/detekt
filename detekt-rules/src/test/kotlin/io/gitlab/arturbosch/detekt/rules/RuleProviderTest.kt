@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.BaseRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.rules.providers.CommentSmellProvider
 import io.gitlab.arturbosch.detekt.rules.providers.ComplexityProvider
@@ -91,7 +90,9 @@ class RuleProviderTest {
 
 		fun assert() {
 			val rules = getRules(provider)
+			assertThat(rules).isNotEmpty
 			val classes = getClasses()
+			assertThat(classes).isNotEmpty
 			classes
 					.map { c -> rules.singleOrNull { it.javaClass.simpleName == c.simpleName } }
 					.forEach {
@@ -104,23 +105,13 @@ class RuleProviderTest {
 		}
 
 		private fun getRules(provider: RuleSetProvider): List<BaseRule> {
-			val ruleSet = provider.buildRuleset(Config.empty)
-			assertRuleSet(ruleSet!!)
-			return ruleSet.rules
-		}
-
-		private fun assertRuleSet(ruleSet: RuleSet) {
-			assertThat(ruleSet).isNotNull()
-			assertThat(ruleSet.rules).isNotNull
-			assertThat(ruleSet.rules).isNotEmpty
+			return provider.buildRuleset(Config.empty)!!.rules
 		}
 
 		private fun getClasses(): List<Class<out T>> {
-			val reflections = Reflections(packageName)
-			val classes = reflections.getSubTypesOf(clazz)
+			return Reflections(packageName)
+					.getSubTypesOf(clazz)
 					.filter { !Modifier.isAbstract(it.modifiers) && it.superclass.simpleName != "SubRule" }
-			assertThat(classes).isNotEmpty
-			return classes
 		}
 	}
 }
