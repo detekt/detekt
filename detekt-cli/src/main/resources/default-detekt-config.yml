@@ -171,6 +171,9 @@ complexity:
   ComplexMethod:
     active: true
     threshold: 10
+  MethodOverloading:
+    active: false
+    treshold: 5
   TooManyFunctions:
     active: true
     threshold: 10
