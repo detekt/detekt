@@ -23,6 +23,7 @@ enum class Case(val file: String) {
 	InvalidLoopCondition("/cases/InvalidLoopCondition.kt"),
 	IteratorImpl("/cases/IteratorImpl.kt"),
 	LabeledExpression("/cases/LabeledExpression.kt"),
+	LargeInterface("/cases/LargeInterface.kt"),
 	LoopWithTooManyJumpStatements("cases/LoopWithTooManyJumpStatements.kt"),
 	NamingConventions("/cases/NamingConventions.kt"),
 	NewLineAtEndOfFile("/cases/NewLineAtEndOfFile.kt"),
