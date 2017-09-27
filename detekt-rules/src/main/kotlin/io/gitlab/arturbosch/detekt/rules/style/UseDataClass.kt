@@ -24,15 +24,13 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 			Severity.Style,
 			"Classes that do nothing but hold data should be replaced with a data class.")
 
-	private val defaultFunctionNames = listOf("hashCode", "equals", "toString", "copy")
+	private val defaultFunctionNames = hashSetOf("hashCode", "equals", "toString", "copy")
 
 	override fun visitClass(klass: KtClass) {
-		if (klass.isData() || klass.isSealed()) {
+		if (isIncorrectClassType(klass) || klass.isSealed()) {
 			return
 		}
-
 		if (klass.isClosedForExtension() && klass.doesNotExtendAnything()) {
-
 			val declarations = klass.extractDeclarations()
 			val properties = declarations.filterIsInstance<KtProperty>()
 			val functions = declarations.filterIsInstance<KtNamedFunction>()
@@ -49,7 +47,10 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 		super.visitClass(klass)
 	}
 
+	private fun isIncorrectClassType(klass: KtClass) = klass.isData() || klass.isEnum() || klass.isAnnotation()
+
 	private fun KtClass.doesNotExtendAnything() = superTypeListEntries.isEmpty()
+
 	private fun KtClass.isClosedForExtension() = !isAbstract() && !hasModifier(KtTokens.OPEN_KEYWORD)
 
 	private fun KtClass.extractDeclarations(): List<KtDeclaration> = getBody()?.declarations ?: emptyList()
