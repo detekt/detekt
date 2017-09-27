@@ -1,15 +1,14 @@
+@file:Suppress("unused")
+
 package cases
 
-@Suppress("unused")
 class DataClassCandidate(val i: Int) // reports 1
 
-@Suppress("unused")
 class DataClassCandidateWithProperties(val i: Int) { // reports 1
 
 	val i2: Int = 0
 }
 
-@Suppress("unused")
 class NoDataClassCandidate(val i: Int) {
 
 	val i2: Int = 0
@@ -55,7 +54,14 @@ class DataClassCandidateWithOverriddenMethods(val i: Int) { // reports 1
 	}
 }
 
-sealed class NoDataClassbecauseItsSealed {
-	data class Success(val any: Any) : NoDataClassbecauseItsSealed()
-	data class Error(val error: Throwable) : NoDataClassbecauseItsSealed()
+sealed class NoDataClassBecauseItsSealed {
+	data class Success(val any: Any) : NoDataClassBecauseItsSealed()
+	data class Error(val error: Throwable) : NoDataClassBecauseItsSealed()
 }
+
+enum class EnumNoDataClass(val i: Int) {
+
+	FIRST(1), SECOND(2);
+}
+
+annotation class AnnotationNoDataClass(val i: Int)
