@@ -153,10 +153,10 @@ allprojects {
 		kotlinTest "org.jetbrains.spek:spek-api:$spekVersion"
 		kotlinTest "org.jetbrains.spek:spek-subject-extension:$spekVersion"
 		kotlinTest "org.junit.jupiter:junit-jupiter-engine:$junitEngineVersion"
+		kotlinTest 'org.reflections:reflections:0.9.11'
 		junitPlatform "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
 		junitPlatform "org.junit.platform:junit-platform-console:$junitPlatformVersion"
 		junitPlatform "org.jetbrains.spek:spek-junit-platform-engine:$spekVersion"
-		compile 'org.reflections:reflections:0.9.11'
 	}
 
 	sourceSets {
