@@ -27,7 +27,7 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 	private val defaultFunctionNames = hashSetOf("hashCode", "equals", "toString", "copy")
 
 	override fun visitClass(klass: KtClass) {
-		if (isIncorrectClassType(klass) || klass.isSealed()) {
+		if (isIncorrectClassType(klass)) {
 			return
 		}
 		if (klass.isClosedForExtension() && klass.doesNotExtendAnything()) {
@@ -47,7 +47,8 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 		super.visitClass(klass)
 	}
 
-	private fun isIncorrectClassType(klass: KtClass) = klass.isData() || klass.isEnum() || klass.isAnnotation()
+	private fun isIncorrectClassType(klass: KtClass) =
+			klass.isData() || klass.isEnum() || klass.isAnnotation() || klass.isSealed()
 
 	private fun KtClass.doesNotExtendAnything() = superTypeListEntries.isEmpty()
 
