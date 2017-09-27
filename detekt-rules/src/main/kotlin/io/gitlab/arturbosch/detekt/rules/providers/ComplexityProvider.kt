@@ -11,6 +11,7 @@ import io.gitlab.arturbosch.detekt.rules.complexity.NestedBlockDepth
 import io.gitlab.arturbosch.detekt.rules.complexity.TooManyFunctions
 import io.gitlab.arturbosch.detekt.rules.complexity.ComplexCondition
 import io.gitlab.arturbosch.detekt.rules.complexity.LabeledExpression
+import io.gitlab.arturbosch.detekt.rules.complexity.LargeInterface
 import io.gitlab.arturbosch.detekt.rules.complexity.MethodOverloading
 import io.gitlab.arturbosch.detekt.rules.complexity.StringLiteralDuplication
 
@@ -26,6 +27,7 @@ class ComplexityProvider : RuleSetProvider {
 				LongParameterList(config),
 				LongMethod(config),
 				LargeClass(config),
+				LargeInterface(config),
 				ComplexMethod(config),
 				StringLiteralDuplication(config),
 				MethodOverloading(config),

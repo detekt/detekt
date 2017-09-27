@@ -168,12 +168,15 @@ complexity:
   LargeClass:
     active: true
     threshold: 150
+  LargeInterface:
+    active: false
+    threshold: 10
   ComplexMethod:
     active: true
     threshold: 10
   MethodOverloading:
     active: false
-    treshold: 5
+    threshold: 5
   TooManyFunctions:
     active: true
     threshold: 10
