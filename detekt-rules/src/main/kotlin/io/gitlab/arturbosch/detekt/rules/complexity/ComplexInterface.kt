@@ -11,10 +11,10 @@ import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
 
-class LargeInterface(config: Config = Config.empty,
-					 threshold: Int = DEFAULT_LARGE_INTERFACE_COUNT) : ThresholdRule(config, threshold) {
+class ComplexInterface(config: Config = Config.empty,
+					   threshold: Int = DEFAULT_LARGE_INTERFACE_COUNT) : ThresholdRule(config, threshold) {
 
-	override val issue = Issue("LargeClass", Severity.Maintainability,
+	override val issue = Issue(javaClass.simpleName, Severity.Maintainability,
 			"An interface contains too many functions and properties. " +
 					"Large classes tend to handle many things at once. " +
 					"An interface should have one responsibility. " +

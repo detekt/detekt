@@ -168,7 +168,7 @@ complexity:
   LargeClass:
     active: true
     threshold: 150
-  LargeInterface:
+  ComplexInterface:
     active: false
     threshold: 10
   ComplexMethod:
