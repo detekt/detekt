@@ -1,4 +1,4 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "UNUSED_VARIABLE")
 
 package cases
 
@@ -21,7 +21,9 @@ class ClassWithNestedInterface {
 
 interface InterfaceOk {
 	fun f1()
-	fun f2()
+	fun fImpl() {
+		val x = 0 // should not report
+	}
 	val i1: Int
 	// a comment shouldn't be detected
 }
