@@ -94,7 +94,7 @@ class RuleProviderTest {
 			val classes = getClasses()
 			assertThat(classes).isNotEmpty
 			classes
-					.map { c -> rules.singleOrNull { it.javaClass.simpleName == c.simpleName } }
+					.map { c -> rules.singleOrNull { it.javaClass == c } }
 					.forEach { assertThat(it).isNotNull() }
 		}
 
