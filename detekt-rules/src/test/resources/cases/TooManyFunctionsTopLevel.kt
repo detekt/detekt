@@ -1,81 +1,20 @@
+@file:Suppress("unused")
+
 package cases
 
-@Suppress("unused")
-fun f1() {
-	println()
-}
-
-@Suppress("unused")
-fun f2() {
-	println()
-}
-
-@Suppress("unused")
-fun f3() {
-	println()
-}
-
-@Suppress("unused")
-fun f4() {
-	println()
-}
-
-@Suppress("unused")
-fun f5() {
-	println()
-}
-
-@Suppress("unused")
-fun f6() {
-	println()
-}
-
-@Suppress("unused")
-fun f7() {
-	println()
-}
-
-@Suppress("unused")
-fun f8() {
-	println()
-}
-
-@Suppress("unused")
-fun f9() {
-	println()
-}
-
-@Suppress("unused")
-fun f10() {
-	println()
-}
-
-@Suppress("unused")
-fun f11() {
-	println()
-}
-
-@Suppress("unused")
-fun f12() {
-	println()
-}
-
-@Suppress("unused")
-fun f13() {
-	println()
-}
-
-@Suppress("unused")
-fun f14() {
-	println()
-}
-
-@Suppress("unused")
-fun f15() {
-	println()
-}
-
-@Suppress("unused")
-fun f16() {
-	println()
-}
+fun f1() {}
+fun f2() {}
+fun f3() {}
+fun f4() {}
+fun f5() {}
+fun f6() {}
+fun f7() {}
+fun f8() {}
+fun f9() {}
+fun f10() {}
+fun f11() {}
+fun f12() {}
+fun f13() {}
+fun f14() {}
+fun f15() {}
+fun f16() {}

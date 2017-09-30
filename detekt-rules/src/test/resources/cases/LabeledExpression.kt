@@ -1,6 +1,7 @@
+@file:Suppress("unused")
+
 package cases
 
-@Suppress("unused")
 fun breakWithLabel() { // reports 2
 	loop@ for (i in 1..100) {
 		for (j in 1..100) {
@@ -9,7 +10,6 @@ fun breakWithLabel() { // reports 2
 	}
 }
 
-@Suppress("unused")
 fun continueWithLabel() { // reports 2
 	loop@ for (i in 1..100) {
 		for (j in 1..100) {
@@ -18,7 +18,6 @@ fun continueWithLabel() { // reports 2
 	}
 }
 
-@Suppress("unused")
 fun implicitReturnWithLabel(range: IntRange) { // reports 1
 	range.forEach {
 		if (it == 5) return@forEach
@@ -26,7 +25,6 @@ fun implicitReturnWithLabel(range: IntRange) { // reports 1
 	}
 }
 
-@Suppress("unused")
 fun returnWithLabel(range: IntRange) {  // reports 2
 	range.forEach label@ {
 		if (it == 5) return@label

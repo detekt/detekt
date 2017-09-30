@@ -1,9 +1,10 @@
+@file:Suppress("unused", "ConstantConditionIf")
+
 package cases
 
 /**
  * This class contains methods which raise exceptions
  */
-@Suppress("unused")
 open class ExceptionRaisedInMethods {
 
 	init {
@@ -23,7 +24,7 @@ open class ExceptionRaisedInMethods {
 	}
 
 	protected fun finalize() {
-		if (1 == 1) {
+		if (true) {
 			throw IllegalStateException() // violation
 		}
 	}
@@ -35,7 +36,6 @@ open class ExceptionRaisedInMethods {
 	}
 }
 
-@Suppress("unused")
 object ExceptionRaisedInMethodsObject {
 
 	override fun equals(other: Any?): Boolean {
@@ -43,7 +43,6 @@ object ExceptionRaisedInMethodsObject {
 	}
 }
 
-@Suppress("unused")
 open class NoExceptionRaisedInMethods {
 
 	override fun toString(): String {
