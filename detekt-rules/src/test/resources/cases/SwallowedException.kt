@@ -1,3 +1,5 @@
+@file:Suppress("ConstantConditionIf")
+
 package cases
 
 import java.io.IOException
@@ -9,7 +11,7 @@ fun x() {
 	} catch(e: Exception) {
 		throw Exception(IOException(e.toString())) // violation
 	} catch(e: Exception) {
-		if (1 == 1) {
+		if (true) {
 			throw IOException(e.message) // violation
 		}
 		throw Exception(e)

@@ -1,9 +1,9 @@
+@file:Suppress("unused")
+
 package cases
 
-@Suppress("unused")
 data class ValidDataClass(val i: Int)
 
-@Suppress("unused")
 data class DataClassWithFunctions(val i: Int) { // reports 2
 
 	fun f1() {
@@ -15,7 +15,6 @@ data class DataClassWithFunctions(val i: Int) { // reports 2
 	}
 }
 
-@Suppress("unused")
 data class DataClassWithOverriddenMethods(val i: Int) {
 
 	override fun hashCode(): Int {
@@ -31,7 +30,6 @@ data class DataClassWithOverriddenMethods(val i: Int) {
 	}
 }
 
-@Suppress("unused")
 class ClassWithRegularFunctions {
 
 	fun f1() {

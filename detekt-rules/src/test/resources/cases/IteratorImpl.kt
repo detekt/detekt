@@ -1,8 +1,9 @@
+@file:Suppress("unused", "ConstantConditionIf", "UNUSED_PARAMETER")
+
 package cases
 
 import java.util.NoSuchElementException
 
-@Suppress("unused")
 class IteratorImplPositive : Iterator<String> {
 
 	override fun hasNext(): Boolean {
@@ -20,7 +21,6 @@ class IteratorImplPositive : Iterator<String> {
 	}
 }
 
-@Suppress("unused")
 // violation NotThrowingNoSuchElementException, HasNextCallsNextMethod
 class IteratorImpl2 : Iterator<String> {
 
@@ -34,7 +34,6 @@ class IteratorImpl2 : Iterator<String> {
 	}
 }
 
-@Suppress("unused")
 class IteratorImplContainer {
 
 	// violation NotThrowingNoSuchElementException, HasNextCallsNextMethod
@@ -50,15 +49,13 @@ class IteratorImplContainer {
 	}
 }
 
-@Suppress("unused")
 abstract class AbstractIterator1 : Iterator<String>
 
-@Suppress("unused")
 // violation NotThrowingNoSuchElementException, HasNextCallsNextMethod
 abstract class AbstractIterator2 : Iterator<String> {
 
 	override fun hasNext(): Boolean {
-		if (1 == 1) {
+		if (true) {
 			next()
 		}
 		return true
@@ -69,5 +66,4 @@ abstract class AbstractIterator2 : Iterator<String> {
 	}
 }
 
-@Suppress("unused")
 class NoIteratorImpl
