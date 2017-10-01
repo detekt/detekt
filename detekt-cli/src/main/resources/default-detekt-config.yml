@@ -337,6 +337,8 @@ style:
     active: false
   DataClassContainsFunctions:
     active: false
+    allowConversionFunctions: false
+    conversionFunctionPrefix: 'to'
   UseDataClass:
     active: false
   UnnecessaryAbstractClass:
