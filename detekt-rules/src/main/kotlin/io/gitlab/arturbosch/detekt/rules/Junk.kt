@@ -23,8 +23,12 @@ fun KtModifierListOwner.isPublicNotOverridden() =
 fun KtModifierListOwner.isPublic(): Boolean {
 	return this.hasModifier(KtTokens.PUBLIC_KEYWORD)
 			|| !(this.hasModifier(KtTokens.PRIVATE_KEYWORD)
-				|| this.hasModifier(KtTokens.PROTECTED_KEYWORD)
-				|| this.hasModifier(KtTokens.INTERNAL_KEYWORD))
+			|| this.hasModifier(KtTokens.PROTECTED_KEYWORD)
+			|| this.hasModifier(KtTokens.INTERNAL_KEYWORD))
+}
+
+fun KtModifierListOwner.isInternal(): Boolean {
+	return this.hasModifier(KtTokens.INTERNAL_KEYWORD)
 }
 
 fun KtCallExpression.isUsedForNesting(): Boolean = when (getCallNameExpression()?.text) {
