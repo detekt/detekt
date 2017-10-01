@@ -10,8 +10,8 @@ import org.jetbrains.spek.subject.SubjectSpek
 class NestedClassesVisibilitySpec : SubjectSpek<NestedClassesVisibility>({
 	subject { NestedClassesVisibility() }
 
-	given("several data classes") {
-		it("valid data class") {
+	given("several nested classes") {
+		it("check interfaces,enums,classes") {
 			Assertions.assertThat(subject.lint(Case.NestedClassesVisibility.path())).hasSize(3)
 		}
 	}
