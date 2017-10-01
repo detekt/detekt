@@ -29,14 +29,41 @@ class DataClassContainsFunctionsRule(config: Config = Config.empty) : Rule(confi
 	}
 
 	private fun handleNamedFunction(function: KtNamedFunction) {
-		if (function.modifierList?.hasModifier(KtTokens.OVERRIDE_KEYWORD) != true) {
+		if (!isOverriden(function) && !isConversionFunction(function)) {
 			report(CodeSmell(issue, Entity.from(function)))
 		}
+	}
+
+	private fun isOverriden(function: KtNamedFunction): Boolean {
+		return function.modifierList?.hasModifier(KtTokens.OVERRIDE_KEYWORD) ?: false
+	}
+
+	private fun isConversionFunction(function: KtNamedFunction): Boolean {
+		if (shouldCheckConversionFunction()) {
+			return containsConversionPrefix(function)
+		}
+		return false
+	}
+
+	private fun shouldCheckConversionFunction(): Boolean {
+		return valueOrDefault(ALLOW_CONVERSION_FUNCTIONS, ALLOW_CONVERSION_FUNCTIONS_DEFAULT_VALUE)
+	}
+
+	private fun containsConversionPrefix(function: KtNamedFunction): Boolean {
+		return function.name?.contains(valueOrDefault(CONVERSION_FUNCTION_PREFIX, CONVERSION_FUNCTION_DEFAULT_PREFIX)) ?: false
 	}
 
 	private class FunctionsVisitor(val rule: DataClassContainsFunctionsRule) : DetektVisitor() {
 		override fun visitNamedFunction(function: KtNamedFunction) {
 			rule.handleNamedFunction(function)
 		}
+	}
+
+	companion object {
+		const val ALLOW_CONVERSION_FUNCTIONS = "allowConversionFunctions"
+		const val CONVERSION_FUNCTION_PREFIX = "conversionFunctionPrefix"
+
+		private const val CONVERSION_FUNCTION_DEFAULT_PREFIX = "to"
+		private const val ALLOW_CONVERSION_FUNCTIONS_DEFAULT_VALUE = false
 	}
 }
