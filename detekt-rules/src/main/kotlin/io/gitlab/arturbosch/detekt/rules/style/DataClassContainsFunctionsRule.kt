@@ -50,8 +50,8 @@ class DataClassContainsFunctionsRule(config: Config = Config.empty) : Rule(confi
 	}
 
 	private fun containsConversionPrefix(function: KtNamedFunction): Boolean {
-		val prefix = valueOrDefault(CONVERSION_FUNCTION_PREFIX, CONVERSION_FUNCTION_DEFAULT_PREFIX)
-		return function.name?.contains(prefix) ?: false
+		val prefixes = valueOrDefault(CONVERSION_FUNCTION_PREFIX, CONVERSION_FUNCTION_DEFAULT_PREFIX)
+		return prefixes.split(',').count { function.name?.startsWith(it) ?: false } != 0
 	}
 
 	private class FunctionsVisitor(val rule: DataClassContainsFunctionsRule) : DetektVisitor() {
