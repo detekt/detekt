@@ -13,15 +13,15 @@ import org.jetbrains.spek.subject.SubjectSpek
  */
 
 class DataClassContainsFunctionsSpec : SubjectSpek<DataClassContainsFunctionsRule>({
-
+	subject { DataClassContainsFunctionsRule() }
 	given("several data classes") {
 		it("valid data class w/o conversion function") {
-			val rule = DataClassContainsFunctionsRule()
-			assertThat(rule.lint(Case.DataClassContainsFunctions.path())).hasSize(3)
+			assertThat(subject.lint(Case.DataClassContainsFunctions.path())).hasSize(3)
 		}
-		it("valid data class w/ conversion function"){
-			val rule = DataClassContainsFunctionsRule(TestConfig(mapOf(DataClassContainsFunctionsRule
-					.ALLOW_CONVERSION_FUNCTIONS to "true")))
+		it("valid data class w/ conversion function") {
+			val rule = DataClassContainsFunctionsRule(TestConfig(
+					mapOf(DataClassContainsFunctionsRule.CONVERSION_FUNCTION_PREFIX to "to"))
+			)
 			assertThat(rule.lint(Case.DataClassContainsFunctions.path())).hasSize(2)
 		}
 	}
