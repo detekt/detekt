@@ -42,3 +42,9 @@ class ClassWithRegularFunctions {
 		println()
 	}
 }
+
+
+@Suppress("unused")
+data class DataClassWithConversionFunction(val i : Int) {
+	fun toDataClassWithOverriddenMethods() = DataClassWithOverriddenMethods(i)
+}
