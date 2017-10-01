@@ -17,7 +17,7 @@ class NestedClassesVisibility(config: Config = Config.empty) : Rule(config) {
 			description = "Nested types are often used for implementing private functionality. " +
 					"Therefore, they shouldn't be externally visible.")
 
-	private val visitor = VisibilityVisitor(this)
+	private val visitor = VisibilityVisitor()
 
 	override fun visitClass(klass: KtClass) {
 		super.visitClass(klass)
