@@ -32,10 +32,10 @@ class NestedClassesVisibility(config: Config = Config.empty) : Rule(config) {
 		report(CodeSmell(issue, Entity.from(klass)))
 	}
 
-	private class VisibilityVisitor(val rule: NestedClassesVisibility) : DetektVisitor() {
+	private inner class VisibilityVisitor : DetektVisitor() {
 		override fun visitClass(klass: KtClass) {
 			if (!klass.isInternal() && !klass.isPrivate()) {
-				rule.handleClass(klass)
+				handleClass(klass)
 			}
 		}
 	}
