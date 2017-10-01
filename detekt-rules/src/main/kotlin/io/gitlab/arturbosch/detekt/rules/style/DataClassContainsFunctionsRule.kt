@@ -29,12 +29,12 @@ class DataClassContainsFunctionsRule(config: Config = Config.empty) : Rule(confi
 	}
 
 	private fun handleNamedFunction(function: KtNamedFunction) {
-		if (!isOverriden(function) && !isConversionFunction(function)) {
+		if (!isOverridden(function) && !isConversionFunction(function)) {
 			report(CodeSmell(issue, Entity.from(function)))
 		}
 	}
 
-	private fun isOverriden(function: KtNamedFunction): Boolean {
+	private fun isOverridden(function: KtNamedFunction): Boolean {
 		return function.modifierList?.hasModifier(KtTokens.OVERRIDE_KEYWORD) ?: false
 	}
 
@@ -46,7 +46,7 @@ class DataClassContainsFunctionsRule(config: Config = Config.empty) : Rule(confi
 	}
 
 	private fun shouldCheckConversionFunction(): Boolean {
-		return valueOrDefault(ALLOW_CONVERSION_FUNCTIONS, ALLOW_CONVERSION_FUNCTIONS_DEFAULT_VALUE)
+		return valueOrDefault(CONVERSION_FUNCTION_PREFIX, "").isNotBlank()
 	}
 
 	private fun containsConversionPrefix(function: KtNamedFunction): Boolean {
@@ -61,10 +61,7 @@ class DataClassContainsFunctionsRule(config: Config = Config.empty) : Rule(confi
 	}
 
 	companion object {
-		const val ALLOW_CONVERSION_FUNCTIONS = "allowConversionFunctions"
 		const val CONVERSION_FUNCTION_PREFIX = "conversionFunctionPrefix"
-
 		private const val CONVERSION_FUNCTION_DEFAULT_PREFIX = "to"
-		private const val ALLOW_CONVERSION_FUNCTIONS_DEFAULT_VALUE = false
 	}
 }
