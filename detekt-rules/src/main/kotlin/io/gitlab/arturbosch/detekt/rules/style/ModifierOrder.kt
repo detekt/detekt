@@ -41,8 +41,7 @@ class ModifierOrder(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,
 			Severity.Style,
-			"Line detected that is longer than the defined maximum line length in the code style.",
-			Debt(mins = 1))
+			debt = Debt(mins = 1))
 
 	// subset of KtTokens.MODIFIER_KEYWORDS_ARRAY
 	private val order = arrayOf(
