@@ -16,6 +16,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
 import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 import java.util.Locale
 
@@ -36,6 +37,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 	private val ignoreHashCodeFunction = valueOrDefault(IGNORE_HASH_CODE, false)
 	private val ignoreAnnotation = valueOrDefault(IGNORE_ANNOTATION, false)
 	private val ignorePropertyDeclaration = valueOrDefault(IGNORE_PROPERTY_DECLARATION, false)
+	private val ignoreNamedParameters = valueOrDefault(IGNORE_NAMED_PARAMETERS, false)
 
 	override fun visitConstantExpression(expression: KtConstantExpression) {
 		val parent = expression.parent
@@ -44,6 +46,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 			ignorePropertyDeclaration && parent is KtProperty && !parent.isLocal -> true
 			ignoreAnnotation && expression.isPartOf(KtAnnotationEntry::class) -> true
 			ignoreHashCodeFunction && expression.isPartOfHashCode() -> true
+			ignoreNamedParameters && expression.isPartOf(KtValueArgument::class) -> true
 			parent.isConstantProperty() -> true
 			else -> false
 		}
@@ -110,6 +113,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 		const val IGNORE_NUMBERS = "ignoreNumbers"
 		const val IGNORE_HASH_CODE = "ignoreHashCodeFunction"
 		const val IGNORE_PROPERTY_DECLARATION = "ignorePropertyDeclaration"
+		const val IGNORE_NAMED_PARAMETERS = "ignoreNamedParameters"
 		const val IGNORE_ANNOTATION = "ignoreAnnotation"
 
 		private const val HEX_RADIX = 16
