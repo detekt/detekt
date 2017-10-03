@@ -587,6 +587,7 @@ style:
     ignoreHashCodeFunction: false
     ignorePropertyDeclaration: false
     ignoreAnnotation: false
+    ignoreNamedParameters: true
   WildcardImport:
     active: true
   SafeCast:
