@@ -40,21 +40,11 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 	private val ignoreNamedParameters = valueOrDefault(IGNORE_NAMED_PARAMETERS, false)
 
 	override fun visitConstantExpression(expression: KtConstantExpression) {
-		val parent = expression.parent
-
-		val isIgnored = when {
-			ignorePropertyDeclaration && parent is KtProperty && !parent.isLocal -> true
-			ignoreAnnotation && expression.isPartOf(KtAnnotationEntry::class) -> true
-			ignoreHashCodeFunction && expression.isPartOfHashCode() -> true
-			ignoreNamedParameters && expression.isPartOf(KtValueArgument::class) -> true
-			parent.isConstantProperty() -> true
-			else -> false
-		}
-
-		if (isIgnored) {
+		if (expression.isIgnored()) {
 			return
 		}
 
+		val parent = expression.parent
 		val rawNumber = if (parent.hasUnaryMinusPrefix()) {
 			parent.text
 		} else {
@@ -65,6 +55,15 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 		if (!ignoredNumbers.contains(number)) {
 			report(CodeSmell(issue, Entity.from(expression)))
 		}
+	}
+
+	private fun KtConstantExpression.isIgnored() = when {
+		ignorePropertyDeclaration && parent is KtProperty && !(parent as KtProperty).isLocal -> true
+		ignoreAnnotation && this.isPartOf(KtAnnotationEntry::class) -> true
+		ignoreHashCodeFunction && this.isPartOfHashCode() -> true
+		ignoreNamedParameters && this.isPartOf(KtValueArgument::class) -> true
+		parent.isConstantProperty() -> true
+		else -> false
 	}
 
 	private fun KtConstantExpression.isPartOfHashCode(): Boolean {
