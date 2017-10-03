@@ -311,6 +311,20 @@ class MagicNumberSpec : Spek({
 		}
 	}
 
+	given("an expression passed as a named parameter in a constructor") {
+		val code = "class HtlExpressionInsertHandler : HtlTextInsertHandler(offset = 4 + 10)"
+
+		it("should be reported") {
+			val findings = MagicNumber().lint(code)
+			assertThat(findings).hasSize(2)
+		}
+
+		it("should still be reported when named parameters are ignored") {
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NAMED_PARAMETERS to "true"))).lint(code)
+			assertThat(findings).hasSize(2)
+		}
+	}
+
 	given("a named parameter in a method call") {
 		val code = "val number = calculateNumber(four = 4)"
 

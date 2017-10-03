@@ -7,10 +7,12 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.isNotPartOf
 import io.gitlab.arturbosch.detekt.api.isPartOf
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
+import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
@@ -61,7 +63,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 		ignorePropertyDeclaration && parent is KtProperty && !(parent as KtProperty).isLocal -> true
 		ignoreAnnotation && this.isPartOf(KtAnnotationEntry::class) -> true
 		ignoreHashCodeFunction && this.isPartOfHashCode() -> true
-		ignoreNamedParameters && this.isPartOf(KtValueArgument::class) -> true
+		ignoreNamedParameters && this.isPartOf(KtValueArgument::class) && this.isNotPartOf(KtBinaryExpression::class) -> true
 		parent.isConstantProperty() -> true
 		else -> false
 	}
