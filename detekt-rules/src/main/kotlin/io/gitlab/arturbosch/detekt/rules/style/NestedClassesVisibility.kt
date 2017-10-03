@@ -7,8 +7,11 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.isEnumEntry
 import io.gitlab.arturbosch.detekt.rules.isInternal
+import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.RecursiveTreeElementVisitor
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtEnumEntry
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 
 class NestedClassesVisibility(config: Config = Config.empty) : Rule(config) {
@@ -22,20 +25,21 @@ class NestedClassesVisibility(config: Config = Config.empty) : Rule(config) {
 	override fun visitClass(klass: KtClass) {
 		super.visitClass(klass)
 		if (klass.isInternal()) {
-			klass.declarations.forEach {
-				it.accept(visitor)
-			}
+			checkDeclarations(klass)
 		}
 	}
 
-	private fun handleClass(klass: KtClass) {
-		report(CodeSmell(issue, Entity.from(klass)))
+	private fun checkDeclarations(klass: KtClass) {
+		klass.declarations.filterNot { it.isEnumEntry() }.forEach {
+			it.accept(visitor)
+		}
 	}
 
 	private inner class VisibilityVisitor : DetektVisitor() {
 		override fun visitClass(klass: KtClass) {
+			checkDeclarations(klass)
 			if (!klass.isInternal() && !klass.isPrivate()) {
-				handleClass(klass)
+				report(CodeSmell(issue, Entity.from(klass)))
 			}
 		}
 	}

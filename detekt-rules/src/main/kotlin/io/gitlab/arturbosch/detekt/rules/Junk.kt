@@ -6,7 +6,9 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiComment
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtEnumEntry
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtModifierListOwner
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
@@ -28,6 +30,8 @@ fun KtModifierListOwner.isPublic(): Boolean {
 }
 
 fun KtModifierListOwner.isInternal() = this.hasModifier(KtTokens.INTERNAL_KEYWORD)
+
+fun KtDeclaration.isEnumEntry() = this is KtEnumEntry
 
 fun KtCallExpression.isUsedForNesting(): Boolean = when (getCallNameExpression()?.text) {
 	"run", "let", "apply", "with", "use", "forEach" -> true
