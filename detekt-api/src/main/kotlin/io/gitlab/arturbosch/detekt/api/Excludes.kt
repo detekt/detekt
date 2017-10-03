@@ -10,4 +10,5 @@ class Excludes(excludeParameter: String) {
 	fun contains(value: String?) = excludes.any { value?.contains(it, ignoreCase = true) == true }
 	fun none(value: String) = !contains(value)
 	fun matches(value: String): List<String> = excludes.filter { value.contains(it, ignoreCase = true) }
+	fun startWith(name: String?) = excludes.any { name?.startsWith(it) ?: false }
 }
