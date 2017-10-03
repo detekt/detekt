@@ -13,4 +13,14 @@ internal class ParentType {
 	private interface PrivateTest {} // valid
 
 	internal interface InternalTest {} // valid
+
+	public class NestedClassWithNestedCLass { //report
+		public class NestedClass { //report
+
+		}
+
+		public interface NestedInterface{ //report
+
+		}
+	}
 }
