@@ -7,15 +7,18 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.isNotPartOf
 import io.gitlab.arturbosch.detekt.api.isPartOf
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
+import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
 import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 import java.util.Locale
 
@@ -36,22 +39,14 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 	private val ignoreHashCodeFunction = valueOrDefault(IGNORE_HASH_CODE, false)
 	private val ignoreAnnotation = valueOrDefault(IGNORE_ANNOTATION, false)
 	private val ignorePropertyDeclaration = valueOrDefault(IGNORE_PROPERTY_DECLARATION, false)
+	private val ignoreNamedParameters = valueOrDefault(IGNORE_NAMED_PARAMETERS, false)
 
 	override fun visitConstantExpression(expression: KtConstantExpression) {
-		val parent = expression.parent
-
-		val isIgnored = when {
-			ignorePropertyDeclaration && parent is KtProperty && !parent.isLocal -> true
-			ignoreAnnotation && expression.isPartOf(KtAnnotationEntry::class) -> true
-			ignoreHashCodeFunction && expression.isPartOfHashCode() -> true
-			parent.isConstantProperty() -> true
-			else -> false
-		}
-
-		if (isIgnored) {
+		if (expression.isIgnored()) {
 			return
 		}
 
+		val parent = expression.parent
 		val rawNumber = if (parent.hasUnaryMinusPrefix()) {
 			parent.text
 		} else {
@@ -62,6 +57,15 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 		if (!ignoredNumbers.contains(number)) {
 			report(CodeSmell(issue, Entity.from(expression)))
 		}
+	}
+
+	private fun KtConstantExpression.isIgnored() = when {
+		ignorePropertyDeclaration && parent is KtProperty && !(parent as KtProperty).isLocal -> true
+		ignoreAnnotation && this.isPartOf(KtAnnotationEntry::class) -> true
+		ignoreHashCodeFunction && this.isPartOfHashCode() -> true
+		ignoreNamedParameters && this.isPartOf(KtValueArgument::class) && this.isNotPartOf(KtBinaryExpression::class) -> true
+		parent.isConstantProperty() -> true
+		else -> false
 	}
 
 	private fun KtConstantExpression.isPartOfHashCode(): Boolean {
@@ -110,6 +114,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 		const val IGNORE_NUMBERS = "ignoreNumbers"
 		const val IGNORE_HASH_CODE = "ignoreHashCodeFunction"
 		const val IGNORE_PROPERTY_DECLARATION = "ignorePropertyDeclaration"
+		const val IGNORE_NAMED_PARAMETERS = "ignoreNamedParameters"
 		const val IGNORE_ANNOTATION = "ignoreAnnotation"
 
 		private const val HEX_RADIX = 16

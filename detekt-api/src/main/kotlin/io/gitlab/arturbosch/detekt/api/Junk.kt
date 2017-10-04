@@ -28,6 +28,11 @@ internal fun ASTNode.visitTokens(currentNode: (node: ASTNode) -> Unit) {
 fun PsiElement.isPartOf(clazz: KClass<out PsiElement>) = getNonStrictParentOfType(clazz.java) != null
 
 /**
+ * Tests if this element is not part of given PsiElement.
+ */
+fun PsiElement.isNotPartOf(clazz: KClass<out PsiElement>) = getNonStrictParentOfType(clazz.java) == null
+
+/**
  * Tests of this element is part of a kotlin string.
  */
 fun PsiElement.isPartOfString() = isPartOf(KtStringTemplateEntry::class)
