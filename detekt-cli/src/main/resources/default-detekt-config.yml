@@ -171,6 +171,7 @@ complexity:
   ComplexInterface:
     active: false
     threshold: 10
+    includeStaticDeclarations: false
   ComplexMethod:
     active: true
     threshold: 10

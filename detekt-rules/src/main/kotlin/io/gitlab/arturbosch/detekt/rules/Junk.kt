@@ -6,6 +6,7 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiComment
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtEnumEntry
@@ -47,6 +48,8 @@ fun KtBlockExpression.hasCommentInside(): Boolean {
 	})
 	return getUserData(commentKey) == true
 }
+
+fun KtClass.companionObject() = this.companionObjects.singleOrNull { it.isCompanion() }
 
 inline fun <reified T : KtElement> KtElement.collectByType(): List<T> {
 	val list = mutableListOf<T>()
