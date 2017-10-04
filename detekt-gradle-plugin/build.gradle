@@ -9,6 +9,7 @@ buildscript {
 	}
 }
 
+apply plugin: "java-gradle-plugin"
 apply plugin: "com.gradle.plugin-publish"
 
 version = "$detektGradleVersion"
@@ -26,6 +27,15 @@ dependencies {
 	testRuntime "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
 	testRuntime "org.junit.platform:junit-platform-console:$junitPlatformVersion"
 	testRuntime "org.jetbrains.spek:spek-junit-platform-engine:$spekVersion"
+}
+
+gradlePlugin {
+	plugins {
+		detektPlugin {
+			id = 'io.gitlab.arturbosch.detekt'
+			implementationClass = 'io.gitlab.arturbosch.detekt.DetektPlugin'
+		}
+	}
 }
 
 pluginBundle {
