@@ -22,7 +22,7 @@ class TestPatternTest : Spek({
 			a/b/c/d/cb.kt
 		"""
 
-		val paths = pathContent.split("\n")
+		val paths = pathContent.split(separator)
 				.map { it.trim() }
 				.filterNot { it.isEmpty() }
 				.map { Paths.get(it) }
@@ -38,6 +38,8 @@ class TestPatternTest : Spek({
 	}
 
 })
+
+val separator: String = System.getProperty("line.separator")
 
 fun createTestPattern(config: Config) = with(config) {
 	TestPattern(valueOrDefault(TestPattern.ACTIVE, false),
