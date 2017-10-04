@@ -118,4 +118,25 @@ class UnusedImportsTest : RuleTest {
             """
 		)).hasSize(3)
 	}
+
+	@Test
+	fun `imports used in KDoc tags`() {
+		val code = """
+			package com.acme
+
+			import com.acme.cathedral.TheDome   // here
+			import com.acme.bazar.SomeException // and here
+
+			/**
+			 * Do something.
+			 * @throws [SomeException] when ...
+			 * @see [TheDome.someMethod]
+			 */
+			fun doSomething() {
+				TODO()
+			}
+		"""
+
+		assertThat(rule.lint(code)).hasSize(0)
+	}
 }

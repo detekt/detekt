@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.isPartOf
 import org.jetbrains.kotlin.com.intellij.psi.PsiFile
+import org.jetbrains.kotlin.kdoc.psi.impl.KDocTag
 import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.kotlin.psi.KtImportList
@@ -60,12 +61,22 @@ class UnusedImports(config: Config) : Rule(config) {
 	}
 
 	override fun visitDeclaration(dcl: KtDeclaration) {
+		dcl.docComment?.getDefaultSection()?.children
+				?.filter { it is KDocTag }
+				?.map { it.text }
+				?.forEach { handleKDoc(it) }
+
+
 		dcl.docComment?.getDefaultSection()?.getContent()?.let {
-			kotlinDocReferencesRegExp.findAll(it, 0)
-					.map { it.groupValues[1] }
-					.forEach { checkImports(it) }
+			handleKDoc(it)
 		}
 		super.visitDeclaration(dcl)
+	}
+
+	private fun handleKDoc(content: String) {
+		kotlinDocReferencesRegExp.findAll(content, 0)
+				.map { it.groupValues[1] }
+				.forEach { checkImports(it) }
 	}
 
 	private fun checkImports(it: String) {
