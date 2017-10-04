@@ -7,8 +7,11 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.rules.companionObject
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtClassBody
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtProperty
 
 class ComplexInterface(config: Config = Config.empty,
@@ -20,15 +23,31 @@ class ComplexInterface(config: Config = Config.empty,
 					"An interface should have one responsibility. " +
 					"Split up large interfaces into smaller ones that are easier to understand.")
 
+	private val includeStaticDeclarations = valueOrDefault(INCLUDE_STATIC_DECLARATIONS, false)
+
 	override fun visitClass(klass: KtClass) {
 		if (klass.isInterface()) {
 			val body = klass.getBody() ?: return
-			val size = body.children.count { it is KtNamedFunction || it is KtProperty }
+			var size = calculateMembers(body)
+			if (includeStaticDeclarations) {
+				size += countStaticDeclarations(klass.companionObject())
+			}
 			if (size > threshold) {
 				report(ThresholdedCodeSmell(issue, Entity.from(klass), Metric("SIZE: ", size, threshold)))
 			}
 		}
 		super.visitClass(klass)
+	}
+
+	private fun countStaticDeclarations(companionObject: KtObjectDeclaration?): Int {
+		val body = companionObject?.getBody()
+		return if (body != null) calculateMembers(body) else 0
+	}
+
+	private fun calculateMembers(body: KtClassBody) = body.children.count { it is KtNamedFunction || it is KtProperty }
+
+	companion object {
+		const val INCLUDE_STATIC_DECLARATIONS = "includeStaticDeclarations"
 	}
 }
 

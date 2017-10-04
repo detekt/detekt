@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.companionObject
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -25,7 +26,7 @@ class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(
 
 	override fun visitClass(klass: KtClass) {
 		if (!klass.isInterface() && isImplementingSerializable(klass)) {
-			val companionObject = klass.companionObjects.singleOrNull { it.isCompanion() }
+			val companionObject = klass.companionObject()
 			if (companionObject == null || !hasCorrectSerialVersionUUID(companionObject)) {
 				report(CodeSmell(issue, Entity.from(klass)))
 			}
