@@ -587,6 +587,7 @@ style:
     ignoreHashCodeFunction: false
     ignorePropertyDeclaration: false
     ignoreAnnotation: false
+    ignoreNamedArgument: true
   WildcardImport:
     active: true
   SafeCast:
@@ -829,6 +830,7 @@ detekt findings, bunch of rules
 - [Karol Wrótniak](https://github.com/koral--) - Treat comments as not empty blocks
 - [Radim Vaculik](https://github.com/radimvaculik) - VariableMaxLength - bugfix
 - [Martin Nonnenmacher](https://github.com/mnonnenmacher) - UndocumentedPublicClass - enum support
+- [Dmytro Troynikov](https://github.com/DmytroTroynikov) - Updated Magic Number rule to ignore Named Arguments
 
 #### Credits
 - [JetBrains](https://github.com/jetbrains/) - Creating Intellij + Kotlin

@@ -11,11 +11,13 @@ import io.gitlab.arturbosch.detekt.api.isPartOf
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
+import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
 import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 import java.util.Locale
 
@@ -36,6 +38,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 	private val ignoreHashCodeFunction = valueOrDefault(IGNORE_HASH_CODE, false)
 	private val ignoreAnnotation = valueOrDefault(IGNORE_ANNOTATION, false)
 	private val ignorePropertyDeclaration = valueOrDefault(IGNORE_PROPERTY_DECLARATION, false)
+	private val ignoreNamedArgument = valueOrDefault(IGNORE_NAMED_ARGUMENT, false)
 
 	override fun visitConstantExpression(expression: KtConstantExpression) {
 		val parent = expression.parent
@@ -45,6 +48,9 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 			ignoreAnnotation && expression.isPartOf(KtAnnotationEntry::class) -> true
 			ignoreHashCodeFunction && expression.isPartOfHashCode() -> true
 			parent.isConstantProperty() -> true
+			ignoreNamedArgument
+					&& expression.isPartOf(KtValueArgument::class)
+					&& expression.isPartOf(KtCallExpression::class) -> true
 			else -> false
 		}
 
@@ -111,6 +117,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 		const val IGNORE_HASH_CODE = "ignoreHashCodeFunction"
 		const val IGNORE_PROPERTY_DECLARATION = "ignorePropertyDeclaration"
 		const val IGNORE_ANNOTATION = "ignoreAnnotation"
+		const val IGNORE_NAMED_ARGUMENT = "ignoreNamedArgument"
 
 		private const val HEX_RADIX = 16
 	}

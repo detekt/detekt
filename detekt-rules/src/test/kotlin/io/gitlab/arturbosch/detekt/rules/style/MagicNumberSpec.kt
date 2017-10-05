@@ -332,7 +332,7 @@ class MagicNumberSpec : Spek({
 			@Magic(number = 69)
 			class A {
 				val boringNumber = 42
-				const val boringConstant = 93871
+				const val BORING_CONSTANT = 93871
 
 				fun hashCode(): Int {
 					val iAmSoMagic = 7328672
@@ -379,6 +379,63 @@ class MagicNumberSpec : Spek({
 
 		it("should not lead to a crash #276") {
 			assertThat(MagicNumber().lint(code)).isEmpty()
+		}
+	}
+
+	given("ignoring named arguments") {
+		given("in constructor invocation") {
+			fun code(numberString: String) = compileContentForTest("""
+				data class Model(
+						val someVal: Int,
+						val other: String = "default"
+				)
+
+				var model = Model(someVal = $numberString)
+			""")
+
+			it("should not ignore int by default") {
+				assertThat(MagicNumber().lint(code("53"))).hasSize(1)
+			}
+
+			it("should not ignore float by default") {
+				assertThat(MagicNumber().lint(code("53f"))).hasSize(1)
+			}
+
+			it("should not ignore binary by default") {
+				assertThat(MagicNumber().lint(code("0b01001"))).hasSize(1)
+			}
+
+			it("should ignore integer with underscores") {
+				assertThat(MagicNumber().lint(code("101_000"))).hasSize(1)
+			}
+
+			it("should ignore numbers when 'ignoreNamedArgument' is set to true") {
+				val rule = MagicNumber(TestConfig(mapOf("ignoreNamedArgument" to "true")))
+				assertThat(rule.lint(code("53"))).isEmpty()
+			}
+		}
+
+		given("in function invocation") {
+			fun code(integer: String) = compileContentForTest("""
+				fun tested(someVal: Int, other: String = "default")
+
+				tested(someVal = $integer)
+			""")
+			it("should ignore int by default") {
+				assertThat(MagicNumber().lint(code("53"))).isEmpty()
+			}
+
+			it("should ignore float by default") {
+				assertThat(MagicNumber().lint(code("53f"))).isEmpty()
+			}
+
+			it("should ignore binary by default") {
+				assertThat(MagicNumber().lint(code("0b01001"))).isEmpty()
+			}
+
+			it("should ignore integer with underscores") {
+				assertThat(MagicNumber().lint(code("101_000"))).isEmpty()
+			}
 		}
 	}
 })

@@ -284,6 +284,7 @@ style:
     ignoreHashCodeFunction: false
     ignorePropertyDeclaration: false
     ignoreAnnotation: false
+    ignoreNamedArgument: true
   WildcardImport:
     active: true
   SafeCast:
