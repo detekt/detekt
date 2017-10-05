@@ -24,6 +24,7 @@ class FileProcessorLocatorTest {
 		val providers = locator.load()
 		val classes = getClasses()
 
+		assertThat(classes).isNotEmpty
 		classes
 				.map { c -> providers.firstOrNull { c == it.javaClass } }
 				.forEach { assertThat(it).isNotNull() }
