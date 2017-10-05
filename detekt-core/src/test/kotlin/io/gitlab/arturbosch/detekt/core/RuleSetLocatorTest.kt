@@ -16,6 +16,7 @@ class RuleSetLocatorTest {
 		val providers = locator.load()
 		val classes = getClasses()
 
+		assertThat(classes).isNotEmpty
 		classes
 				.map { c -> providers.firstOrNull { it.javaClass == c } }
 				.forEach { assertThat(it).isNotNull() }
