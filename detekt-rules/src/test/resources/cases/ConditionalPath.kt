@@ -1,4 +1,4 @@
-@file:Suppress("UNREACHABLE_CODE", "UNUSED_EXPRESSION", "ConstantConditionIf")
+@file:Suppress("UNREACHABLE_CODE", "UNUSED_EXPRESSION", "ConstantConditionIf", "unused")
 
 package cases
 
@@ -50,4 +50,11 @@ fun conditionalFunction2(): Int = try {
 		else -> 5
 	}
 	7
+}
+
+fun conditionalForWhenStatement(i: Int): Int {
+	return when (i) {
+		1 -> 1
+		else -> 2
+	}
 }
