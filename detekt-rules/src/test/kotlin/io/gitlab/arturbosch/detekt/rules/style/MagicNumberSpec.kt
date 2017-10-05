@@ -421,25 +421,25 @@ class MagicNumberSpec : Spek({
 		}
 
 		given("in function invocation") {
-			fun code(integer: String) = compileContentForTest("""
+			fun code(number: Number) = compileContentForTest("""
 				fun tested(someVal: Int, other: String = "default")
 
-				tested(someVal = $integer)
+				tested(someVal = $number)
 			""")
 			it("should ignore int by default") {
-				assertThat(MagicNumber().lint(code("53"))).isEmpty()
+				assertThat(MagicNumber().lint(code(53))).isEmpty()
 			}
 
 			it("should ignore float by default") {
-				assertThat(MagicNumber().lint(code("53f"))).isEmpty()
+				assertThat(MagicNumber().lint(code(53f))).isEmpty()
 			}
 
 			it("should ignore binary by default") {
-				assertThat(MagicNumber().lint(code("0b01001"))).isEmpty()
+				assertThat(MagicNumber().lint(code(0b01001))).isEmpty()
 			}
 
 			it("should ignore integer with underscores") {
-				assertThat(MagicNumber().lint(code("101_000"))).isEmpty()
+				assertThat(MagicNumber().lint(code(101_000))).isEmpty()
 			}
 		}
 	}
