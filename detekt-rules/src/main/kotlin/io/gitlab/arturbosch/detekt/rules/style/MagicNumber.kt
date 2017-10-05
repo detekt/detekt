@@ -43,18 +43,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 	override fun visitConstantExpression(expression: KtConstantExpression) {
 		val parent = expression.parent
 
-		val isIgnored = when {
-			ignorePropertyDeclaration && parent is KtProperty && !parent.isLocal -> true
-			ignoreAnnotation && expression.isPartOf(KtAnnotationEntry::class) -> true
-			ignoreHashCodeFunction && expression.isPartOfHashCode() -> true
-			parent.isConstantProperty() -> true
-			ignoreNamedArgument
-					&& expression.isPartOf(KtValueArgument::class)
-					&& expression.isPartOf(KtCallExpression::class) -> true
-			else -> false
-		}
-
-		if (isIgnored) {
+		if (isIgnoredByConfig(parent, expression)) {
 			return
 		}
 
@@ -70,6 +59,17 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 		}
 	}
 
+	private fun isIgnoredByConfig(parent: PsiElement?, expression: KtConstantExpression) = when {
+		ignorePropertyDeclaration && parent is KtProperty && !parent.isLocal -> true
+		ignoreAnnotation && expression.isPartOf(KtAnnotationEntry::class) -> true
+		ignoreHashCodeFunction && expression.isPartOfHashCode() -> true
+		parent.isConstantProperty() -> true
+		ignoreNamedArgument
+				&& expression.isPartOf(KtValueArgument::class)
+				&& expression.isPartOf(KtCallExpression::class) -> true
+		else -> false
+	}
+
 	private fun KtConstantExpression.isPartOfHashCode(): Boolean {
 		val containingFunction = getNonStrictParentOfType(KtNamedFunction::class.java)
 		val name = containingFunction?.name
@@ -80,7 +80,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 	private fun returnTypeIsInt(returnType: String?) = returnType != null && returnType == "Int"
 	private fun nameIsHashCode(name: String?) = name != null && name == "hashCode"
 
-	private fun PsiElement.isConstantProperty(): Boolean =
+	private fun PsiElement?.isConstantProperty(): Boolean =
 			this is KtProperty && this.hasModifier(KtTokens.CONST_KEYWORD)
 
 	private fun PsiElement.hasUnaryMinusPrefix(): Boolean = this is KtPrefixExpression
