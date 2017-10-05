@@ -1,92 +1,27 @@
 package io.gitlab.arturbosch.detekt.rules.style.optional
 
-import io.gitlab.arturbosch.detekt.test.compileContentForTest
-import org.assertj.core.api.Assertions
+import io.gitlab.arturbosch.detekt.rules.Case
+import io.gitlab.arturbosch.detekt.test.compileForTest
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 /**
  * @author Artur Bosch
  */
-internal class ConditionalPathVisitorTest {
+class ConditionalPathVisitorTest {
 
 	@Test
-	fun isState() {
+	fun pathCount() {
 		var counter = 0
 
 		val visitor = ConditionalPathVisitor {
 			counter++
 		}
 
-		val ktFile = compileContentForTest(isState)
+		val ktFile = compileForTest(Case.ConditionalPath.path())
 
 		ktFile.accept(visitor)
 
-		Assertions.assertThat(counter).isEqualTo(5)
-	}
-
-	@Test
-	fun shouldState() {
-		var counter = 0
-
-		val visitor = ConditionalPathVisitor {
-			counter++
-		}
-
-		val ktFile = compileContentForTest(shouldState)
-
-		ktFile.accept(visitor)
-
-		Assertions.assertThat(counter).isEqualTo(0)
+		assertThat(counter).isEqualTo(5)
 	}
 }
-
-val isState = """
-fun stuff(): Int {
-	return try {
-		return if (true) {
-			if (false) return -1
-			return 5
-		} else {
-			5
-			return try {
-				"5".toInt()
-			} catch (e: IllegalArgumentException) {
-				5
-			} catch (e: RuntimeException) {
-				3
-				return 5
-			}
-		}
-	} catch (e: Exception) {
-		when(5) {
-			5 -> return 1
-			2 -> return 1
-			else -> 5
-		}
-		return 7
-	}
-}""".trimIndent()
-val shouldState = """
-fun stuff(): Int = try {
-		if (true) {
-			if (false) return -1
-			5
-		} else {
-			5
-			try {
-				"5".toInt()
-			} catch (e: IllegalArgumentException) {
-				5
-			} catch (e: RuntimeException) {
-				3
-				5
-			}
-		}
-	} catch (e: Exception) {
-		when(5) {
-			5 -> return 1
-			2 -> return 1
-			else -> 5
-		}
-		7
-	}""".trimIndent()
