@@ -94,12 +94,12 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 
 	private fun parseAsDouble(rawNumber: String): Double {
 		val normalizedText = normalizeForParsingAsDouble(rawNumber)
-		return if (normalizedText.startsWith("0x")) {
-			normalizedText.removePrefix("0x")
-					.toLong(HEX_RADIX)
-					.toDouble()
-		} else {
-			normalizedText.toDouble()
+		return when {
+			normalizedText.startsWith("0x") || normalizedText.startsWith("0X") ->
+				normalizedText.substring(2).toLong(HEX_RADIX).toDouble()
+			normalizedText.startsWith("0b") || normalizedText.startsWith("0B") ->
+				normalizedText.substring(2).toLong(BINARY_RADIX).toDouble()
+			else -> normalizedText.toDouble()
 		}
 	}
 
@@ -120,5 +120,6 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 		const val IGNORE_NAMED_ARGUMENT = "ignoreNamedArgument"
 
 		private const val HEX_RADIX = 16
+		private const val BINARY_RADIX = 2
 	}
 }

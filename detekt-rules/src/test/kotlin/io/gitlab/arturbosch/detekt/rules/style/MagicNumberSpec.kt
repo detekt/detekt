@@ -208,6 +208,11 @@ class MagicNumberSpec : Spek({
 
 		it("should not be reported") {
 			val findings = MagicNumber().lint(ktFile)
+			assertThat(findings).hasSize(1)
+		}
+
+		it("should not be reported when ignoredNumbers contains a binary literal 0b01001") {
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "0b01001"))).lint(ktFile)
 			assertThat(findings).hasSize(0)
 		}
 	}
