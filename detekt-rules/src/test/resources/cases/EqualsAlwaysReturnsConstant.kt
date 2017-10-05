@@ -1,7 +1,8 @@
+@file:Suppress("unused")
+
 package cases
 
-@Suppress("unused")
-class A {
+class EqualsAlwaysReturnsConstant1 {
 	override fun equals(other: Any?): Boolean {
 		return true // violations
 	}
@@ -10,8 +11,7 @@ class A {
 	}
 }
 
-@Suppress("unused")
-object B {
+object EqualsAlwaysReturnsConstant2 {
 	override fun equals(other: Any?): Boolean {
 		return false // violations
 	}

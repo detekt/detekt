@@ -1,6 +1,7 @@
+@file:Suppress("unused", "ConstantConditionIf")
+
 package cases
 
-@Suppress("unused")
 /**
  * @author Artur Bosch
  */
@@ -54,6 +55,4 @@ class Empty : Runnable {
 	}
 }
 
-@Suppress("unused")
-class EmptyClass() {
-}
+class EmptyClass() {}

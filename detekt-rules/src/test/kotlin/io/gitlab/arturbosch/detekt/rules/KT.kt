@@ -46,7 +46,8 @@ enum class Case(val file: String) {
 	TooManyFunctions("/cases/TooManyFunctions.kt"),
 	TooManyFunctionsTopLevel("/cases/TooManyFunctionsTopLevel.kt"),
 	UseDataClass("/cases/UseDataClass.kt"),
-	UnconditionalJumpStatementInLoop("/cases/UnconditionalJumpStatementInLoop.kt");
+	UnconditionalJumpStatementInLoop("/cases/UnconditionalJumpStatementInLoop.kt"),
+	NestedClassesVisibility("/cases/NestedClassesVisibility.kt");
 
 	fun path(): Path = Paths.get(resource(file))
 }

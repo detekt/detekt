@@ -1,7 +1,8 @@
+@file:Suppress("unused")
+
 package cases
 
 // should report 9 for protected = internal
-@Suppress("unused")
 class FinalClass : BaseClass {
 
 	private val i = 0
@@ -41,7 +42,6 @@ class FinalClass : BaseClass {
 	}
 }
 
-@Suppress("unused")
 abstract class BaseClass {
 
 	protected abstract val abstractProp: Int
@@ -56,7 +56,6 @@ abstract class BaseClass {
 	}
 }
 
-@Suppress("unused")
 open class OpenClass {
 
 	inner class InnerClass {
@@ -65,11 +64,9 @@ open class OpenClass {
 	}
 }
 
-@Suppress("unused")
 sealed class SealedClass {
 
 	protected fun a() {}
 }
 
-@Suppress("unused")
 class FinalClassWithProtectedConstructor protected constructor() // positive case

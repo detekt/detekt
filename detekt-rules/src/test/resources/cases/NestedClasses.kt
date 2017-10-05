@@ -1,4 +1,4 @@
-@file:Suppress("EqualsOrHashCode")
+@file:Suppress("EqualsOrHashCode", "ConstantConditionIf")
 
 package cases
 

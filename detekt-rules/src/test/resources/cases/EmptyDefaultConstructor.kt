@@ -1,26 +1,13 @@
+@file:Suppress("unused", "UNUSED_PARAMETER")
+
 package cases
 
-@Suppress("unused")
-class EmptyPrimaryConstructor constructor() {
+class EmptyPrimaryConstructor constructor()
 
-}
+class EmptyPublicPrimaryConstructor public constructor()
 
-@Suppress("unused")
-class EmptyPublicPrimaryConstructor public constructor() {
+class PrimaryConstructorWithParameter constructor(x: Int)
 
-}
+class PrimaryConstructorWithAnnotation @SafeVarargs constructor()
 
-@Suppress("unused")
-class PrimaryConstructorWithParameter constructor(x: Int) {
-
-}
-
-@Suppress("unused")
-class PrimaryConstructorWithAnnotation @SafeVarargs constructor() {
-
-}
-
-@Suppress("unused")
-class PrivatePrimaryConstructor private constructor() {
-
-}
+class PrivatePrimaryConstructor private constructor()

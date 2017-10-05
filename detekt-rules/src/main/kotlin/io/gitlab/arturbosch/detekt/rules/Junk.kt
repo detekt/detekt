@@ -7,7 +7,9 @@ import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtEnumEntry
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtModifierListOwner
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
@@ -24,9 +26,13 @@ fun KtModifierListOwner.isPublicNotOverridden() =
 fun KtModifierListOwner.isPublic(): Boolean {
 	return this.hasModifier(KtTokens.PUBLIC_KEYWORD)
 			|| !(this.hasModifier(KtTokens.PRIVATE_KEYWORD)
-				|| this.hasModifier(KtTokens.PROTECTED_KEYWORD)
-				|| this.hasModifier(KtTokens.INTERNAL_KEYWORD))
+			|| this.hasModifier(KtTokens.PROTECTED_KEYWORD)
+			|| this.hasModifier(KtTokens.INTERNAL_KEYWORD))
 }
+
+fun KtModifierListOwner.isInternal() = this.hasModifier(KtTokens.INTERNAL_KEYWORD)
+
+fun KtDeclaration.isEnumEntry() = this is KtEnumEntry
 
 fun KtCallExpression.isUsedForNesting(): Boolean = when (getCallNameExpression()?.text) {
 	"run", "let", "apply", "with", "use", "forEach" -> true

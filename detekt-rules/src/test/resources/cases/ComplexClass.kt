@@ -3,7 +3,7 @@ package cases
 /**
  * @author Artur Bosch
  */
-@Suppress("unused")
+@Suppress("unused", "ConstantConditionIf")
 fun complex() { //20
 	try {//5
 		while (true) {

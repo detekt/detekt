@@ -12,6 +12,7 @@ import io.gitlab.arturbosch.detekt.rules.style.ForbiddenImport
 import io.gitlab.arturbosch.detekt.rules.style.LoopWithTooManyJumpStatements
 import io.gitlab.arturbosch.detekt.rules.style.MagicNumber
 import io.gitlab.arturbosch.detekt.rules.style.ModifierOrder
+import io.gitlab.arturbosch.detekt.rules.style.NestedClassesVisibility
 import io.gitlab.arturbosch.detekt.rules.style.NewLineAtEndOfFile
 import io.gitlab.arturbosch.detekt.rules.style.OptionalAbstractKeyword
 import io.gitlab.arturbosch.detekt.rules.style.OptionalWhenBraces
@@ -68,7 +69,8 @@ class StyleGuideProvider : RuleSetProvider {
 				DataClassContainsFunctionsRule(config),
 				UseDataClass(config),
 				UnusedImports(config),
-				ExpressionBodySyntax(config)
+				ExpressionBodySyntax(config),
+				NestedClassesVisibility(config)
 		))
 	}
 }

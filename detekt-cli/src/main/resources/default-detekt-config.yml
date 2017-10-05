@@ -350,6 +350,8 @@ style:
     active: false
   UnusedImports:
     active: false
+  NestedClassesVisibility:
+    active: false
 
 comments:
   active: true
