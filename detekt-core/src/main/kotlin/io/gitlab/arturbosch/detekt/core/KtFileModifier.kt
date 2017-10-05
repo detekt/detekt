@@ -30,7 +30,4 @@ class KtFileModifier(private val project: Path) {
 		}
 		return StringUtilRt.convertLineSeparators(text, lineSeparator!!)
 	}
-
-	private fun KtFile.relativePath(): String? = getUserData(KtCompiler.RELATIVE_PATH)
-
 }

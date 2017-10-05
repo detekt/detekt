@@ -4,7 +4,5 @@ test-pattern:
     - '.*/test/.*'
     - '.*Test.kt'
   exclude-rule-sets:
-  # - 'comments'
   exclude-rules:
-  # - 'MagicNumber'
-  # - 'WildcardImport'
+    - 'FindName'

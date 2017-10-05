@@ -1,0 +1,10 @@
+test-pattern:
+  active: true
+  patterns:
+    - '.*/test/.*'
+    - '.*Test.kt'
+  exclude-rule-sets:
+    - 'Test'
+  exclude-rules:
+    - 'MagicNumber'
+    - 'WildcardImport'

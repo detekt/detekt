@@ -24,4 +24,6 @@ data class ProcessingSettings(val project: Path,
 	}
 
 	val pluginUrls = pluginPaths.map { it.toUri().toURL() }.toTypedArray()
+
+	fun loadTestPattern() = createTestPattern(config)
 }
