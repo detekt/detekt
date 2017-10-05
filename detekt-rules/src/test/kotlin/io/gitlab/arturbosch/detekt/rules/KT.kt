@@ -9,6 +9,7 @@ import java.nio.file.Paths
  */
 enum class Case(val file: String) {
 	CasesFolder("/cases"),
+	ConditionalPath("/cases/ConditionalPath.kt"),
 	DataClassContainsFunctions("/cases/DataClassContainsFunctions.kt"),
 	Default("/cases/Default.kt"),
 	Empty("/cases/Empty.kt"),
