@@ -7,7 +7,7 @@ import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
-class ThrowingExceptionsWithoutMessageOrCauseSpek : SubjectSpek<ThrowingExceptionsWithoutMessageOrCause>({
+class ThrowingExceptionsWithoutMessageOrCauseSpec : SubjectSpek<ThrowingExceptionsWithoutMessageOrCause>({
 	subject {
 		ThrowingExceptionsWithoutMessageOrCause(
 				TestConfig(mapOf(ThrowingExceptionsWithoutMessageOrCause.EXCEPTIONS to "IllegalArgumentException"))
