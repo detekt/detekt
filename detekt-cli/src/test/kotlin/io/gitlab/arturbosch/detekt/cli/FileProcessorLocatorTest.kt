@@ -18,15 +18,15 @@ class FileProcessorLocatorTest {
 	private val packageName = "io.gitlab.arturbosch.detekt.core.processors"
 
 	@Test
-	fun containsAllRuleProviders() {
+	fun containsAllProcessors() {
 		val path = Paths.get(resource(""))
 		val locator = FileProcessorLocator(ProcessingSettings(path))
-		val providers = locator.load()
+		val processors = locator.load()
 		val classes = getClasses()
 
 		assertThat(classes).isNotEmpty
 		classes
-				.map { c -> providers.firstOrNull { c == it.javaClass } }
+				.map { c -> processors.firstOrNull { c == it.javaClass } }
 				.forEach { assertThat(it).isNotNull() }
 	}
 
