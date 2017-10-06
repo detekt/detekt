@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.isOverridden
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -22,6 +23,8 @@ class MethodNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
 	private val objectIssue = issue.copy(
 			description = "A method is named after the class object. " +
 					"This might result in confusion. Please rename the method.")
+
+	private val ignoreOverriddenFunction = valueOrDefault(IGNORE_OVERRIDDEN_FUNCTION, true)
 
 	override fun visitClass(klass: KtClass) {
 		if (!klass.isInterface()) {
@@ -44,14 +47,21 @@ class MethodNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
 	}
 
 	private fun checkClassOrObjectFunctions(klassOrObject: KtClassOrObject, name: String?): Boolean {
-		return klassOrObject.getBody()?.children
-				?.filterIsInstance<KtNamedFunction>()
-				?.any { it.name == name } == true
+		val children = klassOrObject.getBody()?.children
+		var functions = children?.filterIsInstance<KtNamedFunction>()
+		if (ignoreOverriddenFunction) {
+			functions = functions?.filter { !it.isOverridden() }
+		}
+		return functions?.any { it.name == name } == true
 	}
 
 	private fun checkCompanionObjectFunctions(klass: KtClass): Boolean {
 		return klass.companionObjects.any {
 			checkClassOrObjectFunctions(it, klass.name)
 		}
+	}
+
+	companion object {
+		const val IGNORE_OVERRIDDEN_FUNCTION = "ignoreOverriddenFunction"
 	}
 }

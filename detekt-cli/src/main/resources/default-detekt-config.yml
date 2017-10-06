@@ -278,6 +278,7 @@ style:
     maxJumpCount: 1
   MethodNameEqualsClassName:
     active: false
+    ignoreOverriddenFunction: 'true'
   ModifierOrder:
     active: true
   MagicNumber:

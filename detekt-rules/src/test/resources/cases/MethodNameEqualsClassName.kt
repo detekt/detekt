@@ -46,3 +46,13 @@ interface MethodNameEqualsInterfaceName {
 		fun MethodNameEqualsNestedClassName() {}
 	}
 }
+
+abstract class BaseClassForMethodNameEqualsClassName {
+
+	abstract fun AbstractMethodNameEqualsClassName()
+}
+
+class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
+
+	override fun AbstractMethodNameEqualsClassName() {}
+}
