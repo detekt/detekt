@@ -11,6 +11,7 @@ import io.gitlab.arturbosch.detekt.rules.style.ForbiddenComment
 import io.gitlab.arturbosch.detekt.rules.style.ForbiddenImport
 import io.gitlab.arturbosch.detekt.rules.style.LoopWithTooManyJumpStatements
 import io.gitlab.arturbosch.detekt.rules.style.MagicNumber
+import io.gitlab.arturbosch.detekt.rules.style.MethodNameEqualsClassName
 import io.gitlab.arturbosch.detekt.rules.style.ModifierOrder
 import io.gitlab.arturbosch.detekt.rules.style.NestedClassesVisibility
 import io.gitlab.arturbosch.detekt.rules.style.NewLineAtEndOfFile
@@ -52,6 +53,7 @@ class StyleGuideProvider : RuleSetProvider {
 				ForbiddenImport(config),
 				PackageDeclarationStyle(config),
 				LoopWithTooManyJumpStatements(config),
+				MethodNameEqualsClassName(config),
 				NamingRules(config),
 				SafeCast(config),
 				UnnecessaryAbstractClass(config),
