@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
+import kotlin.system.measureTimeMillis
 
 interface Executable {
 	fun execute()
@@ -15,12 +16,12 @@ class Runner(private val arguments: Args) : Executable {
 	override fun execute() {
 		val settings = createSettings()
 
-		val start = System.currentTimeMillis()
-		val detektion = DetektFacade.instance(settings).run()
-		val end = System.currentTimeMillis() - start
+		val time = measureTimeMillis {
+			val detektion = DetektFacade.instance(settings).run()
+			OutputFacade(arguments, detektion, settings).run()
+		}
 
-		OutputFacade(arguments, detektion, settings).run()
-		println("\ndetekt run within $end ms")
+		println("\ndetekt finished in $time ms.")
 	}
 
 	private fun createSettings(): ProcessingSettings {
