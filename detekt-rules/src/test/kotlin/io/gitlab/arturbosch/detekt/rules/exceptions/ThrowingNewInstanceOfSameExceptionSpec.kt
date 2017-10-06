@@ -6,7 +6,7 @@ import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
-class ThrowingNewInstanceOfSameExceptionSpek : SubjectSpek<ThrowingNewInstanceOfSameException>({
+class ThrowingNewInstanceOfSameExceptionSpec : SubjectSpek<ThrowingNewInstanceOfSameException>({
 	subject { ThrowingNewInstanceOfSameException() }
 
 	given("a catch block which rethrows a new instance of the caught exception") {
