@@ -28,35 +28,32 @@ class MethodNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
 
 	override fun visitClass(klass: KtClass) {
 		if (!klass.isInterface()) {
-			checkClass(klass)
+			checkClassOrObjectFunctions(klass, klass.name)
+ 			checkCompanionObjectFunctions(klass)
 		}
 		super.visitClass(klass)
 	}
 
-	private fun checkClass(klass: KtClass) {
-		if (checkClassOrObjectFunctions(klass, klass.name) || checkCompanionObjectFunctions(klass)) {
-			report(CodeSmell(issue, Entity.from(klass)))
-		}
-	}
-
 	override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
-		if (!declaration.isCompanion() && checkClassOrObjectFunctions(declaration, declaration.name)) {
-			report(CodeSmell(objectIssue, Entity.from(declaration)))
+		if (!declaration.isCompanion()) {
+			checkClassOrObjectFunctions(declaration, declaration.name, objectIssue)
 		}
 		super.visitObjectDeclaration(declaration)
 	}
 
-	private fun checkClassOrObjectFunctions(klassOrObject: KtClassOrObject, name: String?): Boolean {
+	private fun checkClassOrObjectFunctions(klassOrObject: KtClassOrObject, name: String?, issue: Issue = this.issue) {
 		val children = klassOrObject.getBody()?.children
 		var functions = children?.filterIsInstance<KtNamedFunction>()
 		if (ignoreOverriddenFunction) {
 			functions = functions?.filter { !it.isOverridden() }
 		}
-		return functions?.any { it.name == name } == true
+		functions?.forEach {
+			if (it.name == name) report(CodeSmell(issue, Entity.from(it)))
+		}
 	}
 
-	private fun checkCompanionObjectFunctions(klass: KtClass): Boolean {
-		return klass.companionObjects.any {
+	private fun checkCompanionObjectFunctions(klass: KtClass) {
+		return klass.companionObjects.forEach {
 			checkClassOrObjectFunctions(it, klass.name)
 		}
 	}
