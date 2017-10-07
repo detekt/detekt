@@ -4,7 +4,7 @@ internal class ParentType {
 	public class NestedType { // report
 	}
 
-	enum class NestedEnum { One, Two } // report
+	enum class NestedEnum { One, Two }
 
 	private enum class NestedPrivateEnum { Three } // valid
 
@@ -15,11 +15,11 @@ internal class ParentType {
 	internal interface InternalTest {} // valid
 
 	public class NestedClassWithNestedCLass { //report
-		public class NestedClass { //report
+		public class NestedClass {
 
 		}
 
-		public interface NestedInterface{ //report
+		public interface NestedInterface{
 
 		}
 	}
