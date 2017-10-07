@@ -7,9 +7,9 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.bugs.iterator.getMethod
-import io.gitlab.arturbosch.detekt.rules.bugs.iterator.isImplementingIterator
-import io.gitlab.arturbosch.detekt.rules.bugs.iterator.throwsNoSuchElementExceptionThrown
+import io.gitlab.arturbosch.detekt.rules.bugs.util.getMethod
+import io.gitlab.arturbosch.detekt.rules.bugs.util.isImplementingIterator
+import io.gitlab.arturbosch.detekt.rules.bugs.util.throwsNoSuchElementExceptionThrown
 import org.jetbrains.kotlin.psi.KtClassOrObject
 
 class IteratorNotThrowingNoSuchElementException(config: Config = Config.empty) : Rule(config) {
