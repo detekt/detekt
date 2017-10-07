@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isInternal
 import io.gitlab.arturbosch.detekt.rules.isPublic
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtEnumEntry
 
 class NestedClassesVisibility(config: Config = Config.empty) : Rule(config) {
 
@@ -27,7 +28,7 @@ class NestedClassesVisibility(config: Config = Config.empty) : Rule(config) {
 	private fun checkDeclarations(klass: KtClass) {
 		klass.declarations
 				.filterIsInstance<KtClass>()
-				.filter { !it.isEnum() && it.isPublic() }
+				.filter { it.isPublic() && !it.isEnum() && it !is KtEnumEntry }
 				.forEach { report(CodeSmell(issue, Entity.from(it)))
 		}
 	}
