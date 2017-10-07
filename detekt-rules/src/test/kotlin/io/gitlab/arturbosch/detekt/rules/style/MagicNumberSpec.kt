@@ -442,5 +442,33 @@ class MagicNumberSpec : Spek({
 				assertThat(MagicNumber().lint(code("101_000"))).isEmpty()
 			}
 		}
+		given("in enum constructor argument") {
+			val ktFile = compileContentForTest("""
+				enum class Bag(id: Int) {
+					SMALL(1),
+					EXTRA_LARGE(5)
+				}
+			""")
+			it("should be reported by default") {
+				assertThat(MagicNumber().lint(ktFile)).hasSize(1)
+			}
+			it("numbers when 'ignoreEnums' is set to true"){
+				assertThat(MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_ENUMS to "true"))).lint(ktFile)).isEmpty()
+			}
+		}
+		given("in enum constructor as named argument"){
+			val ktFile = compileContentForTest("""
+				enum class Bag(id: Int) {
+					SMALL(id = 1),
+					EXTRA_LARGE(id = 5)
+				}
+			""")
+			it("should be reported by default") {
+				assertThat(MagicNumber().lint(ktFile)).hasSize(1)
+			}
+			it("numbers when 'ignoreEnums' is set to true"){
+				assertThat(MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_ENUMS to "true"))).lint(ktFile)).isEmpty()
+			}
+		}
 	}
 })
