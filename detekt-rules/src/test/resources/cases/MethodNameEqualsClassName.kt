@@ -15,7 +15,9 @@ class MethodNameEqualsClassName { // reports 1
 
 class MethodNameNotEqualsClassName {
 
-	fun f() {}
+	fun f() {
+		fun MethodNameNotEqualsClassName() {}
+	}
 
 	object MethodNameEqualsObjectName { // reports 1
 
