@@ -39,7 +39,7 @@ class RedundantModifierRule(config: Config = Config.empty) : Rule(config) {
 		}
 	}
 
-	private inner class FunctionVisitor : DetektVisitor(){
+	private inner class FunctionVisitor : DetektVisitor() {
 		override fun visitNamedFunction(function: KtNamedFunction) {
 			super.visitNamedFunction(function)
 			if (function.isPublicNotOverridden()) {
