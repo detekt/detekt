@@ -354,6 +354,8 @@ style:
     active: false
   NestedClassesVisibility:
     active: false
+  RedundantModifierRule:
+    active: false
 
 comments:
   active: true
