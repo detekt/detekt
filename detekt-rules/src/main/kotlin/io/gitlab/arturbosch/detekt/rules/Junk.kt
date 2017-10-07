@@ -32,6 +32,8 @@ fun KtModifierListOwner.isPublic(): Boolean {
 
 fun KtModifierListOwner.isInternal() = this.hasModifier(KtTokens.INTERNAL_KEYWORD)
 
+fun KtClass.isDataClass() = this.modifierList?.hasModifier(KtTokens.DATA_KEYWORD) == true
+
 fun KtDeclaration.isEnumEntry() = this is KtEnumEntry
 
 fun KtCallExpression.isUsedForNesting(): Boolean = when (getCallNameExpression()?.text) {

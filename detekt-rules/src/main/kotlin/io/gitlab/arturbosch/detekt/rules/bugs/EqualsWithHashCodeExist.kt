@@ -8,8 +8,9 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.bugs.util.isEqualsMethod
 import io.gitlab.arturbosch.detekt.rules.bugs.util.isHashCodeMethod
+import io.gitlab.arturbosch.detekt.rules.isDataClass
 import org.jetbrains.kotlin.com.intellij.psi.PsiFile
-import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import java.util.ArrayDeque
@@ -38,9 +39,10 @@ class EqualsWithHashCodeExist(config: Config = Config.empty) : Rule(config) {
 	}
 
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-		val isDataClass = classOrObject.modifierList?.hasModifier(KtTokens.DATA_KEYWORD) == true
-		if (isDataClass) return
-
+		val klass = classOrObject as? KtClass
+		if (klass != null && (klass.isInterface() || klass.isDataClass())) {
+			return
+		}
 		queue.push(ViolationHolder())
 		super.visitClassOrObject(classOrObject)
 		if (queue.pop().violation()) report(CodeSmell(issue, Entity.from(classOrObject)))
