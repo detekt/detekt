@@ -12,12 +12,13 @@ import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtModifierListOwner
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtProperty
 
 class RedundantVisibilityModifierRule(config: Config = Config.empty) : Rule(config) {
 	override val issue: Issue = Issue("RedundantVisibilityModifierRule", Severity.Style)
 
 	private val classVisitor = ClassVisitor()
-	private val functionVisitor = FunctionVisitor()
+	private val childrenVisitor = ChildrenVisitor()
 
 	private fun KtModifierListOwner.isExplicitlyPublicNotOverridden() = isExplicitlyPublic()
 			&& !this.hasModifier(KtTokens.OVERRIDE_KEYWORD)
@@ -28,7 +29,7 @@ class RedundantVisibilityModifierRule(config: Config = Config.empty) : Rule(conf
 		super.visitKtFile(file)
 		file.declarations.forEach {
 			it.accept(classVisitor)
-			it.acceptChildren(functionVisitor)
+			it.acceptChildren(childrenVisitor)
 		}
 	}
 
@@ -44,13 +45,23 @@ class RedundantVisibilityModifierRule(config: Config = Config.empty) : Rule(conf
 		}
 	}
 
-	private inner class FunctionVisitor : DetektVisitor() {
+	private inner class ChildrenVisitor : DetektVisitor() {
 		override fun visitNamedFunction(function: KtNamedFunction) {
 			super.visitNamedFunction(function)
 			if (function.isExplicitlyPublicNotOverridden()) {
 				report(CodeSmell(issue.copy(description = "${function.name} is explicitly marked as public. " +
 						"Functions are public by default so this modifier is redundant."),
 						Entity.from(function))
+				)
+			}
+		}
+
+		override fun visitProperty(property: KtProperty) {
+			super.visitProperty(property)
+			if (property.isExplicitlyPublicNotOverridden()) {
+				report(CodeSmell(issue.copy(description = "${property.name} is explicitly marked as public. " +
+						"Properties are public by default so this modifier is redundant."),
+						Entity.from(property))
 				)
 			}
 		}

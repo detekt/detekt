@@ -6,10 +6,10 @@ import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
-class RedundantModifierRuleSpec : SubjectSpek<RedundantVisibilityModifierRule>({
+class RedundantVisibilityModifierRuleSpec : SubjectSpek<RedundantVisibilityModifierRule>({
 	subject { RedundantVisibilityModifierRule() }
 	describe("check all cases") {
-		it("check overridden function of abstract") {
+		it("check overridden function of abstract class w/ public modifier") {
 			val code = """
 				abstract class A {
 					abstract protected fun A()
@@ -17,6 +17,19 @@ class RedundantModifierRuleSpec : SubjectSpek<RedundantVisibilityModifierRule>({
 
 				class Test : A() {
 					override public fun A() {}
+				}
+			"""
+			assertThat(subject.lint(code)).hasSize(0)
+		}
+
+		it("check overridden function of abstract class w/o public modifier") {
+			val code = """
+				abstract class A {
+					abstract protected fun A()
+				}
+
+				class Test : A() {
+					override fun A() {}
 				}
 			"""
 			assertThat(subject.lint(code)).hasSize(0)
@@ -34,7 +47,7 @@ class RedundantModifierRuleSpec : SubjectSpek<RedundantVisibilityModifierRule>({
 			"""
 			assertThat(subject.lint(code)).hasSize(0)
 		}
-
+		
 		it("check public function") {
 			val code = """
 				class Test{
@@ -70,7 +83,50 @@ class RedundantModifierRuleSpec : SubjectSpek<RedundantVisibilityModifierRule>({
 			"""
 			assertThat(subject.lint(code)).hasSize(2)
 		}
+
+		it("check field w/ public modifier") {
+			val code = """
+				class Test{
+					public val str : String = "test"
+				}
+			"""
+			assertThat(subject.lint(code)).hasSize(1)
+		}
+
+		it("check field w/o public modifier") {
+			val code = """
+				class Test{
+					val str : String = "test"
+				}
+			"""
+			assertThat(subject.lint(code)).hasSize(0)
+		}
+
+		it("check overridden field w/o public modifier ") {
+			val code = """
+				abstract class A {
+					abstract val test: String
+				}
+
+				class B : A() {
+					override val test: String = "valid"
+				}
+			"""
+			assertThat(subject.lint(code)).hasSize(0)
+		}
+
+		it("check overridden field w/ public modifier ") {
+			val code = """
+				abstract class A {
+					abstract val test: String
+				}
+
+				class B : A() {
+					override public val test: String = "valid"
+				}
+			"""
+			assertThat(subject.lint(code)).hasSize(0)
+		}
 	}
 })
-
 
