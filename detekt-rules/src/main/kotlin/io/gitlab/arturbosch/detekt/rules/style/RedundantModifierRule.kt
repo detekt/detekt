@@ -19,8 +19,10 @@ class RedundantModifierRule(config: Config = Config.empty) : Rule(config) {
 	private val classVisitor = ClassVisitor()
 	private val functionVisitor = FunctionVisitor()
 
-	private fun KtModifierListOwner.isPublicNotOverridden() = isPublic() && !this.hasModifier(KtTokens.OVERRIDE_KEYWORD)
-	private fun KtModifierListOwner.isPublic() = this.hasModifier(KtTokens.PUBLIC_KEYWORD)
+	private fun KtModifierListOwner.isExplicitlyPublicNotOverridden() = isExplicitlyPublic()
+			&& !this.hasModifier(KtTokens.OVERRIDE_KEYWORD)
+
+	private fun KtModifierListOwner.isExplicitlyPublic() = this.hasModifier(KtTokens.PUBLIC_KEYWORD)
 
 	override fun visitKtFile(file: KtFile) {
 		super.visitKtFile(file)
@@ -33,7 +35,7 @@ class RedundantModifierRule(config: Config = Config.empty) : Rule(config) {
 	private inner class ClassVisitor : DetektVisitor() {
 		override fun visitClass(klass: KtClass) {
 			super.visitClass(klass)
-			if (klass.isPublic()) {
+			if (klass.isExplicitlyPublic()) {
 				report(CodeSmell(issue, Entity.from(klass)))
 			}
 		}
@@ -42,7 +44,7 @@ class RedundantModifierRule(config: Config = Config.empty) : Rule(config) {
 	private inner class FunctionVisitor : DetektVisitor() {
 		override fun visitNamedFunction(function: KtNamedFunction) {
 			super.visitNamedFunction(function)
-			if (function.isPublicNotOverridden()) {
+			if (function.isExplicitlyPublicNotOverridden()) {
 				report(CodeSmell(issue, Entity.from(function)))
 			}
 		}
