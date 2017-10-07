@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 class DataClassContainsFunctionsRule(config: Config = Config.empty) : Rule(config) {
 	override val issue: Issue = Issue("DataClassContainsFunctions",
 			Severity.Style,
-			"Data classes should mainly be used to store data and should not have any extra functions." +
+			"Data classes should mainly be used to store data and should not have any extra functions. " +
 					"(Compiler will automatically generate equals, toString and hashCode functions)")
 
 	private val visitor = FunctionsVisitor(this)
