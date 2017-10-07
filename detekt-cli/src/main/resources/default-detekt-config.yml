@@ -285,6 +285,7 @@ style:
     ignorePropertyDeclaration: false
     ignoreAnnotation: false
     ignoreNamedArgument: true
+    ignoreEnums: false
   WildcardImport:
     active: true
   SafeCast:

@@ -13,6 +13,7 @@ import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
+import org.jetbrains.kotlin.psi.KtEnumEntry
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
 import org.jetbrains.kotlin.psi.KtPrefixExpression
@@ -39,6 +40,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 	private val ignoreAnnotation = valueOrDefault(IGNORE_ANNOTATION, false)
 	private val ignorePropertyDeclaration = valueOrDefault(IGNORE_PROPERTY_DECLARATION, false)
 	private val ignoreNamedArgument = valueOrDefault(IGNORE_NAMED_ARGUMENT, false)
+	private val ignoreEnums = valueOrDefault(IGNORE_ENUMS, false)
 
 	override fun visitConstantExpression(expression: KtConstantExpression) {
 		val parent = expression.parent
@@ -63,6 +65,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 		ignorePropertyDeclaration && parent is KtProperty && !parent.isLocal -> true
 		ignoreAnnotation && expression.isPartOf(KtAnnotationEntry::class) -> true
 		ignoreHashCodeFunction && expression.isPartOfHashCode() -> true
+		ignoreEnums && expression.isPartOf(KtEnumEntry::class) -> true
 		parent.isConstantProperty() -> true
 		ignoreNamedArgument
 				&& expression.isPartOf(KtValueArgument::class)
@@ -118,6 +121,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 		const val IGNORE_PROPERTY_DECLARATION = "ignorePropertyDeclaration"
 		const val IGNORE_ANNOTATION = "ignoreAnnotation"
 		const val IGNORE_NAMED_ARGUMENT = "ignoreNamedArgument"
+		const val IGNORE_ENUMS = "ignoreEnums"
 
 		private const val HEX_RADIX = 16
 		private const val BINARY_RADIX = 2
