@@ -4,7 +4,7 @@ package cases
 
 class MethodNameEqualsClassName {
 
-	fun MethodNameEqualsClassName() {} // reports 1
+	fun methodNameEqualsClassName() {} // reports 1
 
 	class NestedNameEqualsTopClassName {
 

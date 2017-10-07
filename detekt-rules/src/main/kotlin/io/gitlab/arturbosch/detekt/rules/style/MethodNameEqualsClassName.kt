@@ -48,12 +48,14 @@ class MethodNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
 			functions = functions?.filter { !it.isOverridden() }
 		}
 		functions?.forEach {
-			if (it.name == name) report(CodeSmell(issue, Entity.from(it)))
+			if (it.name?.equals(name, ignoreCase = true) == true) {
+				report(CodeSmell(issue, Entity.from(it)))
+			}
 		}
 	}
 
 	private fun checkCompanionObjectFunctions(klass: KtClass) {
-		return klass.companionObjects.forEach {
+		klass.companionObjects.forEach {
 			checkClassOrObjectFunctions(it, klass.name)
 		}
 	}
