@@ -20,3 +20,15 @@ internal class NestedClassesVisibility {
 		public class NestedClass
 	}
 }
+
+private class PrivateClassWithNestedElements {
+
+	class Inner
+}
+
+internal enum class NestedEnumsVisibility {
+
+	A, B;
+
+	class Inner // report
+}
