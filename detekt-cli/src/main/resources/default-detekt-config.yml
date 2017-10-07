@@ -357,7 +357,7 @@ style:
 
 comments:
   active: true
-  CommentOverPrivateMethod:
+  CommentOverPrivateFunction:
     active: true
   CommentOverPrivateProperty:
     active: true
