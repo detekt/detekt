@@ -13,8 +13,8 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtModifierListOwner
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
-class RedundantModifierRule(config: Config = Config.empty) : Rule(config) {
-	override val issue: Issue = Issue("RedundantModifierRule", Severity.Style, "TODO")
+class RedundantVisibilityModifierRule(config: Config = Config.empty) : Rule(config) {
+	override val issue: Issue = Issue("RedundantVisibilityModifierRule", Severity.Style)
 
 	private val classVisitor = ClassVisitor()
 	private val functionVisitor = FunctionVisitor()
@@ -36,7 +36,10 @@ class RedundantModifierRule(config: Config = Config.empty) : Rule(config) {
 		override fun visitClass(klass: KtClass) {
 			super.visitClass(klass)
 			if (klass.isExplicitlyPublic()) {
-				report(CodeSmell(issue, Entity.from(klass)))
+				report(CodeSmell(issue.copy(description = "${klass.name} is explicitly marked as public. " +
+						"Public is the default visibility for classes. The public modifier is redundant."),
+						Entity.from(klass))
+				)
 			}
 		}
 	}
@@ -45,7 +48,10 @@ class RedundantModifierRule(config: Config = Config.empty) : Rule(config) {
 		override fun visitNamedFunction(function: KtNamedFunction) {
 			super.visitNamedFunction(function)
 			if (function.isExplicitlyPublicNotOverridden()) {
-				report(CodeSmell(issue, Entity.from(function)))
+				report(CodeSmell(issue.copy(description = "${function.name} is explicitly marked as public. " +
+						"Functions are public by default so this modifier is redundant."),
+						Entity.from(function))
+				)
 			}
 		}
 	}

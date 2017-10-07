@@ -6,8 +6,8 @@ import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
-class RedundantModifierRuleSpec : SubjectSpek<RedundantModifierRule>({
-	subject { RedundantModifierRule() }
+class RedundantModifierRuleSpec : SubjectSpek<RedundantVisibilityModifierRule>({
+	subject { RedundantVisibilityModifierRule() }
 	describe("check all cases") {
 		it("check overridden function of abstract") {
 			val code = """
