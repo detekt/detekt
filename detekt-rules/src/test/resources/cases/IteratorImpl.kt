@@ -49,7 +49,16 @@ class IteratorImplContainer {
 	}
 }
 
+// violation NotThrowingNoSuchElementException
+interface InterfaceIterator : Iterator<String> {
+
+	override fun next(): String {
+		return ""
+	}
+}
+
 abstract class AbstractIterator1 : Iterator<String>
+
 
 // violation NotThrowingNoSuchElementException, HasNextCallsNextMethod
 abstract class AbstractIterator2 : Iterator<String> {
