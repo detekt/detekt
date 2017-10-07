@@ -2,9 +2,9 @@
 
 package cases
 
-class MethodNameEqualsClassName { // reports 1
+class MethodNameEqualsClassName {
 
-	fun MethodNameEqualsClassName() {}
+	fun MethodNameEqualsClassName() {} // reports 1
 
 	class NestedNameEqualsTopClassName {
 
@@ -19,16 +19,16 @@ class MethodNameNotEqualsClassName {
 		fun MethodNameNotEqualsClassName() {}
 	}
 
-	object MethodNameEqualsObjectName { // reports 1
+	object MethodNameEqualsObjectName {
 
-		fun MethodNameEqualsObjectName() {}
+		fun MethodNameEqualsObjectName() {} // reports 1
 	}
 }
 
-class StaticMethodNameEqualsClassName { // reports 1
+class StaticMethodNameEqualsClassName {
 
 	companion object {
-		fun StaticMethodNameEqualsClassName() {}
+		fun StaticMethodNameEqualsClassName() {} // reports 1
 	}
 }
 
@@ -43,9 +43,9 @@ interface MethodNameEqualsInterfaceName {
 
 	fun MethodNameEqualsInterfaceName() {}
 
-	class MethodNameEqualsNestedClassName { // reports 1
+	class MethodNameEqualsNestedClassName {
 
-		fun MethodNameEqualsNestedClassName() {}
+		fun MethodNameEqualsNestedClassName() {} // reports 1
 	}
 }
 
@@ -56,5 +56,6 @@ abstract class BaseClassForMethodNameEqualsClassName {
 
 class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
 
+	// reports if overridden functions are not ignored
 	override fun AbstractMethodNameEqualsClassName() {}
 }
