@@ -52,6 +52,24 @@ class RedundantModifierRuleSpec : SubjectSpek<RedundantModifierRule>({
 			"""
 			assertThat(subject.lint(code)).hasSize(0)
 		}
+
+		it("check public class") {
+			val code = """
+				public class Test(){
+					fun test(){}
+				}
+			"""
+			assertThat(subject.lint(code)).hasSize(1)
+		}
+
+		it("check interface w/ public modifier") {
+			val code = """
+				public interface Test{
+					public fun test()
+				}
+			"""
+			assertThat(subject.lint(code)).hasSize(2)
+		}
 	}
 })
 
