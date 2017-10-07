@@ -1,26 +1,22 @@
+@file:Suppress("unused", "RedundantVisibilityModifier")
+
 package cases
 
-internal class ParentType {
-	public class NestedType { // report
-	}
+internal class NestedClassesVisibility {
 
+	public class NestedPublicClass1 // report
+	class NestedPublicClass2 // report
+	interface NestedPublicInterface // report
+
+	// Enums are excluded
 	enum class NestedEnum { One, Two }
 
-	private enum class NestedPrivateEnum { Three } // valid
+	private interface PrivateTest
+	internal interface InternalTest
 
-	interface Test {} // report
+	public class NestedClassWithNestedCLass { // report
 
-	private interface PrivateTest {} // valid
-
-	internal interface InternalTest {} // valid
-
-	public class NestedClassWithNestedCLass { //report
-		public class NestedClass {
-
-		}
-
-		public interface NestedInterface{
-
-		}
+		// classes with a nesting depth higher than 1 are excluded
+		public class NestedClass
 	}
 }
