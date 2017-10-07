@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.bugs.util.hasCorrectEqualsParameter
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
@@ -23,11 +24,8 @@ class WrongEqualsTypeParameter(config: Config = Config.empty) : Rule(config) {
 	}
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (function.name == "equals" && hasIncorrectParameterType(function)) {
+		if (function.name == "equals" && !function.hasCorrectEqualsParameter()) {
 			report(CodeSmell(issue, Entity.from(function)))
 		}
 	}
-
-	private fun hasIncorrectParameterType(function: KtNamedFunction)
-			= function.valueParameters.firstOrNull()?.typeReference?.text != "Any?"
 }
