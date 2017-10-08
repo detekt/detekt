@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.core.FileProcessorLocator
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.test.resource
+import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.reflections.Reflections
@@ -22,15 +23,15 @@ class FileProcessorLocatorTest {
 		val path = Paths.get(resource(""))
 		val locator = FileProcessorLocator(ProcessingSettings(path))
 		val processors = locator.load()
-		val classes = getClasses()
+		val processorClasses = getProcessorClasses()
 
-		assertThat(classes).isNotEmpty
-		classes
-				.map { c -> processors.firstOrNull { c == it.javaClass } }
-				.forEach { assertThat(it).isNotNull() }
+		assertThat(processorClasses).isNotEmpty
+		processorClasses
+				.filter { clazz -> processors.firstOrNull { clazz == it.javaClass } == null }
+				.forEach { Assertions.fail("$it processor is not loaded by the FileProcessorLocator") }
 	}
 
-	private fun getClasses(): List<Class<out FileProcessListener>> {
+	private fun getProcessorClasses(): List<Class<out FileProcessListener>> {
 		return Reflections(packageName)
 				.getSubTypesOf(FileProcessListener::class.java)
 				.filter { !Modifier.isAbstract(it.modifiers) }
