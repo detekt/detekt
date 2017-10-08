@@ -15,20 +15,26 @@ class DetektYamlConfigTest {
 	private val config = loadConfig()
 
 	@Test
-	fun documentationSection() {
+	fun complexitySection() {
 		ConfigAssert(
-				"comments",
-				"io.gitlab.arturbosch.detekt.rules.documentation",
-				Rule::class.java
+				"complexity",
+				"io.gitlab.arturbosch.detekt.rules.complexity"
 		).assert()
 	}
 
 	@Test
-	fun complexitySection() {
+	fun documentationSection() {
 		ConfigAssert(
-				"complexity",
-				"io.gitlab.arturbosch.detekt.rules.complexity",
-				Rule::class.java
+				"comments",
+				"io.gitlab.arturbosch.detekt.rules.documentation"
+		).assert()
+	}
+
+	@Test
+	fun emptyBlocksSection() {
+		ConfigAssert(
+				"empty-blocks",
+				"io.gitlab.arturbosch.detekt.rules.empty"
 		).assert()
 	}
 
@@ -36,8 +42,7 @@ class DetektYamlConfigTest {
 	fun exceptionsSection() {
 		ConfigAssert(
 				"exceptions",
-				"io.gitlab.arturbosch.detekt.rules.exceptions",
-				Rule::class.java
+				"io.gitlab.arturbosch.detekt.rules.exceptions"
 		).assert()
 	}
 
@@ -45,8 +50,7 @@ class DetektYamlConfigTest {
 	fun performanceSection() {
 		ConfigAssert(
 				"performance",
-				"io.gitlab.arturbosch.detekt.rules.performance",
-				Rule::class.java
+				"io.gitlab.arturbosch.detekt.rules.performance"
 		).assert()
 	}
 
@@ -54,8 +58,7 @@ class DetektYamlConfigTest {
 	fun potentialBugsSection() {
 		ConfigAssert(
 				"potential-bugs",
-				"io.gitlab.arturbosch.detekt.rules.bugs",
-				Rule::class.java
+				"io.gitlab.arturbosch.detekt.rules.bugs"
 		).assert()
 	}
 
@@ -63,8 +66,7 @@ class DetektYamlConfigTest {
 	fun styleSection() {
 		ConfigAssert(
 				"style",
-				"io.gitlab.arturbosch.detekt.rules.style",
-				Rule::class.java
+				"io.gitlab.arturbosch.detekt.rules.style"
 		).assert()
 	}
 
@@ -75,10 +77,9 @@ class DetektYamlConfigTest {
 		return YamlConfig.loadResource(url)
 	}
 
-	private inner class ConfigAssert<T>
+	private inner class ConfigAssert
 				(private val name: String,
-				 private val packageName: String,
-				 private val clazz: Class<T>) {
+				 private val packageName: String) {
 
 		fun assert() {
 			val yamlDeclarations = getRuleConfig().properties.filter { it.key != "active" }
@@ -92,9 +93,9 @@ class DetektYamlConfigTest {
 
 		private fun getRuleConfig() = config.subConfig(name) as YamlConfig
 
-		private fun getClasses(): List<Class<out T>> {
+		private fun getClasses(): List<Class<out Rule>> {
 			return Reflections(packageName)
-					.getSubTypesOf(clazz)
+					.getSubTypesOf(Rule::class.java)
 					.filter { !Modifier.isAbstract(it.modifiers) }
 		}
 	}
