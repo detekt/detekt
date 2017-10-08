@@ -18,6 +18,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
 import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 import java.util.Locale
@@ -45,7 +46,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 	override fun visitConstantExpression(expression: KtConstantExpression) {
 		val parent = expression.parent
 
-		if (isIgnoredByConfig(parent, expression)) {
+		if (isIgnoredByConfig(parent, expression) || expression.isPartOfFunctionReturnConstant()) {
 			return
 		}
 
@@ -73,15 +74,15 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 		else -> false
 	}
 
+	private fun KtConstantExpression.isPartOfFunctionReturnConstant() =
+			parent is KtNamedFunction || (parent is KtReturnExpression && parent.parent.children.size == 1)
+
+
 	private fun KtConstantExpression.isPartOfHashCode(): Boolean {
 		val containingFunction = getNonStrictParentOfType(KtNamedFunction::class.java)
-		val name = containingFunction?.name
 		val returnType = containingFunction?.typeReference?.node?.text
-		return nameIsHashCode(name) && returnTypeIsInt(returnType)
+		return containingFunction?.name == "hashCode" && returnType == "Int"
 	}
-
-	private fun returnTypeIsInt(returnType: String?) = returnType != null && returnType == "Int"
-	private fun nameIsHashCode(name: String?) = name != null && name == "hashCode"
 
 	private fun PsiElement?.isConstantProperty(): Boolean =
 			this is KtProperty && this.hasModifier(KtTokens.CONST_KEYWORD)

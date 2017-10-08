@@ -473,4 +473,21 @@ class MagicNumberSpec : Spek({
 			}
 		}
 	}
+
+	given("functions with and without braces which return values") {
+
+		it("does not report functions that always returns a constant value") {
+			val code = """
+				fun x() = 9
+				fun y() { return 9 }"""
+			assertThat(MagicNumber().lint(code)).isEmpty()
+		}
+
+		it("reports functions that does not return a constant value") {
+			val code = """
+				fun x() = 9 + 1
+				fun y(): Int { return 9 + 1 }"""
+			assertThat(MagicNumber().lint(code)).hasSize(2)
+		}
+	}
 })
