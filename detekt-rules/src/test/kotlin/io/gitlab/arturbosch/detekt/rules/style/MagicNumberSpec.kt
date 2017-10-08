@@ -453,7 +453,8 @@ class MagicNumberSpec : Spek({
 				assertThat(MagicNumber().lint(ktFile)).hasSize(1)
 			}
 			it("numbers when 'ignoreEnums' is set to true"){
-				assertThat(MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_ENUMS to "true"))).lint(ktFile)).isEmpty()
+				val rule = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_ENUMS to "true")))
+				assertThat(rule.lint(ktFile)).isEmpty()
 			}
 		}
 		given("in enum constructor as named argument"){
@@ -467,7 +468,8 @@ class MagicNumberSpec : Spek({
 				assertThat(MagicNumber().lint(ktFile)).hasSize(1)
 			}
 			it("numbers when 'ignoreEnums' is set to true"){
-				assertThat(MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_ENUMS to "true"))).lint(ktFile)).isEmpty()
+				val rule = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_ENUMS to "true")))
+				assertThat(rule.lint(ktFile)).isEmpty()
 			}
 		}
 	}
