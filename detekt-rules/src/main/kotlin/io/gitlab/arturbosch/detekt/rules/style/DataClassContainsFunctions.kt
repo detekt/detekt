@@ -12,7 +12,7 @@ import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
-class DataClassContainsFunctionsRule(config: Config = Config.empty) : Rule(config) {
+class DataClassContainsFunctions(config: Config = Config.empty) : Rule(config) {
 	override val issue: Issue = Issue("DataClassContainsFunctions",
 			Severity.Style,
 			"Data classes should mainly be used to store data and should not have any extra functions." +
@@ -45,7 +45,7 @@ class DataClassContainsFunctionsRule(config: Config = Config.empty) : Rule(confi
 		return excludes.startWith(function.name)
 	}
 
-	private class FunctionsVisitor(val rule: DataClassContainsFunctionsRule) : DetektVisitor() {
+	private class FunctionsVisitor(val rule: DataClassContainsFunctions) : DetektVisitor() {
 		override fun visitNamedFunction(function: KtNamedFunction) {
 			rule.handleNamedFunction(function)
 		}

@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.providers
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.rules.style.DataClassContainsFunctionsRule
+import io.gitlab.arturbosch.detekt.rules.style.DataClassContainsFunctions
 import io.gitlab.arturbosch.detekt.rules.style.EqualsNullCall
 import io.gitlab.arturbosch.detekt.rules.style.ExpressionBodySyntax
 import io.gitlab.arturbosch.detekt.rules.style.FileParsingRule
@@ -66,7 +66,7 @@ class StyleGuideProvider : RuleSetProvider {
 				SerialVersionUIDInSerializableClass(config),
 				MagicNumber(config),
 				ModifierOrder(config),
-				DataClassContainsFunctionsRule(config),
+				DataClassContainsFunctions(config),
 				UseDataClass(config),
 				UnusedImports(config),
 				ExpressionBodySyntax(config),
