@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.rules.style.ExpressionBodySyntax
 import io.gitlab.arturbosch.detekt.rules.style.FileParsingRule
 import io.gitlab.arturbosch.detekt.rules.style.ForbiddenComment
 import io.gitlab.arturbosch.detekt.rules.style.ForbiddenImport
+import io.gitlab.arturbosch.detekt.rules.style.FunctionOnlyReturningConstant
 import io.gitlab.arturbosch.detekt.rules.style.LoopWithTooManyJumpStatements
 import io.gitlab.arturbosch.detekt.rules.style.MagicNumber
 import io.gitlab.arturbosch.detekt.rules.style.ModifierOrder
@@ -50,6 +51,7 @@ class StyleGuideProvider : RuleSetProvider {
 				EqualsNullCall(config),
 				ForbiddenComment(config),
 				ForbiddenImport(config),
+				FunctionOnlyReturningConstant(config),
 				PackageDeclarationStyle(config),
 				LoopWithTooManyJumpStatements(config),
 				NamingRules(config),
