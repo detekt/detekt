@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.cli
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.YamlConfig
+import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.reflections.Reflections
@@ -10,7 +11,7 @@ import java.io.File
 import java.lang.reflect.Modifier
 import java.nio.file.Paths
 
-class DetektYamlConfigTest {
+class DetektYmlConfigTest {
 
 	private val config = loadConfig()
 
@@ -72,7 +73,7 @@ class DetektYamlConfigTest {
 
 	private fun loadConfig(): Config {
 		val workingDirectory = Paths.get(".").toAbsolutePath().normalize().toString()
-		val file = File(workingDirectory + "/src/main/resources/default-detekt-config.yml")
+		val file = File(workingDirectory + "/src/main/resources/$CONFIG_FILE")
 		val url = file.toURI().toURL()
 		return YamlConfig.loadResource(url)
 	}
@@ -82,21 +83,27 @@ class DetektYamlConfigTest {
 				 private val packageName: String) {
 
 		fun assert() {
-			val yamlDeclarations = getRuleConfig().properties.filter { it.key != "active" }
-			assertThat(yamlDeclarations).isNotEmpty
-			val classes = getClasses()
-			assertThat(classes).isNotEmpty
+			val ymlDeclarations = getYmlRuleConfig().properties.filter { it.key != "active" }
+			assertThat(ymlDeclarations).isNotEmpty
+			val ruleClasses = getRuleClasses()
+			assertThat(ruleClasses).isNotEmpty
 
-			classes.map { c -> yamlDeclarations.keys.singleOrNull { it == c.simpleName } }
-					.forEach { assertThat(it).isNotNull() }
+			for (ruleClass in ruleClasses) {
+				val ymlDeclaration = ymlDeclarations.filter { it.key == ruleClass.simpleName }
+				if (ymlDeclaration.keys.size != 1) {
+					Assertions.fail("${ruleClass.simpleName} rule is not correctly defined in $CONFIG_FILE")
+				}
+			}
 		}
 
-		private fun getRuleConfig() = config.subConfig(name) as YamlConfig
+		private fun getYmlRuleConfig() = config.subConfig(name) as YamlConfig
 
-		private fun getClasses(): List<Class<out Rule>> {
+		private fun getRuleClasses(): List<Class<out Rule>> {
 			return Reflections(packageName)
 					.getSubTypesOf(Rule::class.java)
 					.filter { !Modifier.isAbstract(it.modifiers) }
 		}
 	}
 }
+
+private const val CONFIG_FILE = "default-detekt-config.yml"
