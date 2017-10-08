@@ -313,6 +313,8 @@ style:
   FunctionMaxLength:
     active: false
     maximumFunctionNameLength: 30
+  FunctionOnlyReturningConstant:
+    active: false
   FunctionMinLength:
     active: false
     minimumFunctionNameLength: 3

@@ -21,6 +21,7 @@ enum class Case(val file: String) {
 	Exceptions("/cases/Exceptions.kt"),
 	ExceptionRaisedInMethods("/cases/ExceptionRaisedInMethods.kt"),
 	FinalClass("/cases/FinalClass.kt"),
+	FunctionReturningConstant("/cases/FunctionReturningConstant.kt"),
 	InvalidLoopCondition("/cases/InvalidLoopCondition.kt"),
 	IteratorImpl("/cases/IteratorImpl.kt"),
 	LabeledExpression("/cases/LabeledExpression.kt"),
