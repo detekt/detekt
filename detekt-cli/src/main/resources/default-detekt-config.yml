@@ -285,6 +285,7 @@ style:
     ignorePropertyDeclaration: false
     ignoreAnnotation: false
     ignoreNamedArgument: true
+    ignoreEnums: false
   WildcardImport:
     active: true
   SafeCast:
@@ -357,7 +358,7 @@ style:
 
 comments:
   active: true
-  CommentOverPrivateMethod:
+  CommentOverPrivateFunction:
     active: true
   CommentOverPrivateProperty:
     active: true

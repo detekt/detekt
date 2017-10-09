@@ -12,6 +12,7 @@ import io.gitlab.arturbosch.detekt.rules.providers.ExceptionsProvider
 import io.gitlab.arturbosch.detekt.rules.providers.PerformanceProvider
 import io.gitlab.arturbosch.detekt.rules.providers.PotentialBugProvider
 import io.gitlab.arturbosch.detekt.rules.providers.StyleGuideProvider
+import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.reflections.Reflections
@@ -84,25 +85,26 @@ class RuleProviderTest {
 	}
 
 	class RuleProviderAssert<T>
-					(private val provider: RuleSetProvider,
-					 private val packageName: String,
-					 private val clazz: Class<T>) {
+	(private val provider: RuleSetProvider,
+	 private val packageName: String,
+	 private val clazz: Class<T>) {
 
 		fun assert() {
 			val rules = getRules(provider)
 			assertThat(rules).isNotEmpty
-			val classes = getClasses()
-			assertThat(classes).isNotEmpty
-			classes
-					.map { c -> rules.singleOrNull { it.javaClass == c } }
-					.forEach { assertThat(it).isNotNull() }
+			val ruleClasses = getRuleClasses()
+			assertThat(ruleClasses).isNotEmpty
+
+			ruleClasses
+					.filter { ruleClass -> rules.singleOrNull { it.javaClass == ruleClass } == null }
+					.forEach { Assertions.fail("${it.simpleName} rule is not defined in the rules provider") }
 		}
 
 		private fun getRules(provider: RuleSetProvider): List<BaseRule> {
 			return provider.buildRuleset(Config.empty)!!.rules
 		}
 
-		private fun getClasses(): List<Class<out T>> {
+		private fun getRuleClasses(): List<Class<out T>> {
 			return Reflections(packageName)
 					.getSubTypesOf(clazz)
 					.filter { !Modifier.isAbstract(it.modifiers) && it.superclass.simpleName != "SubRule" }

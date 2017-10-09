@@ -11,6 +11,7 @@ import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtEnumEntry
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtModifierListOwner
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 
@@ -21,7 +22,9 @@ import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 fun KtExpression?.asBlockExpression(): KtBlockExpression? = this as? KtBlockExpression
 
 fun KtModifierListOwner.isPublicNotOverridden() =
-		isPublic() && !this.hasModifier(KtTokens.OVERRIDE_KEYWORD)
+		isPublic() && !isOverridden()
+
+fun KtModifierListOwner.isOverridden() = this.hasModifier(KtTokens.OVERRIDE_KEYWORD)
 
 fun KtModifierListOwner.isPublic(): Boolean {
 	return this.hasModifier(KtTokens.PUBLIC_KEYWORD)
@@ -31,6 +34,8 @@ fun KtModifierListOwner.isPublic(): Boolean {
 }
 
 fun KtModifierListOwner.isInternal() = this.hasModifier(KtTokens.INTERNAL_KEYWORD)
+
+fun KtClass.isDataClass() = this.modifierList?.hasModifier(KtTokens.DATA_KEYWORD) == true
 
 fun KtCallExpression.isUsedForNesting(): Boolean = when (getCallNameExpression()?.text) {
 	"run", "let", "apply", "with", "use", "forEach" -> true

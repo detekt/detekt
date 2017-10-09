@@ -421,25 +421,55 @@ class MagicNumberSpec : Spek({
 		}
 
 		given("in function invocation") {
-			fun code(integer: String) = compileContentForTest("""
+			fun code(number: Number) = compileContentForTest("""
 				fun tested(someVal: Int, other: String = "default")
 
-				tested(someVal = $integer)
+				tested(someVal = $number)
 			""")
 			it("should ignore int by default") {
-				assertThat(MagicNumber().lint(code("53"))).isEmpty()
+				assertThat(MagicNumber().lint(code(53))).isEmpty()
 			}
 
 			it("should ignore float by default") {
-				assertThat(MagicNumber().lint(code("53f"))).isEmpty()
+				assertThat(MagicNumber().lint(code(53f))).isEmpty()
 			}
 
 			it("should ignore binary by default") {
-				assertThat(MagicNumber().lint(code("0b01001"))).isEmpty()
+				assertThat(MagicNumber().lint(code(0b01001))).isEmpty()
 			}
 
 			it("should ignore integer with underscores") {
-				assertThat(MagicNumber().lint(code("101_000"))).isEmpty()
+				assertThat(MagicNumber().lint(code(101_000))).isEmpty()
+			}
+		}
+		given("in enum constructor argument") {
+			val ktFile = compileContentForTest("""
+				enum class Bag(id: Int) {
+					SMALL(1),
+					EXTRA_LARGE(5)
+				}
+			""")
+			it("should be reported by default") {
+				assertThat(MagicNumber().lint(ktFile)).hasSize(1)
+			}
+			it("numbers when 'ignoreEnums' is set to true"){
+				val rule = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_ENUMS to "true")))
+				assertThat(rule.lint(ktFile)).isEmpty()
+			}
+		}
+		given("in enum constructor as named argument"){
+			val ktFile = compileContentForTest("""
+				enum class Bag(id: Int) {
+					SMALL(id = 1),
+					EXTRA_LARGE(id = 5)
+				}
+			""")
+			it("should be reported by default") {
+				assertThat(MagicNumber().lint(ktFile)).hasSize(1)
+			}
+			it("numbers when 'ignoreEnums' is set to true"){
+				val rule = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_ENUMS to "true")))
+				assertThat(rule.lint(ktFile)).isEmpty()
 			}
 		}
 	}

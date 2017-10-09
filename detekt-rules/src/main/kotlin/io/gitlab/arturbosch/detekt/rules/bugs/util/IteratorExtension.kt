@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.rules.bugs.iterator
+package io.gitlab.arturbosch.detekt.rules.bugs.util
 
 import io.gitlab.arturbosch.detekt.rules.collectByType
 import org.jetbrains.kotlin.psi.KtCallExpression

@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -22,7 +23,8 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 
 	override val issue: Issue = Issue("UseDataClass",
 			Severity.Style,
-			"Classes that do nothing but hold data should be replaced with a data class.")
+			"Classes that do nothing but hold data should be replaced with a data class.",
+			Debt.FIVE_MINS)
 
 	private val defaultFunctionNames = hashSetOf("hashCode", "equals", "toString", "copy")
 
