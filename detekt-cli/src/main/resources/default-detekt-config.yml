@@ -309,8 +309,6 @@ style:
   FunctionMaxLength:
     active: false
     maximumFunctionNameLength: 30
-  FunctionOnlyReturningConstant:
-    active: false
   FunctionMinLength:
     active: false
     minimumFunctionNameLength: 3
@@ -355,6 +353,8 @@ style:
   UnusedImports:
     active: false
   NestedClassesVisibility:
+    active: false
+  FunctionOnlyReturningConstant:
     active: false
 
 comments:
