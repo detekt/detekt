@@ -40,6 +40,10 @@ class NamingConventions {
 	fun classMethod() {
 	}
 
+	fun underscoreTestMethod() {
+		val (_, status) = Pair(1, 2) // _ should not be reported
+	}
+
 	//invalid
 	fun _classmethod() {
 	}
