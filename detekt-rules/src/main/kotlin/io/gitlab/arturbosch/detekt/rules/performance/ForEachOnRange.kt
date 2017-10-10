@@ -25,7 +25,7 @@ class ForEachOnRange(config: Config = Config.empty) : Rule(config) {
 
 			it.getReceiverExpression()?.text?.let {
 				if (it matches rangeRegex) {
-					report(CodeSmell(issue, Entity.from(expression)))
+					report(CodeSmell(issue, Entity.from(expression), message = ""))
 				}
 			}
 		}

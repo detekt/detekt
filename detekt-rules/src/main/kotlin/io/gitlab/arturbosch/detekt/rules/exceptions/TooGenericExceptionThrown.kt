@@ -22,7 +22,7 @@ class TooGenericExceptionThrown(config: Config) : Rule(config) {
 
 	override fun visitThrowExpression(expression: KtThrowExpression) {
 		expression.thrownExpression?.text?.substringBefore("(")?.let {
-			if (it in exceptions) report(CodeSmell(issue, Entity.from(expression)))
+			if (it in exceptions) report(CodeSmell(issue, Entity.from(expression), message = ""))
 		}
 		super.visitThrowExpression(expression)
 	}

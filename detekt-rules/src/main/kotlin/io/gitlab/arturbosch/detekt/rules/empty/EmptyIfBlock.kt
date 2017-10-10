@@ -20,7 +20,7 @@ class EmptyIfBlock(config: Config) : EmptyRule(config) {
 	private fun checkThenBodyForLoneSemicolon(expression: KtIfExpression) {
 		val valueOfNextSibling = (expression.nextSibling as? LeafPsiElement)?.elementType as? KtSingleValueToken
 		if (valueOfNextSibling?.value?.trim() == ";") {
-			report(CodeSmell(issue, Entity.from(expression)))
+			report(CodeSmell(issue, Entity.from(expression), message = ""))
 		}
 	}
 

@@ -12,7 +12,7 @@ class EmptyWhenBlock(config: Config) : EmptyRule(config) {
 
 	override fun visitWhenExpression(expression: KtWhenExpression) {
 		if (expression.entries.isEmpty()) {
-			report(CodeSmell(issue, Entity.from(expression)))
+			report(CodeSmell(issue, Entity.from(expression), message = ""))
 		}
 	}
 

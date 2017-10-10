@@ -25,7 +25,7 @@ class ThrowsCount(config: Config = Config.empty) : Rule(config) {
 		if (!function.hasModifier(KtTokens.OVERRIDE_KEYWORD)) {
 			val count = function.collectByType<KtThrowExpression>().count()
 			if (count > max) {
-				report(CodeSmell(issue, Entity.from(function)))
+				report(CodeSmell(issue, Entity.from(function), message = ""))
 			}
 		}
 	}

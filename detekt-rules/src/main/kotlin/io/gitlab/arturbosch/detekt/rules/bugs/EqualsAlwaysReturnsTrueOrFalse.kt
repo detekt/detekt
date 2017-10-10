@@ -30,7 +30,7 @@ class EqualsAlwaysReturnsTrueOrFalse(config: Config = Config.empty) : Rule(confi
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		if (function.isEqualsFunction() && isReturningBooleanConstant(function)) {
-			report(CodeSmell(issue, Entity.from(function)))
+			report(CodeSmell(issue, Entity.from(function), message = ""))
 		}
 	}
 

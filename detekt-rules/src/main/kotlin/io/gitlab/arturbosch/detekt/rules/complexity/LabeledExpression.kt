@@ -19,7 +19,7 @@ class LabeledExpression(config: Config = Config.empty) : Rule(config) {
 	override fun visitExpressionWithLabel(expression: KtExpressionWithLabel) {
 		super.visitExpressionWithLabel(expression)
 		expression.getLabelName()?.let {
-			report(CodeSmell(issue, Entity.from(expression)))
+			report(CodeSmell(issue, Entity.from(expression), message = ""))
 		}
 	}
 }

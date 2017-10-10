@@ -45,7 +45,7 @@ class ProtectedMemberInFinalClass(config: Config = Config.empty) : Rule(config) 
 
 		override fun visitDeclaration(dcl: KtDeclaration) {
 			if (dcl.isProtected() && !dcl.isOverridden()) {
-				report(CodeSmell(issue, Entity.from(dcl)))
+				report(CodeSmell(issue, Entity.from(dcl), message = ""))
 			}
 		}
 	}

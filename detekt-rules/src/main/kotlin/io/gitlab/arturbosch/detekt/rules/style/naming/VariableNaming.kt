@@ -15,6 +15,7 @@ class VariableNaming(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,
 			Severity.Style,
+			"Variable names should follow the naming convention set in the projects configuration.",
 			debt = Debt.FIVE_MINS)
 	private val variablePattern = Regex(valueOrDefault(VARIABLE_PATTERN, "^(_)?[a-z$][a-zA-Z$0-9]*$"))
 
@@ -25,8 +26,9 @@ class VariableNaming(config: Config = Config.empty) : Rule(config) {
 
 		if (!property.identifierName().matches(variablePattern)) {
 			report(CodeSmell(
-					issue.copy(description = "Variable names should match the pattern: $variablePattern"),
-					Entity.from(property)))
+					issue,
+					Entity.from(property),
+					message = "Variable names should match the pattern: $variablePattern"))
 		}
 	}
 

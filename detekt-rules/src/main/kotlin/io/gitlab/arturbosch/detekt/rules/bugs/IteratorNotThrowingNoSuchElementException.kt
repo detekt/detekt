@@ -23,7 +23,7 @@ class IteratorNotThrowingNoSuchElementException(config: Config = Config.empty) :
 		if (classOrObject.isImplementingIterator()) {
 			val nextMethod = classOrObject.getMethod("next")
 			if (nextMethod != null && !nextMethod.throwsNoSuchElementExceptionThrown()) {
-				report(CodeSmell(issue, Entity.from(classOrObject)))
+				report(CodeSmell(issue, Entity.from(classOrObject), message = ""))
 			}
 		}
 		super.visitClassOrObject(classOrObject)

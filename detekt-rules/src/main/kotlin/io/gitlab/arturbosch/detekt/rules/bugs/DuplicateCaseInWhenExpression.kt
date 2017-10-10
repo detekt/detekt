@@ -30,7 +30,7 @@ class DuplicateCaseInWhenExpression(config: Config) : Rule(config) {
 				.distinct().size
 
 		if (numberOfEntries > distinctNumber) {
-			report(CodeSmell(issue, Entity.from(expression)))
+			report(CodeSmell(issue, Entity.from(expression), message = ""))
 		}
 	}
 }

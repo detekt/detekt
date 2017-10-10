@@ -11,7 +11,8 @@ import io.gitlab.arturbosch.detekt.api.Severity
  */
 data class ImportMigration(private val toReplace: String,
 						   private val replacement: String,
-						   override val entity: Entity) : Finding {
+						   override val entity: Entity,
+						   override val message: String) : Finding {
 	override val id: String = "ImportMigration"
 	override val issue: Issue = Issue(id, Severity.Minor,
 			"$id - $toReplace migrated to $replacement @ ${entity.location.compact()}")

@@ -47,6 +47,6 @@ class SafeCast(config: Config = Config.empty) : Rule(config) {
 	}
 
 	private fun addReport(expression: KtIfExpression) {
-		report(CodeSmell(issue, Entity.from(expression)))
+		report(CodeSmell(issue, Entity.from(expression), message = ""))
 	}
 }

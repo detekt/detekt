@@ -51,7 +51,7 @@ class PackageDeclarationStyle(config: Config = Config.empty) : Rule(config) {
 		if (element is PsiWhiteSpace || element is KtElement) {
 			val count = element.text.count { it == '\n' }
 			if (count != 2) {
-				report(CodeSmell(issue, Entity.from(element)))
+				report(CodeSmell(issue, Entity.from(element), message = ""))
 			}
 		}
 	}

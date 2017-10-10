@@ -18,7 +18,7 @@ class SubRuleSpec : Spek({
 	given("a SubRule that always reports") {
 		val rule = object: SubRule<String>(TestConfig(emptyMap())) {
 			override fun apply(element: String) {
-				report(CodeSmell(issue, Entity.from(file)))
+				report(CodeSmell(issue, Entity.from(file), message = ""))
 			}
 
 			override val issue = Issue("Test", Severity.Style, "Test")
@@ -35,7 +35,7 @@ class SubRuleSpec : Spek({
 	given("a SubRule that always reports but is inactive") {
 		val rule = object: SubRule<String>(TestConfig(mapOf("active" to "false"))) {
 			override fun apply(element: String) {
-				report(CodeSmell(issue, Entity.from(file)))
+				report(CodeSmell(issue, Entity.from(file), message = ""))
 			}
 
 			override val issue = Issue("Test", Severity.Style, "Test")

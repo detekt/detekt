@@ -13,14 +13,16 @@ class EnumNaming(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,
 			Severity.Style,
+			"Enum names should follow the naming convention set in the projects configuration.",
 			debt = Debt.FIVE_MINS)
 	private val enumEntryPattern = Regex(valueOrDefault(ENUM_PATTERN, "^[A-Z$][a-zA-Z_$]*$"))
 
 	override fun visitEnumEntry(enumEntry: KtEnumEntry) {
 		if (!enumEntry.identifierName().matches(enumEntryPattern)) {
 			report(CodeSmell(
-					issue.copy(description = "Enum entry names should match the pattern: $enumEntryPattern"),
-					Entity.from(enumEntry)))
+					issue,
+					Entity.from(enumEntry),
+					message = "Enum entry names should match the pattern: $enumEntryPattern"))
 		}
 	}
 

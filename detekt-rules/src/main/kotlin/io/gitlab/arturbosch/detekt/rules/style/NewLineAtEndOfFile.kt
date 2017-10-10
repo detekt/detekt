@@ -19,7 +19,7 @@ class NewLineAtEndOfFile(config: Config = Config.empty) : Rule(config) {
 	override fun visitKtFile(file: KtFile) {
 		val text = file.text
 		if (text.isNotEmpty() && text.last() != '\n') {
-			report(CodeSmell(issue, Entity.from(file, text.length - 1)))
+			report(CodeSmell(issue, Entity.from(file, text.length - 1), message = ""))
 		}
 	}
 

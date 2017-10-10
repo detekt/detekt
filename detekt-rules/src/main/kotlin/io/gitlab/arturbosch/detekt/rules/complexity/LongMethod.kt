@@ -27,7 +27,10 @@ class LongMethod(config: Config = Config.empty,
 		body?.let {
 			val size = body.statements.size
 			if (size > threshold) report(
-					ThresholdedCodeSmell(issue, Entity.from(function), Metric("SIZE", size, threshold)))
+					ThresholdedCodeSmell(issue,
+							Entity.from(function),
+							Metric("SIZE", size, threshold),
+							message = ""))
 		}
 		super.visitNamedFunction(function)
 	}

@@ -8,6 +8,7 @@ package io.gitlab.arturbosch.detekt.api
  */
 open class CodeSmell(final override val issue: Issue,
 					 override val entity: Entity,
+					 override val message: String,
 					 override val metrics: List<Metric> = listOf(),
 					 override val references: List<Entity> = listOf()) : Finding {
 
@@ -18,7 +19,12 @@ open class CodeSmell(final override val issue: Issue,
 	override fun compactWithSignature() = compact() + " - Signature=" + entity.signature
 
 	override fun toString(): String {
-		return "CodeSmell(issue=$issue, entity=$entity, metrics=$metrics, references=$references, id='$id')"
+		return "CodeSmell(issue=$issue, " +
+				"entity=$entity, " +
+				"message=$message, " +
+				"metrics=$metrics, " +
+				"references=$references, " +
+				"id='$id')"
 	}
 }
 
@@ -27,10 +33,10 @@ open class CodeSmell(final override val issue: Issue,
  * for the existence of this rule violation.
  */
 open class CodeSmellWithReferenceAndMetric(
-		issue: Issue, entity: Entity, val reference: Entity, metric: Metric) : ThresholdedCodeSmell(
-		issue, entity, metric, references = listOf(reference)) {
+		issue: Issue, entity: Entity, private val reference: Entity, message: String, metric: Metric) : ThresholdedCodeSmell(
+		issue, entity, metric, message, references = listOf(reference)) {
 
-	override fun compact() = "$id - $metric - ref=${reference.name} - ${entity.compact()}"
+	override fun compact() = "$id - $metric - ref=${reference.name} - ${entity.compact()} - message=$message"
 }
 
 /**
@@ -38,12 +44,16 @@ open class CodeSmellWithReferenceAndMetric(
  * for the existence of this rule violation.
  */
 open class ThresholdedCodeSmell(
-		issue: Issue, entity: Entity, val metric: Metric, references: List<Entity> = emptyList()) : CodeSmell(
-		issue, entity, metrics = listOf(metric), references = references) {
+		issue: Issue,
+		entity: Entity,
+		val metric: Metric,
+		message: String,
+		references: List<Entity> = emptyList()) : CodeSmell(
+		issue, entity, message, metrics = listOf(metric), references = references) {
 	val value: Int
 		get() = metric.value
 	val threshold: Int
 		get() = metric.threshold
 
-	override fun compact() = "$id - $metric - ${entity.compact()}"
+	override fun compact() = "$id - $metric - ${entity.compact()} = message=$message"
 }

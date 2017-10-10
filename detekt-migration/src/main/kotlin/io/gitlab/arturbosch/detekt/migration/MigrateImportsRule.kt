@@ -36,7 +36,7 @@ class MigrateImportsRule(config: Config) : Rule(config) {
 						val importPath = ImportPath.fromString(it)
 						val newImport = factory.createImportDirectives(listOf(importPath)).toList()[0]
 						node.addChild(newImport.importedReference?.node!!)
-						report(ImportMigration(key!!, it, Entity.from(import)))
+						report(ImportMigration(key!!, it, Entity.from(import), message = ""))
 					}
 				}
 	}

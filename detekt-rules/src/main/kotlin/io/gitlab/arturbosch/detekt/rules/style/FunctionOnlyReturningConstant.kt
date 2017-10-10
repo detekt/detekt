@@ -28,7 +28,7 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		if (checkOverridableFunction(function) && isNotExcluded(function) && isReturningAConstant(function)) {
-			report(CodeSmell(issue, Entity.from(function)))
+			report(CodeSmell(issue, Entity.from(function), message = ""))
 		}
 		super.visitNamedFunction(function)
 	}

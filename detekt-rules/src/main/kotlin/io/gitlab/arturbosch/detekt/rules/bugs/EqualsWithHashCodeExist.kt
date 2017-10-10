@@ -45,7 +45,7 @@ class EqualsWithHashCodeExist(config: Config = Config.empty) : Rule(config) {
 		}
 		queue.push(ViolationHolder())
 		super.visitClassOrObject(classOrObject)
-		if (queue.pop().violation()) report(CodeSmell(issue, Entity.from(classOrObject)))
+		if (queue.pop().violation()) report(CodeSmell(issue, Entity.from(classOrObject), message = ""))
 	}
 
 	override fun visitNamedFunction(function: KtNamedFunction) {

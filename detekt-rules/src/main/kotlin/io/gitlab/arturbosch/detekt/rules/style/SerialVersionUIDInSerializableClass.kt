@@ -28,7 +28,7 @@ class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(
 		if (!klass.isInterface() && isImplementingSerializable(klass)) {
 			val companionObject = klass.companionObject()
 			if (companionObject == null || !hasCorrectSerialVersionUUID(companionObject)) {
-				report(CodeSmell(issue, Entity.from(klass)))
+				report(CodeSmell(issue, Entity.from(klass), message = ""))
 			}
 		}
 		super.visitClass(klass)
@@ -38,7 +38,7 @@ class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(
 		if (!declaration.isCompanion()
 				&& isImplementingSerializable(declaration)
 				&& !hasCorrectSerialVersionUUID(declaration)) {
-			report(CodeSmell(issue, Entity.from(declaration)))
+			report(CodeSmell(issue, Entity.from(declaration), message = ""))
 		}
 		super.visitObjectDeclaration(declaration)
 	}

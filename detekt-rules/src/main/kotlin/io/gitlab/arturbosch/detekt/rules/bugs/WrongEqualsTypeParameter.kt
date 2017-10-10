@@ -25,7 +25,7 @@ class WrongEqualsTypeParameter(config: Config = Config.empty) : Rule(config) {
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		if (function.name == "equals" && !function.hasCorrectEqualsParameter()) {
-			report(CodeSmell(issue, Entity.from(function)))
+			report(CodeSmell(issue, Entity.from(function), message = ""))
 		}
 	}
 }

@@ -23,7 +23,7 @@ class UnnecessaryInheritance(config: Config = Config.empty) : Rule(config) {
 		}
 	}
 
-	private fun report(classOrObject: KtClassOrObject, newDescription: String) {
-		report(CodeSmell(issue.copy(description = newDescription), Entity.from(classOrObject)))
+	private fun report(classOrObject: KtClassOrObject, message: String) {
+		report(CodeSmell(issue, Entity.from(classOrObject), message))
 	}
 }

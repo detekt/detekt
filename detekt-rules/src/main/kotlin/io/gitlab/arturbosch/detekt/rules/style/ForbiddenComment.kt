@@ -28,7 +28,7 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
 
 		values.forEach {
 			if (text.contains(it, ignoreCase = true)) {
-				report(CodeSmell(issue, Entity.from(comment)))
+				report(CodeSmell(issue, Entity.from(comment), message = ""))
 			}
 		}
 	}

@@ -27,7 +27,7 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
 			val typeReference = function.typeReference
 			typeReference?.typeElement?.text?.let {
 				if (it == "Unit") {
-					report(CodeSmell(issue, Entity.from(typeReference)))
+					report(CodeSmell(issue, Entity.from(typeReference), message = ""))
 				}
 			}
 		}

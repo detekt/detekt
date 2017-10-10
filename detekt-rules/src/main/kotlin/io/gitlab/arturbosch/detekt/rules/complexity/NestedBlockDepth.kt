@@ -33,7 +33,10 @@ class NestedBlockDepth(config: Config = Config.empty,
 		val visitor = FunctionDepthVisitor(threshold)
 		visitor.visitNamedFunction(function)
 		if (visitor.isTooDeep)
-			report(ThresholdedCodeSmell(issue, Entity.from(function), Metric("SIZE", visitor.maxDepth, threshold)))
+			report(ThresholdedCodeSmell(issue,
+					Entity.from(function),
+					Metric("SIZE", visitor.maxDepth, threshold),
+					message = ""))
 	}
 
 	private class FunctionDepthVisitor(val threshold: Int) : DetektVisitor() {

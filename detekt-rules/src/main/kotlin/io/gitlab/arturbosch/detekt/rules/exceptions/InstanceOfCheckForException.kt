@@ -20,11 +20,11 @@ class InstanceOfCheckForException(config: Config = Config.empty) : Rule(config) 
 
 	override fun visitCatchSection(catchClause: KtCatchClause) {
 		catchClause.catchBody?.collectByType<KtIsExpression>()?.forEach {
-			report(CodeSmell(issue, Entity.from(it)))
+			report(CodeSmell(issue, Entity.from(it), message = ""))
 		}
 		catchClause.catchBody?.collectByType<KtBinaryExpressionWithTypeRHS>()?.forEach {
 			if (KtPsiUtil.isUnsafeCast(it)) {
-				report(CodeSmell(issue, Entity.from(it)))
+				report(CodeSmell(issue, Entity.from(it), message = ""))
 			}
 		}
 	}

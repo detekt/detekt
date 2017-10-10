@@ -75,7 +75,7 @@ class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
 	}
 
 	private fun report(postfixExpression: KtPostfixExpression) {
-		report(CodeSmell(issue, Entity.from(postfixExpression)))
+		report(CodeSmell(issue, Entity.from(postfixExpression), message = ""))
 	}
 
 	private fun getPostfixExpressionChilds(expression: KtExpression?) =

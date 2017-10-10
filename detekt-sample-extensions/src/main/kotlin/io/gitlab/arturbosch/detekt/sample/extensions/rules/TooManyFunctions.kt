@@ -20,7 +20,7 @@ class TooManyFunctions : Rule() {
 	override fun visitFile(file: PsiFile) {
 		super.visitFile(file)
 		if (amount > THRESHOLD) {
-			report(CodeSmell(issue, Entity.from(file)))
+			report(CodeSmell(issue, Entity.from(file), message = ""))
 		}
 	}
 

@@ -22,11 +22,11 @@ class ForbiddenClassName(config: Config = Config.empty) : Rule(config) {
 		val forbiddenEntries = forbiddenNames.matches(name)
 
 		if (forbiddenEntries.isNotEmpty()) {
-			var description = "Class name $name is forbidden as it contains:"
-			forbiddenEntries.forEach { description += " $it," }
-			description.trimEnd { it == ',' }
+			var message = "Class name $name is forbidden as it contains:"
+			forbiddenEntries.forEach { message += " $it," }
+			message.trimEnd { it == ',' }
 
-			report(CodeSmell(issue.copy(description = description), Entity.from(classOrObject)))
+			report(CodeSmell(issue, Entity.from(classOrObject), message))
 		}
 	}
 

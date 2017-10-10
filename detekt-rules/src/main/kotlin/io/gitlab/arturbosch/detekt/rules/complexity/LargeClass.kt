@@ -56,7 +56,10 @@ class LargeClass(config: Config = Config.empty,
 		super.visitClassOrObject(classOrObject)
 		val loc = locStack.pop()
 		if (loc > threshold) {
-			report(ThresholdedCodeSmell(issue, Entity.from(classOrObject), Metric("SIZE", loc, threshold)))
+			report(ThresholdedCodeSmell(issue,
+					Entity.from(classOrObject),
+					Metric("SIZE", loc, threshold),
+					message = ""))
 		}
 	}
 

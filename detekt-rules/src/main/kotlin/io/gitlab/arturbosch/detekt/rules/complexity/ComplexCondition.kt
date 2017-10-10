@@ -52,7 +52,10 @@ class ComplexCondition(config: Config = Config.empty,
 			val conditionString = longestBinExpr.text
 			val count = frequency(conditionString, "&&") + frequency(conditionString, "||") + 1
 			if (count > threshold) {
-				report(ThresholdedCodeSmell(issue, Entity.from(condition), Metric("SIZE", count, threshold)))
+				report(ThresholdedCodeSmell(issue,
+						Entity.from(condition),
+						Metric("SIZE", count, threshold),
+						message = ""))
 			}
 		}
 	}

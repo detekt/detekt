@@ -22,7 +22,7 @@ class OptionalReturnKeyword(config: Config) : Rule(config) {
 			Debt.TEN_MINS)
 
 	private val visitor = ConditionalPathVisitor {
-		report(CodeSmell(issue, Entity.from(it)))
+		report(CodeSmell(issue, Entity.from(it), message = ""))
 	}
 
 	override fun visitDeclaration(dcl: KtDeclaration) {

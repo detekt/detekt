@@ -33,7 +33,11 @@ class StringLiteralDuplication(
 		val type = "SIZE: "
 		for ((name, value) in visitor.getLiteralsOverThreshold()) {
 			val (main, references) = visitor.entitiesForLiteral(name)
-			report(ThresholdedCodeSmell(issue, main, Metric(type + name, value, threshold), references))
+			report(ThresholdedCodeSmell(issue,
+					main,
+					Metric(type + name, value, threshold),
+					"",
+					references))
 		}
 	}
 

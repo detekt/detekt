@@ -26,7 +26,10 @@ class ComplexMethod(config: Config = Config.empty,
 		visitor.visitNamedFunction(function)
 		val mcc = visitor.mcc
 		if (mcc > threshold) {
-			report(ThresholdedCodeSmell(issue, Entity.from(function), Metric("MCC", mcc, threshold)))
+			report(ThresholdedCodeSmell(issue,
+					Entity.from(function),
+					Metric("MCC", mcc, threshold),
+					message = ""))
 		}
 	}
 }

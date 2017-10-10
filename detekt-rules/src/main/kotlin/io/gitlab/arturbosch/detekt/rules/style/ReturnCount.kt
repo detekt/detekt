@@ -24,7 +24,7 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
 		val numberOfReturns = function.collectByType<KtReturnExpression>().count()
 
 		if (numberOfReturns > max) {
-			report(CodeSmell(issue, Entity.from(function)))
+			report(CodeSmell(issue, Entity.from(function), message = ""))
 		}
 	}
 

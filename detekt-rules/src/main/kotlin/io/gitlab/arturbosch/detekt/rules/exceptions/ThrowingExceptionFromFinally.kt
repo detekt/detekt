@@ -18,7 +18,7 @@ class ThrowingExceptionFromFinally(config: Config = Config.empty) : Rule(config)
 	override fun visitFinallySection(finallySection: KtFinallySection) {
 		val throwExpressions = finallySection.finalExpression.collectByType<KtThrowExpression>()
 		throwExpressions.forEach {
-			report(CodeSmell(issue, Entity.from(it)))
+			report(CodeSmell(issue, Entity.from(it), message = ""))
 		}
 	}
 }

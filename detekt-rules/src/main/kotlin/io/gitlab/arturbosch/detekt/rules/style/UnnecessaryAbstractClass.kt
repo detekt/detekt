@@ -40,11 +40,13 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
 		fun detectAbstractAndConcreteType() {
 			val indexOfFirstAbstractMember = indexOfFirstMember(true)
 			if (indexOfFirstAbstractMember == -1) {
-				report(CodeSmell(issue.copy(description =
-						"An abstract class without an abstract member can be refactored to a concrete class."), Entity.from(klass)))
+				report(CodeSmell(issue,
+						Entity.from(klass),
+						"An abstract class without an abstract member can be refactored to a concrete class."))
 			} else if (indexOfFirstAbstractMember == 0 && hasNoConcreteMemberLeft()) {
-				report(CodeSmell(issue.copy(description =
-						"An abstract class without a concrete member can be refactored to an interface."), Entity.from(klass)))
+				report(CodeSmell(issue,
+						Entity.from(klass),
+						"An abstract class without a concrete member can be refactored to an interface."))
 			}
 		}
 
