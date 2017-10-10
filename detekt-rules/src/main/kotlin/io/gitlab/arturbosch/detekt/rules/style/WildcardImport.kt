@@ -35,7 +35,7 @@ class WildcardImport(config: Config = Config.empty) : Rule(config) {
 			if (excludedImports.contains(import)) {
 				return
 			}
-			report(CodeSmell(issue, Entity.from(importDirective)))
+			report(CodeSmell(issue, Entity.from(importDirective), message = ""))
 		}
 	}
 

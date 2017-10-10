@@ -24,7 +24,7 @@ class InvalidLoopCondition(config: Config = Config.empty) : Rule(config) {
 		val loopRange = expression.loopRange
 		val range = loopRange?.children
 		if (range != null && range.size >= minimumSize && hasInvalidLoopRange(range)) {
-			report(CodeSmell(issue, Entity.from(loopRange)))
+			report(CodeSmell(issue, Entity.from(loopRange), message = ""))
 		}
 		super.visitForExpression(expression)
 	}

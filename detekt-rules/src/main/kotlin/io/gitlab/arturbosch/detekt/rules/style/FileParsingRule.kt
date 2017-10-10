@@ -46,7 +46,7 @@ class MaxLineLength(config: Config = Config.empty) : SubRule<KtFileContent>(conf
 		lines.forEach { line ->
 			offset += line.length
 			if (!isValidLine(line)) {
-				report(CodeSmell(issue, Entity.from(file, offset)))
+				report(CodeSmell(issue, Entity.from(file, offset), message = ""))
 			}
 
 			offset += 1 /* '\n' */

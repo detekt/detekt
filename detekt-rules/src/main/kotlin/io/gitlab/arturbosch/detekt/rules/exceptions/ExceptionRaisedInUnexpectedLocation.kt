@@ -22,13 +22,13 @@ class ExceptionRaisedInUnexpectedLocation(config: Config = Config.empty) : Rule(
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		if (isPotentialMethod(function) && hasThrowExpression(function.bodyExpression)) {
-			report(CodeSmell(issue, Entity.from(function)))
+			report(CodeSmell(issue, Entity.from(function), message = ""))
 		}
 	}
 
 	override fun visitClassInitializer(initializer: KtClassInitializer) {
 		if (hasThrowExpression(initializer.body)) {
-			report(CodeSmell(issue, Entity.from(initializer)))
+			report(CodeSmell(issue, Entity.from(initializer), message = ""))
 		}
 	}
 

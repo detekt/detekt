@@ -23,7 +23,7 @@ class UnconditionalJumpStatementInLoop(config: Config = Config.empty) : Rule(con
 
 	override fun visitLoopExpression(loopExpression: KtLoopExpression) {
 		if (hasJumpStatement(loopExpression.body)) {
-			report(CodeSmell(issue, Entity.from(loopExpression)))
+			report(CodeSmell(issue, Entity.from(loopExpression), message = ""))
 		}
 		super.visitLoopExpression(loopExpression)
 	}

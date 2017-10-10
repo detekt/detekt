@@ -62,7 +62,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 
 		val number = parseAsDoubleOrNull(rawNumber) ?: return
 		if (!ignoredNumbers.contains(number)) {
-			report(CodeSmell(issue, Entity.from(expression)))
+			report(CodeSmell(issue, Entity.from(expression), message = ""))
 		}
 	}
 

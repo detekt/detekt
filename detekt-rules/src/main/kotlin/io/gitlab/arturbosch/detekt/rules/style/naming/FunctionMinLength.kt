@@ -13,6 +13,7 @@ class FunctionMinLength(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,
 			Severity.Style,
+			"Function names should not be shorter than the minimum defined in the configuration.",
 			debt = Debt.FIVE_MINS)
 	private val minimumFunctionNameLength
 			= valueOrDefault(MINIMUM_FUNCTION_NAME_LENGTH, DEFAULT_MINIMUM_FUNCTION_NAME_LENGTH)
@@ -20,8 +21,9 @@ class FunctionMinLength(config: Config = Config.empty) : Rule(config) {
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		if (function.identifierName().length < minimumFunctionNameLength) {
 			report(CodeSmell(
-					issue.copy(description = "Function names should be at least $minimumFunctionNameLength characters long."),
-					Entity.from(function)))
+					issue,
+					Entity.from(function),
+					message = "Function names should be at least $minimumFunctionNameLength characters long."))
 		}
 	}
 

@@ -20,15 +20,15 @@ import org.jetbrains.kotlin.psi.KtValueArgument
 class UnnecessaryParentheses(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue("UnnecessaryParentheses", Severity.Style,
-			"These parentheses are unnecessary and can be removed.")
+			"Unnecessary parentheses don't add any value to the code and should be removed.")
 
 	override fun visitParenthesizedExpression(expression: KtParenthesizedExpression) {
 		super.visitParenthesizedExpression(expression)
 
 		if (KtPsiUtil.areParenthesesUseless(expression)) {
-			val description = "Parentheses in ${expression.text} are unnecessary and can be replaced with: " +
+			val message = "Parentheses in ${expression.text} are unnecessary and can be replaced with: " +
 					"${KtPsiUtil.deparenthesize(expression)?.text}"
-			report(CodeSmell(issue.copy(description = description), Entity.from(expression)))
+			report(CodeSmell(issue, Entity.from(expression), message))
 		}
 	}
 
@@ -40,8 +40,8 @@ class UnnecessaryParentheses(config: Config = Config.empty) : Rule(config) {
 		val isSuperTypeCallEntry = argument.parent.parent is KtSuperTypeCallEntry
 
 		if (isLambdaExpression && isOnlyArgument && !isSuperTypeCallEntry) {
-			val description = "Parentheses around the lambda ${argument.parent.text} are unnecessary and can be removed."
-			report(CodeSmell(issue.copy(description = description), Entity.from(argument.parent)))
+			val message = "Parentheses around the lambda ${argument.parent.text} are unnecessary and can be removed."
+			report(CodeSmell(issue, Entity.from(argument.parent), message))
 		}
 	}
 }

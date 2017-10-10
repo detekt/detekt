@@ -31,7 +31,10 @@ class LongParameterList(config: Config = Config.empty,
 	private fun KtParameterList.checkThreshold() {
 		val size = parameters.size
 		if (size > threshold) {
-			report(ThresholdedCodeSmell(issue, Entity.from(this), Metric("SIZE", size, threshold)))
+			report(ThresholdedCodeSmell(issue,
+					Entity.from(this),
+					Metric("SIZE", size, threshold),
+					message = ""))
 		}
 	}
 }

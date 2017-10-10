@@ -22,7 +22,7 @@ class RethrowCaughtException(config: Config = Config.empty) : Rule(config) {
 			it.thrownExpression?.text == catchClause.catchParameter?.name
 		}
 		if (throwExpression != null) {
-			report(CodeSmell(issue, Entity.from(throwExpression)))
+			report(CodeSmell(issue, Entity.from(throwExpression), message = ""))
 		}
 	}
 }

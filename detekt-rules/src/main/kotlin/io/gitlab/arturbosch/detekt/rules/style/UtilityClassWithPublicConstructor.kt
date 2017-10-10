@@ -27,7 +27,7 @@ class UtilityClassWithPublicConstructor(config: Config = Config.empty) : Rule(co
 		if (!klass.isInterface()) {
 			val declarations = klass.getBody()?.declarations
 			if (hasOnlyUtilityClassMembers(declarations) && hasPublicConstructor(klass)) {
-				report(CodeSmell(issue, Entity.from(klass)))
+				report(CodeSmell(issue, Entity.from(klass), message = ""))
 			}
 		}
 		super.visitClass(klass)

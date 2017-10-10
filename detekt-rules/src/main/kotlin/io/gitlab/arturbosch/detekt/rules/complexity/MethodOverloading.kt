@@ -41,7 +41,10 @@ class MethodOverloading(config: Config = Config.empty,
 
 		fun reportIfThresholdExceeded(element: PsiElement) {
 			methods.filterValues { it > threshold }.forEach {
-				report(ThresholdedCodeSmell(issue, Entity.from(element), Metric("OVERLOAD SIZE: ", it.value, threshold)))
+				report(ThresholdedCodeSmell(issue,
+						Entity.from(element),
+						Metric("OVERLOAD SIZE: ", it.value, threshold),
+						message = ""))
 			}
 		}
 

@@ -36,7 +36,7 @@ class UnusedImports(config: Config) : Rule(config) {
 	override fun visitFile(file: PsiFile?) {
 		imports.clear()
 		super.visitFile(file)
-		imports.forEach { report(CodeSmell(issue, Entity.from(it.second))) }
+		imports.forEach { report(CodeSmell(issue, Entity.from(it.second), message = "")) }
 	}
 
 	override fun visitImportList(importList: KtImportList) {

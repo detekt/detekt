@@ -96,7 +96,7 @@ class TestLM : Rule() {
 		val start = Location.startLineAndColumn(function.funKeyword!!).line
 		val end = Location.startLineAndColumn(function.lastBlockStatementOrThis()).line
 		val offset = end - start
-		if (offset > 10) report(CodeSmell(issue, Entity.from(function)))
+		if (offset > 10) report(CodeSmell(issue, Entity.from(function), message = ""))
 	}
 }
 
@@ -104,6 +104,6 @@ class TestLPL : Rule() {
 	override val issue = Issue("LongParameterList", Severity.CodeSmell, "")
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		val size = function.valueParameters.size
-		if (size > 5) report(CodeSmell(issue, Entity.from(function)))
+		if (size > 5) report(CodeSmell(issue, Entity.from(function), message = ""))
 	}
 }

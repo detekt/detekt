@@ -9,7 +9,7 @@ class EmptyKtFile(config: Config) : EmptyRule(config) {
 
 	override fun visitKtFile(file: KtFile) {
 		if (file.text.isNullOrBlank()) {
-			report(CodeSmell(issue, Entity.from(file)))
+			report(CodeSmell(issue, Entity.from(file), message = ""))
 		}
 	}
 }

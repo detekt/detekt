@@ -33,7 +33,7 @@ class OptionalAbstractKeyword(config: Config = Config.empty) : Rule(config) {
 		dcl.modifierList?.let {
 			val abstractModifier = it.getModifier(KtTokens.ABSTRACT_KEYWORD)
 			if (abstractModifier != null) {
-				report(CodeSmell(issue, Entity.from(dcl)))
+				report(CodeSmell(issue, Entity.from(dcl), message = ""))
 			}
 		}
 	}

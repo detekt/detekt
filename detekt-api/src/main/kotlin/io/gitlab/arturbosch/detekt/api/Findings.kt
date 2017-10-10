@@ -15,6 +15,7 @@ interface Finding : Compactable, Reflective, HasEntity, HasMetrics {
 	val id: String
 	val issue: Issue
 	val references: List<Entity>
+	val message: String
 }
 
 /**

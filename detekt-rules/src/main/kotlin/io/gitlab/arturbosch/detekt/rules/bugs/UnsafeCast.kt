@@ -19,7 +19,7 @@ class UnsafeCast(config: Config = Config.empty) : Rule(config) {
 
 	override fun visitBinaryWithTypeRHSExpression(expression: KtBinaryExpressionWithTypeRHS) {
 		if (KtPsiUtil.isUnsafeCast(expression)) {
-			report(CodeSmell(issue, Entity.from(expression)))
+			report(CodeSmell(issue, Entity.from(expression), message = ""))
 		}
 	}
 }

@@ -29,7 +29,10 @@ class NestedClassesVisibility(config: Config = Config.empty) : Rule(config) {
 		klass.declarations
 				.filterIsInstance<KtClass>()
 				.filter { it.isPublic() && !it.isEnum() && it !is KtEnumEntry }
-				.forEach { report(CodeSmell(issue, Entity.from(it)))
+				.forEach { report(CodeSmell(issue,
+						Entity.from(it),
+						"Nested types are often used for implementing private functionality. " +
+								"However the visibility of ${klass.name} makes it visible externally."))
 		}
 	}
 }

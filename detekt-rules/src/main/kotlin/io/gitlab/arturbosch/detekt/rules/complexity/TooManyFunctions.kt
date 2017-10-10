@@ -28,7 +28,10 @@ class TooManyFunctions(config: Config = Config.empty,
 	override fun visitKtFile(file: KtFile) {
 		super.visitKtFile(file)
 		if (amount > threshold) {
-			report(ThresholdedCodeSmell(issue, Entity.from(file), Metric("SIZE", amount, threshold)))
+			report(ThresholdedCodeSmell(issue,
+					Entity.from(file),
+					Metric("SIZE", amount, threshold),
+					message = ""))
 		}
 		amount = 0
 	}
@@ -39,8 +42,10 @@ class TooManyFunctions(config: Config = Config.empty,
 				?.size
 
 		if (amountOfFunctions != null && amountOfFunctions > threshold) {
-			report(ThresholdedCodeSmell(issue, Entity.from(classOrObject),
-					Metric("SIZE", amountOfFunctions, threshold)))
+			report(ThresholdedCodeSmell(issue,
+					Entity.from(classOrObject),
+					Metric("SIZE", amountOfFunctions, threshold),
+					message = ""))
 		}
 
 		super.visitClassOrObject(classOrObject)

@@ -33,7 +33,10 @@ class ComplexInterface(config: Config = Config.empty,
 				size += countStaticDeclarations(klass.companionObject())
 			}
 			if (size > threshold) {
-				report(ThresholdedCodeSmell(issue, Entity.from(klass), Metric("SIZE: ", size, threshold)))
+				report(ThresholdedCodeSmell(issue,
+						Entity.from(klass),
+						Metric("SIZE: ", size, threshold),
+						message = ""))
 			}
 		}
 		super.visitClass(klass)

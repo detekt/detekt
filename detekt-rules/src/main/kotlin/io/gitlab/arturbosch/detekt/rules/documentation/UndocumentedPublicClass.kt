@@ -48,7 +48,7 @@ class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
 
 	private fun reportIfUndocumented(element: KtClassOrObject) {
 		if (element.isPublicNotOverridden() && element.notEnumEntry() && element.docComment == null) {
-			report(CodeSmell(issue, Entity.Companion.from(element)))
+			report(CodeSmell(issue, Entity.Companion.from(element), message = ""))
 		}
 	}
 

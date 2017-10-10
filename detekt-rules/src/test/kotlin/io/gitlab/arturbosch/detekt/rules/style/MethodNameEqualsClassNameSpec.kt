@@ -22,7 +22,7 @@ class MethodNameEqualsClassNameSpec : SubjectSpek<MethodNameEqualsClassName>({
 		}
 
 		it("reports methods which are named after the class object") {
-			val objectFindings = findings.filter { it.issue.description.contains("object") }
+			val objectFindings = findings.filter { it.message.contains("object") }
 			assertThat(objectFindings).hasSize(1)
 		}
 

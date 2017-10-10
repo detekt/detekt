@@ -31,7 +31,7 @@ internal class XmlOutputFormatTest {
 
 	@Test
 	fun renderOneForSingleFile() {
-		val smell = CodeSmell(Issue("id_a", Severity.CodeSmell, ""), entity1)
+		val smell = CodeSmell(Issue("id_a", Severity.CodeSmell, ""), entity1, message = "")
 
 		val result = outputFormat.render(TestDetektion(smell))
 
@@ -41,8 +41,8 @@ internal class XmlOutputFormatTest {
 
 	@Test
 	fun renderTwoForSingleFile() {
-		val smell1 = CodeSmell(Issue("id_a", Severity.CodeSmell, ""), entity1)
-		val smell2 = CodeSmell(Issue("id_b", Severity.CodeSmell, ""), entity1)
+		val smell1 = CodeSmell(Issue("id_a", Severity.CodeSmell, ""), entity1, message = "")
+		val smell2 = CodeSmell(Issue("id_b", Severity.CodeSmell, ""), entity1, message = "")
 
 		val result = outputFormat.render(TestDetektion(smell1, smell2))
 
@@ -52,8 +52,8 @@ internal class XmlOutputFormatTest {
 
 	@Test
 	fun renderOneForMultipleFiles() {
-		val smell1 = CodeSmell(Issue("id_a", Severity.CodeSmell, ""), entity1)
-		val smell2 = CodeSmell(Issue("id_a", Severity.CodeSmell, ""), entity2)
+		val smell1 = CodeSmell(Issue("id_a", Severity.CodeSmell, ""), entity1, message = "")
+		val smell2 = CodeSmell(Issue("id_a", Severity.CodeSmell, ""), entity2, message = "")
 
 		val result = outputFormat.render(TestDetektion(smell1, smell2))
 
@@ -63,10 +63,10 @@ internal class XmlOutputFormatTest {
 
 	@Test
 	fun renderTwoForMultipleFiles() {
-		val smell1 = CodeSmell(Issue("id_a", Severity.CodeSmell, ""), entity1)
-		val smell2 = CodeSmell(Issue("id_b", Severity.CodeSmell, ""), entity1)
-		val smell3 = CodeSmell(Issue("id_a", Severity.CodeSmell, ""), entity2)
-		val smell4 = CodeSmell(Issue("id_b", Severity.CodeSmell, ""), entity2)
+		val smell1 = CodeSmell(Issue("id_a", Severity.CodeSmell, ""), entity1, message = "")
+		val smell2 = CodeSmell(Issue("id_b", Severity.CodeSmell, ""), entity1, message = "")
+		val smell3 = CodeSmell(Issue("id_a", Severity.CodeSmell, ""), entity2, message = "")
+		val smell4 = CodeSmell(Issue("id_b", Severity.CodeSmell, ""), entity2, message = "")
 
 		val result = outputFormat.render(TestDetektion(smell1, smell2, smell3, smell4))
 

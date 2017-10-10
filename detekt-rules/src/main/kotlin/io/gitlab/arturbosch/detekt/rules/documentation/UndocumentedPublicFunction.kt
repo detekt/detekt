@@ -24,11 +24,11 @@ class UndocumentedPublicFunction(config: Config = Config.empty) : Rule(config) {
 		val modifierList = function.modifierList
 		if (function.docComment == null) {
 			if (modifierList == null) {
-				report(CodeSmell(issue, methodHeaderLocation(function)))
+				report(CodeSmell(issue, methodHeaderLocation(function), message = ""))
 			}
 			if (modifierList != null) {
 				if (function.isPublicNotOverridden()) {
-					report(CodeSmell(issue, methodHeaderLocation(function)))
+					report(CodeSmell(issue, methodHeaderLocation(function), message = ""))
 				}
 			}
 		}

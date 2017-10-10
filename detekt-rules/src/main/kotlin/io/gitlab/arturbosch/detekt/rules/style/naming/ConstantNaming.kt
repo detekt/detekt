@@ -14,6 +14,7 @@ class ConstantNaming(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,
 			Severity.Style,
+			"Constants names should follow the naming convention set in the projects configuraiton.",
 			debt = Debt.FIVE_MINS)
 
 	private val constantPattern = Regex(valueOrDefault(CONSTANT_PATTERN, "^([A-Z_]*|serialVersionUID)$"))
@@ -21,8 +22,9 @@ class ConstantNaming(config: Config = Config.empty) : Rule(config) {
 	override fun visitProperty(property: KtProperty) {
 		if (doesntMatchPattern((property))) {
 			report(CodeSmell(
-					issue.copy(description = "Constant names should match the pattern: $constantPattern"),
-					Entity.from(property)))
+					issue,
+					Entity.from(property),
+					message = "Constant names should match the pattern: $constantPattern"))
 		}
 	}
 

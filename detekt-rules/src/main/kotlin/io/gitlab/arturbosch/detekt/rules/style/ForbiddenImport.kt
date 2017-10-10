@@ -25,7 +25,7 @@ class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
 				.imports
 				.filterNot { it.isAllUnder }
 				.filter { forbiddenImports.contains(it.importedFqName?.asString() ?: "") }
-				.forEach { report(CodeSmell(issue, Entity.from(it))) }
+				.forEach { report(CodeSmell(issue, Entity.from(it), message = "")) }
 	}
 
 	companion object {

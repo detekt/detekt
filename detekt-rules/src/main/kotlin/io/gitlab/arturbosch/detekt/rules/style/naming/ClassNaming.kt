@@ -13,14 +13,16 @@ class ClassNaming(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,
 			Severity.Style,
+			"A classes name should fit the naming pattern defined in the projects configuration.",
 			debt = Debt.FIVE_MINS)
 	private val classPattern = Regex(valueOrDefault(CLASS_PATTERN, "^[A-Z$][a-zA-Z$]*$"))
 
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
 		if (!classOrObject.identifierName().matches(classPattern)) {
 			report(CodeSmell(
-					issue.copy(description = "Class and Object names should match the pattern: $classPattern"),
-					Entity.from(classOrObject)))
+					issue,
+					Entity.from(classOrObject),
+					message = "Class and Object names should match the pattern: $classPattern"))
 		}
 	}
 

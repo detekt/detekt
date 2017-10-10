@@ -32,4 +32,4 @@ class UnnecessaryAbstractClassSpec : SubjectSpek<UnnecessaryAbstractClass>({
 })
 
 private fun countViolationsWithDescription(findings: List<Finding>, description: String) =
-		findings.count { it.issue.description.contains(description) }
+		findings.count { it.message.contains(description) }

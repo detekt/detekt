@@ -14,6 +14,7 @@ class VariableMinLength(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,
 			Severity.Style,
+			"Variable names should not be shorter than the minimum defined in the configuration.",
 			debt = Debt.FIVE_MINS)
 	private val minimumVariableNameLength
 			= valueOrDefault(MINIMUM_VARIABLE_NAME_LENGTH, DEFAULT_MINIMUM_VARIABLE_NAME_LENGTH)
@@ -25,8 +26,9 @@ class VariableMinLength(config: Config = Config.empty) : Rule(config) {
 
 		if (property.identifierName().length < minimumVariableNameLength) {
 			report(CodeSmell(
-					issue.copy(description = "Variable names should be at least $minimumVariableNameLength characters long."),
-					Entity.from(property)))
+					issue,
+					Entity.from(property),
+					message = "Variable names should be at least $minimumVariableNameLength characters long."))
 		}
 	}
 

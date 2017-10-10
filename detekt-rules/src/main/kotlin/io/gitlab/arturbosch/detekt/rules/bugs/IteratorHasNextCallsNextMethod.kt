@@ -26,7 +26,7 @@ class IteratorHasNextCallsNextMethod(config: Config = Config.empty) : Rule(confi
 		if (classOrObject.isImplementingIterator()) {
 			val hasNextMethod = classOrObject.getMethod("hasNext")
 			if (hasNextMethod != null && callsNextMethod(hasNextMethod)) {
-				report(CodeSmell(issue, Entity.from(classOrObject)))
+				report(CodeSmell(issue, Entity.from(classOrObject), message = ""))
 			}
 		}
 		super.visitClassOrObject(classOrObject)

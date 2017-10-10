@@ -13,14 +13,16 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,
 			Severity.Style,
+			"Function names should follow the naming convention set in the configuration.",
 			debt = Debt.FIVE_MINS)
 	private val functionPattern = Regex(valueOrDefault(FUNCTION_PATTERN, "^([a-z$][a-zA-Z$0-9]*)|(`.*`)$"))
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		if (!function.identifierName().matches(functionPattern)) {
 			report(CodeSmell(
-					issue.copy(description = "Function names should match the pattern: $functionPattern"),
-					Entity.from(function)))
+					issue,
+					Entity.from(function),
+					message = "Function names should match the pattern: $functionPattern"))
 		}
 	}
 
