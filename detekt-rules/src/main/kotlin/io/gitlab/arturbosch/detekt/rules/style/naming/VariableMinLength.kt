@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.SubRule
 import org.jetbrains.kotlin.psi.KtVariableDeclaration
+import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
 
 class VariableMinLength(config: Config = Config.empty) : SubRule<KtVariableDeclaration>(config) {
 	override val issue = Issue(javaClass.simpleName,
@@ -17,6 +18,10 @@ class VariableMinLength(config: Config = Config.empty) : SubRule<KtVariableDecla
 			= valueOrDefault(MINIMUM_VARIABLE_NAME_LENGTH, DEFAULT_MINIMUM_VARIABLE_NAME_LENGTH)
 
 	override fun apply(element: KtVariableDeclaration) {
+		if (element.isSingleUnderscore) {
+			return
+		}
+
 		if (element.identifierName().length < minimumVariableNameLength) {
 			report(CodeSmell(
 					issue.copy(description = "Variable names should be at least $minimumVariableNameLength characters long."),

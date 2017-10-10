@@ -170,6 +170,12 @@ class NamingConventionLengthSpec : SubjectSpek<NamingRules>({
 
 	subject { NamingRules() }
 
+	it("should not report underscore variable names") {
+		val code = "val (_, status) = getResult()"
+		subject.lint(code)
+		assertThat(subject.findings).isEmpty()
+	}
+
 	it("should report a variable name that is too short") {
 		val code = "private val a = 3"
 		subject.lint(code)
