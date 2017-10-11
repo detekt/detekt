@@ -28,9 +28,12 @@ class TooGenericExceptionCaught(config: Config) : Rule(config) {
 		}
 		super.visitCatchSection(catchClause)
 	}
+
+	companion object {
+		const val CAUGHT_EXCEPTIONS_PROPERTY = "exceptions"
+	}
 }
 
-const val CAUGHT_EXCEPTIONS_PROPERTY = "exceptions"
 val CAUGHT_EXCEPTIONS = listOf(
 		"ArrayIndexOutOfBoundsException",
 		"Error",

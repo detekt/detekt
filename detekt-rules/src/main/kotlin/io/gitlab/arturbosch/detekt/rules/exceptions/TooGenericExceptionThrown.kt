@@ -26,9 +26,11 @@ class TooGenericExceptionThrown(config: Config) : Rule(config) {
 		}
 		super.visitThrowExpression(expression)
 	}
-}
 
-const val THROWN_EXCEPTIONS_PROPERTY = "exceptions"
+	companion object {
+		const val THROWN_EXCEPTIONS_PROPERTY = "exceptions"
+	}
+}
 
 val THROWN_EXCEPTIONS = listOf(
 		"Error",
