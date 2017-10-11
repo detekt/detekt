@@ -7,8 +7,10 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtBinaryExpression
+import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtPostfixExpression
+import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtReturnExpression
 
 class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
@@ -16,11 +18,21 @@ class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
 	override val issue: Issue = Issue("UselessPostfixExpression", Severity.Defect,
 			"The incremented or decremented value is unused. This value is replaced with the original value.")
 
+	val properties = mutableListOf<KtProperty>()
+
+	override fun visitClass(klass: KtClass) {
+		properties.addAll(klass.getProperties())
+		super.visitClass(klass)
+	}
+
 	override fun visitReturnExpression(expression: KtReturnExpression) {
 		val postfixExpression = expression.returnedExpression as? KtPostfixExpression
-		if (postfixExpression != null) {
-			report(postfixExpression)
+		postfixExpression?.let {
+			if (!postfixExpression.isOnField()) {
+				report(postfixExpression)
+			}
 		}
+
 		getPostfixExpressionChilds(expression.returnedExpression)
 				?.forEach { report(it) }
 	}
@@ -37,6 +49,12 @@ class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
 		if (postfixExpression != null && leftIdentifierText == postfixExpression.firstChild?.text) {
 			report(postfixExpression)
 		}
+	}
+
+	private fun KtPostfixExpression.isOnField(): Boolean {
+		return properties.map { it.name }
+				.filter { it == this.baseExpression?.text }
+				.any()
 	}
 
 	private fun report(postfixExpression: KtPostfixExpression) {

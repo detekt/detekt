@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.test.lint
+import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
-import org.assertj.core.api.Assertions.assertThat
 
 class UselessPostfixExpressionSpec : SubjectSpek<UselessPostfixExpression>({
 	subject { UselessPostfixExpression() }
@@ -32,6 +32,23 @@ class UselessPostfixExpressionSpec : SubjectSpek<UselessPostfixExpression>({
 					return i++
 				}"""
 			assertThat(subject.lint(code)).hasSize(2)
+		}
+
+		it("should not report field increments") {
+			val code = """
+				class Test {
+					private var runningId: Long = 0
+
+					fun increment() {
+						runningId++
+					}
+
+					fun getId(): Long {
+						return runningId++
+					}
+				}
+				"""
+			assertThat(subject.lint(code)).isEmpty()
 		}
 	}
 })
