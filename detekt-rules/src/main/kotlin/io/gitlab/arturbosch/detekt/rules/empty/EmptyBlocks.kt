@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.empty
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.SingleAssign
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtClassInitializer
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -56,101 +55,69 @@ class EmptyBlocks(val config: Config = Config.empty) : MultiRule() {
 			emptyWhileBlock
 	)
 
-	private var activeRules: Set<Rule> by SingleAssign()
-
 	override fun visitKtFile(file: KtFile) {
-		activeRules = rules.filterTo(HashSet()) { it.visitCondition(file) }
-		if (emptyKtFile in activeRules) {
-			emptyKtFile.visitFile(file)
-		}
+		emptyKtFile.runIfActive { visitFile(file) }
 		super.visitKtFile(file)
-		report(activeRules.flatMap { it.findings })
 	}
 
 	override fun visitCatchSection(catchClause: KtCatchClause) {
-		if (emptyCatchBlock in activeRules) {
-			emptyCatchBlock.visitCatchSection(catchClause)
-		}
+		emptyCatchBlock.runIfActive { visitCatchSection(catchClause) }
 		super.visitCatchSection(catchClause)
 	}
 
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-		if (emptyClassBlock in activeRules) {
-			emptyClassBlock.visitClassOrObject(classOrObject)
-		}
+		emptyClassBlock.runIfActive { visitClassOrObject(classOrObject) }
 		super.visitClassOrObject(classOrObject)
 	}
 
 	override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
-		if (emptyDefaultConstructor in activeRules) {
-			emptyDefaultConstructor.visitPrimaryConstructor(constructor)
-		}
+		emptyDefaultConstructor.runIfActive { visitPrimaryConstructor(constructor) }
 		super.visitPrimaryConstructor(constructor)
 	}
 
 	override fun visitDoWhileExpression(expression: KtDoWhileExpression) {
-		if (emptyDoWhileBlock in activeRules) {
-			emptyDoWhileBlock.visitDoWhileExpression(expression)
-		}
+		emptyDoWhileBlock.runIfActive { visitDoWhileExpression(expression) }
 		super.visitDoWhileExpression(expression)
 	}
 
 	override fun visitIfExpression(expression: KtIfExpression) {
-		if (emptyIfBlock in activeRules) {
-			emptyIfBlock.visitIfExpression(expression)
-		}
-		if (emptyElseBlock in activeRules) {
-			emptyElseBlock.visitIfExpression(expression)
-		}
+		emptyIfBlock.runIfActive { visitIfExpression(expression) }
+		emptyElseBlock.runIfActive { visitIfExpression(expression) }
 		super.visitIfExpression(expression)
 	}
 
 	override fun visitFinallySection(finallySection: KtFinallySection) {
-		if (emptyFinallyBlock in activeRules) {
-			emptyFinallyBlock.visitFinallySection(finallySection)
-		}
+		emptyFinallyBlock.runIfActive { visitFinallySection(finallySection) }
 		super.visitFinallySection(finallySection)
 	}
 
 	override fun visitForExpression(expression: KtForExpression) {
-		if (emptyForBlock in activeRules) {
-			emptyForBlock.visitForExpression(expression)
-		}
+		emptyForBlock.runIfActive { visitForExpression(expression) }
 		super.visitForExpression(expression)
 	}
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (emptyFunctionBlock in activeRules) {
-			emptyFinallyBlock.visitNamedFunction(function)
-		}
+		emptyFinallyBlock.runIfActive { visitNamedFunction(function) }
 		super.visitNamedFunction(function)
 	}
 
 	override fun visitClassInitializer(initializer: KtClassInitializer) {
-		if (emptyInitBlock in activeRules) {
-			emptyInitBlock.visitClassInitializer(initializer)
-		}
+		emptyInitBlock.runIfActive { visitClassInitializer(initializer) }
 		super.visitClassInitializer(initializer)
 	}
 
 	override fun visitSecondaryConstructor(constructor: KtSecondaryConstructor) {
-		if (emptySecondaryConstructorBlock in activeRules) {
-			emptySecondaryConstructorBlock.visitSecondaryConstructor(constructor)
-		}
+		emptySecondaryConstructorBlock.runIfActive { visitSecondaryConstructor(constructor) }
 		super.visitSecondaryConstructor(constructor)
 	}
 
 	override fun visitWhenExpression(expression: KtWhenExpression) {
-		if (emptyWhenBlock in activeRules) {
-			emptyWhenBlock.visitWhenExpression(expression)
-		}
+		emptyWhenBlock.runIfActive { visitWhenExpression(expression) }
 		super.visitWhenExpression(expression)
 	}
 
 	override fun visitWhileExpression(expression: KtWhileExpression) {
-		if (emptyWhileBlock in activeRules) {
-			emptyWhileBlock.visitWhileExpression(expression)
-		}
+		emptyWhileBlock.runIfActive { visitWhileExpression(expression) }
 		super.visitWhileExpression(expression)
 	}
 }

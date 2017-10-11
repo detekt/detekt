@@ -18,7 +18,7 @@ class FileParsingRule(val config: Config = Config.empty) : MultiRule() {
 	override fun visitKtFile(file: KtFile) {
 		val lines = file.text.splitToSequence("\n")
 		val fileContents = KtFileContent(file, lines)
-		fileContents.reportFindings(context, rules)
+		fileContents.reportFindings(rules)
 	}
 }
 

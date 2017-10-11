@@ -8,7 +8,6 @@ import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.SpecialNames
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtEnumEntry
-import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
@@ -47,10 +46,6 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
 			functionMinNameLengthRule,
 			forbiddenClassNameRule
 	)
-
-	override fun postVisit(root: KtFile) {
-		report(rules.flatMap { it.findings })
-	}
 
 	override fun visitPackageDirective(directive: KtPackageDirective) {
 		super.visitPackageDirective(directive)
