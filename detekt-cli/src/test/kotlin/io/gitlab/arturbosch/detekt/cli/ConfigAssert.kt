@@ -38,7 +38,7 @@ class ConfigAssert(
 
 	private fun checkOptions(ymlOptions: HashMap<String, *>, ruleClass: Class<out Rule>) {
 		val configFields = ruleClass.declaredFields.filter { isPublicStaticFinal(it) && it.name != "Companion" }
-		var filter = ymlOptions.filterKeys { it != "active" && it != "exceptions" }
+		var filter = ymlOptions.filterKeys { it != "active" }
 		if (filter.containsKey(THRESHOLD)) {
 			assertThat(ruleClass.superclass.simpleName).isEqualTo(THRESHOLD_RULE)
 			filter = filter.filterKeys { it != THRESHOLD }
