@@ -50,5 +50,19 @@ class UselessPostfixExpressionSpec : SubjectSpek<UselessPostfixExpression>({
 				"""
 			assertThat(subject.lint(code)).isEmpty()
 		}
+
+		it("should detect properties shadowing fields that are incremented") {
+			val code = """
+				class Test {
+					private var runningId: Long = 0
+
+					fun getId(): Long {
+						val runningId: Long = 0
+						return runningId++
+					}
+				}
+				"""
+			assertThat(subject.lint(code)).hasSize(1)
+		}
 	}
 })
