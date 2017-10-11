@@ -1,14 +1,9 @@
 package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.YamlConfig
-import org.assertj.core.api.Assertions
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import org.reflections.Reflections
 import java.io.File
-import java.lang.reflect.Modifier
 import java.nio.file.Paths
 
 class DetektYmlConfigTest {
@@ -18,6 +13,7 @@ class DetektYmlConfigTest {
 	@Test
 	fun complexitySection() {
 		ConfigAssert(
+				config,
 				"complexity",
 				"io.gitlab.arturbosch.detekt.rules.complexity"
 		).assert()
@@ -26,6 +22,7 @@ class DetektYmlConfigTest {
 	@Test
 	fun documentationSection() {
 		ConfigAssert(
+				config,
 				"comments",
 				"io.gitlab.arturbosch.detekt.rules.documentation"
 		).assert()
@@ -34,6 +31,7 @@ class DetektYmlConfigTest {
 	@Test
 	fun emptyBlocksSection() {
 		ConfigAssert(
+				config,
 				"empty-blocks",
 				"io.gitlab.arturbosch.detekt.rules.empty"
 		).assert()
@@ -42,6 +40,7 @@ class DetektYmlConfigTest {
 	@Test
 	fun exceptionsSection() {
 		ConfigAssert(
+				config,
 				"exceptions",
 				"io.gitlab.arturbosch.detekt.rules.exceptions"
 		).assert()
@@ -50,6 +49,7 @@ class DetektYmlConfigTest {
 	@Test
 	fun performanceSection() {
 		ConfigAssert(
+				config,
 				"performance",
 				"io.gitlab.arturbosch.detekt.rules.performance"
 		).assert()
@@ -58,6 +58,7 @@ class DetektYmlConfigTest {
 	@Test
 	fun potentialBugsSection() {
 		ConfigAssert(
+				config,
 				"potential-bugs",
 				"io.gitlab.arturbosch.detekt.rules.bugs"
 		).assert()
@@ -66,6 +67,7 @@ class DetektYmlConfigTest {
 	@Test
 	fun styleSection() {
 		ConfigAssert(
+				config,
 				"style",
 				"io.gitlab.arturbosch.detekt.rules.style"
 		).assert()
@@ -77,33 +79,6 @@ class DetektYmlConfigTest {
 		val url = file.toURI().toURL()
 		return YamlConfig.loadResource(url)
 	}
-
-	private inner class ConfigAssert
-				(private val name: String,
-				 private val packageName: String) {
-
-		fun assert() {
-			val ymlDeclarations = getYmlRuleConfig().properties.filter { it.key != "active" }
-			assertThat(ymlDeclarations).isNotEmpty
-			val ruleClasses = getRuleClasses()
-			assertThat(ruleClasses).isNotEmpty
-
-			for (ruleClass in ruleClasses) {
-				val ymlDeclaration = ymlDeclarations.filter { it.key == ruleClass.simpleName }
-				if (ymlDeclaration.keys.size != 1) {
-					Assertions.fail("${ruleClass.simpleName} rule is not correctly defined in $CONFIG_FILE")
-				}
-			}
-		}
-
-		private fun getYmlRuleConfig() = config.subConfig(name) as YamlConfig
-
-		private fun getRuleClasses(): List<Class<out Rule>> {
-			return Reflections(packageName)
-					.getSubTypesOf(Rule::class.java)
-					.filter { !Modifier.isAbstract(it.modifiers) }
-		}
-	}
 }
 
-private const val CONFIG_FILE = "default-detekt-config.yml"
+internal const val CONFIG_FILE = "default-detekt-config.yml"
