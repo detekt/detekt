@@ -1,6 +1,20 @@
 autoCorrect: true
 failFast: false
 
+test-pattern:
+  active: true
+  patterns:
+    - '.*/test/.*'
+    - '.*Test.kt'
+    - '.*Spec.kt'
+  exclude-rule-sets:
+    - 'comments'
+  exclude-rules:
+    - 'NamingRules'
+    - 'WildcardImport'
+    - 'MagicNumber'
+    - 'MaxLineLength'
+
 build:
   warningThreshold: 5
   failThreshold: 10
