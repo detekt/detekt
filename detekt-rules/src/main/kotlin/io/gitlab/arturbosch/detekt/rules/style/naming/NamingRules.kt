@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.style.naming
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.rules.reportFindings
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.SpecialNames
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -49,7 +48,7 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
 
 	override fun visitPackageDirective(directive: KtPackageDirective) {
 		super.visitPackageDirective(directive)
-		directive.reportFindings(packageNamingRule)
+		packageNamingRule.runIfActive { visitPackageDirective(directive) }
 	}
 
 	override fun visitNamedDeclaration(declaration: KtNamedDeclaration) {
@@ -58,9 +57,9 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
 		}
 		declaration.nameIdentifier?.parent?.javaClass?.let {
 			when (declaration) {
-				is KtVariableDeclaration -> handleVariable(declaration)
+				is KtProperty -> handleVariable(declaration)
 				is KtNamedFunction -> handleFunction(declaration)
-				is KtEnumEntry -> declaration.reportFindings(enumEntryNamingRule)
+				is KtEnumEntry -> enumEntryNamingRule.runIfActive { visitEnumEntry(declaration) }
 				is KtClassOrObject -> handleClassOrObject(declaration)
 			}
 		}
@@ -68,29 +67,29 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
 	}
 
 	private fun handleClassOrObject(declaration: KtClassOrObject) {
-		declaration.reportFindings(classOrObjectNamingRule)
-		declaration.reportFindings(forbiddenClassNameRule)
+		classOrObjectNamingRule.runIfActive { visitClassOrObject(declaration) }
+		forbiddenClassNameRule.runIfActive { visitClassOrObject(declaration) }
 	}
 
 	private fun handleFunction(declaration: KtNamedFunction) {
-		declaration.reportFindings(functionNamingRule)
-		declaration.reportFindings(functionMaxNameLengthRule)
-		declaration.reportFindings(functionMinNameLengthRule)
+		functionNamingRule.runIfActive { visitNamedFunction(declaration) }
+		functionMaxNameLengthRule.runIfActive { visitNamedFunction(declaration) }
+		functionMinNameLengthRule.runIfActive { visitNamedFunction(declaration) }
 	}
 
-	private fun handleVariable(declaration: KtVariableDeclaration) {
-		declaration.reportFindings(variableMaxNameLengthRule)
-		declaration.reportFindings(variableMinNameLengthRule)
+	private fun handleVariable(declaration: KtProperty) {
+		variableMaxNameLengthRule.runIfActive { visitProperty(declaration) }
+		variableMinNameLengthRule.runIfActive { visitProperty(declaration) }
 
 		if (declaration.hasConstModifier()) {
-			declaration.reportFindings(constantNamingRule)
-		} else if (declaration.withinObjectDeclaration() || declaration.isTopLevel()) {
+			constantNamingRule.runIfActive { visitProperty(declaration) }
+		} else if (declaration.withinObjectDeclaration() || declaration.isTopLevel) {
 			if (variableNamingRule.doesntMatchPattern(declaration)
 					&& constantNamingRule.doesntMatchPattern(declaration)) {
-				declaration.reportFindings(variableNamingRule)
+				variableNamingRule.runIfActive { visitProperty(declaration) }
 			}
 		} else {
-			declaration.reportFindings(variableNamingRule)
+			variableNamingRule.runIfActive { visitProperty(declaration) }
 		}
 	}
 
@@ -102,8 +101,6 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
 	private fun KtVariableDeclaration.withinObjectDeclaration(): Boolean {
 		return this.getNonStrictParentOfType(KtObjectDeclaration::class.java) != null
 	}
-
-	private fun KtVariableDeclaration.isTopLevel(): Boolean = this is KtProperty && this.isTopLevel
 }
 
 internal fun KtNamedDeclaration.identifierName() = nameIdentifier?.text ?: SpecialNames.NO_NAME_PROVIDED.asString()
