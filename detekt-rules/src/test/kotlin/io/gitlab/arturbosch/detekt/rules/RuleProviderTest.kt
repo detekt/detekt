@@ -17,7 +17,6 @@ import org.junit.jupiter.api.Test
 import org.reflections.Reflections
 import java.lang.reflect.Modifier
 
-
 class RuleProviderTest {
 
 	@Test
