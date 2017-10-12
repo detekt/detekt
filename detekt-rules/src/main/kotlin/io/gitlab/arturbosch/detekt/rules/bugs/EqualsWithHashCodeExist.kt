@@ -6,9 +6,9 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.bugs.util.isEqualsMethod
-import io.gitlab.arturbosch.detekt.rules.bugs.util.isHashCodeMethod
 import io.gitlab.arturbosch.detekt.rules.isDataClass
+import io.gitlab.arturbosch.detekt.rules.isEqualsFunction
+import io.gitlab.arturbosch.detekt.rules.isHashCodeFunction
 import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -51,8 +51,8 @@ class EqualsWithHashCodeExist(config: Config = Config.empty) : Rule(config) {
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		if (!function.isTopLevel) {
 			function.let {
-				if (it.isEqualsMethod()) queue.peek().equals = true
-				if (it.isHashCodeMethod()) queue.peek().hashCode = true
+				if (it.isEqualsFunction()) queue.peek().equals = true
+				if (it.isHashCodeFunction()) queue.peek().hashCode = true
 			}
 		}
 	}

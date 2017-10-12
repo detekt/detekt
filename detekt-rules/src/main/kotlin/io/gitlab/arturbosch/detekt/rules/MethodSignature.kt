@@ -1,11 +1,11 @@
-package io.gitlab.arturbosch.detekt.rules.bugs.util
+package io.gitlab.arturbosch.detekt.rules
 
 import org.jetbrains.kotlin.psi.KtFunction
 
-fun KtFunction.isEqualsMethod() =
+fun KtFunction.isEqualsFunction() =
 	this.name == "equals" && hasCorrectEqualsParameter()
 
-fun KtFunction.isHashCodeMethod() =
+fun KtFunction.isHashCodeFunction() =
 		this.name == "hashCode" && this.valueParameters.isEmpty()
 
 fun KtFunction.hasCorrectEqualsParameter() =
