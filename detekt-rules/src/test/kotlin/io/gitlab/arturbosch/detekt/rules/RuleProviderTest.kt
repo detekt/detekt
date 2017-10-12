@@ -43,7 +43,7 @@ class RuleProviderTest {
 		RuleProviderAssert(
 				EmptyCodeProvider(),
 				"io.gitlab.arturbosch.detekt.rules.empty",
-				MultiRule::class.java)
+				Rule::class.java)
 				.assert()
 	}
 
@@ -83,10 +83,9 @@ class RuleProviderTest {
 				.assert()
 	}
 
-	class RuleProviderAssert<T>
-					(private val provider: RuleSetProvider,
-					 private val packageName: String,
-					 private val clazz: Class<T>) {
+	class RuleProviderAssert<T>(private val provider: RuleSetProvider,
+								private val packageName: String,
+								private val clazz: Class<T>) {
 
 		fun assert() {
 			val rules = getRules(provider)
@@ -97,7 +96,7 @@ class RuleProviderTest {
 					.map { c -> rules.singleOrNull { it.javaClass.simpleName == c.simpleName } }
 					.forEach {
 						if (it == null) {
-							print(rules.size); print(" rules"); println()
+							print(rules.size); println(" rules")
 							print(classes.size); print(" classes")
 						}
 						assertThat(it).isNotNull()
@@ -106,12 +105,14 @@ class RuleProviderTest {
 
 		private fun getRules(provider: RuleSetProvider): List<BaseRule> {
 			return provider.buildRuleset(Config.empty)!!.rules
+					.flatMap { (it as? MultiRule)?.rules ?: listOf(it) }
 		}
 
 		private fun getClasses(): List<Class<out T>> {
 			return Reflections(packageName)
 					.getSubTypesOf(clazz)
-					.filter { !Modifier.isAbstract(it.modifiers) && it.superclass.simpleName != "SubRule" }
+					.filterNot { "Test" in it.name }
+					.filter { !Modifier.isAbstract(it.modifiers) }
 		}
 	}
 }
