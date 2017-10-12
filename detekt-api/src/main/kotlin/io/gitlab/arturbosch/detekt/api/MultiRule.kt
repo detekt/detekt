@@ -8,8 +8,6 @@ abstract class MultiRule : BaseRule() {
 	var activeRules: Set<Rule> by SingleAssign()
 	var ruleFilters: Set<String> = emptySet()
 
-	override val id: String = javaClass.simpleName
-
 	override fun visitCondition(root: KtFile) = true
 
 	override fun preVisit(root: KtFile) {
