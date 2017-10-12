@@ -22,7 +22,7 @@ abstract class MultiRule : BaseRule() {
 		report(activeRules.flatMap { it.findings })
 	}
 
-	fun Rule.runIfActive(block: Rule.() -> Unit) {
+	fun <T : Rule> T.runIfActive(block: T.() -> Unit) {
 		if (this in activeRules) {
 			block()
 		}
