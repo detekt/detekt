@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.providers
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.rules.style.CollapsibleIfStatements
 import io.gitlab.arturbosch.detekt.rules.style.DataClassContainsFunctions
 import io.gitlab.arturbosch.detekt.rules.style.EqualsNullCall
 import io.gitlab.arturbosch.detekt.rules.style.ExpressionBodySyntax
@@ -44,6 +45,7 @@ class StyleGuideProvider : RuleSetProvider {
 
 	override fun instance(config: Config): RuleSet {
 		return RuleSet(ruleSetId, listOf(
+				CollapsibleIfStatements(config),
 				ReturnCount(config),
 				ThrowsCount(config),
 				NewLineAtEndOfFile(config),

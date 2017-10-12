@@ -263,6 +263,8 @@ style:
     active: true
   OptionalWhenBraces:
     active: false
+  CollapsibleIfStatements:
+    active: false
   EqualsNullCall:
     active: false
   ForbiddenComment:
