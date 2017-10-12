@@ -6,13 +6,16 @@ abstract class MultiRule : BaseRule() {
 
 	abstract val rules: List<Rule>
 	var activeRules: Set<Rule> by SingleAssign()
+	var ruleFilters: Set<String> = emptySet()
 
 	override val id: String = javaClass.simpleName
 
 	override fun visitCondition(root: KtFile) = true
 
 	override fun preVisit(root: KtFile) {
-		activeRules = rules.filterTo(HashSet()) { it.visitCondition(root) }
+		activeRules = rules.filterTo(HashSet()) {
+			it.id !in ruleFilters && it.visitCondition(root)
+		}
 	}
 
 	override fun postVisit(root: KtFile) {
