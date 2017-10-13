@@ -11,7 +11,7 @@ import java.nio.file.Paths
  *
  * @author Artur Bosch
  */
-internal object KtTestCompiler : KtCompiler(Paths.get(resource("/"))) {
+object KtTestCompiler : KtCompiler(Paths.get(resource("/"))) {
 
 	fun compileFromContent(content: String): KtFile
 			= psiFileFactory.createFileFromText(KotlinLanguage.INSTANCE, StringUtilRt.convertLineSeparators(content)) as KtFile
