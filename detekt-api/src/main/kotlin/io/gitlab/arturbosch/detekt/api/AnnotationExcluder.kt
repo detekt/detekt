@@ -5,20 +5,20 @@ import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtFile
 
 class AnnotationExcluder(
-    root: KtFile,
-    private val excludes: Excludes
+		root: KtFile,
+		private val excludes: Excludes
 ) {
-  private var resolvedAnnotations = root.importList
-      ?.imports
-      ?.filterNot { it.isAllUnder }
-      ?.mapNotNull { it.importedFqName?.asString() }
-      ?.map { Pair(it.split(".").last(), it) }
-      ?.toMap()
+	private var resolvedAnnotations = root.importList
+			?.imports
+			?.filterNot { it.isAllUnder }
+			?.mapNotNull { it.importedFqName?.asString() }
+			?.map { Pair(it.split(".").last(), it) }
+			?.toMap()
 
-  fun shouldExclude(annotations: List<KtAnnotationEntry>) =
-    annotations.mapNotNull {
-          val shortName = it.typeReferenceName
-          resolvedAnnotations?.get(shortName) ?: shortName
-        }
-        .any { !excludes.none(it) }
+	fun shouldExclude(annotations: List<KtAnnotationEntry>) =
+		annotations.mapNotNull {
+					val shortName = it.typeReferenceName
+					resolvedAnnotations?.get(shortName) ?: shortName
+				}
+				.any { !excludes.none(it) }
 }
