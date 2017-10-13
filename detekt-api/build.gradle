@@ -6,7 +6,7 @@ configurations {
 dependencies {
 	implementation "org.yaml:snakeyaml:$yamlVersion"
 
-  testImplementation project(':detekt-test')
+	testImplementation project(':detekt-test')
 
 	testRuntime "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
 	testRuntime "org.junit.platform:junit-platform-console:$junitPlatformVersion"
