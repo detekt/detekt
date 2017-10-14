@@ -30,7 +30,8 @@ class AnalysisEnvironment : Disposable {
 	fun createCoreEnvironment(trace: CliLightClassGenerationSupport.CliBindingTrace, files: List<KtFile>):
 			ComponentProvider {
 		System.setProperty("idea.io.use.fallback", "true") //otherwise will complain bin/idea.properties is missing
-		val environment = KotlinCoreEnvironment.createForProduction(this, configuration, EnvironmentConfigFiles.JVM_CONFIG_FILES)
+		val environment = KotlinCoreEnvironment.createForProduction(this, configuration,
+				EnvironmentConfigFiles.JVM_CONFIG_FILES)
 
 		return TopDownAnalyzerFacadeForJVM.createContainer(
 				environment.project,

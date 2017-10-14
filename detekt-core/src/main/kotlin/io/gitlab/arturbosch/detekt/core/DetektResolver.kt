@@ -15,12 +15,11 @@ import org.jetbrains.kotlin.utils.PathUtil
 import java.io.File
 
 class DetektResolver(val classpath: List<String>,
-					 private val sources: List<SourceRoot>,
+					 private val sourcePaths: List<String>,
 					 val providers: List<RuleSetProvider>,
 					 val config: Config) {
 
 	fun generate(files: List<KtFile>) : BindingContext {
-		val sourcePaths = sources.map { it.path }
 		val environment = createAnalysisEnvironment(sourcePaths)
 		return try {
 			val trace = CliLightClassGenerationSupport.NoScopeRecordCliBindingTrace()

@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.toMergedMap
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
+import java.io.File
 
 /**
  * @author Artur Bosch
@@ -27,12 +28,8 @@ class Detektor(private val settings: ProcessingSettings,
 
 	fun run(ktFiles: List<KtFile>): Detektion = withExecutor {
 
-		val paths = ktFiles.map { SourceRoot(it.getUserData(KtCompiler.RELATIVE_PATH)!!) }
-
-		val resolver = DetektResolver(
-				settings.classpath,
-				paths, providers, settings.config)
-
+		val paths = ktFiles.map { File(it.getUserData(KtCompiler.RELATIVE_PATH)!!).absolutePath }
+		val resolver = DetektResolver(settings.classpath, paths, providers, settings.config)
 		val bindingContext = resolver.generate(ktFiles)
 
 		processors.forEach { it.onStart(ktFiles) }
