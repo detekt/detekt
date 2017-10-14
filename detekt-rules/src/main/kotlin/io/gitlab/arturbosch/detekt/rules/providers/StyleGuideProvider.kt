@@ -31,6 +31,7 @@ import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryInheritance
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryParentheses
 import io.gitlab.arturbosch.detekt.rules.style.UnusedImports
 import io.gitlab.arturbosch.detekt.rules.style.UseDataClass
+import io.gitlab.arturbosch.detekt.rules.style.UselessCallOnNotNull
 import io.gitlab.arturbosch.detekt.rules.style.UtilityClassWithPublicConstructor
 import io.gitlab.arturbosch.detekt.rules.style.WildcardImport
 import io.gitlab.arturbosch.detekt.rules.style.naming.NamingRules
@@ -83,6 +84,7 @@ class StyleGuideProvider : RuleSetProvider {
 				UnusedImports(config),
 				ExpressionBodySyntax(config),
 				NestedClassesVisibility(config),
+				UselessCallOnNotNull(config),
 				RedundantVisibilityModifierRule(config)
 		))
 	}
