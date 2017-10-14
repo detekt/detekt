@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.toMergedMap
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * @author Artur Bosch
@@ -26,11 +27,19 @@ class Detektor(private val settings: ProcessingSettings,
 
 	fun run(ktFiles: List<KtFile>): Detektion = withExecutor {
 
+		val paths = ktFiles.map { SourceRoot(it.getUserData(KtCompiler.RELATIVE_PATH)!!) }
+
+		val resolver = DetektResolver(
+				settings.classpath,
+				paths, providers, settings.config)
+
+		val bindingContext = resolver.generate(ktFiles)
+
 		processors.forEach { it.onStart(ktFiles) }
 		val futures = ktFiles.map { file ->
 			runAsync {
 				processors.forEach { it.onProcess(file) }
-				file.analyze().apply {
+				file.analyze(bindingContext).apply {
 					processors.forEach { it.onProcessComplete(file, FindingsForFile(this)) }
 				}
 			}
@@ -48,16 +57,16 @@ class Detektor(private val settings: ProcessingSettings,
 		}
 	}
 
-	private fun KtFile.analyze(): List<Pair<String, List<Finding>>> {
+	private fun KtFile.analyze(bindingContext: BindingContext): List<Pair<String, List<Finding>>> {
 		var ruleSets = providers.mapNotNull { it.buildRuleset(config) }
 				.sortedBy { it.id }
 				.distinctBy { it.id }
 
 		return if (testPattern.isTestSource(this)) {
 			ruleSets = ruleSets.filterNot { testPattern.matchesRuleSet(it.id) }
-			ruleSets.map { ruleSet -> ruleSet.id to ruleSet.accept(this, testPattern.excludingRules) }
+			ruleSets.map { ruleSet -> ruleSet.id to ruleSet.accept(this, testPattern.excludingRules, bindingContext) }
 		} else {
-			ruleSets.map { ruleSet -> ruleSet.id to ruleSet.accept(this) }
+			ruleSets.map { ruleSet -> ruleSet.id to ruleSet.accept(this, bindingContext) }
 		}
 	}
 }

@@ -19,6 +19,10 @@ fun Args.createPlugins(): List<Path> = plugins.letIfNonEmpty {
 	MultipleExistingPathConverter().convert(this)
 }
 
+fun Args.createClasspath(): List<String> = classpath.letIfNonEmpty {
+	this.split(";")
+}
+
 private fun <T> String?.letIfNonEmpty(init: String.() -> List<T>): List<T> =
 		if (this == null || this.isEmpty()) listOf() else this.init()
 

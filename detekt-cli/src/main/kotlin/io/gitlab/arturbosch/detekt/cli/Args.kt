@@ -13,6 +13,9 @@ class Args {
 			converter = ExistingPathConverter::class, description = "Input path to analyze (path/to/project).")
 	private var input: Path? = null
 
+	@Parameter(names = arrayOf("--classpath", "-cp"))
+	var classpath: String? = null
+
 	@Parameter(names = arrayOf("--filters", "-f"),
 			description = "Path filters defined through regex with separator ';' (\".*test.*\").")
 	var filters: String? = null // Using a converter for List<PathFilter> resulted in a ClassCastException
