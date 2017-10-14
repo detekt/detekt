@@ -45,7 +45,7 @@ class Args {
 	var baseline: Path? = null
 
 	@Parameter(names = arrayOf("--create-baseline", "-cb"),
-			description = "Treats current analysis findings as a smell baseline for further detekt runs.")
+			description = "Treats current analysis findings as a smell baseline for future detekt runs.")
 	var createBaseline: Boolean = false
 
 	@Parameter(names = arrayOf("--output", "-o"),

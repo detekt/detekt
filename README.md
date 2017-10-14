@@ -59,25 +59,23 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 - `java -jar detekt-cli/build/libs/detekt-cli-[version]-all.jar [parameters]*`
 
 ##### Parameters for CLI
-The CLI uses jcommander for argument parsing. Following parameters are shown when `--help` is entered:
+The following parameters are shown when `--help` is entered. The `--input`/`-i` option is required:
 
 ```
-The following option is required: --input, -i
-
 Usage: detekt [options]
   Options:
     --baseline, -b
-      Treats current analysis findings as a smell baseline for further detekt
-      runs. If a baseline xml file is passed in, only new code smells not in
-      the baseline are printed in the console.
+      If a baseline xml file is passed in, only new code smells not in the 
+      baseline are printed in the console.
     --config, -c
       Path to the config file (path/to/config.yml).
     --config-resource, -cr
       Path to the config resource on detekt's classpath (path/to/config.yml).
     --create-baseline, -cb
-      Treats current analysis findings as a smell baseline for further detekt runs.
+      Treats current analysis findings as a smell baseline for future detekt
+      runs. 
       Default: false
-    --debug, -d
+    --debug
       Debugs given ktFile by printing its elements.
       Default: false
     --disable-default-rulesets, -dd
@@ -90,18 +88,18 @@ Usage: detekt [options]
       Default: false
     --help, -h
       Shows the usage.
+  * --input, -i
+      Input path to analyze (path/to/project).
     --output, -o
-      Specify the file to output to.
+      Directory where output reports are stored.
     --output-name, -on
       The base name for output reports is derived from this parameter.
     --parallel
-      Enables parallel compilation of source files. Should only be used if the
+      Enables parallel compilation of source files. Should only be used if the 
       analyzing project has more than ~200 kotlin files.
       Default: false
-  * --input, -i
-      Input path to analyze (path/to/project).
     --plugins, -p
-      Extra paths to ruleset jars separated by ',' or ';'.
+      Extra paths to plugin jars separated by ',' or ';'.
 ```
 
 `--input` can either be a directory or a single Kotlin file.
