@@ -27,6 +27,7 @@ class UselessCallOnNotNull(config: Config = Config.empty) : Rule(config) {
 
 	private val uselessNames = toShortFqNames(uselessFqNames.keys)
 
+	@Suppress("ReturnCount")
 	override fun visitQualifiedExpression(expression: KtQualifiedExpression) {
 		if (bindingContext == BindingContext.EMPTY) return
 		val selector = expression.selectorExpression as? KtCallExpression ?: return
