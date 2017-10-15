@@ -19,7 +19,7 @@ class CollapsibleIfStatements(config: Config = Config.empty) : Rule(config) {
 			Debt.FIVE_MINS)
 
 	override fun visitIfExpression(expression: KtIfExpression) {
-		if (isNotElseIfOrElse(expression) && hasOneKtStatement(expression)) {
+		if (isNotElseIfOrElse(expression) && hasOneKtIfExpression(expression)) {
 			report(CodeSmell(issue, Entity.from(expression)))
 		}
 		super.visitIfExpression(expression)
@@ -28,7 +28,7 @@ class CollapsibleIfStatements(config: Config = Config.empty) : Rule(config) {
 	private fun isNotElseIfOrElse(expression: KtIfExpression) =
 			expression.`else` == null && expression.parent !is KtContainerNodeForControlStructureBody
 
-	private fun hasOneKtStatement(expression: KtIfExpression): Boolean {
+	private fun hasOneKtIfExpression(expression: KtIfExpression): Boolean {
 		val statements = expression.then?.children?.filterNot { it is PsiComment }
 		return statements != null && statements.size == 1 && statements[0] is KtIfExpression
 	}
