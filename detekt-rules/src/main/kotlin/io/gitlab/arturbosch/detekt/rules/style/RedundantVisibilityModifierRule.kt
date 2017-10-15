@@ -15,7 +15,11 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
 
 class RedundantVisibilityModifierRule(config: Config = Config.empty) : Rule(config) {
-	override val issue: Issue = Issue("RedundantVisibilityModifierRule", Severity.Style)
+	override val issue: Issue = Issue("RedundantVisibilityModifierRule",
+			Severity.Style,
+			"Checks for redundant visibility modifiers. " +
+					"Public is the default visibility for classes. " +
+					"The public modifier is redundant.")
 
 	private val classVisitor = ClassVisitor()
 	private val childrenVisitor = ChildrenVisitor()
