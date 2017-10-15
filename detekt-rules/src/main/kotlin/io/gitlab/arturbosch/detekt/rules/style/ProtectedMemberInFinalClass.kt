@@ -29,7 +29,7 @@ class ProtectedMemberInFinalClass(config: Config = Config.empty) : Rule(config) 
 			klass.getBody()?.declarations?.forEach { it.accept(visitor) }
 			klass.companionObjects.forEach { it.accept(visitor) }
 		}
-		super.visitClassOrObject(klass)
+		super.visitClass(klass)
 	}
 
 	private fun hasModifiers(klass: KtClass): Boolean {

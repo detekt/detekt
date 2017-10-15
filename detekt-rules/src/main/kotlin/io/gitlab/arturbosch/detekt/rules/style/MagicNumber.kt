@@ -13,10 +13,12 @@ import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
+import org.jetbrains.kotlin.psi.KtEnumEntry
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
 import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 import java.util.Locale
@@ -39,11 +41,12 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 	private val ignoreAnnotation = valueOrDefault(IGNORE_ANNOTATION, false)
 	private val ignorePropertyDeclaration = valueOrDefault(IGNORE_PROPERTY_DECLARATION, false)
 	private val ignoreNamedArgument = valueOrDefault(IGNORE_NAMED_ARGUMENT, false)
+	private val ignoreEnums = valueOrDefault(IGNORE_ENUMS, false)
 
 	override fun visitConstantExpression(expression: KtConstantExpression) {
 		val parent = expression.parent
 
-		if (isIgnoredByConfig(parent, expression)) {
+		if (isIgnoredByConfig(parent, expression) || expression.isPartOfFunctionReturnConstant()) {
 			return
 		}
 
@@ -63,6 +66,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 		ignorePropertyDeclaration && parent is KtProperty && !parent.isLocal -> true
 		ignoreAnnotation && expression.isPartOf(KtAnnotationEntry::class) -> true
 		ignoreHashCodeFunction && expression.isPartOfHashCode() -> true
+		ignoreEnums && expression.isPartOf(KtEnumEntry::class) -> true
 		parent.isConstantProperty() -> true
 		ignoreNamedArgument
 				&& expression.isPartOf(KtValueArgument::class)
@@ -70,15 +74,15 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 		else -> false
 	}
 
+	private fun KtConstantExpression.isPartOfFunctionReturnConstant() =
+			parent is KtNamedFunction || (parent is KtReturnExpression && parent.parent.children.size == 1)
+
+
 	private fun KtConstantExpression.isPartOfHashCode(): Boolean {
 		val containingFunction = getNonStrictParentOfType(KtNamedFunction::class.java)
-		val name = containingFunction?.name
 		val returnType = containingFunction?.typeReference?.node?.text
-		return nameIsHashCode(name) && returnTypeIsInt(returnType)
+		return containingFunction?.name == "hashCode" && returnType == "Int"
 	}
-
-	private fun returnTypeIsInt(returnType: String?) = returnType != null && returnType == "Int"
-	private fun nameIsHashCode(name: String?) = name != null && name == "hashCode"
 
 	private fun PsiElement?.isConstantProperty(): Boolean =
 			this is KtProperty && this.hasModifier(KtTokens.CONST_KEYWORD)
@@ -118,6 +122,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 		const val IGNORE_PROPERTY_DECLARATION = "ignorePropertyDeclaration"
 		const val IGNORE_ANNOTATION = "ignoreAnnotation"
 		const val IGNORE_NAMED_ARGUMENT = "ignoreNamedArgument"
+		const val IGNORE_ENUMS = "ignoreEnums"
 
 		private const val HEX_RADIX = 16
 		private const val BINARY_RADIX = 2

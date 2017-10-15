@@ -3,11 +3,12 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.rules.CommonSpec
-import io.gitlab.arturbosch.detekt.test.compileForTest
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.spek.api.dsl.given
+import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 import org.jetbrains.spek.subject.itBehavesLike
-import org.junit.jupiter.api.Test
 
 /**
  * @author Artur Bosch
@@ -15,17 +16,12 @@ import org.junit.jupiter.api.Test
 class EqualsWithHashCodeExistSpec : SubjectSpek<EqualsWithHashCodeExist>({
 	subject { EqualsWithHashCodeExist(Config.empty) }
 	itBehavesLike(CommonSpec())
-})
 
-class EqualsWithHashCodeExistTest {
+	given("some classes with equals() functions") {
 
-	@Test
-	fun nestedClasses() {
-		val subject = EqualsWithHashCodeExist(Config.empty)
-		val file = compileForTest(Case.NestedClasses.path())
-
-		subject.visit(file)
-
-		assertThat(subject.findings).hasSize(2)
+		it("reports equals() without hashCode() functions") {
+			val path = Case.NestedClasses.path()
+			assertThat(subject.lint(path)).hasSize(2)
+		}
 	}
-}
+})

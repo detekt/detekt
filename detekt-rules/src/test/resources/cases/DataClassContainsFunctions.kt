@@ -1,4 +1,4 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "RedundantOverride")
 
 package cases
 
@@ -6,13 +6,8 @@ data class ValidDataClass(val i: Int)
 
 data class DataClassWithFunctions(val i: Int) { // reports 2
 
-	fun f1() {
-		println()
-	}
-
-	fun f2() {
-		println()
-	}
+	fun f1() {}
+	fun f2() {}
 }
 
 data class DataClassWithOverriddenMethods(val i: Int) {
@@ -32,17 +27,10 @@ data class DataClassWithOverriddenMethods(val i: Int) {
 
 class ClassWithRegularFunctions {
 
-	fun f1() {
-		println()
+	fun f1() {}
+	fun f2() {}
+
+	data class NestedDataClassWithConversionFunction(val i : Int) { // reports 1
+		fun toDataClassWithOverriddenMethods() = DataClassWithOverriddenMethods(i)
 	}
-
-	fun f2() {
-		println()
-	}
-}
-
-
-@Suppress("unused")
-data class DataClassWithConversionFunction(val i : Int) {
-	fun toDataClassWithOverriddenMethods() = DataClassWithOverriddenMethods(i)
 }

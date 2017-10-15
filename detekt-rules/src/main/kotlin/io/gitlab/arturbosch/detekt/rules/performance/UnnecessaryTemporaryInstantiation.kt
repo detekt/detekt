@@ -13,7 +13,7 @@ import org.jetbrains.kotlin.psi.KtExpression
 class UnnecessaryTemporaryInstantiation(config: Config = Config.empty) : Rule(config) {
 
 	override val issue: Issue = Issue("UnnecessaryTemporaryInstantiation", Severity.Performance,
-			"Avoid temporary objects when converting primitive types to String")
+			"Avoid temporary objects when converting primitive types to String.")
 
 	private val types: Set<String> = hashSetOf("Boolean", "Byte", "Short", "Integer", "Long", "Float", "Double")
 

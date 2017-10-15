@@ -16,7 +16,7 @@ class IteratorNotThrowingNoSuchElementExceptionSpec : SubjectSpek<IteratorNotThr
 		it("should report") {
 			val file = compileForTest(Case.IteratorImpl.path())
 			val findings = subject.lint(file.text)
-			Assertions.assertThat(findings).hasSize(3)
+			Assertions.assertThat(findings).hasSize(4)
 		}
 	}
 })

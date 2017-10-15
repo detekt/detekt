@@ -12,17 +12,21 @@ import org.jetbrains.spek.subject.SubjectSpek
  * @author Ivan Balaksha
  */
 
-class DataClassContainsFunctionsSpec : SubjectSpek<DataClassContainsFunctionsRule>({
-	subject { DataClassContainsFunctionsRule() }
+class DataClassContainsFunctionsSpec : SubjectSpek<DataClassContainsFunctions>({
+	subject { DataClassContainsFunctions() }
+
 	given("several data classes") {
-		it("valid data class w/o conversion function") {
-			assertThat(subject.lint(Case.DataClassContainsFunctions.path())).hasSize(3)
+
+		val path = Case.DataClassContainsFunctions.path()
+
+		it("reports valid data class w/o conversion function") {
+			assertThat(subject.lint(path)).hasSize(3)
 		}
-		it("valid data class w/ conversion function") {
-			val rule = DataClassContainsFunctionsRule(TestConfig(
-					mapOf(DataClassContainsFunctionsRule.CONVERSION_FUNCTION_PREFIX to "to"))
-			)
-			assertThat(rule.lint(Case.DataClassContainsFunctions.path())).hasSize(2)
+
+		it("reports valid data class w/ conversion function") {
+			val config = TestConfig(mapOf(DataClassContainsFunctions.CONVERSION_FUNCTION_PREFIX to "to"))
+			val rule = DataClassContainsFunctions(config)
+			assertThat(rule.lint(path)).hasSize(2)
 		}
 	}
 })

@@ -276,6 +276,9 @@ style:
   LoopWithTooManyJumpStatements:
     active: false
     maxJumpCount: 1
+  MethodNameEqualsClassName:
+    active: false
+    ignoreOverriddenFunction: true
   ModifierOrder:
     active: true
   MagicNumber:
@@ -285,6 +288,7 @@ style:
     ignorePropertyDeclaration: false
     ignoreAnnotation: false
     ignoreNamedArgument: true
+    ignoreEnums: false
   WildcardImport:
     active: true
   SafeCast:
@@ -356,10 +360,12 @@ style:
     active: false
   RedundantVisibilityModifierRule:
     active: false
+  FunctionOnlyReturningConstant:
+    active: false
 
 comments:
   active: true
-  CommentOverPrivateMethod:
+  CommentOverPrivateFunction:
     active: true
   CommentOverPrivateProperty:
     active: true

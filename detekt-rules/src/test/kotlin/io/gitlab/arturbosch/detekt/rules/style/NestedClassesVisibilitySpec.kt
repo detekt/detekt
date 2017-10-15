@@ -11,8 +11,9 @@ class NestedClassesVisibilitySpec : SubjectSpek<NestedClassesVisibility>({
 	subject { NestedClassesVisibility() }
 
 	given("several nested classes") {
-		it("check interfaces,enums,classes") {
-			Assertions.assertThat(subject.lint(Case.NestedClassesVisibility.path())).hasSize(6)
+
+		it("reports public nested classes") {
+			Assertions.assertThat(subject.lint(Case.NestedClassesVisibility.path())).hasSize(5)
 		}
 	}
 })

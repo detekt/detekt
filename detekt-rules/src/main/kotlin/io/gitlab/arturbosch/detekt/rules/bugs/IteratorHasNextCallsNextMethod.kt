@@ -7,8 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.bugs.iterator.getMethod
-import io.gitlab.arturbosch.detekt.rules.bugs.iterator.isImplementingIterator
+import io.gitlab.arturbosch.detekt.rules.bugs.util.getMethod
+import io.gitlab.arturbosch.detekt.rules.bugs.util.isImplementingIterator
 import io.gitlab.arturbosch.detekt.rules.collectByType
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClassOrObject

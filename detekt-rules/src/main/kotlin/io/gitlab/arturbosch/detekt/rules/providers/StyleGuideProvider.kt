@@ -3,14 +3,16 @@ package io.gitlab.arturbosch.detekt.rules.providers
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.rules.style.DataClassContainsFunctionsRule
+import io.gitlab.arturbosch.detekt.rules.style.DataClassContainsFunctions
 import io.gitlab.arturbosch.detekt.rules.style.EqualsNullCall
 import io.gitlab.arturbosch.detekt.rules.style.ExpressionBodySyntax
 import io.gitlab.arturbosch.detekt.rules.style.FileParsingRule
 import io.gitlab.arturbosch.detekt.rules.style.ForbiddenComment
 import io.gitlab.arturbosch.detekt.rules.style.ForbiddenImport
+import io.gitlab.arturbosch.detekt.rules.style.FunctionOnlyReturningConstant
 import io.gitlab.arturbosch.detekt.rules.style.LoopWithTooManyJumpStatements
 import io.gitlab.arturbosch.detekt.rules.style.MagicNumber
+import io.gitlab.arturbosch.detekt.rules.style.MethodNameEqualsClassName
 import io.gitlab.arturbosch.detekt.rules.style.ModifierOrder
 import io.gitlab.arturbosch.detekt.rules.style.NestedClassesVisibility
 import io.gitlab.arturbosch.detekt.rules.style.NewLineAtEndOfFile
@@ -51,8 +53,10 @@ class StyleGuideProvider : RuleSetProvider {
 				EqualsNullCall(config),
 				ForbiddenComment(config),
 				ForbiddenImport(config),
+				FunctionOnlyReturningConstant(config),
 				PackageDeclarationStyle(config),
 				LoopWithTooManyJumpStatements(config),
+				MethodNameEqualsClassName(config),
 				NamingRules(config),
 				SafeCast(config),
 				UnnecessaryAbstractClass(config),
@@ -67,7 +71,7 @@ class StyleGuideProvider : RuleSetProvider {
 				SerialVersionUIDInSerializableClass(config),
 				MagicNumber(config),
 				ModifierOrder(config),
-				DataClassContainsFunctionsRule(config),
+				DataClassContainsFunctions(config),
 				UseDataClass(config),
 				UnusedImports(config),
 				ExpressionBodySyntax(config),
