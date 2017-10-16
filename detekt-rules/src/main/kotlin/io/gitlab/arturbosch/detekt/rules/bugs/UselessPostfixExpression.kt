@@ -6,21 +6,37 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.collectByType
 import org.jetbrains.kotlin.psi.KtBinaryExpression
+import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtPostfixExpression
+import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtReturnExpression
+import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 
 class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
 
 	override val issue: Issue = Issue("UselessPostfixExpression", Severity.Defect,
 			"The incremented or decremented value is unused. This value is replaced with the original value.")
 
+	var properties = setOf<String?>()
+
+	override fun visitClass(klass: KtClass) {
+		properties = klass.getProperties()
+				.map { it.name }
+				.toSet()
+		super.visitClass(klass)
+	}
+
 	override fun visitReturnExpression(expression: KtReturnExpression) {
 		val postfixExpression = expression.returnedExpression as? KtPostfixExpression
-		if (postfixExpression != null) {
+
+		if (postfixExpression != null && postfixExpression.shouldBeReported()) {
 			report(postfixExpression)
 		}
+
 		getPostfixExpressionChilds(expression.returnedExpression)
 				?.forEach { report(it) }
 	}
@@ -37,6 +53,20 @@ class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
 		if (postfixExpression != null && leftIdentifierText == postfixExpression.firstChild?.text) {
 			report(postfixExpression)
 		}
+	}
+
+	private fun KtPostfixExpression.shouldBeReported(): Boolean {
+		val functionProperties = this.getNonStrictParentOfType(KtNamedFunction::class.java)
+				?.collectByType<KtProperty>()
+				?.map { it.name }
+				?.toSet()
+		val postfixReceiverName = this.baseExpression?.text
+
+		if (functionProperties != null && functionProperties.contains(postfixReceiverName)) {
+			return true
+		}
+		return !properties.contains(postfixReceiverName)
+
 	}
 
 	private fun report(postfixExpression: KtPostfixExpression) {
