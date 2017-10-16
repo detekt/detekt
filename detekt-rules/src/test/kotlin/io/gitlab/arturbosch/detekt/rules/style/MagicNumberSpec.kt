@@ -378,6 +378,23 @@ class MagicNumberSpec : Spek({
 		}
 	}
 
+	given("magic numbers in companion object property assignments") {
+		val ktFile = compileContentForTest("""
+			class A {
+
+				companion object {
+				    val anotherBoringNumber = 43
+					const val anotherBoringConstant = 93872
+				}
+			}
+		""")
+
+		it("should not report any issues in those assignments") {
+			val findings = MagicNumber().lint(ktFile)
+			assertThat(findings).isEmpty()
+		}
+	}
+
 	given("a property without number number") {
 
 		val code = "private var pair: Pair<String, Int>? = null"
