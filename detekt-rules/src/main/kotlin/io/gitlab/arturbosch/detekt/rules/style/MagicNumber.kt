@@ -16,6 +16,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtEnumEntry
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
 import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.KtProperty
@@ -65,6 +66,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 
 	private fun isIgnoredByConfig(parent: PsiElement?, expression: KtConstantExpression) = when {
 		ignorePropertyDeclaration && parent is KtProperty && !parent.isLocal -> true
+		expression.isInCompanionObject() -> true	// TODO add configuration
 		ignoreAnnotation && expression.isPartOf(KtAnnotationEntry::class) -> true
 		ignoreHashCodeFunction && expression.isPartOfHashCode() -> true
 		ignoreEnums && expression.isPartOf(KtEnumEntry::class) -> true
@@ -83,6 +85,11 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 		val containingFunction = getNonStrictParentOfType(KtNamedFunction::class.java)
 		return containingFunction?.isHashCodeFunction() == true
 	}
+
+	private fun PsiElement.isInCompanionObject() =
+			this is KtProperty && this.parent.parent.let {
+				it is KtObjectDeclaration && it.isCompanion()
+			}
 
 	private fun PsiElement?.isConstantProperty(): Boolean =
 			this is KtProperty && this.hasModifier(KtTokens.CONST_KEYWORD)
