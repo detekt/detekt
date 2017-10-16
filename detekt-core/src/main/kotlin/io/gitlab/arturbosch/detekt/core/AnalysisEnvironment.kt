@@ -6,14 +6,13 @@ import org.jetbrains.kotlin.cli.jvm.compiler.CliLightClassGenerationSupport
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.cli.jvm.compiler.TopDownAnalyzerFacadeForJVM
-import org.jetbrains.kotlin.cli.jvm.config.addJavaSourceRoot
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoot
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
 import org.jetbrains.kotlin.com.intellij.openapi.Disposable
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
-import org.jetbrains.kotlin.config.addKotlinSourceRoot
+import org.jetbrains.kotlin.config.addKotlinSourceRoots
 import org.jetbrains.kotlin.container.ComponentProvider
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
@@ -52,13 +51,7 @@ class AnalysisEnvironment : Disposable {
 	}
 
 	fun addSources(list: List<String>) {
-		list.forEach {
-			configuration.addKotlinSourceRoot(it)
-			val file = File(it)
-			if (file.isDirectory || file.extension == ".java") {
-				configuration.addJavaSourceRoot(file)
-			}
-		}
+		configuration.addKotlinSourceRoots(list)
 	}
 
 	override fun dispose() {

@@ -18,7 +18,9 @@ import org.jetbrains.kotlin.types.TypeUtils
 class UselessCallOnNotNull(config: Config = Config.empty) : Rule(config) {
 	override val issue: Issue = Issue("UselessCallOnNotNull",
 			Severity.Performance,
-			"This call on not-null type may be reduced or removed.")
+			"This call on not-null type may be reduced or removed. Some calls are intended to be called on nullable " +
+					"collection or text types (e.g. String?). When this call is used on a not-null type (e.g. String)" +
+					" it is redundant and will have no effect, so it can be removed.")
 
 	private val uselessFqNames = mapOf("kotlin.collections.orEmpty" to deleteConversion,
 			"kotlin.text.orEmpty" to deleteConversion,
