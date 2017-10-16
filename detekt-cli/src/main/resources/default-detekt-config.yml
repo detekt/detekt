@@ -309,6 +309,8 @@ style:
     active: false
   NestedClassesVisibility:
     active: false
+  RedundantVisibilityModifierRule:
+    active: false
   FunctionOnlyReturningConstant:
     active: false
 

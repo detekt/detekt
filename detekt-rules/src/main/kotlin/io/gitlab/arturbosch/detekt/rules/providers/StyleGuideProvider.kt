@@ -20,6 +20,7 @@ import io.gitlab.arturbosch.detekt.rules.style.OptionalAbstractKeyword
 import io.gitlab.arturbosch.detekt.rules.style.OptionalWhenBraces
 import io.gitlab.arturbosch.detekt.rules.style.PackageDeclarationStyle
 import io.gitlab.arturbosch.detekt.rules.style.ProtectedMemberInFinalClass
+import io.gitlab.arturbosch.detekt.rules.style.RedundantVisibilityModifierRule
 import io.gitlab.arturbosch.detekt.rules.style.ReturnCount
 import io.gitlab.arturbosch.detekt.rules.style.SafeCast
 import io.gitlab.arturbosch.detekt.rules.style.SerialVersionUIDInSerializableClass
@@ -74,7 +75,8 @@ class StyleGuideProvider : RuleSetProvider {
 				UseDataClass(config),
 				UnusedImports(config),
 				ExpressionBodySyntax(config),
-				NestedClassesVisibility(config)
+				NestedClassesVisibility(config),
+				RedundantVisibilityModifierRule(config)
 		))
 	}
 }
