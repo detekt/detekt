@@ -64,5 +64,14 @@ class UselessPostfixExpressionSpec : SubjectSpek<UselessPostfixExpression>({
 				"""
 			assertThat(subject.lint(code)).hasSize(1)
 		}
+
+		it("should only detect ++ or -- postfix operator") {
+			val code = """
+				fun getInstance(): SwiftBrowserIdleTaskHelper {
+					return sInstance!!
+				}
+				"""
+			assertThat(subject.lint(code)).isEmpty()
+		}
 	}
 })

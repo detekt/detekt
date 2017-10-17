@@ -7,6 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.collectByType
+import org.jetbrains.kotlin.lexer.KtTokens.MINUSMINUS
+import org.jetbrains.kotlin.lexer.KtTokens.PLUSPLUS
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtExpression
@@ -31,7 +33,7 @@ class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
 	}
 
 	override fun visitReturnExpression(expression: KtReturnExpression) {
-		val postfixExpression = expression.returnedExpression as? KtPostfixExpression
+		val postfixExpression = expression.returnedExpression?.asPostFixExpression()
 
 		if (postfixExpression != null && postfixExpression.shouldBeReported()) {
 			report(postfixExpression)
@@ -41,8 +43,11 @@ class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
 				?.forEach { report(it) }
 	}
 
+	private fun KtExpression.asPostFixExpression() = if (this is KtPostfixExpression &&
+			(operationToken === PLUSPLUS || operationToken === MINUSMINUS)) this else null
+
 	override fun visitBinaryExpression(expression: KtBinaryExpression) {
-		val postfixExpression = expression.right as? KtPostfixExpression
+		val postfixExpression = expression.right?.asPostFixExpression()
 		val leftIdentifierText = expression.left?.text
 		checkPostfixExpression(postfixExpression, leftIdentifierText)
 		getPostfixExpressionChilds(expression.right)
