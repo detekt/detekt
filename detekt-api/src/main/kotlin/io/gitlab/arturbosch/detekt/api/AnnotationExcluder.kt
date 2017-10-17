@@ -16,9 +16,6 @@ class AnnotationExcluder(
 			?.toMap()
 
 	fun shouldExclude(annotations: List<KtAnnotationEntry>) =
-		annotations.mapNotNull {
-					val shortName = it.typeReferenceName
-					resolvedAnnotations?.get(shortName) ?: shortName
-				}
-				.any { !excludes.none(it) }
+		annotations.mapNotNull { resolvedAnnotations?.get(it.typeReferenceName) }
+				.any { excludes.contains(it) }
 }
