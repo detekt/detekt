@@ -1,9 +1,9 @@
 autoCorrect: true
 failFast: false
 
-test-pattern:
+test-pattern: # Configure exclusions for test sources
   active: true
-  patterns:
+  patterns: # Test file regexes
     - '.*/test/.*'
     - '.*Test.kt'
     - '.*Spec.kt'
@@ -14,6 +14,8 @@ test-pattern:
     - 'WildcardImport'
     - 'MagicNumber'
     - 'MaxLineLength'
+    - 'LateInitUsage'
+    - 'StringLiteralDuplication'
 
 build:
   warningThreshold: 5
