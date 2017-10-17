@@ -22,10 +22,10 @@ private fun KtElement.findAnnotatedSuppressedParent(id: String): Boolean {
 
 	var suppressed = false
 	if (parent != null && parent !is KtFile) {
-		if (parent.isSuppressedBy(id)) {
-			suppressed = true
+		suppressed = if (parent.isSuppressedBy(id)) {
+			true
 		} else {
-			suppressed = parent.findAnnotatedSuppressedParent(id)
+			parent.findAnnotatedSuppressedParent(id)
 		}
 	}
 
@@ -39,5 +39,7 @@ fun KtAnnotated.isSuppressedBy(id: String): Boolean {
 	val valid = listOf(id, "ALL", "all")
 	return annotationEntries.find { it.typeReferenceName.let { it == "Suppress" || it == "SuppressWarnings" } }
 			?.valueArguments
-			?.find { it.getArgumentExpression()?.text?.replace("\"", "") in valid } != null
+			?.map { it.getArgumentExpression()?.text?.replace(Regex("(?i)detekt([.:])"), "") }
+			?.map { it?.replace("\"", "") }
+			?.find { it in valid } != null
 }

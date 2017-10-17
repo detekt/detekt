@@ -34,6 +34,13 @@ internal class SuppressionTest : Spek({
 		assertNotNull(rule.expected)
 	}
 
+	it("rule should be suppressed by detekt prefixed suppressions") {
+		val ktFile = compilerFor("SuppressedWithDetektPrefix.kt")
+		val rule = TestRule()
+		rule.visitFile(ktFile)
+		assertNotNull(rule.expected)
+	}
+
 })
 
 class TestRule : Rule() {
