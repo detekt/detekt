@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.rules.complexity.ComplexCondition
 import io.gitlab.arturbosch.detekt.rules.complexity.LongMethod
 import io.gitlab.arturbosch.detekt.rules.complexity.LongParameterList
+import io.gitlab.arturbosch.detekt.rules.complexity.StringLiteralDuplication
 import io.gitlab.arturbosch.detekt.rules.complexity.TooManyFunctions
 import io.gitlab.arturbosch.detekt.test.compileForTest
 import io.gitlab.arturbosch.detekt.test.lint
@@ -48,6 +49,12 @@ class SuppressingSpec : Spek({
 
 	it("should suppress TooManyFunctionsRule on class level") {
 		val findings = TooManyFunctions(threshold = 0).lint(Case.SuppressedElementsByClass.path())
+
+		assertThat(findings).isEmpty()
+	}
+
+	it("should suppress StringLiteralDuplication on class level") {
+		val findings = StringLiteralDuplication().lint(Case.SuppressStringLiteralDuplication.path())
 
 		assertThat(findings).isEmpty()
 	}

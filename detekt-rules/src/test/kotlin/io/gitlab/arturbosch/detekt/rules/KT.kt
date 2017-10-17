@@ -46,6 +46,7 @@ enum class Case(val file: String) {
 	SuppressedElements("/SuppressedByElementAnnotation.kt"),
 	SuppressedElementsByFile("/SuppressedElementsByFileAnnotation.kt"),
 	SuppressedElementsByClass("/SuppressedElementsByClassAnnotation.kt"),
+	SuppressStringLiteralDuplication("/SuppressStringLiteralDuplication.kt"),
 	SwallowedException("/cases/SwallowedException.kt"),
 	TooManyFunctions("/cases/TooManyFunctions.kt"),
 	TooManyFunctionsTopLevel("/cases/TooManyFunctionsTopLevel.kt"),

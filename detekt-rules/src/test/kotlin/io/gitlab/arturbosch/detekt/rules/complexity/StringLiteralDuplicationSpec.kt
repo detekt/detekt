@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Java6Assertions.assertThat
+import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
@@ -74,6 +75,22 @@ class StringLiteralDuplicationSpec : SubjectSpek<StringLiteralDuplication>({
 			"""
 			val config = TestConfig(mapOf(StringLiteralDuplication.IGNORE_STRINGS_REGEX to "(lorem|ipsum)"))
 			assertFindingWithConfig(code, config, 0)
+		}
+	}
+
+	describe("saves string literal references") {
+
+		it("reports 3 locations for 'lorem'") {
+			val code = """
+				class Duplication {
+					var s1 = "lorem"
+					fun f(s: String = "lorem") {
+						s1.equals("lorem")
+					}
+				}"""
+			val finding = subject.lint(code)[0]
+			val locations = finding.references.map { it.location } + finding.entity.location
+			assertThat(locations).hasSize(3)
 		}
 	}
 })
