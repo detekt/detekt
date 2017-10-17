@@ -16,7 +16,7 @@ class MagicNumberSpec : Spek({
 
 		it("should not be reported by default") {
 			val findings = MagicNumber().lint(ktFile)
-			assertThat(findings).hasSize(0)
+			assertThat(findings).isEmpty()
 		}
 
 		it("should be reported when ignoredNumbers is empty") {
@@ -30,12 +30,12 @@ class MagicNumberSpec : Spek({
 
 		it("should not be reported by default") {
 			val findings = MagicNumber().lint(ktFile)
-			assertThat(findings).hasSize(0)
+			assertThat(findings).isEmpty()
 		}
 
 		it("should not be reported when ignoredNumbers is empty") {
 			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
-			assertThat(findings).hasSize(0)
+			assertThat(findings).isEmpty()
 		}
 	}
 
@@ -44,7 +44,7 @@ class MagicNumberSpec : Spek({
 
 		it("should not be reported by default") {
 			val findings = MagicNumber().lint(ktFile)
-			assertThat(findings).hasSize(0)
+			assertThat(findings).isEmpty()
 		}
 
 		it("should be reported when ignoredNumbers is empty") {
@@ -58,12 +58,12 @@ class MagicNumberSpec : Spek({
 
 		it("should not be reported by default") {
 			val findings = MagicNumber().lint(ktFile)
-			assertThat(findings).hasSize(0)
+			assertThat(findings).isEmpty()
 		}
 
 		it("should not be reported when ignoredNumbers is empty") {
 			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
-			assertThat(findings).hasSize(0)
+			assertThat(findings).isEmpty()
 		}
 	}
 
@@ -72,7 +72,7 @@ class MagicNumberSpec : Spek({
 
 		it("should not be reported by default") {
 			val findings = MagicNumber().lint(ktFile)
-			assertThat(findings).hasSize(0)
+			assertThat(findings).isEmpty()
 		}
 
 		it("should be reported when ignoredNumbers is empty") {
@@ -86,7 +86,7 @@ class MagicNumberSpec : Spek({
 
 		it("should not be reported by default") {
 			val findings = MagicNumber().lint(ktFile)
-			assertThat(findings).hasSize(0)
+			assertThat(findings).isEmpty()
 		}
 
 		it("should be reported when ignoredNumbers is empty") {
@@ -124,12 +124,12 @@ class MagicNumberSpec : Spek({
 
 		it("should not be reported by default") {
 			val findings = MagicNumber().lint(ktFile)
-			assertThat(findings).hasSize(0)
+			assertThat(findings).isEmpty()
 		}
 
 		it("should not be reported when ignoredNumbers is empty") {
 			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
-			assertThat(findings).hasSize(0)
+			assertThat(findings).isEmpty()
 		}
 	}
 
@@ -138,7 +138,7 @@ class MagicNumberSpec : Spek({
 
 		it("should not be reported by default") {
 			val findings = MagicNumber().lint(ktFile)
-			assertThat(findings).hasSize(0)
+			assertThat(findings).isEmpty()
 		}
 
 		it("should be reported when ignoredNumbers is empty") {
@@ -152,12 +152,12 @@ class MagicNumberSpec : Spek({
 
 		it("should not be reported by default") {
 			val findings = MagicNumber().lint(ktFile)
-			assertThat(findings).hasSize(0)
+			assertThat(findings).isEmpty()
 		}
 
 		it("should not be reported when ignoredNumbers is empty") {
 			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
-			assertThat(findings).hasSize(0)
+			assertThat(findings).isEmpty()
 		}
 	}
 
@@ -166,7 +166,7 @@ class MagicNumberSpec : Spek({
 
 		it("should not be reported by default") {
 			val findings = MagicNumber().lint(ktFile)
-			assertThat(findings).hasSize(0)
+			assertThat(findings).isEmpty()
 		}
 
 		it("should be reported when ignoredNumbers is empty") {
@@ -180,12 +180,12 @@ class MagicNumberSpec : Spek({
 
 		it("should not be reported by default") {
 			val findings = MagicNumber().lint(ktFile)
-			assertThat(findings).hasSize(0)
+			assertThat(findings).isEmpty()
 		}
 
 		it("should not be reported when ignoredNumbers is empty") {
 			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
-			assertThat(findings).hasSize(0)
+			assertThat(findings).isEmpty()
 		}
 	}
 
@@ -194,12 +194,12 @@ class MagicNumberSpec : Spek({
 
 		it("should not be reported when ignoredNumbers contains 300") {
 			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "300"))).lint(ktFile)
-			assertThat(findings).hasSize(0)
+			assertThat(findings).isEmpty()
 		}
 
 		it("should not be reported when ignoredNumbers contains a floating point 300") {
 			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "300.0"))).lint(ktFile)
-			assertThat(findings).hasSize(0)
+			assertThat(findings).isEmpty()
 		}
 	}
 
@@ -213,7 +213,7 @@ class MagicNumberSpec : Spek({
 
 		it("should not be reported when ignoredNumbers contains a binary literal 0b01001") {
 			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "0b01001"))).lint(ktFile)
-			assertThat(findings).hasSize(0)
+			assertThat(findings).isEmpty()
 		}
 	}
 
@@ -312,7 +312,7 @@ class MagicNumberSpec : Spek({
 
 		it("should not be reported when ignoredNumbers contains it") {
 			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ".5"))).lint(code)
-			assertThat(findings).hasSize(0)
+			assertThat(findings).isEmpty()
 		}
 	}
 
@@ -342,27 +342,53 @@ class MagicNumberSpec : Spek({
 				fun hashCode(): Int {
 					val iAmSoMagic = 7328672
 				}
+
+				companion object {
+				    val anotherBoringNumber = 43
+					const val anotherBoringConstant = 93872
+				}
 			}
 		""")
 
 		it("should report all without ignore flags") {
-			val findings = MagicNumber().lint(ktFile)
-			assertThat(findings).hasSize(3)
+			val config = TestConfig(mapOf(
+					MagicNumber.IGNORE_PROPERTY_DECLARATION to "false",
+					MagicNumber.IGNORE_ANNOTATION to "false",
+					MagicNumber.IGNORE_HASH_CODE to "false",
+					MagicNumber.IGNORE_CONSTANT_DECLARATION to "false",
+					MagicNumber.IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "false"))
+
+			val findings = MagicNumber(config).lint(ktFile)
+
+			val locationStrings = findings.map { it.entity.location.locationString }
+			assertThat(locationStrings == listOf("69", "42", "93871", "7328672", "43", "93872"))
 		}
 
-		it("should not report number in properties") {
+		it("should not report number in properties when ignored") {
 			val config = TestConfig(mapOf(MagicNumber.IGNORE_PROPERTY_DECLARATION to "true"))
 			val findings = MagicNumber(config).lint(ktFile)
 			assertThat(findings).hasSize(2)
 		}
 
-		it("should not report number in annotation") {
+		it("should report number in properties when not ignored") {
+			val config = TestConfig(mapOf(MagicNumber.IGNORE_PROPERTY_DECLARATION to "false"))
+			val findings = MagicNumber(config).lint(ktFile)
+			assertThat(findings).hasSize(3)
+		}
+
+		it("should not report number in annotation when ignored") {
 			val config = TestConfig(mapOf(MagicNumber.IGNORE_ANNOTATION to "true"))
 			val findings = MagicNumber(config).lint(ktFile)
 			assertThat(findings).hasSize(2)
 		}
 
-		it("should not report number in hashCode") {
+		it("should not report number in hashCode when ignored") {
+			val config = TestConfig(mapOf(MagicNumber.IGNORE_HASH_CODE to "true"))
+			val findings = MagicNumber(config).lint(ktFile)
+			assertThat(findings).hasSize(2)
+		}
+
+		it("should not report number in hashCode when ignored") {
 			val config = TestConfig(mapOf(MagicNumber.IGNORE_HASH_CODE to "true"))
 			val findings = MagicNumber(config).lint(ktFile)
 			assertThat(findings).hasSize(2)
@@ -372,7 +398,9 @@ class MagicNumberSpec : Spek({
 			val config = TestConfig(mapOf(
 					MagicNumber.IGNORE_PROPERTY_DECLARATION to "true",
 					MagicNumber.IGNORE_ANNOTATION to "true",
-					MagicNumber.IGNORE_HASH_CODE to "true"))
+					MagicNumber.IGNORE_HASH_CODE to "true",
+					MagicNumber.IGNORE_CONSTANT_DECLARATION to "true",
+					MagicNumber.IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "true"))
 			val findings = MagicNumber(config).lint(ktFile)
 			assertThat(findings).isEmpty()
 		}
@@ -395,7 +423,7 @@ class MagicNumberSpec : Spek({
 		}
 	}
 
-	given("a property without number number") {
+	given("a property without number") {
 
 		val code = "private var pair: Pair<String, Int>? = null"
 
