@@ -22,10 +22,10 @@ private fun KtElement.findAnnotatedSuppressedParent(id: String): Boolean {
 
 	var suppressed = false
 	if (parent != null && parent !is KtFile) {
-		if (parent.isSuppressedBy(id)) {
-			suppressed = true
+		suppressed = if (parent.isSuppressedBy(id)) {
+			true
 		} else {
-			suppressed = parent.findAnnotatedSuppressedParent(id)
+			parent.findAnnotatedSuppressedParent(id)
 		}
 	}
 

@@ -14,11 +14,13 @@ import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtLiteralStringTemplateEntry
 
-class StringLiteralDuplication(config: Config = Config.empty,
-							   threshold: Int = StringLiteralDuplication.DEFAULT_DUPLICATION) : ThresholdRule(config, threshold) {
+class StringLiteralDuplication(
+		config: Config = Config.empty,
+		threshold: Int = DEFAULT_DUPLICATION
+) : ThresholdRule(config, threshold) {
 
 	override val issue = Issue(javaClass.simpleName, Severity.Maintainability,
-			"Multiple occurrences of the same string literal within a single kt file detected.",
+			"Multiple occurrences of the same string literal within a single file detected.",
 			Debt.FIVE_MINS)
 
 	private val ignoreAnnotation = valueOrDefault(IGNORE_ANNOTATION, true)
@@ -29,32 +31,43 @@ class StringLiteralDuplication(config: Config = Config.empty,
 		val visitor = StringLiteralVisitor()
 		file.accept(visitor)
 		val type = "SIZE: "
-		visitor.getLiteralsOverThreshold().forEach {
-			report(ThresholdedCodeSmell(issue, Entity.from(file), Metric(type + it.key, it.value, threshold)))
+		for ((name, value) in visitor.getLiteralsOverThreshold()) {
+			val (main, references) = visitor.entitiesForLiteral(name)
+			report(ThresholdedCodeSmell(issue, main, Metric(type + name, value, threshold), references))
 		}
 	}
 
 	internal inner class StringLiteralVisitor : DetektVisitor() {
 
 		private var literals = HashMap<String, Int>()
+		private var literalReferences = HashMap<String, MutableList<KtLiteralStringTemplateEntry>>()
 		private val pass: Unit = Unit
 
-		fun getLiteralsOverThreshold(): Map<String, Int> {
-			return literals.filterValues { it > threshold }
-		}
-
-		override fun visitLiteralStringTemplateEntry(entry: KtLiteralStringTemplateEntry) {
-			val text = entry.text
-			when {
-				ignoreAnnotation &&	entry.isPartOf(KtAnnotationEntry::class) -> pass
-				excludeStringsWithLessThan5Characters && text.length < STRING_EXCLUSION_LENGTH -> pass
-				text.matches(ignoreStringsRegex) -> pass
-				else -> add(text)
+		fun getLiteralsOverThreshold(): Map<String, Int> = literals.filterValues { it > threshold }
+		fun entitiesForLiteral(literal: String): Pair<Entity, List<Entity>> {
+			val references = literalReferences[literal]
+			if (references != null && references.isNotEmpty()) {
+				val mainEntity = references[0]
+				val referenceEntities = references.subList(1, references.size)
+				return Entity.from(mainEntity) to referenceEntities.map { Entity.from(it) }
+			} else {
+				throw IllegalStateException("No KtElements for literal '$literal' found!")
 			}
 		}
 
-		private fun add(text: String) {
-			literals.put(text, literals.getOrDefault(text, 0) + 1)
+		override fun visitLiteralStringTemplateEntry(entry: KtLiteralStringTemplateEntry) {
+			when {
+				ignoreAnnotation && entry.isPartOf(KtAnnotationEntry::class) -> pass
+				excludeStringsWithLessThan5Characters && entry.text.length < STRING_EXCLUSION_LENGTH -> pass
+				entry.text.matches(ignoreStringsRegex) -> pass
+				else -> add(entry)
+			}
+		}
+
+		private fun add(entry: KtLiteralStringTemplateEntry) {
+			val text = entry.text
+			literals.compute(text) { _, oldValue -> oldValue?.plus(1) ?: 1 }
+			literalReferences.compute(text) { _, entries -> entries?.add(entry); entries ?: mutableListOf(entry) }
 		}
 	}
 
