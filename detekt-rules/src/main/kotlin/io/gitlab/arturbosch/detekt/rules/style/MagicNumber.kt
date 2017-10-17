@@ -39,19 +39,21 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 			.map { parseAsDouble(it) }
 			.sorted()
 
-	private val ignoreHashCodeFunction = valueOrDefault(IGNORE_HASH_CODE, false)
 	private val ignoreAnnotation = valueOrDefault(IGNORE_ANNOTATION, false)
+	private val ignoreHashCodeFunction = valueOrDefault(IGNORE_HASH_CODE, false)
 	private val ignorePropertyDeclaration = valueOrDefault(IGNORE_PROPERTY_DECLARATION, false)
 	private val ignoreNamedArgument = valueOrDefault(IGNORE_NAMED_ARGUMENT, false)
 	private val ignoreEnums = valueOrDefault(IGNORE_ENUMS, false)
+	private val ignoreConstantDeclaration = valueOrDefault(IGNORE_CONSTANT_DECLARATION, true)
+	private val ignoreCompanionObjectPropertyDeclaration = valueOrDefault(IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION, true)
 
 	override fun visitConstantExpression(expression: KtConstantExpression) {
-		val parent = expression.parent
 
-		if (isIgnoredByConfig(parent, expression) || expression.isPartOfFunctionReturnConstant()) {
+		if (isIgnoredByConfig(expression) || expression.isPartOfFunctionReturnConstant()) {
 			return
 		}
 
+		val parent = expression.parent
 		val rawNumber = if (parent.hasUnaryMinusPrefix()) {
 			parent.text
 		} else {
@@ -64,13 +66,13 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 		}
 	}
 
-	private fun isIgnoredByConfig(parent: PsiElement?, expression: KtConstantExpression) = when {
-		ignorePropertyDeclaration && parent is KtProperty && !parent.isLocal -> true
-		expression.isInCompanionObject() -> true	// TODO add configuration
+	private fun isIgnoredByConfig(expression: KtConstantExpression) = when {
+		ignorePropertyDeclaration && expression.isProperty() -> true
+		ignoreConstantDeclaration && expression.isConstantProperty() -> true
+		ignoreCompanionObjectPropertyDeclaration && expression.isCompanionObjectProperty() -> true
 		ignoreAnnotation && expression.isPartOf(KtAnnotationEntry::class) -> true
 		ignoreHashCodeFunction && expression.isPartOfHashCode() -> true
 		ignoreEnums && expression.isPartOf(KtEnumEntry::class) -> true
-		parent.isConstantProperty() -> true
 		ignoreNamedArgument
 				&& expression.isPartOf(KtValueArgument::class)
 				&& expression.isPartOf(KtCallExpression::class) -> true
@@ -86,13 +88,16 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 		return containingFunction?.isHashCodeFunction() == true
 	}
 
-	private fun PsiElement.isInCompanionObject() =
-			this is KtProperty && this.parent.parent.let {
-				it is KtObjectDeclaration && it.isCompanion()
-			}
+	private fun KtConstantExpression.isProperty() =
+			getNonStrictParentOfType(KtProperty::class.java)?.let { !it.isLocal } ?: false
 
-	private fun PsiElement?.isConstantProperty(): Boolean =
-			this is KtProperty && this.hasModifier(KtTokens.CONST_KEYWORD)
+	private fun KtConstantExpression.isCompanionObjectProperty() = isProperty() && isInCompanionObject()
+
+	private fun KtConstantExpression.isInCompanionObject() =
+			getNonStrictParentOfType(KtObjectDeclaration::class.java)?.isCompanion() ?: false
+
+	private fun KtConstantExpression.isConstantProperty(): Boolean =
+			isProperty() && getNonStrictParentOfType(KtProperty::class.java)?.hasModifier(KtTokens.CONST_KEYWORD) ?: false
 
 	private fun PsiElement.hasUnaryMinusPrefix(): Boolean = this is KtPrefixExpression
 			&& (this.firstChild as? KtOperationReferenceExpression)?.operationSignTokenType == KtTokens.MINUS
@@ -127,6 +132,8 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 		const val IGNORE_NUMBERS = "ignoreNumbers"
 		const val IGNORE_HASH_CODE = "ignoreHashCodeFunction"
 		const val IGNORE_PROPERTY_DECLARATION = "ignorePropertyDeclaration"
+		const val IGNORE_CONSTANT_DECLARATION = "ignoreConstantDeclaration"
+		const val IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION = "ignoreCompanionObjectPropertyDeclaration"
 		const val IGNORE_ANNOTATION = "ignoreAnnotation"
 		const val IGNORE_NAMED_ARGUMENT = "ignoreNamedArgument"
 		const val IGNORE_ENUMS = "ignoreEnums"
