@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.isPartOf
+import io.gitlab.arturbosch.detekt.rules.isHashCodeFunction
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
@@ -80,8 +81,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 
 	private fun KtConstantExpression.isPartOfHashCode(): Boolean {
 		val containingFunction = getNonStrictParentOfType(KtNamedFunction::class.java)
-		val returnType = containingFunction?.typeReference?.node?.text
-		return containingFunction?.name == "hashCode" && returnType == "Int"
+		return containingFunction?.isHashCodeFunction() == true
 	}
 
 	private fun PsiElement?.isConstantProperty(): Boolean =

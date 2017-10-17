@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.asBlockExpression
-import io.gitlab.arturbosch.detekt.rules.bugs.util.isEqualsMethod
+import io.gitlab.arturbosch.detekt.rules.isEqualsFunction
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -29,7 +29,7 @@ class EqualsAlwaysReturnsTrueOrFalse(config: Config = Config.empty) : Rule(confi
 	}
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (function.isEqualsMethod() && isReturningBooleanConstant(function)) {
+		if (function.isEqualsFunction() && isReturningBooleanConstant(function)) {
 			report(CodeSmell(issue, Entity.from(function)))
 		}
 	}
