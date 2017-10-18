@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
+import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.lastBlockStatementOrThis
@@ -11,7 +12,7 @@ import kotlin.test.assertNotNull
 /**
  * @author Artur Bosch
  */
-internal class SuppressionTest : Spek({
+internal class SuppressionSpec: Spek({
 
 	it("rule should be suppressed") {
 		val ktFile = compilerFor("SuppressedObject.kt")
@@ -34,8 +35,46 @@ internal class SuppressionTest : Spek({
 		assertNotNull(rule.expected)
 	}
 
-	it("rule should be suppressed by detekt prefixed suppressions") {
-		val ktFile = compilerFor("SuppressedWithDetektPrefix.kt")
+	it("rule should be suppressed by detekt prefix in uppercase with dot separator") {
+		val ktFile = compileContentForTest("""
+			@file:Suppress("Detekt.ALL")
+			object SuppressedWithDetektPrefix {
+
+				fun stuff() {
+					println("FAILED TEST")
+				}
+			}
+			""")
+		val rule = TestRule()
+		rule.visitFile(ktFile)
+		assertNotNull(rule.expected)
+	}
+
+	it("rule should be suppressed by detekt prefix in lowercase with colon separator") {
+		val ktFile = compileContentForTest("""
+			@file:Suppress("detekt:ALL")
+			object SuppressedWithDetektPrefix {
+
+				fun stuff() {
+					println("FAILED TEST")
+				}
+			}
+			""")
+		val rule = TestRule()
+		rule.visitFile(ktFile)
+		assertNotNull(rule.expected)
+	}
+
+	it("rule should be suppressed by detekt prefix in all caps with colon separator") {
+		val ktFile = compileContentForTest("""
+			@file:Suppress("DETEKT:ALL")
+			object SuppressedWithDetektPrefix {
+
+				fun stuff() {
+					println("FAILED TEST")
+				}
+			}
+			""")
 		val rule = TestRule()
 		rule.visitFile(ktFile)
 		assertNotNull(rule.expected)
