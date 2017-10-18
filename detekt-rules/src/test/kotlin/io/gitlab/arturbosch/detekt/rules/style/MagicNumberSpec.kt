@@ -242,16 +242,16 @@ class MagicNumberSpec : Spek({
 	}
 
 	given("an if statement with magic numbers") {
-		val code = "val myInt = if (5 < 6) 7 else 8"
+		val ktFile = compileContentForTest("val myInt = if (5 < 6) 7 else 8")
 
 		it("should be reported") {
-			val findings = MagicNumber().lint(code)
+			val findings = MagicNumber().lint(ktFile)
 			assertThat(findings).hasSize(4)
 		}
 	}
 
 	given("a when statement with magic numbers") {
-		val code = """
+		val ktFile = compileContentForTest("""
 			fun test(x: Int) {
 				when (x) {
 					5 -> return 5
@@ -259,59 +259,59 @@ class MagicNumberSpec : Spek({
 					3 -> return 3
 				}
 			}
-		"""
+		""".trimMargin())
 
 		it("should be reported") {
-			val findings = MagicNumber().lint(code)
+			val findings = MagicNumber().lint(ktFile)
 			assertThat(findings).hasSize(6)
 		}
 	}
 
 	given("a method containing variables with magic numbers") {
-		val code = """
+		val ktFile = compileContentForTest("""
 			fun test(x: Int) {
 				val i = 5
 			}
-		"""
+		""".trimMargin())
 
 		it("should be reported") {
-			val findings = MagicNumber().lint(code)
+			val findings = MagicNumber().lint(ktFile)
 			assertThat(findings).hasSize(1)
 		}
 	}
 
 	given("a boolean value") {
-		val code = """
+		val ktFile = compileContentForTest("""
 			fun test() : Boolean {
 				return true;
 			}
-		"""
+		""".trimMargin())
 
 		it("should not be reported") {
-			val findings = MagicNumber().lint(code)
+			val findings = MagicNumber().lint(ktFile)
 			assertThat(findings).isEmpty()
 		}
 	}
 
 	given("a non-numeric constant expression") {
-		val code = "val surprise = true"
+		val ktFile = compileContentForTest("val surprise = true")
 
 		it("should not be reported") {
-			val findings = MagicNumber().lint(code)
+			val findings = MagicNumber().lint(ktFile)
 			assertThat(findings).isEmpty()
 		}
 	}
 
 	given("a float of 0.5") {
-		val code = compileContentForTest("val test = 0.5f")
+		val ktFile = compileContentForTest("val test = 0.5f")
 
 		it("should be reported by default") {
-			val findings = MagicNumber().lint(code)
+			val findings = MagicNumber().lint(ktFile)
 			assertThat(findings).hasSize(1)
 		}
 
 		it("should not be reported when ignoredNumbers contains it") {
-			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ".5"))).lint(code)
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ".5"))).lint(ktFile)
 			assertThat(findings).isEmpty()
 		}
 	}
@@ -484,11 +484,10 @@ class MagicNumberSpec : Spek({
 	}
 
 	given("a property without number") {
-
-		val code = "private var pair: Pair<String, Int>? = null"
+		val ktFile = compileContentForTest("private var pair: Pair<String, Int>? = null")
 
 		it("should not lead to a crash #276") {
-			val findings = MagicNumber().lint(code)
+			val findings = MagicNumber().lint(ktFile)
 			assertThat(findings).isEmpty()
 		}
 	}
