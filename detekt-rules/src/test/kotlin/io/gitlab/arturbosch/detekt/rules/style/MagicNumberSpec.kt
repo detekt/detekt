@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.rules.assertThat
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.lint
-import org.assertj.core.api.Java6Assertions.assertThat
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
@@ -348,59 +348,41 @@ class MagicNumberSpec : Spek({
 					const val anotherBoringConstant = 93872
 				}
 			}
-		""")
+		""".trimMargin())
 
 		it("should report all without ignore flags") {
-			val config = TestConfig(mapOf(
-					MagicNumber.IGNORE_PROPERTY_DECLARATION to "false",
-					MagicNumber.IGNORE_ANNOTATION to "false",
-					MagicNumber.IGNORE_HASH_CODE to "false",
-					MagicNumber.IGNORE_CONSTANT_DECLARATION to "false",
-					MagicNumber.IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "false"))
+			val config = TestConfig(
+					mapOf(
+							MagicNumber.IGNORE_PROPERTY_DECLARATION to "false",
+							MagicNumber.IGNORE_ANNOTATION to "false",
+							MagicNumber.IGNORE_HASH_CODE to "false",
+							MagicNumber.IGNORE_CONSTANT_DECLARATION to "false",
+							MagicNumber.IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "false"
+					)
+			)
 
 			val findings = MagicNumber(config).lint(ktFile)
-
-			val locationStrings = findings.map { it.entity.location.locationString }
-			assertThat(locationStrings == listOf("69", "42", "93871", "7328672", "43", "93872"))
-		}
-
-		it("should not report number in properties when ignored") {
-			val config = TestConfig(mapOf(MagicNumber.IGNORE_PROPERTY_DECLARATION to "true"))
-			val findings = MagicNumber(config).lint(ktFile)
-			assertThat(findings).hasSize(2)
-		}
-
-		it("should report number in properties when not ignored") {
-			val config = TestConfig(mapOf(MagicNumber.IGNORE_PROPERTY_DECLARATION to "false"))
-			val findings = MagicNumber(config).lint(ktFile)
-			assertThat(findings).hasSize(3)
-		}
-
-		it("should not report number in annotation when ignored") {
-			val config = TestConfig(mapOf(MagicNumber.IGNORE_ANNOTATION to "true"))
-			val findings = MagicNumber(config).lint(ktFile)
-			assertThat(findings).hasSize(2)
-		}
-
-		it("should not report number in hashCode when ignored") {
-			val config = TestConfig(mapOf(MagicNumber.IGNORE_HASH_CODE to "true"))
-			val findings = MagicNumber(config).lint(ktFile)
-			assertThat(findings).hasSize(2)
-		}
-
-		it("should not report number in hashCode when ignored") {
-			val config = TestConfig(mapOf(MagicNumber.IGNORE_HASH_CODE to "true"))
-			val findings = MagicNumber(config).lint(ktFile)
-			assertThat(findings).hasSize(2)
+			assertThat(findings).hasLocationStrings(
+					"'69' at (1,20) in /foo.bar",
+					"'42' at (3,24) in /foo.bar",
+					"'93871' at (4,32) in /foo.bar",
+					"'7328672' at (7,23) in /foo.bar",
+					"'43' at (11,35) in /foo.bar",
+					"'93872' at (12,40) in /foo.bar"
+			)
 		}
 
 		it("should not report any issues with all ignore flags") {
-			val config = TestConfig(mapOf(
-					MagicNumber.IGNORE_PROPERTY_DECLARATION to "true",
-					MagicNumber.IGNORE_ANNOTATION to "true",
-					MagicNumber.IGNORE_HASH_CODE to "true",
-					MagicNumber.IGNORE_CONSTANT_DECLARATION to "true",
-					MagicNumber.IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "true"))
+			val config = TestConfig(
+					mapOf(
+							MagicNumber.IGNORE_PROPERTY_DECLARATION to "true",
+							MagicNumber.IGNORE_ANNOTATION to "true",
+							MagicNumber.IGNORE_HASH_CODE to "true",
+							MagicNumber.IGNORE_CONSTANT_DECLARATION to "true",
+							MagicNumber.IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "true"
+					)
+			)
+
 			val findings = MagicNumber(config).lint(ktFile)
 			assertThat(findings).isEmpty()
 		}
@@ -415,11 +397,89 @@ class MagicNumberSpec : Spek({
 					const val anotherBoringConstant = 93872
 				}
 			}
-		""")
+		""".trimMargin())
 
-		it("should not report any issues in those assignments") {
+		it("should not report any issues by default") {
 			val findings = MagicNumber().lint(ktFile)
 			assertThat(findings).isEmpty()
+		}
+
+		it("should not report any issues when ignoring properties but not constants nor companion objects") {
+			val config = TestConfig(
+					mapOf(
+							MagicNumber.IGNORE_PROPERTY_DECLARATION to "true",
+							MagicNumber.IGNORE_CONSTANT_DECLARATION to "false",
+							MagicNumber.IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "false"
+					)
+			)
+
+			val findings = MagicNumber(config).lint(ktFile)
+			assertThat(findings).isEmpty()
+		}
+
+		it("should not report any issues when ignoring properties and constants but not companion objects") {
+			val config = TestConfig(
+					mapOf(
+							MagicNumber.IGNORE_PROPERTY_DECLARATION to "true",
+							MagicNumber.IGNORE_CONSTANT_DECLARATION to "true",
+							MagicNumber.IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "false"
+					)
+			)
+
+			val findings = MagicNumber(config).lint(ktFile)
+			assertThat(findings).isEmpty()
+		}
+
+		it("should not report any issues when ignoring properties, constants and companion objects") {
+			val config = TestConfig(
+					mapOf(
+							MagicNumber.IGNORE_PROPERTY_DECLARATION to "true",
+							MagicNumber.IGNORE_CONSTANT_DECLARATION to "true",
+							MagicNumber.IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "true"
+					)
+			)
+
+			val findings = MagicNumber(config).lint(ktFile)
+			assertThat(findings).isEmpty()
+		}
+
+		it("should not report any issues when ignoring companion objects but not properties and constants") {
+			val config = TestConfig(
+					mapOf(
+							MagicNumber.IGNORE_PROPERTY_DECLARATION to "false",
+							MagicNumber.IGNORE_CONSTANT_DECLARATION to "false",
+							MagicNumber.IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "true"
+					)
+			)
+
+			val findings = MagicNumber(config).lint(ktFile)
+			assertThat(findings).isEmpty()
+		}
+
+		it("should report property when ignoring constants but not properties and companion objects") {
+			val config = TestConfig(
+					mapOf(
+							MagicNumber.IGNORE_PROPERTY_DECLARATION to "false",
+							MagicNumber.IGNORE_CONSTANT_DECLARATION to "true",
+							MagicNumber.IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "false"
+					)
+			)
+
+			val findings = MagicNumber(config).lint(ktFile)
+			assertThat(findings).hasLocationStrings("'43' at (4,35) in /foo.bar")
+		}
+
+		it("should report property and constant when not ignoring properties, constants nor companion objects") {
+			val config = TestConfig(
+					mapOf(
+							MagicNumber.IGNORE_PROPERTY_DECLARATION to "false",
+							MagicNumber.IGNORE_CONSTANT_DECLARATION to "false",
+							MagicNumber.IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION to "false"
+					)
+			)
+
+			val findings = MagicNumber(config).lint(ktFile)
+			assertThat(findings).hasLocationStrings("'43' at (4,35) in /foo.bar", "'93872' at (5,40) in /foo.bar")
 		}
 	}
 
@@ -428,7 +488,8 @@ class MagicNumberSpec : Spek({
 		val code = "private var pair: Pair<String, Int>? = null"
 
 		it("should not lead to a crash #276") {
-			assertThat(MagicNumber().lint(code)).isEmpty()
+			val findings = MagicNumber().lint(code)
+			assertThat(findings).isEmpty()
 		}
 	}
 
