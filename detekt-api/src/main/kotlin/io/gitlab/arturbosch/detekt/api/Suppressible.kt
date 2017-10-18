@@ -39,7 +39,8 @@ fun KtAnnotated.isSuppressedBy(id: String): Boolean {
 	val valid = listOf(id, "ALL", "all")
 	return annotationEntries.find { it.typeReferenceName.let { it == "Suppress" || it == "SuppressWarnings" } }
 			?.valueArguments
-			?.map { it.getArgumentExpression()?.text?.replace(Regex("(?i)detekt([.:])"), "") }
+			?.map { it.getArgumentExpression()?.text }
+			?.map { it?.replace(Regex("(?i)detekt([.:])"), "") }
 			?.map { it?.replace("\"", "") }
 			?.find { it in valid } != null
 }
