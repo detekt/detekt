@@ -21,7 +21,7 @@ class MagicNumberSpec : Spek({
 
 		it("should be reported when ignoredNumbers is empty") {
 			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
-			assertThat(findings).hasSize(1)
+			assertThat(findings).hasLocationStrings("'1.0f' at (1,15) in /foo.bar")
 		}
 	}
 
@@ -49,7 +49,7 @@ class MagicNumberSpec : Spek({
 
 		it("should be reported when ignoredNumbers is empty") {
 			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
-			assertThat(findings).hasSize(1)
+			assertThat(findings).hasLocationStrings("'1' at (1,13) in /foo.bar")
 		}
 	}
 
@@ -77,7 +77,7 @@ class MagicNumberSpec : Spek({
 
 		it("should be reported when ignoredNumbers is empty") {
 			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
-			assertThat(findings).hasSize(1)
+			assertThat(findings).hasLocationStrings("'1L' at (1,14) in /foo.bar")
 		}
 	}
 
@@ -91,7 +91,7 @@ class MagicNumberSpec : Spek({
 
 		it("should be reported when ignoredNumbers is empty") {
 			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
-			assertThat(findings).hasSize(1)
+			assertThat(findings).hasLocationStrings("'1L' at (1,15) in /foo.bar")
 		}
 	}
 
@@ -100,7 +100,7 @@ class MagicNumberSpec : Spek({
 
 		it("should be reported by default") {
 			val findings = MagicNumber().lint(ktFile)
-			assertThat(findings).hasSize(1)
+			assertThat(findings).hasLocationStrings("'2L' at (1,15) in /foo.bar")
 		}
 
 		it("should be ignored when ignoredNumbers contains it verbatim") {
@@ -115,7 +115,7 @@ class MagicNumberSpec : Spek({
 
 		it("should not be ignored when ignoredNumbers contains 2 but not -2") {
 			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "1,2,3,-1,0"))).lint(ktFile)
-			assertThat(findings).hasSize(1)
+			assertThat(findings).hasLocationStrings("'2L' at (1,15) in /foo.bar")
 		}
 	}
 
@@ -143,7 +143,7 @@ class MagicNumberSpec : Spek({
 
 		it("should be reported when ignoredNumbers is empty") {
 			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
-			assertThat(findings).hasSize(1)
+			assertThat(findings).hasLocationStrings("'1.0' at (1,16) in /foo.bar")
 		}
 	}
 
@@ -171,7 +171,7 @@ class MagicNumberSpec : Spek({
 
 		it("should be reported when ignoredNumbers is empty") {
 			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
-			assertThat(findings).hasSize(1)
+			assertThat(findings).hasLocationStrings("'0x1' at (1,13) in /foo.bar")
 		}
 	}
 
@@ -222,7 +222,7 @@ class MagicNumberSpec : Spek({
 
 		it("should be reported by default") {
 			val findings = MagicNumber().lint(ktFile)
-			assertThat(findings).hasSize(1)
+			assertThat(findings).hasLocationStrings("'100_000' at (1,13) in /foo.bar")
 		}
 
 		it("should not be reported when ignored verbatim") {
@@ -246,7 +246,12 @@ class MagicNumberSpec : Spek({
 
 		it("should be reported") {
 			val findings = MagicNumber().lint(ktFile)
-			assertThat(findings).hasSize(4)
+			assertThat(findings).hasLocationStrings(
+					"'5' at (1,17) in /foo.bar",
+					"'6' at (1,21) in /foo.bar",
+					"'7' at (1,24) in /foo.bar",
+					"'8' at (1,31) in /foo.bar"
+			)
 		}
 	}
 
@@ -263,7 +268,14 @@ class MagicNumberSpec : Spek({
 
 		it("should be reported") {
 			val findings = MagicNumber().lint(ktFile)
-			assertThat(findings).hasSize(6)
+			assertThat(findings).hasLocationStrings(
+					"'5' at (3,6) in /foo.bar",
+					"'5' at (3,18) in /foo.bar",
+					"'4' at (4,6) in /foo.bar",
+					"'4' at (4,18) in /foo.bar",
+					"'3' at (5,6) in /foo.bar",
+					"'3' at (5,18) in /foo.bar"
+			)
 		}
 	}
 
@@ -276,7 +288,7 @@ class MagicNumberSpec : Spek({
 
 		it("should be reported") {
 			val findings = MagicNumber().lint(ktFile)
-			assertThat(findings).hasSize(1)
+			assertThat(findings).hasLocationStrings("'5' at (2,13) in /foo.bar")
 		}
 	}
 
@@ -307,7 +319,7 @@ class MagicNumberSpec : Spek({
 
 		it("should be reported by default") {
 			val findings = MagicNumber().lint(ktFile)
-			assertThat(findings).hasSize(1)
+			assertThat(findings).hasLocationStrings("'0.5f' at (1,12) in /foo.bar")
 		}
 
 		it("should not be reported when ignoredNumbers contains it") {
@@ -365,7 +377,7 @@ class MagicNumberSpec : Spek({
 			assertThat(findings).hasLocationStrings(
 					"'69' at (1,20) in /foo.bar",
 					"'42' at (3,24) in /foo.bar",
-					"'93871' at (4,32) in /foo.bar",
+					"'93871' at (4,33) in /foo.bar",
 					"'7328672' at (7,23) in /foo.bar",
 					"'43' at (11,35) in /foo.bar",
 					"'93872' at (12,40) in /foo.bar"
