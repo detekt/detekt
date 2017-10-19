@@ -45,7 +45,8 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 	private val ignoreNamedArgument = valueOrDefault(IGNORE_NAMED_ARGUMENT, false)
 	private val ignoreEnums = valueOrDefault(IGNORE_ENUMS, false)
 	private val ignoreConstantDeclaration = valueOrDefault(IGNORE_CONSTANT_DECLARATION, true)
-	private val ignoreCompanionObjectPropertyDeclaration = valueOrDefault(IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION, true)
+	private val ignoreCompanionObjectPropertyDeclaration =
+			valueOrDefault(IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION, true)
 
 	override fun visitConstantExpression(expression: KtConstantExpression) {
 
