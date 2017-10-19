@@ -424,7 +424,10 @@ Currently there are seven rule sets which are used per default when running the 
 
 ### <a name="rulesetconfig">RuleSet Configuration</a>
 
-To turn off specific rules/rule sets or change threshold values for certain rules a yaml configuration file can be used.
+To turn off specific rules/rule sets or change threshold values for certain rules a yaml configuration file can be used.  There are two approaches to configuring your rulesets.
+
+#### Copy defaults and modify
+
 Export the default config with the `--generate-config` flag or copy and modify the `detekt-cli/src/main/resources/default-detekt-config.yml` for your needs.
 
 ```yml
@@ -655,6 +658,27 @@ comments:
     active: false
 ```
 
+#### Override defaults ([via `failFast` option](https://github.com/arturbosch/detekt/issues/179))
+
+Set `failFast: true` in your detekt.yml configuration file.  As a result, every rule will be enabled and `warningThreshold` and `errorThreshold` will be set to 0.  Weights can then be ignored and left untouched.
+
+To adjust, for example, the maxLineLength value, use this configuration file:
+```
+failFast:true
+autoCorrect: true
+
+style:
+  MaxLineLength:
+    maxLineLength: 100
+```
+
+All rules are turned on by default and the value of maxLineLength is adjusted to 100. If you don't want to have the CommentOverPrivateMethod turned on, you append:
+```
+comments:
+  CommentOverPrivateMethod:
+    active: false
+```
+
 ### <a name="suppress">Suppress code smell rules</a>
 
 _detekt_ supports the Java (`@SuppressWarnings`) and Kotlin (`@Suppress`) style suppression. If both annotations are present, only Kotlin's annotation is used! To suppress a rule, the id of the rule must be written inside the values field of the annotation e.g. `@Suppress("LongMethod", "LongParameterList", ...)`
@@ -829,6 +853,7 @@ detekt findings, bunch of rules
 - [Radim Vaculik](https://github.com/radimvaculik) - VariableMaxLength - bugfix
 - [Martin Nonnenmacher](https://github.com/mnonnenmacher) - UndocumentedPublicClass - enum support
 - [Dmytro Troynikov](https://github.com/DmytroTroynikov) - Updated Magic Number rule to ignore Named Arguments
+- [Andrew Ochsner](https://github.com/aochsner) - Updated Readme for `failFast` option
 
 #### Credits
 - [JetBrains](https://github.com/jetbrains/) - Creating Intellij + Kotlin
