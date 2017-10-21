@@ -14,5 +14,6 @@ class SplitPattern(text: String,
 	fun contains(value: String?) = excludes.any { value?.contains(it, ignoreCase = true) == true }
 	fun none(value: String) = !contains(value)
 	fun matches(value: String): List<String> = excludes.filter { value.contains(it, ignoreCase = true) }
+	fun startWith(name: String?) = excludes.any { name?.startsWith(it) ?: false }
 	fun <T> mapAll(transform: (String) -> T) = excludes.map(transform)
 }

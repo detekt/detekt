@@ -6,8 +6,8 @@ import org.jetbrains.kotlin.psi.KtFile
 
 class AnnotationExcluder(
 		root: KtFile,
-		private val excludes: Excludes
-) {
+		private val excludes: SplitPattern) {
+
 	private var resolvedAnnotations = root.importList
 			?.imports
 			?.filterNot { it.isAllUnder }
@@ -16,6 +16,6 @@ class AnnotationExcluder(
 			?.toMap()
 
 	fun shouldExclude(annotations: List<KtAnnotationEntry>) =
-		annotations.mapNotNull { resolvedAnnotations?.get(it.typeReferenceName) }
-				.any { excludes.contains(it) }
+			annotations.mapNotNull { resolvedAnnotations?.get(it.typeReferenceName) }
+					.any { excludes.contains(it) }
 }

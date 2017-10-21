@@ -18,22 +18,22 @@ class AnnotationExcluderSpec : Spek({
 		""".trimIndent())
 
 		it("should exclude when the annotation was found") {
-			val excluder = AnnotationExcluder(file, Excludes("JvmField"))
+			val excluder = AnnotationExcluder(file, SplitPattern("JvmField"))
 			assertThat(excluder.shouldExclude(listOf(jvmFieldAnnotation))).isTrue()
 		}
 
 		it("should not exclude when the annotation was not found") {
-			val excluder = AnnotationExcluder(file, Excludes("Jvm Field"))
+			val excluder = AnnotationExcluder(file, SplitPattern("Jvm Field"))
 			assertThat(excluder.shouldExclude(listOf(jvmFieldAnnotation))).isFalse()
 		}
 
 		it("should not exclude when no annotations should be excluded") {
-			val excluder = AnnotationExcluder(file, Excludes(""))
+			val excluder = AnnotationExcluder(file, SplitPattern(""))
 			assertThat(excluder.shouldExclude(listOf(jvmFieldAnnotation))).isFalse()
 		}
 
 		it("should not exclude an annotation that is not imported") {
-			val excluder = AnnotationExcluder(file, Excludes("SinceKotlin"))
+			val excluder = AnnotationExcluder(file, SplitPattern("SinceKotlin"))
 			assertThat(excluder.shouldExclude(listOf(sinceKotlinAnnotation))).isFalse()
 		}
 	}

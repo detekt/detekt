@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.rules.assertThat
 import io.gitlab.arturbosch.detekt.test.TestConfig
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.lint
 import org.jetbrains.spek.api.Spek
@@ -569,12 +569,12 @@ class MagicNumberSpec : Spek({
 			it("should be reported by default") {
 				assertThat(MagicNumber().lint(ktFile)).hasSize(1)
 			}
-			it("numbers when 'ignoreEnums' is set to true"){
+			it("numbers when 'ignoreEnums' is set to true") {
 				val rule = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_ENUMS to "true")))
 				assertThat(rule.lint(ktFile)).isEmpty()
 			}
 		}
-		given("in enum constructor as named argument"){
+		given("in enum constructor as named argument") {
 			val ktFile = compileContentForTest("""
 				enum class Bag(id: Int) {
 					SMALL(id = 1),
@@ -584,7 +584,7 @@ class MagicNumberSpec : Spek({
 			it("should be reported by default") {
 				assertThat(MagicNumber().lint(ktFile)).hasSize(1)
 			}
-			it("numbers when 'ignoreEnums' is set to true"){
+			it("numbers when 'ignoreEnums' is set to true") {
 				val rule = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_ENUMS to "true")))
 				assertThat(rule.lint(ktFile)).isEmpty()
 			}
