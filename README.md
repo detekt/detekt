@@ -854,6 +854,10 @@ detekt findings, bunch of rules
 - [Martin Nonnenmacher](https://github.com/mnonnenmacher) - UndocumentedPublicClass - enum support
 - [Dmytro Troynikov](https://github.com/DmytroTroynikov) - Updated Magic Number rule to ignore Named Arguments
 - [Andrew Ochsner](https://github.com/aochsner) - Updated Readme for `failFast` option
+- [Paul Merlin](https://github.com/eskatos) - Gradle build improvements
+- [Konstantin Aksenov](https://github.com/vacxe) - Coding improvement
+- [Matthew Haughton](https://github.com/3flex) - Started type resolution, Dependency updates, Coding + Documentation 
+improvements
 
 #### Credits
 - [JetBrains](https://github.com/jetbrains/) - Creating Intellij + Kotlin
