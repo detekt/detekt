@@ -13,7 +13,6 @@ import org.jetbrains.kotlin.psi.KtFile
  *
  * @author Artur Bosch
  */
-@Suppress("EmptyFunctionBlock")
 abstract class Rule(override val config: Config = Config.empty,
 					ruleContext: Context = DefaultContext()) :
 		BaseRule(ruleContext), ConfigAware {
