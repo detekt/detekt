@@ -1,11 +1,14 @@
 # Migration Guide
 
+
 ### RC4 -> RC5
 
 - Formatting rule set was removed. Use the `detektIdeaFormat` task, KtLint or wait for the official kotlin format 
 tool which will be released soon (Hadi mentioned it in a reply to a tweet somewhere).
 - McCabe calculation was corrected and can now be slightly higher which can result in unexpected `ComplexMethod` 
 findings.
+- Instead of using a pattern like `.*/test/.*` to filter test sources, you can now specify a `test-pattern` inside a 
+configuration. This allows to turn off specific rules or rule sets for test sources.
 
 ### RC3 -> RC4
 
