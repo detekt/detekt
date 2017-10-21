@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.rules
+package io.gitlab.arturbosch.detekt.test
 
 import io.gitlab.arturbosch.detekt.api.Finding
 import org.assertj.core.api.AbstractAssert
@@ -15,7 +15,7 @@ class FindingsAssert(actual: List<Finding>) :
 
 	fun hasLocationStrings(vararg expected: String) {
 		isNotNull
-		val actualLocationStrings = actual.map { it.entity.location.locationString }
+		val actualLocationStrings = actual.map { it.locationAsString }
 		areEqual(actualLocationStrings, expected)
 	}
 

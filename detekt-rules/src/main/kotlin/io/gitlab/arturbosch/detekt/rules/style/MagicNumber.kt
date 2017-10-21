@@ -49,7 +49,6 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 			valueOrDefault(IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION, true)
 
 	override fun visitConstantExpression(expression: KtConstantExpression) {
-
 		if (isIgnoredByConfig(expression) || expression.isPartOfFunctionReturnConstant()) {
 			return
 		}
@@ -79,29 +78,6 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 				&& expression.isPartOf(KtCallExpression::class) -> true
 		else -> false
 	}
-
-	private fun KtConstantExpression.isPartOfFunctionReturnConstant() =
-			parent is KtNamedFunction || (parent is KtReturnExpression && parent.parent.children.size == 1)
-
-
-	private fun KtConstantExpression.isPartOfHashCode(): Boolean {
-		val containingFunction = getNonStrictParentOfType(KtNamedFunction::class.java)
-		return containingFunction?.isHashCodeFunction() == true
-	}
-
-	private fun KtConstantExpression.isProperty() =
-			getNonStrictParentOfType(KtProperty::class.java)?.let { !it.isLocal } ?: false
-
-	private fun KtConstantExpression.isCompanionObjectProperty() = isProperty() && isInCompanionObject()
-
-	private fun KtConstantExpression.isInCompanionObject() =
-			getNonStrictParentOfType(KtObjectDeclaration::class.java)?.isCompanion() ?: false
-
-	private fun KtConstantExpression.isConstantProperty(): Boolean =
-			isProperty() && getNonStrictParentOfType(KtProperty::class.java)?.hasModifier(KtTokens.CONST_KEYWORD) ?: false
-
-	private fun PsiElement.hasUnaryMinusPrefix(): Boolean = this is KtPrefixExpression
-			&& (this.firstChild as? KtOperationReferenceExpression)?.operationSignTokenType == KtTokens.MINUS
 
 	private fun parseAsDoubleOrNull(rawToken: String?): Double? = try {
 		rawToken?.let { parseAsDouble(it) }
@@ -143,3 +119,25 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 		private const val BINARY_RADIX = 2
 	}
 }
+
+private fun KtConstantExpression.isPartOfFunctionReturnConstant() =
+		parent is KtNamedFunction || (parent is KtReturnExpression && parent.parent.children.size == 1)
+
+private fun KtConstantExpression.isPartOfHashCode(): Boolean {
+	val containingFunction = getNonStrictParentOfType(KtNamedFunction::class.java)
+	return containingFunction?.isHashCodeFunction() == true
+}
+
+private fun KtConstantExpression.isProperty() =
+		getNonStrictParentOfType(KtProperty::class.java)?.let { !it.isLocal } ?: false
+
+private fun KtConstantExpression.isCompanionObjectProperty() = isProperty() && isInCompanionObject()
+
+private fun KtConstantExpression.isInCompanionObject() =
+		getNonStrictParentOfType(KtObjectDeclaration::class.java)?.isCompanion() ?: false
+
+private fun KtConstantExpression.isConstantProperty(): Boolean =
+		isProperty() && getNonStrictParentOfType(KtProperty::class.java)?.hasModifier(KtTokens.CONST_KEYWORD) ?: false
+
+private fun PsiElement.hasUnaryMinusPrefix(): Boolean = this is KtPrefixExpression
+		&& (this.firstChild as? KtOperationReferenceExpression)?.operationSignTokenType == KtTokens.MINUS
