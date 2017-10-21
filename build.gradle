@@ -173,7 +173,7 @@ detekt {
 
 	profile('main') {
 		input = projectDir
-		filters = '.*/test/.*, .*/resources/.*, .*/build/.*'
+		filters = '.*/resources/.*, .*/build/.*'
 		config = "$projectDir/detekt-cli/src/main/resources/default-detekt-config.yml"
 		baseline = "$projectDir/reports/baseline.xml"
 	}
