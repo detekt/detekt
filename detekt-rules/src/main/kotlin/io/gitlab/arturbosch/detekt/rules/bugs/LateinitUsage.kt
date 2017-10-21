@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.AnnotationExcluder
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Excludes
+import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
@@ -20,7 +20,7 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 			"Usage of lateinit. Using lateinit for property initialization " +
 					"is error prone, try using constructor injection or delegation.")
 
-	private val excludeAnnotatedProperties = Excludes(valueOrDefault(EXCLUDE_ANNOTATED_PROPERTIES, ""))
+	private val excludeAnnotatedProperties = SplitPattern(valueOrDefault(EXCLUDE_ANNOTATED_PROPERTIES, ""))
 
 	private val ignoreOnClassesPattern = Regex(valueOrDefault(IGNORE_ON_CLASSES_PATTERN, ""))
 

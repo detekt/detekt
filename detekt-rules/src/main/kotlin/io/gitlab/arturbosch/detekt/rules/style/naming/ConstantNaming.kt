@@ -5,21 +5,24 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.SubRule
+import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtVariableDeclaration
 
-class ConstantNaming(config: Config = Config.empty) : SubRule<KtVariableDeclaration>(config) {
+class ConstantNaming(config: Config = Config.empty) : Rule(config) {
+
 	override val issue = Issue(javaClass.simpleName,
 			Severity.Style,
 			debt = Debt.FIVE_MINS)
+
 	private val constantPattern = Regex(valueOrDefault(CONSTANT_PATTERN, "^([A-Z_]*|serialVersionUID)$"))
 
-	override fun apply(element: KtVariableDeclaration) {
-		if (doesntMatchPattern((element))) {
+	override fun visitProperty(property: KtProperty) {
+		if (doesntMatchPattern((property))) {
 			report(CodeSmell(
 					issue.copy(description = "Constant names should match the pattern: $constantPattern"),
-					Entity.from(element)))
+					Entity.from(property)))
 		}
 	}
 

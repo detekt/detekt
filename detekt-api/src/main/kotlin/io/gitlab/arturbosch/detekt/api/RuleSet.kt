@@ -17,13 +17,17 @@ class RuleSet(val id: String, val rules: List<BaseRule>) {
 	 * Visits given file with all rules of this rule set, returning a list
 	 * of all code smell findings.
 	 */
-	fun accept(file: KtFile): List<Finding> {
-		val findings: MutableList<Finding> = mutableListOf()
-		rules.forEach {
-			it.visitFile(file)
-			findings += it.findings
-		}
-		return findings
-	}
+	fun accept(file: KtFile): List<Finding> = rules.flatMap { it.visitFile(file); it.findings }
 
+	/**
+	 * Visits given file with all non-filtered rules of this rule set.
+	 * If a rule is a [MultiRule] the filters are passed to it via a setter
+	 * and later used to filter sub rules of the [MultiRule].
+	 *
+	 * A list of findings is returned for given [KtFile]
+	 */
+	fun accept(file: KtFile, ruleFilters: Set<String>): List<Finding> =
+			rules.filterNot { it.id in ruleFilters }
+					.onEach { if (it is MultiRule) it.ruleFilters = ruleFilters }
+					.flatMap { it.visitFile(file); it.findings }
 }

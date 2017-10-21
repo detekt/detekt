@@ -12,12 +12,10 @@ import io.gitlab.arturbosch.detekt.rules.providers.ExceptionsProvider
 import io.gitlab.arturbosch.detekt.rules.providers.PerformanceProvider
 import io.gitlab.arturbosch.detekt.rules.providers.PotentialBugProvider
 import io.gitlab.arturbosch.detekt.rules.providers.StyleGuideProvider
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.reflections.Reflections
 import java.lang.reflect.Modifier
-
 
 class RuleProviderTest {
 
@@ -44,7 +42,7 @@ class RuleProviderTest {
 		RuleProviderAssert(
 				EmptyCodeProvider(),
 				"io.gitlab.arturbosch.detekt.rules.empty",
-				MultiRule::class.java)
+				Rule::class.java)
 				.assert()
 	}
 
@@ -84,30 +82,36 @@ class RuleProviderTest {
 				.assert()
 	}
 
-	class RuleProviderAssert<T>
-	(private val provider: RuleSetProvider,
-	 private val packageName: String,
-	 private val clazz: Class<T>) {
+	class RuleProviderAssert<T>(private val provider: RuleSetProvider,
+								private val packageName: String,
+								private val clazz: Class<T>) {
 
 		fun assert() {
 			val rules = getRules(provider)
 			assertThat(rules).isNotEmpty
-			val ruleClasses = getRuleClasses()
-			assertThat(ruleClasses).isNotEmpty
-
-			ruleClasses
-					.filter { ruleClass -> rules.singleOrNull { it.javaClass == ruleClass } == null }
-					.forEach { Assertions.fail("${it.simpleName} rule is not defined in the rules provider") }
+			val classes = getClasses()
+			assertThat(classes).isNotEmpty
+			classes
+					.map { c -> rules.singleOrNull { it.javaClass.simpleName == c.simpleName } }
+					.forEach {
+						if (it == null) {
+							print(rules.size); println(" rules")
+							print(classes.size); print(" classes")
+						}
+						assertThat(it).isNotNull()
+					}
 		}
 
 		private fun getRules(provider: RuleSetProvider): List<BaseRule> {
 			return provider.buildRuleset(Config.empty)!!.rules
+					.flatMap { (it as? MultiRule)?.rules ?: listOf(it) }
 		}
 
-		private fun getRuleClasses(): List<Class<out T>> {
+		private fun getClasses(): List<Class<out T>> {
 			return Reflections(packageName)
 					.getSubTypesOf(clazz)
-					.filter { !Modifier.isAbstract(it.modifiers) && it.superclass.simpleName != "SubRule" }
+					.filterNot { "Test" in it.name }
+					.filter { !Modifier.isAbstract(it.modifiers) }
 		}
 	}
 }

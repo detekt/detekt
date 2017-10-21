@@ -14,14 +14,14 @@ class ClassCountVisitorTest {
 				compileForTest(path.resolve("Test.kt")),
 				compileForTest(path.resolve("Default.kt"))
 		)
-		val count = getClassCount(*files)
+		val count = getClassCount(files)
 		assertThat(count).isEqualTo(2)
 	}
 
 	@Test
 	fun oneClassWithOneNestedClass() {
 		val file = compileForTest(path.resolve("ComplexClass.kt"))
-		val count = getClassCount(file)
+		val count = getClassCount(arrayOf(file))
 		assertThat(count).isEqualTo(2)
 	}
 
@@ -31,11 +31,11 @@ class ClassCountVisitorTest {
 				compileForTest(path.resolve("../empty/EmptyEnum.kt")),
 				compileForTest(path.resolve("../empty/EmptyInterface.kt"))
 		)
-		val count = getClassCount(*files)
+		val count = getClassCount(files)
 		assertThat(count).isEqualTo(2)
 	}
 
-	private fun getClassCount(vararg files: KtFile): Int {
+	private fun getClassCount(files: Array<KtFile>): Int {
 		return files
 				.map { getData(it) }
 				.sum()

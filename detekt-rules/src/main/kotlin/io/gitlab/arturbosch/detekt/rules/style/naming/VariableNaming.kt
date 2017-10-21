@@ -5,26 +5,28 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.SubRule
+import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtVariableDeclaration
 import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
 
-class VariableNaming(config: Config = Config.empty) : SubRule<KtVariableDeclaration>(config) {
+class VariableNaming(config: Config = Config.empty) : Rule(config) {
+
 	override val issue = Issue(javaClass.simpleName,
 			Severity.Style,
 			debt = Debt.FIVE_MINS)
 	private val variablePattern = Regex(valueOrDefault(VARIABLE_PATTERN, "^(_)?[a-z$][a-zA-Z$0-9]*$"))
 
-	override fun apply(element: KtVariableDeclaration) {
-		if (element.isSingleUnderscore) {
+	override fun visitProperty(property: KtProperty) {
+		if (property.isSingleUnderscore) {
 			return
 		}
 
-		if (!element.identifierName().matches(variablePattern)) {
+		if (!property.identifierName().matches(variablePattern)) {
 			report(CodeSmell(
 					issue.copy(description = "Variable names should match the pattern: $variablePattern"),
-					Entity.from(element)))
+					Entity.from(property)))
 		}
 	}
 

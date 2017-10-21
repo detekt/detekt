@@ -5,6 +5,8 @@ import org.jetbrains.kotlin.psi.KtFile
 @Suppress("EmptyFunctionBlock")
 abstract class BaseRule(protected val context: Context = DefaultContext()) : DetektVisitor(), Context by context {
 
+	open val id: String = javaClass.simpleName
+
 	/**
 	 * Before starting visiting kotlin elements, a check is performed if this rule should be triggered.
 	 * Pre- and post-visit-hooks are executed before/after the visiting process.

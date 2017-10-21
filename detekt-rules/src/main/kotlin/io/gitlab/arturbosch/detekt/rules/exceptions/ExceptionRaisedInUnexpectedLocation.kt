@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Excludes
+import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
@@ -18,7 +18,7 @@ class ExceptionRaisedInUnexpectedLocation(config: Config = Config.empty) : Rule(
 	override val issue = Issue("ExceptionRaisedInUnexpectedLocation", Severity.CodeSmell,
 			"This method is not expected to throw exceptions. This can cause weird behavior.")
 
-	private val methods = Excludes(valueOrDefault(METHOD_NAMES, ""))
+	private val methods = SplitPattern(valueOrDefault(METHOD_NAMES, ""))
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		if (isPotentialMethod(function) && hasThrowExpression(function.bodyExpression)) {

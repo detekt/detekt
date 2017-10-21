@@ -19,6 +19,7 @@ class Detektor(private val settings: ProcessingSettings,
 
 	private val config: Config = settings.config
 	private val modifier: KtFileModifier = KtFileModifier(settings.project)
+	private val testPattern: TestPattern = settings.loadTestPattern()
 	private val notifications: MutableList<Notification> = mutableListOf()
 
 	fun run(compiler: KtTreeCompiler = KtTreeCompiler.instance(settings)): Detektion = run(compiler.compile())
@@ -47,9 +48,15 @@ class Detektor(private val settings: ProcessingSettings,
 		}
 	}
 
-	private fun KtFile.analyze(): List<Pair<String, List<Finding>>> = providers
-			.mapNotNull { it.buildRuleset(config) }
-			.sortedBy { it.id }
-			.distinctBy { it.id }
-			.map { rule -> rule.id to rule.accept(this) }
+	private fun KtFile.analyze(): List<Pair<String, List<Finding>>> {
+		var ruleSets = providers.mapNotNull { it.buildRuleset(config) }
+				.sortedBy { it.id }
+				.distinctBy { it.id }
+
+		if (testPattern.isTestSource(this)) {
+			ruleSets = ruleSets.filterNot { testPattern.matchesRuleSet(it.id) }
+		}
+
+		return ruleSets.map { ruleSet -> ruleSet.id to ruleSet.accept(this, testPattern.excludingRules) }
+	}
 }

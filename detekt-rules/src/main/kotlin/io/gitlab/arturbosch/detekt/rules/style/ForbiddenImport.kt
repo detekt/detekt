@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Excludes
+import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
@@ -16,7 +16,7 @@ class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
 			"Mark forbidden imports. A forbidden import could be an import for an unstable / experimental api" +
 					"and hence you might want to mark it as forbidden in order to get warned about the usage.", Debt.TEN_MINS)
 
-	private val forbiddenImports = Excludes(valueOrDefault(IMPORTS, ""))
+	private val forbiddenImports = SplitPattern(valueOrDefault(IMPORTS, ""))
 
 	override fun visitImportList(importList: KtImportList) {
 		super.visitImportList(importList)

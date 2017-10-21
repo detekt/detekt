@@ -1,11 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.empty
 
-import io.gitlab.arturbosch.detekt.api.YamlConfig
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.rules.providers.EmptyCodeProvider
 import io.gitlab.arturbosch.detekt.test.compileForTest
 import io.gitlab.arturbosch.detekt.test.lint
-import io.gitlab.arturbosch.detekt.test.resource
+import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
@@ -30,7 +29,7 @@ class EmptyBlocksMultiRuleTest : SubjectSpek<EmptyBlocks>({
 		}
 
 		it("should not report any as all empty block rules are deactivated") {
-			val config = YamlConfig.loadResource(resource("deactivated-empty-blocks.yml").toURL())
+			val config = yamlConfig("deactivated-empty-blocks.yml")
 			val ruleSet = EmptyCodeProvider().buildRuleset(config)
 
 			val findings = ruleSet?.accept(file)

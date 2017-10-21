@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Excludes
+import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
@@ -23,7 +23,7 @@ class WildcardImport(config: Config = Config.empty) : Rule(config) {
 					"results in compilation errors.",
 			Debt.FIVE_MINS)
 
-	private val excludedImports = Excludes(valueOrDefault(EXCLUDED_IMPORTS, ""))
+	private val excludedImports = SplitPattern(valueOrDefault(EXCLUDED_IMPORTS, ""))
 
 	override fun visitImportDirective(importDirective: KtImportDirective) {
 		val import = importDirective.importPath?.pathStr

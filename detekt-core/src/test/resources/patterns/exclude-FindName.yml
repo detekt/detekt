@@ -1,0 +1,8 @@
+test-pattern:
+  active: true
+  patterns:
+    - '.*/test/.*'
+    - '.*Test.kt'
+  exclude-rule-sets:
+  exclude-rules:
+    - 'FindName'

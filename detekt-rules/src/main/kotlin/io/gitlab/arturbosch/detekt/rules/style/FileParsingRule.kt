@@ -8,22 +8,21 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.SubRule
-import io.gitlab.arturbosch.detekt.rules.reportFindings
 import org.jetbrains.kotlin.psi.KtFile
 
 class FileParsingRule(val config: Config = Config.empty) : MultiRule() {
 
-	override val rules = listOf(MaxLineLength(config))
+	private val maxLineLength = MaxLineLength(config)
+	override val rules = listOf(maxLineLength)
 
 	override fun visitKtFile(file: KtFile) {
 		val lines = file.text.splitToSequence("\n")
 		val fileContents = KtFileContent(file, lines)
-		fileContents.reportFindings(context, rules)
+		rules.forEach { it.runIfActive { apply(fileContents) } }
 	}
 }
 
-abstract class File(open val file: KtFile)
-data class KtFileContent(override val file: KtFile, val content: Sequence<String>) : File(file)
+data class KtFileContent(val file: KtFile, val content: Sequence<String>)
 
 class MaxLineLength(config: Config = Config.empty) : SubRule<KtFileContent>(config) {
 
