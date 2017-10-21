@@ -262,6 +262,7 @@ style:
     ignoreEnums: false
   WildcardImport:
     active: true
+    excludeImports: ''
   SafeCast:
     active: true
   MaxLineLength:
