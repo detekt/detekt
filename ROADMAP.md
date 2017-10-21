@@ -1,8 +1,9 @@
 # Roadmap to 1.0.0
 
 ### todo
+
+- Overall improve documentation of detekt. Introduce a wiki for easier lookup.
 - `no new complex rules` (maybe only some easy or contributed ones)
-- `Wiki` with documentation of the default rule set and/or CLI module provide a `documentation flag`
 
 ### done
 
@@ -13,13 +14,14 @@
 - `jcenter` publishing
 - Windows support!
 - `sonar-plugin` (has it's own space [here](https://github.com/arturbosch/sonar-kotlin))
+- Allow to exclude rules or rule sets for test sources
 
 ## Beyond 1.0.0
 
-- finish `FeatureEnvy` rule -> needs type resolution
 - figure out how kotlinc/intellij does type and symbol resolution
+- finish `FeatureEnvy` rule -> needs type resolution
 
-## For new major versions
+## Ideas for new major versions
 
 - `idea-plugin`
 - `jenkins-plugin`

@@ -2,9 +2,24 @@
 
 - Read [this article](https://chris.beams.io/posts/git-commit/) before writing commit messages
 - `detekt` itself should not report any new errors
-- This repo uses tabs!
+- This repo uses tabs! Make sure your code is properly formatted.
 - Use idea-code-style.xml for coding style 
-- Run `detektFormat` before commiting
+
+### Specific code style rules we use
+
+- If you modify a file (any changes) or add a new file authored by yourself, add a `@author Your_Name` tag. 
+If it is your first contribution, feel free to add yourself to the list of contributors at the end of the readme file.
+- There must be a newline between the start of the class body and the first member declaration:
+```kotlin
+class A { // wrong!
+    val a = 5
+}
+  
+class B { // right!
+  
+    val b = 5
+}
+```
 - Make sure `when {` or `object : MyType { ... ` is on the same line as `=` eg. 
 ```kotlin
     fun stuff(x: Int) = when(x) {
