@@ -24,16 +24,16 @@ data class TestPattern(val active: Boolean,
 
 	fun matches(path: String) = patterns.any { it.matches(path) }
 	fun matchesRuleSet(ruleSet: String) = excludingRuleSets.any { it == ruleSet }
-	fun matchesRule(rule: String) = excludingRules.any { it == rule }
 	fun isTestSource(file: KtFile) = active && file.relativePath()?.let { matches(it) } == true
 
 	companion object {
 		const val TEST_PATTERN_SUB_CONFIG = "test-pattern"
 		const val ACTIVE = "active"
 		const val PATTERNS = "patterns"
-		val DEFAULT_PATTERNS = listOf(".*/test/.*Test.kt")
 		const val EXCLUDE_RULES = "exclude-rules"
 		const val EXCLUDE_RULE_SETS = "exclude-rule-sets"
+
+		val DEFAULT_PATTERNS = listOf(".*/test/.*Test.kt")
 	}
 }
 

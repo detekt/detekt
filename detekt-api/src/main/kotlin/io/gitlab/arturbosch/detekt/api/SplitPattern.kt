@@ -1,8 +1,12 @@
 package io.gitlab.arturbosch.detekt.api
 
-class Excludes(excludeParameter: String) {
-	private val excludes = excludeParameter
-			.split(",")
+private val regex = Regex(",")
+
+class SplitPattern(text: String,
+				   delimiters: Regex = regex) {
+
+	private val excludes = text
+			.split(delimiters)
 			.map { it.trim() }
 			.filter { it.isNotBlank() }
 			.map { it.removeSuffix("*") }
@@ -10,4 +14,5 @@ class Excludes(excludeParameter: String) {
 	fun contains(value: String?) = excludes.any { value?.contains(it, ignoreCase = true) == true }
 	fun none(value: String) = !contains(value)
 	fun matches(value: String): List<String> = excludes.filter { value.contains(it, ignoreCase = true) }
+	fun <T> mapAll(transform: (String) -> T) = excludes.map(transform)
 }

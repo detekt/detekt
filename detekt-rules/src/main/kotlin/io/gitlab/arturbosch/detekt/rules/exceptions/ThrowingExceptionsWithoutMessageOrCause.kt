@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Excludes
+import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
@@ -18,7 +18,7 @@ class ThrowingExceptionsWithoutMessageOrCause(config: Config = Config.empty) : R
 					"This allows to provide more meaningful exceptions.",
 			Debt.FIVE_MINS)
 
-	private val exceptions = Excludes(valueOrDefault(EXCEPTIONS, ""))
+	private val exceptions = SplitPattern(valueOrDefault(EXCEPTIONS, ""))
 
 	override fun visitCallExpression(expression: KtCallExpression) {
 		val calleeExpressionText = expression.calleeExpression?.text

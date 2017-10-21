@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.core
 
+import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions
 import org.jetbrains.spek.api.Spek
@@ -23,10 +24,7 @@ class TestPatternTest : Spek({
 			a/b/c/d/cb.kt
 		"""
 
-		val paths = pathContent.split(',')
-				.map { it.trim() }
-				.filterNot { it.isEmpty() }
-				.map { Paths.get(it) }
+		val paths = SplitPattern(pathContent).mapAll { Paths.get(it) }
 
 		fun splitSources(pattern: TestPattern, paths: List<Path>): Pair<List<Path>, List<Path>> =
 				paths.partition { pattern.matches(it.toString()) }

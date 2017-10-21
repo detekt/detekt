@@ -5,10 +5,10 @@ import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 
-class ExcludesSpec : Spek({
+class SplitPatternSpec : Spek({
 
 	given("an excludes rule with a single exclude") {
-		val excludes = Excludes("test")
+		val excludes = SplitPattern("test")
 
 		it("contains the `test` parameter") {
 			val parameter = "test"
@@ -37,7 +37,7 @@ class ExcludesSpec : Spek({
 	}
 
 	given("an excludes rule with multiple excludes") {
-		val excludes = Excludes("here.there.io, test.com")
+		val excludes = SplitPattern("here.there.io, test.com")
 
 		it("contains the `test` parameter") {
 			val parameter = "test.com"
@@ -65,7 +65,7 @@ class ExcludesSpec : Spek({
 	}
 
 	given("an excludes rule with lots of whitespace and an empty parameter") {
-		val excludes = Excludes("    test,  ,       here.there       ")
+		val excludes = SplitPattern("    test,  ,       here.there       ")
 
 		it("contains the `test` parameter") {
 			val parameter = "test"
