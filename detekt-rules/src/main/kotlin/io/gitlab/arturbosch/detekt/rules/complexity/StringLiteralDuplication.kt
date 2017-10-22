@@ -50,9 +50,8 @@ class StringLiteralDuplication(
 				val mainEntity = references[0]
 				val referenceEntities = references.subList(1, references.size)
 				return Entity.from(mainEntity) to referenceEntities.map { Entity.from(it) }
-			} else {
-				throw IllegalStateException("No KtElements for literal '$literal' found!")
 			}
+			throw IllegalStateException("No KtElements for literal '$literal' found!")
 		}
 
 		override fun visitLiteralStringTemplateEntry(entry: KtLiteralStringTemplateEntry) {
