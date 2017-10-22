@@ -17,8 +17,6 @@ test-pattern: # Configure exclusions for test sources
     - 'LateInitUsage'
     - 'StringLiteralDuplication'
     - 'SpreadOperator'
-    - 'TooManyFunctions'
-    - 'LargeClass'
 
 style:
   MagicNumber:
