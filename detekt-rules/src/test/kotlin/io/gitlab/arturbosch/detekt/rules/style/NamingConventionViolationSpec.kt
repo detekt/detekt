@@ -194,6 +194,11 @@ class NamingConventionLengthSpec : SubjectSpek<NamingRules>({
 		assertThat(subject.findings).isEmpty()
 	}
 
+	it("should not report a variable name with a single underscore") {
+		val code = "private val _ = 1"
+		assertThat(subject.lint(code)).hasSize(0)
+	}
+
 	it("should report a function name that is too short") {
 		val code = "private fun a = 3"
 		subject.lint(code)
