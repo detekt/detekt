@@ -24,4 +24,17 @@ class EqualsWithHashCodeExistSpec : SubjectSpek<EqualsWithHashCodeExist>({
 			assertThat(subject.lint(path)).hasSize(2)
 		}
 	}
+
+	given("a data class") {
+
+		it("does not report equals() or hashcode() violation") {
+			val code = """
+				data class EqualsData(val i: Int) {
+					override fun equals(other: Any?): Boolean {
+						return super.equals(other)
+					}
+				}"""
+			assertThat(subject.lint(code)).hasSize(0)
+		}
+	}
 })
