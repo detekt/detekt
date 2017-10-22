@@ -53,10 +53,11 @@ class Detektor(private val settings: ProcessingSettings,
 				.sortedBy { it.id }
 				.distinctBy { it.id }
 
-		if (testPattern.isTestSource(this)) {
+		return if (testPattern.isTestSource(this)) {
 			ruleSets = ruleSets.filterNot { testPattern.matchesRuleSet(it.id) }
+			ruleSets.map { ruleSet -> ruleSet.id to ruleSet.accept(this, testPattern.excludingRules) }
+		} else {
+			ruleSets.map { ruleSet -> ruleSet.id to ruleSet.accept(this) }
 		}
-
-		return ruleSets.map { ruleSet -> ruleSet.id to ruleSet.accept(this, testPattern.excludingRules) }
 	}
 }
