@@ -7,5 +7,7 @@
     <ID>TooManyFunctions:LargeClass.kt$LargeClass : ThresholdRule</ID>
     <ID>SpreadOperator:Main.kt$(*args)</ID>
     <ID>SpreadOperator:JCommander.kt$(*args)</ID>
+    <ID>TooManyFunctions:EmptyCodeTest.kt$EmptyCodeTest</ID>
+    <ID>LargeClass:MagicNumberSpec.kt$MagicNumberSpec : Spek</ID>
   </Whitelist>
 </SmellBaseline>
