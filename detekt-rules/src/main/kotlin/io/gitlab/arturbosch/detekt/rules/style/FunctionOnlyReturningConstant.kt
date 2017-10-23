@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.isOverridden
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -20,12 +21,18 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
 					"Consider declaring a constant instead",
 			Debt.TEN_MINS)
 
+	private val ignoreOverriddenFunction = valueOrDefault(IGNORE_OVERRIDDEN_FUNCTION, true)
+
 	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (isConstantExpression(function.bodyExpression) || returnsConstant(function)) {
+		if (checkOverriddenFunction(function)
+				&& (isConstantExpression(function.bodyExpression) || returnsConstant(function))) {
 			report(CodeSmell(issue, Entity.from(function)))
 		}
 		super.visitNamedFunction(function)
 	}
+
+	private fun checkOverriddenFunction(function: KtNamedFunction) =
+			if (ignoreOverriddenFunction) !function.isOverridden() else true
 
 	private fun isConstantExpression(expression: KtExpression?): Boolean {
 		if (expression is KtConstantExpression) {
@@ -42,5 +49,9 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
 			return isConstantExpression(returnExpression?.returnedExpression)
 		}
 		return false
+	}
+
+	companion object {
+		const val IGNORE_OVERRIDDEN_FUNCTION = "ignoreOverriddenFunction"
 	}
 }
