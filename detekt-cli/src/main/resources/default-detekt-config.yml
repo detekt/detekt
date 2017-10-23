@@ -335,6 +335,7 @@ style:
   FunctionOnlyReturningConstant:
     active: false
     ignoreOverriddenFunction: true
+    excludedFunctions: ''
 
 comments:
   active: true
