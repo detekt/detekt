@@ -334,6 +334,7 @@ style:
     active: false
   FunctionOnlyReturningConstant:
     active: false
+    ignoreOverriddenFunction: true
 
 comments:
   active: true
