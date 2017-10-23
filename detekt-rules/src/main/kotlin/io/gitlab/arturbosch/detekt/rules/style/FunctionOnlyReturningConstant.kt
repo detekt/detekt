@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.rules.isOverridden
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -22,10 +23,10 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
 			Debt.TEN_MINS)
 
 	private val ignoreOverriddenFunction = valueOrDefault(IGNORE_OVERRIDDEN_FUNCTION, true)
+	private val excludedFunctions = SplitPattern(valueOrDefault(EXCLUDED_FUNCTIONS, ""))
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (checkOverriddenFunction(function)
-				&& (isConstantExpression(function.bodyExpression) || returnsConstant(function))) {
+		if (checkOverriddenFunction(function) && isNotExcluded(function) && isReturningAConstant(function)) {
 			report(CodeSmell(issue, Entity.from(function)))
 		}
 		super.visitNamedFunction(function)
@@ -33,6 +34,12 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
 
 	private fun checkOverriddenFunction(function: KtNamedFunction) =
 			if (ignoreOverriddenFunction) !function.isOverridden() else true
+
+	private fun isNotExcluded(function: KtNamedFunction) =
+			!excludedFunctions.contains(function.name)
+
+	private fun isReturningAConstant(function: KtNamedFunction) =
+			isConstantExpression(function.bodyExpression) || returnsConstant(function)
 
 	private fun isConstantExpression(expression: KtExpression?): Boolean {
 		if (expression is KtConstantExpression) {
@@ -53,5 +60,6 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
 
 	companion object {
 		const val IGNORE_OVERRIDDEN_FUNCTION = "ignoreOverriddenFunction"
+		const val EXCLUDED_FUNCTIONS = "excludedFunctions"
 	}
 }

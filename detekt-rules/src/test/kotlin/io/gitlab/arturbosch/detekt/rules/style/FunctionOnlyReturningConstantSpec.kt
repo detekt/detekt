@@ -24,5 +24,12 @@ class FunctionOnlyReturningConstantSpec : SubjectSpek<FunctionOnlyReturningConst
 			val rule = FunctionOnlyReturningConstant(config)
 			assertThat(rule.lint(path)).hasSize(6)
 		}
+
+		it("does not report excluded function which returns a constant") {
+			val code = "fun f() = 1"
+			val config = TestConfig(mapOf("excludedFunctions" to "f"))
+			val rule = FunctionOnlyReturningConstant(config)
+			assertThat(rule.lint(code)).hasSize(0)
+		}
 	}
 })
