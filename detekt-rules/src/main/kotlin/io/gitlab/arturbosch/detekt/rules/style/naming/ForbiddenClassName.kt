@@ -24,7 +24,7 @@ class ForbiddenClassName(config: Config = Config.empty) : Rule(config) {
 		if (forbiddenEntries.isNotEmpty()) {
 			var description = "Class name $name is forbidden as it contains:"
 			forbiddenEntries.forEach { description += " $it," }
-			description.trimEnd { it.equals(",") }
+			description.trimEnd { it == ',' }
 
 			report(CodeSmell(issue.copy(description = description), Entity.from(classOrObject)))
 		}

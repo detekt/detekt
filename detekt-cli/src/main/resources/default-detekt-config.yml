@@ -335,7 +335,7 @@ style:
   FunctionOnlyReturningConstant:
     active: false
     ignoreOverriddenFunction: true
-    excludedFunctions: ''
+    excludedFunctions: 'describeContents'
 
 comments:
   active: true
