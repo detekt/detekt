@@ -262,7 +262,7 @@ style:
     ignoreEnums: false
   WildcardImport:
     active: true
-    excludeImports: ''
+    excludeImports: 'java.util.*,kotlinx.android.synthetic.*'
   SafeCast:
     active: true
   MaxLineLength:
