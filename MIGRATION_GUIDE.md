@@ -1,5 +1,8 @@
 # Migration Guide
 
+### RC5 -> RC5-2
+
+- rule filters which are defined in the `test-pattern` were applied to main sources too, this is now fixed.
 
 ### RC4 -> RC5
 

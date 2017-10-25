@@ -1,5 +1,15 @@
 # Detekt - Changelog
 
+#### RC5-2
+
+- Enhancement #514 - [#519](https://github.com/arturbosch/detekt/pull/519)
+- Test cases RC5 - [#511](https://github.com/arturbosch/detekt/pull/511)
+- Prepend project name to findings path - #171 - [#510](https://github.com/arturbosch/detekt/pull/510)
+- Do not apply rule filters on main sources - [#509](https://github.com/arturbosch/detekt/pull/509)
+- WildcardImport should support regex exclusions - [#506](https://github.com/arturbosch/detekt/issues/506)
+
+See all issues at: [RC5-2](https://github.com/arturbosch/detekt/milestone/24)
+
 #### RC5
 
 - Remove double check in condition - [#505](https://github.com/arturbosch/detekt/pull/505)
