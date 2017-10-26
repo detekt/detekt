@@ -42,29 +42,35 @@ class MaxLineLength(config: Config = Config.empty) : SubRule<KtFileContent>(conf
 		var offset = 0
 		val lines = element.content
 		val file = element.file
-		lines.filter { filterPackageStatements(it) }
-				.filter { filterImportStatements(it) }
-				.map { it.length }
-				.forEach {
-					offset += it
-					if (it > maxLineLength) {
-						report(CodeSmell(issue, Entity.from(file, offset)))
-					}
-				}
+
+		lines.forEach { line ->
+			offset += line.length
+			if (!isValidLine(line)) {
+				report(CodeSmell(issue, Entity.from(file, offset)))
+			}
+
+			offset += 1 /* '\n' */
+		}
 	}
 
-	private fun filterPackageStatements(line: String): Boolean {
+	private fun isValidLine(line: String): Boolean {
+		return (line.length <= maxLineLength
+				|| containsIgnoredPackageStatement(line)
+				|| containsIgnoredImportStatement(line))
+	}
+
+	private fun containsIgnoredPackageStatement(line: String): Boolean {
 		if (excludePackageStatements) {
-			return !line.trim().startsWith("package ")
+			return line.trimStart().startsWith("package ")
 		}
-		return true
+		return false
 	}
 
-	private fun filterImportStatements(line: String): Boolean {
+	private fun containsIgnoredImportStatement(line: String): Boolean {
 		if (excludeImportStatements) {
-			return !line.trim().startsWith("import ")
+			return line.trimStart().startsWith("import ")
 		}
-		return true
+		return false
 	}
 
 	companion object {
