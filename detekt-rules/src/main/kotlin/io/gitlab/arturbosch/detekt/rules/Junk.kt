@@ -7,12 +7,8 @@ import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
-import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtElement
-import org.jetbrains.kotlin.psi.KtEnumEntry
 import org.jetbrains.kotlin.psi.KtExpression
-import org.jetbrains.kotlin.psi.KtFunction
-import org.jetbrains.kotlin.psi.KtModifierListOwner
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 
 /**
@@ -20,20 +16,6 @@ import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
  */
 
 fun KtExpression?.asBlockExpression(): KtBlockExpression? = this as? KtBlockExpression
-
-fun KtModifierListOwner.isPublicNotOverridden() =
-		isPublic() && !isOverridden()
-
-fun KtModifierListOwner.isOverridden() = this.hasModifier(KtTokens.OVERRIDE_KEYWORD)
-
-fun KtModifierListOwner.isPublic(): Boolean {
-	return this.hasModifier(KtTokens.PUBLIC_KEYWORD)
-			|| !(this.hasModifier(KtTokens.PRIVATE_KEYWORD)
-			|| this.hasModifier(KtTokens.PROTECTED_KEYWORD)
-			|| this.hasModifier(KtTokens.INTERNAL_KEYWORD))
-}
-
-fun KtModifierListOwner.isInternal() = this.hasModifier(KtTokens.INTERNAL_KEYWORD)
 
 fun KtClass.isDataClass() = this.modifierList?.hasModifier(KtTokens.DATA_KEYWORD) == true
 

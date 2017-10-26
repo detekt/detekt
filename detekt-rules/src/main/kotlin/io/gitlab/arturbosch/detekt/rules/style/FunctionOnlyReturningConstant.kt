@@ -8,8 +8,8 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SplitPattern
+import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOverridden
-import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -34,7 +34,7 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
 	}
 
 	private fun checkOverridableFunction(function: KtNamedFunction) =
-			if (ignoreOverridableFunction) !function.isOverridden() && !function.hasModifier(KtTokens.OPEN_KEYWORD) else true
+			if (ignoreOverridableFunction) !function.isOverridden() && !function.isOpen() else true
 
 	private fun isNotExcluded(function: KtNamedFunction) =
 			!excludedFunctions.contains(function.name)
