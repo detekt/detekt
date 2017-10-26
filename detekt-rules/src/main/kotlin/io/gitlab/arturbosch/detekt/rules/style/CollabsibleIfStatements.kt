@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.com.intellij.psi.PsiComment
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtContainerNodeForControlStructureBody
 import org.jetbrains.kotlin.psi.KtIfExpression
 
@@ -30,6 +31,11 @@ class CollapsibleIfStatements(config: Config = Config.empty) : Rule(config) {
 
 	private fun hasOneKtIfExpression(expression: KtIfExpression): Boolean {
 		val statements = expression.then?.children?.filterNot { it is PsiComment }
-		return statements != null && statements.size == 1 && statements[0] is KtIfExpression
+		return statements != null && statements.size == 1 && isLoneIfExpression(statements[0])
+	}
+
+	private fun isLoneIfExpression(statement: PsiElement): Boolean {
+		val ifExpression = statement as? KtIfExpression
+		return ifExpression != null && ifExpression.`else` == null
 	}
 }
