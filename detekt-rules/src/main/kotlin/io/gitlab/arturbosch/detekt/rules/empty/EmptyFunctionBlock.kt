@@ -1,8 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.empty
 
 import io.gitlab.arturbosch.detekt.api.Config
-import org.jetbrains.kotlin.lexer.KtTokens
+import io.gitlab.arturbosch.detekt.rules.isOpen
+import io.gitlab.arturbosch.detekt.rules.isOverridden
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.psiUtil.isProtected
 
 /**
  * @author Artur Bosch
@@ -10,12 +12,10 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 class EmptyFunctionBlock(config: Config) : EmptyRule(config) {
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (function.isNotOverridden() && function.notMeantForOverriding()) {
+		if (!function.isOverridden() && function.notMeantForOverriding()) {
 			function.bodyExpression?.addFindingIfBlockExprIsEmpty()
 		}
 	}
 
-	private fun KtNamedFunction.isNotOverridden() = !hasModifier(KtTokens.OVERRIDE_KEYWORD)
-	private fun KtNamedFunction.notMeantForOverriding() =
-			!(hasModifier(KtTokens.OPEN_KEYWORD) && hasModifier(KtTokens.PROTECTED_KEYWORD))
+	private fun KtNamedFunction.notMeantForOverriding() = !(isOpen() && isProtected())
 }

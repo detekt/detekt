@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.isOverridden
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
@@ -24,8 +25,7 @@ class RedundantVisibilityModifierRule(config: Config = Config.empty) : Rule(conf
 	private val classVisitor = ClassVisitor()
 	private val childrenVisitor = ChildrenVisitor()
 
-	private fun KtModifierListOwner.isExplicitlyPublicNotOverridden() = isExplicitlyPublic()
-			&& !this.hasModifier(KtTokens.OVERRIDE_KEYWORD)
+	private fun KtModifierListOwner.isExplicitlyPublicNotOverridden() = isExplicitlyPublic() && !isOverridden()
 
 	private fun KtModifierListOwner.isExplicitlyPublic() = this.hasModifier(KtTokens.PUBLIC_KEYWORD)
 
