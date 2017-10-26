@@ -34,4 +34,14 @@ fun collapsibleIfs() {
 		if (1 == 1) ;
 		println()
 	}
+
+	if (true) {
+		if (1 == 1) {
+		} else {}
+	}
+
+	if (true) {
+		if (1 == 1) {
+		} else if (2 == 2) {}
+	}
 }
