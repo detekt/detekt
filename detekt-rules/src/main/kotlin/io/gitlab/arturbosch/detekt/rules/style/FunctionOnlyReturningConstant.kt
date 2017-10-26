@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.rules.isOverridden
+import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -22,18 +23,18 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
 					"Consider declaring a constant instead",
 			Debt.TEN_MINS)
 
-	private val ignoreOverriddenFunction = valueOrDefault(IGNORE_OVERRIDDEN_FUNCTION, true)
+	private val ignoreOverridableFunction = valueOrDefault(IGNORE_OVERRIDABLE_FUNCTION, true)
 	private val excludedFunctions = SplitPattern(valueOrDefault(EXCLUDED_FUNCTIONS, ""))
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (checkOverriddenFunction(function) && isNotExcluded(function) && isReturningAConstant(function)) {
+		if (checkOverridableFunction(function) && isNotExcluded(function) && isReturningAConstant(function)) {
 			report(CodeSmell(issue, Entity.from(function)))
 		}
 		super.visitNamedFunction(function)
 	}
 
-	private fun checkOverriddenFunction(function: KtNamedFunction) =
-			if (ignoreOverriddenFunction) !function.isOverridden() else true
+	private fun checkOverridableFunction(function: KtNamedFunction) =
+			if (ignoreOverridableFunction) !function.isOverridden() && !function.hasModifier(KtTokens.OPEN_KEYWORD) else true
 
 	private fun isNotExcluded(function: KtNamedFunction) =
 			!excludedFunctions.contains(function.name)
@@ -59,7 +60,7 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
 	}
 
 	companion object {
-		const val IGNORE_OVERRIDDEN_FUNCTION = "ignoreOverriddenFunction"
+		const val IGNORE_OVERRIDABLE_FUNCTION = "ignoreOverridableFunction"
 		const val EXCLUDED_FUNCTIONS = "excludedFunctions"
 	}
 }

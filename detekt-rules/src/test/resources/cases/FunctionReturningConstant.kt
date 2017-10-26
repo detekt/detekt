@@ -23,6 +23,8 @@ fun functionNotReturningConstant2(): Int {
 fun functionNotReturningConstantString1(str: String) = "str: $str"
 
 @Suppress("EqualsOrHashCode")
-class FunctionReturningConstant {
+open class FunctionReturningConstant {
+
+	open fun f() = 1
 	override fun hashCode() = 1
 }
