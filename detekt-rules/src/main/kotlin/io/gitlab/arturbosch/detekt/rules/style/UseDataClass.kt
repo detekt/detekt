@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.isOpen
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtDeclaration
@@ -54,7 +55,7 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 
 	private fun KtClass.doesNotExtendAnything() = superTypeListEntries.isEmpty()
 
-	private fun KtClass.isClosedForExtension() = !isAbstract() && !hasModifier(KtTokens.OPEN_KEYWORD)
+	private fun KtClass.isClosedForExtension() = !isAbstract() && !isOpen()
 
 	private fun KtClass.extractDeclarations(): List<KtDeclaration> = getBody()?.declarations ?: emptyList()
 
