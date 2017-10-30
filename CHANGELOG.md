@@ -1,5 +1,13 @@
 # Detekt - Changelog
 
+#### RC5-3
+
+- MaxLineLengthRule line number reporting issue - [#526](https://github.com/arturbosch/detekt/pull/526)
+- Fixed #522 - CollapsibleIf must not have a if-else child - [#525](https://github.com/arturbosch/detekt/pull/525)
+- Implemented #523 - open function option FunctionOnlyReturningConstant - [#524](https://github.com/arturbosch/detekt/pull/524)
+
+See all issues at: [RC5-3](https://github.com/arturbosch/detekt/milestone/25)
+
 #### RC5-2
 
 - Enhancement #514 - [#519](https://github.com/arturbosch/detekt/pull/519)
