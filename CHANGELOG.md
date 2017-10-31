@@ -1,5 +1,58 @@
 # Detekt - Changelog
 
+#### RC4-3 - Second bugfix release for RC4 with a bunch of new contributed rules!
+
+- UndocumentedPublicClass: Fix enum support - [#375](https://github.com/arturbosch/detekt/pull/375)
+- add rule to forbid certain class names - [#374](https://github.com/arturbosch/detekt/pull/374)
+- Tests are not executed anymore but skipped! - [#373](https://github.com/arturbosch/detekt/issues/373)
+- Use failfast configuration in CI - [#372](https://github.com/arturbosch/detekt/pull/372)
+- Added break and continue to unreachable code rule - [#371](https://github.com/arturbosch/detekt/pull/371)
+- A few more exception rules - [#370](https://github.com/arturbosch/detekt/pull/370)
+- Added UnnecessaryAbstractClass rule - [#369](https://github.com/arturbosch/detekt/pull/369)
+- remove spaces in default-detekt-config.yml - [#368](https://github.com/arturbosch/detekt/pull/368)
+- Advanced exception rules - [#366](https://github.com/arturbosch/detekt/pull/366)
+- Added PackageDeclaration style rule - [#364](https://github.com/arturbosch/detekt/pull/364)
+- Implement Data class rule - [#354](https://github.com/arturbosch/detekt/pull/354)
+- Feature/data class rule - [#353](https://github.com/arturbosch/detekt/pull/353)
+- Extend naming ruleset - [#302](https://github.com/arturbosch/detekt/issues/302)
+- Data class rule - [#263](https://github.com/arturbosch/detekt/issues/263)
+
+See all issues at: [RC4-3](https://github.com/arturbosch/detekt/milestone/21)
+
+#### RC4-2 - Bugfix release for RC4
+
+- Bugfix FunctionMaxLength typo - [#367](https://github.com/arturbosch/detekt/pull/367)
+- Fixed protected member report in sealed class - [#362](https://github.com/arturbosch/detekt/pull/362)
+- Renamed UselessIncrement to UselessPostfixExp - [#360](https://github.com/arturbosch/detekt/pull/360)
+- Bugfix/variable max length const - [#359](https://github.com/arturbosch/detekt/pull/359)
+- UndocumentedPublicClass: Add searchInInnerObject configuration property. - [#358](https://github.com/arturbosch/detekt/pull/358)
+- fix link to default-detekt-config.yml in migration guide for RC4 - [#357](https://github.com/arturbosch/detekt/pull/357)
+
+See all issues at: [RC4-2](https://github.com/arturbosch/detekt/milestone/20)
+
+#### RC4
+
+- Do not use reflection for toString methods - closes #349 - [#351](https://github.com/arturbosch/detekt/pull/351)
+- Detekt Gradle plugin breaks the Gradle properties task - [#349](https://github.com/arturbosch/detekt/issues/349)
+- Decouple KtTreeCompiler from Detektor - #341 - [#348](https://github.com/arturbosch/detekt/pull/348)
+- fix README to mention the renamed --plugins instead of --rules - [#346](https://github.com/arturbosch/detekt/pull/346)
+- Decouple KtTreeCompiler, KtCompiler from Detektor - [#341](https://github.com/arturbosch/detekt/issues/341)
+- Reimplement thrown-/catched exception rules - #95 - [#334](https://github.com/arturbosch/detekt/pull/334)
+- Reimplement throw-/catch-exception-rules as MultiRules - [#332](https://github.com/arturbosch/detekt/pull/332)
+- remove unnecessary parentheses in the main codebase - [#330](https://github.com/arturbosch/detekt/pull/330)
+- Added packagePattern option to config - [#329](https://github.com/arturbosch/detekt/pull/329)
+- add rule to detect Unnecessary Parentheses - [#328](https://github.com/arturbosch/detekt/pull/328)
+- PackagePattern in naming conventions - [#327](https://github.com/arturbosch/detekt/issues/327)
+- align naming patterns for enum entries in rule + default config - [#325](https://github.com/arturbosch/detekt/pull/325)
+- allow suppressing `all` - [#324](https://github.com/arturbosch/detekt/pull/324)
+- Combine all empty block rules into one multi rule - #95 - [#322](https://github.com/arturbosch/detekt/pull/322)
+- Refactored tests and increased coverage - [#321](https://github.com/arturbosch/detekt/pull/321)
+- Refactor Naming rules and add Variable/Function length rules - [#320](https://github.com/arturbosch/detekt/pull/320)
+- Added protected member in final class rule - [#317](https://github.com/arturbosch/detekt/pull/317)
+- [Poll] Do people care about separated EmptyXXXBlock, ThrowXXX and CatchXXX rules? - [#95](https://github.com/arturbosch/detekt/issues/95)
+
+See all issues at: [RC4](https://github.com/arturbosch/detekt/milestone/18)
+
 #### RC3
 
 - Do not consider empty returns as OptionalReturnKeyword - [#314](https://github.com/arturbosch/detekt/pull/314)

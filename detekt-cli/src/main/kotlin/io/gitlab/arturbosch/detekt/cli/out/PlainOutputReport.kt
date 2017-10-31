@@ -10,6 +10,6 @@ class PlainOutputReport : OutputReport() {
 
 	override fun render(detektion: Detektion): String {
 		val smells = detektion.findings.flatMap { it.value }
-		return smells.map { it.compactWithSignature() }.joinToString("\n")
+		return smells.joinToString("\n") { it.compactWithSignature() }
 	}
 }

@@ -27,6 +27,13 @@ class ExcludesSpec : Spek({
 			assertThat(excludes.contains(parameter)).isFalse()
 			assertThat(excludes.none(parameter)).isTrue()
 		}
+
+		it("returns all matches") {
+			val parameter = "test.com"
+			val matches = excludes.matches(parameter)
+			assertThat(matches).hasSize(1)
+			assertThat(matches).contains("test")
+		}
 	}
 
 	given("an excludes rule with multiple excludes") {
@@ -83,6 +90,5 @@ class ExcludesSpec : Spek({
 			assertThat(excludes.contains(parameter)).isFalse()
 			assertThat(excludes.none(parameter)).isTrue()
 		}
-
 	}
 })

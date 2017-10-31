@@ -18,8 +18,7 @@ class PackageCountProcessor : FileProcessListener {
 
 	override fun onFinish(files: List<KtFile>, result: Detektion) {
 		val count = files
-				.map { it.getUserData(key) }
-				.filterNotNull()
+				.mapNotNull { it.getUserData(key) }
 				.distinct()
 				.size
 		result.add(ProjectMetric(key.toString(), count))

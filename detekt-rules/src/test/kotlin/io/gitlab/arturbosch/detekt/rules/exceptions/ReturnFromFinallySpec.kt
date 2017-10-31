@@ -11,7 +11,7 @@ class ReturnFromFinallySpec : SubjectSpek<ReturnFromFinally>({
 
 	given("a finally block with a return statement") {
 		val code = """
-			function x() {
+			fun x() {
 				try {
 				} finally {
 					return 0
@@ -27,7 +27,7 @@ class ReturnFromFinallySpec : SubjectSpek<ReturnFromFinally>({
 
 	given("a finally block with no return statement") {
 		val code = """
-			function x() {
+			fun x() {
 				try {
 				} finally {
 				}
@@ -42,7 +42,7 @@ class ReturnFromFinallySpec : SubjectSpek<ReturnFromFinally>({
 
 	given("a finally block with a nested return statement") {
 		val code = """
-			function x() {
+			fun x() {
 				try {
 				} finally {
 					if (1 == 1) {

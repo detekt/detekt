@@ -1,0 +1,16 @@
+# top-most EditorConfig file
+root = true
+
+[*]
+insert_final_newline = true
+
+[*.{kt,groovy}]
+indent_style = tab
+
+[*.yml]
+indent_style = space
+indent_size = 2
+
+[*.md]
+indent_style = space
+indent_size = 4

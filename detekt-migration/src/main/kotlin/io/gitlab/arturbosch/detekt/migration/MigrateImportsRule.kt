@@ -19,7 +19,7 @@ class MigrateImportsRule(config: Config) : Rule(config) {
 
 	override val issue = Issue("MigrateImports", Severity.Defect, "")
 
-	private val replacements: HashMap<String, String> = config.valueOrDefault("imports", HashMap<String, String>())
+	private val replacements: HashMap<String, String> = config.valueOrDefault("imports", HashMap())
 	private val toReplaces = replacements.keys
 
 	private val factory = KtImportsFactory(PROJECT)

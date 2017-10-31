@@ -1,11 +1,12 @@
 # __detekt__
 
+[![Join the chat at https://gitter.im/detekt-codeanalysis/Lobby](https://badges.gitter.im/detekt-codeanalysis/Lobby.svg)](https://gitter.im/detekt-codeanalysis/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![build status](https://travis-ci.org/arturbosch/detekt.svg?branch=master)](https://travis-ci.org/arturbosch/detekt)
 [![build status windows](https://ci.appveyor.com/api/projects/status/3q9g98vveiul7yut/branch/master?svg=true)](https://ci.appveyor.com/project/arturbosch/detekt)
 [ ![Download](https://api.bintray.com/packages/arturbosch/code-analysis/detekt/images/download.svg) ](https://bintray.com/arturbosch/code-analysis/detekt/_latestVersion)
-[![All Contributors](https://img.shields.io/badge/gradle_plugin-1.0.0.RC3-blue.svg?style=flat-square)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
+[![gradle plugin](https://img.shields.io/badge/gradle_plugin-1.0.0.RC4.3-blue.svg?style=flat-square)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-16-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-18-orange.svg?style=flat-square)](#contributors)
 [![androidweekly](https://img.shields.io/badge/androidweekly-259-orange.svg?style=flat-square)](http://androidweekly.net/issues/issue-259)
 [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
 
@@ -21,7 +22,6 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 - highly configurable (rule set or rule level)
 - suppress findings with Kotlin's @Suppress and Java's @SuppressWarnings annotations
 - specify code smell thresholds to break your build or print a warning
-- format your code with the formatting rule set
 - code Smell baseline and ignore lists for legacy projects
 - [gradle plugin](#gradleplugin) for code analysis, formatting and import migration
 - gradle tasks to use local `intellij` distribution for [formatting and inspecting](#idea) kotlin code
@@ -47,7 +47,6 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
     2. [Processors](#customprocessors)
     3. [Reports](#customreports)
     4. [Rule testing](#testing)
-9. [Formatting - Code Style](#formatting)
 10. [Black- and Whitelist code smells](#baseline)
 10. [Contributors](#contributors)
 
@@ -85,10 +84,6 @@ Usage: detekt [options]
       Default: false
     --filters, -f
       Path filters defined through regex with separator ';' (".*test.*").
-    --format
-      Enables formatting of source code. Cannot be used together with
-      --config.
-      Default: false
     --generate-config, -gc
       Export default config to default-detekt-config.yml.
       Default: false
@@ -106,9 +101,6 @@ Usage: detekt [options]
       Input path to analyze (path/to/project).
     --plugins, -p
       Extra paths to ruleset jars separated by ',' or ';'.
-    --useTabs
-      Tells the formatter that indentation with tabs are valid.
-      Default: false
 ```
 
 `--input` can either be a directory or a single Kotlin file.
@@ -199,7 +191,6 @@ configure<DetektExtension> {
 
 - `detektCheck` - Runs a _detekt_ analysis and complexity report. Configure the analysis inside the `detekt-closure`. By default the standard rule set is used without output report or  black- and whitelist checks.
 - `detektGenerateConfig` - Generates a default detekt config file into your projects location.
-- `detektFormat` - Formats your kotlin code by using the formatting rule set. Specify which rules should be turned on/off and which should be auto corrected. (see [Formatting - Code Style](#formatting)). Pay attention that this formatting rule set is not as powerful as `intellij's inspection` and never will be. It is recommend to use the `detektIdeaFormat` task which needs some pre configurations.
 - `detektBaseline` - Like `detektCheck`, but creates a code smell baseline. Further detekt runs will only feature new smells not in this list. 
 - `detektMigrate` - Experimental feature for now. Just supports migration of specified imports. See [migration section](#migration).
 - `detektIdeaFormat` - Uses a local `idea` installation to format your kotlin (and other) code according to the specified `code-style.xml`.
@@ -224,7 +215,6 @@ detekt {
         outputName = "my-module" // This parameter is used to derive the output report name
         baseline = "$project.projectDir/reports/baseline.xml" // If present all current findings are saved in a baseline.xml to only consider new code smells for further runs.
         parallel = true // Use this flag if your project has more than 200 files. 
-        useTabs = false // Turns off the indentation check for spaces if true, default is false and does not need to be specified
    }
    
    // Definines a secondary profile `gradle detektCheck -Ddetekt.profile=override` will use this profile. 
@@ -309,7 +299,6 @@ task detekt(type: JavaExec) {
 
 dependencies {
 	detekt 'io.gitlab.arturbosch.detekt:detekt-cli:1.0.0.[version]'
-	detekt 'io.gitlab.arturbosch.detekt:detekt-formatting:1.0.0.[version]'
 }
 ```
 
@@ -391,19 +380,117 @@ Currently there are seven rule sets which are used per default when running the 
  collection calls
 - performance   - finds potential performance issues
 
-##### Additional RuleSets 
-
-* formatting: detects indentation, spacing problems and optional semicolons in code
-
-As of milestone six, the formatting rule set is shipped as an standalone plugin which must be linked to a _detekt_ run
-through the --rules "path/to/jar" parameter or via gradle/maven classpath setup.
-
 ### <a name="rulesetconfig">RuleSet Configuration</a>
 
 To turn off specific rules/rule sets or change threshold values for certain rules a yaml configuration file can be used.
 Export the default config with the `--generate-config` flag or copy and modify the `detekt-cli/src/main/resources/default-detekt-config.yml` for your needs.
 
 ```yml
+potential-bugs:
+  active: true
+  DuplicateCaseInWhenExpression:
+    active: true
+  EqualsAlwaysReturnsTrueOrFalse:
+    active: false
+  EqualsWithHashCodeExist:
+    active: true
+  WrongEqualsTypeParameter:
+    active: false
+  ExplicitGarbageCollectionCall:
+    active: true
+  UnreachableCode:
+    active: true
+  LateinitUsage:
+    active: false
+  UnsafeCallOnNullableType:
+    active: false
+  UnsafeCast:
+    active: false
+  UselessPostfixExpression:
+    active: false
+
+performance:
+  active: true
+  ForEachOnRange:
+    active: true
+  SpreadOperator:
+    active: true
+  UnnecessaryTemporaryInstantiation:
+    active: true
+
+exceptions:
+  active: true
+  ExceptionRaisedInUnexpectedLocation:
+    active: false
+    methodNames: 'toString,hashCode,equals,finalize'
+  SwallowedException:
+    active: false
+  TooGenericExceptionCaught:
+    active: true
+    exceptions:
+      - ArrayIndexOutOfBoundsException
+      - Error
+      - Exception
+      - IllegalMonitorStateException
+      - IndexOutOfBoundsException
+      - InterruptedException
+      - NullPointerException
+      - RuntimeException
+  TooGenericExceptionThrown:
+    active: true
+    exceptions:
+      - Throwable
+      - ThrowError
+      - ThrowException
+      - ThrowNullPointerException
+      - ThrowRuntimeException
+      - ThrowThrowable
+  InstanceOfCheckForException:
+    active: false
+  IteratorNotThrowingNoSuchElementException:
+    active: false
+  PrintExceptionStackTrace:
+    active: false
+  RethrowCaughtException:
+    active: false
+  ReturnFromFinally:
+    active: false
+  ThrowingExceptionFromFinally:
+    active: false
+  ThrowingExceptionInMain:
+    active: false
+  ThrowingNewInstanceOfSameException:
+    active: false
+
+empty-blocks:
+  active: true
+  EmptyCatchBlock:
+    active: true
+  EmptyClassBlock:
+    active: true
+  EmptyDefaultConstructor:
+    active: true
+  EmptyDoWhileBlock:
+    active: true
+  EmptyElseBlock:
+    active: true
+  EmptyFinallyBlock:
+    active: true
+  EmptyForBlock:
+    active: true
+  EmptyFunctionBlock:
+    active: true
+  EmptyIfBlock:
+    active: true
+  EmptyInitBlock:
+    active: true
+  EmptySecondaryConstructor:
+    active: true
+  EmptyWhenBlock:
+    active: true
+  EmptyWhileBlock:
+    active: true
+
 complexity:
   active: true
   LongMethod:
@@ -418,13 +505,53 @@ complexity:
     threshold: 10
   ComplexCondition:
     threshold: 3
+  LabeledExpression:
+    active: false
+  StringLiteralDuplication:
+    active: false
+    threshold: 2
+    ignoreAnnotation: true
+    excludeStringsWithLessThan5Characters: true
+    ignoreStringsRegex: '$^'
 
 style:
   active: true
-  WildcardImport:
+  ReturnCount:
     active: true
+    max: 2
+  NewLineAtEndOfFile:
+    active: true
+  OptionalAbstractKeyword:
+    active: true
+  OptionalWhenBraces:
+    active: false
+  EqualsNullCall:
+    active: false
+  ForbiddenComment:
+    active: true
+    values: 'TODO:,FIXME:,STOPSHIP:'
+  ForbiddenImport:
+    active: false
+    imports: ''
+  PackageDeclarationStyle:
+    active: false
   ModifierOrder:
     active: true
+  MagicNumber:
+    active: true
+    ignoreNumbers: '-1,0,1,2'
+    ignoreHashCodeFunction: false
+    ignorePropertyDeclaration: false
+    ignoreAnnotation: false
+  WildcardImport:
+    active: true
+  SafeCast:
+    active: true
+  MaxLineLength:
+    active: true
+    maxLineLength: 120
+    excludePackageStatements: false
+    excludeImportStatements: false
   PackageNaming:
     active: true
     packagePattern: '^[a-z]+(\.[a-z][a-z0-9]*)*$'
@@ -434,33 +561,39 @@ style:
   EnumNaming:
     active: true
     enumEntryPattern: '^[A-Z$][a-zA-Z_$]*$'
-  FunctionNaming :
+  FunctionNaming:
     active: true
     functionPattern: '^[a-z$][a-zA-Z$0-9]*$'
   FunctionMaxLength:
     active: false
-    maximumFunctionNameLength: 25
+    maximumFunctionNameLength: 30
   FunctionMinLength:
     active: false
     minimumFunctionNameLength: 3
-  VariableNaming :
+  VariableNaming:
     active: true
     variablePattern: '^(_)?[a-z$][a-zA-Z$0-9]*$'
-  ConstantNaming :
+  ConstantNaming:
     active: true
     constantPattern: '^([A-Z_]*|serialVersionUID)$'
   VariableMaxLength:
     active: false
-    maximumVariableNameLength: 17
+    maximumVariableNameLength: 30
   VariableMinLength:
     active: false
     minimumVariableNameLength: 3
-  MaxLineLength:
-    active: true
-    maxLineLength: 120
-    excludePackageStatements: false
-    excludeImportStatements: false
+  ForbiddenClassName:
+    active: false
+    forbiddenName: ''
+  ProtectedMemberInFinalClass:
+    active: false
   UnnecessaryParentheses:
+    active: false
+  DataClassContainsFunctions:
+    active: false
+  UseDataClass:
+    active: false
+  UnnecessaryAbstractClass:
     active: false
 
 comments:
@@ -469,48 +602,15 @@ comments:
     active: true
   CommentOverPrivateProperty:
     active: true
-  NoDocOverPublicClass:
+  UndocumentedPublicClass:
     active: false
-  NoDocOverPublicMethod:
+    searchInNestedClass: true
+    searchInInnerClass: true
+    searchInInnerObject: true
+    searchInInnerInterface: true
+  UndocumentedPublicFunction:
     active: false
-    
-potential-bugs:
-  active: true
-  DuplicateCaseInWhenExpression:
-    active: true
-  EqualsWithHashCodeExist:
-    active: true
-  ExplicitGarbageCollectionCall:
-    active: true
-  LateinitUsage:
-    active: false
-
-performance:
-  active: true
-  ForEachOnRange:
-    active: true
-
-exceptions:
-  active: true
-
-empty-blocks:
-  active: true
 ```
-
-```yaml
-autoCorrect: true
-formatting:
-  ConsecutiveBlankLines:
-    autoCorrect: true
-  ...
-```
-
-Every rule of the default rule sets can be turned off. Thresholded code-smell rules can have an additional field `threshold`.
-`Formatting` rules can be configured to `autoCorrect` the style mistake.
-
-`Active` keyword is only needed if you want to turn off the rule. `Active` on the rule set level turn off whole rule set.
-`autoCorrect` on the top level must be set to true or else all configured formatting rules are ignored.
-This is done to prevent you from changing your project files if your not 100% sure about it.
 
 ### <a name="suppress">Suppress code smell rules</a>
 
@@ -637,66 +737,7 @@ There are two predefined methods to help obtaining a KtFile:
 New with M3 there is a special detekt-test module, which specifies above two methods but also
 Rule extension functions that allow allow to skip compilation, ktFile and visit procedures.
 
-- Rule.lint(StringContent/Path) returns just the findings for given content
-- Rule.format(StringContent/Path) returns just the new modified content for given content
-
-### <a name="formatting">Formatting</a>
-
->As of `M11` the `detektIdeaFormat`-task makes the formatting rule set obsolete to a big part. It is highly advised to use that gradle task for indentation and spacing. Rules like removing OptionalUnit and converting to ExpressionBodySyntax for single return statements can still be useful.
-
-[KtLint](https://github.com/shyiko/ktlint) was first to support auto correct formatting according to the kotlin [coding conventions](https://kotlinlang.org/docs/reference/coding-conventions.html).
-In _detekt_ I made an effort to port over all available formatting rules to detect style violations and auto correct them.
-
-Following configuration I use to check the style for _detekt_. If your like me who prefer tabs over spaces, use `useTabs` in the
-rule set level to turn off indentation check for spaces (or simple turn off `Indentation` rule).
-
-```yaml
-formatting:
-  active: true
-  useTabs: true
-  Indentation:
-    active: false
-    indentSize: 4
-  ConsecutiveBlankLines:
-    active: true
-    autoCorrect: true
-  MultipleSpaces:
-    active: true
-    autoCorrect: true
-  SpacingAfterComma:
-    active: true
-    autoCorrect: true
-  SpacingAfterKeyword:
-    active: true
-    autoCorrect: true
-  SpacingAroundColon:
-    active: true
-    autoCorrect: true
-  SpacingAroundCurlyBraces:
-    active: true
-    autoCorrect: true
-  SpacingAroundOperator:
-    active: true
-    autoCorrect: true
-  TrailingSpaces:
-    active: true
-    autoCorrect: true
-  UnusedImports:
-    active: true
-    autoCorrect: true
-  OptionalSemicolon:
-    active: true
-    autoCorrect: true
-  OptionalUnit:
-    active: true
-    autoCorrect: true
-  ExpressionBodySyntax:
-    active: false
-    autoCorrect: true
-  ExpressionBodySyntaxLineBreaks:
-    active: false
-    autoCorrect: true
-```
+- Rule.lint(StringContent/Path/KtFile) returns just the findings for given content
 
 ### <a name="baseline">Code Smell baseline and ignore list</a>
 
@@ -742,8 +783,9 @@ detekt findings, bunch of rules
 - [schalks](https://github.com/schalkms) - Active on Issues, Bunch of rules, Project metrics 
 - [Anna Y](https://github.com/Nevvea7) - Readme fix
 - [Karol Wrótniak](https://github.com/koral--) - Treat comments as not empty blocks
+- [Radim Vaculik](https://github.com/radimvaculik) - VariableMaxLength - bugfix
+- [Martin Nonnenmacher](https://github.com/mnonnenmacher) - UndocumentedPublicClass - enum support
 
 #### Credits
-- [Stanley Shyiko](https://github.com/shyiko) - `detekt` migrated the formatting rules from [ktlint](https://github.com/shyiko/ktlint)
 - [JetBrains](https://github.com/jetbrains/) - Creating Intellij + Kotlin
-- [PMD](https://github.com/pmd/pmd) & [Checkstyle](https://github.com/checkstyle/checkstyle) & [KtLint](https://github.com/shyiko/ktlint) - Ideas for threshold values and style rules  
+- [PMD](https://github.com/pmd/pmd) & [Checkstyle](https://github.com/checkstyle/checkstyle) & [KtLint](https://github.com/shyiko/ktlint) - Ideas for threshold values and style rules

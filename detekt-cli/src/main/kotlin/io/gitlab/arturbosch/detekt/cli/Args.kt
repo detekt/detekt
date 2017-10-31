@@ -33,18 +33,10 @@ class Args {
 			description = "Extra paths to plugin jars separated by ',' or ';'.")
 	var plugins: String? = null
 
-	@Parameter(names = arrayOf("--format"),
-			description = "Enables formatting of source code. Cannot be used together with --config.")
-	var formatting: Boolean = false
-
 	@Parameter(names = arrayOf("--parallel"),
 			description = "Enables parallel compilation of source files." +
 					" Should only be used if the analyzing project has more than ~200 kotlin files.")
 	var parallel: Boolean = false
-
-	@Parameter(names = arrayOf("--useTabs"),
-			description = "Tells the formatter that indentation with tabs are valid.")
-	var useTabs: Boolean = false
 
 	@Parameter(names = arrayOf("--baseline", "-b"),
 			description = "If a baseline xml file is passed in," +

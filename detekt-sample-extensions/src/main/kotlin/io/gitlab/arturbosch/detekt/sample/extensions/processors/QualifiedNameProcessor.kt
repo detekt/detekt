@@ -16,13 +16,12 @@ class QualifiedNameProcessor : FileProcessListener {
 		val packageName = file.packageFqName.asString()
 		val nameVisitor = ClassNameVisitor()
 		file.accept(nameVisitor)
-		val fqNames = nameVisitor.names.mapTo(HashSet<String>()) { "$packageName.$it" }
+		val fqNames = nameVisitor.names.mapTo(HashSet()) { "$packageName.$it" }
 		file.putUserData(FQ_NAMES_KEY, fqNames)
 	}
 
 	override fun onFinish(files: List<KtFile>, result: Detektion) {
-		val fqNames = files.map { it.getUserData(FQ_NAMES_KEY) }
-				.filterNotNull()
+		val fqNames = files.mapNotNull { it.getUserData(FQ_NAMES_KEY) }
 				.flatMapTo(HashSet()) { it }
 		result.addData(FQ_NAMES_KEY, fqNames)
 	}

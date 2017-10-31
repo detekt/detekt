@@ -6,6 +6,7 @@ import java.util.NoSuchElementException
 class IteratorImplPositive : Iterator<String> {
 
 	override fun hasNext(): Boolean {
+		next(1)
 		return true
 	}
 
@@ -15,21 +16,16 @@ class IteratorImplPositive : Iterator<String> {
 	}
 
 	// next method overload
-	fun next(i: Int) {
-
+	private fun next(i: Int) {
 	}
 }
 
 @Suppress("unused")
-abstract class AbstractIterator : Iterator<String>
-
-@Suppress("unused")
-class NoIteratorImpl
-
-@Suppress("unused")
-class IteratorImplNegative1 : Iterator<String> {
+// violation NotThrowingNoSuchElementException, HasNextCallsNextMethod
+class IteratorImpl2 : Iterator<String> {
 
 	override fun hasNext(): Boolean {
+		next()
 		return true
 	}
 
@@ -39,13 +35,39 @@ class IteratorImplNegative1 : Iterator<String> {
 }
 
 @Suppress("unused")
-class IteratorImplNegative2 : Iterator<String> {
+class IteratorImplContainer {
+
+	// violation NotThrowingNoSuchElementException, HasNextCallsNextMethod
+	object IteratorImplNegative3 : Iterator<String> {
+
+		override fun hasNext(): Boolean {
+			return true
+		}
+
+		override fun next(): String {
+			throw IllegalStateException()
+		}
+	}
+}
+
+@Suppress("unused")
+abstract class AbstractIterator1 : Iterator<String>
+
+@Suppress("unused")
+// violation NotThrowingNoSuchElementException, HasNextCallsNextMethod
+abstract class AbstractIterator2 : Iterator<String> {
 
 	override fun hasNext(): Boolean {
+		if (1 == 1) {
+			next()
+		}
 		return true
 	}
 
 	override fun next(): String {
-		throw IllegalStateException()
+		return ""
 	}
 }
+
+@Suppress("unused")
+class NoIteratorImpl

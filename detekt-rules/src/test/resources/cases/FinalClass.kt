@@ -33,6 +33,12 @@ class FinalClass : BaseClass {
 	}
 
 	protected object InnerObject // positive case
+
+	protected companion object { // positive case
+		protected class A { // positive case
+			protected var x = 0 // positive case
+		}
+	}
 }
 
 @Suppress("unused")
@@ -40,6 +46,14 @@ abstract class BaseClass {
 
 	protected abstract val abstractProp: Int
 	protected abstract fun abstractFunction()
+
+	protected object InnerObject
+
+	protected companion object {
+		protected class A {
+			protected var x = 0 // positive case
+		}
+	}
 }
 
 @Suppress("unused")
@@ -47,10 +61,15 @@ open class OpenClass {
 
 	inner class InnerClass {
 
-		// positive case
-		protected val i = 0
+		protected val i = 0 // positive case
 	}
 }
 
-// positive case
-class FinalClassWithProtectedConstructor protected constructor()
+@Suppress("unused")
+sealed class SealedClass {
+
+	protected fun a() {}
+}
+
+@Suppress("unused")
+class FinalClassWithProtectedConstructor protected constructor() // positive case

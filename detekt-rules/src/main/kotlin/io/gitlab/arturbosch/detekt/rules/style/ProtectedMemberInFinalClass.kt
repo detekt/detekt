@@ -9,7 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.lexer.KtTokens
-import org.jetbrains.kotlin.psi.KtClassOrObject
+import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtDeclaration
 
 class ProtectedMemberInFinalClass(config: Config = Config.empty) : Rule(config) {
@@ -20,25 +20,23 @@ class ProtectedMemberInFinalClass(config: Config = Config.empty) : Rule(config) 
 
 	private val visitor = DeclarationVisitor()
 
-	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-		val isNotAbstract = !classOrObject.hasModifier(KtTokens.ABSTRACT_KEYWORD)
-		val isFinal = !classOrObject.hasModifier(KtTokens.OPEN_KEYWORD)
-		if (isNotAbstract && isFinal) {
-			visitPrimaryConstructor(classOrObject)
-			visitKlassDeclarations(classOrObject)
-		} else {
-			super.visitClassOrObject(classOrObject)
+	/**
+	 * Only classes and companion objects can contain protected members.
+	 */
+	override fun visitClass(klass: KtClass) {
+		if (hasModifiers(klass)) {
+			klass.primaryConstructor?.accept(visitor)
+			klass.getBody()?.declarations?.forEach { it.accept(visitor) }
+			klass.companionObjects.forEach { it.accept(visitor) }
 		}
+		super.visitClassOrObject(klass)
 	}
 
-	private fun visitPrimaryConstructor(classOrObject: KtClassOrObject) {
-		classOrObject.primaryConstructor?.accept(visitor)
-	}
-
-	private fun visitKlassDeclarations(klass: KtClassOrObject) {
-		klass.getBody()?.declarations?.forEach {
-			it.accept(visitor)
-		}
+	private fun hasModifiers(klass: KtClass): Boolean {
+		val isNotAbstract = !klass.hasModifier(KtTokens.ABSTRACT_KEYWORD)
+		val isFinal = !klass.hasModifier(KtTokens.OPEN_KEYWORD)
+		val isNotSealed = !klass.hasModifier(KtTokens.SEALED_KEYWORD)
+		return isNotAbstract && isFinal && isNotSealed
 	}
 
 	internal inner class DeclarationVisitor : DetektVisitor() {
@@ -49,7 +47,6 @@ class ProtectedMemberInFinalClass(config: Config = Config.empty) : Rule(config) 
 			if (isProtected && isNotOverridden) {
 				report(CodeSmell(issue, Entity.from(dcl)))
 			}
-			super.visitDeclaration(dcl)
 		}
 	}
 }

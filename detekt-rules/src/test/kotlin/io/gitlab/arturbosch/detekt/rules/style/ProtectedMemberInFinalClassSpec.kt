@@ -17,7 +17,7 @@ class ProtectedMemberInFinalClassSpec : SubjectSpek<ProtectedMemberInFinalClass>
 
 		it("has protected visibility") {
 			val findings = subject.lint(file.text)
-			Assertions.assertThat(findings).hasSize(9)
+			Assertions.assertThat(findings).hasSize(13)
 		}
 	}
 })

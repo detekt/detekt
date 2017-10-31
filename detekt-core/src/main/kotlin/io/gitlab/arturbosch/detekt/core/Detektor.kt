@@ -4,8 +4,10 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.FindingsForFile
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.api.toMergedMap
 import org.jetbrains.kotlin.psi.KtFile
 
 /**
@@ -26,8 +28,9 @@ class Detektor(private val settings: ProcessingSettings,
 		processors.forEach { it.onStart(ktFiles) }
 		val futures = ktFiles.map { file ->
 			runAsync {
+				processors.forEach { it.onProcess(file) }
 				file.analyze().apply {
-					processors.forEach { it.onProcess(file) }
+					processors.forEach { it.onProcessComplete(file, FindingsForFile(this)) }
 				}
 			}
 		}

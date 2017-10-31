@@ -43,7 +43,7 @@ class BuildFailureReport : ConsoleReport() {
 	private fun extractRuleToRuleSetIdMap(detektion: Detektion): HashMap<String, String> {
 		return detektion.findings.mapValues { it.value.map { it.id }.toSet() }
 				.map { map -> map.value.map { it to map.key }.toMap() }
-				.fold(HashMap<String, String>()) { result, map -> result.putAll(map); result }
+				.fold(HashMap()) { result, map -> result.putAll(map); result }
 	}
 
 	private fun Finding.weighted(ids: Map<String, String>): Int {

@@ -25,7 +25,7 @@ class VariableMaxLength(config: Config = Config.empty) : SubRule<KtVariableDecla
 	}
 
 	companion object {
-		const val MAXIMUM_VARIABLE_NAME_LENGTH = "minimumVariableNameLength"
+		const val MAXIMUM_VARIABLE_NAME_LENGTH = "maximumVariableNameLength"
 		private const val DEFAULT_MAXIMUM_VARIABLE_NAME_LENGTH = 30
 	}
 }

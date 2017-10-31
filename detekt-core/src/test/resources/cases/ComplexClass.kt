@@ -6,11 +6,11 @@ import org.jetbrains.kotlin.utils.sure
  * @author Artur Bosch
  */
 @Suppress("unused")
-class ComplexClass {// McCabe: 42, LLOC: 1+2+29+29+24
+class ComplexClass {// McCabe: 56, LLOC: 20 + 20 + 4x4
 
-	class NestedClass { //13
-		fun complex() {
-			try {//4
+	class NestedClass { //20
+		fun complex() { //1 +
+			try {//5
 				while (true) {
 					if (true) {
 						when ("string") {
@@ -19,8 +19,8 @@ class ComplexClass {// McCabe: 42, LLOC: 1+2+29+29+24
 						}
 					}
 				}
-			} catch (ex: Exception) {
-				try {//3
+			} catch (ex: Exception) { //1 + 5
+				try {
 					println()
 				} catch (ex: Exception) {
 					while (true) {
@@ -31,8 +31,8 @@ class ComplexClass {// McCabe: 42, LLOC: 1+2+29+29+24
 						}
 					}
 				}
-			} finally {
-				try {//3
+			} finally { // 6
+				try {
 					println()
 				} catch (ex: Exception) {
 					while (true) {
@@ -44,18 +44,17 @@ class ComplexClass {// McCabe: 42, LLOC: 1+2+29+29+24
 					}
 				}
 			}
-			(1..10).forEach {
-				//1
+			(1..10).forEach { //1
 				println()
 			}
-			for (i in 1..10) {//1
+			for (i in 1..10) { //1
 				println()
 			}
 		}
 	}
 
-	fun complex() { //13
-		try {//4
+	fun complex() { //1 +
+		try {//5
 			while (true) {
 				if (true) {
 					when ("string") {
@@ -64,8 +63,8 @@ class ComplexClass {// McCabe: 42, LLOC: 1+2+29+29+24
 					}
 				}
 			}
-		} catch (ex: Exception) {
-			try {//3
+		} catch (ex: Exception) { //1 + 5
+			try {
 				println()
 			} catch (ex: Exception) {
 				while (true) {
@@ -76,8 +75,8 @@ class ComplexClass {// McCabe: 42, LLOC: 1+2+29+29+24
 					}
 				}
 			}
-		} finally {
-			try {//3
+		} finally { // 6
+			try {
 				println()
 			} catch (ex: Exception) {
 				while (true) {
@@ -89,11 +88,10 @@ class ComplexClass {// McCabe: 42, LLOC: 1+2+29+29+24
 				}
 			}
 		}
-		(1..10).forEach {
-			//1
+		(1..10).forEach { //1
 			println()
 		}
-		for (i in 1..10) {//1
+		for (i in 1..10) { //1
 			println()
 		}
 	}

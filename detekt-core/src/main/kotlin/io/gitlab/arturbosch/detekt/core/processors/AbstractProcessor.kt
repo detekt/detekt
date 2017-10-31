@@ -17,8 +17,7 @@ abstract class AbstractProcessor : FileProcessListener {
 
 	override fun onFinish(files: List<KtFile>, result: Detektion) {
 		val count = files
-				.map { it.getUserData(key) }
-				.filterNotNull()
+				.mapNotNull { it.getUserData(key) }
 				.sum()
 		result.addData(key, count)
 	}

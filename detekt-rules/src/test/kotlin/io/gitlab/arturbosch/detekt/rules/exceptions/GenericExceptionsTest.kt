@@ -22,11 +22,11 @@ class GenericExceptionsTest : Spek({
 	describe("a file with many catch'ed exceptions") {
 
 		it("should find one of each kind") {
-			val rule = TooGenericExceptionCatched(Config.empty)
+			val rule = TooGenericExceptionCaught(Config.empty)
 
 			val findings = rule.lint(file.text)
 
-			Assertions.assertThat(findings).hasSize(CATCHED_EXCEPTIONS.size)
+			Assertions.assertThat(findings).hasSize(CAUGHT_EXCEPTIONS.size)
 		}
 	}
 
