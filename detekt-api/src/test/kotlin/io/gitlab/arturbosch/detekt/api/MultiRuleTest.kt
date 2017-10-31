@@ -49,7 +49,7 @@ abstract class AbstractRule : Rule() {
 	override val issue: Issue = Issue(javaClass.simpleName, Severity.Minor)
 
 	override fun visitKtFile(file: KtFile) {
-		report(CodeSmell(issue, Entity.from(file)))
+		report(CodeSmell(issue, Entity.from(file), message = ""))
 	}
 }
 
