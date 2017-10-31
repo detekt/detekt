@@ -10,6 +10,13 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtExpression
 
+/**
+ * Avoid temporary objects when converting primitive types to String. This has a performance penalty when compared
+ * to using primitive types directly.
+ * To solve this issue, remove the wrapping type.
+ *
+ * @active since v1.0.0
+ */
 class UnnecessaryTemporaryInstantiation(config: Config = Config.empty) : Rule(config) {
 
 	override val issue: Issue = Issue("UnnecessaryTemporaryInstantiation", Severity.Performance,

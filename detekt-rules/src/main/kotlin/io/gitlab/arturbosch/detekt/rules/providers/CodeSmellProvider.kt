@@ -5,6 +5,8 @@ import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 
 /**
+ * This rule set provides rules that report general code smells.
+ *
  * @author Artur Bosch
  */
 class CodeSmellProvider : RuleSetProvider {

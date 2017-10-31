@@ -7,6 +7,12 @@ import io.gitlab.arturbosch.detekt.rules.performance.ForEachOnRange
 import io.gitlab.arturbosch.detekt.rules.performance.SpreadOperator
 import io.gitlab.arturbosch.detekt.rules.performance.UnnecessaryTemporaryInstantiation
 
+/**
+ * The performance rule set analyzes code for potential performance problems.
+ *
+ * @active since v1.0.0
+ * @author Marvin Ramin
+ */
 class PerformanceProvider : RuleSetProvider {
 
 	override val ruleSetId: String = "performance"

@@ -19,12 +19,12 @@ import io.gitlab.arturbosch.detekt.rules.style.NestedClassesVisibility
 import io.gitlab.arturbosch.detekt.rules.style.NewLineAtEndOfFile
 import io.gitlab.arturbosch.detekt.rules.style.OptionalAbstractKeyword
 import io.gitlab.arturbosch.detekt.rules.style.OptionalWhenBraces
-import io.gitlab.arturbosch.detekt.rules.style.SpacingBetweenPackageAndImports
 import io.gitlab.arturbosch.detekt.rules.style.ProtectedMemberInFinalClass
 import io.gitlab.arturbosch.detekt.rules.style.RedundantVisibilityModifierRule
 import io.gitlab.arturbosch.detekt.rules.style.ReturnCount
 import io.gitlab.arturbosch.detekt.rules.style.SafeCast
 import io.gitlab.arturbosch.detekt.rules.style.SerialVersionUIDInSerializableClass
+import io.gitlab.arturbosch.detekt.rules.style.SpacingBetweenPackageAndImports
 import io.gitlab.arturbosch.detekt.rules.style.ThrowsCount
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryAbstractClass
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryInheritance
@@ -38,6 +38,11 @@ import io.gitlab.arturbosch.detekt.rules.style.optional.OptionalReturnKeyword
 import io.gitlab.arturbosch.detekt.rules.style.optional.OptionalUnit
 
 /**
+ * The Style ruleset provides rules that assert the style of the code.
+ * This will help keep code in line with the given
+ * code style guidelines.
+ *
+ * @active since v1.0.0
  * @author Artur Bosch
  */
 class StyleGuideProvider : RuleSetProvider {

@@ -11,6 +11,14 @@ import io.gitlab.arturbosch.detekt.api.SplitPattern
 import org.jetbrains.kotlin.psi.KtImportDirective
 
 /**
+ * Wildcard imports should be replaced with imports using fully qualified class names. This helps increase clarity of
+ * which classes are imported and helps prevent naming conflicts.
+ *
+ * Library updates can introduce naming clashes with your own classes which might result in compilation errors.
+ *
+ * @configuration excludeImports - Define a whitelist of package names that should be allowed to be imported
+ * with wildcard imports. (default: "")
+ *
  * @author Artur Bosch
  */
 class WildcardImport(config: Config = Config.empty) : Rule(config) {
