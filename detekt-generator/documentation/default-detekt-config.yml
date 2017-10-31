@@ -1,0 +1,283 @@
+autoCorrect: true
+failFast: false
+
+test-pattern: # Configure exclusions for test sources
+  active: true
+  patterns: # Test file regexes
+    - '.*/test/.*'
+    - '.*Test.kt'
+    - '.*Spec.kt'
+  exclude-rule-sets:
+    - 'comments'
+  exclude-rules:
+    - 'NamingRules'
+    - 'WildcardImport'
+    - 'MagicNumber'
+    - 'MaxLineLength'
+    - 'LateinitUsage'
+    - 'StringLiteralDuplication'
+
+build:
+  warningThreshold: 5
+  failThreshold: 10
+  weights:
+    complexity: 2
+    formatting: 1
+    LongParameterList: 1
+    comments: 1
+
+processors:
+  active: true
+  exclude:
+  # - 'FunctionCountProcessor'
+  # - 'PropertyCountProcessor'
+  # - 'ClassCountProcessor'
+  # - 'PackageCountProcessor'
+  # - 'KtFileCountProcessor'
+
+console-reports:
+  active: true
+  exclude:
+  #  - 'ProjectStatisticsReport'
+  #  - 'ComplexityReport'
+  #  - 'NotificationReport'
+  #  - 'FindingsReport'
+  #  - 'BuildFailureReport'
+
+output-reports:
+  active: true
+  exclude:
+  #  - 'PlainOutputReport'
+  #  - 'XmlOutputReport'
+
+code-smell:
+  active: false
+
+comments:
+  active: true
+  CommentOverPrivateFunction:
+    active: false
+  CommentOverPrivateProperty:
+    active: false
+  UndocumentedPublicClass:
+    active: false
+  UndocumentedPublicFunction:
+    active: false
+
+complexity:
+  active: true
+  LongParameterList:
+    active: false
+  LongMethod:
+    active: false
+  LargeClass:
+    active: false
+  ComplexInterface:
+    active: false
+  ComplexMethod:
+    active: false
+  StringLiteralDuplication:
+    active: false
+  MethodOverloading:
+    active: false
+  NestedBlockDepth:
+    active: false
+  TooManyFunctions:
+    active: false
+  ComplexCondition:
+    active: false
+  LabeledExpression:
+    active: false
+
+empty-blocks:
+  active: true
+  EmptyCatchBlock:
+    active: false
+  EmptyClassBlock:
+    active: false
+  EmptyDefaultConstructor:
+    active: false
+  EmptyDoWhileBlock:
+    active: false
+  EmptyElseBlock:
+    active: false
+  EmptyFinallyBlock:
+    active: false
+  EmptyForBlock:
+    active: false
+  EmptyFunctionBlock:
+    active: false
+  EmptyIfBlock:
+    active: false
+  EmptyInitBlock:
+    active: false
+  EmptyKtFile:
+    active: false
+  EmptySecondaryConstructor:
+    active: false
+  EmptyWhenBlock:
+    active: false
+  EmptyWhileBlock:
+    active: false
+
+exceptions:
+  active: true
+  TooGenericExceptionCaught:
+    active: false
+  ExceptionRaisedInUnexpectedLocation:
+    active: false
+  TooGenericExceptionThrown:
+    active: false
+  NotImplementedDeclaration:
+    active: false
+  PrintStackTrace:
+    active: false
+  InstanceOfCheckForException:
+    active: false
+  ThrowingExceptionsWithoutMessageOrCause:
+    active: false
+  ReturnFromFinally:
+    active: false
+  ThrowingExceptionFromFinally:
+    active: false
+  ThrowingExceptionInMain:
+    active: false
+  RethrowCaughtException:
+    active: false
+  ThrowingNewInstanceOfSameException:
+    active: false
+  SwallowedException:
+    active: false
+
+performance:
+  active: true
+  ForEachOnRange:
+    active: true
+  SpreadOperator:
+    active: true
+  UnnecessaryTemporaryInstantiation:
+    active: true
+
+potential-bugs:
+  active: true
+  DuplicateCaseInWhenExpression:
+    active: false
+  EqualsAlwaysReturnsTrueOrFalse:
+    active: false
+  EqualsWithHashCodeExist:
+    active: false
+  IteratorNotThrowingNoSuchElementException:
+    active: false
+  IteratorHasNextCallsNextMethod:
+    active: false
+  UselessPostfixExpression:
+    active: false
+  InvalidLoopCondition:
+    active: false
+  WrongEqualsTypeParameter:
+    active: false
+  ExplicitGarbageCollectionCall:
+    active: false
+  LateinitUsage:
+    active: false
+    excludeAnnotatedProperties: ""
+    ignoreOnClassesPattern: ""
+  UnconditionalJumpStatementInLoop:
+    active: false
+  UnreachableCode:
+    active: false
+  UnsafeCallOnNullableType:
+    active: false
+  UnsafeCast:
+    active: false
+
+style:
+  active: true
+  CollapsibleIfStatements:
+    active: false
+  ReturnCount:
+    active: true
+    max: 2
+  ThrowsCount:
+    active: false
+  NewLineAtEndOfFile:
+    active: false
+  WildcardImport:
+    active: false
+    excludeImports: ""
+  MaxLineLength:
+    active: false
+  EqualsNullCall:
+    active: false
+  ForbiddenComment:
+    active: false
+  ForbiddenImport:
+    active: false
+  FunctionOnlyReturningConstant:
+    active: false
+  SpacingBetweenPackageAndImports:
+    active: false
+  LoopWithTooManyJumpStatements:
+    active: false
+  MethodNameEqualsClassName:
+    active: false
+  VariableNaming:
+    active: false
+  VariableMinLength:
+    active: false
+  VariableMaxLength:
+    active: false
+  ConstantNaming:
+    active: false
+  PackageNaming:
+    active: false
+  ClassNaming:
+    active: false
+  EnumNaming:
+    active: false
+  FunctionNaming:
+    active: false
+  FunctionMaxLength:
+    active: false
+  FunctionMinLength:
+    active: false
+  ForbiddenClassName:
+    active: false
+  SafeCast:
+    active: false
+  UnnecessaryAbstractClass:
+    active: false
+  UnnecessaryParentheses:
+    active: false
+  UnnecessaryInheritance:
+    active: false
+  UtilityClassWithPublicConstructor:
+    active: false
+  OptionalAbstractKeyword:
+    active: false
+  OptionalWhenBraces:
+    active: false
+  OptionalReturnKeyword:
+    active: false
+  OptionalUnit:
+    active: false
+  ProtectedMemberInFinalClass:
+    active: false
+  SerialVersionUIDInSerializableClass:
+    active: false
+  MagicNumber:
+    active: false
+  ModifierOrder:
+    active: false
+  DataClassContainsFunctions:
+    active: false
+  UseDataClass:
+    active: false
+  UnusedImports:
+    active: false
+  ExpressionBodySyntax:
+    active: false
+  NestedClassesVisibility:
+    active: false
+  RedundantVisibilityModifierRule:
+    active: false

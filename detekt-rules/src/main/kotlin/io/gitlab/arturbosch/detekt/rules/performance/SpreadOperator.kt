@@ -9,6 +9,12 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtValueArgumentList
 
 /**
+ * Using a spread operator causes a full copy of the array to be created before calling a method.
+ * has a very high performance penalty.
+ * Benchmarks showing this performance penalty can be seen here:
+ * https://sites.google.com/a/athaydes.com/renato-athaydes/posts/kotlinshiddencosts-benchmarks
+ *
+ * @active since v1.0.0
  * @author Ivan Balaksha
  */
 class SpreadOperator(config: Config = Config.empty) : Rule(config) {

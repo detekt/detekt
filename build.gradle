@@ -44,7 +44,7 @@ subprojects {
 	apply plugin: 'com.jfrog.bintray'
 
 	def projectName = it.name
-	if (projectName == 'detekt-cli' || projectName == 'detekt-watch-service') {
+	if (projectName == 'detekt-cli' || projectName == 'detekt-watch-service' || projectName == 'detekt-generator') {
 		apply plugin: 'application'
 		apply plugin: 'com.github.johnrengelman.shadow'
 	}

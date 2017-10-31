@@ -9,6 +9,10 @@ import io.gitlab.arturbosch.detekt.rules.documentation.UndocumentedPublicClass
 import io.gitlab.arturbosch.detekt.rules.documentation.UndocumentedPublicFunction
 
 /**
+ * This rule set provides rules that address issues in comments and documentation
+ * of the code.
+ *
+ * @active since v1.0.0
  * @author Artur Bosch
  */
 class CommentSmellProvider : RuleSetProvider {

@@ -11,6 +11,16 @@ import io.gitlab.arturbosch.detekt.rules.collectByType
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
 
+/**
+ * Restrict the number of return methods allowed in methods.
+ *
+ * Having many exit points in a function can be confusing and impacts readability of the
+ * code.
+ *
+ * @configuration max - define the maximum number of return statements allowed per function
+ * (default: 2)
+ * @active since v1.0.0
+ */
 class ReturnCount(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName, Severity.Style,

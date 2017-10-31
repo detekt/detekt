@@ -4,15 +4,25 @@ import io.gitlab.arturbosch.detekt.api.AnnotationExcluder
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.SplitPattern
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
 
+/**
+ * Turn on this rule to flag usages of the lateinit modifier.
+ *
+ * Using lateinit for property initialization can be error prone and the actual initialization is not
+ * guaranteed. Try using constructor injection or delegation to initialize properties.
+ *
+ * @configuration excludeAnnotatedProperties - Allows you to provide a list of annotations that disable
+ * this check. (default: "")
+ * @configuration ignoreOnClassesPattern - Allows you to disable the rule for a list of classes (default: "")
+ */
 class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,
