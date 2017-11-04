@@ -30,16 +30,11 @@ class XmlOutputReport : OutputReport() {
 		smells.groupBy { it.location.file }.forEach { fileName, findings ->
 			lines += "<file name=\"${fileName.toXmlString()}\">"
 			findings.forEach {
-				val message = when {
-					it.message.isEmpty() -> it.issue.description
-					else -> it.message
-				}
-
 				lines += arrayOf(
 						"\t<error line=\"${it.location.source.line.toXmlString()}\"",
 						"column=\"${it.location.source.column.toXmlString()}\"",
 						"severity=\"${it.messageType.label.toXmlString()}\"",
-						"message=\"${message.toXmlString()}\"",
+						"message=\"${it.messageOrDescription().toXmlString()}\"",
 						"source=\"${"detekt.${it.id.toXmlString()}"}\" />"
 				).joinToString(separator = " ")
 			}

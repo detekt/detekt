@@ -19,4 +19,9 @@ data class ImportMigration(private val toReplace: String,
 	override val references: List<Entity> = emptyList()
 	override val metrics: List<Metric> = emptyList()
 	override fun compact(): String = issue.description
+
+	override fun messageOrDescription() = when {
+		message.isEmpty() -> issue.description
+		else -> message
+	}
 }
