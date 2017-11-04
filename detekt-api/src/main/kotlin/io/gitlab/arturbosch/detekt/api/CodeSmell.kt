@@ -26,6 +26,11 @@ open class CodeSmell(final override val issue: Issue,
 				"references=$references, " +
 				"id='$id')"
 	}
+
+	override fun messageOrDescription() = when {
+		message.isEmpty() -> issue.description
+		else -> message
+	}
 }
 
 /**
@@ -36,7 +41,12 @@ open class CodeSmellWithReferenceAndMetric(
 		issue: Issue, entity: Entity, private val reference: Entity, message: String, metric: Metric) : ThresholdedCodeSmell(
 		issue, entity, metric, message, references = listOf(reference)) {
 
-	override fun compact() = "$id - $metric - ref=${reference.name} - ${entity.compact()} - message=$message"
+	override fun compact() = "$id - $metric - ref=${reference.name} - ${entity.compact()}"
+
+	override fun messageOrDescription() = when {
+		message.isEmpty() -> issue.description
+		else -> message
+	}
 }
 
 /**
@@ -55,5 +65,10 @@ open class ThresholdedCodeSmell(
 	val threshold: Int
 		get() = metric.threshold
 
-	override fun compact() = "$id - $metric - ${entity.compact()} = message=$message"
+	override fun compact() = "$id - $metric - ${entity.compact()}"
+
+	override fun messageOrDescription() = when {
+		message.isEmpty() -> issue.description
+		else -> message
+	}
 }
