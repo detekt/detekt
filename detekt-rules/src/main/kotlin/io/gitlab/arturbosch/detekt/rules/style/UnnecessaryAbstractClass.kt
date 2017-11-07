@@ -43,11 +43,10 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
 				report(CodeSmell(issue,
 						Entity.from(klass),
 						"An abstract class without an abstract member can be refactored to a concrete class."))
-			} else if (indexOfFirstAbstractMember == 0 && hasNoConcreteMemberLeft()) {
-				if (!hasPrimaryConstructorWithConcreteProperties())
-				  report(CodeSmell(issue,
-						  Entity.from(klass),
-						  "An abstract class without a concrete member can be refactored to an interface."))
+			} else if (isAbstractClassWithoutConcreteMembers(indexOfFirstAbstractMember)) {
+				report(CodeSmell(issue,
+						Entity.from(klass),
+						"An abstract class without a concrete member can be refactored to an interface."))
 			}
 		}
 
@@ -56,6 +55,12 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
 				val namedDeclaration = it as? KtNamedDeclaration
 				namedDeclaration != null && namedDeclaration.hasModifier(KtTokens.ABSTRACT_KEYWORD) == isAbstract
 			}
+		}
+
+		private fun isAbstractClassWithoutConcreteMembers(indexOfFirstAbstractMember: Int): Boolean {
+			return indexOfFirstAbstractMember == 0
+					&& hasNoConcreteMemberLeft()
+					&& hasPrimaryConstructorWithConcreteProperties()
 		}
 
 		private fun hasNoConcreteMemberLeft() = indexOfFirstMember(false, namedMembers.drop(1)) == -1
