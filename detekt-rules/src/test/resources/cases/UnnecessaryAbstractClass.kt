@@ -33,3 +33,7 @@ interface AbstractInterface {
 		fun f() { }
 	}
 }
+
+abstract class AbstractClassWithPrimaryConstructorConcretePropertyOk(val i: Int) {
+	abstract fun f()
+}
