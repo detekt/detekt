@@ -23,10 +23,12 @@ open class DetektMigrateTask : DefaultTask() {
 		project.buildscript.dependencies.add(migration.name, DefaultExternalModuleDependency(
 				"io.gitlab.arturbosch.detekt", "detekt-migration", detektExtension.version))
 
-		project.javaexec {
-			it.main = "io.gitlab.arturbosch.detekt.migration.Migration"
-			it.classpath = migration
-			it.args(detektExtension.profileArgumentsOrDefault(project))
+		detektExtension.getProfiles().forEach { profile ->
+			project.javaexec {
+				it.main = "io.gitlab.arturbosch.detekt.migration.Migration"
+				it.classpath = migration
+				it.args(detektExtension.profileArgumentsOrDefault(project, profile))
+			}
 		}
 	}
 

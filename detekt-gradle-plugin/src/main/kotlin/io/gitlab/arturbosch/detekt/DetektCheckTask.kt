@@ -23,10 +23,12 @@ open class DetektCheckTask : DefaultTask() {
 		project.buildscript.dependencies.add(configuration.name, DefaultExternalModuleDependency(
 				"io.gitlab.arturbosch.detekt", "detekt-cli", detektExtension.version))
 
-		project.javaexec {
-			it.main = "io.gitlab.arturbosch.detekt.cli.Main"
-			it.classpath = configuration
-			it.args(detektExtension.profileArgumentsOrDefault(project))
+		detektExtension.getProfiles().forEach { profile ->
+			project.javaexec {
+				it.main = "io.gitlab.arturbosch.detekt.cli.Main"
+				it.classpath = configuration
+				it.args(detektExtension.profileArgumentsOrDefault(project, profile))
+			}
 		}
 	}
 }
