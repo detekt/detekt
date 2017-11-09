@@ -351,7 +351,7 @@ class MagicNumberSpec : Spek({
 				val boringNumber = 42
 				const val BORING_CONSTANT = 93871
 
-				fun hashCode(): Int {
+				override fun hashCode(): Int {
 					val iAmSoMagic = 7328672
 				}
 
