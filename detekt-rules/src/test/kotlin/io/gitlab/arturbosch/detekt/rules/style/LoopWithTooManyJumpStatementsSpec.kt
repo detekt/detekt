@@ -13,7 +13,7 @@ class LoopWithTooManyJumpStatementsSpec : SubjectSpek<LoopWithTooManyJumpStateme
 
 	given("loops with multiple break or continue statements") {
 
-		val path = Case.LoopWithTooManyJumpStatements.path()
+		val path = Case.LoopWithTooManyJumpStatementsPositive.path()
 
 		it("reports loops with more than 1 break or continue statement") {
 			assertThat(subject.lint(path)).hasSize(3)
@@ -23,6 +23,10 @@ class LoopWithTooManyJumpStatementsSpec : SubjectSpek<LoopWithTooManyJumpStateme
 			val config = TestConfig(mapOf(LoopWithTooManyJumpStatements.MAX_JUMP_COUNT to "2"))
 			val findings = LoopWithTooManyJumpStatements(config).lint(path)
 			assertThat(findings).hasSize(0)
+		}
+
+		it("reports loops with more than 1 break or continue statement") {
+			assertThat(subject.lint(Case.LoopWithTooManyJumpStatementsNegative.path())).hasSize(0)
 		}
 	}
 })

@@ -9,9 +9,11 @@ import java.nio.file.Paths
  */
 enum class Case(val file: String) {
 	CasesFolder("/cases"),
-	CollapsibleIfs("/cases/CollapsibleIfs.kt"),
+	CollapsibleIfsPositive("/cases/CollapsibleIfsPositive.kt"),
+	CollapsibleIfsNegative("/cases/CollapsibleIfsNegative.kt"),
 	ConditionalPath("/cases/ConditionalPath.kt"),
-	DataClassContainsFunctions("/cases/DataClassContainsFunctions.kt"),
+	DataClassContainsFunctionsPositive("/cases/DataClassContainsFunctionsPositive.kt"),
+	DataClassContainsFunctionsNegative("/cases/DataClassContainsFunctionsNegative.kt"),
 	Default("/cases/Default.kt"),
 	Empty("/cases/Empty.kt"),
 	EmptyKtFile("/cases/EmptyKtFile.kt"),
@@ -26,7 +28,8 @@ enum class Case(val file: String) {
 	IteratorImplNegative("/cases/IteratorImplNegative.kt"),
 	IteratorImplPositive("/cases/IteratorImplPositive.kt"),
 	LabeledExpression("/cases/LabeledExpression.kt"),
-	LoopWithTooManyJumpStatements("cases/LoopWithTooManyJumpStatements.kt"),
+	LoopWithTooManyJumpStatementsNegative("cases/LoopWithTooManyJumpStatementsNegative.kt"),
+	LoopWithTooManyJumpStatementsPositive("cases/LoopWithTooManyJumpStatementsPositive.kt"),
 	NamingConventions("/cases/NamingConventions.kt"),
 	NewLineAtEndOfFile("/cases/NewLineAtEndOfFile.kt"),
 	MaxLineLength("/cases/MaxLineLength.kt"),

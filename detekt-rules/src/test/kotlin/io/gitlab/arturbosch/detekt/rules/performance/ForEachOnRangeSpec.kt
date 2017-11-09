@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.performance
 
 import io.gitlab.arturbosch.detekt.test.lint
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
@@ -21,7 +21,7 @@ class ForEachOnRangeSpec : Spek({
 
 		it("should report the forEach usage") {
 			val findings = ForEachOnRange().lint(code)
-			Assertions.assertThat(findings).hasSize(1)
+			assertThat(findings).hasSize(1)
 		}
 	}
 
@@ -36,7 +36,7 @@ class ForEachOnRangeSpec : Spek({
 
 		it("should report not report any issues") {
 			val findings = ForEachOnRange().lint(code)
-			Assertions.assertThat(findings).isEmpty()
+			assertThat(findings).isEmpty()
 		}
 	}
 
@@ -53,7 +53,7 @@ class ForEachOnRangeSpec : Spek({
 
 		it("should report not report any issues") {
 			val findings = ForEachOnRange().lint(code)
-			Assertions.assertThat(findings).isEmpty()
+			assertThat(findings).isEmpty()
 		}
 	}
 })

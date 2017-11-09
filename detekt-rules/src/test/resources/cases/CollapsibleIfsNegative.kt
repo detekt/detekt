@@ -1,19 +1,7 @@
 package cases
 
 @Suppress("unused", "ConstantConditionIf", "SimplifyBooleanWithConstants", "RedundantSemicolon")
-fun collapsibleIfs() {
-
-	if (true) { // reports 1
-		if (1 == 1) {}
-		// a comment
-	}
-
-	if (true) {
-		if (1 == 1) { // reports 1
-			if (2 == 2) {}
-		}
-		println()
-	}
+fun collapsibleIfsNegative() {
 
 	if (true) {}
 	else if (1 == 1) {
