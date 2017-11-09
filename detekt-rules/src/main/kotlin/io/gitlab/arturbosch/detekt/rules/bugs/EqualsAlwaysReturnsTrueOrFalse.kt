@@ -9,7 +9,6 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.asBlockExpression
 import io.gitlab.arturbosch.detekt.rules.isEqualsFunction
 import org.jetbrains.kotlin.lexer.KtTokens
-import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
 
@@ -21,12 +20,6 @@ class EqualsAlwaysReturnsTrueOrFalse(config: Config = Config.empty) : Rule(confi
 					"It does not follow the contract of this method. " +
 					"Consider a good default implementation. " +
 					"For example this == other")
-
-	override fun visitClass(klass: KtClass) {
-		if (!klass.isInterface()) {
-			super.visitClass(klass)
-		}
-	}
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		if (function.isEqualsFunction() && isReturningBooleanConstant(function)) {

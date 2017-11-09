@@ -15,7 +15,7 @@ class DuplicateCaseInWhenSpec : SubjectSpek<DuplicateCaseInWhenExpression>({
 
 	given("several when expressions") {
 
-		it("should report duplicated label in when") {
+		it("reports duplicated label in when") {
 			val code = """
 				fun f() {
 					when (1) {
@@ -27,7 +27,7 @@ class DuplicateCaseInWhenSpec : SubjectSpek<DuplicateCaseInWhenExpression>({
 			assertThat(subject.lint(code)).hasSize(1)
 		}
 
-		it("should report duplicated label in when") {
+		it("reports duplicated label in when") {
 			val code = """
 				fun f() {
 					when (1) {

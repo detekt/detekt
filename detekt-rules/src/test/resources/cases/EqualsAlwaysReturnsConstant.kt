@@ -7,12 +7,17 @@ class EqualsAlwaysReturnsConstant1 {
 		return true // violations
 	}
 
-	private fun equal() {
+	fun equal(): Boolean {
+		return true
 	}
 }
 
 object EqualsAlwaysReturnsConstant2 {
 	override fun equals(other: Any?): Boolean {
-		return false // violations
+		return this == other
 	}
+}
+
+fun equals(other: Any?): Boolean {
+	return false;
 }
