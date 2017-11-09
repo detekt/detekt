@@ -52,7 +52,7 @@ class Default {
 	/**
 	 * 8, no else
 	 */
-	fun IfTHenElse() {
+	fun ifTHenElse() {
 		if (true) {
 			while (true) {
 				println("Loop")
@@ -63,18 +63,6 @@ class Default {
 				"string" -> println("s")
 				else -> println("s")
 			}
-		}
-	}
-
-	fun NoElseInWhen() {
-		// no else in when
-		when (true) {
-			false -> println()
-		}
-		when ("hello") {
-			"hello" -> println()
-			"hello" -> println()
-			else -> println()
 		}
 	}
 
