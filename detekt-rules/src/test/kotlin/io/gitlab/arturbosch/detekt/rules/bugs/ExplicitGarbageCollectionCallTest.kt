@@ -1,24 +1,25 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.Case
-import io.gitlab.arturbosch.detekt.test.compileForTest
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
+import org.jetbrains.spek.api.dsl.given
+import org.jetbrains.spek.api.dsl.it
+import org.jetbrains.spek.subject.SubjectSpek
 
-/**
- * @author Artur Bosch
- */
-class ExplicitGarbageCollectionCallTest {
+class ExplicitGarbageCollectionCallSpec : SubjectSpek<ExplicitGarbageCollectionCall>({
+	subject { ExplicitGarbageCollectionCall(Config.empty) }
 
-	@Test
-	fun systemGC() {
-		val subject = ExplicitGarbageCollectionCall(Config.empty)
-		val file = compileForTest(Case.Default.path())
+	given("several garbage collector calls") {
 
-		subject.visit(file)
-
-		assertThat(subject.findings).hasSize(3)
+		it("reports garbage collector calls") {
+			val code = """
+				fun f() {
+					System.gc()
+					Runtime.getRuntime().gc()
+					System.runFinalization()
+				}"""
+			assertThat(subject.lint(code)).hasSize(3)
+		}
 	}
-
-}
+})

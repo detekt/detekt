@@ -1,13 +1,12 @@
-@file:Suppress("unused", "ConstantConditionIf", "UNUSED_PARAMETER")
+@file:Suppress("unused", "UNUSED_PARAMETER")
 
 package cases
 
 import java.util.NoSuchElementException
 
-class IteratorImplPositive : Iterator<String> {
+class IteratorImplOk : Iterator<String> {
 
 	override fun hasNext(): Boolean {
-		next(1)
 		return true
 	}
 
@@ -16,63 +15,11 @@ class IteratorImplPositive : Iterator<String> {
 		return ""
 	}
 
-	// next method overload
+	// next method overload should not be reported
 	private fun next(i: Int) {
 	}
 }
 
-// violation NotThrowingNoSuchElementException, HasNextCallsNextMethod
-class IteratorImpl2 : Iterator<String> {
-
-	override fun hasNext(): Boolean {
-		next()
-		return true
-	}
-
-	override fun next(): String {
-		return ""
-	}
-}
-
-class IteratorImplContainer {
-
-	// violation NotThrowingNoSuchElementException, HasNextCallsNextMethod
-	object IteratorImplNegative3 : Iterator<String> {
-
-		override fun hasNext(): Boolean {
-			return true
-		}
-
-		override fun next(): String {
-			throw IllegalStateException()
-		}
-	}
-}
-
-// violation NotThrowingNoSuchElementException
-interface InterfaceIterator : Iterator<String> {
-
-	override fun next(): String {
-		return ""
-	}
-}
-
-abstract class AbstractIterator1 : Iterator<String>
-
-
-// violation NotThrowingNoSuchElementException, HasNextCallsNextMethod
-abstract class AbstractIterator2 : Iterator<String> {
-
-	override fun hasNext(): Boolean {
-		if (true) {
-			next()
-		}
-		return true
-	}
-
-	override fun next(): String {
-		return ""
-	}
-}
-
 class NoIteratorImpl
+
+abstract class AbstractIteratorNotOverridden : Iterator<String>
