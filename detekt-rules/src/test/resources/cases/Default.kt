@@ -8,25 +8,6 @@ import java.util.*
 @Suppress("unused", "ConvertLambdaToReference")
 class Default {
 
-	/**
-	 * Documented!
-	 */
-	private val documented = "comment smell!"
-
-	/**
-	 * Comment smell!
-	 */
-	private fun documented() {
-
-	}
-
-	/**
-	 * Used for wildcard import spec
-	 */
-	fun noop() {
-		ArrayList<Any>()
-	}
-
 	fun returnsUnit(): Unit {
 
 	}
@@ -159,14 +140,5 @@ class Default {
 		println()
 		println()
 		println()
-	}
-
-	// EqualsWithHashCode Rule
-//	override fun hashCode(): Int {
-//		return 1
-//	}
-
-	override fun equals(other: Any?): Boolean {
-		return false
 	}
 }
