@@ -34,6 +34,7 @@ enum class Case(val file: String) {
 	OverloadedMethods("/cases/OverloadedMethods.kt"),
 	ComplexClass("/cases/ComplexClass.kt"),
 	ComplexInterface("/cases/ComplexInterface.kt"),
+	ComplexInterfaceViolation("/cases/ComplexInterfaceViolation.kt"),
 	Comments("/cases/Comments.kt"),
 	NestedClasses("/cases/NestedClasses.kt"),
 	NestedLongMethods("/cases/NestedLongMethods.kt"),
