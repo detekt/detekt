@@ -40,7 +40,7 @@ class EqualsWithHashCodeExist(config: Config = Config.empty) : Rule(config) {
 
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
 		val klass = classOrObject as? KtClass
-		if (klass != null && (klass.isInterface() || klass.isDataClass())) {
+		if (klass != null && klass.isDataClass()) {
 			return
 		}
 		queue.push(ViolationHolder())

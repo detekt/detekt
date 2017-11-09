@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.rules.CommonSpec
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
@@ -17,11 +16,31 @@ class EqualsWithHashCodeExistSpec : SubjectSpek<EqualsWithHashCodeExist>({
 	subject { EqualsWithHashCodeExist(Config.empty) }
 	itBehavesLike(CommonSpec())
 
-	given("some classes with equals() functions") {
+	given("some classes with equals() and hashCode() functions") {
 
-		it("reports equals() without hashCode() functions") {
-			val path = Case.NestedClasses.path()
-			assertThat(subject.lint(path)).hasSize(2)
+		it("reports equals() without hashCode() function") {
+			val code = """
+				class A {
+					override fun hashCode(): Int { return super.hashCode() }
+				}"""
+			assertThat(subject.lint(code)).hasSize(1)
+		}
+
+		it("reports equals() without hashCode() function") {
+			val code = """
+				class A {
+					override fun equals(other: Any?): Boolean { return super.equals(other) }
+				}"""
+			assertThat(subject.lint(code)).hasSize(1)
+		}
+
+		it("does not report equals() with hashCode() function") {
+			val code = """
+				class A {
+					override fun equals(other: Any?): Boolean { return super.equals(other) }
+					override fun hashCode(): Int { return super.hashCode() }
+				}"""
+			assertThat(subject.lint(code)).hasSize(0)
 		}
 	}
 
