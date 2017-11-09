@@ -10,11 +10,16 @@ import org.jetbrains.spek.subject.SubjectSpek
 class UnconditionalJumpStatementInLoopSpec : SubjectSpek<UnconditionalJumpStatementInLoop>({
 	subject { UnconditionalJumpStatementInLoop() }
 
-	given("several unconditional jumps in a loop") {
+	given("several jump statements in loops") {
 
-		it("tests unconditional jumps") {
-			val path = Case.UnconditionalJumpStatementInLoop.path()
+		it("reports unconditional jumps") {
+			val path = Case.UnconditionalJumpStatementInLoopViolation.path()
 			assertThat(subject.lint(path)).hasSize(7)
+		}
+
+		it("does not report conditional jumps") {
+			val path = Case.UnconditionalJumpStatementInLoop.path()
+			assertThat(subject.lint(path)).hasSize(0)
 		}
 	}
 })

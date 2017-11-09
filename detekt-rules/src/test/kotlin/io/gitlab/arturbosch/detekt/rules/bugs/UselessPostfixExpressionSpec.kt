@@ -15,13 +15,20 @@ class UselessPostfixExpressionSpec : SubjectSpek<UselessPostfixExpression>({
 			val code = """
 				fun x() {
 					var i = 0
-					var j = 0
-					j = i++ // invalid
 					i = i-- // invalid
 					i = 1 + i++ // invalid
-					i = i++ + 1
+					i = i++ + 1 // invalid
 				}"""
 			assertThat(subject.lint(code)).hasSize(3)
+		}
+
+		it("does not override the incremented integer") {
+			val code = """
+				fun f() {
+					var j = 0
+					j = i++
+				}"""
+			assertThat(subject.lint(code)).hasSize(0)
 		}
 
 		it("returns no incremented value") {

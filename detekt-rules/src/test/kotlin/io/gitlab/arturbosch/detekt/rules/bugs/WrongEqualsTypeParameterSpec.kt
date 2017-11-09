@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.lint
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
@@ -19,7 +19,7 @@ class WrongEqualsTypeParameterSpec  : SubjectSpek<WrongEqualsTypeParameter>({
 						return super.equals(other)
 					}
 				}"""
-			Assertions.assertThat(subject.lint(code).size).isEqualTo(0)
+			assertThat(subject.lint(code).size).isEqualTo(0)
 		}
 
 		it("uses String as parameter") {
@@ -29,7 +29,7 @@ class WrongEqualsTypeParameterSpec  : SubjectSpek<WrongEqualsTypeParameter>({
 						return super.equals(other)
 					}
 				}"""
-			Assertions.assertThat(subject.lint(code).size).isEqualTo(1)
+			assertThat(subject.lint(code).size).isEqualTo(1)
 		}
 
 		it("uses an interface declaration") {
@@ -37,7 +37,7 @@ class WrongEqualsTypeParameterSpec  : SubjectSpek<WrongEqualsTypeParameter>({
 				interface EqualsInterf {
 					fun equals(other: String)
 				}"""
-			Assertions.assertThat(subject.lint(code).size).isEqualTo(0)
+			assertThat(subject.lint(code).size).isEqualTo(0)
 		}
 	}
 })
