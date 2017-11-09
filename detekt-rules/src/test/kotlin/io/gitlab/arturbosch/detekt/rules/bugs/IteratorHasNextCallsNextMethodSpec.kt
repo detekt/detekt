@@ -13,12 +13,12 @@ class IteratorHasNextCallsNextMethodSpec : SubjectSpek<IteratorHasNextCallsNextM
 	given("some iterator classes with a hasNext() method which calls next() method") {
 
 		it("reports wrong iterator implementation") {
-			val path = Case.IteratorImplViolations.path()
+			val path = Case.IteratorImplPositive.path()
 			assertThat(subject.lint(path)).hasSize(4)
 		}
 
 		it("does not report correct iterator implementations") {
-			val path = Case.IteratorImpl.path()
+			val path = Case.IteratorImplNegative.path()
 			assertThat(subject.lint(path)).hasSize(0)
 		}
 	}

@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileForTest
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.dsl.given
@@ -16,12 +15,16 @@ class ExceptionRaisedInUnexpectedLocationSpec : SubjectSpek<ExceptionRaisedInUne
 		)
 	}
 
-	given("methods which are not expected to throw exceptions") {
+	given("methods which throw exceptions") {
 
-		it("reports the methods raising an unexpected exception") {
-			val file = compileForTest(Case.ExceptionRaisedInMethods.path())
-			val findings = subject.lint(file.text)
-			assertThat(findings).hasSize(5)
+		it("reports methods raising an unexpected exception") {
+			val path = Case.ExceptionRaisedInMethodsPositive.path()
+			assertThat(subject.lint(path)).hasSize(5)
+		}
+
+		it("does not report methods raising no exception") {
+			val path = Case.ExceptionRaisedInMethodsNegative.path()
+			assertThat(subject.lint(path)).hasSize(0)
 		}
 	}
 

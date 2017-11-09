@@ -13,12 +13,12 @@ class IteratorNotThrowingNoSuchElementExceptionSpec : SubjectSpek<IteratorNotThr
 	given("two iterator classes which next() method do not throw a NoSuchElementException") {
 
 		it("reports invalid next() implementations") {
-			val path = Case.IteratorImplViolations.path()
+			val path = Case.IteratorImplPositive.path()
 			assertThat(subject.lint(path)).hasSize(4)
 		}
 
 		it("does not report correct next() implemenations") {
-			val path = Case.IteratorImpl.path()
+			val path = Case.IteratorImplNegative.path()
 			assertThat(subject.lint(path)).hasSize(0)
 		}
 	}
