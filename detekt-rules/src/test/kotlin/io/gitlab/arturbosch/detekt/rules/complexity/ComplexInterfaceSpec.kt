@@ -13,7 +13,7 @@ class ComplexInterfaceSpec : SubjectSpek<ComplexInterface>({
 
 	given("several interface declarations") {
 
-		val path = Case.ComplexInterfaceViolation.path()
+		val path = Case.ComplexInterfacePositive.path()
 
 		it("reports interfaces which member size exceeds the threshold") {
 			assertThat(subject.lint(path)).hasSize(2)
@@ -26,7 +26,7 @@ class ComplexInterfaceSpec : SubjectSpek<ComplexInterface>({
 		}
 
 		it("does not report interfaces which member size is under the threshold") {
-			assertThat(subject.lint(Case.ComplexInterface.path())).hasSize(0)
+			assertThat(subject.lint(Case.ComplexInterfaceNegative.path())).hasSize(0)
 		}
 	}
 })

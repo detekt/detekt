@@ -13,12 +13,12 @@ class UnconditionalJumpStatementInLoopSpec : SubjectSpek<UnconditionalJumpStatem
 	given("several jump statements in loops") {
 
 		it("reports unconditional jumps") {
-			val path = Case.UnconditionalJumpStatementInLoopViolation.path()
+			val path = Case.UnconditionalJumpStatementInLoopPositive.path()
 			assertThat(subject.lint(path)).hasSize(7)
 		}
 
 		it("does not report conditional jumps") {
-			val path = Case.UnconditionalJumpStatementInLoop.path()
+			val path = Case.UnconditionalJumpStatementInLoopNegative.path()
 			assertThat(subject.lint(path)).hasSize(0)
 		}
 	}

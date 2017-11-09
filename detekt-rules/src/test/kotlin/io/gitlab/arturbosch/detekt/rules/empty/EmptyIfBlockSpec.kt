@@ -18,12 +18,12 @@ class EmptyIfBlockSpec : SubjectSpek<EmptyIfBlock>({
 	given("several empty if statements") {
 
 		it("reports positive cases") {
-			val path = Case.EmptyIfViolation.path()
+			val path = Case.EmptyIfPositive.path()
 			assertThat(subject.lint(path)).hasSize(4)
 		}
 
 		it("does not report negative cases") {
-			val path = Case.EmptyIf.path()
+			val path = Case.EmptyIfNegative.path()
 			assertThat(subject.lint(path)).hasSize(0)
 		}
 	}
