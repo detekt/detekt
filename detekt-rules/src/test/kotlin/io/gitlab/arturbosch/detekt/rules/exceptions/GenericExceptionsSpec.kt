@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.rules.providers.ExceptionsProvider
 import io.gitlab.arturbosch.detekt.test.compileForTest
 import io.gitlab.arturbosch.detekt.test.lint
 import io.gitlab.arturbosch.detekt.test.resource
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
@@ -15,18 +15,18 @@ import org.jetbrains.spek.api.dsl.it
 /**
  * @author Artur Bosch
  */
-class GenericExceptionsTest : Spek({
+class GenericExceptionsSpec : Spek({
 
 	val file = compileForTest(Case.Exceptions.path())
 
-	describe("a file with many catch'ed exceptions") {
+	describe("a file with many caught exceptions") {
 
 		it("should find one of each kind") {
 			val rule = TooGenericExceptionCaught(Config.empty)
 
 			val findings = rule.lint(file.text)
 
-			Assertions.assertThat(findings).hasSize(CAUGHT_EXCEPTIONS.size)
+			assertThat(findings).hasSize(CAUGHT_EXCEPTIONS.size)
 		}
 	}
 
@@ -37,7 +37,7 @@ class GenericExceptionsTest : Spek({
 
 			val findings = rule.lint(file.text)
 
-			Assertions.assertThat(findings).hasSize(THROWN_EXCEPTIONS.size)
+			assertThat(findings).hasSize(THROWN_EXCEPTIONS.size)
 		}
 	}
 
@@ -47,6 +47,6 @@ class GenericExceptionsTest : Spek({
 
 		val findings = ruleSet?.accept(file)
 
-		Assertions.assertThat(findings).hasSize(0)
+		assertThat(findings).hasSize(0)
 	}
 })
