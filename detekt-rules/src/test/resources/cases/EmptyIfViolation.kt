@@ -1,7 +1,7 @@
 package cases
 
 @Suppress("unused")
-class EmptyIfPositive {
+class EmptyIfViolation {
 
 	private var i = 0
 

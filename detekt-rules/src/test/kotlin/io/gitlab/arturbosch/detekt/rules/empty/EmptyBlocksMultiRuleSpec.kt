@@ -13,7 +13,7 @@ import org.jetbrains.spek.subject.SubjectSpek
 /**
  * @author Artur Bosch
  */
-class EmptyBlocksMultiRuleTest : SubjectSpek<EmptyBlocks>({
+class EmptyBlocksMultiRuleSpec : SubjectSpek<EmptyBlocks>({
 
 	subject { EmptyBlocks() }
 
