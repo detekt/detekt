@@ -17,7 +17,7 @@ class DataClassContainsFunctionsSpec : SubjectSpek<DataClassContainsFunctions>({
 
 	given("several data classes") {
 
-		val path = Case.DataClassContainsFunctions.path()
+		val path = Case.DataClassContainsFunctionsPositive.path()
 
 		it("reports valid data class w/o conversion function") {
 			assertThat(subject.lint(path)).hasSize(3)
@@ -27,6 +27,10 @@ class DataClassContainsFunctionsSpec : SubjectSpek<DataClassContainsFunctions>({
 			val config = TestConfig(mapOf(DataClassContainsFunctions.CONVERSION_FUNCTION_PREFIX to "to"))
 			val rule = DataClassContainsFunctions(config)
 			assertThat(rule.lint(path)).hasSize(2)
+		}
+
+		it("does not report data class w/o conversion function") {
+			assertThat(subject.lint(Case.DataClassContainsFunctionsNegative.path())).hasSize(0)
 		}
 	}
 })
