@@ -21,7 +21,7 @@ class ExceptionRaisedInUnexpectedLocationSpec : SubjectSpek<ExceptionRaisedInUne
 		it("reports the methods raising an unexpected exception") {
 			val file = compileForTest(Case.ExceptionRaisedInMethods.path())
 			val findings = subject.lint(file.text)
-			assertThat(findings).hasSize(7)
+			assertThat(findings).hasSize(5)
 		}
 	}
 
