@@ -24,9 +24,9 @@ dependencies {
 	implementation project(':detekt-cli')
 	implementation "com.beust:jcommander:$jcommanderVersion"
 	
-	testRuntime "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
-	testRuntime "org.junit.platform:junit-platform-console:$junitPlatformVersion"
-	testRuntime "org.jetbrains.spek:spek-junit-platform-engine:$spekVersion"
+	testRuntimeOnly "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
+	testRuntimeOnly "org.junit.platform:junit-platform-console:$junitPlatformVersion"
+	testRuntimeOnly "org.jetbrains.spek:spek-junit-platform-engine:$spekVersion"
 }
 
 gradlePlugin {

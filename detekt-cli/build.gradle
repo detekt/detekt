@@ -6,13 +6,13 @@ configurations {
 }
 
 dependencies {
-	compile project(':detekt-core')
-	compile project(':detekt-rules')
-	compile "com.beust:jcommander:$jcommanderVersion"
-	compile "org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion"
-	
+	implementation project(':detekt-core')
+	implementation project(':detekt-rules')
+	implementation "com.beust:jcommander:$jcommanderVersion"
+	implementation "org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion"
+
 	testImplementation project(':detekt-test')
-	testRuntime "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
-	testRuntime "org.junit.platform:junit-platform-console:$junitPlatformVersion"
-	testRuntime "org.jetbrains.spek:spek-junit-platform-engine:$spekVersion"
+	testRuntimeOnly "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
+	testRuntimeOnly "org.junit.platform:junit-platform-console:$junitPlatformVersion"
+	testRuntimeOnly "org.jetbrains.spek:spek-junit-platform-engine:$spekVersion"
 }

@@ -6,9 +6,11 @@ configurations {
 }
 
 dependencies {
-	compile project(':detekt-cli')
+	implementation "com.beust:jcommander:$jcommanderVersion"
+	implementation project(':detekt-cli')
+	implementation project(':detekt-core')
 	testImplementation project(':detekt-test')
-	testRuntime "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
-	testRuntime "org.junit.platform:junit-platform-console:$junitPlatformVersion"
-	testRuntime "org.jetbrains.spek:spek-junit-platform-engine:$spekVersion"
+	testRuntimeOnly "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
+	testRuntimeOnly "org.junit.platform:junit-platform-console:$junitPlatformVersion"
+	testRuntimeOnly "org.jetbrains.spek:spek-junit-platform-engine:$spekVersion"
 }
