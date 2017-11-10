@@ -20,6 +20,11 @@ plugins {
 
 apply plugin: 'io.gitlab.arturbosch.detekt'
 
+tasks.withType(Wrapper) {
+	gradleVersion = '4.3.1'
+	distributionType = Wrapper.DistributionType.ALL
+}
+
 allprojects {
 
 	group 'io.gitlab.arturbosch.detekt'
