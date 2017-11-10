@@ -1,4 +1,4 @@
-@file:Suppress("unused", "ConstantConditionIf")
+@file:Suppress("unused", "ConstantConditionIf", "RedundantOverride", "EqualsOrHashCode")
 
 package cases
 
@@ -6,10 +6,6 @@ package cases
  * This class contains methods which raise exceptions
  */
 open class ExceptionRaisedInMethods {
-
-	init {
-		throw IllegalStateException() // violation
-	}
 
 	override fun toString(): String {
 		throw IllegalStateException() // violation
@@ -28,12 +24,6 @@ open class ExceptionRaisedInMethods {
 			throw IllegalStateException() // violation
 		}
 	}
-
-	companion object {
-		init {
-			throw IllegalStateException() // violation
-		}
-	}
 }
 
 object ExceptionRaisedInMethodsObject {
@@ -44,6 +34,10 @@ object ExceptionRaisedInMethodsObject {
 }
 
 open class NoExceptionRaisedInMethods {
+
+	init {
+		throw IllegalStateException()
+	}
 
 	override fun toString(): String {
 		return super.toString()
@@ -59,6 +53,7 @@ open class NoExceptionRaisedInMethods {
 
 	companion object {
 		init {
+			throw IllegalStateException()
 		}
 	}
 
