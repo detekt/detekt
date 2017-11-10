@@ -13,8 +13,12 @@ class UtilityClassWithPublicConstructorSpec : SubjectSpek<UtilityClassWithPublic
 
 	given("several utility classes") {
 
-		it("should report utility classes with a public constructor") {
-			assertThat(subject.lint(Case.UtilityClasses.path())).hasSize(4)
+		it("reports utility classes with a public constructor") {
+			assertThat(subject.lint(Case.UtilityClassesPositive.path())).hasSize(4)
+		}
+
+		it("does not report utility classes with no public constructor") {
+			assertThat(subject.lint(Case.UtilityClassesNegative.path())).hasSize(0)
 		}
 	}
 })
