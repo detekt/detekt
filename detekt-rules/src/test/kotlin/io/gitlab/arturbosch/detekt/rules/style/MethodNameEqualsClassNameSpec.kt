@@ -12,9 +12,17 @@ import org.jetbrains.spek.subject.SubjectSpek
 class MethodNameEqualsClassNameSpec : SubjectSpek<MethodNameEqualsClassName>({
 	subject { MethodNameEqualsClassName(Config.empty) }
 
-	given("some classes with methods") {
+	given("some classes with methods which don't have the same name") {
 
-		val path = Case.MethodNameEqualsClassName.path()
+		it("reports methods which are named after the class") {
+			val path = Case.MethodNameEqualsClassNameNegative.path()
+			assertThat(subject.lint(path)).hasSize(0)
+		}
+	}
+
+	given("some classes with methods which have the same name") {
+
+		val path = Case.MethodNameEqualsClassNamePositive.path()
 		val findings = subject.lint(path)
 
 		it("reports methods which are named after the class") {
