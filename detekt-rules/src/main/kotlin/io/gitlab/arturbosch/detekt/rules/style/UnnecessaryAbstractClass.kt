@@ -18,10 +18,10 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
 
 	override val issue =
 			Issue("UnnecessaryAbstractClass", Severity.Style,
-			"An abstract class is unnecessary and can be refactored. " +
-						"An abstract class should have both abstract and concrete properties or functions. " +
-						"An abstract class without a concrete member can be refactored to an interface. " +
-						"An abstract class without an abstract member can be refactored to a concrete class.")
+					"An abstract class is unnecessary and can be refactored. " +
+							"An abstract class should have both abstract and concrete properties or functions. " +
+							"An abstract class without a concrete member can be refactored to an interface. " +
+							"An abstract class without an abstract member can be refactored to a concrete class.")
 
 	override fun visitClass(klass: KtClass) {
 		if (!klass.isInterface() && klass.isAbstract()) {
@@ -43,7 +43,7 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
 				report(CodeSmell(issue,
 						Entity.from(klass),
 						"An abstract class without an abstract member can be refactored to a concrete class."))
-			} else if (isAbstractClassWithoutConcreteMembers(indexOfFirstAbstractMember)) {
+			} else if (indexOfFirstAbstractMember == 0 && hasNoConcreteMemberLeft()) {
 				report(CodeSmell(issue,
 						Entity.from(klass),
 						"An abstract class without a concrete member can be refactored to an interface."))
@@ -57,19 +57,6 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
 			}
 		}
 
-		private fun isAbstractClassWithoutConcreteMembers(indexOfFirstAbstractMember: Int): Boolean {
-			return indexOfFirstAbstractMember == 0
-					&& hasNoConcreteMemberLeft()
-					&& hasPrimaryConstructorWithConcreteProperties()
-		}
-
 		private fun hasNoConcreteMemberLeft() = indexOfFirstMember(false, namedMembers.drop(1)) == -1
-
-		private fun hasPrimaryConstructorWithConcreteProperties(klass: KtClass = this.klass): Boolean {
-			val primaryConstructor = klass.primaryConstructor
-			return primaryConstructor != null &&
-					primaryConstructor.valueParameters
-							.any { !it.hasModifier(KtTokens.ABSTRACT_KEYWORD) }
-		}
 	}
 }

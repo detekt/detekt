@@ -14,7 +14,11 @@ class SerialVersionUIDInSerializableClassSpec : SubjectSpek<SerialVersionUIDInSe
 	given("several serializable classes") {
 
 		it("reports serializable classes which do not implement the serialVersionUID correctly") {
-			assertThat(subject.lint(Case.Serializable.path())).hasSize(5)
+			assertThat(subject.lint(Case.SerializablePositive.path())).hasSize(5)
+		}
+
+		it("does not report serializable classes which implement the serialVersionUID correctly") {
+			assertThat(subject.lint(Case.SerializableNegative.path())).hasSize(0)
 		}
 	}
 })

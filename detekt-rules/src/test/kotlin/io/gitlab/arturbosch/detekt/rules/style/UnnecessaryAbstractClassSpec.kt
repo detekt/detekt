@@ -16,10 +16,10 @@ class UnnecessaryAbstractClassSpec : SubjectSpek<UnnecessaryAbstractClass>({
 	val noConcreteMemberDescription = "An abstract class without a concrete member can be refactored to an interface."
 	val noAbstractMemberDescription = "An abstract class without an abstract member can be refactored to a concrete class."
 
-	given("abstract classes with some members") {
+	given("abstract classes with no abstract members") {
 
-		val file = compileForTest(Case.UnnecessaryAbstractClass.path())
-		val findings = subject.lint(file.text)
+		val path = Case.UnnecessaryAbstractClassPositive.path()
+		val findings = subject.lint(path)
 
 		it("has no abstract member violation") {
 			assertThat(countViolationsWithDescription(findings, noAbstractMemberDescription)).isEqualTo(3)
@@ -27,6 +27,20 @@ class UnnecessaryAbstractClassSpec : SubjectSpek<UnnecessaryAbstractClass>({
 
 		it("has no concrete member violation") {
 			assertThat(countViolationsWithDescription(findings, noConcreteMemberDescription)).isEqualTo(1)
+		}
+	}
+
+	given("abstract classes with members") {
+
+		val path = Case.UnnecessaryAbstractClassNegative.path()
+		val findings = subject.lint(path)
+
+		it("does not report no abstract member violation") {
+			assertThat(countViolationsWithDescription(findings, noAbstractMemberDescription)).isEqualTo(0)
+		}
+
+		it("does not report no concrete member violation") {
+			assertThat(countViolationsWithDescription(findings, noConcreteMemberDescription)).isEqualTo(0)
 		}
 	}
 })
