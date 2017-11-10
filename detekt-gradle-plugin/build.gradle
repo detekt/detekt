@@ -5,7 +5,7 @@ buildscript {
 		maven { url "http://dl.bintray.com/arturbosch/code-analysis" }
 	}
 	dependencies {
-		classpath "com.gradle.publish:plugin-publish-plugin:0.9.7"
+		classpath "com.gradle.publish:plugin-publish-plugin:0.9.9"
 	}
 }
 
