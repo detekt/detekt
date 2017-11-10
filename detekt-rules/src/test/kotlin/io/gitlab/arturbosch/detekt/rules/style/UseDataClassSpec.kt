@@ -17,8 +17,12 @@ class UseDataClassSpec : SubjectSpek<UseDataClass>({
 
 	given("several classes") {
 
-		it("should report potential data classes") {
-			assertThat(subject.lint(Case.UseDataClass.path())).hasSize(3)
+		it("reports potential data classes") {
+			assertThat(subject.lint(Case.UseDataClassPositive.path())).hasSize(3)
+		}
+
+		it("does not report invalid data class candidates") {
+			assertThat(subject.lint(Case.UseDataClassNegative.path())).hasSize(0)
 		}
 	}
 })
