@@ -1,3 +1,5 @@
+@file:Suppress("RedundantVisibilityModifier", "unused", "RedundantModalityModifier")
+
 package cases
 
 abstract public class Test(val test: String = "abc"): OpenTest() {
