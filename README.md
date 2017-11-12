@@ -55,7 +55,7 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 
 - `git clone https://github.com/arturbosch/detekt`
 - `cd detekt`
-- `./gradlew build shadow`
+- `./gradlew build shadowJar`
 - `java -jar detekt-cli/build/libs/detekt-cli-[version]-all.jar [parameters]*`
 
 ##### Parameters for CLI
