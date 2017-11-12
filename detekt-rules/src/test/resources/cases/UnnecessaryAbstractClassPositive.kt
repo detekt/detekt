@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package cases
 
 abstract class OnlyAbstractMembersInAbstractClass { // violation: no concrete members
