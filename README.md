@@ -781,7 +781,7 @@ By specifying the rule set and rule ids, _detekt_ will use the sub configuration
 
 ##### Maven
 
-If your using maven to build rule sets or use _detekt_ as a dependency, you have to run the additional task `install`
+If your using maven to build rule sets or use _detekt_ as a dependency, you have to run the additional task `publishToMavenLocal`
 
 #### <a name="customprocessors">Custom Processors</a>
 
