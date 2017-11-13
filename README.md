@@ -4,9 +4,9 @@
 [![build status](https://travis-ci.org/arturbosch/detekt.svg?branch=master)](https://travis-ci.org/arturbosch/detekt)
 [![build status windows](https://ci.appveyor.com/api/projects/status/3q9g98vveiul7yut/branch/master?svg=true)](https://ci.appveyor.com/project/arturbosch/detekt)
 [ ![Download](https://api.bintray.com/packages/arturbosch/code-analysis/detekt/images/download.svg) ](https://bintray.com/arturbosch/code-analysis/detekt/_latestVersion)
-[![gradle plugin](https://img.shields.io/badge/gradle_plugin-1.0.0.RC5.3-blue.svg?style=flat-square)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
+[![gradle plugin](https://img.shields.io/badge/gradle_plugin-1.0.0.RC5.4-blue.svg?style=flat-square)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-26-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-27-orange.svg?style=flat-square)](#contributors)
 [![androidweekly](https://img.shields.io/badge/androidweekly-259-orange.svg?style=flat-square)](http://androidweekly.net/issues/issue-259)
 [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
 
@@ -834,20 +834,19 @@ inside the report file.
 ### <a name="contributors">Contributors</a>
 
 - [Artur Bosch](https://github.com/arturbosch) - Maintainer
+- [Marvin Ramin](https://github.com/Mauin) - Collaborator, Bunch of rules, Active on Issues, refactorings, MultiRule
+- [schalks](https://github.com/schalkms) - Collaborator, Active on Issues, Bunch of rules, Project metrics
+- [Niklas Baudy](https://github.com/vanniktech) - Active on Issues, Bunch of rules, Bug fixes
 - [lummax](https://github.com/lummax) - Cli enhancements
 - [Svyatoslav Chatchenko](https://github.com/MyDogTom) - Active on Issues, NamingConventions and UnusedImport fixes
 - [Sean Flanigan](https://github.com/seanf) - Config from classpath resource
 - [Sebastian Schuberth](https://github.com/sschuberth) - Active on Issues, Windows support
 - [Olivier Lemasle](https://github.com/olivierlemasle) - NP-Bugfix
-- [Marvin Ramin](https://github.com/Mauin) - Bunch of rules, Active on Issues, refactorings, MultiRule
 - [Marc Prengemann](https://github.com/winterDroid) - Support for custom output formats, prototyped Rule-Context-Issue separation
 - [Sebastiano Poggi](https://github.com/rock3r) - Enhanced milestone report script, Magic number fixes
 - [Ilya Tretyakov](https://github.com/jvilya) - Sonar runs should not auto correct formatting.
 - [Andrey T](https://github.com/mr-procrastinator) - Readme fix
-- [Niklas Baudy](https://github.com/vanniktech) - Active on Issues, Bug fix, documentation fixes, 
-detekt findings, bunch of rules
 - [Ivan Balaksha](https://github.com/tagantroy) - Rules: UnsafeCast, SpreadOperator, UnsafeCallOnNullableType, LabeledExpression
-- [schalks](https://github.com/schalkms) - Active on Issues, Bunch of rules, Project metrics 
 - [Anna Y](https://github.com/Nevvea7) - Readme fix
 - [Karol Wrótniak](https://github.com/koral--) - Treat comments as not empty blocks
 - [Radim Vaculik](https://github.com/radimvaculik) - VariableMaxLength - bugfix
@@ -859,7 +858,7 @@ detekt findings, bunch of rules
 - [Matthew Haughton](https://github.com/3flex) - Started type resolution, Dependency updates, Coding + Documentation 
 improvements
 - [Janusz Bagiński](https://github.com/jbaginski) - Fixed line number reporting for MaxLineLengthRule 
-
+- [Mike Kobit](https://github.com/mkobit) - Gradle build improvements
 #### Credits
 - [JetBrains](https://github.com/jetbrains/) - Creating Intellij + Kotlin
 - [PMD](https://github.com/pmd/pmd) & [Checkstyle](https://github.com/checkstyle/checkstyle) & [KtLint](https://github.com/shyiko/ktlint) - Ideas for threshold values and style rules

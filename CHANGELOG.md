@@ -1,5 +1,16 @@
 # Detekt - Changelog
 
+#### RC5-4
+
+- Testcase refactoring - #527 - [#541](https://github.com/arturbosch/detekt/pull/541)
+- Build improvements - [#539](https://github.com/arturbosch/detekt/pull/539)
+- Allow throwing exceptions in init blocks - closes #537 - [#538](https://github.com/arturbosch/detekt/pull/538)
+- ExceptionRaisedInUnexpectedLocation in constructer - [#537](https://github.com/arturbosch/detekt/issues/537)
+- UnnecessaryAbstractClass takes primary constructor vals into account - [#535](https://github.com/arturbosch/detekt/pull/535)
+- UnnecessaryAbstractClass does not see member variables - [#534](https://github.com/arturbosch/detekt/issues/534)
+
+See all issues at: [RC5-4](https://github.com/arturbosch/detekt/milestone/26)
+
 #### RC5-3
 
 - MaxLineLengthRule line number reporting issue - [#526](https://github.com/arturbosch/detekt/pull/526)
