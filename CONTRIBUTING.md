@@ -1,9 +1,10 @@
 # Contributing to detekt
 
 - Read [this article](https://chris.beams.io/posts/git-commit/) before writing commit messages
-- `detekt` itself should not report any new errors
+- `gradle detektCheck` should not report any errors
 - This repo uses tabs! Make sure your code is properly formatted.
-- Use idea-code-style.xml for coding style 
+- Use idea-code-style.xml for coding style .
+- We use [Spek](https://github.com/spekframework/spek) for testing.
 
 ### Specific code style rules we use
 
