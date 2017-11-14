@@ -1,4 +1,4 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "RemoveEmptyPrimaryConstructor")
 
 package cases
 
@@ -11,3 +11,7 @@ abstract class AbstractClassOk {
 abstract class AbstractClassWithPrimaryConstructorConcretePropertyOk(val i: Int) {
 	abstract fun f()
 }
+
+// empty abstract classes should not be reported by this rule
+abstract class EmptyAbstractClass1
+abstract class EmptyAbstractClass2()

@@ -1,4 +1,4 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "RemoveEmptyClassBody")
 
 package cases
 
@@ -27,3 +27,7 @@ interface AbstractInterface {
 		fun f() { }
 	}
 }
+
+abstract class OnlyConcreteMembersInAbstractClassWithPrimaryCtor1(val i: Int) {} // violation: no abstract members
+
+abstract class OnlyConcreteMembersInAbstractClassWithPrimaryCtor2(val i: Int) // violation: no abstract members

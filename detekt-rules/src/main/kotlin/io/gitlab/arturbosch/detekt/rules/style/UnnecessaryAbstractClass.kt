@@ -16,23 +16,33 @@ import org.jetbrains.kotlin.psi.psiUtil.isAbstract
 
 class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
 
+	private val noConcreteMember = "An abstract class without a concrete member can be refactored to an interface."
+	private val noAbstractMember = "An abstract class without an abstract member can be refactored to a concrete class."
+
 	override val issue =
 			Issue("UnnecessaryAbstractClass", Severity.Style,
 					"An abstract class is unnecessary and can be refactored. " +
 							"An abstract class should have both abstract and concrete properties or functions. " +
-							"An abstract class without a concrete member can be refactored to an interface. " +
-							"An abstract class without an abstract member can be refactored to a concrete class.")
+							noConcreteMember + " " +
+							noAbstractMember)
 
 	override fun visitClass(klass: KtClass) {
 		if (!klass.isInterface() && klass.isAbstract()) {
-			val namedMembers = klass.getBody()?.children
-					?.filter { it is KtProperty || it is KtNamedFunction }
-			if (namedMembers != null) {
+			val body = klass.getBody()
+			if (body != null) {
+				val namedMembers = body.children.filter { it is KtProperty || it is KtNamedFunction }
 				val namedClassMembers = NamedClassMembers(klass, namedMembers)
 				namedClassMembers.detectAbstractAndConcreteType()
+			} else if (!hasNoConstructorParameter(klass)) {
+				report(CodeSmell(issue, Entity.from(klass), noAbstractMember))
 			}
 		}
 		super.visitClass(klass)
+	}
+
+	private fun hasNoConstructorParameter(klass: KtClass): Boolean {
+		val primaryConstructor = klass.primaryConstructor
+		return primaryConstructor == null || !primaryConstructor.valueParameters.any()
 	}
 
 	private inner class NamedClassMembers(val klass: KtClass, val namedMembers: List<PsiElement>) {
@@ -40,14 +50,9 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
 		fun detectAbstractAndConcreteType() {
 			val indexOfFirstAbstractMember = indexOfFirstMember(true)
 			if (indexOfFirstAbstractMember == -1) {
-				report(CodeSmell(issue,
-						Entity.from(klass),
-						"An abstract class without an abstract member can be refactored to a concrete class."))
-			}
-			if (isAbstractClassWithoutConcreteMembers(indexOfFirstAbstractMember)) {
-				report(CodeSmell(issue,
-						Entity.from(klass),
-						"An abstract class without a concrete member can be refactored to an interface."))
+				report(CodeSmell(issue, Entity.from(klass), noAbstractMember))
+			} else if (isAbstractClassWithoutConcreteMembers(indexOfFirstAbstractMember)) {
+				report(CodeSmell(issue, Entity.from(klass), noConcreteMember))
 			}
 		}
 
@@ -62,10 +67,5 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
 				indexOfFirstAbstractMember == 0 && hasNoConcreteMemberLeft() && hasNoConstructorParameter(klass)
 
 		private fun hasNoConcreteMemberLeft() = indexOfFirstMember(false, namedMembers.drop(1)) == -1
-
-		private fun hasNoConstructorParameter(klass: KtClass): Boolean {
-			val primaryConstructor = klass.primaryConstructor
-			return primaryConstructor == null || !primaryConstructor.valueParameters.any()
-		}
 	}
 }
