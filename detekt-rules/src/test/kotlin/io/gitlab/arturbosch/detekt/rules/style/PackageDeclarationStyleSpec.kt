@@ -66,6 +66,18 @@ class PackageDeclarationStyleSpec : SubjectSpek<PackageDeclarationStyle>({
 			val code = "package test;import a.b;class A {}"
 			assertCodeViolation(code, 2)
 		}
+
+		it("should be valid") {
+			val code = """
+				package com.my.package
+
+				import android.util.Log
+				import java.util.concurrent.TimeUnit
+
+				class MyClass { }
+				"""
+			assertCodeViolation(code, 0)
+		}
 	}
 })
 
