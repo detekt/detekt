@@ -162,7 +162,7 @@ detekt {
 ```
 
 ##### <a name="gradlekotlin">Configuration when using kotlin dsl</a>
-For gradle version >= 3.5
+For gradle version >= 4.1
 
 ```kotlin
 import io.gitlab.arturbosch.detekt.DetektExtension
@@ -176,13 +176,13 @@ plugins {
     id("io.gitlab.arturbosch.detekt").version("1.0.0.[version]")
 }
 
-configure<DetektExtension> {
+detekt {
     version = "1.0.0.[version]"
-    profile("main") {
+    profile("main", Action {
         input = "$projectDir/src/main/kotlin"
         config = "$projectDir/detekt.yml"
         filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
-    }
+    })
 }
 ```
 
