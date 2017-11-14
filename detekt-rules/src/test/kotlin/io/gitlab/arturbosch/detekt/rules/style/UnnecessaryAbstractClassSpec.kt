@@ -22,7 +22,7 @@ class UnnecessaryAbstractClassSpec : SubjectSpek<UnnecessaryAbstractClass>({
 		val findings = subject.lint(path)
 
 		it("has no abstract member violation") {
-			assertThat(countViolationsWithDescription(findings, noAbstractMemberDescription)).isEqualTo(3)
+			assertThat(countViolationsWithDescription(findings, noAbstractMemberDescription)).isEqualTo(5)
 		}
 
 		it("has no concrete member violation") {
