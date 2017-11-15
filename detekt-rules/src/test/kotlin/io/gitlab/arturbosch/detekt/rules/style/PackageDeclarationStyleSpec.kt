@@ -8,8 +8,8 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 import org.jetbrains.spek.subject.dsl.SubjectProviderDsl
 
-class PackageDeclarationStyleSpec : SubjectSpek<PackageDeclarationStyle>({
-	subject { PackageDeclarationStyle(Config.empty) }
+class PackageDeclarationStyleSpec : SubjectSpek<SpacingBetweenPackageAndImports>({
+	subject { SpacingBetweenPackageAndImports(Config.empty) }
 
 	given("several package and import declarations") {
 
@@ -81,10 +81,10 @@ class PackageDeclarationStyleSpec : SubjectSpek<PackageDeclarationStyle>({
 	}
 })
 
-private fun SubjectProviderDsl<PackageDeclarationStyle>.assertCodeViolation(code: String, size: Int) {
+private fun SubjectProviderDsl<SpacingBetweenPackageAndImports>.assertCodeViolation(code: String, size: Int) {
 	assertThat(subject.lint(code)).hasSize(size)
 }
 
-private fun SubjectProviderDsl<PackageDeclarationStyle>.assertCodeWithoutViolation(code: String) {
+private fun SubjectProviderDsl<SpacingBetweenPackageAndImports>.assertCodeWithoutViolation(code: String) {
 	assertThat(subject.lint(code)).hasSize(0)
 }
