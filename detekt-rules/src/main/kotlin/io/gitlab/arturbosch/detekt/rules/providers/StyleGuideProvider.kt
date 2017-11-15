@@ -19,7 +19,7 @@ import io.gitlab.arturbosch.detekt.rules.style.NestedClassesVisibility
 import io.gitlab.arturbosch.detekt.rules.style.NewLineAtEndOfFile
 import io.gitlab.arturbosch.detekt.rules.style.OptionalAbstractKeyword
 import io.gitlab.arturbosch.detekt.rules.style.OptionalWhenBraces
-import io.gitlab.arturbosch.detekt.rules.style.PackageDeclarationStyle
+import io.gitlab.arturbosch.detekt.rules.style.SpacingBetweenPackageAndImports
 import io.gitlab.arturbosch.detekt.rules.style.ProtectedMemberInFinalClass
 import io.gitlab.arturbosch.detekt.rules.style.RedundantVisibilityModifierRule
 import io.gitlab.arturbosch.detekt.rules.style.ReturnCount
@@ -56,7 +56,7 @@ class StyleGuideProvider : RuleSetProvider {
 				ForbiddenComment(config),
 				ForbiddenImport(config),
 				FunctionOnlyReturningConstant(config),
-				PackageDeclarationStyle(config),
+				SpacingBetweenPackageAndImports(config),
 				LoopWithTooManyJumpStatements(config),
 				MethodNameEqualsClassName(config),
 				NamingRules(config),

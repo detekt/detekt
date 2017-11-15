@@ -578,7 +578,7 @@ style:
   ForbiddenImport:
     active: false
     imports: ''
-  PackageDeclarationStyle:
+  SpacingBetweenPackageAndImports:
     active: false
   ModifierOrder:
     active: true
