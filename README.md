@@ -269,7 +269,7 @@ detekt {
 
 ##### <a name="idea">Configure a local idea for detekt</a>
 
-- download the community edition of [intellij](https://www.jetbrains.com/idea/download/)
+- download the community edition of [Intellij Idea](https://www.jetbrains.com/idea/download/)
 - extract the file to your preferred location eg. `~/.idea`
 - let detekt know about idea inside the `detekt-closure`
 - extract `code-style.xml` and `inpect.xml` from idea settings (`Settings>CodeStyle>Scheme` and `Settings>Inspections>Profile`)
