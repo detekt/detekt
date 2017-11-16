@@ -428,7 +428,7 @@ To turn off specific rules/rule sets or change threshold values for certain rule
 
 #### Copy defaults and modify
 
-Export the default config with the `--generate-config` flag or copy and modify the `detekt-cli/src/main/resources/default-detekt-config.yml` for your needs.
+Export the default config with the `--generate-config` flag or copy and modify the [default-detekt-config.yml](./detekt-cli/src/main/resources/default-detekt-config.yml) for your needs.
 
 ```yml
 potential-bugs:
