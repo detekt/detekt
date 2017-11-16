@@ -6,7 +6,7 @@
 [ ![Download](https://api.bintray.com/packages/arturbosch/code-analysis/detekt/images/download.svg) ](https://bintray.com/arturbosch/code-analysis/detekt/_latestVersion)
 [![gradle plugin](https://img.shields.io/badge/gradle_plugin-1.0.0.RC5.4-blue.svg?style=flat-square)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-27-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-28-orange.svg?style=flat-square)](#contributors)
 [![androidweekly](https://img.shields.io/badge/androidweekly-259-orange.svg?style=flat-square)](http://androidweekly.net/issues/issue-259)
 [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
 
@@ -269,7 +269,7 @@ detekt {
 
 ##### <a name="idea">Configure a local idea for detekt</a>
 
-- download the community edition of [Intellij Idea](https://www.jetbrains.com/idea/download/)
+- download the community edition of [Intellij IDEA](https://www.jetbrains.com/idea/download/)
 - extract the file to your preferred location eg. `~/.idea`
 - let detekt know about idea inside the `detekt-closure`
 - extract `code-style.xml` and `inpect.xml` from idea settings (`Settings>CodeStyle>Scheme` and `Settings>Inspections>Profile`)
@@ -859,6 +859,7 @@ inside the report file.
 improvements
 - [Janusz Bagiński](https://github.com/jbaginski) - Fixed line number reporting for MaxLineLengthRule 
 - [Mike Kobit](https://github.com/mkobit) - Gradle build improvements
+- [Philipp Hofmann](https://github.com/philipphofmann) - ReadMe improvements
 #### Credits
 - [JetBrains](https://github.com/jetbrains/) - Creating Intellij + Kotlin
 - [PMD](https://github.com/pmd/pmd) & [Checkstyle](https://github.com/checkstyle/checkstyle) & [KtLint](https://github.com/shyiko/ktlint) - Ideas for threshold values and style rules
