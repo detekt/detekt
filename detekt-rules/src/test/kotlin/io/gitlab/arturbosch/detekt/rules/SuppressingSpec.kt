@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.rules.complexity.LongMethod
 import io.gitlab.arturbosch.detekt.rules.complexity.LongParameterList
 import io.gitlab.arturbosch.detekt.rules.complexity.StringLiteralDuplication
 import io.gitlab.arturbosch.detekt.rules.complexity.TooManyFunctions
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileForTest
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
@@ -48,7 +49,8 @@ class SuppressingSpec : Spek({
 	}
 
 	it("should suppress TooManyFunctionsRule on class level") {
-		val findings = TooManyFunctions(threshold = 0).lint(Case.SuppressedElementsByClass.path())
+		val findings = TooManyFunctions(
+				TestConfig(mapOf("thresholdInClass" to "0"))).lint(Case.SuppressedElementsByClass.path())
 
 		assertThat(findings).isEmpty()
 	}
