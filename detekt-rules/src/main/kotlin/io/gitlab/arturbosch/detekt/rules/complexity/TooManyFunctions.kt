@@ -20,9 +20,9 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue("TooManyFunctions",
 			Severity.Maintainability,
-			"Classes with many functions tend to do too many things and often come in conjunction with " +
-					"large classes and can quickly become God classes. " +
-					"Consider extracting methods to (new) classes better matching their responsibility.")
+			"Too many functions inside a/an file/class/object/interface always indicate a violation of "
+					+ "the single responsibility principle. Maybe your file/class/object/interface wants to manage to many " +
+					"things at once. Try to refactor out functionality which belong clearly together.")
 
 	private val thresholdInFiles = valueOrDefault(THRESHOLD_IN_FILES, DEFAULT_THRESHOLD)
 	private val thresholdInClasses = valueOrDefault(THRESHOLD_IN_CLASSES, DEFAULT_THRESHOLD)
@@ -38,7 +38,8 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 			report(ThresholdedCodeSmell(issue,
 					Entity.from(file),
 					Metric("SIZE", amountOfTopLevelFunctions, thresholdInFiles),
-					message = "")) // TODO: add file message
+					"File '${file.name}' with '$amountOfTopLevelFunctions' functions detected. " +
+							"Allowed maximum amount of functions inside files is set to '$thresholdInFiles'"))
 		}
 		amountOfTopLevelFunctions = 0
 	}
@@ -56,20 +57,25 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 				report(ThresholdedCodeSmell(issue,
 						Entity.from(klass),
 						Metric("SIZE", amount, thresholdInInterfaces),
-						message = "")) // TODO: add class message
+						"Interface '${klass.name}' with '$amount' functions detected. " +
+								"Allowed maximum amount of functions inside interfaces is set to " +
+								"'$thresholdInInterfaces'"))
 			}
 			klass.isEnum() && amount > thresholdInEnums -> {
 				report(ThresholdedCodeSmell(issue,
 						Entity.from(klass),
-						Metric("SIZE", amount, thresholdInInterfaces),
-						message = "")) // TODO: add enum message
+						Metric("SIZE", amount, thresholdInEnums),
+						"Enum class '${klass.name}' with '$amount' functions detected. " +
+								"Allowed maximum amount of functions inside enum classes is set to " +
+								"'$thresholdInEnums'"))
 			}
 			else -> {
 				if (amount > thresholdInClasses) {
 					report(ThresholdedCodeSmell(issue,
 							Entity.from(klass),
 							Metric("SIZE", amount, thresholdInClasses),
-							message = "")) // TODO: add class message
+							"Class '${klass.name}' with '$amount' functions detected. " +
+									"Allowed maximum amount of functions inside classes is set to '$thresholdInClasses'"))
 				}
 			}
 		}
@@ -82,7 +88,8 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 			report(ThresholdedCodeSmell(issue,
 					Entity.from(declaration),
 					Metric("SIZE", amount, thresholdInObjects),
-					message = "")) // TODO: add object message
+					"Object '${declaration.name}' with '$amount' functions detected. " +
+							"Allowed maximum amount of functions inside objects is set to '$thresholdInObjects'"))
 		}
 		super.visitObjectDeclaration(declaration)
 	}
