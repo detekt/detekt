@@ -6,25 +6,26 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.MultiRule
+import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.SubRule
 import org.jetbrains.kotlin.psi.KtFile
 
 class FileParsingRule(val config: Config = Config.empty) : MultiRule() {
 
 	private val maxLineLength = MaxLineLength(config)
-	override val rules = listOf(maxLineLength)
+	override val rules = listOf<Rule>(maxLineLength)
 
 	override fun visitKtFile(file: KtFile) {
 		val lines = file.text.splitToSequence("\n")
 		val fileContents = KtFileContent(file, lines)
-		rules.forEach { it.runIfActive { apply(fileContents) } }
+
+		maxLineLength.runIfActive { visit(fileContents) }
 	}
 }
 
 data class KtFileContent(val file: KtFile, val content: Sequence<String>)
 
-class MaxLineLength(config: Config = Config.empty) : SubRule<KtFileContent>(config) {
+class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,
 			Severity.Style,
@@ -38,7 +39,7 @@ class MaxLineLength(config: Config = Config.empty) : SubRule<KtFileContent>(conf
 	private val excludeImportStatements: Boolean
 			= valueOrDefault(MaxLineLength.EXCLUDE_IMPORT_STATEMENTS, MaxLineLength.DEFAULT_VALUE_IMPORTS_EXCLUDE)
 
-	override fun apply(element: KtFileContent) {
+	fun visit(element: KtFileContent) {
 		var offset = 0
 		val lines = element.content
 		val file = element.file

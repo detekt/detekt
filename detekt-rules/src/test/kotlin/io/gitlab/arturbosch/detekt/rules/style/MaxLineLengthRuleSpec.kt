@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.rules.Case
-import io.gitlab.arturbosch.detekt.rules.verify
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.compileForTest
 import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
@@ -20,17 +20,15 @@ class MaxLineLengthRuleSpec : Spek({
 		it("should report no errors when maxLineLength is set to 200") {
 			val rule = MaxLineLength(TestConfig(mapOf("maxLineLength" to "200")))
 
-			rule.verify(fileContent) {
-				Assertions.assertThat(it).isEmpty()
-			}
+			rule.visit(fileContent)
+			assertThat(rule.findings).isEmpty()
 		}
 
 		it("should report all errors with default maxLineLength") {
 			val rule = MaxLineLength()
 
-			rule.verify(fileContent) {
-				Assertions.assertThat(it).hasSize(3)
-			}
+			rule.visit(fileContent)
+			assertThat(rule.findings).hasSize(3)
 		}
 	}
 
@@ -53,9 +51,8 @@ class MaxLineLengthRuleSpec : Spek({
 					"maxLineLength" to "60"
 			)))
 
-			rule.verify(fileContent) {
-				Assertions.assertThat(it).hasSize(2)
-			}
+			rule.visit(fileContent)
+			assertThat(rule.findings).hasSize(2)
 		}
 
 		it("should report the package statement and import statements if they're enabled") {
@@ -65,9 +62,8 @@ class MaxLineLengthRuleSpec : Spek({
 					"excludeImportStatements" to "false"
 			)))
 
-			rule.verify(fileContent) {
-				Assertions.assertThat(it).hasSize(2)
-			}
+			rule.visit(fileContent)
+			assertThat(rule.findings).hasSize(2)
 		}
 
 		it("should not report the package statement if it is disabled") {
@@ -76,9 +72,8 @@ class MaxLineLengthRuleSpec : Spek({
 					"excludePackageStatements" to "true"
 			)))
 
-			rule.verify(fileContent) {
-				Assertions.assertThat(it).hasSize(1)
-			}
+			rule.visit(fileContent)
+			assertThat(rule.findings).hasSize(1)
 		}
 
 		it("should not report the import statements if it is disabled") {
@@ -87,9 +82,8 @@ class MaxLineLengthRuleSpec : Spek({
 					"excludeImportStatements" to "true"
 			)))
 
-			rule.verify(fileContent) {
-				Assertions.assertThat(it).hasSize(1)
-			}
+			rule.visit(fileContent)
+			assertThat(rule.findings).hasSize(1)
 		}
 
 		it("should not report anything if both package and import statements are disabled") {
@@ -99,9 +93,8 @@ class MaxLineLengthRuleSpec : Spek({
 					"excludeImportStatements" to "true"
 			)))
 
-			rule.verify(fileContent) {
-				Assertions.assertThat(it).isEmpty()
-			}
+			rule.visit(fileContent)
+			assertThat(rule.findings).isEmpty()
 		}
 	}
 
@@ -125,9 +118,8 @@ class MaxLineLengthRuleSpec : Spek({
 					"maxLineLength" to "60"
 			)))
 
-			rule.verify(fileContent) {
-				Assertions.assertThat(it).hasSize(3)
-			}
+			rule.visit(fileContent)
+			assertThat(rule.findings).hasSize(3)
 		}
 
 		it("should report the package statement, import statements and line if they're enabled") {
@@ -137,9 +129,8 @@ class MaxLineLengthRuleSpec : Spek({
 					"excludeImportStatements" to "false"
 			)))
 
-			rule.verify(fileContent) {
-				Assertions.assertThat(it).hasSize(3)
-			}
+			rule.visit(fileContent)
+			assertThat(rule.findings).hasSize(3)
 		}
 
 		it("should not report the package statement if it is disabled") {
@@ -148,9 +139,8 @@ class MaxLineLengthRuleSpec : Spek({
 					"excludePackageStatements" to "true"
 			)))
 
-			rule.verify(fileContent) {
-				Assertions.assertThat(it).hasSize(2)
-			}
+			rule.visit(fileContent)
+			assertThat(rule.findings).hasSize(2)
 		}
 
 		it("should not report the import statements if it is disabled") {
@@ -159,9 +149,8 @@ class MaxLineLengthRuleSpec : Spek({
 					"excludeImportStatements" to "true"
 			)))
 
-			rule.verify(fileContent) {
-				Assertions.assertThat(it).hasSize(2)
-			}
+			rule.visit(fileContent)
+			assertThat(rule.findings).hasSize(2)
 		}
 
 		it("should report only method if both package and import statements are disabled") {
@@ -171,9 +160,8 @@ class MaxLineLengthRuleSpec : Spek({
 					"excludeImportStatements" to "true"
 			)))
 
-			rule.verify(fileContent) {
-				Assertions.assertThat(it).hasSize(1)
-			}
+			rule.visit(fileContent)
+			assertThat(rule.findings).hasSize(1)
 		}
 
 		it("should report correct line and column for the finding") {
@@ -183,12 +171,11 @@ class MaxLineLengthRuleSpec : Spek({
 					"excludeImportStatements" to "true"
 			)))
 
-			rule.verify(fileContent) {
-				Assertions.assertThat(it).hasSize(1)
-				val findingSource = it[0].location.source
-				Assertions.assertThat(findingSource.line).isEqualTo(6)
-				Assertions.assertThat(findingSource.column).isEqualTo(109)
-			}
+			rule.visit(fileContent)
+			Assertions.assertThat(rule.findings).hasSize(1)
+			val findingSource = rule.findings[0].location.source
+			Assertions.assertThat(findingSource.line).isEqualTo(6)
+			Assertions.assertThat(findingSource.column).isEqualTo(109)
 		}
 	}
 })
