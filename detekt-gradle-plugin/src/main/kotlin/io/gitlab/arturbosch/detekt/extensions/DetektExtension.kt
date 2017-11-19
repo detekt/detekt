@@ -7,7 +7,7 @@ import org.gradle.api.Project
  * @author Artur Bosch
  */
 open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
-						   open var debug: Boolean = DEBUG_PARAMETER,
+						   open var debug: Boolean = DEFAULT_DEBUG_VALUE,
 						   open var profile: String = DEFAULT_PROFILE_NAME,
 						   open var ideaExtension: IdeaExtension = IdeaExtension()) {
 
@@ -45,16 +45,20 @@ open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 	private fun createArgumentsForProfile(): MutableList<String> {
 		val defaultProfile = getDefaultProfile()
 		val systemProfile = getSystemProfile()
-		val mainProfile = if (defaultProfile?.name != MAIN_PROFILE_NAME && systemProfile?.name != MAIN_PROFILE_NAME) {
-			searchProfileWithName(MAIN_PROFILE_NAME)
-		} else null
+		val mainProfile =
+				if (defaultProfile?.name != DEFAULT_PROFILE_NAME && systemProfile?.name != DEFAULT_PROFILE_NAME) {
+					searchProfileWithName(DEFAULT_PROFILE_NAME)
+				} else {
+					null
+				}
 
 		val allArguments = mainProfile?.arguments(debug) ?: mutableMapOf()
 		val defaultArguments = defaultProfile?.arguments(debug) ?: mutableMapOf()
 		val fallbackEmptyArguments = mutableMapOf<String, String>()
 
-		val overriddenArguments = if (systemProfile?.name == defaultProfile?.name) fallbackEmptyArguments
-		else systemProfile?.arguments(debug) ?: fallbackEmptyArguments
+		val overriddenArguments =
+				if (systemProfile?.name == defaultProfile?.name) fallbackEmptyArguments
+				else systemProfile?.arguments(debug) ?: fallbackEmptyArguments
 
 		defaultArguments.merge(allArguments)
 		overriddenArguments.merge(allArguments)
@@ -78,8 +82,6 @@ open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 	override fun toString(): String = "DetektExtension(version='$version', " +
 			"debug=$debug, profile='$profile', ideaExtension=$ideaExtension, profiles=$profiles)"
 }
-
-private val MAIN_PROFILE_NAME = "main"
 
 private fun MutableMap<String, String>.merge(other: MutableMap<String, String>) {
 	for ((key, value) in this) {
