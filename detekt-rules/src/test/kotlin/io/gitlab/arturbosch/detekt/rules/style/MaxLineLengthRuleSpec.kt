@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.compileForTest
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
@@ -172,10 +171,10 @@ class MaxLineLengthRuleSpec : Spek({
 			)))
 
 			rule.visit(fileContent)
-			Assertions.assertThat(rule.findings).hasSize(1)
+			assertThat(rule.findings).hasSize(1)
 			val findingSource = rule.findings[0].location.source
-			Assertions.assertThat(findingSource.line).isEqualTo(6)
-			Assertions.assertThat(findingSource.column).isEqualTo(109)
+			assertThat(findingSource.line).isEqualTo(6)
+			assertThat(findingSource.column).isEqualTo(109)
 		}
 	}
 })
