@@ -4,10 +4,9 @@
 [![build status](https://travis-ci.org/arturbosch/detekt.svg?branch=master)](https://travis-ci.org/arturbosch/detekt)
 [![build status windows](https://ci.appveyor.com/api/projects/status/3q9g98vveiul7yut/branch/master?svg=true)](https://ci.appveyor.com/project/arturbosch/detekt)
 [ ![Download](https://api.bintray.com/packages/arturbosch/code-analysis/detekt/images/download.svg) ](https://bintray.com/arturbosch/code-analysis/detekt/_latestVersion)
-[![gradle plugin](https://img.shields.io/badge/gradle_plugin-1.0.0.RC5.4-blue.svg?style=flat-square)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
+[![gradle plugin](https://img.shields.io/badge/gradle_plugin-1.0.0.RC5.5-blue.svg?style=flat-square)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-28-orange.svg?style=flat-square)](#contributors)
-[![androidweekly](https://img.shields.io/badge/androidweekly-259-orange.svg?style=flat-square)](http://androidweekly.net/issues/issue-259)
+[![All Contributors](https://img.shields.io/badge/all_contributors-30-orange.svg?style=flat-square)](#contributors)
 [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
 
 Meet _detekt_, a static code analysis tool for the _Kotlin_ programming language.
@@ -50,6 +49,7 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
     4. [Rule testing](#testing)
 10. [Black- and Whitelist code smells](#baseline)
 10. [Contributors](#contributors)
+10. [Mentions](#mentions)
 
 ### <a name="build">Build & use the commandline interface</a>
 
@@ -855,11 +855,24 @@ inside the report file.
 - [Andrew Ochsner](https://github.com/aochsner) - Updated Readme for `failFast` option
 - [Paul Merlin](https://github.com/eskatos) - Gradle build improvements
 - [Konstantin Aksenov](https://github.com/vacxe) - Coding improvement
-- [Matthew Haughton](https://github.com/3flex) - Started type resolution, Dependency updates, Coding + Documentation 
-improvements
+- [Matthew Haughton](https://github.com/3flex) - Started type resolution, Dependency updates, Coding + Documentation improvements
 - [Janusz Bagiński](https://github.com/jbaginski) - Fixed line number reporting for MaxLineLengthRule 
 - [Mike Kobit](https://github.com/mkobit) - Gradle build improvements
-- [Philipp Hofmann](https://github.com/philipphofmann) - ReadMe improvements
+- [Philipp Hofmann](https://github.com/philipphofmann) - Readme improvements
+- [Olivier PEREZ](https://github.com/olivierperez) - Fixed Typo in Readme
+
+### <a name="mentions">Mentions</a>
+
+As mentioned/used in ...
+
+- [![androidweekly](https://img.shields.io/badge/androidweekly-net-259-orange.svg?style=flat-square)](http://androidweekly.net/issues/issue-259) [![androidweekly](https://img.shields.io/badge/androidweekly-ch-154-orange.svg?style=flat-square)](http://androidweekly.cn/android-dev-wekly-issue-154/)
+- [@medium/acerezoluna/static-code-analysis-tools-for-kotlin-in-android](https://medium.com/@acerezoluna/static-code-analysis-tools-for-kotlin-in-android-fa072125fd50)
+- [@medium/annayan/writing-custom-lint-rules-for-your-kotlin-project-with-detekt](https://proandroiddev.com/writing-custom-lint-rules-for-your-kotlin-project-with-detekt-653e4dbbe8b9)
+- [continuous-integration-for-modern-android-apps](https://tips.seebrock3r.me/free-continuous-integration-for-modern-android-apps-with-circleci-940e33451c83)
+- [sputnik is a free tool for static code review and provides support for detekt](https://github.com/TouK/sputnik)
+- [Gradle plugin that generates ErrorProne, Findbugs, Checkstyle, PMD, CPD, Lint, Detekt & Ktlint Tasks for every subproject](https://github.com/vanniktech/gradle-code-quality-tools-plugin)
+- [Java library for parsing report files from static code analysis](https://github.com/tomasbjerre/violations-lib)
+
 #### Credits
 - [JetBrains](https://github.com/jetbrains/) - Creating Intellij + Kotlin
 - [PMD](https://github.com/pmd/pmd) & [Checkstyle](https://github.com/checkstyle/checkstyle) & [KtLint](https://github.com/shyiko/ktlint) - Ideas for threshold values and style rules
