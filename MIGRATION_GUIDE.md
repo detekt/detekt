@@ -1,5 +1,14 @@
 # Migration Guide
 
+### RC5-4 -> RC5-5
+
+- TooManyFunctions rule got a rework. Old property `threshold` was replaced with:
+    - `thresholdInFiles: 10`
+    - `thresholdInClasses: 10`
+    - `thresholdInInterfaces: 10`
+    - `thresholdInObjects: 10`
+    - `thresholdInEnums: 10`
+
 ### RC5 -> RC5-2
 
 - rule filters which are defined in the `test-pattern` were applied to main sources too, this is now fixed.

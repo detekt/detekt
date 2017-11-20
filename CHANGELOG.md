@@ -1,5 +1,20 @@
 # Detekt - Changelog
 
+#### RC5-5
+
+- Add --plugins option to gradle plugin - Fixes #545 - [#561](https://github.com/arturbosch/detekt/pull/561)
+- Rewrite messages and issue description for TooManyFunctions rule - #552 - [#560](https://github.com/arturbosch/detekt/pull/560)
+- Run built snapshot also on test sources - [#559](https://github.com/arturbosch/detekt/pull/559)
+- TooManyFunctions message can be misleading - [#552](https://github.com/arturbosch/detekt/issues/552)
+- Added UnnecessaryAbstractClass without body detection - [#551](https://github.com/arturbosch/detekt/pull/551)
+- UnnecessaryAbstractClass: misses class without body - [#550](https://github.com/arturbosch/detekt/issues/550)
+- Use newer extension syntax in example for Kotlin DSL and add in expli… - [#549](https://github.com/arturbosch/detekt/pull/549)
+- improve message of PackageDeclarationStyle - [#548](https://github.com/arturbosch/detekt/pull/548)
+- Update to Kotlin 1.1.60 - [#546](https://github.com/arturbosch/detekt/pull/546)
+- Using plugin rulesets in Android project - [#545](https://github.com/arturbosch/detekt/issues/545)
+
+See all issues at: [RC5-5](https://github.com/arturbosch/detekt/milestone/27)
+
 #### RC5-4
 
 - Testcase refactoring - #527 - [#541](https://github.com/arturbosch/detekt/pull/541)
