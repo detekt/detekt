@@ -863,8 +863,8 @@ inside the report file.
 
 ### <a name="mentions">Mentions</a>
 
-[![androidweekly](https://img.shields.io/badge/androidweekly-net-259-orange.svg?style=flat-square)](http://androidweekly.net/issues/issue-259) 
-[![androidweekly](https://img.shields.io/badge/androidweekly-ch-154-orange.svg?style=flat-square)](http://androidweekly.cn/android-dev-wekly-issue-154/)
+[![androidweekly](https://img.shields.io/badge/androidweekly.net-259-orange.svg?style=flat-square)](http://androidweekly.net/issues/issue-259) 
+[![androidweekly](https://img.shields.io/badge/androidweekly.cn-154-orange.svg?style=flat-square)](http://androidweekly.cn/android-dev-wekly-issue-154/)
 
 As mentioned/used in ...
 
