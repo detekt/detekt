@@ -55,6 +55,17 @@ class NamingConventionTest {
 	}
 
 	@Test
+	fun underscoreForUnusedVariableInClosure() {
+		assertThat(NamingRules().lint(
+				"""
+			fun underScoreVar() {
+				emptyMap<String, String>().forEach { _, v -> println(v) }
+			}
+            """
+		)).hasSize(0)
+	}
+
+	@Test
 	fun upperCasePackageDirectiveName() {
 		assertThat(NamingRules().lint("package FOO.BAR")).hasSize(1)
 	}
