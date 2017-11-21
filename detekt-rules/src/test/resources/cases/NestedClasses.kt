@@ -8,6 +8,8 @@ package cases
 @Suppress("unused")
 class NestedClasses {
 
+	private val i = 0
+
 	class InnerClass {
 
 		class NestedInnerClass {
@@ -142,3 +144,9 @@ class NestedClasses {
 	}
 
 }
+
+@Suppress("unused")
+/**
+ * Top level members must be skipped for LargeClass rule
+ */
+val aTopLevelProperty = 0
