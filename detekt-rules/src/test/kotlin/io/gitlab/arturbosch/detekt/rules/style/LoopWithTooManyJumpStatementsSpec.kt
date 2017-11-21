@@ -25,8 +25,9 @@ class LoopWithTooManyJumpStatementsSpec : SubjectSpek<LoopWithTooManyJumpStateme
 			assertThat(findings).hasSize(0)
 		}
 
-		it("reports loops with more than 1 break or continue statement") {
-			assertThat(subject.lint(Case.LoopWithTooManyJumpStatementsNegative.path())).hasSize(0)
+		it("does not report loop with less than 1 break or continue statement") {
+			val findings = subject.lint(Case.LoopWithTooManyJumpStatementsNegative.path())
+			assertThat(findings).hasSize(0)
 		}
 	}
 })

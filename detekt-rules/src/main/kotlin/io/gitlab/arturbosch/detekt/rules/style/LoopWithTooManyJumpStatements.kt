@@ -29,9 +29,7 @@ class LoopWithTooManyJumpStatements(config: Config = Config.empty) : Rule(config
 		super.visitLoopExpression(loopExpression)
 	}
 
-	private fun countBreakAndReturnStatements(body: KtExpression?): Int {
-		return body?.countBreakAndReturnStatementsInLoop() ?: 0
-	}
+	private fun countBreakAndReturnStatements(body: KtExpression?) = body?.countBreakAndReturnStatementsInLoop() ?: 0
 
 	private fun KtElement.countBreakAndReturnStatementsInLoop(): Int {
 		var count = 0
