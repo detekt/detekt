@@ -863,9 +863,11 @@ inside the report file.
 
 ### <a name="mentions">Mentions</a>
 
+[![androidweekly](https://img.shields.io/badge/androidweekly-net-259-orange.svg?style=flat-square)](http://androidweekly.net/issues/issue-259) 
+[![androidweekly](https://img.shields.io/badge/androidweekly-ch-154-orange.svg?style=flat-square)](http://androidweekly.cn/android-dev-wekly-issue-154/)
+
 As mentioned/used in ...
 
-- [![androidweekly](https://img.shields.io/badge/androidweekly-net-259-orange.svg?style=flat-square)](http://androidweekly.net/issues/issue-259) [![androidweekly](https://img.shields.io/badge/androidweekly-ch-154-orange.svg?style=flat-square)](http://androidweekly.cn/android-dev-wekly-issue-154/)
 - [@medium/acerezoluna/static-code-analysis-tools-for-kotlin-in-android](https://medium.com/@acerezoluna/static-code-analysis-tools-for-kotlin-in-android-fa072125fd50)
 - [@medium/annayan/writing-custom-lint-rules-for-your-kotlin-project-with-detekt](https://proandroiddev.com/writing-custom-lint-rules-for-your-kotlin-project-with-detekt-653e4dbbe8b9)
 - [continuous-integration-for-modern-android-apps](https://tips.seebrock3r.me/free-continuous-integration-for-modern-android-apps-with-circleci-940e33451c83)
