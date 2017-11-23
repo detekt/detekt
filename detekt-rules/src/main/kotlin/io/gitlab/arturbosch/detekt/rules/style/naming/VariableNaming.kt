@@ -8,7 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtProperty
-import org.jetbrains.kotlin.psi.KtVariableDeclaration
+import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
 
 class VariableNaming(config: Config = Config.empty) : Rule(config) {
@@ -17,24 +17,35 @@ class VariableNaming(config: Config = Config.empty) : Rule(config) {
 			Severity.Style,
 			"Variable names should follow the naming convention set in the projects configuration.",
 			debt = Debt.FIVE_MINS)
-	private val variablePattern = Regex(valueOrDefault(VARIABLE_PATTERN, "^(_)?[a-z$][a-zA-Z$0-9]*$"))
+
+	private val variablePattern = Regex(valueOrDefault(VARIABLE_PATTERN, "[a-z][A-Za-z\\d]*"))
+	private val privateVariablePattern = Regex(valueOrDefault(PRIVATE_VARIABLE_PATTERN, "(_)?[a-z][A-Za-z\\d]*"))
 
 	override fun visitProperty(property: KtProperty) {
 		if (property.isSingleUnderscore) {
 			return
 		}
 
-		if (!property.identifierName().matches(variablePattern)) {
-			report(CodeSmell(
-					issue,
-					Entity.from(property),
-					message = "Variable names should match the pattern: $variablePattern"))
+		val identifier = property.identifierName()
+		if (property.isPrivate()) {
+			if (!identifier.matches(privateVariablePattern)) {
+				report(CodeSmell(
+						issue,
+						Entity.from(property),
+						message = "Private variable names should match the pattern: $privateVariablePattern"))
+			}
+		} else {
+			if (!identifier.matches(variablePattern)) {
+				report(CodeSmell(
+						issue,
+						Entity.from(property),
+						message = "Variable names should match the pattern: $variablePattern"))
+			}
 		}
 	}
 
-	fun doesntMatchPattern(element: KtVariableDeclaration) = !element.identifierName().matches(variablePattern)
-
 	companion object {
 		const val VARIABLE_PATTERN = "variablePattern"
+		const val PRIVATE_VARIABLE_PATTERN = "privateVariablePattern"
 	}
 }

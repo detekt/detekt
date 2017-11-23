@@ -10,27 +10,27 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtVariableDeclaration
 
-class ConstantNaming(config: Config = Config.empty) : Rule(config) {
+class ObjectPropertyNaming(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,
 			Severity.Style,
-			"Constants names should follow the naming convention set in the projects configuraiton.",
+			"Constants inside objects should follow the naming convention set in the projects configuration.",
 			debt = Debt.FIVE_MINS)
 
-	private val constantPattern = Regex(valueOrDefault(CONSTANT_PATTERN, "^([A-Z_]*|serialVersionUID)$"))
+	private val propertyPattern = Regex(valueOrDefault(PROPERTY_PATTERN, "[A-Za-z][_A-Za-z\\d]*"))
 
 	override fun visitProperty(property: KtProperty) {
 		if (doesntMatchPattern((property))) {
 			report(CodeSmell(
 					issue,
 					Entity.from(property),
-					message = "Constant names should match the pattern: $constantPattern"))
+					message = "Names of constants inside objects should match the pattern: $propertyPattern"))
 		}
 	}
 
-	fun doesntMatchPattern(element: KtVariableDeclaration) = !element.identifierName().matches(constantPattern)
+	fun doesntMatchPattern(element: KtVariableDeclaration) = !element.identifierName().matches(propertyPattern)
 
 	companion object {
-		const val CONSTANT_PATTERN = "constantPattern"
+		const val PROPERTY_PATTERN = "propertyPattern"
 	}
 }

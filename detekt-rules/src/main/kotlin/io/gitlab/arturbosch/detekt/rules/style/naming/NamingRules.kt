@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.style.naming
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
-import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.name.SpecialNames
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtEnumEntry
@@ -23,7 +22,8 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
 	private val variableNamingRule = VariableNaming(config)
 	private val variableMinNameLengthRule = VariableMinLength(config)
 	private val variableMaxNameLengthRule = VariableMaxLength(config)
-	private val constantNamingRule = ConstantNaming(config)
+	private val topLevelPropertyRule = TopLevelPropertyNaming(config)
+	private val objectConstantNamingRule = ObjectPropertyNaming(config)
 	private val packageNamingRule = PackageNaming(config)
 	private val classOrObjectNamingRule = ClassNaming(config)
 	private val enumEntryNamingRule = EnumNaming(config)
@@ -36,7 +36,8 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
 			variableNamingRule,
 			variableMinNameLengthRule,
 			variableMaxNameLengthRule,
-			constantNamingRule,
+			topLevelPropertyRule,
+			objectConstantNamingRule,
 			packageNamingRule,
 			classOrObjectNamingRule,
 			enumEntryNamingRule,
@@ -81,26 +82,15 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
 		variableMaxNameLengthRule.runIfActive { visitProperty(declaration) }
 		variableMinNameLengthRule.runIfActive { visitProperty(declaration) }
 
-		if (declaration.hasConstModifier()) {
-			constantNamingRule.runIfActive { visitProperty(declaration) }
-		} else if (declaration.withinObjectDeclaration() || declaration.isTopLevel) {
-			if (variableNamingRule.doesntMatchPattern(declaration)
-					&& constantNamingRule.doesntMatchPattern(declaration)) {
-				variableNamingRule.runIfActive { visitProperty(declaration) }
-			}
-		} else {
-			variableNamingRule.runIfActive { visitProperty(declaration) }
+		when {
+			declaration.isTopLevel -> topLevelPropertyRule.runIfActive { visitProperty(declaration) }
+			declaration.withinObjectDeclaration() -> objectConstantNamingRule.runIfActive { visitProperty(declaration) }
+			else -> variableNamingRule.runIfActive { visitProperty(declaration) }
 		}
 	}
 
-	private fun KtVariableDeclaration.hasConstModifier(): Boolean {
-		val modifierList = this.modifierList
-		return modifierList != null && modifierList.hasModifier(KtTokens.CONST_KEYWORD)
-	}
-
-	private fun KtVariableDeclaration.withinObjectDeclaration(): Boolean {
-		return this.getNonStrictParentOfType(KtObjectDeclaration::class.java) != null
-	}
+	private fun KtVariableDeclaration.withinObjectDeclaration(): Boolean =
+			this.getNonStrictParentOfType(KtObjectDeclaration::class.java) != null
 }
 
 internal fun KtNamedDeclaration.identifierName() = nameIdentifier?.text ?: SpecialNames.NO_NAME_PROVIDED.asString()
