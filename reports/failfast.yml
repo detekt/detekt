@@ -25,6 +25,9 @@ style:
     ignorePropertyDeclaration: true
     ignoreAnnotation: true
     ignoreNumbers: '-1,0,1,2,100,1000'
+  VariableNaming:
+    active: true
+    variablePattern: '(_)?[a-z][a-zA-Z0-9]*'
 
 potential-bugs:
   UnsafeCast:
