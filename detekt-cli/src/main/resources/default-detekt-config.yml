@@ -294,10 +294,16 @@ style:
     minimumFunctionNameLength: 3
   VariableNaming:
     active: true
-    variablePattern: '^(_)?[a-z$][a-zA-Z$0-9]*$'
-  ConstantNaming:
+    variablePattern: '[a-z][A-Za-z0-9]*'
+    privateVariablePattern: '(_)?[a-z][A-Za-z0-9]*'
+  ObjectPropertyNaming:
     active: true
-    constantPattern: '^([A-Z_]*|serialVersionUID)$'
+    propertyPattern: '[A-Za-z][_A-Za-z0-9]*'
+  TopLevelPropertyNaming:
+    active: true
+    constantPattern: '[A-Z][_A-Z0-9]*'
+    propertyPattern: '[a-z][A-Za-z\d]*'
+    privatePropertyPattern: '(_)?[a-z][A-Za-z0-9]*'
   VariableMaxLength:
     active: false
     maximumVariableNameLength: 30

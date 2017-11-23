@@ -15,7 +15,8 @@ class EnumNaming(config: Config = Config.empty) : Rule(config) {
 			Severity.Style,
 			"Enum names should follow the naming convention set in the projects configuration.",
 			debt = Debt.FIVE_MINS)
-	private val enumEntryPattern = Regex(valueOrDefault(ENUM_PATTERN, "^[A-Z$][a-zA-Z_$]*$"))
+
+	private val enumEntryPattern = Regex(valueOrDefault(ENUM_PATTERN, "^[A-Z][_a-zA-Z0-9]*"))
 
 	override fun visitEnumEntry(enumEntry: KtEnumEntry) {
 		if (!enumEntry.identifierName().matches(enumEntryPattern)) {

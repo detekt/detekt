@@ -1,16 +1,18 @@
-@file:Suppress("unused", "RemoveEmptyClassBody")
+@file:Suppress("unused", "RemoveEmptyClassBody", "UNUSED_VARIABLE")
 
 package cases
 
-// both valid
 val variable = 5
-val _variable = 5
 
-//invalid
+// valid: underscore only allowed for private vars
+private val _variable = 5
+val _variable2 = 5 // invalid
+
+//invalid: starts with uppercase!
 val V_riable = 5
-// invalid start with _ is optional, but then lowercase!
+// invalid: start with _ is optional, but then lowercase!
 val _Variable = 5
-// topLevel vars count as if were declared in objects
+// invalid: top level vars are not constants
 val ALLOWED_AS_UPPERCASE = 5
 
 //valid
@@ -27,21 +29,21 @@ fun _fileMethod() {
 
 class NamingConventions {
 
-	//invalid
+	// invalid
 	val C_lassVariable = 5
-	//invalid
+	// invalid
 	val CLASSVARIABLE = 5
-	//valid
-	val _classVariable = 5
-	//valid
+	// valid
+	private val _classVariable = 5
+	// valid
 	val classVariable = 5
 
-	//valid
+	// valid
 	fun classMethod() {
 	}
 
 	fun underscoreTestMethod() {
-		val (_, status) = Pair(1, 2) // _ should not be reported
+		val (_, status) = Pair(1, 2) // valid: _
 	}
 
 	//invalid
@@ -52,10 +54,12 @@ class NamingConventions {
 	fun Classmethod() {
 	}
 
-	//valid
 	companion object {
-		//invalid
-		const val stuff = "stuff"
+		const val stUff = "stuff"
+		val SSS = "stuff"
+		val ooo = Any()
+		val OOO = Any()
+		val __bla = Any() //invalid
 	}
 }
 
