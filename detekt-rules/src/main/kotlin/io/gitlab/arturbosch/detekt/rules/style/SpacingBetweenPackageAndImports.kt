@@ -44,7 +44,7 @@ class SpacingBetweenPackageAndImports(config: Config = Config.empty) : Rule(conf
 		val nextSibling = importList.nextSibling
 		if (ktElements.isNotEmpty()
 				&& (nextSibling is PsiWhiteSpace || nextSibling is KtElement)) {
-			val name = (ktElements.first() as KtClassOrObject).name ?: "the class or object"
+			val name = (ktElements.first() as? KtClassOrObject)?.name ?: "the class or object"
 
 			checkLinebreakAfterElement(nextSibling, "There should be exactly one empty line in between the " +
 					"list of imports and the declaration of $name.")
