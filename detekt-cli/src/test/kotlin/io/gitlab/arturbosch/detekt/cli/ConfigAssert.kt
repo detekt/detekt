@@ -31,6 +31,7 @@ class ConfigAssert(
 				Assertions.fail("${ruleClass.simpleName} rule is not correctly defined in $CONFIG_FILE")
 			}
 
+			@Suppress("UNCHECKED_CAST")
 			val options = ymlDeclaration.iterator().next().value as HashMap<String, *>
 			checkOptions(options, ruleClass)
 		}

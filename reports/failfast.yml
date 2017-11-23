@@ -17,6 +17,7 @@ test-pattern: # Configure exclusions for test sources
     - 'LateInitUsage'
     - 'StringLiteralDuplication'
     - 'SpreadOperator'
+    - 'UnsafeCast'
 
 style:
   MagicNumber:
@@ -24,3 +25,7 @@ style:
     ignorePropertyDeclaration: true
     ignoreAnnotation: true
     ignoreNumbers: '-1,0,1,2,100,1000'
+
+potential-bugs:
+  UnsafeCast:
+    active: true
