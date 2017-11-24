@@ -14,7 +14,6 @@ import kotlin.test.assertEquals
  */
 class LargeClassSpec : SubjectSpek<LargeClass>({
 	subject { LargeClass() }
-	itBehavesLike(CommonSpec())
 
 	describe("nested classes are also considered") {
 		it("should detect only the nested large class") {
