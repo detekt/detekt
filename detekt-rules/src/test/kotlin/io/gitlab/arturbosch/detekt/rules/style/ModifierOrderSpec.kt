@@ -62,7 +62,7 @@ class ModifierOrderSpec : Spek({
 	}
 
 	given("a kt file with correctly ordered modifiers") {
-		it("should not report modifiers") {
+		it("should not report correct modifiers") {
 			val rule = ModifierOrder()
 
 			val findings = rule.lint(Case.Default.path())
@@ -70,8 +70,8 @@ class ModifierOrderSpec : Spek({
 		}
 	}
 
-	given("a kt file with correctly ordered modifiers") {
-		it("should not report modifiers") {
+	given("a kt file with incorrectly ordered modifiers") {
+		it("should report incorrect modifiers") {
 			val rule = ModifierOrder()
 
 			val findings = rule.lint(Case.ModifierOrder.path())
