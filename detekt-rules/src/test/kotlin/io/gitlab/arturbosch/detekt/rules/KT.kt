@@ -36,7 +36,6 @@ enum class Case(val file: String) {
 	MaxLineLength("/cases/MaxLineLength.kt"),
 	MethodNameEqualsClassNameNegative("/cases/MethodNameEqualsClassNameNegative.kt"),
 	MethodNameEqualsClassNamePositive("/cases/MethodNameEqualsClassNamePositive.kt"),
-	ModifierOrder("/cases/ModifierOrder.kt"),
 	OverloadedMethods("/cases/OverloadedMethods.kt"),
 	ComplexClass("/cases/ComplexClass.kt"),
 	ComplexInterfaceNegative("/cases/ComplexInterfaceNegative.kt"),
