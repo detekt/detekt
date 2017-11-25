@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.generator.out
 /**
  * @author Marvin Ramin
  */
-class Markdown(var content: String = "") {
+sealed class MD(open var content: String = "") {
 	fun append(value: String) {
 		content = if (content.isEmpty()) {
 			value
@@ -12,16 +12,8 @@ class Markdown(var content: String = "") {
 		}
 	}
 }
-
-class MarkdownList(var content: String = "") {
-	fun append(value: String) {
-		content = if (content.isEmpty()) {
-			value
-		} else {
-			"$content\n$value"
-		}
-	}
-}
+data class Markdown(override var content: String = ""): MD()
+data class MarkdownList(override var content: String = ""): MD()
 
 inline fun markdown(content: Markdown.() -> Unit): String {
 	val markdown = Markdown()
