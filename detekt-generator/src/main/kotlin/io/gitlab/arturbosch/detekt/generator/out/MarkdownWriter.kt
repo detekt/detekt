@@ -6,7 +6,7 @@ import java.nio.file.Paths
 /**
  * @author Marvin Ramin
  */
-class MarkdownWriter {
+object MarkdownWriter {
 	private val ending: String = "md"
 
 	fun write(fileName: String, content: String) {
@@ -15,4 +15,8 @@ class MarkdownWriter {
 		Files.write(filePath, content.toByteArray())
 		println("Wrote: $fileName.$ending")
 	}
+}
+
+fun markdownFile(fileName: String, content: () -> String) {
+	MarkdownWriter.write(fileName, content())
 }
