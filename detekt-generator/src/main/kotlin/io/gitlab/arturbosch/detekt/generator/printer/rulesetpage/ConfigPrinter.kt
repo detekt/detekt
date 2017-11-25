@@ -1,6 +1,8 @@
 package io.gitlab.arturbosch.detekt.generator.printer.rulesetpage
 
-import io.gitlab.arturbosch.detekt.generator.collection.Rule
+import io.gitlab.arturbosch.detekt.generator.out.keyValue
+import io.gitlab.arturbosch.detekt.generator.out.node
+import io.gitlab.arturbosch.detekt.generator.out.yaml
 import io.gitlab.arturbosch.detekt.generator.printer.DocumentationPrinter
 
 /**
@@ -9,42 +11,36 @@ import io.gitlab.arturbosch.detekt.generator.printer.DocumentationPrinter
 object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 
 	override fun print(item: List<RuleSetPage>): String {
-		var config = ""
-		config += defaultAutoCorrectFailFastConfiguration()
-		config += "\n\n"
-		config += defaultTestPatternConfiguration()
-		config += "\n\n"
-		config += defaultBuildConfiguration()
-		config += "\n\n"
-		config += defaultProcessorsConfiguration()
-		config += "\n\n"
-		config += defaultConsoleReportsConfiguration()
-		config += "\n\n"
-		config += defaultOutputReportsConfiguration()
-		config += "\n\n"
+		return yaml {
+			yaml { defaultAutoCorrectFailFastConfiguration() }
+			emptyLine()
+			yaml { defaultTestPatternConfiguration() }
+			emptyLine()
+			yaml { defaultBuildConfiguration() }
+			emptyLine()
+			yaml { defaultProcessorsConfiguration() }
+			emptyLine()
+			yaml { defaultConsoleReportsConfiguration() }
+			emptyLine()
+			yaml { defaultOutputReportsConfiguration() }
+			emptyLine()
 
-		config += item.joinToString("\n") { it.print() }
-		return config
-	}
+			item.forEach { (ruleSet, rules) ->
+				node(ruleSet.name) {
+					keyValue { "active" to "${ruleSet.active}" }
 
-	private fun RuleSetPage.print(): String {
-		var config = ""
-		config += "${ruleSet.name}:\n"
-		config += "  active: ${ruleSet.active}\n" // Are they active or not?
-		rules.forEach {
-			config += it.print()
+					rules.forEach { rule ->
+						node(rule.name) {
+							keyValue { "active" to "${rule.active}" }
+							rule.configuration.forEach { configuration ->
+								keyValue { configuration.name to configuration.defaultValue }
+							}
+						}
+					}
+					emptyLine()
+				}
+			}
 		}
-		return config
-	}
-
-	private fun Rule.print(): String {
-		var config = ""
-		config += "  $name:\n"
-		config += "    active: $active\n"
-		configuration.forEach {
-			config += "    ${it.name}: ${it.defaultValue}\n"
-		}
-		return config
 	}
 
 	private fun defaultAutoCorrectFailFastConfiguration(): String {
