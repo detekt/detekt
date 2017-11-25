@@ -6,7 +6,7 @@ import java.nio.file.Paths
 /**
  * @author Marvin Ramin
  */
-class YamlWriter {
+object YamlWriter {
 	private val ending: String = "yml"
 
 	fun write(fileName: String, content: String) {
@@ -15,4 +15,8 @@ class YamlWriter {
 		Files.write(filePath, content.toByteArray())
 		println("Wrote: $fileName.$ending")
 	}
+}
+
+fun yamlFile(fileName: String, content: () -> String) {
+	YamlWriter.write(fileName, content())
 }
