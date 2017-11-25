@@ -13,9 +13,9 @@ class Markdown(var content: String = "") {
 	}
 }
 
-class MarkdownList(var content: String? = null) {
+class MarkdownList(var content: String = "") {
 	fun append(value: String) {
-		content = if (content == null) {
+		content = if (content.isEmpty()) {
 			value
 		} else {
 			"$content\n$value"
@@ -39,10 +39,12 @@ inline fun Markdown.h4(heading: () -> String) = append("#### ${heading()}\n")
 inline fun Markdown.code(code: () -> String) = "`${code()}`"
 fun Markdown.emptyLine() = append("")
 
-inline fun Markdown.list(listContent: MarkdownList.() -> Unit): String? {
+inline fun Markdown.list(listContent: MarkdownList.() -> Unit) {
 	val list = MarkdownList()
 	listContent(list)
-	return list.content
+	if (list.content.isNotEmpty()) {
+		append(list.content)
+	}
 }
 inline fun MarkdownList.item(item: () -> String) = append("* ${item()}\n")
 inline fun MarkdownList.description(description: () -> String) = append("   ${description()}\n")
