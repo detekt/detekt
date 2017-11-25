@@ -52,7 +52,7 @@ object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
 				h4 { "Configuration options:" }
 				list {
 					rule.configuration.forEach {
-						item { "${it.name} (default: ${it.defaultValue})" }
+						item { "${code { it.name} } (default: ${code { it.defaultValue } })" }
 						description { it.description }
 					}
 				}

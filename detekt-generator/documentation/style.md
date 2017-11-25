@@ -19,6 +19,10 @@ code.
 
 #### Configuration options:
 
+* `max` (default: `2`)
+
+   define the maximum number of return statements allowed per function
+
 ### ThrowsCount
 
 TODO: Specify description
@@ -35,6 +39,11 @@ which classes are imported and helps prevent naming conflicts.
 Library updates can introduce naming clashes with your own classes which might result in compilation errors.
 
 #### Configuration options:
+
+* `excludeImports` (default: `""`)
+
+   Define a whitelist of package names that should be allowed to be imported
+with wildcard imports.
 
 ### MaxLineLength
 
