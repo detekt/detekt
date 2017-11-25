@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.rules.SubRule
 import io.gitlab.arturbosch.detekt.rules.empty.EmptyRule
+import org.jetbrains.kotlin.kdoc.psi.impl.KDocSection
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtSuperTypeList
@@ -87,13 +88,13 @@ class RuleVisitor : DetektVisitor() {
 		}
 
 		name = classOrObject.name?.trim() ?: ""
-		description = classOrObject.docComment?.getDefaultSection()?.getContent()?.trim() ?: ""
-		active = classOrObject.docComment?.getDefaultSection()?.findTagByName(TAG_ACTIVE) != null
+		description = classOrObject.kDocSection()?.getContent()?.trim() ?: ""
+		active = classOrObject.kDocSection()?.findTagByName(TAG_ACTIVE) != null
 		findConfigurationOptions(classOrObject)
 	}
 
 	private fun findConfigurationOptions(classOrObject: KtClassOrObject) {
-		val configurationTags = classOrObject.docComment?.getDefaultSection()?.findTagsByName(TAG_CONFIGURATION) ?: emptyList()
+		val configurationTags = classOrObject.kDocSection()?.findTagsByName(TAG_CONFIGURATION) ?: emptyList()
 		val configurations = configurationTags.map { it.getContent() }
 				.filter {
 					val valid = it.contains("-") && it.contains(CONFIGURATION_DEFAULT_VALUE_REGEX)
@@ -105,9 +106,13 @@ class RuleVisitor : DetektVisitor() {
 				.map {
 					val name = it.split("-")[0].trim()
 					val defaultValue = CONFIGURATION_DEFAULT_VALUE_REGEX.find(it)?.groupValues?.get(1)?.trim() ?: ""
-					val description = it.split("-")[1].replace(CONFIGURATION_DEFAULT_VALUE_REGEX, "").trim()
+					val description = it.split("-")[1]
+							.replace(CONFIGURATION_DEFAULT_VALUE_REGEX, "")
+							.trim()
 					Configuration(name, description, defaultValue)
 				}
 		configuration.addAll(configurations)
 	}
+
+	private fun KtClassOrObject.kDocSection(): KDocSection? = docComment?.getDefaultSection()
 }
