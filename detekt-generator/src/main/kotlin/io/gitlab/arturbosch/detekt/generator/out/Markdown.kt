@@ -12,14 +12,17 @@ sealed class MD(open var content: String = "") {
 		}
 	}
 }
-data class Markdown(override var content: String = ""): MD()
-data class MarkdownList(override var content: String = ""): MD()
+
+data class Markdown(override var content: String = "") : MD()
+data class MarkdownList(override var content: String = "") : MD()
 
 inline fun markdown(content: Markdown.() -> Unit): String {
-	val markdown = Markdown()
-	content(markdown)
-	return markdown.content
+	return Markdown().let { markdown ->
+		content(markdown)
+		markdown.content
+	}
 }
+
 inline fun Markdown.markdown(markdown: () -> String) = append(markdown())
 inline fun Markdown.paragraph(content: () -> String) = append("${content()}\n")
 
@@ -32,12 +35,14 @@ inline fun Markdown.code(code: () -> String) = "`${code()}`"
 fun Markdown.emptyLine() = append("")
 
 inline fun Markdown.list(listContent: MarkdownList.() -> Unit) {
-	val list = MarkdownList()
-	listContent(list)
-	if (list.content.isNotEmpty()) {
-		append(list.content)
+	return MarkdownList().let { list ->
+		listContent(list)
+		if (list.content.isNotEmpty()) {
+			append(list.content)
+		}
 	}
 }
+
 inline fun MarkdownList.item(item: () -> String) = append("* ${item()}\n")
 inline fun MarkdownList.description(description: () -> String) = append("   ${description()}\n")
 
