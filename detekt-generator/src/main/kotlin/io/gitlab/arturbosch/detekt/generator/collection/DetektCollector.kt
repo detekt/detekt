@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
-import io.gitlab.arturbosch.detekt.generator.printer.RuleSetPage
+import io.gitlab.arturbosch.detekt.generator.printer.rulesetpage.RuleSetPage
 import org.jetbrains.kotlin.psi.KtFile
 
 /**

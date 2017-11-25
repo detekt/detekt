@@ -3,6 +3,7 @@
 The performance rule set analyzes code for potential performance problems.
 
 ## Rules in the `performance` rule set:
+
 ### ForEachOnRange
 
 Using the forEach method on ranges has a heavy performance cost. Prefer using simple for loops.
@@ -24,4 +25,3 @@ https://sites.google.com/a/athaydes.com/renato-athaydes/posts/kotlinshiddencosts
 Avoid temporary objects when converting primitive types to String. This has a performance penalty when compared
 to using primitive types directly.
 To solve this issue, remove the wrapping type.
-

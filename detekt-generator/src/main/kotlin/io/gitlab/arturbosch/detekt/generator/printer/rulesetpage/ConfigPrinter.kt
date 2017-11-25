@@ -1,6 +1,7 @@
-package io.gitlab.arturbosch.detekt.generator.printer
+package io.gitlab.arturbosch.detekt.generator.printer.rulesetpage
 
 import io.gitlab.arturbosch.detekt.generator.collection.Rule
+import io.gitlab.arturbosch.detekt.generator.printer.DocumentationPrinter
 
 /**
  * @author Marvin Ramin

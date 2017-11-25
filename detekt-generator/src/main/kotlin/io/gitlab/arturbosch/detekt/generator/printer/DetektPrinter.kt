@@ -2,6 +2,9 @@ package io.gitlab.arturbosch.detekt.generator.printer
 
 import io.gitlab.arturbosch.detekt.generator.out.MarkdownWriter
 import io.gitlab.arturbosch.detekt.generator.out.YamlWriter
+import io.gitlab.arturbosch.detekt.generator.printer.rulesetpage.ConfigPrinter
+import io.gitlab.arturbosch.detekt.generator.printer.rulesetpage.RuleSetPage
+import io.gitlab.arturbosch.detekt.generator.printer.rulesetpage.RuleSetPagePrinter
 
 class DetektPrinter {
 	private val markdownWriter = MarkdownWriter()
