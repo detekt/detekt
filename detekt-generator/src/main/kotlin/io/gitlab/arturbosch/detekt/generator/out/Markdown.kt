@@ -1,3 +1,4 @@
+@file:Suppress("detekt.TooManyFunctions")
 package io.gitlab.arturbosch.detekt.generator.out
 
 /**

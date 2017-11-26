@@ -111,7 +111,7 @@ class RuleListVisitor : DetektVisitor() {
 		// Call Expression = Constructor of rule
 		ruleNames = argumentExpressions
 				.filter { it is KtCallExpression }
-				.map { (it as KtCallExpression).calleeExpression?.text ?: "" }
+				.map { (it as? KtCallExpression)?.calleeExpression?.text ?: "" }
 
 		// Reference Expression = variable we need to search for
 		ruleProperties = argumentExpressions
