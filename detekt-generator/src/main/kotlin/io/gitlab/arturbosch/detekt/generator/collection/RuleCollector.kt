@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.generator.collection
 
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
-import io.gitlab.arturbosch.detekt.rules.SubRule
 import io.gitlab.arturbosch.detekt.rules.empty.EmptyRule
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocSection
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -28,7 +27,6 @@ data class Configuration(
 
 private val ruleClasses = listOf(
 		io.gitlab.arturbosch.detekt.api.Rule::class.simpleName,
-		SubRule::class.simpleName,
 		ThresholdRule::class.simpleName,
 		EmptyRule::class.simpleName
 )
