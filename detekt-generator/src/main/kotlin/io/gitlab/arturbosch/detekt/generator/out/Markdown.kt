@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.generator.out
 /**
  * @author Marvin Ramin
  */
-sealed class MD(open var content: String = "") {
+sealed class Markdown(open var content: String = "") {
 	fun append(value: String) {
 		content = if (content.isEmpty()) {
 			value
@@ -13,28 +13,28 @@ sealed class MD(open var content: String = "") {
 	}
 }
 
-data class Markdown(override var content: String = "") : MD()
-data class MarkdownList(override var content: String = "") : MD()
+data class MarkdownContent(override var content: String = "") : Markdown()
+data class MarkdownList(override var content: String = "") : Markdown()
 
-inline fun markdown(content: Markdown.() -> Unit): String {
-	return Markdown().let { markdown ->
+inline fun markdown(content: MarkdownContent.() -> Unit): String {
+	return MarkdownContent().let { markdown ->
 		content(markdown)
 		markdown.content
 	}
 }
 
-inline fun Markdown.markdown(markdown: () -> String) = append(markdown())
-inline fun Markdown.paragraph(content: () -> String) = append("${content()}\n")
+inline fun MarkdownContent.markdown(markdown: () -> String) = append(markdown())
+inline fun MarkdownContent.paragraph(content: () -> String) = append("${content()}\n")
 
-inline fun Markdown.h1(heading: () -> String) = append("# ${heading()}\n")
-inline fun Markdown.h2(heading: () -> String) = append("## ${heading()}\n")
-inline fun Markdown.h3(heading: () -> String) = append("### ${heading()}\n")
-inline fun Markdown.h4(heading: () -> String) = append("#### ${heading()}\n")
+inline fun MarkdownContent.h1(heading: () -> String) = append("# ${heading()}\n")
+inline fun MarkdownContent.h2(heading: () -> String) = append("## ${heading()}\n")
+inline fun MarkdownContent.h3(heading: () -> String) = append("### ${heading()}\n")
+inline fun MarkdownContent.h4(heading: () -> String) = append("#### ${heading()}\n")
 
-inline fun Markdown.code(code: () -> String) = "`${code()}`"
-fun Markdown.emptyLine() = append("")
+inline fun MarkdownContent.code(code: () -> String) = "`${code()}`"
+fun MarkdownContent.emptyLine() = append("")
 
-inline fun Markdown.list(listContent: MarkdownList.() -> Unit) {
+inline fun MarkdownContent.list(listContent: MarkdownList.() -> Unit) {
 	return MarkdownList().let { list ->
 		listContent(list)
 		if (list.content.isNotEmpty()) {
