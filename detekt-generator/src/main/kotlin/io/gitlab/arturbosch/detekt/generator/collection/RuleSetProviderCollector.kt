@@ -8,6 +8,7 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtSuperTypeList
+import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
 
 /**
@@ -67,7 +68,9 @@ class RuleSetProviderVisitor : DetektVisitor() {
 	override fun visitProperty(property: KtProperty) {
 		super.visitProperty(property)
 		if (property.isOverridden() && property.name != null && property.name == PROPERTY_RULE_SET_ID) {
-			name = (property.initializer as KtStringTemplateExpression).entries[0].text
+			name = (property.initializer as? KtStringTemplateExpression)?.entries?.get(0)?.text
+					?: throw InvalidRuleSetProviderException("RuleSetProvider class " +
+					"${property.containingClass()?.name ?: ""} doesn't provide list of rules.")
 		}
 	}
 
@@ -80,10 +83,11 @@ class RuleSetProviderVisitor : DetektVisitor() {
 					.firstOrNull { it?.referenceExpression()?.text == "listOf" }
 					?: throw InvalidRuleSetProviderException("RuleSetProvider $name doesn't provide list of rules.")
 
-			val ruleArgumentNames = (ruleListExpression as KtCallExpression)
-					.valueArguments
-					.map { it.getArgumentExpression() }
-					.mapNotNull { it?.referenceExpression()?.text }
+			val ruleArgumentNames = (ruleListExpression as? KtCallExpression)
+					?.valueArguments
+					?.map { it.getArgumentExpression() }
+					?.mapNotNull { it?.referenceExpression()?.text }
+					?: emptyList()
 
 			ruleNames.addAll(ruleArgumentNames)
 		}
