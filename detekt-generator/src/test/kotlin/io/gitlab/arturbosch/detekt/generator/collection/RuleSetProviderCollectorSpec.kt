@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
-import io.gitlab.arturbosch.detekt.test.KtTestCompiler
+import io.gitlab.arturbosch.detekt.generator.util.run
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
@@ -10,11 +10,6 @@ import kotlin.test.assertFailsWith
 class RuleSetProviderCollectorSpec : Spek({
 
 	val collector = RuleSetProviderCollector()
-	fun <T> Collector<T>.run(code: String): List<T> {
-		val ktFile = KtTestCompiler.compileFromContent(code.trimIndent())
-		visit(ktFile)
-		return items
-	}
 
 	given("a non-RuleSetProvider class extending nothing") {
 		val code = """
