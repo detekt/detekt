@@ -2,14 +2,14 @@ package io.gitlab.arturbosch.detekt.generator.collection
 
 import io.gitlab.arturbosch.detekt.generator.util.run
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
+import org.jetbrains.spek.subject.SubjectSpek
 import kotlin.test.assertFailsWith
 
-class RuleSetProviderCollectorSpec : Spek({
+class RuleSetProviderCollectorSpec : SubjectSpek<RuleSetProviderCollector>({
 
-	val collector = RuleSetProviderCollector()
+	subject { RuleSetProviderCollector() }
 
 	given("a non-RuleSetProvider class extending nothing") {
 		val code = """
@@ -22,7 +22,7 @@ class RuleSetProviderCollectorSpec : Spek({
 			}
 		"""
 		it("collects no rulesets") {
-			val items = collector.run(code)
+			val items = subject.run(code)
 			assertThat(items).isEmpty()
 		}
 	}
@@ -38,7 +38,7 @@ class RuleSetProviderCollectorSpec : Spek({
 			}
 		"""
 		it("collects no rulesets") {
-			val items = collector.run(code)
+			val items = subject.run(code)
 			assertThat(items).isEmpty()
 		}
 	}
@@ -55,24 +55,24 @@ class RuleSetProviderCollectorSpec : Spek({
 		"""
 
 		it("collects a RuleSetProvider") {
-			val items = collector.run(code)
+			val items = subject.run(code)
 			assertThat(items).hasSize(1)
 		}
 
 		it("has no rules") {
-			val items = collector.run(code)
+			val items = subject.run(code)
 			val provider = items[0]
 			assertThat(provider.rules).isEmpty()
 		}
 
 		it("has no name") {
-			val items = collector.run(code)
+			val items = subject.run(code)
 			val provider = items[0]
 			assertThat(provider.name).isEmpty()
 		}
 
 		it("has no description") {
-			val items = collector.run(code)
+			val items = subject.run(code)
 			val provider = items[0]
 			assertThat(provider.description).isEmpty()
 		}
@@ -102,31 +102,31 @@ class RuleSetProviderCollectorSpec : Spek({
 		"""
 
 		it("collects a RuleSetProvider") {
-			val items = collector.run(code)
+			val items = subject.run(code)
 			assertThat(items).hasSize(1)
 		}
 
 		it("has one rule") {
-			val items = collector.run(code)
+			val items = subject.run(code)
 			val provider = items[0]
 			assertThat(provider.rules).hasSize(1)
 			assertThat(provider.rules[0]).isEqualTo(ruleName)
 		}
 
 		it("has correct name") {
-			val items = collector.run(code)
+			val items = subject.run(code)
 			val provider = items[0]
 			assertThat(provider.name).isEqualTo(ruleSetId)
 		}
 
 		it("has correct description") {
-			val items = collector.run(code)
+			val items = subject.run(code)
 			val provider = items[0]
 			assertThat(provider.description).isEqualTo(description)
 		}
 
 		it("is active") {
-			val items = collector.run(code)
+			val items = subject.run(code)
 			val provider = items[0]
 			assertThat(provider.active).isTrue()
 		}
@@ -154,7 +154,7 @@ class RuleSetProviderCollectorSpec : Spek({
 		"""
 
 		it("is not active") {
-			val items = collector.run(code)
+			val items = subject.run(code)
 			val provider = items[0]
 			assertThat(provider.active).isFalse()
 		}
@@ -179,7 +179,7 @@ class RuleSetProviderCollectorSpec : Spek({
 		"""
 
 		it("is has no name") {
-			val items = collector.run(code)
+			val items = subject.run(code)
 			val provider = items[0]
 			assertThat(provider.name).isEmpty()
 		}
@@ -203,7 +203,7 @@ class RuleSetProviderCollectorSpec : Spek({
 		"""
 
 		it("is not active") {
-			val items = collector.run(code)
+			val items = subject.run(code)
 			val provider = items[0]
 			assertThat(provider.description).isEmpty()
 		}
@@ -225,7 +225,7 @@ class RuleSetProviderCollectorSpec : Spek({
 
 		it("throws an exception") {
 			assertFailsWith<InvalidRuleSetProviderException> {
-				collector.run(code)
+				subject.run(code)
 			}
 		}
 	}
@@ -256,7 +256,7 @@ class RuleSetProviderCollectorSpec : Spek({
 		"""
 
 		it("collects multiple rules") {
-			val items = collector.run(code)
+			val items = subject.run(code)
 			assertThat(items[0].rules).containsExactly(ruleName, secondRuleName)
 		}
 	}

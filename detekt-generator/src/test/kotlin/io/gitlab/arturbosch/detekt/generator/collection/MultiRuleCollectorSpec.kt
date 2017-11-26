@@ -2,14 +2,15 @@ package io.gitlab.arturbosch.detekt.generator.collection
 
 import io.gitlab.arturbosch.detekt.generator.util.run
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.Spek
-import org.jetbrains.spek.api.dsl.given
+import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
+import org.jetbrains.spek.subject.SubjectSpek
 
-class MultiRuleCollectorSpec : Spek({
+class MultiRuleCollectorSpec : SubjectSpek<MultiRuleCollector>({
 
-	given("a MultiRuleCollector") {
-		val collector = MultiRuleCollector()
+	subject { MultiRuleCollector() }
+
+	describe("a MultiRuleCollector") {
 
 		it("collects no multirule when no class is extended") {
 			val code = """
@@ -18,7 +19,7 @@ class MultiRuleCollectorSpec : Spek({
 				class SomeRandomClass {
 				}
 			"""
-			val items = collector.run(code)
+			val items = subject.run(code)
 			assertThat(items).isEmpty()
 		}
 
@@ -29,7 +30,7 @@ class MultiRuleCollectorSpec : Spek({
 				class SomeRandomClass: SomeOtherClass {
 				}
 			"""
-			val items = collector.run(code)
+			val items = subject.run(code)
 			assertThat(items).isEmpty()
 		}
 
@@ -40,7 +41,7 @@ class MultiRuleCollectorSpec : Spek({
 				class SomeRandomClass: MultiRule {
 				}
 			"""
-			val items = collector.run(code)
+			val items = subject.run(code)
 			assertThat(items).hasSize(1)
 		}
 
@@ -52,7 +53,7 @@ class MultiRuleCollectorSpec : Spek({
 				class $name: MultiRule {
 				}
 			"""
-			val items = collector.run(code)
+			val items = subject.run(code)
 			assertThat(items[0].name).isEqualTo(name)
 		}
 
@@ -64,7 +65,7 @@ class MultiRuleCollectorSpec : Spek({
 				class $name: MultiRule {
 				}
 			"""
-			val items = collector.run(code)
+			val items = subject.run(code)
 			assertThat(items[0].rules).isEmpty()
 		}
 
@@ -85,9 +86,9 @@ class MultiRuleCollectorSpec : Spek({
 						)
 				}
 			"""
-			val items = collector.run(code)
+			val items = subject.run(code)
 			assertThat(items[0].rules).hasSize(4)
-			assertThat(items[0].rules).containsExactly("FirstRule", "SecondRule", "RuleOne", "RuleTwo")
+			assertThat(items[0].rules).contains("FirstRule", "SecondRule", "RuleOne", "RuleTwo")
 		}
 	}
 })

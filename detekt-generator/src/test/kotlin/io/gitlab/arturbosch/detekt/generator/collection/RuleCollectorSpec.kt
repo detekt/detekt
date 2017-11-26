@@ -2,14 +2,15 @@ package io.gitlab.arturbosch.detekt.generator.collection
 
 import io.gitlab.arturbosch.detekt.generator.util.run
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.Spek
-import org.jetbrains.spek.api.dsl.given
+import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
+import org.jetbrains.spek.subject.SubjectSpek
 
-class RuleCollectorSpec : Spek({
+class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 
-	given("the RuleCollector") {
-		val collector = RuleCollector()
+	subject { RuleCollector() }
+
+	describe("a RuleCollector") {
 
 		it("collects no rules when no class is extended") {
 			val code = """
@@ -18,7 +19,7 @@ class RuleCollectorSpec : Spek({
 				class SomeRandomClass {
 				}
 			"""
-			val items = collector.run(code)
+			val items = subject.run(code)
 			assertThat(items).isEmpty()
 		}
 
@@ -29,7 +30,7 @@ class RuleCollectorSpec : Spek({
 				class SomeRandomClass: SomeOtherClass {
 				}
 			"""
-			val items = collector.run(code)
+			val items = subject.run(code)
 			assertThat(items).isEmpty()
 		}
 
@@ -40,7 +41,7 @@ class RuleCollectorSpec : Spek({
 				class SomeRandomClass: Rule {
 				}
 			"""
-			val items = collector.run(code)
+			val items = subject.run(code)
 			assertThat(items).hasSize(1)
 		}
 
@@ -51,7 +52,7 @@ class RuleCollectorSpec : Spek({
 				class SomeRandomClass: ThresholdRule {
 				}
 			"""
-			val items = collector.run(code)
+			val items = subject.run(code)
 			assertThat(items).hasSize(1)
 		}
 
@@ -63,7 +64,7 @@ class RuleCollectorSpec : Spek({
 				class $name: Rule {
 				}
 			"""
-			val items = collector.run(code)
+			val items = subject.run(code)
 			assertThat(items[0].name).isEqualTo(name)
 		}
 
@@ -75,7 +76,7 @@ class RuleCollectorSpec : Spek({
 				class $name: Rule {
 				}
 			"""
-			val items = collector.run(code)
+			val items = subject.run(code)
 			assertThat(items[0].description).isEmpty()
 		}
 
@@ -91,7 +92,7 @@ class RuleCollectorSpec : Spek({
 				class $name: Rule {
 				}
 			"""
-			val items = collector.run(code)
+			val items = subject.run(code)
 			assertThat(items[0].description).isEqualTo(description)
 		}
 
@@ -109,7 +110,7 @@ class RuleCollectorSpec : Spek({
 				class $name: Rule {
 				}
 			"""
-			val items = collector.run(code)
+			val items = subject.run(code)
 			assertThat(items[0].description).startsWith(description)
 			assertThat(items[0].description).contains("more...")
 		}
@@ -127,7 +128,7 @@ class RuleCollectorSpec : Spek({
 				class $name: Rule {
 				}
 			"""
-			val items = collector.run(code)
+			val items = subject.run(code)
 			assertThat(items[0].description).isEqualTo(description)
 		}
 
@@ -144,7 +145,7 @@ class RuleCollectorSpec : Spek({
 				class $name: Rule {
 				}
 			"""
-			val items = collector.run(code)
+			val items = subject.run(code)
 			assertThat(items[0].active).isFalse()
 		}
 
@@ -161,7 +162,7 @@ class RuleCollectorSpec : Spek({
 				class $name: Rule {
 				}
 			"""
-			val items = collector.run(code)
+			val items = subject.run(code)
 			assertThat(items[0].active).isTrue()
 		}
 
@@ -178,7 +179,7 @@ class RuleCollectorSpec : Spek({
 				class $name: Rule {
 				}
 			"""
-			val items = collector.run(code)
+			val items = subject.run(code)
 			assertThat(items[0].active).isTrue()
 		}
 
@@ -194,7 +195,7 @@ class RuleCollectorSpec : Spek({
 				class $name: Rule {
 				}
 			"""
-			val items = collector.run(code)
+			val items = subject.run(code)
 			assertThat(items[0].configuration).isEmpty()
 		}
 
@@ -211,11 +212,11 @@ class RuleCollectorSpec : Spek({
 				class $name: Rule {
 				}
 			"""
-			val items = collector.run(code)
+			val items = subject.run(code)
 			assertThat(items[0].configuration).hasSize(1)
 			assertThat(items[0].configuration[0].name).isEqualTo("config")
 			assertThat(items[0].configuration[0].description).isEqualTo("description")
-			assertThat(items[0].configuration[0].defaultValue).isEqualTo("")
+			assertThat(items[0].configuration[0].defaultValue).isEqualTo("\"\"")
 		}
 
 		it("contains multiple configuration options") {
@@ -232,7 +233,7 @@ class RuleCollectorSpec : Spek({
 				class $name: Rule {
 				}
 			"""
-			val items = collector.run(code)
+			val items = subject.run(code)
 			assertThat(items[0].configuration).hasSize(2)
 		}
 
@@ -249,7 +250,7 @@ class RuleCollectorSpec : Spek({
 				class $name: Rule {
 				}
 			"""
-			val items = collector.run(code)
+			val items = subject.run(code)
 			assertThat(items[0].configuration).isEmpty()
 		}
 	}
