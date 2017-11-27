@@ -47,7 +47,7 @@ class RuleCollector : Collector<Rule> {
 
 private const val TAG_ACTIVE = "active"
 private const val TAG_CONFIGURATION = "configuration"
-private val CONFIGURATION_DEFAULT_VALUE_REGEX = "\\(default: (.+)\\)".toRegex()
+private val configurationDefaultValueRegex = "\\(default: (.+)\\)".toRegex()
 
 class RuleVisitor : DetektVisitor() {
 	val containsRule
@@ -95,7 +95,7 @@ class RuleVisitor : DetektVisitor() {
 		val configurationTags = classOrObject.kDocSection()?.findTagsByName(TAG_CONFIGURATION) ?: emptyList()
 		val configurations = configurationTags.map { it.getContent() }
 				.filter {
-					val valid = it.contains("-") && it.contains(CONFIGURATION_DEFAULT_VALUE_REGEX)
+					val valid = it.contains("-") && it.contains(configurationDefaultValueRegex)
 					if (!valid) {
 						println("Rule $name contains an incorrect configuration option KDoc.")
 					}
@@ -103,9 +103,9 @@ class RuleVisitor : DetektVisitor() {
 				}
 				.map {
 					val name = it.split("-")[0].trim()
-					val defaultValue = CONFIGURATION_DEFAULT_VALUE_REGEX.find(it)?.groupValues?.get(1)?.trim() ?: ""
+					val defaultValue = configurationDefaultValueRegex.find(it)?.groupValues?.get(1)?.trim() ?: ""
 					val description = it.split("-")[1]
-							.replace(CONFIGURATION_DEFAULT_VALUE_REGEX, "")
+							.replace(configurationDefaultValueRegex, "")
 							.trim()
 					Configuration(name, description, defaultValue)
 				}
