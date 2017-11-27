@@ -14,7 +14,6 @@ configurations {
 dependencies {
 	compile project(':detekt-core')
 	compile project(':detekt-rules')
-	compile "com.beust:jcommander:$jcommanderVersion"
 	compile "org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion"
 	
 	testImplementation project(':detekt-test')
