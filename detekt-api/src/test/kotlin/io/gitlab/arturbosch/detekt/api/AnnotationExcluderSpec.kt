@@ -8,8 +8,8 @@ import org.jetbrains.spek.api.dsl.it
 
 class AnnotationExcluderSpec : Spek({
 	describe("a kt file with some imports") {
-		val jvmFieldAnnotation = FACTORY.createAnnotationEntry("@JvmField")
-		val sinceKotlinAnnotation = FACTORY.createAnnotationEntry("@SinceKotlin")
+		val jvmFieldAnnotation = psiFactory.createAnnotationEntry("@JvmField")
+		val sinceKotlinAnnotation = psiFactory.createAnnotationEntry("@SinceKotlin")
 
 		val file = compileContentForTest("""
 			package foo

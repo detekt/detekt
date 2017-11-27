@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.core
 
-import io.gitlab.arturbosch.detekt.api.PROJECT
+import io.gitlab.arturbosch.detekt.api.psiProject
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import org.jetbrains.kotlin.com.intellij.psi.PsiFileFactory
@@ -14,7 +14,7 @@ import java.nio.file.Path
  */
 open class KtCompiler(val project: Path) {
 
-	protected val psiFileFactory: PsiFileFactory = PsiFileFactory.getInstance(PROJECT)
+	protected val psiFileFactory: PsiFileFactory = PsiFileFactory.getInstance(psiProject)
 
 	fun compile(subPath: Path): KtFile {
 		require(subPath.isFile()) { "Given sub path should be a regular file!" }

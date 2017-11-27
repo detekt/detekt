@@ -18,7 +18,8 @@ class TooGenericExceptionCaught(config: Config) : Rule(config) {
 			"Thrown exception is too generic. " +
 					"Prefer throwing project specific exceptions to handle error cases.")
 
-	private val exceptions: Set<String> = valueOrDefault(CAUGHT_EXCEPTIONS_PROPERTY, CAUGHT_EXCEPTIONS).toHashSet()
+	private val exceptions: Set<String> = valueOrDefault(
+			CAUGHT_EXCEPTIONS_PROPERTY, caughtExceptionDefaults).toHashSet()
 
 	override fun visitCatchSection(catchClause: KtCatchClause) {
 		catchClause.catchParameter?.let {
@@ -34,7 +35,7 @@ class TooGenericExceptionCaught(config: Config) : Rule(config) {
 	}
 }
 
-val CAUGHT_EXCEPTIONS = listOf(
+val caughtExceptionDefaults = listOf(
 		"ArrayIndexOutOfBoundsException",
 		"Error",
 		"Exception",

@@ -12,7 +12,7 @@ class CLOCVisitorTest {
 		val file = compileForTest(path.resolve("../comments/CommentsClass.kt"))
 		val commentLines = with(file) {
 			accept(CLOCVisitor())
-			getUserData(NUMBER_OF_COMMENT_LINES_KEY)
+			getUserData(commentLinesKey)
 		}
 		assertThat(commentLines).isEqualTo(10)
 	}

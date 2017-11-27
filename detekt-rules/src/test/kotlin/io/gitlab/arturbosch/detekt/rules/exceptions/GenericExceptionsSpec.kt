@@ -26,7 +26,7 @@ class GenericExceptionsSpec : Spek({
 
 			val findings = rule.lint(file.text)
 
-			assertThat(findings).hasSize(CAUGHT_EXCEPTIONS.size)
+			assertThat(findings).hasSize(caughtExceptionDefaults.size)
 		}
 	}
 
@@ -37,7 +37,7 @@ class GenericExceptionsSpec : Spek({
 
 			val findings = rule.lint(file.text)
 
-			assertThat(findings).hasSize(THROWN_EXCEPTIONS.size)
+			assertThat(findings).hasSize(thrownExceptionDefaults.size)
 		}
 	}
 

@@ -17,13 +17,13 @@ class QualifiedNameProcessor : FileProcessListener {
 		val nameVisitor = ClassNameVisitor()
 		file.accept(nameVisitor)
 		val fqNames = nameVisitor.names.mapTo(HashSet()) { "$packageName.$it" }
-		file.putUserData(FQ_NAMES_KEY, fqNames)
+		file.putUserData(fqNamesKey, fqNames)
 	}
 
 	override fun onFinish(files: List<KtFile>, result: Detektion) {
-		val fqNames = files.mapNotNull { it.getUserData(FQ_NAMES_KEY) }
+		val fqNames = files.mapNotNull { it.getUserData(fqNamesKey) }
 				.flatMapTo(HashSet()) { it }
-		result.addData(FQ_NAMES_KEY, fqNames)
+		result.addData(fqNamesKey, fqNames)
 	}
 
 	class ClassNameVisitor : DetektVisitor() {
@@ -36,4 +36,4 @@ class QualifiedNameProcessor : FileProcessListener {
 	}
 }
 
-val FQ_NAMES_KEY: Key<Set<String>> = Key.create<Set<String>>("FQNames")
+val fqNamesKey: Key<Set<String>> = Key.create<Set<String>>("FQNames")

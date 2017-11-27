@@ -8,18 +8,18 @@ import org.jetbrains.kotlin.psi.KtFile
 
 class ProjectCLOCProcessor : AbstractProcessor() {
 
-	override val key = NUMBER_OF_COMMENT_LINES_KEY
+	override val key = commentLinesKey
 	override val visitor = CLOCVisitor()
 }
 
-val NUMBER_OF_COMMENT_LINES_KEY = Key<Int>("cloc")
+val commentLinesKey = Key<Int>("cloc")
 
 class CLOCVisitor : DetektVisitor() {
 
 	override fun visitKtFile(file: KtFile) {
 		with(CLOCCountVisitor()) {
 			file.accept(this)
-			file.putUserData(NUMBER_OF_COMMENT_LINES_KEY, count)
+			file.putUserData(commentLinesKey, count)
 		}
 	}
 }

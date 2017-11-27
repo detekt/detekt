@@ -7,15 +7,15 @@ import org.jetbrains.kotlin.psi.KtFile
 class ProjectLOCProcessor : AbstractProcessor() {
 
 	override val visitor: DetektVisitor = LOCVisitor()
-	override val key = LOC_KEY
+	override val key = linesKey
 }
 
 class LOCVisitor : DetektVisitor() {
 
 	override fun visitKtFile(file: KtFile) {
 		val lines = file.text.count { it == '\n' } + 1
-		file.putUserData(LOC_KEY, lines)
+		file.putUserData(linesKey, lines)
 	}
 }
 
-val LOC_KEY = Key<Int>("loc")
+val linesKey = Key<Int>("loc")

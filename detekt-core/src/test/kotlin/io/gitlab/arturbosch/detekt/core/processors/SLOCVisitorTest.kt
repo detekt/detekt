@@ -12,7 +12,7 @@ class SLOCVisitorTest {
 		val file = compileForTest(path.resolve("Default.kt"))
 		val loc = with(file) {
 			accept(SLOCVisitor())
-			getUserData(SLOC_KEY)
+			getUserData(sourceLinesKey)
 		}
 		Assertions.assertThat(loc).isEqualTo(3)
 	}

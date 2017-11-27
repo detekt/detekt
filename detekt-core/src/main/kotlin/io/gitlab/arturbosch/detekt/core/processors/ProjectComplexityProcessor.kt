@@ -8,17 +8,17 @@ import org.jetbrains.kotlin.psi.KtFile
 class ProjectComplexityProcessor : AbstractProcessor() {
 
 	override val visitor = ComplexityVisitor()
-	override val key = COMPLEXITY_KEY
+	override val key = complexityKey
 }
 
-val COMPLEXITY_KEY = Key<Int>("complexity")
+val complexityKey = Key<Int>("complexity")
 
 class ComplexityVisitor : DetektVisitor() {
 
 	override fun visitKtFile(file: KtFile) {
 		with(McCabeVisitor()) {
 			file.accept(this)
-			file.putUserData(COMPLEXITY_KEY, mcc)
+			file.putUserData(complexityKey, mcc)
 		}
 	}
 }

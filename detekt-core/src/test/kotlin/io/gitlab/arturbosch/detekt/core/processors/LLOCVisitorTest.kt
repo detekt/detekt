@@ -16,7 +16,7 @@ internal class LLOCVisitorTest {
 
 		val lloc = with(file) {
 			accept(LLOCVisitor())
-			getUserData(LLOC_KEY)
+			getUserData(logicalLinesKey)
 		}
 
 		assertThat(lloc).isEqualTo(2)
@@ -28,7 +28,7 @@ internal class LLOCVisitorTest {
 
 		val lloc = with(file) {
 			accept(LLOCVisitor())
-			getUserData(LLOC_KEY)
+			getUserData(logicalLinesKey)
 		}
 
 		assertThat(lloc).isEqualTo(85)

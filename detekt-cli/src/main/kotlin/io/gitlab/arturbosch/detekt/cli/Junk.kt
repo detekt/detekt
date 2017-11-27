@@ -5,5 +5,5 @@ import io.gitlab.arturbosch.detekt.api.Finding
 val Finding.baselineId: String
 	get() = this.id + ":" + this.signature
 
-val SEPARATOR_COMMA = ","
-val SEPARATOR_SEMICOLON = ";"
+const val SEPARATOR_COMMA = ","
+const val SEPARATOR_SEMICOLON = ";"

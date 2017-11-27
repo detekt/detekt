@@ -44,7 +44,7 @@ class ClassCountVisitorTest {
 	private fun getData(file: KtFile): Int {
 		return with(file) {
 			accept(ClassCountVisitor())
-			getUserData(NUMBER_OF_CLASSES_KEY)!!
+			getUserData(numberOfClassesKey)!!
 		}
 	}
 }

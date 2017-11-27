@@ -17,12 +17,12 @@ import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.psi.KtPsiFactory
 import sun.reflect.ReflectionFactory
 
-val PROJECT = KotlinCoreEnvironment.createForProduction(Disposer.newDisposable(),
+val psiProject = KotlinCoreEnvironment.createForProduction(Disposer.newDisposable(),
 		CompilerConfiguration(), EnvironmentConfigFiles.JVM_CONFIG_FILES).project.apply {
 	makeMutable(this as MockProject)
 }
 
-val FACTORY = KtPsiFactory(PROJECT, false)
+val psiFactory = KtPsiFactory(psiProject, false)
 
 private fun makeMutable(project: MockProject) {
 	// Based on KtLint by Shyiko

@@ -22,7 +22,7 @@ internal class QualifiedNameProcessorTest {
 		processor.onProcess(ktFile)
 		processor.onFinish(listOf(ktFile), result)
 
-		val data = result.getData(FQ_NAMES_KEY)
+		val data = result.getData(fqNamesKey)
 		Assertions.assertThat(data).contains(
 				"io.gitlab.arturbosch.detekt.sample.Foo",
 				"io.gitlab.arturbosch.detekt.sample.Bar",

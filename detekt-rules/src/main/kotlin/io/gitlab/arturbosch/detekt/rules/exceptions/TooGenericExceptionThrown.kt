@@ -18,7 +18,7 @@ class TooGenericExceptionThrown(config: Config) : Rule(config) {
 			"Thrown exception is too generic. " +
 					"Prefer throwing project specific exceptions to handle error cases.")
 
-	private val exceptions: Set<String> = valueOrDefault(THROWN_EXCEPTIONS_PROPERTY, THROWN_EXCEPTIONS).toHashSet()
+	private val exceptions: Set<String> = valueOrDefault(THROWN_EXCEPTIONS_PROPERTY, thrownExceptionDefaults).toHashSet()
 
 	override fun visitThrowExpression(expression: KtThrowExpression) {
 		expression.thrownExpression?.text?.substringBefore("(")?.let {
@@ -32,7 +32,7 @@ class TooGenericExceptionThrown(config: Config) : Rule(config) {
 	}
 }
 
-val THROWN_EXCEPTIONS = listOf(
+val thrownExceptionDefaults = listOf(
 		"Error",
 		"Exception",
 		"NullPointerException",
