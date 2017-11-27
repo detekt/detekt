@@ -14,7 +14,7 @@ class ObjectPropertyNaming(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,
 			Severity.Style,
-			"Constants inside objects should follow the naming convention set in the projects configuration.",
+			"Property names inside objects should follow the naming convention set in the projects configuration.",
 			debt = Debt.FIVE_MINS)
 
 	private val propertyPattern = Regex(valueOrDefault(PROPERTY_PATTERN, "[A-Za-z][_A-Za-z\\d]*"))
@@ -24,7 +24,7 @@ class ObjectPropertyNaming(config: Config = Config.empty) : Rule(config) {
 			report(CodeSmell(
 					issue,
 					Entity.from(property),
-					message = "Names of constants inside objects should match the pattern: $propertyPattern"))
+					message = "Names of properties inside objects should match the pattern: $propertyPattern"))
 		}
 	}
 
