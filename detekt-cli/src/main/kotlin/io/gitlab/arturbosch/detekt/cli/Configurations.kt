@@ -70,7 +70,7 @@ data class FailFastConfig(private val originalConfig: Config, private val defaul
 
 private fun loadDefaultConfig() = YamlConfig.loadResource(ClasspathResourceConverter().convert(DEFAULT_CONFIG))
 
-private val DEFAULT_CONFIG = "default-detekt-config.yml"
+private const val DEFAULT_CONFIG = "default-detekt-config.yml"
 
 /**
  * @author lummax

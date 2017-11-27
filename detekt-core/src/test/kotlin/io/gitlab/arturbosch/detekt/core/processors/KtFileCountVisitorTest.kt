@@ -23,7 +23,7 @@ class KtFileCountVisitorTest {
 	private fun getData(file: KtFile): Int {
 		return with(file) {
 			accept(KtFileCountVisitor())
-			getUserData(NUMBER_OF_FILES_KEY)!!
+			getUserData(numberOfFilesKey)!!
 		}
 	}
 }

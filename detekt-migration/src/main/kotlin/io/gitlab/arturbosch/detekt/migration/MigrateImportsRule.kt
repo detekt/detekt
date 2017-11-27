@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.migration
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.PROJECT
+import io.gitlab.arturbosch.detekt.api.psiProject
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.codeStyle.CodeEditUtil
@@ -22,7 +22,7 @@ class MigrateImportsRule(config: Config) : Rule(config) {
 	private val replacements: HashMap<String, String> = config.valueOrDefault("imports", HashMap())
 	private val toReplaces = replacements.keys
 
-	private val factory = KtImportsFactory(PROJECT)
+	private val factory = KtImportsFactory(psiProject)
 
 	override fun visitImportList(importList: KtImportList) {
 

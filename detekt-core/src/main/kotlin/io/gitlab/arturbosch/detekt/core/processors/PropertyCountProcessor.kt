@@ -9,15 +9,15 @@ import org.jetbrains.kotlin.psi.KtProperty
 class PropertyCountProcessor : AbstractProjectMetricProcessor() {
 
 	override val visitor = PropertyCountVisitor()
-	override val key = NUMBER_OF_FIELDS_KEY
+	override val key = numberOfFieldsKey
 }
 
-val NUMBER_OF_FIELDS_KEY = Key<Int>("number of properties")
+val numberOfFieldsKey = Key<Int>("number of properties")
 
 class PropertyCountVisitor : DetektVisitor() {
 
 	override fun visitKtFile(file: KtFile) {
 		super.visitKtFile(file)
-		file.putUserData(NUMBER_OF_FIELDS_KEY, file.collectByType<KtProperty>().size)
+		file.putUserData(numberOfFieldsKey, file.collectByType<KtProperty>().size)
 	}
 }

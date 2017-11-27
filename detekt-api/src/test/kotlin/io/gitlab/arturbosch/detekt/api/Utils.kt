@@ -12,11 +12,10 @@ import java.net.URI
  */
 internal object Compiler {
 
-	private val psiFileFactory: PsiFileFactory = PsiFileFactory.getInstance(PROJECT)
+	private val psiFileFactory: PsiFileFactory = PsiFileFactory.getInstance(psiProject)
 
-	fun compileFromContent(content: String): KtFile {
-		return psiFileFactory.createFileFromText(KotlinLanguage.INSTANCE, StringUtilRt.convertLineSeparators(content)) as KtFile
-	}
+	fun compileFromContent(content: String): KtFile = psiFileFactory.createFileFromText(
+			KotlinLanguage.INSTANCE, StringUtilRt.convertLineSeparators(content)) as KtFile
 }
 
 fun compilerFor(resource: String) = Compiler.compileFromContent(

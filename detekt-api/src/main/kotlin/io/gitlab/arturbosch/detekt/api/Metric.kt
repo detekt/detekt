@@ -32,4 +32,4 @@ data class Metric(val type: String,
 /**
  * To represent a value of 0.5, use the metric value 50 and the conversion factor of 100. (50 / 100 = 0.5)
  */
-val DEFAULT_FLOAT_CONVERSION_FACTOR = 100
+const val DEFAULT_FLOAT_CONVERSION_FACTOR = 100

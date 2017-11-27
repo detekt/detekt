@@ -12,7 +12,7 @@ class FieldCountVisitorTest {
 		val file = compileForTest(path.resolve("../fields/ClassWithFields.kt"))
 		val count = with(file) {
 			accept(PropertyCountVisitor())
-			getUserData(NUMBER_OF_FIELDS_KEY)
+			getUserData(numberOfFieldsKey)
 		}
 		assertThat(count).isEqualTo(2)
 	}

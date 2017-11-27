@@ -12,7 +12,7 @@ class LOCVisitorTest {
 		val file = compileForTest(path.resolve("Default.kt"))
 		val loc = with(file) {
 			accept(LOCVisitor())
-			getUserData(LOC_KEY)
+			getUserData(linesKey)
 		}
 		Assertions.assertThat(loc).isEqualTo(8)
 	}

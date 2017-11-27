@@ -10,10 +10,10 @@ data class Baseline(val blacklist: Blacklist, val whitelist: Whitelist) {
 	}
 }
 
-val SMELL_BASELINE = "SmellBaseline"
-val BLACKLIST = "Blacklist"
-val WHITELIST = "Whitelist"
-val TIMESTAMP = "timestamp"
-val ID = "ID"
+const val SMELL_BASELINE = "SmellBaseline"
+const val BLACKLIST = "Blacklist"
+const val WHITELIST = "Whitelist"
+const val TIMESTAMP = "timestamp"
+const val ID = "ID"
 
 class InvalidBaselineState(msg: String, error: Throwable) : IllegalStateException(msg, error)

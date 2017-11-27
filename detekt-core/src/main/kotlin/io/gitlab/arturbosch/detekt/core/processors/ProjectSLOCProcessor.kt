@@ -7,7 +7,7 @@ import org.jetbrains.kotlin.psi.KtFile
 class ProjectSLOCProcessor : AbstractProcessor() {
 
 	override val visitor: DetektVisitor = SLOCVisitor()
-	override val key: Key<Int> = SLOC_KEY
+	override val key: Key<Int> = sourceLinesKey
 }
 
 class SLOCVisitor : DetektVisitor() {
@@ -15,7 +15,7 @@ class SLOCVisitor : DetektVisitor() {
 	override fun visitKtFile(file: KtFile) {
 		val lines = file.text.split('\n')
 		val sloc = SLOC().count(lines)
-		file.putUserData(SLOC_KEY, sloc)
+		file.putUserData(sourceLinesKey, sloc)
 	}
 
 	private class SLOC {
@@ -31,4 +31,4 @@ class SLOCVisitor : DetektVisitor() {
 	}
 }
 
-val SLOC_KEY = Key<Int>("sloc")
+val sourceLinesKey = Key<Int>("sloc")

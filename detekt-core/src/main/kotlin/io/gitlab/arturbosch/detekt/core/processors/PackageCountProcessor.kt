@@ -10,7 +10,7 @@ import org.jetbrains.kotlin.psi.KtFile
 class PackageCountProcessor : FileProcessListener {
 
 	private val visitor = PackageCountVisitor()
-	private val key = NUMBER_OF_PACKAGES_KEY
+	private val key = numberOfPackagesKey
 
 	override fun onProcess(file: KtFile) {
 		file.accept(visitor)
@@ -25,12 +25,12 @@ class PackageCountProcessor : FileProcessListener {
 	}
 }
 
-val NUMBER_OF_PACKAGES_KEY = Key<String>("number of packages")
+val numberOfPackagesKey = Key<String>("number of packages")
 
 class PackageCountVisitor : DetektVisitor() {
 
 	override fun visitKtFile(file: KtFile) {
 		val packageName = file.packageFqNameByTree.toString()
-		file.putUserData(NUMBER_OF_PACKAGES_KEY, packageName)
+		file.putUserData(numberOfPackagesKey, packageName)
 	}
 }

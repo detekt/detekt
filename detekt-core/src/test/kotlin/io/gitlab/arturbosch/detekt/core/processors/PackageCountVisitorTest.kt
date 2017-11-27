@@ -24,7 +24,7 @@ class PackageCountVisitorTest {
 	private fun getData(file: KtFile): String {
 		return with(file) {
 			accept(PackageCountVisitor())
-			getUserData(NUMBER_OF_PACKAGES_KEY)!!
+			getUserData(numberOfPackagesKey)!!
 		}
 	}
 }

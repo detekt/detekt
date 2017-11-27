@@ -22,7 +22,7 @@ internal class ComplexityVisitorTest {
 
 	private fun calcComplexity(path: Path) = with(compileForTest(path)) {
 		accept(ComplexityVisitor())
-		getUserData(COMPLEXITY_KEY)
+		getUserData(complexityKey)
 	}
 
 	@Test
