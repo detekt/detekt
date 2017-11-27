@@ -20,8 +20,7 @@ data class MultiRule(
 		val rules: List<String> = listOf()
 )
 
-private val MULTI_RULE = io.gitlab.arturbosch.detekt.api.MultiRule::class.simpleName ?: ""
-
+private val multiRule = io.gitlab.arturbosch.detekt.api.MultiRule::class.simpleName ?: ""
 
 class MultiRuleCollector : Collector<MultiRule> {
 	override val items = mutableListOf<MultiRule>()
@@ -61,7 +60,7 @@ class MultiRuleVisitor : DetektVisitor() {
 	override fun visitSuperTypeList(list: KtSuperTypeList) {
 		val isMultiRule = list.entries
 				?.mapNotNull { it.typeAsUserType?.referencedName }
-				?.any { it == MULTI_RULE } ?: false
+				?.any { it == multiRule } ?: false
 
 		val containingClass = list.containingClass()
 		val className = containingClass?.name
