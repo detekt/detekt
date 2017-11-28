@@ -16,7 +16,6 @@ import io.gitlab.arturbosch.detekt.rules.style.MagicNumber
 import io.gitlab.arturbosch.detekt.rules.style.MethodNameEqualsClassName
 import io.gitlab.arturbosch.detekt.rules.style.ModifierOrder
 import io.gitlab.arturbosch.detekt.rules.style.NestedClassesVisibility
-import io.gitlab.arturbosch.detekt.rules.style.NewLineAtEndOfFile
 import io.gitlab.arturbosch.detekt.rules.style.OptionalAbstractKeyword
 import io.gitlab.arturbosch.detekt.rules.style.OptionalWhenBraces
 import io.gitlab.arturbosch.detekt.rules.style.ProtectedMemberInFinalClass
@@ -54,7 +53,6 @@ class StyleGuideProvider : RuleSetProvider {
 				CollapsibleIfStatements(config),
 				ReturnCount(config),
 				ThrowsCount(config),
-				NewLineAtEndOfFile(config),
 				WildcardImport(config),
 				FileParsingRule(config),
 				EqualsNullCall(config),

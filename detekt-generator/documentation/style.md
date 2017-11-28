@@ -27,10 +27,6 @@ code.
 
 TODO: Specify description
 
-### NewLineAtEndOfFile
-
-TODO: Specify description
-
 ### WildcardImport
 
 Wildcard imports should be replaced with imports using fully qualified class names. This helps increase clarity of

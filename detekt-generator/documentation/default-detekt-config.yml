@@ -200,8 +200,6 @@ style:
     max: 2
   ThrowsCount:
     active: false
-  NewLineAtEndOfFile:
-    active: false
   WildcardImport:
     active: false
     excludeImports: ""
