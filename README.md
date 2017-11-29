@@ -253,7 +253,7 @@ detekt {
         filters = ".*test.*, .*/resources/.*" // What paths to exclude? Use comma oder semicolon to separate
         ruleSets = "other/optional/ruleset.jar" // Custom rule sets can be linked to this, use comma oder semicolon to separate, remove if unused.
         disableDefaultRuleSets = false // Disables the default rule set. Just use detekt as the detection engine with your custom rule sets.
-        output = "$project.projectDir/reports/detekt.xml" // If present, prints all findings into that file.
+        output = "$project.projectDir/reports" // Directory where output reports are stored (if present).
         outputName = "my-module" // This parameter is used to derive the output report name
         baseline = "$project.projectDir/reports/baseline.xml" // If present all current findings are saved in a baseline.xml to only consider new code smells for further runs.
         parallel = true // Use this flag if your project has more than 200 files. 
