@@ -42,4 +42,15 @@ class MarkdownContentSpec : Spek({
 			assertThat(expected).isEqualTo(actual)
 		}
 	}
+
+	given("a markdown reference to a heading") {
+
+		it("prints the correct content") {
+			val expected = "[Some text](#Some-text)\n"
+			val actual = markdown {
+				paragraph { referenceToHeading { "Some text" } }
+			}
+			assertThat(expected).isEqualTo(actual)
+		}
+	}
 })
