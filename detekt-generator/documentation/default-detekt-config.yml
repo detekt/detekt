@@ -227,7 +227,9 @@ style:
     active: false
   VariableMaxLength:
     active: false
-  ConstantNaming:
+  TopLevelPropertyNaming:
+    active: false
+  ObjectPropertyNaming:
     active: false
   PackageNaming:
     active: false
