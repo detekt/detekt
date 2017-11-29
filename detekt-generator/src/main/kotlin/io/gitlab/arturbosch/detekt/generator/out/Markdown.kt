@@ -32,6 +32,12 @@ inline fun MarkdownContent.h2(heading: () -> String) = append("## ${heading()}\n
 inline fun MarkdownContent.h3(heading: () -> String) = append("### ${heading()}\n")
 inline fun MarkdownContent.h4(heading: () -> String) = append("#### ${heading()}\n")
 
+inline fun MarkdownContent.orderedList(sectionList: () -> List<String>) {
+	for (i in 0 until sectionList().size) {
+		append("${i+1}. ${sectionList()[i]}")
+	}
+}
+
 inline fun MarkdownContent.code(code: () -> String) = "`${code()}`"
 fun MarkdownContent.emptyLine() = append("")
 
@@ -46,5 +52,3 @@ inline fun MarkdownContent.list(listContent: MarkdownList.() -> Unit) {
 
 inline fun MarkdownList.item(item: () -> String) = append("* ${item()}\n")
 inline fun MarkdownList.description(description: () -> String) = append("   ${description()}\n")
-
-

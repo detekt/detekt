@@ -4,6 +4,54 @@ The Style ruleset provides rules that assert the style of the code.
 This will help keep code in line with the given
 code style guidelines.
 
+## Content
+
+1. CollapsibleIfStatements
+2. ReturnCount
+3. ThrowsCount
+4. NewLineAtEndOfFile
+5. WildcardImport
+6. MaxLineLength
+7. EqualsNullCall
+8. ForbiddenComment
+9. ForbiddenImport
+10. FunctionOnlyReturningConstant
+11. SpacingBetweenPackageAndImports
+12. LoopWithTooManyJumpStatements
+13. MethodNameEqualsClassName
+14. VariableNaming
+15. VariableMinLength
+16. VariableMaxLength
+17. TopLevelPropertyNaming
+18. ObjectPropertyNaming
+19. PackageNaming
+20. ClassNaming
+21. EnumNaming
+22. FunctionNaming
+23. FunctionMaxLength
+24. FunctionMinLength
+25. ForbiddenClassName
+26. SafeCast
+27. UnnecessaryAbstractClass
+28. UnnecessaryParentheses
+29. UnnecessaryInheritance
+30. UtilityClassWithPublicConstructor
+31. OptionalAbstractKeyword
+32. OptionalWhenBraces
+33. OptionalReturnKeyword
+34. OptionalUnit
+35. ProtectedMemberInFinalClass
+36. SerialVersionUIDInSerializableClass
+37. MagicNumber
+38. ModifierOrder
+39. DataClassContainsFunctions
+40. UseDataClass
+41. UnusedImports
+42. ExpressionBodySyntax
+43. NestedClassesVisibility
+44. RedundantVisibilityModifierRule
+
+
 ## Rules in the `style` rule set:
 
 ### CollapsibleIfStatements
@@ -89,7 +137,11 @@ TODO: Specify description
 
 TODO: Specify description
 
-### ConstantNaming
+### TopLevelPropertyNaming
+
+TODO: Specify description
+
+### ObjectPropertyNaming
 
 TODO: Specify description
 

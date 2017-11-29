@@ -2,6 +2,13 @@
 
 The performance rule set analyzes code for potential performance problems.
 
+## Content
+
+1. ForEachOnRange
+2. SpreadOperator
+3. UnnecessaryTemporaryInstantiation
+
+
 ## Rules in the `performance` rule set:
 
 ### ForEachOnRange
