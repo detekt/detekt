@@ -12,6 +12,7 @@ import io.gitlab.arturbosch.detekt.generator.out.list
 import io.gitlab.arturbosch.detekt.generator.out.markdown
 import io.gitlab.arturbosch.detekt.generator.out.orderedList
 import io.gitlab.arturbosch.detekt.generator.out.paragraph
+import io.gitlab.arturbosch.detekt.generator.out.referenceToHeading
 import io.gitlab.arturbosch.detekt.generator.printer.DocumentationPrinter
 
 /**
@@ -30,8 +31,8 @@ object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
 
 			if (item.rules.isNotEmpty()) {
 				h2 { "Content" }
-				val ruleNames = item.rules.map { it.name }
-				orderedList { ruleNames }
+				val sections = item.rules.map { referenceToHeading { it.name } }
+				orderedList { sections }
 				h2 { "Rules in the ${code { item.ruleSet.name } } rule set:" }
 				item.rules.forEach {
 					markdown { printRule(it) }
