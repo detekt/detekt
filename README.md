@@ -875,6 +875,7 @@ As mentioned/used in ...
 - [Gradle plugin that generates ErrorProne, Findbugs, Checkstyle, PMD, CPD, Lint, Detekt & Ktlint Tasks for every subproject](https://github.com/vanniktech/gradle-code-quality-tools-plugin)
 - [Java library for parsing report files from static code analysis](https://github.com/tomasbjerre/violations-lib)
 - [Static code analysis for Kotlin in Android](https://blog.thefuntasty.com/static-code-analysis-for-kotlin-in-android-8676c8d6a3c5)
+- [The Art of Android DevOps](https://blog.undabot.com/the-art-of-android-devops-fa29396bc9ee)
 
 #### Credits
 - [JetBrains](https://github.com/jetbrains/) - Creating Intellij + Kotlin
