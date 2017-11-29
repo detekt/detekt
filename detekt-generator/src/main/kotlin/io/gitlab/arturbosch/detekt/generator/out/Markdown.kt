@@ -38,6 +38,9 @@ inline fun MarkdownContent.orderedList(sectionList: () -> List<String>) {
 	}
 }
 
+inline fun MarkdownContent.referenceToHeading(reference: () -> String) =
+		"[${reference()}](#${reference().replace(' ', '-')})"
+
 inline fun MarkdownContent.code(code: () -> String) = "`${code()}`"
 fun MarkdownContent.emptyLine() = append("")
 

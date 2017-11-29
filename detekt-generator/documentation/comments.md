@@ -5,12 +5,10 @@ of the code.
 
 ## Content
 
-1. CommentOverPrivateFunction
-2. CommentOverPrivateProperty
-3. UndocumentedPublicClass
-4. UndocumentedPublicFunction
-
-
+1. [CommentOverPrivateFunction](#CommentOverPrivateFunction)
+2. [CommentOverPrivateProperty](#CommentOverPrivateProperty)
+3. [UndocumentedPublicClass](#UndocumentedPublicClass)
+4. [UndocumentedPublicFunction](#UndocumentedPublicFunction)
 ## Rules in the `comments` rule set:
 
 ### CommentOverPrivateFunction

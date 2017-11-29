@@ -4,21 +4,19 @@ Rules in this rule set report issues related to how code throws and handles Exce
 
 ## Content
 
-1. TooGenericExceptionCaught
-2. ExceptionRaisedInUnexpectedLocation
-3. TooGenericExceptionThrown
-4. NotImplementedDeclaration
-5. PrintStackTrace
-6. InstanceOfCheckForException
-7. ThrowingExceptionsWithoutMessageOrCause
-8. ReturnFromFinally
-9. ThrowingExceptionFromFinally
-10. ThrowingExceptionInMain
-11. RethrowCaughtException
-12. ThrowingNewInstanceOfSameException
-13. SwallowedException
-
-
+1. [TooGenericExceptionCaught](#TooGenericExceptionCaught)
+2. [ExceptionRaisedInUnexpectedLocation](#ExceptionRaisedInUnexpectedLocation)
+3. [TooGenericExceptionThrown](#TooGenericExceptionThrown)
+4. [NotImplementedDeclaration](#NotImplementedDeclaration)
+5. [PrintStackTrace](#PrintStackTrace)
+6. [InstanceOfCheckForException](#InstanceOfCheckForException)
+7. [ThrowingExceptionsWithoutMessageOrCause](#ThrowingExceptionsWithoutMessageOrCause)
+8. [ReturnFromFinally](#ReturnFromFinally)
+9. [ThrowingExceptionFromFinally](#ThrowingExceptionFromFinally)
+10. [ThrowingExceptionInMain](#ThrowingExceptionInMain)
+11. [RethrowCaughtException](#RethrowCaughtException)
+12. [ThrowingNewInstanceOfSameException](#ThrowingNewInstanceOfSameException)
+13. [SwallowedException](#SwallowedException)
 ## Rules in the `exceptions` rule set:
 
 ### TooGenericExceptionCaught
