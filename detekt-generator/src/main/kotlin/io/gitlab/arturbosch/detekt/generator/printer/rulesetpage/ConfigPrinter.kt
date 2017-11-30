@@ -30,7 +30,8 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 				node(ruleSet.name) {
 					keyValue { "active" to "${ruleSet.active}" }
 
-					rules.forEach { rule ->
+					rules.forEach { ruleCode ->
+						val rule = ruleCode.rule
 						node(rule.name) {
 							keyValue { "active" to "${rule.active}" }
 							rule.configuration.forEach { configuration ->

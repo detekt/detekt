@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
+import io.gitlab.arturbosch.detekt.generator.printer.rulesetpage.RuleCode
 import io.gitlab.arturbosch.detekt.generator.printer.rulesetpage.RuleSetPage
 import org.jetbrains.kotlin.psi.KtFile
 
@@ -10,6 +11,7 @@ class DetektCollector : Collector<RuleSetPage> {
 	private val ruleSetProviderCollector = RuleSetProviderCollector()
 	private val ruleCollector = RuleCollector()
 	private val multiRuleCollector = MultiRuleCollector()
+	private val codeExampleCollector = CodeExampleCollector()
 
 	private val collectors = listOf(
 			ruleSetProviderCollector,
@@ -23,11 +25,13 @@ class DetektCollector : Collector<RuleSetPage> {
 		val rules = ruleCollector.items
 		val multiRules = multiRuleCollector.items.associateBy({ it.name }, { it.rules })
 		val ruleSets = ruleSetProviderCollector.items
+		val codeExamples = codeExampleCollector.collect()
 
 		return ruleSets.map { ruleSet ->
-			val consolidatedRules = ruleSet.rules.flatMap { ruleName ->
-				multiRules[ruleName] ?: listOf(ruleName)
-			}.mapNotNull { rules.findRuleByName(it) }
+			val consolidatedRules =
+					ruleSet.rules.flatMap { ruleName -> multiRules[ruleName] ?: listOf(ruleName) }
+							.mapNotNull { rules.findRuleByName(it) }
+							.map { createRuleCode(it, codeExamples) }
 			RuleSetPage(ruleSet, consolidatedRules)
 		}
 	}
@@ -38,6 +42,13 @@ class DetektCollector : Collector<RuleSetPage> {
 			println("Rule $ruleName was specified in provider but not collected.")
 		}
 		return rule
+	}
+
+	private fun createRuleCode(rule: Rule, codeExamples: Set<CodeExample>): RuleCode {
+		return RuleCode(
+				rule,
+				codeExamples.firstOrNull { e -> e.ruleName == rule.name }
+		)
 	}
 
 	override fun visit(file: KtFile) {
