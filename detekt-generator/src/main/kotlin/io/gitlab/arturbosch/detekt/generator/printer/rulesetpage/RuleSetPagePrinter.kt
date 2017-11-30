@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.generator.printer.rulesetpage
 
-import io.gitlab.arturbosch.detekt.generator.collection.Rule
 import io.gitlab.arturbosch.detekt.generator.out.code
 import io.gitlab.arturbosch.detekt.generator.out.description
 import io.gitlab.arturbosch.detekt.generator.out.h1
@@ -8,6 +7,7 @@ import io.gitlab.arturbosch.detekt.generator.out.h2
 import io.gitlab.arturbosch.detekt.generator.out.h3
 import io.gitlab.arturbosch.detekt.generator.out.h4
 import io.gitlab.arturbosch.detekt.generator.out.item
+import io.gitlab.arturbosch.detekt.generator.out.kotlinCode
 import io.gitlab.arturbosch.detekt.generator.out.list
 import io.gitlab.arturbosch.detekt.generator.out.markdown
 import io.gitlab.arturbosch.detekt.generator.out.orderedList
@@ -31,7 +31,7 @@ object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
 
 			if (item.rules.isNotEmpty()) {
 				h2 { "Content" }
-				val sections = item.rules.map { referenceToHeading { it.name } }
+				val sections = item.rules.map { referenceToHeading { it.rule.name } }
 				orderedList { sections }
 				h2 { "Rules in the ${code { item.ruleSet.name } } rule set:" }
 				item.rules.forEach {
@@ -43,8 +43,9 @@ object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
 		}
 	}
 
-	private fun printRule(rule: Rule): String {
+	private fun printRule(ruleCode: RuleCode): String {
 		return markdown {
+			val rule = ruleCode.rule
 			h3 { rule.name }
 
 			if (rule.description.isNotEmpty()) {
@@ -61,6 +62,14 @@ object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
 						description { it.description }
 					}
 				}
+			}
+
+			val codeExample = ruleCode.codeExample
+			if (codeExample != null) {
+				h4 { "Noncompliant Code:" }
+				kotlinCode { codeExample.nonCompliant }
+				h4 { "Compliant Code:" }
+				kotlinCode { codeExample.compliant }
 			}
 		}
 	}

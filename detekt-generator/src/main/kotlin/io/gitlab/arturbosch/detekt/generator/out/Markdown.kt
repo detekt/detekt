@@ -42,6 +42,8 @@ inline fun MarkdownContent.referenceToHeading(reference: () -> String) =
 		"[${reference()}](#${reference().replace(' ', '-')})"
 
 inline fun MarkdownContent.code(code: () -> String) = "`${code()}`"
+inline fun MarkdownContent.kotlinCode(code: () -> String) = "```kotlin\n${code()}\n```"
+
 fun MarkdownContent.emptyLine() = append("")
 
 inline fun MarkdownContent.list(listContent: MarkdownList.() -> Unit) {
