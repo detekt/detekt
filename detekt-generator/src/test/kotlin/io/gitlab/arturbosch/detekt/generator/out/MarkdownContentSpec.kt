@@ -53,4 +53,23 @@ class MarkdownContentSpec : Spek({
 			assertThat(expected).isEqualTo(actual)
 		}
 	}
+
+	given("markdown source code snippets") {
+
+		it("prints the correct single-line code") {
+			val expected = "`Hello World`\n"
+			val actual = markdown {
+				paragraph { code { "Hello World" } }
+			}
+			assertThat(expected).isEqualTo(actual)
+		}
+
+		it("prints the correct multi-line code") {
+			val expected = "```kotlin\nprintln()\n```\n"
+			val actual = markdown {
+				paragraph { kotlinCode { "println()" } }
+			}
+			assertThat(expected).isEqualTo(actual)
+		}
+	}
 })
