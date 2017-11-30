@@ -1,5 +1,16 @@
 # Detekt - Changelog
 
+#### RC5-6
+
+- update Kotlin to v1.1.61 - [#573](https://github.com/arturbosch/detekt/pull/573)
+- rules-test-rc5 - [#571](https://github.com/arturbosch/detekt/pull/571)
+- UnsafeCast: Fix in SpacingBetweenPackageImports, turn on rule, add present to baseline - [#570](https://github.com/arturbosch/detekt/pull/570)
+- Rework naming rules to match intellij inspections - [#569](https://github.com/arturbosch/detekt/pull/569)
+- 1.0.0-RC5-5 org.jetbrains.kotlin.psi.KtProperty cannot be cast to org.jetbrains.kotlin.psi.KtClassOrObject - [#568](https://github.com/arturbosch/detekt/issues/568)
+- housekeeping_rules - [#565](https://github.com/arturbosch/detekt/pull/565)
+
+See all issues at: [RC5-6](https://github.com/arturbosch/detekt/milestone/28)
+
 #### RC5-5
 
 - Add --plugins option to gradle plugin - Fixes #545 - [#561](https://github.com/arturbosch/detekt/pull/561)

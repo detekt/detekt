@@ -1,5 +1,28 @@
 # Migration Guide
 
+### RC5-5 -> RC5-6
+
+- fixed a critical bug in `SpacingBetweenPackageImports`, please update if you use this rule.
+- Aligned naming conventions rules to meet intellij inspections.
+    - ConstantNaming got removed
+    - TopLevelPropertyNaming and ObjectPropertyNaming was added
+    - there are now configuration parameters for private properties
+
+```yaml
+  VariableNaming:
+    active: true
+    variablePattern: '[a-z][A-Za-z0-9]*'
+    privateVariablePattern: '(_)?[a-z][A-Za-z0-9]*'
+  ObjectPropertyNaming:
+    active: true
+    propertyPattern: '[A-Za-z][_A-Za-z0-9]*'
+  TopLevelPropertyNaming:
+    active: true
+    constantPattern: '[A-Z][_A-Z0-9]*'
+    propertyPattern: '[a-z][A-Za-z\d]*'
+    privatePropertyPattern: '(_)?[a-z][A-Za-z0-9]*'
+```
+
 ### RC5-4 -> RC5-5
 
 - TooManyFunctions rule got a rework. Old property `threshold` was replaced with:
