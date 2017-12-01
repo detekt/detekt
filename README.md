@@ -478,7 +478,6 @@ exceptions:
       - Exception
       - IllegalMonitorStateException
       - IndexOutOfBoundsException
-      - InterruptedException
       - NullPointerException
       - RuntimeException
   TooGenericExceptionThrown:
