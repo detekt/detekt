@@ -15,7 +15,6 @@ class Exceptions {
 			throw Exception()
 		} catch (e: Exception) {
 		} catch (e: IllegalMonitorStateException) {
-		} catch (e: InterruptedException) {
 		} catch (e: IndexOutOfBoundsException) {
 			throw RuntimeException()
 		} catch (e: Throwable) {

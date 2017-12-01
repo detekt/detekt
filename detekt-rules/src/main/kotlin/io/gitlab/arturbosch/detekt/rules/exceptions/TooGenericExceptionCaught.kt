@@ -40,7 +40,6 @@ val caughtExceptionDefaults = listOf(
 		"Error",
 		"Exception",
 		"IllegalMonitorStateException",
-		"InterruptedException",
 		"NullPointerException",
 		"IndexOutOfBoundsException",
 		"RuntimeException",
