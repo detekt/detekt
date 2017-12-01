@@ -32,7 +32,6 @@ enum class Case(val file: String) {
 	LoopWithTooManyJumpStatementsNegative("cases/LoopWithTooManyJumpStatementsNegative.kt"),
 	LoopWithTooManyJumpStatementsPositive("cases/LoopWithTooManyJumpStatementsPositive.kt"),
 	NamingConventions("/cases/NamingConventions.kt"),
-	NewLineAtEndOfFile("/cases/NewLineAtEndOfFile.kt"),
 	MaxLineLength("/cases/MaxLineLength.kt"),
 	MethodNameEqualsClassNameNegative("/cases/MethodNameEqualsClassNameNegative.kt"),
 	MethodNameEqualsClassNamePositive("/cases/MethodNameEqualsClassNamePositive.kt"),

@@ -564,8 +564,6 @@ style:
   ReturnCount:
     active: true
     max: 2
-  NewLineAtEndOfFile:
-    active: true
   OptionalAbstractKeyword:
     active: true
   OptionalWhenBraces:
