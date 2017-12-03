@@ -12,6 +12,16 @@ import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
 
+/**
+ * Reports equals() methods which will always return true or false.
+ *
+ * Equals methods should always report if some other object is equal to the current object.
+ * See the Kotlin documentation for Any.equals(other: Any?):
+ * https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html
+ *
+ * @author schalkms
+ * @author Marvin Ramin
+ */
 class EqualsAlwaysReturnsTrueOrFalse(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue("EqualsAlwaysReturnsTrueOrFalse",

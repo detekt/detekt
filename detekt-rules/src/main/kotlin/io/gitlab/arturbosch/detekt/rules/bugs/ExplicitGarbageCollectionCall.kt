@@ -12,7 +12,13 @@ import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
 
 /**
+ * Reports all calls to explicitly trigger the Garbage Collector.
+ * Code should work independently of the garbage collector and should not require the GC to be triggered in certain
+ * points in time.
+ *
+ * @active since v1.0.0
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 class ExplicitGarbageCollectionCall(config: Config) : Rule(config) {
 

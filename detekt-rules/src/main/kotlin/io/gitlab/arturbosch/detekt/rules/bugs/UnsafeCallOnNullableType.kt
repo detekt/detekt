@@ -10,7 +10,12 @@ import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtUnaryExpression
 
 /**
+ * Reports unsafe calls on nullable types. These calls will throw a NullPointerException in case
+ * the nullable value is null. Kotlin provides many ways to work with nullable types to increase
+ * null safety. Guard the code appropriately to prevent NullPointerExceptions.
+ *
  * @author Ivan Balaksha
+ * @author Marvin Ramin
  */
 class UnsafeCallOnNullableType(config: Config = Config.empty) : Rule(config) {
 	override val issue: Issue = Issue("UnsafeCallOnNullableType",

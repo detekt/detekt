@@ -10,7 +10,14 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtWhenExpression
 
 /**
+ * Flags duplicate case statements in when expressions.
+ *
+ * If a when expression contains the same case statement multiple times they should be merged. Otherwise it might be
+ * easy to miss one of the cases when reading the code, leading to unwanted side effects.
+ *
+ * @active since v1.0.0
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 class DuplicateCaseInWhenExpression(config: Config) : Rule(config) {
 

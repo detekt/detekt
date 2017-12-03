@@ -12,6 +12,16 @@ import io.gitlab.arturbosch.detekt.rules.bugs.util.isImplementingIterator
 import io.gitlab.arturbosch.detekt.rules.bugs.util.throwsNoSuchElementExceptionThrown
 import org.jetbrains.kotlin.psi.KtClassOrObject
 
+/**
+ * Reports implementations of the Iterator interface which do not throw a NoSuchElementException in the
+ * implementation of the next() method. When there are no more elements to return an Iterator should throw a
+ * NoSuchElementException.
+ *
+ * See: https://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html#next()
+ *
+ * @author schalkms
+ * @author Marvin Ramin
+ */
 class IteratorNotThrowingNoSuchElementException(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue("IteratorNotThrowingNoSuchElementException", Severity.Defect,
