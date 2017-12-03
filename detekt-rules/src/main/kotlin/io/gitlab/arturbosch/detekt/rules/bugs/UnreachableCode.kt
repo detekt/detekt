@@ -14,6 +14,15 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.KtThrowExpression
 
+/**
+ * Reports unreachable code.
+ * Code can be unreachable because it is behind return, throw, continue or break expressions.
+ * This unreachable code should be removed as it serves no purpose.
+ *
+ * @active since v1.0.0
+ * @author schalkms
+ * @author Marvin Ramin
+ */
 class UnreachableCode(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue("UnreachableCode", Severity.Warning,

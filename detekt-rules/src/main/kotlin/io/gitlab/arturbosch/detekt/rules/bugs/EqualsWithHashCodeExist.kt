@@ -16,7 +16,15 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import java.util.ArrayDeque
 
 /**
+ * When a class overrides the equals() method it should also override the hashCode() method.
+ *
+ * All hash-based collections depend on objects meeting the equals-contract. Two equal objects must produce the
+ * same hashcode. When inheriting equals or hashcode, override the inherited and call the super method for
+ * clarification.
+ *
+ * @active since v1.0.0
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 class EqualsWithHashCodeExist(config: Config = Config.empty) : Rule(config) {
 

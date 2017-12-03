@@ -15,6 +15,14 @@ import org.jetbrains.kotlin.psi.KtLoopExpression
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.KtThrowExpression
 
+/**
+ * Reports loops which contain jump statements that jump regardless of any conditions.
+ * This implies that the loop is only executed once and thus could be rewritten without a
+ * loop alltogether.
+ *
+ * @author schalkms
+ * @author Marvin Ramin
+ */
 class UnconditionalJumpStatementInLoop(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName, Severity.Defect,

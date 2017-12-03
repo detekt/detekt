@@ -11,6 +11,13 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtForExpression
 
+/**
+ * Reports loop conditions which will never be triggered.
+ * This might be due to invalid ranges like (10..9) which will cause the loop to never be entered.
+ *
+ * @author schalkms
+ * @author Marvin Ramin
+ */
 class InvalidLoopCondition(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,

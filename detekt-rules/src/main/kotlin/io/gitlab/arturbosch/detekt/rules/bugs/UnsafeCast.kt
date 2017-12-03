@@ -10,7 +10,10 @@ import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
 import org.jetbrains.kotlin.psi.KtPsiUtil
 
 /**
+ * Reports casts which are unsafe. In case the cast is not possible it will throw an exception.
+ *
  * @author Ivan Balaksha
+ * @author Marvin Ramin
  */
 class UnsafeCast(config: Config = Config.empty) : Rule(config) {
 	override val issue: Issue = Issue("UnsafeCast",

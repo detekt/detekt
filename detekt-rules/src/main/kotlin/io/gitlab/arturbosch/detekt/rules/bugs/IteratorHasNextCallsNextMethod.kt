@@ -14,6 +14,14 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
+/**
+ * Verifies implementations of the Iterator interface.
+ * The hasNext() method of an Iterator implementation should not have any side effects.
+ * This rule reports implementations that call the next() method of the Iterator inside the hasNext() method.
+ *
+ * @author Marvin Ramin
+ * @author schalkms
+ */
 class IteratorHasNextCallsNextMethod(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue("IteratorHasNextCallsNextMethod", Severity.Defect,

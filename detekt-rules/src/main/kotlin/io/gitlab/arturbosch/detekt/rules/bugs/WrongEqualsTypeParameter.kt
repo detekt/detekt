@@ -10,6 +10,14 @@ import io.gitlab.arturbosch.detekt.rules.hasCorrectEqualsParameter
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
+/**
+ * Reports equals() methods which take in a wrongly typed parameter.
+ * Correct implementations of the equals() method should only take in a parameter of type Any?
+ * See: https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html
+ *
+ * @author schalkms
+ * @author Marvin Ramin
+ */
 class WrongEqualsTypeParameter(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue("WrongEqualsTypeParameter", Severity.Defect,
