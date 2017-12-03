@@ -14,6 +14,11 @@ import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtLoopExpression
 
+/**
+ * @configuration maxJumpCount - maximum allowed jumps in a loop (default: 1)
+ *
+ * @author Marvin Ramin
+ */
 class LoopWithTooManyJumpStatements(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName, Severity.Style,

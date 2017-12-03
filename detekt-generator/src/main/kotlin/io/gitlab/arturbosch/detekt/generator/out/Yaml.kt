@@ -49,4 +49,11 @@ inline fun YamlNode.keyValue(keyValue: () -> Pair<String, String>) {
 	val (key, value) = keyValue()
 	append("$key: $value")
 }
+
+inline fun YamlNode.list(name: String, list: List<String>) {
+	append("$name:")
+	list.forEach {
+		append(" - $it")
+	}
+}
 inline fun YamlNode.yaml(yaml: () -> String) = append(yaml())

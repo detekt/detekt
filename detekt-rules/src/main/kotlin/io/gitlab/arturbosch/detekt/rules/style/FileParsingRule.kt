@@ -25,6 +25,14 @@ class FileParsingRule(val config: Config = Config.empty) : MultiRule() {
 
 data class KtFileContent(val file: KtFile, val content: Sequence<String>)
 
+/**
+ * @configuration maxLineLength - maximum line length (default: 120)
+ * @configuration excludePackageStatements - if package statements should be ignored (default: false)
+ * @configuration excludeImportStatements - if import statements should be ignored (default: false)
+ *
+ * @active since v1.0.0
+ * @author Marvin Ramin
+ */
 class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,

@@ -12,7 +12,11 @@ import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
+ * @configuration threshold - maximum lines in a method (default: 20)
+ *
+ * @active since v1.0.0
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 class LongMethod(config: Config = Config.empty,
 				 threshold: Int = DEFAULT_ACCEPTED_METHOD_LENGTH) : ThresholdRule(config, threshold) {

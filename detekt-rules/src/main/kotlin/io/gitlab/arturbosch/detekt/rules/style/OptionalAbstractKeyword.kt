@@ -14,6 +14,10 @@ import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
 
+/**
+ * @active since v1.0.0
+ * @author Marvin Ramin
+ */
 class OptionalAbstractKeyword(config: Config = Config.empty) : Rule(config) {
 
 	private val visitor = AbstractDeclarationVisitor(this)

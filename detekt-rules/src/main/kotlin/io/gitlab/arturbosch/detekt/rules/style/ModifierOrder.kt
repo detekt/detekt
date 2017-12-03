@@ -36,6 +36,9 @@ import java.util.Arrays
 
 /**
  * Modifier order array taken from ktlint: https://github.com/shyiko/ktlint
+ *
+ * @active since v1.0.0
+ * @author Marvin Ramin
  */
 class ModifierOrder(config: Config = Config.empty) : Rule(config) {
 

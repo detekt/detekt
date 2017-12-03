@@ -19,7 +19,11 @@ import org.jetbrains.kotlin.psi.KtTryExpression
 import org.jetbrains.kotlin.psi.KtWhenExpression
 
 /**
+ * @configuration threshold - maximum nesting depth (default: 3)
+ *
+ * @active since v1.0.0
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 class NestedBlockDepth(config: Config = Config.empty,
 					   threshold: Int = DEFAULT_ACCEPTED_NESTING) : ThresholdRule(config, threshold) {

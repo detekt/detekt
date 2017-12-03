@@ -14,7 +14,15 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 
 /**
+ * @configuration thresholdInFiles - threshold in files (default: 10)
+ * @configuration thresholdInClasses - threshold in classes (default: 10)
+ * @configuration thresholdInInterfaces - threshold in interfaces (default: 10)
+ * @configuration thresholdInObjects - threshold in objects (default: 10)
+ * @configuration thresholdInEnums - threshold in enums (default: 10)
+ *
+ * @active since v1.0.0
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 

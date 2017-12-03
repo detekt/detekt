@@ -47,7 +47,7 @@ class RuleCollector : Collector<Rule> {
 
 private const val TAG_ACTIVE = "active"
 private const val TAG_CONFIGURATION = "configuration"
-private val configurationDefaultValueRegex = "\\(default: (.+)\\)".toRegex()
+private val configurationDefaultValueRegex = "\\(default: (.+)\\)".toRegex(RegexOption.DOT_MATCHES_ALL)
 
 class RuleVisitor : DetektVisitor() {
 	val containsRule

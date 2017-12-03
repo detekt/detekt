@@ -14,6 +14,13 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtProperty
 
+/**
+ * @configuration threshold - maximum amount of definitions in an interface (default: 10)
+ * @configuration includeStaticDeclarations - whether static declarations should be included (default: false)
+ *
+ * @author schalkms
+ * @author Marvin Ramin
+ */
 class ComplexInterface(config: Config = Config.empty,
 					   threshold: Int = DEFAULT_LARGE_INTERFACE_COUNT) : ThresholdRule(config, threshold) {
 

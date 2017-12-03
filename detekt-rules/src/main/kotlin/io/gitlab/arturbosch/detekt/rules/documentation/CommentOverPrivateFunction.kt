@@ -10,7 +10,9 @@ import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
+ * @active since v1.0.0
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 class CommentOverPrivateFunction(config: Config = Config.empty) : Rule(config) {
 

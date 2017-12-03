@@ -12,6 +12,14 @@ import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtVariableDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 
+/**
+ * @configuration constantPattern - naming pattern (default: '[A-Z][_A-Z0-9]*')
+ * @configuration propertyPattern - naming pattern (default: '[a-z][A-Za-z\d]*')
+ * @configuration privatePropertyPattern - naming pattern (default: '(_)?[a-z][A-Za-z0-9]*')
+ *
+ * @active since v1.0.0
+ * @author Marvin Ramin
+ */
 class TopLevelPropertyNaming(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,

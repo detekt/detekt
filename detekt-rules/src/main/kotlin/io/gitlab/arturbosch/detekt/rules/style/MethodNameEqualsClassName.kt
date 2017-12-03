@@ -13,6 +13,11 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 
+/**
+ * @configuration ignoreOverriddenFunction - if overridden functions should be ignored (default: true)
+ *
+ * @author Marvin Ramin
+ */
 class MethodNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName, Severity.Style,

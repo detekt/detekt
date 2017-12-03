@@ -9,6 +9,10 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
+/**
+ * @configuration maximumFunctionNameLength - maximum name length (default: 30)
+ * @author Marvin Ramin
+ */
 class FunctionMaxLength(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,

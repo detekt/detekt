@@ -13,6 +13,11 @@ import org.jetbrains.kotlin.psi.KtEnumEntry
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 
 /**
+ * @configuration searchInNestedClass - if nested classes should be searched (default: true)
+ * @configuration searchInInnerClass - if inner classes should be searched (default: true)
+ * @configuration searchInInnerObject - if inner objects should be searched (default: true)
+ * @configuration searchInInnerInterface - if inner interfaces should be searched (default: true)
+ *
  * @author Artur Bosch
  */
 class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {

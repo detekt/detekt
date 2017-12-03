@@ -25,6 +25,25 @@ import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 import java.util.Locale
 
+/**
+ * @configuration ignoreNumbers - numbers which do not count as magic numbers (default: '-1,0,1,2')
+ * @configuration ignoreHashCodeFunction - whether magic numbers in hashCode functions should be ignored
+ * (default: false)
+ * @configuration ignorePropertyDeclaration - whether magic numbers in property declarations should be ignored
+ * (default: false)
+ * @configuration ignoreConstantDeclaration - whether magic numbers in property declarations should be ignored
+ * (default: true)
+ * @configuration ignoreCompanionObjectPropertyDeclaration - whether magic numbers in companion object
+ * declarations should be ignored (default: true)
+ * @configuration ignoreAnnotation - whether magic numbers in annotations should be ignored
+ * (default: false)
+ * @configuration ignoreNamedArgument - whether magic numbers in named arguments should be ignored
+ * (default: true)
+ * @configuration ignoreEnums - whether magic numbers in enums should be ignored (default: false)
+ *
+ * @active since v1.0.0
+ * @author Marvin Ramin
+ */
 class MagicNumber(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName, Severity.Style,

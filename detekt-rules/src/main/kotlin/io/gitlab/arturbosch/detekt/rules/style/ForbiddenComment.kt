@@ -9,6 +9,12 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.com.intellij.psi.PsiComment
 
+/**
+ * @configuration values - forbidden comment strings (default: 'TODO:,FIXME:,STOPSHIP:')
+ *
+ * @active since v1.0.0
+ * @author Marvin Ramin
+ */
 class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,

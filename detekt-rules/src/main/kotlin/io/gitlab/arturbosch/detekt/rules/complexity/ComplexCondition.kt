@@ -15,7 +15,11 @@ import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtWhileExpression
 
 /**
+ * @configuration threshold - (default: 3)
+ *
+ * @active since v1.0.0
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 class ComplexCondition(config: Config = Config.empty,
 					   threshold: Int = DEFAULT_ACCEPTED_NESTING) : ThresholdRule(config, threshold) {

@@ -7,7 +7,9 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.isProtected
 
 /**
+ * @active since v1.0.0
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 class EmptyFunctionBlock(config: Config) : EmptyRule(config) {
 

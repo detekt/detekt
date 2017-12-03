@@ -9,6 +9,11 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
+/**
+ * @configuration functionPattern - naming pattern (default: '^([a-z$][a-zA-Z$0-9]*)|(`.*`)$')
+ * @active since v1.0.0
+ * @author Marvin Ramin
+ */
 class FunctionNaming(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,

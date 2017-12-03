@@ -9,7 +9,19 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtCatchClause
 
 /**
+ * @configuration exceptions - exceptions which are too generic and should not be caught
+ * (default: - ArrayIndexOutOfBoundsException
+ *			 - Error
+ *			 - Exception
+ *			 - IllegalMonitorStateException
+ *			 - NullPointerException
+ *			 - IndexOutOfBoundsException
+ *			 - RuntimeException
+ *			 - Throwable)
+ *
+ * @active since v1.0.0
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 class TooGenericExceptionCaught(config: Config) : Rule(config) {
 
