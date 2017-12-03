@@ -23,13 +23,44 @@ Rules in this rule set report issues related to how code throws and handles Exce
 
 TODO: Specify description
 
+#### Configuration options:
+
+* `exceptions` (default: `- ArrayIndexOutOfBoundsException
+- Error
+- Exception
+- IllegalMonitorStateException
+- NullPointerException
+- IndexOutOfBoundsException
+- RuntimeException
+- Throwable`)
+
+   exceptions which are too generic and should not be caught
+(default:
+
 ### ExceptionRaisedInUnexpectedLocation
 
 TODO: Specify description
 
+#### Configuration options:
+
+* `methodNames` (default: `'toString,hashCode,equals,finalize'`)
+
+   methods which should not throw exceptions
+
 ### TooGenericExceptionThrown
 
 TODO: Specify description
+
+#### Configuration options:
+
+* `exceptions` (default: `- Error
+- Exception
+- NullPointerException
+- Throwable
+- RuntimeException`)
+
+   exceptions which are too generic and should not be thrown
+(default:
 
 ### NotImplementedDeclaration
 
@@ -46,6 +77,12 @@ TODO: Specify description
 ### ThrowingExceptionsWithoutMessageOrCause
 
 TODO: Specify description
+
+#### Configuration options:
+
+* `exceptions` (default: `'IllegalArgumentException,IllegalStateException,IOException'`)
+
+   exceptions which should not be thrown without message or cause
 
 ### ReturnFromFinally
 
