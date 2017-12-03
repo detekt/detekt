@@ -161,11 +161,11 @@ performance:
 potential-bugs:
   active: true
   DuplicateCaseInWhenExpression:
-    active: false
+    active: true
   EqualsAlwaysReturnsTrueOrFalse:
     active: false
   EqualsWithHashCodeExist:
-    active: false
+    active: true
   IteratorNotThrowingNoSuchElementException:
     active: false
   IteratorHasNextCallsNextMethod:
@@ -177,7 +177,7 @@ potential-bugs:
   WrongEqualsTypeParameter:
     active: false
   ExplicitGarbageCollectionCall:
-    active: false
+    active: true
   LateinitUsage:
     active: false
     excludeAnnotatedProperties: ""
@@ -185,7 +185,7 @@ potential-bugs:
   UnconditionalJumpStatementInLoop:
     active: false
   UnreachableCode:
-    active: false
+    active: true
   UnsafeCallOnNullableType:
     active: false
   UnsafeCast:

@@ -22,39 +22,63 @@ The potential-bugs rule set provides rules that detect potential bugs.
 
 ### DuplicateCaseInWhenExpression
 
-TODO: Specify description
+Flags duplicate case statements in when expressions.
+
+If a when expression contains the same case statement multiple times they should be merged. Otherwise it might be
+easy to miss one of the cases when reading the code, leading to unwanted side effects.
 
 ### EqualsAlwaysReturnsTrueOrFalse
 
-TODO: Specify description
+Reports equals() methods which will always return true or false.
+
+Equals methods should always report if some other object is equal to the current object.
+See the Kotlin documentation for Any.equals(other: Any?):
+https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html
 
 ### EqualsWithHashCodeExist
 
-TODO: Specify description
+When a class overrides the equals() method it should also override the hashCode() method.
+
+All hash-based collections depend on objects meeting the equals-contract. Two equal objects must produce the
+same hashcode. When inheriting equals or hashcode, override the inherited and call the super method for
+clarification.
 
 ### IteratorNotThrowingNoSuchElementException
 
-TODO: Specify description
+Reports implementations of the Iterator interface which do not throw a NoSuchElementException in the
+implementation of the next() method. When there are no more elements to return an Iterator should throw a
+NoSuchElementException.
+
+See: https://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html#next()
 
 ### IteratorHasNextCallsNextMethod
 
-TODO: Specify description
+Verifies implementations of the Iterator interface.
+The hasNext() method of an Iterator implementation should not have any side effects.
+This rule reports implementations that call the next() method of the Iterator inside the hasNext() method.
 
 ### UselessPostfixExpression
 
-TODO: Specify description
+This rule reports postfix expressions (++, --) which are unused and thus unnecessary.
+This leads to confusion as a reader of the code might think the value will be incremented/decremented.
+However the value is replaced with the original value which might lead to bugs.
 
 ### InvalidLoopCondition
 
-TODO: Specify description
+Reports loop conditions which will never be triggered.
+This might be due to invalid ranges like (10..9) which will cause the loop to never be entered.
 
 ### WrongEqualsTypeParameter
 
-TODO: Specify description
+Reports equals() methods which take in a wrongly typed parameter.
+Correct implementations of the equals() method should only take in a parameter of type Any?
+See: https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html
 
 ### ExplicitGarbageCollectionCall
 
-TODO: Specify description
+Reports all calls to explicitly trigger the Garbage Collector.
+Code should work independently of the garbage collector and should not require the GC to be triggered in certain
+points in time.
 
 ### LateinitUsage
 
@@ -76,16 +100,22 @@ this check.
 
 ### UnconditionalJumpStatementInLoop
 
-TODO: Specify description
+Reports loops which contain jump statements that jump regardless of any conditions.
+This implies that the loop is only executed once and thus could be rewritten without a
+loop alltogether.
 
 ### UnreachableCode
 
-TODO: Specify description
+Reports unreachable code.
+Code can be unreachable because it is behind return, throw, continue or break expressions.
+This unreachable code should be removed as it serves no purpose.
 
 ### UnsafeCallOnNullableType
 
-TODO: Specify description
+Reports unsafe calls on nullable types. These calls will throw a NullPointerException in case
+the nullable value is null. Kotlin provides many ways to work with nullable types to increase
+null safety. Guard the code appropriately to prevent NullPointerExceptions.
 
 ### UnsafeCast
 
-TODO: Specify description
+Reports casts which are unsafe. In case the cast is not possible it will throw an exception.
