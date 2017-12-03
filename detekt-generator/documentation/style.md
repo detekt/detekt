@@ -73,6 +73,12 @@ code.
 
 TODO: Specify description
 
+#### Configuration options:
+
+* `max` (default: `2`)
+
+   maximum amount of throw statements in a method
+
 ### NewLineAtEndOfFile
 
 TODO: Specify description
@@ -86,7 +92,7 @@ Library updates can introduce naming clashes with your own classes which might r
 
 #### Configuration options:
 
-* `excludeImports` (default: `""`)
+* `excludeImports` (default: `'java.util.*,kotlinx.android.synthetic.*'`)
 
    Define a whitelist of package names that should be allowed to be imported
 with wildcard imports.
@@ -94,6 +100,20 @@ with wildcard imports.
 ### MaxLineLength
 
 TODO: Specify description
+
+#### Configuration options:
+
+* `maxLineLength` (default: `120`)
+
+   maximum line length
+
+* `excludePackageStatements` (default: `false`)
+
+   if package statements should be ignored
+
+* `excludeImportStatements` (default: `false`)
+
+   if import statements should be ignored
 
 ### EqualsNullCall
 
@@ -103,13 +123,35 @@ TODO: Specify description
 
 TODO: Specify description
 
+#### Configuration options:
+
+* `values` (default: `'TODO:,FIXME:,STOPSHIP:'`)
+
+   forbidden comment strings
+
 ### ForbiddenImport
 
 TODO: Specify description
 
+#### Configuration options:
+
+* `imports` (default: `''`)
+
+   imports which should not be used
+
 ### FunctionOnlyReturningConstant
 
 TODO: Specify description
+
+#### Configuration options:
+
+* `ignoreOverridableFunction` (default: `true`)
+
+   if overriden functions should be ignored
+
+* `excludedFunctions` (default: `'describeContents'`)
+
+   excluded functions
 
 ### SpacingBetweenPackageAndImports
 
@@ -119,57 +161,153 @@ TODO: Specify description
 
 TODO: Specify description
 
+#### Configuration options:
+
+* `maxJumpCount` (default: `1`)
+
+   maximum allowed jumps in a loop
+
 ### MethodNameEqualsClassName
 
 TODO: Specify description
+
+#### Configuration options:
+
+* `ignoreOverriddenFunction` (default: `true`)
+
+   if overridden functions should be ignored
 
 ### VariableNaming
 
 TODO: Specify description
 
+#### Configuration options:
+
+* `variablePattern` (default: `'[a-z][A-Za-z0-9]*'`)
+
+   naming pattern (default: '[a
+
+* `privateVariablePattern` (default: `'(_)?[a-z][A-Za-z0-9]*'`)
+
+   naming pattern ?[a
+
 ### VariableMinLength
 
 TODO: Specify description
+
+#### Configuration options:
+
+* `minimumVariableNameLength` (default: `3`)
+
+   maximum name length
 
 ### VariableMaxLength
 
 TODO: Specify description
 
+#### Configuration options:
+
+* `maximumVariableNameLength` (default: `30`)
+
+   maximum name length
+
 ### TopLevelPropertyNaming
 
 TODO: Specify description
+
+#### Configuration options:
+
+* `constantPattern` (default: `'[A-Z][_A-Z0-9]*'`)
+
+   naming pattern (default: '[A
+
+* `propertyPattern` (default: `'[a-z][A-Za-z\d]*'`)
+
+   naming pattern (default: '[a
+
+* `privatePropertyPattern` (default: `'(_)?[a-z][A-Za-z0-9]*'`)
+
+   naming pattern ?[a
 
 ### ObjectPropertyNaming
 
 TODO: Specify description
 
+#### Configuration options:
+
+* `propertyPattern` (default: `'[A-Za-z][_A-Za-z0-9]*'`)
+
+   naming pattern (default: '[A
+
 ### PackageNaming
 
 TODO: Specify description
+
+#### Configuration options:
+
+* `packagePattern` (default: `'^[a-z]+(\.[a-z][a-z0-9]*)*$'`)
+
+   naming pattern (default: '^[a
 
 ### ClassNaming
 
 TODO: Specify description
 
+#### Configuration options:
+
+* `classPattern` (default: `'[A-Z$][a-zA-Z$]*'`)
+
+   naming pattern (default: '[A
+
 ### EnumNaming
 
 TODO: Specify description
+
+#### Configuration options:
+
+* `enumEntryPattern` (default: `'^[A-Z$][a-zA-Z_$]*$'`)
+
+   naming pattern (default: '^[A
 
 ### FunctionNaming
 
 TODO: Specify description
 
+#### Configuration options:
+
+* `functionPattern` (default: `'^([a-z$][a-zA-Z$0-9]*)|(`.*`)$'`)
+
+   naming pattern (default: '^([a
+
 ### FunctionMaxLength
 
 TODO: Specify description
+
+#### Configuration options:
+
+* `maximumFunctionNameLength` (default: `30`)
+
+   maximum name length
 
 ### FunctionMinLength
 
 TODO: Specify description
 
+#### Configuration options:
+
+* `minimumFunctionNameLength` (default: `3`)
+
+   minimum name length
+
 ### ForbiddenClassName
 
 TODO: Specify description
+
+#### Configuration options:
+
+* `forbiddenName` (default: `''`)
+
+   forbidden class names
 
 ### SafeCast
 
@@ -221,6 +359,41 @@ TODO: Specify description
 
 TODO: Specify description
 
+#### Configuration options:
+
+* `ignoreNumbers` (default: `'-1,0,1,2'`)
+
+   numbers which do not count as magic numbers (default: '
+
+* `ignoreHashCodeFunction` (default: `false`)
+
+   whether magic numbers in hashCode functions should be ignored
+
+* `ignorePropertyDeclaration` (default: `false`)
+
+   whether magic numbers in property declarations should be ignored
+
+* `ignoreConstantDeclaration` (default: `true`)
+
+   whether magic numbers in property declarations should be ignored
+
+* `ignoreCompanionObjectPropertyDeclaration` (default: `true`)
+
+   whether magic numbers in companion object
+declarations should be ignored
+
+* `ignoreAnnotation` (default: `false`)
+
+   whether magic numbers in annotations should be ignored
+
+* `ignoreNamedArgument` (default: `true`)
+
+   whether magic numbers in named arguments should be ignored
+
+* `ignoreEnums` (default: `false`)
+
+   whether magic numbers in enums should be ignored
+
 ### ModifierOrder
 
 Modifier order array taken from ktlint: https://github.com/shyiko/ktlint
@@ -228,6 +401,12 @@ Modifier order array taken from ktlint: https://github.com/shyiko/ktlint
 ### DataClassContainsFunctions
 
 TODO: Specify description
+
+#### Configuration options:
+
+* `conversionFunctionPrefix` (default: `'to'`)
+
+   allowed conversion function names
 
 ### UseDataClass
 

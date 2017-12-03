@@ -21,41 +21,133 @@ This rule set contains rules that report complex code.
 
 TODO: Specify description
 
+#### Configuration options:
+
+* `threshold` (default: `5`)
+
+   maximum number of parameters
+
 ### LongMethod
 
 TODO: Specify description
+
+#### Configuration options:
+
+* `threshold` (default: `20`)
+
+   maximum lines in a method
 
 ### LargeClass
 
 TODO: Specify description
 
+#### Configuration options:
+
+* `threshold` (default: `150`)
+
+   maximum size of a class
+
 ### ComplexInterface
 
 TODO: Specify description
+
+#### Configuration options:
+
+* `threshold` (default: `10`)
+
+   maximum amount of definitions in an interface
+
+* `includeStaticDeclarations` (default: `false`)
+
+   whether static declarations should be included
 
 ### ComplexMethod
 
 TODO: Specify description
 
+#### Configuration options:
+
+* `threshold` (default: `10`)
+
+   maximum amount of functions in a class
+
 ### StringLiteralDuplication
 
 TODO: Specify description
+
+#### Configuration options:
+
+* `threshold` (default: `2`)
+
+   maximum allowed duplication
+
+* `ignoreAnnotation` (default: `true`)
+
+   if values in Annotations should be ignored
+
+* `excludeStringsWithLessThan5Characters` (default: `true`)
+
+   if short strings should be excluded
+
+* `ignoreStringsRegex` (default: `'$^'`)
+
+   RegEx of Strings that should be ignored
 
 ### MethodOverloading
 
 TODO: Specify description
 
+#### Configuration options:
+
+* `threshold` (default: `5`)
+
+   
+
 ### NestedBlockDepth
 
 TODO: Specify description
+
+#### Configuration options:
+
+* `threshold` (default: `3`)
+
+   maximum nesting depth
 
 ### TooManyFunctions
 
 TODO: Specify description
 
+#### Configuration options:
+
+* `thresholdInFiles` (default: `10`)
+
+   threshold in files
+
+* `thresholdInClasses` (default: `10`)
+
+   threshold in classes
+
+* `thresholdInInterfaces` (default: `10`)
+
+   threshold in interfaces
+
+* `thresholdInObjects` (default: `10`)
+
+   threshold in objects
+
+* `thresholdInEnums` (default: `10`)
+
+   threshold in enums
+
 ### ComplexCondition
 
 TODO: Specify description
+
+#### Configuration options:
+
+* `threshold` (default: `3`)
+
+   
 
 ### LabeledExpression
 

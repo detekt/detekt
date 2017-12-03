@@ -23,6 +23,24 @@ TODO: Specify description
 
 TODO: Specify description
 
+#### Configuration options:
+
+* `searchInNestedClass` (default: `true`)
+
+   if nested classes should be searched
+
+* `searchInInnerClass` (default: `true`)
+
+   if inner classes should be searched
+
+* `searchInInnerObject` (default: `true`)
+
+   if inner objects should be searched
+
+* `searchInInnerInterface` (default: `true`)
+
+   if inner interfaces should be searched
+
 ### UndocumentedPublicFunction
 
 TODO: Specify description
