@@ -14,6 +14,17 @@ import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtLiteralStringTemplateEntry
 
+/**
+ * @configuration threshold - maximum allowed duplication (default: 2)
+ * @configuration ignoreAnnotation - if values in Annotations should be ignored (default: true)
+ * @configuration excludeStringsWithLessThan5Characters - if short strings should be excluded (default: true)
+ * @configuration ignoreStringsRegex - RegEx of Strings that should be ignored (default: '$^')
+ *
+ * @active since v1.0.0
+ * @author schalkms
+ * @author Artur Bosch
+ * @author Marvin Ramin
+ */
 class StringLiteralDuplication(
 		config: Config = Config.empty,
 		threshold: Int = DEFAULT_DUPLICATION

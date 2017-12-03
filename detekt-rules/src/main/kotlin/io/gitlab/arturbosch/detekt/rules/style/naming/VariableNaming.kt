@@ -11,6 +11,13 @@ import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
 
+/**
+ * @configuration variablePattern - naming pattern (default: '[a-z][A-Za-z0-9]*')
+ * @configuration privateVariablePattern - naming pattern (default: '(_)?[a-z][A-Za-z0-9]*')
+ *
+ * @active since v1.0.0
+ * @author Marvin Ramin
+ */
 class VariableNaming(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,

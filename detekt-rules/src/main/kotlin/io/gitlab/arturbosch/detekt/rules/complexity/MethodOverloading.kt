@@ -13,6 +13,12 @@ import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
+/**
+ * @configuration threshold - (default: 5)
+ *
+ * @author schalkms
+ * @author Marvin Ramin
+ */
 class MethodOverloading(config: Config = Config.empty,
 						threshold: Int = ACCEPTED_OVERLOAD_COUNT) : ThresholdRule(config, threshold) {
 

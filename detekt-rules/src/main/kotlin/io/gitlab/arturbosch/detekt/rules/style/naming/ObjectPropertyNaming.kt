@@ -10,6 +10,11 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtVariableDeclaration
 
+/**
+ * @configuration propertyPattern - naming pattern (default: '[A-Za-z][_A-Za-z0-9]*')
+ * @active since v1.0.0
+ * @author Marvin Ramin
+ */
 class ObjectPropertyNaming(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,

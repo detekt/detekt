@@ -10,6 +10,10 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
 
+/**
+ * @configuration minimumVariableNameLength - maximum name length (default: 3)
+ * @author Marvin Ramin
+ */
 class VariableMinLength(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,

@@ -12,6 +12,14 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtThrowExpression
 
+/**
+ * @configuration methodNames - methods which should not throw exceptions
+ * (default: 'toString,hashCode,equals,finalize')
+ *
+ * @author schalkms
+ * @author Artur Bosch
+ * @author Marvin Ramin
+ */
 class ExceptionRaisedInUnexpectedLocation(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue("ExceptionRaisedInUnexpectedLocation", Severity.CodeSmell,

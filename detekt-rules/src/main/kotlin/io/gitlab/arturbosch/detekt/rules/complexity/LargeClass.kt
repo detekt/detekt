@@ -22,7 +22,11 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
 import java.util.ArrayDeque
 
 /**
+ * @configuration threshold - maximum size of a class (default: 150)
+ *
+ * @active since v1.0.0
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 class LargeClass(config: Config = Config.empty,
 				 threshold: Int = DEFAULT_ACCEPTED_CLASS_LENGTH) : ThresholdRule(config, threshold) {

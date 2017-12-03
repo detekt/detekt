@@ -17,8 +17,9 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  * Library updates can introduce naming clashes with your own classes which might result in compilation errors.
  *
  * @configuration excludeImports - Define a whitelist of package names that should be allowed to be imported
- * with wildcard imports. (default: "")
+ * with wildcard imports. (default: 'java.util.*,kotlinx.android.synthetic.*')
  *
+ * @active since v1.0.0
  * @author Artur Bosch
  */
 class WildcardImport(config: Config = Config.empty) : Rule(config) {

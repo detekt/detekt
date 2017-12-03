@@ -9,6 +9,10 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtProperty
 
+/**
+ * @configuration maximumVariableNameLength - maximum name length (default: 30)
+ * @author Marvin Ramin
+ */
 class VariableMaxLength(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,

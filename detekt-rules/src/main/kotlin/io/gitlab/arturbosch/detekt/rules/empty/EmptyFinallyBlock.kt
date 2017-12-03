@@ -4,7 +4,9 @@ import io.gitlab.arturbosch.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtFinallySection
 
 /**
+ * @active since v1.0.0
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 class EmptyFinallyBlock(config: Config) : EmptyRule(config) {
 

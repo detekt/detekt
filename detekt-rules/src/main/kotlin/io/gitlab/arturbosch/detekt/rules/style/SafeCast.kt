@@ -15,6 +15,10 @@ import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtIsExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 
+/**
+ * @active since v1.0.0
+ * @author Marvin Ramin
+ */
 class SafeCast(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName, Severity.Style, "Safe cast instead of if-else-null", Debt.FIVE_MINS)

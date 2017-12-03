@@ -8,6 +8,11 @@ import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.psiUtil.visibilityModifierType
 
+/**
+ * @active since v1.0.0
+ * @author schalkms
+ * @author Marvin Ramin
+ */
 class EmptyDefaultConstructor(config: Config) : EmptyRule(config = config) {
 
 	override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {

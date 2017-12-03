@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.generator.printer.rulesetpage
 
 import io.gitlab.arturbosch.detekt.generator.out.keyValue
+import io.gitlab.arturbosch.detekt.generator.out.list
 import io.gitlab.arturbosch.detekt.generator.out.node
 import io.gitlab.arturbosch.detekt.generator.out.yaml
 import io.gitlab.arturbosch.detekt.generator.printer.DocumentationPrinter
@@ -33,7 +34,11 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 						node(rule.name) {
 							keyValue { "active" to "${rule.active}" }
 							rule.configuration.forEach { configuration ->
-								keyValue { configuration.name to configuration.defaultValue }
+								if (configuration.defaultValue.isYamlList()) {
+									list(configuration.name, configuration.defaultValue.toList())
+								} else {
+									keyValue { configuration.name to configuration.defaultValue }
+								}
 							}
 						}
 					}
@@ -118,4 +123,10 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 			  #  - 'XmlOutputReport'
 			""".trimIndent()
 	}
+}
+
+private fun String.isYamlList() = trim().startsWith("-")
+private fun String.toList(): List<String> {
+	return split("\n").map { it.replace("-", "") }
+			.map { it.trim() }
 }

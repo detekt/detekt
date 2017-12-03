@@ -6,7 +6,9 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import org.jetbrains.kotlin.psi.KtClassOrObject
 
 /**
+ * @active since v1.0.0
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 class EmptyClassBlock(config: Config) : EmptyRule(config) {
 

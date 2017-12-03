@@ -9,6 +9,10 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
+/**
+ * @configuration minimumFunctionNameLength - minimum name length (default: 3)
+ * @author Marvin Ramin
+ */
 class FunctionMinLength(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,

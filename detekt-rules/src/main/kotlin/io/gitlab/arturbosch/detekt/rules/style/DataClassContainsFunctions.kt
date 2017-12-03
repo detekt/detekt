@@ -11,6 +11,10 @@ import io.gitlab.arturbosch.detekt.rules.isOverridden
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
+/**
+ * @configuration conversionFunctionPrefix - allowed conversion function names (default: 'to')
+ * @author Marvin Ramin
+ */
 class DataClassContainsFunctions(config: Config = Config.empty) : Rule(config) {
 
 	override val issue: Issue = Issue("DataClassContainsFunctions",

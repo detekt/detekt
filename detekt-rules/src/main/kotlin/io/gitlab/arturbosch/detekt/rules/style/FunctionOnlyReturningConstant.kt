@@ -16,6 +16,11 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
+/**
+ * @configuration ignoreOverridableFunction - if overriden functions should be ignored (default: true)
+ * @configuration excludedFunctions - excluded functions (default: 'describeContents')
+ * @author Marvin Ramin
+ */
 class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName, Severity.Style,

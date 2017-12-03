@@ -9,6 +9,11 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtEnumEntry
 
+/**
+ * @configuration enumEntryPattern - naming pattern (default: '^[A-Z$][a-zA-Z_$]*$')
+ * @active since v1.0.0
+ * @author Marvin Ramin
+ */
 class EnumNaming(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,

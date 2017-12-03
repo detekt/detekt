@@ -8,7 +8,9 @@ import org.jetbrains.kotlin.lexer.KtSingleValueToken
 import org.jetbrains.kotlin.psi.KtIfExpression
 
 /**
+ * @active since v1.0.0
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 class EmptyIfBlock(config: Config) : EmptyRule(config) {
 

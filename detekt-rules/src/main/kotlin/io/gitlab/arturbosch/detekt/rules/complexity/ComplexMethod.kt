@@ -11,7 +11,11 @@ import io.gitlab.arturbosch.detekt.api.internal.McCabeVisitor
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
+ * @configuration threshold - maximum amount of functions in a class (default: 10)
+ *
+ * @active since v1.0.0
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 class ComplexMethod(config: Config = Config.empty,
 					threshold: Int = DEFAULT_ACCEPTED_METHOD_COMPLEXITY) : ThresholdRule(config, threshold) {

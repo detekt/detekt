@@ -6,7 +6,9 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import org.jetbrains.kotlin.psi.KtWhenExpression
 
 /**
+ * @active since v1.0.0
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 class EmptyWhenBlock(config: Config) : EmptyRule(config) {
 
