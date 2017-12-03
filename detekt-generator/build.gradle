@@ -1,23 +1,39 @@
 mainClassName = 'io.gitlab.arturbosch.detekt.generator.Main'
 
 jar {
-	manifest {
-		attributes 'Main-Class': 'io.gitlab.arturbosch.detekt.generator.Main'
-	}
+    manifest {
+        attributes 'Main-Class': 'io.gitlab.arturbosch.detekt.generator.Main'
+    }
 }
 
 configurations {
-	// implementation.extendsFrom kotlin is not enough for using cli in a gradle task - #58
-	testImplementation.extendsFrom kotlinTest
+    // implementation.extendsFrom kotlin is not enough for using cli in a gradle task - #58
+    testImplementation.extendsFrom kotlinTest
+}
+
+task generateDocumentation(dependsOn: ":detekt-generator:shadowJar") {
+    doLast {
+        javaexec {
+            main = "-jar"
+            args = [
+                    "$rootProject.rootDir/detekt-generator/build/libs/detekt-generator-$detektVersion-all.jar",
+                    "--input",
+                    "$rootProject.rootDir/detekt-rules/src/main/kotlin",
+                    "--output",
+                    "$rootProject.rootDir/detekt-generator/documentation"
+            ]
+        }
+    }
 }
 
 dependencies {
-	compile project(':detekt-core')
-	compile project(':detekt-rules')
-	compile "org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion"
-	
-	testImplementation project(':detekt-test')
-	testRuntime "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
-	testRuntime "org.junit.platform:junit-platform-console:$junitPlatformVersion"
-	testRuntime "org.jetbrains.spek:spek-junit-platform-engine:$spekVersion"
+    implementation project(':detekt-core')
+    implementation project(':detekt-rules')
+    implementation "com.beust:jcommander:$jcommanderVersion"
+    implementation "org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion"
+
+    testImplementation project(':detekt-test')
+    testRuntime "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
+    testRuntime "org.junit.platform:junit-platform-console:$junitPlatformVersion"
+    testRuntime "org.jetbrains.spek:spek-junit-platform-engine:$spekVersion"
 }
