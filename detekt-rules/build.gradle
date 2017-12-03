@@ -3,6 +3,8 @@ configurations {
 	testImplementation.extendsFrom kotlinTest
 }
 
+build.finalizedBy(":detekt-generator:generateDocumentation")
+
 dependencies {
 	implementation project(':detekt-api')
 	

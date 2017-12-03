@@ -5,15 +5,16 @@ import io.gitlab.arturbosch.detekt.generator.out.yamlFile
 import io.gitlab.arturbosch.detekt.generator.printer.rulesetpage.ConfigPrinter
 import io.gitlab.arturbosch.detekt.generator.printer.rulesetpage.RuleSetPage
 import io.gitlab.arturbosch.detekt.generator.printer.rulesetpage.RuleSetPagePrinter
+import java.nio.file.Path
 
 class DetektPrinter {
 
-	fun print(pages: List<RuleSetPage>) {
+	fun print(path: Path, pages: List<RuleSetPage>) {
 		pages.forEach {
-			markdownFile(it.ruleSet.name) { RuleSetPagePrinter.print(it) }
+			markdownFile(path, it.ruleSet.name) { RuleSetPagePrinter.print(it) }
 		}
 
-		yamlFile("default-detekt-config") { ConfigPrinter.print(pages) }
+		yamlFile(path, "default-detekt-config") { ConfigPrinter.print(pages) }
 	}
 
 }

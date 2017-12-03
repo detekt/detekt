@@ -3,20 +3,19 @@ package io.gitlab.arturbosch.detekt.generator
 import io.gitlab.arturbosch.detekt.core.KtTreeCompiler
 import io.gitlab.arturbosch.detekt.generator.collection.DetektCollector
 import io.gitlab.arturbosch.detekt.generator.printer.DetektPrinter
-import java.nio.file.Path
 import kotlin.system.measureTimeMillis
 
 /**
  * @author Marvin Ramin
  */
-class Runner(val path: Path) {
+class Runner(private val arguments: Args) {
 	private val listeners = listOf(DetektProgressListener())
 	private val collector = DetektCollector()
 	private val printer = DetektPrinter()
 
 	fun execute() {
 		val time = measureTimeMillis {
-			val ktFiles = KtTreeCompiler(path).compile()
+			val ktFiles = KtTreeCompiler(arguments.inputPath).compile()
 			listeners.forEach { it.onStart(ktFiles) }
 
 			ktFiles.forEach { file ->
@@ -24,7 +23,7 @@ class Runner(val path: Path) {
 						collector.visit(file)
 					}
 
-			printer.print(collector.items)
+			printer.print(arguments.outputPath, collector.items)
 		}
 
 		println("\nGenerated all detekt documentation in $time ms.")
