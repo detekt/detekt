@@ -29,8 +29,12 @@ private fun parseArgumentsCheckingReportDirectory(args: Array<String>): Args {
 private fun validateCli(arguments: Args): List<String> {
 	val violations = ArrayList<String>()
 	with(arguments) {
-		if (Files.exists(outputPath) && outputPath.isFile()) {
-			violations += "Output file must be a directory."
+		if (Files.exists(documentationPath) && documentationPath.isFile()) {
+			violations += "Documentation path must be a directory."
+		}
+
+		if (Files.exists(configPath) && configPath.isFile()) {
+			violations += "Config path must be a directory."
 		}
 
 		if (!Files.exists(inputPath) || inputPath.isFile()) {

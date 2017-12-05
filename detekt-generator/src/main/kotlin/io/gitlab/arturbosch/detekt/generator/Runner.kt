@@ -11,7 +11,7 @@ import kotlin.system.measureTimeMillis
 class Runner(private val arguments: Args) {
 	private val listeners = listOf(DetektProgressListener())
 	private val collector = DetektCollector()
-	private val printer = DetektPrinter()
+	private val printer = DetektPrinter(arguments)
 
 	fun execute() {
 		val time = measureTimeMillis {
@@ -23,7 +23,7 @@ class Runner(private val arguments: Args) {
 						collector.visit(file)
 					}
 
-			printer.print(arguments.outputPath, collector.items)
+			printer.print(collector.items)
 		}
 
 		println("\nGenerated all detekt documentation in $time ms.")

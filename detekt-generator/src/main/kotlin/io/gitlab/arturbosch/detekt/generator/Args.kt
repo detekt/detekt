@@ -17,10 +17,15 @@ class Args {
 			converter = ExistingPathConverter::class, description = "Input path to analyze (path/to/project).")
 	private var input: Path? = null
 
-	@Parameter(names = arrayOf("--output", "-o"),
+	@Parameter(names = arrayOf("--documentation", "-d"),
 			required = true,
 			converter = ExistingPathConverter::class, description = "Output path for generated documentation.")
-	private var output: Path? = null
+	private var documentation: Path? = null
+
+	@Parameter(names = arrayOf("--config", "-c"),
+			required = true,
+			converter = ExistingPathConverter::class, description = "Output path for generated detekt config.")
+	private var config: Path? = null
 
 	@Parameter(names = arrayOf("--help", "-h"),
 			help = true, description = "Shows the usage.")
@@ -29,8 +34,11 @@ class Args {
 	val inputPath: Path
 		get() = input ?: throw IllegalStateException("Input path was not initialized by jcommander!")
 
-	val outputPath: Path
-		get() = output ?: throw IllegalStateException("Output path was not initialized by jcommander!")
+	val documentationPath: Path
+		get() = documentation ?: throw IllegalStateException("Output path was not initialized by jcommander!")
+
+	val configPath: Path
+		get() = config ?: throw IllegalStateException("Output path was not initialized by jcommander!")
 }
 
 class ExistingPathConverter : IStringConverter<Path> {
