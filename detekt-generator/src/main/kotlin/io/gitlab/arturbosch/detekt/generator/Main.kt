@@ -33,7 +33,7 @@ private fun validateCli(arguments: Args): List<String> {
 			violations += "Output file must be a directory."
 		}
 
-		if (!Files.exists(inputPath) || outputPath.isFile()) {
+		if (!Files.exists(inputPath) || inputPath.isFile()) {
 			violations += "Input path must exist"
 		}
 	}
