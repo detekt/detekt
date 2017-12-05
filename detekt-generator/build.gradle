@@ -19,8 +19,10 @@ task generateDocumentation(dependsOn: ":detekt-generator:shadowJar") {
                     "$rootProject.rootDir/detekt-generator/build/libs/detekt-generator-$detektVersion-all.jar",
                     "--input",
                     "$rootProject.rootDir/detekt-rules/src/main/kotlin",
-                    "--output",
-                    "$rootProject.rootDir/detekt-generator/documentation"
+                    "--documentation",
+                    "$rootProject.rootDir/detekt-generator/documentation",
+                    "--config",
+                    "$rootProject.rootDir/detekt-cli/src/main/resources"
             ]
         }
     }
