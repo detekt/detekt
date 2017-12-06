@@ -20,7 +20,6 @@ import org.jetbrains.kotlin.psi.KtLiteralStringTemplateEntry
  * @configuration excludeStringsWithLessThan5Characters - if short strings should be excluded (default: true)
  * @configuration ignoreStringsRegex - RegEx of Strings that should be ignored (default: '$^')
  *
- * @active since v1.0.0
  * @author schalkms
  * @author Artur Bosch
  * @author Marvin Ramin
