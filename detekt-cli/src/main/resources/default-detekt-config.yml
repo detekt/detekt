@@ -349,9 +349,9 @@ style:
 comments:
   active: true
   CommentOverPrivateFunction:
-    active: true
+    active: false
   CommentOverPrivateProperty:
-    active: true
+    active: false
   UndocumentedPublicClass:
     active: false
     searchInNestedClass: true
