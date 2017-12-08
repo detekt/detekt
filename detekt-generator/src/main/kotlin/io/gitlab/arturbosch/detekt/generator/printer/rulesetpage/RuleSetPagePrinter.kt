@@ -8,7 +8,7 @@ import io.gitlab.arturbosch.detekt.generator.out.h2
 import io.gitlab.arturbosch.detekt.generator.out.h3
 import io.gitlab.arturbosch.detekt.generator.out.h4
 import io.gitlab.arturbosch.detekt.generator.out.item
-import io.gitlab.arturbosch.detekt.generator.out.kotlinCode
+import io.gitlab.arturbosch.detekt.generator.out.codeBlock
 import io.gitlab.arturbosch.detekt.generator.out.list
 import io.gitlab.arturbosch.detekt.generator.out.markdown
 import io.gitlab.arturbosch.detekt.generator.out.orderedList
@@ -66,12 +66,12 @@ object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
 
 			if (rule.nonCompliantCodeExample.isNotEmpty()) {
 				h4 { "Noncompliant Code:" }
-				paragraph { kotlinCode { rule.nonCompliantCodeExample } }
+				paragraph { codeBlock { rule.nonCompliantCodeExample } }
 			}
 
 			if (rule.compliantCodeExample.isNotEmpty()) {
 				h4 { "Compliant Code:" }
-				paragraph { kotlinCode { rule.compliantCodeExample } }
+				paragraph { codeBlock { rule.compliantCodeExample } }
 			}
 		}
 	}
