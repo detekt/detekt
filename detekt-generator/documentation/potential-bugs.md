@@ -43,6 +43,32 @@ All hash-based collections depend on objects meeting the equals-contract. Two eq
 same hashcode. When inheriting equals or hashcode, override the inherited and call the super method for
 clarification.
 
+#### Noncompliant Code:
+
+```kotlin
+class A {
+
+    override fun equals(other: Any?): Boolean {
+        return super.equals(other)
+    }
+
+    override fun hashCode(): Int {
+        return super.hashCode()
+    }
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+class Test {
+
+    override fun equals(other: Any?): Boolean {
+        return super.equals(other)
+    }
+}
+```
+
 ### IteratorNotThrowingNoSuchElementException
 
 Reports implementations of the Iterator interface which do not throw a NoSuchElementException in the
