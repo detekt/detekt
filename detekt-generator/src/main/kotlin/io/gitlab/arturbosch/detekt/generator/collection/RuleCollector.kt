@@ -12,26 +12,6 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
 /**
  * @author Marvin Ramin
  */
-data class Rule(
-		val name: String,
-		val description: String,
-		val active: Boolean,
-		val configuration: List<Configuration> = listOf()
-)
-
-data class Configuration(
-		val name: String,
-		val description: String,
-		val defaultValue: String
-)
-
-private val ruleClasses = listOf(
-		io.gitlab.arturbosch.detekt.api.Rule::class.simpleName,
-		ThresholdRule::class.simpleName,
-		EmptyRule::class.simpleName
-)
-
-
 class RuleCollector : Collector<Rule> {
 	override val items = mutableListOf<Rule>()
 
@@ -45,14 +25,26 @@ class RuleCollector : Collector<Rule> {
 	}
 }
 
+private val ruleClasses = listOf(
+		io.gitlab.arturbosch.detekt.api.Rule::class.simpleName,
+		ThresholdRule::class.simpleName,
+		EmptyRule::class.simpleName
+)
+
 private const val TAG_ACTIVE = "active"
 private const val TAG_CONFIGURATION = "configuration"
+private const val TAG_NONCOMPLIANT = "<noncompliant>"
+private const val ENDTAG_NONCOMPLIANT = "</noncompliant>"
+private const val TAG_COMPLIANT = "<compliant>"
+private const val ENDTAG_COMPLIANT = "</compliant>"
 private val configurationDefaultValueRegex = "\\(default: (.+)\\)".toRegex(RegexOption.DOT_MATCHES_ALL)
 
 class RuleVisitor : DetektVisitor() {
 	val containsRule
 		get() = classesMap.any { it.value }
 	private var description = ""
+	private var nonCompliant = ""
+	private var compliant = ""
 	private var name = ""
 	private var active = false
 	private val configuration = mutableListOf<Configuration>()
@@ -63,7 +55,7 @@ class RuleVisitor : DetektVisitor() {
 			println("Rule $name is missing a description")
 		}
 
-		return Rule(name, description, active, configuration)
+		return Rule(name, description, compliant, nonCompliant, active, configuration)
 	}
 
 	override fun visitSuperTypeList(list: KtSuperTypeList) {
@@ -86,9 +78,28 @@ class RuleVisitor : DetektVisitor() {
 		}
 
 		name = classOrObject.name?.trim() ?: ""
-		description = classOrObject.kDocSection()?.getContent()?.trim() ?: ""
 		active = classOrObject.kDocSection()?.findTagByName(TAG_ACTIVE) != null
+
+		val comment = classOrObject.kDocSection()?.getContent()?.trim() ?: return
+		extractRuleDocumentation(comment)
 		findConfigurationOptions(classOrObject)
+	}
+
+	private fun extractRuleDocumentation(comment: String) {
+		val nonCompliantIndex = comment.indexOf(TAG_NONCOMPLIANT)
+		if (nonCompliantIndex != -1) {
+			val nonCompliantEndIndex = comment.indexOf(ENDTAG_NONCOMPLIANT)
+			val compliantIndex = comment.indexOf(TAG_COMPLIANT)
+			val compliantEndIndex = comment.indexOf(ENDTAG_COMPLIANT)
+			if (nonCompliantEndIndex == -1 || compliantIndex == -1 || compliantEndIndex == -1) {
+				throw InvalidCodeExampleDocumentationException()
+			}
+			description = comment.substring(0, nonCompliantIndex).trim()
+			nonCompliant = comment.substring(nonCompliantIndex + TAG_NONCOMPLIANT.length, nonCompliantEndIndex).trim()
+			compliant = comment.substring(compliantIndex + TAG_COMPLIANT.length, compliantEndIndex).trim()
+		} else {
+			description = comment
+		}
 	}
 
 	private fun findConfigurationOptions(classOrObject: KtClassOrObject) {
