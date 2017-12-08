@@ -50,92 +50,65 @@ output-reports:
   #  - 'PlainOutputReport'
   #  - 'XmlOutputReport'
 
-potential-bugs:
+code-smell:
+  active: false
+
+comments:
   active: true
-  DuplicateCaseInWhenExpression:
-    active: true
-  EqualsAlwaysReturnsTrueOrFalse:
+  CommentOverPrivateFunction:
     active: false
-  EqualsWithHashCodeExist:
-    active: true
-  InvalidLoopCondition:
+  CommentOverPrivateProperty:
     active: false
-  WrongEqualsTypeParameter:
+  UndocumentedPublicClass:
     active: false
-  IteratorHasNextCallsNextMethod:
-    active: false
-  ExplicitGarbageCollectionCall:
-    active: true
-  UnconditionalJumpStatementInLoop:
-    active: false
-  IteratorNotThrowingNoSuchElementException:
-    active: false
-  UnreachableCode:
-    active: true
-  LateinitUsage:
-    active: false
-    excludeAnnotatedProperties: ''
-    ignoreOnClassesPattern: ''
-  UnsafeCallOnNullableType:
-    active: false
-  UnsafeCast:
-    active: false
-  UselessPostfixExpression:
+    searchInNestedClass: true
+    searchInInnerClass: true
+    searchInInnerObject: true
+    searchInInnerInterface: true
+  UndocumentedPublicFunction:
     active: false
 
-performance:
+complexity:
   active: true
-  ForEachOnRange:
+  LongParameterList:
     active: true
-  SpreadOperator:
+    threshold: 5
+  LongMethod:
     active: true
-  UnnecessaryTemporaryInstantiation:
+    threshold: 20
+  LargeClass:
     active: true
-
-exceptions:
-  active: true
-  ExceptionRaisedInUnexpectedLocation:
+    threshold: 150
+  ComplexInterface:
     active: false
-    methodNames: 'toString,hashCode,equals,finalize'
-  SwallowedException:
-    active: false
-  TooGenericExceptionCaught:
+    threshold: 10
+    includeStaticDeclarations: false
+  ComplexMethod:
     active: true
-    exceptions:
-      - ArrayIndexOutOfBoundsException
-      - Error
-      - Exception
-      - IllegalMonitorStateException
-      - IndexOutOfBoundsException
-      - NullPointerException
-      - RuntimeException
-      - Throwable
-  TooGenericExceptionThrown:
+    threshold: 10
+  StringLiteralDuplication:
+    active: false
+    threshold: 2
+    ignoreAnnotation: true
+    excludeStringsWithLessThan5Characters: true
+    ignoreStringsRegex: '$^'
+  MethodOverloading:
+    active: false
+    threshold: 5
+  NestedBlockDepth:
     active: true
-    exceptions:
-      - Error
-      - Exception
-      - NullPointerException
-      - RuntimeException
-      - Throwable
-  InstanceOfCheckForException:
-    active: false
-  NotImplementedDeclaration:
-    active: false
-  ThrowingExceptionsWithoutMessageOrCause:
-    active: false
-    exceptions: 'IllegalArgumentException,IllegalStateException,IOException'
-  PrintStackTrace:
-    active: false
-  RethrowCaughtException:
-    active: false
-  ReturnFromFinally:
-    active: false
-  ThrowingExceptionFromFinally:
-    active: false
-  ThrowingExceptionInMain:
-    active: false
-  ThrowingNewInstanceOfSameException:
+    threshold: 3
+  TooManyFunctions:
+    active: true
+    thresholdInFiles: 10
+    thresholdInClasses: 10
+    thresholdInInterfaces: 10
+    thresholdInObjects: 10
+    thresholdInEnums: 10
+  ComplexCondition:
+    active: true
+    threshold: 3
+  LabeledExpression:
     active: false
 
 empty-blocks:
@@ -169,58 +142,98 @@ empty-blocks:
   EmptyWhileBlock:
     active: true
 
-complexity:
+exceptions:
   active: true
-  LongMethod:
+  TooGenericExceptionCaught:
     active: true
-    threshold: 20
-  NestedBlockDepth:
-    active: true
-    threshold: 3
-  LongParameterList:
-    active: true
-    threshold: 5
-  LargeClass:
-    active: true
-    threshold: 150
-  ComplexInterface:
+    exceptions:
+     - ArrayIndexOutOfBoundsException
+     - Error
+     - Exception
+     - IllegalMonitorStateException
+     - NullPointerException
+     - IndexOutOfBoundsException
+     - RuntimeException
+     - Throwable
+  ExceptionRaisedInUnexpectedLocation:
     active: false
-    threshold: 10
-    includeStaticDeclarations: false
-  ComplexMethod:
+    methodNames: 'toString,hashCode,equals,finalize'
+  TooGenericExceptionThrown:
     active: true
-    threshold: 10
-  MethodOverloading:
+    exceptions:
+     - Error
+     - Exception
+     - NullPointerException
+     - Throwable
+     - RuntimeException
+  NotImplementedDeclaration:
     active: false
-    threshold: 5
-  TooManyFunctions:
-    active: true
-    thresholdInFiles: 10
-    thresholdInClasses: 10
-    thresholdInInterfaces: 10
-    thresholdInObjects: 10
-    thresholdInEnums: 10
-  ComplexCondition:
-    active: true
-    threshold: 3
-  LabeledExpression:
+  PrintStackTrace:
     active: false
-  StringLiteralDuplication:
+  InstanceOfCheckForException:
     active: false
-    threshold: 2
-    ignoreAnnotation: true
-    excludeStringsWithLessThan5Characters: true
-    ignoreStringsRegex: '$^'
+  ThrowingExceptionsWithoutMessageOrCause:
+    active: false
+    exceptions: 'IllegalArgumentException,IllegalStateException,IOException'
+  ReturnFromFinally:
+    active: false
+  ThrowingExceptionFromFinally:
+    active: false
+  ThrowingExceptionInMain:
+    active: false
+  RethrowCaughtException:
+    active: false
+  ThrowingNewInstanceOfSameException:
+    active: false
+  SwallowedException:
+    active: false
 
-code-smell:
+performance:
   active: true
-  FeatureEnvy:
-    threshold: 0.5
-    weight: 0.45
-    base: 0.5
+  ForEachOnRange:
+    active: true
+  SpreadOperator:
+    active: true
+  UnnecessaryTemporaryInstantiation:
+    active: true
+
+potential-bugs:
+  active: true
+  DuplicateCaseInWhenExpression:
+    active: true
+  EqualsAlwaysReturnsTrueOrFalse:
+    active: false
+  EqualsWithHashCodeExist:
+    active: true
+  IteratorNotThrowingNoSuchElementException:
+    active: false
+  IteratorHasNextCallsNextMethod:
+    active: false
+  UselessPostfixExpression:
+    active: false
+  InvalidLoopCondition:
+    active: false
+  WrongEqualsTypeParameter:
+    active: false
+  ExplicitGarbageCollectionCall:
+    active: true
+  LateinitUsage:
+    active: false
+    excludeAnnotatedProperties: ""
+    ignoreOnClassesPattern: ""
+  UnconditionalJumpStatementInLoop:
+    active: false
+  UnreachableCode:
+    active: true
+  UnsafeCallOnNullableType:
+    active: false
+  UnsafeCast:
+    active: false
 
 style:
   active: true
+  CollapsibleIfStatements:
+    active: false
   ReturnCount:
     active: true
     max: 2
@@ -229,12 +242,14 @@ style:
     max: 2
   NewLineAtEndOfFile:
     active: true
-  OptionalAbstractKeyword:
+  WildcardImport:
     active: true
-  OptionalWhenBraces:
-    active: false
-  CollapsibleIfStatements:
-    active: false
+    excludeImports: 'java.util.*,kotlinx.android.synthetic.*'
+  MaxLineLength:
+    active: true
+    maxLineLength: 120
+    excludePackageStatements: false
+    excludeImportStatements: false
   EqualsNullCall:
     active: false
   ForbiddenComment:
@@ -243,6 +258,10 @@ style:
   ForbiddenImport:
     active: false
     imports: ''
+  FunctionOnlyReturningConstant:
+    active: false
+    ignoreOverridableFunction: true
+    excludedFunctions: 'describeContents'
   SpacingBetweenPackageAndImports:
     active: false
   LoopWithTooManyJumpStatements:
@@ -251,28 +270,24 @@ style:
   MethodNameEqualsClassName:
     active: false
     ignoreOverriddenFunction: true
-  ModifierOrder:
+  VariableNaming:
     active: true
-  MagicNumber:
+    variablePattern: '[a-z][A-Za-z0-9]*'
+    privateVariablePattern: '(_)?[a-z][A-Za-z0-9]*'
+  VariableMinLength:
+    active: false
+    minimumVariableNameLength: 3
+  VariableMaxLength:
+    active: false
+    maximumVariableNameLength: 30
+  TopLevelPropertyNaming:
     active: true
-    ignoreNumbers: '-1,0,1,2'
-    ignoreHashCodeFunction: false
-    ignorePropertyDeclaration: false
-    ignoreConstantDeclaration: true
-    ignoreCompanionObjectPropertyDeclaration: true
-    ignoreAnnotation: false
-    ignoreNamedArgument: true
-    ignoreEnums: false
-  WildcardImport:
+    constantPattern: '[A-Z][_A-Z0-9]*'
+    propertyPattern: '[a-z][A-Za-z\d]*'
+    privatePropertyPattern: '(_)?[a-z][A-Za-z0-9]*'
+  ObjectPropertyNaming:
     active: true
-    excludeImports: 'java.util.*,kotlinx.android.synthetic.*'
-  SafeCast:
-    active: true
-  MaxLineLength:
-    active: true
-    maxLineLength: 120
-    excludePackageStatements: false
-    excludeImportStatements: false
+    propertyPattern: '[A-Za-z][_A-Za-z0-9]*'
   PackageNaming:
     active: true
     packagePattern: '^[a-z]+(\.[a-z][a-z0-9]*)*$'
@@ -291,30 +306,12 @@ style:
   FunctionMinLength:
     active: false
     minimumFunctionNameLength: 3
-  VariableNaming:
-    active: true
-    variablePattern: '[a-z][A-Za-z0-9]*'
-    privateVariablePattern: '(_)?[a-z][A-Za-z0-9]*'
-  ObjectPropertyNaming:
-    active: true
-    propertyPattern: '[A-Za-z][_A-Za-z0-9]*'
-  TopLevelPropertyNaming:
-    active: true
-    constantPattern: '[A-Z][_A-Z0-9]*'
-    propertyPattern: '[a-z][A-Za-z\d]*'
-    privatePropertyPattern: '(_)?[a-z][A-Za-z0-9]*'
-  VariableMaxLength:
-    active: false
-    maximumVariableNameLength: 30
-  VariableMinLength:
-    active: false
-    minimumVariableNameLength: 3
   ForbiddenClassName:
     active: false
     forbiddenName: ''
-  ProtectedMemberInFinalClass:
-    active: false
-  SerialVersionUIDInSerializableClass:
+  SafeCast:
+    active: true
+  UnnecessaryAbstractClass:
     active: false
   UnnecessaryParentheses:
     active: false
@@ -322,50 +319,40 @@ style:
     active: false
   UtilityClassWithPublicConstructor:
     active: false
+  OptionalAbstractKeyword:
+    active: true
+  OptionalWhenBraces:
+    active: false
+  OptionalReturnKeyword:
+    active: false
+  OptionalUnit:
+    active: false
+  ProtectedMemberInFinalClass:
+    active: false
+  SerialVersionUIDInSerializableClass:
+    active: false
+  MagicNumber:
+    active: true
+    ignoreNumbers: '-1,0,1,2'
+    ignoreHashCodeFunction: false
+    ignorePropertyDeclaration: false
+    ignoreConstantDeclaration: true
+    ignoreCompanionObjectPropertyDeclaration: true
+    ignoreAnnotation: false
+    ignoreNamedArgument: true
+    ignoreEnums: false
+  ModifierOrder:
+    active: true
   DataClassContainsFunctions:
     active: false
     conversionFunctionPrefix: 'to'
   UseDataClass:
     active: false
-  UnnecessaryAbstractClass:
-    active: false
-  OptionalUnit:
-    active: false
-  OptionalReturnKeyword:
+  UnusedImports:
     active: false
   ExpressionBodySyntax:
-    active: false
-  UnusedImports:
     active: false
   NestedClassesVisibility:
     active: false
   RedundantVisibilityModifierRule:
     active: false
-  FunctionOnlyReturningConstant:
-    active: false
-    ignoreOverridableFunction: true
-    excludedFunctions: 'describeContents'
-
-comments:
-  active: true
-  CommentOverPrivateFunction:
-    active: false
-  CommentOverPrivateProperty:
-    active: false
-  UndocumentedPublicClass:
-    active: false
-    searchInNestedClass: true
-    searchInInnerClass: true
-    searchInInnerObject: true
-    searchInInnerInterface: true
-  UndocumentedPublicFunction:
-    active: false
-
-# *experimental feature*
-# Migration rules can be defined in the same config file or a new one
-migration:
-  active: true
-  imports:
-    # your.package.Class: new.package.or.Class
-    # for example:
-    # io.gitlab.arturbosch.detekt.api.Rule: io.gitlab.arturbosch.detekt.rule.Rule
