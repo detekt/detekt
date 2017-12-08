@@ -35,10 +35,10 @@ class Args {
 		get() = input ?: throw IllegalStateException("Input path was not initialized by jcommander!")
 
 	val documentationPath: Path
-		get() = documentation ?: throw IllegalStateException("Output path was not initialized by jcommander!")
+		get() = documentation ?: throw IllegalStateException("Documentation output path was not initialized by jcommander!")
 
 	val configPath: Path
-		get() = config ?: throw IllegalStateException("Output path was not initialized by jcommander!")
+		get() = config ?: throw IllegalStateException("Configuration output path was not initialized by jcommander!")
 }
 
 class ExistingPathConverter : IStringConverter<Path> {
