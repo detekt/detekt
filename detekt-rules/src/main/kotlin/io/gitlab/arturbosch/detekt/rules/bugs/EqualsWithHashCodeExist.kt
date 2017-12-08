@@ -22,6 +22,28 @@ import java.util.ArrayDeque
  * same hashcode. When inheriting equals or hashcode, override the inherited and call the super method for
  * clarification.
  *
+ * <noncompliant>
+ * class Test {
+ *
+ *     override fun equals(other: Any?): Boolean {
+ *         return super.equals(other)
+ *     }
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * class A {
+ *
+ *     override fun equals(other: Any?): Boolean {
+ *         return super.equals(other)
+ *     }
+ *
+ *     override fun hashCode(): Int {
+ *         return super.hashCode()
+ *     }
+ * }
+ * </compliant>
+ *
  * @active since v1.0.0
  * @author Artur Bosch
  * @author Marvin Ramin
