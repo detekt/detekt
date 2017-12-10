@@ -64,4 +64,60 @@ class ReturnCountSpec : Spek({
 
 	}
 
+	given("a function is ignored") {
+		val code = """
+    		fun test(x: Int) {
+				when (x) {
+					5 -> return 5
+					4 -> return 4
+					3 -> return 3
+				}
+			}
+		"""
+
+		it("should not get flagged") {
+			val findings = ReturnCount(TestConfig(mapOf(
+					ReturnCount.MAX to "2",
+					ReturnCount.IGNORED_FUNCTION_NAMES to "test")
+			)).lint(code)
+			assertThat(findings).isEmpty()
+		}
+	}
+
+	given("a subset of functions are ignored") {
+		val code = """
+    		fun test1(x: Int) {
+				when (x) {
+					5 -> return 5
+					4 -> return 4
+					3 -> return 3
+				}
+			}
+
+			fun test2(x: Int) {
+				when (x) {
+					5 -> return 5
+					4 -> return 4
+					3 -> return 3
+				}
+			}
+
+			fun test3(x: Int) {
+				when (x) {
+					5 -> return 5
+					4 -> return 4
+					3 -> return 3
+				}
+			}
+		"""
+
+		it("should flag none of the ignored functions") {
+			val findings = ReturnCount(TestConfig(mapOf(
+					ReturnCount.MAX to "2",
+					ReturnCount.IGNORED_FUNCTION_NAMES to "test1,test2")
+			)).lint(code)
+			assertThat(findings).hasSize(1)
+		}
+	}
+
 })
