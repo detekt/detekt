@@ -32,10 +32,32 @@ class B { // right!
 ### When implementing new rules ...
 
 - ... do not forget to add the new rule to a `RuleSetProvider`.
-- ... do not forget to add the new rule to the `default-detekt-config.yml` in the `detekt-cli-resources`.
 - ... do not forget to write a description for the issue of the new rule.
+- Add the correct KDoc to the Rule class. This KDoc is used to generate wiki pages and the `default-detekt-config.yml`
+automatically. The format of the KDoc should be as follows:
+
+    ```kotlin
+    /**
+     * This is a nice description for the rule, explaining what it checks, why it exists and how violations can be
+     * solved.
+     * @configuration name - Description for the configuration option (default: "whatever should be the default")
+     */
+    class SomeRule : Rule {
+  
+    }
+    ```
+    
+    The description should be as detailed as possible as it will act as the documentation of the rule. Add links to 
+    references that explain the rationale for the rule if possible.
+    The `@configuration` tag should follow the correct pattern. The name of the configuration option has to match the 
+    actual name used in the code, otherwise an invalid `default-detekt-config.yml` will be generated and the rule won't
+    function correctly by default. 
+    The default value will be taken as is for the configuration option and pasted into the `default-detekt-config.yml`.
+- ... do not forget to test the new rule and/or add tests for any changes made to a rule. 
+- ... do not forget to run `./gradlew build`. This will execute tests locally and update the `default-detekt.config.yml`
+as well as add the new/changed rules to the documentation.
 - be aware that your PR will stay open for at least two days so that other users can give feedback.
-- make sure to set the new rule `active: false` in the default config. Brave users can test it on demand. 
+
 After some time and testing there is a chance this rule will become active on default.
 
 ### Release checklist
