@@ -49,16 +49,25 @@ automatically. The format of the KDoc should be as follows:
     
     The description should be as detailed as possible as it will act as the documentation of the rule. Add links to 
     references that explain the rationale for the rule if possible.
-    The `@configuration` tag should follow the correct pattern. The name of the configuration option has to match the 
+    The `@configuration` tag should follow the correct pattern. The name of the configuration option *has* to match the 
     actual name used in the code, otherwise an invalid `default-detekt-config.yml` will be generated and the rule won't
     function correctly by default. 
     The default value will be taken as is for the configuration option and pasted into the `default-detekt-config.yml`.
+    
+    A `@configuration` tag as described above will translate to a rule entry in the `default-detekt-config.yml`:
+    ```yml
+    SomeRule:
+       active: false
+       name: whatever should be the default
+    ```
 - ... do not forget to test the new rule and/or add tests for any changes made to a rule. 
 - ... do not forget to run `./gradlew build`. This will execute tests locally and update the `default-detekt.config.yml`
 as well as add the new/changed rules to the documentation.
 - be aware that your PR will stay open for at least two days so that other users can give feedback.
 
 After some time and testing there is a chance this rule will become active on default.
+
+Rules that contain an `@active` tag in their KDoc will be marked as active in the `default-detekt-config.yml`.
 
 ### Release checklist
 
