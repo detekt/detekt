@@ -20,8 +20,8 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
  *
  * @configuration max - define the maximum number of return statements allowed per function
  * (default: 2)
- * @configuration ignoredFunctionNames - define functions to be ignored by this check
- * (default: none)
+ * @configuration excludedFunctions - define functions to be ignored by this check
+ * (default: "equals")
  * @active since v1.0.0
  * @author Patrick Pilch
  */
