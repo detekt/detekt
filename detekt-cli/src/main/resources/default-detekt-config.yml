@@ -237,6 +237,7 @@ style:
   ReturnCount:
     active: true
     max: 2
+    ignoredFunctionNames: "equals"
   ThrowsCount:
     active: true
     max: 2
