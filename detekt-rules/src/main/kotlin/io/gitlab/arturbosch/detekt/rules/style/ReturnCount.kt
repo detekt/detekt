@@ -31,7 +31,7 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
 			"Restrict the number of return statements in methods.", Debt.TEN_MINS)
 
 	private val max = valueOrDefault(MAX, 2)
-	private val ignoredFunctions = SplitPattern(valueOrDefault(IGNORED_FUNCTION_NAMES, ""))
+	private val excludedFunctions = SplitPattern(valueOrDefault(EXCLUDED_FUNCTIONS, ""))
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		super.visitNamedFunction(function)
@@ -45,10 +45,10 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
 		}
 	}
 
-	private fun isIgnoredFunction(function: KtNamedFunction) = ignoredFunctions.contains(function.name)
+	private fun isIgnoredFunction(function: KtNamedFunction) = excludedFunctions.contains(function.name)
 
 	companion object {
 		const val MAX = "max"
-		const val IGNORED_FUNCTION_NAMES = "ignoredFunctionNames"
+		const val EXCLUDED_FUNCTIONS = "excludedFunctions"
 	}
 }
