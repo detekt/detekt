@@ -12,6 +12,7 @@ configurations {
 }
 
 task generateDocumentation(dependsOn: ":detekt-generator:shadowJar") {
+    description "Generates detekt documentation and the default config.yml based on Rule KDoc"
     doLast {
         javaexec {
             main = "-jar"
@@ -25,6 +26,40 @@ task generateDocumentation(dependsOn: ":detekt-generator:shadowJar") {
                     "$rootProject.rootDir/detekt-cli/src/main/resources"
             ]
         }
+    }
+}
+
+task verifyGeneratorOutput(dependsOn: [":detekt-generator:shadowJar", ":detekt-generator:generateDocumentation"]) {
+    description "Verifies that all documentation and the config.yml are up-to-date"
+    doLast {
+        assertDefaultConfigUpToDate()
+        assertDocumentationUpToDate()
+    }
+}
+
+def assertDefaultConfigUpToDate() {
+    def configDiff = new ByteArrayOutputStream()
+    exec {
+        commandLine "git", "diff", "$rootProject.rootDir/detekt-cli/src/main/resources/default-detekt-config.yml"
+        standardOutput = configDiff
+    }
+
+    if (!configDiff.toString().isEmpty()) {
+        throw new RuntimeException("The default-detekt-config.yml is not up-to-date. " +
+                "Please build detekt locally to update it.")
+    }
+}
+
+def assertDocumentationUpToDate() {
+    def configDiff = new ByteArrayOutputStream()
+    exec {
+        commandLine "git", "diff", "$rootProject.rootDir/detekt-generator/documentation"
+        standardOutput = configDiff
+    }
+
+    if (!configDiff.toString().isEmpty()) {
+        throw new RuntimeException("The detekt documentation is not up-to-date. " +
+                "Please build detekt locally to update it.")
     }
 }
 
