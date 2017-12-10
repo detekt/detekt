@@ -78,7 +78,7 @@ class ReturnCountSpec : Spek({
 		it("should not get flagged") {
 			val findings = ReturnCount(TestConfig(mapOf(
 					ReturnCount.MAX to "2",
-					ReturnCount.IGNORED_FUNCTION_NAMES to "test")
+					ReturnCount.EXCLUDED_FUNCTIONS to "test")
 			)).lint(code)
 			assertThat(findings).isEmpty()
 		}
@@ -114,7 +114,7 @@ class ReturnCountSpec : Spek({
 		it("should flag none of the ignored functions") {
 			val findings = ReturnCount(TestConfig(mapOf(
 					ReturnCount.MAX to "2",
-					ReturnCount.IGNORED_FUNCTION_NAMES to "test1,test2")
+					ReturnCount.EXCLUDED_FUNCTIONS to "test1,test2")
 			)).lint(code)
 			assertThat(findings).hasSize(1)
 		}
