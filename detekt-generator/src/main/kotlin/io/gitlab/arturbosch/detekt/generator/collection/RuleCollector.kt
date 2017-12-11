@@ -55,7 +55,7 @@ class RuleVisitor : DetektVisitor() {
 			println("Rule $name is missing a description")
 		}
 
-		return Rule(name, description, compliant, nonCompliant, active, configuration)
+		return Rule(name, description, nonCompliant, compliant, active, configuration)
 	}
 
 	override fun visitSuperTypeList(list: KtSuperTypeList) {
