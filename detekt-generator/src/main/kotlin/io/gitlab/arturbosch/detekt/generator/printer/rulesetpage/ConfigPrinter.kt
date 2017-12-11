@@ -72,6 +72,7 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 			    - 'MaxLineLength'
 			    - 'LateinitUsage'
 			    - 'StringLiteralDuplication'
+			    - 'SpreadOperator'
 			""".trimIndent()
 	}
 
