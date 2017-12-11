@@ -69,6 +69,10 @@ code.
 
    define the maximum number of return statements allowed per function
 
+* `excludedFunctions` (default: `"equals"`)
+
+   define functions to be ignored by this check
+
 ### ThrowsCount
 
 TODO: Specify description
