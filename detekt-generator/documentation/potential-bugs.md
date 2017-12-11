@@ -46,6 +46,17 @@ clarification.
 #### Noncompliant Code:
 
 ```kotlin
+class Test {
+
+    override fun equals(other: Any?): Boolean {
+        return super.equals(other)
+    }
+}
+```
+
+#### Compliant Code:
+
+```kotlin
 class A {
 
     override fun equals(other: Any?): Boolean {
@@ -54,17 +65,6 @@ class A {
 
     override fun hashCode(): Int {
         return super.hashCode()
-    }
-}
-```
-
-#### Compliant Code:
-
-```kotlin
-class Test {
-
-    override fun equals(other: Any?): Boolean {
-        return super.equals(other)
     }
 }
 ```
