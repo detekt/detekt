@@ -54,7 +54,7 @@ class YamlConfig internal constructor(val properties: Map<String, Any>) : BaseCo
 			if (yamlInput.isEmpty()) {
 				Config.empty
 			} else {
-				val map = Yaml().load(yamlInput)
+				val map: Any = Yaml().load(yamlInput)
 				if (map is Map<*, *>) {
 					YamlConfig(map as Map<String, Any>)
 				} else {
