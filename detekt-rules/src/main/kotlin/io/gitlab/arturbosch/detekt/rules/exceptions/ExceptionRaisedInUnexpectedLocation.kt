@@ -33,7 +33,7 @@ class ExceptionRaisedInUnexpectedLocation(config: Config = Config.empty) : Rule(
 		}
 	}
 
-	private fun isPotentialMethod(function: KtNamedFunction) = methods.contains(function.name)
+	private fun isPotentialMethod(function: KtNamedFunction) = methods.equals(function.name)
 
 	private fun hasThrowExpression(declaration: KtExpression?) =
 			declaration?.collectByType<KtThrowExpression>()?.any() == true
