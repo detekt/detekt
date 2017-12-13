@@ -26,6 +26,10 @@ open class NoExceptionRaisedInMethods {
 		}
 	}
 
+	fun doSomeEqualsComparison() {
+		throw IllegalStateException()
+	}
+
 	protected fun finalize() {
 	}
 }
