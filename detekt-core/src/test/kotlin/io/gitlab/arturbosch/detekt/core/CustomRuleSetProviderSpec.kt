@@ -18,7 +18,7 @@ class CustomRuleSetProviderSpec : Spek({
 
 		it("should load the sample provider") {
 			val settings = ProcessingSettings(path, excludeDefaultRuleSets = true, pluginPaths = listOf(sampleRuleSet))
-			val detekt = DetektFacade.instance(settings)
+			val detekt = DetektFacade.create(settings)
 			val result = detekt.run()
 
 			assertThat(result.findings.keys).contains("sample")

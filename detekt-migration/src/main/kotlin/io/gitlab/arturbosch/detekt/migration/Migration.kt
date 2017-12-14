@@ -19,7 +19,7 @@ class Migration {
 			with(parseArguments(args)) {
 				val config = loadConfiguration()
 				val settings = ProcessingSettings(inputPath, config, createPathFilters(), parallel, true)
-				val detektion = DetektFacade.instance(settings, MigrationRuleSetProvider()).run()
+				val detektion = DetektFacade.create(settings, MigrationRuleSetProvider()).run()
 				OutputFacade(this, detektion, settings).run()
 			}
 

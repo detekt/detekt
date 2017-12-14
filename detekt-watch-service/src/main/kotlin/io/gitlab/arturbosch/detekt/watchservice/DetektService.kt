@@ -24,7 +24,7 @@ class DetektService(parameters: Parameters) {
 		)
 	}
 
-	private val detektor = DetektFacade.instance(settings, RuleSetLocator(settings).load(), emptyList())
+	private val detektor = DetektFacade.create(settings, RuleSetLocator(settings).load(), emptyList())
 	private val reporter = FindingsReport()
 
 	fun check(dir: WatchedDir) {

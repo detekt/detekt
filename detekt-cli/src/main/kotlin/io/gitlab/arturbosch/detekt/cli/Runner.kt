@@ -17,7 +17,7 @@ class Runner(private val arguments: Args) : Executable {
 		val settings = createSettings()
 
 		val time = measureTimeMillis {
-			val detektion = DetektFacade.instance(settings).run()
+			val detektion = DetektFacade.create(settings).run()
 			OutputFacade(arguments, detektion, settings).run()
 		}
 
