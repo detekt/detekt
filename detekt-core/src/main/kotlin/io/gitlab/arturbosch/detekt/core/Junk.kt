@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.core
 
+import io.gitlab.arturbosch.detekt.api.Finding
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Files
 import java.nio.file.Path
@@ -17,3 +18,9 @@ fun Path.isFile(): Boolean = Files.isRegularFile(this)
 fun Path.isDirectory(): Boolean = Files.isDirectory(this)
 
 fun KtFile.relativePath(): String? = getUserData(KtCompiler.RELATIVE_PATH)
+
+fun MutableMap<String, List<Finding>>.mergeSmells(other: Map<String, List<Finding>>) {
+	for ((key, findings) in other.entries) {
+		merge(key, findings) { f1, f2 -> f1.plus(f2) }
+	}
+}

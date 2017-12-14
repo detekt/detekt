@@ -8,12 +8,20 @@ import java.nio.file.Path
  * @author Artur Bosch
  */
 @Suppress("LongParameterList")
-data class ProcessingSettings(val project: Path,
+data class ProcessingSettings(val project: List<Path>,
 							  val config: Config = Config.empty,
 							  val pathFilters: List<PathFilter> = listOf(),
 							  val parallelCompilation: Boolean = false,
 							  val excludeDefaultRuleSets: Boolean = false,
 							  val pluginPaths: List<Path> = emptyList()) {
+
+	constructor(project: Path,
+				config: Config = Config.empty,
+				pathFilters: List<PathFilter> = listOf(),
+				parallelCompilation: Boolean = false,
+				excludeDefaultRuleSets: Boolean = false,
+				pluginPaths: List<Path> = emptyList()) :
+			this(listOf(project), config, pathFilters, parallelCompilation, excludeDefaultRuleSets, pluginPaths)
 
 	init {
 		pluginPaths.forEach {
