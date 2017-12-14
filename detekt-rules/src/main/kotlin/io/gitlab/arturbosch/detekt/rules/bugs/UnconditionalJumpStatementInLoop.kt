@@ -20,6 +20,16 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  * This implies that the loop is only executed once and thus could be rewritten without a
  * loop alltogether.
  *
+ * <noncompliant>
+ * for (i in 1..2) break
+ * </noncompliant>
+ *
+ * <compliant>
+ * for (i in 1..2) {
+ *     if (i == 1) break
+ * }
+ * </compliant>
+ *
  * @author schalkms
  * @author Marvin Ramin
  */

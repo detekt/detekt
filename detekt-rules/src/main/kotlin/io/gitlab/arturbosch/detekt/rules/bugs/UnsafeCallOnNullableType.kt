@@ -14,6 +14,18 @@ import org.jetbrains.kotlin.psi.KtUnaryExpression
  * the nullable value is null. Kotlin provides many ways to work with nullable types to increase
  * null safety. Guard the code appropriately to prevent NullPointerExceptions.
  *
+ * <noncompliant>
+ * fun foo(str: String?) {
+ *     println(str!!.length)
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * fun foo(str: String?) {
+ *     println(str?.length)
+ * }
+ * </compliant>
+ *
  * @author Ivan Balaksha
  * @author Marvin Ramin
  */

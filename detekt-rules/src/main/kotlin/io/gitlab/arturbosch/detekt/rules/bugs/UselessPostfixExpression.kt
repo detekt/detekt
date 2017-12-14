@@ -23,6 +23,17 @@ import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
  * This leads to confusion as a reader of the code might think the value will be incremented/decremented.
  * However the value is replaced with the original value which might lead to bugs.
  *
+ * <noncompliant>
+ * var i = 0
+ * i = i--
+ * i = 1 + i++
+ * i = i++ + 1
+ *
+ * fun foo(i: Int): Int {
+ *     return i++
+ * }
+ * </noncompliant>
+ *
  * @author schalkms
  * @author Artur Bosch
  * @author Marvin Ramin

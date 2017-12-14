@@ -19,6 +19,21 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  * Code can be unreachable because it is behind return, throw, continue or break expressions.
  * This unreachable code should be removed as it serves no purpose.
  *
+ * <noncompliant>
+ * for (i in 1..2) {
+ *     break
+ *     println() // unreachable
+ * }
+ *
+ * throw IllegalArgumentException()
+ * println() // unreachable
+ *
+ * fun f() {
+ *     return
+ *     println() // unreachable
+ * }
+ * </noncompliant>
+ *
  * @active since v1.0.0
  * @author schalkms
  * @author Marvin Ramin

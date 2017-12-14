@@ -23,7 +23,7 @@ import java.util.ArrayDeque
  * clarification.
  *
  * <noncompliant>
- * class Test {
+ * class Foo {
  *
  *     override fun equals(other: Any?): Boolean {
  *         return super.equals(other)
@@ -32,7 +32,7 @@ import java.util.ArrayDeque
  * </noncompliant>
  *
  * <compliant>
- * class A {
+ * class Foo {
  *
  *     override fun equals(other: Any?): Boolean {
  *         return super.equals(other)
