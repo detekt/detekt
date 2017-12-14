@@ -36,9 +36,9 @@ class DetektService(parameters: Parameters) {
 				.distinct()
 				.fold(mutableListOf<Path>()) { acc, path -> acc.add(path); acc }
 
-		val compiler = KtCompiler(watchedDir)
+		val compiler = KtCompiler()
 		val ktFiles = paths
-				.map { compiler.compile(it) }
+				.map { compiler.compile(watchedDir, it) }
 				.fold(mutableListOf<KtFile>()) { acc, ktFile -> acc.add(ktFile); acc }
 
 		if (ktFiles.isNotEmpty()) {

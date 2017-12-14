@@ -10,9 +10,9 @@ import org.jetbrains.kotlin.com.intellij.util.keyFMap.KeyFMap
 /**
  * @author Artur Bosch
  */
-data class DetektResult(override val findings: Map<String, List<Finding>>,
-						override val notifications: MutableCollection<Notification>) : Detektion {
+data class DetektResult(override val findings: Map<String, List<Finding>>) : Detektion {
 
+	override val notifications: MutableCollection<Notification> = ArrayList()
 	private var userData = KeyFMap.EMPTY_MAP
 	private val _metrics = ArrayList<ProjectMetric>()
 	override val metrics: Collection<ProjectMetric> = _metrics

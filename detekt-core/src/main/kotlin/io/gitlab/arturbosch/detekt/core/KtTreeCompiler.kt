@@ -3,42 +3,37 @@ package io.gitlab.arturbosch.detekt.core
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Files
 import java.nio.file.Path
-import java.util.stream.Stream
 
 /**
  * @author Artur Bosch
  */
-class KtTreeCompiler(private val project: Path,
+class KtTreeCompiler(private val compiler: KtCompiler = KtCompiler(),
 					 private val filters: List<PathFilter> = listOf(),
 					 private val parallel: Boolean = false) {
 
-	private val compiler = KtCompiler(project)
-
-	init {
-		require(Files.exists(project)) { "Given project path does not exist!" }
-	}
-
 	companion object {
 		fun instance(settings: ProcessingSettings) = with(settings) {
-			KtTreeCompiler(project, pathFilters, parallelCompilation)
+			KtTreeCompiler(KtCompiler(), pathFilters, parallelCompilation)
 		}
 	}
 
-	fun compile(): List<KtFile> = when {
-		project.isFile() -> listOf(compiler.compile(project))
-		project.isDirectory() -> compileInternal(createStream())
-		else -> throw IllegalArgumentException("Provided project path $project is not a file/dir." +
-				" Detekt cannot work with it!")
+	fun compile(project: Path): List<KtFile> {
+		require(Files.exists(project)) { "Given project path does not exist!" }
+		return when {
+			project.isFile() -> listOf(compiler.compile(project, project))
+			project.isDirectory() -> compileInternal(project)
+			else -> throw IllegalArgumentException("Provided project path $project is not a file/dir." +
+					" Detekt cannot work with it!")
+		}
 	}
 
-	private fun createStream(): Stream<Path> = Files.walk(project).apply {
-		if (parallel) parallel()
-	}
+	private fun streamFor(project: Path) = Files.walk(project).apply { if (parallel) parallel() }
 
-	private fun compileInternal(stream: Stream<Path>): List<KtFile> = stream.filter(Path::isFile)
+	private fun compileInternal(project: Path): List<KtFile> = streamFor(project)
+			.filter(Path::isFile)
 			.filter { it.isKotlinFile() }
 			.filter { notIgnored(it) }
-			.map { compiler.compile(it) }
+			.map { compiler.compile(project, it) }
 			.toList()
 
 	private fun Path.isKotlinFile(): Boolean {
