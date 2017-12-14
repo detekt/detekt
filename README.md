@@ -410,10 +410,9 @@ dependencies {
 
 ### <a name="rulesets">RuleSets</a>
 
-Currently there are seven rule sets which are used per default when running the cli.
+Currently there are six rule sets which are used per default when running the cli.
 
 - complexity    - has rules to detect _LongMethod, LongParameterList, LargeClass, ComplexMethod ..._ smells
-- code-smell    - other rules which can be classified as code smells but do not fit into the complexity category
 - style         - detects wildcard imports and naming violations
 - comments      - has rules to detect missing KDoc over public members and unnecessary KDoc over private members
 - exceptions    - too general exceptions are used in throw and catch statements like RuntimeException, Error or Throwable
@@ -469,7 +468,7 @@ build:
 ```
 
 Every rule and rule set can be attached with an integer value which is the weight of the finding.
-For example: If you have 5 findings of the category _code-smell_, then your failThreshold of 10 is reached as
+For example: If you have 5 findings of the category _complexity_, then your failThreshold of 10 is reached as
 5 x 2 = 10. 
 
 The formula for weights: RuleID > RuleSetID > 1. Only integer values are supported.
