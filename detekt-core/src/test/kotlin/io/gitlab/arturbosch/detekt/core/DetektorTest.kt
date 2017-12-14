@@ -20,7 +20,7 @@ class DetektorTest {
 	}
 
 	private fun runDetektWithPattern(patternToUse: String) {
-		val instance = DetektFacade.instance(ProcessingSettings(path,
+		val instance = DetektFacade.create(ProcessingSettings(path,
 				config = yamlConfig(patternToUse)),
 				listOf(TestProvider(), TestProvider2()), emptyList())
 

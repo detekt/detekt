@@ -9,7 +9,7 @@ import org.jetbrains.kotlin.psi.KtFile
  * @author Artur Bosch
  */
 class DetektFacade(
-		val detektor: Detektor,
+		private val detektor: Detektor,
 		private val settings: ProcessingSettings,
 		private val processors: List<FileProcessListener>) {
 
@@ -41,24 +41,18 @@ class DetektFacade(
 
 	companion object {
 
-		fun instance(settings: ProcessingSettings): DetektFacade {
+		fun create(settings: ProcessingSettings): DetektFacade {
 			val providers = RuleSetLocator(settings).load()
 			val processors = FileProcessorLocator(settings).load()
-			return instance(settings, providers, processors)
-		}
-
-		fun instance(settings: ProcessingSettings, vararg providers: RuleSetProvider): DetektFacade {
-			return instance(settings, providers.toList(), emptyList())
-		}
-
-		fun instance(settings: ProcessingSettings, vararg processors: FileProcessListener): DetektFacade {
-			return instance(settings, emptyList(), processors.toList())
-		}
-
-		fun instance(settings: ProcessingSettings,
-					 providers: List<RuleSetProvider>,
-					 processors: List<FileProcessListener>): DetektFacade {
 			return create(settings, providers, processors)
+		}
+
+		fun create(settings: ProcessingSettings, vararg providers: RuleSetProvider): DetektFacade {
+			return create(settings, providers.toList(), emptyList())
+		}
+
+		fun create(settings: ProcessingSettings, vararg processors: FileProcessListener): DetektFacade {
+			return create(settings, emptyList(), processors.toList())
 		}
 
 		fun create(settings: ProcessingSettings,
