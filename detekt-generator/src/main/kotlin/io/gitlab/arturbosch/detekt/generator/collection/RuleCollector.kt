@@ -89,14 +89,23 @@ class RuleVisitor : DetektVisitor() {
 		val nonCompliantIndex = comment.indexOf(TAG_NONCOMPLIANT)
 		if (nonCompliantIndex != -1) {
 			val nonCompliantEndIndex = comment.indexOf(ENDTAG_NONCOMPLIANT)
-			val compliantIndex = comment.indexOf(TAG_COMPLIANT)
-			val compliantEndIndex = comment.indexOf(ENDTAG_COMPLIANT)
-			if (nonCompliantEndIndex == -1 || compliantIndex == -1 || compliantEndIndex == -1) {
+			if (nonCompliantEndIndex == -1) {
 				throw InvalidCodeExampleDocumentationException()
 			}
 			description = comment.substring(0, nonCompliantIndex).trim()
-			nonCompliant = comment.substring(nonCompliantIndex + TAG_NONCOMPLIANT.length, nonCompliantEndIndex).trim()
-			compliant = comment.substring(compliantIndex + TAG_COMPLIANT.length, compliantEndIndex).trim()
+			nonCompliant = comment.substring(nonCompliantIndex + TAG_NONCOMPLIANT.length, nonCompliantEndIndex)
+									.trimStartingLineBreaks()
+									.trimEnd()
+			val compliantIndex = comment.indexOf(TAG_COMPLIANT)
+			val compliantEndIndex = comment.indexOf(ENDTAG_COMPLIANT)
+			if (compliantIndex != -1) {
+				if (compliantEndIndex == -1) {
+					throw InvalidCodeExampleDocumentationException()
+				}
+				compliant = comment.substring(compliantIndex + TAG_COMPLIANT.length, compliantEndIndex)
+									.trimStartingLineBreaks()
+									.trimEnd()
+			}
 		} else {
 			description = comment
 		}
@@ -124,4 +133,12 @@ class RuleVisitor : DetektVisitor() {
 	}
 
 	private fun KtClassOrObject.kDocSection(): KDocSection? = docComment?.getDefaultSection()
+
+	private fun String.trimStartingLineBreaks(): String {
+		var i = 0
+		while (i < this.length && (this[i] == '\n' || this[i] == '\r')) {
+			i++
+		}
+		return this.substring(i)
+	}
 }
