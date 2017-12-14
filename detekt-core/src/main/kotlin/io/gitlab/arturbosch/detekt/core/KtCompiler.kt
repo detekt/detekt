@@ -12,15 +12,15 @@ import java.nio.file.Path
 /**
  * @author Artur Bosch
  */
-open class KtCompiler(val project: Path) {
+open class KtCompiler {
 
 	protected val psiFileFactory: PsiFileFactory = PsiFileFactory.getInstance(psiProject)
 
-	fun compile(subPath: Path): KtFile {
+	fun compile(root: Path, subPath: Path): KtFile {
 		require(subPath.isFile()) { "Given sub path should be a regular file!" }
 		val relativePath =
-				if (project == subPath) subPath
-				else project.fileName.resolve(project.relativize(subPath))
+				if (root == subPath) subPath
+				else root.fileName.resolve(root.relativize(subPath))
 		val content = subPath.toFile().readText()
 		val lineSeparator = content.determineLineSeparator()
 		val normalizedContent = StringUtilRt.convertLineSeparators(content)

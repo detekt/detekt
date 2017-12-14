@@ -15,13 +15,13 @@ class Runner(private val arguments: Args) {
 
 	fun execute() {
 		val time = measureTimeMillis {
-			val ktFiles = KtTreeCompiler(arguments.inputPath).compile()
+			val ktFiles = KtTreeCompiler().compile(arguments.inputPath)
 			listeners.forEach { it.onStart(ktFiles) }
 
 			ktFiles.forEach { file ->
-						listeners.forEach { it.onProcess(file) }
-						collector.visit(file)
-					}
+				listeners.forEach { it.onProcess(file) }
+				collector.visit(file)
+			}
 
 			printer.print(collector.items)
 		}

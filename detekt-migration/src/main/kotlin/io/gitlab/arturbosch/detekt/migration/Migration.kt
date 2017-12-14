@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.cli.OutputFacade
 import io.gitlab.arturbosch.detekt.cli.createPathFilters
 import io.gitlab.arturbosch.detekt.cli.loadConfiguration
 import io.gitlab.arturbosch.detekt.cli.parseArguments
-import io.gitlab.arturbosch.detekt.core.Detektor
+import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 
 /**
@@ -19,8 +19,7 @@ class Migration {
 			with(parseArguments(args)) {
 				val config = loadConfiguration()
 				val settings = ProcessingSettings(inputPath, config, createPathFilters(), parallel, true)
-				val detektor = Detektor(settings, listOf(MigrationRuleSetProvider()))
-				val detektion = detektor.run()
+				val detektion = DetektFacade.instance(settings, MigrationRuleSetProvider()).run()
 				OutputFacade(this, detektion, settings).run()
 			}
 

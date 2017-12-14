@@ -27,7 +27,7 @@ interface FileProcessListener : Extension {
 	 * Called when processing of a file completes.
 	 * This method is called from a thread pool thread. Heavy computations allowed.
 	 */
-	fun onProcessComplete(file: KtFile, findingsForFile: FindingsForFile) {}
+	fun onProcessComplete(file: KtFile, findings: Map<String, List<Finding>>) {}
 
 	/**
 	 * Mainly use this method to save computed metrics from KtFile's to the {@link Detektion} container.
@@ -36,10 +36,3 @@ interface FileProcessListener : Extension {
 	fun onFinish(files: List<KtFile>, result: Detektion) {}
 }
 
-class FindingsForFile(findings: List<Pair<String, List<Finding>>>) {
-
-	private val ruleSetFindings: Map<String, List<Finding>> by lazy { findings.toMergedMap() }
-
-	fun queryForRuleSet(name: String) = ruleSetFindings[name]
-
-}

@@ -10,9 +10,9 @@ internal class KtCompilerTest {
 
 	@Test
 	fun ktFileHasExtraUserData() {
-		val ktCompiler = KtCompiler(path)
+		val ktCompiler = KtCompiler()
 
-		val ktFile = ktCompiler.compile(path.resolve("Default.kt"))
+		val ktFile = ktCompiler.compile(path, path.resolve("Default.kt"))
 
 		assertThat(ktFile.getUserData(KtCompiler.LINE_SEPARATOR)).isEqualTo("\n")
 		assertThat(ktFile.getUserData(KtCompiler.RELATIVE_PATH)).isEqualTo(path.fileName.resolve("Default.kt").toString())
