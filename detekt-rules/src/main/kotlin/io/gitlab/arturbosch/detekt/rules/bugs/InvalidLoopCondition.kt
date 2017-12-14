@@ -15,6 +15,18 @@ import org.jetbrains.kotlin.psi.KtForExpression
  * Reports loop conditions which will never be triggered.
  * This might be due to invalid ranges like (10..9) which will cause the loop to never be entered.
  *
+ * <noncompliant>
+ * for (i in 2..1) {}
+ * for (i in 1 downTo 2) {}
+ * for (i in 2 until 1) {}
+ * </noncompliant>
+ *
+ * <compliant>
+ * for (i in 2..2) {}
+ * for (i in 2 downTo 2) {}
+ * for (i in 2 until 2) {}
+ * </compliant>
+ *
  * @author schalkms
  * @author Marvin Ramin
  */

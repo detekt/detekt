@@ -19,9 +19,18 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
  * Using lateinit for property initialization can be error prone and the actual initialization is not
  * guaranteed. Try using constructor injection or delegation to initialize properties.
  *
+ * <noncompliant>
+ * class Foo {
+ *     @JvmField lateinit var i1: Int
+ *     @JvmField @SinceKotlin("1.0.0") lateinit var i2: Int
+ * }
+ * </noncompliant>
+ *
  * @configuration excludeAnnotatedProperties - Allows you to provide a list of annotations that disable
  * this check. (default: "")
  * @configuration ignoreOnClassesPattern - Allows you to disable the rule for a list of classes (default: "")
+ *
+ * @author Marvin Ramin
  */
 class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 

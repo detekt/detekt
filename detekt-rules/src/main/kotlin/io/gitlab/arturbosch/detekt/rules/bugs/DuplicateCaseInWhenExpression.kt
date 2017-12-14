@@ -15,6 +15,21 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  * If a when expression contains the same case statement multiple times they should be merged. Otherwise it might be
  * easy to miss one of the cases when reading the code, leading to unwanted side effects.
  *
+ * <noncompliant>
+ * when (i) {
+ *     1 -> println("one")
+ *     1 -> println("one")
+ *     else -> println("else")
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * when (i) {
+ *     1 -> println("one")
+ *     else -> println("else")
+ * }
+ * </compliant>
+ *
  * @active since v1.0.0
  * @author Artur Bosch
  * @author Marvin Ramin

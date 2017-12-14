@@ -27,6 +27,25 @@ Flags duplicate case statements in when expressions.
 If a when expression contains the same case statement multiple times they should be merged. Otherwise it might be
 easy to miss one of the cases when reading the code, leading to unwanted side effects.
 
+#### Noncompliant Code:
+
+```kotlin
+when (i) {
+    1 -> println("one")
+    1 -> println("one")
+    else -> println("else")
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+when (i) {
+    1 -> println("one")
+    else -> println("else")
+}
+```
+
 ### EqualsAlwaysReturnsTrueOrFalse
 
 Reports equals() methods which will always return true or false.
@@ -34,6 +53,22 @@ Reports equals() methods which will always return true or false.
 Equals methods should always report if some other object is equal to the current object.
 See the Kotlin documentation for Any.equals(other: Any?):
 https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html
+
+#### Noncompliant Code:
+
+```kotlin
+override fun equals(other: Any?): Boolean {
+    return true
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+override fun equals(other: Any?): Boolean {
+    return this == other
+}
+```
 
 ### EqualsWithHashCodeExist
 
@@ -46,7 +81,7 @@ clarification.
 #### Noncompliant Code:
 
 ```kotlin
-class Test {
+class Foo {
 
     override fun equals(other: Any?): Boolean {
         return super.equals(other)
@@ -57,7 +92,7 @@ class Test {
 #### Compliant Code:
 
 ```kotlin
-class A {
+class Foo {
 
     override fun equals(other: Any?): Boolean {
         return super.equals(other)
@@ -77,11 +112,35 @@ NoSuchElementException.
 
 See: https://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html#next()
 
+#### Noncompliant Code:
+
+```kotlin
+class MyIterator : Iterator<String> {
+
+    public Integer next() {
+        if (!this.hasNext()) {
+            throw NoSuchElementException()
+        }
+    }
+}
+```
+
 ### IteratorHasNextCallsNextMethod
 
 Verifies implementations of the Iterator interface.
 The hasNext() method of an Iterator implementation should not have any side effects.
 This rule reports implementations that call the next() method of the Iterator inside the hasNext() method.
+
+#### Noncompliant Code:
+
+```kotlin
+class MyIterator : Iterator<String> {
+
+    override fun hasNext(): Boolean {
+        return next() != null
+    }
+}
+```
 
 ### UselessPostfixExpression
 
@@ -89,10 +148,39 @@ This rule reports postfix expressions (++, --) which are unused and thus unneces
 This leads to confusion as a reader of the code might think the value will be incremented/decremented.
 However the value is replaced with the original value which might lead to bugs.
 
+#### Noncompliant Code:
+
+```kotlin
+var i = 0
+i = i--
+i = 1 + i++
+i = i++ + 1
+
+fun foo(i: Int): Int {
+    return i++
+}
+```
+
 ### InvalidLoopCondition
 
 Reports loop conditions which will never be triggered.
 This might be due to invalid ranges like (10..9) which will cause the loop to never be entered.
+
+#### Noncompliant Code:
+
+```kotlin
+for (i in 2..1) {}
+for (i in 1 downTo 2) {}
+for (i in 2 until 1) {}
+```
+
+#### Compliant Code:
+
+```kotlin
+for (i in 2..2) {}
+for (i in 2 downTo 2) {}
+for (i in 2 until 2) {}
+```
 
 ### WrongEqualsTypeParameter
 
@@ -100,11 +188,41 @@ Reports equals() methods which take in a wrongly typed parameter.
 Correct implementations of the equals() method should only take in a parameter of type Any?
 See: https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html
 
+#### Noncompliant Code:
+
+```kotlin
+class Foo {
+
+    fun equals(other: String): Boolean {
+        return super.equals(other)
+    }
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+class Foo {
+
+    fun equals(other: Any?): Boolean {
+        return super.equals(other)
+    }
+}
+```
+
 ### ExplicitGarbageCollectionCall
 
 Reports all calls to explicitly trigger the Garbage Collector.
 Code should work independently of the garbage collector and should not require the GC to be triggered in certain
 points in time.
+
+#### Noncompliant Code:
+
+```kotlin
+System.gc()
+Runtime.getRuntime().gc()
+System.runFinalization()
+```
 
 ### LateinitUsage
 
@@ -124,11 +242,34 @@ this check.
 
    Allows you to disable the rule for a list of classes
 
+#### Noncompliant Code:
+
+```kotlin
+class Foo {
+    @JvmField lateinit var i1: Int
+    @JvmField @SinceKotlin("1.0.0") lateinit var i2: Int
+}
+```
+
 ### UnconditionalJumpStatementInLoop
 
 Reports loops which contain jump statements that jump regardless of any conditions.
 This implies that the loop is only executed once and thus could be rewritten without a
 loop alltogether.
+
+#### Noncompliant Code:
+
+```kotlin
+for (i in 1..2) break
+```
+
+#### Compliant Code:
+
+```kotlin
+for (i in 1..2) {
+    if (i == 1) break
+}
+```
 
 ### UnreachableCode
 
@@ -136,12 +277,61 @@ Reports unreachable code.
 Code can be unreachable because it is behind return, throw, continue or break expressions.
 This unreachable code should be removed as it serves no purpose.
 
+#### Noncompliant Code:
+
+```kotlin
+for (i in 1..2) {
+    break
+    println() // unreachable
+}
+
+throw IllegalArgumentException()
+println() // unreachable
+
+fun f() {
+    return
+    println() // unreachable
+}
+```
+
 ### UnsafeCallOnNullableType
 
 Reports unsafe calls on nullable types. These calls will throw a NullPointerException in case
 the nullable value is null. Kotlin provides many ways to work with nullable types to increase
 null safety. Guard the code appropriately to prevent NullPointerExceptions.
 
+#### Noncompliant Code:
+
+```kotlin
+fun foo(str: String?) {
+    println(str!!.length)
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+fun foo(str: String?) {
+    println(str?.length)
+}
+```
+
 ### UnsafeCast
 
 Reports casts which are unsafe. In case the cast is not possible it will throw an exception.
+
+#### Noncompliant Code:
+
+```kotlin
+fun foo(s: Any) {
+    println(s as Int)
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+fun foo(s: Any) {
+    println((s as? Int) ?: 0)
+}
+```

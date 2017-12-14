@@ -12,6 +12,18 @@ import org.jetbrains.kotlin.psi.KtPsiUtil
 /**
  * Reports casts which are unsafe. In case the cast is not possible it will throw an exception.
  *
+ * <noncompliant>
+ * fun foo(s: Any) {
+ *     println(s as Int)
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * fun foo(s: Any) {
+ *     println((s as? Int) ?: 0)
+ * }
+ * </compliant>
+ *
  * @author Ivan Balaksha
  * @author Marvin Ramin
  */

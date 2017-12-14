@@ -15,6 +15,24 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * Correct implementations of the equals() method should only take in a parameter of type Any?
  * See: https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html
  *
+ * <noncompliant>
+ * class Foo {
+ *
+ *     fun equals(other: String): Boolean {
+ *         return super.equals(other)
+ *     }
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * class Foo {
+ *
+ *     fun equals(other: Any?): Boolean {
+ *         return super.equals(other)
+ *     }
+ * }
+ * </compliant>
+ *
  * @author schalkms
  * @author Marvin Ramin
  */

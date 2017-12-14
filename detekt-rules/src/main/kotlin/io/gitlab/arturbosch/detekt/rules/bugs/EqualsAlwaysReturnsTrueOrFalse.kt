@@ -19,6 +19,18 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
  * See the Kotlin documentation for Any.equals(other: Any?):
  * https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html
  *
+ * <noncompliant>
+ * override fun equals(other: Any?): Boolean {
+ *     return true
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * override fun equals(other: Any?): Boolean {
+ *     return this == other
+ * }
+ * </compliant>
+ *
  * @author schalkms
  * @author Marvin Ramin
  */

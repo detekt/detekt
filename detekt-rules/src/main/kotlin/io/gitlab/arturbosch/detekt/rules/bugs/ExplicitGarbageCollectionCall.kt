@@ -16,6 +16,12 @@ import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
  * Code should work independently of the garbage collector and should not require the GC to be triggered in certain
  * points in time.
  *
+ * <noncompliant>
+ * System.gc()
+ * Runtime.getRuntime().gc()
+ * System.runFinalization()
+ * </noncompliant>
+ *
  * @active since v1.0.0
  * @author Artur Bosch
  * @author Marvin Ramin
