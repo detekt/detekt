@@ -1,30 +1,86 @@
 package io.gitlab.arturbosch.detekt.core
 
+import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
+import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import org.jetbrains.kotlin.psi.KtFile
+import java.nio.file.Path
 
 /**
  * @author Artur Bosch
  */
-object DetektFacade {
+class DetektFacade(
+		private val detektor: Detektor,
+		settings: ProcessingSettings,
+		private val processors: List<FileProcessListener>) {
 
-	fun instance(settings: ProcessingSettings): Detektor {
-		val providers = RuleSetLocator(settings).load()
-		val processors = FileProcessorLocator(settings).load()
-		return instance(settings, providers, processors)
+	private val saveSupported = settings.config.valueOrDefault("autoCorrect", false)
+	private val pathsToAnalyze = settings.project
+	private val compiler = KtTreeCompiler.instance(settings)
+
+	fun run(): Detektion {
+		val notifications = mutableListOf<Notification>()
+		val ktFiles = mutableListOf<KtFile>()
+		val findings = HashMap<String, List<Finding>>()
+
+		for (current in pathsToAnalyze) {
+			val files = compiler.compile(current)
+
+			processors.forEach { it.onStart(files) }
+			findings.mergeSmells(detektor.run(files))
+			if (saveSupported) {
+				KtFileModifier(current).saveModifiedFiles(files) {
+					notifications.add(it)
+				}
+			}
+
+			ktFiles.addAll(files)
+		}
+
+		val result = DetektResult(findings.toSortedMap())
+		processors.forEach { it.onFinish(ktFiles, result) }
+		return result
 	}
 
-	fun instance(settings: ProcessingSettings, vararg providers: RuleSetProvider): Detektor {
-		return instance(settings, providers.toList(), emptyList())
+	fun run(project: Path, files: List<KtFile>): Detektion = runOnFiles(project, files)
+
+	private fun runOnFiles(current: Path, files: List<KtFile>): DetektResult {
+		processors.forEach { it.onStart(files) }
+
+		val findings = detektor.run(files)
+		val detektion = DetektResult(findings.toSortedMap())
+		if (saveSupported) {
+			KtFileModifier(current).saveModifiedFiles(files) {
+				detektion.add(it)
+			}
+		}
+
+		processors.forEach { it.onFinish(files, detektion) }
+		return detektion
 	}
 
-	fun instance(settings: ProcessingSettings, vararg processors: FileProcessListener): Detektor {
-		return instance(settings, emptyList(), processors.toList())
-	}
+	companion object {
 
-	fun instance(settings: ProcessingSettings,
-				 providers: List<RuleSetProvider>,
-				 processors: List<FileProcessListener>): Detektor {
-		return Detektor(settings, providers, processors)
+		fun create(settings: ProcessingSettings): DetektFacade {
+			val providers = RuleSetLocator(settings).load()
+			val processors = FileProcessorLocator(settings).load()
+			return create(settings, providers, processors)
+		}
+
+		fun create(settings: ProcessingSettings, vararg providers: RuleSetProvider): DetektFacade {
+			return create(settings, providers.toList(), emptyList())
+		}
+
+		fun create(settings: ProcessingSettings, vararg processors: FileProcessListener): DetektFacade {
+			return create(settings, emptyList(), processors.toList())
+		}
+
+		fun create(settings: ProcessingSettings,
+				   providers: List<RuleSetProvider>,
+				   processors: List<FileProcessListener>): DetektFacade {
+			return DetektFacade(Detektor(settings, providers, processors), settings, processors)
+		}
 	}
 }

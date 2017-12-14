@@ -24,7 +24,7 @@ class DetektService(parameters: Parameters) {
 		)
 	}
 
-	private val detektor = DetektFacade.instance(settings, RuleSetLocator(settings).load(), emptyList())
+	private val detektor = DetektFacade.create(settings, RuleSetLocator(settings).load(), emptyList())
 	private val reporter = FindingsReport()
 
 	fun check(dir: WatchedDir) {
@@ -36,14 +36,14 @@ class DetektService(parameters: Parameters) {
 				.distinct()
 				.fold(mutableListOf<Path>()) { acc, path -> acc.add(path); acc }
 
-		val compiler = KtCompiler(watchedDir)
+		val compiler = KtCompiler()
 		val ktFiles = paths
-				.map { compiler.compile(it) }
+				.map { compiler.compile(watchedDir, it) }
 				.fold(mutableListOf<KtFile>()) { acc, ktFile -> acc.add(ktFile); acc }
 
 		if (ktFiles.isNotEmpty()) {
 			paths.forEach { println("Change detected for $it") }
-			val detektion = detektor.run(ktFiles)
+			val detektion = detektor.run(watchedDir, ktFiles)
 			println(reporter.render(detektion))
 		}
 	}
