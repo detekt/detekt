@@ -30,9 +30,7 @@ class Detektor(settings: ProcessingSettings,
 
 		val result = HashMap<String, List<Finding>>()
 		for (map in awaitAll(futures)) {
-			for ((key, findings) in map.entries) {
-				result.merge(key, findings) { f1, f2 -> f1.plus(f2) }
-			}
+			result.mergeSmells(map)
 		}
 
 		result
