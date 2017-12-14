@@ -24,6 +24,6 @@ class RuleSetLocator(settings: ProcessingSettings) {
 
 	private fun RuleSetProvider.provided() = ruleSetId in defaultRuleSetIds
 
-	private val defaultRuleSetIds = listOf("code-smell", "comments", "complexity", "empty-blocks",
+	private val defaultRuleSetIds = listOf("comments", "complexity", "empty-blocks",
 			"exceptions", "potential-bugs", "performance", "style")
 }

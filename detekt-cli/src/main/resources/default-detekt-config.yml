@@ -51,6 +51,21 @@ output-reports:
   #  - 'PlainOutputReport'
   #  - 'XmlOutputReport'
 
+comments:
+  active: true
+  CommentOverPrivateFunction:
+    active: false
+  CommentOverPrivateProperty:
+    active: false
+  UndocumentedPublicClass:
+    active: false
+    searchInNestedClass: true
+    searchInInnerClass: true
+    searchInInnerObject: true
+    searchInInnerInterface: true
+  UndocumentedPublicFunction:
+    active: false
+
 complexity:
   active: true
   LongParameterList:
@@ -94,38 +109,36 @@ complexity:
   LabeledExpression:
     active: false
 
-potential-bugs:
+empty-blocks:
   active: true
-  DuplicateCaseInWhenExpression:
+  EmptyCatchBlock:
     active: true
-  EqualsAlwaysReturnsTrueOrFalse:
-    active: false
-  EqualsWithHashCodeExist:
+  EmptyClassBlock:
     active: true
-  IteratorNotThrowingNoSuchElementException:
-    active: false
-  IteratorHasNextCallsNextMethod:
-    active: false
-  UselessPostfixExpression:
-    active: false
-  InvalidLoopCondition:
-    active: false
-  WrongEqualsTypeParameter:
-    active: false
-  ExplicitGarbageCollectionCall:
+  EmptyDefaultConstructor:
     active: true
-  LateinitUsage:
-    active: false
-    excludeAnnotatedProperties: ""
-    ignoreOnClassesPattern: ""
-  UnconditionalJumpStatementInLoop:
-    active: false
-  UnreachableCode:
+  EmptyDoWhileBlock:
     active: true
-  UnsafeCallOnNullableType:
-    active: false
-  UnsafeCast:
-    active: false
+  EmptyElseBlock:
+    active: true
+  EmptyFinallyBlock:
+    active: true
+  EmptyForBlock:
+    active: true
+  EmptyFunctionBlock:
+    active: true
+  EmptyIfBlock:
+    active: true
+  EmptyInitBlock:
+    active: true
+  EmptyKtFile:
+    active: true
+  EmptySecondaryConstructor:
+    active: true
+  EmptyWhenBlock:
+    active: true
+  EmptyWhileBlock:
+    active: true
 
 exceptions:
   active: true
@@ -173,19 +186,46 @@ exceptions:
   SwallowedException:
     active: false
 
-comments:
+performance:
   active: true
-  CommentOverPrivateFunction:
+  ForEachOnRange:
+    active: true
+  SpreadOperator:
+    active: true
+  UnnecessaryTemporaryInstantiation:
+    active: true
+
+potential-bugs:
+  active: true
+  DuplicateCaseInWhenExpression:
+    active: true
+  EqualsAlwaysReturnsTrueOrFalse:
     active: false
-  CommentOverPrivateProperty:
+  EqualsWithHashCodeExist:
+    active: true
+  IteratorNotThrowingNoSuchElementException:
     active: false
-  UndocumentedPublicClass:
+  IteratorHasNextCallsNextMethod:
     active: false
-    searchInNestedClass: true
-    searchInInnerClass: true
-    searchInInnerObject: true
-    searchInInnerInterface: true
-  UndocumentedPublicFunction:
+  UselessPostfixExpression:
+    active: false
+  InvalidLoopCondition:
+    active: false
+  WrongEqualsTypeParameter:
+    active: false
+  ExplicitGarbageCollectionCall:
+    active: true
+  LateinitUsage:
+    active: false
+    excludeAnnotatedProperties: ""
+    ignoreOnClassesPattern: ""
+  UnconditionalJumpStatementInLoop:
+    active: false
+  UnreachableCode:
+    active: true
+  UnsafeCallOnNullableType:
+    active: false
+  UnsafeCast:
     active: false
 
 style:
@@ -315,46 +355,3 @@ style:
     active: false
   RedundantVisibilityModifierRule:
     active: false
-
-code-smell:
-  active: false
-
-performance:
-  active: true
-  ForEachOnRange:
-    active: true
-  SpreadOperator:
-    active: true
-  UnnecessaryTemporaryInstantiation:
-    active: true
-
-empty-blocks:
-  active: true
-  EmptyCatchBlock:
-    active: true
-  EmptyClassBlock:
-    active: true
-  EmptyDefaultConstructor:
-    active: true
-  EmptyDoWhileBlock:
-    active: true
-  EmptyElseBlock:
-    active: true
-  EmptyFinallyBlock:
-    active: true
-  EmptyForBlock:
-    active: true
-  EmptyFunctionBlock:
-    active: true
-  EmptyIfBlock:
-    active: true
-  EmptyInitBlock:
-    active: true
-  EmptyKtFile:
-    active: true
-  EmptySecondaryConstructor:
-    active: true
-  EmptyWhenBlock:
-    active: true
-  EmptyWhileBlock:
-    active: true
