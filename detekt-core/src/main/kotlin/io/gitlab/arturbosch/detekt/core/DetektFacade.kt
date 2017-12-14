@@ -2,15 +2,18 @@ package io.gitlab.arturbosch.detekt.core
 
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
+import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import org.jetbrains.kotlin.psi.KtFile
+import java.nio.file.Path
 
 /**
  * @author Artur Bosch
  */
 class DetektFacade(
 		private val detektor: Detektor,
-		private val settings: ProcessingSettings,
+		settings: ProcessingSettings,
 		private val processors: List<FileProcessListener>) {
 
 	private val saveSupported = settings.config.valueOrDefault("autoCorrect", false)
@@ -18,19 +21,38 @@ class DetektFacade(
 	private val compiler = KtTreeCompiler.instance(settings)
 
 	fun run(): Detektion {
-		val files = compiler.compile(pathsToAnalyze)
-		return runOnFiles(files)
+		val notifications = mutableListOf<Notification>()
+		val ktFiles = mutableListOf<KtFile>()
+		val findings = HashMap<String, List<Finding>>()
+
+		for (current in pathsToAnalyze) {
+			val files = compiler.compile(current)
+
+			processors.forEach { it.onStart(files) }
+			findings.mergeSmells(detektor.run(files))
+			if (saveSupported) {
+				KtFileModifier(current).saveModifiedFiles(files) {
+					notifications.add(it)
+				}
+			}
+
+			ktFiles.addAll(files)
+		}
+
+		val result = DetektResult(findings.toSortedMap())
+		processors.forEach { it.onFinish(ktFiles, result) }
+		return result
 	}
 
-	fun run(files: List<KtFile>): Detektion = runOnFiles(files)
+	fun run(project: Path, files: List<KtFile>): Detektion = runOnFiles(project, files)
 
-	private fun runOnFiles(files: List<KtFile>): DetektResult {
+	private fun runOnFiles(current: Path, files: List<KtFile>): DetektResult {
 		processors.forEach { it.onStart(files) }
 
 		val findings = detektor.run(files)
 		val detektion = DetektResult(findings.toSortedMap())
 		if (saveSupported) {
-			KtFileModifier(settings.project).saveModifiedFiles(files) {
+			KtFileModifier(current).saveModifiedFiles(files) {
 				detektion.add(it)
 			}
 		}

@@ -10,8 +10,8 @@ class Args {
 
 	@Parameter(names = ["--input", "-i"],
 			required = true,
-			converter = ExistingPathConverter::class, description = "Input path to analyze (path/to/project).")
-	private var input: Path? = null
+			description = "Input paths to analyze.")
+	private var input: String? = null
 
 	@Parameter(names = ["--filters", "-f"],
 			description = "Path filters defined through regex with separator ';' (\".*test.*\").")
@@ -69,6 +69,8 @@ class Args {
 			help = true, description = "Shows the usage.")
 	var help: Boolean = false
 
-	val inputPath: Path
-		get() = input ?: throw IllegalStateException("Input path was not initialized by jcommander!")
+	val inputPath: List<Path> by lazy {
+		MultipleExistingPathConverter().convert(input
+				?: throw IllegalStateException("Input parameter was not initialized by jcommander!"))
+	}
 }

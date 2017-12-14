@@ -43,7 +43,7 @@ class DetektService(parameters: Parameters) {
 
 		if (ktFiles.isNotEmpty()) {
 			paths.forEach { println("Change detected for $it") }
-			val detektion = detektor.run(ktFiles)
+			val detektion = detektor.run(watchedDir, ktFiles)
 			println(reporter.render(detektion))
 		}
 	}
