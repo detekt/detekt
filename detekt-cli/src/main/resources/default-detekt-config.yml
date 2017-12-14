@@ -51,9 +51,6 @@ output-reports:
   #  - 'PlainOutputReport'
   #  - 'XmlOutputReport'
 
-code-smell:
-  active: false
-
 comments:
   active: true
   CommentOverPrivateFunction:
