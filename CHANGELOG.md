@@ -11,6 +11,29 @@
 
 See all issues at: [RC5-6](https://github.com/arturbosch/detekt/milestone/28)
 
+##### Migration
+
+- fixed a critical bug in `SpacingBetweenPackageImports`, please update if you use this rule.
+- Aligned naming conventions rules to meet intellij inspections.
+    - ConstantNaming got removed
+    - TopLevelPropertyNaming and ObjectPropertyNaming was added
+    - there are now configuration parameters for private properties
+
+```yaml
+  VariableNaming:
+    active: true
+    variablePattern: '[a-z][A-Za-z0-9]*'
+    privateVariablePattern: '(_)?[a-z][A-Za-z0-9]*'
+  ObjectPropertyNaming:
+    active: true
+    propertyPattern: '[A-Za-z][_A-Za-z0-9]*'
+  TopLevelPropertyNaming:
+    active: true
+    constantPattern: '[A-Z][_A-Z0-9]*'
+    propertyPattern: '[a-z][A-Za-z\d]*'
+    privatePropertyPattern: '(_)?[a-z][A-Za-z0-9]*'
+```
+
 #### RC5-5
 
 - Add --plugins option to gradle plugin - Fixes #545 - [#561](https://github.com/arturbosch/detekt/pull/561)
@@ -25,6 +48,15 @@ See all issues at: [RC5-6](https://github.com/arturbosch/detekt/milestone/28)
 - Using plugin rulesets in Android project - [#545](https://github.com/arturbosch/detekt/issues/545)
 
 See all issues at: [RC5-5](https://github.com/arturbosch/detekt/milestone/27)
+
+##### Migration
+
+- TooManyFunctions rule got a rework. Old property `threshold` was replaced with:
+    - `thresholdInFiles: 10`
+    - `thresholdInClasses: 10`
+    - `thresholdInInterfaces: 10`
+    - `thresholdInObjects: 10`
+    - `thresholdInEnums: 10`
 
 #### RC5-4
 
@@ -54,6 +86,10 @@ See all issues at: [RC5-3](https://github.com/arturbosch/detekt/milestone/25)
 - WildcardImport should support regex exclusions - [#506](https://github.com/arturbosch/detekt/issues/506)
 
 See all issues at: [RC5-2](https://github.com/arturbosch/detekt/milestone/24)
+
+##### Migration
+
+- rule filters which are defined in the `test-pattern` were applied to main sources too, this is now fixed.
 
 #### RC5
 
@@ -126,6 +162,15 @@ See all issues at: [RC5-2](https://github.com/arturbosch/detekt/milestone/24)
 
 See all issues at: [RC5](https://github.com/arturbosch/detekt/milestone/22)
 
+##### Migration
+
+- Formatting rule set was removed. Use the `detektIdeaFormat` task, KtLint or wait for the official kotlin format
+tool which will be released soon (Hadi mentioned it in a reply to a tweet somewhere).
+- McCabe calculation was corrected and can now be slightly higher which can result in unexpected `ComplexMethod`
+findings.
+- Instead of using a pattern like `.*/test/.*` to filter test sources, you can now specify a `test-pattern` inside a
+configuration. This allows to turn off specific rules or rule sets for test sources.
+
 #### RC4-3 - Second bugfix release for RC4 with a bunch of new contributed rules!
 
 - UndocumentedPublicClass: Fix enum support - [#375](https://github.com/arturbosch/detekt/pull/375)
@@ -179,6 +224,15 @@ See all issues at: [RC4-2](https://github.com/arturbosch/detekt/milestone/20)
 
 See all issues at: [RC4](https://github.com/arturbosch/detekt/milestone/18)
 
+##### Migration
+
+- CatchXXX and ThrowXXX rules were reimplemented and combined into TooGenericExceptionCatched and
+TooGenericExceptionThrown rules. Own exceptions can be added to the list.
+- EmptyXXXBlock rules were reimplemented and can be turned off individually
+- The rule NamingConventions was reimplemented and now every case is separately configurable and new cases were added
+
+See [default-detekt-config.yml](detekt-cli/src/main/resources/default-detekt-config.yml)
+
 #### RC3
 
 - Do not consider empty returns as OptionalReturnKeyword - [#314](https://github.com/arturbosch/detekt/pull/314)
@@ -195,6 +249,10 @@ See all issues at: [RC4](https://github.com/arturbosch/detekt/milestone/18)
 
 See all issues at: [RC3](https://github.com/arturbosch/detekt/milestone/17)
 
+##### Migration
+
+- MagicNumber rule has now different ignore properties
+
 #### RC2
 
 - Remove magic numbers and other detekt issues - [#295](https://github.com/arturbosch/detekt/pull/295)
@@ -208,6 +266,10 @@ See all issues at: [RC3](https://github.com/arturbosch/detekt/milestone/17)
 - Improve build setup - [#275](https://github.com/arturbosch/detekt/pull/275)
 
 See all issues at: [RC2](https://github.com/arturbosch/detekt/milestone/16)
+
+##### Migration
+
+- Make sure to upgrade! RC2 fixes a number of MagicNumber's issues and adds properties to make this rule more configurable.
 
 #### RC1
 
@@ -230,6 +292,15 @@ See all issues at: [RC2](https://github.com/arturbosch/detekt/milestone/16)
 - FileProcessListener's should be loaded through a ServiceLoader - [#101](https://github.com/arturbosch/detekt/issues/101)
 
 See all issues at: [RC1](https://github.com/arturbosch/detekt/milestone/15)
+
+##### Migration
+
+- Attention: new `MagicNumber` and `ReturnCount` rules can let your CI fail
+- Sample project now reflects all possible custom extensions to detekt, see `extensions` section in README
+- `--output` points to a directory now. This is due the fact that many output reports can be generated at once
+- Each `OutputReport` specifies a file name and ending. The parameter `--output-name` can be used to override the
+default provided file name of the `OutputReport`. Unnecessary output reports for your project can be turned off in
+the configuration.
 
 #### M13.2
 
@@ -268,6 +339,11 @@ See all issues at: [M13.2](https://github.com/arturbosch/detekt/milestone/14)
 - Not providing a detekt-closure or profile should not crash the gradle-plugin but instead just use the default profile - [#166](https://github.com/arturbosch/detekt/issues/166)
 
 See all issues at: [M13.1](https://github.com/arturbosch/detekt/milestone/13)
+
+##### Migration
+
+- Misspelled class `Dept` was renamed to `Debt`, if you using custom rule sets, please rebuild it
+- CLI parameter `--project` was renamed to `--input` to match the input parameter of the gradle plugin
 
 #### M13
 
@@ -342,6 +418,70 @@ See all issues at: [M12.2](https://github.com/arturbosch/detekt/milestone/9)
 
 See all issues at: [M12](https://github.com/arturbosch/detekt/milestone/8)
 
+##### Migration
+
+###### CLI
+
+- No break just extra notification that you can pass now more than one configuration file within the `--config` and `--config-resource` parameters
+
+This allows overriding certain configuration parameters in the base configuration (left-most config)
+
+###### Gradle Plugin
+
+- the detekt extension is now aware of `configuration profiles`
+- non default or 'main' profile, needs to be specified like `gradle detektCheck -Ddetekt.profile=[profile-name]`
+
+Instead of writing something like
+
+```groovy
+detekt {
+    version = "1.0.0.M11"
+    input = "$project.projectDir/src"
+    filters = '.*/test/.*'
+    config = "$project.projectDir/detekt-config.yml"
+    output = "$project.projectDir/output.xml"
+    idea {
+        path = "$USER_HOME/.idea"
+        codeStyleScheme = "$USER_HOME/.idea/idea-code-style.xml"
+        inspectionsProfile = "$USER_HOME/.idea/inspect.xml"
+        mask = "*.kt,"
+    }
+}
+```
+
+you have to put a `profile`-closure around the parameters
+
+```groovy
+detekt {
+    profile("main") {
+        version = "1.0.0.M11"
+        input = "$project.projectDir/src"
+        filters = '.*/test/.*'
+        config = "$project.projectDir/detekt-config.yml"
+        output = "$project.projectDir/output.xml"
+    }
+    profile("test") {
+        filters = ".*/src/main/kotlin/.*"
+        config = "$project.projectDir/detekt-test-config.yml"
+    }
+    idea {
+        path = "$USER_HOME/.idea"
+        codeStyleScheme = "$USER_HOME/.idea/idea-code-style.xml"
+        inspectionsProfile = "$USER_HOME/.idea/inspect.xml"
+        mask = "*.kt,"
+    }
+}
+```
+
+This allows you too configure `detekt-rules` specific for each module. Also allowing to have different configurations for production or test code.
+
+###### Renamings
+
+- `NoDocOverPublicClass` -> `UndocumentedPublicClass`
+- `NoDocOverPublicMethod` -> `UndocumentedPublicFunction`
+
+Rename this id's in your configuration
+
 #### M11
 
 - False positive SpacingAfterKeyword - [#71](https://github.com/arturbosch/detekt/issues/71)
@@ -366,6 +506,11 @@ See all issues at: [M12](https://github.com/arturbosch/detekt/milestone/8)
 See all issues at: [M11](https://github.com/arturbosch/detekt/milestone/5)  
 See all issues at: [Formatting](https://github.com/arturbosch/detekt/milestone/6)
 
+##### Migration
+
+- `detekt` task was renamed to `detektCheck` (gradle-plugin)
+- `empty` rule set was renamed to `empty-blocks` rule set
+
 #### M10
 
 - detekt-gradle-plugin - [#16](https://github.com/arturbosch/detekt/issues/16)
@@ -378,6 +523,11 @@ See all issues at: [Formatting](https://github.com/arturbosch/detekt/milestone/6
 
 See all issues at: [M10](https://github.com/arturbosch/detekt/milestone/4)  
 See all issues at: [M10.1](https://api.github.com/repos/arturbosch/detekt/milestones/7)
+
+##### Migration
+
+- `code-smell` rule set was renamed to `complexity` rule set (config)
+
 #### M9
 
 - Support suppressing rules (@SuppressWarnings, @Suppress) - [#6](https://github.com/arturbosch/detekt/issues/6)
