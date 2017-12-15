@@ -28,8 +28,10 @@ class Runner(private val arguments: Args) : Executable {
 		with(arguments) {
 			val pathFilters = createPathFilters()
 			val plugins = createPlugins()
+			val classpath = createClasspath()
 			val config = loadConfiguration()
-			return ProcessingSettings(inputPath, config, pathFilters, parallel, disableDefaultRuleSets, plugins)
+			return ProcessingSettings(inputPath, config, pathFilters, parallel, disableDefaultRuleSets, plugins,
+					classpath)
 		}
 	}
 }
