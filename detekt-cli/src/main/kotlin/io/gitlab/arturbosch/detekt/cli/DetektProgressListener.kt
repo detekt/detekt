@@ -9,15 +9,11 @@ import org.jetbrains.kotlin.psi.KtFile
  */
 class DetektProgressListener : FileProcessListener {
 
-	override fun onStart(files: List<KtFile>) {
-		kotlin.io.print("Analyzing ${files.size} kotlin files: ")
-	}
-
 	override fun onProcess(file: KtFile) {
 		kotlin.io.print(".")
 	}
 
 	override fun onFinish(files: List<KtFile>, result: Detektion) {
-		kotlin.io.println()
+		kotlin.io.println("\n\n${files.size} kotlin files were analyzed.")
 	}
 }
