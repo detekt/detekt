@@ -40,7 +40,18 @@ automatically. The format of the KDoc should be as follows:
     /**
      * This is a nice description for the rule, explaining what it checks, why it exists and how violations can be
      * solved.
+     *
+     * <noncompliant>
+     * // add the non-compliant code example here
+     * </noncompliant>
+     *
+     * <compliant>
+     * // add the compliant code example here
+     * </compliant>
+     *
      * @configuration name - Description for the configuration option (default: "whatever should be the default")
+     *
+     * @author name
      */
     class SomeRule : Rule {
   
@@ -49,6 +60,7 @@ automatically. The format of the KDoc should be as follows:
     
     The description should be as detailed as possible as it will act as the documentation of the rule. Add links to 
     references that explain the rationale for the rule if possible.
+    The `<noncompliant>` and `<compliant>` code examples should be added right after the description of the rule.
     The `@configuration` tag should follow the correct pattern. The name of the configuration option *has* to match the 
     actual name used in the code, otherwise an invalid `default-detekt-config.yml` will be generated and the rule won't
     function correctly by default. 
@@ -60,6 +72,9 @@ automatically. The format of the KDoc should be as follows:
        active: false
        name: whatever should be the default
     ```
+
+    Last but not least, the `@author` tag should be added.
+
 - ... do not forget to test the new rule and/or add tests for any changes made to a rule. 
 - ... do not forget to run `./gradlew build`. This will execute tests locally and update the `default-detekt.config.yml`
 as well as add the new/changed rules to the documentation.
