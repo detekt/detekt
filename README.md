@@ -410,7 +410,7 @@ dependencies {
 
 ### <a name="rulesets">RuleSets</a>
 
-Currently there are six rule sets which are used per default when running the cli.
+Currently there are seven rule sets which are used per default when running the cli.
 
 - complexity    - has rules to detect _LongMethod, LongParameterList, LargeClass, ComplexMethod ..._ smells
 - style         - detects wildcard imports and naming violations
