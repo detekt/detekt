@@ -22,7 +22,7 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 - suppress findings with Kotlin's @Suppress and Java's @SuppressWarnings annotations
 - specify code smell thresholds to break your build or print a warning
 - code Smell baseline and ignore lists for legacy projects
-- [gradle plugin](#gradleplugin) for code analysis, formatting and import migration
+- [gradle plugin](#gradleplugin) for code analysis via Gradle builds
 - gradle tasks to use local `intellij` distribution for [formatting and inspecting](#idea) kotlin code
 - optionally configure detekt for each sub module by using [profiles](#closure) (gradle-plugin)
 - [sonarqube integration](https://github.com/arturbosch/sonar-kotlin)
@@ -234,7 +234,6 @@ detekt {
 - `detektCheck` - Runs a _detekt_ analysis and complexity report. Configure the analysis inside the `detekt-closure`. By default the standard rule set is used without output report or  black- and whitelist checks.
 - `detektGenerateConfig` - Generates a default detekt config file into your projects location.
 - `detektBaseline` - Like `detektCheck`, but creates a code smell baseline. Further detekt runs will only feature new smells not in this list. 
-- `detektMigrate` - Experimental feature for now. Just supports migration of specified imports. See [migration section](#migration).
 - `detektIdeaFormat` - Uses a local `idea` installation to format your kotlin (and other) code according to the specified `code-style.xml`.
 - `detektIdeaInspect` Uses a local `idea` installation to run inspections on your kotlin (and other) code according to the specified `inspections.xml` profile.
 
@@ -297,21 +296,6 @@ detekt {
 ```
 
 For more information on using idea as a headless formatting/inspection tool see [here](https://www.jetbrains.com/help/idea/working-with-intellij-idea-features-from-command-line.html).
-
-##### <a name="migration">Migration</a>
-
-Migration rules can be configured in your `detekt.yml` file. For now only migration of imports is supported.
-
-```yaml
-# *experimental feature*
-# Migration rules can be defined in the same config file or a new one
-migration:
-  active: true
-  imports:
-    # your.package.Class: new.package.or.Class
-    # for example:
-    # io.gitlab.arturbosch.detekt.api.Rule: io.gitlab.arturbosch.detekt.rule.Rule
-```
 
 #### <a name="gradle">Using _detekt_ in custom gradle projects</a>
 

@@ -6,7 +6,6 @@ include 'detekt-cli'
 include 'detekt-test'
 include 'detekt-sample-extensions'
 include 'detekt-gradle-plugin'
-include 'detekt-migration'
 include 'detekt-generator'
 include 'detekt-watch-service'
 
