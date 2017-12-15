@@ -12,6 +12,31 @@ import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtIsExpression
 import org.jetbrains.kotlin.psi.KtPsiUtil
 
+/**
+ *
+ * <noncompliant>
+ * fun foo() {
+ *     try {
+ *         // ... do some I/O
+ *     } catch(e: IOException) {
+ *         if (e is MyException || (e as MyException) != null) { }
+ *     }
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * fun foo() {
+ *     try {
+ *         // ... do some I/O
+ *     } catch(e: MyException) {
+ *     } catch(e: IOException) {
+ *     }
+ *
+ * </compliant>
+ *
+ * @author schalkms
+ * @author Marvin Ramin
+ */
 class InstanceOfCheckForException(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue("InstanceOfCheckForException", Severity.CodeSmell,

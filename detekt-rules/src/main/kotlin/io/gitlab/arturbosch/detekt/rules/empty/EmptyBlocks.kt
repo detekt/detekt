@@ -18,6 +18,13 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.psi.KtWhileExpression
 
 /**
+ *
+ * <noncompliant>
+ * // unnecessary empty blocks should be removed
+ * fun unnecessaryFunction() {
+ * }
+ * </noncompliant>
+ *
  * @active since v1.0.0
  * @author Artur Bosch
  * @author Marvin Ramin

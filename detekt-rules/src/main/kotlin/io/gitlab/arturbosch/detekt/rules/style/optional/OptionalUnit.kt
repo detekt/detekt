@@ -10,6 +10,15 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
+ *
+ * <noncompliant>
+ * fun foo(): Unit { }
+ * </noncompliant>
+ *
+ * <compliant>
+ * fun foo() { }
+ * </compliant>
+ *
  * @author Artur Bosch
  */
 class OptionalUnit(config: Config = Config.empty) : Rule(config) {

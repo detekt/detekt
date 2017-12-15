@@ -11,6 +11,31 @@ import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtThrowExpression
 
+/**
+ *
+ * <noncompliant>
+ * fun foo() {
+ *     try {
+ *         // ...
+ *     } catch(e: IOException) {
+ *         throw MyException(e.message) // e is swallowed
+ *     }
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * fun foo() {
+ *     try {
+ *         // ...
+ *     } catch(e: IOException) {
+ *         throw MyException(e)
+ *     }
+ * }
+ * </compliant>
+ *
+ * @author schalkms
+ * @author Marvin Ramin
+ */
 class SwallowedException(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue("SwallowedException", Severity.CodeSmell,

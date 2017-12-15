@@ -47,6 +47,7 @@ import java.util.ArrayDeque
  * @active since v1.0.0
  * @author Artur Bosch
  * @author Marvin Ramin
+ * @author schalkms
  */
 class EqualsWithHashCodeExist(config: Config = Config.empty) : Rule(config) {
 

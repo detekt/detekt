@@ -12,7 +12,21 @@ import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
+ *
+ * <noncompliant>
+ * data class DataClassWithFunctions(val i: Int) {
+ *     fun foo() { }
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * data class DataClassWithFunctions(val i: Int) {
+ * }
+ * </compliant>
+ *
  * @configuration conversionFunctionPrefix - allowed conversion function names (default: 'to')
+ * @author Ivan Balaksha
+ * @author schalkms
  * @author Marvin Ramin
  */
 class DataClassContainsFunctions(config: Config = Config.empty) : Rule(config) {

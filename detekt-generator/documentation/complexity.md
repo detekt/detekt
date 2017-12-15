@@ -93,6 +93,30 @@ TODO: Specify description
 
    RegEx of Strings that should be ignored
 
+#### Noncompliant Code:
+
+```kotlin
+class Foo {
+
+    val s1 = "lorem"
+    fun bar(s: String = "lorem") {
+        s1.equals("lorem")
+    }
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+class Foo {
+    val lorem = "lorem"
+    val s1 = lorem
+    fun bar(s: String = lorem) {
+        s1.equals(lorem)
+    }
+}
+```
+
 ### MethodOverloading
 
 TODO: Specify description
@@ -149,6 +173,46 @@ TODO: Specify description
 
    
 
+#### Noncompliant Code:
+
+```kotlin
+val str = "foo"
+val isFoo = if (str.startsWith("foo") && !str.endsWith("foo") && !str.endsWith("bar") && !str.endsWith("_")) {
+    // ...
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+val str = "foo"
+val isFoo = if (str.startsWith("foo") && hasCorrectEnding()) {
+    // ...
+}
+
+fun hasCorrectEnding() = return !str.endsWith("foo") && !str.endsWith("bar") && !str.endsWith("_")
+```
+
 ### LabeledExpression
 
 TODO: Specify description
+
+#### Noncompliant Code:
+
+```kotlin
+val range = listOf<String>("foo", "bar")
+loop@ for (r in range) {
+    if (r == "bar") break@loop
+    println(r)
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+val range = listOf<String>("foo", "bar")
+for (r in range) {
+    if (r == "bar") break
+    println(r)
+}
+```

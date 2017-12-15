@@ -15,6 +15,23 @@ import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtWhileExpression
 
 /**
+ *
+ * <noncompliant>
+ * val str = "foo"
+ * val isFoo = if (str.startsWith("foo") && !str.endsWith("foo") && !str.endsWith("bar") && !str.endsWith("_")) {
+ *     // ...
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * val str = "foo"
+ * val isFoo = if (str.startsWith("foo") && hasCorrectEnding()) {
+ *     // ...
+ * }
+ *
+ * fun hasCorrectEnding() = return !str.endsWith("foo") && !str.endsWith("bar") && !str.endsWith("_")
+ * </compliant>
+ *
  * @configuration threshold - (default: 3)
  *
  * @active since v1.0.0

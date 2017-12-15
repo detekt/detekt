@@ -9,6 +9,25 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtThrowExpression
 
 /**
+ *
+ * <noncompliant>
+ * fun foo(bar: Int) {
+ *     if (bar < 1) {
+ *         throw Exception()
+ *     }
+ *     // ...
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * fun foo(bar: Int) {
+ *     if (bar < 1) {
+ *         throw IllegalArgumentException("bar must be greater than zero")
+ *     }
+ *     // ...
+ * }
+ * </compliant>
+ *
  * @configuration exceptions - exceptions which are too generic and should not be thrown
  * (default: - Error
  * 			 - Exception
@@ -19,6 +38,7 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  * @active since v1.0.0
  * @author Artur Bosch
  * @author Marvin Ramin
+ * @author schalkms
  */
 class TooGenericExceptionThrown(config: Config) : Rule(config) {
 

@@ -12,6 +12,27 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtContainerNodeForControlStructureBody
 import org.jetbrains.kotlin.psi.KtIfExpression
 
+/**
+ *
+ * <noncompliant>
+ * val i = 1
+ * if (i > 0) {
+ *     if (i < 5) {
+ *         println(i)
+ *     }
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * val i = 1
+ * if (i > 0 && i < 5) {
+ *     println(i)
+ * }
+ * </compliant>
+ *
+ * @author schalkms
+ * @author Marvin Ramin
+ */
 class CollapsibleIfStatements(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue("CollapsibleIfStatements", Severity.Style,

@@ -14,6 +14,37 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
 
+/**
+ *
+ * <noncompliant>
+ * fun foo() {
+ *     Thread.dumpStack()
+ * }
+ *
+ * fun bar() {
+ *     try {
+ *         // ...
+ *     } catch (e: IOException) {
+ *         e.printStackTrace()
+ *     }
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * val LOGGER = Logger.getLogger()
+ *
+ * fun bar() {
+ *     try {
+ *         // ...
+ *     } catch (e: IOException) {
+ *         LOGGER.info(e)
+ *     }
+ * }
+ * </compliant>
+ *
+ * @author schalkms
+ * @author Marvin Ramin
+ */
 class PrintStackTrace(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue("PrintStackTrace", Severity.CodeSmell,

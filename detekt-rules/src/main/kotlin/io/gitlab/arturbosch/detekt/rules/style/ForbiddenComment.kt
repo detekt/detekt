@@ -10,9 +10,16 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.com.intellij.psi.PsiComment
 
 /**
+ *
+ * <noncompliant>
+ * TODO:,FIXME:,STOPSHIP:
+ * fun foo() { }
+ * </noncompliant>
+ *
  * @configuration values - forbidden comment strings (default: 'TODO:,FIXME:,STOPSHIP:')
  *
  * @active since v1.0.0
+ * @author Niklas Baudy
  * @author Marvin Ramin
  */
 class ForbiddenComment(config: Config = Config.empty) : Rule(config) {

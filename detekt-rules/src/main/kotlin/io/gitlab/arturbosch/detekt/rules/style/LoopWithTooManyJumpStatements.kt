@@ -15,8 +15,21 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtLoopExpression
 
 /**
+ *
+ * <noncompliant>
+ * val strs = listOf("foo, bar")
+ * for (str in strs) {
+ *     if (str == "bar") {
+ *         break
+ *     } else {
+ *         continue
+ *     }
+ * }
+ * </noncompliant>
+ *
  * @configuration maxJumpCount - maximum allowed jumps in a loop (default: 1)
  *
+ * @author schalkms
  * @author Marvin Ramin
  */
 class LoopWithTooManyJumpStatements(config: Config = Config.empty) : Rule(config) {

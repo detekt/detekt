@@ -11,6 +11,15 @@ import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtProperty
 
 /**
+ *
+ * <noncompliant>
+ * val z = if (true) return x else return y
+ * </noncompliant>
+ *
+ * <compliant>
+ * val z = if (true) x else y
+ * </compliant>
+ *
  * @author Artur Bosch
  */
 class OptionalReturnKeyword(config: Config) : Rule(config) {

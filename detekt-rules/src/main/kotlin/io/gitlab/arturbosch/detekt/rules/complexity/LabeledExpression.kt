@@ -9,6 +9,23 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtExpressionWithLabel
 
 /**
+ *
+ * <noncompliant>
+ * val range = listOf<String>("foo", "bar")
+ * loop@ for (r in range) {
+ *     if (r == "bar") break@loop
+ *     println(r)
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * val range = listOf<String>("foo", "bar")
+ * for (r in range) {
+ *     if (r == "bar") break
+ *     println(r)
+ * }
+ * </compliant>
+ *
  * @author Ivan Balaksha
  */
 class LabeledExpression(config: Config = Config.empty) : Rule(config) {

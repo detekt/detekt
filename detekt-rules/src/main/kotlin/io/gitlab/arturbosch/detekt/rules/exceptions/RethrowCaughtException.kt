@@ -11,6 +11,31 @@ import io.gitlab.arturbosch.detekt.rules.collectByType
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtThrowExpression
 
+/**
+ *
+ * <noncompliant>
+ * fun foo() {
+ *     try {
+ *         // ...
+ *     } catch (e: IOException) {
+ *         throw e
+ *     }
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * fun foo() {
+ *     try {
+ *         // ...
+ *     } catch (e: IOException) {
+ *         throw MyException(e)
+ *     }
+ * }
+ * </compliant>
+ *
+ * @author schalkms
+ * @author Marvin Ramin
+ */
 class RethrowCaughtException(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue("RethrowCaughtException", Severity.CodeSmell,

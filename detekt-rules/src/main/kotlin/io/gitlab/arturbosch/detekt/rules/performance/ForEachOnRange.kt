@@ -17,7 +17,24 @@ import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
  * simple for loops. Hence in most contexts a simple for loop should be used instead.
  * See more details here: https://sites.google.com/a/athaydes.com/renato-athaydes/posts/kotlinshiddencosts-benchmarks
  * To solve this CodeSmell, the forEach usage should be replaced by a for loop.
+ *
+ * <noncompliant>
+ * (1..10).forEach {
+ *     println(it)
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * for (i in 1..10) {
+ *     println(i)
+ * }
+ * </compliant>
+ *
  * @active since v1.0.0
+ *
+ * @author Marvin Ramin
+ * @author Ivan Balaksha
+ * @author schalkms
  */
 class ForEachOnRange(config: Config = Config.empty) : Rule(config) {
 	override val issue = Issue("ForEachOnRange",

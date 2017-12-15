@@ -15,7 +15,18 @@ import org.jetbrains.kotlin.psi.KtExpression
  * to using primitive types directly.
  * To solve this issue, remove the wrapping type.
  *
+ * <noncompliant>
+ * val i = Integer(1).toString() // temporary instantiation for conversion
+ * </noncompliant>
+ *
+ * <compliant>
+ * val i = Integer.toString(1)
+ * </compliant>
+ *
  * @active since v1.0.0
+ *
+ * @author schalkms
+ * @author Marvin Ramin
  */
 class UnnecessaryTemporaryInstantiation(config: Config = Config.empty) : Rule(config) {
 
