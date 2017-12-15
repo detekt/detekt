@@ -9,6 +9,23 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtCatchClause
 
 /**
+ *
+ * <noncompliant>
+ * fun foo() {
+ *     try {
+ *         // ... do some I/O
+ *     } catch(e: Exception) { } // too generic exception thrown here
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * fun foo() {
+ *     try {
+ *         // ... do some I/O
+ *     } catch(e: IOException) { }
+ * }
+ * </compliant>
+ *
  * @configuration exceptions - exceptions which are too generic and should not be caught
  * (default: - ArrayIndexOutOfBoundsException
  *			 - Error
@@ -22,6 +39,7 @@ import org.jetbrains.kotlin.psi.KtCatchClause
  * @active since v1.0.0
  * @author Artur Bosch
  * @author Marvin Ramin
+ * @author schalkms
  */
 class TooGenericExceptionCaught(config: Config) : Rule(config) {
 

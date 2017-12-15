@@ -15,6 +15,26 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtLiteralStringTemplateEntry
 
 /**
+ * <noncompliant>
+ * class Foo {
+ *
+ *     val s1 = "lorem"
+ *     fun bar(s: String = "lorem") {
+ *         s1.equals("lorem")
+ *     }
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * class Foo {
+ *     val lorem = "lorem"
+ *     val s1 = lorem
+ *     fun bar(s: String = lorem) {
+ *         s1.equals(lorem)
+ *     }
+ * }
+ * </compliant>
+ *
  * @configuration threshold - maximum allowed duplication (default: 2)
  * @configuration ignoreAnnotation - if values in Annotations should be ignored (default: true)
  * @configuration excludeStringsWithLessThan5Characters - if short strings should be excluded (default: true)

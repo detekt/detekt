@@ -14,6 +14,16 @@ import org.jetbrains.kotlin.psi.KtValueArgumentList
  * Benchmarks showing this performance penalty can be seen here:
  * https://sites.google.com/a/athaydes.com/renato-athaydes/posts/kotlinshiddencosts-benchmarks
  *
+ * <noncompliant>
+ * fun foo(strs: Array<String>) {
+ *     bar(*strs)
+ * }
+ *
+ * fun bar(vararg strs: String) {
+ *     strs.forEach { println(it) }
+ * }
+ * </noncompliant>
+ *
  * @active since v1.0.0
  * @author Ivan Balaksha
  */

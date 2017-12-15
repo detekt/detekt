@@ -13,6 +13,16 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtThrowExpression
 
 /**
+ *
+ * <noncompliant>
+ * class Foo {
+ *
+ *     override fun toString(): String {
+ *         throw IllegalStateException() // exception should not be thrown here
+ *     }
+ * }
+ * </noncompliant>
+ *
  * @configuration methodNames - methods which should not throw exceptions
  * (default: 'toString,hashCode,equals,finalize')
  *

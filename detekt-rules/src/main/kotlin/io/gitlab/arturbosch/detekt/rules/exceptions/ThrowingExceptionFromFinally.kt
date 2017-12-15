@@ -10,6 +10,21 @@ import io.gitlab.arturbosch.detekt.rules.collectByType
 import org.jetbrains.kotlin.psi.KtFinallySection
 import org.jetbrains.kotlin.psi.KtThrowExpression
 
+/**
+ *
+ * <noncompliant>
+ * fun foo() {
+ *     try {
+ *         // ...
+ *     } finally {
+ *         throw IOException()
+ *     }
+ * }
+ * </noncompliant>
+ *
+ * @author schalkms
+ * @author Marvin Ramin
+ */
 class ThrowingExceptionFromFinally(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue("ThrowingExceptionFromFinally", Severity.Defect,

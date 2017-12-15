@@ -32,6 +32,7 @@ data class KtFileContent(val file: KtFile, val content: Sequence<String>)
  *
  * @active since v1.0.0
  * @author Marvin Ramin
+ * @author Artur Bosch
  */
 class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 

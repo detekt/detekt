@@ -12,6 +12,21 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.psiUtil.parents
 
+/**
+ *
+ * <noncompliant>
+ * fun foo() {
+ *     try {
+ *         throw MyException()
+ *     } finally {
+ *         return // prevents MyException from being propagated
+ *     }
+ * }
+ * </noncompliant>
+ *
+ * @author schalkms
+ * @author Marvin Ramin
+ */
 class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue("ReturnFromFinally", Severity.Defect,

@@ -14,7 +14,7 @@ class ReturnFromFinallySpec : SubjectSpek<ReturnFromFinally>({
 			fun x() {
 				try {
 				} finally {
-					return 0
+					return
 				}
 			}
 		"""
@@ -46,7 +46,7 @@ class ReturnFromFinallySpec : SubjectSpek<ReturnFromFinally>({
 				try {
 				} finally {
 					if (1 == 1) {
-						return 0
+						return
 					}
 				}
 			}

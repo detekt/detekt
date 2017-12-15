@@ -13,6 +13,17 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
 
 /**
+ *
+ * <noncompliant>
+ * fun stuff(): Int {
+ *     return 5
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * fun stuff() = 5
+ * </compliant>
+ *
  * @author Artur Bosch
  */
 class ExpressionBodySyntax(config: Config = Config.empty) : Rule(config) {

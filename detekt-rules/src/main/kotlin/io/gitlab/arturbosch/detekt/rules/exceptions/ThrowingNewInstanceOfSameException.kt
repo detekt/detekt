@@ -12,6 +12,31 @@ import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.KtValueArgument
 
+/**
+ *
+ * <noncompliant>
+ * fun foo() {
+ *     try {
+ *         // ...
+ *     } catch (e: IllegalStateException) {
+ *         throw IllegalStateException(e) // rethrows the same exception
+ *     }
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * fun foo() {
+ *     try {
+ *         // ...
+ *     } catch (e: IllegalStateException) {
+ *         throw MyException(e)
+ *     }
+ * }
+ * </compliant>
+ *
+ * @author schalkms
+ * @author Marvin Ramin
+ */
 class ThrowingNewInstanceOfSameException(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue("ThrowingNewInstanceOfSameException", Severity.Defect,

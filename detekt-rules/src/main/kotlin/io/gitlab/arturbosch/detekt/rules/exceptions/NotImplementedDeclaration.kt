@@ -10,6 +10,21 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.resolve.calls.callUtil.getCalleeExpressionIfAny
 
+/**
+ *
+ * <noncompliant>
+ * fun foo() {
+ *     throw NotImplementedError()
+ * }
+ *
+ * fun todo() {
+ *     TODO("")
+ * }
+ * </noncompliant>
+ *
+ * @author schalkms
+ * @author Marvin Ramin
+ */
 class NotImplementedDeclaration(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue("NotImplementedDeclaration", Severity.CodeSmell,

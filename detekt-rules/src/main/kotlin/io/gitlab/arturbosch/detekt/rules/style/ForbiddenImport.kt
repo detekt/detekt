@@ -11,8 +11,17 @@ import io.gitlab.arturbosch.detekt.api.SplitPattern
 import org.jetbrains.kotlin.psi.KtImportList
 
 /**
+ *
+ * <noncompliant>
+ * package foo
+
+ * import kotlin.jvm.JvmField
+ * import kotlin.SinceKotlin
+ * </noncompliant>
+ *
  * @configuration imports - imports which should not be used (default: '')
  *
+ * @author Niklas Baudy
  * @author Marvin Ramin
  */
 class ForbiddenImport(config: Config = Config.empty) : Rule(config) {

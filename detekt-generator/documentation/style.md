@@ -56,6 +56,26 @@ code style guidelines.
 
 TODO: Specify description
 
+#### Noncompliant Code:
+
+```kotlin
+val i = 1
+if (i > 0) {
+    if (i < 5) {
+        println(i)
+    }
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+val i = 1
+if (i > 0 && i < 5) {
+    println(i)
+}
+```
+
 ### ReturnCount
 
 Restrict the number of return methods allowed in methods.
@@ -123,6 +143,22 @@ TODO: Specify description
 
 TODO: Specify description
 
+#### Noncompliant Code:
+
+```kotlin
+fun isNull(str: String) {
+    str.equals(null)
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+fun isNull(str: String) {
+    str == null
+}
+```
+
 ### ForbiddenComment
 
 TODO: Specify description
@@ -133,6 +169,13 @@ TODO: Specify description
 
    forbidden comment strings
 
+#### Noncompliant Code:
+
+```kotlin
+TODO:,FIXME:,STOPSHIP:
+fun foo() { }
+```
+
 ### ForbiddenImport
 
 TODO: Specify description
@@ -142,6 +185,15 @@ TODO: Specify description
 * `imports` (default: `''`)
 
    imports which should not be used
+
+#### Noncompliant Code:
+
+```kotlin
+package foo
+
+import kotlin.jvm.JvmField
+import kotlin.SinceKotlin
+```
 
 ### FunctionOnlyReturningConstant
 
@@ -157,6 +209,18 @@ TODO: Specify description
 
    excluded functions
 
+#### Noncompliant Code:
+
+```kotlin
+fun functionReturningConstantString() = "1"
+```
+
+#### Compliant Code:
+
+```kotlin
+const val constantString = "1"
+```
+
 ### SpacingBetweenPackageAndImports
 
 TODO: Specify description
@@ -170,6 +234,19 @@ TODO: Specify description
 * `maxJumpCount` (default: `1`)
 
    maximum allowed jumps in a loop
+
+#### Noncompliant Code:
+
+```kotlin
+val strs = listOf("foo, bar")
+for (str in strs) {
+    if (str == "bar") {
+        break
+    } else {
+        continue
+    }
+}
+```
 
 ### MethodNameEqualsClassName
 
@@ -347,9 +424,33 @@ TODO: Specify description
 
 TODO: Specify description
 
+#### Noncompliant Code:
+
+```kotlin
+val z = if (true) return x else return y
+```
+
+#### Compliant Code:
+
+```kotlin
+val z = if (true) x else y
+```
+
 ### OptionalUnit
 
 TODO: Specify description
+
+#### Noncompliant Code:
+
+```kotlin
+fun foo(): Unit { }
+```
+
+#### Compliant Code:
+
+```kotlin
+fun foo() { }
+```
 
 ### ProtectedMemberInFinalClass
 
@@ -412,6 +513,21 @@ TODO: Specify description
 
    allowed conversion function names
 
+#### Noncompliant Code:
+
+```kotlin
+data class DataClassWithFunctions(val i: Int) {
+    fun foo() { }
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+data class DataClassWithFunctions(val i: Int) {
+}
+```
+
 ### UseDataClass
 
 TODO: Specify description
@@ -423,6 +539,20 @@ TODO: Specify description
 ### ExpressionBodySyntax
 
 TODO: Specify description
+
+#### Noncompliant Code:
+
+```kotlin
+fun stuff(): Int {
+    return 5
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+fun stuff() = 5
+```
 
 ### NestedClassesVisibility
 

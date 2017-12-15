@@ -11,6 +11,25 @@ import io.gitlab.arturbosch.detekt.api.SplitPattern
 import org.jetbrains.kotlin.psi.KtCallExpression
 
 /**
+ *
+ * <noncompliant>
+ * fun foo(bar: Int) {
+ *     if (bar < 1) {
+ *         throw IllegalArgumentException()
+ *     }
+ *     // ...
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * fun foo(bar: Int) {
+ *     if (bar < 1) {
+ *         throw IllegalArgumentException("bar must be greater than zero")
+ *     }
+ *     // ...
+ * }
+ * </compliant>
+ *
  * @configuration exceptions - exceptions which should not be thrown without message or cause
  * (default: 'IllegalArgumentException,IllegalStateException,IOException')
  *

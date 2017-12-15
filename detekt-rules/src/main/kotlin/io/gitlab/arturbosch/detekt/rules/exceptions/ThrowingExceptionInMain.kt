@@ -13,6 +13,17 @@ import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.KtTypeReference
 
+/**
+ *
+ * <noncompliant>
+ * fun main(args: Array<String>) {
+ *     throw new IOException()
+ * }
+ * </noncompliant>
+ *
+ * @author schalkms
+ * @author Marvin Ramin
+ */
 class ThrowingExceptionInMain(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue("ThrowingExceptionInMain", Severity.CodeSmell,

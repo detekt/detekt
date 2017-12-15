@@ -17,8 +17,18 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
 /**
+ *
+ * <noncompliant>
+ * fun functionReturningConstantString() = "1"
+ * </noncompliant>
+ *
+ * <compliant>
+ * const val constantString = "1"
+ * </compliant>
+ *
  * @configuration ignoreOverridableFunction - if overriden functions should be ignored (default: true)
  * @configuration excludedFunctions - excluded functions (default: 'describeContents')
+ * @author schalkms
  * @author Marvin Ramin
  */
 class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config) {
