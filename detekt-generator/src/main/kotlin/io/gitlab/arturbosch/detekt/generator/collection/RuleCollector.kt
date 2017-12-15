@@ -90,7 +90,7 @@ class RuleVisitor : DetektVisitor() {
 		if (nonCompliantIndex != -1) {
 			val nonCompliantEndIndex = comment.indexOf(ENDTAG_NONCOMPLIANT)
 			if (nonCompliantEndIndex == -1) {
-				throw InvalidCodeExampleDocumentationException()
+				throw InvalidCodeExampleDocumentationException(name)
 			}
 			description = comment.substring(0, nonCompliantIndex).trim()
 			nonCompliant = comment.substring(nonCompliantIndex + TAG_NONCOMPLIANT.length, nonCompliantEndIndex)
@@ -100,7 +100,7 @@ class RuleVisitor : DetektVisitor() {
 			val compliantEndIndex = comment.indexOf(ENDTAG_COMPLIANT)
 			if (compliantIndex != -1) {
 				if (compliantEndIndex == -1) {
-					throw InvalidCodeExampleDocumentationException()
+					throw InvalidCodeExampleDocumentationException(name)
 				}
 				compliant = comment.substring(compliantIndex + TAG_COMPLIANT.length, compliantEndIndex)
 									.trimStartingLineBreaks()
