@@ -51,8 +51,11 @@ class MultiRuleVisitor : DetektVisitor() {
 		rules.addAll(ruleProperties)
 		rules.addAll(rulesVisitor.ruleNames)
 
+		if (name.isEmpty()) {
+			throw InvalidDocumentationException("MultiRule without name found.")
+		}
 		if (rules.isEmpty()) {
-			println("MultiRule $name contains no rules.")
+			throw InvalidDocumentationException("MultiRule $name contains no rules.")
 		}
 		return MultiRule(name, rules)
 	}
