@@ -15,6 +15,26 @@ import org.jetbrains.kotlin.psi.KtImportList
 import org.jetbrains.kotlin.psi.KtPackageDirective
 import org.jetbrains.kotlin.psi.psiUtil.siblings
 
+/**
+ *
+ * <noncompliant>
+ * package foo
+ * import a.b
+ * class Bar { }
+ * </noncompliant>
+ *
+ * <compliant>
+ * package foo
+ *
+ * import a.b
+ *
+ * class Bar { }
+ * </compliant>
+ *
+ * @author schalkms
+ * @author Marvin Ramin
+ * @author Artur Bosch
+ */
 class SpacingBetweenPackageAndImports(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName, Severity.Style,

@@ -15,6 +15,37 @@ import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtSecondaryConstructor
 
+/**
+ *
+ * <noncompliant>
+ * class UtilityClassWithPublicConstructor {
+ *
+ *     constructor() {
+ *         // ...
+ *     }
+ *
+ *     companion object {
+ *         val i = 0
+ *     }
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * class UtilityClass {
+ *
+ *     private constructor() {
+ *         // ...
+ *     }
+ *
+ *     companion object {
+ *         val i = 0
+ *     }
+ * }
+ * </compliant>
+ *
+ * @author schalkms
+ * @author Marvin Ramin
+ */
 class UtilityClassWithPublicConstructor(config: Config = Config.empty) : Rule(config) {
 
 	override val issue: Issue = Issue(javaClass.simpleName,

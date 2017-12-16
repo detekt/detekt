@@ -11,7 +11,7 @@ class ReturnCountSpec : Spek({
 
 	given("a file with 3 returns") {
 		val code = """
-			fun test(x: Int) {
+			fun test(x: Int): Int {
 				when (x) {
 					5 -> return 5
 					4 -> return 4
@@ -39,7 +39,7 @@ class ReturnCountSpec : Spek({
 
 	given("a file with 2 returns") {
 		val code = """
-			fun test(x: Int) {
+			fun test(x: Int): Int {
 				when (x) {
 					5 -> return 5
 					4 -> return 4
@@ -66,7 +66,7 @@ class ReturnCountSpec : Spek({
 
 	given("a function is ignored") {
 		val code = """
-    		fun test(x: Int) {
+    		fun test(x: Int): Int {
 				when (x) {
 					5 -> return 5
 					4 -> return 4
@@ -86,7 +86,7 @@ class ReturnCountSpec : Spek({
 
 	given("a subset of functions are ignored") {
 		val code = """
-    		fun test1(x: Int) {
+    		fun test1(x: Int): Int {
 				when (x) {
 					5 -> return 5
 					4 -> return 4
@@ -94,7 +94,7 @@ class ReturnCountSpec : Spek({
 				}
 			}
 
-			fun test2(x: Int) {
+			fun test2(x: Int): Int {
 				when (x) {
 					5 -> return 5
 					4 -> return 4
@@ -102,7 +102,7 @@ class ReturnCountSpec : Spek({
 				}
 			}
 
-			fun test3(x: Int) {
+			fun test3(x: Int): Int {
 				when (x) {
 					5 -> return 5
 					4 -> return 4

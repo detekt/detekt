@@ -14,6 +14,16 @@ import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.isProtected
 
+/**
+ *
+ * <noncompliant>
+ * class ProtectedMemberInFinalClass {
+ *     protected var i = 0
+ * </noncompliant>
+ *
+ * @author schalkms
+ * @author Marvin Ramin
+ */
 class ProtectedMemberInFinalClass(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName, Severity.Warning,

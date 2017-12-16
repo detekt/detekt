@@ -15,7 +15,25 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
 
 /**
+ *
+ * <noncompliant>
+ * abstract interface Foo { // abstract keyword not needed
+ *
+ *     abstract fun x() // abstract keyword not needed
+ *     abstract var y: Int // abstract keyword not needed
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * interface Foo {
+ *
+ *     fun x()
+ *     var y: Int
+ * }
+ * </compliant>
+ *
  * @active since v1.0.0
+ * @author schalkms
  * @author Marvin Ramin
  */
 class OptionalAbstractKeyword(config: Config = Config.empty) : Rule(config) {

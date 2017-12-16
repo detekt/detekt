@@ -11,6 +11,26 @@ import io.gitlab.arturbosch.detekt.rules.hasCommentInside
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtWhenExpression
 
+/**
+ *
+ * <noncompliant>
+ * val i = 1
+ * when (1) {
+ *     1 -> { println("one") } // unnecessary curly braces
+ *     else -> println("else")
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * val i = 1
+ * when (1) {
+ *     1 -> println("one")
+ *     else -> println("else")
+ * }
+ * </compliant>
+ *
+ * @author schalkms
+ */
 class OptionalWhenBraces(config: Config = Config.empty) : Rule(config) {
 
 	override val issue: Issue = Issue(javaClass.simpleName, Severity.Style,

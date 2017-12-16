@@ -8,7 +8,7 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 import org.jetbrains.spek.subject.dsl.SubjectProviderDsl
 
-class PackageDeclarationStyleSpec : SubjectSpek<SpacingBetweenPackageAndImports>({
+class SpacingBetweenPackageAndImportsSpec : SubjectSpek<SpacingBetweenPackageAndImports>({
 	subject { SpacingBetweenPackageAndImports(Config.empty) }
 
 	given("several package and import declarations") {

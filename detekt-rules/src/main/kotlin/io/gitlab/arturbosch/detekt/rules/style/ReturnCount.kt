@@ -18,11 +18,35 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
  * Having many exit points in a function can be confusing and impacts readability of the
  * code.
  *
+ * <noncompliant>
+ * fun foo(i: Int): String {
+ *     when (i) {
+ *         1 -> return "one"
+ *         2 -> return "two"
+ *         else -> return "other"
+ *     }
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * fun foo(i: Int): String {
+ *     return when (i) {
+ *         1 -> "one"
+ *         2 -> "two"
+ *         else -> "other"
+ *     }
+ * }
+ * </compliant>
+ *
  * @configuration max - define the maximum number of return statements allowed per function
  * (default: 2)
  * @configuration excludedFunctions - define functions to be ignored by this check
  * (default: "equals")
  * @active since v1.0.0
+ *
+ * @author Niklas Baudy
+ * @author schalkms
+ * @author Marvin Ramin
  * @author Patrick Pilch
  */
 class ReturnCount(config: Config = Config.empty) : Rule(config) {

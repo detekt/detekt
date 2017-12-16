@@ -14,6 +14,25 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.isAbstract
 
+/**
+ *
+ * <noncompliant>
+ * abstract class OnlyAbstractMembersInAbstractClass { // violation: no concrete members
+ *
+ *     abstract val i: Int
+ *     abstract fun f()
+ * }
+ *
+ * abstract class OnlyConcreteMembersInAbstractClass { // violation: no abstract members
+ *
+ *     val i: Int = 0
+ *     fun f() { }
+ * }
+ * </noncompliant>
+ *
+ * @author schalkms
+ * @author Marvin Ramin
+ */
 class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
 
 	private val noConcreteMember = "An abstract class without a concrete member can be refactored to an interface."
