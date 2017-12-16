@@ -17,6 +17,7 @@ test-pattern: # Configure exclusions for test sources
     - 'LateinitUsage'
     - 'StringLiteralDuplication'
     - 'SpreadOperator'
+    - 'TooManyFunctions'
 
 build:
   warningThreshold: 5
