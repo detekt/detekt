@@ -28,16 +28,17 @@ class DuplicateCaseInWhenExpression(config: Config) : Rule(config) {
 			Debt.TEN_MINS)
 
 	override fun visitWhenExpression(expression: KtWhenExpression) {
-		val numberOfEntries = expression.entries.size
-		val distinctNumber = expression.entries
+		val distinctEntries = expression.entries
 				.map { it.conditions }
 				.fold(mutableListOf<String>(), { state, conditions ->
 					state.apply { add(conditions.joinToString { it.text }) }
 				})
-				.distinct().size
+				.distinct()
+		val duplicateExpressions = expression.entries - distinctEntries
 
-		if (numberOfEntries > distinctNumber) {
-			report(CodeSmell(issue, Entity.from(expression), message = ""))
+		if (duplicateExpressions.isNotEmpty()) {
+			report(CodeSmell(issue, Entity.from(expression), "When expression has multiple case statements" +
+					"for ${duplicateExpressions.joinToString { ", " }}."))
 		}
 	}
 }

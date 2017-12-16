@@ -33,7 +33,8 @@ class WrongEqualsTypeParameter(config: Config = Config.empty) : Rule(config) {
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		if (function.name == "equals" && !function.hasCorrectEqualsParameter()) {
-			report(CodeSmell(issue, Entity.from(function), message = ""))
+			report(CodeSmell(issue, Entity.from(function), "equals() methods should only take one parameter" +
+					"of type Any?."))
 		}
 	}
 }

@@ -75,7 +75,10 @@ class EqualsWithHashCodeExist(config: Config = Config.empty) : Rule(config) {
 		}
 		queue.push(ViolationHolder())
 		super.visitClassOrObject(classOrObject)
-		if (queue.pop().violation()) report(CodeSmell(issue, Entity.from(classOrObject), message = ""))
+		if (queue.pop().violation()) {
+			report(CodeSmell(issue, Entity.from(classOrObject), "A class should always override hashCode" +
+					" when overriding equals and the other way around."))
+		}
 	}
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
