@@ -9,6 +9,16 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtClassOrObject
 
+/**
+ *
+ * <noncompliant>
+ * class A : Any()
+ * class B : Object()
+ * </noncompliant>
+ *
+ * @author schalkms
+ * @author Artur Bosch
+ */
 class UnnecessaryInheritance(config: Config = Config.empty) : Rule(config) {
 
 	override val issue: Issue = Issue(javaClass.simpleName, Severity.Style,

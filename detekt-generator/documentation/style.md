@@ -93,6 +93,30 @@ code.
 
    define functions to be ignored by this check
 
+#### Noncompliant Code:
+
+```kotlin
+fun foo(i: Int): String {
+    when (i) {
+        1 -> return "one"
+        2 -> return "two"
+        else -> return "other"
+    }
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+fun foo(i: Int): String {
+    return when (i) {
+        1 -> "one"
+        2 -> "two"
+        else -> "other"
+    }
+}
+```
+
 ### ThrowsCount
 
 TODO: Specify description
@@ -102,6 +126,28 @@ TODO: Specify description
 * `max` (default: `2`)
 
    maximum amount of throw statements in a method
+
+#### Noncompliant Code:
+
+```kotlin
+fun foo(i: Int) {
+    when (i) {
+        1 -> throw IllegalArgumentException()
+        2 -> throw IllegalArgumentException()
+        3 -> throw IllegalArgumentException()
+    }
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+fun foo(i: Int) {
+    when (i) {
+        1,2,3 -> throw IllegalArgumentException()
+    }
+}
+```
 
 ### NewLineAtEndOfFile
 
@@ -120,6 +166,33 @@ Library updates can introduce naming clashes with your own classes which might r
 
    Define a whitelist of package names that should be allowed to be imported
 with wildcard imports.
+
+#### Noncompliant Code:
+
+```kotlin
+package test
+
+import io.gitlab.arturbosch.detekt.*
+
+class DetektElements {
+    val element1 = DetektElement1()
+    val element2 = DetektElement2()
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+package test
+
+import io.gitlab.arturbosch.detekt.DetektElement1
+import io.gitlab.arturbosch.detekt.DetektElement2
+
+class DetektElements {
+    val element1 = DetektElement1()
+    val element2 = DetektElement2()
+}
+```
 
 ### MaxLineLength
 
@@ -225,6 +298,24 @@ const val constantString = "1"
 
 TODO: Specify description
 
+#### Noncompliant Code:
+
+```kotlin
+package foo
+import a.b
+class Bar { }
+```
+
+#### Compliant Code:
+
+```kotlin
+package foo
+
+import a.b
+
+class Bar { }
+```
+
 ### LoopWithTooManyJumpStatements
 
 TODO: Specify description
@@ -257,6 +348,15 @@ TODO: Specify description
 * `ignoreOverriddenFunction` (default: `true`)
 
    if overridden functions should be ignored
+
+#### Noncompliant Code:
+
+```kotlin
+class MethodNameEqualsClassName {
+
+    fun methodNameEqualsClassName() { }
+}
+```
 
 ### VariableNaming
 
@@ -398,27 +498,144 @@ TODO: Specify description
 
 TODO: Specify description
 
+#### Noncompliant Code:
+
+```kotlin
+abstract class OnlyAbstractMembersInAbstractClass { // violation: no concrete members
+
+    abstract val i: Int
+    abstract fun f()
+}
+
+abstract class OnlyConcreteMembersInAbstractClass { // violation: no abstract members
+
+    val i: Int = 0
+    fun f() { }
+}
+```
+
 ### UnnecessaryParentheses
 
 Reports unnecessary parentheses around expressions.
 
 Added in v1.0.0.RC4
 
+#### Noncompliant Code:
+
+```kotlin
+val local = (5 + 3)
+
+if ((local == 8)) { }
+
+fun foo() {
+    function({ input -> println(input) })
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+val local = 5 + 3
+
+if (local == 8) { }
+
+fun foo() {
+    function { input -> println(input) }
+}
+```
+
 ### UnnecessaryInheritance
 
 TODO: Specify description
+
+#### Noncompliant Code:
+
+```kotlin
+class A : Any()
+class B : Object()
+```
 
 ### UtilityClassWithPublicConstructor
 
 TODO: Specify description
 
+#### Noncompliant Code:
+
+```kotlin
+class UtilityClassWithPublicConstructor {
+
+    constructor() {
+        // ...
+    }
+
+    companion object {
+        val i = 0
+    }
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+class UtilityClass {
+
+    private constructor() {
+        // ...
+    }
+
+    companion object {
+        val i = 0
+    }
+}
+```
+
 ### OptionalAbstractKeyword
 
 TODO: Specify description
 
+#### Noncompliant Code:
+
+```kotlin
+abstract interface Foo { // abstract keyword not needed
+
+    abstract fun x() // abstract keyword not needed
+    abstract var y: Int // abstract keyword not needed
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+interface Foo {
+
+    fun x()
+    var y: Int
+}
+```
+
 ### OptionalWhenBraces
 
 TODO: Specify description
+
+#### Noncompliant Code:
+
+```kotlin
+val i = 1
+when (1) {
+    1 -> { println("one") } // unnecessary curly braces
+    else -> println("else")
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+val i = 1
+when (1) {
+    1 -> println("one")
+    else -> println("else")
+}
+```
 
 ### OptionalReturnKeyword
 
@@ -456,9 +673,38 @@ fun foo() { }
 
 TODO: Specify description
 
+#### Noncompliant Code:
+
+```kotlin
+class ProtectedMemberInFinalClass {
+    protected var i = 0
+```
+
 ### SerialVersionUIDInSerializableClass
 
 TODO: Specify description
+
+#### Noncompliant Code:
+
+```kotlin
+class IncorrectSerializable : Serializable {
+
+    companion object {
+        val serialVersionUID = 1 // wrong declaration for UID
+    }
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+class CorrectSerializable : Serializable {
+
+    companion object {
+        const val serialVersionUID = 1L
+    }
+}
+```
 
 ### MagicNumber
 
@@ -501,7 +747,19 @@ declarations should be ignored
 
 ### ModifierOrder
 
-Modifier order array taken from ktlint: https://github.com/shyiko/ktlint
+TODO: Specify description
+
+#### Noncompliant Code:
+
+```kotlin
+lateinit internal private val str: String
+```
+
+#### Compliant Code:
+
+```kotlin
+private internal lateinit val str: String
+```
 
 ### DataClassContainsFunctions
 
@@ -532,6 +790,21 @@ data class DataClassWithFunctions(val i: Int) {
 
 TODO: Specify description
 
+#### Noncompliant Code:
+
+```kotlin
+class DataClassCandidate(val i: Int) {
+
+    val i2: Int = 0
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+data class DataClass(val i: Int, val i2: Int)
+```
+
 ### UnusedImports
 
 TODO: Specify description
@@ -558,6 +831,42 @@ fun stuff() = 5
 
 TODO: Specify description
 
+#### Noncompliant Code:
+
+```kotlin
+internal class NestedClassesVisibility {
+
+    public class NestedPublicClass // should not be public
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+internal class NestedClassesVisibility {
+
+    internal class NestedPublicClass
+}
+```
+
 ### RedundantVisibilityModifierRule
 
 TODO: Specify description
+
+#### Noncompliant Code:
+
+```kotlin
+public interface Foo { // public per default
+
+    public fun bar() // public per default
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+interface Foo {
+
+    fun bar()
+}
+```

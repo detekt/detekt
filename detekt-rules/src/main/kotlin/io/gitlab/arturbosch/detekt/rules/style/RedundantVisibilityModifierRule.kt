@@ -15,6 +15,26 @@ import org.jetbrains.kotlin.psi.KtModifierListOwner
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
 
+/**
+ *
+ * <noncompliant>
+ * public interface Foo { // public per default
+ *
+ *     public fun bar() // public per default
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * interface Foo {
+ *
+ *     fun bar()
+ * }
+ * </compliant>
+ *
+ * @author Ivan Balaksha
+ * @author schalkms
+ * @author Marvin Ramin
+ */
 class RedundantVisibilityModifierRule(config: Config = Config.empty) : Rule(config) {
 	override val issue: Issue = Issue("RedundantVisibilityModifierRule",
 			Severity.Style,

@@ -15,6 +15,28 @@ import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtProperty
 
+/**
+ *
+ * <noncompliant>
+ * class IncorrectSerializable : Serializable {
+ *
+ *     companion object {
+ *         val serialVersionUID = 1 // wrong declaration for UID
+ *     }
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * class CorrectSerializable : Serializable {
+ *
+ *     companion object {
+ *         const val serialVersionUID = 1L
+ *     }
+ * }
+ * </compliant>
+ *
+ * @author schalkms
+ */
 class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName, Severity.Warning,

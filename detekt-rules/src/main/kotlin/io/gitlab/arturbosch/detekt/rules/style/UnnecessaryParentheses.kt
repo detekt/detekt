@@ -16,6 +16,28 @@ import org.jetbrains.kotlin.psi.KtValueArgument
  * Reports unnecessary parentheses around expressions.
  *
  * Added in v1.0.0.RC4
+ *
+ * <noncompliant>
+ * val local = (5 + 3)
+ *
+ * if ((local == 8)) { }
+ *
+ * fun foo() {
+ *     function({ input -> println(input) })
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * val local = 5 + 3
+ *
+ * if (local == 8) { }
+ *
+ * fun foo() {
+ *     function { input -> println(input) }
+ * }
+ * </compliant>
+ *
+ * @author Marvin Ramin
  */
 class UnnecessaryParentheses(config: Config = Config.empty) : Rule(config) {
 

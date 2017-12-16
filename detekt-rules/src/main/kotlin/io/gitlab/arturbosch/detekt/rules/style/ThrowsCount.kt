@@ -13,6 +13,25 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtThrowExpression
 
 /**
+ *
+ * <noncompliant>
+ * fun foo(i: Int) {
+ *     when (i) {
+ *         1 -> throw IllegalArgumentException()
+ *         2 -> throw IllegalArgumentException()
+ *         3 -> throw IllegalArgumentException()
+ *     }
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * fun foo(i: Int) {
+ *     when (i) {
+ *         1,2,3 -> throw IllegalArgumentException()
+ *     }
+ * }
+ * </compliant>
+ *
  * @configuration max - maximum amount of throw statements in a method (default: 2)
  *
  * @active since v1.0.0

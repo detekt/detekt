@@ -12,6 +12,25 @@ import io.gitlab.arturbosch.detekt.rules.isPublic
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtEnumEntry
 
+/**
+ *
+ * <noncompliant>
+ * internal class NestedClassesVisibility {
+ *
+ *     public class NestedPublicClass // should not be public
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * internal class NestedClassesVisibility {
+ *
+ *     internal class NestedPublicClass
+ * }
+ * </compliant>
+ *
+ * @author Ivan Balaksha
+ * @author schalkms
+ */
 class NestedClassesVisibility(config: Config = Config.empty) : Rule(config) {
 
 	override val issue: Issue = Issue("NestedClassesVisibility", Severity.Style,

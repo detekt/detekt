@@ -17,6 +17,7 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 
 /**
  * @active since v1.0.0
+ * @author schalkms
  * @author Marvin Ramin
  */
 class SafeCast(config: Config = Config.empty) : Rule(config) {

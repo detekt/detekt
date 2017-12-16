@@ -16,11 +16,35 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  *
  * Library updates can introduce naming clashes with your own classes which might result in compilation errors.
  *
+ * <noncompliant>
+ * package test
+ *
+ * import io.gitlab.arturbosch.detekt.*
+ *
+ * class DetektElements {
+ *     val element1 = DetektElement1()
+ *     val element2 = DetektElement2()
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * package test
+ *
+ * import io.gitlab.arturbosch.detekt.DetektElement1
+ * import io.gitlab.arturbosch.detekt.DetektElement2
+ *
+ * class DetektElements {
+ *     val element1 = DetektElement1()
+ *     val element2 = DetektElement2()
+ * }
+ * </compliant>
+ *
  * @configuration excludeImports - Define a whitelist of package names that should be allowed to be imported
  * with wildcard imports. (default: 'java.util.*,kotlinx.android.synthetic.*')
  *
  * @active since v1.0.0
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 class WildcardImport(config: Config = Config.empty) : Rule(config) {
 

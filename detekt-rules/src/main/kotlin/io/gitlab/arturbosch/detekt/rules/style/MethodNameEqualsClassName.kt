@@ -14,8 +14,17 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 
 /**
+ *
+ * <noncompliant>
+ * class MethodNameEqualsClassName {
+ *
+ *     fun methodNameEqualsClassName() { }
+ * }
+ * </noncompliant>
+ *
  * @configuration ignoreOverriddenFunction - if overridden functions should be ignored (default: true)
  *
+ * @author schalkms
  * @author Marvin Ramin
  */
 class MethodNameEqualsClassName(config: Config = Config.empty) : Rule(config) {

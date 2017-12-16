@@ -17,7 +17,21 @@ import org.jetbrains.kotlin.psi.psiUtil.isAbstract
 import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
 
 /**
+ *
+ * <noncompliant>
+ * class DataClassCandidate(val i: Int) {
+ *
+ *     val i2: Int = 0
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * data class DataClass(val i: Int, val i2: Int)
+ * </compliant>
+ *
  * @author Ivan Balaksha
+ * @author Artur Bosch
+ * @author schalkms
  */
 class UseDataClass(config: Config = Config.empty) : Rule(config) {
 

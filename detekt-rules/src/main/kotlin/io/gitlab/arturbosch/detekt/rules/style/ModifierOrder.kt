@@ -35,6 +35,15 @@ import org.jetbrains.kotlin.psi.psiUtil.allChildren
 import java.util.Arrays
 
 /**
+ *
+ * <noncompliant>
+ * lateinit internal private val str: String
+ * </noncompliant>
+ *
+ * <compliant>
+ * private internal lateinit val str: String
+ * </compliant>
+ *
  * Modifier order array taken from ktlint: https://github.com/shyiko/ktlint
  *
  * @active since v1.0.0
