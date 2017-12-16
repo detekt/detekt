@@ -63,7 +63,7 @@ class LargeClass(config: Config = Config.empty,
 			report(ThresholdedCodeSmell(issue,
 					Entity.from(classOrObject),
 					Metric("SIZE", loc, threshold),
-					message = ""))
+					"Class ${classOrObject.name} is too large. Consider splitting it into smaller pieces."))
 		}
 	}
 

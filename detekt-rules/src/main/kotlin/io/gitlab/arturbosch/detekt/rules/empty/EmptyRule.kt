@@ -25,7 +25,8 @@ abstract class EmptyRule(config: Config) : Rule(config) {
 	fun KtExpression.addFindingIfBlockExprIsEmpty() {
 		val blockExpression = this.asBlockExpression()
 		blockExpression?.statements?.let {
-			if (it.isEmpty() && !blockExpression.hasCommentInside()) report(CodeSmell(issue, Entity.from(this), message = ""))
+			if (it.isEmpty() && !blockExpression.hasCommentInside()) report(CodeSmell(issue, Entity.from(this),
+					"This empty block of code can be removed."))
 		}
 	}
 }

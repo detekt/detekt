@@ -43,7 +43,8 @@ class IteratorHasNextCallsNextMethod(config: Config = Config.empty) : Rule(confi
 		if (classOrObject.isImplementingIterator()) {
 			val hasNextMethod = classOrObject.getMethod("hasNext")
 			if (hasNextMethod != null && callsNextMethod(hasNextMethod)) {
-				report(CodeSmell(issue, Entity.from(classOrObject), message = ""))
+				report(CodeSmell(issue, Entity.from(classOrObject), "Calling hasNext() on an Iterator should" +
+						"have no side-effects. Calling next() is a side effect."))
 			}
 		}
 		super.visitClassOrObject(classOrObject)

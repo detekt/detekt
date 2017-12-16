@@ -44,7 +44,8 @@ class ExplicitGarbageCollectionCall(config: Config) : Rule(config) {
 		if (it.textMatches("gc") || it.textMatches("runFinalization")) {
 			it.getReceiverExpression()?.let {
 				when (it.text) {
-					"System", "Runtime.getRuntime()" -> report(CodeSmell(issue, Entity.Companion.from(expression), message = ""))
+					"System", "Runtime.getRuntime()" -> report(CodeSmell(issue, Entity.Companion.from(expression),
+							"An explicit call to the Garbage Collector as in ${it.text} should not be made."))
 				}
 			}
 		}

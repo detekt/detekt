@@ -37,7 +37,8 @@ class UnsafeCallOnNullableType(config: Config = Config.empty) : Rule(config) {
 	override fun visitUnaryExpression(expression: KtUnaryExpression) {
 		super.visitUnaryExpression(expression)
 		if (expression.operationToken == KtTokens.EXCLEXCL) {
-			report(CodeSmell(issue, Entity.from(expression), message = ""))
+			report(CodeSmell(issue, Entity.from(expression), "Calling !! on a nullable type will throw a " +
+					"NullPointerException at runtime in case the value is null. It should be avoided."))
 		}
 	}
 }

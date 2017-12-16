@@ -43,7 +43,7 @@ class ComplexInterface(config: Config = Config.empty,
 				report(ThresholdedCodeSmell(issue,
 						Entity.from(klass),
 						Metric("SIZE: ", size, threshold),
-						message = ""))
+						"The interface ${klass.name} is too complex. Consider splitting it up."))
 			}
 		}
 		super.visitClass(klass)

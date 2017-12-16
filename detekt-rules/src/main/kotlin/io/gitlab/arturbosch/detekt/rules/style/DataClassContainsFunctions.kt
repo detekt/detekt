@@ -42,14 +42,16 @@ class DataClassContainsFunctions(config: Config = Config.empty) : Rule(config) {
 		if (klass.isData()) {
 			klass.getBody()?.declarations
 					?.filterIsInstance<KtNamedFunction>()
-					?.forEach { checkFunction(it) }
+					?.forEach { checkFunction(klass, it) }
 		}
 		super.visitClass(klass)
 	}
 
-	private fun checkFunction(function: KtNamedFunction) {
+	private fun checkFunction(klass: KtClass, function: KtNamedFunction) {
 		if (!function.isOverridden() && !conversionFunctionPrefix.startWith(function.name)) {
-			report(CodeSmell(issue, Entity.from(function), message = ""))
+			report(CodeSmell(issue, Entity.from(function),
+					"The data class ${klass.name} contains functions which are not registered " +
+							"conversion functions. The offending method is called ${function.name}"))
 		}
 	}
 

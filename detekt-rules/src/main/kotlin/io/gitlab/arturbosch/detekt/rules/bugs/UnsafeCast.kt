@@ -34,7 +34,8 @@ class UnsafeCast(config: Config = Config.empty) : Rule(config) {
 
 	override fun visitBinaryWithTypeRHSExpression(expression: KtBinaryExpressionWithTypeRHS) {
 		if (KtPsiUtil.isUnsafeCast(expression)) {
-			report(CodeSmell(issue, Entity.from(expression), message = ""))
+			report(CodeSmell(issue, Entity.from(expression),
+					"${expression.left.text} cannot be safely cast to ${expression.right?.text ?: ""}."))
 		}
 	}
 }

@@ -16,7 +16,7 @@ class EmptyWhenBlock(config: Config) : EmptyRule(config) {
 
 	override fun visitWhenExpression(expression: KtWhenExpression) {
 		if (expression.entries.isEmpty()) {
-			report(CodeSmell(issue, Entity.from(expression), message = ""))
+			report(CodeSmell(issue, Entity.from(expression), "This when block is empty."))
 		}
 	}
 

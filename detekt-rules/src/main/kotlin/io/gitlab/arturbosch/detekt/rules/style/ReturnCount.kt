@@ -64,7 +64,8 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
 			val numberOfReturns = function.collectByType<KtReturnExpression>().count()
 
 			if (numberOfReturns > max) {
-				report(CodeSmell(issue, Entity.from(function), message = ""))
+				report(CodeSmell(issue, Entity.from(function), "Function ${function.name} has " +
+						"$numberOfReturns return statements which exceeds the limit of $max."))
 			}
 		}
 	}

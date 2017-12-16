@@ -40,7 +40,7 @@ class NestedBlockDepth(config: Config = Config.empty,
 			report(ThresholdedCodeSmell(issue,
 					Entity.from(function),
 					Metric("SIZE", visitor.maxDepth, threshold),
-					message = ""))
+					"Function ${function.name} is nested too deeply."))
 	}
 
 	private class FunctionDepthVisitor(val threshold: Int) : DetektVisitor() {

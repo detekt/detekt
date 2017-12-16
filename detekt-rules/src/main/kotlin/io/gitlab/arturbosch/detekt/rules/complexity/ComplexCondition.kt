@@ -76,7 +76,7 @@ class ComplexCondition(config: Config = Config.empty,
 				report(ThresholdedCodeSmell(issue,
 						Entity.from(condition),
 						Metric("SIZE", count, threshold),
-						message = ""))
+						"This condition is too complex."))
 			}
 		}
 	}

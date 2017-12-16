@@ -65,7 +65,8 @@ class UnreachableCode(config: Config = Config.empty) : Rule(config) {
 		val statements = (expression.parent as? KtBlockExpression)?.statements ?: return
 		val indexOfStatement = statements.indexOf(expression)
 		if (indexOfStatement < statements.size - 1) {
-			report(CodeSmell(issue, Entity.from(expression), message = ""))
+			report(CodeSmell(issue, Entity.from(expression), "This expression is followed by unreachable code" +
+					"which should either be used or removed."))
 		}
 	}
 }

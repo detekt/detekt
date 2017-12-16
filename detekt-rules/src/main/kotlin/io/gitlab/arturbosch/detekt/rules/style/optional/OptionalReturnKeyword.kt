@@ -31,7 +31,8 @@ class OptionalReturnKeyword(config: Config) : Rule(config) {
 			Debt.TEN_MINS)
 
 	private val visitor = ConditionalPathVisitor {
-		report(CodeSmell(issue, Entity.from(it), message = ""))
+		report(CodeSmell(issue, Entity.from(it), "The return keyword is unnecessary as the last" +
+				" statement inside expressions is always returned."))
 	}
 
 	override fun visitDeclaration(dcl: KtDeclaration) {

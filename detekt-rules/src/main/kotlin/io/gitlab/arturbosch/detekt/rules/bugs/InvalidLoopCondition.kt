@@ -43,7 +43,8 @@ class InvalidLoopCondition(config: Config = Config.empty) : Rule(config) {
 		val loopRange = expression.loopRange
 		val range = loopRange?.children
 		if (range != null && range.size >= minimumSize && hasInvalidLoopRange(range)) {
-			report(CodeSmell(issue, Entity.from(loopRange), message = ""))
+			report(CodeSmell(issue, Entity.from(loopRange), "This loop will never be executed due to its " +
+					"expression."))
 		}
 		super.visitForExpression(expression)
 	}

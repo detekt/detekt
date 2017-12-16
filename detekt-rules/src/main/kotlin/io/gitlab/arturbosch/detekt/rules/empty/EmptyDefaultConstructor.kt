@@ -21,7 +21,7 @@ class EmptyDefaultConstructor(config: Config) : EmptyRule(config = config) {
 		if (hasPublicVisibility(constructor.visibilityModifierType())
 				&& constructor.annotationEntries.isEmpty()
 				&& constructor.valueParameters.isEmpty()) {
-			report(CodeSmell(issue, Entity.from(constructor), message = ""))
+			report(CodeSmell(issue, Entity.from(constructor), "An empty default constructor can be removed."))
 		}
 	}
 
