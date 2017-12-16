@@ -22,7 +22,7 @@ internal class RuleVisitor : DetektVisitor() {
 
 	fun getRule(): Rule {
 		if (description.isEmpty()) {
-			println("Rule $name is missing a description")
+			throw InvalidDocumentationException("Rule $name is missing a description in its KDoc.")
 		}
 
 		return Rule(name, description, nonCompliant, compliant, active, configuration)
@@ -87,7 +87,8 @@ internal class RuleVisitor : DetektVisitor() {
 				.filter {
 					val valid = it.contains("-") && it.contains(configurationDefaultValueRegex)
 					if (!valid) {
-						println("Rule $name contains an incorrect configuration option KDoc.")
+						throw InvalidDocumentationException("Rule $name contains an incorrect configuration option" +
+								"tag in the KDoc.")
 					}
 					valid
 				}

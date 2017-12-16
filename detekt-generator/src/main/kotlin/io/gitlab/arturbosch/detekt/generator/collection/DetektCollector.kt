@@ -38,7 +38,7 @@ class DetektCollector : Collector<RuleSetPage> {
 	private fun List<Rule>.findRuleByName(ruleName: String): Rule? {
 		val rule = this.find { it.name == ruleName }
 		if (rule == null) {
-			println("Rule $ruleName was specified in provider but not collected.")
+			throw InvalidDocumentationException("Rule $ruleName was specified in a provider but it was not defined.")
 		}
 		return rule
 	}

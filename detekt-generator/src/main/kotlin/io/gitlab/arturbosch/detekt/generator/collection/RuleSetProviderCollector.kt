@@ -45,8 +45,12 @@ class RuleSetProviderVisitor : DetektVisitor() {
 	private val ruleNames: MutableList<String> = mutableListOf()
 
 	fun getRuleSetProvider(): RuleSetProvider {
+		if (name.isEmpty()) {
+			throw InvalidDocumentationException("RuleSetProvider without name found.")
+		}
+
 		if (description.isEmpty()) {
-			println("Missing description for RuleSet $name")
+			throw InvalidDocumentationException("Missing description for RuleSet $name.")
 		}
 
 		return RuleSetProvider(name, description, active, ruleNames)
@@ -69,7 +73,7 @@ class RuleSetProviderVisitor : DetektVisitor() {
 		super.visitProperty(property)
 		if (property.isOverridden() && property.name != null && property.name == PROPERTY_RULE_SET_ID) {
 			name = (property.initializer as? KtStringTemplateExpression)?.entries?.get(0)?.text
-					?: throw InvalidRuleSetProviderException("RuleSetProvider class " +
+					?: throw InvalidDocumentationException("RuleSetProvider class " +
 					"${property.containingClass()?.name ?: ""} doesn't provide list of rules.")
 		}
 	}
@@ -81,7 +85,7 @@ class RuleSetProviderVisitor : DetektVisitor() {
 			val ruleListExpression = expression.valueArguments
 					.map { it.getArgumentExpression() }
 					.firstOrNull { it?.referenceExpression()?.text == "listOf" }
-					?: throw InvalidRuleSetProviderException("RuleSetProvider $name doesn't provide list of rules.")
+					?: throw InvalidDocumentationException("RuleSetProvider $name doesn't provide list of rules.")
 
 			val ruleArgumentNames = (ruleListExpression as? KtCallExpression)
 					?.valueArguments
@@ -93,5 +97,3 @@ class RuleSetProviderVisitor : DetektVisitor() {
 		}
 	}
 }
-
-class InvalidRuleSetProviderException(message: String) : Exception(message)
