@@ -39,7 +39,7 @@ class KtTreeCompiler(private val compiler: KtCompiler = KtCompiler(),
 	private fun Path.isKotlinFile(): Boolean {
 		val fullPath = this.toAbsolutePath().toString()
 		val kotlinEnding = fullPath.substring(fullPath.lastIndexOf('.') + 1)
-		return kotlinEnding.length == 2 && kotlinEnding.endsWith("kt")
+		return kotlinEnding == "kt" || kotlinEnding == "kts"
 	}
 
 	private fun notIgnored(path: Path) = !filters.any { it.matches(path) }
