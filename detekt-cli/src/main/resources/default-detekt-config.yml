@@ -267,7 +267,7 @@ style:
   LoopWithTooManyJumpStatements:
     active: false
     maxJumpCount: 1
-  MethodNameEqualsClassName:
+  MemberNameEqualsClassName:
     active: false
     ignoreOverriddenFunction: true
   VariableNaming:

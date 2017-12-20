@@ -13,7 +13,7 @@ import io.gitlab.arturbosch.detekt.rules.style.ForbiddenImport
 import io.gitlab.arturbosch.detekt.rules.style.FunctionOnlyReturningConstant
 import io.gitlab.arturbosch.detekt.rules.style.LoopWithTooManyJumpStatements
 import io.gitlab.arturbosch.detekt.rules.style.MagicNumber
-import io.gitlab.arturbosch.detekt.rules.style.MethodNameEqualsClassName
+import io.gitlab.arturbosch.detekt.rules.style.MemberNameEqualsClassName
 import io.gitlab.arturbosch.detekt.rules.style.ModifierOrder
 import io.gitlab.arturbosch.detekt.rules.style.NestedClassesVisibility
 import io.gitlab.arturbosch.detekt.rules.style.NewLineAtEndOfFile
@@ -63,7 +63,7 @@ class StyleGuideProvider : RuleSetProvider {
 				FunctionOnlyReturningConstant(config),
 				SpacingBetweenPackageAndImports(config),
 				LoopWithTooManyJumpStatements(config),
-				MethodNameEqualsClassName(config),
+				MemberNameEqualsClassName(config),
 				NamingRules(config),
 				SafeCast(config),
 				UnnecessaryAbstractClass(config),

@@ -20,6 +20,11 @@ import org.jetbrains.kotlin.psi.KtObjectDeclaration
  *
  *     fun methodNameEqualsClassName() { }
  * }
+ *
+ * class PropertyNameEqualsClassName {
+ *
+ *     val propertyEqualsClassName = 0
+ * }
  * </noncompliant>
  *
  * @configuration ignoreOverriddenFunction - if overridden functions should be ignored (default: true)
@@ -27,7 +32,7 @@ import org.jetbrains.kotlin.psi.KtObjectDeclaration
  * @author schalkms
  * @author Marvin Ramin
  */
-class MethodNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
+class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName, Severity.Style,
 			"A method should not given the same name as its parent class or object.",
@@ -56,16 +61,17 @@ class MethodNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
 	}
 
 	private fun checkClassOrObjectFunctions(klassOrObject: KtClassOrObject, name: String?, message: String) {
-		val children = klassOrObject.getBody()?.children
-		var functions = children?.filterIsInstance<KtNamedFunction>()
+		val body = klassOrObject.getBody() ?: return
+		var functions = body.children.filterIsInstance<KtNamedFunction>()
 		if (ignoreOverriddenFunction) {
-			functions = functions?.filter { !it.isOverridden() }
+			functions = functions.filter { !it.isOverridden() }
 		}
-		functions?.forEach {
-			if (it.name?.equals(name, ignoreCase = true) == true) {
-				report(CodeSmell(issue, Entity.from(it), message))
-			}
-		}
+		functions
+				.filter { it.name?.equals(name, ignoreCase = true) == true }
+				.forEach { report(CodeSmell(issue, Entity.from(it), message)) }
+		body.properties
+				.filter { it.name?.equals(name, ignoreCase = true) == true }
+				.forEach { report(CodeSmell(issue, Entity.from(it), message)) }
 	}
 
 	private fun checkCompanionObjectFunctions(klass: KtClass) {
