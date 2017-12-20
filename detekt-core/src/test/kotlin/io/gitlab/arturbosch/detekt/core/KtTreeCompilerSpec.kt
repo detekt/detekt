@@ -30,7 +30,8 @@ class KtTreeCompilerSpec : Spek({
 			val filter = PathFilter(".*Default.kt")
 			val filterTwo = PathFilter(".*Test.*")
 			val filterThree = PathFilter(".*Complex.*")
-			val ktFiles = KtTreeCompiler(filters = listOf(filter, filterTwo, filterThree)).compile(path)
+			val filterFour = PathFilter(".*KotlinScript.*")
+			val ktFiles = KtTreeCompiler(filters = listOf(filter, filterTwo, filterThree, filterFour)).compile(path)
 			assertThat(ktFiles).isEmpty()
 		}
 
