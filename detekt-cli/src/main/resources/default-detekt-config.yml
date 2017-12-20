@@ -52,21 +52,6 @@ output-reports:
   #  - 'PlainOutputReport'
   #  - 'XmlOutputReport'
 
-comments:
-  active: true
-  CommentOverPrivateFunction:
-    active: false
-  CommentOverPrivateProperty:
-    active: false
-  UndocumentedPublicClass:
-    active: false
-    searchInNestedClass: true
-    searchInInnerClass: true
-    searchInInnerObject: true
-    searchInInnerInterface: true
-  UndocumentedPublicFunction:
-    active: false
-
 complexity:
   active: true
   LongParameterList:
@@ -187,14 +172,20 @@ exceptions:
   SwallowedException:
     active: false
 
-performance:
+comments:
   active: true
-  ForEachOnRange:
-    active: true
-  SpreadOperator:
-    active: true
-  UnnecessaryTemporaryInstantiation:
-    active: true
+  CommentOverPrivateFunction:
+    active: false
+  CommentOverPrivateProperty:
+    active: false
+  UndocumentedPublicClass:
+    active: false
+    searchInNestedClass: true
+    searchInInnerClass: true
+    searchInInnerObject: true
+    searchInInnerInterface: true
+  UndocumentedPublicFunction:
+    active: false
 
 potential-bugs:
   active: true
@@ -293,7 +284,7 @@ style:
     packagePattern: '^[a-z]+(\.[a-z][a-z0-9]*)*$'
   ClassNaming:
     active: true
-    classPattern: '[A-Z$][a-zA-Z$]*'
+    classPattern: '[A-Z$][a-zA-Z0-9$]*'
   EnumNaming:
     active: true
     enumEntryPattern: '^[A-Z$][a-zA-Z_$]*$'
@@ -356,3 +347,12 @@ style:
     active: false
   RedundantVisibilityModifierRule:
     active: false
+
+performance:
+  active: true
+  ForEachOnRange:
+    active: true
+  SpreadOperator:
+    active: true
+  UnnecessaryTemporaryInstantiation:
+    active: true

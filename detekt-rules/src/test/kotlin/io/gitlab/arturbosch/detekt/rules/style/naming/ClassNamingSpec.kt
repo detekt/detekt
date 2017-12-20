@@ -16,6 +16,8 @@ class ClassNamingSpec : Spek({
 		it("should detect no violations") {
 			val findings = NamingRules().lint(
 					"""
+					class MyClassWithNumbers5
+
 					class NamingConventions {
 
 						const val serialVersionUID = 1L
@@ -52,10 +54,10 @@ class ClassNamingSpec : Spek({
 						fun Classmethod() {} // invalid
 
 						companion object {
-							val __bla = Any() //invalid
+							val __bla = Any() // invalid
 						}
 					}
-					class namingConventions {} //invalid
+					class namingConventions {} // invalid
 				"""
 			)
 			assertThat(findings).hasSize(7)

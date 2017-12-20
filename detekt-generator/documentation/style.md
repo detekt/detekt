@@ -259,7 +259,7 @@ TODO: Specify description
 
 #### Configuration options:
 
-* `classPattern` (default: `'[A-Z$][a-zA-Z$]*'`)
+* `classPattern` (default: `'[A-Z$][a-zA-Z0-9$]*'`)
 
    naming pattern (default: '[A
 
