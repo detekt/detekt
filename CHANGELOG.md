@@ -1,5 +1,9 @@
 # Detekt - Changelog
 
+#### RC6
+
+- rename MethodNameEqualsClassName to MemberNameEqualsClassName (rule checks also properties now)
+
 #### RC5-6
 
 - update Kotlin to v1.1.61 - [#573](https://github.com/arturbosch/detekt/pull/573)
