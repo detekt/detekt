@@ -18,7 +18,7 @@ code style guidelines.
 10. [FunctionOnlyReturningConstant](#FunctionOnlyReturningConstant)
 11. [SpacingBetweenPackageAndImports](#SpacingBetweenPackageAndImports)
 12. [LoopWithTooManyJumpStatements](#LoopWithTooManyJumpStatements)
-13. [MethodNameEqualsClassName](#MethodNameEqualsClassName)
+13. [MemberNameEqualsClassName](#MemberNameEqualsClassName)
 14. [VariableNaming](#VariableNaming)
 15. [VariableMinLength](#VariableMinLength)
 16. [VariableMaxLength](#VariableMaxLength)
@@ -339,7 +339,7 @@ for (str in strs) {
 }
 ```
 
-### MethodNameEqualsClassName
+### MemberNameEqualsClassName
 
 TODO: Specify description
 
@@ -355,6 +355,11 @@ TODO: Specify description
 class MethodNameEqualsClassName {
 
     fun methodNameEqualsClassName() { }
+}
+
+class PropertyNameEqualsClassName {
+
+    val propertyEqualsClassName = 0
 }
 ```
 

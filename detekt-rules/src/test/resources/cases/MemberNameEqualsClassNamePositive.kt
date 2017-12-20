@@ -12,6 +12,16 @@ object MethodNameEqualsObjectName {
 	fun MethodNameEqualsObjectName() {} // reports 1
 }
 
+class PropertyNameEqualsClassName {
+
+	val propertyNameEqualsClassName = 0 // reports 1
+}
+
+object PropertyNameEqualsObjectName {
+
+	val propertyNameEqualsObjectName = 0 // reports 1
+}
+
 class StaticMethodNameEqualsClassName {
 
 	companion object {
