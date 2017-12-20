@@ -52,6 +52,21 @@ output-reports:
   #  - 'PlainOutputReport'
   #  - 'XmlOutputReport'
 
+comments:
+  active: true
+  CommentOverPrivateFunction:
+    active: false
+  CommentOverPrivateProperty:
+    active: false
+  UndocumentedPublicClass:
+    active: false
+    searchInNestedClass: true
+    searchInInnerClass: true
+    searchInInnerObject: true
+    searchInInnerInterface: true
+  UndocumentedPublicFunction:
+    active: false
+
 complexity:
   active: true
   LongParameterList:
@@ -172,20 +187,14 @@ exceptions:
   SwallowedException:
     active: false
 
-comments:
+performance:
   active: true
-  CommentOverPrivateFunction:
-    active: false
-  CommentOverPrivateProperty:
-    active: false
-  UndocumentedPublicClass:
-    active: false
-    searchInNestedClass: true
-    searchInInnerClass: true
-    searchInInnerObject: true
-    searchInInnerInterface: true
-  UndocumentedPublicFunction:
-    active: false
+  ForEachOnRange:
+    active: true
+  SpreadOperator:
+    active: true
+  UnnecessaryTemporaryInstantiation:
+    active: true
 
 potential-bugs:
   active: true
@@ -347,12 +356,3 @@ style:
     active: false
   RedundantVisibilityModifierRule:
     active: false
-
-performance:
-  active: true
-  ForEachOnRange:
-    active: true
-  SpreadOperator:
-    active: true
-  UnnecessaryTemporaryInstantiation:
-    active: true

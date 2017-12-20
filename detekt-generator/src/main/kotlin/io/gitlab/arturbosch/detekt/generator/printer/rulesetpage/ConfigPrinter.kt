@@ -26,7 +26,7 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 			yaml { defaultOutputReportsConfiguration() }
 			emptyLine()
 
-			item.forEach { (ruleSet, rules) ->
+			item.sortedBy { it.ruleSet.name }.forEach { (ruleSet, rules) ->
 				node(ruleSet.name) {
 					keyValue { "active" to "${ruleSet.active}" }
 
