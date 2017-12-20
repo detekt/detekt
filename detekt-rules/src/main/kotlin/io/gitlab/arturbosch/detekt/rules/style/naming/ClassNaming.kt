@@ -10,7 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtClassOrObject
 
 /**
- * @configuration classPattern - naming pattern (default: '[A-Z$][a-zA-Z$]*')
+ * @configuration classPattern - naming pattern (default: '[A-Z$][a-zA-Z0-9$]*')
  * @active since v1.0.0
  * @author Marvin Ramin
  */
@@ -20,7 +20,7 @@ class ClassNaming(config: Config = Config.empty) : Rule(config) {
 			Severity.Style,
 			"A classes name should fit the naming pattern defined in the projects configuration.",
 			debt = Debt.FIVE_MINS)
-	private val classPattern = Regex(valueOrDefault(CLASS_PATTERN, "^[A-Z$][a-zA-Z$]*$"))
+	private val classPattern = Regex(valueOrDefault(CLASS_PATTERN, "^[A-Z$][a-zA-Z0-9$]*$"))
 
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
 		if (!classOrObject.identifierName().matches(classPattern)) {
