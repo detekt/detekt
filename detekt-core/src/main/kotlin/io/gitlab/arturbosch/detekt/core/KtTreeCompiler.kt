@@ -20,7 +20,7 @@ class KtTreeCompiler(private val compiler: KtCompiler = KtCompiler(),
 	fun compile(project: Path): List<KtFile> {
 		require(Files.exists(project)) { "Given project path does not exist!" }
 		return when {
-			project.isFile() -> listOf(compiler.compile(project, project))
+			project.isFile() && project.isKotlinFile() -> listOf(compiler.compile(project, project))
 			project.isDirectory() -> compileInternal(project)
 			else -> throw IllegalArgumentException("Provided project path $project is not a file/dir." +
 					" Detekt cannot work with it!")
@@ -37,7 +37,7 @@ class KtTreeCompiler(private val compiler: KtCompiler = KtCompiler(),
 			.toList()
 
 	private fun Path.isKotlinFile(): Boolean {
-		val fullPath = this.toAbsolutePath().toString()
+		val fullPath = toAbsolutePath().toString()
 		val kotlinEnding = fullPath.substring(fullPath.lastIndexOf('.') + 1)
 		return kotlinEnding == "kt" || kotlinEnding == "kts"
 	}
