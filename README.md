@@ -4,9 +4,9 @@
 [![build status](https://travis-ci.org/arturbosch/detekt.svg?branch=master)](https://travis-ci.org/arturbosch/detekt)
 [![build status windows](https://ci.appveyor.com/api/projects/status/3q9g98vveiul7yut/branch/master?svg=true)](https://ci.appveyor.com/project/arturbosch/detekt)
 [ ![Download](https://api.bintray.com/packages/arturbosch/code-analysis/detekt/images/download.svg) ](https://bintray.com/arturbosch/code-analysis/detekt/_latestVersion)
-[![gradle plugin](https://img.shields.io/badge/gradle_plugin-1.0.0.RC5.6-blue.svg?style=flat-square)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
+[![gradle plugin](https://img.shields.io/badge/gradle_plugin-1.0.0.RC6-blue.svg?style=flat-square)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-31-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-34-orange.svg?style=flat-square)](#contributors)
 [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
 
 Meet _detekt_, a static code analysis tool for the _Kotlin_ programming language.
@@ -615,7 +615,10 @@ inside the report file.
 - [Mike Kobit](https://github.com/mkobit) - Gradle build improvements
 - [Philipp Hofmann](https://github.com/philipphofmann) - Readme improvements
 - [Olivier PEREZ](https://github.com/olivierperez) - Fixed Typo in Readme
-- [Sebastian Kaspari](https://github.com/pocmo) - Documentation fix
+- [Sebastian Kaspari](https://github.com/pocmo) - Html-Output-Format, Documentation fix
+- [Ilya Zorin](https://github.com/geralt-encore) - Rule improvement: UnnecessaryAbstractClass
+- [Gesh Markov](https://github.com/markov) - Improve error message for incorrect configuration file
+- [Patrick Pilch](https://github.com/patrickpilch) - Rule improvement: ReturnCount
 
 ### <a name="mentions">Mentions</a>
 

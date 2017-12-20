@@ -2,7 +2,67 @@
 
 #### RC6
 
-- rename MethodNameEqualsClassName to MemberNameEqualsClassName (rule checks also properties now)
+- Allow numbers in ClassNaming. - [#631](https://github.com/arturbosch/detekt/pull/631)
+- Renamed MethodNameEqualsClassName to support properties - [#629](https://github.com/arturbosch/detekt/pull/629)
+- Allow detekt to run on kts too. - [#628](https://github.com/arturbosch/detekt/pull/628)
+- Updated kotlin compiler version - [#625](https://github.com/arturbosch/detekt/pull/625)
+- Add TooManyFunctions to test-pattern exclude-rules by default. - [#624](https://github.com/arturbosch/detekt/pull/624)
+- Consider adding TooManyFunctions to the test-pattern exclude-rules - [#622](https://github.com/arturbosch/detekt/issues/622)
+- Added rule documentation to CONTRIBUTING.md - [#621](https://github.com/arturbosch/detekt/pull/621)
+- Merged CHANGELOG.md and MIGRATION_GUIDE.md - [#620](https://github.com/arturbosch/detekt/pull/620)
+- Do not depend on a specific project path in core classes - #605 - [#619](https://github.com/arturbosch/detekt/pull/619)
+- Consider merging CHANGELOG.md and MIGRATION_GUIDE.md - [#618](https://github.com/arturbosch/detekt/issues/618)
+- remove migration module - [#617](https://github.com/arturbosch/detekt/pull/617)
+- Removed code-smell ruleset - [#616](https://github.com/arturbosch/detekt/pull/616)
+- Remove CodeSmell RuleSet - [#615](https://github.com/arturbosch/detekt/issues/615)
+- Remove migration module - [#614](https://github.com/arturbosch/detekt/issues/614)
+- Allow checks on Kotlin script files (.kts) - [#612](https://github.com/arturbosch/detekt/issues/612)
+- compliant and non-compliant code examples documentation - [#610](https://github.com/arturbosch/detekt/pull/610)
+- Error message agrees with require condition - [#609](https://github.com/arturbosch/detekt/pull/609)
+- False positive in ExceptionRaisedInUnexpectedLocation - [#608](https://github.com/arturbosch/detekt/pull/608)
+- Update dependencies - [#607](https://github.com/arturbosch/detekt/pull/607)
+- Checkout *.md, *.yml & *.html with LF line endings - [#606](https://github.com/arturbosch/detekt/pull/606)
+- Allow --input to handle multiple paths - [#605](https://github.com/arturbosch/detekt/issues/605)
+- update documentation after some merges to master - [#604](https://github.com/arturbosch/detekt/pull/604)
+- README: Remove copy of default-detekt-config.yml - [#603](https://github.com/arturbosch/detekt/pull/603)
+- HtmlOutputFormatTest tests assume Unix-style line endings - [#602](https://github.com/arturbosch/detekt/issues/602)
+- add gradle task to assert config and documentation are generated up-to-date - [#601](https://github.com/arturbosch/detekt/pull/601)
+- update CONTRIBUTING.md to take detekt-generator behavior into account - [#600](https://github.com/arturbosch/detekt/pull/600)
+- ReturnCount augmented to ignore specified function names - [#599](https://github.com/arturbosch/detekt/pull/599)
+- Add SpreadOperator to exclude-rules in test-pattern. - [#598](https://github.com/arturbosch/detekt/pull/598)
+- update gradle to v4.4 - [#597](https://github.com/arturbosch/detekt/pull/597)
+- DetektCli depends on kotlin-compiler-embeddable which pulls in older version of json-org-java - [#596](https://github.com/arturbosch/detekt/issues/596)
+- Turn off comments over private function/property - #589 - [#595](https://github.com/arturbosch/detekt/pull/595)
+- removes active mark for StringLiteralDuplication - [#594](https://github.com/arturbosch/detekt/pull/594)
+- Replace default-detekt-config.yml with generated one - [#593](https://github.com/arturbosch/detekt/pull/593)
+- TooManyFunctions description could be improved - [#592](https://github.com/arturbosch/detekt/issues/592)
+- Automatically run detekt-generator on detekt-rules build task - [#590](https://github.com/arturbosch/detekt/pull/590)
+- Add documentation to generate default config - [#589](https://github.com/arturbosch/detekt/pull/589)
+- Add documentation in bugs rules - [#588](https://github.com/arturbosch/detekt/pull/588)
+- Remove InterruptedException from TooGenericExceptionCaught rule - [#587](https://github.com/arturbosch/detekt/pull/587)
+- InterruptedException is too generic - [#586](https://github.com/arturbosch/detekt/issues/586)
+- detekt-generator code examples - [#584](https://github.com/arturbosch/detekt/pull/584)
+- Add OutputReport implementation that generates an HTML report - [#583](https://github.com/arturbosch/detekt/pull/583)
+- Fix my blogpost title in the README :) - [#582](https://github.com/arturbosch/detekt/pull/582)
+- detekt-generator: content section - [#579](https://github.com/arturbosch/detekt/pull/579)
+- README: Update description of the 'output' parameter for the Gradle plugin - [#578](https://github.com/arturbosch/detekt/pull/578)
+- Output is a folder and not a file anymore - [#577](https://github.com/arturbosch/detekt/issues/577)
+- add detekt-generator module to generate documentation and default config - [#563](https://github.com/arturbosch/detekt/pull/563)
+- Add message to CodeSmell - [#480](https://github.com/arturbosch/detekt/pull/480)
+- Generate default-detekt-config.yml according to rules - [#189](https://github.com/arturbosch/detekt/issues/189)
+
+See all issues at: [RC6](https://github.com/arturbosch/detekt/milestone/23)
+
+##### Migration
+
+- We are now generating [documentation](detekt-generator/documentation) for all rule sets. They are stored as 
+markdown files and will later be hosted on the official detekt website.
+- rename `MethodNameEqualsClassName` to `MemberNameEqualsClassName` (rule checks also properties now)
+- `CHANGELOG.md` and `MIGRATION.md` are now merged. The changelog now has also a migration subsection.
+- Numbers are not allowed in class names (aligned to IntelliJ inspections) - `ClassNaming`-Rule
+- If you are using the text or xml output option of detekt, consider also the new html output format.
+- The `--input` cli property now supports multiple paths separated by a comma.
+- `TooManyFunctions` and `SpreadOperator` rules are turned off for test files per default.
 
 #### RC5-6
 
