@@ -74,6 +74,7 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 			    - 'StringLiteralDuplication'
 			    - 'SpreadOperator'
 			    - 'TooManyFunctions'
+			    - 'LongMethod'
 			""".trimIndent()
 	}
 
