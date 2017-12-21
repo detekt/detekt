@@ -383,7 +383,7 @@ TODO: Specify description
 
 #### Configuration options:
 
-* `minimumVariableNameLength` (default: `3`)
+* `minimumVariableNameLength` (default: `1`)
 
    maximum name length
 
@@ -393,7 +393,7 @@ TODO: Specify description
 
 #### Configuration options:
 
-* `maximumVariableNameLength` (default: `30`)
+* `maximumVariableNameLength` (default: `64`)
 
    maximum name length
 

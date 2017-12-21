@@ -276,10 +276,10 @@ style:
     privateVariablePattern: '(_)?[a-z][A-Za-z0-9]*'
   VariableMinLength:
     active: false
-    minimumVariableNameLength: 3
+    minimumVariableNameLength: 1
   VariableMaxLength:
     active: false
-    maximumVariableNameLength: 30
+    maximumVariableNameLength: 64
   TopLevelPropertyNaming:
     active: true
     constantPattern: '[A-Z][_A-Z0-9]*'

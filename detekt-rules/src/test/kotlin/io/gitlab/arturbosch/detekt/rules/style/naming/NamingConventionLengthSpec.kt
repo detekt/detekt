@@ -15,14 +15,19 @@ class NamingConventionLengthSpec : SubjectSpek<NamingRules>({
 		Assertions.assertThat(subject.findings).isEmpty()
 	}
 
-	it("should report a variable name that is too short") {
+	it("should not report a variable with single letter name") {
 		val code = "private val a = 3"
 		subject.lint(code)
-		Assertions.assertThat(subject.findings).hasSize(1)
+		Assertions.assertThat(subject.findings).hasSize(0)
+	}
+	it("should not report a variable with 64 letters") {
+		val code = "private val varThatIsExactly64LettersLongWhichYouMightNotWantToBelieveInLolz = 3"
+		subject.lint(code)
+		Assertions.assertThat(subject.findings).hasSize(0)
 	}
 
 	it("should report a variable name that is too long") {
-		val code = "private val thisVariableIsDefinitelyWayTooLongAndShouldBeMuchShorter = 3"
+		val code = "private val thisVariableIsDefinitelyWayTooLongLongerThanEverythingAndShouldBeMuchShorter = 3"
 		subject.lint(code)
 		Assertions.assertThat(subject.findings).hasSize(1)
 	}
