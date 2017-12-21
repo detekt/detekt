@@ -12,7 +12,7 @@ import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
 
 /**
  * @configuration minimumVariableNameLength - maximum name length (default: 1)
- * @author Marvin Ramin
+ * @author Marvin Ramin, Niklas Baudy
  */
 class VariableMinLength(config: Config = Config.empty) : Rule(config) {
 
