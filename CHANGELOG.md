@@ -59,7 +59,7 @@ See all issues at: [RC6](https://github.com/arturbosch/detekt/milestone/23)
 markdown files and will later be hosted on the official detekt website.
 - rename `MethodNameEqualsClassName` to `MemberNameEqualsClassName` (rule checks also properties now)
 - `CHANGELOG.md` and `MIGRATION.md` are now merged. The changelog now has also a migration subsection.
-- Numbers are not allowed in class names (aligned to IntelliJ inspections) - `ClassNaming`-Rule
+- Numbers are now allowed in class names (aligned to IntelliJ inspections) - `ClassNaming`-Rule
 - If you are using the text or xml output option of detekt, consider also the new html output format.
 - The `--input` cli property now supports multiple paths separated by a comma.
 - `TooManyFunctions` and `SpreadOperator` rules are turned off for test files per default.
