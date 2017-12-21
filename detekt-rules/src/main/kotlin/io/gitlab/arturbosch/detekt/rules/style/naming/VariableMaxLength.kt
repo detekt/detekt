@@ -10,7 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtProperty
 
 /**
- * @configuration maximumVariableNameLength - maximum name length (default: 30)
+ * @configuration maximumVariableNameLength - maximum name length (default: 64)
  * @author Marvin Ramin
  */
 class VariableMaxLength(config: Config = Config.empty) : Rule(config) {
@@ -33,6 +33,6 @@ class VariableMaxLength(config: Config = Config.empty) : Rule(config) {
 
 	companion object {
 		const val MAXIMUM_VARIABLE_NAME_LENGTH = "maximumVariableNameLength"
-		private const val DEFAULT_MAXIMUM_VARIABLE_NAME_LENGTH = 30
+		private const val DEFAULT_MAXIMUM_VARIABLE_NAME_LENGTH = 64
 	}
 }

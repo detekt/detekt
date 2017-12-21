@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
 
 /**
- * @configuration minimumVariableNameLength - maximum name length (default: 3)
+ * @configuration minimumVariableNameLength - maximum name length (default: 1)
  * @author Marvin Ramin
  */
 class VariableMinLength(config: Config = Config.empty) : Rule(config) {
@@ -38,6 +38,6 @@ class VariableMinLength(config: Config = Config.empty) : Rule(config) {
 
 	companion object {
 		const val MINIMUM_VARIABLE_NAME_LENGTH = "minimumVariableNameLength"
-		private const val DEFAULT_MINIMUM_VARIABLE_NAME_LENGTH = 3
+		private const val DEFAULT_MINIMUM_VARIABLE_NAME_LENGTH = 1
 	}
 }
