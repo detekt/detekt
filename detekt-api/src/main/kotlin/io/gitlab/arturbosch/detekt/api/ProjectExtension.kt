@@ -5,6 +5,7 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.com.intellij.mock.MockProject
 import org.jetbrains.kotlin.com.intellij.openapi.extensions.ExtensionPoint
 import org.jetbrains.kotlin.com.intellij.openapi.extensions.Extensions
+import org.jetbrains.kotlin.com.intellij.openapi.project.Project
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.com.intellij.openapi.util.UserDataHolderBase
 import org.jetbrains.kotlin.com.intellij.pom.PomModel
@@ -17,12 +18,17 @@ import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.psi.KtPsiFactory
 import sun.reflect.ReflectionFactory
 
-val psiProject = KotlinCoreEnvironment.createForProduction(Disposer.newDisposable(),
-		CompilerConfiguration(), EnvironmentConfigFiles.JVM_CONFIG_FILES).project.apply {
-	makeMutable(this as MockProject)
-}
+val psiProject = createKotlinCoreEnvironment()
 
 val psiFactory = KtPsiFactory(psiProject, false)
+
+private fun createKotlinCoreEnvironment(): Project {
+	System.setProperty("idea.io.use.fallback", "true")
+	return KotlinCoreEnvironment.createForProduction(Disposer.newDisposable(),
+			CompilerConfiguration(), EnvironmentConfigFiles.JVM_CONFIG_FILES).project.apply {
+		makeMutable(this as MockProject)
+	}
+}
 
 private fun makeMutable(project: MockProject) {
 	// Based on KtLint by Shyiko
