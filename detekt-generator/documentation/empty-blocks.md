@@ -23,56 +23,57 @@ which should be avoided.
 
 ### EmptyCatchBlock
 
-TODO: Specify description
+Reports empty `catch` blocks. Empty blocks of code serve no purpose and should be removed.
 
 ### EmptyClassBlock
 
-TODO: Specify description
+Reports empty classes. Empty blocks of code serve no purpose and should be removed.
 
 ### EmptyDefaultConstructor
 
-TODO: Specify description
+Reports empty default constructors. Empty blocks of code serve no purpose and should be removed.
 
 ### EmptyDoWhileBlock
 
-TODO: Specify description
+Reports `do`/`while` loops. Empty blocks of code serve no purpose and should be removed.
 
 ### EmptyElseBlock
 
-TODO: Specify description
+Reports empty `else` blocks. Empty blocks of code serve no purpose and should be removed.
 
 ### EmptyFinallyBlock
 
-TODO: Specify description
+Reports empty `finally` blocks. Empty blocks of code serve no purpose and should be removed.
 
 ### EmptyForBlock
 
-TODO: Specify description
+Reports empty `for` loops. Empty blocks of code serve no purpose and should be removed.
 
 ### EmptyFunctionBlock
 
-TODO: Specify description
+Reports empty functions. Empty blocks of code serve no purpose and should be removed.
+This rule will not report functions overriding others.
 
 ### EmptyIfBlock
 
-TODO: Specify description
+Reports empty `if` blocks. Empty blocks of code serve no purpose and should be removed.
 
 ### EmptyInitBlock
 
-TODO: Specify description
+Reports empty `init` expressions. Empty blocks of code serve no purpose and should be removed.
 
 ### EmptyKtFile
 
-TODO: Specify description
+Reports empty Kotlin (.kt) files. Empty blocks of code serve no purpose and should be removed.
 
 ### EmptySecondaryConstructor
 
-TODO: Specify description
+Reports empty secondary constructors. Empty blocks of code serve no purpose and should be removed.
 
 ### EmptyWhenBlock
 
-TODO: Specify description
+Reports empty `when` expressions. Empty blocks of code serve no purpose and should be removed.
 
 ### EmptyWhileBlock
 
-TODO: Specify description
+Reports empty `while` expressions. Empty blocks of code serve no purpose and should be removed.
