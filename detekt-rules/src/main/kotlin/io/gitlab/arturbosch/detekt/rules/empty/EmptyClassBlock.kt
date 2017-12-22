@@ -14,7 +14,7 @@ class EmptyClassBlock(config: Config) : EmptyRule(config) {
 
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
 		classOrObject.getBody()?.declarations?.let {
-			if (it.isEmpty()) report(CodeSmell(issue, Entity.from(classOrObject), "The class or object" +
+			if (it.isEmpty()) report(CodeSmell(issue, Entity.from(classOrObject), "The class or object " +
 					" ${classOrObject.name} is empty."))
 		}
 	}

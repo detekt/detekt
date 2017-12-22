@@ -27,8 +27,8 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
 			val typeReference = function.typeReference
 			typeReference?.typeElement?.text?.let {
 				if (it == "Unit") {
-					report(CodeSmell(issue, Entity.from(typeReference), "The function ${function.name}" +
-							" defines a return type of Unit. This is unnecessary and can safely be removed."))
+					report(CodeSmell(issue, Entity.from(typeReference), "The function ${function.name} " +
+							"defines a return type of Unit. This is unnecessary and can safely be removed."))
 				}
 			}
 		}

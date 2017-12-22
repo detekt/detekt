@@ -34,7 +34,7 @@ class IteratorNotThrowingNoSuchElementException(config: Config = Config.empty) :
 			val nextMethod = classOrObject.getMethod("next")
 			if (nextMethod != null && !nextMethod.throwsNoSuchElementExceptionThrown()) {
 				report(CodeSmell(issue, Entity.from(classOrObject),
-						"This implementation of Iterator does not correctly implement the next() method" +
+						"This implementation of Iterator does not correctly implement the next() method " +
 								"as it doesn't throw a NoSuchElementException when no elements remain in the Iterator."))
 			}
 		}
