@@ -10,6 +10,14 @@ import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtProperty
 
 /**
+ * This rule reports comments and documentation above private properties. This can indicated that the property has a
+ * confusing name or is not in a small enough context to be understood.
+ * Private properties should be named in a self-explanatory way and readers of the code should be able to understand
+ * why the property exists and what purpose it solves without the comment.
+ *
+ * Instead of simply removing the comment to solve this issue prefer renaming the property to a more self-explanatory
+ * name. Refactoring the code and splitting up the class this property resides in can also be an option.
+ *
  * @author Artur Bosch
  * @author Marvin Ramin
  */
