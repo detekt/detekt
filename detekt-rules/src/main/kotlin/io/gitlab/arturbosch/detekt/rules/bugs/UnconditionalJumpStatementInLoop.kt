@@ -42,7 +42,7 @@ class UnconditionalJumpStatementInLoop(config: Config = Config.empty) : Rule(con
 	override fun visitLoopExpression(loopExpression: KtLoopExpression) {
 		if (hasJumpStatement(loopExpression.body)) {
 			report(CodeSmell(issue, Entity.from(loopExpression), "This loop contains an unconditional " +
-					"jump expression which" +
+					"jump expression which " +
 					"essentially renders it useless as it will exit the loop during the first iteration."))
 		}
 		super.visitLoopExpression(loopExpression)
