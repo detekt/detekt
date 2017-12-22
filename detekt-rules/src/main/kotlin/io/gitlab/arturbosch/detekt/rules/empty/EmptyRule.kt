@@ -12,7 +12,6 @@ import io.gitlab.arturbosch.detekt.rules.hasCommentInside
 import org.jetbrains.kotlin.psi.KtExpression
 
 /**
- * @active since v1.0.0
  * @author Artur Bosch
  * @author Marvin Ramin
  */

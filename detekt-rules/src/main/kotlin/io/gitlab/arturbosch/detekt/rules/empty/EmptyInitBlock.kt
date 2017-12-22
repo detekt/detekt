@@ -4,6 +4,8 @@ import io.gitlab.arturbosch.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtClassInitializer
 
 /**
+ * Reports empty `init` expressions. Empty blocks of code serve no purpose and should be removed.
+ *
  * @active since v1.0.0
  * @author schalkms
  * @author Marvin Ramin
