@@ -35,7 +35,7 @@ Reports empty default constructors. Empty blocks of code serve no purpose and sh
 
 ### EmptyDoWhileBlock
 
-Reports `do`/`while` loops. Empty blocks of code serve no purpose and should be removed.
+Reports empty `do`/`while` loops. Empty blocks of code serve no purpose and should be removed.
 
 ### EmptyElseBlock
 
