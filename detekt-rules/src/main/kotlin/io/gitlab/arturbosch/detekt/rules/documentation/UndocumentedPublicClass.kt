@@ -13,10 +13,11 @@ import org.jetbrains.kotlin.psi.KtEnumEntry
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 
 /**
- * This rule report public classes, objects and interfaces which do not have the required documentation.
+ * This rule reports public classes, objects and interfaces which do not have the required documentation.
  * Enable this rule if the codebase should have documentation on every public class, interface and object.
  *
- * With the configuration options the rule can be configured on its behavior to search inner objects.
+ * By default this rule also searches for nested and inner classes and objects. This default behavior can be changed
+ * with the configuration options of this rule.
  *
  * @configuration searchInNestedClass - if nested classes should be searched (default: true)
  * @configuration searchInInnerClass - if inner classes should be searched (default: true)
