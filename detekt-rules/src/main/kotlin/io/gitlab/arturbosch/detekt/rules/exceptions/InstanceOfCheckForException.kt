@@ -13,6 +13,9 @@ import org.jetbrains.kotlin.psi.KtIsExpression
 import org.jetbrains.kotlin.psi.KtPsiUtil
 
 /**
+ * This rule reports `catch` blocks which check for the type of an exception via `is` checks or casts.
+ * Instead of catching generic exception types and then checking for specific exception types the code should
+ * use multiple catch blocks. These catch blocks should then catch the specific exceptions.
  *
  * <noncompliant>
  * fun foo() {

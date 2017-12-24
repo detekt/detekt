@@ -15,6 +15,8 @@ import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
 
 /**
+ * This rule reports code that tries to print the stacktrace of an exception. Instead of simply printing a stacktrace
+ * a better logging solution should be used.
  *
  * <noncompliant>
  * fun foo() {

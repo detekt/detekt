@@ -14,6 +14,7 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.KtTypeReference
 
 /**
+ * This rule reports all exceptions that are thrown in a `main` method.
  *
  * <noncompliant>
  * fun main(args: Array<String>) {

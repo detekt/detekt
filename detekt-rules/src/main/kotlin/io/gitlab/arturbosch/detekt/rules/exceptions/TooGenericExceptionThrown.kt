@@ -9,6 +9,8 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtThrowExpression
 
 /**
+ * This rule reports thrown exceptions that have a type that is too generic. It should be preferred to throw specific
+ * exceptions to the case that has currently occurred.
  *
  * <noncompliant>
  * fun foo(bar: Int) {

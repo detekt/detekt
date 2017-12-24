@@ -11,6 +11,8 @@ import org.jetbrains.kotlin.psi.KtFinallySection
 import org.jetbrains.kotlin.psi.KtThrowExpression
 
 /**
+ * This rule reports all cases where exceptions are thrown from a `finally` block. Throwing exceptions from a `finally`
+ * block should be avoided as it can lead to confusion and discarded exceptions.
  *
  * <noncompliant>
  * fun foo() {
