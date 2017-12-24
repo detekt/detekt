@@ -21,7 +21,9 @@ Rules in this rule set report issues related to how code throws and handles Exce
 
 ### TooGenericExceptionCaught
 
-TODO: Specify description
+This rule reports `catch` blocks for exceptions that have a type that is too generic.
+It should be preferred to catch specific exceptions to the case that is currently handled. If the scope of the caught
+Exception is too broad it can lead to unintended exceptions being caught.
 
 #### Configuration options:
 
@@ -59,7 +61,10 @@ fun foo() {
 
 ### ExceptionRaisedInUnexpectedLocation
 
-TODO: Specify description
+This rule allows to define functions which should never throw an exception. If a function exists that does throw
+an exception it will be reported. By default this rule is checking for `toString`, `hashCode, `equals` and
+`finalize`. This rule is configurable via the `methodNames` configuration to change the list of functions which
+should not throw.
 
 #### Configuration options:
 
@@ -80,7 +85,8 @@ class Foo {
 
 ### TooGenericExceptionThrown
 
-TODO: Specify description
+This rule reports thrown exceptions that have a type that is too generic. It should be preferred to throw specific
+exceptions to the case that has currently occurred.
 
 #### Configuration options:
 
@@ -117,7 +123,10 @@ fun foo(bar: Int) {
 
 ### NotImplementedDeclaration
 
-TODO: Specify description
+This rule reports all exceptions of the type `NotImplementedError` that are thrown. It also reports all `TODO(..)`
+functions.
+These indicate that functionality is still under development and will not work properly. Both of these should only
+serve as temporary declarations and should not be put into production environments.
 
 #### Noncompliant Code:
 
@@ -133,7 +142,8 @@ fun todo() {
 
 ### PrintStackTrace
 
-TODO: Specify description
+This rule reports code that tries to print the stacktrace of an exception. Instead of simply printing a stacktrace
+a better logging solution should be used.
 
 #### Noncompliant Code:
 
@@ -167,7 +177,9 @@ fun bar() {
 
 ### InstanceOfCheckForException
 
-TODO: Specify description
+This rule reports `catch` blocks which check for the type of an exception via `is` checks or casts.
+Instead of catching generic exception types and then checking for specific exception types the code should
+use multiple catch blocks. These catch blocks should then catch the specific exceptions.
 
 #### Noncompliant Code:
 
@@ -194,7 +206,10 @@ fun foo() {
 
 ### ThrowingExceptionsWithoutMessageOrCause
 
-TODO: Specify description
+This rule reports all exceptions which are thrown without arguments or further description.
+Exceptions should always call one of the constructor overloads to provide a message or a cause exception.
+Exceptions should be meaningful and contain as much detail about the error case as possible. This will help track
+down an underlying issue in a better way.
 
 #### Configuration options:
 
@@ -226,7 +241,8 @@ fun foo(bar: Int) {
 
 ### ReturnFromFinally
 
-TODO: Specify description
+Reports all `return` statements in `finally` blocks.
+Using `return` statements in `finally` blocks can discard and hide exceptions that are thrown in the `try` block.
 
 #### Noncompliant Code:
 
@@ -242,7 +258,8 @@ fun foo() {
 
 ### ThrowingExceptionFromFinally
 
-TODO: Specify description
+This rule reports all cases where exceptions are thrown from a `finally` block. Throwing exceptions from a `finally`
+block should be avoided as it can lead to confusion and discarded exceptions.
 
 #### Noncompliant Code:
 
@@ -258,7 +275,7 @@ fun foo() {
 
 ### ThrowingExceptionInMain
 
-TODO: Specify description
+This rule reports all exceptions that are thrown in a `main` method.
 
 #### Noncompliant Code:
 
@@ -270,7 +287,7 @@ fun main(args: Array<String>) {
 
 ### RethrowCaughtException
 
-TODO: Specify description
+This rule reports all exceptions that are caught and then later re-thrown without modification.
 
 #### Noncompliant Code:
 
@@ -298,7 +315,8 @@ fun foo() {
 
 ### ThrowingNewInstanceOfSameException
 
-TODO: Specify description
+Exceptions should not be wrapped inside the same exception type and then rethrown. Prefer wrapping exceptions in more
+meaningful exception types.
 
 #### Noncompliant Code:
 
@@ -326,7 +344,8 @@ fun foo() {
 
 ### SwallowedException
 
-TODO: Specify description
+Exceptions should not be swallowed. This rule reports all instances where exceptions are `caught` and not correctly
+passed into a newly thrown exception.
 
 #### Noncompliant Code:
 
