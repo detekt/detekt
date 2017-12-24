@@ -69,12 +69,4 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 			super.visitReferenceExpression(expression)
 		}
 	}
-
-	class Test {
-		private val unused = "This is not used"
-
-		inner class Something {
-			val test = unused
-		}
-	}
 }
