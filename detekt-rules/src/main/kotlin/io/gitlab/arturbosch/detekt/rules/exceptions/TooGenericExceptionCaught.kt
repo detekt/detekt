@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.psi.KtCatchClause
 /**
  * This rule reports `catch` blocks for exceptions that have a type that is too generic.
  * It should be preferred to catch specific exceptions to the case that is currently handled. If the scope of the caught
- * Exception is too broad it can lead to unintended exceptions being caught.
+ * exception is too broad it can lead to unintended exceptions being caught.
  *
  * <noncompliant>
  * fun foo() {
