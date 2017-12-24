@@ -23,7 +23,7 @@ Rules in this rule set report issues related to how code throws and handles Exce
 
 This rule reports `catch` blocks for exceptions that have a type that is too generic.
 It should be preferred to catch specific exceptions to the case that is currently handled. If the scope of the caught
-Exception is too broad it can lead to unintended exceptions being caught.
+exception is too broad it can lead to unintended exceptions being caught.
 
 #### Configuration options:
 
@@ -64,7 +64,7 @@ fun foo() {
 This rule allows to define functions which should never throw an exception. If a function exists that does throw
 an exception it will be reported. By default this rule is checking for `toString`, `hashCode, `equals` and
 `finalize`. This rule is configurable via the `methodNames` configuration to change the list of functions which
-should not throw.
+should not throw any exceptions.
 
 #### Configuration options:
 
@@ -207,8 +207,8 @@ fun foo() {
 ### ThrowingExceptionsWithoutMessageOrCause
 
 This rule reports all exceptions which are thrown without arguments or further description.
-Exceptions should always call one of the constructor overloads to provide a message or a cause exception.
-Exceptions should be meaningful and contain as much detail about the error case as possible. This will help track
+Exceptions should always call one of the constructor overloads to provide a message or a cause.
+Exceptions should be meaningful and contain as much detail about the error case as possible. This will help to track
 down an underlying issue in a better way.
 
 #### Configuration options:
