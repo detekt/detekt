@@ -30,6 +30,7 @@ import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryInheritance
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryParentheses
 import io.gitlab.arturbosch.detekt.rules.style.UntilInsteadOfRangeTo
 import io.gitlab.arturbosch.detekt.rules.style.UnusedImports
+import io.gitlab.arturbosch.detekt.rules.style.UnusedPrivateMember
 import io.gitlab.arturbosch.detekt.rules.style.UseDataClass
 import io.gitlab.arturbosch.detekt.rules.style.UtilityClassWithPublicConstructor
 import io.gitlab.arturbosch.detekt.rules.style.WildcardImport
@@ -78,6 +79,7 @@ class StyleGuideProvider : RuleSetProvider {
 				DataClassContainsFunctions(config),
 				UseDataClass(config),
 				UnusedImports(config),
+				UnusedPrivateMember(config),
 				ExpressionBodySyntax(config),
 				NestedClassesVisibility(config),
 				RedundantVisibilityModifierRule(config),
