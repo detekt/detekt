@@ -12,6 +12,7 @@ import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtThrowExpression
 
 /**
+ * This rule reports all exceptions that are caught and then later re-thrown without modification.
  *
  * <noncompliant>
  * fun foo() {

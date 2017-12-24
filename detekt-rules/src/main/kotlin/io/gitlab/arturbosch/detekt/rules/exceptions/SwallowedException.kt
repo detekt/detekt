@@ -12,6 +12,8 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtThrowExpression
 
 /**
+ * Exceptions should not be swallowed. This rule reports all instances where exceptions are `caught` and not correctly
+ * passed into a newly thrown exception.
  *
  * <noncompliant>
  * fun foo() {

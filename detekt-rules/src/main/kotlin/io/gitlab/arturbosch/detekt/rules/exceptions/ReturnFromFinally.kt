@@ -13,6 +13,8 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.psiUtil.parents
 
 /**
+ * Reports all `return` statements in `finally` blocks.
+ * Using `return` statements in `finally` blocks can discard and hide exceptions that are thrown in the `try` block.
  *
  * <noncompliant>
  * fun foo() {

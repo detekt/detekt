@@ -13,6 +13,8 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.KtValueArgument
 
 /**
+ * Exceptions should not be wrapped inside the same exception type and then rethrown. Prefer wrapping exceptions in more
+ * meaningful exception types.
  *
  * <noncompliant>
  * fun foo() {
