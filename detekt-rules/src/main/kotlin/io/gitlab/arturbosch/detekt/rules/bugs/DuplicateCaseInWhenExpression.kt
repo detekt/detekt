@@ -48,12 +48,22 @@ class DuplicateCaseInWhenExpression(config: Config) : Rule(config) {
 				.fold(mutableListOf<String>(), { state, conditions ->
 					state.apply { add(conditions.joinToString { it.text }) }
 				})
-		val distinctEntries = entries.distinct()
-
-		if (entries.size > distinctEntries.size) {
-			val duplicateExpressions = entries - distinctEntries
-			report(CodeSmell(issue, Entity.from(expression), "When expression has multiple case statements " +
-					"for ${duplicateExpressions.joinToString { ", " }}."))
+		val duplicates = findDuplicates(entries)
+		if (duplicates.isNotEmpty()) {
+			report(CodeSmell(issue, Entity.from(expression),
+					"When expression has multiple case statements " + "for ${duplicates.joinToString { ", " }}."))
 		}
+	}
+
+	private fun findDuplicates(list: List<String>): MutableSet<String> {
+		val duplicates = mutableSetOf<String>()
+		for (i in 0 until list.size) {
+			for (j in i+1 until list.size) {
+				if (list[i] == list[j]) {
+					duplicates.add(list[i])
+				}
+			}
+		}
+		return duplicates
 	}
 }
