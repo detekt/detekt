@@ -10,7 +10,7 @@ import org.jetbrains.spek.subject.SubjectSpek
 /**
  * @author Artur Bosch
  */
-class DuplicateCaseInWhenSpec : SubjectSpek<DuplicateCaseInWhenExpression>({
+class DuplicateCaseInWhenExpressionSpec : SubjectSpek<DuplicateCaseInWhenExpression>({
 	subject { DuplicateCaseInWhenExpression(Config.empty) }
 
 	given("several when expressions") {
