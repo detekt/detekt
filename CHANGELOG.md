@@ -1,5 +1,9 @@
 # Detekt - Changelog
 
+#### RC6-1
+
+- Ignores default values in constructor properties (MagicNumber) - [#644](https://github.com/arturbosch/detekt/pull/644)
+
 #### RC6
 
 - Allow numbers in ClassNaming. - [#631](https://github.com/arturbosch/detekt/pull/631)
