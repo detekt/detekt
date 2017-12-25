@@ -607,4 +607,28 @@ class MagicNumberSpec : Spek({
 			assertThat(MagicNumber().lint(code)).hasSize(2)
 		}
 	}
+
+	given("in-class declaration with default properties") {
+
+		it("reports no finding") {
+			val code = compileContentForTest("class SomeClassWithDefault(val defaultValue: Int = 10)")
+			assertThat(MagicNumber().lint(code)).isEmpty()
+		}
+
+		it("reports no finding for an explicit declaration") {
+			val code = compileContentForTest("class SomeClassWithDefault constructor(val defaultValue: Int = 10)")
+			assertThat(MagicNumber().lint(code)).isEmpty()
+		}
+	}
+
+	given("default properties in secondary constructor") {
+
+		it("reports no finding") {
+			val code = compileContentForTest("""
+				class SomeClassWithDefault {
+					constructor(val defaultValue: Int = 10) { }
+				}""")
+			assertThat(MagicNumber().lint(code)).isEmpty()
+		}
+	}
 })
