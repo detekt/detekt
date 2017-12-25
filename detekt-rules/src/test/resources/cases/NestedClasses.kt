@@ -28,59 +28,17 @@ class NestedClasses {
 					}
 				}
 
+				try {
+					for (i in 1..5) {
+						when (i) {
+							1 -> print(1)
+						}
+					}
+				} finally {
+
+				}
+
 				fun nestedLocalMethod() {
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
 					println()
 					println()
 					println()

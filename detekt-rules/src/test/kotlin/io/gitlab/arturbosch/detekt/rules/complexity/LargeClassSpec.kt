@@ -16,7 +16,7 @@ class LargeClassSpec : SubjectSpek<LargeClass>({
 	subject { LargeClass() }
 
 	describe("nested classes are also considered") {
-		it("should detect only the nested large class") {
+		it("should detect only the nested large class which exceeds threshold 70") {
 			subject.lint(Case.NestedClasses.path())
 			assertEquals(subject.findings.size, 1)
 		}
