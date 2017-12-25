@@ -18,9 +18,12 @@ import org.jetbrains.kotlin.psi.KtEnumEntry
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
+import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtPrefixExpression
+import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtReturnExpression
+import org.jetbrains.kotlin.psi.KtSecondaryConstructor
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 import java.util.Locale
@@ -68,7 +71,8 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 			valueOrDefault(IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION, true)
 
 	override fun visitConstantExpression(expression: KtConstantExpression) {
-		if (isIgnoredByConfig(expression) || expression.isPartOfFunctionReturnConstant()) {
+		if (isIgnoredByConfig(expression) || expression.isPartOfFunctionReturnConstant()
+				|| expression.isPartOfConstructor()) {
 			return
 		}
 
@@ -141,6 +145,11 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 
 private fun KtConstantExpression.isPartOfFunctionReturnConstant() =
 		parent is KtNamedFunction || (parent is KtReturnExpression && parent.parent.children.size == 1)
+
+private fun KtConstantExpression.isPartOfConstructor(): Boolean {
+	val isInConstructor = parent.parent.parent is KtPrimaryConstructor || parent.parent.parent is KtSecondaryConstructor
+	return isInConstructor && parent is KtParameter
+}
 
 private fun KtConstantExpression.isPartOfHashCode(): Boolean {
 	val containingFunction = getNonStrictParentOfType(KtNamedFunction::class.java)
