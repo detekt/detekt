@@ -1,8 +1,7 @@
-package io.gitlab.arturbosch.detekt.cli
+package io.gitlab.arturbosch.detekt.generator
 
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.ParameterException
-import io.gitlab.arturbosch.detekt.generator.Args
 
 private val jCommander = JCommander()
 

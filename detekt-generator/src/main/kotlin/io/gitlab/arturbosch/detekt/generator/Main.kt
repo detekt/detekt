@@ -2,8 +2,6 @@
 
 package io.gitlab.arturbosch.detekt.generator
 
-import io.gitlab.arturbosch.detekt.cli.failWithErrorMessages
-import io.gitlab.arturbosch.detekt.cli.parseArguments
 import io.gitlab.arturbosch.detekt.core.isFile
 import org.jetbrains.kotlin.utils.addToStdlib.ifNotEmpty
 import java.nio.file.Files
