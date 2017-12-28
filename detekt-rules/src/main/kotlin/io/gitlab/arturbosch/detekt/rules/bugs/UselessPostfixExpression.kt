@@ -29,10 +29,26 @@ import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
  * i = 1 + i++
  * i = i++ + 1
  *
- * fun foo(i: Int): Int {
+ * fun foo(): Int {
+ *     var i = 0
+ *     // ...
  *     return i++
  * }
  * </noncompliant>
+ *
+ * <compliant>
+ * var i = 0
+ * i--
+ * i = i + 2
+ * i = i + 2
+ *
+ * fun foo(): Int {
+ *     var i = 0
+ *     // ...
+ *     i++
+ *     return i
+ * }
+ * </compliant>
  *
  * @author schalkms
  * @author Artur Bosch

@@ -19,7 +19,14 @@ import org.jetbrains.kotlin.psi.psiUtil.isProtected
  * <noncompliant>
  * class ProtectedMemberInFinalClass {
  *     protected var i = 0
+ * }
  * </noncompliant>
+ *
+ * <compliant>
+ * class ProtectedMemberInFinalClass {
+ *     private var i = 0
+ * }
+ * </compliant>
  *
  * @author schalkms
  * @author Marvin Ramin

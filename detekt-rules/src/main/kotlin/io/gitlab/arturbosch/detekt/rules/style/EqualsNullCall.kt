@@ -11,15 +11,11 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 /**
  *
  * <noncompliant>
- * fun isNull(str: String) {
- *     str.equals(null)
- * }
+ * fun isNull(str: String) = str.equals(null)
  * </noncompliant>
  *
  * <compliant>
- * fun isNull(str: String) {
- *     str == null
- * }
+ * fun isNull(str: String) = str == null
  * </compliant>
  *
  * @author schalkms

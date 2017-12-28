@@ -45,7 +45,7 @@ exception is too broad it can lead to unintended exceptions being caught.
 fun foo() {
     try {
         // ... do some I/O
-    } catch(e: Exception) { } // too generic exception thrown here
+    } catch(e: Exception) { } // too generic exception caught here
 }
 ```
 
@@ -104,7 +104,7 @@ exceptions to the case that has currently occurred.
 ```kotlin
 fun foo(bar: Int) {
     if (bar < 1) {
-        throw Exception()
+        throw Exception() // too generic exception thrown here
     }
     // ...
 }
@@ -276,12 +276,14 @@ fun foo() {
 ### ThrowingExceptionInMain
 
 This rule reports all exceptions that are thrown in a `main` method.
+An exception should only be thrown if it can be handled by a "higher" function.
 
 #### Noncompliant Code:
 
 ```kotlin
 fun main(args: Array<String>) {
-    throw new IOException()
+    // ...
+    throw IOException() // exception should not be thrown here
 }
 ```
 

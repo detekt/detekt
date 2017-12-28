@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  * <noncompliant>
  * fun foo(bar: Int) {
  *     if (bar < 1) {
- *         throw Exception()
+ *         throw Exception() // too generic exception thrown here
  *     }
  *     // ...
  * }

@@ -16,7 +16,7 @@ import org.jetbrains.kotlin.psi.KtExpression
  * To solve this issue, remove the wrapping type.
  *
  * <noncompliant>
- * val i = Integer(1).toString() // temporary instantiation for conversion
+ * val i = Integer(1).toString() // temporary Integer instantiation just for the conversion
  * </noncompliant>
  *
  * <compliant>

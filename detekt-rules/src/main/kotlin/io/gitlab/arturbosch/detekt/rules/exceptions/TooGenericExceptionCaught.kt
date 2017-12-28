@@ -17,7 +17,7 @@ import org.jetbrains.kotlin.psi.KtCatchClause
  * fun foo() {
  *     try {
  *         // ... do some I/O
- *     } catch(e: Exception) { } // too generic exception thrown here
+ *     } catch(e: Exception) { } // too generic exception caught here
  * }
  * </noncompliant>
  *

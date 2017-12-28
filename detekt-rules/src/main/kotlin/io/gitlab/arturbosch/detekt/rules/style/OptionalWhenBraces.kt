@@ -16,7 +16,7 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  * <noncompliant>
  * val i = 1
  * when (1) {
- *     1 -> { println("one") } // unnecessary curly braces
+ *     1 -> { println("one") } // unnecessary curly braces since there is only one statement
  *     else -> println("else")
  * }
  * </noncompliant>

@@ -18,8 +18,9 @@ import org.jetbrains.kotlin.psi.KtSecondaryConstructor
 /**
  *
  * <noncompliant>
- * class UtilityClassWithPublicConstructor {
+ * class UtilityClass {
  *
+ *     // public constructor here
  *     constructor() {
  *         // ...
  *     }
