@@ -504,7 +504,7 @@ class TooManyFunctions2(config: Config) : Rule("TooManyFunctionsTwo", Severity.M
 		if (amount > 10) {
 			addFindings(CodeSmell(
 					id = id, entity = Entity.from(file),
-					description = "Too many functions can make the maintainability of a file more costly",
+					description = "Too many functions can make the maintainability of a file costlier",
 					metrics = listOf(Metric(type = "SIZE", value = amount, threshold = 10)),
 					references = listOf())
 			)
@@ -550,14 +550,14 @@ For example if you do not like the default printing of findings, we can ... TODO
 
 #### <a name="testing">Testing your rules</a>
 
-To test your rules you need a KtFile object and use it's _visit_ method.
+To test your rules you need a KtFile object and use its _visit_ method.
 There are two predefined methods to help obtaining a KtFile:
 
 - compileContentForTest(content: String): KtFile
 - compileForTest(path: Path): KtFile
 
 New with M3 there is a special detekt-test module, which specifies above two methods but also
-Rule extension functions that allow allow to skip compilation, ktFile and visit procedures.
+Rule extension functions that allow to skip compilation, ktFile and visit procedures.
 
 - Rule.lint(StringContent/Path/KtFile) returns just the findings for given content
 
