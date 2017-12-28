@@ -2,6 +2,7 @@
 
 package cases
 
+// reports 1 - too many members
 interface TooLargeInterface {
 	fun f1()
 	fun f2()
@@ -9,6 +10,7 @@ interface TooLargeInterface {
 	fun fImpl() { }
 }
 
+// reports 1 - too many members
 class ClassWithNestedInterface {
 
 	interface TooLargeNestedInterface {
@@ -19,6 +21,7 @@ class ClassWithNestedInterface {
 	}
 }
 
+// reports 1 - too many members
 interface TooLargeInterfaceWithStaticDeclarations {
 	fun f1()
 

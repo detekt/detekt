@@ -6,11 +6,14 @@ package cases
 @Suppress("unused")
 class LongMethodPositive {
 
+	// reports 1 - too many statements
 	fun longMethod() {
 		println()
 		println()
 		println()
-		fun localLongMethod() {
+
+		// reports 1 - too many statements
+		fun nestedLongMethod() {
 			println()
 			println()
 			println()

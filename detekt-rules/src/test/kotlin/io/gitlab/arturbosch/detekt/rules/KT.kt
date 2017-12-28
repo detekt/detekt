@@ -20,12 +20,13 @@ enum class Case(val file: String) {
 	EmptyIfPositive("/cases/EmptyIfPositive.kt"),
 	EmptyIfNegative("/cases/EmptyIfNegative.kt"),
 	EmptyDefaultConstructor("/cases/EmptyDefaultConstructor.kt"),
-	Exceptions("/cases/Exceptions.kt"),
+	TooGenericExceptions("/cases/TooGenericExceptions.kt"),
 	ExceptionRaisedInMethodsNegative("/cases/ExceptionRaisedInMethodsNegative.kt"),
 	ExceptionRaisedInMethodsPositive("/cases/ExceptionRaisedInMethodsPositive.kt"),
 	FinalClassNegative("/cases/ProtectedMemberInFinalClassNegative.kt"),
 	FinalClassPositive("/cases/ProtectedMemberInFinalClassPositive.kt"),
-	FunctionReturningConstant("/cases/FunctionReturningConstant.kt"),
+	FunctionReturningConstantPositive("/cases/FunctionReturningConstantPositive.kt"),
+	FunctionReturningConstantNegative("/cases/FunctionReturningConstantNegative.kt"),
 	IteratorImplNegative("/cases/IteratorImplNegative.kt"),
 	IteratorImplPositive("/cases/IteratorImplPositive.kt"),
 	LabeledExpression("/cases/LabeledExpression.kt"),
@@ -64,7 +65,8 @@ enum class Case(val file: String) {
 	UseDataClassPositive("/cases/UseDataClassPositive.kt"),
 	UnconditionalJumpStatementInLoopNegative("/cases/UnconditionalJumpStatementInLoopNegative.kt"),
 	UnconditionalJumpStatementInLoopPositive("/cases/UnconditionalJumpStatementInLoopPositive.kt"),
-	NestedClassesVisibility("/cases/NestedClassesVisibility.kt");
+	NestedClassVisibilityPositive("/cases/NestedClassVisibilityPositive.kt"),
+	NestedClassVisibilityNegative("/cases/NestedClassVisibilityNegative.kt");
 
 	fun path(): Path = Paths.get(resource(file))
 }

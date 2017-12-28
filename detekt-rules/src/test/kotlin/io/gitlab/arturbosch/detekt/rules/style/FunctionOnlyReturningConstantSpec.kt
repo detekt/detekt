@@ -11,9 +11,9 @@ import org.jetbrains.spek.subject.SubjectSpek
 class FunctionOnlyReturningConstantSpec : SubjectSpek<FunctionOnlyReturningConstant>({
 	subject { FunctionOnlyReturningConstant() }
 
-	given("some functions which return stuff") {
+	given("some functions which return constants") {
 
-		val path = Case.FunctionReturningConstant.path()
+		val path = Case.FunctionReturningConstantPositive.path()
 
 		it("reports functions which return constants") {
 			assertThat(subject.lint(path)).hasSize(5)
@@ -30,6 +30,14 @@ class FunctionOnlyReturningConstantSpec : SubjectSpek<FunctionOnlyReturningConst
 			val config = TestConfig(mapOf("excludedFunctions" to "f"))
 			val rule = FunctionOnlyReturningConstant(config)
 			assertThat(rule.lint(code)).hasSize(0)
+		}
+	}
+
+	given("some functions which do not return constants") {
+
+		it("does not report functions which do not return constants") {
+			val path = Case.FunctionReturningConstantNegative.path()
+			assertThat(subject.lint(path)).isEmpty()
 		}
 	}
 })

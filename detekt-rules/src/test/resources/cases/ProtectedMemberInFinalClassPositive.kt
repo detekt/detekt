@@ -4,27 +4,27 @@ package cases
 
 class ProtectedMemberInFinalClassPositive {
 
-	protected var i1 = 0 // positive case
+	protected var i1 = 0 // reports 1
 
-	protected constructor(i1: Int) : super() { // positive case
+	protected constructor(i1: Int) : super() { // reports 1
 		this.i1 = i1
 	}
 
-	protected fun function() {} // positive case
+	protected fun function() {} // reports 1
 
-	protected inner class InnerClass1 { // positive case
-		protected val i = 0 // positive case
+	protected inner class InnerClass1 { // reports 1
+		protected val i = 0 // reports 1
 	}
 
 	inner class InnerClass2 {
-		protected val i = 0 // positive case
+		protected val i = 0 // reports 1
 	}
 
-	protected object InnerObject // positive case
+	protected object InnerObject // reports 1
 
-	protected companion object { // positive case
-		protected class A { // positive case
-			protected var x = 0 // positive case
+	protected companion object { // reports 1
+		protected class A { // reports 1
+			protected var x = 0 // reports 1
 		}
 	}
 }
@@ -33,7 +33,7 @@ abstract class ClassWithAbstractCompanionMembers {
 
 	protected companion object {
 		protected class A {
-			protected var x = 0 // positive case
+			protected var x = 0 // reports 1
 		}
 	}
 }
@@ -41,8 +41,8 @@ abstract class ClassWithAbstractCompanionMembers {
 open class OpenClass {
 
 	inner class InnerClass {
-		protected val i = 0 // positive case
+		protected val i = 0 // reports 1
 	}
 }
 
-class FinalClassWithProtectedConstructor protected constructor() // positive case
+class FinalClassWithProtectedConstructor protected constructor() // reports 1

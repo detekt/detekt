@@ -5,27 +5,27 @@ class EmptyIfPositive {
 
 	private var i = 0
 
-	// if with trailing semicolon
-	fun positive1() {
-		if (i == 0)	;
+	// reports 1
+	fun trailingSemicolon1() {
+		if (i == 0) ;
 		i++
 	}
 
-	// if with trailing semicolon
-	fun positive2() {
+	// reports 1
+	fun trailingSemicolon2() {
 		if (i == 0);
 		i++
 	}
 
-	// if with semicolon on new line
-	fun positive3() {
+	// reports 1
+	fun semicolonOnNewLine() {
 		if (i == 0)
 			;
 		i++
 	}
 
-	// if with semicolon and braces
-	fun positive4() {
+	// reports 1
+	fun semicolonAndBraces() {
 		if (i == 0) ; {
 		}
 	}

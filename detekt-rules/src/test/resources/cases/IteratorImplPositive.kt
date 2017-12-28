@@ -2,7 +2,7 @@
 
 package cases
 
-// violation NotThrowingNoSuchElementException, HasNextCallsNextMethod
+// reports IteratorNotThrowingNoSuchElementException, IteratorHasNextCallsNextMethod
 class IteratorImpl2 : Iterator<String> {
 
 	override fun hasNext(): Boolean {
@@ -17,7 +17,7 @@ class IteratorImpl2 : Iterator<String> {
 
 class IteratorImplContainer {
 
-	// violation NotThrowingNoSuchElementException, HasNextCallsNextMethod
+	// reports IteratorNotThrowingNoSuchElementException, IteratorHasNextCallsNextMethod
 	object IteratorImplNegative3 : Iterator<String> {
 
 		override fun hasNext(): Boolean {
@@ -31,7 +31,7 @@ class IteratorImplContainer {
 	}
 }
 
-// violation NotThrowingNoSuchElementException, HasNextCallsNextMethod
+// reports IteratorNotThrowingNoSuchElementException, IteratorHasNextCallsNextMethod
 interface InterfaceIterator : Iterator<String> {
 
 	override fun hasNext(): Boolean {
@@ -44,7 +44,7 @@ interface InterfaceIterator : Iterator<String> {
 	}
 }
 
-// violation NotThrowingNoSuchElementException, HasNextCallsNextMethod
+// reports IteratorNotThrowingNoSuchElementException, IteratorHasNextCallsNextMethod
 abstract class AbstractIterator : Iterator<String> {
 
 	override fun hasNext(): Boolean {

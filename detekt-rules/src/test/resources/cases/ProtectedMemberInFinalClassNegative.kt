@@ -2,7 +2,6 @@
 
 package cases
 
-// should report 9 for protected = internal
 class NoProtectedMembersInFinalClass : BaseClass() {
 
 	private val i = 0
