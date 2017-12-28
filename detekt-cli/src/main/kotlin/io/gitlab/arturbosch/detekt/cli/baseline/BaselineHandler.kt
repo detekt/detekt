@@ -13,8 +13,8 @@ class BaselineHandler : DefaultHandler() {
 	private var content: String = ""
 	private var whitestamp: String? = null
 	private var blackstamp: String? = null
-	private val whiteIds = mutableListOf<String>()
-	private val blackIds = mutableListOf<String>()
+	private val whiteIds = mutableSetOf<String>()
+	private val blackIds = mutableSetOf<String>()
 
 	internal fun createBaseline() = Baseline(
 			Blacklist(blackIds, blackstamp ?: now()), Whitelist(whiteIds, whitestamp ?: now()))

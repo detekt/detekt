@@ -1,35 +1,33 @@
 <?xml version="1.0" ?>
 <SmellBaseline>
   <Blacklist timestamp="1496430248166"></Blacklist>
-  <Whitelist timestamp="1511428925707">
-    <ID>TooManyFunctions:DetektExtension.kt$DetektExtension</ID>
-    <ID>TooManyFunctions:LargeClass.kt$LargeClass : ThresholdRule</ID>
-    <ID>TooManyFunctions:EmptyCodeTest.kt$EmptyCodeTest</ID>
+  <Whitelist timestamp="1514463720221">
     <ID>LargeClass:MagicNumberSpec.kt$MagicNumberSpec : Spek</ID>
-    <ID>SpreadOperator:Main.kt$(*args)</ID>
     <ID>SpreadOperator:JCommander.kt$(*args)</ID>
+    <ID>SpreadOperator:Main.kt$(*args)</ID>
+    <ID>TooManyFunctions:DetektExtension.kt$DetektExtension</ID>
+    <ID>TooManyFunctions:EmptyCodeTest.kt$EmptyCodeTest</ID>
+    <ID>TooManyFunctions:LargeClass.kt$LargeClass : ThresholdRule</ID>
+    <ID>UnsafeCast:Config.kt$EmptyConfig$true as T</ID>
+    <ID>UnsafeCast:Configurations.kt$FailFastConfig$originalConfig.valueOrDefault(key, 0) as T</ID>
+    <ID>UnsafeCast:Configurations.kt$FailFastConfig$originalConfig.valueOrDefault(key, true) as T</ID>
+    <ID>UnsafeCast:DetektCheckTask.kt$DetektCheckTask$project.extensions.getByName("detekt") as DetektExtension</ID>
+    <ID>UnsafeCast:DetektCreateBaselineTask.kt$DetektCreateBaselineTask$project.extensions.getByName("detekt") as DetektExtension</ID>
+    <ID>UnsafeCast:DetektGenerateConfigTask.kt$DetektGenerateConfigTask$project.extensions.getByName("detekt") as DetektExtension</ID>
+    <ID>UnsafeCast:DetektIdeaFormatTask.kt$DetektIdeaFormatTask$project.extensions.getByName("detekt") as DetektExtension</ID>
+    <ID>UnsafeCast:DetektIdeaInspectionTask.kt$DetektIdeaInspectionTask$project.extensions.getByName("detekt") as DetektExtension</ID>
+    <ID>UnsafeCast:ExpressionBodySyntax.kt$ExpressionBodySyntax$statements[0] as KtReturnExpression</ID>
+    <ID>UnsafeCast:Junk.kt$SingleAssign$_value as T</ID>
+    <ID>UnsafeCast:KtCompiler.kt$KtCompiler$psiFileFactory.createFileFromText( relativePath.fileName.toString(), KotlinLanguage.INSTANCE, StringUtilRt.convertLineSeparators(content), true, true, false, LightVirtualFile(relativePath.toString())) as KtFile</ID>
+    <ID>UnsafeCast:Location.kt$Location.Companion$this.containingFile.viewProvider.virtualFile as LightVirtualFile</ID>
+    <ID>UnsafeCast:ProjectExtension.kt$&lt;no name provided&gt;$constructor.newInstance() as T</ID>
+    <ID>UnsafeCast:ProjectExtension.kt$&lt;no name provided&gt;$transaction as PomTransactionBase</ID>
+    <ID>UnsafeCast:ProjectExtension.kt$this as MockProject</ID>
+    <ID>UnsafeCast:Reports.kt$Key.findKeyByName("FQNames") as Key&lt;Set&lt;String&gt;&gt;</ID>
     <ID>UnsafeCast:Watching.kt$it.context() as Path</ID>
     <ID>UnsafeCast:Watching.kt$watchKey.watchable() as Path</ID>
-    <ID>UnsafeCast:Configurations.kt$FailFastConfig$originalConfig.valueOrDefault(key, true) as T</ID>
-    <ID>UnsafeCast:Configurations.kt$FailFastConfig$originalConfig.valueOrDefault(key, 0) as T</ID>
-    <ID>UnsafeCast:Location.kt$Location.Companion$this.containingFile.viewProvider.virtualFile as LightVirtualFile</ID>
     <ID>UnsafeCast:YamlConfig.kt$YamlConfig$subProperties as Map&lt;String, Any&gt;</ID>
     <ID>UnsafeCast:YamlConfig.kt$YamlConfig$valueOrDefaultInternal(result, default) as T</ID>
     <ID>UnsafeCast:YamlConfig.kt$YamlConfig.Companion$map as Map&lt;String, Any&gt;</ID>
-    <ID>UnsafeCast:ProjectExtension.kt$this as MockProject</ID>
-    <ID>UnsafeCast:ProjectExtension.kt$&lt;no name provided&gt;$transaction as PomTransactionBase</ID>
-    <ID>UnsafeCast:ProjectExtension.kt$&lt;no name provided&gt;$constructor.newInstance() as T</ID>
-    <ID>UnsafeCast:Config.kt$EmptyConfig$true as T</ID>
-    <ID>UnsafeCast:Junk.kt$SingleAssign$_value as T</ID>
-    <ID>UnsafeCast:KtCompiler.kt$KtCompiler$psiFileFactory.createFileFromText( relativePath.fileName.toString(), KotlinLanguage.INSTANCE, StringUtilRt.convertLineSeparators(content), true, true, false, LightVirtualFile(relativePath.toString())) as KtFile</ID>
-    <ID>UnsafeCast:MigrateImportsRule.kt$MigrateImportsRule$import.importedReference?.node as CompositeElement</ID>
-    <ID>UnsafeCast:Reports.kt$Key.findKeyByName("FQNames") as Key&lt;Set&lt;String&gt;&gt;</ID>
-    <ID>UnsafeCast:DetektIdeaInspectionTask.kt$DetektIdeaInspectionTask$project.extensions.getByName("detekt") as DetektExtension</ID>
-    <ID>UnsafeCast:DetektMigrateTask.kt$DetektMigrateTask$project.extensions.getByName("detekt") as DetektExtension</ID>
-    <ID>UnsafeCast:DetektCheckTask.kt$DetektCheckTask$project.extensions.getByName("detekt") as DetektExtension</ID>
-    <ID>UnsafeCast:DetektCreateBaselineTask.kt$DetektCreateBaselineTask$project.extensions.getByName("detekt") as DetektExtension</ID>
-    <ID>UnsafeCast:DetektIdeaFormatTask.kt$DetektIdeaFormatTask$project.extensions.getByName("detekt") as DetektExtension</ID>
-    <ID>UnsafeCast:DetektGenerateConfigTask.kt$DetektGenerateConfigTask$project.extensions.getByName("detekt") as DetektExtension</ID>
-    <ID>UnsafeCast:ExpressionBodySyntax.kt$ExpressionBodySyntax$statements[0] as KtReturnExpression</ID>
   </Whitelist>
 </SmellBaseline>
