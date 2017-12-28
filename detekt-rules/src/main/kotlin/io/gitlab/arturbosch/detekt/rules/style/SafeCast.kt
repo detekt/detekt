@@ -16,6 +16,21 @@ import org.jetbrains.kotlin.psi.KtIsExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 
 /**
+ *
+ * <noncompliant>
+ * fun numberMagic(number: Number) {
+ *     val i = if (number is Int) number else null
+ *     // ...
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * fun numberMagic(number: Number) {
+ *     val i = number as? Int
+ *     // ...
+ * }
+ * </compliant>
+ *
  * @active since v1.0.0
  * @author schalkms
  * @author Marvin Ramin

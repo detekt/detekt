@@ -26,6 +26,36 @@ import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 import java.util.Locale
 
 /**
+ *
+ * <noncompliant>
+ * class User {
+ *
+ *     fun checkName(name: String) {
+ *         if (name.length > 42) {
+ *             throw IllegalArgumentException("username is too long")
+ *         }
+ *         // ...
+ *     }
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ *
+ * class User {
+ *
+ *     fun checkName(name: String) {
+ *         if (name.length > MAX_USERNAME_SIZE) {
+ *             throw IllegalArgumentException("username is too long")
+ *         }
+ *         // ...
+ *     }
+ *
+ *     companion object {
+ *         private const val MAX_USERNAME_SIZE = 42
+ *     }
+ * }
+ * </compliant>
+ *
  * @configuration ignoreNumbers - numbers which do not count as magic numbers (default: '-1,0,1,2')
  * @configuration ignoreHashCodeFunction - whether magic numbers in hashCode functions should be ignored
  * (default: false)

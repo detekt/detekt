@@ -46,7 +46,7 @@ class OptionalReturnKeywordSpec : SubjectSpek<OptionalReturnKeyword>({
 			} else a
 		else y
 		*/
-		it("should report 5 in complex condition") {
+		it("reports optional return statements in complex condition") {
 			val actual = """
 			val z =
 			if (true)

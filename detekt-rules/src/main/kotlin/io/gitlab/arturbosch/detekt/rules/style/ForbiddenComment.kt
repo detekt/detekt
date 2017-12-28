@@ -12,7 +12,7 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiComment
 /**
  *
  * <noncompliant>
- * TODO:,FIXME:,STOPSHIP:
+ * // TODO:,FIXME:,STOPSHIP:
  * fun foo() { }
  * </noncompliant>
  *

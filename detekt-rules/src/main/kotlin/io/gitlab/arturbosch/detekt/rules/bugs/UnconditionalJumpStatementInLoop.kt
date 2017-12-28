@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
 /**
  * Reports loops which contain jump statements that jump regardless of any conditions.
  * This implies that the loop is only executed once and thus could be rewritten without a
- * loop alltogether.
+ * loop altogether.
  *
  * <noncompliant>
  * for (i in 1..2) break

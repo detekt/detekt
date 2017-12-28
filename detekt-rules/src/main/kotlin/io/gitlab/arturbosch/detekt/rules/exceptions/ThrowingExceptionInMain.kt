@@ -15,10 +15,12 @@ import org.jetbrains.kotlin.psi.KtTypeReference
 
 /**
  * This rule reports all exceptions that are thrown in a `main` method.
+ * An exception should only be thrown if it can be handled by a "higher" function.
  *
  * <noncompliant>
  * fun main(args: Array<String>) {
- *     throw new IOException()
+ *     // ...
+ *     throw IOException() // exception should not be thrown here
  * }
  * </noncompliant>
  *

@@ -19,16 +19,17 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
  *
  * See: https://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html#next()
  *
- * <noncompliant>
+ * <compliant>
  * class MyIterator : Iterator<String> {
  *
- *     public Integer next() {
+ *     override fun next(): String {
  *         if (!this.hasNext()) {
  *             throw NoSuchElementException()
  *         }
+ *         // ...
  *     }
  * }
- * </noncompliant>
+ * </compliant>
  *
  * @author schalkms
  * @author Marvin Ramin

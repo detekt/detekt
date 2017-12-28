@@ -112,18 +112,17 @@ NoSuchElementException.
 
 See: https://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html#next()
 
-#### Noncompliant Code:
-
-```kotlin
+<compliant>
 class MyIterator : Iterator<String> {
 
-    public Integer next() {
+    override fun next(): String {
         if (!this.hasNext()) {
             throw NoSuchElementException()
         }
+        // ...
     }
 }
-```
+</compliant>
 
 ### IteratorHasNextCallsNextMethod
 
@@ -156,8 +155,26 @@ i = i--
 i = 1 + i++
 i = i++ + 1
 
-fun foo(i: Int): Int {
+fun foo(): Int {
+    var i = 0
+    // ...
     return i++
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+var i = 0
+i--
+i = i + 2
+i = i + 2
+
+fun foo(): Int {
+    var i = 0
+    // ...
+    i++
+    return i
 }
 ```
 
@@ -255,7 +272,7 @@ class Foo {
 
 Reports loops which contain jump statements that jump regardless of any conditions.
 This implies that the loop is only executed once and thus could be rewritten without a
-loop alltogether.
+loop altogether.
 
 #### Noncompliant Code:
 

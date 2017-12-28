@@ -219,17 +219,13 @@ TODO: Specify description
 #### Noncompliant Code:
 
 ```kotlin
-fun isNull(str: String) {
-    str.equals(null)
-}
+fun isNull(str: String) = str.equals(null)
 ```
 
 #### Compliant Code:
 
 ```kotlin
-fun isNull(str: String) {
-    str == null
-}
+fun isNull(str: String) = str == null
 ```
 
 ### ForbiddenComment
@@ -245,7 +241,7 @@ TODO: Specify description
 #### Noncompliant Code:
 
 ```kotlin
-TODO:,FIXME:,STOPSHIP:
+// TODO:,FIXME:,STOPSHIP:
 fun foo() { }
 ```
 
@@ -499,6 +495,24 @@ TODO: Specify description
 
 TODO: Specify description
 
+#### Noncompliant Code:
+
+```kotlin
+fun numberMagic(number: Number) {
+    val i = if (number is Int) number else null
+    // ...
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+fun numberMagic(number: Number) {
+    val i = number as? Int
+    // ...
+}
+```
+
 ### UnnecessaryAbstractClass
 
 TODO: Specify description
@@ -567,8 +581,9 @@ TODO: Specify description
 #### Noncompliant Code:
 
 ```kotlin
-class UtilityClassWithPublicConstructor {
+class UtilityClass {
 
+    // public constructor here
     constructor() {
         // ...
     }
@@ -627,7 +642,7 @@ TODO: Specify description
 ```kotlin
 val i = 1
 when (1) {
-    1 -> { println("one") } // unnecessary curly braces
+    1 -> { println("one") } // unnecessary curly braces since there is only one statement
     else -> println("else")
 }
 ```
@@ -683,6 +698,15 @@ TODO: Specify description
 ```kotlin
 class ProtectedMemberInFinalClass {
     protected var i = 0
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+class ProtectedMemberInFinalClass {
+    private var i = 0
+}
 ```
 
 ### SerialVersionUIDInSerializableClass
@@ -750,6 +774,38 @@ declarations should be ignored
 
    whether magic numbers in enums should be ignored
 
+#### Noncompliant Code:
+
+```kotlin
+class User {
+
+    fun checkName(name: String) {
+        if (name.length > 42) {
+            throw IllegalArgumentException("username is too long")
+        }
+        // ...
+    }
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+class User {
+
+    fun checkName(name: String) {
+        if (name.length > MAX_USERNAME_SIZE) {
+            throw IllegalArgumentException("username is too long")
+        }
+        // ...
+    }
+
+    companion object {
+        private const val MAX_USERNAME_SIZE = 42
+    }
+}
+```
+
 ### ModifierOrder
 
 TODO: Specify description
@@ -781,13 +837,6 @@ TODO: Specify description
 ```kotlin
 data class DataClassWithFunctions(val i: Int) {
     fun foo() { }
-}
-```
-
-#### Compliant Code:
-
-```kotlin
-data class DataClassWithFunctions(val i: Int) {
 }
 ```
 

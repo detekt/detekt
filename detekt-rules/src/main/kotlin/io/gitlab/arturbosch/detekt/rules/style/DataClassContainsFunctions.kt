@@ -19,11 +19,6 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * }
  * </noncompliant>
  *
- * <compliant>
- * data class DataClassWithFunctions(val i: Int) {
- * }
- * </compliant>
- *
  * @configuration conversionFunctionPrefix - allowed conversion function names (default: 'to')
  * @author Ivan Balaksha
  * @author schalkms

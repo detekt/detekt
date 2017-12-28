@@ -37,7 +37,7 @@ for (i in 1..10) {
 ### SpreadOperator
 
 Using a spread operator causes a full copy of the array to be created before calling a method.
-has a very high performance penalty.
+This has a very high performance penalty.
 Benchmarks showing this performance penalty can be seen here:
 https://sites.google.com/a/athaydes.com/renato-athaydes/posts/kotlinshiddencosts-benchmarks
 
@@ -62,7 +62,7 @@ To solve this issue, remove the wrapping type.
 #### Noncompliant Code:
 
 ```kotlin
-val i = Integer(1).toString() // temporary instantiation for conversion
+val i = Integer(1).toString() // temporary Integer instantiation just for the conversion
 ```
 
 #### Compliant Code:
