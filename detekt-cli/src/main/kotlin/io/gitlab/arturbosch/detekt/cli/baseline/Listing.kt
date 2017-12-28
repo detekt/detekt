@@ -8,7 +8,7 @@ import java.time.Instant
 interface Listing<T> {
 
 	val timestamp: String
-	val ids: List<String>
+	val ids: Set<String>
 
 	fun isOlderThan(instant: Instant): Boolean {
 		val timeMillis = Instant.ofEpochMilli(timestamp.toLong())

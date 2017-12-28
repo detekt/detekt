@@ -22,11 +22,11 @@ internal class BaselineFormatTest {
 		val (blacklist, whitelist) = BaselineFormat.read(path)
 
 		assertThat(blacklist.ids).hasSize(2)
-		assertThat(blacklist.ids[0]).startsWith("LongParameterList")
-		assertThat(blacklist.ids[1]).startsWith("LongMethod")
+		assertThat(blacklist.ids).anySatisfy { it.startsWith("LongParameterList") }
+		assertThat(blacklist.ids).anySatisfy { it.startsWith("LongMethod") }
 		assertThat(blacklist.timestamp).isEqualTo("123456789")
 		assertThat(whitelist.ids).hasSize(1)
-		assertThat(whitelist.ids[0]).startsWith("FeatureEnvy")
+		assertThat(whitelist.ids).anySatisfy { it.startsWith("FeatureEnvy") }
 		assertThat(whitelist.timestamp).isEqualTo("987654321")
 	}
 
@@ -36,8 +36,8 @@ internal class BaselineFormatTest {
 		val tempFile = Files.createTempFile("baseline", now)
 
 		val savedBaseline = Baseline(
-				Blacklist(listOf("4", "2", "2"), now),
-				Whitelist(listOf("1", "2", "3"), now))
+				Blacklist(setOf("4", "2", "2"), now),
+				Whitelist(setOf("1", "2", "3"), now))
 
 		BaselineFormat.write(savedBaseline, tempFile)
 		val loadedBaseline = BaselineFormat.read(tempFile)

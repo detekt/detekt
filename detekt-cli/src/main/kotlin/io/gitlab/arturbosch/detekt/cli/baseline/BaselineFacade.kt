@@ -31,9 +31,9 @@ class BaselineFacade(val baselineFile: Path) {
 		val blacklist = if (baselineExists()) {
 			BaselineFormat.read(baselineFile).blacklist
 		} else {
-			Blacklist(emptyList(), timestamp)
+			Blacklist(emptySet(), timestamp)
 		}
-		val ids = smells.map { it.baselineId }
+		val ids = smells.map { it.baselineId }.sorted().toSet()
 		val smellBaseline = Baseline(blacklist, Whitelist(ids, timestamp))
 		baselineFile.parent?.let { Files.createDirectories(it) }
 		BaselineFormat.write(smellBaseline, baselineFile)
