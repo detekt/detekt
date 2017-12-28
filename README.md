@@ -249,8 +249,8 @@ detekt {
         input = "$projectDir/src/main/kotlin" // Which part of your project should be analyzed?
         config = "$projectDir/detekt.yml" // Use $project.projectDir or to navigate inside your project 
         configResource = "/detekt.yml" // Use this parameter instead of config if your detekt yaml file is inside your resources. Is needed for multi project maven tasks.
-        filters = ".*test.*, .*/resources/.*" // What paths to exclude? Use comma oder semicolon to separate
-        ruleSets = "other/optional/ruleset.jar" // Custom rule sets can be linked to this, use comma oder semicolon to separate, remove if unused.
+        filters = ".*test.*, .*/resources/.*" // What paths to exclude? Use comma or semicolon to separate
+        ruleSets = "other/optional/ruleset.jar" // Custom rule sets can be linked to this, use comma or semicolon to separate, remove if unused.
         disableDefaultRuleSets = false // Disables the default rule set. Just use detekt as the detection engine with your custom rule sets.
         output = "$project.projectDir/reports" // Directory where output reports are stored (if present).
         outputName = "my-module" // This parameter is used to derive the output report name
