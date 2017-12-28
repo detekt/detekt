@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.cli.baseline
 
-import com.sun.xml.internal.txw2.output.IndentingXMLStreamWriter
+import io.gitlab.arturbosch.detekt.cli.baseline.internal.IndentingXMLStreamWriter
 import org.xml.sax.SAXParseException
 import java.io.OutputStream
 import java.nio.charset.StandardCharsets

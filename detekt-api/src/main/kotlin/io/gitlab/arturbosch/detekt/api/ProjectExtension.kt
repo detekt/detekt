@@ -1,5 +1,8 @@
 package io.gitlab.arturbosch.detekt.api
 
+import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
+import org.jetbrains.kotlin.cli.common.messages.MessageRenderer
+import org.jetbrains.kotlin.cli.common.messages.PrintingMessageCollector
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.com.intellij.mock.MockProject
@@ -24,8 +27,11 @@ val psiFactory = KtPsiFactory(psiProject, false)
 
 private fun createKotlinCoreEnvironment(): Project {
 	System.setProperty("idea.io.use.fallback", "true")
+	val configuration = CompilerConfiguration()
+	configuration.put(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY,
+			PrintingMessageCollector(System.err, MessageRenderer.PLAIN_FULL_PATHS, false))
 	return KotlinCoreEnvironment.createForProduction(Disposer.newDisposable(),
-			CompilerConfiguration(), EnvironmentConfigFiles.JVM_CONFIG_FILES).project.apply {
+			configuration, EnvironmentConfigFiles.JVM_CONFIG_FILES).project.apply {
 		makeMutable(this as MockProject)
 	}
 }
