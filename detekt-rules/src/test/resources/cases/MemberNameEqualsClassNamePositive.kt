@@ -39,6 +39,6 @@ class MethodNameContainer {
 
 class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
 
-	// reports if overridden functions are not ignored
+	// reports 1 - if overridden functions are not ignored
 	override fun AbstractMethodNameEqualsClassName() {}
 }

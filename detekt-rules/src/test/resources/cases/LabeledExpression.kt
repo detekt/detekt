@@ -2,7 +2,7 @@
 
 package cases
 
-fun breakWithLabel() { // reports 2
+fun breakWithLabel() { // reports 2 - for each @label
 	loop@ for (i in 1..100) {
 		for (j in 1..100) {
 			if (j == 5) break@loop
@@ -10,7 +10,7 @@ fun breakWithLabel() { // reports 2
 	}
 }
 
-fun continueWithLabel() { // reports 2
+fun continueWithLabel() { // reports 2 - for each @label
 	loop@ for (i in 1..100) {
 		for (j in 1..100) {
 			if (j == 5) continue@loop
@@ -18,14 +18,14 @@ fun continueWithLabel() { // reports 2
 	}
 }
 
-fun implicitReturnWithLabel(range: IntRange) { // reports 1
+fun implicitReturnWithLabel(range: IntRange) { // reports 2 - for each @label
 	range.forEach {
 		if (it == 5) return@forEach
 		println(it)
 	}
 }
 
-fun returnWithLabel(range: IntRange) {  // reports 2
+fun returnWithLabel(range: IntRange) {  // reports 2 - for each @label
 	range.forEach label@ {
 		if (it == 5) return@label
 		println(it)

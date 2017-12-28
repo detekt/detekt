@@ -4,7 +4,7 @@ package cases
 /**
  * @author Artur Bosch
  */
-class Exceptions {
+class TooGenericExceptions {
 
 	fun main() {
 		try {

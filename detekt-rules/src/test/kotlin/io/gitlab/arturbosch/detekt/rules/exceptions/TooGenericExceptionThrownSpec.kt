@@ -15,9 +15,9 @@ import org.jetbrains.spek.api.dsl.it
 /**
  * @author Artur Bosch
  */
-class GenericExceptionsSpec : Spek({
+class TooGenericExceptionThrownSpec : Spek({
 
-	val file = compileForTest(Case.Exceptions.path())
+	val file = compileForTest(Case.TooGenericExceptions.path())
 
 	describe("a file with many caught exceptions") {
 

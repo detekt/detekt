@@ -2,12 +2,14 @@
 
 package cases
 
-data class DataClassWithFunctions(val i: Int) { // reports 2
+// reports 2 - for each defined function in the data class
+data class DataClassWithFunctions(val i: Int) {
 
 	fun f1() {}
 	fun f2() {}
 
-	data class NestedDataClassWithConversionFunction(val i : Int) { // reports 1
+	// reports 1 - for each defined conversion function in the data class
+	data class NestedDataClassWithConversionFunction(val i : Int) {
 		fun toDataClassWithOverriddenMethods() = DataClassWithOverriddenMethods(i)
 	}
 }

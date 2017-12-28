@@ -14,7 +14,7 @@ class MemberNameEqualsClassNameSpec : SubjectSpek<MemberNameEqualsClassName>({
 
 	given("some classes with methods which don't have the same name") {
 
-		it("reports methods which are named after the class") {
+		it("reports methods which are not named after the class") {
 			val path = Case.MemberNameEqualsClassNameNegative.path()
 			assertThat(subject.lint(path)).hasSize(0)
 		}
