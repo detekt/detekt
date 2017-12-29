@@ -125,10 +125,10 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 			  #  - 'XmlOutputReport'
 			""".trimIndent()
 	}
-}
 
-private fun String.isYamlList() = trim().startsWith("-")
-private fun String.toList(): List<String> {
-	return split("\n").map { it.replace("-", "") }
-			.map { it.trim() }
+	private fun String.isYamlList() = trim().startsWith("-")
+
+	private fun String.toList(): List<String> {
+		return split("\n").map { it.replace("-", "") }.map { it.trim() }
+	}
 }

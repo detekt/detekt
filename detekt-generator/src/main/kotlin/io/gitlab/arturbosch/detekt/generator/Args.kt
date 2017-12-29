@@ -12,22 +12,22 @@ import java.nio.file.Path
  */
 class Args {
 
-	@Parameter(names = arrayOf("--input", "-i"),
+	@Parameter(names = ["--input", "-i"],
 			required = true,
 			converter = ExistingPathConverter::class, description = "Input path to analyze (path/to/project).")
 	private var input: Path? = null
 
-	@Parameter(names = arrayOf("--documentation", "-d"),
+	@Parameter(names = ["--documentation", "-d"],
 			required = true,
 			converter = ExistingPathConverter::class, description = "Output path for generated documentation.")
 	private var documentation: Path? = null
 
-	@Parameter(names = arrayOf("--config", "-c"),
+	@Parameter(names = ["--config", "-c"],
 			required = true,
 			converter = ExistingPathConverter::class, description = "Output path for generated detekt config.")
 	private var config: Path? = null
 
-	@Parameter(names = arrayOf("--help", "-h"),
+	@Parameter(names = ["--help", "-h"],
 			help = true, description = "Shows the usage.")
 	var help: Boolean = false
 
