@@ -1,0 +1,7 @@
+style:
+  active: true
+  WildcardImport:
+    active: true
+    conf1: foo
+  EqualsNull:
+    active: false
