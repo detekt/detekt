@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.generator.collection
 
 import io.gitlab.arturbosch.detekt.generator.util.run
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.catchThrowable
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
@@ -252,6 +253,58 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 			"""
 			val items = subject.run(code)
 			assertThat(items[0].configuration).isEmpty()
+		}
+
+		it("contains compliant and noncompliant code examples") {
+			val code = """
+				package foo
+
+				/**
+				 * <noncompliant>
+				 * val one = 2
+				 * </noncompliant>
+				 *
+				 * <compliant>
+				 * val one = 1
+				 * </compliant>
+				 */
+				class RandomClass : Rule {
+				}
+			"""
+			val items = subject.run(code)
+			assertThat(items[0].nonCompliantCodeExample).isEqualTo("val one = 2")
+			assertThat(items[0].compliantCodeExample).isEqualTo("val one = 1")
+		}
+
+		it("has wrong noncompliant code example declaration") {
+			val code = """
+				package foo
+
+				/**
+				 * <noncompliant>
+				 */
+				class RandomClass : Rule {
+				}
+			"""
+			val thrown = catchThrowable { subject.run(code) }
+			assertThat(thrown).isInstanceOf(InvalidCodeExampleDocumentationException::class.java)
+		}
+
+		it("has wrong compliant code example declaration") {
+			val code = """
+				package foo
+
+				/**
+				 * <noncompliant>
+				 * val one = 2
+				 * </noncompliant>
+				 * <compliant>
+				 */
+				class RandomClass : Rule {
+				}
+			"""
+			val thrown = catchThrowable { subject.run(code) }
+			assertThat(thrown).isInstanceOf(InvalidCodeExampleDocumentationException::class.java)
 		}
 	}
 })
