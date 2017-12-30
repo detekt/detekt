@@ -147,8 +147,8 @@ private fun KtConstantExpression.isPartOfFunctionReturnConstant() =
 		parent is KtNamedFunction || (parent is KtReturnExpression && parent.parent.children.size == 1)
 
 private fun KtConstantExpression.isPartOfConstructor(): Boolean {
-	val isInConstructor = parent.parent.parent is KtPrimaryConstructor || parent.parent.parent is KtSecondaryConstructor
-	return isInConstructor && parent is KtParameter
+	return parent is KtParameter
+			&& parent.parent.parent is KtPrimaryConstructor || parent.parent.parent is KtSecondaryConstructor
 }
 
 private fun KtConstantExpression.isPartOfHashCode(): Boolean {

@@ -328,6 +328,15 @@ class MagicNumberSpec : Spek({
 		}
 	}
 
+	given("a magic number number in a constructor call") {
+
+		it("should report") {
+			val code = "val file = File(42)"
+			val findings = MagicNumber().lint(code)
+			assertThat(findings).hasSize(1)
+		}
+	}
+
 	given("an invalid ignoredNumber") {
 
 		it("throws a NumberFormatException") {
