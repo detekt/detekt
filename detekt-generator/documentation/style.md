@@ -366,6 +366,20 @@ class PropertyNameEqualsClassName {
 }
 ```
 
+#### Compliant Code:
+
+```kotlin
+class Manager {
+
+    companion object {
+        // factory functions can have the same name as the class
+        fun manager(): Manager {
+            return Manager()
+        }
+    }
+}
+```
+
 ### VariableNaming
 
 TODO: Specify description
