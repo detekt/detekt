@@ -11,7 +11,7 @@ import java.io.File
 
 class RuleSetPagePrinterSpec : Spek({
 
-	given("a RuleSetPage to print") {
+	given("a config to print") {
 
 		it("prints the correct markdown format") {
 			val markdownString = RuleSetPagePrinter.print(createRuleSetPage())

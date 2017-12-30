@@ -11,7 +11,7 @@ import java.io.File
 
 class ConfigPrinterSpec : Spek({
 
-	given("a RuleSetPage config to print") {
+	given("a config to print") {
 
 		it("prints the correct yaml format") {
 			val ruleSetList = listOf(createRuleSetPage())
