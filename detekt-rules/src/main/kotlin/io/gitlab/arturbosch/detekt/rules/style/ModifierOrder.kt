@@ -9,11 +9,13 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.lexer.KtTokens.ABSTRACT_KEYWORD
+import org.jetbrains.kotlin.lexer.KtTokens.ACTUAL_KEYWORD
 import org.jetbrains.kotlin.lexer.KtTokens.ANNOTATION_KEYWORD
 import org.jetbrains.kotlin.lexer.KtTokens.COMPANION_KEYWORD
 import org.jetbrains.kotlin.lexer.KtTokens.CONST_KEYWORD
 import org.jetbrains.kotlin.lexer.KtTokens.DATA_KEYWORD
 import org.jetbrains.kotlin.lexer.KtTokens.ENUM_KEYWORD
+import org.jetbrains.kotlin.lexer.KtTokens.EXPECT_KEYWORD
 import org.jetbrains.kotlin.lexer.KtTokens.EXTERNAL_KEYWORD
 import org.jetbrains.kotlin.lexer.KtTokens.FINAL_KEYWORD
 import org.jetbrains.kotlin.lexer.KtTokens.INFIX_KEYWORD
@@ -30,6 +32,7 @@ import org.jetbrains.kotlin.lexer.KtTokens.PUBLIC_KEYWORD
 import org.jetbrains.kotlin.lexer.KtTokens.SEALED_KEYWORD
 import org.jetbrains.kotlin.lexer.KtTokens.SUSPEND_KEYWORD
 import org.jetbrains.kotlin.lexer.KtTokens.TAILREC_KEYWORD
+import org.jetbrains.kotlin.lexer.KtTokens.VARARG_KEYWORD
 import org.jetbrains.kotlin.psi.KtModifierList
 import org.jetbrains.kotlin.psi.psiUtil.allChildren
 import java.util.Arrays
@@ -44,7 +47,7 @@ import java.util.Arrays
  * private internal lateinit val str: String
  * </compliant>
  *
- * Modifier order array taken from ktlint: https://github.com/shyiko/ktlint
+ * Modifier order array taken from http://kotlinlang.org/docs/reference/coding-conventions.html#modifiers
  *
  * @active since v1.0.0
  * @author Marvin Ramin
@@ -58,18 +61,21 @@ class ModifierOrder(config: Config = Config.empty) : Rule(config) {
 	// subset of KtTokens.MODIFIER_KEYWORDS_ARRAY
 	private val order = arrayOf(
 			PUBLIC_KEYWORD, PROTECTED_KEYWORD, PRIVATE_KEYWORD, INTERNAL_KEYWORD,
-			FINAL_KEYWORD, OPEN_KEYWORD, ABSTRACT_KEYWORD,
-			SUSPEND_KEYWORD, TAILREC_KEYWORD,
+			EXPECT_KEYWORD, ACTUAL_KEYWORD,
+			FINAL_KEYWORD, OPEN_KEYWORD, ABSTRACT_KEYWORD, SEALED_KEYWORD, CONST_KEYWORD,
+			EXTERNAL_KEYWORD,
 			OVERRIDE_KEYWORD,
-			CONST_KEYWORD, LATEINIT_KEYWORD,
-			INNER_KEYWORD, EXTERNAL_KEYWORD,
-			ENUM_KEYWORD, ANNOTATION_KEYWORD, SEALED_KEYWORD, DATA_KEYWORD,
+			LATEINIT_KEYWORD,
+			TAILREC_KEYWORD,
+			VARARG_KEYWORD,
+			SUSPEND_KEYWORD,
+			INNER_KEYWORD,
+			ENUM_KEYWORD, ANNOTATION_KEYWORD,
 			COMPANION_KEYWORD,
 			INLINE_KEYWORD,
-			// NOINLINE_KEYWORD, CROSSINLINE_KEYWORD, OUT_KEYWORD, IN_KEYWORD, VARARG_KEYWORD, REIFIED_KEYWORD
 			INFIX_KEYWORD,
-			OPERATOR_KEYWORD
-			// HEADER_KEYWORD, IMPL_KEYWORD
+			OPERATOR_KEYWORD,
+			DATA_KEYWORD
 	)
 
 	override fun visitModifierList(list: KtModifierList) {
