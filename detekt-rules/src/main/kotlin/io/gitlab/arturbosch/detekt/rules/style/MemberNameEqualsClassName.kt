@@ -8,10 +8,14 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isOverridden
+import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtClassBody
 import org.jetbrains.kotlin.psi.KtClassOrObject
+import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
+import org.jetbrains.kotlin.util.collectionUtils.concat
 
 /**
  *
@@ -47,37 +51,49 @@ class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
 
 	override fun visitClass(klass: KtClass) {
 		if (!klass.isInterface()) {
-			checkClassOrObjectFunctions(klass, klass.name, classMessage)
- 			checkCompanionObjectFunctions(klass)
+			getMisnamedMembers(klass, klass.name)
+					.concat(getMisnamedCompanionObjectMembers(klass))
+					?.forEach { report(CodeSmell(issue, Entity.from(it), classMessage)) }
 		}
 		super.visitClass(klass)
 	}
 
 	override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
 		if (!declaration.isCompanion()) {
-			checkClassOrObjectFunctions(declaration, declaration.name, objectMessage)
+			getMisnamedMembers(declaration, declaration.name)
+					.forEach { report(CodeSmell(issue, Entity.from(it), objectMessage)) }
 		}
 		super.visitObjectDeclaration(declaration)
 	}
 
-	private fun checkClassOrObjectFunctions(klassOrObject: KtClassOrObject, name: String?, message: String) {
-		val body = klassOrObject.getBody() ?: return
+	private fun getMisnamedMembers(klassOrObject: KtClassOrObject, name: String?): List<KtNamedDeclaration> {
+		val body = klassOrObject.getBody() ?: return emptyList()
+		val declarations = getFunctions(body).concat(body.properties)
+		return declarations?.filter { it.name?.equals(name, ignoreCase = true) == true } ?: emptyList()
+	}
+
+	private fun getFunctions(body: KtClassBody): List<KtNamedDeclaration> {
 		var functions = body.children.filterIsInstance<KtNamedFunction>()
 		if (ignoreOverriddenFunction) {
 			functions = functions.filter { !it.isOverridden() }
 		}
-		functions
-				.filter { it.name?.equals(name, ignoreCase = true) == true }
-				.forEach { report(CodeSmell(issue, Entity.from(it), message)) }
-		body.properties
-				.filter { it.name?.equals(name, ignoreCase = true) == true }
-				.forEach { report(CodeSmell(issue, Entity.from(it), message)) }
+		return functions
 	}
 
-	private fun checkCompanionObjectFunctions(klass: KtClass) {
-		klass.companionObjects.forEach {
-			checkClassOrObjectFunctions(it, klass.name, classMessage)
-		}
+	private fun getMisnamedCompanionObjectMembers(klass: KtClass): List<KtNamedDeclaration> {
+		val list = mutableListOf<KtNamedDeclaration>()
+		klass.companionObjects.forEach { list.addAll(getMisnamedMembers(it, klass.name)) }
+		list
+				.filterIsInstance<KtNamedFunction>()
+				.filter { isFactoryMethod(it, klass) }
+				.forEach { it -> list.remove(it) }
+		return list
+	}
+
+	private fun isFactoryMethod(function: KtNamedFunction, klass: KtClass): Boolean {
+		val typeReference = function.typeReference
+		return typeReference == null && function.bodyExpression !is KtBlockExpression
+				|| typeReference?.text?.equals(klass.name) == true
 	}
 
 	companion object {
