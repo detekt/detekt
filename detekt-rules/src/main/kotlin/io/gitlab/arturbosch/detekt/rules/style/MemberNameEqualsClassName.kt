@@ -35,6 +35,18 @@ import org.jetbrains.kotlin.util.collectionUtils.concat
  * }
  * </noncompliant>
  *
+ * <compliant>
+ * class Manager {
+ *
+ *     companion object {
+ *         // factory functions can have the same name as the class
+ *         fun manager(): Manager {
+ *             return Manager()
+ *         }
+ *     }
+ * }
+ * </compliant>
+ *
  * @configuration ignoreOverriddenFunction - if overridden functions should be ignored (default: true)
  *
  * @author schalkms
