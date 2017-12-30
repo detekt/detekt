@@ -26,7 +26,7 @@ class MemberNameEqualsClassNameSpec : SubjectSpek<MemberNameEqualsClassName>({
 		val findings = subject.lint(path)
 
 		it("reports methods which are named after the class") {
-			assertThat(findings).hasSize(6)
+			assertThat(findings).hasSize(8)
 		}
 
 		it("reports methods which are named after the class object") {
@@ -37,7 +37,7 @@ class MemberNameEqualsClassNameSpec : SubjectSpek<MemberNameEqualsClassName>({
 		it("reports methods which are named after the class object including overridden functions") {
 			val config = TestConfig(mapOf("ignoreOverriddenFunction" to "false"))
 			val rule = MemberNameEqualsClassName(config)
-			assertThat(rule.lint(path)).hasSize(7)
+			assertThat(rule.lint(path)).hasSize(9)
 		}
 	}
 })

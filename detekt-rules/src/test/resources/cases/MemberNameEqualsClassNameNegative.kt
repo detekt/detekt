@@ -25,6 +25,24 @@ class StaticMethodNameEqualsObjectName {
 	}
 }
 
+// factory method can have the same name as the class
+class FactoryClass1 {
+
+	companion object {
+		fun factoryClass1(): FactoryClass1 {
+			return FactoryClass1()
+		}
+	}
+}
+
+// factory method can have the same name as the class
+class FactoryClass2 {
+
+	companion object {
+		fun factoryClass2() = FactoryClass2()
+	}
+}
+
 abstract class BaseClassForMethodNameEqualsClassName {
 
 	abstract fun AbstractMethodNameEqualsClassName()

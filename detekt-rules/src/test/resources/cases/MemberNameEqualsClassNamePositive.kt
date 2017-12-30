@@ -37,6 +37,22 @@ class MethodNameContainer {
 	}
 }
 
+class WrongFactoryClass1 {
+
+	companion object {
+		fun wrongFactoryClass1() {} // reports 1 - no return type
+	}
+}
+
+class WrongFactoryClass2 {
+
+	companion object {
+		fun wrongFactoryClass2(): Int { // reports 1 - wrong return type
+			return 0
+		}
+	}
+}
+
 class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
 
 	// reports if overridden functions are not ignored
