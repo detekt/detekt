@@ -97,13 +97,9 @@ class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
 	}
 
 	private fun getMisnamedCompanionObjectMembers(klass: KtClass): List<KtNamedDeclaration> {
-		val list = mutableListOf<KtNamedDeclaration>()
-		klass.companionObjects.forEach { list.addAll(getMisnamedMembers(it, klass.name)) }
-		list
-				.filterIsInstance<KtNamedFunction>()
-				.filter { isFactoryMethod(it, klass) }
-				.forEach { it -> list.remove(it) }
-		return list
+		return klass.companionObjects
+				.flatMap { getMisnamedMembers(it, klass.name) }
+				.filterNot { it is KtNamedFunction && isFactoryMethod(it, klass) }
 	}
 
 	private fun isFactoryMethod(function: KtNamedFunction, klass: KtClass): Boolean {
