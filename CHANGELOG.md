@@ -2,6 +2,26 @@
 
 #### RC6-1
 
+- Added factory function check to MemberNameEqualsClassName - [#653](https://github.com/arturbosch/detekt/pull/653)
+- detekt generator tests - rc6 - [#650](https://github.com/arturbosch/detekt/pull/650)
+- Rule examples improvement - [#649](https://github.com/arturbosch/detekt/pull/649)
+- Improved documentation for rule test cases - [#648](https://github.com/arturbosch/detekt/pull/648)
+- Apply compiler and baseline changes to work properly on java 9 - [#647](https://github.com/arturbosch/detekt/pull/647)
+- Test coverage rc6 - [#645](https://github.com/arturbosch/detekt/pull/645)
+- Implements #643 - MagicNumber ignores default values in ctor properties - [#644](https://github.com/arturbosch/detekt/pull/644)
+- update gradle to v4.4.1 - [#642](https://github.com/arturbosch/detekt/pull/642)
+- Documentation for Exceptions RuleSet - [#640](https://github.com/arturbosch/detekt/pull/640)
+- Documentation for "emtpy" rules - [#639](https://github.com/arturbosch/detekt/pull/639)
+- Documentation for documentation rules - [#638](https://github.com/arturbosch/detekt/pull/638)
+- Change variable min & max length to match IntelliJ. - [#635](https://github.com/arturbosch/detekt/pull/635)
+- Remove "native filesystem" warning on Windows - [#634](https://github.com/arturbosch/detekt/pull/634)
+- Failed to initialize native filesystem for Windows - [#630](https://github.com/arturbosch/detekt/issues/630)
+
+See all issues at: [RC6-1](https://github.com/arturbosch/detekt/milestone/29)
+
+##### Migration
+
+- Running detekt under Java 9 should work again with newest Kotlin Version
 - Ignores default values in constructor properties (MagicNumber) - [#644](https://github.com/arturbosch/detekt/pull/644)
 
 #### RC6

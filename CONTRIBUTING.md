@@ -5,6 +5,7 @@
 - This repo uses tabs! Make sure your code is properly formatted.
 - Use idea-code-style.xml for coding style .
 - We use [Spek](https://github.com/spekframework/spek) for testing.
+- Feel free to add your name to the contributors list at the end of the readme file when opening a pull request.
 
 ### Specific code style rules we use
 
@@ -88,6 +89,6 @@ Rules that contain an `@active` tag in their KDoc will be marked as active in th
 
 - new features? -> Update README.md / from `1.x.x` Wiki
 - add changes in CHANGELOG.md -> `groovy github-milestone-report.groovy arturbosch/detekt [milestone-number]`
-- migrations expected? -> Update MIGRATION_GUIDE.md
+- migrations expected? -> Add migration sub-section to current release changelog in CHANGELOG.md
 - all new contributors mentioned? -> README.md>Contributors, Update `all contributors`-Badge
 - new gradle-plugin release? -> Update gradle-version badge
