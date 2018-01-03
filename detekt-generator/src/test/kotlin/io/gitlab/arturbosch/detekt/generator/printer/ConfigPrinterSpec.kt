@@ -16,7 +16,7 @@ class ConfigPrinterSpec : Spek({
 		it("prints the correct yaml format") {
 			val ruleSetList = listOf(createRuleSetPage())
 			val yamlString = ConfigPrinter.print(ruleSetList)
-			val expectedYamlString = File(resource("/RuleSetConfig.yaml")).readText()
+			val expectedYamlString = File(resource("/RuleSetConfig.yml")).readText()
 			assertThat(yamlString).contains(expectedYamlString)
 		}
 	}
