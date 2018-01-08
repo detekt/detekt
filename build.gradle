@@ -52,7 +52,7 @@ subprojects {
 	compileKotlin {
 		kotlinOptions.jvmTarget = "1.8"
 		kotlinOptions.freeCompilerArgs = ["-Xskip-runtime-version-check"]
-
+		kotlinOptions.allWarningsAsErrors = true
 	}
 	compileTestKotlin {
 		kotlinOptions.jvmTarget = "1.8"
