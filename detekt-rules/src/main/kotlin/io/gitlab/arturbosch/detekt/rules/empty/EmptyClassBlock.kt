@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.empty
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.rules.isObjectOfAnonymousClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 
 /**
@@ -15,6 +16,8 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
 class EmptyClassBlock(config: Config) : EmptyRule(config) {
 
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
+		if (classOrObject.isObjectOfAnonymousClass()) return
+
 		classOrObject.getBody()?.declarations?.let {
 			if (it.isEmpty()) report(CodeSmell(issue, Entity.from(classOrObject), "The class or object " +
 					" ${classOrObject.name} is empty."))
