@@ -70,8 +70,6 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 			    - 'WildcardImport'
 			    - 'MagicNumber'
 			    - 'MaxLineLength'
-			    - 'LateinitUsage'
-			    - 'StringLiteralDuplication'
 			    - 'SpreadOperator'
 			    - 'TooManyFunctions'
 			""".trimIndent()
