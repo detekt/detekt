@@ -22,5 +22,5 @@ class EmptyFunctionBlock(config: Config) : EmptyRule(config) {
 		}
 	}
 
-	private fun KtNamedFunction.notMeantForOverriding() = !(isOpen() && isProtected())
+	private fun KtNamedFunction.notMeantForOverriding() = !isOpen()
 }

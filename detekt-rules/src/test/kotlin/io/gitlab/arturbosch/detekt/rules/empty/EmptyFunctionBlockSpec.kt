@@ -16,11 +16,6 @@ class EmptyFunctionBlockSpec : SubjectSpek<EmptyFunctionBlock>({
 
 	describe("should not flag functions meant to be overridden") {
 
-		it("should not flag function with protected and open modifier") {
-			val findings = subject.lint("protected open fun stuff() {}")
-			assertThat(findings).isEmpty()
-		}
-
 		it("should flag function with protected modifier") {
 			val findings = subject.lint("protected fun stuff() {}")
 			assertThat(findings).hasSize(1)
@@ -28,7 +23,7 @@ class EmptyFunctionBlockSpec : SubjectSpek<EmptyFunctionBlock>({
 
 		it("should not flag function with open modifier") {
 			val findings = subject.lint("open fun stuff() {}")
-			assertThat(findings).hasSize(1)
+			assertThat(findings).isEmpty()
 		}
 	}
 
