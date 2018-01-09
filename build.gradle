@@ -192,7 +192,7 @@ detekt {
 }
 
 /**
- * Usage: <code>./gradlew build -PwarningsAsErrors=true<code>.
+ * Usage: <code>./gradlew build -PwarningsAsErrors=true</code>.
  */
 def shouldTreatCompilerWarningsAsErrors() {
 	return project.hasProperty('warningsAsErrors') && project.properties['warningsAsErrors'] == 'true'
