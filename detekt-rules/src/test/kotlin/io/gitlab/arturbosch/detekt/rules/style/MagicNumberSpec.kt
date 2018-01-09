@@ -546,6 +546,23 @@ class MagicNumberSpec : Spek({
 			}
 		}
 
+		given("Issue#659 - false-negative reporting on unnamed argument when ignore is true") {
+
+			fun code(numberString: String) = compileContentForTest("""
+				data class Model(
+						val someVal: Int,
+						val other: String = "default"
+				)
+
+				var model = Model($numberString)
+			""")
+
+			it("should detect the argument") {
+				val rule = MagicNumber(TestConfig(mapOf("ignoreNamedArgument" to "true")))
+				assertThat(rule.lint(code("53"))).hasSize(1)
+			}
+		}
+
 		given("in function invocation") {
 			fun code(number: Number) = compileContentForTest("""
 				fun tested(someVal: Int, other: String = "default")
