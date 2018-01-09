@@ -357,3 +357,5 @@ style:
     active: false
   RedundantVisibilityModifierRule:
     active: false
+  MatchingDeclarationName:
+    active: true
