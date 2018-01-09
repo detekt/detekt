@@ -12,6 +12,7 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
  * @active since v1.0.0
  * @author Artur Bosch
  * @author Marvin Ramin
+ * @author Egor Neliuba
  */
 class EmptyClassBlock(config: Config) : EmptyRule(config) {
 
