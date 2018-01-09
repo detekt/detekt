@@ -12,11 +12,15 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameterList
 
 /**
+ * Reports functions which have more parameters then a certain threshold (default: 5).
+ *
  * @configuration threshold - maximum number of parameters (default: 5)
+ * @configuration ignoreDefaultParameters - ignore parameters that have a default value (default: false)
  *
  * @active since v1.0.0
  * @author Artur Bosch
  * @author Marvin Ramin
+ * @author Serj Lotutovici
  */
 class LongParameterList(config: Config = Config.empty,
 						threshold: Int = DEFAULT_ACCEPTED_PARAMETER_LENGTH) : ThresholdRule(config, threshold) {
@@ -27,13 +31,20 @@ class LongParameterList(config: Config = Config.empty,
 					"used to control complex algorithms and violate the Single Responsibility Principle. " +
 					"Prefer methods with short parameter lists.")
 
+	private val ignoreDefaultParameters = valueOrDefault(IGNORE_DEFAULT_PARAMETERS, DEFAULT_IGNORE_DEFAULT_PARAMETERS)
+
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		if (function.hasModifier(KtTokens.OVERRIDE_KEYWORD)) return
 		function.valueParameterList?.checkThreshold()
 	}
 
 	private fun KtParameterList.checkThreshold() {
-		val size = parameters.size
+		val size = if (ignoreDefaultParameters) {
+			parameters.filter { !it.hasDefaultValue() }.size
+		} else {
+			parameters.size
+		}
+
 		if (size > threshold) {
 			report(ThresholdedCodeSmell(issue,
 					Entity.from(this),
@@ -41,6 +52,11 @@ class LongParameterList(config: Config = Config.empty,
 					message = ""))
 		}
 	}
+
+	companion object {
+		const val IGNORE_DEFAULT_PARAMETERS = "ignoreDefaultParameters"
+	}
 }
 
 private const val DEFAULT_ACCEPTED_PARAMETER_LENGTH = 5
+private const val DEFAULT_IGNORE_DEFAULT_PARAMETERS = false

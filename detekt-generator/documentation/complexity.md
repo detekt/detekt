@@ -19,13 +19,17 @@ This rule set contains rules that report complex code.
 
 ### LongParameterList
 
-TODO: Specify description
+Reports functions which have more parameters then a certain threshold (default: 5).
 
 #### Configuration options:
 
 * `threshold` (default: `5`)
 
    maximum number of parameters
+
+* `ignoreDefaultParameters` (default: `false`)
+
+   ignore parameters that have a default value
 
 ### LongMethod
 

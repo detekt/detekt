@@ -619,6 +619,7 @@ inside the report file.
 - [Ilya Zorin](https://github.com/geralt-encore) - Rule improvement: UnnecessaryAbstractClass
 - [Gesh Markov](https://github.com/markov) - Improve error message for incorrect configuration file
 - [Patrick Pilch](https://github.com/patrickpilch) - Rule improvement: ReturnCount
+- [Serj Lotutovici](https://github.com/serj-lotutovici) - Rule improvement: LongParameterList
 
 ### <a name="mentions">Mentions</a>
 
