@@ -13,6 +13,7 @@ import io.gitlab.arturbosch.detekt.rules.style.ForbiddenImport
 import io.gitlab.arturbosch.detekt.rules.style.FunctionOnlyReturningConstant
 import io.gitlab.arturbosch.detekt.rules.style.LoopWithTooManyJumpStatements
 import io.gitlab.arturbosch.detekt.rules.style.MagicNumber
+import io.gitlab.arturbosch.detekt.rules.style.MatchingDeclarationName
 import io.gitlab.arturbosch.detekt.rules.style.MemberNameEqualsClassName
 import io.gitlab.arturbosch.detekt.rules.style.ModifierOrder
 import io.gitlab.arturbosch.detekt.rules.style.NestedClassesVisibility
@@ -83,7 +84,8 @@ class StyleGuideProvider : RuleSetProvider {
 				UnusedImports(config),
 				ExpressionBodySyntax(config),
 				NestedClassesVisibility(config),
-				RedundantVisibilityModifierRule(config)
+				RedundantVisibilityModifierRule(config),
+				MatchingDeclarationName(config)
 		))
 	}
 }

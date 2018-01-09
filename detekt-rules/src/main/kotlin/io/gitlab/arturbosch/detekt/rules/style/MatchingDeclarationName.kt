@@ -11,6 +11,37 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
 
 /**
+ * "If a Kotlin file contains a single class (potentially with related top-level declarations),
+ * its name should be the same as the name of the class, with the .kt extension appended.
+ * If a file contains multiple classes, or only top-level declarations,
+ * choose a name describing what the file contains, and name the file accordingly.
+ * Use camel humps with an uppercase first letter (e.g. ProcessDeclarations.kt).
+ *
+ * The name of the file should describe what the code in the file does.
+ * Therefore, you should avoid using meaningless words such as "Util" in file names." - Official Kotlin Style Guide
+ *
+ * More information at: http://kotlinlang.org/docs/reference/coding-conventions.html
+ *
+ * <noncompliant>
+ *
+ * class Foo // FooUtils.kt
+ *
+ * fun Bar.toFoo(): Foo = ...
+ * fun Foo.toBar(): Bar = ...
+ *
+ * </noncompliant>
+ *
+ * <compliant>
+ *
+ * class Foo { // Foo.kt
+ *     fun stuff() = 42
+ * }
+ *
+ * fun Bar.toFoo(): Foo = ...
+ *
+ * </compliant>
+ *
+ * @active since v1.0.0
  * @author Artur Bosch
  */
 class MatchingDeclarationName(config: Config = Config.empty) : Rule(config) {
