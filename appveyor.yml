@@ -17,6 +17,6 @@ install:
   - java -version
   - gradlew.bat --version
 build_script:
-  - gradlew.bat -u -i assemble
+  - gradlew.bat -u -i assemble -PwarningsAsErrors=true
 test_script:
-  - gradlew.bat -u -i -S test
+  - gradlew.bat -u -i -S test -PwarningsAsErrors=true

@@ -3,7 +3,7 @@ jdk:
   - oraclejdk8
   - oraclejdk9
 script:
-  - ./gradlew build
+  - ./gradlew build -PwarningsAsErrors=true
   - ./gradlew shadowJar
   - java -jar ./detekt-cli/build/libs/detekt-cli-*-all.jar --help
   - java -jar ./detekt-cli/build/libs/detekt-cli-*-all.jar -i . --baseline ./reports/baseline.xml -f ".*/resources/.*, .*/build/.*" -c ./detekt-cli/src/main/resources/default-detekt-config.yml,./reports/failfast.yml
