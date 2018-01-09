@@ -126,9 +126,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 		ignoreAnnotation && expression.isPartOf(KtAnnotationEntry::class) -> true
 		ignoreHashCodeFunction && expression.isPartOfHashCode() -> true
 		ignoreEnums && expression.isPartOf(KtEnumEntry::class) -> true
-		ignoreNamedArgument
-				&& expression.isPartOf(KtValueArgument::class)
-				&& expression.isPartOf(KtCallExpression::class) -> true
+		ignoreNamedArgument && expression.isNamedArgument() -> true
 		else -> false
 	}
 
@@ -172,6 +170,11 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 		private const val BINARY_RADIX = 2
 	}
 }
+
+private fun KtConstantExpression.isNamedArgument() =
+		(parent is KtValueArgument
+				&& (parent as? KtValueArgument)?.isNamed() == true
+				&& isPartOf(KtCallExpression::class))
 
 private fun KtConstantExpression.isPartOfFunctionReturnConstant() =
 		parent is KtNamedFunction || (parent is KtReturnExpression && parent.parent.children.size == 1)
