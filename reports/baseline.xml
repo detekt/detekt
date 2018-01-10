@@ -17,7 +17,7 @@
     <ID>UnsafeCast:DetektIdeaFormatTask.kt$DetektIdeaFormatTask$project.extensions.getByName("detekt") as DetektExtension</ID>
     <ID>UnsafeCast:DetektIdeaInspectionTask.kt$DetektIdeaInspectionTask$project.extensions.getByName("detekt") as DetektExtension</ID>
     <ID>UnsafeCast:ExpressionBodySyntax.kt$ExpressionBodySyntax$statements[0] as KtReturnExpression</ID>
-    <ID>UnsafeCast:Junk.kt$SingleAssign$_value as T</ID>
+    <ID>UnsafeCast:SingleAssign.kt$SingleAssign$_value as T</ID>
     <ID>UnsafeCast:KtCompiler.kt$KtCompiler$psiFileFactory.createFileFromText( relativePath.fileName.toString(), KotlinLanguage.INSTANCE, StringUtilRt.convertLineSeparators(content), true, true, false, LightVirtualFile(relativePath.toString())) as KtFile</ID>
     <ID>UnsafeCast:Location.kt$Location.Companion$this.containingFile.viewProvider.virtualFile as LightVirtualFile</ID>
     <ID>UnsafeCast:ProjectExtension.kt$&lt;no name provided&gt;$constructor.newInstance() as T</ID>

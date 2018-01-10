@@ -181,6 +181,11 @@ detekt {
 		config = "${rootProject.projectDir}/reports/failfast.yml"
 	}
 
+	profile('output') {
+		output = "${rootProject.projectDir}/reports"
+		outputName = "detekt"
+	}
+
 	idea {
 		path = "$USER_HOME/.idea"
 		codeStyleScheme = "$USER_HOME/.idea/idea-code-style.xml"
