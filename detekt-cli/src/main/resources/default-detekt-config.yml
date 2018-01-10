@@ -360,4 +360,4 @@ style:
   MatchingDeclarationName:
     active: true
   UntilInsteadOfRangeTo:
-    active: true
+    active: false
