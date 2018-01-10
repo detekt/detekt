@@ -6,7 +6,6 @@ import org.jetbrains.kotlin.psi.KtStringTemplateEntry
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 import java.util.HashMap
 import kotlin.reflect.KClass
-import kotlin.reflect.KProperty
 
 private val identifierRegex = Regex("[aA-zZ]+([-][aA-zZ]+)*")
 
@@ -52,36 +51,10 @@ const val PREFIX = "\t- "
 
 fun Any.format(prefix: String = "", suffix: String = "\n") = "$prefix$this$suffix"
 
-class SingleAssign<T> {
-
-	private var initialized = false
-	private var _value: Any? = UNINITIALIZED_VALUE
-
-	operator fun getValue(thisRef: Any?, property: KProperty<*>): T {
-		if (!initialized) {
-			throw IllegalStateException("Property ${property.name} has not been assigned yet!")
-		}
-		@Suppress("UNCHECKED_CAST")
-		return _value as T
-	}
-
-	operator fun setValue(thisRef: Any?, property: KProperty<*>, value: T) {
-		if (initialized) {
-			throw IllegalStateException("Property ${property.name} has already been assigned!")
-		}
-		_value = value
-		initialized = true
-	}
-
-	companion object {
-		private val UNINITIALIZED_VALUE = Any()
-	}
-}
-
 fun <K, V> List<Pair<K, List<V>>>.toMergedMap(): Map<K, List<V>> {
-    val map = HashMap<K, MutableList<V>>()
-    this.forEach {
-        map.merge(it.first, it.second.toMutableList(), { l1, l2 -> l1.apply { addAll(l2) } })
-    }
-    return map
+	val map = HashMap<K, MutableList<V>>()
+	this.forEach {
+		map.merge(it.first, it.second.toMutableList(), { l1, l2 -> l1.apply { addAll(l2) } })
+	}
+	return map
 }

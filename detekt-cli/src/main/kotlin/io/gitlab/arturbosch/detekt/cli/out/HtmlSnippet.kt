@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.cli.out
 /**
  * A very simple DSL for generating HTML.
  */
-internal class HTMLSnippet {
+internal class HtmlSnippet {
 
 	private val lines = mutableListOf<String>()
 
@@ -11,7 +11,7 @@ internal class HTMLSnippet {
 		lines.add("<h3>${body()}</h3>")
 	}
 
-	fun div(cssClass: String, body: HTMLSnippet.() -> Unit) {
+	fun div(cssClass: String, body: HtmlSnippet.() -> Unit) {
 		lines.add("<div class=\"$cssClass\">")
 
 		body()
@@ -33,7 +33,7 @@ internal class HTMLSnippet {
 		lines.add("</span>")
 	}
 
-	fun <T> list(collection: Collection<T>, body: HTMLSnippet.(T) -> Unit) {
+	fun <T> list(collection: Collection<T>, body: HtmlSnippet.(T) -> Unit) {
 		lines.add("<ul>")
 
 		collection.forEach {
@@ -50,8 +50,8 @@ internal class HTMLSnippet {
 	}
 }
 
-internal fun htmlSnippet(init: HTMLSnippet.() -> Unit): String {
-	val snippet = HTMLSnippet()
+internal fun htmlSnippet(init: HtmlSnippet.() -> Unit): String {
+	val snippet = HtmlSnippet()
 	snippet.init()
 	return snippet.toString()
 }
