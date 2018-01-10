@@ -30,6 +30,7 @@ import io.gitlab.arturbosch.detekt.rules.style.ThrowsCount
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryAbstractClass
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryInheritance
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryParentheses
+import io.gitlab.arturbosch.detekt.rules.style.UntilInsteadOfRangeTo
 import io.gitlab.arturbosch.detekt.rules.style.UnusedImports
 import io.gitlab.arturbosch.detekt.rules.style.UseDataClass
 import io.gitlab.arturbosch.detekt.rules.style.UtilityClassWithPublicConstructor
@@ -85,7 +86,8 @@ class StyleGuideProvider : RuleSetProvider {
 				ExpressionBodySyntax(config),
 				NestedClassesVisibility(config),
 				RedundantVisibilityModifierRule(config),
-				MatchingDeclarationName(config)
+				MatchingDeclarationName(config),
+				UntilInsteadOfRangeTo(config)
 		))
 	}
 }
