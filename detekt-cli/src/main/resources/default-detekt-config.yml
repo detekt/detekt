@@ -359,3 +359,5 @@ style:
     active: false
   MatchingDeclarationName:
     active: true
+  UntilInsteadOfRangeTo:
+    active: true
