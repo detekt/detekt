@@ -15,6 +15,8 @@ import org.jetbrains.kotlin.psi.KtForExpression
 
 /**
  * Reports calls to 'rangeTo' or '..' operator instead of calls to 'until'.
+ * 'until' is applicable in cases where upper range value is described as
+ * some value subtracted by 1. 'until' helps to prevent off by one errors.
  *
  * <noncompliant>
  * for (i in 0 until 10 - 1) {}
