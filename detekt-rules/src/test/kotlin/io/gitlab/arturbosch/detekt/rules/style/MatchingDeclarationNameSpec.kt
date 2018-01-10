@@ -28,6 +28,24 @@ internal class MatchingDeclarationNameSpec : Spek({
 			assertThat(findings).isEmpty()
 		}
 
+		it("should pass for interface declaration") {
+			val ktFile = compileContentForTest("interface I")
+			ktFile.name = "I.kt"
+			val findings = MatchingDeclarationName().lint(ktFile)
+			assertThat(findings).isEmpty()
+		}
+
+		it("should pass for enum declaration") {
+			val ktFile = compileContentForTest("""
+				enum class E {
+					ONE, TWO, THREE
+				}
+			""")
+			ktFile.name = "E.kt"
+			val findings = MatchingDeclarationName().lint(ktFile)
+			assertThat(findings).isEmpty()
+		}
+
 		it("should pass for multiple declaration") {
 			val ktFile = compileContentForTest("""
 				class C
@@ -74,6 +92,24 @@ internal class MatchingDeclarationNameSpec : Spek({
 				fun C.b() = 5
 			""")
 			ktFile.name = "ClassUtils.kt"
+			val findings = MatchingDeclarationName().lint(ktFile)
+			assertThat(findings).hasSize(1)
+		}
+
+		it("should not pass for interface declaration") {
+			val ktFile = compileContentForTest("interface I")
+			ktFile.name = "Not_I.kt"
+			val findings = MatchingDeclarationName().lint(ktFile)
+			assertThat(findings).hasSize(1)
+		}
+
+		it("should pass for enum declaration") {
+			val ktFile = compileContentForTest("""
+				enum class NOT_E {
+					ONE, TWO, THREE
+				}
+			""")
+			ktFile.name = "E.kt"
 			val findings = MatchingDeclarationName().lint(ktFile)
 			assertThat(findings).hasSize(1)
 		}
