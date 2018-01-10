@@ -16,7 +16,7 @@ import org.jetbrains.kotlin.psi.KtForExpression
 /**
  * Reports calls to 'rangeTo' or '..' operator instead of calls to 'until'.
  * 'until' is applicable in cases where upper range value is described as
- * some value subtracted by 1. 'until' helps to prevent off by one errors.
+ * some value subtracted by 1. 'until' helps to prevent off-by-one errors.
  *
  * <noncompliant>
  * for (i in 0 until 10 - 1) {}
@@ -52,6 +52,7 @@ class UntilInsteadOfRangeTo(config: Config = Config.empty) : Rule(config) {
 		super.visitForExpression(expression)
 	}
 
+	@Suppress("ReturnCount")
 	private fun isUntilApplicable(range: Array<PsiElement>): Boolean {
 		if (range[1].text !in setOf("rangeTo", "..")) return false
 		val expression = range[2] as? KtBinaryExpression ?: return false
