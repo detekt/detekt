@@ -5,20 +5,20 @@ which should be avoided.
 
 ## Content
 
-1. [EmptyCatchBlock](#EmptyCatchBlock)
-2. [EmptyClassBlock](#EmptyClassBlock)
-3. [EmptyDefaultConstructor](#EmptyDefaultConstructor)
-4. [EmptyDoWhileBlock](#EmptyDoWhileBlock)
-5. [EmptyElseBlock](#EmptyElseBlock)
-6. [EmptyFinallyBlock](#EmptyFinallyBlock)
-7. [EmptyForBlock](#EmptyForBlock)
-8. [EmptyFunctionBlock](#EmptyFunctionBlock)
-9. [EmptyIfBlock](#EmptyIfBlock)
-10. [EmptyInitBlock](#EmptyInitBlock)
-11. [EmptyKtFile](#EmptyKtFile)
-12. [EmptySecondaryConstructor](#EmptySecondaryConstructor)
-13. [EmptyWhenBlock](#EmptyWhenBlock)
-14. [EmptyWhileBlock](#EmptyWhileBlock)
+1. [EmptyCatchBlock](#emptycatchblock)
+2. [EmptyClassBlock](#emptyclassblock)
+3. [EmptyDefaultConstructor](#emptydefaultconstructor)
+4. [EmptyDoWhileBlock](#emptydowhileblock)
+5. [EmptyElseBlock](#emptyelseblock)
+6. [EmptyFinallyBlock](#emptyfinallyblock)
+7. [EmptyForBlock](#emptyforblock)
+8. [EmptyFunctionBlock](#emptyfunctionblock)
+9. [EmptyIfBlock](#emptyifblock)
+10. [EmptyInitBlock](#emptyinitblock)
+11. [EmptyKtFile](#emptyktfile)
+12. [EmptySecondaryConstructor](#emptysecondaryconstructor)
+13. [EmptyWhenBlock](#emptywhenblock)
+14. [EmptyWhileBlock](#emptywhileblock)
 ## Rules in the `empty-blocks` rule set:
 
 ### EmptyCatchBlock

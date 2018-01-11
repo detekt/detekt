@@ -4,19 +4,19 @@ Rules in this rule set report issues related to how code throws and handles Exce
 
 ## Content
 
-1. [TooGenericExceptionCaught](#TooGenericExceptionCaught)
-2. [ExceptionRaisedInUnexpectedLocation](#ExceptionRaisedInUnexpectedLocation)
-3. [TooGenericExceptionThrown](#TooGenericExceptionThrown)
-4. [NotImplementedDeclaration](#NotImplementedDeclaration)
-5. [PrintStackTrace](#PrintStackTrace)
-6. [InstanceOfCheckForException](#InstanceOfCheckForException)
-7. [ThrowingExceptionsWithoutMessageOrCause](#ThrowingExceptionsWithoutMessageOrCause)
-8. [ReturnFromFinally](#ReturnFromFinally)
-9. [ThrowingExceptionFromFinally](#ThrowingExceptionFromFinally)
-10. [ThrowingExceptionInMain](#ThrowingExceptionInMain)
-11. [RethrowCaughtException](#RethrowCaughtException)
-12. [ThrowingNewInstanceOfSameException](#ThrowingNewInstanceOfSameException)
-13. [SwallowedException](#SwallowedException)
+1. [TooGenericExceptionCaught](#toogenericexceptioncaught)
+2. [ExceptionRaisedInUnexpectedLocation](#exceptionraisedinunexpectedlocation)
+3. [TooGenericExceptionThrown](#toogenericexceptionthrown)
+4. [NotImplementedDeclaration](#notimplementeddeclaration)
+5. [PrintStackTrace](#printstacktrace)
+6. [InstanceOfCheckForException](#instanceofcheckforexception)
+7. [ThrowingExceptionsWithoutMessageOrCause](#throwingexceptionswithoutmessageorcause)
+8. [ReturnFromFinally](#returnfromfinally)
+9. [ThrowingExceptionFromFinally](#throwingexceptionfromfinally)
+10. [ThrowingExceptionInMain](#throwingexceptioninmain)
+11. [RethrowCaughtException](#rethrowcaughtexception)
+12. [ThrowingNewInstanceOfSameException](#throwingnewinstanceofsameexception)
+13. [SwallowedException](#swallowedexception)
 ## Rules in the `exceptions` rule set:
 
 ### TooGenericExceptionCaught

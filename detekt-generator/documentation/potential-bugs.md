@@ -4,20 +4,20 @@ The potential-bugs rule set provides rules that detect potential bugs.
 
 ## Content
 
-1. [DuplicateCaseInWhenExpression](#DuplicateCaseInWhenExpression)
-2. [EqualsAlwaysReturnsTrueOrFalse](#EqualsAlwaysReturnsTrueOrFalse)
-3. [EqualsWithHashCodeExist](#EqualsWithHashCodeExist)
-4. [IteratorNotThrowingNoSuchElementException](#IteratorNotThrowingNoSuchElementException)
-5. [IteratorHasNextCallsNextMethod](#IteratorHasNextCallsNextMethod)
-6. [UselessPostfixExpression](#UselessPostfixExpression)
-7. [InvalidLoopCondition](#InvalidLoopCondition)
-8. [WrongEqualsTypeParameter](#WrongEqualsTypeParameter)
-9. [ExplicitGarbageCollectionCall](#ExplicitGarbageCollectionCall)
-10. [LateinitUsage](#LateinitUsage)
-11. [UnconditionalJumpStatementInLoop](#UnconditionalJumpStatementInLoop)
-12. [UnreachableCode](#UnreachableCode)
-13. [UnsafeCallOnNullableType](#UnsafeCallOnNullableType)
-14. [UnsafeCast](#UnsafeCast)
+1. [DuplicateCaseInWhenExpression](#duplicatecaseinwhenexpression)
+2. [EqualsAlwaysReturnsTrueOrFalse](#equalsalwaysreturnstrueorfalse)
+3. [EqualsWithHashCodeExist](#equalswithhashcodeexist)
+4. [IteratorNotThrowingNoSuchElementException](#iteratornotthrowingnosuchelementexception)
+5. [IteratorHasNextCallsNextMethod](#iteratorhasnextcallsnextmethod)
+6. [UselessPostfixExpression](#uselesspostfixexpression)
+7. [InvalidLoopCondition](#invalidloopcondition)
+8. [WrongEqualsTypeParameter](#wrongequalstypeparameter)
+9. [ExplicitGarbageCollectionCall](#explicitgarbagecollectioncall)
+10. [LateinitUsage](#lateinitusage)
+11. [UnconditionalJumpStatementInLoop](#unconditionaljumpstatementinloop)
+12. [UnreachableCode](#unreachablecode)
+13. [UnsafeCallOnNullableType](#unsafecallonnullabletype)
+14. [UnsafeCast](#unsafecast)
 ## Rules in the `potential-bugs` rule set:
 
 ### DuplicateCaseInWhenExpression

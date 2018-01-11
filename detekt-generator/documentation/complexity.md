@@ -4,17 +4,17 @@ This rule set contains rules that report complex code.
 
 ## Content
 
-1. [LongParameterList](#LongParameterList)
-2. [LongMethod](#LongMethod)
-3. [LargeClass](#LargeClass)
-4. [ComplexInterface](#ComplexInterface)
-5. [ComplexMethod](#ComplexMethod)
-6. [StringLiteralDuplication](#StringLiteralDuplication)
-7. [MethodOverloading](#MethodOverloading)
-8. [NestedBlockDepth](#NestedBlockDepth)
-9. [TooManyFunctions](#TooManyFunctions)
-10. [ComplexCondition](#ComplexCondition)
-11. [LabeledExpression](#LabeledExpression)
+1. [LongParameterList](#longparameterlist)
+2. [LongMethod](#longmethod)
+3. [LargeClass](#largeclass)
+4. [ComplexInterface](#complexinterface)
+5. [ComplexMethod](#complexmethod)
+6. [StringLiteralDuplication](#stringliteralduplication)
+7. [MethodOverloading](#methodoverloading)
+8. [NestedBlockDepth](#nestedblockdepth)
+9. [TooManyFunctions](#toomanyfunctions)
+10. [ComplexCondition](#complexcondition)
+11. [LabeledExpression](#labeledexpression)
 ## Rules in the `complexity` rule set:
 
 ### LongParameterList
