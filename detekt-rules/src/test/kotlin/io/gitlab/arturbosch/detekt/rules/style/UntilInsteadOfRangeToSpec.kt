@@ -35,12 +35,11 @@ class UntilInsteadOfRangeToSpec : SubjectSpek<UntilInsteadOfRangeTo> ({
 		assertThat(subject.lint(code)).hasSize(0)
 	}
 
-	it("reports for both 'rangeTo' and '..'") {
+	it("reports for '..'") {
 		val code = """
 				fun f() {
 					for (i in 0 .. 10 - 1) {}
-					for (i in 0 rangeTo 10 - 1) {}
 				}"""
-		assertThat(subject.lint(code)).hasSize(2)
+		assertThat(subject.lint(code)).hasSize(1)
 	}
 })
