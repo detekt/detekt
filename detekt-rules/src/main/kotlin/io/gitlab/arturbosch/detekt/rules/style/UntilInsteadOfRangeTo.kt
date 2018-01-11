@@ -28,7 +28,6 @@ import org.jetbrains.kotlin.psi.KtForExpression
  *
  * <compliant>
  * for (i in 0 .. 10 - 1) {}
- * for (i in 0 rangeTo 10 - 1) {}
  * </compliant>
  *
  * @author Ilya Zorin
@@ -54,7 +53,7 @@ class UntilInsteadOfRangeTo(config: Config = Config.empty) : Rule(config) {
 
 	@Suppress("ReturnCount")
 	private fun isUntilApplicable(range: Array<PsiElement>): Boolean {
-		if (range[1].text !in setOf("rangeTo", "..")) return false
+		if (range[1].text != "..") return false
 		val expression = range[2] as? KtBinaryExpression ?: return false
 		if (expression.operationToken != KtTokens.MINUS) return false
 		val rightExpressionValue = expression.right as? KtConstantExpression ?: return false
