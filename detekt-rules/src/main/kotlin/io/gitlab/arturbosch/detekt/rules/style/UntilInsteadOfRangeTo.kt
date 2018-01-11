@@ -14,7 +14,7 @@ import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtForExpression
 
 /**
- * Reports calls to 'rangeTo' or '..' operator instead of calls to 'until'.
+ * Reports calls to '..' operator instead of calls to 'until'.
  * 'until' is applicable in cases where upper range value is described as
  * some value subtracted by 1. 'until' helps to prevent off-by-one errors.
  *
@@ -36,7 +36,7 @@ class UntilInsteadOfRangeTo(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,
 			Severity.Style,
-			"'rangeTo' or the '..' call can be replaced with 'until'",
+			"'..' call can be replaced with 'until'",
 			Debt.FIVE_MINS)
 
 	private val minimumSize = 3
@@ -46,7 +46,7 @@ class UntilInsteadOfRangeTo(config: Config = Config.empty) : Rule(config) {
 		val range = loopRange?.children
 		if (range != null && range.size >= minimumSize && isUntilApplicable(range)) {
 			report(CodeSmell(issue, Entity.from(loopRange),
-					"'rangeTo' or the '..' call can be replaced with 'until'"))
+					"'..' call can be replaced with 'until'"))
 		}
 		super.visitForExpression(expression)
 	}
