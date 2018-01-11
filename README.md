@@ -394,16 +394,15 @@ dependencies {
 
 ### <a name="rulesets">RuleSets</a>
 
-Currently there are seven rule sets which are used per default when running the cli.
+Currently there are seven rule sets which are used per default when running the CLI.
 
-- complexity    - has rules to detect _LongMethod, LongParameterList, LargeClass, ComplexMethod ..._ smells
-- style         - detects wildcard imports and naming violations
-- comments      - has rules to detect missing KDoc over public members and unnecessary KDoc over private members
-- exceptions    - too general exceptions are used in throw and catch statements like RuntimeException, Error or Throwable
-- empty         - finds empty block statements
-- potential-bugs    - code is structured in a way it can lead to bugs like 'only equals but not hashcode is implemented' or explicit garbage
- collection calls
-- performance   - finds potential performance issues
+- [complexity](detekt-generator/documentation/complexity.md) - This rule set contains rules that report complex code.
+- [style](detekt-generator/documentation/style.md) - The Style ruleset provides rules that assert the style of the code. This will help keep code in line with the given code style guidelines.
+- [comments](detekt-generator/documentation/comments.md) - This rule set provides rules that address issues in comments and documentation of the code.
+- [exceptions](detekt-generator/documentation/exceptions.md) - Rules in this rule set report issues related to how code throws and handles Exceptions.
+- [empty-blocks](detekt-generator/documentation/empty-blocks.md) - The empty-blocks ruleset contains rules that will report empty blocks of code which should be avoided.
+- [potential-bugs](detekt-generator/documentation/potential-bugs.md) - The potential-bugs rule set provides rules that detect potential bugs.
+- [performance](detekt-generator/documentation/performance.md) - The performance rule set analyzes code for potential performance problems.
 
 ### <a name="rulesetconfig">RuleSet Configuration</a>
 
