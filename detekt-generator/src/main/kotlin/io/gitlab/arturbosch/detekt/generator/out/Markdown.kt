@@ -39,7 +39,7 @@ inline fun MarkdownContent.orderedList(sectionList: () -> List<String>) {
 }
 
 inline fun MarkdownContent.referenceToHeading(reference: () -> String) =
-		"[${reference()}](#${reference().replace(' ', '-')})"
+		"[${reference()}](#${reference().replace(' ', '-').toLowerCase()})"
 
 inline fun MarkdownContent.code(code: () -> String) = "`${code()}`"
 inline fun MarkdownContent.codeBlock(code: () -> String) = "```kotlin\n${code()}\n```"

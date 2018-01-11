@@ -4,9 +4,9 @@ The performance rule set analyzes code for potential performance problems.
 
 ## Content
 
-1. [ForEachOnRange](#ForEachOnRange)
-2. [SpreadOperator](#SpreadOperator)
-3. [UnnecessaryTemporaryInstantiation](#UnnecessaryTemporaryInstantiation)
+1. [ForEachOnRange](#foreachonrange)
+2. [SpreadOperator](#spreadoperator)
+3. [UnnecessaryTemporaryInstantiation](#unnecessarytemporaryinstantiation)
 ## Rules in the `performance` rule set:
 
 ### ForEachOnRange

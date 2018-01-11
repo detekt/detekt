@@ -4,8 +4,8 @@ style rule set
 
 ## Content
 
-1. [WildcardImport](#WildcardImport)
-2. [EqualsNull](#EqualsNull)
+1. [WildcardImport](#wildcardimport)
+2. [EqualsNull](#equalsnull)
 ## Rules in the `style` rule set:
 
 ### WildcardImport
