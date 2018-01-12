@@ -120,4 +120,93 @@ class ReturnCountSpec : Spek({
 		}
 	}
 
+	given("a function with inner object") {
+		val code = """
+			fun test(x: Int): Int {
+				val a = object {
+					fun test2(x: Int): Int {
+						when (x) {
+							5 -> return 5
+							else -> return 0
+						}
+					}
+				}
+				when (x) {
+					5 -> return 5
+					else -> return 0
+				}
+			}
+    	"""
+
+		it("should not get flag when returns is in inner object") {
+			val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "2"))).lint(code)
+			assertThat(findings).hasSize(0)
+		}
+	}
+
+	given("a function with 2 inner object") {
+		val code = """
+			fun test(x: Int): Int {
+				val a = object {
+					fun test2(x: Int): Int {
+						val b = object {
+							fun test3(x: Int): Int {
+								when (x) {
+									5 -> return 5
+									else -> return 0
+								}
+							}
+						}
+						when (x) {
+							5 -> return 5
+							else -> return 0
+						}
+					}
+				}
+				when (x) {
+					5 -> return 5
+					else -> return 0
+				}
+			}
+    	"""
+
+		it("should not get flag when returns is in inner object") {
+			val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "2"))).lint(code)
+			assertThat(findings).hasSize(0)
+		}
+	}
+
+	given("a function with 2 inner object and exceeded max") {
+		val code = """
+			fun test(x: Int): Int {
+				val a = object {
+					fun test2(x: Int): Int {
+						val b = object {
+							fun test3(x: Int): Int {
+								when (x) {
+									5 -> return 5
+									else -> return 0
+								}
+							}
+						}
+						when (x) {
+							5 -> return 5
+							else -> return 0
+						}
+					}
+				}
+				when (x) {
+					5 -> return 5
+					4 -> return 4
+					3 -> return 3
+					else -> return 0
+				}
+			}
+    	"""
+
+		it("should get flagged when returns is in inner object") {
+			val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "2"))).lint(code)
+			assertThat(findings).hasSize(1)
+		}
+	}
 })
