@@ -3,12 +3,13 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
+import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SplitPattern
-import io.gitlab.arturbosch.detekt.rules.collectByType
+import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
 
@@ -48,6 +49,7 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
  * @author schalkms
  * @author Marvin Ramin
  * @author Patrick Pilch
+ * @author Ilya Tretyakov
  */
 class ReturnCount(config: Config = Config.empty) : Rule(config) {
 
@@ -61,7 +63,7 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
 		super.visitNamedFunction(function)
 
 		if (!isIgnoredFunction(function)) {
-			val numberOfReturns = function.collectByType<KtReturnExpression>().count()
+			val numberOfReturns = countFunctionReturns(function)
 
 			if (numberOfReturns > max) {
 				report(CodeSmell(issue, Entity.from(function), "Function ${function.name} has " +
@@ -71,6 +73,19 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
 	}
 
 	private fun isIgnoredFunction(function: KtNamedFunction) = excludedFunctions.contains(function.name)
+
+	private fun countFunctionReturns(function: KtNamedFunction): Int {
+		var returnsNumber = 0
+		function.accept(object : DetektVisitor() {
+			override fun visitKtElement(element: KtElement) {
+				if (element is KtReturnExpression) {
+					returnsNumber++
+				}
+				element.children.filter { it !is KtNamedFunction }.forEach { it.accept(this) }
+			}
+		})
+		return returnsNumber
+	}
 
 	companion object {
 		const val MAX = "max"
