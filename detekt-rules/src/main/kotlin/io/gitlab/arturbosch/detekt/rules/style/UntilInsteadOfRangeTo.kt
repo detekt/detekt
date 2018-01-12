@@ -19,15 +19,15 @@ import org.jetbrains.kotlin.psi.KtForExpression
  * some value subtracted by 1. 'until' helps to prevent off-by-one errors.
  *
  * <noncompliant>
+ * for (i in 0 .. 10 - 1) {}
+ * </noncompliant>
  * for (i in 0 until 10 - 1) {}
  * for (i in 10 downTo 2 - 1) {}
  * for (i in 0 .. 10) {}
  * for (i in 0 .. 10 + 1) {}
  * for (i in 0 .. 10 - 2) {}
- * </noncompliant>
- *
  * <compliant>
- * for (i in 0 .. 10 - 1) {}
+
  * </compliant>
  *
  * @author Ilya Zorin
@@ -51,12 +51,14 @@ class UntilInsteadOfRangeTo(config: Config = Config.empty) : Rule(config) {
 		super.visitForExpression(expression)
 	}
 
-	@Suppress("ReturnCount")
 	private fun isUntilApplicable(range: Array<PsiElement>): Boolean {
-		if (range[1].text != "..") return false
-		val expression = range[2] as? KtBinaryExpression ?: return false
-		if (expression.operationToken != KtTokens.MINUS) return false
-		val rightExpressionValue = expression.right as? KtConstantExpression ?: return false
-		return rightExpressionValue.text == "1"
+		if (range[1].text == "..") {
+			val expression = range[2] as? KtBinaryExpression
+			if (expression?.operationToken == KtTokens.MINUS) {
+				val rightExpressionValue = expression?.right as? KtConstantExpression
+				return rightExpressionValue?.text == "1"
+			}
+		}
+		return false
 	}
 }
