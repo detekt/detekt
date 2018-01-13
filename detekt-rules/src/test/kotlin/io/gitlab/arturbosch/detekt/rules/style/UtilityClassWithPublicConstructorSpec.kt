@@ -14,11 +14,13 @@ class UtilityClassWithPublicConstructorSpec : SubjectSpek<UtilityClassWithPublic
 	given("several utility classes") {
 
 		it("reports utility classes with a public constructor") {
-			assertThat(subject.lint(Case.UtilityClassesPositive.path())).hasSize(4)
+			val findings = subject.lint(Case.UtilityClassesPositive.path())
+			assertThat(findings).hasSize(4)
 		}
 
 		it("does not report utility classes with no public constructor") {
-			assertThat(subject.lint(Case.UtilityClassesNegative.path())).hasSize(0)
+			val findings = subject.lint(Case.UtilityClassesNegative.path())
+			assertThat(findings).hasSize(0)
 		}
 	}
 })
