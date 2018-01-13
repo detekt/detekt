@@ -7,8 +7,8 @@ import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
-class InvalidLoopConditionSpec : SubjectSpek<InvalidLoopCondition>({
-	subject { InvalidLoopCondition(Config.empty) }
+class InvalidRangeSpec : SubjectSpek<InvalidRange>({
+	subject { InvalidRange(Config.empty) }
 
 	describe("check for loop conditions") {
 
@@ -41,6 +41,19 @@ class InvalidLoopConditionSpec : SubjectSpek<InvalidLoopCondition>({
 					}
 				}"""
 			assertThat(subject.lint(code)).hasSize(1)
+		}
+	}
+
+	describe("check ranges outside of loops") {
+
+		it("reports for '..'") {
+			val code = "val r = 2..1"
+			assertThat(subject.lint(code)).hasSize(1)
+		}
+
+		it("does not report binary expressions without an invalid range") {
+			val code = "val sum = 1 + 2"
+			assertThat(subject.lint(code)).hasSize(0)
 		}
 	}
 })

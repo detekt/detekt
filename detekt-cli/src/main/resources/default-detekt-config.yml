@@ -211,7 +211,7 @@ potential-bugs:
     active: false
   UselessPostfixExpression:
     active: false
-  InvalidLoopCondition:
+  InvalidRange:
     active: false
   WrongEqualsTypeParameter:
     active: false

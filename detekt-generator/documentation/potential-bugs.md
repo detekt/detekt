@@ -10,7 +10,7 @@ The potential-bugs rule set provides rules that detect potential bugs.
 4. [IteratorNotThrowingNoSuchElementException](#iteratornotthrowingnosuchelementexception)
 5. [IteratorHasNextCallsNextMethod](#iteratorhasnextcallsnextmethod)
 6. [UselessPostfixExpression](#uselesspostfixexpression)
-7. [InvalidLoopCondition](#invalidloopcondition)
+7. [InvalidRange](#invalidrange)
 8. [WrongEqualsTypeParameter](#wrongequalstypeparameter)
 9. [ExplicitGarbageCollectionCall](#explicitgarbagecollectioncall)
 10. [LateinitUsage](#lateinitusage)
@@ -178,9 +178,10 @@ fun foo(): Int {
 }
 ```
 
-### InvalidLoopCondition
+### InvalidRange
 
-Reports loop conditions which will never be triggered.
+Reports ranges which are empty.
+This might be a bug if it is used for instance as a loop condition. This loop will never be triggered then.
 This might be due to invalid ranges like (10..9) which will cause the loop to never be entered.
 
 #### Noncompliant Code:
