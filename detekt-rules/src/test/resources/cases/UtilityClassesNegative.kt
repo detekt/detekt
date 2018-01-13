@@ -49,3 +49,12 @@ interface InterfaceWithCompanionObject {
 		val C = 0
 	}
 }
+
+interface SomeInterface
+class SomeImplementation : SomeInterface
+class NotUtilityClass : SomeInterface by SomeImplementation() {
+	// Issue#682 - Class with delegate is no utility class
+	companion object {
+		val C = 0
+	}
+}
