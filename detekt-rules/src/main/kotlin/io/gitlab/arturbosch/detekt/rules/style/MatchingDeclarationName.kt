@@ -1,12 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.*
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
@@ -55,7 +49,7 @@ class MatchingDeclarationName(config: Config = Config.empty) : Rule(config) {
 	override fun visitKtFile(file: KtFile) {
 		val declarations = file.declarations
 				.filterIsInstance<KtClassOrObject>()
-				.filterNot { it.isPrivate()  }
+				.filterNot { it.isPrivate() }
 		if (declarations.size == 1) {
 			val declaration = declarations[0] as? KtClassOrObject
 			val declarationName = declaration?.name ?: return
