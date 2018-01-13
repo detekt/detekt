@@ -1,5 +1,31 @@
 # Detekt - Changelog
 
+#### RC6-2
+
+- Updates two rules to detect violated range expressions outside of loops - [#684](https://github.com/arturbosch/detekt/pull/684)
+- Add UntilInsteadOfRangeTo rule - [#676](https://github.com/arturbosch/detekt/pull/676)
+- Implement MatchingDeclarationName rule - [#674](https://github.com/arturbosch/detekt/pull/674)
+- Consider adding ignoreOptionalParameters to LongParameterList - [#673](https://github.com/arturbosch/detekt/issues/673)
+- Fix false negative reporting of non-named argument - Fixes #659 - [#672](https://github.com/arturbosch/detekt/pull/672)
+- Change LateInitUsage to LateinitUsage in failfast.yml - [#671](https://github.com/arturbosch/detekt/pull/671)
+- Rule: 'rangeTo' or the '..' call can be replaced with 'until' - [#670](https://github.com/arturbosch/detekt/issues/670)
+- Treat all compiler warnings as errors - [#669](https://github.com/arturbosch/detekt/pull/669)
+- Do not run EmptyFunctionBlock on open functions - [#667](https://github.com/arturbosch/detekt/pull/667)
+- EmptyFunctionBlock should not flag functions with open modifier - [#666](https://github.com/arturbosch/detekt/issues/666)
+- Do not run EmptyClassBlock on objects of anonymous classes - [#665](https://github.com/arturbosch/detekt/pull/665)
+- MatchingDeclarationName rule to match single declaration to file name - [#664](https://github.com/arturbosch/detekt/issues/664)
+- Rename *.yaml to *.yml so fixtures use expected line endings - [#661](https://github.com/arturbosch/detekt/pull/661)
+- Appveyor: Use default git config - [#660](https://github.com/arturbosch/detekt/pull/660)
+- `ignoreNamedArguments` breaks marking non-named magic number params - [#659](https://github.com/arturbosch/detekt/issues/659)
+- Run tests on Travis on Oracle JDK 8 & 9 - [#658](https://github.com/arturbosch/detekt/pull/658)
+
+See all issues at: [RC6-2](https://github.com/arturbosch/detekt/milestone/30)
+
+##### Migration
+
+- The new rule `MatchingDeclarationName` is active on default. If a file has only one top-level declaration then the 
+file name must match the declaration name according to the jetbrains and android style guides.
+
 #### RC6-1
 
 - Added factory function check to MemberNameEqualsClassName - [#653](https://github.com/arturbosch/detekt/pull/653)

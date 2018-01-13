@@ -4,9 +4,9 @@
 [![build status](https://travis-ci.org/arturbosch/detekt.svg?branch=master)](https://travis-ci.org/arturbosch/detekt)
 [![build status windows](https://ci.appveyor.com/api/projects/status/3q9g98vveiul7yut/branch/master?svg=true)](https://ci.appveyor.com/project/arturbosch/detekt)
 [ ![Download](https://api.bintray.com/packages/arturbosch/code-analysis/detekt/images/download.svg) ](https://bintray.com/arturbosch/code-analysis/detekt/_latestVersion)
-[![gradle plugin](https://img.shields.io/badge/gradle_plugin-1.0.0.RC6.1-blue.svg?style=flat-square)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
+[![gradle plugin](https://img.shields.io/badge/gradle_plugin-1.0.0.RC6.2-blue.svg?style=flat-square)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-34-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-36-orange.svg?style=flat-square)](#contributors)
 [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
 
 Meet _detekt_, a static code analysis tool for the _Kotlin_ programming language.
@@ -587,6 +587,8 @@ inside the report file.
 
 ### <a name="contributors">Contributors</a>
 
+If you contributed to detekt but your name is not in the list, please feel free to add yourself to it!
+
 - [Artur Bosch](https://github.com/arturbosch) - Maintainer
 - [Marvin Ramin](https://github.com/Mauin) - Collaborator, Bunch of rules, Active on Issues, refactorings, MultiRule
 - [schalks](https://github.com/schalkms) - Collaborator, Active on Issues, Bunch of rules, Project metrics
@@ -619,6 +621,8 @@ inside the report file.
 - [Gesh Markov](https://github.com/markov) - Improve error message for incorrect configuration file
 - [Patrick Pilch](https://github.com/patrickpilch) - Rule improvement: ReturnCount
 - [Serj Lotutovici](https://github.com/serj-lotutovici) - Rule improvement: LongParameterList
+- [Dmitry Primshyts](https://github.com/deeprim) - Rule improvement: MagicNumber
+- [Egor Neliuba](https://github.com/egor-n) - Rule improvement: EmptyFunctionBlock, EmptyClassBlock
 
 ### <a name="mentions">Mentions</a>
 
