@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 
 /**
  * "If a Kotlin file contains a single class (potentially with related top-level declarations),
@@ -47,13 +48,14 @@ import org.jetbrains.kotlin.psi.KtFile
 class MatchingDeclarationName(config: Config = Config.empty) : Rule(config) {
 
 	override val issue: Issue = Issue(javaClass.simpleName, Severity.Style,
-			"If a source file contains only a single top-level class or object, " +
+			"If a source file contains only a single non-private top-level class or object, " +
 					"the file name should reflect the case-sensitive name plus the .kt extension.",
 			Debt.FIVE_MINS)
 
 	override fun visitKtFile(file: KtFile) {
 		val declarations = file.declarations
 				.filterIsInstance<KtClassOrObject>()
+				.filterNot { it.isPrivate()  }
 		if (declarations.size == 1) {
 			val declaration = declarations[0] as? KtClassOrObject
 			val declarationName = declaration?.name ?: return

@@ -67,6 +67,16 @@ internal class MatchingDeclarationNameSpec : Spek({
 			val findings = MatchingDeclarationName().lint(ktFile)
 			assertThat(findings).isEmpty()
 		}
+
+		it("should pass for private class declaration") {
+			val ktFile = compileContentForTest("""
+				private class C
+				fun a() = 5
+			""")
+			ktFile.name = "b.kt"
+			val findings = MatchingDeclarationName().lint(ktFile)
+			assertThat(findings).isEmpty()
+		}
 	}
 
 	given("non-compliant test cases") {
