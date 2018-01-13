@@ -986,14 +986,12 @@ some value subtracted by 1. 'until' helps to prevent off-by-one errors.
 
 ```kotlin
 for (i in 0 .. 10 - 1) {}
+val range = 0 .. 10 - 1
 ```
 
 #### Compliant Code:
 
 ```kotlin
 for (i in 0 until 10 - 1) {}
-for (i in 10 downTo 2 - 1) {}
-for (i in 0 .. 10) {}
-for (i in 0 .. 10 + 1) {}
-for (i in 0 .. 10 - 2) {}
+val range = 0 until 10 - 1
 ```
