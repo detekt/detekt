@@ -85,14 +85,14 @@ internal class MatchingDeclarationNameSpec : Spek({
 			val ktFile = compileContentForTest("object O")
 			ktFile.name = "Objects.kt"
 			val findings = MatchingDeclarationName().lint(ktFile)
-			assertThat(findings).hasSize(1)
+			assertThat(findings).hasLocationStrings("'object O' at (1,1) in /Objects.kt")
 		}
 
 		it("should not pass for class declaration") {
 			val ktFile = compileContentForTest("class C")
 			ktFile.name = "Classes.kt"
 			val findings = MatchingDeclarationName().lint(ktFile)
-			assertThat(findings).hasSize(1)
+			assertThat(findings).hasLocationStrings("'class C' at (1,1) in /Classes.kt")
 		}
 
 		it("should not pass for class declaration with utility functions") {
@@ -103,17 +103,21 @@ internal class MatchingDeclarationNameSpec : Spek({
 			""")
 			ktFile.name = "ClassUtils.kt"
 			val findings = MatchingDeclarationName().lint(ktFile)
-			assertThat(findings).hasSize(1)
+			assertThat(findings).hasLocationStrings("""'
+				class C
+				fun a() = 5
+				fun C.b() = 5
+			' at (1,1) in /ClassUtils.kt""", trimIndent = true)
 		}
 
 		it("should not pass for interface declaration") {
 			val ktFile = compileContentForTest("interface I")
 			ktFile.name = "Not_I.kt"
 			val findings = MatchingDeclarationName().lint(ktFile)
-			assertThat(findings).hasSize(1)
+			assertThat(findings).hasLocationStrings("'interface I' at (1,1) in /Not_I.kt")
 		}
 
-		it("should pass for enum declaration") {
+		it("should not pass for enum declaration") {
 			val ktFile = compileContentForTest("""
 				enum class NOT_E {
 					ONE, TWO, THREE
@@ -121,7 +125,11 @@ internal class MatchingDeclarationNameSpec : Spek({
 			""")
 			ktFile.name = "E.kt"
 			val findings = MatchingDeclarationName().lint(ktFile)
-			assertThat(findings).hasSize(1)
+			assertThat(findings).hasLocationStrings("""'
+				enum class NOT_E {
+					ONE, TWO, THREE
+				}
+			' at (1,1) in /E.kt""", trimIndent = true)
 		}
 	}
 })
