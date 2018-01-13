@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
-import org.jetbrains.kotlin.psi.KtForExpression
+import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
 
 /**
  * Reports calls to '..' operator instead of calls to 'until'.
@@ -20,17 +20,16 @@ import org.jetbrains.kotlin.psi.KtForExpression
  *
  * <noncompliant>
  * for (i in 0 .. 10 - 1) {}
+ * val range = 0 .. 10 - 1
  * </noncompliant>
  *
  * <compliant>
  * for (i in 0 until 10 - 1) {}
- * for (i in 10 downTo 2 - 1) {}
- * for (i in 0 .. 10) {}
- * for (i in 0 .. 10 + 1) {}
- * for (i in 0 .. 10 - 2) {}
+ * val range = 0 until 10 - 1
  * </compliant>
  *
  * @author Ilya Zorin
+ * @author schalkms
  */
 class UntilInsteadOfRangeTo(config: Config = Config.empty) : Rule(config) {
 
@@ -41,18 +40,15 @@ class UntilInsteadOfRangeTo(config: Config = Config.empty) : Rule(config) {
 
 	private val minimumSize = 3
 
-	override fun visitForExpression(expression: KtForExpression) {
-		val loopRange = expression.loopRange
-		val range = loopRange?.children
-		if (range != null && range.size >= minimumSize && isUntilApplicable(range)) {
-			report(CodeSmell(issue, Entity.from(loopRange),
-					"'..' call can be replaced with 'until'"))
+	override fun visitBinaryExpression(expression: KtBinaryExpression) {
+		if (isUntilApplicable(expression.children)) {
+			report(CodeSmell(issue, Entity.from(expression), "'..' call can be replaced with 'until'"))
 		}
-		super.visitForExpression(expression)
+		super.visitBinaryExpression(expression)
 	}
 
 	private fun isUntilApplicable(range: Array<PsiElement>): Boolean {
-		if (range[1].text == "..") {
+		if (range.size >= minimumSize && range[1] is KtOperationReferenceExpression && range[1].text == "..") {
 			val expression = range[2] as? KtBinaryExpression
 			if (expression?.operationToken == KtTokens.MINUS) {
 				val rightExpressionValue = expression?.right as? KtConstantExpression
