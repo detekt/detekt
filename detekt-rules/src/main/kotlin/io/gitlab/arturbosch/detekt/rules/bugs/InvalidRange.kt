@@ -19,13 +19,15 @@ import org.jetbrains.kotlin.psi.KtConstantExpression
  * <noncompliant>
  * for (i in 2..1) {}
  * for (i in 1 downTo 2) {}
- * for (i in 2 until 1) {}
+ *
+ * val range = 2 until 1
  * </noncompliant>
  *
  * <compliant>
  * for (i in 2..2) {}
  * for (i in 2 downTo 2) {}
- * for (i in 2 until 2) {}
+ *
+ * val range =  2 until 2)
  * </compliant>
  *
  * @author schalkms

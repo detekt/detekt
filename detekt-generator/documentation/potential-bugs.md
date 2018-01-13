@@ -189,7 +189,8 @@ This might be due to invalid ranges like (10..9) which will cause the loop to ne
 ```kotlin
 for (i in 2..1) {}
 for (i in 1 downTo 2) {}
-for (i in 2 until 1) {}
+
+val range = 2 until 1
 ```
 
 #### Compliant Code:
@@ -197,7 +198,8 @@ for (i in 2 until 1) {}
 ```kotlin
 for (i in 2..2) {}
 for (i in 2 downTo 2) {}
-for (i in 2 until 2) {}
+
+val range =  2 until 2)
 ```
 
 ### WrongEqualsTypeParameter
