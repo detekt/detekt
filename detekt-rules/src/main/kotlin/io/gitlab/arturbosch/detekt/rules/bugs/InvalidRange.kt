@@ -8,11 +8,12 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
-import org.jetbrains.kotlin.psi.KtForExpression
 
 /**
- * Reports loop conditions which will never be triggered.
+ * Reports ranges which are empty.
+ * This might be a bug if it is used for instance as a loop condition. This loop will never be triggered then.
  * This might be due to invalid ranges like (10..9) which will cause the loop to never be entered.
  *
  * <noncompliant>
@@ -30,7 +31,7 @@ import org.jetbrains.kotlin.psi.KtForExpression
  * @author schalkms
  * @author Marvin Ramin
  */
-class InvalidLoopCondition(config: Config = Config.empty) : Rule(config) {
+class InvalidRange(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,
 			Severity.Defect,
@@ -39,14 +40,13 @@ class InvalidLoopCondition(config: Config = Config.empty) : Rule(config) {
 
 	private val minimumSize = 3
 
-	override fun visitForExpression(expression: KtForExpression) {
-		val loopRange = expression.loopRange
-		val range = loopRange?.children
-		if (range != null && range.size >= minimumSize && hasInvalidLoopRange(range)) {
-			report(CodeSmell(issue, Entity.from(loopRange), "This loop will never be executed due to its " +
-					"expression."))
+	override fun visitBinaryExpression(expression: KtBinaryExpression) {
+		val range = expression.children
+		if (range.size >= minimumSize && hasInvalidLoopRange(range)) {
+			report(CodeSmell(issue, Entity.from(expression),
+					"This loop will never be executed due to its expression."))
 		}
-		super.visitForExpression(expression)
+		super.visitBinaryExpression(expression)
 	}
 
 	private fun hasInvalidLoopRange(range: Array<PsiElement>): Boolean {
