@@ -12,7 +12,7 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 
 /**
- * "If a Kotlin file contains a single class (potentially with related top-level declarations),
+ * "If a Kotlin file contains a single non-private class (potentially with related top-level declarations),
  * its name should be the same as the name of the class, with the .kt extension appended.
  * If a file contains multiple classes, or only top-level declarations,
  * choose a name describing what the file contains, and name the file accordingly.
