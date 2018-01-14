@@ -7,17 +7,17 @@ The potential-bugs rule set provides rules that detect potential bugs.
 1. [DuplicateCaseInWhenExpression](#duplicatecaseinwhenexpression)
 2. [EqualsAlwaysReturnsTrueOrFalse](#equalsalwaysreturnstrueorfalse)
 3. [EqualsWithHashCodeExist](#equalswithhashcodeexist)
-4. [IteratorNotThrowingNoSuchElementException](#iteratornotthrowingnosuchelementexception)
-5. [IteratorHasNextCallsNextMethod](#iteratorhasnextcallsnextmethod)
-6. [UselessPostfixExpression](#uselesspostfixexpression)
-7. [InvalidRange](#invalidrange)
-8. [WrongEqualsTypeParameter](#wrongequalstypeparameter)
-9. [ExplicitGarbageCollectionCall](#explicitgarbagecollectioncall)
-10. [LateinitUsage](#lateinitusage)
-11. [UnconditionalJumpStatementInLoop](#unconditionaljumpstatementinloop)
-12. [UnreachableCode](#unreachablecode)
-13. [UnsafeCallOnNullableType](#unsafecallonnullabletype)
-14. [UnsafeCast](#unsafecast)
+4. [ExplicitGarbageCollectionCall](#explicitgarbagecollectioncall)
+5. [InvalidRange](#invalidrange)
+6. [IteratorHasNextCallsNextMethod](#iteratorhasnextcallsnextmethod)
+7. [IteratorNotThrowingNoSuchElementException](#iteratornotthrowingnosuchelementexception)
+8. [LateinitUsage](#lateinitusage)
+9. [UnconditionalJumpStatementInLoop](#unconditionaljumpstatementinloop)
+10. [UnreachableCode](#unreachablecode)
+11. [UnsafeCallOnNullableType](#unsafecallonnullabletype)
+12. [UnsafeCast](#unsafecast)
+13. [UselessPostfixExpression](#uselesspostfixexpression)
+14. [WrongEqualsTypeParameter](#wrongequalstypeparameter)
 ## Rules in the `potential-bugs` rule set:
 
 ### DuplicateCaseInWhenExpression
@@ -104,78 +104,18 @@ class Foo {
 }
 ```
 
-### IteratorNotThrowingNoSuchElementException
+### ExplicitGarbageCollectionCall
 
-Reports implementations of the Iterator interface which do not throw a NoSuchElementException in the
-implementation of the next() method. When there are no more elements to return an Iterator should throw a
-NoSuchElementException.
-
-See: https://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html#next()
-
-<compliant>
-class MyIterator : Iterator<String> {
-
-    override fun next(): String {
-        if (!this.hasNext()) {
-            throw NoSuchElementException()
-        }
-        // ...
-    }
-}
-</compliant>
-
-### IteratorHasNextCallsNextMethod
-
-Verifies implementations of the Iterator interface.
-The hasNext() method of an Iterator implementation should not have any side effects.
-This rule reports implementations that call the next() method of the Iterator inside the hasNext() method.
+Reports all calls to explicitly trigger the Garbage Collector.
+Code should work independently of the garbage collector and should not require the GC to be triggered in certain
+points in time.
 
 #### Noncompliant Code:
 
 ```kotlin
-class MyIterator : Iterator<String> {
-
-    override fun hasNext(): Boolean {
-        return next() != null
-    }
-}
-```
-
-### UselessPostfixExpression
-
-This rule reports postfix expressions (++, --) which are unused and thus unnecessary.
-This leads to confusion as a reader of the code might think the value will be incremented/decremented.
-However the value is replaced with the original value which might lead to bugs.
-
-#### Noncompliant Code:
-
-```kotlin
-var i = 0
-i = i--
-i = 1 + i++
-i = i++ + 1
-
-fun foo(): Int {
-    var i = 0
-    // ...
-    return i++
-}
-```
-
-#### Compliant Code:
-
-```kotlin
-var i = 0
-i--
-i = i + 2
-i = i + 2
-
-fun foo(): Int {
-    var i = 0
-    // ...
-    i++
-    return i
-}
+System.gc()
+Runtime.getRuntime().gc()
+System.runFinalization()
 ```
 
 ### InvalidRange
@@ -202,47 +142,42 @@ for (i in 2 downTo 2) {}
 val range =  2 until 2)
 ```
 
-### WrongEqualsTypeParameter
+### IteratorHasNextCallsNextMethod
 
-Reports equals() methods which take in a wrongly typed parameter.
-Correct implementations of the equals() method should only take in a parameter of type Any?
-See: https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html
-
-#### Noncompliant Code:
-
-```kotlin
-class Foo {
-
-    fun equals(other: String): Boolean {
-        return super.equals(other)
-    }
-}
-```
-
-#### Compliant Code:
-
-```kotlin
-class Foo {
-
-    fun equals(other: Any?): Boolean {
-        return super.equals(other)
-    }
-}
-```
-
-### ExplicitGarbageCollectionCall
-
-Reports all calls to explicitly trigger the Garbage Collector.
-Code should work independently of the garbage collector and should not require the GC to be triggered in certain
-points in time.
+Verifies implementations of the Iterator interface.
+The hasNext() method of an Iterator implementation should not have any side effects.
+This rule reports implementations that call the next() method of the Iterator inside the hasNext() method.
 
 #### Noncompliant Code:
 
 ```kotlin
-System.gc()
-Runtime.getRuntime().gc()
-System.runFinalization()
+class MyIterator : Iterator<String> {
+
+    override fun hasNext(): Boolean {
+        return next() != null
+    }
+}
 ```
+
+### IteratorNotThrowingNoSuchElementException
+
+Reports implementations of the Iterator interface which do not throw a NoSuchElementException in the
+implementation of the next() method. When there are no more elements to return an Iterator should throw a
+NoSuchElementException.
+
+See: https://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html#next()
+
+<compliant>
+class MyIterator : Iterator<String> {
+
+    override fun next(): String {
+        if (!this.hasNext()) {
+            throw NoSuchElementException()
+        }
+        // ...
+    }
+}
+</compliant>
 
 ### LateinitUsage
 
@@ -353,5 +288,70 @@ fun foo(s: Any) {
 ```kotlin
 fun foo(s: Any) {
     println((s as? Int) ?: 0)
+}
+```
+
+### UselessPostfixExpression
+
+This rule reports postfix expressions (++, --) which are unused and thus unnecessary.
+This leads to confusion as a reader of the code might think the value will be incremented/decremented.
+However the value is replaced with the original value which might lead to bugs.
+
+#### Noncompliant Code:
+
+```kotlin
+var i = 0
+i = i--
+i = 1 + i++
+i = i++ + 1
+
+fun foo(): Int {
+    var i = 0
+    // ...
+    return i++
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+var i = 0
+i--
+i = i + 2
+i = i + 2
+
+fun foo(): Int {
+    var i = 0
+    // ...
+    i++
+    return i
+}
+```
+
+### WrongEqualsTypeParameter
+
+Reports equals() methods which take in a wrongly typed parameter.
+Correct implementations of the equals() method should only take in a parameter of type Any?
+See: https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html
+
+#### Noncompliant Code:
+
+```kotlin
+class Foo {
+
+    fun equals(other: String): Boolean {
+        return super.equals(other)
+    }
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+class Foo {
+
+    fun equals(other: Any?): Boolean {
+        return super.equals(other)
+    }
 }
 ```
