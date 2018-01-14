@@ -5,3 +5,4 @@ io.gitlab.arturbosch.detekt.rules.providers.EmptyCodeProvider
 io.gitlab.arturbosch.detekt.rules.providers.PerformanceProvider
 io.gitlab.arturbosch.detekt.rules.providers.PotentialBugProvider
 io.gitlab.arturbosch.detekt.rules.providers.ExceptionsProvider
+io.gitlab.arturbosch.detekt.rules.providers.NamingProvider
