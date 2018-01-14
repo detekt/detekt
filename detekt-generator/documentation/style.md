@@ -62,7 +62,7 @@ TODO: Specify description
 
 * `classPattern` (default: `'[A-Z$][a-zA-Z0-9$]*'`)
 
-   naming pattern (default: '[A
+   naming pattern
 
 ### CollapsibleIfStatements
 
@@ -114,7 +114,7 @@ TODO: Specify description
 
 * `enumEntryPattern` (default: `'^[A-Z$][a-zA-Z_$]*$'`)
 
-   naming pattern (default: '^[A
+   naming pattern
 
 ### EqualsNullCall
 
@@ -224,7 +224,7 @@ TODO: Specify description
 
 * `functionPattern` (default: `'^([a-z$][a-zA-Z$0-9]*)|(`.*`)$'`)
 
-   naming pattern (default: '^([a
+   naming pattern
 
 ### FunctionOnlyReturningConstant
 
@@ -283,7 +283,7 @@ TODO: Specify description
 
 * `ignoreNumbers` (default: `'-1,0,1,2'`)
 
-   numbers which do not count as magic numbers (default: '
+   numbers which do not count as magic numbers
 
 * `ignoreHashCodeFunction` (default: `false`)
 
@@ -487,7 +487,7 @@ TODO: Specify description
 
 * `propertyPattern` (default: `'[A-Za-z][_A-Za-z0-9]*'`)
 
-   naming pattern (default: '[A
+   naming pattern
 
 ### OptionalAbstractKeyword
 
@@ -577,7 +577,7 @@ TODO: Specify description
 
 * `packagePattern` (default: `'^[a-z]+(\.[a-z][a-z0-9]*)*$'`)
 
-   naming pattern (default: '^[a
+   naming pattern
 
 ### ProtectedMemberInFinalClass
 
@@ -772,15 +772,15 @@ TODO: Specify description
 
 * `constantPattern` (default: `'[A-Z][_A-Z0-9]*'`)
 
-   naming pattern (default: '[A
+   naming pattern
 
 * `propertyPattern` (default: `'[a-z][A-Za-z\d]*'`)
 
-   naming pattern (default: '[a
+   naming pattern
 
 * `privatePropertyPattern` (default: `'(_)?[a-z][A-Za-z0-9]*'`)
 
-   naming pattern ?[a
+   naming pattern
 
 ### UnnecessaryAbstractClass
 
@@ -949,11 +949,11 @@ TODO: Specify description
 
 * `variablePattern` (default: `'[a-z][A-Za-z0-9]*'`)
 
-   naming pattern (default: '[a
+   naming pattern
 
 * `privateVariablePattern` (default: `'(_)?[a-z][A-Za-z0-9]*'`)
 
-   naming pattern ?[a
+   naming pattern
 
 ### WildcardImport
 
