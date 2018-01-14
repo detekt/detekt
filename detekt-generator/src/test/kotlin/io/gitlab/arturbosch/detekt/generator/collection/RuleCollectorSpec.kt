@@ -208,7 +208,7 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 
 				/**
 				 * $description
-				 * @configuration config - description (default: "")
+				 * @configuration config - description (default: '[A-Z$]')
 				 */
 				class $name: Rule {
 				}
@@ -217,7 +217,7 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 			assertThat(items[0].configuration).hasSize(1)
 			assertThat(items[0].configuration[0].name).isEqualTo("config")
 			assertThat(items[0].configuration[0].description).isEqualTo("description")
-			assertThat(items[0].configuration[0].defaultValue).isEqualTo("\"\"")
+			assertThat(items[0].configuration[0].defaultValue).isEqualTo("'[A-Z$]'")
 		}
 
 		it("contains multiple configuration options") {
