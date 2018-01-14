@@ -13,8 +13,6 @@ import io.gitlab.arturbosch.detekt.rules.style.ForbiddenImport
 import io.gitlab.arturbosch.detekt.rules.style.FunctionOnlyReturningConstant
 import io.gitlab.arturbosch.detekt.rules.style.LoopWithTooManyJumpStatements
 import io.gitlab.arturbosch.detekt.rules.style.MagicNumber
-import io.gitlab.arturbosch.detekt.rules.style.MatchingDeclarationName
-import io.gitlab.arturbosch.detekt.rules.style.MemberNameEqualsClassName
 import io.gitlab.arturbosch.detekt.rules.style.ModifierOrder
 import io.gitlab.arturbosch.detekt.rules.style.NestedClassesVisibility
 import io.gitlab.arturbosch.detekt.rules.style.NewLineAtEndOfFile
@@ -35,7 +33,6 @@ import io.gitlab.arturbosch.detekt.rules.style.UnusedImports
 import io.gitlab.arturbosch.detekt.rules.style.UseDataClass
 import io.gitlab.arturbosch.detekt.rules.style.UtilityClassWithPublicConstructor
 import io.gitlab.arturbosch.detekt.rules.style.WildcardImport
-import io.gitlab.arturbosch.detekt.rules.style.naming.NamingRules
 import io.gitlab.arturbosch.detekt.rules.style.optional.OptionalReturnKeyword
 import io.gitlab.arturbosch.detekt.rules.style.optional.OptionalUnit
 
@@ -65,8 +62,6 @@ class StyleGuideProvider : RuleSetProvider {
 				FunctionOnlyReturningConstant(config),
 				SpacingBetweenPackageAndImports(config),
 				LoopWithTooManyJumpStatements(config),
-				MemberNameEqualsClassName(config),
-				NamingRules(config),
 				SafeCast(config),
 				UnnecessaryAbstractClass(config),
 				UnnecessaryParentheses(config),
@@ -86,7 +81,6 @@ class StyleGuideProvider : RuleSetProvider {
 				ExpressionBodySyntax(config),
 				NestedClassesVisibility(config),
 				RedundantVisibilityModifierRule(config),
-				MatchingDeclarationName(config),
 				UntilInsteadOfRangeTo(config)
 		))
 	}
