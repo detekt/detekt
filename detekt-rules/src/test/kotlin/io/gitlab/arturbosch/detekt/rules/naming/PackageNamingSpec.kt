@@ -1,5 +1,7 @@
-package io.gitlab.arturbosch.detekt.rules.style.naming
+package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.rules.naming.NamingRules
+import io.gitlab.arturbosch.detekt.rules.naming.PackageNaming
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.dsl.it
