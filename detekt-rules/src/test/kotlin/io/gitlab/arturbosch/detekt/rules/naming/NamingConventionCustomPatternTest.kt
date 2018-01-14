@@ -1,14 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.naming.ClassNaming
-import io.gitlab.arturbosch.detekt.rules.naming.EnumNaming
-import io.gitlab.arturbosch.detekt.rules.naming.FunctionMaxLength
-import io.gitlab.arturbosch.detekt.rules.naming.FunctionNaming
-import io.gitlab.arturbosch.detekt.rules.naming.NamingRules
-import io.gitlab.arturbosch.detekt.rules.naming.PackageNaming
-import io.gitlab.arturbosch.detekt.rules.naming.TopLevelPropertyNaming
-import io.gitlab.arturbosch.detekt.rules.naming.VariableNaming
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
