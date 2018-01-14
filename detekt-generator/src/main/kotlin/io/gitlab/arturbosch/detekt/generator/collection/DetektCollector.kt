@@ -29,6 +29,8 @@ class DetektCollector : Collector<RuleSetPage> {
 			val consolidatedRules = ruleSet.rules.flatMap { ruleName ->
 				multiRules[ruleName] ?: listOf(ruleName)
 			}.mapNotNull { rules.findRuleByName(it) }
+					.sortedBy { rule -> rule.name }
+
 			RuleSetPage(ruleSet, consolidatedRules)
 		}
 	}
