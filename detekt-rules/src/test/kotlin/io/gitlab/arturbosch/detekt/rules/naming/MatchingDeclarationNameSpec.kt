@@ -1,5 +1,6 @@
-package io.gitlab.arturbosch.detekt.rules.style
+package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.rules.naming.MatchingDeclarationName
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.lint
