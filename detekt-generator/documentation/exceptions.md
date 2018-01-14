@@ -313,7 +313,6 @@ exception is too broad it can lead to unintended exceptions being caught.
 - Throwable`)
 
    exceptions which are too generic and should not be caught
-(default:
 
 #### Noncompliant Code:
 
@@ -349,7 +348,6 @@ exceptions to the case that has currently occurred.
 - RuntimeException`)
 
    exceptions which are too generic and should not be thrown
-(default:
 
 #### Noncompliant Code:
 

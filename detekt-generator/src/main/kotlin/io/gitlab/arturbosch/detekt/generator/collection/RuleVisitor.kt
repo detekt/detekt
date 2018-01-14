@@ -92,9 +92,10 @@ internal class RuleVisitor : DetektVisitor() {
 					valid
 				}
 				.map {
-					val name = it.split("-")[0].trim()
+					val delimiterIndex = it.indexOf('-')
+					val name = it.substring(0, delimiterIndex-1)
 					val defaultValue = configurationDefaultValueRegex.find(it)?.groupValues?.get(1)?.trim() ?: ""
-					val description = it.split("-")[1]
+					val description = it.substring(delimiterIndex+1)
 							.replace(configurationDefaultValueRegex, "")
 							.trim()
 					Configuration(name, description, defaultValue)
