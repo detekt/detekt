@@ -24,8 +24,8 @@ import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
  * </noncompliant>
  *
  * <compliant>
- * for (i in 0 until 10 - 1) {}
- * val range = 0 until 10 - 1
+ * for (i in 0 until 10) {}
+ * val range = 0 until 10
  * </compliant>
  *
  * @author Ilya Zorin
