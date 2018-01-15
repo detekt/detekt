@@ -859,8 +859,8 @@ val range = 0 .. 10 - 1
 #### Compliant Code:
 
 ```kotlin
-for (i in 0 until 10 - 1) {}
-val range = 0 until 10 - 1
+for (i in 0 until 10) {}
+val range = 0 until 10
 ```
 
 ### UnusedImports
