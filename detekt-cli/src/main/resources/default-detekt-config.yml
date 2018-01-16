@@ -359,6 +359,7 @@ style:
     active: false
   UseDataClass:
     active: false
+    excludeAnnotatedClasses: true
   UtilityClassWithPublicConstructor:
     active: false
   WildcardImport:
