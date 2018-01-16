@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.Case
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.dsl.given
@@ -23,6 +24,18 @@ class UseDataClassSpec : SubjectSpek<UseDataClass>({
 
 		it("does not report invalid data class candidates") {
 			assertThat(subject.lint(Case.UseDataClassNegative.path())).hasSize(0)
+		}
+	}
+
+	given("a class with an annotation which is not ignored") {
+
+		it("reports a potential data class") {
+			val code = """
+				@Module
+				class AnnotatedClass(val i: Int) {}
+				"""
+			val config = TestConfig(mapOf(UseDataClass.EXCLUDE_ANNOTATED_CLASSES to "false"))
+			assertThat(UseDataClass(config).lint(code)).hasSize(1)
 		}
 	}
 })

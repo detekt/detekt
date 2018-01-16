@@ -40,13 +40,14 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 			"Classes that do nothing but hold data should be replaced with a data class.",
 			Debt.FIVE_MINS)
 
+	private val excludeAnnotatedClasses = valueOrDefault(EXCLUDE_ANNOTATED_CLASSES, true)
 	private val defaultFunctionNames = hashSetOf("hashCode", "equals", "toString", "copy")
 
 	override fun visitClass(klass: KtClass) {
 		if (isIncorrectClassType(klass)) {
 			return
 		}
-		if (klass.isClosedForExtension() && klass.doesNotExtendAnything()) {
+		if (klass.isClosedForExtension() && klass.doesNotExtendAnything() && isAnnotatedClassExcluded(klass)) {
 			val declarations = klass.extractDeclarations()
 			val properties = declarations.filterIsInstance<KtProperty>()
 			val functions = declarations.filterIsInstance<KtNamedFunction>()
@@ -70,10 +71,17 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 
 	private fun KtClass.isClosedForExtension() = !isAbstract() && !isOpen()
 
+	private fun isAnnotatedClassExcluded(klass: KtClass) =
+			if (excludeAnnotatedClasses) klass.annotations.isEmpty() else true
+
 	private fun KtClass.extractDeclarations(): List<KtDeclaration> = getBody()?.declarations ?: emptyList()
 
 	private fun KtClass.extractConstructorPropertyParameters(): List<KtParameter> =
 			getPrimaryConstructorParameterList()
 					?.parameters
 					?.filter { it.isPropertyParameter() } ?: emptyList()
+
+	companion object {
+		const val EXCLUDE_ANNOTATED_CLASSES = "excludeAnnotatedClasses"
+	}
 }
