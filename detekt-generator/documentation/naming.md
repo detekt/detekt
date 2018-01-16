@@ -22,7 +22,7 @@ The naming ruleset contains rules which assert the naming of different parts of 
 
 ### ClassNaming
 
-TODO: Specify description
+Reports when class names which do not follow the specified naming convention are used.
 
 #### Configuration options:
 
@@ -32,7 +32,7 @@ TODO: Specify description
 
 ### EnumNaming
 
-TODO: Specify description
+Reports when enum names which do not follow the specified naming convention are used.
 
 #### Configuration options:
 
@@ -42,7 +42,9 @@ TODO: Specify description
 
 ### ForbiddenClassName
 
-TODO: Specify description
+Reports class names which are forbidden per configuration.
+By default this rule does not report any classes.
+Examples for forbidden names might be too generic class names like `...Manager`.
 
 #### Configuration options:
 
@@ -52,7 +54,7 @@ TODO: Specify description
 
 ### FunctionMaxLength
 
-TODO: Specify description
+Reports when very long function names are used.
 
 #### Configuration options:
 
@@ -62,7 +64,7 @@ TODO: Specify description
 
 ### FunctionMinLength
 
-TODO: Specify description
+Reports when very short function names are used.
 
 #### Configuration options:
 
@@ -72,7 +74,7 @@ TODO: Specify description
 
 ### FunctionNaming
 
-TODO: Specify description
+Reports when function names which do not follow the specified naming convention are used.
 
 #### Configuration options:
 
@@ -155,7 +157,7 @@ class Manager {
 
 ### ObjectPropertyNaming
 
-TODO: Specify description
+Reports when property names inside objects which do not follow the specified naming convention are used.
 
 #### Configuration options:
 
@@ -165,7 +167,7 @@ TODO: Specify description
 
 ### PackageNaming
 
-TODO: Specify description
+Reports when package names which do not follow the specified naming convention are used.
 
 #### Configuration options:
 
@@ -175,7 +177,7 @@ TODO: Specify description
 
 ### TopLevelPropertyNaming
 
-TODO: Specify description
+Reports when top level constant names which do not follow the specified naming convention are used.
 
 #### Configuration options:
 
@@ -193,7 +195,7 @@ TODO: Specify description
 
 ### VariableMaxLength
 
-TODO: Specify description
+Reports when very long variable names are used.
 
 #### Configuration options:
 
@@ -203,7 +205,7 @@ TODO: Specify description
 
 ### VariableMinLength
 
-TODO: Specify description
+Reports when very short variable names are used.
 
 #### Configuration options:
 
@@ -213,7 +215,7 @@ TODO: Specify description
 
 ### VariableNaming
 
-TODO: Specify description
+Reports when variable names which do not follow the specified naming convention are used.
 
 #### Configuration options:
 

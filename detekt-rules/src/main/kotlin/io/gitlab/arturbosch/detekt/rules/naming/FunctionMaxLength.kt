@@ -10,6 +10,8 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
+ * Reports when very long function names are used.
+ *
  * @configuration maximumFunctionNameLength - maximum name length (default: 30)
  * @author Marvin Ramin
  */

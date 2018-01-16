@@ -10,6 +10,8 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
+ * Reports when function names which do not follow the specified naming convention are used.
+ *
  * @configuration functionPattern - naming pattern (default: '^([a-z$][a-zA-Z$0-9]*)|(`.*`)$')
  * @active since v1.0.0
  * @author Marvin Ramin

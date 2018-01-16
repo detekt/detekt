@@ -10,6 +10,8 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtPackageDirective
 
 /**
+ * Reports when package names which do not follow the specified naming convention are used.
+ *
  * @configuration packagePattern - naming pattern (default: '^[a-z]+(\.[a-z][a-z0-9]*)*$')
  * @active since v1.0.0
  * @author Marvin Ramin

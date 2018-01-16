@@ -10,6 +10,8 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtEnumEntry
 
 /**
+ * Reports when enum names which do not follow the specified naming convention are used.
+ *
  * @configuration enumEntryPattern - naming pattern (default: '^[A-Z$][a-zA-Z_$]*$')
  * @active since v1.0.0
  * @author Marvin Ramin

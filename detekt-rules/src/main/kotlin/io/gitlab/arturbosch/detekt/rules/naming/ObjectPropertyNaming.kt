@@ -11,6 +11,8 @@ import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtVariableDeclaration
 
 /**
+ * Reports when property names inside objects which do not follow the specified naming convention are used.
+ *
  * @configuration propertyPattern - naming pattern (default: '[A-Za-z][_A-Za-z0-9]*')
  * @active since v1.0.0
  * @author Marvin Ramin
