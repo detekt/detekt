@@ -28,7 +28,7 @@ TODO: Specify description
 
 * `classPattern` (default: `'[A-Z$][a-zA-Z0-9$]*'`)
 
-   naming pattern (default: '[A
+   naming pattern
 
 ### EnumNaming
 
@@ -38,7 +38,7 @@ TODO: Specify description
 
 * `enumEntryPattern` (default: `'^[A-Z$][a-zA-Z_$]*$'`)
 
-   naming pattern (default: '^[A
+   naming pattern
 
 ### ForbiddenClassName
 
@@ -78,11 +78,11 @@ TODO: Specify description
 
 * `functionPattern` (default: `'^([a-z$][a-zA-Z$0-9]*)|(`.*`)$'`)
 
-   naming pattern (default: '^([a
+   naming pattern
 
 ### MatchingDeclarationName
 
-"If a Kotlin file contains a single class (potentially with related top-level declarations),
+"If a Kotlin file contains a single non-private class (potentially with related top-level declarations),
 its name should be the same as the name of the class, with the .kt extension appended.
 If a file contains multiple classes, or only top-level declarations,
 choose a name describing what the file contains, and name the file accordingly.
@@ -161,7 +161,7 @@ TODO: Specify description
 
 * `propertyPattern` (default: `'[A-Za-z][_A-Za-z0-9]*'`)
 
-   naming pattern (default: '[A
+   naming pattern
 
 ### PackageNaming
 
@@ -171,7 +171,7 @@ TODO: Specify description
 
 * `packagePattern` (default: `'^[a-z]+(\.[a-z][a-z0-9]*)*$'`)
 
-   naming pattern (default: '^[a
+   naming pattern
 
 ### TopLevelPropertyNaming
 
@@ -181,15 +181,15 @@ TODO: Specify description
 
 * `constantPattern` (default: `'[A-Z][_A-Z0-9]*'`)
 
-   naming pattern (default: '[A
+   naming pattern
 
 * `propertyPattern` (default: `'[a-z][A-Za-z\d]*'`)
 
-   naming pattern (default: '[a
+   naming pattern
 
 * `privatePropertyPattern` (default: `'(_)?[a-z][A-Za-z0-9]*'`)
 
-   naming pattern ?[a
+   naming pattern
 
 ### VariableMaxLength
 
@@ -219,8 +219,8 @@ TODO: Specify description
 
 * `variablePattern` (default: `'[a-z][A-Za-z0-9]*'`)
 
-   naming pattern (default: '[a
+   naming pattern
 
 * `privateVariablePattern` (default: `'(_)?[a-z][A-Za-z0-9]*'`)
 
-   naming pattern ?[a
+   naming pattern
