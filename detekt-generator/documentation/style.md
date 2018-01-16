@@ -686,6 +686,12 @@ TODO: Specify description
 
 TODO: Specify description
 
+#### Configuration options:
+
+* `excludeAnnotatedClasses` (default: `true`)
+
+   if annotated class should be ignored
+
 #### Noncompliant Code:
 
 ```kotlin
