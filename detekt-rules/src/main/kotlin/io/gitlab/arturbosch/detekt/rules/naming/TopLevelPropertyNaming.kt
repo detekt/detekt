@@ -13,6 +13,8 @@ import org.jetbrains.kotlin.psi.KtVariableDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 
 /**
+ * Reports when top level constant names which do not follow the specified naming convention are used.
+ *
  * @configuration constantPattern - naming pattern (default: '[A-Z][_A-Z0-9]*')
  * @configuration propertyPattern - naming pattern (default: '[a-z][A-Za-z\d]*')
  * @configuration privatePropertyPattern - naming pattern (default: '(_)?[a-z][A-Za-z0-9]*')

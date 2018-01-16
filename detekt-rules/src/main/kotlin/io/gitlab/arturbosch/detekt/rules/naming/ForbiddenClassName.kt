@@ -11,6 +11,10 @@ import io.gitlab.arturbosch.detekt.api.SplitPattern
 import org.jetbrains.kotlin.psi.KtClassOrObject
 
 /**
+ * Reports class names which are forbidden per configuration.
+ * By default this rule does not report any classes.
+ * Examples for forbidden names might be too generic class names like `...Manager`.
+ *
  * @configuration forbiddenName - forbidden class names (default: '')
  * @author Marvin Ramin
  */

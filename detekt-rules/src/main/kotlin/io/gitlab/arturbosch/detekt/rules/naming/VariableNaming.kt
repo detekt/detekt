@@ -12,6 +12,8 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
 
 /**
+ * Reports when variable names which do not follow the specified naming convention are used.
+ *
  * @configuration variablePattern - naming pattern (default: '[a-z][A-Za-z0-9]*')
  * @configuration privateVariablePattern - naming pattern (default: '(_)?[a-z][A-Za-z0-9]*')
  *
