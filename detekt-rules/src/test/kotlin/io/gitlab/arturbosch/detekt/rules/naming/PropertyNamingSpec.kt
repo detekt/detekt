@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.rules.style.naming
+package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.lint

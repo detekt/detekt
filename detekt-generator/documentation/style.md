@@ -6,63 +6,39 @@ code style guidelines.
 
 ## Content
 
-1. [ClassNaming](#classnaming)
-2. [CollapsibleIfStatements](#collapsibleifstatements)
-3. [DataClassContainsFunctions](#dataclasscontainsfunctions)
-4. [EnumNaming](#enumnaming)
-5. [EqualsNullCall](#equalsnullcall)
-6. [ExpressionBodySyntax](#expressionbodysyntax)
-7. [ForbiddenClassName](#forbiddenclassname)
-8. [ForbiddenComment](#forbiddencomment)
-9. [ForbiddenImport](#forbiddenimport)
-10. [FunctionMaxLength](#functionmaxlength)
-11. [FunctionMinLength](#functionminlength)
-12. [FunctionNaming](#functionnaming)
-13. [FunctionOnlyReturningConstant](#functiononlyreturningconstant)
-14. [LoopWithTooManyJumpStatements](#loopwithtoomanyjumpstatements)
-15. [MagicNumber](#magicnumber)
-16. [MatchingDeclarationName](#matchingdeclarationname)
-17. [MaxLineLength](#maxlinelength)
-18. [MemberNameEqualsClassName](#membernameequalsclassname)
-19. [ModifierOrder](#modifierorder)
-20. [NestedClassesVisibility](#nestedclassesvisibility)
-21. [NewLineAtEndOfFile](#newlineatendoffile)
-22. [ObjectPropertyNaming](#objectpropertynaming)
-23. [OptionalAbstractKeyword](#optionalabstractkeyword)
-24. [OptionalReturnKeyword](#optionalreturnkeyword)
-25. [OptionalUnit](#optionalunit)
-26. [OptionalWhenBraces](#optionalwhenbraces)
-27. [PackageNaming](#packagenaming)
-28. [ProtectedMemberInFinalClass](#protectedmemberinfinalclass)
-29. [RedundantVisibilityModifierRule](#redundantvisibilitymodifierrule)
-30. [ReturnCount](#returncount)
-31. [SafeCast](#safecast)
-32. [SerialVersionUIDInSerializableClass](#serialversionuidinserializableclass)
-33. [SpacingBetweenPackageAndImports](#spacingbetweenpackageandimports)
-34. [ThrowsCount](#throwscount)
-35. [TopLevelPropertyNaming](#toplevelpropertynaming)
-36. [UnnecessaryAbstractClass](#unnecessaryabstractclass)
-37. [UnnecessaryInheritance](#unnecessaryinheritance)
-38. [UnnecessaryParentheses](#unnecessaryparentheses)
-39. [UntilInsteadOfRangeTo](#untilinsteadofrangeto)
-40. [UnusedImports](#unusedimports)
-41. [UseDataClass](#usedataclass)
-42. [UtilityClassWithPublicConstructor](#utilityclasswithpublicconstructor)
-43. [VariableMaxLength](#variablemaxlength)
-44. [VariableMinLength](#variableminlength)
-45. [VariableNaming](#variablenaming)
-46. [WildcardImport](#wildcardimport)
+1. [CollapsibleIfStatements](#collapsibleifstatements)
+2. [DataClassContainsFunctions](#dataclasscontainsfunctions)
+3. [EqualsNullCall](#equalsnullcall)
+4. [ExpressionBodySyntax](#expressionbodysyntax)
+5. [ForbiddenComment](#forbiddencomment)
+6. [ForbiddenImport](#forbiddenimport)
+7. [FunctionOnlyReturningConstant](#functiononlyreturningconstant)
+8. [LoopWithTooManyJumpStatements](#loopwithtoomanyjumpstatements)
+9. [MagicNumber](#magicnumber)
+10. [MaxLineLength](#maxlinelength)
+11. [ModifierOrder](#modifierorder)
+12. [NestedClassesVisibility](#nestedclassesvisibility)
+13. [NewLineAtEndOfFile](#newlineatendoffile)
+14. [OptionalAbstractKeyword](#optionalabstractkeyword)
+15. [OptionalReturnKeyword](#optionalreturnkeyword)
+16. [OptionalUnit](#optionalunit)
+17. [OptionalWhenBraces](#optionalwhenbraces)
+18. [ProtectedMemberInFinalClass](#protectedmemberinfinalclass)
+19. [RedundantVisibilityModifierRule](#redundantvisibilitymodifierrule)
+20. [ReturnCount](#returncount)
+21. [SafeCast](#safecast)
+22. [SerialVersionUIDInSerializableClass](#serialversionuidinserializableclass)
+23. [SpacingBetweenPackageAndImports](#spacingbetweenpackageandimports)
+24. [ThrowsCount](#throwscount)
+25. [UnnecessaryAbstractClass](#unnecessaryabstractclass)
+26. [UnnecessaryInheritance](#unnecessaryinheritance)
+27. [UnnecessaryParentheses](#unnecessaryparentheses)
+28. [UntilInsteadOfRangeTo](#untilinsteadofrangeto)
+29. [UnusedImports](#unusedimports)
+30. [UseDataClass](#usedataclass)
+31. [UtilityClassWithPublicConstructor](#utilityclasswithpublicconstructor)
+32. [WildcardImport](#wildcardimport)
 ## Rules in the `style` rule set:
-
-### ClassNaming
-
-TODO: Specify description
-
-#### Configuration options:
-
-* `classPattern` (default: `'[A-Z$][a-zA-Z0-9$]*'`)
-
-   naming pattern (default: '[A
 
 ### CollapsibleIfStatements
 
@@ -106,16 +82,6 @@ data class DataClassWithFunctions(val i: Int) {
 }
 ```
 
-### EnumNaming
-
-TODO: Specify description
-
-#### Configuration options:
-
-* `enumEntryPattern` (default: `'^[A-Z$][a-zA-Z_$]*$'`)
-
-   naming pattern (default: '^[A
-
 ### EqualsNullCall
 
 TODO: Specify description
@@ -149,16 +115,6 @@ fun stuff(): Int {
 ```kotlin
 fun stuff() = 5
 ```
-
-### ForbiddenClassName
-
-TODO: Specify description
-
-#### Configuration options:
-
-* `forbiddenName` (default: `''`)
-
-   forbidden class names
 
 ### ForbiddenComment
 
@@ -195,36 +151,6 @@ package foo
 import kotlin.jvm.JvmField
 import kotlin.SinceKotlin
 ```
-
-### FunctionMaxLength
-
-TODO: Specify description
-
-#### Configuration options:
-
-* `maximumFunctionNameLength` (default: `30`)
-
-   maximum name length
-
-### FunctionMinLength
-
-TODO: Specify description
-
-#### Configuration options:
-
-* `minimumFunctionNameLength` (default: `3`)
-
-   minimum name length
-
-### FunctionNaming
-
-TODO: Specify description
-
-#### Configuration options:
-
-* `functionPattern` (default: `'^([a-z$][a-zA-Z$0-9]*)|(`.*`)$'`)
-
-   naming pattern (default: '^([a
 
 ### FunctionOnlyReturningConstant
 
@@ -346,38 +272,6 @@ class User {
 }
 ```
 
-### MatchingDeclarationName
-
-"If a Kotlin file contains a single class (potentially with related top-level declarations),
-its name should be the same as the name of the class, with the .kt extension appended.
-If a file contains multiple classes, or only top-level declarations,
-choose a name describing what the file contains, and name the file accordingly.
-Use camel humps with an uppercase first letter (e.g. ProcessDeclarations.kt).
-
-The name of the file should describe what the code in the file does.
-Therefore, you should avoid using meaningless words such as "Util" in file names." - Official Kotlin Style Guide
-
-More information at: http://kotlinlang.org/docs/reference/coding-conventions.html
-
-#### Noncompliant Code:
-
-```kotlin
-class Foo // FooUtils.kt
-
-fun Bar.toFoo(): Foo = ...
-fun Foo.toBar(): Bar = ...
-```
-
-#### Compliant Code:
-
-```kotlin
-class Foo { // Foo.kt
-    fun stuff() = 42
-}
-
-fun Bar.toFoo(): Foo = ...
-```
-
 ### MaxLineLength
 
 TODO: Specify description
@@ -395,47 +289,6 @@ TODO: Specify description
 * `excludeImportStatements` (default: `false`)
 
    if import statements should be ignored
-
-### MemberNameEqualsClassName
-
-This rule reports a member that has the same as the containing class or object.
-This might result in confusion.
-The member should either be renamed or changed to a constructor.
-Factory functions that create an instance of the class are exempt from this rule.
-
-#### Configuration options:
-
-* `ignoreOverriddenFunction` (default: `true`)
-
-   if overridden functions should be ignored
-
-#### Noncompliant Code:
-
-```kotlin
-class MethodNameEqualsClassName {
-
-    fun methodNameEqualsClassName() { }
-}
-
-class PropertyNameEqualsClassName {
-
-    val propertyEqualsClassName = 0
-}
-```
-
-#### Compliant Code:
-
-```kotlin
-class Manager {
-
-    companion object {
-        // factory functions can have the same name as the class
-        fun manager(): Manager {
-            return Manager()
-        }
-    }
-}
-```
 
 ### ModifierOrder
 
@@ -478,16 +331,6 @@ internal class NestedClassesVisibility {
 ### NewLineAtEndOfFile
 
 TODO: Specify description
-
-### ObjectPropertyNaming
-
-TODO: Specify description
-
-#### Configuration options:
-
-* `propertyPattern` (default: `'[A-Za-z][_A-Za-z0-9]*'`)
-
-   naming pattern (default: '[A
 
 ### OptionalAbstractKeyword
 
@@ -568,16 +411,6 @@ when (1) {
     else -> println("else")
 }
 ```
-
-### PackageNaming
-
-TODO: Specify description
-
-#### Configuration options:
-
-* `packagePattern` (default: `'^[a-z]+(\.[a-z][a-z0-9]*)*$'`)
-
-   naming pattern (default: '^[a
 
 ### ProtectedMemberInFinalClass
 
@@ -764,24 +597,6 @@ fun foo(i: Int) {
 }
 ```
 
-### TopLevelPropertyNaming
-
-TODO: Specify description
-
-#### Configuration options:
-
-* `constantPattern` (default: `'[A-Z][_A-Z0-9]*'`)
-
-   naming pattern (default: '[A
-
-* `propertyPattern` (default: `'[a-z][A-Za-z\d]*'`)
-
-   naming pattern (default: '[a
-
-* `privatePropertyPattern` (default: `'(_)?[a-z][A-Za-z0-9]*'`)
-
-   naming pattern ?[a
-
 ### UnnecessaryAbstractClass
 
 TODO: Specify description
@@ -920,40 +735,6 @@ class UtilityClass {
     }
 }
 ```
-
-### VariableMaxLength
-
-TODO: Specify description
-
-#### Configuration options:
-
-* `maximumVariableNameLength` (default: `64`)
-
-   maximum name length
-
-### VariableMinLength
-
-TODO: Specify description
-
-#### Configuration options:
-
-* `minimumVariableNameLength` (default: `1`)
-
-   maximum name length
-
-### VariableNaming
-
-TODO: Specify description
-
-#### Configuration options:
-
-* `variablePattern` (default: `'[a-z][A-Za-z0-9]*'`)
-
-   naming pattern (default: '[a
-
-* `privateVariablePattern` (default: `'(_)?[a-z][A-Za-z0-9]*'`)
-
-   naming pattern ?[a
 
 ### WildcardImport
 

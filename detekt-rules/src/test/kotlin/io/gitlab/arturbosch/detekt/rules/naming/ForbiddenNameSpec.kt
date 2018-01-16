@@ -1,7 +1,5 @@
-package io.gitlab.arturbosch.detekt.rules.style
+package io.gitlab.arturbosch.detekt.rules.naming
 
-import io.gitlab.arturbosch.detekt.rules.style.naming.ForbiddenClassName
-import io.gitlab.arturbosch.detekt.rules.style.naming.NamingRules
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat

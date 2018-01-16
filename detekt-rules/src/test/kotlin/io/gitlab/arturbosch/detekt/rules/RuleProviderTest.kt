@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.rules.providers.CommentSmellProvider
 import io.gitlab.arturbosch.detekt.rules.providers.ComplexityProvider
 import io.gitlab.arturbosch.detekt.rules.providers.EmptyCodeProvider
 import io.gitlab.arturbosch.detekt.rules.providers.ExceptionsProvider
+import io.gitlab.arturbosch.detekt.rules.providers.NamingProvider
 import io.gitlab.arturbosch.detekt.rules.providers.PerformanceProvider
 import io.gitlab.arturbosch.detekt.rules.providers.PotentialBugProvider
 import io.gitlab.arturbosch.detekt.rules.providers.StyleGuideProvider
@@ -51,6 +52,15 @@ class RuleProviderTest {
 		RuleProviderAssert(
 				ExceptionsProvider(),
 				"io.gitlab.arturbosch.detekt.rules.exceptions",
+				Rule::class.java)
+				.assert()
+	}
+
+	@Test
+	fun namingProvider() {
+		RuleProviderAssert(
+				NamingProvider(),
+				"io.gitlab.arturbosch.detekt.rules.naming",
 				Rule::class.java)
 				.assert()
 	}

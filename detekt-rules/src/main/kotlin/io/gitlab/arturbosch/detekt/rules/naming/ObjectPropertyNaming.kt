@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.rules.style.naming
+package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config

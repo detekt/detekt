@@ -188,6 +188,53 @@ exceptions:
      - Throwable
      - RuntimeException
 
+naming:
+  active: true
+  ClassNaming:
+    active: true
+    classPattern: '[A-Z$][a-zA-Z0-9$]*'
+  EnumNaming:
+    active: true
+    enumEntryPattern: '^[A-Z$][a-zA-Z_$]*$'
+  ForbiddenClassName:
+    active: false
+    forbiddenName: ''
+  FunctionMaxLength:
+    active: false
+    maximumFunctionNameLength: 30
+  FunctionMinLength:
+    active: false
+    minimumFunctionNameLength: 3
+  FunctionNaming:
+    active: true
+    functionPattern: '^([a-z$][a-zA-Z$0-9]*)|(`.*`)$'
+  MatchingDeclarationName:
+    active: true
+  MemberNameEqualsClassName:
+    active: false
+    ignoreOverriddenFunction: true
+  ObjectPropertyNaming:
+    active: true
+    propertyPattern: '[A-Za-z][_A-Za-z0-9]*'
+  PackageNaming:
+    active: true
+    packagePattern: '^[a-z]+(\.[a-z][a-z0-9]*)*$'
+  TopLevelPropertyNaming:
+    active: true
+    constantPattern: '[A-Z][_A-Z0-9]*'
+    propertyPattern: '[a-z][A-Za-z\d]*'
+    privatePropertyPattern: '(_)?[a-z][A-Za-z0-9]*'
+  VariableMaxLength:
+    active: false
+    maximumVariableNameLength: 64
+  VariableMinLength:
+    active: false
+    minimumVariableNameLength: 1
+  VariableNaming:
+    active: true
+    variablePattern: '[a-z][A-Za-z0-9]*'
+    privateVariablePattern: '(_)?[a-z][A-Za-z0-9]*'
+
 performance:
   active: true
   ForEachOnRange:
@@ -232,39 +279,21 @@ potential-bugs:
 
 style:
   active: true
-  ClassNaming:
-    active: true
-    classPattern: '[A-Z$][a-zA-Z0-9$]*'
   CollapsibleIfStatements:
     active: false
   DataClassContainsFunctions:
     active: false
     conversionFunctionPrefix: 'to'
-  EnumNaming:
-    active: true
-    enumEntryPattern: '^[A-Z$][a-zA-Z_$]*$'
   EqualsNullCall:
     active: false
   ExpressionBodySyntax:
     active: false
-  ForbiddenClassName:
-    active: false
-    forbiddenName: ''
   ForbiddenComment:
     active: true
     values: 'TODO:,FIXME:,STOPSHIP:'
   ForbiddenImport:
     active: false
     imports: ''
-  FunctionMaxLength:
-    active: false
-    maximumFunctionNameLength: 30
-  FunctionMinLength:
-    active: false
-    minimumFunctionNameLength: 3
-  FunctionNaming:
-    active: true
-    functionPattern: '^([a-z$][a-zA-Z$0-9]*)|(`.*`)$'
   FunctionOnlyReturningConstant:
     active: false
     ignoreOverridableFunction: true
@@ -282,25 +311,17 @@ style:
     ignoreAnnotation: false
     ignoreNamedArgument: true
     ignoreEnums: false
-  MatchingDeclarationName:
-    active: true
   MaxLineLength:
     active: true
     maxLineLength: 120
     excludePackageStatements: false
     excludeImportStatements: false
-  MemberNameEqualsClassName:
-    active: false
-    ignoreOverriddenFunction: true
   ModifierOrder:
     active: true
   NestedClassesVisibility:
     active: false
   NewLineAtEndOfFile:
     active: true
-  ObjectPropertyNaming:
-    active: true
-    propertyPattern: '[A-Za-z][_A-Za-z0-9]*'
   OptionalAbstractKeyword:
     active: true
   OptionalReturnKeyword:
@@ -309,9 +330,6 @@ style:
     active: false
   OptionalWhenBraces:
     active: false
-  PackageNaming:
-    active: true
-    packagePattern: '^[a-z]+(\.[a-z][a-z0-9]*)*$'
   ProtectedMemberInFinalClass:
     active: false
   RedundantVisibilityModifierRule:
@@ -329,11 +347,6 @@ style:
   ThrowsCount:
     active: true
     max: 2
-  TopLevelPropertyNaming:
-    active: true
-    constantPattern: '[A-Z][_A-Z0-9]*'
-    propertyPattern: '[a-z][A-Za-z\d]*'
-    privatePropertyPattern: '(_)?[a-z][A-Za-z0-9]*'
   UnnecessaryAbstractClass:
     active: false
   UnnecessaryInheritance:
@@ -348,16 +361,6 @@ style:
     active: false
   UtilityClassWithPublicConstructor:
     active: false
-  VariableMaxLength:
-    active: false
-    maximumVariableNameLength: 64
-  VariableMinLength:
-    active: false
-    minimumVariableNameLength: 1
-  VariableNaming:
-    active: true
-    variablePattern: '[a-z][A-Za-z0-9]*'
-    privateVariablePattern: '(_)?[a-z][A-Za-z0-9]*'
   WildcardImport:
     active: true
     excludeImports: 'java.util.*,kotlinx.android.synthetic.*'
