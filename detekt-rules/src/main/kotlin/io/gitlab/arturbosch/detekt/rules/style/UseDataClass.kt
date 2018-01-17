@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.AnnotationExcluder
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
@@ -7,9 +8,12 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.SplitPattern
+import io.gitlab.arturbosch.detekt.rules.collectByType
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtDeclaration
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
@@ -29,7 +33,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
  * data class DataClass(val i: Int, val i2: Int)
  * </compliant>
  *
- * @configuration excludeAnnotatedClasses - if annotated class should be ignored (default: true)
+ * @configuration excludeAnnotatedClasses - allows to provide a list of annotations that disable (default: "")
  *
  * @author Ivan Balaksha
  * @author Artur Bosch
@@ -42,14 +46,21 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 			"Classes that do nothing but hold data should be replaced with a data class.",
 			Debt.FIVE_MINS)
 
-	private val excludeAnnotatedClasses = valueOrDefault(EXCLUDE_ANNOTATED_CLASSES, true)
+	private val excludeAnnotatedClasses = SplitPattern(valueOrDefault(EXCLUDE_ANNOTATED_CLASSES, ""))
 	private val defaultFunctionNames = hashSetOf("hashCode", "equals", "toString", "copy")
 
-	override fun visitClass(klass: KtClass) {
+	override fun visit(root: KtFile) {
+		super.visit(root)
+		val annotationExcluder = AnnotationExcluder(root, excludeAnnotatedClasses)
+		root.collectByType<KtClass>().forEach { visitKlass(it, annotationExcluder) }
+	}
+
+	private fun visitKlass(klass: KtClass, annotationExcluder: AnnotationExcluder) {
 		if (isIncorrectClassType(klass)) {
 			return
 		}
-		if (klass.isClosedForExtension() && klass.doesNotExtendAnything() && isAnnotatedClassExcluded(klass)) {
+		if (klass.isClosedForExtension() && klass.doesNotExtendAnything()
+				&& !annotationExcluder.shouldExclude(klass.annotationEntries)) {
 			val declarations = klass.extractDeclarations()
 			val properties = declarations.filterIsInstance<KtProperty>()
 			val functions = declarations.filterIsInstance<KtNamedFunction>()
@@ -63,7 +74,6 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 				report(CodeSmell(issue, Entity.from(klass), message = ""))
 			}
 		}
-		super.visitClass(klass)
 	}
 
 	private fun isIncorrectClassType(klass: KtClass) =
@@ -72,9 +82,6 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 	private fun KtClass.doesNotExtendAnything() = superTypeListEntries.isEmpty()
 
 	private fun KtClass.isClosedForExtension() = !isAbstract() && !isOpen()
-
-	private fun isAnnotatedClassExcluded(klass: KtClass) =
-			if (excludeAnnotatedClasses) klass.annotations.isEmpty() else true
 
 	private fun KtClass.extractDeclarations(): List<KtDeclaration> = getBody()?.declarations ?: emptyList()
 

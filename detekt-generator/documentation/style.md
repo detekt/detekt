@@ -688,9 +688,9 @@ TODO: Specify description
 
 #### Configuration options:
 
-* `excludeAnnotatedClasses` (default: `true`)
+* `excludeAnnotatedClasses` (default: `""`)
 
-   if annotated class should be ignored
+   allows to provide a list of annotations that disable
 
 #### Noncompliant Code:
 

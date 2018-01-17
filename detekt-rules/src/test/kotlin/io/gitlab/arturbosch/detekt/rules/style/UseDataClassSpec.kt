@@ -27,15 +27,17 @@ class UseDataClassSpec : SubjectSpek<UseDataClass>({
 		}
 	}
 
-	given("a class with an annotation which is not ignored") {
+	given("a class with an annotation which is ignored") {
 
-		it("reports a potential data class") {
+		it("does not report a potential data class") {
 			val code = """
-				@Module
+				import kotlin.SinceKotlin
+
+				@SinceKotlin("1.0.0")
 				class AnnotatedClass(val i: Int) {}
 				"""
-			val config = TestConfig(mapOf(UseDataClass.EXCLUDE_ANNOTATED_CLASSES to "false"))
-			assertThat(UseDataClass(config).lint(code)).hasSize(1)
+			val config = TestConfig(mapOf(UseDataClass.EXCLUDE_ANNOTATED_CLASSES to "kotlin.*"))
+			assertThat(UseDataClass(config).lint(code)).hasSize(0)
 		}
 	}
 })
