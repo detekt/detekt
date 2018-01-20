@@ -108,20 +108,6 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 				"""
 			assertThat(subject.lint(code)).hasSize(1)
 		}
-
-		it("reports unused members shadowed by local properties") {
-			val code = """
-				class Test {
-				    private val unused = "This is not used"
-
-					fun use() {
-						val unused = "This is used"
-						println(unused)
-					}
-				}
-				"""
-			assertThat(subject.lint(code)).hasSize(1)
-		}
 	}
 
 	given("properties used to initialize other properties") {
@@ -169,7 +155,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 			assertThat(subject.lint(code)).hasSize(1)
 		}
 
-		it("does not report single parameters if they used") {
+		it("does not report single parameters if they used in return statement") {
 			val code = """
 			class Test {
 				val value = usedMethod(1)
@@ -180,16 +166,44 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 			}
 			"""
 
-			assertThat(subject.lint(code)).hasSize(1)
+			assertThat(subject.lint(code)).hasSize(0)
 		}
 
-		it("reports parameters that are unused") {
+		it("does not report single parameters if they used in function") {
+			val code = """
+			class Test {
+				val value = usedMethod(1)
+
+				private fun usedMethod(used: Int) {
+					println(used)
+				}
+			}
+			"""
+
+			assertThat(subject.lint(code)).hasSize(0)
+		}
+
+		it("reports parameters that are unused in return statement") {
 			val code = """
 			class Test {
 				val value = usedMethod(1, 2)
 
 				private fun usedMethod(unusedParameter: Int, usedParameter: Int): Int {
 					return usedParameter
+				}
+			}
+			"""
+
+			assertThat(subject.lint(code)).hasSize(1)
+		}
+
+		it("reports parameters that are unused in function") {
+			val code = """
+			class Test {
+				val value = usedMethod(1, 2)
+
+				private fun usedMethod(unusedParameter: Int, usedParameter: Int) {
+					println(usedParameter)
 				}
 			}
 			"""
@@ -206,7 +220,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 				val value = usedMethod()
 
 				private fun usedMethod(): Int {
-					return usedParameter
+					return 5
 				}
 			}
 			"""
@@ -243,56 +257,5 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 
 			assertThat(subject.lint(code)).hasSize(2)
 		}
-
-		it("reports unused private functions with when branches") {
-			val code = """
-			class Test {
-				private fun run(boolean go) {
-					boolean used = true;
-					if (go && used) {
-						String concat = "";
-						when (concat) {
-							"truetrue": run2()
-							else -> println("nothing")
-						}
-					}
-				}
-
-				private void run2() {
-					val strings = listOf<String>()
-					strings.forEach {
-						println(it)
-					}
-				}
-			}
-			"""
-
-			assertThat(subject.lint(code)).hasSize(2)
-		}
-
-		it("reports unused private functions with if branches") {
-			val code = """
-			class Test {
-				private fun run(boolean go) {
-					boolean used = false;
-					if (used) {
-						run()
-					}
-				}
-
-				private void run2() {
-					val strings = listOf<String>()
-					strings.forEach {
-						println(it)
-					}
-				}
-			}
-			"""
-
-			assertThat(subject.lint(code)).hasSize(2)
-		}
 	}
-
-
-
 })
