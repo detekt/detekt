@@ -16,8 +16,8 @@ import org.jetbrains.kotlin.psi.KtWhileExpression
 
 /**
  * Complex conditions make it hard to understand which cases lead to the condition being true or false. To improve
- * readability and understanding of complex conditions consider extracting them into well-named functions and call
- * those instead.
+ * readability and understanding of complex conditions consider extracting them into well-named functions or variables
+ * and call those instead.
  *
  * <noncompliant>
  * val str = "foo"
