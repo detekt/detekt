@@ -42,7 +42,10 @@ code style guidelines.
 
 ### CollapsibleIfStatements
 
-TODO: Specify description
+This rule detects if statements which can be collapsed. This can reduce nesting and help improve readability.
+
+However it should be carefully considered if merging the if statements actually does improve readability or if it
+hides some edge-cases from the reader.
 
 #### Noncompliant Code:
 
@@ -66,7 +69,11 @@ if (i > 0 && i < 5) {
 
 ### DataClassContainsFunctions
 
-TODO: Specify description
+This rule reports functions inside data classes which have not been whitelisted as a conversion function.
+
+Data classes should mainly be used to store data. This rule assumes that they should not contain any extra functions
+aside functions that help with converting objects from/to one another.
+Data classes will automatically have a generated `equals`, `toString` and `hashCode` function by the compiler.
 
 #### Configuration options:
 
@@ -84,7 +91,8 @@ data class DataClassWithFunctions(val i: Int) {
 
 ### EqualsNullCall
 
-TODO: Specify description
+To compare an object with `null` prefer using `==`. This rule detects and reports instances in the code where the
+`equals()` method is used to compare a value with `null`.
 
 #### Noncompliant Code:
 
@@ -100,7 +108,8 @@ fun isNull(str: String) = str == null
 
 ### ExpressionBodySyntax
 
-TODO: Specify description
+Functions which only contain a `return` statement can be collapsed to an expression body. This shorten and clean up
+the code.
 
 #### Noncompliant Code:
 
@@ -118,7 +127,8 @@ fun stuff() = 5
 
 ### ForbiddenComment
 
-TODO: Specify description
+This rule allows to set a list of comments which are forbidden in the codebase and should only be used during
+development. Offending code comments will then be reported.
 
 #### Configuration options:
 
@@ -135,7 +145,8 @@ fun foo() { }
 
 ### ForbiddenImport
 
-TODO: Specify description
+This rule allows to set a list of forbidden imports. This can be used to discourage the use of unstable, experimental
+or deprecated APIs. Detekt will then report all imports that are forbidden.
 
 #### Configuration options:
 
@@ -154,7 +165,8 @@ import kotlin.SinceKotlin
 
 ### FunctionOnlyReturningConstant
 
-TODO: Specify description
+A function that only returns a single constant can be misleading. Instead prefer to define the constant directly
+as a `const val`.
 
 #### Configuration options:
 
@@ -180,7 +192,8 @@ const val constantString = "1"
 
 ### LoopWithTooManyJumpStatements
 
-TODO: Specify description
+Loops which contain multiple `break` or `continue` statements are hard to read and understand.
+To increase readability they should be refactored into simpler loops.
 
 #### Configuration options:
 
@@ -203,7 +216,8 @@ for (str in strs) {
 
 ### MagicNumber
 
-TODO: Specify description
+This rule detects and reports usages of magic numbers in the code. Prefer defining constants with clear names
+describing what the magic number means.
 
 #### Configuration options:
 
@@ -274,7 +288,7 @@ class User {
 
 ### MaxLineLength
 
-TODO: Specify description
+This rule reports lines of code which exceed a defined maximum line length.
 
 #### Configuration options:
 
@@ -292,7 +306,8 @@ TODO: Specify description
 
 ### ModifierOrder
 
-TODO: Specify description
+This rule reports cases in the code where modifiers are not in the correct order. The default modifier order is
+taken from: http://kotlinlang.org/docs/reference/coding-conventions.html#modifiers
 
 #### Noncompliant Code:
 
@@ -308,7 +323,9 @@ private internal lateinit val str: String
 
 ### NestedClassesVisibility
 
-TODO: Specify description
+Nested classes are often used to implement functionality local to the class it is nested in. Therefore it should
+not be public to other parts of the code.
+Prefer keeping nested classes `private`.
 
 #### Noncompliant Code:
 
@@ -330,11 +347,11 @@ internal class NestedClassesVisibility {
 
 ### NewLineAtEndOfFile
 
-TODO: Specify description
+This rule reports files which do not end with a line separator.
 
 ### OptionalAbstractKeyword
 
-TODO: Specify description
+This rule reports `abstract` modifiers which are unnecessary and can be removed.
 
 #### Noncompliant Code:
 
@@ -358,7 +375,10 @@ interface Foo {
 
 ### OptionalReturnKeyword
 
-TODO: Specify description
+This rule reports optional `return` keywords. Inside conditional expressions the last expression is always returned
+by default.
+
+This makes the return keyword unnecessary and it can be removed safely.
 
 #### Noncompliant Code:
 
@@ -374,7 +394,8 @@ val z = if (true) x else y
 
 ### OptionalUnit
 
-TODO: Specify description
+It is not necessary to define a return type of `Unit` on functions. This rule detects and reports instances where
+the `Unit` return type is specified on functions.
 
 #### Noncompliant Code:
 
@@ -390,7 +411,7 @@ fun foo() { }
 
 ### OptionalWhenBraces
 
-TODO: Specify description
+This rule reports unnecessary braces in when expressions. These optional braces should be removed.
 
 #### Noncompliant Code:
 
@@ -414,7 +435,8 @@ when (1) {
 
 ### ProtectedMemberInFinalClass
 
-TODO: Specify description
+Kotlin classes are `final` by default. Thus classes which are not marked as `open` should not contain any `protected`
+members. Consider using `private` or `internal` modifiers instead.
 
 #### Noncompliant Code:
 
@@ -434,7 +456,7 @@ class ProtectedMemberInFinalClass {
 
 ### RedundantVisibilityModifierRule
 
-TODO: Specify description
+This rule checks for redundant visibility modifiers.
 
 #### Noncompliant Code:
 
@@ -497,7 +519,7 @@ fun foo(i: Int): String {
 
 ### SafeCast
 
-TODO: Specify description
+This rule inspects casts and reports casts which could be replaced with safe casts instead.
 
 #### Noncompliant Code:
 
@@ -519,7 +541,8 @@ fun numberMagic(number: Number) {
 
 ### SerialVersionUIDInSerializableClass
 
-TODO: Specify description
+Classes which implement the `Serializable` interface should also correctly declare a `serialVersionUID`.
+This rule verifies that a `serialVersionUID` was correctly defined.
 
 #### Noncompliant Code:
 
@@ -545,7 +568,8 @@ class CorrectSerializable : Serializable {
 
 ### SpacingBetweenPackageAndImports
 
-TODO: Specify description
+This rule verifies spacing between package and import statements as well as between import statements and class
+declarations.
 
 #### Noncompliant Code:
 
@@ -567,7 +591,8 @@ class Bar { }
 
 ### ThrowsCount
 
-TODO: Specify description
+Functions should have clear `throw` statements. Functions with many `throw` statements can be harder to read and lead
+to confusion. Instead prefer to limit the amount of `throw` statements in a function.
 
 #### Configuration options:
 
@@ -599,7 +624,9 @@ fun foo(i: Int) {
 
 ### UnnecessaryAbstractClass
 
-TODO: Specify description
+This rule inspects `abstract` classes. In case an `abstract class` does not have any concrete members it should be
+refactored into an interfacse. Abstract classes which do not define any `abstract` members should instead be
+refactored into concrete classes.
 
 #### Noncompliant Code:
 
@@ -619,7 +646,8 @@ abstract class OnlyConcreteMembersInAbstractClass { // violation: no abstract me
 
 ### UnnecessaryInheritance
 
-TODO: Specify description
+This rule reports unnecessary super types. Inheriting from `Any` or `Object` is unnecessary and should simply be
+removed.
 
 #### Noncompliant Code:
 
@@ -680,11 +708,14 @@ val range = 0 until 10
 
 ### UnusedImports
 
-TODO: Specify description
+This rule reports unused imports. Unused imports are dead code and should be removed.
 
 ### UseDataClass
 
-TODO: Specify description
+Classes that simply hold data should be refactored into a `data class`. Data classes are specialized to hold data
+and generate `hashCode`, `equals` and `toString` implementations as well.
+
+Read more about `data class`: https://kotlinlang.org/docs/reference/data-classes.html
 
 #### Configuration options:
 
@@ -709,7 +740,7 @@ data class DataClass(val i: Int, val i2: Int)
 
 ### UtilityClassWithPublicConstructor
 
-TODO: Specify description
+A class which only contains utility functions and no concrete implementation can be refactored into an `object`.
 
 #### Noncompliant Code:
 
