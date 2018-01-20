@@ -42,7 +42,7 @@ code style guidelines.
 
 ### CollapsibleIfStatements
 
-This rule detects if statements which can be collapsed. This can reduce nesting and help improve readability.
+This rule detects `if` statements which can be collapsed. This can reduce nesting and help improve readability.
 
 However it should be carefully considered if merging the if statements actually does improve readability or if it
 hides some edge-cases from the reader.
@@ -108,8 +108,8 @@ fun isNull(str: String) = str == null
 
 ### ExpressionBodySyntax
 
-Functions which only contain a `return` statement can be collapsed to an expression body. This shorten and clean up
-the code.
+Functions which only contain a `return` statement can be collapsed to an expression body. This shortens and
+cleans up the code.
 
 #### Noncompliant Code:
 
@@ -289,6 +289,9 @@ class User {
 ### MaxLineLength
 
 This rule reports lines of code which exceed a defined maximum line length.
+
+Long lines might be hard to read on smaller screens or printouts. Additionally having a maximum line length
+in the codebase will help make the code more uniform.
 
 #### Configuration options:
 
