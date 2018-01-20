@@ -9,6 +9,8 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtCallExpression
 
 /**
+ * To compare an object with `null` prefer using `==`. This rule detects and reports instances in the code where the
+ * `equals()` method is used to compare a value with `null`.
  *
  * <noncompliant>
  * fun isNull(str: String) = str.equals(null)

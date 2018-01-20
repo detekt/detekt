@@ -16,6 +16,8 @@ import org.jetbrains.kotlin.psi.KtPackageDirective
 import org.jetbrains.kotlin.psi.psiUtil.siblings
 
 /**
+ * This rule verifies spacing between package and import statements as well as between import statements and class
+ * declarations.
  *
  * <noncompliant>
  * package foo

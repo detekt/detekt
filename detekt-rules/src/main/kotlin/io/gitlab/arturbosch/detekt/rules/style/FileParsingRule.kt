@@ -26,6 +26,8 @@ class FileParsingRule(val config: Config = Config.empty) : MultiRule() {
 data class KtFileContent(val file: KtFile, val content: Sequence<String>)
 
 /**
+ * This rule reports lines of code which exceed a defined maximum line length.
+ *
  * @configuration maxLineLength - maximum line length (default: 120)
  * @configuration excludePackageStatements - if package statements should be ignored (default: false)
  * @configuration excludeImportStatements - if import statements should be ignored (default: false)

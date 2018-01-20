@@ -16,6 +16,8 @@ import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtProperty
 
 /**
+ * Classes which implement the `Serializable` interface should also correctly declare a `serialVersionUID`.
+ * This rule verifies that a `serialVersionUID` was correctly defined.
  *
  * <noncompliant>
  * class IncorrectSerializable : Serializable {
@@ -36,6 +38,7 @@ import org.jetbrains.kotlin.psi.KtProperty
  * </compliant>
  *
  * @author schalkms
+ * @author Marvin Ramin
  */
 class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(config) {
 

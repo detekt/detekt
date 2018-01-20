@@ -10,6 +10,8 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtClassOrObject
 
 /**
+ * This rule reports unnecessary super types. Inheriting from `Any` or `Object` is unnecessary and should simply be
+ * removed.
  *
  * <noncompliant>
  * class A : Any()
@@ -18,6 +20,7 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
  *
  * @author schalkms
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 class UnnecessaryInheritance(config: Config = Config.empty) : Rule(config) {
 

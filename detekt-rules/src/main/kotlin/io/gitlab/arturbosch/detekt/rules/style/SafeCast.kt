@@ -16,6 +16,7 @@ import org.jetbrains.kotlin.psi.KtIsExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 
 /**
+ * This rule inspects casts and reports casts which could be replaced with safe casts instead.
  *
  * <noncompliant>
  * fun numberMagic(number: Number) {

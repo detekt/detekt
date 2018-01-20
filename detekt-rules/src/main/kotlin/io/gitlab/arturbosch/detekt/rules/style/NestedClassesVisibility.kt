@@ -13,6 +13,9 @@ import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtEnumEntry
 
 /**
+ * Nested classes are often used to implement functionality local to the class it is nested in. Therefore it should
+ * not be public to other parts of the code.
+ * Prefer keeping nested classes `private`.
  *
  * <noncompliant>
  * internal class NestedClassesVisibility {
@@ -30,6 +33,7 @@ import org.jetbrains.kotlin.psi.KtEnumEntry
  *
  * @author Ivan Balaksha
  * @author schalkms
+ * @author Marvin Ramin
  */
 class NestedClassesVisibility(config: Config = Config.empty) : Rule(config) {
 

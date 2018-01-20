@@ -15,6 +15,8 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtLoopExpression
 
 /**
+ * Loops which contain multiple `break` or `continue` statements are hard to read and understand.
+ * To increase readability they should be refactored into simpler loops.
  *
  * <noncompliant>
  * val strs = listOf("foo, bar")
