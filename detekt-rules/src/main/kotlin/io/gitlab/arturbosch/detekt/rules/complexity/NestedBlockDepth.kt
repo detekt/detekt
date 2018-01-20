@@ -19,6 +19,11 @@ import org.jetbrains.kotlin.psi.KtTryExpression
 import org.jetbrains.kotlin.psi.KtWhenExpression
 
 /**
+ * This rule reports excessive nesting depth in functions. Excessively nested code becomes harder to read and increases
+ * its hidden complexity. It might become harder to understand edge-cases of the function.
+ *
+ * Prefer extracting the nested code into well-named functions to make it easier to understand.
+ *
  * @configuration threshold - maximum nesting depth (default: 3)
  *
  * @active since v1.0.0

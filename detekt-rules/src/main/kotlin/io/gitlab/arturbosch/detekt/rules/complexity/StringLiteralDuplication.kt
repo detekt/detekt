@@ -15,6 +15,11 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtLiteralStringTemplateEntry
 
 /**
+ * This rule detects and reports duplicated String literals. Repeatedly typing out the same String literal across the
+ * codebase makes it harder to change and maintain.
+ *
+ * Instead, prefer extracting the String literal into a property or constant.
+ *
  * <noncompliant>
  * class Foo {
  *

@@ -11,7 +11,11 @@ import io.gitlab.arturbosch.detekt.api.internal.McCabeVisitor
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
- * @configuration threshold - maximum amount of functions in a class (default: 10)
+ * Complex methods are hard to understand and read. It might not be obvious what side-effects a complex method has.
+ * Prefer splitting up complex methods into smaller methods that are in turn easier to understand.
+ * Smaller methods can also be named much clearer which leads to improved readability of the code.
+ *
+ * @configuration threshold - MCC threshold for a method (default: 10)
  *
  * @active since v1.0.0
  * @author Artur Bosch
