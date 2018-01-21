@@ -91,6 +91,54 @@ class EndOfSentenceFormatSpec : SubjectSpek<KDocStyle>({
 		assertThat(subject.lint(code)).isEmpty()
 	}
 
+	it("does not report KDoc which doesn't contain any real sentence") {
+		val code = """
+			/**
+			 * @author Someone
+			 */
+			class Test {
+			}
+			"""
+		assertThat(subject.lint(code)).isEmpty()
+	}
+
+
+	it("does not report KDoc which doesn't contain any real sentence but many tags") {
+		val code = """
+			/**
+			 * @configuration this - just an example (default: 150)
+			 *
+			 * @active since v1.0.0
+			 * @author person1
+			 * @author person2
+			 */
+			class Test {
+			}
+			"""
+		assertThat(subject.lint(code)).isEmpty()
+	}
+
+
+	it("does not report KDoc which doesn't contain any real sentence but html tags") {
+		val code = """
+			/**
+			 *
+			 * <noncompliant>
+			 * fun foo(): Unit { }
+			 * </noncompliant>
+			 *
+			 * <compliant>
+			 * fun foo() { }
+			 * </compliant>
+			 *
+			 * @author someone
+			 */
+			class Test {
+			}
+			"""
+		assertThat(subject.lint(code)).isEmpty()
+	}
+
 	it("does not report KDoc ending with periods") {
 		val code = """
 			/**

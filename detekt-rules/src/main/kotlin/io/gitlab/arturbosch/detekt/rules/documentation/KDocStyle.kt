@@ -40,15 +40,25 @@ class EndOfSentenceFormat(config: Config = Config.empty) : Rule(config) {
 	private val endOfSentenceFormat =
 			Regex(valueOrDefault(END_OF_SENTENCE_FORMAT, "([.?!][ \\t\\n\\r\\f<])|([.?!]\$)"))
 
+	private val htmlTag = Regex("<.+>")
+
 	fun verify(declaration: KtDeclaration) {
 		declaration.docComment?.let {
 			val text = it.getDefaultSection().getContent()
+			if (text.isEmpty()) {
+				return
+			}
+			if (text.startsWithHtmlTag()) {
+				return
+			}
 			if (!endOfSentenceFormat.containsMatchIn(text)) {
 				report(CodeSmell(issue, Entity.from(declaration), "The first sentence of this KDoc does not" +
 						"end with the correct punctuation."))
 			}
 		}
 	}
+
+	private fun String.startsWithHtmlTag() = startsWith("<") && contains(htmlTag)
 
 	companion object {
 		const val END_OF_SENTENCE_FORMAT = "endOfSentenceFormat"
