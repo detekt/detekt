@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.psi.KtDeclaration
 
 class KDocStyle(config: Config = Config.empty) : MultiRule() {
 
-	private val endOfSentenceFormat = EndOfSentenceFormat()
+	private val endOfSentenceFormat = EndOfSentenceFormat(config)
 
 	override val rules = listOf(
 			endOfSentenceFormat
