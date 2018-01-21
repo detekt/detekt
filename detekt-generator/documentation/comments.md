@@ -7,8 +7,9 @@ of the code.
 
 1. [CommentOverPrivateFunction](#commentoverprivatefunction)
 2. [CommentOverPrivateProperty](#commentoverprivateproperty)
-3. [UndocumentedPublicClass](#undocumentedpublicclass)
-4. [UndocumentedPublicFunction](#undocumentedpublicfunction)
+3. [EndOfSentenceFormat](#endofsentenceformat)
+4. [UndocumentedPublicClass](#undocumentedpublicclass)
+5. [UndocumentedPublicFunction](#undocumentedpublicfunction)
 ## Rules in the `comments` rule set:
 
 ### CommentOverPrivateFunction
@@ -32,6 +33,16 @@ why the property exists and what purpose it solves without the comment.
 Instead of simply removing the comment to solve this issue prefer renaming the property to a more self-explanatory
 name. If this property is inside a bigger class it could make senes to refactor and split up the class. This can
 increase readability and make the documentation obsolete.
+
+### EndOfSentenceFormat
+
+This rule validates the end of the first sentence of a KDoc comment. It should end with proper punctuation.
+
+#### Configuration options:
+
+* `endOfSentenceFormat` (default: `([.?!][ \t\n\r\f<])|([.?!]$)`)
+
+   regular expression which should match the end of the first sentence in the KDoc
 
 ### UndocumentedPublicClass
 
