@@ -73,7 +73,7 @@ class LargeClass(config: Config = Config.empty,
 	}
 
 	/**
-	 * Top level members must be skipped as loc stack can be empty - #64
+	 * Top level members must be skipped as loc stack can be empty. See #64 for more info.
 	 */
 	override fun visitProperty(property: KtProperty) {
 		if (property.isTopLevel) return
