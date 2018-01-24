@@ -12,6 +12,8 @@ import io.gitlab.arturbosch.detekt.rules.hasCommentInside
 import org.jetbrains.kotlin.psi.KtExpression
 
 /**
+ * Rule to detect empty blocks of code.
+ *
  * @author Artur Bosch
  * @author Marvin Ramin
  */

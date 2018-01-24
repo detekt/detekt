@@ -18,6 +18,8 @@ import org.jetbrains.kotlin.psi.KtVariableDeclaration
 import java.util.IdentityHashMap
 
 /**
+ * Rule that detects feature envy in classes.
+ *
  * @author Artur Bosch
  */
 class FeatureEnvy(config: Config = Config.empty) : Rule(config) {
