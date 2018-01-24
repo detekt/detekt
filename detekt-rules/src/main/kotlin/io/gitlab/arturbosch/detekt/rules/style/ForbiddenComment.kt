@@ -10,6 +10,8 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.com.intellij.psi.PsiComment
 
 /**
+ * This rule allows to set a list of comments which are forbidden in the codebase and should only be used during
+ * development. Offending code comments will then be reported.
  *
  * <noncompliant>
  * // TODO:,FIXME:,STOPSHIP:

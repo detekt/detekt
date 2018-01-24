@@ -10,6 +10,8 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtFile
 
 /**
+ * This rule reports files which do not end with a line separator.
+ *
  * @active since v1.0.0
  * @author Marvin Ramin
  */

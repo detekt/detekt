@@ -15,6 +15,8 @@ import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.isProtected
 
 /**
+ * Kotlin classes are `final` by default. Thus classes which are not marked as `open` should not contain any `protected`
+ * members. Consider using `private` or `internal` modifiers instead.
  *
  * <noncompliant>
  * class ProtectedMemberInFinalClass {

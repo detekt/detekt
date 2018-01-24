@@ -16,7 +16,10 @@ import org.jetbrains.kotlin.psi.KtImportList
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 
 /**
+ * This rule reports unused imports. Unused imports are dead code and should be removed.
+ *
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 class UnusedImports(config: Config) : Rule(config) {
 

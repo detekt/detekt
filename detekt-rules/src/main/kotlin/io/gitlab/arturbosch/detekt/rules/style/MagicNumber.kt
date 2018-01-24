@@ -29,6 +29,8 @@ import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 import java.util.Locale
 
 /**
+ * This rule detects and reports usages of magic numbers in the code. Prefer defining constants with clear names
+ * describing what the magic number means.
  *
  * <noncompliant>
  * class User {

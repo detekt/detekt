@@ -16,6 +16,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
 
 /**
+ * This rule checks for redundant visibility modifiers.
  *
  * <noncompliant>
  * public interface Foo { // public per default

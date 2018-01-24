@@ -17,6 +17,8 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
 /**
+ * A function that only returns a single constant can be misleading. Instead prefer to define the constant directly
+ * as a `const val`.
  *
  * <noncompliant>
  * fun functionReturningConstantString() = "1"

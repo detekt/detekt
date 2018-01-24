@@ -38,6 +38,8 @@ import org.jetbrains.kotlin.psi.psiUtil.allChildren
 import java.util.Arrays
 
 /**
+ * This rule reports cases in the code where modifiers are not in the correct order. The default modifier order is
+ * taken from: http://kotlinlang.org/docs/reference/coding-conventions.html#modifiers
  *
  * <noncompliant>
  * lateinit internal private val str: String
@@ -46,8 +48,6 @@ import java.util.Arrays
  * <compliant>
  * private internal lateinit val str: String
  * </compliant>
- *
- * Modifier order array taken from http://kotlinlang.org/docs/reference/coding-conventions.html#modifiers
  *
  * @active since v1.0.0
  * @author Marvin Ramin

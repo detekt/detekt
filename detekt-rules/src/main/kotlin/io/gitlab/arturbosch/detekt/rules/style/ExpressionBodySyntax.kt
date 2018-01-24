@@ -13,6 +13,8 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
 
 /**
+ * Functions which only contain a `return` statement can be collapsed to an expression body. This shortens and
+ * cleans up the code.
  *
  * <noncompliant>
  * fun stuff(): Int {
@@ -25,6 +27,7 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
  * </compliant>
  *
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 class ExpressionBodySyntax(config: Config = Config.empty) : Rule(config) {
 

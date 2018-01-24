@@ -12,6 +12,7 @@ import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtWhenExpression
 
 /**
+ * This rule reports unnecessary braces in when expressions. These optional braces should be removed.
  *
  * <noncompliant>
  * val i = 1
@@ -30,6 +31,7 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  * </compliant>
  *
  * @author schalkms
+ * @author Marvin Ramin
  */
 class OptionalWhenBraces(config: Config = Config.empty) : Rule(config) {
 

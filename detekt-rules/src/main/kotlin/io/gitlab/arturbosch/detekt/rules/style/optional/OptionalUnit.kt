@@ -10,6 +10,8 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
+ * It is not necessary to define a return type of `Unit` on functions. This rule detects and reports instances where
+ * the `Unit` return type is specified on functions.
  *
  * <noncompliant>
  * fun foo(): Unit { }
@@ -20,6 +22,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * </compliant>
  *
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 class OptionalUnit(config: Config = Config.empty) : Rule(config) {
 

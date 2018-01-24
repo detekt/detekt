@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
 
 /**
+ * This rule reports `abstract` modifiers which are unnecessary and can be removed.
  *
  * <noncompliant>
  * abstract interface Foo { // abstract keyword not needed

@@ -11,6 +11,10 @@ import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtProperty
 
 /**
+ * This rule reports optional `return` keywords. Inside conditional expressions the last expression is always returned
+ * by default.
+ *
+ * This makes the return keyword unnecessary and it can be removed safely.
  *
  * <noncompliant>
  * val z = if (true) return x else return y
@@ -21,6 +25,7 @@ import org.jetbrains.kotlin.psi.KtProperty
  * </compliant>
  *
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 class OptionalReturnKeyword(config: Config) : Rule(config) {
 
