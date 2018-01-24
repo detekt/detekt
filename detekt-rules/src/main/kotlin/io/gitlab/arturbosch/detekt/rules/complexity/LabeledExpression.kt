@@ -9,6 +9,8 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtExpressionWithLabel
 
 /**
+ * This rule reports labeled expressions. Expressions with labels generally increase complexity and worsen the
+ * maintainability of the code. Refactor the violating code to not use labels instead.
  *
  * <noncompliant>
  * val range = listOf<String>("foo", "bar")

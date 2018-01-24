@@ -19,7 +19,9 @@ This rule set contains rules that report complex code.
 
 ### ComplexCondition
 
-TODO: Specify description
+Complex conditions make it hard to understand which cases lead to the condition being true or false. To improve
+readability and understanding of complex conditions consider extracting them into well-named functions or variables
+and call those instead.
 
 #### Configuration options:
 
@@ -49,7 +51,12 @@ fun hasCorrectEnding() = return !str.endsWith("foo") && !str.endsWith("bar") && 
 
 ### ComplexInterface
 
-TODO: Specify description
+Complex interfaces which contain too many functions and/or properties indicate that this interface is handling too
+many things at once. Interfaces should follow the single-responsibility principle to also encourage implementations
+of this interface to not handle too many things at once.
+
+Large interfaces should be split into smaller interfaces which have a clear responsibility and are easier
+to understand and implement.
 
 #### Configuration options:
 
@@ -63,17 +70,20 @@ TODO: Specify description
 
 ### ComplexMethod
 
-TODO: Specify description
+Complex methods are hard to understand and read. It might not be obvious what side-effects a complex method has.
+Prefer splitting up complex methods into smaller methods that are in turn easier to understand.
+Smaller methods can also be named much clearer which leads to improved readability of the code.
 
 #### Configuration options:
 
 * `threshold` (default: `10`)
 
-   maximum amount of functions in a class
+   MCC threshold for a method
 
 ### LabeledExpression
 
-TODO: Specify description
+This rule reports labeled expressions. Expressions with labels generally increase complexity and worsen the
+maintainability of the code. Refactor the violating code to not use labels instead.
 
 #### Noncompliant Code:
 
@@ -97,7 +107,10 @@ for (r in range) {
 
 ### LargeClass
 
-TODO: Specify description
+This rule reports large classes. Classes should generally have one responsibility. Large classes can indicate that
+the class does instead handle multiple responsibilities. Instead of doing many things at once prefer to
+split up large classes into smaller classes. These smaller classes are then easier to understand and handle less
+things.
 
 #### Configuration options:
 
@@ -107,7 +120,10 @@ TODO: Specify description
 
 ### LongMethod
 
-TODO: Specify description
+Methods should have one responsibility. Long methods can indicate that a method handles too many cases at once.
+Prefer smaller methods with clear names that describe their functionality clearly.
+
+Extract parts of the functionality of long methods into separate, smaller methods.
 
 #### Configuration options:
 
@@ -131,7 +147,10 @@ Reports functions which have more parameters then a certain threshold (default: 
 
 ### MethodOverloading
 
-TODO: Specify description
+This rule reports methods which have many versions of the same method with different parameter overloading.
+Method overloading tightly couples these methods together which might make the code harder to understand.
+
+Refactor these methods and try to use optional parameters instead to prevent some of the overloading.
 
 #### Configuration options:
 
@@ -141,7 +160,10 @@ TODO: Specify description
 
 ### NestedBlockDepth
 
-TODO: Specify description
+This rule reports excessive nesting depth in functions. Excessively nested code becomes harder to read and increases
+its hidden complexity. It might become harder to understand edge-cases of the function.
+
+Prefer extracting the nested code into well-named functions to make it easier to understand.
 
 #### Configuration options:
 
@@ -151,7 +173,10 @@ TODO: Specify description
 
 ### StringLiteralDuplication
 
-TODO: Specify description
+This rule detects and reports duplicated String literals. Repeatedly typing out the same String literal across the
+codebase makes it harder to change and maintain.
+
+Instead, prefer extracting the String literal into a property or constant.
 
 #### Configuration options:
 
@@ -197,7 +222,11 @@ class Foo {
 
 ### TooManyFunctions
 
-TODO: Specify description
+This rule reports files, classes, interfaces, objects and enums which contain too many functions.
+Each element can be configured with different thresholds.
+
+Too many functions indicate a violation of the single responsibility principle. Prefer extracting functionality
+which clearly belongs together in separate parts of the code.
 
 #### Configuration options:
 
