@@ -6,6 +6,7 @@ import org.assertj.core.api.Assertions.catchThrowable
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
+import kotlin.test.assertFailsWith
 
 class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 
@@ -35,33 +36,39 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 			assertThat(items).isEmpty()
 		}
 
-		it("collects a rule when class extends Rule") {
+		it("throws when a class extends Rule but has no valid documentation") {
 			val code = """
 				package foo
 
 				class SomeRandomClass: Rule {
 				}
 			"""
-			val items = subject.run(code)
-			assertThat(items).hasSize(1)
+			assertFailsWith<InvalidDocumentationException> {
+				subject.run(code)
+			}
 		}
 
-		it("collects a rule when class extends ThresholdRule") {
+		it("throws when a class extends ThresholdRule but has no valid documentation") {
 			val code = """
 				package foo
 
 				class SomeRandomClass: ThresholdRule {
 				}
 			"""
-			val items = subject.run(code)
-			assertThat(items).hasSize(1)
+			assertFailsWith<InvalidDocumentationException> {
+				subject.run(code)
+			}
 		}
 
-		it("sets the class name as the rule name") {
+		it("collects the rule name") {
 			val name = "SomeRandomClass"
+			val description = "some description"
 			val code = """
 				package foo
 
+				/**
+				 * $description
+				 */
 				class $name: Rule {
 				}
 			"""
@@ -69,19 +76,7 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 			assertThat(items[0].name).isEqualTo(name)
 		}
 
-		it("has no description") {
-			val name = "SomeRandomClass"
-			val code = """
-				package foo
-
-				class $name: Rule {
-				}
-			"""
-			val items = subject.run(code)
-			assertThat(items[0].description).isEmpty()
-		}
-
-		it("has a description") {
+		it("collects the rule description") {
 			val name = "SomeRandomClass"
 			val description = "some description"
 			val code = """
@@ -251,8 +246,9 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				class $name: Rule {
 				}
 			"""
-			val items = subject.run(code)
-			assertThat(items[0].configuration).isEmpty()
+			assertFailsWith<InvalidDocumentationException> {
+				subject.run(code)
+			}
 		}
 
 		it("contains compliant and noncompliant code examples") {
@@ -260,6 +256,8 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				package foo
 
 				/**
+				 * Some documentation
+				 *
 				 * <noncompliant>
 				 * val one = 2
 				 * </noncompliant>
@@ -281,6 +279,8 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				package foo
 
 				/**
+				 * Some documentation
+				 *
 				 * <noncompliant>
 				 */
 				class RandomClass : Rule {
@@ -295,6 +295,8 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				package foo
 
 				/**
+				 * Some documentation
+				 *
 				 * <noncompliant>
 				 * val one = 2
 				 * </noncompliant>

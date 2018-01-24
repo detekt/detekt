@@ -5,6 +5,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
+import kotlin.test.assertFailsWith
 
 class MultiRuleCollectorSpec : SubjectSpek<MultiRuleCollector>({
 
@@ -34,18 +35,7 @@ class MultiRuleCollectorSpec : SubjectSpek<MultiRuleCollector>({
 			assertThat(items).isEmpty()
 		}
 
-		it("collects a rule when class extends MultiRule") {
-			val code = """
-				package foo
-
-				class SomeRandomClass: MultiRule {
-				}
-			"""
-			val items = subject.run(code)
-			assertThat(items).hasSize(1)
-		}
-
-		it("sets the class name as the rule name") {
+		it("throws when no rules are added") {
 			val name = "SomeRandomClass"
 			val code = """
 				package foo
@@ -53,20 +43,9 @@ class MultiRuleCollectorSpec : SubjectSpek<MultiRuleCollector>({
 				class $name: MultiRule {
 				}
 			"""
-			val items = subject.run(code)
-			assertThat(items[0].name).isEqualTo(name)
-		}
-
-		it("contains no rules by default") {
-			val name = "SomeRandomClass"
-			val code = """
-				package foo
-
-				class $name: MultiRule {
-				}
-			"""
-			val items = subject.run(code)
-			assertThat(items[0].rules).isEmpty()
+			assertFailsWith<InvalidDocumentationException> {
+				subject.run(code)
+			}
 		}
 
 		it("collects all rules in fields and in the rule property") {
