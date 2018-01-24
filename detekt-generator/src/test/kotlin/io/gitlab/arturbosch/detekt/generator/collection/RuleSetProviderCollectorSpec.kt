@@ -43,6 +43,25 @@ class RuleSetProviderCollectorSpec : SubjectSpek<RuleSetProviderCollector>({
 		}
 	}
 
+
+
+	given("a RuleSetProvider without documentation") {
+		val code = """
+			package foo
+
+			class TestProvider: RuleSetProvider {
+				fun logSomething(message: String) {
+					println(message)
+				}
+			}
+		"""
+		it("throws an exception") {
+			assertFailsWith<InvalidDocumentationException> {
+				subject.run(code)
+			}
+		}
+	}
+
 	given("a correct RuleSetProvider class extending RuleSetProvider but missing parameters") {
 		val code = """
 			package foo
@@ -54,27 +73,10 @@ class RuleSetProviderCollectorSpec : SubjectSpek<RuleSetProviderCollector>({
 			}
 		"""
 
-		it("collects a RuleSetProvider") {
-			val items = subject.run(code)
-			assertThat(items).hasSize(1)
-		}
-
-		it("has no rules") {
-			val items = subject.run(code)
-			val provider = items[0]
-			assertThat(provider.rules).isEmpty()
-		}
-
-		it("has no name") {
-			val items = subject.run(code)
-			val provider = items[0]
-			assertThat(provider.name).isEmpty()
-		}
-
-		it("has no description") {
-			val items = subject.run(code)
-			val provider = items[0]
-			assertThat(provider.description).isEmpty()
+		it("throws an exception") {
+			assertFailsWith<InvalidDocumentationException> {
+				subject.run(code)
+			}
 		}
 	}
 
@@ -178,10 +180,10 @@ class RuleSetProviderCollectorSpec : SubjectSpek<RuleSetProviderCollector>({
 			}
 		"""
 
-		it("is has no name") {
-			val items = subject.run(code)
-			val provider = items[0]
-			assertThat(provider.name).isEmpty()
+		it("throws an exception") {
+			assertFailsWith<InvalidDocumentationException> {
+				subject.run(code)
+			}
 		}
 	}
 
@@ -202,10 +204,10 @@ class RuleSetProviderCollectorSpec : SubjectSpek<RuleSetProviderCollector>({
 			}
 		"""
 
-		it("is not active") {
-			val items = subject.run(code)
-			val provider = items[0]
-			assertThat(provider.description).isEmpty()
+		it("throws an exception") {
+			assertFailsWith<InvalidDocumentationException> {
+				subject.run(code)
+			}
 		}
 	}
 
@@ -224,7 +226,7 @@ class RuleSetProviderCollectorSpec : SubjectSpek<RuleSetProviderCollector>({
 		"""
 
 		it("throws an exception") {
-			assertFailsWith<InvalidRuleSetProviderException> {
+			assertFailsWith<InvalidDocumentationException> {
 				subject.run(code)
 			}
 		}
