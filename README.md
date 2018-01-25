@@ -623,6 +623,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Serj Lotutovici](https://github.com/serj-lotutovici) - Rule improvement: LongParameterList
 - [Dmitry Primshyts](https://github.com/deeprim) - Rule improvement: MagicNumber
 - [Egor Neliuba](https://github.com/egor-n) - Rule improvement: EmptyFunctionBlock, EmptyClassBlock
+- [Said Tahsin Dane](https://github.com/tasomaniac/) - Gradle plugin improvements
 
 ### <a name="mentions">Mentions</a>
 
