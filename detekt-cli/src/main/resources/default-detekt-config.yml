@@ -360,6 +360,8 @@ style:
     active: false
   UnusedImports:
     active: false
+  UnusedPrivateMember:
+    active: false
   UseDataClass:
     active: false
     excludeAnnotatedClasses: ""
