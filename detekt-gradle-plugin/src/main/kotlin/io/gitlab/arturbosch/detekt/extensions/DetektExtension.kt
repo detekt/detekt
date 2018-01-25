@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.extensions
 
 import org.gradle.api.Action
 import org.gradle.api.Project
-import java.util.*
 
 /**
  * @author Artur Bosch
