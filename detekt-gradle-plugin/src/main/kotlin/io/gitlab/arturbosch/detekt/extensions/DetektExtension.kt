@@ -5,6 +5,7 @@ import org.gradle.api.Project
 
 /**
  * @author Artur Bosch
+ * @author Said Tahsin Dane
  */
 open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 						   open var debug: Boolean = DEFAULT_DEBUG_VALUE,
