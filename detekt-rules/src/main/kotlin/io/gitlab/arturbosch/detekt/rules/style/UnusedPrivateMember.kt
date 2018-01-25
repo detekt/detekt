@@ -20,7 +20,8 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
 
 /**
- * Reports unused private properties. If private properties are unused they should be removed. Otherwise this dead code
+ * Reports unused private properties, function parameters and functions.
+ * If private properties are unused they should be removed. Otherwise this dead code
  * can lead to confusion and potential bugs.
  *
  * @author Marvin Ramin

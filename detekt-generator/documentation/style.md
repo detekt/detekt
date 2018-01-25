@@ -35,9 +35,10 @@ code style guidelines.
 27. [UnnecessaryParentheses](#unnecessaryparentheses)
 28. [UntilInsteadOfRangeTo](#untilinsteadofrangeto)
 29. [UnusedImports](#unusedimports)
-30. [UseDataClass](#usedataclass)
-31. [UtilityClassWithPublicConstructor](#utilityclasswithpublicconstructor)
-32. [WildcardImport](#wildcardimport)
+30. [UnusedPrivateMember](#unusedprivatemember)
+31. [UseDataClass](#usedataclass)
+32. [UtilityClassWithPublicConstructor](#utilityclasswithpublicconstructor)
+33. [WildcardImport](#wildcardimport)
 ## Rules in the `style` rule set:
 
 ### CollapsibleIfStatements
@@ -712,6 +713,12 @@ val range = 0 until 10
 ### UnusedImports
 
 This rule reports unused imports. Unused imports are dead code and should be removed.
+
+### UnusedPrivateMember
+
+Reports unused private properties, function parameters and functions.
+If private properties are unused they should be removed. Otherwise this dead code
+can lead to confusion and potential bugs.
 
 ### UseDataClass
 
