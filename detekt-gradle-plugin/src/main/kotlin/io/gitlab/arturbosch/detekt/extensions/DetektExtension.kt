@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.extensions
 
 import org.gradle.api.Action
 import org.gradle.api.Project
+import java.util.*
 
 /**
  * @author Artur Bosch
@@ -11,7 +12,8 @@ open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 						   open var profile: String = DEFAULT_PROFILE_NAME,
 						   open var ideaExtension: IdeaExtension = IdeaExtension()) {
 
-	private val profiles: MutableList<ProfileExtension> = mutableListOf()
+	private val _profiles = mutableListOf<ProfileExtension>()
+	val profiles get() = _profiles.toList()
 
 	fun systemOrDefaultProfile() = getSystemProfile() ?: getDefaultProfile()
 	fun ideaFormatArgs() = ideaExtension.formatArgs(this)
@@ -23,7 +25,7 @@ open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 
 	fun profile(name: String, configuration: Action<in ProfileExtension>) {
 		ProfileExtension(name).apply {
-			profiles.add(this)
+			_profiles.add(this)
 			configuration.execute(this)
 		}
 	}
