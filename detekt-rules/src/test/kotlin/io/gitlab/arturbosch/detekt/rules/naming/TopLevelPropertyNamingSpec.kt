@@ -7,7 +7,7 @@ import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
-class PropertyNamingSpec : SubjectSpek<NamingRules>({
+class TopLevelPropertyNamingSpec : SubjectSpek<NamingRules>({
 
 	subject { NamingRules() }
 
@@ -37,13 +37,14 @@ class PropertyNamingSpec : SubjectSpek<NamingRules>({
 			val nAme8 = "Artur"
 			val _nAme = "Artur" // invalid
 			private val _name = "Artur"
+			private val NAME = "Artur // invalid
             val serialVersionUID = 42L
 		""")
 
 		val findings = subject.lint(code)
 
 		it("should detect four top level variables not matching [a-z][A-Za-z\\d]*") {
-			assertThat(findings).hasSize(4)
+			assertThat(findings).hasSize(5)
 		}
 
 		it("should allow underscores in private property") {
