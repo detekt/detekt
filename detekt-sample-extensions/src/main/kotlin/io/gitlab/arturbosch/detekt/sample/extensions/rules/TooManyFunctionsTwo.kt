@@ -1,19 +1,25 @@
 package io.gitlab.arturbosch.detekt.sample.extensions.rules
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Metric
-import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.ThresholdRule
+import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
+ * This rule is a copy of [TooManyFunctions] but inherits from [ThresholdRule].
+ * The [ThresholdRule] predefines a `threshold` property which can be configured
+ * through the detekt configuration file.
+ * A [ThresholdedCodeSmell] can then be used to provide more information about the
+ * raised metric.
+ *
  * @author Artur Bosch
  */
-class TooManyFunctionsTwo(config: Config) : Rule(config) {
+class TooManyFunctionsTwo(config: Config) : ThresholdRule(config, THRESHOLD) {
 
 	override val issue = Issue(javaClass.simpleName, Severity.Maintainability,
 			"Too many functions can make the maintainability of a file more costly")
@@ -22,11 +28,13 @@ class TooManyFunctionsTwo(config: Config) : Rule(config) {
 
 	override fun visitFile(file: PsiFile) {
 		super.visitFile(file)
-		if (amount > THRESHOLD) {
-			report(CodeSmell(issue,
+		if (amount > threshold) {
+			report(ThresholdedCodeSmell(issue,
 					entity = Entity.from(file),
-					metrics = listOf(Metric(type = "SIZE", value = amount, threshold = THRESHOLD)),
-					references = listOf(), message = "")
+					metric = Metric(type = "SIZE", value = amount, threshold = THRESHOLD),
+					message = "The file ${file.name} has $amount function declarations. " +
+							"Threshold is specified with $THRESHOLD.",
+					references = emptyList())
 			)
 		}
 	}
@@ -34,5 +42,4 @@ class TooManyFunctionsTwo(config: Config) : Rule(config) {
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		amount++
 	}
-
 }
