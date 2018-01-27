@@ -11,7 +11,8 @@ import org.jetbrains.spek.api.dsl.it
  */
 class EnumNamingSpec : Spek({
 
-	describe("allowed enum entries declarations") {
+	describe("some enum entry declarations") {
+
 		it("should detect no violation") {
 			val findings = NamingRules().lint(
 					"""
@@ -22,10 +23,8 @@ class EnumNamingSpec : Spek({
 			)
 			assertThat(findings).isEmpty()
 		}
-	}
 
-	describe("") {
-		it("reports a violation") {
+		it("reports an underscore in enum name") {
 			val code = """
 				enum class WorkFlow {
 					_Default
