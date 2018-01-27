@@ -1,6 +1,5 @@
 buildscript {
 	repositories {
-		mavenCentral()
 		mavenLocal()
 		jcenter()
 	}
@@ -11,7 +10,6 @@ buildscript {
 }
 
 repositories {
-	mavenCentral()
 	mavenLocal()
 	jcenter()
 }
@@ -33,8 +31,4 @@ dependencies {
 	testRuntimeOnly "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
 	testRuntimeOnly "org.junit.platform:junit-platform-console:$junitPlatformVersion"
 	testRuntimeOnly "org.jetbrains.spek:spek-junit-platform-engine:$spekVersion"
-}
-
-sourceSets {
-	main.java.srcDirs += 'src/main/kotlin'
 }
