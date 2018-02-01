@@ -35,6 +35,8 @@ See all issues at: [RC6-3](https://github.com/arturbosch/detekt/milestone/31)
 
 ##### Migration
 
+- ATTENTION!! The default configuration now uses an alphabetical order. We apologize for any inconveniences
+this might cause. 
 - Fixed false positives in `UtilityClassWithPublicConstructor`, `MatchingDeclarationName` and `EmptyClassBlock` 
 - make sure to rerun your baseline (if you ignored some of these)!
 
