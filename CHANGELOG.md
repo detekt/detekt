@@ -1,5 +1,43 @@
 # Detekt - Changelog
 
+#### RC6-3
+
+- Improve documentation of sample project - #438 - [#712](https://github.com/arturbosch/detekt/pull/712)
+- Added tests for naming rules - [#711](https://github.com/arturbosch/detekt/pull/711)
+- Gradle Plugin: Expose a copy of `profiles` - [#709](https://github.com/arturbosch/detekt/pull/709)
+- update gradle to v4.5 - [#708](https://github.com/arturbosch/detekt/pull/708)
+- EmptyClassBlock should not be reported for objects deriving from superclasses - [#707](https://github.com/arturbosch/detekt/issues/707)
+- remove FeatureEnvy class - [#706](https://github.com/arturbosch/detekt/pull/706)
+- Tooling: Accessing the profiles defined by the user - [#705](https://github.com/arturbosch/detekt/issues/705)
+- make detekt-cli tests depend on updated documentation/config - [#704](https://github.com/arturbosch/detekt/pull/704)
+- KDocStyle MultiRule with EndOfSentenceFormat Rule - [#703](https://github.com/arturbosch/detekt/pull/703)
+- Add documentation for style rules - [#702](https://github.com/arturbosch/detekt/pull/702)
+- Add documentation for complexity rules - [#701](https://github.com/arturbosch/detekt/pull/701)
+- [Question] How to reference to a version of the plugin in the main project before it's even published? - [#700](https://github.com/arturbosch/detekt/issues/700)
+- Rule: KDoc's first sentence should have a proper end - [#699](https://github.com/arturbosch/detekt/issues/699)
+- Added documentation for naming rule set - [#697](https://github.com/arturbosch/detekt/pull/697)
+- update kotlin to v1.2.20 - [#696](https://github.com/arturbosch/detekt/pull/696)
+- Added `excludeAnnotatedClasses` to UseDataClass - #694 - [#695](https://github.com/arturbosch/detekt/pull/695)
+- Consider adding `excludeAnnotatedClasses` to UseDataClass. - [#694](https://github.com/arturbosch/detekt/issues/694)
+- Fix compliant case for UntilInsteadOfRangeTo rule - [#693](https://github.com/arturbosch/detekt/pull/693)
+- Documentation generator truncates config descriptions - [#692](https://github.com/arturbosch/detekt/pull/692)
+- Documentation generator truncates some configuration descriptions - [#691](https://github.com/arturbosch/detekt/issues/691)
+- Introduce "naming" ruleset - [#690](https://github.com/arturbosch/detekt/pull/690)
+- Sort Rules in Config & Documentation alphabetically - [#689](https://github.com/arturbosch/detekt/pull/689)
+- Default configuration file should be sorted alphabetically - [#688](https://github.com/arturbosch/detekt/issues/688)
+- Fix MatchingDeclarationName false positives - [#687](https://github.com/arturbosch/detekt/pull/687)
+- MatchingDeclarationName has false positives - [#686](https://github.com/arturbosch/detekt/issues/686)
+- UtilityClassWithPublicConstructor reports classes with delegates - [#682](https://github.com/arturbosch/detekt/issues/682)
+- `ComplexMethod` rule question - [#680](https://github.com/arturbosch/detekt/issues/680)
+- generator: anchor tags are lower case; TOC links to CamelCase - [#678](https://github.com/arturbosch/detekt/issues/678)
+
+See all issues at: [RC6-3](https://github.com/arturbosch/detekt/milestone/31)
+
+##### Migration
+
+- Fixed false positives in `UtilityClassWithPublicConstructor`, `MatchingDeclarationName` and `EmptyClassBlock` 
+- make sure to rerun your baseline (if you ignored some of these)!
+
 #### RC6-2
 
 - Updates two rules to detect violated range expressions outside of loops - [#684](https://github.com/arturbosch/detekt/pull/684)
