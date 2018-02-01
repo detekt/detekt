@@ -94,6 +94,22 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 	class UnusedPropertyVisitor : DetektVisitor() {
 		val properties = mutableMapOf<String, KtElement>()
 
+		override fun visitParameter(parameter: KtParameter) {
+			super.visitParameter(parameter)
+			if (parameter.isLoopParameter) {
+				val destructuringDeclaration = parameter.destructuringDeclaration
+				if (destructuringDeclaration != null) {
+					destructuringDeclaration.entries.forEach {
+						val name = it.nameAsSafeName.identifier
+						properties[name] = it
+					}
+				} else {
+					val name = parameter.nameAsSafeName.identifier
+					properties[name] = parameter
+				}
+			}
+		}
+
 		override fun visitProperty(property: KtProperty) {
 			if ((property.isPrivate() && property.isMember) || property.isLocal) {
 				val name = property.nameAsSafeName.identifier
