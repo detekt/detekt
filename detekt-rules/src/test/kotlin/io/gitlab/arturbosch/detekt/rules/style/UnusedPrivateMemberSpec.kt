@@ -14,7 +14,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 		it("reports an unused member") {
 			val code = """
 				class Test {
-				    private val unused = "This is not used"
+					private val unused = "This is not used"
 
 					fun use() {
 						println("This is not using a property")
@@ -27,7 +27,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 		it("does not report unused public members") {
 			val code = """
 				class Test {
-				    val unused = "This is not used"
+					val unused = "This is not used"
 
 					fun use() {
 						println("This is not using a property")
@@ -40,7 +40,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 		it("does not report used members") {
 			val code = """
 				class Test {
-				    private val used = "This is used"
+					private val used = "This is used"
 
 					fun use() {
 						println(used)
@@ -53,8 +53,8 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 		it("does not report used members but reports unused members") {
 			val code = """
 				class Test {
-				    private val used = "This is used"
-				    private val unused = "This is not used"
+					private val used = "This is used"
+					private val unused = "This is not used"
 
 					fun use() {
 						println(used)
@@ -70,7 +70,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 		it("reports an unused member") {
 			val code = """
 				class Test {
-				    private val unused = "This is not used"
+					private val unused = "This is not used"
 
 					fun use() {
 						val used = "This is used"
@@ -84,7 +84,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 		it("does not report used members") {
 			val code = """
 				class Test {
-				    private val used = "This is used"
+					private val used = "This is used"
 
 					fun use() {
 						val text = used
@@ -98,7 +98,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 		it("reports unused local properties") {
 			val code = """
 				class Test {
-				    private val used = "This is used"
+					private val used = "This is used"
 
 					fun use() {
 						val unused = used
@@ -115,7 +115,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 		it("does not report properties used by other properties") {
 			val code = """
 				class Test {
-				    private val used = "This is used"
+					private val used = "This is used"
 					private val text = used
 
 					fun use() {
