@@ -110,6 +110,75 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 		}
 	}
 
+	given("loop iterators") {
+		it("doesn't report loop properties") {
+			val code = """
+				class Test {
+					fun use() {
+						for (i in 0 until 10) {
+							println(i)
+						}
+					}
+				}
+				"""
+			assertThat(subject.lint(code)).isEmpty()
+		}
+
+		it("reports unused loop property") {
+			val code = """
+				class Test {
+					fun use() {
+						for (i in 0 until 10) {
+						}
+					}
+				}
+				"""
+			assertThat(subject.lint(code)).hasSize(1)
+		}
+
+		it("reports unused loop property in indexed array") {
+			val code = """
+				class Test {
+					fun use() {
+						val array = intArrayOf(1, 2, 3)
+						for ((index, value) in array.withIndex()) {
+							println(index)
+						}
+					}
+				}
+				"""
+			assertThat(subject.lint(code)).hasSize(1)
+		}
+
+		it("reports all unused loop properties in indexed array") {
+			val code = """
+				class Test {
+					fun use() {
+						val array = intArrayOf(1, 2, 3)
+						for ((index, value) in array.withIndex()) {
+						}
+					}
+				}
+				"""
+			assertThat(subject.lint(code)).hasSize(2)
+		}
+
+		it("does not report used loop properties in indexed array") {
+			val code = """
+				class Test {
+					fun use() {
+						val array = intArrayOf(1, 2, 3)
+						for ((index, value) in array.withIndex()) {
+							println(index)
+							println(value)
+						}
+					}
+				}
+				"""
+			assertThat(subject.lint(code)).isEmpty()
+		}
+	}
+
 	given("properties used to initialize other properties") {
 
 		it("does not report properties used by other properties") {
