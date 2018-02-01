@@ -63,15 +63,15 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 			super.visitNamedFunction(function)
 
 			function.valueParameterList?.parameters?.forEach {
-				val name = it.name ?: throw IllegalStateException("Value parameter should have a name.")
-				parameters.put(name, it)
+				val name = it.nameAsSafeName.identifier
+				parameters[name] = it
 			}
 
 			val localProperties = mutableListOf<String>()
 			function.accept(object : DetektVisitor() {
 				override fun visitProperty(property: KtProperty) {
 					if (property.isLocal) {
-						val name = property.name ?: throw IllegalStateException("Properties should have a name")
+						val name = property.nameAsSafeName.identifier
 						localProperties.add(name)
 					}
 					super.visitProperty(property)
@@ -96,8 +96,8 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 
 		override fun visitProperty(property: KtProperty) {
 			if ((property.isPrivate() && property.isMember) || property.isLocal) {
-				val name = property.name ?: throw IllegalStateException("Private properties should have a name")
-				properties.put(name, property)
+				val name = property.nameAsSafeName.identifier
+				properties[name] = property
 			}
 			super.visitProperty(property)
 		}
@@ -135,8 +135,8 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 				return
 			}
 
-			val name = function.name ?: throw IllegalStateException("Functions should have a name.")
-			functions.put(name, function)
+			val name = function.nameAsSafeName.identifier
+			functions[name] = function
 			super.visitNamedFunction(function)
 		}
 
@@ -146,7 +146,7 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 			val function = expression.getNonStrictParentOfType(KtFunction::class.java)
 
 			if (calledMethodName != null) {
-				callExpressions.put(function, calledMethodName)
+				callExpressions[function] = calledMethodName
 			}
 		}
 	}
