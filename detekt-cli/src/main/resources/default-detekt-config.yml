@@ -198,7 +198,7 @@ naming:
     classPattern: '[A-Z$][a-zA-Z0-9$]*'
   EnumNaming:
     active: true
-    enumEntryPattern: '^[A-Z$][a-zA-Z_$]*$'
+    enumEntryPattern: '^[A-Z][_a-zA-Z0-9]*'
   ForbiddenClassName:
     active: false
     forbiddenName: ''
