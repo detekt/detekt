@@ -36,7 +36,7 @@ Reports when enum names which do not follow the specified naming convention are 
 
 #### Configuration options:
 
-* `enumEntryPattern` (default: `'^[A-Z$][a-zA-Z_$]*$'`)
+* `enumEntryPattern` (default: `'^[A-Z][_a-zA-Z0-9]*'`)
 
    naming pattern
 
