@@ -14,9 +14,6 @@ object ProfileStorage {
 	}
 
 	fun add(profile: ProfileExtension) {
-		if (profiles.contains(profile)) {
-			throw IllegalArgumentException("There is already a profile with name '${profile.name}'.")
-		}
 		profiles.add(profile)
 	}
 
