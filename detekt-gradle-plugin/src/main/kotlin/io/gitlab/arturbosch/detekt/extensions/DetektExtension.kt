@@ -12,9 +12,6 @@ open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 						   open var profile: String = DEFAULT_PROFILE_NAME,
 						   open var ideaExtension: IdeaExtension = IdeaExtension()) {
 
-	private val _profiles = mutableListOf<ProfileExtension>()
-	val profiles get() = _profiles.toList()
-
 	fun systemOrDefaultProfile() = getSystemProfile() ?: getDefaultProfile()
 	fun ideaFormatArgs() = ideaExtension.formatArgs(this)
 	fun ideaInspectArgs() = ideaExtension.inspectArgs(this)
@@ -23,9 +20,13 @@ open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 		configuration.execute(ideaExtension)
 	}
 
+	fun defaultProfile(configuration: Action<in ProfileExtension>) {
+		configuration.execute(ProfileStorage.defaultProfile)
+	}
+
 	fun profile(name: String, configuration: Action<in ProfileExtension>) {
 		ProfileExtension(name).apply {
-			_profiles.add(this)
+			ProfileStorage.add(this)
 			configuration.execute(this)
 		}
 	}
@@ -48,8 +49,9 @@ open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 		val defaultProfile = getDefaultProfile()
 		val systemProfile = getSystemProfile()
 		val mainProfile =
-				if (defaultProfile?.name != DEFAULT_PROFILE_NAME && systemProfile?.name != DEFAULT_PROFILE_NAME) {
-					searchProfileWithName(DEFAULT_PROFILE_NAME)
+				if (defaultProfile?.name != DEFAULT_PROFILE_NAME &&
+						systemProfile?.name != DEFAULT_PROFILE_NAME) {
+					ProfileStorage.getByName(DEFAULT_PROFILE_NAME)
 				} else {
 					null
 				}
@@ -74,15 +76,15 @@ open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 		}
 	}
 
-	private fun searchProfileWithName(name: String) = profiles.find { it.name == name }
-	private fun getDefaultProfile() = searchProfileWithName(profile)
-	private fun getSystemProfile() = searchProfileWithName(System.getProperty(DETEKT_PROFILE) ?: profile)
+	private fun getDefaultProfile() = ProfileStorage.getByName(profile)
+	private fun getSystemProfile() = ProfileStorage.getByName(
+			System.getProperty(DETEKT_PROFILE) ?: profile)
 
-	private fun flattenBoolValues(key: String, value: String)
-			= if (value == "true" || value == "false") listOf(key) else listOf(key, value)
+	private fun flattenBoolValues(key: String, value: String) =
+			if (value == "true" || value == "false") listOf(key) else listOf(key, value)
 
 	override fun toString(): String = "DetektExtension(version='$version', " +
-			"debug=$debug, profile='$profile', ideaExtension=$ideaExtension, profiles=$profiles)"
+			"debug=$debug, profile='$profile', ideaExtension=$ideaExtension, profiles=${ProfileStorage.all})"
 }
 
 private fun MutableMap<String, String>.merge(other: MutableMap<String, String>) {
@@ -93,8 +95,8 @@ private fun MutableMap<String, String>.merge(other: MutableMap<String, String>) 
 	}
 }
 
-private fun multipleConfigAware(key: String, v1: String, v2: String)
-		= if (key == CONFIG_PARAMETER || key == CONFIG_RESOURCE_PARAMETER) "$v1,$v2" else v2
+private fun multipleConfigAware(key: String, v1: String, v2: String) =
+		if (key == CONFIG_PARAMETER || key == CONFIG_RESOURCE_PARAMETER) "$v1,$v2" else v2
 
 internal fun Project.fallbackArguments() = listOf(
 		INPUT_PARAMETER, projectDir.absolutePath,

@@ -4,18 +4,19 @@ package io.gitlab.arturbosch.detekt.extensions
  * @author Artur Bosch
  */
 @Suppress("LongParameterList", "ComplexMethod")
-open class ProfileExtension(val name: String,
-							open var input: String? = null,
-							open var config: String? = null,
-							open var configResource: String? = null,
-							open var filters: String? = null,
-							open var ruleSets: String? = null,
-							open var output: String? = null,
-							open var outputName: String? = null,
-							open var baseline: String? = null,
-							open var parallel: Boolean = false,
-							open var disableDefaultRuleSets: Boolean = false,
-							open var plugins: String? = null) {
+open class ProfileExtension(val name: String) {
+
+	open var input: String? = null
+	open var config: String? = null
+	open var configResource: String? = null
+	open var filters: String? = null
+	open var ruleSets: String? = null
+	open var output: String? = null
+	open var outputName: String? = null
+	open var baseline: String? = null
+	open var parallel: Boolean = false
+	open var disableDefaultRuleSets: Boolean = false
+	open var plugins: String? = null
 
 	fun arguments(debug: Boolean = false) = mutableMapOf<String, String>().apply {
 		input?.let { put(INPUT_PARAMETER, it) }
