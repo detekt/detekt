@@ -43,13 +43,14 @@ import org.jetbrains.kotlin.psi.KtCatchClause
  * @author Artur Bosch
  * @author Marvin Ramin
  * @author schalkms
+ * @author olivierlemasle
  */
 class TooGenericExceptionCaught(config: Config) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,
 			Severity.Defect,
-			"Thrown exception is too generic. " +
-					"Prefer throwing project specific exceptions to handle error cases.")
+			"Caught exception is too generic. " +
+					"Prefer catching specific exceptions to the case that is currently handled.")
 
 	private val exceptions: Set<String> = valueOrDefault(
 			CAUGHT_EXCEPTIONS_PROPERTY, caughtExceptionDefaults).toHashSet()
