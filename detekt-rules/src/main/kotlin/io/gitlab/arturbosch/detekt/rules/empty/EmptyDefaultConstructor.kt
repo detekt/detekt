@@ -18,14 +18,23 @@ import org.jetbrains.kotlin.psi.psiUtil.visibilityModifierType
 class EmptyDefaultConstructor(config: Config) : EmptyRule(config = config) {
 
 	override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
-		if (hasPublicVisibility(constructor.visibilityModifierType())
-				&& constructor.annotationEntries.isEmpty()
-				&& constructor.valueParameters.isEmpty()) {
+		if (hasSuitableSignature(constructor) && isNotCalled(constructor)) {
 			report(CodeSmell(issue, Entity.from(constructor), "An empty default constructor can be removed."))
 		}
 	}
 
+	private fun hasSuitableSignature(constructor: KtPrimaryConstructor) =
+			hasPublicVisibility(constructor.visibilityModifierType())
+					&& constructor.annotationEntries.isEmpty()
+					&& constructor.valueParameters.isEmpty()
+
 	private fun hasPublicVisibility(visibility: KtModifierKeywordToken?): Boolean {
 		return visibility == null || visibility == KtTokens.PUBLIC_KEYWORD
+	}
+
+	private fun isNotCalled(constructor: KtPrimaryConstructor): Boolean {
+		return constructor.getContainingClassOrObject().secondaryConstructors.none {
+			it.getDelegationCall().isCallToThis && it.getDelegationCall().calleeExpression?.children?.isEmpty() == true
+		}
 	}
 }
