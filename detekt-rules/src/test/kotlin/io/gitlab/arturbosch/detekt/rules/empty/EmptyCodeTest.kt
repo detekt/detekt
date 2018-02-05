@@ -78,9 +78,15 @@ class EmptyCodeTest {
 	@Test
 	fun findsEmptyDefaultConstructor() {
 		val rule = EmptyDefaultConstructor(Config.empty)
-		val text = compileForTest(Case.EmptyDefaultConstructor.path()).text
-		rule.lint(text)
-		assertThat(rule.findings).hasSize(2)
+		val text = compileForTest(Case.EmptyDefaultConstructorPositive.path()).text
+		assertThat(rule.lint(text)).hasSize(2)
+	}
+
+	@Test
+	fun doesNotFindEmptyDefaultConstructor() {
+		val rule = EmptyDefaultConstructor(Config.empty)
+		val text = compileForTest(Case.EmptyDefaultConstructorNegative.path()).text
+		assertThat(rule.lint(text)).isEmpty()
 	}
 
 	private fun test(block: () -> Rule) {
