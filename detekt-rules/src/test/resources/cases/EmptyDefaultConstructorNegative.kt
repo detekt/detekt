@@ -2,10 +2,6 @@
 
 package cases
 
-class EmptyPrimaryConstructor constructor()
-
-class EmptyPublicPrimaryConstructor public constructor()
-
 class PrimaryConstructorWithParameter constructor(x: Int)
 
 class PrimaryConstructorWithAnnotation @SafeVarargs constructor()
