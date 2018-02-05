@@ -34,7 +34,7 @@ class EmptyDefaultConstructor(config: Config) : EmptyRule(config = config) {
 
 	private fun isNotCalled(constructor: KtPrimaryConstructor): Boolean {
 		return constructor.getContainingClassOrObject().secondaryConstructors.none {
-			it.getDelegationCall().isCallToThis && it.getDelegationCall().calleeExpression?.children?.isEmpty() == true
+			it.getDelegationCall().isCallToThis && it.getDelegationCall().valueArguments.isEmpty()
 		}
 	}
 }
