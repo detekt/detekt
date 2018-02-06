@@ -28,6 +28,9 @@ style:
   VariableNaming:
     active: true
     variablePattern: '(_)?[a-z][a-zA-Z0-9]*'
+  SpacingBetweenPackageAndImports:
+    active: true
+
 
 potential-bugs:
   UnsafeCast:

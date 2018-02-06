@@ -6,7 +6,7 @@ package io.gitlab.arturbosch.detekt.extensions
 object ProfileStorage {
 
 	private val profiles: MutableSet<ProfileExtension> = mutableSetOf()
-	val all = profiles.toSet()
+	val all = profiles
 	val defaultProfile: ProfileExtension = ProfileExtension(DEFAULT_PROFILE_NAME)
 
 	init {
