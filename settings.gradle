@@ -1,3 +1,11 @@
+pluginManagement {
+	repositories {
+		gradlePluginPortal()
+		mavenCentral()
+		mavenLocal()
+	}
+}
+
 rootProject.name = 'detekt'
 include 'detekt-api'
 include 'detekt-core'

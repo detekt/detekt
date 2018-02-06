@@ -1,9 +1,6 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 buildscript {
-	repositories {
-		mavenCentral()
-		mavenLocal()
-		maven { url 'http://dl.bintray.com/jetbrains/spek' }
-	}
 	dependencies {
 		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
 		classpath "org.junit.platform:junit-platform-gradle-plugin:$junitPlatformVersion"
@@ -14,8 +11,9 @@ buildscript {
 plugins {
 	id 'com.jfrog.bintray' version '1.8.0'
 	id 'com.github.ben-manes.versions' version '0.17.0'
-	id 'com.github.johnrengelman.shadow' version '2.0.2'
+	id 'com.github.johnrengelman.shadow' version '2.0.2' apply false
 	id 'org.sonarqube' version '2.6.1'
+	id 'com.gradle.plugin-publish' version '0.9.9' apply false
 }
 
 apply plugin: 'io.gitlab.arturbosch.detekt'
@@ -33,6 +31,7 @@ allprojects {
 		mavenCentral()
 		mavenLocal()
 		maven { url 'http://dl.bintray.com/jetbrains/spek' }
+		jcenter()
 	}
 }
 
@@ -43,18 +42,12 @@ subprojects {
 	apply plugin: 'maven-publish'
 	apply plugin: 'com.jfrog.bintray'
 
-	def projectName = it.name
-	if (projectName == 'detekt-cli' || projectName == 'detekt-watch-service' || projectName == 'detekt-generator') {
+	if (it.name in ['detekt-cli', 'detekt-watch-service', 'detekt-generator']) {
 		apply plugin: 'application'
 		apply plugin: 'com.github.johnrengelman.shadow'
 	}
 
-	compileKotlin {
-		kotlinOptions.jvmTarget = "1.8"
-		kotlinOptions.freeCompilerArgs = ["-Xskip-runtime-version-check"]
-		kotlinOptions.allWarningsAsErrors = shouldTreatCompilerWarningsAsErrors()
-	}
-	compileTestKotlin {
+	tasks.withType(KotlinCompile) {
 		kotlinOptions.jvmTarget = "1.8"
 		kotlinOptions.freeCompilerArgs = ["-Xskip-runtime-version-check"]
 		kotlinOptions.allWarningsAsErrors = shouldTreatCompilerWarningsAsErrors()
@@ -87,16 +80,17 @@ subprojects {
 		}
 	}
 
-	task sourcesJar(type: Jar, dependsOn: classes) {
+	final sourcesJar = tasks.create('sourcesJar', Jar) {
+		dependsOn('classes')
 		classifier = 'sources'
-		from sourceSets.main.allSource
+		from(sourceSets.main.allSource)
 	}
 
 	artifacts {
-		archives sourcesJar
+		archives(sourcesJar)
 	}
 
-	def pomConfig = {
+	final pomConfig = {
 		licenses {
 			license {
 				name 'The Apache Software License, Version 2.0'
@@ -199,6 +193,6 @@ detekt {
 /**
  * Usage: <code>./gradlew build -PwarningsAsErrors=true</code>.
  */
-def shouldTreatCompilerWarningsAsErrors() {
-	return project.hasProperty('warningsAsErrors') && project.properties['warningsAsErrors'] == 'true'
+boolean shouldTreatCompilerWarningsAsErrors() {
+	return project.findProperty('warningsAsErrors') == 'true'
 }
