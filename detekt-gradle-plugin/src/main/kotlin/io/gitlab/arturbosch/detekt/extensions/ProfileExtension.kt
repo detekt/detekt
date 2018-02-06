@@ -1,5 +1,9 @@
 package io.gitlab.arturbosch.detekt.extensions
 
+import org.gradle.api.file.FileCollection
+import java.io.File
+import java.nio.file.Path
+
 /**
  * @author Artur Bosch
  */
@@ -7,7 +11,7 @@ package io.gitlab.arturbosch.detekt.extensions
 open class ProfileExtension(val name: String) {
 
 	open var input: String? = null
-	open var config: String? = null
+	open var config: Any? = null
 	open var configResource: String? = null
 	open var filters: String? = null
 	open var ruleSets: String? = null
@@ -20,7 +24,7 @@ open class ProfileExtension(val name: String) {
 
 	fun arguments(debug: Boolean = false) = mutableMapOf<String, String>().apply {
 		input?.let { put(INPUT_PARAMETER, it) }
-		config?.let { put(CONFIG_PARAMETER, it) }
+		config?.let { put(CONFIG_PARAMETER, extractConfigParameter(it)) }
 		configResource?.let { put(CONFIG_RESOURCE_PARAMETER, it) }
 		filters?.let { put(FILTERS_PARAMETER, it) }
 		ruleSets?.let { put(RULES_PARAMETER, it) }
@@ -31,6 +35,13 @@ open class ProfileExtension(val name: String) {
 		if (parallel) put(PARALLEL_PARAMETER, DEFAULT_TRUE)
 		if (disableDefaultRuleSets) put(DISABLE_DEFAULT_RULESETS_PARAMETER, DEFAULT_TRUE)
 		if (debug) put(DEBUG_PARAMETER, DEFAULT_TRUE)
+	}
+
+	private fun extractConfigParameter(any: Any): String = when (any) {
+		is String, is File, is Path -> any.toString()
+		is FileCollection -> any.files.joinToString(",") { it.toString() }
+		else -> throw IllegalArgumentException("Configuration parameter has unsupported type '${any.javaClass}'. "
+				+ "Configure the parameter with file(...), files(...) or with a plain string.")
 	}
 
 	override fun toString(): String = "ProfileExtension(name='$name', input=$input, config=$config, " +
