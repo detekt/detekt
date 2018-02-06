@@ -16,7 +16,7 @@ abstract class AbstractClassWithPrimaryConstructorConcretePropertyOk(val i: Int)
 abstract class EmptyAbstractClass1
 abstract class EmptyAbstractClass2()
 
-// This test case should be removed when type resolution is available
+// This test case should be removed when type resolution is available - see issue #727
 abstract class AbstractClassDerivedFrom : EmptyAbstractClass1() {
 
 	fun f() {}
