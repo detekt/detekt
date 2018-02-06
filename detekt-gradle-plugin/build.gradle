@@ -1,16 +1,7 @@
-buildscript {
-	repositories {
-		maven { url "https://plugins.gradle.org/m2/" }
-		jcenter()
-		maven { url "http://dl.bintray.com/arturbosch/code-analysis" }
-	}
-	dependencies {
-		classpath "com.gradle.publish:plugin-publish-plugin:0.9.9"
-	}
+plugins {
+	id 'com.gradle.plugin-publish'
+	id "java-gradle-plugin"
 }
-
-apply plugin: "java-gradle-plugin"
-apply plugin: "com.gradle.plugin-publish"
 
 version = "$detektGradleVersion"
 

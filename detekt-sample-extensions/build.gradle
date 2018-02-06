@@ -1,21 +1,3 @@
-buildscript {
-	repositories {
-		mavenLocal()
-		jcenter()
-	}
-
-	dependencies {
-		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-	}
-}
-
-repositories {
-	mavenLocal()
-	jcenter()
-}
-
-apply plugin: "kotlin"
-
 dependencies {
 	implementation "io.gitlab.arturbosch.detekt:detekt-api:$usedDetektVersion"
 
