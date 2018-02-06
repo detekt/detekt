@@ -49,7 +49,7 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
 							noAbstractMember)
 
 	override fun visitClass(klass: KtClass) {
-		if (!klass.isInterface() && klass.isAbstract()) {
+		if (!klass.isInterface() && klass.isAbstract() && klass.superTypeListEntries.isEmpty()) {
 			val body = klass.getBody()
 			if (body != null) {
 				val namedMembers = body.children.filter { it is KtProperty || it is KtNamedFunction }

@@ -15,3 +15,9 @@ abstract class AbstractClassWithPrimaryConstructorConcretePropertyOk(val i: Int)
 // empty abstract classes should not be reported by this rule
 abstract class EmptyAbstractClass1
 abstract class EmptyAbstractClass2()
+
+// This test case should be removed when type resolution is available
+abstract class AbstractClassDerivedFrom : EmptyAbstractClass1() {
+
+	fun f() {}
+}
