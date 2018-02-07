@@ -28,7 +28,7 @@ open class DetektCreateBaselineTask : DefaultTask() {
 		project.javaexec {
 			it.main = "io.gitlab.arturbosch.detekt.cli.Main"
 			it.classpath = configuration
-			it.args(detektExtension.profileArgumentsOrDefault(project).plus(createBaseline))
+			it.args(detektExtension.resolveArguments(project).plus(createBaseline))
 		}
 	}
 

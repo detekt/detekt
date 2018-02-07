@@ -14,9 +14,9 @@ open class IdeaExtension(open var path: String? = null,
 		require(path != null) { IDEA_PATH_ERROR }
 		require(input != null) { INPUT_PATH_ERROR }
 		return if (codeStyleScheme != null) {
-			arrayOf(format(path!!), "-r", input!!, "-s", codeStyleScheme!!, "-m", mask)
+			arrayOf(formatScript(path!!), "-r", input!!, "-s", codeStyleScheme!!, "-m", mask)
 		} else {
-			arrayOf(format(path!!), "-r", input!!, "-m", mask)
+			arrayOf(formatScript(path!!), "-r", input!!, "-m", mask)
 		}
 	}
 
@@ -26,10 +26,10 @@ open class IdeaExtension(open var path: String? = null,
 		require(input != null) { INPUT_PATH_ERROR }
 		require(report != null) { REPORT_PATH_ERROR }
 		require(inspectionsProfile != null) { INSPECTION_PROFILE_ERROR }
-		return arrayOf(inspect(path!!), input!!, inspectionsProfile!!, report!!)
+		return arrayOf(inspectScript(path!!), input!!, inspectionsProfile!!, report!!)
 	}
 
-	private fun DetektExtension.profileInputPath() = systemOrDefaultProfile()?.input?.apply {
+	private fun DetektExtension.profileInputPath() = ProfileStorage.systemOrDefault.input?.apply {
 		if (debug) println("input: $this")
 	}
 
@@ -46,5 +46,5 @@ private const val REPORT_PATH_ERROR =
 private const val INSPECTION_PROFILE_ERROR =
 		"Make sure the path to an inspection profile is provided!"
 
-private fun inspect(path: String): String = "$path/bin/" + if (isWindows) "inspect.bat" else "inspect.sh"
-private fun format(path: String): String = "$path/bin/" + if (isWindows) "format.bat" else "format.sh"
+private fun inspectScript(path: String): String = "$path/bin/" + if (isWindows) "inspect.bat" else "inspect.sh"
+private fun formatScript(path: String): String = "$path/bin/" + if (isWindows) "format.bat" else "format.sh"

@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.extensions
 
+import groovy.lang.GString
 import org.gradle.api.file.FileCollection
 import java.io.File
 import java.nio.file.Path
@@ -38,7 +39,7 @@ open class ProfileExtension(val name: String) {
 	}
 
 	private fun extractConfigParameter(any: Any): String = when (any) {
-		is String, is File, is Path -> any.toString()
+		is String, is GString, is File, is Path -> any.toString()
 		is FileCollection -> any.files.joinToString(",") { it.toString() }
 		else -> throw IllegalArgumentException("Configuration parameter has unsupported type '${any.javaClass}'. "
 				+ "Configure the parameter with file(...), files(...) or with a plain string.")

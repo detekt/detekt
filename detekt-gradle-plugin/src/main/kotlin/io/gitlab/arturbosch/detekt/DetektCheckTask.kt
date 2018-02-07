@@ -26,7 +26,7 @@ open class DetektCheckTask : DefaultTask() {
 		project.javaexec {
 			it.main = "io.gitlab.arturbosch.detekt.cli.Main"
 			it.classpath = configuration
-			it.args(detektExtension.profileArgumentsOrDefault(project))
+			it.args(detektExtension.resolveArguments(project))
 		}
 	}
 }

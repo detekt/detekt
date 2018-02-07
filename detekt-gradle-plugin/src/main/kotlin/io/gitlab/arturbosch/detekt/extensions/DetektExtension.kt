@@ -12,7 +12,6 @@ open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 						   open var profile: String = DEFAULT_PROFILE_NAME,
 						   open var ideaExtension: IdeaExtension = IdeaExtension()) {
 
-	fun systemOrDefaultProfile() = getSystemProfile() ?: getDefaultProfile()
 	fun ideaFormatArgs() = ideaExtension.formatArgs(this)
 	fun ideaInspectArgs() = ideaExtension.inspectArgs(this)
 
@@ -31,74 +30,55 @@ open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 		}
 	}
 
-	fun profileArgumentsOrDefault(project: Project): List<String> {
-		return with(createArgumentsForProfile()) {
-			if (isNotEmpty()) {
-				if (!contains(INPUT_PARAMETER)) {
-					add(INPUT_PARAMETER)
-					add(project.projectDir.toString())
-				}
-				this
-			} else {
-				project.fallbackArguments()
+	fun resolveArguments(project: Project): List<String> {
+		return with(extractArguments()) {
+			if (!contains(INPUT_PARAMETER)) {
+				add(INPUT_PARAMETER)
+				add(project.projectDir.toString())
 			}
+			this
 		}
 	}
 
-	private fun createArgumentsForProfile(): MutableList<String> {
-		val defaultProfile = getDefaultProfile()
-		val systemProfile = getSystemProfile()
-		val mainProfile =
-				if (defaultProfile?.name != DEFAULT_PROFILE_NAME &&
-						systemProfile?.name != DEFAULT_PROFILE_NAME) {
-					ProfileStorage.getByName(DEFAULT_PROFILE_NAME)
+	private fun extractArguments(): MutableList<String> {
+		val defaultProfile = ProfileStorage.defaultProfile
+		val systemOrSelected = ProfileStorage.systemProfile
+				?: ProfileStorage.getByName(profile)
+
+		val propertyMap =
+				if (systemOrSelected?.name == defaultProfile.name) {
+					defaultProfile.arguments(debug)
 				} else {
-					null
+					defaultProfile.arguments(debug).apply {
+						systemOrSelected?.arguments(debug)?.mergeInto(this)
+					}
 				}
 
-		val allArguments = mainProfile?.arguments(debug) ?: mutableMapOf()
-		val defaultArguments = defaultProfile?.arguments(debug) ?: mutableMapOf()
-		val fallbackEmptyArguments = mutableMapOf<String, String>()
+		val arguments = propertyMap.flatMapTo(ArrayList()) { removeBooleanValues(it.key, it.value) }
 
-		val overriddenArguments =
-				if (systemProfile?.name == defaultProfile?.name) fallbackEmptyArguments
-				else systemProfile?.arguments(debug) ?: fallbackEmptyArguments
-
-		defaultArguments.merge(allArguments)
-		overriddenArguments.merge(allArguments)
-
-		return allArguments.flatMapTo(ArrayList()) { flattenBoolValues(it.key, it.value) }.apply {
-			if (debug) {
-				val name = systemOrDefaultProfile()?.name ?: "_fallback_"
-				println("detekt version: $version - usedProfile: $name")
-				println("Arguments: $this")
-			}
+		if (debug) {
+			val name = systemOrSelected?.name ?: DEFAULT_PROFILE_NAME
+			println("detekt version: $version - usedProfile: $name")
+			println("arguments: $arguments")
 		}
+
+		return arguments
 	}
 
-	private fun getDefaultProfile() = ProfileStorage.getByName(profile)
-	private fun getSystemProfile() = ProfileStorage.getByName(
-			System.getProperty(DETEKT_PROFILE) ?: profile)
-
-	private fun flattenBoolValues(key: String, value: String) =
+	private fun removeBooleanValues(key: String, value: String) =
 			if (value == "true" || value == "false") listOf(key) else listOf(key, value)
 
 	override fun toString(): String = "DetektExtension(version='$version', " +
 			"debug=$debug, profile='$profile', ideaExtension=$ideaExtension, profiles=${ProfileStorage.all})"
 }
 
-private fun MutableMap<String, String>.merge(other: MutableMap<String, String>) {
+private fun MutableMap<String, String>.mergeInto(other: MutableMap<String, String>) {
 	for ((key, value) in this) {
 		other.merge(key, value) { v1, v2 ->
-			multipleConfigAware(key, v1, v2)
+			joinMultipleConfigurations(key, v1, v2)
 		}
 	}
 }
 
-private fun multipleConfigAware(key: String, v1: String, v2: String) =
+private fun joinMultipleConfigurations(key: String, v1: String, v2: String) =
 		if (key == CONFIG_PARAMETER || key == CONFIG_RESOURCE_PARAMETER) "$v1,$v2" else v2
-
-internal fun Project.fallbackArguments() = listOf(
-		INPUT_PARAMETER, projectDir.absolutePath,
-		CONFIG_RESOURCE_PARAMETER, DEFAULT_DETEKT_CONFIG_RESOURCE,
-		FILTERS_PARAMETER, DEFAULT_PATH_EXCLUDES)
