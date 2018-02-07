@@ -28,10 +28,9 @@ allprojects {
 	version = detektVersion
 
 	repositories {
-		mavenCentral()
+		jcenter()
 		mavenLocal()
 		maven { url 'http://dl.bintray.com/jetbrains/spek' }
-		jcenter()
 	}
 }
 
