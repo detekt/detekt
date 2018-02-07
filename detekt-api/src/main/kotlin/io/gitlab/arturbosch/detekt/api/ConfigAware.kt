@@ -12,11 +12,6 @@ interface ConfigAware : Config {
 	val id: String
 
 	/**
-	 * Aliases for this rule (used for suppression)
-	 */
-	val aliases: List<String>
-
-	/**
 	 * Wrapped configuration to use for specified id.
 	 */
 	val config: Config

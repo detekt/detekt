@@ -8,7 +8,7 @@ data class Issue(val id: String,
 				 val severity: Severity,
 				 val description: String = "",
 				 val debt: Debt = Debt.TWENTY_MINS,
-				 val aliases: List<String> = listOf()) {
+				 val aliases: Set<String> = setOf()) {
 
 	init {
 		validateIdentifier(id)
