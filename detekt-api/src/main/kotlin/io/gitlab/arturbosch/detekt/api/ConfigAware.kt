@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.api
 
 /**
  * @author Artur Bosch
- * @author Marvin Ramin
  */
 interface ConfigAware : Config {
 
