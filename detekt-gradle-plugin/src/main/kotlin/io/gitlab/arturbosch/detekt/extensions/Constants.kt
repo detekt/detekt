@@ -11,7 +11,7 @@ const val DEFAULT_DEBUG_VALUE = false
 const val DEFAULT_PROFILE_NAME = "main"
 const val DEFAULT_TRUE = "true"
 const val DEFAULT_DETEKT_CONFIG_RESOURCE = "/default-detekt-config.yml"
-const val DEFAULT_PATH_EXCLUDES = ".*/test/.*,.*/resources/.*,.*/build/.*,.*/target/.*"
+const val DEFAULT_PATH_EXCLUDES = ".*/resources/.*,.*/build/.*,.*/target/.*"
 
 const val DEBUG_PARAMETER = "--debug"
 const val CONFIG_RESOURCE_PARAMETER = "--config-resource"
