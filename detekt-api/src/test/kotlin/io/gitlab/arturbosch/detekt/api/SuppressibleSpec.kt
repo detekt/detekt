@@ -83,6 +83,14 @@ internal class SuppressibleSpec : Spek({
 		it("should not be suppressed by a @SuppressWarnings annotation with a 'detekt' prefix with a wrong separator") {
 			assertFalse { checkSuppression("SuppressWarnings", "detekt/Test") }
 		}
+
+		it("should be suppressed by a @Suppress annotation with an alias") {
+			assertTrue { checkSuppression("Suppress", "alias") }
+		}
+
+		it("should be suppressed by a @SuppressWarnings annotation with an alias") {
+			assertTrue { checkSuppression("SuppressWarnings", "alias") }
+		}
 	}
 })
 
@@ -93,5 +101,5 @@ private fun checkSuppression(annotation: String, argument: String): Boolean {
 			 """
 	val file = compileContentForTest(annotated)
 	val annotatedClass = file.children.first { it is KtClass } as KtAnnotated
-	return annotatedClass.isSuppressedBy("Test")
+	return annotatedClass.isSuppressedBy("Test", listOf("alias"))
 }
