@@ -12,10 +12,12 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * This is a sample rule reporting too many functions inside a file.
  *
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 class TooManyFunctions : Rule() {
 
-	override val issue = Issue(javaClass.simpleName, Severity.CodeSmell,
+	override val issue = Issue(javaClass.simpleName,
+			Severity.CodeSmell,
 			"This rule reports a file with an excessive function count.")
 
 	private var amount: Int = 0
@@ -32,7 +34,6 @@ class TooManyFunctions : Rule() {
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		amount++
 	}
-
 }
 
 const val THRESHOLD = 10
