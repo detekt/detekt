@@ -24,9 +24,13 @@ open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 	}
 
 	fun profile(name: String, configuration: Action<in ProfileExtension>) {
-		ProfileExtension(name).apply {
-			ProfileStorage.add(this)
-			configuration.execute(this)
+		if (name == DEFAULT_PROFILE_NAME) {
+			defaultProfile(configuration)
+		} else {
+			ProfileExtension(name).apply {
+				ProfileStorage.add(this)
+				configuration.execute(this)
+			}
 		}
 	}
 
