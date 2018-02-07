@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.api
 
 /**
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 interface ConfigAware : Config {
 
@@ -9,6 +10,11 @@ interface ConfigAware : Config {
 	 * Id which is used to retrieve the sub config for this rule.
 	 */
 	val id: String
+
+	/**
+	 * Aliases for this rule (used for suppression)
+	 */
+	val aliases: List<String>
 
 	/**
 	 * Wrapped configuration to use for specified id.

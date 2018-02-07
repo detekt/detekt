@@ -2,11 +2,13 @@ package io.gitlab.arturbosch.detekt.api
 
 /**
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 data class Issue(val id: String,
 				 val severity: Severity,
 				 val description: String = "",
-				 val debt: Debt = Debt.TWENTY_MINS) {
+				 val debt: Debt = Debt.TWENTY_MINS,
+				 val aliases: List<String> = listOf()) {
 
 	init {
 		validateIdentifier(id)

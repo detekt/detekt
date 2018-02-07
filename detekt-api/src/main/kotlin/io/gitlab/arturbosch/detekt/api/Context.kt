@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.api
 
 /**
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 interface Context {
 	val findings: List<Finding>
@@ -28,7 +29,7 @@ open class DefaultContext : Context {
 	 */
 	override fun report(finding: Finding) {
 		val ktElement = finding.entity.ktElement
-		if (ktElement == null || !ktElement.isSuppressedBy(finding.id)) {
+		if (ktElement == null || !ktElement.isSuppressedBy(finding.id, finding.issue.aliases)) {
 			_findings.add(finding)
 		}
 	}
