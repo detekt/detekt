@@ -31,7 +31,7 @@ class YamlConfig internal constructor(val properties: Map<String, Any>) : BaseCo
 
 	companion object {
 
-		val YAML = ".yml"
+		private const val YAML = ".yml"
 
 		/**
 		 * Factory method to load a yaml configuration. Given path must exist and end with "yml".
