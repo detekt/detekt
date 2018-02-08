@@ -13,6 +13,7 @@ import io.gitlab.arturbosch.detekt.rules.style.ForbiddenImport
 import io.gitlab.arturbosch.detekt.rules.style.FunctionOnlyReturningConstant
 import io.gitlab.arturbosch.detekt.rules.style.LoopWithTooManyJumpStatements
 import io.gitlab.arturbosch.detekt.rules.style.MagicNumber
+import io.gitlab.arturbosch.detekt.rules.style.MayBeConst
 import io.gitlab.arturbosch.detekt.rules.style.ModifierOrder
 import io.gitlab.arturbosch.detekt.rules.style.NestedClassesVisibility
 import io.gitlab.arturbosch.detekt.rules.style.NewLineAtEndOfFile
@@ -83,7 +84,8 @@ class StyleGuideProvider : RuleSetProvider {
 				ExpressionBodySyntax(config),
 				NestedClassesVisibility(config),
 				RedundantVisibilityModifierRule(config),
-				UntilInsteadOfRangeTo(config)
+				UntilInsteadOfRangeTo(config),
+				MayBeConst(config)
 		))
 	}
 }

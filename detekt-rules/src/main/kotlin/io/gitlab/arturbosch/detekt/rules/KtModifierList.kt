@@ -17,4 +17,6 @@ fun KtModifierListOwner.isPublic(): Boolean {
 			|| this.hasModifier(KtTokens.INTERNAL_KEYWORD))
 }
 
+fun KtModifierListOwner.isConstant() = hasModifier(KtTokens.CONST_KEYWORD)
+
 fun KtModifierListOwner.isInternal() = hasModifier(KtTokens.INTERNAL_KEYWORD)
