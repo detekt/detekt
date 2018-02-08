@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.empty
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.rules.Case
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileForTest
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
@@ -18,6 +19,19 @@ class EmptyCodeTest {
 	@Test
 	fun findsEmptyCatch() {
 		test { EmptyCatchBlock(Config.empty) }
+	}
+
+	@Test
+	fun findsEmptyCatchWithConfig() {
+		val code = """
+			fun f() {
+				try {
+				} catch (e: MyException) {
+				} catch (e: Exception) {
+				}
+			}"""
+		val config = TestConfig(mapOf(EmptyCatchBlock.ALLOWED_EXCEPTION_NAME_REGEX to "MyException|FooException"))
+		assertThat(EmptyCatchBlock(config).lint(code)).hasSize(1)
 	}
 
 	@Test

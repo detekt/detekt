@@ -25,6 +25,12 @@ which should be avoided.
 
 Reports empty `catch` blocks. Empty blocks of code serve no purpose and should be removed.
 
+#### Configuration options:
+
+* `allowedExceptionNameRegex` (default: `""`)
+
+   ignores exception types which match this regex
+
 ### EmptyClassBlock
 
 Reports empty classes. Empty blocks of code serve no purpose and should be removed.

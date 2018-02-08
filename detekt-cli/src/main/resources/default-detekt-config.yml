@@ -118,6 +118,7 @@ empty-blocks:
   active: true
   EmptyCatchBlock:
     active: true
+    allowedExceptionNameRegex: ""
   EmptyClassBlock:
     active: true
   EmptyDefaultConstructor:
