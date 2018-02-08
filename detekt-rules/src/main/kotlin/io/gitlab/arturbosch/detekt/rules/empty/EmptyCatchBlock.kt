@@ -10,6 +10,7 @@ import org.jetbrains.kotlin.psi.KtCatchClause
  * @active since v1.0.0
  * @author Artur Bosch
  * @author Marvin Ramin
+ * @author schalkms
  */
 class EmptyCatchBlock(config: Config) : EmptyRule(config = config) {
 
