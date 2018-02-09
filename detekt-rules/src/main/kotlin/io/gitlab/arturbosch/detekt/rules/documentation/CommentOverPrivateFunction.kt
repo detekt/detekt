@@ -34,7 +34,8 @@ class CommentOverPrivateFunction(config: Config = Config.empty) : Rule(config) {
 		val modifierList = function.modifierList
 		if (modifierList != null && function.docComment != null) {
 			if (modifierList.hasModifier(KtTokens.PRIVATE_KEYWORD)) {
-				report(CodeSmell(issue, Entity.from(function.docComment!!), message = ""))
+				report(CodeSmell(issue, Entity.from(function.docComment!!), "The function ${function.nameAsSafeName} " +
+						"has a comment. Prefer renaming the function giving it a more self-explanatory name."))
 			}
 		}
 	}

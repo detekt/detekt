@@ -45,7 +45,8 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		if (checkOverridableFunction(function) && isNotExcluded(function) && isReturningAConstant(function)) {
-			report(CodeSmell(issue, Entity.from(function), message = ""))
+			report(CodeSmell(issue, Entity.from(function),
+					"${function.nameAsSafeName} is returning a constant. Prefer declaring a constant instead."))
 		}
 		super.visitNamedFunction(function)
 	}

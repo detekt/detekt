@@ -62,7 +62,8 @@ class UtilityClassWithPublicConstructor(config: Config = Config.empty) : Rule(co
 		if (!klass.isInterface() && !klass.hasDelegates() && hasPublicConstructor(klass)) {
 			val declarations = klass.getBody()?.declarations
 			if (hasOnlyUtilityClassMembers(declarations)) {
-				report(CodeSmell(issue, Entity.from(klass), message = ""))
+				report(CodeSmell(issue, Entity.from(klass), "The class ${klass.nameAsSafeName} only contains" +
+						"utility functions. Consider defining it as an object."))
 			}
 		}
 		super.visitClass(klass)

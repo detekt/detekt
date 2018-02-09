@@ -59,7 +59,7 @@ class TooGenericExceptionCaught(config: Config) : Rule(config) {
 		catchClause.catchParameter?.let {
 			val text = it.typeReference?.text
 			if (text != null && text in exceptions)
-				report(CodeSmell(issue, Entity.from(it), message = ""))
+				report(CodeSmell(issue, Entity.from(it), issue.description))
 		}
 		super.visitCatchSection(catchClause)
 	}

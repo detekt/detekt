@@ -25,7 +25,8 @@ class NewLineAtEndOfFile(config: Config = Config.empty) : Rule(config) {
 	override fun visitKtFile(file: KtFile) {
 		val text = file.text
 		if (text.isNotEmpty() && text.last() != '\n') {
-			report(CodeSmell(issue, Entity.from(file, text.length - 1), message = ""))
+			report(CodeSmell(issue, Entity.from(file, text.length - 1),
+					"The file ${file.name} is not ending with a new line."))
 		}
 	}
 

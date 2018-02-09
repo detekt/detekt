@@ -37,7 +37,7 @@ class SpreadOperator(config: Config = Config.empty) : Rule(config) {
 		super.visitValueArgumentList(list)
 		list.arguments.filter { it.getSpreadElement() != null }
 				.forEach {
-					report(CodeSmell(issue, Entity.from(list), message = ""))
+					report(CodeSmell(issue, Entity.from(list), issue.description))
 				}
 	}
 }

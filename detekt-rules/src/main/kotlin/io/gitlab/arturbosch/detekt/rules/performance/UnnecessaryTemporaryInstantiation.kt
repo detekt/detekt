@@ -38,7 +38,7 @@ class UnnecessaryTemporaryInstantiation(config: Config = Config.empty) : Rule(co
 	override fun visitCallExpression(expression: KtCallExpression) {
 		if (isPrimitiveWrapperType(expression.calleeExpression)
 				&& isToStringMethod(expression.nextSibling?.nextSibling)) {
-			report(CodeSmell(issue, Entity.from(expression), message = ""))
+			report(CodeSmell(issue, Entity.from(expression), issue.description))
 		}
 	}
 

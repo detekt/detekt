@@ -61,7 +61,7 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 		lines.forEach { line ->
 			offset += line.length
 			if (!isValidLine(line)) {
-				report(CodeSmell(issue, Entity.from(file, offset), message = ""))
+				report(CodeSmell(issue, Entity.from(file, offset), issue.description))
 			}
 
 			offset += 1 /* '\n' */

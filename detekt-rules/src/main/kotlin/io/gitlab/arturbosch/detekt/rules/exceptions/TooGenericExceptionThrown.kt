@@ -53,7 +53,8 @@ class TooGenericExceptionThrown(config: Config) : Rule(config) {
 
 	override fun visitThrowExpression(expression: KtThrowExpression) {
 		expression.thrownExpression?.text?.substringBefore("(")?.let {
-			if (it in exceptions) report(CodeSmell(issue, Entity.from(expression), message = ""))
+			if (it in exceptions) report(CodeSmell(issue, Entity.from(expression), "$it is a too generic " +
+					"Exception. Prefer throwing specific exceptions that indicate a specific error case."))
 		}
 		super.visitThrowExpression(expression)
 	}

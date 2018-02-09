@@ -58,14 +58,14 @@ class PrintStackTrace(config: Config = Config.empty) : Rule(config) {
 		val callNameExpression = expression.getCallNameExpression()
 		if (callNameExpression?.text == "dumpStack"
 				&& callNameExpression.getReceiverExpression()?.text == "Thread") {
-			report(CodeSmell(issue, Entity.from(expression), message = ""))
+			report(CodeSmell(issue, Entity.from(expression), issue.description))
 		}
 	}
 
 	override fun visitCatchSection(catchClause: KtCatchClause) {
 		catchClause.catchBody?.collectByType<KtNameReferenceExpression>()?.forEach {
 			if (it.text == catchClause.catchParameter?.name && hasPrintStacktraceCallExpression(it)) {
-				report(CodeSmell(issue, Entity.from(it), message = ""))
+				report(CodeSmell(issue, Entity.from(it), issue.description))
 			}
 		}
 	}

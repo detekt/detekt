@@ -29,6 +29,7 @@ import org.jetbrains.kotlin.psi.KtExpressionWithLabel
  * </compliant>
  *
  * @author Ivan Balaksha
+ * @author Marvin Ramin
  */
 class LabeledExpression(config: Config = Config.empty) : Rule(config) {
 	override val issue: Issue = Issue("LabeledExpression",
@@ -38,7 +39,7 @@ class LabeledExpression(config: Config = Config.empty) : Rule(config) {
 	override fun visitExpressionWithLabel(expression: KtExpressionWithLabel) {
 		super.visitExpressionWithLabel(expression)
 		expression.getLabelName()?.let {
-			report(CodeSmell(issue, Entity.from(expression), message = ""))
+			report(CodeSmell(issue, Entity.from(expression), issue.description))
 		}
 	}
 }

@@ -39,7 +39,8 @@ class LongMethod(config: Config = Config.empty,
 					ThresholdedCodeSmell(issue,
 							Entity.from(function),
 							Metric("SIZE", size, threshold),
-							message = ""))
+							"The function ${function.nameAsSafeName} is too long. The maximum length is " +
+									"$threshold."))
 		}
 		super.visitNamedFunction(function)
 	}

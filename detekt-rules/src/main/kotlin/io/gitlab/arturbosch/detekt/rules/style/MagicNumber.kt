@@ -117,7 +117,8 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 
 		val number = parseAsDoubleOrNull(rawNumber) ?: return
 		if (!ignoredNumbers.contains(number)) {
-			report(CodeSmell(issue, Entity.from(expression), message = ""))
+			report(CodeSmell(issue, Entity.from(expression), "This expression contains a magic number." +
+					" Consider defining it to a well named constant."))
 		}
 	}
 

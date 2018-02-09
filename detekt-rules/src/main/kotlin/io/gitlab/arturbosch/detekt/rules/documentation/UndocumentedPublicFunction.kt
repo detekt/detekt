@@ -28,11 +28,13 @@ class UndocumentedPublicFunction(config: Config = Config.empty) : Rule(config) {
 		val modifierList = function.modifierList
 		if (function.docComment == null) {
 			if (modifierList == null) {
-				report(CodeSmell(issue, methodHeaderLocation(function), message = ""))
+				report(CodeSmell(issue, methodHeaderLocation(function), "The function ${function.nameAsSafeName}" +
+						" is missing documentation."))
 			}
 			if (modifierList != null) {
 				if (function.isPublicNotOverridden()) {
-					report(CodeSmell(issue, methodHeaderLocation(function), message = ""))
+					report(CodeSmell(issue, methodHeaderLocation(function), "The function ${function.nameAsSafeName}" +
+							" is missing documentation."))
 				}
 			}
 		}
