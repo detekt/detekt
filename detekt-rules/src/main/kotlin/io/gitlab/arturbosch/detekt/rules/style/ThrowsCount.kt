@@ -53,7 +53,8 @@ class ThrowsCount(config: Config = Config.empty) : Rule(config) {
 		if (!function.hasModifier(KtTokens.OVERRIDE_KEYWORD)) {
 			val count = function.collectByType<KtThrowExpression>().count()
 			if (count > max) {
-				report(CodeSmell(issue, Entity.from(function), message = ""))
+				report(CodeSmell(issue, Entity.from(function), "Too many throw statements in the function" +
+						" ${function.nameAsSafeName}. The maximum number of allowed throw statements is $max."))
 			}
 		}
 	}

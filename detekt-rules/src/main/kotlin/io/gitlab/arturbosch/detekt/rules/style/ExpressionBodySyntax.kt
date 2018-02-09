@@ -42,7 +42,7 @@ class ExpressionBodySyntax(config: Config = Config.empty) : Rule(config) {
 		if (function.bodyExpression != null) {
 			val body = function.bodyExpression!!
 			body.singleReturnStatement()?.let { returnStmt ->
-				report(CodeSmell(issue, Entity.from(returnStmt), message = ""))
+				report(CodeSmell(issue, Entity.from(returnStmt), issue.description))
 			}
 		}
 	}

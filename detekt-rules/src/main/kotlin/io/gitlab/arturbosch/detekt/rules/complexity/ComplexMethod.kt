@@ -37,7 +37,7 @@ class ComplexMethod(config: Config = Config.empty,
 			report(ThresholdedCodeSmell(issue,
 					Entity.from(function),
 					Metric("MCC", mcc, threshold),
-					message = ""))
+					"The function ${function.nameAsSafeName} appears to be too complex."))
 		}
 	}
 }

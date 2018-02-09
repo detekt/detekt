@@ -30,7 +30,7 @@ class EqualsNullCall(config: Config = Config.empty) : Rule(config) {
 
 	override fun visitCallExpression(expression: KtCallExpression) {
 		if (expression.calleeExpression?.text == "equals" && hasNullParameter(expression)) {
-			report(CodeSmell(issue, Entity.from(expression), message = ""))
+			report(CodeSmell(issue, Entity.from(expression), issue.description))
 		} else {
 			super.visitCallExpression(expression)
 		}

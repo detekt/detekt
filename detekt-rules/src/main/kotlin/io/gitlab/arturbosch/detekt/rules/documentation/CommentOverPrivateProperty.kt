@@ -32,7 +32,7 @@ class CommentOverPrivateProperty(config: Config = Config.empty) : Rule(config) {
 		val modifierList = property.modifierList
 		if (modifierList != null && property.docComment != null) {
 			if (modifierList.hasModifier(KtTokens.PRIVATE_KEYWORD)) {
-				report(CodeSmell(issue, Entity.from(property.docComment!!), message = ""))
+				report(CodeSmell(issue, Entity.from(property.docComment!!), issue.description))
 			}
 		}
 	}

@@ -39,7 +39,7 @@ class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
 		val innerFunctions = finallySection.finalExpression.collectByType<KtNamedFunction>()
 		returnExpressions.forEach {
 			if (isNotInInnerFunction(it, innerFunctions)) {
-				report(CodeSmell(issue, Entity.from(it), message = ""))
+				report(CodeSmell(issue, Entity.from(it), issue.description))
 			}
 		}
 	}

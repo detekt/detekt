@@ -35,21 +35,23 @@ class LongParameterList(config: Config = Config.empty,
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		if (function.hasModifier(KtTokens.OVERRIDE_KEYWORD)) return
-		function.valueParameterList?.checkThreshold()
+		val parameterList = function.valueParameterList
+		val parameters = parameterList?.parameterCount()
+
+		if (parameters != null && parameters > threshold) {
+			report(ThresholdedCodeSmell(issue,
+					Entity.from(parameterList),
+					Metric("SIZE", parameters, threshold),
+					"The function ${function.nameAsSafeName} has too many parameters. The current threshold" +
+							" is set to $threshold."))
+		}
 	}
 
-	private fun KtParameterList.checkThreshold() {
-		val size = if (ignoreDefaultParameters) {
+	private fun KtParameterList.parameterCount(): Int {
+		return if (ignoreDefaultParameters) {
 			parameters.filter { !it.hasDefaultValue() }.size
 		} else {
 			parameters.size
-		}
-
-		if (size > threshold) {
-			report(ThresholdedCodeSmell(issue,
-					Entity.from(this),
-					Metric("SIZE", size, threshold),
-					message = ""))
 		}
 	}
 

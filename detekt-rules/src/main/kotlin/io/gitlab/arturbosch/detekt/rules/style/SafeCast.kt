@@ -68,6 +68,6 @@ class SafeCast(config: Config = Config.empty) : Rule(config) {
 	}
 
 	private fun addReport(expression: KtIfExpression) {
-		report(CodeSmell(issue, Entity.from(expression), message = ""))
+		report(CodeSmell(issue, Entity.from(expression), "This cast should be replaced with a safe cast: as?"))
 	}
 }

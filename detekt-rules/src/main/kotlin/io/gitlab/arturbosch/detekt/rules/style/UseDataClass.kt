@@ -76,7 +76,8 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 			val containsPropertyOrPropertyParameters = properties.isNotEmpty() || propertyParameters.isNotEmpty()
 
 			if (containsFunctions && containsPropertyOrPropertyParameters) {
-				report(CodeSmell(issue, Entity.from(klass), message = ""))
+				report(CodeSmell(issue, Entity.from(klass), "The class ${klass.nameAsSafeName} defines no" +
+						"functionality and only holds data. Consider converting it to a data class."))
 			}
 		}
 	}

@@ -44,7 +44,7 @@ class LoopWithTooManyJumpStatements(config: Config = Config.empty) : Rule(config
 
 	override fun visitLoopExpression(loopExpression: KtLoopExpression) {
 		if (countBreakAndReturnStatements(loopExpression.body) > maxJumpCount) {
-			report(CodeSmell(issue, Entity.from(loopExpression), message = ""))
+			report(CodeSmell(issue, Entity.from(loopExpression), issue.description))
 		}
 		super.visitLoopExpression(loopExpression)
 	}

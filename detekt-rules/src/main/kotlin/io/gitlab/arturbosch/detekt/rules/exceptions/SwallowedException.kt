@@ -45,7 +45,7 @@ class SwallowedException(config: Config = Config.empty) : Rule(config) {
 
 	override fun visitCatchSection(catchClause: KtCatchClause) {
 		if (isExceptionSwallowed(catchClause) == true) {
-			report(CodeSmell(issue, Entity.from(catchClause), message = ""))
+			report(CodeSmell(issue, Entity.from(catchClause), issue.description))
 		}
 	}
 
