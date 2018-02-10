@@ -64,10 +64,14 @@ class EqualsAlwaysReturnsTrueOrFalse(config: Config = Config.empty) : Rule(confi
 	}
 
 	private fun isSingleReturnWithBooleanConstant(bodyExpression: KtExpression): Boolean {
-		val returnExpressions = bodyExpression.asBlockExpression()?.statements
+		val returnExpressionsInBlock = bodyExpression.asBlockExpression()?.statements
 				?.filterIsInstance<KtReturnExpression>() ?: return false
-		val hasNoNestedReturnExpression = bodyExpression.collectByType<KtReturnExpression>().size == returnExpressions.size
-		return hasNoNestedReturnExpression && returnExpressions.first().returnedExpression?.isBooleanConstant() == true
+		val lastValidReturnExpression = returnExpressionsInBlock.first().returnedExpression
+		val allReturnExpressions = bodyExpression.collectByType<KtReturnExpression>()
+		val hasNoNestedReturnExpression = allReturnExpressions.size == returnExpressionsInBlock.size
+		return lastValidReturnExpression?.isBooleanConstant() == true
+				&& (hasNoNestedReturnExpression
+					|| allReturnExpressions.all { it.returnedExpression?.text == lastValidReturnExpression.text })
 	}
 
 	private fun PsiElement.isBooleanConstant() = node.elementType == KtNodeTypes.BOOLEAN_CONSTANT

@@ -2,7 +2,7 @@
 
 package cases
 
-// 5 -> reports 1 for every equals method
+// reports 1 for every equals method
 class EqualsReturnsTrue {
 
 	override fun equals(other: Any?): Boolean {
@@ -38,4 +38,12 @@ class EqualsReturnsConstantExpression {
 	override fun equals(other: Any?) = false
 }
 
+class EqualsWithTwoReturnExpressions {
 
+	override fun equals(other: Any?): Boolean {
+		if (other is Int) {
+			return true
+		}
+		return true
+	}
+}
