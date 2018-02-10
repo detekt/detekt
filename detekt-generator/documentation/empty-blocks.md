@@ -27,7 +27,7 @@ Reports empty `catch` blocks. Empty blocks of code serve no purpose and should b
 
 #### Configuration options:
 
-* `allowedExceptionNameRegex` (default: `""`)
+* `allowedExceptionNameRegex` (default: `"^(ignore|expected).*"`)
 
    ignores exception types which match this regex
 

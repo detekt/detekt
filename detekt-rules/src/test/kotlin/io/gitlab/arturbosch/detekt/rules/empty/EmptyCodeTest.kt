@@ -26,12 +26,11 @@ class EmptyCodeTest {
 		val code = """
 			fun f() {
 				try {
-				} catch (e: MyException) {
-				} catch (e: Exception) {
+				} catch (foo: MyException) {
 				}
 			}"""
-		val config = TestConfig(mapOf(EmptyCatchBlock.ALLOWED_EXCEPTION_NAME_REGEX to "MyException|FooException"))
-		assertThat(EmptyCatchBlock(config).lint(code)).hasSize(1)
+		val config = TestConfig(mapOf(EmptyCatchBlock.ALLOWED_EXCEPTION_NAME_REGEX to "foo"))
+		assertThat(EmptyCatchBlock(config).lint(code)).hasSize(0)
 	}
 
 	@Test

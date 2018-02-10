@@ -32,7 +32,11 @@ class Empty : Runnable {
 			//no-op
 		} catch (e: Exception) {
 			println()
-		} finally {
+		} catch (ignored: Exception) {
+
+		} catch (expected: Exception) {
+
+		}finally {
 
 		}
 		if (true) {
