@@ -14,7 +14,7 @@ class EqualsAlwaysReturnsTrueOrFalseSpec : SubjectSpek<EqualsAlwaysReturnsTrueOr
 	given("several classes overriding the equals() method") {
 
 		it("reports equals() methods") {
-			assertThat(subject.lint(Case.EqualsAlwaysReturnsTrueOrFalsePositive.path())).hasSize(5)
+			assertThat(subject.lint(Case.EqualsAlwaysReturnsTrueOrFalsePositive.path())).hasSize(6)
 		}
 
 		it("does not report equals() methods") {
