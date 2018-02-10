@@ -1,6 +1,11 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
+	repositories {
+		gradlePluginPortal()
+		jcenter()
+		mavenLocal()
+	}
 	dependencies {
 		classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
 		classpath "org.junit.platform:junit-platform-gradle-plugin:$junitPlatformVersion"
