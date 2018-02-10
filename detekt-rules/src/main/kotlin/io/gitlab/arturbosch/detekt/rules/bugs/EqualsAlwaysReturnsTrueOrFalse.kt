@@ -7,8 +7,12 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.asBlockExpression
+import io.gitlab.arturbosch.detekt.rules.collectByType
 import io.gitlab.arturbosch.detekt.rules.isEqualsFunction
-import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.KtNodeTypes
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.psi.KtConstantExpression
+import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
 
@@ -51,8 +55,20 @@ class EqualsAlwaysReturnsTrueOrFalse(config: Config = Config.empty) : Rule(confi
 	}
 
 	private fun isReturningBooleanConstant(function: KtNamedFunction): Boolean {
-		val returnExpression = function.bodyExpression.asBlockExpression()?.statements?.lastOrNull() as? KtReturnExpression
-		val text = returnExpression?.returnedExpression?.text
-		return text == KtTokens.TRUE_KEYWORD.value || text == KtTokens.FALSE_KEYWORD.value
+		val bodyExpression = function.bodyExpression ?: return false
+		return if (bodyExpression is KtConstantExpression) {
+			bodyExpression.isBooleanConstant()
+		} else {
+			isSingleReturnWithBooleanConstant(bodyExpression)
+		}
 	}
+
+	private fun isSingleReturnWithBooleanConstant(bodyExpression: KtExpression): Boolean {
+		val returnExpressions = bodyExpression.asBlockExpression()?.statements
+				?.filterIsInstance<KtReturnExpression>() ?: return false
+		val hasNoNestedReturnExpression = bodyExpression.collectByType<KtReturnExpression>().size == returnExpressions.size
+		return hasNoNestedReturnExpression && returnExpressions.first().returnedExpression?.isBooleanConstant() == true
+	}
+
+	private fun PsiElement.isBooleanConstant() = node.elementType == KtNodeTypes.BOOLEAN_CONSTANT
 }
