@@ -32,6 +32,53 @@ class EqualsAlwaysReturnsTrueOrFalseSpec : SubjectSpek<EqualsAlwaysReturnsTrueOr
 			assertThat(subject.lint(code)).hasSize(1)
 		}
 
+		it("reports returning 'false' in method body without curly braces") {
+			val code = """
+				class A {
+					override fun equals(other: Any?) = false
+				}"""
+			assertThat(subject.lint(code)).hasSize(1)
+		}
+
+		it("reports returning 'false' with unreachable second return") {
+			val code = """
+				class A {
+					override fun equals(other: Any?): Boolean {
+						return false
+						return true
+					}
+				}
+				"""
+			assertThat(subject.lint(code)).hasSize(1)
+		}
+
+
+
+		it("reports returning 'false' with unreachable statements after it") {
+			val code = """
+				class A {
+					override fun equals(other: Any?): Boolean {
+						return false
+						val i = 0
+					}
+				}
+				"""
+			assertThat(subject.lint(code)).hasSize(1)
+		}
+
+		it("does not report returning a constant whilst another return statement") {
+			val code = """
+				class A {
+					override fun equals(other: Any?): Boolean {
+						if (other is A) {
+							return true
+						}
+						return false
+					}
+				}"""
+			assertThat(subject.lint(code)).hasSize(0)
+		}
+
 		it("does not report returning no constant'") {
 			val code = """
 				class A {
@@ -47,7 +94,7 @@ class EqualsAlwaysReturnsTrueOrFalseSpec : SubjectSpek<EqualsAlwaysReturnsTrueOr
 				fun equals(other: Any?): Boolean {
 					return false;
 				}"""
-			assertThat(subject.lint(code)).hasSize(0);
+			assertThat(subject.lint(code)).hasSize(0)
 		}
 
 		it("does not report equals function with wrong name") {
