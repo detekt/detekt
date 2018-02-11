@@ -3,11 +3,13 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
+import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtElement
@@ -39,12 +41,23 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  */
 class SpacingBetweenPackageAndImports(config: Config = Config.empty) : Rule(config) {
 
+	private var containsClassOrObject = false
+
 	override val issue = Issue(javaClass.simpleName, Severity.Style,
 			"Violation of the package declaration style.",
 			Debt.FIVE_MINS)
 
+	override fun visitFile(file: PsiFile?) {
+		file?.accept(object: DetektVisitor() {
+			override fun visitClassOrObject(classOrObject: KtClassOrObject) {
+				containsClassOrObject = true
+			}
+		})
+		super.visitFile(file)
+	}
+
 	override fun visitImportList(importList: KtImportList) {
-		if (importList.imports.isNotEmpty()) {
+		if (containsClassOrObject && importList.imports.isNotEmpty()) {
 			checkPackageDeclaration(importList)
 			checkKtElementsDeclaration(importList)
 		}
