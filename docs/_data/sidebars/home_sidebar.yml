@@ -1,0 +1,52 @@
+# This is your sidebar TOC. The sidebar code loops through sections here and provides the appropriate formatting.
+
+entries:
+- title: Sidebar
+  levels: one
+  folders:
+
+  - title: User Documentation
+    output: web
+    folderitems:
+    - title: Introduction
+      url: /index.html
+      output: web
+    - title: Release Notes
+      url: /changelog.html
+      output: web
+  - title: Getting Started
+    output: web
+    folderitems:
+    - title: Gradle Groovy DSL
+      url: /groovydsl.html
+      output: web
+    - title: Gradle Kotlin DSL
+      url: /kotlindsl.html
+      output: web
+  - title: Rule Sets
+    output: web
+    folderitems:
+    - title: comments
+      url: /comments.html
+      output: web
+    - title: complexity
+      url: /complexity.html
+      output: web
+    - title: empty-blocks
+      url: /empty-blocks.html
+      output: web
+    - title: exceptions
+      url: /exceptions.html
+      output: web
+    - title: naming
+      url: /naming.html
+      output: web
+    - title: performance
+      url: /performance.html
+      output: web
+    - title: potential-bugs
+      url: /potential-bugs.html
+      output: web
+    - title: style
+      url: /style.html
+      output: web
