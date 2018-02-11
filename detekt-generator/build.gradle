@@ -13,6 +13,14 @@ configurations {
 
 task generateDocumentation(dependsOn: ":detekt-generator:shadowJar") {
     description "Generates detekt documentation and the default config.yml based on Rule KDoc"
+
+    inputs.files(
+            fileTree("$rootProject.rootDir/detekt-rules/src/main/kotlin"),
+            file("$rootProject.rootDir/detekt-generator/build/libs/detekt-generator-$detektVersion-all.jar"))
+    outputs.files(
+            fileTree("$rootProject.rootDir/detekt-generator/documentation"),
+            file("$rootProject.rootDir/detekt-cli/src/main/resources/default-detekt-config.yml"))
+
     doLast {
         javaexec {
             main = "-jar"
