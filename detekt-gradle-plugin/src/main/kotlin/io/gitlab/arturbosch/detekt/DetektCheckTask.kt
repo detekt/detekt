@@ -12,6 +12,7 @@ import java.io.File
 
 /**
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 open class DetektCheckTask : DefaultTask() {
 
