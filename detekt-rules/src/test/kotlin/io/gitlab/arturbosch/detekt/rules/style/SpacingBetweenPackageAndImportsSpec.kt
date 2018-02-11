@@ -78,6 +78,16 @@ class SpacingBetweenPackageAndImportsSpec : SubjectSpek<SpacingBetweenPackageAnd
 				"""
 			assertCodeViolation(code, 0)
 		}
+
+		it("has no class") {
+			val code = """
+				package com.my.package
+
+				import android.util.Log
+				import java.util.concurrent.TimeUnit
+				"""
+			assertCodeViolation(code, 0)
+		}
 	}
 })
 
