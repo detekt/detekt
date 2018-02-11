@@ -36,6 +36,8 @@ import java.util.ArrayDeque
 class LargeClass(config: Config = Config.empty,
 				 threshold: Int = DEFAULT_ACCEPTED_CLASS_LENGTH) : ThresholdRule(config, threshold) {
 
+	private var containsClassOrObject = false
+
 	override val issue = Issue("LargeClass",
 			Severity.Maintainability,
 			"One class should have one responsibility. Large classes tend to handle many things at once. " +
@@ -48,7 +50,9 @@ class LargeClass(config: Config = Config.empty,
 	}
 
 	private fun addToHead(amount: Int) {
-		locStack.push(locStack.pop() + amount)
+		if (containsClassOrObject) {
+			locStack.push(locStack.pop() + amount)
+		}
 	}
 
 	override fun visitFile(file: PsiFile?) { //TODO
@@ -57,6 +61,7 @@ class LargeClass(config: Config = Config.empty,
 	}
 
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
+		containsClassOrObject = true
 		locStack.push(0)
 		classOrObject.getBody()?.let {
 			addToHead(it.declarations.size)
