@@ -16,29 +16,30 @@ code style guidelines.
 8. [LoopWithTooManyJumpStatements](#loopwithtoomanyjumpstatements)
 9. [MagicNumber](#magicnumber)
 10. [MaxLineLength](#maxlinelength)
-11. [ModifierOrder](#modifierorder)
-12. [NestedClassesVisibility](#nestedclassesvisibility)
-13. [NewLineAtEndOfFile](#newlineatendoffile)
-14. [OptionalAbstractKeyword](#optionalabstractkeyword)
-15. [OptionalReturnKeyword](#optionalreturnkeyword)
-16. [OptionalUnit](#optionalunit)
-17. [OptionalWhenBraces](#optionalwhenbraces)
-18. [ProtectedMemberInFinalClass](#protectedmemberinfinalclass)
-19. [RedundantVisibilityModifierRule](#redundantvisibilitymodifierrule)
-20. [ReturnCount](#returncount)
-21. [SafeCast](#safecast)
-22. [SerialVersionUIDInSerializableClass](#serialversionuidinserializableclass)
-23. [SpacingBetweenPackageAndImports](#spacingbetweenpackageandimports)
-24. [ThrowsCount](#throwscount)
-25. [UnnecessaryAbstractClass](#unnecessaryabstractclass)
-26. [UnnecessaryInheritance](#unnecessaryinheritance)
-27. [UnnecessaryParentheses](#unnecessaryparentheses)
-28. [UntilInsteadOfRangeTo](#untilinsteadofrangeto)
-29. [UnusedImports](#unusedimports)
-30. [UnusedPrivateMember](#unusedprivatemember)
-31. [UseDataClass](#usedataclass)
-32. [UtilityClassWithPublicConstructor](#utilityclasswithpublicconstructor)
-33. [WildcardImport](#wildcardimport)
+11. [MayBeConst](#maybeconst)
+12. [ModifierOrder](#modifierorder)
+13. [NestedClassesVisibility](#nestedclassesvisibility)
+14. [NewLineAtEndOfFile](#newlineatendoffile)
+15. [OptionalAbstractKeyword](#optionalabstractkeyword)
+16. [OptionalReturnKeyword](#optionalreturnkeyword)
+17. [OptionalUnit](#optionalunit)
+18. [OptionalWhenBraces](#optionalwhenbraces)
+19. [ProtectedMemberInFinalClass](#protectedmemberinfinalclass)
+20. [RedundantVisibilityModifierRule](#redundantvisibilitymodifierrule)
+21. [ReturnCount](#returncount)
+22. [SafeCast](#safecast)
+23. [SerialVersionUIDInSerializableClass](#serialversionuidinserializableclass)
+24. [SpacingBetweenPackageAndImports](#spacingbetweenpackageandimports)
+25. [ThrowsCount](#throwscount)
+26. [UnnecessaryAbstractClass](#unnecessaryabstractclass)
+27. [UnnecessaryInheritance](#unnecessaryinheritance)
+28. [UnnecessaryParentheses](#unnecessaryparentheses)
+29. [UntilInsteadOfRangeTo](#untilinsteadofrangeto)
+30. [UnusedImports](#unusedimports)
+31. [UnusedPrivateMember](#unusedprivatemember)
+32. [UseDataClass](#usedataclass)
+33. [UtilityClassWithPublicConstructor](#utilityclasswithpublicconstructor)
+34. [WildcardImport](#wildcardimport)
 ## Rules in the `style` rule set:
 
 ### CollapsibleIfStatements
@@ -307,6 +308,24 @@ in the codebase will help make the code more uniform.
 * `excludeImportStatements` (default: `false`)
 
    if import statements should be ignored
+
+### MayBeConst
+
+This rule identifies and reports properties (`val`) that may be `const val` instead.
+Using `const val` can lead to better performance of the resulting bytecode as well as better interoperability with
+Java.
+
+#### Noncompliant Code:
+
+```kotlin
+val myConstant = "abc"
+```
+
+#### Compliant Code:
+
+```kotlin
+const val MY_CONSTANT = "abc"
+```
 
 ### ModifierOrder
 
