@@ -320,6 +320,8 @@ style:
     maxLineLength: 120
     excludePackageStatements: false
     excludeImportStatements: false
+  MayBeConst:
+    active: false
   ModifierOrder:
     active: true
   NestedClassesVisibility:
