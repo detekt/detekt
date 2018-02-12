@@ -10,7 +10,6 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isConstant
 import io.gitlab.arturbosch.detekt.rules.isOverridden
 import org.jetbrains.kotlin.KtNodeTypes
-import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
@@ -47,30 +46,35 @@ class MayBeConst(config: Config = Config.empty) : Rule(config) {
 	}
 
 	private fun KtProperty.canBeConst(): Boolean {
-		if (isLocal
+		if (cannotBeConstant() || isInObject() || isJvmField()) {
+			return false
+		}
+		return isConstantExpression()
+	}
+
+	private fun KtProperty.isJvmField(): Boolean {
+		val isJvmField = annotationEntries.any { it.text == "@JvmField" }
+		return annotationEntries.isNotEmpty() && !isJvmField
+	}
+
+	private fun KtProperty.cannotBeConstant(): Boolean {
+		return (isLocal
 				|| isVar
 				|| getter != null
 				|| isConstant()
-				|| isOverridden()) {
-			return false
-		}
-
-		if (!isTopLevel && containingClassOrObject !is KtObjectDeclaration) return false
-
-		val isJvmField = annotationEntries.any { it.text == "@JvmField" }
-		if (annotationEntries.isNotEmpty() && !isJvmField) return false
-
-		val initializer = initializer ?: return false
-
-		return initializer.isConstantExpression()
+				|| isOverridden())
 	}
 
-	private fun KtExpression.isConstantExpression(): Boolean {
-		return this is KtStringTemplateExpression
-				|| node.elementType == KtNodeTypes.BOOLEAN_CONSTANT
-				|| node.elementType == KtNodeTypes.INTEGER_CONSTANT
-				|| node.elementType == KtNodeTypes.CHARACTER_CONSTANT
-				|| node.elementType == KtNodeTypes.FLOAT_CONSTANT
+	private fun KtProperty.isInObject() =
+			!isTopLevel && containingClassOrObject !is KtObjectDeclaration
+
+	private fun KtProperty.isConstantExpression(): Boolean {
+		val initializer = initializer ?: return false
+		return initializer is KtStringTemplateExpression
+				|| initializer.node.elementType == KtNodeTypes.BOOLEAN_CONSTANT
+				|| initializer.node.elementType == KtNodeTypes.INTEGER_CONSTANT
+				|| initializer.node.elementType == KtNodeTypes.CHARACTER_CONSTANT
+				|| initializer.node.elementType == KtNodeTypes.FLOAT_CONSTANT
 	}
 
 }
