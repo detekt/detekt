@@ -19,4 +19,11 @@ class LargeClassSpec : SubjectSpek<LargeClass>({
 			assertEquals(subject.findings.size, 1)
 		}
 	}
+
+	describe("files without classes should not be considered") {
+		it("should not report anything in large files without classes") {
+			subject.lint(Case.NoClasses.path())
+			assertEquals(subject.findings.size, 0)
+		}
+	}
 })
