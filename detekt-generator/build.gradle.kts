@@ -54,12 +54,13 @@ val verifyGeneratorOutput by tasks.creating {
 fun assertDefaultConfigUpToDate() {
     val configDiff = ByteArrayOutputStream()
     exec {
-        commandLine = listOf("git", "diff", "${rootProject.rootDir}/detekt-cli/src/main/resources/default-detekt-config.yml")
+        commandLine = listOf("git", "diff",
+                "${rootProject.rootDir}/detekt-cli/src/main/resources/default-detekt-config.yml")
         standardOutput = configDiff
     }
 
     if (!configDiff.toString().isEmpty()) {
-        throw RuntimeException("The default-detekt-config.yml is not up-to-date. " +
+        throw GradleException("The default-detekt-config.yml is not up-to-date. " +
                 "Please build detekt locally to update it.")
     }
 }
@@ -72,7 +73,7 @@ fun assertDocumentationUpToDate() {
     }
 
     if (!configDiff.toString().isEmpty()) {
-        throw RuntimeException("The detekt documentation is not up-to-date. " +
+        throw GradleException("The detekt documentation is not up-to-date. " +
                 "Please build detekt locally to update it.")
     }
 }
