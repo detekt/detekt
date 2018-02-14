@@ -7,6 +7,10 @@ import io.gitlab.arturbosch.detekt.generator.printer.rulesetpage.ConfigPrinter
 import io.gitlab.arturbosch.detekt.generator.printer.rulesetpage.RuleSetPage
 import io.gitlab.arturbosch.detekt.generator.printer.rulesetpage.RuleSetPagePrinter
 
+/**
+ * @author Marvin Ramin
+ * @author Artur Bosch
+ */
 class DetektPrinter(private val arguments: Args) {
 
 	private val markdownWriter = MarkdownWriter()
@@ -14,9 +18,24 @@ class DetektPrinter(private val arguments: Args) {
 
 	fun print(pages: List<RuleSetPage>) {
 		pages.forEach {
-			markdownWriter.write(arguments.documentationPath, it.ruleSet.name) { RuleSetPagePrinter.print(it) }
+			markdownWriter.write(arguments.documentationPath, it.ruleSet.name) {
+				jekyllHeader(it.ruleSet.name) + "\n" + RuleSetPagePrinter.print(it)
+			}
 		}
 		yamlWriter.write(arguments.configPath, "default-detekt-config") { ConfigPrinter.print(pages) }
 	}
 
+	private fun jekyllHeader(ruleSet: String): String {
+		check(ruleSet.length > 1) { "Rule set name must be not empty or less than two symbols." }
+		return """
+			|---
+			|title: ${ruleSet[0].toUpperCase()}${ruleSet.substring(1)} Rule Set
+			|sidebar: home_sidebar
+			|keywords: rules, $ruleSet
+			|permalink: $ruleSet.html
+			|toc: true
+			|folder: documentation
+			|---
+		""".trimMargin()
+	}
 }

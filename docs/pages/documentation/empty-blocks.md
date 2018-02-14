@@ -1,15 +1,23 @@
 ---
-title: Empty Blocks Rule Set
+title: Empty-blocks Rule Set
 sidebar: home_sidebar
-keywords: news, blog, updates, release notes, announcements
+keywords: rules, empty-blocks
 permalink: empty-blocks.html
 toc: true
 folder: documentation
 ---
+The empty-blocks ruleset contains rules that will report empty blocks of code
+which should be avoided.
 
 ### EmptyCatchBlock
 
 Reports empty `catch` blocks. Empty blocks of code serve no purpose and should be removed.
+
+#### Configuration options:
+
+* `allowedExceptionNameRegex` (default: `"^(ignore|expected).*"`)
+
+   ignores exception types which match this regex
 
 ### EmptyClassBlock
 
