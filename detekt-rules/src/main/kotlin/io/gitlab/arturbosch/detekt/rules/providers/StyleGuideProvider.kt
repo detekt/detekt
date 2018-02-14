@@ -35,7 +35,6 @@ import io.gitlab.arturbosch.detekt.rules.style.UnusedPrivateMember
 import io.gitlab.arturbosch.detekt.rules.style.UseDataClass
 import io.gitlab.arturbosch.detekt.rules.style.UtilityClassWithPublicConstructor
 import io.gitlab.arturbosch.detekt.rules.style.WildcardImport
-import io.gitlab.arturbosch.detekt.rules.style.optional.OptionalReturnKeyword
 import io.gitlab.arturbosch.detekt.rules.style.optional.OptionalUnit
 
 /**
@@ -71,7 +70,6 @@ class StyleGuideProvider : RuleSetProvider {
 				UtilityClassWithPublicConstructor(config),
 				OptionalAbstractKeyword(config),
 				OptionalWhenBraces(config),
-				OptionalReturnKeyword(config),
 				OptionalUnit(config),
 				ProtectedMemberInFinalClass(config),
 				SerialVersionUIDInSerializableClass(config),

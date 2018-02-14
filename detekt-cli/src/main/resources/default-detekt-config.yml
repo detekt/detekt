@@ -330,8 +330,6 @@ style:
     active: true
   OptionalAbstractKeyword:
     active: true
-  OptionalReturnKeyword:
-    active: false
   OptionalUnit:
     active: false
   OptionalWhenBraces:
