@@ -21,25 +21,24 @@ code style guidelines.
 13. [NestedClassesVisibility](#nestedclassesvisibility)
 14. [NewLineAtEndOfFile](#newlineatendoffile)
 15. [OptionalAbstractKeyword](#optionalabstractkeyword)
-16. [OptionalReturnKeyword](#optionalreturnkeyword)
-17. [OptionalUnit](#optionalunit)
-18. [OptionalWhenBraces](#optionalwhenbraces)
-19. [ProtectedMemberInFinalClass](#protectedmemberinfinalclass)
-20. [RedundantVisibilityModifierRule](#redundantvisibilitymodifierrule)
-21. [ReturnCount](#returncount)
-22. [SafeCast](#safecast)
-23. [SerialVersionUIDInSerializableClass](#serialversionuidinserializableclass)
-24. [SpacingBetweenPackageAndImports](#spacingbetweenpackageandimports)
-25. [ThrowsCount](#throwscount)
-26. [UnnecessaryAbstractClass](#unnecessaryabstractclass)
-27. [UnnecessaryInheritance](#unnecessaryinheritance)
-28. [UnnecessaryParentheses](#unnecessaryparentheses)
-29. [UntilInsteadOfRangeTo](#untilinsteadofrangeto)
-30. [UnusedImports](#unusedimports)
-31. [UnusedPrivateMember](#unusedprivatemember)
-32. [UseDataClass](#usedataclass)
-33. [UtilityClassWithPublicConstructor](#utilityclasswithpublicconstructor)
-34. [WildcardImport](#wildcardimport)
+16. [OptionalUnit](#optionalunit)
+17. [OptionalWhenBraces](#optionalwhenbraces)
+18. [ProtectedMemberInFinalClass](#protectedmemberinfinalclass)
+19. [RedundantVisibilityModifierRule](#redundantvisibilitymodifierrule)
+20. [ReturnCount](#returncount)
+21. [SafeCast](#safecast)
+22. [SerialVersionUIDInSerializableClass](#serialversionuidinserializableclass)
+23. [SpacingBetweenPackageAndImports](#spacingbetweenpackageandimports)
+24. [ThrowsCount](#throwscount)
+25. [UnnecessaryAbstractClass](#unnecessaryabstractclass)
+26. [UnnecessaryInheritance](#unnecessaryinheritance)
+27. [UnnecessaryParentheses](#unnecessaryparentheses)
+28. [UntilInsteadOfRangeTo](#untilinsteadofrangeto)
+29. [UnusedImports](#unusedimports)
+30. [UnusedPrivateMember](#unusedprivatemember)
+31. [UseDataClass](#usedataclass)
+32. [UtilityClassWithPublicConstructor](#utilityclasswithpublicconstructor)
+33. [WildcardImport](#wildcardimport)
 ## Rules in the `style` rule set:
 
 ### CollapsibleIfStatements
@@ -394,25 +393,6 @@ interface Foo {
     fun x()
     var y: Int
 }
-```
-
-### OptionalReturnKeyword
-
-This rule reports optional `return` keywords. Inside conditional expressions the last expression is always returned
-by default.
-
-This makes the return keyword unnecessary and it can be removed safely.
-
-#### Noncompliant Code:
-
-```kotlin
-val z = if (true) return x else return y
-```
-
-#### Compliant Code:
-
-```kotlin
-val z = if (true) x else y
 ```
 
 ### OptionalUnit
