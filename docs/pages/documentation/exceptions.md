@@ -1,11 +1,12 @@
 ---
 title: Exceptions Rule Set
 sidebar: home_sidebar
-keywords: news, blog, updates, release notes, announcements
+keywords: rules, exceptions
 permalink: exceptions.html
 toc: true
 folder: documentation
 ---
+Rules in this rule set report issues related to how code throws and handles Exceptions.
 
 ### ExceptionRaisedInUnexpectedLocation
 

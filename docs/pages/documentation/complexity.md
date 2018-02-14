@@ -1,11 +1,12 @@
 ---
 title: Complexity Rule Set
 sidebar: home_sidebar
-keywords: news, blog, updates, release notes, announcements
+keywords: rules, complexity
 permalink: complexity.html
 toc: true
 folder: documentation
 ---
+This rule set contains rules that report complex code.
 
 ### ComplexCondition
 

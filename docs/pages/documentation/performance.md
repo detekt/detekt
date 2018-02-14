@@ -1,11 +1,12 @@
 ---
 title: Performance Rule Set
 sidebar: home_sidebar
-keywords: news, blog, updates, release notes, announcements
+keywords: rules, performance
 permalink: performance.html
 toc: true
 folder: documentation
 ---
+The performance rule set analyzes code for potential performance problems.
 
 ### ForEachOnRange
 

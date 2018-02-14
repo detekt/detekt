@@ -1,11 +1,14 @@
 ---
 title: Style Rule Set
 sidebar: home_sidebar
-keywords: news, blog, updates, release notes, announcements
+keywords: rules, style
 permalink: style.html
 toc: true
 folder: documentation
 ---
+The Style ruleset provides rules that assert the style of the code.
+This will help keep code in line with the given
+code style guidelines.
 
 ### CollapsibleIfStatements
 
@@ -273,6 +276,24 @@ in the codebase will help make the code more uniform.
 * `excludeImportStatements` (default: `false`)
 
    if import statements should be ignored
+
+### MayBeConst
+
+This rule identifies and reports properties (`val`) that may be `const val` instead.
+Using `const val` can lead to better performance of the resulting bytecode as well as better interoperability with
+Java.
+
+#### Noncompliant Code:
+
+```kotlin
+val myConstant = "abc"
+```
+
+#### Compliant Code:
+
+```kotlin
+const val MY_CONSTANT = "abc"
+```
 
 ### ModifierOrder
 
@@ -679,6 +700,12 @@ val range = 0 until 10
 ### UnusedImports
 
 This rule reports unused imports. Unused imports are dead code and should be removed.
+
+### UnusedPrivateMember
+
+Reports unused private properties, function parameters and functions.
+If private properties are unused they should be removed. Otherwise this dead code
+can lead to confusion and potential bugs.
 
 ### UseDataClass
 
