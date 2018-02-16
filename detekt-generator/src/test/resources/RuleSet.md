@@ -1,12 +1,4 @@
-# style
-
 style rule set
-
-## Content
-
-1. [WildcardImport](#wildcardimport)
-2. [EqualsNull](#equalsnull)
-## Rules in the `style` rule set:
 
 ### WildcardImport
 

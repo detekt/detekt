@@ -158,3 +158,4 @@ target/
 /detekt-cli/src/test/kotlin/io/gitlab/arturbosch/detekt/cli/Test.kt
 *.iml
 */out
+/docs/_site

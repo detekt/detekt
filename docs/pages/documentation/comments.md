@@ -1,11 +1,13 @@
 ---
 title: Comments Rule Set
 sidebar: home_sidebar
-keywords: news, blog, updates, release notes, announcements
+keywords: rules, comments
 permalink: comments.html
 toc: true
 folder: documentation
 ---
+This rule set provides rules that address issues in comments and documentation
+of the code.
 
 ### CommentOverPrivateFunction
 

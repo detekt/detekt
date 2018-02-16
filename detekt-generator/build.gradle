@@ -18,7 +18,7 @@ task generateDocumentation(dependsOn: ":detekt-generator:shadowJar") {
             fileTree("$rootProject.rootDir/detekt-rules/src/main/kotlin"),
             file("$rootProject.rootDir/detekt-generator/build/libs/detekt-generator-$detektVersion-all.jar"))
     outputs.files(
-            fileTree("$rootProject.rootDir/detekt-generator/documentation"),
+            fileTree("$rootProject.rootDir/docs/pages/documentation"),
             file("$rootProject.rootDir/detekt-cli/src/main/resources/default-detekt-config.yml"))
 
     doLast {
@@ -29,7 +29,7 @@ task generateDocumentation(dependsOn: ":detekt-generator:shadowJar") {
                     "--input",
                     "$rootProject.rootDir/detekt-rules/src/main/kotlin",
                     "--documentation",
-                    "$rootProject.rootDir/detekt-generator/documentation",
+                    "$rootProject.rootDir/docs/pages/documentation",
                     "--config",
                     "$rootProject.rootDir/detekt-cli/src/main/resources"
             ]
@@ -53,7 +53,7 @@ def assertDefaultConfigUpToDate() {
     }
 
     if (!configDiff.toString().isEmpty()) {
-        throw new RuntimeException("The default-detekt-config.yml is not up-to-date. " +
+        throw new GradleException("The default-detekt-config.yml is not up-to-date. " +
                 "Please build detekt locally to update it.")
     }
 }
@@ -61,12 +61,12 @@ def assertDefaultConfigUpToDate() {
 def assertDocumentationUpToDate() {
     def configDiff = new ByteArrayOutputStream()
     exec {
-        commandLine "git", "diff", "$rootProject.rootDir/detekt-generator/documentation"
+        commandLine "git", "diff", "$rootProject.rootDir/docs/pages/documentation"
         standardOutput = configDiff
     }
 
     if (!configDiff.toString().isEmpty()) {
-        throw new RuntimeException("The detekt documentation is not up-to-date. " +
+        throw new GradleException("The detekt documentation is not up-to-date. " +
                 "Please build detekt locally to update it.")
     }
 }

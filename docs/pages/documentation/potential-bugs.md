@@ -1,11 +1,12 @@
 ---
-title: Potential Bugs Rule Set
+title: Potential-bugs Rule Set
 sidebar: home_sidebar
-keywords: news, blog, updates, release notes, announcements
+keywords: rules, potential-bugs
 permalink: potential-bugs.html
 toc: true
 folder: documentation
 ---
+The potential-bugs rule set provides rules that detect potential bugs.
 
 ### DuplicateCaseInWhenExpression
 

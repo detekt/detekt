@@ -1,11 +1,12 @@
 ---
 title: Naming Rule Set
 sidebar: home_sidebar
-keywords: news, blog, updates, release notes, announcements
+keywords: rules, naming
 permalink: naming.html
 toc: true
 folder: documentation
 ---
+The naming ruleset contains rules which assert the naming of different parts of the codebase.
 
 ### ClassNaming
 
