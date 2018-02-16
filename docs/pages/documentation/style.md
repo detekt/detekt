@@ -364,25 +364,6 @@ interface Foo {
 }
 ```
 
-### OptionalReturnKeyword
-
-This rule reports optional `return` keywords. Inside conditional expressions the last expression is always returned
-by default.
-
-This makes the return keyword unnecessary and it can be removed safely.
-
-#### Noncompliant Code:
-
-```kotlin
-val z = if (true) return x else return y
-```
-
-#### Compliant Code:
-
-```kotlin
-val z = if (true) x else y
-```
-
 ### OptionalUnit
 
 It is not necessary to define a return type of `Unit` on functions. This rule detects and reports instances where
