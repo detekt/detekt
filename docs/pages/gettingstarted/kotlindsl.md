@@ -6,6 +6,9 @@ sidebar:
 permalink: kotlindsl.html
 summary:
 ---
+
+All information from Gradle Groovy DSL are still valid, just the DSL changes a little.
+
 For gradle version >= 4.1
 
 ```kotlin

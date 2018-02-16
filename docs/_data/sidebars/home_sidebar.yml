@@ -17,6 +17,9 @@ entries:
   - title: Getting Started
     output: web
     folderitems:
+    - title: with the Command Line Interface
+      url: /cli.html
+      output: web
     - title: with Gradle Groovy DSL
       url: /groovydsl.html
       output: web
