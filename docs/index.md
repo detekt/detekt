@@ -1,7 +1,7 @@
 ---
 title: "detekt"
 keywords: detekt static analysis code kotlin
-tags: [getting_started]
+tags: [features, quick_start]
 sidebar: 
 permalink: index.html
 summary:

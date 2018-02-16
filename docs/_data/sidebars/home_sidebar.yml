@@ -17,11 +17,17 @@ entries:
   - title: Getting Started
     output: web
     folderitems:
-    - title: Gradle Groovy DSL
+    - title: with Gradle Groovy DSL
       url: /groovydsl.html
       output: web
-    - title: Gradle Kotlin DSL
+    - title: with Gradle Kotlin DSL
       url: /kotlindsl.html
+      output: web
+    - title: with Gradle Plain Task
+      url: /gradletask.html
+      output: web
+    - title: with Maven Ant Task
+      url: /mavenanttask.html
       output: web
   - title: Rule Sets
     output: web
