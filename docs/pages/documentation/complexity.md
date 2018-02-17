@@ -71,6 +71,10 @@ Smaller methods can also be named much clearer which leads to improved readabili
 
    MCC threshold for a method
 
+* `ignoreSingleWhenExpression` (default: `false`)
+
+   Ignores a complex method if it only contains a single when expression.
+
 ### LabeledExpression
 
 This rule reports labeled expressions. Expressions with labels generally increase complexity and worsen the
