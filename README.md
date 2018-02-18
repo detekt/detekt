@@ -418,7 +418,7 @@ Set `failFast: true` in your detekt.yml configuration file.  As a result, every 
 
 To adjust, for example, the maxLineLength value, use this configuration file:
 ```
-failFast:true
+failFast: true
 autoCorrect: true
 
 style:
