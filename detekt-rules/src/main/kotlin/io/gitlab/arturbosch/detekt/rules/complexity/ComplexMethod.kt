@@ -38,10 +38,13 @@ class ComplexMethod(config: Config = Config.empty,
 	private val ignoreSingleWhenExpression = valueOrDefault(IGNORE_SINGLE_WHEN_EXPRESSION, false)
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
+		if (hasSingleWhenExpression(function.bodyExpression)) {
+			return
+		}
 		val visitor = McCabeVisitor()
 		visitor.visitNamedFunction(function)
 		val mcc = visitor.mcc
-		if (mcc > threshold && !hasSingleWhenExpression(function.bodyExpression)) {
+		if (mcc > threshold) {
 			report(ThresholdedCodeSmell(issue,
 					Entity.from(function),
 					Metric("MCC", mcc, threshold),
@@ -63,8 +66,7 @@ class ComplexMethod(config: Config = Config.empty,
 	}
 
 	companion object {
+		private const val DEFAULT_ACCEPTED_METHOD_COMPLEXITY = 10
 		const val IGNORE_SINGLE_WHEN_EXPRESSION = "ignoreSingleWhenExpression"
 	}
 }
-
-private const val DEFAULT_ACCEPTED_METHOD_COMPLEXITY = 10
