@@ -14,6 +14,9 @@ entries:
     - title: Release Notes
       url: /changelog.html
       output: web
+    - title: detekt configuration file
+      url: /configurations.html
+      output: web
     - title: Suppressing Issues in Code
       url: /suppressing-rules.html
       output: web

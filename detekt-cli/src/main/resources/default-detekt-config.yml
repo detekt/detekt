@@ -49,6 +49,7 @@ console-reports:
 output-reports:
   active: true
   exclude:
+  #  - 'HtmlOutputReport'
   #  - 'PlainOutputReport'
   #  - 'XmlOutputReport'
 
