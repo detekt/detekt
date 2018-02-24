@@ -4,6 +4,7 @@ keywords: gradle task
 tags: [getting_started, gradle]
 sidebar: 
 permalink: gradletask.html
+folder: gettingstarted
 summary:
 ---
 

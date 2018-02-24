@@ -4,6 +4,7 @@ keywords: cli
 tags: [getting_started, cli]
 sidebar: 
 permalink: cli.html
+folder: gettingstarted
 summary:
 ---
 

@@ -4,7 +4,6 @@ sidebar: home_sidebar
 keywords: changelog, release-notes, migration
 permalink: changelog.html
 toc: true
-folder: pages
 ---
 
 #### RC6-3

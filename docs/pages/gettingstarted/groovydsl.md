@@ -4,6 +4,7 @@ keywords: detekt static analysis code kotlin
 tags: [getting_started, gradle]
 sidebar: 
 permalink: groovydsl.html
+folder: gettingstarted
 summary:
 ---
 
