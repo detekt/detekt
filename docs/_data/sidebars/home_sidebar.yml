@@ -14,8 +14,14 @@ entries:
     - title: Release Notes
       url: /changelog.html
       output: web
-    - title: Suppressing Rules in Code
+    - title: Suppressing Issues in Code
       url: /suppressing-rules.html
+      output: web
+    - title: Suppressing Issues via Baseline File
+      url: /baseline.html
+      output: web
+    - title: Configure Build Failure Thresholds
+      url: /failonbuild.html
       output: web
   - title: Getting Started
     output: web
