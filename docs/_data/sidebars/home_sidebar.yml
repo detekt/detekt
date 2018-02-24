@@ -23,6 +23,9 @@ entries:
     - title: Configure Build Failure Thresholds
       url: /failonbuild.html
       output: web
+    - title: Extending detekt
+      url: /extensions.html
+      output: web
   - title: Getting Started
     output: web
     folderitems:
