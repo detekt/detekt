@@ -121,6 +121,7 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 			output-reports:
 			  active: true
 			  exclude:
+			  #  - 'HtmlOutputReport'
 			  #  - 'PlainOutputReport'
 			  #  - 'XmlOutputReport'
 			""".trimIndent()
