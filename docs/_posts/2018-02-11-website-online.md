@@ -1,13 +1,10 @@
 ---
-title:  "Detekt RC7 and Website"
+title:  "Website Online"
 published: true
 permalink: samplepost.html
 summary: "Documentation website launched together with RC7."
-tags: [news, getting_started]
+tags: [news]
 ---
-
-## RC7 
-
-Release notes will be added later ...
+As of today the website was launched!
 
 {% include links.html %}
