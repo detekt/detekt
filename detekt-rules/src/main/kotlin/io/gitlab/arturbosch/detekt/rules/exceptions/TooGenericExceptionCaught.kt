@@ -29,7 +29,7 @@ import org.jetbrains.kotlin.psi.KtCatchClause
  * }
  * </compliant>
  *
- * @configuration exceptions - exceptions which are too generic and should not be caught
+ * @configuration exceptionNames - exceptions which are too generic and should not be caught
  * (default: - ArrayIndexOutOfBoundsException
  *			 - Error
  *			 - Exception
@@ -65,7 +65,7 @@ class TooGenericExceptionCaught(config: Config) : Rule(config) {
 	}
 
 	companion object {
-		const val CAUGHT_EXCEPTIONS_PROPERTY = "exceptions"
+		const val CAUGHT_EXCEPTIONS_PROPERTY = "exceptionNames"
 	}
 }
 
