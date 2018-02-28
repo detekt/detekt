@@ -356,7 +356,6 @@ dependencies {
                                 <arg value="${basedir}/src"/>
                                 <arg value="-f"/>
                                 <arg value=".*test.*"/>
-                                <arg value="--useTabs"/>
                             </java>
                         </target>
                     </configuration>
