@@ -292,7 +292,7 @@ exception is too broad it can lead to unintended exceptions being caught.
 
 #### Configuration options:
 
-* `exceptions` (default: `- ArrayIndexOutOfBoundsException
+* `exceptionNames` (default: `- ArrayIndexOutOfBoundsException
 - Error
 - Exception
 - IllegalMonitorStateException
@@ -330,9 +330,8 @@ exceptions to the case that has currently occurred.
 
 #### Configuration options:
 
-* `exceptions` (default: `- Error
+* `exceptionNames` (default: `- Error
 - Exception
-- NullPointerException
 - Throwable
 - RuntimeException`)
 

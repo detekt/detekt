@@ -30,10 +30,9 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  * }
  * </compliant>
  *
- * @configuration exceptions - exceptions which are too generic and should not be thrown
+ * @configuration exceptionNames - exceptions which are too generic and should not be thrown
  * (default: - Error
  * 			 - Exception
- * 			 - NullPointerException
  *			 - Throwable
  * 			 - RuntimeException)
  *
@@ -60,14 +59,13 @@ class TooGenericExceptionThrown(config: Config) : Rule(config) {
 	}
 
 	companion object {
-		const val THROWN_EXCEPTIONS_PROPERTY = "exceptions"
+		const val THROWN_EXCEPTIONS_PROPERTY = "exceptionNames"
 	}
 }
 
 val thrownExceptionDefaults = listOf(
 		"Error",
 		"Exception",
-		"NullPointerException",
 		"Throwable",
 		"RuntimeException"
 )
