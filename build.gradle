@@ -19,7 +19,7 @@ plugins {
 apply plugin: 'io.gitlab.arturbosch.detekt'
 
 tasks.withType(Wrapper) {
-	gradleVersion = '4.5.1'
+	gradleVersion = '4.6'
 	distributionType = Wrapper.DistributionType.ALL
 }
 
