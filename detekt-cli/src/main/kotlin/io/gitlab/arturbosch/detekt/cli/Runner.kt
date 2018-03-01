@@ -10,6 +10,7 @@ interface Executable {
 
 /**
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 class Runner(private val arguments: Args) : Executable {
 
@@ -29,7 +30,7 @@ class Runner(private val arguments: Args) : Executable {
 			val pathFilters = createPathFilters()
 			val plugins = createPlugins()
 			val config = loadConfiguration()
-			return ProcessingSettings(inputPath, config, pathFilters, parallel, disableDefaultRuleSets, plugins)
+			return ProcessingSettings(inputPath, config, pathFilters, parallel, disableDefaultRuleSets, plugins, debug)
 		}
 	}
 }

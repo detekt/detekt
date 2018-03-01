@@ -6,6 +6,7 @@ import java.nio.file.Path
 
 /**
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 @Suppress("LongParameterList")
 data class ProcessingSettings(val project: List<Path>,
@@ -13,7 +14,8 @@ data class ProcessingSettings(val project: List<Path>,
 							  val pathFilters: List<PathFilter> = listOf(),
 							  val parallelCompilation: Boolean = false,
 							  val excludeDefaultRuleSets: Boolean = false,
-							  val pluginPaths: List<Path> = emptyList()) {
+							  val pluginPaths: List<Path> = emptyList(),
+							  val debug: Boolean = false) {
 
 	constructor(project: Path,
 				config: Config = Config.empty,
