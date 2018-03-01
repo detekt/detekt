@@ -24,7 +24,7 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  *
  * Prefer extracting the nested code into well-named functions to make it easier to understand.
  *
- * @configuration threshold - maximum nesting depth (default: 3)
+ * @configuration threshold - maximum nesting depth (default: 4)
  *
  * @active since v1.0.0
  * @author Artur Bosch
@@ -55,7 +55,7 @@ class NestedBlockDepth(config: Config = Config.empty,
 		internal var isTooDeep = false
 		private fun inc() {
 			depth++
-			if (depth > threshold) {
+			if (depth >= threshold) {
 				isTooDeep = true
 				if (depth > maxDepth) maxDepth = depth
 			}
@@ -66,7 +66,7 @@ class NestedBlockDepth(config: Config = Config.empty,
 		}
 
 		override fun visitIfExpression(expression: KtIfExpression) {
-			// Prevents else if (...) to count as two - #51C
+			// Prevents else if (...) to count as two - #51
 			if (expression.parent !is KtContainerNodeForControlStructureBody) {
 				inc()
 				super.visitIfExpression(expression)
@@ -109,8 +109,9 @@ class NestedBlockDepth(config: Config = Config.empty,
 				}
 			}
 		}
+	}
 
+	companion object {
+		const val DEFAULT_ACCEPTED_NESTING = 4
 	}
 }
-
-private const val DEFAULT_ACCEPTED_NESTING = 3

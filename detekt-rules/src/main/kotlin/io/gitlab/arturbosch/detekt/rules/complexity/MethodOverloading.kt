@@ -19,13 +19,13 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  *
  * Refactor these methods and try to use optional parameters instead to prevent some of the overloading.
  *
- * @configuration threshold - (default: 5)
+ * @configuration threshold - (default: 6)
  *
  * @author schalkms
  * @author Marvin Ramin
  */
 class MethodOverloading(config: Config = Config.empty,
-						threshold: Int = ACCEPTED_OVERLOAD_COUNT) : ThresholdRule(config, threshold) {
+						threshold: Int = DEFAULT_ACCEPTED_OVERLOAD_COUNT) : ThresholdRule(config, threshold) {
 
 	override val issue = Issue("MethodOverloading", Severity.Maintainability,
 			"Methods which are overloaded often might be harder to maintain. " +
@@ -51,7 +51,7 @@ class MethodOverloading(config: Config = Config.empty,
 		private var methods = HashMap<String, Int>()
 
 		fun reportIfThresholdExceeded(element: PsiElement) {
-			methods.filterValues { it > threshold }.forEach {
+			methods.filterValues { it >= threshold }.forEach {
 				report(ThresholdedCodeSmell(issue,
 						Entity.from(element),
 						Metric("OVERLOAD SIZE: ", it.value, threshold),
@@ -61,9 +61,11 @@ class MethodOverloading(config: Config = Config.empty,
 
 		override fun visitNamedFunction(function: KtNamedFunction) {
 			val name = function.name ?: return
-			methods.put(name, methods.getOrDefault(name, 0) + 1)
+			methods[name] = methods.getOrDefault(name, 0) + 1
 		}
 	}
-}
 
-private const val ACCEPTED_OVERLOAD_COUNT = 5
+	companion object {
+		const val DEFAULT_ACCEPTED_OVERLOAD_COUNT = 6
+	}
+}

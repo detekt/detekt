@@ -40,7 +40,7 @@ import org.jetbrains.kotlin.psi.KtLiteralStringTemplateEntry
  * }
  * </compliant>
  *
- * @configuration threshold - maximum allowed duplication (default: 2)
+ * @configuration threshold - amount of duplications to trigger rule (default: 3)
  * @configuration ignoreAnnotation - if values in Annotations should be ignored (default: true)
  * @configuration excludeStringsWithLessThan5Characters - if short strings should be excluded (default: true)
  * @configuration ignoreStringsRegex - RegEx of Strings that should be ignored (default: '$^')
@@ -82,7 +82,7 @@ class StringLiteralDuplication(
 		private var literalReferences = HashMap<String, MutableList<KtLiteralStringTemplateEntry>>()
 		private val pass: Unit = Unit
 
-		fun getLiteralsOverThreshold(): Map<String, Int> = literals.filterValues { it > threshold }
+		fun getLiteralsOverThreshold(): Map<String, Int> = literals.filterValues { it >= threshold }
 		fun entitiesForLiteral(literal: String): Pair<Entity, List<Entity>> {
 			val references = literalReferences[literal]
 			if (references != null && references.isNotEmpty()) {
@@ -110,7 +110,7 @@ class StringLiteralDuplication(
 	}
 
 	companion object {
-		const val DEFAULT_DUPLICATION = 2
+		const val DEFAULT_DUPLICATION = 3
 		const val STRING_EXCLUSION_LENGTH = 5
 		const val IGNORE_ANNOTATION = "ignoreAnnotation"
 		const val EXCLUDE_SHORT_STRING = "excludeStringsWithLessThan5Characters"
