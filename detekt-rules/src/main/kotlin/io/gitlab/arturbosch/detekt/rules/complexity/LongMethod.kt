@@ -35,7 +35,7 @@ class LongMethod(config: Config = Config.empty,
 		val body: KtBlockExpression? = function.bodyExpression.asBlockExpression()
 		body?.let {
 			val size = body.statements.size
-			if (size > threshold) report(
+			if (size >= threshold) report(
 					ThresholdedCodeSmell(issue,
 							Entity.from(function),
 							Metric("SIZE", size, threshold),
@@ -45,6 +45,7 @@ class LongMethod(config: Config = Config.empty,
 		super.visitNamedFunction(function)
 	}
 
+	companion object {
+		const val DEFAULT_ACCEPTED_METHOD_LENGTH = 20
+	}
 }
-
-private const val DEFAULT_ACCEPTED_METHOD_LENGTH = 20

@@ -46,7 +46,7 @@ class ComplexInterface(config: Config = Config.empty,
 			if (includeStaticDeclarations) {
 				size += countStaticDeclarations(klass.companionObject())
 			}
-			if (size > threshold) {
+			if (size >= threshold) {
 				report(ThresholdedCodeSmell(issue,
 						Entity.from(klass),
 						Metric("SIZE: ", size, threshold),
@@ -65,7 +65,7 @@ class ComplexInterface(config: Config = Config.empty,
 
 	companion object {
 		const val INCLUDE_STATIC_DECLARATIONS = "includeStaticDeclarations"
+		const val DEFAULT_LARGE_INTERFACE_COUNT = 10
 	}
 }
 
-private const val DEFAULT_LARGE_INTERFACE_COUNT = 10

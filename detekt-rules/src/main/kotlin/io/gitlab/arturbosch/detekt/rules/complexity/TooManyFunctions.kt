@@ -20,11 +20,11 @@ import org.jetbrains.kotlin.psi.KtObjectDeclaration
  * Too many functions indicate a violation of the single responsibility principle. Prefer extracting functionality
  * which clearly belongs together in separate parts of the code.
  *
- * @configuration thresholdInFiles - threshold in files (default: 10)
- * @configuration thresholdInClasses - threshold in classes (default: 10)
- * @configuration thresholdInInterfaces - threshold in interfaces (default: 10)
- * @configuration thresholdInObjects - threshold in objects (default: 10)
- * @configuration thresholdInEnums - threshold in enums (default: 10)
+ * @configuration thresholdInFiles - threshold in files (default: 11)
+ * @configuration thresholdInClasses - threshold in classes (default: 11)
+ * @configuration thresholdInInterfaces - threshold in interfaces (default: 11)
+ * @configuration thresholdInObjects - threshold in objects (default: 11)
+ * @configuration thresholdInEnums - threshold in enums (default: 11)
  *
  * @active since v1.0.0
  * @author Artur Bosch
@@ -48,7 +48,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 
 	override fun visitKtFile(file: KtFile) {
 		super.visitKtFile(file)
-		if (amountOfTopLevelFunctions > thresholdInFiles) {
+		if (amountOfTopLevelFunctions >= thresholdInFiles) {
 			report(ThresholdedCodeSmell(issue,
 					Entity.from(file),
 					Metric("SIZE", amountOfTopLevelFunctions, thresholdInFiles),
@@ -67,7 +67,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 	override fun visitClass(klass: KtClass) {
 		val amount = calcFunctions(klass)
 		when {
-			klass.isInterface() && amount > thresholdInInterfaces -> {
+			klass.isInterface() && amount >= thresholdInInterfaces -> {
 				report(ThresholdedCodeSmell(issue,
 						Entity.from(klass),
 						Metric("SIZE", amount, thresholdInInterfaces),
@@ -75,7 +75,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 								"Allowed maximum amount of functions inside interfaces is set to " +
 								"'$thresholdInInterfaces'"))
 			}
-			klass.isEnum() && amount > thresholdInEnums -> {
+			klass.isEnum() && amount >= thresholdInEnums -> {
 				report(ThresholdedCodeSmell(issue,
 						Entity.from(klass),
 						Metric("SIZE", amount, thresholdInEnums),
@@ -84,7 +84,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 								"'$thresholdInEnums'"))
 			}
 			else -> {
-				if (amount > thresholdInClasses) {
+				if (amount >= thresholdInClasses) {
 					report(ThresholdedCodeSmell(issue,
 							Entity.from(klass),
 							Metric("SIZE", amount, thresholdInClasses),
@@ -98,7 +98,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 
 	override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
 		val amount = calcFunctions(declaration)
-		if (amount > thresholdInObjects) {
+		if (amount >= thresholdInObjects) {
 			report(ThresholdedCodeSmell(issue,
 					Entity.from(declaration),
 					Metric("SIZE", amount, thresholdInObjects),
@@ -113,7 +113,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 			?.size ?: 0
 
 	companion object {
-		const val DEFAULT_THRESHOLD = 10
+		const val DEFAULT_THRESHOLD = 11
 		const val THRESHOLD_IN_FILES = "thresholdInFiles"
 		const val THRESHOLD_IN_CLASSES = "thresholdInClasses"
 		const val THRESHOLD_IN_INTERFACES = "thresholdInInterfaces"

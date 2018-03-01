@@ -12,9 +12,9 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameterList
 
 /**
- * Reports functions which have more parameters then a certain threshold (default: 5).
+ * Reports functions which have more parameters then a certain threshold (default: 6).
  *
- * @configuration threshold - maximum number of parameters (default: 5)
+ * @configuration threshold - maximum number of parameters (default: 6)
  * @configuration ignoreDefaultParameters - ignore parameters that have a default value (default: false)
  *
  * @active since v1.0.0
@@ -38,7 +38,7 @@ class LongParameterList(config: Config = Config.empty,
 		val parameterList = function.valueParameterList
 		val parameters = parameterList?.parameterCount()
 
-		if (parameters != null && parameters > threshold) {
+		if (parameters != null && parameters >= threshold) {
 			report(ThresholdedCodeSmell(issue,
 					Entity.from(parameterList),
 					Metric("SIZE", parameters, threshold),
@@ -57,8 +57,7 @@ class LongParameterList(config: Config = Config.empty,
 
 	companion object {
 		const val IGNORE_DEFAULT_PARAMETERS = "ignoreDefaultParameters"
+		const val DEFAULT_ACCEPTED_PARAMETER_LENGTH = 6
+		const val DEFAULT_IGNORE_DEFAULT_PARAMETERS = false
 	}
 }
-
-private const val DEFAULT_ACCEPTED_PARAMETER_LENGTH = 5
-private const val DEFAULT_IGNORE_DEFAULT_PARAMETERS = false

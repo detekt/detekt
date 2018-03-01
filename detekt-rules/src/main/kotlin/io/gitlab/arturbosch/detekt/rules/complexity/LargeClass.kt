@@ -69,7 +69,7 @@ class LargeClass(config: Config = Config.empty,
 		incHead() // for class body
 		super.visitClassOrObject(classOrObject)
 		val loc = locStack.pop()
-		if (loc > threshold) {
+		if (loc >= threshold) {
 			report(ThresholdedCodeSmell(issue,
 					Entity.from(classOrObject),
 					Metric("SIZE", loc, threshold),
@@ -127,6 +127,8 @@ class LargeClass(config: Config = Config.empty,
 		super.visitCallExpression(expression)
 	}
 
+	companion object {
+		const val DEFAULT_ACCEPTED_CLASS_LENGTH = 150
+	}
 }
 
-private const val DEFAULT_ACCEPTED_CLASS_LENGTH = 70

@@ -35,14 +35,14 @@ import org.jetbrains.kotlin.psi.KtWhileExpression
  * fun hasCorrectEnding() = return !str.endsWith("foo") && !str.endsWith("bar") && !str.endsWith("_")
  * </compliant>
  *
- * @configuration threshold - (default: 3)
+ * @configuration threshold - (default: 4)
  *
  * @active since v1.0.0
  * @author Artur Bosch
  * @author Marvin Ramin
  */
 class ComplexCondition(config: Config = Config.empty,
-					   threshold: Int = DEFAULT_ACCEPTED_NESTING) : ThresholdRule(config, threshold) {
+					   threshold: Int = DEFAULT_CONDITIONS_COUNT) : ThresholdRule(config, threshold) {
 
 	override val issue = Issue("ComplexCondition", Severity.Maintainability,
 			"Complex conditions should be simplified and extracted " +
@@ -75,7 +75,7 @@ class ComplexCondition(config: Config = Config.empty,
 			}
 			val conditionString = longestBinExpr.text
 			val count = frequency(conditionString, "&&") + frequency(conditionString, "||") + 1
-			if (count > threshold) {
+			if (count >= threshold) {
 				report(ThresholdedCodeSmell(issue,
 						Entity.from(condition),
 						Metric("SIZE", count, threshold),
@@ -100,6 +100,8 @@ class ComplexCondition(config: Config = Config.empty,
 
 		return count
 	}
-}
 
-private const val DEFAULT_ACCEPTED_NESTING = 3
+	companion object {
+		const val DEFAULT_CONDITIONS_COUNT = 4
+	}
+}
