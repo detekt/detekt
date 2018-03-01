@@ -10,6 +10,7 @@ import java.nio.file.Paths
 
 /**
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 class ExistingPathConverter : IStringConverter<Path> {
 	override fun convert(value: String): Path {
@@ -29,7 +30,7 @@ class PathConverter : IStringConverter<Path> {
 interface CommaSeparatedStringConverter<T> : IStringConverter<List<T>> {
 	val converter: IStringConverter<T>
 	override fun convert(value: String): List<T>
-			= value.splitToSequence(SEPARATOR_COMMA, SEPARATOR_SEMICOLON)
+			= value.splitToSequence(SEPARATOR_COMMA, SEPARATOR_SEMICOLON, SEPARATOR_COLON)
 			.map { it.trim() }
 			.map { converter.convert(it) }
 			.toList().apply {
