@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOverridden
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.psiUtil.isProtected
 
 /**
  * Reports empty functions. Empty blocks of code serve no purpose and should be removed.
