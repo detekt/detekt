@@ -214,3 +214,7 @@ Reports when variable names which do not follow the specified naming convention 
 * `privateVariablePattern` (default: `'(_)?[a-z][A-Za-z0-9]*'`)
 
    naming pattern
+
+* `excludeClassPattern` (default: `'$^'`)
+
+   ignores variables in classes which match this regex
