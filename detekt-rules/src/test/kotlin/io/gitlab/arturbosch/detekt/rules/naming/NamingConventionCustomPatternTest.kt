@@ -1,8 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 class NamingConventionCustomPatternTest {
@@ -43,7 +44,7 @@ class NamingConventionCustomPatternTest {
 
 	@Test
 	fun shouldUseCustomNameForMethodAndClass() {
-		Assertions.assertThat(rule.lint("""
+		assertThat(rule.lint("""
             class aBbD{
                 fun `name with back ticks`(){
                   val 123var = ""
@@ -58,7 +59,7 @@ class NamingConventionCustomPatternTest {
 
 	@Test
 	fun shouldUseCustomNameForConstant() {
-		Assertions.assertThat(rule.lint("""
+		assertThat(rule.lint("""
             class aBbD{
                 companion object {
                   const val lowerCaseConst = ""
@@ -69,7 +70,7 @@ class NamingConventionCustomPatternTest {
 
 	@Test
 	fun shouldUseCustomNameForEnum() {
-		Assertions.assertThat(rule.lint("""
+		assertThat(rule.lint("""
             class aBbD{
                 enum class aBbD {
                     enum1, enum2
@@ -80,6 +81,20 @@ class NamingConventionCustomPatternTest {
 
 	@Test
 	fun shouldUseCustomNameForPackage() {
-		Assertions.assertThat(rule.lint("package package_1")).hasSize(0)
+		assertThat(rule.lint("package package_1")).hasSize(0)
+	}
+
+	@Test
+	fun shouldExcludeClassesFromVariableNaming() {
+		val code = """
+			class Bar {
+				val MYVar = 3
+			}
+
+			object Foo {
+				val MYVar = 3
+			}"""
+		val config = TestConfig(mapOf(VariableNaming.EXCLUDE_CLASS_PATTERN to "Foo|Bar"))
+		assertThat(VariableNaming(config).lint(code)).hasSize(2)
 	}
 }

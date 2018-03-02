@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
 
@@ -29,9 +30,10 @@ class VariableNaming(config: Config = Config.empty) : Rule(config) {
 
 	private val variablePattern = Regex(valueOrDefault(VARIABLE_PATTERN, "[a-z][A-Za-z\\d]*"))
 	private val privateVariablePattern = Regex(valueOrDefault(PRIVATE_VARIABLE_PATTERN, "(_)?[a-z][A-Za-z\\d]*"))
+	private val excludeClassPattern = Regex(valueOrDefault(EXCLUDE_CLASS_PATTERN, "$^"))
 
 	override fun visitProperty(property: KtProperty) {
-		if (property.isSingleUnderscore) {
+		if (property.isSingleUnderscore && isContainingExcludedClass(property)) {
 			return
 		}
 
@@ -53,8 +55,14 @@ class VariableNaming(config: Config = Config.empty) : Rule(config) {
 		}
 	}
 
+	private fun isContainingExcludedClass(property: KtProperty): Boolean {
+		val classOrObject = property.containingClassOrObject
+		return classOrObject != null && classOrObject.identifierName().matches(excludeClassPattern)
+	}
+
 	companion object {
 		const val VARIABLE_PATTERN = "variablePattern"
 		const val PRIVATE_VARIABLE_PATTERN = "privateVariablePattern"
+		const val EXCLUDE_CLASS_PATTERN = "excludeClassPattern"
 	}
 }
