@@ -17,9 +17,11 @@ import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
  *
  * @configuration variablePattern - naming pattern (default: '[a-z][A-Za-z0-9]*')
  * @configuration privateVariablePattern - naming pattern (default: '(_)?[a-z][A-Za-z0-9]*')
+ * @configuration excludeClassPattern -  ignores variables in classes which match this regex (default: '$^')
  *
  * @active since v1.0.0
  * @author Marvin Ramin
+ * @author schalkms
  */
 class VariableNaming(config: Config = Config.empty) : Rule(config) {
 
