@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import java.net.URL
 
 /**
  * Reports when function names which do not follow the specified naming convention are used.
@@ -36,4 +37,9 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
 	companion object {
 		const val FUNCTION_PATTERN = "functionPattern"
 	}
+}
+
+fun main(args: Array<String>) {
+	val url = URL("htp://google.com")
+	println(url)
 }

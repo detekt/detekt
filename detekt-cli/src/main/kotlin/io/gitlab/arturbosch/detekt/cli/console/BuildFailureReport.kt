@@ -17,12 +17,14 @@ class BuildFailureReport : ConsoleReport() {
 	private var weightsConfig: Config by SingleAssign()
 	private var warningThreshold: Int by SingleAssign()
 	private var failThreshold: Int by SingleAssign()
+	private var maxIssues: Int by SingleAssign()
 
 	override fun init(config: Config) {
 		val buildConfig = config.subConfig("build")
 		weightsConfig = buildConfig.subConfig("weights")
 		warningThreshold = buildConfig.valueOrDefault("warningThreshold", -1)
 		failThreshold = buildConfig.valueOrDefault("failThreshold", -1)
+		maxIssues = buildConfig.valueOrDefault("maxIssues", -1)
 	}
 
 	override fun render(detektion: Detektion): String? {
@@ -30,13 +32,14 @@ class BuildFailureReport : ConsoleReport() {
 		val ruleToRuleSetId = extractRuleToRuleSetIdMap(detektion)
 		val amount = smells.map { it.weighted(ruleToRuleSetId) }.sum()
 
-		return if (failThreshold.reached(amount)) {
-			throw BuildFailure("Build failure threshold of $failThreshold reached with $amount weighted smells!")
-		} else if (warningThreshold.reached(amount)) {
-			"Warning: $amount weighted code smells found. " +
+		return when {
+			maxIssues.reached(amount) -> throw BuildFailure("Build failed with $amount weighted issues " +
+					"(threshold defined was $maxIssues).")
+			failThreshold.reached(amount) -> throw BuildFailure("Build failure threshold of " +
+					"$failThreshold reached with $amount weighted smells!")
+			warningThreshold.reached(amount) -> "Warning: $amount weighted code smells found. " +
 					"Warning threshold is $warningThreshold and fail threshold is $failThreshold!"
-		} else {
-			null
+			else -> null
 		}
 	}
 

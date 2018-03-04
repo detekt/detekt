@@ -9,6 +9,7 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
 class ComplexInterfaceSpec : SubjectSpek<ComplexInterface>({
+
 	subject { ComplexInterface(threshold = THRESHOLD) }
 
 	given("several interface declarations") {
@@ -31,4 +32,4 @@ class ComplexInterfaceSpec : SubjectSpek<ComplexInterface>({
 	}
 })
 
-private const val THRESHOLD = 3
+private const val THRESHOLD = 4

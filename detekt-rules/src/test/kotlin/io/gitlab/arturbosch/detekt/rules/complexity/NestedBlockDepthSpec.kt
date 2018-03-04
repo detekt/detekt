@@ -13,7 +13,8 @@ import kotlin.test.assertEquals
  * @author Artur Bosch
  */
 class NestedBlockDepthSpec : SubjectSpek<NestedBlockDepth>({
-	subject { NestedBlockDepth(threshold = 3) }
+
+	subject { NestedBlockDepth(threshold = 4) }
 
 	describe("nested classes are also considered") {
 		it("should detect only the nested large class") {
@@ -58,7 +59,7 @@ class NestedBlockDepthSpec : SubjectSpek<NestedBlockDepth>({
 
 })
 
-val nestedBlockCode = 	"""
+const val nestedBlockCode = 	"""
 	override fun procedure(node: ASTNode) {
 		val psi = node.psi
 		if (psi.isNotPartOfEnum() && psi.isNotPartOfString()) {

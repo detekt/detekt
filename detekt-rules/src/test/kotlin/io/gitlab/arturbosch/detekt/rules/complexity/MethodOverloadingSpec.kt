@@ -8,7 +8,8 @@ import org.jetbrains.spek.subject.SubjectSpek
 import kotlin.test.assertEquals
 
 class MethodOverloadingSpec : SubjectSpek<MethodOverloading>({
-	subject { MethodOverloading(threshold = 2) }
+
+	subject { MethodOverloading(threshold = 3) }
 
 	given("several overloaded methods") {
 

@@ -29,11 +29,11 @@ class TooManyFunctionsSpec : Spek({
 	describe("different declarations with one function as threshold") {
 
 		val rule = TooManyFunctions(TestConfig(mapOf(
-				TooManyFunctions.THRESHOLD_IN_CLASSES to "0",
-				TooManyFunctions.THRESHOLD_IN_ENUMS to "0",
-				TooManyFunctions.THRESHOLD_IN_FILES to "0",
-				TooManyFunctions.THRESHOLD_IN_INTERFACES to "0",
-				TooManyFunctions.THRESHOLD_IN_OBJECTS to "0"
+				TooManyFunctions.THRESHOLD_IN_CLASSES to "1",
+				TooManyFunctions.THRESHOLD_IN_ENUMS to "1",
+				TooManyFunctions.THRESHOLD_IN_FILES to "1",
+				TooManyFunctions.THRESHOLD_IN_INTERFACES to "1",
+				TooManyFunctions.THRESHOLD_IN_OBJECTS to "1"
 		)))
 
 		it("finds one function in class") {

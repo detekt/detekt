@@ -11,7 +11,8 @@ import org.jetbrains.spek.subject.SubjectSpek
  * @author Artur Bosch
  */
 class LongMethodSpec : SubjectSpek<LongMethod>({
-	subject { LongMethod(threshold = 2) }
+
+	subject { LongMethod(threshold = 3) }
 
 	describe("nested functions can be long") {
 
