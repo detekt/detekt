@@ -86,7 +86,7 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 			  weights:
 			    # complexity: 2
 			    # LongParameterList: 1
-				# style: 1
+			    # style: 1
 			    # comments: 1
 			""".trimIndent()
 	}
