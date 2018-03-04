@@ -630,7 +630,8 @@ class B : Object()
 
 ### UnnecessaryParentheses
 
-Reports unnecessary parentheses around expressions.
+This rule reports unnecessary parentheses around expressions.
+This unnecessary parentheses can safely be removed.
 
 Added in v1.0.0.RC4
 

@@ -14,7 +14,8 @@ import org.jetbrains.kotlin.psi.KtSuperTypeCallEntry
 import org.jetbrains.kotlin.psi.KtValueArgument
 
 /**
- * Reports unnecessary parentheses around expressions.
+ * This rule reports unnecessary parentheses around expressions.
+ * This unnecessary parentheses can safely be removed.
  *
  * Added in v1.0.0.RC4
  *
@@ -39,6 +40,7 @@ import org.jetbrains.kotlin.psi.KtValueArgument
  * </compliant>
  *
  * @author Marvin Ramin
+ * @author schalkms
  */
 class UnnecessaryParentheses(config: Config = Config.empty) : Rule(config) {
 
