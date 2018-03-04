@@ -10,6 +10,8 @@ import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.parents
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
 
+private val signatureRegex = Regex("\\s(\\s|\t)+")
+
 internal fun PsiElement.searchName(): String {
 	return this.namedUnwrappedElement?.name ?: "<UnknownName>"
 }
@@ -44,7 +46,7 @@ private fun PsiElement.searchSignature(): String {
 		is KtClassOrObject -> buildClassSignature(this)
 		is KtFile -> fileSignature()
 		else -> this.text
-	}.replace('\n', ' ').replace(Regex("\\s(\\s|\t)+"), " ")
+	}.replace('\n', ' ').replace(signatureRegex, " ")
 }
 
 private fun KtFile.fileSignature() = "${this.packageFqName.asString()}.${this.name}"
