@@ -78,7 +78,7 @@ class EndOfSentenceFormatSpec : SubjectSpek<KDocStyle>({
 		assertThat(subject.lint(code)).hasSize(1)
 	}
 
-	it("does not valid first sentence KDoc endings in a multi sentence comment") {
+	it("does not validate first sentence KDoc endings in a multi sentence comment") {
 		val code = """
 			/**
 			 * This sentence is correct.
@@ -167,6 +167,20 @@ class EndOfSentenceFormatSpec : SubjectSpek<KDocStyle>({
 			 * Something correct!
 			 */
 			class Test {
+			}
+			"""
+		assertThat(subject.lint(code)).isEmpty()
+	}
+
+	it("does not report URLs in comments") {
+		val code = """
+			/** http://www.google.com */
+			class Test1 {
+			}
+
+			/** Look here
+			www.google.com */
+			class Test2 {
 			}
 			"""
 		assertThat(subject.lint(code)).isEmpty()
