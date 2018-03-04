@@ -5,6 +5,7 @@ import java.nio.file.Path
 
 /**
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 class Args {
 
@@ -48,14 +49,20 @@ class Args {
 			description = "Treats current analysis findings as a smell baseline for future detekt runs.")
 	var createBaseline: Boolean = false
 
-	@Parameter(names = ["--output", "-o"],
-			description = "Directory where output reports are stored.",
-			converter = PathConverter::class)
-	var output: Path? = null
+	@Parameter(names = ["--report-xml", "-rx"],
+			description = "The path the XML report output should be stored in. If this argument is not supplied no XML" +
+					" report will be written.")
+	var xmlReport: String? = null
 
-	@Parameter(names = ["--output-name", "-on"],
-			description = "The base name for output reports is derived from this parameter.")
-	var outputName: String? = null
+	@Parameter(names = ["--report-html", "-rh"],
+			description = "The path the HTML report output should be stored in. If this argument is not supplied no" +
+					" HTML report will be written")
+	var htmlReport: String? = null
+
+	@Parameter(names = ["--report-plain", "-rp"],
+			description = "The path the plain (.txt) report output should be stored in. If this argument is not supplied no" +
+					" plain report will be written")
+	var plainReport: String? = null
 
 	@Parameter(names = ["--disable-default-rulesets", "-dd"],
 			description = "Disables default rule sets.")

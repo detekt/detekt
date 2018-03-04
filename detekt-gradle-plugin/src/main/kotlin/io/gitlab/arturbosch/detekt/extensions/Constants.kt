@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.extensions
 
 /**
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 
 const val DETEKT_PROFILE = "detekt.profile"
@@ -17,9 +18,9 @@ const val DEBUG_PARAMETER = "--debug"
 const val FILTERS_PARAMETER = "--filters"
 const val INPUT_PARAMETER = "--input"
 const val CONFIG_PARAMETER = "--config"
-const val OUTPUT_PARAMETER = "--output"
-const val OUTPUT_NAME_PARAMETER = "--output-name"
 const val BASELINE_PARAMETER = "--baseline"
 const val PARALLEL_PARAMETER = "--parallel"
 const val DISABLE_DEFAULT_RULESETS_PARAMETER = "--disable-default-rulesets"
 const val PLUGINS_PARAMETER = "--plugins"
+const val REPORT_XML_PARAMETER = "--report-xml"
+const val REPORT_HTML_PARAMETER = "--report-html"

@@ -2,12 +2,11 @@
 
 package io.gitlab.arturbosch.detekt.cli
 
-import io.gitlab.arturbosch.detekt.core.isFile
 import org.jetbrains.kotlin.utils.addToStdlib.ifNotEmpty
-import java.nio.file.Files
 
 /**
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 fun main(args: Array<String>) {
 	val arguments = parseArgumentsCheckingReportDirectory(args)
@@ -31,11 +30,6 @@ private fun parseArgumentsCheckingReportDirectory(args: Array<String>): Args {
 private fun validateCli(arguments: Args): List<String> {
 	val violations = ArrayList<String>()
 	with(arguments) {
-		output?.let {
-			if (Files.exists(it) && it.isFile()) {
-				violations += "Output file must be a directory."
-			}
-		}
 		if (createBaseline && baseline == null) {
 			violations += "Creating a baseline.xml requires the --baseline parameter to specify a path."
 		}

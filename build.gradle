@@ -59,11 +59,12 @@ subprojects { project ->
 		reports {
 			xml {
 				enabled true
-				destination "report.xml"
+				destination file("build/reports/detekt.xml")
+
 			}
 			html {
 				enabled true
-				destination "report.html"
+				destination file("build/reports/detekt.html")
 			}
 		}
 	}

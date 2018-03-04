@@ -8,6 +8,8 @@ import io.gitlab.arturbosch.detekt.extensions.FILTERS_PARAMETER
 import io.gitlab.arturbosch.detekt.extensions.INPUT_PARAMETER
 import io.gitlab.arturbosch.detekt.extensions.PARALLEL_PARAMETER
 import io.gitlab.arturbosch.detekt.extensions.PLUGINS_PARAMETER
+import io.gitlab.arturbosch.detekt.extensions.REPORT_HTML_PARAMETER
+import io.gitlab.arturbosch.detekt.extensions.REPORT_XML_PARAMETER
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
 import org.jetbrains.kotlin.org.jline.utils.Log
@@ -29,6 +31,9 @@ object DetektInvoker {
 		detekt.plugins?.let { args += PLUGINS_PARAMETER to it }
 		detekt.baseline?.let { args += BASELINE_PARAMETER to it.absolutePath }
 
+		if (detekt.reports.html.isEnabled) args += REPORT_HTML_PARAMETER to detekt.reports.html.destination.absolutePath
+		if (detekt.reports.xml.isEnabled) args += REPORT_XML_PARAMETER to detekt.reports.xml.destination.absolutePath
+
 		val argumentList = args.toArgumentList()
 		if (detekt.debug) argumentList += DEBUG_PARAMETER
 		if (detekt.parallel) argumentList += PARALLEL_PARAMETER
@@ -39,10 +44,11 @@ object DetektInvoker {
 	}
 
 	fun createBaseline() {
-
+		// TODO baseline task
 	}
 
 	fun generateConfig() {
+		// TODO generate config task
 	}
 
 	private fun invokeCli(project: Project, classpath: Configuration, args: Iterable<String>) {

@@ -103,4 +103,4 @@ private fun MutableMap<String, String>.mergeInto(other: MutableMap<String, Strin
 }
 
 private fun joinMultipleConfigurations(key: String, v1: String, v2: String) =
-		if (key == CONFIG_PARAMETER || key == CONFIG_RESOURCE_PARAMETER) "$v1,$v2" else v2
+		if (key == CONFIG_PARAMETER) "$v1,$v2" else v2
