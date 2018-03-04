@@ -9,6 +9,9 @@ import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtDeclaration
+import java.net.MalformedURLException
+import java.net.URISyntaxException
+import java.net.URL
 
 class KDocStyle(config: Config = Config.empty) : MultiRule() {
 
@@ -43,9 +46,7 @@ class EndOfSentenceFormat(config: Config = Config.empty) : Rule(config) {
 
 	private val endOfSentenceFormat =
 			Regex(valueOrDefault(END_OF_SENTENCE_FORMAT, "([.?!][ \\t\\n\\r\\f<])|([.?!]\$)"))
-
-	// https://stackoverflow.com/questions/3809401/what-is-a-good-regular-expression-to-match-a-url
-	private val urlFormat = Regex("[-a-zA-Z0-9@:%._+~#=]{2,256}\\.[a-z]{2,6}\\b([-a-zA-Z0-9@:%_+.~#?&//=]*)")
+	private val whiteSpaceRegex = Regex("\\s+")
 	private val htmlTag = Regex("<.+>")
 
 	fun verify(declaration: KtDeclaration) {
@@ -64,8 +65,15 @@ class EndOfSentenceFormat(config: Config = Config.empty) : Rule(config) {
 	private fun String.startsWithHtmlTag() = startsWith("<") && contains(htmlTag)
 
 	private fun lastArgumentMatchesUrl(text: String): Boolean {
-		val arguments = text.trimEnd().split(Regex("\\s+"))
-		return urlFormat.containsMatchIn(arguments.last())
+		val lastArgument = text.trimEnd().split(whiteSpaceRegex).last()
+		return try {
+			URL(lastArgument).toURI()
+			true
+		} catch (e: MalformedURLException){
+			false
+		} catch (e: URISyntaxException) {
+			false
+		}
 	}
 
 	companion object {
