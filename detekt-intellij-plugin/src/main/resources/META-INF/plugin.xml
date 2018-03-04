@@ -1,0 +1,39 @@
+<idea-plugin>
+    <id>detekt</id>
+    <name>Detekt IntelliJ Plugin</name>
+    <version>1.0</version>
+    <category>Tools Integration</category>
+    <vendor email=""
+            url="https://github.com/arturbosch/detekt">
+        Detekt
+    </vendor>
+
+    <description><![CDATA[
+        Detekt IntelliJ plugin
+    ]]></description>
+
+    <change-notes><![CDATA[
+        Initial version of plugin
+    ]]>
+    </change-notes>
+
+    <depends>com.intellij.modules.lang</depends>
+
+    <idea-version since-build="131"/>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <externalAnnotator language="kotlin"
+                           implementationClass="io.gitlab.arturbosch.detekt.DetektAnnotator"/>
+        <errorHandler implementation="com.intellij.diagnostic.ITNReporter"/>
+    </extensions>
+
+    <application-components>
+    </application-components>
+
+    <project-components>
+    </project-components>
+
+    <actions>
+    </actions>
+
+</idea-plugin>
