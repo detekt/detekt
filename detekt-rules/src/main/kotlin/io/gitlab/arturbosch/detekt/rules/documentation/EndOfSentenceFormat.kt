@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.MultiRule
@@ -37,7 +38,8 @@ class EndOfSentenceFormat(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,
 			Severity.Maintainability,
-			"The first sentence in a KDoc comment should end with correct punctuation.")
+			"The first sentence in a KDoc comment should end with correct punctuation.",
+			Debt.FIVE_MINS)
 
 	private val endOfSentenceFormat =
 			Regex(valueOrDefault(END_OF_SENTENCE_FORMAT, "([.?!][ \\t\\n\\r\\f<])|([.?!]\$)"))
