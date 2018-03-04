@@ -21,8 +21,6 @@ plugins {
 	id 'com.gradle.plugin-publish' version '0.9.10' apply false
 }
 
-apply plugin: 'io.gitlab.arturbosch.detekt'
-
 tasks.withType(Wrapper) {
 	gradleVersion = '4.6'
 	distributionType = Wrapper.DistributionType.ALL
@@ -39,14 +37,45 @@ allprojects {
 	}
 }
 
-subprojects {
+subprojects { project ->
 	apply plugin: 'org.junit.platform.gradle.plugin'
 	apply plugin: 'java-library'
 	apply plugin: 'kotlin'
 	apply plugin: 'maven-publish'
 	apply plugin: 'com.jfrog.bintray'
+	apply plugin: 'io.gitlab.arturbosch.detekt'
 
-	if (it.name in ['detekt-cli', 'detekt-watch-service', 'detekt-generator']) {
+	detekt {
+		debug = true
+		parallel = true
+		version = usedDetektVersion
+
+		config = project.resources.text.fromFile("${rootProject.projectDir}/detekt-cli/src/main/resources/default-detekt-config.yml")
+		baseline = file("${rootProject.projectDir}/reports/baseline.xml")
+		filters = '.*/resources/.*, .*/build/.*'
+	}
+
+	tasks.withType(io.gitlab.arturbosch.detekt.Detekt) {
+		reports {
+			xml {
+				enabled true
+				destination "report.xml"
+			}
+			html {
+				enabled true
+				destination "report.html"
+			}
+		}
+	}
+
+	task detektFailfast(type: io.gitlab.arturbosch.detekt.Detekt) {
+		description = "Runs a failfast detekt build."
+
+		source = sourceSets.getAt("main").allSource
+		config = project.resources.text.fromFile("${rootProject.projectDir}/reports/failfast.yml")
+	}
+
+	if (project.name in ['detekt-cli', 'detekt-watch-service', 'detekt-generator']) {
 		apply plugin: 'application'
 		apply plugin: 'com.github.johnrengelman.shadow'
 	}
@@ -159,39 +188,6 @@ subprojects {
 
 	sourceSets {
 		main.java.srcDirs += 'src/main/kotlin'
-	}
-}
-
-String USER_HOME = System.getProperty('user.home')
-
-detekt {
-	debug = true
-	version = usedDetektVersion
-	profile = 'failfast'
-
-	profile('main') {
-		input = rootProject.projectDir
-		filters = '.*/resources/.*, .*/build/.*'
-		config = "${rootProject.projectDir}/detekt-cli/src/main/resources/default-detekt-config.yml"
-		baseline = "${rootProject.projectDir}/reports/baseline.xml"
-	}
-
-	profile('failfast') {
-		input = rootProject.projectDir
-		config = "${rootProject.projectDir}/reports/failfast.yml"
-	}
-
-	profile('output') {
-		output = "${rootProject.projectDir}/reports"
-		outputName = "detekt"
-	}
-
-	idea {
-		path = "$USER_HOME/.idea"
-		codeStyleScheme = "$USER_HOME/.idea/idea-code-style.xml"
-		inspectionsProfile = "$USER_HOME/.idea/inspect.xml"
-		report = "${rootProject.projectDir}/reports"
-		mask = '*.kt,'
 	}
 }
 
