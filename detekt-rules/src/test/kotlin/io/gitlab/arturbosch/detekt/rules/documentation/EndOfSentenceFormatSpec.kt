@@ -179,7 +179,7 @@ class EndOfSentenceFormatSpec : SubjectSpek<KDocStyle>({
 			}
 
 			/** Look here
-			www.google.com */
+			http://google.com */
 			class Test2 {
 			}
 			"""
