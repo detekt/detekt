@@ -2,16 +2,29 @@ package io.gitlab.arturbosch.detekt.extensions
 
 import org.gradle.api.Action
 import org.gradle.api.Project
+import org.gradle.api.plugins.quality.CodeQualityExtension
+import org.gradle.api.resources.TextResource
+import java.io.File
 
 /**
  * @author Artur Bosch
  * @author Said Tahsin Dane
+ * @author Marvin Ramin
  */
-open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
-						   open var debug: Boolean = DEFAULT_DEBUG_VALUE,
-						   open var profile: String = DEFAULT_PROFILE_NAME,
-						   open var ideaExtension: IdeaExtension = IdeaExtension()) {
+open class DetektExtension(val project: Project) : CodeQualityExtension() {
 
+	open var version: String = SUPPORTED_DETEKT_VERSION
+	open var debug: Boolean = DEFAULT_DEBUG_VALUE
+	open var parallel: Boolean = false
+	open var disableDefaultRuleSets: Boolean = false
+	open var profile: String = DEFAULT_PROFILE_NAME
+	open var profiles: List<ProfileExtension> = listOf()
+	open var filters: String? = null
+	open var baseline: File? = null
+	open var plugins: String? = null
+	open var ideaExtension: IdeaExtension = IdeaExtension()
+	open lateinit var config: TextResource
+	open lateinit var configDir: File
 	fun ideaFormatArgs() = ideaExtension.formatArgs(this)
 	fun ideaInspectArgs() = ideaExtension.inspectArgs(this)
 
@@ -42,6 +55,11 @@ open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 			}
 			this
 		}
+	}
+
+	fun activeProfile(): ProfileExtension? {
+		println("Found ${profiles.size} profiles.")
+		return profiles.find { it.name == profile }
 	}
 
 	private fun extractArguments(): MutableList<String> {
