@@ -9,7 +9,7 @@ import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 
-class MaxLineLengthRuleSpec : Spek({
+class MaxLineLengthSpec : Spek({
 
 	given("a kt file with some long lines") {
 		val file = compileForTest(Case.MaxLineLength.path())

@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
@@ -29,7 +30,8 @@ import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
 class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 	override val issue: Issue = Issue("UnusedPrivateMember",
 			Severity.Maintainability,
-			"Private member is unused.")
+			"Private member is unused.",
+			Debt.FIVE_MINS)
 
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
 		val propertyVisitor = UnusedPropertyVisitor()

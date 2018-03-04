@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -56,7 +57,8 @@ class EqualsWithHashCodeExist(config: Config = Config.empty) : Rule(config) {
 			"Always override hashCode when you override equals. " +
 					"All hash-based collections depend on objects meeting the equals-contract. " +
 					"Two equal objects must produce the same hashcode. When inheriting equals or hashcode, " +
-					"override the inherited and call the super method for clarification.")
+					"override the inherited and call the super method for clarification.",
+			Debt.FIVE_MINS)
 
 	private val queue = ArrayDeque<ViolationHolder>(MAXIMUM_EXPECTED_NESTED_CLASSES)
 

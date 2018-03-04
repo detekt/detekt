@@ -31,12 +31,14 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
  * @configuration ignoreOnClassesPattern - Allows you to disable the rule for a list of classes (default: "")
  *
  * @author Marvin Ramin
+ * @author Niklas Baudy
+ * @author schalkms
  */
 class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,
 			Severity.Defect,
-			"Usage of lateinit. Using lateinit for property initialization " +
+			"Usage of lateinit detected. Using lateinit for property initialization " +
 					"is error prone, try using constructor injection or delegation.")
 
 	private val excludeAnnotatedProperties = SplitPattern(valueOrDefault(EXCLUDE_ANNOTATED_PROPERTIES, ""))
