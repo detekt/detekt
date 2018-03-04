@@ -16,7 +16,7 @@ and call those instead.
 
 #### Configuration options:
 
-* `threshold` (default: `3`)
+* `threshold` (default: `4`)
 
    
 
@@ -128,11 +128,11 @@ Extract parts of the functionality of long methods into separate, smaller method
 
 ### LongParameterList
 
-Reports functions which have more parameters then a certain threshold (default: 5).
+Reports functions which have more parameters then a certain threshold (default: 6).
 
 #### Configuration options:
 
-* `threshold` (default: `5`)
+* `threshold` (default: `6`)
 
    maximum number of parameters
 
@@ -149,7 +149,7 @@ Refactor these methods and try to use optional parameters instead to prevent som
 
 #### Configuration options:
 
-* `threshold` (default: `5`)
+* `threshold` (default: `6`)
 
    
 
@@ -162,7 +162,7 @@ Prefer extracting the nested code into well-named functions to make it easier to
 
 #### Configuration options:
 
-* `threshold` (default: `3`)
+* `threshold` (default: `4`)
 
    maximum nesting depth
 
@@ -175,9 +175,9 @@ Instead, prefer extracting the String literal into a property or constant.
 
 #### Configuration options:
 
-* `threshold` (default: `2`)
+* `threshold` (default: `3`)
 
-   maximum allowed duplication
+   amount of duplications to trigger rule
 
 * `ignoreAnnotation` (default: `true`)
 
@@ -225,22 +225,22 @@ which clearly belongs together in separate parts of the code.
 
 #### Configuration options:
 
-* `thresholdInFiles` (default: `10`)
+* `thresholdInFiles` (default: `11`)
 
    threshold in files
 
-* `thresholdInClasses` (default: `10`)
+* `thresholdInClasses` (default: `11`)
 
    threshold in classes
 
-* `thresholdInInterfaces` (default: `10`)
+* `thresholdInInterfaces` (default: `11`)
 
    threshold in interfaces
 
-* `thresholdInObjects` (default: `10`)
+* `thresholdInObjects` (default: `11`)
 
    threshold in objects
 
-* `thresholdInEnums` (default: `10`)
+* `thresholdInEnums` (default: `11`)
 
    threshold in enums

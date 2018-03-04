@@ -10,6 +10,7 @@ import org.jetbrains.spek.subject.SubjectSpek
 import org.jetbrains.spek.subject.dsl.SubjectProviderDsl
 
 class StringLiteralDuplicationSpec : SubjectSpek<StringLiteralDuplication>({
+
 	subject { StringLiteralDuplication() }
 
 	given("many hardcoded strings") {

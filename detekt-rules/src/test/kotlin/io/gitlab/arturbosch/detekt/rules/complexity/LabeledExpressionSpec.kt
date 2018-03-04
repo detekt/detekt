@@ -11,6 +11,7 @@ import org.jetbrains.spek.subject.SubjectSpek
  * @author Ivan Balaksha
  */
 class LabeledExpressionSpec : SubjectSpek<LabeledExpression>({
+
 	subject { LabeledExpression() }
 
 	given("several labeled expressions") {

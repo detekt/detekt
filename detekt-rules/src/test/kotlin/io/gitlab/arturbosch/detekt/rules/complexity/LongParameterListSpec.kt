@@ -11,6 +11,7 @@ import org.jetbrains.spek.subject.SubjectSpek
  * @author Artur Bosch
  */
 class LongParameterListSpec : SubjectSpek<LongParameterList>({
+
 	subject { LongParameterList() }
 
 	given("function with parameters") {
