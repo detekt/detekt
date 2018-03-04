@@ -24,12 +24,14 @@ class KDocStyle(config: Config = Config.empty) : MultiRule() {
 }
 
 /**
- * This rule validates the end of the first sentence of a KDoc comment. It should end with proper punctuation.
+ * This rule validates the end of the first sentence of a KDoc comment.
+ * It should end with proper punctuation or with a correct URL.
  *
  * @configuration endOfSentenceFormat - regular expression which should match the end of the first sentence in the KDoc
  * (default: ([.?!][ \t\n\r\f<])|([.?!]$))
  *
  *  @author Marvin Ramin
+ *  @author schalkms
  */
 class EndOfSentenceFormat(config: Config = Config.empty) : Rule(config) {
 
