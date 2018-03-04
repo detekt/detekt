@@ -63,6 +63,14 @@ class UnnecessaryParenthesesSpec : SubjectSpek<UnnecessaryParentheses>({
 			assertThat(subject.lint(code).size).isEqualTo(0)
 		}
 
+		it("does not report unnecessary parentheses when assigning a lambda to a val") {
+			val code = """
+				fun f() {
+					instance.copy(value = { false })
+				}"""
+			assertThat(subject.lint(code)).hasSize(0)
+		}
+
 		it("does not report well behaved parentheses") {
 			val code = """
 				fun x(a: String, b: String) {
