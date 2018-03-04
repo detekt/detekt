@@ -95,6 +95,20 @@ class NamingConventionCustomPatternTest {
 				val MYVar = 3
 			}"""
 		val config = TestConfig(mapOf(VariableNaming.EXCLUDE_CLASS_PATTERN to "Foo|Bar"))
-		assertThat(VariableNaming(config).lint(code)).hasSize(2)
+		assertThat(VariableNaming(config).lint(code)).hasSize(0)
+	}
+
+	@Test
+	fun shouldExcludeClassesFromFunctionNaming() {
+		val code = """
+			class Bar {
+				fun MYFun() {}
+			}
+
+			object Foo {
+				fun MYFun() {}
+			}"""
+		val config = TestConfig(mapOf(FunctionNaming.EXCLUDE_CLASS_PATTERN to "Foo|Bar"))
+		assertThat(FunctionNaming(config).lint(code)).hasSize(0)
 	}
 }

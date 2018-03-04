@@ -70,6 +70,10 @@ Reports when function names which do not follow the specified naming convention 
 
    naming pattern
 
+* `excludeClassPattern` (default: `'$^'`)
+
+   ignores functions in classes which match this regex
+
 ### MatchingDeclarationName
 
 "If a Kotlin file contains a single non-private class (potentially with related top-level declarations),
