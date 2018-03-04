@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.psi.KtValueArgument
 
 /**
  * This rule reports unnecessary parentheses around expressions.
- * This unnecessary parentheses can safely be removed.
+ * These unnecessary parentheses can safely be removed.
  *
  * Added in v1.0.0.RC4
  *
