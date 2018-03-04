@@ -56,7 +56,8 @@ class ModifierOrder(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,
 			Severity.Style,
-			debt = Debt(mins = 1))
+			"Modifiers are not in the correct order.",
+			Debt.FIVE_MINS)
 
 	// subset of KtTokens.MODIFIER_KEYWORDS_ARRAY
 	private val order = arrayOf(

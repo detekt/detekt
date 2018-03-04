@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -51,8 +50,7 @@ class PrintStackTrace(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue("PrintStackTrace", Severity.CodeSmell,
 			"Do not print an stack trace. " +
-					"These debug statements should be replaced with a logger or removed.",
-			Debt.FIVE_MINS)
+					"These debug statements should be replaced with a logger or removed.")
 
 	override fun visitCallExpression(expression: KtCallExpression) {
 		val callNameExpression = expression.getCallNameExpression()
