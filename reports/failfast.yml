@@ -1,5 +1,5 @@
 build:
-  failThreshold: 1
+  maxIssues: 1
 
 test-pattern: # Configure exclusions for test sources
   active: true
