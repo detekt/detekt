@@ -59,7 +59,7 @@ class NestedBlockDepthSpec : SubjectSpek<NestedBlockDepth>({
 
 })
 
-const val nestedBlockCode = 	"""
+const val nestedBlockCode = """
 	override fun procedure(node: ASTNode) {
 		val psi = node.psi
 		if (psi.isNotPartOfEnum() && psi.isNotPartOfString()) {

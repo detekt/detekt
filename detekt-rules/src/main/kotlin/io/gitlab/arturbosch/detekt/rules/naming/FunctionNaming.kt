@@ -46,8 +46,3 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
 		const val EXCLUDE_CLASS_PATTERN = "excludeClassPattern"
 	}
 }
-
-fun main(args: Array<String>) {
-	val url = URL("htp://google.com")
-	println(url)
-}

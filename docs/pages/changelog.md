@@ -6,6 +6,20 @@ permalink: changelog.html
 toc: true
 ---
 
+#### RC7
+
+##### Migration
+
+- build failure threshold properties are now deprecated in favor of the new `maxIssues` property.
+- `warningThreshold` and `failThreshold` will get removed in a later release, a deprecation warning is printed to the console.
+
+```yaml
+build:
+  warningThreshold: 5 // deprecated
+  failThreshold: 10 // deprecated
+  maxIssues: 10
+```
+
 #### RC6-3
 
 - Improve documentation of sample project - #438 - [#712](https://github.com/arturbosch/detekt/pull/712)
