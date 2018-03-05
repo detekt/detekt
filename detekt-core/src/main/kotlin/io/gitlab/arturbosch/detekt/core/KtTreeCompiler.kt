@@ -20,7 +20,7 @@ class KtTreeCompiler(private val compiler: KtCompiler = KtCompiler(),
 	}
 
 	fun compile(path: Path): List<KtFile> {
-		require(Files.exists(path)) { "Given path path does not exist!" }
+		require(Files.exists(path)) { "Given path $path does not exist!" }
 		return when {
 			path.isFile() && path.isKotlinFile() -> listOf(compiler.compile(path, path))
 			path.isDirectory() -> compileInternal(path)
