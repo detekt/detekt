@@ -48,7 +48,7 @@ subprojects { project ->
 	detekt {
 		debug = true
 		parallel = true
-		version = usedDetektVersion
+		toolVersion = "1.0.0.RC6-MARVIN"
 
 		config = project.resources.text.fromFile("${rootProject.projectDir}/detekt-cli/src/main/resources/default-detekt-config.yml")
 		baseline = file("${rootProject.projectDir}/reports/baseline.xml")

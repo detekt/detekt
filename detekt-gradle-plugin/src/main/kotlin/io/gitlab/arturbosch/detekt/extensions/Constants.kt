@@ -6,7 +6,6 @@ package io.gitlab.arturbosch.detekt.extensions
  */
 
 const val DETEKT_PROFILE = "detekt.profile"
-const val SUPPORTED_DETEKT_VERSION = "latest.release"
 const val DEFAULT_DEBUG_VALUE = false
 
 const val DEFAULT_PROFILE_NAME = "main"

@@ -12,7 +12,6 @@ import java.io.File
  */
 open class DetektExtension(val project: Project) : CodeQualityExtension() {
 
-	open var version: String = SUPPORTED_DETEKT_VERSION
 	open var debug: Boolean = DEFAULT_DEBUG_VALUE
 	open var parallel: Boolean = false
 	open var disableDefaultRuleSets: Boolean = false
