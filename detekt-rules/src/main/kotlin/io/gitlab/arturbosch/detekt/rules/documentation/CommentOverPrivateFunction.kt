@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -28,7 +29,8 @@ class CommentOverPrivateFunction(config: Config = Config.empty) : Rule(config) {
 			Severity.Maintainability,
 			"Comments for private functions should be avoided. " +
 					"Prefer giving the function an expressive name. " +
-					"Split it up in smaller, self-explaining functions if necessary.")
+					"Split it up in smaller, self-explaining functions if necessary.",
+			Debt.TWENTY_MINS)
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		val modifierList = function.modifierList

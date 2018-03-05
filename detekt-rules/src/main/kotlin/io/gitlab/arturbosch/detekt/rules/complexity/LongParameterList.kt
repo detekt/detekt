@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Metric
@@ -29,7 +30,8 @@ class LongParameterList(config: Config = Config.empty,
 			Severity.Maintainability,
 			"The more parameters a method has the more complex it is. Long parameter lists are often " +
 					"used to control complex algorithms and violate the Single Responsibility Principle. " +
-					"Prefer methods with short parameter lists.")
+					"Prefer methods with short parameter lists.",
+			Debt.TWENTY_MINS)
 
 	private val ignoreDefaultParameters = valueOrDefault(IGNORE_DEFAULT_PARAMETERS, DEFAULT_IGNORE_DEFAULT_PARAMETERS)
 

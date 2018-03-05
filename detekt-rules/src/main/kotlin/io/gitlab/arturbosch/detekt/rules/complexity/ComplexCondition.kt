@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Metric
@@ -45,8 +46,8 @@ class ComplexCondition(config: Config = Config.empty,
 					   threshold: Int = DEFAULT_CONDITIONS_COUNT) : ThresholdRule(config, threshold) {
 
 	override val issue = Issue("ComplexCondition", Severity.Maintainability,
-			"Complex conditions should be simplified and extracted " +
-					"into well-named methods if necessary.")
+			"Complex conditions should be simplified and extracted into well-named methods if necessary.",
+			Debt.TWENTY_MINS)
 
 	override fun visitIfExpression(expression: KtIfExpression) {
 		val condition = expression.condition

@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -45,8 +46,8 @@ class TooGenericExceptionThrown(config: Config) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName,
 			Severity.Defect,
-			"Thrown exception is too generic. " +
-					"Prefer throwing project specific exceptions to handle error cases.")
+			"Thrown exception is too generic. Prefer throwing project specific exceptions to handle error cases.",
+			Debt.TWENTY_MINS)
 
 	private val exceptions: Set<String> = valueOrDefault(THROWN_EXCEPTIONS_PROPERTY, thrownExceptionDefaults).toHashSet()
 
