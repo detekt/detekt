@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.performance
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -28,10 +29,11 @@ import org.jetbrains.kotlin.psi.KtValueArgumentList
  * @author Ivan Balaksha
  */
 class SpreadOperator(config: Config = Config.empty) : Rule(config) {
-	override val issue: Issue = Issue("SpreadOperator",
-			Severity.Performance,
+
+	override val issue: Issue = Issue("SpreadOperator", Severity.Performance,
 			"Using a spread operator causes a full copy of the array to be created before calling a method " +
-					"has a very high performance penalty.")
+					"has a very high performance penalty.",
+			Debt.TWENTY_MINS)
 
 	override fun visitValueArgumentList(list: KtValueArgumentList) {
 		super.visitValueArgumentList(list)

@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -41,7 +42,8 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
 class SwallowedException(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue("SwallowedException", Severity.CodeSmell,
-			"The caught exception is swallowed. The original exception could be lost.")
+			"The caught exception is swallowed. The original exception could be lost.",
+			Debt.TWENTY_MINS)
 
 	override fun visitCatchSection(catchClause: KtCatchClause) {
 		if (isExceptionSwallowed(catchClause) == true) {

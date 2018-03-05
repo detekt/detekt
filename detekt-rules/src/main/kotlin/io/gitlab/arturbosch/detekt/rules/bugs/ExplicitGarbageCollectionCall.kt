@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -32,7 +33,8 @@ class ExplicitGarbageCollectionCall(config: Config) : Rule(config) {
 			Severity.Defect,
 			"Don't try to be smarter than the JVM. Your code should work independently if the garbage " +
 					"collector is disabled or not. If you face memory issues, " +
-					"try tuning the JVM options instead of relying on code itself.")
+					"try tuning the JVM options instead of relying on code itself.",
+			Debt.TWENTY_MINS)
 
 	override fun visitCallExpression(expression: KtCallExpression) {
 		expression.getCallNameExpression()?.let {

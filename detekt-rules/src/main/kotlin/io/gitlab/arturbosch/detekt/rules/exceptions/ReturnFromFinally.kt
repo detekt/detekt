@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -32,7 +33,7 @@ import org.jetbrains.kotlin.psi.psiUtil.parents
 class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue("ReturnFromFinally", Severity.Defect,
-			"Do not return within a finally statement. This can discard exceptions.")
+			"Do not return within a finally statement. This can discard exceptions.", Debt.TWENTY_MINS)
 
 	override fun visitFinallySection(finallySection: KtFinallySection) {
 		val returnExpressions = finallySection.finalExpression.collectByType<KtReturnExpression>()

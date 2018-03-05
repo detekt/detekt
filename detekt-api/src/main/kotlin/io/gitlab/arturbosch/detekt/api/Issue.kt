@@ -3,11 +3,16 @@ package io.gitlab.arturbosch.detekt.api
 /**
  * @author Artur Bosch
  * @author Marvin Ramin
+ * @author schalkms
+ */
+
+/**
+ * An issue represents a problem in the codebase.
  */
 data class Issue(val id: String,
 				 val severity: Severity,
-				 val description: String = "",
-				 val debt: Debt = Debt.TWENTY_MINS,
+				 val description: String,
+				 val debt: Debt,
 				 val aliases: Set<String> = setOf()) {
 
 	init {

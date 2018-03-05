@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Metric
@@ -36,7 +37,8 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 			Severity.Maintainability,
 			"Too many functions inside a/an file/class/object/interface always indicate a violation of "
 					+ "the single responsibility principle. Maybe the file/class/object/interface wants to manage to " +
-					"many things at once. Extract functionality which clearly belongs together.")
+					"many things at once. Extract functionality which clearly belongs together.",
+			Debt.TWENTY_MINS)
 
 	private val thresholdInFiles = valueOrDefault(THRESHOLD_IN_FILES, DEFAULT_THRESHOLD)
 	private val thresholdInClasses = valueOrDefault(THRESHOLD_IN_CLASSES, DEFAULT_THRESHOLD)

@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Metric
@@ -35,7 +36,8 @@ class ComplexInterface(config: Config = Config.empty,
 			"An interface contains too many functions and properties. " +
 					"Large classes tend to handle many things at once. " +
 					"An interface should have one responsibility. " +
-					"Split up large interfaces into smaller ones that are easier to understand.")
+					"Split up large interfaces into smaller ones that are easier to understand.",
+			Debt.TWENTY_MINS)
 
 	private val includeStaticDeclarations = valueOrDefault(INCLUDE_STATIC_DECLARATIONS, false)
 

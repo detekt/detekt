@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Metric
@@ -29,7 +30,8 @@ class LongMethod(config: Config = Config.empty,
 	override val issue = Issue("LongMethod",
 			Severity.Maintainability,
 			"One method should have one responsibility. Long methods tend to handle many things at once. " +
-					"Prefer smaller methods to make them easier to understand.")
+					"Prefer smaller methods to make them easier to understand.",
+			Debt.TWENTY_MINS)
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		val body: KtBlockExpression? = function.bodyExpression.asBlockExpression()

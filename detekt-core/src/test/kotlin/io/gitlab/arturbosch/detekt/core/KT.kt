@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.core
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -32,7 +33,7 @@ class TestProvider2(override val ruleSetId: String = "Test2") : RuleSetProvider 
 }
 
 class FindName : Rule() {
-	override val issue: Issue = Issue(javaClass.simpleName, Severity.Minor)
+	override val issue: Issue = Issue(javaClass.simpleName, Severity.Minor, "", Debt.TWENTY_MINS)
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
 		report(CodeSmell(issue, Entity.from(classOrObject), message = ""))
 	}
