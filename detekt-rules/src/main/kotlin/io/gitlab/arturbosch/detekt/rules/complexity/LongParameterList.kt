@@ -12,7 +12,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameterList
 
 /**
- * Reports functions which have more parameters then a certain threshold (default: 6).
+ * Reports functions which have more parameters than a certain threshold (default: 6).
  *
  * @configuration threshold - maximum number of parameters (default: 6)
  * @configuration ignoreDefaultParameters - ignore parameters that have a default value (default: false)

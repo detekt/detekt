@@ -128,7 +128,7 @@ Extract parts of the functionality of long methods into separate, smaller method
 
 ### LongParameterList
 
-Reports functions which have more parameters then a certain threshold (default: 6).
+Reports functions which have more parameters than a certain threshold (default: 6).
 
 #### Configuration options:
 

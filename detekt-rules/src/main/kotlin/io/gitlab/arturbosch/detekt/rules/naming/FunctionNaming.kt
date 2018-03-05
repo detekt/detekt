@@ -38,8 +38,3 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
 		const val FUNCTION_PATTERN = "functionPattern"
 	}
 }
-
-fun main(args: Array<String>) {
-	val url = URL("htp://google.com")
-	println(url)
-}
