@@ -1,8 +1,6 @@
 package io.gitlab.arturbosch.detekt
 
 import groovy.lang.Closure
-import groovy.lang.MissingPropertyException
-import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Action
 import org.gradle.api.Incubating
 import org.gradle.api.file.FileCollection
@@ -16,7 +14,6 @@ import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.VerificationTask
-import org.jetbrains.kotlin.org.jline.utils.Log
 import java.io.File
 import javax.inject.Inject
 
@@ -64,16 +61,8 @@ open class Detekt : SourceTask(), VerificationTask, Reporting<CheckstyleReports>
 		return reports
 	}
 
-	private val extension: DetektExtension
-		get() = project.extensions.findByType(DetektExtension::class.java)
-				?: throw MissingPropertyException("missing detekt")
-
 	@TaskAction
 	fun check() {
-		Log.info("Running detektCheck")
-		Log.info(reports.html.destination)
-		Log.info(reports.xml.destination)
-
 		DetektInvoker.check(this)
 	}
 }

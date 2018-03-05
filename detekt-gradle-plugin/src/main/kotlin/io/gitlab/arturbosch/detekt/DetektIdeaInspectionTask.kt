@@ -18,7 +18,7 @@ open class DetektIdeaInspectionTask : DefaultTask() {
 	fun inspect() {
 		with(project.extensions.getByName("detekt") as DetektExtension) {
 			if (debug) println("$ideaExtension")
-			startProcess(ideaInspectArgs())
+//			startProcess(ideaInspectArgs())
 		}
 	}
 }

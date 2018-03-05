@@ -71,11 +71,6 @@ class DetektPlugin : AbstractCodeQualityPlugin<Detekt>() {
 	}
 
 	override fun beforeApply() {
-		// TODO should we Read profiles??
-//		val profilesContainer = project.container(ProfileExtension::class.java)
-//		project.extensions.add(PROFILES_EXTENSION_NAME, profilesContainer)
-//		profilesContainer.all { ProfileStorage.add(it) }
-
 		// Default Tasks
 //		project.task(mapOf(TYPE to Detekt::class.java), LEGACY_DETEKT_TASK)
 		project.task(mapOf(TYPE to DetektIdeaFormatTask::class.java), IDEA_FORMAT)
@@ -84,25 +79,8 @@ class DetektPlugin : AbstractCodeQualityPlugin<Detekt>() {
 		project.task(mapOf(TYPE to DetektCreateBaselineTask::class.java), BASELINE)
 	}
 
-	//	override fun beforeApply() {
-
-//
-//		println("createExtension")
-//		project.extensions.create(DETEKT_EXTENSION_NAME, DetektExtension::class.java)
-//		println("createTask")
-//		project.task(mapOf(TYPE to Detekt::class.java), CHECK)
-//	}
-
-	//	override fun apply(project: Project) {
-//		project.task(mapOf(TYPE to DetektIdeaFormatTask::class.java), IDEA_FORMAT)
-//		project.task(mapOf(TYPE to DetektIdeaInspectionTask::class.java), IDEA_INSPECT)
-//		project.task(mapOf(TYPE to DetektGenerateConfigTask::class.java), GENERATE_CONFIG)
-//		project.task(mapOf(TYPE to DetektCreateBaselineTask::class.java), BASELINE)
-//	}
-
 	companion object {
 		private const val DETEKT_EXTENSION_NAME = "detekt"
-		private const val PROFILES_EXTENSION_NAME = "profiles"
 		private const val TYPE = "type"
 		private const val DETEKT = "detekt"
 		private const val LEGACY_DETEKT_TASK = "detektCheck"
