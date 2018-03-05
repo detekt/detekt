@@ -34,7 +34,7 @@ object DetektInvoker {
 		if (detekt.reports.html.isEnabled) args += REPORT_HTML_PARAMETER to detekt.reports.html.destination.absolutePath
 		if (detekt.reports.xml.isEnabled) args += REPORT_XML_PARAMETER to detekt.reports.xml.destination.absolutePath
 
-		val argumentList = args.toArgumentList()
+		val argumentList = args.flatMapTo(ArrayList()) { listOf(it.key, it.value) }
 		if (detekt.debug) argumentList += DEBUG_PARAMETER
 		if (detekt.parallel) argumentList += PARALLEL_PARAMETER
 		if (detekt.disableDefaultRuleSets) argumentList += DISABLE_DEFAULT_RULESETS_PARAMETER
@@ -57,14 +57,5 @@ object DetektInvoker {
 			it.classpath = classpath
 			it.args(args)
 		}
-	}
-
-	private fun <T> Map<T, T>.toArgumentList(): MutableList<T> {
-		val list = mutableListOf<T>()
-		this.keys.forEach {
-			list += it
-			list += this.getValue(it)
-		}
-		return list
 	}
 }
