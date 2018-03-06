@@ -11,6 +11,7 @@ import org.gradle.api.plugins.quality.internal.CheckstyleReportsImpl
 import org.gradle.api.reporting.Reporting
 import org.gradle.api.resources.TextResource
 import org.gradle.api.tasks.CacheableTask
+import org.gradle.api.tasks.OutputFiles
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.VerificationTask
@@ -45,6 +46,20 @@ open class Detekt : SourceTask(), VerificationTask, Reporting<CheckstyleReports>
 	open fun getObjectFactory(): ObjectFactory {
 		throw UnsupportedOperationException()
 	}
+
+	@OutputFiles
+	fun getOutputFiles(): Map<String, File> {
+		val map = HashMap<String, File>()
+
+		if (reports.xml.isEnabled) {
+			map += "XML" to reports.xml.destination
+		}
+		if (reports.html.isEnabled) {
+			map += "HTML" to reports.html.destination
+		}
+		return map
+	}
+
 
 	override fun getReports(): CheckstyleReports {
 		return reports
