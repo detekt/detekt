@@ -12,6 +12,7 @@ import org.gradle.api.reporting.Reporting
 import org.gradle.api.resources.TextResource
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.OutputFiles
+import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.VerificationTask
@@ -60,6 +61,11 @@ open class Detekt : SourceTask(), VerificationTask, Reporting<CheckstyleReports>
 		return map
 	}
 
+	fun configureForSourceSet(sourceSet: SourceSet) {
+		description = "Run detekt analysis for ${sourceSet.name} classes"
+		classpath = sourceSet.compileClasspath
+		setSource(sourceSet.allSource)
+	}
 
 	override fun getReports(): CheckstyleReports {
 		return reports

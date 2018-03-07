@@ -2,9 +2,11 @@ package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.extensions.BASELINE_PARAMETER
 import io.gitlab.arturbosch.detekt.extensions.CONFIG_PARAMETER
+import io.gitlab.arturbosch.detekt.extensions.CREATE_BASELINE_PARAMETER
 import io.gitlab.arturbosch.detekt.extensions.DEBUG_PARAMETER
 import io.gitlab.arturbosch.detekt.extensions.DISABLE_DEFAULT_RULESETS_PARAMETER
 import io.gitlab.arturbosch.detekt.extensions.FILTERS_PARAMETER
+import io.gitlab.arturbosch.detekt.extensions.GENERATE_CONFIG_PARAMETER
 import io.gitlab.arturbosch.detekt.extensions.INPUT_PARAMETER
 import io.gitlab.arturbosch.detekt.extensions.PARALLEL_PARAMETER
 import io.gitlab.arturbosch.detekt.extensions.PLUGINS_PARAMETER
@@ -22,6 +24,36 @@ object DetektInvoker {
 		val project = detekt.project
 		val classpath = project.configurations.getAt("detekt")
 
+		val argumentList = baseDetektParameters(detekt)
+
+		invokeCli(project, classpath, argumentList.toList())
+	}
+
+	fun createBaseline(detekt: Detekt) {
+		val project = detekt.project
+		val classpath = project.configurations.getAt("detekt")
+
+		val argumentList = baseDetektParameters(detekt)
+		argumentList += CREATE_BASELINE_PARAMETER
+
+		invokeCli(project, classpath, argumentList.toList())
+	}
+
+	fun generateConfig(detekt: Detekt) {
+		val project = detekt.project
+		val classpath = project.configurations.getAt("detekt")
+
+		val args = mutableMapOf<String, String>(
+				INPUT_PARAMETER to detekt.source.asFileTree.asPath
+		)
+
+		val argumentList = args.flatMapTo(ArrayList()) { listOf(it.key, it.value) }
+		argumentList += GENERATE_CONFIG_PARAMETER
+
+		invokeCli(project, classpath, argumentList.toList())
+	}
+
+	private fun baseDetektParameters(detekt: Detekt): MutableList<String> {
 		val args = mutableMapOf<String, String>(
 				INPUT_PARAMETER to detekt.source.asFileTree.asPath
 		)
@@ -39,19 +71,11 @@ object DetektInvoker {
 		if (detekt.parallel) argumentList += PARALLEL_PARAMETER
 		if (detekt.disableDefaultRuleSets) argumentList += DISABLE_DEFAULT_RULESETS_PARAMETER
 
-		Log.info(argumentList)
-		invokeCli(project, classpath, argumentList.toList())
-	}
-
-	fun createBaseline() {
-		// TODO baseline task
-	}
-
-	fun generateConfig() {
-		// TODO generate config task
+		return argumentList
 	}
 
 	private fun invokeCli(project: Project, classpath: Configuration, args: Iterable<String>) {
+		Log.info(args)
 		project.javaexec {
 			it.main = "io.gitlab.arturbosch.detekt.cli.Main"
 			it.classpath = classpath
