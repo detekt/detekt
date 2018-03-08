@@ -594,6 +594,10 @@ fun foo(i: Int) {
 }
 ```
 
+### TrailingWhitespace
+
+This rule reports lines that end with a whitespace.
+
 ### UnnecessaryAbstractClass
 
 This rule inspects `abstract` classes. In case an `abstract class` does not have any concrete members it should be

@@ -71,7 +71,9 @@ enum class Case(val file: String) {
 	UnconditionalJumpStatementInLoopNegative("/cases/UnconditionalJumpStatementInLoopNegative.kt"),
 	UnconditionalJumpStatementInLoopPositive("/cases/UnconditionalJumpStatementInLoopPositive.kt"),
 	NestedClassVisibilityPositive("/cases/NestedClassVisibilityPositive.kt"),
-	NestedClassVisibilityNegative("/cases/NestedClassVisibilityNegative.kt");
+	NestedClassVisibilityNegative("/cases/NestedClassVisibilityNegative.kt"),
+	TrailingWhitespaceNegative("/cases/TrailingWhitespaceNegative.kt"),
+	TrailingWhitespacePositive("/cases/TrailingWhitespacePositive.kt");
 
 	fun path(): Path = Paths.get(resource(file))
 }

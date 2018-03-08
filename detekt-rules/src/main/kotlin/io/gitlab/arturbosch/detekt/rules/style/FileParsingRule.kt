@@ -13,13 +13,15 @@ import org.jetbrains.kotlin.psi.KtFile
 class FileParsingRule(val config: Config = Config.empty) : MultiRule() {
 
 	private val maxLineLength = MaxLineLength(config)
-	override val rules = listOf<Rule>(maxLineLength)
+	private val trailingWhitespace = TrailingWhitespace(config)
+	override val rules = listOf<Rule>(maxLineLength, trailingWhitespace)
 
 	override fun visitKtFile(file: KtFile) {
 		val lines = file.text.splitToSequence("\n")
 		val fileContents = KtFileContent(file, lines)
 
 		maxLineLength.runIfActive { visit(fileContents) }
+		trailingWhitespace.runIfActive { visit(fileContents) }
 	}
 }
 
