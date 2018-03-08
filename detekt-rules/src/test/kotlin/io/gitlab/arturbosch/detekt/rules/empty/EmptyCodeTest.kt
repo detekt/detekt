@@ -22,7 +22,19 @@ class EmptyCodeTest {
 	}
 
 	@Test
-	fun findsEmptyCatchWithConfig() {
+	fun doesNotReportIgnoredOrExpectedException() {
+		val code = """
+			fun f() {
+				try {
+                } catch (ignore: IOException) {
+				} catch (expected: Exception) {
+				}
+			}"""
+		assertThat(EmptyCatchBlock(Config.empty).lint(code)).hasSize(0)
+	}
+
+	@Test
+	fun doesNotReportEmptyCatchWithConfig() {
 		val code = """
 			fun f() {
 				try {
