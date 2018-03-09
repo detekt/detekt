@@ -1,5 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules
 
+import io.gitlab.arturbosch.detekt.rules.style.KtFileContent
+import io.gitlab.arturbosch.detekt.test.compileForTest
 import io.gitlab.arturbosch.detekt.test.resource
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -73,7 +75,16 @@ enum class Case(val file: String) {
 	NestedClassVisibilityPositive("/cases/NestedClassVisibilityPositive.kt"),
 	NestedClassVisibilityNegative("/cases/NestedClassVisibilityNegative.kt"),
 	TrailingWhitespaceNegative("/cases/TrailingWhitespaceNegative.kt"),
-	TrailingWhitespacePositive("/cases/TrailingWhitespacePositive.kt");
+	TrailingWhitespacePositive("/cases/TrailingWhitespacePositive.kt"),
+	NoTabsNegative("/cases/NoTabsNegative.kt"),
+	NoTabsPositive("/cases/NoTabsPositive.kt");
 
 	fun path(): Path = Paths.get(resource(file))
+
+	fun getKtFileContent(): KtFileContent {
+		val file = compileForTest(path())
+		val lines = file.text.splitToSequence("\n")
+		val ktFileContent = KtFileContent(file, lines)
+		return ktFileContent
+	}
 }

@@ -54,7 +54,7 @@ class RunRuleSetWithRuleFiltersSpec : Spek({
 
 		it("should filter all rules") {
 			val ruleSet = RuleSet("Test", listOf(FileParsingRule(), OptionalUnit()))
-			assertThat(ruleSet.accept(emptyFile, setOf("MaxLineLength", "OptionalUnit"))).isEmpty()
+			assertThat(ruleSet.accept(emptyFile, setOf("MaxLineLength", "NoTabs", "OptionalUnit"))).isEmpty()
 		}
 	}
 })

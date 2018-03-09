@@ -332,6 +332,8 @@ style:
     active: false
   NewLineAtEndOfFile:
     active: true
+  NoTabs:
+    active: false
   OptionalAbstractKeyword:
     active: true
   OptionalUnit:
