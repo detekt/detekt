@@ -511,6 +511,10 @@ fun numberMagic(number: Number) {
 }
 ```
 
+### SemicolonAtEndOfLine
+
+This rule reports if a line ends with a semicolon.
+
 ### SerialVersionUIDInSerializableClass
 
 Classes which implement the `Serializable` interface should also correctly declare a `serialVersionUID`.

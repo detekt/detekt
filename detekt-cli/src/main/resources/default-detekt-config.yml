@@ -348,6 +348,8 @@ style:
     excludedFunctions: "equals"
   SafeCast:
     active: true
+  SemicolonAtEndOfLine:
+    active: false
   SerialVersionUIDInSerializableClass:
     active: false
   SpacingBetweenPackageAndImports:
