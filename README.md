@@ -623,7 +623,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Dmitry Primshyts](https://github.com/deeprim) - Rule improvement: MagicNumber
 - [Egor Neliuba](https://github.com/egor-n) - Rule improvement: EmptyFunctionBlock, EmptyClassBlock
 - [Said Tahsin Dane](https://github.com/tasomaniac/) - Gradle plugin improvements
-- [Misa Torres](https://github.com/misaelmt) - Trailing whitespace rule
+- [Misa Torres](https://github.com/misaelmt) - Added: TrailingWhitespace and NoTabs rules
 
 ### <a name="mentions">Mentions</a>
 

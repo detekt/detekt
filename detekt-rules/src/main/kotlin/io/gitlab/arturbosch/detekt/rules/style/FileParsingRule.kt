@@ -14,7 +14,8 @@ class FileParsingRule(val config: Config = Config.empty) : MultiRule() {
 
 	private val maxLineLength = MaxLineLength(config)
 	private val trailingWhitespace = TrailingWhitespace(config)
-	override val rules = listOf<Rule>(maxLineLength, trailingWhitespace)
+	private val noTabs = NoTabs(config)
+	override val rules = listOf(maxLineLength, trailingWhitespace, noTabs)
 
 	override fun visitKtFile(file: KtFile) {
 		val lines = file.text.splitToSequence("\n")
@@ -22,6 +23,7 @@ class FileParsingRule(val config: Config = Config.empty) : MultiRule() {
 
 		maxLineLength.runIfActive { visit(fileContents) }
 		trailingWhitespace.runIfActive { visit(fileContents) }
+		noTabs.runIfActive { visit(fileContents) }
 	}
 }
 
