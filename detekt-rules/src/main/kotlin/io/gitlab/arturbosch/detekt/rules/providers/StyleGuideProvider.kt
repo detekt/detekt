@@ -23,6 +23,7 @@ import io.gitlab.arturbosch.detekt.rules.style.ProtectedMemberInFinalClass
 import io.gitlab.arturbosch.detekt.rules.style.RedundantVisibilityModifierRule
 import io.gitlab.arturbosch.detekt.rules.style.ReturnCount
 import io.gitlab.arturbosch.detekt.rules.style.SafeCast
+import io.gitlab.arturbosch.detekt.rules.style.SemicolonAtEndOfLine
 import io.gitlab.arturbosch.detekt.rules.style.SerialVersionUIDInSerializableClass
 import io.gitlab.arturbosch.detekt.rules.style.SpacingBetweenPackageAndImports
 import io.gitlab.arturbosch.detekt.rules.style.ThrowsCount
@@ -83,7 +84,8 @@ class StyleGuideProvider : RuleSetProvider {
 				NestedClassesVisibility(config),
 				RedundantVisibilityModifierRule(config),
 				UntilInsteadOfRangeTo(config),
-				MayBeConst(config)
+				MayBeConst(config),
+				SemicolonAtEndOfLine(config)
 		))
 	}
 }
