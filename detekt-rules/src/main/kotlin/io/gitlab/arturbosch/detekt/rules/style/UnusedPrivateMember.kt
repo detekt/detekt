@@ -83,11 +83,7 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 				}
 			})
 
-			parameters.forEach {
-				if (localProperties.contains(it.key)) {
-					parameters.remove(it.key)
-				}
-			}
+			parameters = parameters.filterTo(mutableMapOf()) { it.key !in localProperties }
 		}
 	}
 
