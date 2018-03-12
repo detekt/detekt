@@ -88,9 +88,7 @@ class DetektPlugin : AbstractCodeQualityPlugin<Detekt>() {
 
 	override fun beforeApply() {
 		// Default Tasks
-//		project.task(mapOf(org.gradle.api.Task.TASK_DEPENDS_ON to "detekt"), LEGACY_DETEKT_TASK)
-//		project.task(mapOf(org.gradle.api.Task.TASK_TYPE to DetektIdeaFormatTask::class.java), IDEA_FORMAT)
-//		project.task(mapOf(org.gradle.api.Task.TASK_TYPE to DetektIdeaInspectionTask::class.java), IDEA_INSPECT)
+		project.task(mapOf(org.gradle.api.Task.TASK_DEPENDS_ON to "detektMain"), LEGACY_DETEKT_TASK)
 	}
 
 	companion object {
