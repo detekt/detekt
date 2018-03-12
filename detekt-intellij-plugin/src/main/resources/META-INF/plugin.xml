@@ -24,6 +24,12 @@
     <extensions defaultExtensionNs="com.intellij">
         <externalAnnotator language="kotlin"
                            implementationClass="io.gitlab.arturbosch.detekt.DetektAnnotator"/>
+
+        <projectConfigurable groupId="tools"
+                             displayName="Detekt"
+                             id="preferences.detekt"
+                             instance="io.gitlab.arturbosch.detekt.config.DetektConfig"/>
+
         <errorHandler implementation="com.intellij.diagnostic.ITNReporter"/>
     </extensions>
 
