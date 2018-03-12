@@ -26,7 +26,7 @@ class DetektPlugin : AbstractCodeQualityPlugin<Detekt>() {
 
 	override fun createExtension(): CodeQualityExtension {
 		val extension = project.extensions.create(DETEKT, DetektExtension::class.java, project)
-		extension.toolVersion = "1.0.0.RC6-MARVIN"
+		extension.toolVersion = "latest.release"
 		extension.configDir = project.rootProject.file("detekt-cli/src/main/resources/")
 		extension.config = project.resources.text.fromFile {
 			File(extension.configDir, "default-detekt-config.yml")
@@ -54,11 +54,11 @@ class DetektPlugin : AbstractCodeQualityPlugin<Detekt>() {
 	override fun configureTaskDefaults(task: Detekt, baseName: String) {
 		val configuration = project.configurations.getAt(DETEKT)
 		configureDefaultDependencies(configuration)
-		configureTaskConventionMapping(configuration, task)
+		configureTaskConventionMapping(task)
 		configureReportsConventionMapping(task, baseName)
 	}
 
-	private fun configureTaskConventionMapping(configuration: Configuration, task: Detekt) {
+	private fun configureTaskConventionMapping(task: Detekt) {
 		val taskMapping = task.conventionMapping
 		taskMapping.map("config") { detektExtension.config }
 		taskMapping.map("filters") { detektExtension.filters }

@@ -77,7 +77,7 @@ open class Detekt : SourceTask(), VerificationTask, Reporting<CheckstyleReports>
 		_ignoreFailures = ignoreFailures
 	}
 
-	override fun reports(closure: Closure<*>?) = reports(ClosureBackedAction<CheckstyleReports>(closure))
+	override fun reports(closure: Closure<*>) = reports(ClosureBackedAction<CheckstyleReports>(closure))
 	override fun reports(configureAction: Action<in CheckstyleReports>?): CheckstyleReports {
 		configureAction?.execute(reports)
 		return reports
