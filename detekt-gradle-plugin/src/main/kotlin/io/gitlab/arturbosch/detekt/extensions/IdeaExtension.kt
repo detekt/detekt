@@ -9,29 +9,21 @@ open class IdeaExtension(open var path: String? = null,
 						 open var report: String? = null,
 						 open var mask: String = "*.kt") {
 
-//	fun formatArgs(ext: DetektExtension): Array<String> {
-//		val input = ext.profileInputPath()
-//		require(path != null) { IDEA_PATH_ERROR }
-//		require(input != null) { INPUT_PATH_ERROR }
-//		return if (codeStyleScheme != null) {
-//			arrayOf(formatScript(path!!), "-r", input!!, "-s", codeStyleScheme!!, "-m", mask)
-//		} else {
-//			arrayOf(formatScript(path!!), "-r", input!!, "-m", mask)
-//		}
-//	}
-//
-//	fun inspectArgs(ext: DetektExtension): Array<String> {
-//		val input = ext.profileInputPath()
-//		require(path != null) { IDEA_PATH_ERROR }
-//		require(input != null) { INPUT_PATH_ERROR }
-//		require(report != null) { REPORT_PATH_ERROR }
-//		require(inspectionsProfile != null) { INSPECTION_PROFILE_ERROR }
-//		return arrayOf(inspectScript(path!!), input!!, inspectionsProfile!!, report!!)
-//	}
-//
-//	private fun DetektExtension.profileInputPath() = ProfileStorage.systemOrDefault.input?.apply {
-//		if (debug) println("input: $this")
-//	}
+	fun formatArgs(input: String): Array<String> {
+		require(path != null) { IDEA_PATH_ERROR }
+		return if (codeStyleScheme != null) {
+			arrayOf(formatScript(path!!), "-r", input, "-s", codeStyleScheme!!, "-m", mask)
+		} else {
+			arrayOf(formatScript(path!!), "-r", input, "-m", mask)
+		}
+	}
+
+	fun inspectArgs(input: String): Array<String> {
+		require(path != null) { IDEA_PATH_ERROR }
+		require(report != null) { REPORT_PATH_ERROR }
+		require(inspectionsProfile != null) { INSPECTION_PROFILE_ERROR }
+		return arrayOf(inspectScript(path!!), input, inspectionsProfile!!, report!!)
+	}
 
 	override fun toString(): String = "IdeaExtension(path=$path, " +
 			"codeStyleScheme=$codeStyleScheme, inspectionsProfile=$inspectionsProfile, report=$report, mask='$mask')"

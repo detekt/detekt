@@ -1,5 +1,6 @@
-package io.gitlab.arturbosch.detekt
+package io.gitlab.arturbosch.detekt.invoke
 
+import io.gitlab.arturbosch.detekt.Detekt
 import io.gitlab.arturbosch.detekt.extensions.BASELINE_PARAMETER
 import io.gitlab.arturbosch.detekt.extensions.CONFIG_PARAMETER
 import io.gitlab.arturbosch.detekt.extensions.CREATE_BASELINE_PARAMETER

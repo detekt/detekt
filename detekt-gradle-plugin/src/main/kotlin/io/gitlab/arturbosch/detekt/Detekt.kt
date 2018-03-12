@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt
 
 import groovy.lang.Closure
+import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import org.gradle.api.Action
 import org.gradle.api.Incubating
 import org.gradle.api.file.FileCollection

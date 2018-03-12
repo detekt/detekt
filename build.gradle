@@ -53,6 +53,14 @@ subprojects { project ->
 		config = project.resources.text.fromFile("${rootProject.projectDir}/detekt-cli/src/main/resources/default-detekt-config.yml")
 		baseline = file("${rootProject.projectDir}/reports/baseline.xml")
 		filters = '.*/resources/.*, .*/build/.*'
+
+		idea {
+			path = "$USER_HOME/.idea"
+			codeStyleScheme = "$USER_HOME/.idea/idea-code-style.xml"
+			inspectionsProfile = "$USER_HOME/.idea/inspect.xml"
+			report = "project.projectDir/reports"
+			mask = "*.kt,"
+		}
 	}
 
 	tasks.withType(io.gitlab.arturbosch.detekt.Detekt) {

@@ -18,6 +18,8 @@ class DetektPlugin : AbstractCodeQualityPlugin<Detekt>() {
 
 	private lateinit var generateConfigTask: DetektGenerateConfigTask
 	private lateinit var createBaselineTask: DetektCreateBaselineTask
+	private lateinit var ideaFormatTask: DetektIdeaFormatTask
+	private lateinit var ideaInspectionTask: DetektIdeaInspectionTask
 
 	override fun getToolName() = DETEKT_EXTENSION_NAME
 	override fun getTaskType() = Detekt::class.java
@@ -32,6 +34,8 @@ class DetektPlugin : AbstractCodeQualityPlugin<Detekt>() {
 
 		generateConfigTask = project.task(mapOf(org.gradle.api.Task.TASK_TYPE to DetektGenerateConfigTask::class.java), GENERATE_CONFIG) as DetektGenerateConfigTask
 		createBaselineTask = project.task(mapOf(org.gradle.api.Task.TASK_TYPE to DetektCreateBaselineTask::class.java), BASELINE) as DetektCreateBaselineTask
+		ideaFormatTask = project.task(mapOf(org.gradle.api.Task.TASK_TYPE to DetektIdeaFormatTask::class.java), IDEA_FORMAT) as DetektIdeaFormatTask
+		ideaInspectionTask = project.task(mapOf(org.gradle.api.Task.TASK_TYPE to DetektIdeaInspectionTask::class.java), IDEA_INSPECT) as DetektIdeaInspectionTask
 
 		return extension
 	}
@@ -41,6 +45,10 @@ class DetektPlugin : AbstractCodeQualityPlugin<Detekt>() {
 
 		generateConfigTask.detekt = task
 		createBaselineTask.detekt = task
+		ideaFormatTask.detekt = task
+		ideaFormatTask.ideaExtension = detektExtension.ideaExtension
+		ideaInspectionTask.detekt = task
+		ideaInspectionTask.ideaExtension = detektExtension.ideaExtension
 	}
 
 	override fun configureTaskDefaults(task: Detekt, baseName: String) {
