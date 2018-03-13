@@ -52,7 +52,7 @@ subprojects { project ->
 		parallel = true
 		toolVersion = usedDetektGradleVersion
 
-		config = project.resources.text.fromFile("${rootProject.projectDir}/detekt-cli/src/main/resources/default-detekt-config.yml")
+		configFile = file("${rootProject.projectDir}/detekt-cli/src/main/resources/default-detekt-config.yml")
 		baseline = file("${rootProject.projectDir}/reports/baseline.xml")
 		filters = '.*/resources/.*, .*/build/.*'
 

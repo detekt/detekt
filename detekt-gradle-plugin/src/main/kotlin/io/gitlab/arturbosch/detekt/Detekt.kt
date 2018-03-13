@@ -12,6 +12,7 @@ import org.gradle.api.plugins.quality.internal.CheckstyleReportsImpl
 import org.gradle.api.reporting.Reporting
 import org.gradle.api.resources.TextResource
 import org.gradle.api.tasks.CacheableTask
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.OutputFiles
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceTask
