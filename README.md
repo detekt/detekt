@@ -28,6 +28,11 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 - [sonarqube integration](https://github.com/arturbosch/sonar-kotlin)
 - **NEW** extensible by own rule sets and `FileProcessListener's`
 
+### Known Issues with RC6-3
+
+- rule `LargeClass` throws an exception on `kts` files -> exclude kts files with `filter` or turn off `LargeClass` for now
+- rule `UnusedPrivateMember` throws an `ConcurrentModificationException` -> turn off this rule for now
+
 ### Table of contents
 1. [Commandline interface](#build)
 2. [Gradle plugin](#gradleplugin)
