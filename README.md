@@ -116,7 +116,7 @@ using the detekt closure as described [here](#closure).
 
 ##### <a name="gradlegroovy">Configuration when using groovy dsl</a>
 For gradle version >= 2.1
- 
+
 ```groovy
 buildscript {
     repositories {
@@ -220,13 +220,12 @@ You can configure the reports detekt outputs with the following configuration in
 tasks.withType(io.gitlab.arturbosch.detekt.Detekt) {
     reports {
         xml {
-            enabled true                                             // Enable/Disable XML report
-            destination file("build/reports/detekt.xml")             // Path where XML report will be stored
-
+            enabled true                                             // Enable/Disable XML report (default: true)
+            destination file("build/reports/detekt.xml")             // Path where XML report will be stored (default: build/reports/detekt/[sourceset].xml)
         }
         html {
-            enabled true                                             // Enable/Disable HTML report
-            destination file("build/reports/detekt.html")            // Path where HTML report will be stored
+            enabled true                                             // Enable/Disable HTML report (default: true)
+            destination file("build/reports/detekt.html")            // Path where HTML report will be stored (default: build/reports/detekt/[sourceset].html)
         }
     }
 }
