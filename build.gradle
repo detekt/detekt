@@ -83,7 +83,7 @@ subprojects { project ->
 		description = "Runs a failfast detekt build."
 
 		source = sourceSets.getAt("main").allSource
-		config = project.resources.text.fromFile("${rootProject.projectDir}/reports/failfast.yml")
+		configFile = file("${rootProject.projectDir}/reports/failfast.yml")
 	}
 
 	if (project.name in ['detekt-cli', 'detekt-watch-service', 'detekt-generator']) {

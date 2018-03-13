@@ -63,6 +63,21 @@ open class Detekt : SourceTask(), VerificationTask, Reporting<CheckstyleReports>
 		return map
 	}
 
+	/**
+	 * The Detekt configuration file to use.
+	 */
+	@Internal
+	fun getConfigFile(): File? {
+		return config?.asFile()
+	}
+
+	/**
+	 * The Detekt configuration file to use.
+	 */
+	fun setConfigFile(configFile: File) {
+		config = project.resources.text.fromFile(configFile)
+	}
+
 	fun configureForSourceSet(sourceSet: SourceSet) {
 		description = "Run detekt analysis for ${sourceSet.name} classes"
 		classpath = sourceSet.compileClasspath
