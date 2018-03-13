@@ -111,7 +111,8 @@ More on this topic see section _Custom RuleSets_.
 
 #### <a name="gradleplugin">Using the detekt-gradle-plugin</a>
 
-Use the groovy or kotlin dsl of gradle and configure the detekt closure as described [here](#closure).
+Use the Groovy or Kotlin DSL of Gradle to apply the detekt Gradle Plugin. You can further configure the Plugin
+using the detekt closure as described [here](#closure).
 
 ##### <a name="gradlegroovy">Configuration when using groovy dsl</a>
 For gradle version >= 2.1
@@ -125,15 +126,6 @@ buildscript {
 
 plugins {
     id "io.gitlab.arturbosch.detekt" version "1.0.0.[version]"
-}
-
-detekt {
-    version = "1.0.0.[version]"
-    profile("main") {
-        input = "$projectDir/src/main/kotlin"
-        config = "$projectDir/detekt.yml"
-        filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
-    }
 }
 ```
 
@@ -151,15 +143,6 @@ buildscript {
 }
 
 apply plugin: "io.gitlab.arturbosch.detekt"
-
-detekt {
-    version = "1.0.0.[version]"
-    profile("main") {
-        input = "$projectDir/src/main/kotlin"
-        config = "$projectDir/detekt.yml"
-        filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
-    }
-}
 ```
 
 ##### <a name="gradlekotlin">Configuration when using kotlin dsl</a>
@@ -175,15 +158,6 @@ buildscript {
 }
 plugins {
     id("io.gitlab.arturbosch.detekt").version("1.0.0.[version]")
-}
-
-detekt {
-    version = "1.0.0.[version]"
-    profile("main", Action {
-        input = "$projectDir/src/main/kotlin"
-        config = "$projectDir/detekt.yml"
-        filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
-    })
 }
 ```
 
@@ -209,32 +183,17 @@ plugins {
 }
 
 //apply plugin: 'io.gitlab.arturbosch.detekt'
-
-allprojects {
-    repositories {
-        jcenter()
-    }
-}
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
-}
-
-detekt {
-    version = "1.0.0.[version]"
-    profile("main") {
-        input = "$projectDir/your/app"
-        config = "$projectDir/detekt.yml"
-        filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
-    }
-}
 ```
 
 #### <a name="tasks">Available plugin tasks</a>
 
-- `detektCheck` - Runs a _detekt_ analysis and complexity report. Configure the analysis inside the `detekt-closure`. By default the standard rule set is used without output report or  black- and whitelist checks.
-- `detektGenerateConfig` - Generates a default detekt config file into your projects location.
-- `detektBaseline` - Like `detektCheck`, but creates a code smell baseline. Further detekt runs will only feature new smells not in this list. 
+The detekt Gradle plugin will generate `detekt` tasks for each of your source sets. For a basic project this will result
+in a `detektMain` task which will check all main source code of the project. The `detektTest` task will run detekt on
+the test sources of the project
+
+- `detekt[SourceSet]` - Runs a _detekt_ analysis and complexity report on the given source set. Configure the analysis inside the `detekt` closure. By default the standard rule set is used without output report or black- and whitelist checks.
+- `detektGenerateConfig` - Generates a default detekt configuration file into your project directory.
+- `detektBaseline` - Similar to `detekt[SourceSet]`, but creates a code smell baseline. Further detekt runs will only feature new smells not in this list.
 - `detektIdeaFormat` - Uses a local `idea` installation to format your kotlin (and other) code according to the specified `code-style.xml`.
 - `detektIdeaInspect` Uses a local `idea` installation to run inspections on your kotlin (and other) code according to the specified `inspections.xml` profile.
 
@@ -242,30 +201,51 @@ detekt {
 
 ```groovy
 detekt {
-    version = "1.0.0.[version]"  // When unspecified the latest detekt version found, will be used. Override to stay on the same version.
-    
-     // A profile basically abstracts over the argument vector passed to detekt. 
-     // Different profiles can be specified and used for different sub modules or testing code.
-    profile("main") {
-        input = "$projectDir/src/main/kotlin" // Which part of your project should be analyzed?
-        config = "$projectDir/detekt.yml" // Use $project.projectDir or to navigate inside your project 
-        configResource = "/detekt.yml" // Use this parameter instead of config if your detekt yaml file is inside your resources. Is needed for multi project maven tasks.
-        filters = ".*test.*, .*/resources/.*" // What paths to exclude? Use comma or semicolon to separate
-        ruleSets = "other/optional/ruleset.jar" // Custom rule sets can be linked to this, use comma or semicolon to separate, remove if unused.
-        disableDefaultRuleSets = false // Disables the default rule set. Just use detekt as the detection engine with your custom rule sets.
-        output = "$project.projectDir/reports" // Directory where output reports are stored (if present).
-        outputName = "my-module" // This parameter is used to derive the output report name
-        baseline = "$project.projectDir/reports/baseline.xml" // If present all current findings are saved in a baseline.xml to only consider new code smells for further runs.
-        parallel = true // Use this flag if your project has more than 200 files. 
-   }
-   
-   // Definines a secondary profile `gradle detektCheck -Ddetekt.profile=override` will use this profile. 
-   // The main profile gets always loaded but specified profiles override main profiles parameters.
-   profile("override") {
-       config = "$projectDir/detekt-test-config.yml"
-   }
+    toolVersion = "1.0.0.[version]"                                  // When unspecified the latest detekt version found, will be used. Override to stay on the same version.
+    parallel = false                                                 // Runs detekt in parallel. Can lead to speedups in larger projects. `false` by default.
+    config = project.resources.text.fromFile("path/to/config.yml")   // Define the detekt configuration you want to use.
+    configFile = file("path/to/config.yml")                          // Define the detekt configuration you want to use.
+    baseline = file("path/to/baseline.xml")                          // Specifying a baseline file will ignore all findings that are saved in the baseline file.
+    filters = ''                                                     // Regular expression of paths that should be excluded.
+    disableDefaultRuleSets = false                                   // Disables all default detekt rulesets and will only run detekt with custom rules defined in `plugins`.
+    plugins = "other/optional/ruleset.jar"                           // Jar file containing custom detekt rules.
 }
 ```
+
+##### <a name="gradlepluginreports">Customizing Detekt reports</a>
+
+You can configure the reports detekt outputs with the following configuration in your `build.gradle` file:
+
+```groovy
+tasks.withType(io.gitlab.arturbosch.detekt.Detekt) {
+    reports {
+        xml {
+            enabled true                                             // Enable/Disable XML report
+            destination file("build/reports/detekt.xml")             // Path where XML report will be stored
+
+        }
+        html {
+            enabled true                                             // Enable/Disable HTML report
+            destination file("build/reports/detekt.html")            // Path where HTML report will be stored
+        }
+    }
+}
+```
+
+##### <a name="customdetekttask">Defining custom detekt</a>
+
+Custom tasks for alternative configurations or different source sets can be defined by creating a custom task that
+uses the type `Detekt`.
+
+```groovy
+task customDetektTask(type: io.gitlab.arturbosch.detekt.Detekt) {
+		description = "Runs a custom detekt task."
+
+		source = sourceSets.getAt("main").allSource                              // Define the source set this task should run for
+		configFile = file("${rootProject.projectDir}/reports/failfast.yml")      // Define the configuration file that should be used
+	}
+```
+
 
 ##### <a name="idea">Configure a local idea for detekt</a>
 
@@ -281,11 +261,6 @@ detekt {
 String USER_HOME = System.getProperty("user.home")
 
 detekt {  
-    profile("main") {
-        input = "$projectDir/src/main/kotlin"
-        output = "$projectDir/reports/report.xml"
-        outputFormat = "xml"
-    }
     idea {
         path = "$USER_HOME/.idea"
         codeStyleScheme = "$USER_HOME/.idea/idea-code-style.xml"
