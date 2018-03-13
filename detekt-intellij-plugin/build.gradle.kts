@@ -1,6 +1,8 @@
 import org.jetbrains.intellij.IntelliJPluginExtension
 import org.jetbrains.intellij.tasks.RunIdeaTask
 
+version = "1.0.0"
+
 repositories {
     maven {
         setUrl("http://dl.bintray.com/jetbrains/intellij-plugin-service")

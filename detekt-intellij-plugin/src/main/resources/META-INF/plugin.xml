@@ -25,6 +25,10 @@
         <externalAnnotator language="kotlin"
                            implementationClass="io.gitlab.arturbosch.detekt.DetektAnnotator"/>
 
+        <projectService
+                serviceInterface="io.gitlab.arturbosch.detekt.config.DetektConfigStorage"
+                serviceImplementation="io.gitlab.arturbosch.detekt.config.DetektConfigStorage"/>
+
         <projectConfigurable groupId="tools"
                              displayName="Detekt"
                              id="preferences.detekt"
