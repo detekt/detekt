@@ -1,4 +1,4 @@
-@file:Suppress("unused")
+@file:Suppress("unused", "UNUSED_PARAMETER")
 
 package cases
 
@@ -18,6 +18,14 @@ class NoDataClassCandidateWithAdditionalMethod(val i: Int) {
 	fun f1() {
 		println()
 	}
+}
+
+class NoDataClassCandidateWithOnlyPrivateCtor1 private constructor(val i: Int)
+
+class NoDataClassCandidateWithOnlyPrivateCtor2 {
+
+	@Suppress("ConvertSecondaryConstructorToPrimary")
+	private constructor(i: Int)
 }
 
 sealed class NoDataClassBecauseItsSealed {
