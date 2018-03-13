@@ -24,6 +24,9 @@ class DetektConfigStorage : PersistentStateComponent<DetektConfigStorage> {
 	var checkTestFiles: Boolean = false
 
 	@Tag
+	var detektVersion: String = ""
+
+	@Tag
 	var rulesPath: String = ""
 
 	override fun getState(): DetektConfigStorage? = this
@@ -31,6 +34,7 @@ class DetektConfigStorage : PersistentStateComponent<DetektConfigStorage> {
 	override fun loadState(state: DetektConfigStorage) {
 		this.enableDetekt = state.enableDetekt
 		this.checkTestFiles = state.checkTestFiles
+		this.detektVersion = state.detektVersion
 		this.rulesPath = state.rulesPath
 	}
 
@@ -42,7 +46,7 @@ class DetektConfigStorage : PersistentStateComponent<DetektConfigStorage> {
 		 * @param project the project
 		 */
 		fun instance(project: Project): DetektConfigStorage =
-				ServiceManager.getService(DetektConfigStorage::class.java)
+				ServiceManager.getService(project, DetektConfigStorage::class.java)
 
 	}
 
