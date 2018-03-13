@@ -19,7 +19,6 @@ import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
-import java.util.concurrent.ConcurrentHashMap
 
 /**
  * Reports unused private properties, function parameters and functions.
@@ -60,7 +59,7 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 	}
 
 	class UnusedFunctionParameterVisitor : DetektVisitor() {
-		var parameters: MutableMap<String, KtParameter> = ConcurrentHashMap()
+		var parameters: MutableMap<String, KtParameter> = mutableMapOf()
 
 		override fun visitNamedFunction(function: KtNamedFunction) {
 			super.visitNamedFunction(function)
@@ -91,7 +90,7 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 	}
 
 	class UnusedPropertyVisitor : DetektVisitor() {
-		val properties = ConcurrentHashMap<String, KtElement>()
+		val properties = mutableMapOf<String, KtElement>()
 
 		override fun visitParameter(parameter: KtParameter) {
 			super.visitParameter(parameter)
@@ -128,8 +127,8 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 	}
 
 	class UnusedFunctionVisitor : DetektVisitor() {
-		private val callExpressions = ConcurrentHashMap<KtFunction?, String>()
-		private val functions = ConcurrentHashMap<String, KtFunction>()
+		private val callExpressions = mutableMapOf<KtFunction?, String>()
+		private val functions = mutableMapOf<String, KtFunction>()
 
 		fun getFunctions(): Map<String, KtFunction> {
 			val unusedFunctions = mutableMapOf<String, KtFunction>()
