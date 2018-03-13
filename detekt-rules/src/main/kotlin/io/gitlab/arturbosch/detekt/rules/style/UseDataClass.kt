@@ -18,6 +18,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.isAbstract
+import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
 
 /**
@@ -61,7 +62,7 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 	}
 
 	private fun visitKlass(klass: KtClass, annotationExcluder: AnnotationExcluder) {
-		if (isIncorrectClassType(klass)) {
+		if (isIncorrectClassType(klass) || hasOnlyPrivateConstructors(klass)) {
 			return
 		}
 		if (klass.isClosedForExtension() && klass.doesNotExtendAnything()
@@ -84,6 +85,12 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 
 	private fun isIncorrectClassType(klass: KtClass) =
 			klass.isData() || klass.isEnum() || klass.isAnnotation() || klass.isSealed()
+
+	private fun hasOnlyPrivateConstructors(klass: KtClass): Boolean {
+		val primaryConstructor = klass.primaryConstructor
+		return (primaryConstructor == null || primaryConstructor.isPrivate() )
+				&& klass.secondaryConstructors.all { it.isPrivate() }
+	}
 
 	private fun KtClass.doesNotExtendAnything() = superTypeListEntries.isEmpty()
 
