@@ -3,7 +3,7 @@ Please search among the [Pull requests](https://github.com/arturbosch/detekt/pul
 
 Thanks for submitting a pull request! Please provide enough information so that others can review your pull request:
 
-For more information, see the `CONTRIBUTING` guide.
+For more information, see the [CONTRIBUTING guide](https://github.com/arturbosch/detekt/blob/master/CONTRIBUTING.md).
 
 
 **Summary**
