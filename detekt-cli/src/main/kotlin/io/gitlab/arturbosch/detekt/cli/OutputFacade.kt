@@ -42,8 +42,9 @@ class OutputFacade(private val arguments: Args,
 	private fun handleOutputReport(report: OutputReport, result: Detektion) {
 		arguments.output?.let {
 			fileName?.let { report.fileName = it }
-			report.write(it, result)
-			printStream.println("Successfully generated ${report.id}.")
+			val filePath = it.resolve("${report.fileName}.${report.ending}")
+			report.write(filePath, result)
+			printStream.println("Successfully generated ${report.id} at $filePath")
 		}
 	}
 
