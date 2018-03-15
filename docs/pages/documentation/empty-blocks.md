@@ -48,6 +48,12 @@ Reports empty `for` loops. Empty blocks of code serve no purpose and should be r
 Reports empty functions. Empty blocks of code serve no purpose and should be removed.
 This rule will not report functions overriding others.
 
+#### Configuration options:
+
+* `ignoreOverriddenFunctions` (default: `false`)
+
+   excludes overridden functions with an empty body
+
 ### EmptyIfBlock
 
 Reports empty `if` blocks. Empty blocks of code serve no purpose and should be removed.

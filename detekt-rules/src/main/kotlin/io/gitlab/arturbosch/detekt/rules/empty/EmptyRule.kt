@@ -16,6 +16,7 @@ import org.jetbrains.kotlin.psi.KtExpression
  *
  * @author Artur Bosch
  * @author Marvin Ramin
+ * @author schalkms
  */
 abstract class EmptyRule(config: Config) : Rule(config) {
 
@@ -25,10 +26,19 @@ abstract class EmptyRule(config: Config) : Rule(config) {
 			Debt.FIVE_MINS)
 
 	fun KtExpression.addFindingIfBlockExprIsEmpty() {
+		checkBlockExpr(false)
+	}
+
+	fun KtExpression.addFindingIfBlockExprIsEmptyAndNotCommented() {
+		checkBlockExpr(true)
+	}
+
+	private fun KtExpression.checkBlockExpr(hasComment: Boolean) {
 		val blockExpression = this.asBlockExpression()
 		blockExpression?.statements?.let {
-			if (it.isEmpty() && !blockExpression.hasCommentInside()) report(CodeSmell(issue, Entity.from(this),
-					"This empty block of code can be removed."))
+			if (it.isEmpty() && blockExpression.hasCommentInside() == hasComment) {
+				report(CodeSmell(issue, Entity.from(this), "This empty block of code can be removed."))
+			}
 		}
 	}
 }
