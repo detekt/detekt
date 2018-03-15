@@ -1,12 +1,15 @@
-# Roadmap to 1.0.0
+## Roadmap to 1.0.0
 
 ### todo
 
-- Overall improve documentation of detekt. Introduce a wiki for easier lookup.
+- rework gradle plugin to behave like other static analysis tools
 - `no new complex rules` (maybe only some easy or contributed ones)
 
 ### done
 
+- Overall improve documentation of detekt.
+- We now have a website: arturbosch.github.io/detekt
+- Refine threshold definition
 - an output format (like checkstyle etc - thx to @winterDroid)
 - Resolve `formatting` issues, integrate ktlint fixes OR `integrate ktlint` into detekt for formatting
 - Resolve `java9` java.xml.bind issue
@@ -25,3 +28,10 @@
 
 - `idea-plugin`
 - `jenkins-plugin`
+
+## Won't do
+
+- implement formatting rules, instead please use:
+	- KtLint
+	- IntelliJ's format.sh
+	- or `detektIdeaFormat` and `detektIdeaInspect` wrapper over a local intellij
