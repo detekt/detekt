@@ -7,7 +7,7 @@ Please search on the [issue track](https://github.com/arturbosch/detekt/issues) 
 
 ## Current Behavior
 <!--- If describing a bug, tell us what happens instead of the expected behavior -->
-<!--- If suggesting a change/improvement, explain the difference from current behavior -->
+<!--- If suggesting a change/improvement, explain the difference from the current behavior -->
 
 ## Possible Solution
 <!--- Not obligatory, but suggest a fix/reason for the bug, -->
@@ -28,6 +28,5 @@ Please search on the [issue track](https://github.com/arturbosch/detekt/issues) 
 ## Your Environment
 <!--- Include as many relevant details about the environment you experienced the bug in -->
 * Version used:
-* Browser Name and version:
-* Operating System and version (desktop or mobile):
+* Operating System and version:
 * Link to your project:
