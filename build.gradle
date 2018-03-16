@@ -61,7 +61,7 @@ subprojects { project ->
 			codeStyleScheme = "$USER_HOME/.idea/idea-code-style.xml"
 			inspectionsProfile = "$USER_HOME/.idea/inspect.xml"
 			report = "project.projectDir/reports"
-			mask = "*.kt,"
+			mask = "*.kt"
 		}
 	}
 
@@ -70,7 +70,6 @@ subprojects { project ->
 			xml {
 				enabled true
 				destination file("build/reports/detekt.xml")
-
 			}
 			html {
 				enabled true

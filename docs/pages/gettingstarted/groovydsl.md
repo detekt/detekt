@@ -11,14 +11,14 @@ summary:
 #### <a name="tasks">Available plugin tasks</a>
 
 The detekt Gradle plugin will generate `detekt` tasks for each of your source sets. For a basic project this will result
-in a `detektMain` task which will check all main source code of the project. The `detektTest` task will run detekt on
-the test sources of the project
+in a `detektMain` task which will check all `main` sourcesets of the project. The `detektTest` task will run detekt on
+all `test` sourcesets of the project
 
-- `detekt[SourceSet]` - Runs a _detekt_ analysis and complexity report on the given source set. Configure the analysis inside the `detekt` closure. By default the standard rule set is used without output report or black- and whitelist checks.
+- `detekt[SourceSet]` - Runs a detekt analysis and complexity report on the given source set. Configure the analysis inside the `detekt` closure. By default the standard rule set is used without output report or black- and whitelist checks.
 - `detektGenerateConfig` - Generates a default detekt configuration file into your project directory.
 - `detektBaseline` - Similar to `detekt[SourceSet]`, but creates a code smell baseline. Further detekt runs will only feature new smells not in this list.
-- `detektIdeaFormat` - Uses a local `idea` installation to format your kotlin (and other) code according to the specified `code-style.xml`.
-- `detektIdeaInspect` Uses a local `idea` installation to run inspections on your kotlin (and other) code according to the specified `inspections.xml` profile.
+- `detektIdeaFormat` - Uses a local `idea` installation to format your Kotlin (and other) code according to the specified `code-style.xml`.
+- `detektIdeaInspect` Uses a local `idea` installation to run inspections on your Kotlin (and other) code according to the specified `inspections.xml` profile.
 
 Use the Groovy or Kotlin DSL of Gradle to apply the detekt Gradle Plugin. You can further configure the Plugin
 using the detekt closure as described [here](#closure).
@@ -54,7 +54,7 @@ buildscript {
 apply plugin: "io.gitlab.arturbosch.detekt"
 ```
 
-##### <a name="gradlekotlin">Configuration when using kotlin dsl</a>
+##### <a name="gradlekotlin">Configuration when using Kotlin DSL</a>
 For gradle version >= 4.1
 
 ```kotlin
@@ -73,8 +73,8 @@ plugins {
 ##### <a name="gradleandroid">Configuration for Android projects</a>
 
 When using Android make sure to have detekt configured in the project level build.gradle file.
-The new preferred plugin configuration way is used, the old way is commented out.
 
+You can configure the plugin in the same way as indicated above.
 ```groovy
 buildscript {
     repositories {
@@ -118,13 +118,12 @@ You can configure the reports detekt outputs with the following configuration in
 tasks.withType(io.gitlab.arturbosch.detekt.Detekt) {
     reports {
         xml {
-            enabled true                                             // Enable/Disable XML report
-            destination file("build/reports/detekt.xml")             // Path where XML report will be stored
-
+            enabled true                                             // Enable/Disable XML report (default: true)
+            destination file("build/reports/detekt.xml")             // Path where XML report will be stored (default: build/reports/detekt/[sourceset].xml)
         }
         html {
-            enabled true                                             // Enable/Disable HTML report
-            destination file("build/reports/detekt.html")            // Path where HTML report will be stored
+            enabled true                                             // Enable/Disable HTML report (default: true)
+            destination file("build/reports/detekt.html")            // Path where HTML report will be stored (default: build/reports/detekt/[sourceset].html)
         }
     }
 }

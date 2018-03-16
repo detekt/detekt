@@ -188,14 +188,14 @@ plugins {
 #### <a name="tasks">Available plugin tasks</a>
 
 The detekt Gradle plugin will generate `detekt` tasks for each of your source sets. For a basic project this will result
-in a `detektMain` task which will check all main source code of the project. The `detektTest` task will run detekt on
-the test sources of the project
+in a `detektMain` task which will check all `main` sourcesets of the project. The `detektTest` task will run detekt on
+all `test` sourcesets of the project
 
 - `detekt[SourceSet]` - Runs a _detekt_ analysis and complexity report on the given source set. Configure the analysis inside the `detekt` closure. By default the standard rule set is used without output report or black- and whitelist checks.
 - `detektGenerateConfig` - Generates a default detekt configuration file into your project directory.
 - `detektBaseline` - Similar to `detekt[SourceSet]`, but creates a code smell baseline. Further detekt runs will only feature new smells not in this list.
-- `detektIdeaFormat` - Uses a local `idea` installation to format your kotlin (and other) code according to the specified `code-style.xml`.
-- `detektIdeaInspect` Uses a local `idea` installation to run inspections on your kotlin (and other) code according to the specified `inspections.xml` profile.
+- `detektIdeaFormat` - Uses a local `idea` installation to format your Kotlin (and other) code according to the specified `code-style.xml`.
+- `detektIdeaInspect` Uses a local `idea` installation to run inspections on your Kotlin (and other) code according to the specified `inspections.xml` profile.
 
 ##### <a name="closure">Options for detekt configuration closure</a>
 
@@ -212,7 +212,7 @@ detekt {
 }
 ```
 
-##### <a name="gradlepluginreports">Customizing Detekt reports</a>
+##### <a name="gradlepluginreports">Customizing detekt reports</a>
 
 You can configure the reports detekt outputs with the following configuration in your `build.gradle` file:
 
