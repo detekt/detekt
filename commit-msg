@@ -1,0 +1,35 @@
+#!/bin/sh
+#
+# This hook script checks the commit log message.
+# Called by "git commit" with one argument, the name of the file that has the commit message.
+
+msg=$1
+
+# checks if the first character of the commit message is an uppercase letter
+uppercase='^[A-Z]'
+if ! head -1 "$msg" | grep -Eq "$uppercase"; then
+  echo "Aborting commit. The commit message does not start with an uppercase letter." >&2
+  exit 1
+fi
+
+# checks if the second line of the commit message is empty
+len=`awk 'END{print NR}' $msg`
+if [ "$len" -ge 2 ]; then
+  line=`sed -n 2p $msg`
+  if [ "$line" != "" ]; then
+    echo "Aborting commit. The commit message does not have a empty second line." >&2
+    exit 1
+  fi
+fi
+
+# checks if all lines of the commit message do not exceed the length 70
+for (( i=1; i<=len; i++ ))
+do
+  index=$(printf "%sp" "$i")
+  el=`sed -n $index $msg`
+  if [ "${#el}" -gt 70 ]; then
+    echo "Aborting commit. The commit message exceeds the maximum allowed line length of 70" >&2
+    exit 1
+  fi
+done
+
