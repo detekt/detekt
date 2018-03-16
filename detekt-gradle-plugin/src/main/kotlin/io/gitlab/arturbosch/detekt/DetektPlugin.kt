@@ -25,12 +25,12 @@ class DetektPlugin : AbstractCodeQualityPlugin<Detekt>() {
 	override fun getTaskType() = Detekt::class.java
 
 	override fun createExtension(): CodeQualityExtension {
-		val extension = project.extensions.create(DETEKT, DetektExtension::class.java, project)
+		val extension = project.extensions.create(DETEKT, DetektExtension::class.java, project, project.objects, project.layout)
 		extension.toolVersion = System.getProperty("detektVersion")
-		extension.configDir = project.rootProject.file("detekt-cli/src/main/resources/")
-		extension.config = project.resources.text.fromFile {
-			File(extension.configDir, "default-detekt-config.yml")
-		}
+		extension.configDir.set(project.rootProject.file("detekt-cli/src/main/resources/"))
+		extension.config.set(project.resources.text.fromFile {
+			File(extension.configDir.get().asFile, "default-detekt-config.yml")
+		})
 
 		generateConfigTask = project.tasks.create(GENERATE_CONFIG, DetektGenerateConfigTask::class.java)
 		createBaselineTask = project.tasks.create(BASELINE, DetektCreateBaselineTask::class.java)
@@ -54,23 +54,22 @@ class DetektPlugin : AbstractCodeQualityPlugin<Detekt>() {
 	override fun configureTaskDefaults(task: Detekt, baseName: String) {
 		val configuration = project.configurations.getAt(DETEKT)
 		configureDefaultDependencies(configuration)
-		configureTaskConventionMapping(task)
+		configureTask(task)
 		configureReportsConventionMapping(task, baseName)
 	}
 
-	private fun configureTaskConventionMapping(task: Detekt) {
-		val taskMapping = task.conventionMapping
-		taskMapping.map("config") { detektExtension.config }
-		taskMapping.map("filters") { detektExtension.filters }
-		taskMapping.map("baseline") { detektExtension.baseline }
-		taskMapping.map("debug") { detektExtension.debug }
-		taskMapping.map("parallel") { detektExtension.parallel }
-		taskMapping.map("plugins") { detektExtension.plugins }
-		taskMapping.map("disableDefaultRuleSets") { detektExtension.disableDefaultRuleSets }
+	private fun configureTask(task: Detekt) {
+		task.config.set(detektExtension.config)
+		task.filters.set(detektExtension.filters)
+		task.baseline.set(detektExtension.baseline)
+		task.debug.set(detektExtension.debug)
+		task.parallel.set(detektExtension.parallel)
+		task.plugins.set(detektExtension.plugins)
+		task.disableDefaultRuleSets.set(detektExtension.disableDefaultRuleSets)
 	}
 
 	private fun configureReportsConventionMapping(task: Detekt, baseName: String) {
-		task.reports.all { report ->
+		task.reports.forEach { report ->
 			val reportMapping = conventionMappingOf(report)
 			reportMapping.map("enabled") { true }
 			reportMapping.map("destination") { File(extension.reportsDir, "$baseName.${report.name}") }
@@ -82,7 +81,7 @@ class DetektPlugin : AbstractCodeQualityPlugin<Detekt>() {
 			val detektCli = DefaultExternalModuleDependency("io.gitlab.arturbosch.detekt",
 					"detekt-cli",
 					detektExtension.toolVersion)
-			it.add(project.dependencies.create(detektCli))
+			add(project.dependencies.create(detektCli))
 		}
 	}
 

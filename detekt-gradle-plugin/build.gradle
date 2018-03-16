@@ -1,6 +1,7 @@
 plugins {
 	id 'com.gradle.plugin-publish'
 	id "java-gradle-plugin"
+	id "org.gradle.kotlin.kotlin-dsl" version "0.16.0"
 }
 
 version = "$detektGradleVersion"

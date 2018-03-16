@@ -4,10 +4,13 @@ import groovy.lang.Closure
 import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import org.gradle.api.Action
 import org.gradle.api.file.FileCollection
+import org.gradle.api.file.ProjectLayout
+import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.internal.ClosureBackedAction
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.plugins.quality.CheckstyleReports
 import org.gradle.api.plugins.quality.internal.CheckstyleReportsImpl
+import org.gradle.api.provider.Property
 import org.gradle.api.reporting.Reporting
 import org.gradle.api.resources.TextResource
 import org.gradle.api.tasks.CacheableTask
@@ -17,6 +20,7 @@ import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.VerificationTask
+import org.gradle.kotlin.dsl.property
 import java.io.File
 import javax.inject.Inject
 
@@ -25,26 +29,23 @@ import javax.inject.Inject
  * @author Marvin Ramin
  */
 @CacheableTask
-open class Detekt : SourceTask(), VerificationTask, Reporting<CheckstyleReports> {
+open class Detekt
+@Inject
+constructor(
+		objectFactory: ObjectFactory,
+		projectLayout: ProjectLayout
+) : SourceTask(), VerificationTask, Reporting<CheckstyleReports> {
 
-	private val reports: CheckstyleReports = getObjectFactory().newInstance(CheckstyleReportsImpl::class.java, this)
+	private val reports: CheckstyleReports = objectFactory.newInstance(CheckstyleReportsImpl::class.java, this)
 	private var _ignoreFailures: Boolean = false
-	open lateinit var classpath: FileCollection
-	open var config: TextResource? = null
-	open var filters: String? = null
-	open var baseline: File? = null
-	open var plugins: String? = null
-	open var debug: Boolean = false
-	open var parallel: Boolean = false
-	open var disableDefaultRuleSets: Boolean = false
-
-	/**
-	 * Injects and returns an instance of [org.gradle.api.model.ObjectFactory].
-	 */
-	@Inject
-	open fun getObjectFactory(): ObjectFactory {
-		throw UnsupportedOperationException()
-	}
+	lateinit var classpath: FileCollection
+	open var config: Property<TextResource> = objectFactory.property()
+	open var filters: Property<String> = objectFactory.property()
+	open var baseline: RegularFileProperty = projectLayout.fileProperty()
+	open var plugins: Property<String> = objectFactory.property()
+	open var debug: Property<Boolean> = objectFactory.property()
+	open var parallel: Property<Boolean> = objectFactory.property()
+	open var disableDefaultRuleSets: Property<Boolean> = objectFactory.property()
 
 	@OutputFiles
 	fun getOutputFiles(): Map<String, File> {
@@ -63,15 +64,15 @@ open class Detekt : SourceTask(), VerificationTask, Reporting<CheckstyleReports>
 	 * The Detekt configuration file to use.
 	 */
 	@Internal
-	fun getConfigFile(): File? {
-		return config?.asFile()
+	fun getConfigFile(): File {
+		return config.get().asFile()
 	}
 
 	/**
 	 * The Detekt configuration file to use.
 	 */
 	fun setConfigFile(configFile: File) {
-		config = project.resources.text.fromFile(configFile)
+		config.set(project.resources.text.fromFile(configFile))
 	}
 
 	fun configureForSourceSet(sourceSet: SourceSet) {
