@@ -44,7 +44,7 @@ object DetektInvoker {
 		val project = detekt.project
 		val classpath = project.configurations.getAt("detekt")
 
-		val args = mutableMapOf<String, String>(
+		val args = mapOf<String, String>(
 				INPUT_PARAMETER to detekt.source.asFileTree.asPath
 		)
 
