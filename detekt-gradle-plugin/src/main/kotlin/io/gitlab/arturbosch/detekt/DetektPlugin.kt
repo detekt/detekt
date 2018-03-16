@@ -32,10 +32,10 @@ class DetektPlugin : AbstractCodeQualityPlugin<Detekt>() {
 			File(extension.configDir, "default-detekt-config.yml")
 		}
 
-		generateConfigTask = project.task(mapOf(org.gradle.api.Task.TASK_TYPE to DetektGenerateConfigTask::class.java), GENERATE_CONFIG) as DetektGenerateConfigTask
-		createBaselineTask = project.task(mapOf(org.gradle.api.Task.TASK_TYPE to DetektCreateBaselineTask::class.java), BASELINE) as DetektCreateBaselineTask
-		ideaFormatTask = project.task(mapOf(org.gradle.api.Task.TASK_TYPE to DetektIdeaFormatTask::class.java), IDEA_FORMAT) as DetektIdeaFormatTask
-		ideaInspectionTask = project.task(mapOf(org.gradle.api.Task.TASK_TYPE to DetektIdeaInspectionTask::class.java), IDEA_INSPECT) as DetektIdeaInspectionTask
+		generateConfigTask = project.tasks.create(GENERATE_CONFIG, DetektGenerateConfigTask::class.java)
+		createBaselineTask = project.tasks.create(BASELINE, DetektCreateBaselineTask::class.java)
+		ideaFormatTask = project.tasks.create(IDEA_FORMAT, DetektIdeaFormatTask::class.java)
+		ideaInspectionTask = project.tasks.create(IDEA_INSPECT, DetektIdeaInspectionTask::class.java)
 
 		return extension
 	}
