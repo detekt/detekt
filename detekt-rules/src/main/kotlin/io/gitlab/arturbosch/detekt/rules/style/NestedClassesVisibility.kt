@@ -53,11 +53,13 @@ class NestedClassesVisibility(config: Config = Config.empty) : Rule(config) {
 	private fun checkDeclarations(klass: KtClass) {
 		klass.declarations
 				.filterIsInstance<KtClassOrObject>()
-				.filter { it.isPublic() && !it.hasModifier(KtTokens.ENUM_KEYWORD) && it !is KtEnumEntry }
+				.filter { it.isPublic() && it.isNoEnum() }
 				.forEach {
 					report(CodeSmell(issue, Entity.from(it),
 						"Nested types are often used for implementing private functionality. " +
 								"However the visibility of ${klass.name} makes it visible externally."))
 				}
 	}
+
+	private fun KtClassOrObject.isNoEnum() = !this.hasModifier(KtTokens.ENUM_KEYWORD) && this !is KtEnumEntry
 }
