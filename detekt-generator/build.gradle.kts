@@ -35,7 +35,7 @@ val generateDocumentation by tasks.creating {
                     "--input",
                     "${rootProject.rootDir}/detekt-rules/src/main/kotlin",
                     "--documentation",
-                    "${rootProject.rootDir}/detekt-generator/documentation",
+                    "${rootProject.rootDir}/docs/pages/documentation",
                     "--config",
                     "${rootProject.rootDir}/detekt-cli/src/main/resources")
         }
@@ -68,7 +68,7 @@ fun assertDefaultConfigUpToDate() {
 fun assertDocumentationUpToDate() {
     val configDiff = ByteArrayOutputStream()
     exec {
-        commandLine = listOf("git", "diff", "${rootProject.rootDir}/detekt-generator/documentation")
+        commandLine = listOf("git", "diff", "${rootProject.rootDir}/docs/pages/documentation")
         standardOutput = configDiff
     }
 
