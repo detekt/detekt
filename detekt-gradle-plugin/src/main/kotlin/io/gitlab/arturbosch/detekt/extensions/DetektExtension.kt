@@ -4,7 +4,6 @@ import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.plugins.quality.CodeQualityExtension
 import org.gradle.api.resources.TextResource
-import org.gradle.api.tasks.Internal
 import java.io.File
 
 /**
@@ -30,7 +29,6 @@ open class DetektExtension(val project: Project) : CodeQualityExtension() {
 	/**
 	 * The Detekt configuration file to use.
 	 */
-	@Internal
 	fun getConfigFile(): File? {
 		return config.asFile()
 	}

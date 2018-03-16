@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt
 import groovy.lang.Closure
 import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import org.gradle.api.Action
-import org.gradle.api.Incubating
 import org.gradle.api.file.FileCollection
 import org.gradle.api.internal.ClosureBackedAction
 import org.gradle.api.model.ObjectFactory
@@ -41,10 +40,7 @@ open class Detekt : SourceTask(), VerificationTask, Reporting<CheckstyleReports>
 
 	/**
 	 * Injects and returns an instance of [org.gradle.api.model.ObjectFactory].
-	 *
-	 * @since 4.2
 	 */
-	@Incubating
 	@Inject
 	open fun getObjectFactory(): ObjectFactory {
 		throw UnsupportedOperationException()
@@ -80,6 +76,7 @@ open class Detekt : SourceTask(), VerificationTask, Reporting<CheckstyleReports>
 
 	fun configureForSourceSet(sourceSet: SourceSet) {
 		description = "Run detekt analysis for ${sourceSet.name} classes"
+		group = "verification"
 		classpath = sourceSet.compileClasspath
 		setSource(sourceSet.allSource)
 	}
