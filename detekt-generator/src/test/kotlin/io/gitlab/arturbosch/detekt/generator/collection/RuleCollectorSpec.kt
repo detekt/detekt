@@ -55,9 +55,7 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				class SomeRandomClass: ThresholdRule {
 				}
 			"""
-			assertFailsWith<InvalidDocumentationException> {
-				subject.run(code)
-			}
+			assertFailsWith<InvalidDocumentationException> { subject.run(code) }
 		}
 
 		it("collects the rule name") {
@@ -246,9 +244,7 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				class $name: Rule {
 				}
 			"""
-			assertFailsWith<InvalidDocumentationException> {
-				subject.run(code)
-			}
+			assertFailsWith<InvalidDocumentationException> { subject.run(code) }
 		}
 
 		it("contains compliant and noncompliant code examples") {
@@ -286,8 +282,7 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				class RandomClass : Rule {
 				}
 			"""
-			val thrown = catchThrowable { subject.run(code) }
-			assertThat(thrown).isInstanceOf(InvalidCodeExampleDocumentationException::class.java)
+			assertFailsWith<InvalidCodeExampleDocumentationException> { subject.run(code) }
 		}
 
 		it("has wrong compliant code example declaration") {
@@ -305,8 +300,24 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				class RandomClass : Rule {
 				}
 			"""
-			val thrown = catchThrowable { subject.run(code) }
-			assertThat(thrown).isInstanceOf(InvalidCodeExampleDocumentationException::class.java)
+			assertFailsWith<InvalidCodeExampleDocumentationException> { subject.run(code) }
+		}
+
+		it("has wrong compliant without noncompliant code example declaration") {
+			val code = """
+				package foo
+
+				/**
+				 * Some documentation
+				 *
+				 * <compliant>
+				 * val one = 1
+				 * </compliant>
+				 */
+				class RandomClass : Rule {
+				}
+			"""
+			assertFailsWith<InvalidCodeExampleDocumentationException> { subject.run(code) }
 		}
 	}
 })

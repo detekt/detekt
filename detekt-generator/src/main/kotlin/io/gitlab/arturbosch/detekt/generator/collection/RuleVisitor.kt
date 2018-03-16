@@ -57,27 +57,37 @@ internal class RuleVisitor : DetektVisitor() {
 
 	private fun extractRuleDocumentation(comment: String) {
 		val nonCompliantIndex = comment.indexOf(TAG_NONCOMPLIANT)
+		val compliantIndex = comment.indexOf(TAG_COMPLIANT)
 		if (nonCompliantIndex != -1) {
-			val nonCompliantEndIndex = comment.indexOf(ENDTAG_NONCOMPLIANT)
-			if (nonCompliantEndIndex == -1) {
-				throw InvalidCodeExampleDocumentationException(name)
-			}
-			description = comment.substring(0, nonCompliantIndex).trim()
-			nonCompliant = comment.substring(nonCompliantIndex + TAG_NONCOMPLIANT.length, nonCompliantEndIndex)
-					.trimStartingLineBreaks()
-					.trimEnd()
-			val compliantIndex = comment.indexOf(TAG_COMPLIANT)
-			val compliantEndIndex = comment.indexOf(ENDTAG_COMPLIANT)
-			if (compliantIndex != -1) {
-				if (compliantEndIndex == -1) {
-					throw InvalidCodeExampleDocumentationException(name)
-				}
-				compliant = comment.substring(compliantIndex + TAG_COMPLIANT.length, compliantEndIndex)
-						.trimStartingLineBreaks()
-						.trimEnd()
-			}
+			extractNonCompliantDocumentation(comment, nonCompliantIndex)
+			extractCompliantDocumentation(comment, compliantIndex)
+		} else if (compliantIndex != -1) {
+			throw InvalidCodeExampleDocumentationException(name)
 		} else {
 			description = comment
+		}
+	}
+
+	private fun extractNonCompliantDocumentation(comment: String, nonCompliantIndex: Int) {
+		val nonCompliantEndIndex = comment.indexOf(ENDTAG_NONCOMPLIANT)
+		if (nonCompliantEndIndex == -1) {
+			throw InvalidCodeExampleDocumentationException(name)
+		}
+		description = comment.substring(0, nonCompliantIndex).trim()
+		nonCompliant = comment.substring(nonCompliantIndex + TAG_NONCOMPLIANT.length, nonCompliantEndIndex)
+				.trimStartingLineBreaks()
+				.trimEnd()
+	}
+
+	private fun extractCompliantDocumentation(comment: String, compliantIndex: Int) {
+		val compliantEndIndex = comment.indexOf(ENDTAG_COMPLIANT)
+		if (compliantIndex != -1) {
+			if (compliantEndIndex == -1) {
+				throw InvalidCodeExampleDocumentationException(name)
+			}
+			compliant = comment.substring(compliantIndex + TAG_COMPLIANT.length, compliantEndIndex)
+					.trimStartingLineBreaks()
+					.trimEnd()
 		}
 	}
 
