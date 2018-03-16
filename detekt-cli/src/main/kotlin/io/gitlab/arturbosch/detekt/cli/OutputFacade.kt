@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.ConsoleReport
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.cli.baseline.BaselineFacade
 import io.gitlab.arturbosch.detekt.cli.out.HtmlOutputReport
+import io.gitlab.arturbosch.detekt.cli.out.PlainOutputReport
 import io.gitlab.arturbosch.detekt.cli.out.XmlOutputReport
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import java.io.File
@@ -48,7 +49,7 @@ class OutputFacade(private val arguments: Args,
 		}
 
 		arguments.plainReport?.let {
-			XmlOutputReport().write(File(it).toPath(), result)
+			PlainOutputReport().write(File(it).toPath(), result)
 		}
 	}
 
