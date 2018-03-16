@@ -15,7 +15,7 @@ apply {
 }
 
 plugins {
-    id("org.jetbrains.intellij") version "0.2.17"
+    id("org.jetbrains.intellij") version "0.2.18"
 }
 
 configurations {
@@ -30,7 +30,7 @@ dependencies {
 
 configure<IntelliJPluginExtension> {
     pluginName = "Detekt IntelliJ Plugin"
-    version = "2017.3.4"
+    version = "2017.3.5"
     updateSinceUntilBuild = false
     setPlugins("IntelliLang", "Kotlin")
 }
