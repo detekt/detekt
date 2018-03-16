@@ -149,13 +149,26 @@ class MyIterator : Iterator<String> {
 
 ### IteratorNotThrowingNoSuchElementException
 
-Reports implementations of the Iterator interface which do not throw a NoSuchElementException in the
+Reports implementations of the `Iterator` interface which do not throw a NoSuchElementException in the
 implementation of the next() method. When there are no more elements to return an Iterator should throw a
 NoSuchElementException.
 
 See: https://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html#next()
 
-<compliant>
+#### Noncompliant Code:
+
+```kotlin
+class MyIterator : Iterator<String> {
+
+    override fun next(): String {
+        return ""
+    }
+}
+```
+
+#### Compliant Code:
+
+```kotlin
 class MyIterator : Iterator<String> {
 
     override fun next(): String {
@@ -165,7 +178,7 @@ class MyIterator : Iterator<String> {
         // ...
     }
 }
-</compliant>
+```
 
 ### LateinitUsage
 
