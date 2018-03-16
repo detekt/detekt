@@ -26,7 +26,7 @@ class DetektPlugin : AbstractCodeQualityPlugin<Detekt>() {
 
 	override fun createExtension(): CodeQualityExtension {
 		val extension = project.extensions.create(DETEKT, DetektExtension::class.java, project)
-		extension.toolVersion = "latest.release"
+		extension.toolVersion = System.getProperty("detektVersion")
 		extension.configDir = project.rootProject.file("detekt-cli/src/main/resources/")
 		extension.config = project.resources.text.fromFile {
 			File(extension.configDir, "default-detekt-config.yml")
