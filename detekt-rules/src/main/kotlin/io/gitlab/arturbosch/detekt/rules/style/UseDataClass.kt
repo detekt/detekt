@@ -88,7 +88,7 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 
 	private fun hasOnlyPrivateConstructors(klass: KtClass): Boolean {
 		val primaryConstructor = klass.primaryConstructor
-		return (primaryConstructor == null || primaryConstructor.isPrivate() )
+		return (primaryConstructor == null || primaryConstructor.isPrivate())
 				&& klass.secondaryConstructors.all { it.isPrivate() }
 	}
 
