@@ -9,7 +9,9 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isInternal
 import io.gitlab.arturbosch.detekt.rules.isPublic
+import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtEnumEntry
 
 /**
@@ -50,12 +52,12 @@ class NestedClassesVisibility(config: Config = Config.empty) : Rule(config) {
 
 	private fun checkDeclarations(klass: KtClass) {
 		klass.declarations
-				.filterIsInstance<KtClass>()
-				.filter { it.isPublic() && !it.isEnum() && it !is KtEnumEntry }
-				.forEach { report(CodeSmell(issue,
-						Entity.from(it),
+				.filterIsInstance<KtClassOrObject>()
+				.filter { it.isPublic() && !it.hasModifier(KtTokens.ENUM_KEYWORD) && it !is KtEnumEntry }
+				.forEach {
+					report(CodeSmell(issue, Entity.from(it),
 						"Nested types are often used for implementing private functionality. " +
 								"However the visibility of ${klass.name} makes it visible externally."))
-		}
+				}
 	}
 }

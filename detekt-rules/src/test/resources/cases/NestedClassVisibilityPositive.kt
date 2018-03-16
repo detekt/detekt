@@ -12,6 +12,9 @@ internal class NestedClassesVisibilityPositive {
 	interface NestedPublicInterface
 
 	// reports 1 - public visibility
+	object A
+
+	// reports 1 - public visibility
 	public class NestedClassWithNestedCLass {
 
 		// classes with a nesting depth higher than 1 are excluded
