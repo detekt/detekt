@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.sample.extensions.rules
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Metric
@@ -24,7 +25,8 @@ class TooManyFunctionsTwo(config: Config) : ThresholdRule(config, THRESHOLD) {
 
 	override val issue = Issue(javaClass.simpleName,
 			Severity.Maintainability,
-			"Too many functions can make the maintainability of a file more costly")
+			"Too many functions can make the maintainability of a file more costly",
+			Debt(hours = 1))
 
 	private var amount: Int = 0
 
