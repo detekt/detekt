@@ -21,15 +21,3 @@ if [ "$len" -ge 2 ]; then
     exit 1
   fi
 fi
-
-# checks if all lines of the commit message do not exceed the length 70
-for (( i=1; i<=len; i++ ))
-do
-  index=$(printf "%sp" "$i")
-  el=`sed -n $index $msg`
-  if [ "${#el}" -gt 70 ]; then
-    echo "Aborting commit. The commit message exceeds the maximum allowed line length of 70" >&2
-    exit 1
-  fi
-done
-
