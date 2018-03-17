@@ -16,4 +16,5 @@ include 'detekt-sample-extensions'
 include 'detekt-gradle-plugin'
 include 'detekt-generator'
 include 'detekt-watch-service'
+include 'detekt-intellij-plugin'
 
