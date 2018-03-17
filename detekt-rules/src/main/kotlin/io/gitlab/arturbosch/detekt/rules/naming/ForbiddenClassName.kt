@@ -20,9 +20,9 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
  */
 class ForbiddenClassName(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName,
-			Severity.Style,
-			debt = Debt.FIVE_MINS)
+	override val issue = Issue(javaClass.simpleName, Severity.Style,
+			"Forbidden class name as per configuration detected.",
+			Debt.FIVE_MINS)
 	private val forbiddenNames = SplitPattern(valueOrDefault(FORBIDDEN_NAME, ""))
 
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {

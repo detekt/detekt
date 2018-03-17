@@ -44,7 +44,7 @@ class ThrowsCount(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName, Severity.Style,
 			"Restrict the number of throw statements in methods.",
-			Debt.FIVE_MINS)
+			Debt.TEN_MINS)
 
 	private val max = valueOrDefault(MAX, 2)
 

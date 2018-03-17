@@ -52,7 +52,7 @@ class PrintStackTrace(config: Config = Config.empty) : Rule(config) {
 	override val issue = Issue("PrintStackTrace", Severity.CodeSmell,
 			"Do not print an stack trace. " +
 					"These debug statements should be replaced with a logger or removed.",
-			Debt.FIVE_MINS)
+			Debt.TWENTY_MINS)
 
 	override fun visitCallExpression(expression: KtCallExpression) {
 		val callNameExpression = expression.getCallNameExpression()

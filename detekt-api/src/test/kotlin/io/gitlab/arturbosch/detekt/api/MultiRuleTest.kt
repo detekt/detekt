@@ -46,7 +46,7 @@ class TestMultiRule : MultiRule() {
 }
 
 abstract class AbstractRule : Rule() {
-	override val issue: Issue = Issue(javaClass.simpleName, Severity.Minor)
+	override val issue: Issue = Issue(javaClass.simpleName, Severity.Minor, "", Debt.TWENTY_MINS)
 
 	override fun visitKtFile(file: KtFile) {
 		report(CodeSmell(issue, Entity.from(file), message = ""))

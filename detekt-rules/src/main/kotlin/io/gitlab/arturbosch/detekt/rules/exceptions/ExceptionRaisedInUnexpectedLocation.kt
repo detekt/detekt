@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -37,7 +38,8 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
 class ExceptionRaisedInUnexpectedLocation(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue("ExceptionRaisedInUnexpectedLocation", Severity.CodeSmell,
-			"This method is not expected to throw exceptions. This can cause weird behavior.")
+			"This method is not expected to throw exceptions. This can cause weird behavior.",
+			Debt.TWENTY_MINS)
 
 	private val methods = SplitPattern(valueOrDefault(METHOD_NAMES, ""))
 

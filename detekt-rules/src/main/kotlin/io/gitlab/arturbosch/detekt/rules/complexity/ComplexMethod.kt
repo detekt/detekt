@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Metric
@@ -32,8 +33,8 @@ class ComplexMethod(config: Config = Config.empty,
 
 	override val issue = Issue("ComplexMethod",
 			Severity.Maintainability,
-			"Prefer splitting up complex methods into smaller, " +
-					"easier to understand methods.")
+			"Prefer splitting up complex methods into smaller, easier to understand methods.",
+			Debt.TWENTY_MINS)
 
 	private val ignoreSingleWhenExpression = valueOrDefault(IGNORE_SINGLE_WHEN_EXPRESSION, false)
 

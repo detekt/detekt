@@ -83,7 +83,7 @@ internal class SuppressionSpec: Spek({
 })
 
 class TestRule : Rule() {
-	override val issue = Issue("Test", Severity.CodeSmell, "")
+	override val issue = Issue("Test", Severity.CodeSmell, "", Debt.TWENTY_MINS)
 	var expected: String? = "Test"
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
 		expected = null
@@ -91,7 +91,7 @@ class TestRule : Rule() {
 }
 
 class TestLM : Rule() {
-	override val issue = Issue("LongMethod", Severity.CodeSmell, "")
+	override val issue = Issue("LongMethod", Severity.CodeSmell, "", Debt.TWENTY_MINS)
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		val start = Location.startLineAndColumn(function.funKeyword!!).line
 		val end = Location.startLineAndColumn(function.lastBlockStatementOrThis()).line
@@ -101,7 +101,7 @@ class TestLM : Rule() {
 }
 
 class TestLPL : Rule() {
-	override val issue = Issue("LongParameterList", Severity.CodeSmell, "")
+	override val issue = Issue("LongParameterList", Severity.CodeSmell, "", Debt.TWENTY_MINS)
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		val size = function.valueParameters.size
 		if (size > 5) report(CodeSmell(issue, Entity.from(function), message = ""))

@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -45,8 +46,8 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
 			Issue("UnnecessaryAbstractClass", Severity.Style,
 					"An abstract class is unnecessary and can be refactored. " +
 							"An abstract class should have both abstract and concrete properties or functions. " +
-							noConcreteMember + " " +
-							noAbstractMember)
+							noConcreteMember + " " + noAbstractMember,
+					Debt.FIVE_MINS)
 
 	override fun visitClass(klass: KtClass) {
 		if (!klass.isInterface() && klass.isAbstract() && klass.superTypeListEntries.isEmpty()) {

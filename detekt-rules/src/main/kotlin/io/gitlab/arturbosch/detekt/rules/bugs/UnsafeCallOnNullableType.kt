@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -32,7 +33,8 @@ import org.jetbrains.kotlin.psi.KtUnaryExpression
 class UnsafeCallOnNullableType(config: Config = Config.empty) : Rule(config) {
 	override val issue: Issue = Issue("UnsafeCallOnNullableType",
 			Severity.Defect,
-			"It will throw NullPointerException at runtime if your nullable value is null.")
+			"It will throw a NullPointerException at runtime if your nullable value is null.",
+			Debt.TWENTY_MINS)
 
 	override fun visitUnaryExpression(expression: KtUnaryExpression) {
 		super.visitUnaryExpression(expression)

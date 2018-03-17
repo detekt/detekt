@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Metric
@@ -41,7 +42,8 @@ class LargeClass(config: Config = Config.empty,
 	override val issue = Issue("LargeClass",
 			Severity.Maintainability,
 			"One class should have one responsibility. Large classes tend to handle many things at once. " +
-					"Split up large classes into smaller classes that are easier to understand.")
+					"Split up large classes into smaller classes that are easier to understand.",
+			Debt.TWENTY_MINS)
 
 	private val locStack = ArrayDeque<Int>()
 

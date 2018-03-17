@@ -69,8 +69,8 @@ internal class HtmlOutputFormatTest {
 						"ijkl", "src/main/com/sample/Sample3.kt"))
 
 		return TestDetektion(
-				CodeSmell(Issue("id_a", Severity.CodeSmell, "A1"), entity1, message = "B1"),
-				CodeSmell(Issue("id_b", Severity.CodeSmell, "A2"), entity2, message = "B2"),
-				CodeSmell(Issue("id_c", Severity.CodeSmell, "A3"), entity3, message = "B3"))
+				CodeSmell(Issue("id_a", Severity.CodeSmell, "A1", Debt.TWENTY_MINS), entity1, message = "B1"),
+				CodeSmell(Issue("id_b", Severity.CodeSmell, "A2", Debt.TWENTY_MINS), entity2, message = "B2"),
+				CodeSmell(Issue("id_c", Severity.CodeSmell, "A3", Debt.TWENTY_MINS), entity3, message = "B3"))
 	}
 }
