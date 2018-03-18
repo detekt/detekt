@@ -22,27 +22,25 @@ class DetektAnnotator : ExternalAnnotator<PsiFile, List<Finding>>() {
 	override fun collectInformation(file: PsiFile): PsiFile = file
 
 	override fun doAnnotate(collectedInfo: PsiFile): List<Finding> {
-		val configuration = DetektConfigStorage.instance(
-				collectedInfo.project
-		)
+		val configuration = DetektConfigStorage.instance(collectedInfo.project)
 
-		if (!configuration.enableDetekt) {
-			return emptyList()
+		if (configuration.enableDetekt) {
+			return if (ProjectRootsUtil.isInTestSource(collectedInfo)
+					&& !configuration.checkTestFiles) {
+				emptyList()
+			} else {
+				runDetekt(collectedInfo, configuration)
+			}
 		}
+		return emptyList()
+	}
 
-		if (ProjectRootsUtil.isInTestSource(collectedInfo)
-				&& !configuration.checkTestFiles) {
-			return emptyList()
-		}
-
+	private fun runDetekt(collectedInfo: PsiFile,
+						  configuration: DetektConfigStorage): List<Finding> {
 		val virtualFile = collectedInfo.originalFile.virtualFile
-
 		val settings = processingSettings(virtualFile, configuration)
-
 		val detektion = DetektFacade.create(settings).run()
-		return detektion.findings.flatMap {
-			it.value
-		}
+		return detektion.findings.flatMap { it.value }
 	}
 
 	override fun apply(file: PsiFile,
