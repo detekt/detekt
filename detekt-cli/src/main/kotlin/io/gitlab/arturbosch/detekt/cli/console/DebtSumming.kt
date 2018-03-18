@@ -11,8 +11,7 @@ internal class DebtSumming {
 	}
 
 	fun calculateDebt(): Debt? {
-		if (debtList.isEmpty())
-		{
+		if (debtList.isEmpty()) {
 			return null
 		}
 		return calculate()
