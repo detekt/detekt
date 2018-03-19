@@ -393,15 +393,16 @@ dependencies {
 
 ### <a name="rulesets">RuleSets</a>
 
-Currently there are seven rule sets which are used per default when running the CLI.
+Currently there are eight rule sets which are used per default when running the CLI.
 
-- [complexity](detekt-generator/documentation/complexity.md) - This rule set contains rules that report complex code.
-- [style](detekt-generator/documentation/style.md) - The Style ruleset provides rules that assert the style of the code. This will help keep code in line with the given code style guidelines.
-- [comments](detekt-generator/documentation/comments.md) - This rule set provides rules that address issues in comments and documentation of the code.
-- [exceptions](detekt-generator/documentation/exceptions.md) - Rules in this rule set report issues related to how code throws and handles Exceptions.
-- [empty-blocks](detekt-generator/documentation/empty-blocks.md) - The empty-blocks ruleset contains rules that will report empty blocks of code which should be avoided.
-- [potential-bugs](detekt-generator/documentation/potential-bugs.md) - The potential-bugs rule set provides rules that detect potential bugs.
-- [performance](detekt-generator/documentation/performance.md) - The performance rule set analyzes code for potential performance problems.
+- [complexity](detekt-generator/docs/pages/documentation/complexity.md) - This rule set contains rules that report complex code.
+- [style](detekt-generator/docs/pages/documentation/style.md) - The Style ruleset provides rules that assert the style of the code. This will help keep code in line with the given code style guidelines.
+- [comments](detekt-generator/docs/pages/documentation/comments.md) - This rule set provides rules that address issues in comments and documentation of the code.
+- [exceptions](detekt-generator/docs/pages/documentation/exceptions.md) - Rules in this rule set report issues related to how code throws and handles Exceptions.
+- [empty-blocks](detekt-generator/docs/pages/documentation/empty-blocks.md) - The empty-blocks ruleset contains rules that will report empty blocks of code which should be avoided.
+- [naming](detekt-generator/docs/pages/documentation/naming.md) - The naming ruleset contains rules which assert the naming of different parts of the codebase.
+- [potential-bugs](detekt-generator/docs/pages/documentation/potential-bugs.md) - The potential-bugs rule set provides rules that detect potential bugs.
+- [performance](detekt-generator/docs/pages/documentation/performance.md) - The performance rule set analyzes code for potential performance problems.
 
 ### <a name="rulesetconfig">RuleSet Configuration</a>
 
@@ -624,6 +625,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Egor Neliuba](https://github.com/egor-n) - Rule improvement: EmptyFunctionBlock, EmptyClassBlock
 - [Said Tahsin Dane](https://github.com/tasomaniac/) - Gradle plugin improvements
 - [Misa Torres](https://github.com/misaelmt) - Added: TrailingWhitespace and NoTabs rules
+- [R.A. Porter](https://github.com/coyotesqrl) - Updated Readme links to RuleSets
 
 ### <a name="mentions">Mentions</a>
 
