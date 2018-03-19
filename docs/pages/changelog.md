@@ -71,6 +71,7 @@ See all issues at: [RC6-4](https://github.com/arturbosch/detekt/milestone/33)
 
 ##### Migration
 
+- changed threshold definition (`value >= threshold` instead of `value > threshold`)
 - build failure threshold properties are now deprecated in favor of the new `maxIssues` property.
 - `warningThreshold` and `failThreshold` will get removed in a later release, a deprecation warning is printed to the console.
 
