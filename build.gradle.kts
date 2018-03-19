@@ -99,7 +99,7 @@ subprojects {
 			vcsUrl = "https://github.com/arturbosch/detekt"
 
 			version(delegateClosureOf<BintrayExtension.VersionConfig> {
-				name = project.version as String
+				name = project.version as? String
 				released = Date().toString()
 			})
 		})
@@ -120,9 +120,9 @@ subprojects {
 		publications.create<MavenPublication>("DetektPublication") {
 			from(components["java"])
 			artifact(sourcesJar)
-			groupId = this@subprojects.group as String
+			groupId = this@subprojects.group as? String
 			artifactId = this@subprojects.name
-			version = this@subprojects.version as String
+			version = this@subprojects.version as? String
 			pom.withXml {
 				asNode().apply {
 					appendNode("description", "Static code analysis for Kotlin")
@@ -185,7 +185,7 @@ val usedDetektVersion by project
 
 configure<DetektExtension>{
 	debug = true
-	version = usedDetektVersion as String
+	version = "$usedDetektVersion"
 	profile("failfast", Action() {
 		input = rootProject.projectDir.absolutePath
 		filters = ".*/resources/.*, .*/build/.*"
