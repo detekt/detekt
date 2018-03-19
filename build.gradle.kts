@@ -179,7 +179,7 @@ subprojects {
 	}
 }
 
-val USER_HOME = System.getProperty("user.home")
+val userHome = System.getProperty("user.home")
 
 val usedDetektVersion by project
 
@@ -202,9 +202,9 @@ configure<DetektExtension>{
 	})
 
 	idea(Action {
-		path = "$USER_HOME/.idea"
-		codeStyleScheme = "$USER_HOME/.idea/idea-code-style.xml"
-		inspectionsProfile = "$USER_HOME/.idea/inspect.xml"
+		path = "$userHome/.idea"
+		codeStyleScheme = "$userHome/.idea/idea-code-style.xml"
+		inspectionsProfile = "$userHome/.idea/inspect.xml"
 		report = "${rootProject.projectDir}/reports"
 		mask = "*.kt,"
 	});
