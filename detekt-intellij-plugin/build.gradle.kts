@@ -41,3 +41,5 @@ tasks.withType<RunIdeaTask> {
             "disabled"
     )
 }
+
+intellij.instrumentCode = false
