@@ -27,7 +27,7 @@ class TopLevelPropertyNaming(config: Config = Config.empty) : Rule(config) {
 	override val issue = Issue(javaClass.simpleName,
 			Severity.Style,
 			"Top level constant names should follow the naming convention set in the projects configuration.",
-			debt = Debt.FIVE_MINS)
+			debt = Debt.ONE_MIN)
 
 	private val constantPattern = Regex(valueOrDefault(CONSTANT_PATTERN, "[A-Z][_A-Z0-9]*"))
 	private val propertyPattern = Regex(valueOrDefault(PROPERTY_PATTERN, "[a-z][A-Za-z0-9]*"))

@@ -27,7 +27,7 @@ class UnusedImports(config: Config) : Rule(config) {
 			javaClass.simpleName,
 			Severity.Style,
 			"Unused Imports are dead code and should be removed.",
-			Debt.FIVE_MINS)
+			Debt.ONE_MIN)
 
 	private val operatorSet = setOf("unaryPlus", "unaryMinus", "not", "inc", "dec", "plus", "minus", "times", "div",
 			"mod", "rangeTo", "contains", "get", "set", "invoke", "plusAssign", "minusAssign", "timesAssign", "divAssign",

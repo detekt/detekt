@@ -31,7 +31,7 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 	override val issue: Issue = Issue("UnusedPrivateMember",
 			Severity.Maintainability,
 			"Private member is unused.",
-			Debt.FIVE_MINS)
+			Debt.ONE_MIN)
 
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
 		val propertyVisitor = UnusedPropertyVisitor()

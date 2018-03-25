@@ -48,6 +48,7 @@ data class Debt(val days: Int = 0, val hours: Int = 0, val mins: Int = 0) {
 		val TWENTY_MINS = Debt(0, 0, 20)
 		val TEN_MINS = Debt(0, 0, 10)
 		val FIVE_MINS = Debt(0, 0, 5)
+		val ONE_MIN = Debt(0, 0, 1)
 	}
 
 	override fun toString(): String {
