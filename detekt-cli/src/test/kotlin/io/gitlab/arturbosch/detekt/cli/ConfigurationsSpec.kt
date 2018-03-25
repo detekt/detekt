@@ -85,12 +85,8 @@ internal class ConfigurationsSpec : Spek({
 			assertThat(config.subConfig("comments").subConfig("UndocumentedPublicClass").valueOrDefault("active", false)).isEqualTo(true)
 		}
 
-		it("should override warningThreshold to 0 by default") {
-			assertThat(config.subConfig("build").valueOrDefault("warningThreshold", -1)).isEqualTo(0)
-		}
-
-		it("should override failThreshold to 0 by default") {
-			assertThat(config.subConfig("build").valueOrDefault("failThreshold", -1)).isEqualTo(0)
+		it("should override maxIssues to 0 by default") {
+			assertThat(config.subConfig("build").valueOrDefault("maxIssues", -1)).isEqualTo(0)
 		}
 
 		it("should keep config from default") {
@@ -109,12 +105,8 @@ internal class ConfigurationsSpec : Spek({
 			assertThat(config.subConfig("comments").subConfig("CommentOverPrivateMethod").valueOrDefault("active", true)).isEqualTo(false)
 		}
 
-		it("should override warningThreshold when specified") {
-			assertThat(config.subConfig("build").valueOrDefault("warningThreshold", -1)).isEqualTo(1)
-		}
-
-		it("should override failThreshold when specified") {
-			assertThat(config.subConfig("build").valueOrDefault("failThreshold", -1)).isEqualTo(1)
+		it("should override maxIssues when specified") {
+			assertThat(config.subConfig("build").valueOrDefault("maxIssues", -1)).isEqualTo(1)
 		}
 	}
 

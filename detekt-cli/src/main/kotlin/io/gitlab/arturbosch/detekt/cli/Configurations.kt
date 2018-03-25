@@ -62,7 +62,7 @@ data class FailFastConfig(private val originalConfig: Config, private val defaul
 		@Suppress("UNCHECKED_CAST")
 		return when (key) {
 			"active" -> originalConfig.valueOrDefault(key, true) as T
-			"warningThreshold", "failThreshold" -> originalConfig.valueOrDefault(key, 0) as T
+			"maxIssues" -> originalConfig.valueOrDefault(key, 0) as T
 			else -> originalConfig.valueOrDefault(key, defaultConfig.valueOrDefault(key, default))
 		}
 	}
