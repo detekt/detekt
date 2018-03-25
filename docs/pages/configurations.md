@@ -97,7 +97,7 @@ processors:
 #### failfast property
 
 Set `failFast: true` in your detekt.yml configuration file.  
-As a result, every rule will be enabled and `warningThreshold` and `errorThreshold` will be set to 0.  
+As a result, every rule will be enabled and `maxIssues` will be set to 0.  
 Weights can then be ignored and left untouched.  
 
 

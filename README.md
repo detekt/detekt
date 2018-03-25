@@ -415,7 +415,7 @@ Export the default config with the `--generate-config` flag or copy and modify t
 
 #### Override defaults ([via `failFast` option](https://github.com/arturbosch/detekt/issues/179))
 
-Set `failFast: true` in your detekt.yml configuration file.  As a result, every rule will be enabled and `warningThreshold` and `errorThreshold` will be set to 0.  Weights can then be ignored and left untouched.
+Set `failFast: true` in your detekt.yml configuration file.  As a result, every rule will be enabled and `maxIssues` will be set to 0.  Weights can then be ignored and left untouched.
 
 To adjust, for example, the maxLineLength value, use this configuration file:
 ```
@@ -443,8 +443,7 @@ _detekt_ supports the Java (`@SuppressWarnings`) and Kotlin (`@Suppress`) style 
 _detekt_ now can throw a BuildFailure(Exception) and let the build fail with following config parameters:
 ```yaml
 build:
-  warningThreshold: 5 // Five weighted findings 
-  failThreshold: 10 // Ten weighted smells to fail the build
+  maxIssues: 10 // Ten weighted smells to fail the build
   weights:
     complexity: 2 // Whole complexity rule should add two for each finding.
     LongParameterList: 1 // The specific rule should not add two.

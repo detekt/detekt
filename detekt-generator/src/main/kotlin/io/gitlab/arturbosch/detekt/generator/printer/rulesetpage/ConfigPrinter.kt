@@ -80,8 +80,6 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 	private fun defaultBuildConfiguration(): String {
 		return """
 			build:
-			  warningThreshold: 5
-			  failThreshold: 10
 			  maxIssues: 10
 			  weights:
 			    # complexity: 2

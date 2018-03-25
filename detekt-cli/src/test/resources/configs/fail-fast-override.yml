@@ -3,6 +3,7 @@ failFast: true
 build:
   warningThreshold: 1
   failThreshold: 1
+  maxIssues: 1
 
 style:
   MaxLineLength:

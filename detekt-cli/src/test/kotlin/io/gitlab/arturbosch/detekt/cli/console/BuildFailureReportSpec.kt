@@ -55,6 +55,11 @@ internal class BuildFailureReportSpec : SubjectSpek<BuildFailureReport>({
 				assertFails { subject.render(detektion) }
 			}
 
+			it("should throw a build failure error when maxIssues met") {
+				subject.init(TestConfig(mapOf("maxIssues" to "-2")))
+				assertFails { subject.render(detektion) }
+			}
+
 			it("should throw a build failure error even if warning threshold is also met") {
 				subject.init(TestConfig(mapOf("failThreshold" to "-2", "warningThreshold" to "-2")))
 				assertFails { subject.render(detektion) }
