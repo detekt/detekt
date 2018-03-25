@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.api.format
 
 /**
  * @author Artur Bosch
+ * @author schalkms
  */
 class FindingsReport : ConsoleReport() {
 
@@ -16,22 +17,25 @@ class FindingsReport : ConsoleReport() {
 		val totalDebt = DebtSumming()
 		return with(StringBuilder()) {
 			findings.forEach {
-				append(it.key.format("Ruleset: "))
-				val index = length
 				val debtSumming = DebtSumming()
-				it.value.forEach {
+				val issuesString = it.value.joinToString("") {
 					debtSumming.add(it.issue.debt)
-					append(it.compact().format("\t"))
+					it.compact().format("\t")
 				}
 				val debt = debtSumming.calculateDebt()
-				if (debt != null) {
-					insert(index, " - $debt debt")
-					totalDebt.add(debt)
-				}
+				val debtString =
+						if (debt != null) {
+							totalDebt.add(debt)
+							" - $debt debt".format()
+						} else {
+							"\n"
+						}
+				append(it.key.format(prefix = "Ruleset: ", suffix = debtString))
+				append(issuesString)
 			}
 			val debt = totalDebt.calculateDebt()
 			if (debt != null) {
-				append("\nOverall debt: $debt\n")
+				append("Overall debt: $debt".format("\n"))
 			}
 			toString()
 		}
