@@ -22,11 +22,12 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 - suppress findings with Kotlin's @Suppress and Java's @SuppressWarnings annotations
 - specify code smell thresholds to break your build or print a warning
 - code Smell baseline and ignore lists for legacy projects
-- [gradle plugin](#gradleplugin) for code analysis via Gradle builds
 - gradle tasks to use local `intellij` distribution for [formatting and inspecting](#idea) kotlin code
 - optionally configure detekt for each sub module by using [profiles](#closure) (gradle-plugin)
+- extensible by own rule sets and `FileProcessListener's`
+- [gradle plugin](#gradleplugin) for code analysis via Gradle builds
 - [sonarqube integration](https://github.com/arturbosch/sonar-kotlin)
-- **NEW** extensible by own rule sets and `FileProcessListener's`
+- [intellij integration](https://github.com/arturbosch/detekt-intellij-plugin)
 
 ### Table of contents
 1. [Commandline interface](#build)
