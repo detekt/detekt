@@ -27,12 +27,27 @@ class OptionalAbstractKeywordSpec : SubjectSpek<OptionalAbstractKeyword>({
 		}
 
 		it("reports nested abstract interface") {
-			val code = "class A { abstract interface B {} }"
-			assertThat(subject.lint(code)).hasSize(1)
+			val code = """
+				class A {
+					abstract interface B {
+						abstract fun x()
+					}
+				}"""
+			assertThat(subject.lint(code)).hasSize(2)
 		}
 
 		it("does not report an abstract class") {
 			val code = "abstract class A { abstract fun x() }"
+			assertThat(subject.lint(code)).hasSize(0)
+		}
+
+		it("does not report a nested abstract class function") {
+			val code = """@Subcomponent
+				interface I {
+				    abstract class A {
+						abstract fun dependency
+				    }
+				}"""
 			assertThat(subject.lint(code)).hasSize(0)
 		}
 	}

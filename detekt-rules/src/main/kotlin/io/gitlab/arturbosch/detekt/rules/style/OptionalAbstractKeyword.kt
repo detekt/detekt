@@ -39,15 +39,17 @@ import org.jetbrains.kotlin.psi.KtProperty
  */
 class OptionalAbstractKeyword(config: Config = Config.empty) : Rule(config) {
 
-	private val visitor = AbstractDeclarationVisitor(this)
-
 	override val issue: Issue = Issue(javaClass.simpleName, Severity.Style,
 			"Unnecessary abstract modifier in interface", Debt.FIVE_MINS)
 
 	override fun visitClass(klass: KtClass) {
 		if (klass.isInterface()) {
 			handleAbstractKeyword(klass)
-			klass.getBody()?.declarations?.forEach { it.accept(visitor) }
+			val body = klass.getBody()
+			if (body != null) {
+				body.properties.forEach { handleAbstractKeyword(it) }
+				body.children.filterIsInstance<KtNamedFunction>().forEach { handleAbstractKeyword(it) }
+			}
 		}
 		super.visitClass(klass)
 	}
@@ -56,20 +58,8 @@ class OptionalAbstractKeyword(config: Config = Config.empty) : Rule(config) {
 		dcl.modifierList?.let {
 			val abstractModifier = it.getModifier(KtTokens.ABSTRACT_KEYWORD)
 			if (abstractModifier != null) {
-				report(CodeSmell(issue, Entity.from(dcl), "The abstract keyword on this declaration " +
-						 "is unnecessary."))
+				report(CodeSmell(issue, Entity.from(dcl), "The abstract keyword on this declaration is unnecessary."))
 			}
-		}
-	}
-
-	private class AbstractDeclarationVisitor(val rule: OptionalAbstractKeyword) : DetektVisitor() {
-
-		override fun visitProperty(property: KtProperty) {
-			rule.handleAbstractKeyword(property)
-		}
-
-		override fun visitNamedFunction(function: KtNamedFunction) {
-			rule.handleAbstractKeyword(function)
 		}
 	}
 }
