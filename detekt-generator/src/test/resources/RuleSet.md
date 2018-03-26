@@ -4,6 +4,10 @@ style rule set
 
 a wildcard import
 
+**Severity**: Defect
+
+**Debt**: 10min
+
 #### Configuration options:
 
 * `conf1` (default: `foo`)

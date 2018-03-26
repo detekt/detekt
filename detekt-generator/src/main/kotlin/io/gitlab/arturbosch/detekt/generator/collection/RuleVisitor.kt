@@ -1,12 +1,17 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.rules.empty.EmptyRule
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocSection
+import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtSuperTypeList
+import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
+import java.lang.reflect.Modifier
 
 internal class RuleVisitor : DetektVisitor() {
 
@@ -17,6 +22,8 @@ internal class RuleVisitor : DetektVisitor() {
 	private var compliant = ""
 	private var name = ""
 	private var active = false
+	private var severity = ""
+	private var debt = ""
 	private val configuration = mutableListOf<Configuration>()
 	private val classesMap = mutableMapOf<String, Boolean>()
 
@@ -25,7 +32,7 @@ internal class RuleVisitor : DetektVisitor() {
 			throw InvalidDocumentationException("Rule $name is missing a description in its KDoc.")
 		}
 
-		return Rule(name, description, nonCompliant, compliant, active, configuration)
+		return Rule(name, description, nonCompliant, compliant, active, severity, debt, configuration)
 	}
 
 	override fun visitSuperTypeList(list: KtSuperTypeList) {
@@ -36,7 +43,8 @@ internal class RuleVisitor : DetektVisitor() {
 		val containingClass = list.containingClass()
 		val className = containingClass?.name
 		if (containingClass != null && className != null && !classesMap.containsKey(className)) {
-			classesMap.put(className, isRule)
+			classesMap[className] = isRule
+			extractIssueDocumentation(containingClass)
 		}
 		super.visitSuperTypeList(list)
 	}
@@ -94,6 +102,34 @@ internal class RuleVisitor : DetektVisitor() {
 		}
 	}
 
+	private fun extractIssueDocumentation(klass: KtClass) {
+		val issueProperty = klass.getProperties().singleOrNull { it.name == "issue" }
+		val initializer = issueProperty?.initializer as? KtCallExpression
+		if (initializer != null) {
+			val arguments = initializer.valueArguments
+			if (arguments.size >= ISSUE_ARGUMENT_SIZE) {
+				severity = getArgument(arguments[1], "Severity")
+				val debtName = getArgument(arguments[DEBT_ARGUMENT_INDEX], "Debt")
+				val debtDeclarations = Debt::class.java.declaredFields.filter { Modifier.isStatic(it.modifiers) }
+				val debtDeclaration = debtDeclarations.singleOrNull { it.name == debtName }
+				if (debtDeclaration != null) {
+					debtDeclaration.isAccessible = true
+					debt = debtDeclaration.get(Debt::class.java).toString()
+				}
+			}
+		}
+	}
+
+	private fun getArgument(argument: KtValueArgument, name: String): String {
+		var value = ""
+		val text = argument.text
+		val type = text.split('.')
+		if (text.startsWith(name, true) && type.size == 2) {
+			value = type[1]
+		}
+		return value
+	}
+
 	private fun findConfigurationOptions(classOrObject: KtClassOrObject) {
 		val configurationTags = classOrObject.kDocSection()?.findTagsByName(TAG_CONFIGURATION) ?: emptyList()
 		val configurations = configurationTags.map { it.getContent() }
@@ -117,16 +153,6 @@ internal class RuleVisitor : DetektVisitor() {
 		configuration.addAll(configurations)
 	}
 
-	private fun KtClassOrObject.kDocSection(): KDocSection? = docComment?.getDefaultSection()
-
-	private fun String.trimStartingLineBreaks(): String {
-		var i = 0
-		while (i < this.length && (this[i] == '\n' || this[i] == '\r')) {
-			i++
-		}
-		return this.substring(i)
-	}
-
 	companion object {
 		private val ruleClasses = listOf(
 				io.gitlab.arturbosch.detekt.api.Rule::class.simpleName,
@@ -141,5 +167,18 @@ internal class RuleVisitor : DetektVisitor() {
 		private const val ENDTAG_NONCOMPLIANT = "</noncompliant>"
 		private const val TAG_COMPLIANT = "<compliant>"
 		private const val ENDTAG_COMPLIANT = "</compliant>"
+
+		private const val ISSUE_ARGUMENT_SIZE = 4
+		private const val DEBT_ARGUMENT_INDEX = 3
 	}
+}
+
+private fun KtClassOrObject.kDocSection(): KDocSection? = docComment?.getDefaultSection()
+
+private fun String.trimStartingLineBreaks(): String {
+	var i = 0
+	while (i < this.length && (this[i] == '\n' || this[i] == '\r')) {
+		i++
+	}
+	return this.substring(i)
 }
