@@ -94,7 +94,7 @@ class MultiRuleVisitor : DetektVisitor() {
 			val name = property.name
 			val initializer = property.initializer?.referenceExpression()?.text
 			if (name != null && initializer != null) {
-				properties.put(name, initializer)
+				properties[name] = initializer
 			}
 		}
 	}

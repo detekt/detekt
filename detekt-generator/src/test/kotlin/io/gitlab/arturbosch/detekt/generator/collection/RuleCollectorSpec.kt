@@ -177,6 +177,25 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 			assertThat(items[0].active).isTrue()
 		}
 
+		it("collects the issue property") {
+			val name = "SomeRandomClass"
+			val description = "some description"
+			val code = """
+				package foo
+
+				/**
+				 * $description
+				 */
+				class $name: Rule {
+
+					override val issue = Issue(javaClass.simpleName, Severity.Style, "", debt = Debt.TEN_MINS)
+				}
+			"""
+			val items = subject.run(code)
+			assertThat(items[0].severity).isEqualTo("Style")
+			assertThat(items[0].debt).isEqualTo("10min")
+		}
+
 		it("contains no configuration options by default") {
 			val name = "SomeRandomClass"
 			val description = "some description"

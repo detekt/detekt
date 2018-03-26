@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.generator.printer.rulesetpage
 
 import io.gitlab.arturbosch.detekt.generator.collection.Rule
+import io.gitlab.arturbosch.detekt.generator.out.bold
 import io.gitlab.arturbosch.detekt.generator.out.code
 import io.gitlab.arturbosch.detekt.generator.out.codeBlock
 import io.gitlab.arturbosch.detekt.generator.out.description
@@ -39,6 +40,18 @@ object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
 				paragraph { rule.description }
 			} else {
 				paragraph { "TODO: Specify description" }
+			}
+
+			if (rule.severity.isNotEmpty()) {
+				paragraph {
+					"${bold { "Severity" }}: ${rule.severity}"
+				}
+			}
+
+			if (rule.debt.isNotEmpty()) {
+				paragraph {
+					"${bold { "Debt" }}: ${rule.debt}"
+				}
 			}
 
 			if (rule.configuration.isNotEmpty()) {

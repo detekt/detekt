@@ -14,6 +14,10 @@ Complex conditions make it hard to understand which cases lead to the condition 
 readability and understanding of complex conditions consider extracting them into well-named functions or variables
 and call those instead.
 
+**Severity**: Maintainability
+
+**Debt**: 20min
+
 #### Configuration options:
 
 * `threshold` (default: `4`)
@@ -49,6 +53,10 @@ of this interface to not handle too many things at once.
 Large interfaces should be split into smaller interfaces which have a clear responsibility and are easier
 to understand and implement.
 
+**Severity**: Maintainability
+
+**Debt**: 20min
+
 #### Configuration options:
 
 * `threshold` (default: `10`)
@@ -65,6 +73,10 @@ Complex methods are hard to understand and read. It might not be obvious what si
 Prefer splitting up complex methods into smaller methods that are in turn easier to understand.
 Smaller methods can also be named much clearer which leads to improved readability of the code.
 
+**Severity**: Maintainability
+
+**Debt**: 20min
+
 #### Configuration options:
 
 * `threshold` (default: `10`)
@@ -79,6 +91,10 @@ Smaller methods can also be named much clearer which leads to improved readabili
 
 This rule reports labeled expressions. Expressions with labels generally increase complexity and worsen the
 maintainability of the code. Refactor the violating code to not use labels instead.
+
+**Severity**: Maintainability
+
+**Debt**: 20min
 
 #### Noncompliant Code:
 
@@ -107,6 +123,10 @@ the class does instead handle multiple responsibilities. Instead of doing many t
 split up large classes into smaller classes. These smaller classes are then easier to understand and handle less
 things.
 
+**Severity**: Maintainability
+
+**Debt**: 20min
+
 #### Configuration options:
 
 * `threshold` (default: `150`)
@@ -120,6 +140,10 @@ Prefer smaller methods with clear names that describe their functionality clearl
 
 Extract parts of the functionality of long methods into separate, smaller methods.
 
+**Severity**: Maintainability
+
+**Debt**: 20min
+
 #### Configuration options:
 
 * `threshold` (default: `20`)
@@ -129,6 +153,10 @@ Extract parts of the functionality of long methods into separate, smaller method
 ### LongParameterList
 
 Reports functions which have more parameters than a certain threshold (default: 6).
+
+**Severity**: Maintainability
+
+**Debt**: 20min
 
 #### Configuration options:
 
@@ -147,6 +175,10 @@ Method overloading tightly couples these methods together which might make the c
 
 Refactor these methods and try to use optional parameters instead to prevent some of the overloading.
 
+**Severity**: Maintainability
+
+**Debt**: 20min
+
 #### Configuration options:
 
 * `threshold` (default: `6`)
@@ -160,6 +192,10 @@ its hidden complexity. It might become harder to understand edge-cases of the fu
 
 Prefer extracting the nested code into well-named functions to make it easier to understand.
 
+**Severity**: Maintainability
+
+**Debt**: 20min
+
 #### Configuration options:
 
 * `threshold` (default: `4`)
@@ -172,6 +208,10 @@ This rule detects and reports duplicated String literals. Repeatedly typing out 
 codebase makes it harder to change and maintain.
 
 Instead, prefer extracting the String literal into a property or constant.
+
+**Severity**: Maintainability
+
+**Debt**: 5min
 
 #### Configuration options:
 
@@ -222,6 +262,10 @@ Each element can be configured with different thresholds.
 
 Too many functions indicate a violation of the single responsibility principle. Prefer extracting functionality
 which clearly belongs together in separate parts of the code.
+
+**Severity**: Maintainability
+
+**Debt**: 20min
 
 #### Configuration options:
 

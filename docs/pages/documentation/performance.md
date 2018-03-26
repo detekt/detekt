@@ -17,6 +17,10 @@ simple for loops. Hence in most contexts a simple for loop should be used instea
 See more details here: https://sites.google.com/a/athaydes.com/renato-athaydes/posts/kotlinshiddencosts-benchmarks
 To solve this CodeSmell, the forEach usage should be replaced by a for loop.
 
+**Severity**: Performance
+
+**Debt**: 5min
+
 #### Noncompliant Code:
 
 ```kotlin
@@ -40,6 +44,10 @@ This has a very high performance penalty.
 Benchmarks showing this performance penalty can be seen here:
 https://sites.google.com/a/athaydes.com/renato-athaydes/posts/kotlinshiddencosts-benchmarks
 
+**Severity**: Performance
+
+**Debt**: 20min
+
 #### Noncompliant Code:
 
 ```kotlin
@@ -57,6 +65,10 @@ fun bar(vararg strs: String) {
 Avoid temporary objects when converting primitive types to String. This has a performance penalty when compared
 to using primitive types directly.
 To solve this issue, remove the wrapping type.
+
+**Severity**: Performance
+
+**Debt**: 5min
 
 #### Noncompliant Code:
 
