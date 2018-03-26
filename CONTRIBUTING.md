@@ -1,6 +1,7 @@
 # Contributing to detekt
 
 - Read [this article](https://chris.beams.io/posts/git-commit/) before writing commit messages
+- Copy the file `commit-msg` to `.git/hooks`
 - `gradle detektCheck` should not report any errors
 - This repo uses tabs! Make sure your code is properly formatted.
 - Use idea-code-style.xml for coding style .
