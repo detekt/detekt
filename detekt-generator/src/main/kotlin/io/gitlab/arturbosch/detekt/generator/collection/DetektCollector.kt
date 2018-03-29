@@ -28,19 +28,30 @@ class DetektCollector : Collector<RuleSetPage> {
 		return ruleSets.map { ruleSet ->
 			val consolidatedRules = ruleSet.rules.flatMap { ruleName ->
 				multiRules[ruleName] ?: listOf(ruleName)
-			}.mapNotNull { rules.findRuleByName(it) }
+			}.map { rules.findRuleByName(it) }
 					.sortedBy { rule -> rule.name }
 
+			consolidatedRules.resolveParentRule(rules)
 			RuleSetPage(ruleSet, consolidatedRules)
 		}
 	}
 
-	private fun List<Rule>.findRuleByName(ruleName: String): Rule? {
+	private fun List<Rule>.findRuleByName(ruleName: String): Rule {
 		val rule = this.find { it.name == ruleName }
 		if (rule == null) {
 			throw InvalidDocumentationException("Rule $ruleName was specified in a provider but it was not defined.")
 		}
 		return rule
+	}
+
+	private fun List<Rule>.resolveParentRule(rules: List<Rule>) {
+		this
+				.filter { it.debt.isEmpty() && it.severity.isEmpty() }
+				.forEach {
+					val parentRule = rules.findRuleByName(it.parent)
+					it.debt = parentRule.debt
+					it.severity = parentRule.severity
+				}
 	}
 
 	override fun visit(file: KtFile) {

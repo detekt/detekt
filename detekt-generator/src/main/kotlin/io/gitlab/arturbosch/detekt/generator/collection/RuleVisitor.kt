@@ -11,6 +11,7 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtSuperTypeList
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
+import org.jetbrains.kotlin.psi.psiUtil.getSuperNames
 import java.lang.reflect.Modifier
 
 internal class RuleVisitor : DetektVisitor() {
@@ -24,6 +25,7 @@ internal class RuleVisitor : DetektVisitor() {
 	private var active = false
 	private var severity = ""
 	private var debt = ""
+	private var parent = ""
 	private val configuration = mutableListOf<Configuration>()
 	private val classesMap = mutableMapOf<String, Boolean>()
 
@@ -32,7 +34,7 @@ internal class RuleVisitor : DetektVisitor() {
 			throw InvalidDocumentationException("Rule $name is missing a description in its KDoc.")
 		}
 
-		return Rule(name, description, nonCompliant, compliant, active, severity, debt, configuration)
+		return Rule(name, description, nonCompliant, compliant, active, severity, debt, parent, configuration)
 	}
 
 	override fun visitSuperTypeList(list: KtSuperTypeList) {
@@ -44,6 +46,7 @@ internal class RuleVisitor : DetektVisitor() {
 		val className = containingClass?.name
 		if (containingClass != null && className != null && !classesMap.containsKey(className)) {
 			classesMap[className] = isRule
+			parent = containingClass.getSuperNames().firstOrNull { ruleClasses.contains(it) } ?: ""
 			extractIssueDocumentation(containingClass)
 		}
 		super.visitSuperTypeList(list)
