@@ -9,7 +9,8 @@ data class Rule(
 		val nonCompliantCodeExample: String,
 		val compliantCodeExample: String,
 		val active: Boolean,
-		val severity: String,
-		val debt: String,
+		var severity: String,
+		var debt: String,
+		val parent: String,
 		val configuration: List<Configuration> = listOf()
 )
