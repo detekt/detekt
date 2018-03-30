@@ -31,7 +31,6 @@ style:
   SpacingBetweenPackageAndImports:
     active: true
 
-
 potential-bugs:
   UnsafeCast:
     active: true

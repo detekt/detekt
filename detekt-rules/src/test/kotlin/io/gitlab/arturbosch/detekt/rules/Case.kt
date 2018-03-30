@@ -77,14 +77,14 @@ enum class Case(val file: String) {
 	TrailingWhitespaceNegative("/cases/TrailingWhitespaceNegative.kt"),
 	TrailingWhitespacePositive("/cases/TrailingWhitespacePositive.kt"),
 	NoTabsNegative("/cases/NoTabsNegative.kt"),
-	NoTabsPositive("/cases/NoTabsPositive.kt");
+	NoTabsPositive("/cases/NoTabsPositive.kt"),
+	UnusedPrivateMembers("/cases/UnusedPrivateMembers.kt");
 
 	fun path(): Path = Paths.get(resource(file))
 
 	fun getKtFileContent(): KtFileContent {
 		val file = compileForTest(path())
 		val lines = file.text.splitToSequence("\n")
-		val ktFileContent = KtFileContent(file, lines)
-		return ktFileContent
+		return KtFileContent(file, lines)
 	}
 }
