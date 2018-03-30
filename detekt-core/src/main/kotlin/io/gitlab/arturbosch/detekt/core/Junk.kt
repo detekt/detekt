@@ -18,6 +18,7 @@ fun Path.isFile(): Boolean = Files.isRegularFile(this)
 fun Path.isDirectory(): Boolean = Files.isDirectory(this)
 
 fun KtFile.relativePath(): String? = getUserData(KtCompiler.RELATIVE_PATH)
+fun KtFile.absolutePath(): String? = getUserData(KtCompiler.ABSOLUTE_PATH)
 
 fun MutableMap<String, List<Finding>>.mergeSmells(other: Map<String, List<Finding>>) {
 	for ((key, findings) in other.entries) {
