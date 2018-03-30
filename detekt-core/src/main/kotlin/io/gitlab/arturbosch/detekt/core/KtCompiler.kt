@@ -19,24 +19,26 @@ open class KtCompiler {
 	fun compile(root: Path, subPath: Path): KtFile {
 		require(subPath.isFile()) { "Given sub path should be a regular file!" }
 		val relativePath =
-				if (root == subPath) subPath
-				else root.fileName.resolve(root.relativize(subPath))
+				(if (root == subPath) subPath.fileName
+				else root.fileName.resolve(root.relativize(subPath))).normalize()
+		val absolutePath =
+				(if (root == subPath) subPath
+				else subPath).toAbsolutePath().normalize()
 		val content = subPath.toFile().readText()
 		val lineSeparator = content.determineLineSeparator()
 		val normalizedContent = StringUtilRt.convertLineSeparators(content)
-		val ktFile = createKtFile(normalizedContent, relativePath)
-		ktFile.putExtraInformation(lineSeparator, relativePath)
-		return ktFile
+		val ktFile = createKtFile(normalizedContent, absolutePath)
+
+		return ktFile.apply {
+			putUserData(LINE_SEPARATOR, lineSeparator)
+			putUserData(RELATIVE_PATH, relativePath.toString())
+			putUserData(ABSOLUTE_PATH, absolutePath.toString())
+		}
 	}
 
-	private fun KtFile.putExtraInformation(lineSeparator: String, relativePath: Path) {
-		this.putUserData(LINE_SEPARATOR, lineSeparator)
-		this.putUserData(RELATIVE_PATH, relativePath.toString())
-	}
-
-	private fun createKtFile(content: String, relativePath: Path) = psiFileFactory.createFileFromText(
-			relativePath.fileName.toString(), KotlinLanguage.INSTANCE, StringUtilRt.convertLineSeparators(content),
-			true, true, false, LightVirtualFile(relativePath.toString())) as KtFile
+	private fun createKtFile(content: String, path: Path) = psiFileFactory.createFileFromText(
+			path.fileName.toString(), KotlinLanguage.INSTANCE, StringUtilRt.convertLineSeparators(content),
+			true, true, false, LightVirtualFile(path.toString())) as KtFile
 
 	private fun String.determineLineSeparator(): String {
 		val i = this.lastIndexOf('\n')
@@ -49,6 +51,7 @@ open class KtCompiler {
 	companion object {
 		val LINE_SEPARATOR: Key<String> = Key("lineSeparator")
 		val RELATIVE_PATH: Key<String> = Key("relativePath")
+		val ABSOLUTE_PATH: Key<String> = Key("absolutePath")
 	}
 
 }
