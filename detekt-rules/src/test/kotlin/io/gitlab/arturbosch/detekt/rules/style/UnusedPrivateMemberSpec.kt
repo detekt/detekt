@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.dsl.given
@@ -7,7 +8,63 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
 class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
+
 	subject { UnusedPrivateMember() }
+
+	given("cases file with different findings") {
+
+		it("should find all commented unused cases") {
+			assertThat(subject.lint(Case.UnusedPrivateMembers.path())).hasSize(4)
+		}
+	}
+
+	given("interface functions") {
+
+		it("should not report parameters in interface functions") {
+			val code = """
+				interface UserPlugin {
+					fun plug(application: Application)
+					fun unplug()
+				}
+			"""
+			assertThat(subject.lint(code)).isEmpty()
+		}
+	}
+
+	given("overridden functions") {
+
+		it("should not report parameters in not private functions") {
+			val code = """
+				override fun funA() {
+					objectA.resolve(valA, object : MyCallback {
+						override fun onResolveFailed(throwable: Throwable) {
+							errorMessage.visibility = View.VISIBLE
+						}
+					})
+				}
+			"""
+			assertThat(subject.lint(code)).isEmpty()
+		}
+	}
+
+	given("classes accessing constants from companion objects") {
+
+		it("should not report used constants") {
+			val code = """
+				class A {
+					companion object {
+						private const val MY_CONST = 42
+					}
+
+					fun a() {
+						Completable.timer(MY_CONST.toLong(), TimeUnit.MILLISECONDS)
+								.subscribe()
+					}
+				}
+			"""
+			assertThat(subject.lint(code)).isEmpty()
+		}
+	}
 
 	given("several classes with properties") {
 
@@ -111,6 +168,17 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 	}
 
 	given("loop iterators") {
+
+		it("should not depend on evaluation order of functions or properties") {
+			val code = """
+				private fun RuleSetProvider.provided() = ruleSetId in defaultRuleSetIds
+
+				private val defaultRuleSetIds = listOf("comments", "complexity", "empty-blocks",
+						"exceptions", "potential-bugs", "performance", "style")
+			"""
+			assertThat(subject.lint(code)).isEmpty()
+		}
+
 		it("doesn't report loop properties") {
 			val code = """
 				class Test {
@@ -311,7 +379,8 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 	}
 
 	given("private functions only used by unused private functions") {
-		it("reports unused private functions") {
+
+		it("reports the non called private function") {
 			val code = """
 			class Test {
 				private fun unusedFunction(): Int {
@@ -324,7 +393,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 			}
 			"""
 
-			assertThat(subject.lint(code)).hasSize(2)
+			assertThat(subject.lint(code)).hasSize(1)
 		}
 	}
 })
