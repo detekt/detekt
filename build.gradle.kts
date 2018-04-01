@@ -45,7 +45,7 @@ val detektVersion by project
 
 allprojects {
 	group = "io.gitlab.arturbosch.detekt"
-	version = detektVersion
+	version = "$detektVersion"
 
 	repositories {
 		jcenter()
@@ -152,7 +152,7 @@ subprojects {
 	val spekVersion by project
 	val kotlinImplementation by configurations.creating
 	val kotlinTest by configurations.creating
-	val junitPlatform = configurations.get("junitPlatform")
+	val junitPlatform = configurations["junitPlatform"]
 
 	dependencies {
 		kotlinImplementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion")
@@ -179,24 +179,29 @@ subprojects {
 	}
 }
 
-val userHome = System.getProperty("user.home")
+val userHome: String = System.getProperty("user.home")
 
 val usedDetektVersion by project
 
 configure<DetektExtension>{
+
 	debug = true
 	version = "$usedDetektVersion"
-	profile("failfast", Action() {
+	profile = "failfast"
+
+	profile("main", Action {
 		input = rootProject.projectDir.absolutePath
 		filters = ".*/resources/.*, .*/build/.*"
 		config = "${rootProject.projectDir}/detekt-cli/src/main/resources/default-detekt-config.yml"
 		baseline = "${rootProject.projectDir}/reports/baseline.xml"
 	})
-	profile("failfast", Action() {
+
+	profile("failfast", Action {
 		input = rootProject.projectDir.absolutePath
 		config = "${rootProject.projectDir}/reports/failfast.yml"
 	})
-	profile("output", Action() {
+
+	profile("output", Action {
 		output = "${rootProject.projectDir}/reports"
 		outputName = "detekt"
 	})
@@ -207,7 +212,7 @@ configure<DetektExtension>{
 		inspectionsProfile = "$userHome/.idea/inspect.xml"
 		report = "${rootProject.projectDir}/reports"
 		mask = "*.kt,"
-	});
+	})
 }
 
 /**
