@@ -31,6 +31,8 @@ class EmptyFunctionBlockSpec : SubjectSpek<EmptyFunctionBlock>({
 	given("some overridden functions") {
 
 		val code = """
+				fun empty() {}
+
 				override fun stuff1() {}
 
 				override fun stuff2() {
@@ -42,12 +44,12 @@ class EmptyFunctionBlockSpec : SubjectSpek<EmptyFunctionBlock>({
 				}"""
 
 		it("should flag empty block in overridden function") {
-			assertThat(subject.lint(code)).hasSize(1)
+			assertThat(subject.lint(code)).hasSize(2)
 		}
 
 		it("should not flag overridden functions") {
 			val config = TestConfig(mapOf(EmptyFunctionBlock.IGNORE_OVERRIDDEN_FUNCTIONS to "true"))
-			assertThat(EmptyFunctionBlock(config).lint(code)).isEmpty()
+			assertThat(EmptyFunctionBlock(config).lint(code)).hasSize(1)
 		}
 	}
 
