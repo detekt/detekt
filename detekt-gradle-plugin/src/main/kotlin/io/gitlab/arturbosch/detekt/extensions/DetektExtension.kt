@@ -2,10 +2,13 @@ package io.gitlab.arturbosch.detekt.extensions
 
 import org.gradle.api.Action
 import org.gradle.api.Project
+import org.gradle.api.file.FileCollection
+import org.gradle.api.internal.artifacts.dependencies.DefaultExternalModuleDependency
 
 /**
  * @author Artur Bosch
  * @author Said Tahsin Dane
+ * @author Olivier Lemasle
  */
 open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 						   open var debug: Boolean = DEFAULT_DEBUG_VALUE,
@@ -33,6 +36,17 @@ open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 			}
 		}
 	}
+
+	fun resolveClasspath(project: Project): FileCollection = project
+		.configurations
+		.getByName("detekt")
+		.withDependencies {
+			it.add(
+				DefaultExternalModuleDependency(
+					"io.gitlab.arturbosch.detekt", "detekt-cli", version
+				)
+			)
+		}
 
 	fun resolveArguments(project: Project): List<String> {
 		return with(extractArguments()) {

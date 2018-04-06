@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import io.gitlab.arturbosch.detekt.extensions.INPUT_PARAMETER
 import io.gitlab.arturbosch.detekt.extensions.OUTPUT_PARAMETER
 import org.gradle.api.DefaultTask
-import org.gradle.api.internal.artifacts.dependencies.DefaultExternalModuleDependency
+import org.gradle.api.file.FileCollection
 import org.gradle.api.tasks.InputDirectory
 import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
@@ -13,6 +13,7 @@ import java.io.File
 /**
  * @author Artur Bosch
  * @author Marvin Ramin
+ * @author Olivier Lemasle
  */
 open class DetektCheckTask : DefaultTask() {
 
@@ -21,6 +22,8 @@ open class DetektCheckTask : DefaultTask() {
 
 	@OutputDirectory
 	val output: File?
+
+	private val classpath: FileCollection
 
 	init {
 		description = "Analyze your kotlin code with detekt."
@@ -33,19 +36,18 @@ open class DetektCheckTask : DefaultTask() {
 
 		val outputIndex = arguments.indexOf(OUTPUT_PARAMETER)
 		output = File(arguments[outputIndex + 1])
+
+		classpath = detektExtension.resolveClasspath(project)
+		dependsOn(classpath)
 	}
 
 	@TaskAction
 	fun check() {
 		val detektExtension = project.extensions.getByName("detekt") as DetektExtension
 
-		val configuration = project.buildscript.configurations.maybeCreate("detektCheck")
-		project.buildscript.dependencies.add(configuration.name, DefaultExternalModuleDependency(
-				"io.gitlab.arturbosch.detekt", "detekt-cli", detektExtension.version))
-
 		project.javaexec {
 			it.main = "io.gitlab.arturbosch.detekt.cli.Main"
-			it.classpath = configuration
+			it.classpath = classpath
 			it.args(detektExtension.resolveArguments(project))
 		}
 	}

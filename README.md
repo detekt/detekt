@@ -37,6 +37,7 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
     3. [in android projects](#gradleandroid)
     4. [plugin tasks](#tasks)
     5. [detekt-closure](#closure)
+    6. [custom rules](#gradleCustomRules)
 3. [Standalone gradle task](#gradle)
 4. [Standalone maven task](#maventask)
 5. [Rule sets](#rulesets)
@@ -297,6 +298,26 @@ detekt {
 ```
 
 For more information on using idea as a headless formatting/inspection tool see [here](https://www.jetbrains.com/help/idea/working-with-intellij-idea-features-from-command-line.html).
+
+##### <a name="gradleCustomRules">Using custom rules with Gradle plugin</a>
+
+When your _detekt_ custom rules are located in a module of your Gradle project (e.g. `:detekt-extensions`), you can
+enable them with the following syntax:
+
+```groovy
+dependencies {
+    detekt project(':detekt-extensions')
+}
+
+detekt {
+    profile("main") {
+        input = "$projectDir/src/main/kotlin"
+    }
+}
+```
+
+More generally, you can use dependencies on `detekt` configuration; these dependencies will be resolved, built if
+needed, and added to _detekt_ classpath.
 
 #### <a name="gradle">Using _detekt_ in custom gradle projects</a>
 
@@ -597,7 +618,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Svyatoslav Chatchenko](https://github.com/MyDogTom) - Active on Issues, NamingConventions and UnusedImport fixes
 - [Sean Flanigan](https://github.com/seanf) - Config from classpath resource
 - [Sebastian Schuberth](https://github.com/sschuberth) - Active on Issues, Windows support
-- [Olivier Lemasle](https://github.com/olivierlemasle) - NP-Bugfix
+- [Olivier Lemasle](https://github.com/olivierlemasle) - NP-Bugfix, fix TooGenericExceptionCaught, Gradle plugin improvement
 - [Marc Prengemann](https://github.com/winterDroid) - Support for custom output formats, prototyped Rule-Context-Issue separation
 - [Sebastiano Poggi](https://github.com/rock3r) - Enhanced milestone report script, Magic number fixes
 - [Ilya Tretyakov](https://github.com/jvilya) - Sonar runs should not auto correct formatting.

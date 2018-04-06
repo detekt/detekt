@@ -9,6 +9,8 @@ import org.gradle.api.Project
 class DetektPlugin : Plugin<Project> {
 
 	override fun apply(project: Project) {
+		project.configurations.create("detekt")
+
 		val profilesContainer = project.container(ProfileExtension::class.java)
 		project.extensions.add(PROFILES_EXTENSION_NAME, profilesContainer)
 		profilesContainer.all { ProfileStorage.add(it) }
