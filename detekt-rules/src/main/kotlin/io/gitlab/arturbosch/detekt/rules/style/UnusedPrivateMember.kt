@@ -15,7 +15,9 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFunction
+import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtReferenceExpression
@@ -46,59 +48,11 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 		val propertyVisitor = UnusedPropertyVisitor()
 		classOrObject.accept(propertyVisitor)
 
-		propertyVisitor.getProperties().forEach {
+		propertyVisitor.getUnusedProperties().forEach {
 			report(CodeSmell(issue, Entity.from(it.value), "Private property ${it.key} is unused."))
 		}
 
-		val functionParameterVisitor = UnusedFunctionParameterVisitor()
-		classOrObject.accept(functionParameterVisitor)
-
-		functionParameterVisitor.parameters.forEach {
-			report(CodeSmell(issue, Entity.from(it.value), "Function parameter ${it.key} is unused."))
-		}
-
-		val functionVisitor = UnusedFunctionVisitor()
-		classOrObject.accept(functionVisitor)
-
-		functionVisitor.getFunctions().forEach {
-			report(CodeSmell(issue, Entity.from(it.value), "Private function ${it.key} is unused."))
-		}
-
 		super.visitClassOrObject(classOrObject)
-	}
-
-	class UnusedFunctionParameterVisitor : DetektVisitor() {
-
-		var parameters: MutableMap<String, KtParameter> = mutableMapOf()
-
-		override fun visitNamedFunction(function: KtNamedFunction) {
-			if (!function.isPrivate() || function.isOverridden()) {
-				return
-			}
-
-			function.valueParameterList?.parameters?.forEach {
-				val name = it.nameAsSafeName.identifier
-				parameters[name] = it
-			}
-
-			val localProperties = mutableListOf<String>()
-			function.accept(object : DetektVisitor() {
-				override fun visitProperty(property: KtProperty) {
-					if (property.isLocal) {
-						val name = property.nameAsSafeName.identifier
-						localProperties.add(name)
-					}
-					super.visitProperty(property)
-				}
-
-				override fun visitReferenceExpression(expression: KtReferenceExpression) {
-					localProperties.add(expression.text)
-					super.visitReferenceExpression(expression)
-				}
-			})
-
-			parameters = parameters.filterTo(mutableMapOf()) { it.key !in localProperties }
-		}
 	}
 
 	class UnusedPropertyVisitor : DetektVisitor() {
@@ -106,7 +60,7 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 		private val properties = mutableMapOf<String, KtElement>()
 		private val nameAccesses = mutableSetOf<String>()
 
-		fun getProperties(): Map<String, KtElement> {
+		fun getUnusedProperties(): Map<String, KtElement> {
 			for (access in nameAccesses) {
 				if (properties.isEmpty()) {
 					break
@@ -152,36 +106,98 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 		}
 	}
 
-	class UnusedFunctionVisitor : DetektVisitor() {
-		private val callExpressions = mutableSetOf<String>()
-		private val functions = mutableMapOf<String, KtFunction>()
+	/*
+	* Here begins the common part for unused private functions and parameters.
+	*/
 
-		fun getFunctions(): Map<String, KtFunction> {
-			for (call in callExpressions) {
-				if (functions.isEmpty()) {
-					break
+	override fun postVisit(root: KtFile) {
+		getUnusedFunctions().forEach {
+			report(CodeSmell(issue, Entity.from(it.value), "Private function ${it.key} is unused."))
+		}
+		unusedParameters.forEach {
+			report(CodeSmell(issue, Entity.from(it.value), "Function parameter ${it.key} is unused."))
+		}
+	}
+
+	override fun visitNamedFunction(function: KtNamedFunction) {
+		if (function.isPrivate() && !function.isOverridden()) {
+			collectFunction(function)
+			collectParameters(function)
+		}
+
+		super.visitNamedFunction(function)
+	}
+
+	/*
+	* Here starts the unused parameters part.
+	*/
+	var unusedParameters: MutableMap<String, KtParameter> = mutableMapOf()
+
+	private fun collectParameters(function: KtNamedFunction) {
+		function.valueParameterList?.parameters?.forEach {
+			val name = it.nameAsSafeName.identifier
+			unusedParameters[name] = it
+		}
+
+		val localProperties = mutableListOf<String>()
+		function.accept(object : DetektVisitor() {
+			override fun visitProperty(property: KtProperty) {
+				if (property.isLocal) {
+					val name = property.nameAsSafeName.identifier
+					localProperties.add(name)
 				}
-				functions.remove(call)
+				super.visitProperty(property)
 			}
-			return functions
+
+			override fun visitReferenceExpression(expression: KtReferenceExpression) {
+				localProperties.add(expression.text)
+				super.visitReferenceExpression(expression)
+			}
+		})
+
+		unusedParameters = unusedParameters.filterTo(mutableMapOf()) { it.key !in localProperties }
+	}
+
+	/*
+	* Here starts the unused private functions part.
+	*
+	* We need to collect all private function declarations and references to these functions
+	* for the whole file as Kotlin allows to access private and internal object declarations
+	* from everywhere in the file.
+	*/
+
+	private val callExpressions = mutableSetOf<String>()
+	private val functions = mutableMapOf<String, KtFunction>()
+
+	private fun collectFunction(function: KtNamedFunction) {
+		val name = function.nameAsSafeName.identifier
+		functions[name] = function
+	}
+
+	fun getUnusedFunctions(): Map<String, KtFunction> {
+		for (call in callExpressions) {
+			if (functions.isEmpty()) {
+				break
+			}
+			functions.remove(call)
 		}
+		return functions
+	}
 
-		override fun visitNamedFunction(function: KtNamedFunction) {
-			if (function.isPrivate() && !function.isOverridden()) {
-				val name = function.nameAsSafeName.identifier
-				functions[name] = function
-			}
-
-			super.visitNamedFunction(function)
+	override fun visitReferenceExpression(expression: KtReferenceExpression) {
+		super.visitReferenceExpression(expression)
+		when (expression) {
+			is KtOperationReferenceExpression -> callExpressions.add(expression.getReferencedName())
+			is KtNameReferenceExpression -> callExpressions.add(expression.getReferencedName())
 		}
+	}
 
-		override fun visitCallExpression(expression: KtCallExpression) {
-			super.visitCallExpression(expression)
-			val calledMethodName = expression.referenceExpression()?.text
+	override fun visitCallExpression(expression: KtCallExpression) {
+		super.visitCallExpression(expression)
+		val calledMethodName = expression.referenceExpression()?.text
 
-			if (calledMethodName != null) {
-				callExpressions.add(calledMethodName)
-			}
+		if (calledMethodName != null) {
+			callExpressions.add(calledMethodName)
 		}
 	}
 }

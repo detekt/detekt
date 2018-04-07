@@ -171,7 +171,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 
 		it("should not depend on evaluation order of functions or properties") {
 			val code = """
-				private fun RuleSetProvider.provided() = ruleSetId in defaultRuleSetIds
+				fun RuleSetProvider.provided() = ruleSetId in defaultRuleSetIds
 
 				private val defaultRuleSetIds = listOf("comments", "complexity", "empty-blocks",
 						"exceptions", "potential-bugs", "performance", "style")

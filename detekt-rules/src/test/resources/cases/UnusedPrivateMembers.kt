@@ -3,7 +3,8 @@
 package cases
 
 /**
- * Many false positives reported in #812 - https://github.com/arturbosch/detekt/issues/812.
+ * Many false positives reported in #812 - https://github.com/arturbosch/detekt/issues/812
+ * and #840 - https://github.com/arturbosch/detekt/pull/840.
  */
 object O { // public
 	const val NUMBER = 5 // public
@@ -22,6 +23,18 @@ class C {
 		val unusedLocal = 5                            // unused local var
 		println(usedParam)
 		println(PC.THE_CONST)
+		println("Hello " ext "World" ext "!")
+		println(::doubleColonObjectReferenced)
+		println(this::doubleColonThisReferenced)
+	}
+
+	private fun doubleColonThisReferenced() {}
+
+	companion object {
+		private infix fun String.ext(other: String): String {
+			return this + other
+		}
+		private fun doubleColonObjectReferenced() {}
 	}
 }
 
