@@ -15,12 +15,9 @@ private object PO { // private, but constants may be used
 }
 
 class C {
-	private val unusedField = 5					// unused field
-	val myNumber = 5							// public and unused
+	val myNumber = 5
 
-	private fun unusedFunction(unusedParam: Int, // unused local param
-							   usedParam: String) { // used local param
-		val unusedLocal = 5                            // unused local var
+	fun publicFunction(usedParam: String) {
 		println(usedParam)
 		println(PC.THE_CONST)
 		println("Hello " ext "World" ext "!")
@@ -29,11 +26,11 @@ class C {
 	}
 
 	fun usesAllowedNames() {
-		for ((index, _) in mapOf(0 to 0, 1 to 1, 2 to 2)) {
+		for ((index, _) in mapOf(0 to 0, 1 to 1, 2 to 2)) {  // unused but allowed name
 			println(index)
 		}
 		try {
-		} catch (_: OutOfMemoryError) {
+		} catch (_: OutOfMemoryError) { // unused but allowed name
 		}
 	}
 
@@ -47,16 +44,14 @@ class C {
 	}
 }
 
-private class PC {                                    // used private class
+private class PC { // used private class
 	companion object {
-		internal const val THE_CONST = ""            // used private const
+		internal const val THE_CONST = "" // used private const
 		object OO {
 			const val BLA = 4
 		}
 	}
 }
-
-private fun unusedFunction() = 5                    // unused
 
 internal fun libraryFunction() = run {
 	val o: Function1<Any, Any> = object : Function1<Any, Any> {
@@ -67,7 +62,7 @@ internal fun libraryFunction() = run {
 	println(o("${PC.Companion.OO.BLA.toString() + ""}"))
 }
 
-internal class IC                                    // unused but internal
+internal class IC // unused but internal
 
 val stuff = object : Iterator<String?> {
 
