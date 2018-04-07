@@ -28,6 +28,15 @@ class C {
 		println(this::doubleColonThisReferenced)
 	}
 
+	fun usesAllowedNames() {
+		for ((index, _) in mapOf(0 to 0, 1 to 1, 2 to 2)) {
+			println(index)
+		}
+		try {
+		} catch (_: OutOfMemoryError) {
+		}
+	}
+
 	private fun doubleColonThisReferenced() {}
 
 	companion object {

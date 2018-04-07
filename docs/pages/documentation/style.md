@@ -829,6 +829,12 @@ can lead to confusion and potential bugs.
 
 **Debt**: 5min
 
+#### Configuration options:
+
+* `allowedNames` (default: `"(_|ignored|expected)"`)
+
+   unused private member names matching this regex are ignored
+
 ### UseDataClass
 
 Classes that simply hold data should be refactored into a `data class`. Data classes are specialized to hold data

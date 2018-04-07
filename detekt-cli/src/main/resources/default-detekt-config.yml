@@ -370,6 +370,7 @@ style:
     active: false
   UnusedPrivateMember:
     active: false
+    allowedNames: "(_|ignored|expected)"
   UseDataClass:
     active: false
     excludeAnnotatedClasses: ""
