@@ -91,7 +91,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 					}
 				}
 				"""
-			assertThat(subject.lint(code)).hasSize(0)
+			assertThat(subject.lint(code)).isEmpty()
 		}
 
 		it("does not report used members") {
@@ -104,7 +104,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 					}
 				}
 				"""
-			assertThat(subject.lint(code)).hasSize(0)
+			assertThat(subject.lint(code)).isEmpty()
 		}
 
 		it("does not report used members but reports unused members") {
@@ -149,7 +149,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 					}
 				}
 				"""
-			assertThat(subject.lint(code)).hasSize(0)
+			assertThat(subject.lint(code)).isEmpty()
 		}
 
 		it("reports unused local properties") {
@@ -260,7 +260,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 					}
 				}
 				"""
-			assertThat(subject.lint(code)).hasSize(0)
+			assertThat(subject.lint(code)).isEmpty()
 		}
 
 		it("does not report properties used by inner classes") {
@@ -273,7 +273,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 					}
 				}
 				"""
-			assertThat(subject.lint(code)).hasSize(0)
+			assertThat(subject.lint(code)).isEmpty()
 		}
 	}
 
@@ -303,7 +303,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 			}
 			"""
 
-			assertThat(subject.lint(code)).hasSize(0)
+			assertThat(subject.lint(code)).isEmpty()
 		}
 
 		it("does not report single parameters if they used in function") {
@@ -317,7 +317,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 			}
 			"""
 
-			assertThat(subject.lint(code)).hasSize(0)
+			assertThat(subject.lint(code)).isEmpty()
 		}
 
 		it("reports parameters that are unused in return statement") {
@@ -362,7 +362,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 			}
 			"""
 
-			assertThat(subject.lint(code)).hasSize(0)
+			assertThat(subject.lint(code)).isEmpty()
 		}
 
 		it("reports unused private functions") {

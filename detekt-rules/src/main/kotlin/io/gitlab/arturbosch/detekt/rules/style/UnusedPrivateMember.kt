@@ -16,6 +16,7 @@ import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
+import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
 import org.jetbrains.kotlin.psi.KtParameter
@@ -29,10 +30,17 @@ import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
  * If private properties are unused they should be removed. Otherwise this dead code
  * can lead to confusion and potential bugs.
  *
+ * @configuration allowedNames - unused private member names matching this regex are ignored
+ * (default: "(_|ignored|expected)")
+ *
  * @author Marvin Ramin
  * @author Artur Bosch
  */
 class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
+
+	companion object {
+		const val ALLOWED_NAMES_PATTERN = "allowedNames"
+	}
 
 	override val issue: Issue = Issue("UnusedPrivateMember",
 			Severity.Maintainability,
@@ -40,12 +48,14 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 			Debt.FIVE_MINS,
 			aliases = setOf("UNUSED_VARIABLE"))
 
+	private val allowedNames = Regex(valueOrDefault(ALLOWED_NAMES_PATTERN, "(_|ignored|expected)"))
+
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
 		if ((classOrObject as? KtClass)?.isInterface() == true) {
 			return
 		}
 
-		val propertyVisitor = UnusedPropertyVisitor()
+		val propertyVisitor = UnusedPropertyVisitor(allowedNames)
 		classOrObject.accept(propertyVisitor)
 
 		propertyVisitor.getUnusedProperties().forEach {
@@ -55,7 +65,7 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 		super.visitClassOrObject(classOrObject)
 	}
 
-	class UnusedPropertyVisitor : DetektVisitor() {
+	class UnusedPropertyVisitor(private val allowedNames: Regex) : DetektVisitor() {
 
 		private val properties = mutableMapOf<String, KtElement>()
 		private val nameAccesses = mutableSetOf<String>()
@@ -75,14 +85,19 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 			if (parameter.isLoopParameter) {
 				val destructuringDeclaration = parameter.destructuringDeclaration
 				if (destructuringDeclaration != null) {
-					destructuringDeclaration.entries.forEach {
-						val name = it.nameAsSafeName.identifier
-						properties[name] = it
+					for (variable in destructuringDeclaration.entries) {
+						checkAllowedNames(variable)
 					}
 				} else {
-					val name = parameter.nameAsSafeName.identifier
-					properties[name] = parameter
+					checkAllowedNames(parameter)
 				}
+			}
+		}
+
+		private fun checkAllowedNames(it: KtNamedDeclaration) {
+			val name = it.nameAsSafeName.identifier
+			if (!allowedNames.matches(name)) {
+				properties[name] = it
 			}
 		}
 
@@ -136,7 +151,9 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 	private fun collectParameters(function: KtNamedFunction) {
 		function.valueParameterList?.parameters?.forEach {
 			val name = it.nameAsSafeName.identifier
-			unusedParameters[name] = it
+			if (!allowedNames.matches(name)) {
+				unusedParameters[name] = it
+			}
 		}
 
 		val localProperties = mutableListOf<String>()
@@ -171,7 +188,9 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 
 	private fun collectFunction(function: KtNamedFunction) {
 		val name = function.nameAsSafeName.identifier
-		functions[name] = function
+		if (!allowedNames.matches(name)) {
+			functions[name] = function
+		}
 	}
 
 	fun getUnusedFunctions(): Map<String, KtFunction> {
