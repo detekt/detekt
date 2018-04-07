@@ -13,8 +13,12 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 
 	given("cases file with different findings") {
 
-		it("should find all commented unused cases") {
-			assertThat(subject.lint(Case.UnusedPrivateMembers.path())).hasSize(4)
+		it("positive cases file") {
+			assertThat(subject.lint(Case.UnusedPrivateMemberPositive.path())).hasSize(5)
+		}
+
+		it("negative cases file") {
+			assertThat(subject.lint(Case.UnusedPrivateMemberNegative.path())).isEmpty()
 		}
 	}
 

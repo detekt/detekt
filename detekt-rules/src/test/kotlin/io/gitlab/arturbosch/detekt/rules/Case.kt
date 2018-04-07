@@ -78,7 +78,8 @@ enum class Case(val file: String) {
 	TrailingWhitespacePositive("/cases/TrailingWhitespacePositive.kt"),
 	NoTabsNegative("/cases/NoTabsNegative.kt"),
 	NoTabsPositive("/cases/NoTabsPositive.kt"),
-	UnusedPrivateMembers("/cases/UnusedPrivateMembers.kt");
+	UnusedPrivateMemberPositive("/cases/UnusedPrivateMemberPositive.kt"),
+	UnusedPrivateMemberNegative("/cases/UnusedPrivateMemberNegative.kt");
 
 	fun path(): Path = Paths.get(resource(file))
 
