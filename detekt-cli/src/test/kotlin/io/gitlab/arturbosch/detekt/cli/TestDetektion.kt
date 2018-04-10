@@ -10,7 +10,7 @@ import org.jetbrains.kotlin.com.intellij.openapi.util.Key
  * @author Artur Bosch
  * @author schalkms
  */
-class TestDetektion(vararg findings: Finding) : Detektion {
+open class TestDetektion(vararg findings: Finding) : Detektion {
 
 	override val metrics: Collection<ProjectMetric> = listOf(createMetric())
 	override val findings: Map<String, List<Finding>> = findings.groupBy { it.id }

@@ -19,22 +19,11 @@ internal class ComplexityReportSpec : SubjectSpek<ComplexityReport>({
 
 	given("several complexity metrics") {
 
-		val reportText = """
-			Complexity Report:
-				- 10 lines of code (loc)
-				- 6 source lines of code (sloc)
-				- 5 logical lines of code (lloc)
-				- 4 comment lines of code (cloc)
-				- 2 McCabe complexity (mcc)
-				- 1 number of total code smells
-				- 66 % comment source ratio
-				- 400 mcc per 1000 lloc
-				- 200 code smells per 1000 lloc"""
-
 		it("successfully generates a complexity report") {
+			val expectedContent = readResource("complexity-report.txt")
 			val detektion = createDetektion()
 			addData(detektion)
-			assertThat(generateComplexityReport(detektion)).isEqualToIgnoringWhitespace(reportText)
+			assertThat(generateComplexityReport(detektion)).isEqualTo(expectedContent)
 		}
 
 		it("returns null for missing complexity metrics") {
@@ -63,5 +52,5 @@ private fun addData(detektion: Detektion) {
 private fun generateComplexityReport(detektion: Detektion): String? {
 	val complexityMetric = ComplexityMetric(detektion)
 	val generator = ComplexityReportGenerator(complexityMetric)
-	return generator.generate()
+	return generator.generate()?.trimEnd()
 }
