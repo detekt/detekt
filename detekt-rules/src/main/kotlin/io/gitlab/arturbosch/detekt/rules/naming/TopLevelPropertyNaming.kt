@@ -7,9 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import org.jetbrains.kotlin.lexer.KtTokens
+import io.gitlab.arturbosch.detekt.rules.hasConstModifier
 import org.jetbrains.kotlin.psi.KtProperty
-import org.jetbrains.kotlin.psi.KtVariableDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 
 /**
@@ -66,11 +65,6 @@ class TopLevelPropertyNaming(config: Config = Config.empty) : Rule(config) {
 						message = "Top level property names should match the pattern: $propertyPattern"))
 			}
 		}
-	}
-
-	private fun KtVariableDeclaration.hasConstModifier(): Boolean {
-		val modifierList = this.modifierList
-		return modifierList != null && modifierList.hasModifier(KtTokens.CONST_KEYWORD)
 	}
 
 	companion object {

@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
@@ -68,6 +69,22 @@ class ObjectPropertyNamingSpec : SubjectSpek<ObjectPropertyNaming>({
 		it("should detect two object properties not matching [A-Za-z][_A-Za-z\\d]*") {
 			val findings = subject.lint(code)
 			assertThat(findings).hasSize(2)
+		}
+	}
+
+	describe("variables and constants in objects with custom config") {
+		val code = compileContentForTest("""
+			object O {
+				val _name = "Artur"
+				val NAME = "Artur" // invalid
+				const val MYNAME = "Artur"
+				const val myname = "Artur" // invalid
+			}
+		""")
+
+		it("should detect invalid variables and constants in object") {
+			val config = TestConfig(mapOf(ObjectPropertyNaming.CONSTANT_PATTERN to "[A-Z][_A-Z0-9]*"))
+			assertThat(ObjectPropertyNaming(config).lint(code)).hasSize(2)
 		}
 	}
 })
