@@ -6,7 +6,7 @@
 [ ![Download](https://api.bintray.com/packages/arturbosch/code-analysis/detekt/images/download.svg) ](https://bintray.com/arturbosch/code-analysis/detekt/_latestVersion)
 [![gradle plugin](https://img.shields.io/badge/gradle_plugin-1.0.0.RC6.4-blue.svg?style=flat-square)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-40-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-41-orange.svg?style=flat-square)](#contributors)
 [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
 
 Meet _detekt_, a static code analysis tool for the _Kotlin_ programming language.
@@ -647,6 +647,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Said Tahsin Dane](https://github.com/tasomaniac/) - Gradle plugin improvements
 - [Misa Torres](https://github.com/misaelmt) - Added: TrailingWhitespace and NoTabs rules
 - [R.A. Porter](https://github.com/coyotesqrl) - Updated Readme links to RuleSets
+- [Robbin Voortman](https://github.com/rvoortman) - Rule improvement: MaxLineLength
 
 ### <a name="mentions">Mentions</a>
 
