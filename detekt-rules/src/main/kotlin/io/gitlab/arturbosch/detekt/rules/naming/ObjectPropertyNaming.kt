@@ -27,7 +27,7 @@ class ObjectPropertyNaming(config: Config = Config.empty) : Rule(config) {
 	private val propertyPattern = Regex(valueOrDefault(PROPERTY_PATTERN, "[A-Za-z][_A-Za-z\\d]*"))
 
 	override fun visitProperty(property: KtProperty) {
-		if (doesntMatchPattern((property))) {
+		if (doesNotMatchPattern((property))) {
 			report(CodeSmell(
 					issue,
 					Entity.from(property),
@@ -35,7 +35,8 @@ class ObjectPropertyNaming(config: Config = Config.empty) : Rule(config) {
 		}
 	}
 
-	fun doesntMatchPattern(element: KtVariableDeclaration) = !element.identifierName().matches(propertyPattern)
+	private fun doesNotMatchPattern(element: KtVariableDeclaration) =
+			!element.identifierName().matches(propertyPattern)
 
 	companion object {
 		const val PROPERTY_PATTERN = "propertyPattern"
