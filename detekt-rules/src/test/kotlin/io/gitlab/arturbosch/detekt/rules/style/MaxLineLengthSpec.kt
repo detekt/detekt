@@ -18,7 +18,7 @@ class MaxLineLengthSpec : Spek({
 
 		it("should report no errors when maxLineLength is set to 200") {
 			val rule = MaxLineLength(TestConfig(mapOf("maxLineLength" to "200")))
-
+ 
 			rule.visit(fileContent)
 			assertThat(rule.findings).isEmpty()
 		}
@@ -27,7 +27,7 @@ class MaxLineLengthSpec : Spek({
 			val rule = MaxLineLength()
 
 			rule.visit(fileContent)
-			assertThat(rule.findings).hasSize(3)
+			assertThat(rule.findings).hasSize(6)
 		}
 	}
 
@@ -94,6 +94,56 @@ class MaxLineLengthSpec : Spek({
 
 			rule.visit(fileContent)
 			assertThat(rule.findings).isEmpty()
+		}
+	}
+	given("a kt file with a long package name, long import statements, a long line and long comments") {
+		val code = """
+			package anIncrediblyLongAndComplexPackageNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
+
+			import anIncrediblyLongAndComplexImportNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
+
+			class Test {
+				fun anIncrediblyLongAndComplexMethodNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot() {}
+			}
+			// anIncrediblyLongAndComplexCommentThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
+			/* anIncrediblyLongAndComplexCommentThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot */
+			/*
+			* anIncrediblyLongAndComplexCommentThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
+			*/
+		""".trim()
+		val file = compileContentForTest(code)
+		val lines = file.text.splitToSequence("\n")
+		val fileContent = KtFileContent(file, lines)
+
+		it("should report the package statement, import statements, line and comments by default") {
+			val rule = MaxLineLength(TestConfig(mapOf(
+					"maxLineLength" to "60"
+			)))
+
+			rule.visit(fileContent)
+			assertThat(rule.findings).hasSize(6)
+		}
+
+		it("should report the package statement, import statements, line and comments if they're enabled") {
+			val rule = MaxLineLength(TestConfig(mapOf(
+					"maxLineLength" to "60",
+					"excludePackageStatements" to "false",
+					"excludeImportStatements" to "false",
+					"excludeCommentStatements" to "false"
+			)))
+
+			rule.visit(fileContent)
+			assertThat(rule.findings).hasSize(6)
+		}
+
+		it("should not report comments if they're disabled") {
+			val rule = MaxLineLength(TestConfig(mapOf(
+					"maxLineLength" to "60",
+					"excludeCommentStatements" to "true"
+			)))
+
+			rule.visit(fileContent)
+			assertThat(rule.findings).hasSize(3)
 		}
 	}
 

@@ -38,8 +38,10 @@ data class KtFileContent(val file: KtFile, val content: Sequence<String>)
  * @configuration maxLineLength - maximum line length (default: 120)
  * @configuration excludePackageStatements - if package statements should be ignored (default: false)
  * @configuration excludeImportStatements - if import statements should be ignored (default: false)
+ * @configuration excludeCommentStatements - if comment statements should be ignored (default: false)
  *
  * @active since v1.0.0
+ * @author Robbin Voortman
  * @author Marvin Ramin
  * @author Artur Bosch
  */
@@ -56,6 +58,8 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 			= valueOrDefault(MaxLineLength.EXCLUDE_PACKAGE_STATEMENTS, MaxLineLength.DEFAULT_VALUE_PACKAGE_EXCLUDE)
 	private val excludeImportStatements: Boolean
 			= valueOrDefault(MaxLineLength.EXCLUDE_IMPORT_STATEMENTS, MaxLineLength.DEFAULT_VALUE_IMPORTS_EXCLUDE)
+	private val excludeCommentStatements: Boolean
+			= valueOrDefault(MaxLineLength.EXCLUDE_COMMENT_STATEMENTS, MaxLineLength.DEFAULT_VALUE_COMMENT_EXCLUDE)
 
 	fun visit(element: KtFileContent) {
 		var offset = 0
@@ -75,7 +79,8 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 	private fun isValidLine(line: String): Boolean {
 		return (line.length <= maxLineLength
 				|| containsIgnoredPackageStatement(line)
-				|| containsIgnoredImportStatement(line))
+				|| containsIgnoredImportStatement(line)
+				|| containsIgnoredCommentStatement(line))
 	}
 
 	private fun containsIgnoredPackageStatement(line: String): Boolean {
@@ -92,6 +97,13 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 		return false
 	}
 
+	private fun containsIgnoredCommentStatement(line: String): Boolean {
+		if (excludeCommentStatements) {
+			return line.contains("//") || line.contains("/*") || line.trimStart().startsWith("*")
+		}
+		return false
+	}
+
 	companion object {
 		const val MAX_LINE_LENGTH = "maxLineLength"
 		const val DEFAULT_IDEA_LINE_LENGTH = 120
@@ -101,6 +113,8 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 
 		const val EXCLUDE_IMPORT_STATEMENTS = "excludeImportStatements"
 		const val DEFAULT_VALUE_IMPORTS_EXCLUDE = false
+
+		const val EXCLUDE_COMMENT_STATEMENTS = "excludeCommentStatements"
+		const val DEFAULT_VALUE_COMMENT_EXCLUDE = false
 	}
 }
-

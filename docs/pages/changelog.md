@@ -11,7 +11,7 @@ toc: true
 - NoSuchElementException when running from build.gradle.kts - [#793](https://github.com/arturbosch/detekt/issues/793)
 - No files analysed if path contains test - [#792](https://github.com/arturbosch/detekt/issues/792)
 - Does detekt include copy/paste detector ? - [#789](https://github.com/arturbosch/detekt/issues/789)
-- @Suppress("MaxLineLength") at file-level doesn't work - [#788](https://github.com/arturbosch/detekt/issues/788)
+- @Suppress("MaxLineLenth") at file-level doesn't work - [#788](https://github.com/arturbosch/detekt/issues/788)
 - Update test dependencies and publish versions - [#787](https://github.com/arturbosch/detekt/pull/787)
 - Bitrise step to run detekt - [#785](https://github.com/arturbosch/detekt/issues/785)
 - Add no tabs rule - [#782](https://github.com/arturbosch/detekt/pull/782)
