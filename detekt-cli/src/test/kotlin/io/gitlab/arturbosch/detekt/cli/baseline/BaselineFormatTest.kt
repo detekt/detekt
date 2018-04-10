@@ -1,11 +1,8 @@
-package io.gitlab.arturbosch.detekt.cli
+package io.gitlab.arturbosch.detekt.cli.baseline
 
-import io.gitlab.arturbosch.detekt.cli.baseline.Baseline
-import io.gitlab.arturbosch.detekt.cli.baseline.BaselineFormat
-import io.gitlab.arturbosch.detekt.cli.baseline.Blacklist
-import io.gitlab.arturbosch.detekt.cli.baseline.Whitelist
 import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -13,6 +10,7 @@ import java.time.Instant
 
 /**
  * @author Artur Bosch
+ * @author schalkms
  */
 internal class BaselineFormatTest {
 
@@ -43,5 +41,11 @@ internal class BaselineFormatTest {
 		val loadedBaseline = BaselineFormat.read(tempFile)
 
 		assertThat(loadedBaseline).isEqualTo(savedBaseline)
+	}
+
+	@Test
+	fun loadInvalidBaseline() {
+		val path = Paths.get(resource("/invalid-smell-baseline.txt"))
+		assertThatThrownBy { BaselineFormat.read(path) }.isInstanceOf(InvalidBaselineState::class.java)
 	}
 }
