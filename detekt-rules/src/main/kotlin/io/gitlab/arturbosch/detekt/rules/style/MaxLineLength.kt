@@ -99,7 +99,9 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 
 	private fun containsIgnoredCommentStatement(line: String): Boolean {
 		if (excludeCommentStatements) {
-			return line.contains("//") || line.contains("/*") || line.trimStart().startsWith("*")
+			return  line.trimStart().startsWith("//") ||
+					line.trimStart().startsWith("/*") ||
+					line.trimStart().startsWith("*")
 		}
 		return false
 	}
