@@ -193,6 +193,10 @@ Reports when property names inside objects which do not follow the specified nam
 
    naming pattern
 
+* `constantPattern` (default: `'[A-Za-z][_A-Za-z0-9]*'`)
+
+   naming pattern
+
 ### PackageNaming
 
 Reports when package names which do not follow the specified naming convention are used.
