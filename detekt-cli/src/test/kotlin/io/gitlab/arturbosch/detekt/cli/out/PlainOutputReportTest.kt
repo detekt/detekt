@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.cli.out
 
+import io.gitlab.arturbosch.detekt.cli.TestDetektion
 import io.gitlab.arturbosch.detekt.cli.createFinding
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

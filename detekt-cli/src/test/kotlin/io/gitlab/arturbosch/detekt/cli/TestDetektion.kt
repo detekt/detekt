@@ -1,14 +1,14 @@
-package io.gitlab.arturbosch.detekt.cli.out
+package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
-import io.gitlab.arturbosch.detekt.cli.createMetric
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 
 /**
  * @author Artur Bosch
+ * @author schalkms
  */
 class TestDetektion(vararg findings: Finding) : Detektion {
 
