@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
+import io.gitlab.arturbosch.detekt.cli.createMetric
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 
 /**
@@ -11,7 +12,7 @@ import org.jetbrains.kotlin.com.intellij.openapi.util.Key
  */
 class TestDetektion(vararg findings: Finding) : Detektion {
 
-	override val metrics: Collection<ProjectMetric> = listOf()
+	override val metrics: Collection<ProjectMetric> = listOf(createMetric())
 	override val findings: Map<String, List<Finding>> = findings.groupBy { it.id }
 	override val notifications: List<Notification> = listOf()
 
