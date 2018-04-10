@@ -10,9 +10,9 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 
-fun createFinding() = CodeSmell(createIssue(), createEntity(), "TestMessage")
+fun createFinding(ruleSet: String = "TestSmell") = CodeSmell(createIssue(ruleSet), createEntity(), "TestMessage")
 
-fun createIssue()= Issue("TestSmell", Severity.CodeSmell, "For Test", Debt.FIVE_MINS)
+fun createIssue(id: String = "TestSmell")= Issue(id, Severity.CodeSmell, "For Test", Debt.FIVE_MINS)
 
 fun createEntity() = Entity("TestEntity", "TestEntity", "S1", createLocation())
 
