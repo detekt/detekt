@@ -12,7 +12,14 @@ Usage: groovy get_analysis_projects.groovy [/path/to/storing/folder]
 
 def projects = [
 		"git@github.com:arrow-kt/arrow.git",
-		"git@github.com:shyiko/ktlint.git"
+		"git@github.com:shyiko/ktlint.git",
+		"git@github.com:vanniktech/gradle-dependency-graph-generator-plugin.git",
+		"git@github.com:vanniktech/lint-rules.git",
+		"git@github.com:vanniktech/junit-rules.git",
+		"git@github.com:spekframework/spek.git",
+		"git@github.com:Kotlin/kotlinx.coroutines.git",
+		"git@github.com:kotlintest/kotlintest.git",
+		"git@github.com:tipsy/javalin.git"
 ]
 
 if (args.size() == 0) {
