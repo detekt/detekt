@@ -27,7 +27,7 @@ class ObjectPropertyNaming(config: Config = Config.empty) : Rule(config) {
 	private val propertyPattern = Regex(valueOrDefault(PROPERTY_PATTERN, "[A-Za-z][_A-Za-z\\d]*"))
 
 	override fun visitProperty(property: KtProperty) {
-		if (doesNotMatchPattern((property))) {
+		if (doesNotMatchPattern(property)) {
 			report(CodeSmell(
 					issue,
 					Entity.from(property),
