@@ -23,7 +23,7 @@ class TopLevelPropertyNamingSpec : SubjectSpek<TopLevelPropertyNaming>({
 		""")
 
 		it("should detect five constants not matching [A-Z][_A-Z\\d]*") {
-			val findings = TopLevelPropertyNaming().lint(code)
+			val findings = subject.lint(code)
 			assertThat(findings).hasSize(5)
 		}
 	}
@@ -41,7 +41,7 @@ class TopLevelPropertyNamingSpec : SubjectSpek<TopLevelPropertyNaming>({
             val serialVersionUID = 42L
 		""")
 
-		val findings = TopLevelPropertyNaming().lint(code)
+		val findings = subject.lint(code)
 
 		it("should detect four top level variables not matching [a-z][A-Za-z\\d]*") {
 			assertThat(findings).hasSize(5)
