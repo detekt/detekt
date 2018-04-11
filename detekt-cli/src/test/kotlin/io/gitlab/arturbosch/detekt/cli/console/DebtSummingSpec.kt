@@ -2,11 +2,11 @@ package io.gitlab.arturbosch.detekt.cli.console
 
 import io.gitlab.arturbosch.detekt.api.Debt
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
 
-internal class DebtSummingSpec : SubjectSpek<DebtSumming>({
+internal class DebtSummingSpec : Spek({
 
 	given("debt minutes, hours and days") {
 

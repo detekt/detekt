@@ -21,14 +21,12 @@ class FindingsReportSpec : SubjectSpek<FindingsReport>({
 						Pair("TestSmell", listOf(createFinding(), createFinding())),
 						Pair("EmptySmells", emptyList()))
 			}
-			val report = FindingsReport()
-			assertThat(report.render(detektion)?.trimEnd()).isEqualTo(expectedContent)
+			assertThat(subject.render(detektion)?.trimEnd()).isEqualTo(expectedContent)
 		}
 
 		it("reports no findings") {
 			val detektion = TestDetektion()
-			val report = FindingsReport()
-			println(report.render(detektion))
+			assertThat(subject.render(detektion))
 		}
 	}
 })
