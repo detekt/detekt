@@ -34,22 +34,6 @@ open class CodeSmell(final override val issue: Issue,
 }
 
 /**
- * Represents a code smell for which a specific metric and reference entity can be determined which are responsible
- * for the existence of this rule violation.
- */
-open class CodeSmellWithReferenceAndMetric(
-		issue: Issue, entity: Entity, private val reference: Entity, message: String, metric: Metric) : ThresholdedCodeSmell(
-		issue, entity, metric, message, references = listOf(reference)) {
-
-	override fun compact() = "$id - $metric - ref=${reference.name} - ${entity.compact()}"
-
-	override fun messageOrDescription() = when {
-		message.isEmpty() -> issue.description
-		else -> message
-	}
-}
-
-/**
  * Represents a code smell for which a specific metric can be determined which is responsible
  * for the existence of this rule violation.
  */
