@@ -87,26 +87,23 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 	}
 
 	private fun containsIgnoredPackageStatement(line: String): Boolean {
-		if (excludePackageStatements) {
-			return line.trimStart().startsWith("package ")
-		}
-		return false
+		if (!excludePackageStatements) return false
+
+		return line.trimStart().startsWith("package ")
 	}
 
 	private fun containsIgnoredImportStatement(line: String): Boolean {
-		if (excludeImportStatements) {
-			return line.trimStart().startsWith("import ")
-		}
-		return false
+		if(!excludeImportStatements) return false
+
+		return line.trimStart().startsWith("import ")
 	}
 
 	private fun containsIgnoredCommentStatement(line: String): Boolean {
-		if (excludeCommentStatements) {
-			return  line.trimStart().startsWith("//") ||
-					line.trimStart().startsWith("/*") ||
-					line.trimStart().startsWith("*")
-		}
-		return false
+		if (!excludeCommentStatements) return false
+
+		return  line.trimStart().startsWith("//") ||
+				line.trimStart().startsWith("/*") ||
+				line.trimStart().startsWith("*")
 	}
 
 	companion object {
