@@ -9,6 +9,9 @@ import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
+import io.gitlab.arturbosch.detekt.core.ModificationNotification
+import io.gitlab.arturbosch.detekt.test.resource
+import java.nio.file.Paths
 
 fun createFinding(ruleSet: String = "TestSmell") = CodeSmell(createIssue(ruleSet), createEntity(), "TestMessage")
 
@@ -18,4 +21,4 @@ fun createEntity() = Entity("TestEntity", "TestEntity", "S1", createLocation())
 
 fun createLocation() = Location(SourceLocation(1, 1), TextLocation(1, 1), "", "TestFile.kt")
 
-fun createMetric() = ProjectMetric("TestMetric", 1)
+fun createNotification() = ModificationNotification(Paths.get(resource("empty.txt")))
