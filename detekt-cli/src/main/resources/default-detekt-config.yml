@@ -323,6 +323,7 @@ style:
     maxLineLength: 120
     excludePackageStatements: false
     excludeImportStatements: false
+    excludeCommentStatements: false
   MayBeConst:
     active: false
   ModifierOrder:

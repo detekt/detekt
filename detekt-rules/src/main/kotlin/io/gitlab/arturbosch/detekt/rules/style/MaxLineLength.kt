@@ -77,10 +77,13 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 	}
 
 	private fun isValidLine(line: String): Boolean {
-		return (line.length <= maxLineLength
-				|| containsIgnoredPackageStatement(line)
-				|| containsIgnoredImportStatement(line)
-				|| containsIgnoredCommentStatement(line))
+		return (line.length <= maxLineLength || isIgnoredStatement(line))
+	}
+
+	private fun isIgnoredStatement(line: String): Boolean {
+		return containsIgnoredPackageStatement(line) ||
+				containsIgnoredImportStatement(line) ||
+				containsIgnoredCommentStatement(line)
 	}
 
 	private fun containsIgnoredPackageStatement(line: String): Boolean {

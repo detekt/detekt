@@ -317,6 +317,10 @@ in the codebase will help make the code more uniform.
 
    if import statements should be ignored
 
+* `excludeCommentStatements` (default: `false`)
+
+   if comment statements should be ignored
+
 ### MayBeConst
 
 This rule identifies and reports properties (`val`) that may be `const val` instead.

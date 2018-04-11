@@ -27,7 +27,7 @@ class MaxLineLengthSpec : Spek({
 			val rule = MaxLineLength()
 
 			rule.visit(fileContent)
-			assertThat(rule.findings).hasSize(6)
+			assertThat(rule.findings).hasSize(3)
 		}
 	}
 
@@ -97,21 +97,7 @@ class MaxLineLengthSpec : Spek({
 		}
 	}
 	given("a kt file with a long package name, long import statements, a long line and long comments") {
-		val code = """
-			package anIncrediblyLongAndComplexPackageNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
-
-			import anIncrediblyLongAndComplexImportNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
-
-			class Test {
-				fun anIncrediblyLongAndComplexMethodNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot() {}
-			}
-			// anIncrediblyLongAndComplexCommentThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
-			/* anIncrediblyLongAndComplexCommentThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot */
-			/*
-			* anIncrediblyLongAndComplexCommentThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
-			*/
-		""".trim()
-		val file = compileContentForTest(code)
+		val file = compileForTest(Case.MaxLineLengthWithLongComments.path())
 		val lines = file.text.splitToSequence("\n")
 		val fileContent = KtFileContent(file, lines)
 
@@ -121,7 +107,7 @@ class MaxLineLengthSpec : Spek({
 			)))
 
 			rule.visit(fileContent)
-			assertThat(rule.findings).hasSize(6)
+			assertThat(rule.findings).hasSize(8)
 		}
 
 		it("should report the package statement, import statements, line and comments if they're enabled") {
@@ -133,7 +119,7 @@ class MaxLineLengthSpec : Spek({
 			)))
 
 			rule.visit(fileContent)
-			assertThat(rule.findings).hasSize(6)
+			assertThat(rule.findings).hasSize(8)
 		}
 
 		it("should not report comments if they're disabled") {
@@ -143,7 +129,7 @@ class MaxLineLengthSpec : Spek({
 			)))
 
 			rule.visit(fileContent)
-			assertThat(rule.findings).hasSize(3)
+			assertThat(rule.findings).hasSize(5)
 		}
 	}
 
