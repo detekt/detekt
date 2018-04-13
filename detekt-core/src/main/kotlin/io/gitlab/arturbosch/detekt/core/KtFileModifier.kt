@@ -14,7 +14,7 @@ class KtFileModifier(private val project: Path) {
 
 	fun saveModifiedFiles(ktFiles: List<KtFile>, notification: (Notification) -> Unit) {
 		ktFiles.filter { it.modificationStamp > 0 }
-				.map { it.relativePath() to it.unnormalizeContent() }
+				.map { it.absolutePath() to it.unnormalizeContent() }
 				.filter { it.first != null }
 				.map { project.resolve(it.first) to it.second }
 				.forEach {
