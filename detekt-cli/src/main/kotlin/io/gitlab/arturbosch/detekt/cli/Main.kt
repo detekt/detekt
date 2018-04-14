@@ -2,6 +2,7 @@
 
 package io.gitlab.arturbosch.detekt.cli
 
+import io.gitlab.arturbosch.detekt.cli.runners.AstPrinter
 import io.gitlab.arturbosch.detekt.cli.runners.ConfigExporter
 import io.gitlab.arturbosch.detekt.cli.runners.Runner
 import io.gitlab.arturbosch.detekt.cli.runners.SingleRuleRunner
@@ -18,7 +19,7 @@ fun main(args: Array<String>) {
 	val executable = when {
 		arguments.generateConfig -> ConfigExporter()
 		arguments.runRule != null -> SingleRuleRunner(arguments)
-		arguments.printAst -> ConfigExporter()
+		arguments.printAst -> AstPrinter(arguments)
 		else -> Runner(arguments)
 	}
 	executable.execute()
