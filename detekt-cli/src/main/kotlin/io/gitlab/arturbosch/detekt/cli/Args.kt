@@ -62,12 +62,20 @@ class Args {
 	var disableDefaultRuleSets: Boolean = false
 
 	@Parameter(names = ["--debug"],
-			description = "Debugs given ktFile by printing its elements.")
+			description = "Prints extra information about configurations and extensions.")
 	var debug: Boolean = false
 
 	@Parameter(names = ["--help", "-h"],
 			help = true, description = "Shows the usage.")
 	var help: Boolean = false
+
+	@Parameter(names = ["--run-rule"],
+			description = "Specify a rule by [RuleSet:Rule] pattern and run it on input.")
+	var runRule: String? = null
+
+	@Parameter(names = ["--print-ast"],
+			description = "Prints the AST for given [input] file. Must be no directory.")
+	var printAst: Boolean = false
 
 	val inputPath: List<Path> by lazy {
 		MultipleExistingPathConverter().convert(input

@@ -2,6 +2,9 @@
 
 package io.gitlab.arturbosch.detekt.cli
 
+import io.gitlab.arturbosch.detekt.cli.runners.ConfigExporter
+import io.gitlab.arturbosch.detekt.cli.runners.Runner
+import io.gitlab.arturbosch.detekt.cli.runners.SingleRuleRunner
 import io.gitlab.arturbosch.detekt.core.isFile
 import org.jetbrains.kotlin.utils.addToStdlib.ifNotEmpty
 import java.nio.file.Files
@@ -14,6 +17,8 @@ fun main(args: Array<String>) {
 	LOG.active = arguments.debug
 	val executable = when {
 		arguments.generateConfig -> ConfigExporter()
+		arguments.runRule != null -> SingleRuleRunner(arguments)
+		arguments.printAst -> ConfigExporter()
 		else -> Runner(arguments)
 	}
 	executable.execute()

@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.CompositeConfig
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.YamlConfig
 import io.gitlab.arturbosch.detekt.core.PathFilter
-import java.io.File
 import java.nio.file.Path
 
 /**
@@ -55,32 +54,6 @@ private fun parsePathConfig(configPath: String): Config {
 	}
 }
 
-data class FailFastConfig(private val originalConfig: Config, private val defaultConfig: Config) : Config {
-	override fun subConfig(key: String) = FailFastConfig(originalConfig.subConfig(key), defaultConfig.subConfig(key))
-
-	override fun <T : Any> valueOrDefault(key: String, default: T): T {
-		@Suppress("UNCHECKED_CAST")
-		return when (key) {
-			"active" -> originalConfig.valueOrDefault(key, true) as T
-			"maxIssues" -> originalConfig.valueOrDefault(key, 0) as T
-			else -> originalConfig.valueOrDefault(key, defaultConfig.valueOrDefault(key, default))
-		}
-	}
-}
-
 private fun loadDefaultConfig() = YamlConfig.loadResource(ClasspathResourceConverter().convert(DEFAULT_CONFIG))
 
-private const val DEFAULT_CONFIG = "default-detekt-config.yml"
-
-/**
- * @author lummax
- */
-class ConfigExporter : Executable {
-
-	override fun execute() {
-		val defaultConfig = ClasspathResourceConverter().convert(DEFAULT_CONFIG).openStream()
-		defaultConfig.copyTo(File(DEFAULT_CONFIG).outputStream())
-		println("\nSuccessfully copied $DEFAULT_CONFIG to project location.")
-	}
-
-}
+const val DEFAULT_CONFIG = "default-detekt-config.yml"

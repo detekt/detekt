@@ -1,12 +1,13 @@
-package io.gitlab.arturbosch.detekt.cli
+package io.gitlab.arturbosch.detekt.cli.runners
 
+import io.gitlab.arturbosch.detekt.cli.Args
+import io.gitlab.arturbosch.detekt.cli.OutputFacade
+import io.gitlab.arturbosch.detekt.cli.createPathFilters
+import io.gitlab.arturbosch.detekt.cli.createPlugins
+import io.gitlab.arturbosch.detekt.cli.loadConfiguration
 import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import kotlin.system.measureTimeMillis
-
-interface Executable {
-	fun execute()
-}
 
 /**
  * @author Artur Bosch
