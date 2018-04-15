@@ -18,6 +18,7 @@ import org.jetbrains.kotlin.psi.KtPostfixExpression
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
+import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
 
 /**
  * This rule reports postfix expressions (++, --) which are unused and thus unnecessary.
@@ -54,6 +55,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
  * @author schalkms
  * @author Artur Bosch
  * @author Marvin Ramin
+ * @author Olivier Lemasle
  */
 class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
 
@@ -66,7 +68,7 @@ class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
 	override fun visitClass(klass: KtClass) {
 		properties = klass.getProperties()
 				.map { it.name }
-				.toSet()
+				.union(klass.primaryConstructorParameters.filter { it.isPropertyParameter() }.map { it.name })
 		super.visitClass(klass)
 	}
 
@@ -119,4 +121,5 @@ class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
 
 	private fun getPostfixExpressionChilds(expression: KtExpression?) =
 			expression?.children?.filterIsInstance<KtPostfixExpression>()
+				?.filter { it.operationToken === PLUSPLUS || it.operationToken === MINUSMINUS }
 }
