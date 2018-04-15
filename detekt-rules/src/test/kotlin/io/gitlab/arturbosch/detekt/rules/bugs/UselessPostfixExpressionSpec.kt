@@ -54,6 +54,12 @@ class UselessPostfixExpressionSpec : SubjectSpek<UselessPostfixExpression>({
 						return runningId++
 					}
 				}
+
+				class Foo(var i: Int = 0) {
+					fun getIdAndIncrement(): Int {
+						return i++
+					}
+				}
 				"""
 			assertThat(subject.lint(code)).isEmpty()
 		}
@@ -68,8 +74,15 @@ class UselessPostfixExpressionSpec : SubjectSpek<UselessPostfixExpression>({
 						return runningId++
 					}
 				}
+
+				class Foo(var i: Int = 0) {
+					fun foo(): Int {
+						var i = 0
+						return i++
+					}
+				}
 				"""
-			assertThat(subject.lint(code)).hasSize(1)
+			assertThat(subject.lint(code)).hasSize(2)
 		}
 	}
 
@@ -79,6 +92,10 @@ class UselessPostfixExpressionSpec : SubjectSpek<UselessPostfixExpression>({
 			val code = """
 				fun getInstance(): SwiftBrowserIdleTaskHelper {
 					return sInstance!!
+				}
+
+				fun testProperty(): Int {
+					return shouldNotBeNull!!.field
 				}
 				"""
 			assertThat(subject.lint(code)).isEmpty()

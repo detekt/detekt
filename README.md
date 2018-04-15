@@ -618,7 +618,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Svyatoslav Chatchenko](https://github.com/MyDogTom) - Active on Issues, NamingConventions and UnusedImport fixes
 - [Sean Flanigan](https://github.com/seanf) - Config from classpath resource
 - [Sebastian Schuberth](https://github.com/sschuberth) - Active on Issues, Windows support
-- [Olivier Lemasle](https://github.com/olivierlemasle) - NP-Bugfix, fix TooGenericExceptionCaught, Gradle plugin improvement
+- [Olivier Lemasle](https://github.com/olivierlemasle) - NP-Bugfix, rules fixes, Gradle plugin improvement
 - [Marc Prengemann](https://github.com/winterDroid) - Support for custom output formats, prototyped Rule-Context-Issue separation
 - [Sebastiano Poggi](https://github.com/rock3r) - Enhanced milestone report script, Magic number fixes
 - [Ilya Tretyakov](https://github.com/jvilya) - Sonar runs should not auto correct formatting.
