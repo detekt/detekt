@@ -55,7 +55,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 					Entity.from(file),
 					Metric("SIZE", amountOfTopLevelFunctions, thresholdInFiles),
 					"File '${file.name}' with '$amountOfTopLevelFunctions' functions detected. " +
-							"Allowed maximum amount of functions inside files is set to '$thresholdInFiles'"))
+							"Defined threshold inside files is set to '$thresholdInFiles'"))
 		}
 		amountOfTopLevelFunctions = 0
 	}
@@ -74,7 +74,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 						Entity.from(klass),
 						Metric("SIZE", amount, thresholdInInterfaces),
 						"Interface '${klass.name}' with '$amount' functions detected. " +
-								"Allowed maximum amount of functions inside interfaces is set to " +
+								"Defined threshold inside interfaces is set to " +
 								"'$thresholdInInterfaces'"))
 			}
 			klass.isEnum() && amount >= thresholdInEnums -> {
@@ -82,7 +82,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 						Entity.from(klass),
 						Metric("SIZE", amount, thresholdInEnums),
 						"Enum class '${klass.name}' with '$amount' functions detected. " +
-								"Allowed maximum amount of functions inside enum classes is set to " +
+								"Defined threshold inside enum classes is set to " +
 								"'$thresholdInEnums'"))
 			}
 			else -> {
@@ -91,7 +91,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 							Entity.from(klass),
 							Metric("SIZE", amount, thresholdInClasses),
 							"Class '${klass.name}' with '$amount' functions detected. " +
-									"Allowed maximum amount of functions inside classes is set to '$thresholdInClasses'"))
+									"Defined threshold inside classes is set to '$thresholdInClasses'"))
 				}
 			}
 		}
@@ -105,7 +105,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 					Entity.from(declaration),
 					Metric("SIZE", amount, thresholdInObjects),
 					"Object '${declaration.name}' with '$amount' functions detected. " +
-							"Allowed maximum amount of functions inside objects is set to '$thresholdInObjects'"))
+							"Defined threshold inside objects is set to '$thresholdInObjects'"))
 		}
 		super.visitObjectDeclaration(declaration)
 	}
