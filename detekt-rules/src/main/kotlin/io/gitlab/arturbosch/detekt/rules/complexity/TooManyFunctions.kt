@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import org.jetbrains.kotlin.preprocessor.typeReferenceName
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
@@ -61,7 +62,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 	}
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (function.isTopLevel) {
+		if (function.isTopLevel && !function.annotationEntries.any { it.typeReferenceName == DEPRECATED }) {
 			amountOfTopLevelFunctions++
 		}
 	}
@@ -112,6 +113,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 
 	private fun calcFunctions(classOrObject: KtClassOrObject): Int = classOrObject.getBody()?.declarations
 			?.filterIsInstance<KtNamedFunction>()
+			?.filterNot { it.annotationEntries.any { it.typeReferenceName == DEPRECATED } }
 			?.size ?: 0
 
 	companion object {
@@ -121,5 +123,6 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 		const val THRESHOLD_IN_INTERFACES = "thresholdInInterfaces"
 		const val THRESHOLD_IN_OBJECTS = "thresholdInObjects"
 		const val THRESHOLD_IN_ENUMS = "thresholdInEnums"
+		private const val DEPRECATED = "Deprecated"
 	}
 }

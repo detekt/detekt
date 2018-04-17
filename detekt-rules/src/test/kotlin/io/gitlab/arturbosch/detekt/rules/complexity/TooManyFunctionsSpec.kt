@@ -109,5 +109,21 @@ class TooManyFunctionsSpec : Spek({
 
 			assertThat(rule.lint(code)).hasSize(1)
 		}
+
+		it("finds no deprecated functions") {
+			val code = """
+				@Deprecated
+				fun f() {
+				}
+
+				class A {
+					@Deprecated
+					fun f() {
+					}
+				}
+				"""
+
+			assertThat(rule.lint(code)).isEmpty()
+		}
 	}
 })
