@@ -12,43 +12,48 @@ class TopLevelPropertyNamingSpec : SubjectSpek<TopLevelPropertyNaming>({
 	subject { TopLevelPropertyNaming() }
 
 	describe("constants on top level") {
-		val code = compileContentForTest("""
-			const val MY_NAME_8 = "Artur"
-            const val MYNAME = "Artur"
-            const val MyNAME = "Artur" // invalid
-			const val name = "Artur" // invalid
-			const val nAme = "Artur" // invalid
-			private const val _nAme = "Artur" // invalid
-            const val serialVersionUID = 42L // invalid
-		""")
 
-		it("should detect five constants not matching [A-Z][_A-Z\\d]*") {
-			val findings = subject.lint(code)
-			assertThat(findings).hasSize(5)
+		it("should not detect any constants not complying to the naming rules") {
+			val code = compileContentForTest("""
+				const val MY_NAME_8 = "Artur"
+            	const val MYNAME = "Artur"
+			""")
+			assertThat(subject.lint(code)).hasSize(0)
+		}
+
+		it("should detect five constants not complying to the naming rules") {
+			val code = compileContentForTest("""
+            	const val MyNAME = "Artur"
+				const val name = "Artur"
+				const val nAme = "Artur"
+				private const val _nAme = "Artur"
+            	const val serialVersionUID = 42L
+			""")
+			assertThat(subject.lint(code)).hasSize(5)
 		}
 	}
 
 	describe("variables on top level") {
-		val code = compileContentForTest("""
-			val MY_NAME = "Artur" // invalid
-            val MYNAME = "Artur" // invalid
-            val MyNAME = "Artur" // invalid
-			val name = "Artur"
-			val nAme8 = "Artur"
-			val _nAme = "Artur" // invalid
-			private val _name = "Artur"
-			private val NAME = "Artur // invalid
-            val serialVersionUID = 42L
-		""")
 
-		val findings = subject.lint(code)
-
-		it("should detect four top level variables not matching [a-z][A-Za-z\\d]*") {
-			assertThat(findings).hasSize(5)
+		it("should not detect any constants not complying to the naming rules") {
+			val code = compileContentForTest("""
+				val name = "Artur"
+				val nAme8 = "Artur"
+				private val _name = "Artur"
+            	val serialVersionUID = 42L
+			""")
+			assertThat(subject.lint(code)).hasSize(0)
 		}
 
-		it("should allow underscores in private property") {
-			assertThat(findings.find { it.name == "_name" }).isNull()
+		it("should detect five constants not complying to the naming rules") {
+			val code = compileContentForTest("""
+				val MY_NAME = "Artur"
+        	    val MYNAME = "Artur"
+        	    val MyNAME = "Artur"
+				val _nAme = "Artur"
+				private val NAME = "Artur"
+			""")
+			assertThat(subject.lint(code)).hasSize(5)
 		}
 	}
 })
