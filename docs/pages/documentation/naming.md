@@ -225,11 +225,11 @@ Reports when top level constant names which do not follow the specified naming c
 
    naming pattern
 
-* `propertyPattern` (default: `'[a-z][A-Za-z\d]*'`)
+* `propertyPattern` (default: `'[A-Za-z][_A-Za-z0-9]*'`)
 
    naming pattern
 
-* `privatePropertyPattern` (default: `'(_)?[a-z][A-Za-z0-9]*'`)
+* `privatePropertyPattern` (default: `'(_)?[A-Za-z][A-Za-z0-9]*'`)
 
    naming pattern
 
