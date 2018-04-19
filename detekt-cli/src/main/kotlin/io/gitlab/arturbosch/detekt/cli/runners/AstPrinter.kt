@@ -26,19 +26,22 @@ class AstPrinter(private val arguments: Args) : Executable {
 
 		val input = arguments.inputPath[0]
 		val ktFile = KtCompiler().compile(input, input)
-		ElementPrinter.print(ktFile)
+		println(ElementPrinter.dump(ktFile))
 	}
 }
 
-private class ElementPrinter : DetektVisitor() {
+class ElementPrinter : DetektVisitor() {
 
 	companion object {
 		private const val TAB = "\t"
-		internal fun print(file: KtFile) = ElementPrinter().apply {
-			println("0: " + file.javaClass.simpleName)
+		internal fun dump(file: KtFile): String = ElementPrinter().run {
+			sb.appendln("0: " + file.javaClass.simpleName)
 			visitKtFile(file)
+			sb.toString()
 		}
 	}
+
+	private val sb = StringBuilder()
 
 	private val indentation
 		get() = (0..indent).joinToString("") { "  " }
@@ -58,14 +61,14 @@ private class ElementPrinter : DetektVisitor() {
 		val currentLine = element.line
 		if (element.isContainer()) {
 			indent++
-			println(element.dump)
+			sb.appendln(element.dump)
 		} else {
 			if (lastLine == currentLine) {
 				indent++
-				println(element.dump)
+				sb.appendln(element.dump)
 				indent--
 			} else {
-				println(element.dump)
+				sb.appendln(element.dump)
 			}
 		}
 		lastLine = currentLine
