@@ -114,6 +114,7 @@ complexity:
     thresholdInInterfaces: 11
     thresholdInObjects: 11
     thresholdInEnums: 11
+    ignoreDeprecated: false
 
 empty-blocks:
   active: true
