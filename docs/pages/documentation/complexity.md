@@ -288,3 +288,7 @@ which clearly belongs together in separate parts of the code.
 * `thresholdInEnums` (default: `11`)
 
    threshold in enums
+
+* `ignoreDeprecated` (default: `false`)
+
+   ignore deprecated functions
