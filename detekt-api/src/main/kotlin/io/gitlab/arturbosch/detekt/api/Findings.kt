@@ -1,7 +1,5 @@
 package io.gitlab.arturbosch.detekt.api
 
-import kotlin.reflect.full.memberProperties
-
 /**
  * Base interface of detection findings. Inherits a bunch of useful behaviour
  * from sub interfaces.
@@ -55,7 +53,7 @@ interface HasMetrics {
  * Allows to iterate over attributes reflectively.
  */
 interface Reflective {
-	fun findAttribute(name: String): Any? = this.javaClass.kotlin.memberProperties.find { it.name == name }?.get(this)
+	fun findAttribute(name: String) = this.javaClass.kotlin.members.find { it.name == name }
 }
 
 /**

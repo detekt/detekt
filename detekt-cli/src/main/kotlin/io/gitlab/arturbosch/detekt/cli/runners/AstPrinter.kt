@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.cli.Args
 import io.gitlab.arturbosch.detekt.core.KtCompiler
 import io.gitlab.arturbosch.detekt.core.isFile
-import org.jetbrains.kotlin.diagnostics.DiagnosticUtils
+import org.jetbrains.kotlin.diagnostics.PsiDiagnosticUtils
 import org.jetbrains.kotlin.psi.KtContainerNode
 import org.jetbrains.kotlin.psi.KtDeclarationContainer
 import org.jetbrains.kotlin.psi.KtElement
@@ -47,7 +47,7 @@ class ElementPrinter : DetektVisitor() {
 		get() = (0..indent).joinToString("") { "  " }
 
 	private val KtElement.line
-		get() = DiagnosticUtils.offsetToLineAndColumn(
+		get() = PsiDiagnosticUtils.offsetToLineAndColumn(
 				containingFile.viewProvider.document,
 				textRange.startOffset).line
 

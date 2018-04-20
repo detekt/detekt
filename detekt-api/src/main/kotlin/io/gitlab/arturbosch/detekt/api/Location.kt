@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.com.intellij.openapi.util.TextRange
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.com.intellij.testFramework.LightVirtualFile
 import org.jetbrains.kotlin.diagnostics.DiagnosticUtils
+import org.jetbrains.kotlin.diagnostics.PsiDiagnosticUtils
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
 import org.jetbrains.kotlin.psi.psiUtil.getTextWithLocation
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
@@ -31,14 +32,14 @@ data class Location(val source: SourceLocation,
 		}
 
 		@Suppress("TooGenericExceptionCaught")
-		fun startLineAndColumn(element: PsiElement, offset: Int = 0): DiagnosticUtils.LineAndColumn {
+		fun startLineAndColumn(element: PsiElement, offset: Int = 0): PsiDiagnosticUtils.LineAndColumn {
 			return try {
 				val range = element.textRange
 				DiagnosticUtils.getLineAndColumnInPsiFile(element.containingFile,
 						TextRange(range.startOffset + offset, range.endOffset + offset))
 			} catch (e: IndexOutOfBoundsException) {
 				// #18 - somehow the TextRange is out of bound on '}' leaf nodes, returning fail safe -1
-				DiagnosticUtils.LineAndColumn(-1, -1, null)
+				PsiDiagnosticUtils.LineAndColumn(-1, -1, null)
 			}
 		}
 

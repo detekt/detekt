@@ -55,7 +55,7 @@ class McCabeVisitor : DetektVisitor() {
 			val lambdaArguments = expression.lambdaArguments
 			if (lambdaArguments.size > 0) {
 				val lambdaArgument = lambdaArguments[0]
-				lambdaArgument.getLambdaExpression().bodyExpression?.let {
+				lambdaArgument.getLambdaExpression()?.bodyExpression?.let {
 					inc()
 				}
 			}
