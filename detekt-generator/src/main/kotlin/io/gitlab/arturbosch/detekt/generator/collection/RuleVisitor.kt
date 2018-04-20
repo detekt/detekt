@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.generator.collection
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
+import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 import io.gitlab.arturbosch.detekt.rules.empty.EmptyRule
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocSection
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -69,14 +70,14 @@ internal class RuleVisitor : DetektVisitor() {
 	private fun extractRuleDocumentation(comment: String) {
 		val nonCompliantIndex = comment.indexOf(TAG_NONCOMPLIANT)
 		val compliantIndex = comment.indexOf(TAG_COMPLIANT)
-		if (nonCompliantIndex != -1) {
-			extractNonCompliantDocumentation(comment, nonCompliantIndex)
-			extractCompliantDocumentation(comment, compliantIndex)
-		} else if (compliantIndex != -1) {
-			throw InvalidCodeExampleDocumentationException(
+		when {
+			nonCompliantIndex != -1 -> {
+				extractNonCompliantDocumentation(comment, nonCompliantIndex)
+				extractCompliantDocumentation(comment, compliantIndex)
+			}
+			compliantIndex != -1 -> throw InvalidCodeExampleDocumentationException(
 					"Rule $name contains a compliant without a noncompliant code definition.")
-		} else {
-			description = comment
+			else -> description = comment
 		}
 	}
 
@@ -159,6 +160,7 @@ internal class RuleVisitor : DetektVisitor() {
 	companion object {
 		private val ruleClasses = listOf(
 				io.gitlab.arturbosch.detekt.api.Rule::class.simpleName,
+				FormattingRule::class.simpleName,
 				ThresholdRule::class.simpleName,
 				EmptyRule::class.simpleName
 		)
