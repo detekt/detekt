@@ -2,15 +2,44 @@ package io.gitlab.arturbosch.detekt.formatting
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.MultiRule
+import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.formatting.wrappers.ChainWrapping
+import io.gitlab.arturbosch.detekt.formatting.wrappers.FinalNewline
+import io.gitlab.arturbosch.detekt.formatting.wrappers.ImportOrdering
+import io.gitlab.arturbosch.detekt.formatting.wrappers.Indentation
+import io.gitlab.arturbosch.detekt.formatting.wrappers.MaxLineLength
+import io.gitlab.arturbosch.detekt.formatting.wrappers.ModifierOrder
+import io.gitlab.arturbosch.detekt.formatting.wrappers.NoBlankLineBeforeRbrace
+import io.gitlab.arturbosch.detekt.formatting.wrappers.NoConsecutiveBlankLines
+import io.gitlab.arturbosch.detekt.formatting.wrappers.NoEmptyClassBody
+import io.gitlab.arturbosch.detekt.formatting.wrappers.NoItParamInMultilineLambda
+import io.gitlab.arturbosch.detekt.formatting.wrappers.NoLineBreakAfterElse
+import io.gitlab.arturbosch.detekt.formatting.wrappers.NoLineBreakBeforeAssignment
+import io.gitlab.arturbosch.detekt.formatting.wrappers.NoMultipleSpaces
+import io.gitlab.arturbosch.detekt.formatting.wrappers.NoSemicolons
+import io.gitlab.arturbosch.detekt.formatting.wrappers.NoTrailingSpaces
+import io.gitlab.arturbosch.detekt.formatting.wrappers.NoUnitReturn
+import io.gitlab.arturbosch.detekt.formatting.wrappers.NoUnusedImports
+import io.gitlab.arturbosch.detekt.formatting.wrappers.NoWildcardImports
+import io.gitlab.arturbosch.detekt.formatting.wrappers.ParameterListWrapping
+import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundColon
+import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundComma
+import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundCurly
+import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundKeyword
+import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundOperators
+import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundRangeOperator
+import io.gitlab.arturbosch.detekt.formatting.wrappers.StringTemplate
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.psi.KtFile
 
 /**
+ * Runs all KtLint rules.
+ *
  * @author Artur Bosch
  */
 class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
 
-	override val rules: List<ApplyingRule> = listOf(
+	override val rules: List<Rule> = listOf(
 			ChainWrapping(config),
 			FinalNewline(config),
 			ImportOrdering(config),
@@ -47,7 +76,7 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
 		root.node.visitTokens { node ->
 			activeRules.forEach { rule ->
 				println(rule.id)
-				(rule as? ApplyingRule)?.runIfActive { this.apply(node) }
+				(rule as? FormattingRule)?.runIfActive { this.apply(node) }
 			}
 		}
 	}

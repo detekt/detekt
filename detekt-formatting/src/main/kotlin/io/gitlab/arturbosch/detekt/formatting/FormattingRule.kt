@@ -21,9 +21,11 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
 
 /**
+ * Rule to detect formatting violations.
+ *
  * @author Artur Bosch
  */
-abstract class ApplyingRule(config: Config) : Rule(config) {
+abstract class FormattingRule(config: Config) : Rule(config) {
 
 	abstract val wrapping: com.github.shyiko.ktlint.core.Rule
 
