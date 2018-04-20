@@ -122,7 +122,7 @@ class LargeClass(config: Config = Config.empty,
 		val lambdaArguments = expression.lambdaArguments
 		if (lambdaArguments.size > 0) {
 			val lambdaArgument = lambdaArguments[0]
-			lambdaArgument.getLambdaExpression().bodyExpression?.let {
+			lambdaArgument.getLambdaExpression()?.bodyExpression?.let {
 				addToHead(it.statements.size)
 			}
 		}
