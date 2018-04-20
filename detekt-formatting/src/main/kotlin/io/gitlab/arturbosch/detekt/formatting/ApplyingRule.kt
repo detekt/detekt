@@ -68,5 +68,5 @@ abstract class ApplyingRule(config: Config) : Rule(config) {
 					&& node !is FileASTNode
 
 	private fun PsiElement.originalFilePath() =
-			(this.containingFile.viewProvider.virtualFile as LightVirtualFile).originalFile?.name
+			(this.containingFile.viewProvider.virtualFile as? LightVirtualFile)?.originalFile?.name
 }

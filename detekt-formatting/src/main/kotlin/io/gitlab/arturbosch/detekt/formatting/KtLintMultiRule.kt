@@ -46,7 +46,8 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
 		activeRules.forEach { it.visit(root) }
 		root.node.visitTokens { node ->
 			activeRules.forEach { rule ->
-				(rule as ApplyingRule).runIfActive { this.apply(node) }
+				println(rule.id)
+				(rule as? ApplyingRule)?.runIfActive { this.apply(node) }
 			}
 		}
 	}
