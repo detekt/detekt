@@ -5,3 +5,6 @@ style:
     conf1: foo
   EqualsNull:
     active: false
+  NoUnitKeyword:
+    active: true
+    autoCorrect: true

@@ -24,6 +24,7 @@ internal class RuleVisitor : DetektVisitor() {
 	private var compliant = ""
 	private var name = ""
 	private var active = false
+	private var autoCorrect = false
 	private var severity = ""
 	private var debt = ""
 	private var parent = ""
@@ -35,7 +36,8 @@ internal class RuleVisitor : DetektVisitor() {
 			throw InvalidDocumentationException("Rule $name is missing a description in its KDoc.")
 		}
 
-		return Rule(name, description, nonCompliant, compliant, active, severity, debt, parent, configuration)
+		return Rule(name, description, nonCompliant, compliant,
+				active, severity, debt, parent, configuration, autoCorrect)
 	}
 
 	override fun visitSuperTypeList(list: KtSuperTypeList) {
@@ -61,6 +63,7 @@ internal class RuleVisitor : DetektVisitor() {
 
 		name = classOrObject.name?.trim() ?: ""
 		active = classOrObject.kDocSection()?.findTagByName(TAG_ACTIVE) != null
+		autoCorrect = classOrObject.kDocSection()?.findTagByName(TAG_AUTO_CORRECT) != null
 
 		val comment = classOrObject.kDocSection()?.getContent()?.trim() ?: return
 		extractRuleDocumentation(comment)
@@ -167,6 +170,7 @@ internal class RuleVisitor : DetektVisitor() {
 		private val configurationDefaultValueRegex = "\\(default: (.+)\\)".toRegex(RegexOption.DOT_MATCHES_ALL)
 
 		private const val TAG_ACTIVE = "active"
+		private const val TAG_AUTO_CORRECT = "autoCorrect"
 		private const val TAG_CONFIGURATION = "configuration"
 		private const val TAG_NONCOMPLIANT = "<noncompliant>"
 		private const val ENDTAG_NONCOMPLIANT = "</noncompliant>"

@@ -13,7 +13,7 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 
 	override fun print(item: List<RuleSetPage>): String {
 		return yaml {
-			yaml { defaultAutoCorrectFailFastConfiguration() }
+			yaml { defaultGenericConfiguration() }
 			emptyLine()
 			yaml { defaultTestPatternConfiguration() }
 			emptyLine()
@@ -29,10 +29,12 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 			item.sortedBy { it.ruleSet.name }.forEach { (ruleSet, rules) ->
 				node(ruleSet.name) {
 					keyValue { "active" to "${ruleSet.active}" }
-
 					rules.forEach { rule ->
 						node(rule.name) {
 							keyValue { "active" to "${rule.active}" }
+							if (rule.autoCorrect) {
+								keyValue { "autoCorrect" to "true" }
+							}
 							rule.configuration.forEach { configuration ->
 								if (configuration.defaultValue.isYamlList()) {
 									list(configuration.name, configuration.defaultValue.toList())
@@ -48,7 +50,7 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 		}
 	}
 
-	private fun defaultAutoCorrectFailFastConfiguration(): String {
+	private fun defaultGenericConfiguration(): String {
 		return """
 			autoCorrect: true
 			failFast: false
