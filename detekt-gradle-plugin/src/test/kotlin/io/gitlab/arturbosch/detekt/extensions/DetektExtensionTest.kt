@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.extensions
 
 import com.beust.jcommander.JCommander
-import io.gitlab.arturbosch.detekt.cli.Args
+import io.gitlab.arturbosch.detekt.cli.CliArgs
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testfixtures.ProjectBuilder
 import org.jetbrains.spek.api.Spek
@@ -23,7 +23,7 @@ internal class DetektExtensionTest : Spek({
 			val detektExtension = DetektExtension()
 			val args = detektExtension.resolveArguments(project)
 
-			val main = Args().apply { JCommander(this).parse(*args.toTypedArray()) }
+			val main = CliArgs().apply { JCommander(this).parse(*args.toTypedArray()) }
 
 			assertThat(main.inputPath).isEqualTo(listOf(Paths.get(project.projectDir.toString())))
 			assertThat(main.configResource).isEqualTo(DEFAULT_DETEKT_CONFIG_RESOURCE)

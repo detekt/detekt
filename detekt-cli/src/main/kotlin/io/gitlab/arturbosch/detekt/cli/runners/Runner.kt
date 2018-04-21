@@ -12,7 +12,7 @@ import kotlin.system.measureTimeMillis
 /**
  * @author Artur Bosch
  */
-class Runner(private val arguments: Args) : Executable {
+class Runner(private val arguments: CliArgs) : Executable {
 
 	override fun execute() {
 		val settings = createSettings()

@@ -2,11 +2,14 @@ package io.gitlab.arturbosch.detekt.cli
 
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.ParameterException
+import kotlin.reflect.full.primaryConstructor
 
-private val jCommander = JCommander()
+val jCommander = JCommander()
 
-fun parseArguments(args: Array<String>): Args {
-	val cli = Args()
+inline fun <reified T : Args> parseArguments(args: Array<String>): T {
+	val cli = T::class.primaryConstructor?.call()
+			?: throw IllegalStateException("Could not create Args object for class ${T::class.java}")
+
 	jCommander.addObject(cli)
 	jCommander.programName = "detekt"
 
