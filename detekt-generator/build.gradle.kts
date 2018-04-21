@@ -42,6 +42,24 @@ val generateDocumentation by tasks.creating {
     }
 }
 
+val generateFormattingDocumentation by tasks.creating {
+    dependsOn(":detekt-generator:shadowJar")
+    description = "Generates detekt formatting documentation"
+    doLast {
+        javaexec {
+            main = "-jar"
+            args = listOf(
+                    "${rootProject.rootDir}/detekt-generator/build/libs/detekt-generator-$detektVersion-all.jar",
+                    "--input",
+                    "${rootProject.rootDir}/detekt-formatting/src/main/kotlin",
+                    "--documentation",
+                    "${rootProject.rootDir}/reports/",
+                    "--config",
+                    "${rootProject.rootDir}/reports/")
+        }
+    }
+}
+
 val verifyGeneratorOutput by tasks.creating {
     dependsOn(listOf(":detekt-generator:shadowJar", ":detekt-generator:generateDocumentation"))
     description = "Verifies that all documentation and the config.yml are up-to-date"
@@ -86,6 +104,7 @@ val jcommanderVersion: String by project
 dependencies {
     implementation(project(":detekt-core"))
     implementation(project(":detekt-rules"))
+    implementation(project(":detekt-formatting"))
     implementation("com.beust:jcommander:$jcommanderVersion")
     implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion")
     implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")

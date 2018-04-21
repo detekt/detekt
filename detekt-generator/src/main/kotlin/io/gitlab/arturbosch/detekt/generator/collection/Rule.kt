@@ -12,5 +12,6 @@ data class Rule(
 		var severity: String,
 		var debt: String,
 		val parent: String,
-		val configuration: List<Configuration> = listOf()
+		val configuration: List<Configuration> = listOf(),
+		val autoCorrect: Boolean = false
 )
