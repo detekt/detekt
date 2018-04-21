@@ -30,7 +30,7 @@ abstract class FormattingRule(config: Config) : Rule(config) {
 	abstract val wrapping: com.github.shyiko.ktlint.core.Rule
 
 	protected fun issueFor(description: String) =
-			Issue(wrapping.id, Severity.Style, description, Debt.FIVE_MINS)
+			Issue(javaClass.simpleName, Severity.Style, description, Debt.FIVE_MINS)
 
 	private val isAndroid by lazy { valueOrDefault("android", false) }
 
