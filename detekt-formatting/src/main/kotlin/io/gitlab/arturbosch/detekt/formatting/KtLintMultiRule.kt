@@ -66,19 +66,23 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
 			SpacingAroundOperators(config),
 			SpacingAroundRangeOperator(config),
 			StringTemplate(config)
-	).sortedBy {
-		it is com.github.shyiko.ktlint.core.Rule.Modifier.Last
-				|| it is com.github.shyiko.ktlint.core.Rule.Modifier.RestrictToRootLast
-	}.reversed()
+	)
 
 	override fun visit(root: KtFile) {
-		activeRules.forEach { it.visit(root) }
+		val sortedRules = activeRules.sortedBy { it.lastModifier() }
+		sortedRules.forEach { it.visit(root) }
 		root.node.visitTokens { node ->
-			activeRules.forEach { rule ->
+			sortedRules.forEach { rule ->
 				println(rule.id)
 				(rule as? FormattingRule)?.runIfActive { this.apply(node) }
 			}
 		}
+	}
+
+	private fun Rule.lastModifier(): Boolean {
+		val rule = (this as? FormattingRule)?.wrapping ?: return false
+		return rule is com.github.shyiko.ktlint.core.Rule.Modifier.Last
+				|| rule is com.github.shyiko.ktlint.core.Rule.Modifier.RestrictToRootLast
 	}
 
 	private fun ASTNode.visitTokens(currentNode: (node: ASTNode) -> Unit) {
