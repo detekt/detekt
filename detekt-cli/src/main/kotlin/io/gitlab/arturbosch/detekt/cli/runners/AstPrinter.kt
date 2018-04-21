@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.cli.runners
 
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
-import io.gitlab.arturbosch.detekt.cli.Args
+import io.gitlab.arturbosch.detekt.cli.CliArgs
 import io.gitlab.arturbosch.detekt.core.KtCompiler
 import io.gitlab.arturbosch.detekt.core.isFile
 import org.jetbrains.kotlin.diagnostics.PsiDiagnosticUtils
@@ -14,7 +14,7 @@ import org.jetbrains.kotlin.psi.KtStatementExpression
 /**
  * @author Artur Bosch
  */
-class AstPrinter(private val arguments: Args) : Executable {
+class AstPrinter(private val arguments: CliArgs) : Executable {
 
 	override fun execute() {
 		assert(arguments.inputPath.size == 1) {

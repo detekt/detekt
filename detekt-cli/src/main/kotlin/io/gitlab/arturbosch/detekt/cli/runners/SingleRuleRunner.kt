@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.BaseRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.cli.Args
+import io.gitlab.arturbosch.detekt.cli.CliArgs
 import io.gitlab.arturbosch.detekt.cli.DetektProgressListener
 import io.gitlab.arturbosch.detekt.cli.OutputFacade
 import io.gitlab.arturbosch.detekt.cli.createPathFilters
@@ -17,7 +17,7 @@ import io.gitlab.arturbosch.detekt.core.RuleSetLocator
 /**
  * @author Artur Bosch
  */
-class SingleRuleRunner(private val arguments: Args) : Executable {
+class SingleRuleRunner(private val arguments: CliArgs) : Executable {
 
 	override fun execute() {
 		val (ruleSet, rule) = arguments.runRule?.split(":")
