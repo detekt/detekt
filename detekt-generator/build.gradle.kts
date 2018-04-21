@@ -102,6 +102,7 @@ val spekVersion: String by project
 val jcommanderVersion: String by project
 
 dependencies {
+    implementation(project(":detekt-cli"))
     implementation(project(":detekt-core"))
     implementation(project(":detekt-rules"))
     implementation(project(":detekt-formatting"))

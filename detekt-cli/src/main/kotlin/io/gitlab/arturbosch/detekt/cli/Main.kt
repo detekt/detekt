@@ -25,8 +25,8 @@ fun main(args: Array<String>) {
 	executable.execute()
 }
 
-private fun parseArgumentsCheckingReportDirectory(args: Array<String>): Args {
-	val arguments = parseArguments(args)
+private fun parseArgumentsCheckingReportDirectory(args: Array<String>): CliArgs {
+	val arguments = parseArguments<CliArgs>(args)
 	val messages = validateCli(arguments)
 	messages.ifNotEmpty {
 		failWithErrorMessages(messages)
@@ -34,7 +34,7 @@ private fun parseArgumentsCheckingReportDirectory(args: Array<String>): Args {
 	return arguments
 }
 
-private fun validateCli(arguments: Args): List<String> {
+private fun validateCli(arguments: CliArgs): List<String> {
 	val violations = ArrayList<String>()
 	with(arguments) {
 		output?.let {

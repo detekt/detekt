@@ -9,7 +9,7 @@ import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 /**
  * @author Artur Bosch
  */
-class OutputFacade(private val arguments: Args,
+class OutputFacade(private val arguments: CliArgs,
 				   private val detektion: Detektion,
 				   private val settings: ProcessingSettings) {
 
