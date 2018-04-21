@@ -11,7 +11,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.cli.Args
+import io.gitlab.arturbosch.detekt.cli.CliArgs
 import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions
 import org.jetbrains.kotlin.psi.KtClass
@@ -27,7 +27,7 @@ class SingleRuleRunnerSpec : Spek({
 	it("should load and run custom rule") {
 		val case = Paths.get(resource("cases/Poko.kt"))
 
-		val args = Args().apply {
+		val args = CliArgs().apply {
 			val field = this.javaClass.getDeclaredField("input")
 			field.isAccessible = true
 			field.set(this, case.toString())
