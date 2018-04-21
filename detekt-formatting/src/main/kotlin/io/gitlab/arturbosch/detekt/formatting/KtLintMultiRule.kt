@@ -73,7 +73,6 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
 		sortedRules.forEach { it.visit(root) }
 		root.node.visitTokens { node ->
 			sortedRules.forEach { rule ->
-				println(rule.id)
 				(rule as? FormattingRule)?.runIfActive { this.apply(node) }
 			}
 		}

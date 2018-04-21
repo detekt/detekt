@@ -33,29 +33,12 @@ val generateDocumentation by tasks.creating {
             args = listOf(
                     "${rootProject.rootDir}/detekt-generator/build/libs/detekt-generator-$detektVersion-all.jar",
                     "--input",
-                    "${rootProject.rootDir}/detekt-rules/src/main/kotlin",
+                    "${rootProject.rootDir}/detekt-rules/src/main/kotlin" + "," +
+                            "${rootProject.rootDir}/detekt-formatting/src/main/kotlin",
                     "--documentation",
                     "${rootProject.rootDir}/docs/pages/documentation",
                     "--config",
                     "${rootProject.rootDir}/detekt-cli/src/main/resources")
-        }
-    }
-}
-
-val generateFormattingDocumentation by tasks.creating {
-    dependsOn(":detekt-generator:shadowJar")
-    description = "Generates detekt formatting documentation"
-    doLast {
-        javaexec {
-            main = "-jar"
-            args = listOf(
-                    "${rootProject.rootDir}/detekt-generator/build/libs/detekt-generator-$detektVersion-all.jar",
-                    "--input",
-                    "${rootProject.rootDir}/detekt-formatting/src/main/kotlin",
-                    "--documentation",
-                    "${rootProject.rootDir}/reports/",
-                    "--config",
-                    "${rootProject.rootDir}/reports/")
         }
     }
 }
