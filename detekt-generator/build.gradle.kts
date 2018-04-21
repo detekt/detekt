@@ -88,6 +88,7 @@ dependencies {
     implementation(project(":detekt-rules"))
     implementation("com.beust:jcommander:$jcommanderVersion")
     implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
 
     testImplementation(project(":detekt-test"))
     testRuntime("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")

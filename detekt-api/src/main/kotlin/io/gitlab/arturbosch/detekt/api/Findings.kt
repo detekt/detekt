@@ -9,7 +9,7 @@ package io.gitlab.arturbosch.detekt.api
  *
  * @author Artur Bosch
  */
-interface Finding : Compactable, Reflective, HasEntity, HasMetrics {
+interface Finding : Compactable, HasEntity, HasMetrics {
 	val id: String
 	val issue: Issue
 	val references: List<Entity>
@@ -47,13 +47,6 @@ interface HasEntity {
 interface HasMetrics {
 	val metrics: List<Metric>
 	fun metricByType(type: String): Metric? = metrics.find { it.type == type }
-}
-
-/**
- * Allows to iterate over attributes reflectively.
- */
-interface Reflective {
-	fun findAttribute(name: String) = this.javaClass.kotlin.members.find { it.name == name }
 }
 
 /**
