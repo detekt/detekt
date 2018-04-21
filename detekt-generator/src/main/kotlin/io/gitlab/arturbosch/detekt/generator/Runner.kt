@@ -7,15 +7,18 @@ import kotlin.system.measureTimeMillis
 
 /**
  * @author Marvin Ramin
+ * @author Artur Bosch
  */
-class Runner(private val arguments: Args) {
+class Runner(private val arguments: GeneratorArgs) {
 	private val listeners = listOf(DetektProgressListener())
 	private val collector = DetektCollector()
 	private val printer = DetektPrinter(arguments)
 
 	fun execute() {
 		val time = measureTimeMillis {
-			val ktFiles = KtTreeCompiler().compile(arguments.inputPath)
+			val compiler = KtTreeCompiler()
+			val ktFiles = arguments.inputPath
+					.flatMap { compiler.compile(it) }
 			listeners.forEach { it.onStart(ktFiles) }
 
 			ktFiles.forEach { file ->

@@ -10,18 +10,18 @@ import java.nio.file.Path
  * @author Artur Bosch
  */
 
-fun Args.createPathFilters(): List<PathFilter> = filters.letIfNonEmpty {
+fun CliArgs.createPathFilters(): List<PathFilter> = filters.letIfNonEmpty {
 	split(SEPARATOR_COMMA, SEPARATOR_SEMICOLON).map(::PathFilter)
 }
 
-fun Args.createPlugins(): List<Path> = plugins.letIfNonEmpty {
+fun CliArgs.createPlugins(): List<Path> = plugins.letIfNonEmpty {
 	MultipleExistingPathConverter().convert(this)
 }
 
 private fun <T> String?.letIfNonEmpty(init: String.() -> List<T>): List<T> =
 		if (this == null || this.isEmpty()) listOf() else this.init()
 
-fun Args.loadConfiguration(): Config {
+fun CliArgs.loadConfiguration(): Config {
 	var config = when {
 		!config.isNullOrBlank() -> parsePathConfig(config!!)
 		!configResource.isNullOrBlank() -> parseResourceConfig(configResource!!)
