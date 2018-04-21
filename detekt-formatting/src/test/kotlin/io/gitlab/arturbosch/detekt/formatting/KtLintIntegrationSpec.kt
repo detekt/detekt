@@ -17,7 +17,7 @@ class KtLintIntegrationSpec : Spek({
 
 	describe("tests integration of formatting") {
 
-		it("should work like formatting") {
+		it("should work like KtLint") {
 			val fileBefore = compileForTest(Paths.get(resource("before.kt")))
 			val expected = File(resource("after.kt")).readText()
 
