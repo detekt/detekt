@@ -8,7 +8,6 @@ import org.gradle.api.model.ObjectFactory
 import org.gradle.api.plugins.quality.CodeQualityExtension
 import org.gradle.api.provider.Property
 import org.gradle.api.resources.TextResource
-import org.gradle.kotlin.dsl.property
 import java.io.File
 
 /**
@@ -22,13 +21,13 @@ constructor(
 		objectFactory: ObjectFactory,
 		projectLayout: ProjectLayout
 ) : CodeQualityExtension() {
-	var debug: Property<Boolean> = objectFactory.property()
-	var parallel: Property<Boolean> = objectFactory.property()
-	var disableDefaultRuleSets: Property<Boolean> = objectFactory.property()
-	var filters: Property<String> = objectFactory.property()
+	var debug: Property<Boolean> = objectFactory.property(Boolean::class.java)
+	var parallel: Property<Boolean> = objectFactory.property(Boolean::class.java)
+	var disableDefaultRuleSets: Property<Boolean> = objectFactory.property(Boolean::class.java)
+	var filters: Property<String> = objectFactory.property(String::class.java)
 	var baseline: RegularFileProperty = projectLayout.fileProperty()
-	var plugins: Property<String> = objectFactory.property()
-	var config: Property<TextResource> = objectFactory.property()
+	var plugins: Property<String> = objectFactory.property(String::class.java)
+	var config: Property<TextResource> = objectFactory.property(TextResource::class.java)
 	var configDir: RegularFileProperty = projectLayout.fileProperty()
 	var ideaExtension: IdeaExtension = IdeaExtension()
 

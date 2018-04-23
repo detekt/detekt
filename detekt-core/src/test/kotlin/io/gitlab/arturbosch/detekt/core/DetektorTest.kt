@@ -25,6 +25,6 @@ class DetektorTest {
 				listOf(TestProvider(), TestProvider2()), emptyList())
 
 		val run = instance.run()
-		assertTrue { run.findings["Test"]?.none { it.file == "Test.kt" } == true }
+		assertTrue { run.findings["Test"]?.none { "Test.kt" in it.file } ?: true }
 	}
 }

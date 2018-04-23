@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.cli.out
 
 import io.gitlab.arturbosch.detekt.api.*
+import io.gitlab.arturbosch.detekt.cli.TestDetektion
 import org.junit.jupiter.api.Test
-
 import org.assertj.core.api.Assertions.assertThat
 
 internal class HtmlOutputFormatTest {
@@ -64,7 +64,7 @@ internal class HtmlOutputFormatTest {
 		val entity2 = Entity("Sample2", "com.sample.Sample2", "",
 				Location(SourceLocation(22, 2), TextLocation(0, 20),
 						"efgh", "src/main/com/sample/Sample2.kt"))
-		val entity3 = Entity("Sample2", "com.sample.Sample3", "",
+		val entity3 = Entity("Sample3", "com.sample.Sample3", "",
 				Location(SourceLocation(33, 3), TextLocation(0, 30),
 						"ijkl", "src/main/com/sample/Sample3.kt"))
 

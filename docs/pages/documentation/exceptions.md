@@ -15,6 +15,10 @@ an exception it will be reported. By default this rule is checking for `toString
 `finalize`. This rule is configurable via the `methodNames` configuration to change the list of functions which
 should not throw any exceptions.
 
+**Severity**: CodeSmell
+
+**Debt**: 20min
+
 #### Configuration options:
 
 * `methodNames` (default: `'toString,hashCode,equals,finalize'`)
@@ -37,6 +41,10 @@ class Foo {
 This rule reports `catch` blocks which check for the type of an exception via `is` checks or casts.
 Instead of catching generic exception types and then checking for specific exception types the code should
 use multiple catch blocks. These catch blocks should then catch the specific exceptions.
+
+**Severity**: CodeSmell
+
+**Debt**: 20min
 
 #### Noncompliant Code:
 
@@ -68,6 +76,10 @@ functions.
 These indicate that functionality is still under development and will not work properly. Both of these should only
 serve as temporary declarations and should not be put into production environments.
 
+**Severity**: CodeSmell
+
+**Debt**: 20min
+
 #### Noncompliant Code:
 
 ```kotlin
@@ -84,6 +96,10 @@ fun todo() {
 
 This rule reports code that tries to print the stacktrace of an exception. Instead of simply printing a stacktrace
 a better logging solution should be used.
+
+**Severity**: CodeSmell
+
+**Debt**: 20min
 
 #### Noncompliant Code:
 
@@ -119,6 +135,10 @@ fun bar() {
 
 This rule reports all exceptions that are caught and then later re-thrown without modification.
 
+**Severity**: CodeSmell
+
+**Debt**: 5min
+
 #### Noncompliant Code:
 
 ```kotlin
@@ -148,6 +168,10 @@ fun foo() {
 Reports all `return` statements in `finally` blocks.
 Using `return` statements in `finally` blocks can discard and hide exceptions that are thrown in the `try` block.
 
+**Severity**: Defect
+
+**Debt**: 20min
+
 #### Noncompliant Code:
 
 ```kotlin
@@ -164,6 +188,10 @@ fun foo() {
 
 Exceptions should not be swallowed. This rule reports all instances where exceptions are `caught` and not correctly
 passed into a newly thrown exception.
+
+**Severity**: CodeSmell
+
+**Debt**: 20min
 
 #### Noncompliant Code:
 
@@ -194,6 +222,10 @@ fun foo() {
 This rule reports all cases where exceptions are thrown from a `finally` block. Throwing exceptions from a `finally`
 block should be avoided as it can lead to confusion and discarded exceptions.
 
+**Severity**: Defect
+
+**Debt**: 20min
+
 #### Noncompliant Code:
 
 ```kotlin
@@ -211,6 +243,10 @@ fun foo() {
 This rule reports all exceptions that are thrown in a `main` method.
 An exception should only be thrown if it can be handled by a "higher" function.
 
+**Severity**: CodeSmell
+
+**Debt**: 20min
+
 #### Noncompliant Code:
 
 ```kotlin
@@ -226,6 +262,10 @@ This rule reports all exceptions which are thrown without arguments or further d
 Exceptions should always call one of the constructor overloads to provide a message or a cause.
 Exceptions should be meaningful and contain as much detail about the error case as possible. This will help to track
 down an underlying issue in a better way.
+
+**Severity**: Warning
+
+**Debt**: 5min
 
 #### Configuration options:
 
@@ -260,6 +300,10 @@ fun foo(bar: Int) {
 Exceptions should not be wrapped inside the same exception type and then rethrown. Prefer wrapping exceptions in more
 meaningful exception types.
 
+**Severity**: Defect
+
+**Debt**: 5min
+
 #### Noncompliant Code:
 
 ```kotlin
@@ -289,6 +333,10 @@ fun foo() {
 This rule reports `catch` blocks for exceptions that have a type that is too generic.
 It should be preferred to catch specific exceptions to the case that is currently handled. If the scope of the caught
 exception is too broad it can lead to unintended exceptions being caught.
+
+**Severity**: Defect
+
+**Debt**: 20min
 
 #### Configuration options:
 
@@ -327,6 +375,10 @@ fun foo() {
 
 This rule reports thrown exceptions that have a type that is too generic. It should be preferred to throw specific
 exceptions to the case that has currently occurred.
+
+**Severity**: Defect
+
+**Debt**: 20min
 
 #### Configuration options:
 

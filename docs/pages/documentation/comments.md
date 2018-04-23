@@ -20,6 +20,10 @@ Instead of simply removing this comment to solve this issue prefer to split up t
 with better names if necessary. Giving the function a better, more descriptive name can also help in
 solving this issue.
 
+**Severity**: Maintainability
+
+**Debt**: 20min
+
 ### CommentOverPrivateProperty
 
 This rule reports comments and documentation above private properties. This can indicate that the property has a
@@ -31,10 +35,18 @@ Instead of simply removing the comment to solve this issue prefer renaming the p
 name. If this property is inside a bigger class it could make senes to refactor and split up the class. This can
 increase readability and make the documentation obsolete.
 
+**Severity**: Maintainability
+
+**Debt**: 20min
+
 ### EndOfSentenceFormat
 
 This rule validates the end of the first sentence of a KDoc comment.
 It should end with proper punctuation or with a correct URL.
+
+**Severity**: Maintainability
+
+**Debt**: 5min
 
 #### Configuration options:
 
@@ -49,6 +61,10 @@ Enable this rule if the codebase should have documentation on every public class
 
 By default this rule also searches for nested and inner classes and objects. This default behavior can be changed
 with the configuration options of this rule.
+
+**Severity**: Maintainability
+
+**Debt**: 20min
 
 #### Configuration options:
 
@@ -72,3 +88,7 @@ with the configuration options of this rule.
 
 This rule will report any public function which does not have the required documentation.
 If the codebase should have documentation on all public functions enable this rule to enforce this.
+
+**Severity**: Maintainability
+
+**Debt**: 20min

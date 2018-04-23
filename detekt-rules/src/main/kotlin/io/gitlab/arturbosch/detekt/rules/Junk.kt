@@ -11,6 +11,7 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
+import org.jetbrains.kotlin.psi.KtVariableDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 
@@ -28,6 +29,11 @@ fun KtClassOrObject.isObjectOfAnonymousClass() =
 fun KtCallExpression.isUsedForNesting(): Boolean = when (getCallNameExpression()?.text) {
 	"run", "let", "apply", "with", "use", "forEach" -> true
 	else -> false
+}
+
+fun KtVariableDeclaration.hasConstModifier(): Boolean {
+	val modifierList = this.modifierList
+	return modifierList != null && modifierList.hasModifier(KtTokens.CONST_KEYWORD)
 }
 
 fun KtBlockExpression.hasCommentInside(): Boolean {

@@ -7,17 +7,16 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import org.jetbrains.kotlin.lexer.KtTokens
+import io.gitlab.arturbosch.detekt.rules.hasConstModifier
 import org.jetbrains.kotlin.psi.KtProperty
-import org.jetbrains.kotlin.psi.KtVariableDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 
 /**
  * Reports when top level constant names which do not follow the specified naming convention are used.
  *
  * @configuration constantPattern - naming pattern (default: '[A-Z][_A-Z0-9]*')
- * @configuration propertyPattern - naming pattern (default: '[a-z][A-Za-z\d]*')
- * @configuration privatePropertyPattern - naming pattern (default: '(_)?[a-z][A-Za-z0-9]*')
+ * @configuration propertyPattern - naming pattern (default: '[A-Za-z][_A-Za-z0-9]*')
+ * @configuration privatePropertyPattern - naming pattern (default: '(_)?[A-Za-z][A-Za-z0-9]*')
  *
  * @active since v1.0.0
  * @author Marvin Ramin
@@ -30,8 +29,8 @@ class TopLevelPropertyNaming(config: Config = Config.empty) : Rule(config) {
 			debt = Debt.FIVE_MINS)
 
 	private val constantPattern = Regex(valueOrDefault(CONSTANT_PATTERN, "[A-Z][_A-Z0-9]*"))
-	private val propertyPattern = Regex(valueOrDefault(PROPERTY_PATTERN, "[a-z][A-Za-z0-9]*"))
-	private val privatePropertyPattern = Regex(valueOrDefault(PRIVATE_PROPERTY_PATTERN, "(_)?[a-z][A-Za-z0-9]*"))
+	private val propertyPattern = Regex(valueOrDefault(PROPERTY_PATTERN, "[A-Za-z][_A-Za-z0-9]*"))
+	private val privatePropertyPattern = Regex(valueOrDefault(PRIVATE_PROPERTY_PATTERN, "(_)?[A-Za-z][A-Za-z0-9]*"))
 
 	override fun visitProperty(property: KtProperty) {
 		if (property.hasConstModifier()) {
@@ -66,11 +65,6 @@ class TopLevelPropertyNaming(config: Config = Config.empty) : Rule(config) {
 						message = "Top level property names should match the pattern: $propertyPattern"))
 			}
 		}
-	}
-
-	private fun KtVariableDeclaration.hasConstModifier(): Boolean {
-		val modifierList = this.modifierList
-		return modifierList != null && modifierList.hasModifier(KtTokens.CONST_KEYWORD)
 	}
 
 	companion object {

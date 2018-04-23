@@ -38,8 +38,10 @@ data class KtFileContent(val file: KtFile, val content: Sequence<String>)
  * @configuration maxLineLength - maximum line length (default: 120)
  * @configuration excludePackageStatements - if package statements should be ignored (default: false)
  * @configuration excludeImportStatements - if import statements should be ignored (default: false)
+ * @configuration excludeCommentStatements - if comment statements should be ignored (default: false)
  *
  * @active since v1.0.0
+ * @author Robbin Voortman
  * @author Marvin Ramin
  * @author Artur Bosch
  */
@@ -56,6 +58,8 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 			= valueOrDefault(MaxLineLength.EXCLUDE_PACKAGE_STATEMENTS, MaxLineLength.DEFAULT_VALUE_PACKAGE_EXCLUDE)
 	private val excludeImportStatements: Boolean
 			= valueOrDefault(MaxLineLength.EXCLUDE_IMPORT_STATEMENTS, MaxLineLength.DEFAULT_VALUE_IMPORTS_EXCLUDE)
+	private val excludeCommentStatements: Boolean
+			= valueOrDefault(MaxLineLength.EXCLUDE_COMMENT_STATEMENTS, MaxLineLength.DEFAULT_VALUE_COMMENT_EXCLUDE)
 
 	fun visit(element: KtFileContent) {
 		var offset = 0
@@ -73,23 +77,33 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 	}
 
 	private fun isValidLine(line: String): Boolean {
-		return (line.length <= maxLineLength
-				|| containsIgnoredPackageStatement(line)
-				|| containsIgnoredImportStatement(line))
+		return (line.length <= maxLineLength || isIgnoredStatement(line))
+	}
+
+	private fun isIgnoredStatement(line: String): Boolean {
+		return containsIgnoredPackageStatement(line) ||
+				containsIgnoredImportStatement(line) ||
+				containsIgnoredCommentStatement(line)
 	}
 
 	private fun containsIgnoredPackageStatement(line: String): Boolean {
-		if (excludePackageStatements) {
-			return line.trimStart().startsWith("package ")
-		}
-		return false
+		if (!excludePackageStatements) return false
+
+		return line.trimStart().startsWith("package ")
 	}
 
 	private fun containsIgnoredImportStatement(line: String): Boolean {
-		if (excludeImportStatements) {
-			return line.trimStart().startsWith("import ")
-		}
-		return false
+		if(!excludeImportStatements) return false
+
+		return line.trimStart().startsWith("import ")
+	}
+
+	private fun containsIgnoredCommentStatement(line: String): Boolean {
+		if (!excludeCommentStatements) return false
+
+		return  line.trimStart().startsWith("//") ||
+				line.trimStart().startsWith("/*") ||
+				line.trimStart().startsWith("*")
 	}
 
 	companion object {
@@ -101,6 +115,8 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 
 		const val EXCLUDE_IMPORT_STATEMENTS = "excludeImportStatements"
 		const val DEFAULT_VALUE_IMPORTS_EXCLUDE = false
+
+		const val EXCLUDE_COMMENT_STATEMENTS = "excludeCommentStatements"
+		const val DEFAULT_VALUE_COMMENT_EXCLUDE = false
 	}
 }
-

@@ -2,7 +2,6 @@ package cases
 
 @Suppress("unused")
 class MaxLineLength {
-
 	companion object {
 		val LOREM_IPSUM = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
 	}

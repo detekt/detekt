@@ -36,7 +36,9 @@ class Empty : Runnable {
 
 		} catch (expected: Exception) {
 
-		}finally {
+		} catch (_: Exception) {
+
+		} finally {
 
 		}
 		if (true) {

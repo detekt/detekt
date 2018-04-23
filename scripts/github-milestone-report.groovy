@@ -1,7 +1,3 @@
-/**
- * @author Artur Bosch
- */
-
 @groovy.lang.Grab('org.kohsuke:github-api:1.85')
 import org.kohsuke.github.*
 

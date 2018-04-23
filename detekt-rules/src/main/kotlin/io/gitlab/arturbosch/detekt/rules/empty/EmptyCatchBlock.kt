@@ -8,7 +8,7 @@ import org.jetbrains.kotlin.psi.KtCatchClause
  * Reports empty `catch` blocks. Empty blocks of code serve no purpose and should be removed.
  *
  * @configuration allowedExceptionNameRegex - ignores exception types which match this regex
- * (default: "^(ignore|expected).*")
+ * (default: "^(_|(ignore|expected).*)")
  * @active since v1.0.0
  * @author Artur Bosch
  * @author Marvin Ramin
@@ -16,7 +16,7 @@ import org.jetbrains.kotlin.psi.KtCatchClause
  */
 class EmptyCatchBlock(config: Config) : EmptyRule(config = config) {
 
-	private val allowedExceptionNameRegex = Regex(valueOrDefault(ALLOWED_EXCEPTION_NAME_REGEX, "^(ignore|expected).*"))
+	private val allowedExceptionNameRegex = Regex(valueOrDefault(ALLOWED_EXCEPTION_NAME_REGEX, "^(_|(ignore|expected).*)"))
 
 	override fun visitCatchSection(catchClause: KtCatchClause) {
 		val name = catchClause.catchParameter?.identifierName()

@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.cli.out
+package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
@@ -8,8 +8,9 @@ import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 
 /**
  * @author Artur Bosch
+ * @author schalkms
  */
-class TestDetektion(vararg findings: Finding) : Detektion {
+open class TestDetektion(vararg findings: Finding) : Detektion {
 
 	override val metrics: Collection<ProjectMetric> = listOf()
 	override val findings: Map<String, List<Finding>> = findings.groupBy { it.id }

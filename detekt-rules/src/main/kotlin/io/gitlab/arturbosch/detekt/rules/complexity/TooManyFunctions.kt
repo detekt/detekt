@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import org.jetbrains.kotlin.preprocessor.typeReferenceName
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
@@ -26,10 +27,12 @@ import org.jetbrains.kotlin.psi.KtObjectDeclaration
  * @configuration thresholdInInterfaces - threshold in interfaces (default: 11)
  * @configuration thresholdInObjects - threshold in objects (default: 11)
  * @configuration thresholdInEnums - threshold in enums (default: 11)
+ * @configuration ignoreDeprecated - ignore deprecated functions (default: false)
  *
  * @active since v1.0.0
  * @author Artur Bosch
  * @author Marvin Ramin
+ * @author schalkms
  */
 class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 
@@ -45,6 +48,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 	private val thresholdInObjects = valueOrDefault(THRESHOLD_IN_OBJECTS, DEFAULT_THRESHOLD)
 	private val thresholdInInterfaces = valueOrDefault(THRESHOLD_IN_INTERFACES, DEFAULT_THRESHOLD)
 	private val thresholdInEnums = valueOrDefault(THRESHOLD_IN_ENUMS, DEFAULT_THRESHOLD)
+	private val ignoreDeprecated = valueOrDefault(IGNORE_DEPRECATED, false)
 
 	private var amountOfTopLevelFunctions: Int = 0
 
@@ -55,13 +59,13 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 					Entity.from(file),
 					Metric("SIZE", amountOfTopLevelFunctions, thresholdInFiles),
 					"File '${file.name}' with '$amountOfTopLevelFunctions' functions detected. " +
-							"Allowed maximum amount of functions inside files is set to '$thresholdInFiles'"))
+							"Defined threshold inside files is set to '$thresholdInFiles'"))
 		}
 		amountOfTopLevelFunctions = 0
 	}
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (function.isTopLevel) {
+		if (function.isTopLevel && ignoresDeprecatedFunction(function)) {
 			amountOfTopLevelFunctions++
 		}
 	}
@@ -74,7 +78,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 						Entity.from(klass),
 						Metric("SIZE", amount, thresholdInInterfaces),
 						"Interface '${klass.name}' with '$amount' functions detected. " +
-								"Allowed maximum amount of functions inside interfaces is set to " +
+								"Defined threshold inside interfaces is set to " +
 								"'$thresholdInInterfaces'"))
 			}
 			klass.isEnum() && amount >= thresholdInEnums -> {
@@ -82,7 +86,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 						Entity.from(klass),
 						Metric("SIZE", amount, thresholdInEnums),
 						"Enum class '${klass.name}' with '$amount' functions detected. " +
-								"Allowed maximum amount of functions inside enum classes is set to " +
+								"Defined threshold inside enum classes is set to " +
 								"'$thresholdInEnums'"))
 			}
 			else -> {
@@ -91,7 +95,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 							Entity.from(klass),
 							Metric("SIZE", amount, thresholdInClasses),
 							"Class '${klass.name}' with '$amount' functions detected. " +
-									"Allowed maximum amount of functions inside classes is set to '$thresholdInClasses'"))
+									"Defined threshold inside classes is set to '$thresholdInClasses'"))
 				}
 			}
 		}
@@ -105,14 +109,22 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 					Entity.from(declaration),
 					Metric("SIZE", amount, thresholdInObjects),
 					"Object '${declaration.name}' with '$amount' functions detected. " +
-							"Allowed maximum amount of functions inside objects is set to '$thresholdInObjects'"))
+							"Defined threshold inside objects is set to '$thresholdInObjects'"))
 		}
 		super.visitObjectDeclaration(declaration)
 	}
 
 	private fun calcFunctions(classOrObject: KtClassOrObject): Int = classOrObject.getBody()?.declarations
 			?.filterIsInstance<KtNamedFunction>()
+			?.filter { ignoresDeprecatedFunction(it) }
 			?.size ?: 0
+
+	private fun ignoresDeprecatedFunction(function: KtNamedFunction): Boolean {
+		if (ignoreDeprecated) {
+			return !function.annotationEntries.any { it.typeReferenceName == DEPRECATED }
+		}
+		return true
+	}
 
 	companion object {
 		const val DEFAULT_THRESHOLD = 11
@@ -121,5 +133,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 		const val THRESHOLD_IN_INTERFACES = "thresholdInInterfaces"
 		const val THRESHOLD_IN_OBJECTS = "thresholdInObjects"
 		const val THRESHOLD_IN_ENUMS = "thresholdInEnums"
+		const val IGNORE_DEPRECATED = "ignoreDeprecated"
+		private const val DEPRECATED = "Deprecated"
 	}
 }

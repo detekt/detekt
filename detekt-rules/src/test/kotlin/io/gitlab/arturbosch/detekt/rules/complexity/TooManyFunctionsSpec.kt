@@ -109,5 +109,33 @@ class TooManyFunctionsSpec : Spek({
 
 			assertThat(rule.lint(code)).hasSize(1)
 		}
+
+		describe("different deprecated functions") {
+
+			val code = """
+				@Deprecated
+				fun f() {
+				}
+
+				class A {
+					@Deprecated
+					fun f() {
+					}
+				}
+				"""
+			it("finds all deprecated functions per default") {
+
+				assertThat(rule.lint(code)).hasSize(2)
+			}
+
+			it("finds no deprecated functions") {
+				val configuredRule = TooManyFunctions(TestConfig(mapOf(
+						TooManyFunctions.THRESHOLD_IN_CLASSES to "1",
+						TooManyFunctions.THRESHOLD_IN_FILES to "1",
+						TooManyFunctions.IGNORE_DEPRECATED to "true"
+				)))
+				assertThat(configuredRule.lint(code)).isEmpty()
+			}
+		}
 	}
 })

@@ -114,12 +114,13 @@ complexity:
     thresholdInInterfaces: 11
     thresholdInObjects: 11
     thresholdInEnums: 11
+    ignoreDeprecated: false
 
 empty-blocks:
   active: true
   EmptyCatchBlock:
     active: true
-    allowedExceptionNameRegex: "^(ignore|expected).*"
+    allowedExceptionNameRegex: "^(_|(ignore|expected).*)"
   EmptyClassBlock:
     active: true
   EmptyDefaultConstructor:
@@ -222,14 +223,15 @@ naming:
   ObjectPropertyNaming:
     active: true
     propertyPattern: '[A-Za-z][_A-Za-z0-9]*'
+    constantPattern: '[A-Za-z][_A-Za-z0-9]*'
   PackageNaming:
     active: true
     packagePattern: '^[a-z]+(\.[a-z][a-z0-9]*)*$'
   TopLevelPropertyNaming:
     active: true
     constantPattern: '[A-Z][_A-Z0-9]*'
-    propertyPattern: '[a-z][A-Za-z\d]*'
-    privatePropertyPattern: '(_)?[a-z][A-Za-z0-9]*'
+    propertyPattern: '[A-Za-z][_A-Za-z0-9]*'
+    privatePropertyPattern: '(_)?[A-Za-z][A-Za-z0-9]*'
   VariableMaxLength:
     active: false
     maximumVariableNameLength: 64
@@ -323,6 +325,7 @@ style:
     maxLineLength: 120
     excludePackageStatements: false
     excludeImportStatements: false
+    excludeCommentStatements: false
   MayBeConst:
     active: false
   ModifierOrder:
@@ -370,6 +373,7 @@ style:
     active: false
   UnusedPrivateMember:
     active: false
+    allowedNames: "(_|ignored|expected)"
   UseDataClass:
     active: false
     excludeAnnotatedClasses: ""

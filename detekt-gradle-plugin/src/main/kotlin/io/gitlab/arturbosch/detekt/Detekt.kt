@@ -20,7 +20,6 @@ import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.VerificationTask
-import org.gradle.kotlin.dsl.property
 import java.io.File
 import javax.inject.Inject
 
@@ -39,13 +38,13 @@ constructor(
 	private val reports: CheckstyleReports = objectFactory.newInstance(CheckstyleReportsImpl::class.java, this)
 	private var _ignoreFailures: Boolean = false
 	lateinit var classpath: FileCollection
-	open var config: Property<TextResource> = objectFactory.property()
-	open var filters: Property<String> = objectFactory.property()
+	open var config: Property<TextResource> = objectFactory.property(TextResource::class.java)
+	open var filters: Property<String> = objectFactory.property(String::class.java)
 	open var baseline: RegularFileProperty = projectLayout.fileProperty()
-	open var plugins: Property<String> = objectFactory.property()
-	open var debug: Property<Boolean> = objectFactory.property()
-	open var parallel: Property<Boolean> = objectFactory.property()
-	open var disableDefaultRuleSets: Property<Boolean> = objectFactory.property()
+	open var plugins: Property<String> = objectFactory.property(String::class.java)
+	open var debug: Property<Boolean> = objectFactory.property(Boolean::class.java)
+	open var parallel: Property<Boolean> = objectFactory.property(Boolean::class.java)
+	open var disableDefaultRuleSets: Property<Boolean> = objectFactory.property(Boolean::class.java)
 
 	@OutputFiles
 	fun getOutputFiles(): Map<String, File> {

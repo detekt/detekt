@@ -12,6 +12,10 @@ The naming ruleset contains rules which assert the naming of different parts of 
 
 Reports when class names which do not follow the specified naming convention are used.
 
+**Severity**: Style
+
+**Debt**: 5min
+
 #### Configuration options:
 
 * `classPattern` (default: `'[A-Z$][a-zA-Z0-9$]*'`)
@@ -21,6 +25,10 @@ Reports when class names which do not follow the specified naming convention are
 ### EnumNaming
 
 Reports when enum names which do not follow the specified naming convention are used.
+
+**Severity**: Style
+
+**Debt**: 5min
 
 #### Configuration options:
 
@@ -34,6 +42,10 @@ Reports class names which are forbidden per configuration.
 By default this rule does not report any classes.
 Examples for forbidden names might be too generic class names like `...Manager`.
 
+**Severity**: Style
+
+**Debt**: 5min
+
 #### Configuration options:
 
 * `forbiddenName` (default: `''`)
@@ -43,6 +55,10 @@ Examples for forbidden names might be too generic class names like `...Manager`.
 ### FunctionMaxLength
 
 Reports when very long function names are used.
+
+**Severity**: Style
+
+**Debt**: 5min
 
 #### Configuration options:
 
@@ -54,6 +70,10 @@ Reports when very long function names are used.
 
 Reports when very short function names are used.
 
+**Severity**: Style
+
+**Debt**: 5min
+
 #### Configuration options:
 
 * `minimumFunctionNameLength` (default: `3`)
@@ -63,6 +83,10 @@ Reports when very short function names are used.
 ### FunctionNaming
 
 Reports when function names which do not follow the specified naming convention are used.
+
+**Severity**: Style
+
+**Debt**: 5min
 
 #### Configuration options:
 
@@ -86,6 +110,10 @@ The name of the file should describe what the code in the file does.
 Therefore, you should avoid using meaningless words such as "Util" in file names." - Official Kotlin Style Guide
 
 More information at: http://kotlinlang.org/docs/reference/coding-conventions.html
+
+**Severity**: Style
+
+**Debt**: 5min
 
 #### Noncompliant Code:
 
@@ -112,6 +140,10 @@ This rule reports a member that has the same as the containing class or object.
 This might result in confusion.
 The member should either be renamed or changed to a constructor.
 Factory functions that create an instance of the class are exempt from this rule.
+
+**Severity**: Style
+
+**Debt**: 5min
 
 #### Configuration options:
 
@@ -151,15 +183,27 @@ class Manager {
 
 Reports when property names inside objects which do not follow the specified naming convention are used.
 
+**Severity**: Style
+
+**Debt**: 5min
+
 #### Configuration options:
 
 * `propertyPattern` (default: `'[A-Za-z][_A-Za-z0-9]*'`)
 
    naming pattern
 
+* `constantPattern` (default: `'[A-Za-z][_A-Za-z0-9]*'`)
+
+   naming pattern
+
 ### PackageNaming
 
 Reports when package names which do not follow the specified naming convention are used.
+
+**Severity**: Style
+
+**Debt**: 5min
 
 #### Configuration options:
 
@@ -171,23 +215,31 @@ Reports when package names which do not follow the specified naming convention a
 
 Reports when top level constant names which do not follow the specified naming convention are used.
 
+**Severity**: Style
+
+**Debt**: 5min
+
 #### Configuration options:
 
 * `constantPattern` (default: `'[A-Z][_A-Z0-9]*'`)
 
    naming pattern
 
-* `propertyPattern` (default: `'[a-z][A-Za-z\d]*'`)
+* `propertyPattern` (default: `'[A-Za-z][_A-Za-z0-9]*'`)
 
    naming pattern
 
-* `privatePropertyPattern` (default: `'(_)?[a-z][A-Za-z0-9]*'`)
+* `privatePropertyPattern` (default: `'(_)?[A-Za-z][A-Za-z0-9]*'`)
 
    naming pattern
 
 ### VariableMaxLength
 
 Reports when very long variable names are used.
+
+**Severity**: Style
+
+**Debt**: 5min
 
 #### Configuration options:
 
@@ -199,6 +251,10 @@ Reports when very long variable names are used.
 
 Reports when very short variable names are used.
 
+**Severity**: Style
+
+**Debt**: 5min
+
 #### Configuration options:
 
 * `minimumVariableNameLength` (default: `1`)
@@ -208,6 +264,10 @@ Reports when very short variable names are used.
 ### VariableNaming
 
 Reports when variable names which do not follow the specified naming convention are used.
+
+**Severity**: Style
+
+**Debt**: 5min
 
 #### Configuration options:
 

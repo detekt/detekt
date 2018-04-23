@@ -41,6 +41,7 @@ enum class Case(val file: String) {
 	NamingConventions("/cases/NamingConventions.kt"),
 	NewLineAtEndOfFile("/cases/NewLineAtEndOfFile.kt"),
 	MaxLineLength("/cases/MaxLineLength.kt"),
+	MaxLineLengthWithLongComments("/cases/MaxLineLengthWithLongComments.kt"),
 	MemberNameEqualsClassNameNegative("/cases/MemberNameEqualsClassNameNegative.kt"),
 	MemberNameEqualsClassNamePositive("/cases/MemberNameEqualsClassNamePositive.kt"),
 	OverloadedMethods("/cases/OverloadedMethods.kt"),
@@ -77,14 +78,15 @@ enum class Case(val file: String) {
 	TrailingWhitespaceNegative("/cases/TrailingWhitespaceNegative.kt"),
 	TrailingWhitespacePositive("/cases/TrailingWhitespacePositive.kt"),
 	NoTabsNegative("/cases/NoTabsNegative.kt"),
-	NoTabsPositive("/cases/NoTabsPositive.kt");
+	NoTabsPositive("/cases/NoTabsPositive.kt"),
+	UnusedPrivateMemberPositive("/cases/UnusedPrivateMemberPositive.kt"),
+	UnusedPrivateMemberNegative("/cases/UnusedPrivateMemberNegative.kt");
 
 	fun path(): Path = Paths.get(resource(file))
 
 	fun getKtFileContent(): KtFileContent {
 		val file = compileForTest(path())
 		val lines = file.text.splitToSequence("\n")
-		val ktFileContent = KtFileContent(file, lines)
-		return ktFileContent
+		return KtFileContent(file, lines)
 	}
 }

@@ -15,6 +15,10 @@ Flags duplicate case statements in when expressions.
 If a when expression contains the same case statement multiple times they should be merged. Otherwise it might be
 easy to miss one of the cases when reading the code, leading to unwanted side effects.
 
+**Severity**: Warning
+
+**Debt**: 10min
+
 #### Noncompliant Code:
 
 ```kotlin
@@ -42,6 +46,10 @@ Equals methods should always report if some other object is equal to the current
 See the Kotlin documentation for Any.equals(other: Any?):
 https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html
 
+**Severity**: Defect
+
+**Debt**: 20min
+
 #### Noncompliant Code:
 
 ```kotlin
@@ -65,6 +73,10 @@ When a class overrides the equals() method it should also override the hashCode(
 All hash-based collections depend on objects meeting the equals-contract. Two equal objects must produce the
 same hashcode. When inheriting equals or hashcode, override the inherited and call the super method for
 clarification.
+
+**Severity**: Defect
+
+**Debt**: 5min
 
 #### Noncompliant Code:
 
@@ -98,6 +110,10 @@ Reports all calls to explicitly trigger the Garbage Collector.
 Code should work independently of the garbage collector and should not require the GC to be triggered in certain
 points in time.
 
+**Severity**: Defect
+
+**Debt**: 20min
+
 #### Noncompliant Code:
 
 ```kotlin
@@ -111,6 +127,10 @@ System.runFinalization()
 Reports ranges which are empty.
 This might be a bug if it is used for instance as a loop condition. This loop will never be triggered then.
 This might be due to invalid ranges like (10..9) which will cause the loop to never be entered.
+
+**Severity**: Defect
+
+**Debt**: 10min
 
 #### Noncompliant Code:
 
@@ -136,6 +156,10 @@ Verifies implementations of the Iterator interface.
 The hasNext() method of an Iterator implementation should not have any side effects.
 This rule reports implementations that call the next() method of the Iterator inside the hasNext() method.
 
+**Severity**: Defect
+
+**Debt**: 10min
+
 #### Noncompliant Code:
 
 ```kotlin
@@ -154,6 +178,10 @@ implementation of the next() method. When there are no more elements to return a
 NoSuchElementException.
 
 See: https://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html#next()
+
+**Severity**: Defect
+
+**Debt**: 10min
 
 #### Noncompliant Code:
 
@@ -187,6 +215,10 @@ Turn on this rule to flag usages of the lateinit modifier.
 Using lateinit for property initialization can be error prone and the actual initialization is not
 guaranteed. Try using constructor injection or delegation to initialize properties.
 
+**Severity**: Defect
+
+**Debt**: 20min
+
 #### Configuration options:
 
 * `excludeAnnotatedProperties` (default: `""`)
@@ -213,6 +245,10 @@ Reports loops which contain jump statements that jump regardless of any conditio
 This implies that the loop is only executed once and thus could be rewritten without a
 loop altogether.
 
+**Severity**: Defect
+
+**Debt**: 10min
+
 #### Noncompliant Code:
 
 ```kotlin
@@ -232,6 +268,10 @@ for (i in 1..2) {
 Reports unreachable code.
 Code can be unreachable because it is behind return, throw, continue or break expressions.
 This unreachable code should be removed as it serves no purpose.
+
+**Severity**: Warning
+
+**Debt**: 10min
 
 #### Noncompliant Code:
 
@@ -256,6 +296,10 @@ Reports unsafe calls on nullable types. These calls will throw a NullPointerExce
 the nullable value is null. Kotlin provides many ways to work with nullable types to increase
 null safety. Guard the code appropriately to prevent NullPointerExceptions.
 
+**Severity**: Defect
+
+**Debt**: 20min
+
 #### Noncompliant Code:
 
 ```kotlin
@@ -275,6 +319,10 @@ fun foo(str: String?) {
 ### UnsafeCast
 
 Reports casts which are unsafe. In case the cast is not possible it will throw an exception.
+
+**Severity**: Defect
+
+**Debt**: 20min
 
 #### Noncompliant Code:
 
@@ -297,6 +345,10 @@ fun foo(s: Any) {
 This rule reports postfix expressions (++, --) which are unused and thus unnecessary.
 This leads to confusion as a reader of the code might think the value will be incremented/decremented.
 However the value is replaced with the original value which might lead to bugs.
+
+**Severity**: Defect
+
+**Debt**: 20min
 
 #### Noncompliant Code:
 
@@ -334,6 +386,10 @@ fun foo(): Int {
 Reports equals() methods which take in a wrongly typed parameter.
 Correct implementations of the equals() method should only take in a parameter of type Any?
 See: https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/equals.html
+
+**Severity**: Defect
+
+**Debt**: 10min
 
 #### Noncompliant Code:
 
