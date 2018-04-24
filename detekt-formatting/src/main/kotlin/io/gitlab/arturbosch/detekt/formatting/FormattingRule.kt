@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import com.github.shyiko.ktlint.core.EditorConfig
 import com.github.shyiko.ktlint.core.KtLint
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
@@ -32,13 +31,15 @@ abstract class FormattingRule(config: Config) : Rule(config) {
 	protected fun issueFor(description: String) =
 			Issue(javaClass.simpleName, Severity.Style, description, Debt.FIVE_MINS)
 
-	private val isAndroid by lazy { valueOrDefault("android", false) }
+	protected val isAndroid
+		get() = config.valueOrDefault("android", false)
 
 	private var positionByOffset: (offset: Int) -> Pair<Int, Int> by SingleAssign()
 	private var root: KtFile by SingleAssign()
 
 	override fun visit(root: KtFile) {
 		this.root = root
+		root.node.putUserData(KtLint.ANDROID_USER_DATA_KEY, isAndroid)
 		positionByOffset = calculateLineColByOffset(root.text).let {
 			val offsetDueToLineBreakNormalization = calculateLineBreakOffset(root.text)
 			return@let { offset: Int -> it(offset + offsetDueToLineBreakNormalization(offset)) }
@@ -46,10 +47,6 @@ abstract class FormattingRule(config: Config) : Rule(config) {
 	}
 
 	fun apply(node: ASTNode) {
-		if (node is FileASTNode) {
-			node.putUserData(KtLint.EDITOR_CONFIG_USER_DATA_KEY, EditorConfig.fromMap(mapOf()))
-			node.putUserData(KtLint.ANDROID_USER_DATA_KEY, isAndroid)
-		}
 		if (ruleShouldOnlyRunOnFileNode(node)) {
 			return
 		}

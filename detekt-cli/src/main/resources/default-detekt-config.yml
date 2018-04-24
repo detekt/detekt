@@ -208,6 +208,8 @@ formatting:
   Indentation:
     active: true
     autoCorrect: true
+    indentSize: 4
+    continuationIndentSize: 4
   MaxLineLength:
     active: true
     maxLineLength: 120
@@ -255,6 +257,7 @@ formatting:
   ParameterListWrapping:
     active: true
     autoCorrect: true
+    indentSize: 4
   SpacingAroundColon:
     active: true
     autoCorrect: true

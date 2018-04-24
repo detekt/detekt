@@ -24,6 +24,16 @@ See https://ktlint.github.io for documentation.
 
 See https://ktlint.github.io for documentation.
 
+#### Configuration options:
+
+* `indentSize` (default: `4`)
+
+   indentation size
+
+* `continuationIndentSize` (default: `4`)
+
+   continuation indentation size
+
 ### MaxLineLength
 
 This rule reports lines of code which exceed a defined maximum line length.
@@ -125,6 +135,12 @@ See https://ktlint.github.io for documentation.
 ### ParameterListWrapping
 
 See https://ktlint.github.io for documentation.
+
+#### Configuration options:
+
+* `indentSize` (default: `4`)
+
+   indentation size
 
 ### SpacingAroundColon
 
