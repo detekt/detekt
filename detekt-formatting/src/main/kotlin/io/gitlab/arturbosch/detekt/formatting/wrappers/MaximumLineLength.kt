@@ -12,13 +12,13 @@ import org.jetbrains.kotlin.psi.KtFile
 /**
  * See https://ktlint.github.io for documentation.
  *
- * @configuration maxLineLength - maximum line length (default: 120, android: 100)
+ * @configuration maxLineLength - maximum line length (default: 120)
  *
  * @active since v1.0.0
  * @autoCorrect since v1.0.0
  * @author Artur Bosch
  */
-class MaxLineLength(config: Config) : FormattingRule(config) {
+class MaximumLineLength(config: Config) : FormattingRule(config) {
 
 	override val wrapping = MaxLineLengthRule()
 	override val issue = issueFor("Reports lines with exceeded length")
