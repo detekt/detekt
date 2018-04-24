@@ -7,8 +7,8 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.ChainWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FinalNewline
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ImportOrdering
 import io.gitlab.arturbosch.detekt.formatting.wrappers.Indentation
-import io.gitlab.arturbosch.detekt.formatting.wrappers.MaxLineLength
-import io.gitlab.arturbosch.detekt.formatting.wrappers.ModifierOrder
+import io.gitlab.arturbosch.detekt.formatting.wrappers.MaximumLineLength
+import io.gitlab.arturbosch.detekt.formatting.wrappers.ModifierOrdering
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoBlankLineBeforeRbrace
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoConsecutiveBlankLines
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoEmptyClassBody
@@ -44,8 +44,8 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
 			FinalNewline(config),
 			ImportOrdering(config),
 			Indentation(config),
-			MaxLineLength(config),
-			ModifierOrder(config),
+			MaximumLineLength(config),
+			ModifierOrdering(config),
 			NoBlankLineBeforeRbrace(config),
 			NoConsecutiveBlankLines(config),
 			NoEmptyClassBody(config),

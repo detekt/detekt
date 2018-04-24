@@ -210,14 +210,13 @@ formatting:
     autoCorrect: true
     indentSize: 4
     continuationIndentSize: 4
-  MaxLineLength:
+  MaximumLineLength:
     active: true
+    autoCorrect: true
     maxLineLength: 120
-    excludePackageStatements: false
-    excludeImportStatements: false
-    excludeCommentStatements: false
-  ModifierOrder:
+  ModifierOrdering:
     active: true
+    autoCorrect: true
   NoBlankLineBeforeRbrace:
     active: true
     autoCorrect: true

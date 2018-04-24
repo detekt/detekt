@@ -11,7 +11,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  * @autoCorrect since v1.0.0
  * @author Artur Bosch
  */
-class ModifierOrder(config: Config) : FormattingRule(config) {
+class ModifierOrdering(config: Config) : FormattingRule(config) {
 
 	override val wrapping = ModifierOrderRule()
 	override val issue = issueFor("Detects modifiers in non default order")

@@ -34,16 +34,9 @@ See https://ktlint.github.io for documentation.
 
    continuation indentation size
 
-### MaxLineLength
+### MaximumLineLength
 
-This rule reports lines of code which exceed a defined maximum line length.
-
-Long lines might be hard to read on smaller screens or printouts. Additionally having a maximum line length
-in the codebase will help make the code more uniform.
-
-**Severity**: Style
-
-**Debt**: 5min
+See https://ktlint.github.io for documentation.
 
 #### Configuration options:
 
@@ -51,38 +44,9 @@ in the codebase will help make the code more uniform.
 
    maximum line length
 
-* `excludePackageStatements` (default: `false`)
+### ModifierOrdering
 
-   if package statements should be ignored
-
-* `excludeImportStatements` (default: `false`)
-
-   if import statements should be ignored
-
-* `excludeCommentStatements` (default: `false`)
-
-   if comment statements should be ignored
-
-### ModifierOrder
-
-This rule reports cases in the code where modifiers are not in the correct order. The default modifier order is
-taken from: http://kotlinlang.org/docs/reference/coding-conventions.html#modifiers
-
-**Severity**: Style
-
-**Debt**: 5min
-
-#### Noncompliant Code:
-
-```kotlin
-lateinit internal private val str: String
-```
-
-#### Compliant Code:
-
-```kotlin
-private internal lateinit val str: String
-```
+See https://ktlint.github.io for documentation.
 
 ### NoBlankLineBeforeRbrace
 
