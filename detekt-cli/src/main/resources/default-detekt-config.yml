@@ -196,6 +196,8 @@ exceptions:
 
 formatting:
   active: true
+  android: false
+  autoCorrect: true
   ChainWrapping:
     active: true
     autoCorrect: true

@@ -13,12 +13,14 @@ import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
 
 /**
  * @author Marvin Ramin
+ * @author Artur Bosch
  */
 data class RuleSetProvider(
 		val name: String,
 		val description: String,
 		val active: Boolean,
-		val rules: List<String> = listOf()
+		val rules: List<String> = listOf(),
+		val configuration: List<Configuration> = listOf()
 )
 
 class RuleSetProviderCollector : Collector<RuleSetProvider> {
@@ -43,6 +45,7 @@ class RuleSetProviderVisitor : DetektVisitor() {
 	private var description: String = ""
 	private var active: Boolean = false
 	private val ruleNames: MutableList<String> = mutableListOf()
+	private val configuration = mutableListOf<Configuration>()
 
 	fun getRuleSetProvider(): RuleSetProvider {
 		if (name.isEmpty()) {
@@ -53,7 +56,7 @@ class RuleSetProviderVisitor : DetektVisitor() {
 			throw InvalidDocumentationException("Missing description for RuleSet $name.")
 		}
 
-		return RuleSetProvider(name, description, active, ruleNames)
+		return RuleSetProvider(name, description, active, ruleNames, configuration)
 	}
 
 	override fun visitSuperTypeList(list: KtSuperTypeList) {
@@ -66,6 +69,7 @@ class RuleSetProviderVisitor : DetektVisitor() {
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
 		description = classOrObject.docComment?.getDefaultSection()?.getContent()?.trim() ?: ""
 		active = classOrObject.docComment?.getDefaultSection()?.findTagByName(TAG_ACTIVE) != null
+		configuration.addAll(classOrObject.parseConfigurationTags())
 		super.visitClassOrObject(classOrObject)
 	}
 
