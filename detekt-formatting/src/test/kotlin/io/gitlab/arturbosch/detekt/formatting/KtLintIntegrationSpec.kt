@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileForTest
 import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
@@ -19,7 +20,8 @@ class KtLintIntegrationSpec : Spek({
 
 		it("should work like KtLint") {
 			val fileBefore = compileForTest(Paths.get(resource("before.kt")))
-			val expected = File(resource("after.kt")).readText()
+			val expected = StringUtilRt.convertLineSeparators(
+					File(resource("after.kt")).readText())
 
 			val ruleSet = FormattingProvider()
 					.instance(TestConfig(mapOf("autoCorrect" to "true")))
