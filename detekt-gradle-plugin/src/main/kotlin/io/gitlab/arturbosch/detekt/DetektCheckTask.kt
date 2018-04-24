@@ -46,9 +46,9 @@ open class DetektCheckTask : DefaultTask() {
 		val detektExtension = project.extensions.getByName("detekt") as DetektExtension
 
 		project.javaexec {
-			it.main = "io.gitlab.arturbosch.detekt.cli.Main"
-			it.classpath = classpath
-			it.args(detektExtension.resolveArguments(project))
+			main = "io.gitlab.arturbosch.detekt.cli.Main"
+			classpath = classpath
+			args(detektExtension.resolveArguments(project))
 		}
 	}
 }

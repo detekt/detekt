@@ -41,7 +41,7 @@ open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 		.configurations
 		.getByName("detekt")
 		.withDependencies {
-			it.add(
+			add(
 				DefaultExternalModuleDependency(
 					"io.gitlab.arturbosch.detekt", "detekt-cli", version
 				)
