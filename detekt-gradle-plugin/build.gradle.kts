@@ -3,16 +3,16 @@ plugins {
 	id("com.gradle.plugin-publish")
 }
 
-val detektGradleVersion by project
+val detektGradleVersion: String by project
 
 version = "$detektGradleVersion"
 
 configurations.implementation.extendsFrom(configurations.kotlinImplementation)
 configurations.testImplementation.extendsFrom(configurations.kotlinTest)
 
-val jcommanderVersion by project
-val spekVersion by project
-val junitPlatformVersion by project
+val jcommanderVersion: String by project
+val spekVersion: String by project
+val junitPlatformVersion: String by project
 
 dependencies {
 	implementation(gradleApi())
