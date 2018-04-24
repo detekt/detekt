@@ -2,12 +2,11 @@ package io.gitlab.arturbosch.detekt.cli
 
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.ParameterException
-import kotlin.reflect.full.primaryConstructor
 
 val jCommander = JCommander()
 
 inline fun <reified T : Args> parseArguments(args: Array<String>): T {
-	val cli = T::class.primaryConstructor?.call()
+	val cli = T::class.java.declaredConstructors.firstOrNull()?.newInstance() as? T
 			?: throw IllegalStateException("Could not create Args object for class ${T::class.java}")
 
 	jCommander.addObject(cli)
