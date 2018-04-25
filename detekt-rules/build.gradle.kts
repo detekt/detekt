@@ -7,8 +7,8 @@ tasks {
 	}
 }
 
-val junitPlatformVersion by project
-val spekVersion by project
+val junitPlatformVersion: String by project
+val spekVersion: String by project
 
 dependencies {
 	implementation(project(":detekt-api"))

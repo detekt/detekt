@@ -14,9 +14,9 @@ buildscript {
 		mavenLocal()
 	}
 
-	val kotlinVersion by project
-	val junitPlatformVersion by project
-	val usedDetektGradleVersion by project
+	val kotlinVersion: String by project
+	val junitPlatformVersion: String by project
+	val usedDetektGradleVersion: String by project
 
 	dependencies {
 		classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
@@ -42,7 +42,7 @@ tasks.withType<Wrapper> {
 	distributionType = Wrapper.DistributionType.ALL
 }
 
-val detektVersion by project
+val detektVersion: String by project
 
 allprojects {
 	group = "io.gitlab.arturbosch.detekt"
@@ -106,10 +106,11 @@ subprojects {
 		})
 	}
 
+	val javaConvention = the<JavaPluginConvention>()
 	val sourcesJar by tasks.creating(Jar::class) {
 		dependsOn("classes")
 		classifier = "sources"
-		from(the<JavaPluginConvention>().sourceSets["main"].allSource)
+		from(javaConvention.sourceSets["main"].allSource)
 	}
 
 	artifacts {
@@ -146,11 +147,11 @@ subprojects {
 		}
 	}
 
-	val kotlinVersion by project
-	val junitEngineVersion by project
-	val junitPlatformVersion by project
-	val assertjVersion by project
-	val spekVersion by project
+	val kotlinVersion: String by project
+	val junitEngineVersion: String by project
+	val junitPlatformVersion: String by project
+	val assertjVersion: String by project
+	val spekVersion: String by project
 	val kotlinImplementation by configurations.creating
 	val kotlinTest by configurations.creating
 	val junitPlatform = configurations["junitPlatform"]
@@ -182,7 +183,7 @@ subprojects {
 
 val userHome: String = System.getProperty("user.home")
 
-val usedDetektVersion by project
+val usedDetektVersion: String by project
 
 configure<DetektExtension>{
 

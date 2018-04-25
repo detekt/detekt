@@ -1,7 +1,5 @@
 package io.gitlab.arturbosch.detekt.api
 
-import kotlin.reflect.full.memberProperties
-
 /**
  * Base interface of detection findings. Inherits a bunch of useful behaviour
  * from sub interfaces.
@@ -11,7 +9,7 @@ import kotlin.reflect.full.memberProperties
  *
  * @author Artur Bosch
  */
-interface Finding : Compactable, Reflective, HasEntity, HasMetrics {
+interface Finding : Compactable, HasEntity, HasMetrics {
 	val id: String
 	val issue: Issue
 	val references: List<Entity>
@@ -49,13 +47,6 @@ interface HasEntity {
 interface HasMetrics {
 	val metrics: List<Metric>
 	fun metricByType(type: String): Metric? = metrics.find { it.type == type }
-}
-
-/**
- * Allows to iterate over attributes reflectively.
- */
-interface Reflective {
-	fun findAttribute(name: String): Any? = this.javaClass.kotlin.memberProperties.find { it.name == name }?.get(this)
 }
 
 /**
