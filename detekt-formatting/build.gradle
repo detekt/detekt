@@ -8,10 +8,10 @@ configurations {
 
 dependencies {
 	compileOnly project(':detekt-api')
-	compile("com.github.shyiko.ktlint:ktlint-ruleset-standard:0.21.0") {
+	compile("com.github.shyiko.ktlint:ktlint-ruleset-standard:$ktlintVersion") {
 		exclude group: "org.jetbrains.kotlin"
 	}
-	compile("com.github.shyiko.ktlint:ktlint-core:0.21.0") {
+	compile("com.github.shyiko.ktlint:ktlint-core:$ktlintVersion") {
 		exclude group: "org.jetbrains.kotlin"
 	}
 
