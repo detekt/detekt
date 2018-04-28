@@ -2,18 +2,21 @@ package io.gitlab.arturbosch.detekt.core
 
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
-import java.util.concurrent.Executors
+import java.util.concurrent.ForkJoinPool
 import java.util.function.Supplier
 
 /**
  * @author Artur Bosch
  */
 
-fun <T> withExecutor(block: Executor.() -> T): T {
-	val executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors())
-	return block.invoke(executor).apply {
-		executor.shutdown()
+fun <T> withExecutor(executor: Executor? = null, block: Executor.() -> T): T {
+	if (executor == null) {
+		val defaultExecutor = ForkJoinPool.commonPool()
+		return block.invoke(defaultExecutor).apply {
+			defaultExecutor.shutdown()
+		}
 	}
+	return block.invoke(executor)
 }
 
 fun <T> Executor.runAsync(block: () -> T): CompletableFuture<T> {
