@@ -15,7 +15,6 @@ import org.jetbrains.kotlin.psi.KtFile
  * @configuration maxLineLength - maximum line length (default: 120)
  *
  * @active since v1.0.0
- * @autoCorrect since v1.0.0
  * @author Artur Bosch
  */
 class MaximumLineLength(config: Config) : FormattingRule(config) {
