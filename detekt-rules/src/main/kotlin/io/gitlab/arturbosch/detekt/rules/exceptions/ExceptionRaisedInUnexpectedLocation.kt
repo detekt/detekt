@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
 
 /**
  * This rule allows to define functions which should never throw an exception. If a function exists that does throw
- * an exception it will be reported. By default this rule is checking for `toString`, `hashCode, `equals` and
+ * an exception it will be reported. By default this rule is checking for `toString`, `hashCode`, `equals` and
  * `finalize`. This rule is configurable via the `methodNames` configuration to change the list of functions which
  * should not throw any exceptions.
  *
