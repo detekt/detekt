@@ -214,7 +214,6 @@ formatting:
     continuationIndentSize: 4
   MaximumLineLength:
     active: true
-    autoCorrect: true
     maxLineLength: 120
   ModifierOrdering:
     active: true
@@ -230,7 +229,6 @@ formatting:
     autoCorrect: true
   NoItParamInMultilineLambda:
     active: true
-    autoCorrect: true
   NoLineBreakAfterElse:
     active: true
     autoCorrect: true

@@ -183,7 +183,7 @@ val userHome: String = System.getProperty("user.home")
 
 val usedDetektVersion by project
 
-configure<DetektExtension>{
+configure<DetektExtension> {
 
 	debug = true
 	version = "$usedDetektVersion"
