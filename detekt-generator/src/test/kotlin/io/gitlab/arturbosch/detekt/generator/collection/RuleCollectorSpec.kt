@@ -167,22 +167,33 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 			assertThat(items[0].active).isFalse()
 		}
 
-		it("is active and auto-correctable if tags are present") {
-			val name = "SomeRandomClass"
-			val description = "some description"
+		it("is active tag is present") {
 			val code = """
 				package foo
 
 				/**
-				 * $description
+				 * some description
 				 * @active
-				 * @autoCorrect
 				 */
-				class $name: Rule {
+				class SomeRandomClass: Rule {
 				}
 			"""
 			val items = subject.run(code)
 			assertThat(items[0].active).isTrue()
+		}
+
+		it("is auto-correctable tag is present") {
+			val code = """
+				package foo
+
+				/**
+				 * some description
+				 * @autoCorrect
+				 */
+				class SomeRandomClass: Rule {
+				}
+			"""
+			val items = subject.run(code)
 			assertThat(items[0].autoCorrect).isTrue()
 		}
 

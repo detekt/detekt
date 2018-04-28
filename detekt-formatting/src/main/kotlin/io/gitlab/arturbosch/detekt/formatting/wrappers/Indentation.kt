@@ -10,7 +10,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 import org.jetbrains.kotlin.psi.KtFile
 
 /**
- * See https://ktlint.github.io for documentation.
+ * See https://ktlint.github.io/#rule-indentation for documentation.
  *
  * @configuration indentSize - indentation size (default: 4)
  * @configuration continuationIndentSize - continuation indentation size (default: 4)
