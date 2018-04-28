@@ -8,7 +8,6 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  * See https://ktlint.github.io for documentation.
  *
  * @active since v1.0.0
- * @autoCorrect since v1.0.0
  * @author Artur Bosch
  */
 class NoItParamInMultilineLambda(config: Config) : FormattingRule(config) {
