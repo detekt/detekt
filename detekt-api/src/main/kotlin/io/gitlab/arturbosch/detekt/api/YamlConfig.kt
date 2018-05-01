@@ -25,6 +25,10 @@ class YamlConfig internal constructor(val properties: Map<String, Any>) : BaseCo
 		return valueOrDefaultInternal(result, default) as T
 	}
 
+	override fun <T : Any> valueOrNull(key: String): T? {
+		return properties[key] as? T?
+	}
+
 	override fun toString(): String {
 		return "YamlConfig(properties=$properties)"
 	}
