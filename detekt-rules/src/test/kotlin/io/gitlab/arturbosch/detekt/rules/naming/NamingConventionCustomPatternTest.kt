@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
-import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
@@ -9,8 +8,8 @@ import org.junit.jupiter.api.Test
 class NamingConventionCustomPatternTest {
 
 	private val configCustomRules =
-			object : Config {
-				override fun subConfig(key: String): Config = Config.empty
+			object : TestConfig() {
+				override fun subConfig(key: String): TestConfig = this
 
 				@Suppress("UNCHECKED_CAST")
 				override fun <T : Any> valueOrDefault(key: String, default: T): T =
@@ -25,8 +24,8 @@ class NamingConventionCustomPatternTest {
 							else -> default
 						}
 			}
-	private val config = object : Config {
-		override fun subConfig(key: String): Config =
+	private val config = object : TestConfig() {
+		override fun subConfig(key: String): TestConfig =
 				when (key) {
 					FunctionNaming::class.simpleName -> configCustomRules
 					FunctionMaxLength::class.simpleName -> configCustomRules
@@ -35,7 +34,7 @@ class NamingConventionCustomPatternTest {
 					TopLevelPropertyNaming::class.simpleName -> configCustomRules
 					EnumNaming::class.simpleName -> configCustomRules
 					PackageNaming::class.simpleName -> configCustomRules
-					else -> Config.empty
+					else -> this
 				}
 
 		override fun <T : Any> valueOrDefault(key: String, default: T): T = default

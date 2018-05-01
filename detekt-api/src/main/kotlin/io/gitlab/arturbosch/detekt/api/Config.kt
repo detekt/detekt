@@ -13,10 +13,16 @@ interface Config {
 	fun subConfig(key: String): Config
 
 	/**
-	 * Retrieves a sub configuration of value based on given key. If configuration property cannot be found
+	 * Retrieves a sub configuration or value based on given key. If configuration property cannot be found
 	 * the specified default value is returned.
 	 */
 	fun <T : Any> valueOrDefault(key: String, default: T): T
+
+	/**
+	 * Retrieves a sub configuration or value based on given key.
+	 * If the configuration property cannot be found, null is returned.
+	 */
+	fun <T : Any> valueOrNull(key: String): T?
 
 	/**
 	 * Is thrown when loading a configuration results in errors.
@@ -25,6 +31,7 @@ interface Config {
 			" Structure must be from type Map<String,Any>!") : RuntimeException(msg)
 
 	companion object {
+
 		/**
 		 * An empty configuration with no properties.
 		 * This config should only be used in test cases.
@@ -38,6 +45,8 @@ interface Config {
  * NOP-implementation of a config object.
  */
 internal object EmptyConfig : Config {
+	override fun <T : Any> valueOrNull(key: String): T? = null
+
 	override fun subConfig(key: String) = this
 	@Suppress("UNCHECKED_CAST")
 	override fun <T : Any> valueOrDefault(key: String, default: T): T = when (key) {

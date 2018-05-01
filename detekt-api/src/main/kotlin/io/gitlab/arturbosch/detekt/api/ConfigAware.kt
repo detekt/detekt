@@ -46,4 +46,7 @@ interface ConfigAware : Config {
 
 	override fun <T : Any> valueOrDefault(key: String, default: T) =
 			config.subConfig(id).valueOrDefault(key, default)
+
+	override fun <T : Any> valueOrNull(key: String): T? =
+			config.subConfig(id).valueOrNull(key)
 }

@@ -19,6 +19,9 @@ style:
     active: true
   NoElseInWhenExpression:
     active: true
+  MagicNumber:
+    active: true
+    ignoreNumbers: '-1,0,1,2'
 
 comments:
   active: false
