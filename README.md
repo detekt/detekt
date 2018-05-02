@@ -104,6 +104,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Misa Torres](https://github.com/misaelmt) - Added: TrailingWhitespace and NoTabs rules
 - [R.A. Porter](https://github.com/coyotesqrl) - Updated Readme links to RuleSets
 - [Robbin Voortman](https://github.com/rvoortman) - Rule improvement: MaxLineLength
+- [Mike Gorunov](http://github.com/Miha-x64/) — Rule improvement: UndocumentedPublicFunction
 
 ### Mentions
 
