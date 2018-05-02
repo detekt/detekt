@@ -26,4 +26,24 @@ open class Comments<T : K, out K> : Serializable {
 
 }
 
+internal class NoComments {
+
+	fun nope0() {}
+	public fun nope1() {}
+	internal fun nope2() {}
+	protected fun nope3() {}
+	private fun nope4() {}
+
+}
+
+private class NoCommentsPlease {
+
+	fun nope0() {}
+	public fun nope1() {}
+	internal fun nope2() {}
+	protected fun nope3() {}
+	private fun nope4() {}
+
+}
+
 object MissMyDocObject
