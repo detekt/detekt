@@ -9,6 +9,8 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isPublicNotOverridden
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.psiUtil.containingClass
+import org.jetbrains.kotlin.psi.psiUtil.isPublic
 
 /**
  * This rule will report any public function which does not have the required documentation.
@@ -26,20 +28,21 @@ class UndocumentedPublicFunction(config: Config = Config.empty) : Rule(config) {
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		if (function.funKeyword == null && function.isLocal) return
 
-		val modifierList = function.modifierList
-		if (function.docComment == null) {
-			if (modifierList == null) {
-				report(CodeSmell(issue, methodHeaderLocation(function), "The function ${function.nameAsSafeName}" +
-						" is missing documentation."))
-			}
-			if (modifierList != null) {
-				if (function.isPublicNotOverridden()) {
-					report(CodeSmell(issue, methodHeaderLocation(function), "The function ${function.nameAsSafeName}" +
-							" is missing documentation."))
-				}
-			}
+		if (function.docComment == null && function.shouldBeDocumented()) {
+				report(CodeSmell(issue, methodHeaderLocation(function),
+						"The function ${function.nameAsSafeName} is missing documentation."))
 		}
 	}
+
+	/**
+	 * A function should be documented when it is not overridden,
+	 * and both the function and a class containing it are public.
+	 */
+	private fun KtNamedFunction.shouldBeDocumented(): Boolean =
+			isContainingClassPublic() && (modifierList == null || isPublicNotOverridden())
+
+	private fun KtNamedFunction.isContainingClassPublic(): Boolean =
+			containingClass().let { it == null || it.isPublic }
 
 	private fun methodHeaderLocation(function: KtNamedFunction) = Entity.from(function)
 
