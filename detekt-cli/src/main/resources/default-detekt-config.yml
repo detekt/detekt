@@ -201,6 +201,11 @@ formatting:
   ChainWrapping:
     active: true
     autoCorrect: true
+  CommentSpacing:
+    active: true
+    autoCorrect: true
+  Filename:
+    active: true
   FinalNewline:
     active: true
     autoCorrect: true
