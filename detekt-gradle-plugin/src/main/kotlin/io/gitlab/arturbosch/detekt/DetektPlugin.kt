@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.artifacts.Configuration
+import org.gradle.api.file.RegularFile
 import org.gradle.api.internal.artifacts.dependencies.DefaultExternalModuleDependency
 import org.gradle.api.plugins.quality.CodeQualityExtension
 import org.gradle.api.plugins.quality.internal.AbstractCodeQualityPlugin
@@ -25,12 +26,11 @@ class DetektPlugin : AbstractCodeQualityPlugin<Detekt>() {
 	override fun getTaskType() = Detekt::class.java
 
 	override fun createExtension(): CodeQualityExtension {
-		val extension = project.extensions.create(DETEKT, DetektExtension::class.java, project, project.objects, project.layout)
+		println("CreateExtension")
+		val extension = project.extensions.create(DETEKT, DetektExtension::class.java, project, project.layout)
 		extension.toolVersion = System.getProperty("detektVersion")
-		extension.configDir.set(project.rootProject.file("detekt-cli/src/main/resources/"))
-		extension.config.set(project.resources.text.fromFile {
-			File(extension.configDir.get().asFile, "default-detekt-config.yml")
-		})
+		extension.configDir = RegularFile { project.rootProject.file("detekt-cli/src/main/resources/") }
+		extension.config = project.resources.text.fromFile { File(extension.configDir.asFile, "default-detekt-config.yml") }
 
 		generateConfigTask = project.tasks.create(GENERATE_CONFIG, DetektGenerateConfigTask::class.java)
 		createBaselineTask = project.tasks.create(BASELINE, DetektCreateBaselineTask::class.java)
@@ -59,13 +59,13 @@ class DetektPlugin : AbstractCodeQualityPlugin<Detekt>() {
 	}
 
 	private fun configureTask(task: Detekt) {
-		task.config.set(detektExtension.config)
-		task.filters.set(detektExtension.filters)
-		task.baseline.set(detektExtension.baseline)
-		task.debug.set(detektExtension.debug)
-		task.parallel.set(detektExtension.parallel)
-		task.plugins.set(detektExtension.plugins)
-		task.disableDefaultRuleSets.set(detektExtension.disableDefaultRuleSets)
+		task.config = detektExtension.config
+		task.filters = detektExtension.filters
+		task.baseline = detektExtension.baseline
+		task.debug = detektExtension.debug
+		task.parallel = detektExtension.parallel
+		task.plugins = detektExtension.plugins
+		task.disableDefaultRuleSets = detektExtension.disableDefaultRuleSets
 	}
 
 	private fun configureReportsConventionMapping(task: Detekt, baseName: String) {

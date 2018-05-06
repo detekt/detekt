@@ -27,7 +27,7 @@ open class DetektIdeaInspectionTask : DefaultTask() {
 			throw GradleException("idea extension is not defined. It is required to run detekt idea tasks.")
 		}
 
-		if (detekt.debug.get()) Log.info("$ideaExtension")
+		if (detekt.debug == true) Log.info("$ideaExtension")
 		ProcessExecutor.startProcess(ideaExtension!!.formatArgs(detekt.source.asFileTree.asPath))
 	}
 }

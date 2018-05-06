@@ -59,18 +59,18 @@ object DetektInvoker {
 				INPUT_PARAMETER to detekt.source.asFileTree.asPath
 		)
 
-		detekt.config.orNull?.let { args += CONFIG_PARAMETER to it.asFile().absolutePath }
-		detekt.filters.orNull?.let { args += FILTERS_PARAMETER to it }
-		detekt.plugins.orNull?.let { args += PLUGINS_PARAMETER to it }
-		detekt.baseline.orNull?.let { args += BASELINE_PARAMETER to it.asFile.absolutePath }
+		detekt.config?.let { args += CONFIG_PARAMETER to it.asFile().absolutePath }
+		detekt.filters?.let { args += FILTERS_PARAMETER to it }
+		detekt.plugins?.let { args += PLUGINS_PARAMETER to it }
+		detekt.baseline?.let { args += BASELINE_PARAMETER to it.asFile.absolutePath }
 
 		if (detekt.reports.html.isEnabled) args += REPORT_HTML_PARAMETER to detekt.reports.html.destination.absolutePath
 		if (detekt.reports.xml.isEnabled) args += REPORT_XML_PARAMETER to detekt.reports.xml.destination.absolutePath
 
 		val argumentList = args.flatMapTo(ArrayList()) { listOf(it.key, it.value) }
-		if (detekt.debug.get()) argumentList += DEBUG_PARAMETER
-		if (detekt.parallel.get()) argumentList += PARALLEL_PARAMETER
-		if (detekt.disableDefaultRuleSets.get()) argumentList += DISABLE_DEFAULT_RULESETS_PARAMETER
+		if (detekt.debug == true) argumentList += DEBUG_PARAMETER
+		if (detekt.parallel == true) argumentList += PARALLEL_PARAMETER
+		if (detekt.disableDefaultRuleSets == true) argumentList += DISABLE_DEFAULT_RULESETS_PARAMETER
 
 		return argumentList
 	}

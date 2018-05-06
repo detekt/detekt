@@ -4,7 +4,6 @@ include("detekt-api",
 		"detekt-rules",
 		"detekt-cli",
 		"detekt-test",
-		"detekt-sample-extensions",
 		"detekt-gradle-plugin",
 		"detekt-generator",
 		"detekt-watch-service")

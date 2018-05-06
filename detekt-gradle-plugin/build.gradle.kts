@@ -1,6 +1,9 @@
+import org.jetbrains.kotlin.serialization.js.DynamicTypeDeserializer.id
+
 plugins {
 	`java-gradle-plugin`
 	id("com.gradle.plugin-publish")
+	id("org.gradle.kotlin.kotlin-dsl")
 }
 
 val detektGradleVersion: String by project
