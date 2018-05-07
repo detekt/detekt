@@ -15,7 +15,7 @@ class EqualsWithHashCodeExistSpec : SubjectSpek<EqualsWithHashCodeExist>({
 
 	given("some classes with equals() and hashCode() functions") {
 
-		it("reports equals() without hashCode() function") {
+		it("reports hashCode() without equals() function") {
 			val code = """
 				class A {
 					override fun hashCode(): Int { return super.hashCode() }
