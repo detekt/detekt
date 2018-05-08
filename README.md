@@ -7,7 +7,7 @@
 [ ![Download](https://api.bintray.com/packages/arturbosch/code-analysis/detekt/images/download.svg) ](https://bintray.com/arturbosch/code-analysis/detekt/_latestVersion)
 [![gradle plugin](https://img.shields.io/badge/gradle_plugin-1.0.0.RC6.4-blue.svg?style=flat-square)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-43-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-44-orange.svg?style=flat-square)](#contributors)
 [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
 
 Meet _detekt_, a static code analysis tool for the _Kotlin_ programming language.
@@ -29,6 +29,8 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 - [gradle plugin](#gradleplugin) for code analysis via Gradle builds
 - [sonarqube integration](https://github.com/arturbosch/sonar-kotlin)
 - [intellij integration](https://github.com/arturbosch/detekt-intellij-plugin)
+
+### Project Website
 
 Visit https://arturbosch.github.io/detekt/ for installation guides, rule descriptions and configuration options.
 
