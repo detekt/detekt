@@ -23,7 +23,9 @@ summary:
 - gradle tasks to use local `intellij` distribution for [formatting and inspecting](#idea) kotlin code
 - optionally configure detekt for each sub module by using [profiles](#closure) (gradle-plugin)
 - [sonarqube integration](https://github.com/arturbosch/sonar-kotlin)
-- **NEW** extensible by own rule sets and `FileProcessListener's`
+- extensible by own rule sets and `FileProcessListener's`
+- [intellij integration](https://github.com/arturbosch/detekt-intellij-plugin)
+- unofficial [maven plugin](https://github.com/Ozsie/detekt-maven-plugin) by the user [Ozsie](https://github.com/Ozsie)
 
 ### Quick Start with Gradle
 
