@@ -25,7 +25,7 @@ class Parameters {
 	fun extractWatchDirectory(): Path {
 		return input?.apply {
 			require(Files.isDirectory(input)) {
-				"Make sure that given path must exist and be a directory with kotlin files to watch."
+				"Make sure that the given path is an existing directory with kotlin files to watch."
 			}
 		} ?: Paths.get(".")
 
