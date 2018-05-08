@@ -5,9 +5,9 @@ import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
-import sun.reflect.generics.reflectiveObjects.NotImplementedException
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
+import java.lang.UnsupportedOperationException
 import java.nio.file.Paths
 import java.nio.file.WatchEvent.Kind
 
@@ -29,7 +29,7 @@ class DetektServiceSpec : Spek({
 			val path = Paths.get(resource("Default.kt"))
 			val service = DetektService(Parameters())
 			val mock = object : Kind<String> {
-				override fun type(): Class<String> = throw NotImplementedException()
+				override fun type(): Class<String> = throw UnsupportedOperationException()
 				override fun name(): String = ""
 			}
 			val dir = WatchedDir(true, path, listOf(PathEvent(path, mock)))

@@ -128,6 +128,7 @@ Integrations:
 - [sputnik is a free tool for static code review and provides support for detekt](https://github.com/TouK/sputnik)
 - [Codacy](https://www.codacy.com)
 - [Novoda Gradle Static Analysis plugin](https://github.com/novoda/gradle-static-analysis-plugin)
+- [Maven plugin that wraps the Detekt CLI](https://github.com/Ozsie/detekt-maven-plugin)
 
 #### Credits
 - [JetBrains](https://github.com/jetbrains/) - Creating Intellij + Kotlin
