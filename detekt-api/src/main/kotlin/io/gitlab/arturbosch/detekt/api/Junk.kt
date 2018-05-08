@@ -16,11 +16,6 @@ internal fun validateIdentifier(id: String) {
 	require(id.matches(identifierRegex), { "id must match [aA-zZ]+([-][aA-zZ]+)*" })
 }
 
-internal fun ASTNode.visitTokens(currentNode: (node: ASTNode) -> Unit) {
-	currentNode(this)
-	getChildren(null).forEach { it.visitTokens(currentNode) }
-}
-
 /**
  * Tests if this element is part of given PsiElement.
  */
