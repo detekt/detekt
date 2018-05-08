@@ -18,6 +18,7 @@ test-pattern: # Configure exclusions for test sources
     - 'StringLiteralDuplication'
     - 'SpreadOperator'
     - 'TooManyFunctions'
+    - 'ForEachOnRange'
 
 build:
   maxIssues: 10
