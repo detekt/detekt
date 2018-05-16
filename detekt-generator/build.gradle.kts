@@ -33,7 +33,8 @@ val generateDocumentation by tasks.creating {
             args = listOf(
                     "${rootProject.rootDir}/detekt-generator/build/libs/detekt-generator-$detektVersion-all.jar",
                     "--input",
-                    "${rootProject.rootDir}/detekt-rules/src/main/kotlin",
+                    "${rootProject.rootDir}/detekt-rules/src/main/kotlin" + "," +
+                            "${rootProject.rootDir}/detekt-formatting/src/main/kotlin",
                     "--documentation",
                     "${rootProject.rootDir}/docs/pages/documentation",
                     "--config",
@@ -84,8 +85,10 @@ val spekVersion: String by project
 val jcommanderVersion: String by project
 
 dependencies {
+    implementation(project(":detekt-cli"))
     implementation(project(":detekt-core"))
     implementation(project(":detekt-rules"))
+    implementation(project(":detekt-formatting"))
     implementation("com.beust:jcommander:$jcommanderVersion")
     implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion")
     implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")

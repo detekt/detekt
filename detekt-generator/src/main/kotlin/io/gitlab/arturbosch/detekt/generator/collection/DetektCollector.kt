@@ -26,9 +26,9 @@ class DetektCollector : Collector<RuleSetPage> {
 		val ruleSets = ruleSetProviderCollector.items
 
 		return ruleSets.map { ruleSet ->
-			val consolidatedRules = ruleSet.rules.flatMap { ruleName ->
-				multiRules[ruleName] ?: listOf(ruleName)
-			}.map { rules.findRuleByName(it) }
+			val consolidatedRules = ruleSet.rules
+					.flatMap { ruleName -> multiRules[ruleName] ?: listOf(ruleName) }
+					.map { rules.findRuleByName(it) }
 					.sortedBy { rule -> rule.name }
 
 			consolidatedRules.resolveParentRule(rules)
@@ -37,16 +37,12 @@ class DetektCollector : Collector<RuleSetPage> {
 	}
 
 	private fun List<Rule>.findRuleByName(ruleName: String): Rule {
-		val rule = this.find { it.name == ruleName }
-		if (rule == null) {
-			throw InvalidDocumentationException("Rule $ruleName was specified in a provider but it was not defined.")
-		}
-		return rule
+		return find { it.name == ruleName }
+				?: throw InvalidDocumentationException("Rule $ruleName was specified in a provider but it was not defined.")
 	}
 
 	private fun List<Rule>.resolveParentRule(rules: List<Rule>) {
-		this
-				.filter { it.debt.isEmpty() && it.severity.isEmpty() }
+		this.filter { it.debt.isEmpty() && it.severity.isEmpty() }
 				.forEach {
 					val parentRule = rules.findRuleByName(it.parent)
 					it.debt = parentRule.debt

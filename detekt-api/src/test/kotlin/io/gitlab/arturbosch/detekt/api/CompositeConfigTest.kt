@@ -15,9 +15,10 @@ class CompositeConfigTest : Spek({
 		val first = yamlConfig("detekt.yml")
 		val compositeConfig = CompositeConfig(second, first)
 
-		it("should have style sub config with active false which is overriden in `second` config") {
+		it("should have style sub config with active false which is overridden in `second` config regardless of default value") {
 			val styleConfig = compositeConfig.subConfig("style").subConfig("WildcardImport")
 			assertThat(styleConfig.valueOrDefault("active", true)).isEqualTo(false)
+			assertThat(styleConfig.valueOrDefault("active", false)).isEqualTo(false)
 		}
 
 		it("should have code smell sub config with LongMethod threshold 20 from `first` config") {
@@ -27,6 +28,12 @@ class CompositeConfigTest : Spek({
 
 		it("should use the default as both part configurations do not have the value") {
 			assertThat(compositeConfig.valueOrDefault("TEST", 42)).isEqualTo(42)
+		}
+
+		it("should return a string based on default value") {
+			val config = compositeConfig.subConfig("style").subConfig("MagicNumber")
+			val value = config.valueOrDefault("ignoreNumbers", "-1,0,1,2")
+			assertThat(value).isEqualTo("-1,0,1,2,100,1000")
 		}
 	}
 })

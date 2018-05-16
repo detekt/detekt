@@ -13,7 +13,7 @@ import java.io.File
  * @author Artur Bosch
  * @author Marvin Ramin
  */
-class OutputFacade(private val arguments: Args,
+class OutputFacade(private val arguments: CliArgs,
 				   private val detektion: Detektion,
 				   private val settings: ProcessingSettings) {
 

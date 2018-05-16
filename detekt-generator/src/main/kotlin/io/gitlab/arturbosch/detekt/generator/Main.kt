@@ -2,12 +2,15 @@
 
 package io.gitlab.arturbosch.detekt.generator
 
+import io.gitlab.arturbosch.detekt.cli.failWithErrorMessages
+import io.gitlab.arturbosch.detekt.cli.parseArguments
 import io.gitlab.arturbosch.detekt.core.isFile
 import org.jetbrains.kotlin.utils.addToStdlib.ifNotEmpty
 import java.nio.file.Files
 
 /**
  * @author Marvin Ramin
+ * @author Artur Bosch
  */
 fun main(args: Array<String>) {
 	val arguments = parseArgumentsCheckingReportDirectory(args)
@@ -15,8 +18,8 @@ fun main(args: Array<String>) {
 	executable.execute()
 }
 
-private fun parseArgumentsCheckingReportDirectory(args: Array<String>): Args {
-	val arguments = parseArguments(args)
+private fun parseArgumentsCheckingReportDirectory(args: Array<String>): GeneratorArgs {
+	val arguments = parseArguments<GeneratorArgs>(args)
 	val messages = validateCli(arguments)
 	messages.ifNotEmpty {
 		failWithErrorMessages(messages)
@@ -24,7 +27,7 @@ private fun parseArgumentsCheckingReportDirectory(args: Array<String>): Args {
 	return arguments
 }
 
-private fun validateCli(arguments: Args): List<String> {
+private fun validateCli(arguments: GeneratorArgs): List<String> {
 	val violations = ArrayList<String>()
 	with(arguments) {
 		if (Files.exists(documentationPath) && documentationPath.isFile()) {
@@ -34,10 +37,7 @@ private fun validateCli(arguments: Args): List<String> {
 		if (Files.exists(configPath) && configPath.isFile()) {
 			violations += "Config path must be a directory."
 		}
-
-		if (!Files.exists(inputPath) || inputPath.isFile()) {
-			violations += "Input path must exist"
-		}
+		// input paths are validated by MultipleExistingPathConverter
 	}
 	return violations
 }

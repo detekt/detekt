@@ -3,8 +3,8 @@ package io.gitlab.arturbosch.detekt.generator.collection
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
+import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 import io.gitlab.arturbosch.detekt.rules.empty.EmptyRule
-import org.jetbrains.kotlin.kdoc.psi.impl.KDocSection
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -14,6 +14,10 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.getSuperNames
 import java.lang.reflect.Modifier
 
+/**
+ * @author Marvin Ramin
+ * @author Artur Bosch
+ */
 internal class RuleVisitor : DetektVisitor() {
 
 	val containsRule
@@ -23,6 +27,7 @@ internal class RuleVisitor : DetektVisitor() {
 	private var compliant = ""
 	private var name = ""
 	private var active = false
+	private var autoCorrect = false
 	private var severity = ""
 	private var debt = ""
 	private var parent = ""
@@ -34,7 +39,8 @@ internal class RuleVisitor : DetektVisitor() {
 			throw InvalidDocumentationException("Rule $name is missing a description in its KDoc.")
 		}
 
-		return Rule(name, description, nonCompliant, compliant, active, severity, debt, parent, configuration)
+		return Rule(name, description, nonCompliant, compliant,
+				active, severity, debt, parent, configuration, autoCorrect)
 	}
 
 	override fun visitSuperTypeList(list: KtSuperTypeList) {
@@ -60,23 +66,24 @@ internal class RuleVisitor : DetektVisitor() {
 
 		name = classOrObject.name?.trim() ?: ""
 		active = classOrObject.kDocSection()?.findTagByName(TAG_ACTIVE) != null
+		autoCorrect = classOrObject.kDocSection()?.findTagByName(TAG_AUTO_CORRECT) != null
 
 		val comment = classOrObject.kDocSection()?.getContent()?.trim() ?: return
 		extractRuleDocumentation(comment)
-		findConfigurationOptions(classOrObject)
+		configuration.addAll(classOrObject.parseConfigurationTags())
 	}
 
 	private fun extractRuleDocumentation(comment: String) {
 		val nonCompliantIndex = comment.indexOf(TAG_NONCOMPLIANT)
 		val compliantIndex = comment.indexOf(TAG_COMPLIANT)
-		if (nonCompliantIndex != -1) {
-			extractNonCompliantDocumentation(comment, nonCompliantIndex)
-			extractCompliantDocumentation(comment, compliantIndex)
-		} else if (compliantIndex != -1) {
-			throw InvalidCodeExampleDocumentationException(
+		when {
+			nonCompliantIndex != -1 -> {
+				extractNonCompliantDocumentation(comment, nonCompliantIndex)
+				extractCompliantDocumentation(comment, compliantIndex)
+			}
+			compliantIndex != -1 -> throw InvalidCodeExampleDocumentationException(
 					"Rule $name contains a compliant without a noncompliant code definition.")
-		} else {
-			description = comment
+			else -> description = comment
 		}
 	}
 
@@ -133,39 +140,16 @@ internal class RuleVisitor : DetektVisitor() {
 		return value
 	}
 
-	private fun findConfigurationOptions(classOrObject: KtClassOrObject) {
-		val configurationTags = classOrObject.kDocSection()?.findTagsByName(TAG_CONFIGURATION) ?: emptyList()
-		val configurations = configurationTags.map { it.getContent() }
-				.filter {
-					val valid = it.contains("-") && it.contains(configurationDefaultValueRegex)
-					if (!valid) {
-						throw InvalidDocumentationException("Rule $name contains an incorrect configuration option" +
-								"tag in the KDoc.")
-					}
-					valid
-				}
-				.map {
-					val delimiterIndex = it.indexOf('-')
-					val name = it.substring(0, delimiterIndex - 1)
-					val defaultValue = configurationDefaultValueRegex.find(it)?.groupValues?.get(1)?.trim() ?: ""
-					val description = it.substring(delimiterIndex + 1)
-							.replace(configurationDefaultValueRegex, "")
-							.trim()
-					Configuration(name, description, defaultValue)
-				}
-		configuration.addAll(configurations)
-	}
-
 	companion object {
 		private val ruleClasses = listOf(
 				io.gitlab.arturbosch.detekt.api.Rule::class.simpleName,
+				FormattingRule::class.simpleName,
 				ThresholdRule::class.simpleName,
 				EmptyRule::class.simpleName
 		)
-		private val configurationDefaultValueRegex = "\\(default: (.+)\\)".toRegex(RegexOption.DOT_MATCHES_ALL)
 
 		private const val TAG_ACTIVE = "active"
-		private const val TAG_CONFIGURATION = "configuration"
+		private const val TAG_AUTO_CORRECT = "autoCorrect"
 		private const val TAG_NONCOMPLIANT = "<noncompliant>"
 		private const val ENDTAG_NONCOMPLIANT = "</noncompliant>"
 		private const val TAG_COMPLIANT = "<compliant>"
@@ -176,7 +160,6 @@ internal class RuleVisitor : DetektVisitor() {
 	}
 }
 
-private fun KtClassOrObject.kDocSection(): KDocSection? = docComment?.getDefaultSection()
 
 private fun String.trimStartingLineBreaks(): String {
 	var i = 0

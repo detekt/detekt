@@ -1,0 +1,28 @@
+configurations {
+	implementation.extendsFrom kotlinImplementation
+	testImplementation.extendsFrom kotlinTest
+	compile {
+		transitive = false
+	}
+}
+
+dependencies {
+	compileOnly project(':detekt-api')
+	compile("com.github.shyiko.ktlint:ktlint-ruleset-standard:$ktlintVersion") {
+		exclude group: "org.jetbrains.kotlin"
+	}
+	compile("com.github.shyiko.ktlint:ktlint-core:$ktlintVersion") {
+		exclude group: "org.jetbrains.kotlin"
+	}
+
+	testCompile project(':detekt-api')
+	testCompile project(':detekt-test')
+	testRuntime "org.junit.platform:junit-platform-launcher:$junitPlatformVersion"
+	testRuntime "org.junit.platform:junit-platform-console:$junitPlatformVersion"
+	testRuntime "org.jetbrains.spek:spek-junit-platform-engine:$spekVersion"
+}
+
+jar {
+	from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
+

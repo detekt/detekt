@@ -13,7 +13,7 @@ import kotlin.test.assertFails
 internal class ConfigurationsSpec : Spek({
 
 	it("should be an empty config") {
-		val config = Args().loadConfiguration()
+		val config = CliArgs().loadConfiguration()
 		assertThat(config.valueOrDefault("one", -1)).isEqualTo(-1)
 		assertThat(config.valueOrDefault("two", -1)).isEqualTo(-1)
 		assertThat(config.valueOrDefault("three", -1)).isEqualTo(-1)
@@ -25,45 +25,45 @@ internal class ConfigurationsSpec : Spek({
 		val pathThree = resource("/configs/three.yml").path
 
 		it("should load single config") {
-			val config = Args().apply { config = pathOne }.loadConfiguration()
+			val config = CliArgs().apply { config = pathOne }.loadConfiguration()
 			assertThat(config.valueOrDefault("one", -1)).isEqualTo(1)
 		}
 
 		it("should load two configs") {
-			val config = Args().apply { config = "$pathOne, $pathTwo" }.loadConfiguration()
+			val config = CliArgs().apply { config = "$pathOne, $pathTwo" }.loadConfiguration()
 			assertThat(config.valueOrDefault("one", -1)).isEqualTo(1)
 			assertThat(config.valueOrDefault("two", -1)).isEqualTo(2)
 		}
 
 		it("should load three configs") {
-			val config = Args().apply { config = "$pathOne, $pathTwo;$pathThree" }.loadConfiguration()
+			val config = CliArgs().apply { config = "$pathOne, $pathTwo;$pathThree" }.loadConfiguration()
 			assertThat(config.valueOrDefault("one", -1)).isEqualTo(1)
 			assertThat(config.valueOrDefault("two", -1)).isEqualTo(2)
 			assertThat(config.valueOrDefault("three", -1)).isEqualTo(3)
 		}
 
 		it("should fail on invalid config value") {
-			assertFails { Args().apply { config = "," }.loadConfiguration() }
-			assertFails { Args().apply { config = "sfsjfsdkfsd" }.loadConfiguration() }
-			assertFails { Args().apply { config = "./i.do.not.exist.yml" }.loadConfiguration() }
+			assertFails { CliArgs().apply { config = "," }.loadConfiguration() }
+			assertFails { CliArgs().apply { config = "sfsjfsdkfsd" }.loadConfiguration() }
+			assertFails { CliArgs().apply { config = "./i.do.not.exist.yml" }.loadConfiguration() }
 		}
 	}
 
 	describe("parse different resource based configuration settings") {
 
 		it("should load single config") {
-			val config = Args().apply { configResource = "/configs/one.yml" }.loadConfiguration()
+			val config = CliArgs().apply { configResource = "/configs/one.yml" }.loadConfiguration()
 			assertThat(config.valueOrDefault("one", -1)).isEqualTo(1)
 		}
 
 		it("should load two configs") {
-			val config = Args().apply { configResource = "/configs/one.yml, /configs/two.yml" }.loadConfiguration()
+			val config = CliArgs().apply { configResource = "/configs/one.yml, /configs/two.yml" }.loadConfiguration()
 			assertThat(config.valueOrDefault("one", -1)).isEqualTo(1)
 			assertThat(config.valueOrDefault("two", -1)).isEqualTo(2)
 		}
 
 		it("should load three configs") {
-			val config = Args().apply {
+			val config = CliArgs().apply {
 				configResource = "/configs/one.yml, /configs/two.yml;configs/three.yml"
 			}.loadConfiguration()
 			assertThat(config.valueOrDefault("one", -1)).isEqualTo(1)
@@ -72,14 +72,14 @@ internal class ConfigurationsSpec : Spek({
 		}
 
 		it("should fail on invalid config value") {
-			assertFails { Args().apply { configResource = "," }.loadConfiguration() }
-			assertFails { Args().apply { configResource = "sfsjfsdkfsd" }.loadConfiguration() }
-			assertFails { Args().apply { configResource = "./i.do.not.exist.yml" }.loadConfiguration() }
+			assertFails { CliArgs().apply { configResource = "," }.loadConfiguration() }
+			assertFails { CliArgs().apply { configResource = "sfsjfsdkfsd" }.loadConfiguration() }
+			assertFails { CliArgs().apply { configResource = "./i.do.not.exist.yml" }.loadConfiguration() }
 		}
 	}
 
 	describe("fail fast only") {
-		val config = Args().apply { configResource = "/configs/fail-fast-only.yml" }.loadConfiguration()
+		val config = CliArgs().apply { configResource = "/configs/fail-fast-only.yml" }.loadConfiguration()
 
 		it("should override active to true by default") {
 			assertThat(config.subConfig("comments").subConfig("UndocumentedPublicClass").valueOrDefault("active", false)).isEqualTo(true)
@@ -95,7 +95,7 @@ internal class ConfigurationsSpec : Spek({
 	}
 
 	describe("fail fast override") {
-		val config = Args().apply { configResource = "/configs/fail-fast-override.yml" }.loadConfiguration()
+		val config = CliArgs().apply { configResource = "/configs/fail-fast-override.yml" }.loadConfiguration()
 
 		it("should override config when specified") {
 			assertThat(config.subConfig("style").subConfig("MaxLineLength").valueOrDefault("maxLineLength", -1)).isEqualTo(100)

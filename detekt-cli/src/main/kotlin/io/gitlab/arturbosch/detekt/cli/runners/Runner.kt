@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.cli.runners
 
-import io.gitlab.arturbosch.detekt.cli.Args
+import io.gitlab.arturbosch.detekt.cli.CliArgs
 import io.gitlab.arturbosch.detekt.cli.OutputFacade
 import io.gitlab.arturbosch.detekt.cli.createPathFilters
 import io.gitlab.arturbosch.detekt.cli.createPlugins
@@ -13,7 +13,7 @@ import kotlin.system.measureTimeMillis
  * @author Artur Bosch
  * @author Marvin Ramin
  */
-class Runner(private val arguments: Args) : Executable {
+class Runner(private val arguments: CliArgs) : Executable {
 
 	override fun execute() {
 		val settings = createSettings()

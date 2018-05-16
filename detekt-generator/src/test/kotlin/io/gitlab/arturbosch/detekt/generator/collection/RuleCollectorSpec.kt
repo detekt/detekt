@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.generator.collection
 
 import io.gitlab.arturbosch.detekt.generator.util.run
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.catchThrowable
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
@@ -56,6 +55,31 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				}
 			"""
 			assertFailsWith<InvalidDocumentationException> { subject.run(code) }
+		}
+
+		it("throws when a class extends ThresholdRule but has no valid documentation") {
+			val code = """
+				package foo
+
+				class SomeRandomClass: FormattingRule {
+				}
+			"""
+			assertFailsWith<InvalidDocumentationException> { subject.run(code) }
+		}
+
+		it("collects the formatting rule name") {
+			val name = "UnusedImport"
+			val code = """
+				package foo
+
+				/**
+				* Wonderful description
+				*/
+				class $name: FormattingRule {
+				}
+			"""
+			val items = subject.run(code)
+			assertThat(items[0].name).isEqualTo(name)
 		}
 
 		it("collects the rule name") {
@@ -143,21 +167,34 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 			assertThat(items[0].active).isFalse()
 		}
 
-		it("is active if the tag is there") {
-			val name = "SomeRandomClass"
-			val description = "some description"
+		it("is active tag is present") {
 			val code = """
 				package foo
 
 				/**
-				 * $description
+				 * some description
 				 * @active
 				 */
-				class $name: Rule {
+				class SomeRandomClass: Rule {
 				}
 			"""
 			val items = subject.run(code)
 			assertThat(items[0].active).isTrue()
+		}
+
+		it("is auto-correctable tag is present") {
+			val code = """
+				package foo
+
+				/**
+				 * some description
+				 * @autoCorrect
+				 */
+				class SomeRandomClass: Rule {
+				}
+			"""
+			val items = subject.run(code)
+			assertThat(items[0].autoCorrect).isTrue()
 		}
 
 		it("is active if the tag is there and has a description") {

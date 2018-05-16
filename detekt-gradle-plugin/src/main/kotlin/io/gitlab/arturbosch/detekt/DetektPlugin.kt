@@ -25,6 +25,10 @@ class DetektPlugin : AbstractCodeQualityPlugin<Detekt>() {
 	override fun getToolName() = DETEKT_EXTENSION_NAME
 	override fun getTaskType() = Detekt::class.java
 
+	override fun configureConfiguration(configuration: Configuration) {
+		configureDefaultDependencies(configuration)
+	}
+
 	override fun createExtension(): CodeQualityExtension {
 		println("CreateExtension")
 		val extension = project.extensions.create(DETEKT, DetektExtension::class.java, project, project.layout)
@@ -52,8 +56,6 @@ class DetektPlugin : AbstractCodeQualityPlugin<Detekt>() {
 	}
 
 	override fun configureTaskDefaults(task: Detekt, baseName: String) {
-		val configuration = project.configurations.getAt(DETEKT)
-		configureDefaultDependencies(configuration)
 		configureTask(task)
 		configureReportsConventionMapping(task, baseName)
 	}

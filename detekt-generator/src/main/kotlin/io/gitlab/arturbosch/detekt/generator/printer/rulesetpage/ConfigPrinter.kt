@@ -1,5 +1,8 @@
 package io.gitlab.arturbosch.detekt.generator.printer.rulesetpage
 
+import io.gitlab.arturbosch.detekt.generator.collection.Rule
+import io.gitlab.arturbosch.detekt.generator.collection.RuleSetProvider
+import io.gitlab.arturbosch.detekt.generator.out.YamlNode
 import io.gitlab.arturbosch.detekt.generator.out.keyValue
 import io.gitlab.arturbosch.detekt.generator.out.list
 import io.gitlab.arturbosch.detekt.generator.out.node
@@ -13,7 +16,7 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 
 	override fun print(item: List<RuleSetPage>): String {
 		return yaml {
-			yaml { defaultAutoCorrectFailFastConfiguration() }
+			yaml { defaultGenericConfiguration() }
 			emptyLine()
 			yaml { defaultTestPatternConfiguration() }
 			emptyLine()
@@ -24,29 +27,41 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 			yaml { defaultConsoleReportsConfiguration() }
 			emptyLine()
 
-			item.sortedBy { it.ruleSet.name }.forEach { (ruleSet, rules) ->
-				node(ruleSet.name) {
-					keyValue { "active" to "${ruleSet.active}" }
-
-					rules.forEach { rule ->
-						node(rule.name) {
-							keyValue { "active" to "${rule.active}" }
-							rule.configuration.forEach { configuration ->
-								if (configuration.defaultValue.isYamlList()) {
-									list(configuration.name, configuration.defaultValue.toList())
-								} else {
-									keyValue { configuration.name to configuration.defaultValue }
-								}
-							}
-						}
-					}
-					emptyLine()
-				}
-			}
+			item.sortedBy { it.ruleSet.name }
+					.forEach { printRuleSet(it.ruleSet, it.rules) }
 		}
 	}
 
-	private fun defaultAutoCorrectFailFastConfiguration(): String {
+	private fun YamlNode.printRuleSet(ruleSet: RuleSetProvider, rules: List<Rule>) {
+		node(ruleSet.name) {
+			keyValue { "active" to "${ruleSet.active}" }
+			ruleSet.configuration.forEach { configuration ->
+				if (configuration.defaultValue.isYamlList()) {
+					list(configuration.name, configuration.defaultValue.toList())
+				} else {
+					keyValue { configuration.name to configuration.defaultValue }
+				}
+			}
+			rules.forEach { rule ->
+				node(rule.name) {
+					keyValue { "active" to "${rule.active}" }
+					if (rule.autoCorrect) {
+						keyValue { "autoCorrect" to "true" }
+					}
+					rule.configuration.forEach { configuration ->
+						if (configuration.defaultValue.isYamlList()) {
+							list(configuration.name, configuration.defaultValue.toList())
+						} else {
+							keyValue { configuration.name to configuration.defaultValue }
+						}
+					}
+				}
+			}
+			emptyLine()
+		}
+	}
+
+	private fun defaultGenericConfiguration(): String {
 		return """
 			autoCorrect: true
 			failFast: false
@@ -72,6 +87,7 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 			    - 'StringLiteralDuplication'
 			    - 'SpreadOperator'
 			    - 'TooManyFunctions'
+			    - 'ForEachOnRange'
 			""".trimIndent()
 	}
 

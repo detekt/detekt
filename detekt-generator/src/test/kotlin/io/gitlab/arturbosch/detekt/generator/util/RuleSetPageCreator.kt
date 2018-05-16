@@ -14,6 +14,8 @@ internal fun createRuleSetPage(): RuleSetPage {
 internal fun createRules(): List<Rule> {
 	val rule1 = Rule("WildcardImport", "a wildcard import", "import foo.*", "import foo.bar", true, "Defect",
 			"10min", "", listOf(Configuration("conf1", "a config option", "foo")))
-	val rule2 = Rule("EqualsNull", "equals null", "", "", false,"", "", "WildcardImport", emptyList())
-	return listOf(rule1, rule2)
+	val rule2 = Rule("EqualsNull", "equals null", "", "", false, "", "", "WildcardImport", emptyList())
+	val rule3 = Rule("NoUnitKeyword", "removes :Unit", "fun stuff(): Unit {}",
+			"fun stuff() {}", true, "", "5m", "", emptyList(), true)
+	return listOf(rule1, rule2, rule3)
 }

@@ -7,7 +7,11 @@ import java.nio.file.Path
  * @author Artur Bosch
  * @author Marvin Ramin
  */
-class Args {
+interface Args {
+	var help: Boolean
+}
+
+class CliArgs : Args {
 
 	@Parameter(names = ["--input", "-i"],
 			required = true,
@@ -74,7 +78,7 @@ class Args {
 
 	@Parameter(names = ["--help", "-h"],
 			help = true, description = "Shows the usage.")
-	var help: Boolean = false
+	override var help: Boolean = false
 
 	@Parameter(names = ["--run-rule"],
 			description = "Specify a rule by [RuleSet:Rule] pattern and run it on input.")

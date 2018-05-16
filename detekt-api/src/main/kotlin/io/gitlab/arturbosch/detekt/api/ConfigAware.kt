@@ -28,8 +28,12 @@ interface ConfigAware : Config {
 
 	/**
 	 * Does this rule have auto correct specified in configuration?
+	 * If not check if a top-level autoCorrect property is set.
+	 * Defaults to true.
 	 */
-	val autoCorrect: Boolean get() = valueOrDefault("autoCorrect", true)
+	val autoCorrect: Boolean
+		get() = valueOrDefault("autoCorrect",
+				config.valueOrDefault("autoCorrect", true))
 
 	/**
 	 * Is this rule specified as active in configuration?
@@ -37,10 +41,12 @@ interface ConfigAware : Config {
 	 */
 	val active get() = valueOrDefault("active", false)
 
-	override fun subConfig(key: String): Config
-			= config.subConfig(id).subConfig(key)
+	override fun subConfig(key: String): Config =
+			config.subConfig(id).subConfig(key)
 
-	override fun <T : Any> valueOrDefault(key: String, default: T)
-			= config.subConfig(id).valueOrDefault(key, default)
+	override fun <T : Any> valueOrDefault(key: String, default: T) =
+			config.subConfig(id).valueOrDefault(key, default)
 
+	override fun <T : Any> valueOrNull(key: String): T? =
+			config.subConfig(id).valueOrNull(key)
 }

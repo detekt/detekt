@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtTypeAlias
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 
 /**
@@ -44,6 +45,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  *
  * @active since v1.0.0
  * @author Artur Bosch
+ * @author schalkms
  */
 class MatchingDeclarationName(config: Config = Config.empty) : Rule(config) {
 
@@ -59,7 +61,9 @@ class MatchingDeclarationName(config: Config = Config.empty) : Rule(config) {
 		if (declarations.size == 1) {
 			val declaration = declarations[0] as? KtClassOrObject
 			val declarationName = declaration?.name ?: return
-			if (declarationName != file.name.removeSuffix(KOTLIN_SUFFIX)) {
+			val filename = file.name.removeSuffix(KOTLIN_SUFFIX)
+			if (declarationName != filename
+					&& file.declarations.filterIsInstance<KtTypeAlias>().all { it.name != filename }) {
 				report(CodeSmell(issue, Entity.from(file), "The file name '${file.name}' " +
 						"does not match the name of the single top-level declaration '$declarationName'."))
 			}

@@ -6,5 +6,6 @@ include("detekt-api",
 		"detekt-test",
 		"detekt-gradle-plugin",
 		"detekt-generator",
-		"detekt-watch-service")
+		"detekt-watch-service",
+		"detekt-formatting")
 

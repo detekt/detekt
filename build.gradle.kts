@@ -33,7 +33,7 @@ plugins {
 	id("com.github.johnrengelman.shadow") version "2.0.2" apply false
 	id("org.sonarqube") version "2.6.2"
 	id("com.gradle.plugin-publish") version "0.9.10" apply false
-	`kotlin-dsl` version "0.16.2"
+	`kotlin-dsl`
 }
 
 tasks.withType<Wrapper> {
@@ -68,22 +68,22 @@ subprojects {
 	val userHome = System.getProperty("user.home")
 	val usedDetektGradleVersion: String by project
 
-	configure<DetektExtension> {
-		debug = true
-		parallel = true
-		baseline = RegularFile { file("${rootProject.projectDir}/reports/baseline.xml") }
-		filters = ".*/resources/.*, .*/build/.*"
-		configFile = file("${rootProject.projectDir}/detekt-cli/src/main/resources/default-detekt-config.yml")
-		toolVersion = usedDetektGradleVersion
-
-		idea(Action {
-			path = "$userHome/.idea"
-			codeStyleScheme = "$userHome/.idea/idea-code-style.xml"
-			inspectionsProfile = "$userHome/.idea/inspect.xml"
-			report = "project.projectDir/reports"
-			mask = "*.kt"
-		})
-	}
+//	configure<DetektExtension> {
+//		debug = true
+//		parallel = true
+//		baseline = RegularFile { file("${rootProject.projectDir}/reports/baseline.xml") }
+//		filters = ".*/resources/.*, .*/build/.*"
+//		configFile = file("${rootProject.projectDir}/detekt-cli/src/main/resources/default-detekt-config.yml")
+//		toolVersion = usedDetektGradleVersion
+//
+//		idea(Action {
+//			path = "$userHome/.idea"
+//			codeStyleScheme = "$userHome/.idea/idea-code-style.xml"
+//			inspectionsProfile = "$userHome/.idea/inspect.xml"
+//			report = "project.projectDir/reports"
+//			mask = "*.kt"
+//		})
+//	}
 
 	if (this.name in listOf("detekt-cli", "detekt-watch-service", "detekt-generator")) {
 		apply {
@@ -205,7 +205,7 @@ val userHome: String = System.getProperty("user.home")
 
 val usedDetektVersion: String by project
 
-//configure<DetektExtension>{
+//configure<DetektExtension> {
 //
 //	debug = true
 //	version = "$usedDetektVersion"
