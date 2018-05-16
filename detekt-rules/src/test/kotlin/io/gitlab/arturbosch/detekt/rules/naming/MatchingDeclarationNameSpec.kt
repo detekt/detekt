@@ -77,6 +77,17 @@ internal class MatchingDeclarationNameSpec : Spek({
 			val findings = MatchingDeclarationName().lint(ktFile)
 			assertThat(findings).isEmpty()
 		}
+
+		it("should pass for a class with a typealias") {
+			val code = """
+				typealias Foo = FooImpl
+
+				class FooImpl {}"""
+			val ktFile = compileContentForTest(code)
+			ktFile.name = "Foo.kt"
+			val findings = MatchingDeclarationName().lint(ktFile)
+			assertThat(findings).isEmpty()
+		}
 	}
 
 	given("non-compliant test cases") {
@@ -130,6 +141,17 @@ internal class MatchingDeclarationNameSpec : Spek({
 					ONE, TWO, THREE
 				}
 			' at (1,1) in /E.kt""", trimIndent = true)
+		}
+
+		it("should not pass for a typealias with a different name") {
+			val code = """
+				typealias Bar = FooImpl
+
+				class FooImpl {}"""
+			val ktFile = compileContentForTest(code)
+			ktFile.name = "Foo.kt"
+			val findings = MatchingDeclarationName().lint(ktFile)
+			assertThat(findings).hasSize(1)
 		}
 	}
 })

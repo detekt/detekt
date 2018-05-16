@@ -12,6 +12,14 @@ This rule set provides rules that address formatting issues.
 
 See https://ktlint.github.io for documentation.
 
+### CommentSpacing
+
+See https://ktlint.github.io for documentation.
+
+### Filename
+
+See https://ktlint.github.io for documentation.
+
 ### FinalNewline
 
 See https://ktlint.github.io for documentation.

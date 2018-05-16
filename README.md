@@ -5,9 +5,9 @@
 [![build status](https://travis-ci.org/arturbosch/detekt.svg?branch=master)](https://travis-ci.org/arturbosch/detekt)
 [![build status windows](https://ci.appveyor.com/api/projects/status/3q9g98vveiul7yut/branch/master?svg=true)](https://ci.appveyor.com/project/arturbosch/detekt)
 [ ![Download](https://api.bintray.com/packages/arturbosch/code-analysis/detekt/images/download.svg) ](https://bintray.com/arturbosch/code-analysis/detekt/_latestVersion)
-[![gradle plugin](https://img.shields.io/badge/gradle_plugin-1.0.0.RC6.4-blue.svg?style=flat-square)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
+[![gradle plugin](https://img.shields.io/badge/gradle_plugin-1.0.0.RC7-blue.svg?style=flat-square)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-43-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-44-orange.svg?style=flat-square)](#contributors)
 [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
 
 Meet _detekt_, a static code analysis tool for the _Kotlin_ programming language.
@@ -23,12 +23,15 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 - suppress findings with Kotlin's @Suppress and Java's @SuppressWarnings annotations
 - specify code smell thresholds to break your build or print a warning
 - code Smell baseline and ignore lists for legacy projects
+- [gradle plugin](#gradleplugin) for code analysis via Gradle builds
 - gradle tasks to use local `intellij` distribution for [formatting and inspecting](#idea) kotlin code
 - optionally configure detekt for each sub module by using [profiles](#closure) (gradle-plugin)
-- extensible by own rule sets and `FileProcessListener's`
-- [gradle plugin](#gradleplugin) for code analysis via Gradle builds
 - [sonarqube integration](https://github.com/arturbosch/sonar-kotlin)
+- extensible by own rule sets and `FileProcessListener's`
 - [intellij integration](https://github.com/arturbosch/detekt-intellij-plugin)
+- unofficial [maven plugin](https://github.com/Ozsie/detekt-maven-plugin) by the user [Ozsie](https://github.com/Ozsie)
+
+### Project Website
 
 Visit https://arturbosch.github.io/detekt/ for installation guides, rule descriptions and configuration options.
 
@@ -113,7 +116,6 @@ If you contributed to detekt but your name is not in the list, please feel free 
 
 As mentioned in...
 
-- [Codacy](https://www.codacy.com)
 - [@medium/acerezoluna/static-code-analysis-tools-for-kotlin-in-android](https://medium.com/@acerezoluna/static-code-analysis-tools-for-kotlin-in-android-fa072125fd50)
 - [@medium/annayan/writing-custom-lint-rules-for-your-kotlin-project-with-detekt](https://proandroiddev.com/writing-custom-lint-rules-for-your-kotlin-project-with-detekt-653e4dbbe8b9)
 - [Free Continuous Integration for modern Android apps with CircleCI](https://tips.seebrock3r.me/free-continuous-integration-for-modern-android-apps-with-circleci-940e33451c83)
@@ -121,12 +123,15 @@ As mentioned in...
 - [The Art of Android DevOps](https://blog.undabot.com/the-art-of-android-devops-fa29396bc9ee)
 - [Android Basics: Continuous Integration](https://academy.realm.io/posts/360-andev-2017-mark-scheel-continuous-integration-android/)
 - [Kotlin Static Analysis — why and how?](https://proandroiddev.com/kotlin-static-analysis-why-and-how-a12042e34a98)
+- [Check the quality of Kotlin code](https://blog.frankel.ch/check-quality-kotlin-code/)
 
 Integrations:
 - [Gradle plugin that generates ErrorProne, Findbugs, Checkstyle, PMD, CPD, Lint, Detekt & Ktlint Tasks for every subproject](https://github.com/vanniktech/gradle-code-quality-tools-plugin)
 - [Java library for parsing report files from static code analysis](https://github.com/tomasbjerre/violations-lib)
 - [sputnik is a free tool for static code review and provides support for detekt](https://github.com/TouK/sputnik)
+- [Codacy](https://www.codacy.com)
 - [Novoda Gradle Static Analysis plugin](https://github.com/novoda/gradle-static-analysis-plugin)
+- [Maven plugin that wraps the Detekt CLI](https://github.com/Ozsie/detekt-maven-plugin)
 
 #### Credits
 - [JetBrains](https://github.com/jetbrains/) - Creating Intellij + Kotlin
