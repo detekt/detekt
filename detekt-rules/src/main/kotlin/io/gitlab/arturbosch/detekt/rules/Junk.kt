@@ -11,6 +11,7 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
+import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtVariableDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
@@ -45,6 +46,8 @@ fun KtBlockExpression.hasCommentInside(): Boolean {
 	})
 	return getUserData(commentKey) == true
 }
+
+fun KtStringTemplateExpression.plainText() = text.substring(1, text.length - 1)
 
 fun KtClass.companionObject() = this.companionObjects.singleOrNull { it.isCompanion() }
 
