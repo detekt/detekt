@@ -400,4 +400,15 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 			assertThat(subject.lint(code)).hasSize(1)
 		}
 	}
+
+	given("unused class declarations which are allowed") {
+
+		it("does not report the unused private property") {
+			val code = """
+				class Test {
+					private val ignored = ""
+				}"""
+			assertThat(subject.lint(code)).hasSize(0)
+		}
+	}
 })

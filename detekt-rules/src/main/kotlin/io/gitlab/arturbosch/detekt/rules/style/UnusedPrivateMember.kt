@@ -35,6 +35,7 @@ import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
  *
  * @author Marvin Ramin
  * @author Artur Bosch
+ * @author schalkms
  */
 class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 
@@ -104,8 +105,7 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 		override fun visitProperty(property: KtProperty) {
 			if ((property.isPrivate() && property.isNonNestedMember())
 					|| property.isLocal) {
-				val name = property.nameAsSafeName.identifier
-				properties[name] = property
+				checkAllowedNames(property)
 			}
 			super.visitProperty(property)
 		}
