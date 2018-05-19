@@ -49,6 +49,20 @@ class RethrowCaughtExceptionSpec : SubjectSpek<RethrowCaughtException>({
 		}
 	}
 
+	given("a caught exception that is logged") {
+
+		it("should not report a logged exception") {
+			val code = """
+				fun x() {
+					try {
+					} catch (e: IllegalStateException) {
+						print("log")
+					}
+				}"""
+			assertThat(subject.lint(code)).hasSize(0)
+		}
+	}
+
 	given("a caught exception that is rethrown after doing something") {
 
 		it("should not report a thrown exception after logging") {
