@@ -35,6 +35,7 @@ import io.gitlab.arturbosch.detekt.rules.style.UnusedPrivateMember
 import io.gitlab.arturbosch.detekt.rules.style.UseDataClass
 import io.gitlab.arturbosch.detekt.rules.style.UtilityClassWithPublicConstructor
 import io.gitlab.arturbosch.detekt.rules.style.WildcardImport
+import io.gitlab.arturbosch.detekt.rules.style.optional.MandatoryBracesIfStatements
 import io.gitlab.arturbosch.detekt.rules.style.optional.OptionalUnit
 
 /**
@@ -83,7 +84,8 @@ class StyleGuideProvider : RuleSetProvider {
 				NestedClassesVisibility(config),
 				RedundantVisibilityModifierRule(config),
 				UntilInsteadOfRangeTo(config),
-				MayBeConst(config)
+				MayBeConst(config),
+				MandatoryBracesIfStatements(config)
 		))
 	}
 }

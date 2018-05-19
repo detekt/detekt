@@ -292,6 +292,29 @@ class User {
 }
 ```
 
+### MandatoryBracesIfStatements
+
+This rule detects multi-line `if` statements which does not include braces.
+Adding braces would improve readability and avoid possible errors.
+
+**Severity**: Style
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+val i = 1
+if (i > 0)
+    println(i)
+```
+
+#### Compliant Code:
+
+```kotlin
+val x = if (condition) 5 else 4
+```
+
 ### MaxLineLength
 
 This rule reports lines of code which exceed a defined maximum line length.
