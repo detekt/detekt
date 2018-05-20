@@ -12,7 +12,7 @@ fun rethrowCaughtExceptionNegative() {
 	}
 	try {
 	} catch (e: IllegalStateException) {
-		print("log")
+		print(e) // logging an exception is allowed
 		throw e
 	}
 }
