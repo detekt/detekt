@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
@@ -41,6 +42,12 @@ class MandatoryBracesIfStatements(config: Config = Config.empty) : Rule(config) 
 					message = "Multi-line if statements were found that do not have braces. " +
 							"These can be added to improve readability and prevent possible errors."))
 		}
+
+		if (isNotBlockOrIfExpression(expression) && hasNewLine(expression.elseKeyword)) {
+			report(CodeSmell(issue, Entity.from(expression),
+					message = "Multi-line else statement found that does not have braces."))
+		}
+
 		super.visitIfExpression(expression)
 	}
 
@@ -49,6 +56,16 @@ class MandatoryBracesIfStatements(config: Config = Config.empty) : Rule(config) 
 					?.filterIsInstance<PsiWhiteSpace>()
 					?.firstOrNull { it.textContains('\n') } != null
 
+	private fun hasNewLine(element: PsiElement?): Boolean =
+			element?.siblings(true, false)
+					?.filterIsInstance<PsiWhiteSpace>()
+					?.firstOrNull { it.textContains('\n') } != null
+
 	private fun isNotBlockExpression(expression: KtIfExpression): Boolean =
 			expression.then !is KtBlockExpression
+
+	private fun isNotBlockOrIfExpression(expression: KtIfExpression): Boolean =
+			expression.`else` != null
+					&& expression.`else` !is KtIfExpression
+					&& expression.`else` !is KtBlockExpression
 }
