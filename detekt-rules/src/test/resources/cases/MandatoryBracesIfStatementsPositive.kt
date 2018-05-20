@@ -16,4 +16,9 @@ fun mandatoryBracesIfStatementPositive() {
 		println()
 	else
 		println()
+
+	if (true) {
+		println()
+	} else
+		println()
 }
