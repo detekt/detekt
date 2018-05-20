@@ -108,6 +108,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [R.A. Porter](https://github.com/coyotesqrl) - Updated Readme links to RuleSets
 - [Robbin Voortman](https://github.com/rvoortman) - Rule improvement: MaxLineLength
 - [Mike Gorunov](http://github.com/Miha-x64/) — Rule improvement: UndocumentedPublicFunction
+- [Joey Kaan](https://github.com/jkaan) - New rule: MandatoryBracesIfStatements
 
 ### Mentions
 
