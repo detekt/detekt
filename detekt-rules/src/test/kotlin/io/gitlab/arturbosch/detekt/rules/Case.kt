@@ -59,6 +59,8 @@ enum class Case(val file: String) {
 	UnnecessaryAbstractClassNegative("/cases/UnnecessaryAbstractClassNegative.kt"),
 	UtilityClassesPositive("/cases/UtilityClassesPositive.kt"),
 	UtilityClassesNegative("/cases/UtilityClassesNegative.kt"),
+	RethrowCaughtExceptionPositive("/cases/RethrowCaughtExceptionPositive.kt"),
+	RethrowCaughtExceptionNegative("/cases/RethrowCaughtExceptionNegative.kt"),
 	SerializablePositive("/cases/SerializablePositive.kt"),
 	SerializableNegative("/cases/SerializableNegative.kt"),
 	SuppressedElements("/SuppressedByElementAnnotation.kt"),
