@@ -15,7 +15,7 @@ class PreferToOverPairSyntaxSpec : SubjectSpek<PreferToOverPairSyntax>({
 
 		it("reports if pair is created using pair constructor") {
 			val path = Case.PreferToOverPairSyntaxPositive.path()
-			Assertions.assertThat(subject.lint(path)).hasSize(2)
+			Assertions.assertThat(subject.lint(path)).hasSize(5)
 		}
 
 		it("does not report if it is created using the to syntax ") {
