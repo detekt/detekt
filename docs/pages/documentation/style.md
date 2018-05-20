@@ -294,7 +294,7 @@ class User {
 
 ### MandatoryBracesIfStatements
 
-This rule detects multi-line `if` statements which does not include braces.
+This rule detects multi-line `if` statements which do not have braces.
 Adding braces would improve readability and avoid possible errors.
 
 **Severity**: Style
