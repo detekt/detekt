@@ -149,6 +149,12 @@ fun foo() {
     } catch (e: IOException) {
         throw e
     }
+    try {
+        // ...
+    } catch (e: IOException) {
+        print(e.message)
+        throw e
+    }
 }
 ```
 
@@ -163,8 +169,8 @@ fun foo() {
     }
     try {
         // ...
-    } catch (e: IllegalStateException) {
-        print("log")
+    } catch (e: IOException) {
+        print(e)
         throw e
     }
 }
