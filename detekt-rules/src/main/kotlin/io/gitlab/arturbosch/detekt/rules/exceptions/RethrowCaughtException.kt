@@ -26,6 +26,12 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  *     } catch (e: IOException) {
  *         throw e
  *     }
+ *     try {
+ *         // ...
+ *     } catch (e: IOException) {
+ *         print(e.message)
+ *         throw e
+ *     }
  * }
  * </noncompliant>
  *
@@ -38,8 +44,8 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  *     }
  *     try {
  *         // ...
- *     } catch (e: IllegalStateException) {
- *         print("log")
+ *     } catch (e: IOException) {
+ *         print(e)
  *         throw e
  *     }
  * }
