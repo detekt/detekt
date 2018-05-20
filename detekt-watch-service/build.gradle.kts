@@ -5,9 +5,9 @@ application {
 configurations.compile.extendsFrom(configurations.kotlinImplementation)
 configurations.testImplementation.extendsFrom(configurations.kotlinTest)
 
-val jcommanderVersion by project
-val junitPlatformVersion by project
-val spekVersion by project
+val jcommanderVersion: String by project
+val junitPlatformVersion: String by project
+val spekVersion: String by project
 
 dependencies {
 	implementation("com.beust:jcommander:$jcommanderVersion")
