@@ -16,7 +16,7 @@ class MandatoryBracesIfStatementSpec : SubjectSpek<MandatoryBracesIfStatements>(
 
 		it("reports multi-line if statements should have braces") {
 			val path = Case.MandatoryBracesIfStatementsPositive.path()
-			assertThat(subject.lint(path)).hasSize(1)
+			assertThat(subject.lint(path)).hasSize(4)
 		}
 
 		it("reports non multi-line if statements should have braces") {
