@@ -7,7 +7,10 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.getIntValueForPsiElement
+import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtParenthesizedExpression
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
 
@@ -38,10 +41,14 @@ import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
  * @author schalkms
  */
 class ForEachOnRange(config: Config = Config.empty) : Rule(config) {
+
 	override val issue = Issue("ForEachOnRange",
 			Severity.Performance,
 			"Using the forEach method on ranges has a heavy performance cost. Prefer using simple for loops.",
 			Debt.FIVE_MINS)
+
+	private val minimumRangeSize = 3
+	private val rangeOperators = setOf("..", "downTo", "until")
 
 	override fun visitCallExpression(expression: KtCallExpression) {
 		super.visitCallExpression(expression)
@@ -50,16 +57,21 @@ class ForEachOnRange(config: Config = Config.empty) : Rule(config) {
 			if (!it.textMatches("forEach")) {
 				return
 			}
-
-			it.getReceiverExpression()?.text?.let {
-				if (it matches rangeRegex) {
-					report(CodeSmell(issue, Entity.from(expression), issue.description))
-				}
+			val parenthesizedExpression = it.getReceiverExpression() as? KtParenthesizedExpression
+			val binaryExpression = parenthesizedExpression?.expression as? KtBinaryExpression
+			if (binaryExpression != null && isRangeOperator(binaryExpression)) {
+				report(CodeSmell(issue, Entity.from(expression), issue.description))
 			}
 		}
 	}
 
-	companion object {
-		val rangeRegex = Regex("\\(.*\\.\\..+\\)")
+	private fun isRangeOperator(binaryExpression: KtBinaryExpression): Boolean {
+		val range = binaryExpression.children
+		if (range.size >= minimumRangeSize) {
+			val lowerValue = getIntValueForPsiElement(range[0])
+			val upperValue = getIntValueForPsiElement(range[2])
+			return lowerValue != null && upperValue != null && rangeOperators.contains(range[1].text)
+		}
+		return false
 	}
 }
