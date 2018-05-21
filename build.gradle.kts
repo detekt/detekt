@@ -20,12 +20,10 @@ buildscript {
 
 	val kotlinVersion: String by project
 	val junitPlatformVersion: String by project
-	val usedDetektGradleVersion: String by project
 
 	dependencies {
 		classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
 		classpath("org.junit.platform:junit-platform-gradle-plugin:$junitPlatformVersion")
-		classpath("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$usedDetektGradleVersion")
 	}
 }
 
@@ -35,11 +33,12 @@ plugins {
 	id("com.github.johnrengelman.shadow") version "2.0.2" apply false
 	id("org.sonarqube") version "2.6.2"
 	id("com.gradle.plugin-publish") version "0.9.10" apply false
+	id("io.gitlab.arturbosch.detekt") version "1.0.0.RC7"
 	`kotlin-dsl`
 }
 
 tasks.withType<Wrapper> {
-	gradleVersion = "4.6"
+	gradleVersion = "4.8-rc-1"
 	distributionType = Wrapper.DistributionType.ALL
 }
 
