@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
+import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Java6Assertions.assertThat
@@ -92,6 +93,14 @@ class StringLiteralDuplicationSpec : SubjectSpek<StringLiteralDuplication>({
 			val finding = subject.lint(code)[0]
 			val locations = finding.references.map { it.location } + finding.entity.location
 			assertThat(locations).hasSize(3)
+		}
+	}
+
+	describe("multiline strings with string interpolation") {
+
+		it("does not report duplicated parts in multiline strings") {
+			val path = Case.MultilineStringLiteralDuplication.path()
+			assertThat(subject.lint(path)).hasSize(0)
 		}
 	}
 })
