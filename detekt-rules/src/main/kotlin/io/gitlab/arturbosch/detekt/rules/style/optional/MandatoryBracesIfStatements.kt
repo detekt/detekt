@@ -32,20 +32,21 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
 class MandatoryBracesIfStatements(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue("MandatoryBracesIfStatements", Severity.Style,
-			"Multi-line if statements detected without braces. " +
-					"The braces can be added to improve readability and prevent possible errors.",
+			"Multi-line if statement was found that does not have braces. " +
+					"These should be added to improve readability.",
 			Debt.FIVE_MINS)
 
 	override fun visitIfExpression(expression: KtIfExpression) {
 		if (isNotBlockExpression(expression) && hasNewLine(expression)) {
 			report(CodeSmell(issue, Entity.from(expression),
-					message = "Multi-line if statements were found that do not have braces. " +
-							"These can be added to improve readability and prevent possible errors."))
+					message = "Multi-line if statement was found that does not have braces. " +
+							"These should be added to improve readability."))
 		}
 
 		if (isNotBlockOrIfExpression(expression) && hasNewLine(expression.elseKeyword)) {
 			report(CodeSmell(issue, Entity.from(expression),
-					message = "Multi-line else statement found that does not have braces."))
+					message = "Multi-line else statement was found that does not have braces." +
+							"These should be added to improve readability"))
 		}
 
 		super.visitIfExpression(expression)
