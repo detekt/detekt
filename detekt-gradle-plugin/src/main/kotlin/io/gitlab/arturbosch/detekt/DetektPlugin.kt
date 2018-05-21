@@ -34,7 +34,7 @@ class DetektPlugin : AbstractCodeQualityPlugin<Detekt>() {
 		val extension = project.extensions.create(DETEKT, DetektExtension::class.java, project, project.layout)
 		extension.toolVersion = System.getProperty("detektVersion")
 		extension.configDir = RegularFile { project.rootProject.file("detekt-cli/src/main/resources/") }
-		extension.config = project.resources.text.fromFile { File(extension.configDir.asFile, "default-detekt-config.yml") }
+		extension.config = project.resources.text.fromFile(File(extension.configDir?.asFile, "default-detekt-config.yml"))
 
 		generateConfigTask = project.tasks.create(GENERATE_CONFIG, DetektGenerateConfigTask::class.java)
 		createBaselineTask = project.tasks.create(BASELINE, DetektCreateBaselineTask::class.java)

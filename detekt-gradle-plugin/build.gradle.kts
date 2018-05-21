@@ -1,4 +1,4 @@
-import org.jetbrains.kotlin.serialization.js.DynamicTypeDeserializer.id
+import com.sun.javafx.scene.CameraHelper.project
 
 plugins {
 	`java-gradle-plugin`

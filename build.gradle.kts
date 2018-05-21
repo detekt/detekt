@@ -1,5 +1,7 @@
 import com.jfrog.bintray.gradle.BintrayExtension
 import io.gitlab.arturbosch.detekt.DetektPlugin
+import io.gitlab.arturbosch.detekt.detekt
+import io.gitlab.arturbosch.detekt.idea
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import io.gitlab.arturbosch.detekt.extensions.IdeaExtension
 import org.codehaus.groovy.tools.shell.util.Logger.io
@@ -68,22 +70,22 @@ subprojects {
 	val userHome = System.getProperty("user.home")
 	val usedDetektGradleVersion: String by project
 
-//	configure<DetektExtension> {
-//		debug = true
-//		parallel = true
-//		baseline = RegularFile { file("${rootProject.projectDir}/reports/baseline.xml") }
-//		filters = ".*/resources/.*, .*/build/.*"
-//		configFile = file("${rootProject.projectDir}/detekt-cli/src/main/resources/default-detekt-config.yml")
-//		toolVersion = usedDetektGradleVersion
-//
-//		idea(Action {
-//			path = "$userHome/.idea"
-//			codeStyleScheme = "$userHome/.idea/idea-code-style.xml"
-//			inspectionsProfile = "$userHome/.idea/inspect.xml"
-//			report = "project.projectDir/reports"
-//			mask = "*.kt"
-//		})
-//	}
+	detekt {
+		debug = true
+		parallel = true
+		filters = ".*/resources/.*, .*/build/.*"
+		baseline = file("${rootProject.projectDir}/reports/baseline.xml")
+		configFile = file("${rootProject.projectDir}/detekt-cli/src/main/resources/default-detekt-config.yml")
+		toolVersion = usedDetektGradleVersion
+
+		idea(Action {
+			path = "$userHome/.idea"
+			codeStyleScheme = "$userHome/.idea/idea-code-style.xml"
+			inspectionsProfile = "$userHome/.idea/inspect.xml"
+			report = "project.projectDir/reports"
+			mask = "*.kt"
+		})
+	}
 
 	if (this.name in listOf("detekt-cli", "detekt-watch-service", "detekt-generator")) {
 		apply {

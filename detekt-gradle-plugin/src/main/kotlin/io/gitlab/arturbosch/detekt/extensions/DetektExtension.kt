@@ -25,49 +25,49 @@ constructor(
 	private val parallelProperty: Property<Boolean?> = project.objects.property()
 	private val disableDefaultRuleSetsProperty: Property<Boolean?> = project.objects.property()
 	private val filtersProperty: Property<String?> = project.objects.property()
-	private val baselineProperty: RegularFileProperty = projectLayout.fileProperty()
+	private val baselineProperty: Property<File?> = project.objects.property()
 	private val pluginsProperty: Property<String?> = project.objects.property()
 	private val configProperty: Property<TextResource?> = project.objects.property()
 	private val configDirProperty: RegularFileProperty = projectLayout.fileProperty()
 	var ideaExtension: IdeaExtension = IdeaExtension()
 
 	var debug: Boolean?
-		get() = debugProperty.get()
+		get() = debugProperty.orNull
 		set(value) = debugProperty.set(value)
 
 	var parallel: Boolean?
-		get() = parallelProperty.get()
+		get() = parallelProperty.orNull
 		set(value) = parallelProperty.set(value)
 
 	var disableDefaultRuleSets: Boolean?
-		get() = disableDefaultRuleSetsProperty.get()
+		get() = disableDefaultRuleSetsProperty.orNull
 		set(value) = disableDefaultRuleSetsProperty.set(value)
 
 	var filters: String?
-		get() = filtersProperty.get()
+		get() = filtersProperty.orNull
 		set(value) {
 			println("Filters $value")
 			filtersProperty.set(value)
 		}
 
 	var plugins: String?
-		get() = pluginsProperty.get()
+		get() = pluginsProperty.orNull
 		set(value) = pluginsProperty.set(value)
 
-	var baseline: RegularFile
-		get() = baselineProperty.get()
+	var baseline: File?
+		get() = baselineProperty.orNull
 		set(value) = baselineProperty.set(value)
 
-	var configDir: RegularFile
-		get() = configDirProperty.get()
+	var configDir: RegularFile?
+		get() = configDirProperty.orNull
 		set(value) = configDirProperty.set(value)
 
 	var config: TextResource?
-		get() = configProperty.get()
+		get() = configProperty.orNull
 		set(value) = configProperty.set(value)
 
 	var configFile: File?
-		get() = configProperty.get()?.asFile()
+		get() = configProperty.orNull?.asFile()
 		set(value) = configProperty.set(project.resources.text.fromFile(configFile))
 
 	fun idea(configuration: Action<in IdeaExtension>) {

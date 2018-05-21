@@ -41,42 +41,42 @@ constructor(
 	lateinit var classpath: FileCollection
 	open var configProperty: Property<TextResource?> = objectFactory.property()
 	open var filtersProperty: Property<String?> = objectFactory.property()
-	open var baselineProperty: RegularFileProperty = projectLayout.fileProperty()
+	open var baselineProperty: Property<File?> = objectFactory.property()
 	open var pluginsProperty: Property<String?> = objectFactory.property()
 	open var debugProperty: Property<Boolean?> = objectFactory.property()
 	open var parallelProperty: Property<Boolean?> = objectFactory.property()
 	open var disableDefaultRuleSetsProperty: Property<Boolean?> = objectFactory.property()
 
 	var config: TextResource?
-		get() = configProperty.get()
+		get() = configProperty.orNull
 		set(value) = configProperty.set(value)
 
 	var configFile: File?
-		get() = configProperty.get()?.asFile()
+		get() = configProperty.orNull?.asFile()
 		set(value) = configProperty.set(project.resources.text.fromFile(configFile))
 
 	var filters: String?
-		get() = filtersProperty.get()
+		get() = filtersProperty.orNull
 		set(value) = filtersProperty.set(value)
 
 	var plugins: String?
-		get() = pluginsProperty.get()
+		get() = pluginsProperty.orNull
 		set(value) = pluginsProperty.set(value)
 
-	var baseline: RegularFile
-		get() = baselineProperty.get()
+	var baseline: File?
+		get() = baselineProperty.orNull
 		set(value) = baselineProperty.set(value)
 
 	var debug: Boolean?
-		get() = debugProperty.get()
+		get() = debugProperty.orNull
 		set(value) = debugProperty.set(value)
 
 	var parallel: Boolean?
-		get() = parallelProperty.get()
+		get() = parallelProperty.orNull
 		set(value) = parallelProperty.set(value)
 
 	var disableDefaultRuleSets: Boolean?
-		get() = disableDefaultRuleSetsProperty.get()
+		get() = disableDefaultRuleSetsProperty.orNull
 		set(value) = disableDefaultRuleSetsProperty.set(value)
 
 	@OutputFiles

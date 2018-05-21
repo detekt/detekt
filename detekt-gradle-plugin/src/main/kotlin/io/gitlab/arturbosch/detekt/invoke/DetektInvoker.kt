@@ -59,10 +59,11 @@ object DetektInvoker {
 				INPUT_PARAMETER to detekt.source.asFileTree.asPath
 		)
 
+		Log.info("Config: ${detekt.config}")
 		detekt.config?.let { args += CONFIG_PARAMETER to it.asFile().absolutePath }
 		detekt.filters?.let { args += FILTERS_PARAMETER to it }
 		detekt.plugins?.let { args += PLUGINS_PARAMETER to it }
-		detekt.baseline?.let { args += BASELINE_PARAMETER to it.asFile.absolutePath }
+		detekt.baseline?.let { args += BASELINE_PARAMETER to it.absolutePath }
 
 		if (detekt.reports.html.isEnabled) args += REPORT_HTML_PARAMETER to detekt.reports.html.destination.absolutePath
 		if (detekt.reports.xml.isEnabled) args += REPORT_XML_PARAMETER to detekt.reports.xml.destination.absolutePath
