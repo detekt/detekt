@@ -203,42 +203,6 @@ subprojects {
 	}
 }
 
-val userHome: String = System.getProperty("user.home")
-
-val usedDetektVersion: String by project
-
-//configure<DetektExtension> {
-//
-//	debug = true
-//	version = "$usedDetektVersion"
-//	profile = "failfast"
-//
-//	profile("main", Action {
-//		input = rootProject.projectDir.absolutePath
-//		filters = ".*/resources/.*, .*/build/.*"
-//		config = "${rootProject.projectDir}/detekt-cli/src/main/resources/default-detekt-config.yml"
-//		baseline = "${rootProject.projectDir}/reports/baseline.xml"
-//	})
-//
-//	profile("failfast", Action {
-//		input = rootProject.projectDir.absolutePath
-//		config = "${rootProject.projectDir}/reports/failfast.yml"
-//	})
-//
-//	profile("output", Action {
-//		output = "${rootProject.projectDir}/reports"
-//		outputName = "detekt"
-//	})
-//
-//	idea(Action {
-//		path = "$userHome/.idea"
-//		codeStyleScheme = "$userHome/.idea/idea-code-style.xml"
-//		inspectionsProfile = "$userHome/.idea/inspect.xml"
-//		report = "${rootProject.projectDir}/reports"
-//		mask = "*.kt,"
-//	})
-//}
-
 /**
  * Usage: <code>./gradlew build -PwarningsAsErrors=true</code>.
  */
