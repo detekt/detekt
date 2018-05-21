@@ -39,7 +39,7 @@ class PreferToOverPairSyntax(config: Config = Config.empty) : Rule(config) {
 
 			report(CodeSmell(issue, Entity.from(expression),
 					message = "Pair is created by using the pair constructor. " +
-							"This can replaced by $firstArg to $secondArg"))
+							"This can replaced by `$firstArg to $secondArg`"))
 		}
 
 		super.visitSimpleNameExpression(expression)
