@@ -10,9 +10,10 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.api.isPartOf
+import io.gitlab.arturbosch.detekt.rules.plainText
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.psi.KtLiteralStringTemplateEntry
+import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 
 /**
  * This rule detects and reports duplicated String literals. Repeatedly typing out the same String literal across the
@@ -79,7 +80,7 @@ class StringLiteralDuplication(
 	internal inner class StringLiteralVisitor : DetektVisitor() {
 
 		private var literals = HashMap<String, Int>()
-		private var literalReferences = HashMap<String, MutableList<KtLiteralStringTemplateEntry>>()
+		private var literalReferences = HashMap<String, MutableList<KtStringTemplateExpression>>()
 		private val pass: Unit = Unit
 
 		fun getLiteralsOverThreshold(): Map<String, Int> = literals.filterValues { it >= threshold }
@@ -93,19 +94,20 @@ class StringLiteralDuplication(
 			throw IllegalStateException("No KtElements for literal '$literal' found!")
 		}
 
-		override fun visitLiteralStringTemplateEntry(entry: KtLiteralStringTemplateEntry) {
+		override fun visitStringTemplateExpression(expression: KtStringTemplateExpression) {
+			val text = expression.plainText()
 			when {
-				ignoreAnnotation && entry.isPartOf(KtAnnotationEntry::class) -> pass
-				excludeStringsWithLessThan5Characters && entry.text.length < STRING_EXCLUSION_LENGTH -> pass
-				entry.text.matches(ignoreStringsRegex) -> pass
-				else -> add(entry)
+				ignoreAnnotation && expression.isPartOf(KtAnnotationEntry::class) -> pass
+				excludeStringsWithLessThan5Characters && text.length < STRING_EXCLUSION_LENGTH -> pass
+				text.matches(ignoreStringsRegex) -> pass
+				else -> add(expression)
 			}
 		}
 
-		private fun add(entry: KtLiteralStringTemplateEntry) {
-			val text = entry.text
+		private fun add(str: KtStringTemplateExpression) {
+			val text = str.plainText()
 			literals.compute(text) { _, oldValue -> oldValue?.plus(1) ?: 1 }
-			literalReferences.compute(text) { _, entries -> entries?.add(entry); entries ?: mutableListOf(entry) }
+			literalReferences.compute(text) { _, entries -> entries?.add(str); entries ?: mutableListOf(str) }
 		}
 	}
 

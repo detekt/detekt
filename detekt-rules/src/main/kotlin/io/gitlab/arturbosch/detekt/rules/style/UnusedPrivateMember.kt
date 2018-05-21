@@ -35,6 +35,7 @@ import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
  *
  * @author Marvin Ramin
  * @author Artur Bosch
+ * @author schalkms
  */
 class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 
@@ -104,8 +105,7 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 		override fun visitProperty(property: KtProperty) {
 			if ((property.isPrivate() && property.isNonNestedMember())
 					|| property.isLocal) {
-				val name = property.nameAsSafeName.identifier
-				properties[name] = property
+				checkAllowedNames(property)
 			}
 			super.visitProperty(property)
 		}
@@ -146,7 +146,7 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 	/*
 	* Here starts the unused parameters part.
 	*/
-	var unusedParameters: MutableMap<String, KtParameter> = mutableMapOf()
+	private var unusedParameters: MutableMap<String, KtParameter> = mutableMapOf()
 
 	private fun collectParameters(function: KtNamedFunction) {
 		function.valueParameterList?.parameters?.forEach {
@@ -193,7 +193,7 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 		}
 	}
 
-	fun getUnusedFunctions(): Map<String, KtFunction> {
+	private fun getUnusedFunctions(): Map<String, KtFunction> {
 		for (call in callExpressions) {
 			if (functions.isEmpty()) {
 				break
