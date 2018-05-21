@@ -20,12 +20,15 @@ class ForEachOnRangeSpec : Spek({
 				(10 downTo 1).forEach {
 					println(it)
 				}
+				(10 downTo 1 step 2).forEach {
+					println(it)
+				}
 			}
 		"""
 
 		it("should report the forEach usage") {
 			val findings = ForEachOnRange().lint(code)
-			assertThat(findings).hasSize(3)
+			assertThat(findings).hasSize(4)
 		}
 	}
 
