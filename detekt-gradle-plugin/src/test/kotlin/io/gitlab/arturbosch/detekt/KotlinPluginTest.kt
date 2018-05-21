@@ -38,10 +38,13 @@ internal class KotlinPluginTest : Spek({
 			assertThat(File(rootDir, "custom/build")).doesNotExist()
 		}
 
-		it("can be applied with just a basic configuration") {
+		it("can be applied with an empty configuration") {
 			val rootDir = createTempDir(prefix = "applyPlugin")
 
 			val detektConfig = """
+				|detekt {
+				|
+				|}
 				"""
 
 			writeFiles(rootDir, detektConfig)
@@ -151,7 +154,7 @@ internal class KotlinPluginTest : Spek({
 			assertThat(result.output).doesNotContain("Ruleset: test-custom")
 			assertThat(File(rootDir, "custom/build")).doesNotExist()
 		}
-		
+
 		it("can configure a new custom detekt task") {
 			val rootDir = createTempDir(prefix = "applyPlugin")
 
