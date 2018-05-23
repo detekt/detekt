@@ -29,7 +29,6 @@ plugins {
 	id("com.github.ben-manes.versions") version "0.17.0"
 	id("com.github.johnrengelman.shadow") version "2.0.2" apply false
 	id("org.sonarqube") version "2.6.2"
-	id("com.gradle.plugin-publish") version "0.9.10" apply false
 }
 
 apply {

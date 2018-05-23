@@ -1,21 +1,42 @@
-plugins {
-	`java-gradle-plugin`
-	id("com.gradle.plugin-publish")
+buildscript {
+	repositories {
+		mavenCentral()
+		jcenter()
+	}
+	dependencies {
+		classpath("org.junit.platform:junit-platform-gradle-plugin:1.1.0")
+	}
 }
 
-val detektGradleVersion by project
+repositories {
+	gradlePluginPortal()
+	jcenter()
+}
 
-version = "$detektGradleVersion"
+plugins {
+	`java-gradle-plugin`
+	id("com.gradle.plugin-publish") version "0.9.10"
+	kotlin("jvm") version "1.2.41"
+}
 
-configurations.implementation.extendsFrom(configurations.kotlinImplementation)
-configurations.testImplementation.extendsFrom(configurations.kotlinTest)
+apply {
+	plugin("org.junit.platform.gradle.plugin")
+}
+
+version = "1.0.0.RC7"
 
 val spekVersion by project
 val junitPlatformVersion by project
+val assertjVersion by project
 
 dependencies {
 	implementation(gradleApi())
+	implementation(kotlin("stdlib"))
+	implementation(kotlin("reflect"))
 	
+	testImplementation("org.assertj:assertj-core:$assertjVersion")
+	testImplementation("org.jetbrains.spek:spek-api:$spekVersion")
+	testImplementation("org.jetbrains.spek:spek-subject-extension:$spekVersion")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
 	testRuntimeOnly("org.junit.platform:junit-platform-console:$junitPlatformVersion")
 	testRuntimeOnly("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
