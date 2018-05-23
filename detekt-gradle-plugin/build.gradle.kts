@@ -10,14 +10,11 @@ version = "$detektGradleVersion"
 configurations.implementation.extendsFrom(configurations.kotlinImplementation)
 configurations.testImplementation.extendsFrom(configurations.kotlinTest)
 
-val jcommanderVersion by project
 val spekVersion by project
 val junitPlatformVersion by project
 
 dependencies {
 	implementation(gradleApi())
-	implementation(project(":detekt-cli"))
-	implementation("com.beust:jcommander:$jcommanderVersion")
 	
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
 	testRuntimeOnly("org.junit.platform:junit-platform-console:$junitPlatformVersion")
