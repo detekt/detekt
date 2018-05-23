@@ -1,1 +1,1 @@
-rootProject.name = 'detekt-gradle-plugin'
+rootProject.name = "detekt-gradle-plugin"
