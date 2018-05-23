@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.extensions.INPUT_PARAMETER
 import io.gitlab.arturbosch.detekt.extensions.OUTPUT_PARAMETER
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileCollection
-import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.TaskAction
 import java.io.File
 
@@ -18,7 +17,6 @@ open class DetektCheckTask : DefaultTask() {
 
 	val input: File?
 
-	@OutputDirectory
 	val output: File?
 
 	private val classpath: FileCollection
