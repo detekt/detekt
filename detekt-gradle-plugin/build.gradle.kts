@@ -23,11 +23,12 @@ apply {
 	plugin("org.junit.platform.gradle.plugin")
 }
 
+group = "io.gitlab.arturbosch"
 version = "1.0.0.RC7"
 
-val spekVersion by project
-val junitPlatformVersion by project
-val assertjVersion by project
+val spekVersion = "1.1.5"
+val junitPlatformVersion = "1.1.0"
+val assertjVersion = "3.9.1"
 
 dependencies {
 	implementation(gradleApi())
