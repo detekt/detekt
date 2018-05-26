@@ -512,6 +512,28 @@ when (1) {
 }
 ```
 
+### PreferToOverPairSyntax
+
+This rule detects the usage of the Pair constructor to create pairs of values.
+
+Using <value1> to <value2> is preferred.
+
+**Severity**: Style
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+val pair = Pair(1, 2)
+```
+
+#### Compliant Code:
+
+```kotlin
+val pair = 1 to 2
+```
+
 ### ProtectedMemberInFinalClass
 
 Kotlin classes are `final` by default. Thus classes which are not marked as `open` should not contain any `protected`

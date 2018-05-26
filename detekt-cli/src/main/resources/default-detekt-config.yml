@@ -435,6 +435,8 @@ style:
     active: false
   OptionalWhenBraces:
     active: false
+  PreferToOverPairSyntax:
+    active: false
   ProtectedMemberInFinalClass:
     active: false
   RedundantVisibilityModifierRule:
