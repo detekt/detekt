@@ -7,9 +7,9 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.getIntValueForPsiElement
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtBinaryExpression
-import org.jetbrains.kotlin.psi.KtConstantExpression
 
 /**
  * Reports ranges which are empty.
@@ -52,8 +52,8 @@ class InvalidRange(config: Config = Config.empty) : Rule(config) {
 	}
 
 	private fun hasInvalidLoopRange(range: Array<PsiElement>): Boolean {
-		val lowerValue = getIntValueForElement(range[0])
-		val upperValue = getIntValueForElement(range[2])
+		val lowerValue = getIntValueForPsiElement(range[0])
+		val upperValue = getIntValueForPsiElement(range[2])
 		if (lowerValue == null || upperValue == null) {
 			return false
 		}
@@ -63,10 +63,6 @@ class InvalidRange(config: Config = Config.empty) : Rule(config) {
 			"until" -> checkUntil(lowerValue, upperValue)
 			else -> false
 		}
-	}
-
-	private fun getIntValueForElement(element: PsiElement): Int? {
-		return (element as? KtConstantExpression)?.text?.toIntOrNull()
 	}
 
 	private fun checkRangeTo(lower: Int, upper: Int) = lower > upper

@@ -35,6 +35,7 @@ import io.gitlab.arturbosch.detekt.rules.style.UnusedPrivateMember
 import io.gitlab.arturbosch.detekt.rules.style.UseDataClass
 import io.gitlab.arturbosch.detekt.rules.style.UtilityClassWithPublicConstructor
 import io.gitlab.arturbosch.detekt.rules.style.WildcardImport
+import io.gitlab.arturbosch.detekt.rules.style.optional.MandatoryBracesIfStatements
 import io.gitlab.arturbosch.detekt.rules.style.optional.OptionalUnit
 import io.gitlab.arturbosch.detekt.rules.style.optional.PreferToOverPairSyntax
 
@@ -85,7 +86,8 @@ class StyleGuideProvider : RuleSetProvider {
 				RedundantVisibilityModifierRule(config),
 				UntilInsteadOfRangeTo(config),
 				MayBeConst(config),
-				PreferToOverPairSyntax(config)
+				PreferToOverPairSyntax(config),
+				MandatoryBracesIfStatements(config)
 		))
 	}
 }
