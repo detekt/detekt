@@ -10,6 +10,11 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isConstant
 import io.gitlab.arturbosch.detekt.rules.isOverridden
 import org.jetbrains.kotlin.KtNodeTypes
+import org.jetbrains.kotlin.lexer.KtSingleValueToken
+import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.psi.KtBinaryExpression
+import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
@@ -29,6 +34,7 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
  * </compliant>
  *
  * @author Marvin Ramin
+ * @author schalkms
  */
 class MayBeConst(config: Config = Config.empty) : Rule(config) {
 
@@ -36,6 +42,32 @@ class MayBeConst(config: Config = Config.empty) : Rule(config) {
 			Severity.Style,
 			"Reports vals that can be const val instead.",
 			Debt.FIVE_MINS)
+
+	private val binaryTokens = hashSetOf<KtSingleValueToken>(KtTokens.PLUS, KtTokens.MINUS, KtTokens.MUL,
+			KtTokens.DIV, KtTokens.PERC)
+
+	private val topLevelConstants = HashSet<String?>()
+	private val companionObjectConstants = HashSet<String?>()
+
+	override fun visitKtFile(file: KtFile) {
+		topLevelConstants.clear()
+		val topLevelProperties = file.declarations
+				.filterIsInstance<KtProperty>()
+				.filter { it.isTopLevel && it.isConstant() }
+				.mapNotNull { it.name }
+		topLevelConstants.addAll(topLevelProperties)
+		super.visitKtFile(file)
+	}
+
+	override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
+		companionObjectConstants.clear()
+		val constProperties = declaration.declarations
+				.filterIsInstance<KtProperty>()
+				.filter { it.isConstant() }
+				.mapNotNull { it.name }
+		companionObjectConstants.addAll(constProperties)
+		super.visitObjectDeclaration(declaration)
+	}
 
 	override fun visitProperty(property: KtProperty) {
 		super.visitProperty(property)
@@ -70,11 +102,25 @@ class MayBeConst(config: Config = Config.empty) : Rule(config) {
 
 	private fun KtProperty.isConstantExpression(): Boolean {
 		val initializer = initializer ?: return false
-		return initializer is KtStringTemplateExpression
-				|| initializer.node.elementType == KtNodeTypes.BOOLEAN_CONSTANT
-				|| initializer.node.elementType == KtNodeTypes.INTEGER_CONSTANT
-				|| initializer.node.elementType == KtNodeTypes.CHARACTER_CONSTANT
-				|| initializer.node.elementType == KtNodeTypes.FLOAT_CONSTANT
+		return initializer.isConstantExpression()
 	}
 
+	private fun KtExpression.isConstantExpression(): Boolean {
+		return this is KtStringTemplateExpression
+				|| node.elementType == KtNodeTypes.BOOLEAN_CONSTANT
+				|| node.elementType == KtNodeTypes.INTEGER_CONSTANT
+				|| node.elementType == KtNodeTypes.CHARACTER_CONSTANT
+				|| node.elementType == KtNodeTypes.FLOAT_CONSTANT
+				|| topLevelConstants.contains(text)
+				|| companionObjectConstants.contains(text)
+				|| isBinaryExpression(this)
+	}
+
+	private fun isBinaryExpression(expression: KtExpression): Boolean {
+		val binaryExpression = expression as? KtBinaryExpression ?: return false
+		return expression.node.elementType == KtNodeTypes.BINARY_EXPRESSION
+				&& binaryTokens.contains(binaryExpression.operationToken)
+				&& binaryExpression.left?.isConstantExpression() == true
+				&& binaryExpression.right?.isConstantExpression() == true
+	}
 }

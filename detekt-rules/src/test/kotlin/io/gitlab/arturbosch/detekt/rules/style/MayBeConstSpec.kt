@@ -17,7 +17,6 @@ class MayBeConstSpec : SubjectSpek<MayBeConst>({
 			assertThat(subject.findings).isEmpty()
 		}
 
-
 		it("is const vals in object") {
 			val code = """
 				object Test {
@@ -98,13 +97,35 @@ class MayBeConstSpec : SubjectSpek<MayBeConst>({
 	}
 
 	given("vals that can be constants but detekt doesn't handle yet") {
-		it("is a constant expression") {
+		it("is a constant binary expression") {
 			val code = """
 				const val one = 1
-				val two = one * 2 // this is an expression that detekt doesn't support yet
+				val two = one * 2
 				"""
 			subject.lint(code)
-			assertThat(subject.findings).isEmpty() // should be 1
+			assertThat(subject.findings).hasSize(1)
+		}
+
+		it("is a constant binary expression in a companion object") {
+			val code = """
+				class Test {
+					companion object {
+						const val one = 1
+						val two = one * 2
+					}
+				}
+				"""
+			subject.lint(code)
+			assertThat(subject.findings).hasSize(1)
+		}
+
+		it("is a nested constant binary expression") {
+			val code = """
+				const val one = 1
+				val two = one * 2 + 1
+				"""
+			subject.lint(code)
+			assertThat(subject.findings).hasSize(1)
 		}
 
 		it("reports vals that use other const vals") {
@@ -114,12 +135,21 @@ class MayBeConstSpec : SubjectSpek<MayBeConst>({
 				class Test {
 					companion object {
 						@JvmField
-						val b = a + 1 // this is an expression that detekt doesn't support yet
+						val b = a + 1
 					}
 				}
 				"""
 			subject.lint(code)
-			assertThat(subject.findings).isEmpty() // should be 1
+			assertThat(subject.findings).hasSize(1)
+		}
+
+		it("reports concatenated string vals") {
+			val code = """
+				private const val A = "a"
+				private val B = A + "b"
+				"""
+			subject.lint(code)
+			assertThat(subject.findings).hasSize(1)
 		}
 	}
 
