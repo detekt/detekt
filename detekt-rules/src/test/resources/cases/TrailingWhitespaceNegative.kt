@@ -1,5 +1,6 @@
 package cases
 
+@Suppress("unused")
 class TrailingWhitespaceNegative {
 
 	fun myFunction() {
