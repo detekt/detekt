@@ -16,6 +16,7 @@ import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
+import org.jetbrains.kotlin.psi.KtParenthesizedExpression
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
@@ -81,7 +82,7 @@ class MayBeConst(config: Config = Config.empty) : Rule(config) {
 		if (cannotBeConstant() || isInObject() || isJvmField()) {
 			return false
 		}
-		return isConstantExpression()
+		return this.initializer?.isConstantExpression() == true
 	}
 
 	private fun KtProperty.isJvmField(): Boolean {
@@ -100,11 +101,6 @@ class MayBeConst(config: Config = Config.empty) : Rule(config) {
 	private fun KtProperty.isInObject() =
 			!isTopLevel && containingClassOrObject !is KtObjectDeclaration
 
-	private fun KtProperty.isConstantExpression(): Boolean {
-		val initializer = initializer ?: return false
-		return initializer.isConstantExpression()
-	}
-
 	private fun KtExpression.isConstantExpression(): Boolean {
 		return this is KtStringTemplateExpression
 				|| node.elementType == KtNodeTypes.BOOLEAN_CONSTANT
@@ -114,7 +110,11 @@ class MayBeConst(config: Config = Config.empty) : Rule(config) {
 				|| topLevelConstants.contains(text)
 				|| companionObjectConstants.contains(text)
 				|| isBinaryExpression(this)
+				|| isParenthesizedExpression(this)
 	}
+
+	private fun isParenthesizedExpression(expression: KtExpression) =
+			(expression as? KtParenthesizedExpression)?.expression?.isConstantExpression() == true
 
 	private fun isBinaryExpression(expression: KtExpression): Boolean {
 		val binaryExpression = expression as? KtBinaryExpression ?: return false

@@ -128,6 +128,15 @@ class MayBeConstSpec : SubjectSpek<MayBeConst>({
 			assertThat(subject.findings).hasSize(1)
 		}
 
+		it("is a nested constant parenthesised expression") {
+			val code = """
+				const val one = 1
+				val two = one * (2 + 1)
+				"""
+			subject.lint(code)
+			assertThat(subject.findings).hasSize(1)
+		}
+
 		it("reports vals that use other const vals") {
 			val code = """
 				const val a = 0
