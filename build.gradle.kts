@@ -66,7 +66,6 @@ subprojects {
 	}
 
 	val userHome = System.getProperty("user.home")
-	val usedDetektGradleVersion: String by project
 
 	detekt {
 		debug = true
@@ -74,7 +73,7 @@ subprojects {
 		filters = ".*/resources/.*, .*/build/.*"
 		baseline = file("${rootProject.projectDir}/reports/baseline.xml")
 		configFile = file("${rootProject.projectDir}/detekt-cli/src/main/resources/default-detekt-config.yml")
-		toolVersion = usedDetektGradleVersion
+		toolVersion = "1.0.0.RC7-MARVIN2"
 
 		idea(Action {
 			path = "$userHome/.idea"

@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.invoke.ProcessExecutor
 import org.gradle.api.DefaultTask
 import org.gradle.api.GradleException
 import org.gradle.api.tasks.TaskAction
-import org.jetbrains.kotlin.org.jline.utils.Log
 
 /**
  * @author Artur Bosch
@@ -27,7 +26,7 @@ open class DetektIdeaInspectionTask : DefaultTask() {
 			throw GradleException("idea extension is not defined. It is required to run detekt idea tasks.")
 		}
 
-		if (detekt.debug == true) Log.info("$ideaExtension")
+		if (detekt.debug == true) println("$ideaExtension")
 		ProcessExecutor.startProcess(ideaExtension!!.formatArgs(detekt.source.asFileTree.asPath))
 	}
 }

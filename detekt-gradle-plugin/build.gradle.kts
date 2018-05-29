@@ -17,7 +17,7 @@ plugins {
 	`java-gradle-plugin`
 	id("com.gradle.plugin-publish") version "0.9.10"
 	kotlin("jvm") version "1.2.41"
-	id("org.gradle.kotlin.kotlin-dsl")
+	`kotlin-dsl`
 }
 
 apply {

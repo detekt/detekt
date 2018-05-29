@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.invoke
 
-import io.gitlab.arturbosch.detekt.cli.console.BuildFailure
+import io.gitlab.arturbosch.detekt.BuildFailure
 import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.InputStreamReader

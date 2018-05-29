@@ -15,7 +15,6 @@ import io.gitlab.arturbosch.detekt.extensions.REPORT_HTML_PARAMETER
 import io.gitlab.arturbosch.detekt.extensions.REPORT_XML_PARAMETER
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
-import org.jetbrains.kotlin.org.jline.utils.Log
 
 /**
  * @author Marvin Ramin
@@ -59,7 +58,7 @@ object DetektInvoker {
 				INPUT_PARAMETER to detekt.source.asFileTree.asPath
 		)
 
-		Log.info("Config: ${detekt.config}")
+		println("Config: ${detekt.config}")
 		detekt.config?.let { args += CONFIG_PARAMETER to it.asFile().absolutePath }
 		detekt.filters?.let { args += FILTERS_PARAMETER to it }
 		detekt.plugins?.let { args += PLUGINS_PARAMETER to it }
@@ -77,7 +76,7 @@ object DetektInvoker {
 	}
 
 	private fun invokeCli(project: Project, classpath: Configuration, args: Iterable<String>) {
-		Log.info(args)
+		println(args)
 		project.javaexec {
 			main = "io.gitlab.arturbosch.detekt.cli.Main"
 			classpath(classpath)
