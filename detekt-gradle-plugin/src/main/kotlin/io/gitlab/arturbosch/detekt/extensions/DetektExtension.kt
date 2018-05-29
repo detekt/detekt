@@ -46,7 +46,6 @@ constructor(
 	var filters: String?
 		get() = filtersProperty.orNull
 		set(value) {
-			println("Filters $value")
 			filtersProperty.set(value)
 		}
 

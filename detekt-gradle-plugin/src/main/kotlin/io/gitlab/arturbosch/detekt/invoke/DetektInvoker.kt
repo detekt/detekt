@@ -26,7 +26,7 @@ object DetektInvoker {
 
 		val argumentList = baseDetektParameters(detekt)
 
-		invokeCli(project, classpath, argumentList.toList())
+		invokeCli(project, classpath, argumentList.toList(), detekt.debug ?: false)
 	}
 
 	fun createBaseline(detekt: Detekt) {
@@ -36,7 +36,7 @@ object DetektInvoker {
 		val argumentList = baseDetektParameters(detekt)
 		argumentList += CREATE_BASELINE_PARAMETER
 
-		invokeCli(project, classpath, argumentList.toList())
+		invokeCli(project, classpath, argumentList.toList(), detekt.debug ?: false)
 	}
 
 	fun generateConfig(detekt: Detekt) {
@@ -50,7 +50,7 @@ object DetektInvoker {
 		val argumentList = args.flatMapTo(ArrayList()) { listOf(it.key, it.value) }
 		argumentList += GENERATE_CONFIG_PARAMETER
 
-		invokeCli(project, classpath, argumentList.toList())
+		invokeCli(project, classpath, argumentList.toList(), detekt.debug ?: false)
 	}
 
 	private fun baseDetektParameters(detekt: Detekt): MutableList<String> {
@@ -58,7 +58,6 @@ object DetektInvoker {
 				INPUT_PARAMETER to detekt.source.asFileTree.asPath
 		)
 
-		println("Config: ${detekt.config}")
 		detekt.config?.let { args += CONFIG_PARAMETER to it.asFile().absolutePath }
 		detekt.filters?.let { args += FILTERS_PARAMETER to it }
 		detekt.plugins?.let { args += PLUGINS_PARAMETER to it }
@@ -75,8 +74,8 @@ object DetektInvoker {
 		return argumentList
 	}
 
-	private fun invokeCli(project: Project, classpath: Configuration, args: Iterable<String>) {
-		println(args)
+	private fun invokeCli(project: Project, classpath: Configuration, args: Iterable<String>, debug: Boolean = false) {
+		if (debug) println(args)
 		project.javaexec {
 			main = "io.gitlab.arturbosch.detekt.cli.Main"
 			classpath(classpath)
