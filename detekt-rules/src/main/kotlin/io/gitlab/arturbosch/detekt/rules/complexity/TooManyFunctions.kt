@@ -14,6 +14,7 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
+import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 
 /**
  * This rule reports files, classes, interfaces, objects and enums which contain too many functions.
@@ -28,6 +29,7 @@ import org.jetbrains.kotlin.psi.KtObjectDeclaration
  * @configuration thresholdInObjects - threshold in objects (default: 11)
  * @configuration thresholdInEnums - threshold in enums (default: 11)
  * @configuration ignoreDeprecated - ignore deprecated functions (default: false)
+ * @configuration ignorePrivate - ignore private functions (default: false)
  *
  * @active since v1.0.0
  * @author Artur Bosch
@@ -49,6 +51,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 	private val thresholdInInterfaces = valueOrDefault(THRESHOLD_IN_INTERFACES, DEFAULT_THRESHOLD)
 	private val thresholdInEnums = valueOrDefault(THRESHOLD_IN_ENUMS, DEFAULT_THRESHOLD)
 	private val ignoreDeprecated = valueOrDefault(IGNORE_DEPRECATED, false)
+	private val ignorePrivate = valueOrDefault(IGNORE_PRIVATE, false)
 
 	private var amountOfTopLevelFunctions: Int = 0
 
@@ -65,7 +68,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 	}
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (function.isTopLevel && ignoresDeprecatedFunction(function)) {
+		if (function.isTopLevel && ignoresDeprecatedFunction(function) && ignoresPrivateFunction(function)) {
 			amountOfTopLevelFunctions++
 		}
 	}
@@ -117,11 +120,19 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 	private fun calcFunctions(classOrObject: KtClassOrObject): Int = classOrObject.getBody()?.declarations
 			?.filterIsInstance<KtNamedFunction>()
 			?.filter { ignoresDeprecatedFunction(it) }
+			?.filter { ignoresPrivateFunction(it) }
 			?.size ?: 0
 
 	private fun ignoresDeprecatedFunction(function: KtNamedFunction): Boolean {
 		if (ignoreDeprecated) {
 			return !function.annotationEntries.any { it.typeReferenceName == DEPRECATED }
+		}
+		return true
+	}
+
+	private fun ignoresPrivateFunction(function: KtNamedFunction): Boolean {
+		if (ignorePrivate) {
+			return !function.isPrivate()
 		}
 		return true
 	}
@@ -134,6 +145,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 		const val THRESHOLD_IN_OBJECTS = "thresholdInObjects"
 		const val THRESHOLD_IN_ENUMS = "thresholdInEnums"
 		const val IGNORE_DEPRECATED = "ignoreDeprecated"
+		const val IGNORE_PRIVATE = "ignorePrivate"
 		private const val DEPRECATED = "Deprecated"
 	}
 }
