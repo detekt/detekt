@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
-import com.sun.tools.javac.code.Flags.DEPRECATED
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
