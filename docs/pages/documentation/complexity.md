@@ -292,3 +292,7 @@ which clearly belongs together in separate parts of the code.
 * `ignoreDeprecated` (default: `false`)
 
    ignore deprecated functions
+
+* `ignorePrivate` (default: `false`)
+
+   ignore private functions
