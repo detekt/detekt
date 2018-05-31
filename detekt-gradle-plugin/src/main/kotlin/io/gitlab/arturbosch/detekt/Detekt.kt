@@ -5,8 +5,6 @@ import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import org.gradle.api.Action
 import org.gradle.api.file.FileCollection
 import org.gradle.api.file.ProjectLayout
-import org.gradle.api.file.RegularFile
-import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.internal.ClosureBackedAction
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.plugins.quality.CheckstyleReports

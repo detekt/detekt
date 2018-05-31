@@ -67,7 +67,7 @@ constructor(
 
 	var configFile: File?
 		get() = configProperty.orNull?.asFile()
-		set(value) = configProperty.set(project.resources.text.fromFile(configFile))
+		set(value) = configProperty.set(project.resources.text.fromFile(value))
 
 	fun idea(configuration: Action<in IdeaExtension>) {
 		configuration.execute(ideaExtension)
