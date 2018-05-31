@@ -102,6 +102,7 @@ internal class KotlinPluginTest : Spek({
 
 			val detektConfig = """
 					|detekt {
+					|	toolVersion = "1.0.0.RC7-MARVIN2"
 					|	configFile = file("${rootDir.absolutePath}/config.yml")
 					|}
 				"""
@@ -163,6 +164,10 @@ internal class KotlinPluginTest : Spek({
 			val rootDir = createTempDir(prefix = "applyPlugin")
 
 			val detektConfig = """
+					|detekt {
+					|	toolVersion = "1.0.0.RC6-MARVIN2"
+					|}
+					|
 					|tasks {
 					| 	"detektFailFast"(io.gitlab.arturbosch.detekt.Detekt::class) {
 					|		description = "Runs a failfast detekt build."
@@ -197,6 +202,10 @@ internal class KotlinPluginTest : Spek({
 			val rootDir = createTempDir(prefix = "applyPlugin")
 
 			val detektConfig = """
+					|detekt {
+					|	toolVersion = "1.0.0.RC6-MARVIN2"
+					|}
+					|
 					|tasks.withType<io.gitlab.arturbosch.detekt.Detekt> {
 					|	reports {
 					|		xml.isEnabled = true
@@ -259,7 +268,10 @@ private fun writeFiles(root: File, detektConfig: String) {
 }
 
 private fun writeConfig(root: File) {
-	File(root, "config.yml").writeText("config is here")
+	File(root, "config.yml").writeText("""
+		|autoCorrect: true
+		|failFast: false
+		""".trimMargin())
 }
 
 private fun writeBaseline(root: File) {
