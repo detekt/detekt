@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
+import com.sun.tools.javac.code.Flags.DEPRECATED
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
@@ -122,14 +123,10 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 			?.filter { !isIgnoredFunction(it) }
 			?.size ?: 0
 
-	private fun isIgnoredFunction(function: KtNamedFunction): Boolean {
-		if (ignoreDeprecated) {
-			return function.annotationEntries.any { it.typeReferenceName == DEPRECATED }
-		}
-		if (ignorePrivate) {
-			return function.isPrivate()
-		}
-		return false
+	private fun isIgnoredFunction(function: KtNamedFunction): Boolean = when {
+			ignoreDeprecated -> function.annotationEntries.any { it.typeReferenceName == DEPRECATED }
+			ignorePrivate -> function.isPrivate()
+			else -> false
 	}
 
 	companion object {
