@@ -68,7 +68,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 	}
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (function.isTopLevel && ignoresDeprecatedFunction(function) && ignoresPrivateFunction(function)) {
+		if (function.isTopLevel && !isIgnoredFunction(function)) {
 			amountOfTopLevelFunctions++
 		}
 	}
@@ -119,22 +119,17 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 
 	private fun calcFunctions(classOrObject: KtClassOrObject): Int = classOrObject.getBody()?.declarations
 			?.filterIsInstance<KtNamedFunction>()
-			?.filter { ignoresDeprecatedFunction(it) }
-			?.filter { ignoresPrivateFunction(it) }
+			?.filter { !isIgnoredFunction(it) }
 			?.size ?: 0
 
-	private fun ignoresDeprecatedFunction(function: KtNamedFunction): Boolean {
+	private fun isIgnoredFunction(function: KtNamedFunction): Boolean {
 		if (ignoreDeprecated) {
-			return !function.annotationEntries.any { it.typeReferenceName == DEPRECATED }
+			return function.annotationEntries.any { it.typeReferenceName == DEPRECATED }
 		}
-		return true
-	}
-
-	private fun ignoresPrivateFunction(function: KtNamedFunction): Boolean {
 		if (ignorePrivate) {
-			return !function.isPrivate()
+			return function.isPrivate()
 		}
-		return true
+		return false
 	}
 
 	companion object {
