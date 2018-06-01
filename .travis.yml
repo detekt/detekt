@@ -7,7 +7,6 @@ script:
   - ./gradlew shadowJar
   - java -jar ./detekt-cli/build/libs/detekt-cli-*-all.jar --help
   - java -jar ./detekt-cli/build/libs/detekt-cli-*-all.jar -i . --baseline ./reports/baseline.xml -f ".*/resources/.*, .*/build/.*" -c ./detekt-cli/src/main/resources/default-detekt-config.yml,./reports/failfast.yml
-  - ./gradlew detektCheck
   - ./gradlew verifyGeneratorOutput
 
 before_cache:

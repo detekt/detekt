@@ -10,6 +10,7 @@ import java.util.concurrent.ExecutorService
  * If using a custom executor service be aware that detekt won't shutdown it after use!
  *
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 @Suppress("LongParameterList")
 data class ProcessingSettings(val project: List<Path>,
@@ -18,6 +19,7 @@ data class ProcessingSettings(val project: List<Path>,
 							  val parallelCompilation: Boolean = false,
 							  val excludeDefaultRuleSets: Boolean = false,
 							  val pluginPaths: List<Path> = emptyList(),
+							  val debug: Boolean = false,
 							  val executorService: ExecutorService? = null) {
 
 	constructor(project: Path,
@@ -26,9 +28,10 @@ data class ProcessingSettings(val project: List<Path>,
 				parallelCompilation: Boolean = false,
 				excludeDefaultRuleSets: Boolean = false,
 				pluginPaths: List<Path> = emptyList(),
+				debug: Boolean = false,
 				executorService: ExecutorService? = null) :
 			this(listOf(project), config, pathFilters, parallelCompilation,
-					excludeDefaultRuleSets, pluginPaths, executorService)
+					excludeDefaultRuleSets, pluginPaths, debug, executorService)
 
 	init {
 		pluginPaths.forEach {

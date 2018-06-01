@@ -17,11 +17,14 @@ plugins {
 	`java-gradle-plugin`
 	id("com.gradle.plugin-publish") version "0.9.10"
 	kotlin("jvm") version "1.2.41"
+	`kotlin-dsl`
 }
 
 apply {
 	plugin("org.junit.platform.gradle.plugin")
 }
+val detektGradleVersion: String by project
+
 
 group = "io.gitlab.arturbosch"
 version = "1.0.0.RC7"

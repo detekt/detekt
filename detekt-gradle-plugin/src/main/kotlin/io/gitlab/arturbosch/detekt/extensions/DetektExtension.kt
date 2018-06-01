@@ -2,101 +2,74 @@ package io.gitlab.arturbosch.detekt.extensions
 
 import org.gradle.api.Action
 import org.gradle.api.Project
-import org.gradle.api.file.FileCollection
-import org.gradle.api.internal.artifacts.dependencies.DefaultExternalModuleDependency
+import org.gradle.api.file.ProjectLayout
+import org.gradle.api.file.RegularFile
+import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.plugins.quality.CodeQualityExtension
+import org.gradle.api.provider.Property
+import org.gradle.api.resources.TextResource
+import org.gradle.kotlin.dsl.property
+import java.io.File
 
 /**
  * @author Artur Bosch
  * @author Said Tahsin Dane
- * @author Olivier Lemasle
+ * @author Marvin Ramin
  */
-open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
-						   open var debug: Boolean = DEFAULT_DEBUG_VALUE,
-						   open var profile: String = DEFAULT_PROFILE_NAME,
-						   open var ideaExtension: IdeaExtension = IdeaExtension()) {
+open class DetektExtension
+constructor(
+		private val project: Project,
+		projectLayout: ProjectLayout
+) : CodeQualityExtension() {
+	private val debugProperty: Property<Boolean?> = project.objects.property()
+	private val parallelProperty: Property<Boolean?> = project.objects.property()
+	private val disableDefaultRuleSetsProperty: Property<Boolean?> = project.objects.property()
+	private val filtersProperty: Property<String?> = project.objects.property()
+	private val baselineProperty: Property<File?> = project.objects.property()
+	private val pluginsProperty: Property<String?> = project.objects.property()
+	private val configProperty: Property<TextResource?> = project.objects.property()
+	private val configDirProperty: RegularFileProperty = projectLayout.fileProperty()
+	var ideaExtension: IdeaExtension = IdeaExtension()
 
-	fun ideaFormatArgs() = ideaExtension.formatArgs(this)
-	fun ideaInspectArgs() = ideaExtension.inspectArgs(this)
+	var debug: Boolean?
+		get() = debugProperty.orNull
+		set(value) = debugProperty.set(value)
+
+	var parallel: Boolean?
+		get() = parallelProperty.orNull
+		set(value) = parallelProperty.set(value)
+
+	var disableDefaultRuleSets: Boolean?
+		get() = disableDefaultRuleSetsProperty.orNull
+		set(value) = disableDefaultRuleSetsProperty.set(value)
+
+	var filters: String?
+		get() = filtersProperty.orNull
+		set(value) {
+			filtersProperty.set(value)
+		}
+
+	var plugins: String?
+		get() = pluginsProperty.orNull
+		set(value) = pluginsProperty.set(value)
+
+	var baseline: File?
+		get() = baselineProperty.orNull
+		set(value) = baselineProperty.set(value)
+
+	var configDir: RegularFile?
+		get() = configDirProperty.orNull
+		set(value) = configDirProperty.set(value)
+
+	var config: TextResource?
+		get() = configProperty.orNull
+		set(value) = configProperty.set(value)
+
+	var configFile: File?
+		get() = configProperty.orNull?.asFile()
+		set(value) = configProperty.set(project.resources.text.fromFile(value))
 
 	fun idea(configuration: Action<in IdeaExtension>) {
 		configuration.execute(ideaExtension)
 	}
-
-	fun defaultProfile(configuration: Action<in ProfileExtension>) {
-		configuration.execute(ProfileStorage.defaultProfile)
-	}
-
-	fun profile(name: String, configuration: Action<in ProfileExtension>) {
-		if (name == DEFAULT_PROFILE_NAME) {
-			defaultProfile(configuration)
-		} else {
-			ProfileExtension(name).apply {
-				ProfileStorage.add(this)
-				configuration.execute(this)
-			}
-		}
-	}
-
-	fun resolveClasspath(project: Project): FileCollection = project
-		.configurations
-		.getByName("detekt")
-		.withDependencies {
-			it.add(
-				DefaultExternalModuleDependency(
-					"io.gitlab.arturbosch.detekt", "detekt-cli", version
-				)
-			)
-		}
-
-	fun resolveArguments(project: Project): List<String> {
-		return with(extractArguments()) {
-			if (!contains(INPUT_PARAMETER)) {
-				add(INPUT_PARAMETER)
-				add(project.projectDir.toString())
-			}
-			this
-		}
-	}
-
-	private fun extractArguments(): MutableList<String> {
-		val defaultProfile = ProfileStorage.defaultProfile
-		val systemOrSelected = ProfileStorage.systemProfile
-				?: ProfileStorage.getByName(profile)
-
-		val propertyMap =
-				if (systemOrSelected?.name == defaultProfile.name) {
-					defaultProfile.arguments(debug)
-				} else {
-					defaultProfile.arguments(debug).apply {
-						systemOrSelected?.arguments(debug)?.mergeInto(this)
-					}
-				}
-
-		val arguments = propertyMap.flatMapTo(ArrayList()) { removeBooleanValues(it.key, it.value) }
-
-		if (debug) {
-			val name = systemOrSelected?.name ?: DEFAULT_PROFILE_NAME
-			println("detekt version: $version - usedProfile: $name")
-			println("arguments: $arguments")
-		}
-
-		return arguments
-	}
-
-	private fun removeBooleanValues(key: String, value: String) =
-			if (value == "true" || value == "false") listOf(key) else listOf(key, value)
-
-	override fun toString(): String = "DetektExtension(version='$version', " +
-			"debug=$debug, profile='$profile', ideaExtension=$ideaExtension, profiles=${ProfileStorage.all})"
 }
-
-private fun MutableMap<String, String>.mergeInto(other: MutableMap<String, String>) {
-	for ((key, value) in this) {
-		other.merge(key, value) { v1, v2 ->
-			joinMultipleConfigurations(key, v1, v2)
-		}
-	}
-}
-
-private fun joinMultipleConfigurations(key: String, v1: String, v2: String) =
-		if (key == CONFIG_PARAMETER || key == CONFIG_RESOURCE_PARAMETER) "$v1,$v2" else v2
