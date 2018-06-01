@@ -4,7 +4,7 @@ buildscript {
 		jcenter()
 	}
 	dependencies {
-		classpath("org.junit.platform:junit-platform-gradle-plugin:1.1.0")
+		classpath("org.junit.platform:junit-platform-gradle-plugin:1.2.0")
 	}
 }
 
@@ -24,17 +24,17 @@ apply {
 }
 
 group = "io.gitlab.arturbosch"
-version = "1.0.0.RC7"
+version = "1.0.0.RC7-2"
 
 val spekVersion = "1.1.5"
-val junitPlatformVersion = "1.1.0"
-val assertjVersion = "3.9.1"
+val junitPlatformVersion = "1.2.0"
+val assertjVersion = "3.10.0"
 
 dependencies {
 	implementation(gradleApi())
 	implementation(kotlin("stdlib"))
 	implementation(kotlin("reflect"))
-	
+
 	testImplementation("org.assertj:assertj-core:$assertjVersion")
 	testImplementation("org.jetbrains.spek:spek-api:$spekVersion")
 	testImplementation("org.jetbrains.spek:spek-subject-extension:$spekVersion")
