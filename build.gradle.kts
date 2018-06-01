@@ -1,6 +1,7 @@
 import com.jfrog.bintray.gradle.BintrayExtension
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import io.gitlab.arturbosch.detekt.extensions.ProfileExtension
+import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.junit.platform.console.options.Details
 import org.junit.platform.gradle.plugin.JUnitPlatformExtension
@@ -28,6 +29,7 @@ plugins {
 	id("com.github.johnrengelman.shadow") version "2.0.2" apply false
 	id("org.sonarqube") version "2.6.2"
 	id("io.gitlab.arturbosch.detekt")
+	id("org.jetbrains.dokka") version "0.9.17"
 }
 
 tasks.withType<Wrapper> {
@@ -56,6 +58,7 @@ subprojects {
 		plugin("kotlin")
 		plugin("com.jfrog.bintray")
 		plugin("maven-publish")
+		plugin("org.jetbrains.dokka")
 	}
 
 	if (this.name in listOf("detekt-cli", "detekt-watch-service", "detekt-generator")) {
@@ -99,21 +102,32 @@ subprojects {
 		})
 	}
 
+	tasks.withType(DokkaTask::class.java) {
+		outputFormat = "javadoc"
+		outputDirectory = "$buildDir/javadoc"
+	}
+
 	val sourcesJar by tasks.creating(Jar::class) {
 		dependsOn("classes")
 		classifier = "sources"
 		from(the<JavaPluginConvention>().sourceSets["main"].allSource)
 	}
 
+	val javadocJar by tasks.creating(Jar::class) {
+		dependsOn("dokka")
+		classifier = "javadoc"
+		from(buildDir.resolve("javadoc"))
+	}
+
 	artifacts {
 		add("archives", sourcesJar)
 	}
-
 
 	configure<PublishingExtension> {
 		publications.create<MavenPublication>("DetektPublication") {
 			from(components["java"])
 			artifact(sourcesJar)
+			artifact(javadocJar)
 			groupId = this@subprojects.group as? String
 			artifactId = this@subprojects.name
 			version = this@subprojects.version as? String
