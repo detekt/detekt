@@ -230,6 +230,17 @@ class MayBeConstSpec : SubjectSpek<MayBeConst>({
 			subject.lint(code)
 			assertThat(subject.findings).isEmpty()
 		}
+
+		it("does not detect just a dollar as interpolation") {
+			val code = """ val hasDollar = "$" """
+			subject.lint(code)
+			assertThat(subject.findings).hasSize(1)
+		}
+
+		it("does not report interpolated strings") {
+			subject.lint(Case.MayBeConstNegative.path())
+			assertThat(subject.findings).isEmpty()
+		}
 	}
 
 	given("some const val candidates in nested objects") {
