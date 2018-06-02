@@ -38,6 +38,7 @@ enum class Case(val file: String) {
 	LabeledExpression("/cases/LabeledExpression.kt"),
 	LoopWithTooManyJumpStatementsNegative("cases/LoopWithTooManyJumpStatementsNegative.kt"),
 	LoopWithTooManyJumpStatementsPositive("cases/LoopWithTooManyJumpStatementsPositive.kt"),
+	MayBeConstNegative("cases/MayBeConstNegative.kt"),
 	MandatoryBracesIfStatementsPositive("cases/MandatoryBracesIfStatementsPositive.kt"),
 	MandatoryBracesIfStatementsNegative("cases/MandatoryBracesIfStatementsNegative.kt"),
 	NamingConventions("/cases/NamingConventions.kt"),

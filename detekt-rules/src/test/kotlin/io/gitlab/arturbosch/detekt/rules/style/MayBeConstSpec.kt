@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
 import org.jetbrains.spek.api.dsl.given
@@ -218,6 +219,17 @@ class MayBeConstSpec : SubjectSpek<MayBeConst>({
 				}
 			""".trimMargin()
 			subject.lint(code)
+			assertThat(subject.findings).isEmpty()
+		}
+
+		it("does not detect just a dollar as interpolation") {
+			val code = """ val hasDollar = "$" """
+			subject.lint(code)
+			assertThat(subject.findings).hasSize(1)
+		}
+
+		it("does not report interpolated strings") {
+			subject.lint(Case.MayBeConstNegative.path())
 			assertThat(subject.findings).isEmpty()
 		}
 	}
