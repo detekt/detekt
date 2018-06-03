@@ -54,6 +54,15 @@ class MayBeConstSpec : SubjectSpek<MayBeConst>({
 			assertThat(subject.findings).isEmpty()
 		}
 
+		it("does not report none const val candidates") {
+			val code = """
+				const val a = 0
+				val p = Pair(a, a + a)
+				val p2 = emptyList<Int>().plus(a)
+				"""
+			subject.lint(code)
+			assertThat(subject.findings).isEmpty()
+		}
 	}
 
 	given("some vals that could be constants") {
