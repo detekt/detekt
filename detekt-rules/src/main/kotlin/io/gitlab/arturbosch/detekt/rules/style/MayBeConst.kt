@@ -61,13 +61,13 @@ class MayBeConst(config: Config = Config.empty) : Rule(config) {
 	}
 
 	override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
-		companionObjectConstants.clear()
 		val constProperties = declaration.declarations
 				.filterIsInstance<KtProperty>()
 				.filter { it.isConstant() }
 				.mapNotNull { it.name }
 		companionObjectConstants.addAll(constProperties)
 		super.visitObjectDeclaration(declaration)
+		companionObjectConstants.removeAll(constProperties)
 	}
 
 	override fun visitProperty(property: KtProperty) {
