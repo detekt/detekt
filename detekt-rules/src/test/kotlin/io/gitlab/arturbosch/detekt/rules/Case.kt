@@ -15,6 +15,7 @@ enum class Case(val file: String) {
 	CollapsibleIfsNegative("/cases/CollapsibleIfsNegative.kt"),
 	ComplexMethods("/cases/ComplexMethods.kt"),
 	ConditionalPath("/cases/ConditionalPath.kt"),
+	ConstInObjects("/cases/ConstInObjects.kt"),
 	DataClassContainsFunctionsPositive("/cases/DataClassContainsFunctionsPositive.kt"),
 	DataClassContainsFunctionsNegative("/cases/DataClassContainsFunctionsNegative.kt"),
 	Default("/cases/Default.kt"),
