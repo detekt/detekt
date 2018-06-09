@@ -86,6 +86,9 @@ subprojects {
 	bintray {
 		user = System.getenv("BINTRAY_USER") ?: ""
 		key = System.getenv("BINTRAY_API_KEY") ?: ""
+		val mavenCentralUser = System.getenv("MAVEN_CENTRAL_USER") ?: ""
+		val mavenCentralPassword = System.getenv("MAVEN_CENTRAL_PW") ?: ""
+
 		setPublications("DetektPublication")
 
 		pkg(delegateClosureOf<BintrayExtension.PackageConfig> {
@@ -98,6 +101,17 @@ subprojects {
 			version(delegateClosureOf<BintrayExtension.VersionConfig> {
 				name = project.version as? String
 				released = Date().toString()
+
+				gpg(delegateClosureOf<BintrayExtension.GpgConfig> {
+					sign = true
+				})
+
+				mavenCentralSync(delegateClosureOf<BintrayExtension.MavenCentralSyncConfig> {
+					sync = true
+					user = mavenCentralUser
+					password = mavenCentralPassword
+					close = "1"
+				})
 			})
 		})
 	}
