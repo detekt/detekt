@@ -18,6 +18,7 @@ class Detektor(settings: ProcessingSettings,
 	private val config: Config = settings.config
 	private val testPattern: TestPattern = settings.loadTestPattern()
 	private val executor: ExecutorService? = settings.executorService
+	private val logger = settings.errorPrinter ?: System.err
 
 	fun run(ktFiles: List<KtFile>): Map<String, List<Finding>> = withExecutor(executor) {
 
@@ -27,6 +28,10 @@ class Detektor(settings: ProcessingSettings,
 				file.analyze().apply {
 					processors.forEach { it.onProcessComplete(file, this) }
 				}
+			}.exceptionally {
+				logger.println("Analyzing ${file.absolutePath()} lead to an exception:")
+				it.stackTrace.forEach { logger.println(it) }
+				emptyMap()
 			}
 		}
 
