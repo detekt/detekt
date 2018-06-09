@@ -6,6 +6,7 @@ val kotlinVersion by project
 val junitPlatformVersion by project
 val spekVersion by project
 val jcommanderVersion by project
+val detektVersion by project
 
 // implementation.extendsFrom kotlin is not enough for using cli in a gradle task - #58
 configurations.testImplementation.extendsFrom(configurations.kotlinTest)
@@ -25,6 +26,13 @@ dependencies {
 tasks {
 	"test" {
 		dependsOn(":detekt-generator:generateDocumentation")
+	}
+}
+
+// bundle detekt's version for debug logging on rule exceptions
+tasks.withType<Jar> {
+	manifest {
+		attributes(mapOf("DetektVersion" to detektVersion))
 	}
 }
 

@@ -13,4 +13,3 @@ dependencies {
 	testRuntimeOnly("org.junit.platform:junit-platform-console:$junitPlatformVersion")
 	testRuntimeOnly("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
 }
-
