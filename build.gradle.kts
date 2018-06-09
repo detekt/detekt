@@ -103,6 +103,9 @@ subprojects {
 	}
 
 	tasks.withType(DokkaTask::class.java) {
+		// suppresses undocumented classes but not dokka warnings
+		// https://github.com/Kotlin/dokka/issues/229 && https://github.com/Kotlin/dokka/issues/319
+		reportUndocumented = false
 		outputFormat = "javadoc"
 		outputDirectory = "$buildDir/javadoc"
 	}
