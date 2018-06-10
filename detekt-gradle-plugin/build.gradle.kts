@@ -24,7 +24,7 @@ apply {
 }
 
 group = "io.gitlab.arturbosch"
-version = "1.0.0.RC7-2"
+version = "1.0.0.RC7-3"
 
 val spekVersion = "1.1.5"
 val junitPlatformVersion = "1.2.0"

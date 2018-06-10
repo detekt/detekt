@@ -5,6 +5,16 @@ keywords: changelog, release-notes, migration
 permalink: changelog.html
 toc: true
 ---
+#### RC7-3
+
+- Suppress undocumented classes in dokka - [#947](https://github.com/arturbosch/detekt/pull/947)
+- Do not crash on rule exceptions - #793 #944 - [#946](https://github.com/arturbosch/detekt/pull/946)
+- Provide signing config for bintray - #345 - [#945](https://github.com/arturbosch/detekt/pull/945)
+- Add a space between two words - [#942](https://github.com/arturbosch/detekt/pull/942)
+- MaybeConst tests - [#938](https://github.com/arturbosch/detekt/pull/938)
+- Respect string interpolation - Closes #808 - [#937](https://github.com/arturbosch/detekt/pull/937)
+
+See all issues at: [RC7-3](https://github.com/arturbosch/detekt/milestone/35)
 
 #### RC7-2
 
