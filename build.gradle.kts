@@ -3,8 +3,6 @@ import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import io.gitlab.arturbosch.detekt.extensions.ProfileExtension
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.junit.platform.console.options.Details
-import org.junit.platform.gradle.plugin.JUnitPlatformExtension
 import java.util.*
 
 buildscript {
@@ -15,11 +13,9 @@ buildscript {
 	}
 
 	val kotlinVersion by project
-	val junitPlatformVersion by project
 
 	dependencies {
 		classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
-		classpath("org.junit.platform:junit-platform-gradle-plugin:$junitPlatformVersion")
 	}
 }
 
@@ -53,7 +49,6 @@ allprojects {
 subprojects {
 
 	apply {
-		plugin("org.junit.platform.gradle.plugin")
 		plugin("java-library")
 		plugin("kotlin")
 		plugin("com.jfrog.bintray")
@@ -74,13 +69,8 @@ subprojects {
 		kotlinOptions.allWarningsAsErrors = shouldTreatCompilerWarningsAsErrors()
 	}
 
-	configure<JUnitPlatformExtension> {
-		details = Details.TREE
-		filters {
-			engines {
-				include = listOf("spek", "junit-jupiter")
-			}
-		}
+	val test by tasks.getting(Test::class) {
+		useJUnitPlatform()
 	}
 
 	bintray {
@@ -178,7 +168,6 @@ subprojects {
 	val spekVersion by project
 	val kotlinImplementation by configurations.creating
 	val kotlinTest by configurations.creating
-	val junitPlatform = configurations["junitPlatform"]
 
 	dependencies {
 		kotlinImplementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion")
@@ -191,9 +180,6 @@ subprojects {
 		kotlinTest("org.jetbrains.spek:spek-subject-extension:$spekVersion")
 		kotlinTest("org.junit.jupiter:junit-jupiter-engine:$junitEngineVersion")
 		kotlinTest("org.reflections:reflections:0.9.11")
-		junitPlatform("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
-		junitPlatform("org.junit.platform:junit-platform-console:$junitPlatformVersion")
-		junitPlatform("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
 	}
 
 	the<JavaPluginConvention>().sourceSets {
