@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import org.jetbrains.kotlin.com.intellij.psi.PsiPlainText
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -42,9 +43,21 @@ class ExpressionBodySyntax(config: Config = Config.empty) : Rule(config) {
 		if (function.bodyExpression != null) {
 			val body = function.bodyExpression!!
 			body.singleReturnStatement()?.let { returnStmt ->
-				report(CodeSmell(issue, Entity.from(returnStmt), issue.description))
+				if (!containsWhiteSpace(returnStmt.returnedExpression)) {
+					report(CodeSmell(issue, Entity.from(returnStmt), issue.description))
+				}
 			}
 		}
+	}
+
+	override fun visitPlainText(content: PsiPlainText?) {
+		super.visitPlainText(content)
+	}
+
+	private fun containsWhiteSpace(expression: KtExpression?): Boolean {
+		return expression?.children?.any {
+			it.text.contains('\n')
+		} == true
 	}
 
 	private fun KtExpression.singleReturnStatement(): KtReturnExpression? {

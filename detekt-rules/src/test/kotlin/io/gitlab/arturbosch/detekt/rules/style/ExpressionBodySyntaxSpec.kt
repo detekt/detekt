@@ -33,14 +33,25 @@ class ExpressionBodySyntaxSpec : SubjectSpek<ExpressionBodySyntax>({
 			)).hasSize(1)
 		}
 
-		it("reports return statement with multiline method chain") {
+		it("does not report return statement with multiline method chain") {
 			assertThat(subject.lint("""
 				fun stuff(): Int {
 					return moreStuff()
-					.getStuff()
-					.stuffStuff()
+						.getStuff()
+						.stuffStuff()
 				}
-			""")).hasSize(1)
+			""")).hasSize(0)
+		}
+
+		it("does not report return statement with multiline method chain") {
+			assertThat(subject.lint("""
+				fun stuff(): Int {
+					return
+						moreStuff()
+							.getStuff()
+							.stuffStuff()
+				}
+			""")).hasSize(0)
 		}
 
 		it("reports return statements with conditionals") {
