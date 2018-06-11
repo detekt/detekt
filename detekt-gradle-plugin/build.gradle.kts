@@ -3,9 +3,6 @@ buildscript {
 		mavenCentral()
 		jcenter()
 	}
-	dependencies {
-		classpath("org.junit.platform:junit-platform-gradle-plugin:1.2.0")
-	}
 }
 
 repositories {
@@ -17,10 +14,6 @@ plugins {
 	`java-gradle-plugin`
 	id("com.gradle.plugin-publish") version "0.9.10"
 	kotlin("jvm") version "1.2.41"
-}
-
-apply {
-	plugin("org.junit.platform.gradle.plugin")
 }
 
 group = "io.gitlab.arturbosch"
@@ -39,7 +32,6 @@ dependencies {
 	testImplementation("org.jetbrains.spek:spek-api:$spekVersion")
 	testImplementation("org.jetbrains.spek:spek-subject-extension:$spekVersion")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
-	testRuntimeOnly("org.junit.platform:junit-platform-console:$junitPlatformVersion")
 	testRuntimeOnly("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
 }
 
@@ -53,6 +45,9 @@ gradlePlugin {
 	}
 }
 
+val test by tasks.getting(Test::class) {
+	useJUnitPlatform()
+}
 
 pluginBundle {
 	website = "https://github.com/arturbosch/detekt"
