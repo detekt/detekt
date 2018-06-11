@@ -109,6 +109,13 @@ fun stuff(): Int {
 
 ```kotlin
 fun stuff() = 5
+
+fun stuff() {
+    return
+        moreStuff()
+            .getStuff()
+            .stuffStuff()
+}
 ```
 
 ### ForbiddenComment
