@@ -25,10 +25,18 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
  *
  * <compliant>
  * fun stuff() = 5
+ *
+ * fun stuff() {
+ *     return
+ *         moreStuff()
+ *             .getStuff()
+ *             .stuffStuff()
+ * }
  * </compliant>
  *
  * @author Artur Bosch
  * @author Marvin Ramin
+ * @author schalkms
  */
 class ExpressionBodySyntax(config: Config = Config.empty) : Rule(config) {
 
