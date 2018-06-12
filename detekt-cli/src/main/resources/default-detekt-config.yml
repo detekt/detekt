@@ -389,6 +389,7 @@ style:
     active: false
   ExpressionBodySyntax:
     active: false
+    includeLineWrapping: false
   ForbiddenComment:
     active: true
     values: 'TODO:,FIXME:,STOPSHIP:'
