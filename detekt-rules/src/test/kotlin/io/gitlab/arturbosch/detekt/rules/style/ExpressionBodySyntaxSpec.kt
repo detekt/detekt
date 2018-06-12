@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.dsl.given
@@ -33,27 +34,6 @@ class ExpressionBodySyntaxSpec : SubjectSpek<ExpressionBodySyntax>({
 			)).hasSize(1)
 		}
 
-		it("does not report return statement with multiline method chain") {
-			assertThat(subject.lint("""
-				fun stuff(): Int {
-					return moreStuff()
-						.getStuff()
-						.stuffStuff()
-				}
-			""")).hasSize(0)
-		}
-
-		it("does not report return statement with multiline method chain") {
-			assertThat(subject.lint("""
-				fun stuff(): Int {
-					return
-						moreStuff()
-							.getStuff()
-							.stuffStuff()
-				}
-			""")).hasSize(0)
-		}
-
 		it("reports return statements with conditionals") {
 			assertThat(subject.lint("""
 				fun stuff(): Int {
@@ -72,6 +52,25 @@ class ExpressionBodySyntaxSpec : SubjectSpek<ExpressionBodySyntax>({
 					return false
 				}
 			""")).hasSize(0)
+		}
+	}
+
+	given("several return statements with multiline method chain") {
+
+		val code = """
+			fun stuff(): Int {
+				return moreStuff()
+					.getStuff()
+					.stuffStuff()
+			}"""
+
+		it("does not report with the default configuration") {
+			assertThat(subject.lint(code)).hasSize(0)
+		}
+
+		it("reports with includeLineWrapping = true configuration") {
+			val config = TestConfig(mapOf(ExpressionBodySyntax.INCLUDE_LINE_WRAPPING to "true"))
+			assertThat(ExpressionBodySyntax(config).lint(code)).hasSize(1)
 		}
 	}
 })

@@ -97,6 +97,12 @@ cleans up the code.
 
 **Debt**: 5min
 
+#### Configuration options:
+
+* `includeLineWrapping` (default: `false`)
+
+   include return statements with line wraps in it
+
 #### Noncompliant Code:
 
 ```kotlin

@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import org.jetbrains.kotlin.com.intellij.psi.PsiPlainText
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -34,6 +33,8 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
  * }
  * </compliant>
  *
+ * @configuration includeLineWrapping - include return statements with line wraps in it (default: false)
+ *
  * @author Artur Bosch
  * @author Marvin Ramin
  * @author schalkms
@@ -47,25 +48,17 @@ class ExpressionBodySyntax(config: Config = Config.empty) : Rule(config) {
 					" can be rewritten with ExpressionBodySyntax.",
 			Debt.FIVE_MINS)
 
+	private val includeLineWrapping = valueOrDefault(INCLUDE_LINE_WRAPPING, false)
+
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		if (function.bodyExpression != null) {
 			val body = function.bodyExpression!!
 			body.singleReturnStatement()?.let { returnStmt ->
-				if (!containsWhiteSpace(returnStmt.returnedExpression)) {
+				if (includeLineWrapping || !containsWhiteSpace(returnStmt.returnedExpression)) {
 					report(CodeSmell(issue, Entity.from(returnStmt), issue.description))
 				}
 			}
 		}
-	}
-
-	override fun visitPlainText(content: PsiPlainText?) {
-		super.visitPlainText(content)
-	}
-
-	private fun containsWhiteSpace(expression: KtExpression?): Boolean {
-		return expression?.children?.any {
-			it.text.contains('\n')
-		} == true
 	}
 
 	private fun KtExpression.singleReturnStatement(): KtReturnExpression? {
@@ -75,6 +68,16 @@ class ExpressionBodySyntax(config: Config = Config.empty) : Rule(config) {
 				return statements[0] as KtReturnExpression
 			} else null
 		}
+	}
+
+	private fun containsWhiteSpace(expression: KtExpression?): Boolean {
+		return expression?.children?.any {
+			it.text.contains('\n')
+		} == true
+	}
+
+	companion object {
+		const val INCLUDE_LINE_WRAPPING = "includeLineWrapping"
 	}
 
 }
