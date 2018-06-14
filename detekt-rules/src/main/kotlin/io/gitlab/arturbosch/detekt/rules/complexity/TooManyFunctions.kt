@@ -8,7 +8,6 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
-import org.jetbrains.kotlin.preprocessor.typeReferenceName
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
@@ -123,7 +122,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 			?.size ?: 0
 
 	private fun isIgnoredFunction(function: KtNamedFunction): Boolean = when {
-			ignoreDeprecated -> function.annotationEntries.any { it.typeReferenceName == DEPRECATED }
+			ignoreDeprecated -> function.annotationEntries.any { it.typeReference?.text == DEPRECATED }
 			ignorePrivate -> function.isPrivate()
 			else -> false
 	}

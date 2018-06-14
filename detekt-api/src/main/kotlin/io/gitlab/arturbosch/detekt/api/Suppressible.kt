@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
 import org.jetbrains.kotlin.com.intellij.psi.util.PsiTreeUtil
-import org.jetbrains.kotlin.preprocessor.typeReferenceName
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
@@ -42,7 +41,7 @@ private const val QUOTES = "\""
 fun KtAnnotated.isSuppressedBy(id: String, aliases: Set<String>): Boolean {
 	val valid = mutableSetOf(id, "ALL", "all", "All")
 	valid.addAll(aliases)
-	return annotationEntries.find { it.typeReferenceName.let { it == "Suppress" || it == "SuppressWarnings" } }
+	return annotationEntries.find { it.typeReference?.text.let { it == "Suppress" || it == "SuppressWarnings" } }
 			?.valueArguments
 			?.map { it.getArgumentExpression()?.text }
 			?.map { it?.replace(detektSuppresionPrefixRegex, "") }
