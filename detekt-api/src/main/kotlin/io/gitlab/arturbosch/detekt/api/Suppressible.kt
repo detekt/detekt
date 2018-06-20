@@ -40,7 +40,7 @@ private const val QUOTES = "\""
  * Checks if this kt element is suppressed by @Suppress or @SuppressWarnings annotations.
  */
 fun KtAnnotated.isSuppressedBy(id: String, aliases: Set<String>): Boolean {
-	val valid = mutableSetOf(id, "ALL", "all")
+	val valid = mutableSetOf(id, "ALL", "all", "All")
 	valid.addAll(aliases)
 	return annotationEntries.find { it.typeReferenceName.let { it == "Suppress" || it == "SuppressWarnings" } }
 			?.valueArguments
