@@ -87,7 +87,7 @@ detekt {
          // What paths to exclude? Use comma or semicolon to separate.
         filters = ".*/build/.*, .*/resources/.*"
         // Use this property to link to detekt extensions (comma or semicolon separated).
-        ruleSets = "other/optional/ruleset.jar"
+        plugins = "other/optional/ruleset.jar"
         // Disables the default rule set. Turn on this option if you want to just use detekt as the detection engine with your custom rule sets.
         disableDefaultRuleSets = false
          // Directory where output reports are stored (if present).
