@@ -18,7 +18,7 @@ class MaxLineLengthSpec : Spek({
 
 		it("should report no errors when maxLineLength is set to 200") {
 			val rule = MaxLineLength(TestConfig(mapOf("maxLineLength" to "200")))
- 
+
 			rule.visit(fileContent)
 			assertThat(rule.findings).isEmpty()
 		}
@@ -28,6 +28,19 @@ class MaxLineLengthSpec : Spek({
 
 			rule.visit(fileContent)
 			assertThat(rule.findings).hasSize(3)
+		}
+	}
+
+	given("a kt file with long but suppressed lines") {
+		val file = compileForTest(Case.MaxLineLengthSuppressed.path())
+		val lines = file.text.splitToSequence("\n")
+		val fileContent = KtFileContent(file, lines)
+
+		it("should not report as lines are suppressed") {
+			val rule = MaxLineLength()
+
+			rule.visit(fileContent)
+			assertThat(rule.findings).isEmpty()
 		}
 	}
 
@@ -96,6 +109,7 @@ class MaxLineLengthSpec : Spek({
 			assertThat(rule.findings).isEmpty()
 		}
 	}
+
 	given("a kt file with a long package name, long import statements, a long line and long comments") {
 		val file = compileForTest(Case.MaxLineLengthWithLongComments.path())
 		val lines = file.text.splitToSequence("\n")
@@ -199,7 +213,7 @@ class MaxLineLengthSpec : Spek({
 			assertThat(rule.findings).hasSize(1)
 		}
 
-		it("should report correct line and column for the finding") {
+		it("should report correct line and column for function with excessive length") {
 			val rule = MaxLineLength(TestConfig(mapOf(
 					"maxLineLength" to "60",
 					"excludePackageStatements" to "true",
@@ -210,7 +224,7 @@ class MaxLineLengthSpec : Spek({
 			assertThat(rule.findings).hasSize(1)
 			val findingSource = rule.findings[0].location.source
 			assertThat(findingSource.line).isEqualTo(6)
-			assertThat(findingSource.column).isEqualTo(109)
+			assertThat(findingSource.column).isEqualTo(5)
 		}
 	}
 })

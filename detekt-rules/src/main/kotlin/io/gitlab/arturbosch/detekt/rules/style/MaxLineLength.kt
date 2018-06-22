@@ -8,7 +8,11 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import org.jetbrains.kotlin.com.intellij.openapi.util.TextRange
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.psiUtil.elementsInRange
 
 class FileParsingRule(val config: Config = Config.empty) : MultiRule() {
 
@@ -66,14 +70,25 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 		val lines = element.content
 		val file = element.file
 
-		lines.forEach { line ->
+		for (line in lines) {
 			offset += line.length
 			if (!isValidLine(line)) {
-				report(CodeSmell(issue, Entity.from(file, offset), issue.description))
+				val ktElement = findAnnotatedStatementInLine(file, offset, line)
+				if (ktElement != null) {
+					report(CodeSmell(issue, Entity.from(ktElement), issue.description))
+				} else {
+					report(CodeSmell(issue, Entity.from(file, offset), issue.description))
+				}
 			}
 
 			offset += 1 /* '\n' */
 		}
+	}
+
+	private fun findAnnotatedStatementInLine(file: KtFile, offset: Int, line: String): PsiElement? {
+		return file.elementsInRange(TextRange.create(offset - line.length, offset))
+				.mapNotNull { it as? KtAnnotated ?: if (it.parent is KtAnnotated) it.parent else null }
+				.firstOrNull()
 	}
 
 	private fun isValidLine(line: String): Boolean {
@@ -93,7 +108,7 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 	}
 
 	private fun containsIgnoredImportStatement(line: String): Boolean {
-		if(!excludeImportStatements) return false
+		if (!excludeImportStatements) return false
 
 		return line.trimStart().startsWith("import ")
 	}
@@ -101,7 +116,7 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 	private fun containsIgnoredCommentStatement(line: String): Boolean {
 		if (!excludeCommentStatements) return false
 
-		return  line.trimStart().startsWith("//") ||
+		return line.trimStart().startsWith("//") ||
 				line.trimStart().startsWith("/*") ||
 				line.trimStart().startsWith("*")
 	}
