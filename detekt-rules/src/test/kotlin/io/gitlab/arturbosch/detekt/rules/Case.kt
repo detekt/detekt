@@ -45,6 +45,7 @@ enum class Case(val file: String) {
 	NamingConventions("/cases/NamingConventions.kt"),
 	NewLineAtEndOfFile("/cases/NewLineAtEndOfFile.kt"),
 	MaxLineLength("/cases/MaxLineLength.kt"),
+	MaxLineLengthSuppressed("/cases/MaxLineLengthSuppressed.kt"),
 	MaxLineLengthWithLongComments("/cases/MaxLineLengthWithLongComments.kt"),
 	MemberNameEqualsClassNameNegative("/cases/MemberNameEqualsClassNameNegative.kt"),
 	MemberNameEqualsClassNamePositive("/cases/MemberNameEqualsClassNamePositive.kt"),
