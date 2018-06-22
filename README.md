@@ -109,6 +109,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Robbin Voortman](https://github.com/rvoortman) - Rule improvement: MaxLineLength
 - [Mike Gorunov](http://github.com/Miha-x64/) — Rule improvement: UndocumentedPublicFunction
 - [Joey Kaan](https://github.com/jkaan) - New rule: MandatoryBracesIfStatements
+- [Dmitriy Samaryan](https://github.com/samarjan92) - Rule fix: SerialVersionUIDInSerializableClass
 
 ### Mentions
 

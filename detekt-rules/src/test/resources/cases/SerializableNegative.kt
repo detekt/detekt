@@ -16,6 +16,12 @@ class CorrectSerializable2 : Serializable {
 	}
 }
 
+class CorrectSerializable3 : Serializable {
+	companion object {
+		const val serialVersionUID = -1L
+	}
+}
+
 class NoSerializableClass
 
 interface SerializableInterface : Serializable
