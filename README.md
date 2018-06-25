@@ -110,6 +110,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Mike Gorunov](http://github.com/Miha-x64/) — Rule improvement: UndocumentedPublicFunction
 - [Joey Kaan](https://github.com/jkaan) - New rule: MandatoryBracesIfStatements
 - [Dmitriy Samaryan](https://github.com/samarjan92) - Rule fix: SerialVersionUIDInSerializableClass
+- [Mariano Simone](https://github.com/marianosimone) - Rule improvement: UnusedPrivateMember
 
 ### Mentions
 

@@ -14,7 +14,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 	given("cases file with different findings") {
 
 		it("positive cases file") {
-			assertThat(subject.lint(Case.UnusedPrivateMemberPositive.path())).hasSize(5)
+			assertThat(subject.lint(Case.UnusedPrivateMemberPositive.path())).hasSize(10)
 		}
 
 		it("negative cases file") {
@@ -177,7 +177,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 			val code = """
 				fun RuleSetProvider.provided() = ruleSetId in defaultRuleSetIds
 
-				private val defaultRuleSetIds = listOf("comments", "complexity", "empty-blocks",
+				val defaultRuleSetIds = listOf("comments", "complexity", "empty-blocks",
 						"exceptions", "potential-bugs", "performance", "style")
 			"""
 			assertThat(subject.lint(code)).isEmpty()
@@ -354,6 +354,58 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 
 	}
 
+	given("top level function parameters") {
+		it("reports single parameters if they are unused") {
+			val code = """
+			fun function(unusedParameter: Int): Int {
+				return 5
+			}
+			"""
+
+			assertThat(subject.lint(code)).hasSize(1)
+		}
+
+		it("does not report single parameters if they used in return statement") {
+			val code = """
+			fun function(used: Int): Int {
+				return used
+			}
+			"""
+
+			assertThat(subject.lint(code)).isEmpty()
+		}
+
+		it("does not report single parameters if they used in function") {
+			val code = """
+			fun function(used: Int) {
+				println(used)
+			}
+			"""
+
+			assertThat(subject.lint(code)).isEmpty()
+		}
+
+		it("reports parameters that are unused in return statement") {
+			val code = """
+			fun function(unusedParameter: Int, usedParameter: Int): Int {
+				return usedParameter
+			}
+			"""
+
+			assertThat(subject.lint(code)).hasSize(1)
+		}
+
+		it("reports parameters that are unused in function") {
+			val code = """
+			fun function(unusedParameter: Int, usedParameter: Int) {
+				println(usedParameter)
+			}
+			"""
+
+			assertThat(subject.lint(code)).hasSize(1)
+		}
+	}
+
 	given("unused private functions") {
 		it("does not report used private functions") {
 			val code = """
@@ -408,7 +460,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 				class Test {
 					private val ignored = ""
 				}"""
-			assertThat(subject.lint(code)).hasSize(0)
+			assertThat(subject.lint(code)).isEmpty()
 		}
 
 		it("does not report the unused private function and parameter") {
@@ -416,7 +468,31 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 				class Test {
 					private fun ignored(ignored: Int) {}
 				}"""
-			assertThat(subject.lint(code)).hasSize(0)
+			assertThat(subject.lint(code)).isEmpty()
+		}
+	}
+
+	given("nested class declarations") {
+
+		it("reports unused nested private property") {
+			val code = """
+				class Test {
+					class Inner {
+						private val unused = 1
+					}
+				}"""
+			assertThat(subject.lint(code)).hasSize(1)
+		}
+
+		it("does not report used nested private property") {
+			val code = """
+				class Test {
+					class Inner {
+						private val used = 1
+						fun someFunction() = used
+					}
+				}"""
+			assertThat(subject.lint(code)).isEmpty()
 		}
 	}
 })
