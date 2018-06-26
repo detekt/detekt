@@ -21,8 +21,10 @@ import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
 import org.jetbrains.kotlin.psi.KtParameter
+import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtReferenceExpression
+import org.jetbrains.kotlin.psi.KtSecondaryConstructor
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
 
@@ -59,7 +61,7 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 		root.accept(propertyVisitor)
 
 		propertyVisitor.getUnusedProperties().forEach {
-			report(CodeSmell(issue, Entity.from(it.value), "Private property ${it.key} is unused."))
+			report(CodeSmell(issue, Entity.from(it), "Private property ${it.nameAsSafeName.identifier} is unused."))
 		}
 	}
 
@@ -73,17 +75,11 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 
 	private class UnusedPropertyVisitor(private val allowedNames: Regex) : DetektVisitor() {
 
-		private val properties = mutableMapOf<String, KtElement>()
+		private val properties = mutableSetOf<KtNamedDeclaration>()
 		private val nameAccesses = mutableSetOf<String>()
 
-		fun getUnusedProperties(): Map<String, KtElement> {
-			for (access in nameAccesses) {
-				if (properties.isEmpty()) {
-					break
-				}
-				properties.remove(access)
-			}
-			return properties
+		fun getUnusedProperties(): List<KtNamedDeclaration> {
+			return properties.filter { it.nameAsSafeName.identifier !in nameAccesses }
 		}
 
 		override fun visitParameter(parameter: KtParameter) {
@@ -100,10 +96,21 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 			}
 		}
 
+		override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
+			super.visitPrimaryConstructor(constructor)
+			constructor.valueParameters
+					.filter { it.isPrivate() || !it.hasValOrVar() }
+					.forEach { checkAllowedNames(it) }
+		}
+
+		override fun visitSecondaryConstructor(constructor: KtSecondaryConstructor) {
+			super.visitSecondaryConstructor(constructor)
+			constructor.valueParameters.forEach { checkAllowedNames(it) }
+		}
+
 		private fun checkAllowedNames(it: KtNamedDeclaration) {
-			val name = it.nameAsSafeName.identifier
-			if (!allowedNames.matches(name)) {
-				properties[name] = it
+			if (!allowedNames.matches(it.nameAsSafeName.identifier)) {
+				properties.add(it)
 			}
 		}
 
