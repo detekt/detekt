@@ -14,7 +14,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 	given("cases file with different findings") {
 
 		it("positive cases file") {
-			assertThat(subject.lint(Case.UnusedPrivateMemberPositive.path())).hasSize(10)
+			assertThat(subject.lint(Case.UnusedPrivateMemberPositive.path())).hasSize(12)
 		}
 
 		it("negative cases file") {
@@ -492,6 +492,77 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 						fun someFunction() = used
 					}
 				}"""
+			assertThat(subject.lint(code)).isEmpty()
+		}
+	}
+
+	given("parameters in primary constructors") {
+		it("reports unused private property") {
+			val code = """
+				class Test(private val unused: Any)
+				"""
+			assertThat(subject.lint(code)).hasSize(1)
+		}
+
+		it("reports unused parameter") {
+			val code = """
+				class Test(unused: Any)
+				"""
+			assertThat(subject.lint(code)).hasSize(1)
+		}
+
+		it("does not report used parameter for calling super") {
+			val code = """
+    			class Parent(val ignored: Any)
+				class Test(used: Any) : Parent(used)
+				"""
+			assertThat(subject.lint(code)).isEmpty()
+		}
+
+		it("does not report used parameter in init block") {
+			val code = """
+				class Test(used: Any) {
+					init {
+						used.toString()
+					}
+				}
+				"""
+			assertThat(subject.lint(code)).isEmpty()
+		}
+
+		it("does not report used parameter to initialize property") {
+			val code = """
+				class Test(used: Any) {
+					val usedString = used.toString()
+				}
+				"""
+			assertThat(subject.lint(code)).isEmpty()
+		}
+
+		it("does not report public property") {
+			val code = """
+				class Test(val unused: Any)
+				"""
+			assertThat(subject.lint(code)).isEmpty()
+		}
+
+		it("does not report private property used in init block") {
+			val code = """
+				class Test(private val used: Any) {
+					init { used.toString() }
+				}
+				"""
+			assertThat(subject.lint(code)).isEmpty()
+		}
+
+		it("does not report private property used in function") {
+			val code = """
+				class Test(private val used: Any) {
+					fun something() {
+						used.toString()
+					}
+				}
+				"""
 			assertThat(subject.lint(code)).isEmpty()
 		}
 	}
