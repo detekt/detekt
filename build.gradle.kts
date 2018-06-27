@@ -65,7 +65,8 @@ subprojects {
 
 	tasks.withType<KotlinCompile> {
 		kotlinOptions.jvmTarget = "1.8"
-		kotlinOptions.freeCompilerArgs = listOf("-Xskip-runtime-version-check")
+		// https://youtrack.jetbrains.com/issue/KT-24946
+		kotlinOptions.freeCompilerArgs = listOf("-Xskip-runtime-version-check", "-Xdisable-default-scripting-plugin")
 		kotlinOptions.allWarningsAsErrors = shouldTreatCompilerWarningsAsErrors()
 	}
 
