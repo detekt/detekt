@@ -6,6 +6,8 @@ import org.jetbrains.kotlin.psi.KtModifierListOwner
 fun KtModifierListOwner.isPublicNotOverridden() =
 		isPublic() && !isOverridden()
 
+fun KtModifierListOwner.isAbstract() = hasModifier(KtTokens.ABSTRACT_KEYWORD)
+
 fun KtModifierListOwner.isOverridden() = hasModifier(KtTokens.OVERRIDE_KEYWORD)
 
 fun KtModifierListOwner.isOpen() = hasModifier(KtTokens.OPEN_KEYWORD)

@@ -8,12 +8,13 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.isAbstract
 import io.gitlab.arturbosch.detekt.rules.isMainFunction
+import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOverridden
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
-import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
@@ -150,8 +151,8 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 		if (function.isPrivate()) {
 			collectFunction(function)
 		}
-		// Overridden functions need to declare parameters, even if they don't use them
-		if (!function.isOverridden()) {
+		// Overriddable/Overridden functions need to declare parameters, even if they don't use them
+		if (!(function.isAbstract() || function.isOpen() || function.isOverridden())) {
 			collectParameters(function)
 		}
 

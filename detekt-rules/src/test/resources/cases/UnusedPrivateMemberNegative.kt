@@ -83,3 +83,19 @@ val stuff = object : Iterator<String?> {
 fun main(args: Array<String>) {
 	println(stuff.next())
 }
+
+abstract class Parent {
+	abstract fun abstractFun(arg: Any)
+	open fun openFun(arg: Any): Int = 0
+}
+
+class Child : Parent() {
+	override fun abstractFun(arg: Any) {
+		println(arg)
+	}
+
+	override fun openFun(arg: Any): Int {
+		println(arg)
+		return 1
+	}
+}
