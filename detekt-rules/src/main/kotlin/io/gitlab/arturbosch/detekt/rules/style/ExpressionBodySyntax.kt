@@ -53,9 +53,9 @@ class ExpressionBodySyntax(config: Config = Config.empty) : Rule(config) {
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		if (function.bodyExpression != null) {
 			val body = function.bodyExpression!!
-			body.singleReturnStatement()?.let { returnStmt ->
-				if (includeLineWrapping || !containsWhiteSpace(returnStmt.returnedExpression)) {
-					report(CodeSmell(issue, Entity.from(returnStmt), issue.description))
+			body.singleReturnStatement()?.run {
+				if (includeLineWrapping || !isLineWrapped(body)) {
+					report(CodeSmell(issue, Entity.from(body), issue.description))
 				}
 			}
 		}
@@ -63,17 +63,15 @@ class ExpressionBodySyntax(config: Config = Config.empty) : Rule(config) {
 
 	private fun KtExpression.singleReturnStatement(): KtReturnExpression? {
 		val statements = (this as? KtBlockExpression)?.statements
-		return statements?.size?.let {
-			if (it == 1 && statements[0] is KtReturnExpression) {
-				return statements[0] as KtReturnExpression
-			} else null
-		}
+		return statements
+				?.takeIf { it.size == 1 }
+				?.let { it[0] as? KtReturnExpression }
 	}
 
-	private fun containsWhiteSpace(expression: KtExpression?): Boolean {
-		return expression?.children?.any {
+	private fun isLineWrapped(expression: KtExpression): Boolean {
+		return expression.children.any {
 			it.text.contains('\n')
-		} == true
+		}
 	}
 
 	companion object {
