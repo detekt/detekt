@@ -35,6 +35,20 @@ potential-bugs:
   UnsafeCast:
     active: true
 
+complexity:
+  ComplexInterface:
+    active: false
+    threshold: 10
+    includeStaticDeclarations: false
+
+exceptions:
+  InstanceOfCheckForException:
+    active: true
+  ReturnFromFinally:
+    active: true
+  ThrowingExceptionFromFinally:
+    active: true
+
 formatting:
   active: true
   android: false
