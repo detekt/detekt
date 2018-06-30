@@ -51,7 +51,7 @@ class ExpressionBodySyntaxSpec : SubjectSpek<ExpressionBodySyntax>({
 					if (true) return true
 					return false
 				}
-			""")).hasSize(0)
+			""")).isEmpty()
 		}
 	}
 
@@ -65,7 +65,45 @@ class ExpressionBodySyntaxSpec : SubjectSpek<ExpressionBodySyntax>({
 			}"""
 
 		it("does not report with the default configuration") {
-			assertThat(subject.lint(code)).hasSize(0)
+			assertThat(subject.lint(code)).isEmpty()
+		}
+
+		it("reports with includeLineWrapping = true configuration") {
+			val config = TestConfig(mapOf(ExpressionBodySyntax.INCLUDE_LINE_WRAPPING to "true"))
+			assertThat(ExpressionBodySyntax(config).lint(code)).hasSize(1)
+		}
+	}
+
+	given("several return statements with multiline when expression") {
+
+		val code = """
+			fun stuff(val arg: Int): Int {
+				return when(arg) {
+					0 -> 0
+					else -> 1
+				}
+			}"""
+
+		it("does not report with the default configuration") {
+			assertThat(subject.lint(code)).isEmpty()
+		}
+
+		it("reports with includeLineWrapping = true configuration") {
+			val config = TestConfig(mapOf(ExpressionBodySyntax.INCLUDE_LINE_WRAPPING to "true"))
+			assertThat(ExpressionBodySyntax(config).lint(code)).hasSize(1)
+		}
+	}
+
+	given("several return statements with multiline if expression") {
+
+		val code = """
+			fun stuff(val arg: Int): Int {
+				return if (arg == 0) 0
+				else 1
+			}"""
+
+		it("does not report with the default configuration") {
+			assertThat(subject.lint(code)).isEmpty()
 		}
 
 		it("reports with includeLineWrapping = true configuration") {
