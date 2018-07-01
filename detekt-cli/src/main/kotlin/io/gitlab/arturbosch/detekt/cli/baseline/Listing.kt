@@ -1,7 +1,5 @@
 package io.gitlab.arturbosch.detekt.cli.baseline
 
-import java.time.Instant
-
 /**
  * @author Artur Bosch
  */
