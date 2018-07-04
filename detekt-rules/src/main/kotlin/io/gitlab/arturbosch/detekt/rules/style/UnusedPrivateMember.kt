@@ -11,6 +11,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isAbstract
 import io.gitlab.arturbosch.detekt.rules.isMainFunction
 import io.gitlab.arturbosch.detekt.rules.isOpen
+import io.gitlab.arturbosch.detekt.rules.isOperator
 import io.gitlab.arturbosch.detekt.rules.isOverridden
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
@@ -152,8 +153,9 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 			collectFunction(function)
 		}
 		// Overriddable/Overridden functions need to declare parameters, even if they don't use them
-		if (!(function.isAbstract() || function.isOpen() || function.isOverridden())) {
-			collectParameters(function)
+		when {
+			function.isAbstract() || function.isOpen() || function.isOverridden() || function.isOperator() -> { }
+			else -> collectParameters(function)
 		}
 
 		super.visitNamedFunction(function)
