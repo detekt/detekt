@@ -70,10 +70,6 @@ subprojects {
 		kotlinOptions.allWarningsAsErrors = shouldTreatCompilerWarningsAsErrors()
 	}
 
-	val test by tasks.getting(Test::class) {
-		useJUnitPlatform()
-	}
-
 	bintray {
 		user = System.getenv("BINTRAY_USER") ?: ""
 		key = System.getenv("BINTRAY_API_KEY") ?: ""
@@ -164,7 +160,6 @@ subprojects {
 
 	val kotlinVersion by project
 	val junitEngineVersion by project
-	val junitPlatformVersion by project
 	val assertjVersion by project
 	val spekVersion by project
 	val kotlinImplementation by configurations.creating
