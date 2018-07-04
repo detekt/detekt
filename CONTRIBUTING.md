@@ -77,7 +77,9 @@ automatically. The format of the KDoc should be as follows:
 
     Last but not least, the `@author` tag should be added.
 
-- ... do not forget to test the new rule and/or add tests for any changes made to a rule. 
+- ... do not forget to test the new rule and/or add tests for any changes made to a rule.
+Run detekt on itself and other kotlin projects with the `--run-rule RuleSet:RuleId` option to test your rule in isolation.
+Make use of the `scripts/get_analysis_projects.groovy` script to automatically establish a set of analysis projects.
 - ... do not forget to run `./gradlew build`. This will execute tests locally and update the `default-detekt.config.yml`
 as well as add the new/changed rules to the documentation.
 - be aware that your PR will stay open for at least two days so that other users can give feedback.
