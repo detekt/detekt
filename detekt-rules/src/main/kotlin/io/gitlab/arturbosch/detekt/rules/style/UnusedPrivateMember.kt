@@ -146,15 +146,13 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 	}
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (function.isMainFunction()) {
-			return
-		}
 		if (function.isPrivate()) {
 			collectFunction(function)
 		}
 		// Overriddable/Overridden functions need to declare parameters, even if they don't use them
 		when {
-			function.isAbstract() || function.isOpen() || function.isOverridden() || function.isOperator() -> { }
+			function.isAbstract() || function.isOpen() || function.isOverridden() || function.isOperator() ||
+					function.isMainFunction()->	{ }
 			else -> collectParameters(function)
 		}
 
