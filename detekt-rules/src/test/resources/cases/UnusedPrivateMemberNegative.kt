@@ -2,6 +2,8 @@
 
 package cases
 
+import kotlin.reflect.KProperty
+
 /**
  * Many false positives reported in #812 - https://github.com/arturbosch/detekt/issues/812
  * and #840 - https://github.com/arturbosch/detekt/pull/840.
@@ -97,5 +99,13 @@ class Child : Parent() {
 	override fun openFun(arg: Any): Int {
 		println(arg)
 		return 1
+	}
+}
+
+class SingleAssign<String> {
+
+	// ignore unused operator function parameters
+	operator fun getValue(thisRef: Any?, property: KProperty<*>): kotlin.String {
+		return ""
 	}
 }
