@@ -35,3 +35,9 @@ private class ClassWithSecondaryConstructor {
 	// this is actually unused, but clashes with the other constructor
 	constructor(used: Any)
 }
+
+fun main(args: Array<String>) {
+	println("")
+}
+
+private fun unusedAndNotCalledFromMain() { } // unused

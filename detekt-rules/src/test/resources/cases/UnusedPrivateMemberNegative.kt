@@ -80,7 +80,10 @@ val stuff = object : Iterator<String?> {
 
 fun main(args: Array<String>) {
 	println(stuff.next())
+	calledFromMain()
 }
+
+private fun calledFromMain() { }
 
 abstract class Parent {
 	abstract fun abstractFun(arg: Any)
