@@ -4,10 +4,6 @@ package cases
 
 import kotlin.reflect.KProperty
 
-/**
- * Many false positives reported in #812 - https://github.com/arturbosch/detekt/issues/812
- * and #840 - https://github.com/arturbosch/detekt/pull/840.
- */
 object O { // public
 	const val NUMBER = 5 // public
 }
