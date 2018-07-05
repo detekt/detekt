@@ -20,11 +20,11 @@ test-pattern: # Configure exclusions for test sources
     - 'UnsafeCast'
 
 complexity:
-  ComplexInterface:
-    active: true
-    threshold: 10
-    includeStaticDeclarations: false
   MethodOverloading:
+    active: true
+
+comments:
+  CommentOverPrivateProperty:
     active: true
 
 exceptions:
@@ -71,7 +71,6 @@ naming:
     variablePattern: '[a-z][A-Za-z0-9]*'
     privateVariablePattern: '(_)?[a-z][A-Za-z0-9]*'
     excludeClassPattern: '$^'
-
 
 potential-bugs:
   UnsafeCast:
