@@ -72,7 +72,7 @@ class StringLiteralDuplication(
 			report(ThresholdedCodeSmell(issue,
 					main,
 					Metric(type + name, value, threshold),
-					"",
+					issue.description,
 					references))
 		}
 	}
