@@ -19,10 +19,6 @@ test-pattern: # Configure exclusions for test sources
     - 'SpreadOperator'
     - 'UnsafeCast'
 
-complexity:
-  MethodOverloading:
-    active: true
-
 comments:
   CommentOverPrivateProperty:
     active: true
@@ -30,10 +26,16 @@ comments:
 complexity:
   StringLiteralDuplication:
     active: true
-    threshold: 4
+    threshold: 5
     ignoreAnnotation: true
     excludeStringsWithLessThan5Characters: true
     ignoreStringsRegex: '$^'
+  ComplexInterface:
+    active: true
+    threshold: 10
+    includeStaticDeclarations: false
+  MethodOverloading:
+    active: true
 
 exceptions:
   NotImplementedDeclaration:
@@ -51,6 +53,7 @@ exceptions:
   ThrowingExceptionsWithoutMessageOrCause:
     active: true
   ThrowingNewInstanceOfSameException:
+    active: true
 
 formatting:
   active: true
