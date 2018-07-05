@@ -9,9 +9,14 @@ internal class NestedClassVisibilityNegative {
 
 	private interface PrivateTest
 	internal interface InternalTest
+
+	// should not detect companion object
+	companion object C
 }
 
 private class PrivateClassWithNestedElements {
 
 	class Inner
 }
+
+
