@@ -18,6 +18,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPublic
  *
  * @author Artur Bosch
  * @author Marvin Ramin
+ * @author schalkms
  */
 class UndocumentedPublicFunction(config: Config = Config.empty) : Rule(config) {
 
@@ -29,21 +30,12 @@ class UndocumentedPublicFunction(config: Config = Config.empty) : Rule(config) {
 		if (function.funKeyword == null && function.isLocal) return
 
 		if (function.docComment == null && function.shouldBeDocumented()) {
-				report(CodeSmell(issue, methodHeaderLocation(function),
+				report(CodeSmell(issue, Entity.from(function),
 						"The function ${function.nameAsSafeName} is missing documentation."))
 		}
 	}
 
-	/**
-	 * A function should be documented when it is not overridden,
-	 * and both the function and a class containing it are public.
-	 */
-	private fun KtNamedFunction.shouldBeDocumented(): Boolean =
-			isContainingClassPublic() && (modifierList == null || isPublicNotOverridden())
+	private fun KtNamedFunction.shouldBeDocumented() = isContainingClassPublic() && isPublicNotOverridden()
 
-	private fun KtNamedFunction.isContainingClassPublic(): Boolean =
-			containingClass().let { it == null || it.isPublic }
-
-	private fun methodHeaderLocation(function: KtNamedFunction) = Entity.from(function)
-
+	private fun KtNamedFunction.isContainingClassPublic() = containingClass().let { it == null || it.isPublic }
 }
