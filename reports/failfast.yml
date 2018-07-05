@@ -27,6 +27,14 @@ comments:
   CommentOverPrivateProperty:
     active: true
 
+complexity:
+  StringLiteralDuplication:
+    active: true
+    threshold: 4
+    ignoreAnnotation: true
+    excludeStringsWithLessThan5Characters: true
+    ignoreStringsRegex: '$^'
+
 exceptions:
   NotImplementedDeclaration:
     active: true
@@ -43,7 +51,6 @@ exceptions:
   ThrowingExceptionsWithoutMessageOrCause:
     active: true
   ThrowingNewInstanceOfSameException:
-    active: true
 
 formatting:
   active: true
@@ -78,6 +85,10 @@ potential-bugs:
   UselessPostfixExpression:
     active: true
 
+potential-bugs:
+  UnsafeCast:
+    active: true
+
 style:
   MagicNumber:
     ignoreHashCodeFunction: true
@@ -87,4 +98,9 @@ style:
   SpacingBetweenPackageAndImports:
     active: true
   UtilityClassWithPublicConstructor:
+    active: true
+  VariableNaming:
+    active: true
+    variablePattern: '(_)?[a-z][a-zA-Z0-9]*'
+  SpacingBetweenPackageAndImports:
     active: true
