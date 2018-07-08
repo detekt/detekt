@@ -92,5 +92,4 @@ class UnusedImports(config: Config) : Rule(config) {
 	}
 
 	private fun KtImportDirective.identifier() = this.importPath?.importedName?.identifier
-
 }

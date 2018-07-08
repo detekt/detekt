@@ -41,13 +41,12 @@ open class ProfileExtension(val name: String) {
 	private fun extractConfigParameter(any: Any): String = when (any) {
 		is String, is GString, is File, is Path -> any.toString()
 		is FileCollection -> any.files.joinToString(",") { it.toString() }
-		else -> throw IllegalArgumentException("Configuration parameter has unsupported type '${any.javaClass}'. "
-				+ "Configure the parameter with file(...), files(...) or with a plain string.")
+		else -> throw IllegalArgumentException("Configuration parameter has unsupported type '${any.javaClass}'. " +
+				"Configure the parameter with file(...), files(...) or with a plain string.")
 	}
 
 	override fun toString(): String = "ProfileExtension(name='$name', input=$input, config=$config, " +
 			"configResource=$configResource, filters=$filters, ruleSets=$ruleSets, output=$output, " +
 			"outputName=$outputName, baseline=$baseline, parallel=$parallel, " +
 			"disableDefaultRuleSets=$disableDefaultRuleSets)"
-
 }

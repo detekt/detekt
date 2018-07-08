@@ -51,9 +51,9 @@ class ThrowingNewInstanceOfSameException(config: Config = Config.empty) : Rule(c
 		val typeReference = catchClause.catchParameter?.typeReference?.text
 		val throwExpression = catchClause.catchBody?.collectByType<KtThrowExpression>()?.firstOrNull {
 			val thrownExpression = it.thrownExpression as? KtCallExpression
-			thrownExpression != null
-					&& createsSameExceptionType(thrownExpression, typeReference)
-					&& hasSameExceptionParameter(thrownExpression.valueArguments, parameterName)
+			thrownExpression != null &&
+					createsSameExceptionType(thrownExpression, typeReference) &&
+					hasSameExceptionParameter(thrownExpression.valueArguments, parameterName)
 		}
 		if (throwExpression != null) {
 			report(CodeSmell(issue, Entity.from(throwExpression), issue.description))

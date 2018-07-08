@@ -21,5 +21,4 @@ class MetricSpec : Spek({
 			Metric("LOC", 100, 50).doubleValue()
 		}
 	}
-
 })

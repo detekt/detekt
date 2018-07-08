@@ -43,8 +43,6 @@ class RuleSetProviderCollectorSpec : SubjectSpek<RuleSetProviderCollector>({
 		}
 	}
 
-
-
 	given("a RuleSetProvider without documentation") {
 		val code = """
 			package foo

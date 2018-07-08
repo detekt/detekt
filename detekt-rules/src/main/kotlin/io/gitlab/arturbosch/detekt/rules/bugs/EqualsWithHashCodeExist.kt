@@ -92,7 +92,6 @@ class EqualsWithHashCodeExist(config: Config = Config.empty) : Rule(config) {
 			}
 		}
 	}
-
 }
 
 private const val MAXIMUM_EXPECTED_NESTED_CLASSES = 5

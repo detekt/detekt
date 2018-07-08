@@ -60,5 +60,4 @@ class ConditionalPathVisitor(private val block: (KtReturnExpression) -> Unit) : 
 			if (last is KtReturnExpression && last.returnedExpression != null) block(last)
 		}
 	}
-
 }

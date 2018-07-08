@@ -14,7 +14,7 @@ includeBuild("detekt-gradle-plugin")
 pluginManagement {
 	resolutionStrategy {
 		eachPlugin {
-			if(requested.id.id == "io.gitlab.arturbosch.detekt") {
+			if (requested.id.id == "io.gitlab.arturbosch.detekt") {
 				useModule("io.gitlab.arturbosch:detekt-gradle-plugin:1") // version ignored for composite build
 			}
 		}

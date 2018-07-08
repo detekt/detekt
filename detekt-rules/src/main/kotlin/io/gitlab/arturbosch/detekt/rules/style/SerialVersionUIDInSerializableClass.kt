@@ -63,9 +63,9 @@ class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(
 	}
 
 	override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
-		if (!declaration.isCompanion()
-				&& isImplementingSerializable(declaration)
-				&& !hasCorrectSerialVersionUUID(declaration)) {
+		if (!declaration.isCompanion() &&
+				isImplementingSerializable(declaration) &&
+				!hasCorrectSerialVersionUUID(declaration)) {
 			report(CodeSmell(issue, Entity.from(declaration), "The object ${declaration.nameAsSafeName} " +
 					"implements the Serializable interface and should thus define a serialVersionUID."))
 		}
@@ -87,7 +87,7 @@ class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(
 	private fun hasLongAssignment(property: KtProperty): Boolean {
 		val assignmentText = property.children
 				.singleOrNull { it is KtConstantExpression || it is KtPrefixExpression }?.text
-		return assignmentText != null && assignmentText.last() == 'L'
-				&& assignmentText.substring(0, assignmentText.length - 1).toLongOrNull() != null
+		return assignmentText != null && assignmentText.last() == 'L' &&
+				assignmentText.substring(0, assignmentText.length - 1).toLongOrNull() != null
 	}
 }

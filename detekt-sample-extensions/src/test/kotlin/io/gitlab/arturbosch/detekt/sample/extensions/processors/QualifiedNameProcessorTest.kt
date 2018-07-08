@@ -50,7 +50,6 @@ val result = object : Detektion {
 	override fun add(projectMetric: ProjectMetric) {
 		throw UnsupportedOperationException("not implemented")
 	}
-
 }
 
 val code = """

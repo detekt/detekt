@@ -12,7 +12,7 @@ import kotlin.test.assertNotNull
 /**
  * @author Artur Bosch
  */
-internal class SuppressionSpec: Spek({
+internal class SuppressionSpec : Spek({
 
 	it("rule should be suppressed") {
 		val ktFile = compilerFor("SuppressedObject.kt")
@@ -79,7 +79,6 @@ internal class SuppressionSpec: Spek({
 		rule.visitFile(ktFile)
 		assertNotNull(rule.expected)
 	}
-
 })
 
 class TestRule : Rule() {

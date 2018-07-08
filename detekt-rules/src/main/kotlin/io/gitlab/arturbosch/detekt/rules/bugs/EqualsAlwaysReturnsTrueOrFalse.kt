@@ -71,9 +71,9 @@ class EqualsAlwaysReturnsTrueOrFalse(config: Config = Config.empty) : Rule(confi
 		val lastValidReturnExpression = returnExpressionsInBlock.first().returnedExpression
 		val allReturnExpressions = bodyExpression.collectByType<KtReturnExpression>()
 		val hasNoNestedReturnExpression = allReturnExpressions.size == returnExpressionsInBlock.size
-		return lastValidReturnExpression?.isBooleanConstant() == true
-				&& (hasNoNestedReturnExpression
-					|| allReturnExpressions.all { it.returnedExpression?.text == lastValidReturnExpression.text })
+		return lastValidReturnExpression?.isBooleanConstant() == true &&
+				(hasNoNestedReturnExpression ||
+					allReturnExpressions.all { it.returnedExpression?.text == lastValidReturnExpression.text })
 	}
 
 	private fun PsiElement.isBooleanConstant() = node.elementType == KtNodeTypes.BOOLEAN_CONSTANT

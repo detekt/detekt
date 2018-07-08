@@ -33,8 +33,8 @@ fun KDocTag.parseConfigTag(): Configuration {
 
 fun KDocTag.isValidConfigurationTag(entity: String = "Rule"): Boolean {
 	val content: String = getContent()
-	val valid = content.contains("-")
-			&& content.contains(configurationDefaultValueRegex)
+	val valid = content.contains("-") &&
+			content.contains(configurationDefaultValueRegex)
 	if (!valid) {
 		throw InvalidDocumentationException(
 				"$entity $name contains an incorrect configuration option tag in the KDoc.")

@@ -127,5 +127,4 @@ class UndocumentedPublicClassSpec : SubjectSpek<UndocumentedPublicClass>({
 
 		assertThat(subject.lint(code)).isEmpty()
 	}
-
 })

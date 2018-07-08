@@ -24,5 +24,4 @@ class EmptyClassBlock(config: Config) : EmptyRule(config) {
 					" ${classOrObject.name} is empty."))
 		}
 	}
-
 }

@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.psi.KtSecondaryConstructor
 
 /**
  * A class which only contains utility functions and no concrete implementation can be refactored into an `object`.
- * 
+ *
  * <noncompliant>
  * class UtilityClass {
  *

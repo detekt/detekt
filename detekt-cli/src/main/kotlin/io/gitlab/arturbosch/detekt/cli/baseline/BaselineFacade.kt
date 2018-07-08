@@ -41,5 +41,4 @@ class BaselineFacade(val baselineFile: Path) {
 	}
 
 	private fun baselineExists() = baselineFile.exists() && baselineFile.isFile()
-
 }

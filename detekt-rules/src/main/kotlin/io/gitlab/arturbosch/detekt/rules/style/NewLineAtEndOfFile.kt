@@ -29,5 +29,4 @@ class NewLineAtEndOfFile(config: Config = Config.empty) : Rule(config) {
 					"The file ${file.name} is not ending with a new line."))
 		}
 	}
-
 }

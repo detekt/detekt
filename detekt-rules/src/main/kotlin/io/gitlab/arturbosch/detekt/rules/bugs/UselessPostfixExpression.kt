@@ -111,7 +111,6 @@ class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
 			return true
 		}
 		return !properties.contains(postfixReceiverName)
-
 	}
 
 	private fun report(postfixExpression: KtPostfixExpression) {

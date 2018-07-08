@@ -119,5 +119,4 @@ class EmptyCodeTest {
 		rule.lint(file)
 		assertThat(rule.findings).hasSize(1)
 	}
-
 }

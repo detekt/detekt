@@ -35,7 +35,6 @@ dependencies {
 	testRuntimeOnly("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
 }
 
-
 gradlePlugin {
 	(plugins) {
 		"detektPlugin" {

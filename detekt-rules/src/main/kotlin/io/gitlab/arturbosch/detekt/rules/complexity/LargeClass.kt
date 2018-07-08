@@ -57,7 +57,7 @@ class LargeClass(config: Config = Config.empty,
 		}
 	}
 
-	override fun visitFile(file: PsiFile?) { //TODO
+	override fun visitFile(file: PsiFile?) { // TODO
 		locStack.clear()
 		super.visitFile(file)
 	}
@@ -133,4 +133,3 @@ class LargeClass(config: Config = Config.empty,
 		const val DEFAULT_ACCEPTED_CLASS_LENGTH = 150
 	}
 }
-

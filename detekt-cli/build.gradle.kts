@@ -34,4 +34,3 @@ tasks.withType<Jar> {
 		attributes(mapOf("DetektVersion" to detektVersion))
 	}
 }
-

@@ -24,7 +24,6 @@ class TooManyFunctionsSpec : SubjectSpek<TooManyFunctions>({
 			assertThat(findings).hasSize(1)
 		}
 	}
-
 })
 
 class TooManyFunctionsTest : RuleTest {

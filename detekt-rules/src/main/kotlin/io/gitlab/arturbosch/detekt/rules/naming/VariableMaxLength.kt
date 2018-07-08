@@ -21,8 +21,8 @@ class VariableMaxLength(config: Config = Config.empty) : Rule(config) {
 			Severity.Style,
 			"Variable names should not be longer than the maximum set in the configuration.",
 			debt = Debt.FIVE_MINS)
-	private val maximumVariableNameLength
-			= valueOrDefault(MAXIMUM_VARIABLE_NAME_LENGTH, DEFAULT_MAXIMUM_VARIABLE_NAME_LENGTH)
+	private val maximumVariableNameLength =
+			valueOrDefault(MAXIMUM_VARIABLE_NAME_LENGTH, DEFAULT_MAXIMUM_VARIABLE_NAME_LENGTH)
 
 	override fun visitProperty(property: KtProperty) {
 		if (property.identifierName().length > maximumVariableNameLength) {

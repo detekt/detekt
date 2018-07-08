@@ -15,5 +15,4 @@ class EmptyElseBlock(config: Config) : EmptyRule(config) {
 	override fun visitIfExpression(expression: KtIfExpression) {
 		expression.`else`?.addFindingIfBlockExprIsEmpty()
 	}
-
 }

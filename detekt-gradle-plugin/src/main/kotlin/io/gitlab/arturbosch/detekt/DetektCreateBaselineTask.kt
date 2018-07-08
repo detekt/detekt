@@ -34,5 +34,4 @@ open class DetektCreateBaselineTask : DefaultTask() {
 			it.args(detektExtension.resolveArguments(project).plus(createBaseline))
 		}
 	}
-
 }

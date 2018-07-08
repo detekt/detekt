@@ -16,5 +16,4 @@ class KtFileCountVisitor : DetektVisitor() {
 	override fun visitKtFile(file: KtFile) {
 		file.putUserData(numberOfFilesKey, 1)
 	}
-
 }

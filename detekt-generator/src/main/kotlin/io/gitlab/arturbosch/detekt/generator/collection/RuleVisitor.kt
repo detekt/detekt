@@ -160,7 +160,6 @@ internal class RuleVisitor : DetektVisitor() {
 	}
 }
 
-
 private fun String.trimStartingLineBreaks(): String {
 	var i = 0
 	while (i < this.length && (this[i] == '\n' || this[i] == '\r')) {

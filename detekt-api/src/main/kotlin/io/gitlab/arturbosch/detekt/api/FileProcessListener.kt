@@ -35,4 +35,3 @@ interface FileProcessListener : Extension {
 	 */
 	fun onFinish(files: List<KtFile>, result: Detektion) {}
 }
-

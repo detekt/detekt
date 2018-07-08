@@ -47,7 +47,6 @@ class ModifierOrderSpec : SubjectSpek<ModifierOrder>({
 			val code = "private internal lateinit val test: String"
 			assertThat(subject.lint(code)).isEmpty()
 		}
-
 	}
 
 	given("an overridden function") {
@@ -94,5 +93,4 @@ class ModifierOrderSpec : SubjectSpek<ModifierOrder>({
 			assertThat(subject.lint(code)).isEmpty()
 		}
 	}
-	
 })

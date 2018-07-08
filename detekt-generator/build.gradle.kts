@@ -26,7 +26,6 @@ val generateDocumentation by tasks.creating {
             fileTree("${rootProject.rootDir}/detekt-generator/documentation"),
             file("${rootProject.rootDir}/detekt-cli/src/main/resources/default-detekt-config.yml"))
 
-
     doLast {
         javaexec {
             main = "-jar"

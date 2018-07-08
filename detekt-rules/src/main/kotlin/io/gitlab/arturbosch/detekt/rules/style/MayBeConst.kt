@@ -91,26 +91,26 @@ class MayBeConst(config: Config = Config.empty) : Rule(config) {
 	}
 
 	private fun KtProperty.cannotBeConstant(): Boolean {
-		return (isLocal
-				|| isVar
-				|| getter != null
-				|| isConstant()
-				|| isOverridden())
+		return (isLocal ||
+				isVar ||
+				getter != null ||
+				isConstant() ||
+				isOverridden())
 	}
 
 	private fun KtProperty.isInObject() =
 			!isTopLevel && containingClassOrObject !is KtObjectDeclaration
 
 	private fun KtExpression.isConstantExpression(): Boolean {
-		return (this is KtStringTemplateExpression && !hasInterpolation())
-				|| node.elementType == KtNodeTypes.BOOLEAN_CONSTANT
-				|| node.elementType == KtNodeTypes.INTEGER_CONSTANT
-				|| node.elementType == KtNodeTypes.CHARACTER_CONSTANT
-				|| node.elementType == KtNodeTypes.FLOAT_CONSTANT
-				|| topLevelConstants.contains(text)
-				|| companionObjectConstants.contains(text)
-				|| isBinaryExpression(this)
-				|| isParenthesizedExpression(this)
+		return (this is KtStringTemplateExpression && !hasInterpolation()) ||
+				node.elementType == KtNodeTypes.BOOLEAN_CONSTANT ||
+				node.elementType == KtNodeTypes.INTEGER_CONSTANT ||
+				node.elementType == KtNodeTypes.CHARACTER_CONSTANT ||
+				node.elementType == KtNodeTypes.FLOAT_CONSTANT ||
+				topLevelConstants.contains(text) ||
+				companionObjectConstants.contains(text) ||
+				isBinaryExpression(this) ||
+				isParenthesizedExpression(this)
 	}
 
 	private fun isParenthesizedExpression(expression: KtExpression) =
@@ -118,9 +118,9 @@ class MayBeConst(config: Config = Config.empty) : Rule(config) {
 
 	private fun isBinaryExpression(expression: KtExpression): Boolean {
 		val binaryExpression = expression as? KtBinaryExpression ?: return false
-		return expression.node.elementType == KtNodeTypes.BINARY_EXPRESSION
-				&& binaryTokens.contains(binaryExpression.operationToken)
-				&& binaryExpression.left?.isConstantExpression() == true
-				&& binaryExpression.right?.isConstantExpression() == true
+		return expression.node.elementType == KtNodeTypes.BINARY_EXPRESSION &&
+				binaryTokens.contains(binaryExpression.operationToken) &&
+				binaryExpression.left?.isConstantExpression() == true &&
+				binaryExpression.right?.isConstantExpression() == true
 	}
 }

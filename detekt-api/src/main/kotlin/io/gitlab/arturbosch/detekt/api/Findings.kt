@@ -15,7 +15,7 @@ interface Finding : Compactable, HasEntity, HasMetrics {
 	val references: List<Entity>
 	val message: String
 
-	fun messageOrDescription() : String
+	fun messageOrDescription(): String
 }
 
 /**

@@ -119,6 +119,5 @@ class RuleListVisitor : DetektVisitor() {
 		ruleProperties.addAll(argumentExpressions
 				.filter { it is KtReferenceExpression }
 				.map { it?.text ?: "" })
-
 	}
 }
