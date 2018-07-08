@@ -21,8 +21,8 @@ class FunctionMinLength(config: Config = Config.empty) : Rule(config) {
 			Severity.Style,
 			"Function names should not be shorter than the minimum defined in the configuration.",
 			debt = Debt.FIVE_MINS)
-	private val minimumFunctionNameLength
-			= valueOrDefault(MINIMUM_FUNCTION_NAME_LENGTH, DEFAULT_MINIMUM_FUNCTION_NAME_LENGTH)
+	private val minimumFunctionNameLength =
+			valueOrDefault(MINIMUM_FUNCTION_NAME_LENGTH, DEFAULT_MINIMUM_FUNCTION_NAME_LENGTH)
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		if (function.identifierName().length < minimumFunctionNameLength) {

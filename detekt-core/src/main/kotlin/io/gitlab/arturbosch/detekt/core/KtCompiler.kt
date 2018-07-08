@@ -59,5 +59,4 @@ open class KtCompiler {
 		val RELATIVE_PATH: Key<String> = Key("relativePath")
 		val ABSOLUTE_PATH: Key<String> = Key("absolutePath")
 	}
-
 }

@@ -76,6 +76,8 @@ formatting:
     autoCorrect: true
   NoItParamInMultilineLambda:
     active: false
+  NoWildcardImports:
+    active: false
 
 naming:
   VariableNaming:

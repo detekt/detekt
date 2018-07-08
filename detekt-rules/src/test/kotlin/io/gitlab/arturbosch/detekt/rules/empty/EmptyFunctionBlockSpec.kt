@@ -52,5 +52,4 @@ class EmptyFunctionBlockSpec : SubjectSpek<EmptyFunctionBlock>({
 			assertThat(EmptyFunctionBlock(config).lint(code)).hasSize(1)
 		}
 	}
-
 })

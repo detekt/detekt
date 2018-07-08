@@ -50,7 +50,5 @@ class ForbiddenImportSpec : Spek({
 			val findings = ForbiddenImport(TestConfig(mapOf(ForbiddenImport.IMPORTS to "kotlin.Since*"))).lint(code)
 			assertThat(findings).hasSize(1)
 		}
-
 	}
-
 })

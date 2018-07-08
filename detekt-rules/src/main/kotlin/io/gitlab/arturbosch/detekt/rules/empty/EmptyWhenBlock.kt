@@ -19,5 +19,4 @@ class EmptyWhenBlock(config: Config) : EmptyRule(config) {
 			report(CodeSmell(issue, Entity.from(expression), "This when block is empty."))
 		}
 	}
-
 }

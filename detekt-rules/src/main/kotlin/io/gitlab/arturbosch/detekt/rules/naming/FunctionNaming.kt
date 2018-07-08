@@ -32,8 +32,8 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
 	private val excludeClassPattern = Regex(valueOrDefault(EXCLUDE_CLASS_PATTERN, "$^"))
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (!function.isContainingExcludedClass(excludeClassPattern)
-				&& !function.identifierName().matches(functionPattern)) {
+		if (!function.isContainingExcludedClass(excludeClassPattern) &&
+				!function.identifierName().matches(functionPattern)) {
 			report(CodeSmell(
 					issue,
 					Entity.from(function),

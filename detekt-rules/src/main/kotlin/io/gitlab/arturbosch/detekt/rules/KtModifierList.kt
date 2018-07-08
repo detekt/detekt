@@ -15,10 +15,10 @@ fun KtModifierListOwner.isOpen() = hasModifier(KtTokens.OPEN_KEYWORD)
 fun KtModifierListOwner.isOperator() = hasModifier(KtTokens.OPERATOR_KEYWORD)
 
 fun KtModifierListOwner.isPublic(): Boolean {
-	return this.hasModifier(KtTokens.PUBLIC_KEYWORD)
-			|| !(this.hasModifier(KtTokens.PRIVATE_KEYWORD)
-			|| this.hasModifier(KtTokens.PROTECTED_KEYWORD)
-			|| this.hasModifier(KtTokens.INTERNAL_KEYWORD))
+	return this.hasModifier(KtTokens.PUBLIC_KEYWORD) ||
+			!(this.hasModifier(KtTokens.PRIVATE_KEYWORD) ||
+			this.hasModifier(KtTokens.PROTECTED_KEYWORD) ||
+			this.hasModifier(KtTokens.INTERNAL_KEYWORD))
 }
 
 fun KtModifierListOwner.isConstant() = hasModifier(KtTokens.CONST_KEYWORD)

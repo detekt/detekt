@@ -69,8 +69,8 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 				}
 	}
 
-	private fun isLateinitProperty(property: KtProperty)
-			= property.modifierList?.hasModifier(KtTokens.LATEINIT_KEYWORD) == true
+	private fun isLateinitProperty(property: KtProperty) =
+			property.modifierList?.hasModifier(KtTokens.LATEINIT_KEYWORD) == true
 
 	companion object {
 		const val EXCLUDE_ANNOTATED_PROPERTIES = "excludeAnnotatedProperties"

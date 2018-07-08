@@ -28,6 +28,5 @@ internal class DetektExtensionTest : Spek({
 
 			assertThat(args).isEqualTo(expectedArgs)
 		}
-
 	}
 })

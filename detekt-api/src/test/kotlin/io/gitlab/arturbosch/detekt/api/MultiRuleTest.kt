@@ -28,7 +28,6 @@ internal class MultiRuleTest : Spek({
 			val findings = ruleSet().accept(file, filters)
 
 			assertThat(findings).hasSize(1)
-
 		}
 	}
 })

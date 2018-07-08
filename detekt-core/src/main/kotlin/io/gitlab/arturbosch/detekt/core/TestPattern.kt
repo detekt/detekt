@@ -36,4 +36,3 @@ data class TestPattern(val active: Boolean,
 		val DEFAULT_PATTERNS = listOf(".*/test/.*Test.kt")
 	}
 }
-

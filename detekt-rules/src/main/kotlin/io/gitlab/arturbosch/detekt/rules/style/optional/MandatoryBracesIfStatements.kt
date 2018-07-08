@@ -66,7 +66,7 @@ class MandatoryBracesIfStatements(config: Config = Config.empty) : Rule(config) 
 			expression.then !is KtBlockExpression
 
 	private fun isNotBlockOrIfExpression(expression: KtIfExpression): Boolean =
-			expression.`else` != null
-					&& expression.`else` !is KtIfExpression
-					&& expression.`else` !is KtBlockExpression
+			expression.`else` != null &&
+					expression.`else` !is KtIfExpression &&
+					expression.`else` !is KtBlockExpression
 }

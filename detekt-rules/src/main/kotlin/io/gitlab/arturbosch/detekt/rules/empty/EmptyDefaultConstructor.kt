@@ -24,9 +24,9 @@ class EmptyDefaultConstructor(config: Config) : EmptyRule(config = config) {
 	}
 
 	private fun hasSuitableSignature(constructor: KtPrimaryConstructor) =
-			hasPublicVisibility(constructor.visibilityModifierType())
-					&& constructor.annotationEntries.isEmpty()
-					&& constructor.valueParameters.isEmpty()
+			hasPublicVisibility(constructor.visibilityModifierType()) &&
+					constructor.annotationEntries.isEmpty() &&
+					constructor.valueParameters.isEmpty()
 
 	private fun hasPublicVisibility(visibility: KtModifierKeywordToken?): Boolean {
 		return visibility == null || visibility == KtTokens.PUBLIC_KEYWORD

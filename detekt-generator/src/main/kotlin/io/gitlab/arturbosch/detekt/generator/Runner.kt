@@ -32,4 +32,3 @@ class Runner(private val arguments: GeneratorArgs) {
 		println("\nGenerated all detekt documentation in $time ms.")
 	}
 }
-

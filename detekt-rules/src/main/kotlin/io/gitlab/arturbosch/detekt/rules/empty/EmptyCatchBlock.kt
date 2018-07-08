@@ -29,5 +29,4 @@ class EmptyCatchBlock(config: Config) : EmptyRule(config = config) {
 	companion object {
 		const val ALLOWED_EXCEPTION_NAME_REGEX = "allowedExceptionNameRegex"
 	}
-
 }

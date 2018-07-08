@@ -30,4 +30,3 @@ tasks.withType<Jar> {
 		})
 	})
 }
-

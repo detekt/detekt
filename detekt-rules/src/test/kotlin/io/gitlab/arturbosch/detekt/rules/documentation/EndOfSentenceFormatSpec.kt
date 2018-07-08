@@ -102,7 +102,6 @@ class EndOfSentenceFormatSpec : SubjectSpek<KDocStyle>({
 		assertThat(subject.lint(code)).isEmpty()
 	}
 
-
 	it("does not report KDoc which doesn't contain any real sentence but many tags") {
 		val code = """
 			/**
@@ -117,7 +116,6 @@ class EndOfSentenceFormatSpec : SubjectSpek<KDocStyle>({
 			"""
 		assertThat(subject.lint(code)).isEmpty()
 	}
-
 
 	it("does not report KDoc which doesn't contain any real sentence but html tags") {
 		val code = """

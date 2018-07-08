@@ -52,6 +52,6 @@ class UnconditionalJumpStatementInLoop(config: Config = Config.empty) : Rule(con
 			isJumpStatement(body) || body?.children?.any { isJumpStatement(it) } == true
 
 	private fun isJumpStatement(element: PsiElement?) =
-			element is KtReturnExpression || element is KtBreakExpression
-					|| element is KtContinueExpression || element is KtThrowExpression
+			element is KtReturnExpression || element is KtBreakExpression ||
+					element is KtContinueExpression || element is KtThrowExpression
 }

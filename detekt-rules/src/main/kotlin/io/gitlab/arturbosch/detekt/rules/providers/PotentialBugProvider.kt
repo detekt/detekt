@@ -46,5 +46,4 @@ class PotentialBugProvider : RuleSetProvider {
 				UnsafeCast(config)
 		))
 	}
-
 }

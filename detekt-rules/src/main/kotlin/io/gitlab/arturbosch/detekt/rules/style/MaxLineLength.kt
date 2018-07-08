@@ -56,14 +56,14 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 			"Line detected that is longer than the defined maximum line length in the code style.",
 			Debt.FIVE_MINS)
 
-	private val maxLineLength: Int
-			= valueOrDefault(MaxLineLength.MAX_LINE_LENGTH, MaxLineLength.DEFAULT_IDEA_LINE_LENGTH)
-	private val excludePackageStatements: Boolean
-			= valueOrDefault(MaxLineLength.EXCLUDE_PACKAGE_STATEMENTS, MaxLineLength.DEFAULT_VALUE_PACKAGE_EXCLUDE)
-	private val excludeImportStatements: Boolean
-			= valueOrDefault(MaxLineLength.EXCLUDE_IMPORT_STATEMENTS, MaxLineLength.DEFAULT_VALUE_IMPORTS_EXCLUDE)
-	private val excludeCommentStatements: Boolean
-			= valueOrDefault(MaxLineLength.EXCLUDE_COMMENT_STATEMENTS, MaxLineLength.DEFAULT_VALUE_COMMENT_EXCLUDE)
+	private val maxLineLength: Int =
+			valueOrDefault(MaxLineLength.MAX_LINE_LENGTH, MaxLineLength.DEFAULT_IDEA_LINE_LENGTH)
+	private val excludePackageStatements: Boolean =
+			valueOrDefault(MaxLineLength.EXCLUDE_PACKAGE_STATEMENTS, MaxLineLength.DEFAULT_VALUE_PACKAGE_EXCLUDE)
+	private val excludeImportStatements: Boolean =
+			valueOrDefault(MaxLineLength.EXCLUDE_IMPORT_STATEMENTS, MaxLineLength.DEFAULT_VALUE_IMPORTS_EXCLUDE)
+	private val excludeCommentStatements: Boolean =
+			valueOrDefault(MaxLineLength.EXCLUDE_COMMENT_STATEMENTS, MaxLineLength.DEFAULT_VALUE_COMMENT_EXCLUDE)
 
 	fun visit(element: KtFileContent) {
 		var offset = 0

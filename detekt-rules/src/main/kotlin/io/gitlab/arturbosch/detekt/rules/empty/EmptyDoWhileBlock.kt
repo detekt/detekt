@@ -15,5 +15,4 @@ class EmptyDoWhileBlock(config: Config) : EmptyRule(config) {
 	override fun visitDoWhileExpression(expression: KtDoWhileExpression) {
 		expression.body?.addFindingIfBlockExprIsEmpty()
 	}
-
 }

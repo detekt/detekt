@@ -351,7 +351,6 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 
 			assertThat(subject.lint(code)).hasSize(1)
 		}
-
 	}
 
 	given("top level function parameters") {

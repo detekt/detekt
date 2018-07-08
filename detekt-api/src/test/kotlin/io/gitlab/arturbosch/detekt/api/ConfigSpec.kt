@@ -47,7 +47,6 @@ class ConfigSpec : Spek({
 				val ignored = config.valueOrDefault("style", "")
 			}
 		}
-
 	}
 
 	describe("loading empty configurations") {
@@ -60,5 +59,4 @@ class ConfigSpec : Spek({
 			YamlConfig.loadResource(javaClass.getResource("/oneitem.yml"))
 		}
 	}
-
 })

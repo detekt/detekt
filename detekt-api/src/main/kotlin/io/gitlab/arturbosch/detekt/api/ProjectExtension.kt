@@ -56,7 +56,6 @@ private fun makeMutable(project: MockProject) {
 			}
 			return null
 		}
-
 	}
 	val extensionPoint = "org.jetbrains.kotlin.com.intellij.treeCopyHandler"
 	val extensionClassName = TreeCopyHandler::class.java.name!!

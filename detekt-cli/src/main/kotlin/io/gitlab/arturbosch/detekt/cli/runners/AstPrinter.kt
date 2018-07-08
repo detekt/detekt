@@ -78,7 +78,7 @@ class ElementPrinter : DetektVisitor() {
 	}
 
 	private fun KtElement.isContainer() =
-			this is KtStatementExpression
-					|| this is KtDeclarationContainer
-					|| this is KtContainerNode
+			this is KtStatementExpression ||
+					this is KtDeclarationContainer ||
+					this is KtContainerNode
 }

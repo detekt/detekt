@@ -57,7 +57,7 @@ internal class HtmlOutputFormatTest {
 		assertThat(result).contains("<span class=\"description\">\nA3\n</span>")
 	}
 
-	private fun createTestDetektionWithMultipleSmells() : Detektion {
+	private fun createTestDetektionWithMultipleSmells(): Detektion {
 		val entity1 = Entity("Sample1", "com.sample.Sample1", "",
 				Location(SourceLocation(11, 1), TextLocation(0, 10),
 						"abcd", "src/main/com/sample/Sample1.kt"))

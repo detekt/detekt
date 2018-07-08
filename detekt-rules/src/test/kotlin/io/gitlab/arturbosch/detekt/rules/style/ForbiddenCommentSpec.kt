@@ -49,7 +49,6 @@ class ForbiddenCommentSpec : Spek({
 			val findings = ForbiddenComment().lint(stopShip)
 			assertThat(findings).hasSize(0)
 		}
-
 	}
 
 	given("custom default values are configured") {
@@ -79,6 +78,5 @@ class ForbiddenCommentSpec : Spek({
 			val findings = ForbiddenComment(TestConfig(mapOf(ForbiddenComment.VALUES to "bAnAnA"))).lint(banana)
 			assertThat(findings).hasSize(1)
 		}
-
 	}
 })

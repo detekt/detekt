@@ -62,8 +62,8 @@ class MatchingDeclarationName(config: Config = Config.empty) : Rule(config) {
 			val declaration = declarations[0] as? KtClassOrObject
 			val declarationName = declaration?.name ?: return
 			val filename = file.name.removeSuffix(KOTLIN_SUFFIX)
-			if (declarationName != filename
-					&& file.declarations.filterIsInstance<KtTypeAlias>().all { it.name != filename }) {
+			if (declarationName != filename &&
+					file.declarations.filterIsInstance<KtTypeAlias>().all { it.name != filename }) {
 				report(CodeSmell(issue, Entity.from(file), "The file name '${file.name}' " +
 						"does not match the name of the single top-level declaration '$declarationName'."))
 			}
@@ -72,4 +72,3 @@ class MatchingDeclarationName(config: Config = Config.empty) : Rule(config) {
 }
 
 private const val KOTLIN_SUFFIX = ".kt"
-

@@ -77,4 +77,3 @@ class WildcardImport(config: Config = Config.empty) : Rule(config) {
 		const val EXCLUDED_IMPORTS = "excludeImports"
 	}
 }
-

@@ -56,7 +56,6 @@ class NestedBlockDepthSpec : SubjectSpek<NestedBlockDepth>({
 			assertThat(subject.findings).isEmpty()
 		}
 	}
-
 })
 
 const val nestedBlockCode = """

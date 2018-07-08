@@ -77,5 +77,4 @@ class ExpressionBodySyntax(config: Config = Config.empty) : Rule(config) {
 	companion object {
 		const val INCLUDE_LINE_WRAPPING = "includeLineWrapping"
 	}
-
 }

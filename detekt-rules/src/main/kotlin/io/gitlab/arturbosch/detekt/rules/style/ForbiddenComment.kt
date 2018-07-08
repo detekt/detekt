@@ -31,8 +31,8 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
 			"Flags a forbidden comment. Defaults values are TODO:, FIXME: or STOPSHIP:",
 			Debt.TEN_MINS)
 
-	private val values: List<String>
-			= valueOrDefault(VALUES, "TODO:,FIXME:,STOPSHIP:")
+	private val values: List<String> =
+			valueOrDefault(VALUES, "TODO:,FIXME:,STOPSHIP:")
 			.split(",")
 			.filter { it.isNotBlank() }
 
@@ -53,4 +53,3 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
 		const val VALUES = "values"
 	}
 }
-

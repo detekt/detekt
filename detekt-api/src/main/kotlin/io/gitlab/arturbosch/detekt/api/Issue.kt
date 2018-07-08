@@ -30,7 +30,6 @@ data class Issue(val id: String,
  */
 enum class Severity {
 	CodeSmell, Style, Warning, Defect, Minor, Maintainability, Security, Performance
-
 }
 
 /**

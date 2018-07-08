@@ -65,8 +65,8 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 		if (isIncorrectClassType(klass) || hasOnlyPrivateConstructors(klass)) {
 			return
 		}
-		if (klass.isClosedForExtension() && klass.doesNotExtendAnything()
-				&& !annotationExcluder.shouldExclude(klass.annotationEntries)) {
+		if (klass.isClosedForExtension() && klass.doesNotExtendAnything() &&
+				!annotationExcluder.shouldExclude(klass.annotationEntries)) {
 			val declarations = klass.extractDeclarations()
 			val properties = declarations.filterIsInstance<KtProperty>()
 			val functions = declarations.filterIsInstance<KtNamedFunction>()
@@ -88,8 +88,8 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 
 	private fun hasOnlyPrivateConstructors(klass: KtClass): Boolean {
 		val primaryConstructor = klass.primaryConstructor
-		return (primaryConstructor == null || primaryConstructor.isPrivate())
-				&& klass.secondaryConstructors.all { it.isPrivate() }
+		return (primaryConstructor == null || primaryConstructor.isPrivate()) &&
+				klass.secondaryConstructors.all { it.isPrivate() }
 	}
 
 	private fun KtClass.doesNotExtendAnything() = superTypeListEntries.isEmpty()

@@ -27,5 +27,4 @@ class EmptyIfBlock(config: Config) : EmptyRule(config) {
 			report(CodeSmell(issue, Entity.from(expression), "This if block is empty and can be removed."))
 		}
 	}
-
 }
