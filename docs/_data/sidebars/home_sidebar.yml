@@ -62,6 +62,9 @@ entries:
     - title: exceptions
       url: /exceptions.html
       output: web
+    - title: formatting
+      url: /formatting.html
+      output: web
     - title: naming
       url: /naming.html
       output: web

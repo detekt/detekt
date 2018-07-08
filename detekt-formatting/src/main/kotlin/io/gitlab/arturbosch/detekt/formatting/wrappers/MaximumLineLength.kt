@@ -10,7 +10,7 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 import org.jetbrains.kotlin.psi.KtFile
 
 /**
- * See https://ktlint.github.io for documentation.
+ * See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
  *
  * @configuration maxLineLength - maximum line length (default: 120)
  *
