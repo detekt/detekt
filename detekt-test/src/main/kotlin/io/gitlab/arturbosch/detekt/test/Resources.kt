@@ -12,4 +12,4 @@ fun resource(name: String): URI {
 	return resource.toURI()
 }
 
-fun yamlConfig(resource: String) = YamlConfig.loadResource(Resources::class.java.getResource("/$resource"))
+fun yamlConfig(name: String) = YamlConfig.loadResource(resource(name).toURL())

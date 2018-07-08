@@ -19,6 +19,7 @@ dependencies {
 
 	testCompile(project(":detekt-api"))
 	testCompile(project(":detekt-test"))
+	testCompile(project(":detekt-core"))
 	testRuntime("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
 	testRuntime("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
 }
