@@ -1,6 +1,5 @@
 import com.jfrog.bintray.gradle.BintrayExtension
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
-import io.gitlab.arturbosch.detekt.extensions.ProfileExtension
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.util.*
@@ -191,6 +190,10 @@ val userHome: String = System.getProperty("user.home")
 
 val usedDetektVersion by project
 
+dependencies {
+	detekt("io.gitlab.arturbosch.detekt:detekt-formatting:$usedDetektVersion")
+}
+
 configure<DetektExtension> {
 
 	debug = true
@@ -226,6 +229,6 @@ configure<DetektExtension> {
 /**
  * Usage: <code>./gradlew build -PwarningsAsErrors=true</code>.
  */
-fun shouldTreatCompilerWarningsAsErrors() : Boolean {
+fun shouldTreatCompilerWarningsAsErrors(): Boolean {
 	return project.findProperty("warningsAsErrors") == "true"
 }
