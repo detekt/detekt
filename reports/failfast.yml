@@ -58,10 +58,7 @@ exceptions:
 formatting:
   active: true
   android: false
-  autoCorrect: false
-  ChainWrapping:
-    active: true
-    autoCorrect: true
+  autoCorrect: true
   Indentation:
     active: false
     autoCorrect: true

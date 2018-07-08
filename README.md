@@ -65,6 +65,19 @@ detekt {
 }
 ```
 
+### Adding more rule sets
+
+detekt itself provides a wrapper over [KtLint](https://github.com/shyiko/ktlint) as a `formatting` rule set
+which can be easily added to the gradle configuration:
+
+```gradle
+dependencies {
+    detekt "io.gitlab.arturbosch.detekt:detekt-formatting:1.0.0.[version]"
+}
+```
+
+Likewise custom [extensions](https://arturbosch.github.io/detekt/extensions.html) can be added to detekt.
+
 ### Contributors
 
 If you contributed to detekt but your name is not in the list, please feel free to add yourself to it!

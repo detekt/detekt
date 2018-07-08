@@ -8,29 +8,35 @@ folder: documentation
 ---
 This rule set provides rules that address formatting issues.
 
+Note: The formatting rule set is not included in the detekt-cli or gradle plugin.
+
+To enable this rule set, add <i>detekt "io.gitlab.arturbosch.detekt:detekt-formatting:$version"</i>
+to your gradle configuration or reference the `detekt-formatting`-jar with the `--plugins` option
+in the command line interface.
+
 ### ChainWrapping
 
-See https://ktlint.github.io for documentation.
+See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
 
 ### CommentSpacing
 
-See https://ktlint.github.io for documentation.
+See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
 
 ### Filename
 
-See https://ktlint.github.io for documentation.
+See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
 
 ### FinalNewline
 
-See https://ktlint.github.io for documentation.
+See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
 
 ### ImportOrdering
 
-See https://ktlint.github.io for documentation.
+See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
 
 ### Indentation
 
-See https://ktlint.github.io/#rule-indentation for documentation.
+See <a href="https://ktlint.github.io/#rule-indentation">ktlint-website</a> for documentation.
 
 #### Configuration options:
 
@@ -44,7 +50,7 @@ See https://ktlint.github.io/#rule-indentation for documentation.
 
 ### MaximumLineLength
 
-See https://ktlint.github.io for documentation.
+See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
 
 #### Configuration options:
 
@@ -54,59 +60,59 @@ See https://ktlint.github.io for documentation.
 
 ### ModifierOrdering
 
-See https://ktlint.github.io/#rule-modifier-order for documentation.
+See <a href="https://ktlint.github.io/#rule-modifier-order">ktlint-website</a> for documentation.
 
 ### NoBlankLineBeforeRbrace
 
-See https://ktlint.github.io for documentation.
+See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
 
 ### NoConsecutiveBlankLines
 
-See https://ktlint.github.io/#rule-blank for documentation.
+See <a href="https://ktlint.github.io/#rule-blank">ktlint-website</a> for documentation.
 
 ### NoEmptyClassBody
 
-See https://ktlint.github.io/#rule-empty-class-body for documentation.
+See <a href="https://ktlint.github.io/#rule-empty-class-body">ktlint-website</a> for documentation.
 
 ### NoItParamInMultilineLambda
 
-See https://ktlint.github.io for documentation.
+See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
 
 ### NoLineBreakAfterElse
 
-See https://ktlint.github.io for documentation.
+See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
 
 ### NoLineBreakBeforeAssignment
 
-See https://ktlint.github.io for documentation.
+See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
 
 ### NoMultipleSpaces
 
-See https://ktlint.github.io for documentation.
+See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
 
 ### NoSemicolons
 
-See https://ktlint.github.io/#rule-semi for documentation.
+See <a href="https://ktlint.github.io/#rule-semi">ktlint-website</a> for documentation.
 
 ### NoTrailingSpaces
 
-See https://ktlint.github.io/#rule-trailing-whitespaces for documentation.
+See <a href="https://ktlint.github.io/#rule-trailing-whitespaces">ktlint-website</a> for documentation.
 
 ### NoUnitReturn
 
-See https://ktlint.github.io/#rule-unit-return for documentation.
+See <a href="https://ktlint.github.io/#rule-unit-return">ktlint-website</a> for documentation.
 
 ### NoUnusedImports
 
-See https://ktlint.github.io for documentation.
+See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
 
 ### NoWildcardImports
 
-See https://ktlint.github.io/#rule-import for documentation.
+See <a href="https://ktlint.github.io/#rule-import">ktlint-website</a> for documentation.
 
 ### ParameterListWrapping
 
-See https://ktlint.github.io for documentation.
+See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
 
 #### Configuration options:
 
@@ -116,28 +122,28 @@ See https://ktlint.github.io for documentation.
 
 ### SpacingAroundColon
 
-See https://ktlint.github.io/#rule-spacing for documentation.
+See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.
 
 ### SpacingAroundComma
 
-See https://ktlint.github.io/#rule-spacing for documentation.
+See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.
 
 ### SpacingAroundCurly
 
-See https://ktlint.github.io/#rule-spacing for documentation.
+See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.
 
 ### SpacingAroundKeyword
 
-See https://ktlint.github.io/#rule-spacing for documentation.
+See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.
 
 ### SpacingAroundOperators
 
-See https://ktlint.github.io/#rule-spacing for documentation.
+See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.
 
 ### SpacingAroundRangeOperator
 
-See https://ktlint.github.io/#rule-spacing for documentation.
+See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.
 
 ### StringTemplate
 
-See https://ktlint.github.io/#rule-string-template for documentation.
+See <a href="https://ktlint.github.io/#rule-string-template">ktlint-website</a> for documentation.
