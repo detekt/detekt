@@ -11,7 +11,7 @@ interface ConfigAware : Config {
 	val id: String
 
 	/**
-	 * Wrapped configuration to use for specified id.
+	 * Wrapped configuration of the ruleSet this rule is in.
 	 */
 	val config: Config
 
@@ -28,12 +28,11 @@ interface ConfigAware : Config {
 
 	/**
 	 * Does this rule have auto correct specified in configuration?
-	 * If not check if a top-level autoCorrect property is set.
-	 * Defaults to true.
+	 * For auto correction to work the rule set itself enable it.
 	 */
 	val autoCorrect: Boolean
-		get() = valueOrDefault("autoCorrect",
-				config.valueOrDefault("autoCorrect", true))
+		get() = valueOrDefault("autoCorrect", false) &&
+				config.valueOrDefault("autoCorrect", true)
 
 	/**
 	 * Is this rule specified as active in configuration?
