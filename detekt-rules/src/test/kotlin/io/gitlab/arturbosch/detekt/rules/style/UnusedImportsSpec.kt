@@ -72,6 +72,20 @@ class UnusedImportsSpec : SubjectSpek<UnusedImports>({
 			}
 		}
 
+		it("reports imports from the current package") {
+			val lint = subject.lint("""
+				package test
+				import test.SomeClass
+
+				val a: SomeClass? = null
+			"""
+			)
+			with(lint) {
+				assertThat(this).hasSize(1)
+				assertThat(this[0].entity.signature).endsWith("import test.SomeClass")
+			}
+		}
+
 		it("does not report KDoc references with method calls") {
 			val code = """
 				package com.example
@@ -117,7 +131,7 @@ class UnusedImportsSpec : SubjectSpek<UnusedImports>({
 		}
 	}
 
-	given("somee import statements with KDoc") {
+	given("some import statements with KDoc") {
 
 		it("does not report imports in KDoc") {
 			val code = """
