@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.isPartOf
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocTag
+import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtImportDirective
@@ -50,13 +51,19 @@ class UnusedImports(config: Config) : Rule(config) {
 	}
 
 	private class UnusedImportsVisitor : DetektVisitor() {
+		private var currentPackage: FqName? = null
 		private var imports: List<KtImportDirective>? = null
 		private val namedReferences = mutableSetOf<String>()
 
 		fun unusedImports(): List<KtImportDirective> {
 			return imports
-					?.filter { it.identifier() !in namedReferences }
+					?.filter { it.importedFqName?.parent() == currentPackage || it.identifier() !in namedReferences }
 					.orEmpty()
+		}
+
+		override fun visitPackageDirective(directive: KtPackageDirective) {
+			currentPackage = directive.fqName
+			super.visitPackageDirective(directive)
 		}
 
 		override fun visitImportList(importList: KtImportList) {
