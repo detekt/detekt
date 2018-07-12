@@ -3,11 +3,11 @@ package io.gitlab.arturbosch.detekt.cli
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.ParameterException
 
-val jCommander = JCommander()
-
 inline fun <reified T : Args> parseArguments(args: Array<String>): T {
 	val cli = T::class.java.declaredConstructors.firstOrNull()?.newInstance() as? T
 			?: throw IllegalStateException("Could not create Args object for class ${T::class.java}")
+
+	val jCommander = JCommander()
 
 	jCommander.addObject(cli)
 	jCommander.programName = "detekt"
@@ -36,6 +36,6 @@ fun failWithErrorMessages(messages: Iterable<String?>) {
 		println(it)
 	}
 	println()
-	jCommander.usage()
+	JCommander().usage()
 	System.exit(-1)
 }
