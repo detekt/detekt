@@ -15,6 +15,8 @@ open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 						   open var profile: String = DEFAULT_PROFILE_NAME,
 						   open var ideaExtension: IdeaExtension = IdeaExtension()) {
 
+	val profileStorage = ProfileStorage()
+
 	fun ideaFormatArgs() = ideaExtension.formatArgs(this)
 	fun ideaInspectArgs() = ideaExtension.inspectArgs(this)
 
@@ -23,7 +25,9 @@ open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 	}
 
 	fun defaultProfile(configuration: Action<in ProfileExtension>) {
-		configuration.execute(ProfileStorage.defaultProfile)
+		val default = ProfileExtension.default()
+		configuration.execute(default)
+		profileStorage.defaultProfile = default
 	}
 
 	fun profile(name: String, configuration: Action<in ProfileExtension>) {
@@ -31,22 +35,22 @@ open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 			defaultProfile(configuration)
 		} else {
 			ProfileExtension(name).apply {
-				ProfileStorage.add(this)
+				profileStorage.add(this)
 				configuration.execute(this)
 			}
 		}
 	}
 
 	fun resolveClasspath(project: Project): FileCollection = project
-		.configurations
-		.getByName("detekt")
-		.withDependencies {
-			it.add(
-				DefaultExternalModuleDependency(
-					"io.gitlab.arturbosch.detekt", "detekt-cli", version
+			.configurations
+			.getByName("detekt")
+			.withDependencies {
+				it.add(
+						DefaultExternalModuleDependency(
+								"io.gitlab.arturbosch.detekt", "detekt-cli", version
+						)
 				)
-			)
-		}
+			}
 
 	fun resolveArguments(project: Project): List<String> {
 		return with(extractArguments()) {
@@ -59,9 +63,9 @@ open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 	}
 
 	private fun extractArguments(): MutableList<String> {
-		val defaultProfile = ProfileStorage.defaultProfile
-		val systemOrSelected = ProfileStorage.systemProfile
-				?: ProfileStorage.getByName(profile)
+		val defaultProfile = profileStorage.defaultProfile
+		val systemOrSelected = profileStorage.systemProfile
+				?: profileStorage.getByName(profile)
 
 		val propertyMap =
 				if (systemOrSelected?.name == defaultProfile.name) {
@@ -87,7 +91,7 @@ open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
 			if (value == "true" || value == "false") listOf(key) else listOf(key, value)
 
 	override fun toString(): String = "DetektExtension(version='$version', " +
-			"debug=$debug, profile='$profile', ideaExtension=$ideaExtension, profiles=${ProfileStorage.all})"
+			"debug=$debug, profile='$profile', ideaExtension=$ideaExtension, profiles=${profileStorage.all})"
 }
 
 private fun MutableMap<String, String>.mergeInto(other: MutableMap<String, String>) {
