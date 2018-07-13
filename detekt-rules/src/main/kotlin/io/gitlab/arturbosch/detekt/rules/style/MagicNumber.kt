@@ -12,7 +12,7 @@ import io.gitlab.arturbosch.detekt.rules.isHashCodeFunction
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
-import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtCallElement
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtEnumEntry
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -177,7 +177,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 private fun KtConstantExpression.isNamedArgument() =
 		(parent is KtValueArgument &&
 				(parent as? KtValueArgument)?.isNamed() == true &&
-				isPartOf(KtCallExpression::class))
+				isPartOf(KtCallElement::class))
 
 private fun KtConstantExpression.isPartOfFunctionReturnConstant() =
 		parent is KtNamedFunction || (parent is KtReturnExpression && parent.parent.children.size == 1)
