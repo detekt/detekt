@@ -104,5 +104,36 @@ class UnnecessaryParenthesesSpec : SubjectSpek<UnnecessaryParentheses>({
 				"""
 			assertThat(subject.lint(code)).hasSize(0)
 		}
+
+		it("should not report lambdas within super constructor calls") {
+			val code = """
+				typealias KBiFunc<X, Y, Z> = (X, Y) -> Z
+
+				interface Func<in X : Any, out Y : Any> {
+					fun apply(input: X): Y
+				}
+
+				interface BiFunc<in X : Any, in Y : Any, out Z : Any> {
+					fun apply(
+						first: X,
+						second: Y
+					): Z
+				}
+
+				class Clazz<in X : Any, out Y : Any>(
+					private val func: KBiFunc<X, Boolean, Y>
+				) : Func<X, Y> {
+
+					constructor(
+						func: BiFunc<X, Boolean, Y>
+					) : this(
+						{ first, second -> func.apply(first, second) }
+					)
+
+					override fun apply(input: X): Y = func(input, true)
+				}
+			""".trimIndent()
+			assertThat(subject.lint(code)).hasSize(0)
+		}
 	}
 })
