@@ -11,6 +11,13 @@ import java.nio.file.Path
 @Suppress("LongParameterList", "ComplexMethod")
 open class ProfileExtension(val name: String) {
 
+	companion object {
+		fun default() = ProfileExtension(DEFAULT_PROFILE_NAME).apply {
+			filters = DEFAULT_PATH_EXCLUDES
+			configResource = DEFAULT_DETEKT_CONFIG_RESOURCE
+		}
+	}
+
 	open var input: String? = null
 	open var config: Any? = null
 	open var configResource: String? = null
