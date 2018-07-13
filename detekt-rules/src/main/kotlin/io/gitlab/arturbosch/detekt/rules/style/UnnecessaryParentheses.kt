@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import org.jetbrains.kotlin.psi.KtConstructorDelegationCall
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtParenthesizedExpression
 import org.jetbrains.kotlin.psi.KtPsiUtil
@@ -63,7 +64,9 @@ class UnnecessaryParentheses(config: Config = Config.empty) : Rule(config) {
 		if (argument.children.any { it is KtLambdaExpression }) {
 			val parent = argument.parent
 			val isOnlyArgument = parent.children.size == 1
-			val isSuperTypeCallEntry = parent.parent is KtSuperTypeCallEntry
+			val nodeBeforeArgumentList = parent.parent
+			val isSuperTypeCallEntry = nodeBeforeArgumentList is KtSuperTypeCallEntry ||
+					nodeBeforeArgumentList is KtConstructorDelegationCall
 			if (isOnlyArgument && !isSuperTypeCallEntry && argument.equalsToken == null) {
 				val message = "Parentheses around the lambda ${parent.text} are unnecessary and can be removed."
 				report(CodeSmell(issue, Entity.from(parent), message))
