@@ -72,7 +72,7 @@ internal class GroovyPluginTest : Spek({
 
 			val detektConfig = """
 				|detekt {
-				|	toolVersion = "1.0.0.RC7-MARVIN2
+				|	toolVersion = "1.0.0-GRADLE"
 				|}
 				"""
 
@@ -99,12 +99,13 @@ internal class GroovyPluginTest : Spek({
 
 			val detektConfig = """
 				|detekt {
-				|	toolVersion = "1.0.0.RC7-MARVIN2
+				|	toolVersion = "1.0.0-GRADLE"
 				|	configFile = file("${rootDir.absolutePath}/config.yml")
 				|}
 				"""
 
 			writeFiles(rootDir, detektConfig)
+			writeConfig(rootDir)
 
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
@@ -155,4 +156,12 @@ private fun writeFiles(root: File, detektConfiguration: String) {
 	File(root, "settings.gradle").writeText(settingsFileContent)
 	File(root, "src/main/java").mkdirs()
 	File(root, "src/main/java/MyClass.kt").writeText(ktFileContent)
+}
+
+
+private fun writeConfig(root: File) {
+	File(root, "config.yml").writeText("""
+		|autoCorrect: true
+		|failFast: false
+		""".trimMargin())
 }
