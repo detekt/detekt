@@ -1,6 +1,7 @@
 buildscript {
 	repositories {
 		mavenCentral()
+		mavenLocal()
 		jcenter()
 	}
 	dependencies {
@@ -10,6 +11,7 @@ buildscript {
 
 repositories {
 	gradlePluginPortal()
+	mavenLocal()
 	jcenter()
 }
 
@@ -27,7 +29,7 @@ val detektGradleVersion: String by project
 
 
 group = "io.gitlab.arturbosch"
-version = "1.0.0.RC7"
+version = "1.0.0-GRADLE"
 
 val spekVersion = "1.1.5"
 val junitPlatformVersion = "1.1.0"

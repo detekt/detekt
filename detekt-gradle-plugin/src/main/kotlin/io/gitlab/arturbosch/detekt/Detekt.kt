@@ -12,12 +12,7 @@ import org.gradle.api.plugins.quality.internal.CheckstyleReportsImpl
 import org.gradle.api.provider.Property
 import org.gradle.api.reporting.Reporting
 import org.gradle.api.resources.TextResource
-import org.gradle.api.tasks.CacheableTask
-import org.gradle.api.tasks.OutputFiles
-import org.gradle.api.tasks.SourceSet
-import org.gradle.api.tasks.SourceTask
-import org.gradle.api.tasks.TaskAction
-import org.gradle.api.tasks.VerificationTask
+import org.gradle.api.tasks.*
 import org.gradle.kotlin.dsl.property
 import java.io.File
 import javax.inject.Inject
@@ -116,4 +111,5 @@ constructor(
 	fun check() {
 		DetektInvoker.check(this)
 	}
+
 }

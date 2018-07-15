@@ -14,8 +14,8 @@ import java.util.*
 buildscript {
 	repositories {
 		gradlePluginPortal()
-		jcenter()
 		mavenLocal()
+		jcenter()
 	}
 
 	val kotlinVersion: String by project
@@ -48,8 +48,8 @@ allprojects {
 	version = detektVersion
 
 	repositories {
-		jcenter()
 		mavenLocal()
+		jcenter()
 		maven ( url = "http://dl.bintray.com/jetbrains/spek" )
 	}
 }
@@ -73,7 +73,7 @@ subprojects {
 		filters = ".*/resources/.*, .*/build/.*"
 		baseline = file("${rootProject.projectDir}/reports/baseline.xml")
 		configFile = file("${rootProject.projectDir}/detekt-cli/src/main/resources/default-detekt-config.yml")
-		toolVersion = "1.0.0.RC7-MARVIN2"
+		toolVersion = "1.0.0-GRADLE"
 
 		idea(Action {
 			path = "$userHome/.idea"

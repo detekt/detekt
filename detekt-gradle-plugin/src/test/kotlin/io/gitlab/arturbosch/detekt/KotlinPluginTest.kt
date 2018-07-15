@@ -74,7 +74,7 @@ internal class KotlinPluginTest : Spek({
 
 			val detektConfig = """
 					|detekt {
-					|	toolVersion = "1.0.0.RC7-MARVIN2"
+					|	toolVersion = "1.0.0-GRADLE"
 					|}
 				"""
 
@@ -102,7 +102,7 @@ internal class KotlinPluginTest : Spek({
 
 			val detektConfig = """
 					|detekt {
-					|	toolVersion = "1.0.0.RC7-MARVIN2"
+					|	toolVersion = "1.0.0-GRADLE"
 					|	configFile = file("${rootDir.absolutePath}/config.yml")
 					|}
 				"""
@@ -133,7 +133,7 @@ internal class KotlinPluginTest : Spek({
 					|detekt {
 					|	debug = true
 					|	parallel = true
-					|	toolVersion = "1.0.0.RC6-MARVIN2"
+					|	toolVersion = "1.0.0-GRADLE"
 					|	configFile = file("${rootDir.absolutePath}/config.yml")
 					|	baseline = file("${rootDir.absolutePath}/baseline.xml")
 					|	filters = ".*/resources/.*, .*/build/.*"
@@ -165,7 +165,7 @@ internal class KotlinPluginTest : Spek({
 
 			val detektConfig = """
 					|detekt {
-					|	toolVersion = "1.0.0.RC6-MARVIN2"
+					|	toolVersion = "1.0.0-GRADLE"
 					|}
 					|
 					|tasks {
@@ -203,7 +203,7 @@ internal class KotlinPluginTest : Spek({
 
 			val detektConfig = """
 					|detekt {
-					|	toolVersion = "1.0.0.RC6-MARVIN2"
+					|	toolVersion = "1.0.0-GRADLE"
 					|}
 					|
 					|tasks.withType<io.gitlab.arturbosch.detekt.Detekt> {
