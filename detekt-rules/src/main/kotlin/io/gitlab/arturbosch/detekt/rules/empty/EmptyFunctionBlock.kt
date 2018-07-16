@@ -21,6 +21,7 @@ class EmptyFunctionBlock(config: Config) : EmptyRule(config) {
 	private val ignoreOverriddenFunctions = valueOrDefault(IGNORE_OVERRIDDEN_FUNCTIONS, false)
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
+		super.visitNamedFunction(function)
 		if (function.isOpen()) {
 			return
 		}
