@@ -17,6 +17,7 @@ import org.jetbrains.kotlin.psi.KtIfExpression
 class EmptyIfBlock(config: Config) : EmptyRule(config) {
 
 	override fun visitIfExpression(expression: KtIfExpression) {
+		super.visitIfExpression(expression)
 		expression.then?.addFindingIfBlockExprIsEmpty()
 		checkThenBodyForLoneSemicolon(expression)
 	}
