@@ -26,8 +26,8 @@ dependencies {
 
 tasks.withType<Jar> {
 	from(Callable {
-		configurations.compile.map({
+		configurations.compile.map {
 			if (it.isDirectory) it else zipTree(it)
-		})
+		}
 	})
 }

@@ -63,7 +63,7 @@ class ConfigAssert(
 
 	private fun isPublicStaticFinal(it: Field): Boolean {
 		val modifiers = it.modifiers
-		return (Modifier.isStatic(modifiers) && Modifier.isPublic(modifiers) && Modifier.isFinal(modifiers))
+		return Modifier.isStatic(modifiers) && Modifier.isPublic(modifiers) && Modifier.isFinal(modifiers)
 	}
 }
 

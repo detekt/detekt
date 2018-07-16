@@ -92,7 +92,7 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 	}
 
 	private fun isValidLine(line: String): Boolean {
-		return (line.length <= maxLineLength || isIgnoredStatement(line))
+		return line.length <= maxLineLength || isIgnoredStatement(line)
 	}
 
 	private fun isIgnoredStatement(line: String): Boolean {
