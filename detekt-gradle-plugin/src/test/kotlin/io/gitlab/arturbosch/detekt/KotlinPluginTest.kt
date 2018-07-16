@@ -28,13 +28,13 @@ internal class KotlinPluginTest : Spek({
 //			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 //			val result = GradleRunner.create()
 //					.withProjectDir(rootDir)
-//					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "detektMain", "--stacktrace", "--info")
+//					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
 //					.withPluginClasspath()
 //					.build()
 //
 //			assertThat(result.output).contains("number of classes: 1")
 //			assertThat(result.output).contains("Ruleset: comments")
-//			assertThat(result.task(":detektMain")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+//			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 //
 //			// Asserts that the "custom" module is not built, and that custom ruleset is not enabled
 //			assertThat(result.output).doesNotContain("Ruleset: test-custom")
@@ -57,13 +57,13 @@ internal class KotlinPluginTest : Spek({
 //			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 //			val result = GradleRunner.create()
 //					.withProjectDir(rootDir)
-//					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "detektMain", "--stacktrace", "--info")
+//					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
 //					.withPluginClasspath()
 //					.build()
 //
 //			assertThat(result.output).contains("number of classes: 1")
 //			assertThat(result.output).contains("Ruleset: comments")
-//			assertThat(result.task(":detektMain")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+//			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 //
 //			// Asserts that the "custom" module is not built, and that custom ruleset is not enabled
 //			assertThat(result.output).doesNotContain("Ruleset: test-custom")
@@ -85,13 +85,13 @@ internal class KotlinPluginTest : Spek({
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
 					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "detektMain", "--stacktrace", "--info")
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
 					.withPluginClasspath()
 					.build()
 
 			assertThat(result.output).contains("number of classes: 1")
 			assertThat(result.output).contains("Ruleset: comments")
-			assertThat(result.task(":detektMain")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 
 			// Asserts that the "custom" module is not built, and that custom ruleset is not enabled
 			assertThat(result.output).doesNotContain("Ruleset: test-custom")
@@ -114,13 +114,13 @@ internal class KotlinPluginTest : Spek({
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
 					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "detektMain", "--stacktrace", "--info")
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
 					.withPluginClasspath()
 					.build()
 
 			assertThat(result.output).contains("number of classes: 1")
 			assertThat(result.output).contains("Ruleset: comments")
-			assertThat(result.task(":detektMain")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 
 			// Asserts that the "custom" module is not built, and that custom ruleset is not enabled
 			assertThat(result.output).doesNotContain("Ruleset: test-custom")
@@ -148,13 +148,13 @@ internal class KotlinPluginTest : Spek({
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
 					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "detektMain", "--stacktrace", "--info")
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
 					.withPluginClasspath()
 					.build()
 
 			assertThat(result.output).contains("number of classes: 1")
 			assertThat(result.output).contains("Ruleset: comments")
-			assertThat(result.task(":detektMain")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 
 			// Asserts that the "custom" module is not built, and that custom ruleset is not enabled
 			assertThat(result.output).doesNotContain("Ruleset: test-custom")
@@ -192,7 +192,7 @@ internal class KotlinPluginTest : Spek({
 
 			assertThat(result.output).contains("number of classes: 1")
 			assertThat(result.output).contains("Ruleset: comments")
-			assertThat(result.task(":detektMain")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 
 			// Asserts that the "custom" module is not built, and that custom ruleset is not enabled
 			assertThat(result.output).doesNotContain("Ruleset: test-custom")
@@ -224,13 +224,13 @@ internal class KotlinPluginTest : Spek({
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
 					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "detektMain", "--stacktrace", "--info")
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
 					.withPluginClasspath()
 					.build()
 
 			assertThat(result.output).contains("number of classes: 1")
 			assertThat(result.output).contains("Ruleset: comments")
-			assertThat(result.task(":detektMain")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 
 			// Asserts that the "custom" module is not built, and that custom ruleset is not enabled
 			assertThat(result.output).doesNotContain("Ruleset: test-custom")

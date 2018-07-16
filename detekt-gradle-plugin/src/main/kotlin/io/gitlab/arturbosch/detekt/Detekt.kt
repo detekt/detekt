@@ -4,7 +4,6 @@ import groovy.lang.Closure
 import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import org.gradle.api.Action
 import org.gradle.api.file.FileCollection
-import org.gradle.api.file.ProjectLayout
 import org.gradle.api.internal.ClosureBackedAction
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.plugins.quality.CheckstyleReports
@@ -25,8 +24,7 @@ import javax.inject.Inject
 open class Detekt
 @Inject
 constructor(
-		objectFactory: ObjectFactory,
-		projectLayout: ProjectLayout
+		objectFactory: ObjectFactory
 ) : SourceTask(), VerificationTask, Reporting<CheckstyleReports> {
 
 	private val reports: CheckstyleReports = objectFactory.newInstance(CheckstyleReportsImpl::class.java, this)

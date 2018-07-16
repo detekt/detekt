@@ -2,9 +2,6 @@ package io.gitlab.arturbosch.detekt.extensions
 
 import org.gradle.api.Action
 import org.gradle.api.Project
-import org.gradle.api.file.ProjectLayout
-import org.gradle.api.file.RegularFile
-import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.plugins.quality.CodeQualityExtension
 import org.gradle.api.provider.Property
 import org.gradle.api.resources.TextResource
@@ -18,8 +15,7 @@ import java.io.File
  */
 open class DetektExtension
 constructor(
-		private val project: Project,
-		projectLayout: ProjectLayout
+		private val project: Project
 ) : CodeQualityExtension() {
 	private val debugProperty: Property<Boolean?> = project.objects.property()
 	private val parallelProperty: Property<Boolean?> = project.objects.property()
@@ -28,7 +24,6 @@ constructor(
 	private val baselineProperty: Property<File?> = project.objects.property()
 	private val pluginsProperty: Property<String?> = project.objects.property()
 	private val configProperty: Property<TextResource?> = project.objects.property()
-	private val configDirProperty: RegularFileProperty = projectLayout.fileProperty()
 	var ideaExtension: IdeaExtension = IdeaExtension()
 
 	var debug: Boolean?
@@ -56,10 +51,6 @@ constructor(
 	var baseline: File?
 		get() = baselineProperty.orNull
 		set(value) = baselineProperty.set(value)
-
-	var configDir: RegularFile?
-		get() = configDirProperty.orNull
-		set(value) = configDirProperty.set(value)
 
 	var config: TextResource?
 		get() = configProperty.orNull
