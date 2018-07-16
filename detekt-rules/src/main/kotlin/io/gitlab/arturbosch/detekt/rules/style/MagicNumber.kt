@@ -175,12 +175,10 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 }
 
 private fun KtConstantExpression.isNamedArgument() =
-		(parent is KtValueArgument &&
-				(parent as? KtValueArgument)?.isNamed() == true &&
-				isPartOf(KtCallElement::class))
+		parent is KtValueArgument && (parent as? KtValueArgument)?.isNamed() == true && isPartOf(KtCallElement::class)
 
 private fun KtConstantExpression.isPartOfFunctionReturnConstant() =
-		parent is KtNamedFunction || (parent is KtReturnExpression && parent.parent.children.size == 1)
+		parent is KtNamedFunction || parent is KtReturnExpression && parent.parent.children.size == 1
 
 private fun KtConstantExpression.isPartOfConstructor(): Boolean {
 	return parent is KtParameter &&

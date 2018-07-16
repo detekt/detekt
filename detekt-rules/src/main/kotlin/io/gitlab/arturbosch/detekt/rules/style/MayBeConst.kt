@@ -91,18 +91,18 @@ class MayBeConst(config: Config = Config.empty) : Rule(config) {
 	}
 
 	private fun KtProperty.cannotBeConstant(): Boolean {
-		return (isLocal ||
+		return isLocal ||
 				isVar ||
 				getter != null ||
 				isConstant() ||
-				isOverridden())
+				isOverridden()
 	}
 
 	private fun KtProperty.isInObject() =
 			!isTopLevel && containingClassOrObject !is KtObjectDeclaration
 
 	private fun KtExpression.isConstantExpression(): Boolean {
-		return (this is KtStringTemplateExpression && !hasInterpolation()) ||
+		return this is KtStringTemplateExpression && !hasInterpolation() ||
 				node.elementType == KtNodeTypes.BOOLEAN_CONSTANT ||
 				node.elementType == KtNodeTypes.INTEGER_CONSTANT ||
 				node.elementType == KtNodeTypes.CHARACTER_CONSTANT ||

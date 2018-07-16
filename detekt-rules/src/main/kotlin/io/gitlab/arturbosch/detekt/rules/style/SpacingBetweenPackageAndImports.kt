@@ -72,7 +72,7 @@ class SpacingBetweenPackageAndImports(config: Config = Config.empty) : Rule(conf
 	}
 
 	private fun isPackageDeclaration(element: PsiElement?) =
-			(element is KtPackageDirective && element.text.isNotEmpty())
+			element is KtPackageDirective && element.text.isNotEmpty()
 
 	private fun checkKtElementsDeclaration(importList: KtImportList) {
 		val ktElements = importList.siblings(withItself = false).toList().filter { it is KtElement }

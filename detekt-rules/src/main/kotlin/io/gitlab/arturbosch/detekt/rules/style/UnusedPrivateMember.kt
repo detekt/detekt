@@ -117,8 +117,7 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 		}
 
 		override fun visitProperty(property: KtProperty) {
-			if ((property.isPrivate() && property.isMemberOrTopLevel()) ||
-					property.isLocal) {
+			if (property.isPrivate() && property.isMemberOrTopLevel() || property.isLocal) {
 				checkAllowedNames(property)
 			}
 			super.visitProperty(property)
