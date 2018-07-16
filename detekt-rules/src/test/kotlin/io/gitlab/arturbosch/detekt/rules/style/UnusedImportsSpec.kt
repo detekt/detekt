@@ -129,6 +129,21 @@ class UnusedImportsSpec : SubjectSpek<UnusedImports>({
 				assertThat(this[2].entity.signature).contains("import escaped.`foo`")
 			}
 		}
+
+		it("does not report imports in same package when inner") {
+			val lint = subject.lint("""
+            	package test
+
+				import test.Outer.Inner
+
+				class Outer : Something<Inner>() {
+					class Inner { }
+				}"""
+			)
+			with(lint) {
+				assertThat(this).isEmpty()
+			}
+		}
 	}
 
 	given("some import statements with KDoc") {
