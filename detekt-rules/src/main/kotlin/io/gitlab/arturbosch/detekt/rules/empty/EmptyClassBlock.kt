@@ -17,6 +17,7 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
 class EmptyClassBlock(config: Config) : EmptyRule(config) {
 
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
+		super.visitClassOrObject(classOrObject)
 		if (classOrObject.isObjectOfAnonymousClass()) return
 
 		classOrObject.getBody()?.declarations?.let {
