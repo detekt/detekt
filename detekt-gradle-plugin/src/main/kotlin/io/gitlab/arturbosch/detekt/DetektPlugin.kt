@@ -15,6 +15,7 @@ import org.gradle.api.plugins.ReportingBasePlugin
 import org.gradle.api.reporting.ReportingExtension
 import org.gradle.api.tasks.SourceSet
 import org.gradle.api.tasks.SourceSetContainer
+import java.io.File
 
 /**
  * @author Marvin Ramin
@@ -37,6 +38,7 @@ class DetektPlugin : Plugin<Project> {
 		configureExtensionRule()
 		configureSourceSetRule()
 		configureCheckTask()
+		configureReportsConventionMapping()
 	}
 
 	protected fun createConfigurations() {
@@ -44,23 +46,10 @@ class DetektPlugin : Plugin<Project> {
 		configuration.isVisible = false
 		configuration.isTransitive = true
 		configuration.description = "The " + DETEKT + " libraries to be used for this project."
-		// Don't need these things, they're provided by the runtime
-		configuration.exclude(excludeProperties("ant", "ant"))
-		configuration.exclude(excludeProperties("org.apache.ant", "ant"))
-		configuration.exclude(excludeProperties("org.apache.ant", "ant-launcher"))
-		configuration.exclude(excludeProperties("org.slf4j", "slf4j-api"))
-		configuration.exclude(excludeProperties("org.slf4j", "jcl-over-slf4j"))
-		configuration.exclude(excludeProperties("org.slf4j", "log4j-over-slf4j"))
-		configuration.exclude(excludeProperties("commons-logging", "commons-logging"))
-		configuration.exclude(excludeProperties("log4j", "log4j"))
-		configureConfiguration(configuration)
+		configurePluginDependencies(configuration)
 	}
 
-	private fun configureConfiguration(configuration: Configuration) {
-		configureDefaultDependencies(configuration)
-	}
-
-	private fun configureDefaultDependencies(configuration: Configuration) {
+	private fun configurePluginDependencies(configuration: Configuration) {
 		configuration.defaultDependencies {
 			val detektCli = DefaultExternalModuleDependency("io.gitlab.arturbosch.detekt",
 					"detekt-cli",
@@ -68,9 +57,6 @@ class DetektPlugin : Plugin<Project> {
 			add(project.dependencies.create(detektCli))
 		}
 	}
-
-	private fun excludeProperties(group: String, module: String) = mapOf("group" to group, "module" to module)
-
 
 	private fun createExtension() {
 		detektExtension = project.extensions.create(DETEKT, DetektExtension::class.java, project)
@@ -84,12 +70,26 @@ class DetektPlugin : Plugin<Project> {
 
 	private fun configureExtensionRule() {
 		val extensionMapping = conventionMappingOf(detektExtension)
-		extensionMapping.map("sourceSets") { emptyList<SourceSet>() }
+		//extensionMapping.map("sourceSets") { emptyList<SourceSet>() }
 		extensionMapping.map("reportsDir") { project.extensions.getByType(ReportingExtension::class.java).file(getReportName()) }
 		withBasePlugin(Action { extensionMapping.map("sourceSets") { getJavaPluginConvention().sourceSets } })
 	}
 
 	private fun getReportName() = DETEKT.toLowerCase()
+
+	private fun configureReportsConventionMapping() {
+		project.tasks.getByNameLater(Detekt::class.java, DETEKT_TASK_NAME).configure {
+			reports.all {
+				val report = this
+				val reportMapping = conventionMappingOf(report)
+				reportMapping.map("enabled") { true }
+				reportMapping.map("destination") {
+					val fileSuffix = report.name
+					File(detektExtension.getReportsDir(), "$DETEKT.$fileSuffix")
+				}
+			}
+		}
+	}
 
 	fun configureForSourceSet(sourceSet: SourceSet, task: Detekt) {
 		task.configureForSourceSet(sourceSet)
@@ -109,9 +109,8 @@ class DetektPlugin : Plugin<Project> {
 	private fun configureForSourceSets(sourceSets: SourceSetContainer) {
 		sourceSets.all {
 			val sourceSet = this
-			project.tasks.createLater(getTaskName(DETEKT, null), Detekt::class.java) {
-				configureForSourceSet(sourceSet, this)
-			}
+			val detektTaskName = getTaskName(DETEKT, null)
+			project.tasks.createLater(detektTaskName, Detekt::class.java) { configureForSourceSet(sourceSet, this) }
 		}
 	}
 
@@ -120,11 +119,8 @@ class DetektPlugin : Plugin<Project> {
 	}
 
 	private fun configureCheckTaskDependents() {
-		val taskBaseName = DETEKT.toLowerCase()
 		project.tasks.getByNameLater(Task::class.java, JavaBasePlugin.CHECK_TASK_NAME).configure {
-			val dependencies = detektExtension.sourceSets.map { it.getTaskName(taskBaseName, null) }
-			dependsOn(dependencies)
-			println("################################## $dependencies")
+			dependsOn(DETEKT_TASK_NAME)
 		}
 	}
 
@@ -138,9 +134,8 @@ class DetektPlugin : Plugin<Project> {
 
 
 	companion object {
-		private const val DETEKT_EXTENSION_NAME = "detekt"
 		private const val DETEKT = "detekt"
-		private const val LEGACY_DETEKT_TASK = "detektCheck"
+		private const val DETEKT_TASK_NAME = "detektMain"
 		private const val IDEA_FORMAT = "detektIdeaFormat"
 		private const val IDEA_INSPECT = "detektIdeaInspect"
 		private const val GENERATE_CONFIG = "detektGenerateConfig"

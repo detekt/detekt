@@ -1,18 +1,7 @@
 package io.gitlab.arturbosch.detekt.invoke
 
 import io.gitlab.arturbosch.detekt.Detekt
-import io.gitlab.arturbosch.detekt.extensions.BASELINE_PARAMETER
-import io.gitlab.arturbosch.detekt.extensions.CONFIG_PARAMETER
-import io.gitlab.arturbosch.detekt.extensions.CREATE_BASELINE_PARAMETER
-import io.gitlab.arturbosch.detekt.extensions.DEBUG_PARAMETER
-import io.gitlab.arturbosch.detekt.extensions.DISABLE_DEFAULT_RULESETS_PARAMETER
-import io.gitlab.arturbosch.detekt.extensions.FILTERS_PARAMETER
-import io.gitlab.arturbosch.detekt.extensions.GENERATE_CONFIG_PARAMETER
-import io.gitlab.arturbosch.detekt.extensions.INPUT_PARAMETER
-import io.gitlab.arturbosch.detekt.extensions.PARALLEL_PARAMETER
-import io.gitlab.arturbosch.detekt.extensions.PLUGINS_PARAMETER
-import io.gitlab.arturbosch.detekt.extensions.REPORT_HTML_PARAMETER
-import io.gitlab.arturbosch.detekt.extensions.REPORT_XML_PARAMETER
+import io.gitlab.arturbosch.detekt.extensions.*
 import org.gradle.api.Project
 import org.gradle.api.artifacts.Configuration
 

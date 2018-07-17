@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.extensions
 
-import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.plugins.quality.CodeQualityExtension
 import org.gradle.api.provider.Property
@@ -24,6 +23,7 @@ constructor(
 	private val baselineProperty: Property<File?> = project.objects.property()
 	private val pluginsProperty: Property<String?> = project.objects.property()
 	private val configProperty: Property<TextResource?> = project.objects.property()
+
 	var ideaExtension: IdeaExtension = IdeaExtension()
 
 	var debug: Boolean?
@@ -58,9 +58,5 @@ constructor(
 
 	var configFile: File?
 		get() = configProperty.orNull?.asFile()
-		set(value) = configProperty.set(project.resources.text.fromFile(value))
-
-	fun idea(configuration: Action<in IdeaExtension>) {
-		configuration.execute(ideaExtension)
-	}
+		set(value) = configProperty.set(value?.run { project.resources.text.fromFile(this) })
 }

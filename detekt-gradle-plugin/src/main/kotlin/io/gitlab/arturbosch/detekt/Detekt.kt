@@ -6,8 +6,6 @@ import org.gradle.api.Action
 import org.gradle.api.file.FileCollection
 import org.gradle.api.internal.ClosureBackedAction
 import org.gradle.api.model.ObjectFactory
-import org.gradle.api.plugins.quality.CheckstyleReports
-import org.gradle.api.plugins.quality.internal.CheckstyleReportsImpl
 import org.gradle.api.provider.Property
 import org.gradle.api.reporting.Reporting
 import org.gradle.api.resources.TextResource
@@ -25,9 +23,9 @@ open class Detekt
 @Inject
 constructor(
 		objectFactory: ObjectFactory
-) : SourceTask(), VerificationTask, Reporting<CheckstyleReports> {
+) : SourceTask(), VerificationTask, Reporting<DetektReports> {
 
-	private val reports: CheckstyleReports = objectFactory.newInstance(CheckstyleReportsImpl::class.java, this)
+	private val reports: DetektReports = objectFactory.newInstance(DetektReportsImpl::class.java, this)
 	private var _ignoreFailures: Boolean = false
 	lateinit var classpath: FileCollection
 	open var configProperty: Property<TextResource?> = objectFactory.property()
@@ -41,10 +39,6 @@ constructor(
 	var config: TextResource?
 		get() = configProperty.orNull
 		set(value) = configProperty.set(value)
-
-	var configFile: File?
-		get() = configProperty.orNull?.asFile()
-		set(value) = configProperty.set(project.resources.text.fromFile(configFile))
 
 	var filters: String?
 		get() = filtersProperty.orNull
@@ -90,17 +84,15 @@ constructor(
 		setSource(sourceSet.allSource)
 	}
 
-	override fun getReports(): CheckstyleReports {
-		return reports
-	}
+	override fun getReports() = reports
 
 	override fun getIgnoreFailures() = _ignoreFailures
 	override fun setIgnoreFailures(ignoreFailures: Boolean) {
 		_ignoreFailures = ignoreFailures
 	}
 
-	override fun reports(closure: Closure<*>) = reports(ClosureBackedAction<CheckstyleReports>(closure))
-	override fun reports(configureAction: Action<in CheckstyleReports>?): CheckstyleReports {
+	override fun reports(closure: Closure<*>) = reports(ClosureBackedAction<DetektReports>(closure))
+	override fun reports(configureAction: Action<in DetektReports>?): DetektReports {
 		configureAction?.execute(reports)
 		return reports
 	}
