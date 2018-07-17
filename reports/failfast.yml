@@ -94,6 +94,8 @@ potential-bugs:
     active: true
 
 style:
+  CollapsibleIfStatements:
+    active: true
   MagicNumber:
     ignoreHashCodeFunction: true
     ignorePropertyDeclaration: true

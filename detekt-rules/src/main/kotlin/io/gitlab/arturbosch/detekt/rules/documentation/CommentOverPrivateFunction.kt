@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
@@ -33,12 +32,9 @@ class CommentOverPrivateFunction(config: Config = Config.empty) : Rule(config) {
 			Debt.TWENTY_MINS)
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
-		val modifierList = function.modifierList
-		if (modifierList != null && function.docComment != null) {
-			if (modifierList.hasModifier(KtTokens.PRIVATE_KEYWORD)) {
-				report(CodeSmell(issue, Entity.from(function.docComment!!), "The function ${function.nameAsSafeName} " +
-						"has a comment. Prefer renaming the function giving it a more self-explanatory name."))
-			}
+		if (function.hasCommentInPrivateMember()) {
+			report(CodeSmell(issue, Entity.from(function.docComment!!), "The function ${function.nameAsSafeName} " +
+					"has a comment. Prefer renaming the function giving it a more self-explanatory name."))
 		}
 	}
 }
