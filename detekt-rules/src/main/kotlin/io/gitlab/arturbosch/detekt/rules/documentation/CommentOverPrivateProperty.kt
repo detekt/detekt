@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtProperty
 
 /**
@@ -31,11 +30,8 @@ class CommentOverPrivateProperty(config: Config = Config.empty) : Rule(config) {
 			Debt.TWENTY_MINS)
 
 	override fun visitProperty(property: KtProperty) {
-		val modifierList = property.modifierList
-		if (modifierList != null && property.docComment != null) {
-			if (modifierList.hasModifier(KtTokens.PRIVATE_KEYWORD)) {
-				report(CodeSmell(issue, Entity.from(property.docComment!!), issue.description))
-			}
+		if (property.hasCommentInPrivateMember()) {
+			report(CodeSmell(issue, Entity.from(property.docComment!!), issue.description))
 		}
 	}
 }
