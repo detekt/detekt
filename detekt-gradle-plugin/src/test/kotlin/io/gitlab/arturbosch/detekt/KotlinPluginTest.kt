@@ -236,6 +236,40 @@ internal class KotlinPluginTest : Spek({
 			assertThat(result.output).doesNotContain("Ruleset: test-custom")
 			assertThat(File(rootDir, "custom/build")).doesNotExist()
 		}
+		it("can configure reports using the extension") {
+			val rootDir = createTempDir(prefix = "applyPlugin")
+
+			val detektConfig = """
+					|detekt {
+					|	toolVersion = "1.0.0-GRADLE"
+					|	reports {
+					|		xml.enabled = true
+					|		xml.destination = file("build/reports/detekt.xml")
+					|		html.enabled = true
+					|		html.destination = file("build/reports/detekt.html")
+					|	}
+					|}
+				"""
+
+			writeFiles(rootDir, detektConfig)
+			writeConfig(rootDir)
+			writeBaseline(rootDir)
+
+			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
+			val result = GradleRunner.create()
+					.withProjectDir(rootDir)
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
+					.withPluginClasspath()
+					.build()
+
+			assertThat(result.output).contains("number of classes: 1")
+			assertThat(result.output).contains("Ruleset: comments")
+			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+
+			// Asserts that the "custom" module is not built, and that custom ruleset is not enabled
+			assertThat(result.output).doesNotContain("Ruleset: test-custom")
+			assertThat(File(rootDir, "custom/build")).doesNotExist()
+		}
 	}
 })
 // build.gradle.kts

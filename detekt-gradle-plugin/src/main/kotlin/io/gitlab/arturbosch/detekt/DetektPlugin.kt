@@ -86,10 +86,13 @@ class DetektPlugin : Plugin<Project> {
 	private fun configureReportsConventionMapping(task: Detekt) {
 		task.reports.all {
 			val reportMapping = conventionMappingOf(this)
-			reportMapping.map("enabled") { true }
-			reportMapping.map("destination") {
-				val fileSuffix = name
-				File(detektExtension.getReportsDir(), "$DETEKT.$fileSuffix")
+			detektExtension.reports.withName(name)?.let {
+				reportMapping.map("enabled") { it.enabled }
+				reportMapping.map("destination") {
+					val fileSuffix = name
+					// use either the manually defined destination or fall back to a default value
+					it.destination ?: File(detektExtension.getReportsDir(), "$DETEKT.$fileSuffix")
+				}
 			}
 		}
 	}

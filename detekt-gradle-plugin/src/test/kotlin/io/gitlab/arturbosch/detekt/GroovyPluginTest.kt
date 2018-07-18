@@ -133,8 +133,6 @@ internal class GroovyPluginTest : Spek({
 			val detektConfig = """
 				|detekt {
 				|	toolVersion = "1.0.0-GRADLE"
-				|}
-				|tasks.withType(io.gitlab.arturbosch.detekt.Detekt) {
 				|	reports {
 				|		html.destination = file('build/somewhere/report.html')
 				|	}
@@ -184,6 +182,63 @@ internal class GroovyPluginTest : Spek({
 
 			assertThat(File(rootDir, "build/detekt-reports/detekt.xml")).exists()
 			assertThat(File(rootDir, "build/detekt-reports/detekt.html")).exists()
+		}
+		it("can change reportsDir but overwrite single report destination") {
+			val rootDir = createTempDir(prefix = "applyPlugin")
+
+			val detektConfig = """
+				|detekt {
+				|	toolVersion = "1.0.0-GRADLE"
+				|	reportsDir = file('build/detekt-reports')
+				|	reports {
+				|		xml.destination = file('build/xml-reports/custom-detekt.xml')
+				|	}
+				|}
+				"""
+
+			writeFiles(rootDir, detektConfig)
+
+			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
+			val result = GradleRunner.create()
+					.withProjectDir(rootDir)
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
+					.withPluginClasspath()
+					.build()
+
+			assertThat(result.output).contains("number of classes: 1")
+			assertThat(result.output).contains("Ruleset: comments")
+			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+
+			assertThat(File(rootDir, "build/xml-reports/custom-detekt.xml")).exists()
+			assertThat(File(rootDir, "build/detekt-reports/detekt.html")).exists()
+		}
+		it("can disable a single report type") {
+			val rootDir = createTempDir(prefix = "applyPlugin")
+
+			val detektConfig = """
+				|detekt {
+				|	toolVersion = "1.0.0-GRADLE"
+				|	reports {
+				|		html.enabled = false
+				|	}
+				|}
+				"""
+
+			writeFiles(rootDir, detektConfig)
+
+			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
+			val result = GradleRunner.create()
+					.withProjectDir(rootDir)
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
+					.withPluginClasspath()
+					.build()
+
+			assertThat(result.output).contains("number of classes: 1")
+			assertThat(result.output).contains("Ruleset: comments")
+			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+
+			assertThat(File(rootDir, "build/reports/detekt/detekt.xml")).exists()
+			assertThat(File(rootDir, "build/reports/detekt/detekt.html")).doesNotExist()
 		}
 	}
 })

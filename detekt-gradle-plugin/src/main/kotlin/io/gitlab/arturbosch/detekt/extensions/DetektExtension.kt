@@ -9,7 +9,7 @@ import java.io.File
  * @author Said Tahsin Dane
  * @author Marvin Ramin
  */
-open class DetektExtension(private val project: Project) : CodeQualityExtension() {
+open class DetektExtension(project: Project) : CodeQualityExtension() {
 	var baseline: File? = null
 	var config: File? = null
 	var debug: Boolean = false
@@ -18,7 +18,22 @@ open class DetektExtension(private val project: Project) : CodeQualityExtension(
 	var filters: String? = null
 	var plugins: String? = null
 
-	var ideaExtension: IdeaExtension = IdeaExtension()
+	val reports = project.extensions.create("reports", DetektReportsExtension::class.java, project)
 
-	// TODO: ReportingExtension
+	var ideaExtension: IdeaExtension = IdeaExtension()
+}
+
+open class DetektReportsExtension(project: Project) {
+	val xml = project.extensions.create("xml", DetektReportExtension::class.java, project)
+	val html = project.extensions.create("html", DetektReportExtension::class.java, project)
+	fun withName(name: String) = when (name.toLowerCase()) {
+		"xml" -> xml
+		"html" -> html
+		else -> throw IllegalArgumentException("name '${name}' is not a supported report name")
+	}
+}
+
+open class DetektReportExtension(project: Project) {
+	var enabled: Boolean = true
+	var destination: File? = null
 }
