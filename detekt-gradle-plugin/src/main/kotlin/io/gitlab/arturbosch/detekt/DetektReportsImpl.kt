@@ -6,7 +6,7 @@ import org.gradle.api.reporting.internal.TaskGeneratedSingleFileReport
 import org.gradle.api.reporting.internal.TaskReportContainer
 import javax.inject.Inject
 
-class DetektReportsImpl @Inject constructor(task: Task) :
+open class DetektReportsImpl @Inject constructor(task: Task) :
 		TaskReportContainer<SingleFileReport>(SingleFileReport::class.java, task), DetektReports {
 	init {
 		add(TaskGeneratedSingleFileReport::class.java, "xml", task)

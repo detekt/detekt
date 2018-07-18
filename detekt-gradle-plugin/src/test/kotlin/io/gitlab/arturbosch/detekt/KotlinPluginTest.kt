@@ -104,7 +104,7 @@ internal class KotlinPluginTest : Spek({
 			val detektConfig = """
 					|detekt {
 					|	toolVersion = "1.0.0-GRADLE"
-					|	configFile = file("${rootDir.absolutePath}/config.yml")
+					|	config = file("${rootDir.absolutePath}/config.yml")
 					|}
 				"""
 
@@ -135,7 +135,7 @@ internal class KotlinPluginTest : Spek({
 					|	debug = true
 					|	parallel = true
 					|	toolVersion = "1.0.0-GRADLE"
-					|	configFile = file("${rootDir.absolutePath}/config.yml")
+					|	config = file("${rootDir.absolutePath}/config.yml")
 					|	baseline = file("${rootDir.absolutePath}/baseline.xml")
 					|	filters = ".*/resources/.*, .*/build/.*"
 					|}
@@ -174,7 +174,7 @@ internal class KotlinPluginTest : Spek({
 					|		description = "Runs a failfast detekt build."
 					|
 					|		source = java.sourceSets["main"].allSource
-					|		configFile = file("$rootDir/config.yml")
+					|		config = "$rootDir/config.yml"
 					|	}
 					|}
 				"""

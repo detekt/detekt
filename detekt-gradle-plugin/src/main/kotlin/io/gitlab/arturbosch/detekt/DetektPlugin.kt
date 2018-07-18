@@ -38,7 +38,14 @@ class DetektPlugin : Plugin<Project> {
 		configureExtensionRule()
 		configureSourceSetRule()
 		configureCheckTask()
-		configureReportsConventionMapping()
+		configureTaskDefaults()
+	}
+
+	private fun configureTaskDefaults() {
+		project.tasks.configureEachLater(Detekt::class.java) {
+			configureTaskConventionMapping(this)
+			configureReportsConventionMapping(this)
+		}
 	}
 
 	protected fun createConfigurations() {
@@ -70,25 +77,32 @@ class DetektPlugin : Plugin<Project> {
 
 	private fun configureExtensionRule() {
 		val extensionMapping = conventionMappingOf(detektExtension)
-		//extensionMapping.map("sourceSets") { emptyList<SourceSet>() }
 		extensionMapping.map("reportsDir") { project.extensions.getByType(ReportingExtension::class.java).file(getReportName()) }
 		withBasePlugin(Action { extensionMapping.map("sourceSets") { getJavaPluginConvention().sourceSets } })
 	}
 
 	private fun getReportName() = DETEKT.toLowerCase()
 
-	private fun configureReportsConventionMapping() {
-		project.tasks.getByNameLater(Detekt::class.java, DETEKT_TASK_NAME).configure {
-			reports.all {
-				val report = this
-				val reportMapping = conventionMappingOf(report)
-				reportMapping.map("enabled") { true }
-				reportMapping.map("destination") {
-					val fileSuffix = report.name
-					File(detektExtension.getReportsDir(), "$DETEKT.$fileSuffix")
-				}
+	private fun configureReportsConventionMapping(task: Detekt) {
+		task.reports.all {
+			val reportMapping = conventionMappingOf(this)
+			reportMapping.map("enabled") { true }
+			reportMapping.map("destination") {
+				val fileSuffix = name
+				File(detektExtension.getReportsDir(), "$DETEKT.$fileSuffix")
 			}
 		}
+	}
+
+	private fun configureTaskConventionMapping(task: Detekt) {
+		val taskMapping = task.conventionMapping
+		taskMapping.map("config") { detektExtension.config }
+		taskMapping.map("baseline") { detektExtension.baseline }
+		taskMapping.map("debug") { detektExtension.debug }
+		taskMapping.map("disableDefaultRuleSets") { detektExtension.disableDefaultRuleSets }
+		taskMapping.map("filters") { detektExtension.filters }
+		taskMapping.map("parallel") { detektExtension.parallel }
+		taskMapping.map("plugins") { detektExtension.plugins }
 	}
 
 	fun configureForSourceSet(sourceSet: SourceSet, task: Detekt) {
@@ -115,10 +129,10 @@ class DetektPlugin : Plugin<Project> {
 	}
 
 	private fun configureCheckTask() {
-		withBasePlugin(Action { configureCheckTaskDependents() })
+		withBasePlugin(Action { configureCheckTaskDependency() })
 	}
 
-	private fun configureCheckTaskDependents() {
+	private fun configureCheckTaskDependency() {
 		project.tasks.getByNameLater(Task::class.java, JavaBasePlugin.CHECK_TASK_NAME).configure {
 			dependsOn(DETEKT_TASK_NAME)
 		}

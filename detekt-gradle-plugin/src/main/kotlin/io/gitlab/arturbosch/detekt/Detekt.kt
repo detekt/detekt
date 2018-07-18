@@ -3,14 +3,11 @@ package io.gitlab.arturbosch.detekt
 import groovy.lang.Closure
 import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import org.gradle.api.Action
-import org.gradle.api.file.FileCollection
-import org.gradle.api.internal.ClosureBackedAction
 import org.gradle.api.model.ObjectFactory
-import org.gradle.api.provider.Property
 import org.gradle.api.reporting.Reporting
-import org.gradle.api.resources.TextResource
 import org.gradle.api.tasks.*
-import org.gradle.kotlin.dsl.property
+import org.gradle.kotlin.dsl.invoke
+import org.gradle.util.ConfigureUtil
 import java.io.File
 import javax.inject.Inject
 
@@ -25,54 +22,61 @@ constructor(
 		objectFactory: ObjectFactory
 ) : SourceTask(), VerificationTask, Reporting<DetektReports> {
 
-	private val reports: DetektReports = objectFactory.newInstance(DetektReportsImpl::class.java, this)
+	private val _reports: DetektReports = objectFactory.newInstance(DetektReportsImpl::class.java, this)
+	@Internal
+	override fun getReports() = _reports
+
+	override fun reports(closure: Closure<*>): DetektReports = ConfigureUtil.configure(closure, _reports)
+	override fun reports(configureAction: Action<in DetektReports>): DetektReports = _reports.apply { configureAction(this) }
+
 	private var _ignoreFailures: Boolean = false
-	lateinit var classpath: FileCollection
-	open var configProperty: Property<TextResource?> = objectFactory.property()
-	open var filtersProperty: Property<String?> = objectFactory.property()
-	open var baselineProperty: Property<File?> = objectFactory.property()
-	open var pluginsProperty: Property<String?> = objectFactory.property()
-	open var debugProperty: Property<Boolean?> = objectFactory.property()
-	open var parallelProperty: Property<Boolean?> = objectFactory.property()
-	open var disableDefaultRuleSetsProperty: Property<Boolean?> = objectFactory.property()
+	@Optional
+	@Input
+	override fun getIgnoreFailures() = _ignoreFailures
 
-	var config: TextResource?
-		get() = configProperty.orNull
-		set(value) = configProperty.set(value)
+	override fun setIgnoreFailures(ignoreFailures: Boolean) {
+		_ignoreFailures = ignoreFailures
+	}
 
-	var filters: String?
-		get() = filtersProperty.orNull
-		set(value) = filtersProperty.set(value)
+	@InputFile
+	@Optional
+	@PathSensitive(PathSensitivity.ABSOLUTE)
+	var baseline: File? = null
 
-	var plugins: String?
-		get() = pluginsProperty.orNull
-		set(value) = pluginsProperty.set(value)
+	@InputFile
+	@Optional
+	@PathSensitive(PathSensitivity.ABSOLUTE)
+	var config: File? = null
 
-	var baseline: File?
-		get() = baselineProperty.orNull
-		set(value) = baselineProperty.set(value)
+	@Input
+	@Optional
+	var filters: String? = null
 
-	var debug: Boolean?
-		get() = debugProperty.orNull
-		set(value) = debugProperty.set(value)
+	@Input
+	@Optional
+	var plugins: String? = null
 
-	var parallel: Boolean?
-		get() = parallelProperty.orNull
-		set(value) = parallelProperty.set(value)
+	@Internal
+	@Optional
+	var debug: Boolean? = null
 
-	var disableDefaultRuleSets: Boolean?
-		get() = disableDefaultRuleSetsProperty.orNull
-		set(value) = disableDefaultRuleSetsProperty.set(value)
+	@Internal
+	@Optional
+	var parallel: Boolean? = null
+
+	@Internal
+	@Optional
+	var disableDefaultRuleSets: Boolean? = null
 
 	@OutputFiles
 	fun getOutputFiles(): Map<String, File> {
 		val map = HashMap<String, File>()
 
 		if (reports.xml.isEnabled) {
-			map += "XML" to reports.xml.destination
+			map += "XML" to _reports.xml.destination
 		}
 		if (reports.html.isEnabled) {
-			map += "HTML" to reports.html.destination
+			map += "HTML" to _reports.html.destination
 		}
 		return map
 	}
@@ -80,22 +84,9 @@ constructor(
 	fun configureForSourceSet(sourceSet: SourceSet) {
 		description = "Run detekt analysis for ${sourceSet.name} classes"
 		group = "verification"
-		classpath = sourceSet.compileClasspath
 		setSource(sourceSet.allSource)
 	}
 
-	override fun getReports() = reports
-
-	override fun getIgnoreFailures() = _ignoreFailures
-	override fun setIgnoreFailures(ignoreFailures: Boolean) {
-		_ignoreFailures = ignoreFailures
-	}
-
-	override fun reports(closure: Closure<*>) = reports(ClosureBackedAction<DetektReports>(closure))
-	override fun reports(configureAction: Action<in DetektReports>?): DetektReports {
-		configureAction?.execute(reports)
-		return reports
-	}
 
 	@TaskAction
 	fun check() {

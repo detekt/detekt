@@ -47,7 +47,7 @@ object DetektInvoker {
 				INPUT_PARAMETER to detekt.source.asFileTree.asPath
 		)
 
-		detekt.config?.let { args += CONFIG_PARAMETER to it.asFile().absolutePath }
+		detekt.config?.let { args += CONFIG_PARAMETER to it.absolutePath }
 		detekt.filters?.let { args += FILTERS_PARAMETER to it }
 		detekt.plugins?.let { args += PLUGINS_PARAMETER to it }
 		detekt.baseline?.let { args += BASELINE_PARAMETER to it.absolutePath }
