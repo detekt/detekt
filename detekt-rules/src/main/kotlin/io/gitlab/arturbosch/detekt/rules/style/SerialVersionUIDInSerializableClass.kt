@@ -56,7 +56,7 @@ class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(
 			val companionObject = klass.companionObject()
 			if (companionObject == null || !hasCorrectSerialVersionUUID(companionObject)) {
 				report(CodeSmell(issue, Entity.from(klass), "The class ${klass.nameAsSafeName} implements" +
-						"the Serializable interface and should thus define a serialVersionUID."))
+						" the Serializable interface and should thus define a serialVersionUID."))
 			}
 		}
 		super.visitClass(klass)
