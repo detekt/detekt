@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.extensions
 
 import org.gradle.api.Project
 import org.gradle.api.plugins.quality.CodeQualityExtension
+import org.gradle.api.reporting.ReportingExtension
 import java.io.File
 
 /**
@@ -12,11 +13,13 @@ import java.io.File
 open class DetektExtension(project: Project) : CodeQualityExtension() {
 	var baseline: File? = null
 	var config: File? = null
-	var debug: Boolean = false
+	var debug: Boolean? = null
 	var parallel: Boolean? = null
 	var disableDefaultRuleSets: Boolean? = null
 	var filters: String? = null
 	var plugins: String? = null
+
+	val defaultReportsDir = project.layout.buildDirectory.dir(ReportingExtension.DEFAULT_REPORTS_DIR_NAME).get().asFile
 
 	val reports = project.extensions.create("reports", DetektReportsExtension::class.java, project)
 
@@ -33,7 +36,13 @@ open class DetektReportsExtension(project: Project) {
 	}
 }
 
-open class DetektReportExtension(project: Project) {
-	var enabled: Boolean = true
-	var destination: File? = null
+open class DetektReportExtension(private val _project: Project) {
+
+	var enabled: Boolean? = null
+
+	/**
+	 * destination of the output - relative to the project root
+	 */
+	var destination: String? = null
 }
+

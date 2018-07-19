@@ -87,7 +87,6 @@ constructor(
 		setSource(sourceSet.allSource)
 	}
 
-
 	@TaskAction
 	fun check() {
 		DetektInvoker.check(this)

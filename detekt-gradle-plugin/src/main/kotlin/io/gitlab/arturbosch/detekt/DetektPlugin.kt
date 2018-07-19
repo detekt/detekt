@@ -67,7 +67,7 @@ class DetektPlugin : Plugin<Project> {
 
 	private fun createExtension() {
 		detektExtension = project.extensions.create(DETEKT, DetektExtension::class.java, project)
-		detektExtension.toolVersion = "latest.release"
+		detektExtension.toolVersion = "1.0.0-GRADLE"
 
 		generateConfigTask = project.tasks.create(GENERATE_CONFIG, DetektGenerateConfigTask::class.java)
 		createBaselineTask = project.tasks.create(BASELINE, DetektCreateBaselineTask::class.java)
@@ -77,7 +77,9 @@ class DetektPlugin : Plugin<Project> {
 
 	private fun configureExtensionRule() {
 		val extensionMapping = conventionMappingOf(detektExtension)
-		extensionMapping.map("reportsDir") { project.extensions.getByType(ReportingExtension::class.java).file(getReportName()) }
+		extensionMapping.map("reportsDir") {
+			project.extensions.getByType(ReportingExtension::class.java).file(getReportName())
+		}
 		withBasePlugin(Action { extensionMapping.map("sourceSets") { getJavaPluginConvention().sourceSets } })
 	}
 
@@ -86,26 +88,48 @@ class DetektPlugin : Plugin<Project> {
 	private fun configureReportsConventionMapping(task: Detekt) {
 		task.reports.all {
 			val reportMapping = conventionMappingOf(this)
-			detektExtension.reports.withName(name)?.let {
-				reportMapping.map("enabled") { it.enabled }
-				reportMapping.map("destination") {
-					val fileSuffix = name
-					// use either the manually defined destination or fall back to a default value
-					it.destination ?: File(detektExtension.getReportsDir(), "$DETEKT.$fileSuffix")
+			reportMapping.map("enabled") {
+				withDetektExtensionFallingBackToParent(project) { it.reports.withName(name)?.enabled } ?: true
+			}
+			reportMapping.map("destination") {
+				val fileSuffix = name
+
+				val reportsDir = withDetektExtensionFallingBackToParent(project) {
+					it.reportsDir
+				} ?: detektExtension.defaultReportsDir
+
+				val customDestination = withDetektExtensionFallingBackToParent(project) {
+					it.reports.withName(name)?.destination?.let { File(project.layout.projectDirectory.asFile, it) }
 				}
+				customDestination ?: File(reportsDir, "$DETEKT.$fileSuffix")
 			}
 		}
 	}
 
 	private fun configureTaskConventionMapping(task: Detekt) {
 		val taskMapping = task.conventionMapping
-		taskMapping.map("config") { detektExtension.config }
-		taskMapping.map("baseline") { detektExtension.baseline }
-		taskMapping.map("debug") { detektExtension.debug }
-		taskMapping.map("disableDefaultRuleSets") { detektExtension.disableDefaultRuleSets }
-		taskMapping.map("filters") { detektExtension.filters }
-		taskMapping.map("parallel") { detektExtension.parallel }
-		taskMapping.map("plugins") { detektExtension.plugins }
+		taskMapping.map("config") { withDetektExtensionFallingBackToParent(project) { it.config } }
+		taskMapping.map("baseline") { withDetektExtensionFallingBackToParent(project) { it.baseline } }
+		taskMapping.map("debug") { withDetektExtensionFallingBackToParent(project) { it.debug } }
+		taskMapping.map("disableDefaultRuleSets") {
+			withDetektExtensionFallingBackToParent(project) { it.disableDefaultRuleSets }
+		}
+		taskMapping.map("filters") { withDetektExtensionFallingBackToParent(project) { it.filters } }
+		taskMapping.map("parallel") { withDetektExtensionFallingBackToParent(project) { it.parallel } }
+		taskMapping.map("plugins") { withDetektExtensionFallingBackToParent(project) { it.plugins } }
+	}
+
+	/**
+	 * Retrieve a value from the projects extension or fall back to extension from parent
+	 */
+	private fun <T> withDetektExtensionFallingBackToParent(project: Project?, retrieveValueFrom: (DetektExtension) -> T?): T? {
+		if (project == null) return null
+		val extension = project.extensions.findByType(DetektExtension::class.java)
+		val projectValue = extension?.let { retrieveValueFrom(it) }
+		return when {
+			projectValue != null -> projectValue
+			else -> withDetektExtensionFallingBackToParent(project.parent, retrieveValueFrom)
+		}
 	}
 
 	fun configureForSourceSet(sourceSet: SourceSet, task: Detekt) {
