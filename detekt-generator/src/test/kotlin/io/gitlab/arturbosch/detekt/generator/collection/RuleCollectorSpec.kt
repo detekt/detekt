@@ -225,12 +225,16 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				 */
 				class $name: Rule {
 
-					override val issue = Issue(javaClass.simpleName, Severity.Style, "", debt = Debt.TEN_MINS)
+					override val issue = Issue(javaClass.simpleName,
+							Severity.Style, "",
+							debt = Debt.TEN_MINS,
+							aliases = setOf("RULE", "RULE2"))
 				}
 			"""
 			val items = subject.run(code)
 			assertThat(items[0].severity).isEqualTo("Style")
 			assertThat(items[0].debt).isEqualTo("10min")
+			assertThat(items[0].aliases).isEqualTo("RULE, RULE2")
 		}
 
 		it("contains no configuration options by default") {
