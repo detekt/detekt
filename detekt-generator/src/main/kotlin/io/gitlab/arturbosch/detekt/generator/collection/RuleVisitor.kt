@@ -4,6 +4,9 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
+import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidCodeExampleDocumentationException
+import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
+import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidIssueDeclaration
 import io.gitlab.arturbosch.detekt.rules.empty.EmptyRule
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
