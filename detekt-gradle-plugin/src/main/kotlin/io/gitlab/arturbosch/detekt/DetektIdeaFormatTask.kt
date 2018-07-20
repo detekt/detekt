@@ -27,6 +27,6 @@ open class DetektIdeaFormatTask : DefaultTask() {
 		}
 
 		if (detekt.debug == true) println("$ideaExtension")
-		startProcess(ideaExtension!!.formatArgs(detekt.source.asFileTree.asPath))
+		startProcess(ideaExtension!!.formatArgs(detekt.input.asPath))
 	}
 }

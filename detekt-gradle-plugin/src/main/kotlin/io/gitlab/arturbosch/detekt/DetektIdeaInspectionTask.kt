@@ -27,6 +27,6 @@ open class DetektIdeaInspectionTask : DefaultTask() {
 		}
 
 		if (detekt.debug == true) println("$ideaExtension")
-		ProcessExecutor.startProcess(ideaExtension!!.formatArgs(detekt.source.asFileTree.asPath))
+		ProcessExecutor.startProcess(ideaExtension!!.formatArgs(detekt.input.asPath))
 	}
 }

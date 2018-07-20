@@ -33,7 +33,7 @@ object DetektInvoker {
 		val classpath = project.configurations.getAt("detekt")
 
 		val args = mapOf<String, String>(
-				INPUT_PARAMETER to detekt.source.asFileTree.asPath
+				INPUT_PARAMETER to detekt.input.asPath
 		)
 
 		val argumentList = args.flatMapTo(ArrayList()) { listOf(it.key, it.value) }
@@ -44,7 +44,7 @@ object DetektInvoker {
 
 	private fun baseDetektParameters(detekt: Detekt): MutableList<String> {
 		val args = mutableMapOf<String, String>(
-				INPUT_PARAMETER to detekt.source.asFileTree.asPath
+				INPUT_PARAMETER to detekt.input.asPath
 		)
 
 		detekt.config?.let { args += CONFIG_PARAMETER to it.absolutePath }

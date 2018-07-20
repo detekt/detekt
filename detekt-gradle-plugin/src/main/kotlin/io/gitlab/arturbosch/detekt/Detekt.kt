@@ -3,6 +3,8 @@ package io.gitlab.arturbosch.detekt
 import groovy.lang.Closure
 import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import org.gradle.api.Action
+import org.gradle.api.file.FileCollection
+import org.gradle.api.internal.ConventionTask
 import org.gradle.api.model.ObjectFactory
 import org.gradle.api.reporting.Reporting
 import org.gradle.api.tasks.*
@@ -20,7 +22,7 @@ open class Detekt
 @Inject
 constructor(
 		objectFactory: ObjectFactory
-) : SourceTask(), VerificationTask, Reporting<DetektReports> {
+) : ConventionTask(), VerificationTask, Reporting<DetektReports> {
 
 	private val _reports: DetektReports = objectFactory.newInstance(DetektReportsImpl::class.java, this)
 	@Internal
@@ -38,6 +40,15 @@ constructor(
 		_ignoreFailures = ignoreFailures
 	}
 
+	@InputFiles
+	@PathSensitive(PathSensitivity.RELATIVE)
+	@SkipWhenEmpty
+	lateinit var input: FileCollection
+
+	@Input
+	@Optional
+	var filters: String? = null
+
 	@InputFile
 	@Optional
 	@PathSensitive(PathSensitivity.ABSOLUTE)
@@ -47,10 +58,6 @@ constructor(
 	@Optional
 	@PathSensitive(PathSensitivity.ABSOLUTE)
 	var config: File? = null
-
-	@Input
-	@Optional
-	var filters: String? = null
 
 	@Input
 	@Optional
@@ -84,12 +91,11 @@ constructor(
 	fun configureForSourceSet(sourceSet: SourceSet) {
 		description = "Run detekt analysis for ${sourceSet.name} classes"
 		group = "verification"
-		setSource(sourceSet.allSource)
+		input = if (sourceSet.allSource.asPath.isBlank()) project.files() else sourceSet.java.sourceDirectories
 	}
 
 	@TaskAction
 	fun check() {
 		DetektInvoker.check(this)
 	}
-
 }
