@@ -52,7 +52,7 @@ class DetektPlugin : Plugin<Project> {
 		val configuration = project.configurations.create(DETEKT.toLowerCase())
 		configuration.isVisible = false
 		configuration.isTransitive = true
-		configuration.description = "The " + DETEKT + " libraries to be used for this project."
+		configuration.description = "The $DETEKT libraries to be used for this project."
 		configurePluginDependencies(configuration)
 	}
 
@@ -67,7 +67,7 @@ class DetektPlugin : Plugin<Project> {
 
 	private fun createExtension() {
 		detektExtension = project.extensions.create(DETEKT, DetektExtension::class.java, project)
-		detektExtension.toolVersion = "1.0.0-GRADLE"
+		detektExtension.toolVersion = DEFAULT_DETEKT_VERSION
 
 		generateConfigTask = project.tasks.create(GENERATE_CONFIG, DetektGenerateConfigTask::class.java)
 		createBaselineTask = project.tasks.create(BASELINE, DetektCreateBaselineTask::class.java)
@@ -126,10 +126,7 @@ class DetektPlugin : Plugin<Project> {
 		if (project == null) return null
 		val extension = project.extensions.findByType(DetektExtension::class.java)
 		val projectValue = extension?.let { retrieveValueFrom(it) }
-		return when {
-			projectValue != null -> projectValue
-			else -> withDetektExtensionFallingBackToParent(project.parent, retrieveValueFrom)
-		}
+		return projectValue ?: withDetektExtensionFallingBackToParent(project.parent, retrieveValueFrom)
 	}
 
 	fun configureForSourceSet(sourceSet: SourceSet, task: Detekt) {
@@ -175,6 +172,7 @@ class DetektPlugin : Plugin<Project> {
 
 
 	companion object {
+		private const val DEFAULT_DETEKT_VERSION = "1.0.0-GRADLE"
 		private const val DETEKT = "detekt"
 		private const val DETEKT_TASK_NAME = "detektMain"
 		private const val IDEA_FORMAT = "detektIdeaFormat"

@@ -24,6 +24,11 @@ constructor(
 		objectFactory: ObjectFactory
 ) : ConventionTask(), VerificationTask, Reporting<DetektReports> {
 
+	init {
+		description = "Run detekt analysis for all classes"
+		group = "verification"
+	}
+
 	private val _reports: DetektReports = objectFactory.newInstance(DetektReportsImpl::class.java, this)
 	@Internal
 	override fun getReports() = _reports
@@ -89,8 +94,6 @@ constructor(
 	}
 
 	fun configureForSourceSet(sourceSet: SourceSet) {
-		description = "Run detekt analysis for ${sourceSet.name} classes"
-		group = "verification"
 		input = if (sourceSet.allSource.asPath.isBlank()) project.files() else sourceSet.java.sourceDirectories
 	}
 
