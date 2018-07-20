@@ -891,6 +891,8 @@ can lead to confusion and potential bugs.
 
 **Debt**: 5min
 
+**Aliases**: UNUSED_VARIABLE
+
 #### Configuration options:
 
 * `allowedNames` (default: `"(_|ignored|expected)"`)
@@ -976,6 +978,8 @@ Val declarations are assign-once (read-only), which makes understanding the curr
 **Severity**: Maintainability
 
 **Debt**: 5min
+
+**Aliases**: CanBeVal
 
 #### Noncompliant Code:
 
