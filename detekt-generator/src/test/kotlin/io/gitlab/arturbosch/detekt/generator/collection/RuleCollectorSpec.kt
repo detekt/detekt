@@ -226,7 +226,8 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				class $name: Rule {
 
 					override val issue = Issue(javaClass.simpleName,
-							Severity.Style, "",
+							Severity.Style,
+							"",
 							debt = Debt.TEN_MINS,
 							aliases = setOf("RULE", "RULE2"))
 				}
@@ -378,6 +379,49 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				}
 			"""
 			assertFailsWith<InvalidCodeExampleDocumentationException> { subject.run(code) }
+		}
+
+		it("has wrong issue style property") {
+			val name = "SomeRandomClass"
+			val description = "some description"
+			val code = """
+				package foo
+
+				/**
+				 * $description
+				 */
+				class $name: Rule {
+
+					val style = Severity.Style
+					override val issue = Issue(javaClass.simpleName,
+							style,
+							"",
+							debt = Debt.TEN_MINS)
+				}
+			"""
+			assertFailsWith<InvalidIssueDeclaration> { subject.run(code) }
+		}
+
+		it("has wrong issue aliases property") {
+			val name = "SomeRandomClass"
+			val description = "some description"
+			val code = """
+				package foo
+
+				/**
+				 * $description
+				 */
+				class $name: Rule {
+
+					val a = setOf("UNUSED_VARIABLE")
+					override val issue = Issue(javaClass.simpleName,
+							Severity.Style,
+							"",
+							debt = Debt.TEN_MINS,
+							aliases = a)
+				}
+			"""
+			assertFailsWith<InvalidIssueDeclaration> { subject.run(code) }
 		}
 	}
 })

@@ -17,6 +17,7 @@ import java.lang.reflect.Modifier
 /**
  * @author Marvin Ramin
  * @author Artur Bosch
+ * @authro schalkms
  */
 internal class RuleVisitor : DetektVisitor() {
 
@@ -119,13 +120,13 @@ internal class RuleVisitor : DetektVisitor() {
 		if (initializer != null) {
 			val arguments = initializer.valueArguments
 			if (arguments.size >= ISSUE_ARGUMENT_SIZE) {
-				extractIssueSeverity(arguments)
+				extractIssueSeverityAndDebt(arguments)
 				extractIssueAliases(arguments)
 			}
 		}
 	}
 
-	private fun extractIssueSeverity(arguments: List<KtValueArgument>) {
+	private fun extractIssueSeverityAndDebt(arguments: List<KtValueArgument>) {
 		severity = getArgument(arguments[1], "Severity")
 		val debtName = getArgument(arguments[DEBT_ARGUMENT_INDEX], "Debt")
 		val debtDeclarations = Debt::class.java.declaredFields.filter { Modifier.isStatic(it.modifiers) }
@@ -139,8 +140,11 @@ internal class RuleVisitor : DetektVisitor() {
 	private fun extractIssueAliases(arguments: List<KtValueArgument>) {
 		if (arguments.size > ISSUE_ARGUMENT_SIZE) {
 			val aliasArgument = arguments[arguments.size - 1].text
-			val index = aliasArgument.indexOf(SETOF) + SETOF.length
-			val argumentString = aliasArgument.substring(index, aliasArgument.length - 1)
+			val index = aliasArgument.indexOf(SETOF)
+			if (index == -1) {
+				throw InvalidIssueDeclaration("aliases")
+			}
+			val argumentString = aliasArgument.substring(index + SETOF.length, aliasArgument.length - 1)
 			aliases = argumentString
 					.split(',')
 					.joinToString(", ") { it.trim().replace("\"", "") }
@@ -148,13 +152,12 @@ internal class RuleVisitor : DetektVisitor() {
 	}
 
 	private fun getArgument(argument: KtValueArgument, name: String): String {
-		var value = ""
 		val text = argument.text
 		val type = text.split('.')
 		if (text.startsWith(name, true) && type.size == 2) {
-			value = type[1]
+			return type[1]
 		}
-		return value
+		throw InvalidIssueDeclaration(name)
 	}
 
 	companion object {
