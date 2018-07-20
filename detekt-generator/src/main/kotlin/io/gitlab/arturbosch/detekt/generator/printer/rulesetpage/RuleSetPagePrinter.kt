@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.generator.printer.rulesetpage
 
 import io.gitlab.arturbosch.detekt.generator.collection.Rule
+import io.gitlab.arturbosch.detekt.generator.out.MarkdownContent
 import io.gitlab.arturbosch.detekt.generator.out.bold
 import io.gitlab.arturbosch.detekt.generator.out.code
 import io.gitlab.arturbosch.detekt.generator.out.codeBlock
@@ -54,6 +55,12 @@ object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
 				}
 			}
 
+			if (!rule.aliases.isNullOrEmpty()) {
+				paragraph {
+					"${bold { "Aliases" }}: ${rule.aliases}"
+				}
+			}
+
 			if (rule.configuration.isNotEmpty()) {
 				h4 { "Configuration options:" }
 				list {
@@ -64,15 +71,19 @@ object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
 				}
 			}
 
-			if (rule.nonCompliantCodeExample.isNotEmpty()) {
-				h4 { "Noncompliant Code:" }
-				paragraph { codeBlock { rule.nonCompliantCodeExample } }
-			}
+			printRuleCodeExamples(rule)
+		}
+	}
 
-			if (rule.compliantCodeExample.isNotEmpty()) {
-				h4 { "Compliant Code:" }
-				paragraph { codeBlock { rule.compliantCodeExample } }
-			}
+	private fun MarkdownContent.printRuleCodeExamples(rule: Rule) {
+		if (rule.nonCompliantCodeExample.isNotEmpty()) {
+			h4 { "Noncompliant Code:" }
+			paragraph { codeBlock { rule.nonCompliantCodeExample } }
+		}
+
+		if (rule.compliantCodeExample.isNotEmpty()) {
+			h4 { "Compliant Code:" }
+			paragraph { codeBlock { rule.compliantCodeExample } }
 		}
 	}
 }

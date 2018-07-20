@@ -30,6 +30,7 @@ internal class RuleVisitor : DetektVisitor() {
 	private var autoCorrect = false
 	private var severity = ""
 	private var debt = ""
+	private var aliases: String? = null
 	private var parent = ""
 	private val configuration = mutableListOf<Configuration>()
 	private val classesMap = mutableMapOf<String, Boolean>()
@@ -40,7 +41,7 @@ internal class RuleVisitor : DetektVisitor() {
 		}
 
 		return Rule(name, description, nonCompliant, compliant,
-				active, severity, debt, parent, configuration, autoCorrect)
+				active, severity, debt, aliases, parent, configuration, autoCorrect)
 	}
 
 	override fun visitSuperTypeList(list: KtSuperTypeList) {
@@ -118,15 +119,31 @@ internal class RuleVisitor : DetektVisitor() {
 		if (initializer != null) {
 			val arguments = initializer.valueArguments
 			if (arguments.size >= ISSUE_ARGUMENT_SIZE) {
-				severity = getArgument(arguments[1], "Severity")
-				val debtName = getArgument(arguments[DEBT_ARGUMENT_INDEX], "Debt")
-				val debtDeclarations = Debt::class.java.declaredFields.filter { Modifier.isStatic(it.modifiers) }
-				val debtDeclaration = debtDeclarations.singleOrNull { it.name == debtName }
-				if (debtDeclaration != null) {
-					debtDeclaration.isAccessible = true
-					debt = debtDeclaration.get(Debt::class.java).toString()
-				}
+				extractIssueSeverity(arguments)
+				extractIssueAliases(arguments)
 			}
+		}
+	}
+
+	private fun extractIssueSeverity(arguments: List<KtValueArgument>) {
+		severity = getArgument(arguments[1], "Severity")
+		val debtName = getArgument(arguments[DEBT_ARGUMENT_INDEX], "Debt")
+		val debtDeclarations = Debt::class.java.declaredFields.filter { Modifier.isStatic(it.modifiers) }
+		val debtDeclaration = debtDeclarations.singleOrNull { it.name == debtName }
+		if (debtDeclaration != null) {
+			debtDeclaration.isAccessible = true
+			debt = debtDeclaration.get(Debt::class.java).toString()
+		}
+	}
+
+	private fun extractIssueAliases(arguments: List<KtValueArgument>) {
+		if (arguments.size > ISSUE_ARGUMENT_SIZE) {
+			val aliasArgument = arguments[arguments.size - 1].text
+			val index = aliasArgument.indexOf(SETOF) + SETOF.length
+			val argumentString = aliasArgument.substring(index, aliasArgument.length - 1)
+			aliases = argumentString
+					.split(',')
+					.joinToString(", ") { it.trim().replace("\"", "") }
 		}
 	}
 
@@ -157,6 +174,7 @@ internal class RuleVisitor : DetektVisitor() {
 
 		private const val ISSUE_ARGUMENT_SIZE = 4
 		private const val DEBT_ARGUMENT_INDEX = 3
+		private const val SETOF = "setOf("
 	}
 }
 
