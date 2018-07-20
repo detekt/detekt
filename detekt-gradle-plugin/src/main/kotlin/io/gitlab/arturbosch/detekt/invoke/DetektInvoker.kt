@@ -13,7 +13,11 @@ object DetektInvoker {
 		val project = detekt.project
 		val classpath = project.configurations.getAt("detekt")
 
-		val argumentList = baseDetektParameters(detekt)
+		val extraArgs = mutableMapOf<String, String>()
+		if (detekt.reports.html.isEnabled) extraArgs += REPORT_HTML_PARAMETER to detekt.reports.html.destination.absolutePath
+		if (detekt.reports.xml.isEnabled) extraArgs += REPORT_XML_PARAMETER to detekt.reports.xml.destination.absolutePath
+
+		val argumentList = baseDetektParameters(detekt, extraArgs)
 
 		invokeCli(project, classpath, argumentList.toList(), detekt.debug ?: false)
 	}
@@ -42,18 +46,15 @@ object DetektInvoker {
 		invokeCli(project, classpath, argumentList.toList(), detekt.debug ?: false)
 	}
 
-	private fun baseDetektParameters(detekt: Detekt): MutableList<String> {
-		val args = mutableMapOf<String, String>(
-				INPUT_PARAMETER to detekt.input.asPath
-		)
+	private fun baseDetektParameters(detekt: Detekt, extraArgs: MutableMap<String, String> = mutableMapOf()): MutableList<String> {
+		val args = extraArgs
+
+		args += INPUT_PARAMETER to detekt.input.asPath
 
 		detekt.config?.let { args += CONFIG_PARAMETER to it.absolutePath }
 		detekt.filters?.let { args += FILTERS_PARAMETER to it }
 		detekt.plugins?.let { args += PLUGINS_PARAMETER to it }
 		detekt.baseline?.let { args += BASELINE_PARAMETER to it.absolutePath }
-
-		if (detekt.reports.html.isEnabled) args += REPORT_HTML_PARAMETER to detekt.reports.html.destination.absolutePath
-		if (detekt.reports.xml.isEnabled) args += REPORT_XML_PARAMETER to detekt.reports.xml.destination.absolutePath
 
 		val argumentList = args.flatMapTo(ArrayList()) { listOf(it.key, it.value) }
 		if (detekt.debug == true) argumentList += DEBUG_PARAMETER
