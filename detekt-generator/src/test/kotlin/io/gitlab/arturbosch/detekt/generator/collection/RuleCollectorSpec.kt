@@ -1,5 +1,8 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
+import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidCodeExampleDocumentationException
+import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
+import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidIssueDeclaration
 import io.gitlab.arturbosch.detekt.generator.util.run
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.dsl.describe
