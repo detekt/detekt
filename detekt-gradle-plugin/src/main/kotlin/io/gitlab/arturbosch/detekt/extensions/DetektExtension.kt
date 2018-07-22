@@ -74,10 +74,7 @@ open class DetektReportsExtension(project: Project) {
 
 open class DetektReportExtension(project: Project) {
 
-	val enabledProperty: Property<java.lang.Boolean> = project.objects.property(java.lang.Boolean::class.java)
-	var enabled: Boolean
-		get() = enabledProperty.orNull?.booleanValue() ?: DEFAULT_REPORT_ENABLED_VALUE
-		set(value) = enabledProperty.set(java.lang.Boolean(value))
+	open var enabled: Boolean = DEFAULT_REPORT_ENABLED_VALUE
 
 	/**
 	 * destination of the output - relative to the project root
@@ -87,8 +84,5 @@ open class DetektReportExtension(project: Project) {
 		get() = destinationProperty.orNull
 		set(value) = destinationProperty.set(value)
 
-	init {
-		enabled = DEFAULT_REPORT_ENABLED_VALUE
-	}
 }
 
