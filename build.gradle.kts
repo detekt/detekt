@@ -19,8 +19,8 @@ buildscript {
 }
 
 plugins {
-	id("com.jfrog.bintray") version "1.8.0"
-	id("com.github.ben-manes.versions") version "0.17.0"
+	id("com.jfrog.bintray") version "1.8.4"
+	id("com.github.ben-manes.versions") version "0.20.0"
 	id("com.github.johnrengelman.shadow") version "2.0.4" apply false
 	id("org.sonarqube") version "2.6.2"
 	id("io.gitlab.arturbosch.detekt")
