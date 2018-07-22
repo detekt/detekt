@@ -1,175 +1,80 @@
 package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
-import org.gradle.api.Action
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.Task
-import org.gradle.api.artifacts.Configuration
-import org.gradle.api.internal.ConventionMapping
-import org.gradle.api.internal.IConventionAware
-import org.gradle.api.internal.artifacts.dependencies.DefaultExternalModuleDependency
 import org.gradle.api.plugins.JavaBasePlugin
-import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.plugins.ReportingBasePlugin
-import org.gradle.api.reporting.ReportingExtension
-import org.gradle.api.tasks.SourceSet
-import org.gradle.api.tasks.SourceSetContainer
 import java.io.File
+
 
 /**
  * @author Marvin Ramin
  */
 class DetektPlugin : Plugin<Project> {
 
-	private lateinit var project: Project
-	private lateinit var detektExtension: DetektExtension
-	private lateinit var generateConfigTask: DetektGenerateConfigTask
-	private lateinit var createBaselineTask: DetektCreateBaselineTask
-	private lateinit var ideaFormatTask: DetektIdeaFormatTask
-	private lateinit var ideaInspectionTask: DetektIdeaInspectionTask
 
-	override fun apply(p: Project) {
-		project = p
+	override fun apply(project: Project) {
 		project.pluginManager.apply(ReportingBasePlugin::class.java)
 
-		createConfigurations()
-		createExtension()
-		configureExtensionRule()
-		configureSourceSetRule()
-		configureCheckTask()
-		configureTaskDefaults()
+		val extension = project.extensions.create(DETEKT, DetektExtension::class.java, project)
+
+		configurePluginDependencies(project, extension)
+
+		val detektTask = createAndConfigureDetektTask(project, extension)
+
+		project.tasks.create(GENERATE_CONFIG, DetektGenerateConfigTask::class.java) { detekt = detektTask }
+		project.tasks.create(BASELINE, DetektCreateBaselineTask::class.java) { detekt = detektTask }
+		project.tasks.create(IDEA_FORMAT, DetektIdeaFormatTask::class.java) { detekt = detektTask }
+		project.tasks.create(IDEA_INSPECT, DetektIdeaInspectionTask::class.java) { detekt = detektTask }
+
 	}
 
-	private fun configureTaskDefaults() {
-		project.tasks.configureEachLater(Detekt::class.java) {
-			configureTaskConventionMapping(this)
-			configureReportsConventionMapping(this)
-		}
-	}
+	private fun createAndConfigureDetektTask(project: Project, extension: DetektExtension): Detekt {
+		val detektTask = project.tasks.create(DETEKT, Detekt::class.java) {
+			val detekt = this
+			detekt.debug = extension.debugProperty
+			detekt.parallel = extension.parallelProperty
+			detekt.disableDefaultRuleSets = extension.disableDefaultRuleSetsProperty
+			detekt.filters = extension.filtersProperty
+			detekt.config = extension.configProperty
+			detekt.input.set(project.provider {
+				extension.input ?: extension.defaultSourceDirectories.filter { it.exists() }
+			})
 
-	protected fun createConfigurations() {
-		val configuration = project.configurations.create(DETEKT.toLowerCase())
-		configuration.isVisible = false
-		configuration.isTransitive = true
-		configuration.description = "The $DETEKT libraries to be used for this project."
-		configurePluginDependencies(configuration)
-	}
-
-	private fun configurePluginDependencies(configuration: Configuration) {
-		configuration.defaultDependencies {
-			val detektCli = DefaultExternalModuleDependency("io.gitlab.arturbosch.detekt",
-					"detekt-cli",
-					detektExtension.toolVersion)
-			add(project.dependencies.create(detektCli))
-		}
-	}
-
-	private fun createExtension() {
-		detektExtension = project.extensions.create(DETEKT, DetektExtension::class.java, project)
-		detektExtension.toolVersion = DEFAULT_DETEKT_VERSION
-
-		generateConfigTask = project.tasks.create(GENERATE_CONFIG, DetektGenerateConfigTask::class.java)
-		createBaselineTask = project.tasks.create(BASELINE, DetektCreateBaselineTask::class.java)
-		ideaFormatTask = project.tasks.create(IDEA_FORMAT, DetektIdeaFormatTask::class.java)
-		ideaInspectionTask = project.tasks.create(IDEA_INSPECT, DetektIdeaInspectionTask::class.java)
-	}
-
-	private fun configureExtensionRule() {
-		val extensionMapping = conventionMappingOf(detektExtension)
-		extensionMapping.map("reportsDir") {
-			project.extensions.getByType(ReportingExtension::class.java).file(getReportName())
-		}
-		withBasePlugin(Action { extensionMapping.map("sourceSets") { getJavaPluginConvention().sourceSets } })
-	}
-
-	private fun getReportName() = DETEKT.toLowerCase()
-
-	private fun configureReportsConventionMapping(task: Detekt) {
-		task.reports.all {
-			val reportMapping = conventionMappingOf(this)
-			reportMapping.map("enabled") {
-				withDetektExtensionFallingBackToParent(project) { it.reports.withName(name)?.enabled } ?: true
+			project.tasks.getByNameLater(Task::class.java, JavaBasePlugin.CHECK_TASK_NAME).configure {
+				dependsOn(detekt)
 			}
-			reportMapping.map("destination") {
-				val fileSuffix = name
+		}
 
-				val reportsDir = withDetektExtensionFallingBackToParent(project) {
-					it.reportsDir
-				} ?: detektExtension.defaultReportsDir
-
-				val customDestination = withDetektExtensionFallingBackToParent(project) {
-					it.reports.withName(name)?.destination?.let { File(project.layout.projectDirectory.asFile, it) }
+		project.afterEvaluate {
+			detektTask.reports.all {
+				extension.reports.withName(name)?.let {
+					val reportExtension = it
+					isEnabled = reportExtension.enabled
+					val fileSuffix = name
+					val reportsDir = extension.reportsDir ?: extension.defaultReportsDir
+					val customDestination = reportExtension.destination
+					destination = customDestination ?: File(reportsDir, "${DETEKT}.$fileSuffix")
 				}
-				customDestination ?: File(reportsDir, "$DETEKT.$fileSuffix")
+			}
+		}
+
+		return detektTask
+	}
+
+	private fun configurePluginDependencies(project: Project, extension: DetektExtension) {
+		project.configurations.create(DETEKT.toLowerCase()) {
+			isVisible = false
+			isTransitive = true
+			description = "The $DETEKT libraries to be used for this project."
+			defaultDependencies {
+				val version = extension.toolVersion ?: DEFAULT_DETEKT_VERSION
+				add(project.dependencies.create("io.gitlab.arturbosch.detekt:detekt-cli:$version"))
 			}
 		}
 	}
-
-	private fun configureTaskConventionMapping(task: Detekt) {
-		val taskMapping = task.conventionMapping
-		taskMapping.map("config") { withDetektExtensionFallingBackToParent(project) { it.config } }
-		taskMapping.map("baseline") { withDetektExtensionFallingBackToParent(project) { it.baseline } }
-		taskMapping.map("debug") { withDetektExtensionFallingBackToParent(project) { it.debug } }
-		taskMapping.map("disableDefaultRuleSets") {
-			withDetektExtensionFallingBackToParent(project) { it.disableDefaultRuleSets }
-		}
-		taskMapping.map("filters") { withDetektExtensionFallingBackToParent(project) { it.filters } }
-		taskMapping.map("parallel") { withDetektExtensionFallingBackToParent(project) { it.parallel } }
-		taskMapping.map("plugins") { withDetektExtensionFallingBackToParent(project) { it.plugins } }
-	}
-
-	/**
-	 * Retrieve a value from the projects extension or fall back to extension from parent
-	 */
-	private fun <T> withDetektExtensionFallingBackToParent(project: Project?, retrieveValueFrom: (DetektExtension) -> T?): T? {
-		if (project == null) return null
-		val extension = project.extensions.findByType(DetektExtension::class.java)
-		val projectValue = extension?.let { retrieveValueFrom(it) }
-		return projectValue ?: withDetektExtensionFallingBackToParent(project.parent, retrieveValueFrom)
-	}
-
-	fun configureForSourceSet(sourceSet: SourceSet, task: Detekt) {
-		task.configureForSourceSet(sourceSet)
-
-		generateConfigTask.detekt = task
-		createBaselineTask.detekt = task
-		ideaFormatTask.detekt = task
-		ideaFormatTask.ideaExtension = detektExtension.ideaExtension
-		ideaInspectionTask.detekt = task
-		ideaInspectionTask.ideaExtension = detektExtension.ideaExtension
-	}
-
-	private fun configureSourceSetRule() {
-		withBasePlugin(Action { configureForSourceSets(getJavaPluginConvention().getSourceSets()) })
-	}
-
-	private fun configureForSourceSets(sourceSets: SourceSetContainer) {
-		sourceSets.all {
-			val sourceSet = this
-			val detektTaskName = getTaskName(DETEKT, null)
-			project.tasks.createLater(detektTaskName, Detekt::class.java) { configureForSourceSet(sourceSet, this) }
-		}
-	}
-
-	private fun configureCheckTask() {
-		withBasePlugin(Action { configureCheckTaskDependency() })
-	}
-
-	private fun configureCheckTaskDependency() {
-		project.tasks.getByNameLater(Task::class.java, JavaBasePlugin.CHECK_TASK_NAME).configure {
-			dependsOn(DETEKT_TASK_NAME)
-		}
-	}
-
-	fun withBasePlugin(action: Action<Plugin<*>>) {
-		project.plugins.withType(JavaBasePlugin::class.java, action)
-	}
-
-	protected fun getJavaPluginConvention(): JavaPluginConvention {
-		return project.convention.getPlugin(JavaPluginConvention::class.java)
-	}
-
 
 	companion object {
 		private const val DEFAULT_DETEKT_VERSION = "1.0.0-GRADLE"
@@ -179,9 +84,5 @@ class DetektPlugin : Plugin<Project> {
 		private const val IDEA_INSPECT = "detektIdeaInspect"
 		private const val GENERATE_CONFIG = "detektGenerateConfig"
 		private const val BASELINE = "detektBaseline"
-
-		private fun conventionMappingOf(anObject: Any): ConventionMapping {
-			return (anObject as IConventionAware).conventionMapping
-		}
 	}
 }

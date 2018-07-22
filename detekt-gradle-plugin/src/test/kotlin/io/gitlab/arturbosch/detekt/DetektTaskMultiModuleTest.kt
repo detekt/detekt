@@ -8,10 +8,12 @@ import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import java.io.File
 
+const val SOURCE_DIRECTORY = "src/main/java"
+
 /**
  * @author Markus Schwarz
  */
-internal class MultiModuleTest : Spek({
+internal class DetektTaskMultiModuleTest : Spek({
 
 	describe("The Detekt Gradle plugin used in a multi module project") {
 
@@ -29,12 +31,12 @@ internal class MultiModuleTest : Spek({
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
 					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "detektMain", "--stacktrace", "--info")
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
 					.withPluginClasspath()
 					.build()
 
 			assertThat(result.output).contains(projectLayout.submodules.map { "number of classes: ${it.numberOfSourceFiles}" })
-			assertThat(result.task(":detektMain")?.outcome).isEqualTo(TaskOutcome.NO_SOURCE)
+			assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.NO_SOURCE)
 
 			assertThat(File(rootDir, "build/reports/detekt/detekt.xml")).doesNotExist()
 			assertThat(File(rootDir, "build/reports/detekt/detekt.html")).doesNotExist()
@@ -57,13 +59,13 @@ internal class MultiModuleTest : Spek({
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
 					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "detektMain", "--stacktrace", "--info")
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
 					.withPluginClasspath()
 					.build()
 
 			assertThat(result.output).contains("number of classes: ${projectLayout.numberOfSourceFilesInRoot}")
 			assertThat(result.output).contains(projectLayout.submodules.map { "number of classes: ${it.numberOfSourceFiles}" })
-			assertThat(result.task(":detektMain")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+			assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 
 			assertThat(File(rootDir, "build/reports/detekt/detekt.xml")).exists()
 			assertThat(File(rootDir, "build/reports/detekt/detekt.html")).exists()
@@ -72,7 +74,7 @@ internal class MultiModuleTest : Spek({
 				assertThat(File(rootDir, "${it.name}/build/reports/detekt/detekt.html")).exists()
 			}
 		}
-		it("allows to disable report type on root level") {
+		it("allows to disable report type for all projects") {
 			val rootDir = createTempDir(prefix = "applyPlugin")
 			val projectLayout = ProjectLayout(0)
 					.withSubmodule("child1", 2)
@@ -92,12 +94,12 @@ internal class MultiModuleTest : Spek({
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
 					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "detektMain", "--stacktrace", "--info")
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
 					.withPluginClasspath()
 					.build()
 
 			assertThat(result.output).contains(projectLayout.submodules.map { "number of classes: ${it.numberOfSourceFiles}" })
-			assertThat(result.task(":detektMain")?.outcome).isEqualTo(TaskOutcome.NO_SOURCE)
+			assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.NO_SOURCE)
 
 			assertThat(File(rootDir, "build/reports/detekt/detekt.xml")).doesNotExist()
 			assertThat(File(rootDir, "build/reports/detekt/detekt.html")).doesNotExist()
@@ -113,7 +115,7 @@ internal class MultiModuleTest : Spek({
 					|detekt {
 					|	reports {
 					|		html.enabled = true
-					|		xml.destination = "build/child1-reports-location/detekt.xml"
+					|		xml.destination = file("build/child1-reports-location/detekt.xml")
 					|	}
 					|}
 				""".trimMargin()
@@ -126,7 +128,7 @@ internal class MultiModuleTest : Spek({
 					|detekt {
 					|	reports {
 					|		html.enabled = false
-					|		xml.destination = "build/custom-reports-location/detekt.xml"
+					|		xml.destination = file("build/custom-reports-location/detekt.xml")
 					|	}
 					|}
 				""".trimMargin()
@@ -137,12 +139,12 @@ internal class MultiModuleTest : Spek({
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
 					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "detektMain", "--stacktrace", "--info")
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
 					.withPluginClasspath()
 					.build()
 
 			assertThat(result.output).contains(projectLayout.submodules.map { "number of classes: ${it.numberOfSourceFiles}" })
-			assertThat(result.task(":detektMain")?.outcome).isEqualTo(TaskOutcome.NO_SOURCE)
+			assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.NO_SOURCE)
 
 			// Child 1 (html: true, custom xml location)
 			assertThat(File(rootDir, "child1/build/child1-reports-location/detekt.xml")).exists()
@@ -174,9 +176,9 @@ private fun buildFileContent(detektConfiguration: String) = """
 	|subprojects {
 	|	apply plugin: "java-library"
 	|	apply plugin: "io.gitlab.arturbosch.detekt"
+	|	$detektConfiguration
 	|}
 	|
-	|$detektConfiguration
 	""".trimMargin()
 
 // src/main/kotlin/MyClass.kt
@@ -188,19 +190,22 @@ private fun ktFileContent(className: String) = """
 private fun writeFiles(root: File, detektConfiguration: String, projectLayout: ProjectLayout) {
 	File(root, "build.gradle").writeText(buildFileContent(detektConfiguration))
 	File(root, "settings.gradle").writeText(settingsContent(projectLayout))
-	File(root, "src/main/java").mkdirs()
 	(1..projectLayout.numberOfSourceFilesInRoot).forEach {
+		File(root, SOURCE_DIRECTORY).mkdirs()
 		val className = "MyRoot${it}Class.kt"
-		File(root, "src/main/java/$className").writeText(ktFileContent(className))
+		File(root, SOURCE_DIRECTORY +
+				"/$className").writeText(ktFileContent(className))
 	}
 	projectLayout.submodules.forEach {
 		val submodule = it
 		val moduleRoot = File(root, submodule.name)
-		File(moduleRoot, "src/main/java").mkdirs()
+		moduleRoot.mkdirs()
 		File(moduleRoot, "build.gradle").writeText(it.detektConfig ?: "")
 		(1..submodule.numberOfSourceFiles).forEach {
+			File(moduleRoot, SOURCE_DIRECTORY).mkdirs()
 			val className = "My${submodule.name}${it}Class.kt"
-			File(moduleRoot, "src/main/java/$className").writeText(ktFileContent(className))
+			File(moduleRoot, SOURCE_DIRECTORY +
+					"/$className").writeText(ktFileContent(className))
 		}
 	}
 }

@@ -11,12 +11,35 @@ import java.io.File
 /**
  * @author Marvin Ramin
  */
-internal class GroovyPluginTest : Spek({
+internal class DetektTaskGroovyDslTest : Spek({
 
 	describe("The Detekt Gradle plugin used in a build.gradle file") {
+		lateinit var rootDir: File
+		beforeEachTest {
+			rootDir = createTempDir(prefix = "applyPlugin")
+		}
+		it("can be applied without any configuration using its task name") {
 
+			val detektConfig = ""
+
+			writeFiles(rootDir, detektConfig)
+
+			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
+			val result = GradleRunner.create()
+					.withProjectDir(rootDir)
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "detekt", "--stacktrace", "--info")
+					.withPluginClasspath()
+					.build()
+
+			assertThat(result.output).contains("number of classes: 1")
+			assertThat(result.output).contains("Ruleset: comments")
+			assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+
+			assertThat(File(rootDir, "custom/build")).doesNotExist()
+			assertThat(File(rootDir, "build/reports/detekt/detekt.xml")).exists()
+			assertThat(File(rootDir, "build/reports/detekt/detekt.html")).exists()
+		}
 		it("can be applied with a version only") {
-			val rootDir = createTempDir(prefix = "applyPlugin")
 
 			val detektConfig = """
 				|detekt {
@@ -43,47 +66,12 @@ internal class GroovyPluginTest : Spek({
 			assertThat(File(rootDir, "build/reports/detekt/detekt.xml")).exists()
 			assertThat(File(rootDir, "build/reports/detekt/detekt.html")).exists()
 		}
-		it("can disable html report") {
-			val rootDir = createTempDir(prefix = "applyPlugin")
-
-			val detektConfig = """
-				|detekt {
-				|	toolVersion = "1.0.0-GRADLE"
-				|}
-				|tasks.withType(io.gitlab.arturbosch.detekt.Detekt) {
-				|	reports {
-				|		html.enabled = false
-				|	}
-				|}
-				"""
-
-			writeFiles(rootDir, detektConfig)
-
-			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
-			val result = GradleRunner.create()
-					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
-					.withPluginClasspath()
-					.build()
-
-			assertThat(result.output).contains("number of classes: 1")
-			assertThat(result.output).contains("Ruleset: comments")
-			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-
-			// Asserts that the "custom" module is not built, and that custom ruleset is not enabled
-			assertThat(result.output).doesNotContain("Ruleset: test-custom")
-			assertThat(File(rootDir, "custom/build")).doesNotExist()
-			assertThat(File(rootDir, "build/reports/detekt/detekt.xml")).exists()
-			assertThat(File(rootDir, "build/reports/detekt/detekt.html")).doesNotExist()
-		}
 		it("can change specific report destination") {
-			val rootDir = createTempDir(prefix = "applyPlugin")
 
 			val detektConfig = """
 				|detekt {
-				|	toolVersion = "1.0.0-GRADLE"
 				|	reports {
-				|		html.destination = 'build/somewhere/report.html'
+				|		html.destination = file('build/somewhere/report.html')
 				|	}
 				|}
 				"""
@@ -106,12 +94,10 @@ internal class GroovyPluginTest : Spek({
 			assertThat(File(rootDir, "custom/build")).doesNotExist()
 			assertThat(File(rootDir, "build/somewhere/report.html")).exists()
 		}
-		it("can change reportsDir") {
-			val rootDir = createTempDir(prefix = "applyPlugin")
+		it("can change general reportsDir") {
 
 			val detektConfig = """
 				|detekt {
-				|	toolVersion = "1.0.0-GRADLE"
 				|	reportsDir = file('build/detekt-reports')
 				|}
 				"""
@@ -133,13 +119,12 @@ internal class GroovyPluginTest : Spek({
 			assertThat(File(rootDir, "build/detekt-reports/detekt.html")).exists()
 		}
 		it("can change reportsDir but overwrite single report destination") {
-			val rootDir = createTempDir(prefix = "applyPlugin")
 
 			val detektConfig = """
 				|detekt {
 				|	reportsDir = file('build/detekt-reports')
 				|	reports {
-				|		xml.destination = 'build/xml-reports/custom-detekt.xml'
+				|		xml.destination = file('build/xml-reports/custom-detekt.xml')
 				|	}
 				|}
 				"""
@@ -161,11 +146,8 @@ internal class GroovyPluginTest : Spek({
 			assertThat(File(rootDir, "build/detekt-reports/detekt.html")).exists()
 		}
 		it("can disable a single report type") {
-			val rootDir = createTempDir(prefix = "applyPlugin")
-
 			val detektConfig = """
 				|detekt {
-				|	toolVersion = "1.0.0-GRADLE"
 				|	reports {
 				|		html.enabled = false
 				|	}
@@ -188,6 +170,7 @@ internal class GroovyPluginTest : Spek({
 			assertThat(File(rootDir, "build/reports/detekt/detekt.xml")).exists()
 			assertThat(File(rootDir, "build/reports/detekt/detekt.html")).doesNotExist()
 		}
+
 	}
 })
 

@@ -7,6 +7,9 @@ package io.gitlab.arturbosch.detekt.extensions
 
 const val DETEKT_PROFILE = "detekt.profile"
 const val DEFAULT_DEBUG_VALUE = false
+const val DEFAULT_PARALLEL_VALUE = false
+const val DEFAULT_DISABLE_RULESETS_VALUE = false
+const val DEFAULT_REPORT_ENABLED_VALUE = true
 
 const val DEFAULT_PROFILE_NAME = "main"
 const val DEFAULT_TRUE = "true"

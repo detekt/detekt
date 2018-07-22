@@ -26,7 +26,7 @@ open class DetektIdeaFormatTask : DefaultTask() {
 			throw GradleException("idea extension is not defined. It is required to run detekt idea tasks.")
 		}
 
-		if (detekt.debug == true) println("$ideaExtension")
-		startProcess(ideaExtension!!.formatArgs(detekt.input.asPath))
+		if (detekt.debugOrDefault) println("$ideaExtension")
+		startProcess(ideaExtension!!.formatArgs(detekt.input.get().asPath))
 	}
 }

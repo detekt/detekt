@@ -19,7 +19,7 @@ object DetektInvoker {
 
 		val argumentList = baseDetektParameters(detekt, extraArgs)
 
-		invokeCli(project, classpath, argumentList.toList(), detekt.debug ?: false)
+		invokeCli(project, classpath, argumentList.toList(), detekt.debugOrDefault)
 	}
 
 	fun createBaseline(detekt: Detekt) {
@@ -29,7 +29,7 @@ object DetektInvoker {
 		val argumentList = baseDetektParameters(detekt)
 		argumentList += CREATE_BASELINE_PARAMETER
 
-		invokeCli(project, classpath, argumentList.toList(), detekt.debug ?: false)
+		invokeCli(project, classpath, argumentList.toList(), detekt.debugOrDefault)
 	}
 
 	fun generateConfig(detekt: Detekt) {
@@ -37,29 +37,29 @@ object DetektInvoker {
 		val classpath = project.configurations.getAt("detekt")
 
 		val args = mapOf<String, String>(
-				INPUT_PARAMETER to detekt.input.asPath
+				INPUT_PARAMETER to detekt.input.get().asPath
 		)
 
 		val argumentList = args.flatMapTo(ArrayList()) { listOf(it.key, it.value) }
 		argumentList += GENERATE_CONFIG_PARAMETER
 
-		invokeCli(project, classpath, argumentList.toList(), detekt.debug ?: false)
+		invokeCli(project, classpath, argumentList.toList(), detekt.debugOrDefault)
 	}
 
 	private fun baseDetektParameters(detekt: Detekt, extraArgs: MutableMap<String, String> = mutableMapOf()): MutableList<String> {
 		val args = extraArgs
 
-		args += INPUT_PARAMETER to detekt.input.asPath
+		args += INPUT_PARAMETER to detekt.input.get().asPath
 
-		detekt.config?.let { args += CONFIG_PARAMETER to it.absolutePath }
-		detekt.filters?.let { args += FILTERS_PARAMETER to it }
-		detekt.plugins?.let { args += PLUGINS_PARAMETER to it }
-		detekt.baseline?.let { args += BASELINE_PARAMETER to it.absolutePath }
+		detekt.config.orNull?.let { args += CONFIG_PARAMETER to it.absolutePath }
+		detekt.filters.orNull?.let { args += FILTERS_PARAMETER to it }
+		detekt.plugins.orNull?.let { args += PLUGINS_PARAMETER to it }
+		detekt.baseline.orNull?.let { args += BASELINE_PARAMETER to it.absolutePath }
 
 		val argumentList = args.flatMapTo(ArrayList()) { listOf(it.key, it.value) }
-		if (detekt.debug == true) argumentList += DEBUG_PARAMETER
-		if (detekt.parallel == true) argumentList += PARALLEL_PARAMETER
-		if (detekt.disableDefaultRuleSets == true) argumentList += DISABLE_DEFAULT_RULESETS_PARAMETER
+		if (detekt.debugOrDefault) argumentList += DEBUG_PARAMETER
+		if (detekt.parallelOrDefault) argumentList += PARALLEL_PARAMETER
+		if (detekt.disableDefaultRuleSetsOrDefault) argumentList += DISABLE_DEFAULT_RULESETS_PARAMETER
 
 		return argumentList
 	}

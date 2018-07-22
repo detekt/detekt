@@ -12,12 +12,52 @@ import java.io.File
 /**
  * @author Marvin Ramin
  */
-internal class KotlinPluginTest : Spek({
+internal class DetektTaskKotlinDslTest : Spek({
 
 	describe("The Detekt Gradle plugin used in a build.gradle.kts file") {
+		lateinit var rootDir: File
+		beforeEachTest {
+			rootDir = createTempDir(prefix = "applyPlugin")
+		}
+		it("can be used without configuration") {
+
+			val detektConfig = ""
+
+			writeFiles(rootDir, detektConfig)
+			writeConfig(rootDir)
+
+			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
+			val result = GradleRunner.create()
+					.withProjectDir(rootDir)
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
+					.withPluginClasspath()
+					.build()
+
+			assertThat(result.output).contains("number of classes: 1")
+			assertThat(result.output).contains("Ruleset: comments")
+			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+		}
+
+		it("can be used without configuration using source files in src/main/kotlin") {
+
+			val detektConfig = ""
+
+			writeFiles(rootDir, detektConfig, "src/main/kotlin")
+			writeConfig(rootDir)
+
+			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
+			val result = GradleRunner.create()
+					.withProjectDir(rootDir)
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
+					.withPluginClasspath()
+					.build()
+
+			assertThat(result.output).contains("number of classes: 1")
+			assertThat(result.output).contains("Ruleset: comments")
+			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+		}
 
 		it("can be applied with a custom detekt version") {
-			val rootDir = createTempDir(prefix = "applyPlugin")
 
 			val detektConfig = """
 					|detekt {
@@ -45,7 +85,7 @@ internal class KotlinPluginTest : Spek({
 		}
 
 		it("can be applied with a custom config file") {
-			val rootDir = createTempDir(prefix = "applyPlugin")
+
 
 			val detektConfig = """
 					|detekt {
@@ -63,22 +103,18 @@ internal class KotlinPluginTest : Spek({
 					.withPluginClasspath()
 					.build()
 
-			assertThat(result.output).contains("number of classes: 1")
-			assertThat(result.output).contains("Ruleset: comments")
+			assertThat(result.output).contains("Ruleset: comments", "number of classes: 1", "--config ${rootDir.absolutePath}/config.yml")
 			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-
-			// Asserts that the "custom" module is not built, and that custom ruleset is not enabled
-			assertThat(result.output).doesNotContain("Ruleset: test-custom")
-			assertThat(File(rootDir, "custom/build")).doesNotExist()
 		}
 
 		it("can be applied with a full config") {
-			val rootDir = createTempDir(prefix = "applyPlugin")
+
 
 			val detektConfig = """
 					|detekt {
 					|	debug = true
 					|	parallel = true
+					|	disableDefaultRuleSets = true
 					|	toolVersion = "1.0.0-GRADLE"
 					|	config = file("${rootDir.absolutePath}/config.yml")
 					|	baseline = file("${rootDir.absolutePath}/baseline.xml")
@@ -98,16 +134,12 @@ internal class KotlinPluginTest : Spek({
 					.build()
 
 			assertThat(result.output).contains("number of classes: 1")
-			assertThat(result.output).contains("Ruleset: comments")
+			assertThat(result.output).contains("--parallel", "--debug", "--disable-default-rulesets")
+			assertThat(result.output).doesNotContain("Ruleset: comments")
 			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-
-			// Asserts that the "custom" module is not built, and that custom ruleset is not enabled
-			assertThat(result.output).doesNotContain("Ruleset: test-custom")
-			assertThat(File(rootDir, "custom/build")).doesNotExist()
 		}
 
 		xit("can configure a new custom detekt task", "fails with some internal api error") {
-			val rootDir = createTempDir(prefix = "applyPlugin")
 
 			val detektConfig = """
 					|detekt {
@@ -145,19 +177,12 @@ internal class KotlinPluginTest : Spek({
 		}
 
 		it("can configure reports") {
-			val rootDir = createTempDir(prefix = "applyPlugin")
 
 			val detektConfig = """
 					|detekt {
-					|	toolVersion = "1.0.0-GRADLE"
-					|}
-					|
-					|tasks.withType<io.gitlab.arturbosch.detekt.Detekt> {
 					|	reports {
-					|		xml.isEnabled = true
-					|		xml.destination = file("build/reports/detekt.xml")
-					|		html.isEnabled = true
-					|		html.destination = file("build/reports/detekt.html")
+					|		xml.destination = file("build/xml/detekt.xml")
+					|		html.destination = file("build/html/detekt.html")
 					|	}
 					|}
 				"""
@@ -177,22 +202,13 @@ internal class KotlinPluginTest : Spek({
 			assertThat(result.output).contains("Ruleset: comments")
 			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 
-			// Asserts that the "custom" module is not built, and that custom ruleset is not enabled
-			assertThat(result.output).doesNotContain("Ruleset: test-custom")
-			assertThat(File(rootDir, "custom/build")).doesNotExist()
+			assertThat(File(rootDir, "build/xml/detekt.xml")).exists()
+			assertThat(File(rootDir, "build/html/detekt.html")).exists()
 		}
-		it("can configure reports using the extension") {
-			val rootDir = createTempDir(prefix = "applyPlugin")
-
+		it("can configure reports base directory") {
 			val detektConfig = """
 					|detekt {
-					|	toolVersion = "1.0.0-GRADLE"
-					|	reports {
-					|		xml.enabled = true
-					|		xml.destination = "build/reports/detekt.xml"
-					|		html.enabled = true
-					|		html.destination = "build/reports/detekt.html"
-					|	}
+					|	reportsDir = file("build/my-reports")
 					|}
 				"""
 
@@ -208,15 +224,37 @@ internal class KotlinPluginTest : Spek({
 					.build()
 
 			assertThat(result.output).contains("number of classes: 1")
-			assertThat(result.output).contains("Ruleset: comments")
 			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 
-			// Asserts that the "custom" module is not built, and that custom ruleset is not enabled
-			assertThat(result.output).doesNotContain("Ruleset: test-custom")
-			assertThat(File(rootDir, "custom/build")).doesNotExist()
+			assertThat(File(rootDir, "build/my-reports/detekt.xml")).exists()
+			assertThat(File(rootDir, "build/my-reports/detekt.html")).exists()
+		}
+		it("can configure the input directory") {
+			val customSourceLocation = "gensrc/kotlin"
+			val detektConfig = """
+					|detekt {
+					|	input = files("$customSourceLocation")
+					|}
+				"""
+
+			writeFiles(rootDir, detektConfig, customSourceLocation)
+			writeConfig(rootDir)
+			writeBaseline(rootDir)
+
+			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
+			val result = GradleRunner.create()
+					.withProjectDir(rootDir)
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
+					.withPluginClasspath()
+					.build()
+
+			assertThat(result.output).contains("number of classes: 1")
+			assertThat(result.output).contains("--input $rootDir/$customSourceLocation")
+			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 		}
 	}
 })
+
 // build.gradle.kts
 private fun getBuildFileContent(detektConfig: String) = """
 	|import io.gitlab.arturbosch.detekt.detekt
@@ -241,10 +279,10 @@ private val ktFileContent = """
 	|
 	""".trimMargin()
 
-private fun writeFiles(root: File, detektConfig: String) {
+private fun writeFiles(root: File, detektConfig: String, sourceDir: String = "src/main/java") {
 	File(root, "build.gradle.kts").writeText(getBuildFileContent(detektConfig))
-	File(root, "src/main/java").mkdirs()
-	File(root, "src/main/java/MyClass.kt").writeText(ktFileContent)
+	File(root, sourceDir).mkdirs()
+	File(root, "$sourceDir/MyClass.kt").writeText(ktFileContent)
 }
 
 private fun writeConfig(root: File) {
