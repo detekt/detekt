@@ -24,8 +24,8 @@ class DetektPlugin : Plugin<Project> {
 
 		val detektTask = createAndConfigureDetektTask(project, extension)
 		createAndConfigureCreateBaselineTask(project, extension)
+		createAndConfigureGenerateConfigTask(project, extension)
 
-		project.tasks.create(GENERATE_CONFIG, DetektGenerateConfigTask::class.java) { detekt = detektTask }
 		project.tasks.create(IDEA_FORMAT, DetektIdeaFormatTask::class.java) { detekt = detektTask }
 		project.tasks.create(IDEA_INSPECT, DetektIdeaInspectionTask::class.java) { detekt = detektTask }
 	}
@@ -66,14 +66,20 @@ class DetektPlugin : Plugin<Project> {
 
 	private fun createAndConfigureCreateBaselineTask(project: Project, extension: DetektExtension) =
 			project.tasks.createLater(BASELINE, DetektCreateBaselineTask::class.java) {
-				val task = this
-				task.baseline = extension.baselineProperty
-				task.debug = extension.debugProperty
-				task.parallel = extension.parallelProperty
-				task.disableDefaultRuleSets = extension.disableDefaultRuleSetsProperty
-				task.filters = extension.filtersProperty
-				task.config = extension.configProperty
-				task.input.set(project.provider {
+				baseline = extension.baselineProperty
+				debug = extension.debugProperty
+				parallel = extension.parallelProperty
+				disableDefaultRuleSets = extension.disableDefaultRuleSetsProperty
+				filters = extension.filtersProperty
+				config = extension.configProperty
+				input.set(project.provider {
+					extension.input ?: extension.defaultSourceDirectories.filter { it.exists() }
+				})
+			}
+
+	private fun createAndConfigureGenerateConfigTask(project: Project, extension: DetektExtension) =
+			project.tasks.createLater(GENERATE_CONFIG, DetektGenerateConfigTask::class.java) {
+				input.set(project.provider {
 					extension.input ?: extension.defaultSourceDirectories.filter { it.exists() }
 				})
 			}

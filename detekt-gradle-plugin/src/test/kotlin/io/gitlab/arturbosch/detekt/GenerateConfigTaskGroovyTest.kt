@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt
 
-
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
@@ -9,22 +8,16 @@ import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import java.io.File
 
-/**
- * @author Markus Schwarz
- */
-internal class CreateBaselineTaskGroovyDslTest : Spek({
+class GenerateConfigTaskGroovyTest : Spek({
 
-	describe("The detektBaseline task of the Detekt Gradle plugin") {
+	describe("The generate config task of the Detekt Gradle plugin") {
 		lateinit var rootDir: File
 		beforeEachTest {
 			rootDir = createTempDir(prefix = "applyPlugin")
 		}
-		it("can be executed when baseline file is specified") {
+		it("can be executed without any configuration") {
 
 			val detektConfig = """
-				|detekt {
-    			| 	baseline = file("build/detekt/baseline.xml")
-				|}
 				"""
 
 			writeFiles(rootDir, detektConfig)
@@ -32,16 +25,13 @@ internal class CreateBaselineTaskGroovyDslTest : Spek({
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
 					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "detektBaseline", "--stacktrace", "--info")
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "detektGenerateConfig", "--stacktrace", "--info")
 					.withPluginClasspath()
 					.build()
 
-			assertThat(result.output).contains("number of classes: 1")
-			assertThat(result.output).contains("Ruleset: comments")
-			assertThat(result.task(":detektBaseline")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-			assertThat(File(rootDir, "build/detekt/baseline.xml")).exists()
+			assertThat(result.task(":detektGenerateConfig")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+			assertThat(File(rootDir, "default-detekt-config.yml")).exists()
 		}
-
 	}
 })
 
@@ -73,3 +63,4 @@ private fun writeFiles(root: File, detektConfiguration: String) {
 	File(root, "src/main/java").mkdirs()
 	File(root, "src/main/java/MyClass.kt").writeText(ktFileContent)
 }
+

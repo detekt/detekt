@@ -20,6 +20,14 @@ internal sealed class CliArgument {
 	abstract fun toArgument(): List<String>
 }
 
+internal class CreateBaselineArgument : CliArgument() {
+	override fun toArgument() = listOf(CREATE_BASELINE_PARAMETER)
+}
+
+internal class GenerateConfigArgument : CliArgument() {
+	override fun toArgument() = listOf(GENERATE_CONFIG_PARAMETER)
+}
+
 internal data class InputArgument(val fileCollection: FileCollection) : CliArgument() {
 	override fun toArgument() = listOf(INPUT_PARAMETER, fileCollection.asPath)
 }
@@ -34,10 +42,6 @@ internal data class PluginsArgument(val plugins: String?) : CliArgument() {
 
 internal data class BaselineArgument(val baseline: File?) : CliArgument() {
 	override fun toArgument() = baseline?.let { listOf(BASELINE_PARAMETER, it.absolutePath) } ?: emptyList()
-}
-
-internal class CreateBaselineArgument : CliArgument() {
-	override fun toArgument() = listOf(CREATE_BASELINE_PARAMETER)
 }
 
 internal data class XmlReportArgument(val file: File?) : CliArgument() {
