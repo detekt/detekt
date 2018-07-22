@@ -8,7 +8,7 @@
 - Use idea-code-style.xml for coding style .
 - We use [Spek](https://github.com/spekframework/spek) for testing.
 - Feel free to add your name to the contributors list at the end of the readme file when opening a pull request.
-- The code in `detekt-api`and any rule in `detekt-rules` must be documented. We generate documentation for our website based on this modules.
+- The code in `detekt-api` and any rule in `detekt-rules` must be documented. We generate documentation for our website based on this modules.
 
 ### Specific code style rules we use
 
