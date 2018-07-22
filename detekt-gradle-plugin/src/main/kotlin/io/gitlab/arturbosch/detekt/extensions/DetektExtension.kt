@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.extensions
 import org.gradle.api.Project
 import org.gradle.api.file.FileCollection
 import org.gradle.api.plugins.quality.CodeQualityExtension
-import org.gradle.api.provider.Property
 import org.gradle.api.reporting.ReportingExtension
 import java.io.File
 
@@ -21,41 +20,26 @@ open class DetektExtension(project: Project) : CodeQualityExtension() {
 	val reports = project.extensions.create("reports", DetektReportsExtension::class.java, project)
 	val idea: IdeaExtension = project.extensions.create("idea", IdeaExtension::class.java)
 
-	val inputProperty: Property<FileCollection> = project.objects.property(FileCollection::class.java)
-	var input: FileCollection?
-		get() = inputProperty.orNull
-		set(value) = inputProperty.set(value)
+	var input: FileCollection? = null
 
-	val baselineProperty: Property<File> = project.objects.property(File::class.java)
-	var baseline: File?
-		get() = baselineProperty.orNull
-		set(value) = baselineProperty.set(value)
+	var baseline: File? = null
 
-	val configProperty: Property<File> = project.objects.property(File::class.java)
-	var config: File?
-		get() = configProperty.orNull
-		set(value) = configProperty.set(value)
+	var config: File? = null
 
-	open var debug: Boolean = DEFAULT_DEBUG_VALUE
+	var debug: Boolean = DEFAULT_DEBUG_VALUE
 
-	open var parallel: Boolean = DEFAULT_PARALLEL_VALUE
+	var parallel: Boolean = DEFAULT_PARALLEL_VALUE
 
-	open var disableDefaultRuleSets: Boolean = DEFAULT_DISABLE_RULESETS_VALUE
+	var disableDefaultRuleSets: Boolean = DEFAULT_DISABLE_RULESETS_VALUE
 
-	var filtersProperty: Property<String> = project.objects.property(String::class.java)
-	var filters: String?
-		get() = filtersProperty.orNull
-		set(value) = filtersProperty.set(value)
+	var filters: String? = null
 
-	var pluginsProperty: Property<String> = project.objects.property(String::class.java)
-	var plugins: String?
-		get() = pluginsProperty.orNull
-		set(value) = pluginsProperty.set(value)
+	var plugins: String? = null
 }
 
 open class DetektReportsExtension(project: Project) {
-	val xml = project.extensions.create("xml", DetektReportExtension::class.java, project)
-	val html = project.extensions.create("html", DetektReportExtension::class.java, project)
+	val xml = project.extensions.create("xml", DetektReportExtension::class.java)
+	val html = project.extensions.create("html", DetektReportExtension::class.java)
 	fun withName(name: String) = when (name.toLowerCase()) {
 		"xml" -> xml
 		"html" -> html
@@ -63,17 +47,13 @@ open class DetektReportsExtension(project: Project) {
 	}
 }
 
-open class DetektReportExtension(project: Project) {
+open class DetektReportExtension {
 
-	open var enabled: Boolean = DEFAULT_REPORT_ENABLED_VALUE
+	var enabled: Boolean = DEFAULT_REPORT_ENABLED_VALUE
 
 	/**
 	 * destination of the output - relative to the project root
 	 */
-	val destinationProperty: Property<File> = project.objects.property(File::class.java)
-	var destination: File?
-		get() = destinationProperty.orNull
-		set(value) = destinationProperty.set(value)
-
+	var destination: File? = null
 }
 

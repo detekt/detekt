@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.invoke.GenerateConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileCollection
-import org.gradle.api.provider.Property
 import org.gradle.api.tasks.*
 
 /**
@@ -23,12 +22,12 @@ open class DetektGenerateConfigTask : DefaultTask() {
 	@InputFiles
 	@PathSensitive(PathSensitivity.RELATIVE)
 	@SkipWhenEmpty
-	val input: Property<FileCollection> = project.objects.property(FileCollection::class.java)
+	lateinit var input: FileCollection
 
 	@TaskAction
 	fun generateConfig() {
 		val arguments = mutableListOf<CliArgument>(GenerateConfigArgument()) +
-				InputArgument(input.get())
+				InputArgument(input)
 
 		DetektInvoker.invokeCli(project, arguments.toList())
 	}

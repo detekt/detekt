@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt
 import io.gitlab.arturbosch.detekt.invoke.*
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileCollection
-import org.gradle.api.provider.Property
 import org.gradle.api.tasks.*
 import java.io.File
 
@@ -20,25 +19,25 @@ open class DetektCreateBaselineTask : DefaultTask() {
 
 	@OutputFile
 	@PathSensitive(PathSensitivity.ABSOLUTE)
-	var baseline: Property<File> = project.objects.property(File::class.java)
+	var baseline: File? = null
 
 	@InputFiles
 	@PathSensitive(PathSensitivity.RELATIVE)
 	@SkipWhenEmpty
-	val input: Property<FileCollection> = project.objects.property(FileCollection::class.java)
+	lateinit var input: FileCollection
 
 	@Input
 	@Optional
-	var filters: Property<String> = project.objects.property(String::class.java)
+	var filters: String? = null
 
 	@InputFile
 	@Optional
 	@PathSensitive(PathSensitivity.ABSOLUTE)
-	var config: Property<File> = project.objects.property(File::class.java)
+	var config: File? = null
 
 	@Input
 	@Optional
-	val plugins: Property<String?> = project.objects.property(String::class.java)
+	var plugins: String? = null
 
 	@Internal
 	@Optional
@@ -52,14 +51,15 @@ open class DetektCreateBaselineTask : DefaultTask() {
 	@Optional
 	var disableDefaultRuleSetsOrDefault: Boolean = false
 
+
 	@TaskAction
 	fun baseline() {
 		val arguments = mutableListOf<CliArgument>(CreateBaselineArgument()) +
-				BaselineArgument(baseline.get()) +
-				InputArgument(input.get()) +
-				FiltersArgument(filters.orNull) +
-				ConfigArgument(config.orNull) +
-				PluginsArgument(plugins.orNull) +
+				BaselineArgument(baseline) +
+				InputArgument(input) +
+				FiltersArgument(filters) +
+				ConfigArgument(config) +
+				PluginsArgument(plugins) +
 				DebugArgument(debugOrDefault) +
 				ParallelArgument(parallelOrDefault) +
 				DisableDefaultRulesetArgument(disableDefaultRuleSetsOrDefault)

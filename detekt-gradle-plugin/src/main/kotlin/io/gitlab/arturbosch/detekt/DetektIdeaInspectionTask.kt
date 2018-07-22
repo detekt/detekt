@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.extensions.IdeaExtension
 import io.gitlab.arturbosch.detekt.invoke.ProcessExecutor
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileCollection
-import org.gradle.api.provider.Property
 import org.gradle.api.tasks.*
 
 /**
@@ -21,7 +20,7 @@ open class DetektIdeaInspectionTask : DefaultTask() {
 	@InputFiles
 	@PathSensitive(PathSensitivity.RELATIVE)
 	@SkipWhenEmpty
-	val input: Property<FileCollection> = project.objects.property(FileCollection::class.java)
+	lateinit var input: FileCollection
 
 	@Internal
 	@Optional
@@ -34,6 +33,6 @@ open class DetektIdeaInspectionTask : DefaultTask() {
 		if (debugOrDefault) println("Running inspection task in debug mode")
 
 		if (debugOrDefault) println("$ideaExtension")
-		ProcessExecutor.startProcess(ideaExtension.inspectArgs(input.get().asPath))
+		ProcessExecutor.startProcess(ideaExtension.inspectArgs(input.asPath))
 	}
 }

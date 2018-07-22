@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.invoke.*
 import org.gradle.api.Action
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileCollection
-import org.gradle.api.provider.Property
 import org.gradle.api.reporting.Reporting
 import org.gradle.api.tasks.*
 import org.gradle.util.ConfigureUtil
@@ -28,25 +27,25 @@ open class Detekt : DefaultTask(), Reporting<DetektReports> {
 	@InputFiles
 	@PathSensitive(PathSensitivity.RELATIVE)
 	@SkipWhenEmpty
-	val input: Property<FileCollection> = project.objects.property(FileCollection::class.java)
+	lateinit var input: FileCollection
 
 	@Input
 	@Optional
-	var filters: Property<String> = project.objects.property(String::class.java)
+	var filters: String? = null
 
 	@InputFile
 	@Optional
 	@PathSensitive(PathSensitivity.ABSOLUTE)
-	var baseline: Property<File> = project.objects.property(File::class.java)
+	var baseline: File? = null
 
 	@InputFile
 	@Optional
 	@PathSensitive(PathSensitivity.ABSOLUTE)
-	var config: Property<File> = project.objects.property(File::class.java)
+	var config: File? = null
 
 	@Input
 	@Optional
-	val plugins: Property<String?> = project.objects.property(String::class.java)
+	var plugins: String? = null
 
 	@Internal
 	@Optional
@@ -73,11 +72,11 @@ open class Detekt : DefaultTask(), Reporting<DetektReports> {
 	@TaskAction
 	fun check() {
 		val arguments = mutableListOf<CliArgument>() +
-				InputArgument(input.get()) +
-				FiltersArgument(filters.orNull) +
-				ConfigArgument(config.orNull) +
-				PluginsArgument(plugins.orNull) +
-				BaselineArgument(baseline.orNull) +
+				InputArgument(input) +
+				FiltersArgument(filters) +
+				ConfigArgument(config) +
+				PluginsArgument(plugins) +
+				BaselineArgument(baseline) +
 				XmlReportArgument(xmlReportFile) +
 				HtmlReportArgument(htmlReportFile) +
 				DebugArgument(debugOrDefault) +

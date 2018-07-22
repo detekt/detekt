@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.file.FileCollection
 import org.gradle.api.plugins.JavaBasePlugin
 import org.gradle.api.plugins.ReportingBasePlugin
 import java.io.File
@@ -33,10 +34,11 @@ class DetektPlugin : Plugin<Project> {
 			debugOrDefault = extension.debug
 			parallelOrDefault = extension.parallel
 			disableDefaultRuleSetsOrDefault = extension.disableDefaultRuleSets
-			filters = extension.filtersProperty
-			config = extension.configProperty
-			baseline = extension.baselineProperty
-			input.set(inputProvider(project, extension))
+			filters = extension.filters
+			config = extension.config
+			baseline = extension.baseline
+			plugins = extension.plugins
+			input = determineInput(extension)
 			reports.all {
 				extension.reports.withName(name)?.let {
 					val reportExtension = it
@@ -54,38 +56,37 @@ class DetektPlugin : Plugin<Project> {
 
 	private fun createAndConfigureCreateBaselineTask(project: Project, extension: DetektExtension) =
 			project.tasks.createLater(BASELINE, DetektCreateBaselineTask::class.java) {
-				baseline = extension.baselineProperty
+				baseline = extension.baseline
 				debugOrDefault = extension.debug
 				parallelOrDefault = extension.parallel
 				disableDefaultRuleSetsOrDefault = extension.disableDefaultRuleSets
-				filters = extension.filtersProperty
-				config = extension.configProperty
-				input.set(inputProvider(project, extension))
+				filters = extension.filters
+				config = extension.config
+				plugins = extension.plugins
+				input = determineInput(extension)
 			}
 
 	private fun createAndConfigureGenerateConfigTask(project: Project, extension: DetektExtension) =
 			project.tasks.createLater(GENERATE_CONFIG, DetektGenerateConfigTask::class.java) {
-				input.set(inputProvider(project, extension))
+				input = determineInput(extension)
 			}
 
 	private fun createAndConfigureIdeaTasks(project: Project, extension: DetektExtension) {
 		project.tasks.createLater(IDEA_FORMAT, DetektIdeaFormatTask::class.java) {
 			debugOrDefault = extension.debug
-			input.set(inputProvider(project, extension))
+			input = determineInput(extension)
 			ideaExtension = extension.idea
 		}
 
 		project.tasks.createLater(IDEA_INSPECT, DetektIdeaInspectionTask::class.java) {
 			debugOrDefault = extension.debug
-			input.set(inputProvider(project, extension))
+			input = determineInput(extension)
 			ideaExtension = extension.idea
 		}
 	}
 
-	private fun inputProvider(project: Project, extension: DetektExtension) =
-			project.provider {
-				extension.input ?: extension.defaultSourceDirectories.filter { it.exists() }
-			}
+	private fun determineInput(extension: DetektExtension): FileCollection =
+			extension.input ?: extension.defaultSourceDirectories.filter { it.exists() }
 
 	private fun configurePluginDependencies(project: Project, extension: DetektExtension) =
 			project.configurations.create(DETEKT) {
