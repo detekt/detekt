@@ -37,7 +37,7 @@ open class Detekt : DefaultTask(), Reporting<DetektReports> {
 	@InputFile
 	@Optional
 	@PathSensitive(PathSensitivity.ABSOLUTE)
-	val baseline: Property<File> = project.objects.property(File::class.java)
+	var baseline: Property<File> = project.objects.property(File::class.java)
 
 	@InputFile
 	@Optional

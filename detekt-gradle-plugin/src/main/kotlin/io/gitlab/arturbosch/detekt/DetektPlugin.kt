@@ -23,9 +23,9 @@ class DetektPlugin : Plugin<Project> {
 		configurePluginDependencies(project, extension)
 
 		val detektTask = createAndConfigureDetektTask(project, extension)
+		createAndConfigureCreateBaselineTask(project, extension)
 
 		project.tasks.create(GENERATE_CONFIG, DetektGenerateConfigTask::class.java) { detekt = detektTask }
-		project.tasks.create(BASELINE, DetektCreateBaselineTask::class.java) { detekt = detektTask }
 		project.tasks.create(IDEA_FORMAT, DetektIdeaFormatTask::class.java) { detekt = detektTask }
 		project.tasks.create(IDEA_INSPECT, DetektIdeaInspectionTask::class.java) { detekt = detektTask }
 	}
@@ -38,6 +38,7 @@ class DetektPlugin : Plugin<Project> {
 			detekt.disableDefaultRuleSets = extension.disableDefaultRuleSetsProperty
 			detekt.filters = extension.filtersProperty
 			detekt.config = extension.configProperty
+			detekt.baseline = extension.baselineProperty
 			detekt.input.set(project.provider {
 				extension.input ?: extension.defaultSourceDirectories.filter { it.exists() }
 			})
@@ -63,22 +64,35 @@ class DetektPlugin : Plugin<Project> {
 		return detektTask
 	}
 
+	private fun createAndConfigureCreateBaselineTask(project: Project, extension: DetektExtension) =
+			project.tasks.createLater(BASELINE, DetektCreateBaselineTask::class.java) {
+				val task = this
+				task.baseline = extension.baselineProperty
+				task.debug = extension.debugProperty
+				task.parallel = extension.parallelProperty
+				task.disableDefaultRuleSets = extension.disableDefaultRuleSetsProperty
+				task.filters = extension.filtersProperty
+				task.config = extension.configProperty
+				task.input.set(project.provider {
+					extension.input ?: extension.defaultSourceDirectories.filter { it.exists() }
+				})
+			}
+
 	private fun configurePluginDependencies(project: Project, extension: DetektExtension) =
 			project.configurations.create(DETEKT) {
-			isVisible = false
-			isTransitive = true
-			description = "The $DETEKT libraries to be used for this project."
-			defaultDependencies {
-				val version = extension.toolVersion ?: DEFAULT_DETEKT_VERSION
-				add(project.dependencies.create("io.gitlab.arturbosch.detekt:detekt-cli:$version"))
+				isVisible = false
+				isTransitive = true
+				description = "The $DETEKT libraries to be used for this project."
+				defaultDependencies {
+					val version = extension.toolVersion ?: DEFAULT_DETEKT_VERSION
+					add(project.dependencies.create("io.gitlab.arturbosch.detekt:detekt-cli:$version"))
+				}
 			}
-		}
 
 
 	companion object {
 		private const val DEFAULT_DETEKT_VERSION = "1.0.0-GRADLE"
 		private const val DETEKT = "detekt"
-		private const val DETEKT_TASK_NAME = "detektMain"
 		private const val IDEA_FORMAT = "detektIdeaFormat"
 		private const val IDEA_INSPECT = "detektIdeaInspect"
 		private const val GENERATE_CONFIG = "detektGenerateConfig"

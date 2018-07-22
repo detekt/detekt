@@ -36,6 +36,10 @@ internal data class BaselineArgument(val baseline: File?) : CliArgument() {
 	override fun toArgument() = baseline?.let { listOf(BASELINE_PARAMETER, it.absolutePath) } ?: emptyList()
 }
 
+internal class CreateBaselineArgument : CliArgument() {
+	override fun toArgument() = listOf(CREATE_BASELINE_PARAMETER)
+}
+
 internal data class XmlReportArgument(val file: File?) : CliArgument() {
 	override fun toArgument() = file?.let { listOf(REPORT_XML_PARAMETER, it.absolutePath) } ?: emptyList()
 }
