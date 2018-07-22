@@ -139,7 +139,7 @@ subprojects {
 				asNode().apply {
 					appendNode("description", "Static code analysis for Kotlin")
 					appendNode("name", "detekt")
-					appendNode("url", "https://github.com/arturbosch/detekt")
+					appendNode("url", "https://arturbosch.github.io/detekt")
 
 					val license = appendNode("licenses").appendNode("license")
 					license.appendNode("name", "The Apache Software License, Version 2.0")
