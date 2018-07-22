@@ -18,8 +18,8 @@ open class DetektExtension(project: Project) : CodeQualityExtension() {
 			.dir("detekt").asFile
 	val defaultSourceDirectories = project.files("src/main/java", "src/main/kotlin")
 
-	val reports = project.extensions.create("detektReports", DetektReportsExtension::class.java, project)
-	val ideaExtension: IdeaExtension = project.extensions.create("reports", IdeaExtension::class.java)
+	val reports = project.extensions.create("reports", DetektReportsExtension::class.java, project)
+	val idea: IdeaExtension = project.extensions.create("idea", IdeaExtension::class.java)
 
 	val inputProperty: Property<FileCollection> = project.objects.property(FileCollection::class.java)
 	var input: FileCollection?

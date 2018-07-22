@@ -3,8 +3,9 @@ package io.gitlab.arturbosch.detekt
 import io.gitlab.arturbosch.detekt.extensions.IdeaExtension
 import io.gitlab.arturbosch.detekt.invoke.ProcessExecutor.startProcess
 import org.gradle.api.DefaultTask
-import org.gradle.api.GradleException
-import org.gradle.api.tasks.TaskAction
+import org.gradle.api.file.FileCollection
+import org.gradle.api.provider.Property
+import org.gradle.api.tasks.*
 
 /**
  * @author Artur Bosch
@@ -12,21 +13,30 @@ import org.gradle.api.tasks.TaskAction
  */
 open class DetektIdeaFormatTask : DefaultTask() {
 
-	lateinit var detekt: Detekt
-	var ideaExtension: IdeaExtension? = null
-
 	init {
 		description = "Uses an external idea installation to format your code."
 		group = "verification"
 	}
 
+	@InputFiles
+	@PathSensitive(PathSensitivity.RELATIVE)
+	@SkipWhenEmpty
+	val input: Property<FileCollection> = project.objects.property(FileCollection::class.java)
+
+	@Internal
+	@Optional
+	lateinit var debug: Property<java.lang.Boolean>
+	val debugOrDefault: Boolean
+		@Internal
+		@Optional
+		get() = debug.get().booleanValue()
+
+	lateinit var ideaExtension: IdeaExtension
+
 	@TaskAction
 	fun format() {
-		if (ideaExtension == null) {
-			throw GradleException("idea extension is not defined. It is required to run detekt idea tasks.")
-		}
+		if (debugOrDefault) println("$ideaExtension")
 
-		if (detekt.debugOrDefault) println("$ideaExtension")
-		startProcess(ideaExtension!!.formatArgs(detekt.input.get().asPath))
+		startProcess(ideaExtension.formatArgs(input.get().asPath))
 	}
 }

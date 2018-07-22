@@ -22,27 +22,23 @@ class DetektPlugin : Plugin<Project> {
 
 		configurePluginDependencies(project, extension)
 
-		val detektTask = createAndConfigureDetektTask(project, extension)
+		createAndConfigureDetektTask(project, extension)
 		createAndConfigureCreateBaselineTask(project, extension)
 		createAndConfigureGenerateConfigTask(project, extension)
 
-		project.tasks.create(IDEA_FORMAT, DetektIdeaFormatTask::class.java) { detekt = detektTask }
-		project.tasks.create(IDEA_INSPECT, DetektIdeaInspectionTask::class.java) { detekt = detektTask }
+		createAndConfigureIdeaTasks(project, extension)
 	}
 
-	private fun createAndConfigureDetektTask(project: Project, extension: DetektExtension): Detekt {
+	private fun createAndConfigureDetektTask(project: Project, extension: DetektExtension) {
 		val detektTask = project.tasks.create(DETEKT, Detekt::class.java) {
 			val detekt = this
-			detekt.debug = extension.debugProperty
-			detekt.parallel = extension.parallelProperty
-			detekt.disableDefaultRuleSets = extension.disableDefaultRuleSetsProperty
-			detekt.filters = extension.filtersProperty
-			detekt.config = extension.configProperty
-			detekt.baseline = extension.baselineProperty
-			detekt.input.set(project.provider {
-				extension.input ?: extension.defaultSourceDirectories.filter { it.exists() }
-			})
-
+			debug = extension.debugProperty
+			parallel = extension.parallelProperty
+			disableDefaultRuleSets = extension.disableDefaultRuleSetsProperty
+			filters = extension.filtersProperty
+			config = extension.configProperty
+			baseline = extension.baselineProperty
+			input.set(inputProvider(project, extension))
 			project.tasks.getByNameLater(Task::class.java, JavaBasePlugin.CHECK_TASK_NAME).configure {
 				dependsOn(detekt)
 			}
@@ -60,8 +56,6 @@ class DetektPlugin : Plugin<Project> {
 				}
 			}
 		}
-
-		return detektTask
 	}
 
 	private fun createAndConfigureCreateBaselineTask(project: Project, extension: DetektExtension) =
@@ -72,16 +66,31 @@ class DetektPlugin : Plugin<Project> {
 				disableDefaultRuleSets = extension.disableDefaultRuleSetsProperty
 				filters = extension.filtersProperty
 				config = extension.configProperty
-				input.set(project.provider {
-					extension.input ?: extension.defaultSourceDirectories.filter { it.exists() }
-				})
+				input.set(inputProvider(project, extension))
 			}
 
 	private fun createAndConfigureGenerateConfigTask(project: Project, extension: DetektExtension) =
 			project.tasks.createLater(GENERATE_CONFIG, DetektGenerateConfigTask::class.java) {
-				input.set(project.provider {
-					extension.input ?: extension.defaultSourceDirectories.filter { it.exists() }
-				})
+				input.set(inputProvider(project, extension))
+			}
+
+	private fun createAndConfigureIdeaTasks(project: Project, extension: DetektExtension) {
+		project.tasks.createLater(IDEA_FORMAT, DetektIdeaFormatTask::class.java) {
+			debug = extension.debugProperty
+			input.set(inputProvider(project, extension))
+			ideaExtension = extension.idea
+		}
+
+		project.tasks.createLater(IDEA_INSPECT, DetektIdeaInspectionTask::class.java) {
+			debug = extension.debugProperty
+			input.set(inputProvider(project, extension))
+			ideaExtension = extension.idea
+		}
+	}
+
+	private fun inputProvider(project: Project, extension: DetektExtension) =
+			project.provider {
+				extension.input ?: extension.defaultSourceDirectories.filter { it.exists() }
 			}
 
 	private fun configurePluginDependencies(project: Project, extension: DetektExtension) =
