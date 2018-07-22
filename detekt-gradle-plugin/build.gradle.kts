@@ -16,7 +16,7 @@ plugins {
 	kotlin("jvm") version "1.2.41"
 }
 
-group = "io.gitlab.arturbosch"
+group = "io.gitlab.arturbosch.detekt"
 version = "1.0.0.RC7-3"
 
 val spekVersion = "1.1.5"
