@@ -25,11 +25,7 @@ open class DetektIdeaFormatTask : DefaultTask() {
 
 	@Internal
 	@Optional
-	lateinit var debug: Property<java.lang.Boolean>
-	val debugOrDefault: Boolean
-		@Internal
-		@Optional
-		get() = debug.get().booleanValue()
+	var debugOrDefault: Boolean = false
 
 	lateinit var ideaExtension: IdeaExtension
 

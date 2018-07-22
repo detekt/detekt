@@ -42,28 +42,15 @@ open class DetektCreateBaselineTask : DefaultTask() {
 
 	@Internal
 	@Optional
-	lateinit var debug: Property<java.lang.Boolean>
-	val debugOrDefault: Boolean
-		@Internal
-		@Optional
-		get() = debug.get().booleanValue()
+	var debugOrDefault: Boolean = false
 
 	@Internal
 	@Optional
-	lateinit var parallel: Property<java.lang.Boolean>
-	val parallelOrDefault: Boolean
-		@Internal
-		@Optional
-		get() = parallel.get().booleanValue()
+	var parallelOrDefault: Boolean = false
 
 	@Internal
 	@Optional
-	lateinit var disableDefaultRuleSets: Property<java.lang.Boolean>
-	val disableDefaultRuleSetsOrDefault: Boolean
-		@Internal
-		@Optional
-		get() = disableDefaultRuleSets.get().booleanValue()
-
+	var disableDefaultRuleSetsOrDefault: Boolean = false
 
 	@TaskAction
 	fun baseline() {

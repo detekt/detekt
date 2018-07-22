@@ -30,9 +30,9 @@ class DetektPlugin : Plugin<Project> {
 
 	private fun createAndConfigureDetektTask(project: Project, extension: DetektExtension) {
 		val detektTask = project.tasks.createLater(DETEKT, Detekt::class.java) {
-			debug = extension.debugProperty
-			parallel = extension.parallelProperty
-			disableDefaultRuleSets = extension.disableDefaultRuleSetsProperty
+			debugOrDefault = extension.debug
+			parallelOrDefault = extension.parallel
+			disableDefaultRuleSetsOrDefault = extension.disableDefaultRuleSets
 			filters = extension.filtersProperty
 			config = extension.configProperty
 			baseline = extension.baselineProperty
@@ -55,9 +55,9 @@ class DetektPlugin : Plugin<Project> {
 	private fun createAndConfigureCreateBaselineTask(project: Project, extension: DetektExtension) =
 			project.tasks.createLater(BASELINE, DetektCreateBaselineTask::class.java) {
 				baseline = extension.baselineProperty
-				debug = extension.debugProperty
-				parallel = extension.parallelProperty
-				disableDefaultRuleSets = extension.disableDefaultRuleSetsProperty
+				debugOrDefault = extension.debug
+				parallelOrDefault = extension.parallel
+				disableDefaultRuleSetsOrDefault = extension.disableDefaultRuleSets
 				filters = extension.filtersProperty
 				config = extension.configProperty
 				input.set(inputProvider(project, extension))
@@ -70,13 +70,13 @@ class DetektPlugin : Plugin<Project> {
 
 	private fun createAndConfigureIdeaTasks(project: Project, extension: DetektExtension) {
 		project.tasks.createLater(IDEA_FORMAT, DetektIdeaFormatTask::class.java) {
-			debug = extension.debugProperty
+			debugOrDefault = extension.debug
 			input.set(inputProvider(project, extension))
 			ideaExtension = extension.idea
 		}
 
 		project.tasks.createLater(IDEA_INSPECT, DetektIdeaInspectionTask::class.java) {
-			debug = extension.debugProperty
+			debugOrDefault = extension.debug
 			input.set(inputProvider(project, extension))
 			ideaExtension = extension.idea
 		}

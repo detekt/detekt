@@ -36,20 +36,11 @@ open class DetektExtension(project: Project) : CodeQualityExtension() {
 		get() = configProperty.orNull
 		set(value) = configProperty.set(value)
 
-	val debugProperty: Property<java.lang.Boolean> = project.objects.property(java.lang.Boolean::class.java)
-	var debug: Boolean
-		get() = debugProperty.orNull?.booleanValue() ?: DEFAULT_DEBUG_VALUE
-		set(value) = debugProperty.set(java.lang.Boolean(value))
+	open var debug: Boolean = DEFAULT_DEBUG_VALUE
 
-	val parallelProperty: Property<java.lang.Boolean> = project.objects.property(java.lang.Boolean::class.java)
-	var parallel: Boolean
-		get() = parallelProperty.orNull?.booleanValue() ?: DEFAULT_PARALLEL_VALUE
-		set(value) = parallelProperty.set(java.lang.Boolean(value))
+	open var parallel: Boolean = DEFAULT_PARALLEL_VALUE
 
-	val disableDefaultRuleSetsProperty: Property<java.lang.Boolean> = project.objects.property(java.lang.Boolean::class.java)
-	var disableDefaultRuleSets: Boolean
-		get() = disableDefaultRuleSetsProperty.orNull?.booleanValue() ?: DEFAULT_DISABLE_RULESETS_VALUE
-		set(value) = disableDefaultRuleSetsProperty.set(java.lang.Boolean(value))
+	open var disableDefaultRuleSets: Boolean = DEFAULT_DISABLE_RULESETS_VALUE
 
 	var filtersProperty: Property<String> = project.objects.property(String::class.java)
 	var filters: String?
