@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt
 
 import groovy.lang.Closure
-import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
+import io.gitlab.arturbosch.detekt.invoke.*
 import org.gradle.api.Action
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileCollection
@@ -72,21 +72,30 @@ open class Detekt : DefaultTask(), Reporting<DetektReports> {
 		@Optional
 		get() = disableDefaultRuleSets.get().booleanValue()
 
-	@OutputFiles
-	fun getOutputFiles(): Map<String, File> {
-		val map = HashMap<String, File>()
+	val xmlReportFile: File?
+		@OutputFile
+		@Optional
+		get() = if (reports.xml.isEnabled) reports.xml.destination else null
 
-		if (reports.xml.isEnabled) {
-			map += "XML" to _reports.xml.destination
-		}
-		if (reports.html.isEnabled) {
-			map += "HTML" to _reports.html.destination
-		}
-		return map
-	}
+	val htmlReportFile: File?
+		@OutputFile
+		@Optional
+		get() = if (reports.html.isEnabled) reports.html.destination else null
 
 	@TaskAction
 	fun check() {
-		DetektInvoker.check(this)
+		val arguments = mutableListOf<CliArgument>() +
+				InputArgument(input.get()) +
+				FiltersArgument(filters.orNull) +
+				ConfigArgument(config.orNull) +
+				PluginsArgument(plugins.orNull) +
+				BaselineArgument(baseline.orNull) +
+				XmlReportArgument(xmlReportFile) +
+				HtmlReportArgument(htmlReportFile) +
+				DebugArgument(debugOrDefault) +
+				ParallelArgument(parallelOrDefault) +
+				DisableDefaultRulesetArgument(disableDefaultRuleSetsOrDefault)
+
+		DetektInvoker.invokeCli(project, arguments.toList(), debugOrDefault)
 	}
 }

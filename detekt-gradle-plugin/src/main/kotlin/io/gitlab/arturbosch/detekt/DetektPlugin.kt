@@ -28,7 +28,6 @@ class DetektPlugin : Plugin<Project> {
 		project.tasks.create(BASELINE, DetektCreateBaselineTask::class.java) { detekt = detektTask }
 		project.tasks.create(IDEA_FORMAT, DetektIdeaFormatTask::class.java) { detekt = detektTask }
 		project.tasks.create(IDEA_INSPECT, DetektIdeaInspectionTask::class.java) { detekt = detektTask }
-
 	}
 
 	private fun createAndConfigureDetektTask(project: Project, extension: DetektExtension): Detekt {
@@ -64,8 +63,8 @@ class DetektPlugin : Plugin<Project> {
 		return detektTask
 	}
 
-	private fun configurePluginDependencies(project: Project, extension: DetektExtension) {
-		project.configurations.create(DETEKT.toLowerCase()) {
+	private fun configurePluginDependencies(project: Project, extension: DetektExtension) =
+			project.configurations.create(DETEKT) {
 			isVisible = false
 			isTransitive = true
 			description = "The $DETEKT libraries to be used for this project."
@@ -74,7 +73,7 @@ class DetektPlugin : Plugin<Project> {
 				add(project.dependencies.create("io.gitlab.arturbosch.detekt:detekt-cli:$version"))
 			}
 		}
-	}
+
 
 	companion object {
 		private const val DEFAULT_DETEKT_VERSION = "1.0.0-GRADLE"
