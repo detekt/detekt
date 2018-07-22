@@ -1,14 +1,11 @@
 package io.gitlab.arturbosch.detekt.sample.extensions
 
-import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.sample.extensions.rules.TooManyFunctions
-import io.gitlab.arturbosch.detekt.test.RuleTest
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
-import org.junit.jupiter.api.Test
 
 /**
  * @author Artur Bosch
@@ -26,17 +23,7 @@ class TooManyFunctionsSpec : SubjectSpek<TooManyFunctions>({
 	}
 })
 
-class TooManyFunctionsTest : RuleTest {
-
-	override val rule: Rule = TooManyFunctions()
-
-	@Test fun findOneFile() {
-		val findings = rule.lint(code)
-		assertThat(findings).hasSize(1)
-	}
-}
-
-val code: String =
+const val code: String =
 		"""
 			class TooManyFunctions : Rule("TooManyFunctions") {
 
