@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.Task
 import org.gradle.api.plugins.JavaBasePlugin
 import org.gradle.api.plugins.ReportingBasePlugin
 import java.io.File
@@ -30,8 +29,7 @@ class DetektPlugin : Plugin<Project> {
 	}
 
 	private fun createAndConfigureDetektTask(project: Project, extension: DetektExtension) {
-		val detektTask = project.tasks.create(DETEKT, Detekt::class.java) {
-			val detekt = this
+		val detektTask = project.tasks.createLater(DETEKT, Detekt::class.java) {
 			debug = extension.debugProperty
 			parallel = extension.parallelProperty
 			disableDefaultRuleSets = extension.disableDefaultRuleSetsProperty
@@ -39,13 +37,7 @@ class DetektPlugin : Plugin<Project> {
 			config = extension.configProperty
 			baseline = extension.baselineProperty
 			input.set(inputProvider(project, extension))
-			project.tasks.getByNameLater(Task::class.java, JavaBasePlugin.CHECK_TASK_NAME).configure {
-				dependsOn(detekt)
-			}
-		}
-
-		project.afterEvaluate {
-			detektTask.reports.all {
+			reports.all {
 				extension.reports.withName(name)?.let {
 					val reportExtension = it
 					isEnabled = reportExtension.enabled
@@ -56,6 +48,8 @@ class DetektPlugin : Plugin<Project> {
 				}
 			}
 		}
+
+		project.tasks.findByName(JavaBasePlugin.CHECK_TASK_NAME)?.dependsOn(detektTask)
 	}
 
 	private fun createAndConfigureCreateBaselineTask(project: Project, extension: DetektExtension) =
