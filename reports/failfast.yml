@@ -101,6 +101,8 @@ style:
     ignorePropertyDeclaration: true
     ignoreAnnotation: true
     ignoreNumbers: '-1,0,1,2,100,1000'
+  NestedClassesVisibility:
+    active: true
   MayBeConst:
     active: true
   SpacingBetweenPackageAndImports:
@@ -112,3 +114,6 @@ style:
     variablePattern: '(_)?[a-z][a-zA-Z0-9]*'
   SpacingBetweenPackageAndImports:
     active: true
+  UnusedPrivateMember:
+    active: true
+    allowedNames: "(_|ignored|expected)"
