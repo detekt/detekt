@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
 import org.jetbrains.spek.api.dsl.given
@@ -16,7 +17,6 @@ class MayBeConstSpec : SubjectSpek<MayBeConst>({
 			subject.lint(code)
 			assertThat(subject.findings).isEmpty()
 		}
-
 
 		it("is const vals in object") {
 			val code = """
@@ -55,6 +55,15 @@ class MayBeConstSpec : SubjectSpek<MayBeConst>({
 			assertThat(subject.findings).isEmpty()
 		}
 
+		it("does not report none const val candidates") {
+			val code = """
+				const val a = 0
+				val p = Pair(a, a + a)
+				val p2 = emptyList<Int>().plus(a)
+				"""
+			subject.lint(code)
+			assertThat(subject.findings).isEmpty()
+		}
 	}
 
 	given("some vals that could be constants") {
@@ -98,13 +107,44 @@ class MayBeConstSpec : SubjectSpek<MayBeConst>({
 	}
 
 	given("vals that can be constants but detekt doesn't handle yet") {
-		it("is a constant expression") {
+		it("is a constant binary expression") {
 			val code = """
 				const val one = 1
-				val two = one * 2 // this is an expression that detekt doesn't support yet
+				val two = one * 2
 				"""
 			subject.lint(code)
-			assertThat(subject.findings).isEmpty() // should be 1
+			assertThat(subject.findings).hasSize(1)
+		}
+
+		it("is a constant binary expression in a companion object") {
+			val code = """
+				class Test {
+					companion object {
+						const val one = 1
+						val two = one * 2
+					}
+				}
+				"""
+			subject.lint(code)
+			assertThat(subject.findings).hasSize(1)
+		}
+
+		it("is a nested constant binary expression") {
+			val code = """
+				const val one = 1
+				val two = one * 2 + 1
+				"""
+			subject.lint(code)
+			assertThat(subject.findings).hasSize(1)
+		}
+
+		it("is a nested constant parenthesised expression") {
+			val code = """
+				const val one = 1
+				val two = one * (2 + 1)
+				"""
+			subject.lint(code)
+			assertThat(subject.findings).hasSize(1)
 		}
 
 		it("reports vals that use other const vals") {
@@ -114,12 +154,21 @@ class MayBeConstSpec : SubjectSpek<MayBeConst>({
 				class Test {
 					companion object {
 						@JvmField
-						val b = a + 1 // this is an expression that detekt doesn't support yet
+						val b = a + 1
 					}
 				}
 				"""
 			subject.lint(code)
-			assertThat(subject.findings).isEmpty() // should be 1
+			assertThat(subject.findings).hasSize(1)
+		}
+
+		it("reports concatenated string vals") {
+			val code = """
+				private const val A = "a"
+				private val B = A + "b"
+				"""
+			subject.lint(code)
+			assertThat(subject.findings).hasSize(1)
 		}
 	}
 
@@ -180,6 +229,26 @@ class MayBeConstSpec : SubjectSpek<MayBeConst>({
 			""".trimMargin()
 			subject.lint(code)
 			assertThat(subject.findings).isEmpty()
+		}
+
+		it("does not detect just a dollar as interpolation") {
+			val code = """ val hasDollar = "$" """
+			subject.lint(code)
+			assertThat(subject.findings).hasSize(1)
+		}
+
+		it("does not report interpolated strings") {
+			subject.lint(Case.MayBeConstNegative.path())
+			assertThat(subject.findings).isEmpty()
+		}
+	}
+
+	given("some const val candidates in nested objects") {
+
+		it("reports the const val candidates") {
+			val path = Case.ConstInObjects.path()
+			subject.lint(path)
+			assertThat(subject.findings).hasSize(3)
 		}
 	}
 })

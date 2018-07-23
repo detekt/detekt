@@ -24,7 +24,7 @@ sealed class YML(open val indent: Int = 0, open var content: String = "") {
 		return spaces
 	}
 }
-data class YamlNode(override val indent: Int = 0, override var content: String = ""): YML()
+data class YamlNode(override val indent: Int = 0, override var content: String = "") : YML()
 
 infix fun Int.times(function: () -> Unit) {
 	var i = this
@@ -38,7 +38,6 @@ inline fun yaml(content: YamlNode.() -> Unit): String {
 		content(yaml)
 		yaml.content
 	}
-
 }
 fun YamlNode.node(name: String, node: YamlNode.() -> Unit) {
 	val yamlNode = YamlNode(indent = indent + 1, content = "$name:")

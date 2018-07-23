@@ -36,9 +36,15 @@ open class KtCompiler {
 		}
 	}
 
-	private fun createKtFile(content: String, path: Path) = psiFileFactory.createFileFromText(
-			path.fileName.toString(), KotlinLanguage.INSTANCE, StringUtilRt.convertLineSeparators(content),
-			true, true, false, LightVirtualFile(path.toString())) as KtFile
+	private fun createKtFile(content: String, path: Path): KtFile {
+		val psiFile = psiFileFactory.createFileFromText(
+				path.fileName.toString(),
+				KotlinLanguage.INSTANCE,
+				StringUtilRt.convertLineSeparators(content),
+				true, true, false,
+				LightVirtualFile(path.toString()))
+		return psiFile as? KtFile ?: throw IllegalStateException("kotlin file expected")
+	}
 
 	private fun String.determineLineSeparator(): String {
 		val i = this.lastIndexOf('\n')
@@ -53,5 +59,4 @@ open class KtCompiler {
 		val RELATIVE_PATH: Key<String> = Key("relativePath")
 		val ABSOLUTE_PATH: Key<String> = Key("absolutePath")
 	}
-
 }

@@ -1,9 +1,7 @@
 import com.jfrog.bintray.gradle.BintrayExtension
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
-import io.gitlab.arturbosch.detekt.extensions.ProfileExtension
+import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.junit.platform.console.options.Details
-import org.junit.platform.gradle.plugin.JUnitPlatformExtension
 import java.util.*
 
 buildscript {
@@ -19,21 +17,16 @@ buildscript {
 
 	dependencies {
 		classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
-		classpath("org.junit.platform:junit-platform-gradle-plugin:$junitPlatformVersion")
-		classpath("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$usedDetektGradleVersion")
 	}
 }
 
 plugins {
-	id("com.jfrog.bintray") version "1.8.0"
-	id("com.github.ben-manes.versions") version "0.17.0"
-	id("com.github.johnrengelman.shadow") version "2.0.2" apply false
+	id("com.jfrog.bintray") version "1.8.4"
+	id("com.github.ben-manes.versions") version "0.20.0"
+	id("com.github.johnrengelman.shadow") version "2.0.4" apply false
 	id("org.sonarqube") version "2.6.2"
-	id("com.gradle.plugin-publish") version "0.9.10" apply false
-}
-
-apply {
-	plugin("io.gitlab.arturbosch.detekt")
+	id("io.gitlab.arturbosch.detekt")
+	id("org.jetbrains.dokka") version "0.9.17"
 }
 
 tasks.withType<Wrapper> {
@@ -57,11 +50,11 @@ allprojects {
 subprojects {
 
 	apply {
-		plugin("org.junit.platform.gradle.plugin")
 		plugin("java-library")
 		plugin("kotlin")
 		plugin("com.jfrog.bintray")
 		plugin("maven-publish")
+		plugin("org.jetbrains.dokka")
 	}
 
 	if (this.name in listOf("detekt-cli", "detekt-watch-service", "detekt-generator")) {
@@ -73,22 +66,17 @@ subprojects {
 
 	tasks.withType<KotlinCompile> {
 		kotlinOptions.jvmTarget = "1.8"
-		kotlinOptions.freeCompilerArgs = listOf("-Xskip-runtime-version-check")
+		// https://youtrack.jetbrains.com/issue/KT-24946
+		kotlinOptions.freeCompilerArgs = listOf("-Xskip-runtime-version-check", "-Xdisable-default-scripting-plugin")
 		kotlinOptions.allWarningsAsErrors = shouldTreatCompilerWarningsAsErrors()
-	}
-
-	configure<JUnitPlatformExtension> {
-		details = Details.TREE
-		filters {
-			engines {
-				include = listOf("spek", "junit-jupiter")
-			}
-		}
 	}
 
 	bintray {
 		user = System.getenv("BINTRAY_USER") ?: ""
 		key = System.getenv("BINTRAY_API_KEY") ?: ""
+		val mavenCentralUser = System.getenv("MAVEN_CENTRAL_USER") ?: ""
+		val mavenCentralPassword = System.getenv("MAVEN_CENTRAL_PW") ?: ""
+
 		setPublications("DetektPublication")
 
 		pkg(delegateClosureOf<BintrayExtension.PackageConfig> {
@@ -101,26 +89,52 @@ subprojects {
 			version(delegateClosureOf<BintrayExtension.VersionConfig> {
 				name = project.version as? String
 				released = Date().toString()
+
+				gpg(delegateClosureOf<BintrayExtension.GpgConfig> {
+					sign = true
+				})
+
+				mavenCentralSync(delegateClosureOf<BintrayExtension.MavenCentralSyncConfig> {
+					sync = true
+					user = mavenCentralUser
+					password = mavenCentralPassword
+					close = "1"
+				})
 			})
 		})
 	}
 
 	val javaConvention = the<JavaPluginConvention>()
+	tasks.withType(DokkaTask::class.java) {
+		// suppresses undocumented classes but not dokka warnings
+		// https://github.com/Kotlin/dokka/issues/229 && https://github.com/Kotlin/dokka/issues/319
+		reportUndocumented = false
+		outputFormat = "javadoc"
+		outputDirectory = "$buildDir/javadoc"
+	}
+
 	val sourcesJar by tasks.creating(Jar::class) {
 		dependsOn("classes")
 		classifier = "sources"
 		from(javaConvention.sourceSets["main"].allSource)
 	}
 
-	artifacts {
-		add("archives", sourcesJar)
+	val javadocJar by tasks.creating(Jar::class) {
+		dependsOn("dokka")
+		classifier = "javadoc"
+		from(buildDir.resolve("javadoc"))
 	}
 
+	artifacts {
+		add("archives", sourcesJar)
+		add("archives", javadocJar)
+	}
 
 	configure<PublishingExtension> {
 		publications.create<MavenPublication>("DetektPublication") {
 			from(components["java"])
 			artifact(sourcesJar)
+			artifact(javadocJar)
 			groupId = this@subprojects.group as? String
 			artifactId = this@subprojects.name
 			version = this@subprojects.version as? String
@@ -128,7 +142,7 @@ subprojects {
 				asNode().apply {
 					appendNode("description", "Static code analysis for Kotlin")
 					appendNode("name", "detekt")
-					appendNode("url", "https://github.com/arturbosch/detekt")
+					appendNode("url", "https://arturbosch.github.io/detekt")
 
 					val license = appendNode("licenses").appendNode("license")
 					license.appendNode("name", "The Apache Software License, Version 2.0")
@@ -153,7 +167,6 @@ subprojects {
 	val spekVersion: String by project
 	val kotlinImplementation by configurations.creating
 	val kotlinTest by configurations.creating
-	val junitPlatform = configurations["junitPlatform"]
 
 	dependencies {
 		kotlinImplementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion")
@@ -166,9 +179,6 @@ subprojects {
 		kotlinTest("org.jetbrains.spek:spek-subject-extension:$spekVersion")
 		kotlinTest("org.junit.jupiter:junit-jupiter-engine:$junitEngineVersion")
 		kotlinTest("org.reflections:reflections:0.9.11")
-		junitPlatform("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
-		junitPlatform("org.junit.platform:junit-platform-console:$junitPlatformVersion")
-		junitPlatform("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
 	}
 
 	the<JavaPluginConvention>().sourceSets {
@@ -183,6 +193,10 @@ subprojects {
 val userHome: String = System.getProperty("user.home")
 
 val usedDetektVersion: String by project
+
+dependencies {
+	detekt("io.gitlab.arturbosch.detekt:detekt-formatting:$usedDetektVersion")
+}
 
 configure<DetektExtension> {
 
@@ -219,6 +233,6 @@ configure<DetektExtension> {
 /**
  * Usage: <code>./gradlew build -PwarningsAsErrors=true</code>.
  */
-fun shouldTreatCompilerWarningsAsErrors() : Boolean {
+fun shouldTreatCompilerWarningsAsErrors(): Boolean {
 	return project.findProperty("warningsAsErrors") == "true"
 }

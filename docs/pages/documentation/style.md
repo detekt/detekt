@@ -97,6 +97,12 @@ cleans up the code.
 
 **Debt**: 5min
 
+#### Configuration options:
+
+* `includeLineWrapping` (default: `false`)
+
+   include return statements with line wraps in it
+
 #### Noncompliant Code:
 
 ```kotlin
@@ -109,6 +115,13 @@ fun stuff(): Int {
 
 ```kotlin
 fun stuff() = 5
+
+fun stuff() {
+    return
+        moreStuff()
+            .getStuff()
+            .stuffStuff()
+}
 ```
 
 ### ForbiddenComment
@@ -290,6 +303,29 @@ class User {
         private const val MAX_USERNAME_SIZE = 42
     }
 }
+```
+
+### MandatoryBracesIfStatements
+
+This rule detects multi-line `if` statements which do not have braces.
+Adding braces would improve readability and avoid possible errors.
+
+**Severity**: Style
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+val i = 1
+if (i > 0)
+    println(i)
+```
+
+#### Compliant Code:
+
+```kotlin
+val x = if (condition) 5 else 4
 ```
 
 ### MaxLineLength
@@ -487,6 +523,28 @@ when (1) {
     1 -> println("one")
     else -> println("else")
 }
+```
+
+### PreferToOverPairSyntax
+
+This rule detects the usage of the Pair constructor to create pairs of values.
+
+Using <value1> to <value2> is preferred.
+
+**Severity**: Style
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+val pair = Pair(1, 2)
+```
+
+#### Compliant Code:
+
+```kotlin
+val pair = 1 to 2
 ```
 
 ### ProtectedMemberInFinalClass
@@ -833,6 +891,8 @@ can lead to confusion and potential bugs.
 
 **Debt**: 5min
 
+**Aliases**: UNUSED_VARIABLE
+
 #### Configuration options:
 
 * `allowedNames` (default: `"(_|ignored|expected)"`)
@@ -907,6 +967,35 @@ class UtilityClass {
     companion object {
         val i = 0
     }
+}
+```
+
+### VarCouldBeVal
+
+Reports var declarations (locally-scoped variables) that could be val, as they are not re-assigned.
+Val declarations are assign-once (read-only), which makes understanding the current state easier.
+
+**Severity**: Maintainability
+
+**Debt**: 5min
+
+**Aliases**: CanBeVal
+
+#### Noncompliant Code:
+
+```kotlin
+fun example() {
+    var i = 1 // violation: this variable is never re-assigned
+    val j = i + 1
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+fun example() {
+    val i = 1
+    val j = i + 1
 }
 ```
 

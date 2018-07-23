@@ -13,7 +13,7 @@ import org.jetbrains.kotlin.psi.KtDoWhileExpression
 class EmptyDoWhileBlock(config: Config) : EmptyRule(config) {
 
 	override fun visitDoWhileExpression(expression: KtDoWhileExpression) {
+		super.visitDoWhileExpression(expression)
 		expression.body?.addFindingIfBlockExprIsEmpty()
 	}
-
 }

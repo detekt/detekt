@@ -7,8 +7,6 @@ permalink: index.html
 summary:
 ---
 
-[//]: {% include note.html content="If you're cloning this theme, you're probably writing documentation of some kind. I have a blog on technical writing here called <a alt='technical writing blog' href='http://idratherbewriting.com'>I'd Rather Be Writing</a>. If you'd like to stay updated with the latest trends, best practices, and other methods for writing documentation, consider <a href='https://tinyletter.com/tomjoht'>subscribing</a>. I also have a site on <a href='http://idratherbewriting.com/learnapidoc'>writing API documentation</a>. Also, if you want a slightly different Jekyll documentation theme, see my <a href='https://github.com/amzn/jekyll-doc-project'>Jekyll doc project theme</a>." %}
-
 ![detekt in action](images/detekt_in_action.png "detekt in action")
 
 ### Features
@@ -59,11 +57,24 @@ Then reference the config inside the defaultProfile-closure:
 
 `config = file("default-detekt-config.yml")`
 
-If you need a textual report, specify the output directory and the reports name defaultProfile-closure:
+If you need a textual report, specify the output directory and the reports name in the `defaultProfile`-closure:
 
 ```
 output = file("reports")
 outputName = "detekt"
 ``` 
+
+### Adding more rule sets
+
+detekt itself provides a wrapper over [KtLint](https://github.com/shyiko/ktlint) as a `formatting` rule set
+which can be easily added to the gradle configuration:
+
+```gradle
+dependencies {
+    detekt "io.gitlab.arturbosch.detekt:detekt-formatting:1.0.0.[version]"
+}
+```
+
+Likewise custom [extensions](https://arturbosch.github.io/detekt/extensions.html) can be added to detekt.
 
 {% include links.html %}

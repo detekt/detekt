@@ -324,6 +324,8 @@ Reports casts which are unsafe. In case the cast is not possible it will throw a
 
 **Debt**: 20min
 
+**Aliases**: UNCHECKED_CAST
+
 #### Noncompliant Code:
 
 ```kotlin

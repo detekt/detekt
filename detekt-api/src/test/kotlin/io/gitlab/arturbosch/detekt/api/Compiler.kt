@@ -14,8 +14,12 @@ internal object Compiler {
 
 	private val psiFileFactory: PsiFileFactory = PsiFileFactory.getInstance(psiProject)
 
-	fun compileFromContent(content: String): KtFile = psiFileFactory.createFileFromText(
-			KotlinLanguage.INSTANCE, StringUtilRt.convertLineSeparators(content)) as KtFile
+	fun compileFromContent(content: String): KtFile {
+		val psiFile = psiFileFactory.createFileFromText(
+				KotlinLanguage.INSTANCE,
+				StringUtilRt.convertLineSeparators(content))
+		return psiFile as? KtFile ?: throw IllegalStateException("kotlin file expected")
+	}
 }
 
 fun compilerFor(resource: String) = Compiler.compileFromContent(

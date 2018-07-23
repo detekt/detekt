@@ -7,6 +7,7 @@ environment:
   TERM: dumb
   matrix:
     - JAVA_HOME: C:\Program Files\Java\jdk1.8.0
+    - JAVA_HOME: C:\Program Files\Java\jdk9
 init:
   - git config --global --unset core.autocrlf
 install:
@@ -17,6 +18,10 @@ install:
   - java -version
   - gradlew.bat --version
 build_script:
-  - gradlew.bat -u -i assemble -PwarningsAsErrors=true
+  - gradlew build -PwarningsAsErrors=true
+  - gradlew installShadowDist
+  - detekt-cli\build\install\detekt-cli-shadow\bin\detekt-cli --help
 test_script:
-  - gradlew.bat -u -i -S test -PwarningsAsErrors=true
+  - detekt-cli\build\install\detekt-cli-shadow\bin\detekt-cli -i . --baseline reports\baseline.xml -f ".*/resources/.*, .*/build/.*" -c detekt-cli\src\main\resources\default-detekt-config.yml,reports\failfast.yml
+  - gradlew detektCheck
+  - gradlew verifyGeneratorOutput

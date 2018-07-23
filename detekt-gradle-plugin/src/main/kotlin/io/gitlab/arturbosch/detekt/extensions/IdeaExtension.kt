@@ -29,7 +29,7 @@ open class IdeaExtension(open var path: String? = null,
 		return arrayOf(inspectScript(path!!), input!!, inspectionsProfile!!, report!!)
 	}
 
-	private fun DetektExtension.profileInputPath() = ProfileStorage.systemOrDefault.input?.apply {
+	private fun DetektExtension.profileInputPath() = profileStorage.systemOrDefault.input?.apply {
 		if (debug) println("input: $this")
 	}
 

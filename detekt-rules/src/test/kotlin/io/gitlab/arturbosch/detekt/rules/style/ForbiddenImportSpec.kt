@@ -14,6 +14,9 @@ class ForbiddenImportSpec : Spek({
 
 			import kotlin.jvm.JvmField
 			import kotlin.SinceKotlin
+
+			import com.example.R.string
+			import net.example.R.dimen
 		"""
 
 		it("should report nothing by default") {
@@ -51,6 +54,9 @@ class ForbiddenImportSpec : Spek({
 			assertThat(findings).hasSize(1)
 		}
 
+		it("should report both com.example.R.string and net.example.R.dimen") {
+			val findings = ForbiddenImport(TestConfig(mapOf(ForbiddenImport.IMPORTS to "*.R.*"))).lint(code)
+			assertThat(findings).hasSize(2)
+		}
 	}
-
 })

@@ -64,9 +64,9 @@ class SwallowedException(config: Config = Config.empty) : Rule(config) {
 	}
 
 	private fun hasParameterReferences(parameterNameReferences: List<KtNameReferenceExpression>?): Boolean {
-		return parameterNameReferences != null
-				&& parameterNameReferences.isNotEmpty()
-				&& parameterNameReferences.all { callsMemberOfCaughtException(it) }
+		return parameterNameReferences != null &&
+				parameterNameReferences.isNotEmpty() &&
+				parameterNameReferences.all { callsMemberOfCaughtException(it) }
 	}
 
 	private fun callsMemberOfCaughtException(expression: KtNameReferenceExpression): Boolean {

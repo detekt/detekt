@@ -11,6 +11,13 @@ import java.nio.file.Path
 @Suppress("LongParameterList", "ComplexMethod")
 open class ProfileExtension(val name: String) {
 
+	companion object {
+		fun default() = ProfileExtension(DEFAULT_PROFILE_NAME).apply {
+			filters = DEFAULT_PATH_EXCLUDES
+			configResource = DEFAULT_DETEKT_CONFIG_RESOURCE
+		}
+	}
+
 	open var input: String? = null
 	open var config: Any? = null
 	open var configResource: String? = null
@@ -41,13 +48,12 @@ open class ProfileExtension(val name: String) {
 	private fun extractConfigParameter(any: Any): String = when (any) {
 		is String, is GString, is File, is Path -> any.toString()
 		is FileCollection -> any.files.joinToString(",") { it.toString() }
-		else -> throw IllegalArgumentException("Configuration parameter has unsupported type '${any.javaClass}'. "
-				+ "Configure the parameter with file(...), files(...) or with a plain string.")
+		else -> throw IllegalArgumentException("Configuration parameter has unsupported type '${any.javaClass}'. " +
+				"Configure the parameter with file(...), files(...) or with a plain string.")
 	}
 
 	override fun toString(): String = "ProfileExtension(name='$name', input=$input, config=$config, " +
 			"configResource=$configResource, filters=$filters, ruleSets=$ruleSets, output=$output, " +
 			"outputName=$outputName, baseline=$baseline, parallel=$parallel, " +
 			"disableDefaultRuleSets=$disableDefaultRuleSets)"
-
 }

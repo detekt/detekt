@@ -84,6 +84,4 @@ abstract class BaseConfig : Config {
 		is String -> result
 		else -> throw ClassCastException()
 	}
-
 }
-

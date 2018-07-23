@@ -29,5 +29,4 @@ class CommentSmellProvider : RuleSetProvider {
 				UndocumentedPublicFunction(config)
 		))
 	}
-
 }

@@ -24,10 +24,20 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
  *
  * <compliant>
  * fun stuff() = 5
+ *
+ * fun stuff() {
+ *     return
+ *         moreStuff()
+ *             .getStuff()
+ *             .stuffStuff()
+ * }
  * </compliant>
+ *
+ * @configuration includeLineWrapping - include return statements with line wraps in it (default: false)
  *
  * @author Artur Bosch
  * @author Marvin Ramin
+ * @author schalkms
  */
 class ExpressionBodySyntax(config: Config = Config.empty) : Rule(config) {
 
@@ -38,22 +48,33 @@ class ExpressionBodySyntax(config: Config = Config.empty) : Rule(config) {
 					" can be rewritten with ExpressionBodySyntax.",
 			Debt.FIVE_MINS)
 
+	private val includeLineWrapping = valueOrDefault(INCLUDE_LINE_WRAPPING, false)
+
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		if (function.bodyExpression != null) {
 			val body = function.bodyExpression!!
-			body.singleReturnStatement()?.let { returnStmt ->
-				report(CodeSmell(issue, Entity.from(returnStmt), issue.description))
+			body.singleReturnStatement()?.run {
+				if (includeLineWrapping || !isLineWrapped(body)) {
+					report(CodeSmell(issue, Entity.from(body), issue.description))
+				}
 			}
 		}
 	}
 
 	private fun KtExpression.singleReturnStatement(): KtReturnExpression? {
 		val statements = (this as? KtBlockExpression)?.statements
-		return statements?.size?.let {
-			if (it == 1 && statements[0] is KtReturnExpression) {
-				return statements[0] as KtReturnExpression
-			} else null
+		return statements
+				?.takeIf { it.size == 1 }
+				?.let { it[0] as? KtReturnExpression }
+	}
+
+	private fun isLineWrapped(expression: KtExpression): Boolean {
+		return expression.children.any {
+			it.text.contains('\n')
 		}
 	}
 
+	companion object {
+		const val INCLUDE_LINE_WRAPPING = "includeLineWrapping"
+	}
 }

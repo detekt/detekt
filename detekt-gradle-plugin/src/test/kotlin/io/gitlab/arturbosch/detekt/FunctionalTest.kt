@@ -19,10 +19,9 @@ internal class FunctionalTest : Spek({
 			val rootDir = createTempDir(prefix = "withoutCustomRules")
 			writeFiles(rootDir)
 
-			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
 				.withProjectDir(rootDir)
-				.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "detektCheck")
+				.withArguments("detektCheck")
 				.withPluginClasspath()
 				.build()
 
@@ -49,7 +48,7 @@ internal class FunctionalTest : Spek({
 
 			val result = GradleRunner.create()
 				.withProjectDir(rootDir)
-				.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "detektCheck")
+				.withArguments("detektCheck")
 				.withPluginClasspath()
 				.build()
 
@@ -92,13 +91,13 @@ private val ktFileContent = """
 // custom/build.gradle
 private val customBuildFileContent = """
 	|plugins {
-	|   id "org.jetbrains.kotlin.jvm" version "1.2.31"
+	|   id "org.jetbrains.kotlin.jvm" version "1.2.41"
 	|}
 	|repositories {
 	|   jcenter()
 	|}
 	|dependencies {
-	|   implementation "io.gitlab.arturbosch.detekt:detekt-api:1.0.0.RC6-4"
+	|   implementation "io.gitlab.arturbosch.detekt:detekt-api:1.0.0.RC7"
 	|}
 	""".trimMargin()
 

@@ -9,7 +9,6 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import java.net.URL
 
 /**
  * Reports when function names which do not follow the specified naming convention are used.
@@ -33,8 +32,8 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
 	private val excludeClassPattern = Regex(valueOrDefault(EXCLUDE_CLASS_PATTERN, "$^"))
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (!function.isContainingExcludedClass(excludeClassPattern)
-				&& !function.identifierName().matches(functionPattern)) {
+		if (!function.isContainingExcludedClass(excludeClassPattern) &&
+				!function.identifierName().matches(functionPattern)) {
 			report(CodeSmell(
 					issue,
 					Entity.from(function),

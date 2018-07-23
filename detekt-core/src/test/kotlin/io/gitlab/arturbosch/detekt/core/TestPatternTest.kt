@@ -39,5 +39,4 @@ class TestPatternTest : Spek({
 			Assertions.assertThat(mainSources).allMatch { it.toString().endsWith("b.kt") }
 		}
 	}
-
 })

@@ -15,6 +15,7 @@ enum class Case(val file: String) {
 	CollapsibleIfsNegative("/cases/CollapsibleIfsNegative.kt"),
 	ComplexMethods("/cases/ComplexMethods.kt"),
 	ConditionalPath("/cases/ConditionalPath.kt"),
+	ConstInObjects("/cases/ConstInObjects.kt"),
 	DataClassContainsFunctionsPositive("/cases/DataClassContainsFunctionsPositive.kt"),
 	DataClassContainsFunctionsNegative("/cases/DataClassContainsFunctionsNegative.kt"),
 	Default("/cases/Default.kt"),
@@ -38,9 +39,13 @@ enum class Case(val file: String) {
 	LabeledExpression("/cases/LabeledExpression.kt"),
 	LoopWithTooManyJumpStatementsNegative("cases/LoopWithTooManyJumpStatementsNegative.kt"),
 	LoopWithTooManyJumpStatementsPositive("cases/LoopWithTooManyJumpStatementsPositive.kt"),
+	MayBeConstNegative("cases/MayBeConstNegative.kt"),
+	MandatoryBracesIfStatementsPositive("cases/MandatoryBracesIfStatementsPositive.kt"),
+	MandatoryBracesIfStatementsNegative("cases/MandatoryBracesIfStatementsNegative.kt"),
 	NamingConventions("/cases/NamingConventions.kt"),
 	NewLineAtEndOfFile("/cases/NewLineAtEndOfFile.kt"),
 	MaxLineLength("/cases/MaxLineLength.kt"),
+	MaxLineLengthSuppressed("/cases/MaxLineLengthSuppressed.kt"),
 	MaxLineLengthWithLongComments("/cases/MaxLineLengthWithLongComments.kt"),
 	MemberNameEqualsClassNameNegative("/cases/MemberNameEqualsClassNameNegative.kt"),
 	MemberNameEqualsClassNamePositive("/cases/MemberNameEqualsClassNamePositive.kt"),
@@ -60,6 +65,8 @@ enum class Case(val file: String) {
 	UnnecessaryAbstractClassNegative("/cases/UnnecessaryAbstractClassNegative.kt"),
 	UtilityClassesPositive("/cases/UtilityClassesPositive.kt"),
 	UtilityClassesNegative("/cases/UtilityClassesNegative.kt"),
+	RethrowCaughtExceptionPositive("/cases/RethrowCaughtExceptionPositive.kt"),
+	RethrowCaughtExceptionNegative("/cases/RethrowCaughtExceptionNegative.kt"),
 	SerializablePositive("/cases/SerializablePositive.kt"),
 	SerializableNegative("/cases/SerializableNegative.kt"),
 	SuppressedElements("/SuppressedByElementAnnotation.kt"),
@@ -81,7 +88,9 @@ enum class Case(val file: String) {
 	NoTabsNegative("/cases/NoTabsNegative.kt"),
 	NoTabsPositive("/cases/NoTabsPositive.kt"),
 	UnusedPrivateMemberPositive("/cases/UnusedPrivateMemberPositive.kt"),
-	UnusedPrivateMemberNegative("/cases/UnusedPrivateMemberNegative.kt");
+	UnusedPrivateMemberNegative("/cases/UnusedPrivateMemberNegative.kt"),
+	PreferToOverPairSyntaxPositive("/cases/PreferToOverPairSyntaxPositive.kt"),
+	PreferToOverPairSyntaxNegative("/cases/PreferToOverPairSyntaxNegative.kt");
 
 	fun path(): Path = Paths.get(resource(file))
 

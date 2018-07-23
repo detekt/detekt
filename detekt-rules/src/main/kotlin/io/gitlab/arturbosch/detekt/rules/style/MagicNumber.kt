@@ -12,7 +12,7 @@ import io.gitlab.arturbosch.detekt.rules.isHashCodeFunction
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
-import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtCallElement
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtEnumEntry
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -103,8 +103,8 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 			valueOrDefault(IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION, true)
 
 	override fun visitConstantExpression(expression: KtConstantExpression) {
-		if (isIgnoredByConfig(expression) || expression.isPartOfFunctionReturnConstant()
-				|| expression.isPartOfConstructor()) {
+		if (isIgnoredByConfig(expression) || expression.isPartOfFunctionReturnConstant() ||
+				expression.isPartOfConstructor()) {
 			return
 		}
 
@@ -175,16 +175,16 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 }
 
 private fun KtConstantExpression.isNamedArgument() =
-		(parent is KtValueArgument
-				&& (parent as? KtValueArgument)?.isNamed() == true
-				&& isPartOf(KtCallExpression::class))
+		(parent is KtValueArgument &&
+				(parent as? KtValueArgument)?.isNamed() == true &&
+				isPartOf(KtCallElement::class))
 
 private fun KtConstantExpression.isPartOfFunctionReturnConstant() =
 		parent is KtNamedFunction || (parent is KtReturnExpression && parent.parent.children.size == 1)
 
 private fun KtConstantExpression.isPartOfConstructor(): Boolean {
-	return parent is KtParameter
-			&& parent.parent.parent is KtPrimaryConstructor || parent.parent.parent is KtSecondaryConstructor
+	return parent is KtParameter &&
+			parent.parent.parent is KtPrimaryConstructor || parent.parent.parent is KtSecondaryConstructor
 }
 
 private fun KtConstantExpression.isPartOfHashCode(): Boolean {
@@ -203,5 +203,5 @@ private fun KtConstantExpression.isInCompanionObject() =
 private fun KtConstantExpression.isConstantProperty(): Boolean =
 		isProperty() && getNonStrictParentOfType(KtProperty::class.java)?.hasModifier(KtTokens.CONST_KEYWORD) ?: false
 
-private fun PsiElement.hasUnaryMinusPrefix(): Boolean = this is KtPrefixExpression
-		&& (this.firstChild as? KtOperationReferenceExpression)?.operationSignTokenType == KtTokens.MINUS
+private fun PsiElement.hasUnaryMinusPrefix(): Boolean = this is KtPrefixExpression &&
+		(this.firstChild as? KtOperationReferenceExpression)?.operationSignTokenType == KtTokens.MINUS

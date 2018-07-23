@@ -27,6 +27,12 @@ To solve this CodeSmell, the forEach usage should be replaced by a for loop.
 (1..10).forEach {
     println(it)
 }
+(1 until 10).forEach {
+    println(it)
+}
+(10 downTo 1).forEach {
+    println(it)
+}
 ```
 
 #### Compliant Code:

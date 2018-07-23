@@ -54,8 +54,8 @@ class BuildFailureReport : ConsoleReport() {
 	}
 
 	private fun checkDeprecation() {
-		if (buildConfig.valueOrDefault(WARNING_THRESHOLD, Int.MIN_VALUE) != Int.MIN_VALUE
-				|| buildConfig.valueOrDefault(FAIL_THRESHOLD, Int.MIN_VALUE) != Int.MIN_VALUE) {
+		if (buildConfig.valueOrDefault(WARNING_THRESHOLD, Int.MIN_VALUE) != Int.MIN_VALUE ||
+				buildConfig.valueOrDefault(FAIL_THRESHOLD, Int.MIN_VALUE) != Int.MIN_VALUE) {
 			println("[Deprecation] - 'warningThreshold' and 'failThreshold' properties are deprecated." +
 					" Please use the new 'maxIssues' config property.")
 		}
@@ -76,4 +76,4 @@ class BuildFailureReport : ConsoleReport() {
 
 internal fun Int.reached(amount: Int): Boolean = !(this == 0 && amount == 0) && this != -1 && this <= amount
 
-class BuildFailure(override val message: String?) : RuntimeException(message)
+class BuildFailure(override val message: String?) : RuntimeException(message, null, true, false)

@@ -56,8 +56,8 @@ class PrintStackTrace(config: Config = Config.empty) : Rule(config) {
 
 	override fun visitCallExpression(expression: KtCallExpression) {
 		val callNameExpression = expression.getCallNameExpression()
-		if (callNameExpression?.text == "dumpStack"
-				&& callNameExpression.getReceiverExpression()?.text == "Thread") {
+		if (callNameExpression?.text == "dumpStack" &&
+				callNameExpression.getReceiverExpression()?.text == "Thread") {
 			report(CodeSmell(issue, Entity.from(expression), issue.description))
 		}
 	}

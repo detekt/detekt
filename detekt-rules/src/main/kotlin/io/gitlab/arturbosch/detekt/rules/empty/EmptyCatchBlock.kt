@@ -19,6 +19,7 @@ class EmptyCatchBlock(config: Config) : EmptyRule(config = config) {
 	private val allowedExceptionNameRegex = Regex(valueOrDefault(ALLOWED_EXCEPTION_NAME_REGEX, "^(_|(ignore|expected).*)"))
 
 	override fun visitCatchSection(catchClause: KtCatchClause) {
+		super.visitCatchSection(catchClause)
 		val name = catchClause.catchParameter?.identifierName()
 		if (name != null && name.matches(allowedExceptionNameRegex)) {
 			return
@@ -29,5 +30,4 @@ class EmptyCatchBlock(config: Config) : EmptyRule(config = config) {
 	companion object {
 		const val ALLOWED_EXCEPTION_NAME_REGEX = "allowedExceptionNameRegex"
 	}
-
 }

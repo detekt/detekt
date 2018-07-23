@@ -70,4 +70,3 @@ class ComplexInterface(config: Config = Config.empty,
 		const val DEFAULT_LARGE_INTERFACE_COUNT = 10
 	}
 }
-

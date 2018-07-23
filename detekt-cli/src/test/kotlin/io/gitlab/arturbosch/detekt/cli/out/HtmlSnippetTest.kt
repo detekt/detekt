@@ -10,7 +10,7 @@ class HtmlSnippetTest {
 		val snippet = htmlSnippet {
 			h3 { "Hello World" }
 			div("box") {
-				text {"Test" }
+				text { "Test" }
 				br()
 			}
 		}

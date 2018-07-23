@@ -1,5 +1,8 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
+import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidCodeExampleDocumentationException
+import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
+import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidIssueDeclaration
 import io.gitlab.arturbosch.detekt.generator.util.run
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.dsl.describe
@@ -225,12 +228,17 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				 */
 				class $name: Rule {
 
-					override val issue = Issue(javaClass.simpleName, Severity.Style, "", debt = Debt.TEN_MINS)
+					override val issue = Issue(javaClass.simpleName,
+							Severity.Style,
+							"",
+							debt = Debt.TEN_MINS,
+							aliases = setOf("RULE", "RULE2"))
 				}
 			"""
 			val items = subject.run(code)
 			assertThat(items[0].severity).isEqualTo("Style")
 			assertThat(items[0].debt).isEqualTo("10min")
+			assertThat(items[0].aliases).isEqualTo("RULE, RULE2")
 		}
 
 		it("contains no configuration options by default") {
@@ -374,6 +382,49 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				}
 			"""
 			assertFailsWith<InvalidCodeExampleDocumentationException> { subject.run(code) }
+		}
+
+		it("has wrong issue style property") {
+			val name = "SomeRandomClass"
+			val description = "some description"
+			val code = """
+				package foo
+
+				/**
+				 * $description
+				 */
+				class $name: Rule {
+
+					val style = Severity.Style
+					override val issue = Issue(javaClass.simpleName,
+							style,
+							"",
+							debt = Debt.TEN_MINS)
+				}
+			"""
+			assertFailsWith<InvalidIssueDeclaration> { subject.run(code) }
+		}
+
+		it("has wrong issue aliases property") {
+			val name = "SomeRandomClass"
+			val description = "some description"
+			val code = """
+				package foo
+
+				/**
+				 * $description
+				 */
+				class $name: Rule {
+
+					val a = setOf("UNUSED_VARIABLE")
+					override val issue = Issue(javaClass.simpleName,
+							Severity.Style,
+							"",
+							debt = Debt.TEN_MINS,
+							aliases = a)
+				}
+			"""
+			assertFailsWith<InvalidIssueDeclaration> { subject.run(code) }
 		}
 	}
 })

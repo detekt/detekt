@@ -5,7 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
- * See https://ktlint.github.io/#rule-semi for documentation.
+ * See <a href="https://ktlint.github.io/#rule-semi">ktlint-website</a> for documentation.
  *
  * @active since v1.0.0
  * @autoCorrect since v1.0.0

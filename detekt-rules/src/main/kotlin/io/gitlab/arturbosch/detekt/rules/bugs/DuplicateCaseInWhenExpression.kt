@@ -58,7 +58,7 @@ class DuplicateCaseInWhenExpression(config: Config) : Rule(config) {
 	private fun findDuplicates(list: List<String>): MutableSet<String> {
 		val duplicates = mutableSetOf<String>()
 		for (i in 0 until list.size) {
-			for (j in i+1 until list.size) {
+			for (j in i + 1 until list.size) {
 				if (list[i] == list[j]) {
 					duplicates.add(list[i])
 				}

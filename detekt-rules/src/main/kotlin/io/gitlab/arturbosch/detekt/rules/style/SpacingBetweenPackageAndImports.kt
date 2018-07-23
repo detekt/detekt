@@ -48,7 +48,7 @@ class SpacingBetweenPackageAndImports(config: Config = Config.empty) : Rule(conf
 			Debt.FIVE_MINS)
 
 	override fun visitFile(file: PsiFile?) {
-		file?.accept(object: DetektVisitor() {
+		file?.accept(object : DetektVisitor() {
 			override fun visitClassOrObject(classOrObject: KtClassOrObject) {
 				containsClassOrObject = true
 			}
@@ -77,8 +77,8 @@ class SpacingBetweenPackageAndImports(config: Config = Config.empty) : Rule(conf
 	private fun checkKtElementsDeclaration(importList: KtImportList) {
 		val ktElements = importList.siblings(withItself = false).toList().filter { it is KtElement }
 		val nextSibling = importList.nextSibling
-		if (ktElements.isNotEmpty()
-				&& (nextSibling is PsiWhiteSpace || nextSibling is KtElement)) {
+		if (ktElements.isNotEmpty() &&
+				(nextSibling is PsiWhiteSpace || nextSibling is KtElement)) {
 			val name = (ktElements.first() as? KtClassOrObject)?.name ?: "the class or object"
 
 			checkLinebreakAfterElement(nextSibling, "There should be exactly one empty line in between the " +

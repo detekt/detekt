@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.cli.ClasspathResourceConverter
 
 private const val DEFAULT_TEMPLATE = "default-html-report-template.html"
-private const val PLACEHOLDER_METRICS =  "@@@metrics@@@"
+private const val PLACEHOLDER_METRICS = "@@@metrics@@@"
 private const val PLACEHOLDER_FINDINGS = "@@@findings@@@"
 
 /**

@@ -4,6 +4,9 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
+import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidCodeExampleDocumentationException
+import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
+import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidIssueDeclaration
 import io.gitlab.arturbosch.detekt.rules.empty.EmptyRule
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
@@ -17,6 +20,7 @@ import java.lang.reflect.Modifier
 /**
  * @author Marvin Ramin
  * @author Artur Bosch
+ * @authro schalkms
  */
 internal class RuleVisitor : DetektVisitor() {
 
@@ -30,6 +34,7 @@ internal class RuleVisitor : DetektVisitor() {
 	private var autoCorrect = false
 	private var severity = ""
 	private var debt = ""
+	private var aliases: String? = null
 	private var parent = ""
 	private val configuration = mutableListOf<Configuration>()
 	private val classesMap = mutableMapOf<String, Boolean>()
@@ -40,7 +45,7 @@ internal class RuleVisitor : DetektVisitor() {
 		}
 
 		return Rule(name, description, nonCompliant, compliant,
-				active, severity, debt, parent, configuration, autoCorrect)
+				active, severity, debt, aliases, parent, configuration, autoCorrect)
 	}
 
 	override fun visitSuperTypeList(list: KtSuperTypeList) {
@@ -118,26 +123,44 @@ internal class RuleVisitor : DetektVisitor() {
 		if (initializer != null) {
 			val arguments = initializer.valueArguments
 			if (arguments.size >= ISSUE_ARGUMENT_SIZE) {
-				severity = getArgument(arguments[1], "Severity")
-				val debtName = getArgument(arguments[DEBT_ARGUMENT_INDEX], "Debt")
-				val debtDeclarations = Debt::class.java.declaredFields.filter { Modifier.isStatic(it.modifiers) }
-				val debtDeclaration = debtDeclarations.singleOrNull { it.name == debtName }
-				if (debtDeclaration != null) {
-					debtDeclaration.isAccessible = true
-					debt = debtDeclaration.get(Debt::class.java).toString()
-				}
+				extractIssueSeverityAndDebt(arguments)
+				extractIssueAliases(arguments)
 			}
 		}
 	}
 
+	private fun extractIssueSeverityAndDebt(arguments: List<KtValueArgument>) {
+		severity = getArgument(arguments[1], "Severity")
+		val debtName = getArgument(arguments[DEBT_ARGUMENT_INDEX], "Debt")
+		val debtDeclarations = Debt::class.java.declaredFields.filter { Modifier.isStatic(it.modifiers) }
+		val debtDeclaration = debtDeclarations.singleOrNull { it.name == debtName }
+		if (debtDeclaration != null) {
+			debtDeclaration.isAccessible = true
+			debt = debtDeclaration.get(Debt::class.java).toString()
+		}
+	}
+
+	private fun extractIssueAliases(arguments: List<KtValueArgument>) {
+		if (arguments.size > ISSUE_ARGUMENT_SIZE) {
+			val aliasArgument = arguments[arguments.size - 1].text
+			val index = aliasArgument.indexOf(SETOF)
+			if (index == -1) {
+				throw InvalidIssueDeclaration("aliases")
+			}
+			val argumentString = aliasArgument.substring(index + SETOF.length, aliasArgument.length - 1)
+			aliases = argumentString
+					.split(',')
+					.joinToString(", ") { it.trim().replace("\"", "") }
+		}
+	}
+
 	private fun getArgument(argument: KtValueArgument, name: String): String {
-		var value = ""
 		val text = argument.text
 		val type = text.split('.')
 		if (text.startsWith(name, true) && type.size == 2) {
-			value = type[1]
+			return type[1]
 		}
-		return value
+		throw InvalidIssueDeclaration(name)
 	}
 
 	companion object {
@@ -157,9 +180,9 @@ internal class RuleVisitor : DetektVisitor() {
 
 		private const val ISSUE_ARGUMENT_SIZE = 4
 		private const val DEBT_ARGUMENT_INDEX = 3
+		private const val SETOF = "setOf("
 	}
 }
-
 
 private fun String.trimStartingLineBreaks(): String {
 	var i = 0

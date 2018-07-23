@@ -38,5 +38,4 @@ class CommentOverPrivateProperty(config: Config = Config.empty) : Rule(config) {
 			}
 		}
 	}
-
 }

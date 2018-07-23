@@ -2,10 +2,8 @@
 
 package cases
 
-/**
- * Many false positives reported in #812 - https://github.com/arturbosch/detekt/issues/812
- * and #840 - https://github.com/arturbosch/detekt/pull/840.
- */
+import kotlin.reflect.KProperty
+
 object O { // public
 	const val NUMBER = 5 // public
 }
@@ -82,4 +80,31 @@ val stuff = object : Iterator<String?> {
 
 fun main(args: Array<String>) {
 	println(stuff.next())
+	calledFromMain()
+}
+
+private fun calledFromMain() { }
+
+abstract class Parent {
+	abstract fun abstractFun(arg: Any)
+	open fun openFun(arg: Any): Int = 0
+}
+
+class Child : Parent() {
+	override fun abstractFun(arg: Any) {
+		println(arg)
+	}
+
+	override fun openFun(arg: Any): Int {
+		println(arg)
+		return 1
+	}
+}
+
+class SingleAssign<String> {
+
+	// ignore unused operator function parameters
+	operator fun getValue(thisRef: Any?, property: KProperty<*>): kotlin.String {
+		return ""
+	}
 }

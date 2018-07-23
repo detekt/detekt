@@ -8,11 +8,14 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.isAbstract
+import io.gitlab.arturbosch.detekt.rules.isMainFunction
+import io.gitlab.arturbosch.detekt.rules.isOpen
+import io.gitlab.arturbosch.detekt.rules.isOperator
 import io.gitlab.arturbosch.detekt.rules.isOverridden
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
-import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
@@ -20,8 +23,10 @@ import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
 import org.jetbrains.kotlin.psi.KtParameter
+import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtReferenceExpression
+import org.jetbrains.kotlin.psi.KtSecondaryConstructor
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
 
@@ -51,34 +56,32 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 
 	private val allowedNames = Regex(valueOrDefault(ALLOWED_NAMES_PATTERN, "(_|ignored|expected)"))
 
+	override fun visit(root: KtFile) {
+		super.visit(root)
+
+		val propertyVisitor = UnusedPropertyVisitor(allowedNames)
+		root.accept(propertyVisitor)
+
+		propertyVisitor.getUnusedProperties().forEach {
+			report(CodeSmell(issue, Entity.from(it), "Private property ${it.nameAsSafeName.identifier} is unused."))
+		}
+	}
+
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
 		if ((classOrObject as? KtClass)?.isInterface() == true) {
 			return
 		}
 
-		val propertyVisitor = UnusedPropertyVisitor(allowedNames)
-		classOrObject.accept(propertyVisitor)
-
-		propertyVisitor.getUnusedProperties().forEach {
-			report(CodeSmell(issue, Entity.from(it.value), "Private property ${it.key} is unused."))
-		}
-
 		super.visitClassOrObject(classOrObject)
 	}
 
-	class UnusedPropertyVisitor(private val allowedNames: Regex) : DetektVisitor() {
+	private class UnusedPropertyVisitor(private val allowedNames: Regex) : DetektVisitor() {
 
-		private val properties = mutableMapOf<String, KtElement>()
+		private val properties = mutableSetOf<KtNamedDeclaration>()
 		private val nameAccesses = mutableSetOf<String>()
 
-		fun getUnusedProperties(): Map<String, KtElement> {
-			for (access in nameAccesses) {
-				if (properties.isEmpty()) {
-					break
-				}
-				properties.remove(access)
-			}
-			return properties
+		fun getUnusedProperties(): List<KtNamedDeclaration> {
+			return properties.filter { it.nameAsSafeName.identifier !in nameAccesses }
 		}
 
 		override fun visitParameter(parameter: KtParameter) {
@@ -95,25 +98,33 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 			}
 		}
 
+		override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
+			super.visitPrimaryConstructor(constructor)
+			constructor.valueParameters
+					.filter { it.isPrivate() || !it.hasValOrVar() }
+					.forEach { checkAllowedNames(it) }
+		}
+
+		override fun visitSecondaryConstructor(constructor: KtSecondaryConstructor) {
+			super.visitSecondaryConstructor(constructor)
+			constructor.valueParameters.forEach { checkAllowedNames(it) }
+		}
+
 		private fun checkAllowedNames(it: KtNamedDeclaration) {
-			val name = it.nameAsSafeName.identifier
-			if (!allowedNames.matches(name)) {
-				properties[name] = it
+			if (!allowedNames.matches(it.nameAsSafeName.identifier)) {
+				properties.add(it)
 			}
 		}
 
 		override fun visitProperty(property: KtProperty) {
-			if ((property.isPrivate() && property.isNonNestedMember())
-					|| property.isLocal) {
+			if ((property.isPrivate() && property.isMemberOrTopLevel()) ||
+					property.isLocal) {
 				checkAllowedNames(property)
 			}
 			super.visitProperty(property)
 		}
 
-		private fun KtProperty.isNonNestedMember() = isMember
-				&& parent // KtClassBody
-				?.parent  // KtClassOrObject
-				?.parent is KtFile
+		private fun KtProperty.isMemberOrTopLevel() = isMember || isTopLevel
 
 		override fun visitReferenceExpression(expression: KtReferenceExpression) {
 			nameAccesses.add(expression.text)
@@ -135,9 +146,14 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 	}
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (function.isPrivate() && !function.isOverridden()) {
+		if (function.isPrivate()) {
 			collectFunction(function)
-			collectParameters(function)
+		}
+		// Overriddable/Overridden functions need to declare parameters, even if they don't use them
+		when {
+			function.isAbstract() || function.isOpen() || function.isOverridden() || function.isOperator() ||
+					function.isMainFunction() ->	{ }
+			else -> collectParameters(function)
 		}
 
 		super.visitNamedFunction(function)

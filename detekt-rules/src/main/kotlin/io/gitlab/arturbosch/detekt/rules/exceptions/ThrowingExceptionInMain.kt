@@ -8,7 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.collectByType
-import io.gitlab.arturbosch.detekt.rules.isPublicNotOverridden
+import io.gitlab.arturbosch.detekt.rules.isMainFunction
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtThrowExpression
@@ -34,13 +34,9 @@ class ThrowingExceptionInMain(config: Config = Config.empty) : Rule(config) {
 			"The main method should not throw an exception.", Debt.TWENTY_MINS)
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (isMainFunction(function) && hasArgsParameter(function.valueParameters) && containsThrowExpression(function)) {
+		if (function.isMainFunction() && hasArgsParameter(function.valueParameters) && containsThrowExpression(function)) {
 			report(CodeSmell(issue, Entity.from(function), issue.description))
 		}
-	}
-
-	private fun isMainFunction(function: KtNamedFunction): Boolean {
-		return function.name == "main" && function.isPublicNotOverridden() && function.isTopLevel
 	}
 
 	private fun hasArgsParameter(parameters: List<KtParameter>): Boolean {

@@ -8,6 +8,8 @@ a wildcard import
 
 **Debt**: 10min
 
+**Aliases**: alias1, alias2
+
 #### Configuration options:
 
 * `conf1` (default: `foo`)

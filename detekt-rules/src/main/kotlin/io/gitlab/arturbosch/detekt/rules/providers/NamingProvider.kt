@@ -24,5 +24,4 @@ class NamingProvider : RuleSetProvider {
 				NamingRules(config)
 		))
 	}
-
 }

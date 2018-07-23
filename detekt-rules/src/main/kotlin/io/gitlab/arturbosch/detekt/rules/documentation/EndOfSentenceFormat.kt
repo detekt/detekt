@@ -69,7 +69,7 @@ class EndOfSentenceFormat(config: Config = Config.empty) : Rule(config) {
 		return try {
 			URL(lastArgument).toURI()
 			true
-		} catch (e: MalformedURLException){
+		} catch (e: MalformedURLException) {
 			false
 		} catch (e: URISyntaxException) {
 			false

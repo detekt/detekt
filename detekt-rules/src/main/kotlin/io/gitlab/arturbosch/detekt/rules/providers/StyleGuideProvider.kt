@@ -34,8 +34,11 @@ import io.gitlab.arturbosch.detekt.rules.style.UnusedImports
 import io.gitlab.arturbosch.detekt.rules.style.UnusedPrivateMember
 import io.gitlab.arturbosch.detekt.rules.style.UseDataClass
 import io.gitlab.arturbosch.detekt.rules.style.UtilityClassWithPublicConstructor
+import io.gitlab.arturbosch.detekt.rules.style.VarCouldBeVal
 import io.gitlab.arturbosch.detekt.rules.style.WildcardImport
+import io.gitlab.arturbosch.detekt.rules.style.optional.MandatoryBracesIfStatements
 import io.gitlab.arturbosch.detekt.rules.style.optional.OptionalUnit
+import io.gitlab.arturbosch.detekt.rules.style.optional.PreferToOverPairSyntax
 
 /**
  * The Style ruleset provides rules that assert the style of the code.
@@ -83,7 +86,10 @@ class StyleGuideProvider : RuleSetProvider {
 				NestedClassesVisibility(config),
 				RedundantVisibilityModifierRule(config),
 				UntilInsteadOfRangeTo(config),
-				MayBeConst(config)
+				MayBeConst(config),
+				PreferToOverPairSyntax(config),
+				MandatoryBracesIfStatements(config),
+				VarCouldBeVal(config)
 		))
 	}
 }

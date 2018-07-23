@@ -8,12 +8,12 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
-import org.jetbrains.kotlin.preprocessor.typeReferenceName
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
+import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 
 /**
  * This rule reports files, classes, interfaces, objects and enums which contain too many functions.
@@ -28,6 +28,7 @@ import org.jetbrains.kotlin.psi.KtObjectDeclaration
  * @configuration thresholdInObjects - threshold in objects (default: 11)
  * @configuration thresholdInEnums - threshold in enums (default: 11)
  * @configuration ignoreDeprecated - ignore deprecated functions (default: false)
+ * @configuration ignorePrivate - ignore private functions (default: false)
  *
  * @active since v1.0.0
  * @author Artur Bosch
@@ -38,8 +39,8 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue("TooManyFunctions",
 			Severity.Maintainability,
-			"Too many functions inside a/an file/class/object/interface always indicate a violation of "
-					+ "the single responsibility principle. Maybe the file/class/object/interface wants to manage to " +
+			"Too many functions inside a/an file/class/object/interface always indicate a violation of " +
+					"the single responsibility principle. Maybe the file/class/object/interface wants to manage to " +
 					"many things at once. Extract functionality which clearly belongs together.",
 			Debt.TWENTY_MINS)
 
@@ -49,6 +50,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 	private val thresholdInInterfaces = valueOrDefault(THRESHOLD_IN_INTERFACES, DEFAULT_THRESHOLD)
 	private val thresholdInEnums = valueOrDefault(THRESHOLD_IN_ENUMS, DEFAULT_THRESHOLD)
 	private val ignoreDeprecated = valueOrDefault(IGNORE_DEPRECATED, false)
+	private val ignorePrivate = valueOrDefault(IGNORE_PRIVATE, false)
 
 	private var amountOfTopLevelFunctions: Int = 0
 
@@ -65,7 +67,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 	}
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (function.isTopLevel && ignoresDeprecatedFunction(function)) {
+		if (function.isTopLevel && !isIgnoredFunction(function)) {
 			amountOfTopLevelFunctions++
 		}
 	}
@@ -116,14 +118,13 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 
 	private fun calcFunctions(classOrObject: KtClassOrObject): Int = classOrObject.getBody()?.declarations
 			?.filterIsInstance<KtNamedFunction>()
-			?.filter { ignoresDeprecatedFunction(it) }
+			?.filter { !isIgnoredFunction(it) }
 			?.size ?: 0
 
-	private fun ignoresDeprecatedFunction(function: KtNamedFunction): Boolean {
-		if (ignoreDeprecated) {
-			return !function.annotationEntries.any { it.typeReferenceName == DEPRECATED }
-		}
-		return true
+	private fun isIgnoredFunction(function: KtNamedFunction): Boolean = when {
+			ignoreDeprecated -> function.annotationEntries.any { it.typeReference?.text == DEPRECATED }
+			ignorePrivate -> function.isPrivate()
+			else -> false
 	}
 
 	companion object {
@@ -134,6 +135,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 		const val THRESHOLD_IN_OBJECTS = "thresholdInObjects"
 		const val THRESHOLD_IN_ENUMS = "thresholdInEnums"
 		const val IGNORE_DEPRECATED = "ignoreDeprecated"
+		const val IGNORE_PRIVATE = "ignorePrivate"
 		private const val DEPRECATED = "Deprecated"
 	}
 }

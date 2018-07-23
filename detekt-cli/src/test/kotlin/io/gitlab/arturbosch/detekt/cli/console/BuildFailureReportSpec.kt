@@ -53,6 +53,12 @@ internal class BuildFailureReportSpec : SubjectSpek<BuildFailureReport>({
 				subject.init(TestConfig(mapOf("failThreshold" to "-2", "warningThreshold" to "-2")))
 				assertFails { subject.render(detektion) }
 			}
+
+			it("should contain no stacktrace on fail") {
+				subject.init(TestConfig(mapOf("maxIssues" to "-2")))
+				val exception = assertFails { subject.render(detektion) }
+				assertThat(exception.stackTrace).isEmpty()
+			}
 		}
 	}
 
