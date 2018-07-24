@@ -72,16 +72,16 @@ subprojects {
 		parallel = true
 		filters = ".*/resources/.*, .*/build/.*"
 		baseline = file("${rootProject.projectDir}/reports/baseline.xml")
-		configFile = file("${rootProject.projectDir}/detekt-cli/src/main/resources/default-detekt-config.yml")
+		config = file("${rootProject.projectDir}/detekt-cli/src/main/resources/default-detekt-config.yml")
 		toolVersion = "1.0.0-GRADLE"
 
-		idea(Action {
+		idea {
 			path = "$userHome/.idea"
 			codeStyleScheme = "$userHome/.idea/idea-code-style.xml"
 			inspectionsProfile = "$userHome/.idea/inspect.xml"
 			report = "project.projectDir/reports"
 			mask = "*.kt"
-		})
+		}
 	}
 
 	if (this.name in listOf("detekt-cli", "detekt-watch-service", "detekt-generator")) {
