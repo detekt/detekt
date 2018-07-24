@@ -8,7 +8,6 @@ import org.gradle.api.plugins.ReportingBasePlugin
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import java.io.File
 
-
 /**
  * @author Marvin Ramin
  */

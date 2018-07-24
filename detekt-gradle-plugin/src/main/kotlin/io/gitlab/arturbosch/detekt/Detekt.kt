@@ -1,12 +1,33 @@
 package io.gitlab.arturbosch.detekt
 
 import groovy.lang.Closure
-import io.gitlab.arturbosch.detekt.invoke.*
+import io.gitlab.arturbosch.detekt.invoke.BaselineArgument
+import io.gitlab.arturbosch.detekt.invoke.CliArgument
+import io.gitlab.arturbosch.detekt.invoke.ConfigArgument
+import io.gitlab.arturbosch.detekt.invoke.DebugArgument
+import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
+import io.gitlab.arturbosch.detekt.invoke.DisableDefaultRulesetArgument
+import io.gitlab.arturbosch.detekt.invoke.FiltersArgument
+import io.gitlab.arturbosch.detekt.invoke.HtmlReportArgument
+import io.gitlab.arturbosch.detekt.invoke.InputArgument
+import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
+import io.gitlab.arturbosch.detekt.invoke.PluginsArgument
+import io.gitlab.arturbosch.detekt.invoke.XmlReportArgument
 import org.gradle.api.Action
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileCollection
 import org.gradle.api.reporting.Reporting
-import org.gradle.api.tasks.*
+import org.gradle.api.tasks.CacheableTask
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputFile
+import org.gradle.api.tasks.InputFiles
+import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.Optional
+import org.gradle.api.tasks.OutputFile
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
+import org.gradle.api.tasks.SkipWhenEmpty
+import org.gradle.api.tasks.TaskAction
 import org.gradle.util.ConfigureUtil
 import java.io.File
 
@@ -21,8 +42,9 @@ open class Detekt : DefaultTask(), Reporting<DetektReports> {
 	@Internal
 	override fun getReports() = _reports
 
-	override fun reports(closure: Closure<*>): DetektReports = ConfigureUtil.configure(closure, _reports)
-	override fun reports(configureAction: Action<in DetektReports>): DetektReports = _reports.apply { configureAction.execute(this) }
+	override fun reports(closure: Closure<*>) = ConfigureUtil.configure(closure, _reports)
+	override fun reports(configureAction: Action<in DetektReports>) =
+			_reports.apply { configureAction.execute(this) }
 
 	@InputFiles
 	@PathSensitive(PathSensitivity.RELATIVE)

@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt
 
-
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
