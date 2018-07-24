@@ -60,5 +60,4 @@ class SuppressingSpec : Spek({
 
 		assertThat(findings).isEmpty()
 	}
-
 })

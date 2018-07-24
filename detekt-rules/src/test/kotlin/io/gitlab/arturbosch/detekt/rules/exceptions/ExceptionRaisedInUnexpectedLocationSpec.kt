@@ -40,4 +40,3 @@ class ExceptionRaisedInUnexpectedLocationSpec : SubjectSpek<ExceptionRaisedInUne
 		}
 	}
 })
-

@@ -116,6 +116,7 @@ complexity:
     thresholdInObjects: 11
     thresholdInEnums: 11
     ignoreDeprecated: false
+    ignorePrivate: false
 
 empty-blocks:
   active: true
@@ -388,6 +389,7 @@ style:
     active: false
   ExpressionBodySyntax:
     active: false
+    includeLineWrapping: false
   ForbiddenComment:
     active: true
     values: 'TODO:,FIXME:,STOPSHIP:'
@@ -473,6 +475,8 @@ style:
     active: false
     excludeAnnotatedClasses: ""
   UtilityClassWithPublicConstructor:
+    active: false
+  VarCouldBeVal:
     active: false
   WildcardImport:
     active: true

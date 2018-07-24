@@ -544,6 +544,16 @@ class MagicNumberSpec : Spek({
 				val rule = MagicNumber(TestConfig(mapOf("ignoreNamedArgument" to "true")))
 				assertThat(rule.lint(code("53"))).isEmpty()
 			}
+
+			it("should ignore named arguments in inheritance - #992") {
+				val code = """
+					abstract class A(n: Int)
+
+					object B : A(n = 5)
+				""".trimIndent()
+				val rule = MagicNumber(TestConfig(mapOf("ignoreNamedArgument" to "true")))
+				assertThat(rule.lint(code)).isEmpty()
+			}
 		}
 
 		given("Issue#659 - false-negative reporting on unnamed argument when ignore is true") {

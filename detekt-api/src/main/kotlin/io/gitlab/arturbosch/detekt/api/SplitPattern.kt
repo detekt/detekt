@@ -9,6 +9,7 @@ class SplitPattern(text: String,
 			.split(delimiters)
 			.map { it.trim() }
 			.filter { it.isNotBlank() }
+			.map { it.removePrefix("*") }
 			.map { it.removeSuffix("*") }
 
 	fun contains(value: String?) = excludes.any { value?.contains(it, ignoreCase = true) == true }

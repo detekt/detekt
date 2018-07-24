@@ -22,6 +22,20 @@ class EmptyCodeTest {
 	}
 
 	@Test
+	fun findsEmptyNestedCatch() {
+		val code = """
+			fun f() {
+				try {
+                } catch (ignore: IOException) {
+					try {
+					} catch (e: IOException) {
+					}
+				}
+			}"""
+		assertThat(EmptyCatchBlock(Config.empty).lint(code)).hasSize(1)
+	}
+
+	@Test
 	fun doesNotReportIgnoredOrExpectedException() {
 		val code = """
 			fun f() {
@@ -119,5 +133,4 @@ class EmptyCodeTest {
 		rule.lint(file)
 		assertThat(rule.findings).hasSize(1)
 	}
-
 }

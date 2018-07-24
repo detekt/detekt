@@ -63,8 +63,8 @@ abstract class FormattingRule(config: Config) : Rule(config) {
 	}
 
 	private fun ruleShouldOnlyRunOnFileNode(node: ASTNode) =
-			wrapping is com.github.shyiko.ktlint.core.Rule.Modifier.RestrictToRoot
-					&& node !is FileASTNode
+			wrapping is com.github.shyiko.ktlint.core.Rule.Modifier.RestrictToRoot &&
+					node !is FileASTNode
 
 	private fun PsiElement.originalFilePath() =
 			(this.containingFile.viewProvider.virtualFile as? LightVirtualFile)?.originalFile?.name

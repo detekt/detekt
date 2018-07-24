@@ -109,5 +109,4 @@ internal class ConfigurationsSpec : Spek({
 			assertThat(config.subConfig("build").valueOrDefault("maxIssues", -1)).isEqualTo(1)
 		}
 	}
-
 })

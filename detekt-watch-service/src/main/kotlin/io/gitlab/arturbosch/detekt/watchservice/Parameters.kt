@@ -13,12 +13,12 @@ import java.nio.file.Paths
  */
 class Parameters {
 
-	@Parameter(names = arrayOf("--input", "-i"),
+	@Parameter(names = ["--input", "-i"],
 			converter = ExistingPathConverter::class,
 			description = "Input path to analyze (path/to/project).")
 	private var input: Path? = null
 
-	@Parameter(names = arrayOf("--config", "-c"),
+	@Parameter(names = ["--config", "-c"],
 			description = "Path to the config file (path/to/config.yml).")
 	private var config: String? = null
 
@@ -28,7 +28,6 @@ class Parameters {
 				"Make sure that the given path is an existing directory with kotlin files to watch."
 			}
 		} ?: Paths.get(".")
-
 	}
 
 	fun extractConfig(): Config =

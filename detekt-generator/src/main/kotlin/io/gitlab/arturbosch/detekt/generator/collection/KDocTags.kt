@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
+import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocSection
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocTag
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -33,8 +34,8 @@ fun KDocTag.parseConfigTag(): Configuration {
 
 fun KDocTag.isValidConfigurationTag(entity: String = "Rule"): Boolean {
 	val content: String = getContent()
-	val valid = content.contains("-")
-			&& content.contains(configurationDefaultValueRegex)
+	val valid = content.contains("-") &&
+			content.contains(configurationDefaultValueRegex)
 	if (!valid) {
 		throw InvalidDocumentationException(
 				"$entity $name contains an incorrect configuration option tag in the KDoc.")

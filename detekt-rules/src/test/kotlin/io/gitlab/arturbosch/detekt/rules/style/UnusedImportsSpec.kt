@@ -26,7 +26,7 @@ class UnusedImportsSpec : SubjectSpek<UnusedImports>({
 					} success {
 					}
             	}"""
-			)).hasSize(0)
+			)).isEmpty()
 		}
 
 		it("does not report imports in documentation") {
@@ -51,7 +51,7 @@ class UnusedImportsSpec : SubjectSpek<UnusedImports>({
 		}
 
 		it("should ignore import for link") {
-			assertThat(subject.lint("""
+			val lint = subject.lint("""
 				import tasks.success
 				import tasks.failure
 				import tasks.undefined
@@ -65,7 +65,25 @@ class UnusedImportsSpec : SubjectSpek<UnusedImports>({
 				}
 				}
             """
-			)).hasSize(1)
+			)
+			with(lint) {
+				assertThat(this).hasSize(1)
+				assertThat(this[0].entity.signature).endsWith("import tasks.undefined")
+			}
+		}
+
+		it("reports imports from the current package") {
+			val lint = subject.lint("""
+				package test
+				import test.SomeClass
+
+				val a: SomeClass? = null
+			"""
+			)
+			with(lint) {
+				assertThat(this).hasSize(1)
+				assertThat(this[0].entity.signature).endsWith("import test.SomeClass")
+			}
 		}
 
 		it("does not report KDoc references with method calls") {
@@ -82,11 +100,11 @@ class UnusedImportsSpec : SubjectSpek<UnusedImports>({
 						TODO()
 					}
 				}"""
-			assertThat(subject.lint(code)).hasSize(0)
+			assertThat(subject.lint(code)).isEmpty()
 		}
 
 		it("reports imports with different cases") {
-			assertThat(subject.lint("""
+			val lint = subject.lint("""
             	import p.a
             	import p.B6 // positive
             	import p.B as B12 // positive
@@ -103,11 +121,32 @@ class UnusedImportsSpec : SubjectSpek<UnusedImports>({
             	    fn(B2.NAME)
             	    `when`()
             	}"""
-			)).hasSize(3)
+			)
+			with(lint) {
+				assertThat(this).hasSize(3)
+				assertThat(this[0].entity.signature).contains("import p.B6")
+				assertThat(this[1].entity.signature).contains("import p.B as B12")
+				assertThat(this[2].entity.signature).contains("import escaped.`foo`")
+			}
+		}
+
+		it("does not report imports in same package when inner") {
+			val lint = subject.lint("""
+            	package test
+
+				import test.Outer.Inner
+
+				class Outer : Something<Inner>() {
+					class Inner { }
+				}"""
+			)
+			with(lint) {
+				assertThat(this).isEmpty()
+			}
 		}
 	}
 
-	given("somee import statements with KDoc") {
+	given("some import statements with KDoc") {
 
 		it("does not report imports in KDoc") {
 			val code = """
@@ -125,7 +164,7 @@ class UnusedImportsSpec : SubjectSpek<UnusedImports>({
 					TODO()
 				}"""
 
-			assertThat(subject.lint(code)).hasSize(0)
+			assertThat(subject.lint(code)).isEmpty()
 		}
 	}
 })

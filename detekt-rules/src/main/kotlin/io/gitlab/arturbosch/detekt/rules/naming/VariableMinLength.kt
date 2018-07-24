@@ -22,8 +22,8 @@ class VariableMinLength(config: Config = Config.empty) : Rule(config) {
 			Severity.Style,
 			"Variable names should not be shorter than the minimum defined in the configuration.",
 			debt = Debt.FIVE_MINS)
-	private val minimumVariableNameLength
-			= valueOrDefault(MINIMUM_VARIABLE_NAME_LENGTH, DEFAULT_MINIMUM_VARIABLE_NAME_LENGTH)
+	private val minimumVariableNameLength =
+			valueOrDefault(MINIMUM_VARIABLE_NAME_LENGTH, DEFAULT_MINIMUM_VARIABLE_NAME_LENGTH)
 
 	override fun visitProperty(property: KtProperty) {
 		if (property.isSingleUnderscore) {

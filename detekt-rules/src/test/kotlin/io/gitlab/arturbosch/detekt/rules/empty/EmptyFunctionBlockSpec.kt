@@ -26,6 +26,14 @@ class EmptyFunctionBlockSpec : SubjectSpek<EmptyFunctionBlock>({
 			val code = "open fun stuff() {}"
 			assertThat(subject.lint(code)).isEmpty()
 		}
+
+		it("should flag the nested empty function") {
+			val code = """
+				fun a() {
+					fun b() {}
+				}"""
+			assertThat(subject.lint(code)).hasSize(1)
+		}
 	}
 
 	given("some overridden functions") {
@@ -52,5 +60,4 @@ class EmptyFunctionBlockSpec : SubjectSpek<EmptyFunctionBlock>({
 			assertThat(EmptyFunctionBlock(config).lint(code)).hasSize(1)
 		}
 	}
-
 })

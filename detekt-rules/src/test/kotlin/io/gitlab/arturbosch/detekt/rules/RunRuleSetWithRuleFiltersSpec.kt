@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.rules
 
-import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.rules.empty.EmptyBlocks
 import io.gitlab.arturbosch.detekt.rules.empty.EmptyInitBlock
@@ -9,6 +8,7 @@ import io.gitlab.arturbosch.detekt.rules.style.FileParsingRule
 import io.gitlab.arturbosch.detekt.rules.style.WildcardImport
 import io.gitlab.arturbosch.detekt.rules.style.optional.OptionalUnit
 import io.gitlab.arturbosch.detekt.test.compileForTest
+import io.gitlab.arturbosch.detekt.test.loadRuleSet
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.Spek
@@ -36,8 +36,7 @@ class RunRuleSetWithRuleFiltersSpec : Spek({
 
 	describe("MultiRule test cases") {
 
-		val provider = EmptyCodeProvider()
-		fun ruleSet() = provider.instance(Config.empty)
+		fun ruleSet() = loadRuleSet<EmptyCodeProvider>()
 		val ruleSetId = EmptyBlocks::class.java.simpleName
 
 		it("should filter by RuleSet id") {

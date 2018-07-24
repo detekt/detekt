@@ -2,11 +2,13 @@
 
 - Read [this article](https://chris.beams.io/posts/git-commit/) before writing commit messages
 - Copy the file `commit-msg` to `.git/hooks`
+- Use `gradle build -x dokka` to build the source but exclude documentation jar generating to save time.
 - `gradle detektCheck` should not report any errors
 - This repo uses tabs! Make sure your code is properly formatted.
 - Use idea-code-style.xml for coding style .
 - We use [Spek](https://github.com/spekframework/spek) for testing.
 - Feel free to add your name to the contributors list at the end of the readme file when opening a pull request.
+- The code in `detekt-api` and any rule in `detekt-rules` must be documented. We generate documentation for our website based on this modules.
 
 ### Specific code style rules we use
 
@@ -77,7 +79,9 @@ automatically. The format of the KDoc should be as follows:
 
     Last but not least, the `@author` tag should be added.
 
-- ... do not forget to test the new rule and/or add tests for any changes made to a rule. 
+- ... do not forget to test the new rule and/or add tests for any changes made to a rule.
+Run detekt on itself and other kotlin projects with the `--run-rule RuleSet:RuleId` option to test your rule in isolation.
+Make use of the `scripts/get_analysis_projects.groovy` script to automatically establish a set of analysis projects.
 - ... do not forget to run `./gradlew build`. This will execute tests locally and update the `default-detekt.config.yml`
 as well as add the new/changed rules to the documentation.
 - be aware that your PR will stay open for at least two days so that other users can give feedback.

@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.core
 
 import io.gitlab.arturbosch.detekt.api.Config
+import java.io.PrintStream
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.concurrent.ExecutorService
@@ -19,19 +20,22 @@ data class ProcessingSettings(val project: List<Path>,
 							  val parallelCompilation: Boolean = false,
 							  val excludeDefaultRuleSets: Boolean = false,
 							  val pluginPaths: List<Path> = emptyList(),
-							  val debug: Boolean = false,
-							  val executorService: ExecutorService? = null) {
+							  val executorService: ExecutorService? = null,
+							  val errorPrinter: PrintStream? = null) {
 
+	/**
+	 * Single project input path constructor.
+	 */
 	constructor(project: Path,
 				config: Config = Config.empty,
 				pathFilters: List<PathFilter> = listOf(),
 				parallelCompilation: Boolean = false,
 				excludeDefaultRuleSets: Boolean = false,
 				pluginPaths: List<Path> = emptyList(),
-				debug: Boolean = false,
-				executorService: ExecutorService? = null) :
+				executorService: ExecutorService? = null,
+				errorPrinter: PrintStream? = null) :
 			this(listOf(project), config, pathFilters, parallelCompilation,
-					excludeDefaultRuleSets, pluginPaths, debug, executorService)
+					excludeDefaultRuleSets, pluginPaths, executorService, errorPrinter)
 
 	init {
 		pluginPaths.forEach {

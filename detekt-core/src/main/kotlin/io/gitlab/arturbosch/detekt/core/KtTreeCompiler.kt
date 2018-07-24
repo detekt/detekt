@@ -15,7 +15,7 @@ class KtTreeCompiler(private val compiler: KtCompiler = KtCompiler(),
 
 	companion object {
 		fun instance(settings: ProcessingSettings) = with(settings) {
-			KtTreeCompiler(KtCompiler(), pathFilters, parallelCompilation, settings.debug)
+			KtTreeCompiler(KtCompiler(), pathFilters, parallelCompilation)
 		}
 	}
 

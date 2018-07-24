@@ -34,7 +34,6 @@ class ReturnCountSpec : Spek({
 			val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "1"))).lint(code)
 			assertThat(findings).hasSize(1)
 		}
-
 	}
 
 	given("a file with 2 returns") {
@@ -61,7 +60,6 @@ class ReturnCountSpec : Spek({
 			val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "1"))).lint(code)
 			assertThat(findings).hasSize(1)
 		}
-
 	}
 
 	given("a function is ignored") {

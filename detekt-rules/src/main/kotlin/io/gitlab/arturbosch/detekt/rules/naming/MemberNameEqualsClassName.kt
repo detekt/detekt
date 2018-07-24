@@ -104,8 +104,8 @@ class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
 
 	private fun isFactoryMethod(function: KtNamedFunction, klass: KtClass): Boolean {
 		val typeReference = function.typeReference
-		return typeReference == null && function.bodyExpression !is KtBlockExpression
-				|| typeReference?.text?.equals(klass.name) == true
+		return typeReference == null && function.bodyExpression !is KtBlockExpression ||
+				typeReference?.text?.equals(klass.name) == true
 	}
 
 	companion object {

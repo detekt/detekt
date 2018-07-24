@@ -43,13 +43,12 @@ data class Location(val source: SourceLocation,
 			}
 		}
 
-		private fun PsiElement.originalFilePath()
-				= (this.containingFile.viewProvider.virtualFile as LightVirtualFile).originalFile?.name
+		private fun PsiElement.originalFilePath() =
+				(this.containingFile.viewProvider.virtualFile as LightVirtualFile).originalFile?.name
 
-		private fun PsiElement.getTextAtLocationSafe()
-				= getTextSafe({ searchName() }, { getTextWithLocation() })
+		private fun PsiElement.getTextAtLocationSafe() =
+				getTextSafe({ searchName() }, { getTextWithLocation() })
 	}
-
 }
 
 /**

@@ -26,7 +26,6 @@ val generateDocumentation by tasks.creating {
             fileTree("${rootProject.rootDir}/detekt-generator/documentation"),
             file("${rootProject.rootDir}/detekt-cli/src/main/resources/default-detekt-config.yml"))
 
-
     doLast {
         javaexec {
             main = "-jar"
@@ -95,6 +94,5 @@ dependencies {
 
     testImplementation(project(":detekt-test"))
     testRuntime("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
-    testRuntime("org.junit.platform:junit-platform-console:$junitPlatformVersion")
     testRuntime("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
 }

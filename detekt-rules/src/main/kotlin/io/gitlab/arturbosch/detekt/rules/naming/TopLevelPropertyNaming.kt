@@ -55,7 +55,7 @@ class TopLevelPropertyNaming(config: Config = Config.empty) : Rule(config) {
 				report(CodeSmell(
 						issue,
 						Entity.from(property),
-						message = "Private top level property names should match the pattern: $propertyPattern"))
+						message = "Private top level property names should match the pattern: $privatePropertyPattern"))
 			}
 		} else {
 			if (!property.identifierName().matches(propertyPattern)) {

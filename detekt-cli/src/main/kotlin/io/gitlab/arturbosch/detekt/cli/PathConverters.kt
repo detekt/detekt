@@ -29,8 +29,8 @@ class PathConverter : IStringConverter<Path> {
 
 interface DetektInputPathConverter<T> : IStringConverter<List<T>> {
 	val converter: IStringConverter<T>
-	override fun convert(value: String): List<T>
-			= value.splitToSequence(SEPARATOR_COMMA, SEPARATOR_SEMICOLON, SEPARATOR_COLON)
+	override fun convert(value: String): List<T> = 
+		value.splitToSequence(SEPARATOR_COMMA, SEPARATOR_SEMICOLON, SEPARATOR_COLON)
 			.map { it.trim() }
 			.map { converter.convert(it) }
 			.toList().apply {
@@ -52,7 +52,7 @@ class MultipleExistingPathConverter : DetektInputPathConverter<Path> {
 class ClasspathResourceConverter : IStringConverter<URL> {
 	override fun convert(resource: String): URL {
 		val relativeResource = if (resource.startsWith("/")) resource else "/" + resource
-		return javaClass.getResource(relativeResource) ?:
-				throw ParameterException("Classpath resource '$resource' does not exist!")
+		return javaClass.getResource(relativeResource)
+				?: throw ParameterException("Classpath resource '$resource' does not exist!")
 	}
 }

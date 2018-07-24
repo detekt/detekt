@@ -57,4 +57,3 @@ class OutputFacade(private val arguments: CliArgs,
 		report.print(printStream, result)
 	}
 }
-

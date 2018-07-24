@@ -68,7 +68,7 @@ class WildcardImport(config: Config = Config.empty) : Rule(config) {
 			if (excludedImports.contains(import)) {
 				return
 			}
-				report(CodeSmell(issue, Entity.from(importDirective), "${importDirective.importPath!!.pathStr} " +
+				report(CodeSmell(issue, Entity.from(importDirective), "$it " +
 						"is a wildcard import. Replace it with fully qualified imports."))
 		}
 	}
@@ -77,4 +77,3 @@ class WildcardImport(config: Config = Config.empty) : Rule(config) {
 		const val EXCLUDED_IMPORTS = "excludeImports"
 	}
 }
-

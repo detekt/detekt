@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
+import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
 import io.gitlab.arturbosch.detekt.rules.isOverridden
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -119,6 +120,5 @@ class RuleListVisitor : DetektVisitor() {
 		ruleProperties.addAll(argumentExpressions
 				.filter { it is KtReferenceExpression }
 				.map { it?.text ?: "" })
-
 	}
 }

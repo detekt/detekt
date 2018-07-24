@@ -7,7 +7,7 @@ import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
-class WrongEqualsTypeParameterSpec  : SubjectSpek<WrongEqualsTypeParameter>({
+class WrongEqualsTypeParameterSpec : SubjectSpek<WrongEqualsTypeParameter>({
 	subject { WrongEqualsTypeParameter(Config.empty) }
 
 	given("an equals method") {

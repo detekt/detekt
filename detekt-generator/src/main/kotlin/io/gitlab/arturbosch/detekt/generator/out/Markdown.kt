@@ -36,7 +36,7 @@ inline fun MarkdownContent.h4(heading: () -> String) = append("#### ${heading()}
 
 inline fun MarkdownContent.orderedList(sectionList: () -> List<String>) {
 	for (i in 0 until sectionList().size) {
-		append("${i+1}. ${sectionList()[i]}")
+		append("${i + 1}. ${sectionList()[i]}")
 	}
 }
 

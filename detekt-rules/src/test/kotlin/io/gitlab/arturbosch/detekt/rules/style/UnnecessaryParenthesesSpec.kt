@@ -104,5 +104,16 @@ class UnnecessaryParenthesesSpec : SubjectSpek<UnnecessaryParentheses>({
 				"""
 			assertThat(subject.lint(code)).hasSize(0)
 		}
+
+		it("should not report lambdas within super constructor calls") {
+			val code = """
+				class Clazz(
+					private val func: (X, Y) -> Z
+				) {
+					constructor() : this({ first, second -> true })
+				}
+			""".trimIndent()
+			assertThat(subject.lint(code)).hasSize(0)
+		}
 	}
 })

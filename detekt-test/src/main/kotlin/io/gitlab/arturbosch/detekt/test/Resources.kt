@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.test
 
 import io.gitlab.arturbosch.detekt.api.YamlConfig
-import java.io.File
 import java.net.URI
 
 internal object Resources
@@ -13,6 +12,4 @@ fun resource(name: String): URI {
 	return resource.toURI()
 }
 
-fun resourceAsString(name: String): String = File(resource(name)).readText()
-
-fun yamlConfig(resource: String) = YamlConfig.loadResource(Resources::class.java.getResource("/$resource"))
+fun yamlConfig(name: String) = YamlConfig.loadResource(resource(name).toURL())

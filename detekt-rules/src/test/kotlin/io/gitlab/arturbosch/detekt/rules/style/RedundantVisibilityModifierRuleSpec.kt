@@ -47,7 +47,7 @@ class RedundantVisibilityModifierRuleSpec : SubjectSpek<RedundantVisibilityModif
 			"""
 			assertThat(subject.lint(code)).hasSize(0)
 		}
-		
+
 		it("check public function") {
 			val code = """
 				class Test{
@@ -129,4 +129,3 @@ class RedundantVisibilityModifierRuleSpec : SubjectSpek<RedundantVisibilityModif
 		}
 	}
 })
-

@@ -44,5 +44,4 @@ class ExceptionsProvider : RuleSetProvider {
 				SwallowedException(config)
 		))
 	}
-
 }

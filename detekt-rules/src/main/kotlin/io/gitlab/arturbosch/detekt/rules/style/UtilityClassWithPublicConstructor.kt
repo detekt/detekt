@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.psi.KtSecondaryConstructor
 
 /**
  * A class which only contains utility functions and no concrete implementation can be refactored into an `object`.
- * 
+ *
  * <noncompliant>
  * class UtilityClass {
  *
@@ -63,7 +63,7 @@ class UtilityClassWithPublicConstructor(config: Config = Config.empty) : Rule(co
 			val declarations = klass.getBody()?.declarations
 			if (hasOnlyUtilityClassMembers(declarations)) {
 				report(CodeSmell(issue, Entity.from(klass), "The class ${klass.nameAsSafeName} only contains" +
-						"utility functions. Consider defining it as an object."))
+						" utility functions. Consider defining it as an object."))
 			}
 		}
 		super.visitClass(klass)

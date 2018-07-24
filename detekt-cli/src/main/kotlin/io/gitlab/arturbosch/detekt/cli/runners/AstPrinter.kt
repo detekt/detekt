@@ -33,7 +33,6 @@ class AstPrinter(private val arguments: CliArgs) : Executable {
 class ElementPrinter : DetektVisitor() {
 
 	companion object {
-		private const val TAB = "\t"
 		internal fun dump(file: KtFile): String = ElementPrinter().run {
 			sb.appendln("0: " + file.javaClass.simpleName)
 			visitKtFile(file)
@@ -79,7 +78,7 @@ class ElementPrinter : DetektVisitor() {
 	}
 
 	private fun KtElement.isContainer() =
-			this is KtStatementExpression
-					|| this is KtDeclarationContainer
-					|| this is KtContainerNode
+			this is KtStatementExpression ||
+					this is KtDeclarationContainer ||
+					this is KtContainerNode
 }

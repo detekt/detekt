@@ -80,5 +80,4 @@ class RethrowCaughtException(config: Config = Config.empty) : Rule(config) {
 			it.text == exceptionName && (it.nextSibling == null || it.nextSibling.node.elementType != KtTokens.DOT)
 		}
 	}
-
 }

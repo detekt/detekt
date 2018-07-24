@@ -50,10 +50,9 @@ val result = object : Detektion {
 	override fun add(projectMetric: ProjectMetric) {
 		throw UnsupportedOperationException("not implemented")
 	}
-
 }
 
-val code = """
+const val code = """
 	package io.gitlab.arturbosch.detekt.sample
 
 	class Foo {}

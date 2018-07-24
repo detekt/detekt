@@ -39,6 +39,5 @@ dependencies {
 	testImplementation("org.junit.jupiter:junit-jupiter-engine:$junitEngineVersion")
 
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
-	testRuntimeOnly("org.junit.platform:junit-platform-console:$junitPlatformVersion")
 	testRuntimeOnly("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
 }

@@ -39,5 +39,4 @@ class KtTreeCompilerSpec : Spek({
 			assertTrue { KtTreeCompiler().compile(path.resolve("Default.kt")).size == 1 }
 		}
 	}
-
 })

@@ -19,29 +19,46 @@ test-pattern: # Configure exclusions for test sources
     - 'SpreadOperator'
     - 'UnsafeCast'
 
-style:
-  MagicNumber:
-    ignoreHashCodeFunction: true
-    ignorePropertyDeclaration: true
-    ignoreAnnotation: true
-    ignoreNumbers: '-1,0,1,2,100,1000'
-  VariableNaming:
-    active: true
-    variablePattern: '(_)?[a-z][a-zA-Z0-9]*'
-  SpacingBetweenPackageAndImports:
+comments:
+  CommentOverPrivateProperty:
     active: true
 
-potential-bugs:
-  UnsafeCast:
+complexity:
+  StringLiteralDuplication:
+    active: true
+    threshold: 5
+    ignoreAnnotation: true
+    excludeStringsWithLessThan5Characters: true
+    ignoreStringsRegex: '$^'
+  ComplexInterface:
+    active: true
+    threshold: 10
+    includeStaticDeclarations: false
+  MethodOverloading:
+    active: true
+
+exceptions:
+  NotImplementedDeclaration:
+    active: true
+  InstanceOfCheckForException:
+    active: true
+  RethrowCaughtException:
+    active: true
+  ReturnFromFinally:
+    active: true
+  SwallowedException:
+    active: true
+  ThrowingExceptionFromFinally:
+    active: true
+  ThrowingExceptionsWithoutMessageOrCause:
+    active: true
+  ThrowingNewInstanceOfSameException:
     active: true
 
 formatting:
   active: true
   android: false
-  autoCorrect: false
-  ChainWrapping:
-    active: true
-    autoCorrect: true
+  autoCorrect: true
   Indentation:
     active: false
     autoCorrect: true
@@ -54,3 +71,40 @@ formatting:
   ImportOrdering:
     active: false
     autoCorrect: true
+  NoItParamInMultilineLambda:
+    active: false
+  NoWildcardImports:
+    active: false
+
+naming:
+  VariableNaming:
+    active: true
+    variablePattern: '[a-z][A-Za-z0-9]*'
+    privateVariablePattern: '(_)?[a-z][A-Za-z0-9]*'
+    excludeClassPattern: '$^'
+
+potential-bugs:
+  UnsafeCast:
+    active: true
+  UselessPostfixExpression:
+    active: true
+
+potential-bugs:
+  UnsafeCast:
+    active: true
+
+style:
+  MagicNumber:
+    ignoreHashCodeFunction: true
+    ignorePropertyDeclaration: true
+    ignoreAnnotation: true
+    ignoreNumbers: '-1,0,1,2,100,1000'
+  SpacingBetweenPackageAndImports:
+    active: true
+  UtilityClassWithPublicConstructor:
+    active: true
+  VariableNaming:
+    active: true
+    variablePattern: '(_)?[a-z][a-zA-Z0-9]*'
+  SpacingBetweenPackageAndImports:
+    active: true

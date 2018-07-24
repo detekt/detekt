@@ -137,5 +137,31 @@ class TooManyFunctionsSpec : Spek({
 				assertThat(configuredRule.lint(code)).isEmpty()
 			}
 		}
+
+		describe("different private functions") {
+
+			val code = """
+				private fun f() {
+				}
+
+				class A {
+					private fun f() {
+					}
+				}
+				"""
+
+			it("finds all private functions per default") {
+				assertThat(rule.lint(code)).hasSize(2)
+			}
+
+			it("finds no private functions") {
+				val configuredRule = TooManyFunctions(TestConfig(mapOf(
+					TooManyFunctions.THRESHOLD_IN_CLASSES to "1",
+					TooManyFunctions.THRESHOLD_IN_FILES to "1",
+					TooManyFunctions.IGNORE_PRIVATE to "true"
+				)))
+				assertThat(configuredRule.lint(code)).isEmpty()
+			}
+		}
 	}
 })

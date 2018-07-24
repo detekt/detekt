@@ -21,5 +21,4 @@ class EmptyCodeProvider : RuleSetProvider {
 				EmptyBlocks(config)
 		))
 	}
-
 }

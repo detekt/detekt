@@ -12,6 +12,7 @@ import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtConstantExpression
+import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtProperty
 
@@ -39,6 +40,7 @@ import org.jetbrains.kotlin.psi.KtProperty
  *
  * @author schalkms
  * @author Marvin Ramin
+ * @author Dmitriy Samaryan
  */
 class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(config) {
 
@@ -54,17 +56,17 @@ class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(
 			val companionObject = klass.companionObject()
 			if (companionObject == null || !hasCorrectSerialVersionUUID(companionObject)) {
 				report(CodeSmell(issue, Entity.from(klass), "The class ${klass.nameAsSafeName} implements" +
-						"the Serializable interface and should thus define a serialVersionUID."))
+						" the Serializable interface and should thus define a serialVersionUID."))
 			}
 		}
 		super.visitClass(klass)
 	}
 
 	override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
-		if (!declaration.isCompanion()
-				&& isImplementingSerializable(declaration)
-				&& !hasCorrectSerialVersionUUID(declaration)) {
-			report(CodeSmell(issue, Entity.from(declaration),"The object ${declaration.nameAsSafeName} " +
+		if (!declaration.isCompanion() &&
+				isImplementingSerializable(declaration) &&
+				!hasCorrectSerialVersionUUID(declaration)) {
+			report(CodeSmell(issue, Entity.from(declaration), "The object ${declaration.nameAsSafeName} " +
 					"implements the Serializable interface and should thus define a serialVersionUID."))
 		}
 		super.visitObjectDeclaration(declaration)
@@ -83,8 +85,9 @@ class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(
 	private fun hasLongType(property: KtProperty) = property.typeReference?.text == "Long"
 
 	private fun hasLongAssignment(property: KtProperty): Boolean {
-		val assignmentText = property.children.singleOrNull { it is KtConstantExpression }?.text
-		return assignmentText != null && assignmentText.last() == 'L'
-				&& assignmentText.substring(0, assignmentText.length-1).toLongOrNull() != null
+		val assignmentText = property.children
+				.singleOrNull { it is KtConstantExpression || it is KtPrefixExpression }?.text
+		return assignmentText != null && assignmentText.last() == 'L' &&
+				assignmentText.substring(0, assignmentText.length - 1).toLongOrNull() != null
 	}
 }

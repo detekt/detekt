@@ -5,9 +5,9 @@
 [![build status](https://travis-ci.org/arturbosch/detekt.svg?branch=master)](https://travis-ci.org/arturbosch/detekt)
 [![build status windows](https://ci.appveyor.com/api/projects/status/3q9g98vveiul7yut/branch/master?svg=true)](https://ci.appveyor.com/project/arturbosch/detekt)
 [ ![Download](https://api.bintray.com/packages/arturbosch/code-analysis/detekt/images/download.svg) ](https://bintray.com/arturbosch/code-analysis/detekt/_latestVersion)
-[![gradle plugin](https://img.shields.io/badge/gradle_plugin-1.0.0.RC7-blue.svg?style=flat-square)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
+[![gradle plugin](https://img.shields.io/badge/gradle_plugin-1.0.0.RC7.3-blue.svg?style=flat-square)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-44-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-48-orange.svg?style=flat-square)](#contributors)
 [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
 
 Meet _detekt_, a static code analysis tool for the _Kotlin_ programming language.
@@ -33,7 +33,7 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 
 ### Project Website
 
-Visit https://arturbosch.github.io/detekt/ for installation guides, rule descriptions and configuration options.
+Visit https://arturbosch.github.io/detekt/ for installation guides, release notes, migration guides, rule descriptions and configuration options.
 
 ### Quick Start ...
 
@@ -64,6 +64,19 @@ detekt {
     }
 }
 ```
+
+### Adding more rule sets
+
+detekt itself provides a wrapper over [KtLint](https://github.com/shyiko/ktlint) as a `formatting` rule set
+which can be easily added to the gradle configuration:
+
+```gradle
+dependencies {
+    detekt "io.gitlab.arturbosch.detekt:detekt-formatting:1.0.0.[version]"
+}
+```
+
+Likewise custom [extensions](https://arturbosch.github.io/detekt/extensions.html) can be added to detekt.
 
 ### Contributors
 
@@ -109,6 +122,9 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Robbin Voortman](https://github.com/rvoortman) - Rule improvement: MaxLineLength
 - [Mike Gorunov](http://github.com/Miha-x64/) — Rule improvement: UndocumentedPublicFunction
 - [Joey Kaan](https://github.com/jkaan) - New rule: MandatoryBracesIfStatements
+- [Dmitriy Samaryan](https://github.com/samarjan92) - Rule fix: SerialVersionUIDInSerializableClass
+- [Mariano Simone](https://github.com/marianosimone) - Rule improvement: UnusedPrivateMember
+- [Shunsuke Maeda](https://github.com/duck8823) - Fix: to work on multi module project using [maven plugin](https://github.com/Ozsie/detekt-maven-plugin)
 
 ### Mentions
 
@@ -127,10 +143,11 @@ As mentioned in...
 - [Check the quality of Kotlin code](https://blog.frankel.ch/check-quality-kotlin-code/)
 
 Integrations:
+- [SonarKotlin](https://docs.sonarqube.org/display/PLUG/SonarKotlin)
+- [Codacy](https://www.codacy.com)
 - [Gradle plugin that generates ErrorProne, Findbugs, Checkstyle, PMD, CPD, Lint, Detekt & Ktlint Tasks for every subproject](https://github.com/vanniktech/gradle-code-quality-tools-plugin)
 - [Java library for parsing report files from static code analysis](https://github.com/tomasbjerre/violations-lib)
 - [sputnik is a free tool for static code review and provides support for detekt](https://github.com/TouK/sputnik)
-- [Codacy](https://www.codacy.com)
 - [Novoda Gradle Static Analysis plugin](https://github.com/novoda/gradle-static-analysis-plugin)
 - [Maven plugin that wraps the Detekt CLI](https://github.com/Ozsie/detekt-maven-plugin)
 

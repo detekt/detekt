@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.api
 
-import org.jetbrains.kotlin.preprocessor.typeReferenceName
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtFile
 
@@ -16,6 +15,6 @@ class AnnotationExcluder(
 			?.toMap()
 
 	fun shouldExclude(annotations: List<KtAnnotationEntry>) =
-			annotations.mapNotNull { resolvedAnnotations?.get(it.typeReferenceName) }
+			annotations.mapNotNull { resolvedAnnotations?.get(it.typeReference?.text) }
 					.any { excludes.contains(it) }
 }

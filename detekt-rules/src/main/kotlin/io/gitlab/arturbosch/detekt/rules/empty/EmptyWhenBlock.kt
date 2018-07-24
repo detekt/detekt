@@ -15,9 +15,9 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
 class EmptyWhenBlock(config: Config) : EmptyRule(config) {
 
 	override fun visitWhenExpression(expression: KtWhenExpression) {
+		super.visitWhenExpression(expression)
 		if (expression.entries.isEmpty()) {
 			report(CodeSmell(issue, Entity.from(expression), "This when block is empty."))
 		}
 	}
-
 }

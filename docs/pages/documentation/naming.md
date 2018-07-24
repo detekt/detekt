@@ -88,6 +88,8 @@ Reports when function names which do not follow the specified naming convention 
 
 **Debt**: 5min
 
+**Aliases**: FunctionName
+
 #### Configuration options:
 
 * `functionPattern` (default: `'^([a-z$][a-zA-Z$0-9]*)|(`.*`)$'`)
