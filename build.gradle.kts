@@ -1,7 +1,6 @@
 import com.jfrog.bintray.gradle.BintrayExtension
 import io.gitlab.arturbosch.detekt.DetektPlugin
 import io.gitlab.arturbosch.detekt.detekt
-import io.gitlab.arturbosch.detekt.idea
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.codehaus.groovy.tools.shell.util.Logger.io
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -18,9 +17,6 @@ buildscript {
 	}
 
 	val kotlinVersion: String by project
-	val junitPlatformVersion: String by project
-
-	val usedDetektGradleVersion: String by project
 
 	dependencies {
 		classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
@@ -190,7 +186,6 @@ subprojects {
 
 	val kotlinVersion: String by project
 	val junitEngineVersion: String by project
-	val junitPlatformVersion: String by project
 	val assertjVersion: String by project
 	val spekVersion: String by project
 	val kotlinImplementation by configurations.creating

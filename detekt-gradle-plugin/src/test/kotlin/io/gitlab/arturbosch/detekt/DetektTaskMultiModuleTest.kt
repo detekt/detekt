@@ -128,7 +128,7 @@ internal class DetektTaskMultiModuleTest : Spek({
 					|detekt {
 					|	reports {
 					|		html.enabled = false
-					|		xml.destination = file("build/custom-reports-location/detekt.xml")
+					|		xml.destination = file("${"\${project.projectDir}"}/build/custom-reports-location/detekt.xml")
 					|	}
 					|}
 				""".trimMargin()
