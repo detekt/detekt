@@ -1,102 +1,59 @@
 package io.gitlab.arturbosch.detekt.extensions
 
-import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.file.FileCollection
-import org.gradle.api.internal.artifacts.dependencies.DefaultExternalModuleDependency
+import org.gradle.api.plugins.quality.CodeQualityExtension
+import org.gradle.api.reporting.ReportingExtension
+import java.io.File
 
 /**
  * @author Artur Bosch
  * @author Said Tahsin Dane
- * @author Olivier Lemasle
+ * @author Marvin Ramin
  */
-open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
-						   open var debug: Boolean = DEFAULT_DEBUG_VALUE,
-						   open var profile: String = DEFAULT_PROFILE_NAME,
-						   open var ideaExtension: IdeaExtension = IdeaExtension()) {
+open class DetektExtension(project: Project) : CodeQualityExtension() {
+	val defaultReportsDir = project.layout.buildDirectory.get()
+			.dir(ReportingExtension.DEFAULT_REPORTS_DIR_NAME)
+			.dir("detekt").asFile
+	val defaultSourceDirectories = project.files("src/main/java", "src/main/kotlin")
 
-	fun ideaFormatArgs() = ideaExtension.formatArgs(this)
-	fun ideaInspectArgs() = ideaExtension.inspectArgs(this)
+	val reports = project.extensions.create("reports", DetektReportsExtension::class.java, project)
+	val idea: IdeaExtension = project.extensions.create("idea", IdeaExtension::class.java)
 
-	fun idea(configuration: Action<in IdeaExtension>) {
-		configuration.execute(ideaExtension)
-	}
+	var input: FileCollection? = null
 
-	fun defaultProfile(configuration: Action<in ProfileExtension>) {
-		configuration.execute(ProfileStorage.defaultProfile)
-	}
+	var baseline: File? = null
 
-	fun profile(name: String, configuration: Action<in ProfileExtension>) {
-		if (name == DEFAULT_PROFILE_NAME) {
-			defaultProfile(configuration)
-		} else {
-			ProfileExtension(name).apply {
-				ProfileStorage.add(this)
-				configuration.execute(this)
-			}
-		}
-	}
+	var config: File? = null
 
-	fun resolveClasspath(project: Project): FileCollection = project
-		.configurations
-		.getByName("detekt")
-		.withDependencies {
-			it.add(
-				DefaultExternalModuleDependency(
-					"io.gitlab.arturbosch.detekt", "detekt-cli", version
-				)
-			)
-		}
+	var debug: Boolean = DEFAULT_DEBUG_VALUE
 
-	fun resolveArguments(project: Project): List<String> {
-		return with(extractArguments()) {
-			if (!contains(INPUT_PARAMETER)) {
-				add(INPUT_PARAMETER)
-				add(project.projectDir.toString())
-			}
-			this
-		}
-	}
+	var parallel: Boolean = DEFAULT_PARALLEL_VALUE
 
-	private fun extractArguments(): MutableList<String> {
-		val defaultProfile = ProfileStorage.defaultProfile
-		val systemOrSelected = ProfileStorage.systemProfile
-				?: ProfileStorage.getByName(profile)
+	var disableDefaultRuleSets: Boolean = DEFAULT_DISABLE_RULESETS_VALUE
 
-		val propertyMap =
-				if (systemOrSelected?.name == defaultProfile.name) {
-					defaultProfile.arguments(debug)
-				} else {
-					defaultProfile.arguments(debug).apply {
-						systemOrSelected?.arguments(debug)?.mergeInto(this)
-					}
-				}
+	var filters: String? = null
 
-		val arguments = propertyMap.flatMapTo(ArrayList()) { removeBooleanValues(it.key, it.value) }
-
-		if (debug) {
-			val name = systemOrSelected?.name ?: DEFAULT_PROFILE_NAME
-			println("detekt version: $version - usedProfile: $name")
-			println("arguments: $arguments")
-		}
-
-		return arguments
-	}
-
-	private fun removeBooleanValues(key: String, value: String) =
-			if (value == "true" || value == "false") listOf(key) else listOf(key, value)
-
-	override fun toString(): String = "DetektExtension(version='$version', " +
-			"debug=$debug, profile='$profile', ideaExtension=$ideaExtension, profiles=${ProfileStorage.all})"
+	var plugins: String? = null
 }
 
-private fun MutableMap<String, String>.mergeInto(other: MutableMap<String, String>) {
-	for ((key, value) in this) {
-		other.merge(key, value) { v1, v2 ->
-			joinMultipleConfigurations(key, v1, v2)
-		}
+open class DetektReportsExtension(project: Project) {
+	val xml = project.extensions.create("xml", DetektReportExtension::class.java)
+	val html = project.extensions.create("html", DetektReportExtension::class.java)
+	fun withName(name: String) = when (name.toLowerCase()) {
+		"xml" -> xml
+		"html" -> html
+		else -> throw IllegalArgumentException("name '${name}' is not a supported report name")
 	}
 }
 
-private fun joinMultipleConfigurations(key: String, v1: String, v2: String) =
-		if (key == CONFIG_PARAMETER || key == CONFIG_RESOURCE_PARAMETER) "$v1,$v2" else v2
+open class DetektReportExtension {
+
+	var enabled: Boolean = DEFAULT_REPORT_ENABLED_VALUE
+
+	/**
+	 * destination of the output - relative to the project root
+	 */
+	var destination: File? = null
+}
+

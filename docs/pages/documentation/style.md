@@ -292,6 +292,29 @@ class User {
 }
 ```
 
+### MandatoryBracesIfStatements
+
+This rule detects multi-line `if` statements which do not have braces.
+Adding braces would improve readability and avoid possible errors.
+
+**Severity**: Style
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+val i = 1
+if (i > 0)
+    println(i)
+```
+
+#### Compliant Code:
+
+```kotlin
+val x = if (condition) 5 else 4
+```
+
 ### MaxLineLength
 
 This rule reports lines of code which exceed a defined maximum line length.
@@ -487,6 +510,28 @@ when (1) {
     1 -> println("one")
     else -> println("else")
 }
+```
+
+### PreferToOverPairSyntax
+
+This rule detects the usage of the Pair constructor to create pairs of values.
+
+Using <value1> to <value2> is preferred.
+
+**Severity**: Style
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+val pair = Pair(1, 2)
+```
+
+#### Compliant Code:
+
+```kotlin
+val pair = 1 to 2
 ```
 
 ### ProtectedMemberInFinalClass

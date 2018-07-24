@@ -18,6 +18,7 @@ class InvalidRangeSpec : SubjectSpek<InvalidRange>({
 					for (i in 2..2) {}
 					for (i in 2 downTo 2) {}
 					for (i in 2 until 2) {}
+					for (i in 2 until 4 step 2) {}
 					for (i in (1+1)..3) { }
 				}"""
 			assertThat(subject.lint(code)).hasSize(0)
@@ -29,8 +30,9 @@ class InvalidRangeSpec : SubjectSpek<InvalidRange>({
 					for (i in 2..1) { }
 					for (i in 1 downTo 2) { }
 					for (i in 2 until 1) { }
+					for (i in 2 until 1 step 2) { }
 				}"""
-			assertThat(subject.lint(code)).hasSize(3)
+			assertThat(subject.lint(code)).hasSize(4)
 		}
 
 		it("reports nested loops with incorrect bounds in for loop conditions") {

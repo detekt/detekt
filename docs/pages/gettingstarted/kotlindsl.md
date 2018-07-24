@@ -8,7 +8,8 @@ folder: gettingstarted
 summary:
 ---
 
-All information from Gradle Groovy DSL are still valid, just the DSL changes a little.
+All information from Gradle Groovy DSL are still valid, but the
+DSL to apply the plugin changes slightly.
 
 For gradle version >= 4.1
 
@@ -22,17 +23,5 @@ buildscript {
 }
 plugins {
     id("io.gitlab.arturbosch.detekt").version("1.0.0.[version]")
-}
-
-detekt {
-    version = "1.0.0.[version]"
-    profile("main", Action {
-        input = file("src/main/kotlin")
-        config = file("detekt.yml")
-        filters = ".*/resources/.*,.*/tmp/.*"
-        output = file("reports")
-        outputName = "detekt-report"
-        baseline = file("reports/baseline.xml")
-    })
 }
 ```

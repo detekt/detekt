@@ -1,33 +1,34 @@
 package io.gitlab.arturbosch.detekt
 
-import io.gitlab.arturbosch.detekt.extensions.DetektExtension
+import io.gitlab.arturbosch.detekt.invoke.CliArgument
+import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
+import io.gitlab.arturbosch.detekt.invoke.GenerateConfigArgument
+import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileCollection
-import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.*
 
 /**
  * @author Artur Bosch
- * @author Olivier Lemasle
+ * @author Marvin Ramin
  */
 open class DetektGenerateConfigTask : DefaultTask() {
-
-	private val classpath: FileCollection
 
 	init {
 		description = "Generate a detekt configuration file inside your project."
 		group = "verification"
-
-		val detektExtension = project.extensions.getByName("detekt") as DetektExtension
-		classpath = detektExtension.resolveClasspath(project)
-		dependsOn(classpath)
 	}
+
+	@InputFiles
+	@PathSensitive(PathSensitivity.RELATIVE)
+	@SkipWhenEmpty
+	lateinit var input: FileCollection
 
 	@TaskAction
 	fun generateConfig() {
-		project.javaexec {
-			it.main = "io.gitlab.arturbosch.detekt.cli.Main"
-			it.classpath = classpath
-			it.args("--input", project.projectDir.absolutePath, "--generate-config")
-		}
+		val arguments = mutableListOf<CliArgument>(GenerateConfigArgument()) +
+				InputArgument(input)
+
+		DetektInvoker.invokeCli(project, arguments.toList())
 	}
 }

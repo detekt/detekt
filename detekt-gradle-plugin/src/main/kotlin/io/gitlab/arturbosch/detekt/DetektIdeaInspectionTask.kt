@@ -1,11 +1,14 @@
 package io.gitlab.arturbosch.detekt
 
-import io.gitlab.arturbosch.detekt.extensions.DetektExtension
+import io.gitlab.arturbosch.detekt.extensions.IdeaExtension
+import io.gitlab.arturbosch.detekt.invoke.ProcessExecutor
 import org.gradle.api.DefaultTask
-import org.gradle.api.tasks.TaskAction
+import org.gradle.api.file.FileCollection
+import org.gradle.api.tasks.*
 
 /**
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 open class DetektIdeaInspectionTask : DefaultTask() {
 
@@ -14,11 +17,22 @@ open class DetektIdeaInspectionTask : DefaultTask() {
 		group = "verification"
 	}
 
+	@InputFiles
+	@PathSensitive(PathSensitivity.RELATIVE)
+	@SkipWhenEmpty
+	lateinit var input: FileCollection
+
+	@Internal
+	@Optional
+	var debugOrDefault: Boolean = false
+
+	lateinit var ideaExtension: IdeaExtension
+
 	@TaskAction
 	fun inspect() {
-		with(project.extensions.getByName("detekt") as DetektExtension) {
-			if (debug) println("$ideaExtension")
-			startProcess(ideaInspectArgs())
-		}
+		if (debugOrDefault) println("Running inspection task in debug mode")
+
+		if (debugOrDefault) println("$ideaExtension")
+		ProcessExecutor.startProcess(ideaExtension.inspectArgs(input.asPath))
 	}
 }

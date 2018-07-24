@@ -12,10 +12,11 @@ private const val PLACEHOLDER_FINDINGS = "@@@findings@@@"
 
 /**
  * Generates a HTML report containing rule violations and metrics.
+ *
+ * @author Marvin Ramin
  */
 class HtmlOutputReport : OutputReport() {
 
-	override var fileName = "detekt-report"
 	override val ending = "html"
 
 	override fun render(detektion: Detektion) =

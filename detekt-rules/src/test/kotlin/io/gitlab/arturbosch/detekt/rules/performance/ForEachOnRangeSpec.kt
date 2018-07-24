@@ -10,10 +10,17 @@ class ForEachOnRangeSpec : Spek({
 
 	given("a kt file with using a forEach on a range") {
 		val code = """
-			package foo
-
 			fun test() {
 				(1..10).forEach {
+					println(it)
+				}
+				(1 until 10).forEach {
+					println(it)
+				}
+				(10 downTo 1).forEach {
+					println(it)
+				}
+				(10 downTo 1 step 2).forEach {
 					println(it)
 				}
 			}
@@ -21,14 +28,12 @@ class ForEachOnRangeSpec : Spek({
 
 		it("should report the forEach usage") {
 			val findings = ForEachOnRange().lint(code)
-			assertThat(findings).hasSize(1)
+			assertThat(findings).hasSize(4)
 		}
 	}
 
 	given("a kt file with using any other method on a range") {
 		val code = """
-			package foo
-
 			fun test() {
 				(1..10).isEmpty()
 			}
@@ -42,8 +47,6 @@ class ForEachOnRangeSpec : Spek({
 
 	given("a kt file with using a forEach on a list") {
 		val code = """
-			package foo
-
 			fun test() {
 				listOf<Int>(1, 2, 3).forEach {
 					println(it)

@@ -1,24 +1,48 @@
-plugins {
-	`java-gradle-plugin`
-	id("com.gradle.plugin-publish")
+buildscript {
+	repositories {
+		mavenCentral()
+		mavenLocal()
+		jcenter()
+	}
+	dependencies {
+		classpath("org.junit.platform:junit-platform-gradle-plugin:1.1.0")
+	}
 }
 
+repositories {
+	gradlePluginPortal()
+	mavenLocal()
+	jcenter()
+}
+
+plugins {
+	`java-gradle-plugin`
+	id("com.gradle.plugin-publish") version "0.9.10"
+	kotlin("jvm") version "1.2.41"
+	`kotlin-dsl`
+}
+
+apply {
+	plugin("org.junit.platform.gradle.plugin")
+}
 val detektGradleVersion: String by project
 
-version = "$detektGradleVersion"
 
-configurations.implementation.extendsFrom(configurations.kotlinImplementation)
-configurations.testImplementation.extendsFrom(configurations.kotlinTest)
+group = "io.gitlab.arturbosch"
+version = "1.0.0-GRADLE"
 
-val jcommanderVersion: String by project
-val spekVersion: String by project
-val junitPlatformVersion: String by project
+val spekVersion = "1.1.5"
+val junitPlatformVersion = "1.1.0"
+val assertjVersion = "3.9.1"
 
 dependencies {
 	implementation(gradleApi())
-	implementation(project(":detekt-cli"))
-	implementation("com.beust:jcommander:$jcommanderVersion")
+	implementation(kotlin("stdlib"))
+	implementation(kotlin("reflect"))
 	
+	testImplementation("org.assertj:assertj-core:$assertjVersion")
+	testImplementation("org.jetbrains.spek:spek-api:$spekVersion")
+	testImplementation("org.jetbrains.spek:spek-subject-extension:$spekVersion")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
 	testRuntimeOnly("org.junit.platform:junit-platform-console:$junitPlatformVersion")
 	testRuntimeOnly("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")

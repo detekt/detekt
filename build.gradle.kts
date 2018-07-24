@@ -1,26 +1,29 @@
 import com.jfrog.bintray.gradle.BintrayExtension
+import io.gitlab.arturbosch.detekt.DetektPlugin
+import io.gitlab.arturbosch.detekt.detekt
+import io.gitlab.arturbosch.detekt.idea
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
-import io.gitlab.arturbosch.detekt.extensions.ProfileExtension
+import io.gitlab.arturbosch.detekt.extensions.IdeaExtension
+import org.codehaus.groovy.tools.shell.util.Logger.io
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.junit.platform.console.options.Details
 import org.junit.platform.gradle.plugin.JUnitPlatformExtension
+import org.gradle.kotlin.dsl.setValue
 import java.util.*
 
 buildscript {
 	repositories {
 		gradlePluginPortal()
-		jcenter()
 		mavenLocal()
+		jcenter()
 	}
 
 	val kotlinVersion: String by project
 	val junitPlatformVersion: String by project
-	val usedDetektGradleVersion: String by project
 
 	dependencies {
 		classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
 		classpath("org.junit.platform:junit-platform-gradle-plugin:$junitPlatformVersion")
-		classpath("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:$usedDetektGradleVersion")
 	}
 }
 
@@ -29,15 +32,12 @@ plugins {
 	id("com.github.ben-manes.versions") version "0.17.0"
 	id("com.github.johnrengelman.shadow") version "2.0.2" apply false
 	id("org.sonarqube") version "2.6.2"
-	id("com.gradle.plugin-publish") version "0.9.10" apply false
-}
-
-apply {
-	plugin("io.gitlab.arturbosch.detekt")
+	id("io.gitlab.arturbosch.detekt")
+	`kotlin-dsl`
 }
 
 tasks.withType<Wrapper> {
-	gradleVersion = "4.6"
+	gradleVersion = "4.8-rc-1"
 	distributionType = Wrapper.DistributionType.ALL
 }
 
@@ -45,11 +45,11 @@ val detektVersion: String by project
 
 allprojects {
 	group = "io.gitlab.arturbosch.detekt"
-	version = "$detektVersion"
+	version = detektVersion
 
 	repositories {
-		jcenter()
 		mavenLocal()
+		jcenter()
 		maven ( url = "http://dl.bintray.com/jetbrains/spek" )
 	}
 }
@@ -62,6 +62,26 @@ subprojects {
 		plugin("kotlin")
 		plugin("com.jfrog.bintray")
 		plugin("maven-publish")
+		plugin("io.gitlab.arturbosch.detekt")
+	}
+
+	val userHome = System.getProperty("user.home")
+
+	detekt {
+		debug = true
+		parallel = true
+		filters = ".*/resources/.*, .*/build/.*"
+		baseline = file("${rootProject.projectDir}/reports/baseline.xml")
+		configFile = file("${rootProject.projectDir}/detekt-cli/src/main/resources/default-detekt-config.yml")
+		toolVersion = "1.0.0-GRADLE"
+
+		idea(Action {
+			path = "$userHome/.idea"
+			codeStyleScheme = "$userHome/.idea/idea-code-style.xml"
+			inspectionsProfile = "$userHome/.idea/inspect.xml"
+			report = "project.projectDir/reports"
+			mask = "*.kt"
+		})
 	}
 
 	if (this.name in listOf("detekt-cli", "detekt-watch-service", "detekt-generator")) {
@@ -178,42 +198,6 @@ subprojects {
 			}
 		}
 	}
-}
-
-val userHome: String = System.getProperty("user.home")
-
-val usedDetektVersion: String by project
-
-configure<DetektExtension> {
-
-	debug = true
-	version = "$usedDetektVersion"
-	profile = "failfast"
-
-	profile("main", Action {
-		input = rootProject.projectDir.absolutePath
-		filters = ".*/resources/.*, .*/build/.*"
-		config = "${rootProject.projectDir}/detekt-cli/src/main/resources/default-detekt-config.yml"
-		baseline = "${rootProject.projectDir}/reports/baseline.xml"
-	})
-
-	profile("failfast", Action {
-		input = rootProject.projectDir.absolutePath
-		config = "${rootProject.projectDir}/reports/failfast.yml"
-	})
-
-	profile("output", Action {
-		output = "${rootProject.projectDir}/reports"
-		outputName = "detekt"
-	})
-
-	idea(Action {
-		path = "$userHome/.idea"
-		codeStyleScheme = "$userHome/.idea/idea-code-style.xml"
-		inspectionsProfile = "$userHome/.idea/inspect.xml"
-		report = "${rootProject.projectDir}/reports"
-		mask = "*.kt,"
-	})
 }
 
 /**

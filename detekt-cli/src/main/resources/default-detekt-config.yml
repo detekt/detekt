@@ -411,6 +411,8 @@ style:
     ignoreAnnotation: false
     ignoreNamedArgument: true
     ignoreEnums: false
+  MandatoryBracesIfStatements:
+    active: false
   MaxLineLength:
     active: true
     maxLineLength: 120
@@ -432,6 +434,8 @@ style:
   OptionalUnit:
     active: false
   OptionalWhenBraces:
+    active: false
+  PreferToOverPairSyntax:
     active: false
   ProtectedMemberInFinalClass:
     active: false
