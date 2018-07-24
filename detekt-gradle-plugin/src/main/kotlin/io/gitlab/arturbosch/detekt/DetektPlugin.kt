@@ -4,8 +4,8 @@ import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.file.FileCollection
-import org.gradle.api.plugins.JavaBasePlugin
 import org.gradle.api.plugins.ReportingBasePlugin
+import org.gradle.language.base.plugins.LifecycleBasePlugin
 import java.io.File
 
 
@@ -51,7 +51,7 @@ class DetektPlugin : Plugin<Project> {
 			}
 		}
 
-		project.tasks.findByName(JavaBasePlugin.CHECK_TASK_NAME)?.dependsOn(detektTask)
+		project.tasks.findByName(LifecycleBasePlugin.CHECK_TASK_NAME)?.dependsOn(detektTask)
 	}
 
 	private fun createAndConfigureCreateBaselineTask(project: Project, extension: DetektExtension) =
