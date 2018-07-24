@@ -46,13 +46,6 @@ console-reports:
   #  - 'FindingsReport'
   #  - 'BuildFailureReport'
 
-output-reports:
-  active: true
-  exclude:
-  #  - 'HtmlOutputReport'
-  #  - 'PlainOutputReport'
-  #  - 'XmlOutputReport'
-
 comments:
   active: true
   CommentOverPrivateFunction:
