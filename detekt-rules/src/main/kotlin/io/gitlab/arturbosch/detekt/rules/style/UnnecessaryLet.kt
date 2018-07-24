@@ -17,11 +17,12 @@ class UnnecessaryLet : Rule() {
 	private val letParamRegex = """let\s*\{\s*(\w*)\s*->\s*\1\??\.\w*(?:\(.*\))?\s*}""".toRegex()
 
 	override fun visitCallExpression(expression: KtCallExpression) {
+		super.visitCallExpression(expression)
 		val isLetIt = expression.text matches letItRegex
 		val isLetParam = expression.text matches letParamRegex
 		if	(isLetIt || isLetParam){
 			report(CodeSmell(
-					issue, Entity.from(expression.parent ?: expression),
+					issue, Entity.from(expression),
 					"let expression can be omitted"
 			))
 		}
