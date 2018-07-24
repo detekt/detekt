@@ -10,13 +10,15 @@ summary:
 
 #### <a name="tasks">Available plugin tasks</a>
 
-The detekt Gradle plugin will generate `detekt` tasks for each of your source sets. For a basic project this will result
-in a `detektMain` task which will check all `main` sourcesets of the project. The `detektTest` task will run detekt on
-all `test` sourcesets of the project
+The detekt Gradle plugin will generate multiple tasks
 
-- `detekt[SourceSet]` - Runs a detekt analysis and complexity report on the given source set. Configure the analysis inside the `detekt` closure. By default the standard rule set is used without output report or black- and whitelist checks.
+- `detekt` - Runs a detekt analysis and complexity report on your source files. Configure the analysis inside the 
+`detekt` closure. By default the standard rule set without any white- or blacklist is executed on sources files located
+ in `src/main/java` and `src/main/kotlin`. Reports are automatically generated in xml and html format and can be 
+ found in `build/reports/detekt/detekt.[xml|html]` respectively. Please note that the `detekt` task is automatically 
+ run when executing `gradle check`.
 - `detektGenerateConfig` - Generates a default detekt configuration file into your project directory.
-- `detektBaseline` - Similar to `detekt[SourceSet]`, but creates a code smell baseline. Further detekt runs will only feature new smells not in this list.
+- `detektBaseline` - Similar to `detekt`, but creates a code smell baseline. Further detekt runs will only feature new smells not in this list.
 - `detektIdeaFormat` - Uses a local `idea` installation to format your Kotlin (and other) code according to the specified `code-style.xml`.
 - `detektIdeaInspect` Uses a local `idea` installation to run inspections on your Kotlin (and other) code according to the specified `inspections.xml` profile.
 
@@ -99,50 +101,25 @@ plugins {
 
 ```groovy
 detekt {
-    toolVersion = "1.0.0.[version]"                                  // When unspecified the latest detekt version found, will be used. Override to stay on the same version.
-    parallel = false                                                 // Runs detekt in parallel. Can lead to speedups in larger projects. `false` by default.
-    config = project.resources.text.fromFile("path/to/config.yml")   // Define the detekt configuration you want to use.
-    configFile = file("path/to/config.yml")                          // Define the detekt configuration you want to use.
-    baseline = file("path/to/baseline.xml")                          // Specifying a baseline file will ignore all findings that are saved in the baseline file.
-    filters = ''                                                     // Regular expression of paths that should be excluded.
-    disableDefaultRuleSets = false                                   // Disables all default detekt rulesets and will only run detekt with custom rules defined in `plugins`.
-    plugins = "other/optional/ruleset.jar"                           // Jar file containing custom detekt rules.
-}
-```
-
-##### <a name="gradlepluginreports">Customizing Detekt reports</a>
-
-You can configure the reports detekt outputs with the following configuration in your `build.gradle` file:
-
-```groovy
-tasks.withType(io.gitlab.arturbosch.detekt.Detekt) {
+    toolVersion = "1.0.0.[version]"                       // When unspecified the latest detekt version found, will be used. Override to stay on the same version.
+    parallel = false                                      // Runs detekt in parallel. Can lead to speedups in larger projects. `false` by default.
+    config = file("path/to/config.yml")                   // Define the detekt configuration you want to use. Defaults to the default detekt configuration.
+    baseline = file("path/to/baseline.xml")               // Specifying a baseline file will ignore all findings that are saved in the baseline file.
+    filters = ''                                          // Regular expression of paths that should be excluded separated by `;`. Defaults to `.*/test/.*;.*Test.kt';.*Spec.kt`
+    disableDefaultRuleSets = false                        // Disables all default detekt rulesets and will only run detekt with custom rules defined in `plugins`. `false` by default.
+    plugins = "other/optional/ruleset.jar"                // Additional jar file containing custom detekt rules.
+    debug = false                                         // Adds debug output during task execution. `false` by default.
+    reportsDir = file('build/detekt-reports')             // Output directory where the reports are created. Defaults to `build/reports/detekt`
     reports {
-        xml {
-            enabled true                                             // Enable/Disable XML report (default: true)
-            destination file("build/reports/detekt.xml")             // Path where XML report will be stored (default: build/reports/detekt/[sourceset].xml)
-        }
-        html {
-            enabled true                                             // Enable/Disable HTML report (default: true)
-            destination file("build/reports/detekt.html")            // Path where HTML report will be stored (default: build/reports/detekt/[sourceset].html)
+        xml.enabled = true                                // Enable/Disable XML report (default: true)
+        xml.destination file("build/reports/detekt.xml")  // Path where XML report will be stored (default: `build/reports/detekt/detekt.xml`)
+        html {                                            // Alternatively as nested closure
+            enabled true                                  // Enable/Disable HTML report (default: true)
+            destination file("build/reports/detekt.html") // Path where HTML report will be stored (default: `build/reports/detekt/detekt.html`)
         }
     }
 }
 ```
-
-##### <a name="customdetekttask">Defining custom detekt</a>
-
-Custom tasks for alternative configurations or different source sets can be defined by creating a custom task that
-uses the type `Detekt`.
-
-```groovy
-task customDetektTask(type: io.gitlab.arturbosch.detekt.Detekt) {
-		description = "Runs a custom detekt task."
-
-		source = sourceSets.getAt("main").allSource                              // Define the source set this task should run for
-		configFile = file("${rootProject.projectDir}/reports/failfast.yml")      // Define the configuration file that should be used
-	}
-```
-
 
 ##### <a name="idea">Configure a local idea for detekt</a>
 

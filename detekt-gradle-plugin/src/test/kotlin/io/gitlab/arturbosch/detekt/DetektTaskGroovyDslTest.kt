@@ -170,6 +170,34 @@ internal class DetektTaskGroovyDslTest : Spek({
 			assertThat(File(rootDir, "build/reports/detekt/detekt.xml")).exists()
 			assertThat(File(rootDir, "build/reports/detekt/detekt.html")).doesNotExist()
 		}
+		it("can disable a single report type with nested closure") {
+			val detektConfig = """
+				|detekt {
+				|	reports {
+				|		xml.enabled = true
+				|		html {
+				|			enabled false
+				|		}
+				|	}
+				|}
+				"""
+
+			writeFiles(rootDir, detektConfig)
+
+			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
+			val result = GradleRunner.create()
+					.withProjectDir(rootDir)
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
+					.withPluginClasspath()
+					.build()
+
+			assertThat(result.output).contains("number of classes: 1")
+			assertThat(result.output).contains("Ruleset: comments")
+			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+
+			assertThat(File(rootDir, "build/reports/detekt/detekt.xml")).exists()
+			assertThat(File(rootDir, "build/reports/detekt/detekt.html")).doesNotExist()
+		}
 
 	}
 })
