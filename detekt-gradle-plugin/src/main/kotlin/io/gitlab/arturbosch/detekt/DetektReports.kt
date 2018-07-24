@@ -5,8 +5,8 @@ import org.gradle.api.reporting.SingleFileReport
 
 interface DetektReports : ReportContainer<SingleFileReport> {
 
-    var html: SingleFileReport
+	var html: SingleFileReport
 
-    var xml: SingleFileReport
+	var xml: SingleFileReport
 
 }

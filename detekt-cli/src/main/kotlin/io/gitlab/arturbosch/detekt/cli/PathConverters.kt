@@ -29,13 +29,13 @@ class PathConverter : IStringConverter<Path> {
 
 interface DetektInputPathConverter<T> : IStringConverter<List<T>> {
 	val converter: IStringConverter<T>
-	override fun convert(value: String): List<T> = 
-		value.splitToSequence(SEPARATOR_COMMA, SEPARATOR_SEMICOLON, SEPARATOR_COLON)
-			.map { it.trim() }
-			.map { converter.convert(it) }
-			.toList().apply {
-		if (isEmpty()) throw IllegalStateException("Given input '$value' was impossible to parse!")
-	}
+	override fun convert(value: String): List<T> =
+			value.splitToSequence(SEPARATOR_COMMA, SEPARATOR_SEMICOLON, SEPARATOR_COLON)
+					.map { it.trim() }
+					.map { converter.convert(it) }
+					.toList().apply {
+						if (isEmpty()) throw IllegalStateException("Given input '$value' was impossible to parse!")
+					}
 }
 
 class MultipleClasspathResourceConverter : DetektInputPathConverter<URL> {
