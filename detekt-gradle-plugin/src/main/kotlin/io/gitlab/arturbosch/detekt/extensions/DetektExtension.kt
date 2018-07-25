@@ -10,6 +10,7 @@ import java.io.File
  * @author Artur Bosch
  * @author Said Tahsin Dane
  * @author Marvin Ramin
+ * @author Markus Schwarz
  */
 open class DetektExtension(private val project: Project) : CodeQualityExtension() {
 	val defaultReportsDir = project.layout.buildDirectory.get()
@@ -44,6 +45,10 @@ open class DetektExtension(private val project: Project) : CodeQualityExtension(
 	companion object {
 		const val DEFAULT_SRC_DIR_JAVA = "src/main/java"
 		const val DEFAULT_SRC_DIR_KOTLIN = "src/main/kotlin"
+		const val DEFAULT_DEBUG_VALUE = false
+		const val DEFAULT_PARALLEL_VALUE = false
+		const val DEFAULT_DISABLE_RULESETS_VALUE = false
+		const val DEFAULT_REPORT_ENABLED_VALUE = true
 	}
 }
 
@@ -59,7 +64,7 @@ open class DetektReportsExtension(project: Project) {
 
 open class DetektReportExtension {
 
-	var enabled: Boolean = DEFAULT_REPORT_ENABLED_VALUE
+	var enabled: Boolean = DetektExtension.DEFAULT_REPORT_ENABLED_VALUE
 
 	/**
 	 * destination of the output - relative to the project root
