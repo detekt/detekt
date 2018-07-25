@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.file.FileCollection
 import org.gradle.api.plugins.ReportingBasePlugin
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import java.io.File
@@ -84,8 +83,7 @@ class DetektPlugin : Plugin<Project> {
 		}
 	}
 
-	private fun determineInput(extension: DetektExtension): FileCollection =
-			extension.input ?: extension.defaultSourceDirectories.filter { it.exists() }
+	private fun determineInput(extension: DetektExtension) = extension.input.filter { it.exists() }
 
 	private fun configurePluginDependencies(project: Project, extension: DetektExtension) =
 			project.configurations.create(DETEKT) {

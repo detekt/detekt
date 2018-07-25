@@ -198,6 +198,31 @@ internal class DetektTaskGroovyDslTest : Spek({
 			assertThat(File(rootDir, "build/reports/detekt/detekt.xml")).exists()
 			assertThat(File(rootDir, "build/reports/detekt/detekt.html")).doesNotExist()
 		}
+		it("can configure the input directory") {
+			val customSourceLocation = "gensrc/kotlin"
+			val detektConfig = """
+					|detekt {
+					|	input = files(
+					|		"$customSourceLocation",
+					|		"some/location/thatdoesnotexist"
+					|	)
+					|}
+				"""
+
+			writeFiles(rootDir, detektConfig, customSourceLocation)
+			writeConfig(rootDir)
+
+			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
+			val result = GradleRunner.create()
+					.withProjectDir(rootDir)
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
+					.withPluginClasspath()
+					.build()
+
+			assertThat(result.output).contains("number of classes: 1")
+			assertThat(result.output).contains("--input $rootDir/$customSourceLocation")
+			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+		}
 
 	}
 })
@@ -228,13 +253,12 @@ private val ktFileContent = """
 	|
 	""".trimMargin()
 
-private fun writeFiles(root: File, detektConfiguration: String) {
+private fun writeFiles(root: File, detektConfiguration: String, srcDir: String = "src/main/java") {
 	File(root, "build.gradle").writeText(buildFileContent(detektConfiguration))
 	File(root, "settings.gradle").writeText(settingsFileContent)
-	File(root, "src/main/java").mkdirs()
-	File(root, "src/main/java/MyClass.kt").writeText(ktFileContent)
+	File(root, srcDir).mkdirs()
+	File(root, "$srcDir/MyClass.kt").writeText(ktFileContent)
 }
-
 
 private fun writeConfig(root: File) {
 	File(root, "config.yml").writeText("""

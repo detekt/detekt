@@ -15,7 +15,6 @@ open class DetektExtension(private val project: Project) : CodeQualityExtension(
 	val defaultReportsDir = project.layout.buildDirectory.get()
 			.dir(ReportingExtension.DEFAULT_REPORTS_DIR_NAME)
 			.dir("detekt").asFile
-	val defaultSourceDirectories = project.files("src/main/java", "src/main/kotlin")
 
 	val reports = project.extensions.create("detektReports", DetektReportsExtension::class.java, project)
 	fun reports(configure: DetektReportsExtension.() -> Unit) =
@@ -26,7 +25,7 @@ open class DetektExtension(private val project: Project) : CodeQualityExtension(
 	fun idea(configure: IdeaExtension.() -> Unit) =
 			project.extensions.configure(IdeaExtension::class.java, configure)
 
-	var input: FileCollection? = null
+	var input: FileCollection = project.files(DEFAULT_SRC_DIR_JAVA, DEFAULT_SRC_DIR_KOTLIN)
 
 	var baseline: File? = null
 
@@ -41,6 +40,11 @@ open class DetektExtension(private val project: Project) : CodeQualityExtension(
 	var filters: String? = null
 
 	var plugins: String? = null
+
+	companion object {
+		const val DEFAULT_SRC_DIR_JAVA = "src/main/java"
+		const val DEFAULT_SRC_DIR_KOTLIN = "src/main/kotlin"
+	}
 }
 
 open class DetektReportsExtension(project: Project) {
