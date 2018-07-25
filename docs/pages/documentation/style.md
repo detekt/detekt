@@ -775,7 +775,7 @@ This rule reports lines that end with a whitespace.
 ### UnnecessaryAbstractClass
 
 This rule inspects `abstract` classes. In case an `abstract class` does not have any concrete members it should be
-refactored into an interfacse. Abstract classes which do not define any `abstract` members should instead be
+refactored into an interface. Abstract classes which do not define any `abstract` members should instead be
 refactored into concrete classes.
 
 **Severity**: Style
