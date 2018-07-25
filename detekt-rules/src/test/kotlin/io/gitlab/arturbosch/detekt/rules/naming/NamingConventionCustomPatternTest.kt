@@ -46,7 +46,7 @@ class NamingConventionCustomPatternTest {
 		assertThat(rule.lint("""
             class aBbD{
                 fun `name with back ticks`(){
-                  val 123var = ""
+                  val `123var` = ""
                 }
 
                 companion object {
