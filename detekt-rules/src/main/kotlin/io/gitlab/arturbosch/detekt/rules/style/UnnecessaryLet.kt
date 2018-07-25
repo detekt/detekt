@@ -1,13 +1,25 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.*
-import org.jetbrains.kotlin.psi.*
-import org.jetbrains.kotlin.psi.psiUtil.siblings
+import io.gitlab.arturbosch.detekt.api.CodeSmell
+import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
+import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.Severity
+import org.jetbrains.kotlin.psi.KtCallExpression
 
 /**
+ * Unnecessary `let` TODO
+ *
+ * <noncompliant>
+ * TODO add example
+ * </noncompliant>
+ *
  * @author mishkun
  */
-class UnnecessaryLet : Rule() {
+class UnnecessaryLet(config: Config) : Rule(config) {
+
 	override val issue = Issue(javaClass.simpleName, Severity.Style,
 			"The `let` usage is unnecessary", Debt.FIVE_MINS)
 
@@ -20,12 +32,11 @@ class UnnecessaryLet : Rule() {
 		super.visitCallExpression(expression)
 		val isLetIt = expression.text matches letItRegex
 		val isLetParam = expression.text matches letParamRegex
-		if	(isLetIt || isLetParam){
+		if	(isLetIt || isLetParam) {
 			report(CodeSmell(
 					issue, Entity.from(expression),
 					"let expression can be omitted"
 			))
 		}
 	}
-
 }
