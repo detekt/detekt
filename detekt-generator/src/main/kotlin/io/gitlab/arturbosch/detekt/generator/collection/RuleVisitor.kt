@@ -20,7 +20,7 @@ import java.lang.reflect.Modifier
 /**
  * @author Marvin Ramin
  * @author Artur Bosch
- * @authro schalkms
+ * @author schalkms
  */
 internal class RuleVisitor : DetektVisitor() {
 
