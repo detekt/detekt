@@ -471,6 +471,8 @@ style:
     excludeAnnotatedClasses: "dagger.Module"
   UnnecessaryInheritance:
     active: false
+  UnnecessaryLet:
+    active: false
   UnnecessaryParentheses:
     active: false
   UntilInsteadOfRangeTo:

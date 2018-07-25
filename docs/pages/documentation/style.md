@@ -856,6 +856,20 @@ class A : Any()
 class B : Object()
 ```
 
+### UnnecessaryLet
+
+Unnecessary `let` TODO
+
+**Severity**: Style
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+TODO add example
+```
+
 ### UnnecessaryParentheses
 
 This rule reports unnecessary parentheses around expressions.
