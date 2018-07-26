@@ -139,19 +139,15 @@ internal class DetektTaskKotlinDslTest : Spek({
 			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 		}
 
-		xit("can configure a new custom detekt task", "fails with some internal api error") {
+		it("can configure a new custom detekt task") {
 
 			val detektConfig = """
-					|detekt {
-					|	toolVersion = "1.0.0-GRADLE"
-					|}
-					|
 					|tasks {
 					| 	"detektFailFast"(io.gitlab.arturbosch.detekt.Detekt::class) {
 					|		description = "Runs a failfast detekt build."
 					|
-					|		source = java.sourceSets["main"].allSource
-					|		config = "$rootDir/config.yml"
+					|		input = files("src/main/java")
+					|		config = file("$rootDir/config.yml")
 					|	}
 					|}
 				"""
@@ -169,7 +165,7 @@ internal class DetektTaskKotlinDslTest : Spek({
 
 			assertThat(result.output).contains("number of classes: 1")
 			assertThat(result.output).contains("Ruleset: comments")
-			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+			assertThat(result.task(":detektFailFast")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 
 			// Asserts that the "custom" module is not built, and that custom ruleset is not enabled
 			assertThat(result.output).doesNotContain("Ruleset: test-custom")
