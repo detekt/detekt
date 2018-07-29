@@ -118,10 +118,49 @@ detekt {
         xml.enabled = true                                // Enable/Disable XML report (default: true)
         xml.destination file("build/reports/detekt.xml")  // Path where XML report will be stored (default: `build/reports/detekt/detekt.xml`)
         html {                                            // Alternatively as nested closure
-            enabled true                                  // Enable/Disable HTML report (default: true)
+            enabled = true                                // Enable/Disable HTML report (default: true)
             destination file("build/reports/detekt.html") // Path where HTML report will be stored (default: `build/reports/detekt/detekt.html`)
         }
     }
+}
+```
+
+##### <a name="customdetekttask">Defining custom detekt task</a>
+
+Custom tasks for alternative configurations or different source sets can be defined by creating a custom task that
+uses the type `Detekt`.
+
+###### Kotlin DSL
+```kotlin
+task<io.gitlab.arturbosch.detekt.Detekt>("detektFailFast") {
+    description = "Runs a failfast detekt build."
+
+    input = files("src/main/kotlin", "src/test/kotlin")
+    config = file("config.yml")
+    debug = true
+    reports {
+        xml {
+            destination = file("build/reports/failfast.xml")
+        }
+        html.destination = file("build/reports/failfast.html")
+    }
+}
+```
+
+###### Groovy DSL
+```groovy
+task detektFailFast(type: io.gitlab.arturbosch.detekt.Detekt) {
+   description = "Runs a failfast detekt build."
+
+   input = files("src/main/java")
+   config = file("$rootDir/config.yml")
+   debug = true
+   reports {
+       xml {
+           destination = file("build/reports/failfast.xml")
+       }
+       html.destination = file("build/reports/failfast.html")
+   }
 }
 ```
 

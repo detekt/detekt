@@ -2,6 +2,8 @@ package io.gitlab.arturbosch.detekt
 
 import groovy.lang.Closure
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
+import io.gitlab.arturbosch.detekt.extensions.DetektReport
+import io.gitlab.arturbosch.detekt.extensions.DetektReports
 import io.gitlab.arturbosch.detekt.invoke.BaselineArgument
 import io.gitlab.arturbosch.detekt.invoke.CliArgument
 import io.gitlab.arturbosch.detekt.invoke.ConfigArgument
@@ -14,10 +16,8 @@ import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
 import io.gitlab.arturbosch.detekt.invoke.PluginsArgument
 import io.gitlab.arturbosch.detekt.invoke.XmlReportArgument
-import org.gradle.api.Action
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileCollection
-import org.gradle.api.reporting.Reporting
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
@@ -35,17 +35,16 @@ import java.io.File
 /**
  * @author Artur Bosch
  * @author Marvin Ramin
+ * @author Markus Schwarz
  */
 @CacheableTask
-open class Detekt : DefaultTask(), Reporting<DetektReports> {
+open class Detekt : DefaultTask() {
 
-	private val _reports: DetektReports = project.objects.newInstance(DetektReportsImpl::class.java, this)
 	@Internal
-	override fun getReports() = _reports
+	val reports = DetektReports()
 
-	override fun reports(closure: Closure<*>) = ConfigureUtil.configure(closure, _reports)
-	override fun reports(configureAction: Action<in DetektReports>) =
-			_reports.apply { configureAction.execute(this) }
+	fun reports(closure: Closure<*>) = ConfigureUtil.configure(closure, reports)
+	fun reports(configure: DetektReports.() -> Unit) = reports.configure()
 
 	@InputFiles
 	@PathSensitive(PathSensitivity.RELATIVE)
@@ -85,17 +84,14 @@ open class Detekt : DefaultTask(), Reporting<DetektReports> {
 	val xmlReportFile: File?
 		@OutputFile
 		@Optional
-		get() = if (reports.xml.isEnabled) reports.xml.destination else null
+		get() = getReportFile(reports.xml)
 
 	val htmlReportFile: File?
 		@OutputFile
 		@Optional
-		get() = if (reports.html.isEnabled) reports.html.destination else null
+		get() = getReportFile(reports.html)
 
-	init {
-		_reports.html.isEnabled = DetektExtension.DEFAULT_REPORT_ENABLED_VALUE
-		_reports.xml.isEnabled = DetektExtension.DEFAULT_REPORT_ENABLED_VALUE
-	}
+	private fun getReportFile(report: DetektReport) = if (report.enabled) report.destination else null
 
 	@TaskAction
 	fun check() {

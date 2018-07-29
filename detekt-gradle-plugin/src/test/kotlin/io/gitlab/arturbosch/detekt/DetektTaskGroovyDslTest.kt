@@ -176,7 +176,7 @@ internal class DetektTaskGroovyDslTest : Spek({
 				|	reports {
 				|		xml.enabled = true
 				|		html {
-				|			enabled false
+				|			enabled = false
 				|		}
 				|	}
 				|}
@@ -223,7 +223,41 @@ internal class DetektTaskGroovyDslTest : Spek({
 			assertThat(result.output).contains("--input $rootDir/$customSourceLocation")
 			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 		}
+		it("can configure a new custom detekt task") {
 
+			val detektConfig = """
+					|task detektFailFast(type: io.gitlab.arturbosch.detekt.Detekt) {
+					|	description = "Runs a failfast detekt build."
+					|
+					|	input = files("src/main/java")
+					|	config = file("$rootDir/config.yml")
+					|	debug = true
+					|	reports {
+					|		xml {
+					|			destination = file("build/reports/failfast.xml")
+					|		}
+					|		html.destination = file("build/reports/failfast.html")
+					|	}
+					|}
+				"""
+
+			writeFiles(rootDir, detektConfig)
+			writeConfig(rootDir, failFast = true)
+
+			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
+			val result = GradleRunner.create()
+					.withProjectDir(rootDir)
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "detektFailFast", "--stacktrace", "--info")
+					.withPluginClasspath()
+					.build()
+
+			assertThat(result.output).contains("number of classes: 1")
+			assertThat(result.output).contains("Ruleset: comments")
+			assertThat(result.task(":detektFailFast")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+
+			assertThat(File(rootDir, "build/reports/failfast.xml")).exists()
+			assertThat(File(rootDir, "build/reports/failfast.html")).exists()
+		}
 	}
 })
 
@@ -249,7 +283,7 @@ private const val settingsFileContent = """include ":custom""""
 
 // src/main/kotlin/MyClass.kt
 private val ktFileContent = """
-	|class MyClass
+	|internal class MyClass
 	|
 	""".trimMargin()
 
@@ -260,9 +294,9 @@ private fun writeFiles(root: File, detektConfiguration: String, srcDir: String =
 	File(root, "$srcDir/MyClass.kt").writeText(ktFileContent)
 }
 
-private fun writeConfig(root: File) {
+private fun writeConfig(root: File, failFast: Boolean = false) {
 	File(root, "config.yml").writeText("""
 		|autoCorrect: true
-		|failFast: false
+		|failFast: $failFast
 		""".trimMargin())
 }

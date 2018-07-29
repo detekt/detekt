@@ -35,13 +35,12 @@ class DetektPlugin : Plugin<Project> {
 			baseline = extension.baseline
 			plugins = extension.plugins
 			input = determineInput(extension)
-			reports.all {
-				extension.reports.withName(name)?.let {
-					val reportExtension = it
-					isEnabled = reportExtension.enabled
-					val fileSuffix = name
+			extension.reports.forEach { extReport ->
+				reports.withName(extReport.name) {
+					enabled = extReport.enabled
+					val fileSuffix = extReport.name
 					val reportsDir = extension.reportsDir ?: extension.defaultReportsDir
-					val customDestination = reportExtension.destination
+					val customDestination = extReport.destination
 					destination = customDestination ?: File(reportsDir, "${DETEKT}.$fileSuffix")
 				}
 			}

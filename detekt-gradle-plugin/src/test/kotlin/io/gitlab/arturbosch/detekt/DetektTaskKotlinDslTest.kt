@@ -6,7 +6,6 @@ import org.gradle.testkit.runner.TaskOutcome
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.api.dsl.xit
 import java.io.File
 
 /**
@@ -141,16 +140,17 @@ internal class DetektTaskKotlinDslTest : Spek({
 		it("can configure a new custom detekt task") {
 
 			val detektConfig = """
-					|tasks {
-					| 	"detektFailFast"(io.gitlab.arturbosch.detekt.Detekt::class) {
-					|		description = "Runs a failfast detekt build."
+					|task<io.gitlab.arturbosch.detekt.Detekt>("detektFailFast") {
+					|	description = "Runs a failfast detekt build."
 					|
-					|		input = files("src/main/java")
-					|		config = file("$rootDir/config.yml")
-					|		reports {
-					|			xml.destination = file("build/reports/failfast.xml")
-					|			html.destination = file("build/reports/failfast.html")
+					|	input = files("src/main/java")
+					|	config = file("$rootDir/config.yml")
+					|	debug = true
+					|	reports {
+					|		xml {
+					|			destination = file("build/reports/failfast.xml")
 					|		}
+					|		html.destination = file("build/reports/failfast.html")
 					|	}
 					|}
 				"""
