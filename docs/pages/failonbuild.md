@@ -13,11 +13,11 @@ For this the following code must be inside the detekt config:
 
 ```yaml
 build:
-  maxIssues: 10 // break the build if ten weighted issues are found
+  maxIssues: 10 # break the build if ten weighted issues are found
   weights:
-    complexity: 2 // every rule of the complexity rule set should count as if two issues were found...
-    LongParameterList: 1 // ...with the exception of the LongParameterList rule.
-    comments: 0 // comment rules are just a nice to know?!
+    complexity: 2 # every rule of the complexity rule set should count as if two issues were found...
+    LongParameterList: 1 # ...with the exception of the LongParameterList rule.
+    comments: 0 # comment rules are just a nice to know?!
 ```
 
 Every rule and rule set can be attached with an integer value which is the weight of the finding.
