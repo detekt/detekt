@@ -86,7 +86,6 @@ internal class DetektTaskKotlinDslTest : Spek({
 
 		it("can be applied with a custom config file") {
 
-
 			val detektConfig = """
 					|detekt {
 					|	config = file("${rootDir.absolutePath}/config.yml")
@@ -148,12 +147,16 @@ internal class DetektTaskKotlinDslTest : Spek({
 					|
 					|		input = files("src/main/java")
 					|		config = file("$rootDir/config.yml")
+					|		reports {
+					|			xml.destination = file("build/reports/failfast.xml")
+					|			html.destination = file("build/reports/failfast.html")
+					|		}
 					|	}
 					|}
 				"""
 
 			writeFiles(rootDir, detektConfig)
-			writeConfig(rootDir)
+			writeConfig(rootDir, failfast = true)
 			writeBaseline(rootDir)
 
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
@@ -167,9 +170,8 @@ internal class DetektTaskKotlinDslTest : Spek({
 			assertThat(result.output).contains("Ruleset: comments")
 			assertThat(result.task(":detektFailFast")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 
-			// Asserts that the "custom" module is not built, and that custom ruleset is not enabled
-			assertThat(result.output).doesNotContain("Ruleset: test-custom")
-			assertThat(File(rootDir, "custom/build")).doesNotExist()
+			assertThat(File(rootDir, "build/reports/failfast.xml")).exists()
+			assertThat(File(rootDir, "build/reports/failfast.html")).exists()
 		}
 
 		it("can configure reports") {
@@ -271,7 +273,7 @@ private fun getBuildFileContent(detektConfig: String) = """
 
 // src/main/kotlin/MyClass.kt
 private val ktFileContent = """
-	|class MyClass
+	|internal class MyClass
 	|
 	""".trimMargin()
 
@@ -281,10 +283,10 @@ private fun writeFiles(root: File, detektConfig: String, sourceDir: String = "sr
 	File(root, "$sourceDir/MyClass.kt").writeText(ktFileContent)
 }
 
-private fun writeConfig(root: File) {
+private fun writeConfig(root: File, failfast: Boolean = false) {
 	File(root, "config.yml").writeText("""
 		|autoCorrect: true
-		|failFast: false
+		|failFast: $failfast
 		""".trimMargin())
 }
 

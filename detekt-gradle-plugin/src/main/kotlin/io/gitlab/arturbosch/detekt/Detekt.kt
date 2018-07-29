@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt
 
 import groovy.lang.Closure
+import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import io.gitlab.arturbosch.detekt.invoke.BaselineArgument
 import io.gitlab.arturbosch.detekt.invoke.CliArgument
 import io.gitlab.arturbosch.detekt.invoke.ConfigArgument
@@ -71,15 +72,15 @@ open class Detekt : DefaultTask(), Reporting<DetektReports> {
 
 	@Internal
 	@Optional
-	var debugOrDefault: Boolean = false
+	var debug: Boolean = DetektExtension.DEFAULT_DEBUG_VALUE
 
 	@Internal
 	@Optional
-	var parallelOrDefault: Boolean = false
+	var parallel: Boolean = DetektExtension.DEFAULT_PARALLEL_VALUE
 
 	@Internal
 	@Optional
-	var disableDefaultRuleSetsOrDefault: Boolean = false
+	var disableDefaultRuleSets: Boolean = DetektExtension.DEFAULT_DISABLE_RULESETS_VALUE
 
 	val xmlReportFile: File?
 		@OutputFile
@@ -91,6 +92,11 @@ open class Detekt : DefaultTask(), Reporting<DetektReports> {
 		@Optional
 		get() = if (reports.html.isEnabled) reports.html.destination else null
 
+	init {
+		_reports.html.isEnabled = DetektExtension.DEFAULT_REPORT_ENABLED_VALUE
+		_reports.xml.isEnabled = DetektExtension.DEFAULT_REPORT_ENABLED_VALUE
+	}
+
 	@TaskAction
 	fun check() {
 		val arguments = mutableListOf<CliArgument>() +
@@ -101,10 +107,10 @@ open class Detekt : DefaultTask(), Reporting<DetektReports> {
 				BaselineArgument(baseline) +
 				XmlReportArgument(xmlReportFile) +
 				HtmlReportArgument(htmlReportFile) +
-				DebugArgument(debugOrDefault) +
-				ParallelArgument(parallelOrDefault) +
-				DisableDefaultRulesetArgument(disableDefaultRuleSetsOrDefault)
+				DebugArgument(debug) +
+				ParallelArgument(parallel) +
+				DisableDefaultRulesetArgument(disableDefaultRuleSets)
 
-		DetektInvoker.invokeCli(project, arguments.toList(), debugOrDefault)
+		DetektInvoker.invokeCli(project, arguments.toList(), debug)
 	}
 }
