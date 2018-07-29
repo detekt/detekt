@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.plugins.ReportingBasePlugin
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import java.io.File
 
@@ -14,7 +13,6 @@ class DetektPlugin : Plugin<Project> {
 
 
 	override fun apply(project: Project) {
-		project.pluginManager.apply(ReportingBasePlugin::class.java)
 
 		val extension = project.extensions.create(DETEKT, DetektExtension::class.java, project)
 
