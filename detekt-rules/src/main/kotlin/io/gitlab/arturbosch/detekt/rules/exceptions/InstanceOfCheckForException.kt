@@ -10,7 +10,9 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.collectByType
 import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
 import org.jetbrains.kotlin.psi.KtCatchClause
+import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtIsExpression
+import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtPsiUtil
 
 /**
@@ -50,12 +52,17 @@ class InstanceOfCheckForException(config: Config = Config.empty) : Rule(config) 
 
 	override fun visitCatchSection(catchClause: KtCatchClause) {
 		catchClause.catchBody?.collectByType<KtIsExpression>()?.forEach {
-			report(CodeSmell(issue, Entity.from(it), issue.description))
+			if (isExceptionReferenced(it.leftHandSide, catchClause)) {
+				report(CodeSmell(issue, Entity.from(it), issue.description))
+			}
 		}
 		catchClause.catchBody?.collectByType<KtBinaryExpressionWithTypeRHS>()?.forEach {
-			if (KtPsiUtil.isUnsafeCast(it)) {
+			if (KtPsiUtil.isUnsafeCast(it) && isExceptionReferenced(it.left, catchClause)) {
 				report(CodeSmell(issue, Entity.from(it), issue.description))
 			}
 		}
 	}
+
+	private fun isExceptionReferenced(expression: KtExpression, catchClause: KtCatchClause) =
+			expression is KtNameReferenceExpression && expression.text == catchClause.catchParameter?.name
 }

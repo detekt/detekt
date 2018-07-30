@@ -44,6 +44,10 @@ class InstanceOfCheckForExceptionSpec : SubjectSpek<InstanceOfCheckForException>
 				fun x() {
 					try {
 					} catch(e: IOException) {
+						val s = ""
+						if (s is String || (s as String) != null) {
+							val b = s !is MyException || (s as MyException) != null
+						}
 					}
 				}
 				"""
