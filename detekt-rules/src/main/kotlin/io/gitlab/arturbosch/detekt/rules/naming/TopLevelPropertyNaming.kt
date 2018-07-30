@@ -57,13 +57,11 @@ class TopLevelPropertyNaming(config: Config = Config.empty) : Rule(config) {
 						Entity.from(property),
 						message = "Private top level property names should match the pattern: $privatePropertyPattern"))
 			}
-		} else {
-			if (!property.identifierName().matches(propertyPattern)) {
-				report(CodeSmell(
-						issue,
-						Entity.from(property),
-						message = "Top level property names should match the pattern: $propertyPattern"))
-			}
+		} else if (!property.identifierName().matches(propertyPattern)) {
+			report(CodeSmell(
+					issue,
+					Entity.from(property),
+					message = "Top level property names should match the pattern: $propertyPattern"))
 		}
 	}
 

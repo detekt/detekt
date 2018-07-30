@@ -125,6 +125,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Dmitriy Samaryan](https://github.com/samarjan92) - Rule fix: SerialVersionUIDInSerializableClass
 - [Mariano Simone](https://github.com/marianosimone) - Rule improvement: UnusedPrivateMember
 - [Shunsuke Maeda](https://github.com/duck8823) - Fix: to work on multi module project using [maven plugin](https://github.com/Ozsie/detekt-maven-plugin)
+- [Scott Kennedy](https://github.com/scottkennedy) - Minor fixes
 
 ### Mentions
 
