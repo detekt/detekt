@@ -78,6 +78,7 @@ class ObjectPropertyNamingSpec : SubjectSpek<ObjectPropertyNaming>({
 					val name = "Artur"
 					val nAme8 = "Artur"
 					val serialVersionUID = 42L
+					private val _name = "Artur"
 				}
 			""")
 			assertThat(subject.lint(code)).hasSize(0)
@@ -87,10 +88,9 @@ class ObjectPropertyNamingSpec : SubjectSpek<ObjectPropertyNaming>({
 			val code = compileContentForTest("""
 				object O {
 					val _nAme = "Artur"
-					private val _name = "Artur"
 				}
 			""")
-			assertThat(subject.lint(code)).hasSize(2)
+			assertThat(subject.lint(code)).hasSize(1)
 		}
 	}
 

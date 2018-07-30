@@ -191,11 +191,15 @@ Reports when property names inside objects which do not follow the specified nam
 
 #### Configuration options:
 
+* `constantPattern` (default: `'[A-Za-z][_A-Za-z0-9]*'`)
+
+   naming pattern
+
 * `propertyPattern` (default: `'[A-Za-z][_A-Za-z0-9]*'`)
 
    naming pattern
 
-* `constantPattern` (default: `'[A-Za-z][_A-Za-z0-9]*'`)
+* `privatePropertyPattern` (default: `'(_)?[A-Za-z][A-Za-z0-9]*'`)
 
    naming pattern
 
