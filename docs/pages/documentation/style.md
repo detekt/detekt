@@ -895,7 +895,7 @@ can lead to confusion and potential bugs.
 
 #### Configuration options:
 
-* `allowedNames` (default: `"(_|ignored|expected)"`)
+* `allowedNames` (default: `"(_|ignored|expected|serialVersionUID)"`)
 
    unused private member names matching this regex are ignored
 

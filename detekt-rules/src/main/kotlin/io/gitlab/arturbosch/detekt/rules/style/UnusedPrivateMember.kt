@@ -36,7 +36,7 @@ import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
  * can lead to confusion and potential bugs.
  *
  * @configuration allowedNames - unused private member names matching this regex are ignored
- * (default: "(_|ignored|expected)")
+ * (default: "(_|ignored|expected|serialVersionUID)")
  *
  * @author Marvin Ramin
  * @author Artur Bosch
