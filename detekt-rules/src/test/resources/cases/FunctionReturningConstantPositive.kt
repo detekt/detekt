@@ -17,11 +17,11 @@ fun functionReturningConstantInt(): Int { // reports 1
 @Suppress("EqualsOrHashCode")
 open class FunctionReturningConstant {
 
-	open fun f() = 1
-	override fun hashCode() = 1
+	open fun f() = 1 // reports 1
+	override fun hashCode() = 1 // reports 1
 }
 
 interface InterfaceFunctionReturningConstant {
 
-	fun interfaceFunctionWithImplementation() = 1
+	fun interfaceFunctionWithImplementation() = 1 // reports 1
 }
