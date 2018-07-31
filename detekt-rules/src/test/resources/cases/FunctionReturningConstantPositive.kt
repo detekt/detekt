@@ -20,3 +20,8 @@ open class FunctionReturningConstant {
 	open fun f() = 1
 	override fun hashCode() = 1
 }
+
+interface InterfaceFunctionReturningConstant {
+
+	fun interfaceFunctionWithImplementation() = 1
+}
