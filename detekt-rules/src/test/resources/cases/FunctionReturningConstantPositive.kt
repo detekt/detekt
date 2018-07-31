@@ -24,4 +24,9 @@ open class FunctionReturningConstant {
 interface InterfaceFunctionReturningConstant {
 
 	fun interfaceFunctionWithImplementation() = 1 // reports 1
+
+	class NestedClassFunctionReturningConstant {
+
+		fun interfaceFunctionWithImplementation() = 1 // reports 1
+	}
 }
