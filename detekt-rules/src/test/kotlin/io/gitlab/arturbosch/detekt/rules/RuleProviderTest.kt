@@ -121,7 +121,7 @@ class RuleProviderTest {
 			return Reflections(packageName)
 					.getSubTypesOf(clazz)
 					.filterNot { "Test" in it.name }
-					.filter { !Modifier.isAbstract(it.modifiers) }
+					.filter { !Modifier.isAbstract(it.modifiers) && !Modifier.isStatic(it.modifiers) }
 		}
 	}
 }
