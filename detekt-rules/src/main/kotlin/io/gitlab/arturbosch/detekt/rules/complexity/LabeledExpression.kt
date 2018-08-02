@@ -55,7 +55,7 @@ class LabeledExpression(config: Config = Config.empty) : Rule(config) {
 
 	override fun visitExpressionWithLabel(expression: KtExpressionWithLabel) {
 		super.visitExpressionWithLabel(expression)
-		if (isNotReferencingOuterClass(expression)) {
+		if (expression !is KtThisExpression || isNotReferencingOuterClass(expression)) {
 			expression.getLabelName()?.let {
 				report(CodeSmell(issue, Entity.from(expression), issue.description))
 			}
@@ -65,7 +65,7 @@ class LabeledExpression(config: Config = Config.empty) : Rule(config) {
 	private fun isNotReferencingOuterClass(expression: KtExpressionWithLabel): Boolean {
 		val containingClasses = mutableListOf<KtClass>()
 		expression.containingClass()?.let { containingClasses(it, containingClasses) }
-		return expression !is KtThisExpression || !containingClasses.any { it.name == expression.getLabelName() }
+		return !containingClasses.any { it.name == expression.getLabelName() }
 	}
 
 	private fun containingClasses(element: KtElement, classes: MutableList<KtClass>) {
