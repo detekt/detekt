@@ -19,12 +19,12 @@ class CommentInsideBlockSpec : Spek({
 
 	val subject = NotConfiguredEmptyRule()
 
-	it("finds comments inside block") {
+	it("does not find comment inside an empty block") {
 		val findings = subject.lint("{/*comment*/}")
 		assertThat(findings).isEmpty()
 	}
 
-	it("does not find comment inside an empty block") {
+	it("finds comments inside block") {
 		val findings = subject.lint("{}")
 		assertThat(findings).hasSize(1)
 	}
