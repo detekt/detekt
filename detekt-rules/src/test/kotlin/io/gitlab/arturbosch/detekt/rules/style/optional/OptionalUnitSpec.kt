@@ -12,12 +12,24 @@ import org.jetbrains.spek.api.dsl.it
 class OptionalUnitSpec : Spek({
 
 	describe("running specified rule") {
+
 		it("should detect one finding") {
 			val findings = OptionalUnit().lint("""
-				fun returnsUnit(): Unit {
+				fun returnsUnit1(): Unit {
+				}
+
+				fun returnsUnit2() = Unit
+			""")
+			assertThat(findings).hasSize(2)
+		}
+
+		it("should not report Unit reference") {
+			val findings = OptionalUnit().lint("""
+				fun returnsNothing() {
+					Unit
 				}
 			""")
-			assertThat(findings).hasSize(1)
+			assertThat(findings).isEmpty()
 		}
 	}
 })
