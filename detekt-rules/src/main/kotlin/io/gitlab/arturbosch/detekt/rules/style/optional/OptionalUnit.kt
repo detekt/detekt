@@ -53,10 +53,9 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
 
 	private fun checkFunctionWithExplicitReturnType(function: KtNamedFunction) {
 		val typeReference = function.typeReference
-		typeReference?.typeElement?.text?.let {
-			if (it == "Unit") {
-				report(CodeSmell(issue, Entity.from(typeReference), createMessage(function)))
-			}
+		val typeElementText = typeReference?.typeElement?.text
+		if (typeElementText == "Unit") {
+			report(CodeSmell(issue, Entity.from(typeReference), createMessage(function)))
 		}
 	}
 
