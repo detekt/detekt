@@ -19,9 +19,9 @@ class TrailingWhitespaceSpec : Spek({
 			assertThat(rule.findings).hasSize(7)
 		}
 
-		it("should report the correct source location") {
+		it("should report the correct source location for a comment with trailing whitespace") {
 			val findingSource = rule.findings[1].location.source
-			assertThat(findingSource.line).isEqualTo(4)
+			assertThat(findingSource.line).isEqualTo(5)
 			assertThat(findingSource.column).isEqualTo(1)
 		}
 	}
