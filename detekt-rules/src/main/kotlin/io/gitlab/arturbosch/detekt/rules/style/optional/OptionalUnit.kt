@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.isOverridden
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
@@ -38,19 +39,27 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		if (function.funKeyword == null) return
 		if (function.hasDeclaredReturnType() && function.colon != null) {
-			val typeReference = function.typeReference
-			typeReference?.typeElement?.text?.let {
-				if (it == "Unit") {
-					report(CodeSmell(issue, Entity.from(typeReference), createMessage(function)))
-				}
-			}
-		} else {
-			val referenceExpression = function.bodyExpression as? KtNameReferenceExpression
-			if (referenceExpression != null && referenceExpression.text == "Unit") {
-				report(CodeSmell(issue, Entity.from(referenceExpression), createMessage(function)))
-			}
+			checkFunctionWithExplicitReturnType(function)
+		} else if (!function.isOverridden()) {
+			checkFunctionWithInferredReturnType(function)
 		}
 		super.visitNamedFunction(function)
+	}
+
+	private fun checkFunctionWithExplicitReturnType(function: KtNamedFunction) {
+		val typeReference = function.typeReference
+		typeReference?.typeElement?.text?.let {
+			if (it == "Unit") {
+				report(CodeSmell(issue, Entity.from(typeReference), createMessage(function)))
+			}
+		}
+	}
+
+	private fun checkFunctionWithInferredReturnType(function: KtNamedFunction) {
+		val referenceExpression = function.bodyExpression as? KtNameReferenceExpression
+		if (referenceExpression != null && referenceExpression.text == "Unit") {
+			report(CodeSmell(issue, Entity.from(referenceExpression), createMessage(function)))
+		}
 	}
 
 	private fun createMessage(function: KtNamedFunction) = "The function ${function.name} " +

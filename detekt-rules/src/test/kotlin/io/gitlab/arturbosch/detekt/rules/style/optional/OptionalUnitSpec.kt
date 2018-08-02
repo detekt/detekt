@@ -18,7 +18,10 @@ class OptionalUnitSpec : SubjectSpek<OptionalUnit>({
 		it("should detect one finding") {
 			val findings = subject.lint("""
 				fun returnsUnit1(): Unit {
-					fun returnsUnitNested(): Unit {}
+					fun returnsUnitNested(): Unit {
+						return Unit
+					}
+					return Unit
 				}
 
 				fun returnsUnit2() = Unit
@@ -31,6 +34,13 @@ class OptionalUnitSpec : SubjectSpek<OptionalUnit>({
 				fun returnsNothing() {
 					Unit
 				}
+			""")
+			assertThat(findings).isEmpty()
+		}
+
+		it("should not report Unit return type in overridden function") {
+			val findings = subject.lint("""
+				override fun returnsUnit2() = Unit
 			""")
 			assertThat(findings).isEmpty()
 		}
