@@ -91,6 +91,8 @@ Smaller methods can also be named much clearer which leads to improved readabili
 
 This rule reports labeled expressions. Expressions with labels generally increase complexity and worsen the
 maintainability of the code. Refactor the violating code to not use labels instead.
+Labeled expressions referencing an outer class with a label from an inner class are allowed, because there is no
+way to get the instance of an outer class from an inner class in Kotlin.
 
 **Severity**: Maintainability
 
@@ -113,6 +115,14 @@ val range = listOf<String>("foo", "bar")
 for (r in range) {
     if (r == "bar") break
     println(r)
+}
+
+class Outer {
+    inner class Inner {
+        fun f() {
+            val outer = this@Outer
+        }
+    }
 }
 ```
 
