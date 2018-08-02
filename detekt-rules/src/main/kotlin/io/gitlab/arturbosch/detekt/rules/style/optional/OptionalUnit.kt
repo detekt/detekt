@@ -16,6 +16,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  *
  * <noncompliant>
  * fun foo(): Unit { }
+ * fun foo() = Unit
  * </noncompliant>
  *
  * <compliant>
