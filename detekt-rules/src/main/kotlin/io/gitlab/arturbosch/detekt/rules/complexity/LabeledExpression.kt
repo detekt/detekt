@@ -16,6 +16,8 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
 /**
  * This rule reports labeled expressions. Expressions with labels generally increase complexity and worsen the
  * maintainability of the code. Refactor the violating code to not use labels instead.
+ * Labeled expressions referencing an outer class with a label from an inner class are allowed, because there is no
+ * way to get the instance of an outer class from an inner class in Kotlin.
  *
  * <noncompliant>
  * val range = listOf<String>("foo", "bar")
@@ -30,6 +32,14 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
  * for (r in range) {
  *     if (r == "bar") break
  *     println(r)
+ * }
+ *
+ * class Outer {
+ *     inner class Inner {
+ *         fun f() {
+ *             val outer = this@Outer
+ *         }
+ *     }
  * }
  * </compliant>
  *
