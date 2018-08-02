@@ -16,11 +16,12 @@ class OptionalUnitSpec : Spek({
 		it("should detect one finding") {
 			val findings = OptionalUnit().lint("""
 				fun returnsUnit1(): Unit {
+					fun returnsUnitNested(): Unit {}
 				}
 
 				fun returnsUnit2() = Unit
 			""")
-			assertThat(findings).hasSize(2)
+			assertThat(findings).hasSize(3)
 		}
 
 		it("should not report Unit reference") {
