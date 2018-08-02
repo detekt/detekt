@@ -489,6 +489,7 @@ the `Unit` return type is specified on functions.
 
 ```kotlin
 fun foo(): Unit { }
+fun foo() = Unit
 ```
 
 #### Compliant Code:
