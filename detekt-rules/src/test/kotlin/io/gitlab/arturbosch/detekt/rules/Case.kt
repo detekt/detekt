@@ -59,7 +59,6 @@ enum class Case(val file: String) {
 	NoClasses("/cases/NoClasses.kt"),
 	LongMethodPositive("/cases/LongMethodPositive.kt"),
 	LongMethodNegative("/cases/LongMethodNegative.kt"),
-	FeatureEnvy("/cases/FeatureEnvy.kt"),
 	UnreachableCode("/cases/UnreachableCode.kt"),
 	UnnecessaryAbstractClassPositive("/cases/UnnecessaryAbstractClassPositive.kt"),
 	UnnecessaryAbstractClassNegative("/cases/UnnecessaryAbstractClassNegative.kt"),
