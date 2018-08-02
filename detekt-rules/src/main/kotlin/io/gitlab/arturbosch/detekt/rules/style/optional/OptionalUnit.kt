@@ -16,12 +16,17 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * the `Unit` return type is specified on functions.
  *
  * <noncompliant>
- * fun foo(): Unit { }
+ * fun foo(): Unit {
+ *     return Unit 
+ * }
  * fun foo() = Unit
  * </noncompliant>
  *
  * <compliant>
  * fun foo() { }
+ *
+ * // overridden no-op functions are allowed
+ * override fun foo() = Unit
  * </compliant>
  *
  * @author Artur Bosch

@@ -488,7 +488,9 @@ the `Unit` return type is specified on functions.
 #### Noncompliant Code:
 
 ```kotlin
-fun foo(): Unit { }
+fun foo(): Unit {
+    return Unit 
+}
 fun foo() = Unit
 ```
 
@@ -496,6 +498,9 @@ fun foo() = Unit
 
 ```kotlin
 fun foo() { }
+
+// overridden no-op functions are allowed
+override fun foo() = Unit
 ```
 
 ### OptionalWhenBraces
