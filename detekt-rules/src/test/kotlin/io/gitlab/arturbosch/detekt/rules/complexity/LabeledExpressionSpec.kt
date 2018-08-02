@@ -17,8 +17,13 @@ class LabeledExpressionSpec : SubjectSpek<LabeledExpression>({
 	given("several labeled expressions") {
 
 		it("reports these labels") {
-			subject.lint(Case.LabeledExpression.path())
-			assertThat(subject.findings).hasSize(7)
+			subject.lint(Case.LabeledExpressionPositive.path())
+			assertThat(subject.findings).hasSize(10)
+		}
+
+		it("does not report these labels") {
+			subject.lint(Case.LabeledExpressionNegative.path())
+			assertThat(subject.findings).isEmpty()
 		}
 	}
 })

@@ -7,7 +7,11 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtExpressionWithLabel
+import org.jetbrains.kotlin.psi.KtThisExpression
+import org.jetbrains.kotlin.psi.psiUtil.containingClass
 
 /**
  * This rule reports labeled expressions. Expressions with labels generally increase complexity and worsen the
@@ -31,6 +35,7 @@ import org.jetbrains.kotlin.psi.KtExpressionWithLabel
  *
  * @author Ivan Balaksha
  * @author Marvin Ramin
+ * @author schalkms
  */
 class LabeledExpression(config: Config = Config.empty) : Rule(config) {
 	override val issue: Issue = Issue("LabeledExpression",
@@ -40,8 +45,22 @@ class LabeledExpression(config: Config = Config.empty) : Rule(config) {
 
 	override fun visitExpressionWithLabel(expression: KtExpressionWithLabel) {
 		super.visitExpressionWithLabel(expression)
-		expression.getLabelName()?.let {
-			report(CodeSmell(issue, Entity.from(expression), issue.description))
+		if (isNotReferencingOuterClass(expression)) {
+			expression.getLabelName()?.let {
+				report(CodeSmell(issue, Entity.from(expression), issue.description))
+			}
 		}
+	}
+
+	private fun isNotReferencingOuterClass(expression: KtExpressionWithLabel): Boolean {
+		val containingClasses = mutableListOf<KtClass>()
+		expression.containingClass()?.let { containingClasses(it, containingClasses) }
+		return expression !is KtThisExpression || !containingClasses.any { it.name == expression.getLabelName() }
+	}
+
+	private fun containingClasses(element: KtElement, classes: MutableList<KtClass>) {
+		val containingClass = element.containingClass() ?: return
+		classes.add(containingClass)
+		containingClasses(containingClass, classes)
 	}
 }
