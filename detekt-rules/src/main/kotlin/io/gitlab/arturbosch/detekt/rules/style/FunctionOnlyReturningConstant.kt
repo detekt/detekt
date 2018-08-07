@@ -52,10 +52,11 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
 		super.visitNamedFunction(function)
 	}
 
-	private fun checkOverridableFunction(function: KtNamedFunction) =
-			if (ignoreOverridableFunction)
-				!function.isOverridden() && !function.isOpen() && !checkContainingInterface(function)
-			else true
+	private fun checkOverridableFunction(function: KtNamedFunction): Boolean {
+		return if (ignoreOverridableFunction)
+			!function.isOverridden() && !function.isOpen() && !checkContainingInterface(function)
+		else true
+	}
 
 	private fun checkContainingInterface(function: KtNamedFunction): Boolean {
 		val containingClass = function.containingClass()
