@@ -33,7 +33,7 @@ class LongParameterList(config: Config = Config.empty,
 					"Prefer methods with short parameter lists.",
 			Debt.TWENTY_MINS)
 
-	private val ignoreDefaultParameters = valueOrDefault(IGNORE_DEFAULT_PARAMETERS, DEFAULT_IGNORE_DEFAULT_PARAMETERS)
+	private val ignoreDefaultParameters = valueOrDefault(IGNORE_DEFAULT_PARAMETERS, false)
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		if (function.hasModifier(KtTokens.OVERRIDE_KEYWORD)) return
@@ -60,6 +60,5 @@ class LongParameterList(config: Config = Config.empty,
 	companion object {
 		const val IGNORE_DEFAULT_PARAMETERS = "ignoreDefaultParameters"
 		const val DEFAULT_ACCEPTED_PARAMETER_LENGTH = 6
-		const val DEFAULT_IGNORE_DEFAULT_PARAMETERS = false
 	}
 }
