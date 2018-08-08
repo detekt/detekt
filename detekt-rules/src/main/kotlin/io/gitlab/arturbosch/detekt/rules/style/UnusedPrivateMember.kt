@@ -54,7 +54,7 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 			Debt.FIVE_MINS,
 			aliases = setOf("UNUSED_VARIABLE"))
 
-	private val allowedNames = Regex(valueOrDefault(ALLOWED_NAMES_PATTERN, "(_|ignored|expected)"))
+	private val allowedNames = Regex(valueOrDefault(ALLOWED_NAMES_PATTERN, "(_|ignored|expected|serialVersionUID)"))
 
 	override fun visit(root: KtFile) {
 		super.visit(root)
