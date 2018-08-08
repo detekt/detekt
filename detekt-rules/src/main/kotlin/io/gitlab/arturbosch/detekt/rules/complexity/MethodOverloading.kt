@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
- * This rule reports methods which have many versions of the same method with different parameter overloading.
+ * This rule reports methods which are overloaded often.
  * Method overloading tightly couples these methods together which might make the code harder to understand.
  *
  * Refactor these methods and try to use optional parameters instead to prevent some of the overloading.
