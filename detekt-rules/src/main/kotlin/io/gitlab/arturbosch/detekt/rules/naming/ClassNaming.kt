@@ -22,7 +22,7 @@ class ClassNaming(config: Config = Config.empty) : Rule(config) {
 			Severity.Style,
 			"A classes name should fit the naming pattern defined in the projects configuration.",
 			debt = Debt.FIVE_MINS)
-	private val classPattern = Regex(valueOrDefault(CLASS_PATTERN, "^[A-Z$][a-zA-Z0-9$]*$"))
+	private val classPattern = Regex(valueOrDefault(CLASS_PATTERN, "^[A-Z$][a-zA-Z0-9$]*"))
 
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
 		if (!classOrObject.identifierName().matches(classPattern)) {
