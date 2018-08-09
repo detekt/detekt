@@ -13,7 +13,6 @@ import org.jetbrains.kotlin.psi.KtContinueExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtLoopExpression
 import org.jetbrains.kotlin.psi.KtReturnExpression
-import org.jetbrains.kotlin.psi.KtThrowExpression
 
 /**
  * Reports loops which contain jump statements that jump regardless of any conditions.
@@ -52,6 +51,5 @@ class UnconditionalJumpStatementInLoop(config: Config = Config.empty) : Rule(con
 			isJumpStatement(body) || body?.children?.any { isJumpStatement(it) } == true
 
 	private fun isJumpStatement(element: PsiElement?) =
-			element is KtReturnExpression || element is KtBreakExpression ||
-					element is KtContinueExpression || element is KtThrowExpression
+			element is KtReturnExpression || element is KtBreakExpression || element is KtContinueExpression
 }

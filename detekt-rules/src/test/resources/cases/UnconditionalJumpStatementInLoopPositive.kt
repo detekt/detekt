@@ -2,11 +2,10 @@
 
 package cases
 
-fun unconditionalJumpStatementsInLoop() { // reports 6
+fun unconditionalJumpStatementsInLoop() { // reports 5 - 1 for every jump statement
 	for (i in 1..2) break
 	for (i in 1..2) continue
 	for (i in 1..2) return
-	for (i in 1..2) throw IllegalStateException()
 	while (true) break
 	do {
 		break
