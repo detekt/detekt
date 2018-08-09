@@ -8,11 +8,13 @@ import com.github.shyiko.ktlint.core.EditorConfig
  *
  * @author Lukasz Jazgar
  */
-fun EditorConfig.Companion.merge(sourceEditorConfig: EditorConfig?,
-																 indentSize: Int? = null,
-																 continuationIndentSize: Int? = null,
-																 maxLineLength: Int? = null,
-																 insertFinalNewline: Boolean? = null): EditorConfig =
+fun EditorConfig.Companion.merge(
+		sourceEditorConfig: EditorConfig?,
+		indentSize: Int? = null,
+		continuationIndentSize: Int? = null,
+		maxLineLength: Int? = null,
+		insertFinalNewline: Boolean? = null
+): EditorConfig =
 	EditorConfig.fromMap(
 		HashMap<String, String>().also {
 			copyProperty(it, "indent_size", indentSize, sourceEditorConfig)
@@ -22,8 +24,12 @@ fun EditorConfig.Companion.merge(sourceEditorConfig: EditorConfig?,
 		}
 	)
 
-private fun copyProperty(map: MutableMap<String, String>, property: String, value: Any?,
-												 sourceEditorConfig: EditorConfig?) {
+private fun copyProperty(
+		map: MutableMap<String, String>,
+		property: String,
+		value: Any?,
+		sourceEditorConfig: EditorConfig?
+) {
 	val newValue: String? = value?.toString() ?: sourceEditorConfig?.get(property)
 	newValue?.let { map[property] = it }
 }
