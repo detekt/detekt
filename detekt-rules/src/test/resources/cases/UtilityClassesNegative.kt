@@ -18,6 +18,25 @@ class UtilityClassWithSecondaryConstructorOk {
 	}
 }
 
+class NoUtilityClassBecauseOfInterface : InterfaceWithCompanionObject {
+
+	constructor()
+
+	companion object {
+		val C = 0
+	}
+}
+
+open class UtilityClassesNegativeParent(val i : Int)
+class NoUtilityClassBecauseOfInheritance : UtilityClassesNegativeParent {
+
+	constructor(i: Int) : super(i)
+
+	companion object {
+		val C = 0
+	}
+}
+
 class NoUtilityClasses {
 
 	private val i = 0
