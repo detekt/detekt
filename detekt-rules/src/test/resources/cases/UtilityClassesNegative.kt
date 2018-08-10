@@ -41,7 +41,21 @@ class NoUtilityClasses {
 
 	private val i = 0
 
-	class EmptyClass(val i: Int)
+	class EmptyClass1 { }
+	class EmptyClass2
+
+	class ClassWithSecondaryConstructor {
+		constructor()
+	}
+
+	class ClassWithInstanceFunc {
+
+		fun f() {}
+
+		companion object {
+			val C = 0
+		}
+	}
 
 	class ClassWithPrimaryConstructorParameter1(val i: Int) {
 
@@ -57,7 +71,7 @@ class NoUtilityClasses {
 		}
 	}
 
-	class ClassWithSecondaryConstructorParameter  {
+	class ClassWithSecondaryConstructorParameter {
 
 		constructor(i: Int)
 
