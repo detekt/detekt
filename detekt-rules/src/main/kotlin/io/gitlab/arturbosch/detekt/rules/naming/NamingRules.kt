@@ -5,11 +5,13 @@ import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
 import org.jetbrains.kotlin.name.SpecialNames
 import org.jetbrains.kotlin.psi.KtClassOrObject
+import org.jetbrains.kotlin.psi.KtConstructor
 import org.jetbrains.kotlin.psi.KtEnumEntry
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtPackageDirective
+import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtVariableDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
@@ -31,6 +33,8 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
 	private val functionMaxNameLengthRule = FunctionMaxLength(config)
 	private val functionMinNameLengthRule = FunctionMinLength(config)
 	private val forbiddenClassNameRule = ForbiddenClassName(config)
+	private val constructorParameterNamingRule = ConstructorParameterNaming(config)
+	private val functionParameterNamingRule = FunctionParameterNaming(config)
 
 	override val rules: List<Rule> = listOf(
 			variableNamingRule,
@@ -44,7 +48,9 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
 			functionNamingRule,
 			functionMaxNameLengthRule,
 			functionMinNameLengthRule,
-			forbiddenClassNameRule
+			forbiddenClassNameRule,
+			constructorParameterNamingRule,
+			functionParameterNamingRule
 	)
 
 	override fun visitPackageDirective(directive: KtPackageDirective) {
@@ -62,6 +68,7 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
 				is KtNamedFunction -> handleFunction(declaration)
 				is KtEnumEntry -> enumEntryNamingRule.runIfActive { visitEnumEntry(declaration) }
 				is KtClassOrObject -> handleClassOrObject(declaration)
+				is KtParameter -> handleParameter(declaration)
 			}
 		}
 		super.visitNamedDeclaration(declaration)
@@ -86,6 +93,13 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
 			declaration.isTopLevel -> topLevelPropertyRule.runIfActive { visitProperty(declaration) }
 			declaration.withinObjectDeclaration() -> objectConstantNamingRule.runIfActive { visitProperty(declaration) }
 			else -> variableNamingRule.runIfActive { visitProperty(declaration) }
+		}
+	}
+
+	private fun handleParameter(declaration: KtParameter) {
+		when (declaration.ownerFunction) {
+			is KtConstructor<*> -> constructorParameterNamingRule.runIfActive { visitParameter(declaration) }
+			is KtNamedFunction -> functionParameterNamingRule.runIfActive { visitParameter(declaration) }
 		}
 	}
 

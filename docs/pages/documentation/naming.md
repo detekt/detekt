@@ -22,6 +22,28 @@ Reports when class names which do not follow the specified naming convention are
 
    naming pattern
 
+### ConstructorParameterNaming
+
+Reports constructor parameter names which do not follow the specified naming convention are used.
+
+**Severity**: Style
+
+**Debt**: 5min
+
+#### Configuration options:
+
+* `parameterPattern` (default: `'[a-z][A-Za-z0-9]*'`)
+
+   naming pattern
+
+* `privateParameterPattern` (default: `'[a-z][A-Za-z0-9]*'`)
+
+   naming pattern
+
+* `excludeClassPattern` (default: `'$^'`)
+
+   ignores variables in classes which match this regex
+
 ### EnumNaming
 
 Reports when enum names which do not follow the specified naming convention are used.
@@ -99,6 +121,24 @@ Reports when function names which do not follow the specified naming convention 
 * `excludeClassPattern` (default: `'$^'`)
 
    ignores functions in classes which match this regex
+
+### FunctionParameterNaming
+
+Reports function parameter names which do not follow the specified naming convention are used.
+
+**Severity**: Style
+
+**Debt**: 5min
+
+#### Configuration options:
+
+* `parameterPattern` (default: `'[a-z][A-Za-z0-9]*'`)
+
+   naming pattern
+
+* `excludeClassPattern` (default: `'$^'`)
+
+   ignores variables in classes which match this regex
 
 ### MatchingDeclarationName
 
