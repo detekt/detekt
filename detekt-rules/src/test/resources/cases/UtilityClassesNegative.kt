@@ -2,7 +2,14 @@
 
 package cases
 
-class UtilityClassWithPrimaryConstructorOk private constructor() {
+class UtilityClassWithPrimaryPrivateConstructorOk private constructor() {
+
+	companion object {
+		val C = 0
+	}
+}
+
+class UtilityClassWithPrimaryInternalConstructorOk internal constructor() {
 
 	companion object {
 		val C = 0
