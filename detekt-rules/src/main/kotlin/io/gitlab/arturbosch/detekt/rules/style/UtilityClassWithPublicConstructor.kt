@@ -71,14 +71,23 @@ class UtilityClassWithPublicConstructor(config: Config = Config.empty) : Rule(co
 	private fun KtClass.hasSuperTypes() = superTypeListEntries.any()
 
 	private fun hasOnlyUtilityClassMembers(declarations: List<KtDeclaration>?): Boolean {
-		return declarations?.all {
-			it is KtSecondaryConstructor || it is KtClassInitializer || isCompanionObject(it)
-		} == true
+		if (declarations == null || declarations.isEmpty()) {
+			return false
+		}
+		var containsCompanionObject = false
+		var isUtilityClassCandidate = true
+		declarations.forEach {
+			if (isCompanionObject(it)) {
+				containsCompanionObject = true
+			} else if (it !is KtSecondaryConstructor && it !is KtClassInitializer) {
+				isUtilityClassCandidate = false
+			}
+		}
+		return containsCompanionObject && isUtilityClassCandidate
 	}
 
-	private fun isCompanionObject(declaration: KtDeclaration): Boolean {
-		return (declaration as? KtObjectDeclaration)?.isCompanion() == true
-	}
+	private fun isCompanionObject(declaration: KtDeclaration) =
+			(declaration as? KtObjectDeclaration)?.isCompanion() == true
 
 	private fun hasPublicSecondaryConstructorWithoutParameters(klass: KtClass): Boolean {
 		val primaryConstructor = klass.primaryConstructor
