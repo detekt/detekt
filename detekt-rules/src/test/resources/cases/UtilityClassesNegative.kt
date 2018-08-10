@@ -1,4 +1,4 @@
-@file:Suppress("unused", "ConvertSecondaryConstructorToPrimary")
+@file:Suppress("unused", "ConvertSecondaryConstructorToPrimary", "UNUSED_PARAMETER")
 
 package cases
 
@@ -43,14 +43,23 @@ class NoUtilityClasses {
 
 	class EmptyClass(val i: Int)
 
-	class NoUtilityClass2(val i: Int) {
+	class ClassWithPrimaryConstructorParameter1(val i: Int) {
 
 		companion object {
 			val C = 0
 		}
 	}
 
-	class NoUtilityClass3 constructor(val i: Int) {
+	class ClassWithPrimaryConstructorParameter2 constructor(val i: Int) {
+
+		companion object {
+			val C = 0
+		}
+	}
+
+	class ClassWithSecondaryConstructorParameter  {
+
+		constructor(i: Int)
 
 		companion object {
 			val C = 0
