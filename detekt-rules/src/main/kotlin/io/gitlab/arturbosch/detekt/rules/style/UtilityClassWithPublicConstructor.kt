@@ -93,5 +93,6 @@ class UtilityClassWithPublicConstructor(config: Config = Config.empty) : Rule(co
 			primaryConstructor.isPublic() && primaryConstructor.valueParameters.isEmpty()
 
 	private fun hasPublicConstructor(secondaryConstructors: List<KtSecondaryConstructor>) =
-			secondaryConstructors.isEmpty() || secondaryConstructors.any { it.isPublic() }
+			secondaryConstructors.isEmpty()
+					|| secondaryConstructors.any { it.isPublic() && it.valueParameters.isEmpty() }
 }
