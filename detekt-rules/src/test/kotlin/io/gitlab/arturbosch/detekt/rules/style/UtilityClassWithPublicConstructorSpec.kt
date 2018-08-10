@@ -11,14 +11,23 @@ import org.jetbrains.spek.subject.SubjectSpek
 class UtilityClassWithPublicConstructorSpec : SubjectSpek<UtilityClassWithPublicConstructor>({
 	subject { UtilityClassWithPublicConstructor(Config.empty) }
 
-	given("several utility classes") {
+	given("several UtilityClassWithPublicConstructor rule violations") {
+
+		val findings = subject.lint(Case.UtilityClassesPositive.path())
 
 		it("reports utility classes with a public constructor") {
-			val findings = subject.lint(Case.UtilityClassesPositive.path())
 			assertThat(findings).hasSize(6)
 		}
 
-		it("does not report utility classes with no public constructor") {
+		it("reports utility classes which are marked as open") {
+			val count = findings.count { it.message.contains("The utility class OpenUtilityClass should be final.") }
+			assertThat(count).isEqualTo(1)
+		}
+	}
+
+	given("several classes which adhere to the UtilityClassWithPublicConstructor rule") {
+
+		it("does not report given classes") {
 			val findings = subject.lint(Case.UtilityClassesNegative.path())
 			assertThat(findings).hasSize(0)
 		}
