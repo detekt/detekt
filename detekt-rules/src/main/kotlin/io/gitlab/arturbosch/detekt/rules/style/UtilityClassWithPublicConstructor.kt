@@ -7,12 +7,12 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isPublic
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassInitializer
 import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
-import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtSecondaryConstructor
 
 /**
@@ -58,17 +58,22 @@ class UtilityClassWithPublicConstructor(config: Config = Config.empty) : Rule(co
 			Debt.FIVE_MINS)
 
 	override fun visitClass(klass: KtClass) {
-		if (!klass.isInterface() && !klass.hasSuperTypes() && hasPublicSecondaryConstructorWithoutParameters(klass)) {
+		if (!klass.isInterface() && !klass.superTypeListEntries.any()) {
+			val utilityClassConstructor = UtilityClassConstructor(klass)
 			val declarations = klass.getBody()?.declarations
 			if (hasOnlyUtilityClassMembers(declarations)) {
-				report(CodeSmell(issue, Entity.from(klass), "The class ${klass.nameAsSafeName} only contains" +
-						" utility functions. Consider defining it as an object."))
+				if (utilityClassConstructor.hasPublicConstructorWithoutParameters()) {
+					report(CodeSmell(issue, Entity.from(klass),
+							"The class ${klass.nameAsSafeName} only contains" +
+									" utility functions. Consider defining it as an object."))
+				} else if (klass.isOpen() && utilityClassConstructor.hasNonPublicConstructorWithoutParameters()) {
+					report(CodeSmell(issue, Entity.from(klass),
+							"The utility class ${klass.nameAsSafeName} should be final."))
+				}
 			}
 		}
 		super.visitClass(klass)
 	}
-
-	private fun KtClass.hasSuperTypes() = superTypeListEntries.any()
 
 	private fun hasOnlyUtilityClassMembers(declarations: List<KtDeclaration>?): Boolean {
 		if (declarations == null || declarations.isEmpty()) {
@@ -89,19 +94,20 @@ class UtilityClassWithPublicConstructor(config: Config = Config.empty) : Rule(co
 	private fun isCompanionObject(declaration: KtDeclaration) =
 			(declaration as? KtObjectDeclaration)?.isCompanion() == true
 
-	private fun hasPublicSecondaryConstructorWithoutParameters(klass: KtClass): Boolean {
-		val primaryConstructor = klass.primaryConstructor
-		val secondaryConstructors = klass.secondaryConstructors
-		if (primaryConstructor == null) {
-			return hasPublicSecondaryConstructorWithoutParameters(secondaryConstructors)
+	internal class UtilityClassConstructor(private val klass: KtClass) {
+
+		internal fun hasPublicConstructorWithoutParameters() = hasConstructorWithoutParameters(true)
+
+		internal fun hasNonPublicConstructorWithoutParameters() = hasConstructorWithoutParameters(false)
+
+		private fun hasConstructorWithoutParameters(publicModifier: Boolean): Boolean {
+			val primaryConstructor = klass.primaryConstructor
+			if (primaryConstructor != null) {
+				return primaryConstructor.isPublic() == publicModifier && primaryConstructor.valueParameters.isEmpty()
+			}
+			val secondaryConstructors = klass.secondaryConstructors
+			return secondaryConstructors.isEmpty() ||
+				secondaryConstructors.any { it.isPublic() == publicModifier && it.valueParameters.isEmpty() }
 		}
-		return hasPublicPrimaryConstructorWithoutParameters(primaryConstructor)
 	}
-
-	private fun hasPublicPrimaryConstructorWithoutParameters(primaryConstructor: KtPrimaryConstructor) =
-			primaryConstructor.isPublic() && primaryConstructor.valueParameters.isEmpty()
-
-	private fun hasPublicSecondaryConstructorWithoutParameters(secondaryConstructors: List<KtSecondaryConstructor>) =
-			secondaryConstructors.isEmpty() ||
-					secondaryConstructors.any { it.isPublic() && it.valueParameters.isEmpty() }
 }

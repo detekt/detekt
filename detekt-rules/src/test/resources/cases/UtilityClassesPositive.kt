@@ -36,3 +36,12 @@ class UtilityClassWithEmptyCompanionObj { // violation
 
 	companion object
 }
+
+open class OpenUtilityClass { // violation - utility class should be final
+
+	internal constructor()
+
+	companion object {
+		val C = 0
+	}
+}
