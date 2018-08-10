@@ -58,7 +58,7 @@ class UtilityClassWithPublicConstructor(config: Config = Config.empty) : Rule(co
 			Debt.FIVE_MINS)
 
 	override fun visitClass(klass: KtClass) {
-		if (!klass.isInterface() && !klass.hasSuperTypes() && hasPublicConstructor(klass)) {
+		if (!klass.isInterface() && !klass.hasSuperTypes() && hasPublicSecondaryConstructorWithoutParameters(klass)) {
 			val declarations = klass.getBody()?.declarations
 			if (hasOnlyUtilityClassMembers(declarations)) {
 				report(CodeSmell(issue, Entity.from(klass), "The class ${klass.nameAsSafeName} only contains" +
@@ -80,19 +80,19 @@ class UtilityClassWithPublicConstructor(config: Config = Config.empty) : Rule(co
 		return (declaration as? KtObjectDeclaration)?.isCompanion() == true
 	}
 
-	private fun hasPublicConstructor(klass: KtClass): Boolean {
+	private fun hasPublicSecondaryConstructorWithoutParameters(klass: KtClass): Boolean {
 		val primaryConstructor = klass.primaryConstructor
 		val secondaryConstructors = klass.secondaryConstructors
 		if (primaryConstructor == null) {
-			return hasPublicConstructor(secondaryConstructors)
+			return hasPublicSecondaryConstructorWithoutParameters(secondaryConstructors)
 		}
-		return hasPublicConstructor(primaryConstructor)
+		return hasPublicPrimaryConstructorWithoutParameters(primaryConstructor)
 	}
 
-	private fun hasPublicConstructor(primaryConstructor: KtPrimaryConstructor) =
+	private fun hasPublicPrimaryConstructorWithoutParameters(primaryConstructor: KtPrimaryConstructor) =
 			primaryConstructor.isPublic() && primaryConstructor.valueParameters.isEmpty()
 
-	private fun hasPublicConstructor(secondaryConstructors: List<KtSecondaryConstructor>) =
-			secondaryConstructors.isEmpty()
-					|| secondaryConstructors.any { it.isPublic() && it.valueParameters.isEmpty() }
+	private fun hasPublicSecondaryConstructorWithoutParameters(secondaryConstructors: List<KtSecondaryConstructor>) =
+			secondaryConstructors.isEmpty() ||
+					secondaryConstructors.any { it.isPublic() && it.valueParameters.isEmpty() }
 }
