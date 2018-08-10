@@ -12,6 +12,17 @@ fun unconditionalJumpStatementsInLoop() { // reports 5 - 1 for every jump statem
 	} while (true)
 }
 
+fun unconditionalJumpStatementsInLoop2() {
+	for (i in 1..2) {
+		break // reports 1 - dead code
+		print("")
+	}
+	for (i in 1..2) {
+		print("")
+		break // reports 1
+	}
+}
+
 fun unconditionalJumpStatementInNestedLoop() { // reports 1
 	for (i in 1..2) {
 		for (j in 1..2) {
