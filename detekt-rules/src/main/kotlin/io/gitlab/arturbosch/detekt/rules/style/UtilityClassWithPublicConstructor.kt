@@ -16,10 +16,12 @@ import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtSecondaryConstructor
 
 /**
- * A class which only contains utility functions and no concrete implementation can be refactored into an `object`.
+ * A class which only contains utility variables and functions with no concrete implementation can be refactored
+ * into an `object` or an class with a non-public constructor.
+ * Furthermore, this rule reports utility classes which are not final.
  *
  * <noncompliant>
- * class UtilityClass {
+ * class UtilityClassViolation {
  *
  *     // public constructor here
  *     constructor() {
@@ -29,6 +31,11 @@ import org.jetbrains.kotlin.psi.KtSecondaryConstructor
  *     companion object {
  *         val i = 0
  *     }
+ * }
+ *
+ * open class UtilityClassViolation private constructor() {
+ *
+ *     // ...
  * }
  * </noncompliant>
  *
@@ -42,6 +49,10 @@ import org.jetbrains.kotlin.psi.KtSecondaryConstructor
  *     companion object {
  *         val i = 0
  *     }
+ * }
+ * object UtilityClass {
+ *
+ *     val i = 0
  * }
  * </compliant>
  *
