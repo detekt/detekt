@@ -11,7 +11,6 @@ import io.gitlab.arturbosch.detekt.rules.isPublic
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassInitializer
 import org.jetbrains.kotlin.psi.KtDeclaration
-import org.jetbrains.kotlin.psi.KtDelegatedSuperTypeEntry
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtSecondaryConstructor
@@ -59,7 +58,7 @@ class UtilityClassWithPublicConstructor(config: Config = Config.empty) : Rule(co
 			Debt.FIVE_MINS)
 
 	override fun visitClass(klass: KtClass) {
-		if (!klass.isInterface() && !klass.hasDelegates() && hasPublicConstructor(klass)) {
+		if (!klass.isInterface() && !klass.hasSuperTypes() && hasPublicConstructor(klass)) {
 			val declarations = klass.getBody()?.declarations
 			if (hasOnlyUtilityClassMembers(declarations)) {
 				report(CodeSmell(issue, Entity.from(klass), "The class ${klass.nameAsSafeName} only contains" +
@@ -69,7 +68,7 @@ class UtilityClassWithPublicConstructor(config: Config = Config.empty) : Rule(co
 		super.visitClass(klass)
 	}
 
-	private fun KtClass.hasDelegates() = superTypeListEntries.any { it is KtDelegatedSuperTypeEntry }
+	private fun KtClass.hasSuperTypes() = superTypeListEntries.any()
 
 	private fun hasOnlyUtilityClassMembers(declarations: List<KtDeclaration>?): Boolean {
 		return declarations?.all {

@@ -31,3 +31,8 @@ class UtilityClassWithSecondaryConstructor { // violation
 		val C = 0
 	}
 }
+
+class UtilityClassWithEmptyCompanionObj { // violation
+
+	companion object
+}
