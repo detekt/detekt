@@ -13,14 +13,19 @@ import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
- * It is not necessary to define a return type of `Unit` on functions. This rule detects and reports instances where
- * the `Unit` return type is specified on functions.
+ * It is not necessary to define a return type of `Unit` on functions or to specify a lone Unit statement.
+ * This rule detects and reports instances where the `Unit` return type is specified on functions and the occurrences
+ * of a lone Unit statement.
  *
  * <noncompliant>
  * fun foo(): Unit {
  *     return Unit 
  * }
  * fun foo() = Unit
+ *
+ * fun doesNothing() {
+ *     Unit
+ * }
  * </noncompliant>
  *
  * <compliant>
