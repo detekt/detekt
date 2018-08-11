@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isOverridden
+import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
@@ -51,21 +52,35 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
 		super.visitNamedFunction(function)
 	}
 
+	override fun visitBlockExpression(expression: KtBlockExpression) {
+		expression.statements
+				.filter { it is KtNameReferenceExpression && it.text == UNIT }
+				.forEach {
+					report(CodeSmell(issue, Entity.from(expression),
+							"A single Unit expression is unnecessary and can safely be removed"))
+				}
+		super.visitBlockExpression(expression)
+	}
+
 	private fun checkFunctionWithExplicitReturnType(function: KtNamedFunction) {
 		val typeReference = function.typeReference
 		val typeElementText = typeReference?.typeElement?.text
-		if (typeElementText == "Unit") {
+		if (typeElementText == UNIT) {
 			report(CodeSmell(issue, Entity.from(typeReference), createMessage(function)))
 		}
 	}
 
 	private fun checkFunctionWithInferredReturnType(function: KtNamedFunction) {
 		val referenceExpression = function.bodyExpression as? KtNameReferenceExpression
-		if (referenceExpression != null && referenceExpression.text == "Unit") {
+		if (referenceExpression != null && referenceExpression.text == UNIT) {
 			report(CodeSmell(issue, Entity.from(referenceExpression), createMessage(function)))
 		}
 	}
 
 	private fun createMessage(function: KtNamedFunction) = "The function ${function.name} " +
 			"defines a return type of Unit. This is unnecessary and can safely be removed."
+
+	companion object {
+		private const val UNIT = "Unit"
+	}
 }
