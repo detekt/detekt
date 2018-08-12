@@ -13,7 +13,7 @@ All information from Gradle Groovy DSL are still valid, just the DSL changes a l
 For gradle version >= 4.1
 
 ```kotlin
-import io.gitlab.arturbosch.detekt.DetektExtension
+import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 
 buildscript {
     repositories {
@@ -24,15 +24,15 @@ plugins {
     id("io.gitlab.arturbosch.detekt").version("1.0.0.[version]")
 }
 
-detekt {
+configure<DetektExtension> {
     version = "1.0.0.[version]"
     profile("main", Action {
-        input = file("src/main/kotlin")
-        config = file("detekt.yml")
+        input = "src/main/kotlin"
+        config = "detekt.yml"
         filters = ".*/resources/.*,.*/tmp/.*"
-        output = file("reports")
+        output = "reports"
         outputName = "detekt-report"
-        baseline = file("reports/baseline.xml")
+        baseline = "reports/baseline.xml"
     })
 }
 ```
