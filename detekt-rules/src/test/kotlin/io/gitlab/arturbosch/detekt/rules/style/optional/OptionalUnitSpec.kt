@@ -15,8 +15,7 @@ class OptionalUnitSpec : SubjectSpek<OptionalUnit>({
 
 	given("several functions which return Unit") {
 
-		it("should detect one finding") {
-			val findings = subject.lint("""
+		val code = """
 				fun returnsUnit1(): Unit {
 					fun returnsUnitNested(): Unit {
 						return Unit
@@ -25,22 +24,33 @@ class OptionalUnitSpec : SubjectSpek<OptionalUnit>({
 				}
 
 				fun returnsUnit2() = Unit
-			""")
+			"""
+		val findings = subject.lint(code)
+
+		it("should report functions returning Unit") {
 			assertThat(findings).hasSize(3)
 		}
 
+		it("should report the correct violation message") {
+			findings.forEach {
+				assertThat(it.message).endsWith(
+						" defines a return type of Unit. This is unnecessary and can safely be removed.")
+			}
+		}
+	}
+
+	given("an overridden function which returns Unit") {
+
 		it("should not report Unit return type in overridden function") {
-			val findings = subject.lint("""
-				override fun returnsUnit2() = Unit
-			""")
+			val code = "override fun returnsUnit2() = Unit"
+			val findings = subject.lint(code)
 			assertThat(findings).isEmpty()
 		}
 	}
 
-	given("several Unit references") {
+	given("several lone Unit statements") {
 
-		it("should report lone Unit statement") {
-			val findings = subject.lint("""
+		val code = """
 				fun returnsNothing() {
 					Unit
 					val i: (Int) -> Unit = { _ -> Unit }
@@ -54,9 +64,21 @@ class OptionalUnitSpec : SubjectSpek<OptionalUnit>({
 						Unit
 					}
 				}
-			""")
+			"""
+		val findings = subject.lint(code)
+
+		it("should report lone Unit statement") {
 			assertThat(findings).hasSize(4)
 		}
+
+		it("should report the correct violation message") {
+			findings.forEach {
+				assertThat(it.message).isEqualTo("A single Unit expression is unnecessary and can safely be removed")
+			}
+		}
+	}
+
+	given("several Unit references") {
 
 		it("should not report Unit reference") {
 			val findings = subject.lint("""
