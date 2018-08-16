@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.com.intellij.openapi.util.TextRange
@@ -13,23 +12,6 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.elementsInRange
-
-class FileParsingRule(val config: Config = Config.empty) : MultiRule() {
-
-	private val maxLineLength = MaxLineLength(config)
-	private val trailingWhitespace = TrailingWhitespace(config)
-	private val noTabs = NoTabs(config)
-	override val rules = listOf(maxLineLength, trailingWhitespace, noTabs)
-
-	override fun visitKtFile(file: KtFile) {
-		val lines = file.text.splitToSequence("\n")
-		val fileContents = KtFileContent(file, lines)
-
-		maxLineLength.runIfActive { visit(fileContents) }
-		trailingWhitespace.runIfActive { visit(fileContents) }
-		noTabs.runIfActive { visit(fileContents) }
-	}
-}
 
 data class KtFileContent(val file: KtFile, val content: Sequence<String>)
 
