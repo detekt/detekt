@@ -18,7 +18,7 @@ class NoTabsSpec : SubjectSpek<NoTabs>({
 
 		it("should flag it") {
 			val path = Case.NoTabsPositive.path()
-			assertThat(lint(path)).hasSize(3)
+			assertThat(lint(path)).hasSize(5)
 		}
 	}
 

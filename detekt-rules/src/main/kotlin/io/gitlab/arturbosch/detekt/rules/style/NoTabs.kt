@@ -8,9 +8,11 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.isPartOf
 import io.gitlab.arturbosch.detekt.api.isPartOfString
 import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtStringTemplateEntryWithExpression
 
 /**
  * This rule reports if tabs are used in Kotlin files.
@@ -31,7 +33,7 @@ class NoTabs(config: Config = Config.empty) : Rule(config) {
 
 	fun findTabs(file: KtFile) {
 		file.collectWhitespaces()
-				.filter { !it.isPartOfString() && it.text.contains('\t') }
+				.filter { it.isTab() }
 				.forEach { report(CodeSmell(issue, Entity.from(it), "Tab character is in use.")) }
 	}
 
@@ -47,4 +49,11 @@ class NoTabs(config: Config = Config.empty) : Rule(config) {
 		})
 		return list
 	}
+
+	private fun PsiWhiteSpace.isTab(): Boolean {
+		return (!isPartOfString() || isStringInterpolated()) && text.contains('\t')
+	}
+
+	private fun PsiWhiteSpace.isStringInterpolated(): Boolean =
+			this.isPartOf(KtStringTemplateEntryWithExpression::class)
 }
