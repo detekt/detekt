@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.rules.style.ExpressionBodySyntax
 import io.gitlab.arturbosch.detekt.rules.style.FileParsingRule
 import io.gitlab.arturbosch.detekt.rules.style.ForbiddenComment
 import io.gitlab.arturbosch.detekt.rules.style.ForbiddenImport
+import io.gitlab.arturbosch.detekt.rules.style.ForbiddenVoid
 import io.gitlab.arturbosch.detekt.rules.style.FunctionOnlyReturningConstant
 import io.gitlab.arturbosch.detekt.rules.style.LoopWithTooManyJumpStatements
 import io.gitlab.arturbosch.detekt.rules.style.MagicNumber
@@ -89,7 +90,8 @@ class StyleGuideProvider : RuleSetProvider {
 				MayBeConst(config),
 				PreferToOverPairSyntax(config),
 				MandatoryBracesIfStatements(config),
-				VarCouldBeVal(config)
+				VarCouldBeVal(config),
+				ForbiddenVoid(config)
 		))
 	}
 }

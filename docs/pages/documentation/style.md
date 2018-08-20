@@ -170,6 +170,29 @@ import kotlin.jvm.JvmField
 import kotlin.SinceKotlin
 ```
 
+### ForbiddenVoid
+
+`Unit` should be used instead of `Void`. This rule detects and reports instances where
+the `Void` type is used.
+
+**Severity**: Style
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+runnable: () -> Void
+var aVoid: Void? = null
+```
+
+#### Compliant Code:
+
+```kotlin
+runnable: () -> Unit
+Void::class
+```
+
 ### FunctionOnlyReturningConstant
 
 A function that only returns a single constant can be misleading. Instead prefer to define the constant directly
