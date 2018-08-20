@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.naming
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
-import org.jetbrains.kotlin.name.SpecialNames
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtEnumEntry
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
@@ -92,5 +91,3 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
 	private fun KtVariableDeclaration.withinObjectDeclaration(): Boolean =
 			this.getNonStrictParentOfType(KtObjectDeclaration::class.java) != null
 }
-
-internal fun KtNamedDeclaration.identifierName() = nameIdentifier?.text ?: SpecialNames.NO_NAME_PROVIDED.asString()

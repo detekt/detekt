@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.empty
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.ALLOWED_EXCEPTION_NAME
-import io.gitlab.arturbosch.detekt.rules.naming.identifierName
+import io.gitlab.arturbosch.detekt.rules.identifierName
 import org.jetbrains.kotlin.psi.KtCatchClause
 
 /**
