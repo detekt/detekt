@@ -108,8 +108,6 @@ style:
   VariableNaming:
     active: true
     variablePattern: '(_)?[a-z][a-zA-Z0-9]*'
-  SpacingBetweenPackageAndImports:
-    active: true
   UnusedPrivateMember:
     active: true
     allowedNames: "(_|ignored|expected)"
