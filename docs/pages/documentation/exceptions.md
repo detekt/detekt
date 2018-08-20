@@ -364,6 +364,10 @@ exception is too broad it can lead to unintended exceptions being caught.
 
    exceptions which are too generic and should not be caught
 
+* `allowedExceptionNameRegex` (default: `"^(_|(ignore|expected).*)"`)
+
+   ignores too generic exception types which match this regex
+
 #### Noncompliant Code:
 
 ```kotlin

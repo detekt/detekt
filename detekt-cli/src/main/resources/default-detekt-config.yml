@@ -188,6 +188,7 @@ exceptions:
      - IndexOutOfBoundsException
      - RuntimeException
      - Throwable
+    allowedExceptionNameRegex: "^(_|(ignore|expected).*)"
   TooGenericExceptionThrown:
     active: true
     exceptionNames:
