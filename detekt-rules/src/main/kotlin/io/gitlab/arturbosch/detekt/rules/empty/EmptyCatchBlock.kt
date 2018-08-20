@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.empty
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.rules.ALLOWED_EXCEPTION_NAME
 import io.gitlab.arturbosch.detekt.rules.naming.identifierName
 import org.jetbrains.kotlin.psi.KtCatchClause
 
@@ -16,7 +17,7 @@ import org.jetbrains.kotlin.psi.KtCatchClause
  */
 class EmptyCatchBlock(config: Config) : EmptyRule(config = config) {
 
-	private val allowedExceptionNameRegex = Regex(valueOrDefault(ALLOWED_EXCEPTION_NAME_REGEX, "^(_|(ignore|expected).*)"))
+	private val allowedExceptionNameRegex = Regex(valueOrDefault(ALLOWED_EXCEPTION_NAME_REGEX, ALLOWED_EXCEPTION_NAME))
 
 	override fun visitCatchSection(catchClause: KtCatchClause) {
 		super.visitCatchSection(catchClause)
