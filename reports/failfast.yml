@@ -89,10 +89,6 @@ potential-bugs:
   UselessPostfixExpression:
     active: true
 
-potential-bugs:
-  UnsafeCast:
-    active: true
-
 style:
   CollapsibleIfStatements:
     active: true
