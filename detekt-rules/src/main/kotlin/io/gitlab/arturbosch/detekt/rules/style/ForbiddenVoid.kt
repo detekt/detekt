@@ -12,8 +12,9 @@ import org.jetbrains.kotlin.psi.KtSimpleNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
 /**
- * `Unit` should be used instead of `Void`. This rule detects and reports instances where
- * the `Void` type is used.
+ * This rule detects usages of `Void` and reports them as forbidden.
+ * The Kotlin type `Unit` should be used instead. This type corresponds to the `Void` class in Java
+ * and has only one value - the `Unit` object.
  *
  * <noncompliant>
  * runnable: () -> Void
