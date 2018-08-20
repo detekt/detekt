@@ -32,5 +32,14 @@ class TooGenericExceptionCaughtSpec : Spek({
 
 			assertThat(findings).isEmpty()
 		}
+
+		it("should not report an ignored catch blocks because of its exception type") {
+			val config = TestConfig(mapOf(TooGenericExceptionCaught.CAUGHT_EXCEPTIONS_PROPERTY to "[MyException]"))
+			val rule = TooGenericExceptionCaught(config)
+
+			val findings = rule.lint(Case.TooGenericExceptionsOptions.path())
+
+			assertThat(findings).isEmpty()
+		}
 	}
 })

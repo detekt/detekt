@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.Case
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.Spek
@@ -21,6 +22,15 @@ class TooGenericExceptionThrownSpec : Spek({
 			val findings = rule.lint(Case.TooGenericExceptions.path())
 
 			assertThat(findings).hasSize(thrownExceptionDefaults.size)
+		}
+
+		it("should not report thrown exceptions") {
+			val config = TestConfig(mapOf(TooGenericExceptionThrown.THROWN_EXCEPTIONS_PROPERTY to "[MyException]"))
+			val rule = TooGenericExceptionCaught(config)
+
+			val findings = rule.lint(Case.TooGenericExceptions.path())
+
+			assertThat(findings).isEmpty()
 		}
 	}
 })
