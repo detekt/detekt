@@ -104,7 +104,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 
 	override fun visitConstantExpression(expression: KtConstantExpression) {
 		if (isIgnoredByConfig(expression) || expression.isPartOfFunctionReturnConstant() ||
-				expression.isPartOfConstructor()) {
+				expression.isPartOfConstructorOrFunctionConstant()) {
 			return
 		}
 
@@ -180,9 +180,12 @@ private fun KtConstantExpression.isNamedArgument() =
 private fun KtConstantExpression.isPartOfFunctionReturnConstant() =
 		parent is KtNamedFunction || parent is KtReturnExpression && parent.parent.children.size == 1
 
-private fun KtConstantExpression.isPartOfConstructor(): Boolean {
+private fun KtConstantExpression.isPartOfConstructorOrFunctionConstant(): Boolean {
 	return parent is KtParameter &&
-			parent.parent.parent is KtPrimaryConstructor || parent.parent.parent is KtSecondaryConstructor
+			when (parent.parent.parent) {
+				is KtNamedFunction, is KtPrimaryConstructor, is KtSecondaryConstructor -> true
+				else -> false
+			}
 }
 
 private fun KtConstantExpression.isPartOfHashCode(): Boolean {
