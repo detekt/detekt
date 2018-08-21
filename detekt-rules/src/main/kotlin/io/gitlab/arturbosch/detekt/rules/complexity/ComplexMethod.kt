@@ -12,6 +12,7 @@ import io.gitlab.arturbosch.detekt.api.internal.McCabeVisitor
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.KtWhenExpression
 
 /**
@@ -55,12 +56,15 @@ class ComplexMethod(config: Config = Config.empty,
 
 	private fun hasSingleWhenExpression(bodyExpression: KtExpression?): Boolean {
 		if (ignoreSingleWhenExpression) {
-			val blockExpression = bodyExpression as? KtBlockExpression
-			return if (blockExpression != null && blockExpression.statements.size == 1) {
-				val statements = blockExpression.statements
-				statements.size == 1 && statements[0] is KtWhenExpression
-			} else {
-				bodyExpression is KtWhenExpression
+			return when {
+				bodyExpression is KtBlockExpression && bodyExpression.statements.size == 1 -> {
+					val statement = bodyExpression.statements.single()
+					statement is KtWhenExpression ||
+							(statement is KtReturnExpression && statement.returnedExpression is KtWhenExpression)
+				}
+				// the case where function-expression syntax is used: `fun test() = when { ... }`
+				bodyExpression is KtWhenExpression -> true
+				else -> false
 			}
 		}
 		return false

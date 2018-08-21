@@ -21,6 +21,24 @@ fun complexMethodWithSingleWhen2(i: Int) {
 	}
 }
 
+// reports 1 - only if ignoreSingleWhenExpression = false
+fun complexMethodWithSingleWhen3(i: Int): String {
+	return when (i) {
+		1 -> "one"
+		2 -> "two"
+		3 -> "three"
+		else -> ""
+	}
+}
+
+// reports 1 - only if ignoreSingleWhenExpression = false
+fun complexMethodWithSingleWhen4(i: Int) = when (i) {
+	1 -> "one"
+	2 -> "two"
+	3 -> "three"
+	else -> ""
+}
+
 // reports 1
 fun complexMethodWith2Statements(i: Int) {
 	when (i) {
