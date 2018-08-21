@@ -644,7 +644,7 @@ class MagicNumberSpec : Spek({
 		}
 	}
 
-	given("in-class declaration with default properties") {
+	given("in-class declaration with default parameters") {
 
 		it("reports no finding") {
 			val code = compileContentForTest("class SomeClassWithDefault(val defaultValue: Int = 10)")
@@ -657,13 +657,21 @@ class MagicNumberSpec : Spek({
 		}
 	}
 
-	given("default properties in secondary constructor") {
+	given("default parameters in secondary constructor") {
 
 		it("reports no finding") {
 			val code = compileContentForTest("""
 				class SomeClassWithDefault {
 					constructor(val defaultValue: Int = 10) { }
 				}""")
+			assertThat(MagicNumber().lint(code)).isEmpty()
+		}
+	}
+
+	given("default parameters in function") {
+
+		it("reports no finding") {
+			val code = compileContentForTest("fun f(p: Int = 100)")
 			assertThat(MagicNumber().lint(code)).isEmpty()
 		}
 	}
