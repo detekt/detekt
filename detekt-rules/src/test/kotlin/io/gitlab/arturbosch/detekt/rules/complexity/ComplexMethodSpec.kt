@@ -37,7 +37,7 @@ class ComplexMethodSpec : Spek({
 
 		it("reports all complex methods") {
 			val subject = ComplexMethod(threshold = 4)
-			assertThat(subject.lint(path)).hasSize(3)
+			assertThat(subject.lint(path)).hasSize(5)
 		}
 	}
 })
