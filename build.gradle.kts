@@ -62,6 +62,10 @@ subprojects {
 		}
 	}
 
+	tasks.withType<Test> {
+		useJUnitPlatform()
+	}
+
 	tasks.withType<KotlinCompile> {
 		kotlinOptions.jvmTarget = "1.8"
 		// https://youtrack.jetbrains.com/issue/KT-24946
