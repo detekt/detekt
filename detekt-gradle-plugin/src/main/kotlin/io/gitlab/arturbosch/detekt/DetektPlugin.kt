@@ -1,31 +1,102 @@
 package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
-import io.gitlab.arturbosch.detekt.extensions.ProfileExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.language.base.plugins.LifecycleBasePlugin
+import java.io.File
 
+/**
+ * @author Marvin Ramin
+ */
 class DetektPlugin : Plugin<Project> {
 
+
 	override fun apply(project: Project) {
-		project.configurations.create("detekt")
 
-		val profilesContainer = project.container(ProfileExtension::class.java)
-		project.extensions.add(PROFILES_EXTENSION_NAME, profilesContainer)
+		val extension = project.extensions.create(DETEKT, DetektExtension::class.java, project)
 
-		project.extensions.create(DETEKT_EXTENSION_NAME, DetektExtension::class.java)
-		project.task(mapOf(TYPE to DetektCheckTask::class.java), CHECK)
-		project.task(mapOf(TYPE to DetektIdeaFormatTask::class.java), IDEA_FORMAT)
-		project.task(mapOf(TYPE to DetektIdeaInspectionTask::class.java), IDEA_INSPECT)
-		project.task(mapOf(TYPE to DetektGenerateConfigTask::class.java), GENERATE_CONFIG)
-		project.task(mapOf(TYPE to DetektCreateBaselineTask::class.java), BASELINE)
+		configurePluginDependencies(project, extension)
+
+		createAndConfigureDetektTask(project, extension)
+		createAndConfigureCreateBaselineTask(project, extension)
+		createAndConfigureGenerateConfigTask(project, extension)
+
+		createAndConfigureIdeaTasks(project, extension)
 	}
 
+	private fun createAndConfigureDetektTask(project: Project, extension: DetektExtension) {
+		val detektTask = project.tasks.createLater(DETEKT, Detekt::class.java) {
+			debug = extension.debug
+			parallel = extension.parallel
+			disableDefaultRuleSets = extension.disableDefaultRuleSets
+			filters = extension.filters
+			config = extension.config
+			baseline = extension.baseline
+			plugins = extension.plugins
+			input = determineInput(extension)
+			extension.reports.forEach { extReport ->
+				reports.withName(extReport.name) {
+					enabled = extReport.enabled
+					val fileSuffix = extReport.name
+					val reportsDir = extension.reportsDir ?: extension.defaultReportsDir
+					val customDestination = extReport.destination
+					destination = customDestination ?: File(reportsDir, "${DETEKT}.$fileSuffix")
+				}
+			}
+		}
+
+		project.tasks.findByName(LifecycleBasePlugin.CHECK_TASK_NAME)?.dependsOn(detektTask)
+	}
+
+	private fun createAndConfigureCreateBaselineTask(project: Project, extension: DetektExtension) =
+			project.tasks.createLater(BASELINE, DetektCreateBaselineTask::class.java) {
+				baseline = extension.baseline
+				debugOrDefault = extension.debug
+				parallelOrDefault = extension.parallel
+				disableDefaultRuleSetsOrDefault = extension.disableDefaultRuleSets
+				filters = extension.filters
+				config = extension.config
+				plugins = extension.plugins
+				input = determineInput(extension)
+			}
+
+	private fun createAndConfigureGenerateConfigTask(project: Project, extension: DetektExtension) =
+			project.tasks.createLater(GENERATE_CONFIG, DetektGenerateConfigTask::class.java) {
+				input = determineInput(extension)
+			}
+
+	private fun createAndConfigureIdeaTasks(project: Project, extension: DetektExtension) {
+		project.tasks.createLater(IDEA_FORMAT, DetektIdeaFormatTask::class.java) {
+			debugOrDefault = extension.debug
+			input = determineInput(extension)
+			ideaExtension = extension.idea
+		}
+
+		project.tasks.createLater(IDEA_INSPECT, DetektIdeaInspectionTask::class.java) {
+			debugOrDefault = extension.debug
+			input = determineInput(extension)
+			ideaExtension = extension.idea
+		}
+	}
+
+	private fun determineInput(extension: DetektExtension) = extension.input.filter { it.exists() }
+
+	private fun configurePluginDependencies(project: Project, extension: DetektExtension) =
+			project.configurations.create(DETEKT) {
+				isVisible = false
+				isTransitive = true
+				description = "The $DETEKT libraries to be used for this project."
+				defaultDependencies {
+					val version = extension.toolVersion ?: DEFAULT_DETEKT_VERSION
+					add(project.dependencies.create("io.gitlab.arturbosch.detekt:detekt-cli:$version"))
+				}
+			}
+
+
 	companion object {
-		private const val DETEKT_EXTENSION_NAME = "detekt"
-		private const val PROFILES_EXTENSION_NAME = "profiles"
-		private const val TYPE = "type"
-		private const val CHECK = "detektCheck"
+		private const val DEFAULT_DETEKT_VERSION = "1.0.0-GRADLE"
+		private const val DETEKT = "detekt"
 		private const val IDEA_FORMAT = "detektIdeaFormat"
 		private const val IDEA_INSPECT = "detektIdeaInspect"
 		private const val GENERATE_CONFIG = "detektGenerateConfig"

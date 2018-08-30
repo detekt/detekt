@@ -5,12 +5,14 @@ import java.util.Date
 buildscript {
 	repositories {
 		mavenCentral()
+		mavenLocal()
 		jcenter()
 	}
 }
 
 repositories {
 	gradlePluginPortal()
+	mavenLocal()
 	jcenter()
 }
 
@@ -19,6 +21,7 @@ plugins {
 	id("com.gradle.plugin-publish") version "0.9.10"
 	id("com.jfrog.bintray") version "1.8.4"
 	kotlin("jvm") version "1.2.41"
+	`kotlin-dsl`
 	id("org.jetbrains.dokka") version "0.9.17"
 }
 
@@ -27,11 +30,13 @@ apply {
 }
 
 group = "io.gitlab.arturbosch.detekt"
-version = "1.0.0.RC8"
+version = "1.0.0-GRADLE"
 
+val detektGradleVersion: String by project
+val jcommanderVersion: String by project
 val spekVersion = "1.1.5"
-val junitPlatformVersion = "1.2.0"
-val assertjVersion = "3.10.0"
+val junitPlatformVersion = "1.1.0"
+val assertjVersion = "3.9.1"
 
 dependencies {
 	implementation(gradleApi())
@@ -113,10 +118,11 @@ tasks.withType(DokkaTask::class.java) {
 	outputDirectory = "$buildDir/javadoc"
 }
 
+val javaConvention = the<JavaPluginConvention>()
 val sourcesJar by tasks.creating(Jar::class) {
 	dependsOn("classes")
 	classifier = "sources"
-	from(the<JavaPluginConvention>().sourceSets["main"].allSource)
+	from(javaConvention.sourceSets["main"].allSource)
 }
 
 val javadocJar by tasks.creating(Jar::class) {

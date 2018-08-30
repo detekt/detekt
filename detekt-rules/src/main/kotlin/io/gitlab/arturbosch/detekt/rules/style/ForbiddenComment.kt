@@ -33,8 +33,8 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
 
 	private val values: List<String> =
 			valueOrDefault(VALUES, "TODO:,FIXME:,STOPSHIP:")
-			.split(",")
-			.filter { it.isNotBlank() }
+					.split(",")
+					.filter { it.isNotBlank() }
 
 	override fun visitComment(comment: PsiComment) {
 		super.visitComment(comment)

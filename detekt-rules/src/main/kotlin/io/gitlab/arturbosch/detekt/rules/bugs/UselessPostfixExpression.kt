@@ -120,5 +120,5 @@ class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
 
 	private fun getPostfixExpressionChilds(expression: KtExpression?) =
 			expression?.children?.filterIsInstance<KtPostfixExpression>()
-				?.filter { it.operationToken === PLUSPLUS || it.operationToken === MINUSMINUS }
+					?.filter { it.operationToken === PLUSPLUS || it.operationToken === MINUSMINUS }
 }

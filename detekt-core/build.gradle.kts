@@ -1,8 +1,8 @@
 configurations.implementation.extendsFrom(configurations.kotlinImplementation)
 configurations.testImplementation.extendsFrom(configurations.kotlinTest)
 
-val junitPlatformVersion by project
-val spekVersion by project
+val junitPlatformVersion: String by project
+val spekVersion: String by project
 
 dependencies {
 	api(project(":detekt-api"))

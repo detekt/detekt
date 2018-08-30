@@ -1,106 +1,56 @@
 package io.gitlab.arturbosch.detekt.extensions
 
-import org.gradle.api.Action
+import groovy.lang.Closure
 import org.gradle.api.Project
 import org.gradle.api.file.FileCollection
-import org.gradle.api.internal.artifacts.dependencies.DefaultExternalModuleDependency
+import org.gradle.api.plugins.quality.CodeQualityExtension
+import org.gradle.api.reporting.ReportingExtension
+import org.gradle.util.ConfigureUtil
+import java.io.File
 
 /**
  * @author Artur Bosch
  * @author Said Tahsin Dane
- * @author Olivier Lemasle
+ * @author Marvin Ramin
+ * @author Markus Schwarz
  */
-open class DetektExtension(open var version: String = SUPPORTED_DETEKT_VERSION,
-						   open var debug: Boolean = DEFAULT_DEBUG_VALUE,
-						   open var profile: String = DEFAULT_PROFILE_NAME,
-						   open var ideaExtension: IdeaExtension = IdeaExtension()) {
+open class DetektExtension(project: Project) : CodeQualityExtension() {
+	val defaultReportsDir = project.layout.buildDirectory.get()
+			.dir(ReportingExtension.DEFAULT_REPORTS_DIR_NAME)
+			.dir("detekt").asFile
 
-	val profileStorage = ProfileStorage()
+	val reports = DetektReports()
+	fun reports(configure: DetektReports.() -> Unit) = reports.configure()
+	fun reports(configure: Closure<*>) = ConfigureUtil.configure(configure, reports)
 
-	fun ideaFormatArgs() = ideaExtension.formatArgs(this)
-	fun ideaInspectArgs() = ideaExtension.inspectArgs(this)
 
-	fun idea(configuration: Action<in IdeaExtension>) {
-		configuration.execute(ideaExtension)
-	}
+	val idea = IdeaExtension()
+	fun idea(configure: IdeaExtension.() -> Unit) = idea.configure()
+	fun idea(configure: Closure<*>) = ConfigureUtil.configure(configure, idea)
 
-	fun defaultProfile(configuration: Action<in ProfileExtension>) {
-		val default = ProfileExtension.default()
-		configuration.execute(default)
-		profileStorage.defaultProfile = default
-	}
+	var input: FileCollection = project.files(DEFAULT_SRC_DIR_JAVA, DEFAULT_SRC_DIR_KOTLIN)
 
-	fun profile(name: String, configuration: Action<in ProfileExtension>) {
-		if (name == DEFAULT_PROFILE_NAME) {
-			defaultProfile(configuration)
-		} else {
-			ProfileExtension(name).apply {
-				profileStorage.add(this)
-				configuration.execute(this)
-			}
-		}
-	}
+	var baseline: File? = null
 
-	fun resolveClasspath(project: Project): FileCollection = project
-			.configurations
-			.getByName("detekt")
-			.withDependencies {
-				it.add(
-						DefaultExternalModuleDependency(
-								"io.gitlab.arturbosch.detekt", "detekt-cli", version
-						)
-				)
-			}
+	var config: File? = null
 
-	fun resolveArguments(project: Project): List<String> {
-		return with(extractArguments()) {
-			if (!contains(INPUT_PARAMETER)) {
-				add(INPUT_PARAMETER)
-				add(project.projectDir.toString())
-			}
-			this
-		}
-	}
+	var debug: Boolean = DEFAULT_DEBUG_VALUE
 
-	private fun extractArguments(): MutableList<String> {
-		val defaultProfile = profileStorage.defaultProfile
-		val systemOrSelected = profileStorage.systemProfile
-				?: profileStorage.getByName(profile)
+	var parallel: Boolean = DEFAULT_PARALLEL_VALUE
 
-		val propertyMap =
-				if (systemOrSelected?.name == defaultProfile.name) {
-					defaultProfile.arguments(debug)
-				} else {
-					defaultProfile.arguments(debug).apply {
-						systemOrSelected?.arguments(debug)?.mergeInto(this)
-					}
-				}
+	var disableDefaultRuleSets: Boolean = DEFAULT_DISABLE_RULESETS_VALUE
 
-		val arguments = propertyMap.flatMapTo(ArrayList()) { removeBooleanValues(it.key, it.value) }
+	var filters: String? = null
 
-		if (debug) {
-			val name = systemOrSelected?.name ?: DEFAULT_PROFILE_NAME
-			println("detekt version: $version - usedProfile: $name")
-			println("arguments: $arguments")
-		}
+	var plugins: String? = null
 
-		return arguments
-	}
-
-	private fun removeBooleanValues(key: String, value: String) =
-			if (value == "true" || value == "false") listOf(key) else listOf(key, value)
-
-	override fun toString(): String = "DetektExtension(version='$version', " +
-			"debug=$debug, profile='$profile', ideaExtension=$ideaExtension, profiles=${profileStorage.all})"
-}
-
-private fun MutableMap<String, String>.mergeInto(other: MutableMap<String, String>) {
-	for ((key, value) in this) {
-		other.merge(key, value) { v1, v2 ->
-			joinMultipleConfigurations(key, v1, v2)
-		}
+	companion object {
+		const val DEFAULT_SRC_DIR_JAVA = "src/main/java"
+		const val DEFAULT_SRC_DIR_KOTLIN = "src/main/kotlin"
+		const val DEFAULT_DEBUG_VALUE = false
+		const val DEFAULT_PARALLEL_VALUE = false
+		const val DEFAULT_DISABLE_RULESETS_VALUE = false
+		const val DEFAULT_REPORT_ENABLED_VALUE = true
 	}
 }
 
-private fun joinMultipleConfigurations(key: String, v1: String, v2: String) =
-		if (key == CONFIG_PARAMETER || key == CONFIG_RESOURCE_PARAMETER) "$v1,$v2" else v2
