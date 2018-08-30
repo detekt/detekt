@@ -18,8 +18,8 @@ data class KtFileContent(val file: KtFile, val content: Sequence<String>)
  * in the codebase will help make the code more uniform.
  *
  * @configuration maxLineLength - maximum line length (default: 120)
- * @configuration excludePackageStatements - if package statements should be ignored (default: false)
- * @configuration excludeImportStatements - if import statements should be ignored (default: false)
+ * @configuration excludePackageStatements - if package statements should be ignored (default: true)
+ * @configuration excludeImportStatements - if import statements should be ignored (default: true)
  * @configuration excludeCommentStatements - if comment statements should be ignored (default: false)
  *
  * @active since v1.0.0
@@ -37,9 +37,9 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 	private val maxLineLength: Int =
 			valueOrDefault(MaxLineLength.MAX_LINE_LENGTH, MaxLineLength.DEFAULT_IDEA_LINE_LENGTH)
 	private val excludePackageStatements: Boolean =
-			valueOrDefault(MaxLineLength.EXCLUDE_PACKAGE_STATEMENTS, false)
+			valueOrDefault(MaxLineLength.EXCLUDE_PACKAGE_STATEMENTS, true)
 	private val excludeImportStatements: Boolean =
-			valueOrDefault(MaxLineLength.EXCLUDE_IMPORT_STATEMENTS, false)
+			valueOrDefault(MaxLineLength.EXCLUDE_IMPORT_STATEMENTS, true)
 	private val excludeCommentStatements: Boolean =
 			valueOrDefault(MaxLineLength.EXCLUDE_COMMENT_STATEMENTS, false)
 
