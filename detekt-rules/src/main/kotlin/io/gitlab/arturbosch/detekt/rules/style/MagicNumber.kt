@@ -63,7 +63,7 @@ import java.util.Locale
  *
  * @configuration ignoreNumbers - numbers which do not count as magic numbers (default: '-1,0,1,2')
  * @configuration ignoreHashCodeFunction - whether magic numbers in hashCode functions should be ignored
- * (default: false)
+ * (default: true)
  * @configuration ignorePropertyDeclaration - whether magic numbers in property declarations should be ignored
  * (default: false)
  * @configuration ignoreConstantDeclaration - whether magic numbers in property declarations should be ignored
@@ -94,7 +94,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 			.sorted()
 
 	private val ignoreAnnotation = valueOrDefault(IGNORE_ANNOTATION, false)
-	private val ignoreHashCodeFunction = valueOrDefault(IGNORE_HASH_CODE, false)
+	private val ignoreHashCodeFunction = valueOrDefault(IGNORE_HASH_CODE, true)
 	private val ignorePropertyDeclaration = valueOrDefault(IGNORE_PROPERTY_DECLARATION, false)
 	private val ignoreNamedArgument = valueOrDefault(IGNORE_NAMED_ARGUMENT, false)
 	private val ignoreEnums = valueOrDefault(IGNORE_ENUMS, false)

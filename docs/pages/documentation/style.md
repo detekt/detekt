@@ -244,7 +244,7 @@ describing what the magic number means.
 
    numbers which do not count as magic numbers
 
-* `ignoreHashCodeFunction` (default: `false`)
+* `ignoreHashCodeFunction` (default: `true`)
 
    whether magic numbers in hashCode functions should be ignored
 
