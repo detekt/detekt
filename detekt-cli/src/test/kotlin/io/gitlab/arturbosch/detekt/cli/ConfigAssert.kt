@@ -28,7 +28,7 @@ class ConfigAssert(
 		for (ruleClass in ruleClasses) {
 			val ymlDeclaration = ymlDeclarations.filter { it.key == ruleClass.simpleName }
 			if (ymlDeclaration.keys.size != 1) {
-				Assertions.fail("${ruleClass.simpleName} rule is not correctly defined in $CONFIG_FILE")
+				Assertions.fail<String>("${ruleClass.simpleName} rule is not correctly defined in $CONFIG_FILE")
 			}
 
 			@Suppress("UNCHECKED_CAST")
@@ -47,7 +47,8 @@ class ConfigAssert(
 		for (ymlOption in filter) {
 			val configField = configFields.singleOrNull { ymlOption.key == it.get(null) }
 			if (configField == null) {
-				Assertions.fail("${ymlOption.key} option for ${ruleClass.simpleName} rule is not correctly defined")
+				Assertions.fail<String>("${ymlOption.key} option for ${ruleClass.simpleName} rule is not correctly " +
+						"defined")
 			}
 		}
 	}
