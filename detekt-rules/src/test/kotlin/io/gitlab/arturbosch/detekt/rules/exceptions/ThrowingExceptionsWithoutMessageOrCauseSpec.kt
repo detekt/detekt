@@ -33,4 +33,16 @@ class ThrowingExceptionsWithoutMessageOrCauseSpec : SubjectSpek<ThrowingExceptio
 			assertThat(findings).hasSize(0)
 		}
 	}
+
+	given("a test code which asserts an exception") {
+
+		it("does not report a call to this exception") {
+			val code = """
+				fun test() {
+					assertThatIllegalArgumentException().isThrownBy { }
+				}
+			"""
+			assertThat(subject.lint(code)).isEmpty()
+		}
+	}
 })
