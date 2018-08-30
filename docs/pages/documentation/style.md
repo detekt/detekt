@@ -345,11 +345,11 @@ in the codebase will help make the code more uniform.
 
    maximum line length
 
-* `excludePackageStatements` (default: `false`)
+* `excludePackageStatements` (default: `true`)
 
    if package statements should be ignored
 
-* `excludeImportStatements` (default: `false`)
+* `excludeImportStatements` (default: `true`)
 
    if import statements should be ignored
 
