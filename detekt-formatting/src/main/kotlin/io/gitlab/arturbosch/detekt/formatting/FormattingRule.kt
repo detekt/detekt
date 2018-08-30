@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.formatting
 
+import com.github.shyiko.ktlint.core.EditorConfig
 import com.github.shyiko.ktlint.core.KtLint
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
@@ -44,7 +45,13 @@ abstract class FormattingRule(config: Config) : Rule(config) {
 			val offsetDueToLineBreakNormalization = calculateLineBreakOffset(root.text)
 			return@let { offset: Int -> it(offset + offsetDueToLineBreakNormalization(offset)) }
 		}
+		editorConfigUpdater()?.let { updateFunc ->
+			val oldEditorConfig = root.node.getUserData(KtLint.EDITOR_CONFIG_USER_DATA_KEY)
+			root.node.putUserData(KtLint.EDITOR_CONFIG_USER_DATA_KEY, updateFunc(oldEditorConfig))
+		}
 	}
+
+	open fun editorConfigUpdater(): ((oldEditorConfig: EditorConfig?) -> EditorConfig)? = null
 
 	fun apply(node: ASTNode) {
 		if (ruleShouldOnlyRunOnFileNode(node)) {

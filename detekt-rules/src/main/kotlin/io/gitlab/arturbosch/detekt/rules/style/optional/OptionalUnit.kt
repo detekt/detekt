@@ -7,6 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.isOverridden
+import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
@@ -14,15 +16,22 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * the `Unit` return type is specified on functions.
  *
  * <noncompliant>
- * fun foo(): Unit { }
+ * fun foo(): Unit {
+ *     return Unit 
+ * }
+ * fun foo() = Unit
  * </noncompliant>
  *
  * <compliant>
  * fun foo() { }
+ *
+ * // overridden no-op functions are allowed
+ * override fun foo() = Unit
  * </compliant>
  *
  * @author Artur Bosch
  * @author Marvin Ramin
+ * @author schalkms
  */
 class OptionalUnit(config: Config = Config.empty) : Rule(config) {
 
@@ -34,16 +43,29 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		if (function.funKeyword == null) return
-		val colon = function.colon
-		if (function.hasDeclaredReturnType() && colon != null) {
-			val typeReference = function.typeReference
-			typeReference?.typeElement?.text?.let {
-				if (it == "Unit") {
-					report(CodeSmell(issue, Entity.from(typeReference), "The function ${function.name} " +
-							"defines a return type of Unit. This is unnecessary and can safely be removed."))
-				}
-			}
+		if (function.hasDeclaredReturnType() && function.colon != null) {
+			checkFunctionWithExplicitReturnType(function)
+		} else if (!function.isOverridden()) {
+			checkFunctionWithInferredReturnType(function)
 		}
 		super.visitNamedFunction(function)
 	}
+
+	private fun checkFunctionWithExplicitReturnType(function: KtNamedFunction) {
+		val typeReference = function.typeReference
+		val typeElementText = typeReference?.typeElement?.text
+		if (typeElementText == "Unit") {
+			report(CodeSmell(issue, Entity.from(typeReference), createMessage(function)))
+		}
+	}
+
+	private fun checkFunctionWithInferredReturnType(function: KtNamedFunction) {
+		val referenceExpression = function.bodyExpression as? KtNameReferenceExpression
+		if (referenceExpression != null && referenceExpression.text == "Unit") {
+			report(CodeSmell(issue, Entity.from(referenceExpression), createMessage(function)))
+		}
+	}
+
+	private fun createMessage(function: KtNamedFunction) = "The function ${function.name} " +
+			"defines a return type of Unit. This is unnecessary and can safely be removed."
 }

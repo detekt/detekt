@@ -16,13 +16,13 @@ class FunctionOnlyReturningConstantSpec : SubjectSpek<FunctionOnlyReturningConst
 		val path = Case.FunctionReturningConstantPositive.path()
 
 		it("reports functions which return constants") {
-			assertThat(subject.lint(path)).hasSize(5)
+			assertThat(subject.lint(path)).hasSize(6)
 		}
 
 		it("reports overridden functions which return constants") {
 			val config = TestConfig(mapOf("ignoreOverridableFunction" to "false"))
 			val rule = FunctionOnlyReturningConstant(config)
-			assertThat(rule.lint(path)).hasSize(7)
+			assertThat(rule.lint(path)).hasSize(9)
 		}
 
 		it("does not report excluded function which returns a constant") {

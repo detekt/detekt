@@ -265,7 +265,7 @@ declarations should be ignored
 
    whether magic numbers in annotations should be ignored
 
-* `ignoreNamedArgument` (default: `true`)
+* `ignoreNamedArgument` (default: `false`)
 
    whether magic numbers in named arguments should be ignored
 
@@ -488,13 +488,19 @@ the `Unit` return type is specified on functions.
 #### Noncompliant Code:
 
 ```kotlin
-fun foo(): Unit { }
+fun foo(): Unit {
+    return Unit 
+}
+fun foo() = Unit
 ```
 
 #### Compliant Code:
 
 ```kotlin
 fun foo() { }
+
+// overridden no-op functions are allowed
+override fun foo() = Unit
 ```
 
 ### OptionalWhenBraces

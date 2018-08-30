@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
+import org.jetbrains.kotlin.psi.psiUtil.containingClass
 
 /**
  * A function that only returns a single constant can be misleading. Instead prefer to define the constant directly
@@ -51,8 +52,16 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
 		super.visitNamedFunction(function)
 	}
 
-	private fun checkOverridableFunction(function: KtNamedFunction) =
-			if (ignoreOverridableFunction) !function.isOverridden() && !function.isOpen() else true
+	private fun checkOverridableFunction(function: KtNamedFunction): Boolean {
+		return if (ignoreOverridableFunction)
+			!function.isOverridden() && !function.isOpen() && !checkContainingInterface(function)
+		else true
+	}
+
+	private fun checkContainingInterface(function: KtNamedFunction): Boolean {
+		val containingClass = function.containingClass()
+		return containingClass != null && containingClass.isInterface()
+	}
 
 	private fun isNotExcluded(function: KtNamedFunction) =
 			!excludedFunctions.contains(function.name)

@@ -91,6 +91,8 @@ Smaller methods can also be named much clearer which leads to improved readabili
 
 This rule reports labeled expressions. Expressions with labels generally increase complexity and worsen the
 maintainability of the code. Refactor the violating code to not use labels instead.
+Labeled expressions referencing an outer class with a label from an inner class are allowed, because there is no
+way to get the instance of an outer class from an inner class in Kotlin.
 
 **Severity**: Maintainability
 
@@ -113,6 +115,14 @@ val range = listOf<String>("foo", "bar")
 for (r in range) {
     if (r == "bar") break
     println(r)
+}
+
+class Outer {
+    inner class Inner {
+        fun f() {
+            val outer = this@Outer
+        }
+    }
 }
 ```
 
@@ -170,7 +180,7 @@ Reports functions which have more parameters than a certain threshold (default: 
 
 ### MethodOverloading
 
-This rule reports methods which have many versions of the same method with different parameter overloading.
+This rule reports methods which are overloaded often.
 Method overloading tightly couples these methods together which might make the code harder to understand.
 
 Refactor these methods and try to use optional parameters instead to prevent some of the overloading.

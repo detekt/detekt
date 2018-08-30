@@ -8,11 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import org.jetbrains.kotlin.com.intellij.openapi.util.TextRange
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.psi.psiUtil.elementsInRange
 
 class FileParsingRule(val config: Config = Config.empty) : MultiRule() {
 
@@ -59,11 +55,11 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 	private val maxLineLength: Int =
 			valueOrDefault(MaxLineLength.MAX_LINE_LENGTH, MaxLineLength.DEFAULT_IDEA_LINE_LENGTH)
 	private val excludePackageStatements: Boolean =
-			valueOrDefault(MaxLineLength.EXCLUDE_PACKAGE_STATEMENTS, MaxLineLength.DEFAULT_VALUE_PACKAGE_EXCLUDE)
+			valueOrDefault(MaxLineLength.EXCLUDE_PACKAGE_STATEMENTS, false)
 	private val excludeImportStatements: Boolean =
-			valueOrDefault(MaxLineLength.EXCLUDE_IMPORT_STATEMENTS, MaxLineLength.DEFAULT_VALUE_IMPORTS_EXCLUDE)
+			valueOrDefault(MaxLineLength.EXCLUDE_IMPORT_STATEMENTS, false)
 	private val excludeCommentStatements: Boolean =
-			valueOrDefault(MaxLineLength.EXCLUDE_COMMENT_STATEMENTS, MaxLineLength.DEFAULT_VALUE_COMMENT_EXCLUDE)
+			valueOrDefault(MaxLineLength.EXCLUDE_COMMENT_STATEMENTS, false)
 
 	fun visit(element: KtFileContent) {
 		var offset = 0
@@ -83,12 +79,6 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 
 			offset += 1 /* '\n' */
 		}
-	}
-
-	private fun findAnnotatedStatementInLine(file: KtFile, offset: Int, line: String): PsiElement? {
-		return file.elementsInRange(TextRange.create(offset - line.length, offset))
-				.mapNotNull { it as? KtAnnotated ?: if (it.parent is KtAnnotated) it.parent else null }
-				.firstOrNull()
 	}
 
 	private fun isValidLine(line: String): Boolean {
@@ -124,14 +114,8 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 	companion object {
 		const val MAX_LINE_LENGTH = "maxLineLength"
 		const val DEFAULT_IDEA_LINE_LENGTH = 120
-
 		const val EXCLUDE_PACKAGE_STATEMENTS = "excludePackageStatements"
-		const val DEFAULT_VALUE_PACKAGE_EXCLUDE = false
-
 		const val EXCLUDE_IMPORT_STATEMENTS = "excludeImportStatements"
-		const val DEFAULT_VALUE_IMPORTS_EXCLUDE = false
-
 		const val EXCLUDE_COMMENT_STATEMENTS = "excludeCommentStatements"
-		const val DEFAULT_VALUE_COMMENT_EXCLUDE = false
 	}
 }

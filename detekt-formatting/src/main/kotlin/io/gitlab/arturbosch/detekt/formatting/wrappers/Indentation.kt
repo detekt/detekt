@@ -1,13 +1,12 @@
 package io.gitlab.arturbosch.detekt.formatting.wrappers
 
 import com.github.shyiko.ktlint.core.EditorConfig
-import com.github.shyiko.ktlint.core.KtLint
 import com.github.shyiko.ktlint.ruleset.standard.IndentationRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.formatting.DEFAULT_CONTINUATION_INDENT
 import io.gitlab.arturbosch.detekt.formatting.DEFAULT_INDENT
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
-import org.jetbrains.kotlin.psi.KtFile
+import io.gitlab.arturbosch.detekt.formatting.merge
 
 /**
  * See <a href="https://ktlint.github.io/#rule-indentation">ktlint-website</a> for documentation.
@@ -27,12 +26,10 @@ class Indentation(config: Config) : FormattingRule(config) {
 	private val indentSize = valueOrDefault(INDENT_SIZE, DEFAULT_INDENT)
 	private val continuationIndentSize = valueOrDefault(CONTINUATION_INDENT_SIZE, DEFAULT_CONTINUATION_INDENT)
 
-	override fun visit(root: KtFile) {
-		super.visit(root)
-		root.node.putUserData(KtLint.EDITOR_CONFIG_USER_DATA_KEY,
-				EditorConfig.fromMap(mapOf(
-						INDENT_SIZE to indentSize.toString(),
-						CONTINUATION_INDENT_SIZE to continuationIndentSize.toString())))
+	override fun editorConfigUpdater(): ((oldEditorConfig: EditorConfig?) -> EditorConfig)? = {
+		EditorConfig.merge(it,
+			indentSize = indentSize,
+			continuationIndentSize = continuationIndentSize)
 	}
 }
 

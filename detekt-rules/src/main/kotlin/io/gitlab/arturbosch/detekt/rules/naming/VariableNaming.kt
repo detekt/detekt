@@ -30,8 +30,8 @@ class VariableNaming(config: Config = Config.empty) : Rule(config) {
 			"Variable names should follow the naming convention set in the projects configuration.",
 			debt = Debt.FIVE_MINS)
 
-	private val variablePattern = Regex(valueOrDefault(VARIABLE_PATTERN, "[a-z][A-Za-z\\d]*"))
-	private val privateVariablePattern = Regex(valueOrDefault(PRIVATE_VARIABLE_PATTERN, "(_)?[a-z][A-Za-z\\d]*"))
+	private val variablePattern = Regex(valueOrDefault(VARIABLE_PATTERN, "[a-z][A-Za-z0-9]*"))
+	private val privateVariablePattern = Regex(valueOrDefault(PRIVATE_VARIABLE_PATTERN, "(_)?[a-z][A-Za-z0-9]*"))
 	private val excludeClassPattern = Regex(valueOrDefault(EXCLUDE_CLASS_PATTERN, "$^"))
 
 	override fun visitProperty(property: KtProperty) {
