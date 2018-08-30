@@ -14,21 +14,22 @@ class NamingRulesSpec : SubjectSpek<NamingRules>({
 
 		it("should detect all positive cases") {
 			val code = """
-				class C {
+				class C(val CONST_PARAMETER: String, private val PRIVATE_CONST_PARAMETER: Int) {
 					private val _FIELD = 5
 					val FIELD get() = _field
 					val camel_Case_Property = 5
 					const val MY_CONST = 7
 					const val MYCONST = 7
+					fun doStuff(FUN_PARAMETER: String) {}
 				}
 			"""
 			val findings = subject.lint(code)
-			assertThat(findings).hasSize(5)
+			assertThat(findings).hasSize(8)
 		}
 
 		it("checks all negative cases") {
 			val code = """
-				class C {
+				class C(val constParameter: String, private val privateConstParameter: Int) {
 					private val _field = 5
 					val field get() = _field
 					val camelCaseProperty = 5
@@ -40,6 +41,7 @@ class NamingRulesSpec : SubjectSpek<NamingRules>({
 						emptyMap<String, String>().forEach { _, v -> println(v) }
 					}
 					val doable: (Int) -> Unit = { _ -> Unit }
+					fun doStuff(funParameter: String) {}
 				}
 			"""
 			val findings = subject.lint(code)

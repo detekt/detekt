@@ -16,13 +16,13 @@ fun createTestPattern(config: Config) = with(config.subConfig(TEST_PATTERN_SUB_C
 }
 
 data class TestPattern(val active: Boolean,
-					   private val _patterns: Set<String>,
+					   private val patterns: Set<String>,
 					   val excludingRules: Set<String>,
 					   private val excludingRuleSets: Set<String>) {
 
-	private val patterns = _patterns.map { Regex(it) }
+	private val _patterns = patterns.map { Regex(it) }
 
-	fun matches(path: String) = patterns.any { it.matches(path) }
+	fun matches(path: String) = _patterns.any { it.matches(path) }
 	fun matchesRuleSet(ruleSet: String) = excludingRuleSets.any { it == ruleSet }
 	fun isTestSource(file: KtFile) = active && file.relativePath()?.let { matches(it) } == true
 
