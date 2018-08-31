@@ -83,6 +83,15 @@ abstract class BaseConfig : Config {
 		is Boolean -> result.toBoolean()
 		is Double -> result.toDouble()
 		is String -> result
+		is List<*> -> parseList(result)
 		else -> throw ClassCastException()
+	}
+
+	private fun parseList(result: String): List<String> {
+		if (result.startsWith('[') && result.endsWith(']')) {
+			val str = result.substring(1, result.length - 1)
+			return str.split(',').toList()
+		}
+		throw ClassCastException()
 	}
 }
