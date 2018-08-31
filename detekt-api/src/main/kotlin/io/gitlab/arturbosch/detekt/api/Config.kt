@@ -4,6 +4,7 @@ package io.gitlab.arturbosch.detekt.api
  * A configuration holds information about how to configure specific rules.
  *
  * @author Artur Bosch
+ * @author schalkms
  */
 interface Config {
 
@@ -60,7 +61,7 @@ internal object EmptyConfig : Config {
  */
 abstract class BaseConfig : Config {
 
-	protected fun valueOrDefaultInternal(result: Any?, default: Any): Any {
+	protected open fun valueOrDefaultInternal(result: Any?, default: Any): Any {
 		return try {
 			if (result != null) {
 				when (result) {
@@ -77,7 +78,7 @@ abstract class BaseConfig : Config {
 		}
 	}
 
-	private fun tryParseBasedOnDefault(result: String, defaultResult: Any): Any = when (defaultResult) {
+	protected open fun tryParseBasedOnDefault(result: String, defaultResult: Any): Any = when (defaultResult) {
 		is Int -> result.toInt()
 		is Boolean -> result.toBoolean()
 		is Double -> result.toDouble()

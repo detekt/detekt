@@ -7,7 +7,11 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.ALLOWED_EXCEPTION_NAME
+import io.gitlab.arturbosch.detekt.rules.identifierName
 import org.jetbrains.kotlin.psi.KtCatchClause
+import org.jetbrains.kotlin.psi.KtParameter
+import org.jetbrains.kotlin.psi.KtTypeReference
 
 /**
  * This rule reports `catch` blocks for exceptions that have a type that is too generic.
@@ -39,7 +43,8 @@ import org.jetbrains.kotlin.psi.KtCatchClause
  *			 - IndexOutOfBoundsException
  *			 - RuntimeException
  *			 - Throwable)
- *
+ * @configuration allowedExceptionNameRegex - ignores too generic exception types which match this regex
+ * (default: "^(_|(ignore|expected).*)")
  * @active since v1.0.0
  * @author Artur Bosch
  * @author Marvin Ramin
@@ -57,17 +62,28 @@ class TooGenericExceptionCaught(config: Config) : Rule(config) {
 	private val exceptions: Set<String> = valueOrDefault(
 			CAUGHT_EXCEPTIONS_PROPERTY, caughtExceptionDefaults).toHashSet()
 
+	private val allowedExceptionNameRegex = Regex(
+			valueOrDefault(ALLOWED_EXCEPTION_NAME_REGEX, ALLOWED_EXCEPTION_NAME))
+
 	override fun visitCatchSection(catchClause: KtCatchClause) {
 		catchClause.catchParameter?.let {
-			val text = it.typeReference?.text
-			if (text != null && text in exceptions)
+			if (isTooGenericException(it.typeReference) && !isAllowedExceptionName(it)) {
 				report(CodeSmell(issue, Entity.from(it), issue.description))
+			}
 		}
 		super.visitCatchSection(catchClause)
 	}
 
+	private fun isTooGenericException(typeReference: KtTypeReference?): Boolean {
+		return typeReference?.text in exceptions
+	}
+
+	private fun isAllowedExceptionName(catchParameter: KtParameter) =
+			catchParameter.identifierName().matches(allowedExceptionNameRegex)
+
 	companion object {
 		const val CAUGHT_EXCEPTIONS_PROPERTY = "exceptionNames"
+		const val ALLOWED_EXCEPTION_NAME_REGEX = "allowedExceptionNameRegex"
 	}
 }
 

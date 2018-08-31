@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtThrowExpression
+import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
 
 /**
  * This rule reports thrown exceptions that have a type that is too generic. It should be preferred to throw specific
@@ -52,7 +53,7 @@ class TooGenericExceptionThrown(config: Config) : Rule(config) {
 	private val exceptions: Set<String> = valueOrDefault(THROWN_EXCEPTIONS_PROPERTY, thrownExceptionDefaults).toHashSet()
 
 	override fun visitThrowExpression(expression: KtThrowExpression) {
-		expression.thrownExpression?.text?.substringBefore("(")?.let {
+		expression.thrownExpression?.referenceExpression()?.text?.let {
 			if (it in exceptions) report(CodeSmell(issue, Entity.from(expression), "$it is a too generic " +
 					"Exception. Prefer throwing specific exceptions that indicate a specific error case."))
 		}

@@ -24,4 +24,20 @@ open class TestConfig(private val values: Map<String, String> = mutableMapOf()) 
 		"active" -> (values["active"] ?: true) as T?
 		else -> values[key] as? T
 	}
+
+	override fun tryParseBasedOnDefault(result: String, defaultResult: Any): Any = when (defaultResult) {
+		is List<*> -> parseList(result)
+		else -> super.tryParseBasedOnDefault(result, defaultResult)
+	}
+
+	protected fun parseList(result: String): List<String> {
+		if (result.startsWith('[') && result.endsWith(']')) {
+			val str = result.substring(1, result.length - 1)
+			return str.splitToSequence(',')
+					.map { it.trim() }
+					.filter { it.isNotEmpty() }
+					.toList()
+		}
+		throw ClassCastException()
+	}
 }
