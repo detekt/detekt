@@ -32,7 +32,7 @@ To read about all supported rule sets and rules, use the side navigation `Rule S
  
 #### Test-Pattern
 
-The configuration file contains a whole section to treat test code diffently.  
+The configuration file contains a whole section to treat test code differently.  
 Specify test patterns to detect test code and exclude rules or rule sets for them. 
 
 ```yaml
@@ -75,7 +75,7 @@ output-reports:
   exclude:
   #  - 'HtmlOutputReport'
   #  - 'PlainOutputReport'
-  #  - 'XmlOutputReport'
+  #  - 'XmlOutputReport'<
 ```
 
 #### Processors
