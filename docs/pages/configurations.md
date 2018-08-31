@@ -75,7 +75,7 @@ output-reports:
   exclude:
   #  - 'HtmlOutputReport'
   #  - 'PlainOutputReport'
-  #  - 'XmlOutputReport'<
+  #  - 'XmlOutputReport'
 ```
 
 #### Processors
