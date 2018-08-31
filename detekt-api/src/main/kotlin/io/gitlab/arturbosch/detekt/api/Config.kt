@@ -61,7 +61,7 @@ internal object EmptyConfig : Config {
  */
 abstract class BaseConfig : Config {
 
-	protected fun valueOrDefaultInternal(result: Any?, default: Any): Any {
+	protected open fun valueOrDefaultInternal(result: Any?, default: Any): Any {
 		return try {
 			if (result != null) {
 				when (result) {
@@ -78,20 +78,11 @@ abstract class BaseConfig : Config {
 		}
 	}
 
-	private fun tryParseBasedOnDefault(result: String, defaultResult: Any): Any = when (defaultResult) {
+	protected open fun tryParseBasedOnDefault(result: String, defaultResult: Any): Any = when (defaultResult) {
 		is Int -> result.toInt()
 		is Boolean -> result.toBoolean()
 		is Double -> result.toDouble()
 		is String -> result
-		is List<*> -> parseList(result)
 		else -> throw ClassCastException()
-	}
-
-	private fun parseList(result: String): List<String> {
-		if (result.startsWith('[') && result.endsWith(']')) {
-			val str = result.substring(1, result.length - 1)
-			return str.split(',').toList()
-		}
-		throw ClassCastException()
 	}
 }
