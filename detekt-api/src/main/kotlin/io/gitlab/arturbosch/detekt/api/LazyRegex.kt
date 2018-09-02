@@ -1,6 +1,5 @@
-package io.gitlab.arturbosch.detekt.api.internal
+package io.gitlab.arturbosch.detekt.api
 
-import io.gitlab.arturbosch.detekt.api.Rule
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
