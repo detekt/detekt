@@ -31,27 +31,27 @@ class LateinitUsageSpec : Spek({
 
 		it("should not report lateinit properties annotated @JvmField") {
 			val findings = LateinitUsage(TestConfig(mapOf(LateinitUsage.EXCLUDE_ANNOTATED_PROPERTIES to "JvmField"))).lint(code)
-			assertThat(findings).hasSize(0)
+			assertThat(findings).isEmpty()
 		}
 
 		it("should not report lateinit properties annotated @JvmField with trailing whitespace") {
 			val findings = LateinitUsage(TestConfig(mapOf(LateinitUsage.EXCLUDE_ANNOTATED_PROPERTIES to " JvmField "))).lint(code)
-			assertThat(findings).hasSize(0)
+			assertThat(findings).isEmpty()
 		}
 
 		it("should not report lateinit properties matching kotlin.*") {
 			val findings = LateinitUsage(TestConfig(mapOf(LateinitUsage.EXCLUDE_ANNOTATED_PROPERTIES to "kotlin.*"))).lint(code)
-			assertThat(findings).hasSize(0)
+			assertThat(findings).isEmpty()
 		}
 
 		it("should not report lateinit properties matching kotlin.jvm.") {
 			val findings = LateinitUsage(TestConfig(mapOf(LateinitUsage.EXCLUDE_ANNOTATED_PROPERTIES to "kotlin.jvm."))).lint(code)
-			assertThat(findings).hasSize(0)
+			assertThat(findings).isEmpty()
 		}
 
 		it("should not report lateinit properties matching kotlin.jvm.*") {
 			val findings = LateinitUsage(TestConfig(mapOf(LateinitUsage.EXCLUDE_ANNOTATED_PROPERTIES to "kotlin.jvm.*"))).lint(code)
-			assertThat(findings).hasSize(0)
+			assertThat(findings).isEmpty()
 		}
 
 		it("should not exclude lateinit properties not matching the exclude pattern") {
@@ -66,7 +66,7 @@ class LateinitUsageSpec : Spek({
 
 		it("should not report lateinit properties when ignoreOnClassesPattern does match") {
 			val findings = LateinitUsage(TestConfig(mapOf(LateinitUsage.IGNORE_ON_CLASSES_PATTERN to "[\\w]+Test"))).lint(code)
-			assertThat(findings).hasSize(0)
+			assertThat(findings).isEmpty()
 		}
 
 		it("should fail when enabled with faulty regex pattern") {
@@ -78,7 +78,7 @@ class LateinitUsageSpec : Spek({
 		it("should not fail when disabled with faulty regex pattern") {
 			val configValues = mapOf("active" to "false", LateinitUsage.IGNORE_ON_CLASSES_PATTERN to "*Test")
 			val findings = LateinitUsage(TestConfig(configValues)).lint(code)
-			assertThat(findings).hasSize(0)
+			assertThat(findings).isEmpty()
 		}
 	}
 })
