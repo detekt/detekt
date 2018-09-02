@@ -33,6 +33,7 @@ open class DetektIdeaFormatTask : DefaultTask() {
 	@Optional
 	var debugOrDefault: Boolean = false
 
+	@Internal
 	lateinit var ideaExtension: IdeaExtension
 
 	@TaskAction
