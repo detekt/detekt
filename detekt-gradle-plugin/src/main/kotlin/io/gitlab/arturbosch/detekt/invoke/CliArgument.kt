@@ -52,8 +52,11 @@ internal data class HtmlReportArgument(val file: File?) : CliArgument() {
 	override fun toArgument() = file?.let { listOf(REPORT_HTML_PARAMETER, it.absolutePath) } ?: emptyList()
 }
 
-internal data class ConfigArgument(val config: File?) : CliArgument() {
-	override fun toArgument() = config?.let { listOf(CONFIG_PARAMETER, it.absolutePath) } ?: emptyList()
+internal data class ConfigArgument(val config: FileCollection?) : CliArgument() {
+	override fun toArgument() = config?.let { configPaths ->
+		listOf(CONFIG_PARAMETER,
+				configPaths.joinToString(",") { it.absolutePath })
+	} ?: emptyList()
 }
 
 internal data class DebugArgument(val value: Boolean) : CliArgument() {

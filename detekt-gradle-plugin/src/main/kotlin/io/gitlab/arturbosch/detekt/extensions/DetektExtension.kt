@@ -32,7 +32,7 @@ open class DetektExtension(project: Project) : CodeQualityExtension() {
 
 	var baseline: File? = null
 
-	var config: File? = null
+	var config: FileCollection? = null
 
 	var debug: Boolean = DEFAULT_DEBUG_VALUE
 

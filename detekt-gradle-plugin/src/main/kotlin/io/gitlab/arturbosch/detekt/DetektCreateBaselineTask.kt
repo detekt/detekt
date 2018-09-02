@@ -14,7 +14,6 @@ import io.gitlab.arturbosch.detekt.invoke.PluginsArgument
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileCollection
 import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Optional
@@ -50,10 +49,10 @@ open class DetektCreateBaselineTask : DefaultTask() {
 	@Optional
 	var filters: String? = null
 
-	@InputFile
+	@InputFiles
 	@Optional
 	@PathSensitive(PathSensitivity.ABSOLUTE)
-	var config: File? = null
+	var config: FileCollection? = null
 
 	@Input
 	@Optional
