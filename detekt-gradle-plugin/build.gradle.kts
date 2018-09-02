@@ -1,3 +1,4 @@
+import com.gradle.publish.PluginConfig
 import com.jfrog.bintray.gradle.BintrayExtension
 import org.jetbrains.dokka.gradle.DokkaTask
 import java.util.Date
@@ -30,7 +31,7 @@ apply {
 }
 
 group = "io.gitlab.arturbosch.detekt"
-version = "1.0.0-gradle-rework-beta1"
+version = "1.0.0-rework-beta1"
 
 val detektGradleVersion: String by project
 val jcommanderVersion: String by project
@@ -52,7 +53,7 @@ dependencies {
 
 gradlePlugin {
 	plugins {
-		create("detektPlugin") {
+		register("detektPlugin") {
 			id = "io.gitlab.arturbosch.detekt"
 			implementationClass = "io.gitlab.arturbosch.detekt.DetektPlugin"
 		}
@@ -68,6 +69,13 @@ pluginBundle {
 	vcsUrl = "https://github.com/arturbosch/detekt"
 	description = "Static code analysis for Kotlin"
 	tags = listOf("kotlin", "detekt", "code-analysis", "badsmells", "codesmells")
+
+	plugins {
+		register("detektPlugin") {
+			id = "io.gitlab.arturbosch.detekt"
+			displayName = "Static code analysis for Kotlin"
+		}
+	}
 }
 
 bintray {
