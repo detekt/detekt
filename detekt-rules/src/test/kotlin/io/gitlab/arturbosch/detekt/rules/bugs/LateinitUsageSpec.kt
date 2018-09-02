@@ -6,6 +6,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
+import java.util.regex.PatternSyntaxException
+import kotlin.test.assertFailsWith
 
 class LateinitUsageSpec : Spek({
 
@@ -64,6 +66,18 @@ class LateinitUsageSpec : Spek({
 
 		it("should not report lateinit properties when ignoreOnClassesPattern does match") {
 			val findings = LateinitUsage(TestConfig(mapOf(LateinitUsage.IGNORE_ON_CLASSES_PATTERN to "[\\w]+Test"))).lint(code)
+			assertThat(findings).hasSize(0)
+		}
+
+		it("should fail when enabled with faulty regex pattern") {
+			assertFailsWith<PatternSyntaxException> {
+				LateinitUsage(TestConfig(mapOf(LateinitUsage.IGNORE_ON_CLASSES_PATTERN to "*Test"))).lint(code)
+			}
+		}
+
+		it("should not fail when disabled with faulty regex pattern") {
+			val configValues = mapOf("active" to "false", LateinitUsage.IGNORE_ON_CLASSES_PATTERN to "*Test")
+			val findings = LateinitUsage(TestConfig(configValues)).lint(code)
 			assertThat(findings).hasSize(0)
 		}
 	}
