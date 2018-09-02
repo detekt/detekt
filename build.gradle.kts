@@ -39,7 +39,7 @@ val detektVersion: String by project
 
 allprojects {
 	group = "io.gitlab.arturbosch.detekt"
-	version = "$detektVersion"
+	version = detektVersion
 
 	repositories {
 		mavenLocal()
@@ -60,6 +60,15 @@ subprojects {
 	}
 
 	val userHome = System.getProperty("user.home")
+
+	detekt {
+		config = files(
+				file(project.rootDir.resolve("detekt-cli/src/main/resources/default-detekt-config.yml")),
+				file(project.rootDir.resolve("reports/failfast.yml"))
+		)
+		filters = ".*/resources/.*,.*/build/.*"
+		baseline = project.rootDir.resolve("reports/baseline.xml")
+	}
 
 	if (this.name in listOf("detekt-cli", "detekt-watch-service", "detekt-generator")) {
 		apply {
