@@ -31,7 +31,6 @@ open class IdeaExtension(open var path: String? = null,
 
 private val isWindows: Boolean = System.getProperty("os.name").contains("Windows")
 
-private const val INPUT_PATH_ERROR = "Make sure the input path is specified!"
 private const val IDEA_PATH_ERROR = "Make sure the idea path is specified to run idea tasks!"
 private const val REPORT_PATH_ERROR =
 		"Make sure the report path is specified where idea inspections are stored!"
