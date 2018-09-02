@@ -4,6 +4,14 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
+/**
+ * LazyRegex class provides a lazy evaluation of a Regex pattern for usages inside Rules.
+ * It computes the value once when reaching the point of its usage and returns the same
+ * value when requested again.
+ *
+ * @author Pavlos-Petros Tournaris
+ */
+
 class LazyRegex(
 		private val key: String,
 		private val default: String
