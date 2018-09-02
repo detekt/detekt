@@ -67,7 +67,7 @@ class RedundantVisibilityModifierRule(config: Config = Config.empty) : Rule(conf
 				report(CodeSmell(issue,
 						Entity.from(klass),
 						message = "${klass.name} is explicitly marked as public. " +
-						"Public is the default visibility for classes. The public modifier is redundant.")
+								"Public is the default visibility for classes. The public modifier is redundant.")
 				)
 			}
 		}
@@ -80,7 +80,7 @@ class RedundantVisibilityModifierRule(config: Config = Config.empty) : Rule(conf
 				report(CodeSmell(issue,
 						Entity.from(function),
 						message = "${function.name} is explicitly marked as public. " +
-						"Functions are public by default so this modifier is redundant.")
+								"Functions are public by default so this modifier is redundant.")
 				)
 			}
 		}
@@ -91,7 +91,7 @@ class RedundantVisibilityModifierRule(config: Config = Config.empty) : Rule(conf
 				report(CodeSmell(issue,
 						Entity.from(property),
 						message = "${property.name} is explicitly marked as public. " +
-						"Properties are public by default so this modifier is redundant.")
+								"Properties are public by default so this modifier is redundant.")
 				)
 			}
 		}

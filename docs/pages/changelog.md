@@ -821,9 +821,9 @@ detekt {
     config = "$project.projectDir/detekt-config.yml"
     output = "$project.projectDir/output.xml"
     idea {
-        path = "$USER_HOME/.idea"
-        codeStyleScheme = "$USER_HOME/.idea/idea-code-style.xml"
-        inspectionsProfile = "$USER_HOME/.idea/inspect.xml"
+        path = "$userHome/.idea"
+        codeStyleScheme = "$userHome/.idea/idea-code-style.xml"
+        inspectionsProfile = "$userHome/.idea/inspect.xml"
         mask = "*.kt,"
     }
 }
@@ -845,9 +845,9 @@ detekt {
         config = "$project.projectDir/detekt-test-config.yml"
     }
     idea {
-        path = "$USER_HOME/.idea"
-        codeStyleScheme = "$USER_HOME/.idea/idea-code-style.xml"
-        inspectionsProfile = "$USER_HOME/.idea/inspect.xml"
+        path = "$userHome/.idea"
+        codeStyleScheme = "$userHome/.idea/idea-code-style.xml"
+        inspectionsProfile = "$userHome/.idea/inspect.xml"
         mask = "*.kt,"
     }
 }

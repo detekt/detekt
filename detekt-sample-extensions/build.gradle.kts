@@ -4,7 +4,7 @@ buildscript {
 		jcenter()
 	}
 
-	val kotlinVersion by project
+	val kotlinVersion: String by project
 
 	dependencies {
 		classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
@@ -19,12 +19,12 @@ apply {
 	plugin("kotlin")
 }
 
-val kotlinVersion by project
-val assertjVersion by project
-val usedDetektVersion by project
-val junitEngineVersion by project
-val junitPlatformVersion by project
-val spekVersion by project
+val kotlinVersion: String by project
+val assertjVersion: String by project
+val usedDetektVersion: String by project
+val junitEngineVersion: String by project
+val junitPlatformVersion: String by project
+val spekVersion: String by project
 
 dependencies {
 	implementation("io.gitlab.arturbosch.detekt:detekt-api:$usedDetektVersion")

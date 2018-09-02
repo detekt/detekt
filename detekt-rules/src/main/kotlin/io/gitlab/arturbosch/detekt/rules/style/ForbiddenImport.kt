@@ -41,8 +41,10 @@ class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
 				.imports
 				.filterNot { it.isAllUnder }
 				.filter { forbiddenImports.contains(it.importedFqName?.asString() ?: "") }
-				.forEach { report(CodeSmell(issue, Entity.from(it), "The import " +
-						"${it.importedFqName!!.asString()} has been forbidden in the Detekt config.")) }
+				.forEach {
+					report(CodeSmell(issue, Entity.from(it), "The import " +
+							"${it.importedFqName!!.asString()} has been forbidden in the Detekt config."))
+				}
 	}
 
 	companion object {

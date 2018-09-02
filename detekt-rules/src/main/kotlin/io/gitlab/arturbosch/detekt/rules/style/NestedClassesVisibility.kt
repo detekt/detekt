@@ -42,7 +42,7 @@ class NestedClassesVisibility(config: Config = Config.empty) : Rule(config) {
 	override val issue: Issue = Issue("NestedClassesVisibility", Severity.Style,
 			"Nested types are often used for implementing private functionality " +
 					"and therefore this should not be public.",
-					Debt.FIVE_MINS)
+			Debt.FIVE_MINS)
 
 	override fun visitClass(klass: KtClass) {
 		if (klass.isTopLevel() && klass.isInternal()) {
@@ -56,8 +56,8 @@ class NestedClassesVisibility(config: Config = Config.empty) : Rule(config) {
 				.filter { it.isPublic() && it.isNoEnum() && it.isNoCompanionObj() }
 				.forEach {
 					report(CodeSmell(issue, Entity.from(it),
-						"Nested types are often used for implementing private functionality. " +
-								"However the visibility of ${klass.name} makes it visible externally."))
+							"Nested types are often used for implementing private functionality. " +
+									"However the visibility of ${klass.name} makes it visible externally."))
 				}
 	}
 

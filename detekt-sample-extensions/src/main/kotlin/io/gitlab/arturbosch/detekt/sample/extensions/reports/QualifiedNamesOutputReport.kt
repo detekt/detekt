@@ -5,10 +5,11 @@ import io.gitlab.arturbosch.detekt.api.OutputReport
 
 /**
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 class QualifiedNamesOutputReport : OutputReport() {
 
-	override var fileName: String = "fqNames"
+	var fileName: String = "fqNames"
 	override val ending: String = "txt"
 
 	override fun render(detektion: Detektion): String? {

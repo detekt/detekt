@@ -4,9 +4,9 @@ configurations.implementation.extendsFrom(configurations.kotlinImplementation)
 configurations.testImplementation.extendsFrom(configurations.kotlinTest)
 configurations.compile.isTransitive = false
 
-val ktlintVersion by project
-val junitPlatformVersion by project
-val spekVersion by project
+val ktlintVersion: String by project
+val junitPlatformVersion: String by project
+val spekVersion: String by project
 
 dependencies {
 	compileOnly(project(":detekt-api"))

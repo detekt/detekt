@@ -11,6 +11,7 @@ import java.util.concurrent.ExecutorService
  * If using a custom executor service be aware that detekt won't shutdown it after use!
  *
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 @Suppress("LongParameterList")
 data class ProcessingSettings(val project: List<Path>,
