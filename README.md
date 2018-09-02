@@ -128,6 +128,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Scott Kennedy](https://github.com/scottkennedy) - Minor fixes
 - [Mickele Moriconi](https://github.com/mickele) - Added: ConstructorParameterNaming and FunctionParameterNaming rules
 - [Lukasz Jazgar](https://github.com/ljazgar) - Fixed configuring formatting rules
+- [Pavlos-Petros Tournaris](https://github.com/pavlospt) - Lazy evaluation of Regex in Rules
 
 ### Mentions
 
