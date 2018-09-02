@@ -43,7 +43,7 @@ open class Detekt : DefaultTask() {
 	@Internal
 	val reports = DetektReports()
 
-	fun reports(closure: Closure<*>) = ConfigureUtil.configure(closure, reports)
+	fun reports(closure: Closure<*>): DetektReports = ConfigureUtil.configure(closure, reports)
 	fun reports(configure: DetektReports.() -> Unit) = reports.configure()
 
 	@InputFiles

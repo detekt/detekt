@@ -31,7 +31,7 @@ open class DetektGenerateConfigTask : DefaultTask() {
 
 	@TaskAction
 	fun generateConfig() {
-		val arguments = mutableListOf<CliArgument>(GenerateConfigArgument()) +
+		val arguments = mutableListOf<CliArgument>(GenerateConfigArgument) +
 				InputArgument(input)
 
 		DetektInvoker.invokeCli(project, arguments.toList())

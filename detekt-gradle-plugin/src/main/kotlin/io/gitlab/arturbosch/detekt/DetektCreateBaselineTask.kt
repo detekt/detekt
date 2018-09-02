@@ -73,7 +73,7 @@ open class DetektCreateBaselineTask : DefaultTask() {
 
 	@TaskAction
 	fun baseline() {
-		val arguments = mutableListOf<CliArgument>(CreateBaselineArgument()) +
+		val arguments = mutableListOf<CliArgument>(CreateBaselineArgument) +
 				BaselineArgument(baseline) +
 				InputArgument(input) +
 				FiltersArgument(filters) +
