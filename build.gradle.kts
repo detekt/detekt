@@ -62,6 +62,7 @@ subprojects {
 	val userHome = System.getProperty("user.home")
 
 	detekt {
+		debug = true
 		toolVersion = "1.0.0-gradle-rework-beta1"
 		config = files(
 				project.rootDir.resolve("detekt-cli/src/main/resources/default-detekt-config.yml"),
