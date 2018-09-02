@@ -15,18 +15,18 @@ import java.io.File
  * @author Markus Schwarz
  */
 open class DetektExtension(project: Project) : CodeQualityExtension() {
-	val defaultReportsDir = project.layout.buildDirectory.get()
+	val defaultReportsDir: File = project.layout.buildDirectory.get()
 			.dir(ReportingExtension.DEFAULT_REPORTS_DIR_NAME)
 			.dir("detekt").asFile
 
 	val reports = DetektReports()
 	fun reports(configure: DetektReports.() -> Unit) = reports.configure()
-	fun reports(configure: Closure<*>) = ConfigureUtil.configure(configure, reports)
+	fun reports(configure: Closure<*>): DetektReports = ConfigureUtil.configure(configure, reports)
 
 
 	val idea = IdeaExtension()
 	fun idea(configure: IdeaExtension.() -> Unit) = idea.configure()
-	fun idea(configure: Closure<*>) = ConfigureUtil.configure(configure, idea)
+	fun idea(configure: Closure<*>): IdeaExtension = ConfigureUtil.configure(configure, idea)
 
 	var input: FileCollection = project.files(DEFAULT_SRC_DIR_JAVA, DEFAULT_SRC_DIR_KOTLIN)
 

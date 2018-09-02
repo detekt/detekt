@@ -42,7 +42,7 @@ class DetektPlugin : Plugin<Project> {
 					@Suppress("USELESS_ELVIS")
 					val reportsDir = extension.reportsDir ?: extension.defaultReportsDir
 					val customDestination = extReport.destination
-					destination = customDestination ?: File(reportsDir, "${DETEKT}.$fileSuffix")
+					destination = customDestination ?: File(reportsDir, "$DETEKT.$fileSuffix")
 				}
 			}
 		}

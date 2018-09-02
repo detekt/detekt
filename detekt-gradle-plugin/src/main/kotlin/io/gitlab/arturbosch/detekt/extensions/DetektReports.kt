@@ -16,8 +16,8 @@ class DetektReports {
 	fun withName(name: String, configure: DetektReport.() -> Unit) = all.find { it.name == name }?.let(configure)
 
 	fun xml(configure: DetektReport.() -> Unit) = xml.configure()
-	fun xml(closure: Closure<*>) = ConfigureUtil.configure(closure, xml)
+	fun xml(closure: Closure<*>): DetektReport = ConfigureUtil.configure(closure, xml)
 
 	fun html(configure: DetektReport.() -> Unit) = html.configure()
-	fun html(closure: Closure<*>) = ConfigureUtil.configure(closure, html)
+	fun html(closure: Closure<*>): DetektReport = ConfigureUtil.configure(closure, html)
 }
