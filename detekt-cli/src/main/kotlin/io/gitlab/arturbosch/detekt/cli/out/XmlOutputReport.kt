@@ -7,10 +7,11 @@ import io.gitlab.arturbosch.detekt.api.Severity
 
 /**
  * Generates an XML report following the structure of a Checkstyle report.
+ *
+ * @author Marvin Ramin
  */
 class XmlOutputReport : OutputReport() {
 
-	override var fileName = "detekt-checkstyle"
 	override val ending: String = "xml"
 
 	private sealed class MessageType(val label: String) {

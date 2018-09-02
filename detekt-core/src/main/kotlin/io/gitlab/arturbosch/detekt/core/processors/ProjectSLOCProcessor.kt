@@ -24,9 +24,9 @@ class SLOCVisitor : DetektVisitor() {
 
 		fun count(lines: List<String>): Int {
 			return lines
-						.map { it.trim() }
-						.filter { trim -> trim.isNotEmpty() && !comments.any { trim.startsWith(it) } }
-						.size
+					.map { it.trim() }
+					.filter { trim -> trim.isNotEmpty() && !comments.any { trim.startsWith(it) } }
+					.size
 		}
 	}
 }

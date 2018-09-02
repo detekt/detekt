@@ -12,6 +12,7 @@ import kotlin.system.measureTimeMillis
 
 /**
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 class Runner(private val arguments: CliArgs) : Executable {
 
@@ -31,6 +32,7 @@ class Runner(private val arguments: CliArgs) : Executable {
 			val pathFilters = createPathFilters()
 			val plugins = createPlugins()
 			val config = loadConfiguration()
+
 			return ProcessingSettings(
 					inputPath,
 					config,

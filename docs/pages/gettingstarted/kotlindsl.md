@@ -8,7 +8,8 @@ folder: gettingstarted
 summary:
 ---
 
-All information from Gradle Groovy DSL are still valid, just the DSL changes a little.
+All information from Gradle Groovy DSL are still valid, but the
+DSL to apply the plugin changes slightly.
 
 For gradle version >= 4.1
 

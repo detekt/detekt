@@ -10,6 +10,7 @@ import java.nio.file.Paths
 
 /**
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 class ExistingPathConverter : IStringConverter<Path> {
 	override fun convert(value: String): Path {
@@ -26,22 +27,22 @@ class PathConverter : IStringConverter<Path> {
 	}
 }
 
-interface CommaSeparatedStringConverter<T> : IStringConverter<List<T>> {
+interface DetektInputPathConverter<T> : IStringConverter<List<T>> {
 	val converter: IStringConverter<T>
 	override fun convert(value: String): List<T> =
-			value.splitToSequence(SEPARATOR_COMMA, SEPARATOR_SEMICOLON)
-			.map { it.trim() }
-			.map { converter.convert(it) }
-			.toList().apply {
-		if (isEmpty()) throw IllegalStateException("Given input '$value' was impossible to parse!")
-	}
+			value.splitToSequence(SEPARATOR_COMMA, SEPARATOR_SEMICOLON, SEPARATOR_COLON)
+					.map { it.trim() }
+					.map { converter.convert(it) }
+					.toList().apply {
+						if (isEmpty()) throw IllegalStateException("Given input '$value' was impossible to parse!")
+					}
 }
 
-class MultipleClasspathResourceConverter : CommaSeparatedStringConverter<URL> {
+class MultipleClasspathResourceConverter : DetektInputPathConverter<URL> {
 	override val converter = ClasspathResourceConverter()
 }
 
-class MultipleExistingPathConverter : CommaSeparatedStringConverter<Path> {
+class MultipleExistingPathConverter : DetektInputPathConverter<Path> {
 	override val converter = ExistingPathConverter()
 }
 

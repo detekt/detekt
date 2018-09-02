@@ -1,9 +1,9 @@
 configurations.implementation.extendsFrom(configurations.kotlinImplementation)
 configurations.testImplementation.extendsFrom(configurations.kotlinTest)
 
-val yamlVersion by project
-val junitPlatformVersion by project
-val spekVersion by project
+val yamlVersion: String by project
+val junitPlatformVersion: String by project
+val spekVersion: String by project
 
 dependencies {
 	implementation("org.yaml:snakeyaml:$yamlVersion")

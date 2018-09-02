@@ -152,7 +152,8 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 		// Overriddable/Overridden functions need to declare parameters, even if they don't use them
 		when {
 			function.isAbstract() || function.isOpen() || function.isOverridden() || function.isOperator() ||
-					function.isMainFunction() ->	{ }
+					function.isMainFunction() -> {
+			}
 			else -> collectParameters(function)
 		}
 

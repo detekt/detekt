@@ -1,17 +1,19 @@
 import com.jfrog.bintray.gradle.BintrayExtension
-import io.gitlab.arturbosch.detekt.extensions.DetektExtension
-import org.jetbrains.dokka.gradle.DokkaTask
+import org.codehaus.groovy.tools.shell.util.Logger.io
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.gradle.kotlin.dsl.setValue
+import org.jetbrains.dokka.gradle.DokkaTask
+
 import java.util.*
 
 buildscript {
 	repositories {
 		gradlePluginPortal()
-		jcenter()
 		mavenLocal()
+		jcenter()
 	}
 
-	val kotlinVersion by project
+	val kotlinVersion: String by project
 
 	dependencies {
 		classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
@@ -24,24 +26,25 @@ plugins {
 	id("com.github.johnrengelman.shadow") version "2.0.4" apply false
 	id("org.sonarqube") version "2.6.2"
 	id("io.gitlab.arturbosch.detekt")
+	`kotlin-dsl`
 	id("org.jetbrains.dokka") version "0.9.17"
 }
 
 tasks.withType<Wrapper> {
-	gradleVersion = "4.6"
+	gradleVersion = "4.10"
 	distributionType = Wrapper.DistributionType.ALL
 }
 
-val detektVersion by project
+val detektVersion: String by project
 
 allprojects {
 	group = "io.gitlab.arturbosch.detekt"
 	version = "$detektVersion"
 
 	repositories {
-		jcenter()
 		mavenLocal()
-		maven ( url = "http://dl.bintray.com/jetbrains/spek" )
+		jcenter()
+		maven(url = "http://dl.bintray.com/jetbrains/spek")
 	}
 }
 
@@ -52,8 +55,11 @@ subprojects {
 		plugin("kotlin")
 		plugin("com.jfrog.bintray")
 		plugin("maven-publish")
+		plugin("io.gitlab.arturbosch.detekt")
 		plugin("org.jetbrains.dokka")
 	}
+
+	val userHome = System.getProperty("user.home")
 
 	if (this.name in listOf("detekt-cli", "detekt-watch-service", "detekt-generator")) {
 		apply {
@@ -106,6 +112,7 @@ subprojects {
 		})
 	}
 
+	val javaConvention = the<JavaPluginConvention>()
 	tasks.withType(DokkaTask::class.java) {
 		// suppresses undocumented classes but not dokka warnings
 		// https://github.com/Kotlin/dokka/issues/229 && https://github.com/Kotlin/dokka/issues/319
@@ -117,7 +124,7 @@ subprojects {
 	val sourcesJar by tasks.creating(Jar::class) {
 		dependsOn("classes")
 		classifier = "sources"
-		from(the<JavaPluginConvention>().sourceSets["main"].allSource)
+		from(javaConvention.sourceSets["main"].allSource)
 	}
 
 	val javadocJar by tasks.creating(Jar::class) {
@@ -161,10 +168,10 @@ subprojects {
 		}
 	}
 
-	val kotlinVersion by project
-	val junitEngineVersion by project
-	val assertjVersion by project
-	val spekVersion by project
+	val kotlinVersion: String  by project
+	val junitEngineVersion: String by project
+	val assertjVersion: String by project
+	val spekVersion: String by project
 	val kotlinImplementation by configurations.creating
 	val kotlinTest by configurations.creating
 
@@ -188,46 +195,6 @@ subprojects {
 			}
 		}
 	}
-}
-
-val userHome: String = System.getProperty("user.home")
-
-val usedDetektVersion by project
-
-dependencies {
-	detekt("io.gitlab.arturbosch.detekt:detekt-formatting:$usedDetektVersion")
-}
-
-configure<DetektExtension> {
-
-	debug = true
-	version = "$usedDetektVersion"
-	profile = "failfast"
-
-	profile("main", Action {
-		input = rootProject.projectDir.absolutePath
-		filters = ".*/resources/.*, .*/build/.*"
-		config = "${rootProject.projectDir}/detekt-cli/src/main/resources/default-detekt-config.yml"
-		baseline = "${rootProject.projectDir}/reports/baseline.xml"
-	})
-
-	profile("failfast", Action {
-		input = rootProject.projectDir.absolutePath
-		config = "${rootProject.projectDir}/reports/failfast.yml"
-	})
-
-	profile("output", Action {
-		output = "${rootProject.projectDir}/reports"
-		outputName = "detekt"
-	})
-
-	idea(Action {
-		path = "$userHome/.idea"
-		codeStyleScheme = "$userHome/.idea/idea-code-style.xml"
-		inspectionsProfile = "$userHome/.idea/inspect.xml"
-		report = "${rootProject.projectDir}/reports"
-		mask = "*.kt,"
-	})
 }
 
 /**
