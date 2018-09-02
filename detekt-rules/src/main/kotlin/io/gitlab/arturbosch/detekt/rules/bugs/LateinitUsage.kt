@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SplitPattern
+import io.gitlab.arturbosch.detekt.api.internal.LazyRegex
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtProperty
@@ -45,7 +46,7 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 
 	private val excludeAnnotatedProperties = SplitPattern(valueOrDefault(EXCLUDE_ANNOTATED_PROPERTIES, ""))
 
-	private val ignoreOnClassesPattern = Regex(valueOrDefault(IGNORE_ON_CLASSES_PATTERN, ""))
+	private val ignoreOnClassesPattern by LazyRegex(key = IGNORE_ON_CLASSES_PATTERN, default = "")
 
 	private var properties = mutableListOf<KtProperty>()
 
