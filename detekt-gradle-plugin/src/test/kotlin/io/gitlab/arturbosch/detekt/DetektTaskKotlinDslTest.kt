@@ -87,7 +87,7 @@ internal class DetektTaskKotlinDslTest : Spek({
 
 			val detektConfig = """
 					|detekt {
-					|	config = file("${rootDir.absolutePath}/config.yml")
+					|	config = files("${rootDir.absolutePath}/config.yml")
 					|}
 				"""
 
@@ -114,7 +114,7 @@ internal class DetektTaskKotlinDslTest : Spek({
 					|	parallel = true
 					|	disableDefaultRuleSets = true
 					|	toolVersion = "1.0.0-GRADLE"
-					|	config = file("${rootDir.absolutePath}/config.yml")
+					|	config = files("${rootDir.absolutePath}/config.yml")
 					|	baseline = file("${rootDir.absolutePath}/baseline.xml")
 					|	filters = ".*/resources/.*, .*/build/.*"
 					|}
@@ -144,7 +144,7 @@ internal class DetektTaskKotlinDslTest : Spek({
 					|	description = "Runs a failfast detekt build."
 					|
 					|	input = files("src/main/java")
-					|	config = file("$rootDir/config.yml")
+					|	config = files("$rootDir/config.yml")
 					|	debug = true
 					|	reports {
 					|		xml {

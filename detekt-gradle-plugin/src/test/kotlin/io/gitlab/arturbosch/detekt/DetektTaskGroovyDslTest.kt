@@ -230,7 +230,7 @@ internal class DetektTaskGroovyDslTest : Spek({
 					|	description = "Runs a failfast detekt build."
 					|
 					|	input = files("src/main/java")
-					|	config = file("$rootDir/config.yml")
+					|	config = files("$rootDir/config.yml")
 					|	debug = true
 					|	reports {
 					|		xml {
