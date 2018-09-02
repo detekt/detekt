@@ -9,6 +9,8 @@ import kotlin.reflect.KProperty
  * It computes the value once when reaching the point of its usage and returns the same
  * value when requested again.
  *
+ * `key` & `default` are used to retrieve a value from config.
+ *
  * @author Pavlos-Petros Tournaris
  */
 
