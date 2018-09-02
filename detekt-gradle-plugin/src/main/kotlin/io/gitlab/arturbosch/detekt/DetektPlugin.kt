@@ -39,6 +39,7 @@ class DetektPlugin : Plugin<Project> {
 				reports.withName(extReport.name) {
 					enabled = extReport.enabled
 					val fileSuffix = extReport.name
+					@Suppress("USELESS_ELVIS")
 					val reportsDir = extension.reportsDir ?: extension.defaultReportsDir
 					val customDestination = extReport.destination
 					destination = customDestination ?: File(reportsDir, "${DETEKT}.$fileSuffix")
@@ -88,6 +89,7 @@ class DetektPlugin : Plugin<Project> {
 				isTransitive = true
 				description = "The $DETEKT libraries to be used for this project."
 				defaultDependencies {
+					@Suppress("USELESS_ELVIS")
 					val version = extension.toolVersion ?: DEFAULT_DETEKT_VERSION
 					add(project.dependencies.create("io.gitlab.arturbosch.detekt:detekt-cli:$version"))
 				}
@@ -95,7 +97,7 @@ class DetektPlugin : Plugin<Project> {
 
 
 	companion object {
-		private const val DEFAULT_DETEKT_VERSION = "1.0.0-GRADLE"
+		private const val DEFAULT_DETEKT_VERSION = "1.0.0-gradle-rework-beta1"
 		private const val DETEKT = "detekt"
 		private const val IDEA_FORMAT = "detektIdeaFormat"
 		private const val IDEA_INSPECT = "detektIdeaInspect"

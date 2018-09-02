@@ -62,12 +62,26 @@ subprojects {
 	val userHome = System.getProperty("user.home")
 
 	detekt {
+		toolVersion = "1.0.0-gradle-rework-beta1"
 		config = files(
-				file(project.rootDir.resolve("detekt-cli/src/main/resources/default-detekt-config.yml")),
-				file(project.rootDir.resolve("reports/failfast.yml"))
+				project.rootDir.resolve("detekt-cli/src/main/resources/default-detekt-config.yml"),
+				project.rootDir.resolve("reports/failfast.yml")
 		)
 		filters = ".*/resources/.*,.*/build/.*"
 		baseline = project.rootDir.resolve("reports/baseline.xml")
+
+		reports {
+			xml.enabled = true
+			html.enabled = true
+		}
+
+		idea {
+			path = "$userHome/.idea"
+			codeStyleScheme = "$userHome/.idea/idea-code-style.xml"
+			inspectionsProfile = "$userHome/.idea/inspect.xml"
+			report = "project.projectDir/reports"
+			mask = "*.kt"
+		}
 	}
 
 	if (this.name in listOf("detekt-cli", "detekt-watch-service", "detekt-generator")) {

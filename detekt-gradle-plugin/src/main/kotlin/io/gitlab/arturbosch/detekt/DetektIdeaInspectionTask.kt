@@ -33,6 +33,7 @@ open class DetektIdeaInspectionTask : DefaultTask() {
 	@Optional
 	var debugOrDefault: Boolean = false
 
+	@Internal
 	lateinit var ideaExtension: IdeaExtension
 
 	@TaskAction
