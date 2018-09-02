@@ -7,4 +7,3 @@ val Finding.baselineId: String
 
 const val SEPARATOR_COMMA = ","
 const val SEPARATOR_SEMICOLON = ";"
-const val SEPARATOR_COLON = ":"
