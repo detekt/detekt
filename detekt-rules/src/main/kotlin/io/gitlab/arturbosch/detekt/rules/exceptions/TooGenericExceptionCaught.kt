@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.ALLOWED_EXCEPTION_NAME
@@ -62,8 +63,7 @@ class TooGenericExceptionCaught(config: Config) : Rule(config) {
 	private val exceptions: Set<String> = valueOrDefault(
 			CAUGHT_EXCEPTIONS_PROPERTY, caughtExceptionDefaults).toHashSet()
 
-	private val allowedExceptionNameRegex = Regex(
-			valueOrDefault(ALLOWED_EXCEPTION_NAME_REGEX, ALLOWED_EXCEPTION_NAME))
+	private val allowedExceptionNameRegex by LazyRegex(ALLOWED_EXCEPTION_NAME_REGEX, ALLOWED_EXCEPTION_NAME)
 
 	override fun visitCatchSection(catchClause: KtCatchClause) {
 		catchClause.catchParameter?.let {
