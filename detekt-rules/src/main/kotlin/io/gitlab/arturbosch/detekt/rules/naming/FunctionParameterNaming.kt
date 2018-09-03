@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.identifierName
@@ -27,8 +28,8 @@ class FunctionParameterNaming(config: Config = Config.empty) : Rule(config) {
 			"Function parameter names should follow the naming convention set in the projects configuration.",
 			debt = Debt.FIVE_MINS)
 
-	private val parameterPattern = Regex(valueOrDefault(PARAMETER_PATTERN, "[a-z][A-Za-z\\d]*"))
-	private val excludeClassPattern = Regex(valueOrDefault(EXCLUDE_CLASS_PATTERN, "$^"))
+	private val parameterPattern by LazyRegex(PARAMETER_PATTERN, "[a-z][A-Za-z\\d]*")
+	private val excludeClassPattern by LazyRegex(EXCLUDE_CLASS_PATTERN, "$^")
 
 	override fun visitParameter(parameter: KtParameter) {
 		if (parameter.isContainingExcludedClass(excludeClassPattern)) {

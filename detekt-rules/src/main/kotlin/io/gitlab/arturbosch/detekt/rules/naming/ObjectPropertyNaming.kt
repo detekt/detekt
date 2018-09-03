@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.hasConstModifier
@@ -29,9 +30,9 @@ class ObjectPropertyNaming(config: Config = Config.empty) : Rule(config) {
 			"Property names inside objects should follow the naming convention set in the projects configuration.",
 			debt = Debt.FIVE_MINS)
 
-	private val constantPattern = Regex(valueOrDefault(CONSTANT_PATTERN, "[A-Za-z][_A-Za-z0-9]*"))
-	private val propertyPattern = Regex(valueOrDefault(PROPERTY_PATTERN, "[A-Za-z][_A-Za-z0-9]*"))
-	private val privatePropertyPattern = Regex(valueOrDefault(PRIVATE_PROPERTY_PATTERN, "(_)?[A-Za-z][A-Za-z0-9]*"))
+	private val constantPattern by LazyRegex(CONSTANT_PATTERN, "[A-Za-z][_A-Za-z0-9]*")
+	private val propertyPattern by LazyRegex(PROPERTY_PATTERN, "[A-Za-z][_A-Za-z0-9]*")
+	private val privatePropertyPattern by LazyRegex(PRIVATE_PROPERTY_PATTERN, "(_)?[A-Za-z][A-Za-z0-9]*")
 
 	override fun visitProperty(property: KtProperty) {
 		if (property.hasConstModifier()) {

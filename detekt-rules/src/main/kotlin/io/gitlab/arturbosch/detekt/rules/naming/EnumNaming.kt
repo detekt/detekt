@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.identifierName
@@ -24,7 +25,7 @@ class EnumNaming(config: Config = Config.empty) : Rule(config) {
 			"Enum names should follow the naming convention set in the projects configuration.",
 			debt = Debt.FIVE_MINS)
 
-	private val enumEntryPattern = Regex(valueOrDefault(ENUM_PATTERN, "^[A-Z][_a-zA-Z0-9]*"))
+	private val enumEntryPattern by LazyRegex(ENUM_PATTERN, "^[A-Z][_a-zA-Z0-9]*")
 
 	override fun visitEnumEntry(enumEntry: KtEnumEntry) {
 		if (!enumEntry.identifierName().matches(enumEntryPattern)) {

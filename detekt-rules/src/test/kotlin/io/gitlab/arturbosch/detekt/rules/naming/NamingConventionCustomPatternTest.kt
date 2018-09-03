@@ -4,6 +4,8 @@ import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import java.util.regex.PatternSyntaxException
+import kotlin.test.assertFailsWith
 
 class NamingConventionCustomPatternTest {
 
@@ -53,7 +55,7 @@ class NamingConventionCustomPatternTest {
                   const val lowerCaseConst = ""
                 }
             }
-        """)).hasSize(0)
+        """)).isEmpty()
 	}
 
 	@Test
@@ -64,7 +66,7 @@ class NamingConventionCustomPatternTest {
                   const val lowerCaseConst = ""
                 }
             }
-        """)).hasSize(0)
+        """)).isEmpty()
 	}
 
 	@Test
@@ -75,12 +77,12 @@ class NamingConventionCustomPatternTest {
                     enum1, enum2
                 }
             }
-        """)).hasSize(0)
+        """)).isEmpty()
 	}
 
 	@Test
 	fun shouldUseCustomNameForPackage() {
-		assertThat(rule.lint("package package_1")).hasSize(0)
+		assertThat(rule.lint("package package_1")).isEmpty()
 	}
 
 	@Test
@@ -94,7 +96,41 @@ class NamingConventionCustomPatternTest {
 				val MYVar = 3
 			}"""
 		val config = TestConfig(mapOf(VariableNaming.EXCLUDE_CLASS_PATTERN to "Foo|Bar"))
-		assertThat(VariableNaming(config).lint(code)).hasSize(0)
+		assertThat(VariableNaming(config).lint(code)).isEmpty()
+	}
+
+	@Test
+	fun shouldNotFailWithInvalidRegexWhenDisabledVariableNaming() {
+		val code = """
+			class Bar {
+				val MYVar = 3
+			}
+
+			object Foo {
+				val MYVar = 3
+			}"""
+		val configValues = mapOf(
+				"active" to "false",
+				VariableNaming.EXCLUDE_CLASS_PATTERN to "*Foo"
+		)
+		val config = TestConfig(configValues)
+		assertThat(VariableNaming(config).lint(code)).isEmpty()
+	}
+
+	@Test
+	fun shouldFailWithInvalidRegexVariableNaming() {
+		val code = """
+			class Bar {
+				val MYVar = 3
+			}
+
+			object Foo {
+				val MYVar = 3
+			}"""
+		val config = TestConfig(mapOf(VariableNaming.EXCLUDE_CLASS_PATTERN to "*Foo"))
+		assertFailsWith<PatternSyntaxException> {
+			VariableNaming(config).lint(code)
+		}
 	}
 
 	@Test
@@ -108,6 +144,40 @@ class NamingConventionCustomPatternTest {
 				fun MYFun() {}
 			}"""
 		val config = TestConfig(mapOf(FunctionNaming.EXCLUDE_CLASS_PATTERN to "Foo|Bar"))
-		assertThat(FunctionNaming(config).lint(code)).hasSize(0)
+		assertThat(FunctionNaming(config).lint(code)).isEmpty()
+	}
+
+	@Test
+	fun shouldNotFailWithInvalidRegexWhenDisabledFunctionNaming() {
+		val code = """
+			class Bar {
+				fun MYFun() {}
+			}
+
+			object Foo {
+				fun MYFun() {}
+			}"""
+		val configRules = mapOf(
+				"active" to "false",
+				FunctionNaming.EXCLUDE_CLASS_PATTERN to "Foo|Bar"
+		)
+		val config = TestConfig(configRules)
+		assertThat(FunctionNaming(config).lint(code)).isEmpty()
+	}
+
+	@Test
+	fun shouldFailWithInvalidRegexFunctionNaming() {
+		val code = """
+			class Bar {
+				fun MYFun() {}
+			}
+
+			object Foo {
+				fun MYFun() {}
+			}"""
+		val config = TestConfig(mapOf(FunctionNaming.EXCLUDE_CLASS_PATTERN to "*Foo"))
+		assertFailsWith<PatternSyntaxException> {
+			FunctionNaming(config).lint(code)
+		}
 	}
 }
