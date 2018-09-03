@@ -9,6 +9,8 @@ import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 import org.jetbrains.spek.subject.dsl.SubjectProviderDsl
+import java.util.regex.PatternSyntaxException
+import kotlin.test.assertFailsWith
 
 class StringLiteralDuplicationSpec : SubjectSpek<StringLiteralDuplication>({
 
@@ -77,6 +79,30 @@ class StringLiteralDuplicationSpec : SubjectSpek<StringLiteralDuplication>({
 			"""
 			val config = TestConfig(mapOf(StringLiteralDuplication.IGNORE_STRINGS_REGEX to "(lorem|ipsum)"))
 			assertFindingWithConfig(code, config, 0)
+		}
+
+		it("should not fail with invalid regex when disabled") {
+			val code = """
+				val str1 = "lorem" + "lorem" + "lorem"
+				val str2 = "ipsum" + "ipsum" + "ipsum"
+			"""
+			val configValues = mapOf(
+					"active" to "false",
+					StringLiteralDuplication.IGNORE_STRINGS_REGEX to "*lorem"
+			)
+			val config = TestConfig(configValues)
+			assertFindingWithConfig(code, config, 0)
+		}
+
+		it("should fail with invalid regex") {
+			val code = """
+				val str1 = "lorem" + "lorem" + "lorem"
+				val str2 = "ipsum" + "ipsum" + "ipsum"
+			"""
+			val config = TestConfig(mapOf(StringLiteralDuplication.IGNORE_STRINGS_REGEX to "*lorem"))
+			assertFailsWith<PatternSyntaxException> {
+				StringLiteralDuplication(config).lint(code)
+			}
 		}
 	}
 

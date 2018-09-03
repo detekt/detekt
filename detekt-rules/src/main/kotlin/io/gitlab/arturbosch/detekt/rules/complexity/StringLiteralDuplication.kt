@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
@@ -61,7 +62,7 @@ class StringLiteralDuplication(
 
 	private val ignoreAnnotation = valueOrDefault(IGNORE_ANNOTATION, true)
 	private val excludeStringsWithLessThan5Characters = valueOrDefault(EXCLUDE_SHORT_STRING, true)
-	private val ignoreStringsRegex = Regex(valueOrDefault(IGNORE_STRINGS_REGEX, "$^"))
+	private val ignoreStringsRegex by LazyRegex(IGNORE_STRINGS_REGEX, "$^")
 
 	override fun visitKtFile(file: KtFile) {
 		val visitor = StringLiteralVisitor()
