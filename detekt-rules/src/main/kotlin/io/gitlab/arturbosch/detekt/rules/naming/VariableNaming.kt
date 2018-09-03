@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.identifierName
@@ -31,9 +32,9 @@ class VariableNaming(config: Config = Config.empty) : Rule(config) {
 			"Variable names should follow the naming convention set in the projects configuration.",
 			debt = Debt.FIVE_MINS)
 
-	private val variablePattern = Regex(valueOrDefault(VARIABLE_PATTERN, "[a-z][A-Za-z0-9]*"))
-	private val privateVariablePattern = Regex(valueOrDefault(PRIVATE_VARIABLE_PATTERN, "(_)?[a-z][A-Za-z0-9]*"))
-	private val excludeClassPattern = Regex(valueOrDefault(EXCLUDE_CLASS_PATTERN, "$^"))
+	private val variablePattern by LazyRegex(VARIABLE_PATTERN, "[a-z][A-Za-z0-9]*")
+	private val privateVariablePattern by LazyRegex(PRIVATE_VARIABLE_PATTERN, "(_)?[a-z][A-Za-z0-9]*")
+	private val excludeClassPattern by LazyRegex(EXCLUDE_CLASS_PATTERN, "$^")
 
 	override fun visitProperty(property: KtProperty) {
 		if (property.isSingleUnderscore || property.isContainingExcludedClass(excludeClassPattern)) {

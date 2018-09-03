@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.identifierName
@@ -23,7 +24,7 @@ class ClassNaming(config: Config = Config.empty) : Rule(config) {
 			Severity.Style,
 			"A classes name should fit the naming pattern defined in the projects configuration.",
 			debt = Debt.FIVE_MINS)
-	private val classPattern = Regex(valueOrDefault(CLASS_PATTERN, "^[A-Z$][a-zA-Z0-9$]*"))
+	private val classPattern by LazyRegex(CLASS_PATTERN, "^[A-Z$][a-zA-Z0-9$]*")
 
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
 		if (!classOrObject.identifierName().matches(classPattern)) {
