@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isAbstract
@@ -54,7 +55,7 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 			Debt.FIVE_MINS,
 			aliases = setOf("UNUSED_VARIABLE"))
 
-	private val allowedNames = Regex(valueOrDefault(ALLOWED_NAMES_PATTERN, "(_|ignored|expected|serialVersionUID)"))
+	private val allowedNames by LazyRegex(ALLOWED_NAMES_PATTERN, "(_|ignored|expected|serialVersionUID)")
 
 	override fun visit(root: KtFile) {
 		super.visit(root)
