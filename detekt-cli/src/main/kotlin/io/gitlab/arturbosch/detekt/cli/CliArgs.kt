@@ -23,7 +23,8 @@ class CliArgs : Args {
 	var filters: String? = null // Using a converter for List<PathFilter> resulted in a ClassCastException
 
 	@Parameter(names = ["--config", "-c"],
-			description = "Path to the config file (path/to/config.yml).")
+			description = "Path to the config file (path/to/config.yml). " +
+					"Multiple configuration files can be specified with ',' or ';' as separator.")
 	var config: String? = null
 
 	@Parameter(names = ["--config-resource", "-cr"],
