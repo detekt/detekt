@@ -14,6 +14,17 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 
 	subject { UnusedPrivateMember() }
 
+	val regexTestingCode = """
+				class Test {
+					private val used = "This is used"
+					private val unused = "This is not used"
+
+					fun use() {
+						println(used)
+					}
+				}
+				"""
+
 	given("cases file with different findings") {
 
 		it("positive cases file") {
@@ -134,34 +145,14 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 					UnusedPrivateMember.ALLOWED_NAMES_PATTERN to "*foo"
 			)
 			val config = TestConfig(configRules)
-			val code = """
-				class Test {
-					private val used = "This is used"
-					private val unused = "This is not used"
-
-					fun use() {
-						println(used)
-					}
-				}
-				"""
-			assertThat(UnusedPrivateMember(config).lint(code)).isEmpty()
+			assertThat(UnusedPrivateMember(config).lint(regexTestingCode)).isEmpty()
 		}
 
 		it("does fail when enabled with invalid regex") {
 			val configRules = mapOf(UnusedPrivateMember.ALLOWED_NAMES_PATTERN to "*foo")
 			val config = TestConfig(configRules)
-			val code = """
-				class Test {
-					private val used = "This is used"
-					private val unused = "This is not used"
-
-					fun use() {
-						println(used)
-					}
-				}
-				"""
 			assertFailsWith<PatternSyntaxException> {
-				UnusedPrivateMember(config).lint(code)
+				UnusedPrivateMember(config).lint(regexTestingCode)
 			}
 		}
 	}

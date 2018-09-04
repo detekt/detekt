@@ -18,6 +18,13 @@ class EmptyCodeTest {
 
 	val file = compileForTest(Case.Empty.path())
 
+	private val regexTestingCode = """
+			fun f() {
+				try {
+				} catch (foo: MyException) {
+				}
+			}"""
+
 	@Test
 	fun findsEmptyCatch() {
 		test { EmptyCatchBlock(Config.empty) }
@@ -132,30 +139,18 @@ class EmptyCodeTest {
 
 	@Test
 	fun doesNotFailWithInvalidRegexWhenDisabled() {
-		val code = """
-			fun f() {
-				try {
-				} catch (foo: MyException) {
-				}
-			}"""
 		val configValues = mapOf("active" to "false",
 				EmptyCatchBlock.ALLOWED_EXCEPTION_NAME_REGEX to "*foo")
 		val config = TestConfig(configValues)
-		assertThat(EmptyCatchBlock(config).lint(code)).isEmpty()
+		assertThat(EmptyCatchBlock(config).lint(regexTestingCode)).isEmpty()
 	}
 
 	@Test
 	fun doesFailWithInvalidRegex() {
-		val code = """
-			fun f() {
-				try {
-				} catch (foo: MyException) {
-				}
-			}"""
 		val configValues = mapOf(EmptyCatchBlock.ALLOWED_EXCEPTION_NAME_REGEX to "*foo")
 		val config = TestConfig(configValues)
 		assertFailsWith<PatternSyntaxException> {
-			EmptyCatchBlock(config).lint(code)
+			EmptyCatchBlock(config).lint(regexTestingCode)
 		}
 	}
 
