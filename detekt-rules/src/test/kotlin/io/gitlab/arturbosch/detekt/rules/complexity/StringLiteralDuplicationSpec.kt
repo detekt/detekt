@@ -72,6 +72,11 @@ class StringLiteralDuplicationSpec : SubjectSpek<StringLiteralDuplication>({
 
 	given("strings with values to match for the regex") {
 
+		val regexTestingCode = """
+				val str1 = "lorem" + "lorem" + "lorem"
+				val str2 = "ipsum" + "ipsum" + "ipsum"
+			"""
+
 		it("does not report lorem or ipsum according to config in regex") {
 			val code = """
 				val str1 = "lorem" + "lorem" + "lorem"
@@ -82,26 +87,18 @@ class StringLiteralDuplicationSpec : SubjectSpek<StringLiteralDuplication>({
 		}
 
 		it("should not fail with invalid regex when disabled") {
-			val code = """
-				val str1 = "lorem" + "lorem" + "lorem"
-				val str2 = "ipsum" + "ipsum" + "ipsum"
-			"""
 			val configValues = mapOf(
 					"active" to "false",
 					StringLiteralDuplication.IGNORE_STRINGS_REGEX to "*lorem"
 			)
 			val config = TestConfig(configValues)
-			assertFindingWithConfig(code, config, 0)
+			assertFindingWithConfig(regexTestingCode, config, 0)
 		}
 
 		it("should fail with invalid regex") {
-			val code = """
-				val str1 = "lorem" + "lorem" + "lorem"
-				val str2 = "ipsum" + "ipsum" + "ipsum"
-			"""
 			val config = TestConfig(mapOf(StringLiteralDuplication.IGNORE_STRINGS_REGEX to "*lorem"))
 			assertFailsWith<PatternSyntaxException> {
-				StringLiteralDuplication(config).lint(code)
+				StringLiteralDuplication(config).lint(regexTestingCode)
 			}
 		}
 	}
