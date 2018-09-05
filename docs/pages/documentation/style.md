@@ -812,6 +812,13 @@ refactored into concrete classes.
 
 **Debt**: 5min
 
+#### Configuration options:
+
+* `excludeAnnotatedProperties` (default: `"dagger.Module"`)
+
+   Allows you to provide a list of annotations that disable
+this check.
+
 #### Noncompliant Code:
 
 ```kotlin

@@ -2,6 +2,8 @@
 
 package cases
 
+import dagger.Module
+
 abstract class AbstractClassOk {
 
 	abstract val i: Int
@@ -20,4 +22,8 @@ abstract class EmptyAbstractClass2()
 abstract class AbstractClassDerivedFrom : EmptyAbstractClass1() {
 
 	fun f() {}
+}
+
+@Module abstract class AbstractClassWithModuleAnnotation {
+	abstract fun binds(foo: Integer): Number
 }

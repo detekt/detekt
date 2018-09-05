@@ -14,6 +14,7 @@ dependencies {
 	implementation(project(":detekt-api"))
 
 	testImplementation(project(":detekt-test"))
+  testImplementation("com.google.dagger:dagger:2.17")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
 	testRuntimeOnly("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
 }

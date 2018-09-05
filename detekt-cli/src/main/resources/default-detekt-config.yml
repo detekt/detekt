@@ -473,6 +473,7 @@ style:
     active: false
   UnnecessaryAbstractClass:
     active: false
+    excludeAnnotatedProperties: "dagger.Module"
   UnnecessaryInheritance:
     active: false
   UnnecessaryParentheses:
