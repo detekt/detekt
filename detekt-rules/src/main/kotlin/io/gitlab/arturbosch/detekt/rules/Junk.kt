@@ -17,6 +17,9 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.KtVariableDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
+import java.net.MalformedURLException
+import java.net.URISyntaxException
+import java.net.URL
 
 /**
  * @author Artur Bosch
@@ -68,4 +71,16 @@ inline fun <reified T : KtElement> KtElement.collectByType(): List<T> {
 		}
 	})
 	return list
+}
+
+internal fun String.lastArgumentMatchesUrl(): Boolean {
+	val lastArgument = trimEnd().split(Regex("\\s+")).last()
+	return try {
+		URL(lastArgument).toURI()
+		true
+	} catch (e: MalformedURLException) {
+		false
+	} catch (e: URISyntaxException) {
+		false
+	}
 }

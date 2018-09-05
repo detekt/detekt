@@ -8,10 +8,8 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.lastArgumentMatchesUrl
 import org.jetbrains.kotlin.psi.KtDeclaration
-import java.net.MalformedURLException
-import java.net.URISyntaxException
-import java.net.URL
 
 class KDocStyle(config: Config = Config.empty) : MultiRule() {
 
@@ -46,7 +44,6 @@ class EndOfSentenceFormat(config: Config = Config.empty) : Rule(config) {
 
 	private val endOfSentenceFormat =
 			Regex(valueOrDefault(END_OF_SENTENCE_FORMAT, "([.?!][ \\t\\n\\r\\f<])|([.?!]\$)"))
-	private val whiteSpaceRegex = Regex("\\s+")
 	private val htmlTag = Regex("<.+>")
 
 	fun verify(declaration: KtDeclaration) {
@@ -55,7 +52,7 @@ class EndOfSentenceFormat(config: Config = Config.empty) : Rule(config) {
 			if (text.isEmpty() || text.startsWithHtmlTag()) {
 				return
 			}
-			if (!endOfSentenceFormat.containsMatchIn(text) && !lastArgumentMatchesUrl(text)) {
+			if (!endOfSentenceFormat.containsMatchIn(text) && !text.lastArgumentMatchesUrl()) {
 				report(CodeSmell(issue, Entity.from(declaration),
 						"The first sentence of this KDoc does not end with the correct punctuation."))
 			}
@@ -63,18 +60,6 @@ class EndOfSentenceFormat(config: Config = Config.empty) : Rule(config) {
 	}
 
 	private fun String.startsWithHtmlTag() = startsWith("<") && contains(htmlTag)
-
-	private fun lastArgumentMatchesUrl(text: String): Boolean {
-		val lastArgument = text.trimEnd().split(whiteSpaceRegex).last()
-		return try {
-			URL(lastArgument).toURI()
-			true
-		} catch (e: MalformedURLException) {
-			false
-		} catch (e: URISyntaxException) {
-			false
-		}
-	}
 
 	companion object {
 		const val END_OF_SENTENCE_FORMAT = "endOfSentenceFormat"
