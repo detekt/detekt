@@ -814,7 +814,7 @@ refactored into concrete classes.
 
 #### Configuration options:
 
-* `excludeAnnotatedProperties` (default: `"dagger.Module"`)
+* `excludeAnnotatedClasses` (default: `"dagger.Module"`)
 
    Allows you to provide a list of annotations that disable
 this check.
