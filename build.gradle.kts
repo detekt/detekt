@@ -36,6 +36,7 @@ tasks.withType<Wrapper> {
 }
 
 val detektVersion: String by project
+val usedDetektVersion: String by project
 
 allprojects {
 	group = "io.gitlab.arturbosch.detekt"
@@ -63,7 +64,7 @@ subprojects {
 
 	detekt {
 		debug = true
-		toolVersion = "1.0.0-gradle-rework-beta1"
+		toolVersion = usedDetektVersion
 		config = files(
 				project.rootDir.resolve("detekt-cli/src/main/resources/default-detekt-config.yml"),
 				project.rootDir.resolve("reports/failfast.yml")
