@@ -84,7 +84,7 @@ class DetektPlugin : Plugin<Project> {
 	private fun determineInput(extension: DetektExtension) = extension.input.filter { it.exists() }
 
 	private fun configurePluginDependencies(project: Project, extension: DetektExtension) =
-			project.configurations.register(DETEKT) {
+			project.configurations.create(DETEKT) {
 				isVisible = false
 				isTransitive = true
 				description = "The $DETEKT libraries to be used for this project."
