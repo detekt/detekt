@@ -2,7 +2,7 @@
 
 package cases
 
-import dagger.Module
+import jdk.nashorn.internal.ir.annotations.Ignore
 
 abstract class AbstractClassOk {
 
@@ -24,6 +24,6 @@ abstract class AbstractClassDerivedFrom : EmptyAbstractClass1() {
 	fun f() {}
 }
 
-@Module abstract class AbstractClassWithModuleAnnotation {
+@Ignore abstract class AbstractClassWithModuleAnnotation {
 	abstract fun binds(foo: Integer): Number
 }
