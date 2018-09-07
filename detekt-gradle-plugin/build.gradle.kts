@@ -26,6 +26,10 @@ plugins {
 	id("org.jetbrains.dokka") version "0.9.17"
 }
 
+kotlinDslPluginOptions {
+	experimentalWarning.set(false)
+}
+
 apply {
 	plugin("maven-publish")
 }
@@ -37,7 +41,7 @@ val detektGradleVersion: String by project
 val jcommanderVersion: String by project
 val spekVersion = "1.2.1"
 val junitPlatformVersion = "1.2.0"
-val assertjVersion = "3.9.1"
+val assertjVersion = "3.10.0"
 
 dependencies {
 	implementation(gradleApi())
