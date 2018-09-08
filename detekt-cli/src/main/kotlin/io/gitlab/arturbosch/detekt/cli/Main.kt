@@ -25,10 +25,10 @@ fun main(args: Array<String>) {
 }
 
 private fun parseArgumentsCheckingReportDirectory(args: Array<String>): CliArgs {
-	val arguments = parseArguments<CliArgs>(args)
+	val (arguments, jcommander) = parseArguments<CliArgs>(args)
 	val messages = validateCli(arguments)
 	messages.ifNotEmpty {
-		failWithErrorMessages(messages)
+		jcommander.failWithErrorMessages(messages)
 	}
 	return arguments
 }
