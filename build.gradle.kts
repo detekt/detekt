@@ -81,6 +81,8 @@ subprojects {
 
 		setPublications("DetektPublication")
 
+		override = (project.version as? String)?.endsWith("-SNAPSHOT") == true
+
 		pkg(delegateClosureOf<BintrayExtension.PackageConfig> {
 			repo = "code-analysis"
 			name = "detekt"
