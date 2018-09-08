@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.cli
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.ParameterException
 
-inline fun <reified T : Args> parseArguments(args: Array<String>): T {
+inline fun <reified T : Args> parseArguments(args: Array<String>): Pair<T, JCommander> {
 	val cli = T::class.java.declaredConstructors.firstOrNull()?.newInstance() as? T
 			?: throw IllegalStateException("Could not create Args object for class ${T::class.java}")
 
@@ -16,7 +16,7 @@ inline fun <reified T : Args> parseArguments(args: Array<String>): T {
 		jCommander.parse(*args)
 	} catch (ex: ParameterException) {
 		val message = ex.message
-		failWithErrorMessages(message)
+		jCommander.failWithErrorMessages(message)
 	}
 
 	if (cli.help) {
@@ -24,18 +24,18 @@ inline fun <reified T : Args> parseArguments(args: Array<String>): T {
 		System.exit(0)
 	}
 
-	return cli
+	return cli to jCommander
 }
 
-fun failWithErrorMessages(vararg messages: String?) {
+fun JCommander.failWithErrorMessages(vararg messages: String?) {
 	failWithErrorMessages(messages.asIterable())
 }
 
-fun failWithErrorMessages(messages: Iterable<String?>) {
+fun JCommander.failWithErrorMessages(messages: Iterable<String?>) {
 	messages.forEach {
 		println(it)
 	}
 	println()
-	JCommander().usage()
+	this.usage()
 	System.exit(-1)
 }
