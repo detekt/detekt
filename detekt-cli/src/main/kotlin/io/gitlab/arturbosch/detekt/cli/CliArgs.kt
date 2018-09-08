@@ -54,21 +54,6 @@ class CliArgs : Args {
 			description = "Treats current analysis findings as a smell baseline for future detekt runs.")
 	var createBaseline: Boolean = false
 
-	@Parameter(names = ["--report-xml", "-rx"],
-			description = "The path the XML report output should be stored in. If this argument is not supplied no XML" +
-					" report will be written.")
-	var xmlReport: String? = null
-
-	@Parameter(names = ["--report-html", "-rh"],
-			description = "The path the HTML report output should be stored in. If this argument is not supplied no" +
-					" HTML report will be written")
-	var htmlReport: String? = null
-
-	@Parameter(names = ["--report-plain", "-rp"],
-			description = "The path the plain (.txt) report output should be stored in. If this argument is not supplied no" +
-					" plain report will be written")
-	var plainReport: String? = null
-
 	@Parameter(names = ["--report", "-r"],
 			description = "Generates a report for given 'report-id' and stores it on given 'path'. " +
 					"Entry should consist of: [report-id:path-to-store-report]+")
