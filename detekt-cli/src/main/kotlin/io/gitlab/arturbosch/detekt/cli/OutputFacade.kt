@@ -30,8 +30,12 @@ class OutputFacade(arguments: CliArgs,
 			FilteredDetectionResult(detektion, baselineFacade)
 		} else detektion
 
-		val reports = ReportLocator(settings).load()
-		reports.sortedBy { it.priority }.asReversed().forEach { report ->
+		val reports = ReportLocator(settings)
+				.load()
+				.sortedBy { it.priority }
+				.asReversed()
+
+		for (report in reports) {
 			report.init(config)
 			when (report) {
 				is ConsoleReport -> handleConsoleReport(report, result)
