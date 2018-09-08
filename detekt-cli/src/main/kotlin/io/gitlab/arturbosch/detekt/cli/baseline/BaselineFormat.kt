@@ -14,7 +14,7 @@ import javax.xml.stream.XMLStreamWriter
 /**
  * @author Artur Bosch
  */
-object BaselineFormat {
+class BaselineFormat {
 
 	private val outputFactory by lazy { XMLOutputFactory.newFactory() }
 	private val inputFactory by lazy { SAXParserFactory.newInstance() }

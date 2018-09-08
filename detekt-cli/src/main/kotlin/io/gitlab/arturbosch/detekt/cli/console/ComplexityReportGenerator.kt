@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.PREFIX
 import io.gitlab.arturbosch.detekt.api.format
 
-internal class ComplexityReportGenerator(private val complexityMetric: ComplexityMetric) {
+class ComplexityReportGenerator(private val complexityMetric: ComplexityMetric) {
 
 	private var numberOfSmells = 0
 	private var smellPerThousandLines = 0
