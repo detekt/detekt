@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.cli.console
 
 import io.gitlab.arturbosch.detekt.api.Debt
 
-internal class DebtSumming {
+class DebtSumming {
 
 	private val debtList = mutableListOf<Debt>()
 
