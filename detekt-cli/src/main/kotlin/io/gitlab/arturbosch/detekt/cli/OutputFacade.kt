@@ -2,18 +2,15 @@ package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.api.ConsoleReport
 import io.gitlab.arturbosch.detekt.api.Detektion
+import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.cli.baseline.BaselineFacade
-import io.gitlab.arturbosch.detekt.cli.out.HtmlOutputReport
-import io.gitlab.arturbosch.detekt.cli.out.PlainOutputReport
-import io.gitlab.arturbosch.detekt.cli.out.XmlOutputReport
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
-import java.io.File
 
 /**
  * @author Artur Bosch
  * @author Marvin Ramin
  */
-class OutputFacade(private val arguments: CliArgs,
+class OutputFacade(arguments: CliArgs,
 				   private val detektion: Detektion,
 				   private val settings: ProcessingSettings) {
 
@@ -21,6 +18,7 @@ class OutputFacade(private val arguments: CliArgs,
 	private val config = settings.config
 	private val baselineFacade = arguments.baseline?.let { BaselineFacade(it) }
 	private val createBaseline = arguments.createBaseline
+	private val reportPaths = arguments.reportPaths.toHashMap({ it.kind }, { it.path })
 
 	fun run() {
 		if (createBaseline) {
@@ -37,19 +35,15 @@ class OutputFacade(private val arguments: CliArgs,
 			report.init(config)
 			when (report) {
 				is ConsoleReport -> handleConsoleReport(report, result)
+				is OutputReport -> handleOutputReport(report, result)
 			}
 		}
+	}
 
-		arguments.htmlReport?.let {
-			HtmlOutputReport().write(File(it).toPath(), result)
-		}
-
-		arguments.xmlReport?.let {
-			XmlOutputReport().write(File(it).toPath(), result)
-		}
-
-		arguments.plainReport?.let {
-			PlainOutputReport().write(File(it).toPath(), result)
+	private fun handleOutputReport(report: OutputReport, result: Detektion) {
+		val filePath = reportPaths[report.id]
+		if (filePath != null) {
+			report.write(filePath, result)
 		}
 	}
 

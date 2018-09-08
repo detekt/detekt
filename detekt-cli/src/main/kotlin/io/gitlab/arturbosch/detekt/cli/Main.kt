@@ -13,7 +13,7 @@ import org.jetbrains.kotlin.utils.addToStdlib.ifNotEmpty
  * @author Marvin Ramin
  */
 fun main(args: Array<String>) {
-	val arguments = parseArgumentsCheckingReportDirectory(args)
+	val arguments = parseArguments(args)
 	LOG.active = arguments.debug
 	val executable = when {
 		arguments.generateConfig -> ConfigExporter()
@@ -24,7 +24,7 @@ fun main(args: Array<String>) {
 	executable.execute()
 }
 
-private fun parseArgumentsCheckingReportDirectory(args: Array<String>): CliArgs {
+private fun parseArguments(args: Array<String>): CliArgs {
 	val (arguments, jcommander) = parseArguments<CliArgs>(args)
 	val messages = validateCli(arguments)
 	messages.ifNotEmpty {

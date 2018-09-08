@@ -69,6 +69,11 @@ class CliArgs : Args {
 					" plain report will be written")
 	var plainReport: String? = null
 
+	@Parameter(names = ["--report", "-r"],
+			description = "Generates a report for given 'report-id' and stores it on given 'path'. " +
+					"Entry should consist of: [report-id:path-to-store-report]+")
+	private var reports: List<String>? = null
+
 	@Parameter(names = ["--disable-default-rulesets", "-dd"],
 			description = "Disables default rule sets.")
 	var disableDefaultRuleSets: Boolean = false
@@ -92,5 +97,9 @@ class CliArgs : Args {
 	val inputPath: List<Path> by lazy {
 		MultipleExistingPathConverter().convert(input
 				?: throw IllegalStateException("Input parameter was not initialized by jcommander!"))
+	}
+
+	val reportPaths: List<ReportPath> by lazy {
+		reports?.map { ReportPath.from(it) } ?: emptyList()
 	}
 }
