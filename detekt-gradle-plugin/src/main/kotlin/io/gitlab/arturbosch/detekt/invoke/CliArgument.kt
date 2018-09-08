@@ -11,8 +11,7 @@ private const val BASELINE_PARAMETER = "--baseline"
 private const val PARALLEL_PARAMETER = "--parallel"
 private const val DISABLE_DEFAULT_RULESETS_PARAMETER = "--disable-default-rulesets"
 private const val PLUGINS_PARAMETER = "--plugins"
-private const val REPORT_XML_PARAMETER = "--report-xml"
-private const val REPORT_HTML_PARAMETER = "--report-html"
+private const val REPORT_PARAMETER = "--report"
 private const val GENERATE_CONFIG_PARAMETER = "--generate-config"
 private const val CREATE_BASELINE_PARAMETER = "--create-baseline"
 
@@ -45,11 +44,11 @@ internal data class BaselineArgument(val baseline: File?) : CliArgument() {
 }
 
 internal data class XmlReportArgument(val file: File?) : CliArgument() {
-	override fun toArgument() = file?.let { listOf(REPORT_XML_PARAMETER, it.absolutePath) } ?: emptyList()
+	override fun toArgument() = file?.let { listOf(REPORT_PARAMETER, "xml:${it.absolutePath}") } ?: emptyList()
 }
 
 internal data class HtmlReportArgument(val file: File?) : CliArgument() {
-	override fun toArgument() = file?.let { listOf(REPORT_HTML_PARAMETER, it.absolutePath) } ?: emptyList()
+	override fun toArgument() = file?.let { listOf(REPORT_PARAMETER, "html:${it.absolutePath}") } ?: emptyList()
 }
 
 internal data class ConfigArgument(val config: FileCollection?) : CliArgument() {

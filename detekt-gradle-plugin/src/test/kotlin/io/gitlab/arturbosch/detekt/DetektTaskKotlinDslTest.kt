@@ -60,7 +60,7 @@ internal class DetektTaskKotlinDslTest : Spek({
 
 			val detektConfig = """
 					|detekt {
-					|	toolVersion = "1.0.0-GRADLE"
+					|	toolVersion = "$VERSION_UNDER_TEST"
 					|}
 				"""
 
@@ -113,7 +113,7 @@ internal class DetektTaskKotlinDslTest : Spek({
 					|	debug = true
 					|	parallel = true
 					|	disableDefaultRuleSets = true
-					|	toolVersion = "1.0.0-GRADLE"
+					|	toolVersion = "$VERSION_UNDER_TEST"
 					|	config = files("${rootDir.absolutePath}/config.yml")
 					|	baseline = file("${rootDir.absolutePath}/baseline.xml")
 					|	filters = ".*/resources/.*, .*/build/.*"

@@ -43,7 +43,7 @@ internal class DetektTaskGroovyDslTest : Spek({
 
 			val detektConfig = """
 				|detekt {
-				|	toolVersion = "1.0.0-GRADLE"
+				|	toolVersion = "$VERSION_UNDER_TEST"
 				|}
 				"""
 
