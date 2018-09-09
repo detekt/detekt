@@ -3,7 +3,7 @@
 - Read [this article](https://chris.beams.io/posts/git-commit/) before writing commit messages
 - Copy the file `commit-msg` to `.git/hooks`
 - Use `gradle build -x dokka` to build the source but exclude documentation jar generating to save time.
-- `gradle detektCheck` should not report any errors
+- `gradle detekt` should not report any errors
 - This repo uses tabs! Make sure your code is properly formatted.
 - Use idea-code-style.xml for coding style .
 - We use [Spek](https://github.com/spekframework/spek) for testing.

@@ -25,7 +25,6 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 - code Smell baseline and ignore lists for legacy projects
 - [gradle plugin](#gradleplugin) for code analysis via Gradle builds
 - gradle tasks to use local `intellij` distribution for [formatting and inspecting](#idea) kotlin code
-- optionally configure detekt for each sub module by using [profiles](#closure) (gradle-plugin)
 - [sonarqube integration](https://github.com/arturbosch/sonar-kotlin)
 - extensible by own rule sets and `FileProcessListener's`
 - [intellij integration](https://github.com/arturbosch/detekt-intellij-plugin)
@@ -45,7 +44,7 @@ Visit https://arturbosch.github.io/detekt/ for installation guides, release note
 
 #### with gradle
 
-```gradle
+```kotlin
 buildscript {
     repositories {
         jcenter()
@@ -53,14 +52,15 @@ buildscript {
 }
 
 plugins {
-    id "io.gitlab.arturbosch.detekt" version "1.0.0.[version]"
+    id("io.gitlab.arturbosch.detekt").version("[version]")
 }
 
 detekt {
-    version = "1.0.0.[version]"
-    defaultProfile {
-        input = file("src/main/kotlin")
+    detekt {
+        version = "[version]"
+        input = files("src/main/kotlin")
         filters = ".*/resources/.*,.*/build/.*"
+        config = files("path/to/config.yml")
     }
 }
 ```
@@ -70,9 +70,9 @@ detekt {
 detekt itself provides a wrapper over [KtLint](https://github.com/shyiko/ktlint) as a `formatting` rule set
 which can be easily added to the gradle configuration:
 
-```gradle
+```kotlin
 dependencies {
-    detekt "io.gitlab.arturbosch.detekt:detekt-formatting:1.0.0.[version]"
+    detekt "io.gitlab.arturbosch.detekt:detekt-formatting:[version]"
 }
 ```
 

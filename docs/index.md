@@ -19,7 +19,6 @@ summary:
 - code Smell baseline and ignore lists for legacy projects
 - [gradle plugin](#gradleplugin) for code analysis via Gradle builds
 - gradle tasks to use local `intellij` distribution for [formatting and inspecting](#idea) kotlin code
-- optionally configure detekt for each sub module by using [profiles](#closure) (gradle-plugin)
 - [sonarqube integration](https://github.com/arturbosch/sonar-kotlin)
 - extensible by own rule sets and `FileProcessListener's`
 - [intellij integration](https://github.com/arturbosch/detekt-intellij-plugin)
@@ -27,9 +26,9 @@ summary:
 
 ### Quick Start with Gradle
 
-Apply following configuration to your gradle build file and run `gradle detektCheck`:
+Apply following configuration to your gradle build file and run `gradle detekt`:
 
-```groovy
+```kotlin
 buildscript {
     repositories {
         jcenter()
@@ -37,15 +36,14 @@ buildscript {
 }
 
 plugins {
-    id "io.gitlab.arturbosch.detekt" version "1.0.0.[version]"
+    id("io.gitlab.arturbosch.detekt").version("[version]")
 }
 
 detekt {
-    version = "1.0.0.[version]"
-    defaultProfile {
-        input = file("src/main/kotlin")
-        filters = ".*/resources/.*,.*/build/.*"
-    }
+    version = "[version]"
+    input = files("src/main/kotlin")
+    filters = ".*/resources/.*,.*/build/.*"
+    config = files("path/to/config.yml")
 }
 ```
 
@@ -55,13 +53,20 @@ If you want to change the default behaviour of detekt rules, first generate your
 
 Then reference the config inside the defaultProfile-closure:
 
-`config = file("default-detekt-config.yml")`
+`config = files("default-detekt-config.yml")`
 
-If you need a textual report, specify the output directory and the reports name in the `defaultProfile`-closure:
-
-```
-output = file("reports")
-outputName = "detekt"
+To enable/disable detekt reports and to configure their output directories edit the `detekt { }` closure:
+```kotlin
+detekt {
+    xml {
+        enabled = true
+        destination = file("path/to/destination.xml")
+    }
+    html {
+        enabled = true
+        destination = file("path/to/destination.html")
+    }
+}
 ``` 
 
 ### Adding more rule sets
@@ -71,7 +76,7 @@ which can be easily added to the gradle configuration:
 
 ```gradle
 dependencies {
-    detekt "io.gitlab.arturbosch.detekt:detekt-formatting:1.0.0.[version]"
+    detekt "io.gitlab.arturbosch.detekt:detekt-formatting:[version]"
 }
 ```
 

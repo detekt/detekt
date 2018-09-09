@@ -50,7 +50,7 @@ summary:
                 <dependency>
                     <groupId>io.gitlab.arturbosch.detekt</groupId>
                     <artifactId>detekt-cli</artifactId>
-                    <version>1.0.0.[version]</version>
+                    <version>[version]</version>
                 </dependency>
             </dependencies>
         </plugin>
