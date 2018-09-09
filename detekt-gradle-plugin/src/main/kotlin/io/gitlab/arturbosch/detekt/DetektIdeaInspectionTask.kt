@@ -41,6 +41,6 @@ open class DetektIdeaInspectionTask : DefaultTask() {
 		if (debugOrDefault) println("Running inspection task in debug mode")
 
 		if (debugOrDefault) println("$ideaExtension")
-		ProcessExecutor.startProcess(ideaExtension.inspectArgs(input.asPath))
+		ProcessExecutor.startProcess(ideaExtension.inspectArgs(input.asPath), debugOrDefault)
 	}
 }
