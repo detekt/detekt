@@ -9,8 +9,9 @@ fun KtFunction.isEqualsFunction() =
 fun KtFunction.isHashCodeFunction() =
 		this.name == "hashCode" && this.valueParameters.isEmpty() && this.isOverridden()
 
+private val knownAnys = setOf("Any?", "kotlin.Any?")
 fun KtFunction.hasCorrectEqualsParameter() =
-		this.valueParameters.firstOrNull()?.typeReference?.text == "Any?"
+		this.valueParameters.firstOrNull()?.typeReference?.text in knownAnys
 
 fun KtNamedFunction.isMainFunction() =
 		this.name == "main" && this.isPublicNotOverridden() && this.isTopLevel
