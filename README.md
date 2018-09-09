@@ -17,19 +17,19 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 
 ### Features
 
-- code smell analysis for your kotlin projects
-- complexity report based on logical lines of code, McCabe complexity and amount of code smells
-- highly configurable (rule set or rule level)
-- suppress findings with Kotlin's @Suppress and Java's @SuppressWarnings annotations
-- specify code smell thresholds to break your build or print a warning
-- code Smell baseline and ignore lists for legacy projects
-- [gradle plugin](#gradleplugin) for code analysis via Gradle builds
-- gradle tasks to use local `intellij` distribution for [formatting and inspecting](#idea) kotlin code
-- optionally configure detekt for each sub module by using [profiles](#closure) (gradle-plugin)
-- [sonarqube integration](https://github.com/arturbosch/sonar-kotlin)
-- extensible by own rule sets and `FileProcessListener's`
-- [intellij integration](https://github.com/arturbosch/detekt-intellij-plugin)
-- unofficial [maven plugin](https://github.com/Ozsie/detekt-maven-plugin) by the user [Ozsie](https://github.com/Ozsie)
+- Code smell analysis for your Kotlin projects
+- Complexity report based on logical lines of code, McCabe complexity and amount of code smells
+- Highly configurable
+- Suppress findings with Kotlin's `@Suppress` and Java's `@SuppressWarnings` annotations
+- Specify code smell thresholds to break your build or print a warning
+- Code Smell baseline and ignore lists for legacy projects
+- [Gradle plugin](#gradleplugin) for code analysis via Gradle builds
+- Gradle tasks to use local `IntelliJ` distribution for [formatting and inspecting](#idea) Kotlin code
+- Optionally configure detekt for each sub module by using [profiles](#closure) (gradle-plugin)
+- [SonarQube integration](https://github.com/arturbosch/sonar-kotlin)
+- Extensible by own rule sets and `FileProcessListener's`
+- [IntelliJ integration](https://github.com/arturbosch/detekt-intellij-plugin)
+- Unofficial [Maven plugin](https://github.com/Ozsie/detekt-maven-plugin) by [Ozsie](https://github.com/Ozsie)
 
 ### Project Website
 
