@@ -10,12 +10,12 @@ import java.io.InputStreamReader
  * @author Marvin Ramin
  */
 object ProcessExecutor {
-	fun startProcess(args: Array<String>) {
+	fun startProcess(args: Array<String>, debug: Boolean = false) {
 		val process = Runtime.getRuntime().exec(args)
 
 		BufferedReader(InputStreamReader(BufferedInputStream(process.inputStream))).use {
 			val inputs = it.readLines().joinToString("\n")
-			println(inputs)
+			if (debug) println(inputs)
 		}
 
 		BufferedReader(InputStreamReader(BufferedInputStream(process.errorStream))).use {
