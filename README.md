@@ -13,7 +13,7 @@
 Meet _detekt_, a static code analysis tool for the _Kotlin_ programming language.
 It operates on the abstract syntax tree provided by the Kotlin compiler.
 
-![detekt in action](img/detekt_in_action.png "detekt in action")
+![detekt in action](docs/images/detekt_in_action.png "detekt in action")
 
 ### Features
 
