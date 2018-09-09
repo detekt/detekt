@@ -1,3 +1,4 @@
+import com.gradle.publish.PluginConfig
 import com.jfrog.bintray.gradle.BintrayExtension
 import org.jetbrains.dokka.gradle.DokkaTask
 import java.util.Date
@@ -5,12 +6,14 @@ import java.util.Date
 buildscript {
 	repositories {
 		mavenCentral()
+		mavenLocal()
 		jcenter()
 	}
 }
 
 repositories {
 	gradlePluginPortal()
+	mavenLocal()
 	jcenter()
 }
 
@@ -18,8 +21,13 @@ plugins {
 	`java-gradle-plugin`
 	id("com.gradle.plugin-publish") version "0.9.10"
 	id("com.jfrog.bintray") version "1.8.4"
-	kotlin("jvm") version "1.2.41"
+	kotlin("jvm") version "1.2.61"
+	`kotlin-dsl`
 	id("org.jetbrains.dokka") version "0.9.17"
+}
+
+kotlinDslPluginOptions {
+	experimentalWarning.set(false)
 }
 
 apply {
@@ -27,9 +35,11 @@ apply {
 }
 
 group = "io.gitlab.arturbosch.detekt"
-version = "1.0.0.RC8"
+version = "1.0.0-rework-beta5"
 
-val spekVersion = "1.1.5"
+val detektGradleVersion: String by project
+val jcommanderVersion: String by project
+val spekVersion = "1.2.1"
 val junitPlatformVersion = "1.2.0"
 val assertjVersion = "3.10.0"
 
@@ -46,8 +56,8 @@ dependencies {
 }
 
 gradlePlugin {
-	(plugins) {
-		"detektPlugin" {
+	plugins {
+		register("detektPlugin") {
 			id = "io.gitlab.arturbosch.detekt"
 			implementationClass = "io.gitlab.arturbosch.detekt.DetektPlugin"
 		}
@@ -64,8 +74,8 @@ pluginBundle {
 	description = "Static code analysis for Kotlin"
 	tags = listOf("kotlin", "detekt", "code-analysis", "badsmells", "codesmells")
 
-	(plugins) {
-		"detektPlugin" {
+	plugins {
+		register("detektPlugin") {
 			id = "io.gitlab.arturbosch.detekt"
 			displayName = "Static code analysis for Kotlin"
 		}
@@ -113,10 +123,11 @@ tasks.withType(DokkaTask::class.java) {
 	outputDirectory = "$buildDir/javadoc"
 }
 
+val javaConvention = the<JavaPluginConvention>()
 val sourcesJar by tasks.creating(Jar::class) {
 	dependsOn("classes")
 	classifier = "sources"
-	from(the<JavaPluginConvention>().sourceSets["main"].allSource)
+	from(javaConvention.sourceSets["main"].allSource)
 }
 
 val javadocJar by tasks.creating(Jar::class) {

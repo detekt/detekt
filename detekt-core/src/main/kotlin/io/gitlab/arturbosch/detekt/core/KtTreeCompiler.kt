@@ -6,10 +6,12 @@ import java.nio.file.Path
 
 /**
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 class KtTreeCompiler(private val compiler: KtCompiler = KtCompiler(),
 					 private val filters: List<PathFilter> = listOf(),
-					 private val parallel: Boolean = false) {
+					 private val parallel: Boolean = false,
+					 private val debug: Boolean = false) {
 
 	companion object {
 		fun instance(settings: ProcessingSettings) = with(settings) {
@@ -17,13 +19,17 @@ class KtTreeCompiler(private val compiler: KtCompiler = KtCompiler(),
 		}
 	}
 
-	fun compile(project: Path): List<KtFile> {
-		require(Files.exists(project)) { "Given project path does not exist!" }
+	fun compile(path: Path): List<KtFile> {
+		require(Files.exists(path)) { "Given path $path does not exist!" }
 		return when {
-			project.isFile() && project.isKotlinFile() -> listOf(compiler.compile(project, project))
-			project.isDirectory() -> compileInternal(project)
-			else -> throw IllegalArgumentException("Provided project path $project is not a file/dir." +
-					" Detekt cannot work with it!")
+			path.isFile() && path.isKotlinFile() -> listOf(compiler.compile(path, path))
+			path.isDirectory() -> compileInternal(path)
+			else -> {
+				if (debug) {
+					println("Ignoring a file detekt cannot handle: $path")
+				}
+				listOf()
+			}
 		}
 	}
 

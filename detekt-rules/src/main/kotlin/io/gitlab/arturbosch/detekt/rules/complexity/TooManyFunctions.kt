@@ -122,9 +122,9 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 			?.size ?: 0
 
 	private fun isIgnoredFunction(function: KtNamedFunction): Boolean = when {
-			ignoreDeprecated -> function.annotationEntries.any { it.typeReference?.text == DEPRECATED }
-			ignorePrivate -> function.isPrivate()
-			else -> false
+		ignoreDeprecated -> function.annotationEntries.any { it.typeReference?.text == DEPRECATED }
+		ignorePrivate -> function.isPrivate()
+		else -> false
 	}
 
 	companion object {

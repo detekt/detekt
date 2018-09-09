@@ -8,6 +8,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
+import java.util.regex.PatternSyntaxException
+import kotlin.test.assertFailsWith
 
 class TooGenericExceptionCaughtSpec : Spek({
 
@@ -40,6 +42,26 @@ class TooGenericExceptionCaughtSpec : Spek({
 			val findings = rule.lint(Case.TooGenericExceptionsOptions.path())
 
 			assertThat(findings).isEmpty()
+		}
+
+		it("should not fail when disabled with invalid regex on allowed exception names") {
+			val configRules = mapOf(
+					"active" to "false",
+					TooGenericExceptionCaught.ALLOWED_EXCEPTION_NAME_REGEX to "*MyException"
+			)
+			val config = TestConfig(configRules)
+			val rule = TooGenericExceptionCaught(config)
+			val findings = rule.lint(Case.TooGenericExceptions.path())
+
+			assertThat(findings).isEmpty()
+		}
+
+		it("should fail with invalid regex on allowed exception names") {
+			val config = TestConfig(mapOf(TooGenericExceptionCaught.ALLOWED_EXCEPTION_NAME_REGEX to "*Foo"))
+			val rule = TooGenericExceptionCaught(config)
+			assertFailsWith<PatternSyntaxException> {
+				rule.lint(Case.TooGenericExceptions.path())
+			}
 		}
 	}
 })

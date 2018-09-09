@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.lastArgumentMatchesUrl
 import org.jetbrains.kotlin.psi.KtFile
 
 data class KtFileContent(val file: KtFile, val content: Sequence<String>)
@@ -64,7 +65,8 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 	}
 
 	private fun isValidLine(line: String): Boolean {
-		return line.length <= maxLineLength || isIgnoredStatement(line)
+		val isUrl = line.lastArgumentMatchesUrl()
+		return line.length <= maxLineLength || isIgnoredStatement(line) || isUrl
 	}
 
 	private fun isIgnoredStatement(line: String): Boolean {

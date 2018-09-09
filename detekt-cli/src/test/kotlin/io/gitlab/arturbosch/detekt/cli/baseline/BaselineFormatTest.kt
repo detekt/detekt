@@ -17,7 +17,7 @@ internal class BaselineFormatTest {
 	@Test
 	fun loadBaseline() {
 		val path = Paths.get(resource("/smell-baseline.xml"))
-		val (blacklist, whitelist) = BaselineFormat.read(path)
+		val (blacklist, whitelist) = BaselineFormat().read(path)
 
 		assertThat(blacklist.ids).hasSize(2)
 		assertThat(blacklist.ids).anySatisfy { it.startsWith("LongParameterList") }
@@ -37,8 +37,9 @@ internal class BaselineFormatTest {
 				Blacklist(setOf("4", "2", "2"), now),
 				Whitelist(setOf("1", "2", "3"), now))
 
-		BaselineFormat.write(savedBaseline, tempFile)
-		val loadedBaseline = BaselineFormat.read(tempFile)
+		val format = BaselineFormat()
+		format.write(savedBaseline, tempFile)
+		val loadedBaseline = format.read(tempFile)
 
 		assertThat(loadedBaseline).isEqualTo(savedBaseline)
 	}
@@ -46,6 +47,6 @@ internal class BaselineFormatTest {
 	@Test
 	fun loadInvalidBaseline() {
 		val path = Paths.get(resource("/invalid-smell-baseline.txt"))
-		assertThatThrownBy { BaselineFormat.read(path) }.isInstanceOf(InvalidBaselineState::class.java)
+		assertThatThrownBy { BaselineFormat().read(path) }.isInstanceOf(InvalidBaselineState::class.java)
 	}
 }

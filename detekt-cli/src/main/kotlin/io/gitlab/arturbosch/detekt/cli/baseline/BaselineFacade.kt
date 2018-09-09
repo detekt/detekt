@@ -15,7 +15,7 @@ class BaselineFacade(val baselineFile: Path) {
 
 	private val listings: Pair<Whitelist, Blacklist>? =
 			if (baselineExists()) {
-				val format = BaselineFormat.read(baselineFile)
+				val format = BaselineFormat().read(baselineFile)
 				format.whitelist to format.blacklist
 			} else null
 
@@ -29,14 +29,14 @@ class BaselineFacade(val baselineFile: Path) {
 	fun create(smells: List<Finding>) {
 		val timestamp = Instant.now().toEpochMilli().toString()
 		val blacklist = if (baselineExists()) {
-			BaselineFormat.read(baselineFile).blacklist
+			BaselineFormat().read(baselineFile).blacklist
 		} else {
 			Blacklist(emptySet(), timestamp)
 		}
 		val ids = smells.map { it.baselineId }.toSortedSet()
 		val smellBaseline = Baseline(blacklist, Whitelist(ids, timestamp))
 		baselineFile.parent?.let { Files.createDirectories(it) }
-		BaselineFormat.write(smellBaseline, baselineFile)
+		BaselineFormat().write(smellBaseline, baselineFile)
 		println("Successfully wrote smell baseline to $baselineFile")
 	}
 

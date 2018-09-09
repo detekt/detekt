@@ -134,7 +134,7 @@ fun bar() {
 ### RethrowCaughtException
 
 This rule reports all exceptions that are caught and then later re-thrown without modification.
-It ignores caught exception that are rethrown if there is work done before that.
+It ignores caught exceptions that are rethrown if there is work done before that.
 
 **Severity**: CodeSmell
 

@@ -26,8 +26,6 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 			emptyLine()
 			yaml { defaultConsoleReportsConfiguration() }
 			emptyLine()
-			yaml { defaultOutputReportsConfiguration() }
-			emptyLine()
 
 			item.sortedBy { it.ruleSet.name }
 					.forEach { printRuleSet(it.ruleSet, it.rules) }
@@ -128,17 +126,6 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 			  #  - 'NotificationReport'
 			  #  - 'FindingsReport'
 			  #  - 'BuildFailureReport'
-			""".trimIndent()
-	}
-
-	private fun defaultOutputReportsConfiguration(): String {
-		return """
-			output-reports:
-			  active: true
-			  exclude:
-			  #  - 'HtmlOutputReport'
-			  #  - 'PlainOutputReport'
-			  #  - 'XmlOutputReport'
 			""".trimIndent()
 	}
 

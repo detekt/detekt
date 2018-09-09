@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtPackageDirective
@@ -22,7 +23,7 @@ class PackageNaming(config: Config = Config.empty) : Rule(config) {
 			Severity.Style,
 			"Package names should match the naming convention set in the configuration.",
 			debt = Debt.FIVE_MINS)
-	private val packagePattern = Regex(valueOrDefault(PACKAGE_PATTERN, "^[a-z]+(\\.[a-z][a-z0-9]*)*$"))
+	private val packagePattern by LazyRegex(PACKAGE_PATTERN, "^[a-z]+(\\.[a-z][a-z0-9]*)*$")
 
 	override fun visitPackageDirective(directive: KtPackageDirective) {
 		val name = directive.qualifiedName

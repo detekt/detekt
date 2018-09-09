@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.identifierName
@@ -29,8 +30,8 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
 			debt = Debt.FIVE_MINS,
 			aliases = setOf("FunctionName"))
 
-	private val functionPattern = Regex(valueOrDefault(FUNCTION_PATTERN, "^([a-z$][a-zA-Z$0-9]*)|(`.*`)$"))
-	private val excludeClassPattern = Regex(valueOrDefault(EXCLUDE_CLASS_PATTERN, "$^"))
+	private val functionPattern by LazyRegex(FUNCTION_PATTERN, "^([a-z$][a-zA-Z$0-9]*)|(`.*`)$")
+	private val excludeClassPattern by LazyRegex(EXCLUDE_CLASS_PATTERN, "$^")
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		if (!function.isContainingExcludedClass(excludeClassPattern) &&

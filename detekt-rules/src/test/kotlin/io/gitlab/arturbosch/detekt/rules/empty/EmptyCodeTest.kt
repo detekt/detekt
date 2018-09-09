@@ -8,6 +8,8 @@ import io.gitlab.arturbosch.detekt.test.compileForTest
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import java.util.regex.PatternSyntaxException
+import kotlin.test.assertFailsWith
 
 /**
  * @author Artur Bosch
@@ -15,6 +17,13 @@ import org.junit.jupiter.api.Test
 class EmptyCodeTest {
 
 	val file = compileForTest(Case.Empty.path())
+
+	private val regexTestingCode = """
+			fun f() {
+				try {
+				} catch (foo: MyException) {
+				}
+			}"""
 
 	@Test
 	fun findsEmptyCatch() {
@@ -44,7 +53,7 @@ class EmptyCodeTest {
 				} catch (expected: Exception) {
 				}
 			}"""
-		assertThat(EmptyCatchBlock(Config.empty).lint(code)).hasSize(0)
+		assertThat(EmptyCatchBlock(Config.empty).lint(code)).isEmpty()
 	}
 
 	@Test
@@ -56,7 +65,7 @@ class EmptyCodeTest {
 				}
 			}"""
 		val config = TestConfig(mapOf(EmptyCatchBlock.ALLOWED_EXCEPTION_NAME_REGEX to "foo"))
-		assertThat(EmptyCatchBlock(config).lint(code)).hasSize(0)
+		assertThat(EmptyCatchBlock(config).lint(code)).isEmpty()
 	}
 
 	@Test
@@ -126,6 +135,23 @@ class EmptyCodeTest {
 		val rule = EmptyDefaultConstructor(Config.empty)
 		val text = compileForTest(Case.EmptyDefaultConstructorNegative.path()).text
 		assertThat(rule.lint(text)).isEmpty()
+	}
+
+	@Test
+	fun doesNotFailWithInvalidRegexWhenDisabled() {
+		val configValues = mapOf("active" to "false",
+				EmptyCatchBlock.ALLOWED_EXCEPTION_NAME_REGEX to "*foo")
+		val config = TestConfig(configValues)
+		assertThat(EmptyCatchBlock(config).lint(regexTestingCode)).isEmpty()
+	}
+
+	@Test
+	fun doesFailWithInvalidRegex() {
+		val configValues = mapOf(EmptyCatchBlock.ALLOWED_EXCEPTION_NAME_REGEX to "*foo")
+		val config = TestConfig(configValues)
+		assertFailsWith<PatternSyntaxException> {
+			EmptyCatchBlock(config).lint(regexTestingCode)
+		}
 	}
 
 	private fun test(block: () -> Rule) {

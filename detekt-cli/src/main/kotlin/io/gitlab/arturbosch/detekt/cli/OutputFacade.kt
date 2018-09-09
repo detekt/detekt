@@ -8,8 +8,9 @@ import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 
 /**
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
-class OutputFacade(private val arguments: CliArgs,
+class OutputFacade(arguments: CliArgs,
 				   private val detektion: Detektion,
 				   private val settings: ProcessingSettings) {
 
@@ -17,7 +18,7 @@ class OutputFacade(private val arguments: CliArgs,
 	private val config = settings.config
 	private val baselineFacade = arguments.baseline?.let { BaselineFacade(it) }
 	private val createBaseline = arguments.createBaseline
-	private val fileName = arguments.outputName
+	private val reportPaths = arguments.reportPaths.toHashMap({ it.kind }, { it.path })
 
 	fun run() {
 		if (createBaseline) {
@@ -29,8 +30,12 @@ class OutputFacade(private val arguments: CliArgs,
 			FilteredDetectionResult(detektion, baselineFacade)
 		} else detektion
 
-		val reports = ReportLocator(settings).load()
-		reports.sortedBy { it.priority }.asReversed().forEach { report ->
+		val reports = ReportLocator(settings)
+				.load()
+				.sortedBy { it.priority }
+				.asReversed()
+
+		for (report in reports) {
 			report.init(config)
 			when (report) {
 				is ConsoleReport -> handleConsoleReport(report, result)
@@ -40,11 +45,9 @@ class OutputFacade(private val arguments: CliArgs,
 	}
 
 	private fun handleOutputReport(report: OutputReport, result: Detektion) {
-		arguments.output?.let {
-			fileName?.let { report.fileName = it }
-			val filePath = it.resolve("${report.fileName}.${report.ending}")
+		val filePath = reportPaths[report.id]
+		if (filePath != null) {
 			report.write(filePath, result)
-			printStream.println("Successfully generated ${report.id} at $filePath")
 		}
 	}
 

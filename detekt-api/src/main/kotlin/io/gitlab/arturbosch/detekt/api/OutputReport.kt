@@ -5,17 +5,20 @@ import java.nio.file.Path
 
 /**
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 abstract class OutputReport : Extension {
 
-	abstract var fileName: String
 	abstract val ending: String
 
 	fun write(filePath: Path, detektion: Detektion) {
-		val smellData = render(detektion)
-		smellData?.let {
+		val reportData = render(detektion)
+		if (reportData != null) {
+			assert(filePath.endsWith(ending)) {
+				"The ${ending.toUpperCase()} report needs to have a file ending of type .$ending."
+			}
 			filePath.parent?.let { Files.createDirectories(it) }
-			Files.write(filePath, it.toByteArray())
+			Files.write(filePath, reportData.toByteArray())
 		}
 	}
 

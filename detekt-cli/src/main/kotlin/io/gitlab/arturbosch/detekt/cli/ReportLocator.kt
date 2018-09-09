@@ -14,11 +14,11 @@ class ReportLocator(private val settings: ProcessingSettings) {
 
 	private val consoleSubConfig = settings.config.subConfig("console-reports")
 	private val consoleActive = consoleSubConfig.valueOrDefault(ACTIVE, true)
-	private val consoleExcludes = consoleSubConfig.valueOrDefault(EXCLUDE, emptyList<String>())
+	private val consoleExcludes = consoleSubConfig.valueOrDefault(EXCLUDE, emptyList<String>()).toSet()
 
 	private val outputSubConfig = settings.config.subConfig("output-reports")
 	private val outputActive = outputSubConfig.valueOrDefault(ACTIVE, true)
-	private val outputExcludes = outputSubConfig.valueOrDefault(EXCLUDE, emptyList<String>())
+	private val outputExcludes = outputSubConfig.valueOrDefault(EXCLUDE, emptyList<String>()).toSet()
 
 	fun load(): List<Extension> {
 		LOG.debug("console-report=$consoleActive")

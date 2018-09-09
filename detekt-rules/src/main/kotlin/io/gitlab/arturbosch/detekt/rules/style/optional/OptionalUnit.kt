@@ -8,18 +8,24 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isOverridden
+import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
- * It is not necessary to define a return type of `Unit` on functions. This rule detects and reports instances where
- * the `Unit` return type is specified on functions.
+ * It is not necessary to define a return type of `Unit` on functions or to specify a lone Unit statement.
+ * This rule detects and reports instances where the `Unit` return type is specified on functions and the occurrences
+ * of a lone Unit statement.
  *
  * <noncompliant>
  * fun foo(): Unit {
  *     return Unit 
  * }
  * fun foo() = Unit
+ *
+ * fun doesNothing() {
+ *     Unit
+ * }
  * </noncompliant>
  *
  * <compliant>
@@ -51,21 +57,35 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
 		super.visitNamedFunction(function)
 	}
 
+	override fun visitBlockExpression(expression: KtBlockExpression) {
+		expression.statements
+				.filter { it is KtNameReferenceExpression && it.text == UNIT }
+				.forEach {
+					report(CodeSmell(issue, Entity.from(expression),
+							"A single Unit expression is unnecessary and can safely be removed"))
+				}
+		super.visitBlockExpression(expression)
+	}
+
 	private fun checkFunctionWithExplicitReturnType(function: KtNamedFunction) {
 		val typeReference = function.typeReference
 		val typeElementText = typeReference?.typeElement?.text
-		if (typeElementText == "Unit") {
+		if (typeElementText == UNIT) {
 			report(CodeSmell(issue, Entity.from(typeReference), createMessage(function)))
 		}
 	}
 
 	private fun checkFunctionWithInferredReturnType(function: KtNamedFunction) {
 		val referenceExpression = function.bodyExpression as? KtNameReferenceExpression
-		if (referenceExpression != null && referenceExpression.text == "Unit") {
+		if (referenceExpression != null && referenceExpression.text == UNIT) {
 			report(CodeSmell(issue, Entity.from(referenceExpression), createMessage(function)))
 		}
 	}
 
 	private fun createMessage(function: KtNamedFunction) = "The function ${function.name} " +
 			"defines a return type of Unit. This is unnecessary and can safely be removed."
+
+	companion object {
+		private const val UNIT = "Unit"
+	}
 }

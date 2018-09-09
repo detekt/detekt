@@ -1,15 +1,29 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.rules.Case
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
+import java.util.regex.PatternSyntaxException
+import kotlin.test.assertFailsWith
 
 class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 
 	subject { UnusedPrivateMember() }
+
+	val regexTestingCode = """
+				class Test {
+					private val used = "This is used"
+					private val unused = "This is not used"
+
+					fun use() {
+						println(used)
+					}
+				}
+				"""
 
 	given("cases file with different findings") {
 
@@ -123,6 +137,23 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 				}
 				"""
 			assertThat(subject.lint(code)).hasSize(1)
+		}
+
+		it("does not fail when disabled with invalid regex") {
+			val configRules = mapOf(
+					"active" to "false",
+					UnusedPrivateMember.ALLOWED_NAMES_PATTERN to "*foo"
+			)
+			val config = TestConfig(configRules)
+			assertThat(UnusedPrivateMember(config).lint(regexTestingCode)).isEmpty()
+		}
+
+		it("does fail when enabled with invalid regex") {
+			val configRules = mapOf(UnusedPrivateMember.ALLOWED_NAMES_PATTERN to "*foo")
+			val config = TestConfig(configRules)
+			assertFailsWith<PatternSyntaxException> {
+				UnusedPrivateMember(config).lint(regexTestingCode)
+			}
 		}
 	}
 

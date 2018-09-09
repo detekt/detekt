@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.core.processors.linesKey
 import io.gitlab.arturbosch.detekt.core.processors.commentLinesKey
 import io.gitlab.arturbosch.detekt.core.processors.sourceLinesKey
 
-internal class ComplexityMetric(detektion: Detektion) {
+class ComplexityMetric(detektion: Detektion) {
 
 	val mcc = detektion.getData(complexityKey)
 	val loc = detektion.getData(linesKey)

@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 fun KtFunction.isEqualsFunction() =
-	this.name == "equals" && hasCorrectEqualsParameter() && this.isOverridden()
+		this.name == "equals" && hasCorrectEqualsParameter() && this.isOverridden()
 
 fun KtFunction.isHashCodeFunction() =
 		this.name == "hashCode" && this.valueParameters.isEmpty() && this.isOverridden()

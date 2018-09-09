@@ -6,15 +6,14 @@ import io.gitlab.arturbosch.detekt.cli.runners.AstPrinter
 import io.gitlab.arturbosch.detekt.cli.runners.ConfigExporter
 import io.gitlab.arturbosch.detekt.cli.runners.Runner
 import io.gitlab.arturbosch.detekt.cli.runners.SingleRuleRunner
-import io.gitlab.arturbosch.detekt.core.isFile
 import org.jetbrains.kotlin.utils.addToStdlib.ifNotEmpty
-import java.nio.file.Files
 
 /**
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 fun main(args: Array<String>) {
-	val arguments = parseArgumentsCheckingReportDirectory(args)
+	val arguments = parseArguments(args)
 	LOG.active = arguments.debug
 	val executable = when {
 		arguments.generateConfig -> ConfigExporter()
@@ -25,11 +24,11 @@ fun main(args: Array<String>) {
 	executable.execute()
 }
 
-private fun parseArgumentsCheckingReportDirectory(args: Array<String>): CliArgs {
-	val arguments = parseArguments<CliArgs>(args)
+private fun parseArguments(args: Array<String>): CliArgs {
+	val (arguments, jcommander) = parseArguments<CliArgs>(args)
 	val messages = validateCli(arguments)
 	messages.ifNotEmpty {
-		failWithErrorMessages(messages)
+		jcommander.failWithErrorMessages(messages)
 	}
 	return arguments
 }
@@ -37,11 +36,6 @@ private fun parseArgumentsCheckingReportDirectory(args: Array<String>): CliArgs 
 private fun validateCli(arguments: CliArgs): List<String> {
 	val violations = ArrayList<String>()
 	with(arguments) {
-		output?.let {
-			if (Files.exists(it) && it.isFile()) {
-				violations += "Output file must be a directory."
-			}
-		}
 		if (createBaseline && baseline == null) {
 			violations += "Creating a baseline.xml requires the --baseline parameter to specify a path."
 		}

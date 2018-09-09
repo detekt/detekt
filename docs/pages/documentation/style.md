@@ -502,8 +502,9 @@ interface Foo {
 
 ### OptionalUnit
 
-It is not necessary to define a return type of `Unit` on functions. This rule detects and reports instances where
-the `Unit` return type is specified on functions.
+It is not necessary to define a return type of `Unit` on functions or to specify a lone Unit statement.
+This rule detects and reports instances where the `Unit` return type is specified on functions and the occurrences
+of a lone Unit statement.
 
 **Severity**: Style
 
@@ -516,6 +517,10 @@ fun foo(): Unit {
     return Unit 
 }
 fun foo() = Unit
+
+fun doesNothing() {
+    Unit
+}
 ```
 
 #### Compliant Code:
@@ -811,6 +816,13 @@ refactored into concrete classes.
 **Severity**: Style
 
 **Debt**: 5min
+
+#### Configuration options:
+
+* `excludeAnnotatedClasses` (default: `"dagger.Module"`)
+
+   Allows you to provide a list of annotations that disable
+this check.
 
 #### Noncompliant Code:
 

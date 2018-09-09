@@ -5,6 +5,7 @@ import java.nio.file.Path
 
 /**
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 interface Args {
 	var help: Boolean
@@ -22,7 +23,8 @@ class CliArgs : Args {
 	var filters: String? = null // Using a converter for List<PathFilter> resulted in a ClassCastException
 
 	@Parameter(names = ["--config", "-c"],
-			description = "Path to the config file (path/to/config.yml).")
+			description = "Path to the config file (path/to/config.yml). " +
+					"Multiple configuration files can be specified with ',' or ';' as separator.")
 	var config: String? = null
 
 	@Parameter(names = ["--config-resource", "-cr"],
@@ -52,14 +54,10 @@ class CliArgs : Args {
 			description = "Treats current analysis findings as a smell baseline for future detekt runs.")
 	var createBaseline: Boolean = false
 
-	@Parameter(names = ["--output", "-o"],
-			description = "Directory where output reports are stored.",
-			converter = PathConverter::class)
-	var output: Path? = null
-
-	@Parameter(names = ["--output-name", "-on"],
-			description = "The base name for output reports is derived from this parameter.")
-	var outputName: String? = null
+	@Parameter(names = ["--report", "-r"],
+			description = "Generates a report for given 'report-id' and stores it on given 'path'. " +
+					"Entry should consist of: [report-id:path-to-store-report]+")
+	private var reports: List<String>? = null
 
 	@Parameter(names = ["--disable-default-rulesets", "-dd"],
 			description = "Disables default rule sets.")
@@ -84,5 +82,9 @@ class CliArgs : Args {
 	val inputPath: List<Path> by lazy {
 		MultipleExistingPathConverter().convert(input
 				?: throw IllegalStateException("Input parameter was not initialized by jcommander!"))
+	}
+
+	val reportPaths: List<ReportPath> by lazy {
+		reports?.map { ReportPath.from(it) } ?: emptyList()
 	}
 }
