@@ -18,18 +18,19 @@ The following parameters are shown when `--help` is entered. The `--input`/`-i` 
 Usage: detekt [options]
   Options:
     --baseline, -b
-      If a baseline xml file is passed in, only new code smells not in the 
+      If a baseline xml file is passed in, only new code smells not in the
       baseline are printed in the console.
     --config, -c
-      Path to the config file (path/to/config.yml).
+      Path to the config file (path/to/config.yml). Multiple configuration
+      files can be specified with ',' or ';' as separator.
     --config-resource, -cr
       Path to the config resource on detekt's classpath (path/to/config.yml).
     --create-baseline, -cb
-      Treats current analysis findings as a smell baseline for future detekt 
-      runs. 
+      Treats current analysis findings as a smell baseline for future detekt
+      runs.
       Default: false
     --debug
-      Debugs given ktFile by printing its elements.
+      Prints extra information about configurations and extensions.
       Default: false
     --disable-default-rulesets, -dd
       Disables default rule sets.
@@ -43,14 +44,20 @@ Usage: detekt [options]
       Shows the usage.
   * --input, -i
       Input paths to analyze.
-    --output, -o
-      Directory where output reports are stored.
-    --output-name, -on
-      The base name for output reports is derived from this parameter.
     --parallel
-      Enables parallel compilation of source files. Should only be used if the 
+      Enables parallel compilation of source files. Should only be used if the
       analyzing project has more than ~200 kotlin files.
       Default: false
     --plugins, -p
       Extra paths to plugin jars separated by ',' or ';'.
+    --print-ast
+      Prints the AST for given [input] file. Must be no directory.
+      Default: false
+    --report, -r
+      Generates a report for given 'report-id' and stores it on given 'path'.
+      Entry should consist of: [report-id:path-to-store-report]+
+    --run-rule
+      Specify a rule by [RuleSet:Rule] pattern and run it on input.
+
+
 ```

@@ -45,7 +45,7 @@ Visit https://arturbosch.github.io/detekt/ for installation guides, release note
 
 #### with gradle
 
-```gradle
+```kotlin
 buildscript {
     repositories {
         jcenter()
@@ -53,14 +53,15 @@ buildscript {
 }
 
 plugins {
-    id "io.gitlab.arturbosch.detekt" version "1.0.0.[version]"
+    id("io.gitlab.arturbosch.detekt").version("[version]")
 }
 
 detekt {
-    version = "1.0.0.[version]"
-    defaultProfile {
-        input = file("src/main/kotlin")
+    detekt {
+        version = "[version]"
+        input = files("src/main/kotlin")
         filters = ".*/resources/.*,.*/build/.*"
+        config = files("path/to/config.yml")
     }
 }
 ```
@@ -70,9 +71,9 @@ detekt {
 detekt itself provides a wrapper over [KtLint](https://github.com/shyiko/ktlint) as a `formatting` rule set
 which can be easily added to the gradle configuration:
 
-```gradle
+```kotlin
 dependencies {
-    detekt "io.gitlab.arturbosch.detekt:detekt-formatting:1.0.0.[version]"
+    detekt "io.gitlab.arturbosch.detekt:detekt-formatting:[version]"
 }
 ```
 

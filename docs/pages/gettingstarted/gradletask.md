@@ -33,6 +33,6 @@ task detekt(type: JavaExec) {
 }
 
 dependencies {
-	detekt 'io.gitlab.arturbosch.detekt:detekt-cli:1.0.0.[version]'
+	detekt 'io.gitlab.arturbosch.detekt:detekt-cli:[version]'
 }
 ```
