@@ -115,5 +115,53 @@ class UnnecessaryParenthesesSpec : SubjectSpek<UnnecessaryParentheses>({
 			""".trimIndent()
 			assertThat(subject.lint(code)).hasSize(0)
 		}
+
+		it("should not report call to function with two lambda parameters with one as block body") {
+			val code = """
+				class Clazz {
+					fun test(first: (Int) -> Unit, second: (Int) -> Unit) {
+						first(1)
+						second(2)
+					}
+
+					fun call() {
+						test({ println(it) }) { println(it) }
+					}
+				}
+			""".trimIndent()
+			assertThat(subject.lint(code)).hasSize(0)
+		}
+
+		it("should not report call to function with two lambda parameters") {
+			val code = """
+				class Clazz {
+					fun test(first: (Int) -> Unit, second: (Int) -> Unit) {
+						first(1)
+						second(2)
+					}
+
+					fun call() {
+						test({ println(it) }, { println(it) })
+					}
+				}
+			""".trimIndent()
+			assertThat(subject.lint(code)).hasSize(0)
+		}
+
+		it("should not report call to function with multiple lambdas as parameters but also other parameters") {
+			val code = """
+				class Clazz {
+					fun test(text: String, first: () -> Unit, second: () -> Unit) {
+						first()
+						second()
+					}
+
+					fun call() {
+						test("hello", { println(it) }) { println(it) }
+					}
+				}
+			""".trimIndent()
+			assertThat(subject.lint(code)).hasSize(0)
+		}
 	}
 })
