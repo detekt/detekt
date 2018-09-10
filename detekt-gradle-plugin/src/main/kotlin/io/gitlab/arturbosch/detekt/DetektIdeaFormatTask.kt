@@ -40,6 +40,6 @@ open class DetektIdeaFormatTask : DefaultTask() {
 	fun format() {
 		if (debugOrDefault) println("$ideaExtension")
 
-		startProcess(ideaExtension.formatArgs(input.asPath))
+		startProcess(ideaExtension.formatArgs(input.asPath), debugOrDefault)
 	}
 }

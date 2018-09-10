@@ -37,7 +37,16 @@ class EqualsWithHashCodeExistSpec : SubjectSpek<EqualsWithHashCodeExist>({
 					override fun equals(other: Any?): Boolean { return super.equals(other) }
 					override fun hashCode(): Int { return super.hashCode() }
 				}"""
-			assertThat(subject.lint(code)).hasSize(0)
+			assertThat(subject.lint(code)).isEmpty()
+		}
+
+		it("does not report when using kotlin.Any?") {
+			val code = """
+				class A {
+					override fun equals(other: kotlin.Any?): Boolean { return super.equals(other) }
+					override fun hashCode(): Int { return super.hashCode() }
+				}"""
+			assertThat(subject.lint(code)).isEmpty()
 		}
 	}
 
