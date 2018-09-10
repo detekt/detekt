@@ -57,12 +57,9 @@ plugins {
 }
 
 detekt {
-    detekt {
-        version = "[version]"
-        input = files("src/main/kotlin")
-        filters = ".*/resources/.*,.*/build/.*"
-        config = files("path/to/config.yml")
-    }
+    version = "[version]"
+    input = files("src/main/kotlin")
+    filters = ".*/resources/.*,.*/build/.*"
 }
 ```
 
