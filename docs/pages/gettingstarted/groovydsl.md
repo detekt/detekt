@@ -140,7 +140,6 @@ task detektFailFast(type: io.gitlab.arturbosch.detekt.Detekt) {
 - Extract `code-style.xml` and `inpect.xml` from idea settings (`Settings>CodeStyle>Scheme` and `Settings>Inspections>Profile`)
 - Run `detektIdeaFormat` or `detektIdeaInspect`
 - All parameters in the following detekt-closure are mandatory for both tasks
-- Make sure that current or default profile have an input path specified!
 
 ```groovy
 String userHome = System.getProperty("user.home")
