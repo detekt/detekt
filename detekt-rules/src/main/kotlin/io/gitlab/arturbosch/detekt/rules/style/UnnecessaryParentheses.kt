@@ -7,12 +7,16 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtConstructorDelegationCall
+import org.jetbrains.kotlin.psi.KtLambdaArgument
 import org.jetbrains.kotlin.psi.KtLambdaExpression
+import org.jetbrains.kotlin.psi.KtParameterList
 import org.jetbrains.kotlin.psi.KtParenthesizedExpression
 import org.jetbrains.kotlin.psi.KtPsiUtil
 import org.jetbrains.kotlin.psi.KtSuperTypeCallEntry
 import org.jetbrains.kotlin.psi.KtValueArgument
+import org.jetbrains.kotlin.psi.KtValueArgumentList
 
 /**
  * This rule reports unnecessary parentheses around expressions.
@@ -67,10 +71,28 @@ class UnnecessaryParentheses(config: Config = Config.empty) : Rule(config) {
 			val nodeBeforeArgumentList = parent.parent
 			val isSuperTypeCallEntry = nodeBeforeArgumentList is KtSuperTypeCallEntry ||
 					nodeBeforeArgumentList is KtConstructorDelegationCall
-			if (isOnlyArgument && !isSuperTypeCallEntry && argument.equalsToken == null) {
+			if (isOnlyArgument &&
+					!isSuperTypeCallEntry &&
+					argument.equalsToken == null &&
+					!isArgumentInFunctionCallWithTwoLambdas(argument)) {
 				val message = "Parentheses around the lambda ${parent.text} are unnecessary and can be removed."
 				report(CodeSmell(issue, Entity.from(parent), message))
 			}
 		}
+	}
+
+	private fun isArgumentInFunctionCallWithTwoLambdas(argument: KtValueArgument): Boolean {
+		val parent = argument.parent
+		if (parent !is KtValueArgumentList) {
+			return false
+		}
+
+		val grandParent = parent.parent
+		if (grandParent.children.size <= 1) {
+			return false
+		}
+
+		val possibleLambda = grandParent.children.last()
+		return possibleLambda is KtLambdaArgument
 	}
 }
