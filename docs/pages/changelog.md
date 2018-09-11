@@ -7,6 +7,85 @@ toc: true
 ---
 #### RC9
 
+##### Migration
+
+With RC9, which is the last major release candidate before 1.0.0, a new gradle plugin gets introduced.
+The `detekt` extension configuration changes a bit and the concept of `profiles` was removed.
+Now the `detekt` plugin must be applied to every project and just analyzes `Kotlin` files in the source set of this project.
+
+Instead of writing
+```gradle
+detekt {
+    defaultProfile { // or profile("main") {...}
+        // properties
+    }
+}
+```
+we now write
+```gradle
+detekt {
+    // properties
+}
+```
+ 
+ If we want all our sub projects to get analyzed by detekt, something like
+ ```gradle
+ subprojects {
+    detekt {
+        // properties
+    }
+ }
+ ```
+can be applied to the root build file.
+
+A full `detekt` configuration for multi-module gradle project could look like `detekt`'s own build file.
+Attention(!) this must be translated to groovy if you do not use `kotlin-dsl`.
+```gradle
+plugins {
+	id("io.gitlab.arturbosch.detekt") version "[1.0.0.RC9]"
+}
+...
+subprojects {
+    ...
+	apply {
+		plugin("io.gitlab.arturbosch.detekt")
+		...
+	}
+
+	val userHome = System.getProperty("user.home")
+
+    detekt {
+        debug = true
+        toolVersion = usedDetektVersion
+        config = files(
+                project.rootDir.resolve("detekt-cli/src/main/resources/default-detekt-config.yml"),
+                project.rootDir.resolve("reports/failfast.yml")
+        )
+        filters = ".*/resources/.*,.*/build/.*"
+        baseline = project.rootDir.resolve("reports/baseline.xml")
+    
+        reports {
+            xml.enabled = true
+            html {
+                enabled = true
+                destination = project.rootDir.resolve("reports/detekt.html")    
+            }
+        }
+    
+        idea {
+            path = "$userHome/.idea"
+            codeStyleScheme = "$userHome/.idea/idea-code-style.xml"
+            inspectionsProfile = "$userHome/.idea/inspect.xml"
+            report = "project.projectDir/reports"
+            mask = "*.kt"
+        }
+}
+```
+
+Make sure that all properties expecting a path expect a `FileCollection` or a `File` type now.
+The `config` property now explicitly tells the user that `detekt` can consume multiple configuration yaml files (config = files(...)).
+##### Changes
+
 - fix false positive in UnnecessaryParentheses - [#1098](https://github.com/arturbosch/detekt/pull/1098)
 - remove duplicated `detekt` in readme - [#1097](https://github.com/arturbosch/detekt/pull/1097)
 - use debug flag for printing outputs in gradle plugin - [#1096](https://github.com/arturbosch/detekt/pull/1096)
