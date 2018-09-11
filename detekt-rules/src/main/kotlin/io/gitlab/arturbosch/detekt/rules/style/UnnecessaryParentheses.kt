@@ -7,11 +7,9 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtConstructorDelegationCall
 import org.jetbrains.kotlin.psi.KtLambdaArgument
 import org.jetbrains.kotlin.psi.KtLambdaExpression
-import org.jetbrains.kotlin.psi.KtParameterList
 import org.jetbrains.kotlin.psi.KtParenthesizedExpression
 import org.jetbrains.kotlin.psi.KtPsiUtil
 import org.jetbrains.kotlin.psi.KtSuperTypeCallEntry
@@ -65,34 +63,33 @@ class UnnecessaryParentheses(config: Config = Config.empty) : Rule(config) {
 
 	override fun visitArgument(argument: KtValueArgument) {
 		super.visitArgument(argument)
-		if (argument.children.any { it is KtLambdaExpression }) {
+		if (argument.children.any { it is KtLambdaExpression } &&
+				isSingleLambdaInArgumentList(argument) &&
+				!isArgumentInFunctionCallWithTwoLambdas(argument)) {
 			val parent = argument.parent
-			val isOnlyArgument = parent.children.size == 1
-			val nodeBeforeArgumentList = parent.parent
-			val isSuperTypeCallEntry = nodeBeforeArgumentList is KtSuperTypeCallEntry ||
-					nodeBeforeArgumentList is KtConstructorDelegationCall
-			if (isOnlyArgument &&
-					!isSuperTypeCallEntry &&
-					argument.equalsToken == null &&
-					!isArgumentInFunctionCallWithTwoLambdas(argument)) {
-				val message = "Parentheses around the lambda ${parent.text} are unnecessary and can be removed."
-				report(CodeSmell(issue, Entity.from(parent), message))
-			}
+			val message = "Parentheses around the lambda ${parent.text} are unnecessary and can be removed."
+			report(CodeSmell(issue, Entity.from(parent), message))
 		}
+	}
+
+	private fun isSingleLambdaInArgumentList(argument: KtValueArgument): Boolean {
+		val parent = argument.parent
+		val isOnlyArgument = parent.children.size == 1
+		val nodeBeforeArgumentList = parent.parent
+		val isSuperTypeCallEntry = nodeBeforeArgumentList is KtSuperTypeCallEntry ||
+				nodeBeforeArgumentList is KtConstructorDelegationCall
+
+		return isOnlyArgument &&
+				!isSuperTypeCallEntry &&
+				argument.equalsToken == null
 	}
 
 	private fun isArgumentInFunctionCallWithTwoLambdas(argument: KtValueArgument): Boolean {
 		val parent = argument.parent
-		if (parent !is KtValueArgumentList) {
-			return false
-		}
-
 		val grandParent = parent.parent
-		if (grandParent.children.size <= 1) {
-			return false
-		}
 
-		val possibleLambda = grandParent.children.last()
-		return possibleLambda is KtLambdaArgument
+		return parent is KtValueArgumentList &&
+				grandParent.children.size >= 2 &&
+				grandParent.children.last() is KtLambdaArgument
 	}
 }
