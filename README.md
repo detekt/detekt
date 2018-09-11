@@ -57,7 +57,7 @@ plugins {
 }
 
 detekt {
-    version = "[version]"
+    toolVersion = "[version]"
     input = files("src/main/kotlin")
     filters = ".*/resources/.*,.*/build/.*"
 }
