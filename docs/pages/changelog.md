@@ -39,7 +39,7 @@ detekt {
 can be applied to the root build file.
 
 A full `detekt` configuration for multi-module gradle project could look like `detekt`'s own build file.
-Attention(!) this must be translated to groovy if you do not use `kotlin-dsl`.
+Attention(!) this must be translated to [groovy](https://arturbosch.github.io/detekt/groovydsl.html) if you do not use the [kotlin-dsl](https://arturbosch.github.io/detekt/kotlindsl.html).
 ```gradle
 plugins {
 	id("io.gitlab.arturbosch.detekt") version "[1.0.0.RC9]"
