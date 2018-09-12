@@ -8,7 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SplitPattern
-import org.jetbrains.kotlin.psi.KtImportList
+import org.jetbrains.kotlin.psi.KtImportDirective
 
 /**
  * This rule allows to set a list of forbidden imports. This can be used to discourage the use of unstable, experimental
@@ -34,17 +34,14 @@ class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
 
 	private val forbiddenImports = SplitPattern(valueOrDefault(IMPORTS, ""))
 
-	override fun visitImportList(importList: KtImportList) {
-		super.visitImportList(importList)
+	override fun visitImportDirective(importDirective: KtImportDirective) {
+		super.visitImportDirective(importDirective)
 
-		importList
-				.imports
-				.filterNot { it.isAllUnder }
-				.filter { forbiddenImports.contains(it.importedFqName?.asString() ?: "") }
-				.forEach {
-					report(CodeSmell(issue, Entity.from(it), "The import " +
-							"${it.importedFqName!!.asString()} has been forbidden in the Detekt config."))
-				}
+		val import = importDirective.importedFqName?.asString() ?: ""
+		if (forbiddenImports.contains(import)) {
+			report(CodeSmell(issue, Entity.from(importDirective), "The import " +
+					"$import has been forbidden in the Detekt config."))
+		}
 	}
 
 	companion object {
