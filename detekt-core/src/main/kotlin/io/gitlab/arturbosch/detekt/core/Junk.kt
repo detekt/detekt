@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.core
 
 import io.gitlab.arturbosch.detekt.api.Finding
 import org.jetbrains.kotlin.psi.KtFile
+import java.io.PrintStream
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.stream.Collectors
@@ -24,4 +25,9 @@ fun MutableMap<String, List<Finding>>.mergeSmells(other: Map<String, List<Findin
 	for ((key, findings) in other.entries) {
 		merge(key, findings) { f1, f2 -> f1.plus(f2) }
 	}
+}
+
+fun Throwable.printStacktraceRecursively(logger: PrintStream) {
+	stackTrace.forEach { logger.println(it) }
+	cause?.printStacktraceRecursively(logger)
 }

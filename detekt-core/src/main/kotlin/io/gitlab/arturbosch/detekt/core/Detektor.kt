@@ -28,11 +28,11 @@ class Detektor(settings: ProcessingSettings,
 				file.analyze().apply {
 					processors.forEach { it.onProcessComplete(file, this) }
 				}
-			}.exceptionally {
+			}.exceptionally { error ->
 				logger.println("\n\nAnalyzing '${file.absolutePath()}' led to an exception.\n" +
 						"Running detekt '${whichDetekt()}' on Java '${whichJava()}' on OS '${whichOS()}'.\n" +
 						"Please create an issue and report this exception.")
-				it.stackTrace.forEach { logger.println(it) }
+				error.printStacktraceRecursively(logger)
 				emptyMap()
 			}
 		}
