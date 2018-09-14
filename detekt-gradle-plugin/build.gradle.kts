@@ -35,7 +35,7 @@ apply {
 }
 
 group = "io.gitlab.arturbosch.detekt"
-version = "1.0.0-rework-beta5"
+version = "1.0.0.RC9"
 
 val detektGradleVersion: String by project
 val jcommanderVersion: String by project

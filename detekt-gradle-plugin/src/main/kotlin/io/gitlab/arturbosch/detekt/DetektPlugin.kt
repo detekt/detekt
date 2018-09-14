@@ -97,7 +97,7 @@ class DetektPlugin : Plugin<Project> {
 
 
 	companion object {
-		private const val DEFAULT_DETEKT_VERSION = "1.0.0-gradle-rework-beta3"
+		private const val DEFAULT_DETEKT_VERSION = "1.0.0.RC9"
 		private const val DETEKT = "detekt"
 		private const val IDEA_FORMAT = "detektIdeaFormat"
 		private const val IDEA_INSPECT = "detektIdeaInspect"
