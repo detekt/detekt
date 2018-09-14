@@ -212,7 +212,7 @@ subprojects {
 		}
 	}
 
-	val kotlinVersion: String  by project
+	val kotlinVersion: String by project
 	val junitEngineVersion: String by project
 	val assertjVersion: String by project
 	val spekVersion: String by project
