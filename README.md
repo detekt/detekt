@@ -127,6 +127,17 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Mickele Moriconi](https://github.com/mickele) - Added: ConstructorParameterNaming and FunctionParameterNaming rules
 - [Lukasz Jazgar](https://github.com/ljazgar) - Fixed configuring formatting rules
 - [Pavlos-Petros Tournaris](https://github.com/pavlospt) - Lazy evaluation of Regex in Rules
+- [Erhard Pointl](https://github.com/epeee) - Kotlin DSL and Gradle enhancements
+- [Tyler Thrailkill](https://github.com/snowe2010) - FunctionNaming rule enhancements
+- [Tarek Belkahia](https://github.com/tokou) - TooManyFunctions rule options
+- [Bournane Abdelkrim](https://github.com/karimkod) - Fix typos
+- [Rafael Toledo](https://github.com/rafaeltoledo) - Fix Gradle plugin badge
+- [Alberto Ballano](https://github.com/aballano) - ExceptionRaisedInUnexpectedLocation rule improvements
+- [Guido Pio Mariotti](https://github.com/gmariotti) - Documentation improvement
+- [Mygod](https://github.com/Mygod) - UnusedImports rule improvement
+- [Andreas Volkmann](https://github.com/AndreasVolkmann) - yaml code comments
+- [glammers](https://github.com/glammers) - Documentation improvement
+- [Ahmad El-Melegy](https://github.com/mlegy) - yaml syntax fix
 
 ### Mentions
 
