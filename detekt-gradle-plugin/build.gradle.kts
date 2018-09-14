@@ -123,6 +123,32 @@ tasks.withType(DokkaTask::class.java) {
 	outputDirectory = "$buildDir/javadoc"
 }
 
+
+val generateDefaultDetektVersionFile by tasks.creating {
+	val defaultDetektVersionFile =
+			File("$buildDir/generated/src/io/gitlab/arturbosch/detekt", "PluginVersion.kt")
+
+	outputs.file(defaultDetektVersionFile)
+
+	doFirst {
+		defaultDetektVersionFile.parentFile.mkdirs()
+		defaultDetektVersionFile.writeText("""
+			package io.gitlab.arturbosch.detekt
+
+			internal const val DEFAULT_DETEKT_VERSION = "${version}"
+			"""
+				.trimIndent()
+		)
+	}
+}
+
+val mainJavaSourceSet: SourceDirectorySet = sourceSets.getByName("main").java
+mainJavaSourceSet.srcDir("$buildDir/generated/src")
+
+tasks.named("compileKotlin").configure {
+	dependsOn(generateDefaultDetektVersionFile)
+}
+
 val javaConvention = the<JavaPluginConvention>()
 val sourcesJar by tasks.creating(Jar::class) {
 	dependsOn("classes")
