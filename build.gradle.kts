@@ -31,7 +31,7 @@ plugins {
 }
 
 tasks.withType<Wrapper> {
-	gradleVersion = "4.10"
+	gradleVersion = "4.10.1"
 	distributionType = Wrapper.DistributionType.ALL
 }
 
