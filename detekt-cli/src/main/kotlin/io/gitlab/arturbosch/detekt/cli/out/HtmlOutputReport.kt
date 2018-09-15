@@ -19,6 +19,8 @@ class HtmlOutputReport : OutputReport() {
 
 	override val ending = "html"
 
+	override val name = "HTML report"
+
 	override fun render(detektion: Detektion) =
 			ClasspathResourceConverter().convert(DEFAULT_TEMPLATE).openStream().bufferedReader().use { it.readText() }
 					.replace(PLACEHOLDER_METRICS, renderMetrics(detektion.metrics))

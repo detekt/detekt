@@ -14,6 +14,8 @@ class XmlOutputReport : OutputReport() {
 
 	override val ending: String = "xml"
 
+	override val name = "Checkstyle XML report"
+
 	private sealed class MessageType(val label: String) {
 		class Warning : MessageType("warning")
 		class Info : MessageType("info")
