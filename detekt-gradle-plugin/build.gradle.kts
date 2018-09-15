@@ -135,7 +135,7 @@ val generateDefaultDetektVersionFile by tasks.creating {
 		defaultDetektVersionFile.writeText("""
 			package io.gitlab.arturbosch.detekt
 
-			internal const val DEFAULT_DETEKT_VERSION = "${version}"
+			internal const val DEFAULT_DETEKT_VERSION = "$version"
 			"""
 				.trimIndent()
 		)
