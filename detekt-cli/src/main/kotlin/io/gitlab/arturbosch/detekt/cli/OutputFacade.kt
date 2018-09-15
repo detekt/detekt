@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.cli.baseline.BaselineFacade
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
+import java.io.PrintStream
 
 /**
  * @author Artur Bosch
@@ -12,9 +13,9 @@ import io.gitlab.arturbosch.detekt.core.ProcessingSettings
  */
 class OutputFacade(arguments: CliArgs,
 				   private val detektion: Detektion,
-				   private val settings: ProcessingSettings) {
+				   private val settings: ProcessingSettings,
+				   private val printStream: PrintStream = System.out) {
 
-	private val printStream = System.out
 	private val config = settings.config
 	private val baselineFacade = arguments.baseline?.let { BaselineFacade(it) }
 	private val createBaseline = arguments.createBaseline
