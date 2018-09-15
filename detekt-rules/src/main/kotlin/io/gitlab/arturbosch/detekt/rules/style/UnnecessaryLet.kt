@@ -51,7 +51,7 @@ class UnnecessaryLet(config: Config) : Rule(config) {
 
 		if (lambdaBody.hasOnlyOneStatement()) {
 			// only dot qualified expressions can be unnecessary
-			val firstExpr = lambdaBody.firstChild as? KtDotQualifiedExpression
+			val firstExpr = lambdaBody?.firstChild as? KtDotQualifiedExpression
 			val exprReceiver = firstExpr?.receiverExpression
 
 			if (exprReceiver != null) {
