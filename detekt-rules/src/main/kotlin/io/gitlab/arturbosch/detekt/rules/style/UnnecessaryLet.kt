@@ -8,6 +8,8 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
+import org.jetbrains.kotlin.psi.KtLambdaExpression
 
 /**
  * Unnecessary `let` TODO
@@ -23,20 +25,40 @@ class UnnecessaryLet(config: Config) : Rule(config) {
 	override val issue = Issue(javaClass.simpleName, Severity.Style,
 			"The `let` usage is unnecessary", Debt.FIVE_MINS)
 
-	// catches the `let { it.foo() }` and `let { it.baz }` cases
-	private val letItRegex = """let\s*\{\s*it\??\.\w+(?:\(.*\))?\s*}""".toRegex()
-	// catches the `let { a -> a.foo() }` and `let { a -> a.baz }` cases
-	private val letParamRegex = """let\s*\{\s*(\w*)\s*->\s*\1\??\.\w*(?:\(.*\))?\s*}""".toRegex()
-
 	override fun visitCallExpression(expression: KtCallExpression) {
 		super.visitCallExpression(expression)
-		val isLetIt = expression.text matches letItRegex
-		val isLetParam = expression.text matches letParamRegex
-		if	(isLetIt || isLetParam) {
-			report(CodeSmell(
-					issue, Entity.from(expression),
-					"let expression can be omitted"
-			))
+		if (expression.isLetExpr()) {
+			val lambdaExpr = expression.firstLambdaArg
+			val lambdaParameter = lambdaExpr?.firstParameter
+			val lambdaBody = lambdaExpr?.bodyExpression
+			// we need to check lambdas with only one statement
+			if (lambdaBody?.children?.size == 1) {
+				// only dot qualified expressions can be unnecessary
+				val firstExpr = lambdaBody.firstChild as? KtDotQualifiedExpression
+				val exprReceiver = firstExpr?.receiverExpression
+
+				if (exprReceiver != null) {
+					val isLetWithImplicitParam = lambdaParameter == null && exprReceiver.textMatches(IT_LITERAL)
+					val isLetWithExplicitParam = lambdaParameter != null && lambdaParameter.textMatches(exprReceiver)
+					if (isLetWithExplicitParam || isLetWithImplicitParam) {
+						report(CodeSmell(
+								issue, Entity.from(expression),
+								"let expression can be omitted"
+						))
+					}
+				}
+			}
 		}
 	}
+
 }
+
+
+private const val LET_LITERAL = "let"
+private const val IT_LITERAL = "it"
+
+private fun KtCallExpression.isLetExpr() = calleeExpression?.textMatches(LET_LITERAL) == true
+
+private val KtCallExpression.firstLambdaArg get() = lambdaArguments.firstOrNull()?.getLambdaExpression()
+
+private val KtLambdaExpression.firstParameter get() = valueParameters.firstOrNull()
