@@ -41,28 +41,28 @@ class UnnecessaryLet(config: Config) : Rule(config) {
 
 	override fun visitCallExpression(expression: KtCallExpression) {
 		super.visitCallExpression(expression)
-		if (expression.isLetExpr()) {
-			val lambdaExpr = expression.firstLambdaArg
-			val lambdaParameter = lambdaExpr?.firstParameter
-			val lambdaBody = lambdaExpr?.bodyExpression
-			// we need to check lambdas with only one statement
-			if (lambdaBody?.children?.size == 1) {
-				// only dot qualified expressions can be unnecessary
-				val firstExpr = lambdaBody.firstChild as? KtDotQualifiedExpression
-				val exprReceiver = firstExpr?.receiverExpression
+		if (!expression.isLetExpr()) return
+		
+		val lambdaExpr = expression.firstLambdaArg
+		val lambdaParameter = lambdaExpr?.firstParameter
+		val lambdaBody = lambdaExpr?.bodyExpression
+		// we need to check lambdas with only one statement
+		if (lambdaBody?.children?.size == 1) {
+            // only dot qualified expressions can be unnecessary
+            val firstExpr = lambdaBody.firstChild as? KtDotQualifiedExpression
+            val exprReceiver = firstExpr?.receiverExpression
 
-				if (exprReceiver != null) {
-					val isLetWithImplicitParam = lambdaParameter == null && exprReceiver.textMatches(IT_LITERAL)
-					val isLetWithExplicitParam = lambdaParameter != null && lambdaParameter.textMatches(exprReceiver)
-					if (isLetWithExplicitParam || isLetWithImplicitParam) {
-						report(CodeSmell(
-								issue, Entity.from(expression),
-								"let expression can be omitted"
-						))
-					}
-				}
-			}
-		}
+            if (exprReceiver != null) {
+                val isLetWithImplicitParam = lambdaParameter == null && exprReceiver.textMatches(IT_LITERAL)
+                val isLetWithExplicitParam = lambdaParameter != null && lambdaParameter.textMatches(exprReceiver)
+                if (isLetWithExplicitParam || isLetWithImplicitParam) {
+                    report(CodeSmell(
+                            issue, Entity.from(expression),
+                            "let expression can be omitted"
+                    ))
+                }
+            }
+        }
 	}
 
 }
