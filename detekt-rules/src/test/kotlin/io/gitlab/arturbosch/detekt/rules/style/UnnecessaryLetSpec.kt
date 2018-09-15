@@ -23,7 +23,7 @@ class UnnecessaryLetSpec : SubjectSpek<UnnecessaryLet>({
 				}""")
 			assertThat(findings).hasSize(6)
 		}
-		it("does not report lets used for function calls"){
+		it("does not report lets used for function calls") {
 			val findings = subject.lint("""
 				fun f() {
 					val a : Int? = null
@@ -35,7 +35,7 @@ class UnnecessaryLetSpec : SubjectSpek<UnnecessaryLet>({
 				}""")
 			assertThat(findings).hasSize(0)
 		}
-		it("does not report lets with lambda body containing more than one statement"){
+		it("does not report lets with lambda body containing more than one statement") {
 			val findings = subject.lint("""
 				fun f() {
 					val a : Int? = null
