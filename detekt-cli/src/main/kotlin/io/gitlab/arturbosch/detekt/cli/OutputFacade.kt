@@ -48,7 +48,7 @@ class OutputFacade(arguments: CliArgs,
 		val filePath = reportPaths[report.id]
 		if (filePath != null) {
 			report.write(filePath, result)
-			printStream.println("Successfully generated ${report::class.simpleName} at $filePath")
+			printStream.println("Successfully generated ${report.name} at $filePath")
 		}
 	}
 

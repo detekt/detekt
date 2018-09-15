@@ -11,6 +11,9 @@ abstract class OutputReport : Extension {
 
 	abstract val ending: String
 
+	open val name
+		get() = this::class.simpleName
+
 	fun write(filePath: Path, detektion: Detektion) {
 		val reportData = render(detektion)
 		if (reportData != null) {
