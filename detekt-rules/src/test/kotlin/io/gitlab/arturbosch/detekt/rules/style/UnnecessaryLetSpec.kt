@@ -15,12 +15,10 @@ class UnnecessaryLetSpec : SubjectSpek<UnnecessaryLet>({
 			val findings = subject.lint("""
 				fun f() {
 					val a : Int? = null
-					val b = a.let { it.plus(3) }.let { a -> a.minus(1) }
-					val c = b
-					b.let { it?.plus(c) }
-					a?.let { it.plus(b) }
+					a?.let { it.plus(1) }
+					a.let { that -> that.plus(1) }
 				}""")
-			assertThat(findings).hasSize(4)
+			assertThat(findings).hasSize(2)
 		}
 	}
 })
