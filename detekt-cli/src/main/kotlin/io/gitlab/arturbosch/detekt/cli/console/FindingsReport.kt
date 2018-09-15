@@ -16,9 +16,9 @@ class FindingsReport : ConsoleReport() {
 		val findings = detektion.findings
 		val totalDebt = DebtSumming()
 		return with(StringBuilder()) {
-			findings.forEach {
+			findings.forEach { rulesetFindings ->
 				val debtSumming = DebtSumming()
-				val issuesString = it.value.joinToString("") {
+				val issuesString = rulesetFindings.value.joinToString("") {
 					debtSumming.add(it.issue.debt)
 					it.compact().format("\t")
 				}
@@ -30,7 +30,7 @@ class FindingsReport : ConsoleReport() {
 						} else {
 							"\n"
 						}
-				append(it.key.format(prefix = "Ruleset: ", suffix = debtString))
+				append(rulesetFindings.key.format(prefix = "Ruleset: ", suffix = debtString))
 				append(issuesString)
 			}
 			val debt = totalDebt.calculateDebt()
