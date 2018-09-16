@@ -86,7 +86,7 @@ subprojects {
 		}
 	}
 
-	if (this.name in listOf("detekt-cli", "detekt-watch-service", "detekt-generator")) {
+	if (this.name in listOf("detekt-cli", "detekt-watcher", "detekt-generator")) {
 		apply {
 			plugin("application")
 			plugin("com.github.johnrengelman.shadow")
