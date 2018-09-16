@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  *
  * @configuration functionPattern - naming pattern (default: '^([a-z$][a-zA-Z$0-9]*)|(`.*`)$')
  * @configuration excludeClassPattern - ignores functions in classes which match this regex (default: '$^')
- * @configuration ignoreOverridden - ignores functions that have the override modifier
+ * @configuration ignoreOverridden - ignores functions that have the override modifier (default: true)
  *
  * @active since v1.0.0
  * @author Marvin Ramin
