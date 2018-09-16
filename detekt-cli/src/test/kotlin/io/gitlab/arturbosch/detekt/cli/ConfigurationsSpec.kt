@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.cli
 
+import io.gitlab.arturbosch.detekt.core.PathFilter
 import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.Spek
@@ -75,6 +76,73 @@ internal class ConfigurationsSpec : Spek({
 			assertFails { CliArgs().apply { configResource = "," }.loadConfiguration() }
 			assertFails { CliArgs().apply { configResource = "sfsjfsdkfsd" }.loadConfiguration() }
 			assertFails { CliArgs().apply { configResource = "./i.do.not.exist.yml" }.loadConfiguration() }
+		}
+	}
+
+	describe("parse different filter settings") {
+
+		it("should load single filter") {
+			val filters = CliArgs().apply { filters = ".*/one/.*" }.createPathFilters()
+			assertThat(filters).containsExactly(PathFilter(".*/one/.*"))
+		}
+
+		it("should load multiple comma-separated filters with no spaces around commas") {
+			val filters = CliArgs().apply { filters = ".*/one/.*,.*/two/.*,.*/three" }.createPathFilters()
+			assertThat(filters).containsExactly(
+					PathFilter(".*/one/.*"),
+					PathFilter(".*/two/.*"),
+					PathFilter(".*/three")
+			)
+		}
+
+		it("should load multiple semicolon-separated filters with no spaces around semicolons") {
+			val filters = CliArgs().apply { filters = ".*/one/.*;.*/two/.*;.*/three" }.createPathFilters()
+			assertThat(filters).containsExactly(
+					PathFilter(".*/one/.*"),
+					PathFilter(".*/two/.*"),
+					PathFilter(".*/three")
+			)
+		}
+
+		it("should load multiple comma-separated filters with spaces around commas") {
+			val filters = CliArgs().apply { filters = ".*/one/.* ,.*/two/.*, .*/three" }.createPathFilters()
+			assertThat(filters).containsExactly(
+					PathFilter(".*/one/.*"),
+					PathFilter(".*/two/.*"),
+					PathFilter(".*/three")
+			)
+		}
+
+		it("should load multiple semicolon-separated filters with spaces around semicolons") {
+			val filters = CliArgs().apply { filters = ".*/one/.* ;.*/two/.*; .*/three" }.createPathFilters()
+			assertThat(filters).containsExactly(
+					PathFilter(".*/one/.*"),
+					PathFilter(".*/two/.*"),
+					PathFilter(".*/three")
+			)
+		}
+
+		it("should load multiple mixed-separated filters with no spaces around separators") {
+			val filters = CliArgs().apply { filters = ".*/one/.*,.*/two/.*;.*/three" }.createPathFilters()
+			assertThat(filters).containsExactly(
+					PathFilter(".*/one/.*"),
+					PathFilter(".*/two/.*"),
+					PathFilter(".*/three")
+			)
+		}
+
+		it("should load multiple mixed-separated filters with spaces around separators") {
+			val filters = CliArgs().apply { filters = ".*/one/.* ,.*/two/.*; .*/three" }.createPathFilters()
+			assertThat(filters).containsExactly(
+					PathFilter(".*/one/.*"),
+					PathFilter(".*/two/.*"),
+					PathFilter(".*/three")
+			)
+		}
+
+		it("should fail on invalid filters values") {
+			assertFails { CliArgs().apply { filters = "*." }.createPathFilters() }
+			assertFails { CliArgs().apply { filters = "(ahel" }.createPathFilters() }
 		}
 	}
 
