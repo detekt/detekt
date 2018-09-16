@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.identifierName
+import io.gitlab.arturbosch.detekt.rules.isOverridden
 import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClass
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
@@ -35,9 +36,14 @@ class VariableNaming(config: Config = Config.empty) : Rule(config) {
 	private val variablePattern by LazyRegex(VARIABLE_PATTERN, "[a-z][A-Za-z0-9]*")
 	private val privateVariablePattern by LazyRegex(PRIVATE_VARIABLE_PATTERN, "(_)?[a-z][A-Za-z0-9]*")
 	private val excludeClassPattern by LazyRegex(EXCLUDE_CLASS_PATTERN, "$^")
+	private val ignoreOverridden = valueOrDefault(IGNORE_OVERRIDDEN, true)
 
 	override fun visitProperty(property: KtProperty) {
 		if (property.isSingleUnderscore || property.isContainingExcludedClass(excludeClassPattern)) {
+			return
+		}
+
+		if (property.isOverridden() && ignoreOverridden) {
 			return
 		}
 
@@ -63,5 +69,6 @@ class VariableNaming(config: Config = Config.empty) : Rule(config) {
 		const val VARIABLE_PATTERN = "variablePattern"
 		const val PRIVATE_VARIABLE_PATTERN = "privateVariablePattern"
 		const val EXCLUDE_CLASS_PATTERN = "excludeClassPattern"
+		const val IGNORE_OVERRIDDEN = "ignoreOverridden"
 	}
 }

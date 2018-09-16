@@ -63,7 +63,7 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
 		}
 		declaration.nameIdentifier?.parent?.javaClass?.let {
 			when (declaration) {
-				is KtProperty -> handleVariable(declaration)
+				is KtProperty -> handleProperty(declaration)
 				is KtNamedFunction -> handleFunction(declaration)
 				is KtEnumEntry -> enumEntryNamingRule.runIfActive { visitEnumEntry(declaration) }
 				is KtClassOrObject -> handleClassOrObject(declaration)
@@ -84,7 +84,7 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
 		functionMinNameLengthRule.runIfActive { visitNamedFunction(declaration) }
 	}
 
-	private fun handleVariable(declaration: KtProperty) {
+	private fun handleProperty(declaration: KtProperty) {
 		variableMaxNameLengthRule.runIfActive { visitProperty(declaration) }
 		variableMinNameLengthRule.runIfActive { visitProperty(declaration) }
 
