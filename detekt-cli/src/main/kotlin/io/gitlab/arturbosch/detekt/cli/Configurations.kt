@@ -11,7 +11,11 @@ import java.nio.file.Path
  */
 
 fun CliArgs.createPathFilters(): List<PathFilter> = filters.letIfNonEmpty {
-	split(SEPARATOR_COMMA, SEPARATOR_SEMICOLON).map(::PathFilter)
+	split(SEPARATOR_COMMA, SEPARATOR_SEMICOLON)
+			.asSequence()
+			.map { it.trim() }
+			.map(::PathFilter)
+			.toList()
 }
 
 fun CliArgs.createPlugins(): List<Path> = plugins.letIfNonEmpty {
