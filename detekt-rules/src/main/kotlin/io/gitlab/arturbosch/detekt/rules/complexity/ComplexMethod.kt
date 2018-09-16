@@ -9,9 +9,12 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.api.internal.McCabeVisitor
+import io.gitlab.arturbosch.detekt.rules.asBlockExpression
+import org.jetbrains.kotlin.kotlinx.coroutines.experimental.NonCancellable.children
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtObjectLiteralExpression
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.KtWhenExpression
 
@@ -43,6 +46,9 @@ class ComplexMethod(config: Config = Config.empty,
 		if (hasSingleWhenExpression(function.bodyExpression)) {
 			return
 		}
+		if (returnsObjectDeclaration(function)) {
+			return
+		}
 		val visitor = McCabeVisitor()
 		visitor.visitNamedFunction(function)
 		val mcc = visitor.mcc
@@ -68,6 +74,25 @@ class ComplexMethod(config: Config = Config.empty,
 			}
 		}
 		return false
+	}
+
+	private fun returnsObjectDeclaration(function: KtNamedFunction): Boolean {
+		if (!function.hasDeclaredReturnType()) {
+			return false
+		}
+		val body = function.bodyExpression.asBlockExpression() ?: return false
+		val children = body.children
+		if (children.size > 1) {
+			return false
+		}
+
+		val child = body.children.first()
+		if (child !is KtReturnExpression) {
+			return false
+		}
+
+		val expression = child.returnedExpression
+		return expression is KtObjectLiteralExpression
 	}
 
 	companion object {
