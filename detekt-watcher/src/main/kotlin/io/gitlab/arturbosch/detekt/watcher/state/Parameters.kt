@@ -1,8 +1,9 @@
 package io.gitlab.arturbosch.detekt.watcher.state
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.YamlConfig
+import io.gitlab.arturbosch.detekt.cli.CliArgs
 import io.gitlab.arturbosch.detekt.cli.ExistingPathConverter
+import io.gitlab.arturbosch.detekt.cli.loadConfiguration
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -20,6 +21,8 @@ class Parameters(
 		} ?: Paths.get(".")
 	}
 
-	fun extractConfig(): Config =
-			config?.let { YamlConfig.load(ExistingPathConverter().convert(it)) } ?: Config.empty
+	fun extractConfig(): Config? =
+			config?.let {
+				CliArgs().apply { this.config = this@Parameters.config }.loadConfiguration()
+			}
 }

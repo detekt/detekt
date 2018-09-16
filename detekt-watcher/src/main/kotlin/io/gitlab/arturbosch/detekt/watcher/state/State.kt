@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.watcher.state
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.YamlConfig
-import io.gitlab.arturbosch.detekt.cli.ExistingPathConverter
+import io.gitlab.arturbosch.detekt.cli.CliArgs
+import io.gitlab.arturbosch.detekt.cli.loadConfiguration
 import io.gitlab.arturbosch.detekt.core.PathFilter
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.exists
@@ -29,7 +29,7 @@ class State(
 
 	private var config: Config =
 			home.property("detekt.config.default")?.let {
-				YamlConfig.load(ExistingPathConverter().convert(it))
+				CliArgs().apply { config = it }.loadConfiguration()
 			} ?: Config.empty
 
 	fun project(): Path = project
@@ -43,7 +43,7 @@ class State(
 			println("Stopping ongoing watcher for ${project()}")
 		}
 		project = parameters.extractWatchDirectory()
-		config = parameters.extractConfig()
+		config = parameters.extractConfig() ?: config
 	}
 
 	fun resolveSubPath(sub: String): Path = project().resolve(sub)
