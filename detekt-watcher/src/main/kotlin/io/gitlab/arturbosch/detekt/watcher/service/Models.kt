@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.watchservice
+package io.gitlab.arturbosch.detekt.watcher.service
 
 import java.nio.file.Path
 import java.nio.file.WatchEvent
