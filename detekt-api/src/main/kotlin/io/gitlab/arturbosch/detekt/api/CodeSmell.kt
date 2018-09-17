@@ -42,8 +42,11 @@ open class ThresholdedCodeSmell(
 		entity: Entity,
 		val metric: Metric,
 		message: String,
-		references: List<Entity> = emptyList()) : CodeSmell(
-		issue, entity, message, metrics = listOf(metric), references = references) {
+		references: List<Entity> = emptyList()
+) : CodeSmell(
+		issue, entity, message, metrics = listOf(metric), references = references
+) {
+
 	val value: Int
 		get() = metric.value
 	val threshold: Int
