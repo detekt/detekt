@@ -35,9 +35,9 @@ internal class OutputFacadeSpec : SubjectSpek<OutputFacade>({
 		)
 
 		val (cliArgs, _) = parseArguments<CliArgs>(args)
-		val settings = ProcessingSettings(inputPath)
+		val settings = ProcessingSettings(inputPath, outPrinter = PrintStream(outputStream))
 		val detektion = DetektResult(mapOf(Pair("Key", listOf(createFinding()))))
-		OutputFacade(cliArgs, detektion, settings, PrintStream(outputStream))
+		OutputFacade(cliArgs, detektion, settings)
 	}
 
 	describe("prints the reports paths when writing them") {

@@ -34,14 +34,15 @@ class Runner(private val arguments: CliArgs) : Executable {
 			val config = loadConfiguration()
 
 			return ProcessingSettings(
-					inputPath,
-					config,
-					pathFilters,
-					parallel,
-					disableDefaultRuleSets,
-					plugins,
-					ForkJoinPool.commonPool(),
-					System.err)
+					project = inputPath,
+					config = config,
+					pathFilters = pathFilters,
+					parallelCompilation = parallel,
+					excludeDefaultRuleSets = disableDefaultRuleSets,
+					pluginPaths = plugins,
+					executorService = ForkJoinPool.commonPool(),
+					outPrinter = System.out,
+					errorPrinter = System.err)
 		}
 	}
 }
