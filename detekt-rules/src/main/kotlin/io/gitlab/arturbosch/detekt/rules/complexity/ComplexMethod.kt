@@ -23,7 +23,7 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  * @configuration threshold - MCC threshold for a method (default: 10)
  * @configuration ignoreSingleWhenExpression - Ignores a complex method if it only contains a single when expression.
  * (default: false)
- * @configuration simpleWhenEntriesWeight - The weight used for simple (braceless) when entries. (default: 0.5)
+ * @configuration simpleWhenEntryWeight - The weight used for simple (braceless) when entries. (default: 0.5)
  *
  * @active since v1.0.0
  * @author Artur Bosch

@@ -87,6 +87,10 @@ Smaller methods can also be named much clearer which leads to improved readabili
 
    Ignores a complex method if it only contains a single when expression.
 
+* `simpleWhenEntryWeight` (default: `0.5`)
+
+   The weight used for simple (braceless) when entries.
+
 ### LabeledExpression
 
 This rule reports labeled expressions. Expressions with labels generally increase complexity and worsen the
