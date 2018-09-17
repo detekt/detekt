@@ -1,23 +1,28 @@
 package io.gitlab.arturbosch.detekt.api.internal
 
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
+import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtLoopExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtTryExpression
+import org.jetbrains.kotlin.psi.KtWhenEntry
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 
 /**
  * @author Artur Bosch
  */
-class McCabeVisitor : DetektVisitor() {
+class McCabeVisitor(private val simpleWhenEntriesWeight: Double = WHEN_DEFAULT_SIMPLE_ENTRY_WEIGHT) : DetektVisitor() {
 
-	var mcc = 0
+	private var doubleMcc = 0.0
+
+	val mcc: Int
+		get() = Math.floor(doubleMcc).toInt()
 
 	private fun inc() {
-		mcc++
+		doubleMcc += 1.0
 	}
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
@@ -39,13 +44,16 @@ class McCabeVisitor : DetektVisitor() {
 	}
 
 	override fun visitWhenExpression(expression: KtWhenExpression) {
-		mcc += expression.entries.size
+		doubleMcc += expression.entries
+				.asSequence()
+				.map { it.weight }
+				.sum()
 		super.visitWhenExpression(expression)
 	}
 
 	override fun visitTryExpression(expression: KtTryExpression) {
 		inc()
-		mcc += expression.catchClauses.size
+		doubleMcc += expression.catchClauses.size
 		expression.finallyBlock?.let { inc() }
 		super.visitTryExpression(expression)
 	}
@@ -62,7 +70,13 @@ class McCabeVisitor : DetektVisitor() {
 		}
 		super.visitCallExpression(expression)
 	}
+
+	private val KtWhenEntry.weight: Double
+		get() = if (expression is KtBlockExpression) WHEN_BLOCK_ENTRY_WEIGHT else simpleWhenEntriesWeight
 }
+
+private const val WHEN_BLOCK_ENTRY_WEIGHT = 1.0
+private const val WHEN_DEFAULT_SIMPLE_ENTRY_WEIGHT = 0.5
 
 fun KtCallExpression.isUsedForNesting(): Boolean = when (getCallNameExpression()?.text) {
 	"run", "let", "apply", "with", "use", "forEach" -> true
