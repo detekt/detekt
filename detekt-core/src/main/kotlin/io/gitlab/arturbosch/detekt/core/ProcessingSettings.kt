@@ -21,6 +21,7 @@ data class ProcessingSettings(val project: List<Path>,
 							  val excludeDefaultRuleSets: Boolean = false,
 							  val pluginPaths: List<Path> = emptyList(),
 							  val executorService: ExecutorService? = null,
+							  val outPrinter: PrintStream = System.out,
 							  val errorPrinter: PrintStream? = null) {
 
 	/**
@@ -33,9 +34,10 @@ data class ProcessingSettings(val project: List<Path>,
 				excludeDefaultRuleSets: Boolean = false,
 				pluginPaths: List<Path> = emptyList(),
 				executorService: ExecutorService? = null,
+				outPrinter: PrintStream = System.out,
 				errorPrinter: PrintStream? = null) :
 			this(listOf(project), config, pathFilters, parallelCompilation,
-					excludeDefaultRuleSets, pluginPaths, executorService, errorPrinter)
+					excludeDefaultRuleSets, pluginPaths, executorService, outPrinter, errorPrinter)
 
 	init {
 		pluginPaths.forEach {
