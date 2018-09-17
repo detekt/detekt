@@ -44,7 +44,7 @@ class VariableNaming(config: Config = Config.empty) : Rule(config) {
 			return
 		}
 
-		if (property.isOverridden() && ignoreOverridden) {
+		if (ignoreOverridden && property.isOverridden()) {
 			return
 		}
 

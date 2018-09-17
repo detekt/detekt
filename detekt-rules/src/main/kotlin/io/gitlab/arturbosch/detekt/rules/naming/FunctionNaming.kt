@@ -39,7 +39,7 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		super.visitNamedFunction(function)
 
-		if (function.isOverridden() && ignoreOverridden) {
+		if (ignoreOverridden && function.isOverridden()) {
 			return
 		}
 
