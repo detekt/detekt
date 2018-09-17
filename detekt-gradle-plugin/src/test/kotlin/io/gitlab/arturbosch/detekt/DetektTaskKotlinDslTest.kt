@@ -231,6 +231,7 @@ internal class DetektTaskKotlinDslTest : Spek({
 			val customSourceLocation = "gensrc/kotlin"
 			val detektConfig = """
 					|detekt {
+					| debug = true
 					|	input = files("$customSourceLocation")
 					|}
 				"""
@@ -247,7 +248,7 @@ internal class DetektTaskKotlinDslTest : Spek({
 					.build()
 
 			assertThat(result.output).contains("number of classes: 1")
-			assertThat(result.output).contains("--input $rootDir/$customSourceLocation")
+			assertThat(result.output).contains("--input, /private$rootDir/$customSourceLocation")
 			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 		}
 	}
