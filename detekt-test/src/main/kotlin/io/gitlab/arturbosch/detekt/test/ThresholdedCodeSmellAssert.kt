@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import org.assertj.core.api.AbstractAssert
 import org.assertj.core.internal.Objects
 
-
 fun assertThat(thresholdedCodeSmell: ThresholdedCodeSmell) = ThresholdedCodeSmellAssert(thresholdedCodeSmell)
 
 fun FindingAssert.isThresholded(): ThresholdedCodeSmellAssert {

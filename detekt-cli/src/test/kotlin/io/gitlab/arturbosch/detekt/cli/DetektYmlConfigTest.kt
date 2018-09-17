@@ -75,7 +75,7 @@ class DetektYmlConfigTest {
 
 	private fun loadConfig(): Config {
 		val workingDirectory = Paths.get(".").toAbsolutePath().normalize().toString()
-		val file = File(workingDirectory + "/src/main/resources/$CONFIG_FILE")
+		val file = File("$workingDirectory/src/main/resources/$CONFIG_FILE")
 		val url = file.toURI().toURL()
 		return YamlConfig.loadResource(url)
 	}
