@@ -37,6 +37,8 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
 	private val ignoreOverridden = valueOrDefault(IGNORE_OVERRIDDEN, true)
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
+		super.visitNamedFunction(function)
+
 		if (function.isOverridden() && ignoreOverridden) {
 			return
 		}

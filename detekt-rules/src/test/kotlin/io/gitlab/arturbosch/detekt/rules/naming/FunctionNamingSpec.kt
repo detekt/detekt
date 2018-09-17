@@ -29,11 +29,33 @@ class FunctionNamingSpec : Spek({
 		assertThat(FunctionNaming(config).lint(code)).isEmpty()
 	}
 
+	it("flags functions inside functions") {
+		val code = """
+			override fun shouldNotBeFlagged() {
+				fun SHOULD_BE_FLAGGED() { }
+			}
+		"""
+		assertThat(FunctionNaming().lint(code)).hasLocationStrings(
+				"'fun SHOULD_BE_FLAGGED() { }' at (2,2) in /foo.bar"
+		)
+	}
+
 	it("ignores overridden functions by default") {
 		val code = """
 			override fun SHOULD_NOT_BE_FLAGGED() = TODO()
 		"""
 		assertThat(FunctionNaming().lint(code)).isEmpty()
+	}
+
+	it("flags functions with bad names inside overridden functions by default") {
+		val code = """
+			override fun SHOULD_NOT_BE_FLAGGED() {
+				fun SHOULD_BE_FLAGGED() {}
+			}
+		"""
+		assertThat(FunctionNaming().lint(code)).hasLocationStrings(
+				"'fun SHOULD_BE_FLAGGED() {}' at (2,2) in /foo.bar"
+		)
 	}
 
 	it("doesn't ignore overridden functions if ignoreOverridden is false") {
