@@ -46,6 +46,7 @@ allprojects {
 		mavenLocal()
 		jcenter()
 		maven(url = "http://dl.bintray.com/jetbrains/spek")
+		maven(url = "https://dl.bintray.com/arturbosch/generic")
 	}
 }
 
