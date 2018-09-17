@@ -10,10 +10,11 @@ configurations.testImplementation.extendsFrom(configurations.kotlinTest)
 val jcommanderVersion: String by project
 val junitPlatformVersion: String by project
 val spekVersion: String by project
+val kshVersion: String by project
 
 dependencies {
 	implementation("com.beust:jcommander:$jcommanderVersion")
-	implementation("io.gitlab.arturbosch:ksh:0.1.1")
+	implementation("io.gitlab.arturbosch:ksh:$kshVersion")
 	implementation(project(":detekt-cli"))
 	implementation(project(":detekt-core"))
 	testImplementation(project(":detekt-test"))
