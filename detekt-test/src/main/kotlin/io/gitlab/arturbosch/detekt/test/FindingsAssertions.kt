@@ -24,11 +24,11 @@ class FindingsAssert(actual: List<Finding>) :
 	fun hasLocationStrings(vararg expected: String, trimIndent: Boolean = false) {
 		isNotNull
 
-		val locationStrings = actual.asSequence().map { it.locationAsString }
+		val actualStrings = actual.asSequence().map { it.locationAsString }.sorted()
 		if (trimIndent) {
-			areEqual(locationStrings.map { it.trimIndent() }.toList(), expected.map { it.trimIndent() })
+			areEqual(actualStrings.map { it.trimIndent() }.toList(), expected.map { it.trimIndent() }.sorted())
 		} else {
-			areEqual(locationStrings.toList(), expected.toList())
+			areEqual(actualStrings.toList(), expected.toList().sorted())
 		}
 	}
 

@@ -9,6 +9,8 @@ toc: true
 
 ##### Migration
 
+You need Gradle 4.9 or higher to migrate to RC9.
+
 With RC9, which is the last major release candidate before 1.0.0, a new gradle plugin gets introduced.
 The `detekt` extension configuration changes a bit and the concept of `profiles` was removed.
 Now the `detekt` plugin must be applied to every project and just analyzes `Kotlin` files in the source set of this project.

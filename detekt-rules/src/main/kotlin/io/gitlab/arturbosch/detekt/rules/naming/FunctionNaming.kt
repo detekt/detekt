@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.identifierName
+import io.gitlab.arturbosch.detekt.rules.isOverridden
 import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
@@ -17,6 +18,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  *
  * @configuration functionPattern - naming pattern (default: '^([a-z$][a-zA-Z$0-9]*)|(`.*`)$')
  * @configuration excludeClassPattern - ignores functions in classes which match this regex (default: '$^')
+ * @configuration ignoreOverridden - ignores functions that have the override modifier (default: true)
  *
  * @active since v1.0.0
  * @author Marvin Ramin
@@ -32,8 +34,15 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
 
 	private val functionPattern by LazyRegex(FUNCTION_PATTERN, "^([a-z$][a-zA-Z$0-9]*)|(`.*`)$")
 	private val excludeClassPattern by LazyRegex(EXCLUDE_CLASS_PATTERN, "$^")
+	private val ignoreOverridden = valueOrDefault(IGNORE_OVERRIDDEN, true)
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
+		super.visitNamedFunction(function)
+
+		if (ignoreOverridden && function.isOverridden()) {
+			return
+		}
+
 		if (!function.isContainingExcludedClass(excludeClassPattern) &&
 				!function.identifierName().matches(functionPattern)) {
 			report(CodeSmell(
@@ -46,5 +55,6 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
 	companion object {
 		const val FUNCTION_PATTERN = "functionPattern"
 		const val EXCLUDE_CLASS_PATTERN = "excludeClassPattern"
+		const val IGNORE_OVERRIDDEN = "ignoreOverridden"
 	}
 }
