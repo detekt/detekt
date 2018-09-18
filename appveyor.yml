@@ -1,15 +1,20 @@
 version: '{build}'
+
 skip_tags: true
+
 skip_commits:
   message: /\[ci skip\]/
 clone_depth: 10
+
 environment:
   TERM: dumb
   matrix:
     - JAVA_HOME: C:\Program Files\Java\jdk1.8.0
     - JAVA_HOME: C:\Program Files\Java\jdk9
+
 init:
   - git config --global --unset core.autocrlf
+
 install:
   - SET PATH=%JAVA_HOME%\bin;%PATH%
   # remove Ruby entry (C:\Ruby193\bin;) from PATH
@@ -17,10 +22,25 @@ install:
   - echo %PATH%
   - java -version
   - gradlew.bat --version
+
 build_script:
   - gradlew build -PwarningsAsErrors=true
   - gradlew installShadowDist
   - detekt-cli\build\install\detekt-cli-shadow\bin\detekt-cli --help
+
 test_script:
   - detekt-cli\build\install\detekt-cli-shadow\bin\detekt-cli -i . --baseline reports\baseline.xml -f ".*/resources/.*,.*/build/.*" -c detekt-cli\src\main\resources\default-detekt-config.yml,reports\failfast.yml
   - gradlew verifyGeneratorOutput
+
+on_finish:
+  - ps: |
+      $wc = New-Object 'System.Net.WebClient'
+      $url = "https://ci.appveyor.com/api/testresults/junit/$($env:APPVEYOR_JOB_ID)"
+      $files = Get-ChildItem -Include 'TEST-*.xml' -Recurse
+      $filesCount = $files.Count
+      echo "Uploading JUnit test results to AppVeyor ($filesCount files)..."
+      for ($I = 1; $I -le ($filesCount - 1); $I++) {
+        $file = $files.Get($I)
+        $wc.UploadFile($url, (Resolve-Path $file))
+      }
+      echo "JUnit test results uploaded correctly"
