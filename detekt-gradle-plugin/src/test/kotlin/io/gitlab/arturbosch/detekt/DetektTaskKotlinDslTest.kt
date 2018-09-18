@@ -247,7 +247,7 @@ internal class DetektTaskKotlinDslTest : Spek({
 					.build()
 
 			assertThat(result.output).contains("number of classes: 1")
-			assertThat(result.output).contains("--input $rootDir/$customSourceLocation")
+			assertThat(result.output).contains("--input ${File(rootDir, customSourceLocation).canonicalPath}")
 			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 		}
 	}
@@ -263,8 +263,8 @@ private fun getBuildFileContent(detektConfig: String) = """
 	|}
 	|
 	|repositories {
-	|	jcenter()
 	|	mavenLocal()
+	|	jcenter()
 	|}
 	|
 	|$detektConfig

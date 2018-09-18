@@ -220,7 +220,7 @@ internal class DetektTaskGroovyDslTest : Spek({
 					.build()
 
 			assertThat(result.output).contains("number of classes: 1")
-			assertThat(result.output).contains("--input $rootDir/$customSourceLocation")
+			assertThat(result.output).contains("--input ${File(rootDir, customSourceLocation).canonicalPath}")
 			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 		}
 		it("can configure a new custom detekt task") {
@@ -271,8 +271,8 @@ private fun buildFileContent(detektConfiguration: String) = """
 	|}
 	|
 	|repositories {
-	|	jcenter()
 	|	mavenLocal()
+	|	jcenter()
 	|}
 	|
 	|$detektConfiguration
