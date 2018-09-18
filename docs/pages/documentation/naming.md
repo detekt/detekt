@@ -122,6 +122,10 @@ Reports when function names which do not follow the specified naming convention 
 
    ignores functions in classes which match this regex
 
+* `ignoreOverridden` (default: `true`)
+
+   ignores functions that have the override modifier
+
 ### FunctionParameterNaming
 
 Reports function parameter names which do not follow the specified naming convention are used.
@@ -328,3 +332,7 @@ Reports when variable names which do not follow the specified naming convention 
 * `excludeClassPattern` (default: `'$^'`)
 
    ignores variables in classes which match this regex
+
+* `ignoreOverridden` (default: `true`)
+
+   ignores member properties that have the override modifier
