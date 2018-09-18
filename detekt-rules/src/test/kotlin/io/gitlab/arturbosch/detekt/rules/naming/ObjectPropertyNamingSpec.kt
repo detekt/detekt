@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.test.TestConfig
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.lint
-import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
@@ -29,7 +29,7 @@ class ObjectPropertyNamingSpec : SubjectSpek<ObjectPropertyNaming>({
 					$negative
 				}
 			""")
-			assertThat(subject.lint(code)).hasSize(0)
+			assertThat(subject.lint(code)).isEmpty()
 		}
 
 		it("should detect constants not complying to the naming rules") {
@@ -38,7 +38,9 @@ class ObjectPropertyNamingSpec : SubjectSpek<ObjectPropertyNaming>({
 					$positive
 				}
 			""")
-			assertThat(subject.lint(code)).hasSize(1)
+			assertThat(subject.lint(code)).hasLocationStrings(
+					"'const val _nAme = \"Artur\"' at (3,6) in /foo.bar"
+			)
 		}
 	}
 
@@ -52,7 +54,7 @@ class ObjectPropertyNamingSpec : SubjectSpek<ObjectPropertyNaming>({
 					}
 				}
 			""")
-			assertThat(subject.lint(code)).hasSize(0)
+			assertThat(subject.lint(code)).isEmpty()
 		}
 
 		it("should detect constants not complying to the naming rules") {
@@ -63,7 +65,9 @@ class ObjectPropertyNamingSpec : SubjectSpek<ObjectPropertyNaming>({
 					}
 				}
 			""")
-			assertThat(subject.lint(code)).hasSize(1)
+			assertThat(subject.lint(code)).hasLocationStrings(
+					"'const val _nAme = \"Artur\"' at (4,7) in /foo.bar"
+			)
 		}
 	}
 
@@ -81,7 +85,7 @@ class ObjectPropertyNamingSpec : SubjectSpek<ObjectPropertyNaming>({
 					private val _name = "Artur"
 				}
 			""")
-			assertThat(subject.lint(code)).hasSize(0)
+			assertThat(subject.lint(code)).isEmpty()
 		}
 
 		it("should detect constants not complying to the naming rules") {
@@ -96,7 +100,10 @@ class ObjectPropertyNamingSpec : SubjectSpek<ObjectPropertyNaming>({
 
 	describe("variables and constants in objects with custom config") {
 
-		val config = TestConfig(mapOf(ObjectPropertyNaming.CONSTANT_PATTERN to "_[A-Za-z]*"))
+		val config = TestConfig(mapOf(
+				ObjectPropertyNaming.CONSTANT_PATTERN to "_[A-Za-z]*",
+				ObjectPropertyNaming.PRIVATE_PROPERTY_PATTERN to ".*"
+		))
 		val subject = ObjectPropertyNaming(config)
 
 		it("should not detect constants in object with underscores") {
@@ -106,7 +113,17 @@ class ObjectPropertyNamingSpec : SubjectSpek<ObjectPropertyNaming>({
 					const val _name = "Artur"
 				}
 			""")
-			assertThat(subject.lint(code)).hasSize(0)
+			assertThat(subject.lint(code)).isEmpty()
+		}
+
+		it("should not detect private properties in object") {
+			val code = compileContentForTest("""
+				object O {
+					private val __NAME = "Artur"
+					private val _1234 = "Artur"
+				}
+			""")
+			assertThat(subject.lint(code)).isEmpty()
 		}
 	}
 })

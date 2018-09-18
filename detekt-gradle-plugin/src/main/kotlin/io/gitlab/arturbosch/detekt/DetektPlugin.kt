@@ -11,9 +11,7 @@ import java.io.File
  */
 class DetektPlugin : Plugin<Project> {
 
-
 	override fun apply(project: Project) {
-
 		val extension = project.extensions.create(DETEKT, DetektExtension::class.java, project)
 
 		configurePluginDependencies(project, extension)
@@ -97,7 +95,6 @@ class DetektPlugin : Plugin<Project> {
 
 
 	companion object {
-		private const val DEFAULT_DETEKT_VERSION = "1.0.0.RC9"
 		private const val DETEKT = "detekt"
 		private const val IDEA_FORMAT = "detektIdeaFormat"
 		private const val IDEA_INSPECT = "detektIdeaInspect"
