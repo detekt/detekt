@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.cli.createPlugins
 import io.gitlab.arturbosch.detekt.cli.loadConfiguration
 import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
-import java.util.concurrent.ForkJoinPool
 import kotlin.system.measureTimeMillis
 
 /**
@@ -39,10 +38,7 @@ class Runner(private val arguments: CliArgs) : Executable {
 					pathFilters = pathFilters,
 					parallelCompilation = parallel,
 					excludeDefaultRuleSets = disableDefaultRuleSets,
-					pluginPaths = plugins,
-					executorService = ForkJoinPool.commonPool(),
-					outPrinter = System.out,
-					errorPrinter = System.err)
+					pluginPaths = plugins)
 		}
 	}
 }
