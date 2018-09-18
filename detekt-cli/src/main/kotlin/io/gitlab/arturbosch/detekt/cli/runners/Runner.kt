@@ -34,7 +34,7 @@ class Runner(private val arguments: CliArgs) : Executable {
 			val config = loadConfiguration()
 
 			return ProcessingSettings(
-					project = inputPath,
+					inputPaths = inputPaths,
 					config = config,
 					pathFilters = pathFilters,
 					parallelCompilation = parallel,

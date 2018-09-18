@@ -24,7 +24,7 @@ class SingleRuleRunner(private val arguments: CliArgs) : Executable {
 				?: throw IllegalStateException("Unexpected empty 'runRule' argument.")
 
 		val settings = ProcessingSettings(
-				arguments.inputPath,
+				arguments.inputPaths,
 				arguments.loadConfiguration(),
 				arguments.createPathFilters(),
 				arguments.parallel,

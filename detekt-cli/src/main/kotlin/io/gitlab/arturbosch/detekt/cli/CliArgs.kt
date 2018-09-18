@@ -79,7 +79,7 @@ class CliArgs : Args {
 			description = "Prints the AST for given [input] file. Must be no directory.")
 	var printAst: Boolean = false
 
-	val inputPath: List<Path> by lazy {
+	val inputPaths: List<Path> by lazy {
 		MultipleExistingPathConverter().convert(input
 				?: throw IllegalStateException("Input parameter was not initialized by jcommander!"))
 	}
