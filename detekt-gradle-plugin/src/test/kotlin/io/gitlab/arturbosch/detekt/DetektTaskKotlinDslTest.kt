@@ -232,7 +232,7 @@ internal class DetektTaskKotlinDslTest : Spek({
 			val detektConfig = """
 					|detekt {
 					| debug = true
-					|	input = files("$customSourceLocation")
+					| input = files("$customSourceLocation")
 					|}
 				"""
 
