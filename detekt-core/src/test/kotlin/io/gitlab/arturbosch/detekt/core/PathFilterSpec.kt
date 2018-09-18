@@ -16,6 +16,18 @@ internal class PathFilterSpec : Spek({
 		}
 	}
 
+	given("an empty pattern") {
+		it("throws an IllegalArgumentException") {
+			assertThrows<IllegalArgumentException> { PathFilter("") }
+		}
+	}
+
+	given("an blank pattern") {
+		it("throws an IllegalArgumentException") {
+			assertThrows<IllegalArgumentException> { PathFilter("    ") }
+		}
+	}
+
 	given("a single regex pattern") {
 		val pathFilter = PathFilter(".*/build/.*")
 
