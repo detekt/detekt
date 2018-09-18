@@ -17,7 +17,7 @@ class DetektFacade(
 		private val processors: List<FileProcessListener>) {
 
 	private val saveSupported = settings.config.valueOrDefault("autoCorrect", false)
-	private val pathsToAnalyze = settings.project
+	private val pathsToAnalyze = settings.inputPaths
 	private val compiler = KtTreeCompiler.instance(settings)
 
 	fun run(): Detektion {

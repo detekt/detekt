@@ -8,13 +8,13 @@ import java.util.concurrent.ExecutorService
 
 /**
  * Settings to be used by detekt.
- * If using a custom executor service be aware that detekt won't shutdown it after use!
+ * If using a custom executor service be aware that detekt won't shut it down after use!
  *
  * @author Artur Bosch
  * @author Marvin Ramin
  */
 @Suppress("LongParameterList")
-data class ProcessingSettings(val project: List<Path>,
+data class ProcessingSettings(val inputPaths: List<Path>,
 							  val config: Config = Config.empty,
 							  val pathFilters: List<PathFilter> = listOf(),
 							  val parallelCompilation: Boolean = false,
@@ -22,22 +22,25 @@ data class ProcessingSettings(val project: List<Path>,
 							  val pluginPaths: List<Path> = emptyList(),
 							  val executorService: ExecutorService? = null,
 							  val outPrinter: PrintStream = System.out,
-							  val errorPrinter: PrintStream? = null) {
+							  val errorPrinter: PrintStream = System.err) {
 
 	/**
 	 * Single project input path constructor.
 	 */
-	constructor(project: Path,
-				config: Config = Config.empty,
-				pathFilters: List<PathFilter> = listOf(),
-				parallelCompilation: Boolean = false,
-				excludeDefaultRuleSets: Boolean = false,
-				pluginPaths: List<Path> = emptyList(),
-				executorService: ExecutorService? = null,
-				outPrinter: PrintStream = System.out,
-				errorPrinter: PrintStream? = null) :
-			this(listOf(project), config, pathFilters, parallelCompilation,
-					excludeDefaultRuleSets, pluginPaths, executorService, outPrinter, errorPrinter)
+	constructor(
+			inputPath: Path,
+			config: Config = Config.empty,
+			pathFilters: List<PathFilter> = listOf(),
+			parallelCompilation: Boolean = false,
+			excludeDefaultRuleSets: Boolean = false,
+			pluginPaths: List<Path> = emptyList(),
+			executorService: ExecutorService? = null,
+			outPrinter: PrintStream = System.out,
+			errorPrinter: PrintStream = System.err
+	) : this(
+			listOf(inputPath), config, pathFilters, parallelCompilation,
+			excludeDefaultRuleSets, pluginPaths, executorService, outPrinter, errorPrinter
+	)
 
 	init {
 		pluginPaths.forEach {
