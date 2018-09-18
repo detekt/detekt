@@ -140,6 +140,11 @@ internal class ConfigurationsSpec : Spek({
 			)
 		}
 
+		it("should ignore empty and blank filters") {
+			val filters = CliArgs().apply { filters = " ,,.*/three" }.createPathFilters()
+			assertThat(filters).containsExactly(PathFilter(".*/three"))
+		}
+
 		it("should fail on invalid filters values") {
 			assertFails { CliArgs().apply { filters = "*." }.createPathFilters() }
 			assertFails { CliArgs().apply { filters = "(ahel" }.createPathFilters() }
