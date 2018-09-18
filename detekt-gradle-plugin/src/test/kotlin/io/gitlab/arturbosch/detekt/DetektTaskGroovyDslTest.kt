@@ -203,10 +203,10 @@ internal class DetektTaskGroovyDslTest : Spek({
 			val detektConfig = """
 					|detekt {
 					| debug = true
-					|	input = files(
-					|		"$customSourceLocation",
-					|		"some/location/thatdoesnotexist"
-					|	)
+					| input = files(
+					|	 "$customSourceLocation",
+					|	 "some/location/thatdoesnotexist"
+					| )
 					|}
 				"""
 
@@ -230,10 +230,10 @@ internal class DetektTaskGroovyDslTest : Spek({
 			val detektConfig = """
 					|detekt {
 					| debug = true
-					|	input = files(
-					|		"$customSourceLocation",
-					|		"$otherCustomSourceLocation"
-					|	)
+					| input = files(
+					|	 "$customSourceLocation",
+					|	 "$otherCustomSourceLocation"
+					| )
 					|}
 				"""
 
