@@ -28,7 +28,7 @@ internal object GenerateConfigArgument : CliArgument() {
 }
 
 internal data class InputArgument(val fileCollection: FileCollection) : CliArgument() {
-	override fun toArgument() = listOf(INPUT_PARAMETER, fileCollection.asPath)
+	override fun toArgument() = listOf(INPUT_PARAMETER, fileCollection.joinToString(",") { it.absolutePath })
 }
 
 internal data class FiltersArgument(val filters: String?) : CliArgument() {
@@ -53,8 +53,7 @@ internal data class HtmlReportArgument(val file: File?) : CliArgument() {
 
 internal data class ConfigArgument(val config: FileCollection?) : CliArgument() {
 	override fun toArgument() = config?.let { configPaths ->
-		listOf(CONFIG_PARAMETER,
-				configPaths.joinToString(",") { it.absolutePath })
+		listOf(CONFIG_PARAMETER, configPaths.joinToString(",") { it.absolutePath })
 	} ?: emptyList()
 }
 
