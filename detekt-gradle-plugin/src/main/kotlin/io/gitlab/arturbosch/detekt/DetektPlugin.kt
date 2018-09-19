@@ -81,18 +81,25 @@ class DetektPlugin : Plugin<Project> {
 
 	private fun determineInput(extension: DetektExtension) = extension.input.filter { it.exists() }
 
-	private fun configurePluginDependencies(project: Project, extension: DetektExtension) =
-			project.configurations.create(DETEKT) {
-				isVisible = false
-				isTransitive = true
-				description = "The $DETEKT libraries to be used for this project."
-				defaultDependencies {
-					@Suppress("USELESS_ELVIS")
-					val version = extension.toolVersion ?: DEFAULT_DETEKT_VERSION
-					add(project.dependencies.create("io.gitlab.arturbosch.detekt:detekt-cli:$version"))
-				}
-			}
+	private fun configurePluginDependencies(project: Project, extension: DetektExtension) {
+		project.configurations.create(CONFIGURATION_DETEKT_PLUGINS) {
+			isVisible = false
+			isTransitive = true
+			description = "The $CONFIGURATION_DETEKT_PLUGINS libraries to be used for this project."
+		}
 
+		project.configurations.create(CONFIGURATION_DETEKT) {
+			isVisible = false
+			isTransitive = true
+			description = "The $CONFIGURATION_DETEKT dependencies to be used for this project."
+
+			@Suppress("USELESS_ELVIS")
+			val version = extension.toolVersion ?: DEFAULT_DETEKT_VERSION
+			defaultDependencies {
+				add(project.dependencies.create("io.gitlab.arturbosch.detekt:detekt-cli:$version"))
+			}
+		}
+	}
 
 	companion object {
 		private const val DETEKT = "detekt"
@@ -102,3 +109,6 @@ class DetektPlugin : Plugin<Project> {
 		private const val BASELINE = "detektBaseline"
 	}
 }
+
+const val CONFIGURATION_DETEKT = "detekt"
+const val CONFIGURATION_DETEKT_PLUGINS = "detektPlugins"

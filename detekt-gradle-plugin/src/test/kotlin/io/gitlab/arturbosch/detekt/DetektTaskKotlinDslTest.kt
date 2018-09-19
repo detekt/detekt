@@ -13,6 +13,21 @@ import java.io.File
  */
 internal class DetektTaskKotlinDslTest : Spek({
 
+	val buildGradle = """
+		|import io.gitlab.arturbosch.detekt.detekt
+		|
+		|plugins {
+		|   `java-library`
+		|	id("io.gitlab.arturbosch.detekt")
+		|}
+		|
+		|repositories {
+		|	jcenter()
+		|	mavenLocal()
+		|}
+		""".trimMargin()
+	val dslTest = DslBaseTest("build.gradle.kts", buildGradle)
+
 	describe("The Detekt Gradle plugin used in a build.gradle.kts file") {
 		lateinit var rootDir: File
 		beforeEachTest {
@@ -22,13 +37,13 @@ internal class DetektTaskKotlinDslTest : Spek({
 
 			val detektConfig = ""
 
-			writeFiles(rootDir, detektConfig)
-			writeConfig(rootDir)
+			dslTest.writeFiles(rootDir, detektConfig)
+			dslTest.writeConfig(rootDir)
 
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
 					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").canonicalPath, "check", "--stacktrace", "--info")
 					.withPluginClasspath()
 					.build()
 
@@ -41,13 +56,14 @@ internal class DetektTaskKotlinDslTest : Spek({
 
 			val detektConfig = ""
 
-			writeFiles(rootDir, detektConfig, "src/main/kotlin")
-			writeConfig(rootDir)
+			val srcDir = File(rootDir, "src/main/kotlin")
+			dslTest.writeFiles(rootDir, detektConfig, srcDir)
+			dslTest.writeConfig(rootDir)
 
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
 					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").canonicalPath, "check", "--stacktrace", "--info")
 					.withPluginClasspath()
 					.build()
 
@@ -64,13 +80,13 @@ internal class DetektTaskKotlinDslTest : Spek({
 					|}
 				"""
 
-			writeFiles(rootDir, detektConfig)
-			writeConfig(rootDir)
+			dslTest.writeFiles(rootDir, detektConfig)
+			dslTest.writeConfig(rootDir)
 
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
 					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").canonicalPath, "check", "--stacktrace", "--info")
 					.withPluginClasspath()
 					.build()
 
@@ -84,29 +100,31 @@ internal class DetektTaskKotlinDslTest : Spek({
 		}
 
 		it("can be applied with a custom config file") {
+			val configPath = File(rootDir, "config.yml")
 
 			val detektConfig = """
 					|detekt {
-					|	config = files("${rootDir.absolutePath}/config.yml")
+					|	config = files("${configPath.canonicalPath}")
 					|}
 				"""
 
-			writeFiles(rootDir, detektConfig)
-			writeConfig(rootDir)
+			dslTest.writeFiles(rootDir, detektConfig)
+			dslTest.writeConfig(rootDir)
 
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
 					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").canonicalPath, "check", "--stacktrace", "--info")
 					.withPluginClasspath()
 					.build()
 
-			assertThat(result.output).contains("Ruleset: comments", "number of classes: 1", "--config ${rootDir.absolutePath}/config.yml")
+			assertThat(result.output).contains("Ruleset: comments", "number of classes: 1", "--config ${configPath.canonicalPath}")
 			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 		}
 
 		it("can be applied with a full config") {
-
+			val configFile = File(rootDir, "config.yml")
+			val baselineFile = File(rootDir, "baseline.xml")
 
 			val detektConfig = """
 					|detekt {
@@ -114,20 +132,20 @@ internal class DetektTaskKotlinDslTest : Spek({
 					|	parallel = true
 					|	disableDefaultRuleSets = true
 					|	toolVersion = "$VERSION_UNDER_TEST"
-					|	config = files("${rootDir.absolutePath}/config.yml")
-					|	baseline = file("${rootDir.absolutePath}/baseline.xml")
+					|	config = files("${configFile.canonicalPath}")
+					|	baseline = file("${baselineFile.canonicalPath}")
 					|	filters = ".*/resources/.*, .*/build/.*"
 					|}
 				"""
 
-			writeFiles(rootDir, detektConfig)
-			writeConfig(rootDir)
-			writeBaseline(rootDir)
+			dslTest.writeFiles(rootDir, detektConfig)
+			dslTest.writeConfig(rootDir)
+			dslTest.writeBaseline(rootDir)
 
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
 					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").canonicalPath, "check", "--stacktrace", "--info")
 					.withPluginClasspath()
 					.build()
 
@@ -138,13 +156,14 @@ internal class DetektTaskKotlinDslTest : Spek({
 		}
 
 		it("can configure a new custom detekt task") {
+			val configFile = File(rootDir, "config.yml")
 
 			val detektConfig = """
 					|task<io.gitlab.arturbosch.detekt.Detekt>("detektFailFast") {
 					|	description = "Runs a failfast detekt build."
 					|
 					|	input = files("src/main/java")
-					|	config = files("$rootDir/config.yml")
+					|	config = files("${configFile.canonicalPath}")
 					|	debug = true
 					|	reports {
 					|		xml {
@@ -155,14 +174,14 @@ internal class DetektTaskKotlinDslTest : Spek({
 					|}
 				"""
 
-			writeFiles(rootDir, detektConfig)
-			writeConfig(rootDir, failfast = true)
-			writeBaseline(rootDir)
+			dslTest.writeFiles(rootDir, detektConfig)
+			dslTest.writeConfig(rootDir, failfast = true)
+			dslTest.writeBaseline(rootDir)
 
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
 					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "detektFailFast", "--stacktrace", "--info")
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").canonicalPath, "detektFailFast", "--stacktrace", "--info")
 					.withPluginClasspath()
 					.build()
 
@@ -185,14 +204,14 @@ internal class DetektTaskKotlinDslTest : Spek({
 					|}
 				"""
 
-			writeFiles(rootDir, detektConfig)
-			writeConfig(rootDir)
-			writeBaseline(rootDir)
+			dslTest.writeFiles(rootDir, detektConfig)
+			dslTest.writeConfig(rootDir)
+			dslTest.writeBaseline(rootDir)
 
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
 					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").canonicalPath, "check", "--stacktrace", "--info")
 					.withPluginClasspath()
 					.build()
 
@@ -203,6 +222,7 @@ internal class DetektTaskKotlinDslTest : Spek({
 			assertThat(File(rootDir, "build/xml/detekt.xml")).exists()
 			assertThat(File(rootDir, "build/html/detekt.html")).exists()
 		}
+
 		it("can configure reports base directory") {
 			val detektConfig = """
 					|detekt {
@@ -210,14 +230,14 @@ internal class DetektTaskKotlinDslTest : Spek({
 					|}
 				"""
 
-			writeFiles(rootDir, detektConfig)
-			writeConfig(rootDir)
-			writeBaseline(rootDir)
+			dslTest.writeFiles(rootDir, detektConfig)
+			dslTest.writeConfig(rootDir)
+			dslTest.writeBaseline(rootDir)
 
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
 					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").canonicalPath, "check", "--stacktrace", "--info")
 					.withPluginClasspath()
 					.build()
 
@@ -227,73 +247,53 @@ internal class DetektTaskKotlinDslTest : Spek({
 			assertThat(File(rootDir, "build/my-reports/detekt.xml")).exists()
 			assertThat(File(rootDir, "build/my-reports/detekt.html")).exists()
 		}
+
 		it("can configure the input directory") {
-			val customSourceLocation = "gensrc/kotlin"
+			val customSourceLocation = File(rootDir, "gensrc/kotlin")
 			val detektConfig = """
 					|detekt {
-					|	input = files("$customSourceLocation")
+					| debug = true
+					| input = files("${customSourceLocation.canonicalPath}")
 					|}
 				"""
 
-			writeFiles(rootDir, detektConfig, customSourceLocation)
-			writeConfig(rootDir)
-			writeBaseline(rootDir)
+			dslTest.writeFiles(rootDir, detektConfig, customSourceLocation)
+			dslTest.writeConfig(rootDir)
+			dslTest.writeBaseline(rootDir)
 
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
 					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").canonicalPath, "check", "--stacktrace", "--info")
 					.withPluginClasspath()
 					.build()
 
 			assertThat(result.output).contains("number of classes: 1")
-			assertThat(result.output).contains("--input ${File(rootDir, customSourceLocation).canonicalPath}")
+			assertThat(result.output).contains("--input ${customSourceLocation.canonicalPath}")
+			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+		}
+
+		it("can be used without configuration") {
+			val detektConfig = """
+					|dependencies {
+					| detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:$VERSION_UNDER_TEST")
+					|}
+				"""
+
+			dslTest.writeFiles(rootDir, detektConfig)
+			dslTest.writeConfig(rootDir)
+
+			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
+			val result = GradleRunner.create()
+					.withProjectDir(rootDir)
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").canonicalPath, "check", "--stacktrace", "--info")
+					.withPluginClasspath()
+					.build()
+
+			assertThat(result.output).contains("number of classes: 1")
+			assertThat(result.output).contains("Ruleset: comments")
 			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 		}
 	}
 })
 
-// build.gradle.kts
-private fun getBuildFileContent(detektConfig: String) = """
-	|import io.gitlab.arturbosch.detekt.detekt
-	|
-	|plugins {
-	|   `java-library`
-	|	id("io.gitlab.arturbosch.detekt")
-	|}
-	|
-	|repositories {
-	|	mavenLocal()
-	|	jcenter()
-	|}
-	|
-	|$detektConfig
-	""".trimMargin()
-
-
-// src/main/kotlin/MyClass.kt
-private val ktFileContent = """
-	|internal class MyClass
-	|
-	""".trimMargin()
-
-private fun writeFiles(root: File, detektConfig: String, sourceDir: String = "src/main/java") {
-	File(root, "build.gradle.kts").writeText(getBuildFileContent(detektConfig))
-	File(root, sourceDir).mkdirs()
-	File(root, "$sourceDir/MyClass.kt").writeText(ktFileContent)
-}
-
-private fun writeConfig(root: File, failfast: Boolean = false) {
-	File(root, "config.yml").writeText("""
-		|autoCorrect: true
-		|failFast: $failfast
-		""".trimMargin())
-}
-
-private fun writeBaseline(root: File) {
-	File(root, "baseline.xml").writeText("""
-		|<some>
-		|	<xml/>
-		|</some>
-		""".trimMargin())
-}

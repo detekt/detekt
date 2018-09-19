@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.core
 
 import io.gitlab.arturbosch.detekt.test.yamlConfig
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import kotlin.test.assertTrue
 
 /**
  * @author Artur Bosch
@@ -25,6 +25,6 @@ class DetektorTest {
 				listOf(TestProvider(), TestProvider2()), emptyList())
 
 		val run = instance.run()
-		assertTrue { run.findings["Test"]?.none { "Test.kt" in it.file } ?: true }
+		assertThat(run.findings["Test"]?.none { "Test.kt" in it.file } ?: true).isTrue()
 	}
 }

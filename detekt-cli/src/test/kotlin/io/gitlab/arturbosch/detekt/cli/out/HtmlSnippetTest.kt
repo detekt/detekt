@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.cli.out
 
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import kotlin.test.assertEquals
 
 class HtmlSnippetTest {
 
@@ -15,7 +15,7 @@ class HtmlSnippetTest {
 			}
 		}
 
-		assertEquals("<h3>Hello World</h3>\n<div class=\"box\">\nTest\n<br />\n</div>", snippet)
+		assertThat(snippet).isEqualTo("<h3>Hello World</h3>\n<div class=\"box\">\nTest\n<br />\n</div>")
 	}
 
 	@Test
@@ -28,6 +28,6 @@ class HtmlSnippetTest {
 			}
 		}
 
-		assertEquals("<ul>\n<li>\n<span class=\"fruit\">\nApple\n</span>\n</li>\n<li>\n<span class=\"fruit\">\nBanana\n</span>\n</li>\n<li>\n<span class=\"fruit\">\nOrange\n</span>\n</li>\n</ul>", snippet)
+		assertThat(snippet).isEqualTo("<ul>\n<li>\n<span class=\"fruit\">\nApple\n</span>\n</li>\n<li>\n<span class=\"fruit\">\nBanana\n</span>\n</li>\n<li>\n<span class=\"fruit\">\nOrange\n</span>\n</li>\n</ul>")
 	}
 }

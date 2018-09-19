@@ -3,10 +3,10 @@ package io.gitlab.arturbosch.detekt.generator.collection
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
 import io.gitlab.arturbosch.detekt.generator.util.run
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
-import kotlin.test.assertFailsWith
 
 class RuleSetProviderCollectorSpec : SubjectSpek<RuleSetProviderCollector>({
 
@@ -55,9 +55,8 @@ class RuleSetProviderCollectorSpec : SubjectSpek<RuleSetProviderCollector>({
 			}
 		"""
 		it("throws an exception") {
-			assertFailsWith<InvalidDocumentationException> {
-				subject.run(code)
-			}
+			assertThatExceptionOfType(InvalidDocumentationException::class.java)
+					.isThrownBy { subject.run(code) }
 		}
 	}
 
@@ -73,9 +72,8 @@ class RuleSetProviderCollectorSpec : SubjectSpek<RuleSetProviderCollector>({
 		"""
 
 		it("throws an exception") {
-			assertFailsWith<InvalidDocumentationException> {
-				subject.run(code)
-			}
+			assertThatExceptionOfType(InvalidDocumentationException::class.java)
+					.isThrownBy { subject.run(code) }
 		}
 	}
 
@@ -180,9 +178,8 @@ class RuleSetProviderCollectorSpec : SubjectSpek<RuleSetProviderCollector>({
 		"""
 
 		it("throws an exception") {
-			assertFailsWith<InvalidDocumentationException> {
-				subject.run(code)
-			}
+			assertThatExceptionOfType(InvalidDocumentationException::class.java)
+					.isThrownBy { subject.run(code) }
 		}
 	}
 
@@ -204,9 +201,8 @@ class RuleSetProviderCollectorSpec : SubjectSpek<RuleSetProviderCollector>({
 		"""
 
 		it("throws an exception") {
-			assertFailsWith<InvalidDocumentationException> {
-				subject.run(code)
-			}
+			assertThatExceptionOfType(InvalidDocumentationException::class.java)
+					.isThrownBy { subject.run(code) }
 		}
 	}
 
@@ -225,9 +221,8 @@ class RuleSetProviderCollectorSpec : SubjectSpek<RuleSetProviderCollector>({
 		"""
 
 		it("throws an exception") {
-			assertFailsWith<InvalidDocumentationException> {
-				subject.run(code)
-			}
+			assertThatExceptionOfType(InvalidDocumentationException::class.java)
+					.isThrownBy { subject.run(code) }
 		}
 	}
 

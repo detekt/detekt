@@ -7,9 +7,9 @@ import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileForTest
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.junit.jupiter.api.Test
 import java.util.regex.PatternSyntaxException
-import kotlin.test.assertFailsWith
 
 /**
  * @author Artur Bosch
@@ -149,7 +149,7 @@ class EmptyCodeTest {
 	fun doesFailWithInvalidRegex() {
 		val configValues = mapOf(EmptyCatchBlock.ALLOWED_EXCEPTION_NAME_REGEX to "*foo")
 		val config = TestConfig(configValues)
-		assertFailsWith<PatternSyntaxException> {
+		assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
 			EmptyCatchBlock(config).lint(regexTestingCode)
 		}
 	}

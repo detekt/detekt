@@ -7,6 +7,8 @@ import org.assertj.core.internal.Objects
 
 fun assertThat(findings: List<Finding>) = FindingsAssert(findings)
 
+fun List<Finding>.assert() = FindingsAssert(this)
+
 class FindingsAssert(actual: List<Finding>) :
 		AbstractListAssert<FindingsAssert, List<Finding>,
 				Finding, FindingAssert>(actual, FindingsAssert::class.java) {

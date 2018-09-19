@@ -29,6 +29,7 @@ import io.gitlab.arturbosch.detekt.rules.style.SpacingBetweenPackageAndImports
 import io.gitlab.arturbosch.detekt.rules.style.ThrowsCount
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryAbstractClass
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryInheritance
+import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryLet
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryParentheses
 import io.gitlab.arturbosch.detekt.rules.style.UntilInsteadOfRangeTo
 import io.gitlab.arturbosch.detekt.rules.style.UnusedImports
@@ -87,6 +88,7 @@ class StyleGuideProvider : RuleSetProvider {
 				NestedClassesVisibility(config),
 				RedundantVisibilityModifierRule(config),
 				UntilInsteadOfRangeTo(config),
+				UnnecessaryLet(config),
 				MayBeConst(config),
 				PreferToOverPairSyntax(config),
 				MandatoryBracesIfStatements(config),

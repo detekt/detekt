@@ -1,19 +1,39 @@
 package io.gitlab.arturbosch.detekt.api
 
 /**
+ * Interface which is implemented by each Rule class to provide
+ * utility functions to retrieve specific or generic properties
+ * from the underlying detekt configuration file.
+ *
+ * Be aware that there are three config levels by default:
+ * - the top level config layer specifies rule sets and detekt engine properties
+ * - the rule set level specifies properties concerning the whole rule set and rules
+ * - the rule level provides additional properties which are used to configure rules
+ *
+ * This interface operates on the rule set level as the rule set config is passed to each
+ * rule in the #RuleSetProvider interface. This is due the fact that users create the
+ * rule set and all rules upfront and letting them 'sub config' the rule set config would
+ * be error-prone.
+ *
  * @author Artur Bosch
  */
 interface ConfigAware : Config {
 
 	/**
-	 * Id which is used to retrieve the sub config for this rule.
+	 * Id which is used to retrieve the sub config for the rule implementing this interface.
 	 */
-	val id: String
+	val ruleId: String
 
 	/**
 	 * Wrapped configuration of the ruleSet this rule is in.
+	 * Use #valueOrDefault function to retrieve properties specified for the rule
+	 * implementing this interface instead.
+	 * Only use this property directly if you need a specific rule set property.
 	 */
-	val config: Config
+	val ruleSetConfig: Config
+
+	private val ruleConfig: Config
+		get() = ruleSetConfig.subConfig(ruleId)
 
 	/**
 	 * If your rule supports to automatically correct the misbehaviour of underlying smell,
@@ -32,7 +52,7 @@ interface ConfigAware : Config {
 	 */
 	val autoCorrect: Boolean
 		get() = valueOrDefault("autoCorrect", false) &&
-				config.valueOrDefault("autoCorrect", true)
+				ruleSetConfig.valueOrDefault("autoCorrect", true)
 
 	/**
 	 * Is this rule specified as active in configuration?
@@ -41,11 +61,11 @@ interface ConfigAware : Config {
 	val active get() = valueOrDefault("active", false)
 
 	override fun subConfig(key: String): Config =
-			config.subConfig(id).subConfig(key)
+			ruleConfig.subConfig(key)
 
 	override fun <T : Any> valueOrDefault(key: String, default: T) =
-			config.subConfig(id).valueOrDefault(key, default)
+			ruleConfig.valueOrDefault(key, default)
 
 	override fun <T : Any> valueOrNull(key: String): T? =
-			config.subConfig(id).valueOrNull(key)
+			ruleConfig.valueOrNull(key)
 }

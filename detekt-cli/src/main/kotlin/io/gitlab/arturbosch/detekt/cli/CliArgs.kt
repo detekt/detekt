@@ -19,7 +19,7 @@ class CliArgs : Args {
 	private var input: String? = null
 
 	@Parameter(names = ["--filters", "-f"],
-			description = "Path filters defined through regex with separator ';' (\".*test.*\").")
+			description = "Path filters defined through regex with separator ';' or ',' (\".*test.*\").")
 	var filters: String? = null // Using a converter for List<PathFilter> resulted in a ClassCastException
 
 	@Parameter(names = ["--config", "-c"],

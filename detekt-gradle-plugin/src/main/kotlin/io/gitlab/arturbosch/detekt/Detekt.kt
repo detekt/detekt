@@ -29,6 +29,7 @@ import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.SkipWhenEmpty
 import org.gradle.api.tasks.TaskAction
+import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.gradle.util.ConfigureUtil
 import java.io.File
 
@@ -39,6 +40,10 @@ import java.io.File
  */
 @CacheableTask
 open class Detekt : DefaultTask() {
+
+	init {
+		group = LifecycleBasePlugin.VERIFICATION_GROUP
+	}
 
 	@Internal
 	val reports = DetektReports()

@@ -5,6 +5,85 @@ keywords: changelog, release-notes, migration
 permalink: changelog.html
 toc: true
 ---
+
+<!--
+#### Coming up
+
+##### Migration
+
+The configurations in the Detekt Gradle Plugin have changed to align the Plugin further with other
+static analysis plugins. Similar to FindBugs the Detekt Gradle Plugin now defines two configurations:
+`detekt` and `detektPlugins`.
+- `detekt` is now used to define detekt dependencies such as the `detekt-cli`.
+- `detektPlugins` is used to define custom detekt RuleSets and rules such as the `detekt-formatting`
+rules
+
+To define custom detekt extensions or to add the `detekt-formatting` rules you will now have to
+define them as:
+
+```kotlin
+dependencies {
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:[version]")
+    detektPlugins("your.custom.detekt.rules:rules:[version]")
+}
+```
+
+-->
+
+#### RC9.2
+
+##### Migration
+
+Please update to this bug fix version of RC9 as it contains many essential and important fixes for the new gradle plugin.
+Also take a look at the migration section of RC9 if you are < RC9.
+
+##### Changelog
+
+- Revert change to ignoreNamedArguments - Closes #1115 - [#1157](https://github.com/arturbosch/detekt/pull/1157)
+- Rename config and id of ConfigAware - [#1156](https://github.com/arturbosch/detekt/pull/1156)
+- Add test case for parameter annotations - Closes #1115 - [#1155](https://github.com/arturbosch/detekt/pull/1155)
+- use correct instance of valueOrDefault in FormattingRule - [#1154](https://github.com/arturbosch/detekt/pull/1154)
+- Make `config` property in `Rule` effectively private - [#1153](https://github.com/arturbosch/detekt/issues/1153)
+- Use correct accessor method for config in LazyRegex - [#1152](https://github.com/arturbosch/detekt/pull/1152)
+- print test outcome for debugging during the build - [#1150](https://github.com/arturbosch/detekt/pull/1150)
+- Fix Gradle Plugin Tests - [#1148](https://github.com/arturbosch/detekt/pull/1148)
+- Prevent overwriting of defaultDependency detekt-cli by additional detekt dependencies - [#1147](https://github.com/arturbosch/detekt/pull/1147)
+- Fix issue with wrong report name - [#1145](https://github.com/arturbosch/detekt/pull/1145)
+- Set group to Detekt task - [#1144](https://github.com/arturbosch/detekt/pull/1144)
+- Running RC9 gradlew detekt crashes with detekt-formatting included - [#1143](https://github.com/arturbosch/detekt/issues/1143)
+- The IntelliJ IDEA plugin does not define the settings from the Gradle - [#1142](https://github.com/arturbosch/detekt/issues/1142)
+- RC9 creates files called "C" with <checkstyle> tags inside - [#1141](https://github.com/arturbosch/detekt/issues/1141)
+- Sample / demo code? - [#1140](https://github.com/arturbosch/detekt/issues/1140)
+- Reimplement watch service - [#1139](https://github.com/arturbosch/detekt/pull/1139)
+- RC9 not working with gradle 4.4 - [#1136](https://github.com/arturbosch/detekt/issues/1136)
+- Fix issue when multiple input files are specified - [#1134](https://github.com/arturbosch/detekt/pull/1134)
+- Nested functions not reported by FunctionNaming - [#1133](https://github.com/arturbosch/detekt/issues/1133)
+- #1122/Add tests for ObjectPropertyNaming for private val overrides - [#1130](https://github.com/arturbosch/detekt/pull/1130)
+- #1120/Ignore naming of overridden functions and properties - [#1129](https://github.com/arturbosch/detekt/pull/1129)
+- Upload JUnit test results to AppVeyor - [#1128](https://github.com/arturbosch/detekt/pull/1128)
+- 1125/Allow spaces in CLI filters param - [#1127](https://github.com/arturbosch/detekt/pull/1127)
+- detektCheck starts failing - Was passed main parameter '--output' but no main parameter was defined in your arg class - [#1126](https://github.com/arturbosch/detekt/issues/1126)
+- Spaces around separators in CLI input filters break filters - [#1125](https://github.com/arturbosch/detekt/issues/1125)
+- HTML report created at the wrong place - [#1123](https://github.com/arturbosch/detekt/issues/1123)
+- ObjectPropertyNaming/privatePropertyPattern not loaded from configuration - [#1122](https://github.com/arturbosch/detekt/issues/1122)
+- Missing GitHub release & tag for RC9 - [#1121](https://github.com/arturbosch/detekt/issues/1121)
+- FunctionNaming should exclude overridden functions - [#1120](https://github.com/arturbosch/detekt/issues/1120)
+- Use plugin version as default Detekt version - [#1119](https://github.com/arturbosch/detekt/pull/1119)
+- Remove hardcoded default version in Detekt Gradle Plugin - [#1118](https://github.com/arturbosch/detekt/issues/1118)
+- Documented version not available in gradle plugins - [#1117](https://github.com/arturbosch/detekt/issues/1117)
+- MagicNumber regression with RC9 in Annotation methods - [#1115](https://github.com/arturbosch/detekt/issues/1115)
+- IndexOutOfBoundsException when changing --output to --report with RC9 - [#1114](https://github.com/arturbosch/detekt/issues/1114)
+- Updated contributors list - [#1112](https://github.com/arturbosch/detekt/pull/1112)
+- update Gradle to v4.10.1 - [#1109](https://github.com/arturbosch/detekt/pull/1109)
+- Print stacktraces recursively - Closes #1107 - [#1108](https://github.com/arturbosch/detekt/pull/1108)
+- Detektor doesn't print stack trace causes which makes debugging difficult - [#1107](https://github.com/arturbosch/detekt/issues/1107)
+- Delete a bunch of files from the docs directory - [#1106](https://github.com/arturbosch/detekt/pull/1106)
+- use KtImportDirective instead of KtImportList for ForbiddenImport - [#1105](https://github.com/arturbosch/detekt/pull/1105)
+- Reference vcsreader repo via GrabResolver - Fixes #1101 - [#1104](https://github.com/arturbosch/detekt/pull/1104)
+- org.vcsreader:vcsreader:1.1.0 does not exist - [#1101](https://github.com/arturbosch/detekt/issues/1101)
+
+See all issues at: [RC9.2](https://github.com/arturbosch/detekt/milestone/38)
+
 #### RC9
 
 ##### Migration
@@ -13,7 +92,13 @@ You need Gradle 4.9 or higher to migrate to RC9.
 
 With RC9, which is the last major release candidate before 1.0.0, a new gradle plugin gets introduced.
 The `detekt` extension configuration changes a bit and the concept of `profiles` was removed.
+There is no `detektCheck` task anymore, just a `detekt` task which is incremental and is bound to the check task.
 Now the `detekt` plugin must be applied to every project and just analyzes `Kotlin` files in the source set of this project.
+
+An important change is that `detekt-gradle-plugin` does not pull the latest version which is found online but has a hardcoded version by default.
+This can break your current setup if you have not specified a `version = "...""` property!
+Furthermore this `version` property got now removed and the new `toolVersion` property is used to specify the underlying `detekt` tool version.
+This was done to be inline with other static analysis tools.
 
 Instead of writing
 ```gradle
@@ -86,6 +171,12 @@ subprojects {
 
 Make sure that all properties expecting a path expect a `FileCollection` or a `File` type now.
 The `config` property now explicitly tells the user that `detekt` can consume multiple configuration yaml files (config = files(...)).
+
+There is also a breaking change for the `detekt-cli` module which will attack custom gradle task and cli users.
+The `output` and `reports` options are no longer. There is the new `--report` option which can be used multiple times to generate specific reports.
+The report pattern now is `--report [report-id:path-to-store-report]`.
+There are three provided output reports named: `plain`, `xml` and `html`. Custom reports can be added to leveraging the detekt extension mechanism as described on the [website](https://arturbosch.github.io/detekt/extensions.html).
+
 ##### Changes
 
 - fix false positive in UnnecessaryParentheses - [#1098](https://github.com/arturbosch/detekt/pull/1098)

@@ -4,8 +4,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
 
 /**
  * @author Artur Bosch
@@ -16,14 +14,16 @@ class KtTreeCompilerSpec : Spek({
 
 		it("should compile all files") {
 			val ktFiles = KtTreeCompiler().compile(path)
-			assertTrue(ktFiles.size >= 3, "It should compile more than three files, but did ${ktFiles.size}")
+			assertThat(ktFiles.size)
+					.describedAs("It should compile at least three files, but did ${ktFiles.size}")
+					.isGreaterThanOrEqualTo(3)
 		}
 
 		it("should filter the file 'Default.kt'") {
 			val filter = PathFilter(".*Default.kt")
 			val ktFiles = KtTreeCompiler(filters = listOf(filter)).compile(path)
 			val ktFile = ktFiles.find { it.name == "Default.kt" }
-			assertNull(ktFile, "It should have no Default.kt file")
+			assertThat(ktFile).describedAs("It should have no Default.kt file").isNull()
 		}
 
 		it("should work with two or more filters") {
@@ -36,7 +36,7 @@ class KtTreeCompilerSpec : Spek({
 		}
 
 		it("should also compile regular files") {
-			assertTrue { KtTreeCompiler().compile(path.resolve("Default.kt")).size == 1 }
+			assertThat(KtTreeCompiler().compile(path.resolve("Default.kt")).size).isEqualTo(1)
 		}
 	}
 })

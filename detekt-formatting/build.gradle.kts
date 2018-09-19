@@ -1,6 +1,5 @@
 import java.util.concurrent.Callable
 
-configurations.implementation.extendsFrom(configurations.kotlinImplementation)
 configurations.testImplementation.extendsFrom(configurations.kotlinTest)
 configurations.compile.isTransitive = false
 
@@ -9,19 +8,19 @@ val junitPlatformVersion: String by project
 val spekVersion: String by project
 
 dependencies {
-	compileOnly(project(":detekt-api"))
-	compile("com.github.shyiko.ktlint:ktlint-ruleset-standard:$ktlintVersion") {
+	implementation(kotlin("compiler-embeddable"))
+	implementation(project(":detekt-api"))
+	implementation("com.github.shyiko.ktlint:ktlint-ruleset-standard:$ktlintVersion") {
 		exclude(group = "org.jetbrains.kotlin")
 	}
-	compile("com.github.shyiko.ktlint:ktlint-core:$ktlintVersion") {
+	implementation("com.github.shyiko.ktlint:ktlint-core:$ktlintVersion") {
 		exclude(group = "org.jetbrains.kotlin")
 	}
 
-	testCompile(project(":detekt-api"))
-	testCompile(project(":detekt-test"))
-	testCompile(project(":detekt-core"))
-	testRuntime("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
-	testRuntime("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
+	testImplementation(project(":detekt-test"))
+	testImplementation(project(":detekt-core"))
+	testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
+	testRuntimeOnly("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
 }
 
 tasks.withType<Jar> {
