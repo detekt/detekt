@@ -14,15 +14,15 @@ import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 /**
  * @author Artur Bosch
  */
-class McCabeVisitor(private val simpleWhenEntriesWeight: Double = WHEN_DEFAULT_SIMPLE_ENTRY_WEIGHT) : DetektVisitor() {
+class McCabeVisitor(private val ignoreSimpleWhenEntries: Boolean) : DetektVisitor() {
 
-	private var doubleMcc = 0.0
+	private var _mcc: Int = 0
 
 	val mcc: Int
-		get() = Math.floor(doubleMcc).toInt()
+		get() = _mcc
 
 	private fun inc() {
-		doubleMcc += 1.0
+		_mcc++
 	}
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
@@ -44,16 +44,19 @@ class McCabeVisitor(private val simpleWhenEntriesWeight: Double = WHEN_DEFAULT_S
 	}
 
 	override fun visitWhenExpression(expression: KtWhenExpression) {
-		doubleMcc += expression.entries
-				.asSequence()
-				.map { it.weight }
-				.sum()
+		val entriesSequence = expression.extractEntries(ignoreSimpleWhenEntries)
+		_mcc += entriesSequence.count()
 		super.visitWhenExpression(expression)
+	}
+
+	private fun KtWhenExpression.extractEntries(ignoreSimpleWhenEntries: Boolean): Sequence<KtWhenEntry> {
+		val entries = entries.asSequence()
+		return if (ignoreSimpleWhenEntries) entries.filter { it.expression is KtBlockExpression } else entries
 	}
 
 	override fun visitTryExpression(expression: KtTryExpression) {
 		inc()
-		doubleMcc += expression.catchClauses.size
+		_mcc += expression.catchClauses.size
 		expression.finallyBlock?.let { inc() }
 		super.visitTryExpression(expression)
 	}
@@ -70,13 +73,7 @@ class McCabeVisitor(private val simpleWhenEntriesWeight: Double = WHEN_DEFAULT_S
 		}
 		super.visitCallExpression(expression)
 	}
-
-	private val KtWhenEntry.weight: Double
-		get() = if (expression is KtBlockExpression) WHEN_BLOCK_ENTRY_WEIGHT else simpleWhenEntriesWeight
 }
-
-private const val WHEN_BLOCK_ENTRY_WEIGHT = 1.0
-private const val WHEN_DEFAULT_SIMPLE_ENTRY_WEIGHT = 0.5
 
 fun KtCallExpression.isUsedForNesting(): Boolean = when (getCallNameExpression()?.text) {
 	"run", "let", "apply", "with", "use", "forEach" -> true

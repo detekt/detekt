@@ -23,7 +23,7 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  * @configuration threshold - MCC threshold for a method (default: 10)
  * @configuration ignoreSingleWhenExpression - Ignores a complex method if it only contains a single when expression.
  * (default: false)
- * @configuration simpleWhenEntryWeight - The weight used for simple (braceless) when entries. (default: 0.5)
+ * @configuration ignoreSimpleWhenEntries - Whether to ignore simple (braceless) when entries. (default: false)
  *
  * @active since v1.0.0
  * @author Artur Bosch
@@ -39,13 +39,13 @@ class ComplexMethod(config: Config = Config.empty,
 			Debt.TWENTY_MINS)
 
 	private val ignoreSingleWhenExpression = valueOrDefault(IGNORE_SINGLE_WHEN_EXPRESSION, false)
-	private val simpleWhenEntriesWeight = valueOrDefault(SIMPLE_WHEN_ENTRY_WEIGHT, 0.5)
+	private val ignoreSimpleWhenEntries = valueOrDefault(IGNORE_SIMPLE_WHEN_ENTRIES, false)
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		if (hasSingleWhenExpression(function.bodyExpression)) {
 			return
 		}
-		val visitor = McCabeVisitor(simpleWhenEntriesWeight)
+		val visitor = McCabeVisitor(ignoreSimpleWhenEntries)
 		visitor.visitNamedFunction(function)
 		val mcc = visitor.mcc
 		if (mcc >= threshold) {
@@ -75,6 +75,6 @@ class ComplexMethod(config: Config = Config.empty,
 	companion object {
 		const val DEFAULT_ACCEPTED_METHOD_COMPLEXITY = 10
 		const val IGNORE_SINGLE_WHEN_EXPRESSION = "ignoreSingleWhenExpression"
-		const val SIMPLE_WHEN_ENTRY_WEIGHT = "simpleWhenEntryWeight"
+		const val IGNORE_SIMPLE_WHEN_ENTRIES = "ignoreSimpleWhenEntries"
 	}
 }

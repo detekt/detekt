@@ -16,7 +16,7 @@ val complexityKey = Key<Int>("complexity")
 class ComplexityVisitor : DetektVisitor() {
 
 	override fun visitKtFile(file: KtFile) {
-		with(McCabeVisitor()) {
+		with(McCabeVisitor(ignoreSimpleWhenEntries = false)) {
 			file.accept(this)
 			file.putUserData(complexityKey, mcc)
 		}
