@@ -202,10 +202,11 @@ internal class DetektTaskGroovyDslTest : Spek({
 			val customSourceLocation = "gensrc/kotlin"
 			val detektConfig = """
 					|detekt {
-					|	input = files(
-					|		"$customSourceLocation",
-					|		"some/location/thatdoesnotexist"
-					|	)
+					| debug = true
+					| input = files(
+					|	 "$customSourceLocation",
+					|	 "some/location/thatdoesnotexist"
+					| )
 					|}
 				"""
 
@@ -220,7 +221,34 @@ internal class DetektTaskGroovyDslTest : Spek({
 					.build()
 
 			assertThat(result.output).contains("number of classes: 1")
-			assertThat(result.output).contains("--input $rootDir/$customSourceLocation")
+			assertThat(result.output).contains("--input, /private$rootDir/$customSourceLocation")
+			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+		}
+		it("can configure multiple input directories") {
+			val customSourceLocation = "gensrc/kotlin"
+			val otherCustomSourceLocation = "gensrc/foo"
+			val detektConfig = """
+					|detekt {
+					| debug = true
+					| input = files(
+					|	 "$customSourceLocation",
+					|	 "$otherCustomSourceLocation"
+					| )
+					|}
+				"""
+
+			writeFiles(rootDir, detektConfig, customSourceLocation, otherCustomSourceLocation)
+			writeConfig(rootDir)
+
+			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
+			val result = GradleRunner.create()
+					.withProjectDir(rootDir)
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
+					.withPluginClasspath()
+					.build()
+
+			assertThat(result.output).contains("number of classes: 2")
+			assertThat(result.output).contains("--input, /private$rootDir/$customSourceLocation,/private$rootDir/$otherCustomSourceLocation")
 			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 		}
 		it("can configure a new custom detekt task") {
@@ -292,6 +320,15 @@ private fun writeFiles(root: File, detektConfiguration: String, srcDir: String =
 	File(root, "settings.gradle").writeText(settingsFileContent)
 	File(root, srcDir).mkdirs()
 	File(root, "$srcDir/MyClass.kt").writeText(ktFileContent)
+}
+
+private fun writeFiles(root: File, detektConfiguration: String, vararg srcDir: String) {
+	File(root, "build.gradle").writeText(buildFileContent(detektConfiguration))
+	File(root, "settings.gradle").writeText(settingsFileContent)
+	srcDir.forEach {
+		File(root, it).mkdirs()
+		File(root, "$it/MyClass.kt").writeText(ktFileContent)
+	}
 }
 
 private fun writeConfig(root: File, failFast: Boolean = false) {
