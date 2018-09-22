@@ -14,7 +14,8 @@ data class ReportPath(val kind: String, val path: Path) {
 		private const val NUM_OF_PARTS_UNIX = 2
 		private const val NUM_OF_PARTS_WINDOWS = 3
 		private const val REPORT_PATH_SEPARATOR = ":"
-		private const val ILLEGAL_PARTS_SIZE_ERROR = "Must consist of two parts for Unix OSs or three for Windows (report-id:path)."
+		private const val ILLEGAL_PARTS_SIZE_ERROR =
+				"Must consist of two parts for Unix OSs or three for Windows (report-id:path)."
 
 		fun from(input: String): ReportPath {
 			val parts = input.split(REPORT_PATH_SEPARATOR)
