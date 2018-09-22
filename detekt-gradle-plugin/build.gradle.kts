@@ -1,5 +1,7 @@
 import com.gradle.publish.PluginConfig
 import com.jfrog.bintray.gradle.BintrayExtension
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.dokka.gradle.DokkaTask
 import java.util.Date
 
@@ -66,6 +68,19 @@ gradlePlugin {
 
 val test by tasks.getting(Test::class) {
 	useJUnitPlatform()
+	testLogging {
+		// set options for log level LIFECYCLE
+		events = setOf(
+				TestLogEvent.FAILED,
+				TestLogEvent.PASSED,
+				TestLogEvent.SKIPPED,
+				TestLogEvent.STANDARD_OUT
+		)
+		exceptionFormat = TestExceptionFormat.FULL
+		showExceptions = true
+		showCauses = true
+		showStackTraces = true
+	}
 }
 
 pluginBundle {
