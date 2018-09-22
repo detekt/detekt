@@ -37,6 +37,10 @@ tasks.withType<Wrapper> {
 	distributionType = Wrapper.DistributionType.ALL
 }
 
+tasks.withType<Test> {
+	dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":test"))
+}
+
 val detektVersion: String by project
 val usedDetektVersion: String by project
 
