@@ -25,14 +25,15 @@ internal class ReportsSpec : Spek({
 				"--input", "/tmp/must/be/given",
 				"--report", "xml:/tmp/path1",
 				"--report", "plain:/tmp/path2",
-				"--report", "$reportUnderTest:/tmp/path3"
+				"--report", "$reportUnderTest:/tmp/path3",
+				"--report", "html:D:_Gradle\\xxx\\xxx\\build\\reports\\detekt\\detekt.html"
 		)
 		val (cli, _) = parseArguments<CliArgs>(args)
 
 		val reports = cli.reportPaths
 
 		it("should parse multiple report entries") {
-			assertThat(reports).hasSize(3)
+			assertThat(reports).hasSize(4)
 		}
 
 		val extensions = ReportLocator(ProcessingSettings(listOf())).load()
