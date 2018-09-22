@@ -1,6 +1,8 @@
 import com.jfrog.bintray.gradle.BintrayExtension
 import org.codehaus.groovy.tools.shell.util.Logger.io
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.gradle.kotlin.dsl.setValue
 import org.jetbrains.dokka.gradle.DokkaTask
 
@@ -96,6 +98,20 @@ subprojects {
 
 	tasks.withType<Test> {
 		useJUnitPlatform()
+		testLogging {
+			// set options for log level LIFECYCLE
+			events = setOf(
+					TestLogEvent.FAILED,
+					TestLogEvent.PASSED,
+					TestLogEvent.SKIPPED,
+					TestLogEvent.STANDARD_OUT
+			)
+			exceptionFormat = TestExceptionFormat.FULL
+			showExceptions = true
+			showCauses = true
+			showStackTraces = true
+
+		}
 	}
 
 	tasks.withType<KotlinCompile> {
