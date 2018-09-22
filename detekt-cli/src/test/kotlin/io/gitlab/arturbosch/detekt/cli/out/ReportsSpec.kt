@@ -36,6 +36,30 @@ internal class ReportsSpec : Spek({
 			assertThat(reports).hasSize(4)
 		}
 
+		it("it should properly parse XML report entry") {
+			val xmlReport = reports[0]
+			assertThat(xmlReport.kind).isEqualTo(XmlOutputReport::class.java.simpleName)
+			assertThat(xmlReport.path.toString()).isEqualTo("/tmp/path1")
+		}
+
+		it("it should properly parse PLAIN report entry") {
+			val plainReport = reports[1]
+			assertThat(plainReport.kind).isEqualTo(PlainOutputReport::class.java.simpleName)
+			assertThat(plainReport.path.toString()).isEqualTo("/tmp/path2")
+		}
+
+		it("it should properly parse custom report entry") {
+			val customReport = reports[2]
+			assertThat(customReport.kind).isEqualTo(reportUnderTest)
+			assertThat(customReport.path.toString()).isEqualTo("/tmp/path3")
+		}
+
+		it("it should properly parse HTML report entry") {
+			val htmlReport = reports[3]
+			assertThat(htmlReport.kind).isEqualTo(HtmlOutputReport::class.java.simpleName)
+			assertThat(htmlReport.path.toString()).isEqualTo("D:_Gradle\\xxx\\xxx\\build\\reports\\detekt\\detekt.html")
+		}
+
 		val extensions = ReportLocator(ProcessingSettings(listOf())).load()
 		val extensionsIds = extensions.mapTo(HashSet()) { it.id }
 
