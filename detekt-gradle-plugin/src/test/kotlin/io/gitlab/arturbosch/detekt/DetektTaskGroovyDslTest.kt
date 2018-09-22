@@ -221,7 +221,7 @@ internal class DetektTaskGroovyDslTest : Spek({
 					.build()
 
 			assertThat(result.output).contains("number of classes: 1")
-			assertThat(result.output).contains("--input, /private$rootDir/$customSourceLocation")
+			assertThat(result.output).contains("--input, $rootDir/$customSourceLocation")
 			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 		}
 		it("can configure multiple input directories") {
@@ -248,7 +248,7 @@ internal class DetektTaskGroovyDslTest : Spek({
 					.build()
 
 			assertThat(result.output).contains("number of classes: 2")
-			assertThat(result.output).contains("--input, /private$rootDir/$customSourceLocation,/private$rootDir/$otherCustomSourceLocation")
+			assertThat(result.output).contains("--input, $rootDir/$customSourceLocation,$rootDir/$otherCustomSourceLocation")
 			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 		}
 		it("can configure a new custom detekt task") {
