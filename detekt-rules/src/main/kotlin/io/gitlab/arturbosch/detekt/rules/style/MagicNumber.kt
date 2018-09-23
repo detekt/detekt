@@ -88,10 +88,11 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 					"By default, -1, 0, 1, and 2 are not considered to be magic numbers.", Debt.TEN_MINS)
 
 	private val ignoredNumbers = valueOrDefault(IGNORE_NUMBERS, "-1,0,1,2")
-			.split(",")
+			.splitToSequence(",")
 			.filterNot { it.isEmpty() }
 			.map { parseAsDouble(it) }
 			.sorted()
+			.toList()
 
 	private val ignoreAnnotation = valueOrDefault(IGNORE_ANNOTATION, false)
 	private val ignoreHashCodeFunction = valueOrDefault(IGNORE_HASH_CODE, true)
