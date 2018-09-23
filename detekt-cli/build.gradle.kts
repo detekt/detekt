@@ -2,7 +2,6 @@ application {
 	mainClassName = "io.gitlab.arturbosch.detekt.cli.Main"
 }
 
-val kotlinVersion: String by project
 val junitPlatformVersion: String by project
 val spekVersion: String by project
 val jcommanderVersion: String by project
@@ -15,7 +14,7 @@ dependencies {
 	implementation(project(":detekt-core"))
 	implementation(project(":detekt-rules"))
 	implementation("com.beust:jcommander:$jcommanderVersion")
-	implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion")
+	implementation(kotlin("compiler-embeddable"))
 
 	testImplementation(project(":detekt-test"))
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")

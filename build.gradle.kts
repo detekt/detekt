@@ -196,7 +196,6 @@ subprojects {
 		}
 	}
 
-	val kotlinVersion: String  by project
 	val junitEngineVersion: String by project
 	val assertjVersion: String by project
 	val spekVersion: String by project
@@ -205,10 +204,10 @@ subprojects {
 
 	dependencies {
 		kotlinImplementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion")
-		kotlinImplementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
+		kotlinImplementation(kotlin("stdlib"))
+		kotlinTest(kotlin("test"))
+		kotlinTest(kotlin("reflect"))
 		kotlinTest("org.junit.jupiter:junit-jupiter-api:$junitEngineVersion")
-		kotlinTest("org.jetbrains.kotlin:kotlin-test:$kotlinVersion")
-		kotlinTest("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
 		kotlinTest("org.assertj:assertj-core:$assertjVersion")
 		kotlinTest("org.jetbrains.spek:spek-api:$spekVersion")
 		kotlinTest("org.jetbrains.spek:spek-subject-extension:$spekVersion")

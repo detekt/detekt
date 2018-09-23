@@ -78,7 +78,6 @@ fun assertDocumentationUpToDate() {
     }
 }
 
-val kotlinVersion: String by project
 val junitPlatformVersion: String by project
 val spekVersion: String by project
 val jcommanderVersion: String by project
@@ -89,8 +88,8 @@ dependencies {
     implementation(project(":detekt-rules"))
     implementation(project(":detekt-formatting"))
     implementation("com.beust:jcommander:$jcommanderVersion")
-    implementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion")
-    implementation("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
+    implementation(kotlin("compiler-embeddable"))
+    implementation(kotlin("reflect"))
 
     testImplementation(project(":detekt-test"))
     testRuntime("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
