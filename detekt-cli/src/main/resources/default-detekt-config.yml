@@ -419,7 +419,7 @@ style:
     ignoreConstantDeclaration: true
     ignoreCompanionObjectPropertyDeclaration: true
     ignoreAnnotation: false
-    ignoreNamedArgument: false
+    ignoreNamedArgument: true
     ignoreEnums: false
   MandatoryBracesIfStatements:
     active: false
