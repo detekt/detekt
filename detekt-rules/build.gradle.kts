@@ -1,4 +1,3 @@
-configurations.implementation.extendsFrom(configurations.kotlinImplementation)
 configurations.testImplementation.extendsFrom(configurations.kotlinTest)
 
 tasks {
@@ -12,6 +11,7 @@ val spekVersion: String by project
 
 dependencies {
 	implementation(project(":detekt-api"))
+	implementation(kotlin("compiler-embeddable"))
 
 	testImplementation(project(":detekt-test"))
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")

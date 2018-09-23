@@ -1,10 +1,10 @@
-configurations.implementation.extendsFrom(configurations.kotlinImplementation)
 configurations.testImplementation.extendsFrom(configurations.kotlinTest)
 
 val junitPlatformVersion: String by project
 val spekVersion: String by project
 
 dependencies {
+	implementation(kotlin("compiler-embeddable"))
 	api(project(":detekt-api"))
 
 	testImplementation(project(":detekt-rules"))

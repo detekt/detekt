@@ -199,12 +199,10 @@ subprojects {
 	val junitEngineVersion: String by project
 	val assertjVersion: String by project
 	val spekVersion: String by project
-	val kotlinImplementation by configurations.creating
 	val kotlinTest by configurations.creating
 
 	dependencies {
-		kotlinImplementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion")
-		kotlinImplementation(kotlin("stdlib"))
+		implementation(kotlin("stdlib"))
 		kotlinTest(kotlin("test"))
 		kotlinTest(kotlin("reflect"))
 		kotlinTest("org.junit.jupiter:junit-jupiter-api:$junitEngineVersion")

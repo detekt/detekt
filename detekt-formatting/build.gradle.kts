@@ -1,6 +1,5 @@
 import java.util.concurrent.Callable
 
-configurations.implementation.extendsFrom(configurations.kotlinImplementation)
 configurations.testImplementation.extendsFrom(configurations.kotlinTest)
 configurations.compile.isTransitive = false
 
@@ -9,6 +8,7 @@ val junitPlatformVersion: String by project
 val spekVersion: String by project
 
 dependencies {
+	implementation(kotlin("compiler-embeddable"))
 	compileOnly(project(":detekt-api"))
 	compile("com.github.shyiko.ktlint:ktlint-ruleset-standard:$ktlintVersion") {
 		exclude(group = "org.jetbrains.kotlin")
