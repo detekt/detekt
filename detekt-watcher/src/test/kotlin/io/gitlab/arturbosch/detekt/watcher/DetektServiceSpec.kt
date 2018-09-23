@@ -36,9 +36,10 @@ class DetektServiceSpec : Spek({
 
 		it("detects a change in a file") {
 			val path = Paths.get(resource("Default.kt"))
-			val state = State(DetektHome(tmpDir))
+			val home = DetektHome(tmpDir)
+			val state = State(home)
 			state.use(Parameters(tmpDir.toString()))
-			val service = DetektService(state)
+			val service = DetektService(state, home)
 			val mock = object : Kind<String> {
 				override fun type(): Class<String> = throw UnsupportedOperationException()
 				override fun name(): String = ""
