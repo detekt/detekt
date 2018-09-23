@@ -147,6 +147,11 @@ subprojects {
 Make sure that all properties expecting a path expect a `FileCollection` or a `File` type now.
 The `config` property now explicitly tells the user that `detekt` can consume multiple configuration yaml files (config = files(...)).
 
+There is also a breaking change for the `detekt-cli` module which will attack custom gradle task and cli users.
+The `output` and `reports` options are no longer. There is the new `--report` option which can be used multiple times to generate specific reports.
+The report pattern now is `--report [report-id:path-to-store-report]`.
+There are three provided output reports named: `plain`, `xml` and `html`. Custom reports can be added to leveraging the detekt extension mechanism as described on the [website](https://arturbosch.github.io/detekt/extensions.html).
+
 ##### Changes
 
 - fix false positive in UnnecessaryParentheses - [#1098](https://github.com/arturbosch/detekt/pull/1098)
