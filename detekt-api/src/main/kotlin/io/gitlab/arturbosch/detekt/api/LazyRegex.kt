@@ -25,6 +25,6 @@ class LazyRegex(
 	}
 
 	private fun createRegex(rule: Rule): Regex {
-		return Regex(rule.config.valueOrDefault(key = key, default = default))
+		return Regex(rule.valueOrDefault(key = key, default = default))
 	}
 }
