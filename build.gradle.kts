@@ -140,7 +140,6 @@ subprojects {
 		})
 	}
 
-	val javaConvention = the<JavaPluginConvention>()
 	tasks.withType(DokkaTask::class.java) {
 		// suppresses undocumented classes but not dokka warnings
 		// https://github.com/Kotlin/dokka/issues/229 && https://github.com/Kotlin/dokka/issues/319
@@ -152,7 +151,7 @@ subprojects {
 	val sourcesJar by tasks.creating(Jar::class) {
 		dependsOn("classes")
 		classifier = "sources"
-		from(javaConvention.sourceSets["main"].allSource)
+		from(sourceSets["main"].allSource)
 	}
 
 	val javadocJar by tasks.creating(Jar::class) {
@@ -212,13 +211,7 @@ subprojects {
 		kotlinTest("org.reflections:reflections:0.9.11")
 	}
 
-	the<JavaPluginConvention>().sourceSets {
-		"main" {
-			java {
-				srcDirs("src/main/kotlin")
-			}
-		}
-	}
+	sourceSets["main"].java.srcDirs("src/main/kotlin")
 }
 
 /**
