@@ -1,6 +1,20 @@
 package io.gitlab.arturbosch.detekt.api
 
 /**
+ * Interface which is implemented by each Rule class to provide
+ * utility functions to retrieve specific or generic properties
+ * from the underlying detekt configuration file.
+ *
+ * Be aware that there are three config levels by default:
+ * - the top level config layer specifies rule sets and detekt engine properties
+ * - the rule set level specifies properties concerning the whole rule set and rules
+ * - the rule level provides additional properties which are used to configure rules
+ *
+ * This interface operates on the rule set level as the rule set config is passed to each
+ * rule in the #RuleSetProvider interface. This is due the fact that users create the
+ * rule set and all rules upfront and letting them 'sub config' the rule set config would
+ * be error-prone.
+ *
  * @author Artur Bosch
  */
 interface ConfigAware : Config {
