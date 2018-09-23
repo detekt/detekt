@@ -91,6 +91,6 @@ dependencies {
     implementation(kotlin("compiler-embeddable"))
 
     testImplementation(project(":detekt-test"))
-    testRuntime("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
-    testRuntime("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
+    testRuntimeOnly("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
 }
