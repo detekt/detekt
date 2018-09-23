@@ -254,21 +254,15 @@ internal class DetektTaskKotlinDslTest : Spek({
 			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 		}
 
-		it("can add an additional detekt dependency") {
-			val customSourceLocation = "gensrc/kotlin"
+		it("can be used without configuration") {
 			val detektConfig = """
-					|detekt {
-					| debug = true
-					|}
-					|
 					|dependencies {
 					| detekt("io.gitlab.arturbosch.detekt:detekt-formatting:${VERSION_UNDER_TEST}")
 					|}
 				"""
 
-			writeFiles(rootDir, detektConfig, customSourceLocation)
+			writeFiles(rootDir, detektConfig)
 			writeConfig(rootDir)
-			writeBaseline(rootDir)
 
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
@@ -277,6 +271,8 @@ internal class DetektTaskKotlinDslTest : Spek({
 					.withPluginClasspath()
 					.build()
 
+			assertThat(result.output).contains("number of classes: 1")
+			assertThat(result.output).contains("Ruleset: comments")
 			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 		}
 	}
