@@ -73,7 +73,7 @@ import java.util.Locale
  * @configuration ignoreAnnotation - whether magic numbers in annotations should be ignored
  * (default: false)
  * @configuration ignoreNamedArgument - whether magic numbers in named arguments should be ignored
- * (default: false)
+ * (default: true)
  * @configuration ignoreEnums - whether magic numbers in enums should be ignored (default: false)
  *
  * @active since v1.0.0

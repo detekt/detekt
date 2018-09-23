@@ -289,7 +289,7 @@ declarations should be ignored
 
    whether magic numbers in annotations should be ignored
 
-* `ignoreNamedArgument` (default: `false`)
+* `ignoreNamedArgument` (default: `true`)
 
    whether magic numbers in named arguments should be ignored
 
