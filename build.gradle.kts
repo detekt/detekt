@@ -28,7 +28,6 @@ plugins {
 	id("com.github.johnrengelman.shadow") version "2.0.4" apply false
 	id("org.sonarqube") version "2.6.2"
 	id("io.gitlab.arturbosch.detekt")
-	`kotlin-dsl`
 	id("org.jetbrains.dokka") version "0.9.17"
 }
 
