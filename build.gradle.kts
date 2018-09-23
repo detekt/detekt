@@ -6,21 +6,8 @@ import org.jetbrains.dokka.gradle.DokkaTask
 
 import java.util.*
 
-buildscript {
-	repositories {
-		gradlePluginPortal()
-		mavenLocal()
-		jcenter()
-	}
-
-	val kotlinVersion: String by project
-
-	dependencies {
-		classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
-	}
-}
-
 plugins {
+	kotlin("jvm") version "1.2.61"
 	id("com.jfrog.bintray") version "1.8.4"
 	id("com.github.ben-manes.versions") version "0.20.0"
 	id("com.github.johnrengelman.shadow") version "2.0.4" apply false
