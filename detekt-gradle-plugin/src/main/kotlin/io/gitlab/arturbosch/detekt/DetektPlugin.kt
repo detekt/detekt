@@ -82,10 +82,10 @@ class DetektPlugin : Plugin<Project> {
 	private fun determineInput(extension: DetektExtension) = extension.input.filter { it.exists() }
 
 	private fun configurePluginDependencies(project: Project, extension: DetektExtension) {
-		project.configurations.create(CONFIGURATION_DETEKT_PLUGIN) {
+		project.configurations.create(CONFIGURATION_DETEKT_INTERNAL) {
 			isVisible = false
 			isTransitive = true
-			description = "The internal $CONFIGURATION_DETEKT_PLUGIN libraries to be used for this project."
+			description = "The internal $CONFIGURATION_DETEKT_INTERNAL libraries to be used for this project."
 
 			@Suppress("USELESS_ELVIS")
 			val version = extension.toolVersion ?: DEFAULT_DETEKT_VERSION
@@ -111,4 +111,4 @@ class DetektPlugin : Plugin<Project> {
 }
 
 const val CONFIGURATION_DETEKT = "detekt"
-const val CONFIGURATION_DETEKT_PLUGIN = "detektPlugins"
+const val CONFIGURATION_DETEKT_INTERNAL = "detektInternal"
