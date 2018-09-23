@@ -6,9 +6,9 @@ package io.gitlab.arturbosch.detekt.api
 interface ConfigAware : Config {
 
 	/**
-	 * Id which is used to retrieve the sub config for this rule.
+	 * Id which is used to retrieve the sub config for the rule implementing this interface.
 	 */
-	val id: String
+	val ruleId: String
 
 	/**
 	 * Wrapped configuration of the ruleSet this rule is in.
@@ -17,6 +17,9 @@ interface ConfigAware : Config {
 	 * Only use this property directly if you need a specific rule set property.
 	 */
 	val ruleSetConfig: Config
+
+	private val ruleConfig: Config
+		get() = ruleSetConfig.subConfig(ruleId)
 
 	/**
 	 * If your rule supports to automatically correct the misbehaviour of underlying smell,
@@ -44,11 +47,11 @@ interface ConfigAware : Config {
 	val active get() = valueOrDefault("active", false)
 
 	override fun subConfig(key: String): Config =
-			ruleSetConfig.subConfig(id).subConfig(key)
+			ruleConfig.subConfig(key)
 
 	override fun <T : Any> valueOrDefault(key: String, default: T) =
-			ruleSetConfig.subConfig(id).valueOrDefault(key, default)
+			ruleConfig.valueOrDefault(key, default)
 
 	override fun <T : Any> valueOrNull(key: String): T? =
-			ruleSetConfig.subConfig(id).valueOrNull(key)
+			ruleConfig.valueOrNull(key)
 }
