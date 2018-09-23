@@ -1,10 +1,6 @@
 configurations.testImplementation.extendsFrom(configurations.kotlinTest)
 
-tasks {
-	"build" {
-		finalizedBy(":detekt-generator:generateDocumentation")
-	}
-}
+tasks["build"].finalizedBy(":detekt-generator:generateDocumentation")
 
 val junitPlatformVersion: String by project
 val spekVersion: String by project

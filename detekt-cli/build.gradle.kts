@@ -21,11 +21,7 @@ dependencies {
 	testRuntimeOnly("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
 }
 
-tasks {
-	"test" {
-		dependsOn(":detekt-generator:generateDocumentation")
-	}
-}
+tasks["test"].dependsOn(":detekt-generator:generateDocumentation")
 
 // bundle detekt's version for debug logging on rule exceptions
 tasks.withType<Jar> {
