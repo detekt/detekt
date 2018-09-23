@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.cli.loadConfiguration
 import io.gitlab.arturbosch.detekt.core.PathFilter
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.exists
+import io.gitlab.arturbosch.detekt.watcher.config.DETEKT_YAML_CONFIG_PATHS
 import io.gitlab.arturbosch.detekt.watcher.config.DetektHome
 import io.gitlab.arturbosch.detekt.watcher.config.Injekt
 import io.gitlab.arturbosch.detekt.watcher.service.DirectoryRegisteringVisitor
@@ -28,7 +29,7 @@ class State(
 	private var project: Path? = null
 
 	private var config: Config =
-			home.property("detekt.config.default")?.let {
+			home.property(DETEKT_YAML_CONFIG_PATHS)?.let {
 				CliArgs().apply { config = it }.loadConfiguration()
 			} ?: Config.empty
 

@@ -7,7 +7,9 @@ import io.gitlab.arturbosch.detekt.core.KtTreeCompiler
 import io.gitlab.arturbosch.detekt.core.RuleSetLocator
 import io.gitlab.arturbosch.detekt.core.isDirectory
 import io.gitlab.arturbosch.detekt.core.isFile
+import io.gitlab.arturbosch.detekt.watcher.config.DetektHome
 import io.gitlab.arturbosch.detekt.watcher.config.Injekt
+import io.gitlab.arturbosch.detekt.watcher.config.WATCHER_CHANGE_NOTIFICATION
 import io.gitlab.arturbosch.detekt.watcher.state.State
 import io.gitlab.arturbosch.kutils.get
 import java.nio.file.Path
@@ -16,11 +18,15 @@ import java.nio.file.Path
  * @author Artur Bosch
  */
 class DetektService(
-		private val state: State = Injekt.get()
+		private val state: State = Injekt.get(),
+		home: DetektHome = Injekt.get()
 ) {
 
 	private val compiler by lazy { KtCompiler() }
 	private val reporter = FindingsReport()
+
+	private val printChangesNotification = home.property(WATCHER_CHANGE_NOTIFICATION)
+			?.toBoolean() ?: true
 
 	fun run(subPath: Path) {
 		val settings = state.settings()
@@ -49,16 +55,20 @@ class DetektService(
 
 		val watchedDir = dir.dir
 		val paths = dir.events
+				.asSequence()
 				.filter { it.kind.name() != "ENTRY_DELETE" }
 				.filter { it.path.toString().endsWith(".kt") }
 				.map { watchedDir.resolve(it.path) }
 				.distinct()
+				.toList()
 
 		val ktFiles = paths
 				.map { compiler.compile(watchedDir, it) }
 
 		if (ktFiles.isNotEmpty()) {
-			paths.forEach { println("Change detected for $it") }
+			if (printChangesNotification) {
+				paths.forEach { println("Change detected for $it") }
+			}
 			detektor.run(watchedDir, ktFiles)
 					.findings
 					.values
