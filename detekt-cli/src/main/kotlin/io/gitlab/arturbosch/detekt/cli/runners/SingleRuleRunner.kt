@@ -35,7 +35,7 @@ class SingleRuleRunner(private val arguments: CliArgs) : Executable {
 				.find { it.ruleSetId == ruleSet }
 				?.buildRuleset(Config.empty)
 				?.rules
-				?.find { it.id == rule }
+				?.find { it.ruleId == rule }
 				?: throw IllegalArgumentException("There was no rule '$rule' in rule set '$ruleSet'.")
 
 		val provider = FakeRuleSetProvider("$ruleSet-$rule", ruleToRun)

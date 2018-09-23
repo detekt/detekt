@@ -19,7 +19,7 @@ abstract class Rule(override val ruleSetConfig: Config = Config.empty,
 		BaseRule(ruleContext), ConfigAware {
 
 	abstract val issue: Issue
-	final override val id: String by lazy(LazyThreadSafetyMode.NONE) { issue.id }
+	final override val ruleId: String get() = issue.id
 
-	override fun visitCondition(root: KtFile) = active && !root.isSuppressedBy(id, issue.aliases)
+	override fun visitCondition(root: KtFile) = active && !root.isSuppressedBy(ruleId, issue.aliases)
 }
