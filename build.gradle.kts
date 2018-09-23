@@ -204,7 +204,6 @@ subprojects {
 	dependencies {
 		implementation(kotlin("stdlib"))
 		kotlinTest(kotlin("test"))
-		kotlinTest(kotlin("reflect"))
 		kotlinTest("org.junit.jupiter:junit-jupiter-api:$junitEngineVersion")
 		kotlinTest("org.assertj:assertj-core:$assertjVersion")
 		kotlinTest("org.jetbrains.spek:spek-api:$spekVersion")

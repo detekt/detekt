@@ -9,8 +9,6 @@ dependencies {
 
 	testImplementation("io.gitlab.arturbosch.detekt:detekt-test:$usedDetektVersion")
 	testImplementation("org.junit.jupiter:junit-jupiter-api:$junitEngineVersion")
-	testImplementation(kotlin("test"))
-	testImplementation(kotlin("reflect"))
 	testImplementation("org.assertj:assertj-core:$assertjVersion")
 	testImplementation("org.jetbrains.spek:spek-api:$spekVersion")
 	testImplementation("org.jetbrains.spek:spek-subject-extension:$spekVersion")

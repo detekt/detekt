@@ -48,7 +48,6 @@ val assertjVersion = "3.10.0"
 dependencies {
 	implementation(gradleApi())
 	implementation(kotlin("stdlib"))
-	implementation(kotlin("reflect"))
 
 	testImplementation("org.assertj:assertj-core:$assertjVersion")
 	testImplementation("org.jetbrains.spek:spek-api:$spekVersion")
