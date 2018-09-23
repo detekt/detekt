@@ -12,8 +12,11 @@ interface ConfigAware : Config {
 
 	/**
 	 * Wrapped configuration of the ruleSet this rule is in.
+	 * Use #valueOrDefault function to retrieve properties specified for the rule
+	 * implementing this interface instead.
+	 * Only use this property directly if you need a specific rule set property.
 	 */
-	val config: Config
+	val ruleSetConfig: Config
 
 	/**
 	 * If your rule supports to automatically correct the misbehaviour of underlying smell,
@@ -32,7 +35,7 @@ interface ConfigAware : Config {
 	 */
 	val autoCorrect: Boolean
 		get() = valueOrDefault("autoCorrect", false) &&
-				config.valueOrDefault("autoCorrect", true)
+				ruleSetConfig.valueOrDefault("autoCorrect", true)
 
 	/**
 	 * Is this rule specified as active in configuration?
@@ -41,11 +44,11 @@ interface ConfigAware : Config {
 	val active get() = valueOrDefault("active", false)
 
 	override fun subConfig(key: String): Config =
-			config.subConfig(id).subConfig(key)
+			ruleSetConfig.subConfig(id).subConfig(key)
 
 	override fun <T : Any> valueOrDefault(key: String, default: T) =
-			config.subConfig(id).valueOrDefault(key, default)
+			ruleSetConfig.subConfig(id).valueOrDefault(key, default)
 
 	override fun <T : Any> valueOrNull(key: String): T? =
-			config.subConfig(id).valueOrNull(key)
+			ruleSetConfig.subConfig(id).valueOrNull(key)
 }
