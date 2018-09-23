@@ -1,24 +1,3 @@
-buildscript {
-	repositories {
-		mavenLocal()
-		jcenter()
-	}
-
-	val kotlinVersion: String by project
-
-	dependencies {
-		classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
-	}
-}
-
-repositories {
-	jcenter()
-}
-
-apply {
-	plugin("kotlin")
-}
-
 val assertjVersion: String by project
 val usedDetektVersion: String by project
 val junitEngineVersion: String by project
