@@ -12,11 +12,11 @@ configurations.testImplementation.extendsFrom(configurations.kotlinTest)
 
 dependencies {
 	implementation(project(":detekt-core"))
-	implementation(project(":detekt-rules"))
 	implementation("com.beust:jcommander:$jcommanderVersion")
 	implementation(kotlin("compiler-embeddable"))
 
 	testImplementation(project(":detekt-test"))
+	testImplementation(project(":detekt-rules"))
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
 	testRuntimeOnly("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
 }

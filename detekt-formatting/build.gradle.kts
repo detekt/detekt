@@ -9,7 +9,7 @@ val spekVersion: String by project
 
 dependencies {
 	implementation(kotlin("compiler-embeddable"))
-	compileOnly(project(":detekt-api"))
+	implementation(project(":detekt-api"))
 	implementation("com.github.shyiko.ktlint:ktlint-ruleset-standard:$ktlintVersion") {
 		exclude(group = "org.jetbrains.kotlin")
 	}
@@ -17,7 +17,6 @@ dependencies {
 		exclude(group = "org.jetbrains.kotlin")
 	}
 
-	testImplementation(project(":detekt-api"))
 	testImplementation(project(":detekt-test"))
 	testImplementation(project(":detekt-core"))
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
