@@ -33,7 +33,7 @@ abstract class FormattingRule(config: Config) : Rule(config) {
 			Issue(javaClass.simpleName, Severity.Style, description, Debt.FIVE_MINS)
 
 	protected val isAndroid
-		get() = config.valueOrDefault("android", false)
+		get() = valueOrDefault("android", false)
 
 	private var positionByOffset: (offset: Int) -> Pair<Int, Int> by SingleAssign()
 	private var root: KtFile by SingleAssign()
