@@ -5,10 +5,10 @@ import io.gitlab.arturbosch.detekt.test.assert
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.lint
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
-import kotlin.test.assertFailsWith
 
 class MagicNumberSpec : Spek({
 
@@ -341,7 +341,7 @@ class MagicNumberSpec : Spek({
 	given("an invalid ignoredNumber") {
 
 		it("throws a NumberFormatException") {
-			assertFailsWith(NumberFormatException::class) {
+			assertThatExceptionOfType(NumberFormatException::class.java).isThrownBy {
 				MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "banana")))
 			}
 		}

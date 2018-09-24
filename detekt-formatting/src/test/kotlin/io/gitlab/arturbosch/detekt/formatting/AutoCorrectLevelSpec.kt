@@ -14,8 +14,6 @@ import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import java.nio.file.Paths
-import kotlin.test.assertFalse
-import kotlin.test.assertTrue
 
 /**
  * @author Artur Bosch
@@ -30,8 +28,8 @@ class AutoCorrectLevelSpec : Spek({
 
 			it("should reformat the test file") {
 				val (file, findings) = runAnalysis(config)
-				assertTrue(wasLinted(findings))
-				assertTrue(wasFormatted(file))
+				assertThat(wasLinted(findings)).isTrue()
+				assertThat(wasFormatted(file)).isTrue()
 			}
 		}
 
@@ -47,8 +45,8 @@ class AutoCorrectLevelSpec : Spek({
 				val findings = detekt.run(project, listOf(file))
 						.findings.flatMap { it.value }
 
-				assertTrue(wasLinted(findings))
-				assertTrue(wasFormatted(file))
+				assertThat(wasLinted(findings)).isTrue()
+				assertThat(wasFormatted(file)).isTrue()
 				assertThat(loadFileContent("before.kt")).isEqualTo(expected)
 			}
 		}
@@ -59,8 +57,8 @@ class AutoCorrectLevelSpec : Spek({
 
 			it("should not reformat the test file") {
 				val (file, findings) = runAnalysis(config)
-				assertTrue(wasLinted(findings))
-				assertFalse(wasFormatted(file))
+				assertThat(wasLinted(findings)).isTrue()
+				assertThat(wasFormatted(file)).isFalse()
 			}
 		}
 
@@ -70,8 +68,8 @@ class AutoCorrectLevelSpec : Spek({
 
 			it("should not reformat the test file") {
 				val (file, findings) = runAnalysis(config)
-				assertTrue(wasLinted(findings))
-				assertFalse(wasFormatted(file))
+				assertThat(wasLinted(findings)).isTrue()
+				assertThat(wasFormatted(file)).isFalse()
 			}
 		}
 
@@ -81,8 +79,8 @@ class AutoCorrectLevelSpec : Spek({
 
 			it("should not reformat the test file") {
 				val (file, findings) = runAnalysis(config)
-				assertFalse(wasLinted(findings))
-				assertFalse(wasFormatted(file))
+				assertThat(wasLinted(findings)).isFalse()
+				assertThat(wasFormatted(file)).isFalse()
 			}
 		}
 	}

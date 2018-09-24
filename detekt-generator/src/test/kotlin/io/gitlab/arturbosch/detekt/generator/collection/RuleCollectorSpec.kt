@@ -5,10 +5,10 @@ import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumen
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidIssueDeclaration
 import io.gitlab.arturbosch.detekt.generator.util.run
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
-import kotlin.test.assertFailsWith
 
 class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 
@@ -45,9 +45,8 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				class SomeRandomClass: Rule {
 				}
 			"""
-			assertFailsWith<InvalidDocumentationException> {
-				subject.run(code)
-			}
+			assertThatExceptionOfType(InvalidDocumentationException::class.java)
+					.isThrownBy { subject.run(code) }
 		}
 
 		it("throws when a class extends ThresholdRule but has no valid documentation") {
@@ -57,7 +56,8 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				class SomeRandomClass: ThresholdRule {
 				}
 			"""
-			assertFailsWith<InvalidDocumentationException> { subject.run(code) }
+			assertThatExceptionOfType(InvalidDocumentationException::class.java)
+					.isThrownBy { subject.run(code) }
 		}
 
 		it("throws when a class extends ThresholdRule but has no valid documentation") {
@@ -67,7 +67,8 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				class SomeRandomClass: FormattingRule {
 				}
 			"""
-			assertFailsWith<InvalidDocumentationException> { subject.run(code) }
+			assertThatExceptionOfType(InvalidDocumentationException::class.java)
+					.isThrownBy { subject.run(code) }
 		}
 
 		it("collects the formatting rule name") {
@@ -308,7 +309,8 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				class $name: Rule {
 				}
 			"""
-			assertFailsWith<InvalidDocumentationException> { subject.run(code) }
+			assertThatExceptionOfType(InvalidDocumentationException::class.java)
+					.isThrownBy { subject.run(code) }
 		}
 
 		it("contains compliant and noncompliant code examples") {
@@ -346,7 +348,8 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				class RandomClass : Rule {
 				}
 			"""
-			assertFailsWith<InvalidCodeExampleDocumentationException> { subject.run(code) }
+			assertThatExceptionOfType(InvalidCodeExampleDocumentationException::class.java)
+					.isThrownBy { subject.run(code) }
 		}
 
 		it("has wrong compliant code example declaration") {
@@ -364,7 +367,8 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				class RandomClass : Rule {
 				}
 			"""
-			assertFailsWith<InvalidCodeExampleDocumentationException> { subject.run(code) }
+			assertThatExceptionOfType(InvalidCodeExampleDocumentationException::class.java)
+					.isThrownBy { subject.run(code) }
 		}
 
 		it("has wrong compliant without noncompliant code example declaration") {
@@ -381,7 +385,8 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				class RandomClass : Rule {
 				}
 			"""
-			assertFailsWith<InvalidCodeExampleDocumentationException> { subject.run(code) }
+			assertThatExceptionOfType(InvalidCodeExampleDocumentationException::class.java)
+					.isThrownBy { subject.run(code) }
 		}
 
 		it("has wrong issue style property") {
@@ -402,7 +407,8 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 							debt = Debt.TEN_MINS)
 				}
 			"""
-			assertFailsWith<InvalidIssueDeclaration> { subject.run(code) }
+			assertThatExceptionOfType(InvalidIssueDeclaration::class.java)
+					.isThrownBy { subject.run(code) }
 		}
 
 		it("has wrong issue aliases property") {
@@ -424,7 +430,8 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 							aliases = a)
 				}
 			"""
-			assertFailsWith<InvalidIssueDeclaration> { subject.run(code) }
+			assertThatExceptionOfType(InvalidIssueDeclaration::class.java)
+					.isThrownBy { subject.run(code) }
 		}
 	}
 })
