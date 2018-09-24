@@ -6,6 +6,7 @@ val junitPlatformVersion: String by project
 val spekVersion: String by project
 val jcommanderVersion: String by project
 val detektVersion: String by project
+val reflectionsVersion: String by project
 
 // implementation.extendsFrom kotlin is not enough for using cli in a gradle task - #58
 configurations.testImplementation.extendsFrom(configurations.kotlinTest)
@@ -17,7 +18,7 @@ dependencies {
 
 	testImplementation(project(":detekt-test"))
 	testImplementation(project(":detekt-rules"))
-	testImplementation("org.reflections:reflections:0.9.11")
+	testImplementation("org.reflections:reflections:$reflectionsVersion")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
 	testRuntimeOnly("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
 }
