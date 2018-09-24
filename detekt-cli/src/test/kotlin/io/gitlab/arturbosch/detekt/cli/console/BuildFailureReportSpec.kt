@@ -5,10 +5,12 @@ import io.gitlab.arturbosch.detekt.cli.TestDetektion
 import io.gitlab.arturbosch.detekt.cli.createFinding
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
+import org.assertj.core.api.Assertions.assertThatIllegalStateException
+import org.assertj.core.api.Assertions.fail
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
-import kotlin.test.assertFails
 
 /**
  * @author Artur Bosch
@@ -23,7 +25,7 @@ internal class BuildFailureReportSpec : SubjectSpek<BuildFailureReport>({
 			val detektion = TestDetektion(createFinding())
 
 			it("should fail because no config is provided for configurable console reporter") {
-				assertFails { subject.render(detektion) }
+				assertThatIllegalStateException().isThrownBy { subject.render(detektion) }
 			}
 
 			it("should return no report if build failure not configured") {
@@ -41,23 +43,27 @@ internal class BuildFailureReportSpec : SubjectSpek<BuildFailureReport>({
 
 			it("should throw a build failure error") {
 				subject.init(TestConfig(mapOf("failThreshold" to "-2")))
-				assertFails { subject.render(detektion) }
+				assertThatExceptionOfType(BuildFailure::class.java).isThrownBy { subject.render(detektion) }
 			}
 
 			it("should throw a build failure error when maxIssues met") {
 				subject.init(TestConfig(mapOf("maxIssues" to "-2")))
-				assertFails { subject.render(detektion) }
+				assertThatExceptionOfType(BuildFailure::class.java).isThrownBy { subject.render(detektion) }
 			}
 
 			it("should throw a build failure error even if warning threshold is also met") {
 				subject.init(TestConfig(mapOf("failThreshold" to "-2", "warningThreshold" to "-2")))
-				assertFails { subject.render(detektion) }
+				assertThatExceptionOfType(BuildFailure::class.java).isThrownBy { subject.render(detektion) }
 			}
 
 			it("should contain no stacktrace on fail") {
 				subject.init(TestConfig(mapOf("maxIssues" to "-2")))
-				val exception = assertFails { subject.render(detektion) }
-				assertThat(exception.stackTrace).isEmpty()
+				try {
+					subject.render(detektion)
+					fail("Render should throw")
+				} catch (e: BuildFailure) {
+					assertThat(e.stackTrace).isEmpty()
+				}
 			}
 		}
 	}

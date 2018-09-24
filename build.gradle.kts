@@ -223,7 +223,6 @@ subprojects {
 		kotlinImplementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion")
 		kotlinImplementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
 		kotlinTest("org.junit.jupiter:junit-jupiter-api:$junitEngineVersion")
-		kotlinTest("org.jetbrains.kotlin:kotlin-test:$kotlinVersion")
 		kotlinTest("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
 		kotlinTest("org.assertj:assertj-core:$assertjVersion")
 		kotlinTest("org.jetbrains.spek:spek-api:$spekVersion")

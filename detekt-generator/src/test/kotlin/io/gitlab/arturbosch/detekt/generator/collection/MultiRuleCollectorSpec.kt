@@ -3,10 +3,10 @@ package io.gitlab.arturbosch.detekt.generator.collection
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
 import io.gitlab.arturbosch.detekt.generator.util.run
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
-import kotlin.test.assertFailsWith
 
 class MultiRuleCollectorSpec : SubjectSpek<MultiRuleCollector>({
 
@@ -44,7 +44,7 @@ class MultiRuleCollectorSpec : SubjectSpek<MultiRuleCollector>({
 				class $name: MultiRule {
 				}
 			"""
-			assertFailsWith<InvalidDocumentationException> {
+			assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy {
 				subject.run(code)
 			}
 		}
