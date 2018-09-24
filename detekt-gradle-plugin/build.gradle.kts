@@ -1,9 +1,6 @@
-import com.gradle.publish.PluginConfig
-import com.jfrog.bintray.gradle.BintrayExtension
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.dokka.gradle.DokkaTask
-import java.util.Date
 
 buildscript {
 	repositories {
@@ -32,12 +29,12 @@ apply {
 }
 
 group = "io.gitlab.arturbosch.detekt"
-version = "1.0.0-RC11"
+version = "1.0.0-RC12"
 
 val detektGradleVersion: String by project
 val jcommanderVersion: String by project
 val spekVersion = "1.2.1"
-val junitPlatformVersion = "1.3.1"
+val junitPlatformVersion = "1.3.2"
 val assertjVersion = "3.11.1"
 
 dependencies {
@@ -91,39 +88,6 @@ pluginBundle {
 	}
 }
 
-bintray {
-	user = System.getenv("BINTRAY_USER") ?: ""
-	key = System.getenv("BINTRAY_API_KEY") ?: ""
-	val mavenCentralUser = System.getenv("MAVEN_CENTRAL_USER") ?: ""
-	val mavenCentralPassword = System.getenv("MAVEN_CENTRAL_PW") ?: ""
-
-	setPublications("DetektPublication")
-
-	pkg(delegateClosureOf<BintrayExtension.PackageConfig> {
-		repo = "code-analysis"
-		name = "detekt"
-		userOrg = "arturbosch"
-		setLicenses("Apache-2.0")
-		vcsUrl = "https://github.com/arturbosch/detekt"
-
-		version(delegateClosureOf<BintrayExtension.VersionConfig> {
-			name = project.version as? String
-			released = Date().toString()
-
-			gpg(delegateClosureOf<BintrayExtension.GpgConfig> {
-				sign = true
-			})
-
-			mavenCentralSync(delegateClosureOf<BintrayExtension.MavenCentralSyncConfig> {
-				sync = true
-				user = mavenCentralUser
-				password = mavenCentralPassword
-				close = "1"
-			})
-		})
-	})
-}
-
 tasks.withType(DokkaTask::class.java) {
 	// suppresses undocumented classes but not dokka warnings
 	// https://github.com/Kotlin/dokka/issues/229 && https://github.com/Kotlin/dokka/issues/319
@@ -131,7 +95,6 @@ tasks.withType(DokkaTask::class.java) {
 	outputFormat = "javadoc"
 	outputDirectory = "$buildDir/javadoc"
 }
-
 
 val generateDefaultDetektVersionFile by tasks.creating {
 	val defaultDetektVersionFile =
