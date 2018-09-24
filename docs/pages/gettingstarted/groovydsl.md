@@ -149,7 +149,7 @@ detekt {
         path = "$userHome/.idea"
         codeStyleScheme = "$userHome/.idea/idea-code-style.xml"
         inspectionsProfile = "$userHome/.idea/inspect.xml"
-        report = "project.projectDir/reports"
+        report = "$project.projectDir/reports"
         mask = "*.kt,"
     }
 }
