@@ -9,6 +9,7 @@ dependencies {
 	implementation(project(":detekt-api"))
 	implementation(kotlin("compiler-embeddable"))
 
+	testImplementation("org.reflections:reflections:0.9.11")
 	testImplementation(project(":detekt-test"))
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
 	testRuntimeOnly("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")

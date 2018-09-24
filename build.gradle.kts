@@ -208,7 +208,6 @@ subprojects {
 		kotlinTest("org.jetbrains.spek:spek-api:$spekVersion")
 		kotlinTest("org.jetbrains.spek:spek-subject-extension:$spekVersion")
 		kotlinTest("org.junit.jupiter:junit-jupiter-engine:$junitEngineVersion")
-		kotlinTest("org.reflections:reflections:0.9.11")
 	}
 
 	sourceSets["main"].java.srcDirs("src/main/kotlin")

@@ -17,6 +17,7 @@ dependencies {
 
 	testImplementation(project(":detekt-test"))
 	testImplementation(project(":detekt-rules"))
+	testImplementation("org.reflections:reflections:0.9.11")
 	testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
 	testRuntimeOnly("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
 }
