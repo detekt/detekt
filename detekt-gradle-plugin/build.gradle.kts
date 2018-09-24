@@ -1,9 +1,7 @@
 import com.gradle.publish.PluginConfig
-import com.jfrog.bintray.gradle.BintrayExtension
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.dokka.gradle.DokkaTask
-import java.util.Date
 
 buildscript {
 	repositories {
@@ -22,7 +20,6 @@ repositories {
 plugins {
 	`java-gradle-plugin`
 	id("com.gradle.plugin-publish") version "0.9.10"
-	id("com.jfrog.bintray") version "1.8.4"
 	kotlin("jvm") version "1.2.61"
 	`kotlin-dsl`
 	id("org.jetbrains.dokka") version "0.9.17"
@@ -95,39 +92,6 @@ pluginBundle {
 			displayName = "Static code analysis for Kotlin"
 		}
 	}
-}
-
-bintray {
-	user = System.getenv("BINTRAY_USER") ?: ""
-	key = System.getenv("BINTRAY_API_KEY") ?: ""
-	val mavenCentralUser = System.getenv("MAVEN_CENTRAL_USER") ?: ""
-	val mavenCentralPassword = System.getenv("MAVEN_CENTRAL_PW") ?: ""
-
-	setPublications("DetektPublication")
-
-	pkg(delegateClosureOf<BintrayExtension.PackageConfig> {
-		repo = "code-analysis"
-		name = "detekt"
-		userOrg = "arturbosch"
-		setLicenses("Apache-2.0")
-		vcsUrl = "https://github.com/arturbosch/detekt"
-
-		version(delegateClosureOf<BintrayExtension.VersionConfig> {
-			name = project.version as? String
-			released = Date().toString()
-
-			gpg(delegateClosureOf<BintrayExtension.GpgConfig> {
-				sign = true
-			})
-
-			mavenCentralSync(delegateClosureOf<BintrayExtension.MavenCentralSyncConfig> {
-				sync = true
-				user = mavenCentralUser
-				password = mavenCentralPassword
-				close = "1"
-			})
-		})
-	})
 }
 
 tasks.withType(DokkaTask::class.java) {
