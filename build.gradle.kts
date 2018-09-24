@@ -4,7 +4,7 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.dokka.gradle.DokkaTask
 
-import java.util.*
+import java.util.Date
 
 plugins {
 	kotlin("jvm") version "1.2.61"
