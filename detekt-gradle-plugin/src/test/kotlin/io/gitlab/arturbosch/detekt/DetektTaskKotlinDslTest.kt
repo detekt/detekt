@@ -41,7 +41,8 @@ internal class DetektTaskKotlinDslTest : Spek({
 
 			val detektConfig = ""
 
-			writeFiles(rootDir, detektConfig, "src/main/kotlin")
+			val srcDir = File(rootDir, "src/main/kotlin")
+			writeFiles(rootDir, detektConfig, srcDir)
 			writeConfig(rootDir)
 
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
@@ -84,10 +85,11 @@ internal class DetektTaskKotlinDslTest : Spek({
 		}
 
 		it("can be applied with a custom config file") {
+			val configPath = File(rootDir, "config.yml")
 
 			val detektConfig = """
 					|detekt {
-					|	config = files("${rootDir.absolutePath}/config.yml")
+					|	config = files("${configPath.absolutePath}")
 					|}
 				"""
 
@@ -101,12 +103,13 @@ internal class DetektTaskKotlinDslTest : Spek({
 					.withPluginClasspath()
 					.build()
 
-			assertThat(result.output).contains("Ruleset: comments", "number of classes: 1", "--config ${rootDir.absolutePath}/config.yml")
+			assertThat(result.output).contains("Ruleset: comments", "number of classes: 1", "--config ${configPath.absolutePath}")
 			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 		}
 
 		it("can be applied with a full config") {
-
+			val configFile = File(rootDir, "config.yml")
+			val baselineFile = File(rootDir, "baseline.xml")
 
 			val detektConfig = """
 					|detekt {
@@ -114,8 +117,8 @@ internal class DetektTaskKotlinDslTest : Spek({
 					|	parallel = true
 					|	disableDefaultRuleSets = true
 					|	toolVersion = "$VERSION_UNDER_TEST"
-					|	config = files("${rootDir.absolutePath}/config.yml")
-					|	baseline = file("${rootDir.absolutePath}/baseline.xml")
+					|	config = files("${configFile.absolutePath}")
+					|	baseline = file("${baselineFile.absolutePath}")
 					|	filters = ".*/resources/.*, .*/build/.*"
 					|}
 				"""
@@ -138,13 +141,14 @@ internal class DetektTaskKotlinDslTest : Spek({
 		}
 
 		it("can configure a new custom detekt task") {
+			val configFile = File(rootDir, "config.yml")
 
 			val detektConfig = """
 					|task<io.gitlab.arturbosch.detekt.Detekt>("detektFailFast") {
 					|	description = "Runs a failfast detekt build."
 					|
 					|	input = files("src/main/java")
-					|	config = files("$rootDir/config.yml")
+					|	config = files("${configFile.absolutePath}")
 					|	debug = true
 					|	reports {
 					|		xml {
@@ -230,11 +234,11 @@ internal class DetektTaskKotlinDslTest : Spek({
 		}
 
 		it("can configure the input directory") {
-			val customSourceLocation = "gensrc/kotlin"
+			val customSourceLocation = File(rootDir, "gensrc/kotlin")
 			val detektConfig = """
 					|detekt {
 					| debug = true
-					| input = files("$customSourceLocation")
+					| input = files("${customSourceLocation.absolutePath}")
 					|}
 				"""
 
@@ -250,7 +254,7 @@ internal class DetektTaskKotlinDslTest : Spek({
 					.build()
 
 			assertThat(result.output).contains("number of classes: 1")
-			assertThat(result.output).contains("--input, $rootDir/$customSourceLocation")
+			assertThat(result.output).contains("--input, ${customSourceLocation.absolutePath}")
 			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 		}
 
@@ -302,10 +306,10 @@ private val ktFileContent = """
 	|
 	""".trimMargin()
 
-private fun writeFiles(root: File, detektConfig: String, sourceDir: String = "src/main/java") {
+private fun writeFiles(root: File, detektConfig: String, sourceDir: File = File(root, "src/main/java")) {
 	File(root, "build.gradle.kts").writeText(getBuildFileContent(detektConfig))
-	File(root, sourceDir).mkdirs()
-	File(root, "$sourceDir/MyClass.kt").writeText(ktFileContent)
+	sourceDir.mkdirs()
+	File(sourceDir, "/MyClass.kt").writeText(ktFileContent)
 }
 
 private fun writeConfig(root: File, failfast: Boolean = false) {
