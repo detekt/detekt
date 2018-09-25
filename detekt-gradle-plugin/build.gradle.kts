@@ -23,7 +23,7 @@ plugins {
 	`java-gradle-plugin`
 	id("com.gradle.plugin-publish") version "0.9.10"
 	id("com.jfrog.bintray") version "1.8.4"
-	kotlin("jvm") version "1.2.70"
+	kotlin("jvm") version "1.2.71"
 	`kotlin-dsl`
 	id("org.jetbrains.dokka") version "0.9.17"
 }
