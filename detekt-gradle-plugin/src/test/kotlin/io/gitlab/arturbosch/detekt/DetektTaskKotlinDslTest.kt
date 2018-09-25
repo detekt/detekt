@@ -276,7 +276,7 @@ internal class DetektTaskKotlinDslTest : Spek({
 		it("can be used without configuration") {
 			val detektConfig = """
 					|dependencies {
-					| detekt("io.gitlab.arturbosch.detekt:detekt-formatting:${VERSION_UNDER_TEST}")
+					| detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:${VERSION_UNDER_TEST}")
 					|}
 				"""
 
