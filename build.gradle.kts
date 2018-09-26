@@ -150,6 +150,9 @@ subprojects {
 		reportUndocumented = false
 		outputFormat = "javadoc"
 		outputDirectory = "$buildDir/javadoc"
+		// Java 8 is only version supported both by Oracle/OpenJDK and Dokka itself
+		// https://github.com/Kotlin/dokka/issues/294
+		enabled = JavaVersion.current().isJava8
 	}
 
 	val sourcesJar by tasks.creating(Jar::class) {
