@@ -21,6 +21,10 @@ tasks.withType<Wrapper> {
 	distributionType = Wrapper.DistributionType.ALL
 }
 
+tasks.withType<Test> {
+	dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":test"))
+}
+
 val detektVersion: String by project
 val usedDetektVersion: String by project
 
@@ -204,6 +208,7 @@ subprojects {
 		implementation(kotlin("stdlib"))
 		kotlinTest(kotlin("test"))
 		kotlinTest("org.junit.jupiter:junit-jupiter-api:$junitEngineVersion")
+		kotlinTest("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
 		kotlinTest("org.assertj:assertj-core:$assertjVersion")
 		kotlinTest("org.jetbrains.spek:spek-api:$spekVersion")
 		kotlinTest("org.jetbrains.spek:spek-subject-extension:$spekVersion")

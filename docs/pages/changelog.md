@@ -5,6 +5,31 @@ keywords: changelog, release-notes, migration
 permalink: changelog.html
 toc: true
 ---
+
+<!--
+#### Coming up
+
+##### Migration
+
+The configurations in the Detekt Gradle Plugin have changed to align the Plugin further with other
+static analysis plugins. Similar to FindBugs the Detekt Gradle Plugin now defines two configurations:
+`detekt` and `detektPlugins`.
+- `detekt` is now used to define detekt dependencies such as the `detekt-cli`.
+- `detektPlugins` is used to define custom detekt RuleSets and rules such as the `detekt-formatting`
+rules
+
+To define custom detekt extensions or to add the `detekt-formatting` rules you will now have to
+define them as:
+
+```kotlin
+dependencies {
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:[version]")
+    detektPlugins("your.custom.detekt.rules:rules:[version]")
+}
+```
+
+-->
+
 #### RC9.2
 
 ##### Migration

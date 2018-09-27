@@ -7,7 +7,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
-import kotlin.test.assertEquals
 
 /**
  * @author Artur Bosch
@@ -19,8 +18,8 @@ class NestedBlockDepthSpec : SubjectSpek<NestedBlockDepth>({
 	describe("nested classes are also considered") {
 		it("should detect only the nested large class") {
 			subject.lint(Case.NestedClasses.path())
-			assertEquals(subject.findings.size, 1)
-			assertEquals((subject.findings[0] as ThresholdedCodeSmell).value, 5)
+			assertThat(subject.findings.size).isEqualTo(1)
+			assertThat((subject.findings[0] as ThresholdedCodeSmell).value).isEqualTo(5)
 		}
 
 		it("should detect too nested block depth") {

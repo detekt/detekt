@@ -82,22 +82,22 @@ class DetektPlugin : Plugin<Project> {
 	private fun determineInput(extension: DetektExtension) = extension.input.filter { it.exists() }
 
 	private fun configurePluginDependencies(project: Project, extension: DetektExtension) {
-		project.configurations.create(CONFIGURATION_DETEKT_INTERNAL) {
+		project.configurations.create(CONFIGURATION_DETEKT_PLUGINS) {
 			isVisible = false
 			isTransitive = true
-			description = "The internal $CONFIGURATION_DETEKT_INTERNAL libraries to be used for this project."
+			description = "The $CONFIGURATION_DETEKT_PLUGINS libraries to be used for this project."
+		}
+
+		project.configurations.create(CONFIGURATION_DETEKT) {
+			isVisible = false
+			isTransitive = true
+			description = "The $CONFIGURATION_DETEKT dependencies to be used for this project."
 
 			@Suppress("USELESS_ELVIS")
 			val version = extension.toolVersion ?: DEFAULT_DETEKT_VERSION
 			defaultDependencies {
 				add(project.dependencies.create("io.gitlab.arturbosch.detekt:detekt-cli:$version"))
 			}
-		}
-
-		project.configurations.create(CONFIGURATION_DETEKT) {
-			isVisible = false
-			isTransitive = true
-			description = "The $CONFIGURATION_DETEKT libraries to be used for this project."
 		}
 	}
 
@@ -111,4 +111,4 @@ class DetektPlugin : Plugin<Project> {
 }
 
 const val CONFIGURATION_DETEKT = "detekt"
-const val CONFIGURATION_DETEKT_INTERNAL = "detektInternal"
+const val CONFIGURATION_DETEKT_PLUGINS = "detektPlugins"

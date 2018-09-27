@@ -4,11 +4,11 @@ import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 import java.util.regex.PatternSyntaxException
-import kotlin.test.assertFailsWith
 
 class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 
@@ -151,9 +151,8 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 		it("does fail when enabled with invalid regex") {
 			val configRules = mapOf(UnusedPrivateMember.ALLOWED_NAMES_PATTERN to "*foo")
 			val config = TestConfig(configRules)
-			assertFailsWith<PatternSyntaxException> {
-				UnusedPrivateMember(config).lint(regexTestingCode)
-			}
+			assertThatExceptionOfType(PatternSyntaxException::class.java)
+					.isThrownBy{ UnusedPrivateMember(config).lint(regexTestingCode) }
 		}
 	}
 

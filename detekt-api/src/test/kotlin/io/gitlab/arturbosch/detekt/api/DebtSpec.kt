@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.api
 
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
-import kotlin.test.assertFails
 
 /**
  * @author Artur Bosch
@@ -13,11 +13,11 @@ class DebtSpec : Spek({
 
 	describe("creating issues with custom debt values") {
 		it("should fail on negative values") {
-			assertFails { Debt(-1, -1, -1) }
+			assertThatIllegalArgumentException().isThrownBy { Debt(-1, -1, -1) }
 		}
 
 		it("should fail if all values are less than zero ") {
-			assertFails { Debt(0, 0, 0) }
+			assertThatIllegalArgumentException().isThrownBy { Debt(0, 0, 0) }
 		}
 
 		it("should print 20min, 10min and 5min") {

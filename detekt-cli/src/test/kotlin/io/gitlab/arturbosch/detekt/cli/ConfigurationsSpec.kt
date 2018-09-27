@@ -1,12 +1,16 @@
 package io.gitlab.arturbosch.detekt.cli
 
+import com.beust.jcommander.ParameterException
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.core.PathFilter
 import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
+import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
+import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
-import kotlin.test.assertFails
 
 /**
  * @author Artur Bosch
@@ -44,9 +48,9 @@ internal class ConfigurationsSpec : Spek({
 		}
 
 		it("should fail on invalid config value") {
-			assertFails { CliArgs().apply { config = "," }.loadConfiguration() }
-			assertFails { CliArgs().apply { config = "sfsjfsdkfsd" }.loadConfiguration() }
-			assertFails { CliArgs().apply { config = "./i.do.not.exist.yml" }.loadConfiguration() }
+			assertThatIllegalArgumentException().isThrownBy { CliArgs().apply { config = "," }.loadConfiguration() }
+			assertThatExceptionOfType(ParameterException::class.java).isThrownBy { CliArgs().apply { config = "sfsjfsdkfsd" }.loadConfiguration() }
+			assertThatExceptionOfType(ParameterException::class.java).isThrownBy { CliArgs().apply { config = "./i.do.not.exist.yml" }.loadConfiguration() }
 		}
 	}
 
@@ -73,9 +77,9 @@ internal class ConfigurationsSpec : Spek({
 		}
 
 		it("should fail on invalid config value") {
-			assertFails { CliArgs().apply { configResource = "," }.loadConfiguration() }
-			assertFails { CliArgs().apply { configResource = "sfsjfsdkfsd" }.loadConfiguration() }
-			assertFails { CliArgs().apply { configResource = "./i.do.not.exist.yml" }.loadConfiguration() }
+			assertThatExceptionOfType(Config.InvalidConfigurationError::class.java).isThrownBy { CliArgs().apply { configResource = "," }.loadConfiguration() }
+			assertThatExceptionOfType(ParameterException::class.java).isThrownBy { CliArgs().apply { configResource = "sfsjfsdkfsd" }.loadConfiguration() }
+			assertThatExceptionOfType(ParameterException::class.java).isThrownBy { CliArgs().apply { configResource = "./i.do.not.exist.yml" }.loadConfiguration() }
 		}
 	}
 
@@ -146,8 +150,8 @@ internal class ConfigurationsSpec : Spek({
 		}
 
 		it("should fail on invalid filters values") {
-			assertFails { CliArgs().apply { filters = "*." }.createPathFilters() }
-			assertFails { CliArgs().apply { filters = "(ahel" }.createPathFilters() }
+			assertThatIllegalArgumentException().isThrownBy { CliArgs().apply { filters = "*." }.createPathFilters() }
+			assertThatIllegalArgumentException().isThrownBy { CliArgs().apply { filters = "(ahel" }.createPathFilters() }
 		}
 	}
 

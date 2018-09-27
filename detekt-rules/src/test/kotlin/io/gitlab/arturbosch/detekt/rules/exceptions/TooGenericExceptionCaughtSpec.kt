@@ -5,11 +5,11 @@ import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import java.util.regex.PatternSyntaxException
-import kotlin.test.assertFailsWith
 
 class TooGenericExceptionCaughtSpec : Spek({
 
@@ -59,7 +59,7 @@ class TooGenericExceptionCaughtSpec : Spek({
 		it("should fail with invalid regex on allowed exception names") {
 			val config = TestConfig(mapOf(TooGenericExceptionCaught.ALLOWED_EXCEPTION_NAME_REGEX to "*Foo"))
 			val rule = TooGenericExceptionCaught(config)
-			assertFailsWith<PatternSyntaxException> {
+			assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
 				rule.lint(Case.TooGenericExceptions.path())
 			}
 		}
