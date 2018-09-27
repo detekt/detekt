@@ -1,34 +1,18 @@
 import com.jfrog.bintray.gradle.BintrayExtension
-import org.codehaus.groovy.tools.shell.util.Logger.io
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
-import org.gradle.kotlin.dsl.setValue
 import org.jetbrains.dokka.gradle.DokkaTask
 
-import java.util.*
-
-buildscript {
-	repositories {
-		gradlePluginPortal()
-		mavenLocal()
-		jcenter()
-	}
-
-	val kotlinVersion: String by project
-
-	dependencies {
-		classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
-	}
-}
+import java.util.Date
 
 plugins {
+	kotlin("jvm") version "1.2.61"
 	id("com.jfrog.bintray") version "1.8.4"
 	id("com.github.ben-manes.versions") version "0.20.0"
 	id("com.github.johnrengelman.shadow") version "2.0.4" apply false
 	id("org.sonarqube") version "2.6.2"
 	id("io.gitlab.arturbosch.detekt")
-	`kotlin-dsl`
 	id("org.jetbrains.dokka") version "0.9.17"
 }
 
@@ -160,7 +144,6 @@ subprojects {
 		})
 	}
 
-	val javaConvention = the<JavaPluginConvention>()
 	tasks.withType(DokkaTask::class.java) {
 		// suppresses undocumented classes but not dokka warnings
 		// https://github.com/Kotlin/dokka/issues/229 && https://github.com/Kotlin/dokka/issues/319
@@ -172,7 +155,7 @@ subprojects {
 	val sourcesJar by tasks.creating(Jar::class) {
 		dependsOn("classes")
 		classifier = "sources"
-		from(javaConvention.sourceSets["main"].allSource)
+		from(sourceSets["main"].allSource)
 	}
 
 	val javadocJar by tasks.creating(Jar::class) {
@@ -216,32 +199,23 @@ subprojects {
 		}
 	}
 
-	val kotlinVersion: String  by project
 	val junitEngineVersion: String by project
 	val assertjVersion: String by project
 	val spekVersion: String by project
-	val kotlinImplementation by configurations.creating
 	val kotlinTest by configurations.creating
 
 	dependencies {
-		kotlinImplementation("org.jetbrains.kotlin:kotlin-compiler-embeddable:$kotlinVersion")
-		kotlinImplementation("org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion")
+		implementation(kotlin("stdlib"))
+		kotlinTest(kotlin("test"))
 		kotlinTest("org.junit.jupiter:junit-jupiter-api:$junitEngineVersion")
 		kotlinTest("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
 		kotlinTest("org.assertj:assertj-core:$assertjVersion")
 		kotlinTest("org.jetbrains.spek:spek-api:$spekVersion")
 		kotlinTest("org.jetbrains.spek:spek-subject-extension:$spekVersion")
 		kotlinTest("org.junit.jupiter:junit-jupiter-engine:$junitEngineVersion")
-		kotlinTest("org.reflections:reflections:0.9.11")
 	}
 
-	the<JavaPluginConvention>().sourceSets {
-		"main" {
-			java {
-				srcDirs("src/main/kotlin")
-			}
-		}
-	}
+	sourceSets["main"].java.srcDirs("src/main/kotlin")
 }
 
 /**

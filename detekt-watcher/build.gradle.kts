@@ -4,7 +4,6 @@ application {
 	mainClassName = "io.gitlab.arturbosch.detekt.watcher.MainKt"
 }
 
-configurations.compile.extendsFrom(configurations.kotlinImplementation)
 configurations.testImplementation.extendsFrom(configurations.kotlinTest)
 
 val jcommanderVersion: String by project
@@ -15,6 +14,7 @@ val kshVersion: String by project
 dependencies {
 	implementation("com.beust:jcommander:$jcommanderVersion")
 	implementation("io.gitlab.arturbosch:ksh:$kshVersion")
+	implementation(kotlin("compiler-embeddable"))
 	implementation(project(":detekt-cli"))
 	implementation(project(":detekt-core"))
 	testImplementation(project(":detekt-test"))
