@@ -21,11 +21,12 @@ repositories {
 
 plugins {
 	`java-gradle-plugin`
-	id("com.gradle.plugin-publish") version "0.9.10"
+	id("com.gradle.plugin-publish") version "0.10.0"
 	id("com.jfrog.bintray") version "1.8.4"
 	kotlin("jvm") version "1.2.61"
 	`kotlin-dsl`
 	id("org.jetbrains.dokka") version "0.9.17"
+	id("com.github.ben-manes.versions") version "0.20.0"
 }
 
 kotlinDslPluginOptions {
@@ -42,8 +43,8 @@ version = "1.0.0.RC9.2"
 val detektGradleVersion: String by project
 val jcommanderVersion: String by project
 val spekVersion = "1.2.1"
-val junitPlatformVersion = "1.2.0"
-val assertjVersion = "3.10.0"
+val junitPlatformVersion = "1.3.1"
+val assertjVersion = "3.11.1"
 
 dependencies {
 	implementation(gradleApi())
@@ -88,8 +89,8 @@ pluginBundle {
 	description = "Static code analysis for Kotlin"
 	tags = listOf("kotlin", "detekt", "code-analysis", "badsmells", "codesmells")
 
-	plugins {
-		register("detektPlugin") {
+	(plugins) {
+		"detektPlugin" {
 			id = "io.gitlab.arturbosch.detekt"
 			displayName = "Static code analysis for Kotlin"
 		}
