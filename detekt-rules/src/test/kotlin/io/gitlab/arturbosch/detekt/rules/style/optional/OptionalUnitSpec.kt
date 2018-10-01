@@ -93,4 +93,16 @@ class OptionalUnitSpec : SubjectSpek<OptionalUnit>({
 			assertThat(findings).isEmpty()
 		}
 	}
+
+	given("a default interface implementation") {
+		it("should not report Unit as part of default interface implementations") {
+			val code = """
+                interface Foo {
+                    fun onMapClicked(point: Point?) = Unit
+                }
+            """
+			val findings = subject.lint(code)
+			assertThat(findings).isEmpty()
+		}
+	}
 })
