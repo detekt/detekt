@@ -159,3 +159,6 @@ target/
 *.iml
 */out
 /docs/_site
+
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
