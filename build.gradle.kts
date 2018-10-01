@@ -2,6 +2,7 @@ import com.jfrog.bintray.gradle.BintrayExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
+import org.gradle.util.GFileUtils
 import org.jetbrains.dokka.gradle.DokkaTask
 
 import java.util.Date
@@ -19,6 +20,18 @@ plugins {
 tasks.withType<Wrapper> {
 	gradleVersion = "4.10.2"
 	distributionType = Wrapper.DistributionType.ALL
+	doLast {
+		/*
+		 * Copy the properties file into the detekt-gradle-plugin project.
+		 * This allows IDEs like IntelliJ to import the detekt-gradle-plugin as a standalone project.
+		 */
+		val gradlePluginWrapperDir = File(gradle.includedBuild("detekt-gradle-plugin").projectDir, "/gradle/wrapper")
+		GFileUtils.mkdirs(gradlePluginWrapperDir)
+		copy {
+			from(propertiesFile)
+			into(gradlePluginWrapperDir)
+		}
+	}
 }
 
 tasks.withType<Test> {
