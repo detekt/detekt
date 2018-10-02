@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.test.TEST_FILENAME
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
@@ -8,6 +9,8 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
 class NamingRulesSpec : SubjectSpek<NamingRules>({
+
+	val fileName = TEST_FILENAME
 
 	subject { NamingRules() }
 
@@ -25,14 +28,14 @@ class NamingRulesSpec : SubjectSpek<NamingRules>({
 				}
 			"""
 			assertThat(subject.lint(code)).hasLocationStrings(
-					"'private val _FIELD = 5' at (2,2) in /foo.bar",
-					"'val FIELD get() = _field' at (3,2) in /foo.bar",
-					"'val camel_Case_Property = 5' at (4,2) in /foo.bar",
-					"'const val MY_CONST = 7' at (5,2) in /foo.bar",
-					"'const val MYCONST = 7' at (6,2) in /foo.bar",
-					"'val CONST_PARAMETER: String' at (1,9) in /foo.bar",
-					"'private val PRIVATE_CONST_PARAMETER: Int' at (1,38) in /foo.bar",
-					"'FUN_PARAMETER: String' at (7,14) in /foo.bar"
+					"'private val _FIELD = 5' at (2,2) in /$fileName",
+					"'val FIELD get() = _field' at (3,2) in /$fileName",
+					"'val camel_Case_Property = 5' at (4,2) in /$fileName",
+					"'const val MY_CONST = 7' at (5,2) in /$fileName",
+					"'const val MYCONST = 7' at (6,2) in /$fileName",
+					"'val CONST_PARAMETER: String' at (1,9) in /$fileName",
+					"'private val PRIVATE_CONST_PARAMETER: Int' at (1,38) in /$fileName",
+					"'FUN_PARAMETER: String' at (7,14) in /$fileName"
 			)
 		}
 
@@ -79,8 +82,8 @@ class NamingRulesSpec : SubjectSpek<NamingRules>({
 			"""
 			val config = TestConfig(mapOf("ignoreOverridden" to "false"))
 			assertThat(NamingRules(config).lint(code)).hasLocationStrings(
-					"'override val SHOULD_BE_FLAGGED = \"banana\"' at (2,2) in /foo.bar",
-					"'override val SHOULD_BE_FLAGGED_2 = \"banana\"' at (5,2) in /foo.bar"
+					"'override val SHOULD_BE_FLAGGED = \"banana\"' at (2,2) in /$fileName",
+					"'override val SHOULD_BE_FLAGGED_2 = \"banana\"' at (5,2) in /$fileName"
 			)
 		}
 	}
