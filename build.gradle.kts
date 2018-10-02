@@ -206,6 +206,9 @@ subprojects {
 
 	dependencies {
 		implementation(kotlin("stdlib"))
+
+		detekt(project(":detekt-cli"))
+
 		kotlinTest(kotlin("test"))
 		kotlinTest("org.junit.jupiter:junit-jupiter-api:$junitEngineVersion")
 		kotlinTest("org.assertj:assertj-core:$assertjVersion")
