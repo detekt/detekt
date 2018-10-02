@@ -44,8 +44,8 @@ class McCabeVisitor(private val ignoreSimpleWhenEntries: Boolean) : DetektVisito
 	}
 
 	override fun visitWhenExpression(expression: KtWhenExpression) {
-		val entriesSequence = expression.extractEntries(ignoreSimpleWhenEntries)
-		_mcc += entriesSequence.count()
+		val entries = expression.extractEntries(ignoreSimpleWhenEntries)
+		_mcc += if (ignoreSimpleWhenEntries && entries.count() == 0) 1 else entries.count()
 		super.visitWhenExpression(expression)
 	}
 

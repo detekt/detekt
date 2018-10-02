@@ -31,6 +31,6 @@ internal class ComplexityVisitorTest {
 
 		val mcc = calcComplexity(path)
 
-		assertThat(mcc).isEqualTo(54)
+		assertThat(mcc).isEqualTo(56)
 	}
 }
