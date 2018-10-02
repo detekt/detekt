@@ -20,5 +20,3 @@ pluginManagement {
 		}
 	}
 }
-
-enableFeaturePreview("STABLE_PUBLISHING")
