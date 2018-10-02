@@ -1,5 +1,7 @@
 import com.gradle.publish.PluginConfig
 import com.jfrog.bintray.gradle.BintrayExtension
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.dokka.gradle.DokkaTask
 import java.util.Date
 
@@ -35,7 +37,7 @@ apply {
 }
 
 group = "io.gitlab.arturbosch.detekt"
-version = "1.0.0.RC9"
+version = "1.0.0.RC9.2"
 
 val detektGradleVersion: String by project
 val jcommanderVersion: String by project
@@ -46,7 +48,6 @@ val assertjVersion = "3.10.0"
 dependencies {
 	implementation(gradleApi())
 	implementation(kotlin("stdlib"))
-	implementation(kotlin("reflect"))
 
 	testImplementation("org.assertj:assertj-core:$assertjVersion")
 	testImplementation("org.jetbrains.spek:spek-api:$spekVersion")
@@ -66,6 +67,19 @@ gradlePlugin {
 
 val test by tasks.getting(Test::class) {
 	useJUnitPlatform()
+	testLogging {
+		// set options for log level LIFECYCLE
+		events = setOf(
+				TestLogEvent.FAILED,
+				TestLogEvent.PASSED,
+				TestLogEvent.SKIPPED,
+				TestLogEvent.STANDARD_OUT
+		)
+		exceptionFormat = TestExceptionFormat.FULL
+		showExceptions = true
+		showCauses = true
+		showStackTraces = true
+	}
 }
 
 pluginBundle {

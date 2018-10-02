@@ -1,13 +1,12 @@
 package io.gitlab.arturbosch.detekt.api
 
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
+import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.lastBlockStatementOrThis
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.it
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 /**
  * @author Artur Bosch
@@ -18,21 +17,21 @@ internal class SuppressionSpec : Spek({
 		val ktFile = compilerFor("SuppressedObject.kt")
 		val rule = TestRule()
 		rule.visitFile(ktFile)
-		assertNotNull(rule.expected)
+		assertThat(rule.expected).isNotNull()
 	}
 
 	it("findings are suppressed") {
 		val ktFile = compilerFor("SuppressedElements.kt")
 		val ruleSet = RuleSet("Test", listOf(TestLM(), TestLPL()))
 		val findings = ruleSet.accept(ktFile)
-		assertEquals(0, findings.size)
+		assertThat(findings.size).isZero()
 	}
 
 	it("rule should be suppressed by ALL") {
 		val ktFile = compilerFor("SuppressedByAllObject.kt")
 		val rule = TestRule()
 		rule.visitFile(ktFile)
-		assertNotNull(rule.expected)
+		assertThat(rule.expected).isNotNull()
 	}
 
 	it("rule should be suppressed by detekt prefix in uppercase with dot separator") {
@@ -47,7 +46,7 @@ internal class SuppressionSpec : Spek({
 			""")
 		val rule = TestRule()
 		rule.visitFile(ktFile)
-		assertNotNull(rule.expected)
+		assertThat(rule.expected).isNotNull()
 	}
 
 	it("rule should be suppressed by detekt prefix in lowercase with colon separator") {
@@ -62,7 +61,7 @@ internal class SuppressionSpec : Spek({
 			""")
 		val rule = TestRule()
 		rule.visitFile(ktFile)
-		assertNotNull(rule.expected)
+		assertThat(rule.expected).isNotNull()
 	}
 
 	it("rule should be suppressed by detekt prefix in all caps with colon separator") {
@@ -77,7 +76,7 @@ internal class SuppressionSpec : Spek({
 			""")
 		val rule = TestRule()
 		rule.visitFile(ktFile)
-		assertNotNull(rule.expected)
+		assertThat(rule.expected).isNotNull()
 	}
 })
 

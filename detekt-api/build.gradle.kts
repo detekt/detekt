@@ -1,4 +1,3 @@
-configurations.implementation.extendsFrom(configurations.kotlinImplementation)
 configurations.testImplementation.extendsFrom(configurations.kotlinTest)
 
 val yamlVersion: String by project
@@ -7,6 +6,7 @@ val spekVersion: String by project
 
 dependencies {
 	implementation("org.yaml:snakeyaml:$yamlVersion")
+	implementation(kotlin("compiler-embeddable"))
 
 	testImplementation(project(":detekt-test"))
 

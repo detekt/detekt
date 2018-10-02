@@ -32,8 +32,12 @@ abstract class FormattingRule(config: Config) : Rule(config) {
 	protected fun issueFor(description: String) =
 			Issue(javaClass.simpleName, Severity.Style, description, Debt.FIVE_MINS)
 
+	/**
+	 * Should the android style guide be enforced?
+	 * This property is read from the ruleSet config.
+	 */
 	protected val isAndroid
-		get() = config.valueOrDefault("android", false)
+		get() = ruleSetConfig.valueOrDefault("android", false)
 
 	private var positionByOffset: (offset: Int) -> Pair<Int, Int> by SingleAssign()
 	private var root: KtFile by SingleAssign()

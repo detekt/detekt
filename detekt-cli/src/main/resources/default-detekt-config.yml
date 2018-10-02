@@ -420,7 +420,7 @@ style:
     ignoreConstantDeclaration: true
     ignoreCompanionObjectPropertyDeclaration: true
     ignoreAnnotation: false
-    ignoreNamedArgument: false
+    ignoreNamedArgument: true
     ignoreEnums: false
   MandatoryBracesIfStatements:
     active: false
@@ -471,6 +471,8 @@ style:
     active: false
     excludeAnnotatedClasses: "dagger.Module"
   UnnecessaryInheritance:
+    active: false
+  UnnecessaryLet:
     active: false
   UnnecessaryParentheses:
     active: false

@@ -27,7 +27,8 @@ class RuleSet(val id: String, val rules: List<BaseRule>) {
 	 * A list of findings is returned for given [KtFile]
 	 */
 	fun accept(file: KtFile, ruleFilters: Set<String>): List<Finding> =
-			rules.filterNot { it.id in ruleFilters }
-					.onEach { if (it is MultiRule) it.ruleFilters = ruleFilters }
+			rules.asSequence()
+					.filterNot { it.ruleId in ruleFilters }
+					.onEach { if (it is MultiRule) it.ruleFilters = ruleFilters }.toList()
 					.flatMap { it.visitFile(file); it.findings }
 }

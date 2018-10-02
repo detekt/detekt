@@ -12,7 +12,7 @@ abstract class MultiRule : BaseRule() {
 
 	override fun preVisit(root: KtFile) {
 		activeRules = rules.filterTo(HashSet()) {
-			it.id !in ruleFilters && it.visitCondition(root)
+			it.ruleId !in ruleFilters && it.visitCondition(root)
 		}
 	}
 

@@ -35,6 +35,18 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 
 Visit https://arturbosch.github.io/detekt/ for installation guides, release notes, migration guides, rule descriptions and configuration options.
 
+##### Quick-Links
+
+- Changelog and migration guides: https://arturbosch.github.io/detekt/changelog.html
+- Available CLI options: https://arturbosch.github.io/detekt/cli.html
+- Rule set and rule descriptions: https://arturbosch.github.io/detekt/complexity.html
+- Writing custom rules and extending detekt: https://arturbosch.github.io/detekt/extensions.html
+- Suppressing findings? https://arturbosch.github.io/detekt/suppressing-rules.html https://arturbosch.github.io/detekt/baseline.html
+- Configuring detekt? https://arturbosch.github.io/detekt/configurations.html
+- Sample gradle integrations examples
+    - multi project (kotlin dsl): https://github.com/arturbosch/detekt/blob/master/build.gradle.kts
+    - single project (groovy dsl): https://github.com/arturbosch/kutils/blob/master/build.gradle
+
 ### Quick Start ...
 
 #### with command-line interface
@@ -123,6 +135,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Dmitriy Samaryan](https://github.com/samarjan92) - Rule fix: SerialVersionUIDInSerializableClass
 - [Mariano Simone](https://github.com/marianosimone) - Rule improvement: UnusedPrivateMember
 - [Shunsuke Maeda](https://github.com/duck8823) - Fix: to work on multi module project using [maven plugin](https://github.com/Ozsie/detekt-maven-plugin)
+- [Mikhail Levchenko](https://github.com/mishkun) - New rule: Unnecessary let
 - [Scott Kennedy](https://github.com/scottkennedy) - Minor fixes
 - [Mickele Moriconi](https://github.com/mickele) - Added: ConstructorParameterNaming and FunctionParameterNaming rules
 - [Lukasz Jazgar](https://github.com/ljazgar) - Fixed configuring formatting rules

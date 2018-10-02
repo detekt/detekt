@@ -10,6 +10,8 @@ fun assertThat(findings: List<Finding>) = FindingsAssert(findings)
 
 fun assertThat(finding: Finding) = FindingAssert(finding)
 
+fun List<Finding>.assert() = FindingsAssert(this)
+
 class FindingsAssert(actual: List<Finding>) :
 		AbstractListAssert<FindingsAssert, List<Finding>,
 				Finding, FindingAssert>(actual, FindingsAssert::class.java) {

@@ -1,16 +1,16 @@
 package io.gitlab.arturbosch.detekt.api
 
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
-import kotlin.test.assertEquals
-import kotlin.test.assertFailsWith
 
 internal class SingleAssignTest : Spek({
   describe("value is unset") {
     var unassigned: Int by SingleAssign()
     it("should fail when value is retrieved") {
-      assertFailsWith(IllegalStateException::class) {
+      assertThatIllegalStateException().isThrownBy {
         @Suppress("UNUSED_EXPRESSION")
         unassigned
       }
@@ -26,11 +26,11 @@ internal class SingleAssignTest : Spek({
     assigned = 15
 
     it("should succeed when value is retrieved") {
-      assertEquals(15, assigned)
+      assertThat(assigned).isEqualTo(15)
     }
 
     it("should fail when value is assigned") {
-      assertFailsWith<IllegalStateException> { assigned = -1 }
+	  assertThatIllegalStateException().isThrownBy { assigned = -1 }
     }
   }
 })
