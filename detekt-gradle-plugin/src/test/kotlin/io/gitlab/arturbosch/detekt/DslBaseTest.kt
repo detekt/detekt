@@ -38,17 +38,20 @@ class DslBaseTest(private val buildGradleFileName: String, private val buildGrad
 	fun writeFiles(root: File, detektConfiguration: String, srcDir: File = File(root, "src/main/java")) {
 		File(root, buildGradleFileName).writeText(getBuildFileContent(detektConfiguration))
 		File(root, "settings.gradle").writeText(settingsFileContent)
-		srcDir.mkdirs()
-		File(srcDir, "MyClass.kt").writeText(ktFileContent)
+		writeSourceFile(root, srcDir)
 	}
 
 	fun writeFiles(root: File, detektConfiguration: String, vararg srcDir: File) {
 		File(root, buildGradleFileName).writeText(getBuildFileContent(detektConfiguration))
 		File(root, "settings.gradle").writeText(settingsFileContent)
 		srcDir.forEach {
-			it.mkdirs()
-			File(it, "MyClass.kt").writeText(ktFileContent)
+			writeSourceFile(root, it)
 		}
+	}
+
+	fun writeSourceFile(root: File, srcDir: File = File(root, "src/main/java"), filename: String = "MyClass.kt") {
+		srcDir.mkdirs()
+		File(srcDir, filename).writeText(ktFileContent)
 	}
 }
 
