@@ -62,12 +62,12 @@ open class Detekt : DefaultTask() {
 
 	@InputFile
 	@Optional
-	@PathSensitive(PathSensitivity.ABSOLUTE)
+	@PathSensitive(PathSensitivity.RELATIVE)
 	var baseline: File? = null
 
 	@InputFiles
 	@Optional
-	@PathSensitive(PathSensitivity.ABSOLUTE)
+	@PathSensitive(PathSensitivity.RELATIVE)
 	var config: FileCollection? = null
 
 	@Input
