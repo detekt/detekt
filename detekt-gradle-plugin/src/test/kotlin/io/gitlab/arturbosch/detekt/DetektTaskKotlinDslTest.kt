@@ -150,7 +150,7 @@ internal class DetektTaskKotlinDslTest : Spek({
 					.build()
 
 			assertThat(result.output).contains("number of classes: 1")
-			assertThat(result.output).contains("--parallel", "--debug", "--disable-default-rulesets")
+			assertThat(result.output).contains("--parallel", "--debug", "--disable-default-rulesets", "--filters .*/resources/.*, .*/build/.*")
 			assertThat(result.output).doesNotContain("Ruleset: comments")
 			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 		}
@@ -164,13 +164,9 @@ internal class DetektTaskKotlinDslTest : Spek({
 					|
 					|	input = files("src/main/java")
 					|	config = files("${configFile.safeAbsolutePath}")
-					|	debug = true
-					|	reports {
-					|		xml {
-					|			destination = file("build/reports/failfast.xml")
-					|		}
-					|		html.destination = file("build/reports/failfast.html")
-					|	}
+					|	debug.set(true)
+					|	xmlReportFile.set(file("build/reports/failfast.xml"))
+					|	htmlReportFile.set(file("build/reports/failfast.html"))
 					|}
 				"""
 
@@ -269,7 +265,7 @@ internal class DetektTaskKotlinDslTest : Spek({
 					.build()
 
 			assertThat(result.output).contains("number of classes: 1")
-			assertThat(result.output).contains("--input, ${customSourceLocation.absolutePath}")
+			assertThat(result.output).contains("--input ${customSourceLocation.absolutePath}")
 			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 		}
 

@@ -7,6 +7,8 @@ class DslBaseTest(private val buildGradleFileName: String, private val buildGrad
 	private fun getBuildFileContent(customConfig: String): String {
 		return """
     	|$buildGradleFile
+    	|
+    	|tasks.all {}
 		|
     	|$customConfig
 		""".trimMargin()
@@ -35,7 +37,7 @@ class DslBaseTest(private val buildGradleFileName: String, private val buildGrad
 		""".trimMargin())
 	}
 
-	fun writeFiles(root: File, detektConfiguration: String, srcDir: File = File(root, "src/main/java")) {
+	fun writeFiles(root: File, detektConfiguration: String = "", srcDir: File = File(root, "src/main/java")) {
 		File(root, buildGradleFileName).writeText(getBuildFileContent(detektConfiguration))
 		File(root, "settings.gradle").writeText(settingsFileContent)
 		writeSourceFile(root, srcDir)

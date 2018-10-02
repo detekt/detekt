@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.invoke
 
 import org.gradle.api.file.FileCollection
-import java.io.File
+import org.gradle.api.file.RegularFile
 
 private const val DEBUG_PARAMETER = "--debug"
 private const val FILTERS_PARAMETER = "--filters"
@@ -39,22 +39,23 @@ internal data class PluginsArgument(val plugins: String?) : CliArgument() {
 	override fun toArgument() = plugins?.let { listOf(PLUGINS_PARAMETER, it) } ?: emptyList()
 }
 
-internal data class BaselineArgument(val baseline: File?) : CliArgument() {
-	override fun toArgument() = baseline?.let { listOf(BASELINE_PARAMETER, it.absolutePath) } ?: emptyList()
+internal data class BaselineArgument(val baseline: RegularFile?) : CliArgument() {
+	override fun toArgument() = baseline?.let { listOf(BASELINE_PARAMETER, it.asFile.absolutePath) } ?: emptyList()
 }
 
-internal data class XmlReportArgument(val file: File?) : CliArgument() {
-	override fun toArgument() = file?.let { listOf(REPORT_PARAMETER, "xml:${it.absolutePath}") } ?: emptyList()
+internal data class XmlReportArgument(val file: RegularFile?) : CliArgument() {
+	override fun toArgument() = file?.let { listOf(REPORT_PARAMETER, "xml:${it.asFile.absoluteFile}") } ?: emptyList()
 }
 
-internal data class HtmlReportArgument(val file: File?) : CliArgument() {
-	override fun toArgument() = file?.let { listOf(REPORT_PARAMETER, "html:${it.absolutePath}") } ?: emptyList()
+internal data class HtmlReportArgument(val file: RegularFile?) : CliArgument() {
+	override fun toArgument() = file?.let { listOf(REPORT_PARAMETER, "html:${it.asFile.absolutePath}") } ?: emptyList()
 }
 
-internal data class ConfigArgument(val config: FileCollection?) : CliArgument() {
-	override fun toArgument() = config?.let { configPaths ->
-		listOf(CONFIG_PARAMETER, configPaths.joinToString(",") { it.absolutePath })
-	} ?: emptyList()
+internal data class ConfigArgument(val config: FileCollection) : CliArgument() {
+	override fun toArgument() = if (config.isEmpty)
+		emptyList()
+	else
+		listOf(CONFIG_PARAMETER, config.joinToString(",") { it.absolutePath })
 }
 
 internal data class DebugArgument(val value: Boolean) : CliArgument() {

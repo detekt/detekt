@@ -66,13 +66,9 @@ task<io.gitlab.arturbosch.detekt.Detekt>("detektFailFast") {
 
     input = files("src/main/kotlin", "src/test/kotlin")
     config = files("$rootDir/config.yml")
-    debug = true
-    reports {
-        xml {
-            destination = file("build/reports/failfast.xml")
-        }
-        html.destination = file("build/reports/failfast.html")
-    }
+    debug.set(true)
+    xmlReportFile.set(file("build/reports/failfast.xml"))       // if omitted no xml report is generated
+    htmlReportFile.set(file("build/reports/failfast.html"))     // if omitted no html report is generated
 }
 ```
 

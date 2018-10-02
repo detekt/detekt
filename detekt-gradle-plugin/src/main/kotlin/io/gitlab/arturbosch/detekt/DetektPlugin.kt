@@ -3,8 +3,9 @@ package io.gitlab.arturbosch.detekt
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.file.FileCollection
+import org.gradle.api.provider.Provider
 import org.gradle.language.base.plugins.LifecycleBasePlugin
-import java.io.File
 
 /**
  * @author Marvin Ramin
@@ -25,23 +26,16 @@ class DetektPlugin : Plugin<Project> {
 
 	private fun createAndConfigureDetektTask(project: Project, extension: DetektExtension) {
 		val detektTask = project.tasks.register(DETEKT, Detekt::class.java) {
-			debug = extension.debug
-			parallel = extension.parallel
-			disableDefaultRuleSets = extension.disableDefaultRuleSets
-			filters = extension.filters
-			config = extension.config
-			baseline = extension.baseline
-			plugins = extension.plugins
-			input = determineInput(extension)
+			debug.set(project.provider({ extension.debug }))
+			parallel.set(project.provider({ extension.parallel }))
+			disableDefaultRuleSets.set(project.provider({ extension.disableDefaultRuleSets }))
+			filters.set(project.provider({ extension.filters }))
+			config.setFrom(project.provider { extension.config })
+			baseline.set(project.layout.file(project.provider({ extension.baseline })))
+			plugins.set(project.provider({ extension.plugins }))
+			input.setFrom(existingInputDirectoriesProvider(project, extension))
 			extension.reports.forEach { extReport ->
-				reports.withName(extReport.name) {
-					enabled = extReport.enabled
-					val fileSuffix = extReport.name
-					@Suppress("USELESS_ELVIS")
-					val reportsDir = extension.reportsDir ?: extension.defaultReportsDir
-					val customDestination = extReport.destination
-					destination = customDestination ?: File(reportsDir, "$DETEKT.$fileSuffix")
-				}
+				setReportFileProvider(extReport.name, extReport.getTargetFileProvider(extension.reportsDirProvider))
 			}
 		}
 
@@ -50,36 +44,37 @@ class DetektPlugin : Plugin<Project> {
 
 	private fun createAndConfigureCreateBaselineTask(project: Project, extension: DetektExtension) =
 			project.tasks.register(BASELINE, DetektCreateBaselineTask::class.java) {
-				baseline = extension.baseline
-				debugOrDefault = extension.debug
-				parallelOrDefault = extension.parallel
-				disableDefaultRuleSetsOrDefault = extension.disableDefaultRuleSets
-				filters = extension.filters
-				config = extension.config
-				plugins = extension.plugins
-				input = determineInput(extension)
+				baseline.set(project.layout.file(project.provider({ extension.baseline })))
+				config.setFrom(project.provider { extension.config })
+				debug.set(project.provider({ extension.debug }))
+				parallel.set(project.provider({ extension.parallel }))
+				disableDefaultRuleSets.set(project.provider({ extension.disableDefaultRuleSets }))
+				filters.set(project.provider({ extension.filters }))
+				plugins.set(project.provider({ extension.plugins }))
+				input.setFrom(existingInputDirectoriesProvider(project, extension))
 			}
 
 	private fun createAndConfigureGenerateConfigTask(project: Project, extension: DetektExtension) =
 			project.tasks.register(GENERATE_CONFIG, DetektGenerateConfigTask::class.java) {
-				input = determineInput(extension)
+				input.setFrom(existingInputDirectoriesProvider(project, extension))
 			}
 
 	private fun createAndConfigureIdeaTasks(project: Project, extension: DetektExtension) {
 		project.tasks.register(IDEA_FORMAT, DetektIdeaFormatTask::class.java) {
-			debugOrDefault = extension.debug
-			input = determineInput(extension)
+			debug.set(project.provider({ extension.debug }))
+			input.setFrom(existingInputDirectoriesProvider(project, extension))
 			ideaExtension = extension.idea
 		}
 
 		project.tasks.register(IDEA_INSPECT, DetektIdeaInspectionTask::class.java) {
-			debugOrDefault = extension.debug
-			input = determineInput(extension)
+			debug.set(project.provider({ extension.debug }))
+			input.setFrom(existingInputDirectoriesProvider(project, extension))
 			ideaExtension = extension.idea
 		}
 	}
 
-	private fun determineInput(extension: DetektExtension) = extension.input.filter { it.exists() }
+	private fun existingInputDirectoriesProvider(project: Project, extension: DetektExtension): Provider<FileCollection> =
+			project.provider({ extension.input.filter { it.exists() } })
 
 	private fun configurePluginDependencies(project: Project, extension: DetektExtension) {
 		project.configurations.create(CONFIGURATION_DETEKT_PLUGINS) {
@@ -93,8 +88,7 @@ class DetektPlugin : Plugin<Project> {
 			isTransitive = true
 			description = "The $CONFIGURATION_DETEKT dependencies to be used for this project."
 
-			@Suppress("USELESS_ELVIS")
-			val version = extension.toolVersion ?: DEFAULT_DETEKT_VERSION
+			val version = extension.detektVersion ?: DEFAULT_DETEKT_VERSION
 			defaultDependencies {
 				add(project.dependencies.create("io.gitlab.arturbosch.detekt:detekt-cli:$version"))
 			}
