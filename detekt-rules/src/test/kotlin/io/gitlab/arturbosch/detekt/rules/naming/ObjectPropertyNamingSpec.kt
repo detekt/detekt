@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.test.TEST_FILENAME
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
@@ -9,6 +10,8 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
 class ObjectPropertyNamingSpec : SubjectSpek<ObjectPropertyNaming>({
+
+	val fileName = TEST_FILENAME
 
 	subject { ObjectPropertyNaming() }
 
@@ -39,7 +42,7 @@ class ObjectPropertyNamingSpec : SubjectSpek<ObjectPropertyNaming>({
 				}
 			""")
 			assertThat(subject.lint(code)).hasLocationStrings(
-					"'const val _nAme = \"Artur\"' at (3,6) in /foo.bar"
+					"'const val _nAme = \"Artur\"' at (3,6) in /$fileName"
 			)
 		}
 	}
@@ -66,7 +69,7 @@ class ObjectPropertyNamingSpec : SubjectSpek<ObjectPropertyNaming>({
 				}
 			""")
 			assertThat(subject.lint(code)).hasLocationStrings(
-					"'const val _nAme = \"Artur\"' at (4,7) in /foo.bar"
+					"'const val _nAme = \"Artur\"' at (4,7) in /$fileName"
 			)
 		}
 	}

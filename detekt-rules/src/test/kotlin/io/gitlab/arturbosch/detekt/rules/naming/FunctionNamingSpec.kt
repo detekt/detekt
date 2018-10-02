@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.test.TEST_FILENAME
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
@@ -10,6 +11,8 @@ import org.jetbrains.spek.api.dsl.it
  * @author Artur Bosch
  */
 class FunctionNamingSpec : Spek({
+
+	val fileName = TEST_FILENAME
 
 	it("allows FunctionName as alias for suppressing") {
 		val code = """
@@ -36,7 +39,7 @@ class FunctionNamingSpec : Spek({
 			}
 		"""
 		assertThat(FunctionNaming().lint(code)).hasLocationStrings(
-				"'fun SHOULD_BE_FLAGGED() { }' at (2,2) in /foo.bar"
+				"'fun SHOULD_BE_FLAGGED() { }' at (2,2) in /$fileName"
 		)
 	}
 
@@ -54,7 +57,7 @@ class FunctionNamingSpec : Spek({
 			}
 		"""
 		assertThat(FunctionNaming().lint(code)).hasLocationStrings(
-				"'fun SHOULD_BE_FLAGGED() {}' at (2,2) in /foo.bar"
+				"'fun SHOULD_BE_FLAGGED() {}' at (2,2) in /$fileName"
 		)
 	}
 
@@ -64,7 +67,7 @@ class FunctionNamingSpec : Spek({
 		"""
 		val config = TestConfig(mapOf("ignoreOverridden" to "false"))
 		assertThat(FunctionNaming(config).lint(code)).hasLocationStrings(
-				"'override fun SHOULD_BE_FLAGGED() = TODO()' at (1,1) in /foo.bar"
+				"'override fun SHOULD_BE_FLAGGED() = TODO()' at (1,1) in /$fileName"
 		)
 	}
 })
