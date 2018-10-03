@@ -143,6 +143,10 @@ Reports function parameter names which do not follow the specified naming conven
 * `excludeClassPattern` (default: `'$^'`)
 
    ignores variables in classes which match this regex
+   
+* `ignoreOverriddenFunctions` (default: `true`)
+
+   ignores overridden functions with parameters not matching the pattern
 
 ### MatchingDeclarationName
 

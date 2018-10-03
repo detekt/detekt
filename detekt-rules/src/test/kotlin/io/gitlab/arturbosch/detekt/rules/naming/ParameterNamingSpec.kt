@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.Spek
@@ -55,7 +56,7 @@ class ParameterNamingSpec : Spek({
 			assertThat(findings).isEmpty()
 		}
 
-		it("should not detect violations in overridden function") {
+		it("should not detect violations in overridden function by default") {
 			val findings = FunctionParameterNaming().lint(
 					"""
 					class C {
@@ -64,6 +65,18 @@ class ParameterNamingSpec : Spek({
 				"""
 			)
 			assertThat(findings).isEmpty()
+		}
+
+		it("should detect violations in overridden function if ignoreOverriddenFunctions is false") {
+			val config = TestConfig(mapOf("ignoreOverriddenFunctions" to "false"))
+			val findings = FunctionParameterNaming(config).lint(
+					"""
+					class C {
+						override fun someStuff(`object`: String) {}
+					}
+				"""
+			)
+			assertThat(findings).hasSize(1)
 		}
 
 		it("should find some violations") {
