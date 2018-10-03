@@ -55,15 +55,17 @@ internal class DetektTaskGroovyDslTest : Spek({
 			assertThat(File(rootDir, "build/reports/detekt/detekt.xml")).exists()
 			assertThat(File(rootDir, "build/reports/detekt/detekt.html")).exists()
 		}
-		it("can be applied with a version only") {
+		it("can be applied with a custom detekt version") {
 
+			val customVersion = "1.0.0-gradle-rework-beta3"
 			val detektConfig = """
-				|detekt {
-				|	toolVersion = "$VERSION_UNDER_TEST"
-				|}
+					|detekt {
+					|	toolVersion = "$customVersion"
+					|}
 				"""
 
 			dslTest.writeFiles(rootDir, detektConfig)
+			dslTest.writeConfig(rootDir)
 
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
@@ -72,15 +74,12 @@ internal class DetektTaskGroovyDslTest : Spek({
 					.withPluginClasspath()
 					.build()
 
-			assertThat(result.output).contains("number of classes: 1")
-			assertThat(result.output).contains("Ruleset: comments")
 			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+			assertThat(result.output).contains("io.gitlab.arturbosch.detekt/detekt-cli/$customVersion")
 
 			// Asserts that the "custom" module is not built, and that custom ruleset is not enabled
 			assertThat(result.output).doesNotContain("Ruleset: test-custom")
 			assertThat(File(rootDir, "custom/build")).doesNotExist()
-			assertThat(File(rootDir, "build/reports/detekt/detekt.xml")).exists()
-			assertThat(File(rootDir, "build/reports/detekt/detekt.html")).exists()
 		}
 		it("can change specific report destination") {
 

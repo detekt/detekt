@@ -74,9 +74,10 @@ internal class DetektTaskKotlinDslTest : Spek({
 
 		it("can be applied with a custom detekt version") {
 
+			val customVersion = "1.0.0-gradle-rework-beta3"
 			val detektConfig = """
 					|detekt {
-					|	toolVersion = "$VERSION_UNDER_TEST"
+					|	toolVersion = "$customVersion"
 					|}
 				"""
 
@@ -90,9 +91,8 @@ internal class DetektTaskKotlinDslTest : Spek({
 					.withPluginClasspath()
 					.build()
 
-			assertThat(result.output).contains("number of classes: 1")
-			assertThat(result.output).contains("Ruleset: comments")
 			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+			assertThat(result.output).contains("io.gitlab.arturbosch.detekt/detekt-cli/$customVersion")
 
 			// Asserts that the "custom" module is not built, and that custom ruleset is not enabled
 			assertThat(result.output).doesNotContain("Ruleset: test-custom")

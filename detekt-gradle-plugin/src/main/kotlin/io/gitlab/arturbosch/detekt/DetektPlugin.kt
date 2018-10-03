@@ -88,8 +88,9 @@ class DetektPlugin : Plugin<Project> {
 			isTransitive = true
 			description = "The $CONFIGURATION_DETEKT dependencies to be used for this project."
 
-			val version = extension.detektVersion ?: DEFAULT_DETEKT_VERSION
 			defaultDependencies {
+				@Suppress("USELESS_ELVIS")
+				val version = extension.toolVersion ?: DEFAULT_DETEKT_VERSION
 				add(project.dependencies.create("io.gitlab.arturbosch.detekt:detekt-cli:$version"))
 			}
 		}

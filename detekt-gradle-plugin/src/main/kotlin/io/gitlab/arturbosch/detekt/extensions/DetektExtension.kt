@@ -21,9 +21,6 @@ open class DetektExtension(project: Project) : CodeQualityExtension() {
 	val customReportsDir: File?
 		get() = reportsDir
 
-	val detektVersion: String?
-		get() = toolVersion
-
 	private val defaultReportsDir: Directory = project.layout.buildDirectory.get()
 			.dir(ReportingExtension.DEFAULT_REPORTS_DIR_NAME)
 			.dir("detekt")
