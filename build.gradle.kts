@@ -11,7 +11,7 @@ plugins {
 	kotlin("jvm") version "1.2.61"
 	id("com.jfrog.bintray") version "1.8.4"
 	id("com.github.ben-manes.versions") version "0.20.0"
-	id("com.github.johnrengelman.shadow") version "4.0.0" apply false
+	id("com.github.johnrengelman.shadow") version "4.0.1" apply false
 	id("org.sonarqube") version "2.6.2"
 	id("io.gitlab.arturbosch.detekt")
 	id("org.jetbrains.dokka") version "0.9.17"
