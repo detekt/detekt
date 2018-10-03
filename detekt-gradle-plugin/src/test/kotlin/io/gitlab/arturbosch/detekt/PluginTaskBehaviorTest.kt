@@ -27,7 +27,7 @@ internal class PluginTaskBehaviorTest : Spek({
 		|	mavenLocal()
 		|}
 		""".trimMargin()
-	val dslTest = DslBaseTest("build.gradle.kts", buildGradle)
+	val dslTest = DslBaseTest("build.gradle.kts", buildGradle, true)
 
 	describe("The Detekt Gradle Plugin :detekt Task") {
 		lateinit var rootDir: File
@@ -79,7 +79,6 @@ internal class PluginTaskBehaviorTest : Spek({
 
 		it("should pick up build artifacts from the build cache on a 2nd run after deleting the build/ dir") {
 			val gradleRunner = GradleRunner.create()
-					.withTestKitDir(createTempDir())
 					.withProjectDir(rootDir)
 					.withPluginClasspath()
 
@@ -104,7 +103,6 @@ internal class PluginTaskBehaviorTest : Spek({
 
 		it("should pick up build artifacts from the build cache on a 2nd run after running :clean") {
 			val gradleRunner = GradleRunner.create()
-					.withTestKitDir(createTempDir())
 					.withProjectDir(rootDir)
 					.withPluginClasspath()
 
@@ -201,7 +199,7 @@ internal class PluginTaskBehaviorTest : Spek({
 
 			assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 
-			dslTest.writeSourceFile(rootDir, filename = "OtherFile.kt")
+			dslTest.writeSourceFile(rootDir, className = "OtherFile")
 
 			// Running the same task again should NOT be UP-TO-DATE
 			val secondResult = gradleRunner
