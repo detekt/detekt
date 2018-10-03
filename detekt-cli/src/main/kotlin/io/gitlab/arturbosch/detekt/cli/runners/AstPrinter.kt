@@ -17,14 +17,14 @@ import org.jetbrains.kotlin.psi.KtStatementExpression
 class AstPrinter(private val arguments: CliArgs) : Executable {
 
 	override fun execute() {
-		assert(arguments.inputPath.size == 1) {
+		require(arguments.inputPaths.size == 1) {
 			"More than one input path specified. Printing AST is only supported for single files."
 		}
-		assert(arguments.inputPath[0].isFile()) {
+		require(arguments.inputPaths.first().isFile()) {
 			"Input path must be a kotlin file and not a directory."
 		}
 
-		val input = arguments.inputPath[0]
+		val input = arguments.inputPaths.first()
 		val ktFile = KtCompiler().compile(input, input)
 		println(ElementPrinter.dump(ktFile))
 	}

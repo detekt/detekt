@@ -23,14 +23,20 @@ data class ReportPath(val kind: String, val path: Path) {
 
 			require(partsSize == NUM_OF_PARTS_UNIX || partsSize == NUM_OF_PARTS_WINDOWS) { ILLEGAL_PARTS_SIZE_ERROR }
 
-			val kind = parts[0]
+			val kind = parts.first()
 			val path = when (partsSize) {
 				NUM_OF_PARTS_UNIX -> parts[1]
 				NUM_OF_PARTS_WINDOWS -> parts.slice(1 until partsSize).joinToString(REPORT_PATH_SEPARATOR)
 				else -> throw IllegalStateException(ILLEGAL_PARTS_SIZE_ERROR)
 			}
 
+			assertNotEmpty(kind, path)
 			return ReportPath(defaultMapping(kind), Paths.get(path))
+		}
+
+		private fun assertNotEmpty(kind: String, path: String) {
+			require(kind.isNotEmpty()) { "The kind of report must not be empty" }
+			require(path.isNotEmpty()) { "The path of the report must not be empty" }
 		}
 
 		private fun defaultMapping(reportId: String) = when (reportId) {

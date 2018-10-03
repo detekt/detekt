@@ -42,7 +42,7 @@ internal class DetektTaskGroovyDslTest : Spek({
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
 					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "detekt", "--stacktrace", "--info")
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").canonicalPath, "detekt", "--stacktrace", "--info")
 					.withPluginClasspath()
 					.build()
 
@@ -67,7 +67,7 @@ internal class DetektTaskGroovyDslTest : Spek({
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
 					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").canonicalPath, "check", "--stacktrace", "--info")
 					.withPluginClasspath()
 					.build()
 
@@ -96,7 +96,7 @@ internal class DetektTaskGroovyDslTest : Spek({
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
 					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").canonicalPath, "check", "--stacktrace", "--info")
 					.withPluginClasspath()
 					.build()
 
@@ -122,7 +122,7 @@ internal class DetektTaskGroovyDslTest : Spek({
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
 					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").canonicalPath, "check", "--stacktrace", "--info")
 					.withPluginClasspath()
 					.build()
 
@@ -149,7 +149,7 @@ internal class DetektTaskGroovyDslTest : Spek({
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
 					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").canonicalPath, "check", "--stacktrace", "--info")
 					.withPluginClasspath()
 					.build()
 
@@ -174,7 +174,7 @@ internal class DetektTaskGroovyDslTest : Spek({
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
 					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").canonicalPath, "check", "--stacktrace", "--info")
 					.withPluginClasspath()
 					.build()
 
@@ -202,7 +202,7 @@ internal class DetektTaskGroovyDslTest : Spek({
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
 					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").canonicalPath, "check", "--stacktrace", "--info")
 					.withPluginClasspath()
 					.build()
 
@@ -219,7 +219,7 @@ internal class DetektTaskGroovyDslTest : Spek({
 					|detekt {
 					| debug = true
 					| input = files(
-					|	 "${customSourceLocation.safeAbsolutePath}",
+					|	 "${customSourceLocation.canonicalPath}",
 					|	 "some/location/thatdoesnotexist"
 					| )
 					|}
@@ -231,12 +231,12 @@ internal class DetektTaskGroovyDslTest : Spek({
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
 					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").canonicalPath, "check", "--stacktrace", "--info")
 					.withPluginClasspath()
 					.build()
 
 			assertThat(result.output).contains("number of classes: 1")
-			assertThat(result.output).contains("--input, ${customSourceLocation.absolutePath}")
+			assertThat(result.output).contains("--input ${customSourceLocation.canonicalPath}")
 			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 		}
 		it("can configure multiple input directories") {
@@ -246,8 +246,8 @@ internal class DetektTaskGroovyDslTest : Spek({
 					|detekt {
 					| debug = true
 					| input = files(
-					|	 "${customSourceLocation.safeAbsolutePath}",
-					|	 "${otherCustomSourceLocation.safeAbsolutePath}"
+					|	 "${customSourceLocation.canonicalPath}",
+					|	 "${otherCustomSourceLocation.canonicalPath}"
 					| )
 					|}
 				"""
@@ -258,12 +258,12 @@ internal class DetektTaskGroovyDslTest : Spek({
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
 					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").canonicalPath, "check", "--stacktrace", "--info")
 					.withPluginClasspath()
 					.build()
 
 			assertThat(result.output).contains("number of classes: 2")
-			assertThat(result.output).contains("--input, ${customSourceLocation.absolutePath},${otherCustomSourceLocation.absolutePath}")
+			assertThat(result.output).contains("--input ${customSourceLocation.canonicalPath},${otherCustomSourceLocation.canonicalPath}")
 			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 		}
 		it("can configure a new custom detekt task") {
@@ -274,7 +274,7 @@ internal class DetektTaskGroovyDslTest : Spek({
 					|	description = "Runs a failfast detekt build."
 					|
 					|	input = files("src/main/java")
-					|	config = files("${configFile.safeAbsolutePath}")
+					|	config = files("${configFile.canonicalPath}")
 					|	debug = true
 					|	reports {
 					|		xml {
@@ -291,7 +291,7 @@ internal class DetektTaskGroovyDslTest : Spek({
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
 					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "detektFailFast", "--stacktrace", "--info")
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").canonicalPath, "detektFailFast", "--stacktrace", "--info")
 					.withPluginClasspath()
 					.build()
 

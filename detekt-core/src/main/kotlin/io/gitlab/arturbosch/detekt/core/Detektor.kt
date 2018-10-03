@@ -18,7 +18,7 @@ class Detektor(settings: ProcessingSettings,
 	private val config: Config = settings.config
 	private val testPattern: TestPattern = settings.loadTestPattern()
 	private val executor: ExecutorService? = settings.executorService
-	private val logger = settings.errorPrinter ?: System.err
+	private val logger = settings.errorPrinter
 
 	fun run(ktFiles: List<KtFile>): Map<String, List<Finding>> = withExecutor(executor) {
 
@@ -46,9 +46,11 @@ class Detektor(settings: ProcessingSettings,
 	}
 
 	private fun KtFile.analyze(): Map<String, List<Finding>> {
-		var ruleSets = providers.mapNotNull { it.buildRuleset(config) }
+		var ruleSets = providers.asSequence()
+				.mapNotNull { it.buildRuleset(config) }
 				.sortedBy { it.id }
 				.distinctBy { it.id }
+				.toList()
 
 		return if (testPattern.isTestSource(this)) {
 			ruleSets = ruleSets.filterNot { testPattern.matchesRuleSet(it.id) }
