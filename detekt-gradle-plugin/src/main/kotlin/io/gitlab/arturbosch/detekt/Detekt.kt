@@ -31,6 +31,7 @@ import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.SkipWhenEmpty
 import org.gradle.api.tasks.TaskAction
+import org.gradle.kotlin.dsl.property
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 
 /**
@@ -52,7 +53,7 @@ open class Detekt : DefaultTask() {
 
 	@Input
 	@Optional
-	var filters: Property<String> = project.objects.property(String::class.java)
+	var filters: Property<String> = project.objects.property()
 
 	@InputFile
 	@Optional
@@ -66,7 +67,7 @@ open class Detekt : DefaultTask() {
 
 	@Input
 	@Optional
-	var plugins: Property<String> = project.objects.property(String::class.java)
+	var plugins: Property<String> = project.objects.property()
 
 	@Internal
 	@Optional
