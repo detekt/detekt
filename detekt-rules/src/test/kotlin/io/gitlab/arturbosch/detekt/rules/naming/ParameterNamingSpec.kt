@@ -55,6 +55,17 @@ class ParameterNamingSpec : Spek({
 			assertThat(findings).isEmpty()
 		}
 
+		it("should not detect violations in overridden function") {
+			val findings = FunctionParameterNaming().lint(
+					"""
+					class C {
+						override fun someStuff(`object`: String) {}
+					}
+				"""
+			)
+			assertThat(findings).isEmpty()
+		}
+
 		it("should find some violations") {
 			val findings = NamingRules().lint(
 					"""
