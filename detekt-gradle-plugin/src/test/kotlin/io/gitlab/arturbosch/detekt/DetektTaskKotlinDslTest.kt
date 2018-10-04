@@ -72,9 +72,9 @@ internal class DetektTaskKotlinDslTest : Spek({
 			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 		}
 
-		it("can be applied with a custom detekt version") {
+		it("is possible to select a custom version") {
 
-			val customVersion = "1.0.0-gradle-rework-beta3"
+			val customVersion = "1.0.0.RC8"
 			val detektConfig = """
 					|detekt {
 					|	toolVersion = "$customVersion"
@@ -87,16 +87,12 @@ internal class DetektTaskKotlinDslTest : Spek({
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
 					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "dependencies", "--configuration", "detekt")
 					.withPluginClasspath()
 					.build()
 
-			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-			assertThat(result.output).contains("io.gitlab.arturbosch.detekt/detekt-cli/$customVersion")
-
-			// Asserts that the "custom" module is not built, and that custom ruleset is not enabled
-			assertThat(result.output).doesNotContain("Ruleset: test-custom")
-			assertThat(File(rootDir, "custom/build")).doesNotExist()
+			assertThat(result.task(":dependencies")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+			assertThat(result.output).contains("io.gitlab.arturbosch.detekt:detekt-cli:${customVersion}")
 		}
 
 		it("can be applied with a custom config file") {
