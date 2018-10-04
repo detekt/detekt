@@ -401,6 +401,8 @@ style:
     conversionFunctionPrefix: 'to'
   EqualsNullCall:
     active: false
+  ExplicitItLambdaParameter:
+    active: false
   ExpressionBodySyntax:
     active: false
     includeLineWrapping: false

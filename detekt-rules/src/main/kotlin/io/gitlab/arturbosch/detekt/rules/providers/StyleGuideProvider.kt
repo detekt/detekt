@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.rules.style.CollapsibleIfStatements
 import io.gitlab.arturbosch.detekt.rules.style.DataClassContainsFunctions
 import io.gitlab.arturbosch.detekt.rules.style.EqualsNullCall
+import io.gitlab.arturbosch.detekt.rules.style.ExplicitItLambdaParameter
 import io.gitlab.arturbosch.detekt.rules.style.ExpressionBodySyntax
 import io.gitlab.arturbosch.detekt.rules.style.FileParsingRule
 import io.gitlab.arturbosch.detekt.rules.style.ForbiddenComment
@@ -95,7 +96,8 @@ class StyleGuideProvider : RuleSetProvider {
 				PreferToOverPairSyntax(config),
 				MandatoryBracesIfStatements(config),
 				VarCouldBeVal(config),
-				ForbiddenVoid(config)
+				ForbiddenVoid(config),
+				ExplicitItLambdaParameter(config)
 		))
 	}
 }
