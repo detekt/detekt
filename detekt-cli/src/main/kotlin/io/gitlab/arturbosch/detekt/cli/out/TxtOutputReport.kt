@@ -6,7 +6,7 @@ import io.gitlab.arturbosch.detekt.api.OutputReport
 /**
  * @author Marvin Ramin
  */
-class PlainOutputReport : OutputReport() {
+class TxtOutputReport : OutputReport() {
 
 	override val ending: String = "txt"
 
