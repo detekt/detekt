@@ -134,7 +134,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Dmitriy Samaryan](https://github.com/samarjan92) - Rule fix: SerialVersionUIDInSerializableClass
 - [Mariano Simone](https://github.com/marianosimone) - Rule improvement: UnusedPrivateMember
 - [Shunsuke Maeda](https://github.com/duck8823) - Fix: to work on multi module project using [maven plugin](https://github.com/Ozsie/detekt-maven-plugin)
-- [Mikhail Levchenko](https://github.com/mishkun) - New rule: Unnecessary let
+- [Mikhail Levchenko](https://github.com/mishkun) - New rules: Unnecessary let, ExplicitItLambdaParameter
 - [Scott Kennedy](https://github.com/scottkennedy) - Minor fixes
 - [Mickele Moriconi](https://github.com/mickele) - Added: ConstructorParameterNaming and FunctionParameterNaming rules
 - [Lukasz Jazgar](https://github.com/ljazgar) - Fixed configuring formatting rules
