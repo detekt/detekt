@@ -1,8 +1,8 @@
 ---
 title: "Detekt Configuration File"
 keywords: config configuration yaml
-tags: 
-sidebar: 
+tags:
+sidebar:
 permalink: configurations.html
 summary:
 ---
@@ -13,14 +13,14 @@ _detekt_ uses a yaml style configuration file for various things:
 - build failure
 - test-pattern to exclude rule sets/rules for test classes
 - processors
-- console and output formats 
+- console and output formats
 - autoCorrect and failfast support
 
 See the [default-detekt-config.yml](https://github.com/arturbosch/detekt/blob/master/detekt-cli/src/main/resources/default-detekt-config.yml) file for all defined configuration options and their default values.
 
 #### Rule sets and rules
 
-_detekt_ allows easily to just pick the rules you want and configure them the way you like.  
+_detekt_ allows easily to just pick the rules you want and configure them the way you like.
 For example if you want to allow 20 functions inside a kotlin file instead of the default threshold of 10, write:
 ```
 complexity:
@@ -29,11 +29,11 @@ complexity:
 ```
 
 To read about all supported rule sets and rules, use the side navigation `Rule Sets`.
- 
+
 #### Test-Pattern
 
-The configuration file contains a whole section to treat test code differently.  
-Specify test patterns to detect test code and exclude rules or rule sets for them. 
+The configuration file contains a whole section to treat test code differently.
+Specify test patterns to detect test code and exclude rules or rule sets for them.
 
 ```yaml
 test-pattern: # Configure exclusions for test sources
@@ -58,7 +58,7 @@ test-pattern: # Configure exclusions for test sources
 
 #### Console and Output Reports
 
-Uncomment the reporters you don't care about.  
+Uncomment the reporters you don't care about.
 
 ```yaml
 console-reports:
@@ -74,13 +74,13 @@ output-reports:
   active: true
   exclude:
   #  - 'HtmlOutputReport'
-  #  - 'PlainOutputReport'
+  #  - 'TxtOutputReport'
   #  - 'XmlOutputReport'
 ```
 
 #### Processors
 
-Processors are usually used to raise project metrics.  
+Processors are usually used to raise project metrics.
 Uncomment the ones you do not care about.
 
 ```yaml
@@ -93,12 +93,12 @@ processors:
   # - 'PackageCountProcessor'
   # - 'KtFileCountProcessor'
 ```
- 
+
 #### failfast property
 
-Set `failFast: true` in your detekt.yml configuration file.  
-As a result, every rule will be enabled and `maxIssues` will be set to 0.  
-Weights can then be ignored and left untouched.  
+Set `failFast: true` in your detekt.yml configuration file.
+As a result, every rule will be enabled and `maxIssues` will be set to 0.
+Weights can then be ignored and left untouched.
 
 
 #### autoCorrect property

@@ -28,6 +28,8 @@ dependencies {
 }
 ```
 
+The report id `plain` has been renamed to `txt`. If you were using `--report "plain:/tmp/plaintxt"` before it's now `--report "txt:/tmp/plaintxt"`.
+
 -->
 
 #### RC9.2
@@ -114,7 +116,7 @@ detekt {
     // properties
 }
 ```
- 
+
  If we want all our sub projects to get analyzed by detekt, something like
  ```gradle
  subprojects {
@@ -150,15 +152,15 @@ subprojects {
         )
         filters = ".*/resources/.*,.*/build/.*"
         baseline = project.rootDir.resolve("reports/baseline.xml")
-    
+
         reports {
             xml.enabled = true
             html {
                 enabled = true
-                destination = project.rootDir.resolve("reports/detekt.html")    
+                destination = project.rootDir.resolve("reports/detekt.html")
             }
         }
-    
+
         idea {
             path = "$userHome/.idea"
             codeStyleScheme = "$userHome/.idea/idea-code-style.xml"
@@ -557,7 +559,7 @@ this might cause.
   - Naming Rules (min/max length, naming regex rules, forbidden name)
   - `MatchingDeclarationName`
   - `MemberNameEqualsClassName`
-- Fixed false positives in `UtilityClassWithPublicConstructor`, `MatchingDeclarationName` and `EmptyClassBlock` 
+- Fixed false positives in `UtilityClassWithPublicConstructor`, `MatchingDeclarationName` and `EmptyClassBlock`
 - make sure to rerun your baseline (if you ignored some of these)!
 
 #### RC6-2
@@ -583,7 +585,7 @@ See all issues at: [RC6-2](https://github.com/arturbosch/detekt/milestone/30)
 
 ##### Migration
 
-- The new rule `MatchingDeclarationName` is active on default. If a file has only one top-level declaration then the 
+- The new rule `MatchingDeclarationName` is active on default. If a file has only one top-level declaration then the
 file name must match the declaration name according to the jetbrains and android style guides.
 
 #### RC6-1
@@ -665,7 +667,7 @@ See all issues at: [RC6](https://github.com/arturbosch/detekt/milestone/23)
 
 ##### Migration
 
-- We are now generating [documentation](detekt-generator/documentation) for all rule sets. They are stored as 
+- We are now generating [documentation](detekt-generator/documentation) for all rule sets. They are stored as
 markdown files and will later be hosted on the official detekt website.
 - rename `MethodNameEqualsClassName` to `MemberNameEqualsClassName` (rule checks also properties now)
 - `CHANGELOG.md` and `MIGRATION.md` are now merged. The changelog now has also a migration subsection.
@@ -1177,7 +1179,7 @@ Rename this id's in your configuration
 - SpacingAroundCurlyBraces throw IndexOutOfFound when determinating Location.of(node) as LineAndColumn calculation is simple wrong (of Idea?) - [#18](https://github.com/arturbosch/detekt/issues/18)
 
 
-See all issues at: [M11](https://github.com/arturbosch/detekt/milestone/5)  
+See all issues at: [M11](https://github.com/arturbosch/detekt/milestone/5)
 See all issues at: [Formatting](https://github.com/arturbosch/detekt/milestone/6)
 
 ##### Migration
@@ -1189,13 +1191,13 @@ See all issues at: [Formatting](https://github.com/arturbosch/detekt/milestone/6
 
 - detekt-gradle-plugin - [#16](https://github.com/arturbosch/detekt/issues/16)
 - experimental migration module which can migrate imports- [#30](https://github.com/arturbosch/detekt/issues/30)
-- NamingConventionViolation is now aware about backticks - [contributed by Svyatoslav Chatchenko](https://github.com/arturbosch/detekt/pull/34) 
+- NamingConventionViolation is now aware about backticks - [contributed by Svyatoslav Chatchenko](https://github.com/arturbosch/detekt/pull/34)
 - cli and core module refactorings, jcenter publishing, travis ci
 - gradle-plugin version is not configurable, task configurations should be in `afterEvaluate` - [#41](https://api.github.com/repos/arturbosch/detekt/issues/41)
 - Add Contributing Guide - [#37](https://api.github.com/repos/arturbosch/detekt/issues/37)
 - NamingConventionViolation is now aware about backticks “`” - [#34](https://api.github.com/repos/arturbosch/detekt/issues/34)
 
-See all issues at: [M10](https://github.com/arturbosch/detekt/milestone/4)  
+See all issues at: [M10](https://github.com/arturbosch/detekt/milestone/4)
 See all issues at: [M10.1](https://api.github.com/repos/arturbosch/detekt/milestones/7)
 
 ##### Migration
@@ -1216,7 +1218,7 @@ See all issues at: [M9](https://github.com/arturbosch/detekt/milestone/2)
 - Introduce complexity ruleset - [#4](https://github.com/arturbosch/detekt/issues/4)
 - Provide a new screenshot showing detekt in action [#13](https://github.com/arturbosch/detekt/issues/13)
 - Update Readme/Rulesets for changes in code-smell/complexity rulesets [#14](https://github.com/arturbosch/detekt/issues/14)
-- NamingConventionViolation should allow customization [#20](https://github.com/arturbosch/detekt/issues/20) 
+- NamingConventionViolation should allow customization [#20](https://github.com/arturbosch/detekt/issues/20)
 <!-- - Implement FeatureEnvy rule - [#36](https://gitlab.com/arturbosch/detekt/issues/36)  -->
 
 ##### bugs fixed
@@ -1264,7 +1266,7 @@ smells are shown in analysis (see 'Code Smell baseline and ignore list' in READM
 
 ##### Improvements
 
-- move formatting to own rule set project as formatting works great on my kotlin projects but line/column calculation 
+- move formatting to own rule set project as formatting works great on my kotlin projects but line/column calculation
 from within PsiElements is wrong (!?)
 - OptionalUnit and -Semicolon should be auto correctable and moved to formatting
 - show progress while waiting for the analysis
@@ -1278,7 +1280,7 @@ See all issues at: https://gitlab.com/arturbosch/detekt/milestones/6
 - Fix an "Underestimated text length" problem inside Psi - #65
 - Filter top level members from LargeClass and EqualsWithHashCode rules, preventing NoSuchElementExceptions - #64
 
-In this milestone the goal was to fully be able to analyze the Kotlin project. 
+In this milestone the goal was to fully be able to analyze the Kotlin project.
 All rule sets (except formatting) successfully run now. Formatting needs some fixes
 as line and column values are sometimes not correctly determined by the AST.
 
@@ -1292,7 +1294,7 @@ More issues: https://gitlab.com/arturbosch/detekt/milestones/5
 - Rewrite UnusedImport-rule to fix deleting infix extension function imports - #60
 - Cli flag: --parallel to compile all kotlin files in parallel, use when your project has more than 1000+ files,
  detection is always parallel - #46
-- Cli flag: --format (--useTabs) to allow formatting of your source code without a detekt configuration file. 
+- Cli flag: --format (--useTabs) to allow formatting of your source code without a detekt configuration file.
 All formatting rules are turned off except indentation with spaces if --useTabs is used - #54
 
 More issues: https://gitlab.com/arturbosch/detekt/milestones/4

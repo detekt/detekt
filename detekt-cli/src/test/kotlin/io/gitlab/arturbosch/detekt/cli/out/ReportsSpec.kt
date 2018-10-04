@@ -25,7 +25,7 @@ internal class ReportsSpec : Spek({
 		val args = arrayOf(
 				"--input", "/tmp/must/be/given",
 				"--report", "xml:/tmp/path1",
-				"--report", "plain:/tmp/path2",
+				"--report", "txt:/tmp/path2",
 				"--report", "$reportUnderTest:/tmp/path3",
 				"--report", "html:D:_Gradle\\xxx\\xxx\\build\\reports\\detekt\\detekt.html"
 		)
@@ -43,10 +43,10 @@ internal class ReportsSpec : Spek({
 			assertThat(xmlReport.path).isEqualTo(Paths.get("/tmp/path1"))
 		}
 
-		it("it should properly parse PLAIN report entry") {
-			val plainReport = reports[1]
-			assertThat(plainReport.kind).isEqualTo(PlainOutputReport::class.java.simpleName)
-			assertThat(plainReport.path).isEqualTo(Paths.get("/tmp/path2"))
+		it("it should properly parse TXT report entry") {
+			val txtRepot = reports[1]
+			assertThat(txtRepot.kind).isEqualTo(TxtOutputReport::class.java.simpleName)
+			assertThat(txtRepot.path).isEqualTo(Paths.get("/tmp/path2"))
 		}
 
 		it("it should properly parse custom report entry") {

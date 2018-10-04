@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.cli.out.HtmlOutputReport
-import io.gitlab.arturbosch.detekt.cli.out.PlainOutputReport
+import io.gitlab.arturbosch.detekt.cli.out.TxtOutputReport
 import io.gitlab.arturbosch.detekt.cli.out.XmlOutputReport
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -42,7 +42,7 @@ data class ReportPath(val kind: String, val path: Path) {
 		}
 
 		private fun defaultMapping(reportId: String) = when (reportId) {
-			"plain" -> PlainOutputReport::class.java.simpleName
+			"txt" -> TxtOutputReport::class.java.simpleName
 			"xml" -> XmlOutputReport::class.java.simpleName
 			"html" -> HtmlOutputReport::class.java.simpleName
 			else -> reportId
