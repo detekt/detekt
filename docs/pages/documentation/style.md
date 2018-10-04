@@ -88,6 +88,38 @@ fun isNull(str: String) = str.equals(null)
 fun isNull(str: String) = str == null
 ```
 
+### ExplicitItLambdaParameter
+
+Lambda expressions are one of the core features of the language. They often include very small chunks of
+code using only one parameter. In this cases Kotlin can supply the implicit `it` parameter
+to make code more concise. It fits most usecases, but when faced larger or nested chunks of code,
+you might want to add an explicit name for the parameter. Naming it just `it` is meaningless and only
+clutters the code.
+
+**Severity**: Style
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+a?.let { it -> it.plus(1) }
+foo.flatMapObservable { it -> Observable.fromIterable(it) }
+listOfPairs.map(::second).forEach { it ->
+it.execute()
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+a?.let { it.plus(1) } // Much better to use implicit it
+foo.flatMapObservable(Observable::fromIterable) // Here we can have a method reference
+listOfPairs.map(::second).forEach { apiRequest -> // For multiline blocks better come up with meaningful name
+it.execute()
+}
+```
+
 ### ExpressionBodySyntax
 
 Functions which only contain a `return` statement can be collapsed to an expression body. This shortens and
