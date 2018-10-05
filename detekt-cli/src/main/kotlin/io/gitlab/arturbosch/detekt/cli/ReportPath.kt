@@ -8,8 +8,10 @@ import java.nio.file.Paths
 
 /**
  * @author Artur Bosch
+ * @author Pavlos-Petros Tournaris
  */
 data class ReportPath(val kind: String, val path: Path) {
+
 	companion object {
 		private const val NUM_OF_PARTS_UNIX = 2
 		private const val NUM_OF_PARTS_WINDOWS = 3
@@ -30,7 +32,13 @@ data class ReportPath(val kind: String, val path: Path) {
 				else -> throw IllegalStateException(ILLEGAL_PARTS_SIZE_ERROR)
 			}
 
+			assertNotEmpty(kind, path)
 			return ReportPath(defaultMapping(kind), Paths.get(path))
+		}
+
+		private fun assertNotEmpty(kind: String, path: String) {
+			require(kind.isNotEmpty()) { "The kind of report must not be empty" }
+			require(path.isNotEmpty()) { "The path of the report must not be empty" }
 		}
 
 		private fun defaultMapping(reportId: String) = when (reportId) {
