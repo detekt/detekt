@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.cli.out.HtmlOutputReport
-import io.gitlab.arturbosch.detekt.cli.out.PlainOutputReport
+import io.gitlab.arturbosch.detekt.cli.out.TxtOutputReport
 import io.gitlab.arturbosch.detekt.cli.out.XmlOutputReport
 import io.gitlab.arturbosch.detekt.core.DetektResult
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
@@ -30,7 +30,7 @@ internal class OutputFacadeSpec : SubjectSpek<OutputFacade>({
 		val args = arrayOf(
 				"--input", inputPath.toString(),
 				"--report", "xml:$xmlOutputPath",
-				"--report", "plain:$plainOutputPath",
+				"--report", "txt:$plainOutputPath",
 				"--report", "html:$htmlOutputPath"
 		)
 
@@ -43,7 +43,7 @@ internal class OutputFacadeSpec : SubjectSpek<OutputFacade>({
 	describe("prints the reports paths when writing them") {
 		subject.run()
 
-		outputStream.assertThatItPrintsReportPath(PlainOutputReport().name)
+		outputStream.assertThatItPrintsReportPath(TxtOutputReport().name)
 		outputStream.assertThatItPrintsReportPath(XmlOutputReport().name)
 		outputStream.assertThatItPrintsReportPath(HtmlOutputReport().name)
 	}

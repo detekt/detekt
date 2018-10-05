@@ -8,7 +8,7 @@ import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import java.nio.file.Paths
 
-class ReportPathTest : Spek({
+class ReportPathSpec : Spek({
 
 	if (IS_WINDOWS) {
 		given("a Windows path") {
@@ -61,10 +61,10 @@ class ReportPathTest : Spek({
 	}
 
 	given("a kind") {
-		it("parses and maps the plain kind correctly") {
-			val reportPath = ReportPath.from("plain:/tmp/valid/report")
+		it("parses and maps the txt kind correctly") {
+			val reportPath = ReportPath.from("txt:/tmp/valid/report")
 
-			assertThat(reportPath.kind).isEqualTo("PlainOutputReport")
+			assertThat(reportPath.kind).isEqualTo("TxtOutputReport")
 		}
 
 		it("parses and maps the xml kind correctly") {
@@ -79,10 +79,10 @@ class ReportPathTest : Spek({
 			assertThat(reportPath.kind).isEqualTo("HtmlOutputReport")
 		}
 
-		it("parses and maps the plain kind correctly") {
-			val reportPath = ReportPath.from("plain:/tmp/valid/report")
+		it("parses and maps the txt kind correctly") {
+			val reportPath = ReportPath.from("txt:/tmp/valid/report")
 
-			assertThat(reportPath.kind).isEqualTo("PlainOutputReport")
+			assertThat(reportPath.kind).isEqualTo("TxtOutputReport")
 		}
 
 		it("parses a non-default kind correctly") {
