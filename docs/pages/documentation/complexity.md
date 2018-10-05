@@ -87,9 +87,9 @@ Smaller methods can also be named much clearer which leads to improved readabili
 
    Ignores a complex method if it only contains a single when expression.
 
-* `simpleWhenEntryWeight` (default: `0.5`)
+* `ignoreSimpleWhenEntries` (default: `false`)
 
-   The weight used for simple (braceless) when entries.
+   Whether to ignore simple (braceless) when entries.
 
 ### LabeledExpression
 
