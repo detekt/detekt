@@ -21,25 +21,21 @@ class McCabeVisitor(private val ignoreSimpleWhenEntries: Boolean) : DetektVisito
 	val mcc: Int
 		get() = _mcc
 
-	private fun inc() {
-		_mcc++
-	}
-
 	override fun visitNamedFunction(function: KtNamedFunction) {
-		inc()
+		_mcc++
 		super.visitNamedFunction(function)
 	}
 
 	override fun visitIfExpression(expression: KtIfExpression) {
-		inc()
+		_mcc++
 		if (expression.`else` != null) {
-			inc()
+			_mcc++
 		}
 		super.visitIfExpression(expression)
 	}
 
 	override fun visitLoopExpression(loopExpression: KtLoopExpression) {
-		inc()
+		_mcc++
 		super.visitLoopExpression(loopExpression)
 	}
 
@@ -55,9 +51,12 @@ class McCabeVisitor(private val ignoreSimpleWhenEntries: Boolean) : DetektVisito
 	}
 
 	override fun visitTryExpression(expression: KtTryExpression) {
-		inc()
+		_mcc++
 		_mcc += expression.catchClauses.size
-		expression.finallyBlock?.let { inc() }
+		expression.finallyBlock?.let {
+			_mcc++
+			Unit
+		}
 		super.visitTryExpression(expression)
 	}
 
@@ -67,7 +66,8 @@ class McCabeVisitor(private val ignoreSimpleWhenEntries: Boolean) : DetektVisito
 			if (lambdaArguments.size > 0) {
 				val lambdaArgument = lambdaArguments[0]
 				lambdaArgument.getLambdaExpression()?.bodyExpression?.let {
-					inc()
+					_mcc++
+					Unit
 				}
 			}
 		}
