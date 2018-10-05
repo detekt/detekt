@@ -17,7 +17,7 @@ class Detektor(settings: ProcessingSettings,
 
 	private val config: Config = settings.config
 	private val testPattern: TestPattern = settings.loadTestPattern()
-	private val executor: ExecutorService? = settings.executorService
+	private val executor: ExecutorService = settings.executorService
 	private val logger = settings.errorPrinter
 
 	fun run(ktFiles: List<KtFile>): Map<String, List<Finding>> = withExecutor(executor) {

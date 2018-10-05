@@ -21,7 +21,7 @@ data class ProcessingSettings(val inputPaths: List<Path>,
 							  val parallelCompilation: Boolean = false,
 							  val excludeDefaultRuleSets: Boolean = false,
 							  val pluginPaths: List<Path> = emptyList(),
-							  val executorService: ExecutorService? = ForkJoinPool.commonPool(),
+							  val executorService: ExecutorService = ForkJoinPool.commonPool(),
 							  val outPrinter: PrintStream = System.out,
 							  val errorPrinter: PrintStream = System.err) {
 
@@ -35,7 +35,7 @@ data class ProcessingSettings(val inputPaths: List<Path>,
 			parallelCompilation: Boolean = false,
 			excludeDefaultRuleSets: Boolean = false,
 			pluginPaths: List<Path> = emptyList(),
-			executorService: ExecutorService? = ForkJoinPool.commonPool(),
+			executorService: ExecutorService = ForkJoinPool.commonPool(),
 			outPrinter: PrintStream = System.out,
 			errorPrinter: PrintStream = System.err
 	) : this(
