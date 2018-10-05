@@ -16,32 +16,32 @@ import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
  */
 class McCabeVisitor(private val ignoreSimpleWhenEntries: Boolean) : DetektVisitor() {
 
-	private var _mcc: Int = 0
-
-	val mcc: Int
-		get() = _mcc
+	var mcc: Int = 0
+		private set(value) {
+			field = value
+		}
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
-		_mcc++
+		mcc++
 		super.visitNamedFunction(function)
 	}
 
 	override fun visitIfExpression(expression: KtIfExpression) {
-		_mcc++
+		mcc++
 		if (expression.`else` != null) {
-			_mcc++
+			mcc++
 		}
 		super.visitIfExpression(expression)
 	}
 
 	override fun visitLoopExpression(loopExpression: KtLoopExpression) {
-		_mcc++
+		mcc++
 		super.visitLoopExpression(loopExpression)
 	}
 
 	override fun visitWhenExpression(expression: KtWhenExpression) {
 		val entries = expression.extractEntries(ignoreSimpleWhenEntries)
-		_mcc += if (ignoreSimpleWhenEntries && entries.count() == 0) 1 else entries.count()
+		mcc += if (ignoreSimpleWhenEntries && entries.count() == 0) 1 else entries.count()
 		super.visitWhenExpression(expression)
 	}
 
@@ -51,10 +51,10 @@ class McCabeVisitor(private val ignoreSimpleWhenEntries: Boolean) : DetektVisito
 	}
 
 	override fun visitTryExpression(expression: KtTryExpression) {
-		_mcc++
-		_mcc += expression.catchClauses.size
+		mcc++
+		mcc += expression.catchClauses.size
 		expression.finallyBlock?.let {
-			_mcc++
+			mcc++
 			Unit
 		}
 		super.visitTryExpression(expression)
@@ -66,7 +66,7 @@ class McCabeVisitor(private val ignoreSimpleWhenEntries: Boolean) : DetektVisito
 			if (lambdaArguments.size > 0) {
 				val lambdaArgument = lambdaArguments[0]
 				lambdaArgument.getLambdaExpression()?.bodyExpression?.let {
-					_mcc++
+					mcc++
 					Unit
 				}
 			}
