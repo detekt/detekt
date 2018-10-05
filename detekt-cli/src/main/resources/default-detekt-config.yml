@@ -77,7 +77,7 @@ complexity:
     active: true
     threshold: 10
     ignoreSingleWhenExpression: false
-    simpleWhenEntryWeight: 0.5
+    ignoreSimpleWhenEntries: false
   LabeledExpression:
     active: false
   LargeClass:
