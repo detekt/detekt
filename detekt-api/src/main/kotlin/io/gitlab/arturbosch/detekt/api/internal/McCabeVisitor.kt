@@ -14,47 +14,49 @@ import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 /**
  * @author Artur Bosch
  */
-class McCabeVisitor(private val simpleWhenEntriesWeight: Double = WHEN_DEFAULT_SIMPLE_ENTRY_WEIGHT) : DetektVisitor() {
+class McCabeVisitor(private val ignoreSimpleWhenEntries: Boolean) : DetektVisitor() {
 
-	private var doubleMcc = 0.0
-
-	val mcc: Int
-		get() = Math.floor(doubleMcc).toInt()
-
-	private fun inc() {
-		doubleMcc += 1.0
-	}
+	var mcc: Int = 0
+		private set(value) {
+			field = value
+		}
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
-		inc()
+		mcc++
 		super.visitNamedFunction(function)
 	}
 
 	override fun visitIfExpression(expression: KtIfExpression) {
-		inc()
+		mcc++
 		if (expression.`else` != null) {
-			inc()
+			mcc++
 		}
 		super.visitIfExpression(expression)
 	}
 
 	override fun visitLoopExpression(loopExpression: KtLoopExpression) {
-		inc()
+		mcc++
 		super.visitLoopExpression(loopExpression)
 	}
 
 	override fun visitWhenExpression(expression: KtWhenExpression) {
-		doubleMcc += expression.entries
-				.asSequence()
-				.map { it.weight }
-				.sum()
+		val entries = expression.extractEntries(ignoreSimpleWhenEntries)
+		mcc += if (ignoreSimpleWhenEntries && entries.count() == 0) 1 else entries.count()
 		super.visitWhenExpression(expression)
 	}
 
+	private fun KtWhenExpression.extractEntries(ignoreSimpleWhenEntries: Boolean): Sequence<KtWhenEntry> {
+		val entries = entries.asSequence()
+		return if (ignoreSimpleWhenEntries) entries.filter { it.expression is KtBlockExpression } else entries
+	}
+
 	override fun visitTryExpression(expression: KtTryExpression) {
-		inc()
-		doubleMcc += expression.catchClauses.size
-		expression.finallyBlock?.let { inc() }
+		mcc++
+		mcc += expression.catchClauses.size
+		expression.finallyBlock?.let {
+			mcc++
+			Unit
+		}
 		super.visitTryExpression(expression)
 	}
 
@@ -64,19 +66,14 @@ class McCabeVisitor(private val simpleWhenEntriesWeight: Double = WHEN_DEFAULT_S
 			if (lambdaArguments.size > 0) {
 				val lambdaArgument = lambdaArguments[0]
 				lambdaArgument.getLambdaExpression()?.bodyExpression?.let {
-					inc()
+					mcc++
+					Unit
 				}
 			}
 		}
 		super.visitCallExpression(expression)
 	}
-
-	private val KtWhenEntry.weight: Double
-		get() = if (expression is KtBlockExpression) WHEN_BLOCK_ENTRY_WEIGHT else simpleWhenEntriesWeight
 }
-
-private const val WHEN_BLOCK_ENTRY_WEIGHT = 1.0
-private const val WHEN_DEFAULT_SIMPLE_ENTRY_WEIGHT = 0.5
 
 fun KtCallExpression.isUsedForNesting(): Boolean = when (getCallNameExpression()?.text) {
 	"run", "let", "apply", "with", "use", "forEach" -> true

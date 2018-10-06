@@ -25,7 +25,7 @@ class ComplexMethodSpec : Spek({
 
 			assertThat(subject.findings.first())
 					.isThresholded()
-					.withValue(19)
+					.withValue(20)
 					.withThreshold(10)
 		}
 	}
@@ -36,7 +36,7 @@ class ComplexMethodSpec : Spek({
 
 		it("does not report complex methods with a single when expression") {
 			val config = TestConfig(mapOf(
-					ComplexMethod.SIMPLE_WHEN_ENTRY_WEIGHT to "1.0",
+					ComplexMethod.IGNORE_SIMPLE_WHEN_ENTRIES to "1.0",
 					ComplexMethod.IGNORE_SINGLE_WHEN_EXPRESSION to "true"))
 			val subject = ComplexMethod(config, threshold = 4)
 
@@ -44,7 +44,7 @@ class ComplexMethodSpec : Spek({
 		}
 
 		it("reports all complex methods") {
-			val config = TestConfig(mapOf(ComplexMethod.SIMPLE_WHEN_ENTRY_WEIGHT to "1.0"))
+			val config = TestConfig(mapOf(ComplexMethod.IGNORE_SIMPLE_WHEN_ENTRIES to "1.0"))
 			val subject = ComplexMethod(config, threshold = 4)
 
 			assertThat(subject.lint(path)).hasSourceLocations(
@@ -56,8 +56,8 @@ class ComplexMethodSpec : Spek({
 			)
 		}
 
-		it("does not trip for a reasonable amount of simple when entries") {
-			val config = TestConfig(mapOf(ComplexMethod.SIMPLE_WHEN_ENTRY_WEIGHT to "0.5"))
+		it("does not trip for a reasonable amount of simple when entries when ignoreSimpleWhenEntries is true") {
+			val config = TestConfig(mapOf(ComplexMethod.IGNORE_SIMPLE_WHEN_ENTRIES to "true"))
 			val subject = ComplexMethod(config)
 			val code = """
 				internal fun Map<String, Any>.asBundle(): Bundle {
