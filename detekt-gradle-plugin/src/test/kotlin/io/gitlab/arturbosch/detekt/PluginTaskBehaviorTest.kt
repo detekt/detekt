@@ -1,212 +1,117 @@
 package io.gitlab.arturbosch.detekt
 
+import io.gitlab.arturbosch.detekt.DslTestBuilder.Companion.kotlin
 import org.assertj.core.api.Assertions.assertThat
-import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
-import java.io.File
 
 /**
  * Tests that run the Detekt Gradle Plugins tasks multiple times to check for correct
  * UP-TO-DATE states and correct build caching.
+ *
+ * @author Marvin Ramin
+ * @author Markus Schwarz
  */
 internal class PluginTaskBehaviorTest : Spek({
 
-	val buildGradle = """
-		|import io.gitlab.arturbosch.detekt.detekt
-		|
-		|plugins {
-		|   `java-library`
-		|	id("io.gitlab.arturbosch.detekt")
-		|}
-		|
-		|repositories {
-		|	jcenter()
-		|	mavenLocal()
-		|}
-		""".trimMargin()
-	val dslTest = DslBaseTest("build.gradle.kts", buildGradle, true)
+	val configFileName = "config.yml"
+	val baselineFileName = "baseline.xml"
 
-	describe("The Detekt Gradle Plugin :detekt Task") {
-		lateinit var rootDir: File
-		lateinit var configFile: File
-		lateinit var baselineFile: File
-		beforeEachTest {
-			rootDir = createTempDir(prefix = "applyPlugin")
-			configFile = File(rootDir, "config.yml")
-			baselineFile = File(rootDir, "baseline.xml")
-
-			val detektConfig = """
+	val detektConfig = """
 					|detekt {
-					|	debug = true
-					|	parallel = true
-					|	disableDefaultRuleSets = true
-					|	toolVersion = "$VERSION_UNDER_TEST"
-					|	config = files("${configFile.safeAbsolutePath}")
-					|	baseline = file("${baselineFile.safeAbsolutePath}")
+					|	config = files("$configFileName")
+					|	baseline = file("$baselineFileName")
 					|	filters = ".*/resources/.*, .*/build/.*"
 					|}
 				"""
 
-			dslTest.writeFiles(rootDir, detektConfig)
-			dslTest.writeConfig(rootDir)
-			dslTest.writeBaseline(rootDir)
+	describe("The Detekt Gradle Plugin :detekt Task") {
+		lateinit var gradleRunner: DslGradleRunner
+
+		beforeEachTest {
+			gradleRunner = kotlin()
+					.withDetektConfig(detektConfig)
+					.withBaseline(baselineFileName)
+					.withConfigFile(configFileName)
+					.build()
 		}
 
 		it("should be UP-TO-DATE the 2nd run without changes") {
-			val gradleRunner = GradleRunner.create()
-					.withProjectDir(rootDir)
-					.withPluginClasspath()
-
-			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
-			val projectCacheDir = createTempDir(prefix = "cache").absolutePath
-
-			val result = gradleRunner
-					.withArguments("--project-cache-dir", projectCacheDir, "detekt", "--stacktrace", "--info")
-					.build()
-
-			assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-
-			// Running the same task again should be UP-TO-DATE
-			val secondResult = gradleRunner
-					.withArguments("--project-cache-dir", projectCacheDir, "detekt", "--stacktrace", "--info")
-					.build()
-
-			assertThat(secondResult.task(":detekt")?.outcome).isEqualTo(TaskOutcome.UP_TO_DATE)
+			gradleRunner.runDetektTaskAndCheckResult { result ->
+				assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+			}
+			gradleRunner.runDetektTaskAndCheckResult { result ->
+				assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.UP_TO_DATE)
+			}
 		}
-
 		it("should pick up build artifacts from the build cache on a 2nd run after deleting the build/ dir") {
-			val gradleRunner = GradleRunner.create()
-					.withProjectDir(rootDir)
-					.withPluginClasspath()
-
-			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
-			val projectCacheDir = createTempDir(prefix = "cache").absolutePath
-
-			val result = gradleRunner
-					.withArguments("--build-cache", "--project-cache-dir", projectCacheDir, "detekt", "--stacktrace", "--info")
-					.build()
-
-			assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-
-			// Delete the "build" directory so that no local artifacts remain
-			File(rootDir, "build").deleteRecursively()
+			gradleRunner.runDetektTaskAndCheckResult { result ->
+				assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+				projectFile("build").deleteRecursively()
+			}
 			// Running detekt again should pick up artifacts from Build Cache
-			val secondResult = gradleRunner
-					.withArguments("--build-cache", "--project-cache-dir", projectCacheDir, "detekt", "--stacktrace", "--info")
-					.build()
-
-			assertThat(secondResult.task(":detekt")?.outcome).isEqualTo(TaskOutcome.FROM_CACHE)
+			gradleRunner.runDetektTaskAndCheckResult { result ->
+				assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.FROM_CACHE)
+			}
 		}
-
 		it("should pick up build artifacts from the build cache on a 2nd run after running :clean") {
-			val gradleRunner = GradleRunner.create()
-					.withProjectDir(rootDir)
-					.withPluginClasspath()
-
-			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
-			val projectCacheDir = createTempDir(prefix = "cache").absolutePath
-
-			val result = gradleRunner
-					.withArguments("--build-cache", "--project-cache-dir", projectCacheDir, "detekt", "--stacktrace", "--info")
-					.build()
-
-			assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-
-			// Run a clean
-			val cleanResult = gradleRunner
-					.withArguments("--build-cache", "--project-cache-dir", projectCacheDir, "clean", "--stacktrace", "--info")
-					.build()
-
-			assertThat(cleanResult.task(":clean")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-
-			// Running detekt again should pick up artifacts from Build Cache
-			val secondResult = gradleRunner
-					.withArguments("--build-cache", "--project-cache-dir", projectCacheDir, "detekt", "--stacktrace", "--info")
-					.build()
-
-			assertThat(secondResult.task(":detekt")?.outcome).isEqualTo(TaskOutcome.FROM_CACHE)
+			gradleRunner.runDetektTaskAndCheckResult { result ->
+				assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+			}
+			gradleRunner.runTasksAndCheckResult("clean", "detekt") { result ->
+				assertThat(result.task(":clean")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+				assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.FROM_CACHE)
+			}
 		}
-
 		it("should run again after changing config") {
-			val gradleRunner = GradleRunner.create()
-					.withProjectDir(rootDir)
-					.withPluginClasspath()
+			val configFileWithCommentsDisabled = """
+							|autoCorrect: true
+							|failFast: false
+							|comments:
+							|  active: false
+						""".trimMargin()
 
-			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
-			val projectCacheDir = createTempDir(prefix = "cache").absolutePath
+			gradleRunner.runDetektTaskAndCheckResult { result ->
+				assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 
-			val result = gradleRunner
-					.withArguments("--project-cache-dir", projectCacheDir, "detekt", "--stacktrace", "--info")
-					.build()
-
-			assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-
-			// Change Config file
-			dslTest.writeConfig(rootDir, true)
-
-			// Running the same task again should NOT be UP-TO-DATE
-			val secondResult = gradleRunner
-					.withArguments("--project-cache-dir", projectCacheDir, "detekt", "--stacktrace", "--info")
-					.build()
-
-			assertThat(secondResult.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+				// update config file
+				writeProjectFile(configFileName, configFileWithCommentsDisabled)
+			}
+			gradleRunner.runTasksAndCheckResult("detekt") { result ->
+				assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+			}
 		}
-
 		it("should run again after changing baseline") {
-			val gradleRunner = GradleRunner.create()
-					.withProjectDir(rootDir)
-					.withPluginClasspath()
-
-			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
-			val projectCacheDir = createTempDir(prefix = "cache").absolutePath
-
-			val result = gradleRunner
-					.withArguments("--project-cache-dir", projectCacheDir, "detekt", "--stacktrace", "--info")
-					.build()
-
-			assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-
-			// Change Config file
-			baselineFile.writeText("""
+			val changedBaselineContent = """
 							|<some>
 							|	<more/>
 							|	<xml/>
 							|</some>
-							""".trimMargin())
+						""".trimMargin()
 
-			// Running the same task again should NOT be UP-TO-DATE
-			val secondResult = gradleRunner
-					.withArguments("--project-cache-dir", projectCacheDir, "detekt", "--stacktrace", "--info")
-					.build()
+			gradleRunner.runDetektTaskAndCheckResult { result ->
+				assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 
-			assertThat(secondResult.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+				// update baseline file
+				writeProjectFile(baselineFileName, changedBaselineContent)
+			}
+			gradleRunner.runTasksAndCheckResult("detekt") { result ->
+				assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+			}
 		}
-
 		it("should run again after changing inputs") {
-			val gradleRunner = GradleRunner.create()
-					.withProjectDir(rootDir)
-					.withPluginClasspath()
 
-			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
-			val projectCacheDir = createTempDir(prefix = "cache").absolutePath
+			gradleRunner.runDetektTaskAndCheckResult { result ->
+				assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 
-			val result = gradleRunner
-					.withArguments("--project-cache-dir", projectCacheDir, "detekt", "--stacktrace", "--info")
-					.build()
-
-			assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-
-			dslTest.writeSourceFile(rootDir, className = "OtherFile")
-
-			// Running the same task again should NOT be UP-TO-DATE
-			val secondResult = gradleRunner
-					.withArguments("--project-cache-dir", projectCacheDir, "detekt", "--stacktrace", "--info")
-					.build()
-
-			assertThat(secondResult.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+				// add a new File
+				writeKtFile(projectLayout.srcDirs.first(), "OtherKotlinClass")
+			}
+			gradleRunner.runTasksAndCheckResult("detekt") { result ->
+				assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+			}
 		}
 	}
 })

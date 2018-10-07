@@ -1,12 +1,12 @@
 package io.gitlab.arturbosch.detekt
 
+import io.gitlab.arturbosch.detekt.DslTestBuilder.Companion.groovy
+import io.gitlab.arturbosch.detekt.DslTestBuilder.Companion.kotlin
 import org.assertj.core.api.Assertions.assertThat
-import org.gradle.testkit.runner.GradleRunner
 import org.gradle.testkit.runner.TaskOutcome
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
-import java.io.File
 
 const val SOURCE_DIRECTORY = "src/main/java"
 
@@ -14,225 +14,339 @@ const val SOURCE_DIRECTORY = "src/main/java"
  * @author Markus Schwarz
  */
 internal class DetektTaskMultiModuleTest : Spek({
-
 	describe("The Detekt Gradle plugin used in a multi module project") {
-
-		it("is applied to all subprojects individually without sources in root project") {
-			val rootDir = createTempDir(prefix = "applyPlugin")
+		describe("is applied with defaults to all subprojects individually without sources in root project using the" +
+				" " +
+				"subprojects block") {
 			val projectLayout = ProjectLayout(0)
 					.withSubmodule("child1", 2)
 					.withSubmodule("child2", 4)
 
-			val detektConfig = ""
+			lateinit var gradleRunner: DslGradleRunner
 
-			writeFiles(rootDir, detektConfig, projectLayout)
-			writeConfig(rootDir)
+			afterEachTest {
+				gradleRunner.setupProject()
+				gradleRunner.runDetektTaskAndCheckResult { result ->
+					assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.NO_SOURCE)
+					projectLayout.submodules.forEach { submodule ->
+						assertThat(result.task(":${submodule.name}:detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+						assertThat(result.output).contains("number of classes: ${submodule.numberOfSourceFiles}")
+					}
 
-			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
-			val result = GradleRunner.create()
-					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
-					.withPluginClasspath()
-					.build()
+					assertThat(projectFile("build/reports/detekt/detekt.xml")).doesNotExist()
+					assertThat(projectFile("build/reports/detekt/detekt.html")).doesNotExist()
+					projectLayout.submodules.forEach {
+						assertThat(projectFile("${it.name}/build/reports/detekt/detekt.xml")).exists()
+						assertThat(projectFile("${it.name}/build/reports/detekt/detekt.html")).exists()
+					}
+				}
+			}
+			it("can be done using the groovy dsl") {
 
-			assertThat(result.output).contains(projectLayout.submodules.map { "number of classes: ${it.numberOfSourceFiles}" })
-			assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.NO_SOURCE)
+				val mainBuildFileContent: String = """
+				|import io.gitlab.arturbosch.detekt.DetektPlugin
+				|
+				|plugins {
+				|   id "java-library"
+				|   id "io.gitlab.arturbosch.detekt"
+				|}
+				|
+				|allprojects {
+				|	repositories {
+				|		mavenLocal()
+				|		jcenter()
+				|	}
+				|}
+				|subprojects {
+				|	apply plugin: "java-library"
+				|	apply plugin: "io.gitlab.arturbosch.detekt"
+				|}
+				""".trimMargin()
 
-			assertThat(File(rootDir, "build/reports/detekt/detekt.xml")).doesNotExist()
-			assertThat(File(rootDir, "build/reports/detekt/detekt.html")).doesNotExist()
-			projectLayout.submodules.forEach {
-				assertThat(File(rootDir, "${it.name}/build/reports/detekt/detekt.xml")).exists()
-				assertThat(File(rootDir, "${it.name}/build/reports/detekt/detekt.html")).exists()
+				gradleRunner = DslGradleRunner(projectLayout, "build.gradle", mainBuildFileContent)
+			}
+			it("can be done using the kotlin dsl") {
+
+				val mainBuildFileContent: String = """
+				|import io.gitlab.arturbosch.detekt.detekt
+				|
+				|plugins {
+				|   `java-library`
+				|	id("io.gitlab.arturbosch.detekt")
+				|}
+				|
+				|allprojects {
+				|	repositories {
+				|		mavenLocal()
+				|		jcenter()
+				|	}
+				|}
+				|subprojects {
+				|	plugins.apply("java-library")
+				|	plugins.apply("io.gitlab.arturbosch.detekt")
+				|}
+				""".trimMargin()
+
+				gradleRunner = DslGradleRunner(projectLayout, "build.gradle.kts", mainBuildFileContent)
 			}
 		}
-		it("is applied to all submodules as well as the root project") {
-			val rootDir = createTempDir(prefix = "applyPlugin")
+		describe("is applied with defaults to main project and subprojects individually using the allprojects block") {
 			val projectLayout = ProjectLayout(1)
 					.withSubmodule("child1", 2)
 					.withSubmodule("child2", 4)
 
-			val detektConfig = ""
+			lateinit var gradleRunner: DslGradleRunner
 
-			writeFiles(rootDir, detektConfig, projectLayout)
-			writeConfig(rootDir)
+			afterEachTest {
+				gradleRunner.setupProject()
+				gradleRunner.runDetektTaskAndCheckResult { result ->
+					assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+					projectLayout.submodules.forEach { submodule ->
+						assertThat(result.task(":${submodule.name}:detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+						assertThat(result.output).contains("number of classes: ${submodule.numberOfSourceFiles}")
+					}
 
-			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
-			val result = GradleRunner.create()
-					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
-					.withPluginClasspath()
-					.build()
+					assertThat(projectFile("build/reports/detekt/detekt.xml")).exists()
+					assertThat(projectFile("build/reports/detekt/detekt.html")).exists()
+					projectLayout.submodules.forEach {
+						assertThat(projectFile("${it.name}/build/reports/detekt/detekt.xml")).exists()
+						assertThat(projectFile("${it.name}/build/reports/detekt/detekt.html")).exists()
+					}
+				}
+			}
+			it("can be done using the groovy dsl") {
 
-			assertThat(result.output).contains("number of classes: ${projectLayout.numberOfSourceFilesInRoot}")
-			assertThat(result.output).contains(projectLayout.submodules.map { "number of classes: ${it.numberOfSourceFiles}" })
-			assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+				val mainBuildFileContent: String = """
+				|import io.gitlab.arturbosch.detekt.DetektPlugin
+				|
+				|plugins {
+				|   id "java-library"
+				|   id "io.gitlab.arturbosch.detekt"
+				|}
+				|
+				|allprojects {
+				|	repositories {
+				|		mavenLocal()
+				|		jcenter()
+				|	}
+				|	apply plugin: "java-library"
+				|	apply plugin: "io.gitlab.arturbosch.detekt"
+				|}
+				""".trimMargin()
 
-			assertThat(File(rootDir, "build/reports/detekt/detekt.xml")).exists()
-			assertThat(File(rootDir, "build/reports/detekt/detekt.html")).exists()
-			projectLayout.submodules.forEach {
-				assertThat(File(rootDir, "${it.name}/build/reports/detekt/detekt.xml")).exists()
-				assertThat(File(rootDir, "${it.name}/build/reports/detekt/detekt.html")).exists()
+				gradleRunner = DslGradleRunner(projectLayout, "build.gradle", mainBuildFileContent)
+			}
+			it("can be done using the kotlin dsl") {
+
+				val mainBuildFileContent: String = """
+				|import io.gitlab.arturbosch.detekt.detekt
+				|
+				|plugins {
+				|   `java-library`
+				|	id("io.gitlab.arturbosch.detekt")
+				|}
+				|
+				|allprojects {
+				|	repositories {
+				|		mavenLocal()
+				|		jcenter()
+				|	}
+				|	plugins.apply("java-library")
+				|	plugins.apply("io.gitlab.arturbosch.detekt")
+				|}
+				""".trimMargin()
+
+				gradleRunner = DslGradleRunner(projectLayout, "build.gradle.kts", mainBuildFileContent)
 			}
 		}
-		it("allows to disable report type for all projects") {
-			val rootDir = createTempDir(prefix = "applyPlugin")
-			val projectLayout = ProjectLayout(0)
+		describe("uses custom configs when configured in allprojects block") {
+			val projectLayout = ProjectLayout(1)
 					.withSubmodule("child1", 2)
 					.withSubmodule("child2", 4)
 
-			val detektConfig = """
-					|detekt {
-					|	reports {
-					|		html.enabled = false
-					|	}
-					|}
+			lateinit var gradleRunner: DslGradleRunner
+
+			afterEachTest {
+				gradleRunner.setupProject()
+				gradleRunner.runDetektTaskAndCheckResult { result ->
+					assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+					projectLayout.submodules.forEach { submodule ->
+						assertThat(result.task(":${submodule.name}:detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+					}
+
+					assertThat(projectFile("build/detekt-reports/detekt.xml")).exists()
+					assertThat(projectFile("build/detekt-reports/detekt.html")).exists()
+					projectLayout.submodules.forEach {
+						assertThat(projectFile("${it.name}/build/detekt-reports/detekt.xml")).exists()
+						assertThat(projectFile("${it.name}/build/detekt-reports/detekt.html")).exists()
+					}
+				}
+			}
+			it("can be done using the groovy dsl") {
+
+				val mainBuildFileContent: String = """
+				|import io.gitlab.arturbosch.detekt.DetektPlugin
+				|
+				|plugins {
+				|   id "java-library"
+				|   id "io.gitlab.arturbosch.detekt"
+				|}
+				|
+				|allprojects {
+				|	repositories {
+				|		mavenLocal()
+				|		jcenter()
+				|	}
+				|	apply plugin: "java-library"
+				|	apply plugin: "io.gitlab.arturbosch.detekt"
+				|	detekt {
+				|		reportsDir = file("build/detekt-reports")
+				|	}
+				|}
 				""".trimMargin()
 
-			writeFiles(rootDir, detektConfig, projectLayout)
-			writeConfig(rootDir)
+				gradleRunner = DslGradleRunner(projectLayout, "build.gradle", mainBuildFileContent)
+			}
+			it("can be done using the kotlin dsl") {
 
-			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
-			val result = GradleRunner.create()
-					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
-					.withPluginClasspath()
-					.build()
+				val mainBuildFileContent: String = """
+				|import io.gitlab.arturbosch.detekt.detekt
+				|
+				|plugins {
+				|   `java-library`
+				|	id("io.gitlab.arturbosch.detekt")
+				|}
+				|
+				|allprojects {
+				|	repositories {
+				|		mavenLocal()
+				|		jcenter()
+				|	}
+				|	plugins.apply("java-library")
+				|	plugins.apply("io.gitlab.arturbosch.detekt")
+				|	detekt {
+				|		reportsDir = file("build/detekt-reports")
+				|	}
+				|}
+				""".trimMargin()
 
-			assertThat(result.output).contains(projectLayout.submodules.map { "number of classes: ${it.numberOfSourceFiles}" })
-			assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.NO_SOURCE)
-
-			assertThat(File(rootDir, "build/reports/detekt/detekt.xml")).doesNotExist()
-			assertThat(File(rootDir, "build/reports/detekt/detekt.html")).doesNotExist()
-			projectLayout.submodules.forEach {
-				assertThat(File(rootDir, "${it.name}/build/reports/detekt/detekt.xml")).exists()
-				assertThat(File(rootDir, "${it.name}/build/reports/detekt/detekt.html")).doesNotExist()
+				gradleRunner = DslGradleRunner(projectLayout, "build.gradle.kts", mainBuildFileContent)
 			}
 		}
-		it("respects properties beeing overwritten in submodules") {
-			val rootDir = createTempDir(prefix = "applyPlugin")
+		describe("allows changing defaults in allprojects block that can be overwritten in subprojects") {
+			val child2DetektConfig = """
+				| detekt {
+				| 	reportsDir = file("build/custom")
+				| }
+			""".trimMargin()
+			val projectLayout = ProjectLayout(1)
+					.withSubmodule("child1", 2)
+					.withSubmodule("child2", 4, detektConfig = child2DetektConfig)
 
-			val child1DetektConfig = """
-					|detekt {
-					|	reports {
-					|		html.enabled = true
-					|		xml.destination = file("build/child1-reports-location/detekt.xml")
-					|	}
-					|}
+			lateinit var gradleRunner: DslGradleRunner
+
+			afterEachTest {
+				gradleRunner.setupProject()
+				gradleRunner.runDetektTaskAndCheckResult { result ->
+					assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+					projectLayout.submodules.forEach { submodule ->
+						assertThat(result.task(":${submodule.name}:detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+					}
+
+					assertThat(projectFile("build/detekt-reports/detekt.xml")).exists()
+					assertThat(projectFile("build/detekt-reports/detekt.html")).exists()
+					assertThat(projectFile("child1/build/detekt-reports/detekt.xml")).exists()
+					assertThat(projectFile("child1/build/detekt-reports/detekt.html")).exists()
+					assertThat(projectFile("child2/build/custom/detekt.xml")).exists()
+					assertThat(projectFile("child2/build/custom/detekt.html")).exists()
+				}
+			}
+			it("can be done using the groovy dsl") {
+
+				val mainBuildFileContent: String = """
+				|import io.gitlab.arturbosch.detekt.DetektPlugin
+				|
+				|plugins {
+				|   id "java-library"
+				|   id "io.gitlab.arturbosch.detekt"
+				|}
+				|
+				|allprojects {
+				|	repositories {
+				|		mavenLocal()
+				|		jcenter()
+				|	}
+				|	apply plugin: "java-library"
+				|	apply plugin: "io.gitlab.arturbosch.detekt"
+				|	detekt {
+				|		reportsDir = file("build/detekt-reports")
+				|	}
+				|}
 				""".trimMargin()
 
-			val projectLayout = ProjectLayout(0)
-					.withSubmodule("child1", 2, child1DetektConfig)
+				gradleRunner = DslGradleRunner(projectLayout, "build.gradle", mainBuildFileContent)
+			}
+			it("can be done using the kotlin dsl") {
+
+				val mainBuildFileContent: String = """
+				|import io.gitlab.arturbosch.detekt.detekt
+				|
+				|plugins {
+				|   `java-library`
+				|	id("io.gitlab.arturbosch.detekt")
+				|}
+				|
+				|allprojects {
+				|	repositories {
+				|		mavenLocal()
+				|		jcenter()
+				|	}
+				|	plugins.apply("java-library")
+				|	plugins.apply("io.gitlab.arturbosch.detekt")
+				|	detekt {
+				|		reportsDir = file("build/detekt-reports")
+				|	}
+				|}
+				""".trimMargin()
+
+				gradleRunner = DslGradleRunner(projectLayout, "build.gradle.kts", mainBuildFileContent)
+			}
+		}
+		listOf(groovy(), kotlin()).forEach { builder ->
+			val projectLayout = ProjectLayout(1)
+					.withSubmodule("child1", 2)
 					.withSubmodule("child2", 4)
 
-			val detektConfig = """
-					|detekt {
-					|	reports {
-					|		html.enabled = false
-					|		xml.destination = file("${"\${project.projectDir}"}/build/custom-reports-location/detekt.xml")
-					|	}
-					|}
+			val detektConfig: String = """
+				|detekt {
+				|	input = files("${"$"}projectDir")
+				|	filters = ".*build.gradle.kts"
+				|}
 				""".trimMargin()
-
-			writeFiles(rootDir, detektConfig, projectLayout)
-			writeConfig(rootDir)
-
-			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
-			val result = GradleRunner.create()
-					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
-					.withPluginClasspath()
+			val gradleRunner = builder
+					.withProjectLayout(projectLayout)
+					.withDetektConfig(detektConfig)
 					.build()
 
-			assertThat(result.output).contains(projectLayout.submodules.map { "number of classes: ${it.numberOfSourceFiles}" })
-			assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.NO_SOURCE)
+			describe("can be used in ${builder.gradleBuildName}") {
+				it("can be applied to all files in entire project resulting in 1 report") {
+					gradleRunner.runDetektTaskAndCheckResult { result ->
+						assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+						projectLayout.submodules.forEach { submodule ->
+							assertThat(result.task(":${submodule.name}:detekt")).isNull()
+						}
 
-			// Child 1 (html: true, custom xml location)
-			assertThat(File(rootDir, "child1/build/child1-reports-location/detekt.xml")).exists()
-			assertThat(File(rootDir, "child1/build/reports/detekt/detekt.html")).exists()
+						assertThat(result.output).contains("number of classes: 7")
 
-			// Child 2 (html: false (per root), custom xml location from root)
-			assertThat(File(rootDir, "child2/build/custom-reports-location/detekt.xml")).exists()
-			assertThat(File(rootDir, "child2/build/reports/detekt/detekt.html")).doesNotExist()
+						assertThat(projectFile("build/reports/detekt/detekt.xml")).exists()
+						assertThat(projectFile("build/reports/detekt/detekt.html")).exists()
+						projectLayout.submodules.forEach { submodule ->
+							assertThat(projectFile("${submodule.name}/build/reports/detekt/detekt.xml")).doesNotExist()
+							assertThat(projectFile("${submodule.name}/build/reports/detekt/detekt.html")).doesNotExist()
+						}
+					}
+				}
+			}
 		}
 	}
 })
-
-// build.gradle
-private fun buildFileContent(detektConfiguration: String) = """
-	|import io.gitlab.arturbosch.detekt.DetektPlugin
-	|
-	|plugins {
-	|   id "java-library"
-	|   id "io.gitlab.arturbosch.detekt"
-	|}
-	|
-	|allprojects {
-	|	repositories {
-	|		mavenLocal()
-	|		jcenter()
-	|	}
-	|}
-	|
-	|subprojects {
-	|	apply plugin: "java-library"
-	|	apply plugin: "io.gitlab.arturbosch.detekt"
-	|	$detektConfiguration
-	|}
-	|
-	""".trimMargin()
-
-// src/main/kotlin/MyClass.kt
-private fun ktFileContent(className: String) = """
-	|class $className
-	|
-	""".trimMargin()
-
-private fun writeFiles(root: File, detektConfiguration: String, projectLayout: ProjectLayout) {
-	File(root, "build.gradle").writeText(buildFileContent(detektConfiguration))
-	File(root, "settings.gradle").writeText(settingsContent(projectLayout))
-	(1..projectLayout.numberOfSourceFilesInRoot).forEach {
-		File(root, SOURCE_DIRECTORY).mkdirs()
-		val className = "MyRoot${it}Class.kt"
-		File(root, SOURCE_DIRECTORY +
-				"/$className").writeText(ktFileContent(className))
-	}
-	projectLayout.submodules.forEach {
-		val submodule = it
-		val moduleRoot = File(root, submodule.name)
-		moduleRoot.mkdirs()
-		File(moduleRoot, "build.gradle").writeText(it.detektConfig ?: "")
-		(1..submodule.numberOfSourceFiles).forEach {
-			File(moduleRoot, SOURCE_DIRECTORY).mkdirs()
-			val className = "My${submodule.name}${it}Class.kt"
-			File(moduleRoot, SOURCE_DIRECTORY +
-					"/$className").writeText(ktFileContent(className))
-		}
-	}
-}
-
-private fun writeConfig(root: File) {
-	File(root, "config.yml").writeText("""
-		|autoCorrect: true
-		|failFast: false
-		""".trimMargin())
-}
-
-private fun settingsContent(projectLayout: ProjectLayout) = """
-    	| rootProject.name = "root-project"
-		| include(${projectLayout.submodules.map { "\"${it.name}\"" }.joinToString(",")})
-		|
-		""".trimMargin()
-
-private data class Project(val name: String, val numberOfSourceFiles: Int) {
-	companion object {
-		const val ROOT_PROJECT = "root"
-		fun root(numberOfSourceFiles: Int) = Project(ROOT_PROJECT, numberOfSourceFiles)
-	}
-}
-
-private data class ProjectLayout(val numberOfSourceFilesInRoot: Int, val submodules: List<Submodule> = emptyList()) {
-	fun withSubmodule(name: String, numberOfSourceFiles: Int, detektConfig: String? = null) =
-			copy(submodules = (submodules + listOf(Submodule(name, numberOfSourceFiles, detektConfig))))
-}
-
-private data class Submodule(val name: String, val numberOfSourceFiles: Int, val detektConfig: String? = null)
