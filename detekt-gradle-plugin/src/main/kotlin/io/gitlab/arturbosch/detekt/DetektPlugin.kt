@@ -26,13 +26,13 @@ class DetektPlugin : Plugin<Project> {
 
 	private fun createAndConfigureDetektTask(project: Project, extension: DetektExtension) {
 		val detektTask = project.tasks.register(DETEKT, Detekt::class.java) {
-			debug.set(project.provider({ extension.debug }))
-			parallel.set(project.provider({ extension.parallel }))
-			disableDefaultRuleSets.set(project.provider({ extension.disableDefaultRuleSets }))
-			filters.set(project.provider({ extension.filters }))
+			debug.set(project.provider { extension.debug })
+			parallel.set(project.provider { extension.parallel })
+			disableDefaultRuleSets.set(project.provider { extension.disableDefaultRuleSets })
+			filters.set(project.provider { extension.filters })
 			config.setFrom(project.provider { extension.config })
-			baseline.set(project.layout.file(project.provider({ extension.baseline })))
-			plugins.set(project.provider({ extension.plugins }))
+			baseline.set(project.layout.file(project.provider { extension.baseline }))
+			plugins.set(project.provider { extension.plugins })
 			input.setFrom(existingInputDirectoriesProvider(project, extension))
 			extension.reports.forEach { extReport ->
 				setReportFileProvider(extReport.name, extReport.getTargetFileProvider(extension.reportsDirProvider))
@@ -44,13 +44,13 @@ class DetektPlugin : Plugin<Project> {
 
 	private fun createAndConfigureCreateBaselineTask(project: Project, extension: DetektExtension) =
 			project.tasks.register(BASELINE, DetektCreateBaselineTask::class.java) {
-				baseline.set(project.layout.file(project.provider({ extension.baseline })))
+				baseline.set(project.layout.file(project.provider { extension.baseline }))
 				config.setFrom(project.provider { extension.config })
-				debug.set(project.provider({ extension.debug }))
-				parallel.set(project.provider({ extension.parallel }))
-				disableDefaultRuleSets.set(project.provider({ extension.disableDefaultRuleSets }))
-				filters.set(project.provider({ extension.filters }))
-				plugins.set(project.provider({ extension.plugins }))
+				debug.set(project.provider { extension.debug })
+				parallel.set(project.provider { extension.parallel })
+				disableDefaultRuleSets.set(project.provider { extension.disableDefaultRuleSets })
+				filters.set(project.provider { extension.filters })
+				plugins.set(project.provider { extension.plugins })
 				input.setFrom(existingInputDirectoriesProvider(project, extension))
 			}
 
@@ -61,20 +61,20 @@ class DetektPlugin : Plugin<Project> {
 
 	private fun createAndConfigureIdeaTasks(project: Project, extension: DetektExtension) {
 		project.tasks.register(IDEA_FORMAT, DetektIdeaFormatTask::class.java) {
-			debug.set(project.provider({ extension.debug }))
+			debug.set(project.provider { extension.debug })
 			input.setFrom(existingInputDirectoriesProvider(project, extension))
 			ideaExtension = extension.idea
 		}
 
 		project.tasks.register(IDEA_INSPECT, DetektIdeaInspectionTask::class.java) {
-			debug.set(project.provider({ extension.debug }))
+			debug.set(project.provider { extension.debug })
 			input.setFrom(existingInputDirectoriesProvider(project, extension))
 			ideaExtension = extension.idea
 		}
 	}
 
 	private fun existingInputDirectoriesProvider(project: Project, extension: DetektExtension): Provider<FileCollection> =
-			project.provider({ extension.input.filter { it.exists() } })
+			project.provider { extension.input.filter { it.exists() } }
 
 	private fun configurePluginDependencies(project: Project, extension: DetektExtension) {
 		project.configurations.create(CONFIGURATION_DETEKT_PLUGINS) {

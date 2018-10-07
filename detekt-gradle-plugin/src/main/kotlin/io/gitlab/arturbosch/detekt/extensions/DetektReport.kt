@@ -20,12 +20,12 @@ class DetektReport(val name: String, private val project: Project) {
 	}
 
 	fun getTargetFileProvider(reportsDir: Provider<Directory>): Provider<RegularFile> {
-		return project.provider({
+		return project.provider {
 			if (enabled ?: DetektExtension.DEFAULT_REPORT_ENABLED_VALUE)
 				getTargetFile(reportsDir.get())
 			else
 				null
-		})
+		}
 	}
 
 	private fun getTargetFile(reportsDir: Directory): RegularFile {

@@ -50,13 +50,13 @@ open class DetektExtension(project: Project) : CodeQualityExtension() {
 
 	var plugins: String? = null
 
-	val reportsDirProvider: Provider<Directory> = project.provider({
+	val reportsDirProvider: Provider<Directory> = project.provider {
 		val dir = customReportsDir
 		if (dir == null)
 			defaultReportsDir
 		else
 			project.layout.projectDirectory.dir(dir.path)
-	})
+	}
 
 	companion object {
 		const val DEFAULT_SRC_DIR_JAVA = "src/main/java"
