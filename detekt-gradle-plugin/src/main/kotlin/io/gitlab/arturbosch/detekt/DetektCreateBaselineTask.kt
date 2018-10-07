@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt
 
-import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import io.gitlab.arturbosch.detekt.invoke.BaselineArgument
 import io.gitlab.arturbosch.detekt.invoke.CliArgument
 import io.gitlab.arturbosch.detekt.invoke.ConfigArgument
@@ -76,17 +75,16 @@ open class DetektCreateBaselineTask : DefaultTask() {
 
 	@TaskAction
 	fun baseline() {
-		val debugOrDefault = debug.getOrElse(DetektExtension.DEFAULT_DEBUG_VALUE)
 		val arguments = mutableListOf<CliArgument>(CreateBaselineArgument) +
 				BaselineArgument(baseline.get()) +
 				InputArgument(input) +
 				FiltersArgument(filters.orNull) +
 				ConfigArgument(config) +
 				PluginsArgument(plugins.orNull) +
-				DebugArgument(debugOrDefault) +
-				ParallelArgument(parallel.getOrElse(DetektExtension.DEFAULT_PARALLEL_VALUE)) +
-				DisableDefaultRulesetArgument(disableDefaultRuleSets.getOrElse(DetektExtension.DEFAULT_DISABLE_RULESETS_VALUE))
+				DebugArgument(debug.get()) +
+				ParallelArgument(parallel.get()) +
+				DisableDefaultRulesetArgument(disableDefaultRuleSets.get())
 
-		DetektInvoker.invokeCli(project, arguments.toList(), debugOrDefault)
+		DetektInvoker.invokeCli(project, arguments.toList(), debug.get())
 	}
 }

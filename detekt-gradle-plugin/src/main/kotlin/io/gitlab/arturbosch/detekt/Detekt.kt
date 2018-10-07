@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt
 
-import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import io.gitlab.arturbosch.detekt.extensions.DetektReports
 import io.gitlab.arturbosch.detekt.invoke.BaselineArgument
 import io.gitlab.arturbosch.detekt.invoke.CliArgument
@@ -98,7 +97,6 @@ open class Detekt : DefaultTask() {
 
 	@TaskAction
 	fun check() {
-		val debugOrDefault = debug.getOrElse(DetektExtension.DEFAULT_DEBUG_VALUE)
 		val arguments = mutableListOf<CliArgument>() +
 				InputArgument(input) +
 				FiltersArgument(filters.orNull) +
@@ -107,10 +105,10 @@ open class Detekt : DefaultTask() {
 				BaselineArgument(baseline.orNull) +
 				XmlReportArgument(xmlReportFile.orNull) +
 				HtmlReportArgument(htmlReportFile.orNull) +
-				DebugArgument(debugOrDefault) +
-				ParallelArgument(parallel.getOrElse(DetektExtension.DEFAULT_PARALLEL_VALUE)) +
-				DisableDefaultRulesetArgument(disableDefaultRuleSets.getOrElse(DetektExtension.DEFAULT_DISABLE_RULESETS_VALUE))
+				DebugArgument(debug.get()) +
+				ParallelArgument(parallel.get()) +
+				DisableDefaultRulesetArgument(disableDefaultRuleSets.get())
 
-		DetektInvoker.invokeCli(project, arguments.toList(), debugOrDefault)
+		DetektInvoker.invokeCli(project, arguments.toList(), debug.get())
 	}
 }

@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt
 
-import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import io.gitlab.arturbosch.detekt.extensions.IdeaExtension
 import io.gitlab.arturbosch.detekt.invoke.ProcessExecutor.startProcess
 import org.gradle.api.DefaultTask
@@ -40,9 +39,8 @@ open class DetektIdeaFormatTask : DefaultTask() {
 
 	@TaskAction
 	fun format() {
-		val debugOrDefault = debug.getOrElse(DetektExtension.DEFAULT_DEBUG_VALUE)
-		if (debugOrDefault) println("$ideaExtension")
+		if (debug.get()) println("$ideaExtension")
 
-		startProcess(ideaExtension.formatArgs(input.asPath), debugOrDefault)
+		startProcess(ideaExtension.formatArgs(input.asPath), debug.get())
 	}
 }

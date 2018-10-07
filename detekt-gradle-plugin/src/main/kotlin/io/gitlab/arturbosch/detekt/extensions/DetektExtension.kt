@@ -40,11 +40,11 @@ open class DetektExtension(project: Project) : CodeQualityExtension() {
 
 	var config: ConfigurableFileCollection = project.layout.configurableFiles()
 
-	var debug: Boolean? = null
+	var debug: Boolean = DEFAULT_DEBUG_VALUE
 
-	var parallel: Boolean? = null
+	var parallel: Boolean = DEFAULT_PARALLEL_VALUE
 
-	var disableDefaultRuleSets: Boolean? = null
+	var disableDefaultRuleSets: Boolean = DEFAULT_DISABLE_RULESETS_VALUE
 
 	var filters: String? = null
 

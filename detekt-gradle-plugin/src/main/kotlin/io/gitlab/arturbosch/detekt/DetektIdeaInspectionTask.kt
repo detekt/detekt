@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt
 
-import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import io.gitlab.arturbosch.detekt.extensions.IdeaExtension
 import io.gitlab.arturbosch.detekt.invoke.ProcessExecutor
 import org.gradle.api.DefaultTask
@@ -40,10 +39,9 @@ open class DetektIdeaInspectionTask : DefaultTask() {
 
 	@TaskAction
 	fun inspect() {
-		val debugOrDefault = debug.getOrElse(DetektExtension.DEFAULT_DEBUG_VALUE)
-		if (debugOrDefault) println("Running inspection task in debug mode")
+		if (debug.get()) println("Running inspection task in debug mode")
 
-		if (debugOrDefault) println("$ideaExtension")
-		ProcessExecutor.startProcess(ideaExtension.inspectArgs(input.asPath), debugOrDefault)
+		if (debug.get()) println("$ideaExtension")
+		ProcessExecutor.startProcess(ideaExtension.inspectArgs(input.asPath), debug.get())
 	}
 }
