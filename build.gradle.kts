@@ -4,6 +4,7 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.gradle.util.GFileUtils
 import org.jetbrains.dokka.gradle.DokkaTask
+import io.gitlab.arturbosch.detekt.Detekt
 
 import java.util.Date
 
@@ -36,6 +37,10 @@ tasks.withType<Wrapper> {
 
 tasks.withType<Test> {
 	dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":test"))
+}
+
+tasks.withType<Detekt> {
+	dependsOn("detekt-cli:assemble")
 }
 
 val detektVersion: String by project
