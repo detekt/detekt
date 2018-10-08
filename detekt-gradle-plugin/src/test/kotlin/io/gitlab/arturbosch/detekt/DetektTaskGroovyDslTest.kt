@@ -344,8 +344,13 @@ internal class DetektTaskGroovyDslTest : Spek({
 					|
 					|	input = files("src/main/java")
 					|	debug = true
-					|	xmlReportFile = file("build/reports/failfast.xml")
-					|	htmlReportFile = file("build/reports/failfast.html")
+					|	reports {
+					|		xml {
+					|			enabled = true
+					|			destination = file("build/reports/failfast.xml")
+					|		}
+					|		html.destination = file("build/reports/failfast.html")
+					|	}
 					|}
 				"""
 

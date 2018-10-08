@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt
 
+import groovy.lang.Closure
 import io.gitlab.arturbosch.detekt.extensions.DetektReports
 import io.gitlab.arturbosch.detekt.invoke.BaselineArgument
 import io.gitlab.arturbosch.detekt.invoke.CliArgument
@@ -15,10 +16,12 @@ import io.gitlab.arturbosch.detekt.invoke.PluginsArgument
 import io.gitlab.arturbosch.detekt.invoke.XmlReportArgument
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.ConfigurableFileCollection
+import org.gradle.api.file.Directory
 import org.gradle.api.file.RegularFile
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
+import org.gradle.api.reporting.ReportingExtension
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
@@ -32,6 +35,8 @@ import org.gradle.api.tasks.SkipWhenEmpty
 import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.property
 import org.gradle.language.base.plugins.LifecycleBasePlugin
+import org.gradle.util.ConfigureUtil
+import java.io.File
 
 /**
  * @author Artur Bosch
@@ -80,20 +85,31 @@ open class Detekt : DefaultTask() {
 	@Optional
 	var disableDefaultRuleSets: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
-	@OutputFile
-	@Optional
-	var xmlReportFile: RegularFileProperty = project.layout.fileProperty()
+	@Internal
+	var reports = DetektReports(project)
 
-	@OutputFile
-	@Optional
-	var htmlReportFile: RegularFileProperty = project.layout.fileProperty()
+	fun reports(closure: Closure<*>): DetektReports = ConfigureUtil.configure(closure, reports)
+	fun reports(configure: DetektReports.() -> Unit) = reports.configure()
 
-	fun setReportFileProvider(name: String, provider: Provider<RegularFile>) {
-		when (name) {
-			DetektReports.XML_REPORT_NAME -> xmlReportFile.set(provider)
-			DetektReports.HTML_REPORT_NAME -> htmlReportFile.set(provider)
-		}
-	}
+	@Internal
+	@Optional
+	var reportsDir: Property<File> = project.objects.property()
+
+	val xmlReportFile: Provider<RegularFile>
+		@OutputFile
+		@Optional
+		get() = reports.xml.getTargetFileProvider(effectiveReportsDir)
+
+	val htmlReportFile: Provider<RegularFile>
+		@OutputFile
+		@Optional
+		get() = reports.html.getTargetFileProvider(effectiveReportsDir)
+
+	private val defaultReportsDir: Directory = project.layout.buildDirectory.get()
+			.dir(ReportingExtension.DEFAULT_REPORTS_DIR_NAME)
+			.dir("detekt")
+
+	private val effectiveReportsDir = project.provider { reportsDir.getOrElse(defaultReportsDir.asFile) }
 
 	@TaskAction
 	fun check() {

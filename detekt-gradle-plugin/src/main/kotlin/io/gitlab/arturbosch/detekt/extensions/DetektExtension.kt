@@ -3,10 +3,7 @@ package io.gitlab.arturbosch.detekt.extensions
 import groovy.lang.Closure
 import org.gradle.api.Project
 import org.gradle.api.file.ConfigurableFileCollection
-import org.gradle.api.file.Directory
 import org.gradle.api.plugins.quality.CodeQualityExtension
-import org.gradle.api.provider.Provider
-import org.gradle.api.reporting.ReportingExtension
 import org.gradle.util.ConfigureUtil
 import java.io.File
 
@@ -20,10 +17,6 @@ open class DetektExtension(project: Project) : CodeQualityExtension() {
 
 	val customReportsDir: File?
 		get() = reportsDir
-
-	private val defaultReportsDir: Directory = project.layout.buildDirectory.get()
-			.dir(ReportingExtension.DEFAULT_REPORTS_DIR_NAME)
-			.dir("detekt")
 
 	val reports = DetektReports(project)
 	fun reports(configure: DetektReports.() -> Unit) = reports.configure()
@@ -49,14 +42,6 @@ open class DetektExtension(project: Project) : CodeQualityExtension() {
 	var filters: String? = null
 
 	var plugins: String? = null
-
-	val reportsDirProvider: Provider<Directory> = project.provider {
-		val dir = customReportsDir
-		if (dir == null)
-			defaultReportsDir
-		else
-			project.layout.projectDirectory.dir(dir.path)
-	}
 
 	companion object {
 		const val DEFAULT_SRC_DIR_JAVA = "src/main/java"

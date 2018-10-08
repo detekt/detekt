@@ -9,6 +9,7 @@ import org.gradle.language.base.plugins.LifecycleBasePlugin
 
 /**
  * @author Marvin Ramin
+ * @author Markus Schwarz
  */
 class DetektPlugin : Plugin<Project> {
 
@@ -34,9 +35,8 @@ class DetektPlugin : Plugin<Project> {
 			baseline.set(project.layout.file(project.provider { extension.baseline }))
 			plugins.set(project.provider { extension.plugins })
 			input.setFrom(existingInputDirectoriesProvider(project, extension))
-			extension.reports.forEach { extReport ->
-				setReportFileProvider(extReport.name, extReport.getTargetFileProvider(extension.reportsDirProvider))
-			}
+			reportsDir.set(project.provider { extension.customReportsDir })
+			reports = extension.reports
 		}
 
 		project.tasks.findByName(LifecycleBasePlugin.CHECK_TASK_NAME)?.dependsOn(detektTask)

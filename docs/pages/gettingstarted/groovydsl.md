@@ -123,8 +123,12 @@ task detektFailFast(type: io.gitlab.arturbosch.detekt.Detekt) {
    input = files("src/main/java")
    config = files("$rootDir/config.yml")
    debug = true
-   xmlReportFile = file("build/reports/failfast.xml")       // if omitted no xml report is generated
-   htmlReportFile = file("build/reports/failfast.html")     // if omitted no html report is generated
+   reports {
+       xml {
+           destination = file("build/reports/failfast.xml")
+       }
+       html.destination = file("build/reports/failfast.html")
+   }
 }
 ```
 

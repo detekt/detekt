@@ -161,8 +161,13 @@ internal class DetektTaskKotlinDslTest : Spek({
 					|	input = files("src/main/java")
 					|	config = files("${configFile.safeAbsolutePath}")
 					|	debug.set(true)
-					|	xmlReportFile.set(file("build/reports/failfast.xml"))
-					|	htmlReportFile.set(file("build/reports/failfast.html"))
+					|	reports {
+					|		xml {
+					|			enabled = true
+					|			destination = file("build/reports/failfast.xml")
+					|		}
+					|		html.destination = file("build/reports/failfast.html")
+					|	}
 					|}
 				"""
 
