@@ -13,6 +13,21 @@ import java.io.File
  */
 internal class DetektTaskGroovyDslTest : Spek({
 
+	val buildGradle = """
+		|import io.gitlab.arturbosch.detekt.DetektPlugin
+		|
+		|plugins {
+		|   id "java-library"
+		|   id "io.gitlab.arturbosch.detekt"
+		|}
+		|
+		|repositories {
+		|	jcenter()
+		|	mavenLocal()
+		|}
+		""".trimMargin()
+	val dslTest = DslBaseTest("build.gradle", buildGradle)
+
 	describe("The Detekt Gradle plugin used in a build.gradle file") {
 		lateinit var rootDir: File
 		beforeEachTest {
@@ -22,7 +37,7 @@ internal class DetektTaskGroovyDslTest : Spek({
 
 			val detektConfig = ""
 
-			writeFiles(rootDir, detektConfig)
+			dslTest.writeFiles(rootDir, detektConfig)
 
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
@@ -47,7 +62,7 @@ internal class DetektTaskGroovyDslTest : Spek({
 				|}
 				"""
 
-			writeFiles(rootDir, detektConfig)
+			dslTest.writeFiles(rootDir, detektConfig)
 
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
@@ -76,7 +91,7 @@ internal class DetektTaskGroovyDslTest : Spek({
 				|}
 				"""
 
-			writeFiles(rootDir, detektConfig)
+			dslTest.writeFiles(rootDir, detektConfig)
 
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
@@ -102,7 +117,7 @@ internal class DetektTaskGroovyDslTest : Spek({
 				|}
 				"""
 
-			writeFiles(rootDir, detektConfig)
+			dslTest.writeFiles(rootDir, detektConfig)
 
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
@@ -118,7 +133,7 @@ internal class DetektTaskGroovyDslTest : Spek({
 			assertThat(File(rootDir, "build/detekt-reports/detekt.xml")).exists()
 			assertThat(File(rootDir, "build/detekt-reports/detekt.html")).exists()
 		}
-		it("can change reportsDir but overwrite single report destination") {
+		it("can change reportsDir but overdslTest.write single report destination") {
 
 			val detektConfig = """
 				|detekt {
@@ -129,7 +144,7 @@ internal class DetektTaskGroovyDslTest : Spek({
 				|}
 				"""
 
-			writeFiles(rootDir, detektConfig)
+			dslTest.writeFiles(rootDir, detektConfig)
 
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
@@ -154,7 +169,7 @@ internal class DetektTaskGroovyDslTest : Spek({
 				|}
 				"""
 
-			writeFiles(rootDir, detektConfig)
+			dslTest.writeFiles(rootDir, detektConfig)
 
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
@@ -182,7 +197,7 @@ internal class DetektTaskGroovyDslTest : Spek({
 				|}
 				"""
 
-			writeFiles(rootDir, detektConfig)
+			dslTest.writeFiles(rootDir, detektConfig)
 
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
@@ -199,19 +214,19 @@ internal class DetektTaskGroovyDslTest : Spek({
 			assertThat(File(rootDir, "build/reports/detekt/detekt.html")).doesNotExist()
 		}
 		it("can configure the input directory") {
-			val customSourceLocation = "gensrc/kotlin"
+			val customSourceLocation = File(rootDir, "gensrc/kotlin")
 			val detektConfig = """
 					|detekt {
 					| debug = true
 					| input = files(
-					|	 "$customSourceLocation",
+					|	 "${customSourceLocation.safeAbsolutePath}",
 					|	 "some/location/thatdoesnotexist"
 					| )
 					|}
 				"""
 
-			writeFiles(rootDir, detektConfig, customSourceLocation)
-			writeConfig(rootDir)
+			dslTest.writeFiles(rootDir, detektConfig, customSourceLocation)
+			dslTest.writeConfig(rootDir)
 
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
@@ -221,24 +236,24 @@ internal class DetektTaskGroovyDslTest : Spek({
 					.build()
 
 			assertThat(result.output).contains("number of classes: 1")
-			assertThat(result.output).contains("--input, $rootDir/$customSourceLocation")
+			assertThat(result.output).contains("--input, ${customSourceLocation.absolutePath}")
 			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 		}
 		it("can configure multiple input directories") {
-			val customSourceLocation = "gensrc/kotlin"
-			val otherCustomSourceLocation = "gensrc/foo"
+			val customSourceLocation = File(rootDir, "gensrc/kotlin")
+			val otherCustomSourceLocation = File(rootDir, "gensrc/foo")
 			val detektConfig = """
 					|detekt {
 					| debug = true
 					| input = files(
-					|	 "$customSourceLocation",
-					|	 "$otherCustomSourceLocation"
+					|	 "${customSourceLocation.safeAbsolutePath}",
+					|	 "${otherCustomSourceLocation.safeAbsolutePath}"
 					| )
 					|}
 				"""
 
-			writeFiles(rootDir, detektConfig, customSourceLocation, otherCustomSourceLocation)
-			writeConfig(rootDir)
+			dslTest.writeFiles(rootDir, detektConfig, customSourceLocation, otherCustomSourceLocation)
+			dslTest.writeConfig(rootDir)
 
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
@@ -248,17 +263,18 @@ internal class DetektTaskGroovyDslTest : Spek({
 					.build()
 
 			assertThat(result.output).contains("number of classes: 2")
-			assertThat(result.output).contains("--input, $rootDir/$customSourceLocation,$rootDir/$otherCustomSourceLocation")
+			assertThat(result.output).contains("--input, ${customSourceLocation.absolutePath},${otherCustomSourceLocation.absolutePath}")
 			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 		}
 		it("can configure a new custom detekt task") {
+			val configFile = File(rootDir, "config.yml")
 
 			val detektConfig = """
 					|task detektFailFast(type: io.gitlab.arturbosch.detekt.Detekt) {
 					|	description = "Runs a failfast detekt build."
 					|
 					|	input = files("src/main/java")
-					|	config = files("$rootDir/config.yml")
+					|	config = files("${configFile.safeAbsolutePath}")
 					|	debug = true
 					|	reports {
 					|		xml {
@@ -269,8 +285,8 @@ internal class DetektTaskGroovyDslTest : Spek({
 					|}
 				"""
 
-			writeFiles(rootDir, detektConfig)
-			writeConfig(rootDir, failFast = true)
+			dslTest.writeFiles(rootDir, detektConfig)
+			dslTest.writeConfig(rootDir, failfast = true)
 
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
@@ -288,52 +304,3 @@ internal class DetektTaskGroovyDslTest : Spek({
 		}
 	}
 })
-
-// build.gradle
-private fun buildFileContent(detektConfiguration: String) = """
-	|import io.gitlab.arturbosch.detekt.DetektPlugin
-	|
-	|plugins {
-	|   id "java-library"
-	|   id "io.gitlab.arturbosch.detekt"
-	|}
-	|
-	|repositories {
-	|	jcenter()
-	|	mavenLocal()
-	|}
-	|
-	|$detektConfiguration
-	""".trimMargin()
-
-// settings.gradle
-private const val settingsFileContent = """include ":custom""""
-
-// src/main/kotlin/MyClass.kt
-private val ktFileContent = """
-	|internal class MyClass
-	|
-	""".trimMargin()
-
-private fun writeFiles(root: File, detektConfiguration: String, srcDir: String = "src/main/java") {
-	File(root, "build.gradle").writeText(buildFileContent(detektConfiguration))
-	File(root, "settings.gradle").writeText(settingsFileContent)
-	File(root, srcDir).mkdirs()
-	File(root, "$srcDir/MyClass.kt").writeText(ktFileContent)
-}
-
-private fun writeFiles(root: File, detektConfiguration: String, vararg srcDir: String) {
-	File(root, "build.gradle").writeText(buildFileContent(detektConfiguration))
-	File(root, "settings.gradle").writeText(settingsFileContent)
-	srcDir.forEach {
-		File(root, it).mkdirs()
-		File(root, "$it/MyClass.kt").writeText(ktFileContent)
-	}
-}
-
-private fun writeConfig(root: File, failFast: Boolean = false) {
-	File(root, "config.yml").writeText("""
-		|autoCorrect: true
-		|failFast: $failFast
-		""".trimMargin())
-}

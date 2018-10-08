@@ -8,7 +8,9 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isOverridden
+import org.jetbrains.kotlin.com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.kotlin.psi.KtBlockExpression
+import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
@@ -49,6 +51,7 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		if (function.funKeyword == null) return
+		if (isInInterface(function)) return
 		if (function.hasDeclaredReturnType() && function.colon != null) {
 			checkFunctionWithExplicitReturnType(function)
 		} else if (!function.isOverridden()) {
@@ -80,6 +83,11 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
 		if (referenceExpression != null && referenceExpression.text == UNIT) {
 			report(CodeSmell(issue, Entity.from(referenceExpression), createMessage(function)))
 		}
+	}
+
+	private fun isInInterface(function: KtNamedFunction): Boolean {
+		val parent = PsiTreeUtil.getParentOfType(function, KtClass::class.java, true)
+		return parent is KtClass && parent.isInterface()
 	}
 
 	private fun createMessage(function: KtNamedFunction) = "The function ${function.name} " +

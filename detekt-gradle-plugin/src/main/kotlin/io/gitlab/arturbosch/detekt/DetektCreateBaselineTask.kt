@@ -37,7 +37,7 @@ open class DetektCreateBaselineTask : DefaultTask() {
 	}
 
 	@OutputFile
-	@PathSensitive(PathSensitivity.ABSOLUTE)
+	@PathSensitive(PathSensitivity.RELATIVE)
 	var baseline: File? = null
 
 	@InputFiles
@@ -51,7 +51,7 @@ open class DetektCreateBaselineTask : DefaultTask() {
 
 	@InputFiles
 	@Optional
-	@PathSensitive(PathSensitivity.ABSOLUTE)
+	@PathSensitive(PathSensitivity.RELATIVE)
 	var config: FileCollection? = null
 
 	@Input

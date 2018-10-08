@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.invoke
 
 import io.gitlab.arturbosch.detekt.CONFIGURATION_DETEKT
-import io.gitlab.arturbosch.detekt.CONFIGURATION_DETEKT_INTERNAL
+import io.gitlab.arturbosch.detekt.CONFIGURATION_DETEKT_PLUGINS
 import org.gradle.api.Project
 import org.gradle.api.file.FileCollection
 
@@ -21,7 +21,7 @@ object DetektInvoker {
 	}
 
 	private fun getConfigurations(project: Project, debug: Boolean = false): FileCollection {
-		val detektConfigurations = setOf(CONFIGURATION_DETEKT_INTERNAL, CONFIGURATION_DETEKT)
+		val detektConfigurations = setOf(CONFIGURATION_DETEKT_PLUGINS, CONFIGURATION_DETEKT)
 		val configurations = project.configurations.filter { detektConfigurations.contains(it.name) }
 
 		val files = project.files(configurations)

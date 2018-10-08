@@ -9,8 +9,8 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
  *
  * Note: The formatting rule set is not included in the detekt-cli or gradle plugin.
  *
- * To enable this rule set, add <i>detekt "io.gitlab.arturbosch.detekt:detekt-formatting:$version"</i>
- * to your gradle configuration or reference the `detekt-formatting`-jar with the `--plugins` option
+ * To enable this rule set, add <i>detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:$version"</i>
+ * to your gradle dependencies or reference the `detekt-formatting`-jar with the `--plugins` option
  * in the command line interface.
  *
  * @configuration android - if android style guides should be preferred (default: false)

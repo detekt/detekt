@@ -1,1 +1,1 @@
-rootProject.name = "detekt-gradle-plugin"
+enableFeaturePreview("STABLE_PUBLISHING")

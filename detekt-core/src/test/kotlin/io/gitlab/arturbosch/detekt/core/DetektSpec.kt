@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.core
 
+import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
-import kotlin.test.assertTrue
 
 /**
  * @author Artur Bosch
@@ -15,7 +15,7 @@ class DetektSpec : Spek({
 		val detekt = DetektFacade.create(ProcessingSettings(path))
 
 		it("should detect findings from more than one provider") {
-			assertTrue { detekt.run().findings.isNotEmpty() }
+			assertThat(detekt.run().findings).isNotEmpty
 		}
 	}
 })

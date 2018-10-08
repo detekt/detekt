@@ -3,11 +3,11 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import java.util.regex.PatternSyntaxException
-import kotlin.test.assertFailsWith
 
 class LateinitUsageSpec : Spek({
 
@@ -70,7 +70,7 @@ class LateinitUsageSpec : Spek({
 		}
 
 		it("should fail when enabled with faulty regex pattern") {
-			assertFailsWith<PatternSyntaxException> {
+			assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
 				LateinitUsage(TestConfig(mapOf(LateinitUsage.IGNORE_ON_CLASSES_PATTERN to "*Test"))).lint(code)
 			}
 		}

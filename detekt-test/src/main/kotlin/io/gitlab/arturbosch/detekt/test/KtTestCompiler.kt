@@ -20,8 +20,11 @@ object KtTestCompiler : KtCompiler() {
 
 	fun compileFromContent(content: String): KtFile {
 		val psiFile = psiFileFactory.createFileFromText(
+				TEST_FILENAME,
 				KotlinLanguage.INSTANCE,
 				StringUtilRt.convertLineSeparators(content))
 		return psiFile as? KtFile ?: throw IllegalStateException("kotlin file expected")
 	}
 }
+
+const val TEST_FILENAME = "Test.kt"

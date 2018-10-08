@@ -3,9 +3,9 @@ package io.gitlab.arturbosch.detekt.rules.naming
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.junit.jupiter.api.Test
 import java.util.regex.PatternSyntaxException
-import kotlin.test.assertFailsWith
 
 class NamingConventionCustomPatternTest {
 
@@ -130,7 +130,7 @@ class NamingConventionCustomPatternTest {
 	@Test
 	fun shouldFailWithInvalidRegexVariableNaming() {
 		val config = TestConfig(mapOf(VariableNaming.EXCLUDE_CLASS_PATTERN to "*Foo"))
-		assertFailsWith<PatternSyntaxException> {
+		assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
 			VariableNaming(config).lint(excludeClassPatternVariableRegexCode)
 		}
 	}
@@ -162,7 +162,7 @@ class NamingConventionCustomPatternTest {
 	@Test
 	fun shouldFailWithInvalidRegexFunctionNaming() {
 		val config = TestConfig(mapOf(FunctionNaming.EXCLUDE_CLASS_PATTERN to "*Foo"))
-		assertFailsWith<PatternSyntaxException> {
+		assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
 			FunctionNaming(config).lint(excludeClassPatternFunctionRegexCode)
 		}
 	}

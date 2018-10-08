@@ -14,7 +14,7 @@ class OutputFacade(arguments: CliArgs,
 				   private val detektion: Detektion,
 				   private val settings: ProcessingSettings) {
 
-	private val printStream = System.out
+	private val printStream = settings.outPrinter
 	private val config = settings.config
 	private val baselineFacade = arguments.baseline?.let { BaselineFacade(it) }
 	private val createBaseline = arguments.createBaseline
@@ -35,7 +35,7 @@ class OutputFacade(arguments: CliArgs,
 				.sortedBy { it.priority }
 				.asReversed()
 
-		for (report in reports) {
+		reports.forEach { report ->
 			report.init(config)
 			when (report) {
 				is ConsoleReport -> handleConsoleReport(report, result)
@@ -48,6 +48,7 @@ class OutputFacade(arguments: CliArgs,
 		val filePath = reportPaths[report.id]
 		if (filePath != null) {
 			report.write(filePath, result)
+			printStream.println("Successfully generated ${report.name} at $filePath")
 		}
 	}
 
