@@ -49,8 +49,10 @@ internal class PluginTaskBehaviorTest : Spek({
 		it("should pick up build artifacts from the build cache on a 2nd run after deleting the build/ dir") {
 			gradleRunner.runDetektTaskAndCheckResult { result ->
 				assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-				projectFile("build").deleteRecursively()
 			}
+
+			gradleRunner.projectFile("build").deleteRecursively()
+
 			// Running detekt again should pick up artifacts from Build Cache
 			gradleRunner.runDetektTaskAndCheckResult { result ->
 				assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.FROM_CACHE)
@@ -75,10 +77,11 @@ internal class PluginTaskBehaviorTest : Spek({
 
 			gradleRunner.runDetektTaskAndCheckResult { result ->
 				assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-
-				// update config file
-				writeProjectFile(configFileName, configFileWithCommentsDisabled)
 			}
+
+			// update config file
+			gradleRunner.writeProjectFile(configFileName, configFileWithCommentsDisabled)
+
 			gradleRunner.runTasksAndCheckResult("detekt") { result ->
 				assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 			}
@@ -93,10 +96,11 @@ internal class PluginTaskBehaviorTest : Spek({
 
 			gradleRunner.runDetektTaskAndCheckResult { result ->
 				assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-
-				// update baseline file
-				writeProjectFile(baselineFileName, changedBaselineContent)
 			}
+
+			// update baseline file
+			gradleRunner.writeProjectFile(baselineFileName, changedBaselineContent)
+
 			gradleRunner.runTasksAndCheckResult("detekt") { result ->
 				assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 			}
@@ -105,10 +109,11 @@ internal class PluginTaskBehaviorTest : Spek({
 
 			gradleRunner.runDetektTaskAndCheckResult { result ->
 				assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-
-				// add a new File
-				writeKtFile(projectLayout.srcDirs.first(), "OtherKotlinClass")
 			}
+
+			// add a new File
+			gradleRunner.writeKtFile(gradleRunner.projectLayout.srcDirs.first(), "OtherKotlinClass")
+
 			gradleRunner.runTasksAndCheckResult("detekt") { result ->
 				assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 			}
