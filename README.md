@@ -23,7 +23,7 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 - Suppress findings with Kotlin's `@Suppress` and Java's `@SuppressWarnings` annotations
 - Specify code smell thresholds to break your build
 - Code Smell baseline and ignore lists for legacy projects
-- [Gradle plugin](#gradleplugin) for code analysis via Gradle builds
+- [Gradle plugin](#with-gradle) for code analysis via Gradle builds
 - Gradle tasks to use local `IntelliJ` distribution for [formatting and inspecting](#idea) Kotlin code
 - [SonarQube integration](https://github.com/arturbosch/sonar-kotlin)
 - Extensible by own rule sets, `FileProcessListener's` and `OutputReport's`
