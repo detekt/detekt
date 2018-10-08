@@ -18,8 +18,8 @@ class DslGradleRunner(
 	private val randomString = UUID.randomUUID().toString()
 
 	private val settingsContent = """
-    	| rootProject.name = "rootDir-project"
-		| include(${projectLayout.submodules.map { "\"${it.name}\"" }.joinToString(",")})
+    	|rootProject.name = "rootDir-project"
+		|include(${projectLayout.submodules.map { "\"${it.name}\"" }.joinToString(",")})
 		|
 		""".trimMargin()
 

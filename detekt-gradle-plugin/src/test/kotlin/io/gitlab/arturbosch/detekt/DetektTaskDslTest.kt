@@ -183,7 +183,7 @@ internal class DetektTaskDslTest : Spek({
 						assertThat(projectFile("build/reports/detekt/detekt.html")).doesNotExist()
 					}
 				}
-				it("change all flags") {
+				it("can change all flags") {
 
 					val config = """
 						|detekt {
