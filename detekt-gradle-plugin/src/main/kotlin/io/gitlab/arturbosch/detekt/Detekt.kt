@@ -75,15 +75,15 @@ open class Detekt : DefaultTask() {
 
 	@Internal
 	@Optional
-	var debug: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+	var debug: Property<Boolean> = project.objects.property()
 
 	@Internal
 	@Optional
-	var parallel: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+	var parallel: Property<Boolean> = project.objects.property()
 
 	@Internal
 	@Optional
-	var disableDefaultRuleSets: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+	var disableDefaultRuleSets: Property<Boolean> = project.objects.property()
 
 	@Internal
 	var reports = DetektReports(project)
