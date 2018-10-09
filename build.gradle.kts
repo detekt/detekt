@@ -215,7 +215,6 @@ subprojects {
 		}
 	}
 
-	val junitEngineVersion: String by project
 	val assertjVersion: String by project
 	val spekVersion: String by project
 	val kotlinTest by configurations.creating
@@ -225,12 +224,9 @@ subprojects {
 
 		detekt(project(":detekt-cli"))
 
-		kotlinTest(kotlin("test"))
-		kotlinTest("org.junit.jupiter:junit-jupiter-api:$junitEngineVersion")
 		kotlinTest("org.assertj:assertj-core:$assertjVersion")
 		kotlinTest("org.jetbrains.spek:spek-api:$spekVersion")
 		kotlinTest("org.jetbrains.spek:spek-subject-extension:$spekVersion")
-		kotlinTest("org.junit.jupiter:junit-jupiter-engine:$junitEngineVersion")
 	}
 
 	sourceSets["main"].java.srcDirs("src/main/kotlin")

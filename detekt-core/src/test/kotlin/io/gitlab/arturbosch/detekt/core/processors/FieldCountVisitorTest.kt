@@ -3,12 +3,12 @@ package io.gitlab.arturbosch.detekt.core.processors
 import io.gitlab.arturbosch.detekt.core.path
 import io.gitlab.arturbosch.detekt.test.compileForTest
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
+import org.jetbrains.spek.api.Spek
+import org.jetbrains.spek.api.dsl.it
 
-class FieldCountVisitorTest {
+class FieldCountVisitorTest : Spek({
 
-	@Test
-	fun defaultFieldCount() {
+	it("defaultFieldCount") {
 		val file = compileForTest(path.resolve("../fields/ClassWithFields.kt"))
 		val count = with(file) {
 			accept(PropertyCountVisitor())
@@ -16,4 +16,4 @@ class FieldCountVisitorTest {
 		}
 		assertThat(count).isEqualTo(2)
 	}
-}
+})
