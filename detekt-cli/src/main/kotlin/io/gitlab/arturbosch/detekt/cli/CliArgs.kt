@@ -57,7 +57,7 @@ class CliArgs : Args {
 	@Parameter(names = ["--report", "-r"],
 			description = "Generates a report for given 'report-id' and stores it on given 'path'. " +
 					"Entry should consist of: [report-id:path]. " +
-		   			"Available 'report-id' values: 'plain', 'xml', 'html' )
+		   			"Available 'report-id' values: 'txt', 'xml', 'html' )
 	private var reports: List<String>? = null
 
 	@Parameter(names = ["--disable-default-rulesets", "-dd"],
