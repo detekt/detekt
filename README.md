@@ -150,6 +150,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Andreas Volkmann](https://github.com/AndreasVolkmann) - yaml code comments
 - [glammers](https://github.com/glammers) - Documentation improvement
 - [Ahmad El-Melegy](https://github.com/mlegy) - yaml syntax fix
+- [Arjan Kleene](https://github.com/arjank) - Add unnecessary apply rule
 
 ### Mentions
 
