@@ -28,6 +28,7 @@ import io.gitlab.arturbosch.detekt.rules.style.SerialVersionUIDInSerializableCla
 import io.gitlab.arturbosch.detekt.rules.style.SpacingBetweenPackageAndImports
 import io.gitlab.arturbosch.detekt.rules.style.ThrowsCount
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryAbstractClass
+import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryApply
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryInheritance
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryLet
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryParentheses
@@ -88,6 +89,7 @@ class StyleGuideProvider : RuleSetProvider {
 				NestedClassesVisibility(config),
 				RedundantVisibilityModifierRule(config),
 				UntilInsteadOfRangeTo(config),
+				UnnecessaryApply(config),
 				UnnecessaryLet(config),
 				MayBeConst(config),
 				PreferToOverPairSyntax(config),
