@@ -19,6 +19,7 @@ import io.gitlab.arturbosch.detekt.invoke.XmlReportArgument
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.FileCollection
 import org.gradle.api.tasks.CacheableTask
+import org.gradle.api.Project
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.InputFiles
@@ -29,6 +30,7 @@ import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.SkipWhenEmpty
 import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.TaskProvider
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.gradle.util.ConfigureUtil
 import java.io.File
@@ -113,5 +115,35 @@ open class Detekt : DefaultTask() {
 				DisableDefaultRulesetArgument(disableDefaultRuleSets)
 
 		DetektInvoker.invokeCli(project, arguments.toList(), debug)
+	}
+
+	companion object {
+		fun create(project: Project, 
+					extension: DetektExtension, 
+					name: String, 
+					taskDescription: String,
+					inputSources: FileCollection): TaskProvider<Detekt> {
+			return project.tasks.register(name, Detekt::class.java) {
+				description = taskDescription
+				debug = extension.debug
+				parallel = extension.parallel
+				disableDefaultRuleSets = extension.disableDefaultRuleSets
+				filters = extension.filters
+				config = extension.config
+				baseline = extension.baseline
+				plugins = extension.plugins
+				input = inputSources
+				extension.reports.forEach { extReport ->
+					reports.withName(extReport.name) {
+						enabled = extReport.enabled
+						val fileSuffix = extReport.name
+						@Suppress("USELESS_ELVIS")
+						val reportsDir = extension.reportsDir ?: extension.defaultReportsDir
+						val customDestination = extReport.destination
+						destination = customDestination ?: File(reportsDir, "$name.$fileSuffix")
+					}
+				}
+			}
+		}
 	}
 }

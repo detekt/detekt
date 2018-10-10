@@ -1,8 +1,12 @@
 package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
+import io.gitlab.arturbosch.detekt.Detekt
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.tasks.SourceSet
+import org.gradle.api.tasks.TaskProvider
+import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import java.io.File
 
@@ -16,35 +20,21 @@ class DetektPlugin : Plugin<Project> {
 
 		configurePluginDependencies(project, extension)
 
-		createAndConfigureDetektTask(project, extension)
+		createDetektTasks(project, extension)
 		createAndConfigureCreateBaselineTask(project, extension)
 		createAndConfigureGenerateConfigTask(project, extension)
 
 		createAndConfigureIdeaTasks(project, extension)
 	}
 
-	private fun createAndConfigureDetektTask(project: Project, extension: DetektExtension) {
-		val detektTask = project.tasks.register(DETEKT, Detekt::class.java) {
-			debug = extension.debug
-			parallel = extension.parallel
-			disableDefaultRuleSets = extension.disableDefaultRuleSets
-			filters = extension.filters
-			config = extension.config
-			baseline = extension.baseline
-			plugins = extension.plugins
-			input = determineInput(extension)
-			extension.reports.forEach { extReport ->
-				reports.withName(extReport.name) {
-					enabled = extReport.enabled
-					val fileSuffix = extReport.name
-					@Suppress("USELESS_ELVIS")
-					val reportsDir = extension.reportsDir ?: extension.defaultReportsDir
-					val customDestination = extReport.destination
-					destination = customDestination ?: File(reportsDir, "$DETEKT.$fileSuffix")
-				}
-			}
+	private fun createDetektTasks(project: Project, extension: DetektExtension) {
+		project.sourceSets?.map { sourceSet ->
+			val name = "$DETEKT${sourceSet.name.capitalize()}"
+			val description = "Runs detekt on the ${sourceSet.name} source set."
+			Detekt.create(project, extension, name, description, sourceSet.allSource)
 		}
 
+		val detektTask = Detekt.create(project, extension, DETEKT, "Runs the default detekt task.", determineInput(extension))
 		project.tasks.findByName(LifecycleBasePlugin.CHECK_TASK_NAME)?.dependsOn(detektTask)
 	}
 
@@ -100,6 +90,8 @@ class DetektPlugin : Plugin<Project> {
 			}
 		}
 	}
+
+	private val Project.sourceSets: SourceSetContainer? get() = project.getProperties()["sourceSets"] as? SourceSetContainer
 
 	companion object {
 		private const val DETEKT = "detekt"
