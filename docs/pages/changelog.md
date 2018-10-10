@@ -10,6 +10,12 @@ toc: true
 #### Coming up
 The --input parameter is no longer required. If it is missing, the current working directory is used instead.
 
+The detekt Gradle Plugin now generates one task per sourceSet in the Gradle Project. The old `detekt` task remains.
+All detekt tasks are executed with the `./gradlew check` task.
+ - detektMain -> Executes detekt on all sources in the `main` sourceSet
+ - detektTest -> Executes detekt on all sources in the `test` sourceSet
+ - more tasks for each and every sourceSet with the name `detekt{sourceSetName}`
+
 ##### Migration
 
 -->

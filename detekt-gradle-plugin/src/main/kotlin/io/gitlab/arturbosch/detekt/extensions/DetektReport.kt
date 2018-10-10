@@ -3,9 +3,12 @@ package io.gitlab.arturbosch.detekt.extensions
 import org.gradle.api.Project
 import org.gradle.api.file.RegularFile
 import org.gradle.api.provider.Provider
+import org.gradle.internal.impldep.org.testng.xml.Parser.DEFAULT_FILENAME
 import java.io.File
 
-class DetektReport(val type: DetektReportType, private val project: Project) {
+class DetektReport(val type: DetektReportType,
+				   private val project: Project,
+				   private val reportName: String = DEFAULT_FILENAME) {
 
 	var enabled: Boolean? = null
 
@@ -30,7 +33,7 @@ class DetektReport(val type: DetektReportType, private val project: Project) {
 		if (customDestination != null)
 			prop.set(customDestination)
 		else
-			prop.set(File(reportsDir, "$DEFAULT_FILENAME.${type.extension}"))
+			prop.set(File(reportsDir, "$reportName.${type.extension}"))
 
 		return prop.get()
 	}

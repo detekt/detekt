@@ -5,6 +5,8 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.file.FileCollection
 import org.gradle.api.provider.Provider
+import org.gradle.api.tasks.SourceSetContainer
+import org.gradle.api.tasks.TaskProvider
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 
 /**
@@ -18,15 +20,45 @@ class DetektPlugin : Plugin<Project> {
 
 		configurePluginDependencies(project, extension)
 
-		createAndConfigureDetektTask(project, extension)
+		createDetektTasks(project, extension)
 		createAndConfigureCreateBaselineTask(project, extension)
 		createAndConfigureGenerateConfigTask(project, extension)
 
 		createAndConfigureIdeaTasks(project, extension)
 	}
 
-	private fun createAndConfigureDetektTask(project: Project, extension: DetektExtension) {
-		val detektTask = project.tasks.register(DETEKT, Detekt::class.java) {
+	private fun createDetektTasks(project: Project, extension: DetektExtension) {
+		project.sourceSets?.map { sourceSet ->
+			val name = "$DETEKT${sourceSet.name.capitalize()}"
+			val description = "Runs detekt on the ${sourceSet.name} source set."
+			val inputProvider = project.provider { sourceSet.allSource.sourceDirectories.filter { it.exists() } }
+			val sourceSetTask =
+					createAndConfigureDetektTask(project,
+							extension,
+							name,
+							description,
+							inputProvider,
+							sourceSet.compileClasspath)
+			project.tasks.findByName(LifecycleBasePlugin.CHECK_TASK_NAME)?.dependsOn(sourceSetTask)
+		}
+
+		val detektTask =
+				createAndConfigureDetektTask(project,
+						extension,
+						DETEKT,
+						"Runs the default detekt task.",
+						existingInputDirectoriesProvider(project, extension))
+		project.tasks.findByName(LifecycleBasePlugin.CHECK_TASK_NAME)?.dependsOn(detektTask)
+	}
+
+	private fun createAndConfigureDetektTask(project: Project,
+											 extension: DetektExtension,
+											 name: String,
+											 taskDescription: String,
+											 inputSources: Provider<FileCollection>,
+											 compileClasspath: FileCollection = project.files()): TaskProvider<Detekt> {
+		return project.tasks.register(name, Detekt::class.java) {
+			it.description = taskDescription
 			it.debugProp.set(project.provider { extension.debug })
 			it.parallelProp.set(project.provider { extension.parallel })
 			it.disableDefaultRuleSetsProp.set(project.provider { extension.disableDefaultRuleSets })
@@ -34,12 +66,13 @@ class DetektPlugin : Plugin<Project> {
 			it.config.setFrom(project.provider { extension.config })
 			it.baseline.set(project.layout.file(project.provider { extension.baseline }))
 			it.plugins.set(project.provider { extension.plugins })
-			it.input.setFrom(existingInputDirectoriesProvider(project, extension))
+			it.input.setFrom(project.provider { inputSources })
+			it.classpath.setFrom(project.provider { compileClasspath })
 			it.reportsDir.set(project.provider { extension.customReportsDir })
-			it.reports = extension.reports
+			it.reports = extension.reports.apply {
+				reportName = name
+			}
 		}
-
-		project.tasks.findByName(LifecycleBasePlugin.CHECK_TASK_NAME)?.dependsOn(detektTask)
 	}
 
 	private fun createAndConfigureCreateBaselineTask(project: Project, extension: DetektExtension) =
@@ -95,6 +128,9 @@ class DetektPlugin : Plugin<Project> {
 			}
 		}
 	}
+
+	private val Project.sourceSets: SourceSetContainer?
+		get() = project.extensions.findByType(SourceSetContainer::class.java)
 
 	companion object {
 		private const val DETEKT = "detekt"

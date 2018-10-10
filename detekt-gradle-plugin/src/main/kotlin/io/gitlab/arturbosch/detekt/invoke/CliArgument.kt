@@ -7,6 +7,7 @@ private const val DEBUG_PARAMETER = "--debug"
 private const val FILTERS_PARAMETER = "--filters"
 private const val INPUT_PARAMETER = "--input"
 private const val CONFIG_PARAMETER = "--config"
+private const val CLASSPATH_PARAMETER = "--classpath"
 private const val BASELINE_PARAMETER = "--baseline"
 private const val PARALLEL_PARAMETER = "--parallel"
 private const val DISABLE_DEFAULT_RULESETS_PARAMETER = "--disable-default-rulesets"
@@ -21,6 +22,13 @@ internal sealed class CliArgument {
 
 internal object CreateBaselineArgument : CliArgument() {
 	override fun toArgument() = listOf(CREATE_BASELINE_PARAMETER)
+}
+
+internal data class ClasspathArgument(val fileCollection: FileCollection) : CliArgument() {
+	override fun toArgument(): List<String> {
+		if (fileCollection.isEmpty()) return emptyList()
+		return listOf(CLASSPATH_PARAMETER, fileCollection.joinToString(",") { it.absolutePath })	
+	}
 }
 
 internal object GenerateConfigArgument : CliArgument() {

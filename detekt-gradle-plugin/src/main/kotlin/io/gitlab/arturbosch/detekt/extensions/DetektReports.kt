@@ -6,11 +6,15 @@ import io.gitlab.arturbosch.detekt.extensions.DetektReportType.XML
 import org.gradle.api.Project
 import org.gradle.util.ConfigureUtil
 
-class DetektReports(project: Project) {
+class DetektReports(private val project: Project) {
 
-	val xml = DetektReport(XML, project)
+	var reportName = ""
 
-	val html = DetektReport(HTML, project)
+	val xml
+		get() = DetektReport(XML, project, reportName)
+
+	val html
+		get() = DetektReport(HTML, project, reportName)
 
 	fun xml(configure: DetektReport.() -> Unit) = xml.configure()
 	fun xml(closure: Closure<*>): DetektReport = ConfigureUtil.configure(closure, xml)
