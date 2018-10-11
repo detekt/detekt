@@ -1,7 +1,7 @@
 test-pattern:
   active: true
   patterns:
-    - '.*/test/.*'
+    - '.*(/|\\)test(/|\\).*'
     - '.*Test.kt'
   exclude-rule-sets:
   exclude-rules:

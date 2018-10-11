@@ -73,7 +73,7 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 			test-pattern: # Configure exclusions for test sources
 			  active: true
 			  patterns: # Test file regexes
-			    - '.*/test/.*'
+			    - '.*(/|\\)test(/|\\).*'
 			    - '.*Test.kt'
 			    - '.*Spec.kt'
 			  exclude-rule-sets:

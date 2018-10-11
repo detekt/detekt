@@ -25,5 +25,7 @@ private fun runDetektWithPattern(patternToUse: String) {
 			listOf(TestProvider(), TestProvider2()), emptyList())
 
 	val run = instance.run()
-	assertThat(run.findings["Test"]?.none { "Test.kt" in it.file } ?: true).isTrue()
+	assertThat(run.findings["Test"] ?: listOf())
+		.filteredOn { "Test.kt" in it.file || "SomeUnusedClass.kt" in it.file }
+		.isEmpty()
 }

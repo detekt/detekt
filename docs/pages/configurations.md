@@ -39,7 +39,7 @@ Specify test patterns to detect test code and exclude rules or rule sets for the
 test-pattern: # Configure exclusions for test sources
   active: true
   patterns: # Test file regexes
-    - '.*/test/.*'
+    - '.*(/|\\)test(/|\\).*'
     - '.*Test.kt'
     - '.*Spec.kt'
   exclude-rule-sets:

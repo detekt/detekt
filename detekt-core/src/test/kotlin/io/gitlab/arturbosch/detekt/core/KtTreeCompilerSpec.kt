@@ -28,7 +28,7 @@ class KtTreeCompilerSpec : Spek({
 
 		it("should work with two or more filters") {
 			val filter = PathFilter(".*Default.kt")
-			val filterTwo = PathFilter(".*Test.*")
+			val filterTwo = PathFilter(".*Test.*|.*SomeUnusedClass.*")
 			val filterThree = PathFilter(".*Complex.*")
 			val filterFour = PathFilter(".*KotlinScript.*")
 			val ktFiles = KtTreeCompiler(filters = listOf(filter, filterTwo, filterThree, filterFour)).compile(path)
