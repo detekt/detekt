@@ -15,7 +15,6 @@ environment:
 
 init:
   - git config --global --unset core.autocrlf
-  - set GRADLE_OPTS=-Dorg.gradle.daemon=false -Pkotlin.incremental=false
 
 install:
   - SET PATH=%JAVA_HOME%\bin;%PATH%
@@ -26,6 +25,7 @@ install:
   - gradlew.bat --version
 
 build_script:
+  - set GRADLE_OPTS=-Dorg.gradle.daemon=false -Pkotlin.incremental=false
   - gradlew build -PwarningsAsErrors=true
   - gradlew installShadowDist
   - detekt-cli\build\install\detekt-cli-shadow\bin\detekt-cli --help
