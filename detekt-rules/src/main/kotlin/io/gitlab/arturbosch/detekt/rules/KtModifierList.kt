@@ -12,6 +12,8 @@ fun KtModifierListOwner.isOverridden() = hasModifier(KtTokens.OVERRIDE_KEYWORD)
 
 fun KtModifierListOwner.isOpen() = hasModifier(KtTokens.OPEN_KEYWORD)
 
+fun KtModifierListOwner.isExternal() = hasModifier(KtTokens.EXTERNAL_KEYWORD)
+
 fun KtModifierListOwner.isOperator() = hasModifier(KtTokens.OPERATOR_KEYWORD)
 
 fun KtModifierListOwner.isPublic(): Boolean {
