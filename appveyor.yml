@@ -15,7 +15,6 @@ environment:
 
 init:
   - git config --global --unset core.autocrlf
-  - set GRADLE_OPTS=-Dorg.gradle.daemon=false
 
 install:
   - SET PATH=%JAVA_HOME%\bin;%PATH%
@@ -35,6 +34,8 @@ test_script:
   - gradlew verifyGeneratorOutput
 
 after_test:
+  - gradlew --stop
+  - timeout 3 >nul
   - ps: del C:\Users\appveyor\.gradle\caches\modules-2\modules-2.lock
   - ps: del -Recurse C:\Users\appveyor\.gradle\caches\*\plugin-resolution
 
