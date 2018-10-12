@@ -83,6 +83,7 @@ open class Detekt : DefaultTask() {
 
 	@Internal
 	@Optional
+	@Input
 	var disableDefaultRuleSets: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
 	@Internal
