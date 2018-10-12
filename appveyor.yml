@@ -15,7 +15,7 @@ environment:
 
 init:
   - git config --global --unset core.autocrlf
-  - set GRADLE_OPTS=-Dorg.gradle.daemon=false
+  - set GRADLE_OPTS="-Dorg.gradle.daemon=false -Pkotlin.incremental=false"
 
 install:
   - SET PATH=%JAVA_HOME%\bin;%PATH%
