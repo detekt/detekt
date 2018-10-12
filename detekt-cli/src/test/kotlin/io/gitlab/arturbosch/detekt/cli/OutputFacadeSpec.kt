@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.cli.out.XmlOutputReport
 import io.gitlab.arturbosch.detekt.core.DetektResult
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.test.resource
+import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.subject.SubjectSpek
 import java.io.ByteArrayOutputStream
@@ -13,7 +14,6 @@ import java.io.File
 import java.io.PrintStream
 import java.nio.file.Path
 import java.nio.file.Paths
-import kotlin.test.assertTrue
 
 /**
  * @author Sebastiano Poggi
@@ -51,5 +51,5 @@ internal class OutputFacadeSpec : SubjectSpek<OutputFacade>({
 
 fun ByteArrayOutputStream.assertThatItPrintsReportPath(reportName: String) {
 	val outputString = toString(Charsets.UTF_8.name())
-	assertTrue { outputString.contains("Successfully generated $reportName at ") }
+	assertThat(outputString.contains("Successfully generated $reportName at ")).isTrue()
 }

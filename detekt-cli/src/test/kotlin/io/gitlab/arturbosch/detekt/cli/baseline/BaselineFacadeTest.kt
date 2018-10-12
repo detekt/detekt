@@ -5,7 +5,8 @@ import io.gitlab.arturbosch.detekt.cli.createFinding
 import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.ListAssert
-import org.junit.jupiter.api.Test
+import org.jetbrains.spek.api.Spek
+import org.jetbrains.spek.api.dsl.it
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -17,12 +18,11 @@ import java.nio.file.Paths
  * @author Artur Bosch
  * @author schalkms
  */
-internal class BaselineFacadeTest {
+class BaselineFacadeTest : Spek({
 
-	private val dir = Files.createTempDirectory("baseline_format")
+	val dir = Files.createTempDirectory("baseline_format")
 
-	@Test
-	fun create() {
+	it("create") {
 		val fullPath = dir.resolve("baseline.xml")
 		val baselineFacade = BaselineFacade(fullPath)
 		baselineFacade.create(emptyList())
@@ -32,20 +32,18 @@ internal class BaselineFacadeTest {
 		}
 	}
 
-	@Test
-	fun filterWithExistingBaseline() {
+	it("filterWithExistingBaseline") {
 		assertFilter(dir)
 	}
 
-	@Test
-	fun filterWithoutExistingBaseline() {
+	it("filterWithoutExistingBaseline") {
 		val path = Paths.get(resource("/smell-baseline.xml"))
 		assertFilter(path)
 	}
+})
 
-	private fun assertFilter(path: Path) {
-		val findings = listOf<Finding>(createFinding())
-		val result = BaselineFacade(path).filter(findings)
-		assertThat(result).isEqualTo(findings)
-	}
+private fun assertFilter(path: Path) {
+	val findings = listOf<Finding>(createFinding())
+	val result = BaselineFacade(path).filter(findings)
+	assertThat(result).isEqualTo(findings)
 }

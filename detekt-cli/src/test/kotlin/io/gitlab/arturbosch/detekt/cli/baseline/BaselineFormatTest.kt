@@ -3,7 +3,8 @@ package io.gitlab.arturbosch.detekt.cli.baseline
 import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
-import org.junit.jupiter.api.Test
+import org.jetbrains.spek.api.Spek
+import org.jetbrains.spek.api.dsl.it
 import java.nio.file.Files
 import java.nio.file.Paths
 import java.time.Instant
@@ -12,10 +13,9 @@ import java.time.Instant
  * @author Artur Bosch
  * @author schalkms
  */
-internal class BaselineFormatTest {
+class BaselineFormatTest : Spek({
 
-	@Test
-	fun loadBaseline() {
+	it("loadBaseline") {
 		val path = Paths.get(resource("/smell-baseline.xml"))
 		val (blacklist, whitelist) = BaselineFormat().read(path)
 
@@ -28,8 +28,7 @@ internal class BaselineFormatTest {
 		assertThat(whitelist.timestamp).isEqualTo("987654321")
 	}
 
-	@Test
-	fun savedAndLoadedXmlAreEqual() {
+	it("savedAndLoadedXmlAreEqual") {
 		val now = Instant.now().toEpochMilli().toString()
 		val tempFile = Files.createTempFile("baseline", now)
 
@@ -44,9 +43,8 @@ internal class BaselineFormatTest {
 		assertThat(loadedBaseline).isEqualTo(savedBaseline)
 	}
 
-	@Test
-	fun loadInvalidBaseline() {
+	it("loadInvalidBaseline") {
 		val path = Paths.get(resource("/invalid-smell-baseline.txt"))
 		assertThatThrownBy { BaselineFormat().read(path) }.isInstanceOf(InvalidBaselineState::class.java)
 	}
-}
+})

@@ -8,15 +8,15 @@ import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import org.assertj.core.api.Assertions
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.com.intellij.util.keyFMap.KeyFMap
-import org.junit.jupiter.api.Test
+import org.jetbrains.spek.api.Spek
+import org.jetbrains.spek.api.dsl.it
 
 /**
  * @author Artur Bosch
  */
-internal class QualifiedNameProcessorTest {
+class QualifiedNameProcessorTest : Spek({
 
-	@Test
-	fun fqNamesOfTestFiles() {
+	it("fqNamesOfTestFiles") {
 		val ktFile = compileContentForTest(code)
 		val processor = QualifiedNameProcessor()
 		processor.onProcess(ktFile)
@@ -28,9 +28,9 @@ internal class QualifiedNameProcessorTest {
 				"io.gitlab.arturbosch.detekt.sample.Bar",
 				"io.gitlab.arturbosch.detekt.sample.Bla")
 	}
-}
+})
 
-val result = object : Detektion {
+private val result = object : Detektion {
 
 	override val findings: Map<String, List<Finding>> = mapOf()
 	override val notifications: Collection<Notification> = listOf()
