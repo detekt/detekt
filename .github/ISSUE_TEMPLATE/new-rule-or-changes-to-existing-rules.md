@@ -13,4 +13,5 @@ Please search in the [issues](https://github.com/arturbosch/detekt/issues) befor
 
 ## Context
 <!--- What are you trying to accomplish with this rule/change? -->
-<!--- Providing context helps us come up with a solution that is most useful in the real world -->
+<!--- Providing context helps us come up with a solution that is most useful in the real world. -->
+<!--- Please add links to official documentation or best practices such as code style guides if available. -->
