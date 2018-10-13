@@ -1,4 +1,4 @@
-language: java
+language: shell
 os:
   - linux
   - windows
