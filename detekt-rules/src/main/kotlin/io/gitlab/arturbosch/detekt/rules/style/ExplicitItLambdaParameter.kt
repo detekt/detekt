@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.IT_LITERAL
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 
 /**
@@ -51,9 +52,5 @@ class ExplicitItLambdaParameter(val config: Config) : Rule(config) {
 					"explicit `it` parameter declaration can be omitted"
 			))
 		}
-	}
-
-	companion object {
-		private const val IT_LITERAL = "it"
 	}
 }
