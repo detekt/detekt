@@ -160,7 +160,7 @@ internal class DetektTaskKotlinDslTest : Spek({
 					|
 					|	input = files("src/main/java")
 					|	config = files("${configFile.safeAbsolutePath}")
-					|	debug.set(true)
+					|	debug = true
 					|	reports {
 					|		xml {
 					|			enabled = true
