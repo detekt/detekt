@@ -1,12 +1,17 @@
 package io.gitlab.arturbosch.detekt.core
 
 import java.nio.file.Path
+import java.nio.file.Paths
 import java.util.regex.PatternSyntaxException
 
 /**
+ * Filter that works on relative paths to the project root.
+ * Filters out files that match the regex defined in the CLI --filters argument.
+ * Respects both *nix and Windows paths.
+ *
  * @author Artur Bosch
  */
-class PathFilter(pattern: String) {
+class PathFilter(pattern: String, private val root: Path = Paths.get("").toAbsolutePath()) {
 
 	companion object {
 		val IS_WINDOWS = System.getProperty("os.name").contains("Windows")
@@ -27,7 +32,17 @@ class PathFilter(pattern: String) {
 		}
 	}
 
-	fun matches(path: Path): Boolean = path.toAbsolutePath().toString().matches(regex)
+	fun matches(path: Path): Boolean {
+		val prefix = if (IS_WINDOWS) {
+			"\\"
+		} else {
+			"./"
+		}
+		val relativePath = "$prefix${root.relativize(path)}"
+		println(root)
+		println(relativePath)
+		return relativePath.matches(regex)
+	}
 
 	override fun equals(other: Any?): Boolean {
 		if (this === other) return true
