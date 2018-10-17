@@ -26,5 +26,21 @@ class MethodOverloadingSpec : SubjectSpek<MethodOverloading>({
 				}""")
 			assertThat(subject.findings.size).isZero()
 		}
+
+		it("does not report extension methods with a different receiver") {
+			subject.lint("""
+				fun Boolean.foo() {}
+				fun Int.foo() {}
+				fun Long.foo() {}""")
+			assertThat(subject.findings.size).isZero()
+		}
+
+		it("reports extension methods with the same receiver") {
+			subject.lint("""
+				fun Int.foo() {}
+				fun Int.foo(i: Int) {}
+				fun Int.foo(i: String) {}""")
+			assertThat(subject.findings.size).isEqualTo(1)
+		}
 	}
 })
