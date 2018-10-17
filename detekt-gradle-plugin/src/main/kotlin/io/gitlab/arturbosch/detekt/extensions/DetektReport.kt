@@ -5,17 +5,17 @@ import org.gradle.api.file.RegularFile
 import org.gradle.api.provider.Provider
 import java.io.File
 
-class DetektReport(val name: String, private val project: Project) {
+class DetektReport(val type: DetektReportType, private val project: Project) {
 
 	var enabled: Boolean? = null
 
 	var destination: File? = null
 
 	private val reportFileExtension
-		get() = name
+		get() = type.extension
 
 	override fun toString(): String {
-		return "DetektReport(name='$name', enabled=$enabled, destination=$destination)"
+		return "DetektReport(name='$type', enabled=$enabled, destination=$destination)"
 	}
 
 	fun getTargetFileProvider(reportsDir: Provider<File>): Provider<RegularFile> {
