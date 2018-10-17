@@ -46,10 +46,6 @@ import java.io.File
 @CacheableTask
 open class Detekt : DefaultTask() {
 
-	init {
-		group = LifecycleBasePlugin.VERIFICATION_GROUP
-	}
-
 	@InputFiles
 	@PathSensitive(PathSensitivity.RELATIVE)
 	@SkipWhenEmpty
@@ -75,23 +71,34 @@ open class Detekt : DefaultTask() {
 
 	@Internal
 	@Optional
-	var debug: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+	val debugProp: Property<Boolean> = project.objects.property()
+	var debug: Boolean
+		@Internal
+		get() = debugProp.get()
+		set(value) = debugProp.set(value)
 
 	@Internal
 	@Optional
-	var parallel: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+	val parallelProp: Property<Boolean> = project.objects.property()
+	var parallel: Boolean
+		@Internal
+		get() = parallelProp.get()
+		set(value) = parallelProp.set(value)
 
-	@Internal
 	@Optional
 	@Input
-	var disableDefaultRuleSets: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+	val disableDefaultRuleSetsProp: Property<Boolean> = project.objects.property()
+	var disableDefaultRuleSets: Boolean
+		@Internal
+		get() = disableDefaultRuleSetsProp.get()
+		set(value) = disableDefaultRuleSetsProp.set(value)
 
 	@Internal
 	var reports = DetektReports(project)
 
 	fun reports(closure: Closure<*>): DetektReports = ConfigureUtil.configure(closure, reports)
-	fun reports(configure: DetektReports.() -> Unit) = reports.configure()
 
+	fun reports(configure: DetektReports.() -> Unit) = reports.configure()
 	@Internal
 	@Optional
 	var reportsDir: Property<File> = project.objects.property()
@@ -112,6 +119,10 @@ open class Detekt : DefaultTask() {
 
 	private val effectiveReportsDir = project.provider { reportsDir.getOrElse(defaultReportsDir.asFile) }
 
+	init {
+		group = LifecycleBasePlugin.VERIFICATION_GROUP
+	}
+
 	@TaskAction
 	fun check() {
 		val arguments = mutableListOf<CliArgument>() +
@@ -122,11 +133,11 @@ open class Detekt : DefaultTask() {
 				BaselineArgument(baseline.orNull) +
 				XmlReportArgument(xmlReportFile.orNull) +
 				HtmlReportArgument(htmlReportFile.orNull) +
-				DebugArgument(debug.get()) +
-				ParallelArgument(parallel.get()) +
-				DisableDefaultRulesetArgument(disableDefaultRuleSets.get())
+				DebugArgument(debugProp.get()) +
+				ParallelArgument(parallelProp.get()) +
+				DisableDefaultRulesetArgument(disableDefaultRuleSetsProp.get())
 
-		DetektInvoker.invokeCli(project, arguments.toList(), debug.get())
+		DetektInvoker.invokeCli(project, arguments.toList(), debugProp.get())
 	}
 
 	private fun createNewInputFile() = newInputFile()

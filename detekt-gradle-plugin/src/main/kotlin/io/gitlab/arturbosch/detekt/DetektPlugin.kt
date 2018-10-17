@@ -27,9 +27,9 @@ class DetektPlugin : Plugin<Project> {
 
 	private fun createAndConfigureDetektTask(project: Project, extension: DetektExtension) {
 		val detektTask = project.tasks.register(DETEKT, Detekt::class.java) {
-			debug.set(project.provider { extension.debug })
-			parallel.set(project.provider { extension.parallel })
-			disableDefaultRuleSets.set(project.provider { extension.disableDefaultRuleSets })
+			debugProp.set(project.provider { extension.debug })
+			parallelProp.set(project.provider { extension.parallel })
+			disableDefaultRuleSetsProp.set(project.provider { extension.disableDefaultRuleSets })
 			filters.set(project.provider { extension.filters })
 			config.setFrom(project.provider { extension.config })
 			baseline.set(project.layout.file(project.provider { extension.baseline }))

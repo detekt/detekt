@@ -161,6 +161,8 @@ internal class DetektTaskKotlinDslTest : Spek({
 					|	input = files("src/main/java")
 					|	config = files("${configFile.safeAbsolutePath}")
 					|	debug = true
+					|	parallel = true
+					|	disableDefaultRuleSets = true
 					|	reports {
 					|		xml {
 					|			enabled = true
@@ -183,7 +185,6 @@ internal class DetektTaskKotlinDslTest : Spek({
 					.build()
 
 			assertThat(result.output).contains("number of classes: 1")
-			assertThat(result.output).contains("Ruleset: comments")
 			assertThat(result.task(":detektFailFast")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 
 			assertThat(File(rootDir, "build/reports/failfast.xml")).exists()
