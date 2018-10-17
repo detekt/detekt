@@ -30,6 +30,8 @@ dependencies {
 
 The report id `plain` has been renamed to `txt`. If you were using `--report "plain:/tmp/plaintxt"` before it's now `--report "txt:/tmp/plaintxt"`.
 
+The `--filters` argument no longer checks on the absolute path of files, but rather relative paths to the project root.
+
 -->
 
 #### RC9.2
