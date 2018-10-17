@@ -49,6 +49,14 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 		}
 	}
 
+	given("external functions") {
+
+		it("should not report parameters in external functions") {
+			val code = "external fun foo(bar: String)"
+			assertThat(subject.lint(code)).isEmpty()
+		}
+	}
+
 	given("overridden functions") {
 
 		it("should not report parameters in not private functions") {

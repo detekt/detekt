@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isAbstract
+import io.gitlab.arturbosch.detekt.rules.isExternal
 import io.gitlab.arturbosch.detekt.rules.isMainFunction
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOperator
@@ -149,12 +150,8 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 		if (function.isPrivate()) {
 			collectFunction(function)
 		}
-		// Overriddable/Overridden functions need to declare parameters, even if they don't use them
-		when {
-			function.isAbstract() || function.isOpen() || function.isOverridden() || function.isOperator() ||
-					function.isMainFunction() -> {
-			}
-			else -> collectParameters(function)
+		if (function.isRelevant()) {
+			collectParameters(function)
 		}
 
 		super.visitNamedFunction(function)
@@ -236,4 +233,9 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 			callExpressions.add(calledMethodName)
 		}
 	}
+
+	private fun KtNamedFunction.isRelevant() = !isAllowedToHaveUnusedParameters()
+
+	private fun KtNamedFunction.isAllowedToHaveUnusedParameters() =
+			isAbstract() || isOpen() || isOverridden() || isOperator() || isMainFunction() || isExternal()
 }
