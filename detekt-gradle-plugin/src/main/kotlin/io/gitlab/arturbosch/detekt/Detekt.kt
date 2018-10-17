@@ -62,7 +62,7 @@ open class Detekt : DefaultTask() {
 	@InputFile
 	@Optional
 	@PathSensitive(PathSensitivity.RELATIVE)
-	var baseline: RegularFileProperty = project.layout.fileProperty()
+	var baseline: RegularFileProperty = createNewInputFile()
 
 	@InputFiles
 	@Optional
@@ -128,4 +128,6 @@ open class Detekt : DefaultTask() {
 
 		DetektInvoker.invokeCli(project, arguments.toList(), debug.get())
 	}
+
+	private fun createNewInputFile() = newInputFile()
 }
