@@ -66,9 +66,7 @@ class UnnecessaryLet(config: Config) : Rule(config) {
 			}
 		}
 	}
-
 }
-
 
 private const val LET_LITERAL = "let"
 private const val IT_LITERAL = "it"
