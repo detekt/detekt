@@ -41,6 +41,7 @@ tasks.withType<Test> {
 
 tasks.withType<Detekt> {
 	dependsOn("detekt-cli:assemble")
+	dependsOn("detekt-formatting:assemble")
 }
 
 val detektVersion: String by project
@@ -228,6 +229,7 @@ subprojects {
 		implementation(kotlin("stdlib"))
 
 		detekt(project(":detekt-cli"))
+		detektPlugins(project(":detekt-formatting"))
 
 		kotlinTest("org.assertj:assertj-core:$assertjVersion")
 		kotlinTest("org.jetbrains.spek:spek-api:$spekVersion")
