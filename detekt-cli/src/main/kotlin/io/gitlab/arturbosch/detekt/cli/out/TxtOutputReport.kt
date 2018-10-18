@@ -6,9 +6,11 @@ import io.gitlab.arturbosch.detekt.api.OutputReport
 /**
  * @author Marvin Ramin
  */
-class PlainOutputReport : OutputReport() {
+class TxtOutputReport : OutputReport() {
 
 	override val ending: String = "txt"
+
+	override val name = "plain text report"
 
 	override fun render(detektion: Detektion): String {
 		val smells = detektion.findings.flatMap { it.value }

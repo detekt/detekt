@@ -2,29 +2,28 @@ package io.gitlab.arturbosch.detekt.core
 
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
+import org.jetbrains.spek.api.Spek
+import org.jetbrains.spek.api.dsl.it
 
 /**
  * @author Artur Bosch
  */
-class DetektorTest {
+class DetektorTest : Spek({
 
-	@Test
-	fun `TestProvider gets excluded as RuleSet`() {
+	it("TestProvider gets excluded as RuleSet") {
 		runDetektWithPattern("patterns/test-pattern.yml")
 	}
 
-	@Test
-	fun `FindName rule gets excluded`() {
+	it("FindName rule gets excluded") {
 		runDetektWithPattern("patterns/exclude-FindName.yml")
 	}
+})
 
-	private fun runDetektWithPattern(patternToUse: String) {
-		val instance = DetektFacade.create(ProcessingSettings(path,
-				config = yamlConfig(patternToUse)),
-				listOf(TestProvider(), TestProvider2()), emptyList())
+private fun runDetektWithPattern(patternToUse: String) {
+	val instance = DetektFacade.create(ProcessingSettings(path,
+			config = yamlConfig(patternToUse)),
+			listOf(TestProvider(), TestProvider2()), emptyList())
 
-		val run = instance.run()
-		assertThat(run.findings["Test"]?.none { "Test.kt" in it.file } ?: true).isTrue()
-	}
+	val run = instance.run()
+	assertThat(run.findings["Test"]?.none { "Test.kt" in it.file } ?: true).isTrue()
 }

@@ -2,16 +2,16 @@ package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.YamlConfig
-import org.junit.jupiter.api.Test
+import org.jetbrains.spek.api.Spek
+import org.jetbrains.spek.api.dsl.it
 import java.io.File
 import java.nio.file.Paths
 
-class DetektYmlConfigTest {
+class DetektYmlConfigTest : Spek({
 
-	private val config = loadConfig()
+	val config = loadConfig()
 
-	@Test
-	fun complexitySection() {
+	it("complexitySection") {
 		ConfigAssert(
 				config,
 				"complexity",
@@ -19,8 +19,7 @@ class DetektYmlConfigTest {
 		).assert()
 	}
 
-	@Test
-	fun documentationSection() {
+	it("documentationSection") {
 		ConfigAssert(
 				config,
 				"comments",
@@ -28,8 +27,7 @@ class DetektYmlConfigTest {
 		).assert()
 	}
 
-	@Test
-	fun emptyBlocksSection() {
+	it("emptyBlocksSection") {
 		ConfigAssert(
 				config,
 				"empty-blocks",
@@ -37,8 +35,7 @@ class DetektYmlConfigTest {
 		).assert()
 	}
 
-	@Test
-	fun exceptionsSection() {
+	it("exceptionsSection") {
 		ConfigAssert(
 				config,
 				"exceptions",
@@ -46,8 +43,7 @@ class DetektYmlConfigTest {
 		).assert()
 	}
 
-	@Test
-	fun performanceSection() {
+	it("performanceSection") {
 		ConfigAssert(
 				config,
 				"performance",
@@ -55,8 +51,7 @@ class DetektYmlConfigTest {
 		).assert()
 	}
 
-	@Test
-	fun potentialBugsSection() {
+	it("potentialBugsSection") {
 		ConfigAssert(
 				config,
 				"potential-bugs",
@@ -64,21 +59,20 @@ class DetektYmlConfigTest {
 		).assert()
 	}
 
-	@Test
-	fun styleSection() {
+	it("styleSection") {
 		ConfigAssert(
 				config,
 				"style",
 				"io.gitlab.arturbosch.detekt.rules.style"
 		).assert()
 	}
-
-	private fun loadConfig(): Config {
-		val workingDirectory = Paths.get(".").toAbsolutePath().normalize().toString()
-		val file = File(workingDirectory + "/src/main/resources/$CONFIG_FILE")
-		val url = file.toURI().toURL()
-		return YamlConfig.loadResource(url)
-	}
-}
+})
 
 internal const val CONFIG_FILE = "default-detekt-config.yml"
+
+private fun loadConfig(): Config {
+	val workingDirectory = Paths.get(".").toAbsolutePath().normalize().toString()
+	val file = File("$workingDirectory/src/main/resources/$CONFIG_FILE")
+	val url = file.toURI().toURL()
+	return YamlConfig.loadResource(url)
+}

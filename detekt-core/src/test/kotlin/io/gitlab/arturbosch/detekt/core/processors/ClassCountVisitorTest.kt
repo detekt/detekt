@@ -4,12 +4,12 @@ import io.gitlab.arturbosch.detekt.core.path
 import io.gitlab.arturbosch.detekt.test.compileForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
-import org.junit.jupiter.api.Test
+import org.jetbrains.spek.api.Spek
+import org.jetbrains.spek.api.dsl.it
 
-class ClassCountVisitorTest {
+class ClassCountVisitorTest : Spek({
 
-	@Test
-	fun twoClassesInSeparateFile() {
+	it("twoClassesInSeparateFile") {
 		val files = arrayOf(
 				compileForTest(path.resolve("Test.kt")),
 				compileForTest(path.resolve("Default.kt"))
@@ -18,15 +18,13 @@ class ClassCountVisitorTest {
 		assertThat(count).isEqualTo(2)
 	}
 
-	@Test
-	fun oneClassWithOneNestedClass() {
+	it("oneClassWithOneNestedClass") {
 		val file = compileForTest(path.resolve("ComplexClass.kt"))
 		val count = getClassCount(arrayOf(file))
 		assertThat(count).isEqualTo(2)
 	}
 
-	@Test
-	fun testEnumAndInterface() {
+	it("testEnumAndInterface") {
 		val files = arrayOf(
 				compileForTest(path.resolve("../empty/EmptyEnum.kt")),
 				compileForTest(path.resolve("../empty/EmptyInterface.kt"))
@@ -34,17 +32,17 @@ class ClassCountVisitorTest {
 		val count = getClassCount(files)
 		assertThat(count).isEqualTo(2)
 	}
+})
 
-	private fun getClassCount(files: Array<KtFile>): Int {
-		return files
-				.map { getData(it) }
-				.sum()
-	}
+private fun getClassCount(files: Array<KtFile>): Int {
+	return files
+			.map { getData(it) }
+			.sum()
+}
 
-	private fun getData(file: KtFile): Int {
-		return with(file) {
-			accept(ClassCountVisitor())
-			getUserData(numberOfClassesKey)!!
-		}
+private fun getData(file: KtFile): Int {
+	return with(file) {
+		accept(ClassCountVisitor())
+		getUserData(numberOfClassesKey)!!
 	}
 }

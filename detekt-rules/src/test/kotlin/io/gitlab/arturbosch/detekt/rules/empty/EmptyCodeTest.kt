@@ -8,30 +8,27 @@ import io.gitlab.arturbosch.detekt.test.compileForTest
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
-import org.junit.jupiter.api.Test
+import org.jetbrains.spek.api.Spek
+import org.jetbrains.spek.api.dsl.it
 import java.util.regex.PatternSyntaxException
 
 /**
  * @author Artur Bosch
  */
-class EmptyCodeTest {
+class EmptyCodeTest : Spek({
 
-	val file = compileForTest(Case.Empty.path())
-
-	private val regexTestingCode = """
+	val regexTestingCode = """
 			fun f() {
 				try {
 				} catch (foo: MyException) {
 				}
 			}"""
 
-	@Test
-	fun findsEmptyCatch() {
+	it("findsEmptyCatch") {
 		test { EmptyCatchBlock(Config.empty) }
 	}
 
-	@Test
-	fun findsEmptyNestedCatch() {
+	it("findsEmptyNestedCatch") {
 		val code = """
 			fun f() {
 				try {
@@ -44,8 +41,7 @@ class EmptyCodeTest {
 		assertThat(EmptyCatchBlock(Config.empty).lint(code)).hasSize(1)
 	}
 
-	@Test
-	fun doesNotReportIgnoredOrExpectedException() {
+	it("doesNotReportIgnoredOrExpectedException") {
 		val code = """
 			fun f() {
 				try {
@@ -56,8 +52,7 @@ class EmptyCodeTest {
 		assertThat(EmptyCatchBlock(Config.empty).lint(code)).isEmpty()
 	}
 
-	@Test
-	fun doesNotReportEmptyCatchWithConfig() {
+	it("doesNotReportEmptyCatchWithConfig") {
 		val code = """
 			fun f() {
 				try {
@@ -68,85 +63,70 @@ class EmptyCodeTest {
 		assertThat(EmptyCatchBlock(config).lint(code)).isEmpty()
 	}
 
-	@Test
-	fun findsEmptyFinally() {
+	it("findsEmptyFinally") {
 		test { EmptyFinallyBlock(Config.empty) }
 	}
 
-	@Test
-	fun findsEmptyIf() {
+	it("findsEmptyIf") {
 		test { EmptyIfBlock(Config.empty) }
 	}
 
-	@Test
-	fun findsEmptyElse() {
+	it("findsEmptyElse") {
 		test { EmptyElseBlock(Config.empty) }
 	}
 
-	@Test
-	fun findsEmptyFor() {
+	it("findsEmptyFor") {
 		test { EmptyForBlock(Config.empty) }
 	}
 
-	@Test
-	fun findsEmptyWhile() {
+	it("findsEmptyWhile") {
 		test { EmptyWhileBlock(Config.empty) }
 	}
 
-	@Test
-	fun findsEmptyDoWhile() {
+	it("findsEmptyDoWhile") {
 		test { EmptyDoWhileBlock(Config.empty) }
 	}
 
-	@Test
-	fun findsEmptyFun() {
+	it("findsEmptyFun") {
 		test { EmptyFunctionBlock(Config.empty) }
 	}
 
-	@Test
-	fun findsEmptyClass() {
+	it("findsEmptyClass") {
 		test { EmptyClassBlock(Config.empty) }
 	}
 
-	@Test
-	fun findsEmptyWhen() {
+	it("findsEmptyWhen") {
 		test { EmptyWhenBlock(Config.empty) }
 	}
 
-	@Test
-	fun findsEmptyInit() {
+	it("findsEmptyInit") {
 		test { EmptyInitBlock(Config.empty) }
 	}
 
-	@Test
-	fun findsOneEmptySecondaryConstructor() {
+	it("findsOneEmptySecondaryConstructor") {
 		test { EmptySecondaryConstructor(Config.empty) }
 	}
 
-	@Test
-	fun findsEmptyDefaultConstructor() {
+	it("findsEmptyDefaultConstructor") {
 		val rule = EmptyDefaultConstructor(Config.empty)
 		val text = compileForTest(Case.EmptyDefaultConstructorPositive.path()).text
 		assertThat(rule.lint(text)).hasSize(2)
 	}
 
-	@Test
-	fun doesNotFindEmptyDefaultConstructor() {
+	it("doesNotFindEmptyDefaultConstructor") {
 		val rule = EmptyDefaultConstructor(Config.empty)
 		val text = compileForTest(Case.EmptyDefaultConstructorNegative.path()).text
 		assertThat(rule.lint(text)).isEmpty()
 	}
 
-	@Test
-	fun doesNotFailWithInvalidRegexWhenDisabled() {
+	it("doesNotFailWithInvalidRegexWhenDisabled") {
 		val configValues = mapOf("active" to "false",
 				EmptyCatchBlock.ALLOWED_EXCEPTION_NAME_REGEX to "*foo")
 		val config = TestConfig(configValues)
 		assertThat(EmptyCatchBlock(config).lint(regexTestingCode)).isEmpty()
 	}
 
-	@Test
-	fun doesFailWithInvalidRegex() {
+	it("doesFailWithInvalidRegex") {
 		val configValues = mapOf(EmptyCatchBlock.ALLOWED_EXCEPTION_NAME_REGEX to "*foo")
 		val config = TestConfig(configValues)
 		assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
@@ -154,9 +134,10 @@ class EmptyCodeTest {
 		}
 	}
 
-	private fun test(block: () -> Rule) {
-		val rule = block()
-		rule.lint(file)
-		assertThat(rule.findings).hasSize(1)
-	}
+})
+
+private fun test(block: () -> Rule) {
+	val rule = block()
+	rule.lint(compileForTest(Case.Empty.path()))
+	assertThat(rule.findings).hasSize(1)
 }

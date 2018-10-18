@@ -15,6 +15,7 @@ environment:
 
 init:
   - git config --global --unset core.autocrlf
+  - set GRADLE_OPTS="-Dorg.gradle.daemon=false -Pkotlin.incremental=false"
 
 install:
   - SET PATH=%JAVA_HOME%\bin;%PATH%
@@ -32,6 +33,14 @@ build_script:
 test_script:
   - detekt-cli\build\install\detekt-cli-shadow\bin\detekt-cli -i . --baseline reports\baseline.xml -f ".*/resources/.*,.*/build/.*" -c detekt-cli\src\main\resources\default-detekt-config.yml,reports\failfast.yml
   - gradlew verifyGeneratorOutput
+
+after_test:
+  - ps: del C:\Users\appveyor\.gradle\caches\modules-2\modules-2.lock
+  - ps: del -Recurse C:\Users\appveyor\.gradle\caches\*\plugin-resolution
+
+cache:
+  - C:\Users\appveyor\.gradle\wrapper
+  - C:\Users\appveyor\.gradle\caches
 
 on_finish:
   - ps: |

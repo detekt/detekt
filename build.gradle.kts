@@ -4,21 +4,22 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.gradle.util.GFileUtils
 import org.jetbrains.dokka.gradle.DokkaTask
+import io.gitlab.arturbosch.detekt.Detekt
 
 import java.util.Date
 
 plugins {
-	kotlin("jvm") version "1.2.61"
+	kotlin("jvm") version "1.2.71"
 	id("com.jfrog.bintray") version "1.8.4"
 	id("com.github.ben-manes.versions") version "0.20.0"
-	id("com.github.johnrengelman.shadow") version "2.0.4" apply false
+	id("com.github.johnrengelman.shadow") version "4.0.1" apply false
 	id("org.sonarqube") version "2.6.2"
 	id("io.gitlab.arturbosch.detekt")
 	id("org.jetbrains.dokka") version "0.9.17"
 }
 
 tasks.withType<Wrapper> {
-	gradleVersion = "4.10.1"
+	gradleVersion = "4.10.2"
 	distributionType = Wrapper.DistributionType.ALL
 	doLast {
 		/*
@@ -36,6 +37,10 @@ tasks.withType<Wrapper> {
 
 tasks.withType<Test> {
 	dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":test"))
+}
+
+tasks.withType<Detekt> {
+	dependsOn("detekt-cli:assemble")
 }
 
 val detektVersion: String by project
@@ -215,19 +220,18 @@ subprojects {
 		}
 	}
 
-	val junitEngineVersion: String by project
 	val assertjVersion: String by project
 	val spekVersion: String by project
 	val kotlinTest by configurations.creating
 
 	dependencies {
 		implementation(kotlin("stdlib"))
-		kotlinTest(kotlin("test"))
-		kotlinTest("org.junit.jupiter:junit-jupiter-api:$junitEngineVersion")
+
+		detekt(project(":detekt-cli"))
+
 		kotlinTest("org.assertj:assertj-core:$assertjVersion")
 		kotlinTest("org.jetbrains.spek:spek-api:$spekVersion")
 		kotlinTest("org.jetbrains.spek:spek-subject-extension:$spekVersion")
-		kotlinTest("org.junit.jupiter:junit-jupiter-engine:$junitEngineVersion")
 	}
 
 	sourceSets["main"].java.srcDirs("src/main/kotlin")

@@ -21,13 +21,12 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 - Complexity report based on logical lines of code, McCabe complexity and amount of code smells
 - Highly configurable
 - Suppress findings with Kotlin's `@Suppress` and Java's `@SuppressWarnings` annotations
-- Specify code smell thresholds to break your build or print a warning
+- Specify code smell thresholds to break your build
 - Code Smell baseline and ignore lists for legacy projects
-- [Gradle plugin](#gradleplugin) for code analysis via Gradle builds
+- [Gradle plugin](#with-gradle) for code analysis via Gradle builds
 - Gradle tasks to use local `IntelliJ` distribution for [formatting and inspecting](#idea) Kotlin code
-- Optionally configure detekt for each sub module by using [profiles](#closure) (gradle-plugin)
 - [SonarQube integration](https://github.com/arturbosch/sonar-kotlin)
-- Extensible by own rule sets and `FileProcessListener's`
+- Extensible by own rule sets, `FileProcessListener's` and `OutputReport's`
 - [IntelliJ integration](https://github.com/arturbosch/detekt-intellij-plugin)
 - Unofficial [Maven plugin](https://github.com/Ozsie/detekt-maven-plugin) by [Ozsie](https://github.com/Ozsie)
 
@@ -152,6 +151,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [glammers](https://github.com/glammers) - Documentation improvement
 - [Ahmad El-Melegy](https://github.com/mlegy) - yaml syntax fix
 - [Paweł Gajda](https://github.com/pawegio) - Rule improvement: FunctionParameterNaming
+- [Alistair Sykes](https://github.com/alistairsykes) - Doc improvement
 
 ### Mentions
 
