@@ -11,11 +11,8 @@ class DetektReport(val type: DetektReportType, private val project: Project) {
 
 	var destination: File? = null
 
-	private val reportFileExtension
-		get() = type.extension
-
 	override fun toString(): String {
-		return "DetektReport(name='$type', enabled=$enabled, destination=$destination)"
+		return "DetektReport(type='$type', enabled=$enabled, destination=$destination)"
 	}
 
 	fun getTargetFileProvider(reportsDir: Provider<File>): Provider<RegularFile> {
@@ -33,7 +30,7 @@ class DetektReport(val type: DetektReportType, private val project: Project) {
 		if (customDestination != null)
 			prop.set(customDestination)
 		else
-			prop.set(File(reportsDir, "$DEFAULT_FILENAME.$reportFileExtension"))
+			prop.set(File(reportsDir, "$DEFAULT_FILENAME.${type.extension}"))
 
 		return prop.get()
 	}
