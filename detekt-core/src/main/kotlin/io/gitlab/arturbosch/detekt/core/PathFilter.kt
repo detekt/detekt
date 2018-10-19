@@ -42,7 +42,7 @@ class PathFilter(pattern: String, private val root: Path = Paths.get("").toAbsol
 			"$prefix${root.relativize(path)}"
 		} else {
 			if (!path.startsWith(prefix)) {
-				"$prefix${path.toString()}"
+				"$prefix$path"
 			} else {
 				path.toString()
 			}
