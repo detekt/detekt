@@ -144,6 +144,10 @@ Reports function parameter names which do not follow the specified naming conven
 
    ignores variables in classes which match this regex
 
+* `ignoreOverriddenFunctions` (default: `true`)
+
+   ignores overridden functions with parameters not matching the pattern
+
 ### MatchingDeclarationName
 
 "If a Kotlin file contains a single non-private class (potentially with related top-level declarations),

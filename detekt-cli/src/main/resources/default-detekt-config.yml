@@ -312,6 +312,7 @@ naming:
     active: true
     parameterPattern: '[a-z][A-Za-z0-9]*'
     excludeClassPattern: '$^'
+    ignoreOverriddenFunctions: true
   MatchingDeclarationName:
     active: true
   MemberNameEqualsClassName:
