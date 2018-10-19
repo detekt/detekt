@@ -41,16 +41,17 @@ internal class DetektTaskDslTest : Spek({
 
 				it("can use a custom tool version") {
 
+					val customVersion = "1.0.0.RC8"
 					val config = """
 						|detekt {
-						|	toolVersion = "1.0.0.RC8"
+						|	toolVersion = "$customVersion"
 						|}
 						"""
 
 					val gradleRunner = builder.withDetektConfig(config).build()
 					gradleRunner.runTasksAndCheckResult("dependencies", "--configuration", "detekt") { result ->
 						assertThat(result.task(":dependencies")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-						assertThat(result.output).contains("io.gitlab.arturbosch.detekt:detekt-cli:1.0.0.RC8")
+						assertThat(result.output).contains("io.gitlab.arturbosch.detekt:detekt-cli:$customVersion")
 					}
 				}
 
@@ -275,8 +276,11 @@ internal class DetektTaskDslTest : Spek({
 					|	input = files("${"$"}projectDir")
 					|	config = files("config.yml")
 					|	debug = true
+					|	parallel = true
+					|	disableDefaultRuleSets = true
 					|	reports {
 					|		xml {
+					|			enabled = true
 					|			destination = file("build/reports/failfast.xml")
 					|		}
 					|		html.destination = file("build/reports/failfast.html")
@@ -303,8 +307,11 @@ internal class DetektTaskDslTest : Spek({
 					|	input = files("${"$"}projectDir")
 					|	config = files("config.yml")
 					|	debug = true
+					|	parallel = true
+					|	disableDefaultRuleSets = true
 					|	reports {
 					|		xml {
+					|			enabled = true
 					|			destination = file("build/reports/failfast.xml")
 					|		}
 					|		html.destination = file("build/reports/failfast.html")
