@@ -144,6 +144,10 @@ See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for docu
 
 See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.
 
+### SpacingAroundParens
+
+See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.
+
 ### SpacingAroundRangeOperator
 
 See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.

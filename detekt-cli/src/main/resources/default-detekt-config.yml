@@ -277,6 +277,9 @@ formatting:
   SpacingAroundOperators:
     active: true
     autoCorrect: true
+  SpacingAroundParens:
+    active: true
+    autoCorrect: true
   SpacingAroundRangeOperator:
     active: true
     autoCorrect: true

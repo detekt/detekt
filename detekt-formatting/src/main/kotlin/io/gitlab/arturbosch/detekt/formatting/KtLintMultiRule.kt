@@ -30,6 +30,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundComma
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundCurly
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundKeyword
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundOperators
+import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundParens
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundRangeOperator
 import io.gitlab.arturbosch.detekt.formatting.wrappers.StringTemplate
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
@@ -70,6 +71,7 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
 			SpacingAroundCurly(config),
 			SpacingAroundKeyword(config),
 			SpacingAroundOperators(config),
+			SpacingAroundParens(config),
 			SpacingAroundRangeOperator(config),
 			StringTemplate(config)
 	)
