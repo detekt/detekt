@@ -1,15 +1,19 @@
-Your issue may already be reported!
+---
+name: Bug report
+about: Help make detekt better by reporting bugs, false positives and other issues
+
+---
+
+The bug you're experiencing might have already be reported!
 Please search in the [issues](https://github.com/arturbosch/detekt/issues) before creating one.
 
 ## Expected Behavior
-<!--- If you're describing a bug, tell us what should happen -->
-<!--- If you're suggesting a change/improvement, tell us how it should work -->
+<!---Tell us what should happen -->
 
-## Current Behavior
-<!--- If describing a bug, tell us what happens instead of the expected behavior -->
-<!--- If suggesting a change/improvement, explain the difference from the current behavior -->
+## Observed Behavior
+<!---Tell us what happens instead of the expected behavior -->
 
-## Steps to Reproduce (for bugs)
+## Steps to Reproduce
 <!--- Provide a link to a live example, or an unambiguous set of steps to -->
 <!--- reproduce this bug. Include code to reproduce, if relevant -->
 
@@ -19,6 +23,6 @@ Please search in the [issues](https://github.com/arturbosch/detekt/issues) befor
 
 ## Your Environment
 <!--- Include as many relevant details about the environment you experienced the bug in -->
-* Version used:
+* Version of detekt used:
 * Operating System and version:
-* Link to your project:
+* Link to your project (if it's a public repository):
