@@ -34,15 +34,15 @@ class PathFilter(pattern: String, private val root: Path = Paths.get("").toAbsol
 
 	fun matches(path: Path): Boolean {
 		val prefix = if (IS_WINDOWS) {
-				"\\"
-			} else {
-				"./"
-			}
-		val relativePath = if (path.isAbsolute()) {
+			"\\"
+		} else {
+			"./"
+		}
+		val relativePath = if (path.isAbsolute) {
 			"$prefix${root.relativize(path)}"
 		} else {
 			if (!path.startsWith(prefix)) {
-				"$prefix${path.toString()}"
+				"$prefix$path"
 			} else {
 				path.toString()
 			}
