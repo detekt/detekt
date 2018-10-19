@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt
 
-import groovy.lang.Closure
 import io.gitlab.arturbosch.detekt.extensions.DetektReports
 import io.gitlab.arturbosch.detekt.invoke.BaselineArgument
 import io.gitlab.arturbosch.detekt.invoke.CliArgument
@@ -14,6 +13,7 @@ import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
 import io.gitlab.arturbosch.detekt.invoke.PluginsArgument
 import io.gitlab.arturbosch.detekt.invoke.XmlReportArgument
+import org.gradle.api.Action
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
@@ -35,7 +35,6 @@ import org.gradle.api.tasks.SkipWhenEmpty
 import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.property
 import org.gradle.language.base.plugins.LifecycleBasePlugin
-import org.gradle.util.ConfigureUtil
 import java.io.File
 
 /**
@@ -96,9 +95,8 @@ open class Detekt : DefaultTask() {
 	@Internal
 	var reports = DetektReports(project)
 
-	fun reports(closure: Closure<*>): DetektReports = ConfigureUtil.configure(closure, reports)
+	fun reports(configure: Action<DetektReports>) = configure.execute(reports)
 
-	fun reports(configure: DetektReports.() -> Unit) = reports.configure()
 	@Internal
 	@Optional
 	var reportsDir: Property<File> = project.objects.property()

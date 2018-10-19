@@ -1,10 +1,9 @@
 package io.gitlab.arturbosch.detekt.extensions
 
-import groovy.lang.Closure
+import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.plugins.quality.CodeQualityExtension
-import org.gradle.util.ConfigureUtil
 import java.io.File
 
 /**
@@ -19,13 +18,10 @@ open class DetektExtension(project: Project) : CodeQualityExtension() {
 		get() = reportsDir
 
 	val reports = DetektReports(project)
-	fun reports(configure: DetektReports.() -> Unit) = reports.configure()
-	fun reports(configure: Closure<*>): DetektReports = ConfigureUtil.configure(configure, reports)
-
+	fun reports(configure: Action<DetektReports>) = configure.execute(reports)
 
 	val idea = IdeaExtension()
-	fun idea(configure: IdeaExtension.() -> Unit) = idea.configure()
-	fun idea(configure: Closure<*>): IdeaExtension = ConfigureUtil.configure(configure, idea)
+	fun idea(configure: Action<IdeaExtension>) = configure.execute(idea)
 
 	var input: ConfigurableFileCollection = project.layout.configurableFiles(DEFAULT_SRC_DIR_JAVA, DEFAULT_SRC_DIR_KOTLIN)
 
