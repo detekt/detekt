@@ -12,7 +12,9 @@ import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
 import io.gitlab.arturbosch.detekt.invoke.PluginsArgument
 import org.gradle.api.DefaultTask
-import org.gradle.api.file.FileCollection
+import org.gradle.api.file.ConfigurableFileCollection
+import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
@@ -22,12 +24,13 @@ import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.SkipWhenEmpty
 import org.gradle.api.tasks.TaskAction
+import org.gradle.kotlin.dsl.property
 import org.gradle.language.base.plugins.LifecycleBasePlugin
-import java.io.File
 
 /**
  * @author Artur Bosch
  * @author Marvin Ramin
+ * @author Markus Schwarz
  */
 open class DetektCreateBaselineTask : DefaultTask() {
 
@@ -38,51 +41,50 @@ open class DetektCreateBaselineTask : DefaultTask() {
 
 	@OutputFile
 	@PathSensitive(PathSensitivity.RELATIVE)
-	var baseline: File? = null
+	var baseline: RegularFileProperty = project.layout.fileProperty()
 
 	@InputFiles
 	@PathSensitive(PathSensitivity.RELATIVE)
 	@SkipWhenEmpty
-	lateinit var input: FileCollection
+	var input: ConfigurableFileCollection = project.layout.configurableFiles()
 
 	@Input
 	@Optional
-	var filters: String? = null
+	var filters: Property<String> = project.objects.property()
 
 	@InputFiles
 	@Optional
 	@PathSensitive(PathSensitivity.RELATIVE)
-	var config: FileCollection? = null
+	var config: ConfigurableFileCollection = project.layout.configurableFiles()
 
 	@Input
 	@Optional
-	var plugins: String? = null
+	var plugins: Property<String> = project.objects.property()
 
 	@Internal
 	@Optional
-	var debugOrDefault: Boolean = false
+	var debug: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
 	@Internal
 	@Optional
-	var parallelOrDefault: Boolean = false
+	var parallel: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
 	@Internal
 	@Optional
-	var disableDefaultRuleSetsOrDefault: Boolean = false
-
+	var disableDefaultRuleSets: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
 	@TaskAction
 	fun baseline() {
 		val arguments = mutableListOf<CliArgument>(CreateBaselineArgument) +
-				BaselineArgument(baseline) +
+				BaselineArgument(baseline.get()) +
 				InputArgument(input) +
-				FiltersArgument(filters) +
+				FiltersArgument(filters.orNull) +
 				ConfigArgument(config) +
-				PluginsArgument(plugins) +
-				DebugArgument(debugOrDefault) +
-				ParallelArgument(parallelOrDefault) +
-				DisableDefaultRulesetArgument(disableDefaultRuleSetsOrDefault)
+				PluginsArgument(plugins.orNull) +
+				DebugArgument(debug.get()) +
+				ParallelArgument(parallel.get()) +
+				DisableDefaultRulesetArgument(disableDefaultRuleSets.get())
 
-		DetektInvoker.invokeCli(project, arguments.toList(), debugOrDefault)
+		DetektInvoker.invokeCli(project, arguments.toList(), debug.get())
 	}
 }

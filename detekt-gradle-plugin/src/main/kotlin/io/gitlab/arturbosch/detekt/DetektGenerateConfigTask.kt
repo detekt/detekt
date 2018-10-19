@@ -5,7 +5,7 @@ import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import io.gitlab.arturbosch.detekt.invoke.GenerateConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import org.gradle.api.DefaultTask
-import org.gradle.api.file.FileCollection
+import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
@@ -27,7 +27,7 @@ open class DetektGenerateConfigTask : DefaultTask() {
 	@InputFiles
 	@PathSensitive(PathSensitivity.RELATIVE)
 	@SkipWhenEmpty
-	lateinit var input: FileCollection
+	var input: ConfigurableFileCollection = project.layout.configurableFiles()
 
 	@TaskAction
 	fun generateConfig() {

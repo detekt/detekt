@@ -23,6 +23,7 @@ internal class CreateBaselineTaskGroovyDslTest : Spek({
 			val detektConfig = """
 				|detekt {
     			| 	baseline = file("build/detekt/baseline.xml")
+				| 	debug = true
 				|}
 				"""
 
@@ -35,8 +36,7 @@ internal class CreateBaselineTaskGroovyDslTest : Spek({
 					.withPluginClasspath()
 					.build()
 
-			assertThat(result.output).contains("number of classes: 1")
-			assertThat(result.output).contains("Ruleset: comments")
+			assertThat(result.output).contains("number of classes: 1", "Ruleset: comments", "--debug")
 			assertThat(result.task(":detektBaseline")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 			assertThat(File(rootDir, "build/detekt/baseline.xml")).exists()
 		}

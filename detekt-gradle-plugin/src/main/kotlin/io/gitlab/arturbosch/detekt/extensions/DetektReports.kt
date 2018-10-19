@@ -1,19 +1,16 @@
 package io.gitlab.arturbosch.detekt.extensions
 
 import groovy.lang.Closure
+import io.gitlab.arturbosch.detekt.extensions.DetektReportType.HTML
+import io.gitlab.arturbosch.detekt.extensions.DetektReportType.XML
+import org.gradle.api.Project
 import org.gradle.util.ConfigureUtil
 
-class DetektReports {
+class DetektReports(project: Project) {
 
-	val xml = DetektReport("xml")
+	val xml = DetektReport(XML, project)
 
-	val html = DetektReport("html")
-
-	val all = listOf(xml, html)
-
-	fun forEach(configure: (DetektReport) -> Unit) = all.forEach(configure)
-
-	fun withName(name: String, configure: DetektReport.() -> Unit) = all.find { it.name == name }?.let(configure)
+	val html = DetektReport(HTML, project)
 
 	fun xml(configure: DetektReport.() -> Unit) = xml.configure()
 	fun xml(closure: Closure<*>): DetektReport = ConfigureUtil.configure(closure, xml)
