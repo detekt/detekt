@@ -15,7 +15,7 @@ fun CliArgs.createPathFilters(): List<PathFilter> = filters.letIfNonEmpty {
 			.asSequence()
 			.map { it.trim() }
 			.filter { it.isNotEmpty() }
-			.map(::PathFilter)
+			.map { filter -> PathFilter(filter) }
 			.toList()
 }
 
