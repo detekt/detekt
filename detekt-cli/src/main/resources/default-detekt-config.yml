@@ -255,6 +255,9 @@ formatting:
   NoWildcardImports:
     active: true
     autoCorrect: true
+  PackageName:
+    active: true
+    autoCorrect: true
   ParameterListWrapping:
     active: true
     autoCorrect: true
@@ -272,6 +275,9 @@ formatting:
     active: true
     autoCorrect: true
   SpacingAroundOperators:
+    active: true
+    autoCorrect: true
+  SpacingAroundParens:
     active: true
     autoCorrect: true
   SpacingAroundRangeOperator:
