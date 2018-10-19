@@ -110,6 +110,10 @@ See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
 
 See <a href="https://ktlint.github.io/#rule-import">ktlint-website</a> for documentation.
 
+### PackageName
+
+See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
+
 ### ParameterListWrapping
 
 See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.

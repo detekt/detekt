@@ -255,6 +255,9 @@ formatting:
   NoWildcardImports:
     active: true
     autoCorrect: true
+  PackageName:
+    active: true
+    autoCorrect: true
   ParameterListWrapping:
     active: true
     autoCorrect: true
