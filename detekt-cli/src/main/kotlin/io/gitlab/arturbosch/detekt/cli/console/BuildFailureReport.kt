@@ -62,7 +62,7 @@ class BuildFailureReport : ConsoleReport() {
 	}
 
 	private fun extractRuleToRuleSetIdMap(detektion: Detektion): HashMap<String, String> {
-		return detektion.findings.mapValues { finding -> finding.value.map { it.id }.toSet() }
+		return detektion.findings.mapValues { it.value.map(Finding::id).toSet() }
 				.map { map -> map.value.map { it to map.key }.toMap() }
 				.fold(HashMap()) { result, map -> result.putAll(map); result }
 	}
