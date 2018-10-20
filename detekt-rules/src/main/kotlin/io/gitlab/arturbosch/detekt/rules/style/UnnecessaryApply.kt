@@ -48,9 +48,7 @@ class UnnecessaryApply(config: Config) : Rule(config) {
 			))
 		}
 	}
-
 }
-
 
 private const val APPLY_LITERAL = "apply"
 
