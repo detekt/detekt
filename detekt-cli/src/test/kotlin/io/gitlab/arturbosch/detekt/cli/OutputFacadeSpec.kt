@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.core.DetektResult
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.dsl.describe
+import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -40,7 +40,7 @@ internal class OutputFacadeSpec : SubjectSpek<OutputFacade>({
 		OutputFacade(cliArgs, detektion, settings)
 	}
 
-	describe("prints the reports paths when writing them") {
+	it("prints the reports paths when writing them") {
 		subject.run()
 
 		outputStream.assertThatItPrintsReportPath(TxtOutputReport().name)
