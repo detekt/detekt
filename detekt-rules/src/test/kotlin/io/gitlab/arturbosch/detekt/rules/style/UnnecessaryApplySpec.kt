@@ -8,33 +8,60 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
 class UnnecessaryApplySpec : SubjectSpek<UnnecessaryApply>({
+
 	subject { UnnecessaryApply(Config.empty) }
 
-	given("some code using apply expressions extensively") {
-		it("reports unnecessary applies that can be changed to ordinary method call") {
-			val findings = subject.lint("""
-				fun b(i : Int) {
-				}
+	given("unnecessary applies that can be changed to ordinary method call") {
+
+		it("reports an apply on non-nullable type") {
+			assertThat(subject.lint("""
 				fun f() {
 					val a : Int? = null
 					a.apply {
 						plus(1)
 					}
+				}
+			""")).hasSize(1)
+		}
+
+		it("reports an apply on nullable type") {
+			assertThat(subject.lint("""
+				fun f() {
+					val a : Int? = null
 					a?.apply {
 						plus(1)
 					}
+				}
+			""")).hasSize(1)
+		}
+
+		it("does not report an apply with lambda block") {
+			assertThat(subject.lint("""
+				fun f() {
+					val a : Int? = null
 					a.apply({
 						plus(1)
 					})
-					b(a.apply {
-						plus(1)
-					})
-				}""")
-			assertThat(findings).hasSize(3)
+				}
+			""")).isEmpty()
 		}
+
+		it("does report single statement in apply used as function argument") {
+			assertThat(subject.lint("""
+				fun b(i : Int?) {
+				}
+				fun f() {
+					val a : Int? = null
+					b(a.apply {
+						toString()
+					})
+				}
+			""")).hasSize(1)
+		}
+
 		it("does not report applies with lambda body containing more than one statement") {
 			val findings = subject.lint("""
-				fun b(i : Int) {
+				fun b(i : Int?) {
 				}
 				fun f() {
 					val a : Int? = null
@@ -51,7 +78,7 @@ class UnnecessaryApplySpec : SubjectSpek<UnnecessaryApply>({
 						plus(2)
 					})
 				}""")
-			assertThat(findings).hasSize(0)
+			assertThat(findings).isEmpty()
 		}
 	}
 })
