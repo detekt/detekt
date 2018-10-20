@@ -23,13 +23,17 @@ specialized arrays to represent primitive types without boxing overhead, such as
 #### Noncompliant Code:
 
 ```kotlin
-fun function(array: Array<Int>)
+fun function(array: Array<Int>) { }
+
+fun returningFunction(): Array<Double> { }
 ```
 
 #### Compliant Code:
 
 ```kotlin
-fun function(array: IntArray)
+fun function(array: IntArray) { }
+
+fun returningFunction(): DoubleArray { }
 ```
 
 ### ForEachOnRange

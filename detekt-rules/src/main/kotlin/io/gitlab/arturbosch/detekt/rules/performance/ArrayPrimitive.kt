@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
 
 /**
@@ -17,11 +18,15 @@ import org.jetbrains.kotlin.psi.KtParameter
  * specialized arrays to represent primitive types without boxing overhead, such as `IntArray`, `ByteArray` and so on.
  *
  * <noncompliant>
- * fun function(array: Array<Int>)
+ * fun function(array: Array<Int>) { }
+ *
+ * fun returningFunction(): Array<Double> { }
  * </noncompliant>
  *
  * <compliant>
- * fun function(array: IntArray)
+ * fun function(array: IntArray) { }
+ *
+ * fun returningFunction(): DoubleArray { }
  * </compliant>
  *
  * @author elaydis
@@ -29,21 +34,40 @@ import org.jetbrains.kotlin.psi.KtParameter
  */
 class ArrayPrimitive(config: Config = Config.empty) : Rule(config) {
 
+	private val regex = Regex("""^Array<(\w+)>$""")
+
 	override val issue = Issue("ArrayPrimitive",
 			Severity.Performance,
 			"Using Array<Primitive> leads to implicit boxing and a performance hit",
 			Debt.FIVE_MINS)
 
 	override fun visitParameter(parameter: KtParameter) {
-		val regex = Regex("""^Array<(\w+)>$""")
-		val matchResult = regex.find(parameter.typeReference?.text as CharSequence)
-		matchResult?.let {
-			val type = it.destructured.component1()
-			if (type in primitiveTypes) {
-				report(CodeSmell(issue, Entity.from(parameter), issue.description))
-			}
+		if (parameter.typeReference?.text.isArrayPrimitive()) {
+			report(CodeSmell(issue, Entity.from(parameter), issue.description))
 		}
 		super.visitParameter(parameter)
+	}
+
+	override fun visitNamedFunction(function: KtNamedFunction) {
+		if (function.hasDeclaredReturnType()) {
+			if (function.typeReference?.typeElement?.text.isArrayPrimitive()) {
+				report(CodeSmell(issue, Entity.from(function), issue.description))
+			}
+		}
+		super.visitNamedFunction(function)
+	}
+
+	private fun String?.isArrayPrimitive(): Boolean {
+		this?.run {
+			val matchResult = regex.find(this)
+			matchResult?.run {
+				val type = destructured.component1()
+				if (type in primitiveTypes) {
+					return true
+				}
+			}
+		}
+		return false
 	}
 
 	private val primitiveTypes = listOf(
