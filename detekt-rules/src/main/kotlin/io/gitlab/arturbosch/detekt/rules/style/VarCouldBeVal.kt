@@ -11,10 +11,13 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
+import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.KtThisExpression
 import org.jetbrains.kotlin.psi.KtUnaryExpression
+import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
 private val unaryAssignmentOperators = setOf(KtTokens.MINUSMINUS, KtTokens.PLUSPLUS)
 
@@ -47,6 +50,10 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
 			aliases = setOf("CanBeVal"))
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
+		if (function.isSomehowNested()) {
+			return
+		}
+
 		val assignmentVisitor = AssignmentVisitor()
 		function.accept(assignmentVisitor)
 
@@ -55,6 +62,9 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
 		}
 		super.visitNamedFunction(function)
 	}
+
+	private fun KtNamedFunction.isSomehowNested() =
+			getStrictParentOfType<KtNamedFunction>() != null
 
 	private class AssignmentVisitor : DetektVisitor() {
 
@@ -74,7 +84,8 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
 		override fun visitProperty(property: KtProperty) {
 			if (property.isVar) {
 				declarations.add(property)
-				val contextsForName = contextsByDeclarationName.getOrPut(property.nameAsSafeName.identifier) { mutableSetOf() }
+				val identifier = property.nameAsSafeName.identifier
+				val contextsForName = contextsByDeclarationName.getOrPut(identifier) { mutableSetOf() }
 				contextsForName.add(property.parent)
 			}
 			super.visitProperty(property)
@@ -91,9 +102,21 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
 
 		override fun visitBinaryExpression(expression: KtBinaryExpression) {
 			if (expression.operationToken in KtTokens.ALL_ASSIGNMENTS) {
-				visitAssignment(expression.firstChild.text, expression.parent)
+				val assignedName = extractAssignedName(expression)
+				if (assignedName != null) {
+					visitAssignment(assignedName, expression.parent)
+				}
 			}
 			super.visitBinaryExpression(expression)
+		}
+
+		private fun extractAssignedName(expression: KtBinaryExpression): String? {
+			val leftSide = expression.left
+			if (leftSide is KtDotQualifiedExpression &&
+					leftSide.receiverExpression is KtThisExpression) {
+				return leftSide.selectorExpression?.text
+			}
+			return leftSide?.text
 		}
 
 		private fun visitAssignment(assignedName: String, context: PsiElement) {
