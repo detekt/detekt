@@ -10,6 +10,7 @@ import java.io.File
 
 /**
  * @author Marvin Ramin
+ * @author Markus Schwarz
  */
 internal class DetektTaskGroovyDslTest : Spek({
 
@@ -54,32 +55,27 @@ internal class DetektTaskGroovyDslTest : Spek({
 			assertThat(File(rootDir, "build/reports/detekt/detekt.xml")).exists()
 			assertThat(File(rootDir, "build/reports/detekt/detekt.html")).exists()
 		}
-		it("can be applied with a version only") {
+		it("is possible to select a custom version") {
 
+			val customVersion = "1.0.0.RC8"
 			val detektConfig = """
-				|detekt {
-				|	toolVersion = "$VERSION_UNDER_TEST"
-				|}
+					|detekt {
+					|	toolVersion = "$customVersion"
+					|}
 				"""
 
 			dslTest.writeFiles(rootDir, detektConfig)
+			dslTest.writeConfig(rootDir)
 
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
 					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "dependencies", "--configuration", "detekt")
 					.withPluginClasspath()
 					.build()
 
-			assertThat(result.output).contains("number of classes: 1")
-			assertThat(result.output).contains("Ruleset: comments")
-			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-
-			// Asserts that the "custom" module is not built, and that custom ruleset is not enabled
-			assertThat(result.output).doesNotContain("Ruleset: test-custom")
-			assertThat(File(rootDir, "custom/build")).doesNotExist()
-			assertThat(File(rootDir, "build/reports/detekt/detekt.xml")).exists()
-			assertThat(File(rootDir, "build/reports/detekt/detekt.html")).exists()
+			assertThat(result.task(":dependencies")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+			assertThat(result.output).contains("io.gitlab.arturbosch.detekt:detekt-cli:${customVersion}")
 		}
 		it("can change specific report destination") {
 
@@ -133,7 +129,7 @@ internal class DetektTaskGroovyDslTest : Spek({
 			assertThat(File(rootDir, "build/detekt-reports/detekt.xml")).exists()
 			assertThat(File(rootDir, "build/detekt-reports/detekt.html")).exists()
 		}
-		it("can change reportsDir but overdslTest.write single report destination") {
+		it("can change reportsDir but overwrite single report destination") {
 
 			val detektConfig = """
 				|detekt {
@@ -206,20 +202,22 @@ internal class DetektTaskGroovyDslTest : Spek({
 					.withPluginClasspath()
 					.build()
 
-			assertThat(result.output).contains("number of classes: 1")
-			assertThat(result.output).contains("Ruleset: comments")
+			assertThat(result.output).contains("number of classes: 1", "Ruleset: comments")
+			assertThat(result.output).contains("--report xml:")
+			assertThat(result.output).doesNotContain("--report html:")
 			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 
 			assertThat(File(rootDir, "build/reports/detekt/detekt.xml")).exists()
 			assertThat(File(rootDir, "build/reports/detekt/detekt.html")).doesNotExist()
 		}
 		it("can configure the input directory") {
-			val customSourceLocation = File(rootDir, "gensrc/kotlin")
+			val customSource = "gensrc/kotlin"
+			val customSourceLocation = File(rootDir, customSource)
 			val detektConfig = """
 					|detekt {
 					| debug = true
 					| input = files(
-					|	 "${customSourceLocation.safeAbsolutePath}",
+					|	 "$customSource",
 					|	 "some/location/thatdoesnotexist"
 					| )
 					|}
@@ -236,10 +234,10 @@ internal class DetektTaskGroovyDslTest : Spek({
 					.build()
 
 			assertThat(result.output).contains("number of classes: 1")
-			assertThat(result.output).contains("--input, ${customSourceLocation.absolutePath}")
+			assertThat(result.output).contains("--input ${customSourceLocation.absolutePath}")
 			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 		}
-		it("can configure multiple input directories") {
+		it("can configure multiple absolute input directories") {
 			val customSourceLocation = File(rootDir, "gensrc/kotlin")
 			val otherCustomSourceLocation = File(rootDir, "gensrc/foo")
 			val detektConfig = """
@@ -263,21 +261,92 @@ internal class DetektTaskGroovyDslTest : Spek({
 					.build()
 
 			assertThat(result.output).contains("number of classes: 2")
-			assertThat(result.output).contains("--input, ${customSourceLocation.absolutePath},${otherCustomSourceLocation.absolutePath}")
+			assertThat(result.output).contains("--input ${customSourceLocation.absolutePath},${otherCustomSourceLocation.absolutePath}")
 			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 		}
-		it("can configure a new custom detekt task") {
-			val configFile = File(rootDir, "config.yml")
+		it("uses the flags") {
 
+			val detektConfig = """
+					|detekt {
+					|	debug = true
+					|	parallel = true
+					|	disableDefaultRuleSets = true
+					|}
+				"""
+
+			dslTest.writeFiles(rootDir, detektConfig)
+			dslTest.writeConfig(rootDir)
+
+			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
+			val result = GradleRunner.create()
+					.withProjectDir(rootDir)
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "detekt",
+							"--stacktrace", "--info")
+					.withPluginClasspath()
+					.build()
+
+			assertThat(result.output).contains("--debug")
+			assertThat(result.output).contains("--parallel")
+			assertThat(result.output).contains("--disable-default-rulesets")
+			assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+		}
+		it("can set filters") {
+			val filters = ".*test.*,.*/resources/.*,.*/tmp/.*"
+
+			val detektConfig = """
+					|detekt {
+					|	filters = "$filters"
+					|}
+				"""
+
+			dslTest.writeFiles(rootDir, detektConfig)
+			dslTest.writeConfig(rootDir)
+
+			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
+			val result = GradleRunner.create()
+					.withProjectDir(rootDir)
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "detekt",
+							"--stacktrace", "--info")
+					.withPluginClasspath()
+					.build()
+
+			assertThat(result.output).contains("--filters $filters")
+			assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+		}
+		it("can set plugins") {
+			val additionalPlugin = "plugin.jar"
+			File(rootDir, additionalPlugin).createNewFile()
+
+			val detektConfig = """
+					|detekt {
+					|	plugins = "$additionalPlugin"
+					|}
+				"""
+
+			dslTest.writeFiles(rootDir, detektConfig)
+			dslTest.writeConfig(rootDir)
+
+			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
+			val result = GradleRunner.create()
+					.withProjectDir(rootDir)
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "detekt",
+							"--stacktrace", "--info")
+					.withPluginClasspath()
+					.build()
+
+			assertThat(result.output).contains("--plugins $additionalPlugin")
+			assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+		}
+		it("can configure a new custom detekt task") {
 			val detektConfig = """
 					|task detektFailFast(type: io.gitlab.arturbosch.detekt.Detekt) {
 					|	description = "Runs a failfast detekt build."
 					|
 					|	input = files("src/main/java")
-					|	config = files("${configFile.safeAbsolutePath}")
 					|	debug = true
 					|	reports {
 					|		xml {
+					|			enabled = true
 					|			destination = file("build/reports/failfast.xml")
 					|		}
 					|		html.destination = file("build/reports/failfast.html")
@@ -298,6 +367,7 @@ internal class DetektTaskGroovyDslTest : Spek({
 			assertThat(result.output).contains("number of classes: 1")
 			assertThat(result.output).contains("Ruleset: comments")
 			assertThat(result.task(":detektFailFast")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+			assertThat(result.output).contains("--debug")
 
 			assertThat(File(rootDir, "build/reports/failfast.xml")).exists()
 			assertThat(File(rootDir, "build/reports/failfast.html")).exists()

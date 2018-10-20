@@ -72,11 +72,12 @@ internal class DetektTaskKotlinDslTest : Spek({
 			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 		}
 
-		it("can be applied with a custom detekt version") {
+		it("is possible to select a custom version") {
 
+			val customVersion = "1.0.0.RC8"
 			val detektConfig = """
 					|detekt {
-					|	toolVersion = "$VERSION_UNDER_TEST"
+					|	toolVersion = "$customVersion"
 					|}
 				"""
 
@@ -86,17 +87,12 @@ internal class DetektTaskKotlinDslTest : Spek({
 			// Using a custom "project-cache-dir" to avoid a Gradle error on Windows
 			val result = GradleRunner.create()
 					.withProjectDir(rootDir)
-					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "check", "--stacktrace", "--info")
+					.withArguments("--project-cache-dir", createTempDir(prefix = "cache").absolutePath, "dependencies", "--configuration", "detekt")
 					.withPluginClasspath()
 					.build()
 
-			assertThat(result.output).contains("number of classes: 1")
-			assertThat(result.output).contains("Ruleset: comments")
-			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-
-			// Asserts that the "custom" module is not built, and that custom ruleset is not enabled
-			assertThat(result.output).doesNotContain("Ruleset: test-custom")
-			assertThat(File(rootDir, "custom/build")).doesNotExist()
+			assertThat(result.task(":dependencies")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+			assertThat(result.output).contains("io.gitlab.arturbosch.detekt:detekt-cli:${customVersion}")
 		}
 
 		it("can be applied with a custom config file") {
@@ -150,7 +146,7 @@ internal class DetektTaskKotlinDslTest : Spek({
 					.build()
 
 			assertThat(result.output).contains("number of classes: 1")
-			assertThat(result.output).contains("--parallel", "--debug", "--disable-default-rulesets")
+			assertThat(result.output).contains("--parallel", "--debug", "--disable-default-rulesets", "--filters .*/resources/.*, .*/build/.*")
 			assertThat(result.output).doesNotContain("Ruleset: comments")
 			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 		}
@@ -165,8 +161,11 @@ internal class DetektTaskKotlinDslTest : Spek({
 					|	input = files("src/main/java")
 					|	config = files("${configFile.safeAbsolutePath}")
 					|	debug = true
+					|	parallel = true
+					|	disableDefaultRuleSets = true
 					|	reports {
 					|		xml {
+					|			enabled = true
 					|			destination = file("build/reports/failfast.xml")
 					|		}
 					|		html.destination = file("build/reports/failfast.html")
@@ -186,7 +185,6 @@ internal class DetektTaskKotlinDslTest : Spek({
 					.build()
 
 			assertThat(result.output).contains("number of classes: 1")
-			assertThat(result.output).contains("Ruleset: comments")
 			assertThat(result.task(":detektFailFast")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 
 			assertThat(File(rootDir, "build/reports/failfast.xml")).exists()
@@ -269,7 +267,7 @@ internal class DetektTaskKotlinDslTest : Spek({
 					.build()
 
 			assertThat(result.output).contains("number of classes: 1")
-			assertThat(result.output).contains("--input, ${customSourceLocation.absolutePath}")
+			assertThat(result.output).contains("--input ${customSourceLocation.absolutePath}")
 			assertThat(result.task(":check")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 		}
 

@@ -9,7 +9,6 @@ val Finding.baselineId: String
 const val SEPARATOR_COMMA = ","
 const val SEPARATOR_SEMICOLON = ";"
 
-
 inline fun <T, K, V> Collection<T>.toHashMap(
 		keyFunction: (T) -> K,
 		valueFunction: (T) -> V

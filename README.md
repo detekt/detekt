@@ -151,6 +151,8 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [glammers](https://github.com/glammers) - Documentation improvement
 - [Ahmad El-Melegy](https://github.com/mlegy) - yaml syntax fix
 - [Arjan Kleene](https://github.com/arjank) - Add unnecessary apply rule
+- [Paweł Gajda](https://github.com/pawegio) - Rule improvement: FunctionParameterNaming
+- [Alistair Sykes](https://github.com/alistairsykes) - Doc improvement
 
 ### Mentions
 

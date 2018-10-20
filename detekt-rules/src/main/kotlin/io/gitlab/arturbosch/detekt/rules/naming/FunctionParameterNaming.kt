@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.identifierName
+import io.gitlab.arturbosch.detekt.rules.isOverridden
 import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClass
 import org.jetbrains.kotlin.psi.KtParameter
 
@@ -17,9 +18,12 @@ import org.jetbrains.kotlin.psi.KtParameter
  *
  * @configuration parameterPattern - naming pattern (default: '[a-z][A-Za-z0-9]*')
  * @configuration excludeClassPattern - ignores variables in classes which match this regex (default: '$^')
+ * @configuration ignoreOverriddenFunctions - ignores overridden functions with parameters not matching the pattern
+ * (default: true)
  *
  * @active since v1.0.0
  * @author Mickele Moriconi
+ * @author Paweł Gajda
  */
 class FunctionParameterNaming(config: Config = Config.empty) : Rule(config) {
 
@@ -30,9 +34,14 @@ class FunctionParameterNaming(config: Config = Config.empty) : Rule(config) {
 
 	private val parameterPattern by LazyRegex(PARAMETER_PATTERN, "[a-z][A-Za-z\\d]*")
 	private val excludeClassPattern by LazyRegex(EXCLUDE_CLASS_PATTERN, "$^")
+	private val ignoreOverriddenFunctions = valueOrDefault(IGNORE_OVERRIDDEN_FUNCTIONS, true)
 
 	override fun visitParameter(parameter: KtParameter) {
 		if (parameter.isContainingExcludedClass(excludeClassPattern)) {
+			return
+		}
+
+		if (ignoreOverriddenFunctions && parameter.ownerFunction?.isOverridden() == true) {
 			return
 		}
 
@@ -48,5 +57,6 @@ class FunctionParameterNaming(config: Config = Config.empty) : Rule(config) {
 	companion object {
 		const val PARAMETER_PATTERN = "parameterPattern"
 		const val EXCLUDE_CLASS_PATTERN = "excludeClassPattern"
+		const val IGNORE_OVERRIDDEN_FUNCTIONS = "ignoreOverriddenFunctions"
 	}
 }

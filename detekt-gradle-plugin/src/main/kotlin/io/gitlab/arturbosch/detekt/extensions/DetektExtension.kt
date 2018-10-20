@@ -1,11 +1,9 @@
 package io.gitlab.arturbosch.detekt.extensions
 
-import groovy.lang.Closure
+import org.gradle.api.Action
 import org.gradle.api.Project
-import org.gradle.api.file.FileCollection
+import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.plugins.quality.CodeQualityExtension
-import org.gradle.api.reporting.ReportingExtension
-import org.gradle.util.ConfigureUtil
 import java.io.File
 
 /**
@@ -15,24 +13,21 @@ import java.io.File
  * @author Markus Schwarz
  */
 open class DetektExtension(project: Project) : CodeQualityExtension() {
-	val defaultReportsDir: File = project.layout.buildDirectory.get()
-			.dir(ReportingExtension.DEFAULT_REPORTS_DIR_NAME)
-			.dir("detekt").asFile
 
-	val reports = DetektReports()
-	fun reports(configure: DetektReports.() -> Unit) = reports.configure()
-	fun reports(configure: Closure<*>): DetektReports = ConfigureUtil.configure(configure, reports)
+	val customReportsDir: File?
+		get() = reportsDir
 
+	val reports = DetektReports(project)
+	fun reports(configure: Action<DetektReports>) = configure.execute(reports)
 
 	val idea = IdeaExtension()
-	fun idea(configure: IdeaExtension.() -> Unit) = idea.configure()
-	fun idea(configure: Closure<*>): IdeaExtension = ConfigureUtil.configure(configure, idea)
+	fun idea(configure: Action<IdeaExtension>) = configure.execute(idea)
 
-	var input: FileCollection = project.files(DEFAULT_SRC_DIR_JAVA, DEFAULT_SRC_DIR_KOTLIN)
+	var input: ConfigurableFileCollection = project.layout.configurableFiles(DEFAULT_SRC_DIR_JAVA, DEFAULT_SRC_DIR_KOTLIN)
 
 	var baseline: File? = null
 
-	var config: FileCollection? = null
+	var config: ConfigurableFileCollection = project.layout.configurableFiles()
 
 	var debug: Boolean = DEFAULT_DEBUG_VALUE
 

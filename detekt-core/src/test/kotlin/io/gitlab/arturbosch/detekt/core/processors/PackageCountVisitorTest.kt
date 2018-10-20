@@ -4,12 +4,12 @@ import io.gitlab.arturbosch.detekt.core.path
 import io.gitlab.arturbosch.detekt.test.compileForTest
 import org.assertj.core.api.Assertions
 import org.jetbrains.kotlin.psi.KtFile
-import org.junit.jupiter.api.Test
+import org.jetbrains.spek.api.Spek
+import org.jetbrains.spek.api.dsl.it
 
-class PackageCountVisitorTest {
+class PackageCountVisitorTest : Spek({
 
-	@Test
-	fun twoClassesInSeparatePackage() {
+	it("twoClassesInSeparatePackage") {
 		val files = arrayOf(
 				compileForTest(path.resolve("Default.kt")),
 				compileForTest(path.resolve("../empty/EmptyEnum.kt"))
@@ -21,10 +21,11 @@ class PackageCountVisitorTest {
 		Assertions.assertThat(count).isEqualTo(2)
 	}
 
-	private fun getData(file: KtFile): String {
-		return with(file) {
-			accept(PackageCountVisitor())
-			getUserData(numberOfPackagesKey)!!
-		}
+})
+
+private fun getData(file: KtFile): String {
+	return with(file) {
+		accept(PackageCountVisitor())
+		getUserData(numberOfPackagesKey)!!
 	}
 }

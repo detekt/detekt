@@ -61,7 +61,7 @@ fun assertDefaultConfigUpToDate() {
 
     if (!configDiff.toString().isEmpty()) {
         throw GradleException("The default-detekt-config.yml is not up-to-date. " +
-                "Please build detekt locally to update it.")
+                "Please build detekt locally to update it and commit the changed files.")
     }
 }
 
@@ -74,7 +74,7 @@ fun assertDocumentationUpToDate() {
 
     if (!configDiff.toString().isEmpty()) {
         throw GradleException("The detekt documentation is not up-to-date. " +
-                "Please build detekt locally to update it.")
+                "Please build detekt locally to update it and commit the changed files.")
     }
 }
 

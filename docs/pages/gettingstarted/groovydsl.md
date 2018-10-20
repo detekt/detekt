@@ -93,7 +93,7 @@ detekt {
     parallel = false                                      // Runs detekt in parallel. Can lead to speedups in larger projects. `false` by default.
     config = files("path/to/config.yml")                  // Define the detekt configuration(s) you want to use. Defaults to the default detekt configuration.
     baseline = file("path/to/baseline.xml")               // Specifying a baseline file. All findings stored in this file in subsequent runs of detekt.
-    filters = ''                                          // Regular expression of paths that should be excluded separated by `;`.
+    filters = ''                                          // Regular expression of paths that should be excluded separated by `;` or `,`.
     disableDefaultRuleSets = false                        // Disables all default detekt rulesets and will only run detekt with custom rules defined in `plugins`. `false` by default.
     plugins = "other/optional/ruleset.jar"                // Additional jar file containing custom detekt rules.
     debug = false                                         // Adds debug output during task execution. `false` by default.

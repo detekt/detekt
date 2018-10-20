@@ -41,6 +41,7 @@ tasks.withType<Test> {
 
 tasks.withType<Detekt> {
 	dependsOn("detekt-cli:assemble")
+	dependsOn("detekt-formatting:assemble")
 }
 
 val detektVersion: String by project
@@ -79,7 +80,6 @@ subprojects {
 				project.rootDir.resolve("reports/failfast.yml")
 		)
 		filters = ".*/resources/.*,.*/build/.*"
-		baseline = project.rootDir.resolve("reports/baseline.xml")
 
 		reports {
 			xml.enabled = true
@@ -220,7 +220,6 @@ subprojects {
 		}
 	}
 
-	val junitEngineVersion: String by project
 	val assertjVersion: String by project
 	val spekVersion: String by project
 	val kotlinTest by configurations.creating
@@ -229,13 +228,11 @@ subprojects {
 		implementation(kotlin("stdlib"))
 
 		detekt(project(":detekt-cli"))
+		detektPlugins(project(":detekt-formatting"))
 
-		kotlinTest(kotlin("test"))
-		kotlinTest("org.junit.jupiter:junit-jupiter-api:$junitEngineVersion")
 		kotlinTest("org.assertj:assertj-core:$assertjVersion")
 		kotlinTest("org.jetbrains.spek:spek-api:$spekVersion")
 		kotlinTest("org.jetbrains.spek:spek-subject-extension:$spekVersion")
-		kotlinTest("org.junit.jupiter:junit-jupiter-engine:$junitEngineVersion")
 	}
 
 	sourceSets["main"].java.srcDirs("src/main/kotlin")

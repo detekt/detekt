@@ -23,12 +23,14 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.NoTrailingSpaces
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoUnitReturn
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoUnusedImports
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoWildcardImports
+import io.gitlab.arturbosch.detekt.formatting.wrappers.PackageName
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ParameterListWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundColon
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundComma
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundCurly
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundKeyword
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundOperators
+import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundParens
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundRangeOperator
 import io.gitlab.arturbosch.detekt.formatting.wrappers.StringTemplate
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
@@ -62,12 +64,14 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
 			NoUnitReturn(config),
 			NoUnusedImports(config),
 			NoWildcardImports(config),
+			PackageName(config),
 			ParameterListWrapping(config),
 			SpacingAroundColon(config),
 			SpacingAroundComma(config),
 			SpacingAroundCurly(config),
 			SpacingAroundKeyword(config),
 			SpacingAroundOperators(config),
+			SpacingAroundParens(config),
 			SpacingAroundRangeOperator(config),
 			StringTemplate(config)
 	)

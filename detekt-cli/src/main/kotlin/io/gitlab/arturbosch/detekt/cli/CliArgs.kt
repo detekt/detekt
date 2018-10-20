@@ -19,7 +19,8 @@ class CliArgs : Args {
 	private var input: String? = null
 
 	@Parameter(names = ["--filters", "-f"],
-			description = "Path filters defined through regex with separator ';' or ',' (\".*test.*\").")
+			description = "Path filters defined through regex with separator ';' or ',' (\".*test.*\"). " +
+                    "These filters apply on relative paths from the project root.")
 	var filters: String? = null // Using a converter for List<PathFilter> resulted in a ClassCastException
 
 	@Parameter(names = ["--config", "-c"],
@@ -56,7 +57,10 @@ class CliArgs : Args {
 
 	@Parameter(names = ["--report", "-r"],
 			description = "Generates a report for given 'report-id' and stores it on given 'path'. " +
-					"Entry should consist of: [report-id:path-to-store-report]+")
+					"Entry should consist of: [report-id:path]. " +
+		   			"Available 'report-id' values: 'txt', 'xml', 'html'. " +
+		  			"These can also be used in combination with each other " +
+					"e.g. '-r txt:reports/detekt.txt -r xml:reports/detekt.xml'")
 	private var reports: List<String>? = null
 
 	@Parameter(names = ["--disable-default-rulesets", "-dd"],

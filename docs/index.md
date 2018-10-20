@@ -59,13 +59,15 @@ Then reference the config inside the defaultProfile-closure:
 To enable/disable detekt reports and to configure their output directories edit the `detekt { }` closure:
 ```kotlin
 detekt {
-    xml {
-        enabled = true
-        destination = file("path/to/destination.xml")
-    }
-    html {
-        enabled = true
-        destination = file("path/to/destination.html")
+    reports {
+        xml {
+            enabled = true
+            destination = file("path/to/destination.xml")
+        }
+        html {
+            enabled = true
+            destination = file("path/to/destination.html")
+        }
     }
 }
 ``` 
