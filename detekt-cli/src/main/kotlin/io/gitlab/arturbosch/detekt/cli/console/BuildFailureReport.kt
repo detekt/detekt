@@ -62,7 +62,7 @@ class BuildFailureReport : ConsoleReport() {
 	}
 
 	private fun extractRuleToRuleSetIdMap(detektion: Detektion): HashMap<String, String> {
-		return detektion.findings.mapValues { it.value.map { it.id }.toSet() }
+		return detektion.findings.mapValues { finding -> finding.value.map { it.id }.toSet() }
 				.map { map -> map.value.map { it to map.key }.toMap() }
 				.fold(HashMap()) { result, map -> result.putAll(map); result }
 	}
@@ -72,8 +72,8 @@ class BuildFailureReport : ConsoleReport() {
 		return weightsConfig.valueOrDefault(id,
 				if (key != null) weightsConfig.valueOrDefault(key, 1) else 1)
 	}
-}
 
-fun Int.reached(amount: Int): Boolean = !(this == 0 && amount == 0) && this != -1 && this <= amount
+	fun Int.reached(amount: Int): Boolean = !(this == 0 && amount == 0) && this != -1 && this <= amount
+}
 
 class BuildFailure(override val message: String?) : RuntimeException(message, null, true, false)
