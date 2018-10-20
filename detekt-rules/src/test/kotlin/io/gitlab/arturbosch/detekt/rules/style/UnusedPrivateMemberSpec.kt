@@ -603,4 +603,40 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 			assertThat(subject.lint(code)).isEmpty()
 		}
 	}
+
+	given("error messages") {
+		it("are specific for function parameters"){
+			val code = """
+				fun foo(unused: Int){}
+			"""
+
+			val lint = subject.lint(code)
+
+			assertThat(lint.first().message).startsWith("Function parameter")
+		}
+
+		it("are specific for local variables"){
+			val code = """
+				fun foo(){ val unused = 1 }
+			"""
+
+			val lint = subject.lint(code)
+
+			assertThat(lint.first().message).startsWith("Private property")
+		}
+
+		it("are specific for private functions"){
+			val code = """
+			class Test {
+				private fun unusedFunction(): Int {
+					return 5
+				}
+			}
+			"""
+
+			val lint = subject.lint(code)
+
+			assertThat(lint.first().message).startsWith("Private function")
+		}
+	}
 })
