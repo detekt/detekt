@@ -94,7 +94,7 @@ Lambda expressions are one of the core features of the language. They often incl
 code using only one parameter. In this cases Kotlin can supply the implicit `it` parameter
 to make code more concise. It fits most usecases, but when faced larger or nested chunks of code,
 you might want to add an explicit name for the parameter. Naming it just `it` is meaningless and only
-clutters the code.
+makes your code misleading, especially when dealing with nested functions.
 
 **Severity**: Style
 
@@ -108,6 +108,7 @@ foo.flatMapObservable { it -> Observable.fromIterable(it) }
 listOfPairs.map(::second).forEach { it ->
 it.execute()
 }
+collection.zipWithNext { it, next -> Pair(it, next) }
 ```
 
 #### Compliant Code:
@@ -116,7 +117,10 @@ it.execute()
 a?.let { it.plus(1) } // Much better to use implicit it
 foo.flatMapObservable(Observable::fromIterable) // Here we can have a method reference
 listOfPairs.map(::second).forEach { apiRequest -> // For multiline blocks better come up with meaningful name
-it.execute()
+apiRequest.execute()
+}
+collection.zipWithNext { prev, next -> // Why do one parameter was named appropriately, and other was not?
+Pair(prev, next)
 }
 ```
 
