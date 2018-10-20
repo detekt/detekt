@@ -34,7 +34,7 @@ import org.jetbrains.kotlin.psi.KtParameter
  */
 class ArrayPrimitive(config: Config = Config.empty) : Rule(config) {
 
-	private val regex = Regex("""^Array<(\w+)>$""")
+	private val regex = Regex("""Array<(\w+)>""")
 
 	override val issue = Issue("ArrayPrimitive",
 			Severity.Performance,
