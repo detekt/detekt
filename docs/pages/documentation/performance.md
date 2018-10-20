@@ -8,6 +8,30 @@ folder: documentation
 ---
 The performance rule set analyzes code for potential performance problems.
 
+### ArrayPrimitive
+
+Using Array<Primitive> leads to implicit boxing and performance hit. Prefer using Kotlin specialized Array
+Instances.
+
+As stated in the Kotlin [documention](https://kotlinlang.org/docs/reference/basic-types.html#arrays) Kotlin has
+specialized arrays to represent primitive types without boxing overhead, such as `IntArray`, `ByteArray` and so on.
+
+**Severity**: Performance
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+fun function(array: Array<Int>)
+```
+
+#### Compliant Code:
+
+```kotlin
+fun function(array: IntArray)
+```
+
 ### ForEachOnRange
 
 Using the forEach method on ranges has a heavy performance cost. Prefer using simple for loops.

@@ -352,6 +352,8 @@ naming:
 
 performance:
   active: true
+  ArrayPrimitive:
+    active: false
   ForEachOnRange:
     active: true
   SpreadOperator:
