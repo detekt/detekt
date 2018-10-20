@@ -30,7 +30,8 @@ import org.jetbrains.kotlin.psi.KtLambdaExpression
  * a?.let { it.plus(1) } // Much better to use implicit it
  * foo.flatMapObservable(Observable::fromIterable) // Here we can have a method reference
  * listOfPairs.map(::second).forEach { apiRequest -> // For multiline blocks better come up with meaningful name
- * 		it.execute()
+ * 		apiRequest.execute()
+ * }
  * collection.zipWithNext { prev, next -> // Why do one parameter was named appropriately, and other was not?
  * 		Pair(prev, next)
  * }
