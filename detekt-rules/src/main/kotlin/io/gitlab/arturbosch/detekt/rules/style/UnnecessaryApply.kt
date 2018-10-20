@@ -9,6 +9,10 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtDeclaration
+import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
+import org.jetbrains.kotlin.psi.KtValueArgument
+import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 
 /**
  * `apply` expressions are used frequently, but sometimes their usage should be replaced with
@@ -36,7 +40,8 @@ class UnnecessaryApply(config: Config) : Rule(config) {
 	override fun visitCallExpression(expression: KtCallExpression) {
 		super.visitCallExpression(expression)
 
-		if (!expression.isApplyExpr()) return
+		if (!expression.isApplyExpr() ||
+				expression.isInsideFunctionCall()) return
 
 		val lambdaExpr = expression.firstLambdaArg
 		val lambdaBody = lambdaExpr?.bodyExpression
@@ -49,6 +54,13 @@ class UnnecessaryApply(config: Config) : Rule(config) {
 		}
 	}
 }
+
+private fun KtCallExpression.isInsideFunctionCall(): Boolean =
+		(parent as? KtDotQualifiedExpression)
+				?.getParentOfType<KtValueArgument>(
+						true,
+						KtCallExpression::class.java, KtDeclaration::class.java
+				) != null
 
 private const val APPLY_LITERAL = "apply"
 

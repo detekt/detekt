@@ -56,7 +56,7 @@ class UnnecessaryApplySpec : SubjectSpek<UnnecessaryApply>({
 						toString()
 					})
 				}
-			""")).hasSize(1)
+			""")).isEmpty()
 		}
 
 		it("does not report applies with lambda body containing more than one statement") {
