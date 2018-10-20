@@ -42,19 +42,19 @@ class ExplicitItLambdaParameterSpec : SubjectSpek<ExplicitItLambdaParameter>({
 	}
 	given("some code using lambdas with (slightly) better style guidelines") {
 		on("multiple parameters one of which with name `it` declared explicitly") {
-			it("does not report when parameter types are not declared") {
+			it("reports when parameter types are not declared") {
 				val findings = subject.lint("""
 				fun f() {
 					val flat = listOf(listOf(1), listOf(2)).mapIndexed { index, it -> it + index }
 				}""")
-				assertThat(findings).isEmpty()
+				assertThat(findings).hasSize(1)
 			}
-			it("does not report when parameter types are declared explicitly"){
+			it("reports when parameter types are declared explicitly"){
 				val findings = subject.lint("""
 				fun f() {
 					val lambda = { it: Int, that: String -> it.toString() + that }
 				}""")
-				assertThat(findings).isEmpty()
+				assertThat(findings).hasSize(1)
 			}
 		}
 	}

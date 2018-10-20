@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.psi.KtLambdaExpression
  * code using only one parameter. In this cases Kotlin can supply the implicit `it` parameter
  * to make code more concise. It fits most usecases, but when faced larger or nested chunks of code,
  * you might want to add an explicit name for the parameter. Naming it just `it` is meaningless and only
- * clutters the code.
+ * makes your code misleading, especially when dealing with nested functions.
  *
  * <noncompliant>
  * a?.let { it -> it.plus(1) }
@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.psi.KtLambdaExpression
  * listOfPairs.map(::second).forEach { it ->
  * 		it.execute()
  * }
+ * collection.zipWithNext { it, next -> Pair(it, next) }
  * </noncompliant>
  *
  * <compliant>
@@ -30,6 +31,8 @@ import org.jetbrains.kotlin.psi.KtLambdaExpression
  * foo.flatMapObservable(Observable::fromIterable) // Here we can have a method reference
  * listOfPairs.map(::second).forEach { apiRequest -> // For multiline blocks better come up with meaningful name
  * 		it.execute()
+ * collection.zipWithNext { prev, next -> // Why do one parameter was named appropriately, and other was not?
+ * 		Pair(prev, next)
  * }
  * </compliant>
  *
@@ -41,12 +44,8 @@ class ExplicitItLambdaParameter(val config: Config) : Rule(config) {
 
 	override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
 		super.visitLambdaExpression(lambdaExpression)
-
-		val isSingleParameterLambda = lambdaExpression.valueParameters.size == 1
-		if (!isSingleParameterLambda) return
-
-		val singleParameter = lambdaExpression.valueParameters.first()
-		if (singleParameter.name == IT_LITERAL) {
+		val parameterNames = lambdaExpression.valueParameters.map { it.name }
+		if (IT_LITERAL in parameterNames) {
 			report(CodeSmell(
 					issue, Entity.from(lambdaExpression),
 					"explicit `it` parameter declaration can be omitted"
