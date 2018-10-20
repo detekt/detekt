@@ -46,10 +46,10 @@ class ArrayPrimitiveSpec : SubjectSpek<ArrayPrimitive>({
 			assertThat(subject.findings.size).isEqualTo(1)
 		}
 
-		it("is an array of an array of a non-primitive type") {
-			val code = "fun function(array: Array<Array<String>>) {}"
+		it("is a dictionary with an array of a primitive type as key") {
+			val code = "fun function(dict: Dictionary<Int, Array<Int>>) {}"
 			subject.lint(code)
-			assertThat(subject.findings.size).isZero()
+			assertThat(subject.findings.size).isEqualTo(1)
 		}
 	}
 
