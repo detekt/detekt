@@ -20,7 +20,7 @@ class MethodOverloadingSpec : SubjectSpek<MethodOverloading>({
 		}
 
 		it("reports the correct method name") {
-			val expected = "The method 'overloadedMethod' is overloaded too many times."
+			val expected = "The method 'overloadedMethod' is overloaded 3 times."
 			assertThat(findings[0].message).isEqualTo(expected)
 		}
 

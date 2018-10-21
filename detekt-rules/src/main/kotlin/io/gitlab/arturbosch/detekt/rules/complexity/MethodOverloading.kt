@@ -58,7 +58,7 @@ class MethodOverloading(config: Config = Config.empty,
 				report(ThresholdedCodeSmell(issue,
 						Entity.from(element),
 						Metric("OVERLOAD SIZE: ", it.value, threshold),
-						message = "The method '${it.key}' is overloaded too many times."))
+						message = "The method '${it.key}' is overloaded ${it.value} times."))
 			}
 		}
 
