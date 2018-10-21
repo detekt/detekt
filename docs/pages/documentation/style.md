@@ -116,10 +116,10 @@ collection.zipWithNext { it, next -> Pair(it, next) }
 ```kotlin
 a?.let { it.plus(1) } // Much better to use implicit it
 foo.flatMapObservable(Observable::fromIterable) // Here we can have a method reference
-listOfPairs.map(::second).forEach { apiRequest -> // For multiline blocks better come up with meaningful name
+listOfPairs.map(::second).forEach { apiRequest -> // For multiline blocks it is usually better come up with a clear and more meaningful name
 apiRequest.execute()
 }
-collection.zipWithNext { prev, next -> // Why do one parameter was named appropriately, and other was not?
+collection.zipWithNext { prev, next -> // Lambdas with multiple parameter should be named clearly, using it for one of them can be confusing
 Pair(prev, next)
 }
 ```
