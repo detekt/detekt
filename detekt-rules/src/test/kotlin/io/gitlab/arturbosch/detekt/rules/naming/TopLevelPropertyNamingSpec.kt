@@ -50,11 +50,18 @@ class TopLevelPropertyNamingSpec : SubjectSpek<TopLevelPropertyNaming>({
 			assertThat(subject.lint(code)).hasSize(0)
 		}
 
-		it("should report non private property using underscore") {
+		it("should report non private top level property using underscore") {
 			val code = compileContentForTest("""
 				val _nAme = "Artur"
 			""")
 			assertThat(subject.lint(code)).hasSize(1)
+		}
+
+		it("should report private top level property using two underscores") {
+			val code = compileContentForTest("""
+				private val __NAME = "Artur"
+			""")
+			io.gitlab.arturbosch.detekt.test.assertThat(subject.lint(code)).hasSize(1)
 		}
 	}
 })

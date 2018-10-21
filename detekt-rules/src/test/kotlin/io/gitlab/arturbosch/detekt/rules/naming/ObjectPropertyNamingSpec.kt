@@ -91,10 +91,19 @@ class ObjectPropertyNamingSpec : SubjectSpek<ObjectPropertyNaming>({
 			assertThat(subject.lint(code)).isEmpty()
 		}
 
-		it("should detect constants not complying to the naming rules") {
+		it("should detect public constants not complying to the naming rules") {
 			val code = compileContentForTest("""
 				object O {
 					val _nAme = "Artur"
+				}
+			""")
+			assertThat(subject.lint(code)).hasSize(1)
+		}
+
+		it("should detect private constants not complying to the naming rules") {
+			val code = compileContentForTest("""
+				object O {
+					private val __NAME = "Artur"
 				}
 			""")
 			assertThat(subject.lint(code)).hasSize(1)
