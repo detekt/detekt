@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.ConsoleReport
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.cli.baseline.BaselineFacade
+import io.gitlab.arturbosch.detekt.cli.console.BuildFailureReport
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 
 /**
@@ -32,6 +33,7 @@ class OutputFacade(arguments: CliArgs,
 
 		val reports = ReportLocator(settings)
 				.load()
+				.filterNot { createBaseline && it is BuildFailureReport }
 				.sortedBy { it.priority }
 				.asReversed()
 
