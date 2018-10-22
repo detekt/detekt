@@ -7,6 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.IT_LITERAL
+import io.gitlab.arturbosch.detekt.rules.LET_LITERAL
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
@@ -67,9 +69,6 @@ class UnnecessaryLet(config: Config) : Rule(config) {
 		}
 	}
 }
-
-private const val LET_LITERAL = "let"
-private const val IT_LITERAL = "it"
 
 private fun KtCallExpression.isLetExpr() = calleeExpression?.textMatches(LET_LITERAL) == true
 
