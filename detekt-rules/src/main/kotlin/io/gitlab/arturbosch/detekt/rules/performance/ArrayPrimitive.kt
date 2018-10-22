@@ -38,8 +38,6 @@ import org.jetbrains.kotlin.psi.KtTypeReference
  */
 class ArrayPrimitive(config: Config = Config.empty) : Rule(config) {
 
-	private val regex = Regex("""Array<(\w+)>""")
-
 	override val issue = Issue("ArrayPrimitive",
 			Severity.Performance,
 			"Using Array<Primitive> leads to implicit boxing and a performance hit",
