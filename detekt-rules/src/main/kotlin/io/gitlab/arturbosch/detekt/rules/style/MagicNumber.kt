@@ -61,7 +61,7 @@ import java.util.Locale
  * }
  * </compliant>
  *
- * @configuration ignoreNumbers - numbers which do not count as magic numbers (default: '-1,0,1,2')
+ * @configuration ignoreNumbers - numbers which do not count as magic numbers (default: '-1,0,1,2,300')
  * @configuration ignoreHashCodeFunction - whether magic numbers in hashCode functions should be ignored
  * (default: true)
  * @configuration ignorePropertyDeclaration - whether magic numbers in property declarations should be ignored
@@ -87,7 +87,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 					"It's better to declare such numbers as constants and give them a proper name. " +
 					"By default, -1, 0, 1, and 2 are not considered to be magic numbers.", Debt.TEN_MINS)
 
-	private val ignoredNumbers = valueOrDefault(IGNORE_NUMBERS, "-1,0,1,2")
+	private val ignoredNumbers = valueOrDefault(IGNORE_NUMBERS, "-1,0,1,2,300")
 			.splitToSequence(",")
 			.filterNot { it.isEmpty() }
 			.map { parseAsDouble(it) }

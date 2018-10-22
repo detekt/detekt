@@ -264,7 +264,7 @@ describing what the magic number means.
 
 #### Configuration options:
 
-* `ignoreNumbers` (default: `'-1,0,1,2'`)
+* `ignoreNumbers` (default: `'-1,0,1,2,300'`)
 
    numbers which do not count as magic numbers
 

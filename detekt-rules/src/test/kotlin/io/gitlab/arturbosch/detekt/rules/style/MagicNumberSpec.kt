@@ -57,6 +57,15 @@ class MagicNumberSpec : Spek({
 		}
 	}
 
+	given("an integer of 300") {
+		val ktFile = compileContentForTest("val myInt = 300")
+
+		it("should not be reported by default") {
+			val findings = MagicNumber().lint(ktFile)
+			assertThat(findings).isEmpty()
+		}
+	}
+
 	given("a const integer of 1") {
 		val ktFile = compileContentForTest("const val MY_INT = 1")
 
@@ -193,16 +202,16 @@ class MagicNumberSpec : Spek({
 		}
 	}
 
-	given("an integer of 300") {
-		val ktFile = compileContentForTest("val myInt = 300")
+	given("an integer of 400") {
+		val ktFile = compileContentForTest("val myInt = 400")
 
-		it("should not be reported when ignoredNumbers contains 300") {
-			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "300"))).lint(ktFile)
+		it("should not be reported when ignoredNumbers contains 400") {
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "400"))).lint(ktFile)
 			assertThat(findings).isEmpty()
 		}
 
-		it("should not be reported when ignoredNumbers contains a floating point 300") {
-			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "300.0"))).lint(ktFile)
+		it("should not be reported when ignoredNumbers contains a floating point 400") {
+			val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "400.0"))).lint(ktFile)
 			assertThat(findings).isEmpty()
 		}
 	}
