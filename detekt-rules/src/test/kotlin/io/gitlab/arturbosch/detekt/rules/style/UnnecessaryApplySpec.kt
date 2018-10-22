@@ -11,12 +11,12 @@ class UnnecessaryApplySpec : SubjectSpek<UnnecessaryApply>({
 
 	subject { UnnecessaryApply(Config.empty) }
 
-	given("unnecessary applies that can be changed to ordinary method call") {
+	given("unnecessary apply expressions that can be changed to ordinary method call") {
 
 		it("reports an apply on non-nullable type") {
 			assertThat(subject.lint("""
 				fun f() {
-					val a : Int? = null
+					val a : Int = 0
 					a.apply {
 						plus(1)
 					}
