@@ -122,4 +122,48 @@ class VarCouldBeValSpec : SubjectSpek<VarCouldBeVal>({
 			}
 		}
 	}
+
+	given("this-prefixed properties - #1257") {
+
+		it("finds unused field and local") {
+			val code = """
+				fun createObject() = object {
+					private var myVar: String? = null
+					fun assign(value: String?) {
+						var myVar = value
+					}
+				}
+			""".trimIndent()
+			assertThat(subject.lint(code)).hasSize(2)
+		}
+
+		it("should not report this-prefixed property") {
+			val code = """
+				fun createObject() = object {
+					private var myVar: String? = null
+					fun assign(value: String?) {
+						this.myVar = value
+					}
+				}
+			""".trimIndent()
+			assertThat(subject.lint(code)).isEmpty()
+		}
+
+		it("should report unused local variable") {
+			val code = """
+				fun createObject() = object {
+					private var myVar: String? = null
+					fun assign(value: String?) {
+						var myVar = value
+						this.myVar = value
+					}
+				}
+			""".trimIndent()
+			with(subject.lint(code)[0]) {
+				// we accept wrong entity reporting here due to no symbol solving
+				// false reporting with shadowed vars vs false positives
+				assertThat(entity.ktElement?.text).isEqualTo("private var myVar: String? = null")
+			}
+		}
+	}
 })
