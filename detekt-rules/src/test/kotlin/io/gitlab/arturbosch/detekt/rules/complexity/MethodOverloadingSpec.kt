@@ -13,9 +13,15 @@ class MethodOverloadingSpec : SubjectSpek<MethodOverloading>({
 
 	given("several overloaded methods") {
 
+		val findings = subject.lint(Case.OverloadedMethods.path())
+
 		it("reports overloaded methods which exceed the threshold") {
-			subject.lint(Case.OverloadedMethods.path())
-			assertThat(subject.findings.size).isEqualTo(3)
+			assertThat(findings.size).isEqualTo(3)
+		}
+
+		it("reports the correct method name") {
+			val expected = "The method 'overloadedMethod' is overloaded 3 times."
+			assertThat(findings[0].message).isEqualTo(expected)
 		}
 
 		it("does not report overloaded methods which do not exceed the threshold") {
@@ -26,6 +32,9 @@ class MethodOverloadingSpec : SubjectSpek<MethodOverloading>({
 				}""")
 			assertThat(subject.findings.size).isZero()
 		}
+	}
+
+	given("several overloaded extensions functions") {
 
 		it("does not report extension methods with a different receiver") {
 			subject.lint("""
