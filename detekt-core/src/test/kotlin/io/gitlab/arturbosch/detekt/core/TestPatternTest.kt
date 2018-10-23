@@ -1,8 +1,7 @@
 package io.gitlab.arturbosch.detekt.core
 
-import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.test.yamlConfig
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
@@ -14,29 +13,59 @@ import java.nio.file.Paths
  */
 class TestPatternTest : Spek({
 
-	given("a bunch of paths") {
-		val pathContent = """
-			a/b/c/test/abcTest.kt,
-			a/b/c/test/adeTest.kt,
-			a/b/c/test/afgTest.kt,
-			a/b/c/d/ab.kt,
-			a/b/c/d/bb.kt,
-			a/b/c/d/cb.kt
-		"""
+	given("a test pattern for paths") {
 
-		val paths = SplitPattern(pathContent).mapAll { Paths.get(it) }
+		fun splitSources(pattern: TestPattern, path: Path): Pair<List<Path>, List<Path>> =
+				listOf(path).partition { pattern.matches(it.toString()) }
 
-		fun splitSources(pattern: TestPattern, paths: List<Path>): Pair<List<Path>, List<Path>> =
-				paths.partition { pattern.matches(it.toString()) }
+		val defaultPattern = createTestPattern(yamlConfig("patterns/test-pattern.yml"))
 
-		fun preparePattern() = createTestPattern(yamlConfig("patterns/test-pattern.yml"))
+		it("should identify a kt file in test path as test source with test as the first directory") {
+			val path = "./test/SomeFile.kt"
+			val (testSources, mainSources) = splitSources(defaultPattern, Paths.get(path))
 
-		it("should split the given paths to main and test sources") {
-			val pattern = preparePattern()
-			val (testSources, mainSources) = splitSources(pattern, paths)
+			assertThat(testSources).allMatch { it.toString().endsWith(path.toFile()) }
+			assertThat(testSources).isNotEmpty()
+			assertThat(mainSources).isEmpty()
+		}
 
-			Assertions.assertThat(testSources).allMatch { it.toString().endsWith("Test.kt") }
-			Assertions.assertThat(mainSources).allMatch { it.toString().endsWith("b.kt") }
+		it("should identify a kt file in test path as test source") {
+			val path = "./path/test/SomeFile.kt"
+			val (testSources, mainSources) = splitSources(defaultPattern, Paths.get(path))
+
+			assertThat(testSources).allMatch { it.toString().endsWith(path.toFile()) }
+			assertThat(testSources).isNotEmpty()
+			assertThat(mainSources).isEmpty()
+		}
+
+		it("should identify kt Test file as test source") {
+			val path = "./some/path/abcTest.kt"
+			val (testSources, mainSources) = splitSources(defaultPattern, Paths.get(path))
+
+			assertThat(testSources).allMatch { it.toString().endsWith(path.toFile()) }
+			assertThat(testSources).isNotEmpty()
+			assertThat(mainSources).isEmpty()
+		}
+
+		it("should not identify kt files in an absolute path containing test as test source") {
+			val pattern = createTestPattern(yamlConfig("patterns/test-pattern.yml"), Paths.get("/path/test/detekt"))
+			val path = "./some/path/SomeFile.kt"
+			val (testSources, mainSources) = splitSources(pattern, Paths.get(path))
+
+			assertThat(testSources).isEmpty()
+			assertThat(mainSources).allMatch { it.toString().endsWith(path.toFile()) }
+			assertThat(mainSources).isNotEmpty()
+		}
+
+		it("should not identify a non-test kt file as test source") {
+			val path = "./some/path/abc.kt"
+			val (testSources, mainSources) = splitSources(defaultPattern, Paths.get(path))
+
+			assertThat(testSources).isEmpty()
+			assertThat(mainSources).allMatch { it.toString().endsWith(path.toFile()) }
+			assertThat(mainSources).isNotEmpty()
 		}
 	}
 })
+
+private fun String.toFile() = this.split('/').last()
