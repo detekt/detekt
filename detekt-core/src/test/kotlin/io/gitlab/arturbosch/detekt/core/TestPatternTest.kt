@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.core
 
-import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.Spek
@@ -25,7 +24,7 @@ class TestPatternTest : Spek({
 			val path = "./test/SomeFile.kt"
 			val (testSources, mainSources) = splitSources(defaultPattern, Paths.get(path))
 
-			assertThat(testSources).allMatch { it.toString().endsWith(path) }
+			assertThat(testSources).allMatch { it.toString().endsWith(path.toFile()) }
 			assertThat(testSources).isNotEmpty()
 			assertThat(mainSources).isEmpty()
 		}
@@ -34,7 +33,7 @@ class TestPatternTest : Spek({
 			val path = "./path/test/SomeFile.kt"
 			val (testSources, mainSources) = splitSources(defaultPattern, Paths.get(path))
 
-			assertThat(testSources).allMatch { it.toString().endsWith(path) }
+			assertThat(testSources).allMatch { it.toString().endsWith(path.toFile()) }
 			assertThat(testSources).isNotEmpty()
 			assertThat(mainSources).isEmpty()
 		}
@@ -43,7 +42,7 @@ class TestPatternTest : Spek({
 			val path = "./some/path/abcTest.kt"
 			val (testSources, mainSources) = splitSources(defaultPattern, Paths.get(path))
 
-			assertThat(testSources).allMatch { it.toString().endsWith(path) }
+			assertThat(testSources).allMatch { it.toString().endsWith(path.toFile()) }
 			assertThat(testSources).isNotEmpty()
 			assertThat(mainSources).isEmpty()
 		}
@@ -54,7 +53,7 @@ class TestPatternTest : Spek({
 			val (testSources, mainSources) = splitSources(pattern, Paths.get(path))
 
 			assertThat(testSources).isEmpty()
-			assertThat(mainSources).allMatch { it.toString().endsWith(path) }
+			assertThat(mainSources).allMatch { it.toString().endsWith(path.toFile()) }
 			assertThat(mainSources).isNotEmpty()
 		}
 
@@ -63,8 +62,10 @@ class TestPatternTest : Spek({
 			val (testSources, mainSources) = splitSources(defaultPattern, Paths.get(path))
 
 			assertThat(testSources).isEmpty()
-			assertThat(mainSources).allMatch { it.toString().endsWith(path) }
+			assertThat(mainSources).allMatch { it.toString().endsWith(path.toFile()) }
 			assertThat(mainSources).isNotEmpty()
 		}
 	}
 })
+
+private fun String.toFile() = this.split('/').last()
