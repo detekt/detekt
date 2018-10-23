@@ -92,6 +92,8 @@ potential-bugs:
 style:
   CollapsibleIfStatements:
     active: true
+  MaxLineLength:
+    excludeCommentStatements: true
   MagicNumber:
     ignoreHashCodeFunction: true
     ignorePropertyDeclaration: true
