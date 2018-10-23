@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <Blacklist timestamp="1540322472112"></Blacklist>
+  <Whitelist timestamp="1540322472112">
+    <ID>TooManyFunctions:LargeClass.kt$LargeClass : ThresholdRule</ID>
+    <ID>TooManyFunctions:UnusedPrivateMember.kt$UnusedPrivateMember : Rule</ID>
+  </Whitelist>
+</SmellBaseline>
