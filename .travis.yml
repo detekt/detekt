@@ -1,8 +1,9 @@
 language: java
 jdk:
-  - oraclejdk8
-  - oraclejdk9
+  - openjdk8
+  - openjdk9
   - openjdk10
+  - openjdk11
 script:
   - ./gradlew build -PwarningsAsErrors=true
   - ./gradlew shadowJar
