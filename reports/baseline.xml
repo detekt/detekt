@@ -1,7 +1,9 @@
 <?xml version="1.0" ?>
 <SmellBaseline>
   <Blacklist timestamp="1540322472112"></Blacklist>
-  <Whitelist timestamp="1540322472112">
+  <Whitelist timestamp="1540358366748">
+    <ID>LargeClass:MagicNumberSpec.kt$MagicNumberSpec : Spek</ID>
+    <ID>LargeClass:UnusedPrivateMemberSpec.kt$UnusedPrivateMemberSpec : SubjectSpek</ID>
     <ID>TooManyFunctions:LargeClass.kt$LargeClass : ThresholdRule</ID>
     <ID>TooManyFunctions:UnusedPrivateMember.kt$UnusedPrivateMember : Rule</ID>
   </Whitelist>
