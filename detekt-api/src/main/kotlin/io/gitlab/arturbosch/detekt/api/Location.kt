@@ -26,7 +26,7 @@ data class Location(val source: SourceLocation,
 			val start = startLineAndColumn(element, offset)
 			val sourceLocation = SourceLocation(start.line, start.column)
 			val textLocation = TextLocation(element.startOffset + offset, element.endOffset + offset)
-			val fileName = element.originalFilePath() ?: element.containingFile.name
+			val fileName = element.originalFilePath()
 			val locationText = element.getTextAtLocationSafe()
 			return Location(sourceLocation, textLocation, locationText, fileName)
 		}
@@ -44,7 +44,8 @@ data class Location(val source: SourceLocation,
 		}
 
 		private fun PsiElement.originalFilePath() =
-				(this.containingFile.viewProvider.virtualFile as LightVirtualFile).originalFile?.name
+				(containingFile.viewProvider.virtualFile as? LightVirtualFile)?.originalFile?.name
+						?: containingFile.name
 
 		private fun PsiElement.getTextAtLocationSafe() =
 				getTextSafe({ searchName() }, { getTextWithLocation() })

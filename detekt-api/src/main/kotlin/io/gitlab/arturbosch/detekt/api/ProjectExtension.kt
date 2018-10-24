@@ -32,7 +32,8 @@ private fun createKotlinCoreEnvironment(): Project {
 			PrintingMessageCollector(System.err, MessageRenderer.PLAIN_FULL_PATHS, false))
 	return KotlinCoreEnvironment.createForProduction(Disposer.newDisposable(),
 			configuration, EnvironmentConfigFiles.JVM_CONFIG_FILES).project.apply {
-		makeMutable(this as MockProject)
+		makeMutable(this as? MockProject ?: throw IllegalStateException(
+				"Unexpected Type for psi project. MockProject expected. Please report this!"))
 	}
 }
 
@@ -41,7 +42,7 @@ private fun makeMutable(project: MockProject) {
 	val pomModel: PomModel = object : UserDataHolderBase(), PomModel {
 
 		override fun runTransaction(transaction: PomTransaction) {
-			(transaction as PomTransactionBase).run()
+			(transaction as? PomTransactionBase)?.run()
 		}
 
 		@Suppress("UNCHECKED_CAST")

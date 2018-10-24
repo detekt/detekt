@@ -13,6 +13,7 @@ inline fun <reified T : Args> parseArguments(args: Array<String>): Pair<T, JComm
 	jCommander.programName = "detekt"
 
 	try {
+		@Suppress("SpreadOperator")
 		jCommander.parse(*args)
 	} catch (ex: ParameterException) {
 		val message = ex.message

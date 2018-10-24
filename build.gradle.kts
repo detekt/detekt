@@ -80,6 +80,7 @@ subprojects {
 				project.rootDir.resolve("reports/failfast.yml")
 		)
 		filters = ".*/resources/.*,.*/build/.*"
+		baseline = project.rootDir.resolve("reports/baseline.xml")
 
 		reports {
 			xml.enabled = true
