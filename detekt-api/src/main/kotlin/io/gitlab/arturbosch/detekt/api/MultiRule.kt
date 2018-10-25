@@ -17,7 +17,10 @@ abstract class MultiRule : BaseRule() {
 	}
 
 	override fun postVisit(root: KtFile) {
-		report(activeRules.flatMap { it.findings })
+		for (activeRule in activeRules) {
+			// TODO do not actually need a suppression again
+			report(activeRule.findings, activeRule.aliases)
+		}
 	}
 
 	fun <T : Rule> T.runIfActive(block: T.() -> Unit) {

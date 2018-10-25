@@ -6,8 +6,8 @@ package io.gitlab.arturbosch.detekt.api
  */
 interface Context {
 	val findings: List<Finding>
-	fun report(finding: Finding)
-	fun report(findings: List<Finding>)
+	fun report(finding: Finding, aliases: Set<String> = emptySet())
+	fun report(findings: List<Finding>, aliases: Set<String> = emptySet())
 	fun clearFindings()
 }
 
@@ -27,9 +27,9 @@ open class DefaultContext : Context {
 	 * Before adding a finding, it is checked if it is not suppressed
 	 * by @Suppress or @SuppressWarnings annotations.
 	 */
-	override fun report(finding: Finding) {
+	override fun report(finding: Finding, aliases: Set<String>) {
 		val ktElement = finding.entity.ktElement
-		if (ktElement == null || !ktElement.isSuppressedBy(finding.id, finding.issue.aliases)) {
+		if (ktElement == null || !ktElement.isSuppressedBy(finding.id, finding.issue.aliases + aliases)) {
 			_findings.add(finding)
 		}
 	}
@@ -40,8 +40,8 @@ open class DefaultContext : Context {
 	 * Before adding a finding, it is checked if it is not suppressed
 	 * by @Suppress or @SuppressWarnings annotations.
 	 */
-	override fun report(findings: List<Finding>) {
-		findings.forEach { report(it) }
+	override fun report(findings: List<Finding>, aliases: Set<String>) {
+		findings.forEach { report(it, aliases) }
 	}
 
 	final override fun clearFindings() {

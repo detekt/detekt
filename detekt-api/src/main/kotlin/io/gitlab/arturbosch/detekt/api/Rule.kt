@@ -18,8 +18,29 @@ abstract class Rule(override val ruleSetConfig: Config = Config.empty,
 					ruleContext: Context = DefaultContext()) :
 		BaseRule(ruleContext), ConfigAware {
 
+	/**
+	 * A rule is motivated to point out a specific issue in the code base.
+	 */
 	abstract val issue: Issue
+
+	/**
+	 * An id this rule is identified with.
+	 * Conventionally the rule id is derived from the issue id as these two classes have a coexistence.
+	 */
 	final override val ruleId: RuleId get() = issue.id
 
-	override fun visitCondition(root: KtFile) = active && !root.isSuppressedBy(ruleId, issue.aliases)
+	/**
+	 * List of rule ids which can optionally be used in suppress annotations to refer to this rule.
+	 */
+	val aliases get() = valueOrDefault("aliases", emptySet<String>())
+
+	override fun visitCondition(root: KtFile) = active && !root.isSuppressedBy(ruleId, issue.aliases + aliases)
+
+	fun report(finding: Finding) {
+		report(finding, aliases)
+	}
+
+	fun report(findings: List<Finding>) {
+		report(findings, aliases)
+	}
 }
