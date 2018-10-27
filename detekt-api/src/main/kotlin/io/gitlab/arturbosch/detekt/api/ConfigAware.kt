@@ -22,7 +22,7 @@ interface ConfigAware : Config {
 	/**
 	 * Id which is used to retrieve the sub config for the rule implementing this interface.
 	 */
-	val ruleId: String
+	val ruleId: RuleId
 
 	/**
 	 * Wrapped configuration of the ruleSet this rule is in.

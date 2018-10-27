@@ -2,10 +2,12 @@ package io.gitlab.arturbosch.detekt.api
 
 import org.jetbrains.kotlin.psi.KtFile
 
+typealias RuleId = String
+
 @Suppress("EmptyFunctionBlock")
 abstract class BaseRule(protected val context: Context = DefaultContext()) : DetektVisitor(), Context by context {
 
-	open val ruleId: String = javaClass.simpleName
+	open val ruleId: RuleId = javaClass.simpleName
 
 	/**
 	 * Before starting visiting kotlin elements, a check is performed if this rule should be triggered.

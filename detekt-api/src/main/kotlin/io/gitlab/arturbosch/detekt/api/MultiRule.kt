@@ -6,7 +6,7 @@ abstract class MultiRule : BaseRule() {
 
 	abstract val rules: List<Rule>
 	var activeRules: Set<Rule> by SingleAssign()
-	var ruleFilters: Set<String> = emptySet()
+	var ruleFilters: Set<RuleId> = emptySet()
 
 	override fun visitCondition(root: KtFile) = true
 

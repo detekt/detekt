@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.core
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.RuleId
 import io.gitlab.arturbosch.detekt.core.TestPattern.Companion.TEST_PATTERN_SUB_CONFIG
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
@@ -15,7 +16,7 @@ fun createTestPattern(config: Config,
 	return with(config.subConfig(TEST_PATTERN_SUB_CONFIG)) {
 		TestPattern(valueOrDefault(TestPattern.ACTIVE, false),
 				valueOrDefault(TestPattern.PATTERNS, TestPattern.DEFAULT_PATTERNS).toSet(),
-				valueOrDefault(TestPattern.EXCLUDE_RULES, emptyList<String>()).toSet(),
+				valueOrDefault(TestPattern.EXCLUDE_RULES, emptyList<RuleId>()).toSet(),
 				valueOrDefault(TestPattern.EXCLUDE_RULE_SETS, emptyList<String>()).toSet(),
 				root)
 	}
@@ -23,7 +24,7 @@ fun createTestPattern(config: Config,
 
 data class TestPattern(val active: Boolean,
 					   val patterns: Set<String>,
-					   val excludingRules: Set<String>,
+					   val excludingRules: Set<RuleId>,
 					   private val excludingRuleSets: Set<String>,
 					   private val root: Path) {
 
