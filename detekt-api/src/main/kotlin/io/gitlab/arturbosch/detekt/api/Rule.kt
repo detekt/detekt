@@ -35,7 +35,12 @@ abstract class Rule(override val ruleSetConfig: Config = Config.empty,
 	val aliases get() = valueOrDefault("aliases", defaultRuleIdAliases)
 
 	/**
-	 * The default names which can be used instead of this #ruleId to refer to this rule in suppressions.
+	 * The default names which can be used instead of this #ruleId to refer to this rule in suppression's.
+	 *
+	 * When overriding this property make sure to meet following structure for detekt-generator to pick
+	 * it up and generate documentation for aliases:
+	 *
+	 * 		override val defaultRuleIdAliases = setOf("Name1", "Name2")
 	 */
 	open val defaultRuleIdAliases = emptySet<String>()
 

@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
+import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidAliasesDeclaration
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidCodeExampleDocumentationException
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidIssueDeclaration
@@ -229,11 +230,12 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				 */
 				class $name: Rule {
 
+					override val defaultRuleIdAliases = setOf("RULE", "RULE2")
+
 					override val issue = Issue(javaClass.simpleName,
 							Severity.Style,
 							"",
-							debt = Debt.TEN_MINS,
-							aliases = setOf("RULE", "RULE2"))
+							debt = Debt.TEN_MINS)
 				}
 			"""
 			val items = subject.run(code)
@@ -411,7 +413,7 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 					.isThrownBy { subject.run(code) }
 		}
 
-		it("has wrong issue aliases property") {
+		it("has wrong aliases property structure") {
 			val name = "SomeRandomClass"
 			val description = "some description"
 			val code = """
@@ -423,14 +425,14 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				class $name: Rule {
 
 					val a = setOf("UNUSED_VARIABLE")
+					override val defaultRuleIdAliases = a
 					override val issue = Issue(javaClass.simpleName,
 							Severity.Style,
 							"",
-							debt = Debt.TEN_MINS,
-							aliases = a)
+							debt = Debt.TEN_MINS)
 				}
 			"""
-			assertThatExceptionOfType(InvalidIssueDeclaration::class.java)
+			assertThatExceptionOfType(InvalidAliasesDeclaration::class.java)
 					.isThrownBy { subject.run(code) }
 		}
 	}

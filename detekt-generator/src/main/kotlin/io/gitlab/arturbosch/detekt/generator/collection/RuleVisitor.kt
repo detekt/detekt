@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule
+import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidAliasesDeclaration
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidCodeExampleDocumentationException
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidIssueDeclaration
@@ -50,6 +51,7 @@ internal class RuleVisitor : DetektVisitor() {
 
 	override fun visitSuperTypeList(list: KtSuperTypeList) {
 		val isRule = list.entries
+				?.asSequence()
 				?.map { it.typeAsUserType?.referencedName }
 				?.any { ruleClasses.contains(it) } ?: false
 
@@ -58,7 +60,8 @@ internal class RuleVisitor : DetektVisitor() {
 		if (containingClass != null && className != null && !classesMap.containsKey(className)) {
 			classesMap[className] = isRule
 			parent = containingClass.getSuperNames().firstOrNull { ruleClasses.contains(it) } ?: ""
-			extractIssueDocumentation(containingClass)
+			extractIssueSeverityAndDebt(containingClass)
+			extractAliases(containingClass)
 		}
 		super.visitSuperTypeList(list)
 	}
@@ -117,40 +120,33 @@ internal class RuleVisitor : DetektVisitor() {
 		}
 	}
 
-	private fun extractIssueDocumentation(klass: KtClass) {
-		val issueProperty = klass.getProperties().singleOrNull { it.name == "issue" }
-		val initializer = issueProperty?.initializer as? KtCallExpression
+	private fun extractAliases(klass: KtClass) {
+		val initializer = klass.getProperties()
+				.singleOrNull { it.name == "defaultRuleIdAliases" }
+				?.initializer
 		if (initializer != null) {
-			val arguments = initializer.valueArguments
-			if (arguments.size >= ISSUE_ARGUMENT_SIZE) {
-				extractIssueSeverityAndDebt(arguments)
-				extractIssueAliases(arguments)
-			}
+			aliases = (initializer as? KtCallExpression
+					?: throw InvalidAliasesDeclaration())
+					.valueArguments
+					.joinToString(", ") { it.text.replace("\"", "") }
 		}
 	}
 
-	private fun extractIssueSeverityAndDebt(arguments: List<KtValueArgument>) {
-		severity = getArgument(arguments[1], "Severity")
-		val debtName = getArgument(arguments[DEBT_ARGUMENT_INDEX], "Debt")
-		val debtDeclarations = Debt::class.java.declaredFields.filter { Modifier.isStatic(it.modifiers) }
-		val debtDeclaration = debtDeclarations.singleOrNull { it.name == debtName }
-		if (debtDeclaration != null) {
-			debtDeclaration.isAccessible = true
-			debt = debtDeclaration.get(Debt::class.java).toString()
-		}
-	}
+	private fun extractIssueSeverityAndDebt(klass: KtClass) {
+		val arguments = (klass.getProperties()
+				.singleOrNull { it.name == "issue" }
+				?.initializer as? KtCallExpression)
+				?.valueArguments ?: emptyList()
 
-	private fun extractIssueAliases(arguments: List<KtValueArgument>) {
-		if (arguments.size > ISSUE_ARGUMENT_SIZE) {
-			val aliasArgument = arguments[arguments.size - 1].text
-			val index = aliasArgument.indexOf(SETOF)
-			if (index == -1) {
-				throw InvalidIssueDeclaration("aliases")
+		if (arguments.size >= ISSUE_ARGUMENT_SIZE) {
+			severity = getArgument(arguments[1], "Severity")
+			val debtName = getArgument(arguments[DEBT_ARGUMENT_INDEX], "Debt")
+			val debtDeclarations = Debt::class.java.declaredFields.filter { Modifier.isStatic(it.modifiers) }
+			val debtDeclaration = debtDeclarations.singleOrNull { it.name == debtName }
+			if (debtDeclaration != null) {
+				debtDeclaration.isAccessible = true
+				debt = debtDeclaration.get(Debt::class.java).toString()
 			}
-			val argumentString = aliasArgument.substring(index + SETOF.length, aliasArgument.length - 1)
-			aliases = argumentString
-					.split(',')
-					.joinToString(", ") { it.trim().replace("\"", "") }
 		}
 	}
 
