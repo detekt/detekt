@@ -32,9 +32,14 @@ abstract class Rule(override val ruleSetConfig: Config = Config.empty,
 	/**
 	 * List of rule ids which can optionally be used in suppress annotations to refer to this rule.
 	 */
-	val aliases get() = valueOrDefault("aliases", emptySet<String>())
+	val aliases get() = valueOrDefault("aliases", defaultRuleIdAliases)
 
-	override fun visitCondition(root: KtFile) = active && !root.isSuppressedBy(ruleId, issue.aliases + aliases)
+	/**
+	 * The default names which can be used instead of this #ruleId to refer to this rule in suppressions.
+	 */
+	open val defaultRuleIdAliases = emptySet<String>()
+
+	override fun visitCondition(root: KtFile) = active && !root.isSuppressedBy(ruleId, aliases)
 
 	fun report(finding: Finding) {
 		report(finding, aliases)

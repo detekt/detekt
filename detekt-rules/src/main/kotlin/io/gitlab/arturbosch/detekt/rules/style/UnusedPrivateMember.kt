@@ -50,11 +50,12 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 		const val ALLOWED_NAMES_PATTERN = "allowedNames"
 	}
 
+	override val defaultRuleIdAliases: Set<String> = setOf("UNUSED_VARIABLE")
+
 	override val issue: Issue = Issue("UnusedPrivateMember",
 			Severity.Maintainability,
 			"Private member is unused.",
-			Debt.FIVE_MINS,
-			aliases = setOf("UNUSED_VARIABLE"))
+			Debt.FIVE_MINS)
 
 	private val allowedNames by LazyRegex(ALLOWED_NAMES_PATTERN, "(_|ignored|expected|serialVersionUID)")
 

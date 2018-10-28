@@ -29,7 +29,7 @@ open class DefaultContext : Context {
 	 */
 	override fun report(finding: Finding, aliases: Set<String>) {
 		val ktElement = finding.entity.ktElement
-		if (ktElement == null || !ktElement.isSuppressedBy(finding.id, finding.issue.aliases + aliases)) {
+		if (ktElement == null || !ktElement.isSuppressedBy(finding.id, aliases)) {
 			_findings.add(finding)
 		}
 	}

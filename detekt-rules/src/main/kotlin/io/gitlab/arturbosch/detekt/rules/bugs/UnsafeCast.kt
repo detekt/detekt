@@ -29,11 +29,13 @@ import org.jetbrains.kotlin.psi.KtPsiUtil
  * @author Marvin Ramin
  */
 class UnsafeCast(config: Config = Config.empty) : Rule(config) {
+
+	override val defaultRuleIdAliases: Set<String> = setOf("UNCHECKED_CAST")
+
 	override val issue: Issue = Issue("UnsafeCast",
 			Severity.Defect,
 			"Cast operator throws an exception if the cast is not possible.",
-			Debt.TWENTY_MINS,
-			aliases = setOf("UNCHECKED_CAST"))
+			Debt.TWENTY_MINS)
 
 	override fun visitBinaryWithTypeRHSExpression(expression: KtBinaryExpressionWithTypeRHS) {
 		if (KtPsiUtil.isUnsafeCast(expression)) {
