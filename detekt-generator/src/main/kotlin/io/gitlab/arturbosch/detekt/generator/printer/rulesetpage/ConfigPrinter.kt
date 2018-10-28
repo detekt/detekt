@@ -88,6 +88,7 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 			    - 'SpreadOperator'
 			    - 'TooManyFunctions'
 			    - 'ForEachOnRange'
+			    - 'FunctionMaxLength'
 			""".trimIndent()
 	}
 
