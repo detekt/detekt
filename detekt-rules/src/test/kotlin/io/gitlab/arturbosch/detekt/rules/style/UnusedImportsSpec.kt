@@ -172,10 +172,8 @@ class UnusedImportsSpec : SubjectSpek<UnusedImports>({
 
 		it("should not report import as unused because the alias is used") {
 			val code = """
-				import ch.tutteli.kbox.forEachRemaining as foreachRemaining // otherwise we use jdk8
-				fun foo(){
-				   listOf().iterator().foreachRemaining{}
-				}
+				import test.forEach as foreach
+				fun foo() = listOf().iterator().foreach {}
 			"""
 			assertThat(subject.lint(code)).isEmpty()
 		}
