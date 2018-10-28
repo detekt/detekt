@@ -16,6 +16,7 @@ plugins {
 	id("org.sonarqube") version "2.6.2"
 	id("io.gitlab.arturbosch.detekt")
 	id("org.jetbrains.dokka") version "0.9.17"
+	jacoco
 }
 
 tasks.withType<Wrapper> {
@@ -68,6 +69,16 @@ subprojects {
 		plugin("maven-publish")
 		plugin("io.gitlab.arturbosch.detekt")
 		plugin("org.jetbrains.dokka")
+		plugin("jacoco")
+	}
+
+	val jacocoVersion: String by project
+	jacoco.toolVersion = jacocoVersion
+
+	tasks.getByName<JacocoReport>("jacocoTestReport") {
+		reports.xml.isEnabled = true
+		reports.html.isEnabled = true
+		dependsOn("test")
 	}
 
 	val userHome = System.getProperty("user.home")
