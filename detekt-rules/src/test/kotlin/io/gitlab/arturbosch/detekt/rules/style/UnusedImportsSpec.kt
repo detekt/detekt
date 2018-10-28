@@ -167,4 +167,15 @@ class UnusedImportsSpec : SubjectSpek<UnusedImports>({
 			assertThat(subject.lint(code)).isEmpty()
 		}
 	}
+
+	given("imports with aliases") {
+
+		it("should not report import as unused because the alias is used") {
+			val code = """
+				import test.forEach as foreach
+				fun foo() = listOf().iterator().foreach {}
+			"""
+			assertThat(subject.lint(code)).isEmpty()
+		}
+	}
 })
