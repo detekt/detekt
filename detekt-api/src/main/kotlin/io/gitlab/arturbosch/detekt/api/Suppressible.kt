@@ -38,7 +38,7 @@ private const val QUOTES = "\""
 /**
  * Checks if this kt element is suppressed by @Suppress or @SuppressWarnings annotations.
  */
-fun KtAnnotated.isSuppressedBy(id: String, aliases: Set<String>): Boolean {
+fun KtAnnotated.isSuppressedBy(id: RuleId, aliases: Set<String>): Boolean {
 	val valid = mutableSetOf(id, "ALL", "all", "All")
 	valid.addAll(aliases)
 	return annotationEntries.find { it.typeReference?.text.let { it == "Suppress" || it == "SuppressWarnings" } }

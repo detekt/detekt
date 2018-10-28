@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.core
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.toMergedMap
 import org.jetbrains.kotlin.psi.KtFile
@@ -20,7 +21,7 @@ class Detektor(settings: ProcessingSettings,
 	private val executor: ExecutorService = settings.executorService
 	private val logger = settings.errorPrinter
 
-	fun run(ktFiles: List<KtFile>): Map<String, List<Finding>> = withExecutor(executor) {
+	fun run(ktFiles: List<KtFile>): Map<RuleSetId, List<Finding>> = withExecutor(executor) {
 
 		val futures = ktFiles.map { file ->
 			runAsync {
@@ -37,7 +38,7 @@ class Detektor(settings: ProcessingSettings,
 			}
 		}
 
-		val result = HashMap<String, List<Finding>>()
+		val result = HashMap<RuleSetId, List<Finding>>()
 		for (map in awaitAll(futures)) {
 			result.mergeSmells(map)
 		}
@@ -45,7 +46,7 @@ class Detektor(settings: ProcessingSettings,
 		result
 	}
 
-	private fun KtFile.analyze(): Map<String, List<Finding>> {
+	private fun KtFile.analyze(): Map<RuleSetId, List<Finding>> {
 		var ruleSets = providers.asSequence()
 				.mapNotNull { it.buildRuleset(config) }
 				.sortedBy { it.id }

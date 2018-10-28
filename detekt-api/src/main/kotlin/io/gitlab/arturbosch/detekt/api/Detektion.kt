@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.com.intellij.openapi.util.Key
  * @author Artur Bosch
  */
 interface Detektion {
-	val findings: Map<String, List<Finding>>
+	val findings: Map<RuleSetId, List<Finding>>
 	val notifications: Collection<Notification>
 	val metrics: Collection<ProjectMetric>
 

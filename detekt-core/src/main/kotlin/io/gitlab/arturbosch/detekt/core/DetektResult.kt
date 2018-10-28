@@ -4,13 +4,14 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
+import io.gitlab.arturbosch.detekt.api.RuleSetId
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.com.intellij.util.keyFMap.KeyFMap
 
 /**
  * @author Artur Bosch
  */
-data class DetektResult(override val findings: Map<String, List<Finding>>) : Detektion {
+data class DetektResult(override val findings: Map<RuleSetId, List<Finding>>) : Detektion {
 
 	override val notifications: MutableCollection<Notification> = ArrayList()
 	private var userData = KeyFMap.EMPTY_MAP

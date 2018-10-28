@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.ConsoleReport
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.SingleAssign
 import java.util.HashMap
 
@@ -61,7 +62,7 @@ class BuildFailureReport : ConsoleReport() {
 		}
 	}
 
-	private fun extractRuleToRuleSetIdMap(detektion: Detektion): HashMap<String, String> {
+	private fun extractRuleToRuleSetIdMap(detektion: Detektion): HashMap<RuleSetId, String> {
 		return detektion.findings.mapValues { it.value.map(Finding::id).toSet() }
 				.map { map -> map.value.map { it to map.key }.toMap() }
 				.fold(HashMap()) { result, map -> result.putAll(map); result }
