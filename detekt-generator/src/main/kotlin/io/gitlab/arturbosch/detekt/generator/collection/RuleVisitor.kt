@@ -176,7 +176,6 @@ internal class RuleVisitor : DetektVisitor() {
 
 		private const val ISSUE_ARGUMENT_SIZE = 4
 		private const val DEBT_ARGUMENT_INDEX = 3
-		private const val SETOF = "setOf("
 	}
 }
 
