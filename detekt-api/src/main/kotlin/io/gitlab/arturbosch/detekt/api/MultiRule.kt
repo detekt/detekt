@@ -18,7 +18,6 @@ abstract class MultiRule : BaseRule() {
 
 	override fun postVisit(root: KtFile) {
 		for (activeRule in activeRules) {
-			// TODO do not actually need a suppression again
 			report(activeRule.findings, activeRule.aliases)
 		}
 	}
