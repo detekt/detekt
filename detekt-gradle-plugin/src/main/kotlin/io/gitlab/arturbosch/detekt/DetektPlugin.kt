@@ -27,16 +27,16 @@ class DetektPlugin : Plugin<Project> {
 
 	private fun createAndConfigureDetektTask(project: Project, extension: DetektExtension) {
 		val detektTask = project.tasks.register(DETEKT, Detekt::class.java) {
-			debugProp.set(project.provider { extension.debug })
-			parallelProp.set(project.provider { extension.parallel })
-			disableDefaultRuleSetsProp.set(project.provider { extension.disableDefaultRuleSets })
-			filters.set(project.provider { extension.filters })
-			config.setFrom(project.provider { extension.config })
-			baseline.set(project.layout.file(project.provider { extension.baseline }))
-			plugins.set(project.provider { extension.plugins })
-			input.setFrom(existingInputDirectoriesProvider(project, extension))
-			reportsDir.set(project.provider { extension.customReportsDir })
-			reports = extension.reports
+			it.debugProp.set(project.provider { extension.debug })
+			it.parallelProp.set(project.provider { extension.parallel })
+			it.disableDefaultRuleSetsProp.set(project.provider { extension.disableDefaultRuleSets })
+			it.filters.set(project.provider { extension.filters })
+			it.config.setFrom(project.provider { extension.config })
+			it.baseline.set(project.layout.file(project.provider { extension.baseline }))
+			it.plugins.set(project.provider { extension.plugins })
+			it.input.setFrom(existingInputDirectoriesProvider(project, extension))
+			it.reportsDir.set(project.provider { extension.customReportsDir })
+			it.reports = extension.reports
 		}
 
 		project.tasks.findByName(LifecycleBasePlugin.CHECK_TASK_NAME)?.dependsOn(detektTask)
@@ -44,32 +44,32 @@ class DetektPlugin : Plugin<Project> {
 
 	private fun createAndConfigureCreateBaselineTask(project: Project, extension: DetektExtension) =
 			project.tasks.register(BASELINE, DetektCreateBaselineTask::class.java) {
-				baseline.set(project.layout.file(project.provider { extension.baseline }))
-				config.setFrom(project.provider { extension.config })
-				debug.set(project.provider { extension.debug })
-				parallel.set(project.provider { extension.parallel })
-				disableDefaultRuleSets.set(project.provider { extension.disableDefaultRuleSets })
-				filters.set(project.provider { extension.filters })
-				plugins.set(project.provider { extension.plugins })
-				input.setFrom(existingInputDirectoriesProvider(project, extension))
+				it.baseline.set(project.layout.file(project.provider { extension.baseline }))
+				it.config.setFrom(project.provider { extension.config })
+				it.debug.set(project.provider { extension.debug })
+				it.parallel.set(project.provider { extension.parallel })
+				it.disableDefaultRuleSets.set(project.provider { extension.disableDefaultRuleSets })
+				it.filters.set(project.provider { extension.filters })
+				it.plugins.set(project.provider { extension.plugins })
+				it.input.setFrom(existingInputDirectoriesProvider(project, extension))
 			}
 
 	private fun createAndConfigureGenerateConfigTask(project: Project, extension: DetektExtension) =
 			project.tasks.register(GENERATE_CONFIG, DetektGenerateConfigTask::class.java) {
-				input.setFrom(existingInputDirectoriesProvider(project, extension))
+				it.input.setFrom(existingInputDirectoriesProvider(project, extension))
 			}
 
 	private fun createAndConfigureIdeaTasks(project: Project, extension: DetektExtension) {
 		project.tasks.register(IDEA_FORMAT, DetektIdeaFormatTask::class.java) {
-			debug.set(project.provider { extension.debug })
-			input.setFrom(existingInputDirectoriesProvider(project, extension))
-			ideaExtension = extension.idea
+			it.debug.set(project.provider { extension.debug })
+			it.input.setFrom(existingInputDirectoriesProvider(project, extension))
+			it.ideaExtension = extension.idea
 		}
 
 		project.tasks.register(IDEA_INSPECT, DetektIdeaInspectionTask::class.java) {
-			debug.set(project.provider { extension.debug })
-			input.setFrom(existingInputDirectoriesProvider(project, extension))
-			ideaExtension = extension.idea
+			it.debug.set(project.provider { extension.debug })
+			it.input.setFrom(existingInputDirectoriesProvider(project, extension))
+			it.ideaExtension = extension.idea
 		}
 	}
 
@@ -77,21 +77,21 @@ class DetektPlugin : Plugin<Project> {
 			project.provider { extension.input.filter { it.exists() } }
 
 	private fun configurePluginDependencies(project: Project, extension: DetektExtension) {
-		project.configurations.create(CONFIGURATION_DETEKT_PLUGINS) {
-			isVisible = false
-			isTransitive = true
-			description = "The $CONFIGURATION_DETEKT_PLUGINS libraries to be used for this project."
+		project.configurations.create(CONFIGURATION_DETEKT_PLUGINS) { configuration ->
+			configuration.isVisible = false
+			configuration.isTransitive = true
+			configuration.description = "The $CONFIGURATION_DETEKT_PLUGINS libraries to be used for this project."
 		}
 
-		project.configurations.create(CONFIGURATION_DETEKT) {
-			isVisible = false
-			isTransitive = true
-			description = "The $CONFIGURATION_DETEKT dependencies to be used for this project."
+		project.configurations.create(CONFIGURATION_DETEKT) { configuration ->
+			configuration.isVisible = false
+			configuration.isTransitive = true
+			configuration.description = "The $CONFIGURATION_DETEKT dependencies to be used for this project."
 
-			defaultDependencies {
+			configuration.defaultDependencies { dependencySet ->
 				@Suppress("USELESS_ELVIS")
 				val version = extension.toolVersion ?: DEFAULT_DETEKT_VERSION
-				add(project.dependencies.create("io.gitlab.arturbosch.detekt:detekt-cli:$version"))
+				dependencySet.add(project.dependencies.create("io.gitlab.arturbosch.detekt:detekt-cli:$version"))
 			}
 		}
 	}

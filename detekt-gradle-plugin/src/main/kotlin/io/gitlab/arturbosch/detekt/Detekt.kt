@@ -33,7 +33,6 @@ import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.SkipWhenEmpty
 import org.gradle.api.tasks.TaskAction
-import org.gradle.kotlin.dsl.property
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import java.io.File
 
@@ -52,7 +51,7 @@ open class Detekt : DefaultTask() {
 
 	@Input
 	@Optional
-	var filters: Property<String> = project.objects.property()
+	var filters = project.objects.property(String::class.java)
 
 	@InputFile
 	@Optional
@@ -66,11 +65,11 @@ open class Detekt : DefaultTask() {
 
 	@Input
 	@Optional
-	var plugins: Property<String> = project.objects.property()
+	var plugins = project.objects.property(String::class.java)
 
 	@Internal
 	@Optional
-	val debugProp: Property<Boolean> = project.objects.property()
+	val debugProp = project.objects.property(Boolean::class.javaObjectType)
 	var debug: Boolean
 		@Internal
 		get() = debugProp.get()
@@ -78,7 +77,7 @@ open class Detekt : DefaultTask() {
 
 	@Internal
 	@Optional
-	val parallelProp: Property<Boolean> = project.objects.property()
+	val parallelProp = project.objects.property(Boolean::class.javaObjectType)
 	var parallel: Boolean
 		@Internal
 		get() = parallelProp.get()
@@ -86,7 +85,7 @@ open class Detekt : DefaultTask() {
 
 	@Optional
 	@Input
-	val disableDefaultRuleSetsProp: Property<Boolean> = project.objects.property()
+	val disableDefaultRuleSetsProp = project.objects.property(Boolean::class.javaObjectType)
 	var disableDefaultRuleSets: Boolean
 		@Internal
 		get() = disableDefaultRuleSetsProp.get()
@@ -99,7 +98,7 @@ open class Detekt : DefaultTask() {
 
 	@Internal
 	@Optional
-	var reportsDir: Property<File> = project.objects.property()
+	var reportsDir = project.objects.property(File::class.java)
 
 	val xmlReportFile: Provider<RegularFile>
 		@OutputFile

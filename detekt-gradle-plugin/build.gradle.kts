@@ -24,15 +24,9 @@ plugins {
 	id("com.gradle.plugin-publish") version "0.10.0"
 	id("com.jfrog.bintray") version "1.8.4"
 	kotlin("jvm") version "1.2.61"
-	`kotlin-dsl`
 	id("org.jetbrains.dokka") version "0.9.17"
 	id("com.github.ben-manes.versions") version "0.20.0"
 }
-
-kotlinDslPluginOptions {
-	experimentalWarning.set(false)
-}
-
 apply {
 	plugin("maven-publish")
 }
