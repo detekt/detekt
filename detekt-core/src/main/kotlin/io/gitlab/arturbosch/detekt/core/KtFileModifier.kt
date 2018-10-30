@@ -28,6 +28,6 @@ class KtFileModifier(private val project: Path) {
 		require(lineSeparator != null) {
 			"No line separator entry for ktFile ${javaFileFacadeFqName.asString()}"
 		}
-		return StringUtilRt.convertLineSeparators(text, lineSeparator!!)
+		return StringUtilRt.convertLineSeparators(text, lineSeparator)
 	}
 }
