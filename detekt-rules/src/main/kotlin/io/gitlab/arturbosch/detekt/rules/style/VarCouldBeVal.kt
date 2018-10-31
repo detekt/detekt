@@ -43,11 +43,12 @@ private val unaryAssignmentOperators = setOf(KtTokens.MINUSMINUS, KtTokens.PLUSP
  */
 class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
 
+	override val defaultRuleIdAliases: Set<String> = setOf("CanBeVal")
+
 	override val issue: Issue = Issue("VarCouldBeVal",
 			Severity.Maintainability,
 			"Var declaration could be val.",
-			Debt.FIVE_MINS,
-			aliases = setOf("CanBeVal"))
+			Debt.FIVE_MINS)
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		if (function.isSomehowNested()) {

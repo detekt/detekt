@@ -27,6 +27,7 @@ open class TestConfig(private val values: Map<String, String> = mutableMapOf()) 
 
 	override fun tryParseBasedOnDefault(result: String, defaultResult: Any): Any = when (defaultResult) {
 		is List<*> -> parseList(result)
+		is Set<*> -> parseList(result).toSet()
 		else -> super.tryParseBasedOnDefault(result, defaultResult)
 	}
 

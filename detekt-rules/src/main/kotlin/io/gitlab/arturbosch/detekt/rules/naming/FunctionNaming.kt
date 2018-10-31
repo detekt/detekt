@@ -26,11 +26,12 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  */
 class FunctionNaming(config: Config = Config.empty) : Rule(config) {
 
+	override val defaultRuleIdAliases: Set<String> = setOf("FunctionName")
+
 	override val issue = Issue(javaClass.simpleName,
 			Severity.Style,
 			"Function names should follow the naming convention set in the configuration.",
-			debt = Debt.FIVE_MINS,
-			aliases = setOf("FunctionName"))
+			debt = Debt.FIVE_MINS)
 
 	private val functionPattern by LazyRegex(FUNCTION_PATTERN, "^([a-z$][a-zA-Z$0-9]*)|(`.*`)$")
 	private val excludeClassPattern by LazyRegex(EXCLUDE_CLASS_PATTERN, "$^")

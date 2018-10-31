@@ -12,8 +12,7 @@ package io.gitlab.arturbosch.detekt.api
 data class Issue(val id: String,
 				 val severity: Severity,
 				 val description: String,
-				 val debt: Debt,
-				 val aliases: Set<String> = setOf()) {
+				 val debt: Debt) {
 
 	init {
 		validateIdentifier(id)
