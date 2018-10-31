@@ -24,5 +24,6 @@ Please search in the [issues](https://github.com/arturbosch/detekt/issues) befor
 ## Your Environment
 <!--- Include as many relevant details about the environment you experienced the bug in -->
 * Version of detekt used:
+* Version of Gradle used (if applicable):
 * Operating System and version:
 * Link to your project (if it's a public repository):
