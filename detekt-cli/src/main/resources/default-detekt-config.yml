@@ -19,6 +19,7 @@ test-pattern: # Configure exclusions for test sources
     - 'SpreadOperator'
     - 'TooManyFunctions'
     - 'ForEachOnRange'
+    - 'FunctionMaxLength'
 
 build:
   maxIssues: 10
