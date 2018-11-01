@@ -14,9 +14,9 @@ object DetektInvoker {
 
 		if (debug) println(cliArguments)
 		project.javaexec {
-			main = DETEKT_MAIN
-			classpath = getConfigurations(project, debug)
-			args = cliArguments
+			it.main = DETEKT_MAIN
+			it.classpath = getConfigurations(project, debug)
+			it.args = cliArguments
 		}
 	}
 
