@@ -46,7 +46,9 @@ private fun parseResourceConfig(configPath: String): Config {
 	return if (urls.size == 1) {
 		YamlConfig.loadResource(urls[0])
 	} else {
-		urls.map { YamlConfig.loadResource(it) }.reduce { composite, config -> CompositeConfig(config, composite) }
+		urls.asSequence()
+				.map { YamlConfig.loadResource(it) }
+				.reduce { composite, config -> CompositeConfig(config, composite) }
 	}
 }
 
@@ -55,7 +57,9 @@ private fun parsePathConfig(configPath: String): Config {
 	return if (paths.size == 1) {
 		YamlConfig.load(paths[0])
 	} else {
-		paths.map { YamlConfig.load(it) }.reduce { composite, config -> CompositeConfig(config, composite) }
+		paths.asSequence()
+				.map { YamlConfig.load(it) }
+				.reduce { composite, config -> CompositeConfig(config, composite) }
 	}
 }
 
