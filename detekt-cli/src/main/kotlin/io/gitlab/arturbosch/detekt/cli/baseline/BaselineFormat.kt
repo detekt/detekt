@@ -12,13 +12,10 @@ import javax.xml.stream.XMLStreamWriter
  */
 class BaselineFormat {
 
-	private val inputFactory by lazy { SAXParserFactory.newInstance() }
-	private fun xmlReader() = inputFactory.newSAXParser()
-
 	fun read(path: Path): Baseline {
 		try {
 			Files.newInputStream(path).use {
-				val reader = xmlReader()
+				val reader = SAXParserFactory.newInstance().newSAXParser()
 				val handler = BaselineHandler()
 				reader.parse(it, handler)
 				return handler.createBaseline()
