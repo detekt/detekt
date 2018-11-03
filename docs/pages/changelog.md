@@ -8,6 +8,7 @@ toc: true
 
 <!--
 #### Coming up
+The --input parameter is no longer required. If it is missing, the current working directory is used instead.
 
 ##### Migration
 

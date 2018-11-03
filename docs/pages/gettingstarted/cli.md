@@ -12,7 +12,7 @@ summary:
 2. `gradle build`
 3. `java -jar detekt-cli/build/libs/detekt-cli-[version]-all.jar [parameters]*`
 
-The following parameters are shown when `--help` is entered. The `--input`/`-i` option is required:
+The following parameters are shown when `--help` is entered.
 
 ```
 Usage: detekt [options]
@@ -42,8 +42,9 @@ Usage: detekt [options]
       Default: false
     --help, -h
       Shows the usage.
-  * --input, -i
-      Input paths to analyze.
+    --input, -i
+      Input paths to analyze. Multiple paths are separated by comma. 
+      Default: The current working directory.
     --parallel
       Enables parallel compilation of source files. Should only be used if the
       analyzing project has more than ~200 kotlin files.
