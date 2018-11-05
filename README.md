@@ -82,7 +82,7 @@ which can be easily added to the gradle configuration:
 
 ```kotlin
 dependencies {
-    detekt "io.gitlab.arturbosch.detekt:detekt-formatting:[version]"
+    detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:[version]"
 }
 ```
 
