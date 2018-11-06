@@ -23,7 +23,6 @@ internal class ReportsSpec : Spek({
 
 		val reportUnderTest = TestOutputReport::class.java.simpleName
 		val args = arrayOf(
-				"--input", "/tmp/must/be/given",
 				"--report", "xml:/tmp/path1",
 				"--report", "txt:/tmp/path2",
 				"--report", "$reportUnderTest:/tmp/path3",

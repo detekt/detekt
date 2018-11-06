@@ -14,13 +14,13 @@ interface Args {
 class CliArgs : Args {
 
 	@Parameter(names = ["--input", "-i"],
-			required = true,
-			description = "Input paths to analyze.")
+			description = "Input paths to analyze. Multiple paths are separated by comma. If not specified the " +
+					"current working directory is used.")
 	private var input: String? = null
 
 	@Parameter(names = ["--filters", "-f"],
 			description = "Path filters defined through regex with separator ';' or ',' (\".*test.*\"). " +
-                    "These filters apply on relative paths from the project root.")
+					"These filters apply on relative paths from the project root.")
 	var filters: String? = null // Using a converter for List<PathFilter> resulted in a ClassCastException
 
 	@Parameter(names = ["--config", "-c"],
@@ -58,8 +58,8 @@ class CliArgs : Args {
 	@Parameter(names = ["--report", "-r"],
 			description = "Generates a report for given 'report-id' and stores it on given 'path'. " +
 					"Entry should consist of: [report-id:path]. " +
-		   			"Available 'report-id' values: 'txt', 'xml', 'html'. " +
-		  			"These can also be used in combination with each other " +
+					"Available 'report-id' values: 'txt', 'xml', 'html'. " +
+					"These can also be used in combination with each other " +
 					"e.g. '-r txt:reports/detekt.txt -r xml:reports/detekt.xml'")
 	private var reports: List<String>? = null
 
@@ -84,8 +84,7 @@ class CliArgs : Args {
 	var printAst: Boolean = false
 
 	val inputPaths: List<Path> by lazy {
-		MultipleExistingPathConverter().convert(input
-				?: throw IllegalStateException("Input parameter was not initialized by jcommander!"))
+		MultipleExistingPathConverter().convert(input ?: System.getProperty("user.dir"))
 	}
 
 	val reportPaths: List<ReportPath> by lazy {
