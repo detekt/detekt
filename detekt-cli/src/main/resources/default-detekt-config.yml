@@ -494,6 +494,8 @@ style:
     active: false
   UnusedImports:
     active: false
+  UnusedPrivateClass:
+    active: false
   UnusedPrivateMember:
     active: false
     allowedNames: "(_|ignored|expected|serialVersionUID)"

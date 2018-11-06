@@ -1014,6 +1014,18 @@ This rule reports unused imports. Unused imports are dead code and should be rem
 
 **Debt**: 5min
 
+### UnusedPrivateClass
+
+Reports unused private classes.
+If private classes are unused they should be removed. Otherwise this dead code
+can lead to confusion and potential bugs.
+
+**Severity**: Maintainability
+
+**Debt**: 5min
+
+**Aliases**: unused
+
 ### UnusedPrivateMember
 
 Reports unused private properties, function parameters and functions.
