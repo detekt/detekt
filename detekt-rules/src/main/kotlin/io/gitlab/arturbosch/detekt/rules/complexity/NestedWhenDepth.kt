@@ -48,7 +48,7 @@ class NestedWhenDepth(config: Config = Config.empty,
 			report(ThresholdedCodeSmell(issue,
 					Entity.from(expression),
 					Metric("NESTING DEPTH", nestedWhens.size, threshold),
-					"These for expressions are nested too deeply."))
+					"These when expressions are nested too deeply."))
 		}
 	}
 
