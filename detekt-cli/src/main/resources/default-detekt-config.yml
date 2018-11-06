@@ -97,6 +97,18 @@ complexity:
   NestedBlockDepth:
     active: true
     threshold: 4
+  NestedForDepth:
+    active: false
+    threshold: 2
+  NestedIfDepth:
+    active: false
+    threshold: 2
+  NestedTryDepth:
+    active: false
+    threshold: 1
+  NestedWhenDepth:
+    active: false
+    threshold: 1
   StringLiteralDuplication:
     active: false
     threshold: 3

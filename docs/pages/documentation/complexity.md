@@ -216,6 +216,77 @@ Prefer extracting the nested code into well-named functions to make it easier to
 
    maximum nesting depth
 
+### NestedForDepth
+
+This rule reports excessive nesting depth of `for` expressions. Excessively nested for loops can be
+harder to manage in one's head, and commonly masks the intended behavior of the function.
+
+Prefer extracting the nested code into well-named functions and/or using expressive comprehensions to
+make it easier to understand.
+
+**Severity**: Maintainability
+
+**Debt**: 20min
+
+#### Configuration options:
+
+* `threshold` (default: `2`)
+
+   maximum allowed nesting depth
+
+### NestedIfDepth
+
+This rule reports excessive nesting depth of `if` expressions. Excessively nested `if`s increase the complexity of
+a function by increasing the number of possible execution paths and state dependencies.
+
+Prefer simplifying the conditional logic or extracting the nested code into well-named functions
+to make it easier to understand.
+
+**Severity**: Maintainability
+
+**Debt**: 20min
+
+#### Configuration options:
+
+* `threshold` (default: `2`)
+
+   maximum allowed nesting depth
+
+### NestedTryDepth
+
+This rule reports excessive nesting depth of `try` blocks. Excessively nested `try` blocks greatly increase the
+complexity of a function, and frequently signal that a function is taking on too much responsibility.
+
+Prefer extracting the nested code into well-named functions to make it easier to understand.
+
+**Severity**: Maintainability
+
+**Debt**: 20min
+
+#### Configuration options:
+
+* `threshold` (default: `1`)
+
+   maximum allowed nesting depth
+
+### NestedWhenDepth
+
+This rule reports excessive nesting depth of `when` expressions. Excessively nested when expressions clutter code
+and commonly indicate that a function may be handling too many disparate conditional branches.
+
+Prefer extracting the nested code into well-named functions to
+make it easier to understand.
+
+**Severity**: Maintainability
+
+**Debt**: 20min
+
+#### Configuration options:
+
+* `threshold` (default: `1`)
+
+   maximum allowed nesting depth
+
 ### StringLiteralDuplication
 
 This rule detects and reports duplicated String literals. Repeatedly typing out the same String literal across the
