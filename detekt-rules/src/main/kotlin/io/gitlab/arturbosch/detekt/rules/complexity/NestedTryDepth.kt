@@ -33,7 +33,7 @@ class NestedTryDepth(config: Config = Config.empty,
 	private val seenTries: MutableSet<KtTryExpression> = mutableSetOf()
 
 	override fun visitTryExpression(expression: KtTryExpression) {
-		// filter out fors that are nested within other fors
+		// filter out try blocks that are nested within other try blocks
 		if (expression !in seenTries) {
 			checkDepthOf(expression)
 		}
