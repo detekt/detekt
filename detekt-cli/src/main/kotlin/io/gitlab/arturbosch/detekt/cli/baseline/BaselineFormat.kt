@@ -10,15 +10,21 @@ import javax.xml.stream.XMLStreamWriter
 /**
  * @author Artur Bosch
  */
-class BaselineFormat {
+internal class BaselineFormat {
 
-	fun read(path: Path): Baseline {
+	fun read(path: Path, sourceSetId: String? = null): Baseline =
+			read(path) { createBaseline(sourceSetId) }
+
+	fun readConsolidated(path: Path): ConsolidatedBaseline =
+			read(path) { createConsolidatedBaseline() }
+
+	private fun <T> read(path: Path, create: BaselineHandler.() -> T): T {
 		try {
 			Files.newInputStream(path).use {
 				val reader = SAXParserFactory.newInstance().newSAXParser()
 				val handler = BaselineHandler()
 				reader.parse(it, handler)
-				return handler.createBaseline()
+				return handler.create()
 			}
 		} catch (error: SAXParseException) {
 			val (line, column) = error.lineNumber to error.columnNumber
@@ -26,7 +32,7 @@ class BaselineFormat {
 		}
 	}
 
-	fun write(baseline: Baseline, path: Path) {
+	fun write(baseline: ConsolidatedBaseline, path: Path) {
 		try {
 			Files.newBufferedWriter(path).use {
 				it.streamXml().prettyPrinter().save(baseline)
@@ -40,7 +46,7 @@ class BaselineFormat {
 	private val XMLStreamException.positions
 		get() = location.lineNumber to location.columnNumber
 
-	private fun XMLStreamWriter.save(baseline: Baseline) {
+	private fun XMLStreamWriter.save(baseline: ConsolidatedBaseline) {
 		document {
 			tag(SMELL_BASELINE) {
 				tag(BLACKLIST) {
@@ -48,10 +54,20 @@ class BaselineFormat {
 					attribute(TIMESTAMP, timestamp)
 					ids.forEach { tag(ID, it) }
 				}
-				tag(WHITELIST) {
-					val (ids, timestamp) = baseline.whitelist
-					attribute(TIMESTAMP, timestamp)
-					ids.forEach { tag(ID, it) }
+				baseline.defaultWhitelist?.let { whitelist ->
+					tag(WHITELIST) {
+						val (sourceSetId, ids, timestamp) = whitelist
+						sourceSetId?.let { attribute(SOURCE_SET_ID, sourceSetId) }
+						attribute(TIMESTAMP, timestamp)
+						ids.forEach { tag(ID, it) }
+					}
+				}
+				baseline.whitelists.forEach { sourceSetId, whitelist ->
+					tag(WHITELIST) {
+						attribute(SOURCE_SET_ID, sourceSetId)
+						attribute(TIMESTAMP, whitelist.timestamp)
+						whitelist.ids.forEach { tag(ID, it) }
+					}
 				}
 			}
 		}

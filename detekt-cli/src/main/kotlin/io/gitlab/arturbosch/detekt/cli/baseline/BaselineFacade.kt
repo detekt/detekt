@@ -11,11 +11,11 @@ import java.time.Instant
 /**
  * @author Artur Bosch
  */
-class BaselineFacade(val baselineFile: Path) {
+class BaselineFacade(val baselineFile: Path, private val sourceSetId: String? = null) {
 
 	private val listings: Pair<Whitelist, Blacklist>? =
 			if (baselineExists()) {
-				val format = BaselineFormat().read(baselineFile)
+				val format = BaselineFormat().read(baselineFile, sourceSetId)
 				format.whitelist to format.blacklist
 			} else null
 
@@ -28,13 +28,18 @@ class BaselineFacade(val baselineFile: Path) {
 
 	fun create(smells: List<Finding>) {
 		val timestamp = Instant.now().toEpochMilli().toString()
-		val blacklist = if (baselineExists()) {
-			BaselineFormat().read(baselineFile).blacklist
+		val consolidated = if (baselineExists()) {
+			BaselineFormat().readConsolidated(baselineFile)
 		} else {
-			Blacklist(emptySet(), timestamp)
+			ConsolidatedBaseline(Blacklist(emptySet(), timestamp), null, emptyMap())
 		}
 		val ids = smells.map { it.baselineId }.toSortedSet()
-		val smellBaseline = Baseline(blacklist, Whitelist(ids, timestamp))
+		val smellWhitelist = Whitelist(sourceSetId, ids, timestamp)
+		val smellBaseline = if (sourceSetId == null)
+			consolidated.copy(defaultWhitelist = smellWhitelist)
+		else
+			consolidated.copy(whitelists = consolidated.whitelists + (sourceSetId to smellWhitelist))
+
 		baselineFile.parent?.let { Files.createDirectories(it) }
 		BaselineFormat().write(smellBaseline, baselineFile)
 		println("Successfully wrote smell baseline to $baselineFile")

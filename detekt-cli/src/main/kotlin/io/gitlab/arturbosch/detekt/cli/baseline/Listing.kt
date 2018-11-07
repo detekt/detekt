@@ -7,6 +7,4 @@ interface Listing<T> {
 
 	val timestamp: String
 	val ids: Set<String>
-
-	fun withNewTimestamp(timestamp: String, list: T): T
 }
