@@ -20,6 +20,7 @@ test-pattern: # Configure exclusions for test sources
     - 'TooManyFunctions'
     - 'ForEachOnRange'
     - 'FunctionMaxLength'
+    - 'TooGenericExceptionCaught'
 
 build:
   maxIssues: 10
