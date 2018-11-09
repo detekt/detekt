@@ -83,6 +83,12 @@ class CliArgs : Args {
 			description = "Prints the AST for given [input] file. Must be no directory.")
 	var printAst: Boolean = false
 
+	@Parameter(names = ["--source-set-id"],
+			hidden = true,
+			description = "The source set identifier to use. Needs to be specified for consolidated baselines and " +
+					"reports in multi project environment.")
+	var sourceSetId: String? = null
+
 	val inputPaths: List<Path> by lazy {
 		MultipleExistingPathConverter().convert(input ?: System.getProperty("user.dir"))
 	}

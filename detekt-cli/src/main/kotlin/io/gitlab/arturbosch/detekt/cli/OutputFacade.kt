@@ -17,7 +17,7 @@ class OutputFacade(arguments: CliArgs,
 
 	private val printStream = settings.outPrinter
 	private val config = settings.config
-	private val baselineFacade = arguments.baseline?.let { BaselineFacade(it) }
+	private val baselineFacade = arguments.baseline?.let { BaselineFacade(it, arguments.sourceSetId) }
 	private val createBaseline = arguments.createBaseline
 	private val reportPaths = arguments.reportPaths.toHashMap({ it.kind }, { it.path })
 
