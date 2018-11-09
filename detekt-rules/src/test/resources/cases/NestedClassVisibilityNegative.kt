@@ -19,4 +19,7 @@ private class PrivateClassWithNestedElements {
 	class Inner
 }
 
+internal interface IgnoreNestedClassInInterface {
 
+	class Nested
+}
