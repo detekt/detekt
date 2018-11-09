@@ -20,16 +20,16 @@ class BaselineFormatTest : Spek({
 	describe("Without baseline id") {
 		it("can be loaded") {
 			val path = Paths.get(resource("/smell-baseline.xml"))
-			val (blacklist, defaultWhitelist, _) = BaselineFormat().readConsolidated(path)
+			val (_, blacklist, whitelist) = BaselineFormat().read(path)
 
 			assertThat(blacklist.ids).hasSize(2)
 			assertThat(blacklist.ids).anySatisfy { it.startsWith("LongParameterList") }
 			assertThat(blacklist.ids).anySatisfy { it.startsWith("LongMethod") }
 			assertThat(blacklist.timestamp).isEqualTo("123456789")
-			assertNotNull(defaultWhitelist).let { whitelist ->
-				assertThat(whitelist.ids).hasSize(1)
-				assertThat(whitelist.ids).anySatisfy { it.startsWith("FeatureEnvy") }
-				assertThat(whitelist.timestamp).isEqualTo("987654321")
+			assertNotNull(whitelist).apply {
+				assertThat(ids).hasSize(1)
+				assertThat(ids).anySatisfy { it.startsWith("FeatureEnvy") }
+				assertThat(timestamp).isEqualTo("987654321")
 			}
 		}
 
@@ -38,14 +38,15 @@ class BaselineFormatTest : Spek({
 			val tempFile = Files.createTempFile("baseline", now)
 
 			val blacklist = Blacklist(setOf("4", "2", "2"), now)
-			val whitelist = Whitelist(null, setOf("1", "2", "3"), now)
-			val savedBaseline = ConsolidatedBaseline(blacklist, whitelist)
+			val whitelist = Whitelist(setOf("1", "2", "3"), now)
+			val baseline = Baseline(null, blacklist, whitelist)
+			val savedBaseline = ConsolidatedBaseline(listOf(baseline))
 
 			val format = BaselineFormat()
 			format.write(savedBaseline, tempFile)
 			val loadedBaseline = format.read(tempFile)
 
-			assertThat(loadedBaseline).isEqualTo(Baseline(blacklist, whitelist))
+			assertThat(loadedBaseline).isEqualTo(baseline)
 		}
 
 		it("load fails if file is invalid") {
@@ -57,10 +58,9 @@ class BaselineFormatTest : Spek({
 	describe("With a named source set") {
 		it("default baseline can be loaded") {
 			val path = Paths.get(resource("/smell-consolidated-baseline.xml"))
-			val (blacklist, whitelist) = BaselineFormat().read(path)
+			val (_, blacklist, whitelist) = BaselineFormat().read(path)
 
-			assertThat(blacklist.ids).hasSize(2)
-			assertThat(blacklist.ids).anySatisfy { it.startsWith("LongParameterList") }
+			assertThat(blacklist.ids).hasSize(1)
 			assertThat(blacklist.ids).anySatisfy { it.startsWith("LongMethod") }
 			assertThat(blacklist.timestamp).isEqualTo("123456789")
 			assertThat(whitelist.ids).hasSize(1)
@@ -69,8 +69,9 @@ class BaselineFormatTest : Spek({
 		}
 		it("whitelist for source set can be loaded") {
 			val path = Paths.get(resource("/smell-consolidated-baseline.xml"))
-			val (blacklist, whitelist) = BaselineFormat().read(path, "foo")
+			val (sourceSetId, blacklist, whitelist) = BaselineFormat().read(path, "foo")
 
+			assertThat(sourceSetId).isEqualTo("foo")
 			assertThat(blacklist.ids).hasSize(2)
 			assertThat(blacklist.ids).anySatisfy { it.startsWith("LongParameterList") }
 			assertThat(blacklist.ids).anySatisfy { it.startsWith("LongMethod") }
@@ -81,11 +82,10 @@ class BaselineFormatTest : Spek({
 		}
 		it("whitelist for source set with empty whitelist can be loaded") {
 			val path = Paths.get(resource("/smell-consolidated-baseline.xml"))
-			val (blacklist, whitelist) = BaselineFormat().read(path, "bar")
+			val (sourceSetId, blacklist, whitelist) = BaselineFormat().read(path, "bar")
 
-			assertThat(blacklist.ids).hasSize(2)
-			assertThat(blacklist.ids).anySatisfy { it.startsWith("LongParameterList") }
-			assertThat(blacklist.ids).anySatisfy { it.startsWith("LongMethod") }
+			assertThat(sourceSetId).isEqualTo("bar")
+			assertThat(blacklist.ids).isEmpty()
 			assertThat(blacklist.timestamp).isEqualTo("123456789")
 			assertThat(whitelist.ids).isEmpty()
 			assertThat(whitelist.timestamp).isEqualTo("555555555")
@@ -96,70 +96,43 @@ class BaselineFormatTest : Spek({
 			val tempFile = Files.createTempFile("baseline", now)
 
 			val blacklist = Blacklist(setOf("4", "2", "2"), now)
-			val whitelist = Whitelist(sourceSetId, setOf("1", "2", "3"), now)
-			val savedBaseline = ConsolidatedBaseline(blacklist, whitelists = mapOf(sourceSetId to whitelist))
+			val whitelist = Whitelist(setOf("1", "2", "3"), now)
+			val baseline = Baseline(sourceSetId, blacklist, whitelist)
+			val savedBaseline = ConsolidatedBaseline(listOf(baseline))
 
 			val format = BaselineFormat()
 			format.write(savedBaseline, tempFile)
 			val loadedBaseline = format.read(tempFile, sourceSetId)
 
-			assertThat(loadedBaseline).isEqualTo(Baseline(blacklist, whitelist))
+			assertThat(loadedBaseline).isEqualTo(baseline)
 		}
-		it("a single named source set can be replaced and loaded") {
-			val sourceSetId = "foo"
+		it("multiple baselines can be saved and loaded") {
 			val now = "12345"
 			val tempFile = Files.createTempFile("baseline", now)
 			val format = BaselineFormat()
 
 			// create initially
-			val blacklist = Blacklist(setOf("4", "2", "2"), now)
-			val sourceSetWhitelist = Whitelist(sourceSetId, setOf("1", "2", "3"), now)
-			val savedBaseline = ConsolidatedBaseline(
-					blacklist,
-					whitelists = mapOf(sourceSetId to sourceSetWhitelist))
+			val fooBaseline = Baseline(
+					"foo",
+					Blacklist(setOf("4"), now),
+					Whitelist(setOf("1"), now)
+			)
+			val barBaseline = Baseline(
+					"bar",
+					Blacklist(setOf("5"), now),
+					Whitelist(setOf("1", "2", "3"), now)
+			)
+			val defaultBaseline = Baseline(
+					null,
+					Blacklist(setOf("6", "7"), now),
+					Whitelist(setOf("4"), now)
+			)
+			val savedBaseline = ConsolidatedBaseline(listOf(fooBaseline, barBaseline, defaultBaseline))
 			format.write(savedBaseline, tempFile)
 
-			// update
-			val updatedWhitelist = sourceSetWhitelist.copy(ids = setOf("9"))
-			val updatedBaseline = savedBaseline.copy(
-					whitelists = savedBaseline.whitelists + (sourceSetId to updatedWhitelist)
-			)
-			format.write(updatedBaseline, tempFile)
-
 			// load and verify
-			val loadedBaseline = format.read(tempFile, sourceSetId)
-			assertThat(loadedBaseline).isEqualTo(Baseline(blacklist, updatedWhitelist))
-		}
-		it("a second named source set can be added without overwriting the first") {
-			val firstSourceSetId = "foo"
-			val secondSourceSetId = "bar"
-			val now = "12345"
-			val tempFile = Files.createTempFile("baseline", now)
-			val format = BaselineFormat()
-
-			// create initially
-			val blacklist = Blacklist(setOf("4", "2", "2"), now)
-			val firstSourceWhitelist = Whitelist(firstSourceSetId, setOf("1", "2", "3"), now)
-			val savedBaseline = ConsolidatedBaseline(
-					blacklist,
-					whitelists = mapOf(firstSourceSetId to firstSourceWhitelist)
-			)
-			format.write(savedBaseline, tempFile)
-
-			// update
-			val secondSourceWhitelist = Whitelist(secondSourceSetId, setOf("9"), now)
-			val updatedBaseline = savedBaseline.copy(
-					whitelists = savedBaseline.whitelists + (secondSourceSetId to secondSourceWhitelist)
-			)
-			format.write(updatedBaseline, tempFile)
-
-			// load and verify
-			format.read(tempFile, firstSourceSetId).let {
-				assertThat(it).isEqualTo(Baseline(blacklist, firstSourceWhitelist))
-			}
-			format.read(tempFile, secondSourceSetId).let {
-				assertThat(it).isEqualTo(Baseline(blacklist, secondSourceWhitelist))
-			}
+			val loadedBaseline = format.readConsolidated(tempFile)
+			assertThat(loadedBaseline).isEqualTo(savedBaseline)
 		}
 	}
 })

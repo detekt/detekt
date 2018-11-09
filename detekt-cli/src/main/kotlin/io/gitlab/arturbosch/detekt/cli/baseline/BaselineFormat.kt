@@ -46,27 +46,22 @@ internal class BaselineFormat {
 	private val XMLStreamException.positions
 		get() = location.lineNumber to location.columnNumber
 
-	private fun XMLStreamWriter.save(baseline: ConsolidatedBaseline) {
+	private fun XMLStreamWriter.save(consolidated: ConsolidatedBaseline) {
 		document {
-			tag(SMELL_BASELINE) {
-				tag(BLACKLIST) {
-					val (ids, timestamp) = baseline.blacklist
-					attribute(TIMESTAMP, timestamp)
-					ids.forEach { tag(ID, it) }
-				}
-				baseline.defaultWhitelist?.let { whitelist ->
-					tag(WHITELIST) {
-						val (sourceSetId, ids, timestamp) = whitelist
-						sourceSetId?.let { attribute(SOURCE_SET_ID, sourceSetId) }
-						attribute(TIMESTAMP, timestamp)
-						ids.forEach { tag(ID, it) }
-					}
-				}
-				baseline.whitelists.forEach { sourceSetId, whitelist ->
-					tag(WHITELIST) {
-						attribute(SOURCE_SET_ID, sourceSetId)
-						attribute(TIMESTAMP, whitelist.timestamp)
-						whitelist.ids.forEach { tag(ID, it) }
+			tag(SMELL_BASELINE_CONTAINER) {
+				consolidated.baselines.forEach { baseline ->
+					tag(SMELL_BASELINE) {
+						baseline.sourceSetId?.let { attribute(SOURCE_SET_ID, it) }
+						tag(BLACKLIST) {
+							val (ids, timestamp) = baseline.blacklist
+							attribute(TIMESTAMP, timestamp)
+							ids.forEach { tag(ID, it) }
+						}
+						tag(WHITELIST) {
+							val (ids, timestamp) = baseline.whitelist
+							attribute(TIMESTAMP, timestamp)
+							ids.forEach { tag(ID, it) }
+						}
 					}
 				}
 			}

@@ -13,62 +13,41 @@ internal class BaselineHandler : DefaultHandler() {
 	private var content: String = ""
 	private var whitestamp: String? = null
 	private var blackstamp: String? = null
-	private var currentSourceSetId: String? = null
+	private var sourceSetId: String? = null
 
-	private val currentWhitelists = mutableListOf<Whitelist>()
-	private val currentWhiteIds = mutableSetOf<String>()
+	private val currentBaselines = mutableListOf<Baseline>()
+	private val sourceSetIds = mutableSetOf<String?>()
+	private val whiteIds = mutableSetOf<String>()
 	private val blackIds = mutableSetOf<String>()
 
-	internal fun createConsolidatedBaseline() = ConsolidatedBaseline(
-			Blacklist(blackIds, blackstamp ?: now()),
-			whitelistIdentifiedBy(null),
-			sourceSetWhitelistsAsMap()
-	)
+	private val now = Instant.now().toEpochMilli().toString()
 
-	private fun sourceSetWhitelistsAsMap(): Map<String, Whitelist> {
-		val sourceSets = currentWhitelists.map(Whitelist::sourceSetId)
+	internal fun createConsolidatedBaseline() = ConsolidatedBaseline(currentBaselines.toList())
 
-		val result = mutableMapOf<String, Whitelist>()
-		// by iterating over the ids we also check for duplicates
-		sourceSets.forEach {
-			it?.let { sourceSetId ->
-				val whitelist = whitelistIdentifiedBy(sourceSetId)
-				if (whitelist != null) {
-					result.put(sourceSetId, whitelist)
-				}
-			}
-		}
-
-		return result
-	}
-
-	internal fun createBaseline(sourceSetId: String?) = Baseline(
-			Blacklist(blackIds, blackstamp ?: now()),
-			whitelistIdentifiedBy(sourceSetId) ?: Whitelist(sourceSetId, emptySet(), whitestamp ?: now())
-	)
-
-	private fun now() = Instant.now().toEpochMilli().toString()
-
-	private fun whitelistIdentifiedBy(sourceSetId: String?): Whitelist? {
-		val matching = currentWhitelists.filter { it.sourceSetId == sourceSetId }
-		if (matching.size > 1) {
-			val msg = if (sourceSetId == null)
-				"There are multiple whitelists not associated to a source set"
-			else "There are multiple whitelists associated to source set $sourceSetId"
-			throw InvalidBaselineState(msg)
-		}
-		return matching.firstOrNull()
+	internal fun createBaseline(sourceSetId: String?): Baseline {
+		return currentBaselines.firstOrNull { it.sourceSetId == sourceSetId }
+				?: Baseline(sourceSetId, Blacklist(emptySet(), now), Whitelist(emptySet(), now))
 	}
 
 	override fun startElement(uri: String, localName: String, qName: String, attributes: Attributes) {
 		when (qName) {
+			SMELL_BASELINE -> {
+				sourceSetId = attributes.getValue(SOURCE_SET_ID)
+				if (sourceSetIds.contains(sourceSetId)) {
+					val msg = if (sourceSetId == null)
+						"There are multiple whitelists not associated to a source set"
+					else "There are multiple whitelists associated to source set $sourceSetId"
+					throw InvalidBaselineState(msg)
+				}
+				sourceSetIds.add(sourceSetId)
+				current = null
+			}
 			BLACKLIST -> {
 				current = BLACKLIST
 				blackstamp = attributes.getValue(TIMESTAMP)
 			}
 			WHITELIST -> {
 				current = WHITELIST
-				currentSourceSetId = attributes.getValue(SOURCE_SET_ID)
 				whitestamp = attributes.getValue(TIMESTAMP)
 			}
 			ID -> content = ""
@@ -77,21 +56,25 @@ internal class BaselineHandler : DefaultHandler() {
 
 	override fun endElement(uri: String, localName: String, qName: String) {
 		when (qName) {
+			SMELL_BASELINE -> {
+				currentBaselines.add(Baseline(
+						sourceSetId,
+						Blacklist(blackIds.toSet(), blackstamp ?: now),
+						Whitelist(whiteIds.toSet(), whitestamp ?: now)
+				))
+				blackIds.clear()
+				whiteIds.clear()
+				blackstamp = null
+				whitestamp = null
+			}
 			ID -> if (content.isNotBlank()) {
 				when (current) {
 					BLACKLIST -> blackIds.add(content)
-					WHITELIST -> currentWhiteIds.add(content)
+					WHITELIST -> whiteIds.add(content)
 				}
 				content = ""
 			}
-			BLACKLIST -> current == null
-			WHITELIST -> {
-				currentWhitelists.add(Whitelist(currentSourceSetId, currentWhiteIds.toSet(), whitestamp ?: now()))
-				current = null
-				currentSourceSetId = null
-				currentWhiteIds.clear()
-			}
-
+			BLACKLIST, WHITELIST -> current == null
 		}
 	}
 

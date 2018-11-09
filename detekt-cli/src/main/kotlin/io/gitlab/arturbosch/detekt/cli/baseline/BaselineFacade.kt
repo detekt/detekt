@@ -28,20 +28,19 @@ class BaselineFacade(val baselineFile: Path, private val sourceSetId: String? = 
 
 	fun create(smells: List<Finding>) {
 		val timestamp = Instant.now().toEpochMilli().toString()
-		val consolidated = if (baselineExists()) {
+		val existingOrNew = if (baselineExists()) {
 			BaselineFormat().readConsolidated(baselineFile)
 		} else {
-			ConsolidatedBaseline(Blacklist(emptySet(), timestamp), null, emptyMap())
+			ConsolidatedBaseline()
 		}
-		val ids = smells.map { it.baselineId }.toSortedSet()
-		val smellWhitelist = Whitelist(sourceSetId, ids, timestamp)
-		val smellBaseline = if (sourceSetId == null)
-			consolidated.copy(defaultWhitelist = smellWhitelist)
-		else
-			consolidated.copy(whitelists = consolidated.whitelists + (sourceSetId to smellWhitelist))
+		val ids = smells.map(Finding::baselineId).toSortedSet()
+		val smellWhitelist = Whitelist(ids, timestamp)
+		val smellBaseline = existingOrNew.withSourceSetId(sourceSetId)?.copy(whitelist = smellWhitelist)
+				?: Baseline(sourceSetId, Blacklist(emptySet(), timestamp), smellWhitelist)
+		val consolidatedResult = existingOrNew.addOrReplace(smellBaseline)
 
 		baselineFile.parent?.let { Files.createDirectories(it) }
-		BaselineFormat().write(smellBaseline, baselineFile)
+		BaselineFormat().write(consolidatedResult, baselineFile)
 		println("Successfully wrote smell baseline to $baselineFile")
 	}
 
