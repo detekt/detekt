@@ -79,4 +79,23 @@ class ParameterNamingSpec : Spek({
 			assertThat(NamingRules().lint(code)).hasSize(1)
 		}
 	}
+
+	describe("parameters in a function of an excluded class") {
+
+		val config = TestConfig(mapOf("excludeClassPattern" to "Excluded"))
+
+		it("should not detect function parameter") {
+			val code = """
+				class Excluded {
+					fun f(PARAM: Int)
+				}
+			"""
+			assertThat(FunctionParameterNaming(config).lint(code)).isEmpty()
+		}
+
+		it("should not detect constructor parameter") {
+			val code = "class Excluded(val PARAM: Int) {}"
+			assertThat(ConstructorParameterNaming(config).lint(code)).isEmpty()
+		}
+	}
 })

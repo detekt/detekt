@@ -10,7 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.identifierName
 import io.gitlab.arturbosch.detekt.rules.isOverridden
-import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClass
+import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
@@ -44,7 +44,7 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
 			return
 		}
 
-		if (!function.isContainingExcludedClass(excludeClassPattern) &&
+		if (!function.isContainingExcludedClassOrObject(excludeClassPattern) &&
 				!function.identifierName().matches(functionPattern)) {
 			report(CodeSmell(
 					issue,
