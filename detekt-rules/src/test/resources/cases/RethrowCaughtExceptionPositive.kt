@@ -13,12 +13,9 @@ fun rethrowCaughtExceptionPositive() {
 	}
 	try {
 	} catch (e: IllegalStateException) {
-		print("log") // reports 1 - exception is not logged
-		throw e
-	}
-	try {
-	} catch (e: IllegalStateException) {
-		print(e.message) // reports 1 - logs only the exception message, exception is lost
-		throw e
+		try {
+		} catch (f: IllegalStateException) {
+			throw f // reports 1 - dead code after the same exception is rethrown
+		}
 	}
 }

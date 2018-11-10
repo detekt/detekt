@@ -14,7 +14,7 @@ class RethrowCaughtExceptionSpec : SubjectSpek<RethrowCaughtException>({
 
 		it("reports caught exceptions which are rethrown") {
 			val path = Case.RethrowCaughtExceptionPositive.path()
-			assertThat(subject.lint(path)).hasSize(4)
+			assertThat(subject.lint(path)).hasSize(3)
 		}
 
 		it("does not report caught exceptions which are encapsulated in another exception or logged") {
