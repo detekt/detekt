@@ -32,7 +32,7 @@ class DetektPlugin : Plugin<Project> {
 			it.disableDefaultRuleSetsProp.set(project.provider { extension.disableDefaultRuleSets })
 			it.filters.set(project.provider { extension.filters })
 			it.config.setFrom(project.provider { extension.config })
-			it.baseline.set(project.layout.file(project.provider { extension.baseline }))
+			it.baseline.set(project.layout.file(project.provider { extension.baselineOrDefaultIfExists }))
 			it.plugins.set(project.provider { extension.plugins })
 			it.input.setFrom(existingInputDirectoriesProvider(project, extension))
 			it.reportsDir.set(project.provider { extension.customReportsDir })

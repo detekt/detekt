@@ -13,7 +13,7 @@ import java.io.File
  * @author Markus Schwarz
  */
 open class DetektExtension(project: Project) : CodeQualityExtension() {
-
+	private val defaultBaselineFile = project.rootProject.file(DEFAULT_BASELINE_FILE)
 	val customReportsDir: File?
 		get() = reportsDir
 
@@ -25,7 +25,9 @@ open class DetektExtension(project: Project) : CodeQualityExtension() {
 
 	var input: ConfigurableFileCollection = project.layout.configurableFiles(DEFAULT_SRC_DIR_JAVA, DEFAULT_SRC_DIR_KOTLIN)
 
-	var baseline: File? = null
+	var baseline: File? = defaultBaselineFile
+	val baselineOrDefaultIfExists: File?
+		get() = if (baseline == defaultBaselineFile && !defaultBaselineFile.exists()) null else baseline
 
 	var config: ConfigurableFileCollection = project.layout.configurableFiles()
 
@@ -39,6 +41,7 @@ open class DetektExtension(project: Project) : CodeQualityExtension() {
 
 	var plugins: String? = null
 
+
 	companion object {
 		const val DEFAULT_SRC_DIR_JAVA = "src/main/java"
 		const val DEFAULT_SRC_DIR_KOTLIN = "src/main/kotlin"
@@ -46,6 +49,7 @@ open class DetektExtension(project: Project) : CodeQualityExtension() {
 		const val DEFAULT_PARALLEL_VALUE = false
 		const val DEFAULT_DISABLE_RULESETS_VALUE = false
 		const val DEFAULT_REPORT_ENABLED_VALUE = true
+		const val DEFAULT_BASELINE_FILE = "config/detekt/baseline.xml"
 	}
 }
 
