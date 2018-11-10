@@ -23,6 +23,16 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  *     } catch(e: IOException) {
  *         throw MyException(e.message) // e is swallowed
  *     }
+ *     try {
+ *         // ...
+ *     } catch(e: IOException) {
+ *         throw MyException() // e is swallowed
+ *     }
+ *     try {
+ *         // ...
+ *     } catch(e: IOException) {
+ *         bar() // exception is unused
+ *     }
  * }
  * </noncompliant>
  *
@@ -32,6 +42,11 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  *         // ...
  *     } catch(e: IOException) {
  *         throw MyException(e)
+ *     }
+ *     try {
+ *         // ...
+ *     } catch(e: IOException) {
+ *         println(e) // logging is ok here
  *     }
  * }
  * </compliant>
