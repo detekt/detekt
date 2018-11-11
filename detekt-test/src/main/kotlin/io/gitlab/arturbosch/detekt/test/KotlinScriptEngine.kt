@@ -17,9 +17,7 @@ object KotlinScriptEngine {
 
 		val scriptEngineManager = ScriptEngineManager()
 		val localEngine = scriptEngineManager.getEngineByExtension("kts") as? KotlinJsr223JvmLocalScriptEngine
-		if (localEngine == null) {
-			throw IllegalStateException("Kotlin script engine not supported")
-		}
+		requireNotNull(localEngine) { "Kotlin script engine not supported" }
 		engine = localEngine
 	}
 

@@ -11,7 +11,6 @@ import org.jetbrains.spek.api.dsl.it
 class ForEachOnRangeSpec : Spek({
 
 	given("a kt file with using a forEach on a range") {
-		@Language("kotlin")
 		val code = """
 			fun test() {
 				(1..10).forEach {
