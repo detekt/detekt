@@ -1,7 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.performance
 
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
+import org.intellij.lang.annotations.Language
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
@@ -9,6 +11,7 @@ import org.jetbrains.spek.api.dsl.it
 class ForEachOnRangeSpec : Spek({
 
 	given("a kt file with using a forEach on a range") {
+		@Language("kotlin")
 		val code = """
 			fun test() {
 				(1..10).forEach {
@@ -27,7 +30,7 @@ class ForEachOnRangeSpec : Spek({
 		"""
 
 		it("should report the forEach usage") {
-			val findings = ForEachOnRange().lint(code)
+			val findings = ForEachOnRange().compileAndLint(code)
 			assertThat(findings).hasSize(4)
 		}
 	}
