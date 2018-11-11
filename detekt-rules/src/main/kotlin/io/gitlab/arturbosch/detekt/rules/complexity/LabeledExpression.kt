@@ -7,7 +7,11 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import org.jetbrains.kotlin.psi.*
+import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtExpressionWithLabel
+import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtThisExpression
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.isExtensionDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.parents
@@ -24,6 +28,14 @@ import org.jetbrains.kotlin.psi.psiUtil.parents
  *     if (r == "bar") break@loop
  *     println(r)
  * }
+ *
+ * class Outer {
+ *     inner class Inner {
+ *         fun f() {
+ *             val i = this@Inner // referencing itself, use `this instead
+ *         }
+ *     }
+ * }
  * </noncompliant>
  *
  * <compliant>
@@ -37,6 +49,9 @@ import org.jetbrains.kotlin.psi.psiUtil.parents
  *     inner class Inner {
  *         fun f() {
  *             val outer = this@Outer
+ *         }
+ *         fun Int.extend() {
+ *             val inner = this@Inner // this would reference Int and not Inner
  *         }
  *     }
  * }
