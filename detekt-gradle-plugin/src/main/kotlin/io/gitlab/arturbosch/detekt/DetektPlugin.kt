@@ -28,13 +28,14 @@ class DetektPlugin : Plugin<Project> {
         registerIdeaTasks(project, extension)
     }
 
-    private fun registerDetektTask(project: Project, extension: DetektExtension) {
-        val detektTaskProvider = project.tasks.register(DETEKT, Detekt::class.java) {
-            it.debugProp.set(project.provider { extension.debug })
-            it.parallelProp.set(project.provider { extension.parallel })
-            it.disableDefaultRuleSetsProp.set(project.provider { extension.disableDefaultRuleSets })
-            it.buildUponDefaultConfigProp.set(project.provider { extension.buildUponDefaultConfig })
-            it.failFastProp.set(project.provider { extension.failFast })
+	private fun registerDetektTask(project: Project, extension: DetektExtension) {
+		val taskName = DETEKT
+		val detektTaskProvider = project.tasks.register(taskName, Detekt::class.java) {
+			it.debugProp.set(project.provider { extension.debug })
+			it.parallelProp.set(project.provider { extension.parallel })
+			it.disableDefaultRuleSetsProp.set(project.provider { extension.disableDefaultRuleSets })
+			it.buildUponDefaultConfigProp.set(project.provider { extension.buildUponDefaultConfig })
+			it.failFastProp.set(project.provider { extension.failFast })
             it.config.setFrom(project.provider { extension.config })
             it.baseline.set(project.layout.file(project.provider { extension.baseline }))
             it.plugins.set(project.provider { extension.plugins })
@@ -43,6 +44,13 @@ class DetektPlugin : Plugin<Project> {
             it.setExcludes(defaultExcludes)
             it.reportsDir.set(project.provider { extension.customReportsDir })
             it.reports = extension.reports
+
+
+			project.subprojects.forEach { subProject ->
+				subProject.getTasksByName(taskName, false).forEach { subProjectTask ->
+					it.dependsOn(subProjectTask)
+				}
+			}
         }
 
         val checkTaskProvider = try {
