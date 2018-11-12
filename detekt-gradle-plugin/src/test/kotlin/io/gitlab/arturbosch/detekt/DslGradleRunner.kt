@@ -34,36 +34,39 @@ class DslGradleRunner(
 		|failFast: false
 		""".trimMargin()
 
-    /**
-     * Each generated file is different so the artifacts are not cached in between test runs
-     */
-    private fun ktFileContent(className: String) = """
-	|internal class $className(val randomDefaultValue: String = "$randomString")
+	/**
+	 * Each generated file is different so the artifacts are not cached in between test runs
+	 */
+	private fun ktFileContent(className: String, withCodeSmell: Boolean = false) = """
+	|internal class $className(
+	|	val randomDefaultValue: String = "$randomString",
+	|	val smellyConstant: Int = ${if (withCodeSmell) "42" else "0"}
+	|)
 	|
 	""".trimMargin()
 
-    fun setupProject() {
-        writeProjectFile(buildFileName, mainBuildFileContent)
-        writeProjectFile(SETTINGS_FILENAME, settingsContent)
-        configFileOrNone?.let { writeProjectFile(configFileOrNone, configFileContent) }
-        baselineFileOrNone?.let { writeProjectFile(baselineFileOrNone, baselineContent) }
-        projectLayout.srcDirs.forEach { sourceDir ->
-            (1..projectLayout.numberOfSourceFilesInRootPerSourceDir).forEach {
-                writeKtFile(File(rootDir, sourceDir), "MyRoot${it}Class")
-            }
-        }
+	fun setupProject() {
+		writeProjectFile(buildFileName, mainBuildFileContent)
+		writeProjectFile(SETTINGS_FILENAME, settingsContent)
+		configFileOrNone?.let { writeProjectFile(configFileOrNone, configFileContent) }
+		baselineFileOrNone?.let { writeProjectFile(baselineFileOrNone, baselineContent) }
+		projectLayout.srcDirs.forEach { sourceDir ->
+			(1..projectLayout.numberOfSourceFilesInRootPerSourceDir).forEach {
+				writeKtFile(File(rootDir, sourceDir), "MyRoot${it}Class", it == 1)
+			}
+		}
 
-        projectLayout.submodules.forEach { submodule ->
-            val moduleRoot = File(rootDir, submodule.name)
-            moduleRoot.mkdirs()
-            File(moduleRoot, buildFileName).writeText(submodule.detektConfig ?: "")
-            submodule.srcDirs.forEach { moduleSourceDir ->
-                (1..submodule.numberOfSourceFiles).forEach {
-                    writeKtFile(File(moduleRoot, moduleSourceDir), "My${submodule.name}${it}Class")
-                }
-            }
-        }
-    }
+		projectLayout.submodules.forEach { submodule ->
+			val moduleRoot = File(rootDir, submodule.name)
+			moduleRoot.mkdirs()
+			File(moduleRoot, buildFileName).writeText(submodule.detektConfig ?: "")
+			submodule.srcDirs.forEach { moduleSourceDir ->
+				(1..submodule.numberOfSourceFiles).forEach {
+					writeKtFile(File(moduleRoot, moduleSourceDir), "My${submodule.name}${it}Class", it == 1)
+				}
+			}
+		}
+	}
 
     fun writeProjectFile(filename: String, content: String) {
         File(rootDir, filename).writeText(content)
@@ -73,10 +76,10 @@ class DslGradleRunner(
         writeKtFile(File(rootDir, srcDir), className)
     }
 
-    private fun writeKtFile(dir: File, className: String) {
-        dir.mkdirs()
-        File(dir, "$className.kt").writeText(ktFileContent(className))
-    }
+	private fun writeKtFile(dir: File, className: String, withCodeSmell: Boolean = false) {
+		dir.mkdirs()
+		File(dir, "$className.kt").writeText(ktFileContent(className, withCodeSmell))
+	}
 
     fun runTasksAndCheckResult(vararg tasks: String, doAssert: DslGradleRunner.(BuildResult) -> Unit) {
 

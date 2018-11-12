@@ -15,13 +15,13 @@ import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
 import io.gitlab.arturbosch.detekt.invoke.PluginsArgument
 import io.gitlab.arturbosch.detekt.invoke.XmlReportArgument
+import io.gitlab.arturbosch.detekt.output.mergeXmlReports
 import org.gradle.api.Action
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
 import org.gradle.api.file.FileCollection
 import org.gradle.api.file.RegularFile
 import org.gradle.api.file.RegularFileProperty
-import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
 import org.gradle.api.reporting.ReportingExtension
 import org.gradle.api.tasks.CacheableTask
@@ -141,13 +141,14 @@ open class Detekt : SourceTask() {
 
     @TaskAction
     fun check() {
+		val xmlReportTargetFile = xmlReportFile.orNull
         val arguments = mutableListOf(
-                InputArgument(source),
-                ConfigArgument(config),
-                PluginsArgument(plugins.orNull),
-                BaselineArgument(baseline.orNull),
-                XmlReportArgument(xmlReportFile.orNull),
-                HtmlReportArgument(htmlReportFile.orNull),
+                InputArgument(source) ,
+                ConfigArgument(config) ,
+                PluginsArgument(plugins.orNull) ,
+                BaselineArgument(baseline.orNull) ,
+                XmlReportArgument(xmlReportTargetFile) ,
+                HtmlReportArgument(htmlReportFile.orNull) ,
                 DebugArgument(debugProp.getOrElse(false)),
                 ParallelArgument(parallelProp.getOrElse(false)),
                 BuildUponDefaultConfigArgument(buildUponDefaultConfigProp.getOrElse(false)),
@@ -155,6 +156,16 @@ open class Detekt : SourceTask() {
                 DisableDefaultRuleSetArgument(disableDefaultRuleSetsProp.getOrElse(false))
         )
 
-        DetektInvoker.invokeCli(project, arguments.toList(), debugProp.getOrElse(false))
-    }
+		DetektInvoker.invokeCli(project, arguments.toList(), debugProp.getOrElse(false))
+
+		if (xmlReportTargetFile != null) {
+			val xmlReports = project.subprojects.mapNotNull { subproject ->
+				subproject.tasks.findByName(name)?.let { (it as Detekt).xmlReportFile.orNull?.asFile }
+			}
+			if (!xmlReports.isEmpty()) {
+				logger.info("Merging report files of subprojects $xmlReports into $xmlReportTargetFile")
+			}
+			mergeXmlReports(xmlReportTargetFile.asFile, xmlReports)
+		}
+	}
 }
