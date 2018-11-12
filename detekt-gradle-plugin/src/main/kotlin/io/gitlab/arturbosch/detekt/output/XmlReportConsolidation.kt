@@ -9,7 +9,9 @@ import java.nio.file.Files
  * @author Markus Schwarz
  */
 internal fun mergeXmlReports(target: File, input: List<File>) {
-	check(target.exists() && target.isFile) { "$target does not exist" }
+	check(target.exists() && target.isFile) { "$target does not exist." }
+	check(input.none { it == target }) { "$target cannot be source and target at the same time." }
+
 	if (input.isEmpty()) return
 
 	val content = readContent(target).toMutableList()

@@ -31,6 +31,14 @@ internal class XmlReportConsolidationTest : Spek({
 	}
 
 	describe("merging valid report files") {
+		it("fails if source and target are the same") {
+			val target = Files.createTempFile("target", ".xml").toFile()
+			target.writeText(emptyContent)
+
+			assertThatIllegalStateException().isThrownBy {
+				mergeXmlReports(target, listOf(target))
+			}
+		}
 		it("target file remains unchanged if there are no files to be merged") {
 			val target = Files.createTempFile("target", ".xml").toFile()
 			target.writeText(emptyContent)
