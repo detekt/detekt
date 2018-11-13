@@ -11,34 +11,52 @@ import org.jetbrains.spek.subject.SubjectSpek
 
 class ObjectPropertyNamingSpec : SubjectSpek<ObjectPropertyNaming>({
 
-	val fileName = TEST_FILENAME
-
 	subject { ObjectPropertyNaming() }
 
-	val negative = """
-					const val MY_NAME_8 = "Artur"
-					const val MYNAME = "Artur"
-					const val MyNAME = "Artur"
-					const val name = "Artur"
-					const val nAme = "Artur"
-					const val serialVersionUID = 42L"""
-	val positive = """const val _nAme = "Artur""""
+	val fileName = TEST_FILENAME
 
 	describe("constants in object declarations") {
 
-		it("should not detect any constants not complying to the naming rules") {
+		it("should not detect public constants complying to the naming rules") {
 			val code = compileContentForTest("""
 				object O {
-					$negative
+					${PublicConst.negative}
 				}
 			""")
 			assertThat(subject.lint(code)).isEmpty()
 		}
 
-		it("should detect constants not complying to the naming rules") {
+		it("should detect public constants not complying to the naming rules") {
 			val code = compileContentForTest("""
 				object O {
-					$positive
+					${PublicConst.positive}
+				}
+			""")
+			assertThat(subject.lint(code)).hasSize(1)
+		}
+
+		it("should not detect private constants complying to the naming rules") {
+			val code = compileContentForTest("""
+				object O {
+					${PrivateConst.negative}
+				}
+			""")
+			assertThat(subject.lint(code)).isEmpty()
+		}
+
+		it("should detect private constants not complying to the naming rules") {
+			val code = compileContentForTest("""
+				object O {
+					${PrivateConst.positive}
+				}
+			""")
+			assertThat(subject.lint(code)).hasSize(1)
+		}
+
+		it("should report constants not complying to the naming rules at the right position") {
+			val code = compileContentForTest("""
+				object O {
+					${PublicConst.positive}
 				}
 			""")
 			assertThat(subject.lint(code)).hasLocationStrings(
@@ -49,22 +67,55 @@ class ObjectPropertyNamingSpec : SubjectSpek<ObjectPropertyNaming>({
 
 	describe("constants in companion object") {
 
-		it("should not detect any constants not complying to the naming rules") {
+		it("should not detect public constants complying to the naming rules") {
 			val code = compileContentForTest("""
 				class C {
 					companion object {
-						$negative
+						${PublicConst.negative}
 					}
 				}
 			""")
 			assertThat(subject.lint(code)).isEmpty()
 		}
 
-		it("should detect constants not complying to the naming rules") {
+		it("should detect public constants not complying to the naming rules") {
 			val code = compileContentForTest("""
 				class C {
 					companion object {
-						$positive
+						${PublicConst.positive}
+					}
+				}
+			""")
+			assertThat(subject.lint(code)).hasSize(1)
+		}
+
+		it("should not detect private constants complying to the naming rules") {
+			val code = compileContentForTest("""
+				class C {
+					companion object {
+						${PrivateConst.negative}
+					}
+				}
+			""")
+			assertThat(subject.lint(code)).isEmpty()
+		}
+
+		it("should detect private constants not complying to the naming rules") {
+			val code = compileContentForTest("""
+				class C {
+					companion object {
+						${PrivateConst.positive}
+					}
+				}
+			""")
+			assertThat(subject.lint(code)).hasSize(1)
+		}
+
+		it("should report constants not complying to the naming rules at the right position") {
+			val code = compileContentForTest("""
+				class C {
+					companion object {
+						${PublicConst.positive}
 					}
 				}
 			""")
@@ -76,16 +127,10 @@ class ObjectPropertyNamingSpec : SubjectSpek<ObjectPropertyNaming>({
 
 	describe("variables in objects") {
 
-		it("should not detect any constants not complying to the naming rules") {
+		it("should not detect public constants complying to the naming rules") {
 			val code = compileContentForTest("""
 				object O {
-					val MY_NAME = "Artur"
-					val MYNAME = "Artur"
-					val MyNAME = "Artur"
-					val name = "Artur"
-					val nAme8 = "Artur"
-					val serialVersionUID = 42L
-					private val _name = "Artur"
+					${PublicVal.negative}
 				}
 			""")
 			assertThat(subject.lint(code)).isEmpty()
@@ -94,10 +139,19 @@ class ObjectPropertyNamingSpec : SubjectSpek<ObjectPropertyNaming>({
 		it("should detect public constants not complying to the naming rules") {
 			val code = compileContentForTest("""
 				object O {
-					val _nAme = "Artur"
+					${PublicVal.positive}
 				}
 			""")
 			assertThat(subject.lint(code)).hasSize(1)
+		}
+
+		it("should not detect private constants complying to the naming rules") {
+			val code = compileContentForTest("""
+				object O {
+					${PrivateVal.negative}
+				}
+			""")
+			assertThat(subject.lint(code)).isEmpty()
 		}
 
 		it("should detect private constants not complying to the naming rules") {
@@ -139,3 +193,23 @@ class ObjectPropertyNamingSpec : SubjectSpek<ObjectPropertyNaming>({
 		}
 	}
 })
+
+abstract class NamingSnippet(private val isPrivate: Boolean, private val isConst: Boolean) {
+
+	val negative = """
+					${visibility()}${const()}val MY_NAME_8 = "Artur"
+					${visibility()}${const()}val MYNAME = "Artur"
+					${visibility()}${const()}val MyNAME = "Artur"
+					${visibility()}${const()}val name = "Artur"
+					${visibility()}${const()}val nAme = "Artur"
+					${visibility()}${const()}val serialVersionUID = 42L"""
+	val positive = """${visibility()}${const()}val _nAme = "Artur""""
+
+	private fun visibility() = if (isPrivate) "private " else ""
+	private fun const() = if (isConst) "const " else ""
+}
+
+object PrivateConst : NamingSnippet(true, true)
+object PublicConst : NamingSnippet(false, true)
+object PrivateVal : NamingSnippet(true, false)
+object PublicVal : NamingSnippet(false, false)
