@@ -11,6 +11,7 @@ import org.jetbrains.spek.subject.SubjectSpek
  * @author Shyiko
  * @author Artur Bosch
  * @author Mauin
+ * @author schalkms
  */
 class UnusedImportsSpec : SubjectSpek<UnusedImports>({
 	subject { UnusedImports(Config.empty) }
@@ -150,15 +151,15 @@ class UnusedImportsSpec : SubjectSpek<UnusedImports>({
 
 		it("does not report imports in KDoc") {
 			val code = """
-				package com.acme
+				package test
 
-				import com.acme.cathedral.TheDome   // here
-				import com.acme.bazar.SomeException // and here
+				import tasks.success   // here
+				import tasks.undefined // and here
 
 				/**
 				 * Do something.
-				 * @throws [SomeException] when ...
-				 * @see [TheDome.someMethod]
+				 * @throws [success] when ...
+				 * @see [undefined]
 				 */
 				fun doSomething() {
 					TODO()
