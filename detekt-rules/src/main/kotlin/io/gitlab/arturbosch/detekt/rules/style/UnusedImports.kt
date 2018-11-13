@@ -23,6 +23,7 @@ import org.jetbrains.kotlin.psi.KtReferenceExpression
  *
  * @author Artur Bosch
  * @author Marvin Ramin
+ * @author schalkms
  */
 class UnusedImports(config: Config) : Rule(config) {
 
@@ -38,6 +39,8 @@ class UnusedImports(config: Config) : Rule(config) {
 				"modAssign", "equals", "compareTo", "iterator", "getValue", "setValue")
 
 		private val kotlinDocReferencesRegExp = Regex("\\[([^]]+)](?!\\[)")
+		private val kotlinDocSeeReferenceRegExp = Regex("^@see (.+)")
+		private val whiteSpaceRegex = Regex("\\s+")
 	}
 
 	override fun visit(root: KtFile) {
@@ -100,6 +103,10 @@ class UnusedImports(config: Config) : Rule(config) {
 			kotlinDocReferencesRegExp.findAll(content, 0)
 					.map { it.groupValues[1] }
 					.forEach { namedReferences.add(it.split(".")[0]) }
+			kotlinDocSeeReferenceRegExp.find(content)?.let {
+				val str = it.groupValues[1].split(whiteSpaceRegex)[0]
+				namedReferences.add(str.split(".")[0])
+			}
 		}
 	}
 }
