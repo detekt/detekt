@@ -13,7 +13,7 @@ class SwallowedExceptionSpec : SubjectSpek<SwallowedException>({
 	given("several catch blocks") {
 
 		it("reports swallowed exceptions") {
-			assertThat(subject.lint(Case.SwallowedExceptionPositive.path())).hasSize(3)
+			assertThat(subject.lint(Case.SwallowedExceptionPositive.path())).hasSize(5)
 		}
 
 		it("does not report thrown catch blocks") {

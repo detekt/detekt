@@ -23,6 +23,16 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  *     } catch(e: IOException) {
  *         throw MyException(e.message) // e is swallowed
  *     }
+ *     try {
+ *         // ...
+ *     } catch(e: IOException) {
+ *         throw MyException() // e is swallowed
+ *     }
+ *     try {
+ *         // ...
+ *     } catch(e: IOException) {
+ *         bar() // exception is unused
+ *     }
  * }
  * </noncompliant>
  *
@@ -32,6 +42,11 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  *         // ...
  *     } catch(e: IOException) {
  *         throw MyException(e)
+ *     }
+ *     try {
+ *         // ...
+ *     } catch(e: IOException) {
+ *         println(e) // logging is ok here
  *     }
  * }
  * </compliant>
@@ -46,12 +61,20 @@ class SwallowedException(config: Config = Config.empty) : Rule(config) {
 			Debt.TWENTY_MINS)
 
 	override fun visitCatchSection(catchClause: KtCatchClause) {
-		if (isExceptionSwallowed(catchClause) == true) {
+		if (isExceptionUnused(catchClause) || isExceptionSwallowed(catchClause)) {
 			report(CodeSmell(issue, Entity.from(catchClause), issue.description))
 		}
 	}
 
-	private fun isExceptionSwallowed(catchClause: KtCatchClause): Boolean? {
+	private fun isExceptionUnused(catchClause: KtCatchClause): Boolean {
+		val parameterName = catchClause.catchParameter?.name
+		val catchBody = catchClause.catchBody ?: return true
+		return !catchBody
+				.collectByType<KtNameReferenceExpression>()
+				.any { it.text == parameterName }
+	}
+
+	private fun isExceptionSwallowed(catchClause: KtCatchClause): Boolean {
 		val parameterName = catchClause.catchParameter?.name
 		val throwExpressions = catchClause.catchBody?.collectByType<KtThrowExpression>()
 		throwExpressions?.forEach { throwExpr ->

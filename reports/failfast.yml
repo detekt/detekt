@@ -47,7 +47,7 @@ exceptions:
   ReturnFromFinally:
     active: true
   SwallowedException:
-    active: true
+    active: false
   ThrowingExceptionFromFinally:
     active: true
   ThrowingExceptionsWithoutMessageOrCause:
