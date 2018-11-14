@@ -8,6 +8,10 @@ fun rethrowCaughtExceptionNegative() {
 	}
 	try {
 	} catch (e: IllegalStateException) {
+		throw IllegalArgumentException("msg", e)
+	}
+	try {
+	} catch (e: IllegalStateException) {
 		print(e) // logging an exception is allowed
 	}
 	try {
