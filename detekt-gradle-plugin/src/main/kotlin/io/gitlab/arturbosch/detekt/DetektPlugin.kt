@@ -1,9 +1,12 @@
 package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
+import org.gradle.api.Named
+import org.gradle.api.NamedDomainObjectCollection
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.file.FileCollection
+import org.gradle.api.file.SourceDirectorySet
 import org.gradle.api.provider.Provider
 import org.gradle.api.tasks.SourceSetContainer
 import org.gradle.api.tasks.TaskProvider
@@ -28,7 +31,9 @@ class DetektPlugin : Plugin<Project> {
 	}
 
 	private fun createDetektTasks(project: Project, extension: DetektExtension) {
-		project.sourceSets?.map { sourceSet ->
+		val sourceSets = mutableSetOf<String>()
+		project.sourceSets?.forEach { sourceSet ->
+			sourceSets += sourceSet.name
 			val name = "$DETEKT${sourceSet.name.capitalize()}"
 			val description = "Runs detekt on the ${sourceSet.name} source set."
 			val inputProvider = project.provider { sourceSet.allSource.sourceDirectories.filter { it.exists() } }
@@ -42,6 +47,15 @@ class DetektPlugin : Plugin<Project> {
 			project.tasks.findByName(LifecycleBasePlugin.CHECK_TASK_NAME)?.dependsOn(sourceSetTask)
 		}
 
+		// TODO kotlin-multiplatform ios source sets are currently not considered
+		setOf("kotlin", "kotlin-multiplatform", "kotlin-android", "kotlin2js")
+				.forEach { pluginId ->
+					project.plugins.withId(pluginId) {
+						project.applyKotlinSourceSetDetektTasks(extension, sourceSets)
+					}
+				}
+
+
 		val detektTask =
 				createAndConfigureDetektTask(project,
 						extension,
@@ -49,6 +63,28 @@ class DetektPlugin : Plugin<Project> {
 						"Runs the default detekt task.",
 						existingInputDirectoriesProvider(project, extension))
 		project.tasks.findByName(LifecycleBasePlugin.CHECK_TASK_NAME)?.dependsOn(detektTask)
+	}
+
+	private fun Project.applyKotlinSourceSetDetektTasks(extension: DetektExtension, existingSourceSets: MutableSet<String>) {
+		project.kotlinSourceSets
+				.filter { !existingSourceSets.contains(it.name) }
+				.forEach { sourceSet ->
+					existingSourceSets += sourceSet.name
+					val name = "$DETEKT${sourceSet.name.capitalize()}"
+					val description = "Runs detekt on the kotlin ${sourceSet.name} source set."
+					val sourceDirectorySet = getKotlinSourceDirectorySetSafe(sourceSet)
+					sourceDirectorySet?.let {
+						val inputProvider = project.provider { it.sourceDirectories.filter { it.exists() } }
+						// TODO How to provide Classpath for KotlinSourceSet?
+						val sourceSetTask =
+								createAndConfigureDetektTask(project,
+										extension,
+										name,
+										description,
+										inputProvider)
+						project.tasks.findByName(LifecycleBasePlugin.CHECK_TASK_NAME)?.dependsOn(sourceSetTask)
+					}
+				}
 	}
 
 	private fun createAndConfigureDetektTask(project: Project,
@@ -131,6 +167,20 @@ class DetektPlugin : Plugin<Project> {
 
 	private val Project.sourceSets: SourceSetContainer?
 		get() = project.extensions.findByType(SourceSetContainer::class.java)
+
+	private val Project.kotlinSourceSets: NamedDomainObjectCollection<out Named>
+		get() {
+			// Access through reflection, because another project's KotlinProjectExtension might be loaded by a different class loader:
+			val kotlinExt = project.extensions.getByName("kotlin")
+			@Suppress("UNCHECKED_CAST")
+			val sourceSets = kotlinExt.javaClass.getMethod("getSourceSets").invoke(kotlinExt) as NamedDomainObjectCollection<out Named>
+			return sourceSets
+		}
+
+	private fun getKotlinSourceDirectorySetSafe(from: Any): SourceDirectorySet? {
+		val getKotlin = from.javaClass.getMethod("getKotlin")
+		return getKotlin(from) as? SourceDirectorySet
+	}
 
 	companion object {
 		private const val DETEKT = "detekt"
