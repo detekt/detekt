@@ -45,7 +45,7 @@ class NestedClassesVisibility(config: Config = Config.empty) : Rule(config) {
 			Debt.FIVE_MINS)
 
 	override fun visitClass(klass: KtClass) {
-		if (klass.isTopLevel() && klass.isInternal()) {
+		if (!klass.isInterface() && klass.isTopLevel() && klass.isInternal()) {
 			checkDeclarations(klass)
 		}
 	}
