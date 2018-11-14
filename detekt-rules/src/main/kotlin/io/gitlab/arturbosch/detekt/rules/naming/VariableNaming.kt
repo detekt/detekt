@@ -10,7 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.identifierName
 import io.gitlab.arturbosch.detekt.rules.isOverridden
-import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClass
+import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClassOrObject
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
@@ -40,7 +40,7 @@ class VariableNaming(config: Config = Config.empty) : Rule(config) {
 	private val ignoreOverridden = valueOrDefault(IGNORE_OVERRIDDEN, true)
 
 	override fun visitProperty(property: KtProperty) {
-		if (property.isSingleUnderscore || property.isContainingExcludedClass(excludeClassPattern)) {
+		if (property.isSingleUnderscore || property.isContainingExcludedClassOrObject(excludeClassPattern)) {
 			return
 		}
 

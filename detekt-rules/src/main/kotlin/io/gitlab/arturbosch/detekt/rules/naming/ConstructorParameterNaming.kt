@@ -9,7 +9,7 @@ import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.identifierName
-import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClass
+import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClassOrObject
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 
@@ -35,7 +35,7 @@ class ConstructorParameterNaming(config: Config = Config.empty) : Rule(config) {
 	private val excludeClassPattern by LazyRegex(EXCLUDE_CLASS_PATTERN, "$^")
 
 	override fun visitParameter(parameter: KtParameter) {
-		if (parameter.isContainingExcludedClass(excludeClassPattern)) {
+		if (parameter.isContainingExcludedClassOrObject(excludeClassPattern)) {
 			return
 		}
 
