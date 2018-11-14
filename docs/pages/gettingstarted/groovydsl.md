@@ -49,7 +49,12 @@ buildscript {
     maven { url "https://plugins.gradle.org/m2/" }
   }
   dependencies {
+    // https://mvnrepository.com/artifact/gradle.plugin.io.gitlab.arturbosch.detekt/detekt-gradle-plugin 
+    // for version <= 1.0.0.RC9.2
     classpath "gradle.plugin.io.gitlab.arturbosch.detekt:detekt-gradle-plugin:[version]"
+    // https://mvnrepository.com/artifact/io.gitlab.arturbosch.detekt/detekt-gradle-plugin?repo=gradle-plugins
+    // for version >= 1.0.0-RC10
+    classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:[version]"
   }
 }
 
