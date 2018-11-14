@@ -11,6 +11,7 @@ import org.jetbrains.spek.subject.SubjectSpek
  * @author Shyiko
  * @author Artur Bosch
  * @author Mauin
+ * @author schalkms
  */
 class UnusedImportsSpec : SubjectSpek<UnusedImports>({
 	subject { UnusedImports(Config.empty) }
@@ -146,23 +147,74 @@ class UnusedImportsSpec : SubjectSpek<UnusedImports>({
 		}
 	}
 
+	given("some import statements referenced by KDoc @see") {
+
+		it("does not report see annotation linking to class") {
+			val code = """
+				import tasks.success
+
+				/**
+				 * Do something.
+				 * @see success
+				 */
+				fun doSomething()"""
+
+			assertThat(subject.lint(code)).isEmpty()
+		}
+
+		it("does not report see annotation linking to class with description") {
+			val code = """
+				import tasks.success
+
+				/**
+				 * Do something.
+				 * @see success something
+				 */
+				fun doSomething()"""
+
+			assertThat(subject.lint(code)).isEmpty()
+		}
+
+		it("reports see annotation that does not link to class") {
+			val code = """
+				import tasks.success
+
+				/**
+				 * Do something.
+				 * @see something
+				 */
+				fun doSomething()"""
+
+			assertThat(subject.lint(code)).hasSize(1)
+		}
+
+		it("reports see annotation that links after description") {
+			val code = """
+				import tasks.success
+
+				/**
+				 * Do something.
+				 * @see something success
+				 */
+				fun doSomething()"""
+
+			assertThat(subject.lint(code)).hasSize(1)
+		}
+	}
+
 	given("some import statements with KDoc") {
 
 		it("does not report imports in KDoc") {
 			val code = """
-				package com.acme
-
-				import com.acme.cathedral.TheDome   // here
-				import com.acme.bazar.SomeException // and here
+				import tasks.success   // here
+				import tasks.undefined // and here
 
 				/**
 				 * Do something.
-				 * @throws [SomeException] when ...
-				 * @see [TheDome.someMethod]
+				 * @throws [success] when ...
+				 * @see [undefined]
 				 */
-				fun doSomething() {
-					TODO()
-				}"""
+				fun doSomething()"""
 
 			assertThat(subject.lint(code)).isEmpty()
 		}
