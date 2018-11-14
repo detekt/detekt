@@ -43,6 +43,8 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
  * (default: 2)
  * @configuration excludedFunctions - define functions to be ignored by this check
  * (default: "equals")
+ * @configuration excludeLabeled - if labeled return statements should be ignored
+ * (default: true)
  * @active since v1.0.0
  *
  * @author Niklas Baudy
@@ -50,6 +52,7 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
  * @author Marvin Ramin
  * @author Patrick Pilch
  * @author Ilya Tretyakov
+ * @author Artur Bosch
  */
 class ReturnCount(config: Config = Config.empty) : Rule(config) {
 
@@ -58,6 +61,7 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
 
 	private val max = valueOrDefault(MAX, 2)
 	private val excludedFunctions = SplitPattern(valueOrDefault(EXCLUDED_FUNCTIONS, ""))
+	private val excludeLabeled = valueOrDefault(EXCLUDE_LABELED, true)
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		super.visitNamedFunction(function)
@@ -79,7 +83,11 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
 		function.accept(object : DetektVisitor() {
 			override fun visitKtElement(element: KtElement) {
 				if (element is KtReturnExpression) {
-					returnsNumber++
+					if (excludeLabeled && element.labeledExpression != null) {
+						return
+					} else {
+						returnsNumber++
+					}
 				}
 				element.children.filter { it !is KtNamedFunction }.forEach { it.accept(this) }
 			}
@@ -90,5 +98,6 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
 	companion object {
 		const val MAX = "max"
 		const val EXCLUDED_FUNCTIONS = "excludedFunctions"
+		const val EXCLUDE_LABELED = "excludeLabeled"
 	}
 }

@@ -690,6 +690,10 @@ code.
 
    define functions to be ignored by this check
 
+* `excludeLabeled` (default: `true`)
+
+   if labeled return statements should be ignored
+
 #### Noncompliant Code:
 
 ```kotlin
