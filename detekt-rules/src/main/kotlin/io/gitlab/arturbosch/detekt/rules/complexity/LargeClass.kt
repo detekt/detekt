@@ -57,7 +57,7 @@ class LargeClass(config: Config = Config.empty,
 		}
 	}
 
-	override fun visitFile(file: PsiFile?) { // TODO
+	override fun visitFile(file: PsiFile?) {
 		locStack.clear()
 		super.visitFile(file)
 	}
