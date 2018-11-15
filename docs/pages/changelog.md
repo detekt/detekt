@@ -8,11 +8,41 @@ toc: true
 
 <!--
 #### Coming up
-The --input parameter is no longer required. If it is missing, the current working directory is used instead.
 
 ##### Migration
 
 -->
+
+#### RC11
+
+##### Migration
+
+- The --input parameter is no longer required. If it is missing, the current working directory is used instead.
+
+##### Changelog
+
+- Update docs dependencies due to security issues - [#1337](https://github.com/arturbosch/detekt/pull/1337)
+- Fixes #1319 - false positive for UnusedImports - [#1335](https://github.com/arturbosch/detekt/pull/1335)
+- Update appveyor.yml to support jdk11 - [#1334](https://github.com/arturbosch/detekt/pull/1334)
+- Updated ObjectPropertyNaming privatePropertyPattern - fixes #1331 - [#1333](https://github.com/arturbosch/detekt/pull/1333)
+- ObjectPropertyNaming defaults do not match Kotlin style guide - [#1331](https://github.com/arturbosch/detekt/issues/1331)
+- Supports @this expr in extension functions - [#1328](https://github.com/arturbosch/detekt/pull/1328)
+- Added first prototype for compiling test snippets - [#1327](https://github.com/arturbosch/detekt/pull/1327)
+- Swallowed exception update - [#1326](https://github.com/arturbosch/detekt/pull/1326)
+- Removed todo without description - [#1323](https://github.com/arturbosch/detekt/pull/1323)
+- Added tests for excludeClassPattern in NamingRules - [#1322](https://github.com/arturbosch/detekt/pull/1322)
+- Ignores interfaces in NestedClassesVisibility - fixes #1075 - [#1321](https://github.com/arturbosch/detekt/pull/1321)
+- False positive for UnusedImports - [#1319](https://github.com/arturbosch/detekt/issues/1319)
+- Option to only build reports on failure - [#1318](https://github.com/arturbosch/detekt/issues/1318)
+- Update detekt-gradle-plugin version - [#1315](https://github.com/arturbosch/detekt/pull/1315)
+- Ignore TooGenericExceptionCaught by default for tests. - [#1312](https://github.com/arturbosch/detekt/pull/1312)
+- Update README with "detektPlugins" configuration. - [#1311](https://github.com/arturbosch/detekt/pull/1311)
+- Add license scan report and status - [#1310](https://github.com/arturbosch/detekt/pull/1310)
+- New Rule: UnusedPrivateClass - [#1309](https://github.com/arturbosch/detekt/pull/1309)
+- Use current working directory if --input parameter is not specified. - [#1308](https://github.com/arturbosch/detekt/pull/1308)
+- Set current directory as default input path - [#1301](https://github.com/arturbosch/detekt/issues/1301)
+
+See all issues at: [RC11](https://github.com/arturbosch/detekt/milestone/40)
 
 #### RC10
 
