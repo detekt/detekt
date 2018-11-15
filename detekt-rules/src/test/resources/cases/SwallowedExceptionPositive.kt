@@ -17,7 +17,7 @@ fun swallowedExceptions() {
 
 fun unusedException() {
 	try {
-	} catch (e: Exception) {
+	} catch (e: IOException) {
 		println() // violation
 	}
 }

@@ -206,6 +206,12 @@ passed into a newly thrown exception.
 
 **Debt**: 20min
 
+#### Configuration options:
+
+* `ignoredExceptionTypes` (default: `'InterruptedException,NumberFormatException,ParseException,MalformedURLException'`)
+
+   exception types which should be ignored by this rule
+
 #### Noncompliant Code:
 
 ```kotlin

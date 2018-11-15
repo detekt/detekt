@@ -164,6 +164,7 @@ exceptions:
     active: false
   SwallowedException:
     active: false
+    ignoredExceptionTypes: 'InterruptedException,NumberFormatException,ParseException,MalformedURLException'
   ThrowingExceptionFromFinally:
     active: false
   ThrowingExceptionInMain:

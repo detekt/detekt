@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.rules.collectByType
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
@@ -51,6 +52,9 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  * }
  * </compliant>
  *
+ * @configuration ignoredExceptionTypes - exception types which should be ignored by this rule
+ * (default: 'InterruptedException,NumberFormatException,ParseException,MalformedURLException')
+ *
  * @author schalkms
  * @author Marvin Ramin
  */
@@ -60,8 +64,13 @@ class SwallowedException(config: Config = Config.empty) : Rule(config) {
 			"The caught exception is swallowed. The original exception could be lost.",
 			Debt.TWENTY_MINS)
 
+	private val ignoredExceptionTypes = SplitPattern(valueOrDefault(IGNORED_EXCEPTION_TYPES, ""))
+
 	override fun visitCatchSection(catchClause: KtCatchClause) {
-		if (isExceptionUnused(catchClause) || isExceptionSwallowed(catchClause)) {
+		val exceptionType = catchClause.catchParameter?.typeReference?.text
+		if (!ignoredExceptionTypes.contains(exceptionType) &&
+				isExceptionUnused(catchClause) ||
+				isExceptionSwallowed(catchClause)) {
 			report(CodeSmell(issue, Entity.from(catchClause), issue.description))
 		}
 	}
@@ -94,5 +103,9 @@ class SwallowedException(config: Config = Config.empty) : Rule(config) {
 
 	private fun callsMemberOfCaughtException(expression: KtNameReferenceExpression): Boolean {
 		return expression.nextSibling?.text == "."
+	}
+
+	companion object {
+		const val IGNORED_EXCEPTION_TYPES = "ignoredExceptionTypes"
 	}
 }
