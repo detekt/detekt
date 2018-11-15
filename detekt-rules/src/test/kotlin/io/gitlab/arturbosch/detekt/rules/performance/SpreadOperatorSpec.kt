@@ -1,18 +1,19 @@
 package io.gitlab.arturbosch.detekt.rules.performance
 
-import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.compileAndLint
+import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
-import org.assertj.core.api.Assertions.assertThat
 
 /**
  * @author Ivan Balaksha
+ * @author schalkms
  */
 class SpreadOperatorSpec : SubjectSpek<SpreadOperator>({
 	subject { SpreadOperator() }
 
-	describe("test all possible cases") {
+	describe("test vararg cases") {
 		it("as vararg") {
 			val code = """
 				fun test0(strs: Array<String>) {
@@ -22,7 +23,7 @@ class SpreadOperatorSpec : SubjectSpek<SpreadOperator>({
 				fun test(vararg strs: String) {
 					strs.forEach { println(it) }
 				}"""
-			assertThat(subject.lint(code)).hasSize(1)
+			assertThat(subject.compileAndLint(code)).hasSize(1)
 		}
 
 		it("without vararg") {
@@ -34,7 +35,7 @@ class SpreadOperatorSpec : SubjectSpek<SpreadOperator>({
 				fun test(strs: Array<String>) {
 					strs.forEach { println(it) }
 				}"""
-			assertThat(subject.lint(code)).hasSize(0)
+			assertThat(subject.compileAndLint(code)).isEmpty()
 		}
 
 		it("expression inside params") {
@@ -46,7 +47,7 @@ class SpreadOperatorSpec : SubjectSpek<SpreadOperator>({
 				fun test(test : Int) {
 					println(test)
 				}"""
-			assertThat(subject.lint(code)).hasSize(0)
+			assertThat(subject.compileAndLint(code)).isEmpty()
 		}
 	}
 })
