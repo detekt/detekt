@@ -93,6 +93,7 @@ class DetektPlugin : Plugin<Project> {
 											 taskDescription: String,
 											 inputSources: Provider<FileCollection>,
 											 compileClasspath: FileCollection = project.files()): TaskProvider<Detekt> {
+
 		return project.tasks.register(name, Detekt::class.java) {
 			it.description = taskDescription
 			it.debugProp.set(project.provider { extension.debug })
@@ -105,8 +106,10 @@ class DetektPlugin : Plugin<Project> {
 			it.input.setFrom(project.provider { inputSources })
 			it.classpath.setFrom(project.provider { compileClasspath })
 			it.reportsDir.set(project.provider { extension.customReportsDir })
+			// TODO this does not set the report name correctly
 			it.reports = extension.reports.apply {
-				reportName = name
+				xml.setReportName(name)
+				html.setReportName(name)
 			}
 		}
 	}

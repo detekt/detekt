@@ -263,6 +263,9 @@ internal class DetektTaskDslTest : Spek({
 					}
 
 				}
+				it("generates one task for each (java) source set of the project") {
+
+				}
 			}
 		}
 
