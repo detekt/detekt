@@ -1,4 +1,4 @@
-configurations.testImplementation.extendsFrom(configurations.kotlinTest)
+configurations.testImplementation.extendsFrom(configurations["kotlinTest"])
 
 tasks["build"].finalizedBy(":detekt-generator:generateDocumentation")
 

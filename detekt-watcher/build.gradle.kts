@@ -4,7 +4,7 @@ application {
 	mainClassName = "io.gitlab.arturbosch.detekt.watcher.MainKt"
 }
 
-configurations.testImplementation.extendsFrom(configurations.kotlinTest)
+configurations.testImplementation.extendsFrom(configurations["kotlinTest"])
 
 val jcommanderVersion: String by project
 val junitPlatformVersion: String by project

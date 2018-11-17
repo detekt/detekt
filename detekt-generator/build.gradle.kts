@@ -11,7 +11,7 @@ val jar by tasks.getting(Jar::class) {
 }
 
 // implementation.extendsFrom kotlin is not enough for using cli in a gradle task - #58
-configurations.testImplementation.extendsFrom(configurations.kotlinTest)
+configurations.testImplementation.extendsFrom(configurations["kotlinTest"])
 
 val detektVersion: String by project
 
