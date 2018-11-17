@@ -118,5 +118,10 @@ internal class PluginTaskBehaviorTest : Spek({
 				assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
 			}
 		}
+		it("should report NO_SOURCE for tasks that point to no sources") {
+			gradleRunner.runDetektTaskAndCheckResult { result ->
+				assertThat(result.task(":detektTest")?.outcome).isEqualTo(TaskOutcome.NO_SOURCE)
+			}
+		}
 	}
 })

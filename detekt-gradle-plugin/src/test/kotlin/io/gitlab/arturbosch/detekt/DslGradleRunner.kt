@@ -21,6 +21,14 @@ class DslGradleRunner(
     	|rootProject.name = "rootDir-project"
 		|include(${projectLayout.submodules.map { "\"${it.name}\"" }.joinToString(",")})
 		|
+		|// Include original detekt dependencies as composite build
+		|includeBuild("${System.getProperty("user.dir")}/../") {
+		|    dependencySubstitution {
+		|    	 // Use local detekt-cli to be able to use local changes to the CLI in Gradle Plugin
+		|    	 // tests immediately.
+		|        substitute module("io.gitlab.arturbosch.detekt:detekt-cli") with project(":detekt-cli")
+		|    }
+		|}
 		""".trimMargin()
 
 	private val baselineContent = """

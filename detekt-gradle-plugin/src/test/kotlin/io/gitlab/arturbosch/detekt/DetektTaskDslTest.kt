@@ -263,8 +263,205 @@ internal class DetektTaskDslTest : Spek({
 					}
 
 				}
-				it("generates one task for each (java) source set of the project") {
+			}
+		}
+	}
 
+	describe("Creating tasks for each source set") {
+		listOf(groovy(), kotlin()).forEach { builder ->
+			describe("using ${builder.gradleBuildName}") {
+				it("generates one task for each java source set of the project") {
+					val gradleRunner = builder
+							.withBaseGradlePlugin(GradlePlugin.JavaLibrary)
+							.build()
+
+					gradleRunner.runTasksAndCheckResult("tasks") { result ->
+						assertThat(result.output).contains("detektMain")
+						assertThat(result.output).contains("detektTest")
+					}
+				}
+
+				it("can successfully run source set tasks") {
+					val gradleRunner = builder
+							.withBaseGradlePlugin(GradlePlugin.JavaLibrary)
+							.build()
+
+					gradleRunner.writeKtFile("src/main/java", "SomeTestClass")
+					gradleRunner.writeKtFile("src/test/java", "SomeTestClass")
+
+					gradleRunner.runTasksAndCheckResult("detektMain", "detektTest") { result ->
+						assertThat(result.task(":detektMain")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+						assertThat(result.task(":detektTest")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+					}
+				}
+				it("respects custom java source sets") {
+					val buildGradleKts = """
+    					|sourceSets.create("custom")
+						""".trimMargin()
+
+					val buildGradle = """
+    					|sourceSets.custom
+						""".trimMargin()
+
+					val gradleRunner = builder
+							.withBuildGradleExtension(buildGradle, buildGradleKts)
+							.withBaseGradlePlugin(GradlePlugin.JavaLibrary)
+							.build()
+
+					gradleRunner.writeKtFile("src/custom/java", "SomeTestClass")
+
+					gradleRunner.runTasksAndCheckResult("detektCustom") { result ->
+						assertThat(result.task(":detektCustom")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+					}
+				}
+
+				it("generates a report for a source set task") {
+					val gradleRunner = builder
+							.withBaseGradlePlugin(GradlePlugin.JavaLibrary)
+							.build()
+
+					gradleRunner.writeKtFile("src/main/java", "SomeTestClass")
+					gradleRunner.writeKtFile("src/test/java", "SomeTestClass")
+
+					gradleRunner.runTasksAndCheckResult("detektMain") { result ->
+						assertThat(projectFile("build/reports/detekt/detektMain.xml")).exists()
+						assertThat(projectFile("build/reports/detekt/detektMain.html")).exists()
+					}
+				}
+
+				it("respects report enable/disable configurations in the source set tasks") {
+					val config = """
+						|detekt {
+						|	reports {
+						|		xml.enabled = false
+						|		html {
+						|			enabled = false
+						|		}
+						|	}
+						|}
+						"""
+
+					val gradleRunner = builder
+							.withBaseGradlePlugin(GradlePlugin.JavaLibrary)
+							.withDetektConfig(config)
+							.build()
+
+					gradleRunner.writeKtFile("src/main/java", "SomeTestClass")
+					gradleRunner.writeKtFile("src/test/java", "SomeTestClass")
+
+					gradleRunner.runTasksAndCheckResult("detektMain") { result ->
+						assertThat(projectFile("build/reports/detekt/detektMain.xml")).doesNotExist()
+						assertThat(projectFile("build/reports/detekt/detektMain.html")).doesNotExist()
+					}
+				}
+
+				it("respects report destination configurations in the source set tasks") {
+					val xmlPath = "path/to/xml"
+					val htmlPath = "path/to/html"
+					val config = """
+						|detekt {
+						|	reports {
+						|		xml.destination = file("$xmlPath/report.xml")
+						|		html {
+						|			destination = file("$htmlPath/report.html")
+						|		}
+						|	}
+						|}
+						"""
+
+					val gradleRunner = builder
+							.withBaseGradlePlugin(GradlePlugin.JavaLibrary)
+							.withDetektConfig(config)
+							.build()
+
+					gradleRunner.writeKtFile("src/main/java", "SomeTestClass")
+					gradleRunner.writeKtFile("src/test/java", "SomeTestClass")
+
+					gradleRunner.runTasksAndCheckResult("detektMain") { result ->
+						assertThat(projectFile("$xmlPath/detektMain.xml")).exists()
+						assertThat(projectFile("$htmlPath/detektMain.html")).exists()
+					}
+				}
+
+				it("respects reportDir configurations in the source set tasks") {
+					val path = "build/detekt-reports"
+					val config = """
+						|detekt {
+						|	reportsDir = file("build/detekt-reports")
+						|}
+						"""
+
+					val gradleRunner = builder
+							.withBaseGradlePlugin(GradlePlugin.JavaLibrary)
+							.withDetektConfig(config)
+							.build()
+
+					gradleRunner.writeKtFile("src/main/java", "SomeTestClass")
+					gradleRunner.writeKtFile("src/test/java", "SomeTestClass")
+
+					gradleRunner.runTasksAndCheckResult("detektMain") { result ->
+						assertThat(projectFile("$path/detektMain.xml")).exists()
+						assertThat(projectFile("$path/detektMain.html")).exists()
+					}
+				}
+
+				it("generates kotlin source set tasks") {
+					val gradleRunner = builder
+							.withBaseGradlePlugin(GradlePlugin.Kotlin)
+							.build()
+
+					gradleRunner.writeKtFile("src/main/java", "SomeTestClass")
+					gradleRunner.writeKtFile("src/test/java", "SomeTestClass")
+
+					gradleRunner.runTasksAndCheckResult("detektMain", "detektTest") { result ->
+						assertThat(result.task(":detektMain")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+						assertThat(result.task(":detektTest")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+					}
+				}
+
+				it("generates kotlin-multiplatform source set tasks") {
+					val gradleRunner = builder
+							.withBaseGradlePlugin(GradlePlugin.KotlinMultiPlatform)
+							.build()
+
+					gradleRunner.writeKtFile("src/main/java", "SomeTestClass")
+					gradleRunner.writeKtFile("src/test/java", "SomeTestClass")
+
+					gradleRunner.runTasksAndCheckResult("tasks", "detektMain", "detektTest") { result ->
+						println(result.output)
+						assertThat(result.task(":detektMain")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+						assertThat(result.task(":detektTest")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+					}
+				}
+
+				it("generates kotlin2js source set tasks") {
+					val gradleRunner = builder
+							.withBaseGradlePlugin(GradlePlugin.Kotlin2Js)
+							.build()
+
+					gradleRunner.writeKtFile("src/main/java", "SomeTestClass")
+					gradleRunner.writeKtFile("src/test/java", "SomeTestClass")
+
+					gradleRunner.runTasksAndCheckResult("tasks", "detektMain", "detektTest") { result ->
+						println(result.output)
+						assertThat(result.task(":detektMain")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+						assertThat(result.task(":detektTest")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+					}
+				}
+
+				it("generates kotlin-android source set tasks") {
+					val gradleRunner = builder
+							.withBaseGradlePlugin(GradlePlugin.KotlinAndroid)
+							.build()
+
+					gradleRunner.writeKtFile("src/main/java", "SomeTestClass")
+					gradleRunner.writeKtFile("src/test/java", "SomeTestClass")
+
+					gradleRunner.runTasksAndCheckResult("tasks", "detektMain", "detektTest") { result ->
+						println(result.output)
+						assertThat(result.task(":detektMain")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+						assertThat(result.task(":detektTest")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+					}
 				}
 			}
 		}
@@ -330,7 +527,6 @@ internal class DetektTaskDslTest : Spek({
 					assertThat(gradleRunner.projectFile("build/reports/failfast.html")).exists()
 				}
 			}
-
 		}
 	}
 })
