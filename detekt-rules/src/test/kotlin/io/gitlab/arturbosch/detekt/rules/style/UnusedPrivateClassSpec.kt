@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
@@ -245,23 +246,37 @@ class UnusedPrivateClassSpec : SubjectSpek<UnusedPrivateClass>({
 		}
 	}
 
-	it("verifies the fix for dot qualified expressions - #1347") {
-		val code = """
-				package com.example
+	describe("reported false positives") {
 
-				class Test {
-					val items = Item.values().map { it.text }.toList()
-				}
-
-				private enum class Item(val text: String) {
-					A("A"),
-					B("B"),
-					C("C")
-				}
+		it("verifies the fix for wildcards within generics - #1345") {
+			val code = """
+				private class Foo
+				fun bar(clazz: KClass<*>) = Unit
 			""".trimIndent()
 
-		val findings = UnusedPrivateClass().lint(code)
+			val findings = UnusedPrivateClass().lint(code)
 
-		assertThat(findings).isEmpty()
+			assertThat(findings).hasSize(1)
+		}
+
+		it("verifies the fix for dot qualified expressions - #1347") {
+			val code = """
+					package com.example
+
+					class Test {
+						val items = Item.values().map { it.text }.toList()
+					}
+
+					private enum class Item(val text: String) {
+						A("A"),
+						B("B"),
+						C("C")
+					}
+				""".trimIndent()
+
+			val findings = UnusedPrivateClass().lint(code)
+
+			assertThat(findings).isEmpty()
+		}
 	}
 })
