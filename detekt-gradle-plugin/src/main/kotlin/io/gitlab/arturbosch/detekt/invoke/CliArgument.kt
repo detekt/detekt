@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.invoke
 
 import org.gradle.api.file.FileCollection
 import org.gradle.api.file.RegularFile
+import java.io.File
 
 private const val DEBUG_PARAMETER = "--debug"
 private const val FILTERS_PARAMETER = "--filters"
@@ -27,7 +28,7 @@ internal object CreateBaselineArgument : CliArgument() {
 internal data class ClasspathArgument(val fileCollection: FileCollection) : CliArgument() {
 	override fun toArgument(): List<String> {
 		if (fileCollection.isEmpty()) return emptyList()
-		return listOf(CLASSPATH_PARAMETER, fileCollection.joinToString(",") { it.absolutePath })	
+		return listOf(CLASSPATH_PARAMETER, fileCollection.joinToString(File.pathSeparator) { it.absolutePath })
 	}
 }
 
