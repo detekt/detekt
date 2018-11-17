@@ -25,7 +25,7 @@ class DetektReport(val type: DetektReportType, private val project: Project) {
 	}
 
 	private fun getTargetFile(reportsDir: File): RegularFile {
-		val prop = project.layout.fileProperty()
+		val prop = project.objects.fileProperty()
 		val customDestination = destination
 		if (customDestination != null)
 			prop.set(customDestination)

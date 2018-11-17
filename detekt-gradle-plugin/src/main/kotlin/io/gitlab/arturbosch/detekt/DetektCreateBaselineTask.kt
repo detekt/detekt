@@ -40,7 +40,7 @@ open class DetektCreateBaselineTask : DefaultTask() {
 
 	@OutputFile
 	@PathSensitive(PathSensitivity.RELATIVE)
-	var baseline: RegularFileProperty = project.layout.fileProperty()
+	var baseline: RegularFileProperty = project.objects.fileProperty()
 
 	@InputFiles
 	@PathSensitive(PathSensitivity.RELATIVE)
