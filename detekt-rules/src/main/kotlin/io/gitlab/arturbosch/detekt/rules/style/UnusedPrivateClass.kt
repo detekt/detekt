@@ -10,8 +10,10 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFunctionType
+import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtNullableType
@@ -118,6 +120,16 @@ class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
 		override fun visitCallExpression(expression: KtCallExpression) {
 			expression.calleeExpression?.text?.run { namedClasses.add(this) }
 			super.visitCallExpression(expression)
+		}
+
+		override fun visitDotQualifiedExpression(expression: KtDotQualifiedExpression) {
+			val maybeClassName = (expression.receiverExpression as? KtNameReferenceExpression)?.text
+			// w/o symbol solving it is hard to tell if this is really a class or part of a package
+			// uppercase is a common convention
+			if (maybeClassName?.firstOrNull()?.isUpperCase() == true) {
+				namedClasses.add(maybeClassName)
+			}
+			super.visitDotQualifiedExpression(expression)
 		}
 	}
 }

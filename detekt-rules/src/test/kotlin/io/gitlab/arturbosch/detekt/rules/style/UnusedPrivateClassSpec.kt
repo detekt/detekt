@@ -245,4 +245,23 @@ class UnusedPrivateClassSpec : SubjectSpek<UnusedPrivateClass>({
 		}
 	}
 
+	it("verifies the fix for dot qualified expressions - #1347") {
+		val code = """
+				package com.example
+
+				class Test {
+					val items = Item.values().map { it.text }.toList()
+				}
+
+				private enum class Item(val text: String) {
+					A("A"),
+					B("B"),
+					C("C")
+				}
+			""".trimIndent()
+
+		val findings = UnusedPrivateClass().lint(code)
+
+		assertThat(findings).isEmpty()
+	}
 })
