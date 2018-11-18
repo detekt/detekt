@@ -36,29 +36,27 @@ Usage: detekt [options]
       Disables default rule sets.
       Default: false
     --filters, -f
-      Path filters defined through regex with separator ';' (".*test.*").
+      Path filters defined through regex with separator ';' or ','
+      (".*test.*"). These filters apply on relative paths from the project
+      root.
     --generate-config, -gc
       Export default config to default-detekt-config.yml.
       Default: false
     --help, -h
       Shows the usage.
     --input, -i
-      Input paths to analyze. Multiple paths are separated by comma. 
-      Default: The current working directory.
+      Input paths to analyze. Multiple paths are separated by comma. If not
+      specified the current working directory is used.
     --parallel
       Enables parallel compilation of source files. Should only be used if the
       analyzing project has more than ~200 kotlin files.
       Default: false
     --plugins, -p
       Extra paths to plugin jars separated by ',' or ';'.
-    --print-ast
-      Prints the AST for given [input] file. Must be no directory.
-      Default: false
     --report, -r
       Generates a report for given 'report-id' and stores it on given 'path'.
-      Entry should consist of: [report-id:path-to-store-report]+
-    --run-rule
-      Specify a rule by [RuleSet:Rule] pattern and run it on input.
-
+      Entry should consist of: [report-id:path]. Available 'report-id' values:
+      'txt', 'xml', 'html'. These can also be used in combination with each
+      other e.g. '-r txt:reports/detekt.txt -r xml:reports/detekt.xml'
 
 ```
