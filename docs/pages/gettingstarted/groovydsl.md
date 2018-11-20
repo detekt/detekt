@@ -26,7 +26,7 @@ Use the Groovy or Kotlin DSL of Gradle to apply the detekt Gradle Plugin. You ca
 using the detekt closure as described [here](#closure).
 
 ##### <a name="gradlegroovy">Configuration when using groovy dsl</a>
-For gradle version >= 2.1
+For gradle version >= 4.9
 
 ```groovy
 buildscript {
