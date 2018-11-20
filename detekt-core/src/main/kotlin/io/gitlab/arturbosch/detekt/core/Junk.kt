@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.core
 
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.RuleSetId
 import org.jetbrains.kotlin.psi.KtFile
 import java.io.PrintStream
 import java.nio.file.Files
@@ -21,10 +22,12 @@ fun Path.isDirectory(): Boolean = Files.isDirectory(this)
 fun KtFile.relativePath(): String? = getUserData(KtCompiler.RELATIVE_PATH)
 fun KtFile.absolutePath(): String? = getUserData(KtCompiler.ABSOLUTE_PATH)
 
-fun MutableMap<String, List<Finding>>.mergeSmells(other: Map<String, List<Finding>>) {
+fun MutableMap<RuleSetId, List<Finding>>.mergeSmells(other: Map<RuleSetId, List<Finding>>)
+		: MutableMap<RuleSetId, List<Finding>> {
 	for ((key, findings) in other.entries) {
 		merge(key, findings) { f1, f2 -> f1.plus(f2) }
 	}
+	return this
 }
 
 fun Throwable.printStacktraceRecursively(logger: PrintStream) {

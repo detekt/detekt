@@ -48,7 +48,7 @@ fun Any.format(prefix: String = "", suffix: String = "\n") = "$prefix$this$suffi
 fun <K, V> List<Pair<K, List<V>>>.toMergedMap(): Map<K, List<V>> {
 	val map = HashMap<K, MutableList<V>>()
 	this.forEach {
-		map.merge(it.first, it.second.toMutableList(), { l1, l2 -> l1.apply { addAll(l2) } })
+		map.merge(it.first, it.second.toMutableList()) { l1, l2 -> l1.apply { addAll(l2) } }
 	}
 	return map
 }

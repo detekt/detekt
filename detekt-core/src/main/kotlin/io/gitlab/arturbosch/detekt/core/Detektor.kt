@@ -6,8 +6,11 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.toMergedMap
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 import org.jetbrains.kotlin.psi.KtFile
-import java.util.concurrent.ExecutorService
 
 /**
  * @author Artur Bosch
@@ -18,35 +21,40 @@ class Detektor(settings: ProcessingSettings,
 
 	private val config: Config = settings.config
 	private val testPattern: TestPattern = settings.loadTestPattern()
-	private val executor: ExecutorService = settings.executorService
 	private val logger = settings.errorPrinter
 
-	fun run(ktFiles: List<KtFile>): Map<RuleSetId, List<Finding>> = withExecutor(executor) {
+	@Suppress("detekt.TooGenericExceptionCaught")
+	fun run(ktFiles: List<KtFile>): Map<RuleSetId, List<Finding>> {
 
-		val futures = ktFiles.map { file ->
-			runAsync {
-				processors.forEach { it.onProcess(file) }
-				file.analyze().apply {
-					processors.forEach { it.onProcessComplete(file, this) }
+		return runBlocking {
+			ktFiles.map { file ->
+				file to processFileAsync(file)
+			}.map { (file, deferred) ->
+				try {
+					deferred.await()
+				} catch (e: Exception) {
+					logger.println("\n\nAnalyzing '${file.absolutePath()}' led to an exception.\n" +
+							"Running detekt '${whichDetekt()}' on Java '${whichJava()}' on OS '${whichOS()}'.\n" +
+							"Please create an issue and report this exception.")
+					e.printStacktraceRecursively(logger)
+					HashMap<RuleSetId, List<Finding>>()
 				}
-			}.exceptionally { error ->
-				logger.println("\n\nAnalyzing '${file.absolutePath()}' led to an exception.\n" +
-						"Running detekt '${whichDetekt()}' on Java '${whichJava()}' on OS '${whichOS()}'.\n" +
-						"Please create an issue and report this exception.")
-				error.printStacktraceRecursively(logger)
-				emptyMap()
+			}.reduce { acc, map ->
+				acc.mergeSmells(map)
 			}
 		}
-
-		val result = HashMap<RuleSetId, List<Finding>>()
-		for (map in awaitAll(futures)) {
-			result.mergeSmells(map)
-		}
-
-		result
 	}
 
-	private fun KtFile.analyze(): Map<RuleSetId, List<Finding>> {
+	private fun CoroutineScope.processFileAsync(file: KtFile): Deferred<MutableMap<RuleSetId, List<Finding>>> {
+		return async {
+			processors.forEach { it.onProcess(file) }
+			file.analyze().apply {
+				processors.forEach { it.onProcessComplete(file, this) }
+			}
+		}
+	}
+
+	private fun KtFile.analyze(): MutableMap<RuleSetId, List<Finding>> {
 		var ruleSets = providers.asSequence()
 				.mapNotNull { it.buildRuleset(config) }
 				.sortedBy { it.id }
@@ -58,6 +66,6 @@ class Detektor(settings: ProcessingSettings,
 			ruleSets.map { ruleSet -> ruleSet.id to ruleSet.accept(this, testPattern.excludingRules) }
 		} else {
 			ruleSets.map { ruleSet -> ruleSet.id to ruleSet.accept(this) }
-		}.toMergedMap()
+		}.toMergedMap().toMutableMap()
 	}
 }

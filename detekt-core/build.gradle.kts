@@ -6,6 +6,7 @@ val reflectionsVersion: String by project
 
 dependencies {
 	implementation(kotlin("compiler-embeddable"))
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.0.1")
 	api(project(":detekt-api"))
 
 	testImplementation(project(":detekt-rules"))
