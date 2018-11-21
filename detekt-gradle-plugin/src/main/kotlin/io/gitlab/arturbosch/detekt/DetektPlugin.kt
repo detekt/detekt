@@ -3,13 +3,18 @@ package io.gitlab.arturbosch.detekt
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.Task
+import org.gradle.api.UnknownTaskException
 import org.gradle.api.file.FileCollection
 import org.gradle.api.provider.Provider
+import org.gradle.api.tasks.TaskProvider
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 
 /**
  * @author Marvin Ramin
  * @author Markus Schwarz
+ * @author Artem Zinnatullin
+ * @author Niklas Baudy
  */
 class DetektPlugin : Plugin<Project> {
 
@@ -18,15 +23,15 @@ class DetektPlugin : Plugin<Project> {
 
 		configurePluginDependencies(project, extension)
 
-		createAndConfigureDetektTask(project, extension)
-		createAndConfigureCreateBaselineTask(project, extension)
-		createAndConfigureGenerateConfigTask(project, extension)
+		registerDetektTask(project, extension)
+		registerCreateBaselineTask(project, extension)
+		registerGenerateConfigTask(project, extension)
 
-		createAndConfigureIdeaTasks(project, extension)
+		registerIdeaTasks(project, extension)
 	}
 
-	private fun createAndConfigureDetektTask(project: Project, extension: DetektExtension) {
-		val detektTask = project.tasks.register(DETEKT, Detekt::class.java) {
+	private fun registerDetektTask(project: Project, extension: DetektExtension) {
+		val detektTaskProvider = project.tasks.register(DETEKT, Detekt::class.java) {
 			it.debugProp.set(project.provider { extension.debug })
 			it.parallelProp.set(project.provider { extension.parallel })
 			it.disableDefaultRuleSetsProp.set(project.provider { extension.disableDefaultRuleSets })
@@ -39,10 +44,16 @@ class DetektPlugin : Plugin<Project> {
 			it.reports = extension.reports
 		}
 
-		project.tasks.findByName(LifecycleBasePlugin.CHECK_TASK_NAME)?.dependsOn(detektTask)
+		val checkTaskProvider = try {
+			project.tasks.named(LifecycleBasePlugin.CHECK_TASK_NAME)
+		} catch (ignored: UnknownTaskException) {
+			null
+		}
+
+		checkTaskProvider?.configure { it.dependsOn(detektTaskProvider.get()) }
 	}
 
-	private fun createAndConfigureCreateBaselineTask(project: Project, extension: DetektExtension) =
+	private fun registerCreateBaselineTask(project: Project, extension: DetektExtension) =
 			project.tasks.register(BASELINE, DetektCreateBaselineTask::class.java) {
 				it.baseline.set(project.layout.file(project.provider { extension.baseline }))
 				it.config.setFrom(project.provider { extension.config })
@@ -54,12 +65,12 @@ class DetektPlugin : Plugin<Project> {
 				it.input.setFrom(existingInputDirectoriesProvider(project, extension))
 			}
 
-	private fun createAndConfigureGenerateConfigTask(project: Project, extension: DetektExtension) =
+	private fun registerGenerateConfigTask(project: Project, extension: DetektExtension) =
 			project.tasks.register(GENERATE_CONFIG, DetektGenerateConfigTask::class.java) {
 				it.input.setFrom(existingInputDirectoriesProvider(project, extension))
 			}
 
-	private fun createAndConfigureIdeaTasks(project: Project, extension: DetektExtension) {
+	private fun registerIdeaTasks(project: Project, extension: DetektExtension) {
 		project.tasks.register(IDEA_FORMAT, DetektIdeaFormatTask::class.java) {
 			it.debug.set(project.provider { extension.debug })
 			it.input.setFrom(existingInputDirectoriesProvider(project, extension))
