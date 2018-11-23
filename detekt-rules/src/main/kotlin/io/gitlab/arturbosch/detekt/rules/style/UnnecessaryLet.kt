@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.IT_LITERAL
 import io.gitlab.arturbosch.detekt.rules.LET_LITERAL
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
@@ -33,6 +34,8 @@ import org.jetbrains.kotlin.psi.KtLambdaExpression
  * a?.let { msg -> print(msg) }
  * a.let { msg -> print(msg) }
  * a?.let { 1.plus(it) } ?.let { msg -> print(msg) }
+ * a?.let { it.plus(it) }
+ * a?.let { param -> param.plus(param) }
  * </compliant>
  *
  * @author mishkun
@@ -59,7 +62,10 @@ class UnnecessaryLet(config: Config) : Rule(config) {
 			if (exprReceiver != null) {
 				val isLetWithImplicitParam = lambdaParameter == null && exprReceiver.textMatches(IT_LITERAL)
 				val isLetWithExplicitParam = lambdaParameter != null && lambdaParameter.textMatches(exprReceiver)
-				if (isLetWithExplicitParam || isLetWithImplicitParam) {
+
+				val hasOneRef = lambdaBody.countVarRefs(lambdaParameter?.text ?: IT_LITERAL) == 1
+
+				if ((isLetWithExplicitParam || isLetWithImplicitParam) && hasOneRef) {
 					report(CodeSmell(
 							issue, Entity.from(expression),
 							"let expression can be omitted"
@@ -77,3 +83,6 @@ private val KtCallExpression.firstLambdaArg get() = lambdaArguments.firstOrNull(
 private val KtLambdaExpression.firstParameter get() = valueParameters.firstOrNull()
 
 private fun KtBlockExpression?.hasOnlyOneStatement() = this?.children?.size == 1
+
+private fun PsiElement.countVarRefs(varName: String): Int =
+		children.sumBy { it.countVarRefs(varName) + if (it.textMatches(varName)) 1 else 0 }

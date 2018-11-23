@@ -53,5 +53,14 @@ class UnnecessaryLetSpec : SubjectSpek<UnnecessaryLet>({
 				}""")
 			assertThat(findings).hasSize(0)
 		}
+		it("does not report lets where it is used multiple times") {
+			val findings = subject.lint("""
+				fun f() {
+					val a : Int? = null
+					a?.let { it.plus(it) }
+					a?.let { foo -> foo.plus(foo) }
+				}""")
+			assertThat(findings).hasSize(0)
+		}
 	}
 })
