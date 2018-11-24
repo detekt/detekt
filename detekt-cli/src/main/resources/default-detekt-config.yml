@@ -470,7 +470,8 @@ style:
     active: true
     max: 2
     excludedFunctions: "equals"
-    excludeLabeled: true
+    excludeLabeled: false
+    excludeReturnFromLambda: true
   SafeCast:
     active: true
   SerialVersionUIDInSerializableClass:

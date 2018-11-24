@@ -220,15 +220,24 @@ class ReturnCountSpec : Spek({
     		}
 		""".trimIndent()
 
-		it("should not count labels by default") {
+		it("should not count labeled returns from lambda by default") {
 			val findings = ReturnCount().lint(code)
 			assertThat(findings).isEmpty()
 		}
 
-		it("should count labels when activated") {
+		it("should count labeled returns from lambda when activated") {
 			val findings = ReturnCount(
-					TestConfig(mapOf("excludeLabeled" to "false"))).lint(code)
+					TestConfig(mapOf("excludeReturnFromLambda" to "false"))).lint(code)
 			assertThat(findings).hasSize(1)
+		}
+
+		it("should be empty when labeled returns are de-activated") {
+			val findings = ReturnCount(
+					TestConfig(mapOf(
+							"excludeLabeled" to "true",
+							"excludeReturnFromLambda" to "false"
+					))).lint(code)
+			assertThat(findings).isEmpty()
 		}
 	}
 })

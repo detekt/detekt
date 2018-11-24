@@ -690,9 +690,13 @@ code.
 
    define functions to be ignored by this check
 
-* `excludeLabeled` (default: `true`)
+* `excludeLabeled` (default: `false`)
 
    if labeled return statements should be ignored
+
+* `excludeReturnFromLambda` (default: `true`)
+
+   if labeled return from a lambda should be ignored
 
 #### Noncompliant Code:
 
