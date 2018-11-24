@@ -59,6 +59,8 @@ Visit https://arturbosch.github.io/detekt/ for installation guides, release note
 
 #### with gradle
 
+Gradle 4.9+ is required:
+
 ```kotlin
 buildscript {
     repositories {

@@ -69,6 +69,28 @@ The report id `plain` has been renamed to `txt`. If you were using `--report "pl
 
 The `--filters` argument no longer checks on the absolute path of files, but rather relative paths to the project root.
 
+
+The published url changed slightly. So users using the old way of applying plugins need to change their gradle setup:
+```
+buildscript {
+  repositories {
+    jcenter()
+    maven { url "https://plugins.gradle.org/m2/" }
+  }
+  dependencies {
+    // https://mvnrepository.com/artifact/gradle.plugin.io.gitlab.arturbosch.detekt/detekt-gradle-plugin 
+    // for version <= 1.0.0.RC9.2
+    classpath "gradle.plugin.io.gitlab.arturbosch.detekt:detekt-gradle-plugin:[version]"
+    // https://mvnrepository.com/artifact/io.gitlab.arturbosch.detekt/detekt-gradle-plugin?repo=gradle-plugins
+    // for version >= 1.0.0-RC10
+    classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:[version]"
+  }
+}
+
+apply plugin: "io.gitlab.arturbosch.detekt"
+```
+
+
 ##### Changelog
 
 - Update regex for private properties in ObjectPropertyNaming to be on pare with intellij - [#1303](https://github.com/arturbosch/detekt/pull/1303)
