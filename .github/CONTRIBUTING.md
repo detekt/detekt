@@ -84,6 +84,8 @@ Run detekt on itself and other kotlin projects with the `--run-rule RuleSet:Rule
 Make use of the `scripts/get_analysis_projects.groovy` script to automatically establish a set of analysis projects.
 - ... do not forget to run `./gradlew build`. This will execute tests locally and update the `default-detekt.config.yml`
 as well as add the new/changed rules to the documentation.
+- To print the AST of sources you can pass the `--print-ast` flag to the CLI which will print each
+Kotlin files AST. This can be helpful when implementing and debugging rules.
 - be aware that your PR will stay open for at least two days so that other users can give feedback.
 
 After some time and testing there is a chance this rule will become active on default.

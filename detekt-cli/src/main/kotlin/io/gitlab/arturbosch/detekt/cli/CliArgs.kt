@@ -76,11 +76,13 @@ class CliArgs : Args {
 	override var help: Boolean = false
 
 	@Parameter(names = ["--run-rule"],
-			description = "Specify a rule by [RuleSet:Rule] pattern and run it on input.")
+			description = "Specify a rule by [RuleSet:Rule] pattern and run it on input.",
+			hidden = true)
 	var runRule: String? = null
 
 	@Parameter(names = ["--print-ast"],
-			description = "Prints the AST for given [input] file. Must be no directory.")
+			description = "Prints the AST for given [input] file. Must be no directory.",
+			hidden = true)
 	var printAst: Boolean = false
 
 	val inputPaths: List<Path> by lazy {
