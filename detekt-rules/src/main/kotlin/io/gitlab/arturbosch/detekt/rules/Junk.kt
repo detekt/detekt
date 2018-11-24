@@ -10,7 +10,6 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtConstantExpression
-import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
@@ -56,16 +55,3 @@ fun getIntValueForPsiElement(element: PsiElement): Int? {
 fun KtStringTemplateExpression.plainText() = text.substring(1, text.length - 1)
 
 fun KtClass.companionObject() = this.companionObjects.singleOrNull { it.isCompanion() }
-
-inline fun <reified T : KtElement> KtElement.collectByType(): List<T> {
-	val list = mutableListOf<T>()
-	this.accept(object : DetektVisitor() {
-		override fun visitKtElement(element: KtElement) {
-			if (element is T) {
-				list.add(element)
-			}
-			element.children.forEach { it.accept(this) }
-		}
-	})
-	return list
-}
