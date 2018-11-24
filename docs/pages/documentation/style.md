@@ -945,6 +945,8 @@ a.let { print(it) }
 a?.let { msg -> print(msg) }
 a.let { msg -> print(msg) }
 a?.let { 1.plus(it) } ?.let { msg -> print(msg) }
+a?.let { it.plus(it) }
+a?.let { param -> param.plus(param) }
 ```
 
 ### UnnecessaryParentheses
