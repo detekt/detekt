@@ -82,6 +82,8 @@ class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
 
 			// Try with the type being a generic argument of other type (e.g. List<Foo>, List<Foo?>)
 			typeReference.typeElement?.typeArgumentsAsTypes
+					?.asSequence()
+					?.filterNotNull()
 					?.map { it.orInnerType() }
 					?.forEach {
 						namedClasses.add(it.text)
