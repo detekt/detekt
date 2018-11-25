@@ -15,7 +15,7 @@ import java.util.regex.PatternSyntaxException
 /**
  * @author Artur Bosch
  */
-class EmptyCodeTest : Spek({
+class EmptyCodeSpec : Spek({
 
 	val regexTestingCode = """
 			fun f() {
@@ -133,7 +133,6 @@ class EmptyCodeTest : Spek({
 			EmptyCatchBlock(config).lint(regexTestingCode)
 		}
 	}
-
 })
 
 private fun test(block: () -> Rule) {

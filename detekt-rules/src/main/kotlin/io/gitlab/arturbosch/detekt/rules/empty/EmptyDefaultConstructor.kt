@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
 import org.jetbrains.kotlin.lexer.KtModifierKeywordToken
 import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.psiUtil.visibilityModifierType
 
@@ -18,9 +19,22 @@ import org.jetbrains.kotlin.psi.psiUtil.visibilityModifierType
 class EmptyDefaultConstructor(config: Config) : EmptyRule(config = config) {
 
 	override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
-		if (hasSuitableSignature(constructor) && isNotCalled(constructor)) {
+		if (hasSuitableSignature(constructor) &&
+				isNotCalled(constructor) &&
+				!isExpectedAnnotationClass(constructor)) {
 			report(CodeSmell(issue, Entity.from(constructor), "An empty default constructor can be removed."))
 		}
+	}
+
+	/**
+	 * Annotations with the 'expect' keyword need the explicit default constructor - #1362
+	 */
+	private fun isExpectedAnnotationClass(constructor: KtPrimaryConstructor): Boolean {
+		val parent = constructor.parent
+		if (parent is KtClass) {
+			return parent.hasModifier(KtTokens.EXPECT_KEYWORD) && parent.isAnnotation()
+		}
+		return false
 	}
 
 	private fun hasSuitableSignature(constructor: KtPrimaryConstructor) =
