@@ -207,4 +207,37 @@ class ReturnCountSpec : Spek({
 			assertThat(findings).hasSize(1)
 		}
 	}
+
+	given("function with multiple labeled return statements") {
+
+		val code = """
+			fun readUsers(name: String): Flowable<User> {
+			return userDao.read(name)
+				.flatMap {
+					if (it.isEmpty()) return@flatMap Flowable.empty<User>()
+					return@flatMap Flowable.just(it[0])
+				}
+    		}
+		""".trimIndent()
+
+		it("should not count labeled returns from lambda by default") {
+			val findings = ReturnCount().lint(code)
+			assertThat(findings).isEmpty()
+		}
+
+		it("should count labeled returns from lambda when activated") {
+			val findings = ReturnCount(
+					TestConfig(mapOf("excludeReturnFromLambda" to "false"))).lint(code)
+			assertThat(findings).hasSize(1)
+		}
+
+		it("should be empty when labeled returns are de-activated") {
+			val findings = ReturnCount(
+					TestConfig(mapOf(
+							"excludeLabeled" to "true",
+							"excludeReturnFromLambda" to "false"
+					))).lint(code)
+			assertThat(findings).isEmpty()
+		}
+	}
 })
