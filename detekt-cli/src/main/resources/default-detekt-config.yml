@@ -406,6 +406,8 @@ style:
     conversionFunctionPrefix: 'to'
   EqualsNullCall:
     active: false
+  EqualsOnSignatureLine:
+    active: false
   ExplicitItLambdaParameter:
     active: false
   ExpressionBodySyntax:
