@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.rules.style.CollapsibleIfStatements
 import io.gitlab.arturbosch.detekt.rules.style.DataClassContainsFunctions
+import io.gitlab.arturbosch.detekt.rules.style.EqualsOnSignatureLine
 import io.gitlab.arturbosch.detekt.rules.style.EqualsNullCall
 import io.gitlab.arturbosch.detekt.rules.style.ExplicitItLambdaParameter
 import io.gitlab.arturbosch.detekt.rules.style.ExpressionBodySyntax
@@ -65,6 +66,7 @@ class StyleGuideProvider : RuleSetProvider {
 				NewLineAtEndOfFile(config),
 				WildcardImport(config),
 				FileParsingRule(config),
+				EqualsOnSignatureLine(config),
 				EqualsNullCall(config),
 				ForbiddenComment(config),
 				ForbiddenImport(config),

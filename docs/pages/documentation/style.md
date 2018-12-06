@@ -88,6 +88,36 @@ fun isNull(str: String) = str.equals(null)
 fun isNull(str: String) = str == null
 ```
 
+### EqualsOnSignatureLine
+
+Requires that the equals sign, when used for an expression style function, is on the same line as the
+rest of the function signature.
+
+**Severity**: Style
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+fun stuff(): Int
+= 5
+
+fun <V> foo(): Int where V : Int
+= 5
+```
+
+#### Compliant Code:
+
+```kotlin
+fun stuff() = 5
+
+fun stuff() =
+foo.bar()
+
+fun <V> foo(): Int where V : Int = 5
+```
+
 ### ExplicitItLambdaParameter
 
 Lambda expressions are one of the core features of the language. They often include very small chunks of
