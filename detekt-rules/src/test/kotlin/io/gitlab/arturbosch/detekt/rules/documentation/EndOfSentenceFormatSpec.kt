@@ -1,12 +1,13 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
-import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
 /**
  * @author Marvin Ramin
+ * @author schalkms
  */
 class EndOfSentenceFormatSpec : SubjectSpek<KDocStyle>({
 	subject { KDocStyle() }
@@ -17,7 +18,7 @@ class EndOfSentenceFormatSpec : SubjectSpek<KDocStyle>({
 			class Test {
 			}
 			"""
-		assertThat(subject.lint(code)).hasSize(1)
+		assertThat(subject.compileAndLint(code)).hasSize(1)
 	}
 
 	it("reports invalid KDoc endings on objects") {
@@ -26,7 +27,7 @@ class EndOfSentenceFormatSpec : SubjectSpek<KDocStyle>({
 			object Test {
 			}
 			"""
-		assertThat(subject.lint(code)).hasSize(1)
+		assertThat(subject.compileAndLint(code)).hasSize(1)
 	}
 
 	it("reports invalid KDoc endings on properties") {
@@ -36,7 +37,7 @@ class EndOfSentenceFormatSpec : SubjectSpek<KDocStyle>({
 				val test = 3
 			}
 			"""
-		assertThat(subject.lint(code)).hasSize(1)
+		assertThat(subject.compileAndLint(code)).hasSize(1)
 	}
 
 	it("reports invalid KDoc endings on top-level functions") {
@@ -44,7 +45,7 @@ class EndOfSentenceFormatSpec : SubjectSpek<KDocStyle>({
 			/** Some doc */
 			fun test() = 3
 			"""
-		assertThat(subject.lint(code)).hasSize(1)
+		assertThat(subject.compileAndLint(code)).hasSize(1)
 	}
 
 	it("reports invalid KDoc endings on functions") {
@@ -54,7 +55,7 @@ class EndOfSentenceFormatSpec : SubjectSpek<KDocStyle>({
 				fun test() = 3
 			}
 			"""
-		assertThat(subject.lint(code)).hasSize(1)
+		assertThat(subject.compileAndLint(code)).hasSize(1)
 	}
 
 	it("reports invalid KDoc endings") {
@@ -64,7 +65,7 @@ class EndOfSentenceFormatSpec : SubjectSpek<KDocStyle>({
 				fun test() = 3
 			}
 			"""
-		assertThat(subject.lint(code)).hasSize(1)
+		assertThat(subject.compileAndLint(code)).hasSize(1)
 	}
 
 	it("reports invalid KDoc endings in block") {
@@ -75,7 +76,7 @@ class EndOfSentenceFormatSpec : SubjectSpek<KDocStyle>({
 			class Test {
 			}
 			"""
-		assertThat(subject.lint(code)).hasSize(1)
+		assertThat(subject.compileAndLint(code)).hasSize(1)
 	}
 
 	it("does not validate first sentence KDoc endings in a multi sentence comment") {
@@ -88,7 +89,7 @@ class EndOfSentenceFormatSpec : SubjectSpek<KDocStyle>({
 			class Test {
 			}
 			"""
-		assertThat(subject.lint(code)).isEmpty()
+		assertThat(subject.compileAndLint(code)).isEmpty()
 	}
 
 	it("does not report KDoc which doesn't contain any real sentence") {
@@ -99,7 +100,7 @@ class EndOfSentenceFormatSpec : SubjectSpek<KDocStyle>({
 			class Test {
 			}
 			"""
-		assertThat(subject.lint(code)).isEmpty()
+		assertThat(subject.compileAndLint(code)).isEmpty()
 	}
 
 	it("does not report KDoc which doesn't contain any real sentence but many tags") {
@@ -114,7 +115,7 @@ class EndOfSentenceFormatSpec : SubjectSpek<KDocStyle>({
 			class Test {
 			}
 			"""
-		assertThat(subject.lint(code)).isEmpty()
+		assertThat(subject.compileAndLint(code)).isEmpty()
 	}
 
 	it("does not report KDoc which doesn't contain any real sentence but html tags") {
@@ -134,7 +135,7 @@ class EndOfSentenceFormatSpec : SubjectSpek<KDocStyle>({
 			class Test {
 			}
 			"""
-		assertThat(subject.lint(code)).isEmpty()
+		assertThat(subject.compileAndLint(code)).isEmpty()
 	}
 
 	it("does not report KDoc ending with periods") {
@@ -145,7 +146,7 @@ class EndOfSentenceFormatSpec : SubjectSpek<KDocStyle>({
 			class Test {
 			}
 			"""
-		assertThat(subject.lint(code)).isEmpty()
+		assertThat(subject.compileAndLint(code)).isEmpty()
 	}
 
 	it("does not report KDoc ending with questionmarks") {
@@ -156,7 +157,7 @@ class EndOfSentenceFormatSpec : SubjectSpek<KDocStyle>({
 			class Test {
 			}
 			"""
-		assertThat(subject.lint(code)).isEmpty()
+		assertThat(subject.compileAndLint(code)).isEmpty()
 	}
 
 	it("does not report KDoc ending with exclamation marks") {
@@ -167,7 +168,7 @@ class EndOfSentenceFormatSpec : SubjectSpek<KDocStyle>({
 			class Test {
 			}
 			"""
-		assertThat(subject.lint(code)).isEmpty()
+		assertThat(subject.compileAndLint(code)).isEmpty()
 	}
 
 	it("does not report URLs in comments") {
@@ -181,6 +182,6 @@ class EndOfSentenceFormatSpec : SubjectSpek<KDocStyle>({
 			class Test2 {
 			}
 			"""
-		assertThat(subject.lint(code)).isEmpty()
+		assertThat(subject.compileAndLint(code)).isEmpty()
 	}
 })
