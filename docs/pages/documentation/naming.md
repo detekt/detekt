@@ -10,7 +10,7 @@ The naming ruleset contains rules which assert the naming of different parts of 
 
 ### ClassNaming
 
-Reports when class names which do not follow the specified naming convention are used.
+Reports when class or object names which do not follow the specified naming convention are used.
 
 **Severity**: Style
 
