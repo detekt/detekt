@@ -66,7 +66,7 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 		properties.filterNot { annotationExcluder.shouldExclude(it.annotationEntries) }
 				.filterNot { it.containingClass()?.name?.matches(ignoreOnClassesPattern) == true }
 				.forEach {
-					report(CodeSmell(issue, Entity.from(it), "Usages of latinit should be avoided."))
+					report(CodeSmell(issue, Entity.from(it), "Usages of lateinit should be avoided."))
 				}
 	}
 
