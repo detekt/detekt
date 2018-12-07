@@ -56,7 +56,6 @@ enum class Case(val file: String) {
 	ComplexClass("/cases/ComplexClass.kt"),
 	ComplexInterfaceNegative("/cases/ComplexInterfaceNegative.kt"),
 	ComplexInterfacePositive("/cases/ComplexInterfacePositive.kt"),
-	Comments("/cases/Comments.kt"),
 	NestedClasses("/cases/NestedClasses.kt"),
 	NoClasses("/cases/NoClasses.kt"),
 	LongMethodPositive("/cases/LongMethodPositive.kt"),
