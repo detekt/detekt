@@ -28,6 +28,6 @@ fun whichDetekt(): String {
 
 private fun readDetektVersionInManifest(resource: URL) =
 		resource.openStream().use {
-			Manifest().mainAttributes
+			Manifest(it).mainAttributes
 					.getValue("DetektVersion")
 		}
