@@ -30,9 +30,11 @@ class Detektor(settings: ProcessingSettings,
 					processors.forEach { it.onProcessComplete(file, this) }
 				}
 			}.exceptionally { error ->
-				logger.println("\n\nAnalyzing '${file.absolutePath()}' led to an exception.\n" +
+				logger.println("Analyzing '${file.absolutePath()}' led to an exception.\n" +
+						"The original exception message was: ${error.localizedMessage}\n" +
 						"Running detekt '${whichDetekt()}' on Java '${whichJava()}' on OS '${whichOS()}'.\n" +
-						"Please create an issue and report this exception.")
+						"If the exception message does not help, please feel free to create an issue on our github page."
+				)
 				error.printStacktraceRecursively(logger)
 				emptyMap()
 			}
