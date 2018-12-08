@@ -8,12 +8,12 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isOpen
-import io.gitlab.arturbosch.detekt.rules.isPublic
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassInitializer
 import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtSecondaryConstructor
+import org.jetbrains.kotlin.psi.psiUtil.isPublic
 
 /**
  * A class which only contains utility variables and functions with no concrete implementation can be refactored
@@ -114,11 +114,11 @@ class UtilityClassWithPublicConstructor(config: Config = Config.empty) : Rule(co
 		private fun hasConstructorWithoutParameters(publicModifier: Boolean): Boolean {
 			val primaryConstructor = klass.primaryConstructor
 			if (primaryConstructor != null) {
-				return primaryConstructor.isPublic() == publicModifier && primaryConstructor.valueParameters.isEmpty()
+				return primaryConstructor.isPublic == publicModifier && primaryConstructor.valueParameters.isEmpty()
 			}
 			val secondaryConstructors = klass.secondaryConstructors
 			return secondaryConstructors.isEmpty() ||
-				secondaryConstructors.any { it.isPublic() == publicModifier && it.valueParameters.isEmpty() }
+				secondaryConstructors.any { it.isPublic == publicModifier && it.valueParameters.isEmpty() }
 		}
 	}
 }

@@ -8,11 +8,11 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isInternal
-import io.gitlab.arturbosch.detekt.rules.isPublic
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtEnumEntry
+import org.jetbrains.kotlin.psi.psiUtil.isPublic
 
 /**
  * Nested classes are often used to implement functionality local to the class it is nested in. Therefore it should
@@ -53,7 +53,7 @@ class NestedClassesVisibility(config: Config = Config.empty) : Rule(config) {
 	private fun checkDeclarations(klass: KtClass) {
 		klass.declarations
 				.filterIsInstance<KtClassOrObject>()
-				.filter { it.isPublic() && it.isNoEnum() && it.isNoCompanionObj() }
+				.filter { it.isPublic && it.isNoEnum() && it.isNoCompanionObj() }
 				.forEach {
 					report(CodeSmell(issue, Entity.from(it),
 							"Nested types are often used for implementing private functionality. " +
