@@ -8,8 +8,8 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.hasConstModifier
 import io.gitlab.arturbosch.detekt.rules.identifierName
+import io.gitlab.arturbosch.detekt.rules.isConstant
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 
@@ -35,7 +35,7 @@ class ObjectPropertyNaming(config: Config = Config.empty) : Rule(config) {
 	private val privatePropertyPattern by LazyRegex(PRIVATE_PROPERTY_PATTERN, "(_)?[A-Za-z][_A-Za-z0-9]*")
 
 	override fun visitProperty(property: KtProperty) {
-		if (property.hasConstModifier()) {
+		if (property.isConstant()) {
 			handleConstant(property)
 		} else {
 			handleProperty(property)
