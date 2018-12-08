@@ -3,18 +3,35 @@ package io.gitlab.arturbosch.detekt.api
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtFile
 
+/**
+ * Primary use case for an AnnotationExcluder is to test KtElement's
+ * if they have an annotation which is excluded e.g. okay for a given rule
+ * not to report it.
+ *
+ * @author Niklas Baudy
+ * @author Artur Bosch
+ * @author schalkms
+ */
 class AnnotationExcluder(
 		root: KtFile,
 		private val excludes: SplitPattern) {
 
 	private var resolvedAnnotations = root.importList
 			?.imports
+			?.asSequence()
 			?.filterNot { it.isAllUnder }
 			?.mapNotNull { it.importedFqName?.asString() }
-			?.map { Pair(it.split(".").last(), it) }
+			?.map { Pair(it.substringAfterLast('.'), it) }
 			?.toMap()
 
+	/**
+	 * Is true if any given annotation name is declared in the SplitPattern
+	 * which basically describes entries to exclude.
+	 */
 	fun shouldExclude(annotations: List<KtAnnotationEntry>) =
-			annotations.mapNotNull { resolvedAnnotations?.get(it.typeReference?.text) }
-					.any { excludes.contains(it) }
+			annotations.firstOrNull(::isExcluded) != null
+
+	private fun isExcluded(annotation: KtAnnotationEntry): Boolean =
+			resolvedAnnotations?.get(annotation.typeReference?.text)
+					?.let { excludes.contains(it) } ?: false
 }

@@ -1,6 +1,8 @@
 package io.gitlab.arturbosch.detekt.api
 
 /**
+ * Wraps two different configuration which should be considered when retrieving properties.
+ *
  * @author Artur Bosch
  */
 class CompositeConfig(private val lookFirst: Config, private val lookSecond: Config) : Config {

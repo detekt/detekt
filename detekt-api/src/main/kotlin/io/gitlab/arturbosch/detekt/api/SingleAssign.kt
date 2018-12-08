@@ -3,6 +3,9 @@ package io.gitlab.arturbosch.detekt.api
 import kotlin.reflect.KProperty
 
 /**
+ * Allows to assign a property just one time.
+ * Further assignments result in [IllegalStateException]'s.
+ *
  * @author Artur Bosch
  */
 class SingleAssign<T : Any> {

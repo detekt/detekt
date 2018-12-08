@@ -17,6 +17,9 @@ data class Entity(val name: String,
 	override fun compact() = "[$name] at ${location.compact()}"
 
 	companion object {
+		/**
+		 * Factory function which retrieves all needed information from the [PsiElement] itself.
+		 */
 		fun from(element: PsiElement, offset: Int = 0): Entity {
 			val name = element.searchName()
 			val signature = element.buildFullSignature()

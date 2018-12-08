@@ -12,7 +12,7 @@ private val identifierRegex = Regex("[aA-zZ]+([-][aA-zZ]+)*")
  * Checks if given string matches the criteria of an id - [aA-zZ]+([-][aA-zZ]+)* .
  */
 internal fun validateIdentifier(id: String) {
-	require(id.matches(identifierRegex), { "id must match [aA-zZ]+([-][aA-zZ]+)*" })
+	require(id.matches(identifierRegex)) { "id must match [aA-zZ]+([-][aA-zZ]+)*" }
 }
 
 /**
@@ -47,8 +47,10 @@ fun Any.format(prefix: String = "", suffix: String = "\n") = "$prefix$this$suffi
 
 fun <K, V> List<Pair<K, List<V>>>.toMergedMap(): Map<K, List<V>> {
 	val map = HashMap<K, MutableList<V>>()
-	this.forEach {
-		map.merge(it.first, it.second.toMutableList(), { l1, l2 -> l1.apply { addAll(l2) } })
+	for ((key, values) in this) {
+		map.merge(key, values.toMutableList()) { l1, l2 ->
+			l1.apply { addAll(l2) }
+		}
 	}
 	return map
 }

@@ -1,13 +1,11 @@
 package io.gitlab.arturbosch.detekt.api
 
 /**
+ * An issue represents a problem in the codebase.
+ *
  * @author Artur Bosch
  * @author Marvin Ramin
  * @author schalkms
- */
-
-/**
- * An issue represents a problem in the codebase.
  */
 data class Issue(val id: String,
 				 val severity: Severity,

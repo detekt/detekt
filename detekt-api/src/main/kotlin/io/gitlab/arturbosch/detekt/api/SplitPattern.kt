@@ -2,6 +2,11 @@ package io.gitlab.arturbosch.detekt.api
 
 private val regex = Regex(",")
 
+/**
+ * Splits given text into parts and provides testing utilities for its elements.
+ * Basic use cases are to specify different function or class names in the detekt
+ * yaml config and test for their appearance in specific rules.
+ */
 class SplitPattern(text: String,
 				   delimiters: Regex = regex) {
 

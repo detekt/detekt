@@ -4,16 +4,28 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 /**
+ * Translates detekt's result container - [Detektion] - into an output report
+ * which is written inside a file.
+ *
  * @author Artur Bosch
  * @author Marvin Ramin
  */
 abstract class OutputReport : Extension {
 
+	/**
+	 * Supported ending of this report type.
+	 */
 	abstract val ending: String
 
+	/**
+	 * Name of the report. Is used to exclude this report in the yaml config.
+	 */
 	open val name
 		get() = this::class.simpleName
 
+	/**
+	 * Renders result and writes it to the given [filePath].
+	 */
 	fun write(filePath: Path, detektion: Detektion) {
 		val reportData = render(detektion)
 		if (reportData != null) {
@@ -25,5 +37,8 @@ abstract class OutputReport : Extension {
 		}
 	}
 
+	/**
+	 * Defines the translation process of detekt's result into a string.
+	 */
 	abstract fun render(detektion: Detektion): String?
 }

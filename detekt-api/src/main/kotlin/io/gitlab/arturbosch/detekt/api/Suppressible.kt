@@ -32,8 +32,9 @@ private fun KtElement.findAnnotatedSuppressedParent(id: String, aliases: Set<Str
 	return suppressed
 }
 
-private val detektSuppresionPrefixRegex = Regex("(?i)detekt([.:])")
+private val detektSuppressionPrefixRegex = Regex("(?i)detekt([.:])")
 private const val QUOTES = "\""
+private val suppressionAnnotations = setOf("Suppress", "SuppressWarnings")
 
 /**
  * Checks if this kt element is suppressed by @Suppress or @SuppressWarnings annotations.
@@ -41,10 +42,11 @@ private const val QUOTES = "\""
 fun KtAnnotated.isSuppressedBy(id: RuleId, aliases: Set<String>): Boolean {
 	val valid = mutableSetOf(id, "ALL", "all", "All")
 	valid.addAll(aliases)
-	return annotationEntries.find { it.typeReference?.text.let { it == "Suppress" || it == "SuppressWarnings" } }
+	return annotationEntries
+			.find { it.typeReference?.text in suppressionAnnotations }
 			?.valueArguments
 			?.map { it.getArgumentExpression()?.text }
-			?.map { it?.replace(detektSuppresionPrefixRegex, "") }
+			?.map { it?.replace(detektSuppressionPrefixRegex, "") }
 			?.map { it?.replace(QUOTES, "") }
 			?.find { it in valid } != null
 }

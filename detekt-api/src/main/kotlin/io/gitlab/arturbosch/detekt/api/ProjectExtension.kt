@@ -18,11 +18,18 @@ import org.jetbrains.kotlin.com.intellij.pom.impl.PomTransactionBase
 import org.jetbrains.kotlin.com.intellij.pom.tree.TreeAspect
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.TreeCopyHandler
 import org.jetbrains.kotlin.config.CompilerConfiguration
+import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtPsiFactory
 import sun.reflect.ReflectionFactory
 
+/**
+ * The initialized kotlin environment which is used to translate kotlin code to a Kotlin-AST.
+ */
 val psiProject = createKotlinCoreEnvironment()
 
+/**
+ * Allows to generate different kinds of [KtElement]'s.
+ */
 val psiFactory = KtPsiFactory(psiProject, false)
 
 private fun createKotlinCoreEnvironment(): Project {

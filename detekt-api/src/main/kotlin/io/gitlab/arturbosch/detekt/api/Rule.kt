@@ -46,10 +46,16 @@ abstract class Rule(override val ruleSetConfig: Config = Config.empty,
 
 	override fun visitCondition(root: KtFile) = active && !root.isSuppressedBy(ruleId, aliases)
 
+	/**
+	 * Simplified version of [Context.report] with aliases retrieval from the config.
+	 */
 	fun report(finding: Finding) {
 		report(finding, aliases)
 	}
 
+	/**
+	 * Simplified version of [Context.report] with aliases retrieval from the config.
+	 */
 	fun report(findings: List<Finding>) {
 		report(findings, aliases)
 	}
