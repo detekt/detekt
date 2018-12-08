@@ -6,13 +6,19 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtLoopExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtObjectLiteralExpression
 import org.jetbrains.kotlin.psi.KtTryExpression
 import org.jetbrains.kotlin.psi.KtWhenEntry
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
+import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
 /**
+ * Counts the cyclomatic complexity of functions.
+ *
  * @author Artur Bosch
+ * @author schalkms
+ * @author Sebastiano Poggi
  */
 class McCabeVisitor(private val ignoreSimpleWhenEntries: Boolean) : DetektVisitor() {
 
@@ -22,9 +28,14 @@ class McCabeVisitor(private val ignoreSimpleWhenEntries: Boolean) : DetektVisito
 		}
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
-		mcc++
-		super.visitNamedFunction(function)
+		if (!isInsideObjectLiteral(function)) {
+			mcc++
+			super.visitNamedFunction(function)
+		}
 	}
+
+	fun isInsideObjectLiteral(function: KtNamedFunction) =
+			function.getStrictParentOfType<KtObjectLiteralExpression>() != null
 
 	override fun visitIfExpression(expression: KtIfExpression) {
 		mcc++
