@@ -8,7 +8,6 @@ val reflectionsVersion: String by project
 
 dependencies {
 	implementation(project(":detekt-api"))
-	implementation(kotlin("compiler-embeddable"))
 
 	testImplementation("org.reflections:reflections:$reflectionsVersion")
 	testImplementation(project(":detekt-test"))
