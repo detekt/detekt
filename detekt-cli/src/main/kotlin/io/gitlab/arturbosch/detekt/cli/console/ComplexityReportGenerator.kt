@@ -1,8 +1,6 @@
 package io.gitlab.arturbosch.detekt.cli.console
 
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.PREFIX
-import io.gitlab.arturbosch.detekt.api.format
 
 class ComplexityReportGenerator(private val complexityMetric: ComplexityMetric) {
 
