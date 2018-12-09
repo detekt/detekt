@@ -45,9 +45,9 @@ class DuplicateCaseInWhenExpression(config: Config) : Rule(config) {
 	override fun visitWhenExpression(expression: KtWhenExpression) {
 		val entries = expression.entries
 				.map { it.conditions }
-				.fold(mutableListOf<String>(), { state, conditions ->
+				.fold(mutableListOf<String>()) { state, conditions ->
 					state.apply { add(conditions.joinToString { it.text }) }
-				})
+				}
 		val duplicates = findDuplicates(entries)
 		if (duplicates.isNotEmpty()) {
 			report(CodeSmell(issue, Entity.from(expression),

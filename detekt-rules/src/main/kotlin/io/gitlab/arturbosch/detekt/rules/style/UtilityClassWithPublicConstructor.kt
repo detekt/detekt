@@ -71,7 +71,7 @@ class UtilityClassWithPublicConstructor(config: Config = Config.empty) : Rule(co
 	override fun visitClass(klass: KtClass) {
 		if (!klass.isInterface() && !klass.superTypeListEntries.any()) {
 			val utilityClassConstructor = UtilityClassConstructor(klass)
-			val declarations = klass.getBody()?.declarations
+			val declarations = klass.body?.declarations
 			if (hasOnlyUtilityClassMembers(declarations)) {
 				if (utilityClassConstructor.hasPublicConstructorWithoutParameters()) {
 					report(CodeSmell(issue, Entity.from(klass),

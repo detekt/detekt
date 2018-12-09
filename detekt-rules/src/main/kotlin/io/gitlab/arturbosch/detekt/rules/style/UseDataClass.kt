@@ -96,7 +96,7 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 
 	private fun KtClass.isClosedForExtension() = !isAbstract() && !isOpen()
 
-	private fun KtClass.extractDeclarations(): List<KtDeclaration> = getBody()?.declarations ?: emptyList()
+	private fun KtClass.extractDeclarations(): List<KtDeclaration> = body?.declarations ?: emptyList()
 
 	private fun KtClass.extractConstructorPropertyParameters(): List<KtParameter> =
 			getPrimaryConstructorParameterList()

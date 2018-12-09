@@ -43,7 +43,7 @@ class OptionalAbstractKeyword(config: Config = Config.empty) : Rule(config) {
 	override fun visitClass(klass: KtClass) {
 		if (klass.isInterface()) {
 			handleAbstractKeyword(klass)
-			val body = klass.getBody()
+			val body = klass.body
 			if (body != null) {
 				body.properties.forEach { handleAbstractKeyword(it) }
 				body.children.filterIsInstance<KtNamedFunction>().forEach { handleAbstractKeyword(it) }

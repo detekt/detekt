@@ -43,7 +43,7 @@ class ComplexInterface(config: Config = Config.empty,
 
 	override fun visitClass(klass: KtClass) {
 		if (klass.isInterface()) {
-			val body = klass.getBody() ?: return
+			val body = klass.body ?: return
 			var size = calculateMembers(body)
 			if (includeStaticDeclarations) {
 				size += countStaticDeclarations(klass.companionObject())
@@ -59,7 +59,7 @@ class ComplexInterface(config: Config = Config.empty,
 	}
 
 	private fun countStaticDeclarations(companionObject: KtObjectDeclaration?): Int {
-		val body = companionObject?.getBody()
+		val body = companionObject?.body
 		return if (body != null) calculateMembers(body) else 0
 	}
 

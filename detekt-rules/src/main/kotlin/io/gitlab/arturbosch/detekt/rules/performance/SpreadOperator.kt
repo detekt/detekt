@@ -38,7 +38,7 @@ class SpreadOperator(config: Config = Config.empty) : Rule(config) {
 	override fun visitValueArgumentList(list: KtValueArgumentList) {
 		super.visitValueArgumentList(list)
 		list.arguments.filter { it.getSpreadElement() != null }
-				.forEach {
+				.onEach {
 					report(CodeSmell(issue, Entity.from(list), issue.description))
 				}
 	}

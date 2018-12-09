@@ -8,10 +8,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.isAbstract
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOverridden
-import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.isAbstract
@@ -50,7 +48,7 @@ class ProtectedMemberInFinalClass(config: Config = Config.empty) : Rule(config) 
 	override fun visitClass(klass: KtClass) {
 		if (hasModifiers(klass)) {
 			klass.primaryConstructor?.accept(visitor)
-			klass.getBody()?.declarations?.forEach { it.accept(visitor) }
+			klass.body?.declarations?.forEach { it.accept(visitor) }
 			klass.companionObjects.forEach { it.accept(visitor) }
 		}
 		super.visitClass(klass)

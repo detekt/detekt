@@ -116,7 +116,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 		super.visitObjectDeclaration(declaration)
 	}
 
-	private fun calcFunctions(classOrObject: KtClassOrObject): Int = classOrObject.getBody()?.declarations
+	private fun calcFunctions(classOrObject: KtClassOrObject): Int = classOrObject.body?.declarations
 			?.filterIsInstance<KtNamedFunction>()
 			?.filter { !isIgnoredFunction(it) }
 			?.size ?: 0

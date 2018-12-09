@@ -65,7 +65,7 @@ class LargeClass(config: Config = Config.empty,
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
 		containsClassOrObject = true
 		locStack.push(0)
-		classOrObject.getBody()?.let {
+		classOrObject.body?.let {
 			addToHead(it.declarations.size)
 		}
 		incHead() // for class body

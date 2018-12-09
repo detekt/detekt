@@ -83,7 +83,7 @@ class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
 	}
 
 	private fun getMisnamedMembers(klassOrObject: KtClassOrObject, name: String?): List<KtNamedDeclaration> {
-		val body = klassOrObject.getBody() ?: return emptyList()
+		val body = klassOrObject.body ?: return emptyList()
 		val declarations = getFunctions(body).concat(body.properties)
 		return declarations?.filter { it.name?.equals(name, ignoreCase = true) == true } ?: emptyList()
 	}

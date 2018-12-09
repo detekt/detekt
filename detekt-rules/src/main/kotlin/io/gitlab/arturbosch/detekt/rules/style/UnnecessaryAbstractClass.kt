@@ -12,7 +12,6 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.rules.isAbstract
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
@@ -67,7 +66,7 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
 
 	override fun visitClass(klass: KtClass) {
 		if (!klass.isInterface() && klass.isAbstract() && klass.superTypeListEntries.isEmpty()) {
-			val body = klass.getBody()
+			val body = klass.body
 			if (body != null) {
 				val namedMembers = body.children.filter { it is KtProperty || it is KtNamedFunction }
 				val namedClassMembers = NamedClassMembers(klass, namedMembers)

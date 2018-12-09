@@ -63,7 +63,7 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
 	override fun visitBlockExpression(expression: KtBlockExpression) {
 		expression.statements
 				.filter { it is KtNameReferenceExpression && it.text == UNIT }
-				.forEach {
+				.onEach {
 					report(CodeSmell(issue, Entity.from(expression),
 							"A single Unit expression is unnecessary and can safely be removed"))
 				}
