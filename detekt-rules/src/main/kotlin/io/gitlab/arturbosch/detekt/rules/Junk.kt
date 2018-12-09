@@ -22,7 +22,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 fun KtExpression?.asBlockExpression(): KtBlockExpression? = this as? KtBlockExpression
 
 fun KtClassOrObject.isObjectOfAnonymousClass() =
-		this.getNonStrictParentOfType(KtObjectDeclaration::class.java) != null && this.name == null
+		this.getNonStrictParentOfType<KtObjectDeclaration>() != null && this.name == null
 
 fun KtCallExpression.isUsedForNesting(): Boolean = when (getCallNameExpression()?.text) {
 	"run", "let", "apply", "with", "use", "forEach" -> true

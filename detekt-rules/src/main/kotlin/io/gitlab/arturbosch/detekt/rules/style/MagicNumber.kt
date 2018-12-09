@@ -191,20 +191,20 @@ private fun KtConstantExpression.isPartOfConstructorOrFunctionConstant(): Boolea
 }
 
 private fun KtConstantExpression.isPartOfHashCode(): Boolean {
-	val containingFunction = getNonStrictParentOfType(KtNamedFunction::class.java)
+	val containingFunction = getNonStrictParentOfType<KtNamedFunction>()
 	return containingFunction?.isHashCodeFunction() == true
 }
 
 private fun KtConstantExpression.isProperty() =
-		getNonStrictParentOfType(KtProperty::class.java)?.let { !it.isLocal } ?: false
+		getNonStrictParentOfType<KtProperty>()?.let { !it.isLocal } ?: false
 
 private fun KtConstantExpression.isCompanionObjectProperty() = isProperty() && isInCompanionObject()
 
 private fun KtConstantExpression.isInCompanionObject() =
-		getNonStrictParentOfType(KtObjectDeclaration::class.java)?.isCompanion() ?: false
+		getNonStrictParentOfType<KtObjectDeclaration>()?.isCompanion() ?: false
 
 private fun KtConstantExpression.isConstantProperty(): Boolean =
-		isProperty() && getNonStrictParentOfType(KtProperty::class.java)?.isConstant() ?: false
+		isProperty() && getNonStrictParentOfType<KtProperty>()?.isConstant() ?: false
 
 private fun PsiElement.hasUnaryMinusPrefix(): Boolean = this is KtPrefixExpression &&
 		(this.firstChild as? KtOperationReferenceExpression)?.operationSignTokenType == KtTokens.MINUS

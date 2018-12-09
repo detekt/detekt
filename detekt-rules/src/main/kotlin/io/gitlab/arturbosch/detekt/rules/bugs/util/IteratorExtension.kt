@@ -13,7 +13,7 @@ internal fun KtClassOrObject.isImplementingIterator(): Boolean {
 }
 
 internal fun KtClassOrObject.getMethod(name: String): KtNamedFunction? {
-	val functions = this.declarations.filterIsInstance(KtNamedFunction::class.java)
+	val functions = this.declarations.filterIsInstance<KtNamedFunction>()
 	return functions.firstOrNull { it.name == name && it.valueParameters.isEmpty() }
 }
 
