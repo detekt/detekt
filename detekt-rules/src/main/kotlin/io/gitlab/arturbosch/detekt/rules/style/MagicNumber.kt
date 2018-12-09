@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.isPartOf
+import io.gitlab.arturbosch.detekt.rules.isConstant
 import io.gitlab.arturbosch.detekt.rules.isHashCodeFunction
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -203,7 +204,7 @@ private fun KtConstantExpression.isInCompanionObject() =
 		getNonStrictParentOfType(KtObjectDeclaration::class.java)?.isCompanion() ?: false
 
 private fun KtConstantExpression.isConstantProperty(): Boolean =
-		isProperty() && getNonStrictParentOfType(KtProperty::class.java)?.hasModifier(KtTokens.CONST_KEYWORD) ?: false
+		isProperty() && getNonStrictParentOfType(KtProperty::class.java)?.isConstant() ?: false
 
 private fun PsiElement.hasUnaryMinusPrefix(): Boolean = this is KtPrefixExpression &&
 		(this.firstChild as? KtOperationReferenceExpression)?.operationSignTokenType == KtTokens.MINUS

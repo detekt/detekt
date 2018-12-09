@@ -8,10 +8,13 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.isAbstract
+import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOverridden
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtDeclaration
+import org.jetbrains.kotlin.psi.psiUtil.isAbstract
 import org.jetbrains.kotlin.psi.psiUtil.isProtected
 
 /**
@@ -54,9 +57,9 @@ class ProtectedMemberInFinalClass(config: Config = Config.empty) : Rule(config) 
 	}
 
 	private fun hasModifiers(klass: KtClass): Boolean {
-		val isNotAbstract = !klass.hasModifier(KtTokens.ABSTRACT_KEYWORD)
-		val isFinal = !klass.hasModifier(KtTokens.OPEN_KEYWORD)
-		val isNotSealed = !klass.hasModifier(KtTokens.SEALED_KEYWORD)
+		val isNotAbstract = !klass.isAbstract()
+		val isFinal = !klass.isOpen()
+		val isNotSealed = !klass.isSealed()
 		return isNotAbstract && isFinal && isNotSealed
 	}
 

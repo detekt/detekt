@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.rules.isOverridden
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameterList
@@ -36,7 +37,7 @@ class LongParameterList(config: Config = Config.empty,
 	private val ignoreDefaultParameters = valueOrDefault(IGNORE_DEFAULT_PARAMETERS, false)
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (function.hasModifier(KtTokens.OVERRIDE_KEYWORD)) return
+		if (function.isOverridden()) return
 		val parameterList = function.valueParameterList
 		val parameters = parameterList?.parameterCount()
 

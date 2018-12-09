@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.companionObject
+import io.gitlab.arturbosch.detekt.rules.isConstant
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -77,7 +78,7 @@ class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(
 
 	private fun hasCorrectSerialVersionUUID(declaration: KtObjectDeclaration): Boolean {
 		val property = declaration.getBody()?.properties?.firstOrNull { it.name == versionUID }
-		return property != null && property.hasModifier(KtTokens.CONST_KEYWORD) && isLongProperty(property)
+		return property != null && property.isConstant() && isLongProperty(property)
 	}
 
 	private fun isLongProperty(property: KtProperty) = hasLongType(property) || hasLongAssignment(property)
