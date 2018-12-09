@@ -13,6 +13,41 @@ toc: true
 
 -->
 
+#### RC12
+
+##### Changelog
+
+- Actually print the exception message next to the stacktrace - [#1378](https://github.com/arturbosch/detekt/pull/1378)
+- Added support for JSR test infrastructure in documentation ruleset - [#1377](https://github.com/arturbosch/detekt/pull/1377)
+- Actually load the manifest to report detekt's version - [#1376](https://github.com/arturbosch/detekt/pull/1376)
+- fix typo - [#1374](https://github.com/arturbosch/detekt/pull/1374)
+- Drop JDK 9 & 10 from CI - [#1371](https://github.com/arturbosch/detekt/pull/1371)
+- Add EqualsOnSignatureLine - [#1370](https://github.com/arturbosch/detekt/pull/1370)
+- Do not add +1 complexity for nested functions inside functions - [#1365](https://github.com/arturbosch/detekt/pull/1365)
+- Do not report expect'ed annotation classes with an empty constructor … - [#1364](https://github.com/arturbosch/detekt/pull/1364)
+- Add more talks mentioning detekt - [#1363](https://github.com/arturbosch/detekt/pull/1363)
+- false positive EmptyDefaultConstructor for annotation - [#1362](https://github.com/arturbosch/detekt/issues/1362)
+- Mention published url change in the migration guide - [#1361](https://github.com/arturbosch/detekt/pull/1361)
+- Support multiple it refs in UnnecessaryLet (#1359) - [#1360](https://github.com/arturbosch/detekt/pull/1360)
+- Allow multiple 'it' references in UnnecessaryLet - [#1359](https://github.com/arturbosch/detekt/issues/1359)
+- Fix link to contributing guideline in PR template - [#1358](https://github.com/arturbosch/detekt/pull/1358)
+- Updated groovydsl version doc - [#1353](https://github.com/arturbosch/detekt/pull/1353)
+- gradle plugin min gradle version - [#1352](https://github.com/arturbosch/detekt/issues/1352)
+- Hide dev flags in CLI - [#1351](https://github.com/arturbosch/detekt/pull/1351)
+- Filter wildcards for type references as they can be null - Closes #1345 - [#1349](https://github.com/arturbosch/detekt/pull/1349)
+- I can't please detekt and/or ktlint with the following - what's kotlin idiomatic approach - [#1348](https://github.com/arturbosch/detekt/issues/1348)
+- False positive UnusedPrivateClass in RC11 - [#1347](https://github.com/arturbosch/detekt/issues/1347)
+- UnusedPrivateClass check led to an exception - [#1345](https://github.com/arturbosch/detekt/issues/1345)
+- Added support for JSR test infrasture in performance ruleset - [#1343](https://github.com/arturbosch/detekt/pull/1343)
+- Added SwallowedException ignore type config - [#1342](https://github.com/arturbosch/detekt/pull/1342)
+- RC10 not published? - [#1339](https://github.com/arturbosch/detekt/issues/1339)
+- Allow to exclude labeled return statements - #1317 - [#1336](https://github.com/arturbosch/detekt/pull/1336)
+- Updated kotlin version to 1.3.10 - [#1332](https://github.com/arturbosch/detekt/pull/1332)
+- Don't publish Gradle plugin to Bintray - [#1161](https://github.com/arturbosch/detekt/pull/1161)
+- ComplexMethod false positive for returning anonymous inner class - [#1037](https://github.com/arturbosch/detekt/issues/1037)
+
+See all issues at: [RC12](https://github.com/arturbosch/detekt/milestone/41)
+
 #### RC11
 
 ##### Migration
