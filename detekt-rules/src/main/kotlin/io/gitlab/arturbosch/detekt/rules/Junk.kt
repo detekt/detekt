@@ -23,8 +23,6 @@ import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 
 fun KtExpression?.asBlockExpression(): KtBlockExpression? = this as? KtBlockExpression
 
-fun KtClass.isDataClass() = this.modifierList?.hasModifier(KtTokens.DATA_KEYWORD) == true
-
 fun KtClassOrObject.isObjectOfAnonymousClass() =
 		this.getNonStrictParentOfType(KtObjectDeclaration::class.java) != null && this.name == null
 

@@ -7,11 +7,11 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.isDataClass
 import io.gitlab.arturbosch.detekt.rules.isEqualsFunction
 import io.gitlab.arturbosch.detekt.rules.isHashCodeFunction
 import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import java.util.ArrayDeque
 
@@ -70,14 +70,15 @@ class EqualsWithHashCodeExist(config: Config = Config.empty) : Rule(config) {
 		super.visitFile(file)
 	}
 
-	override fun visitClass(klass: KtClass) {
-		if (klass.isDataClass()) {
+	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
+		val klass = classOrObject as? KtClass
+		if (klass != null && klass.isData()) {
 			return
 		}
 		queue.push(ViolationHolder())
-		super.visitClass(klass)
+		super.visitClassOrObject(classOrObject)
 		if (queue.pop().violation()) {
-			report(CodeSmell(issue, Entity.from(klass), "A class should always override hashCode " +
+			report(CodeSmell(issue, Entity.from(classOrObject), "A class should always override hashCode " +
 					"when overriding equals and the other way around."))
 		}
 	}
