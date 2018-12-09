@@ -10,13 +10,13 @@ typealias RuleId = String
 /**
  * Defines the visiting mechanism for [KtFile]'s.
  *
- * Custom rule implementations should actually use the [Rule] as base class.
+ * Custom rule implementations should actually use [Rule] as base class.
  *
  * The extraction of this class from [Rule] actually resulted from the need
  * of running many different checks on the same [KtFile] but within a single
  * potential costly visiting process, see [MultiRule].
  *
- * This base rule class abstracts over single and multi rules and allow the
+ * This base rule class abstracts over single and multi rules and allows the
  * detekt core engine to only care about a single type.
  */
 abstract class BaseRule(
