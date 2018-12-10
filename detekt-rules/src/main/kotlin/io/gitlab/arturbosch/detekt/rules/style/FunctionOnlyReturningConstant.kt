@@ -9,7 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.rules.isOpen
-import io.gitlab.arturbosch.detekt.rules.isOverridden
+import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -54,7 +54,7 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
 
 	private fun checkOverridableFunction(function: KtNamedFunction): Boolean {
 		return if (ignoreOverridableFunction)
-			!function.isOverridden() && !function.isOpen() && !checkContainingInterface(function)
+			!function.isOverride() && !function.isOpen() && !checkContainingInterface(function)
 		else true
 	}
 

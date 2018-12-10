@@ -14,7 +14,7 @@ import io.gitlab.arturbosch.detekt.rules.isExternal
 import io.gitlab.arturbosch.detekt.rules.isMainFunction
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOperator
-import io.gitlab.arturbosch.detekt.rules.isOverridden
+import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -238,5 +238,5 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 	private fun KtNamedFunction.isRelevant() = !isAllowedToHaveUnusedParameters()
 
 	private fun KtNamedFunction.isAllowedToHaveUnusedParameters() =
-			isAbstract() || isOpen() || isOverridden() || isOperator() || isMainFunction() || isExternal()
+			isAbstract() || isOpen() || isOverride() || isOperator() || isMainFunction() || isExternal()
 }

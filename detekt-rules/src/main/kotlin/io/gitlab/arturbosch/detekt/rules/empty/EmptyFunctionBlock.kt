@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.empty
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.isOpen
-import io.gitlab.arturbosch.detekt.rules.isOverridden
+import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
@@ -27,12 +27,12 @@ class EmptyFunctionBlock(config: Config) : EmptyRule(config) {
 		}
 		val bodyExpression = function.bodyExpression
 		if (!ignoreOverriddenFunctions) {
-			if (function.isOverridden()) {
+			if (function.isOverride()) {
 				bodyExpression?.addFindingIfBlockExprIsEmptyAndNotCommented()
 			} else {
 				bodyExpression?.addFindingIfBlockExprIsEmpty()
 			}
-		} else if (!function.isOverridden()) {
+		} else if (!function.isOverride()) {
 			bodyExpression?.addFindingIfBlockExprIsEmpty()
 		}
 	}

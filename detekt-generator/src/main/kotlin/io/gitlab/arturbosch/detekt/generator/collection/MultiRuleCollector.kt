@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.generator.collection
 
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
-import io.gitlab.arturbosch.detekt.rules.isOverridden
+import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
@@ -89,7 +89,7 @@ class MultiRuleVisitor : DetektVisitor() {
 			return
 		}
 
-		if (property.isOverridden() && property.name != null && property.name == "rules") {
+		if (property.isOverride() && property.name != null && property.name == "rules") {
 			property.accept(rulesVisitor)
 		} else {
 			val name = property.name

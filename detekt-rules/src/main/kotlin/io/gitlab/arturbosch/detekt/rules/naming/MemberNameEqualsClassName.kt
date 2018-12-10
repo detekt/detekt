@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.isOverridden
+import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassBody
@@ -91,7 +91,7 @@ class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
 	private fun getFunctions(body: KtClassBody): List<KtNamedDeclaration> {
 		var functions = body.children.filterIsInstance<KtNamedFunction>()
 		if (ignoreOverriddenFunction) {
-			functions = functions.filter { !it.isOverridden() }
+			functions = functions.filter { !it.isOverride() }
 		}
 		return functions
 	}
