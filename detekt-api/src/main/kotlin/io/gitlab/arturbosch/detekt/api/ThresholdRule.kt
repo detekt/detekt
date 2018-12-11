@@ -8,5 +8,5 @@ abstract class ThresholdRule(config: Config, private val defaultThreshold: Int) 
 	/**
 	 * The used threshold for this rule is loaded from the configuration or used from the constructor value.
 	 */
-	protected val threshold get() = valueOrDefault("threshold", defaultThreshold)
+	protected val threshold: Int get() = valueOrDefault("threshold", defaultThreshold)
 }

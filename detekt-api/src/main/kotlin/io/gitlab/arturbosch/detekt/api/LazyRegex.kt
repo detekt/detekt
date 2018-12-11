@@ -12,7 +12,6 @@ import kotlin.reflect.KProperty
  *
  * @author Pavlos-Petros Tournaris
  */
-
 class LazyRegex(
 		private val key: String,
 		private val default: String

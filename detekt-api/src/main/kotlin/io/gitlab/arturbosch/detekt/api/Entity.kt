@@ -1,5 +1,8 @@
 package io.gitlab.arturbosch.detekt.api
 
+import io.gitlab.arturbosch.detekt.api.internal.buildFullSignature
+import io.gitlab.arturbosch.detekt.api.internal.searchClass
+import io.gitlab.arturbosch.detekt.api.internal.searchName
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtElement
 
@@ -14,9 +17,12 @@ data class Entity(val name: String,
 				  val location: Location,
 				  val ktElement: KtElement? = null) : Compactable {
 
-	override fun compact() = "[$name] at ${location.compact()}"
+	override fun compact(): String = "[$name] at ${location.compact()}"
 
 	companion object {
+		/**
+		 * Factory function which retrieves all needed information from the [PsiElement] itself.
+		 */
 		fun from(element: PsiElement, offset: Int = 0): Entity {
 			val name = element.searchName()
 			val signature = element.buildFullSignature()

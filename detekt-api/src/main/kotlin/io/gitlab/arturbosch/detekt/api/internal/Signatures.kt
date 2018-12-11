@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.api
+package io.gitlab.arturbosch.detekt.api.internal
 
 import org.jetbrains.kotlin.asJava.namedUnwrappedElement
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
@@ -21,7 +21,7 @@ internal fun PsiElement.searchClass(): String {
 	var className = classElement?.name
 	if (className != null && className == "Companion") {
 		classElement?.parent?.getNonStrictParentOfType(KtClassOrObject::class.java)?.name?.let {
-			className = it + ".$className"
+			className = "$it.$className"
 		}
 	}
 	return className ?: this.containingFile.name
@@ -87,4 +87,20 @@ private fun buildFunctionSignature(element: KtNamedFunction): String {
 	return getTextSafe(
 			{ element.nameAsSafeName.identifier },
 			{ element.text.substring(methodStart, methodEnd) })
+}
+
+/*
+ * When analyzing sub path 'testData' of the kotlin project, CompositeElement.getText() throws
+ * a RuntimeException stating 'Underestimated text length' - #65.
+ */
+@Suppress("TooGenericExceptionCaught")
+internal fun getTextSafe(defaultValue: () -> String, block: () -> String) = try {
+	block()
+} catch (e: RuntimeException) {
+	val message = e.message
+	if (message != null && message.contains("Underestimated text length")) {
+		defaultValue() + "!<UnderestimatedTextLengthException>"
+	} else {
+		defaultValue()
+	}
 }

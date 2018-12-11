@@ -3,6 +3,9 @@ package io.gitlab.arturbosch.detekt.api
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 
 /**
+ * Storage for all kinds of findings and additional information
+ * which needs to be transferred from the detekt engine to the user.
+ *
  * @author Artur Bosch
  */
 interface Detektion {
