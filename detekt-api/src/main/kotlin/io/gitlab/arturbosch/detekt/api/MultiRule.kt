@@ -8,7 +8,7 @@ abstract class MultiRule : BaseRule() {
 	var activeRules: Set<Rule> by SingleAssign()
 	var ruleFilters: Set<RuleId> = emptySet()
 
-	override fun visitCondition(root: KtFile) = true
+	override fun visitCondition(root: KtFile): Boolean = true
 
 	override fun preVisit(root: KtFile) {
 		activeRules = rules.filterTo(HashSet()) {

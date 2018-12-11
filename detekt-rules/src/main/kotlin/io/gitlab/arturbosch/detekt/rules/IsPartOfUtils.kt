@@ -12,9 +12,9 @@ import kotlin.reflect.KClass
 /**
  * Tests if this element is part of given PsiElement.
  */
-fun PsiElement.isPartOf(clazz: KClass<out PsiElement>) = getNonStrictParentOfType(clazz.java) != null
+fun PsiElement.isPartOf(clazz: KClass<out PsiElement>): Boolean = getNonStrictParentOfType(clazz.java) != null
 
 /**
- * Tests of this element is part of a kotlin string.
+ * Tests if this element is part of a kotlin string.
  */
-fun PsiElement.isPartOfString() = isPartOf(KtStringTemplateEntry::class)
+fun PsiElement.isPartOfString(): Boolean = isPartOf(KtStringTemplateEntry::class)

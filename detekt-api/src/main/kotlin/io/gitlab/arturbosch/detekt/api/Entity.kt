@@ -17,7 +17,7 @@ data class Entity(val name: String,
 				  val location: Location,
 				  val ktElement: KtElement? = null) : Compactable {
 
-	override fun compact() = "[$name] at ${location.compact()}"
+	override fun compact(): String = "[$name] at ${location.compact()}"
 
 	companion object {
 		/**

@@ -20,7 +20,7 @@ abstract class OutputReport : Extension {
 	/**
 	 * Name of the report. Is used to exclude this report in the yaml config.
 	 */
-	open val name
+	open val name: String?
 		get() = this::class.simpleName
 
 	/**

@@ -14,7 +14,7 @@ import org.jetbrains.kotlin.psi.KtFile
  * Checks if this psi element is suppressed by @Suppress or @SuppressWarnings annotations.
  * If this element cannot have annotations, the first annotative parent is searched.
  */
-fun KtElement.isSuppressedBy(id: String, aliases: Set<String>) =
+fun KtElement.isSuppressedBy(id: String, aliases: Set<String>): Boolean =
 		this is KtAnnotated && this.isSuppressedBy(id, aliases) || findAnnotatedSuppressedParent(id, aliases)
 
 private fun KtElement.findAnnotatedSuppressedParent(id: String, aliases: Set<String>): Boolean {

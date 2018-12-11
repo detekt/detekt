@@ -21,7 +21,7 @@ data class Location(val source: SourceLocation,
 					val locationString: String,
 					val file: String) : Compactable {
 
-	override fun compact() = "$file:$source"
+	override fun compact(): String = "$file:$source"
 
 	companion object {
 		fun from(element: PsiElement, offset: Int = 0): Location {

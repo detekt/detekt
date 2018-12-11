@@ -27,7 +27,7 @@ open class DefaultContext : Context {
 	/**
 	 * Returns a copy of violations for this rule.
 	 */
-	override val findings
+	override val findings: List<Finding>
 		get() = _findings.toList()
 
 	private var _findings: MutableList<Finding> = mutableListOf()

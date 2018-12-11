@@ -25,12 +25,12 @@ import sun.reflect.ReflectionFactory
 /**
  * The initialized kotlin environment which is used to translate kotlin code to a Kotlin-AST.
  */
-val psiProject = createKotlinCoreEnvironment()
+val psiProject: Project = createKotlinCoreEnvironment()
 
 /**
  * Allows to generate different kinds of [KtElement]'s.
  */
-val psiFactory = KtPsiFactory(psiProject, false)
+val psiFactory: KtPsiFactory = KtPsiFactory(psiProject, false)
 
 private fun createKotlinCoreEnvironment(): Project {
 	System.setProperty("idea.io.use.fallback", "true")
