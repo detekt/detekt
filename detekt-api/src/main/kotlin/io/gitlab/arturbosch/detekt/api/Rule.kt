@@ -32,7 +32,7 @@ abstract class Rule(override val ruleSetConfig: Config = Config.empty,
 	/**
 	 * List of rule ids which can optionally be used in suppress annotations to refer to this rule.
 	 */
-	val aliases get() = valueOrDefault("aliases", defaultRuleIdAliases)
+	val aliases: Set<String> get() = valueOrDefault("aliases", defaultRuleIdAliases)
 
 	/**
 	 * The default names which can be used instead of this #ruleId to refer to this rule in suppression's.
@@ -42,14 +42,20 @@ abstract class Rule(override val ruleSetConfig: Config = Config.empty,
 	 *
 	 * 		override val defaultRuleIdAliases = setOf("Name1", "Name2")
 	 */
-	open val defaultRuleIdAliases = emptySet<String>()
+	open val defaultRuleIdAliases: Set<String> = emptySet()
 
-	override fun visitCondition(root: KtFile) = active && !root.isSuppressedBy(ruleId, aliases)
+	override fun visitCondition(root: KtFile): Boolean = active && !root.isSuppressedBy(ruleId, aliases)
 
+	/**
+	 * Simplified version of [Context.report] with aliases retrieval from the config.
+	 */
 	fun report(finding: Finding) {
 		report(finding, aliases)
 	}
 
+	/**
+	 * Simplified version of [Context.report] with aliases retrieval from the config.
+	 */
 	fun report(findings: List<Finding>) {
 		report(findings, aliases)
 	}

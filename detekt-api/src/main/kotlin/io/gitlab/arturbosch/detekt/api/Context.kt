@@ -1,6 +1,14 @@
 package io.gitlab.arturbosch.detekt.api
 
+import org.jetbrains.kotlin.psi.KtFile
+
 /**
+ * A context describes the storing and reporting mechanism of [Finding]'s inside a [Rule].
+ * Additionally it handles suppression and aliases management.
+ *
+ * The detekt engine retrieves the findings after each [KtFile] visit and resets the context
+ * before the next [KtFile].
+ *
  * @author Artur Bosch
  * @author Marvin Ramin
  */
@@ -11,12 +19,15 @@ interface Context {
 	fun clearFindings()
 }
 
+/**
+ * Default [Context] implementation.
+ */
 open class DefaultContext : Context {
 
 	/**
 	 * Returns a copy of violations for this rule.
 	 */
-	override val findings
+	override val findings: List<Finding>
 		get() = _findings.toList()
 
 	private var _findings: MutableList<Finding> = mutableListOf()

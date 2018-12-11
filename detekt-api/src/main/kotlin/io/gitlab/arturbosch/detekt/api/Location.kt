@@ -1,5 +1,7 @@
 package io.gitlab.arturbosch.detekt.api
 
+import io.gitlab.arturbosch.detekt.api.internal.getTextSafe
+import io.gitlab.arturbosch.detekt.api.internal.searchName
 import org.jetbrains.kotlin.com.intellij.openapi.util.TextRange
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.com.intellij.testFramework.LightVirtualFile
@@ -19,7 +21,7 @@ data class Location(val source: SourceLocation,
 					val locationString: String,
 					val file: String) : Compactable {
 
-	override fun compact() = "$file:$source"
+	override fun compact(): String = "$file:$source"
 
 	companion object {
 		fun from(element: PsiElement, offset: Int = 0): Location {

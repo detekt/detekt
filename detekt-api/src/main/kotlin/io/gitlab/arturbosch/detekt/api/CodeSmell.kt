@@ -1,10 +1,17 @@
 package io.gitlab.arturbosch.detekt.api
 
 /**
- * A code smell is a finding, implementing its behaviour. Use this class to store
- * rule violations.
+ * A code smell indicates any possible design problem inside a program's source code.
+ * The type of a code smell is described by an [Issue].
+ *
+ * If the design problem results from metric violations, a list of [Metric]'s
+ * can describe further the kind of metrics.
+ *
+ * If the design problem manifests by different source locations, references to these
+ * locations can be stored in additional [Entity]'s.
  *
  * @author Artur Bosch
+ * @author Marvin Ramin
  */
 open class CodeSmell(final override val issue: Issue,
 					 override val entity: Entity,
@@ -14,7 +21,7 @@ open class CodeSmell(final override val issue: Issue,
 
 	override val id: String = issue.id
 
-	override fun compact() = "$id - ${entity.compact()}"
+	override fun compact(): String = "$id - ${entity.compact()}"
 
 	override fun compactWithSignature() = compact() + " - Signature=" + entity.signature
 
@@ -52,7 +59,7 @@ open class ThresholdedCodeSmell(
 	val threshold: Int
 		get() = metric.threshold
 
-	override fun compact() = "$id - $metric - ${entity.compact()}"
+	override fun compact(): String = "$id - $metric - ${entity.compact()}"
 
 	override fun messageOrDescription() = when {
 		message.isEmpty() -> issue.description
