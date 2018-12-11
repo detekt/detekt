@@ -278,5 +278,26 @@ class UnusedPrivateClassSpec : SubjectSpek<UnusedPrivateClass>({
 
 			assertThat(findings).isEmpty()
 		}
+
+		it("verifies the fix for double colon references - #1390") {
+			val code = """
+					class UnusedPrivateClassTest {
+
+						private data class SomeClass(val name: String)
+
+						private data class AnotherClass(val id: Long)
+
+						@Test
+						fun `verify class is used`() {
+							val instance = SomeClass(name = "test")
+							assertNotEquals(AnotherClass::class.java.simpleName, instance::class.java.simpleName)
+						}
+					}
+				""".trimIndent()
+
+			val findings = UnusedPrivateClass().lint(code)
+
+			assertThat(findings).isEmpty()
+		}
 	}
 })

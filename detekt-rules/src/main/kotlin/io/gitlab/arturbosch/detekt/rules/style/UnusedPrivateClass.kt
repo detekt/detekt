@@ -11,6 +11,8 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
+import org.jetbrains.kotlin.psi.KtDoubleColonExpression
+import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFunctionType
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
@@ -52,6 +54,7 @@ class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
 		}
 	}
 
+	@Suppress("Detekt.TooManyFunctions")
 	private class UnusedClassVisitor : DetektVisitor() {
 
 		private val privateClasses = mutableSetOf<KtNamedDeclaration>()
@@ -124,15 +127,27 @@ class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
 			super.visitCallExpression(expression)
 		}
 
+		override fun visitDoubleColonExpression(expression: KtDoubleColonExpression) {
+			checkReceiverForClassUsage(expression.receiverExpression)
+			super.visitDoubleColonExpression(expression)
+		}
+
+		private fun checkReceiverForClassUsage(receiver: KtExpression?) {
+			(receiver as? KtNameReferenceExpression)
+					?.text
+					?.takeIf { looksLikeAClassName(it) }
+					?.let { namedClasses.add(it) }
+		}
+
 		override fun visitDotQualifiedExpression(expression: KtDotQualifiedExpression) {
-			val maybeClassName = (expression.receiverExpression as? KtNameReferenceExpression)?.text
-			// w/o symbol solving it is hard to tell if this is really a class or part of a package
-			// uppercase is a common convention
-			if (maybeClassName?.firstOrNull()?.isUpperCase() == true) {
-				namedClasses.add(maybeClassName)
-			}
+			checkReceiverForClassUsage(expression.receiverExpression)
 			super.visitDotQualifiedExpression(expression)
 		}
+
+		// Without symbol solving it is hard to tell if this is really a class or part of a package.
+		// We use "first char is uppercase" as a heuristic in conjunction with "KtNameReferenceExpression"
+		private fun looksLikeAClassName(maybeClassName: String) =
+				maybeClassName.firstOrNull()?.isUpperCase() == true
 	}
 }
 
