@@ -16,7 +16,7 @@ sealed class YML(open val indent: Int = 0, open var content: String = "") {
 		content = "$content\n"
 	}
 
-	fun getIndent(): String {
+	private fun getIndent(): String {
 		var spaces = ""
 		indent times {
 			spaces += "  "
