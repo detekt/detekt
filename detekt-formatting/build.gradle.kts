@@ -1,7 +1,7 @@
 import java.util.concurrent.Callable
 
-configurations.testImplementation.extendsFrom(configurations.kotlinTest)
-configurations.compile.isTransitive = false
+configurations.testImplementation.extendsFrom(configurations["kotlinTest"])
+configurations["compile"].isTransitive = false
 
 val ktlintVersion: String by project
 val junitPlatformVersion: String by project
@@ -25,7 +25,7 @@ dependencies {
 
 tasks.withType<Jar> {
 	from(Callable {
-		configurations.compile.map {
+		configurations["compile"].map {
 			if (it.isDirectory) it else zipTree(it)
 		}
 	})

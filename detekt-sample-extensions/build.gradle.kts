@@ -5,6 +5,7 @@ val spekVersion: String by project
 
 dependencies {
 	implementation("io.gitlab.arturbosch.detekt:detekt-api:$usedDetektVersion")
+	implementation(kotlin("compiler-embeddable"))
 
 	testImplementation("io.gitlab.arturbosch.detekt:detekt-test:$usedDetektVersion")
 	testImplementation("org.assertj:assertj-core:$assertjVersion")

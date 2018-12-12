@@ -1,4 +1,4 @@
-configurations.testImplementation.extendsFrom(configurations.kotlinTest)
+configurations.testImplementation.extendsFrom(configurations["kotlinTest"])
 
 val junitPlatformVersion: String by project
 val spekVersion: String by project
