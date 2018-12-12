@@ -89,6 +89,7 @@ dependencies {
     implementation(project(":detekt-formatting"))
     implementation("com.beust:jcommander:$jcommanderVersion")
     implementation(kotlin("compiler-embeddable"))
+    implementation(kotlin("reflect"))
 
     testImplementation(project(":detekt-test"))
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
