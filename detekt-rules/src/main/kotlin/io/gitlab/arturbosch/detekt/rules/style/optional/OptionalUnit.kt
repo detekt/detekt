@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.isOverridden
+import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtClass
@@ -54,7 +54,7 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
 		if (isInInterface(function)) return
 		if (function.hasDeclaredReturnType() && function.colon != null) {
 			checkFunctionWithExplicitReturnType(function)
-		} else if (!function.isOverridden()) {
+		} else if (!function.isOverride()) {
 			checkFunctionWithInferredReturnType(function)
 		}
 		super.visitNamedFunction(function)
@@ -63,7 +63,7 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
 	override fun visitBlockExpression(expression: KtBlockExpression) {
 		expression.statements
 				.filter { it is KtNameReferenceExpression && it.text == UNIT }
-				.forEach {
+				.onEach {
 					report(CodeSmell(issue, Entity.from(expression),
 							"A single Unit expression is unnecessary and can safely be removed"))
 				}

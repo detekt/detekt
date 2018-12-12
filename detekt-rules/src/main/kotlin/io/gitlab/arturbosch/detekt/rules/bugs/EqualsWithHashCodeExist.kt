@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.isDataClass
 import io.gitlab.arturbosch.detekt.rules.isEqualsFunction
 import io.gitlab.arturbosch.detekt.rules.isHashCodeFunction
 import org.jetbrains.kotlin.com.intellij.psi.PsiFile
@@ -73,7 +72,7 @@ class EqualsWithHashCodeExist(config: Config = Config.empty) : Rule(config) {
 
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
 		val klass = classOrObject as? KtClass
-		if (klass != null && klass.isDataClass()) {
+		if (klass != null && klass.isData()) {
 			return
 		}
 		queue.push(ViolationHolder())

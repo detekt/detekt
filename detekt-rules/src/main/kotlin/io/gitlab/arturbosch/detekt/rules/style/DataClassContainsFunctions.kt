@@ -8,7 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SplitPattern
-import io.gitlab.arturbosch.detekt.rules.isOverridden
+import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
@@ -42,7 +42,7 @@ class DataClassContainsFunctions(config: Config = Config.empty) : Rule(config) {
 
 	override fun visitClass(klass: KtClass) {
 		if (klass.isData()) {
-			klass.getBody()?.declarations
+			klass.body?.declarations
 					?.filterIsInstance<KtNamedFunction>()
 					?.forEach { checkFunction(klass, it) }
 		}
@@ -50,7 +50,7 @@ class DataClassContainsFunctions(config: Config = Config.empty) : Rule(config) {
 	}
 
 	private fun checkFunction(klass: KtClass, function: KtNamedFunction) {
-		if (!function.isOverridden() && !conversionFunctionPrefix.startWith(function.name)) {
+		if (!function.isOverride() && !conversionFunctionPrefix.startWith(function.name)) {
 			report(CodeSmell(issue, Entity.from(function),
 					"The data class ${klass.name} contains functions which are not registered " +
 							"conversion functions. The offending method is called ${function.name}"))

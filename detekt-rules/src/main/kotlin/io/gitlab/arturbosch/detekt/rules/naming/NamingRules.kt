@@ -103,5 +103,5 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
 	}
 
 	private fun KtVariableDeclaration.withinObjectDeclaration(): Boolean =
-			this.getNonStrictParentOfType(KtObjectDeclaration::class.java) != null
+			this.getNonStrictParentOfType<KtObjectDeclaration>() != null
 }

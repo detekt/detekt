@@ -8,7 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isConstant
-import io.gitlab.arturbosch.detekt.rules.isOverridden
+import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.lexer.KtSingleValueToken
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -95,7 +95,7 @@ class MayBeConst(config: Config = Config.empty) : Rule(config) {
 				isVar ||
 				getter != null ||
 				isConstant() ||
-				isOverridden()
+				isOverride()
 	}
 
 	private fun KtProperty.isInObject() =

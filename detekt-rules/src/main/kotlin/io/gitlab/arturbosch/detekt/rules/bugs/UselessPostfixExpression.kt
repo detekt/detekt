@@ -101,7 +101,7 @@ class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
 	}
 
 	private fun KtPostfixExpression.shouldBeReported(): Boolean {
-		val functionProperties = this.getNonStrictParentOfType(KtNamedFunction::class.java)
+		val functionProperties = this.getNonStrictParentOfType<KtNamedFunction>()
 				?.collectByType<KtProperty>()
 				?.map { it.name }
 				?.toSet()

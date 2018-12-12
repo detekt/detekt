@@ -10,7 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.api.LazyRegex
-import org.jetbrains.kotlin.lexer.KtTokens
+import io.gitlab.arturbosch.detekt.rules.isLateinit
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
@@ -51,7 +51,7 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 	private var properties = mutableListOf<KtProperty>()
 
 	override fun visitProperty(property: KtProperty) {
-		if (isLateinitProperty(property)) {
+		if (property.isLateinit()) {
 			properties.add(property)
 		}
 	}
@@ -69,9 +69,6 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 					report(CodeSmell(issue, Entity.from(it), "Usages of lateinit should be avoided."))
 				}
 	}
-
-	private fun isLateinitProperty(property: KtProperty) =
-			property.modifierList?.hasModifier(KtTokens.LATEINIT_KEYWORD) == true
 
 	companion object {
 		const val EXCLUDE_ANNOTATED_PROPERTIES = "excludeAnnotatedProperties"

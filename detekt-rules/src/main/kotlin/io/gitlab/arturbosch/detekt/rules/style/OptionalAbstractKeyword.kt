@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import org.jetbrains.kotlin.lexer.KtTokens
+import io.gitlab.arturbosch.detekt.rules.isAbstract
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -43,7 +43,7 @@ class OptionalAbstractKeyword(config: Config = Config.empty) : Rule(config) {
 	override fun visitClass(klass: KtClass) {
 		if (klass.isInterface()) {
 			handleAbstractKeyword(klass)
-			val body = klass.getBody()
+			val body = klass.body
 			if (body != null) {
 				body.properties.forEach { handleAbstractKeyword(it) }
 				body.children.filterIsInstance<KtNamedFunction>().forEach { handleAbstractKeyword(it) }
@@ -53,11 +53,8 @@ class OptionalAbstractKeyword(config: Config = Config.empty) : Rule(config) {
 	}
 
 	internal fun handleAbstractKeyword(dcl: KtDeclaration) {
-		dcl.modifierList?.let {
-			val abstractModifier = it.getModifier(KtTokens.ABSTRACT_KEYWORD)
-			if (abstractModifier != null) {
-				report(CodeSmell(issue, Entity.from(dcl), "The abstract keyword on this declaration is unnecessary."))
-			}
+		if (dcl.isAbstract()) {
+			report(CodeSmell(issue, Entity.from(dcl), "The abstract keyword on this declaration is unnecessary."))
 		}
 	}
 }

@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.generator.collection
 
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
-import io.gitlab.arturbosch.detekt.rules.isOverridden
+import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
@@ -76,7 +76,7 @@ class RuleSetProviderVisitor : DetektVisitor() {
 
 	override fun visitProperty(property: KtProperty) {
 		super.visitProperty(property)
-		if (property.isOverridden() && property.name != null && property.name == PROPERTY_RULE_SET_ID) {
+		if (property.isOverride() && property.name != null && property.name == PROPERTY_RULE_SET_ID) {
 			name = (property.initializer as? KtStringTemplateExpression)?.entries?.get(0)?.text
 					?: throw InvalidDocumentationException("RuleSetProvider class " +
 					"${property.containingClass()?.name ?: ""} doesn't provide list of rules.")

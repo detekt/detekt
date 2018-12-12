@@ -9,7 +9,7 @@ import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.identifierName
-import io.gitlab.arturbosch.detekt.rules.isOverridden
+import io.gitlab.arturbosch.detekt.rules.isOverride
 import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClassOrObject
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
@@ -44,7 +44,7 @@ class VariableNaming(config: Config = Config.empty) : Rule(config) {
 			return
 		}
 
-		if (ignoreOverridden && property.isOverridden()) {
+		if (ignoreOverridden && property.isOverride()) {
 			return
 		}
 

@@ -96,12 +96,13 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 
 	private fun KtClass.isClosedForExtension() = !isAbstract() && !isOpen()
 
-	private fun KtClass.extractDeclarations(): List<KtDeclaration> = getBody()?.declarations ?: emptyList()
+	private fun KtClass.extractDeclarations(): List<KtDeclaration> = body?.declarations.orEmpty()
 
 	private fun KtClass.extractConstructorPropertyParameters(): List<KtParameter> =
 			getPrimaryConstructorParameterList()
 					?.parameters
-					?.filter { it.isPropertyParameter() } ?: emptyList()
+					?.filter { it.isPropertyParameter() }
+					.orEmpty()
 
 	companion object {
 		const val EXCLUDE_ANNOTATED_CLASSES = "excludeAnnotatedClasses"

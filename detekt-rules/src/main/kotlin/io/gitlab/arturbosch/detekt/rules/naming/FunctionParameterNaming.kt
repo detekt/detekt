@@ -9,7 +9,7 @@ import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.identifierName
-import io.gitlab.arturbosch.detekt.rules.isOverridden
+import io.gitlab.arturbosch.detekt.rules.isOverride
 import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClass
 import org.jetbrains.kotlin.psi.KtParameter
 
@@ -41,7 +41,7 @@ class FunctionParameterNaming(config: Config = Config.empty) : Rule(config) {
 			return
 		}
 
-		if (ignoreOverriddenFunctions && parameter.ownerFunction?.isOverridden() == true) {
+		if (ignoreOverriddenFunctions && parameter.ownerFunction?.isOverride() == true) {
 			return
 		}
 

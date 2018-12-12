@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.isOverridden
+import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassBody
@@ -55,12 +55,12 @@ import org.jetbrains.kotlin.util.collectionUtils.concat
 class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName, Severity.Style,
-			"A member should not given the same name as its parent class or object.",
+			"A member should not be given the same name as its parent class or object.",
 			Debt.FIVE_MINS)
 
 	private val classMessage = "A member is named after the class. This might result in confusion. " +
 			"Either rename the member or change it to a constructor."
-	private val objectMessage = "A member is named after the class object. " +
+	private val objectMessage = "A member is named after the object. " +
 			"This might result in confusion. Please rename the member."
 
 	private val ignoreOverriddenFunction = valueOrDefault(IGNORE_OVERRIDDEN_FUNCTION, true)
@@ -83,15 +83,15 @@ class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
 	}
 
 	private fun getMisnamedMembers(klassOrObject: KtClassOrObject, name: String?): List<KtNamedDeclaration> {
-		val body = klassOrObject.getBody() ?: return emptyList()
+		val body = klassOrObject.body ?: return emptyList()
 		val declarations = getFunctions(body).concat(body.properties)
-		return declarations?.filter { it.name?.equals(name, ignoreCase = true) == true } ?: emptyList()
+		return declarations?.filter { it.name?.equals(name, ignoreCase = true) == true }.orEmpty()
 	}
 
 	private fun getFunctions(body: KtClassBody): List<KtNamedDeclaration> {
 		var functions = body.children.filterIsInstance<KtNamedFunction>()
 		if (ignoreOverriddenFunction) {
-			functions = functions.filter { !it.isOverridden() }
+			functions = functions.filter { !it.isOverride() }
 		}
 		return functions
 	}

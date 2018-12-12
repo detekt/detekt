@@ -4,10 +4,10 @@ import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 fun KtFunction.isEqualsFunction() =
-		this.name == "equals" && hasCorrectEqualsParameter() && this.isOverridden()
+		this.name == "equals" && hasCorrectEqualsParameter() && this.isOverride()
 
 fun KtFunction.isHashCodeFunction() =
-		this.name == "hashCode" && this.valueParameters.isEmpty() && this.isOverridden()
+		this.name == "hashCode" && this.valueParameters.isEmpty() && this.isOverride()
 
 private val knownAnys = setOf("Any?", "kotlin.Any?")
 fun KtFunction.hasCorrectEqualsParameter() =
