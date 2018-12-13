@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.SplitPattern
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtExpressionWithLabel
@@ -57,6 +58,9 @@ import org.jetbrains.kotlin.psi.psiUtil.parents
  * }
  * </compliant>
  *
+ * @configuration ignoredLabels - allows to provide a list of label names which should be ignored by this rule
+ * (default: "")
+ *
  * @author Ivan Balaksha
  * @author Marvin Ramin
  * @author schalkms
@@ -68,11 +72,15 @@ class LabeledExpression(config: Config = Config.empty) : Rule(config) {
 			"Expression with labels increase complexity and affect maintainability.",
 			Debt.TWENTY_MINS)
 
+	private val ignoredLabels = SplitPattern(valueOrDefault(IGNORED_LABELS, ""))
+
 	override fun visitExpressionWithLabel(expression: KtExpressionWithLabel) {
 		super.visitExpressionWithLabel(expression)
 		if (expression !is KtThisExpression || isNotReferencingOuterClass(expression)) {
 			expression.getLabelName()?.let {
-				report(CodeSmell(issue, Entity.from(expression), issue.description))
+				if (!ignoredLabels.contains(it)) {
+					report(CodeSmell(issue, Entity.from(expression), issue.description))
+				}
 			}
 		}
 	}
@@ -96,5 +104,9 @@ class LabeledExpression(config: Config = Config.empty) : Rule(config) {
 		val containingClass = element.containingClass() ?: return
 		classes.add(containingClass)
 		getClassHierarchy(containingClass, classes)
+	}
+
+	companion object {
+		const val IGNORED_LABELS = "ignoredLabels"
 	}
 }

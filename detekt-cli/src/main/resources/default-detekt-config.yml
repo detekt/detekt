@@ -82,6 +82,7 @@ complexity:
     ignoreSimpleWhenEntries: false
   LabeledExpression:
     active: false
+    ignoredLabels: ""
   LargeClass:
     active: true
     threshold: 150
