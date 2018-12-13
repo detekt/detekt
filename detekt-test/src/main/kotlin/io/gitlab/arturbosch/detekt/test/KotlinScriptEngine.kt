@@ -12,7 +12,11 @@ import javax.script.ScriptException
  */
 object KotlinScriptEngine {
 
-	private var engine: KotlinJsr223JvmLocalScriptEngine = createEngine()
+	private lateinit var engine: KotlinJsr223JvmLocalScriptEngine
+
+	init {
+		createEngine()
+	}
 
 	/**
 	 * Compiles a given code string with the Jsr223 script engine.
@@ -30,12 +34,12 @@ object KotlinScriptEngine {
 		}
 	}
 
-	private fun createEngine(): KotlinJsr223JvmLocalScriptEngine {
+	private fun createEngine() {
 		setIdeaIoUseFallback() // To avoid error on Windows
 
 		val scriptEngineManager = ScriptEngineManager()
 		val localEngine = scriptEngineManager.getEngineByExtension("kts") as? KotlinJsr223JvmLocalScriptEngine
 		requireNotNull(localEngine) { "Kotlin script engine not supported" }
-		return engine
+		engine = localEngine
 	}
 }
