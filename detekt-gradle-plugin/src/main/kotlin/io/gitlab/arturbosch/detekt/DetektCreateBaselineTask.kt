@@ -50,7 +50,7 @@ open class DetektCreateBaselineTask : DefaultTask() {
 
 	@Input
 	@Optional
-	var filters = project.objects.property(String::class.java)
+	var filters: Property<String> = project.objects.property(String::class.java)
 
 	@InputFiles
 	@Optional
@@ -59,7 +59,7 @@ open class DetektCreateBaselineTask : DefaultTask() {
 
 	@Input
 	@Optional
-	var plugins = project.objects.property(String::class.java)
+	var plugins: Property<String> = project.objects.property(String::class.java)
 
 	@Internal
 	@Optional

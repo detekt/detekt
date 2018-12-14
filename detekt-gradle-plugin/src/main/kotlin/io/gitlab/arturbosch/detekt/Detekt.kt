@@ -51,7 +51,7 @@ open class Detekt : DefaultTask() {
 
 	@Input
 	@Optional
-	var filters = project.objects.property(String::class.java)
+	var filters: Property<String> = project.objects.property(String::class.java)
 
 	@InputFile
 	@Optional
@@ -65,11 +65,11 @@ open class Detekt : DefaultTask() {
 
 	@Input
 	@Optional
-	var plugins = project.objects.property(String::class.java)
+	var plugins: Property<String> = project.objects.property(String::class.java)
 
 	@Internal
 	@Optional
-	val debugProp = project.objects.property(Boolean::class.javaObjectType)
+	val debugProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 	var debug: Boolean
 		@Internal
 		get() = debugProp.get()
@@ -77,7 +77,7 @@ open class Detekt : DefaultTask() {
 
 	@Internal
 	@Optional
-	val parallelProp = project.objects.property(Boolean::class.javaObjectType)
+	val parallelProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 	var parallel: Boolean
 		@Internal
 		get() = parallelProp.get()
@@ -85,7 +85,7 @@ open class Detekt : DefaultTask() {
 
 	@Optional
 	@Input
-	val disableDefaultRuleSetsProp = project.objects.property(Boolean::class.javaObjectType)
+	val disableDefaultRuleSetsProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 	var disableDefaultRuleSets: Boolean
 		@Internal
 		get() = disableDefaultRuleSetsProp.get()
@@ -98,7 +98,7 @@ open class Detekt : DefaultTask() {
 
 	@Internal
 	@Optional
-	var reportsDir = project.objects.property(File::class.java)
+	var reportsDir: Property<File> = project.objects.property(File::class.java)
 
 	val xmlReportFile: Provider<RegularFile>
 		@OutputFile
