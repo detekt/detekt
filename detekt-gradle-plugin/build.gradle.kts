@@ -1,6 +1,5 @@
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
-import org.jetbrains.dokka.gradle.DokkaTask
 
 buildscript {
 	repositories {
@@ -18,15 +17,13 @@ repositories {
 
 plugins {
 	`java-gradle-plugin`
+	`maven-publish`
 	id("com.gradle.plugin-publish") version "0.10.0"
 	id("com.jfrog.bintray") version "1.8.4"
 	kotlin("jvm") version "1.3.11"
 	id("org.jetbrains.dokka") version "0.9.17"
 	id("com.github.ben-manes.versions") version "0.20.0"
 	id("io.gitlab.arturbosch.detekt") version "1.0.0-RC12"
-}
-apply {
-	plugin("maven-publish")
 }
 
 group = "io.gitlab.arturbosch.detekt"
@@ -39,7 +36,6 @@ val junitPlatformVersion = "1.3.2"
 val assertjVersion = "3.11.1"
 
 dependencies {
-	implementation(gradleApi())
 	implementation(kotlin("stdlib"))
 
 	testImplementation("org.assertj:assertj-core:$assertjVersion")
@@ -58,7 +54,7 @@ gradlePlugin {
 	}
 }
 
-val test by tasks.getting(Test::class) {
+tasks.test {
 	useJUnitPlatform()
 	testLogging {
 		// set options for log level LIFECYCLE
@@ -89,7 +85,7 @@ pluginBundle {
 	}
 }
 
-tasks.withType(DokkaTask::class.java) {
+tasks.dokka {
 	// suppresses undocumented classes but not dokka warnings
 	// https://github.com/Kotlin/dokka/issues/229 && https://github.com/Kotlin/dokka/issues/319
 	reportUndocumented = false
@@ -115,18 +111,16 @@ val generateDefaultDetektVersionFile by tasks.creating {
 	}
 }
 
-val mainJavaSourceSet: SourceDirectorySet = sourceSets.getByName("main").java
-mainJavaSourceSet.srcDir("$buildDir/generated/src")
+sourceSets["main"].java.srcDir("$buildDir/generated/src")
 
-tasks.named("compileKotlin").configure {
+tasks.compileKotlin {
 	dependsOn(generateDefaultDetektVersionFile)
 }
 
-val javaConvention = the<JavaPluginConvention>()
 val sourcesJar by tasks.creating(Jar::class) {
 	dependsOn("classes")
 	classifier = "sources"
-	from(javaConvention.sourceSets["main"].allSource)
+	from(sourceSets["main"].allSource)
 }
 
 val javadocJar by tasks.creating(Jar::class) {
@@ -148,7 +142,7 @@ detekt {
 	filters = ".*/resources/.*,.*/build/.*"
 }
 
-configure<PublishingExtension> {
+publishing {
 	publications.create<MavenPublication>("DetektPublication") {
 		from(components["java"])
 		artifact(sourcesJar)
