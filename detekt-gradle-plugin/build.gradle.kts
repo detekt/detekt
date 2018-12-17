@@ -23,6 +23,7 @@ plugins {
 	kotlin("jvm") version "1.3.11"
 	id("org.jetbrains.dokka") version "0.9.17"
 	id("com.github.ben-manes.versions") version "0.20.0"
+	id("io.gitlab.arturbosch.detekt") version "1.0.0-RC12"
 }
 apply {
 	plugin("maven-publish")
@@ -137,6 +138,14 @@ val javadocJar by tasks.creating(Jar::class) {
 artifacts {
 	add("archives", sourcesJar)
 	add("archives", javadocJar)
+}
+
+detekt {
+	config = files(
+			project.rootDir.resolve("../detekt-cli/src/main/resources/default-detekt-config.yml"),
+			project.rootDir.resolve("../reports/failfast.yml")
+	)
+	filters = ".*/resources/.*,.*/build/.*"
 }
 
 configure<PublishingExtension> {
