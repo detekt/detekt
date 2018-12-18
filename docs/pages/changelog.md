@@ -11,6 +11,8 @@ toc: true
 
 ##### Migration
 
+- 'failFast' inside the yaml config was deprecated. Please use the `--fail-fast` cli flag or `failFast` detekt extension property in the gradle plugin.
+
 -->
 
 #### RC12
