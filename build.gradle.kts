@@ -43,6 +43,7 @@ tasks.withType<Test> {
 tasks.withType<Detekt> {
 	dependsOn("detekt-cli:assemble")
 	dependsOn("detekt-formatting:assemble")
+	dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":detekt"))
 }
 
 val detektVersion: String by project
