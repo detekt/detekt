@@ -1099,7 +1099,7 @@ Read more about `data class`: https://kotlinlang.org/docs/reference/data-classes
 
 * `excludeAnnotatedClasses` (default: `""`)
 
-   allows to provide a list of annotations that disable
+   allows to provide a list of annotations that disable this check
 
 #### Noncompliant Code:
 

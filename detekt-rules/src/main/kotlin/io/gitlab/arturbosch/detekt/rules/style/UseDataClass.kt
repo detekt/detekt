@@ -38,7 +38,8 @@ import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
  * data class DataClass(val i: Int, val i2: Int)
  * </compliant>
  *
- * @configuration excludeAnnotatedClasses - allows to provide a list of annotations that disable (default: "")
+ * @configuration excludeAnnotatedClasses - allows to provide a list of annotations that disable this check
+ * (default: "")
  *
  * @author Ivan Balaksha
  * @author Artur Bosch
