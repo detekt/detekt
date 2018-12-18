@@ -206,5 +206,5 @@ That means your custom rules are also disabled if you have not explicitly enable
 them in the `detekt` yaml configuration file.
 - If your extension is part of your project and you integrate it like `detektPlugins project(":my-rules"")` make sure that this
 subproject is build before `gradle detekt` is run.
-In `kotlin-dsl` you could add something like `tasks.withType<Detekt> { dependsOn(":my-rules:assemble") }` so explicitly run `detekt` only 
+In the `kotlin-dsl` you could add something like `tasks.withType<Detekt> { dependsOn(":my-rules:assemble") }` to explicitly run `detekt` only 
 after your extension sub project is built.
