@@ -3,11 +3,12 @@ package io.gitlab.arturbosch.detekt
 import io.gitlab.arturbosch.detekt.extensions.DetektReports
 import io.gitlab.arturbosch.detekt.internal.fileProperty
 import io.gitlab.arturbosch.detekt.invoke.BaselineArgument
-import io.gitlab.arturbosch.detekt.invoke.CliArgument
+import io.gitlab.arturbosch.detekt.invoke.BuildUponDefaultConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.ConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.DebugArgument
 import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
-import io.gitlab.arturbosch.detekt.invoke.DisableDefaultRulesetArgument
+import io.gitlab.arturbosch.detekt.invoke.DisableDefaultRuleSetArgument
+import io.gitlab.arturbosch.detekt.invoke.FailFastArgument
 import io.gitlab.arturbosch.detekt.invoke.FiltersArgument
 import io.gitlab.arturbosch.detekt.invoke.HtmlReportArgument
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
@@ -92,6 +93,22 @@ open class Detekt : DefaultTask() {
 		get() = disableDefaultRuleSetsProp.get()
 		set(value) = disableDefaultRuleSetsProp.set(value)
 
+	@Optional
+	@Input
+	val buildUponDefaultConfigProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+	var buildUponDefaultConfig: Boolean
+		@Internal
+		get() = buildUponDefaultConfigProp.get()
+		set(value) = buildUponDefaultConfigProp.set(value)
+
+	@Optional
+	@Input
+	val failFastProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+	var failFast: Boolean
+		@Internal
+		get() = failFastProp.get()
+		set(value) = failFastProp.set(value)
+
 	@Internal
 	var reports = DetektReports(project)
 
@@ -123,17 +140,20 @@ open class Detekt : DefaultTask() {
 
 	@TaskAction
 	fun check() {
-		val arguments = mutableListOf<CliArgument>() +
-				InputArgument(input) +
-				FiltersArgument(filters.orNull) +
-				ConfigArgument(config) +
-				PluginsArgument(plugins.orNull) +
-				BaselineArgument(baseline.orNull) +
-				XmlReportArgument(xmlReportFile.orNull) +
-				HtmlReportArgument(htmlReportFile.orNull) +
-				DebugArgument(debugProp.get()) +
-				ParallelArgument(parallelProp.get()) +
-				DisableDefaultRulesetArgument(disableDefaultRuleSetsProp.get())
+		val arguments = mutableListOf(
+				InputArgument(input),
+				FiltersArgument(filters.orNull),
+				ConfigArgument(config),
+				PluginsArgument(plugins.orNull),
+				BaselineArgument(baseline.orNull),
+				XmlReportArgument(xmlReportFile.orNull),
+				HtmlReportArgument(htmlReportFile.orNull),
+				DebugArgument(debugProp.get()),
+				ParallelArgument(parallelProp.get()),
+				BuildUponDefaultConfigArgument(buildUponDefaultConfigProp.get()),
+				FailFastArgument(failFastProp.get()),
+				DisableDefaultRuleSetArgument(disableDefaultRuleSetsProp.get())
+		)
 
 		DetektInvoker.invokeCli(project, arguments.toList(), debugProp.get())
 	}

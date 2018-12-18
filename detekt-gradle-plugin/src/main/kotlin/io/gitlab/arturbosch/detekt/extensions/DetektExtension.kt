@@ -33,6 +33,10 @@ open class DetektExtension(project: Project) : CodeQualityExtension() {
 
 	var parallel: Boolean = DEFAULT_PARALLEL_VALUE
 
+	var failFast: Boolean = DEFAULT_FAIL_FAST_VALUE
+
+	var buildUponDefaultConfig: Boolean = DEFAULT_BUILD_UPON_DEFAULT_CONFIG_VALUE
+
 	var disableDefaultRuleSets: Boolean = DEFAULT_DISABLE_RULESETS_VALUE
 
 	var filters: String? = null
@@ -46,6 +50,8 @@ open class DetektExtension(project: Project) : CodeQualityExtension() {
 		const val DEFAULT_PARALLEL_VALUE = false
 		const val DEFAULT_DISABLE_RULESETS_VALUE = false
 		const val DEFAULT_REPORT_ENABLED_VALUE = true
+		const val DEFAULT_FAIL_FAST_VALUE = false
+		const val DEFAULT_BUILD_UPON_DEFAULT_CONFIG_VALUE = false
 	}
 }
 

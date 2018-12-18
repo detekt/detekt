@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt
 
-import io.gitlab.arturbosch.detekt.invoke.CliArgument
 import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import io.gitlab.arturbosch.detekt.invoke.GenerateConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
@@ -31,8 +30,10 @@ open class DetektGenerateConfigTask : DefaultTask() {
 
 	@TaskAction
 	fun generateConfig() {
-		val arguments = mutableListOf<CliArgument>(GenerateConfigArgument) +
+		val arguments = mutableListOf(
+				GenerateConfigArgument,
 				InputArgument(input)
+		)
 
 		DetektInvoker.invokeCli(project, arguments.toList())
 	}
