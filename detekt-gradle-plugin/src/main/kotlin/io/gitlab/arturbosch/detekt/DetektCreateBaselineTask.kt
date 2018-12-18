@@ -2,12 +2,13 @@ package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.internal.fileProperty
 import io.gitlab.arturbosch.detekt.invoke.BaselineArgument
-import io.gitlab.arturbosch.detekt.invoke.CliArgument
+import io.gitlab.arturbosch.detekt.invoke.BuildUponDefaultConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.ConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.CreateBaselineArgument
 import io.gitlab.arturbosch.detekt.invoke.DebugArgument
 import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
-import io.gitlab.arturbosch.detekt.invoke.DisableDefaultRulesetArgument
+import io.gitlab.arturbosch.detekt.invoke.DisableDefaultRuleSetArgument
+import io.gitlab.arturbosch.detekt.invoke.FailFastArgument
 import io.gitlab.arturbosch.detekt.invoke.FiltersArgument
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
@@ -73,17 +74,29 @@ open class DetektCreateBaselineTask : DefaultTask() {
     @Optional
     var disableDefaultRuleSets: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
-    @TaskAction
+    @Internal
+	@Optional
+	var buildUponDefaultConfig: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+
+	@Internal
+	@Optional
+	var failFast: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+
+	@TaskAction
     fun baseline() {
-        val arguments = mutableListOf<CliArgument>(CreateBaselineArgument) +
-                BaselineArgument(baseline.get()) +
-                InputArgument(input) +
-                FiltersArgument(filters.orNull) +
-                ConfigArgument(config) +
-                PluginsArgument(plugins.orNull) +
-                DebugArgument(debug.getOrElse(false)) +
-                ParallelArgument(parallel.getOrElse(false)) +
-                DisableDefaultRulesetArgument(disableDefaultRuleSets.getOrElse(false))
+        val arguments = mutableListOf(
+				CreateBaselineArgument,
+                BaselineArgument(baseline.get()) ,
+                InputArgument(input) ,
+                FiltersArgument(filters.orNull) ,
+                ConfigArgument(config) ,
+                PluginsArgument(plugins.orNull) ,
+                DebugArgument(debug.getOrElse(false)),
+                ParallelArgument(parallel.getOrElse(false)),
+                BuildUponDefaultConfigArgument(buildUponDefaultConfig.getOrElse(false)),
+				FailFastArgument(failFast.getOrElse(false)),
+				DisableDefaultRuleSetArgument(disableDefaultRuleSets.getOrElse(false))
+		)
 
         DetektInvoker.invokeCli(project, arguments.toList(), debug.getOrElse(false))
     }
