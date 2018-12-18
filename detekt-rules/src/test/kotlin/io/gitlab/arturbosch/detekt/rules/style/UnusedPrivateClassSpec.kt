@@ -246,9 +246,9 @@ class UnusedPrivateClassSpec : SubjectSpek<UnusedPrivateClass>({
 		}
 	}
 
-	describe("reported false positives") {
+	describe("testcase for reported false positives") {
 
-		it("verifies the fix for wildcards within generics - #1345") {
+		it("does not crash when using wildcasts in generics - #1345") {
 			val code = """
 				private class Foo
 				fun bar(clazz: KClass<*>) = Unit
@@ -259,7 +259,7 @@ class UnusedPrivateClassSpec : SubjectSpek<UnusedPrivateClass>({
 			assertThat(findings).hasSize(1)
 		}
 
-		it("verifies the fix for dot qualified expressions - #1347") {
+		it("does not report (companion-)object/named-dot references - #1347") {
 			val code = """
 					package com.example
 
@@ -279,7 +279,7 @@ class UnusedPrivateClassSpec : SubjectSpek<UnusedPrivateClass>({
 			assertThat(findings).isEmpty()
 		}
 
-		it("verifies the fix for double colon references - #1390") {
+		it("does not report classes that are used with ::class - #1390") {
 			val code = """
 					class UnusedPrivateClassTest {
 
