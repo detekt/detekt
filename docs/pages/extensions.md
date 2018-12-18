@@ -171,3 +171,40 @@ All they need are implementation of the `render()`-function which takes a object
 ```kotlin
 abstract fun render(detektion: Detektion): String?
 ```
+
+#### <a name="configureextensions">Let detekt know about your extensions</a>
+
+So you have implemented your own rules or other extensions and want to integrate them
+into your `detekt` run? Great, make sure to have a `jar` with all your needed dependencies 
+minus the ones `detekt` brings itself.
+
+Take a look at our [sample project](https://github.com/arturbosch/detekt/tree/master/detekt-sample-extensions) on how to achieve this with gradle.
+
+##### Integrate your extension with the detekt CLI
+
+Mention your `jar` with the `--plugins` flag when calling the cli fatjar:
+```
+java -jar detekt-cli-[version]-all.jar --input ... --plugins /path/to/my/jar
+```
+
+##### Integrate your extension with the detekt gradle plugin 
+
+For example `detekt` itself provides a wrapper over [KtLint](https://github.com/shyiko/ktlint) as a 
+custom `formatting` rule set.
+To enable it, we add the published dependency to `detekt` via the `detektPlugins` configuration:
+
+```kotlin
+dependencies {
+    detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:[version]"
+}
+```
+
+##### Pitfalls
+
+- By default all rules not marked with `@active` in their `KDoc` are disabled.
+That means your custom rules are also disabled if you have not explicitly enabled
+them in the `detekt` yaml configuration file.
+- If your extension is part of your project and you integrate it like `detektPlugins project(":my-rules"")` make sure that this
+subproject is build before `gradle detekt` is run.
+In the `kotlin-dsl` you could add something like `tasks.withType<Detekt> { dependsOn(":my-rules:assemble") }` to explicitly run `detekt` only 
+after your extension sub project is built.
