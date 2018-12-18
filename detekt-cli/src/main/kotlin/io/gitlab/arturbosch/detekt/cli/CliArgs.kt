@@ -102,4 +102,12 @@ class CliArgs : Args {
 	val reportPaths: List<ReportPath> by lazy {
 		reports?.map { ReportPath.from(it) } ?: emptyList()
 	}
+
+	companion object {
+		/**
+		 * When embedding the cli inside a tool, this closure style configuration
+		 * of the arguments should be used.
+		 */
+		operator fun invoke(init: CliArgs.() -> Unit): CliArgs = CliArgs().apply(init)
+	}
 }

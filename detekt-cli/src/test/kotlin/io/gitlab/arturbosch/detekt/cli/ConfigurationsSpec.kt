@@ -185,4 +185,25 @@ internal class ConfigurationsSpec : Spek({
 			assertThat(config.subConfig("build").valueOrDefault("maxIssues", -1)).isEqualTo(1)
 		}
 	}
+
+	describe("build upon default config") {
+
+		val config = CliArgs {
+			buildUponDefaultConfig = true
+			configResource = "/configs/no-fail-fast-override.yml"
+		}.loadConfiguration()
+
+		it("should override config when specified") {
+			assertThat(config.subConfig("style").subConfig("MaxLineLength").valueOrDefault("maxLineLength", -1)).isEqualTo(100)
+			assertThat(config.subConfig("style").subConfig("MaxLineLength").valueOrDefault("excludeCommentStatements", false)).isTrue()
+		}
+
+		it("should be active=false by default") {
+			assertThat(config.subConfig("comments").subConfig("CommentOverPrivateFunction").valueOrDefault("active", true)).isFalse()
+		}
+
+		it("should be maxIssues=10 by default") {
+			assertThat(config.subConfig("build").valueOrDefault("maxIssues", -1)).isEqualTo(10)
+		}
+	}
 })
