@@ -20,7 +20,7 @@ plugins {
 }
 
 tasks.withType<Wrapper> {
-	gradleVersion = "4.10.2"
+	gradleVersion = "5.0"
 	distributionType = Wrapper.DistributionType.ALL
 	doLast {
 		/*
@@ -76,10 +76,10 @@ subprojects {
 	val jacocoVersion: String by project
 	jacoco.toolVersion = jacocoVersion
 
-	tasks.getByName<JacocoReport>("jacocoTestReport") {
+	tasks.named<JacocoReport>("jacocoTestReport").configure {
 		reports.xml.isEnabled = true
 		reports.html.isEnabled = true
-		dependsOn("test")
+		dependsOn(tasks.named("test"))
 	}
 
 	val userHome = System.getProperty("user.home")
