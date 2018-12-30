@@ -320,7 +320,7 @@ naming:
     ignoreOverridden: true
   FunctionParameterNaming:
     active: true
-    parameterPattern: '[a-z][A-Za-z0-9]*'
+    parameterPattern: '([a-z][A-Za-z0-9]*)|_'
     excludeClassPattern: '$^'
     ignoreOverriddenFunctions: true
   MatchingDeclarationName:
