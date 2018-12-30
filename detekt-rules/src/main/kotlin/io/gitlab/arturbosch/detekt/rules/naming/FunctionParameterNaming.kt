@@ -46,7 +46,7 @@ class FunctionParameterNaming(config: Config = Config.empty) : Rule(config) {
 		}
 
 		val identifier = parameter.identifierName()
-		if (!identifier.matches(parameterPattern)) {
+		if (!identifier.matches(parameterPattern) && identifier != "_") {
 			report(CodeSmell(
 					issue,
 					Entity.from(parameter),

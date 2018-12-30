@@ -60,6 +60,15 @@ class ParameterNamingSpec : Spek({
 			assertThat(FunctionParameterNaming().lint(code)).isEmpty()
 		}
 
+		it("should not detect violations in underscore parameter name by default") {
+			val code = """
+				class C {
+					override fun someStuff(_: String) {}
+				}
+			"""
+			assertThat(FunctionParameterNaming().lint(code)).isEmpty()
+		}
+
 		it("should detect violations in overridden function if ignoreOverriddenFunctions is false") {
 			val code = """
 				class C {
