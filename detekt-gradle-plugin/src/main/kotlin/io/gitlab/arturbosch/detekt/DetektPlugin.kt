@@ -48,7 +48,7 @@ class DetektPlugin : Plugin<Project> {
 			null
 		}
 
-		checkTaskProvider?.configure { it.dependsOn(detektTaskProvider.get()) }
+		checkTaskProvider?.configure { it.dependsOn(detektTaskProvider) }
 	}
 
 	private fun registerCreateBaselineTask(project: Project, extension: DetektExtension) =
