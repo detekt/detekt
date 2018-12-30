@@ -136,7 +136,7 @@ Reports function parameter names which do not follow the specified naming conven
 
 #### Configuration options:
 
-* `parameterPattern` (default: `'[a-z][A-Za-z0-9]*'`)
+* `parameterPattern` (default: `'([a-z][A-Za-z0-9]*)|_'`)
 
    naming pattern
 
