@@ -4,6 +4,7 @@ import java.nio.file.Paths
 import java.util.regex.Pattern
 
 val arguments = args.toList()
+@Suppress("detekt.MagicNumber")
 check(arguments.size >= 3) { "Usage: [version1] [version2] [analysis-path] [diff-tool]?" }
 
 val analysisPath = Paths.get(arguments[2]).toAbsolutePath().normalize()
