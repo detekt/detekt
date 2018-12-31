@@ -1,6 +1,10 @@
 package io.gitlab.arturbosch.detekt.api
 
+import io.gitlab.arturbosch.detekt.api.internal.absolutePath
+import io.gitlab.arturbosch.detekt.api.internal.pathMatcher
 import org.jetbrains.kotlin.psi.KtFile
+import java.nio.file.PathMatcher
+import java.nio.file.Paths
 
 /**
  * A rule defines how one specific code structure should look like. If code is found
@@ -45,7 +49,27 @@ abstract class Rule(
      */
     open val defaultRuleIdAliases: Set<String> = emptySet()
 
-    override fun visitCondition(root: KtFile): Boolean = active && !root.isSuppressedBy(ruleId, aliases)
+    open val pathMatchers: Set<PathMatcher>?
+        get() = run {
+            val raw = valueOrNull<String>("pathMatchers")?.trim()
+            if (raw == null) {
+                null
+            } else {
+                SplitPattern(raw).mapAll { pathMatcher(it) }.toSet()
+            }
+        }
+
+    private fun shouldRunOnFile(file: KtFile): Boolean {
+        val matchers = pathMatchers ?: return true
+        val rawPath = file.absolutePath()
+            ?: throw IllegalStateException("KtFile '${file.name}' expected to have an absolute path.")
+        val path = Paths.get(rawPath)
+        return matchers.any { it.matches(path) }
+    }
+
+    override fun visitCondition(root: KtFile): Boolean = active &&
+            shouldRunOnFile(root) &&
+            !root.isSuppressedBy(ruleId, aliases)
 
     /**
      * Simplified version of [Context.report] with aliases retrieval from the config.

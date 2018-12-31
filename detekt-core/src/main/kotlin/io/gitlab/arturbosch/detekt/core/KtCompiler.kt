@@ -1,7 +1,8 @@
 package io.gitlab.arturbosch.detekt.core
 
+import io.gitlab.arturbosch.detekt.api.internal.ABSOLUTE_PATH
+import io.gitlab.arturbosch.detekt.api.internal.RELATIVE_PATH
 import io.gitlab.arturbosch.detekt.api.psiProject
-import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import org.jetbrains.kotlin.com.intellij.psi.PsiFileFactory
 import org.jetbrains.kotlin.com.intellij.testFramework.LightVirtualFile
@@ -46,17 +47,11 @@ open class KtCompiler {
         return psiFile as? KtFile ?: throw IllegalStateException("kotlin file expected")
     }
 
-    private fun String.determineLineSeparator(): String {
-        val i = this.lastIndexOf('\n')
-        if (i == -1) {
-            return if (this.lastIndexOf('\r') == -1) System.getProperty("line.separator") else "\r"
-        }
-        return if (i != 0 && this[i] == '\r') "\r\n" else "\n"
-    }
-
-    companion object {
-        val LINE_SEPARATOR: Key<String> = Key("lineSeparator")
-        val RELATIVE_PATH: Key<String> = Key("relativePath")
-        val ABSOLUTE_PATH: Key<String> = Key("absolutePath")
-    }
+	private fun String.determineLineSeparator(): String {
+		val i = this.lastIndexOf('\n')
+		if (i == -1) {
+			return if (this.lastIndexOf('\r') == -1) System.getProperty("line.separator") else "\r"
+		}
+		return if (i != 0 && this[i] == '\r') "\r\n" else "\n"
+	}
 }
