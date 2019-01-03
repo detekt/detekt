@@ -187,13 +187,13 @@ subprojects {
 
 	val sourcesJar by tasks.creating(Jar::class) {
 		dependsOn("classes")
-		classifier = "sources"
+		archiveClassifier.set("sources")
 		from(sourceSets["main"].allSource)
 	}
 
 	val javadocJar by tasks.creating(Jar::class) {
 		dependsOn("dokka")
-		classifier = "javadoc"
+		archiveClassifier.set("javadoc")
 		from(buildDir.resolve("javadoc"))
 	}
 
