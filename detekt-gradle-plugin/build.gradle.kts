@@ -71,6 +71,10 @@ tasks.test {
 	}
 }
 
+tasks.validateTaskProperties {
+	enableStricterValidation = true
+}
+
 pluginBundle {
 	website = "https://arturbosch.github.io/detekt"
 	vcsUrl = "https://github.com/arturbosch/detekt"
