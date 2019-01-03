@@ -206,8 +206,8 @@ subprojects {
 	}
 
 	artifacts {
-		add("archives", sourcesJar)
-		add("archives", javadocJar)
+		archives(sourcesJar)
+		archives(javadocJar)
 	}
 
 	configure<PublishingExtension> {
