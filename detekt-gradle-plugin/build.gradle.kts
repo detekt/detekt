@@ -130,8 +130,8 @@ val javadocJar by tasks.creating(Jar::class) {
 }
 
 artifacts {
-	add("archives", sourcesJar)
-	add("archives", javadocJar)
+	archives(sourcesJar)
+	archives(javadocJar)
 }
 
 detekt {
