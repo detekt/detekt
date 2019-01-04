@@ -12,13 +12,13 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.hasAnnotationWithValue
 import io.gitlab.arturbosch.detekt.rules.isAbstract
 import io.gitlab.arturbosch.detekt.rules.isExternal
+import io.gitlab.arturbosch.detekt.rules.isInterface
 import io.gitlab.arturbosch.detekt.rules.isMainFunction
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOperator
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFunction
@@ -54,6 +54,7 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 		const val SUPPRESS_ANNOTATION = "Suppress"
 		const val SUPPRESS_UNUSED_PARAMETER = "\"UNUSED_PARAMETER\""
 		const val SUPPRESS_UNUSED_PROPERTY = "\"unused\""
+		const val SUPPRESS_UNUSED_FUNCTION = "\"unused\""
 	}
 
 	override val defaultRuleIdAliases: Set<String> = setOf("UNUSED_VARIABLE")
@@ -68,61 +69,67 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 	override fun visit(root: KtFile) {
 		super.visit(root)
 
-		val functionVisitor = UnusedFunctionVisitor(allowedNames)
-		root.accept(functionVisitor)
-
-		functionVisitor.getUnusedFunctions().forEach {
-			report(CodeSmell(issue, Entity.from(it.value), "Private function ${it.key} is unused."))
+		if (!root.hasSuppressUnusedFunctionAnnotation()) {
+			root.acceptUnusedMemberVisitor(UnusedFunctionVisitor(allowedNames))
 		}
 
 		if (!root.hasSuppressUnusedParameterAnnotation()) {
-			val parameterVisitor = UnusedParameterVisitor(allowedNames)
-			root.accept(parameterVisitor)
-
-			parameterVisitor.getUnusedParameters().forEach {
-				report(CodeSmell(issue, Entity.from(it.value), "Function parameter ${it.key} is unused."))
-			}
+			root.acceptUnusedMemberVisitor(UnusedParameterVisitor(allowedNames))
 		}
 
 		if (!root.hasSuppressUnusedPropertyAnnotation()) {
-			val propertyVisitor = UnusedPropertyVisitor(allowedNames)
-			root.accept(propertyVisitor)
-
-			propertyVisitor.getUnusedProperties().forEach {
-				report(CodeSmell(issue, Entity.from(it), "Private property ${it.nameAsSafeName.identifier} is unused."))
-			}
+			root.acceptUnusedMemberVisitor(UnusedPropertyVisitor(allowedNames))
 		}
+	}
+
+	private fun KtFile.acceptUnusedMemberVisitor(visitor: UnusedMemberVisitor) {
+		accept(visitor)
+		visitor.getUnusedReports(issue).forEach { report(it) }
 	}
 }
 
-/*
-* Here starts the unused private functions part.
-*
-* We need to collect all private function declarations and references to these functions
-* for the whole file as Kotlin allows to access private and internal object declarations
-* from everywhere in the file.
-*/
-private class UnusedFunctionVisitor(private val allowedNames: Regex) : DetektVisitor() {
+private abstract class UnusedMemberVisitor(protected val allowedNames: Regex) : DetektVisitor() {
+
+	protected var suppressReports = false
+
+	abstract fun getUnusedReports(issue: Issue): List<CodeSmell>
+
+	final override fun visitClassOrObject(classOrObject: KtClassOrObject) {
+		runThenRestoreState {
+			if (shouldSuppressReportsForClassOrObject(classOrObject)) {
+				suppressReports = true
+			}
+
+			super.visitClassOrObject(classOrObject)
+		}
+	}
+
+	abstract fun shouldSuppressReportsForClassOrObject(classOrObject: KtClassOrObject): Boolean
+
+	protected inline fun runThenRestoreState(block: () -> Unit) {
+		val oldSuppressState = suppressReports
+		block()
+		suppressReports = oldSuppressState
+	}
+}
+
+private class UnusedFunctionVisitor(allowedNames: Regex) : UnusedMemberVisitor(allowedNames) {
 
 	private val callExpressions = mutableSetOf<String>()
 	private val functions = mutableMapOf<String, KtFunction>()
 
-	fun getUnusedFunctions(): Map<String, KtFunction> {
+	override fun getUnusedReports(issue: Issue): List<CodeSmell> {
 		for (call in callExpressions) {
 			if (functions.isEmpty()) {
 				break
 			}
 			functions.remove(call)
 		}
-		return functions
+		return functions.map { CodeSmell(issue, Entity.from(it.value), "Private function ${it.key} is unused.") }
 	}
 
-	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-		if ((classOrObject as? KtClass)?.isInterface() == true) {
-			return
-		}
-
-		super.visitClassOrObject(classOrObject)
+	override fun shouldSuppressReportsForClassOrObject(classOrObject: KtClassOrObject): Boolean {
+		return classOrObject.isInterface() || classOrObject.hasSuppressUnusedFunctionAnnotation()
 	}
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
@@ -135,10 +142,19 @@ private class UnusedFunctionVisitor(private val allowedNames: Regex) : DetektVis
 
 	private fun collectFunction(function: KtNamedFunction) {
 		val name = function.nameAsSafeName.identifier
-		if (!allowedNames.matches(name)) {
+		if (!allowedNames.matches(name) &&
+				!function.hasSuppressUnusedFunctionAnnotation() &&
+				!suppressReports
+		) {
 			functions[name] = function
 		}
 	}
+
+	/*
+	 * We need to collect all private function declarations and references to these functions
+	 * for the whole file as Kotlin allows to access private and internal object declarations
+	 * from everywhere in the file.
+	 */
 
 	override fun visitReferenceExpression(expression: KtReferenceExpression) {
 		super.visitReferenceExpression(expression)
@@ -158,29 +174,22 @@ private class UnusedFunctionVisitor(private val allowedNames: Regex) : DetektVis
 	}
 }
 
-private class UnusedParameterVisitor(private val allowedNames: Regex) : DetektVisitor() {
+private class UnusedParameterVisitor(allowedNames: Regex) : UnusedMemberVisitor(allowedNames) {
 
 	private var unusedParameters: MutableMap<String, KtParameter> = mutableMapOf()
-	private var suppressUnusedParameterReports = false
 
-	fun getUnusedParameters(): Map<String, KtParameter> {
-		return unusedParameters
+	override fun getUnusedReports(issue: Issue): List<CodeSmell> {
+		return unusedParameters.map { CodeSmell(issue, Entity.from(it.value), "Function parameter ${it.key} is unused.") }
 	}
 
-	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-		runThenRestoreState {
-			if (classOrObject.isInterface() || classOrObject.hasSuppressUnusedParameterAnnotation()) {
-				suppressUnusedParameterReports = true
-			}
-
-			super.visitClassOrObject(classOrObject)
-		}
+	override fun shouldSuppressReportsForClassOrObject(classOrObject: KtClassOrObject): Boolean {
+		return classOrObject.isInterface() || classOrObject.hasSuppressUnusedParameterAnnotation()
 	}
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		runThenRestoreState {
 			if (!function.isRelevant() || function.hasSuppressUnusedParameterAnnotation()) {
-				suppressUnusedParameterReports = true
+				suppressReports = true
 			}
 
 			collectParameters(function)
@@ -193,7 +202,7 @@ private class UnusedParameterVisitor(private val allowedNames: Regex) : DetektVi
 		function.valueParameterList?.parameters?.forEach { parameter ->
 			val name = parameter.nameAsSafeName.identifier
 			if (!allowedNames.matches(name) &&
-					!suppressUnusedParameterReports &&
+					!suppressReports &&
 					!parameter.hasSuppressUnusedParameterAnnotation()
 			) {
 				unusedParameters[name] = parameter
@@ -219,40 +228,25 @@ private class UnusedParameterVisitor(private val allowedNames: Regex) : DetektVi
 		unusedParameters = unusedParameters.filterTo(mutableMapOf()) { it.key !in localProperties }
 	}
 
-	private inline fun runThenRestoreState(block: () -> Unit) {
-		val oldSuppressState = suppressUnusedParameterReports
-		block()
-		suppressUnusedParameterReports = oldSuppressState
-	}
-
-	private fun KtClassOrObject.isInterface(): Boolean {
-		return (this as? KtClass)?.isInterface() == true
-	}
-
 	private fun KtNamedFunction.isRelevant() = !isAllowedToHaveUnusedParameters()
 
 	private fun KtNamedFunction.isAllowedToHaveUnusedParameters() =
 			isAbstract() || isOpen() || isOverride() || isOperator() || isMainFunction() || isExternal()
 }
 
-private class UnusedPropertyVisitor(private val allowedNames: Regex) : DetektVisitor() {
+private class UnusedPropertyVisitor(allowedNames: Regex) : UnusedMemberVisitor(allowedNames) {
 
 	private val properties = mutableSetOf<KtNamedDeclaration>()
 	private val nameAccesses = mutableSetOf<String>()
-	private var suppressUnusedPropertyReports = false
 
-	fun getUnusedProperties(): List<KtNamedDeclaration> {
-		return properties.filter { it.nameAsSafeName.identifier !in nameAccesses }
+	override fun getUnusedReports(issue: Issue): List<CodeSmell> {
+		return properties
+				.filter { it.nameAsSafeName.identifier !in nameAccesses }
+				.map { CodeSmell(issue, Entity.from(it), "Private property ${it.nameAsSafeName.identifier} is unused.") }
 	}
 
-	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-		runThenRestoreState {
-			if (classOrObject.hasSuppressUnusedPropertyAnnotation()) {
-				suppressUnusedPropertyReports = true
-			}
-
-			super.visitClassOrObject(classOrObject)
-		}
+	override fun shouldSuppressReportsForClassOrObject(classOrObject: KtClassOrObject): Boolean {
+		return classOrObject.hasSuppressUnusedPropertyAnnotation()
 	}
 
 	override fun visitParameter(parameter: KtParameter) {
@@ -272,7 +266,7 @@ private class UnusedPropertyVisitor(private val allowedNames: Regex) : DetektVis
 	override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
 		runThenRestoreState {
 			if (constructor.hasSuppressUnusedPropertyAnnotation()) {
-				suppressUnusedPropertyReports = true
+				suppressReports = true
 			}
 
 			super.visitPrimaryConstructor(constructor)
@@ -285,7 +279,7 @@ private class UnusedPropertyVisitor(private val allowedNames: Regex) : DetektVis
 	override fun visitSecondaryConstructor(constructor: KtSecondaryConstructor) {
 		runThenRestoreState {
 			if (constructor.hasSuppressUnusedPropertyAnnotation()) {
-				suppressUnusedPropertyReports = true
+				suppressReports = true
 			}
 
 			super.visitSecondaryConstructor(constructor)
@@ -295,7 +289,7 @@ private class UnusedPropertyVisitor(private val allowedNames: Regex) : DetektVis
 
 	private fun maybeAddUnusedProperty(it: KtNamedDeclaration) {
 		if (!allowedNames.matches(it.nameAsSafeName.identifier) &&
-				!suppressUnusedPropertyReports &&
+				!suppressReports &&
 				!it.hasSuppressUnusedPropertyAnnotation()) {
 			properties.add(it)
 		}
@@ -314,12 +308,6 @@ private class UnusedPropertyVisitor(private val allowedNames: Regex) : DetektVis
 		nameAccesses.add(expression.text)
 		super.visitReferenceExpression(expression)
 	}
-
-	private inline fun runThenRestoreState(block: () -> Unit) {
-		val oldSuppressState = suppressUnusedPropertyReports
-		block()
-		suppressUnusedPropertyReports = oldSuppressState
-	}
 }
 
 private fun KtAnnotated.hasSuppressUnusedPropertyAnnotation(): Boolean {
@@ -328,4 +316,8 @@ private fun KtAnnotated.hasSuppressUnusedPropertyAnnotation(): Boolean {
 
 private fun KtAnnotated.hasSuppressUnusedParameterAnnotation(): Boolean {
 	return hasAnnotationWithValue(UnusedPrivateMember.SUPPRESS_ANNOTATION, UnusedPrivateMember.SUPPRESS_UNUSED_PARAMETER)
+}
+
+private fun KtAnnotated.hasSuppressUnusedFunctionAnnotation(): Boolean {
+	return hasAnnotationWithValue(UnusedPrivateMember.SUPPRESS_ANNOTATION, UnusedPrivateMember.SUPPRESS_UNUSED_FUNCTION)
 }
