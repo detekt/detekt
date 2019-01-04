@@ -68,6 +68,13 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 		propertyVisitor.getUnusedProperties().forEach {
 			report(CodeSmell(issue, Entity.from(it), "Private property ${it.nameAsSafeName.identifier} is unused."))
 		}
+
+		val functionVisitor = UnusedFunctionVisitor(allowedNames)
+		root.accept(functionVisitor)
+
+		functionVisitor.getUnusedFunctions().forEach {
+			report(CodeSmell(issue, Entity.from(it.value), "Private function ${it.key} is unused."))
+		}
 	}
 
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
@@ -85,18 +92,12 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 	*/
 
 	override fun postVisit(root: KtFile) {
-		getUnusedFunctions().forEach {
-			report(CodeSmell(issue, Entity.from(it.value), "Private function ${it.key} is unused."))
-		}
 		unusedParameters.forEach {
 			report(CodeSmell(issue, Entity.from(it.value), "Function parameter ${it.key} is unused."))
 		}
 	}
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (function.isPrivate()) {
-			collectFunction(function)
-		}
 		if (function.isRelevant()) {
 			collectParameters(function)
 		}
@@ -136,25 +137,25 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 		unusedParameters = unusedParameters.filterTo(mutableMapOf()) { it.key !in localProperties }
 	}
 
-	/*
-	* Here starts the unused private functions part.
-	*
-	* We need to collect all private function declarations and references to these functions
-	* for the whole file as Kotlin allows to access private and internal object declarations
-	* from everywhere in the file.
-	*/
 
+	private fun KtNamedFunction.isRelevant() = !isAllowedToHaveUnusedParameters()
+
+	private fun KtNamedFunction.isAllowedToHaveUnusedParameters() =
+			isAbstract() || isOpen() || isOverride() || isOperator() || isMainFunction() || isExternal()
+}
+
+/*
+* Here starts the unused private functions part.
+*
+* We need to collect all private function declarations and references to these functions
+* for the whole file as Kotlin allows to access private and internal object declarations
+* from everywhere in the file.
+*/
+private class UnusedFunctionVisitor(private val allowedNames: Regex) : DetektVisitor() {
 	private val callExpressions = mutableSetOf<String>()
 	private val functions = mutableMapOf<String, KtFunction>()
 
-	private fun collectFunction(function: KtNamedFunction) {
-		val name = function.nameAsSafeName.identifier
-		if (!allowedNames.matches(name)) {
-			functions[name] = function
-		}
-	}
-
-	private fun getUnusedFunctions(): Map<String, KtFunction> {
+	fun getUnusedFunctions(): Map<String, KtFunction> {
 		for (call in callExpressions) {
 			if (functions.isEmpty()) {
 				break
@@ -162,6 +163,21 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 			functions.remove(call)
 		}
 		return functions
+	}
+
+	override fun visitNamedFunction(function: KtNamedFunction) {
+		if (function.isPrivate()) {
+			collectFunction(function)
+		}
+
+		super.visitNamedFunction(function)
+	}
+
+	private fun collectFunction(function: KtNamedFunction) {
+		val name = function.nameAsSafeName.identifier
+		if (!allowedNames.matches(name)) {
+			functions[name] = function
+		}
 	}
 
 	override fun visitReferenceExpression(expression: KtReferenceExpression) {
@@ -180,11 +196,6 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 			callExpressions.add(calledMethodName)
 		}
 	}
-
-	private fun KtNamedFunction.isRelevant() = !isAllowedToHaveUnusedParameters()
-
-	private fun KtNamedFunction.isAllowedToHaveUnusedParameters() =
-			isAbstract() || isOpen() || isOverride() || isOperator() || isMainFunction() || isExternal()
 }
 
 private class UnusedPropertyVisitor(private val allowedNames: Regex) : DetektVisitor() {
