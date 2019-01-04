@@ -158,6 +158,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Arjan Kleene](https://github.com/arjank) - Add unnecessary apply rule
 - [Paweł Gajda](https://github.com/pawegio) - Rule improvement: FunctionParameterNaming
 - [Alistair Sykes](https://github.com/alistairsykes) - Doc improvement
+- [Andrew Arnott](https://github.com/andrew-arnott) - UnusedPrivateMember improvement
 
 ### Mentions
 

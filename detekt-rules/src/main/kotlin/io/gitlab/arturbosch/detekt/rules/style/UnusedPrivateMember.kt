@@ -15,6 +15,8 @@ import io.gitlab.arturbosch.detekt.rules.isMainFunction
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOperator
 import io.gitlab.arturbosch.detekt.rules.isOverride
+import org.jetbrains.kotlin.psi.KtAnnotated
+import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -29,6 +31,10 @@ import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtSecondaryConstructor
+import org.jetbrains.kotlin.psi.KtTypeReference
+import org.jetbrains.kotlin.psi.KtUserType
+import org.jetbrains.kotlin.psi.KtValueArgument
+import org.jetbrains.kotlin.psi.KtValueArgumentList
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
 
@@ -43,6 +49,7 @@ import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
  * @author Marvin Ramin
  * @author Artur Bosch
  * @author schalkms
+ * @author Andrew Arnott
  */
 class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 
@@ -79,8 +86,10 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 		val parameterVisitor = UnusedParameterVisitor(allowedNames)
 		root.accept(parameterVisitor)
 
-		parameterVisitor.getUnusedParameters().forEach {
-			report(CodeSmell(issue, Entity.from(it.value), "Function parameter ${it.key} is unused."))
+		if (!root.isAnnotatedWithSuppressUnusedParameterWarnings()) {
+			parameterVisitor.getUnusedParameters().forEach {
+				report(CodeSmell(issue, Entity.from(it.value), "Function parameter ${it.key} is unused."))
+			}
 		}
 	}
 }
@@ -152,32 +161,42 @@ private class UnusedFunctionVisitor(private val allowedNames: Regex) : DetektVis
 */
 private class UnusedParameterVisitor(private val allowedNames: Regex) : DetektVisitor() {
 	private var unusedParameters: MutableMap<String, KtParameter> = mutableMapOf()
+	private var suppressUnusedParameterReports = false
 
 	fun getUnusedParameters(): Map<String, KtParameter> {
 		return unusedParameters
 	}
 
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-		if ((classOrObject as? KtClass)?.isInterface() == true) {
-			return
-		}
+		runThenRestoreState {
+			if (classOrObject.isInterface() || classOrObject.isAnnotatedWithSuppressUnusedParameterWarnings()) {
+				suppressUnusedParameterReports = true
+			}
 
-		super.visitClassOrObject(classOrObject)
+			super.visitClassOrObject(classOrObject)
+		}
 	}
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (function.isRelevant()) {
-			collectParameters(function)
-		}
+		runThenRestoreState {
+			if (!function.isRelevant() || function.isAnnotatedWithSuppressUnusedParameterWarnings()) {
+				suppressUnusedParameterReports = true
+			}
 
-		super.visitNamedFunction(function)
+			collectParameters(function)
+
+			super.visitNamedFunction(function)
+		}
 	}
 
 	private fun collectParameters(function: KtNamedFunction) {
-		function.valueParameterList?.parameters?.forEach {
-			val name = it.nameAsSafeName.identifier
-			if (!allowedNames.matches(name)) {
-				unusedParameters[name] = it
+		function.valueParameterList?.parameters?.forEach { parameter ->
+			val name = parameter.nameAsSafeName.identifier
+			if (!allowedNames.matches(name) &&
+					!suppressUnusedParameterReports &&
+					!parameter.isAnnotatedWithSuppressUnusedParameterWarnings()
+			) {
+				unusedParameters[name] = parameter
 			}
 		}
 
@@ -200,6 +219,15 @@ private class UnusedParameterVisitor(private val allowedNames: Regex) : DetektVi
 		unusedParameters = unusedParameters.filterTo(mutableMapOf()) { it.key !in localProperties }
 	}
 
+	private inline fun runThenRestoreState(block: () -> Unit) {
+		val oldSuppressState = suppressUnusedParameterReports
+		block()
+		suppressUnusedParameterReports = oldSuppressState
+	}
+
+	private fun KtClassOrObject.isInterface(): Boolean {
+		return (this as? KtClass)?.isInterface() == true
+	}
 
 	private fun KtNamedFunction.isRelevant() = !isAllowedToHaveUnusedParameters()
 
@@ -261,4 +289,37 @@ private class UnusedPropertyVisitor(private val allowedNames: Regex) : DetektVis
 		nameAccesses.add(expression.text)
 		super.visitReferenceExpression(expression)
 	}
+}
+
+private fun KtAnnotated.isAnnotatedWithSuppressUnusedParameterWarnings(): Boolean {
+	return annotationEntries.any { it.isSuppressUnusedParameterWarningsAnnotation() }
+}
+
+private fun KtAnnotationEntry.isSuppressUnusedParameterWarningsAnnotation(): Boolean {
+	return typeReference.isSuppressAnnotation() &&
+			valueArgumentList.containsUnusedParameterString()
+}
+
+private fun KtTypeReference?.isSuppressAnnotation(): Boolean {
+	if (this == null) {
+		return false
+	}
+
+	val type = typeElement
+
+	return if (type is KtUserType) {
+		type.referencedName == "Suppress"
+	} else {
+		false
+	}
+}
+
+private fun KtValueArgumentList?.containsUnusedParameterString(): Boolean {
+	return this?.arguments
+			?.any { it.isSuppressParameterWarningString() }
+			?: false
+}
+
+private fun KtValueArgument.isSuppressParameterWarningString(): Boolean {
+	return text == "\"UNUSED_PARAMETER\""
 }
