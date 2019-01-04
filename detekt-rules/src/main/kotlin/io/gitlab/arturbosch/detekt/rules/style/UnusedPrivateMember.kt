@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.hasAnnotationWithValue
 import io.gitlab.arturbosch.detekt.rules.isAbstract
 import io.gitlab.arturbosch.detekt.rules.isExternal
 import io.gitlab.arturbosch.detekt.rules.isMainFunction
@@ -16,7 +17,6 @@ import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOperator
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtAnnotated
-import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -31,10 +31,6 @@ import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtSecondaryConstructor
-import org.jetbrains.kotlin.psi.KtTypeReference
-import org.jetbrains.kotlin.psi.KtUserType
-import org.jetbrains.kotlin.psi.KtValueArgument
-import org.jetbrains.kotlin.psi.KtValueArgumentList
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
 
@@ -55,6 +51,9 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 
 	companion object {
 		const val ALLOWED_NAMES_PATTERN = "allowedNames"
+		const val SUPPRESS_ANNOTATION = "Suppress"
+		const val SUPPRESS_UNUSED_PARAMETER = "\"UNUSED_PARAMETER\""
+		const val SUPPRESS_UNUSED_PROPERTY = "\"unused\""
 	}
 
 	override val defaultRuleIdAliases: Set<String> = setOf("UNUSED_VARIABLE")
@@ -69,13 +68,6 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 	override fun visit(root: KtFile) {
 		super.visit(root)
 
-		val propertyVisitor = UnusedPropertyVisitor(allowedNames)
-		root.accept(propertyVisitor)
-
-		propertyVisitor.getUnusedProperties().forEach {
-			report(CodeSmell(issue, Entity.from(it), "Private property ${it.nameAsSafeName.identifier} is unused."))
-		}
-
 		val functionVisitor = UnusedFunctionVisitor(allowedNames)
 		root.accept(functionVisitor)
 
@@ -83,12 +75,21 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 			report(CodeSmell(issue, Entity.from(it.value), "Private function ${it.key} is unused."))
 		}
 
-		val parameterVisitor = UnusedParameterVisitor(allowedNames)
-		root.accept(parameterVisitor)
+		if (!root.hasSuppressUnusedParameterAnnotation()) {
+			val parameterVisitor = UnusedParameterVisitor(allowedNames)
+			root.accept(parameterVisitor)
 
-		if (!root.isAnnotatedWithSuppressUnusedParameterWarnings()) {
 			parameterVisitor.getUnusedParameters().forEach {
 				report(CodeSmell(issue, Entity.from(it.value), "Function parameter ${it.key} is unused."))
+			}
+		}
+
+		if (!root.hasSuppressUnusedPropertyAnnotation()) {
+			val propertyVisitor = UnusedPropertyVisitor(allowedNames)
+			root.accept(propertyVisitor)
+
+			propertyVisitor.getUnusedProperties().forEach {
+				report(CodeSmell(issue, Entity.from(it), "Private property ${it.nameAsSafeName.identifier} is unused."))
 			}
 		}
 	}
@@ -102,6 +103,7 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 * from everywhere in the file.
 */
 private class UnusedFunctionVisitor(private val allowedNames: Regex) : DetektVisitor() {
+
 	private val callExpressions = mutableSetOf<String>()
 	private val functions = mutableMapOf<String, KtFunction>()
 
@@ -156,10 +158,8 @@ private class UnusedFunctionVisitor(private val allowedNames: Regex) : DetektVis
 	}
 }
 
-/*
-* Here starts the unused parameters part.
-*/
 private class UnusedParameterVisitor(private val allowedNames: Regex) : DetektVisitor() {
+
 	private var unusedParameters: MutableMap<String, KtParameter> = mutableMapOf()
 	private var suppressUnusedParameterReports = false
 
@@ -169,7 +169,7 @@ private class UnusedParameterVisitor(private val allowedNames: Regex) : DetektVi
 
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
 		runThenRestoreState {
-			if (classOrObject.isInterface() || classOrObject.isAnnotatedWithSuppressUnusedParameterWarnings()) {
+			if (classOrObject.isInterface() || classOrObject.hasSuppressUnusedParameterAnnotation()) {
 				suppressUnusedParameterReports = true
 			}
 
@@ -179,7 +179,7 @@ private class UnusedParameterVisitor(private val allowedNames: Regex) : DetektVi
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
 		runThenRestoreState {
-			if (!function.isRelevant() || function.isAnnotatedWithSuppressUnusedParameterWarnings()) {
+			if (!function.isRelevant() || function.hasSuppressUnusedParameterAnnotation()) {
 				suppressUnusedParameterReports = true
 			}
 
@@ -194,7 +194,7 @@ private class UnusedParameterVisitor(private val allowedNames: Regex) : DetektVi
 			val name = parameter.nameAsSafeName.identifier
 			if (!allowedNames.matches(name) &&
 					!suppressUnusedParameterReports &&
-					!parameter.isAnnotatedWithSuppressUnusedParameterWarnings()
+					!parameter.hasSuppressUnusedParameterAnnotation()
 			) {
 				unusedParameters[name] = parameter
 			}
@@ -239,9 +239,20 @@ private class UnusedPropertyVisitor(private val allowedNames: Regex) : DetektVis
 
 	private val properties = mutableSetOf<KtNamedDeclaration>()
 	private val nameAccesses = mutableSetOf<String>()
+	private var suppressUnusedPropertyReports = false
 
 	fun getUnusedProperties(): List<KtNamedDeclaration> {
 		return properties.filter { it.nameAsSafeName.identifier !in nameAccesses }
+	}
+
+	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
+		runThenRestoreState {
+			if (classOrObject.hasSuppressUnusedPropertyAnnotation()) {
+				suppressUnusedPropertyReports = true
+			}
+
+			super.visitClassOrObject(classOrObject)
+		}
 	}
 
 	override fun visitParameter(parameter: KtParameter) {
@@ -250,35 +261,49 @@ private class UnusedPropertyVisitor(private val allowedNames: Regex) : DetektVis
 			val destructuringDeclaration = parameter.destructuringDeclaration
 			if (destructuringDeclaration != null) {
 				for (variable in destructuringDeclaration.entries) {
-					checkAllowedNames(variable)
+					maybeAddUnusedProperty(variable)
 				}
 			} else {
-				checkAllowedNames(parameter)
+				maybeAddUnusedProperty(parameter)
 			}
 		}
 	}
 
 	override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
-		super.visitPrimaryConstructor(constructor)
-		constructor.valueParameters
-				.filter { it.isPrivate() || !it.hasValOrVar() }
-				.forEach { checkAllowedNames(it) }
+		runThenRestoreState {
+			if (constructor.hasSuppressUnusedPropertyAnnotation()) {
+				suppressUnusedPropertyReports = true
+			}
+
+			super.visitPrimaryConstructor(constructor)
+			constructor.valueParameters
+					.filter { it.isPrivate() || !it.hasValOrVar() }
+					.forEach { maybeAddUnusedProperty(it) }
+		}
 	}
 
 	override fun visitSecondaryConstructor(constructor: KtSecondaryConstructor) {
-		super.visitSecondaryConstructor(constructor)
-		constructor.valueParameters.forEach { checkAllowedNames(it) }
+		runThenRestoreState {
+			if (constructor.hasSuppressUnusedPropertyAnnotation()) {
+				suppressUnusedPropertyReports = true
+			}
+
+			super.visitSecondaryConstructor(constructor)
+			constructor.valueParameters.forEach { maybeAddUnusedProperty(it) }
+		}
 	}
 
-	private fun checkAllowedNames(it: KtNamedDeclaration) {
-		if (!allowedNames.matches(it.nameAsSafeName.identifier)) {
+	private fun maybeAddUnusedProperty(it: KtNamedDeclaration) {
+		if (!allowedNames.matches(it.nameAsSafeName.identifier) &&
+				!suppressUnusedPropertyReports &&
+				!it.hasSuppressUnusedPropertyAnnotation()) {
 			properties.add(it)
 		}
 	}
 
 	override fun visitProperty(property: KtProperty) {
 		if (property.isPrivate() && property.isMemberOrTopLevel() || property.isLocal) {
-			checkAllowedNames(property)
+			maybeAddUnusedProperty(property)
 		}
 		super.visitProperty(property)
 	}
@@ -289,37 +314,18 @@ private class UnusedPropertyVisitor(private val allowedNames: Regex) : DetektVis
 		nameAccesses.add(expression.text)
 		super.visitReferenceExpression(expression)
 	}
-}
 
-private fun KtAnnotated.isAnnotatedWithSuppressUnusedParameterWarnings(): Boolean {
-	return annotationEntries.any { it.isSuppressUnusedParameterWarningsAnnotation() }
-}
-
-private fun KtAnnotationEntry.isSuppressUnusedParameterWarningsAnnotation(): Boolean {
-	return typeReference.isSuppressAnnotation() &&
-			valueArgumentList.containsUnusedParameterString()
-}
-
-private fun KtTypeReference?.isSuppressAnnotation(): Boolean {
-	if (this == null) {
-		return false
-	}
-
-	val type = typeElement
-
-	return if (type is KtUserType) {
-		type.referencedName == "Suppress"
-	} else {
-		false
+	private inline fun runThenRestoreState(block: () -> Unit) {
+		val oldSuppressState = suppressUnusedPropertyReports
+		block()
+		suppressUnusedPropertyReports = oldSuppressState
 	}
 }
 
-private fun KtValueArgumentList?.containsUnusedParameterString(): Boolean {
-	return this?.arguments
-			?.any { it.isSuppressParameterWarningString() }
-			?: false
+private fun KtAnnotated.hasSuppressUnusedPropertyAnnotation(): Boolean {
+	return hasAnnotationWithValue(UnusedPrivateMember.SUPPRESS_ANNOTATION, UnusedPrivateMember.SUPPRESS_UNUSED_PROPERTY)
 }
 
-private fun KtValueArgument.isSuppressParameterWarningString(): Boolean {
-	return text == "\"UNUSED_PARAMETER\""
+private fun KtAnnotated.hasSuppressUnusedParameterAnnotation(): Boolean {
+	return hasAnnotationWithValue(UnusedPrivateMember.SUPPRESS_ANNOTATION, UnusedPrivateMember.SUPPRESS_UNUSED_PARAMETER)
 }
