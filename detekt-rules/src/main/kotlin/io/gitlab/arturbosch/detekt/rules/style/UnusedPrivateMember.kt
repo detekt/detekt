@@ -78,61 +78,7 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 		super.visitClassOrObject(classOrObject)
 	}
 
-	private class UnusedPropertyVisitor(private val allowedNames: Regex) : DetektVisitor() {
 
-		private val properties = mutableSetOf<KtNamedDeclaration>()
-		private val nameAccesses = mutableSetOf<String>()
-
-		fun getUnusedProperties(): List<KtNamedDeclaration> {
-			return properties.filter { it.nameAsSafeName.identifier !in nameAccesses }
-		}
-
-		override fun visitParameter(parameter: KtParameter) {
-			super.visitParameter(parameter)
-			if (parameter.isLoopParameter) {
-				val destructuringDeclaration = parameter.destructuringDeclaration
-				if (destructuringDeclaration != null) {
-					for (variable in destructuringDeclaration.entries) {
-						checkAllowedNames(variable)
-					}
-				} else {
-					checkAllowedNames(parameter)
-				}
-			}
-		}
-
-		override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
-			super.visitPrimaryConstructor(constructor)
-			constructor.valueParameters
-					.filter { it.isPrivate() || !it.hasValOrVar() }
-					.forEach { checkAllowedNames(it) }
-		}
-
-		override fun visitSecondaryConstructor(constructor: KtSecondaryConstructor) {
-			super.visitSecondaryConstructor(constructor)
-			constructor.valueParameters.forEach { checkAllowedNames(it) }
-		}
-
-		private fun checkAllowedNames(it: KtNamedDeclaration) {
-			if (!allowedNames.matches(it.nameAsSafeName.identifier)) {
-				properties.add(it)
-			}
-		}
-
-		override fun visitProperty(property: KtProperty) {
-			if (property.isPrivate() && property.isMemberOrTopLevel() || property.isLocal) {
-				checkAllowedNames(property)
-			}
-			super.visitProperty(property)
-		}
-
-		private fun KtProperty.isMemberOrTopLevel() = isMember || isTopLevel
-
-		override fun visitReferenceExpression(expression: KtReferenceExpression) {
-			nameAccesses.add(expression.text)
-			super.visitReferenceExpression(expression)
-		}
-	}
 
 	/*
 	* Here begins the common part for unused private functions and parameters.
@@ -239,4 +185,60 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 
 	private fun KtNamedFunction.isAllowedToHaveUnusedParameters() =
 			isAbstract() || isOpen() || isOverride() || isOperator() || isMainFunction() || isExternal()
+}
+
+private class UnusedPropertyVisitor(private val allowedNames: Regex) : DetektVisitor() {
+
+	private val properties = mutableSetOf<KtNamedDeclaration>()
+	private val nameAccesses = mutableSetOf<String>()
+
+	fun getUnusedProperties(): List<KtNamedDeclaration> {
+		return properties.filter { it.nameAsSafeName.identifier !in nameAccesses }
+	}
+
+	override fun visitParameter(parameter: KtParameter) {
+		super.visitParameter(parameter)
+		if (parameter.isLoopParameter) {
+			val destructuringDeclaration = parameter.destructuringDeclaration
+			if (destructuringDeclaration != null) {
+				for (variable in destructuringDeclaration.entries) {
+					checkAllowedNames(variable)
+				}
+			} else {
+				checkAllowedNames(parameter)
+			}
+		}
+	}
+
+	override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
+		super.visitPrimaryConstructor(constructor)
+		constructor.valueParameters
+				.filter { it.isPrivate() || !it.hasValOrVar() }
+				.forEach { checkAllowedNames(it) }
+	}
+
+	override fun visitSecondaryConstructor(constructor: KtSecondaryConstructor) {
+		super.visitSecondaryConstructor(constructor)
+		constructor.valueParameters.forEach { checkAllowedNames(it) }
+	}
+
+	private fun checkAllowedNames(it: KtNamedDeclaration) {
+		if (!allowedNames.matches(it.nameAsSafeName.identifier)) {
+			properties.add(it)
+		}
+	}
+
+	override fun visitProperty(property: KtProperty) {
+		if (property.isPrivate() && property.isMemberOrTopLevel() || property.isLocal) {
+			checkAllowedNames(property)
+		}
+		super.visitProperty(property)
+	}
+
+	private fun KtProperty.isMemberOrTopLevel() = isMember || isTopLevel
+
+	override fun visitReferenceExpression(expression: KtReferenceExpression) {
+		nameAccesses.add(expression.text)
+		super.visitReferenceExpression(expression)
+	}
 }
