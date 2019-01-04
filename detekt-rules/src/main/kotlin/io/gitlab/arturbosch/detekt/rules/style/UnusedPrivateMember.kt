@@ -75,73 +75,14 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 		functionVisitor.getUnusedFunctions().forEach {
 			report(CodeSmell(issue, Entity.from(it.value), "Private function ${it.key} is unused."))
 		}
-	}
 
-	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-		if ((classOrObject as? KtClass)?.isInterface() == true) {
-			return
-		}
+		val parameterVisitor = UnusedParameterVisitor(allowedNames)
+		root.accept(parameterVisitor)
 
-		super.visitClassOrObject(classOrObject)
-	}
-
-
-
-	/*
-	* Here begins the common part for unused private functions and parameters.
-	*/
-
-	override fun postVisit(root: KtFile) {
-		unusedParameters.forEach {
+		parameterVisitor.getUnusedParameters().forEach {
 			report(CodeSmell(issue, Entity.from(it.value), "Function parameter ${it.key} is unused."))
 		}
 	}
-
-	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (function.isRelevant()) {
-			collectParameters(function)
-		}
-
-		super.visitNamedFunction(function)
-	}
-
-	/*
-	* Here starts the unused parameters part.
-	*/
-	private var unusedParameters: MutableMap<String, KtParameter> = mutableMapOf()
-
-	private fun collectParameters(function: KtNamedFunction) {
-		function.valueParameterList?.parameters?.forEach {
-			val name = it.nameAsSafeName.identifier
-			if (!allowedNames.matches(name)) {
-				unusedParameters[name] = it
-			}
-		}
-
-		val localProperties = mutableListOf<String>()
-		function.accept(object : DetektVisitor() {
-			override fun visitProperty(property: KtProperty) {
-				if (property.isLocal) {
-					val name = property.nameAsSafeName.identifier
-					localProperties.add(name)
-				}
-				super.visitProperty(property)
-			}
-
-			override fun visitReferenceExpression(expression: KtReferenceExpression) {
-				localProperties.add(expression.text)
-				super.visitReferenceExpression(expression)
-			}
-		})
-
-		unusedParameters = unusedParameters.filterTo(mutableMapOf()) { it.key !in localProperties }
-	}
-
-
-	private fun KtNamedFunction.isRelevant() = !isAllowedToHaveUnusedParameters()
-
-	private fun KtNamedFunction.isAllowedToHaveUnusedParameters() =
-			isAbstract() || isOpen() || isOverride() || isOperator() || isMainFunction() || isExternal()
 }
 
 /*
@@ -163,6 +104,14 @@ private class UnusedFunctionVisitor(private val allowedNames: Regex) : DetektVis
 			functions.remove(call)
 		}
 		return functions
+	}
+
+	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
+		if ((classOrObject as? KtClass)?.isInterface() == true) {
+			return
+		}
+
+		super.visitClassOrObject(classOrObject)
 	}
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
@@ -196,6 +145,66 @@ private class UnusedFunctionVisitor(private val allowedNames: Regex) : DetektVis
 			callExpressions.add(calledMethodName)
 		}
 	}
+}
+
+/*
+* Here starts the unused parameters part.
+*/
+private class UnusedParameterVisitor(private val allowedNames: Regex) : DetektVisitor() {
+	private var unusedParameters: MutableMap<String, KtParameter> = mutableMapOf()
+
+	fun getUnusedParameters(): Map<String, KtParameter> {
+		return unusedParameters
+	}
+
+	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
+		if ((classOrObject as? KtClass)?.isInterface() == true) {
+			return
+		}
+
+		super.visitClassOrObject(classOrObject)
+	}
+
+	override fun visitNamedFunction(function: KtNamedFunction) {
+		if (function.isRelevant()) {
+			collectParameters(function)
+		}
+
+		super.visitNamedFunction(function)
+	}
+
+	private fun collectParameters(function: KtNamedFunction) {
+		function.valueParameterList?.parameters?.forEach {
+			val name = it.nameAsSafeName.identifier
+			if (!allowedNames.matches(name)) {
+				unusedParameters[name] = it
+			}
+		}
+
+		val localProperties = mutableListOf<String>()
+		function.accept(object : DetektVisitor() {
+			override fun visitProperty(property: KtProperty) {
+				if (property.isLocal) {
+					val name = property.nameAsSafeName.identifier
+					localProperties.add(name)
+				}
+				super.visitProperty(property)
+			}
+
+			override fun visitReferenceExpression(expression: KtReferenceExpression) {
+				localProperties.add(expression.text)
+				super.visitReferenceExpression(expression)
+			}
+		})
+
+		unusedParameters = unusedParameters.filterTo(mutableMapOf()) { it.key !in localProperties }
+	}
+
+
+	private fun KtNamedFunction.isRelevant() = !isAllowedToHaveUnusedParameters()
+
+	private fun KtNamedFunction.isAllowedToHaveUnusedParameters() =
+			isAbstract() || isOpen() || isOverride() || isOperator() || isMainFunction() || isExternal()
 }
 
 private class UnusedPropertyVisitor(private val allowedNames: Regex) : DetektVisitor() {
