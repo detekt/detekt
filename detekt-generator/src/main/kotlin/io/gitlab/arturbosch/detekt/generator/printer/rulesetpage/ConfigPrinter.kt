@@ -90,6 +90,7 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 			    - 'ForEachOnRange'
 			    - 'FunctionMaxLength'
 			    - 'TooGenericExceptionCaught'
+			    - 'InstanceOfCheckForException'
 			""".trimIndent()
 	}
 
