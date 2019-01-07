@@ -1076,7 +1076,7 @@ can lead to confusion and potential bugs.
 
 **Debt**: 5min
 
-**Aliases**: UNUSED_VARIABLE
+**Aliases**: UNUSED_VARIABLE, UNUSED_PARAMETER, unused
 
 #### Configuration options:
 
