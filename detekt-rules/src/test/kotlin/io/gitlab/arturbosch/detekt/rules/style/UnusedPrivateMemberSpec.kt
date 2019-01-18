@@ -160,7 +160,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 			val configRules = mapOf(UnusedPrivateMember.ALLOWED_NAMES_PATTERN to "*foo")
 			val config = TestConfig(configRules)
 			assertThatExceptionOfType(PatternSyntaxException::class.java)
-					.isThrownBy{ UnusedPrivateMember(config).lint(regexTestingCode) }
+					.isThrownBy { UnusedPrivateMember(config).lint(regexTestingCode) }
 		}
 	}
 
@@ -605,7 +605,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 	}
 
 	given("error messages") {
-		it("are specific for function parameters"){
+		it("are specific for function parameters") {
 			val code = """
 				fun foo(unused: Int){}
 			"""
@@ -615,7 +615,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 			assertThat(lint.first().message).startsWith("Function parameter")
 		}
 
-		it("are specific for local variables"){
+		it("are specific for local variables") {
 			val code = """
 				fun foo(){ val unused = 1 }
 			"""
@@ -625,7 +625,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 			assertThat(lint.first().message).startsWith("Private property")
 		}
 
-		it("are specific for private functions"){
+		it("are specific for private functions") {
 			val code = """
 			class Test {
 				private fun unusedFunction(): Int {
@@ -637,6 +637,293 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 			val lint = subject.lint(code)
 
 			assertThat(lint.first().message).startsWith("Private function")
+		}
+	}
+
+	given("suppress unused parameter warning annotations") {
+		it("does not report annotated parameters") {
+			val code = """
+				fun foo(@Suppress("UNUSED_PARAMETER") unused: String){}
+			"""
+
+			assertThat(subject.lint(code)).isEmpty()
+		}
+
+		it("reports parameters without annotation") {
+			val code = """
+				fun foo(@Suppress("UNUSED_PARAMETER") unused: String, unusedWithoutAnnotation: String){}
+			"""
+
+			val lint = subject.lint(code)
+
+			assertThat(lint).hasSize(1)
+			assertThat(lint[0].entity.name).isEqualTo("unusedWithoutAnnotation")
+		}
+
+		it("does not report parameters in annotated function") {
+			val code = """
+        		@Suppress("UNUSED_PARAMETER")
+				fun foo(unused: String, otherUnused: String){}
+			"""
+
+			assertThat(subject.lint(code)).isEmpty()
+		}
+
+		it("does not report parameters in annotated class") {
+			val code = """
+        		@Suppress("UNUSED_PARAMETER")
+        		class Test {
+					fun foo(unused: String, otherUnused: String){}
+					fun bar(unused: String){}
+				}
+			"""
+
+			assertThat(subject.lint(code)).isEmpty()
+		}
+
+		it("does not report parameters in annotated object") {
+			val code = """
+				@Suppress("UNUSED_PARAMETER")
+				object Test {
+					fun foo(unused: String){}
+				}
+			"""
+
+			assertThat(subject.lint(code)).isEmpty()
+		}
+
+		it("does not report parameters in class with annotated outer class") {
+			val code = """
+        		@Suppress("UNUSED_PARAMETER")
+				class Test {
+					fun foo(unused: String){}
+
+					class InnerTest {
+						fun bar(unused: String){}
+					}
+				}
+			"""
+
+			assertThat(subject.lint(code)).isEmpty()
+		}
+
+		it("does not report parameters in annotated file") {
+			val code = """
+				@file:Suppress("UNUSED_PARAMETER")
+
+				class Test {
+					fun foo(unused: String){}
+
+					class InnerTest {
+						fun bar(unused: String){}
+					}
+				}
+			"""
+
+			assertThat(subject.lint(code)).isEmpty()
+		}
+	}
+
+	given("suppress unused property warning annotations") {
+		it("does not report annotated private constructor properties") {
+			val code = """
+				class Test(@Suppress("unused") private val foo: String) {}
+			"""
+
+			assertThat(subject.lint(code)).isEmpty()
+		}
+
+		it("reports private constructor properties without annotation") {
+			val code = """
+				class Test(
+					@Suppress("unused") private val foo: String,
+					private val bar: String
+				) {}
+			"""
+
+			val lint = subject.lint(code)
+
+			assertThat(lint).hasSize(1)
+			assertThat(lint[0].entity.name).isEqualTo("bar")
+		}
+
+		it("does not report private constructor properties in annotated class") {
+			val code = """
+        		@Suppress("unused")
+				class Test(
+					private val foo: String,
+					private val bar: String
+				) {}
+			"""
+
+			assertThat(subject.lint(code)).isEmpty()
+		}
+
+		it("does not report private constructor properties in class with annotated outer class") {
+			val code = """
+        		@Suppress("unused")
+				class Test(
+					private val foo: String,
+					private val bar: String
+				) {
+					class InnerTest(
+						private val baz: String
+					) {}
+				}
+			"""
+
+			assertThat(subject.lint(code)).isEmpty()
+		}
+
+		it("does not report private constructor properties in annotated file") {
+			val code = """
+				@file:Suppress("unused")
+
+				class Test(
+					private val foo: String,
+					private val bar: String
+				) {
+					class InnerTest(
+						private val baz: String
+					) {}
+				}
+			"""
+
+			assertThat(subject.lint(code)).isEmpty()
+		}
+
+		it("does not report annotated private properties") {
+			val code = """
+				class Test {
+					@Suppress("unused") private val foo: String
+				}
+			"""
+
+			assertThat(subject.lint(code)).isEmpty()
+		}
+
+		it("reports private properties without annotation") {
+			val code = """
+				class Test {
+					@Suppress("unused") private val foo: String
+					private val bar: String
+				}
+			"""
+
+			val lint = subject.lint(code)
+
+			assertThat(lint).hasSize(1)
+			assertThat(lint[0].entity.name).isEqualTo("bar")
+		}
+
+		it("does not report private properties in annotated class") {
+			val code = """
+        		@Suppress("unused")
+				class Test {
+					private val foo: String
+					private val bar: String
+				}
+			"""
+
+			assertThat(subject.lint(code)).isEmpty()
+		}
+
+		it("does not report private properties in class with annotated outer class") {
+			val code = """
+        		@Suppress("unused")
+				class Test {
+					private val foo: String
+					private val bar: String
+
+					class InnerTest {
+						private val baz: String
+					}
+				}
+			"""
+
+			assertThat(subject.lint(code)).isEmpty()
+		}
+
+		it("does not report private properties in annotated file") {
+			val code = """
+				@file:Suppress("unused")
+
+				class Test {
+					private val foo: String
+					private val bar: String
+
+					class InnerTest {
+						private val baz: String
+					}
+				}
+			"""
+
+			assertThat(subject.lint(code)).isEmpty()
+		}
+	}
+
+	given("suppress unused function warning annotations") {
+		it("does not report annotated private functions") {
+			val code = """
+				@Suppress("unused")
+				private fun foo(): String = ""
+			"""
+
+			assertThat(subject.lint(code)).isEmpty()
+		}
+
+		it("reports private functions without annotation") {
+			val code = """
+				private fun foo(): String = ""
+			"""
+
+			val lint = subject.lint(code)
+
+			assertThat(lint).hasSize(1)
+			assertThat(lint[0].entity.name).isEqualTo("foo")
+		}
+
+		it("does not report private functions in annotated class") {
+			val code = """
+        		@Suppress("unused")
+				class Test {
+					private fun foo(): String = ""
+				}
+			"""
+
+			assertThat(subject.lint(code)).isEmpty()
+		}
+
+		it("does not report private functions in class with annotated outer class") {
+			val code = """
+        		@Suppress("unused")
+				class Test {
+					private fun foo(): String = ""
+					private fun bar(): String = ""
+
+					class InnerTest {
+						private fun baz(): String = ""
+					}
+				}
+			"""
+
+			assertThat(subject.lint(code)).isEmpty()
+		}
+
+		it("does not report private functions in annotated file") {
+			val code = """
+				@file:Suppress("unused")
+				class Test {
+					private fun foo(): String = ""
+					private fun bar(): String = ""
+
+					class InnerTest {
+						private fun baz(): String = ""
+					}
+				}
+			"""
+
+			assertThat(subject.lint(code)).isEmpty()
 		}
 	}
 })
