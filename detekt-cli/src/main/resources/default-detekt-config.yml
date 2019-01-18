@@ -21,6 +21,7 @@ test-pattern: # Configure exclusions for test sources
     - 'ForEachOnRange'
     - 'FunctionMaxLength'
     - 'TooGenericExceptionCaught'
+    - 'InstanceOfCheckForException'
 
 build:
   maxIssues: 10
