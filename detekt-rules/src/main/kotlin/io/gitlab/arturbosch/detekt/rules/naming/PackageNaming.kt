@@ -13,7 +13,7 @@ import org.jetbrains.kotlin.psi.KtPackageDirective
 /**
  * Reports when package names which do not follow the specified naming convention are used.
  *
- * @configuration packagePattern - naming pattern (default: '^[a-z]+(\.[a-z][a-z0-9]*)*$')
+ * @configuration packagePattern - naming pattern (default: '^[a-z]+(\.[a-z][A-Za-z0-9]*)*$')
  * @active since v1.0.0
  * @author Marvin Ramin
  */
@@ -23,7 +23,7 @@ class PackageNaming(config: Config = Config.empty) : Rule(config) {
 			Severity.Style,
 			"Package names should match the naming convention set in the configuration.",
 			debt = Debt.FIVE_MINS)
-	private val packagePattern by LazyRegex(PACKAGE_PATTERN, "^[a-z]+(\\.[a-z][a-z0-9]*)*$")
+	private val packagePattern by LazyRegex(PACKAGE_PATTERN, "^[a-z]+(\\.[a-z][A-Za-z0-9]*)*$")
 
 	override fun visitPackageDirective(directive: KtPackageDirective) {
 		val name = directive.qualifiedName
