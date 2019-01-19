@@ -261,7 +261,7 @@ Reports when package names which do not follow the specified naming convention a
 
 #### Configuration options:
 
-* `packagePattern` (default: `'^[a-z]+(\.[a-z][a-z0-9]*)*$'`)
+* `packagePattern` (default: `'^[a-z]+(\.[a-z][A-Za-z0-9]*)*$'`)
 
    naming pattern
 
