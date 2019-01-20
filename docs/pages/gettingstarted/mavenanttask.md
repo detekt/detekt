@@ -34,10 +34,8 @@ summary:
                                 <arg value="${basedir}/src/main/kotlin"/>
                                 <arg value="--filters"/>
                                 <arg value=".*/target/.*,.*/resources/.*"/>
-                                <arg value="--output"/>
-                                <arg value="${basedir}/reports"/>
-                                <arg value="--outputname"/>
-                                <arg value="detekt-report"/>
+                                <arg value="--report"/>
+                                <arg value="xml:${basedir}/reports/detekt.xml"/>
                                 <arg value="--baseline"/>
                                 <arg value="${basedir}/reports/baseline.xml"/>
                             </java>
