@@ -926,4 +926,29 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 			assertThat(subject.lint(code)).isEmpty()
 		}
 	}
+
+	given("main methods") {
+
+		it("does not report the args parameter of the main function inside an object") {
+			val code = """
+				object O {
+
+					@JvmStatic
+					fun main(args: Array<String>) {
+						println("b")
+					}
+				}
+			""".trimIndent()
+			assertThat(subject.lint(code)).isEmpty()
+		}
+
+		it("does not report the args parameter of the main function as top level function") {
+			val code = """
+				fun main(args: Array<String>) {
+					println("b")
+				}
+			""".trimIndent()
+			assertThat(subject.lint(code)).isEmpty()
+		}
+	}
 })

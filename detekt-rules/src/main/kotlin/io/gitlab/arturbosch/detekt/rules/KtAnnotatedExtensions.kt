@@ -7,6 +7,19 @@ import org.jetbrains.kotlin.psi.KtUserType
 import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.KtValueArgumentList
 
+fun KtAnnotated.hasAnnotation(
+		vararg annotationNames: String
+): Boolean {
+	val names = annotationNames.toHashSet()
+	val predicate: (KtAnnotationEntry) -> Boolean = {
+		it.typeReference
+				?.typeElement
+				?.safeAs<KtUserType>()
+				?.referencedName in names
+	}
+	return annotationEntries.any(predicate)
+}
+
 fun KtAnnotated.hasAnnotationWithValue(
 		annotationName: String,
 		annotationValueText: String
