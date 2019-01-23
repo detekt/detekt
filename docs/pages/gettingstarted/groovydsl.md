@@ -35,6 +35,10 @@ buildscript {
     }
 }
 
+repositories {
+    jcenter()
+}
+
 plugins {
     id "io.gitlab.arturbosch.detekt" version "[version]"
 }
@@ -95,7 +99,7 @@ detekt {
         "src/main/kotlin",
         "gensrc/main/kotlin"
     )
-    parallel = false                                      // Runs detekt in parallel. Can lead to speedups in larger projects. `false` by default.
+    parallel = false                                      // Builds the AST in parallel. Rules are always executed in parallel. Can lead to speedups in larger projects. `false` by default.
     config = files("path/to/config.yml")                  // Define the detekt configuration(s) you want to use. Defaults to the default detekt configuration.
     baseline = file("path/to/baseline.xml")               // Specifying a baseline file. All findings stored in this file in subsequent runs of detekt.
     filters = ''                                          // Regular expression of paths that should be excluded separated by `;` or `,`.
