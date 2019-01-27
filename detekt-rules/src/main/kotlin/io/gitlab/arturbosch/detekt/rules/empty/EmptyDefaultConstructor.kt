@@ -7,6 +7,7 @@ import org.jetbrains.kotlin.lexer.KtModifierKeywordToken
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
+import org.jetbrains.kotlin.psi.psiUtil.hasActualModifier
 import org.jetbrains.kotlin.psi.psiUtil.hasExpectModifier
 import org.jetbrains.kotlin.psi.psiUtil.visibilityModifierType
 
@@ -28,12 +29,12 @@ class EmptyDefaultConstructor(config: Config) : EmptyRule(config = config) {
 	}
 
 	/**
-	 * Annotations with the 'expect' keyword need the explicit default constructor - #1362
+	 * Annotations with the 'expect' or 'actual' keyword need the explicit default constructor - #1362
 	 */
 	private fun isExpectedAnnotationClass(constructor: KtPrimaryConstructor): Boolean {
 		val parent = constructor.parent
-		if (parent is KtClass) {
-			return parent.hasExpectModifier() && parent.isAnnotation()
+		if (parent is KtClass && parent.isAnnotation()) {
+			return parent.hasExpectModifier() || parent.hasActualModifier()
 		}
 		return false
 	}

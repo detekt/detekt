@@ -11,9 +11,10 @@ import org.jetbrains.spek.api.dsl.it
  */
 class EmptyConstructorSpec : Spek({
 
-	it("should not report empty constructors for 'expect'ed annotation classes - #1362") {
+	it("should not report empty constructors for annotation classes with expect or actual keyword - #1362") {
 		val code = """
 			expect annotation class NeedsConstructor()
+			actual annotation class NeedsConstructor actual constructor()
 
 			@NeedsConstructor
 			fun annotatedFunction() = Unit
