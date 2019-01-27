@@ -49,7 +49,6 @@ fun CliArgs.loadConfiguration(): Config {
 	return declaredConfig ?: loadDefaultConfig()
 }
 
-@Deprecated("Should be removed for 1.0.0")
 private fun Config.deprecatedFailFastUsage(): Boolean {
 	val value = valueOrDefault("failFast", false)
 	LOG.printer.println("Using deprecated property 'failFast' in the yaml config. " +
