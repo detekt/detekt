@@ -46,3 +46,5 @@ fun getIntValueForPsiElement(element: PsiElement): Int? {
 fun KtStringTemplateExpression.plainText() = text.substring(1, text.length - 1)
 
 fun KtClass.companionObject() = this.companionObjects.singleOrNull { it.isCompanion() }
+
+inline fun <reified T : Any> Any.safeAs(): T? = this as? T
