@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
-import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.it
@@ -184,6 +183,27 @@ internal class ConfigurationsSpec : Spek({
 
 		it("should override maxIssues when specified") {
 			assertThat(config.subConfig("build").valueOrDefault("maxIssues", -1)).isEqualTo(1)
+		}
+	}
+
+	describe("build upon default config") {
+
+		val config = CliArgs {
+			buildUponDefaultConfig = true
+			configResource = "/configs/no-fail-fast-override.yml"
+		}.loadConfiguration()
+
+		it("should override config when specified") {
+			assertThat(config.subConfig("style").subConfig("MaxLineLength").valueOrDefault("maxLineLength", -1)).isEqualTo(100)
+			assertThat(config.subConfig("style").subConfig("MaxLineLength").valueOrDefault("excludeCommentStatements", false)).isTrue()
+		}
+
+		it("should be active=false by default") {
+			assertThat(config.subConfig("comments").subConfig("CommentOverPrivateFunction").valueOrDefault("active", true)).isFalse()
+		}
+
+		it("should be maxIssues=10 by default") {
+			assertThat(config.subConfig("build").valueOrDefault("maxIssues", -1)).isEqualTo(10)
 		}
 	}
 })

@@ -67,6 +67,17 @@ class CliArgs : Args {
 			description = "Disables default rule sets.")
 	var disableDefaultRuleSets: Boolean = false
 
+	@Parameter(names = ["--build-upon-default-config"],
+			description = "Preconfigures detekt with a bunch of rules and some opinionated defaults for you. " +
+					"Allows additional provided configurations to override the defaults.")
+	var buildUponDefaultConfig: Boolean = false
+
+	@Parameter(names = ["--fail-fast"],
+			description = "Shortcut for 'build-upon-default-config' together with all available rules active and " +
+					"exit code 0 only when no code smells are found. " +
+					"Additional configuration files can override properties but not the 'active' one.")
+	var failFast: Boolean = false
+
 	@Parameter(names = ["--debug"],
 			description = "Prints extra information about configurations and extensions.")
 	var debug: Boolean = false
@@ -91,5 +102,13 @@ class CliArgs : Args {
 
 	val reportPaths: List<ReportPath> by lazy {
 		reports?.map { ReportPath.from(it) } ?: emptyList()
+	}
+
+	companion object {
+		/**
+		 * When embedding the cli inside a tool, this closure style configuration
+		 * of the arguments should be used.
+		 */
+		operator fun invoke(init: CliArgs.() -> Unit): CliArgs = CliArgs().apply(init)
 	}
 }

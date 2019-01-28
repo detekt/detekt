@@ -23,7 +23,7 @@ internal class CliArgsSpec : Spek({
 		}
 
 		it("a single value is converted to a path") {
-			val (cli, _) = parseArguments<CliArgs>(arrayOf("--input", "${projectPath}"))
+			val (cli, _) = parseArguments<CliArgs>(arrayOf("--input", "$projectPath"))
 			assertThat(cli.inputPaths).hasSize(1)
 			assertThat(cli.inputPaths.first().toAbsolutePath()).isEqualTo(projectPath)
 		}
