@@ -229,5 +229,19 @@ class UnusedImportsSpec : SubjectSpek<UnusedImports>({
 			"""
 			assertThat(subject.lint(code)).isEmpty()
 		}
+
+		it("should not report used alias even when import is from same package") {
+			val code = """
+				package com.example
+
+				import com.example.foo as myFoo // from same package but with alias, check alias usage
+				import com.example.other.foo as otherFoo // not from package with used alias
+
+				fun f() : Boolean {
+					return myFoo() == otherFoo()
+				}
+			""".trimIndent()
+			assertThat(subject.lint(code)).isEmpty()
+		}
 	}
 })
