@@ -68,13 +68,14 @@ class CliArgs : Args {
 	var disableDefaultRuleSets: Boolean = false
 
 	@Parameter(names = ["--build-upon-default-config"],
-			description = "Uses the default detekt configuration as a baseline. " +
+			description = "Preconfigures detekt with a bunch of rules and some opinionated defaults for you. " +
 					"Allows additional provided configurations to override the defaults.")
 	var buildUponDefaultConfig: Boolean = false
 
 	@Parameter(names = ["--fail-fast"],
-			description = "Uses the default detekt configuration as a baseline but sets all rules to active! " +
-					"Additional configuration files can override properties except the 'active' one.")
+			description = "Shortcut for 'build-upon-default-config' together with all available rules active and " +
+					"exit code 0 only when no code smells are found. " +
+					"Additional configuration files can override properties but not the 'active' one.")
 	var failFast: Boolean = false
 
 	@Parameter(names = ["--debug"],
