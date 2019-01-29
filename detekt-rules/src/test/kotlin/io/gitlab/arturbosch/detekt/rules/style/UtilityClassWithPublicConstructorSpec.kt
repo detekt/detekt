@@ -9,6 +9,7 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
 class UtilityClassWithPublicConstructorSpec : SubjectSpek<UtilityClassWithPublicConstructor>({
+
 	subject { UtilityClassWithPublicConstructor(Config.empty) }
 
 	given("several UtilityClassWithPublicConstructor rule violations") {
@@ -29,7 +30,27 @@ class UtilityClassWithPublicConstructorSpec : SubjectSpek<UtilityClassWithPublic
 
 		it("does not report given classes") {
 			val findings = subject.lint(Case.UtilityClassesNegative.path())
-			assertThat(findings).hasSize(0)
+			assertThat(findings).isEmpty()
+		}
+	}
+
+	given("annotations class") {
+
+		it("should not get triggered for utility class") {
+			val code = """
+				@Retention(AnnotationRetention.SOURCE)
+				@StringDef(
+					Gender.MALE,
+					Gender.FEMALE
+				)
+				annotation class Gender {
+					companion object {
+						const val MALE = "male"
+						const val FEMALE = "female"
+					}
+				}
+			""".trimIndent()
+			assertThat(subject.lint(code)).isEmpty()
 		}
 	}
 })
