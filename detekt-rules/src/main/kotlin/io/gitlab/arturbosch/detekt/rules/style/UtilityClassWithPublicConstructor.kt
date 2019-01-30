@@ -69,7 +69,9 @@ class UtilityClassWithPublicConstructor(config: Config = Config.empty) : Rule(co
 			Debt.FIVE_MINS)
 
 	override fun visitClass(klass: KtClass) {
-		if (!klass.isInterface() && !klass.superTypeListEntries.any()) {
+		if (!klass.isInterface() &&
+				!klass.superTypeListEntries.any() &&
+				!klass.isAnnotation()) {
 			val utilityClassConstructor = UtilityClassConstructor(klass)
 			val declarations = klass.body?.declarations
 			if (hasOnlyUtilityClassMembers(declarations)) {
