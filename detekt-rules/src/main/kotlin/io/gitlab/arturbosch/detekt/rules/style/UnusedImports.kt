@@ -59,9 +59,13 @@ class UnusedImports(config: Config) : Rule(config) {
 		private val namedReferences = mutableSetOf<String>()
 
 		fun unusedImports(): List<KtImportDirective> {
-			return imports
-					?.filter { it.importedFqName?.parent() == currentPackage || it.identifier() !in namedReferences }
-					.orEmpty()
+			fun KtImportDirective.isFromSamePackage() =
+					importedFqName?.parent() == currentPackage && alias == null
+
+			fun KtImportDirective.isNotUsed() =
+					aliasName !in namedReferences && identifier() !in namedReferences
+
+			return imports?.filter { it.isFromSamePackage() || it.isNotUsed() }.orEmpty()
 		}
 
 		override fun visitPackageDirective(directive: KtPackageDirective) {
