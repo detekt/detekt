@@ -163,5 +163,24 @@ class TooManyFunctionsSpec : Spek({
 				assertThat(configuredRule.lint(code)).isEmpty()
 			}
 		}
+
+		describe("false negative when private and deprecated functions are ignored - #1439") {
+
+			it("should not report when file has no public functions") {
+				val code = """
+					private fun a() = Unit
+					private fun b() = Unit
+					@Deprecated
+					private fun c() = Unit
+				""".trimIndent()
+				val configuredRule = TooManyFunctions(TestConfig(mapOf(
+						TooManyFunctions.THRESHOLD_IN_CLASSES to "1",
+						TooManyFunctions.THRESHOLD_IN_FILES to "1",
+						TooManyFunctions.IGNORE_PRIVATE to "true",
+						TooManyFunctions.IGNORE_DEPRECATED to "true"
+				)))
+				assertThat(configuredRule.lint(code)).isEmpty()
+			}
+		}
 	}
 })
