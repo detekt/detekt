@@ -101,8 +101,11 @@ private class UnusedFunctionVisitor(allowedNames: Regex) : UnusedMemberVisitor(a
 	}
 
 	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (function.isPrivate()) {
-			collectFunction(function)
+		when {
+			function.isOperator() -> {
+				// Resolution: we skip overloaded operators due to no symbol resolution #1444
+			}
+			function.isPrivate() -> collectFunction(function)
 		}
 
 		super.visitNamedFunction(function)
