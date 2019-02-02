@@ -60,7 +60,7 @@ class UnnecessaryApplySpec : SubjectSpek<UnnecessaryApply>({
 		}
 
 		it("does not report applies with lambda body containing more than one statement") {
-			val findings = subject.lint("""
+			assertThat(subject.lint("""
 				fun b(i : Int?) {
 				}
 				fun f() {
@@ -77,8 +77,30 @@ class UnnecessaryApplySpec : SubjectSpek<UnnecessaryApply>({
 						plus(1)
 						plus(2)
 					})
-				}""")
-			assertThat(findings).isEmpty()
+				}""")).isEmpty()
+		}
+	}
+
+	given("reported false positives - #1305") {
+
+		it("is used within an assignment expr itself") {
+			assertThat(subject.lint("""
+				val content = Intent().apply { putExtra("", 1) }
+			""".trimIndent())).isEmpty()
+		}
+
+		it("is used as return type of extension function") {
+			assertThat(subject.lint("""
+				fun setColor(color: Int) = apply { initialColor = color }
+			""".trimIndent())).isEmpty()
+		}
+
+		it("should not flag apply when assigning property on this") {
+			assertThat(subject.lint("""
+				private val requestedInterval by lazy {
+ 				   MutableLiveData<Int>().apply { value = UsageFragment.INTERVAL_DAY }
+				}
+			""".trimIndent())).isEmpty()
 		}
 	}
 })

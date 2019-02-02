@@ -8,8 +8,8 @@ import org.jetbrains.kotlin.psi.KtElement
  * Returns a list of all parents of type [T] before first occurrence of [S].
  */
 @Suppress("UnsafeCast")
-inline fun <reified T : KtElement, reified S : KtElement> KtElement.parentsOfType() = sequence<T> {
-	var current: PsiElement? = this@parentsOfType
+inline fun <reified T : KtElement, reified S : KtElement> KtElement.parentsOfTypeUntil() = sequence<T> {
+	var current: PsiElement? = this@parentsOfTypeUntil
 	while (current != null && current !is S) {
 		if (current is T) {
 			yield(current)

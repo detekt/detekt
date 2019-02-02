@@ -7,11 +7,17 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.parentsOfTypeUntil
+import io.gitlab.arturbosch.detekt.rules.safeAs
+import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
+import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtValueArgument
+import org.jetbrains.kotlin.psi.KtVariableDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 
 /**
@@ -40,23 +46,38 @@ class UnnecessaryApply(config: Config) : Rule(config) {
 	override fun visitCallExpression(expression: KtCallExpression) {
 		super.visitCallExpression(expression)
 
-		if (!expression.isApplyExpr() ||
-				expression.isInsideFunctionCall()) return
-
-		val lambdaExpr = expression.firstLambdaArg
-		val lambdaBody = lambdaExpr?.bodyExpression
-
-		if (lambdaBody.hasOnlyOneStatement()) {
+		if (expression.isApplyExpr() && expression.isViolation()) {
 			report(CodeSmell(
 					issue, Entity.from(expression),
 					"apply expression can be omitted"
 			))
 		}
 	}
+
+	private fun KtCallExpression.isViolation() =
+			!isInsideFunctionCall() &&
+					hasOnlyOneStatement() &&
+					!isInsideAssignment() &&
+					!isReturnedFromFunction()
 }
 
+private fun KtCallExpression.hasOnlyOneStatement(): Boolean {
+	val lambdaBody = firstLambdaArg?.bodyExpression
+	if (lambdaBody.hasOnlyOneStatement()) {
+		return lambdaBody?.statements?.firstOrNull()
+				?.safeAs<KtBinaryExpression>()
+				?.operationToken != KtTokens.EQ
+	}
+	return false
+}
+
+private fun KtCallExpression.isReturnedFromFunction() = parent is KtNamedFunction
+
+private fun KtCallExpression.isInsideAssignment() =
+		parentsOfTypeUntil<KtVariableDeclaration, KtBlockExpression>().firstOrNull() != null
+
 private fun KtCallExpression.isInsideFunctionCall(): Boolean =
-		(parent as? KtDotQualifiedExpression)
+		parent.safeAs<KtDotQualifiedExpression>()
 				?.getParentOfType<KtValueArgument>(
 						true,
 						KtCallExpression::class.java, KtDeclaration::class.java
@@ -66,6 +87,8 @@ private const val APPLY_LITERAL = "apply"
 
 private fun KtCallExpression.isApplyExpr() = calleeExpression?.textMatches(APPLY_LITERAL) == true
 
-private val KtCallExpression.firstLambdaArg get() = lambdaArguments.firstOrNull()?.getLambdaExpression()
+private val KtCallExpression.firstLambdaArg
+	get() = lambdaArguments.firstOrNull()
+			?.getLambdaExpression()
 
 private fun KtBlockExpression?.hasOnlyOneStatement() = this?.children?.size == 1

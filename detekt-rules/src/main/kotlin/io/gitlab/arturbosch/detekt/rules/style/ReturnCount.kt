@@ -9,7 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SplitPattern
-import io.gitlab.arturbosch.detekt.rules.parentsOfType
+import io.gitlab.arturbosch.detekt.rules.parentsOfTypeUntil
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
@@ -108,7 +108,7 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
 	private fun isNamedReturnFromLambda(expression: KtReturnExpression): Boolean {
 		val label = expression.labeledExpression
 		if (label != null) {
-			return expression.parentsOfType<KtCallExpression, KtNamedFunction>()
+			return expression.parentsOfTypeUntil<KtCallExpression, KtNamedFunction>()
 					.map { it.calleeExpression }
 					.mapNotNull { it as? KtNameReferenceExpression }
 					.map { it.text }
