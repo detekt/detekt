@@ -62,13 +62,14 @@ class LongMethod(config: Config = Config.empty,
 		function.parentOfType<KtNamedFunction>()
 				?.let { nestedFunctionTracking.getOrPut(it) { HashSet() }.add(function) }
 		super.visitNamedFunction(function)
-		nestedFunctionTracking[function]
-				?.fold(0) { acc, next -> acc + (functionToLinesCache[next] ?: 0) }
+		findAllNestedFunctions(function)
+				.fold(0) { acc, next -> acc + (functionToLinesCache[next] ?: 0) }
+				.takeIf { it > 0 }
 				?.let { functionToLinesCache[function] = lines - it }
 	}
 
-	private fun findAllNestedFunctions(startClass: KtNamedFunction): Sequence<KtNamedFunction> = sequence {
-		var nestedFunctions = nestedFunctionTracking[startClass]
+	private fun findAllNestedFunctions(startFunction: KtNamedFunction): Sequence<KtNamedFunction> = sequence {
+		var nestedFunctions = nestedFunctionTracking[startFunction]
 		while (!nestedFunctions.isNullOrEmpty()) {
 			yieldAll(nestedFunctions)
 			nestedFunctions = nestedFunctions.mapNotNull { nestedFunctionTracking[it] }.flattenTo(HashSet())
