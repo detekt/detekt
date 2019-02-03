@@ -15,16 +15,14 @@ class LargeClassSpec : Spek({
 	describe("nested classes are also considered") {
 
 		it("should detect only the nested large class which exceeds threshold 70") {
-			val findings = LargeClass(threshold = 70).lint(Case.NestedClasses.path())
-			assertThat(findings).hasSize(1)
+			assertThat(LargeClass(threshold = 70).lint(Case.NestedClasses.path())).hasSize(1)
 		}
 	}
 
 	describe("files without classes should not be considered") {
 
 		it("should not report anything in large files without classes") {
-			val findings = LargeClass().lint(Case.NoClasses.path())
-			assertThat(findings).isEmpty()
+			assertThat(LargeClass().lint(Case.NoClasses.path())).isEmpty()
 		}
 	}
 })

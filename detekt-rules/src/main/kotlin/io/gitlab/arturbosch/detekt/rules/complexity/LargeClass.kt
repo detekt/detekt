@@ -8,19 +8,12 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
-import io.gitlab.arturbosch.detekt.rules.asBlockExpression
-import org.jetbrains.kotlin.com.intellij.psi.PsiFile
-import org.jetbrains.kotlin.psi.KtBlockExpression
-import org.jetbrains.kotlin.psi.KtCallExpression
+import io.gitlab.arturbosch.detekt.rules.linesOfCode
+import io.gitlab.arturbosch.detekt.rules.parentOfType
 import org.jetbrains.kotlin.psi.KtClassOrObject
-import org.jetbrains.kotlin.psi.KtIfExpression
-import org.jetbrains.kotlin.psi.KtLoopExpression
-import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.KtProperty
-import org.jetbrains.kotlin.psi.KtTryExpression
-import org.jetbrains.kotlin.psi.KtWhenEntry
-import org.jetbrains.kotlin.psi.KtWhenExpression
-import java.util.ArrayDeque
+import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.utils.addToStdlib.flattenTo
+import java.util.IdentityHashMap
 
 /**
  * This rule reports large classes. Classes should generally have one responsibility. Large classes can indicate that
@@ -37,96 +30,50 @@ import java.util.ArrayDeque
 class LargeClass(config: Config = Config.empty,
 				 threshold: Int = DEFAULT_ACCEPTED_CLASS_LENGTH) : ThresholdRule(config, threshold) {
 
-	private var containsClassOrObject = false
-
 	override val issue = Issue("LargeClass",
 			Severity.Maintainability,
 			"One class should have one responsibility. Large classes tend to handle many things at once. " +
 					"Split up large classes into smaller classes that are easier to understand.",
 			Debt.TWENTY_MINS)
 
-	private val locStack = ArrayDeque<Int>()
+	private val classToLinesCache = IdentityHashMap<KtClassOrObject, Int>()
+	private val nestedClassTracking = IdentityHashMap<KtClassOrObject, HashSet<KtClassOrObject>>()
 
-	private fun incHead() {
-		addToHead(1)
+	override fun preVisit(root: KtFile) {
+		classToLinesCache.clear()
+		nestedClassTracking.clear()
 	}
 
-	private fun addToHead(amount: Int) {
-		if (containsClassOrObject) {
-			locStack.push(locStack.pop() + amount)
+	override fun postVisit(root: KtFile) {
+		for ((clazz, lines) in classToLinesCache) {
+			if (lines >= threshold) {
+				println(clazz.name)
+				report(ThresholdedCodeSmell(issue,
+						Entity.from(clazz),
+						Metric("SIZE", lines, threshold),
+						"Class ${clazz.name} is too large. Consider splitting it into smaller pieces."))
+			}
 		}
-	}
-
-	override fun visitFile(file: PsiFile?) {
-		locStack.clear()
-		super.visitFile(file)
 	}
 
 	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-		containsClassOrObject = true
-		locStack.push(0)
-		classOrObject.body?.let {
-			addToHead(it.declarations.size)
-		}
-		incHead() // for class body
+		val lines = classOrObject.linesOfCode()
+		classToLinesCache[classOrObject] = lines
+		classOrObject.parentOfType<KtClassOrObject>()
+				?.let { nestedClassTracking.getOrPut(it) { HashSet() }.add(classOrObject) }
 		super.visitClassOrObject(classOrObject)
-		val loc = locStack.pop()
-		if (loc >= threshold) {
-			report(ThresholdedCodeSmell(issue,
-					Entity.from(classOrObject),
-					Metric("SIZE", loc, threshold),
-					"Class ${classOrObject.name} is too large. Consider splitting it into smaller pieces."))
+		findAllNestedClasses(classOrObject)
+				.fold(0) { acc, next -> acc + (classToLinesCache[next] ?: 0) }
+				.takeIf { it > 0 }
+				?.let { classToLinesCache[classOrObject] = lines - it }
+	}
+
+	private fun findAllNestedClasses(startClass: KtClassOrObject): Sequence<KtClassOrObject> = sequence {
+		var nestedClasses = nestedClassTracking[startClass]
+		while (!nestedClasses.isNullOrEmpty()) {
+			yieldAll(nestedClasses)
+			nestedClasses = nestedClasses.mapNotNull { nestedClassTracking[it] }.flattenTo(HashSet())
 		}
-	}
-
-	/**
-	 * Top level members must be skipped as loc stack can be empty. See #64 for more info.
-	 */
-	override fun visitProperty(property: KtProperty) {
-		if (property.isTopLevel) return
-		super.visitProperty(property)
-	}
-
-	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (function.isTopLevel) return
-		val body: KtBlockExpression? = function.bodyExpression.asBlockExpression()
-		body?.let { addToHead(body.statements.size) }
-		super.visitNamedFunction(function)
-	}
-
-	override fun visitIfExpression(expression: KtIfExpression) {
-		expression.then?.let { addToHead(it.children.size) }
-		expression.`else`?.let { addToHead(it.children.size) }
-		super.visitIfExpression(expression)
-	}
-
-	override fun visitLoopExpression(loopExpression: KtLoopExpression) {
-		loopExpression.body?.let { addToHead(it.children.size) }
-		super.visitLoopExpression(loopExpression)
-	}
-
-	override fun visitWhenExpression(expression: KtWhenExpression) {
-		addToHead(expression.children.filter { it is KtWhenEntry }.size)
-		super.visitWhenExpression(expression)
-	}
-
-	override fun visitTryExpression(expression: KtTryExpression) {
-		addToHead(expression.tryBlock.statements.size)
-		addToHead(expression.catchClauses.size)
-		expression.catchClauses.map { it.catchBody?.children?.size }.forEach { addToHead(it ?: 0) }
-		expression.finallyBlock?.finalExpression?.statements?.size?.let { addToHead(it) }
-		super.visitTryExpression(expression)
-	}
-
-	override fun visitCallExpression(expression: KtCallExpression) {
-		val lambdaArguments = expression.lambdaArguments
-		if (lambdaArguments.size > 0) {
-			val lambdaArgument = lambdaArguments[0]
-			lambdaArgument.getLambdaExpression()?.bodyExpression?.let {
-				addToHead(it.statements.size)
-			}
-		}
-		super.visitCallExpression(expression)
 	}
 
 	companion object {

@@ -12,6 +12,7 @@ import io.gitlab.arturbosch.detekt.rules.linesOfCode
 import io.gitlab.arturbosch.detekt.rules.parentOfType
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.utils.addToStdlib.flattenTo
 import java.util.IdentityHashMap
 
 /**
@@ -64,6 +65,14 @@ class LongMethod(config: Config = Config.empty,
 		nestedFunctionTracking[function]
 				?.fold(0) { acc, next -> acc + (functionToLinesCache[next] ?: 0) }
 				?.let { functionToLinesCache[function] = lines - it }
+	}
+
+	private fun findAllNestedFunctions(startClass: KtNamedFunction): Sequence<KtNamedFunction> = sequence {
+		var nestedFunctions = nestedFunctionTracking[startClass]
+		while (!nestedFunctions.isNullOrEmpty()) {
+			yieldAll(nestedFunctions)
+			nestedFunctions = nestedFunctions.mapNotNull { nestedFunctionTracking[it] }.flattenTo(HashSet())
+		}
 	}
 
 	companion object {
