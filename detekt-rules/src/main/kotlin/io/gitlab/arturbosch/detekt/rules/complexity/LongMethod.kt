@@ -21,7 +21,7 @@ import java.util.IdentityHashMap
  *
  * Extract parts of the functionality of long methods into separate, smaller methods.
  *
- * @configuration threshold - maximum lines in a method (default: 20)
+ * @configuration threshold - maximum lines in a method (default: 60)
  *
  * @active since v1.0.0
  * @author Artur Bosch
@@ -77,6 +77,6 @@ class LongMethod(config: Config = Config.empty,
 	}
 
 	companion object {
-		const val DEFAULT_ACCEPTED_METHOD_LENGTH = 20
+		const val DEFAULT_ACCEPTED_METHOD_LENGTH = 60
 	}
 }

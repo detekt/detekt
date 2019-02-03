@@ -21,7 +21,7 @@ import java.util.IdentityHashMap
  * split up large classes into smaller classes. These smaller classes are then easier to understand and handle less
  * things.
  *
- * @configuration threshold - maximum size of a class (default: 150)
+ * @configuration threshold - maximum size of a class (default: 600)
  *
  * @active since v1.0.0
  * @author Artur Bosch
@@ -77,6 +77,6 @@ class LargeClass(config: Config = Config.empty,
 	}
 
 	companion object {
-		const val DEFAULT_ACCEPTED_CLASS_LENGTH = 150
+		const val DEFAULT_ACCEPTED_CLASS_LENGTH = 600
 	}
 }
