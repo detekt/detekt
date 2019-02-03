@@ -8,9 +8,11 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
-import io.gitlab.arturbosch.detekt.rules.asBlockExpression
-import org.jetbrains.kotlin.psi.KtBlockExpression
+import io.gitlab.arturbosch.detekt.rules.linesOfCode
+import io.gitlab.arturbosch.detekt.rules.parentOfType
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import java.util.IdentityHashMap
 
 /**
  * Methods should have one responsibility. Long methods can indicate that a method handles too many cases at once.
@@ -33,18 +35,35 @@ class LongMethod(config: Config = Config.empty,
 					"Prefer smaller methods to make them easier to understand.",
 			Debt.TWENTY_MINS)
 
-	override fun visitNamedFunction(function: KtNamedFunction) {
-		val body: KtBlockExpression? = function.bodyExpression.asBlockExpression()
-		body?.let {
-			val size = body.statements.size
-			if (size >= threshold) report(
-					ThresholdedCodeSmell(issue,
-							Entity.from(function),
-							Metric("SIZE", size, threshold),
-							"The function ${function.nameAsSafeName} is too long. The maximum length is " +
-									"$threshold."))
+	private val functionToLinesCache = HashMap<KtNamedFunction, Int>()
+	private val nestedFunctionTracking = IdentityHashMap<KtNamedFunction, HashSet<KtNamedFunction>>()
+
+	override fun preVisit(root: KtFile) {
+		functionToLinesCache.clear()
+		nestedFunctionTracking.clear()
+	}
+
+	override fun postVisit(root: KtFile) {
+		for ((function, lines) in functionToLinesCache) {
+			if (lines >= threshold) {
+				report(ThresholdedCodeSmell(issue,
+						Entity.from(function),
+						Metric("SIZE", lines, threshold),
+						"The function ${function.nameAsSafeName} is too long. " +
+								"The maximum length is $threshold."))
+			}
 		}
+	}
+
+	override fun visitNamedFunction(function: KtNamedFunction) {
+		val lines = function.linesOfCode()
+		functionToLinesCache[function] = lines
+		function.parentOfType<KtNamedFunction>()
+				?.let { nestedFunctionTracking.getOrPut(it) { HashSet() }.add(function) }
 		super.visitNamedFunction(function)
+		nestedFunctionTracking[function]
+				?.fold(0) { acc, next -> acc + (functionToLinesCache[next] ?: 0) }
+				?.let { functionToLinesCache[function] = lines - it }
 	}
 
 	companion object {
