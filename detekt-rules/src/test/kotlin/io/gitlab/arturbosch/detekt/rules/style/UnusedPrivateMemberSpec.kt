@@ -951,4 +951,20 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 			assertThat(subject.lint(code)).isEmpty()
 		}
 	}
+
+	given("operators") {
+
+		it("does not report used plus operator - #1354") {
+			val code = """
+				import java.util.Date
+				class Foo {
+					val bla: Date = Date(System.currentTimeMillis()) + 300L
+					companion object {
+						private operator fun Date.plus(diff: Long): Date = Date(this.time + diff)
+					}
+				}
+			""".trimIndent()
+			assertThat(subject.lint(code)).isEmpty()
+		}
+	}
 })
