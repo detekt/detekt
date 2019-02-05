@@ -63,6 +63,8 @@ allprojects {
 
 subprojects {
 
+	val project = this
+
 	apply {
 		plugin("java-library")
 		plugin("kotlin")
@@ -108,7 +110,9 @@ subprojects {
 		}
 	}
 
-	if (this.name in listOf("detekt-cli", "detekt-watcher", "detekt-generator")) {
+	val shadowedProjects = listOf("detekt-cli", "detekt-watcher", "detekt-generator")
+
+	if (project.name in shadowedProjects) {
 		apply {
 			plugin("application")
 			plugin("com.github.johnrengelman.shadow")
@@ -207,6 +211,9 @@ subprojects {
 			from(components["java"])
 			artifact(sourcesJar)
 			artifact(javadocJar)
+			if (project.name in shadowedProjects) {
+				artifact(tasks.getByName("shadowJar"))
+			}
 			groupId = this@subprojects.group as? String
 			artifactId = this@subprojects.name
 			version = this@subprojects.version as? String
