@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.rules.collectByType
+import io.gitlab.arturbosch.detekt.rules.isInline
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtDeclaration
@@ -85,7 +86,11 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 	}
 
 	private fun isIncorrectClassType(klass: KtClass) =
-			klass.isData() || klass.isEnum() || klass.isAnnotation() || klass.isSealed()
+			klass.isData() ||
+					klass.isEnum() ||
+					klass.isAnnotation() ||
+					klass.isSealed() ||
+					klass.isInline()
 
 	private fun hasOnlyPrivateConstructors(klass: KtClass): Boolean {
 		val primaryConstructor = klass.primaryConstructor

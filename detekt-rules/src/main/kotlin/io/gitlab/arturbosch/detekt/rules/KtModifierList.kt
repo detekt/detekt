@@ -22,3 +22,5 @@ fun KtModifierListOwner.isConstant() = hasModifier(KtTokens.CONST_KEYWORD)
 fun KtModifierListOwner.isInternal() = hasModifier(KtTokens.INTERNAL_KEYWORD)
 
 fun KtModifierListOwner.isLateinit() = hasModifier(KtTokens.LATEINIT_KEYWORD)
+
+fun KtModifierListOwner.isInline() = hasModifier(KtTokens.INLINE_KEYWORD)
