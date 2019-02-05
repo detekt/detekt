@@ -23,7 +23,14 @@ class UseDataClassSpec : SubjectSpek<UseDataClass>({
 		}
 
 		it("does not report invalid data class candidates") {
-			assertThat(subject.lint(Case.UseDataClassNegative.path())).hasSize(0)
+			assertThat(subject.lint(Case.UseDataClassNegative.path())).isEmpty()
+		}
+
+		it("does not report inline classes") {
+			assertThat(subject.lint(
+					"""inline class A(val x: Int)"""
+			)).isEmpty()
+
 		}
 	}
 
@@ -37,7 +44,7 @@ class UseDataClassSpec : SubjectSpek<UseDataClass>({
 				class AnnotatedClass(val i: Int) {}
 				"""
 			val config = TestConfig(mapOf(UseDataClass.EXCLUDE_ANNOTATED_CLASSES to "kotlin.*"))
-			assertThat(UseDataClass(config).lint(code)).hasSize(0)
+			assertThat(UseDataClass(config).lint(code)).isEmpty()
 		}
 	}
 })
