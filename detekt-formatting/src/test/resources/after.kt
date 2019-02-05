@@ -1,3 +1,4 @@
+@Suppress @SuppressWarnings
 fun main() {
     val anchor = owner.firstChild!!
         .siblings(forward = true)

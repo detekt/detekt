@@ -1,5 +1,5 @@
-fun main() {
-    val anchor = owner.firstChild!!.
+@Suppress @SuppressWarnings fun main() {
+    val anchor = owner . firstChild!!.
         siblings(forward = true).
         dropWhile { it is PsiComment || it is PsiWhiteSpace }
     val s = foo() ?:
@@ -10,7 +10,7 @@ fun main() {
         + 2
     val s = true
         && false
-    val s = b.equals(o.b)
+    val s = b.  equals(o.b)
         && g == o.g
     val d = 1 +
         -1
