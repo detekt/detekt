@@ -43,8 +43,8 @@ class UnnecessaryApply(config: Config) : Rule(config) {
 		super.visitCallExpression(expression)
 
 		if (expression.isApplyExpr() &&
-				expression.hasOnlyOneStatement()
-				&& expression.receiverIsUnused()) {
+				expression.hasOnlyOneStatement() &&
+				expression.receiverIsUnused()) {
 			report(CodeSmell(
 					issue, Entity.from(expression),
 					"apply expression can be omitted"
