@@ -74,10 +74,10 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 			  active: true
 			  patterns: # Test file regexes
 			    - '.*/test/.*'
-					- '.*/androidTest/.*'
+			    - '.*/androidTest/.*'
 			    - '.*Test.kt'
 			    - '.*Spec.kt'
-					- '.*Spek.kt'
+			    - '.*Spek.kt'
 			  exclude-rule-sets:
 			    - 'comments'
 			  exclude-rules:
