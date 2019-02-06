@@ -107,4 +107,4 @@ class NestedClasses {
 /**
  * Top level members must be skipped for LargeClass rule
  */
-val aTopLevelProperty = 0
+val aTopLevelPropertyOfNestedClasses = 0

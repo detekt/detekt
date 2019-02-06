@@ -160,7 +160,7 @@ things.
 
 #### Configuration options:
 
-* `threshold` (default: `150`)
+* `threshold` (default: `600`)
 
    maximum size of a class
 
@@ -177,7 +177,7 @@ Extract parts of the functionality of long methods into separate, smaller method
 
 #### Configuration options:
 
-* `threshold` (default: `20`)
+* `threshold` (default: `60`)
 
    maximum lines in a method
 

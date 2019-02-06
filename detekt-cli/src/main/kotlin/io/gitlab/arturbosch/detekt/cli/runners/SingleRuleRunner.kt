@@ -32,14 +32,11 @@ class SingleRuleRunner(private val arguments: CliArgs) : Executable {
 				arguments.disableDefaultRuleSets,
 				arguments.createPlugins())
 
-		val ruleToRun = RuleSetLocator(settings).load()
+		val realProvider = RuleSetLocator(settings).load()
 				.find { it.ruleSetId == ruleSet }
-				?.buildRuleset(Config.empty)
-				?.rules
-				?.find { it.ruleId == rule }
-				?: throw IllegalArgumentException("There was no rule '$rule' in rule set '$ruleSet'.")
+				?: throw IllegalArgumentException("There was no rule set with id '$ruleSet'.")
 
-		val provider = FakeRuleSetProvider("$ruleSet-$rule", ruleToRun)
+		val provider = RuleProducingProvider(rule, realProvider)
 		val detektion = DetektFacade.create(
 				settings,
 				listOf(provider),
@@ -49,11 +46,19 @@ class SingleRuleRunner(private val arguments: CliArgs) : Executable {
 	}
 }
 
-private class FakeRuleSetProvider(
-		runPattern: String,
-		private val rule: BaseRule) : RuleSetProvider {
+private class RuleProducingProvider(
+		private val ruleId: RuleId,
+		private val provider: RuleSetProvider) : RuleSetProvider {
 
-	override val ruleSetId: String = runPattern
+	override val ruleSetId: String = provider.ruleSetId + "-" + ruleId
 
-	override fun instance(config: Config): RuleSet = RuleSet(ruleSetId, listOf(rule))
+	override fun instance(config: Config): RuleSet = RuleSet(
+			ruleSetId,
+			listOf(produceRule())
+	)
+
+	private fun produceRule(): BaseRule = (provider.buildRuleset(Config.empty)
+			?.rules
+			?.find { it.ruleId == ruleId }
+			?: throw IllegalArgumentException("There was no rule '$ruleId' in rule set '${provider.ruleSetId}'."))
 }
