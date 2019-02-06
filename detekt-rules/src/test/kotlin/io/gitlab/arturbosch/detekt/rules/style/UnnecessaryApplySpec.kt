@@ -24,15 +24,16 @@ class UnnecessaryApplySpec : SubjectSpek<UnnecessaryApply>({
 			""")).hasSize(1)
 		}
 
-		it("reports an apply on nullable type") {
+		it("reports a false negative apply on nullable type") {
 			assertThat(subject.lint("""
 				fun f() {
 					val a : Int? = null
+					// Resolution: we can't say here if plus is on 'this' or just a side effects when a is not null
 					a?.apply {
 						plus(1)
 					}
 				}
-			""")).hasSize(1)
+			""")).isEmpty()
 		}
 
 		it("does not report an apply with lambda block") {
@@ -99,6 +100,24 @@ class UnnecessaryApplySpec : SubjectSpek<UnnecessaryApply>({
 			assertThat(subject.lint("""
 				private val requestedInterval by lazy {
  				   MutableLiveData<Int>().apply { value = UsageFragment.INTERVAL_DAY }
+				}
+			""".trimIndent())).isEmpty()
+		}
+
+		it("should not report apply when using it after returning something") {
+			assertThat(subject.lint("""
+				inline class Money(var amount: Int)
+				fun returnMe = (Money(5)).apply { amount = 10 }
+			""".trimIndent())).isEmpty()
+		}
+
+		it("should not report apply usage inside safe chained expressions") {
+			assertThat(subject.lint("""
+				fun test() {
+					val arguments = listOf(1,2,3)
+					?.map { it * 2 }
+					?.apply { if (true) add(4) }
+					?: listOf(0)
 				}
 			""".trimIndent())).isEmpty()
 		}
