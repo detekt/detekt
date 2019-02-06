@@ -1,3 +1,4 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import com.jfrog.bintray.gradle.BintrayExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
@@ -116,6 +117,9 @@ subprojects {
 		apply {
 			plugin("application")
 			plugin("com.github.johnrengelman.shadow")
+			tasks.withType<ShadowJar> {
+				archiveClassifier.set("all")
+			}
 		}
 	}
 
