@@ -14,8 +14,8 @@ class KtLintIntegrationSpec : Spek({
     describe("tests integration of formatting") {
 
         it("should work like KtLint") {
-            val fileBefore = loadFile("before.kt")
-            val expected = loadFileContent("after.kt")
+            val fileBefore = loadFile("integration/before.kt")
+            val expected = loadFileContent("integration/after.kt")
 
             val ruleSet = loadRuleSet<FormattingProvider>(
                     TestConfig(mapOf("autoCorrect" to "true")))
