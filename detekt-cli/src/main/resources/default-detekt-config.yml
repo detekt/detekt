@@ -5,8 +5,10 @@ test-pattern: # Configure exclusions for test sources
   active: true
   patterns: # Test file regexes
     - '.*/test/.*'
+    - '.*/androidTest/.*'
     - '.*Test.kt'
     - '.*Spec.kt'
+    - '.*Spek.kt'
   exclude-rule-sets:
     - 'comments'
   exclude-rules:
