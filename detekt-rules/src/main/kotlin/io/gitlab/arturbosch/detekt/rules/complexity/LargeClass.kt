@@ -47,7 +47,6 @@ class LargeClass(config: Config = Config.empty,
 	override fun postVisit(root: KtFile) {
 		for ((clazz, lines) in classToLinesCache) {
 			if (lines >= threshold) {
-				println(clazz.name)
 				report(ThresholdedCodeSmell(issue,
 						Entity.from(clazz),
 						Metric("SIZE", lines, threshold),
