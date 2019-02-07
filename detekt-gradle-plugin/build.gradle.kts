@@ -71,6 +71,10 @@ tasks.test {
 	}
 }
 
+tasks.validateTaskProperties {
+	enableStricterValidation = true
+}
+
 pluginBundle {
 	website = "https://arturbosch.github.io/detekt"
 	vcsUrl = "https://github.com/arturbosch/detekt"
@@ -93,7 +97,7 @@ tasks.dokka {
 	outputDirectory = "$buildDir/javadoc"
 }
 
-val generateDefaultDetektVersionFile by tasks.creating {
+val generateDefaultDetektVersionFile: Task by tasks.creating {
 	val defaultDetektVersionFile =
 			File("$buildDir/generated/src/io/gitlab/arturbosch/detekt", "PluginVersion.kt")
 
@@ -119,19 +123,19 @@ tasks.compileKotlin {
 
 val sourcesJar by tasks.creating(Jar::class) {
 	dependsOn("classes")
-	classifier = "sources"
+	archiveClassifier.set("sources")
 	from(sourceSets["main"].allSource)
 }
 
 val javadocJar by tasks.creating(Jar::class) {
 	dependsOn("dokka")
-	classifier = "javadoc"
+	archiveClassifier.set("javadoc")
 	from(buildDir.resolve("javadoc"))
 }
 
 artifacts {
-	add("archives", sourcesJar)
-	add("archives", javadocJar)
+	archives(sourcesJar)
+	archives(javadocJar)
 }
 
 detekt {
