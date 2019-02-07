@@ -10,7 +10,7 @@ import io.gitlab.arturbosch.detekt.Detekt
 import java.util.Date
 
 plugins {
-	kotlin("jvm") version "1.3.20"
+	kotlin("jvm") version "1.3.21"
 	id("com.jfrog.bintray") version "1.8.4"
 	id("com.github.ben-manes.versions") version "0.20.0"
 	id("com.github.johnrengelman.shadow") version "4.0.3" apply false
