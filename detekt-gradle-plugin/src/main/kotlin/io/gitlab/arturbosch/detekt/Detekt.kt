@@ -131,11 +131,11 @@ open class Detekt : DefaultTask() {
 				BaselineArgument(baseline.orNull) +
 				XmlReportArgument(xmlReportFile.orNull) +
 				HtmlReportArgument(htmlReportFile.orNull) +
-				DebugArgument(debugProp.get()) +
-				ParallelArgument(parallelProp.get()) +
-				DisableDefaultRulesetArgument(disableDefaultRuleSetsProp.get())
+				DebugArgument(debugProp.getOrElse(false)) +
+				ParallelArgument(parallelProp.getOrElse(false)) +
+				DisableDefaultRulesetArgument(disableDefaultRuleSetsProp.getOrElse(false))
 
-		DetektInvoker.invokeCli(project, arguments.toList(), debugProp.get())
+		DetektInvoker.invokeCli(project, arguments.toList(), debugProp.getOrElse(false))
 	}
 
 	private fun createNewInputFile() = project.fileProperty()

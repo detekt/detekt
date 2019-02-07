@@ -81,10 +81,10 @@ open class DetektCreateBaselineTask : DefaultTask() {
 				FiltersArgument(filters.orNull) +
 				ConfigArgument(config) +
 				PluginsArgument(plugins.orNull) +
-				DebugArgument(debug.get()) +
-				ParallelArgument(parallel.get()) +
-				DisableDefaultRulesetArgument(disableDefaultRuleSets.get())
+				DebugArgument(debug.getOrElse(false)) +
+				ParallelArgument(parallel.getOrElse(false)) +
+				DisableDefaultRulesetArgument(disableDefaultRuleSets.getOrElse(false))
 
-		DetektInvoker.invokeCli(project, arguments.toList(), debug.get())
+		DetektInvoker.invokeCli(project, arguments.toList(), debug.getOrElse(false))
 	}
 }
