@@ -29,6 +29,7 @@ import io.gitlab.arturbosch.detekt.rules.style.SafeCast
 import io.gitlab.arturbosch.detekt.rules.style.SerialVersionUIDInSerializableClass
 import io.gitlab.arturbosch.detekt.rules.style.SpacingBetweenPackageAndImports
 import io.gitlab.arturbosch.detekt.rules.style.ThrowsCount
+import io.gitlab.arturbosch.detekt.rules.style.UnderscoresInNumericLiterals
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryAbstractClass
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryApply
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryInheritance
@@ -101,7 +102,8 @@ class StyleGuideProvider : RuleSetProvider {
                 MandatoryBracesIfStatements(config),
                 VarCouldBeVal(config),
                 ForbiddenVoid(config),
-                ExplicitItLambdaParameter(config)
+                ExplicitItLambdaParameter(config),
+                UnderscoresInNumericLiterals(config)
         ))
     }
 }

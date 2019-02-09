@@ -881,6 +881,37 @@ This rule reports lines that end with a whitespace.
 
 **Debt**: 5min
 
+### UnderscoresInNumericLiterals
+
+This rule detects and reports base 10 numeric literals above a certain length that should be underscore separated for
+readability.
+
+**Severity**: Style
+
+**Debt**: 5min
+
+#### Configuration options:
+
+* `minAcceptableLength` (default: `4`)
+
+   Length under which base 10 literals are not required to have underscores
+
+#### Noncompliant Code:
+
+```kotlin
+object Money {
+    const val DEFAULT_AMOUNT = 1000000
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+object Money {
+    const val DEFAULT_AMOUNT = 1_000_000
+}
+```
+
 ### UnnecessaryAbstractClass
 
 This rule inspects `abstract` classes. In case an `abstract class` does not have any concrete members it should be

@@ -489,6 +489,9 @@ style:
     max: 2
   TrailingWhitespace:
     active: false
+  UnderscoresInNumericLiterals:
+    active: false
+    minAcceptableLength: 4
   UnnecessaryAbstractClass:
     active: false
     excludeAnnotatedClasses: "dagger.Module"
