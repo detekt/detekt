@@ -1,8 +1,8 @@
 ---
-title: Changelog and Migration Guide
+title: Changelog and Migration Guide - Pre 1.0.0
 sidebar: home_sidebar
 keywords: changelog, release-notes, migration
-permalink: changelog.html
+permalink: changelog-rc.html
 toc: true
 ---
 
