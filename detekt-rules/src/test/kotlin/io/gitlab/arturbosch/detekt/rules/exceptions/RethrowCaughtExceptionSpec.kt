@@ -8,18 +8,18 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
 class RethrowCaughtExceptionSpec : SubjectSpek<RethrowCaughtException>({
-	subject { RethrowCaughtException() }
+    subject { RethrowCaughtException() }
 
-	given("multiple caught exceptions") {
+    given("multiple caught exceptions") {
 
-		it("reports caught exceptions which are rethrown") {
-			val path = Case.RethrowCaughtExceptionPositive.path()
-			assertThat(subject.lint(path)).hasSize(3)
-		}
+        it("reports caught exceptions which are rethrown") {
+            val path = Case.RethrowCaughtExceptionPositive.path()
+            assertThat(subject.lint(path)).hasSize(3)
+        }
 
-		it("does not report caught exceptions which are encapsulated in another exception or logged") {
-			val path = Case.RethrowCaughtExceptionNegative.path()
-			assertThat(subject.lint(path)).hasSize(0)
-		}
-	}
+        it("does not report caught exceptions which are encapsulated in another exception or logged") {
+            val path = Case.RethrowCaughtExceptionNegative.path()
+            assertThat(subject.lint(path)).hasSize(0)
+        }
+    }
 })

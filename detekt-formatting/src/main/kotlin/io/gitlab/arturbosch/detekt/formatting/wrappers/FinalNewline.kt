@@ -13,6 +13,6 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 class FinalNewline(config: Config) : FormattingRule(config) {
 
-	override val wrapping = FinalNewlineRule()
-	override val issue = issueFor("Detects missing final newlines")
+    override val wrapping = FinalNewlineRule()
+    override val issue = issueFor("Detects missing final newlines")
 }

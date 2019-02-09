@@ -12,18 +12,18 @@ import org.jetbrains.spek.subject.SubjectSpek
  */
 class LongMethodSpec : SubjectSpek<LongMethod>({
 
-	subject { LongMethod(threshold = 5) }
+    subject { LongMethod(threshold = 5) }
 
-	describe("nested functions can be long") {
+    describe("nested functions can be long") {
 
-		it("should find two long methods") {
-			val path = Case.LongMethodPositive.path()
-			assertThat(subject.lint(path)).hasSize(2)
-		}
+        it("should find two long methods") {
+            val path = Case.LongMethodPositive.path()
+            assertThat(subject.lint(path)).hasSize(2)
+        }
 
-		it("should not find too long methods") {
-			val path = Case.LongMethodNegative.path()
-			assertThat(subject.lint(path)).isEmpty()
-		}
-	}
+        it("should not find too long methods") {
+            val path = Case.LongMethodNegative.path()
+            assertThat(subject.lint(path)).isEmpty()
+        }
+    }
 })

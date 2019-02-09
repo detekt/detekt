@@ -18,15 +18,15 @@ import io.gitlab.arturbosch.detekt.formatting.merge
  */
 class ParameterListWrapping(config: Config) : FormattingRule(config) {
 
-	override val wrapping = ParameterListWrappingRule()
-	override val issue = issueFor("Detects mis-aligned parameter lists")
+    override val wrapping = ParameterListWrappingRule()
+    override val issue = issueFor("Detects mis-aligned parameter lists")
 
-	private val indentSize = valueOrDefault(INDENT_SIZE, DEFAULT_INDENT)
+    private val indentSize = valueOrDefault(INDENT_SIZE, DEFAULT_INDENT)
 
-	override fun editorConfigUpdater(): ((oldEditorConfig: EditorConfig?) -> EditorConfig)? = {
-		EditorConfig.merge(it,
-			indentSize = indentSize)
-	}
+    override fun editorConfigUpdater(): ((oldEditorConfig: EditorConfig?) -> EditorConfig)? = {
+        EditorConfig.merge(it,
+                indentSize = indentSize)
+    }
 }
 
 private const val INDENT_SIZE = "indentSize"

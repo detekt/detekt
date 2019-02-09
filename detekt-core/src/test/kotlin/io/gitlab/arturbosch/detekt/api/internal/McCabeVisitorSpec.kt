@@ -10,10 +10,10 @@ private const val FUN_MCC = 1
 
 class McCabeVisitorSpec : Spek({
 
-	given("ignoreSimpleWhenEntries is false") {
+    given("ignoreSimpleWhenEntries is false") {
 
-		it("counts simple when branches as 1") {
-			val code = """
+        it("counts simple when branches as 1") {
+            val code = """
 				fun test() {
 					when (System.currentTimeMillis()) {
 						0 -> println("Epoch!")
@@ -22,15 +22,15 @@ class McCabeVisitorSpec : Spek({
 					}
 				}
 			"""
-			val subject = McCabeVisitor(ignoreSimpleWhenEntries = false)
+            val subject = McCabeVisitor(ignoreSimpleWhenEntries = false)
 
-			subject.visitFile(code.compile())
+            subject.visitFile(code.compile())
 
-			assertThat(subject.mcc).isEqualTo(FUN_MCC + 3)
-		}
+            assertThat(subject.mcc).isEqualTo(FUN_MCC + 3)
+        }
 
-		it("counts block when branches as 1") {
-			val code = """
+        it("counts block when branches as 1") {
+            val code = """
 				fun test() {
 					when (System.currentTimeMillis()) {
 						0 -> {
@@ -41,18 +41,18 @@ class McCabeVisitorSpec : Spek({
 					}
 				}
 			"""
-			val subject = McCabeVisitor(ignoreSimpleWhenEntries = false)
+            val subject = McCabeVisitor(ignoreSimpleWhenEntries = false)
 
-			subject.visitFile(code.compile())
+            subject.visitFile(code.compile())
 
-			assertThat(subject.mcc).isEqualTo(FUN_MCC + 3)
-		}
-	}
+            assertThat(subject.mcc).isEqualTo(FUN_MCC + 3)
+        }
+    }
 
-	given("ignoreSimpleWhenEntries is true") {
+    given("ignoreSimpleWhenEntries is true") {
 
-		it("counts a when with only simple branches as 1") {
-			val code = """
+        it("counts a when with only simple branches as 1") {
+            val code = """
 				fun test() {
 					when (System.currentTimeMillis()) {
 						0 -> println("Epoch!")
@@ -61,15 +61,15 @@ class McCabeVisitorSpec : Spek({
 					}
 				}
 			"""
-			val subject = McCabeVisitor(ignoreSimpleWhenEntries = true)
+            val subject = McCabeVisitor(ignoreSimpleWhenEntries = true)
 
-			subject.visitFile(code.compile())
+            subject.visitFile(code.compile())
 
-			assertThat(subject.mcc).isEqualTo(FUN_MCC + 1)
-		}
+            assertThat(subject.mcc).isEqualTo(FUN_MCC + 1)
+        }
 
-		it("does not count simple when branches") {
-			val code = """
+        it("does not count simple when branches") {
+            val code = """
 				fun test() {
 					when (System.currentTimeMillis()) {
 						0 -> {
@@ -83,16 +83,16 @@ class McCabeVisitorSpec : Spek({
 					}
 				}
 			"""
-			val subject = McCabeVisitor(ignoreSimpleWhenEntries = true)
+            val subject = McCabeVisitor(ignoreSimpleWhenEntries = true)
 
-			subject.visitFile(code.compile())
+            subject.visitFile(code.compile())
 
-			assertThat(subject.mcc).isEqualTo(FUN_MCC + 2)
-		}
+            assertThat(subject.mcc).isEqualTo(FUN_MCC + 2)
+        }
 
-		it("counts block when branches as 1") {
-			val subject = McCabeVisitor(ignoreSimpleWhenEntries = true)
-			val code = """
+        it("counts block when branches as 1") {
+            val subject = McCabeVisitor(ignoreSimpleWhenEntries = true)
+            val code = """
 				fun test() {
 					when (System.currentTimeMillis()) {
 						0 -> {
@@ -109,11 +109,11 @@ class McCabeVisitorSpec : Spek({
 				}
 			"""
 
-			subject.visitFile(code.compile())
+            subject.visitFile(code.compile())
 
-			assertThat(subject.mcc).isEqualTo(FUN_MCC + 2)
-		}
-	}
+            assertThat(subject.mcc).isEqualTo(FUN_MCC + 2)
+        }
+    }
 })
 
 private fun String.compile() = KtTestCompiler.compileFromContent(this.trimIndent())

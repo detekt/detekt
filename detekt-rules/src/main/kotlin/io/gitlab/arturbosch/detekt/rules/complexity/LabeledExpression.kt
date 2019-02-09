@@ -67,46 +67,46 @@ import org.jetbrains.kotlin.psi.psiUtil.parents
  */
 class LabeledExpression(config: Config = Config.empty) : Rule(config) {
 
-	override val issue: Issue = Issue("LabeledExpression",
-			Severity.Maintainability,
-			"Expression with labels increase complexity and affect maintainability.",
-			Debt.TWENTY_MINS)
+    override val issue: Issue = Issue("LabeledExpression",
+            Severity.Maintainability,
+            "Expression with labels increase complexity and affect maintainability.",
+            Debt.TWENTY_MINS)
 
-	private val ignoredLabels = SplitPattern(valueOrDefault(IGNORED_LABELS, ""))
+    private val ignoredLabels = SplitPattern(valueOrDefault(IGNORED_LABELS, ""))
 
-	override fun visitExpressionWithLabel(expression: KtExpressionWithLabel) {
-		super.visitExpressionWithLabel(expression)
-		if (expression !is KtThisExpression || isNotReferencingOuterClass(expression)) {
-			expression.getLabelName()?.let {
-				if (!ignoredLabels.contains(it)) {
-					report(CodeSmell(issue, Entity.from(expression), issue.description))
-				}
-			}
-		}
-	}
-
-	private fun isNotReferencingOuterClass(expression: KtExpressionWithLabel): Boolean {
-		val containingClasses = mutableListOf<KtClass>()
-		val containingClass = expression.containingClass() ?: return false
-		if (isAllowedToReferenceContainingClass(containingClass, expression)) {
-			containingClasses.add(containingClass)
-		}
-		getClassHierarchy(containingClass, containingClasses)
-		return !containingClasses.any { it.name == expression.getLabelName() }
-	}
-
-	private fun isAllowedToReferenceContainingClass(klass: KtClass, expression: KtExpressionWithLabel): Boolean {
-		return !klass.isInner() ||
-				expression.parents.filterIsInstance<KtNamedFunction>().any { it.isExtensionDeclaration() }
+    override fun visitExpressionWithLabel(expression: KtExpressionWithLabel) {
+        super.visitExpressionWithLabel(expression)
+        if (expression !is KtThisExpression || isNotReferencingOuterClass(expression)) {
+            expression.getLabelName()?.let {
+                if (!ignoredLabels.contains(it)) {
+                    report(CodeSmell(issue, Entity.from(expression), issue.description))
+                }
+            }
+        }
     }
 
-	private fun getClassHierarchy(element: KtElement, classes: MutableList<KtClass>) {
-		val containingClass = element.containingClass() ?: return
-		classes.add(containingClass)
-		getClassHierarchy(containingClass, classes)
-	}
+    private fun isNotReferencingOuterClass(expression: KtExpressionWithLabel): Boolean {
+        val containingClasses = mutableListOf<KtClass>()
+        val containingClass = expression.containingClass() ?: return false
+        if (isAllowedToReferenceContainingClass(containingClass, expression)) {
+            containingClasses.add(containingClass)
+        }
+        getClassHierarchy(containingClass, containingClasses)
+        return !containingClasses.any { it.name == expression.getLabelName() }
+    }
 
-	companion object {
-		const val IGNORED_LABELS = "ignoredLabels"
-	}
+    private fun isAllowedToReferenceContainingClass(klass: KtClass, expression: KtExpressionWithLabel): Boolean {
+        return !klass.isInner() ||
+                expression.parents.filterIsInstance<KtNamedFunction>().any { it.isExtensionDeclaration() }
+    }
+
+    private fun getClassHierarchy(element: KtElement, classes: MutableList<KtClass>) {
+        val containingClass = element.containingClass() ?: return
+        classes.add(containingClass)
+        getClassHierarchy(containingClass, classes)
+    }
+
+    companion object {
+        const val IGNORED_LABELS = "ignoredLabels"
+    }
 }

@@ -20,30 +20,30 @@ import org.gradle.language.base.plugins.LifecycleBasePlugin
  */
 open class DetektIdeaInspectionTask : DefaultTask() {
 
-	init {
-		description = "Uses an external idea installation to inspect your code."
-		group = LifecycleBasePlugin.VERIFICATION_GROUP
-	}
+    init {
+        description = "Uses an external idea installation to inspect your code."
+        group = LifecycleBasePlugin.VERIFICATION_GROUP
+    }
 
-	@InputFiles
-	@PathSensitive(PathSensitivity.RELATIVE)
-	@SkipWhenEmpty
-	var input: ConfigurableFileCollection = project.layout.configurableFiles()
+    @InputFiles
+    @PathSensitive(PathSensitivity.RELATIVE)
+    @SkipWhenEmpty
+    var input: ConfigurableFileCollection = project.layout.configurableFiles()
 
-	@Internal
-	@Optional
-	var debug: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    @Internal
+    @Optional
+    var debug: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
-	@Internal
-	lateinit var ideaExtension: IdeaExtension
+    @Internal
+    lateinit var ideaExtension: IdeaExtension
 
-	@TaskAction
-	fun inspect() {
-		val debugState = debug.getOrElse(false)
-		if (debugState) {
-			println("Running inspection task in debug mode")
-			println("$ideaExtension")
-		}
-		ProcessExecutor.startProcess(ideaExtension.inspectArgs(input.asPath), debugState)
-	}
+    @TaskAction
+    fun inspect() {
+        val debugState = debug.getOrElse(false)
+        if (debugState) {
+            println("Running inspection task in debug mode")
+            println("$ideaExtension")
+        }
+        ProcessExecutor.startProcess(ideaExtension.inspectArgs(input.asPath), debugState)
+    }
 }

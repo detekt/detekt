@@ -12,8 +12,8 @@ import org.jetbrains.kotlin.psi.KtFinallySection
  */
 class EmptyFinallyBlock(config: Config) : EmptyRule(config) {
 
-	override fun visitFinallySection(finallySection: KtFinallySection) {
-		super.visitFinallySection(finallySection)
-		finallySection.finalExpression?.addFindingIfBlockExprIsEmpty()
-	}
+    override fun visitFinallySection(finallySection: KtFinallySection) {
+        super.visitFinallySection(finallySection)
+        finallySection.finalExpression?.addFindingIfBlockExprIsEmpty()
+    }
 }

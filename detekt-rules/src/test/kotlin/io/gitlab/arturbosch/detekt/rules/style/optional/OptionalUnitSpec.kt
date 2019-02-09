@@ -11,11 +11,11 @@ import org.jetbrains.spek.subject.SubjectSpek
  * @author Artur Bosch
  */
 class OptionalUnitSpec : SubjectSpek<OptionalUnit>({
-	subject { OptionalUnit(Config.empty) }
+    subject { OptionalUnit(Config.empty) }
 
-	given("several functions which return Unit") {
+    given("several functions which return Unit") {
 
-		val code = """
+        val code = """
 				fun returnsUnit1(): Unit {
 					fun returnsUnitNested(): Unit {
 						return Unit
@@ -25,32 +25,32 @@ class OptionalUnitSpec : SubjectSpek<OptionalUnit>({
 
 				fun returnsUnit2() = Unit
 			"""
-		val findings = subject.lint(code)
+        val findings = subject.lint(code)
 
-		it("should report functions returning Unit") {
-			assertThat(findings).hasSize(3)
-		}
+        it("should report functions returning Unit") {
+            assertThat(findings).hasSize(3)
+        }
 
-		it("should report the correct violation message") {
-			findings.forEach {
-				assertThat(it.message).endsWith(
-						" defines a return type of Unit. This is unnecessary and can safely be removed.")
-			}
-		}
-	}
+        it("should report the correct violation message") {
+            findings.forEach {
+                assertThat(it.message).endsWith(
+                        " defines a return type of Unit. This is unnecessary and can safely be removed.")
+            }
+        }
+    }
 
-	given("an overridden function which returns Unit") {
+    given("an overridden function which returns Unit") {
 
-		it("should not report Unit return type in overridden function") {
-			val code = "override fun returnsUnit2() = Unit"
-			val findings = subject.lint(code)
-			assertThat(findings).isEmpty()
-		}
-	}
+        it("should not report Unit return type in overridden function") {
+            val code = "override fun returnsUnit2() = Unit"
+            val findings = subject.lint(code)
+            assertThat(findings).isEmpty()
+        }
+    }
 
-	given("several lone Unit statements") {
+    given("several lone Unit statements") {
 
-		val code = """
+        val code = """
 				fun returnsNothing() {
 					Unit
 					val i: (Int) -> Unit = { _ -> Unit }
@@ -65,23 +65,23 @@ class OptionalUnitSpec : SubjectSpek<OptionalUnit>({
 					}
 				}
 			"""
-		val findings = subject.lint(code)
+        val findings = subject.lint(code)
 
-		it("should report lone Unit statement") {
-			assertThat(findings).hasSize(4)
-		}
+        it("should report lone Unit statement") {
+            assertThat(findings).hasSize(4)
+        }
 
-		it("should report the correct violation message") {
-			findings.forEach {
-				assertThat(it.message).isEqualTo("A single Unit expression is unnecessary and can safely be removed")
-			}
-		}
-	}
+        it("should report the correct violation message") {
+            findings.forEach {
+                assertThat(it.message).isEqualTo("A single Unit expression is unnecessary and can safely be removed")
+            }
+        }
+    }
 
-	given("several Unit references") {
+    given("several Unit references") {
 
-		it("should not report Unit reference") {
-			val findings = subject.lint("""
+        it("should not report Unit reference") {
+            val findings = subject.lint("""
 				fun returnsNothing(u: Unit, us: () -> String) {
 					val u1 = u is Unit
 					val u2: Unit = Unit
@@ -90,19 +90,19 @@ class OptionalUnitSpec : SubjectSpek<OptionalUnit>({
 					val i: (Int) -> Unit = { _ -> }
 				}
 			""")
-			assertThat(findings).isEmpty()
-		}
-	}
+            assertThat(findings).isEmpty()
+        }
+    }
 
-	given("a default interface implementation") {
-		it("should not report Unit as part of default interface implementations") {
-			val code = """
+    given("a default interface implementation") {
+        it("should not report Unit as part of default interface implementations") {
+            val code = """
                 interface Foo {
                     fun onMapClicked(point: Point?) = Unit
                 }
             """
-			val findings = subject.lint(code)
-			assertThat(findings).isEmpty()
-		}
-	}
+            val findings = subject.lint(code)
+            assertThat(findings).isEmpty()
+        }
+    }
 })

@@ -10,32 +10,32 @@ import org.jetbrains.spek.subject.SubjectSpek
  * @author Ivan Balaksha
  */
 class UnsafeCallOnNullableTypeSpec : SubjectSpek<UnsafeCallOnNullableType>({
-	subject { UnsafeCallOnNullableType() }
+    subject { UnsafeCallOnNullableType() }
 
-	describe("check all variants of safe/unsafe calls on nullable types") {
+    describe("check all variants of safe/unsafe calls on nullable types") {
 
-		it("unsafe call on nullable type") {
-			val code = """
+        it("unsafe call on nullable type") {
+            val code = """
 				fun test(str: String?) {
 					println(str!!.length)
 				}"""
-			assertThat(subject.lint(code)).hasSize(1)
-		}
+            assertThat(subject.lint(code)).hasSize(1)
+        }
 
-		it("safe call on nullable type") {
-			val code = """
+        it("safe call on nullable type") {
+            val code = """
 				fun test(str: String?) {
 					println(str?.length)
 				}"""
-			assertThat(subject.lint(code)).hasSize(0)
-		}
+            assertThat(subject.lint(code)).hasSize(0)
+        }
 
-		it("elvis") {
-			val code = """
+        it("elvis") {
+            val code = """
 				fun test(str: String?) {
 					println(str?.length ?: 0)
 				}"""
-			assertThat(subject.lint(code)).hasSize(0)
-		}
-	}
+            assertThat(subject.lint(code)).hasSize(0)
+        }
+    }
 })

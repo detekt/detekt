@@ -8,53 +8,53 @@ import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.KtValueArgumentList
 
 fun KtAnnotated.hasAnnotation(
-		vararg annotationNames: String
+    vararg annotationNames: String
 ): Boolean {
-	val names = annotationNames.toHashSet()
-	val predicate: (KtAnnotationEntry) -> Boolean = {
-		it.typeReference
-				?.typeElement
-				?.safeAs<KtUserType>()
-				?.referencedName in names
-	}
-	return annotationEntries.any(predicate)
+    val names = annotationNames.toHashSet()
+    val predicate: (KtAnnotationEntry) -> Boolean = {
+        it.typeReference
+                ?.typeElement
+                ?.safeAs<KtUserType>()
+                ?.referencedName in names
+    }
+    return annotationEntries.any(predicate)
 }
 
 fun KtAnnotated.hasAnnotationWithValue(
-		annotationName: String,
-		annotationValueText: String
+    annotationName: String,
+    annotationValueText: String
 ): Boolean {
-	return annotationEntries.any { it.isAnnotationWithValue(annotationName, annotationValueText) }
+    return annotationEntries.any { it.isAnnotationWithValue(annotationName, annotationValueText) }
 }
 
 private fun KtAnnotationEntry.isAnnotationWithValue(
-		annotationName: String,
-		annotationValueText: String
+    annotationName: String,
+    annotationValueText: String
 ): Boolean {
-	return typeReference.isAnnotationWithName(annotationName) &&
-			valueArgumentList.containsAnnotationValue(annotationValueText)
+    return typeReference.isAnnotationWithName(annotationName) &&
+            valueArgumentList.containsAnnotationValue(annotationValueText)
 }
 
 private fun KtTypeReference?.isAnnotationWithName(annotationName: String): Boolean {
-	if (this == null) {
-		return false
-	}
+    if (this == null) {
+        return false
+    }
 
-	val type = typeElement
+    val type = typeElement
 
-	return if (type is KtUserType) {
-		type.referencedName == annotationName
-	} else {
-		false
-	}
+    return if (type is KtUserType) {
+        type.referencedName == annotationName
+    } else {
+        false
+    }
 }
 
 private fun KtValueArgumentList?.containsAnnotationValue(annotationValueText: String): Boolean {
-	return this?.arguments
-			?.any { it.hasValue(annotationValueText) }
-			?: false
+    return this?.arguments
+            ?.any { it.hasValue(annotationValueText) }
+        ?: false
 }
 
 private fun KtValueArgument.hasValue(annotationValueText: String): Boolean {
-	return text == annotationValueText
+    return text == annotationValueText
 }

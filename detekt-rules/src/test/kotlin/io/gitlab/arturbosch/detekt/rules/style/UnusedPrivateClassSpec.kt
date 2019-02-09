@@ -9,55 +9,55 @@ import org.jetbrains.spek.subject.SubjectSpek
 
 class UnusedPrivateClassSpec : SubjectSpek<UnusedPrivateClass>({
 
-	subject { UnusedPrivateClass() }
+    subject { UnusedPrivateClass() }
 
-	given("top level interfaces") {
-		it("should report them if not used") {
-			val code = """
+    given("top level interfaces") {
+        it("should report them if not used") {
+            val code = """
 				private interface Foo
 				class Bar
 				"""
 
-			val lint = subject.lint(code)
+            val lint = subject.lint(code)
 
-			assertThat(lint).hasSize(1)
-			with(lint[0].entity) {
-				assertThat(ktElement?.text).isEqualTo("private interface Foo")
-			}
-		}
+            assertThat(lint).hasSize(1)
+            with(lint[0].entity) {
+                assertThat(ktElement?.text).isEqualTo("private interface Foo")
+            }
+        }
 
-		given("top level private classes") {
+        given("top level private classes") {
 
-			it("should report them if not used") {
-				val code = """
+            it("should report them if not used") {
+                val code = """
 				private class Foo
 				class Bar
 				"""
 
-				val lint = subject.lint(code)
+                val lint = subject.lint(code)
 
-				assertThat(lint).hasSize(1)
-				with(lint[0].entity) {
-					assertThat(ktElement?.text).isEqualTo("private class Foo")
-				}
-			}
+                assertThat(lint).hasSize(1)
+                with(lint[0].entity) {
+                    assertThat(ktElement?.text).isEqualTo("private class Foo")
+                }
+            }
 
-			it("should not report them if used as parent") {
-				val code = """
+            it("should not report them if used as parent") {
+                val code = """
 				private class Foo
 				private class Bar : Foo
 				"""
 
-				val lint = subject.lint(code)
+                val lint = subject.lint(code)
 
-				assertThat(lint).hasSize(1)
-				with(lint[0].entity) {
-					assertThat(ktElement?.text).isEqualTo("private class Bar : Foo")
-				}
-			}
+                assertThat(lint).hasSize(1)
+                with(lint[0].entity) {
+                    assertThat(ktElement?.text).isEqualTo("private class Bar : Foo")
+                }
+            }
 
-			it("should not report them used as generic parent type") {
-				val code = """
+            it("should not report them used as generic parent type") {
+                val code = """
 				private class Foo<in Bar> {
 					operator fun invoke(b: Bar): Unit
 				}
@@ -67,170 +67,170 @@ class UnusedPrivateClassSpec : SubjectSpek<UnusedPrivateClass>({
 				}
 				"""
 
-				val lint = subject.lint(code)
+                val lint = subject.lint(code)
 
-				assertThat(lint).isEmpty()
-			}
-		}
+                assertThat(lint).isEmpty()
+            }
+        }
 
-		it("should not report them if used inside a function") {
-			val code = """
+        it("should not report them if used inside a function") {
+            val code = """
 				private class Foo
 				fun something() {
 					val foo: Foo = Foo()
 				}
 				"""
 
-			val lint = subject.lint(code)
+            val lint = subject.lint(code)
 
-			assertThat(lint).isEmpty()
-		}
+            assertThat(lint).isEmpty()
+        }
 
-		it("should not report them if used as function parameter") {
-			val code = """
+        it("should not report them if used as function parameter") {
+            val code = """
 				private class Foo
 				fun bar(foo: Foo) = Unit
 				"""
 
-			val lint = subject.lint(code)
+            val lint = subject.lint(code)
 
-			assertThat(lint).isEmpty()
-		}
+            assertThat(lint).isEmpty()
+        }
 
-		it("should not report them if used as nullable variable type") {
-			val code = """
+        it("should not report them if used as nullable variable type") {
+            val code = """
 				private class Foo
 				val a: Foo? = null
 				"""
 
-			val lint = subject.lint(code)
+            val lint = subject.lint(code)
 
-			assertThat(lint).isEmpty()
-		}
+            assertThat(lint).isEmpty()
+        }
 
-		it("should not report them if used as variable type") {
-			val code = """
+        it("should not report them if used as variable type") {
+            val code = """
 				private class Foo
 				lateinit var a: Foo
 				"""
 
-			val lint = subject.lint(code)
+            val lint = subject.lint(code)
 
-			assertThat(lint).isEmpty()
-		}
+            assertThat(lint).isEmpty()
+        }
 
-		it("should not report them if used as generic type") {
-			val code = """
+        it("should not report them if used as generic type") {
+            val code = """
 				private class Foo
 				lateinit var foos: List<Foo>
 				"""
 
-			val lint = subject.lint(code)
+            val lint = subject.lint(code)
 
-			assertThat(lint).isEmpty()
-		}
+            assertThat(lint).isEmpty()
+        }
 
-		it("should not report them if used as nested generic type") {
-			val code = """
+        it("should not report them if used as nested generic type") {
+            val code = """
 				private class Foo
 				lateinit var foos: List<List<Foo>>
 				"""
 
-			val lint = subject.lint(code)
+            val lint = subject.lint(code)
 
-			assertThat(lint).isEmpty()
-		}
+            assertThat(lint).isEmpty()
+        }
 
-		it("should not report them if used as type with generics") {
-			val code = """
+        it("should not report them if used as type with generics") {
+            val code = """
 				private class Foo<T>
 				lateinit var foos: Foo<String>
 				"""
 
-			val lint = subject.lint(code)
+            val lint = subject.lint(code)
 
-			assertThat(lint).isEmpty()
-		}
+            assertThat(lint).isEmpty()
+        }
 
-		it("should not report them if used as nullable type with generics") {
-			val code = """
+        it("should not report them if used as nullable type with generics") {
+            val code = """
 				private class Foo<T>
 				lateinit var foos: Foo<String>?
 				"""
 
-			val lint = subject.lint(code)
+            val lint = subject.lint(code)
 
-			assertThat(lint).isEmpty()
-		}
+            assertThat(lint).isEmpty()
+        }
 
-		it("should not report them if used as non-argument constructor") {
-			val code = """
+        it("should not report them if used as non-argument constructor") {
+            val code = """
 				private class Foo
 				val a = Foo()
 				"""
 
-			val lint = subject.lint(code)
+            val lint = subject.lint(code)
 
-			assertThat(lint).isEmpty()
-		}
+            assertThat(lint).isEmpty()
+        }
 
-		it("should not report them if used as constructor with arguments") {
-			val code = """
+        it("should not report them if used as constructor with arguments") {
+            val code = """
 				private class Foo(val a: String)
 				val a = Foo("test")
 				"""
 
-			val lint = subject.lint(code)
+            val lint = subject.lint(code)
 
-			assertThat(lint).isEmpty()
-		}
+            assertThat(lint).isEmpty()
+        }
 
-		it("should not report them if used as function return type") {
-			val code = """
+        it("should not report them if used as function return type") {
+            val code = """
 				private class Foo(val a: String)
 				fun foo(): Foo? = null
 				"""
 
-			val lint = subject.lint(code)
+            val lint = subject.lint(code)
 
-			assertThat(lint).isEmpty()
-		}
+            assertThat(lint).isEmpty()
+        }
 
-		it("should not report them if used as lambda declaration parameter") {
-			val code = """
+        it("should not report them if used as lambda declaration parameter") {
+            val code = """
 				private class Foo
 				val lambda: ((Foo) -> Unit)? = null
 				"""
 
-			val lint = subject.lint(code)
+            val lint = subject.lint(code)
 
-			assertThat(lint).isEmpty()
-		}
+            assertThat(lint).isEmpty()
+        }
 
-		it("should not report them if used as lambda declaration return type") {
-			val code = """
+        it("should not report them if used as lambda declaration return type") {
+            val code = """
 				private class Foo
 				val lambda: (() -> Foo)? = null
 				"""
 
-			val lint = subject.lint(code)
+            val lint = subject.lint(code)
 
-			assertThat(lint).isEmpty()
-		}
+            assertThat(lint).isEmpty()
+        }
 
-		it("should not report them if used as lambda declaration generic type") {
-			val code = """
+        it("should not report them if used as lambda declaration generic type") {
+            val code = """
 				private class Foo
 				val lambda: (() -> List<Foo>)? = null
 				"""
 
-			val lint = subject.lint(code)
+            val lint = subject.lint(code)
 
-			assertThat(lint).isEmpty()
-		}
+            assertThat(lint).isEmpty()
+        }
 
-		it("should not report them if used as inline object type") {
-			val code = """
+        it("should not report them if used as inline object type") {
+            val code = """
 				private abstract class Foo {
 					abstract fun bar()
 				}
@@ -240,27 +240,27 @@ class UnusedPrivateClassSpec : SubjectSpek<UnusedPrivateClass>({
 				}
 				"""
 
-			val lint = subject.lint(code)
+            val lint = subject.lint(code)
 
-			assertThat(lint).isEmpty()
-		}
-	}
+            assertThat(lint).isEmpty()
+        }
+    }
 
-	describe("testcase for reported false positives") {
+    describe("testcase for reported false positives") {
 
-		it("does not crash when using wildcasts in generics - #1345") {
-			val code = """
+        it("does not crash when using wildcasts in generics - #1345") {
+            val code = """
 				private class Foo
 				fun bar(clazz: KClass<*>) = Unit
 			""".trimIndent()
 
-			val findings = UnusedPrivateClass().lint(code)
+            val findings = UnusedPrivateClass().lint(code)
 
-			assertThat(findings).hasSize(1)
-		}
+            assertThat(findings).hasSize(1)
+        }
 
-		it("does not report (companion-)object/named-dot references - #1347") {
-			val code = """
+        it("does not report (companion-)object/named-dot references - #1347") {
+            val code = """
 					package com.example
 
 					class Test {
@@ -274,13 +274,13 @@ class UnusedPrivateClassSpec : SubjectSpek<UnusedPrivateClass>({
 					}
 				""".trimIndent()
 
-			val findings = UnusedPrivateClass().lint(code)
+            val findings = UnusedPrivateClass().lint(code)
 
-			assertThat(findings).isEmpty()
-		}
+            assertThat(findings).isEmpty()
+        }
 
-		it("does not report classes that are used with ::class - #1390") {
-			val code = """
+        it("does not report classes that are used with ::class - #1390") {
+            val code = """
 					class UnusedPrivateClassTest {
 
 						private data class SomeClass(val name: String)
@@ -295,9 +295,9 @@ class UnusedPrivateClassSpec : SubjectSpek<UnusedPrivateClass>({
 					}
 				""".trimIndent()
 
-			val findings = UnusedPrivateClass().lint(code)
+            val findings = UnusedPrivateClass().lint(code)
 
-			assertThat(findings).isEmpty()
-		}
-	}
+            assertThat(findings).isEmpty()
+        }
+    }
 })

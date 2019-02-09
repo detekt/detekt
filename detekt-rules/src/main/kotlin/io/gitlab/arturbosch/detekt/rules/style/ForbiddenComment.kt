@@ -26,30 +26,30 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiComment
  */
 class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName,
-			Severity.Style,
-			"Flags a forbidden comment. Defaults values are TODO:, FIXME: or STOPSHIP:",
-			Debt.TEN_MINS)
+    override val issue = Issue(javaClass.simpleName,
+            Severity.Style,
+            "Flags a forbidden comment. Defaults values are TODO:, FIXME: or STOPSHIP:",
+            Debt.TEN_MINS)
 
-	private val values: List<String> =
-			valueOrDefault(VALUES, "TODO:,FIXME:,STOPSHIP:")
-					.split(",")
-					.filter { it.isNotBlank() }
+    private val values: List<String> =
+            valueOrDefault(VALUES, "TODO:,FIXME:,STOPSHIP:")
+                    .split(",")
+                    .filter { it.isNotBlank() }
 
-	override fun visitComment(comment: PsiComment) {
-		super.visitComment(comment)
+    override fun visitComment(comment: PsiComment) {
+        super.visitComment(comment)
 
-		val text = comment.text
+        val text = comment.text
 
-		values.forEach {
-			if (text.contains(it, ignoreCase = true)) {
-				report(CodeSmell(issue, Entity.from(comment), "This comment contains text that has been " +
-						"defined as forbidden in detekt."))
-			}
-		}
-	}
+        values.forEach {
+            if (text.contains(it, ignoreCase = true)) {
+                report(CodeSmell(issue, Entity.from(comment), "This comment contains text that has been " +
+                        "defined as forbidden in detekt."))
+            }
+        }
+    }
 
-	companion object {
-		const val VALUES = "values"
-	}
+    companion object {
+        const val VALUES = "values"
+    }
 }

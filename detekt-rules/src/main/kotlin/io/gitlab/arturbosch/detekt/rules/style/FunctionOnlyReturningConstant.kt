@@ -36,58 +36,58 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
  */
 class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName, Severity.Style,
-			"A function that only returns a constant is misleading. " +
-					"Consider declaring a constant instead",
-			Debt.TEN_MINS)
+    override val issue = Issue(javaClass.simpleName, Severity.Style,
+            "A function that only returns a constant is misleading. " +
+                    "Consider declaring a constant instead",
+            Debt.TEN_MINS)
 
-	private val ignoreOverridableFunction = valueOrDefault(IGNORE_OVERRIDABLE_FUNCTION, true)
-	private val excludedFunctions = SplitPattern(valueOrDefault(EXCLUDED_FUNCTIONS, ""))
+    private val ignoreOverridableFunction = valueOrDefault(IGNORE_OVERRIDABLE_FUNCTION, true)
+    private val excludedFunctions = SplitPattern(valueOrDefault(EXCLUDED_FUNCTIONS, ""))
 
-	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (checkOverridableFunction(function) && isNotExcluded(function) && isReturningAConstant(function)) {
-			report(CodeSmell(issue, Entity.from(function),
-					"${function.nameAsSafeName} is returning a constant. Prefer declaring a constant instead."))
-		}
-		super.visitNamedFunction(function)
-	}
+    override fun visitNamedFunction(function: KtNamedFunction) {
+        if (checkOverridableFunction(function) && isNotExcluded(function) && isReturningAConstant(function)) {
+            report(CodeSmell(issue, Entity.from(function),
+                    "${function.nameAsSafeName} is returning a constant. Prefer declaring a constant instead."))
+        }
+        super.visitNamedFunction(function)
+    }
 
-	private fun checkOverridableFunction(function: KtNamedFunction): Boolean {
-		return if (ignoreOverridableFunction)
-			!function.isOverride() && !function.isOpen() && !checkContainingInterface(function)
-		else true
-	}
+    private fun checkOverridableFunction(function: KtNamedFunction): Boolean {
+        return if (ignoreOverridableFunction)
+            !function.isOverride() && !function.isOpen() && !checkContainingInterface(function)
+        else true
+    }
 
-	private fun checkContainingInterface(function: KtNamedFunction): Boolean {
-		val containingClass = function.containingClass()
-		return containingClass != null && containingClass.isInterface()
-	}
+    private fun checkContainingInterface(function: KtNamedFunction): Boolean {
+        val containingClass = function.containingClass()
+        return containingClass != null && containingClass.isInterface()
+    }
 
-	private fun isNotExcluded(function: KtNamedFunction) =
-			!excludedFunctions.contains(function.name)
+    private fun isNotExcluded(function: KtNamedFunction) =
+            !excludedFunctions.contains(function.name)
 
-	private fun isReturningAConstant(function: KtNamedFunction) =
-			isConstantExpression(function.bodyExpression) || returnsConstant(function)
+    private fun isReturningAConstant(function: KtNamedFunction) =
+            isConstantExpression(function.bodyExpression) || returnsConstant(function)
 
-	private fun isConstantExpression(expression: KtExpression?): Boolean {
-		if (expression is KtConstantExpression) {
-			return true
-		}
-		val stringTemplate = expression as? KtStringTemplateExpression
-		return stringTemplate?.hasInterpolation() == false
-	}
+    private fun isConstantExpression(expression: KtExpression?): Boolean {
+        if (expression is KtConstantExpression) {
+            return true
+        }
+        val stringTemplate = expression as? KtStringTemplateExpression
+        return stringTemplate?.hasInterpolation() == false
+    }
 
-	private fun returnsConstant(function: KtNamedFunction): Boolean {
-		val children = function.bodyExpression?.children
-		if (children?.size == 1) {
-			val returnExpression = children[0] as? KtReturnExpression
-			return isConstantExpression(returnExpression?.returnedExpression)
-		}
-		return false
-	}
+    private fun returnsConstant(function: KtNamedFunction): Boolean {
+        val children = function.bodyExpression?.children
+        if (children?.size == 1) {
+            val returnExpression = children[0] as? KtReturnExpression
+            return isConstantExpression(returnExpression?.returnedExpression)
+        }
+        return false
+    }
 
-	companion object {
-		const val IGNORE_OVERRIDABLE_FUNCTION = "ignoreOverridableFunction"
-		const val EXCLUDED_FUNCTIONS = "excludedFunctions"
-	}
+    companion object {
+        const val IGNORE_OVERRIDABLE_FUNCTION = "ignoreOverridableFunction"
+        const val EXCLUDED_FUNCTIONS = "excludedFunctions"
+    }
 }

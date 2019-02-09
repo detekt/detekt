@@ -14,12 +14,12 @@ import org.jetbrains.spek.subject.SubjectSpek
  * @author schalkms
  */
 class UnusedImportsSpec : SubjectSpek<UnusedImports>({
-	subject { UnusedImports(Config.empty) }
+    subject { UnusedImports(Config.empty) }
 
-	given("some import statements") {
+    given("some import statements") {
 
-		it("does not report infix operators") {
-			assertThat(subject.lint("""
+        it("does not report infix operators") {
+            assertThat(subject.lint("""
             	import tasks.success
 
             	fun main() {
@@ -27,11 +27,11 @@ class UnusedImportsSpec : SubjectSpek<UnusedImports>({
 					} success {
 					}
             	}"""
-			)).isEmpty()
-		}
+            )).isEmpty()
+        }
 
-		it("does not report imports in documentation") {
-			assertThat(subject.lint("""
+        it("does not report imports in documentation") {
+            assertThat(subject.lint("""
            		import tasks.success
            		import tasks.failure
            		import tasks.undefined
@@ -48,11 +48,11 @@ class UnusedImportsSpec : SubjectSpek<UnusedImports>({
            		  }
            		}
            		"""
-			)).isEmpty()
-		}
+            )).isEmpty()
+        }
 
-		it("should ignore import for link") {
-			val lint = subject.lint("""
+        it("should ignore import for link") {
+            val lint = subject.lint("""
 				import tasks.success
 				import tasks.failure
 				import tasks.undefined
@@ -66,29 +66,29 @@ class UnusedImportsSpec : SubjectSpek<UnusedImports>({
 				}
 				}
             """
-			)
-			with(lint) {
-				assertThat(this).hasSize(1)
-				assertThat(this[0].entity.signature).endsWith("import tasks.undefined")
-			}
-		}
+            )
+            with(lint) {
+                assertThat(this).hasSize(1)
+                assertThat(this[0].entity.signature).endsWith("import tasks.undefined")
+            }
+        }
 
-		it("reports imports from the current package") {
-			val lint = subject.lint("""
+        it("reports imports from the current package") {
+            val lint = subject.lint("""
 				package test
 				import test.SomeClass
 
 				val a: SomeClass? = null
 			"""
-			)
-			with(lint) {
-				assertThat(this).hasSize(1)
-				assertThat(this[0].entity.signature).endsWith("import test.SomeClass")
-			}
-		}
+            )
+            with(lint) {
+                assertThat(this).hasSize(1)
+                assertThat(this[0].entity.signature).endsWith("import test.SomeClass")
+            }
+        }
 
-		it("does not report KDoc references with method calls") {
-			val code = """
+        it("does not report KDoc references with method calls") {
+            val code = """
 				package com.example
 
 				import android.text.TextWatcher
@@ -101,11 +101,11 @@ class UnusedImportsSpec : SubjectSpek<UnusedImports>({
 						TODO()
 					}
 				}"""
-			assertThat(subject.lint(code)).isEmpty()
-		}
+            assertThat(subject.lint(code)).isEmpty()
+        }
 
-		it("reports imports with different cases") {
-			val lint = subject.lint("""
+        it("reports imports with different cases") {
+            val lint = subject.lint("""
             	import p.a
             	import p.B6 // positive
             	import p.B as B12 // positive
@@ -122,17 +122,17 @@ class UnusedImportsSpec : SubjectSpek<UnusedImports>({
             	    fn(B2.NAME)
             	    `when`()
             	}"""
-			)
-			with(lint) {
-				assertThat(this).hasSize(3)
-				assertThat(this[0].entity.signature).contains("import p.B6")
-				assertThat(this[1].entity.signature).contains("import p.B as B12")
-				assertThat(this[2].entity.signature).contains("import escaped.`foo`")
-			}
-		}
+            )
+            with(lint) {
+                assertThat(this).hasSize(3)
+                assertThat(this[0].entity.signature).contains("import p.B6")
+                assertThat(this[1].entity.signature).contains("import p.B as B12")
+                assertThat(this[2].entity.signature).contains("import escaped.`foo`")
+            }
+        }
 
-		it("does not report imports in same package when inner") {
-			val lint = subject.lint("""
+        it("does not report imports in same package when inner") {
+            val lint = subject.lint("""
             	package test
 
 				import test.Outer.Inner
@@ -140,17 +140,17 @@ class UnusedImportsSpec : SubjectSpek<UnusedImports>({
 				class Outer : Something<Inner>() {
 					class Inner { }
 				}"""
-			)
-			with(lint) {
-				assertThat(this).isEmpty()
-			}
-		}
-	}
+            )
+            with(lint) {
+                assertThat(this).isEmpty()
+            }
+        }
+    }
 
-	given("some import statements referenced by KDoc @see") {
+    given("some import statements referenced by KDoc @see") {
 
-		it("does not report see annotation linking to class") {
-			val code = """
+        it("does not report see annotation linking to class") {
+            val code = """
 				import tasks.success
 
 				/**
@@ -159,11 +159,11 @@ class UnusedImportsSpec : SubjectSpek<UnusedImports>({
 				 */
 				fun doSomething()"""
 
-			assertThat(subject.lint(code)).isEmpty()
-		}
+            assertThat(subject.lint(code)).isEmpty()
+        }
 
-		it("does not report see annotation linking to class with description") {
-			val code = """
+        it("does not report see annotation linking to class with description") {
+            val code = """
 				import tasks.success
 
 				/**
@@ -172,11 +172,11 @@ class UnusedImportsSpec : SubjectSpek<UnusedImports>({
 				 */
 				fun doSomething()"""
 
-			assertThat(subject.lint(code)).isEmpty()
-		}
+            assertThat(subject.lint(code)).isEmpty()
+        }
 
-		it("reports see annotation that does not link to class") {
-			val code = """
+        it("reports see annotation that does not link to class") {
+            val code = """
 				import tasks.success
 
 				/**
@@ -185,11 +185,11 @@ class UnusedImportsSpec : SubjectSpek<UnusedImports>({
 				 */
 				fun doSomething()"""
 
-			assertThat(subject.lint(code)).hasSize(1)
-		}
+            assertThat(subject.lint(code)).hasSize(1)
+        }
 
-		it("reports see annotation that links after description") {
-			val code = """
+        it("reports see annotation that links after description") {
+            val code = """
 				import tasks.success
 
 				/**
@@ -198,14 +198,14 @@ class UnusedImportsSpec : SubjectSpek<UnusedImports>({
 				 */
 				fun doSomething()"""
 
-			assertThat(subject.lint(code)).hasSize(1)
-		}
-	}
+            assertThat(subject.lint(code)).hasSize(1)
+        }
+    }
 
-	given("some import statements with KDoc") {
+    given("some import statements with KDoc") {
 
-		it("does not report imports in KDoc") {
-			val code = """
+        it("does not report imports in KDoc") {
+            val code = """
 				import tasks.success   // here
 				import tasks.undefined // and here
 
@@ -216,22 +216,22 @@ class UnusedImportsSpec : SubjectSpek<UnusedImports>({
 				 */
 				fun doSomething()"""
 
-			assertThat(subject.lint(code)).isEmpty()
-		}
-	}
+            assertThat(subject.lint(code)).isEmpty()
+        }
+    }
 
-	given("imports with aliases") {
+    given("imports with aliases") {
 
-		it("should not report import as unused because the alias is used") {
-			val code = """
+        it("should not report import as unused because the alias is used") {
+            val code = """
 				import test.forEach as foreach
 				fun foo() = listOf().iterator().foreach {}
 			"""
-			assertThat(subject.lint(code)).isEmpty()
-		}
+            assertThat(subject.lint(code)).isEmpty()
+        }
 
-		it("should not report used alias even when import is from same package") {
-			val code = """
+        it("should not report used alias even when import is from same package") {
+            val code = """
 				package com.example
 
 				import com.example.foo as myFoo // from same package but with alias, check alias usage
@@ -241,7 +241,7 @@ class UnusedImportsSpec : SubjectSpek<UnusedImports>({
 					return myFoo() == otherFoo()
 				}
 			""".trimIndent()
-			assertThat(subject.lint(code)).isEmpty()
-		}
-	}
+            assertThat(subject.lint(code)).isEmpty()
+        }
+    }
 })

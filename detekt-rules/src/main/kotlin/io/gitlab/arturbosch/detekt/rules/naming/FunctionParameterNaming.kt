@@ -27,36 +27,36 @@ import org.jetbrains.kotlin.psi.KtParameter
  */
 class FunctionParameterNaming(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName,
-			Severity.Style,
-			"Function parameter names should follow the naming convention set in the projects configuration.",
-			debt = Debt.FIVE_MINS)
+    override val issue = Issue(javaClass.simpleName,
+            Severity.Style,
+            "Function parameter names should follow the naming convention set in the projects configuration.",
+            debt = Debt.FIVE_MINS)
 
-	private val parameterPattern by LazyRegex(PARAMETER_PATTERN, "[a-z][A-Za-z\\d]*")
-	private val excludeClassPattern by LazyRegex(EXCLUDE_CLASS_PATTERN, "$^")
-	private val ignoreOverriddenFunctions = valueOrDefault(IGNORE_OVERRIDDEN_FUNCTIONS, true)
+    private val parameterPattern by LazyRegex(PARAMETER_PATTERN, "[a-z][A-Za-z\\d]*")
+    private val excludeClassPattern by LazyRegex(EXCLUDE_CLASS_PATTERN, "$^")
+    private val ignoreOverriddenFunctions = valueOrDefault(IGNORE_OVERRIDDEN_FUNCTIONS, true)
 
-	override fun visitParameter(parameter: KtParameter) {
-		if (parameter.isContainingExcludedClass(excludeClassPattern)) {
-			return
-		}
+    override fun visitParameter(parameter: KtParameter) {
+        if (parameter.isContainingExcludedClass(excludeClassPattern)) {
+            return
+        }
 
-		if (ignoreOverriddenFunctions && parameter.ownerFunction?.isOverride() == true) {
-			return
-		}
+        if (ignoreOverriddenFunctions && parameter.ownerFunction?.isOverride() == true) {
+            return
+        }
 
-		val identifier = parameter.identifierName()
-		if (!identifier.matches(parameterPattern)) {
-			report(CodeSmell(
-					issue,
-					Entity.from(parameter),
-					message = "Function parameter names should match the pattern: $parameterPattern"))
-		}
-	}
+        val identifier = parameter.identifierName()
+        if (!identifier.matches(parameterPattern)) {
+            report(CodeSmell(
+                    issue,
+                    Entity.from(parameter),
+                    message = "Function parameter names should match the pattern: $parameterPattern"))
+        }
+    }
 
-	companion object {
-		const val PARAMETER_PATTERN = "parameterPattern"
-		const val EXCLUDE_CLASS_PATTERN = "excludeClassPattern"
-		const val IGNORE_OVERRIDDEN_FUNCTIONS = "ignoreOverriddenFunctions"
-	}
+    companion object {
+        const val PARAMETER_PATTERN = "parameterPattern"
+        const val EXCLUDE_CLASS_PATTERN = "excludeClassPattern"
+        const val IGNORE_OVERRIDDEN_FUNCTIONS = "ignoreOverriddenFunctions"
+    }
 }

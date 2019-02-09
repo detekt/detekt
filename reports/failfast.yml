@@ -59,21 +59,9 @@ formatting:
   active: true
   android: false
   autoCorrect: true
-  Indentation:
-    active: false
-    autoCorrect: true
-    indentSize: 4
-    continuationIndentSize: 4
-  ParameterListWrapping:
-    active: false
-    autoCorrect: true
-    indentSize: 4
-  ImportOrdering:
-    active: false
-    autoCorrect: true
   NoItParamInMultilineLambda:
     active: false
-  NoWildcardImports:
+  MaximumLineLength:
     active: false
 
 naming:

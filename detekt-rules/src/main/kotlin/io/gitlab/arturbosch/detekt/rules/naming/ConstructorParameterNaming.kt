@@ -25,41 +25,41 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  */
 class ConstructorParameterNaming(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName,
-			Severity.Style,
-			"Constructor parameter names should follow the naming convention set in the projects configuration.",
-			debt = Debt.FIVE_MINS)
+    override val issue = Issue(javaClass.simpleName,
+            Severity.Style,
+            "Constructor parameter names should follow the naming convention set in the projects configuration.",
+            debt = Debt.FIVE_MINS)
 
-	private val parameterPattern by LazyRegex(PARAMETER_PATTERN, "[a-z][A-Za-z\\d]*")
-	private val privateParameterPattern by LazyRegex(PRIVATE_PARAMETER_PATTERN, "[a-z][A-Za-z\\d]*")
-	private val excludeClassPattern by LazyRegex(EXCLUDE_CLASS_PATTERN, "$^")
+    private val parameterPattern by LazyRegex(PARAMETER_PATTERN, "[a-z][A-Za-z\\d]*")
+    private val privateParameterPattern by LazyRegex(PRIVATE_PARAMETER_PATTERN, "[a-z][A-Za-z\\d]*")
+    private val excludeClassPattern by LazyRegex(EXCLUDE_CLASS_PATTERN, "$^")
 
-	override fun visitParameter(parameter: KtParameter) {
-		if (parameter.isContainingExcludedClassOrObject(excludeClassPattern)) {
-			return
-		}
+    override fun visitParameter(parameter: KtParameter) {
+        if (parameter.isContainingExcludedClassOrObject(excludeClassPattern)) {
+            return
+        }
 
-		val identifier = parameter.identifierName()
-		if (parameter.isPrivate()) {
-			if (!identifier.matches(privateParameterPattern)) {
-				report(CodeSmell(
-						issue,
-						Entity.from(parameter),
-						message = "Constructor private parameter names should match the pattern: $privateParameterPattern"))
-			}
-		} else {
-			if (!identifier.matches(parameterPattern)) {
-				report(CodeSmell(
-						issue,
-						Entity.from(parameter),
-						message = "Constructor parameter names should match the pattern: $parameterPattern"))
-			}
-		}
-	}
+        val identifier = parameter.identifierName()
+        if (parameter.isPrivate()) {
+            if (!identifier.matches(privateParameterPattern)) {
+                report(CodeSmell(
+                        issue,
+                        Entity.from(parameter),
+                        message = "Constructor private parameter names should match the pattern: $privateParameterPattern"))
+            }
+        } else {
+            if (!identifier.matches(parameterPattern)) {
+                report(CodeSmell(
+                        issue,
+                        Entity.from(parameter),
+                        message = "Constructor parameter names should match the pattern: $parameterPattern"))
+            }
+        }
+    }
 
-	companion object {
-		const val PARAMETER_PATTERN = "parameterPattern"
-		const val PRIVATE_PARAMETER_PATTERN = "privateParameterPattern"
-		const val EXCLUDE_CLASS_PATTERN = "excludeClassPattern"
-	}
+    companion object {
+        const val PARAMETER_PATTERN = "parameterPattern"
+        const val PRIVATE_PARAMETER_PATTERN = "privateParameterPattern"
+        const val EXCLUDE_CLASS_PATTERN = "excludeClassPattern"
+    }
 }

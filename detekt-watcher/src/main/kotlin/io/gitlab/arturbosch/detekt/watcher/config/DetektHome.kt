@@ -8,10 +8,10 @@ import java.nio.file.Path
  */
 class DetektHome(home: Path) : ApplicationHomeFolder(home) {
 
-	internal val configFile: Path = resolveFile(CONFIG_FILE, shouldCreate = true)
-	internal val historyFile: String = System.getProperty(USER_HOME) + HISTORY_FILE
+    internal val configFile: Path = resolveFile(CONFIG_FILE, shouldCreate = true)
+    internal val historyFile: String = System.getProperty(USER_HOME) + HISTORY_FILE
 
-	init {
-		addPropertiesFromFile(configFile)
-	}
+    init {
+        addPropertiesFromFile(configFile)
+    }
 }

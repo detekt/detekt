@@ -5,13 +5,13 @@ import java.net.URISyntaxException
 import java.net.URL
 
 internal fun String.lastArgumentMatchesUrl(): Boolean {
-	val lastArgument = trimEnd().split(Regex("\\s+")).last()
-	return try {
-		URL(lastArgument).toURI()
-		true
-	} catch (e: MalformedURLException) {
-		false
-	} catch (e: URISyntaxException) {
-		false
-	}
+    val lastArgument = trimEnd().split(Regex("\\s+")).last()
+    return try {
+        URL(lastArgument).toURI()
+        true
+    } catch (e: MalformedURLException) {
+        false
+    } catch (e: URISyntaxException) {
+        false
+    }
 }

@@ -36,119 +36,119 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  */
 class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
 
-	override val defaultRuleIdAliases: Set<String> = setOf("unused")
+    override val defaultRuleIdAliases: Set<String> = setOf("unused")
 
-	override val issue: Issue = Issue("UnusedPrivateClass",
-			Severity.Maintainability,
-			"Private class is unused.",
-			Debt.FIVE_MINS)
+    override val issue: Issue = Issue("UnusedPrivateClass",
+            Severity.Maintainability,
+            "Private class is unused.",
+            Debt.FIVE_MINS)
 
-	override fun visit(root: KtFile) {
-		super.visit(root)
+    override fun visit(root: KtFile) {
+        super.visit(root)
 
-		val classVisitor = UnusedClassVisitor()
-		root.accept(classVisitor)
+        val classVisitor = UnusedClassVisitor()
+        root.accept(classVisitor)
 
-		classVisitor.getUnusedClasses().forEach {
-			report(CodeSmell(issue, Entity.from(it), "Private class ${it.nameAsSafeName.identifier} is unused."))
-		}
-	}
+        classVisitor.getUnusedClasses().forEach {
+            report(CodeSmell(issue, Entity.from(it), "Private class ${it.nameAsSafeName.identifier} is unused."))
+        }
+    }
 
-	@Suppress("Detekt.TooManyFunctions")
-	private class UnusedClassVisitor : DetektVisitor() {
+    @Suppress("Detekt.TooManyFunctions")
+    private class UnusedClassVisitor : DetektVisitor() {
 
-		private val privateClasses = mutableSetOf<KtNamedDeclaration>()
-		private val namedClasses = mutableSetOf<String>()
+        private val privateClasses = mutableSetOf<KtNamedDeclaration>()
+        private val namedClasses = mutableSetOf<String>()
 
-		fun getUnusedClasses(): List<KtNamedDeclaration> {
-			return privateClasses.filter { it.nameAsSafeName.identifier !in namedClasses }
-		}
+        fun getUnusedClasses(): List<KtNamedDeclaration> {
+            return privateClasses.filter { it.nameAsSafeName.identifier !in namedClasses }
+        }
 
-		override fun visitClass(klass: KtClass) {
-			if (klass.isPrivate()) {
-				privateClasses.add(klass)
-			}
-			klass.getSuperTypeList()?.entries
-					?.mapNotNull { it.typeReference }
-					?.forEach { registerAccess(it) }
-			super.visitClass(klass)
-		}
+        override fun visitClass(klass: KtClass) {
+            if (klass.isPrivate()) {
+                privateClasses.add(klass)
+            }
+            klass.getSuperTypeList()?.entries
+                    ?.mapNotNull { it.typeReference }
+                    ?.forEach { registerAccess(it) }
+            super.visitClass(klass)
+        }
 
-		private fun registerAccess(typeReference: KtTypeReference) {
-			// Try with the actual type of the reference (e.g. Foo, Foo?)
-			typeReference.orInnerType().run { namedClasses.add(text) }
+        private fun registerAccess(typeReference: KtTypeReference) {
+            // Try with the actual type of the reference (e.g. Foo, Foo?)
+            typeReference.orInnerType().run { namedClasses.add(text) }
 
-			// Try with the type with generics (e.g. Foo<Any>, Foo<Any>?)
-			(typeReference.typeElement?.orInnerType() as? KtUserType)
-					?.referencedName
-					?.run { namedClasses.add(this) }
+            // Try with the type with generics (e.g. Foo<Any>, Foo<Any>?)
+            (typeReference.typeElement?.orInnerType() as? KtUserType)
+                    ?.referencedName
+                    ?.run { namedClasses.add(this) }
 
-			// Try with the type being a generic argument of other type (e.g. List<Foo>, List<Foo?>)
-			typeReference.typeElement?.typeArgumentsAsTypes
-					?.asSequence()
-					?.filterNotNull()
-					?.map { it.orInnerType() }
-					?.forEach {
-						namedClasses.add(it.text)
-						// Recursively register for nested generic types (e.g. List<List<Foo>>)
-						(it as? KtTypeReference)?.run { registerAccess(it) }
-					}
-		}
+            // Try with the type being a generic argument of other type (e.g. List<Foo>, List<Foo?>)
+            typeReference.typeElement?.typeArgumentsAsTypes
+                    ?.asSequence()
+                    ?.filterNotNull()
+                    ?.map { it.orInnerType() }
+                    ?.forEach {
+                        namedClasses.add(it.text)
+                        // Recursively register for nested generic types (e.g. List<List<Foo>>)
+                        (it as? KtTypeReference)?.run { registerAccess(it) }
+                    }
+        }
 
-		override fun visitParameter(parameter: KtParameter) {
-			parameter.typeReference?.run { registerAccess(this) }
-			super.visitParameter(parameter)
-		}
+        override fun visitParameter(parameter: KtParameter) {
+            parameter.typeReference?.run { registerAccess(this) }
+            super.visitParameter(parameter)
+        }
 
-		override fun visitNamedFunction(function: KtNamedFunction) {
-			function.typeReference?.run { registerAccess(this) }
-			super.visitNamedFunction(function)
-		}
+        override fun visitNamedFunction(function: KtNamedFunction) {
+            function.typeReference?.run { registerAccess(this) }
+            super.visitNamedFunction(function)
+        }
 
-		override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
-			declaration.getSuperTypeList()?.entries?.forEach {
-				it.typeReference?.run { registerAccess(this) }
-			}
-			super.visitObjectDeclaration(declaration)
-		}
+        override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
+            declaration.getSuperTypeList()?.entries?.forEach {
+                it.typeReference?.run { registerAccess(this) }
+            }
+            super.visitObjectDeclaration(declaration)
+        }
 
-		override fun visitFunctionType(type: KtFunctionType) {
-			type.returnTypeReference?.run { registerAccess(this) }
-			super.visitFunctionType(type)
-		}
+        override fun visitFunctionType(type: KtFunctionType) {
+            type.returnTypeReference?.run { registerAccess(this) }
+            super.visitFunctionType(type)
+        }
 
-		override fun visitProperty(property: KtProperty) {
-			property.typeReference?.run { registerAccess(this) }
-			super.visitProperty(property)
-		}
+        override fun visitProperty(property: KtProperty) {
+            property.typeReference?.run { registerAccess(this) }
+            super.visitProperty(property)
+        }
 
-		override fun visitCallExpression(expression: KtCallExpression) {
-			expression.calleeExpression?.text?.run { namedClasses.add(this) }
-			super.visitCallExpression(expression)
-		}
+        override fun visitCallExpression(expression: KtCallExpression) {
+            expression.calleeExpression?.text?.run { namedClasses.add(this) }
+            super.visitCallExpression(expression)
+        }
 
-		override fun visitDoubleColonExpression(expression: KtDoubleColonExpression) {
-			checkReceiverForClassUsage(expression.receiverExpression)
-			super.visitDoubleColonExpression(expression)
-		}
+        override fun visitDoubleColonExpression(expression: KtDoubleColonExpression) {
+            checkReceiverForClassUsage(expression.receiverExpression)
+            super.visitDoubleColonExpression(expression)
+        }
 
-		private fun checkReceiverForClassUsage(receiver: KtExpression?) {
-			(receiver as? KtNameReferenceExpression)
-					?.text
-					?.takeIf { looksLikeAClassName(it) }
-					?.let { namedClasses.add(it) }
-		}
+        private fun checkReceiverForClassUsage(receiver: KtExpression?) {
+            (receiver as? KtNameReferenceExpression)
+                    ?.text
+                    ?.takeIf { looksLikeAClassName(it) }
+                    ?.let { namedClasses.add(it) }
+        }
 
-		override fun visitDotQualifiedExpression(expression: KtDotQualifiedExpression) {
-			checkReceiverForClassUsage(expression.receiverExpression)
-			super.visitDotQualifiedExpression(expression)
-		}
+        override fun visitDotQualifiedExpression(expression: KtDotQualifiedExpression) {
+            checkReceiverForClassUsage(expression.receiverExpression)
+            super.visitDotQualifiedExpression(expression)
+        }
 
-		// Without symbol solving it is hard to tell if this is really a class or part of a package.
-		// We use "first char is uppercase" as a heuristic in conjunction with "KtNameReferenceExpression"
-		private fun looksLikeAClassName(maybeClassName: String) =
-				maybeClassName.firstOrNull()?.isUpperCase() == true
-	}
+        // Without symbol solving it is hard to tell if this is really a class or part of a package.
+        // We use "first char is uppercase" as a heuristic in conjunction with "KtNameReferenceExpression"
+        private fun looksLikeAClassName(maybeClassName: String) =
+                maybeClassName.firstOrNull()?.isUpperCase() == true
+    }
 }
 
 /**

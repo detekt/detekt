@@ -9,18 +9,20 @@ import io.gitlab.arturbosch.detekt.api.internal.validateIdentifier
  * @author Marvin Ramin
  * @author schalkms
  */
-data class Issue(val id: String,
-				 val severity: Severity,
-				 val description: String,
-				 val debt: Debt) {
+data class Issue(
+    val id: String,
+    val severity: Severity,
+    val description: String,
+    val debt: Debt
+) {
 
-	init {
-		validateIdentifier(id)
-	}
+    init {
+        validateIdentifier(id)
+    }
 
-	override fun toString(): String {
-		return "Issue(id='$id', severity=$severity, debt=$debt)"
-	}
+    override fun toString(): String {
+        return "Issue(id='$id', severity=$severity, debt=$debt)"
+    }
 }
 
 /**
@@ -28,7 +30,7 @@ data class Issue(val id: String,
  * a grade which is most harmful to their projects.
  */
 enum class Severity {
-	CodeSmell, Style, Warning, Defect, Minor, Maintainability, Security, Performance
+    CodeSmell, Style, Warning, Defect, Minor, Maintainability, Security, Performance
 }
 
 /**
@@ -37,23 +39,23 @@ enum class Severity {
 @Suppress("MagicNumber")
 data class Debt(val days: Int = 0, val hours: Int = 0, val mins: Int = 0) {
 
-	init {
-		require(days >= 0 && hours >= 0 && mins >= 0)
-		require(!(days == 0 && hours == 0 && mins == 0))
-	}
+    init {
+        require(days >= 0 && hours >= 0 && mins >= 0)
+        require(!(days == 0 && hours == 0 && mins == 0))
+    }
 
-	companion object {
-		val TWENTY_MINS = Debt(0, 0, 20)
-		val TEN_MINS = Debt(0, 0, 10)
-		val FIVE_MINS = Debt(0, 0, 5)
-	}
+    companion object {
+        val TWENTY_MINS = Debt(0, 0, 20)
+        val TEN_MINS = Debt(0, 0, 10)
+        val FIVE_MINS = Debt(0, 0, 5)
+    }
 
-	override fun toString(): String {
-		return with(StringBuilder()) {
-			if (days > 0) append("${days}d ")
-			if (hours > 0) append("${hours}h ")
-			if (mins > 0) append("${mins}min")
-			toString()
-		}.trim()
-	}
+    override fun toString(): String {
+        return with(StringBuilder()) {
+            if (days > 0) append("${days}d ")
+            if (hours > 0) append("${hours}h ")
+            if (mins > 0) append("${mins}min")
+            toString()
+        }.trim()
+    }
 }

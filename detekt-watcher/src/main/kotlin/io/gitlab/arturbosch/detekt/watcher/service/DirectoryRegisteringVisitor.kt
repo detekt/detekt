@@ -12,11 +12,11 @@ import java.nio.file.attribute.BasicFileAttributes
  * @author Artur Bosch
  */
 class DirectoryRegisteringVisitor(
-		private val watchService: WatchService
+    private val watchService: WatchService
 ) : SimpleFileVisitor<Path>() {
 
-	override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
-		dir.register(watchService, ENTRY_CREATE, ENTRY_MODIFY)
-		return FileVisitResult.CONTINUE
-	}
+    override fun preVisitDirectory(dir: Path, attrs: BasicFileAttributes): FileVisitResult {
+        dir.register(watchService, ENTRY_CREATE, ENTRY_MODIFY)
+        return FileVisitResult.CONTINUE
+    }
 }

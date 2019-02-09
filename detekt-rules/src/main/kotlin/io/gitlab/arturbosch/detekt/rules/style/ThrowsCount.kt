@@ -42,24 +42,24 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  */
 class ThrowsCount(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName, Severity.Style,
-			"Restrict the number of throw statements in methods.",
-			Debt.TEN_MINS)
+    override val issue = Issue(javaClass.simpleName, Severity.Style,
+            "Restrict the number of throw statements in methods.",
+            Debt.TEN_MINS)
 
-	private val max = valueOrDefault(MAX, 2)
+    private val max = valueOrDefault(MAX, 2)
 
-	override fun visitNamedFunction(function: KtNamedFunction) {
-		super.visitNamedFunction(function)
-		if (!function.isOverride()) {
-			val count = function.collectByType<KtThrowExpression>().count()
-			if (count > max) {
-				report(CodeSmell(issue, Entity.from(function), "Too many throw statements in the function" +
-						" ${function.nameAsSafeName}. The maximum number of allowed throw statements is $max."))
-			}
-		}
-	}
+    override fun visitNamedFunction(function: KtNamedFunction) {
+        super.visitNamedFunction(function)
+        if (!function.isOverride()) {
+            val count = function.collectByType<KtThrowExpression>().count()
+            if (count > max) {
+                report(CodeSmell(issue, Entity.from(function), "Too many throw statements in the function" +
+                        " ${function.nameAsSafeName}. The maximum number of allowed throw statements is $max."))
+            }
+        }
+    }
 
-	companion object {
-		const val MAX = "max"
-	}
+    companion object {
+        const val MAX = "max"
+    }
 }

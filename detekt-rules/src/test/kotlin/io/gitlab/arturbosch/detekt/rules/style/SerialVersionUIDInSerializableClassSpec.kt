@@ -9,16 +9,16 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
 class SerialVersionUIDInSerializableClassSpec : SubjectSpek<SerialVersionUIDInSerializableClass>({
-	subject { SerialVersionUIDInSerializableClass(Config.empty) }
+    subject { SerialVersionUIDInSerializableClass(Config.empty) }
 
-	given("several serializable classes") {
+    given("several serializable classes") {
 
-		it("reports serializable classes which do not implement the serialVersionUID correctly") {
-			assertThat(subject.lint(Case.SerializablePositive.path())).hasSize(5)
-		}
+        it("reports serializable classes which do not implement the serialVersionUID correctly") {
+            assertThat(subject.lint(Case.SerializablePositive.path())).hasSize(5)
+        }
 
-		it("does not report serializable classes which implement the serialVersionUID correctly") {
-			assertThat(subject.lint(Case.SerializableNegative.path())).hasSize(0)
-		}
-	}
+        it("does not report serializable classes which implement the serialVersionUID correctly") {
+            assertThat(subject.lint(Case.SerializableNegative.path())).hasSize(0)
+        }
+    }
 })

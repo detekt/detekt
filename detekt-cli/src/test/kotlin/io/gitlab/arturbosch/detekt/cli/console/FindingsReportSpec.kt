@@ -10,23 +10,23 @@ import org.jetbrains.spek.subject.SubjectSpek
 
 class FindingsReportSpec : SubjectSpek<FindingsReport>({
 
-	subject { FindingsReport() }
+    subject { FindingsReport() }
 
-	given("several detekt findings") {
+    given("several detekt findings") {
 
-		it("reports the debt per ruleset and the overall debt") {
-			val expectedContent = readResource("findings-report.txt")
-			val detektion = object : TestDetektion() {
-				override val findings: Map<String, List<Finding>> = mapOf(
-						Pair("TestSmell", listOf(createFinding(), createFinding())),
-						Pair("EmptySmells", emptyList()))
-			}
-			assertThat(subject.render(detektion)?.trimEnd()).isEqualTo(expectedContent)
-		}
+        it("reports the debt per ruleset and the overall debt") {
+            val expectedContent = readResource("findings-report.txt")
+            val detektion = object : TestDetektion() {
+                override val findings: Map<String, List<Finding>> = mapOf(
+                        Pair("TestSmell", listOf(createFinding(), createFinding())),
+                        Pair("EmptySmells", emptyList()))
+            }
+            assertThat(subject.render(detektion)?.trimEnd()).isEqualTo(expectedContent)
+        }
 
-		it("reports no findings") {
-			val detektion = TestDetektion()
-			assertThat(subject.render(detektion))
-		}
-	}
+        it("reports no findings") {
+            val detektion = TestDetektion()
+            assertThat(subject.render(detektion))
+        }
+    }
 })

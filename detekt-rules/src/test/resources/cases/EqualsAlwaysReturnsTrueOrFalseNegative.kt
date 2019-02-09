@@ -4,35 +4,35 @@ package cases
 
 class EqualsReturnsTrueOrFalse {
 
-	override fun equals(other: Any?): Boolean {
-		if (other is Int) {
-			return true
-		}
-		return false
-	}
+    override fun equals(other: Any?): Boolean {
+        if (other is Int) {
+            return true
+        }
+        return false
+    }
 }
 
 class CorrectEquals {
 
-	override fun equals(other: Any?): Boolean {
-		return this.toString() == other.toString()
-	}
+    override fun equals(other: Any?): Boolean {
+        return this.toString() == other.toString()
+    }
 }
 
 fun equals(other: Any?): Boolean {
-	return false
+    return false
 }
 
 class NotOverridingEquals {
 
-	fun equal(other: Any?): Boolean {
-		return true
-	}
+    fun equal(other: Any?): Boolean {
+        return true
+    }
 }
 
 class WrongEqualsParameterList {
 
-	fun equals(other: Any, i: Int): Boolean {
-		return true
-	}
+    fun equals(other: Any, i: Int): Boolean {
+        return true
+    }
 }

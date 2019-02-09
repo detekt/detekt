@@ -26,20 +26,20 @@ import org.jetbrains.kotlin.psi.KtCallExpression
  */
 class EqualsNullCall(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue("EqualsNullCall", Severity.Style,
-			"Equals() method is called with null as parameter. Consider using == to compare to null.",
-			Debt.FIVE_MINS)
+    override val issue = Issue("EqualsNullCall", Severity.Style,
+            "Equals() method is called with null as parameter. Consider using == to compare to null.",
+            Debt.FIVE_MINS)
 
-	override fun visitCallExpression(expression: KtCallExpression) {
-		if (expression.calleeExpression?.text == "equals" && hasNullParameter(expression)) {
-			report(CodeSmell(issue, Entity.from(expression), issue.description))
-		} else {
-			super.visitCallExpression(expression)
-		}
-	}
+    override fun visitCallExpression(expression: KtCallExpression) {
+        if (expression.calleeExpression?.text == "equals" && hasNullParameter(expression)) {
+            report(CodeSmell(issue, Entity.from(expression), issue.description))
+        } else {
+            super.visitCallExpression(expression)
+        }
+    }
 
-	private fun hasNullParameter(expression: KtCallExpression): Boolean {
-		val valueArguments = expression.valueArguments
-		return valueArguments.size == 1 && valueArguments.first().text == "null"
-	}
+    private fun hasNullParameter(expression: KtCallExpression): Boolean {
+        val valueArguments = expression.valueArguments
+        return valueArguments.size == 1 && valueArguments.first().text == "null"
+    }
 }

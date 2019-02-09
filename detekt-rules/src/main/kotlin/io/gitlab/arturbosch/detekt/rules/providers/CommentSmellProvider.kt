@@ -18,15 +18,15 @@ import io.gitlab.arturbosch.detekt.rules.documentation.UndocumentedPublicFunctio
  */
 class CommentSmellProvider : RuleSetProvider {
 
-	override val ruleSetId: String = "comments"
+    override val ruleSetId: String = "comments"
 
-	override fun instance(config: Config): RuleSet {
-		return RuleSet(ruleSetId, listOf(
-				CommentOverPrivateFunction(config),
-				CommentOverPrivateProperty(config),
-				KDocStyle(config),
-				UndocumentedPublicClass(config),
-				UndocumentedPublicFunction(config)
-		))
-	}
+    override fun instance(config: Config): RuleSet {
+        return RuleSet(ruleSetId, listOf(
+                CommentOverPrivateFunction(config),
+                CommentOverPrivateProperty(config),
+                KDocStyle(config),
+                UndocumentedPublicClass(config),
+                UndocumentedPublicFunction(config)
+        ))
+    }
 }

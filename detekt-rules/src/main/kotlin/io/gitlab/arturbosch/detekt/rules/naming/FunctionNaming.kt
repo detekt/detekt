@@ -26,36 +26,36 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  */
 class FunctionNaming(config: Config = Config.empty) : Rule(config) {
 
-	override val defaultRuleIdAliases: Set<String> = setOf("FunctionName")
+    override val defaultRuleIdAliases: Set<String> = setOf("FunctionName")
 
-	override val issue = Issue(javaClass.simpleName,
-			Severity.Style,
-			"Function names should follow the naming convention set in the configuration.",
-			debt = Debt.FIVE_MINS)
+    override val issue = Issue(javaClass.simpleName,
+            Severity.Style,
+            "Function names should follow the naming convention set in the configuration.",
+            debt = Debt.FIVE_MINS)
 
-	private val functionPattern by LazyRegex(FUNCTION_PATTERN, "^([a-z$][a-zA-Z$0-9]*)|(`.*`)$")
-	private val excludeClassPattern by LazyRegex(EXCLUDE_CLASS_PATTERN, "$^")
-	private val ignoreOverridden = valueOrDefault(IGNORE_OVERRIDDEN, true)
+    private val functionPattern by LazyRegex(FUNCTION_PATTERN, "^([a-z$][a-zA-Z$0-9]*)|(`.*`)$")
+    private val excludeClassPattern by LazyRegex(EXCLUDE_CLASS_PATTERN, "$^")
+    private val ignoreOverridden = valueOrDefault(IGNORE_OVERRIDDEN, true)
 
-	override fun visitNamedFunction(function: KtNamedFunction) {
-		super.visitNamedFunction(function)
+    override fun visitNamedFunction(function: KtNamedFunction) {
+        super.visitNamedFunction(function)
 
-		if (ignoreOverridden && function.isOverride()) {
-			return
-		}
+        if (ignoreOverridden && function.isOverride()) {
+            return
+        }
 
-		if (!function.isContainingExcludedClassOrObject(excludeClassPattern) &&
-				!function.identifierName().matches(functionPattern)) {
-			report(CodeSmell(
-					issue,
-					Entity.from(function),
-					message = "Function names should match the pattern: $functionPattern"))
-		}
-	}
+        if (!function.isContainingExcludedClassOrObject(excludeClassPattern) &&
+                !function.identifierName().matches(functionPattern)) {
+            report(CodeSmell(
+                    issue,
+                    Entity.from(function),
+                    message = "Function names should match the pattern: $functionPattern"))
+        }
+    }
 
-	companion object {
-		const val FUNCTION_PATTERN = "functionPattern"
-		const val EXCLUDE_CLASS_PATTERN = "excludeClassPattern"
-		const val IGNORE_OVERRIDDEN = "ignoreOverridden"
-	}
+    companion object {
+        const val FUNCTION_PATTERN = "functionPattern"
+        const val EXCLUDE_CLASS_PATTERN = "excludeClassPattern"
+        const val IGNORE_OVERRIDDEN = "ignoreOverridden"
+    }
 }

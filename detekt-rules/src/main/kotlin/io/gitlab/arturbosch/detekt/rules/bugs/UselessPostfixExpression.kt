@@ -59,66 +59,66 @@ import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
  */
 class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
 
-	override val issue: Issue = Issue("UselessPostfixExpression", Severity.Defect,
-			"The incremented or decremented value is unused. This value is replaced with the original value.",
-			Debt.TWENTY_MINS)
+    override val issue: Issue = Issue("UselessPostfixExpression", Severity.Defect,
+            "The incremented or decremented value is unused. This value is replaced with the original value.",
+            Debt.TWENTY_MINS)
 
-	var properties = setOf<String?>()
+    var properties = setOf<String?>()
 
-	override fun visitClass(klass: KtClass) {
-		properties = klass.getProperties()
-				.map { it.name }
-				.union(klass.primaryConstructorParameters.filter { it.isPropertyParameter() }.map { it.name })
-		super.visitClass(klass)
-	}
+    override fun visitClass(klass: KtClass) {
+        properties = klass.getProperties()
+                .map { it.name }
+                .union(klass.primaryConstructorParameters.filter { it.isPropertyParameter() }.map { it.name })
+        super.visitClass(klass)
+    }
 
-	override fun visitReturnExpression(expression: KtReturnExpression) {
-		val postfixExpression = expression.returnedExpression?.asPostFixExpression()
+    override fun visitReturnExpression(expression: KtReturnExpression) {
+        val postfixExpression = expression.returnedExpression?.asPostFixExpression()
 
-		if (postfixExpression != null && postfixExpression.shouldBeReported()) {
-			report(postfixExpression)
-		}
+        if (postfixExpression != null && postfixExpression.shouldBeReported()) {
+            report(postfixExpression)
+        }
 
-		getPostfixExpressionChilds(expression.returnedExpression)
-				?.forEach { report(it) }
-	}
+        getPostfixExpressionChilds(expression.returnedExpression)
+                ?.forEach { report(it) }
+    }
 
-	override fun visitBinaryExpression(expression: KtBinaryExpression) {
-		val postfixExpression = expression.right?.asPostFixExpression()
-		val leftIdentifierText = expression.left?.text
-		checkPostfixExpression(postfixExpression, leftIdentifierText)
-		getPostfixExpressionChilds(expression.right)
-				?.forEach { checkPostfixExpression(it, leftIdentifierText) }
-	}
+    override fun visitBinaryExpression(expression: KtBinaryExpression) {
+        val postfixExpression = expression.right?.asPostFixExpression()
+        val leftIdentifierText = expression.left?.text
+        checkPostfixExpression(postfixExpression, leftIdentifierText)
+        getPostfixExpressionChilds(expression.right)
+                ?.forEach { checkPostfixExpression(it, leftIdentifierText) }
+    }
 
-	private fun KtExpression.asPostFixExpression() = if (this is KtPostfixExpression &&
-			(operationToken === PLUSPLUS || operationToken === MINUSMINUS)) this else null
+    private fun KtExpression.asPostFixExpression() = if (this is KtPostfixExpression &&
+            (operationToken === PLUSPLUS || operationToken === MINUSMINUS)) this else null
 
-	private fun checkPostfixExpression(postfixExpression: KtPostfixExpression?, leftIdentifierText: String?) {
-		if (postfixExpression != null && leftIdentifierText == postfixExpression.firstChild?.text) {
-			report(postfixExpression)
-		}
-	}
+    private fun checkPostfixExpression(postfixExpression: KtPostfixExpression?, leftIdentifierText: String?) {
+        if (postfixExpression != null && leftIdentifierText == postfixExpression.firstChild?.text) {
+            report(postfixExpression)
+        }
+    }
 
-	private fun KtPostfixExpression.shouldBeReported(): Boolean {
-		val functionProperties = this.getNonStrictParentOfType<KtNamedFunction>()
-				?.collectByType<KtProperty>()
-				?.map { it.name }
-				?.toSet()
-		val postfixReceiverName = this.baseExpression?.text
+    private fun KtPostfixExpression.shouldBeReported(): Boolean {
+        val functionProperties = this.getNonStrictParentOfType<KtNamedFunction>()
+                ?.collectByType<KtProperty>()
+                ?.map { it.name }
+                ?.toSet()
+        val postfixReceiverName = this.baseExpression?.text
 
-		if (functionProperties != null && functionProperties.contains(postfixReceiverName)) {
-			return true
-		}
-		return !properties.contains(postfixReceiverName)
-	}
+        if (functionProperties != null && functionProperties.contains(postfixReceiverName)) {
+            return true
+        }
+        return !properties.contains(postfixReceiverName)
+    }
 
-	private fun report(postfixExpression: KtPostfixExpression) {
-		report(CodeSmell(issue, Entity.from(postfixExpression), "The result of the postfix expression: " +
-				"${postfixExpression.text} will not be used and is therefore useless."))
-	}
+    private fun report(postfixExpression: KtPostfixExpression) {
+        report(CodeSmell(issue, Entity.from(postfixExpression), "The result of the postfix expression: " +
+                "${postfixExpression.text} will not be used and is therefore useless."))
+    }
 
-	private fun getPostfixExpressionChilds(expression: KtExpression?) =
-			expression?.children?.filterIsInstance<KtPostfixExpression>()
-					?.filter { it.operationToken === PLUSPLUS || it.operationToken === MINUSMINUS }
+    private fun getPostfixExpressionChilds(expression: KtExpression?) =
+            expression?.children?.filterIsInstance<KtPostfixExpression>()
+                    ?.filter { it.operationToken === PLUSPLUS || it.operationToken === MINUSMINUS }
 }

@@ -34,29 +34,29 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  */
 class EqualsOnSignatureLine(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName, Severity.Style, MESSAGE, Debt.FIVE_MINS)
+    override val issue = Issue(javaClass.simpleName, Severity.Style, MESSAGE, Debt.FIVE_MINS)
 
-	override fun visitNamedFunction(function: KtNamedFunction) {
-		val equals = function.equalsToken ?: return
+    override fun visitNamedFunction(function: KtNamedFunction) {
+        val equals = function.equalsToken ?: return
 
-		// Get the tokens after the parameter list (but not including)
-		val afterParams = function.valueParameterList?.siblings(forward = true, withItself = false) ?: return
+        // Get the tokens after the parameter list (but not including)
+        val afterParams = function.valueParameterList?.siblings(forward = true, withItself = false) ?: return
 
-		// Collect tokens until we find the equals sign
-		val untilEquals = afterParams.takeWhile { it !== equals }.toList()
+        // Collect tokens until we find the equals sign
+        val untilEquals = afterParams.takeWhile { it !== equals }.toList()
 
-		// Walk backwards from the '=' to find the whitespace right behind it
-		val whitespace = untilEquals.takeLastWhile { it is PsiWhiteSpace }
+        // Walk backwards from the '=' to find the whitespace right behind it
+        val whitespace = untilEquals.takeLastWhile { it is PsiWhiteSpace }
 
-		// Search the whitespace tokens to see if they contain newlines
-		whitespace.forEach {
-			if (it.textContains('\n')) {
-				report(CodeSmell(issue, Entity.from(equals), MESSAGE))
-			}
-		}
-	}
+        // Search the whitespace tokens to see if they contain newlines
+        whitespace.forEach {
+            if (it.textContains('\n')) {
+                report(CodeSmell(issue, Entity.from(equals), MESSAGE))
+            }
+        }
+    }
 
-	private companion object {
-		const val MESSAGE = "Equals signs for expression style functions should be on the same line as the signature"
-	}
+    private companion object {
+        const val MESSAGE = "Equals signs for expression style functions should be on the same line as the signature"
+    }
 }

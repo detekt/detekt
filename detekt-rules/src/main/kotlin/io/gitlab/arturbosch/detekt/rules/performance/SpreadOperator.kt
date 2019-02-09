@@ -30,16 +30,16 @@ import org.jetbrains.kotlin.psi.KtValueArgumentList
  */
 class SpreadOperator(config: Config = Config.empty) : Rule(config) {
 
-	override val issue: Issue = Issue("SpreadOperator", Severity.Performance,
-			"Using a spread operator causes a full copy of the array to be created before calling a method " +
-					"has a very high performance penalty.",
-			Debt.TWENTY_MINS)
+    override val issue: Issue = Issue("SpreadOperator", Severity.Performance,
+            "Using a spread operator causes a full copy of the array to be created before calling a method " +
+                    "has a very high performance penalty.",
+            Debt.TWENTY_MINS)
 
-	override fun visitValueArgumentList(list: KtValueArgumentList) {
-		super.visitValueArgumentList(list)
-		list.arguments.filter { it.getSpreadElement() != null }
-				.onEach {
-					report(CodeSmell(issue, Entity.from(list), issue.description))
-				}
-	}
+    override fun visitValueArgumentList(list: KtValueArgumentList) {
+        super.visitValueArgumentList(list)
+        list.arguments.filter { it.getSpreadElement() != null }
+                .onEach {
+                    report(CodeSmell(issue, Entity.from(list), issue.description))
+                }
+    }
 }

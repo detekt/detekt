@@ -13,13 +13,13 @@ import org.jetbrains.spek.subject.SubjectSpek
  * @author Artur Bosch
  */
 class CommonSpec : SubjectSpek<Rule>({
-	subject { WildcardImport() }
-	val file = compileForTest(Case.Default.path())
+    subject { WildcardImport() }
+    val file = compileForTest(Case.Default.path())
 
-	describe("running specified rule") {
-		it("should detect one finding") {
-			subject.lint(file.text)
-			assertThat(subject.findings).hasSize(1)
-		}
-	}
+    describe("running specified rule") {
+        it("should detect one finding") {
+            subject.lint(file.text)
+            assertThat(subject.findings).hasSize(1)
+        }
+    }
 })

@@ -20,29 +20,29 @@ import org.gradle.language.base.plugins.LifecycleBasePlugin
  */
 open class DetektIdeaFormatTask : DefaultTask() {
 
-	init {
-		description = "Uses an external idea installation to format your code."
-		group = LifecycleBasePlugin.VERIFICATION_GROUP
-	}
+    init {
+        description = "Uses an external idea installation to format your code."
+        group = LifecycleBasePlugin.VERIFICATION_GROUP
+    }
 
-	@InputFiles
-	@PathSensitive(PathSensitivity.RELATIVE)
-	@SkipWhenEmpty
-	var input: ConfigurableFileCollection = project.layout.configurableFiles()
+    @InputFiles
+    @PathSensitive(PathSensitivity.RELATIVE)
+    @SkipWhenEmpty
+    var input: ConfigurableFileCollection = project.layout.configurableFiles()
 
-	@Internal
-	@Optional
-	var debug: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    @Internal
+    @Optional
+    var debug: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
-	@Internal
-	lateinit var ideaExtension: IdeaExtension
+    @Internal
+    lateinit var ideaExtension: IdeaExtension
 
-	@TaskAction
-	fun format() {
-		val debugState = debug.getOrElse(false)
-		if (debugState) {
-			println("$ideaExtension")
-		}
-		startProcess(ideaExtension.formatArgs(input.asPath), debugState)
-	}
+    @TaskAction
+    fun format() {
+        val debugState = debug.getOrElse(false)
+        if (debugState) {
+            println("$ideaExtension")
+        }
+        startProcess(ideaExtension.formatArgs(input.asPath), debugState)
+    }
 }

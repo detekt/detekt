@@ -12,18 +12,18 @@ import org.jetbrains.spek.api.dsl.it
  */
 class KtLintIntegrationSpec : Spek({
 
-	describe("tests integration of formatting") {
+    describe("tests integration of formatting") {
 
-		it("should work like KtLint") {
-			val fileBefore = loadFile("before.kt")
-			val expected = loadFileContent("after.kt")
+        it("should work like KtLint") {
+            val fileBefore = loadFile("before.kt")
+            val expected = loadFileContent("after.kt")
 
-			val ruleSet = loadRuleSet<FormattingProvider>(
-					TestConfig(mapOf("autoCorrect" to "true")))
-			val findings = ruleSet.accept(fileBefore)
+            val ruleSet = loadRuleSet<FormattingProvider>(
+                    TestConfig(mapOf("autoCorrect" to "true")))
+            val findings = ruleSet.accept(fileBefore)
 
-			assertThat(findings).isNotEmpty
-			assertThat(fileBefore.text).isEqualTo(expected)
-		}
-	}
+            assertThat(findings).isNotEmpty
+            assertThat(fileBefore.text).isEqualTo(expected)
+        }
+    }
 })

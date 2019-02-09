@@ -9,16 +9,16 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
 class EqualsAlwaysReturnsTrueOrFalseSpec : SubjectSpek<EqualsAlwaysReturnsTrueOrFalse>({
-	subject { EqualsAlwaysReturnsTrueOrFalse(Config.empty) }
+    subject { EqualsAlwaysReturnsTrueOrFalse(Config.empty) }
 
-	given("several classes overriding the equals() method") {
+    given("several classes overriding the equals() method") {
 
-		it("reports equals() methods") {
-			assertThat(subject.lint(Case.EqualsAlwaysReturnsTrueOrFalsePositive.path())).hasSize(6)
-		}
+        it("reports equals() methods") {
+            assertThat(subject.lint(Case.EqualsAlwaysReturnsTrueOrFalsePositive.path())).hasSize(6)
+        }
 
-		it("does not report equals() methods") {
-			assertThat(subject.lint(Case.EqualsAlwaysReturnsTrueOrFalseNegative.path())).hasSize(0)
-		}
-	}
+        it("does not report equals() methods") {
+            assertThat(subject.lint(Case.EqualsAlwaysReturnsTrueOrFalseNegative.path())).hasSize(0)
+        }
+    }
 })

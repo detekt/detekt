@@ -30,17 +30,17 @@ import org.jetbrains.kotlin.psi.KtPsiUtil
  */
 class UnsafeCast(config: Config = Config.empty) : Rule(config) {
 
-	override val defaultRuleIdAliases: Set<String> = setOf("UNCHECKED_CAST")
+    override val defaultRuleIdAliases: Set<String> = setOf("UNCHECKED_CAST")
 
-	override val issue: Issue = Issue("UnsafeCast",
-			Severity.Defect,
-			"Cast operator throws an exception if the cast is not possible.",
-			Debt.TWENTY_MINS)
+    override val issue: Issue = Issue("UnsafeCast",
+            Severity.Defect,
+            "Cast operator throws an exception if the cast is not possible.",
+            Debt.TWENTY_MINS)
 
-	override fun visitBinaryWithTypeRHSExpression(expression: KtBinaryExpressionWithTypeRHS) {
-		if (KtPsiUtil.isUnsafeCast(expression)) {
-			report(CodeSmell(issue, Entity.from(expression),
-					"${expression.left.text} cannot be safely cast to ${expression.right?.text ?: ""}."))
-		}
-	}
+    override fun visitBinaryWithTypeRHSExpression(expression: KtBinaryExpressionWithTypeRHS) {
+        if (KtPsiUtil.isUnsafeCast(expression)) {
+            report(CodeSmell(issue, Entity.from(expression),
+                    "${expression.left.text} cannot be safely cast to ${expression.right?.text ?: ""}."))
+        }
+    }
 }

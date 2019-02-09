@@ -7,10 +7,10 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
 class ReturnFromFinallySpec : SubjectSpek<ReturnFromFinally>({
-	subject { ReturnFromFinally() }
+    subject { ReturnFromFinally() }
 
-	given("a finally block with a return statement") {
-		val code = """
+    given("a finally block with a return statement") {
+        val code = """
 			fun x() {
 				try {
 				} finally {
@@ -19,14 +19,14 @@ class ReturnFromFinallySpec : SubjectSpek<ReturnFromFinally>({
 			}
 		"""
 
-		it("should report") {
-			val findings = subject.lint(code)
-			Assertions.assertThat(findings).hasSize(1)
-		}
-	}
+        it("should report") {
+            val findings = subject.lint(code)
+            Assertions.assertThat(findings).hasSize(1)
+        }
+    }
 
-	given("a finally block with no return statement") {
-		val code = """
+    given("a finally block with no return statement") {
+        val code = """
 			fun x() {
 				try {
 				} finally {
@@ -34,14 +34,14 @@ class ReturnFromFinallySpec : SubjectSpek<ReturnFromFinally>({
 			}
 		"""
 
-		it("should not report") {
-			val findings = subject.lint(code)
-			Assertions.assertThat(findings).hasSize(0)
-		}
-	}
+        it("should not report") {
+            val findings = subject.lint(code)
+            Assertions.assertThat(findings).hasSize(0)
+        }
+    }
 
-	given("a finally block with a nested return statement") {
-		val code = """
+    given("a finally block with a nested return statement") {
+        val code = """
 			fun x() {
 				try {
 				} finally {
@@ -52,14 +52,14 @@ class ReturnFromFinallySpec : SubjectSpek<ReturnFromFinally>({
 			}
 		"""
 
-		it("should report") {
-			val findings = subject.lint(code)
-			Assertions.assertThat(findings).hasSize(1)
-		}
-	}
+        it("should report") {
+            val findings = subject.lint(code)
+            Assertions.assertThat(findings).hasSize(1)
+        }
+    }
 
-	given("a finally block with a return in an inner function") {
-		val code = """
+    given("a finally block with a return in an inner function") {
+        val code = """
 			fun x() {
 				try {
 				} finally {
@@ -71,9 +71,9 @@ class ReturnFromFinallySpec : SubjectSpek<ReturnFromFinally>({
 			}
 		"""
 
-		it("should not report") {
-			val findings = subject.lint(code)
-			Assertions.assertThat(findings).hasSize(0)
-		}
-	}
+        it("should not report") {
+            val findings = subject.lint(code)
+            Assertions.assertThat(findings).hasSize(0)
+        }
+    }
 })

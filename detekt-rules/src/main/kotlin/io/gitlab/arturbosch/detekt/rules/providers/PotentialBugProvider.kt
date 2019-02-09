@@ -26,24 +26,24 @@ import io.gitlab.arturbosch.detekt.rules.bugs.WrongEqualsTypeParameter
  */
 class PotentialBugProvider : RuleSetProvider {
 
-	override val ruleSetId: String = "potential-bugs"
+    override val ruleSetId: String = "potential-bugs"
 
-	override fun instance(config: Config): RuleSet {
-		return RuleSet(ruleSetId, listOf(
-				DuplicateCaseInWhenExpression(config),
-				EqualsAlwaysReturnsTrueOrFalse(config),
-				EqualsWithHashCodeExist(config),
-				IteratorNotThrowingNoSuchElementException(config),
-				IteratorHasNextCallsNextMethod(config),
-				UselessPostfixExpression(config),
-				InvalidRange(config),
-				WrongEqualsTypeParameter(config),
-				ExplicitGarbageCollectionCall(config),
-				LateinitUsage(config),
-				UnconditionalJumpStatementInLoop(config),
-				UnreachableCode(config),
-				UnsafeCallOnNullableType(config),
-				UnsafeCast(config)
-		))
-	}
+    override fun instance(config: Config): RuleSet {
+        return RuleSet(ruleSetId, listOf(
+                DuplicateCaseInWhenExpression(config),
+                EqualsAlwaysReturnsTrueOrFalse(config),
+                EqualsWithHashCodeExist(config),
+                IteratorNotThrowingNoSuchElementException(config),
+                IteratorHasNextCallsNextMethod(config),
+                UselessPostfixExpression(config),
+                InvalidRange(config),
+                WrongEqualsTypeParameter(config),
+                ExplicitGarbageCollectionCall(config),
+                LateinitUsage(config),
+                UnconditionalJumpStatementInLoop(config),
+                UnreachableCode(config),
+                UnsafeCallOnNullableType(config),
+                UnsafeCast(config)
+        ))
+    }
 }

@@ -13,6 +13,6 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 class NoBlankLineBeforeRbrace(config: Config) : FormattingRule(config) {
 
-	override val wrapping = NoBlankLineBeforeRbraceRule()
-	override val issue = issueFor("Detects blank lines before rbraces")
+    override val wrapping = NoBlankLineBeforeRbraceRule()
+    override val issue = issueFor("Detects blank lines before rbraces")
 }

@@ -42,29 +42,29 @@ import org.jetbrains.kotlin.psi.KtValueArgument
  */
 class ThrowingNewInstanceOfSameException(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue("ThrowingNewInstanceOfSameException", Severity.Defect,
-			"Avoid catch blocks that rethrow a caught exception wrapped inside a new instance of the same exception.",
-			Debt.FIVE_MINS)
+    override val issue = Issue("ThrowingNewInstanceOfSameException", Severity.Defect,
+            "Avoid catch blocks that rethrow a caught exception wrapped inside a new instance of the same exception.",
+            Debt.FIVE_MINS)
 
-	override fun visitCatchSection(catchClause: KtCatchClause) {
-		val parameterName = catchClause.catchParameter?.name
-		val typeReference = catchClause.catchParameter?.typeReference?.text
-		val throwExpression = catchClause.catchBody?.collectByType<KtThrowExpression>()?.firstOrNull {
-			val thrownExpression = it.thrownExpression as? KtCallExpression
-			thrownExpression != null &&
-					createsSameExceptionType(thrownExpression, typeReference) &&
-					hasSameExceptionParameter(thrownExpression.valueArguments, parameterName)
-		}
-		if (throwExpression != null) {
-			report(CodeSmell(issue, Entity.from(throwExpression), issue.description))
-		}
-	}
+    override fun visitCatchSection(catchClause: KtCatchClause) {
+        val parameterName = catchClause.catchParameter?.name
+        val typeReference = catchClause.catchParameter?.typeReference?.text
+        val throwExpression = catchClause.catchBody?.collectByType<KtThrowExpression>()?.firstOrNull {
+            val thrownExpression = it.thrownExpression as? KtCallExpression
+            thrownExpression != null &&
+                    createsSameExceptionType(thrownExpression, typeReference) &&
+                    hasSameExceptionParameter(thrownExpression.valueArguments, parameterName)
+        }
+        if (throwExpression != null) {
+            report(CodeSmell(issue, Entity.from(throwExpression), issue.description))
+        }
+    }
 
-	private fun createsSameExceptionType(thrownExpression: KtCallExpression, typeReference: String?): Boolean {
-		return thrownExpression.calleeExpression?.text == typeReference
-	}
+    private fun createsSameExceptionType(thrownExpression: KtCallExpression, typeReference: String?): Boolean {
+        return thrownExpression.calleeExpression?.text == typeReference
+    }
 
-	private fun hasSameExceptionParameter(valueArguments: List<KtValueArgument>, parameterName: String?): Boolean {
-		return valueArguments.size == 1 && valueArguments.first().text == parameterName
-	}
+    private fun hasSameExceptionParameter(valueArguments: List<KtValueArgument>, parameterName: String?): Boolean {
+        return valueArguments.size == 1 && valueArguments.first().text == parameterName
+    }
 }

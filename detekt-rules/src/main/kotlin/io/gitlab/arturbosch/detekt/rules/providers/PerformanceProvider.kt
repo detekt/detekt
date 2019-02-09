@@ -16,14 +16,14 @@ import io.gitlab.arturbosch.detekt.rules.performance.UnnecessaryTemporaryInstant
  */
 class PerformanceProvider : RuleSetProvider {
 
-	override val ruleSetId: String = "performance"
+    override val ruleSetId: String = "performance"
 
-	override fun instance(config: Config): RuleSet {
-		return RuleSet(ruleSetId, listOf(
-				ForEachOnRange(config),
-				SpreadOperator(config),
-				UnnecessaryTemporaryInstantiation(config),
-				ArrayPrimitive(config)
-		))
-	}
+    override fun instance(config: Config): RuleSet {
+        return RuleSet(ruleSetId, listOf(
+                ForEachOnRange(config),
+                SpreadOperator(config),
+                UnnecessaryTemporaryInstantiation(config),
+                ArrayPrimitive(config)
+        ))
+    }
 }

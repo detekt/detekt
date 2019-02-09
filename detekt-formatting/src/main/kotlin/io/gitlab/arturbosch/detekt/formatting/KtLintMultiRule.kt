@@ -43,57 +43,57 @@ import org.jetbrains.kotlin.psi.KtFile
  */
 class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
 
-	override val rules: List<Rule> = listOf(
-			ChainWrapping(config),
-			CommentSpacing(config),
-			Filename(config),
-			FinalNewline(config),
-			ImportOrdering(config),
-			Indentation(config),
-			MaximumLineLength(config),
-			ModifierOrdering(config),
-			NoBlankLineBeforeRbrace(config),
-			NoConsecutiveBlankLines(config),
-			NoEmptyClassBody(config),
-			NoItParamInMultilineLambda(config),
-			NoLineBreakAfterElse(config),
-			NoLineBreakBeforeAssignment(config),
-			NoMultipleSpaces(config),
-			NoSemicolons(config),
-			NoTrailingSpaces(config),
-			NoUnitReturn(config),
-			NoUnusedImports(config),
-			NoWildcardImports(config),
-			PackageName(config),
-			ParameterListWrapping(config),
-			SpacingAroundColon(config),
-			SpacingAroundComma(config),
-			SpacingAroundCurly(config),
-			SpacingAroundKeyword(config),
-			SpacingAroundOperators(config),
-			SpacingAroundParens(config),
-			SpacingAroundRangeOperator(config),
-			StringTemplate(config)
-	)
+    override val rules: List<Rule> = listOf(
+            ChainWrapping(config),
+            CommentSpacing(config),
+            Filename(config),
+            FinalNewline(config),
+            ImportOrdering(config),
+            Indentation(config),
+            MaximumLineLength(config),
+            ModifierOrdering(config),
+            NoBlankLineBeforeRbrace(config),
+            NoConsecutiveBlankLines(config),
+            NoEmptyClassBody(config),
+            NoItParamInMultilineLambda(config),
+            NoLineBreakAfterElse(config),
+            NoLineBreakBeforeAssignment(config),
+            NoMultipleSpaces(config),
+            NoSemicolons(config),
+            NoTrailingSpaces(config),
+            NoUnitReturn(config),
+            NoUnusedImports(config),
+            NoWildcardImports(config),
+            PackageName(config),
+            ParameterListWrapping(config),
+            SpacingAroundColon(config),
+            SpacingAroundComma(config),
+            SpacingAroundCurly(config),
+            SpacingAroundKeyword(config),
+            SpacingAroundOperators(config),
+            SpacingAroundParens(config),
+            SpacingAroundRangeOperator(config),
+            StringTemplate(config)
+    )
 
-	override fun visit(root: KtFile) {
-		val sortedRules = activeRules.sortedBy { it.lastModifier() }
-		sortedRules.forEach { it.visit(root) }
-		root.node.visitTokens { node ->
-			sortedRules.forEach { rule ->
-				(rule as? FormattingRule)?.runIfActive { this.apply(node) }
-			}
-		}
-	}
+    override fun visit(root: KtFile) {
+        val sortedRules = activeRules.sortedBy { it.lastModifier() }
+        sortedRules.forEach { it.visit(root) }
+        root.node.visitTokens { node ->
+            sortedRules.forEach { rule ->
+                (rule as? FormattingRule)?.runIfActive { this.apply(node) }
+            }
+        }
+    }
 
-	private fun Rule.lastModifier(): Boolean {
-		val rule = (this as? FormattingRule)?.wrapping ?: return false
-		return rule is com.github.shyiko.ktlint.core.Rule.Modifier.Last ||
-				rule is com.github.shyiko.ktlint.core.Rule.Modifier.RestrictToRootLast
-	}
+    private fun Rule.lastModifier(): Boolean {
+        val rule = (this as? FormattingRule)?.wrapping ?: return false
+        return rule is com.github.shyiko.ktlint.core.Rule.Modifier.Last ||
+                rule is com.github.shyiko.ktlint.core.Rule.Modifier.RestrictToRootLast
+    }
 
-	private fun ASTNode.visitTokens(currentNode: (node: ASTNode) -> Unit) {
-		currentNode(this)
-		getChildren(null).forEach { it.visitTokens(currentNode) }
-	}
+    private fun ASTNode.visitTokens(currentNode: (node: ASTNode) -> Unit) {
+        currentNode(this)
+        getChildren(null).forEach { it.visitTokens(currentNode) }
+    }
 }

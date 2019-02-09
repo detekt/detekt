@@ -8,10 +8,10 @@ import io.gitlab.arturbosch.detekt.api.Detektion
  */
 class ComplexityReport : ConsoleReport() {
 
-	override val priority: Int = 20
+    override val priority: Int = 20
 
-	override fun render(detektion: Detektion): String? {
-		val complexityReportGenerator = ComplexityReportGenerator.create(detektion)
-		return complexityReportGenerator.generate()
-	}
+    override fun render(detektion: Detektion): String? {
+        val complexityReportGenerator = ComplexityReportGenerator.create(detektion)
+        return complexityReportGenerator.generate()
+    }
 }

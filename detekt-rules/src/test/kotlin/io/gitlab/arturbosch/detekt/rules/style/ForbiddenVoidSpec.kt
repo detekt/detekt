@@ -7,9 +7,9 @@ import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
 
 class ForbiddenVoidSpec : Spek({
-	given("some Void usage") {
-		it("should report all Void type usage") {
-			val code = """
+    given("some Void usage") {
+        it("should report all Void type usage") {
+            val code = """
 				lateinit var c: () -> Void
 
 				fun method(param: Void) {
@@ -18,18 +18,18 @@ class ForbiddenVoidSpec : Spek({
 				}
 			"""
 
-			val findings = ForbiddenVoid().lint(code)
-			assertThat(findings).hasSize(4)
-		}
+            val findings = ForbiddenVoid().lint(code)
+            assertThat(findings).hasSize(4)
+        }
 
-		it("should not report Void class literal") {
-			val code = """
+        it("should not report Void class literal") {
+            val code = """
 				val clazz = java.lang.Void::class
 				val klass = Void::class
 			"""
 
-			val findings = ForbiddenVoid().lint(code)
-			assertThat(findings).isEmpty()
-		}
-	}
+            val findings = ForbiddenVoid().lint(code)
+            assertThat(findings).isEmpty()
+        }
+    }
 })

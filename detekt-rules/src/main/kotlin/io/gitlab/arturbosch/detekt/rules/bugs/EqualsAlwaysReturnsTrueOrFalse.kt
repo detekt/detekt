@@ -41,40 +41,40 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
  */
 class EqualsAlwaysReturnsTrueOrFalse(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue("EqualsAlwaysReturnsTrueOrFalse",
-			Severity.Defect,
-			"Having an equals method which always returns true or false is not a good idea. " +
-					"It does not follow the contract of this method. " +
-					"Consider a good default implementation. " +
-					"For example this == other",
-			Debt.TWENTY_MINS)
+    override val issue = Issue("EqualsAlwaysReturnsTrueOrFalse",
+            Severity.Defect,
+            "Having an equals method which always returns true or false is not a good idea. " +
+                    "It does not follow the contract of this method. " +
+                    "Consider a good default implementation. " +
+                    "For example this == other",
+            Debt.TWENTY_MINS)
 
-	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (function.isEqualsFunction() && isReturningBooleanConstant(function)) {
-			report(CodeSmell(issue, Entity.from(function), "This equals function always returns the same " +
-					"result regardless on the input parameters."))
-		}
-	}
+    override fun visitNamedFunction(function: KtNamedFunction) {
+        if (function.isEqualsFunction() && isReturningBooleanConstant(function)) {
+            report(CodeSmell(issue, Entity.from(function), "This equals function always returns the same " +
+                    "result regardless on the input parameters."))
+        }
+    }
 
-	private fun isReturningBooleanConstant(function: KtNamedFunction): Boolean {
-		val bodyExpression = function.bodyExpression ?: return false
-		return if (bodyExpression is KtConstantExpression) {
-			bodyExpression.isBooleanConstant()
-		} else {
-			isSingleReturnWithBooleanConstant(bodyExpression)
-		}
-	}
+    private fun isReturningBooleanConstant(function: KtNamedFunction): Boolean {
+        val bodyExpression = function.bodyExpression ?: return false
+        return if (bodyExpression is KtConstantExpression) {
+            bodyExpression.isBooleanConstant()
+        } else {
+            isSingleReturnWithBooleanConstant(bodyExpression)
+        }
+    }
 
-	private fun isSingleReturnWithBooleanConstant(bodyExpression: KtExpression): Boolean {
-		val returnExpressionsInBlock = bodyExpression.asBlockExpression()?.statements
-				?.filterIsInstance<KtReturnExpression>() ?: return false
-		val lastValidReturnExpression = returnExpressionsInBlock.first().returnedExpression
-		val allReturnExpressions = bodyExpression.collectByType<KtReturnExpression>()
-		val hasNoNestedReturnExpression = allReturnExpressions.size == returnExpressionsInBlock.size
-		return lastValidReturnExpression?.isBooleanConstant() == true &&
-				(hasNoNestedReturnExpression ||
-						allReturnExpressions.all { it.returnedExpression?.text == lastValidReturnExpression.text })
-	}
+    private fun isSingleReturnWithBooleanConstant(bodyExpression: KtExpression): Boolean {
+        val returnExpressionsInBlock = bodyExpression.asBlockExpression()?.statements
+                ?.filterIsInstance<KtReturnExpression>() ?: return false
+        val lastValidReturnExpression = returnExpressionsInBlock.first().returnedExpression
+        val allReturnExpressions = bodyExpression.collectByType<KtReturnExpression>()
+        val hasNoNestedReturnExpression = allReturnExpressions.size == returnExpressionsInBlock.size
+        return lastValidReturnExpression?.isBooleanConstant() == true &&
+                (hasNoNestedReturnExpression ||
+                        allReturnExpressions.all { it.returnedExpression?.text == lastValidReturnExpression.text })
+    }
 
-	private fun PsiElement.isBooleanConstant() = node.elementType == KtNodeTypes.BOOLEAN_CONSTANT
+    private fun PsiElement.isBooleanConstant() = node.elementType == KtNodeTypes.BOOLEAN_CONSTANT
 }

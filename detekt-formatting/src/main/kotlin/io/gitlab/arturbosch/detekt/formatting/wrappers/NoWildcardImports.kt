@@ -13,6 +13,6 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 class NoWildcardImports(config: Config) : FormattingRule(config) {
 
-	override val wrapping = NoWildcardImportsRule()
-	override val issue = issueFor("Detects wildcast import usages")
+    override val wrapping = NoWildcardImportsRule()
+    override val issue = issueFor("Detects wildcast import usages")
 }

@@ -15,30 +15,30 @@ import kotlin.system.measureTimeMillis
  */
 class Runner(private val arguments: CliArgs) : Executable {
 
-	override fun execute() {
-		val settings = createSettings()
+    override fun execute() {
+        val settings = createSettings()
 
-		val time = measureTimeMillis {
-			val detektion = DetektFacade.create(settings).run()
-			OutputFacade(arguments, detektion, settings).run()
-		}
+        val time = measureTimeMillis {
+            val detektion = DetektFacade.create(settings).run()
+            OutputFacade(arguments, detektion, settings).run()
+        }
 
-		println("\ndetekt finished in $time ms.")
-	}
+        println("\ndetekt finished in $time ms.")
+    }
 
-	private fun createSettings(): ProcessingSettings {
-		with(arguments) {
-			val pathFilters = createPathFilters()
-			val plugins = createPlugins()
-			val config = loadConfiguration()
+    private fun createSettings(): ProcessingSettings {
+        with(arguments) {
+            val pathFilters = createPathFilters()
+            val plugins = createPlugins()
+            val config = loadConfiguration()
 
-			return ProcessingSettings(
-					inputPaths = inputPaths,
-					config = config,
-					pathFilters = pathFilters,
-					parallelCompilation = parallel,
-					excludeDefaultRuleSets = disableDefaultRuleSets,
-					pluginPaths = plugins)
-		}
-	}
+            return ProcessingSettings(
+                    inputPaths = inputPaths,
+                    config = config,
+                    pathFilters = pathFilters,
+                    parallelCompilation = parallel,
+                    excludeDefaultRuleSets = disableDefaultRuleSets,
+                    pluginPaths = plugins)
+        }
+    }
 }

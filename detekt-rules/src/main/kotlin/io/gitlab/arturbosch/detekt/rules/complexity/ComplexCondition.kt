@@ -42,67 +42,69 @@ import org.jetbrains.kotlin.psi.KtWhileExpression
  * @author Artur Bosch
  * @author Marvin Ramin
  */
-class ComplexCondition(config: Config = Config.empty,
-					   threshold: Int = DEFAULT_CONDITIONS_COUNT) : ThresholdRule(config, threshold) {
+class ComplexCondition(
+    config: Config = Config.empty,
+    threshold: Int = DEFAULT_CONDITIONS_COUNT
+) : ThresholdRule(config, threshold) {
 
-	override val issue = Issue("ComplexCondition", Severity.Maintainability,
-			"Complex conditions should be simplified and extracted into well-named methods if necessary.",
-			Debt.TWENTY_MINS)
+    override val issue = Issue("ComplexCondition", Severity.Maintainability,
+            "Complex conditions should be simplified and extracted into well-named methods if necessary.",
+            Debt.TWENTY_MINS)
 
-	override fun visitIfExpression(expression: KtIfExpression) {
-		val condition = expression.condition
-		checkIfComplex(condition)
-		super.visitIfExpression(expression)
-	}
+    override fun visitIfExpression(expression: KtIfExpression) {
+        val condition = expression.condition
+        checkIfComplex(condition)
+        super.visitIfExpression(expression)
+    }
 
-	override fun visitDoWhileExpression(expression: KtDoWhileExpression) {
-		val condition = expression.condition
-		checkIfComplex(condition)
-		super.visitDoWhileExpression(expression)
-	}
+    override fun visitDoWhileExpression(expression: KtDoWhileExpression) {
+        val condition = expression.condition
+        checkIfComplex(condition)
+        super.visitDoWhileExpression(expression)
+    }
 
-	override fun visitWhileExpression(expression: KtWhileExpression) {
-		val condition = expression.condition
-		checkIfComplex(condition)
-		super.visitWhileExpression(expression)
-	}
+    override fun visitWhileExpression(expression: KtWhileExpression) {
+        val condition = expression.condition
+        checkIfComplex(condition)
+        super.visitWhileExpression(expression)
+    }
 
-	private fun checkIfComplex(condition: KtExpression?) {
-		val binaryExpressions = condition?.collectByType<KtBinaryExpression>()
+    private fun checkIfComplex(condition: KtExpression?) {
+        val binaryExpressions = condition?.collectByType<KtBinaryExpression>()
 
-		if (binaryExpressions != null && binaryExpressions.size > 1) {
-			val longestBinExpr = binaryExpressions.reduce { acc, binExpr ->
-				if (binExpr.text.length > acc.text.length) binExpr else acc
-			}
-			val conditionString = longestBinExpr.text
-			val count = frequency(conditionString, "&&") + frequency(conditionString, "||") + 1
-			if (count >= threshold) {
-				report(ThresholdedCodeSmell(issue,
-						Entity.from(condition),
-						Metric("SIZE", count, threshold),
-						"This condition is too complex."))
-			}
-		}
-	}
+        if (binaryExpressions != null && binaryExpressions.size > 1) {
+            val longestBinExpr = binaryExpressions.reduce { acc, binExpr ->
+                if (binExpr.text.length > acc.text.length) binExpr else acc
+            }
+            val conditionString = longestBinExpr.text
+            val count = frequency(conditionString, "&&") + frequency(conditionString, "||") + 1
+            if (count >= threshold) {
+                report(ThresholdedCodeSmell(issue,
+                        Entity.from(condition),
+                        Metric("SIZE", count, threshold),
+                        "This condition is too complex."))
+            }
+        }
+    }
 
-	private fun frequency(source: String, part: String): Int {
+    private fun frequency(source: String, part: String): Int {
 
-		if (source.isEmpty() || part.isEmpty()) {
-			return 0
-		}
+        if (source.isEmpty() || part.isEmpty()) {
+            return 0
+        }
 
-		var count = 0
-		var pos = source.indexOf(part, 0)
-		while (pos != -1) {
-			pos += part.length
-			count++
-			pos = source.indexOf(part, pos)
-		}
+        var count = 0
+        var pos = source.indexOf(part, 0)
+        while (pos != -1) {
+            pos += part.length
+            count++
+            pos = source.indexOf(part, pos)
+        }
 
-		return count
-	}
+        return count
+    }
 
-	companion object {
-		const val DEFAULT_CONDITIONS_COUNT = 4
-	}
+    companion object {
+        const val DEFAULT_CONDITIONS_COUNT = 4
+    }
 }

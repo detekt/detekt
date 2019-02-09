@@ -28,23 +28,23 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  */
 class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName, Severity.Style,
-			"Mark forbidden imports. A forbidden import could be an import for an unstable / experimental api" +
-					"and hence you might want to mark it as forbidden in order to get warned about the usage.", Debt.TEN_MINS)
+    override val issue = Issue(javaClass.simpleName, Severity.Style,
+            "Mark forbidden imports. A forbidden import could be an import for an unstable / experimental api" +
+                    "and hence you might want to mark it as forbidden in order to get warned about the usage.", Debt.TEN_MINS)
 
-	private val forbiddenImports = SplitPattern(valueOrDefault(IMPORTS, ""))
+    private val forbiddenImports = SplitPattern(valueOrDefault(IMPORTS, ""))
 
-	override fun visitImportDirective(importDirective: KtImportDirective) {
-		super.visitImportDirective(importDirective)
+    override fun visitImportDirective(importDirective: KtImportDirective) {
+        super.visitImportDirective(importDirective)
 
-		val import = importDirective.importedFqName?.asString() ?: ""
-		if (forbiddenImports.contains(import)) {
-			report(CodeSmell(issue, Entity.from(importDirective), "The import " +
-					"$import has been forbidden in the Detekt config."))
-		}
-	}
+        val import = importDirective.importedFqName?.asString() ?: ""
+        if (forbiddenImports.contains(import)) {
+            report(CodeSmell(issue, Entity.from(importDirective), "The import " +
+                    "$import has been forbidden in the Detekt config."))
+        }
+    }
 
-	companion object {
-		const val IMPORTS = "imports"
-	}
+    companion object {
+        const val IMPORTS = "imports"
+    }
 }

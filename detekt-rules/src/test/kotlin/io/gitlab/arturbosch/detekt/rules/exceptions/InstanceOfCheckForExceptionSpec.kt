@@ -7,12 +7,12 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
 class InstanceOfCheckForExceptionSpec : SubjectSpek<InstanceOfCheckForException>({
-	subject { InstanceOfCheckForException() }
+    subject { InstanceOfCheckForException() }
 
-	given("several catch blocks") {
+    given("several catch blocks") {
 
-		it("has is and as checks") {
-			val code = """
+        it("has is and as checks") {
+            val code = """
 				fun x() {
 					try {
 					} catch(e: IOException) {
@@ -22,11 +22,11 @@ class InstanceOfCheckForExceptionSpec : SubjectSpek<InstanceOfCheckForException>
 					}
 				}
 				"""
-			assertThat(subject.lint(code)).hasSize(2)
-		}
+            assertThat(subject.lint(code)).hasSize(2)
+        }
 
-		it("has nested is and as checks") {
-			val code = """
+        it("has nested is and as checks") {
+            val code = """
 				fun x() {
 					try {
 					} catch(e: IOException) {
@@ -36,11 +36,11 @@ class InstanceOfCheckForExceptionSpec : SubjectSpek<InstanceOfCheckForException>
 					}
 				}
 				"""
-			assertThat(subject.lint(code)).hasSize(2)
-		}
+            assertThat(subject.lint(code)).hasSize(2)
+        }
 
-		it("has no instance of check") {
-			val code = """
+        it("has no instance of check") {
+            val code = """
 				fun x() {
 					try {
 					} catch(e: IOException) {
@@ -51,7 +51,7 @@ class InstanceOfCheckForExceptionSpec : SubjectSpek<InstanceOfCheckForException>
 					}
 				}
 				"""
-			assertThat(subject.lint(code)).hasSize(0)
-		}
-	}
+            assertThat(subject.lint(code)).hasSize(0)
+        }
+    }
 })

@@ -25,23 +25,23 @@ import io.gitlab.arturbosch.detekt.rules.exceptions.TooGenericExceptionThrown
  */
 class ExceptionsProvider : RuleSetProvider {
 
-	override val ruleSetId: String = "exceptions"
+    override val ruleSetId: String = "exceptions"
 
-	override fun instance(config: Config): RuleSet {
-		return RuleSet(ruleSetId, listOf(
-				TooGenericExceptionCaught(config),
-				ExceptionRaisedInUnexpectedLocation(config),
-				TooGenericExceptionThrown(config),
-				NotImplementedDeclaration(config),
-				PrintStackTrace(config),
-				InstanceOfCheckForException(config),
-				ThrowingExceptionsWithoutMessageOrCause(config),
-				ReturnFromFinally(config),
-				ThrowingExceptionFromFinally(config),
-				ThrowingExceptionInMain(config),
-				RethrowCaughtException(config),
-				ThrowingNewInstanceOfSameException(config),
-				SwallowedException(config)
-		))
-	}
+    override fun instance(config: Config): RuleSet {
+        return RuleSet(ruleSetId, listOf(
+                TooGenericExceptionCaught(config),
+                ExceptionRaisedInUnexpectedLocation(config),
+                TooGenericExceptionThrown(config),
+                NotImplementedDeclaration(config),
+                PrintStackTrace(config),
+                InstanceOfCheckForException(config),
+                ThrowingExceptionsWithoutMessageOrCause(config),
+                ReturnFromFinally(config),
+                ThrowingExceptionFromFinally(config),
+                ThrowingExceptionInMain(config),
+                RethrowCaughtException(config),
+                ThrowingNewInstanceOfSameException(config),
+                SwallowedException(config)
+        ))
+    }
 }

@@ -5,7 +5,7 @@
  */
 object SuppressedByAllObject {
 
-	fun stuff() {
-		println("FAILED TEST")
-	}
+    fun stuff() {
+        println("FAILED TEST")
+    }
 }

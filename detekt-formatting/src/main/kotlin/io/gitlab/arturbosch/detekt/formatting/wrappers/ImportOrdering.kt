@@ -13,6 +13,6 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 class ImportOrdering(config: Config) : FormattingRule(config) {
 
-	override val wrapping = ImportOrderingRule()
-	override val issue = issueFor("Detects imports in non default order")
+    override val wrapping = ImportOrderingRule()
+    override val issue = issueFor("Detects imports in non default order")
 }

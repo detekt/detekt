@@ -20,25 +20,25 @@ import org.jetbrains.kotlin.psi.KtExpression
  */
 abstract class EmptyRule(config: Config) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName,
-			Severity.Minor,
-			"Empty block of code detected. As they serve no purpose they should be removed.",
-			Debt.FIVE_MINS)
+    override val issue = Issue(javaClass.simpleName,
+            Severity.Minor,
+            "Empty block of code detected. As they serve no purpose they should be removed.",
+            Debt.FIVE_MINS)
 
-	fun KtExpression.addFindingIfBlockExprIsEmpty() {
-		checkBlockExpr(false)
-	}
+    fun KtExpression.addFindingIfBlockExprIsEmpty() {
+        checkBlockExpr(false)
+    }
 
-	fun KtExpression.addFindingIfBlockExprIsEmptyAndNotCommented() {
-		checkBlockExpr(true)
-	}
+    fun KtExpression.addFindingIfBlockExprIsEmptyAndNotCommented() {
+        checkBlockExpr(true)
+    }
 
-	private fun KtExpression.checkBlockExpr(hasComment: Boolean) {
-		val blockExpression = this.asBlockExpression()
-		blockExpression?.statements?.let {
-			if (it.isEmpty() && blockExpression.hasCommentInside() == hasComment) {
-				report(CodeSmell(issue, Entity.from(this), "This empty block of code can be removed."))
-			}
-		}
-	}
+    private fun KtExpression.checkBlockExpr(hasComment: Boolean) {
+        val blockExpression = this.asBlockExpression()
+        blockExpression?.statements?.let {
+            if (it.isEmpty() && blockExpression.hasCommentInside() == hasComment) {
+                report(CodeSmell(issue, Entity.from(this), "This empty block of code can be removed."))
+            }
+        }
+    }
 }

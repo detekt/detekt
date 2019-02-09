@@ -30,76 +30,76 @@ data class KtFileContent(val file: KtFile, val content: Sequence<String>)
  */
 class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName,
-			Severity.Style,
-			"Line detected that is longer than the defined maximum line length in the code style.",
-			Debt.FIVE_MINS)
+    override val issue = Issue(javaClass.simpleName,
+            Severity.Style,
+            "Line detected that is longer than the defined maximum line length in the code style.",
+            Debt.FIVE_MINS)
 
-	private val maxLineLength: Int =
-			valueOrDefault(MaxLineLength.MAX_LINE_LENGTH, MaxLineLength.DEFAULT_IDEA_LINE_LENGTH)
-	private val excludePackageStatements: Boolean =
-			valueOrDefault(MaxLineLength.EXCLUDE_PACKAGE_STATEMENTS, true)
-	private val excludeImportStatements: Boolean =
-			valueOrDefault(MaxLineLength.EXCLUDE_IMPORT_STATEMENTS, true)
-	private val excludeCommentStatements: Boolean =
-			valueOrDefault(MaxLineLength.EXCLUDE_COMMENT_STATEMENTS, false)
+    private val maxLineLength: Int =
+            valueOrDefault(MaxLineLength.MAX_LINE_LENGTH, MaxLineLength.DEFAULT_IDEA_LINE_LENGTH)
+    private val excludePackageStatements: Boolean =
+            valueOrDefault(MaxLineLength.EXCLUDE_PACKAGE_STATEMENTS, true)
+    private val excludeImportStatements: Boolean =
+            valueOrDefault(MaxLineLength.EXCLUDE_IMPORT_STATEMENTS, true)
+    private val excludeCommentStatements: Boolean =
+            valueOrDefault(MaxLineLength.EXCLUDE_COMMENT_STATEMENTS, false)
 
-	fun visit(element: KtFileContent) {
-		var offset = 0
-		val lines = element.content
-		val file = element.file
+    fun visit(element: KtFileContent) {
+        var offset = 0
+        val lines = element.content
+        val file = element.file
 
-		for (line in lines) {
-			offset += line.length
-			if (!isValidLine(line)) {
-				val ktElement = findAnnotatedStatementInLine(file, offset, line)
-				if (ktElement != null) {
-					report(CodeSmell(issue, Entity.from(ktElement), issue.description))
-				} else {
-					report(CodeSmell(issue, Entity.from(file, offset), issue.description))
-				}
-			}
+        for (line in lines) {
+            offset += line.length
+            if (!isValidLine(line)) {
+                val ktElement = findAnnotatedStatementInLine(file, offset, line)
+                if (ktElement != null) {
+                    report(CodeSmell(issue, Entity.from(ktElement), issue.description))
+                } else {
+                    report(CodeSmell(issue, Entity.from(file, offset), issue.description))
+                }
+            }
 
-			offset += 1 /* '\n' */
-		}
-	}
+            offset += 1 /* '\n' */
+        }
+    }
 
-	private fun isValidLine(line: String): Boolean {
-		val isUrl = line.lastArgumentMatchesUrl()
-		return line.length <= maxLineLength || isIgnoredStatement(line) || isUrl
-	}
+    private fun isValidLine(line: String): Boolean {
+        val isUrl = line.lastArgumentMatchesUrl()
+        return line.length <= maxLineLength || isIgnoredStatement(line) || isUrl
+    }
 
-	private fun isIgnoredStatement(line: String): Boolean {
-		return containsIgnoredPackageStatement(line) ||
-				containsIgnoredImportStatement(line) ||
-				containsIgnoredCommentStatement(line)
-	}
+    private fun isIgnoredStatement(line: String): Boolean {
+        return containsIgnoredPackageStatement(line) ||
+                containsIgnoredImportStatement(line) ||
+                containsIgnoredCommentStatement(line)
+    }
 
-	private fun containsIgnoredPackageStatement(line: String): Boolean {
-		if (!excludePackageStatements) return false
+    private fun containsIgnoredPackageStatement(line: String): Boolean {
+        if (!excludePackageStatements) return false
 
-		return line.trimStart().startsWith("package ")
-	}
+        return line.trimStart().startsWith("package ")
+    }
 
-	private fun containsIgnoredImportStatement(line: String): Boolean {
-		if (!excludeImportStatements) return false
+    private fun containsIgnoredImportStatement(line: String): Boolean {
+        if (!excludeImportStatements) return false
 
-		return line.trimStart().startsWith("import ")
-	}
+        return line.trimStart().startsWith("import ")
+    }
 
-	private fun containsIgnoredCommentStatement(line: String): Boolean {
-		if (!excludeCommentStatements) return false
+    private fun containsIgnoredCommentStatement(line: String): Boolean {
+        if (!excludeCommentStatements) return false
 
-		return line.trimStart().startsWith("//") ||
-				line.trimStart().startsWith("/*") ||
-				line.trimStart().startsWith("*")
-	}
+        return line.trimStart().startsWith("//") ||
+                line.trimStart().startsWith("/*") ||
+                line.trimStart().startsWith("*")
+    }
 
-	companion object {
-		const val MAX_LINE_LENGTH = "maxLineLength"
-		const val DEFAULT_IDEA_LINE_LENGTH = 120
-		const val EXCLUDE_PACKAGE_STATEMENTS = "excludePackageStatements"
-		const val EXCLUDE_IMPORT_STATEMENTS = "excludeImportStatements"
-		const val EXCLUDE_COMMENT_STATEMENTS = "excludeCommentStatements"
-	}
+    companion object {
+        const val MAX_LINE_LENGTH = "maxLineLength"
+        const val DEFAULT_IDEA_LINE_LENGTH = 120
+        const val EXCLUDE_PACKAGE_STATEMENTS = "excludePackageStatements"
+        const val EXCLUDE_IMPORT_STATEMENTS = "excludeImportStatements"
+        const val EXCLUDE_COMMENT_STATEMENTS = "excludeCommentStatements"
+    }
 }

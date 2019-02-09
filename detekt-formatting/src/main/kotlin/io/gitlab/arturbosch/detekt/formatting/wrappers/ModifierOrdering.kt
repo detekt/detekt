@@ -13,6 +13,6 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 class ModifierOrdering(config: Config) : FormattingRule(config) {
 
-	override val wrapping = ModifierOrderRule()
-	override val issue = issueFor("Detects modifiers in non default order")
+    override val wrapping = ModifierOrderRule()
+    override val issue = issueFor("Detects modifiers in non default order")
 }

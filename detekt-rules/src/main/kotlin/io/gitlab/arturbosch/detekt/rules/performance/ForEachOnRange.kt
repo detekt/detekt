@@ -49,47 +49,47 @@ import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
  */
 class ForEachOnRange(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue("ForEachOnRange",
-			Severity.Performance,
-			"Using the forEach method on ranges has a heavy performance cost. Prefer using simple for loops.",
-			Debt.FIVE_MINS)
+    override val issue = Issue("ForEachOnRange",
+            Severity.Performance,
+            "Using the forEach method on ranges has a heavy performance cost. Prefer using simple for loops.",
+            Debt.FIVE_MINS)
 
-	private val minimumRangeSize = 3
-	private val rangeOperators = setOf("..", "downTo", "until", "step")
+    private val minimumRangeSize = 3
+    private val rangeOperators = setOf("..", "downTo", "until", "step")
 
-	override fun visitCallExpression(expression: KtCallExpression) {
-		super.visitCallExpression(expression)
+    override fun visitCallExpression(expression: KtCallExpression) {
+        super.visitCallExpression(expression)
 
-		expression.getCallNameExpression()?.let {
-			if (!it.textMatches("forEach")) {
-				return
-			}
-			val parenthesizedExpression = it.getReceiverExpression() as? KtParenthesizedExpression
-			val binaryExpression = parenthesizedExpression?.expression as? KtBinaryExpression
-			if (binaryExpression != null && isRangeOperator(binaryExpression)) {
-				report(CodeSmell(issue, Entity.from(expression), issue.description))
-			}
-		}
-	}
+        expression.getCallNameExpression()?.let {
+            if (!it.textMatches("forEach")) {
+                return
+            }
+            val parenthesizedExpression = it.getReceiverExpression() as? KtParenthesizedExpression
+            val binaryExpression = parenthesizedExpression?.expression as? KtBinaryExpression
+            if (binaryExpression != null && isRangeOperator(binaryExpression)) {
+                report(CodeSmell(issue, Entity.from(expression), issue.description))
+            }
+        }
+    }
 
-	private fun isRangeOperator(binaryExpression: KtBinaryExpression): Boolean {
-		val range = binaryExpression.children
-		if (range.size >= minimumRangeSize) {
-			val hasCorrectLowerValue = hasCorrectLowerValue(range[0])
-			val hasCorrectUpperValue = getIntValueForPsiElement(range[2]) != null
-			return hasCorrectLowerValue && hasCorrectUpperValue && rangeOperators.contains(range[1].text)
-		}
-		return false
-	}
+    private fun isRangeOperator(binaryExpression: KtBinaryExpression): Boolean {
+        val range = binaryExpression.children
+        if (range.size >= minimumRangeSize) {
+            val hasCorrectLowerValue = hasCorrectLowerValue(range[0])
+            val hasCorrectUpperValue = getIntValueForPsiElement(range[2]) != null
+            return hasCorrectLowerValue && hasCorrectUpperValue && rangeOperators.contains(range[1].text)
+        }
+        return false
+    }
 
-	private fun hasCorrectLowerValue(element: PsiElement): Boolean {
-		var lowerValue = getIntValueForPsiElement(element) != null
-		if (!lowerValue) {
-			val expression = element as? KtBinaryExpression
-			if (expression != null) {
-				lowerValue = isRangeOperator(expression)
-			}
-		}
-		return lowerValue
-	}
+    private fun hasCorrectLowerValue(element: PsiElement): Boolean {
+        var lowerValue = getIntValueForPsiElement(element) != null
+        if (!lowerValue) {
+            val expression = element as? KtBinaryExpression
+            if (expression != null) {
+                lowerValue = isRangeOperator(expression)
+            }
+        }
+        return lowerValue
+    }
 }

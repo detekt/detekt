@@ -37,105 +37,105 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  */
 class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue("TooManyFunctions",
-			Severity.Maintainability,
-			"Too many functions inside a/an file/class/object/interface always indicate a violation of " +
-					"the single responsibility principle. Maybe the file/class/object/interface wants to manage too " +
-					"many things at once. Extract functionality which clearly belongs together.",
-			Debt.TWENTY_MINS)
+    override val issue = Issue("TooManyFunctions",
+            Severity.Maintainability,
+            "Too many functions inside a/an file/class/object/interface always indicate a violation of " +
+                    "the single responsibility principle. Maybe the file/class/object/interface wants to manage too " +
+                    "many things at once. Extract functionality which clearly belongs together.",
+            Debt.TWENTY_MINS)
 
-	private val thresholdInFiles = valueOrDefault(THRESHOLD_IN_FILES, DEFAULT_THRESHOLD)
-	private val thresholdInClasses = valueOrDefault(THRESHOLD_IN_CLASSES, DEFAULT_THRESHOLD)
-	private val thresholdInObjects = valueOrDefault(THRESHOLD_IN_OBJECTS, DEFAULT_THRESHOLD)
-	private val thresholdInInterfaces = valueOrDefault(THRESHOLD_IN_INTERFACES, DEFAULT_THRESHOLD)
-	private val thresholdInEnums = valueOrDefault(THRESHOLD_IN_ENUMS, DEFAULT_THRESHOLD)
-	private val ignoreDeprecated = valueOrDefault(IGNORE_DEPRECATED, false)
-	private val ignorePrivate = valueOrDefault(IGNORE_PRIVATE, false)
+    private val thresholdInFiles = valueOrDefault(THRESHOLD_IN_FILES, DEFAULT_THRESHOLD)
+    private val thresholdInClasses = valueOrDefault(THRESHOLD_IN_CLASSES, DEFAULT_THRESHOLD)
+    private val thresholdInObjects = valueOrDefault(THRESHOLD_IN_OBJECTS, DEFAULT_THRESHOLD)
+    private val thresholdInInterfaces = valueOrDefault(THRESHOLD_IN_INTERFACES, DEFAULT_THRESHOLD)
+    private val thresholdInEnums = valueOrDefault(THRESHOLD_IN_ENUMS, DEFAULT_THRESHOLD)
+    private val ignoreDeprecated = valueOrDefault(IGNORE_DEPRECATED, false)
+    private val ignorePrivate = valueOrDefault(IGNORE_PRIVATE, false)
 
-	private var amountOfTopLevelFunctions: Int = 0
+    private var amountOfTopLevelFunctions: Int = 0
 
-	override fun visitKtFile(file: KtFile) {
-		super.visitKtFile(file)
-		if (amountOfTopLevelFunctions >= thresholdInFiles) {
-			report(ThresholdedCodeSmell(issue,
-					Entity.from(file),
-					Metric("SIZE", amountOfTopLevelFunctions, thresholdInFiles),
-					"File '${file.name}' with '$amountOfTopLevelFunctions' functions detected. " +
-							"Defined threshold inside files is set to '$thresholdInFiles'"))
-		}
-		amountOfTopLevelFunctions = 0
-	}
+    override fun visitKtFile(file: KtFile) {
+        super.visitKtFile(file)
+        if (amountOfTopLevelFunctions >= thresholdInFiles) {
+            report(ThresholdedCodeSmell(issue,
+                    Entity.from(file),
+                    Metric("SIZE", amountOfTopLevelFunctions, thresholdInFiles),
+                    "File '${file.name}' with '$amountOfTopLevelFunctions' functions detected. " +
+                            "Defined threshold inside files is set to '$thresholdInFiles'"))
+        }
+        amountOfTopLevelFunctions = 0
+    }
 
-	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (function.isTopLevel && !isIgnoredFunction(function)) {
-			amountOfTopLevelFunctions++
-		}
-	}
+    override fun visitNamedFunction(function: KtNamedFunction) {
+        if (function.isTopLevel && !isIgnoredFunction(function)) {
+            amountOfTopLevelFunctions++
+        }
+    }
 
-	override fun visitClass(klass: KtClass) {
-		val amount = calcFunctions(klass)
-		when {
-			klass.isInterface() && amount >= thresholdInInterfaces -> {
-				report(ThresholdedCodeSmell(issue,
-						Entity.from(klass),
-						Metric("SIZE", amount, thresholdInInterfaces),
-						"Interface '${klass.name}' with '$amount' functions detected. " +
-								"Defined threshold inside interfaces is set to " +
-								"'$thresholdInInterfaces'"))
-			}
-			klass.isEnum() && amount >= thresholdInEnums -> {
-				report(ThresholdedCodeSmell(issue,
-						Entity.from(klass),
-						Metric("SIZE", amount, thresholdInEnums),
-						"Enum class '${klass.name}' with '$amount' functions detected. " +
-								"Defined threshold inside enum classes is set to " +
-								"'$thresholdInEnums'"))
-			}
-			else -> {
-				if (amount >= thresholdInClasses) {
-					report(ThresholdedCodeSmell(issue,
-							Entity.from(klass),
-							Metric("SIZE", amount, thresholdInClasses),
-							"Class '${klass.name}' with '$amount' functions detected. " +
-									"Defined threshold inside classes is set to '$thresholdInClasses'"))
-				}
-			}
-		}
-		super.visitClass(klass)
-	}
+    override fun visitClass(klass: KtClass) {
+        val amount = calcFunctions(klass)
+        when {
+            klass.isInterface() && amount >= thresholdInInterfaces -> {
+                report(ThresholdedCodeSmell(issue,
+                        Entity.from(klass),
+                        Metric("SIZE", amount, thresholdInInterfaces),
+                        "Interface '${klass.name}' with '$amount' functions detected. " +
+                                "Defined threshold inside interfaces is set to " +
+                                "'$thresholdInInterfaces'"))
+            }
+            klass.isEnum() && amount >= thresholdInEnums -> {
+                report(ThresholdedCodeSmell(issue,
+                        Entity.from(klass),
+                        Metric("SIZE", amount, thresholdInEnums),
+                        "Enum class '${klass.name}' with '$amount' functions detected. " +
+                                "Defined threshold inside enum classes is set to " +
+                                "'$thresholdInEnums'"))
+            }
+            else -> {
+                if (amount >= thresholdInClasses) {
+                    report(ThresholdedCodeSmell(issue,
+                            Entity.from(klass),
+                            Metric("SIZE", amount, thresholdInClasses),
+                            "Class '${klass.name}' with '$amount' functions detected. " +
+                                    "Defined threshold inside classes is set to '$thresholdInClasses'"))
+                }
+            }
+        }
+        super.visitClass(klass)
+    }
 
-	override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
-		val amount = calcFunctions(declaration)
-		if (amount >= thresholdInObjects) {
-			report(ThresholdedCodeSmell(issue,
-					Entity.from(declaration),
-					Metric("SIZE", amount, thresholdInObjects),
-					"Object '${declaration.name}' with '$amount' functions detected. " +
-							"Defined threshold inside objects is set to '$thresholdInObjects'"))
-		}
-		super.visitObjectDeclaration(declaration)
-	}
+    override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
+        val amount = calcFunctions(declaration)
+        if (amount >= thresholdInObjects) {
+            report(ThresholdedCodeSmell(issue,
+                    Entity.from(declaration),
+                    Metric("SIZE", amount, thresholdInObjects),
+                    "Object '${declaration.name}' with '$amount' functions detected. " +
+                            "Defined threshold inside objects is set to '$thresholdInObjects'"))
+        }
+        super.visitObjectDeclaration(declaration)
+    }
 
-	private fun calcFunctions(classOrObject: KtClassOrObject): Int = classOrObject.body?.declarations
-			?.filterIsInstance<KtNamedFunction>()
-			?.filter { !isIgnoredFunction(it) }
-			?.size ?: 0
+    private fun calcFunctions(classOrObject: KtClassOrObject): Int = classOrObject.body?.declarations
+            ?.filterIsInstance<KtNamedFunction>()
+            ?.filter { !isIgnoredFunction(it) }
+            ?.size ?: 0
 
-	private fun isIgnoredFunction(function: KtNamedFunction): Boolean = when {
-		ignoreDeprecated && function.annotationEntries.any { it.typeReference?.text == DEPRECATED } -> true
-		ignorePrivate && function.isPrivate() -> true
-		else -> false
-	}
+    private fun isIgnoredFunction(function: KtNamedFunction): Boolean = when {
+        ignoreDeprecated && function.annotationEntries.any { it.typeReference?.text == DEPRECATED } -> true
+        ignorePrivate && function.isPrivate() -> true
+        else -> false
+    }
 
-	companion object {
-		const val DEFAULT_THRESHOLD = 11
-		const val THRESHOLD_IN_FILES = "thresholdInFiles"
-		const val THRESHOLD_IN_CLASSES = "thresholdInClasses"
-		const val THRESHOLD_IN_INTERFACES = "thresholdInInterfaces"
-		const val THRESHOLD_IN_OBJECTS = "thresholdInObjects"
-		const val THRESHOLD_IN_ENUMS = "thresholdInEnums"
-		const val IGNORE_DEPRECATED = "ignoreDeprecated"
-		const val IGNORE_PRIVATE = "ignorePrivate"
-		private const val DEPRECATED = "Deprecated"
-	}
+    companion object {
+        const val DEFAULT_THRESHOLD = 11
+        const val THRESHOLD_IN_FILES = "thresholdInFiles"
+        const val THRESHOLD_IN_CLASSES = "thresholdInClasses"
+        const val THRESHOLD_IN_INTERFACES = "thresholdInInterfaces"
+        const val THRESHOLD_IN_OBJECTS = "thresholdInObjects"
+        const val THRESHOLD_IN_ENUMS = "thresholdInEnums"
+        const val IGNORE_DEPRECATED = "ignoreDeprecated"
+        const val IGNORE_PRIVATE = "ignorePrivate"
+        private const val DEPRECATED = "Deprecated"
+    }
 }

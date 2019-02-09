@@ -23,42 +23,44 @@ import org.jetbrains.kotlin.psi.KtParameterList
  * @author Marvin Ramin
  * @author Serj Lotutovici
  */
-class LongParameterList(config: Config = Config.empty,
-						threshold: Int = DEFAULT_ACCEPTED_PARAMETER_LENGTH) : ThresholdRule(config, threshold) {
+class LongParameterList(
+    config: Config = Config.empty,
+    threshold: Int = DEFAULT_ACCEPTED_PARAMETER_LENGTH
+) : ThresholdRule(config, threshold) {
 
-	override val issue = Issue("LongParameterList",
-			Severity.Maintainability,
-			"The more parameters a method has the more complex it is. Long parameter lists are often " +
-					"used to control complex algorithms and violate the Single Responsibility Principle. " +
-					"Prefer methods with short parameter lists.",
-			Debt.TWENTY_MINS)
+    override val issue = Issue("LongParameterList",
+            Severity.Maintainability,
+            "The more parameters a method has the more complex it is. Long parameter lists are often " +
+                    "used to control complex algorithms and violate the Single Responsibility Principle. " +
+                    "Prefer methods with short parameter lists.",
+            Debt.TWENTY_MINS)
 
-	private val ignoreDefaultParameters = valueOrDefault(IGNORE_DEFAULT_PARAMETERS, false)
+    private val ignoreDefaultParameters = valueOrDefault(IGNORE_DEFAULT_PARAMETERS, false)
 
-	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (function.isOverride()) return
-		val parameterList = function.valueParameterList
-		val parameters = parameterList?.parameterCount()
+    override fun visitNamedFunction(function: KtNamedFunction) {
+        if (function.isOverride()) return
+        val parameterList = function.valueParameterList
+        val parameters = parameterList?.parameterCount()
 
-		if (parameters != null && parameters >= threshold) {
-			report(ThresholdedCodeSmell(issue,
-					Entity.from(parameterList),
-					Metric("SIZE", parameters, threshold),
-					"The function ${function.nameAsSafeName} has too many parameters. The current threshold" +
-							" is set to $threshold."))
-		}
-	}
+        if (parameters != null && parameters >= threshold) {
+            report(ThresholdedCodeSmell(issue,
+                    Entity.from(parameterList),
+                    Metric("SIZE", parameters, threshold),
+                    "The function ${function.nameAsSafeName} has too many parameters. The current threshold" +
+                            " is set to $threshold."))
+        }
+    }
 
-	private fun KtParameterList.parameterCount(): Int {
-		return if (ignoreDefaultParameters) {
-			parameters.filter { !it.hasDefaultValue() }.size
-		} else {
-			parameters.size
-		}
-	}
+    private fun KtParameterList.parameterCount(): Int {
+        return if (ignoreDefaultParameters) {
+            parameters.filter { !it.hasDefaultValue() }.size
+        } else {
+            parameters.size
+        }
+    }
 
-	companion object {
-		const val IGNORE_DEFAULT_PARAMETERS = "ignoreDefaultParameters"
-		const val DEFAULT_ACCEPTED_PARAMETER_LENGTH = 6
-	}
+    companion object {
+        const val IGNORE_DEFAULT_PARAMETERS = "ignoreDefaultParameters"
+        const val DEFAULT_ACCEPTED_PARAMETER_LENGTH = 6
+    }
 }

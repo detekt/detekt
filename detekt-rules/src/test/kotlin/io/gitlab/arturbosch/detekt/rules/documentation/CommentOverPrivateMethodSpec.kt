@@ -11,39 +11,39 @@ import org.jetbrains.spek.subject.SubjectSpek
  * @author schalkms
  */
 class CommentOverPrivateMethodSpec : SubjectSpek<CommentOverPrivateFunction>({
-	subject { CommentOverPrivateFunction() }
+    subject { CommentOverPrivateFunction() }
 
-	given("some methods with comments") {
+    given("some methods with comments") {
 
-		it("reports private method with a comment") {
-			val code = """
+        it("reports private method with a comment") {
+            val code = """
     			class Test {
 					/**
 					 * asdf
 					 */
 					private fun f() {}
 				}"""
-			assertThat(subject.compileAndLint(code)).hasSize(1)
-		}
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
 
-		it("does not report public method with a comment") {
-			val code = """
+        it("does not report public method with a comment") {
+            val code = """
 				/**
 				 * asdf
 				 */
 				fun f() {}"""
-			assertThat(subject.compileAndLint(code)).hasSize(0)
-		}
+            assertThat(subject.compileAndLint(code)).hasSize(0)
+        }
 
-		it("does not report public method in a class with a comment") {
-			val code = """
+        it("does not report public method in a class with a comment") {
+            val code = """
     			class Test {
 					/**
 					 * asdf
 					 */
 					fun f() {}
 				}"""
-			assertThat(subject.compileAndLint(code)).hasSize(0)
-		}
-	}
+            assertThat(subject.compileAndLint(code)).hasSize(0)
+        }
+    }
 })

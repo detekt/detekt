@@ -17,88 +17,88 @@ import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
  * @author Artur Bosch
  */
 data class RuleSetProvider(
-		val name: String,
-		val description: String,
-		val active: Boolean,
-		val rules: List<String> = listOf(),
-		val configuration: List<Configuration> = listOf()
+    val name: String,
+    val description: String,
+    val active: Boolean,
+    val rules: List<String> = listOf(),
+    val configuration: List<Configuration> = listOf()
 )
 
 class RuleSetProviderCollector : Collector<RuleSetProvider> {
-	override val items = mutableListOf<RuleSetProvider>()
+    override val items = mutableListOf<RuleSetProvider>()
 
-	override fun visit(file: KtFile) {
-		val visitor = RuleSetProviderVisitor()
-		file.accept(visitor)
+    override fun visit(file: KtFile) {
+        val visitor = RuleSetProviderVisitor()
+        file.accept(visitor)
 
-		if (visitor.containsRuleSetProvider) {
-			items.add(visitor.getRuleSetProvider())
-		}
-	}
+        if (visitor.containsRuleSetProvider) {
+            items.add(visitor.getRuleSetProvider())
+        }
+    }
 }
 
 private const val TAG_ACTIVE = "active"
 private const val PROPERTY_RULE_SET_ID = "ruleSetId"
 
 class RuleSetProviderVisitor : DetektVisitor() {
-	var containsRuleSetProvider = false
-	private var name: String = ""
-	private var description: String = ""
-	private var active: Boolean = false
-	private val ruleNames: MutableList<String> = mutableListOf()
-	private val configuration = mutableListOf<Configuration>()
+    var containsRuleSetProvider = false
+    private var name: String = ""
+    private var description: String = ""
+    private var active: Boolean = false
+    private val ruleNames: MutableList<String> = mutableListOf()
+    private val configuration = mutableListOf<Configuration>()
 
-	fun getRuleSetProvider(): RuleSetProvider {
-		if (name.isEmpty()) {
-			throw InvalidDocumentationException("RuleSetProvider without name found.")
-		}
+    fun getRuleSetProvider(): RuleSetProvider {
+        if (name.isEmpty()) {
+            throw InvalidDocumentationException("RuleSetProvider without name found.")
+        }
 
-		if (description.isEmpty()) {
-			throw InvalidDocumentationException("Missing description for RuleSet $name.")
-		}
+        if (description.isEmpty()) {
+            throw InvalidDocumentationException("Missing description for RuleSet $name.")
+        }
 
-		return RuleSetProvider(name, description, active, ruleNames, configuration)
-	}
+        return RuleSetProvider(name, description, active, ruleNames, configuration)
+    }
 
-	override fun visitSuperTypeList(list: KtSuperTypeList) {
-		containsRuleSetProvider = list.entries
-				?.map { it.typeAsUserType?.referencedName }
-				?.contains(RuleSetProvider::class.simpleName) ?: false
-		super.visitSuperTypeList(list)
-	}
+    override fun visitSuperTypeList(list: KtSuperTypeList) {
+        containsRuleSetProvider = list.entries
+                ?.map { it.typeAsUserType?.referencedName }
+                ?.contains(RuleSetProvider::class.simpleName) ?: false
+        super.visitSuperTypeList(list)
+    }
 
-	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-		description = classOrObject.docComment?.getDefaultSection()?.getContent()?.trim() ?: ""
-		active = classOrObject.docComment?.getDefaultSection()?.findTagByName(TAG_ACTIVE) != null
-		configuration.addAll(classOrObject.parseConfigurationTags())
-		super.visitClassOrObject(classOrObject)
-	}
+    override fun visitClassOrObject(classOrObject: KtClassOrObject) {
+        description = classOrObject.docComment?.getDefaultSection()?.getContent()?.trim() ?: ""
+        active = classOrObject.docComment?.getDefaultSection()?.findTagByName(TAG_ACTIVE) != null
+        configuration.addAll(classOrObject.parseConfigurationTags())
+        super.visitClassOrObject(classOrObject)
+    }
 
-	override fun visitProperty(property: KtProperty) {
-		super.visitProperty(property)
-		if (property.isOverride() && property.name != null && property.name == PROPERTY_RULE_SET_ID) {
-			name = (property.initializer as? KtStringTemplateExpression)?.entries?.get(0)?.text
-					?: throw InvalidDocumentationException("RuleSetProvider class " +
-					"${property.containingClass()?.name ?: ""} doesn't provide list of rules.")
-		}
-	}
+    override fun visitProperty(property: KtProperty) {
+        super.visitProperty(property)
+        if (property.isOverride() && property.name != null && property.name == PROPERTY_RULE_SET_ID) {
+            name = (property.initializer as? KtStringTemplateExpression)?.entries?.get(0)?.text
+                ?: throw InvalidDocumentationException("RuleSetProvider class " +
+                        "${property.containingClass()?.name ?: ""} doesn't provide list of rules.")
+        }
+    }
 
-	override fun visitCallExpression(expression: KtCallExpression) {
-		super.visitCallExpression(expression)
+    override fun visitCallExpression(expression: KtCallExpression) {
+        super.visitCallExpression(expression)
 
-		if (expression.calleeExpression?.text == "RuleSet") {
-			val ruleListExpression = expression.valueArguments
-					.map { it.getArgumentExpression() }
-					.firstOrNull { it?.referenceExpression()?.text == "listOf" }
-					?: throw InvalidDocumentationException("RuleSetProvider $name doesn't provide list of rules.")
+        if (expression.calleeExpression?.text == "RuleSet") {
+            val ruleListExpression = expression.valueArguments
+                    .map { it.getArgumentExpression() }
+                    .firstOrNull { it?.referenceExpression()?.text == "listOf" }
+                ?: throw InvalidDocumentationException("RuleSetProvider $name doesn't provide list of rules.")
 
-			val ruleArgumentNames = (ruleListExpression as? KtCallExpression)
-					?.valueArguments
-					?.map { it.getArgumentExpression() }
-					?.mapNotNull { it?.referenceExpression()?.text }
-					?: emptyList()
+            val ruleArgumentNames = (ruleListExpression as? KtCallExpression)
+                    ?.valueArguments
+                    ?.map { it.getArgumentExpression() }
+                    ?.mapNotNull { it?.referenceExpression()?.text }
+                ?: emptyList()
 
-			ruleNames.addAll(ruleArgumentNames)
-		}
-	}
+            ruleNames.addAll(ruleArgumentNames)
+        }
+    }
 }

@@ -13,25 +13,26 @@ import org.jetbrains.kotlin.psi.KtFile
  * @author schalkms
  */
 class AnnotationExcluder(
-		root: KtFile,
-		private val excludes: SplitPattern) {
+    root: KtFile,
+    private val excludes: SplitPattern
+) {
 
-	private var resolvedAnnotations = root.importList
-			?.imports
-			?.asSequence()
-			?.filterNot { it.isAllUnder }
-			?.mapNotNull { it.importedFqName?.asString() }
-			?.map { Pair(it.substringAfterLast('.'), it) }
-			?.toMap()
+    private var resolvedAnnotations = root.importList
+            ?.imports
+            ?.asSequence()
+            ?.filterNot { it.isAllUnder }
+            ?.mapNotNull { it.importedFqName?.asString() }
+            ?.map { Pair(it.substringAfterLast('.'), it) }
+            ?.toMap()
 
-	/**
-	 * Is true if any given annotation name is declared in the SplitPattern
-	 * which basically describes entries to exclude.
-	 */
-	fun shouldExclude(annotations: List<KtAnnotationEntry>) =
-			annotations.firstOrNull(::isExcluded) != null
+    /**
+     * Is true if any given annotation name is declared in the SplitPattern
+     * which basically describes entries to exclude.
+     */
+    fun shouldExclude(annotations: List<KtAnnotationEntry>) =
+            annotations.firstOrNull(::isExcluded) != null
 
-	private fun isExcluded(annotation: KtAnnotationEntry): Boolean =
-			resolvedAnnotations?.get(annotation.typeReference?.text)
-					?.let { excludes.contains(it) } ?: false
+    private fun isExcluded(annotation: KtAnnotationEntry): Boolean =
+            resolvedAnnotations?.get(annotation.typeReference?.text)
+                    ?.let { excludes.contains(it) } ?: false
 }

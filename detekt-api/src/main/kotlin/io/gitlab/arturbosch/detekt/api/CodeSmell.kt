@@ -13,31 +13,32 @@ package io.gitlab.arturbosch.detekt.api
  * @author Artur Bosch
  * @author Marvin Ramin
  */
-open class CodeSmell(final override val issue: Issue,
-					 override val entity: Entity,
-					 override val message: String,
-					 override val metrics: List<Metric> = listOf(),
-					 override val references: List<Entity> = listOf()) : Finding {
+open class CodeSmell(
+    final override val issue: Issue,
+    override val entity: Entity,
+    override val message: String,
+    override val metrics: List<Metric> = listOf(),
+    override val references: List<Entity> = listOf()) : Finding {
 
-	override val id: String = issue.id
+    override val id: String = issue.id
 
-	override fun compact(): String = "$id - ${entity.compact()}"
+    override fun compact(): String = "$id - ${entity.compact()}"
 
-	override fun compactWithSignature() = compact() + " - Signature=" + entity.signature
+    override fun compactWithSignature() = compact() + " - Signature=" + entity.signature
 
-	override fun toString(): String {
-		return "CodeSmell(issue=$issue, " +
-				"entity=$entity, " +
-				"message=$message, " +
-				"metrics=$metrics, " +
-				"references=$references, " +
-				"id='$id')"
-	}
+    override fun toString(): String {
+        return "CodeSmell(issue=$issue, " +
+                "entity=$entity, " +
+                "message=$message, " +
+                "metrics=$metrics, " +
+                "references=$references, " +
+                "id='$id')"
+    }
 
-	override fun messageOrDescription() = when {
-		message.isEmpty() -> issue.description
-		else -> message
-	}
+    override fun messageOrDescription() = when {
+        message.isEmpty() -> issue.description
+        else -> message
+    }
 }
 
 /**
@@ -45,24 +46,24 @@ open class CodeSmell(final override val issue: Issue,
  * for the existence of this rule violation.
  */
 open class ThresholdedCodeSmell(
-		issue: Issue,
-		entity: Entity,
-		val metric: Metric,
-		message: String,
-		references: List<Entity> = emptyList()
+    issue: Issue,
+    entity: Entity,
+    val metric: Metric,
+    message: String,
+    references: List<Entity> = emptyList()
 ) : CodeSmell(
-		issue, entity, message, metrics = listOf(metric), references = references
+        issue, entity, message, metrics = listOf(metric), references = references
 ) {
 
-	val value: Int
-		get() = metric.value
-	val threshold: Int
-		get() = metric.threshold
+    val value: Int
+        get() = metric.value
+    val threshold: Int
+        get() = metric.threshold
 
-	override fun compact(): String = "$id - $metric - ${entity.compact()}"
+    override fun compact(): String = "$id - $metric - ${entity.compact()}"
 
-	override fun messageOrDescription() = when {
-		message.isEmpty() -> issue.description
-		else -> message
-	}
+    override fun messageOrDescription() = when {
+        message.isEmpty() -> issue.description
+        else -> message
+    }
 }

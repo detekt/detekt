@@ -4,22 +4,22 @@ package cases
 
 internal class NestedClassVisibilityNegative {
 
-	// enums with public visibility are excluded
-	enum class NestedEnum { One, Two }
+    // enums with public visibility are excluded
+    enum class NestedEnum { One, Two }
 
-	private interface PrivateTest
-	internal interface InternalTest
+    private interface PrivateTest
+    internal interface InternalTest
 
-	// should not detect companion object
-	companion object C
+    // should not detect companion object
+    companion object C
 }
 
 private class PrivateClassWithNestedElements {
 
-	class Inner
+    class Inner
 }
 
 internal interface IgnoreNestedClassInInterface {
 
-	class Nested
+    class Nested
 }

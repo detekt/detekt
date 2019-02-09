@@ -9,18 +9,18 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
 class ProtectedMemberInFinalClassSpec : SubjectSpek<ProtectedMemberInFinalClass>({
-	subject { ProtectedMemberInFinalClass(Config.empty) }
+    subject { ProtectedMemberInFinalClass(Config.empty) }
 
-	describe("check all variants of protected visibility modifier in final class") {
+    describe("check all variants of protected visibility modifier in final class") {
 
-		it("reports protected visibility") {
-			val path = Case.FinalClassPositive.path()
-			assertThat(subject.lint(path)).hasSize(13)
-		}
+        it("reports protected visibility") {
+            val path = Case.FinalClassPositive.path()
+            assertThat(subject.lint(path)).hasSize(13)
+        }
 
-		it("does not report protected visibility") {
-			val path = Case.FinalClassNegative.path()
-			assertThat(subject.lint(path)).hasSize(0)
-		}
-	}
+        it("does not report protected visibility") {
+            val path = Case.FinalClassNegative.path()
+            assertThat(subject.lint(path)).hasSize(0)
+        }
+    }
 })

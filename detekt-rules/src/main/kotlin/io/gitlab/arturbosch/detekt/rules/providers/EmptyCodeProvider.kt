@@ -14,11 +14,11 @@ import io.gitlab.arturbosch.detekt.rules.empty.EmptyBlocks
  */
 class EmptyCodeProvider : RuleSetProvider {
 
-	override val ruleSetId: String = "empty-blocks"
+    override val ruleSetId: String = "empty-blocks"
 
-	override fun instance(config: Config): RuleSet {
-		return RuleSet(ruleSetId, listOf(
-				EmptyBlocks(config)
-		))
-	}
+    override fun instance(config: Config): RuleSet {
+        return RuleSet(ruleSetId, listOf(
+                EmptyBlocks(config)
+        ))
+    }
 }

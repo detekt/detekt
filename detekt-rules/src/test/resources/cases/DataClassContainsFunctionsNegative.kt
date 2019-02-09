@@ -6,21 +6,21 @@ data class ValidDataClass(val i: Int)
 
 data class DataClassWithOverriddenMethods(val i: Int) {
 
-	override fun hashCode(): Int {
-		return super.hashCode()
-	}
+    override fun hashCode(): Int {
+        return super.hashCode()
+    }
 
-	override fun equals(other: Any?): Boolean {
-		return super.equals(other)
-	}
+    override fun equals(other: Any?): Boolean {
+        return super.equals(other)
+    }
 
-	override fun toString(): String {
-		return super.toString()
-	}
+    override fun toString(): String {
+        return super.toString()
+    }
 }
 
 class ClassWithRegularFunctions {
 
-	fun f1() {}
-	fun f2() {}
+    fun f1() {}
+    fun f2() {}
 }

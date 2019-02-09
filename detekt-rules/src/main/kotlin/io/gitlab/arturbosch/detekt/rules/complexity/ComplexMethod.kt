@@ -30,51 +30,53 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  * @author Marvin Ramin
  * @author schalkms
  */
-class ComplexMethod(config: Config = Config.empty,
-					threshold: Int = DEFAULT_ACCEPTED_METHOD_COMPLEXITY) : ThresholdRule(config, threshold) {
+class ComplexMethod(
+    config: Config = Config.empty,
+    threshold: Int = DEFAULT_ACCEPTED_METHOD_COMPLEXITY
+) : ThresholdRule(config, threshold) {
 
-	override val issue = Issue("ComplexMethod",
-			Severity.Maintainability,
-			"Prefer splitting up complex methods into smaller, easier to understand methods.",
-			Debt.TWENTY_MINS)
+    override val issue = Issue("ComplexMethod",
+            Severity.Maintainability,
+            "Prefer splitting up complex methods into smaller, easier to understand methods.",
+            Debt.TWENTY_MINS)
 
-	private val ignoreSingleWhenExpression = valueOrDefault(IGNORE_SINGLE_WHEN_EXPRESSION, false)
-	private val ignoreSimpleWhenEntries = valueOrDefault(IGNORE_SIMPLE_WHEN_ENTRIES, false)
+    private val ignoreSingleWhenExpression = valueOrDefault(IGNORE_SINGLE_WHEN_EXPRESSION, false)
+    private val ignoreSimpleWhenEntries = valueOrDefault(IGNORE_SIMPLE_WHEN_ENTRIES, false)
 
-	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (hasSingleWhenExpression(function.bodyExpression)) {
-			return
-		}
-		val visitor = McCabeVisitor(ignoreSimpleWhenEntries)
-		visitor.visitNamedFunction(function)
-		val mcc = visitor.mcc
-		if (mcc >= threshold) {
-			report(ThresholdedCodeSmell(issue,
-					Entity.from(function),
-					Metric("MCC", mcc, threshold),
-					"The function ${function.nameAsSafeName} appears to be too complex."))
-		}
-	}
+    override fun visitNamedFunction(function: KtNamedFunction) {
+        if (hasSingleWhenExpression(function.bodyExpression)) {
+            return
+        }
+        val visitor = McCabeVisitor(ignoreSimpleWhenEntries)
+        visitor.visitNamedFunction(function)
+        val mcc = visitor.mcc
+        if (mcc >= threshold) {
+            report(ThresholdedCodeSmell(issue,
+                    Entity.from(function),
+                    Metric("MCC", mcc, threshold),
+                    "The function ${function.nameAsSafeName} appears to be too complex."))
+        }
+    }
 
-	private fun hasSingleWhenExpression(bodyExpression: KtExpression?): Boolean {
-		if (ignoreSingleWhenExpression) {
-			return when {
-				bodyExpression is KtBlockExpression && bodyExpression.statements.size == 1 -> {
-					val statement = bodyExpression.statements.single()
-					statement is KtWhenExpression ||
-							(statement is KtReturnExpression && statement.returnedExpression is KtWhenExpression)
-				}
-				// the case where function-expression syntax is used: `fun test() = when { ... }`
-				bodyExpression is KtWhenExpression -> true
-				else -> false
-			}
-		}
-		return false
-	}
+    private fun hasSingleWhenExpression(bodyExpression: KtExpression?): Boolean {
+        if (ignoreSingleWhenExpression) {
+            return when {
+                bodyExpression is KtBlockExpression && bodyExpression.statements.size == 1 -> {
+                    val statement = bodyExpression.statements.single()
+                    statement is KtWhenExpression ||
+                            (statement is KtReturnExpression && statement.returnedExpression is KtWhenExpression)
+                }
+                // the case where function-expression syntax is used: `fun test() = when { ... }`
+                bodyExpression is KtWhenExpression -> true
+                else -> false
+            }
+        }
+        return false
+    }
 
-	companion object {
-		const val DEFAULT_ACCEPTED_METHOD_COMPLEXITY = 10
-		const val IGNORE_SINGLE_WHEN_EXPRESSION = "ignoreSingleWhenExpression"
-		const val IGNORE_SIMPLE_WHEN_ENTRIES = "ignoreSimpleWhenEntries"
-	}
+    companion object {
+        const val DEFAULT_ACCEPTED_METHOD_COMPLEXITY = 10
+        const val IGNORE_SINGLE_WHEN_EXPRESSION = "ignoreSingleWhenExpression"
+        const val IGNORE_SIMPLE_WHEN_ENTRIES = "ignoreSimpleWhenEntries"
+    }
 }

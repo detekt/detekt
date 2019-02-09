@@ -5,21 +5,21 @@ package cases
 import java.io.Serializable
 
 class CorrectSerializable1 : Serializable {
-	companion object {
-		const val serialVersionUID = 1L
-	}
+    companion object {
+        const val serialVersionUID = 1L
+    }
 }
 
 class CorrectSerializable2 : Serializable {
-	companion object {
-		const val serialVersionUID: Long = 1
-	}
+    companion object {
+        const val serialVersionUID: Long = 1
+    }
 }
 
 class CorrectSerializable3 : Serializable {
-	companion object {
-		const val serialVersionUID = -1L
-	}
+    companion object {
+        const val serialVersionUID = -1L
+    }
 }
 
 class NoSerializableClass

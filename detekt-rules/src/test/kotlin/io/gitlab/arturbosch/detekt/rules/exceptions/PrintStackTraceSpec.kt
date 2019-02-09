@@ -7,23 +7,23 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
 class PrintStackTraceSpec : SubjectSpek<PrintStackTrace>({
-	subject { PrintStackTrace() }
+    subject { PrintStackTrace() }
 
-	given("catch clauses with printStacktrace methods") {
+    given("catch clauses with printStacktrace methods") {
 
-		it("prints a stacktrace") {
-			val code = """
+        it("prints a stacktrace") {
+            val code = """
 				fun x() {
 					try {
 					} catch (e: Exception) {
 						e.printStackTrace()
 					}
 				}"""
-			assertThat(subject.lint(code)).hasSize(1)
-		}
+            assertThat(subject.lint(code)).hasSize(1)
+        }
 
-		it("does not print a stacktrace") {
-			val code = """
+        it("does not print a stacktrace") {
+            val code = """
 				fun x() {
 					try {
 					} catch (e: Exception) {
@@ -32,19 +32,19 @@ class PrintStackTraceSpec : SubjectSpek<PrintStackTrace>({
 						printStackTrace()
 					}
 				}"""
-			assertThat(subject.lint(code)).hasSize(0)
-		}
-	}
+            assertThat(subject.lint(code)).hasSize(0)
+        }
+    }
 
-	given("a stacktrace printed by a thread") {
+    given("a stacktrace printed by a thread") {
 
-		it("prints one") {
-			val code = """
+        it("prints one") {
+            val code = """
 				fun x() {
 					Thread.dumpStack()
 					Foo.dumpStack()
 				}"""
-			assertThat(subject.lint(code)).hasSize(1)
-		}
-	}
+            assertThat(subject.lint(code)).hasSize(1)
+        }
+    }
 })

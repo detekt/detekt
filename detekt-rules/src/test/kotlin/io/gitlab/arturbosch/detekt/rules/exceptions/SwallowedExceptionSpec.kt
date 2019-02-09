@@ -12,22 +12,22 @@ import org.jetbrains.spek.subject.SubjectSpek
  * @author schalkms
  */
 class SwallowedExceptionSpec : SubjectSpek<SwallowedException>({
-	subject { SwallowedException() }
+    subject { SwallowedException() }
 
-	given("several catch blocks") {
+    given("several catch blocks") {
 
-		it("reports swallowed exceptions") {
-			assertThat(subject.lint(Case.SwallowedExceptionPositive.path())).hasSize(5)
-		}
+        it("reports swallowed exceptions") {
+            assertThat(subject.lint(Case.SwallowedExceptionPositive.path())).hasSize(5)
+        }
 
-		it("ignores given exception types in configuration") {
-			val config = TestConfig(mapOf(SwallowedException.IGNORED_EXCEPTION_TYPES to "IOException"))
-			val rule = SwallowedException(config)
-			assertThat(rule.lint(Case.SwallowedExceptionPositive.path())).hasSize(4)
-		}
+        it("ignores given exception types in configuration") {
+            val config = TestConfig(mapOf(SwallowedException.IGNORED_EXCEPTION_TYPES to "IOException"))
+            val rule = SwallowedException(config)
+            assertThat(rule.lint(Case.SwallowedExceptionPositive.path())).hasSize(4)
+        }
 
-		it("does not report thrown catch blocks") {
-			assertThat(subject.lint(Case.SwallowedExceptionNegative.path())).hasSize(0)
-		}
-	}
+        it("does not report thrown catch blocks") {
+            assertThat(subject.lint(Case.SwallowedExceptionNegative.path())).hasSize(0)
+        }
+    }
 })

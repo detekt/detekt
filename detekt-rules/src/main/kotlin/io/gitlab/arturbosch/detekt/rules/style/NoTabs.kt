@@ -26,34 +26,34 @@ import org.jetbrains.kotlin.psi.KtStringTemplateEntryWithExpression
  */
 class NoTabs(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName,
-			Severity.Style,
-			"Checks if tabs are used in Kotlin files.",
-			Debt.FIVE_MINS)
+    override val issue = Issue(javaClass.simpleName,
+            Severity.Style,
+            "Checks if tabs are used in Kotlin files.",
+            Debt.FIVE_MINS)
 
-	fun findTabs(file: KtFile) {
-		file.collectWhitespaces()
-				.filter { it.isTab() }
-				.forEach { report(CodeSmell(issue, Entity.from(it), "Tab character is in use.")) }
-	}
+    fun findTabs(file: KtFile) {
+        file.collectWhitespaces()
+                .filter { it.isTab() }
+                .forEach { report(CodeSmell(issue, Entity.from(it), "Tab character is in use.")) }
+    }
 
-	private fun KtFile.collectWhitespaces(): List<PsiWhiteSpace> {
-		val list = mutableListOf<PsiWhiteSpace>()
-		this.accept(object : DetektVisitor() {
-			override fun visitWhiteSpace(space: PsiWhiteSpace?) {
-				if (space != null) {
-					list.add(space)
-				}
-				super.visitWhiteSpace(space)
-			}
-		})
-		return list
-	}
+    private fun KtFile.collectWhitespaces(): List<PsiWhiteSpace> {
+        val list = mutableListOf<PsiWhiteSpace>()
+        this.accept(object : DetektVisitor() {
+            override fun visitWhiteSpace(space: PsiWhiteSpace?) {
+                if (space != null) {
+                    list.add(space)
+                }
+                super.visitWhiteSpace(space)
+            }
+        })
+        return list
+    }
 
-	private fun PsiWhiteSpace.isTab(): Boolean {
-		return (!isPartOfString() || isStringInterpolated()) && text.contains('\t')
-	}
+    private fun PsiWhiteSpace.isTab(): Boolean {
+        return (!isPartOfString() || isStringInterpolated()) && text.contains('\t')
+    }
 
-	private fun PsiWhiteSpace.isStringInterpolated(): Boolean =
-			this.isPartOf(KtStringTemplateEntryWithExpression::class)
+    private fun PsiWhiteSpace.isStringInterpolated(): Boolean =
+            this.isPartOf(KtStringTemplateEntryWithExpression::class)
 }

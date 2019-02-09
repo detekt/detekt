@@ -49,26 +49,26 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  */
 class MatchingDeclarationName(config: Config = Config.empty) : Rule(config) {
 
-	override val issue: Issue = Issue(javaClass.simpleName, Severity.Style,
-			"If a source file contains only a single non-private top-level class or object, " +
-					"the file name should reflect the case-sensitive name plus the .kt extension.",
-			Debt.FIVE_MINS)
+    override val issue: Issue = Issue(javaClass.simpleName, Severity.Style,
+            "If a source file contains only a single non-private top-level class or object, " +
+                    "the file name should reflect the case-sensitive name plus the .kt extension.",
+            Debt.FIVE_MINS)
 
-	override fun visitKtFile(file: KtFile) {
-		val declarations = file.declarations
-				.filterIsInstance<KtClassOrObject>()
-				.filterNot { it.isPrivate() }
-		if (declarations.size == 1) {
-			val declaration = declarations[0] as? KtClassOrObject
-			val declarationName = declaration?.name ?: return
-			val filename = file.name.removeSuffix(KOTLIN_SUFFIX)
-			if (declarationName != filename &&
-					file.declarations.filterIsInstance<KtTypeAlias>().all { it.name != filename }) {
-				report(CodeSmell(issue, Entity.from(file), "The file name '${file.name}' " +
-						"does not match the name of the single top-level declaration '$declarationName'."))
-			}
-		}
-	}
+    override fun visitKtFile(file: KtFile) {
+        val declarations = file.declarations
+                .filterIsInstance<KtClassOrObject>()
+                .filterNot { it.isPrivate() }
+        if (declarations.size == 1) {
+            val declaration = declarations[0] as? KtClassOrObject
+            val declarationName = declaration?.name ?: return
+            val filename = file.name.removeSuffix(KOTLIN_SUFFIX)
+            if (declarationName != filename &&
+                    file.declarations.filterIsInstance<KtTypeAlias>().all { it.name != filename }) {
+                report(CodeSmell(issue, Entity.from(file), "The file name '${file.name}' " +
+                        "does not match the name of the single top-level declaration '$declarationName'."))
+            }
+        }
+    }
 }
 
 private const val KOTLIN_SUFFIX = ".kt"

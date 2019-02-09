@@ -10,21 +10,21 @@ import java.io.InputStreamReader
  * @author Marvin Ramin
  */
 object ProcessExecutor {
-	fun startProcess(args: Array<String>, debug: Boolean = false) {
-		val process = Runtime.getRuntime().exec(args)
+    fun startProcess(args: Array<String>, debug: Boolean = false) {
+        val process = Runtime.getRuntime().exec(args)
 
-		BufferedReader(InputStreamReader(BufferedInputStream(process.inputStream))).use {
-			val inputs = it.readLines().joinToString("\n")
-			if (debug) println(inputs)
-		}
+        BufferedReader(InputStreamReader(BufferedInputStream(process.inputStream))).use {
+            val inputs = it.readLines().joinToString("\n")
+            if (debug) println(inputs)
+        }
 
-		BufferedReader(InputStreamReader(BufferedInputStream(process.errorStream))).use {
-			val errors = it.readLines().joinToString("\n")
-			if (errors.isNotEmpty()) {
-				throw BuildFailure(errors)
-			}
-		}
+        BufferedReader(InputStreamReader(BufferedInputStream(process.errorStream))).use {
+            val errors = it.readLines().joinToString("\n")
+            if (errors.isNotEmpty()) {
+                throw BuildFailure(errors)
+            }
+        }
 
-		process.destroy()
-	}
+        process.destroy()
+    }
 }

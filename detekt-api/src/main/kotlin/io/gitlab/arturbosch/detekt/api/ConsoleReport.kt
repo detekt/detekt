@@ -13,11 +13,11 @@ import java.io.PrintStream
  */
 abstract class ConsoleReport : Extension {
 
-	fun print(printer: PrintStream, detektion: Detektion) {
-		render(detektion)?.let {
-			printer.println(it)
-		}
-	}
+    fun print(printer: PrintStream, detektion: Detektion) {
+        render(detektion)?.let {
+            printer.println(it)
+        }
+    }
 
-	abstract fun render(detektion: Detektion): String?
+    abstract fun render(detektion: Detektion): String?
 }

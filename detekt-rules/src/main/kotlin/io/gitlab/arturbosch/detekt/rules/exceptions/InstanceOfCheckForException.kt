@@ -45,24 +45,24 @@ import org.jetbrains.kotlin.psi.KtPsiUtil
  */
 class InstanceOfCheckForException(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue("InstanceOfCheckForException", Severity.CodeSmell,
-			"Instead of checking for a general exception type and checking for a specific exception type " +
-					"use multiple catch blocks.",
-			Debt.TWENTY_MINS)
+    override val issue = Issue("InstanceOfCheckForException", Severity.CodeSmell,
+            "Instead of checking for a general exception type and checking for a specific exception type " +
+                    "use multiple catch blocks.",
+            Debt.TWENTY_MINS)
 
-	override fun visitCatchSection(catchClause: KtCatchClause) {
-		catchClause.catchBody?.collectByType<KtIsExpression>()?.forEach {
-			if (isExceptionReferenced(it.leftHandSide, catchClause)) {
-				report(CodeSmell(issue, Entity.from(it), issue.description))
-			}
-		}
-		catchClause.catchBody?.collectByType<KtBinaryExpressionWithTypeRHS>()?.forEach {
-			if (KtPsiUtil.isUnsafeCast(it) && isExceptionReferenced(it.left, catchClause)) {
-				report(CodeSmell(issue, Entity.from(it), issue.description))
-			}
-		}
-	}
+    override fun visitCatchSection(catchClause: KtCatchClause) {
+        catchClause.catchBody?.collectByType<KtIsExpression>()?.forEach {
+            if (isExceptionReferenced(it.leftHandSide, catchClause)) {
+                report(CodeSmell(issue, Entity.from(it), issue.description))
+            }
+        }
+        catchClause.catchBody?.collectByType<KtBinaryExpressionWithTypeRHS>()?.forEach {
+            if (KtPsiUtil.isUnsafeCast(it) && isExceptionReferenced(it.left, catchClause)) {
+                report(CodeSmell(issue, Entity.from(it), issue.description))
+            }
+        }
+    }
 
-	private fun isExceptionReferenced(expression: KtExpression, catchClause: KtCatchClause) =
-			expression is KtNameReferenceExpression && expression.text == catchClause.catchParameter?.name
+    private fun isExceptionReferenced(expression: KtExpression, catchClause: KtCatchClause) =
+            expression is KtNameReferenceExpression && expression.text == catchClause.catchParameter?.name
 }

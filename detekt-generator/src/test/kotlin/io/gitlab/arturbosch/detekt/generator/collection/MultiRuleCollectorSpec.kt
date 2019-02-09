@@ -10,48 +10,48 @@ import org.jetbrains.spek.subject.SubjectSpek
 
 class MultiRuleCollectorSpec : SubjectSpek<MultiRuleCollector>({
 
-	subject { MultiRuleCollector() }
+    subject { MultiRuleCollector() }
 
-	describe("a MultiRuleCollector") {
+    describe("a MultiRuleCollector") {
 
-		it("collects no multirule when no class is extended") {
-			val code = """
+        it("collects no multirule when no class is extended") {
+            val code = """
 				package foo
 
 				class SomeRandomClass {
 				}
 			"""
-			val items = subject.run(code)
-			assertThat(items).isEmpty()
-		}
+            val items = subject.run(code)
+            assertThat(items).isEmpty()
+        }
 
-		it("collects no rules when no multirule class is extended") {
-			val code = """
+        it("collects no rules when no multirule class is extended") {
+            val code = """
 				package foo
 
 				class SomeRandomClass: SomeOtherClass {
 				}
 			"""
-			val items = subject.run(code)
-			assertThat(items).isEmpty()
-		}
+            val items = subject.run(code)
+            assertThat(items).isEmpty()
+        }
 
-		it("throws when no rules are added") {
-			val name = "SomeRandomClass"
-			val code = """
+        it("throws when no rules are added") {
+            val name = "SomeRandomClass"
+            val code = """
 				package foo
 
 				class $name: MultiRule {
 				}
 			"""
-			assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy {
-				subject.run(code)
-			}
-		}
+            assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy {
+                subject.run(code)
+            }
+        }
 
-		it("collects all rules in fields and in the rule property") {
-			val name = "SomeRandomClass"
-			val code = """
+        it("collects all rules in fields and in the rule property") {
+            val name = "SomeRandomClass"
+            val code = """
 				package foo
 
 				class $name: MultiRule {
@@ -66,9 +66,9 @@ class MultiRuleCollectorSpec : SubjectSpek<MultiRuleCollector>({
 						)
 				}
 			"""
-			val items = subject.run(code)
-			assertThat(items[0].rules).hasSize(4)
-			assertThat(items[0].rules).contains("FirstRule", "SecondRule", "RuleOne", "RuleTwo")
-		}
-	}
+            val items = subject.run(code)
+            assertThat(items[0].rules).hasSize(4)
+            assertThat(items[0].rules).contains("FirstRule", "SecondRule", "RuleOne", "RuleTwo")
+        }
+    }
 })

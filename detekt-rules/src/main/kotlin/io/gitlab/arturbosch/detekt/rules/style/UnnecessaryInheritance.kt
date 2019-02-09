@@ -24,19 +24,19 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
  */
 class UnnecessaryInheritance(config: Config = Config.empty) : Rule(config) {
 
-	override val issue: Issue = Issue(javaClass.simpleName, Severity.Style,
-			"The extended super type is unnecessary.", Debt.FIVE_MINS)
+    override val issue: Issue = Issue(javaClass.simpleName, Severity.Style,
+            "The extended super type is unnecessary.", Debt.FIVE_MINS)
 
-	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-		for (superEntry in classOrObject.superTypeListEntries) {
-			when (superEntry.text) {
-				"Any()" -> report(classOrObject, "Unnecessary inheritance of 'Any'.")
-				"Object()" -> report(classOrObject, "Unnecessary inheritance of 'Object'.")
-			}
-		}
-	}
+    override fun visitClassOrObject(classOrObject: KtClassOrObject) {
+        for (superEntry in classOrObject.superTypeListEntries) {
+            when (superEntry.text) {
+                "Any()" -> report(classOrObject, "Unnecessary inheritance of 'Any'.")
+                "Object()" -> report(classOrObject, "Unnecessary inheritance of 'Object'.")
+            }
+        }
+    }
 
-	private fun report(classOrObject: KtClassOrObject, message: String) {
-		report(CodeSmell(issue, Entity.from(classOrObject), message))
-	}
+    private fun report(classOrObject: KtClassOrObject, message: String) {
+        report(CodeSmell(issue, Entity.from(classOrObject), message))
+    }
 }

@@ -32,32 +32,32 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  */
 class DataClassContainsFunctions(config: Config = Config.empty) : Rule(config) {
 
-	override val issue: Issue = Issue("DataClassContainsFunctions",
-			Severity.Style,
-			"Data classes should mainly be used to store data and should not have any extra functions. " +
-					"(Compiler will automatically generate equals, toString and hashCode functions)",
-			Debt.TWENTY_MINS)
+    override val issue: Issue = Issue("DataClassContainsFunctions",
+            Severity.Style,
+            "Data classes should mainly be used to store data and should not have any extra functions. " +
+                    "(Compiler will automatically generate equals, toString and hashCode functions)",
+            Debt.TWENTY_MINS)
 
-	private val conversionFunctionPrefix = SplitPattern(valueOrDefault(CONVERSION_FUNCTION_PREFIX, ""))
+    private val conversionFunctionPrefix = SplitPattern(valueOrDefault(CONVERSION_FUNCTION_PREFIX, ""))
 
-	override fun visitClass(klass: KtClass) {
-		if (klass.isData()) {
-			klass.body?.declarations
-					?.filterIsInstance<KtNamedFunction>()
-					?.forEach { checkFunction(klass, it) }
-		}
-		super.visitClass(klass)
-	}
+    override fun visitClass(klass: KtClass) {
+        if (klass.isData()) {
+            klass.body?.declarations
+                    ?.filterIsInstance<KtNamedFunction>()
+                    ?.forEach { checkFunction(klass, it) }
+        }
+        super.visitClass(klass)
+    }
 
-	private fun checkFunction(klass: KtClass, function: KtNamedFunction) {
-		if (!function.isOverride() && !conversionFunctionPrefix.startWith(function.name)) {
-			report(CodeSmell(issue, Entity.from(function),
-					"The data class ${klass.name} contains functions which are not registered " +
-							"conversion functions. The offending method is called ${function.name}"))
-		}
-	}
+    private fun checkFunction(klass: KtClass, function: KtNamedFunction) {
+        if (!function.isOverride() && !conversionFunctionPrefix.startWith(function.name)) {
+            report(CodeSmell(issue, Entity.from(function),
+                    "The data class ${klass.name} contains functions which are not registered " +
+                            "conversion functions. The offending method is called ${function.name}"))
+        }
+    }
 
-	companion object {
-		const val CONVERSION_FUNCTION_PREFIX = "conversionFunctionPrefix"
-	}
+    companion object {
+        const val CONVERSION_FUNCTION_PREFIX = "conversionFunctionPrefix"
+    }
 }

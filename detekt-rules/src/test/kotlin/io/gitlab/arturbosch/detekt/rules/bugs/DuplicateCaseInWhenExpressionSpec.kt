@@ -11,12 +11,12 @@ import org.jetbrains.spek.subject.SubjectSpek
  * @author Artur Bosch
  */
 class DuplicateCaseInWhenExpressionSpec : SubjectSpek<DuplicateCaseInWhenExpression>({
-	subject { DuplicateCaseInWhenExpression(Config.empty) }
+    subject { DuplicateCaseInWhenExpression(Config.empty) }
 
-	given("several when expressions") {
+    given("several when expressions") {
 
-		it("reports duplicated label in when") {
-			val code = """
+        it("reports duplicated label in when") {
+            val code = """
 				fun f() {
 					when (1) {
 						1 -> println()
@@ -24,18 +24,18 @@ class DuplicateCaseInWhenExpressionSpec : SubjectSpek<DuplicateCaseInWhenExpress
 						else -> println()
 					}
 				}"""
-			assertThat(subject.lint(code)).hasSize(1)
-		}
+            assertThat(subject.lint(code)).hasSize(1)
+        }
 
-		it("does not report duplicated label in when") {
-			val code = """
+        it("does not report duplicated label in when") {
+            val code = """
 				fun f() {
 					when (1) {
 						1 -> println()
 						else -> println()
 					}
 				}"""
-			assertThat(subject.lint(code)).hasSize(0)
-		}
-	}
+            assertThat(subject.lint(code)).hasSize(0)
+        }
+    }
 })

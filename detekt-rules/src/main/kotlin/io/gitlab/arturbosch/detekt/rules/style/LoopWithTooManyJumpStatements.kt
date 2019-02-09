@@ -36,38 +36,38 @@ import org.jetbrains.kotlin.psi.KtLoopExpression
  */
 class LoopWithTooManyJumpStatements(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName, Severity.Style,
-			"The loop contains more than one break or continue statement. " +
-					"The code should be refactored to increase readability.", Debt.TEN_MINS)
+    override val issue = Issue(javaClass.simpleName, Severity.Style,
+            "The loop contains more than one break or continue statement. " +
+                    "The code should be refactored to increase readability.", Debt.TEN_MINS)
 
-	private val maxJumpCount = valueOrDefault(MAX_JUMP_COUNT, 1)
+    private val maxJumpCount = valueOrDefault(MAX_JUMP_COUNT, 1)
 
-	override fun visitLoopExpression(loopExpression: KtLoopExpression) {
-		if (countBreakAndReturnStatements(loopExpression.body) > maxJumpCount) {
-			report(CodeSmell(issue, Entity.from(loopExpression), issue.description))
-		}
-		super.visitLoopExpression(loopExpression)
-	}
+    override fun visitLoopExpression(loopExpression: KtLoopExpression) {
+        if (countBreakAndReturnStatements(loopExpression.body) > maxJumpCount) {
+            report(CodeSmell(issue, Entity.from(loopExpression), issue.description))
+        }
+        super.visitLoopExpression(loopExpression)
+    }
 
-	private fun countBreakAndReturnStatements(body: KtExpression?) = body?.countBreakAndReturnStatementsInLoop() ?: 0
+    private fun countBreakAndReturnStatements(body: KtExpression?) = body?.countBreakAndReturnStatementsInLoop() ?: 0
 
-	private fun KtElement.countBreakAndReturnStatementsInLoop(): Int {
-		var count = 0
-		this.accept(object : DetektVisitor() {
-			override fun visitKtElement(element: KtElement) {
-				if (element is KtLoopExpression) {
-					return
-				}
-				if (element is KtBreakExpression || element is KtContinueExpression) {
-					count++
-				}
-				element.children.forEach { it.accept(this) }
-			}
-		})
-		return count
-	}
+    private fun KtElement.countBreakAndReturnStatementsInLoop(): Int {
+        var count = 0
+        this.accept(object : DetektVisitor() {
+            override fun visitKtElement(element: KtElement) {
+                if (element is KtLoopExpression) {
+                    return
+                }
+                if (element is KtBreakExpression || element is KtContinueExpression) {
+                    count++
+                }
+                element.children.forEach { it.accept(this) }
+            }
+        })
+        return count
+    }
 
-	companion object {
-		const val MAX_JUMP_COUNT = "maxJumpCount"
-	}
+    companion object {
+        const val MAX_JUMP_COUNT = "maxJumpCount"
+    }
 }

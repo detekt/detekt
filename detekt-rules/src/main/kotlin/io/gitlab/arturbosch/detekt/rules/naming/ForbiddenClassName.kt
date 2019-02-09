@@ -20,25 +20,25 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
  */
 class ForbiddenClassName(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName, Severity.Style,
-			"Forbidden class name as per configuration detected.",
-			Debt.FIVE_MINS)
-	private val forbiddenNames = SplitPattern(valueOrDefault(FORBIDDEN_NAME, ""))
+    override val issue = Issue(javaClass.simpleName, Severity.Style,
+            "Forbidden class name as per configuration detected.",
+            Debt.FIVE_MINS)
+    private val forbiddenNames = SplitPattern(valueOrDefault(FORBIDDEN_NAME, ""))
 
-	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-		val name = classOrObject.name ?: ""
-		val forbiddenEntries = forbiddenNames.matches(name)
+    override fun visitClassOrObject(classOrObject: KtClassOrObject) {
+        val name = classOrObject.name ?: ""
+        val forbiddenEntries = forbiddenNames.matches(name)
 
-		if (forbiddenEntries.isNotEmpty()) {
-			var message = "Class name $name is forbidden as it contains:"
-			forbiddenEntries.forEach { message += " $it," }
-			message.trimEnd { it == ',' }
+        if (forbiddenEntries.isNotEmpty()) {
+            var message = "Class name $name is forbidden as it contains:"
+            forbiddenEntries.forEach { message += " $it," }
+            message.trimEnd { it == ',' }
 
-			report(CodeSmell(issue, Entity.from(classOrObject), message))
-		}
-	}
+            report(CodeSmell(issue, Entity.from(classOrObject), message))
+        }
+    }
 
-	companion object {
-		const val FORBIDDEN_NAME = "forbiddenName"
-	}
+    companion object {
+        const val FORBIDDEN_NAME = "forbiddenName"
+    }
 }

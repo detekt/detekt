@@ -11,17 +11,17 @@ import org.jetbrains.spek.api.dsl.it
  */
 class ConditionalPathVisitorTest : Spek({
 
-	it("pathCount") {
-		var counter = 0
+    it("pathCount") {
+        var counter = 0
 
-		val visitor = ConditionalPathVisitor {
-			counter++
-		}
+        val visitor = ConditionalPathVisitor {
+            counter++
+        }
 
-		val ktFile = compileForTest(Case.ConditionalPath.path())
+        val ktFile = compileForTest(Case.ConditionalPath.path())
 
-		ktFile.accept(visitor)
+        ktFile.accept(visitor)
 
-		assertThat(counter).isEqualTo(5)
-	}
+        assertThat(counter).isEqualTo(5)
+    }
 })

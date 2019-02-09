@@ -7,7 +7,7 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.elementsInRange
 
 internal fun findAnnotatedStatementInLine(file: KtFile, offset: Int, line: String): PsiElement? {
-	return file.elementsInRange(TextRange.create(offset - line.length, offset))
-			.mapNotNull { it as? KtAnnotated ?: if (it.parent is KtAnnotated) it.parent else null }
-			.firstOrNull()
+    return file.elementsInRange(TextRange.create(offset - line.length, offset))
+            .mapNotNull { it as? KtAnnotated ?: if (it.parent is KtAnnotated) it.parent else null }
+            .firstOrNull()
 }

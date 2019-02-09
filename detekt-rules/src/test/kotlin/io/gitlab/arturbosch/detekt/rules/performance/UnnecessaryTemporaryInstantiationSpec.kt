@@ -9,15 +9,15 @@ import org.jetbrains.spek.subject.SubjectSpek
  * @author schalkms
  */
 class UnnecessaryTemporaryInstantiationSpec : SubjectSpek<UnnecessaryTemporaryInstantiation>({
-	subject { UnnecessaryTemporaryInstantiation() }
+    subject { UnnecessaryTemporaryInstantiation() }
 
-	describe("temporary instantiation for conversion") {
-		val code = "val i = Integer(1).toString()"
-		assertThat(subject.compileAndLint(code)).hasSize(1)
-	}
+    describe("temporary instantiation for conversion") {
+        val code = "val i = Integer(1).toString()"
+        assertThat(subject.compileAndLint(code)).hasSize(1)
+    }
 
-	describe("right conversion without instantiation") {
-		val code = "val i = Integer.toString(1)"
-		assertThat(subject.compileAndLint(code)).isEmpty()
-	}
+    describe("right conversion without instantiation") {
+        val code = "val i = Integer.toString(1)"
+        assertThat(subject.compileAndLint(code)).isEmpty()
+    }
 })

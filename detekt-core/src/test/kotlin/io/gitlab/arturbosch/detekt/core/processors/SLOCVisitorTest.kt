@@ -8,12 +8,12 @@ import org.jetbrains.spek.api.dsl.it
 
 class SLOCVisitorTest : Spek({
 
-	it("defaultClass") {
-		val file = compileForTest(path.resolve("Default.kt"))
-		val loc = with(file) {
-			accept(SLOCVisitor())
-			getUserData(sourceLinesKey)
-		}
-		Assertions.assertThat(loc).isEqualTo(3)
-	}
+    it("defaultClass") {
+        val file = compileForTest(path.resolve("Default.kt"))
+        val loc = with(file) {
+            accept(SLOCVisitor())
+            getUserData(sourceLinesKey)
+        }
+        Assertions.assertThat(loc).isEqualTo(3)
+    }
 })

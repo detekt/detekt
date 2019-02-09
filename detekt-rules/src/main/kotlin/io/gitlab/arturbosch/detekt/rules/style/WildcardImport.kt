@@ -48,32 +48,32 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  */
 class WildcardImport(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName,
-			Severity.Style,
-			"Wildcard imports should be replaced with imports using fully qualified class names. " +
-					"Wildcard imports can lead to naming conflicts. " +
-					"A library update can introduce naming clashes with your classes which " +
-					"results in compilation errors.",
-			Debt.FIVE_MINS)
+    override val issue = Issue(javaClass.simpleName,
+            Severity.Style,
+            "Wildcard imports should be replaced with imports using fully qualified class names. " +
+                    "Wildcard imports can lead to naming conflicts. " +
+                    "A library update can introduce naming clashes with your classes which " +
+                    "results in compilation errors.",
+            Debt.FIVE_MINS)
 
-	private val excludedImports = SplitPattern(valueOrDefault(EXCLUDED_IMPORTS, ""))
+    private val excludedImports = SplitPattern(valueOrDefault(EXCLUDED_IMPORTS, ""))
 
-	override fun visitImportDirective(importDirective: KtImportDirective) {
-		val import = importDirective.importPath?.pathStr
-		import?.let {
-			if (!import.contains("*")) {
-				return
-			}
+    override fun visitImportDirective(importDirective: KtImportDirective) {
+        val import = importDirective.importPath?.pathStr
+        import?.let {
+            if (!import.contains("*")) {
+                return
+            }
 
-			if (excludedImports.contains(import)) {
-				return
-			}
-			report(CodeSmell(issue, Entity.from(importDirective), "$it " +
-					"is a wildcard import. Replace it with fully qualified imports."))
-		}
-	}
+            if (excludedImports.contains(import)) {
+                return
+            }
+            report(CodeSmell(issue, Entity.from(importDirective), "$it " +
+                    "is a wildcard import. Replace it with fully qualified imports."))
+        }
+    }
 
-	companion object {
-		const val EXCLUDED_IMPORTS = "excludeImports"
-	}
+    companion object {
+        const val EXCLUDED_IMPORTS = "excludeImports"
+    }
 }

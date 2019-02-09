@@ -29,27 +29,27 @@ import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
  */
 class ExplicitGarbageCollectionCall(config: Config) : Rule(config) {
 
-	override val issue = Issue("ExplicitGarbageCollectionCall",
-			Severity.Defect,
-			"Don't try to be smarter than the JVM. Your code should work independently if the garbage " +
-					"collector is disabled or not. If you face memory issues, " +
-					"try tuning the JVM options instead of relying on code itself.",
-			Debt.TWENTY_MINS)
+    override val issue = Issue("ExplicitGarbageCollectionCall",
+            Severity.Defect,
+            "Don't try to be smarter than the JVM. Your code should work independently if the garbage " +
+                    "collector is disabled or not. If you face memory issues, " +
+                    "try tuning the JVM options instead of relying on code itself.",
+            Debt.TWENTY_MINS)
 
-	override fun visitCallExpression(expression: KtCallExpression) {
-		expression.getCallNameExpression()?.let {
-			matchesGCCall(expression, it)
-		}
-	}
+    override fun visitCallExpression(expression: KtCallExpression) {
+        expression.getCallNameExpression()?.let {
+            matchesGCCall(expression, it)
+        }
+    }
 
-	private fun matchesGCCall(expression: KtCallExpression, it: KtSimpleNameExpression) {
-		if (it.textMatches("gc") || it.textMatches("runFinalization")) {
-			it.getReceiverExpression()?.let {
-				when (it.text) {
-					"System", "Runtime.getRuntime()" -> report(CodeSmell(issue, Entity.from(expression),
-							"An explicit call to the Garbage Collector as in ${it.text} should not be made."))
-				}
-			}
-		}
-	}
+    private fun matchesGCCall(expression: KtCallExpression, it: KtSimpleNameExpression) {
+        if (it.textMatches("gc") || it.textMatches("runFinalization")) {
+            it.getReceiverExpression()?.let {
+                when (it.text) {
+                    "System", "Runtime.getRuntime()" -> report(CodeSmell(issue, Entity.from(expression),
+                            "An explicit call to the Garbage Collector as in ${it.text} should not be made."))
+                }
+            }
+        }
+    }
 }

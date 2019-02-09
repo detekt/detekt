@@ -44,50 +44,50 @@ import org.jetbrains.kotlin.psi.KtProperty
  */
 class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName, Severity.Warning,
-			"A class which implements the Serializable interface does not define a correct serialVersionUID field. " +
-					"The serialVersionUID field should be a constant long value inside a companion object.",
-			Debt.FIVE_MINS)
+    override val issue = Issue(javaClass.simpleName, Severity.Warning,
+            "A class which implements the Serializable interface does not define a correct serialVersionUID field. " +
+                    "The serialVersionUID field should be a constant long value inside a companion object.",
+            Debt.FIVE_MINS)
 
-	private val versionUID = "serialVersionUID"
+    private val versionUID = "serialVersionUID"
 
-	override fun visitClass(klass: KtClass) {
-		if (!klass.isInterface() && isImplementingSerializable(klass)) {
-			val companionObject = klass.companionObject()
-			if (companionObject == null || !hasCorrectSerialVersionUUID(companionObject)) {
-				report(CodeSmell(issue, Entity.from(klass), "The class ${klass.nameAsSafeName} implements" +
-						" the Serializable interface and should thus define a serialVersionUID."))
-			}
-		}
-		super.visitClass(klass)
-	}
+    override fun visitClass(klass: KtClass) {
+        if (!klass.isInterface() && isImplementingSerializable(klass)) {
+            val companionObject = klass.companionObject()
+            if (companionObject == null || !hasCorrectSerialVersionUUID(companionObject)) {
+                report(CodeSmell(issue, Entity.from(klass), "The class ${klass.nameAsSafeName} implements" +
+                        " the Serializable interface and should thus define a serialVersionUID."))
+            }
+        }
+        super.visitClass(klass)
+    }
 
-	override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
-		if (!declaration.isCompanion() &&
-				isImplementingSerializable(declaration) &&
-				!hasCorrectSerialVersionUUID(declaration)) {
-			report(CodeSmell(issue, Entity.from(declaration), "The object ${declaration.nameAsSafeName} " +
-					"implements the Serializable interface and should thus define a serialVersionUID."))
-		}
-		super.visitObjectDeclaration(declaration)
-	}
+    override fun visitObjectDeclaration(declaration: KtObjectDeclaration) {
+        if (!declaration.isCompanion() &&
+                isImplementingSerializable(declaration) &&
+                !hasCorrectSerialVersionUUID(declaration)) {
+            report(CodeSmell(issue, Entity.from(declaration), "The object ${declaration.nameAsSafeName} " +
+                    "implements the Serializable interface and should thus define a serialVersionUID."))
+        }
+        super.visitObjectDeclaration(declaration)
+    }
 
-	private fun isImplementingSerializable(classOrObject: KtClassOrObject) =
-			classOrObject.superTypeListEntries.any { it.text == "Serializable" }
+    private fun isImplementingSerializable(classOrObject: KtClassOrObject) =
+            classOrObject.superTypeListEntries.any { it.text == "Serializable" }
 
-	private fun hasCorrectSerialVersionUUID(declaration: KtObjectDeclaration): Boolean {
-		val property = declaration.body?.properties?.firstOrNull { it.name == versionUID }
-		return property != null && property.isConstant() && isLongProperty(property)
-	}
+    private fun hasCorrectSerialVersionUUID(declaration: KtObjectDeclaration): Boolean {
+        val property = declaration.body?.properties?.firstOrNull { it.name == versionUID }
+        return property != null && property.isConstant() && isLongProperty(property)
+    }
 
-	private fun isLongProperty(property: KtProperty) = hasLongType(property) || hasLongAssignment(property)
+    private fun isLongProperty(property: KtProperty) = hasLongType(property) || hasLongAssignment(property)
 
-	private fun hasLongType(property: KtProperty) = property.typeReference?.text == "Long"
+    private fun hasLongType(property: KtProperty) = property.typeReference?.text == "Long"
 
-	private fun hasLongAssignment(property: KtProperty): Boolean {
-		val assignmentText = property.children
-				.singleOrNull { it is KtConstantExpression || it is KtPrefixExpression }?.text
-		return assignmentText != null && assignmentText.last() == 'L' &&
-				assignmentText.substring(0, assignmentText.length - 1).toLongOrNull() != null
-	}
+    private fun hasLongAssignment(property: KtProperty): Boolean {
+        val assignmentText = property.children
+                .singleOrNull { it is KtConstantExpression || it is KtPrefixExpression }?.text
+        return assignmentText != null && assignmentText.last() == 'L' &&
+                assignmentText.substring(0, assignmentText.length - 1).toLongOrNull() != null
+    }
 }

@@ -9,9 +9,9 @@ import java.io.File
  */
 class ConfigExporter : Executable {
 
-	override fun execute() {
-		val defaultConfig = ClasspathResourceConverter().convert(DEFAULT_CONFIG).openStream()
-		defaultConfig.copyTo(File(DEFAULT_CONFIG).outputStream())
-		println("\nSuccessfully copied $DEFAULT_CONFIG to project location.")
-	}
+    override fun execute() {
+        val defaultConfig = ClasspathResourceConverter().convert(DEFAULT_CONFIG).openStream()
+        defaultConfig.copyTo(File(DEFAULT_CONFIG).outputStream())
+        println("\nSuccessfully copied $DEFAULT_CONFIG to project location.")
+    }
 }

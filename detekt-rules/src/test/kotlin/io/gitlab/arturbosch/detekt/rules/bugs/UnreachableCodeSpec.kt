@@ -9,13 +9,13 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
 class UnreachableCodeSpec : SubjectSpek<UnreachableCode>({
-	subject { UnreachableCode(Config.empty) }
+    subject { UnreachableCode(Config.empty) }
 
-	given("several unreachable statements") {
+    given("several unreachable statements") {
 
-		it("reports unreachable code") {
-			val path = Case.UnreachableCode.path()
-			assertThat(subject.lint(path)).hasSize(6)
-		}
-	}
+        it("reports unreachable code") {
+            val path = Case.UnreachableCode.path()
+            assertThat(subject.lint(path)).hasSize(6)
+        }
+    }
 })

@@ -22,20 +22,20 @@ import org.jetbrains.kotlin.psi.psiUtil.isPublic
  */
 class UndocumentedPublicFunction(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName,
-			Severity.Maintainability,
-			"Public functions require documentation.", Debt.TWENTY_MINS)
+    override val issue = Issue(javaClass.simpleName,
+            Severity.Maintainability,
+            "Public functions require documentation.", Debt.TWENTY_MINS)
 
-	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (function.funKeyword == null && function.isLocal) return
+    override fun visitNamedFunction(function: KtNamedFunction) {
+        if (function.funKeyword == null && function.isLocal) return
 
-		if (function.docComment == null && function.shouldBeDocumented()) {
-			report(CodeSmell(issue, Entity.from(function),
-					"The function ${function.nameAsSafeName} is missing documentation."))
-		}
-	}
+        if (function.docComment == null && function.shouldBeDocumented()) {
+            report(CodeSmell(issue, Entity.from(function),
+                    "The function ${function.nameAsSafeName} is missing documentation."))
+        }
+    }
 
-	private fun KtNamedFunction.shouldBeDocumented() = isContainingClassPublic() && isPublicNotOverridden()
+    private fun KtNamedFunction.shouldBeDocumented() = isContainingClassPublic() && isPublicNotOverridden()
 
-	private fun KtNamedFunction.isContainingClassPublic() = containingClass().let { it == null || it.isPublic }
+    private fun KtNamedFunction.isContainingClassPublic() = containingClass().let { it == null || it.isPublic }
 }

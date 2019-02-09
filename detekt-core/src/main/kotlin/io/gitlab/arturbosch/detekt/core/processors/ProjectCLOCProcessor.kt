@@ -8,41 +8,41 @@ import org.jetbrains.kotlin.psi.KtFile
 
 class ProjectCLOCProcessor : AbstractProcessor() {
 
-	override val key = commentLinesKey
-	override val visitor = CLOCVisitor()
+    override val key = commentLinesKey
+    override val visitor = CLOCVisitor()
 }
 
 val commentLinesKey = Key<Int>("cloc")
 
 class CLOCVisitor : DetektVisitor() {
 
-	override fun visitKtFile(file: KtFile) {
-		with(CLOCCountVisitor()) {
-			file.accept(this)
-			file.putUserData(commentLinesKey, count)
-		}
-	}
+    override fun visitKtFile(file: KtFile) {
+        with(CLOCCountVisitor()) {
+            file.accept(this)
+            file.putUserData(commentLinesKey, count)
+        }
+    }
 }
 
 internal class CLOCCountVisitor : DetektVisitor() {
 
-	internal var count = 0
+    internal var count = 0
 
-	private fun increment(value: Int) {
-		count += value
-	}
+    private fun increment(value: Int) {
+        count += value
+    }
 
-	override fun visitComment(comment: PsiComment?) {
-		if (comment != null) {
-			increment(comment.text.split('\n').size)
-		}
-	}
+    override fun visitComment(comment: PsiComment?) {
+        if (comment != null) {
+            increment(comment.text.split('\n').size)
+        }
+    }
 
-	override fun visitDeclaration(dcl: KtDeclaration) {
-		val text = dcl.docComment?.text
-		if (text != null) {
-			increment(text.split('\n').size)
-		}
-		super.visitDeclaration(dcl)
-	}
+    override fun visitDeclaration(dcl: KtDeclaration) {
+        val text = dcl.docComment?.text
+        if (text != null) {
+            increment(text.split('\n').size)
+        }
+        super.visitDeclaration(dcl)
+    }
 }

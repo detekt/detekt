@@ -11,23 +11,25 @@ import org.jetbrains.kotlin.psi.KtElement
  *
  * @author Artur Bosch
  */
-data class Entity(val name: String,
-				  val className: String,
-				  val signature: String,
-				  val location: Location,
-				  val ktElement: KtElement? = null) : Compactable {
+data class Entity(
+    val name: String,
+    val className: String,
+    val signature: String,
+    val location: Location,
+    val ktElement: KtElement? = null
+) : Compactable {
 
-	override fun compact(): String = "[$name] at ${location.compact()}"
+    override fun compact(): String = "[$name] at ${location.compact()}"
 
-	companion object {
-		/**
-		 * Factory function which retrieves all needed information from the [PsiElement] itself.
-		 */
-		fun from(element: PsiElement, offset: Int = 0): Entity {
-			val name = element.searchName()
-			val signature = element.buildFullSignature()
-			val clazz = element.searchClass()
-			return Entity(name, clazz, signature, Location.from(element, offset), element as? KtElement)
-		}
-	}
+    companion object {
+        /**
+         * Factory function which retrieves all needed information from the [PsiElement] itself.
+         */
+        fun from(element: PsiElement, offset: Int = 0): Entity {
+            val name = element.searchName()
+            val signature = element.buildFullSignature()
+            val clazz = element.searchClass()
+            return Entity(name, clazz, signature, Location.from(element, offset), element as? KtElement)
+        }
+    }
 }

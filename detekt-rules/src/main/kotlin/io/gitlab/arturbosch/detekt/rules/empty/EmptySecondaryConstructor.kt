@@ -12,7 +12,7 @@ import org.jetbrains.kotlin.psi.KtSecondaryConstructor
  */
 class EmptySecondaryConstructor(config: Config) : EmptyRule(config) {
 
-	override fun visitSecondaryConstructor(constructor: KtSecondaryConstructor) {
-		constructor.bodyExpression?.addFindingIfBlockExprIsEmpty()
-	}
+    override fun visitSecondaryConstructor(constructor: KtSecondaryConstructor) {
+        constructor.bodyExpression?.addFindingIfBlockExprIsEmpty()
+    }
 }

@@ -47,49 +47,49 @@ import org.jetbrains.kotlin.psi.KtValueArgumentList
  */
 class UnnecessaryParentheses(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue("UnnecessaryParentheses", Severity.Style,
-			"Unnecessary parentheses don't add any value to the code and should be removed.",
-			Debt.FIVE_MINS)
+    override val issue = Issue("UnnecessaryParentheses", Severity.Style,
+            "Unnecessary parentheses don't add any value to the code and should be removed.",
+            Debt.FIVE_MINS)
 
-	override fun visitParenthesizedExpression(expression: KtParenthesizedExpression) {
-		super.visitParenthesizedExpression(expression)
+    override fun visitParenthesizedExpression(expression: KtParenthesizedExpression) {
+        super.visitParenthesizedExpression(expression)
 
-		if (KtPsiUtil.areParenthesesUseless(expression)) {
-			val message = "Parentheses in ${expression.text} are unnecessary and can be replaced with: " +
-					"${KtPsiUtil.deparenthesize(expression)?.text}"
-			report(CodeSmell(issue, Entity.from(expression), message))
-		}
-	}
+        if (KtPsiUtil.areParenthesesUseless(expression)) {
+            val message = "Parentheses in ${expression.text} are unnecessary and can be replaced with: " +
+                    "${KtPsiUtil.deparenthesize(expression)?.text}"
+            report(CodeSmell(issue, Entity.from(expression), message))
+        }
+    }
 
-	override fun visitArgument(argument: KtValueArgument) {
-		super.visitArgument(argument)
-		if (argument.children.any { it is KtLambdaExpression } &&
-				isSingleLambdaInArgumentList(argument) &&
-				!isArgumentInFunctionCallWithTwoLambdas(argument)) {
-			val parent = argument.parent
-			val message = "Parentheses around the lambda ${parent.text} are unnecessary and can be removed."
-			report(CodeSmell(issue, Entity.from(parent), message))
-		}
-	}
+    override fun visitArgument(argument: KtValueArgument) {
+        super.visitArgument(argument)
+        if (argument.children.any { it is KtLambdaExpression } &&
+                isSingleLambdaInArgumentList(argument) &&
+                !isArgumentInFunctionCallWithTwoLambdas(argument)) {
+            val parent = argument.parent
+            val message = "Parentheses around the lambda ${parent.text} are unnecessary and can be removed."
+            report(CodeSmell(issue, Entity.from(parent), message))
+        }
+    }
 
-	private fun isSingleLambdaInArgumentList(argument: KtValueArgument): Boolean {
-		val parent = argument.parent
-		val isOnlyArgument = parent.children.size == 1
-		val nodeBeforeArgumentList = parent.parent
-		val isSuperTypeCallEntry = nodeBeforeArgumentList is KtSuperTypeCallEntry ||
-				nodeBeforeArgumentList is KtConstructorDelegationCall
+    private fun isSingleLambdaInArgumentList(argument: KtValueArgument): Boolean {
+        val parent = argument.parent
+        val isOnlyArgument = parent.children.size == 1
+        val nodeBeforeArgumentList = parent.parent
+        val isSuperTypeCallEntry = nodeBeforeArgumentList is KtSuperTypeCallEntry ||
+                nodeBeforeArgumentList is KtConstructorDelegationCall
 
-		return isOnlyArgument &&
-				!isSuperTypeCallEntry &&
-				argument.equalsToken == null
-	}
+        return isOnlyArgument &&
+                !isSuperTypeCallEntry &&
+                argument.equalsToken == null
+    }
 
-	private fun isArgumentInFunctionCallWithTwoLambdas(argument: KtValueArgument): Boolean {
-		val parent = argument.parent
-		val grandParent = parent.parent
+    private fun isArgumentInFunctionCallWithTwoLambdas(argument: KtValueArgument): Boolean {
+        val parent = argument.parent
+        val grandParent = parent.parent
 
-		return parent is KtValueArgumentList &&
-				grandParent.children.size >= 2 &&
-				grandParent.children.last() is KtLambdaArgument
-	}
+        return parent is KtValueArgumentList &&
+                grandParent.children.size >= 2 &&
+                grandParent.children.last() is KtLambdaArgument
+    }
 }

@@ -39,28 +39,28 @@ import org.jetbrains.kotlin.psi.KtIfExpression
  */
 class CollapsibleIfStatements(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue("CollapsibleIfStatements", Severity.Style,
-			"Two if statements which could be collapsed were detected. " +
-					"These statements can be merged to improve readability.",
-			Debt.FIVE_MINS)
+    override val issue = Issue("CollapsibleIfStatements", Severity.Style,
+            "Two if statements which could be collapsed were detected. " +
+                    "These statements can be merged to improve readability.",
+            Debt.FIVE_MINS)
 
-	override fun visitIfExpression(expression: KtIfExpression) {
-		if (isNotElseIfOrElse(expression) && hasOneKtIfExpression(expression)) {
-			report(CodeSmell(issue, Entity.from(expression), issue.description))
-		}
-		super.visitIfExpression(expression)
-	}
+    override fun visitIfExpression(expression: KtIfExpression) {
+        if (isNotElseIfOrElse(expression) && hasOneKtIfExpression(expression)) {
+            report(CodeSmell(issue, Entity.from(expression), issue.description))
+        }
+        super.visitIfExpression(expression)
+    }
 
-	private fun isNotElseIfOrElse(expression: KtIfExpression) =
-			expression.`else` == null && expression.parent !is KtContainerNodeForControlStructureBody
+    private fun isNotElseIfOrElse(expression: KtIfExpression) =
+            expression.`else` == null && expression.parent !is KtContainerNodeForControlStructureBody
 
-	private fun hasOneKtIfExpression(expression: KtIfExpression): Boolean {
-		val statements = expression.then?.children?.filterNot { it is PsiComment }
-		return statements != null && statements.size == 1 && isLoneIfExpression(statements[0])
-	}
+    private fun hasOneKtIfExpression(expression: KtIfExpression): Boolean {
+        val statements = expression.then?.children?.filterNot { it is PsiComment }
+        return statements != null && statements.size == 1 && isLoneIfExpression(statements[0])
+    }
 
-	private fun isLoneIfExpression(statement: PsiElement): Boolean {
-		val ifExpression = statement as? KtIfExpression
-		return ifExpression != null && ifExpression.`else` == null
-	}
+    private fun isLoneIfExpression(statement: PsiElement): Boolean {
+        val ifExpression = statement as? KtIfExpression
+        return ifExpression != null && ifExpression.`else` == null
+    }
 }

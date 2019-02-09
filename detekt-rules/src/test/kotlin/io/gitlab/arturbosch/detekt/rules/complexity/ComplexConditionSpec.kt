@@ -11,9 +11,9 @@ import org.jetbrains.spek.api.dsl.it
  */
 class ComplexConditionSpec : Spek({
 
-	given("some complex conditions") {
+    given("some complex conditions") {
 
-		val code = """
+        val code = """
 			val a = if (5 > 4 && 4 < 6 || (3 < 5 || 2 < 5)) { 42 } else { 24 }
 
 			fun complexConditions() {
@@ -22,8 +22,8 @@ class ComplexConditionSpec : Spek({
 			}
 		"""
 
-		it("reports some complex conditions") {
-			assertThat(ComplexCondition().lint(code)).hasSize(3)
-		}
-	}
+        it("reports some complex conditions") {
+            assertThat(ComplexCondition().lint(code)).hasSize(3)
+        }
+    }
 })

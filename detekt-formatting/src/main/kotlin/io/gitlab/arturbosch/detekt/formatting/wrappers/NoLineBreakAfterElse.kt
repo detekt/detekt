@@ -13,6 +13,6 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 class NoLineBreakAfterElse(config: Config) : FormattingRule(config) {
 
-	override val wrapping = NoLineBreakAfterElseRule()
-	override val issue = issueFor("Reports line breaks after else")
+    override val wrapping = NoLineBreakAfterElseRule()
+    override val issue = issueFor("Reports line breaks after else")
 }

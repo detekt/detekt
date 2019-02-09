@@ -4,4 +4,4 @@ import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Project
 
 fun Project.detekt(configure: DetektExtension.() -> Unit) =
-		extensions.configure(DetektExtension::class.java, configure)
+        extensions.configure(DetektExtension::class.java, configure)

@@ -15,51 +15,51 @@ import org.jetbrains.spek.api.dsl.it
  */
 class ComplexMethodSpec : Spek({
 
-	given("a complex method") {
+    given("a complex method") {
 
-		it("finds one complex method") {
-			val subject = ComplexMethod()
-			subject.lint(Case.ComplexClass.path())
+        it("finds one complex method") {
+            val subject = ComplexMethod()
+            subject.lint(Case.ComplexClass.path())
 
-			assertThat(subject.findings).hasSourceLocations(SourceLocation(3, 1))
+            assertThat(subject.findings).hasSourceLocations(SourceLocation(3, 1))
 
-			assertThat(subject.findings.first())
-					.isThresholded()
-					.withValue(20)
-					.withThreshold(10)
-		}
-	}
+            assertThat(subject.findings.first())
+                    .isThresholded()
+                    .withValue(20)
+                    .withThreshold(10)
+        }
+    }
 
-	given("several complex methods") {
+    given("several complex methods") {
 
-		val path = Case.ComplexMethods.path()
+        val path = Case.ComplexMethods.path()
 
-		it("does not report complex methods with a single when expression") {
-			val config = TestConfig(mapOf(
-					ComplexMethod.IGNORE_SIMPLE_WHEN_ENTRIES to "1.0",
-					ComplexMethod.IGNORE_SINGLE_WHEN_EXPRESSION to "true"))
-			val subject = ComplexMethod(config, threshold = 4)
+        it("does not report complex methods with a single when expression") {
+            val config = TestConfig(mapOf(
+                    ComplexMethod.IGNORE_SIMPLE_WHEN_ENTRIES to "1.0",
+                    ComplexMethod.IGNORE_SINGLE_WHEN_EXPRESSION to "true"))
+            val subject = ComplexMethod(config, threshold = 4)
 
-			assertThat(subject.lint(path)).hasSourceLocations(SourceLocation(42, 1))
-		}
+            assertThat(subject.lint(path)).hasSourceLocations(SourceLocation(42, 1))
+        }
 
-		it("reports all complex methods") {
-			val config = TestConfig(mapOf(ComplexMethod.IGNORE_SIMPLE_WHEN_ENTRIES to "1.0"))
-			val subject = ComplexMethod(config, threshold = 4)
+        it("reports all complex methods") {
+            val config = TestConfig(mapOf(ComplexMethod.IGNORE_SIMPLE_WHEN_ENTRIES to "1.0"))
+            val subject = ComplexMethod(config, threshold = 4)
 
-			assertThat(subject.lint(path)).hasSourceLocations(
-					SourceLocation(5, 1),
-					SourceLocation(14, 1),
-					SourceLocation(24, 1),
-					SourceLocation(34, 1),
-					SourceLocation(42, 1)
-			)
-		}
+            assertThat(subject.lint(path)).hasSourceLocations(
+                    SourceLocation(5, 1),
+                    SourceLocation(14, 1),
+                    SourceLocation(24, 1),
+                    SourceLocation(34, 1),
+                    SourceLocation(42, 1)
+            )
+        }
 
-		it("does not trip for a reasonable amount of simple when entries when ignoreSimpleWhenEntries is true") {
-			val config = TestConfig(mapOf(ComplexMethod.IGNORE_SIMPLE_WHEN_ENTRIES to "true"))
-			val subject = ComplexMethod(config)
-			val code = """
+        it("does not trip for a reasonable amount of simple when entries when ignoreSimpleWhenEntries is true") {
+            val config = TestConfig(mapOf(ComplexMethod.IGNORE_SIMPLE_WHEN_ENTRIES to "true"))
+            val subject = ComplexMethod(config)
+            val code = """
 				internal fun Map<String, Any>.asBundle(): Bundle {
 					val bundle = Bundle(size)
 
@@ -83,14 +83,14 @@ class ComplexMethodSpec : Spek({
 				}
 			""".trimIndent()
 
-			val findings = subject.lint(code)
-			assertThat(findings).isEmpty()
-		}
-	}
+            val findings = subject.lint(code)
+            assertThat(findings).isEmpty()
+        }
+    }
 
-	given("function containing object literal with many overridden functions") {
+    given("function containing object literal with many overridden functions") {
 
-		val code = """
+        val code = """
 			fun f(): List<Any> {
 				return object : List<Any> {
 					override val size: Int get() = TODO("not implemented")
@@ -138,8 +138,8 @@ class ComplexMethodSpec : Spek({
 			}
 		""".trimIndent()
 
-		it("should not count these overridden functions to base functions complexity") {
-			assertThat(ComplexMethod().lint(code)).isEmpty()
-		}
-	}
+        it("should not count these overridden functions to base functions complexity") {
+            assertThat(ComplexMethod().lint(code)).isEmpty()
+        }
+    }
 })

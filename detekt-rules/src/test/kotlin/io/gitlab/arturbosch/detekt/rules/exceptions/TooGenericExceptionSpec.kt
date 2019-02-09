@@ -11,13 +11,13 @@ import org.jetbrains.spek.api.dsl.it
 
 class TooGenericExceptionSpec : Spek({
 
-	it("should not report any as all catch exception rules are deactivated") {
-		val config = YamlConfig.loadResource(resource("deactivated-exceptions.yml").toURL())
-		val ruleSet = ExceptionsProvider().buildRuleset(config)
-		val file = compileForTest(Case.TooGenericExceptions.path())
+    it("should not report any as all catch exception rules are deactivated") {
+        val config = YamlConfig.loadResource(resource("deactivated-exceptions.yml").toURL())
+        val ruleSet = ExceptionsProvider().buildRuleset(config)
+        val file = compileForTest(Case.TooGenericExceptions.path())
 
-		val findings = ruleSet?.accept(file)
+        val findings = ruleSet?.accept(file)
 
-		assertThat(findings).hasSize(0)
-	}
+        assertThat(findings).hasSize(0)
+    }
 })

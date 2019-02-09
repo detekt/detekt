@@ -11,12 +11,12 @@ import io.gitlab.arturbosch.detekt.sample.extensions.rules.TooManyFunctionsTwo
  */
 class SampleProvider : RuleSetProvider {
 
-	override val ruleSetId: String = "sample"
+    override val ruleSetId: String = "sample"
 
-	override fun instance(config: Config): RuleSet {
-		return RuleSet(ruleSetId, listOf(
-				TooManyFunctions(),
-				TooManyFunctionsTwo(config)
-		))
-	}
+    override fun instance(config: Config): RuleSet {
+        return RuleSet(ruleSetId, listOf(
+                TooManyFunctions(),
+                TooManyFunctionsTwo(config)
+        ))
+    }
 }

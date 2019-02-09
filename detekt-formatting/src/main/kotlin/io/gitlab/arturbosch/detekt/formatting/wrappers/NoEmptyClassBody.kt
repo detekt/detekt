@@ -13,6 +13,6 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 class NoEmptyClassBody(config: Config) : FormattingRule(config) {
 
-	override val wrapping = NoEmptyClassBodyRule()
-	override val issue = issueFor("Reports empty class bodies")
+    override val wrapping = NoEmptyClassBodyRule()
+    override val issue = issueFor("Reports empty class bodies")
 }

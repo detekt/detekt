@@ -20,40 +20,40 @@ import org.jetbrains.spek.api.dsl.it
  */
 class RunRuleSetWithRuleFiltersSpec : Spek({
 
-	val emptyFile = compileForTest(Case.Empty.path())
-	val defaultFile = compileForTest(Case.Default.path())
+    val emptyFile = compileForTest(Case.Empty.path())
+    val defaultFile = compileForTest(Case.Default.path())
 
-	describe("RuleSet without MultiRule's") {
+    describe("RuleSet without MultiRule's") {
 
-		val ruleSet = RuleSet("Test", listOf(WildcardImport(), OptionalUnit()))
+        val ruleSet = RuleSet("Test", listOf(WildcardImport(), OptionalUnit()))
 
-		it("filters WildcardImport, runs OptionalUnit") {
-			val findings = ruleSet.accept(defaultFile, setOf("WildcardImport"))
-			Assertions.assertThat(findings).allMatch { it.id != "WildcardImport" }
-			Assertions.assertThat(findings).anySatisfy { it.id != "OptionalUnit" }
-		}
-	}
+        it("filters WildcardImport, runs OptionalUnit") {
+            val findings = ruleSet.accept(defaultFile, setOf("WildcardImport"))
+            Assertions.assertThat(findings).allMatch { it.id != "WildcardImport" }
+            Assertions.assertThat(findings).anySatisfy { it.id != "OptionalUnit" }
+        }
+    }
 
-	describe("MultiRule test cases") {
+    describe("MultiRule test cases") {
 
-		fun ruleSet() = loadRuleSet<EmptyCodeProvider>()
-		val ruleSetId = EmptyBlocks::class.java.simpleName
+        fun ruleSet() = loadRuleSet<EmptyCodeProvider>()
+        val ruleSetId = EmptyBlocks::class.java.simpleName
 
-		it("should filter by RuleSet id") {
-			assertThat(ruleSet().accept(emptyFile, setOf(ruleSetId))).isEmpty()
-		}
+        it("should filter by RuleSet id") {
+            assertThat(ruleSet().accept(emptyFile, setOf(ruleSetId))).isEmpty()
+        }
 
-		it("should filter EmptyInitBlock rule") {
-			val ruleIdToFilter = EmptyInitBlock::class.java.simpleName
-			assertThat(ruleSet().accept(emptyFile, setOf(ruleIdToFilter))).allMatch { it.id != ruleIdToFilter }
-		}
-	}
+        it("should filter EmptyInitBlock rule") {
+            val ruleIdToFilter = EmptyInitBlock::class.java.simpleName
+            assertThat(ruleSet().accept(emptyFile, setOf(ruleIdToFilter))).allMatch { it.id != ruleIdToFilter }
+        }
+    }
 
-	describe("Mix of MultiRule and normal Rule") {
+    describe("Mix of MultiRule and normal Rule") {
 
-		it("should filter all rules") {
-			val ruleSet = RuleSet("Test", listOf(FileParsingRule(), OptionalUnit()))
-			assertThat(ruleSet.accept(emptyFile, setOf("MaxLineLength", "NoTabs", "OptionalUnit"))).isEmpty()
-		}
-	}
+        it("should filter all rules") {
+            val ruleSet = RuleSet("Test", listOf(FileParsingRule(), OptionalUnit()))
+            assertThat(ruleSet.accept(emptyFile, setOf("MaxLineLength", "NoTabs", "OptionalUnit"))).isEmpty()
+        }
+    }
 })

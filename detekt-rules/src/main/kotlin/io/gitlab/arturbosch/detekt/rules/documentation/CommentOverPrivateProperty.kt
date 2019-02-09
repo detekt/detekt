@@ -24,14 +24,14 @@ import org.jetbrains.kotlin.psi.KtProperty
  */
 class CommentOverPrivateProperty(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue("CommentOverPrivateProperty",
-			Severity.Maintainability,
-			"Private properties should be named such that they explain themselves even without a comment.",
-			Debt.TWENTY_MINS)
+    override val issue = Issue("CommentOverPrivateProperty",
+            Severity.Maintainability,
+            "Private properties should be named such that they explain themselves even without a comment.",
+            Debt.TWENTY_MINS)
 
-	override fun visitProperty(property: KtProperty) {
-		if (property.hasCommentInPrivateMember()) {
-			report(CodeSmell(issue, Entity.from(property.docComment!!), issue.description))
-		}
-	}
+    override fun visitProperty(property: KtProperty) {
+        if (property.hasCommentInPrivateMember()) {
+            report(CodeSmell(issue, Entity.from(property.docComment!!), issue.description))
+        }
+    }
 }

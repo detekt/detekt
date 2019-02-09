@@ -14,23 +14,23 @@ import org.jetbrains.spek.api.dsl.it
  */
 class TooGenericExceptionThrownSpec : Spek({
 
-	describe("a file with many thrown exceptions") {
+    describe("a file with many thrown exceptions") {
 
-		it("should report one for each generic throw rules") {
-			val rule = TooGenericExceptionThrown(Config.empty)
+        it("should report one for each generic throw rules") {
+            val rule = TooGenericExceptionThrown(Config.empty)
 
-			val findings = rule.lint(Case.TooGenericExceptions.path())
+            val findings = rule.lint(Case.TooGenericExceptions.path())
 
-			assertThat(findings).hasSize(thrownExceptionDefaults.size)
-		}
+            assertThat(findings).hasSize(thrownExceptionDefaults.size)
+        }
 
-		it("should not report thrown exceptions") {
-			val config = TestConfig(mapOf(TooGenericExceptionThrown.THROWN_EXCEPTIONS_PROPERTY to "[MyException]"))
-			val rule = TooGenericExceptionCaught(config)
+        it("should not report thrown exceptions") {
+            val config = TestConfig(mapOf(TooGenericExceptionThrown.THROWN_EXCEPTIONS_PROPERTY to "[MyException]"))
+            val rule = TooGenericExceptionCaught(config)
 
-			val findings = rule.lint(Case.TooGenericExceptions.path())
+            val findings = rule.lint(Case.TooGenericExceptions.path())
 
-			assertThat(findings).isEmpty()
-		}
-	}
+            assertThat(findings).isEmpty()
+        }
+    }
 })

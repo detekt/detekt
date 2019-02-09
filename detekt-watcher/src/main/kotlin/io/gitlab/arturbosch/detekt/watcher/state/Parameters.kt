@@ -11,18 +11,18 @@ import java.nio.file.Paths
  * @author Artur Bosch
  */
 class Parameters(
-		private val input: String? = null,
-		private var config: String? = null
+    private val input: String? = null,
+    private var config: String? = null
 ) {
 
-	fun extractWatchDirectory(): Path {
-		return input?.let {
-			ExistingPathConverter().convert(it)
-		} ?: Paths.get(".")
-	}
+    fun extractWatchDirectory(): Path {
+        return input?.let {
+            ExistingPathConverter().convert(it)
+        } ?: Paths.get(".")
+    }
 
-	fun extractConfig(): Config? =
-			config?.let {
-				CliArgs().apply { this.config = this@Parameters.config }.loadConfiguration()
-			}
+    fun extractConfig(): Config? =
+            config?.let {
+                CliArgs().apply { this.config = this@Parameters.config }.loadConfiguration()
+            }
 }

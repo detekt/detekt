@@ -52,71 +52,71 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  * @author Marvin Ramin
  */
 class StringLiteralDuplication(
-		config: Config = Config.empty,
-		threshold: Int = DEFAULT_DUPLICATION
+    config: Config = Config.empty,
+    threshold: Int = DEFAULT_DUPLICATION
 ) : ThresholdRule(config, threshold) {
 
-	override val issue = Issue(javaClass.simpleName, Severity.Maintainability,
-			"Multiple occurrences of the same string literal within a single file detected.",
-			Debt.FIVE_MINS)
+    override val issue = Issue(javaClass.simpleName, Severity.Maintainability,
+            "Multiple occurrences of the same string literal within a single file detected.",
+            Debt.FIVE_MINS)
 
-	private val ignoreAnnotation = valueOrDefault(IGNORE_ANNOTATION, true)
-	private val excludeStringsWithLessThan5Characters = valueOrDefault(EXCLUDE_SHORT_STRING, true)
-	private val ignoreStringsRegex by LazyRegex(IGNORE_STRINGS_REGEX, "$^")
+    private val ignoreAnnotation = valueOrDefault(IGNORE_ANNOTATION, true)
+    private val excludeStringsWithLessThan5Characters = valueOrDefault(EXCLUDE_SHORT_STRING, true)
+    private val ignoreStringsRegex by LazyRegex(IGNORE_STRINGS_REGEX, "$^")
 
-	override fun visitKtFile(file: KtFile) {
-		val visitor = StringLiteralVisitor()
-		file.accept(visitor)
-		val type = "SIZE: "
-		for ((name, value) in visitor.getLiteralsOverThreshold()) {
-			val (main, references) = visitor.entitiesForLiteral(name)
-			report(ThresholdedCodeSmell(issue,
-					main,
-					Metric(type + name, value, threshold),
-					issue.description,
-					references))
-		}
-	}
+    override fun visitKtFile(file: KtFile) {
+        val visitor = StringLiteralVisitor()
+        file.accept(visitor)
+        val type = "SIZE: "
+        for ((name, value) in visitor.getLiteralsOverThreshold()) {
+            val (main, references) = visitor.entitiesForLiteral(name)
+            report(ThresholdedCodeSmell(issue,
+                    main,
+                    Metric(type + name, value, threshold),
+                    issue.description,
+                    references))
+        }
+    }
 
-	internal inner class StringLiteralVisitor : DetektVisitor() {
+    internal inner class StringLiteralVisitor : DetektVisitor() {
 
-		private var literals = HashMap<String, Int>()
-		private var literalReferences = HashMap<String, MutableList<KtStringTemplateExpression>>()
-		private val pass: Unit = Unit
+        private var literals = HashMap<String, Int>()
+        private var literalReferences = HashMap<String, MutableList<KtStringTemplateExpression>>()
+        private val pass: Unit = Unit
 
-		fun getLiteralsOverThreshold(): Map<String, Int> = literals.filterValues { it >= threshold }
-		fun entitiesForLiteral(literal: String): Pair<Entity, List<Entity>> {
-			val references = literalReferences[literal]
-			if (references != null && references.isNotEmpty()) {
-				val mainEntity = references[0]
-				val referenceEntities = references.subList(1, references.size)
-				return Entity.from(mainEntity) to referenceEntities.map { Entity.from(it) }
-			}
-			throw IllegalStateException("No KtElements for literal '$literal' found!")
-		}
+        fun getLiteralsOverThreshold(): Map<String, Int> = literals.filterValues { it >= threshold }
+        fun entitiesForLiteral(literal: String): Pair<Entity, List<Entity>> {
+            val references = literalReferences[literal]
+            if (references != null && references.isNotEmpty()) {
+                val mainEntity = references[0]
+                val referenceEntities = references.subList(1, references.size)
+                return Entity.from(mainEntity) to referenceEntities.map { Entity.from(it) }
+            }
+            throw IllegalStateException("No KtElements for literal '$literal' found!")
+        }
 
-		override fun visitStringTemplateExpression(expression: KtStringTemplateExpression) {
-			val text = expression.plainText()
-			when {
-				ignoreAnnotation && expression.isPartOf(KtAnnotationEntry::class) -> pass
-				excludeStringsWithLessThan5Characters && text.length < STRING_EXCLUSION_LENGTH -> pass
-				text.matches(ignoreStringsRegex) -> pass
-				else -> add(expression)
-			}
-		}
+        override fun visitStringTemplateExpression(expression: KtStringTemplateExpression) {
+            val text = expression.plainText()
+            when {
+                ignoreAnnotation && expression.isPartOf(KtAnnotationEntry::class) -> pass
+                excludeStringsWithLessThan5Characters && text.length < STRING_EXCLUSION_LENGTH -> pass
+                text.matches(ignoreStringsRegex) -> pass
+                else -> add(expression)
+            }
+        }
 
-		private fun add(str: KtStringTemplateExpression) {
-			val text = str.plainText()
-			literals.compute(text) { _, oldValue -> oldValue?.plus(1) ?: 1 }
-			literalReferences.compute(text) { _, entries -> entries?.add(str); entries ?: mutableListOf(str) }
-		}
-	}
+        private fun add(str: KtStringTemplateExpression) {
+            val text = str.plainText()
+            literals.compute(text) { _, oldValue -> oldValue?.plus(1) ?: 1 }
+            literalReferences.compute(text) { _, entries -> entries?.add(str); entries ?: mutableListOf(str) }
+        }
+    }
 
-	companion object {
-		const val DEFAULT_DUPLICATION = 3
-		const val STRING_EXCLUSION_LENGTH = 5
-		const val IGNORE_ANNOTATION = "ignoreAnnotation"
-		const val EXCLUDE_SHORT_STRING = "excludeStringsWithLessThan5Characters"
-		const val IGNORE_STRINGS_REGEX = "ignoreStringsRegex"
-	}
+    companion object {
+        const val DEFAULT_DUPLICATION = 3
+        const val STRING_EXCLUSION_LENGTH = 5
+        const val IGNORE_ANNOTATION = "ignoreAnnotation"
+        const val EXCLUDE_SHORT_STRING = "excludeStringsWithLessThan5Characters"
+        const val IGNORE_STRINGS_REGEX = "ignoreStringsRegex"
+    }
 }

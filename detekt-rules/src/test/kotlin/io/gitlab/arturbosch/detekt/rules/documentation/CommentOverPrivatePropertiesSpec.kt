@@ -11,48 +11,48 @@ import org.jetbrains.spek.subject.SubjectSpek
  * @author schalkms
  */
 class CommentOverPrivatePropertiesSpec : SubjectSpek<CommentOverPrivateProperty>({
-	subject { CommentOverPrivateProperty() }
+    subject { CommentOverPrivateProperty() }
 
-	given("some properties with comments") {
+    given("some properties with comments") {
 
-		it("reports private property with a comment") {
-			val code = """
+        it("reports private property with a comment") {
+            val code = """
 				/**
 				 * asdf
 				 */
 				private val v = 1"""
-			assertThat(subject.compileAndLint(code)).hasSize(1)
-		}
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
 
-		it("does not report public property with a comment") {
-			val code = """
+        it("does not report public property with a comment") {
+            val code = """
 				/**
 				 * asdf
 				 */
 				val v = 1"""
-			assertThat(subject.compileAndLint(code)).hasSize(0)
-		}
+            assertThat(subject.compileAndLint(code)).hasSize(0)
+        }
 
-		it("reports private property in class with a comment") {
-			val code = """
+        it("reports private property in class with a comment") {
+            val code = """
 					class Test {
 					/**
 					 * asdf
 					 */
 					private val v = 1
 				}"""
-			assertThat(subject.compileAndLint(code)).hasSize(1)
-		}
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
 
-		it("does not report public property with a comment") {
-			val code = """
+        it("does not report public property with a comment") {
+            val code = """
 				class Test {
 					/**
 					 * asdf
 					 */
 					val v = 1
 				}"""
-			assertThat(subject.compileAndLint(code)).hasSize(0)
-		}
-	}
+            assertThat(subject.compileAndLint(code)).hasSize(0)
+        }
+    }
 })

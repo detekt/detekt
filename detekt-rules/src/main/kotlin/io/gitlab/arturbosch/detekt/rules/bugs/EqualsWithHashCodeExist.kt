@@ -9,11 +9,11 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isEqualsFunction
 import io.gitlab.arturbosch.detekt.rules.isHashCodeFunction
+import java.util.ArrayDeque
 import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import java.util.ArrayDeque
 
 /**
  * When a class overrides the equals() method it should also override the hashCode() method.
@@ -51,46 +51,46 @@ import java.util.ArrayDeque
  */
 class EqualsWithHashCodeExist(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue("EqualsWithHashCodeExist",
-			Severity.Defect,
-			"Always override hashCode when you override equals. " +
-					"All hash-based collections depend on objects meeting the equals-contract. " +
-					"Two equal objects must produce the same hashcode. When inheriting equals or hashcode, " +
-					"override the inherited and call the super method for clarification.",
-			Debt.FIVE_MINS)
+    override val issue = Issue("EqualsWithHashCodeExist",
+            Severity.Defect,
+            "Always override hashCode when you override equals. " +
+                    "All hash-based collections depend on objects meeting the equals-contract. " +
+                    "Two equal objects must produce the same hashcode. When inheriting equals or hashcode, " +
+                    "override the inherited and call the super method for clarification.",
+            Debt.FIVE_MINS)
 
-	private val queue = ArrayDeque<ViolationHolder>(MAXIMUM_EXPECTED_NESTED_CLASSES)
+    private val queue = ArrayDeque<ViolationHolder>(MAXIMUM_EXPECTED_NESTED_CLASSES)
 
-	private data class ViolationHolder(var equals: Boolean = false, var hashCode: Boolean = false) {
-		internal fun violation() = equals && !hashCode || !equals && hashCode
-	}
+    private data class ViolationHolder(var equals: Boolean = false, var hashCode: Boolean = false) {
+        internal fun violation() = equals && !hashCode || !equals && hashCode
+    }
 
-	override fun visitFile(file: PsiFile?) {
-		queue.clear()
-		super.visitFile(file)
-	}
+    override fun visitFile(file: PsiFile?) {
+        queue.clear()
+        super.visitFile(file)
+    }
 
-	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-		val klass = classOrObject as? KtClass
-		if (klass != null && klass.isData()) {
-			return
-		}
-		queue.push(ViolationHolder())
-		super.visitClassOrObject(classOrObject)
-		if (queue.pop().violation()) {
-			report(CodeSmell(issue, Entity.from(classOrObject), "A class should always override hashCode " +
-					"when overriding equals and the other way around."))
-		}
-	}
+    override fun visitClassOrObject(classOrObject: KtClassOrObject) {
+        val klass = classOrObject as? KtClass
+        if (klass != null && klass.isData()) {
+            return
+        }
+        queue.push(ViolationHolder())
+        super.visitClassOrObject(classOrObject)
+        if (queue.pop().violation()) {
+            report(CodeSmell(issue, Entity.from(classOrObject), "A class should always override hashCode " +
+                    "when overriding equals and the other way around."))
+        }
+    }
 
-	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (!function.isTopLevel) {
-			function.let {
-				if (it.isEqualsFunction()) queue.peek().equals = true
-				if (it.isHashCodeFunction()) queue.peek().hashCode = true
-			}
-		}
-	}
+    override fun visitNamedFunction(function: KtNamedFunction) {
+        if (!function.isTopLevel) {
+            function.let {
+                if (it.isEqualsFunction()) queue.peek().equals = true
+                if (it.isHashCodeFunction()) queue.peek().hashCode = true
+            }
+        }
+    }
 }
 
 private const val MAXIMUM_EXPECTED_NESTED_CLASSES = 5

@@ -13,6 +13,6 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 class ChainWrapping(config: Config) : FormattingRule(config) {
 
-	override val wrapping = ChainWrappingRule()
-	override val issue = issueFor("Checks if condition chaining is wrapped right")
+    override val wrapping = ChainWrappingRule()
+    override val issue = issueFor("Checks if condition chaining is wrapped right")
 }

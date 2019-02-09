@@ -13,6 +13,6 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 class SpacingAroundComma(config: Config) : FormattingRule(config) {
 
-	override val wrapping = SpacingAroundCommaRule()
-	override val issue = issueFor("Reports spaces around commas")
+    override val wrapping = SpacingAroundCommaRule()
+    override val issue = issueFor("Reports spaces around commas")
 }

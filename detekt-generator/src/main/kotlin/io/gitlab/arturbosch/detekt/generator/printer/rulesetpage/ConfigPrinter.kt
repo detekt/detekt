@@ -14,62 +14,62 @@ import io.gitlab.arturbosch.detekt.generator.printer.DocumentationPrinter
  */
 object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 
-	override fun print(item: List<RuleSetPage>): String {
-		return yaml {
-			yaml { defaultGenericConfiguration() }
-			emptyLine()
-			yaml { defaultTestPatternConfiguration() }
-			emptyLine()
-			yaml { defaultBuildConfiguration() }
-			emptyLine()
-			yaml { defaultProcessorsConfiguration() }
-			emptyLine()
-			yaml { defaultConsoleReportsConfiguration() }
-			emptyLine()
+    override fun print(item: List<RuleSetPage>): String {
+        return yaml {
+            yaml { defaultGenericConfiguration() }
+            emptyLine()
+            yaml { defaultTestPatternConfiguration() }
+            emptyLine()
+            yaml { defaultBuildConfiguration() }
+            emptyLine()
+            yaml { defaultProcessorsConfiguration() }
+            emptyLine()
+            yaml { defaultConsoleReportsConfiguration() }
+            emptyLine()
 
-			item.sortedBy { it.ruleSet.name }
-					.forEach { printRuleSet(it.ruleSet, it.rules) }
-		}
-	}
+            item.sortedBy { it.ruleSet.name }
+                    .forEach { printRuleSet(it.ruleSet, it.rules) }
+        }
+    }
 
-	private fun YamlNode.printRuleSet(ruleSet: RuleSetProvider, rules: List<Rule>) {
-		node(ruleSet.name) {
-			keyValue { "active" to "${ruleSet.active}" }
-			ruleSet.configuration.forEach { configuration ->
-				if (configuration.defaultValue.isYamlList()) {
-					list(configuration.name, configuration.defaultValue.toList())
-				} else {
-					keyValue { configuration.name to configuration.defaultValue }
-				}
-			}
-			rules.forEach { rule ->
-				node(rule.name) {
-					keyValue { "active" to "${rule.active}" }
-					if (rule.autoCorrect) {
-						keyValue { "autoCorrect" to "true" }
-					}
-					rule.configuration.forEach { configuration ->
-						if (configuration.defaultValue.isYamlList()) {
-							list(configuration.name, configuration.defaultValue.toList())
-						} else {
-							keyValue { configuration.name to configuration.defaultValue }
-						}
-					}
-				}
-			}
-			emptyLine()
-		}
-	}
+    private fun YamlNode.printRuleSet(ruleSet: RuleSetProvider, rules: List<Rule>) {
+        node(ruleSet.name) {
+            keyValue { "active" to "${ruleSet.active}" }
+            ruleSet.configuration.forEach { configuration ->
+                if (configuration.defaultValue.isYamlList()) {
+                    list(configuration.name, configuration.defaultValue.toList())
+                } else {
+                    keyValue { configuration.name to configuration.defaultValue }
+                }
+            }
+            rules.forEach { rule ->
+                node(rule.name) {
+                    keyValue { "active" to "${rule.active}" }
+                    if (rule.autoCorrect) {
+                        keyValue { "autoCorrect" to "true" }
+                    }
+                    rule.configuration.forEach { configuration ->
+                        if (configuration.defaultValue.isYamlList()) {
+                            list(configuration.name, configuration.defaultValue.toList())
+                        } else {
+                            keyValue { configuration.name to configuration.defaultValue }
+                        }
+                    }
+                }
+            }
+            emptyLine()
+        }
+    }
 
-	private fun defaultGenericConfiguration(): String {
-		return """
+    private fun defaultGenericConfiguration(): String {
+        return """
 			autoCorrect: true
 			failFast: false
 			""".trimIndent()
-	}
+    }
 
-	private fun defaultTestPatternConfiguration(): String {
-		return """
+    private fun defaultTestPatternConfiguration(): String {
+        return """
 			test-pattern: # Configure exclusions for test sources
 			  active: true
 			  patterns: # Test file regexes
@@ -94,10 +94,10 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 			    - 'TooGenericExceptionCaught'
 			    - 'InstanceOfCheckForException'
 			""".trimIndent()
-	}
+    }
 
-	private fun defaultBuildConfiguration(): String {
-		return """
+    private fun defaultBuildConfiguration(): String {
+        return """
 			build:
 			  maxIssues: 10
 			  weights:
@@ -106,10 +106,10 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 			    # style: 1
 			    # comments: 1
 			""".trimIndent()
-	}
+    }
 
-	private fun defaultProcessorsConfiguration(): String {
-		return """
+    private fun defaultProcessorsConfiguration(): String {
+        return """
 			processors:
 			  active: true
 			  exclude:
@@ -119,10 +119,10 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 			  # - 'PackageCountProcessor'
 			  # - 'KtFileCountProcessor'
 			""".trimIndent()
-	}
+    }
 
-	private fun defaultConsoleReportsConfiguration(): String {
-		return """
+    private fun defaultConsoleReportsConfiguration(): String {
+        return """
 			console-reports:
 			  active: true
 			  exclude:
@@ -132,11 +132,11 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 			  #  - 'FindingsReport'
 			  #  - 'BuildFailureReport'
 			""".trimIndent()
-	}
+    }
 
-	private fun String.isYamlList() = trim().startsWith("-")
+    private fun String.isYamlList() = trim().startsWith("-")
 
-	private fun String.toList(): List<String> {
-		return split("\n").map { it.replace("-", "") }.map { it.trim() }
-	}
+    private fun String.toList(): List<String> {
+        return split("\n").map { it.replace("-", "") }.map { it.trim() }
+    }
 }

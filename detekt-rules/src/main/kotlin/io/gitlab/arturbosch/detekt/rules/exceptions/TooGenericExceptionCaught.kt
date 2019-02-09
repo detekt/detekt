@@ -54,46 +54,46 @@ import org.jetbrains.kotlin.psi.KtTypeReference
  */
 class TooGenericExceptionCaught(config: Config) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName,
-			Severity.Defect,
-			"Caught exception is too generic. " +
-					"Prefer catching specific exceptions to the case that is currently handled.",
-			Debt.TWENTY_MINS)
+    override val issue = Issue(javaClass.simpleName,
+            Severity.Defect,
+            "Caught exception is too generic. " +
+                    "Prefer catching specific exceptions to the case that is currently handled.",
+            Debt.TWENTY_MINS)
 
-	private val exceptions: Set<String> = valueOrDefault(
-			CAUGHT_EXCEPTIONS_PROPERTY, caughtExceptionDefaults).toHashSet()
+    private val exceptions: Set<String> = valueOrDefault(
+            CAUGHT_EXCEPTIONS_PROPERTY, caughtExceptionDefaults).toHashSet()
 
-	private val allowedExceptionNameRegex by LazyRegex(ALLOWED_EXCEPTION_NAME_REGEX, ALLOWED_EXCEPTION_NAME)
+    private val allowedExceptionNameRegex by LazyRegex(ALLOWED_EXCEPTION_NAME_REGEX, ALLOWED_EXCEPTION_NAME)
 
-	override fun visitCatchSection(catchClause: KtCatchClause) {
-		catchClause.catchParameter?.let {
-			if (isTooGenericException(it.typeReference) && !isAllowedExceptionName(it)) {
-				report(CodeSmell(issue, Entity.from(it), issue.description))
-			}
-		}
-		super.visitCatchSection(catchClause)
-	}
+    override fun visitCatchSection(catchClause: KtCatchClause) {
+        catchClause.catchParameter?.let {
+            if (isTooGenericException(it.typeReference) && !isAllowedExceptionName(it)) {
+                report(CodeSmell(issue, Entity.from(it), issue.description))
+            }
+        }
+        super.visitCatchSection(catchClause)
+    }
 
-	private fun isTooGenericException(typeReference: KtTypeReference?): Boolean {
-		return typeReference?.text in exceptions
-	}
+    private fun isTooGenericException(typeReference: KtTypeReference?): Boolean {
+        return typeReference?.text in exceptions
+    }
 
-	private fun isAllowedExceptionName(catchParameter: KtParameter) =
-			catchParameter.identifierName().matches(allowedExceptionNameRegex)
+    private fun isAllowedExceptionName(catchParameter: KtParameter) =
+            catchParameter.identifierName().matches(allowedExceptionNameRegex)
 
-	companion object {
-		const val CAUGHT_EXCEPTIONS_PROPERTY = "exceptionNames"
-		const val ALLOWED_EXCEPTION_NAME_REGEX = "allowedExceptionNameRegex"
-	}
+    companion object {
+        const val CAUGHT_EXCEPTIONS_PROPERTY = "exceptionNames"
+        const val ALLOWED_EXCEPTION_NAME_REGEX = "allowedExceptionNameRegex"
+    }
 }
 
 val caughtExceptionDefaults = listOf(
-		"ArrayIndexOutOfBoundsException",
-		"Error",
-		"Exception",
-		"IllegalMonitorStateException",
-		"NullPointerException",
-		"IndexOutOfBoundsException",
-		"RuntimeException",
-		"Throwable"
+        "ArrayIndexOutOfBoundsException",
+        "Error",
+        "Exception",
+        "IllegalMonitorStateException",
+        "NullPointerException",
+        "IndexOutOfBoundsException",
+        "RuntimeException",
+        "Throwable"
 )

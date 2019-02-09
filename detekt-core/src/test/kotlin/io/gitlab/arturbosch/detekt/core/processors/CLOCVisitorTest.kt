@@ -8,12 +8,12 @@ import org.jetbrains.spek.api.dsl.it
 
 class CLOCVisitorTest : Spek({
 
-	it("commentCases") {
-		val file = compileForTest(path.resolve("../comments/CommentsClass.kt"))
-		val commentLines = with(file) {
-			accept(CLOCVisitor())
-			getUserData(commentLinesKey)
-		}
-		assertThat(commentLines).isEqualTo(10)
-	}
+    it("commentCases") {
+        val file = compileForTest(path.resolve("../comments/CommentsClass.kt"))
+        val commentLines = with(file) {
+            accept(CLOCVisitor())
+            getUserData(commentLinesKey)
+        }
+        assertThat(commentLines).isEqualTo(10)
+    }
 })

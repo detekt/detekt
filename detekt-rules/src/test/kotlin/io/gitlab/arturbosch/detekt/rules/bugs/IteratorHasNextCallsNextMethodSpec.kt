@@ -8,18 +8,18 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
 class IteratorHasNextCallsNextMethodSpec : SubjectSpek<IteratorHasNextCallsNextMethod>({
-	subject { IteratorHasNextCallsNextMethod() }
+    subject { IteratorHasNextCallsNextMethod() }
 
-	given("some iterator classes with a hasNext() method which calls next() method") {
+    given("some iterator classes with a hasNext() method which calls next() method") {
 
-		it("reports wrong iterator implementation") {
-			val path = Case.IteratorImplPositive.path()
-			assertThat(subject.lint(path)).hasSize(4)
-		}
+        it("reports wrong iterator implementation") {
+            val path = Case.IteratorImplPositive.path()
+            assertThat(subject.lint(path)).hasSize(4)
+        }
 
-		it("does not report correct iterator implementations") {
-			val path = Case.IteratorImplNegative.path()
-			assertThat(subject.lint(path)).hasSize(0)
-		}
-	}
+        it("does not report correct iterator implementations") {
+            val path = Case.IteratorImplNegative.path()
+            assertThat(subject.lint(path)).hasSize(0)
+        }
+    }
 })

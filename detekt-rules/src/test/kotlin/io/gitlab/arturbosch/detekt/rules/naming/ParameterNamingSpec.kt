@@ -13,10 +13,10 @@ import org.jetbrains.spek.api.dsl.it
  */
 class ParameterNamingSpec : Spek({
 
-	describe("parameters in a constructor of a class") {
+    describe("parameters in a constructor of a class") {
 
-		it("should detect no violations") {
-			val code = """
+        it("should detect no violations") {
+            val code = """
 				class C(val param: String, private val privateParam: String)
 
 				class C {
@@ -24,11 +24,11 @@ class ParameterNamingSpec : Spek({
 					construct(val param: String, private val privateParam: String) {}
 				}
 			"""
-			assertThat(ConstructorParameterNaming().lint(code)).isEmpty()
-		}
+            assertThat(ConstructorParameterNaming().lint(code)).isEmpty()
+        }
 
-		it("should find some violations") {
-			val code = """
+        it("should find some violations") {
+            val code = """
 				class C(val PARAM: String, private val PRIVATE_PARAM: String)
 
 				class C {
@@ -36,66 +36,66 @@ class ParameterNamingSpec : Spek({
 					construct(val PARAM: String, private val PRIVATE_PARAM: String) {}
 				}
 			"""
-			assertThat(NamingRules().lint(code)).hasSize(5)
-		}
-	}
+            assertThat(NamingRules().lint(code)).hasSize(5)
+        }
+    }
 
-	describe("parameters in a function of a class") {
+    describe("parameters in a function of a class") {
 
-		it("should detect no violations") {
-			val code = """
+        it("should detect no violations") {
+            val code = """
 				class C {
 					fun someStuff(param: String) {}
 				}
 			"""
-			assertThat(ConstructorParameterNaming().lint(code)).isEmpty()
-		}
+            assertThat(ConstructorParameterNaming().lint(code)).isEmpty()
+        }
 
-		it("should not detect violations in overridden function by default") {
-			val code = """
+        it("should not detect violations in overridden function by default") {
+            val code = """
 				class C {
 					override fun someStuff(`object`: String) {}
 				}
 			"""
-			assertThat(FunctionParameterNaming().lint(code)).isEmpty()
-		}
+            assertThat(FunctionParameterNaming().lint(code)).isEmpty()
+        }
 
-		it("should detect violations in overridden function if ignoreOverriddenFunctions is false") {
-			val code = """
+        it("should detect violations in overridden function if ignoreOverriddenFunctions is false") {
+            val code = """
 				class C {
 					override fun someStuff(`object`: String) {}
 				}
 			"""
-			val config = TestConfig(mapOf("ignoreOverriddenFunctions" to "false"))
-			assertThat(FunctionParameterNaming(config).lint(code)).hasSize(1)
-		}
+            val config = TestConfig(mapOf("ignoreOverriddenFunctions" to "false"))
+            assertThat(FunctionParameterNaming(config).lint(code)).hasSize(1)
+        }
 
-		it("should find some violations") {
-			val code = """
+        it("should find some violations") {
+            val code = """
 				class C {
 					fun someStuff(PARAM: String) {}
 				}
 			"""
-			assertThat(NamingRules().lint(code)).hasSize(1)
-		}
-	}
+            assertThat(NamingRules().lint(code)).hasSize(1)
+        }
+    }
 
-	describe("parameters in a function of an excluded class") {
+    describe("parameters in a function of an excluded class") {
 
-		val config = TestConfig(mapOf("excludeClassPattern" to "Excluded"))
+        val config = TestConfig(mapOf("excludeClassPattern" to "Excluded"))
 
-		it("should not detect function parameter") {
-			val code = """
+        it("should not detect function parameter") {
+            val code = """
 				class Excluded {
 					fun f(PARAM: Int)
 				}
 			"""
-			assertThat(FunctionParameterNaming(config).lint(code)).isEmpty()
-		}
+            assertThat(FunctionParameterNaming(config).lint(code)).isEmpty()
+        }
 
-		it("should not detect constructor parameter") {
-			val code = "class Excluded(val PARAM: Int) {}"
-			assertThat(ConstructorParameterNaming(config).lint(code)).isEmpty()
-		}
-	}
+        it("should not detect constructor parameter") {
+            val code = "class Excluded(val PARAM: Int) {}"
+            assertThat(ConstructorParameterNaming(config).lint(code)).isEmpty()
+        }
+    }
 })

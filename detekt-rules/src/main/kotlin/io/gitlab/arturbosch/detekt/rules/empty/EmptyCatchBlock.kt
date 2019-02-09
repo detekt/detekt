@@ -18,18 +18,18 @@ import org.jetbrains.kotlin.psi.KtCatchClause
  */
 class EmptyCatchBlock(config: Config) : EmptyRule(config = config) {
 
-	private val allowedExceptionNameRegex by LazyRegex(ALLOWED_EXCEPTION_NAME_REGEX, ALLOWED_EXCEPTION_NAME)
+    private val allowedExceptionNameRegex by LazyRegex(ALLOWED_EXCEPTION_NAME_REGEX, ALLOWED_EXCEPTION_NAME)
 
-	override fun visitCatchSection(catchClause: KtCatchClause) {
-		super.visitCatchSection(catchClause)
-		val name = catchClause.catchParameter?.identifierName()
-		if (name != null && name.matches(allowedExceptionNameRegex)) {
-			return
-		}
-		catchClause.catchBody?.addFindingIfBlockExprIsEmpty()
-	}
+    override fun visitCatchSection(catchClause: KtCatchClause) {
+        super.visitCatchSection(catchClause)
+        val name = catchClause.catchParameter?.identifierName()
+        if (name != null && name.matches(allowedExceptionNameRegex)) {
+            return
+        }
+        catchClause.catchBody?.addFindingIfBlockExprIsEmpty()
+    }
 
-	companion object {
-		const val ALLOWED_EXCEPTION_NAME_REGEX = "allowedExceptionNameRegex"
-	}
+    companion object {
+        const val ALLOWED_EXCEPTION_NAME_REGEX = "allowedExceptionNameRegex"
+    }
 }

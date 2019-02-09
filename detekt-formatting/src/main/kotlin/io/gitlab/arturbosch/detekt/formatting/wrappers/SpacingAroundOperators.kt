@@ -13,6 +13,6 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 class SpacingAroundOperators(config: Config) : FormattingRule(config) {
 
-	override val wrapping = SpacingAroundOperatorsRule()
-	override val issue = issueFor("Reports spaces around operators")
+    override val wrapping = SpacingAroundOperatorsRule()
+    override val issue = issueFor("Reports spaces around operators")
 }

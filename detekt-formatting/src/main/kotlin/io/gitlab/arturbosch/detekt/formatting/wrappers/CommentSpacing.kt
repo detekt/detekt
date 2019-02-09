@@ -13,6 +13,6 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 class CommentSpacing(config: Config) : FormattingRule(config) {
 
-	override val wrapping = CommentSpacingRule()
-	override val issue = issueFor("Checks if comments have the right spacing")
+    override val wrapping = CommentSpacingRule()
+    override val issue = issueFor("Checks if comments have the right spacing")
 }

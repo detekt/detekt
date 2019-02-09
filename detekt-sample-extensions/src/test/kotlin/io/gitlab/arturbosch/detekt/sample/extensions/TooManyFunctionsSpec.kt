@@ -12,19 +12,19 @@ import org.jetbrains.spek.subject.SubjectSpek
  */
 class TooManyFunctionsSpec : SubjectSpek<TooManyFunctions>({
 
-	subject { TooManyFunctions() }
+    subject { TooManyFunctions() }
 
-	describe("a simple test") {
+    describe("a simple test") {
 
-		it("should find one file with too many functions") {
-			val findings = subject.lint(code)
-			assertThat(findings).hasSize(1)
-		}
-	}
+        it("should find one file with too many functions") {
+            val findings = subject.lint(code)
+            assertThat(findings).hasSize(1)
+        }
+    }
 })
 
 const val code: String =
-		"""
+        """
 			class TooManyFunctions : Rule("TooManyFunctions") {
 
 				override fun visitUserType(type: KtUserType) {

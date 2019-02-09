@@ -7,90 +7,90 @@ import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.test.loadRuleSet
 import io.gitlab.arturbosch.detekt.test.resource
 import io.gitlab.arturbosch.detekt.test.yamlConfig
+import java.nio.file.Paths
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.spek.api.Spek
 import org.jetbrains.spek.api.dsl.describe
 import org.jetbrains.spek.api.dsl.given
 import org.jetbrains.spek.api.dsl.it
-import java.nio.file.Paths
 
 /**
  * @author Artur Bosch
  */
 class AutoCorrectLevelSpec : Spek({
 
-	describe("test different autoCorrect levels in configuration") {
+    describe("test different autoCorrect levels in configuration") {
 
-		given("autoCorrect: true on all levels") {
+        given("autoCorrect: true on all levels") {
 
-			val config = yamlConfig("/autocorrect/autocorrect-all-true.yml")
+            val config = yamlConfig("/autocorrect/autocorrect-all-true.yml")
 
-			it("should reformat the test file") {
-				val (file, findings) = runAnalysis(config)
-				assertThat(wasLinted(findings)).isTrue()
-				assertThat(wasFormatted(file)).isTrue()
-			}
-		}
+            it("should reformat the test file") {
+                val (file, findings) = runAnalysis(config)
+                assertThat(wasLinted(findings)).isTrue()
+                assertThat(wasFormatted(file)).isTrue()
+            }
+        }
 
-		given("autoCorrect: false on top level") {
+        given("autoCorrect: false on top level") {
 
-			val config = yamlConfig("/autocorrect/autocorrect-toplevel-false.yml")
+            val config = yamlConfig("/autocorrect/autocorrect-toplevel-false.yml")
 
-			it("should format the test file but not print to disc") {
-				val project = Paths.get(resource("before.kt"))
-				val detekt = DetektFacade.create(ProcessingSettings(project, config))
-				val file = loadFile("before.kt")
-				val expected = file.text
-				val findings = detekt.run(project, listOf(file))
-						.findings.flatMap { it.value }
+            it("should format the test file but not print to disc") {
+                val project = Paths.get(resource("before.kt"))
+                val detekt = DetektFacade.create(ProcessingSettings(project, config))
+                val file = loadFile("before.kt")
+                val expected = file.text
+                val findings = detekt.run(project, listOf(file))
+                        .findings.flatMap { it.value }
 
-				assertThat(wasLinted(findings)).isTrue()
-				assertThat(wasFormatted(file)).isTrue()
-				assertThat(loadFileContent("before.kt")).isEqualTo(expected)
-			}
-		}
+                assertThat(wasLinted(findings)).isTrue()
+                assertThat(wasFormatted(file)).isTrue()
+                assertThat(loadFileContent("before.kt")).isEqualTo(expected)
+            }
+        }
 
-		given("autoCorrect: false on ruleSet level") {
+        given("autoCorrect: false on ruleSet level") {
 
-			val config = yamlConfig("/autocorrect/autocorrect-ruleset-false.yml")
+            val config = yamlConfig("/autocorrect/autocorrect-ruleset-false.yml")
 
-			it("should not reformat the test file") {
-				val (file, findings) = runAnalysis(config)
-				assertThat(wasLinted(findings)).isTrue()
-				assertThat(wasFormatted(file)).isFalse()
-			}
-		}
+            it("should not reformat the test file") {
+                val (file, findings) = runAnalysis(config)
+                assertThat(wasLinted(findings)).isTrue()
+                assertThat(wasFormatted(file)).isFalse()
+            }
+        }
 
-		given("autoCorrect: false on rule level") {
+        given("autoCorrect: false on rule level") {
 
-			val config = yamlConfig("/autocorrect/autocorrect-rule-false.yml")
+            val config = yamlConfig("/autocorrect/autocorrect-rule-false.yml")
 
-			it("should not reformat the test file") {
-				val (file, findings) = runAnalysis(config)
-				assertThat(wasLinted(findings)).isTrue()
-				assertThat(wasFormatted(file)).isFalse()
-			}
-		}
+            it("should not reformat the test file") {
+                val (file, findings) = runAnalysis(config)
+                assertThat(wasLinted(findings)).isTrue()
+                assertThat(wasFormatted(file)).isFalse()
+            }
+        }
 
-		given("autoCorrect: true but rule active false") {
+        given("autoCorrect: true but rule active false") {
 
-			val config = yamlConfig("/autocorrect/autocorrect-true-rule-active-false.yml")
+            val config = yamlConfig("/autocorrect/autocorrect-true-rule-active-false.yml")
 
-			it("should not reformat the test file") {
-				val (file, findings) = runAnalysis(config)
-				assertThat(wasLinted(findings)).isFalse()
-				assertThat(wasFormatted(file)).isFalse()
-			}
-		}
-	}
+            it("should not reformat the test file") {
+                val (file, findings) = runAnalysis(config)
+                assertThat(wasLinted(findings)).isFalse()
+                assertThat(wasFormatted(file)).isFalse()
+            }
+        }
+    }
 })
 
 private fun runAnalysis(config: Config): Pair<KtFile, List<Finding>> {
-	val testFile = loadFile("before.kt")
-	val ruleSet = loadRuleSet<FormattingProvider>(config)
-	val findings = ruleSet.accept(testFile)
-	return testFile to findings
+    val testFile = loadFile("before.kt")
+    val ruleSet = loadRuleSet<FormattingProvider>(config)
+    val findings = ruleSet.accept(testFile)
+    return testFile to findings
 }
 
 private fun wasLinted(findings: List<Finding>): Boolean = findings.isNotEmpty()

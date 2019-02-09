@@ -1,13 +1,13 @@
 package io.gitlab.arturbosch.detekt.core
 
 import io.gitlab.arturbosch.detekt.api.Finding
-import org.jetbrains.kotlin.psi.KtFile
 import java.io.PrintStream
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.HashMap
 import java.util.stream.Collectors
 import java.util.stream.Stream
+import org.jetbrains.kotlin.psi.KtFile
 
 /**
  * @author Artur Bosch
@@ -23,22 +23,22 @@ fun KtFile.relativePath(): String? = getUserData(KtCompiler.RELATIVE_PATH)
 fun KtFile.absolutePath(): String? = getUserData(KtCompiler.ABSOLUTE_PATH)
 
 fun MutableMap<String, List<Finding>>.mergeSmells(other: Map<String, List<Finding>>) {
-	for ((key, findings) in other.entries) {
-		merge(key, findings) { f1, f2 -> f1.plus(f2) }
-	}
+    for ((key, findings) in other.entries) {
+        merge(key, findings) { f1, f2 -> f1.plus(f2) }
+    }
 }
 
 fun Throwable.printStacktraceRecursively(logger: PrintStream) {
-	stackTrace.forEach { logger.println(it) }
-	cause?.printStacktraceRecursively(logger)
+    stackTrace.forEach { logger.println(it) }
+    cause?.printStacktraceRecursively(logger)
 }
 
 fun <K, V> List<Pair<K, List<V>>>.toMergedMap(): Map<K, List<V>> {
-	val map = HashMap<K, MutableList<V>>()
-	for ((key, values) in this) {
-		map.merge(key, values.toMutableList()) { l1, l2 ->
-			l1.apply { addAll(l2) }
-		}
-	}
-	return map
+    val map = HashMap<K, MutableList<V>>()
+    for ((key, values) in this) {
+        map.merge(key, values.toMutableList()) { l1, l2 ->
+            l1.apply { addAll(l2) }
+        }
+    }
+    return map
 }

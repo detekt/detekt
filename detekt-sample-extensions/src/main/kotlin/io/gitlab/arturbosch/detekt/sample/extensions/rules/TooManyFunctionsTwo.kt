@@ -23,27 +23,27 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  */
 class TooManyFunctionsTwo(config: Config) : ThresholdRule(config, THRESHOLD) {
 
-	override val issue = Issue(javaClass.simpleName,
-			Severity.Maintainability,
-			"Too many functions can make the maintainability of a file more costly",
-			Debt(hours = 1))
+    override val issue = Issue(javaClass.simpleName,
+            Severity.Maintainability,
+            "Too many functions can make the maintainability of a file more costly",
+            Debt(hours = 1))
 
-	private var amount: Int = 0
+    private var amount: Int = 0
 
-	override fun visitFile(file: PsiFile) {
-		super.visitFile(file)
-		if (amount > threshold) {
-			report(ThresholdedCodeSmell(issue,
-					entity = Entity.from(file),
-					metric = Metric(type = "SIZE", value = amount, threshold = THRESHOLD),
-					message = "The file ${file.name} has $amount function declarations. " +
-							"Threshold is specified with $THRESHOLD.",
-					references = emptyList())
-			)
-		}
-	}
+    override fun visitFile(file: PsiFile) {
+        super.visitFile(file)
+        if (amount > threshold) {
+            report(ThresholdedCodeSmell(issue,
+                    entity = Entity.from(file),
+                    metric = Metric(type = "SIZE", value = amount, threshold = THRESHOLD),
+                    message = "The file ${file.name} has $amount function declarations. " +
+                            "Threshold is specified with $THRESHOLD.",
+                    references = emptyList())
+            )
+        }
+    }
 
-	override fun visitNamedFunction(function: KtNamedFunction) {
-		amount++
-	}
+    override fun visitNamedFunction(function: KtNamedFunction) {
+        amount++
+    }
 }

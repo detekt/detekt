@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import java.util.Arrays
 import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.lexer.KtTokens.ABSTRACT_KEYWORD
 import org.jetbrains.kotlin.lexer.KtTokens.ACTUAL_KEYWORD
@@ -35,7 +36,6 @@ import org.jetbrains.kotlin.lexer.KtTokens.TAILREC_KEYWORD
 import org.jetbrains.kotlin.lexer.KtTokens.VARARG_KEYWORD
 import org.jetbrains.kotlin.psi.KtModifierList
 import org.jetbrains.kotlin.psi.psiUtil.allChildren
-import java.util.Arrays
 
 /**
  * This rule reports cases in the code where modifiers are not in the correct order. The default modifier order is
@@ -54,48 +54,48 @@ import java.util.Arrays
  */
 class ModifierOrder(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName,
-			Severity.Style,
-			"Modifiers are not in the correct order.",
-			Debt.FIVE_MINS)
+    override val issue = Issue(javaClass.simpleName,
+            Severity.Style,
+            "Modifiers are not in the correct order.",
+            Debt.FIVE_MINS)
 
-	// subset of KtTokens.MODIFIER_KEYWORDS_ARRAY
-	private val order = arrayOf(
-			PUBLIC_KEYWORD, PROTECTED_KEYWORD, PRIVATE_KEYWORD, INTERNAL_KEYWORD,
-			EXPECT_KEYWORD, ACTUAL_KEYWORD,
-			FINAL_KEYWORD, OPEN_KEYWORD, ABSTRACT_KEYWORD, SEALED_KEYWORD, CONST_KEYWORD,
-			EXTERNAL_KEYWORD,
-			OVERRIDE_KEYWORD,
-			LATEINIT_KEYWORD,
-			TAILREC_KEYWORD,
-			VARARG_KEYWORD,
-			SUSPEND_KEYWORD,
-			INNER_KEYWORD,
-			ENUM_KEYWORD, ANNOTATION_KEYWORD,
-			COMPANION_KEYWORD,
-			INLINE_KEYWORD,
-			INFIX_KEYWORD,
-			OPERATOR_KEYWORD,
-			DATA_KEYWORD
-	)
+    // subset of KtTokens.MODIFIER_KEYWORDS_ARRAY
+    private val order = arrayOf(
+            PUBLIC_KEYWORD, PROTECTED_KEYWORD, PRIVATE_KEYWORD, INTERNAL_KEYWORD,
+            EXPECT_KEYWORD, ACTUAL_KEYWORD,
+            FINAL_KEYWORD, OPEN_KEYWORD, ABSTRACT_KEYWORD, SEALED_KEYWORD, CONST_KEYWORD,
+            EXTERNAL_KEYWORD,
+            OVERRIDE_KEYWORD,
+            LATEINIT_KEYWORD,
+            TAILREC_KEYWORD,
+            VARARG_KEYWORD,
+            SUSPEND_KEYWORD,
+            INNER_KEYWORD,
+            ENUM_KEYWORD, ANNOTATION_KEYWORD,
+            COMPANION_KEYWORD,
+            INLINE_KEYWORD,
+            INFIX_KEYWORD,
+            OPERATOR_KEYWORD,
+            DATA_KEYWORD
+    )
 
-	override fun visitModifierList(list: KtModifierList) {
-		super.visitModifierList(list)
+    override fun visitModifierList(list: KtModifierList) {
+        super.visitModifierList(list)
 
-		val modifiers = list.allChildren
-				.toList()
-				.filter { it !is PsiWhiteSpace }
-				.toTypedArray()
+        val modifiers = list.allChildren
+                .toList()
+                .filter { it !is PsiWhiteSpace }
+                .toTypedArray()
 
-		val sortedModifiers = modifiers.copyOf()
-				.apply { sortWith(compareBy { order.indexOf(it.node.elementType) }) }
+        val sortedModifiers = modifiers.copyOf()
+                .apply { sortWith(compareBy { order.indexOf(it.node.elementType) }) }
 
-		if (!Arrays.equals(modifiers, sortedModifiers)) {
-			val modifierString = sortedModifiers.joinToString(" ") { it.text }
+        if (!Arrays.equals(modifiers, sortedModifiers)) {
+            val modifierString = sortedModifiers.joinToString(" ") { it.text }
 
-			report(CodeSmell(Issue(javaClass.simpleName, Severity.Style,
-					"Modifier order should be: $modifierString", Debt(mins = 1)), Entity.from(list),
-					"Modifier order should be: $modifierString"))
-		}
-	}
+            report(CodeSmell(Issue(javaClass.simpleName, Severity.Style,
+                    "Modifier order should be: $modifierString", Debt(mins = 1)), Entity.from(list),
+                    "Modifier order should be: $modifierString"))
+        }
+    }
 }

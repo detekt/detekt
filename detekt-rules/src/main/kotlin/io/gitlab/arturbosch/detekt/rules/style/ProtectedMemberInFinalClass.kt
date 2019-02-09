@@ -36,37 +36,37 @@ import org.jetbrains.kotlin.psi.psiUtil.isProtected
  */
 class ProtectedMemberInFinalClass(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName, Severity.Warning,
-			"Member with protected visibility in final class is private. Consider using private or internal as modifier.",
-			Debt.FIVE_MINS)
+    override val issue = Issue(javaClass.simpleName, Severity.Warning,
+            "Member with protected visibility in final class is private. Consider using private or internal as modifier.",
+            Debt.FIVE_MINS)
 
-	private val visitor = DeclarationVisitor()
+    private val visitor = DeclarationVisitor()
 
-	/**
-	 * Only classes and companion objects can contain protected members.
-	 */
-	override fun visitClass(klass: KtClass) {
-		if (hasModifiers(klass)) {
-			klass.primaryConstructor?.accept(visitor)
-			klass.body?.declarations?.forEach { it.accept(visitor) }
-			klass.companionObjects.forEach { it.accept(visitor) }
-		}
-		super.visitClass(klass)
-	}
+    /**
+     * Only classes and companion objects can contain protected members.
+     */
+    override fun visitClass(klass: KtClass) {
+        if (hasModifiers(klass)) {
+            klass.primaryConstructor?.accept(visitor)
+            klass.body?.declarations?.forEach { it.accept(visitor) }
+            klass.companionObjects.forEach { it.accept(visitor) }
+        }
+        super.visitClass(klass)
+    }
 
-	private fun hasModifiers(klass: KtClass): Boolean {
-		val isNotAbstract = !klass.isAbstract()
-		val isFinal = !klass.isOpen()
-		val isNotSealed = !klass.isSealed()
-		return isNotAbstract && isFinal && isNotSealed
-	}
+    private fun hasModifiers(klass: KtClass): Boolean {
+        val isNotAbstract = !klass.isAbstract()
+        val isFinal = !klass.isOpen()
+        val isNotSealed = !klass.isSealed()
+        return isNotAbstract && isFinal && isNotSealed
+    }
 
-	internal inner class DeclarationVisitor : DetektVisitor() {
+    internal inner class DeclarationVisitor : DetektVisitor() {
 
-		override fun visitDeclaration(dcl: KtDeclaration) {
-			if (dcl.isProtected() && !dcl.isOverride()) {
-				report(CodeSmell(issue, Entity.from(dcl), issue.description))
-			}
-		}
-	}
+        override fun visitDeclaration(dcl: KtDeclaration) {
+            if (dcl.isProtected() && !dcl.isOverride()) {
+                report(CodeSmell(issue, Entity.from(dcl), issue.description))
+            }
+        }
+    }
 }

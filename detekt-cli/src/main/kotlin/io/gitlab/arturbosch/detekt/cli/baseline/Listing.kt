@@ -5,8 +5,8 @@ package io.gitlab.arturbosch.detekt.cli.baseline
  */
 interface Listing<T> {
 
-	val timestamp: String
-	val ids: Set<String>
+    val timestamp: String
+    val ids: Set<String>
 
-	fun withNewTimestamp(timestamp: String, list: T): T
+    fun withNewTimestamp(timestamp: String, list: T): T
 }

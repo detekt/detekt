@@ -7,42 +7,42 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
 class UselessPostfixExpressionSpec : SubjectSpek<UselessPostfixExpression>({
-	subject { UselessPostfixExpression() }
+    subject { UselessPostfixExpression() }
 
-	describe("check several types of postfix increments") {
+    describe("check several types of postfix increments") {
 
-		it("overrides the incremented integer") {
-			val code = """
+        it("overrides the incremented integer") {
+            val code = """
 				fun x() {
 					var i = 0
 					i = i-- // invalid
 					i = 1 + i++ // invalid
 					i = i++ + 1 // invalid
 				}"""
-			assertThat(subject.lint(code)).hasSize(3)
-		}
+            assertThat(subject.lint(code)).hasSize(3)
+        }
 
-		it("does not override the incremented integer") {
-			val code = """
+        it("does not override the incremented integer") {
+            val code = """
 				fun f() {
 					var j = 0
 					j = i++
 				}"""
-			assertThat(subject.lint(code)).hasSize(0)
-		}
+            assertThat(subject.lint(code)).hasSize(0)
+        }
 
-		it("returns no incremented value") {
-			val code = """
+        it("returns no incremented value") {
+            val code = """
 				fun x() {
 					var i = 0
 					if (i == 0) return 1 + j++
 					return i++
 				}"""
-			assertThat(subject.lint(code)).hasSize(2)
-		}
+            assertThat(subject.lint(code)).hasSize(2)
+        }
 
-		it("should not report field increments") {
-			val code = """
+        it("should not report field increments") {
+            val code = """
 				class Test {
 					private var runningId: Long = 0
 
@@ -61,11 +61,11 @@ class UselessPostfixExpressionSpec : SubjectSpek<UselessPostfixExpression>({
 					}
 				}
 				"""
-			assertThat(subject.lint(code)).isEmpty()
-		}
+            assertThat(subject.lint(code)).isEmpty()
+        }
 
-		it("should detect properties shadowing fields that are incremented") {
-			val code = """
+        it("should detect properties shadowing fields that are incremented") {
+            val code = """
 				class Test {
 					private var runningId: Long = 0
 
@@ -82,14 +82,14 @@ class UselessPostfixExpressionSpec : SubjectSpek<UselessPostfixExpression>({
 					}
 				}
 				"""
-			assertThat(subject.lint(code)).hasSize(2)
-		}
-	}
+            assertThat(subject.lint(code)).hasSize(2)
+        }
+    }
 
-	describe("Only ++ and -- postfix operators should be considered") {
+    describe("Only ++ and -- postfix operators should be considered") {
 
-		it("should not report !! in a return statement") {
-			val code = """
+        it("should not report !! in a return statement") {
+            val code = """
 				fun getInstance(): SwiftBrowserIdleTaskHelper {
 					return sInstance!!
 				}
@@ -98,11 +98,11 @@ class UselessPostfixExpressionSpec : SubjectSpek<UselessPostfixExpression>({
 					return shouldNotBeNull!!.field
 				}
 				"""
-			assertThat(subject.lint(code)).isEmpty()
-		}
+            assertThat(subject.lint(code)).isEmpty()
+        }
 
-		it("should not report !! in a standalone expression") {
-			assertThat(subject.lint("sInstance!!")).isEmpty()
-		}
-	}
+        it("should not report !! in a standalone expression") {
+            assertThat(subject.lint("sInstance!!")).isEmpty()
+        }
+    }
 })

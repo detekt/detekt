@@ -14,6 +14,7 @@ import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
 import io.gitlab.arturbosch.detekt.invoke.PluginsArgument
 import io.gitlab.arturbosch.detekt.invoke.XmlReportArgument
+import java.io.File
 import org.gradle.api.Action
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.ConfigurableFileCollection
@@ -35,7 +36,6 @@ import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.SkipWhenEmpty
 import org.gradle.api.tasks.TaskAction
 import org.gradle.language.base.plugins.LifecycleBasePlugin
-import java.io.File
 
 /**
  * @author Artur Bosch
@@ -45,98 +45,98 @@ import java.io.File
 @CacheableTask
 open class Detekt : DefaultTask() {
 
-	@InputFiles
-	@PathSensitive(PathSensitivity.RELATIVE)
-	@SkipWhenEmpty
-	var input: ConfigurableFileCollection = project.layout.configurableFiles()
+    @InputFiles
+    @PathSensitive(PathSensitivity.RELATIVE)
+    @SkipWhenEmpty
+    var input: ConfigurableFileCollection = project.layout.configurableFiles()
 
-	@Input
-	@Optional
-	var filters: Property<String> = project.objects.property(String::class.java)
+    @Input
+    @Optional
+    var filters: Property<String> = project.objects.property(String::class.java)
 
-	@InputFile
-	@Optional
-	@PathSensitive(PathSensitivity.RELATIVE)
-	var baseline: RegularFileProperty = createNewInputFile()
+    @InputFile
+    @Optional
+    @PathSensitive(PathSensitivity.RELATIVE)
+    var baseline: RegularFileProperty = createNewInputFile()
 
-	@InputFiles
-	@Optional
-	@PathSensitive(PathSensitivity.RELATIVE)
-	var config: ConfigurableFileCollection = project.layout.configurableFiles()
+    @InputFiles
+    @Optional
+    @PathSensitive(PathSensitivity.RELATIVE)
+    var config: ConfigurableFileCollection = project.layout.configurableFiles()
 
-	@Input
-	@Optional
-	var plugins: Property<String> = project.objects.property(String::class.java)
+    @Input
+    @Optional
+    var plugins: Property<String> = project.objects.property(String::class.java)
 
-	@Internal
-	@Optional
-	val debugProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
-	var debug: Boolean
-		@Internal
-		get() = debugProp.get()
-		set(value) = debugProp.set(value)
+    @Internal
+    @Optional
+    val debugProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    var debug: Boolean
+        @Internal
+        get() = debugProp.get()
+        set(value) = debugProp.set(value)
 
-	@Internal
-	@Optional
-	val parallelProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
-	var parallel: Boolean
-		@Internal
-		get() = parallelProp.get()
-		set(value) = parallelProp.set(value)
+    @Internal
+    @Optional
+    val parallelProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    var parallel: Boolean
+        @Internal
+        get() = parallelProp.get()
+        set(value) = parallelProp.set(value)
 
-	@Optional
-	@Input
-	val disableDefaultRuleSetsProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
-	var disableDefaultRuleSets: Boolean
-		@Internal
-		get() = disableDefaultRuleSetsProp.get()
-		set(value) = disableDefaultRuleSetsProp.set(value)
+    @Optional
+    @Input
+    val disableDefaultRuleSetsProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    var disableDefaultRuleSets: Boolean
+        @Internal
+        get() = disableDefaultRuleSetsProp.get()
+        set(value) = disableDefaultRuleSetsProp.set(value)
 
-	@Internal
-	var reports = DetektReports(project)
+    @Internal
+    var reports = DetektReports(project)
 
-	fun reports(configure: Action<DetektReports>) = configure.execute(reports)
+    fun reports(configure: Action<DetektReports>) = configure.execute(reports)
 
-	@Internal
-	@Optional
-	var reportsDir: Property<File> = project.objects.property(File::class.java)
+    @Internal
+    @Optional
+    var reportsDir: Property<File> = project.objects.property(File::class.java)
 
-	val xmlReportFile: Provider<RegularFile>
-		@OutputFile
-		@Optional
-		get() = reports.xml.getTargetFileProvider(effectiveReportsDir)
+    val xmlReportFile: Provider<RegularFile>
+        @OutputFile
+        @Optional
+        get() = reports.xml.getTargetFileProvider(effectiveReportsDir)
 
-	val htmlReportFile: Provider<RegularFile>
-		@OutputFile
-		@Optional
-		get() = reports.html.getTargetFileProvider(effectiveReportsDir)
+    val htmlReportFile: Provider<RegularFile>
+        @OutputFile
+        @Optional
+        get() = reports.html.getTargetFileProvider(effectiveReportsDir)
 
-	private val defaultReportsDir: Directory = project.layout.buildDirectory.get()
-			.dir(ReportingExtension.DEFAULT_REPORTS_DIR_NAME)
-			.dir("detekt")
+    private val defaultReportsDir: Directory = project.layout.buildDirectory.get()
+            .dir(ReportingExtension.DEFAULT_REPORTS_DIR_NAME)
+            .dir("detekt")
 
-	private val effectiveReportsDir = project.provider { reportsDir.getOrElse(defaultReportsDir.asFile) }
+    private val effectiveReportsDir = project.provider { reportsDir.getOrElse(defaultReportsDir.asFile) }
 
-	init {
-		group = LifecycleBasePlugin.VERIFICATION_GROUP
-	}
+    init {
+        group = LifecycleBasePlugin.VERIFICATION_GROUP
+    }
 
-	@TaskAction
-	fun check() {
-		val arguments = mutableListOf<CliArgument>() +
-				InputArgument(input) +
-				FiltersArgument(filters.orNull) +
-				ConfigArgument(config) +
-				PluginsArgument(plugins.orNull) +
-				BaselineArgument(baseline.orNull) +
-				XmlReportArgument(xmlReportFile.orNull) +
-				HtmlReportArgument(htmlReportFile.orNull) +
-				DebugArgument(debugProp.getOrElse(false)) +
-				ParallelArgument(parallelProp.getOrElse(false)) +
-				DisableDefaultRulesetArgument(disableDefaultRuleSetsProp.getOrElse(false))
+    @TaskAction
+    fun check() {
+        val arguments = mutableListOf<CliArgument>() +
+                InputArgument(input) +
+                FiltersArgument(filters.orNull) +
+                ConfigArgument(config) +
+                PluginsArgument(plugins.orNull) +
+                BaselineArgument(baseline.orNull) +
+                XmlReportArgument(xmlReportFile.orNull) +
+                HtmlReportArgument(htmlReportFile.orNull) +
+                DebugArgument(debugProp.getOrElse(false)) +
+                ParallelArgument(parallelProp.getOrElse(false)) +
+                DisableDefaultRulesetArgument(disableDefaultRuleSetsProp.getOrElse(false))
 
-		DetektInvoker.invokeCli(project, arguments.toList(), debugProp.getOrElse(false))
-	}
+        DetektInvoker.invokeCli(project, arguments.toList(), debugProp.getOrElse(false))
+    }
 
-	private fun createNewInputFile() = project.fileProperty()
+    private fun createNewInputFile() = project.fileProperty()
 }

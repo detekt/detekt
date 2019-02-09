@@ -29,47 +29,47 @@ import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
  */
 class VariableNaming(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName,
-			Severity.Style,
-			"Variable names should follow the naming convention set in the projects configuration.",
-			debt = Debt.FIVE_MINS)
+    override val issue = Issue(javaClass.simpleName,
+            Severity.Style,
+            "Variable names should follow the naming convention set in the projects configuration.",
+            debt = Debt.FIVE_MINS)
 
-	private val variablePattern by LazyRegex(VARIABLE_PATTERN, "[a-z][A-Za-z0-9]*")
-	private val privateVariablePattern by LazyRegex(PRIVATE_VARIABLE_PATTERN, "(_)?[a-z][A-Za-z0-9]*")
-	private val excludeClassPattern by LazyRegex(EXCLUDE_CLASS_PATTERN, "$^")
-	private val ignoreOverridden = valueOrDefault(IGNORE_OVERRIDDEN, true)
+    private val variablePattern by LazyRegex(VARIABLE_PATTERN, "[a-z][A-Za-z0-9]*")
+    private val privateVariablePattern by LazyRegex(PRIVATE_VARIABLE_PATTERN, "(_)?[a-z][A-Za-z0-9]*")
+    private val excludeClassPattern by LazyRegex(EXCLUDE_CLASS_PATTERN, "$^")
+    private val ignoreOverridden = valueOrDefault(IGNORE_OVERRIDDEN, true)
 
-	override fun visitProperty(property: KtProperty) {
-		if (property.isSingleUnderscore || property.isContainingExcludedClassOrObject(excludeClassPattern)) {
-			return
-		}
+    override fun visitProperty(property: KtProperty) {
+        if (property.isSingleUnderscore || property.isContainingExcludedClassOrObject(excludeClassPattern)) {
+            return
+        }
 
-		if (ignoreOverridden && property.isOverride()) {
-			return
-		}
+        if (ignoreOverridden && property.isOverride()) {
+            return
+        }
 
-		val identifier = property.identifierName()
-		if (property.isPrivate()) {
-			if (!identifier.matches(privateVariablePattern)) {
-				report(CodeSmell(
-						issue,
-						Entity.from(property),
-						message = "Private variable names should match the pattern: $privateVariablePattern"))
-			}
-		} else {
-			if (!identifier.matches(variablePattern)) {
-				report(CodeSmell(
-						issue,
-						Entity.from(property),
-						message = "Variable names should match the pattern: $variablePattern"))
-			}
-		}
-	}
+        val identifier = property.identifierName()
+        if (property.isPrivate()) {
+            if (!identifier.matches(privateVariablePattern)) {
+                report(CodeSmell(
+                        issue,
+                        Entity.from(property),
+                        message = "Private variable names should match the pattern: $privateVariablePattern"))
+            }
+        } else {
+            if (!identifier.matches(variablePattern)) {
+                report(CodeSmell(
+                        issue,
+                        Entity.from(property),
+                        message = "Variable names should match the pattern: $variablePattern"))
+            }
+        }
+    }
 
-	companion object {
-		const val VARIABLE_PATTERN = "variablePattern"
-		const val PRIVATE_VARIABLE_PATTERN = "privateVariablePattern"
-		const val EXCLUDE_CLASS_PATTERN = "excludeClassPattern"
-		const val IGNORE_OVERRIDDEN = "ignoreOverridden"
-	}
+    companion object {
+        const val VARIABLE_PATTERN = "variablePattern"
+        const val PRIVATE_VARIABLE_PATTERN = "privateVariablePattern"
+        const val EXCLUDE_CLASS_PATTERN = "excludeClassPattern"
+        const val IGNORE_OVERRIDDEN = "ignoreOverridden"
+    }
 }

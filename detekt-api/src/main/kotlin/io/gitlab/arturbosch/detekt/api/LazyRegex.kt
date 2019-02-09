@@ -13,17 +13,17 @@ import kotlin.reflect.KProperty
  * @author Pavlos-Petros Tournaris
  */
 class LazyRegex(
-		private val key: String,
-		private val default: String
+    private val key: String,
+    private val default: String
 ) : ReadOnlyProperty<Rule, Regex> {
 
-	private var lazyRegexValue: Regex? = null
+    private var lazyRegexValue: Regex? = null
 
-	override fun getValue(thisRef: Rule, property: KProperty<*>): Regex {
-		return lazyRegexValue ?: createRegex(thisRef).also { lazyRegexValue = it }
-	}
+    override fun getValue(thisRef: Rule, property: KProperty<*>): Regex {
+        return lazyRegexValue ?: createRegex(thisRef).also { lazyRegexValue = it }
+    }
 
-	private fun createRegex(rule: Rule): Regex {
-		return Regex(rule.valueOrDefault(key = key, default = default))
-	}
+    private fun createRegex(rule: Rule): Regex {
+        return Regex(rule.valueOrDefault(key = key, default = default))
+    }
 }

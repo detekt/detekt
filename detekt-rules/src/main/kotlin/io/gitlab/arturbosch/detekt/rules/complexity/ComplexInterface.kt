@@ -29,44 +29,46 @@ import org.jetbrains.kotlin.psi.KtProperty
  * @author schalkms
  * @author Marvin Ramin
  */
-class ComplexInterface(config: Config = Config.empty,
-					   threshold: Int = DEFAULT_LARGE_INTERFACE_COUNT) : ThresholdRule(config, threshold) {
+class ComplexInterface(
+    config: Config = Config.empty,
+    threshold: Int = DEFAULT_LARGE_INTERFACE_COUNT
+) : ThresholdRule(config, threshold) {
 
-	override val issue = Issue(javaClass.simpleName, Severity.Maintainability,
-			"An interface contains too many functions and properties. " +
-					"Large classes tend to handle many things at once. " +
-					"An interface should have one responsibility. " +
-					"Split up large interfaces into smaller ones that are easier to understand.",
-			Debt.TWENTY_MINS)
+    override val issue = Issue(javaClass.simpleName, Severity.Maintainability,
+            "An interface contains too many functions and properties. " +
+                    "Large classes tend to handle many things at once. " +
+                    "An interface should have one responsibility. " +
+                    "Split up large interfaces into smaller ones that are easier to understand.",
+            Debt.TWENTY_MINS)
 
-	private val includeStaticDeclarations = valueOrDefault(INCLUDE_STATIC_DECLARATIONS, false)
+    private val includeStaticDeclarations = valueOrDefault(INCLUDE_STATIC_DECLARATIONS, false)
 
-	override fun visitClass(klass: KtClass) {
-		if (klass.isInterface()) {
-			val body = klass.body ?: return
-			var size = calculateMembers(body)
-			if (includeStaticDeclarations) {
-				size += countStaticDeclarations(klass.companionObject())
-			}
-			if (size >= threshold) {
-				report(ThresholdedCodeSmell(issue,
-						Entity.from(klass),
-						Metric("SIZE: ", size, threshold),
-						"The interface ${klass.name} is too complex. Consider splitting it up."))
-			}
-		}
-		super.visitClass(klass)
-	}
+    override fun visitClass(klass: KtClass) {
+        if (klass.isInterface()) {
+            val body = klass.body ?: return
+            var size = calculateMembers(body)
+            if (includeStaticDeclarations) {
+                size += countStaticDeclarations(klass.companionObject())
+            }
+            if (size >= threshold) {
+                report(ThresholdedCodeSmell(issue,
+                        Entity.from(klass),
+                        Metric("SIZE: ", size, threshold),
+                        "The interface ${klass.name} is too complex. Consider splitting it up."))
+            }
+        }
+        super.visitClass(klass)
+    }
 
-	private fun countStaticDeclarations(companionObject: KtObjectDeclaration?): Int {
-		val body = companionObject?.body
-		return if (body != null) calculateMembers(body) else 0
-	}
+    private fun countStaticDeclarations(companionObject: KtObjectDeclaration?): Int {
+        val body = companionObject?.body
+        return if (body != null) calculateMembers(body) else 0
+    }
 
-	private fun calculateMembers(body: KtClassBody) = body.children.count { it is KtNamedFunction || it is KtProperty }
+    private fun calculateMembers(body: KtClassBody) = body.children.count { it is KtNamedFunction || it is KtProperty }
 
-	companion object {
-		const val INCLUDE_STATIC_DECLARATIONS = "includeStaticDeclarations"
-		const val DEFAULT_LARGE_INTERFACE_COUNT = 10
-	}
+    companion object {
+        const val INCLUDE_STATIC_DECLARATIONS = "includeStaticDeclarations"
+        const val DEFAULT_LARGE_INTERFACE_COUNT = 10
+    }
 }

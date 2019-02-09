@@ -11,22 +11,22 @@ import org.jetbrains.kotlin.psi.KtLoopExpression
  */
 class NumberOfLoopsProcessor : FileProcessListener {
 
-	override fun onProcess(file: KtFile) {
-		val visitor = LoopVisitor()
-		file.accept(visitor)
-		file.putUserData(numberOfLoopsKey, visitor.numberOfLoops)
-	}
+    override fun onProcess(file: KtFile) {
+        val visitor = LoopVisitor()
+        file.accept(visitor)
+        file.putUserData(numberOfLoopsKey, visitor.numberOfLoops)
+    }
 
-	companion object {
-		val numberOfLoopsKey = Key<Int>("number of loops")
-	}
+    companion object {
+        val numberOfLoopsKey = Key<Int>("number of loops")
+    }
 
-	class LoopVisitor : DetektVisitor() {
+    class LoopVisitor : DetektVisitor() {
 
-		internal var numberOfLoops = 0
-		override fun visitLoopExpression(loopExpression: KtLoopExpression) {
-			super.visitLoopExpression(loopExpression)
-			numberOfLoops++
-		}
-	}
+        internal var numberOfLoops = 0
+        override fun visitLoopExpression(loopExpression: KtLoopExpression) {
+            super.visitLoopExpression(loopExpression)
+            numberOfLoops++
+        }
+    }
 }

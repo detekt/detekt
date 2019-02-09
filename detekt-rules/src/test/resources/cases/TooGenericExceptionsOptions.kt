@@ -4,13 +4,13 @@ package cases
 
 class TooGenericExceptionsOptions {
 
-	fun f() {
-		try {
-			throw Throwable()
-		} catch (myIgnore: MyTooGenericException) {
-			throw Error()
-		}
-	}
+    fun f() {
+        try {
+            throw Throwable()
+        } catch (myIgnore: MyTooGenericException) {
+            throw Error()
+        }
+    }
 }
 
 class MyTooGenericException : RuntimeException()

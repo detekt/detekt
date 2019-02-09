@@ -13,68 +13,68 @@ import org.jetbrains.spek.subject.SubjectSpek
 
 class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 
-	subject { RuleCollector() }
+    subject { RuleCollector() }
 
-	describe("a RuleCollector") {
+    describe("a RuleCollector") {
 
-		it("collects no rules when no class is extended") {
-			val code = """
+        it("collects no rules when no class is extended") {
+            val code = """
 				package foo
 
 				class SomeRandomClass {
 				}
 			"""
-			val items = subject.run(code)
-			assertThat(items).isEmpty()
-		}
+            val items = subject.run(code)
+            assertThat(items).isEmpty()
+        }
 
-		it("collects no rules when no rule class is extended") {
-			val code = """
+        it("collects no rules when no rule class is extended") {
+            val code = """
 				package foo
 
 				class SomeRandomClass: SomeOtherClass {
 				}
 			"""
-			val items = subject.run(code)
-			assertThat(items).isEmpty()
-		}
+            val items = subject.run(code)
+            assertThat(items).isEmpty()
+        }
 
-		it("throws when a class extends Rule but has no valid documentation") {
-			val code = """
+        it("throws when a class extends Rule but has no valid documentation") {
+            val code = """
 				package foo
 
 				class SomeRandomClass: Rule {
 				}
 			"""
-			assertThatExceptionOfType(InvalidDocumentationException::class.java)
-					.isThrownBy { subject.run(code) }
-		}
+            assertThatExceptionOfType(InvalidDocumentationException::class.java)
+                    .isThrownBy { subject.run(code) }
+        }
 
-		it("throws when a class extends ThresholdRule but has no valid documentation") {
-			val code = """
+        it("throws when a class extends ThresholdRule but has no valid documentation") {
+            val code = """
 				package foo
 
 				class SomeRandomClass: ThresholdRule {
 				}
 			"""
-			assertThatExceptionOfType(InvalidDocumentationException::class.java)
-					.isThrownBy { subject.run(code) }
-		}
+            assertThatExceptionOfType(InvalidDocumentationException::class.java)
+                    .isThrownBy { subject.run(code) }
+        }
 
-		it("throws when a class extends ThresholdRule but has no valid documentation") {
-			val code = """
+        it("throws when a class extends ThresholdRule but has no valid documentation") {
+            val code = """
 				package foo
 
 				class SomeRandomClass: FormattingRule {
 				}
 			"""
-			assertThatExceptionOfType(InvalidDocumentationException::class.java)
-					.isThrownBy { subject.run(code) }
-		}
+            assertThatExceptionOfType(InvalidDocumentationException::class.java)
+                    .isThrownBy { subject.run(code) }
+        }
 
-		it("collects the formatting rule name") {
-			val name = "UnusedImport"
-			val code = """
+        it("collects the formatting rule name") {
+            val name = "UnusedImport"
+            val code = """
 				package foo
 
 				/**
@@ -83,14 +83,14 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				class $name: FormattingRule {
 				}
 			"""
-			val items = subject.run(code)
-			assertThat(items[0].name).isEqualTo(name)
-		}
+            val items = subject.run(code)
+            assertThat(items[0].name).isEqualTo(name)
+        }
 
-		it("collects the rule name") {
-			val name = "SomeRandomClass"
-			val description = "some description"
-			val code = """
+        it("collects the rule name") {
+            val name = "SomeRandomClass"
+            val description = "some description"
+            val code = """
 				package foo
 
 				/**
@@ -99,14 +99,14 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				class $name: Rule {
 				}
 			"""
-			val items = subject.run(code)
-			assertThat(items[0].name).isEqualTo(name)
-		}
+            val items = subject.run(code)
+            assertThat(items[0].name).isEqualTo(name)
+        }
 
-		it("collects the rule description") {
-			val name = "SomeRandomClass"
-			val description = "some description"
-			val code = """
+        it("collects the rule description") {
+            val name = "SomeRandomClass"
+            val description = "some description"
+            val code = """
 				package foo
 
 				/**
@@ -115,14 +115,14 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				class $name: Rule {
 				}
 			"""
-			val items = subject.run(code)
-			assertThat(items[0].description).isEqualTo(description)
-		}
+            val items = subject.run(code)
+            assertThat(items[0].description).isEqualTo(description)
+        }
 
-		it("has a multi paragraph description") {
-			val name = "SomeRandomClass"
-			val description = "some description"
-			val code = """
+        it("has a multi paragraph description") {
+            val name = "SomeRandomClass"
+            val description = "some description"
+            val code = """
 				package foo
 
 				/**
@@ -133,15 +133,15 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				class $name: Rule {
 				}
 			"""
-			val items = subject.run(code)
-			assertThat(items[0].description).startsWith(description)
-			assertThat(items[0].description).contains("more...")
-		}
+            val items = subject.run(code)
+            assertThat(items[0].description).startsWith(description)
+            assertThat(items[0].description).contains("more...")
+        }
 
-		it("does not include tags in the description") {
-			val name = "SomeRandomClass"
-			val description = "some description"
-			val code = """
+        it("does not include tags in the description") {
+            val name = "SomeRandomClass"
+            val description = "some description"
+            val code = """
 				package foo
 
 				/**
@@ -151,14 +151,14 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				class $name: Rule {
 				}
 			"""
-			val items = subject.run(code)
-			assertThat(items[0].description).isEqualTo(description)
-		}
+            val items = subject.run(code)
+            assertThat(items[0].description).isEqualTo(description)
+        }
 
-		it("is not active") {
-			val name = "SomeRandomClass"
-			val description = "some description"
-			val code = """
+        it("is not active") {
+            val name = "SomeRandomClass"
+            val description = "some description"
+            val code = """
 				package foo
 
 				/**
@@ -168,12 +168,12 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				class $name: Rule {
 				}
 			"""
-			val items = subject.run(code)
-			assertThat(items[0].active).isFalse()
-		}
+            val items = subject.run(code)
+            assertThat(items[0].active).isFalse()
+        }
 
-		it("is active tag is present") {
-			val code = """
+        it("is active tag is present") {
+            val code = """
 				package foo
 
 				/**
@@ -183,12 +183,12 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				class SomeRandomClass: Rule {
 				}
 			"""
-			val items = subject.run(code)
-			assertThat(items[0].active).isTrue()
-		}
+            val items = subject.run(code)
+            assertThat(items[0].active).isTrue()
+        }
 
-		it("is auto-correctable tag is present") {
-			val code = """
+        it("is auto-correctable tag is present") {
+            val code = """
 				package foo
 
 				/**
@@ -198,14 +198,14 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				class SomeRandomClass: Rule {
 				}
 			"""
-			val items = subject.run(code)
-			assertThat(items[0].autoCorrect).isTrue()
-		}
+            val items = subject.run(code)
+            assertThat(items[0].autoCorrect).isTrue()
+        }
 
-		it("is active if the tag is there and has a description") {
-			val name = "SomeRandomClass"
-			val description = "some description"
-			val code = """
+        it("is active if the tag is there and has a description") {
+            val name = "SomeRandomClass"
+            val description = "some description"
+            val code = """
 				package foo
 
 				/**
@@ -215,14 +215,14 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				class $name: Rule {
 				}
 			"""
-			val items = subject.run(code)
-			assertThat(items[0].active).isTrue()
-		}
+            val items = subject.run(code)
+            assertThat(items[0].active).isTrue()
+        }
 
-		it("collects the issue property") {
-			val name = "SomeRandomClass"
-			val description = "some description"
-			val code = """
+        it("collects the issue property") {
+            val name = "SomeRandomClass"
+            val description = "some description"
+            val code = """
 				package foo
 
 				/**
@@ -238,16 +238,16 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 							debt = Debt.TEN_MINS)
 				}
 			"""
-			val items = subject.run(code)
-			assertThat(items[0].severity).isEqualTo("Style")
-			assertThat(items[0].debt).isEqualTo("10min")
-			assertThat(items[0].aliases).isEqualTo("RULE, RULE2")
-		}
+            val items = subject.run(code)
+            assertThat(items[0].severity).isEqualTo("Style")
+            assertThat(items[0].debt).isEqualTo("10min")
+            assertThat(items[0].aliases).isEqualTo("RULE, RULE2")
+        }
 
-		it("contains no configuration options by default") {
-			val name = "SomeRandomClass"
-			val description = "some description"
-			val code = """
+        it("contains no configuration options by default") {
+            val name = "SomeRandomClass"
+            val description = "some description"
+            val code = """
 				package foo
 
 				/**
@@ -256,14 +256,14 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				class $name: Rule {
 				}
 			"""
-			val items = subject.run(code)
-			assertThat(items[0].configuration).isEmpty()
-		}
+            val items = subject.run(code)
+            assertThat(items[0].configuration).isEmpty()
+        }
 
-		it("contains one configuration option with correct formatting") {
-			val name = "SomeRandomClass"
-			val description = "some description"
-			val code = """
+        it("contains one configuration option with correct formatting") {
+            val name = "SomeRandomClass"
+            val description = "some description"
+            val code = """
 				package foo
 
 				/**
@@ -273,17 +273,17 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				class $name: Rule {
 				}
 			"""
-			val items = subject.run(code)
-			assertThat(items[0].configuration).hasSize(1)
-			assertThat(items[0].configuration[0].name).isEqualTo("config")
-			assertThat(items[0].configuration[0].description).isEqualTo("description")
-			assertThat(items[0].configuration[0].defaultValue).isEqualTo("'[A-Z$]'")
-		}
+            val items = subject.run(code)
+            assertThat(items[0].configuration).hasSize(1)
+            assertThat(items[0].configuration[0].name).isEqualTo("config")
+            assertThat(items[0].configuration[0].description).isEqualTo("description")
+            assertThat(items[0].configuration[0].defaultValue).isEqualTo("'[A-Z$]'")
+        }
 
-		it("contains multiple configuration options") {
-			val name = "SomeRandomClass"
-			val description = "some description"
-			val code = """
+        it("contains multiple configuration options") {
+            val name = "SomeRandomClass"
+            val description = "some description"
+            val code = """
 				package foo
 
 				/**
@@ -294,14 +294,14 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				class $name: Rule {
 				}
 			"""
-			val items = subject.run(code)
-			assertThat(items[0].configuration).hasSize(2)
-		}
+            val items = subject.run(code)
+            assertThat(items[0].configuration).hasSize(2)
+        }
 
-		it("contains a misconfigured configuration option") {
-			val name = "SomeRandomClass"
-			val description = "some description"
-			val code = """
+        it("contains a misconfigured configuration option") {
+            val name = "SomeRandomClass"
+            val description = "some description"
+            val code = """
 				package foo
 
 				/**
@@ -311,12 +311,12 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				class $name: Rule {
 				}
 			"""
-			assertThatExceptionOfType(InvalidDocumentationException::class.java)
-					.isThrownBy { subject.run(code) }
-		}
+            assertThatExceptionOfType(InvalidDocumentationException::class.java)
+                    .isThrownBy { subject.run(code) }
+        }
 
-		it("contains compliant and noncompliant code examples") {
-			val code = """
+        it("contains compliant and noncompliant code examples") {
+            val code = """
 				package foo
 
 				/**
@@ -333,13 +333,13 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				class RandomClass : Rule {
 				}
 			"""
-			val items = subject.run(code)
-			assertThat(items[0].nonCompliantCodeExample).isEqualTo("val one = 2")
-			assertThat(items[0].compliantCodeExample).isEqualTo("val one = 1")
-		}
+            val items = subject.run(code)
+            assertThat(items[0].nonCompliantCodeExample).isEqualTo("val one = 2")
+            assertThat(items[0].compliantCodeExample).isEqualTo("val one = 1")
+        }
 
-		it("has wrong noncompliant code example declaration") {
-			val code = """
+        it("has wrong noncompliant code example declaration") {
+            val code = """
 				package foo
 
 				/**
@@ -350,12 +350,12 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				class RandomClass : Rule {
 				}
 			"""
-			assertThatExceptionOfType(InvalidCodeExampleDocumentationException::class.java)
-					.isThrownBy { subject.run(code) }
-		}
+            assertThatExceptionOfType(InvalidCodeExampleDocumentationException::class.java)
+                    .isThrownBy { subject.run(code) }
+        }
 
-		it("has wrong compliant code example declaration") {
-			val code = """
+        it("has wrong compliant code example declaration") {
+            val code = """
 				package foo
 
 				/**
@@ -369,12 +369,12 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				class RandomClass : Rule {
 				}
 			"""
-			assertThatExceptionOfType(InvalidCodeExampleDocumentationException::class.java)
-					.isThrownBy { subject.run(code) }
-		}
+            assertThatExceptionOfType(InvalidCodeExampleDocumentationException::class.java)
+                    .isThrownBy { subject.run(code) }
+        }
 
-		it("has wrong compliant without noncompliant code example declaration") {
-			val code = """
+        it("has wrong compliant without noncompliant code example declaration") {
+            val code = """
 				package foo
 
 				/**
@@ -387,14 +387,14 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 				class RandomClass : Rule {
 				}
 			"""
-			assertThatExceptionOfType(InvalidCodeExampleDocumentationException::class.java)
-					.isThrownBy { subject.run(code) }
-		}
+            assertThatExceptionOfType(InvalidCodeExampleDocumentationException::class.java)
+                    .isThrownBy { subject.run(code) }
+        }
 
-		it("has wrong issue style property") {
-			val name = "SomeRandomClass"
-			val description = "some description"
-			val code = """
+        it("has wrong issue style property") {
+            val name = "SomeRandomClass"
+            val description = "some description"
+            val code = """
 				package foo
 
 				/**
@@ -409,14 +409,14 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 							debt = Debt.TEN_MINS)
 				}
 			"""
-			assertThatExceptionOfType(InvalidIssueDeclaration::class.java)
-					.isThrownBy { subject.run(code) }
-		}
+            assertThatExceptionOfType(InvalidIssueDeclaration::class.java)
+                    .isThrownBy { subject.run(code) }
+        }
 
-		it("has wrong aliases property structure") {
-			val name = "SomeRandomClass"
-			val description = "some description"
-			val code = """
+        it("has wrong aliases property structure") {
+            val name = "SomeRandomClass"
+            val description = "some description"
+            val code = """
 				package foo
 
 				/**
@@ -432,8 +432,8 @@ class RuleCollectorSpec : SubjectSpek<RuleCollector>({
 							debt = Debt.TEN_MINS)
 				}
 			"""
-			assertThatExceptionOfType(InvalidAliasesDeclaration::class.java)
-					.isThrownBy { subject.run(code) }
-		}
-	}
+            assertThatExceptionOfType(InvalidAliasesDeclaration::class.java)
+                    .isThrownBy { subject.run(code) }
+        }
+    }
 })

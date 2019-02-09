@@ -12,7 +12,7 @@ import org.jetbrains.kotlin.psi.KtClassInitializer
  */
 class EmptyInitBlock(config: Config) : EmptyRule(config) {
 
-	override fun visitClassInitializer(initializer: KtClassInitializer) {
-		initializer.body?.addFindingIfBlockExprIsEmpty()
-	}
+    override fun visitClassInitializer(initializer: KtClassInitializer) {
+        initializer.body?.addFindingIfBlockExprIsEmpty()
+    }
 }

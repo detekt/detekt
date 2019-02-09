@@ -13,6 +13,6 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 class NoConsecutiveBlankLines(config: Config) : FormattingRule(config) {
 
-	override val wrapping = NoConsecutiveBlankLinesRule()
-	override val issue = issueFor("Reports consecutive blank lines")
+    override val wrapping = NoConsecutiveBlankLinesRule()
+    override val issue = issueFor("Reports consecutive blank lines")
 }

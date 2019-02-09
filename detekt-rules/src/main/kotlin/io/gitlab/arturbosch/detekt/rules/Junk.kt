@@ -22,25 +22,25 @@ import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 fun KtExpression?.asBlockExpression(): KtBlockExpression? = this as? KtBlockExpression
 
 fun KtClassOrObject.isObjectOfAnonymousClass() =
-		this.getNonStrictParentOfType<KtObjectDeclaration>() != null && this.name == null
+        this.getNonStrictParentOfType<KtObjectDeclaration>() != null && this.name == null
 
 fun KtCallExpression.isUsedForNesting(): Boolean = when (getCallNameExpression()?.text) {
-	"run", "let", "apply", "with", "use", "forEach" -> true
-	else -> false
+    "run", "let", "apply", "with", "use", "forEach" -> true
+    else -> false
 }
 
 fun KtBlockExpression.hasCommentInside(): Boolean {
-	val commentKey = Key<Boolean>("comment")
-	this.acceptChildren(object : DetektVisitor() {
-		override fun visitComment(comment: PsiComment?) {
-			if (comment != null) putUserData(commentKey, true)
-		}
-	})
-	return getUserData(commentKey) == true
+    val commentKey = Key<Boolean>("comment")
+    this.acceptChildren(object : DetektVisitor() {
+        override fun visitComment(comment: PsiComment?) {
+            if (comment != null) putUserData(commentKey, true)
+        }
+    })
+    return getUserData(commentKey) == true
 }
 
 fun getIntValueForPsiElement(element: PsiElement): Int? {
-	return (element as? KtConstantExpression)?.text?.toIntOrNull()
+    return (element as? KtConstantExpression)?.text?.toIntOrNull()
 }
 
 fun KtStringTemplateExpression.plainText() = text.substring(1, text.length - 1)

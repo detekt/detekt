@@ -13,6 +13,6 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 class NoSemicolons(config: Config) : FormattingRule(config) {
 
-	override val wrapping = NoSemicolonsRule()
-	override val issue = issueFor("Detects semicolons")
+    override val wrapping = NoSemicolonsRule()
+    override val issue = issueFor("Detects semicolons")
 }

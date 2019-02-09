@@ -13,6 +13,6 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 class PackageName(config: Config) : FormattingRule(config) {
 
-	override val wrapping = PackageNameRule()
-	override val issue = issueFor("Checks package name is formatted correctly")
+    override val wrapping = PackageNameRule()
+    override val issue = issueFor("Checks package name is formatted correctly")
 }

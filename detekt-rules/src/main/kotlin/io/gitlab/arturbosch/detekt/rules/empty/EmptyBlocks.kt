@@ -32,101 +32,101 @@ import org.jetbrains.kotlin.psi.KtWhileExpression
 @Suppress("TooManyFunctions")
 class EmptyBlocks(val config: Config = Config.empty) : MultiRule() {
 
-	private val emptyCatchBlock = EmptyCatchBlock(config)
-	private val emptyClassBlock = EmptyClassBlock(config)
-	private val emptyDefaultConstructor = EmptyDefaultConstructor(config)
-	private val emptyDoWhileBlock = EmptyDoWhileBlock(config)
-	private val emptyElseBlock = EmptyElseBlock(config)
-	private val emptyFinallyBlock = EmptyFinallyBlock(config)
-	private val emptyForBlock = EmptyForBlock(config)
-	private val emptyFunctionBlock = EmptyFunctionBlock(config)
-	private val emptyIfBlock = EmptyIfBlock(config)
-	private val emptyInitBlock = EmptyInitBlock(config)
-	private val emptyKtFile = EmptyKtFile(config)
-	private val emptySecondaryConstructorBlock = EmptySecondaryConstructor(config)
-	private val emptyWhenBlock = EmptyWhenBlock(config)
-	private val emptyWhileBlock = EmptyWhileBlock(config)
+    private val emptyCatchBlock = EmptyCatchBlock(config)
+    private val emptyClassBlock = EmptyClassBlock(config)
+    private val emptyDefaultConstructor = EmptyDefaultConstructor(config)
+    private val emptyDoWhileBlock = EmptyDoWhileBlock(config)
+    private val emptyElseBlock = EmptyElseBlock(config)
+    private val emptyFinallyBlock = EmptyFinallyBlock(config)
+    private val emptyForBlock = EmptyForBlock(config)
+    private val emptyFunctionBlock = EmptyFunctionBlock(config)
+    private val emptyIfBlock = EmptyIfBlock(config)
+    private val emptyInitBlock = EmptyInitBlock(config)
+    private val emptyKtFile = EmptyKtFile(config)
+    private val emptySecondaryConstructorBlock = EmptySecondaryConstructor(config)
+    private val emptyWhenBlock = EmptyWhenBlock(config)
+    private val emptyWhileBlock = EmptyWhileBlock(config)
 
-	override val rules: List<Rule> = listOf(
-			emptyCatchBlock,
-			emptyClassBlock,
-			emptyDefaultConstructor,
-			emptyDoWhileBlock,
-			emptyElseBlock,
-			emptyFinallyBlock,
-			emptyForBlock,
-			emptyFunctionBlock,
-			emptyIfBlock,
-			emptyInitBlock,
-			emptyKtFile,
-			emptySecondaryConstructorBlock,
-			emptyWhenBlock,
-			emptyWhileBlock
-	)
+    override val rules: List<Rule> = listOf(
+            emptyCatchBlock,
+            emptyClassBlock,
+            emptyDefaultConstructor,
+            emptyDoWhileBlock,
+            emptyElseBlock,
+            emptyFinallyBlock,
+            emptyForBlock,
+            emptyFunctionBlock,
+            emptyIfBlock,
+            emptyInitBlock,
+            emptyKtFile,
+            emptySecondaryConstructorBlock,
+            emptyWhenBlock,
+            emptyWhileBlock
+    )
 
-	override fun visitKtFile(file: KtFile) {
-		emptyKtFile.runIfActive { visitFile(file) }
-		super.visitKtFile(file)
-	}
+    override fun visitKtFile(file: KtFile) {
+        emptyKtFile.runIfActive { visitFile(file) }
+        super.visitKtFile(file)
+    }
 
-	override fun visitCatchSection(catchClause: KtCatchClause) {
-		emptyCatchBlock.runIfActive { visitCatchSection(catchClause) }
-		super.visitCatchSection(catchClause)
-	}
+    override fun visitCatchSection(catchClause: KtCatchClause) {
+        emptyCatchBlock.runIfActive { visitCatchSection(catchClause) }
+        super.visitCatchSection(catchClause)
+    }
 
-	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-		emptyClassBlock.runIfActive { visitClassOrObject(classOrObject) }
-		super.visitClassOrObject(classOrObject)
-	}
+    override fun visitClassOrObject(classOrObject: KtClassOrObject) {
+        emptyClassBlock.runIfActive { visitClassOrObject(classOrObject) }
+        super.visitClassOrObject(classOrObject)
+    }
 
-	override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
-		emptyDefaultConstructor.runIfActive { visitPrimaryConstructor(constructor) }
-		super.visitPrimaryConstructor(constructor)
-	}
+    override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
+        emptyDefaultConstructor.runIfActive { visitPrimaryConstructor(constructor) }
+        super.visitPrimaryConstructor(constructor)
+    }
 
-	override fun visitDoWhileExpression(expression: KtDoWhileExpression) {
-		emptyDoWhileBlock.runIfActive { visitDoWhileExpression(expression) }
-		super.visitDoWhileExpression(expression)
-	}
+    override fun visitDoWhileExpression(expression: KtDoWhileExpression) {
+        emptyDoWhileBlock.runIfActive { visitDoWhileExpression(expression) }
+        super.visitDoWhileExpression(expression)
+    }
 
-	override fun visitIfExpression(expression: KtIfExpression) {
-		emptyIfBlock.runIfActive { visitIfExpression(expression) }
-		emptyElseBlock.runIfActive { visitIfExpression(expression) }
-		super.visitIfExpression(expression)
-	}
+    override fun visitIfExpression(expression: KtIfExpression) {
+        emptyIfBlock.runIfActive { visitIfExpression(expression) }
+        emptyElseBlock.runIfActive { visitIfExpression(expression) }
+        super.visitIfExpression(expression)
+    }
 
-	override fun visitFinallySection(finallySection: KtFinallySection) {
-		emptyFinallyBlock.runIfActive { visitFinallySection(finallySection) }
-		super.visitFinallySection(finallySection)
-	}
+    override fun visitFinallySection(finallySection: KtFinallySection) {
+        emptyFinallyBlock.runIfActive { visitFinallySection(finallySection) }
+        super.visitFinallySection(finallySection)
+    }
 
-	override fun visitForExpression(expression: KtForExpression) {
-		emptyForBlock.runIfActive { visitForExpression(expression) }
-		super.visitForExpression(expression)
-	}
+    override fun visitForExpression(expression: KtForExpression) {
+        emptyForBlock.runIfActive { visitForExpression(expression) }
+        super.visitForExpression(expression)
+    }
 
-	override fun visitNamedFunction(function: KtNamedFunction) {
-		emptyFinallyBlock.runIfActive { visitNamedFunction(function) }
-		super.visitNamedFunction(function)
-	}
+    override fun visitNamedFunction(function: KtNamedFunction) {
+        emptyFinallyBlock.runIfActive { visitNamedFunction(function) }
+        super.visitNamedFunction(function)
+    }
 
-	override fun visitClassInitializer(initializer: KtClassInitializer) {
-		emptyInitBlock.runIfActive { visitClassInitializer(initializer) }
-		super.visitClassInitializer(initializer)
-	}
+    override fun visitClassInitializer(initializer: KtClassInitializer) {
+        emptyInitBlock.runIfActive { visitClassInitializer(initializer) }
+        super.visitClassInitializer(initializer)
+    }
 
-	override fun visitSecondaryConstructor(constructor: KtSecondaryConstructor) {
-		emptySecondaryConstructorBlock.runIfActive { visitSecondaryConstructor(constructor) }
-		super.visitSecondaryConstructor(constructor)
-	}
+    override fun visitSecondaryConstructor(constructor: KtSecondaryConstructor) {
+        emptySecondaryConstructorBlock.runIfActive { visitSecondaryConstructor(constructor) }
+        super.visitSecondaryConstructor(constructor)
+    }
 
-	override fun visitWhenExpression(expression: KtWhenExpression) {
-		emptyWhenBlock.runIfActive { visitWhenExpression(expression) }
-		super.visitWhenExpression(expression)
-	}
+    override fun visitWhenExpression(expression: KtWhenExpression) {
+        emptyWhenBlock.runIfActive { visitWhenExpression(expression) }
+        super.visitWhenExpression(expression)
+    }
 
-	override fun visitWhileExpression(expression: KtWhileExpression) {
-		emptyWhileBlock.runIfActive { visitWhileExpression(expression) }
-		super.visitWhileExpression(expression)
-	}
+    override fun visitWhileExpression(expression: KtWhileExpression) {
+        emptyWhileBlock.runIfActive { visitWhileExpression(expression) }
+        super.visitWhileExpression(expression)
+    }
 }

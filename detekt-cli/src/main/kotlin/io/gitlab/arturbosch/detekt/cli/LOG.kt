@@ -7,18 +7,18 @@ import java.io.PrintStream
  */
 object LOG {
 
-	var printer: PrintStream = System.out
-	var active: Boolean = false
+    var printer: PrintStream = System.out
+    var active: Boolean = false
 
-	fun debug(message: String) {
-		if (active) {
-			printer.println(message)
-		}
-	}
+    fun debug(message: String) {
+        if (active) {
+            printer.println(message)
+        }
+    }
 
-	fun debug(message: () -> String) {
-		if (active) {
-			printer.println(message.invoke())
-		}
-	}
+    fun debug(message: () -> String) {
+        if (active) {
+            printer.println(message.invoke())
+        }
+    }
 }

@@ -15,13 +15,13 @@ import io.gitlab.arturbosch.detekt.rules.naming.NamingRules
  */
 class NamingProvider : RuleSetProvider {
 
-	override val ruleSetId: String = "naming"
+    override val ruleSetId: String = "naming"
 
-	override fun instance(config: Config): RuleSet {
-		return RuleSet(ruleSetId, listOf(
-				MatchingDeclarationName(config),
-				MemberNameEqualsClassName(config),
-				NamingRules(config)
-		))
-	}
+    override fun instance(config: Config): RuleSet {
+        return RuleSet(ruleSetId, listOf(
+                MatchingDeclarationName(config),
+                MemberNameEqualsClassName(config),
+                NamingRules(config)
+        ))
+    }
 }

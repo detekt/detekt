@@ -60,52 +60,52 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  */
 class SwallowedException(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue("SwallowedException", Severity.CodeSmell,
-			"The caught exception is swallowed. The original exception could be lost.",
-			Debt.TWENTY_MINS)
+    override val issue = Issue("SwallowedException", Severity.CodeSmell,
+            "The caught exception is swallowed. The original exception could be lost.",
+            Debt.TWENTY_MINS)
 
-	private val ignoredExceptionTypes = SplitPattern(valueOrDefault(IGNORED_EXCEPTION_TYPES, ""))
+    private val ignoredExceptionTypes = SplitPattern(valueOrDefault(IGNORED_EXCEPTION_TYPES, ""))
 
-	override fun visitCatchSection(catchClause: KtCatchClause) {
-		val exceptionType = catchClause.catchParameter?.typeReference?.text
-		if (!ignoredExceptionTypes.contains(exceptionType) &&
-				isExceptionUnused(catchClause) ||
-				isExceptionSwallowed(catchClause)) {
-			report(CodeSmell(issue, Entity.from(catchClause), issue.description))
-		}
-	}
+    override fun visitCatchSection(catchClause: KtCatchClause) {
+        val exceptionType = catchClause.catchParameter?.typeReference?.text
+        if (!ignoredExceptionTypes.contains(exceptionType) &&
+                isExceptionUnused(catchClause) ||
+                isExceptionSwallowed(catchClause)) {
+            report(CodeSmell(issue, Entity.from(catchClause), issue.description))
+        }
+    }
 
-	private fun isExceptionUnused(catchClause: KtCatchClause): Boolean {
-		val parameterName = catchClause.catchParameter?.name
-		val catchBody = catchClause.catchBody ?: return true
-		return !catchBody
-				.collectByType<KtNameReferenceExpression>()
-				.any { it.text == parameterName }
-	}
+    private fun isExceptionUnused(catchClause: KtCatchClause): Boolean {
+        val parameterName = catchClause.catchParameter?.name
+        val catchBody = catchClause.catchBody ?: return true
+        return !catchBody
+                .collectByType<KtNameReferenceExpression>()
+                .any { it.text == parameterName }
+    }
 
-	private fun isExceptionSwallowed(catchClause: KtCatchClause): Boolean {
-		val parameterName = catchClause.catchParameter?.name
-		val throwExpressions = catchClause.catchBody?.collectByType<KtThrowExpression>()
-		throwExpressions?.forEach { throwExpr ->
-			val parameterNameReferences = throwExpr.thrownExpression?.collectByType<KtNameReferenceExpression>()?.filter {
-				it.text == parameterName
-			}
-			return hasParameterReferences(parameterNameReferences)
-		}
-		return false
-	}
+    private fun isExceptionSwallowed(catchClause: KtCatchClause): Boolean {
+        val parameterName = catchClause.catchParameter?.name
+        val throwExpressions = catchClause.catchBody?.collectByType<KtThrowExpression>()
+        throwExpressions?.forEach { throwExpr ->
+            val parameterNameReferences = throwExpr.thrownExpression?.collectByType<KtNameReferenceExpression>()?.filter {
+                it.text == parameterName
+            }
+            return hasParameterReferences(parameterNameReferences)
+        }
+        return false
+    }
 
-	private fun hasParameterReferences(parameterNameReferences: List<KtNameReferenceExpression>?): Boolean {
-		return parameterNameReferences != null &&
-				parameterNameReferences.isNotEmpty() &&
-				parameterNameReferences.all { callsMemberOfCaughtException(it) }
-	}
+    private fun hasParameterReferences(parameterNameReferences: List<KtNameReferenceExpression>?): Boolean {
+        return parameterNameReferences != null &&
+                parameterNameReferences.isNotEmpty() &&
+                parameterNameReferences.all { callsMemberOfCaughtException(it) }
+    }
 
-	private fun callsMemberOfCaughtException(expression: KtNameReferenceExpression): Boolean {
-		return expression.nextSibling?.text == "."
-	}
+    private fun callsMemberOfCaughtException(expression: KtNameReferenceExpression): Boolean {
+        return expression.nextSibling?.text == "."
+    }
 
-	companion object {
-		const val IGNORED_EXCEPTION_TYPES = "ignoredExceptionTypes"
-	}
+    companion object {
+        const val IGNORED_EXCEPTION_TYPES = "ignoredExceptionTypes"
+    }
 }

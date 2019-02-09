@@ -8,16 +8,16 @@ import org.jetbrains.kotlin.psi.KtFile
 
 class ClassCountProcessor : AbstractProjectMetricProcessor() {
 
-	override val visitor = ClassCountVisitor()
-	override val key = numberOfClassesKey
+    override val visitor = ClassCountVisitor()
+    override val key = numberOfClassesKey
 }
 
 val numberOfClassesKey = Key<Int>("number of classes")
 
 class ClassCountVisitor : DetektVisitor() {
 
-	override fun visitKtFile(file: KtFile) {
-		super.visitKtFile(file)
-		file.putUserData(numberOfClassesKey, file.collectByType<KtClass>().size)
-	}
+    override fun visitKtFile(file: KtFile) {
+        super.visitKtFile(file)
+        file.putUserData(numberOfClassesKey, file.collectByType<KtClass>().size)
+    }
 }

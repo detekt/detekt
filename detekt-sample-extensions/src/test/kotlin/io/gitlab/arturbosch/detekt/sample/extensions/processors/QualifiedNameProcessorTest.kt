@@ -16,40 +16,40 @@ import org.jetbrains.spek.api.dsl.it
  */
 class QualifiedNameProcessorTest : Spek({
 
-	it("fqNamesOfTestFiles") {
-		val ktFile = compileContentForTest(code)
-		val processor = QualifiedNameProcessor()
-		processor.onProcess(ktFile)
-		processor.onFinish(listOf(ktFile), result)
+    it("fqNamesOfTestFiles") {
+        val ktFile = compileContentForTest(code)
+        val processor = QualifiedNameProcessor()
+        processor.onProcess(ktFile)
+        processor.onFinish(listOf(ktFile), result)
 
-		val data = result.getData(fqNamesKey)
-		Assertions.assertThat(data).contains(
-				"io.gitlab.arturbosch.detekt.sample.Foo",
-				"io.gitlab.arturbosch.detekt.sample.Bar",
-				"io.gitlab.arturbosch.detekt.sample.Bla")
-	}
+        val data = result.getData(fqNamesKey)
+        Assertions.assertThat(data).contains(
+                "io.gitlab.arturbosch.detekt.sample.Foo",
+                "io.gitlab.arturbosch.detekt.sample.Bar",
+                "io.gitlab.arturbosch.detekt.sample.Bla")
+    }
 })
 
 private val result = object : Detektion {
 
-	override val findings: Map<String, List<Finding>> = mapOf()
-	override val notifications: Collection<Notification> = listOf()
-	override val metrics: Collection<ProjectMetric> = listOf()
+    override val findings: Map<String, List<Finding>> = mapOf()
+    override val notifications: Collection<Notification> = listOf()
+    override val metrics: Collection<ProjectMetric> = listOf()
 
-	private var userData = KeyFMap.EMPTY_MAP
-	override fun <V> getData(key: Key<V>): V? = userData.get(key)
+    private var userData = KeyFMap.EMPTY_MAP
+    override fun <V> getData(key: Key<V>): V? = userData.get(key)
 
-	override fun <V> addData(key: Key<V>, value: V) {
-		userData = userData.plus(key, value)
-	}
+    override fun <V> addData(key: Key<V>, value: V) {
+        userData = userData.plus(key, value)
+    }
 
-	override fun add(notification: Notification) {
-		throw UnsupportedOperationException("not implemented")
-	}
+    override fun add(notification: Notification) {
+        throw UnsupportedOperationException("not implemented")
+    }
 
-	override fun add(projectMetric: ProjectMetric) {
-		throw UnsupportedOperationException("not implemented")
-	}
+    override fun add(projectMetric: ProjectMetric) {
+        throw UnsupportedOperationException("not implemented")
+    }
 }
 
 const val code = """

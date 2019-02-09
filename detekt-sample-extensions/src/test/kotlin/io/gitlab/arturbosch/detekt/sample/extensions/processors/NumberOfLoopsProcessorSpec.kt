@@ -11,8 +11,8 @@ import org.jetbrains.spek.api.dsl.it
  */
 class NumberOfLoopsProcessorSpec : Spek({
 
-	it("should expect two loops") {
-		val code = """
+    it("should expect two loops") {
+        val code = """
 			fun main() {
 				for (i in 0..10) {
 					while (i < 5) {
@@ -22,10 +22,10 @@ class NumberOfLoopsProcessorSpec : Spek({
 			}
 		"""
 
-		val ktFile = compileContentForTest(code)
-		ktFile.accept(DetektVisitor())
-		NumberOfLoopsProcessor().onProcess(ktFile)
+        val ktFile = compileContentForTest(code)
+        ktFile.accept(DetektVisitor())
+        NumberOfLoopsProcessor().onProcess(ktFile)
 
-		assertThat(ktFile.getUserData(NumberOfLoopsProcessor.numberOfLoopsKey)).isEqualTo(2)
-	}
+        assertThat(ktFile.getUserData(NumberOfLoopsProcessor.numberOfLoopsKey)).isEqualTo(2)
+    }
 })

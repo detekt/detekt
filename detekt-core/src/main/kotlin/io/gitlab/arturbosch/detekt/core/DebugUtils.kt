@@ -13,21 +13,21 @@ fun whichOS(): String = System.getProperty("os.name")
 fun whichJava(): String = System.getProperty("java.runtime.version")
 
 fun whichDetekt(): String {
-	for (resource in Detektor::class.java.classLoader.getResources("META-INF/MANIFEST.MF")) {
-		try {
-			val version = readDetektVersionInManifest(resource)
-			if (version != null) {
-				return version
-			}
-		} catch (_: IOException) {
-			// we search for the manifest with the detekt version
-		}
-	}
-	return "unknown"
+    for (resource in Detektor::class.java.classLoader.getResources("META-INF/MANIFEST.MF")) {
+        try {
+            val version = readDetektVersionInManifest(resource)
+            if (version != null) {
+                return version
+            }
+        } catch (_: IOException) {
+            // we search for the manifest with the detekt version
+        }
+    }
+    return "unknown"
 }
 
 private fun readDetektVersionInManifest(resource: URL) =
-		resource.openStream().use {
-			Manifest(it).mainAttributes
-					.getValue("DetektVersion")
-		}
+        resource.openStream().use {
+            Manifest(it).mainAttributes
+                    .getValue("DetektVersion")
+        }

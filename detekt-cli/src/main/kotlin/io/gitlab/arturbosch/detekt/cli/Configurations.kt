@@ -11,71 +11,71 @@ import java.nio.file.Path
  */
 
 fun CliArgs.createPathFilters(): List<PathFilter> = filters.letIfNonEmpty {
-	split(SEPARATOR_COMMA, SEPARATOR_SEMICOLON)
-			.asSequence()
-			.map { it.trim() }
-			.filter { it.isNotEmpty() }
-			.map { filter -> PathFilter(filter) }
-			.toList()
+    split(SEPARATOR_COMMA, SEPARATOR_SEMICOLON)
+            .asSequence()
+            .map { it.trim() }
+            .filter { it.isNotEmpty() }
+            .map { filter -> PathFilter(filter) }
+            .toList()
 }
 
 fun CliArgs.createPlugins(): List<Path> = plugins.letIfNonEmpty {
-	MultipleExistingPathConverter().convert(this)
+    MultipleExistingPathConverter().convert(this)
 }
 
 private fun <T> String?.letIfNonEmpty(init: String.() -> List<T>): List<T> =
-		if (this == null || this.isEmpty()) listOf() else this.init()
+        if (this == null || this.isEmpty()) listOf() else this.init()
 
 fun CliArgs.loadConfiguration(): Config {
-	var declaredConfig: Config? = when {
-		!config.isNullOrBlank() -> parsePathConfig(config!!)
-		!configResource.isNullOrBlank() -> parseResourceConfig(configResource!!)
-		else -> null
-	}
-	var defaultConfig: Config? = null
+    var declaredConfig: Config? = when {
+        !config.isNullOrBlank() -> parsePathConfig(config!!)
+        !configResource.isNullOrBlank() -> parseResourceConfig(configResource!!)
+        else -> null
+    }
+    var defaultConfig: Config? = null
 
-	if (buildUponDefaultConfig) {
-		defaultConfig = loadDefaultConfig()
-		declaredConfig = CompositeConfig(declaredConfig ?: defaultConfig, defaultConfig)
-	}
+    if (buildUponDefaultConfig) {
+        defaultConfig = loadDefaultConfig()
+        declaredConfig = CompositeConfig(declaredConfig ?: defaultConfig, defaultConfig)
+    }
 
-	val failFastUsed = declaredConfig?.deprecatedFailFastUsage() ?: false
-	if (failFast || failFastUsed) {
-		val initializedDefaultConfig = defaultConfig ?: loadDefaultConfig()
-		declaredConfig = FailFastConfig(declaredConfig ?: initializedDefaultConfig, initializedDefaultConfig)
-	}
+    val failFastUsed = declaredConfig?.deprecatedFailFastUsage() ?: false
+    if (failFast || failFastUsed) {
+        val initializedDefaultConfig = defaultConfig ?: loadDefaultConfig()
+        declaredConfig = FailFastConfig(declaredConfig ?: initializedDefaultConfig, initializedDefaultConfig)
+    }
 
-	if (debug) println("\n$declaredConfig\n")
-	return declaredConfig ?: loadDefaultConfig()
+    if (debug) println("\n$declaredConfig\n")
+    return declaredConfig ?: loadDefaultConfig()
 }
 
 private fun Config.deprecatedFailFastUsage(): Boolean {
-	val value = valueOrDefault("failFast", false)
-	LOG.printer.println("Using deprecated property 'failFast' in the yaml config. " +
-			"Please migrate to the new '--fail-fast' cli-flag or 'failFast' detekt extension property.")
-	return value
+    val value = valueOrDefault("failFast", false)
+    LOG.printer.println("Using deprecated property 'failFast' in the yaml config. " +
+            "Please migrate to the new '--fail-fast' cli-flag or 'failFast' detekt extension property.")
+    return value
 }
 
 private fun parseResourceConfig(configPath: String): Config {
-	val urls = MultipleClasspathResourceConverter().convert(configPath)
-	return if (urls.size == 1) {
-		YamlConfig.loadResource(urls[0])
-	} else {
-		urls.asSequence()
-				.map { YamlConfig.loadResource(it) }
-				.reduce { composite, config -> CompositeConfig(config, composite) }
-	}
+    val urls = MultipleClasspathResourceConverter().convert(configPath)
+    return if (urls.size == 1) {
+        YamlConfig.loadResource(urls[0])
+    } else {
+        urls.asSequence()
+                .map { YamlConfig.loadResource(it) }
+                .reduce { composite, config -> CompositeConfig(config, composite) }
+    }
 }
 
 private fun parsePathConfig(configPath: String): Config {
-	val paths = MultipleExistingPathConverter().convert(configPath)
-	return if (paths.size == 1) {
-		YamlConfig.load(paths[0])
-	} else {
-		paths.asSequence()
-				.map { YamlConfig.load(it) }
-				.reduce { composite, config -> CompositeConfig(config, composite) }
-	}
+    val paths = MultipleExistingPathConverter().convert(configPath)
+    return if (paths.size == 1) {
+        YamlConfig.load(paths[0])
+    } else {
+        paths.asSequence()
+                .map { YamlConfig.load(it) }
+                .reduce { composite, config -> CompositeConfig(config, composite) }
+    }
 }
 
 private fun loadDefaultConfig() = YamlConfig.loadResource(ClasspathResourceConverter().convert(DEFAULT_CONFIG))

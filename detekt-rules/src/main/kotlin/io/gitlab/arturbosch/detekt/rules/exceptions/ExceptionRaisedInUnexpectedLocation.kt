@@ -37,24 +37,24 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  */
 class ExceptionRaisedInUnexpectedLocation(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue("ExceptionRaisedInUnexpectedLocation", Severity.CodeSmell,
-			"This method is not expected to throw exceptions. This can cause weird behavior.",
-			Debt.TWENTY_MINS)
+    override val issue = Issue("ExceptionRaisedInUnexpectedLocation", Severity.CodeSmell,
+            "This method is not expected to throw exceptions. This can cause weird behavior.",
+            Debt.TWENTY_MINS)
 
-	private val methods = SplitPattern(valueOrDefault(METHOD_NAMES, ""))
+    private val methods = SplitPattern(valueOrDefault(METHOD_NAMES, ""))
 
-	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (isPotentialMethod(function) && hasThrowExpression(function.bodyExpression)) {
-			report(CodeSmell(issue, Entity.from(function), issue.description))
-		}
-	}
+    override fun visitNamedFunction(function: KtNamedFunction) {
+        if (isPotentialMethod(function) && hasThrowExpression(function.bodyExpression)) {
+            report(CodeSmell(issue, Entity.from(function), issue.description))
+        }
+    }
 
-	private fun isPotentialMethod(function: KtNamedFunction) = methods.equals(function.name)
+    private fun isPotentialMethod(function: KtNamedFunction) = methods.equals(function.name)
 
-	private fun hasThrowExpression(declaration: KtExpression?) =
-			declaration?.collectByType<KtThrowExpression>()?.any() == true
+    private fun hasThrowExpression(declaration: KtExpression?) =
+            declaration?.collectByType<KtThrowExpression>()?.any() == true
 
-	companion object {
-		const val METHOD_NAMES = "methodNames"
-	}
+    companion object {
+        const val METHOD_NAMES = "methodNames"
+    }
 }

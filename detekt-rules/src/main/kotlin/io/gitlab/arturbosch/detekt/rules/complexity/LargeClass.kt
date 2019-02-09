@@ -10,10 +10,10 @@ import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.rules.linesOfCode
 import io.gitlab.arturbosch.detekt.rules.parentOfType
+import java.util.IdentityHashMap
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.utils.addToStdlib.flattenTo
-import java.util.IdentityHashMap
 
 /**
  * This rule reports large classes. Classes should generally have one responsibility. Large classes can indicate that
@@ -27,55 +27,57 @@ import java.util.IdentityHashMap
  * @author Artur Bosch
  * @author Marvin Ramin
  */
-class LargeClass(config: Config = Config.empty,
-				 threshold: Int = DEFAULT_ACCEPTED_CLASS_LENGTH) : ThresholdRule(config, threshold) {
+class LargeClass(
+    config: Config = Config.empty,
+    threshold: Int = DEFAULT_ACCEPTED_CLASS_LENGTH
+) : ThresholdRule(config, threshold) {
 
-	override val issue = Issue("LargeClass",
-			Severity.Maintainability,
-			"One class should have one responsibility. Large classes tend to handle many things at once. " +
-					"Split up large classes into smaller classes that are easier to understand.",
-			Debt.TWENTY_MINS)
+    override val issue = Issue("LargeClass",
+            Severity.Maintainability,
+            "One class should have one responsibility. Large classes tend to handle many things at once. " +
+                    "Split up large classes into smaller classes that are easier to understand.",
+            Debt.TWENTY_MINS)
 
-	private val classToLinesCache = IdentityHashMap<KtClassOrObject, Int>()
-	private val nestedClassTracking = IdentityHashMap<KtClassOrObject, HashSet<KtClassOrObject>>()
+    private val classToLinesCache = IdentityHashMap<KtClassOrObject, Int>()
+    private val nestedClassTracking = IdentityHashMap<KtClassOrObject, HashSet<KtClassOrObject>>()
 
-	override fun preVisit(root: KtFile) {
-		classToLinesCache.clear()
-		nestedClassTracking.clear()
-	}
+    override fun preVisit(root: KtFile) {
+        classToLinesCache.clear()
+        nestedClassTracking.clear()
+    }
 
-	override fun postVisit(root: KtFile) {
-		for ((clazz, lines) in classToLinesCache) {
-			if (lines >= threshold) {
-				report(ThresholdedCodeSmell(issue,
-						Entity.from(clazz),
-						Metric("SIZE", lines, threshold),
-						"Class ${clazz.name} is too large. Consider splitting it into smaller pieces."))
-			}
-		}
-	}
+    override fun postVisit(root: KtFile) {
+        for ((clazz, lines) in classToLinesCache) {
+            if (lines >= threshold) {
+                report(ThresholdedCodeSmell(issue,
+                        Entity.from(clazz),
+                        Metric("SIZE", lines, threshold),
+                        "Class ${clazz.name} is too large. Consider splitting it into smaller pieces."))
+            }
+        }
+    }
 
-	override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-		val lines = classOrObject.linesOfCode()
-		classToLinesCache[classOrObject] = lines
-		classOrObject.parentOfType<KtClassOrObject>()
-				?.let { nestedClassTracking.getOrPut(it) { HashSet() }.add(classOrObject) }
-		super.visitClassOrObject(classOrObject)
-		findAllNestedClasses(classOrObject)
-				.fold(0) { acc, next -> acc + (classToLinesCache[next] ?: 0) }
-				.takeIf { it > 0 }
-				?.let { classToLinesCache[classOrObject] = lines - it }
-	}
+    override fun visitClassOrObject(classOrObject: KtClassOrObject) {
+        val lines = classOrObject.linesOfCode()
+        classToLinesCache[classOrObject] = lines
+        classOrObject.parentOfType<KtClassOrObject>()
+                ?.let { nestedClassTracking.getOrPut(it) { HashSet() }.add(classOrObject) }
+        super.visitClassOrObject(classOrObject)
+        findAllNestedClasses(classOrObject)
+                .fold(0) { acc, next -> acc + (classToLinesCache[next] ?: 0) }
+                .takeIf { it > 0 }
+                ?.let { classToLinesCache[classOrObject] = lines - it }
+    }
 
-	private fun findAllNestedClasses(startClass: KtClassOrObject): Sequence<KtClassOrObject> = sequence {
-		var nestedClasses = nestedClassTracking[startClass]
-		while (!nestedClasses.isNullOrEmpty()) {
-			yieldAll(nestedClasses)
-			nestedClasses = nestedClasses.mapNotNull { nestedClassTracking[it] }.flattenTo(HashSet())
-		}
-	}
+    private fun findAllNestedClasses(startClass: KtClassOrObject): Sequence<KtClassOrObject> = sequence {
+        var nestedClasses = nestedClassTracking[startClass]
+        while (!nestedClasses.isNullOrEmpty()) {
+            yieldAll(nestedClasses)
+            nestedClasses = nestedClasses.mapNotNull { nestedClassTracking[it] }.flattenTo(HashSet())
+        }
+    }
 
-	companion object {
-		const val DEFAULT_ACCEPTED_CLASS_LENGTH = 600
-	}
+    companion object {
+        const val DEFAULT_ACCEPTED_CLASS_LENGTH = 600
+    }
 }

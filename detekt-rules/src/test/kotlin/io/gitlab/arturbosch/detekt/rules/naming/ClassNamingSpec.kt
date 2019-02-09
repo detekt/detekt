@@ -11,11 +11,11 @@ import org.jetbrains.spek.api.dsl.it
  */
 class ClassNamingSpec : Spek({
 
-	describe("different naming conventions inside classes") {
+    describe("different naming conventions inside classes") {
 
-		it("should detect no violations") {
-			val findings = NamingRules().lint(
-					"""
+        it("should detect no violations") {
+            val findings = NamingRules().lint(
+                    """
 					class MyClassWithNumbers5
 
 					class NamingConventions {
@@ -38,13 +38,13 @@ class ClassNamingSpec : Spek({
 						}
 					}
 				"""
-			)
-			assertThat(findings).isEmpty()
-		}
+            )
+            assertThat(findings).isEmpty()
+        }
 
-		it("should find seven violations") {
-			val findings = NamingRules().lint(
-					"""
+        it("should find seven violations") {
+            val findings = NamingRules().lint(
+                    """
 					class _NamingConventions { // invalid
 
 						val C_lassVariable = 5 // invalid
@@ -59,8 +59,8 @@ class ClassNamingSpec : Spek({
 					}
 					class namingConventions {} // invalid
 				"""
-			)
-			assertThat(findings).hasSize(7)
-		}
-	}
+            )
+            assertThat(findings).hasSize(7)
+        }
+    }
 })

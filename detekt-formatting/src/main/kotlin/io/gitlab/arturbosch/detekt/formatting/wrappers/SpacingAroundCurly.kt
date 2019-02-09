@@ -13,6 +13,6 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 class SpacingAroundCurly(config: Config) : FormattingRule(config) {
 
-	override val wrapping = SpacingAroundCurlyRule()
-	override val issue = issueFor("Reports spaces around curly braces")
+    override val wrapping = SpacingAroundCurlyRule()
+    override val issue = issueFor("Reports spaces around curly braces")
 }

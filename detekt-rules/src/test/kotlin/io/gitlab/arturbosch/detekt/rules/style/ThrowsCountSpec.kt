@@ -9,11 +9,11 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
 class ThrowsCountSpec : SubjectSpek<ThrowsCount>({
-	subject { ThrowsCount(Config.empty) }
+    subject { ThrowsCount(Config.empty) }
 
-	given("several methods which throw exceptions") {
+    given("several methods which throw exceptions") {
 
-		val code = """
+        val code = """
 			fun f1(x: Int) {
 				when (x) {
 					1 -> throw IOException()
@@ -38,15 +38,15 @@ class ThrowsCountSpec : SubjectSpek<ThrowsCount>({
 			}
 		"""
 
-		it("reports violation by default") {
-			val findings = subject.lint(code)
-			assertThat(findings).hasSize(1)
-		}
+        it("reports violation by default") {
+            val findings = subject.lint(code)
+            assertThat(findings).hasSize(1)
+        }
 
-		it("does not report for configuration max parameter") {
-			val config = TestConfig(mapOf(ThrowsCount.MAX to "3"))
-			val subject = ThrowsCount(config)
-			assertThat(subject.lint(code)).hasSize(0)
-		}
-	}
+        it("does not report for configuration max parameter") {
+            val config = TestConfig(mapOf(ThrowsCount.MAX to "3"))
+            val subject = ThrowsCount(config)
+            assertThat(subject.lint(code)).hasSize(0)
+        }
+    }
 })

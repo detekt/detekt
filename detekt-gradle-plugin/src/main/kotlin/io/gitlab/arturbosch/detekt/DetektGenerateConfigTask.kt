@@ -19,21 +19,21 @@ import org.gradle.language.base.plugins.LifecycleBasePlugin
  */
 open class DetektGenerateConfigTask : DefaultTask() {
 
-	init {
-		description = "Generate a detekt configuration file inside your project."
-		group = LifecycleBasePlugin.VERIFICATION_GROUP
-	}
+    init {
+        description = "Generate a detekt configuration file inside your project."
+        group = LifecycleBasePlugin.VERIFICATION_GROUP
+    }
 
-	@InputFiles
-	@PathSensitive(PathSensitivity.RELATIVE)
-	@SkipWhenEmpty
-	var input: ConfigurableFileCollection = project.layout.configurableFiles()
+    @InputFiles
+    @PathSensitive(PathSensitivity.RELATIVE)
+    @SkipWhenEmpty
+    var input: ConfigurableFileCollection = project.layout.configurableFiles()
 
-	@TaskAction
-	fun generateConfig() {
-		val arguments = mutableListOf<CliArgument>(GenerateConfigArgument) +
-				InputArgument(input)
+    @TaskAction
+    fun generateConfig() {
+        val arguments = mutableListOf<CliArgument>(GenerateConfigArgument) +
+                InputArgument(input)
 
-		DetektInvoker.invokeCli(project, arguments.toList())
-	}
+        DetektInvoker.invokeCli(project, arguments.toList())
+    }
 }

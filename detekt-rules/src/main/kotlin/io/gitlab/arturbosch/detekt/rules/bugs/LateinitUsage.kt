@@ -6,10 +6,10 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SplitPattern
-import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.rules.isLateinit
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtProperty
@@ -38,40 +38,40 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
  */
 class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName,
-			Severity.Defect,
-			"Usage of lateinit detected. Using lateinit for property initialization " +
-					"is error prone, try using constructor injection or delegation.",
-			Debt.TWENTY_MINS)
+    override val issue = Issue(javaClass.simpleName,
+            Severity.Defect,
+            "Usage of lateinit detected. Using lateinit for property initialization " +
+                    "is error prone, try using constructor injection or delegation.",
+            Debt.TWENTY_MINS)
 
-	private val excludeAnnotatedProperties = SplitPattern(valueOrDefault(EXCLUDE_ANNOTATED_PROPERTIES, ""))
+    private val excludeAnnotatedProperties = SplitPattern(valueOrDefault(EXCLUDE_ANNOTATED_PROPERTIES, ""))
 
-	private val ignoreOnClassesPattern by LazyRegex(key = IGNORE_ON_CLASSES_PATTERN, default = "")
+    private val ignoreOnClassesPattern by LazyRegex(key = IGNORE_ON_CLASSES_PATTERN, default = "")
 
-	private var properties = mutableListOf<KtProperty>()
+    private var properties = mutableListOf<KtProperty>()
 
-	override fun visitProperty(property: KtProperty) {
-		if (property.isLateinit()) {
-			properties.add(property)
-		}
-	}
+    override fun visitProperty(property: KtProperty) {
+        if (property.isLateinit()) {
+            properties.add(property)
+        }
+    }
 
-	override fun visit(root: KtFile) {
-		properties = mutableListOf()
+    override fun visit(root: KtFile) {
+        properties = mutableListOf()
 
-		super.visit(root)
+        super.visit(root)
 
-		val annotationExcluder = AnnotationExcluder(root, excludeAnnotatedProperties)
+        val annotationExcluder = AnnotationExcluder(root, excludeAnnotatedProperties)
 
-		properties.filterNot { annotationExcluder.shouldExclude(it.annotationEntries) }
-				.filterNot { it.containingClass()?.name?.matches(ignoreOnClassesPattern) == true }
-				.forEach {
-					report(CodeSmell(issue, Entity.from(it), "Usages of lateinit should be avoided."))
-				}
-	}
+        properties.filterNot { annotationExcluder.shouldExclude(it.annotationEntries) }
+                .filterNot { it.containingClass()?.name?.matches(ignoreOnClassesPattern) == true }
+                .forEach {
+                    report(CodeSmell(issue, Entity.from(it), "Usages of lateinit should be avoided."))
+                }
+    }
 
-	companion object {
-		const val EXCLUDE_ANNOTATED_PROPERTIES = "excludeAnnotatedProperties"
-		const val IGNORE_ON_CLASSES_PATTERN = "ignoreOnClassesPattern"
-	}
+    companion object {
+        const val EXCLUDE_ANNOTATED_PROPERTIES = "excludeAnnotatedProperties"
+        const val IGNORE_ON_CLASSES_PATTERN = "ignoreOnClassesPattern"
+    }
 }

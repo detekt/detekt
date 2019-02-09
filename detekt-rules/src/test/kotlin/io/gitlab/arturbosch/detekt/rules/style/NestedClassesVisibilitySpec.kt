@@ -8,16 +8,16 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
 class NestedClassesVisibilitySpec : SubjectSpek<NestedClassesVisibility>({
-	subject { NestedClassesVisibility() }
+    subject { NestedClassesVisibility() }
 
-	given("several nested classes") {
+    given("several nested classes") {
 
-		it("reports public nested classes") {
-			assertThat(subject.lint(Case.NestedClassVisibilityPositive.path())).hasSize(6)
-		}
+        it("reports public nested classes") {
+            assertThat(subject.lint(Case.NestedClassVisibilityPositive.path())).hasSize(6)
+        }
 
-		it("does not report internal and (package) private nested classes") {
-			assertThat(subject.lint(Case.NestedClassVisibilityNegative.path())).isEmpty()
-		}
-	}
+        it("does not report internal and (package) private nested classes") {
+            assertThat(subject.lint(Case.NestedClassVisibilityNegative.path())).isEmpty()
+        }
+    }
 })

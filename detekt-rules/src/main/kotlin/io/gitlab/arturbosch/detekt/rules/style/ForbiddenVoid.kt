@@ -30,20 +30,20 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  */
 class ForbiddenVoid(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue(
-			javaClass.simpleName,
-			Severity.Style,
-			"`Unit` should be used instead of `Void`.",
-			Debt.FIVE_MINS)
+    override val issue = Issue(
+            javaClass.simpleName,
+            Severity.Style,
+            "`Unit` should be used instead of `Void`.",
+            Debt.FIVE_MINS)
 
-	override fun visitSimpleNameExpression(expression: KtSimpleNameExpression) {
-		if (expression.getReferencedName() == Void::class.java.simpleName && !expression.isClassLiteral) {
-			report(CodeSmell(issue, Entity.from(expression), message = "'Void' should be replaced with 'Unit'."))
-		}
+    override fun visitSimpleNameExpression(expression: KtSimpleNameExpression) {
+        if (expression.getReferencedName() == Void::class.java.simpleName && !expression.isClassLiteral) {
+            report(CodeSmell(issue, Entity.from(expression), message = "'Void' should be replaced with 'Unit'."))
+        }
 
-		super.visitSimpleNameExpression(expression)
-	}
+        super.visitSimpleNameExpression(expression)
+    }
 
-	private val KtSimpleNameExpression.isClassLiteral: Boolean
-		get() = getStrictParentOfType<KtClassLiteralExpression>() != null
+    private val KtSimpleNameExpression.isClassLiteral: Boolean
+        get() = getStrictParentOfType<KtClassLiteralExpression>() != null
 }

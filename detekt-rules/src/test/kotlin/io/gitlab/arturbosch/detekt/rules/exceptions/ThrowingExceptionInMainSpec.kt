@@ -7,22 +7,22 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
 class ThrowingExceptionInMainSpec : SubjectSpek<ThrowingExceptionInMain>({
-	subject { ThrowingExceptionInMain() }
+    subject { ThrowingExceptionInMain() }
 
-	given("some main methods") {
+    given("some main methods") {
 
-		it("has a runnable main method which throws an exception") {
-			val code = "fun main(args: Array<String>) { throw new IOException() }"
-			assertThat(subject.lint(code)).hasSize(1)
-		}
+        it("has a runnable main method which throws an exception") {
+            val code = "fun main(args: Array<String>) { throw new IOException() }"
+            assertThat(subject.lint(code)).hasSize(1)
+        }
 
-		it("has wrong main methods") {
-			val code = """
+        it("has wrong main methods") {
+            val code = """
 				fun main(args: Array<String>) { }
 				private fun main() { }
 				fun mai() { }
 				fun main(args: String) { }"""
-			assertThat(subject.lint(code)).hasSize(0)
-		}
-	}
+            assertThat(subject.lint(code)).hasSize(0)
+        }
+    }
 })

@@ -10,26 +10,25 @@ import org.jetbrains.spek.api.dsl.it
  * @author Markus Schwarz
  */
 internal class CreateBaselineTaskDslTest : Spek({
-	describe("The detektBaseline task of the Detekt Gradle plugin") {
-		listOf(DslTestBuilder.groovy(), DslTestBuilder.kotlin()).forEach { builder ->
-			describe("using ${builder.gradleBuildName}") {
-				it("can be executed when baseline file is specified") {
-					val detektConfig = """
+    describe("The detektBaseline task of the Detekt Gradle plugin") {
+        listOf(DslTestBuilder.groovy(), DslTestBuilder.kotlin()).forEach { builder ->
+            describe("using ${builder.gradleBuildName}") {
+                it("can be executed when baseline file is specified") {
+                    val detektConfig = """
 						|detekt {
 						| 	baseline = file("build/baseline.xml")
 						|}
 						"""
-					val gradleRunner = builder
-							.withDetektConfig(detektConfig)
-							.build()
+                    val gradleRunner = builder
+                            .withDetektConfig(detektConfig)
+                            .build()
 
-					gradleRunner.runTasksAndCheckResult("detektBaseline") { result ->
-						assertThat(result.task(":detektBaseline")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-						assertThat(projectFile("build/baseline.xml")).exists()
-					}
-
-				}
-			}
-		}
-	}
+                    gradleRunner.runTasksAndCheckResult("detektBaseline") { result ->
+                        assertThat(result.task(":detektBaseline")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+                        assertThat(projectFile("build/baseline.xml")).exists()
+                    }
+                }
+            }
+        }
+    }
 })

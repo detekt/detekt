@@ -14,37 +14,36 @@ import org.jetbrains.spek.subject.SubjectSpek
  */
 class UseDataClassSpec : SubjectSpek<UseDataClass>({
 
-	subject { UseDataClass(Config.empty) }
+    subject { UseDataClass(Config.empty) }
 
-	given("several classes") {
+    given("several classes") {
 
-		it("reports potential data classes") {
-			assertThat(subject.lint(Case.UseDataClassPositive.path())).hasSize(5)
-		}
+        it("reports potential data classes") {
+            assertThat(subject.lint(Case.UseDataClassPositive.path())).hasSize(5)
+        }
 
-		it("does not report invalid data class candidates") {
-			assertThat(subject.lint(Case.UseDataClassNegative.path())).isEmpty()
-		}
+        it("does not report invalid data class candidates") {
+            assertThat(subject.lint(Case.UseDataClassNegative.path())).isEmpty()
+        }
 
-		it("does not report inline classes") {
-			assertThat(subject.lint(
-					"""inline class A(val x: Int)"""
-			)).isEmpty()
+        it("does not report inline classes") {
+            assertThat(subject.lint(
+                    """inline class A(val x: Int)"""
+            )).isEmpty()
+        }
+    }
 
-		}
-	}
+    given("a class with an annotation which is ignored") {
 
-	given("a class with an annotation which is ignored") {
-
-		it("does not report a potential data class") {
-			val code = """
+        it("does not report a potential data class") {
+            val code = """
 				import kotlin.SinceKotlin
 
 				@SinceKotlin("1.0.0")
 				class AnnotatedClass(val i: Int) {}
 				"""
-			val config = TestConfig(mapOf(UseDataClass.EXCLUDE_ANNOTATED_CLASSES to "kotlin.*"))
-			assertThat(UseDataClass(config).lint(code)).isEmpty()
-		}
-	}
+            val config = TestConfig(mapOf(UseDataClass.EXCLUDE_ANNOTATED_CLASSES to "kotlin.*"))
+            assertThat(UseDataClass(config).lint(code)).isEmpty()
+        }
+    }
 })

@@ -27,25 +27,25 @@ import org.jetbrains.kotlin.psi.psiUtil.getQualifiedElementOrCallableRef
  * @author jkaan
  */
 class PreferToOverPairSyntax(config: Config = Config.empty) : Rule(config) {
-	override val issue = Issue("PreferToOverPairSyntax", Severity.Style,
-			"Pair was created using the Pair constructor, using the to syntax is preferred.",
-			Debt.FIVE_MINS)
+    override val issue = Issue("PreferToOverPairSyntax", Severity.Style,
+            "Pair was created using the Pair constructor, using the to syntax is preferred.",
+            Debt.FIVE_MINS)
 
-	override fun visitSimpleNameExpression(expression: KtSimpleNameExpression) {
-		val callReference = expression.getQualifiedElementOrCallableRef()
-		if (expression.getReferencedName() == PAIR_CONSTRUCTOR_REFERENCE_NAME &&
-				callReference is KtCallExpression) {
-			val (firstArg, secondArg) = callReference.valueArguments.map { it.text }
+    override fun visitSimpleNameExpression(expression: KtSimpleNameExpression) {
+        val callReference = expression.getQualifiedElementOrCallableRef()
+        if (expression.getReferencedName() == PAIR_CONSTRUCTOR_REFERENCE_NAME &&
+                callReference is KtCallExpression) {
+            val (firstArg, secondArg) = callReference.valueArguments.map { it.text }
 
-			report(CodeSmell(issue, Entity.from(expression),
-					message = "Pair is created by using the pair constructor. " +
-							"This can replaced by `$firstArg to $secondArg`"))
-		}
+            report(CodeSmell(issue, Entity.from(expression),
+                    message = "Pair is created by using the pair constructor. " +
+                            "This can replaced by `$firstArg to $secondArg`"))
+        }
 
-		super.visitSimpleNameExpression(expression)
-	}
+        super.visitSimpleNameExpression(expression)
+    }
 
-	companion object {
-		const val PAIR_CONSTRUCTOR_REFERENCE_NAME = "Pair"
-	}
+    companion object {
+        const val PAIR_CONSTRUCTOR_REFERENCE_NAME = "Pair"
+    }
 }

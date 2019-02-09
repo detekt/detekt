@@ -21,46 +21,46 @@ import java.nio.file.WatchService
  * @author Artur Bosch
  */
 class State(
-		home: DetektHome = Injekt.get()
+    home: DetektHome = Injekt.get()
 ) {
 
-	var shouldWatch: Boolean = false
+    var shouldWatch: Boolean = false
 
-	private var project: Path? = null
+    private var project: Path? = null
 
-	private var config: Config =
-			home.property(DETEKT_YAML_CONFIG_PATHS)?.let {
-				CliArgs().apply { config = it }.loadConfiguration()
-			} ?: Config.empty
+    private var config: Config =
+            home.property(DETEKT_YAML_CONFIG_PATHS)?.let {
+                CliArgs().apply { config = it }.loadConfiguration()
+            } ?: Config.empty
 
-	fun project(): Path = project
-			?: throw IllegalStateException("Please specify a root path with the 'project' command first.")
+    fun project(): Path = project
+        ?: throw IllegalStateException("Please specify a root path with the 'project' command first.")
 
-	fun isValid() = project != null
+    fun isValid() = project != null
 
-	fun use(parameters: Parameters) {
-		if (shouldWatch) {
-			shouldWatch = false
-			println("Stopping ongoing watcher for ${project()}")
-		}
-		project = parameters.extractWatchDirectory()
-		config = parameters.extractConfig() ?: config
-	}
+    fun use(parameters: Parameters) {
+        if (shouldWatch) {
+            shouldWatch = false
+            println("Stopping ongoing watcher for ${project()}")
+        }
+        project = parameters.extractWatchDirectory()
+        config = parameters.extractConfig() ?: config
+    }
 
-	fun resolveSubPath(sub: String): Path = project().resolve(sub)
+    fun resolveSubPath(sub: String): Path = project().resolve(sub)
 
-	fun settings() = ProcessingSettings(
-			project(),
-			config,
-			listOf(PathFilter(".*/resources/.*"),
-					PathFilter(".*/build/.*"))
-	)
+    fun settings() = ProcessingSettings(
+            project(),
+            config,
+            listOf(PathFilter(".*/resources/.*"),
+                    PathFilter(".*/build/.*"))
+    )
 
-	fun newWatcher(): WatchService {
-		check(project != null && project?.exists().isTrue())
-		val watchService = FileSystems.getDefault().newWatchService()
-		Files.walkFileTree(project, DirectoryRegisteringVisitor(watchService))
-		println("Starting detekt watch service for $project")
-		return watchService
-	}
+    fun newWatcher(): WatchService {
+        check(project != null && project?.exists().isTrue())
+        val watchService = FileSystems.getDefault().newWatchService()
+        Files.walkFileTree(project, DirectoryRegisteringVisitor(watchService))
+        println("Starting detekt watch service for $project")
+        return watchService
+    }
 }

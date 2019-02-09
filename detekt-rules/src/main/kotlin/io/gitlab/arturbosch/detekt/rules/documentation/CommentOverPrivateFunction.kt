@@ -24,17 +24,17 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  */
 class CommentOverPrivateFunction(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue("CommentOverPrivateFunction",
-			Severity.Maintainability,
-			"Comments for private functions should be avoided. " +
-					"Prefer giving the function an expressive name. " +
-					"Split it up in smaller, self-explaining functions if necessary.",
-			Debt.TWENTY_MINS)
+    override val issue = Issue("CommentOverPrivateFunction",
+            Severity.Maintainability,
+            "Comments for private functions should be avoided. " +
+                    "Prefer giving the function an expressive name. " +
+                    "Split it up in smaller, self-explaining functions if necessary.",
+            Debt.TWENTY_MINS)
 
-	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (function.hasCommentInPrivateMember()) {
-			report(CodeSmell(issue, Entity.from(function.docComment!!), "The function ${function.nameAsSafeName} " +
-					"has a comment. Prefer renaming the function giving it a more self-explanatory name."))
-		}
-	}
+    override fun visitNamedFunction(function: KtNamedFunction) {
+        if (function.hasCommentInPrivateMember()) {
+            report(CodeSmell(issue, Entity.from(function.docComment!!), "The function ${function.nameAsSafeName} " +
+                    "has a comment. Prefer renaming the function giving it a more self-explanatory name."))
+        }
+    }
 }

@@ -5,8 +5,8 @@ import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.rules.style.CollapsibleIfStatements
 import io.gitlab.arturbosch.detekt.rules.style.DataClassContainsFunctions
-import io.gitlab.arturbosch.detekt.rules.style.EqualsOnSignatureLine
 import io.gitlab.arturbosch.detekt.rules.style.EqualsNullCall
+import io.gitlab.arturbosch.detekt.rules.style.EqualsOnSignatureLine
 import io.gitlab.arturbosch.detekt.rules.style.ExplicitItLambdaParameter
 import io.gitlab.arturbosch.detekt.rules.style.ExpressionBodySyntax
 import io.gitlab.arturbosch.detekt.rules.style.FileParsingRule
@@ -56,52 +56,52 @@ import io.gitlab.arturbosch.detekt.rules.style.optional.PreferToOverPairSyntax
  */
 class StyleGuideProvider : RuleSetProvider {
 
-	override val ruleSetId: String = "style"
+    override val ruleSetId: String = "style"
 
-	override fun instance(config: Config): RuleSet {
-		return RuleSet(ruleSetId, listOf(
-				CollapsibleIfStatements(config),
-				ReturnCount(config),
-				ThrowsCount(config),
-				NewLineAtEndOfFile(config),
-				WildcardImport(config),
-				FileParsingRule(config),
-				EqualsOnSignatureLine(config),
-				EqualsNullCall(config),
-				ForbiddenComment(config),
-				ForbiddenImport(config),
-				FunctionOnlyReturningConstant(config),
-				SpacingBetweenPackageAndImports(config),
-				LoopWithTooManyJumpStatements(config),
-				SafeCast(config),
-				UnnecessaryAbstractClass(config),
-				UnnecessaryParentheses(config),
-				UnnecessaryInheritance(config),
-				UtilityClassWithPublicConstructor(config),
-				OptionalAbstractKeyword(config),
-				OptionalWhenBraces(config),
-				OptionalUnit(config),
-				ProtectedMemberInFinalClass(config),
-				SerialVersionUIDInSerializableClass(config),
-				MagicNumber(config),
-				ModifierOrder(config),
-				DataClassContainsFunctions(config),
-				UseDataClass(config),
-				UnusedImports(config),
-				UnusedPrivateClass(config),
-				UnusedPrivateMember(config),
-				ExpressionBodySyntax(config),
-				NestedClassesVisibility(config),
-				RedundantVisibilityModifierRule(config),
-				UntilInsteadOfRangeTo(config),
-				UnnecessaryApply(config),
-				UnnecessaryLet(config),
-				MayBeConst(config),
-				PreferToOverPairSyntax(config),
-				MandatoryBracesIfStatements(config),
-				VarCouldBeVal(config),
-				ForbiddenVoid(config),
-				ExplicitItLambdaParameter(config)
-		))
-	}
+    override fun instance(config: Config): RuleSet {
+        return RuleSet(ruleSetId, listOf(
+                CollapsibleIfStatements(config),
+                ReturnCount(config),
+                ThrowsCount(config),
+                NewLineAtEndOfFile(config),
+                WildcardImport(config),
+                FileParsingRule(config),
+                EqualsOnSignatureLine(config),
+                EqualsNullCall(config),
+                ForbiddenComment(config),
+                ForbiddenImport(config),
+                FunctionOnlyReturningConstant(config),
+                SpacingBetweenPackageAndImports(config),
+                LoopWithTooManyJumpStatements(config),
+                SafeCast(config),
+                UnnecessaryAbstractClass(config),
+                UnnecessaryParentheses(config),
+                UnnecessaryInheritance(config),
+                UtilityClassWithPublicConstructor(config),
+                OptionalAbstractKeyword(config),
+                OptionalWhenBraces(config),
+                OptionalUnit(config),
+                ProtectedMemberInFinalClass(config),
+                SerialVersionUIDInSerializableClass(config),
+                MagicNumber(config),
+                ModifierOrder(config),
+                DataClassContainsFunctions(config),
+                UseDataClass(config),
+                UnusedImports(config),
+                UnusedPrivateClass(config),
+                UnusedPrivateMember(config),
+                ExpressionBodySyntax(config),
+                NestedClassesVisibility(config),
+                RedundantVisibilityModifierRule(config),
+                UntilInsteadOfRangeTo(config),
+                UnnecessaryApply(config),
+                UnnecessaryLet(config),
+                MayBeConst(config),
+                PreferToOverPairSyntax(config),
+                MandatoryBracesIfStatements(config),
+                VarCouldBeVal(config),
+                ForbiddenVoid(config),
+                ExplicitItLambdaParameter(config)
+        ))
+    }
 }

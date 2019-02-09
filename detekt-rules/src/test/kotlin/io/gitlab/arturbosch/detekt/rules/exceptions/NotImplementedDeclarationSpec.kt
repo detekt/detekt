@@ -7,37 +7,37 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
 class NotImplementedDeclarationSpec : SubjectSpek<NotImplementedDeclaration>({
-	subject { NotImplementedDeclaration() }
+    subject { NotImplementedDeclaration() }
 
-	given("throwing NotImplementedError declarations") {
+    given("throwing NotImplementedError declarations") {
 
-		it("reports NotImplementedErrors") {
-			val code = """
+        it("reports NotImplementedErrors") {
+            val code = """
 				fun f() {
 					if (1 == 1) throw NotImplementedError()
 					throw NotImplementedError()
 				}"""
-			assertThat(subject.lint(code)).hasSize(2)
-		}
-	}
+            assertThat(subject.lint(code)).hasSize(2)
+        }
+    }
 
-	given("several TODOs") {
+    given("several TODOs") {
 
-		it("reports TODO method calls") {
-			val code = """
+        it("reports TODO method calls") {
+            val code = """
 				fun f() {
 					TODO("not implemented")
 					TODO()
 				}"""
-			assertThat(subject.lint(code)).hasSize(2)
-		}
+            assertThat(subject.lint(code)).hasSize(2)
+        }
 
-		it("does not report TODO comments") {
-			val code = """
+        it("does not report TODO comments") {
+            val code = """
 				fun f() {
 					// TODO
 				}"""
-			assertThat(subject.lint(code)).hasSize(0)
-		}
-	}
+            assertThat(subject.lint(code)).hasSize(0)
+        }
+    }
 })

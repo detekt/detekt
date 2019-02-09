@@ -36,34 +36,34 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  */
 class DuplicateCaseInWhenExpression(config: Config) : Rule(config) {
 
-	override val issue = Issue("DuplicateCaseInWhenExpression",
-			Severity.Warning,
-			"Duplicated case statements in when expression. " +
-					"Both cases should be merged.",
-			Debt.TEN_MINS)
+    override val issue = Issue("DuplicateCaseInWhenExpression",
+            Severity.Warning,
+            "Duplicated case statements in when expression. " +
+                    "Both cases should be merged.",
+            Debt.TEN_MINS)
 
-	override fun visitWhenExpression(expression: KtWhenExpression) {
-		val entries = expression.entries
-				.map { it.conditions }
-				.fold(mutableListOf<String>()) { state, conditions ->
-					state.apply { add(conditions.joinToString { it.text }) }
-				}
-		val duplicates = findDuplicates(entries)
-		if (duplicates.isNotEmpty()) {
-			report(CodeSmell(issue, Entity.from(expression),
-					"When expression has multiple case statements " + "for ${duplicates.joinToString { ", " }}."))
-		}
-	}
+    override fun visitWhenExpression(expression: KtWhenExpression) {
+        val entries = expression.entries
+                .map { it.conditions }
+                .fold(mutableListOf<String>()) { state, conditions ->
+                    state.apply { add(conditions.joinToString { it.text }) }
+                }
+        val duplicates = findDuplicates(entries)
+        if (duplicates.isNotEmpty()) {
+            report(CodeSmell(issue, Entity.from(expression),
+                    "When expression has multiple case statements " + "for ${duplicates.joinToString { ", " }}."))
+        }
+    }
 
-	private fun findDuplicates(list: List<String>): MutableSet<String> {
-		val duplicates = mutableSetOf<String>()
-		for (i in 0 until list.size) {
-			for (j in i + 1 until list.size) {
-				if (list[i] == list[j]) {
-					duplicates.add(list[i])
-				}
-			}
-		}
-		return duplicates
-	}
+    private fun findDuplicates(list: List<String>): MutableSet<String> {
+        val duplicates = mutableSetOf<String>()
+        for (i in 0 until list.size) {
+            for (j in i + 1 until list.size) {
+                if (list[i] == list[j]) {
+                    duplicates.add(list[i])
+                }
+            }
+        }
+        return duplicates
+    }
 }

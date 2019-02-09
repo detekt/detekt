@@ -20,70 +20,70 @@ import io.gitlab.arturbosch.detekt.generator.printer.DocumentationPrinter
  */
 object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
 
-	override fun print(item: RuleSetPage): String {
-		return markdown {
-			if (item.ruleSet.description.isNotEmpty()) {
-				paragraph { item.ruleSet.description }
-			} else {
-				paragraph { "TODO: Specify description" }
-			}
-			item.rules.forEach {
-				markdown { printRule(it) }
-			}
-		}
-	}
+    override fun print(item: RuleSetPage): String {
+        return markdown {
+            if (item.ruleSet.description.isNotEmpty()) {
+                paragraph { item.ruleSet.description }
+            } else {
+                paragraph { "TODO: Specify description" }
+            }
+            item.rules.forEach {
+                markdown { printRule(it) }
+            }
+        }
+    }
 
-	private fun printRule(rule: Rule): String {
-		return markdown {
-			h3 { rule.name }
+    private fun printRule(rule: Rule): String {
+        return markdown {
+            h3 { rule.name }
 
-			if (rule.description.isNotEmpty()) {
-				paragraph { rule.description }
-			} else {
-				paragraph { "TODO: Specify description" }
-			}
+            if (rule.description.isNotEmpty()) {
+                paragraph { rule.description }
+            } else {
+                paragraph { "TODO: Specify description" }
+            }
 
-			if (rule.severity.isNotEmpty()) {
-				paragraph {
-					"${bold { "Severity" }}: ${rule.severity}"
-				}
-			}
+            if (rule.severity.isNotEmpty()) {
+                paragraph {
+                    "${bold { "Severity" }}: ${rule.severity}"
+                }
+            }
 
-			if (rule.debt.isNotEmpty()) {
-				paragraph {
-					"${bold { "Debt" }}: ${rule.debt}"
-				}
-			}
+            if (rule.debt.isNotEmpty()) {
+                paragraph {
+                    "${bold { "Debt" }}: ${rule.debt}"
+                }
+            }
 
-			if (!rule.aliases.isNullOrEmpty()) {
-				paragraph {
-					"${bold { "Aliases" }}: ${rule.aliases}"
-				}
-			}
+            if (!rule.aliases.isNullOrEmpty()) {
+                paragraph {
+                    "${bold { "Aliases" }}: ${rule.aliases}"
+                }
+            }
 
-			if (rule.configuration.isNotEmpty()) {
-				h4 { "Configuration options:" }
-				list {
-					rule.configuration.forEach {
-						item { "${code { it.name }} (default: ${code { it.defaultValue }})" }
-						description { it.description }
-					}
-				}
-			}
+            if (rule.configuration.isNotEmpty()) {
+                h4 { "Configuration options:" }
+                list {
+                    rule.configuration.forEach {
+                        item { "${code { it.name }} (default: ${code { it.defaultValue }})" }
+                        description { it.description }
+                    }
+                }
+            }
 
-			printRuleCodeExamples(rule)
-		}
-	}
+            printRuleCodeExamples(rule)
+        }
+    }
 
-	private fun MarkdownContent.printRuleCodeExamples(rule: Rule) {
-		if (rule.nonCompliantCodeExample.isNotEmpty()) {
-			h4 { "Noncompliant Code:" }
-			paragraph { codeBlock { rule.nonCompliantCodeExample } }
-		}
+    private fun MarkdownContent.printRuleCodeExamples(rule: Rule) {
+        if (rule.nonCompliantCodeExample.isNotEmpty()) {
+            h4 { "Noncompliant Code:" }
+            paragraph { codeBlock { rule.nonCompliantCodeExample } }
+        }
 
-		if (rule.compliantCodeExample.isNotEmpty()) {
-			h4 { "Compliant Code:" }
-			paragraph { codeBlock { rule.compliantCodeExample } }
-		}
-	}
+        if (rule.compliantCodeExample.isNotEmpty()) {
+            h4 { "Compliant Code:" }
+            paragraph { codeBlock { rule.compliantCodeExample } }
+        }
+    }
 }

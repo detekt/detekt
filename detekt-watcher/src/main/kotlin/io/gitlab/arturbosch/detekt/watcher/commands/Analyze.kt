@@ -13,22 +13,22 @@ import io.gitlab.arturbosch.kutils.get
  * @author Artur Bosch
  */
 class Analyze(
-		private val state: State = Injekt.get(),
-		private val detekt: DetektService = Injekt.get()
+    private val state: State = Injekt.get(),
+    private val detekt: DetektService = Injekt.get()
 ) : ShellClass {
 
-	@ShellMethod(help = "Runs an analysis on specified project.")
-	fun main(
-			@ShellOption(
-					value = ["", "--subpath"],
-					help = "If a sub path inside the project should be analyzed.",
-					defaultValue = ShellOptions.NULL_DEFAULT
-			) subPath: String?
-	) {
-		if (subPath == null) {
-			detekt.run(state.project())
-		} else {
-			detekt.run(state.resolveSubPath(subPath))
-		}
-	}
+    @ShellMethod(help = "Runs an analysis on specified project.")
+    fun main(
+        @ShellOption(
+                value = ["", "--subpath"],
+                help = "If a sub path inside the project should be analyzed.",
+                defaultValue = ShellOptions.NULL_DEFAULT
+        ) subPath: String?
+    ) {
+        if (subPath == null) {
+            detekt.run(state.project())
+        } else {
+            detekt.run(state.resolveSubPath(subPath))
+        }
+    }
 }

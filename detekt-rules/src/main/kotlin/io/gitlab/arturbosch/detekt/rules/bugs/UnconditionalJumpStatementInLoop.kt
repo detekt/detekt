@@ -34,22 +34,22 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
  */
 class UnconditionalJumpStatementInLoop(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName, Severity.Defect,
-			"An unconditional jump statement in a loop is useless. " +
-					"The loop itself is only executed once.", Debt.TEN_MINS)
+    override val issue = Issue(javaClass.simpleName, Severity.Defect,
+            "An unconditional jump statement in a loop is useless. " +
+                    "The loop itself is only executed once.", Debt.TEN_MINS)
 
-	override fun visitLoopExpression(loopExpression: KtLoopExpression) {
-		if (hasJumpStatement(loopExpression.body)) {
-			report(CodeSmell(issue, Entity.from(loopExpression), "This loop contains an unconditional " +
-					"jump expression which " +
-					"essentially renders it useless as it will exit the loop during the first iteration."))
-		}
-		super.visitLoopExpression(loopExpression)
-	}
+    override fun visitLoopExpression(loopExpression: KtLoopExpression) {
+        if (hasJumpStatement(loopExpression.body)) {
+            report(CodeSmell(issue, Entity.from(loopExpression), "This loop contains an unconditional " +
+                    "jump expression which " +
+                    "essentially renders it useless as it will exit the loop during the first iteration."))
+        }
+        super.visitLoopExpression(loopExpression)
+    }
 
-	private fun hasJumpStatement(body: KtExpression?) =
-			isJumpStatement(body) || body?.children?.any { isJumpStatement(it) } == true
+    private fun hasJumpStatement(body: KtExpression?) =
+            isJumpStatement(body) || body?.children?.any { isJumpStatement(it) } == true
 
-	private fun isJumpStatement(element: PsiElement?) =
-			element is KtReturnExpression || element is KtBreakExpression || element is KtContinueExpression
+    private fun isJumpStatement(element: PsiElement?) =
+            element is KtReturnExpression || element is KtBreakExpression || element is KtContinueExpression
 }

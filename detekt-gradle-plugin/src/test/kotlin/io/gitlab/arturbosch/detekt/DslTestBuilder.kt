@@ -5,52 +5,52 @@ package io.gitlab.arturbosch.detekt
  */
 abstract class DslTestBuilder {
 
-	abstract val gradleBuildConfig: String
-	abstract val gradleBuildName: String
+    abstract val gradleBuildConfig: String
+    abstract val gradleBuildName: String
 
-	private var detektConfig: String = ""
-	private var projectLayout: ProjectLayout = ProjectLayout(1)
-	private var baselineFile: String? = null
-	private var configFile: String? = null
+    private var detektConfig: String = ""
+    private var projectLayout: ProjectLayout = ProjectLayout(1)
+    private var baselineFile: String? = null
+    private var configFile: String? = null
 
-	fun withDetektConfig(config: String): DslTestBuilder {
-		detektConfig = config
-		return this
-	}
+    fun withDetektConfig(config: String): DslTestBuilder {
+        detektConfig = config
+        return this
+    }
 
-	fun withProjectLayout(layout: ProjectLayout): DslTestBuilder {
-		projectLayout = layout
-		return this
-	}
+    fun withProjectLayout(layout: ProjectLayout): DslTestBuilder {
+        projectLayout = layout
+        return this
+    }
 
-	fun withBaseline(filename: String): DslTestBuilder {
-		baselineFile = filename
-		return this
-	}
+    fun withBaseline(filename: String): DslTestBuilder {
+        baselineFile = filename
+        return this
+    }
 
-	fun withConfigFile(filename: String): DslTestBuilder {
-		configFile = filename
-		return this
-	}
+    fun withConfigFile(filename: String): DslTestBuilder {
+        configFile = filename
+        return this
+    }
 
-	fun build(): DslGradleRunner {
-		val mainBuildFileContent = """
+    fun build(): DslGradleRunner {
+        val mainBuildFileContent = """
 			| $gradleBuildConfig
 			| $detektConfig
 		""".trimMargin()
-		val runner = DslGradleRunner(
-				projectLayout,
-				gradleBuildName,
-				mainBuildFileContent,
-				configFile,
-				baselineFile)
-		runner.setupProject()
-		return runner
-	}
+        val runner = DslGradleRunner(
+                projectLayout,
+                gradleBuildName,
+                mainBuildFileContent,
+                configFile,
+                baselineFile)
+        runner.setupProject()
+        return runner
+    }
 
-	private class GroovyBuilder : DslTestBuilder() {
-		override val gradleBuildName: String = "build.gradle"
-		override val gradleBuildConfig: String = """
+    private class GroovyBuilder : DslTestBuilder() {
+        override val gradleBuildName: String = "build.gradle"
+        override val gradleBuildConfig: String = """
 				|import io.gitlab.arturbosch.detekt.DetektPlugin
 				|
 				|plugins {
@@ -63,12 +63,11 @@ abstract class DslTestBuilder {
 				|	mavenLocal()
 				|}
 				""".trimMargin()
+    }
 
-	}
-
-	private class KotlinBuilder : DslTestBuilder() {
-		override val gradleBuildName: String = "build.gradle.kts"
-		override val gradleBuildConfig: String = """
+    private class KotlinBuilder : DslTestBuilder() {
+        override val gradleBuildName: String = "build.gradle.kts"
+        override val gradleBuildConfig: String = """
 				|import io.gitlab.arturbosch.detekt.detekt
 				|
 				|plugins {
@@ -81,10 +80,10 @@ abstract class DslTestBuilder {
 				|	mavenLocal()
 				|}
 				""".trimMargin()
-	}
+    }
 
-	companion object {
-		fun kotlin(): DslTestBuilder = KotlinBuilder()
-		fun groovy(): DslTestBuilder = GroovyBuilder()
-	}
+    companion object {
+        fun kotlin(): DslTestBuilder = KotlinBuilder()
+        fun groovy(): DslTestBuilder = GroovyBuilder()
+    }
 }

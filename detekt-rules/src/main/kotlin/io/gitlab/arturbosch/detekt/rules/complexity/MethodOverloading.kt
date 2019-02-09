@@ -26,53 +26,55 @@ import org.jetbrains.kotlin.psi.psiUtil.isExtensionDeclaration
  * @author schalkms
  * @author Marvin Ramin
  */
-class MethodOverloading(config: Config = Config.empty,
-						threshold: Int = DEFAULT_ACCEPTED_OVERLOAD_COUNT) : ThresholdRule(config, threshold) {
+class MethodOverloading(
+    config: Config = Config.empty,
+    threshold: Int = DEFAULT_ACCEPTED_OVERLOAD_COUNT
+) : ThresholdRule(config, threshold) {
 
-	override val issue = Issue("MethodOverloading", Severity.Maintainability,
-			"Methods which are overloaded often might be harder to maintain. " +
-					"Furthermore, these methods are tightly coupled. " +
-					"Refactor these methods and try to use optional parameters.",
-			Debt.TWENTY_MINS)
+    override val issue = Issue("MethodOverloading", Severity.Maintainability,
+            "Methods which are overloaded often might be harder to maintain. " +
+                    "Furthermore, these methods are tightly coupled. " +
+                    "Refactor these methods and try to use optional parameters.",
+            Debt.TWENTY_MINS)
 
-	override fun visitClass(klass: KtClass) {
-		val visitor = OverloadedMethodVisitor()
-		klass.accept(visitor)
-		visitor.reportIfThresholdExceeded(klass)
-		super.visitClass(klass)
-	}
+    override fun visitClass(klass: KtClass) {
+        val visitor = OverloadedMethodVisitor()
+        klass.accept(visitor)
+        visitor.reportIfThresholdExceeded(klass)
+        super.visitClass(klass)
+    }
 
-	override fun visitKtFile(file: KtFile) {
-		val visitor = OverloadedMethodVisitor()
-		file.children.filterIsInstance<KtNamedFunction>().forEach { it.accept(visitor) }
-		visitor.reportIfThresholdExceeded(file)
-		super.visitKtFile(file)
-	}
+    override fun visitKtFile(file: KtFile) {
+        val visitor = OverloadedMethodVisitor()
+        file.children.filterIsInstance<KtNamedFunction>().forEach { it.accept(visitor) }
+        visitor.reportIfThresholdExceeded(file)
+        super.visitKtFile(file)
+    }
 
-	internal inner class OverloadedMethodVisitor : DetektVisitor() {
+    internal inner class OverloadedMethodVisitor : DetektVisitor() {
 
-		private var methods = HashMap<String, Int>()
+        private var methods = HashMap<String, Int>()
 
-		fun reportIfThresholdExceeded(element: PsiElement) {
-			methods.filterValues { it >= threshold }.forEach {
-				report(ThresholdedCodeSmell(issue,
-						Entity.from(element),
-						Metric("OVERLOAD SIZE: ", it.value, threshold),
-						message = "The method '${it.key}' is overloaded ${it.value} times."))
-			}
-		}
+        fun reportIfThresholdExceeded(element: PsiElement) {
+            methods.filterValues { it >= threshold }.forEach {
+                report(ThresholdedCodeSmell(issue,
+                        Entity.from(element),
+                        Metric("OVERLOAD SIZE: ", it.value, threshold),
+                        message = "The method '${it.key}' is overloaded ${it.value} times."))
+            }
+        }
 
-		override fun visitNamedFunction(function: KtNamedFunction) {
-			var name = function.name ?: return
-			val receiver = function.receiverTypeReference
-			if (function.isExtensionDeclaration() && receiver != null) {
-				name = receiver.text + '.' + name
-			}
-			methods[name] = methods.getOrDefault(name, 0) + 1
-		}
-	}
+        override fun visitNamedFunction(function: KtNamedFunction) {
+            var name = function.name ?: return
+            val receiver = function.receiverTypeReference
+            if (function.isExtensionDeclaration() && receiver != null) {
+                name = receiver.text + '.' + name
+            }
+            methods[name] = methods.getOrDefault(name, 0) + 1
+        }
+    }
 
-	companion object {
-		const val DEFAULT_ACCEPTED_OVERLOAD_COUNT = 6
-	}
+    companion object {
+        const val DEFAULT_ACCEPTED_OVERLOAD_COUNT = 6
+    }
 }

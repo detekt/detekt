@@ -12,6 +12,6 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  */
 class NoItParamInMultilineLambda(config: Config) : FormattingRule(config) {
 
-	override val wrapping = NoItParamInMultilineLambdaRule()
-	override val issue = issueFor("Reports 'it' variable usages in multiline lambdas")
+    override val wrapping = NoItParamInMultilineLambdaRule()
+    override val issue = issueFor("Reports 'it' variable usages in multiline lambdas")
 }

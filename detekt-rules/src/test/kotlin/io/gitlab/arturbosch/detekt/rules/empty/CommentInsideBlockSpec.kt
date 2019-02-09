@@ -12,20 +12,20 @@ import org.jetbrains.spek.api.dsl.it
  */
 class CommentInsideBlockSpec : Spek({
 
-	class NotConfiguredEmptyRule : EmptyRule(Config.empty) {
-		override fun visitBlockExpression(expression: KtBlockExpression) =
-				expression.addFindingIfBlockExprIsEmpty()
-	}
+    class NotConfiguredEmptyRule : EmptyRule(Config.empty) {
+        override fun visitBlockExpression(expression: KtBlockExpression) =
+                expression.addFindingIfBlockExprIsEmpty()
+    }
 
-	val subject = NotConfiguredEmptyRule()
+    val subject = NotConfiguredEmptyRule()
 
-	it("does not find comment inside an empty block") {
-		val findings = subject.lint("{/*comment*/}")
-		assertThat(findings).isEmpty()
-	}
+    it("does not find comment inside an empty block") {
+        val findings = subject.lint("{/*comment*/}")
+        assertThat(findings).isEmpty()
+    }
 
-	it("finds comments inside block") {
-		val findings = subject.lint("{}")
-		assertThat(findings).hasSize(1)
-	}
+    it("finds comments inside block") {
+        val findings = subject.lint("{}")
+        assertThat(findings).hasSize(1)
+    }
 })

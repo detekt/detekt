@@ -4,5 +4,5 @@ import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 
 fun KtClassOrObject.isInterface(): Boolean {
-	return (this as? KtClass)?.isInterface() == true
+    return (this as? KtClass)?.isInterface() == true
 }

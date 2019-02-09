@@ -13,32 +13,32 @@ import java.time.Instant
  */
 class BaselineFacade(val baselineFile: Path) {
 
-	private val listings: Pair<Whitelist, Blacklist>? =
-			if (baselineExists()) {
-				val format = BaselineFormat().read(baselineFile)
-				format.whitelist to format.blacklist
-			} else null
+    private val listings: Pair<Whitelist, Blacklist>? =
+            if (baselineExists()) {
+                val format = BaselineFormat().read(baselineFile)
+                format.whitelist to format.blacklist
+            } else null
 
-	fun filter(smells: List<Finding>) =
-			if (listings != null) {
-				val whiteFiltered = smells.filterNot { finding -> listings.first.ids.contains(finding.baselineId) }
-				val blackFiltered = whiteFiltered.filterNot { finding -> listings.second.ids.contains(finding.baselineId) }
-				blackFiltered
-			} else smells
+    fun filter(smells: List<Finding>) =
+            if (listings != null) {
+                val whiteFiltered = smells.filterNot { finding -> listings.first.ids.contains(finding.baselineId) }
+                val blackFiltered = whiteFiltered.filterNot { finding -> listings.second.ids.contains(finding.baselineId) }
+                blackFiltered
+            } else smells
 
-	fun create(smells: List<Finding>) {
-		val timestamp = Instant.now().toEpochMilli().toString()
-		val blacklist = if (baselineExists()) {
-			BaselineFormat().read(baselineFile).blacklist
-		} else {
-			Blacklist(emptySet(), timestamp)
-		}
-		val ids = smells.map { it.baselineId }.toSortedSet()
-		val smellBaseline = Baseline(blacklist, Whitelist(ids, timestamp))
-		baselineFile.parent?.let { Files.createDirectories(it) }
-		BaselineFormat().write(smellBaseline, baselineFile)
-		println("Successfully wrote smell baseline to $baselineFile")
-	}
+    fun create(smells: List<Finding>) {
+        val timestamp = Instant.now().toEpochMilli().toString()
+        val blacklist = if (baselineExists()) {
+            BaselineFormat().read(baselineFile).blacklist
+        } else {
+            Blacklist(emptySet(), timestamp)
+        }
+        val ids = smells.map { it.baselineId }.toSortedSet()
+        val smellBaseline = Baseline(blacklist, Whitelist(ids, timestamp))
+        baselineFile.parent?.let { Files.createDirectories(it) }
+        BaselineFormat().write(smellBaseline, baselineFile)
+        println("Successfully wrote smell baseline to $baselineFile")
+    }
 
-	private fun baselineExists() = baselineFile.exists() && baselineFile.isFile()
+    private fun baselineExists() = baselineFile.exists() && baselineFile.isFile()
 }

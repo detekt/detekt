@@ -8,18 +8,18 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
 class ExplicitGarbageCollectionCallSpec : SubjectSpek<ExplicitGarbageCollectionCall>({
-	subject { ExplicitGarbageCollectionCall(Config.empty) }
+    subject { ExplicitGarbageCollectionCall(Config.empty) }
 
-	given("several garbage collector calls") {
+    given("several garbage collector calls") {
 
-		it("reports garbage collector calls") {
-			val code = """
+        it("reports garbage collector calls") {
+            val code = """
 				fun f() {
 					System.gc()
 					Runtime.getRuntime().gc()
 					System.runFinalization()
 				}"""
-			assertThat(subject.lint(code)).hasSize(3)
-		}
-	}
+            assertThat(subject.lint(code)).hasSize(3)
+        }
+    }
 })

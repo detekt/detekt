@@ -8,33 +8,33 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
 class EqualsOnSignatureLineSpec : SubjectSpek<EqualsOnSignatureLine>({
-	subject { EqualsOnSignatureLine(Config.empty) }
+    subject { EqualsOnSignatureLine(Config.empty) }
 
-	given("a function") {
+    given("a function") {
 
-		given("with expression syntax and without a return type") {
-			it("reports when the equals is on a new line") {
-				val findings = subject.lint("""
+        given("with expression syntax and without a return type") {
+            it("reports when the equals is on a new line") {
+                val findings = subject.lint("""
 				fun foo()
 					= 1
 				""")
-				assertThat(findings).hasSize(1)
-			}
+                assertThat(findings).hasSize(1)
+            }
 
-			it("succeeds when the equals is on the same line") {
-				val findings = subject.lint("""
+            it("succeeds when the equals is on the same line") {
+                val findings = subject.lint("""
 				fun foo() = 1
 
 				fun bar() =
 					2
 				""")
-				assertThat(findings).isEmpty()
-			}
-		}
+                assertThat(findings).isEmpty()
+            }
+        }
 
-		given("with expression syntax and with a return type") {
-			it("reports when the equals is on a new line") {
-				val findings = subject.lint("""
+        given("with expression syntax and with a return type") {
+            it("reports when the equals is on a new line") {
+                val findings = subject.lint("""
 				fun one(): Int
 					= 1
 
@@ -48,11 +48,11 @@ class EqualsOnSignatureLineSpec : SubjectSpek<EqualsOnSignatureLine>({
 				): Int
 					= 3
 				""")
-				assertThat(findings).hasSize(3)
-			}
+                assertThat(findings).hasSize(3)
+            }
 
-			it("succeeds when the equals is on the same line") {
-				val findings = subject.lint("""
+            it("succeeds when the equals is on the same line") {
+                val findings = subject.lint("""
 				fun one(): Int =
 					1
 
@@ -82,13 +82,13 @@ class EqualsOnSignatureLineSpec : SubjectSpek<EqualsOnSignatureLine>({
 				Int =
 					6
 				""")
-				assertThat(findings).isEmpty()
-			}
-		}
+                assertThat(findings).isEmpty()
+            }
+        }
 
-		given("with expression syntax and with a where clause") {
-			it("reports when the equals is on a new line") {
-				val findings = subject.lint("""
+        given("with expression syntax and with a where clause") {
+            it("reports when the equals is on a new line") {
+                val findings = subject.lint("""
 				fun <V> one(): Int where V : Number
 					= 1
 
@@ -103,11 +103,11 @@ class EqualsOnSignatureLineSpec : SubjectSpek<EqualsOnSignatureLine>({
 					where V : Number
 					= 3
 				""")
-				assertThat(findings).hasSize(3)
-			}
+                assertThat(findings).hasSize(3)
+            }
 
-			it("succeeds when the equals is on the same line") {
-				val findings = subject.lint("""
+            it("succeeds when the equals is on the same line") {
+                val findings = subject.lint("""
 				fun <V> one(): Int where V : Number =
 					1
 
@@ -116,12 +116,12 @@ class EqualsOnSignatureLineSpec : SubjectSpek<EqualsOnSignatureLine>({
 					2
 
 				""")
-				assertThat(findings).isEmpty()
-			}
-		}
+                assertThat(findings).isEmpty()
+            }
+        }
 
-		it("for non-expression functions") {
-			val findings = subject.lint("""
+        it("for non-expression functions") {
+            val findings = subject.lint("""
 			fun foo() {
 			}
 
@@ -135,7 +135,7 @@ class EqualsOnSignatureLineSpec : SubjectSpek<EqualsOnSignatureLine>({
 			{
 			}
 			""")
-			assertThat(findings).isEmpty()
-		}
-	}
+            assertThat(findings).isEmpty()
+        }
+    }
 })

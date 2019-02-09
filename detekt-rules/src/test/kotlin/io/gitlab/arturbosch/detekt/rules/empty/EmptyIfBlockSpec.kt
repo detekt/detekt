@@ -13,18 +13,18 @@ import org.jetbrains.spek.subject.SubjectSpek
  */
 class EmptyIfBlockSpec : SubjectSpek<EmptyIfBlock>({
 
-	subject { EmptyIfBlock(Config.empty) }
+    subject { EmptyIfBlock(Config.empty) }
 
-	given("several empty if statements") {
+    given("several empty if statements") {
 
-		it("reports positive cases") {
-			val path = Case.EmptyIfPositive.path()
-			assertThat(subject.lint(path)).hasSize(4)
-		}
+        it("reports positive cases") {
+            val path = Case.EmptyIfPositive.path()
+            assertThat(subject.lint(path)).hasSize(4)
+        }
 
-		it("does not report negative cases") {
-			val path = Case.EmptyIfNegative.path()
-			assertThat(subject.lint(path)).hasSize(0)
-		}
-	}
+        it("does not report negative cases") {
+            val path = Case.EmptyIfNegative.path()
+            assertThat(subject.lint(path)).hasSize(0)
+        }
+    }
 })

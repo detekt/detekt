@@ -5,9 +5,9 @@ package io.gitlab.arturbosch.detekt.cli.baseline
  */
 data class Baseline(val blacklist: Blacklist, val whitelist: Whitelist) {
 
-	override fun toString(): String {
-		return "Baseline(blacklist=$blacklist, whitelist=$whitelist)"
-	}
+    override fun toString(): String {
+        return "Baseline(blacklist=$blacklist, whitelist=$whitelist)"
+    }
 }
 
 const val SMELL_BASELINE = "SmellBaseline"

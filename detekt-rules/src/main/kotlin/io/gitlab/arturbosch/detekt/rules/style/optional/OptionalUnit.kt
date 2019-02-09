@@ -43,57 +43,57 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  */
 class OptionalUnit(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue(
-			javaClass.simpleName,
-			Severity.Style,
-			"Return type of 'Unit' is unnecessary and can be safely removed.",
-			Debt.FIVE_MINS)
+    override val issue = Issue(
+            javaClass.simpleName,
+            Severity.Style,
+            "Return type of 'Unit' is unnecessary and can be safely removed.",
+            Debt.FIVE_MINS)
 
-	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (function.funKeyword == null) return
-		if (isInInterface(function)) return
-		if (function.hasDeclaredReturnType() && function.colon != null) {
-			checkFunctionWithExplicitReturnType(function)
-		} else if (!function.isOverride()) {
-			checkFunctionWithInferredReturnType(function)
-		}
-		super.visitNamedFunction(function)
-	}
+    override fun visitNamedFunction(function: KtNamedFunction) {
+        if (function.funKeyword == null) return
+        if (isInInterface(function)) return
+        if (function.hasDeclaredReturnType() && function.colon != null) {
+            checkFunctionWithExplicitReturnType(function)
+        } else if (!function.isOverride()) {
+            checkFunctionWithInferredReturnType(function)
+        }
+        super.visitNamedFunction(function)
+    }
 
-	override fun visitBlockExpression(expression: KtBlockExpression) {
-		expression.statements
-				.filter { it is KtNameReferenceExpression && it.text == UNIT }
-				.onEach {
-					report(CodeSmell(issue, Entity.from(expression),
-							"A single Unit expression is unnecessary and can safely be removed"))
-				}
-		super.visitBlockExpression(expression)
-	}
+    override fun visitBlockExpression(expression: KtBlockExpression) {
+        expression.statements
+                .filter { it is KtNameReferenceExpression && it.text == UNIT }
+                .onEach {
+                    report(CodeSmell(issue, Entity.from(expression),
+                            "A single Unit expression is unnecessary and can safely be removed"))
+                }
+        super.visitBlockExpression(expression)
+    }
 
-	private fun checkFunctionWithExplicitReturnType(function: KtNamedFunction) {
-		val typeReference = function.typeReference
-		val typeElementText = typeReference?.typeElement?.text
-		if (typeElementText == UNIT) {
-			report(CodeSmell(issue, Entity.from(typeReference), createMessage(function)))
-		}
-	}
+    private fun checkFunctionWithExplicitReturnType(function: KtNamedFunction) {
+        val typeReference = function.typeReference
+        val typeElementText = typeReference?.typeElement?.text
+        if (typeElementText == UNIT) {
+            report(CodeSmell(issue, Entity.from(typeReference), createMessage(function)))
+        }
+    }
 
-	private fun checkFunctionWithInferredReturnType(function: KtNamedFunction) {
-		val referenceExpression = function.bodyExpression as? KtNameReferenceExpression
-		if (referenceExpression != null && referenceExpression.text == UNIT) {
-			report(CodeSmell(issue, Entity.from(referenceExpression), createMessage(function)))
-		}
-	}
+    private fun checkFunctionWithInferredReturnType(function: KtNamedFunction) {
+        val referenceExpression = function.bodyExpression as? KtNameReferenceExpression
+        if (referenceExpression != null && referenceExpression.text == UNIT) {
+            report(CodeSmell(issue, Entity.from(referenceExpression), createMessage(function)))
+        }
+    }
 
-	private fun isInInterface(function: KtNamedFunction): Boolean {
-		val parent = PsiTreeUtil.getParentOfType(function, KtClass::class.java, true)
-		return parent is KtClass && parent.isInterface()
-	}
+    private fun isInInterface(function: KtNamedFunction): Boolean {
+        val parent = PsiTreeUtil.getParentOfType(function, KtClass::class.java, true)
+        return parent is KtClass && parent.isInterface()
+    }
 
-	private fun createMessage(function: KtNamedFunction) = "The function ${function.name} " +
-			"defines a return type of Unit. This is unnecessary and can safely be removed."
+    private fun createMessage(function: KtNamedFunction) = "The function ${function.name} " +
+            "defines a return type of Unit. This is unnecessary and can safely be removed."
 
-	companion object {
-		private const val UNIT = "Unit"
-	}
+    companion object {
+        private const val UNIT = "Unit"
+    }
 }

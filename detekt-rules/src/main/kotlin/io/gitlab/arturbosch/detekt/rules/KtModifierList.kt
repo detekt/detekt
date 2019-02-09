@@ -5,7 +5,7 @@ import org.jetbrains.kotlin.psi.KtModifierListOwner
 import org.jetbrains.kotlin.psi.psiUtil.isPublic
 
 fun KtModifierListOwner.isPublicNotOverridden() =
-		isPublic && !isOverride()
+        isPublic && !isOverride()
 
 fun KtModifierListOwner.isAbstract() = hasModifier(KtTokens.ABSTRACT_KEYWORD)
 

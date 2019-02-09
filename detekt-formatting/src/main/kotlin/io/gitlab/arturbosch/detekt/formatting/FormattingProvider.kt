@@ -20,8 +20,8 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
  */
 class FormattingProvider : RuleSetProvider {
 
-	override val ruleSetId: String = "formatting"
+    override val ruleSetId: String = "formatting"
 
-	override fun instance(config: Config) =
-			RuleSet(ruleSetId, listOf(KtLintMultiRule(config)))
+    override fun instance(config: Config) =
+            RuleSet(ruleSetId, listOf(KtLintMultiRule(config)))
 }

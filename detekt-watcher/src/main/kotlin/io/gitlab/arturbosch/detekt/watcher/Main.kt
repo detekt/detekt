@@ -15,9 +15,9 @@ import java.nio.file.Paths
  * @author Artur Bosch
  */
 fun main(args: Array<String>) {
-	Injekt.addSingletonFactory { DetektHome(Paths.get(System.getProperty(USER_HOME), HOME_DIR)) }
-	Injekt.addSingletonFactory { DetektPrompt() }
-	Injekt.addSingletonFactory { State() }
-	Injekt.addSingletonFactory { DetektService() }
-	bootstrap(args)
+    Injekt.addSingletonFactory { DetektHome(Paths.get(System.getProperty(USER_HOME), HOME_DIR)) }
+    Injekt.addSingletonFactory { DetektPrompt() }
+    Injekt.addSingletonFactory { State() }
+    Injekt.addSingletonFactory { DetektService() }
+    bootstrap(args)
 }

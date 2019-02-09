@@ -6,23 +6,23 @@ package io.gitlab.arturbosch.detekt.generator.out
  * @author Marvin Ramin
  */
 sealed class Markdown(open var content: String = "") {
-	fun append(value: String) {
-		content = if (content.isEmpty()) {
-			value
-		} else {
-			"$content\n$value"
-		}
-	}
+    fun append(value: String) {
+        content = if (content.isEmpty()) {
+            value
+        } else {
+            "$content\n$value"
+        }
+    }
 }
 
 data class MarkdownContent(override var content: String = "") : Markdown()
 data class MarkdownList(override var content: String = "") : Markdown()
 
 inline fun markdown(content: MarkdownContent.() -> Unit): String {
-	return MarkdownContent().let { markdown ->
-		content(markdown)
-		markdown.content
-	}
+    return MarkdownContent().let { markdown ->
+        content(markdown)
+        markdown.content
+    }
 }
 
 inline fun MarkdownContent.markdown(markdown: () -> String) = append(markdown())
@@ -36,13 +36,13 @@ inline fun MarkdownContent.h3(heading: () -> String) = append("### ${heading()}\
 inline fun MarkdownContent.h4(heading: () -> String) = append("#### ${heading()}\n")
 
 inline fun MarkdownContent.orderedList(sectionList: () -> List<String>) {
-	for (i in 0 until sectionList().size) {
-		append("${i + 1}. ${sectionList()[i]}")
-	}
+    for (i in 0 until sectionList().size) {
+        append("${i + 1}. ${sectionList()[i]}")
+    }
 }
 
 inline fun MarkdownContent.referenceToHeading(reference: () -> String) =
-		"[${reference()}](#${reference().replace(' ', '-').toLowerCase()})"
+        "[${reference()}](#${reference().replace(' ', '-').toLowerCase()})"
 
 inline fun MarkdownContent.code(code: () -> String) = "`${code()}`"
 inline fun MarkdownContent.codeBlock(code: () -> String) = "```kotlin\n${code()}\n```"
@@ -50,12 +50,12 @@ inline fun MarkdownContent.codeBlock(code: () -> String) = "```kotlin\n${code()}
 fun MarkdownContent.emptyLine() = append("")
 
 inline fun MarkdownContent.list(listContent: MarkdownList.() -> Unit) {
-	return MarkdownList().let { list ->
-		listContent(list)
-		if (list.content.isNotEmpty()) {
-			append(list.content)
-		}
-	}
+    return MarkdownList().let { list ->
+        listContent(list)
+        if (list.content.isNotEmpty()) {
+            append(list.content)
+        }
+    }
 }
 
 inline fun MarkdownList.item(item: () -> String) = append("* ${item()}\n")

@@ -18,26 +18,26 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  */
 class EmptyFunctionBlock(config: Config) : EmptyRule(config) {
 
-	private val ignoreOverriddenFunctions = valueOrDefault(IGNORE_OVERRIDDEN_FUNCTIONS, false)
+    private val ignoreOverriddenFunctions = valueOrDefault(IGNORE_OVERRIDDEN_FUNCTIONS, false)
 
-	override fun visitNamedFunction(function: KtNamedFunction) {
-		super.visitNamedFunction(function)
-		if (function.isOpen()) {
-			return
-		}
-		val bodyExpression = function.bodyExpression
-		if (!ignoreOverriddenFunctions) {
-			if (function.isOverride()) {
-				bodyExpression?.addFindingIfBlockExprIsEmptyAndNotCommented()
-			} else {
-				bodyExpression?.addFindingIfBlockExprIsEmpty()
-			}
-		} else if (!function.isOverride()) {
-			bodyExpression?.addFindingIfBlockExprIsEmpty()
-		}
-	}
+    override fun visitNamedFunction(function: KtNamedFunction) {
+        super.visitNamedFunction(function)
+        if (function.isOpen()) {
+            return
+        }
+        val bodyExpression = function.bodyExpression
+        if (!ignoreOverriddenFunctions) {
+            if (function.isOverride()) {
+                bodyExpression?.addFindingIfBlockExprIsEmptyAndNotCommented()
+            } else {
+                bodyExpression?.addFindingIfBlockExprIsEmpty()
+            }
+        } else if (!function.isOverride()) {
+            bodyExpression?.addFindingIfBlockExprIsEmpty()
+        }
+    }
 
-	companion object {
-		const val IGNORE_OVERRIDDEN_FUNCTIONS = "ignoreOverriddenFunctions"
-	}
+    companion object {
+        const val IGNORE_OVERRIDDEN_FUNCTIONS = "ignoreOverriddenFunctions"
+    }
 }

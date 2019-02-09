@@ -11,19 +11,19 @@ import org.jetbrains.spek.subject.SubjectSpek
  * @author schalkms
  */
 class UndocumentedPublicFunctionSpec : SubjectSpek<UndocumentedPublicFunction>({
-	subject { UndocumentedPublicFunction() }
+    subject { UndocumentedPublicFunction() }
 
-	given("several functions") {
+    given("several functions") {
 
-		it("reports undocumented public functions") {
-			val code = """
+        it("reports undocumented public functions") {
+            val code = """
     			fun noComment1() {}
 			"""
-			assertThat(subject.compileAndLint(code)).hasSize(1)
-		}
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
 
-		it("reports undocumented public functions in companion object") {
-			val code = """
+        it("reports undocumented public functions in companion object") {
+            val code = """
     			class Test {
     				companion object {
     					fun noComment1() {}
@@ -31,21 +31,21 @@ class UndocumentedPublicFunctionSpec : SubjectSpek<UndocumentedPublicFunction>({
     				}
     			}
 			"""
-			assertThat(subject.compileAndLint(code)).hasSize(2)
-		}
+            assertThat(subject.compileAndLint(code)).hasSize(2)
+        }
 
-		it("does not report documented public function") {
-			val code = """
+        it("does not report documented public function") {
+            val code = """
     			/**
 			     * Comment
 				 */
 				fun commented1() {}
 			"""
-			assertThat(subject.compileAndLint(code)).isEmpty()
-		}
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
 
-		it("does not report documented public function in class") {
-			val code = """
+        it("does not report documented public function in class") {
+            val code = """
 				class Test {
 					/**
 					*
@@ -58,21 +58,21 @@ class UndocumentedPublicFunctionSpec : SubjectSpek<UndocumentedPublicFunction>({
 					fun commented2() {}
 				}
 			"""
-			assertThat(subject.compileAndLint(code)).isEmpty()
-		}
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
 
-		it("does not report udocumented internal and private function") {
-			val code = """
+        it("does not report udocumented internal and private function") {
+            val code = """
     			class Test {
     				internal fun no1(){}
     				private fun no2(){}
     			}
 			"""
-			assertThat(subject.compileAndLint(code)).isEmpty()
-		}
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
 
-		it("does not report undocumented nested function") {
-			val code = """
+        it("does not report undocumented nested function") {
+            val code = """
     			/**
 			     * Comment
 				 */
@@ -80,11 +80,11 @@ class UndocumentedPublicFunctionSpec : SubjectSpek<UndocumentedPublicFunction>({
 					fun iDontNeedDoc() {}
 				}
 			"""
-			assertThat(subject.compileAndLint(code)).isEmpty()
-		}
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
 
-		it("does not report public functions in internal class") {
-			val code = """
+        it("does not report public functions in internal class") {
+            val code = """
     			internal class NoComments {
 
 					fun nope0() {}
@@ -94,11 +94,11 @@ class UndocumentedPublicFunctionSpec : SubjectSpek<UndocumentedPublicFunction>({
 					private fun nope4() {}
 				}
 			"""
-			assertThat(subject.compileAndLint(code)).isEmpty()
-		}
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
 
-		it("does not report public functions in private class") {
-			val code = """
+        it("does not report public functions in private class") {
+            val code = """
     			private class NoComments {
 
 					fun nope0() {}
@@ -108,7 +108,7 @@ class UndocumentedPublicFunctionSpec : SubjectSpek<UndocumentedPublicFunction>({
 					private fun nope4() {}
 				}
 			"""
-			assertThat(subject.compileAndLint(code)).isEmpty()
-		}
-	}
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+    }
 })

@@ -7,12 +7,12 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
 class SafeCastSpec : SubjectSpek<SafeCast>({
-	subject { SafeCast() }
+    subject { SafeCast() }
 
-	given("some cast expressions") {
+    given("some cast expressions") {
 
-		it("reports negated expression") {
-			val code = """
+        it("reports negated expression") {
+            val code = """
 				fun test() {
 					if (element !is KtElement) {
 						null
@@ -20,11 +20,11 @@ class SafeCastSpec : SubjectSpek<SafeCast>({
 						element
 					}
 				}"""
-			assertThat(subject.lint(code)).hasSize(1)
-		}
+            assertThat(subject.lint(code)).hasSize(1)
+        }
 
-		it("reports expression") {
-			val code = """
+        it("reports expression") {
+            val code = """
 				fun test() {
 					if (element is KtElement) {
 						element
@@ -32,11 +32,11 @@ class SafeCastSpec : SubjectSpek<SafeCast>({
 						null
 					}
 				}"""
-			assertThat(subject.lint(code)).hasSize(1)
-		}
+            assertThat(subject.lint(code)).hasSize(1)
+        }
 
-		it("does not report wrong condition") {
-			val code = """
+        it("does not report wrong condition") {
+            val code = """
 				fun test() {
 					if (element == other) {
 						element
@@ -44,11 +44,11 @@ class SafeCastSpec : SubjectSpek<SafeCast>({
 						null
 					}
 				}"""
-			assertThat(subject.lint(code)).hasSize(0)
-		}
+            assertThat(subject.lint(code)).hasSize(0)
+        }
 
-		it("does not report wrong else clause") {
-			val code = """
+        it("does not report wrong else clause") {
+            val code = """
 				fun test() {
 					if (element is KtElement) {
 						element
@@ -56,7 +56,7 @@ class SafeCastSpec : SubjectSpek<SafeCast>({
 						KtElement()
 					}
 				}"""
-			assertThat(subject.lint(code)).hasSize(0)
-		}
-	}
+            assertThat(subject.lint(code)).hasSize(0)
+        }
+    }
 })

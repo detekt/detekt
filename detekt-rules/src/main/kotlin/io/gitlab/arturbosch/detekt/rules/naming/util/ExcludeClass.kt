@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 
 internal fun KtDeclaration.isContainingExcludedClassOrObject(pattern: Regex) =
-		containingClassOrObject?.identifierName()?.matches(pattern) == true
+        containingClassOrObject?.identifierName()?.matches(pattern) == true
 
 internal fun KtDeclaration.isContainingExcludedClass(pattern: Regex) =
-		containingClass()?.identifierName()?.matches(pattern) == true
+        containingClass()?.identifierName()?.matches(pattern) == true

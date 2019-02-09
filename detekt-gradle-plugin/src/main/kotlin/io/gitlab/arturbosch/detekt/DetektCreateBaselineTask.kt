@@ -34,57 +34,57 @@ import org.gradle.language.base.plugins.LifecycleBasePlugin
  */
 open class DetektCreateBaselineTask : DefaultTask() {
 
-	init {
-		description = "Creates a detekt baseline on the given --baseline path."
-		group = LifecycleBasePlugin.VERIFICATION_GROUP
-	}
+    init {
+        description = "Creates a detekt baseline on the given --baseline path."
+        group = LifecycleBasePlugin.VERIFICATION_GROUP
+    }
 
-	@OutputFile
-	@PathSensitive(PathSensitivity.RELATIVE)
-	var baseline: RegularFileProperty = project.fileProperty()
+    @OutputFile
+    @PathSensitive(PathSensitivity.RELATIVE)
+    var baseline: RegularFileProperty = project.fileProperty()
 
-	@InputFiles
-	@PathSensitive(PathSensitivity.RELATIVE)
-	@SkipWhenEmpty
-	var input: ConfigurableFileCollection = project.layout.configurableFiles()
+    @InputFiles
+    @PathSensitive(PathSensitivity.RELATIVE)
+    @SkipWhenEmpty
+    var input: ConfigurableFileCollection = project.layout.configurableFiles()
 
-	@Input
-	@Optional
-	var filters: Property<String> = project.objects.property(String::class.java)
+    @Input
+    @Optional
+    var filters: Property<String> = project.objects.property(String::class.java)
 
-	@InputFiles
-	@Optional
-	@PathSensitive(PathSensitivity.RELATIVE)
-	var config: ConfigurableFileCollection = project.layout.configurableFiles()
+    @InputFiles
+    @Optional
+    @PathSensitive(PathSensitivity.RELATIVE)
+    var config: ConfigurableFileCollection = project.layout.configurableFiles()
 
-	@Input
-	@Optional
-	var plugins: Property<String> = project.objects.property(String::class.java)
+    @Input
+    @Optional
+    var plugins: Property<String> = project.objects.property(String::class.java)
 
-	@Internal
-	@Optional
-	var debug: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    @Internal
+    @Optional
+    var debug: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
-	@Internal
-	@Optional
-	var parallel: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    @Internal
+    @Optional
+    var parallel: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
-	@Internal
-	@Optional
-	var disableDefaultRuleSets: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    @Internal
+    @Optional
+    var disableDefaultRuleSets: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
-	@TaskAction
-	fun baseline() {
-		val arguments = mutableListOf<CliArgument>(CreateBaselineArgument) +
-				BaselineArgument(baseline.get()) +
-				InputArgument(input) +
-				FiltersArgument(filters.orNull) +
-				ConfigArgument(config) +
-				PluginsArgument(plugins.orNull) +
-				DebugArgument(debug.getOrElse(false)) +
-				ParallelArgument(parallel.getOrElse(false)) +
-				DisableDefaultRulesetArgument(disableDefaultRuleSets.getOrElse(false))
+    @TaskAction
+    fun baseline() {
+        val arguments = mutableListOf<CliArgument>(CreateBaselineArgument) +
+                BaselineArgument(baseline.get()) +
+                InputArgument(input) +
+                FiltersArgument(filters.orNull) +
+                ConfigArgument(config) +
+                PluginsArgument(plugins.orNull) +
+                DebugArgument(debug.getOrElse(false)) +
+                ParallelArgument(parallel.getOrElse(false)) +
+                DisableDefaultRulesetArgument(disableDefaultRuleSets.getOrElse(false))
 
-		DetektInvoker.invokeCli(project, arguments.toList(), debug.getOrElse(false))
-	}
+        DetektInvoker.invokeCli(project, arguments.toList(), debug.getOrElse(false))
+    }
 }

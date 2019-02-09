@@ -31,16 +31,16 @@ import org.jetbrains.kotlin.psi.KtUnaryExpression
  * @author Marvin Ramin
  */
 class UnsafeCallOnNullableType(config: Config = Config.empty) : Rule(config) {
-	override val issue: Issue = Issue("UnsafeCallOnNullableType",
-			Severity.Defect,
-			"It will throw a NullPointerException at runtime if your nullable value is null.",
-			Debt.TWENTY_MINS)
+    override val issue: Issue = Issue("UnsafeCallOnNullableType",
+            Severity.Defect,
+            "It will throw a NullPointerException at runtime if your nullable value is null.",
+            Debt.TWENTY_MINS)
 
-	override fun visitUnaryExpression(expression: KtUnaryExpression) {
-		super.visitUnaryExpression(expression)
-		if (expression.operationToken == KtTokens.EXCLEXCL) {
-			report(CodeSmell(issue, Entity.from(expression), "Calling !! on a nullable type will throw a " +
-					"NullPointerException at runtime in case the value is null. It should be avoided."))
-		}
-	}
+    override fun visitUnaryExpression(expression: KtUnaryExpression) {
+        super.visitUnaryExpression(expression)
+        if (expression.operationToken == KtTokens.EXCLEXCL) {
+            report(CodeSmell(issue, Entity.from(expression), "Calling !! on a nullable type will throw a " +
+                    "NullPointerException at runtime in case the value is null. It should be avoided."))
+        }
+    }
 }

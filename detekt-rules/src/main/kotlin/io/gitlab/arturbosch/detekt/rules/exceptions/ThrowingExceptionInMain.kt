@@ -30,24 +30,24 @@ import org.jetbrains.kotlin.psi.KtTypeReference
  */
 class ThrowingExceptionInMain(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue("ThrowingExceptionInMain", Severity.CodeSmell,
-			"The main method should not throw an exception.", Debt.TWENTY_MINS)
+    override val issue = Issue("ThrowingExceptionInMain", Severity.CodeSmell,
+            "The main method should not throw an exception.", Debt.TWENTY_MINS)
 
-	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (function.isMainFunction() && hasArgsParameter(function.valueParameters) && containsThrowExpression(function)) {
-			report(CodeSmell(issue, Entity.from(function), issue.description))
-		}
-	}
+    override fun visitNamedFunction(function: KtNamedFunction) {
+        if (function.isMainFunction() && hasArgsParameter(function.valueParameters) && containsThrowExpression(function)) {
+            report(CodeSmell(issue, Entity.from(function), issue.description))
+        }
+    }
 
-	private fun hasArgsParameter(parameters: List<KtParameter>): Boolean {
-		return parameters.size == 1 && isStringArrayParameter(parameters.first().typeReference)
-	}
+    private fun hasArgsParameter(parameters: List<KtParameter>): Boolean {
+        return parameters.size == 1 && isStringArrayParameter(parameters.first().typeReference)
+    }
 
-	private fun isStringArrayParameter(typeReference: KtTypeReference?): Boolean {
-		return typeReference?.text?.replace("\\s+", "") == "Array<String>"
-	}
+    private fun isStringArrayParameter(typeReference: KtTypeReference?): Boolean {
+        return typeReference?.text?.replace("\\s+", "") == "Array<String>"
+    }
 
-	private fun containsThrowExpression(function: KtNamedFunction): Boolean {
-		return function.bodyExpression?.collectByType<KtThrowExpression>()?.any() == true
-	}
+    private fun containsThrowExpression(function: KtNamedFunction): Boolean {
+        return function.bodyExpression?.collectByType<KtThrowExpression>()?.any() == true
+    }
 }

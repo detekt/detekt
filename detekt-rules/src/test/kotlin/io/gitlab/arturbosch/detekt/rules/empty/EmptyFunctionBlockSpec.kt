@@ -13,32 +13,32 @@ import org.jetbrains.spek.subject.SubjectSpek
  */
 class EmptyFunctionBlockSpec : SubjectSpek<EmptyFunctionBlock>({
 
-	subject { EmptyFunctionBlock(Config.empty) }
+    subject { EmptyFunctionBlock(Config.empty) }
 
-	given("some functions") {
+    given("some functions") {
 
-		it("should flag function with protected modifier") {
-			val code = "protected fun stuff() {}"
-			assertThat(subject.lint(code)).hasSize(1)
-		}
+        it("should flag function with protected modifier") {
+            val code = "protected fun stuff() {}"
+            assertThat(subject.lint(code)).hasSize(1)
+        }
 
-		it("should not flag function with open modifier") {
-			val code = "open fun stuff() {}"
-			assertThat(subject.lint(code)).isEmpty()
-		}
+        it("should not flag function with open modifier") {
+            val code = "open fun stuff() {}"
+            assertThat(subject.lint(code)).isEmpty()
+        }
 
-		it("should flag the nested empty function") {
-			val code = """
+        it("should flag the nested empty function") {
+            val code = """
 				fun a() {
 					fun b() {}
 				}"""
-			assertThat(subject.lint(code)).hasSize(1)
-		}
-	}
+            assertThat(subject.lint(code)).hasSize(1)
+        }
+    }
 
-	given("some overridden functions") {
+    given("some overridden functions") {
 
-		val code = """
+        val code = """
 				fun empty() {}
 
 				override fun stuff1() {}
@@ -51,13 +51,13 @@ class EmptyFunctionBlockSpec : SubjectSpek<EmptyFunctionBlock>({
 					// this is necessary...
 				}"""
 
-		it("should flag empty block in overridden function") {
-			assertThat(subject.lint(code)).hasSize(2)
-		}
+        it("should flag empty block in overridden function") {
+            assertThat(subject.lint(code)).hasSize(2)
+        }
 
-		it("should not flag overridden functions") {
-			val config = TestConfig(mapOf(EmptyFunctionBlock.IGNORE_OVERRIDDEN_FUNCTIONS to "true"))
-			assertThat(EmptyFunctionBlock(config).lint(code)).hasSize(1)
-		}
-	}
+        it("should not flag overridden functions") {
+            val config = TestConfig(mapOf(EmptyFunctionBlock.IGNORE_OVERRIDDEN_FUNCTIONS to "true"))
+            assertThat(EmptyFunctionBlock(config).lint(code)).hasSize(1)
+        }
+    }
 })

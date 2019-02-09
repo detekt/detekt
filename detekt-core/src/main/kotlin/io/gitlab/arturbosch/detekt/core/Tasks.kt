@@ -10,21 +10,21 @@ import java.util.function.Supplier
  */
 
 fun <T> withExecutor(executor: Executor? = null, block: Executor.() -> T): T {
-	if (executor == null) {
-		val defaultExecutor = ForkJoinPool.commonPool()
-		return block.invoke(defaultExecutor).apply {
-			defaultExecutor.shutdown()
-		}
-	}
-	return block.invoke(executor)
+    if (executor == null) {
+        val defaultExecutor = ForkJoinPool.commonPool()
+        return block.invoke(defaultExecutor).apply {
+            defaultExecutor.shutdown()
+        }
+    }
+    return block.invoke(executor)
 }
 
 fun <T> Executor.runAsync(block: () -> T): CompletableFuture<T> {
-	return task(this) { block() }
+    return task(this) { block() }
 }
 
 fun <T> task(executor: Executor, task: () -> T): CompletableFuture<T> {
-	return CompletableFuture.supplyAsync(Supplier { task() }, executor)
+    return CompletableFuture.supplyAsync(Supplier { task() }, executor)
 }
 
 fun <T> awaitAll(futures: List<CompletableFuture<T>>) = futures.map { it.join() }

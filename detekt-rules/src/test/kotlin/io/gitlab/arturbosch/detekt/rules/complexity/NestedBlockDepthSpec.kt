@@ -13,17 +13,17 @@ import org.jetbrains.spek.subject.SubjectSpek
  */
 class NestedBlockDepthSpec : SubjectSpek<NestedBlockDepth>({
 
-	subject { NestedBlockDepth(threshold = 4) }
+    subject { NestedBlockDepth(threshold = 4) }
 
-	describe("nested classes are also considered") {
-		it("should detect only the nested large class") {
-			subject.lint(Case.NestedClasses.path())
-			assertThat(subject.findings.size).isEqualTo(1)
-			assertThat((subject.findings[0] as ThresholdedCodeSmell).value).isEqualTo(5)
-		}
+    describe("nested classes are also considered") {
+        it("should detect only the nested large class") {
+            subject.lint(Case.NestedClasses.path())
+            assertThat(subject.findings.size).isEqualTo(1)
+            assertThat((subject.findings[0] as ThresholdedCodeSmell).value).isEqualTo(5)
+        }
 
-		it("should detect too nested block depth") {
-			val code = """
+        it("should detect too nested block depth") {
+            val code = """
 				fun f() {
 					if (true) {
 						if (true) {
@@ -34,11 +34,11 @@ class NestedBlockDepthSpec : SubjectSpek<NestedBlockDepth>({
 						}
 					}
 				}"""
-			assertThat(subject.lint(code)).hasSize(1)
-		}
+            assertThat(subject.lint(code)).hasSize(1)
+        }
 
-		it("should not detect valid nested block depth") {
-			val code = """
+        it("should not detect valid nested block depth") {
+            val code = """
 				fun f() {
 					if (true) {
 						if (true) {
@@ -47,14 +47,14 @@ class NestedBlockDepthSpec : SubjectSpek<NestedBlockDepth>({
 						}
 					}
 				}"""
-			assertThat(subject.lint(code)).isEmpty()
-		}
+            assertThat(subject.lint(code)).isEmpty()
+        }
 
-		it("should not count else if as two") {
-			subject.lint(nestedBlockCode)
-			assertThat(subject.findings).isEmpty()
-		}
-	}
+        it("should not count else if as two") {
+            subject.lint(nestedBlockCode)
+            assertThat(subject.findings).isEmpty()
+        }
+    }
 })
 
 const val nestedBlockCode = """

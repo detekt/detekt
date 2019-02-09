@@ -13,21 +13,21 @@ import io.gitlab.arturbosch.detekt.generator.printer.rulesetpage.RuleSetPagePrin
  */
 class DetektPrinter(private val arguments: GeneratorArgs) {
 
-	private val markdownWriter = MarkdownWriter()
-	private val yamlWriter = YamlWriter()
+    private val markdownWriter = MarkdownWriter()
+    private val yamlWriter = YamlWriter()
 
-	fun print(pages: List<RuleSetPage>) {
-		pages.forEach {
-			markdownWriter.write(arguments.documentationPath, it.ruleSet.name) {
-				jekyllHeader(it.ruleSet.name) + "\n" + RuleSetPagePrinter.print(it)
-			}
-		}
-		yamlWriter.write(arguments.configPath, "default-detekt-config") { ConfigPrinter.print(pages) }
-	}
+    fun print(pages: List<RuleSetPage>) {
+        pages.forEach {
+            markdownWriter.write(arguments.documentationPath, it.ruleSet.name) {
+                jekyllHeader(it.ruleSet.name) + "\n" + RuleSetPagePrinter.print(it)
+            }
+        }
+        yamlWriter.write(arguments.configPath, "default-detekt-config") { ConfigPrinter.print(pages) }
+    }
 
-	private fun jekyllHeader(ruleSet: String): String {
-		check(ruleSet.length > 1) { "Rule set name must be not empty or less than two symbols." }
-		return """
+    private fun jekyllHeader(ruleSet: String): String {
+        check(ruleSet.length > 1) { "Rule set name must be not empty or less than two symbols." }
+        return """
 			|---
 			|title: ${ruleSet[0].toUpperCase()}${ruleSet.substring(1)} Rule Set
 			|sidebar: home_sidebar
@@ -37,5 +37,5 @@ class DetektPrinter(private val arguments: GeneratorArgs) {
 			|folder: documentation
 			|---
 		""".trimMargin()
-	}
+    }
 }

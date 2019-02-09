@@ -8,6 +8,6 @@ import java.nio.file.Path
  */
 class ModificationNotification(path: Path) : Notification {
 
-	override val message: String = "File $path was modified."
-	override fun toString(): String = message
+    override val message: String = "File $path was modified."
+    override fun toString(): String = message
 }

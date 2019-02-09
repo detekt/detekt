@@ -49,68 +49,68 @@ import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
  */
 class UseDataClass(config: Config = Config.empty) : Rule(config) {
 
-	override val issue: Issue = Issue("UseDataClass",
-			Severity.Style,
-			"Classes that do nothing but hold data should be replaced with a data class.",
-			Debt.FIVE_MINS)
+    override val issue: Issue = Issue("UseDataClass",
+            Severity.Style,
+            "Classes that do nothing but hold data should be replaced with a data class.",
+            Debt.FIVE_MINS)
 
-	private val excludeAnnotatedClasses = SplitPattern(valueOrDefault(EXCLUDE_ANNOTATED_CLASSES, ""))
-	private val defaultFunctionNames = hashSetOf("hashCode", "equals", "toString", "copy")
+    private val excludeAnnotatedClasses = SplitPattern(valueOrDefault(EXCLUDE_ANNOTATED_CLASSES, ""))
+    private val defaultFunctionNames = hashSetOf("hashCode", "equals", "toString", "copy")
 
-	override fun visit(root: KtFile) {
-		super.visit(root)
-		val annotationExcluder = AnnotationExcluder(root, excludeAnnotatedClasses)
-		root.collectByType<KtClass>().forEach { visitKlass(it, annotationExcluder) }
-	}
+    override fun visit(root: KtFile) {
+        super.visit(root)
+        val annotationExcluder = AnnotationExcluder(root, excludeAnnotatedClasses)
+        root.collectByType<KtClass>().forEach { visitKlass(it, annotationExcluder) }
+    }
 
-	private fun visitKlass(klass: KtClass, annotationExcluder: AnnotationExcluder) {
-		if (isIncorrectClassType(klass) || hasOnlyPrivateConstructors(klass)) {
-			return
-		}
-		if (klass.isClosedForExtension() && klass.doesNotExtendAnything() &&
-				!annotationExcluder.shouldExclude(klass.annotationEntries)) {
-			val declarations = klass.extractDeclarations()
-			val properties = declarations.filterIsInstance<KtProperty>()
-			val functions = declarations.filterIsInstance<KtNamedFunction>()
+    private fun visitKlass(klass: KtClass, annotationExcluder: AnnotationExcluder) {
+        if (isIncorrectClassType(klass) || hasOnlyPrivateConstructors(klass)) {
+            return
+        }
+        if (klass.isClosedForExtension() && klass.doesNotExtendAnything() &&
+                !annotationExcluder.shouldExclude(klass.annotationEntries)) {
+            val declarations = klass.extractDeclarations()
+            val properties = declarations.filterIsInstance<KtProperty>()
+            val functions = declarations.filterIsInstance<KtNamedFunction>()
 
-			val propertyParameters = klass.extractConstructorPropertyParameters()
+            val propertyParameters = klass.extractConstructorPropertyParameters()
 
-			val containsFunctions = functions.none { !defaultFunctionNames.contains(it.name) }
-			val containsPropertyOrPropertyParameters = properties.isNotEmpty() || propertyParameters.isNotEmpty()
+            val containsFunctions = functions.none { !defaultFunctionNames.contains(it.name) }
+            val containsPropertyOrPropertyParameters = properties.isNotEmpty() || propertyParameters.isNotEmpty()
 
-			if (containsFunctions && containsPropertyOrPropertyParameters) {
-				report(CodeSmell(issue, Entity.from(klass), "The class ${klass.nameAsSafeName} defines no" +
-						"functionality and only holds data. Consider converting it to a data class."))
-			}
-		}
-	}
+            if (containsFunctions && containsPropertyOrPropertyParameters) {
+                report(CodeSmell(issue, Entity.from(klass), "The class ${klass.nameAsSafeName} defines no" +
+                        "functionality and only holds data. Consider converting it to a data class."))
+            }
+        }
+    }
 
-	private fun isIncorrectClassType(klass: KtClass) =
-			klass.isData() ||
-					klass.isEnum() ||
-					klass.isAnnotation() ||
-					klass.isSealed() ||
-					klass.isInline()
+    private fun isIncorrectClassType(klass: KtClass) =
+            klass.isData() ||
+                    klass.isEnum() ||
+                    klass.isAnnotation() ||
+                    klass.isSealed() ||
+                    klass.isInline()
 
-	private fun hasOnlyPrivateConstructors(klass: KtClass): Boolean {
-		val primaryConstructor = klass.primaryConstructor
-		return (primaryConstructor == null || primaryConstructor.isPrivate()) &&
-				klass.secondaryConstructors.all { it.isPrivate() }
-	}
+    private fun hasOnlyPrivateConstructors(klass: KtClass): Boolean {
+        val primaryConstructor = klass.primaryConstructor
+        return (primaryConstructor == null || primaryConstructor.isPrivate()) &&
+                klass.secondaryConstructors.all { it.isPrivate() }
+    }
 
-	private fun KtClass.doesNotExtendAnything() = superTypeListEntries.isEmpty()
+    private fun KtClass.doesNotExtendAnything() = superTypeListEntries.isEmpty()
 
-	private fun KtClass.isClosedForExtension() = !isAbstract() && !isOpen()
+    private fun KtClass.isClosedForExtension() = !isAbstract() && !isOpen()
 
-	private fun KtClass.extractDeclarations(): List<KtDeclaration> = body?.declarations.orEmpty()
+    private fun KtClass.extractDeclarations(): List<KtDeclaration> = body?.declarations.orEmpty()
 
-	private fun KtClass.extractConstructorPropertyParameters(): List<KtParameter> =
-			getPrimaryConstructorParameterList()
-					?.parameters
-					?.filter { it.isPropertyParameter() }
-					.orEmpty()
+    private fun KtClass.extractConstructorPropertyParameters(): List<KtParameter> =
+            getPrimaryConstructorParameterList()
+                    ?.parameters
+                    ?.filter { it.isPropertyParameter() }
+                    .orEmpty()
 
-	companion object {
-		const val EXCLUDE_ANNOTATED_CLASSES = "excludeAnnotatedClasses"
-	}
+    companion object {
+        const val EXCLUDE_ANNOTATED_CLASSES = "excludeAnnotatedClasses"
+    }
 }

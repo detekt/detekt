@@ -23,21 +23,21 @@ import io.gitlab.arturbosch.detekt.rules.complexity.TooManyFunctions
  */
 class ComplexityProvider : RuleSetProvider {
 
-	override val ruleSetId: String = "complexity"
+    override val ruleSetId: String = "complexity"
 
-	override fun instance(config: Config): RuleSet {
-		return RuleSet(ruleSetId, listOf(
-				LongParameterList(config),
-				LongMethod(config),
-				LargeClass(config),
-				ComplexInterface(config),
-				ComplexMethod(config),
-				StringLiteralDuplication(config),
-				MethodOverloading(config),
-				NestedBlockDepth(config),
-				TooManyFunctions(config),
-				ComplexCondition(config),
-				LabeledExpression(config)
-		))
-	}
+    override fun instance(config: Config): RuleSet {
+        return RuleSet(ruleSetId, listOf(
+                LongParameterList(config),
+                LongMethod(config),
+                LargeClass(config),
+                ComplexInterface(config),
+                ComplexMethod(config),
+                StringLiteralDuplication(config),
+                MethodOverloading(config),
+                NestedBlockDepth(config),
+                TooManyFunctions(config),
+                ComplexCondition(config),
+                LabeledExpression(config)
+        ))
+    }
 }

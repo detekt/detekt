@@ -18,18 +18,18 @@ import io.gitlab.arturbosch.detekt.formatting.merge
  */
 class MaximumLineLength(config: Config) : FormattingRule(config) {
 
-	override val wrapping = MaxLineLengthRule()
-	override val issue = issueFor("Reports lines with exceeded length")
+    override val wrapping = MaxLineLengthRule()
+    override val issue = issueFor("Reports lines with exceeded length")
 
-	private val defaultMaxLineLength =
-			if (isAndroid) ANDROID_MAX_LINE_LENGTH
-			else DEFAULT_IDEA_LINE_LENGTH
-	private val maxLineLength: Int = valueOrDefault(MAX_LINE_LENGTH, defaultMaxLineLength)
+    private val defaultMaxLineLength =
+            if (isAndroid) ANDROID_MAX_LINE_LENGTH
+            else DEFAULT_IDEA_LINE_LENGTH
+    private val maxLineLength: Int = valueOrDefault(MAX_LINE_LENGTH, defaultMaxLineLength)
 
-	override fun editorConfigUpdater(): ((oldEditorConfig: EditorConfig?) -> EditorConfig)? = {
-		EditorConfig.merge(it,
-			maxLineLength = maxLineLength)
-	}
+    override fun editorConfigUpdater(): ((oldEditorConfig: EditorConfig?) -> EditorConfig)? = {
+        EditorConfig.merge(it,
+                maxLineLength = maxLineLength)
+    }
 }
 
 private const val MAX_LINE_LENGTH = "maxLineLength"

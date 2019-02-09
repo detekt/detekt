@@ -8,18 +8,18 @@ import org.jetbrains.spek.api.dsl.it
 import org.jetbrains.spek.subject.SubjectSpek
 
 class IteratorNotThrowingNoSuchElementExceptionSpec : SubjectSpek<IteratorNotThrowingNoSuchElementException>({
-	subject { IteratorNotThrowingNoSuchElementException() }
+    subject { IteratorNotThrowingNoSuchElementException() }
 
-	given("two iterator classes which next() method do not throw a NoSuchElementException") {
+    given("two iterator classes which next() method do not throw a NoSuchElementException") {
 
-		it("reports invalid next() implementations") {
-			val path = Case.IteratorImplPositive.path()
-			assertThat(subject.lint(path)).hasSize(4)
-		}
+        it("reports invalid next() implementations") {
+            val path = Case.IteratorImplPositive.path()
+            assertThat(subject.lint(path)).hasSize(4)
+        }
 
-		it("does not report correct next() implemenations") {
-			val path = Case.IteratorImplNegative.path()
-			assertThat(subject.lint(path)).hasSize(0)
-		}
-	}
+        it("does not report correct next() implemenations") {
+            val path = Case.IteratorImplNegative.path()
+            assertThat(subject.lint(path)).hasSize(0)
+        }
+    }
 })

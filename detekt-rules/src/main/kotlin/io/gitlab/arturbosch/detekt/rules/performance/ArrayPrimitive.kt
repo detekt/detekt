@@ -38,51 +38,51 @@ import org.jetbrains.kotlin.psi.KtTypeReference
  */
 class ArrayPrimitive(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue("ArrayPrimitive",
-			Severity.Performance,
-			"Using Array<Primitive> leads to implicit boxing and a performance hit",
-			Debt.FIVE_MINS)
+    override val issue = Issue("ArrayPrimitive",
+            Severity.Performance,
+            "Using Array<Primitive> leads to implicit boxing and a performance hit",
+            Debt.FIVE_MINS)
 
-	private val primitiveTypes = hashSetOf(
-			"Int",
-			"Double",
-			"Float",
-			"Short",
-			"Byte",
-			"Long",
-			"Char"
-	)
+    private val primitiveTypes = hashSetOf(
+            "Int",
+            "Double",
+            "Float",
+            "Short",
+            "Byte",
+            "Long",
+            "Char"
+    )
 
-	override fun visitParameter(parameter: KtParameter) {
-		val typeReference = parameter.typeReference
-		if (typeReference != null) {
-			reportArrayPrimitives(typeReference)
-		}
-		super.visitParameter(parameter)
-	}
+    override fun visitParameter(parameter: KtParameter) {
+        val typeReference = parameter.typeReference
+        if (typeReference != null) {
+            reportArrayPrimitives(typeReference)
+        }
+        super.visitParameter(parameter)
+    }
 
-	override fun visitNamedFunction(function: KtNamedFunction) {
-		if (function.hasDeclaredReturnType()) {
-			val typeReference = function.typeReference
-			if (typeReference != null) {
-				reportArrayPrimitives(typeReference)
-			}
-		}
-		super.visitNamedFunction(function)
-	}
+    override fun visitNamedFunction(function: KtNamedFunction) {
+        if (function.hasDeclaredReturnType()) {
+            val typeReference = function.typeReference
+            if (typeReference != null) {
+                reportArrayPrimitives(typeReference)
+            }
+        }
+        super.visitNamedFunction(function)
+    }
 
-	private fun reportArrayPrimitives(element: KtElement) {
-		return element
-				.collectByType<KtTypeReference>()
-				.filter { isArrayPrimitive(it) }
-				.forEach { report(CodeSmell(issue, Entity.from(it), issue.description)) }
-	}
+    private fun reportArrayPrimitives(element: KtElement) {
+        return element
+                .collectByType<KtTypeReference>()
+                .filter { isArrayPrimitive(it) }
+                .forEach { report(CodeSmell(issue, Entity.from(it), issue.description)) }
+    }
 
-	private fun isArrayPrimitive(it: KtTypeReference): Boolean {
-		if (it.text?.startsWith("Array<") == true) {
-			val genericTypeArguments = it.typeElement?.typeArgumentsAsTypes
-			return genericTypeArguments?.size == 1 && primitiveTypes.contains(genericTypeArguments[0].text)
-		}
-		return false
-	}
+    private fun isArrayPrimitive(it: KtTypeReference): Boolean {
+        if (it.text?.startsWith("Array<") == true) {
+            val genericTypeArguments = it.typeElement?.typeArgumentsAsTypes
+            return genericTypeArguments?.size == 1 && primitiveTypes.contains(genericTypeArguments[0].text)
+        }
+        return false
+    }
 }

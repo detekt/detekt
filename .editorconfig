@@ -4,8 +4,8 @@ root = true
 [*]
 insert_final_newline = true
 
-[*.{kt,groovy}]
-indent_style = tab
+[*.{kt, groovy}]
+indent_style = space
 
 [*.yml]
 indent_style = space

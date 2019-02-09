@@ -33,28 +33,28 @@ import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
  */
 class UntilInsteadOfRangeTo(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName,
-			Severity.Style,
-			"'..' call can be replaced with 'until'",
-			Debt.FIVE_MINS)
+    override val issue = Issue(javaClass.simpleName,
+            Severity.Style,
+            "'..' call can be replaced with 'until'",
+            Debt.FIVE_MINS)
 
-	private val minimumSize = 3
+    private val minimumSize = 3
 
-	override fun visitBinaryExpression(expression: KtBinaryExpression) {
-		if (isUntilApplicable(expression.children)) {
-			report(CodeSmell(issue, Entity.from(expression), "'..' call can be replaced with 'until'"))
-		}
-		super.visitBinaryExpression(expression)
-	}
+    override fun visitBinaryExpression(expression: KtBinaryExpression) {
+        if (isUntilApplicable(expression.children)) {
+            report(CodeSmell(issue, Entity.from(expression), "'..' call can be replaced with 'until'"))
+        }
+        super.visitBinaryExpression(expression)
+    }
 
-	private fun isUntilApplicable(range: Array<PsiElement>): Boolean {
-		if (range.size >= minimumSize && range[1] is KtOperationReferenceExpression && range[1].text == "..") {
-			val expression = range[2] as? KtBinaryExpression
-			if (expression?.operationToken == KtTokens.MINUS) {
-				val rightExpressionValue = expression?.right as? KtConstantExpression
-				return rightExpressionValue?.text == "1"
-			}
-		}
-		return false
-	}
+    private fun isUntilApplicable(range: Array<PsiElement>): Boolean {
+        if (range.size >= minimumSize && range[1] is KtOperationReferenceExpression && range[1].text == "..") {
+            val expression = range[2] as? KtBinaryExpression
+            if (expression?.operationToken == KtTokens.MINUS) {
+                val rightExpressionValue = expression?.right as? KtConstantExpression
+                return rightExpressionValue?.text == "1"
+            }
+        }
+        return false
+    }
 }

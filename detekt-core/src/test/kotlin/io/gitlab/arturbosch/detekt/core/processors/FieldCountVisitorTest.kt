@@ -8,12 +8,12 @@ import org.jetbrains.spek.api.dsl.it
 
 class FieldCountVisitorTest : Spek({
 
-	it("defaultFieldCount") {
-		val file = compileForTest(path.resolve("../fields/ClassWithFields.kt"))
-		val count = with(file) {
-			accept(PropertyCountVisitor())
-			getUserData(numberOfFieldsKey)
-		}
-		assertThat(count).isEqualTo(2)
-	}
+    it("defaultFieldCount") {
+        val file = compileForTest(path.resolve("../fields/ClassWithFields.kt"))
+        val count = with(file) {
+            accept(PropertyCountVisitor())
+            getUserData(numberOfFieldsKey)
+        }
+        assertThat(count).isEqualTo(2)
+    }
 })

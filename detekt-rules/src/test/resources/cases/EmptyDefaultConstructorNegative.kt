@@ -10,5 +10,5 @@ class PrivatePrimaryConstructor private constructor()
 
 class EmptyConstructorIsCalled() {
 
-	constructor(i: Int) : this()
+    constructor(i: Int) : this()
 }

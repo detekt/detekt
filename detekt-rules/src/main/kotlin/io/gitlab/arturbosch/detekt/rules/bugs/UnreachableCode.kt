@@ -40,33 +40,33 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  */
 class UnreachableCode(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue("UnreachableCode", Severity.Warning,
-			"Unreachable code detected. This code should be removed", Debt.TEN_MINS)
+    override val issue = Issue("UnreachableCode", Severity.Warning,
+            "Unreachable code detected. This code should be removed", Debt.TEN_MINS)
 
-	override fun visitReturnExpression(expression: KtReturnExpression) {
-		followedByUnreachableCode(expression)
-		super.visitReturnExpression(expression)
-	}
+    override fun visitReturnExpression(expression: KtReturnExpression) {
+        followedByUnreachableCode(expression)
+        super.visitReturnExpression(expression)
+    }
 
-	override fun visitThrowExpression(expression: KtThrowExpression) {
-		followedByUnreachableCode(expression)
-		super.visitThrowExpression(expression)
-	}
+    override fun visitThrowExpression(expression: KtThrowExpression) {
+        followedByUnreachableCode(expression)
+        super.visitThrowExpression(expression)
+    }
 
-	override fun visitContinueExpression(expression: KtContinueExpression) {
-		followedByUnreachableCode(expression)
-	}
+    override fun visitContinueExpression(expression: KtContinueExpression) {
+        followedByUnreachableCode(expression)
+    }
 
-	override fun visitBreakExpression(expression: KtBreakExpression) {
-		followedByUnreachableCode(expression)
-	}
+    override fun visitBreakExpression(expression: KtBreakExpression) {
+        followedByUnreachableCode(expression)
+    }
 
-	private fun followedByUnreachableCode(expression: KtExpression) {
-		val statements = (expression.parent as? KtBlockExpression)?.statements ?: return
-		val indexOfStatement = statements.indexOf(expression)
-		if (indexOfStatement < statements.size - 1) {
-			report(CodeSmell(issue, Entity.from(expression), "This expression is followed by unreachable " +
-					"code which should either be used or removed."))
-		}
-	}
+    private fun followedByUnreachableCode(expression: KtExpression) {
+        val statements = (expression.parent as? KtBlockExpression)?.statements ?: return
+        val indexOfStatement = statements.indexOf(expression)
+        if (indexOfStatement < statements.size - 1) {
+            report(CodeSmell(issue, Entity.from(expression), "This expression is followed by unreachable " +
+                    "code which should either be used or removed."))
+        }
+    }
 }
