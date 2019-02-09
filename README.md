@@ -9,7 +9,7 @@
 <!-- Version needs to be hardcoded until rc phase is over. Change to '-'RC for semantic versioning broke the badge. [![gradle plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/io/gitlab/arturbosch/detekt/detekt-gradle-plugin/maven-metadata.xml.svg?label=gradle&style=flat-square)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)-->
 [![gradle plugin](https://img.shields.io/badge/Gradle-1.0.0--RC12-blue.svg)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-71-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-75-orange.svg?style=flat-square)](#contributors)
 [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
 
 Meet _detekt_, a static code analysis tool for the _Kotlin_ programming language.
