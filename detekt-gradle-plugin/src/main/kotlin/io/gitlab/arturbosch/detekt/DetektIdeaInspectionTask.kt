@@ -39,9 +39,11 @@ open class DetektIdeaInspectionTask : DefaultTask() {
 
 	@TaskAction
 	fun inspect() {
-		if (debug.get()) println("Running inspection task in debug mode")
-
-		if (debug.get()) println("$ideaExtension")
-		ProcessExecutor.startProcess(ideaExtension.inspectArgs(input.asPath), debug.get())
+		val debugState = debug.getOrElse(false)
+		if (debugState) {
+			println("Running inspection task in debug mode")
+			println("$ideaExtension")
+		}
+		ProcessExecutor.startProcess(ideaExtension.inspectArgs(input.asPath), debugState)
 	}
 }

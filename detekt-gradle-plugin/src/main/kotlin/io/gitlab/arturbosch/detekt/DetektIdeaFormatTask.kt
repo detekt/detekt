@@ -39,8 +39,10 @@ open class DetektIdeaFormatTask : DefaultTask() {
 
 	@TaskAction
 	fun format() {
-		if (debug.get()) println("$ideaExtension")
-
-		startProcess(ideaExtension.formatArgs(input.asPath), debug.get())
+		val debugState = debug.getOrElse(false)
+		if (debugState) {
+			println("$ideaExtension")
+		}
+		startProcess(ideaExtension.formatArgs(input.asPath), debugState)
 	}
 }
