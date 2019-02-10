@@ -898,7 +898,7 @@ separated for readability.
 
 * `ignoredNames` (default: `""`)
 
-   Names that are not to be reported on
+   Parameter or property names that are not to be reported on
 
 #### Noncompliant Code:
 

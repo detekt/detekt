@@ -31,7 +31,7 @@ import org.jetbrains.kotlin.psi.KtProperty
  *
  * @configuration minAcceptableLength - Length under which decimal base 10 literals are not required to have underscores
  * (default: 4)
- * @configuration ignoredNames - Names that are not to be reported on (default: "")
+ * @configuration ignoredNames - Parameter or property names that are not to be reported on (default: "")
  *
  * @author Tyler Wong
  */
@@ -68,7 +68,7 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
         }
 
     override fun visitConstantExpression(expression: KtConstantExpression) {
-        if (propertyNameIsExcluded(expression) || isNotDecimal(expression)) {
+        if (isNameExcluded(expression) || isNotDecimal(expression)) {
             return
         }
 
@@ -96,10 +96,10 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
 
     private fun isNotDecimal(expression: KtConstantExpression): Boolean {
         val rawText = expression.text.toLowerCase(Locale.US)
-        return rawText.startsWith("0x") || rawText.startsWith("0b")
+        return rawText.startsWith(HEX_PREFIX) || rawText.startsWith(BIN_PREFIX)
     }
 
-    private fun propertyNameIsExcluded(expression: KtConstantExpression): Boolean {
+    private fun isNameExcluded(expression: KtConstantExpression): Boolean {
         val propertyName = expression.associatedName
         return ignoredFieldNames.contains(propertyName)
     }
@@ -116,6 +116,8 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
         const val MIN_ACCEPTABLE_LENGTH = "minAcceptableLength"
         const val IGNORED_NAMES = "ignoredNames"
 
+        private const val HEX_PREFIX = "0x"
+        private const val BIN_PREFIX = "0b"
         private const val DEFAULT_MIN_ACCEPTABLE_LENGTH_VALUE = 4
     }
 }
