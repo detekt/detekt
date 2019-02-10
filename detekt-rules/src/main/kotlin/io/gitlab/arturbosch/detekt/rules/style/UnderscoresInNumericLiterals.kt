@@ -8,14 +8,15 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.safeAs
-import org.jetbrains.kotlin.psi.KtClassOrObject
 import java.util.Locale
+import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtProperty
 
 /**
  * This rule detects and reports decimal base 10 numeric literals above a certain length that should be underscore
- * separated for readability.
+ * separated for readability. For [Serializable] classes or objects, the field [serialVersionUID] is explicitly
+ * ignored.
  *
  * <noncompliant>
  * object Money {
@@ -54,17 +55,13 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
 
         val numberStringParts = normalizedText.split('.')
 
-        if (numberStringParts.sumBy { it.length } < acceptableDecimalLength) {
-            if (numberStringParts.any { it.contains('_') }) {
-                reportIfInvalid(expression, numberStringParts)
-            }
-            return
+        if (numberStringParts.sumBy { it.length } >= acceptableDecimalLength ||
+                numberStringParts.any { it.contains('_') }) {
+            reportIfInvalidUnderscorePattern(expression, numberStringParts)
         }
-
-        reportIfInvalid(expression, numberStringParts)
     }
 
-    private fun reportIfInvalid(expression: KtConstantExpression, numberStringParts: List<String>) {
+    private fun reportIfInvalidUnderscorePattern(expression: KtConstantExpression, numberStringParts: List<String>) {
         for (part in numberStringParts) {
             if (!part.matches(underscoreNumberRegex)) {
                 report(CodeSmell(issue, Entity.from(expression), "This numeric literal should be separated " +

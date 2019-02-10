@@ -884,7 +884,8 @@ This rule reports lines that end with a whitespace.
 ### UnderscoresInNumericLiterals
 
 This rule detects and reports decimal base 10 numeric literals above a certain length that should be underscore
-separated for readability.
+separated for readability. For [Serializable] classes or objects, the field [serialVersionUID] is explicitly
+ignored.
 
 **Severity**: Style
 
