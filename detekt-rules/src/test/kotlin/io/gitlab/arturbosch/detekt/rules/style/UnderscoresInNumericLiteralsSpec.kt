@@ -25,7 +25,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("should not be reported if ignoredPropertyNames contains myInt") {
+        it("should not be reported if ignoredNames contains myInt") {
             val findings = UnderscoresInNumericLiterals(
                     TestConfig(mapOf(UnderscoresInNumericLiterals.IGNORED_NAMES to "myInt,myFloat"))
             ).lint(ktFile)
@@ -107,7 +107,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
             assertThat(findings).isNotEmpty
         }
 
-        it("should not be reported if ignoredPropertyNames contains myLong") {
+        it("should not be reported if ignoredNames contains myLong") {
             val findings = UnderscoresInNumericLiterals(
                     TestConfig(mapOf(UnderscoresInNumericLiterals.IGNORED_NAMES to "myLong,myInt,myFloat"))
             ).lint(ktFile)

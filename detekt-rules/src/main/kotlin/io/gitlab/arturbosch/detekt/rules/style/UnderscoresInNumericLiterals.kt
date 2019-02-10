@@ -45,7 +45,7 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
     private val underscoreNumberRegex = Regex("^[0-9]{1,3}(_[0-9]{3})*\$")
 
     private val minAcceptableLength = valueOrDefault(MIN_ACCEPTABLE_LENGTH, DEFAULT_MIN_ACCEPTABLE_LENGTH_VALUE)
-    private val ignoredFieldNames = valueOrDefault(IGNORED_NAMES, "")
+    private val ignoredNames = valueOrDefault(IGNORED_NAMES, "")
             .splitToSequence(",")
             .filterNot { it.isEmpty() }
             .toList()
@@ -99,10 +99,7 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
         return rawText.startsWith(HEX_PREFIX) || rawText.startsWith(BIN_PREFIX)
     }
 
-    private fun isNameExcluded(expression: KtConstantExpression): Boolean {
-        val propertyName = expression.associatedName
-        return ignoredFieldNames.contains(propertyName)
-    }
+    private fun isNameExcluded(expression: KtConstantExpression) = ignoredNames.contains(expression.associatedName)
 
     private fun normalizeForMatching(text: String): String {
         return text.trim()
