@@ -15,7 +15,7 @@ entries:
       url: /changelog.html
       output: web
     - title: Pre 1.0 Release Notes
-      url: /changelog.html
+      url: /changelog-rc.html
       output: web
     - title: detekt configuration file
       url: /configurations.html
