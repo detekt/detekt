@@ -191,4 +191,22 @@ class UnderscoresInNumericLiteralsSpec : Spek({
 			assertThat(findings).isNotEmpty
 		}
 	}
+
+    given("a binary Int of 0b1011") {
+        val ktFile = compileContentForTest("const val myBinInt = 0b1011")
+
+        it("should not be reported") {
+            val findings = UnderscoresInNumericLiterals().lint(ktFile)
+            assertThat(findings).isEmpty()
+        }
+    }
+
+    given("a hexadecimal Int of 0x1facdf") {
+        val ktFile = compileContentForTest("const val myHexInt = 0x1facdf")
+
+        it("should not be reported") {
+            val findings = UnderscoresInNumericLiterals().lint(ktFile)
+            assertThat(findings).isEmpty()
+        }
+    }
 })

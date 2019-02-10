@@ -14,8 +14,8 @@ import org.jetbrains.kotlin.psi.KtProperty
 import java.util.Locale
 
 /**
- * This rule detects and reports base 10 numeric literals above a certain length that should be underscore separated for
- * readability.
+ * This rule detects and reports decimal base 10 numeric literals above a certain length that should be underscore
+ * separated for readability.
  *
  * <noncompliant>
  * object Money {
@@ -29,7 +29,7 @@ import java.util.Locale
  * }
  * </compliant>
  *
- * @configuration minAcceptableLength - Length under which base 10 literals are not required to have underscores
+ * @configuration minAcceptableLength - Length under which decimal base 10 literals are not required to have underscores
  * (default: 4)
  * @configuration ignoredNames - Names that are not to be reported on (default: "")
  *
@@ -38,9 +38,9 @@ import java.util.Locale
 class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config) {
 
 	override val issue = Issue(javaClass.simpleName, Severity.Style,
-			"Report missing or invalid underscores in base 10 numeric literals. Numeric literals should " +
-					"be underscore separated to increase readability. Underscores that do not make groups of 3 " +
-					"digits are also reported.", Debt.FIVE_MINS)
+			"Report missing or invalid underscores in decimal base 10 numeric literals. Numeric literals " +
+                    "should be underscore separated to increase readability. Underscores that do not make groups of " +
+                    "3 digits are also reported.", Debt.FIVE_MINS)
 
 	private val underscoreNumberRegex = Regex("^[0-9]{1,3}(_[0-9]{3})*\$")
 
@@ -68,7 +68,7 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
 		}
 
 	override fun visitConstantExpression(expression: KtConstantExpression) {
-		if (propertyNameIsExcluded(expression)) {
+		if (propertyNameIsExcluded(expression) || isNotBase10(expression)) {
 			return
 		}
 
@@ -93,6 +93,11 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
 			}
 		}
 	}
+
+    private fun isNotBase10(expression: KtConstantExpression): Boolean {
+        val rawText = expression.text.toLowerCase(Locale.US)
+        return rawText.startsWith("0x") || rawText.startsWith("0b")
+    }
 
 	private fun propertyNameIsExcluded(expression: KtConstantExpression): Boolean {
 		val propertyName = expression.associatedName
