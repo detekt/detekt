@@ -159,6 +159,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Paweł Gajda](https://github.com/pawegio) - Rule improvement: FunctionParameterNaming
 - [Alistair Sykes](https://github.com/alistairsykes) - Doc improvement
 - [Andrew Arnott](https://github.com/andrew-arnott) - UnusedPrivateMember improvement
+- [Tyler Wong](https://github.com/tylerbwong) - UnderscoresInNumericLiterals rule
 
 ### Mentions
 
