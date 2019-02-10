@@ -4,38 +4,14 @@
 - Copy the file `commit-msg` to `.git/hooks`
 - Use `gradle build -x dokka` to build the source but exclude documentation jar generating to save time.
 - `gradle detekt` should not report any errors
-- This repo uses tabs! Make sure your code is properly formatted.
-- Use idea-code-style.xml for coding style .
-- We use [Spek](https://github.com/spekframework/spek) for testing.
+- This repository follows the [Kotlin Coding Conventions](https://kotlinlang.org/docs/reference/coding-conventions.html) which are enforced by KtLint when running `gradle detekt`.
+- We use [Spek](https://github.com/spekframework/spek) for testing. Please use the `Spec.kt`-Suffix.
 - Feel free to add your name to the contributors list at the end of the readme file when opening a pull request.
 - The code in `detekt-api` and any rule in `detekt-rules` must be documented. We generate documentation for our website based on this modules.
 
-### Specific code style rules we use
-
-- If you modify a file (any changes) or add a new file authored by yourself, add a `@author Your_Name` tag. 
-If it is your first contribution, feel free to add yourself to the list of contributors at the end of the readme file.
-- There must be a newline between the start of the class body and the first member declaration:
-```kotlin
-class A { // wrong!
-    val a = 5
-}
-  
-class B { // right!
-  
-    val b = 5
-}
-```
-- Make sure `when {` or `object : MyType { ... ` is on the same line as `=` eg. 
-```kotlin
-    fun stuff(x: Int) = when(x) {
-        1..10 -> ...
-        else -> ...
-    }
-```
-
 ### When implementing new rules ...
 
-- ... do not forget to add the new rule to a `RuleSetProvider`.
+- ... do not forget to add the new rule to a `RuleSetProvider` (e.g. StyleGuideProvider)
 - ... do not forget to write a description for the issue of the new rule.
 - Add the correct KDoc to the Rule class. This KDoc is used to generate wiki pages and the `default-detekt-config.yml`
 automatically. The format of the KDoc should be as follows:
