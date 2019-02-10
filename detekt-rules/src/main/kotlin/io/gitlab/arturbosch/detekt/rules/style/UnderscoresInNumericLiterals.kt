@@ -52,11 +52,11 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
 
 	private val KtConstantExpression.associatedName: String?
 		get() {
-			var propertyName: String? = null
+			var associatedName: String? = null
 			var element: PsiElement? = parent
 
-			while (propertyName == null || element == null) {
-				propertyName = when (element) {
+			while (associatedName == null || element == null) {
+				associatedName = when (element) {
 					is KtProperty -> element.name
 					is KtParameter -> element.name
 					else -> null
@@ -64,7 +64,7 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
 				element = element?.parent
 			}
 
-			return propertyName
+			return associatedName
 		}
 
 	override fun visitConstantExpression(expression: KtConstantExpression) {
