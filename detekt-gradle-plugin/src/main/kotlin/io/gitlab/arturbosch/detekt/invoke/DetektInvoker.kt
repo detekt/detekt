@@ -10,7 +10,7 @@ import org.gradle.api.file.FileCollection
  */
 object DetektInvoker {
     internal fun invokeCli(project: Project, arguments: List<CliArgument>, debug: Boolean = false) {
-        val cliArguments = arguments.map(CliArgument::toArgument).flatten()
+        val cliArguments = arguments.flatMap(CliArgument::toArgument)
 
         if (debug) println(cliArguments)
         project.javaexec {

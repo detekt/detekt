@@ -10,6 +10,8 @@ private const val CONFIG_PARAMETER = "--config"
 private const val BASELINE_PARAMETER = "--baseline"
 private const val PARALLEL_PARAMETER = "--parallel"
 private const val DISABLE_DEFAULT_RULESETS_PARAMETER = "--disable-default-rulesets"
+private const val BUILD_UPON_DEFAULT_CONFIG_PARAMETER = "--build-upon-default-config"
+private const val FAIL_FAST_PARAMETER = "--fail-fast"
 private const val PLUGINS_PARAMETER = "--plugins"
 private const val REPORT_PARAMETER = "--report"
 private const val GENERATE_CONFIG_PARAMETER = "--generate-config"
@@ -52,20 +54,28 @@ internal data class HtmlReportArgument(val file: RegularFile?) : CliArgument() {
 }
 
 internal data class ConfigArgument(val config: FileCollection) : CliArgument() {
-    override fun toArgument() = if (config.isEmpty)
+    override fun toArgument() = if (config.isEmpty){
         emptyList()
-    else
+    } else {
         listOf(CONFIG_PARAMETER, config.joinToString(",") { it.absolutePath })
 }
 
-internal data class DebugArgument(val value: Boolean) : CliArgument() {
-    override fun toArgument() = if (value) listOf(DEBUG_PARAMETER) else emptyList()
 }
 
-internal data class ParallelArgument(val value: Boolean) : CliArgument() {
-    override fun toArgument() = if (value) listOf(PARALLEL_PARAMETER) else emptyList()
+internal sealed class BoolCliArgument(open val value: Boolean, val configSwitch: String) : CliArgument() {
+    override fun toArgument() = if (value) listOf(configSwitch) else emptyList()
 }
 
-internal data class DisableDefaultRulesetArgument(val value: Boolean) : CliArgument() {
-    override fun toArgument() = if (value) listOf(DISABLE_DEFAULT_RULESETS_PARAMETER) else emptyList()
-}
+internal data class DebugArgument(override val value: Boolean)
+	: BoolCliArgument(value, DEBUG_PARAMETER)
+
+internal data class ParallelArgument(override val value: Boolean)
+	: BoolCliArgument(value, PARALLEL_PARAMETER)
+    internal data class DisableDefaultRuleSetArgument(override val value: Boolean)
+	: BoolCliArgument(value, DISABLE_DEFAULT_RULESETS_PARAMETER)
+
+internal data class BuildUponDefaultConfigArgument(override val value: Boolean)
+	: BoolCliArgument(value, BUILD_UPON_DEFAULT_CONFIG_PARAMETER)
+
+internal data class FailFastArgument(override val value: Boolean)
+	: BoolCliArgument(value, FAIL_FAST_PARAMETER)
