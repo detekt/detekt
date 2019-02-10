@@ -7,10 +7,10 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.safeAs
+import org.jetbrains.kotlin.psi.KtClassOrObject
 import java.util.Locale
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtConstantExpression
-import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
 
 /**
@@ -29,9 +29,8 @@ import org.jetbrains.kotlin.psi.KtProperty
  * }
  * </compliant>
  *
- * @configuration minAcceptableLength - Length under which decimal base 10 literals are not required to have underscores
- * (default: 4)
- * @configuration ignoredNames - Parameter or property names that are not to be reported on (default: "")
+ * @configuration acceptableDecimalLength - Length under which decimal base 10 literals are not required to have
+ * underscores (default: 4)
  *
  * @author Tyler Wong
  */
@@ -44,37 +43,18 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
 
     private val underscoreNumberRegex = Regex("^[0-9]{1,3}(_[0-9]{3})*\$")
 
-    private val minAcceptableLength = valueOrDefault(MIN_ACCEPTABLE_LENGTH, DEFAULT_MIN_ACCEPTABLE_LENGTH_VALUE)
-    private val ignoredNames = valueOrDefault(IGNORED_NAMES, "")
-            .splitToSequence(",")
-            .filterNot { it.isEmpty() }
-            .toList()
-
-    private val KtConstantExpression.associatedName: String?
-        get() {
-            var associatedName: String? = null
-            var element: PsiElement? = parent
-
-            while (associatedName == null || element == null) {
-                associatedName = when (element) {
-                    is KtProperty -> element.name
-                    is KtParameter -> element.name
-                    else -> null
-                }
-                element = element?.parent
-            }
-
-            return associatedName
-        }
+    private val acceptableDecimalLength = valueOrDefault(ACCEPTABLE_DECIMAL_LENGTH, DEFAULT_ACCEPTABLE_DECIMAL_LENGTH)
 
     override fun visitConstantExpression(expression: KtConstantExpression) {
-        if (isNameExcluded(expression) || isNotDecimal(expression)) {
+        val normalizedText = normalizeForMatching(expression.text)
+
+        if (isNotDecimalNumber(normalizedText) || expression.isSerialUidProperty()) {
             return
         }
 
-        val numberStringParts = normalizeForMatching(expression.text).split('.')
+        val numberStringParts = normalizedText.split('.')
 
-        if (numberStringParts.sumBy { it.length } < minAcceptableLength) {
+        if (numberStringParts.sumBy { it.length } < acceptableDecimalLength) {
             if (numberStringParts.any { it.contains('_') }) {
                 reportIfInvalid(expression, numberStringParts)
             }
@@ -94,12 +74,17 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
         }
     }
 
-    private fun isNotDecimal(expression: KtConstantExpression): Boolean {
-        val rawText = expression.text.toLowerCase(Locale.US)
-        return rawText.startsWith(HEX_PREFIX) || rawText.startsWith(BIN_PREFIX)
+    private fun isNotDecimalNumber(rawText: String): Boolean {
+        return rawText.replace("_", "").toDoubleOrNull() == null || rawText.startsWith(HEX_PREFIX) ||
+                rawText.startsWith(BIN_PREFIX)
     }
 
-    private fun isNameExcluded(expression: KtConstantExpression) = ignoredNames.contains(expression.associatedName)
+    private fun KtConstantExpression.isSerialUidProperty(): Boolean {
+        return parent.safeAs<KtProperty>()?.name == SERIAL_UID_PROPERTY_NAME &&
+                parent.parent.parent.safeAs<KtClassOrObject>()
+                        ?.superTypeListEntries
+                        ?.any { it.text == SERIALIZABLE } == true
+    }
 
     private fun normalizeForMatching(text: String): String {
         return text.trim()
@@ -110,11 +95,12 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
     }
 
     companion object {
-        const val MIN_ACCEPTABLE_LENGTH = "minAcceptableLength"
-        const val IGNORED_NAMES = "ignoredNames"
+        const val ACCEPTABLE_DECIMAL_LENGTH = "acceptableDecimalLength"
 
         private const val HEX_PREFIX = "0x"
         private const val BIN_PREFIX = "0b"
-        private const val DEFAULT_MIN_ACCEPTABLE_LENGTH_VALUE = 4
+        private const val SERIALIZABLE = "Serializable"
+        private const val SERIAL_UID_PROPERTY_NAME = "serialVersionUID"
+        private const val DEFAULT_ACCEPTABLE_DECIMAL_LENGTH = 4
     }
 }

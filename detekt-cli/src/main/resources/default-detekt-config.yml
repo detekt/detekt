@@ -491,8 +491,7 @@ style:
     active: false
   UnderscoresInNumericLiterals:
     active: false
-    minAcceptableLength: 4
-    ignoredNames: ""
+    acceptableDecimalLength: 4
   UnnecessaryAbstractClass:
     active: false
     excludeAnnotatedClasses: "dagger.Module"

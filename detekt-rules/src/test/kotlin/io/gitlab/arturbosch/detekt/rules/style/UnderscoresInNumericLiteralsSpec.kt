@@ -18,16 +18,9 @@ class UnderscoresInNumericLiteralsSpec : Spek({
             assertThat(findings).isNotEmpty
         }
 
-        it("should not be reported if minAcceptableLength is 5") {
+        it("should not be reported if acceptableDecimalLength is 5") {
             val findings = UnderscoresInNumericLiterals(
-                    TestConfig(mapOf(UnderscoresInNumericLiterals.MIN_ACCEPTABLE_LENGTH to "5"))
-            ).lint(ktFile)
-            assertThat(findings).isEmpty()
-        }
-
-        it("should not be reported if ignoredNames contains myInt") {
-            val findings = UnderscoresInNumericLiterals(
-                    TestConfig(mapOf(UnderscoresInNumericLiterals.IGNORED_NAMES to "myInt,myFloat"))
+                    TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "5"))
             ).lint(ktFile)
             assertThat(findings).isEmpty()
         }
@@ -50,9 +43,9 @@ class UnderscoresInNumericLiteralsSpec : Spek({
             assertThat(findings).isNotEmpty
         }
 
-        it("should not be reported if minAcceptableLength is 8") {
+        it("should not be reported if acceptableDecimalLength is 8") {
             val findings = UnderscoresInNumericLiterals(
-                    TestConfig(mapOf(UnderscoresInNumericLiterals.MIN_ACCEPTABLE_LENGTH to "8"))
+                    TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "8"))
             ).lint(ktFile)
             assertThat(findings).isEmpty()
         }
@@ -66,9 +59,9 @@ class UnderscoresInNumericLiteralsSpec : Spek({
             assertThat(findings).isNotEmpty
         }
 
-        it("should not be reported if minAcceptableLength is 5") {
+        it("should not be reported if acceptableDecimalLength is 5") {
             val findings = UnderscoresInNumericLiterals(
-                    TestConfig(mapOf(UnderscoresInNumericLiterals.MIN_ACCEPTABLE_LENGTH to "5"))
+                    TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "5"))
             ).lint(ktFile)
             assertThat(findings).isEmpty()
         }
@@ -82,9 +75,9 @@ class UnderscoresInNumericLiteralsSpec : Spek({
             assertThat(findings).isNotEmpty
         }
 
-        it("should not be reported if minAcceptableLength is 5") {
+        it("should not be reported if acceptableDecimalLength is 5") {
             val findings = UnderscoresInNumericLiterals(
-                    TestConfig(mapOf(UnderscoresInNumericLiterals.MIN_ACCEPTABLE_LENGTH to "5"))
+                    TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "5"))
             ).lint(ktFile)
             assertThat(findings).isEmpty()
         }
@@ -107,16 +100,9 @@ class UnderscoresInNumericLiteralsSpec : Spek({
             assertThat(findings).isNotEmpty
         }
 
-        it("should not be reported if ignoredNames contains myLong") {
+        it("should not be reported if ignored acceptableDecimalLength is 8") {
             val findings = UnderscoresInNumericLiterals(
-                    TestConfig(mapOf(UnderscoresInNumericLiterals.IGNORED_NAMES to "myLong,myInt,myFloat"))
-            ).lint(ktFile)
-            assertThat(findings).isEmpty()
-        }
-
-        it("should not be reported if ignored minAcceptableLength is 8") {
-            val findings = UnderscoresInNumericLiterals(
-                    TestConfig(mapOf(UnderscoresInNumericLiterals.MIN_ACCEPTABLE_LENGTH to "8"))
+                    TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "8"))
             ).lint(ktFile)
             assertThat(findings).isEmpty()
         }
@@ -137,13 +123,6 @@ class UnderscoresInNumericLiteralsSpec : Spek({
         it("should be reported by default") {
             val findings = UnderscoresInNumericLiterals().lint(ktFile)
             assertThat(findings).isNotEmpty
-        }
-
-        it("should not be reported when ignoredNames contains testParam") {
-            val findings = UnderscoresInNumericLiterals(
-                    TestConfig(mapOf(UnderscoresInNumericLiterals.IGNORED_NAMES to "testParam"))
-            ).lint(ktFile)
-            assertThat(findings).isEmpty()
         }
     }
 
@@ -167,13 +146,6 @@ class UnderscoresInNumericLiteralsSpec : Spek({
             val findings = UnderscoresInNumericLiterals().lint(ktFile)
             assertThat(findings).isNotEmpty
         }
-
-        it("should not be reported if ignoredNames contains index") {
-            val findings = UnderscoresInNumericLiterals(
-                    TestConfig(mapOf(UnderscoresInNumericLiterals.IGNORED_NAMES to "index"))
-            ).lint(ktFile)
-            assertThat(findings).isEmpty()
-        }
     }
 
     given("an Int of 10_00_00") {
@@ -184,9 +156,9 @@ class UnderscoresInNumericLiteralsSpec : Spek({
             assertThat(findings).isNotEmpty
         }
 
-        it("should still be reported even if minAcceptableLength is 7") {
+        it("should still be reported even if acceptableDecimalLength is 7") {
             val findings = UnderscoresInNumericLiterals(
-                    TestConfig(mapOf(UnderscoresInNumericLiterals.MIN_ACCEPTABLE_LENGTH to "7"))
+                    TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "7"))
             ).lint(ktFile)
             assertThat(findings).isNotEmpty
         }
@@ -207,6 +179,32 @@ class UnderscoresInNumericLiteralsSpec : Spek({
         it("should not be reported") {
             val findings = UnderscoresInNumericLiterals().lint(ktFile)
             assertThat(findings).isEmpty()
+        }
+    }
+
+    given("a property named serialVersionUID in an object that implements Serializable") {
+        val ktFile = compileContentForTest("""
+            object TestSerializable : Serializable {
+                private val serialVersionUID = 314159L
+            }
+        """.trimIndent())
+
+        it("should not be reported") {
+            val findings = UnderscoresInNumericLiterals().lint(ktFile)
+            assertThat(findings).isEmpty()
+        }
+    }
+
+    given("a property named serialVersionUID in an object that does not implement Serializable") {
+        val ktFile = compileContentForTest("""
+            object TestSerializable {
+                private val serialVersionUID = 314159L
+            }
+        """.trimIndent())
+
+        it("should not be reported") {
+            val findings = UnderscoresInNumericLiterals().lint(ktFile)
+            assertThat(findings).isNotEmpty
         }
     }
 })

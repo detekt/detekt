@@ -892,13 +892,10 @@ separated for readability.
 
 #### Configuration options:
 
-* `minAcceptableLength` (default: `4`)
+* `acceptableDecimalLength` (default: `4`)
 
-   Length under which decimal base 10 literals are not required to have underscores
-
-* `ignoredNames` (default: `""`)
-
-   Parameter or property names that are not to be reported on
+   Length under which decimal base 10 literals are not required to have
+underscores
 
 #### Noncompliant Code:
 
