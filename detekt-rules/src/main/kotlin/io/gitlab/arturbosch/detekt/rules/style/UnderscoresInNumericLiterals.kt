@@ -68,7 +68,7 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
 		}
 
 	override fun visitConstantExpression(expression: KtConstantExpression) {
-		if (propertyNameIsExcluded(expression) || isNotBase10(expression)) {
+		if (propertyNameIsExcluded(expression) || isNotDecimal(expression)) {
 			return
 		}
 
@@ -94,7 +94,7 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
 		}
 	}
 
-    private fun isNotBase10(expression: KtConstantExpression): Boolean {
+    private fun isNotDecimal(expression: KtConstantExpression): Boolean {
         val rawText = expression.text.toLowerCase(Locale.US)
         return rawText.startsWith("0x") || rawText.startsWith("0b")
     }
