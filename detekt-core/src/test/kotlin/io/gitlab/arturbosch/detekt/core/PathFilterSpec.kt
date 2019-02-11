@@ -1,33 +1,32 @@
 package io.gitlab.arturbosch.detekt.core
 
-import java.nio.file.Paths
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
-import org.jetbrains.spek.api.Spek
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
+import java.nio.file.Paths
 
 internal class PathFilterSpec : Spek({
 
-    given("an invalid regex pattern") {
+    describe("an invalid regex pattern") {
         it("throws an IllegalArgumentException") {
             assertThatIllegalArgumentException().isThrownBy { PathFilter("*.") }
         }
     }
 
-    given("an empty pattern") {
+    describe("an empty pattern") {
         it("throws an IllegalArgumentException") {
             assertThatIllegalArgumentException().isThrownBy { PathFilter("") }
         }
     }
 
-    given("an blank pattern") {
+    describe("a blank pattern") {
         it("throws an IllegalArgumentException") {
             assertThatIllegalArgumentException().isThrownBy { PathFilter("    ") }
         }
     }
 
-    given("a single regex pattern on Unix systems") {
+    describe("a single regex pattern on Unix systems") {
         val filter = ".*/build/.*"
         val defaultRoot = Paths.get("").toAbsolutePath()
 

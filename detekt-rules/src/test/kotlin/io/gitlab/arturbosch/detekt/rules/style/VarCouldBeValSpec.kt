@@ -2,15 +2,14 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-class VarCouldBeValSpec : SubjectSpek<VarCouldBeVal>({
+class VarCouldBeValSpec : Spek({
 
-    subject { VarCouldBeVal() }
+    val subject by memoized { VarCouldBeVal() }
 
-    given("local declarations in functions") {
+    describe("local declarations in functions") {
 
         it("does not report variables that are re-assigned") {
             val code = """
@@ -123,7 +122,7 @@ class VarCouldBeValSpec : SubjectSpek<VarCouldBeVal>({
         }
     }
 
-    given("this-prefixed properties - #1257") {
+    describe("this-prefixed properties - #1257") {
 
         it("finds unused field and local") {
             val code = """

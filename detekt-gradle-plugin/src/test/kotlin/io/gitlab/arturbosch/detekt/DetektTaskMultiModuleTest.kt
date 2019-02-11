@@ -4,9 +4,8 @@ import io.gitlab.arturbosch.detekt.DslTestBuilder.Companion.groovy
 import io.gitlab.arturbosch.detekt.DslTestBuilder.Companion.kotlin
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.TaskOutcome
-import org.jetbrains.spek.api.Spek
-import org.jetbrains.spek.api.dsl.describe
-import org.jetbrains.spek.api.dsl.it
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
 const val SOURCE_DIRECTORY = "src/main/java"
 

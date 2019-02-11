@@ -13,76 +13,79 @@ import io.gitlab.arturbosch.detekt.rules.providers.NamingProvider
 import io.gitlab.arturbosch.detekt.rules.providers.PerformanceProvider
 import io.gitlab.arturbosch.detekt.rules.providers.PotentialBugProvider
 import io.gitlab.arturbosch.detekt.rules.providers.StyleGuideProvider
-import java.lang.reflect.Modifier
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.Spek
-import org.jetbrains.spek.api.dsl.it
 import org.reflections.Reflections
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
+import java.lang.reflect.Modifier
 
 class RuleProviderTest : Spek({
 
-    it("commentSmellProvider") {
-        RuleProviderAssert(
-                CommentSmellProvider(),
-                "io.gitlab.arturbosch.detekt.rules.documentation",
-                Rule::class.java)
-                .assert()
-    }
+    describe("Rule Provider") {
 
-    it("complexityProvider") {
-        RuleProviderAssert(
-                ComplexityProvider(),
-                "io.gitlab.arturbosch.detekt.rules.complexity",
-                Rule::class.java)
-                .assert()
-    }
+        it("commentSmellProvider") {
+            RuleProviderAssert(
+                    CommentSmellProvider(),
+                    "io.gitlab.arturbosch.detekt.rules.documentation",
+                    Rule::class.java)
+                    .assert()
+        }
 
-    it("emptyCodeProvider") {
-        RuleProviderAssert(
-                EmptyCodeProvider(),
-                "io.gitlab.arturbosch.detekt.rules.empty",
-                Rule::class.java)
-                .assert()
-    }
+        it("complexityProvider") {
+            RuleProviderAssert(
+                    ComplexityProvider(),
+                    "io.gitlab.arturbosch.detekt.rules.complexity",
+                    Rule::class.java)
+                    .assert()
+        }
 
-    it("exceptionsProvider") {
-        RuleProviderAssert(
-                ExceptionsProvider(),
-                "io.gitlab.arturbosch.detekt.rules.exceptions",
-                Rule::class.java)
-                .assert()
-    }
+        it("emptyCodeProvider") {
+            RuleProviderAssert(
+                    EmptyCodeProvider(),
+                    "io.gitlab.arturbosch.detekt.rules.empty",
+                    Rule::class.java)
+                    .assert()
+        }
 
-    it("namingProvider") {
-        RuleProviderAssert(
-                NamingProvider(),
-                "io.gitlab.arturbosch.detekt.rules.naming",
-                Rule::class.java)
-                .assert()
-    }
+        it("exceptionsProvider") {
+            RuleProviderAssert(
+                    ExceptionsProvider(),
+                    "io.gitlab.arturbosch.detekt.rules.exceptions",
+                    Rule::class.java)
+                    .assert()
+        }
 
-    it("performanceProvider") {
-        RuleProviderAssert(
-                PerformanceProvider(),
-                "io.gitlab.arturbosch.detekt.rules.performance",
-                Rule::class.java)
-                .assert()
-    }
+        it("namingProvider") {
+            RuleProviderAssert(
+                    NamingProvider(),
+                    "io.gitlab.arturbosch.detekt.rules.naming",
+                    Rule::class.java)
+                    .assert()
+        }
 
-    it("potentialBugProvider") {
-        RuleProviderAssert(
-                PotentialBugProvider(),
-                "io.gitlab.arturbosch.detekt.rules.bugs",
-                Rule::class.java)
-                .assert()
-    }
+        it("performanceProvider") {
+            RuleProviderAssert(
+                    PerformanceProvider(),
+                    "io.gitlab.arturbosch.detekt.rules.performance",
+                    Rule::class.java)
+                    .assert()
+        }
 
-    it("styleGuideProvider") {
-        RuleProviderAssert(
-                StyleGuideProvider(),
-                "io.gitlab.arturbosch.detekt.rules.style",
-                Rule::class.java)
-                .assert()
+        it("potentialBugProvider") {
+            RuleProviderAssert(
+                    PotentialBugProvider(),
+                    "io.gitlab.arturbosch.detekt.rules.bugs",
+                    Rule::class.java)
+                    .assert()
+        }
+
+        it("styleGuideProvider") {
+            RuleProviderAssert(
+                    StyleGuideProvider(),
+                    "io.gitlab.arturbosch.detekt.rules.style",
+                    Rule::class.java)
+                    .assert()
+        }
     }
 })
 

@@ -2,28 +2,29 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-class PrintStackTraceSpec : SubjectSpek<PrintStackTrace>({
-    subject { PrintStackTrace() }
+class PrintStackTraceSpec : Spek({
+    val subject by memoized { PrintStackTrace() }
 
-    given("catch clauses with printStacktrace methods") {
+    describe("PrintStackTrace") {
 
-        it("prints a stacktrace") {
-            val code = """
+        context("catch clauses with printStacktrace methods") {
+
+            it("prints a stacktrace") {
+                val code = """
 				fun x() {
 					try {
 					} catch (e: Exception) {
 						e.printStackTrace()
 					}
 				}"""
-            assertThat(subject.lint(code)).hasSize(1)
-        }
+                assertThat(subject.lint(code)).hasSize(1)
+            }
 
-        it("does not print a stacktrace") {
-            val code = """
+            it("does not print a stacktrace") {
+                val code = """
 				fun x() {
 					try {
 					} catch (e: Exception) {
@@ -32,19 +33,20 @@ class PrintStackTraceSpec : SubjectSpek<PrintStackTrace>({
 						printStackTrace()
 					}
 				}"""
-            assertThat(subject.lint(code)).hasSize(0)
+                assertThat(subject.lint(code)).hasSize(0)
+            }
         }
-    }
 
-    given("a stacktrace printed by a thread") {
+        context("a stacktrace printed by a thread") {
 
-        it("prints one") {
-            val code = """
+            it("prints one") {
+                val code = """
 				fun x() {
 					Thread.dumpStack()
-					Foo.dumpStack()
+					UnusedPrivateMemberPositiveObject.Foo.dumpStack()
 				}"""
-            assertThat(subject.lint(code)).hasSize(1)
+                assertThat(subject.lint(code)).hasSize(1)
+            }
         }
     }
 })

@@ -3,14 +3,13 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-class RethrowCaughtExceptionSpec : SubjectSpek<RethrowCaughtException>({
-    subject { RethrowCaughtException() }
+class RethrowCaughtExceptionSpec : Spek({
+    val subject by memoized { RethrowCaughtException() }
 
-    given("multiple caught exceptions") {
+    describe("RethrowCaughtException rule") {
 
         it("reports caught exceptions which are rethrown") {
             val path = Case.RethrowCaughtExceptionPositive.path()

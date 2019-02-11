@@ -93,5 +93,5 @@ dependencies {
 
     testImplementation(project(":detekt-test"))
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
-    testRuntimeOnly("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
+    testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spekVersion")
 }

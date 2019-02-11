@@ -1,38 +1,27 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileForTest
-import java.nio.file.Path
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
-import org.jetbrains.spek.subject.dsl.SubjectProviderDsl
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-class NoTabsSpec : SubjectSpek<NoTabs>({
+class NoTabsSpec : Spek({
 
-    subject { NoTabs() }
+    val subject by memoized { NoTabs() }
 
-    given("a line that contains a tab") {
+    describe("NoTabs rule") {
 
-        it("should flag it") {
-            val path = Case.NoTabsPositive.path()
-            assertThat(lint(path)).hasSize(5)
+        it("should flag a line that contains a tab") {
+            val file = compileForTest(Case.NoTabsPositive.path())
+            subject.findTabs(file)
+            assertThat(subject.findings).hasSize(5)
         }
-    }
 
-    given("a line that does not contain a tab") {
-
-        it("should not flag it") {
-            val path = Case.NoTabsNegative.path()
-            assertThat(lint(path)).hasSize(0)
+        it("should not flag a line that does not contain a tab") {
+            val file = compileForTest(Case.NoTabsNegative.path())
+            subject.findTabs(file)
+            assertThat(subject.findings).hasSize(0)
         }
     }
 })
-
-private fun SubjectProviderDsl<NoTabs>.lint(path: Path): List<Finding> {
-    val file = compileForTest(path)
-    subject.findTabs(file)
-    return subject.findings
-}

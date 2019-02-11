@@ -4,14 +4,13 @@ import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-class FunctionOnlyReturningConstantSpec : SubjectSpek<FunctionOnlyReturningConstant>({
-    subject { FunctionOnlyReturningConstant() }
+class FunctionOnlyReturningConstantSpec : Spek({
+    val subject by memoized { FunctionOnlyReturningConstant() }
 
-    given("some functions which return constants") {
+    describe("FunctionOnlyReturningConstant rule - positive cases") {
 
         val path = Case.FunctionReturningConstantPositive.path()
 
@@ -33,7 +32,7 @@ class FunctionOnlyReturningConstantSpec : SubjectSpek<FunctionOnlyReturningConst
         }
     }
 
-    given("some functions which do not return constants") {
+    describe("FunctionOnlyReturningConstant rule - negative cases") {
 
         it("does not report functions which do not return constants") {
             val path = Case.FunctionReturningConstantNegative.path()

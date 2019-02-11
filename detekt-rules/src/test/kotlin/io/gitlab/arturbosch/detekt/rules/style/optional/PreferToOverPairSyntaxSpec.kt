@@ -4,14 +4,13 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-class PreferToOverPairSyntaxSpec : SubjectSpek<PreferToOverPairSyntax>({
-    subject { PreferToOverPairSyntax(Config.empty) }
+class PreferToOverPairSyntaxSpec : Spek({
+    val subject by memoized { PreferToOverPairSyntax(Config.empty) }
 
-    given("pair objects") {
+    describe("PreferToOverPairSyntax rule") {
 
         it("reports if pair is created using pair constructor") {
             val path = Case.PreferToOverPairSyntaxPositive.path()

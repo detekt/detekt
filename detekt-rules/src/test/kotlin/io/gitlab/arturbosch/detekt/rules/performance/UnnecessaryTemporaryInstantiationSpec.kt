@@ -2,14 +2,14 @@ package io.gitlab.arturbosch.detekt.rules.performance
 
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.dsl.describe
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
 /**
  * @author schalkms
  */
-class UnnecessaryTemporaryInstantiationSpec : SubjectSpek<UnnecessaryTemporaryInstantiation>({
-    subject { UnnecessaryTemporaryInstantiation() }
+class UnnecessaryTemporaryInstantiationSpec : Spek({
+    val subject by memoized { UnnecessaryTemporaryInstantiation() }
 
     describe("temporary instantiation for conversion") {
         val code = "val i = Integer(1).toString()"

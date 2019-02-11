@@ -2,12 +2,11 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Java6Assertions.assertThat
-import org.jetbrains.spek.api.Spek
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
 class ForbiddenVoidSpec : Spek({
-    given("some Void usage") {
+    describe("ForbiddenVoid rule") {
         it("should report all Void type usage") {
             val code = """
 				lateinit var c: () -> Void

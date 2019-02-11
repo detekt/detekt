@@ -1,66 +1,68 @@
 package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.core.PathFilter
-import java.nio.file.Paths
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
-import org.jetbrains.spek.api.Spek
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
+import java.nio.file.Paths
 
 class ReportPathSpec : Spek({
 
-    if (IS_WINDOWS) {
-        given("a Windows path") {
-            it("parses a valid absolute path correctly") {
-                val reportPath = ReportPath.from("test:C:\\tmp\\valid\\report")
+    describe("report paths") {
 
-                assertThat(reportPath.path).isEqualTo(Paths.get("C:\\tmp\\valid\\report"))
+        if (IS_WINDOWS) {
+            context("a Windows path") {
+                it("parses a valid absolute path correctly") {
+                    val reportPath = ReportPath.from("test:C:\\tmp\\valid\\report")
+
+                    assertThat(reportPath.path).isEqualTo(Paths.get("C:\\tmp\\valid\\report"))
+                }
+
+                it("parses a valid relative path correctly") {
+                    val reportPath = ReportPath.from("test:valid\\report")
+
+                    assertThat(reportPath.path).isEqualTo(Paths.get("valid\\report"))
+                }
+
+                it("fails when the path is empty") {
+                    assertThatIllegalArgumentException()
+                            .isThrownBy { ReportPath.from("test:") }
+                }
+
+                it("fails when the path is malformed") {
+                    assertThatIllegalArgumentException()
+                            .isThrownBy { ReportPath.from("test:a*a") }
+                }
             }
+        } else {
+            context("a POSIX path") {
+                it("parses a valid absolute path correctly") {
+                    val reportPath = ReportPath.from("test:/tmp/valid/report")
 
-            it("parses a valid relative path correctly") {
-                val reportPath = ReportPath.from("test:valid\\report")
+                    assertThat(reportPath.path).isEqualTo(Paths.get("/tmp/valid/report"))
+                }
 
-                assertThat(reportPath.path).isEqualTo(Paths.get("valid\\report"))
-            }
+                it("parses a valid relative path correctly") {
+                    val reportPath = ReportPath.from("test:valid/report")
 
-            it("fails when the path is empty") {
-                assertThatIllegalArgumentException()
-                        .isThrownBy { ReportPath.from("test:") }
-            }
+                    assertThat(reportPath.path).isEqualTo(Paths.get("valid/report"))
+                }
 
-            it("fails when the path is malformed") {
-                assertThatIllegalArgumentException()
-                        .isThrownBy { ReportPath.from("test:a*a") }
-            }
-        }
-    } else {
-        given("a POSIX path") {
-            it("parses a valid absolute path correctly") {
-                val reportPath = ReportPath.from("test:/tmp/valid/report")
+                it("fails when the path is empty") {
+                    assertThatIllegalArgumentException()
+                            .isThrownBy { ReportPath.from("test:") }
+                }
 
-                assertThat(reportPath.path).isEqualTo(Paths.get("/tmp/valid/report"))
-            }
-
-            it("parses a valid relative path correctly") {
-                val reportPath = ReportPath.from("test:valid/report")
-
-                assertThat(reportPath.path).isEqualTo(Paths.get("valid/report"))
-            }
-
-            it("fails when the path is empty") {
-                assertThatIllegalArgumentException()
-                        .isThrownBy { ReportPath.from("test:") }
-            }
-
-            it("fails when the path is malformed") {
-                assertThatIllegalArgumentException()
-                        .isThrownBy { ReportPath.from("test:a${0.toChar()}a") }
+                it("fails when the path is malformed") {
+                    assertThatIllegalArgumentException()
+                            .isThrownBy { ReportPath.from("test:a${0.toChar()}a") }
+                }
             }
         }
     }
 
-    given("a kind") {
+    describe("`kind` processing") {
         it("parses and maps the txt kind correctly") {
             val reportPath = ReportPath.from("txt:/tmp/valid/report")
 

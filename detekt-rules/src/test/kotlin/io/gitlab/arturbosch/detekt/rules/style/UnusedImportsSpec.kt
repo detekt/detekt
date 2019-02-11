@@ -3,9 +3,8 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
 /**
  * @author Shyiko
@@ -13,10 +12,10 @@ import org.jetbrains.spek.subject.SubjectSpek
  * @author Mauin
  * @author schalkms
  */
-class UnusedImportsSpec : SubjectSpek<UnusedImports>({
-    subject { UnusedImports(Config.empty) }
+class UnusedImportsSpec : Spek({
+    val subject by memoized { UnusedImports(Config.empty) }
 
-    given("some import statements") {
+    describe("UnusedImports rule") {
 
         it("does not report infix operators") {
             assertThat(subject.lint("""
@@ -145,11 +144,8 @@ class UnusedImportsSpec : SubjectSpek<UnusedImports>({
                 assertThat(this).isEmpty()
             }
         }
-    }
 
-    given("some import statements referenced by KDoc @see") {
-
-        it("does not report see annotation linking to class") {
+        it("does not report KDoc @see annotation linking to class") {
             val code = """
 				import tasks.success
 
@@ -162,7 +158,7 @@ class UnusedImportsSpec : SubjectSpek<UnusedImports>({
             assertThat(subject.lint(code)).isEmpty()
         }
 
-        it("does not report see annotation linking to class with description") {
+        it("does not report KDoc @see annotation linking to class with description") {
             val code = """
 				import tasks.success
 
@@ -175,7 +171,7 @@ class UnusedImportsSpec : SubjectSpek<UnusedImports>({
             assertThat(subject.lint(code)).isEmpty()
         }
 
-        it("reports see annotation that does not link to class") {
+        it("reports KDoc @see annotation that does not link to class") {
             val code = """
 				import tasks.success
 
@@ -188,7 +184,7 @@ class UnusedImportsSpec : SubjectSpek<UnusedImports>({
             assertThat(subject.lint(code)).hasSize(1)
         }
 
-        it("reports see annotation that links after description") {
+        it("reports KDoc @see annotation that links after description") {
             val code = """
 				import tasks.success
 
@@ -200,9 +196,6 @@ class UnusedImportsSpec : SubjectSpek<UnusedImports>({
 
             assertThat(subject.lint(code)).hasSize(1)
         }
-    }
-
-    given("some import statements with KDoc") {
 
         it("does not report imports in KDoc") {
             val code = """
@@ -218,11 +211,8 @@ class UnusedImportsSpec : SubjectSpek<UnusedImports>({
 
             assertThat(subject.lint(code)).isEmpty()
         }
-    }
 
-    given("imports with aliases") {
-
-        it("should not report import as unused because the alias is used") {
+        it("should not report import alias as unused when the alias is used") {
             val code = """
 				import test.forEach as foreach
 				fun foo() = listOf().iterator().foreach {}

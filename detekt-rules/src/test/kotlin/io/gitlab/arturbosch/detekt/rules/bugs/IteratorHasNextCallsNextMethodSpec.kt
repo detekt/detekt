@@ -3,14 +3,13 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-class IteratorHasNextCallsNextMethodSpec : SubjectSpek<IteratorHasNextCallsNextMethod>({
-    subject { IteratorHasNextCallsNextMethod() }
+class IteratorHasNextCallsNextMethodSpec : Spek({
+    val subject by memoized { IteratorHasNextCallsNextMethod() }
 
-    given("some iterator classes with a hasNext() method which calls next() method") {
+    describe("IteratorHasNextCallsNextMethod rule") {
 
         it("reports wrong iterator implementation") {
             val path = Case.IteratorImplPositive.path()

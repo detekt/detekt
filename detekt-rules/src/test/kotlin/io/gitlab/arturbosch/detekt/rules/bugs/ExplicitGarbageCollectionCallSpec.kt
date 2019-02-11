@@ -3,14 +3,13 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-class ExplicitGarbageCollectionCallSpec : SubjectSpek<ExplicitGarbageCollectionCall>({
-    subject { ExplicitGarbageCollectionCall(Config.empty) }
+class ExplicitGarbageCollectionCallSpec : Spek({
+    val subject by memoized { ExplicitGarbageCollectionCall(Config.empty) }
 
-    given("several garbage collector calls") {
+    describe("ExplicitGarbageCollectionCall rule") {
 
         it("reports garbage collector calls") {
             val code = """

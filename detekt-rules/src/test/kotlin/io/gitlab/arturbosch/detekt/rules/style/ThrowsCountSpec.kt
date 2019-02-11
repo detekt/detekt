@@ -4,14 +4,12 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-class ThrowsCountSpec : SubjectSpek<ThrowsCount>({
-    subject { ThrowsCount(Config.empty) }
+class ThrowsCountSpec : Spek({
 
-    given("several methods which throw exceptions") {
+    describe("ThrowsCount rule") {
 
         val code = """
 			fun f1(x: Int) {
@@ -38,15 +36,21 @@ class ThrowsCountSpec : SubjectSpek<ThrowsCount>({
 			}
 		"""
 
-        it("reports violation by default") {
-            val findings = subject.lint(code)
-            assertThat(findings).hasSize(1)
+        context("default config") {
+            val subject = ThrowsCount(Config.empty)
+
+            it("reports violation by default") {
+                assertThat(subject.lint(code)).hasSize(1)
+            }
         }
 
-        it("does not report for configuration max parameter") {
+        context("max count == 3") {
             val config = TestConfig(mapOf(ThrowsCount.MAX to "3"))
             val subject = ThrowsCount(config)
-            assertThat(subject.lint(code)).hasSize(0)
+
+            it("does not report for configuration max parameter") {
+                assertThat(subject.lint(code)).hasSize(0)
+            }
         }
     }
 })

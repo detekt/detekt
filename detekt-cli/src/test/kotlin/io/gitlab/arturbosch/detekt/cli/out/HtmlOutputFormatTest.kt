@@ -11,54 +11,56 @@ import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.cli.TestDetektion
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.Spek
-import org.jetbrains.spek.api.dsl.it
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
 class HtmlOutputFormatTest : Spek({
 
-    val outputFormat = HtmlOutputReport()
+    describe("HTML output format") {
+        val outputFormat = HtmlOutputReport()
 
-    it("testRenderResultLooksLikeHtml") {
-        val result = outputFormat.render(TestDetektion())
+        it("testRenderResultLooksLikeHtml") {
+            val result = outputFormat.render(TestDetektion())
 
-        assertThat(result).startsWith("<!DOCTYPE html>\n<html lang=\"en\">")
-        assertThat(result).endsWith("</html>\n")
+            assertThat(result).startsWith("<!DOCTYPE html>\n<html lang=\"en\">")
+            assertThat(result).endsWith("</html>\n")
 
-        assertThat(result).contains("<h1>detekt report</h1>")
-        assertThat(result).contains("<h2>Metrics</h2>")
-        assertThat(result).contains("<h2>Findings</h2>")
-    }
+            assertThat(result).contains("<h1>detekt report</h1>")
+            assertThat(result).contains("<h2>Metrics</h2>")
+            assertThat(result).contains("<h2>Findings</h2>")
+        }
 
-    it("testRenderResultContainsFileLocations") {
-        val result = outputFormat.render(createTestDetektionWithMultipleSmells())
+        it("testRenderResultContainsFileLocations") {
+            val result = outputFormat.render(createTestDetektionWithMultipleSmells())
 
-        assertThat(result).contains("<span class=\"location\">\nsrc/main/com/sample/Sample1.kt:11:1\n</span>")
-        assertThat(result).contains("<span class=\"location\">\nsrc/main/com/sample/Sample2.kt:22:2\n</span>")
-        assertThat(result).contains("<span class=\"location\">\nsrc/main/com/sample/Sample3.kt:33:3\n</span>")
-    }
+            assertThat(result).contains("<span class=\"location\">\nsrc/main/com/sample/Sample1.kt:11:1\n</span>")
+            assertThat(result).contains("<span class=\"location\">\nsrc/main/com/sample/Sample2.kt:22:2\n</span>")
+            assertThat(result).contains("<span class=\"location\">\nsrc/main/com/sample/Sample3.kt:33:3\n</span>")
+        }
 
-    it("testRenderResultContainsRules") {
-        val result = outputFormat.render(createTestDetektionWithMultipleSmells())
+        it("testRenderResultContainsRules") {
+            val result = outputFormat.render(createTestDetektionWithMultipleSmells())
 
-        assertThat(result).contains("<span class=\"rule\">\nid_a\n</span>")
-        assertThat(result).contains("<span class=\"rule\">\nid_a\n</span>")
-        assertThat(result).contains("<span class=\"rule\">\nid_a\n</span>")
-    }
+            assertThat(result).contains("<span class=\"rule\">\nid_a\n</span>")
+            assertThat(result).contains("<span class=\"rule\">\nid_a\n</span>")
+            assertThat(result).contains("<span class=\"rule\">\nid_a\n</span>")
+        }
 
-    it("testRenderResultContainsMessages") {
-        val result = outputFormat.render(createTestDetektionWithMultipleSmells())
+        it("testRenderResultContainsMessages") {
+            val result = outputFormat.render(createTestDetektionWithMultipleSmells())
 
-        assertThat(result).contains("<span class=\"message\">\nB1\n</span>")
-        assertThat(result).contains("<span class=\"message\">\nB2\n</span>")
-        assertThat(result).contains("<span class=\"message\">\nB3\n</span>")
-    }
+            assertThat(result).contains("<span class=\"message\">\nB1\n</span>")
+            assertThat(result).contains("<span class=\"message\">\nB2\n</span>")
+            assertThat(result).contains("<span class=\"message\">\nB3\n</span>")
+        }
 
-    it("testRenderResultContainsDescriptions") {
-        val result = outputFormat.render(createTestDetektionWithMultipleSmells())
+        it("testRenderResultContainsDescriptions") {
+            val result = outputFormat.render(createTestDetektionWithMultipleSmells())
 
-        assertThat(result).contains("<span class=\"description\">\nA1\n</span>")
-        assertThat(result).contains("<span class=\"description\">\nA2\n</span>")
-        assertThat(result).contains("<span class=\"description\">\nA3\n</span>")
+            assertThat(result).contains("<span class=\"description\">\nA1\n</span>")
+            assertThat(result).contains("<span class=\"description\">\nA2\n</span>")
+            assertThat(result).contains("<span class=\"description\">\nA3\n</span>")
+        }
     }
 })
 

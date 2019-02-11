@@ -2,12 +2,11 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
-import org.jetbrains.spek.api.dsl.describe
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-class RedundantVisibilityModifierRuleSpec : SubjectSpek<RedundantVisibilityModifierRule>({
-    subject { RedundantVisibilityModifierRule() }
+class RedundantVisibilityModifierRuleSpec : Spek({
+    val subject by memoized { RedundantVisibilityModifierRule() }
     describe("check all cases") {
         it("check overridden function of abstract class w/ public modifier") {
             val code = """

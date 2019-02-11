@@ -4,16 +4,15 @@ import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.dsl.describe
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
 /**
  * @author Artur Bosch
  */
-class NestedBlockDepthSpec : SubjectSpek<NestedBlockDepth>({
+class NestedBlockDepthSpec : Spek({
 
-    subject { NestedBlockDepth(threshold = 4) }
+    val subject by memoized { NestedBlockDepth(threshold = 4) }
 
     describe("nested classes are also considered") {
         it("should detect only the nested large class") {

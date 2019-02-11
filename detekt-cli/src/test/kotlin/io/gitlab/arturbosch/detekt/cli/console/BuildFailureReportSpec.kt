@@ -8,16 +8,15 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.assertj.core.api.Assertions.fail
-import org.jetbrains.spek.api.dsl.describe
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
 /**
  * @author Artur Bosch
  */
-internal class BuildFailureReportSpec : SubjectSpek<BuildFailureReport>({
+internal class BuildFailureReportSpec : Spek({
 
-    subject { BuildFailureReport() }
+    val subject by memoized { BuildFailureReport() }
 
     describe("build failure threshold is configurable by configuration") {
 

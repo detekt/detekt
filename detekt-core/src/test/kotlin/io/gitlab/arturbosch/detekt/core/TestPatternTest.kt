@@ -1,19 +1,18 @@
 package io.gitlab.arturbosch.detekt.core
 
 import io.gitlab.arturbosch.detekt.test.yamlConfig
+import org.assertj.core.api.Assertions.assertThat
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 import java.nio.file.Path
 import java.nio.file.Paths
-import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.Spek
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
 
 /**
  * @author Artur Bosch
  */
 class TestPatternTest : Spek({
 
-    given("a test pattern for paths") {
+    describe("a test pattern for paths") {
 
         fun splitSources(pattern: TestPattern, path: Path): Pair<List<Path>, List<Path>> =
                 listOf(path).partition { pattern.matches(it.toString()) }
