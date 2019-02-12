@@ -75,7 +75,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("should not be reported if acceptableDecimalLength is 4") {
+        it("should be reported if acceptableDecimalLength is 4") {
             val findings = UnderscoresInNumericLiterals(
                     TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "4"))
             ).lint(ktFile)
