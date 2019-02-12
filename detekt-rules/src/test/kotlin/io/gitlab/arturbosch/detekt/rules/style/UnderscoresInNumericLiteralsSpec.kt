@@ -13,16 +13,16 @@ class UnderscoresInNumericLiteralsSpec : Spek({
     given("an Int of 1000") {
         val ktFile = compileContentForTest("val myInt = 1000")
 
-        it("should be reported by default") {
+        it("should not be reported by default") {
             val findings = UnderscoresInNumericLiterals().lint(ktFile)
-            assertThat(findings).isNotEmpty
+            assertThat(findings).isEmpty()
         }
 
-        it("should not be reported if acceptableDecimalLength is 5") {
+        it("should be reported if acceptableDecimalLength is 4") {
             val findings = UnderscoresInNumericLiterals(
-                    TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "5"))
+                    TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "4"))
             ).lint(ktFile)
-            assertThat(findings).isEmpty()
+            assertThat(findings).isNotEmpty
         }
     }
 
@@ -54,36 +54,36 @@ class UnderscoresInNumericLiteralsSpec : Spek({
     given("a Float of 1000f") {
         val ktFile = compileContentForTest("val myFloat = 1000f")
 
-        it("should be reported by default") {
+        it("should not be reported by default") {
             val findings = UnderscoresInNumericLiterals().lint(ktFile)
-            assertThat(findings).isNotEmpty
+            assertThat(findings).isEmpty()
         }
 
-        it("should not be reported if acceptableDecimalLength is 5") {
+        it("should be reported if acceptableDecimalLength is 4") {
             val findings = UnderscoresInNumericLiterals(
-                    TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "5"))
+                    TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "4"))
             ).lint(ktFile)
-            assertThat(findings).isEmpty()
+            assertThat(findings).isNotEmpty
         }
     }
 
     given("a Float of -1000f") {
         val ktFile = compileContentForTest("val myFloat = -1000f")
 
-        it("should be reported by default") {
+        it("should not be reported by default") {
             val findings = UnderscoresInNumericLiterals().lint(ktFile)
-            assertThat(findings).isNotEmpty
+            assertThat(findings).isEmpty()
         }
 
-        it("should not be reported if acceptableDecimalLength is 5") {
+        it("should not be reported if acceptableDecimalLength is 4") {
             val findings = UnderscoresInNumericLiterals(
-                    TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "5"))
+                    TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "4"))
             ).lint(ktFile)
-            assertThat(findings).isEmpty()
+            assertThat(findings).isNotEmpty
         }
     }
 
-    given("a Float of -1_000f") {
+    given("a constant Float of -1_000f") {
         val ktFile = compileContentForTest("const val myFloat = -1_000f")
 
         it("should not be reported") {
@@ -120,8 +120,15 @@ class UnderscoresInNumericLiteralsSpec : Spek({
     given("a function with default Int parameter value 1000") {
         val ktFile = compileContentForTest("fun testFunction(testParam: Int = 1000) {}")
 
-        it("should be reported by default") {
+        it("should not be reported by default") {
             val findings = UnderscoresInNumericLiterals().lint(ktFile)
+            assertThat(findings).isEmpty()
+        }
+
+        it("should be reported if acceptableDecimalLength is 4") {
+            val findings = UnderscoresInNumericLiterals(
+                    TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "4"))
+            ).lint(ktFile)
             assertThat(findings).isNotEmpty
         }
     }
@@ -205,6 +212,22 @@ class UnderscoresInNumericLiteralsSpec : Spek({
         it("should not be reported") {
             val findings = UnderscoresInNumericLiterals().lint(ktFile)
             assertThat(findings).isNotEmpty
+        }
+    }
+
+    given("an Int of 10000") {
+        val ktFile = compileContentForTest("val myInt = 10000")
+
+        it("should be reported by default") {
+            val findings = UnderscoresInNumericLiterals().lint(ktFile)
+            assertThat(findings).isNotEmpty
+        }
+
+        it("should not be reported if acceptableDecimalLength is 6") {
+            val findings = UnderscoresInNumericLiterals(
+                    TestConfig(mapOf(UnderscoresInNumericLiterals.ACCEPTABLE_DECIMAL_LENGTH to "6"))
+            ).lint(ktFile)
+            assertThat(findings).isEmpty()
         }
     }
 })

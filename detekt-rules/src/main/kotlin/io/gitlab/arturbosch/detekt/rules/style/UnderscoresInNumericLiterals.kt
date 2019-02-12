@@ -15,8 +15,9 @@ import org.jetbrains.kotlin.psi.KtProperty
 
 /**
  * This rule detects and reports decimal base 10 numeric literals above a certain length that should be underscore
- * separated for readability. For [Serializable] classes or objects, the field [serialVersionUID] is explicitly
- * ignored.
+ * separated for readability. Underscores that do not make groups of 3 digits are also reported even if their length is
+ * under the `acceptableDecimalLength`. For `Serializable` classes or objects, the field `serialVersionUID` is
+ * explicitly ignored.
  *
  * <noncompliant>
  * object Money {
@@ -31,7 +32,7 @@ import org.jetbrains.kotlin.psi.KtProperty
  * </compliant>
  *
  * @configuration acceptableDecimalLength - Length under which decimal base 10 literals are not required to have
- * underscores (default: 4)
+ * underscores (default: 5)
  *
  * @author Tyler Wong
  */
@@ -98,6 +99,6 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
         private const val BIN_PREFIX = "0b"
         private const val SERIALIZABLE = "Serializable"
         private const val SERIAL_UID_PROPERTY_NAME = "serialVersionUID"
-        private const val DEFAULT_ACCEPTABLE_DECIMAL_LENGTH = 4
+        private const val DEFAULT_ACCEPTABLE_DECIMAL_LENGTH = 5
     }
 }

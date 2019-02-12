@@ -884,8 +884,9 @@ This rule reports lines that end with a whitespace.
 ### UnderscoresInNumericLiterals
 
 This rule detects and reports decimal base 10 numeric literals above a certain length that should be underscore
-separated for readability. For [Serializable] classes or objects, the field [serialVersionUID] is explicitly
-ignored.
+separated for readability. Underscores that do not make groups of 3 digits are also reported even if their length is
+under the `acceptableDecimalLength`. For `Serializable` classes or objects, the field `serialVersionUID` is
+explicitly ignored.
 
 **Severity**: Style
 
@@ -893,7 +894,7 @@ ignored.
 
 #### Configuration options:
 
-* `acceptableDecimalLength` (default: `4`)
+* `acceptableDecimalLength` (default: `5`)
 
    Length under which decimal base 10 literals are not required to have
 underscores
