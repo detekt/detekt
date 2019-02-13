@@ -214,7 +214,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
         }
     }
 
-    given("an Int of 10000") {
+    describe("an Int of 10000") {
         val ktFile = compileContentForTest("val myInt = 10000")
 
         it("should be reported by default") {
