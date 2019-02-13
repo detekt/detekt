@@ -1,5 +1,4 @@
 autoCorrect: true
-failFast: false
 
 test-pattern: # Configure exclusions for test sources
   active: true
