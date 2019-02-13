@@ -2,16 +2,15 @@ package io.gitlab.arturbosch.detekt.rules.performance
 
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.dsl.describe
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
 /**
  * @author Ivan Balaksha
  * @author schalkms
  */
-class SpreadOperatorSpec : SubjectSpek<SpreadOperator>({
-    subject { SpreadOperator() }
+class SpreadOperatorSpec : Spek({
+    val subject by memoized { SpreadOperator() }
 
     describe("test vararg cases") {
         it("as vararg") {

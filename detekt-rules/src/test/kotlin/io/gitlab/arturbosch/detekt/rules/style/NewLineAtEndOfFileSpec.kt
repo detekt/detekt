@@ -3,27 +3,23 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-class NewLineAtEndOfFileSpec : SubjectSpek<NewLineAtEndOfFile>({
-    subject { NewLineAtEndOfFile() }
+class NewLineAtEndOfFileSpec : Spek({
+    val subject by memoized { NewLineAtEndOfFile() }
 
-    given("a kt file containing new space at end") {
-        it("should not flag it") {
+    describe("NewLineAtEndOfFile rule") {
+
+        it("should not flag a kt file containing new space at end") {
             assertThat(subject.lint(Case.NewLineAtEndOfFile.path())).hasSize(0)
         }
-    }
 
-    given("a kt file not containing new space at end") {
-        it("should flag it") {
+        it("should flag a kt file not containing new space at end") {
             assertThat(subject.lint("class Test")).hasSize(1)
         }
-    }
 
-    given("an empty kt file") {
-        it("should not flag it") {
+        it("should not flag an empty kt file") {
             assertThat(subject.lint(Case.EmptyKtFile.path())).hasSize(0)
         }
     }

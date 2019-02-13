@@ -24,9 +24,9 @@ tasks.withType<Wrapper> {
     distributionType = Wrapper.DistributionType.ALL
     doLast {
         /*
-		 * Copy the properties file into the detekt-gradle-plugin project.
-		 * This allows IDEs like IntelliJ to import the detekt-gradle-plugin as a standalone project.
-		 */
+         * Copy the properties file into the detekt-gradle-plugin project.
+         * This allows IDEs like IntelliJ to import the detekt-gradle-plugin as a standalone project.
+         */
         val gradlePluginWrapperDir = File(gradle.includedBuild("detekt-gradle-plugin").projectDir, "/gradle/wrapper")
         GFileUtils.mkdirs(gradlePluginWrapperDir)
         copy {
@@ -56,7 +56,6 @@ allprojects {
     repositories {
         mavenLocal()
         jcenter()
-        maven(url = "http://dl.bintray.com/jetbrains/spek")
         maven(url = "https://dl.bintray.com/arturbosch/generic")
     }
 }
@@ -257,8 +256,7 @@ subprojects {
         detektPlugins(project(":detekt-formatting"))
 
         kotlinTest("org.assertj:assertj-core:$assertjVersion")
-        kotlinTest("org.jetbrains.spek:spek-api:$spekVersion")
-        kotlinTest("org.jetbrains.spek:spek-subject-extension:$spekVersion")
+        kotlinTest("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
     }
 
     sourceSets["main"].java.srcDirs("src/main/kotlin")

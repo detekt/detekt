@@ -2,15 +2,14 @@ package io.gitlab.arturbosch.detekt.api.internal
 
 import io.gitlab.arturbosch.detekt.test.KtTestCompiler
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.Spek
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
 private const val FUN_MCC = 1
 
 class McCabeVisitorSpec : Spek({
 
-    given("ignoreSimpleWhenEntries is false") {
+    describe("ignoreSimpleWhenEntries is false") {
 
         it("counts simple when branches as 1") {
             val code = """
@@ -49,7 +48,7 @@ class McCabeVisitorSpec : Spek({
         }
     }
 
-    given("ignoreSimpleWhenEntries is true") {
+    describe("ignoreSimpleWhenEntries is true") {
 
         it("counts a when with only simple branches as 1") {
             val code = """

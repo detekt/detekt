@@ -7,13 +7,11 @@ import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.test.loadRuleSet
 import io.gitlab.arturbosch.detekt.test.resource
 import io.gitlab.arturbosch.detekt.test.yamlConfig
-import java.nio.file.Paths
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.spek.api.Spek
-import org.jetbrains.spek.api.dsl.describe
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
+import java.nio.file.Paths
 
 /**
  * @author Artur Bosch
@@ -22,7 +20,7 @@ class AutoCorrectLevelSpec : Spek({
 
     describe("test different autoCorrect levels in configuration") {
 
-        given("autoCorrect: true on all levels") {
+        describe("autoCorrect: true on all levels") {
 
             val config = yamlConfig("/autocorrect/autocorrect-all-true.yml")
 
@@ -33,7 +31,7 @@ class AutoCorrectLevelSpec : Spek({
             }
         }
 
-        given("autoCorrect: false on top level") {
+        describe("autoCorrect: false on top level") {
 
             val config = yamlConfig("/autocorrect/autocorrect-toplevel-false.yml")
 
@@ -51,7 +49,7 @@ class AutoCorrectLevelSpec : Spek({
             }
         }
 
-        given("autoCorrect: false on ruleSet level") {
+        describe("autoCorrect: false on ruleSet level") {
 
             val config = yamlConfig("/autocorrect/autocorrect-ruleset-false.yml")
 
@@ -62,7 +60,7 @@ class AutoCorrectLevelSpec : Spek({
             }
         }
 
-        given("autoCorrect: false on rule level") {
+        describe("autoCorrect: false on rule level") {
 
             val config = yamlConfig("/autocorrect/autocorrect-rule-false.yml")
 
@@ -73,7 +71,7 @@ class AutoCorrectLevelSpec : Spek({
             }
         }
 
-        given("autoCorrect: true but rule active false") {
+        describe("autoCorrect: true but rule active false") {
 
             val config = yamlConfig("/autocorrect/autocorrect-true-rule-active-false.yml")
 

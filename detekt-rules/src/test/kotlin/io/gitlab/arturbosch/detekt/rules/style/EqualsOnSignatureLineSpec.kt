@@ -3,16 +3,15 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-class EqualsOnSignatureLineSpec : SubjectSpek<EqualsOnSignatureLine>({
-    subject { EqualsOnSignatureLine(Config.empty) }
+class EqualsOnSignatureLineSpec : Spek({
+    val subject by memoized { EqualsOnSignatureLine(Config.empty) }
 
-    given("a function") {
+    describe("EqualsOnSignatureLine rule") {
 
-        given("with expression syntax and without a return type") {
+        context("with expression syntax and without a return type") {
             it("reports when the equals is on a new line") {
                 val findings = subject.lint("""
 				fun foo()
@@ -32,7 +31,7 @@ class EqualsOnSignatureLineSpec : SubjectSpek<EqualsOnSignatureLine>({
             }
         }
 
-        given("with expression syntax and with a return type") {
+        context("with expression syntax and with a return type") {
             it("reports when the equals is on a new line") {
                 val findings = subject.lint("""
 				fun one(): Int
@@ -86,7 +85,7 @@ class EqualsOnSignatureLineSpec : SubjectSpek<EqualsOnSignatureLine>({
             }
         }
 
-        given("with expression syntax and with a where clause") {
+        context("with expression syntax and with a where clause") {
             it("reports when the equals is on a new line") {
                 val findings = subject.lint("""
 				fun <V> one(): Int where V : Number

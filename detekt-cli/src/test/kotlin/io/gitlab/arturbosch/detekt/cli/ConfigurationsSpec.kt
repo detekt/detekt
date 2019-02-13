@@ -7,20 +7,22 @@ import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
-import org.jetbrains.spek.api.Spek
-import org.jetbrains.spek.api.dsl.describe
-import org.jetbrains.spek.api.dsl.it
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
 /**
  * @author Artur Bosch
  */
 internal class ConfigurationsSpec : Spek({
 
-    it("should be an empty config") {
-        val config = CliArgs().loadConfiguration()
-        assertThat(config.valueOrDefault("one", -1)).isEqualTo(-1)
-        assertThat(config.valueOrDefault("two", -1)).isEqualTo(-1)
-        assertThat(config.valueOrDefault("three", -1)).isEqualTo(-1)
+    describe("a configuration") {
+
+        it("should be an empty config") {
+            val config = CliArgs().loadConfiguration()
+            assertThat(config.valueOrDefault("one", -1)).isEqualTo(-1)
+            assertThat(config.valueOrDefault("two", -1)).isEqualTo(-1)
+            assertThat(config.valueOrDefault("three", -1)).isEqualTo(-1)
+        }
     }
 
     describe("parse different path based configuration settings") {

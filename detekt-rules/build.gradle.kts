@@ -12,6 +12,7 @@ dependencies {
 
     testImplementation("org.reflections:reflections:$reflectionsVersion")
     testImplementation(project(":detekt-test"))
+    testImplementation(kotlin("reflect"))
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
-    testRuntimeOnly("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
+    testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spekVersion")
 }

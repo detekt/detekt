@@ -3,13 +3,12 @@ package io.gitlab.arturbosch.detekt.rules.naming
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.Spek
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
 class ForbiddenNameSpec : Spek({
 
-    given("forbidden naming rules") {
+    describe("ForbiddenClassName rule") {
         it("should report classes with forbidden names") {
             val code = """
 				class TestManager {} // violation

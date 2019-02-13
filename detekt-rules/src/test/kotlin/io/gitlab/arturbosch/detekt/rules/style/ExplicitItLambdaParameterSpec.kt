@@ -3,16 +3,14 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.api.dsl.on
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-class ExplicitItLambdaParameterSpec : SubjectSpek<ExplicitItLambdaParameter>({
-    subject { ExplicitItLambdaParameter(Config.empty) }
+class ExplicitItLambdaParameterSpec : Spek({
+    val subject by memoized { ExplicitItLambdaParameter(Config.empty) }
 
-    given("lambda with single parameter") {
-        on("single parameter with name `it` declared explicitly") {
+    describe("ExplicitItLambdaParameter rule") {
+        context("single parameter lambda with name `it` declared explicitly") {
             it("reports when parameter type is not declared") {
                 val findings = subject.lint("""
 				fun f() {
@@ -28,7 +26,7 @@ class ExplicitItLambdaParameterSpec : SubjectSpek<ExplicitItLambdaParameter>({
                 assertThat(findings).hasSize(1)
             }
         }
-        on("no parameter declared explicitly") {
+        context("no parameter declared explicitly") {
             it("does not report implicit `it` parameter usage") {
                 val findings = subject.lint("""
 				fun f() {
@@ -39,9 +37,8 @@ class ExplicitItLambdaParameterSpec : SubjectSpek<ExplicitItLambdaParameter>({
                 assertThat(findings).isEmpty()
             }
         }
-    }
-    given("some code using lambdas with (slightly) better style guidelines") {
-        on("multiple parameters one of which with name `it` declared explicitly") {
+
+        context("multiple parameters one of which with name `it` declared explicitly") {
             it("reports when parameter types are not declared") {
                 val findings = subject.lint("""
 				fun f() {

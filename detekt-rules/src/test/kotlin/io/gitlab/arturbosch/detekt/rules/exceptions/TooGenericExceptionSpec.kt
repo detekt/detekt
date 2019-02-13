@@ -6,18 +6,21 @@ import io.gitlab.arturbosch.detekt.rules.providers.ExceptionsProvider
 import io.gitlab.arturbosch.detekt.test.compileForTest
 import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.Spek
-import org.jetbrains.spek.api.dsl.it
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
 class TooGenericExceptionSpec : Spek({
 
-    it("should not report any as all catch exception rules are deactivated") {
-        val config = YamlConfig.loadResource(resource("deactivated-exceptions.yml").toURL())
-        val ruleSet = ExceptionsProvider().buildRuleset(config)
-        val file = compileForTest(Case.TooGenericExceptions.path())
+    describe("TooGenericException rule") {
 
-        val findings = ruleSet?.accept(file)
+        it("should not report any as all catch exception rules are deactivated") {
+            val config = YamlConfig.loadResource(resource("deactivated-exceptions.yml").toURL())
+            val ruleSet = ExceptionsProvider().buildRuleset(config)
+            val file = compileForTest(Case.TooGenericExceptions.path())
 
-        assertThat(findings).hasSize(0)
+            val findings = ruleSet?.accept(file)
+
+            assertThat(findings).hasSize(0)
+        }
     }
 })

@@ -2,15 +2,16 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-class ThrowingNewInstanceOfSameExceptionSpec : SubjectSpek<ThrowingNewInstanceOfSameException>({
-    subject { ThrowingNewInstanceOfSameException() }
+class ThrowingNewInstanceOfSameExceptionSpec : Spek({
+    val subject by memoized { ThrowingNewInstanceOfSameException() }
 
-    given("a catch block which rethrows a new instance of the caught exception") {
-        val code = """
+    describe("ThrowingNewInstanceOfSameException rule") {
+
+        context("a catch block which rethrows a new instance of the caught exception") {
+            val code = """
 			fun x() {
 				try {
 				} catch (e: IllegalStateException) {
@@ -19,14 +20,14 @@ class ThrowingNewInstanceOfSameExceptionSpec : SubjectSpek<ThrowingNewInstanceOf
 			}
 		"""
 
-        it("should report") {
-            val findings = subject.lint(code)
-            Assertions.assertThat(findings).hasSize(1)
+            it("should report") {
+                val findings = subject.lint(code)
+                Assertions.assertThat(findings).hasSize(1)
+            }
         }
-    }
 
-    given("a catch block which rethrows a new instance of another exception") {
-        val code = """
+        context("a catch block which rethrows a new instance of another exception") {
+            val code = """
 			fun x() {
 				try {
 				} catch (e: IllegalStateException) {
@@ -35,14 +36,14 @@ class ThrowingNewInstanceOfSameExceptionSpec : SubjectSpek<ThrowingNewInstanceOf
 			}
 		"""
 
-        it("should not report") {
-            val findings = subject.lint(code)
-            Assertions.assertThat(findings).hasSize(0)
+            it("should not report") {
+                val findings = subject.lint(code)
+                Assertions.assertThat(findings).hasSize(0)
+            }
         }
-    }
 
-    given("a catch block which throws a new instance of the same exception type without wrapping the caught exception") {
-        val code = """
+        context("a catch block which throws a new instance of the same exception type without wrapping the caught exception") {
+            val code = """
 			fun x() {
 				try {
 				} catch (e: IllegalStateException) {
@@ -51,9 +52,10 @@ class ThrowingNewInstanceOfSameExceptionSpec : SubjectSpek<ThrowingNewInstanceOf
 			}
 		"""
 
-        it("should not report") {
-            val findings = subject.lint(code)
-            Assertions.assertThat(findings).hasSize(0)
+            it("should not report") {
+                val findings = subject.lint(code)
+                Assertions.assertThat(findings).hasSize(0)
+            }
         }
     }
 })

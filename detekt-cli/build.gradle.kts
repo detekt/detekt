@@ -21,7 +21,7 @@ dependencies {
     testImplementation(project(":detekt-rules"))
     testImplementation("org.reflections:reflections:$reflectionsVersion")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
-    testRuntimeOnly("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
+    testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spekVersion")
 }
 
 tasks["test"].dependsOn(":detekt-generator:generateDocumentation")

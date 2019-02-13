@@ -9,32 +9,32 @@ import io.gitlab.arturbosch.detekt.core.processors.linesKey
 import io.gitlab.arturbosch.detekt.core.processors.logicalLinesKey
 import io.gitlab.arturbosch.detekt.core.processors.sourceLinesKey
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-internal class ComplexityReportSpec : SubjectSpek<ComplexityReport>({
+internal class ComplexityReportSpec : Spek({
 
-    subject { ComplexityReport() }
+    describe("complexity report") {
 
-    given("several complexity metrics") {
+        context("several complexity metrics") {
 
-        it("successfully generates a complexity report") {
-            val expectedContent = readResource("complexity-report.txt")
-            val detektion = createDetektion()
-            addData(detektion)
-            assertThat(generateComplexityReport(detektion)).isEqualTo(expectedContent)
-        }
+            it("successfully generates a complexity report") {
+                val expectedContent = readResource("complexity-report.txt")
+                val detektion = createDetektion()
+                addData(detektion)
+                assertThat(generateComplexityReport(detektion)).isEqualTo(expectedContent)
+            }
 
-        it("returns null for missing complexity metrics") {
-            val detektion = createDetektion()
-            assertThat(generateComplexityReport(detektion)).isNull()
-        }
+            it("returns null for missing complexity metrics") {
+                val detektion = createDetektion()
+                assertThat(generateComplexityReport(detektion)).isNull()
+            }
 
-        it("returns null for missing complexity metrics in report") {
-            val report = ComplexityReport()
-            val detektion = createDetektion()
-            assertThat(report.render(detektion)).isNull()
+            it("returns null for missing complexity metrics in report") {
+                val report = ComplexityReport()
+                val detektion = createDetektion()
+                assertThat(report.render(detektion)).isNull()
+            }
         }
     }
 })

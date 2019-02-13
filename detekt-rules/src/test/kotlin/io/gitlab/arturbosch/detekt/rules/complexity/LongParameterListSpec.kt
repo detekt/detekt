@@ -3,18 +3,17 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
 /**
  * @author Artur Bosch
  */
-class LongParameterListSpec : SubjectSpek<LongParameterList>({
+class LongParameterListSpec : Spek({
 
-    subject { LongParameterList() }
+    val subject by memoized { LongParameterList() }
 
-    given("function with parameters") {
+    describe("LongParameterList rule") {
 
         it("reports too long parameter list") {
             val code = "fun long(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int) {}"

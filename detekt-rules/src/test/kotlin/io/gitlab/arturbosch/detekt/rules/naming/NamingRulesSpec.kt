@@ -4,15 +4,14 @@ import io.gitlab.arturbosch.detekt.test.TEST_FILENAME
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
-import org.jetbrains.spek.api.dsl.describe
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-class NamingRulesSpec : SubjectSpek<NamingRules>({
+class NamingRulesSpec : Spek({
 
     val fileName = TEST_FILENAME
 
-    subject { NamingRules() }
+    val subject by memoized { NamingRules() }
 
     describe("properties in classes") {
 

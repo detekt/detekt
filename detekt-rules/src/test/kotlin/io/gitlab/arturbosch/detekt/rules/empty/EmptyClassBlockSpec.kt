@@ -3,26 +3,22 @@ package io.gitlab.arturbosch.detekt.rules.empty
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
 /**
  * @author Egor Neliuba
  */
-class EmptyClassBlockSpec : SubjectSpek<EmptyClassBlock>({
+class EmptyClassBlockSpec : Spek({
 
-    subject { EmptyClassBlock(Config.empty) }
+    val subject by memoized { EmptyClassBlock(Config.empty) }
 
-    given("a class with an empty body") {
+    describe("EmptyClassBlock rule") {
 
         it("flags the empty body") {
             val findings = subject.lint("class SomeClass {}")
             assertThat(findings).hasSize(1)
         }
-    }
-
-    given("an object with an empty body") {
 
         it("flags the object if it is of a non-anonymous class") {
             val findings = subject.lint("object SomeObject {}")

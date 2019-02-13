@@ -4,13 +4,12 @@ import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.lint
-import org.jetbrains.spek.api.Spek
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
 class UnderscoresInNumericLiteralsSpec : Spek({
 
-    given("an Int of 1000") {
+    describe("an Int of 1000") {
         val ktFile = compileContentForTest("val myInt = 1000")
 
         it("should not be reported by default") {
@@ -26,7 +25,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
         }
     }
 
-    given("an Int of 1_000_000") {
+    describe("an Int of 1_000_000") {
         val ktFile = compileContentForTest("val myInt = 1_000_000")
 
         it("should not be reported") {
@@ -35,7 +34,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
         }
     }
 
-    given("a const Int of 1000000") {
+    describe("a const Int of 1000000") {
         val ktFile = compileContentForTest("const val myInt = 1000000")
 
         it("should be reported by default") {
@@ -51,7 +50,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
         }
     }
 
-    given("a Float of 1000f") {
+    describe("a Float of 1000f") {
         val ktFile = compileContentForTest("val myFloat = 1000f")
 
         it("should not be reported by default") {
@@ -67,7 +66,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
         }
     }
 
-    given("a Float of -1000f") {
+    describe("a Float of -1000f") {
         val ktFile = compileContentForTest("val myFloat = -1000f")
 
         it("should not be reported by default") {
@@ -83,7 +82,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
         }
     }
 
-    given("a constant Float of -1_000f") {
+    describe("a Float of -1_000f") {
         val ktFile = compileContentForTest("const val myFloat = -1_000f")
 
         it("should not be reported") {
@@ -92,7 +91,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
         }
     }
 
-    given("a Long of 1000000L") {
+    describe("a Long of 1000000L") {
         val ktFile = compileContentForTest("const val myLong = 1000000L")
 
         it("should be reported by default") {
@@ -108,7 +107,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
         }
     }
 
-    given("a Double of 1_000_000.00_000_000") {
+    describe("a Double of 1_000_000.00_000_000") {
         val ktFile = compileContentForTest("val myDouble = 1_000_000.00_000_000")
 
         it("should not be reported") {
@@ -117,7 +116,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
         }
     }
 
-    given("a function with default Int parameter value 1000") {
+    describe("a function with default Int parameter value 1000") {
         val ktFile = compileContentForTest("fun testFunction(testParam: Int = 1000) {}")
 
         it("should not be reported by default") {
@@ -133,7 +132,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
         }
     }
 
-    given("an annotation with numeric literals 0 and 10") {
+    describe("an annotation with numeric literals 0 and 10") {
         val ktFile = compileContentForTest(
                 "fun setCustomDimension(@IntRange(from = 0, to = 10) index: Int, value: String?) {}"
         )
@@ -144,7 +143,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
         }
     }
 
-    given("an annotation with numeric literals 0 and 1000000") {
+    describe("an annotation with numeric literals 0 and 1000000") {
         val ktFile = compileContentForTest(
                 "fun setCustomDimension(@IntRange(from = 0, to = 1000000) index: Int, value: String?) {}"
         )
@@ -155,7 +154,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
         }
     }
 
-    given("an Int of 10_00_00") {
+    describe("an Int of 10_00_00") {
         val ktFile = compileContentForTest("const val myInt = 10_00_00")
 
         it("should be reported by default") {
@@ -171,7 +170,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
         }
     }
 
-    given("a binary Int of 0b1011") {
+    describe("a binary Int of 0b1011") {
         val ktFile = compileContentForTest("const val myBinInt = 0b1011")
 
         it("should not be reported") {
@@ -180,7 +179,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
         }
     }
 
-    given("a hexadecimal Int of 0x1facdf") {
+    describe("a hexadecimal Int of 0x1facdf") {
         val ktFile = compileContentForTest("const val myHexInt = 0x1facdf")
 
         it("should not be reported") {
@@ -189,7 +188,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
         }
     }
 
-    given("a property named serialVersionUID in an object that implements Serializable") {
+    describe("a property named serialVersionUID in an object that implements Serializable") {
         val ktFile = compileContentForTest("""
             object TestSerializable : Serializable {
                 private val serialVersionUID = 314159L
@@ -202,7 +201,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
         }
     }
 
-    given("a property named serialVersionUID in an object that does not implement Serializable") {
+    describe("a property named serialVersionUID in an object that does not implement Serializable") {
         val ktFile = compileContentForTest("""
             object TestSerializable {
                 private val serialVersionUID = 314159L

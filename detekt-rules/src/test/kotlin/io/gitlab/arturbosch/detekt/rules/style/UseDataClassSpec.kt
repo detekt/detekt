@@ -5,18 +5,17 @@ import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
 /**
  * @author Ivan Balaksha
  */
-class UseDataClassSpec : SubjectSpek<UseDataClass>({
+class UseDataClassSpec : Spek({
 
-    subject { UseDataClass(Config.empty) }
+    val subject by memoized { UseDataClass(Config.empty) }
 
-    given("several classes") {
+    describe("UseDataClass rule") {
 
         it("reports potential data classes") {
             assertThat(subject.lint(Case.UseDataClassPositive.path())).hasSize(5)
@@ -27,15 +26,10 @@ class UseDataClassSpec : SubjectSpek<UseDataClass>({
         }
 
         it("does not report inline classes") {
-            assertThat(subject.lint(
-                    """inline class A(val x: Int)"""
-            )).isEmpty()
+            assertThat(subject.lint("inline class A(val x: Int)")).isEmpty()
         }
-    }
 
-    given("a class with an annotation which is ignored") {
-
-        it("does not report a potential data class") {
+        it("does not report a potential data class when class has an annotation which is ignored") {
             val code = """
 				import kotlin.SinceKotlin
 

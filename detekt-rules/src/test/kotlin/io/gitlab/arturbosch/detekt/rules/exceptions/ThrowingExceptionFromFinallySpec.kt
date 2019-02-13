@@ -2,14 +2,13 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-class ThrowingExceptionFromFinallySpec : SubjectSpek<ThrowingExceptionFromFinally>({
-    subject { ThrowingExceptionFromFinally() }
+class ThrowingExceptionFromFinallySpec : Spek({
+    val subject by memoized { ThrowingExceptionFromFinally() }
 
-    given("some finally blocks") {
+    describe("ThrowingExceptionFromFinally rule") {
 
         it("should report a throw expression") {
             val code = """

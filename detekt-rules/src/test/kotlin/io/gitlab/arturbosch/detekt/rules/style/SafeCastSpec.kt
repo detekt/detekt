@@ -2,14 +2,13 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-class SafeCastSpec : SubjectSpek<SafeCast>({
-    subject { SafeCast() }
+class SafeCastSpec : Spek({
+    val subject by memoized { SafeCast() }
 
-    given("some cast expressions") {
+    describe("SafeCast rule") {
 
         it("reports negated expression") {
             val code = """

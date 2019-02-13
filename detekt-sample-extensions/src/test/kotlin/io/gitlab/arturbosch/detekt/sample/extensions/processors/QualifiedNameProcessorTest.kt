@@ -8,25 +8,28 @@ import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import org.assertj.core.api.Assertions
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.com.intellij.util.keyFMap.KeyFMap
-import org.jetbrains.spek.api.Spek
-import org.jetbrains.spek.api.dsl.it
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
 /**
  * @author Artur Bosch
  */
 class QualifiedNameProcessorTest : Spek({
 
-    it("fqNamesOfTestFiles") {
-        val ktFile = compileContentForTest(code)
-        val processor = QualifiedNameProcessor()
-        processor.onProcess(ktFile)
-        processor.onFinish(listOf(ktFile), result)
+    describe("QualifiedNameProcessor") {
 
-        val data = result.getData(fqNamesKey)
-        Assertions.assertThat(data).contains(
-                "io.gitlab.arturbosch.detekt.sample.Foo",
-                "io.gitlab.arturbosch.detekt.sample.Bar",
-                "io.gitlab.arturbosch.detekt.sample.Bla")
+        it("fqNamesOfTestFiles") {
+            val ktFile = compileContentForTest(code)
+            val processor = QualifiedNameProcessor()
+            processor.onProcess(ktFile)
+            processor.onFinish(listOf(ktFile), result)
+
+            val data = result.getData(fqNamesKey)
+            Assertions.assertThat(data).contains(
+                    "io.gitlab.arturbosch.detekt.sample.Foo",
+                    "io.gitlab.arturbosch.detekt.sample.Bar",
+                    "io.gitlab.arturbosch.detekt.sample.Bla")
+        }
     }
 })
 
