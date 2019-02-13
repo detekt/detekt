@@ -2,7 +2,7 @@
 <SmellBaseline>
   <Blacklist timestamp="1540322472112"></Blacklist>
   <Whitelist timestamp="1549734024500">
-    <ID>LargeClass:UnusedPrivateMemberSpec.kt$UnusedPrivateMemberSpec : SubjectSpek</ID>
+    <ID>LargeClass:UnusedPrivateMemberSpec.kt$UnusedPrivateMemberSpec : Spek</ID>
     <ID>MaxLineLength:BaselineFacade.kt$BaselineFacade$val blackFiltered = whiteFiltered.filterNot { finding -&gt; listings.second.ids.contains(finding.baselineId) }</ID>
     <ID>MaxLineLength:ComplexityReportGenerator.kt$ComplexityReportGenerator.Factory$fun create(detektion: Detektion): ComplexityReportGenerator</ID>
     <ID>MaxLineLength:Config.kt$io.gitlab.arturbosch.detekt.api.Config.kt</ID>

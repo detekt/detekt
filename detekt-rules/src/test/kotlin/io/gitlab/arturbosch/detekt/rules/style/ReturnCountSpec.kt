@@ -3,14 +3,15 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Java6Assertions.assertThat
-import org.jetbrains.spek.api.Spek
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
 class ReturnCountSpec : Spek({
 
-    given("a file with 3 returns") {
-        val code = """
+    describe("ReturnCount rule") {
+
+        context("a file with 3 returns") {
+            val code = """
 			fun test(x: Int): Int {
 				when (x) {
 					5 -> return 5
@@ -20,24 +21,24 @@ class ReturnCountSpec : Spek({
 			}
 		"""
 
-        it("should get flagged by default") {
-            val findings = ReturnCount().lint(code)
-            assertThat(findings).hasSize(1)
+            it("should get flagged by default") {
+                val findings = ReturnCount().lint(code)
+                assertThat(findings).hasSize(1)
+            }
+
+            it("should not get flagged when max value is 3") {
+                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "3"))).lint(code)
+                assertThat(findings).hasSize(0)
+            }
+
+            it("should get flagged when max value is 1") {
+                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "1"))).lint(code)
+                assertThat(findings).hasSize(1)
+            }
         }
 
-        it("should not get flagged when max value is 3") {
-            val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "3"))).lint(code)
-            assertThat(findings).hasSize(0)
-        }
-
-        it("should get flagged when max value is 1") {
-            val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "1"))).lint(code)
-            assertThat(findings).hasSize(1)
-        }
-    }
-
-    given("a file with 2 returns") {
-        val code = """
+        context("a file with 2 returns") {
+            val code = """
 			fun test(x: Int): Int {
 				when (x) {
 					5 -> return 5
@@ -46,24 +47,24 @@ class ReturnCountSpec : Spek({
 			}
 		"""
 
-        it("should not get flagged by default") {
-            val findings = ReturnCount().lint(code)
-            assertThat(findings).hasSize(0)
+            it("should not get flagged by default") {
+                val findings = ReturnCount().lint(code)
+                assertThat(findings).hasSize(0)
+            }
+
+            it("should not get flagged when max value is 2") {
+                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "2"))).lint(code)
+                assertThat(findings).hasSize(0)
+            }
+
+            it("should get flagged when max value is 1") {
+                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "1"))).lint(code)
+                assertThat(findings).hasSize(1)
+            }
         }
 
-        it("should not get flagged when max value is 2") {
-            val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "2"))).lint(code)
-            assertThat(findings).hasSize(0)
-        }
-
-        it("should get flagged when max value is 1") {
-            val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "1"))).lint(code)
-            assertThat(findings).hasSize(1)
-        }
-    }
-
-    given("a function is ignored") {
-        val code = """
+        context("a function is ignored") {
+            val code = """
     		fun test(x: Int): Int {
 				when (x) {
 					5 -> return 5
@@ -73,17 +74,17 @@ class ReturnCountSpec : Spek({
 			}
 		"""
 
-        it("should not get flagged") {
-            val findings = ReturnCount(TestConfig(mapOf(
-                    ReturnCount.MAX to "2",
-                    ReturnCount.EXCLUDED_FUNCTIONS to "test")
-            )).lint(code)
-            assertThat(findings).isEmpty()
+            it("should not get flagged") {
+                val findings = ReturnCount(TestConfig(mapOf(
+                        ReturnCount.MAX to "2",
+                        ReturnCount.EXCLUDED_FUNCTIONS to "test")
+                )).lint(code)
+                assertThat(findings).isEmpty()
+            }
         }
-    }
 
-    given("a subset of functions are ignored") {
-        val code = """
+        context("a subset of functions are ignored") {
+            val code = """
     		fun test1(x: Int): Int {
 				when (x) {
 					5 -> return 5
@@ -109,17 +110,17 @@ class ReturnCountSpec : Spek({
 			}
 		"""
 
-        it("should flag none of the ignored functions") {
-            val findings = ReturnCount(TestConfig(mapOf(
-                    ReturnCount.MAX to "2",
-                    ReturnCount.EXCLUDED_FUNCTIONS to "test1,test2")
-            )).lint(code)
-            assertThat(findings).hasSize(1)
+            it("should flag none of the ignored functions") {
+                val findings = ReturnCount(TestConfig(mapOf(
+                        ReturnCount.MAX to "2",
+                        ReturnCount.EXCLUDED_FUNCTIONS to "test1,test2")
+                )).lint(code)
+                assertThat(findings).hasSize(1)
+            }
         }
-    }
 
-    given("a function with inner object") {
-        val code = """
+        context("a function with inner object") {
+            val code = """
 			fun test(x: Int): Int {
 				val a = object {
 					fun test2(x: Int): Int {
@@ -136,14 +137,14 @@ class ReturnCountSpec : Spek({
 			}
     	"""
 
-        it("should not get flag when returns is in inner object") {
-            val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "2"))).lint(code)
-            assertThat(findings).hasSize(0)
+            it("should not get flag when returns is in inner object") {
+                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "2"))).lint(code)
+                assertThat(findings).hasSize(0)
+            }
         }
-    }
 
-    given("a function with 2 inner object") {
-        val code = """
+        context("a function with 2 inner object") {
+            val code = """
 			fun test(x: Int): Int {
 				val a = object {
 					fun test2(x: Int): Int {
@@ -168,14 +169,14 @@ class ReturnCountSpec : Spek({
 			}
     	"""
 
-        it("should not get flag when returns is in inner object") {
-            val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "2"))).lint(code)
-            assertThat(findings).hasSize(0)
+            it("should not get flag when returns is in inner object") {
+                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "2"))).lint(code)
+                assertThat(findings).hasSize(0)
+            }
         }
-    }
 
-    given("a function with 2 inner object and exceeded max") {
-        val code = """
+        context("a function with 2 inner object and exceeded max") {
+            val code = """
 			fun test(x: Int): Int {
 				val a = object {
 					fun test2(x: Int): Int {
@@ -202,15 +203,15 @@ class ReturnCountSpec : Spek({
 			}
     	"""
 
-        it("should get flagged when returns is in inner object") {
-            val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "2"))).lint(code)
-            assertThat(findings).hasSize(1)
+            it("should get flagged when returns is in inner object") {
+                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "2"))).lint(code)
+                assertThat(findings).hasSize(1)
+            }
         }
-    }
 
-    given("function with multiple labeled return statements") {
+        context("function with multiple labeled return statements") {
 
-        val code = """
+            val code = """
 			fun readUsers(name: String): Flowable<User> {
 			return userDao.read(name)
 				.flatMap {
@@ -220,24 +221,25 @@ class ReturnCountSpec : Spek({
     		}
 		""".trimIndent()
 
-        it("should not count labeled returns from lambda by default") {
-            val findings = ReturnCount().lint(code)
-            assertThat(findings).isEmpty()
-        }
+            it("should not count labeled returns from lambda by default") {
+                val findings = ReturnCount().lint(code)
+                assertThat(findings).isEmpty()
+            }
 
-        it("should count labeled returns from lambda when activated") {
-            val findings = ReturnCount(
-                    TestConfig(mapOf("excludeReturnFromLambda" to "false"))).lint(code)
-            assertThat(findings).hasSize(1)
-        }
+            it("should count labeled returns from lambda when activated") {
+                val findings = ReturnCount(
+                        TestConfig(mapOf("excludeReturnFromLambda" to "false"))).lint(code)
+                assertThat(findings).hasSize(1)
+            }
 
-        it("should be empty when labeled returns are de-activated") {
-            val findings = ReturnCount(
-                    TestConfig(mapOf(
-                            "excludeLabeled" to "true",
-                            "excludeReturnFromLambda" to "false"
-                    ))).lint(code)
-            assertThat(findings).isEmpty()
+            it("should be empty when labeled returns are de-activated") {
+                val findings = ReturnCount(
+                        TestConfig(mapOf(
+                                "excludeLabeled" to "true",
+                                "excludeReturnFromLambda" to "false"
+                        ))).lint(code)
+                assertThat(findings).isEmpty()
+            }
         }
     }
 })

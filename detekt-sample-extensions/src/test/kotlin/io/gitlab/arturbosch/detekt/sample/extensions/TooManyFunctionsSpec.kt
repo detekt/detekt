@@ -3,16 +3,15 @@ package io.gitlab.arturbosch.detekt.sample.extensions
 import io.gitlab.arturbosch.detekt.sample.extensions.rules.TooManyFunctions
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.dsl.describe
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
 /**
  * @author Artur Bosch
  */
-class TooManyFunctionsSpec : SubjectSpek<TooManyFunctions>({
+class TooManyFunctionsSpec : Spek({
 
-    subject { TooManyFunctions() }
+    val subject by memoized { TooManyFunctions() }
 
     describe("a simple test") {
 

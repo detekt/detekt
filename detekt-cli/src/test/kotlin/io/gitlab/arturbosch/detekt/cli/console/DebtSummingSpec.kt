@@ -2,13 +2,12 @@ package io.gitlab.arturbosch.detekt.cli.console
 
 import io.gitlab.arturbosch.detekt.api.Debt
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.Spek
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
 internal class DebtSummingSpec : Spek({
 
-    given("debt minutes, hours and days") {
+    describe("debt minutes, hours and days") {
 
         it("outputs correct minutes, hours and days") {
             assertThat(createDebtSumming(1, 23, 62).toString()).isEqualTo("2d 2min")

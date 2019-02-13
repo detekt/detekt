@@ -2,23 +2,26 @@ package io.gitlab.arturbosch.detekt.cli.runners
 
 import io.gitlab.arturbosch.detekt.test.compileForTest
 import io.gitlab.arturbosch.detekt.test.resource
-import java.nio.file.Paths
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.Spek
-import org.jetbrains.spek.api.dsl.it
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
+import java.nio.file.Paths
 
 /**
  * @author Artur Bosch
  */
 class AstPrinterSpec : Spek({
 
-    it("should print the ast as string") {
-        val case = Paths.get(resource("cases/Poko.kt"))
-        val ktFile = compileForTest(case)
+    describe("AST printer") {
 
-        val dump = ElementPrinter.dump(ktFile)
+        it("should print the ast as string") {
+            val case = Paths.get(resource("cases/Poko.kt"))
+            val ktFile = compileForTest(case)
 
-        assertThat(dump.trimIndent()).isEqualTo(expected)
+            val dump = ElementPrinter.dump(ktFile)
+
+            assertThat(dump.trimIndent()).isEqualTo(expected)
+        }
     }
 })
 

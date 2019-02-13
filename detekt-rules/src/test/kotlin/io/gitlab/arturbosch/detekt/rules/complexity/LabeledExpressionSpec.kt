@@ -4,19 +4,18 @@ import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
 /**
  * @author Ivan Balaksha
  * @author schalkms
  */
-class LabeledExpressionSpec : SubjectSpek<LabeledExpression>({
+class LabeledExpressionSpec : Spek({
 
-    subject { LabeledExpression() }
+    val subject by memoized { LabeledExpression() }
 
-    given("several labeled expressions") {
+    describe("LabeledExpression rule") {
 
         it("reports these labels") {
             subject.lint(Case.LabeledExpressionPositive.path())

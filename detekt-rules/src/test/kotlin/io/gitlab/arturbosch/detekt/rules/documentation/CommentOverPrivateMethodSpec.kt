@@ -2,18 +2,17 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
 /**
  * @author Artur Bosch
  * @author schalkms
  */
-class CommentOverPrivateMethodSpec : SubjectSpek<CommentOverPrivateFunction>({
-    subject { CommentOverPrivateFunction() }
+class CommentOverPrivateMethodSpec : Spek({
+    val subject by memoized { CommentOverPrivateFunction() }
 
-    given("some methods with comments") {
+    describe("CommentOverPrivateFunction rule") {
 
         it("reports private method with a comment") {
             val code = """

@@ -3,14 +3,13 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-class UnconditionalJumpStatementInLoopSpec : SubjectSpek<UnconditionalJumpStatementInLoop>({
-    subject { UnconditionalJumpStatementInLoop() }
+class UnconditionalJumpStatementInLoopSpec : Spek({
+    val subject by memoized { UnconditionalJumpStatementInLoop() }
 
-    given("several jump statements in loops") {
+    describe("UnconditionalJumpStatementInLoop rule") {
 
         it("reports unconditional jumps") {
             val path = Case.UnconditionalJumpStatementInLoopPositive.path()

@@ -3,14 +3,13 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-class WrongEqualsTypeParameterSpec : SubjectSpek<WrongEqualsTypeParameter>({
-    subject { WrongEqualsTypeParameter(Config.empty) }
+class WrongEqualsTypeParameterSpec : Spek({
+    val subject by memoized { WrongEqualsTypeParameter(Config.empty) }
 
-    given("an equals method") {
+    describe("WrongEqualsTypeParameter rule") {
 
         it("uses Any? as parameter") {
             val code = """

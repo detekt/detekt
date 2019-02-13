@@ -4,16 +4,16 @@ import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumen
 import io.gitlab.arturbosch.detekt.generator.util.run
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-class RuleSetProviderCollectorSpec : SubjectSpek<RuleSetProviderCollector>({
+class RuleSetProviderCollectorSpec : Spek({
 
-    subject { RuleSetProviderCollector() }
+    val subject by memoized { RuleSetProviderCollector() }
 
-    given("a non-RuleSetProvider class extending nothing") {
-        val code = """
+    describe("RuleSetProviderCollector rule") {
+        context("a non-RuleSetProvider class extending nothing") {
+            val code = """
 			package foo
 
 			class SomeRandomClass {
@@ -22,14 +22,14 @@ class RuleSetProviderCollectorSpec : SubjectSpek<RuleSetProviderCollector>({
 				}
 			}
 		"""
-        it("collects no rulesets") {
-            val items = subject.run(code)
-            assertThat(items).isEmpty()
+            it("collects no rulesets") {
+                val items = subject.run(code)
+                assertThat(items).isEmpty()
+            }
         }
-    }
 
-    given("a non-RuleSetProvider class extending a class that is not related to rules") {
-        val code = """
+        context("a non-RuleSetProvider class extending a class that is not related to rules") {
+            val code = """
 			package foo
 
 			class SomeRandomClass: SomeOtherClass {
@@ -38,14 +38,14 @@ class RuleSetProviderCollectorSpec : SubjectSpek<RuleSetProviderCollector>({
 				}
 			}
 		"""
-        it("collects no rulesets") {
-            val items = subject.run(code)
-            assertThat(items).isEmpty()
+            it("collects no rulesets") {
+                val items = subject.run(code)
+                assertThat(items).isEmpty()
+            }
         }
-    }
 
-    given("a RuleSetProvider without documentation") {
-        val code = """
+        context("a RuleSetProvider without documentation") {
+            val code = """
 			package foo
 
 			class TestProvider: RuleSetProvider {
@@ -54,14 +54,14 @@ class RuleSetProviderCollectorSpec : SubjectSpek<RuleSetProviderCollector>({
 				}
 			}
 		"""
-        it("throws an exception") {
-            assertThatExceptionOfType(InvalidDocumentationException::class.java)
-                    .isThrownBy { subject.run(code) }
+            it("throws an exception") {
+                assertThatExceptionOfType(InvalidDocumentationException::class.java)
+                        .isThrownBy { subject.run(code) }
+            }
         }
-    }
 
-    given("a correct RuleSetProvider class extending RuleSetProvider but missing parameters") {
-        val code = """
+        context("a correct RuleSetProvider class extending RuleSetProvider but missing parameters") {
+            val code = """
 			package foo
 
 			class TestProvider: RuleSetProvider {
@@ -71,17 +71,17 @@ class RuleSetProviderCollectorSpec : SubjectSpek<RuleSetProviderCollector>({
 			}
 		"""
 
-        it("throws an exception") {
-            assertThatExceptionOfType(InvalidDocumentationException::class.java)
-                    .isThrownBy { subject.run(code) }
+            it("throws an exception") {
+                assertThatExceptionOfType(InvalidDocumentationException::class.java)
+                        .isThrownBy { subject.run(code) }
+            }
         }
-    }
 
-    given("a correct RuleSetProvider class with full parameters") {
-        val description = "This is a description"
-        val ruleSetId = "test"
-        val ruleName = "TestRule"
-        val code = """
+        context("a correct RuleSetProvider class with full parameters") {
+            val description = "This is a description"
+            val ruleSetId = "test"
+            val ruleName = "TestRule"
+            val code = """
 			package foo
 
 			/**
@@ -100,42 +100,42 @@ class RuleSetProviderCollectorSpec : SubjectSpek<RuleSetProviderCollector>({
 			}
 		"""
 
-        it("collects a RuleSetProvider") {
-            val items = subject.run(code)
-            assertThat(items).hasSize(1)
+            it("collects a RuleSetProvider") {
+                val items = subject.run(code)
+                assertThat(items).hasSize(1)
+            }
+
+            it("has one rule") {
+                val items = subject.run(code)
+                val provider = items[0]
+                assertThat(provider.rules).hasSize(1)
+                assertThat(provider.rules[0]).isEqualTo(ruleName)
+            }
+
+            it("has correct name") {
+                val items = subject.run(code)
+                val provider = items[0]
+                assertThat(provider.name).isEqualTo(ruleSetId)
+            }
+
+            it("has correct description") {
+                val items = subject.run(code)
+                val provider = items[0]
+                assertThat(provider.description).isEqualTo(description)
+            }
+
+            it("is active") {
+                val items = subject.run(code)
+                val provider = items[0]
+                assertThat(provider.active).isTrue()
+            }
         }
 
-        it("has one rule") {
-            val items = subject.run(code)
-            val provider = items[0]
-            assertThat(provider.rules).hasSize(1)
-            assertThat(provider.rules[0]).isEqualTo(ruleName)
-        }
-
-        it("has correct name") {
-            val items = subject.run(code)
-            val provider = items[0]
-            assertThat(provider.name).isEqualTo(ruleSetId)
-        }
-
-        it("has correct description") {
-            val items = subject.run(code)
-            val provider = items[0]
-            assertThat(provider.description).isEqualTo(description)
-        }
-
-        it("is active") {
-            val items = subject.run(code)
-            val provider = items[0]
-            assertThat(provider.active).isTrue()
-        }
-    }
-
-    given("an inactive RuleSetProvider") {
-        val description = "This is a description"
-        val ruleSetId = "test"
-        val ruleName = "TestRule"
-        val code = """
+        context("an inactive RuleSetProvider") {
+            val description = "This is a description"
+            val ruleSetId = "test"
+            val ruleName = "TestRule"
+            val code = """
 			package foo
 
 			/**
@@ -152,17 +152,17 @@ class RuleSetProviderCollectorSpec : SubjectSpek<RuleSetProviderCollector>({
 			}
 		"""
 
-        it("is not active") {
-            val items = subject.run(code)
-            val provider = items[0]
-            assertThat(provider.active).isFalse()
+            it("is not active") {
+                val items = subject.run(code)
+                val provider = items[0]
+                assertThat(provider.active).isFalse()
+            }
         }
-    }
 
-    given("a RuleSetProvider with missing name") {
-        val description = "This is a description"
-        val ruleName = "TestRule"
-        val code = """
+        context("a RuleSetProvider with missing name") {
+            val description = "This is a description"
+            val ruleName = "TestRule"
+            val code = """
 			package foo
 
 			/**
@@ -177,16 +177,16 @@ class RuleSetProviderCollectorSpec : SubjectSpek<RuleSetProviderCollector>({
 			}
 		"""
 
-        it("throws an exception") {
-            assertThatExceptionOfType(InvalidDocumentationException::class.java)
-                    .isThrownBy { subject.run(code) }
+            it("throws an exception") {
+                assertThatExceptionOfType(InvalidDocumentationException::class.java)
+                        .isThrownBy { subject.run(code) }
+            }
         }
-    }
 
-    given("a RuleSetProvider with missing description") {
-        val ruleSetId = "test"
-        val ruleName = "TestRule"
-        val code = """
+        context("a RuleSetProvider with missing description") {
+            val ruleSetId = "test"
+            val ruleName = "TestRule"
+            val code = """
 			package foo
 
 			class TestProvider: RuleSetProvider {
@@ -200,15 +200,15 @@ class RuleSetProviderCollectorSpec : SubjectSpek<RuleSetProviderCollector>({
 			}
 		"""
 
-        it("throws an exception") {
-            assertThatExceptionOfType(InvalidDocumentationException::class.java)
-                    .isThrownBy { subject.run(code) }
+            it("throws an exception") {
+                assertThatExceptionOfType(InvalidDocumentationException::class.java)
+                        .isThrownBy { subject.run(code) }
+            }
         }
-    }
 
-    given("a RuleSetProvider with no rules") {
-        val ruleSetId = "test"
-        val code = """
+        context("a RuleSetProvider with no rules") {
+            val ruleSetId = "test"
+            val code = """
 			package foo
 
 			class TestProvider: RuleSetProvider {
@@ -220,18 +220,18 @@ class RuleSetProviderCollectorSpec : SubjectSpek<RuleSetProviderCollector>({
 			}
 		"""
 
-        it("throws an exception") {
-            assertThatExceptionOfType(InvalidDocumentationException::class.java)
-                    .isThrownBy { subject.run(code) }
+            it("throws an exception") {
+                assertThatExceptionOfType(InvalidDocumentationException::class.java)
+                        .isThrownBy { subject.run(code) }
+            }
         }
-    }
 
-    given("a correct RuleSetProvider class with full parameters") {
-        val description = "This is a description"
-        val ruleSetId = "test"
-        val ruleName = "TestRule"
-        val secondRuleName = "SecondRule"
-        val code = """
+        context("a correct RuleSetProvider class with full parameters") {
+            val description = "This is a description"
+            val ruleSetId = "test"
+            val ruleName = "TestRule"
+            val secondRuleName = "SecondRule"
+            val code = """
 			package foo
 
 			/**
@@ -251,9 +251,10 @@ class RuleSetProviderCollectorSpec : SubjectSpek<RuleSetProviderCollector>({
 			}
 		"""
 
-        it("collects multiple rules") {
-            val items = subject.run(code)
-            assertThat(items[0].rules).containsExactly(ruleName, secondRuleName)
+            it("collects multiple rules") {
+                val items = subject.run(code)
+                assertThat(items[0].rules).containsExactly(ruleName, secondRuleName)
+            }
         }
     }
 })

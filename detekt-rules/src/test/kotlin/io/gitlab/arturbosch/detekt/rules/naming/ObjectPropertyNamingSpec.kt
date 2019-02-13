@@ -5,17 +5,16 @@ import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.lint
-import org.jetbrains.spek.api.dsl.describe
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-class ObjectPropertyNamingSpec : SubjectSpek<ObjectPropertyNaming>({
-
-    subject { ObjectPropertyNaming() }
+class ObjectPropertyNamingSpec : Spek({
 
     val fileName = TEST_FILENAME
 
     describe("constants in object declarations") {
+
+        val subject by memoized { ObjectPropertyNaming() }
 
         it("should not detect public constants complying to the naming rules") {
             val code = compileContentForTest("""
@@ -66,6 +65,8 @@ class ObjectPropertyNamingSpec : SubjectSpek<ObjectPropertyNaming>({
     }
 
     describe("constants in companion object") {
+
+        val subject by memoized { ObjectPropertyNaming() }
 
         it("should not detect public constants complying to the naming rules") {
             val code = compileContentForTest("""
@@ -126,6 +127,8 @@ class ObjectPropertyNamingSpec : SubjectSpek<ObjectPropertyNaming>({
     }
 
     describe("variables in objects") {
+
+        val subject by memoized { ObjectPropertyNaming() }
 
         it("should not detect public constants complying to the naming rules") {
             val code = compileContentForTest("""

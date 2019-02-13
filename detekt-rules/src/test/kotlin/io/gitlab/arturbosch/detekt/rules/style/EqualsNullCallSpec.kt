@@ -3,14 +3,13 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-class EqualsNullCallSpec : SubjectSpek<EqualsNullCall>({
-    subject { EqualsNullCall(Config.empty) }
+class EqualsNullCallSpec : Spek({
+    val subject by memoized { EqualsNullCall(Config.empty) }
 
-    given("an equals method with a parameter") {
+    describe("EqualsNullCall rule") {
 
         it("with null as parameter") {
             val code = """

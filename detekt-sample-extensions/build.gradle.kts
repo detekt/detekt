@@ -9,9 +9,8 @@ dependencies {
 
     testImplementation("io.gitlab.arturbosch.detekt:detekt-test:$usedDetektVersion")
     testImplementation("org.assertj:assertj-core:$assertjVersion")
-    testImplementation("org.jetbrains.spek:spek-api:$spekVersion")
-    testImplementation("org.jetbrains.spek:spek-subject-extension:$spekVersion")
+    testImplementation("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
-    testRuntimeOnly("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
+    testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spekVersion")
 }

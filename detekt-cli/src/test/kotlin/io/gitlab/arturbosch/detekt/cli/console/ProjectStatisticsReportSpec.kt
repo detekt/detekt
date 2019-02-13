@@ -3,15 +3,14 @@ package io.gitlab.arturbosch.detekt.cli.console
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.cli.TestDetektion
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-class ProjectStatisticsReportSpec : SubjectSpek<ProjectStatisticsReport>({
+class ProjectStatisticsReportSpec : Spek({
 
-    subject { ProjectStatisticsReport() }
+    val subject by memoized { ProjectStatisticsReport() }
 
-    given("several metrics") {
+    describe("project statistics") {
 
         it("reports the project statistics") {
             val expected = "Project Statistics:\n\t- M2: 2\n\t- M1: 1\n"

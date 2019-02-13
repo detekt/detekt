@@ -3,16 +3,15 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
-import java.util.regex.PatternSyntaxException
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
+import java.util.regex.PatternSyntaxException
 
-class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
+class UnusedPrivateMemberSpec : Spek({
 
-    subject { UnusedPrivateMember() }
+    val subject by memoized { UnusedPrivateMember() }
 
     val regexTestingCode = """
 				class Test {
@@ -25,7 +24,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
 				}
 				"""
 
-    given("cases file with different findings") {
+    describe("cases file with different findings") {
 
         it("positive cases file") {
             assertThat(subject.lint(Case.UnusedPrivateMemberPositive.path())).hasSize(13)
@@ -36,7 +35,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
         }
     }
 
-    given("interface functions") {
+    describe("interface functions") {
 
         it("should not report parameters in interface functions") {
             val code = """
@@ -49,7 +48,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
         }
     }
 
-    given("external functions") {
+    describe("external functions") {
 
         it("should not report parameters in external functions") {
             val code = "external fun foo(bar: String)"
@@ -57,7 +56,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
         }
     }
 
-    given("overridden functions") {
+    describe("overridden functions") {
 
         it("should not report parameters in not private functions") {
             val code = """
@@ -73,7 +72,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
         }
     }
 
-    given("classes accessing constants from companion objects") {
+    describe("classes accessing constants from companion objects") {
 
         it("should not report used constants") {
             val code = """
@@ -92,7 +91,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
         }
     }
 
-    given("several classes with properties") {
+    describe("several classes with properties") {
 
         it("reports an unused member") {
             val code = """
@@ -164,7 +163,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
         }
     }
 
-    given("several classes with properties and local properties") {
+    describe("several classes with properties and local properties") {
 
         it("reports an unused member") {
             val code = """
@@ -209,7 +208,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
         }
     }
 
-    given("loop iterators") {
+    describe("loop iterators") {
 
         it("should not depend on evaluation order of functions or properties") {
             val code = """
@@ -289,7 +288,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
         }
     }
 
-    given("properties used to initialize other properties") {
+    describe("properties used to initialize other properties") {
 
         it("does not report properties used by other properties") {
             val code = """
@@ -319,7 +318,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
         }
     }
 
-    given("function parameters") {
+    describe("function parameters") {
         it("reports single parameters if they are unused") {
             val code = """
 			class Test {
@@ -391,7 +390,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
         }
     }
 
-    given("top level function parameters") {
+    describe("top level function parameters") {
         it("reports single parameters if they are unused") {
             val code = """
 			fun function(unusedParameter: Int): Int {
@@ -443,7 +442,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
         }
     }
 
-    given("unused private functions") {
+    describe("unused private functions") {
         it("does not report used private functions") {
             val code = """
 			class Test {
@@ -471,7 +470,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
         }
     }
 
-    given("private functions only used by unused private functions") {
+    describe("private functions only used by unused private functions") {
 
         it("reports the non called private function") {
             val code = """
@@ -490,7 +489,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
         }
     }
 
-    given("unused class declarations which are allowed") {
+    describe("unused class declarations which are allowed") {
 
         it("does not report the unused private property") {
             val code = """
@@ -509,7 +508,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
         }
     }
 
-    given("nested class declarations") {
+    describe("nested class declarations") {
 
         it("reports unused nested private property") {
             val code = """
@@ -533,7 +532,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
         }
     }
 
-    given("parameters in primary constructors") {
+    describe("parameters in primary constructors") {
         it("reports unused private property") {
             val code = """
 				class Test(private val unused: Any)
@@ -604,7 +603,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
         }
     }
 
-    given("error messages") {
+    describe("error messages") {
         it("are specific for function parameters") {
             val code = """
 				fun foo(unused: Int){}
@@ -640,7 +639,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
         }
     }
 
-    given("suppress unused parameter warning annotations") {
+    describe("suppress unused parameter warning annotations") {
         it("does not report annotated parameters") {
             val code = """
 				fun foo(@Suppress("UNUSED_PARAMETER") unused: String){}
@@ -724,7 +723,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
         }
     }
 
-    given("suppress unused property warning annotations") {
+    describe("suppress unused property warning annotations") {
         it("does not report annotated private constructor properties") {
             val code = """
 				class Test(@Suppress("unused") private val foo: String) {}
@@ -862,7 +861,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
         }
     }
 
-    given("suppress unused function warning annotations") {
+    describe("suppress unused function warning annotations") {
         it("does not report annotated private functions") {
             val code = """
 				@Suppress("unused")
@@ -927,7 +926,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
         }
     }
 
-    given("main methods") {
+    describe("main methods") {
 
         it("does not report the args parameter of the main function inside an object") {
             val code = """
@@ -952,7 +951,7 @@ class UnusedPrivateMemberSpec : SubjectSpek<UnusedPrivateMember>({
         }
     }
 
-    given("operators") {
+    describe("operators") {
 
         it("does not report used plus operator - #1354") {
             val code = """

@@ -4,15 +4,14 @@ import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-class ComplexInterfaceSpec : SubjectSpek<ComplexInterface>({
+class ComplexInterfaceSpec : Spek({
 
-    subject { ComplexInterface(threshold = THRESHOLD) }
+    val subject by memoized { ComplexInterface(threshold = THRESHOLD) }
 
-    given("several interface declarations") {
+    describe("ComplexInterface rule") {
 
         val path = Case.ComplexInterfacePositive.path()
 

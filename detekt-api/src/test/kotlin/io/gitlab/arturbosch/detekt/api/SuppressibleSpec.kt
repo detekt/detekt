@@ -4,16 +4,15 @@ import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtClass
-import org.jetbrains.spek.api.Spek
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
 /**
  * @author Marvin Ramin
  */
 internal class SuppressibleSpec : Spek({
 
-    given("a Test rule") {
+    describe("a Test rule") {
 
         it("should not be suppressed by a @Deprecated annotation") {
             assertThat(checkSuppression("Deprecated", "This should no longer be used")).isFalse()

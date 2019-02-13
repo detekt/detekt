@@ -4,14 +4,13 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-class UnreachableCodeSpec : SubjectSpek<UnreachableCode>({
-    subject { UnreachableCode(Config.empty) }
+class UnreachableCodeSpec : Spek({
+    val subject by memoized { UnreachableCode(Config.empty) }
 
-    given("several unreachable statements") {
+    describe("UnreachableCode rule") {
 
         it("reports unreachable code") {
             val path = Case.UnreachableCode.path()

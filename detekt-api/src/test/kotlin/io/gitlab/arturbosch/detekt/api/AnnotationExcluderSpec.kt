@@ -2,9 +2,8 @@ package io.gitlab.arturbosch.detekt.api
 
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import org.assertj.core.api.Java6Assertions.assertThat
-import org.jetbrains.spek.api.Spek
-import org.jetbrains.spek.api.dsl.describe
-import org.jetbrains.spek.api.dsl.it
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
 class AnnotationExcluderSpec : Spek({
     describe("a kt file with some imports") {

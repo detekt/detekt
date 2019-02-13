@@ -4,13 +4,12 @@ import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumen
 import io.gitlab.arturbosch.detekt.generator.util.run
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
-import org.jetbrains.spek.api.dsl.describe
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-class MultiRuleCollectorSpec : SubjectSpek<MultiRuleCollector>({
+class MultiRuleCollectorSpec : Spek({
 
-    subject { MultiRuleCollector() }
+    val subject by memoized { MultiRuleCollector() }
 
     describe("a MultiRuleCollector") {
 

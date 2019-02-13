@@ -31,7 +31,7 @@ version = "1.0.0-RC13"
 
 val detektGradleVersion: String by project
 val jcommanderVersion: String by project
-val spekVersion = "1.2.1"
+val spekVersion = "2.0.0"
 val junitPlatformVersion = "1.3.2"
 val assertjVersion = "3.11.1"
 
@@ -40,10 +40,9 @@ dependencies {
 
     testImplementation(kotlin("reflect"))
     testImplementation("org.assertj:assertj-core:$assertjVersion")
-    testImplementation("org.jetbrains.spek:spek-api:$spekVersion")
-    testImplementation("org.jetbrains.spek:spek-subject-extension:$spekVersion")
+    testImplementation("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
-    testRuntimeOnly("org.jetbrains.spek:spek-junit-platform-engine:$spekVersion")
+    testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spekVersion")
 }
 
 gradlePlugin {
@@ -107,11 +106,10 @@ val generateDefaultDetektVersionFile: Task by tasks.creating {
     doFirst {
         defaultDetektVersionFile.parentFile.mkdirs()
         defaultDetektVersionFile.writeText("""
-			package io.gitlab.arturbosch.detekt
+            package io.gitlab.arturbosch.detekt
 
-			internal const val DEFAULT_DETEKT_VERSION = "$version"
-			"""
-                .trimIndent()
+            internal const val DEFAULT_DETEKT_VERSION = "$version"
+            """.trimIndent()
         )
     }
 }

@@ -3,17 +3,16 @@ package io.gitlab.arturbosch.detekt.cli.console
 import io.gitlab.arturbosch.detekt.cli.TestDetektion
 import io.gitlab.arturbosch.detekt.cli.createNotification
 import io.gitlab.arturbosch.detekt.test.resource
-import java.nio.file.Paths
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
+import java.nio.file.Paths
 
-class NotificationReportSpec : SubjectSpek<NotificationReport>({
+class NotificationReportSpec : Spek({
 
-    subject { NotificationReport() }
+    val subject by memoized { NotificationReport() }
 
-    given("several notfications") {
+    describe("notification report") {
 
         it("reports two notifications") {
             val path = Paths.get(resource("empty.txt"))

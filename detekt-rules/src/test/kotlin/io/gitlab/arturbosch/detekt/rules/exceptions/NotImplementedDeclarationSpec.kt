@@ -2,41 +2,37 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-class NotImplementedDeclarationSpec : SubjectSpek<NotImplementedDeclaration>({
-    subject { NotImplementedDeclaration() }
+class NotImplementedDeclarationSpec : Spek({
+    val subject by memoized { NotImplementedDeclaration() }
 
-    given("throwing NotImplementedError declarations") {
+    describe("NotImplementedDeclaration rule") {
 
         it("reports NotImplementedErrors") {
             val code = """
-				fun f() {
-					if (1 == 1) throw NotImplementedError()
-					throw NotImplementedError()
-				}"""
+			fun f() {
+				if (1 == 1) throw NotImplementedError()
+				throw NotImplementedError()
+			}"""
             assertThat(subject.lint(code)).hasSize(2)
         }
-    }
-
-    given("several TODOs") {
 
         it("reports TODO method calls") {
             val code = """
-				fun f() {
-					TODO("not implemented")
-					TODO()
-				}"""
+			fun f() {
+				TODO("not implemented")
+				TODO()
+			}"""
             assertThat(subject.lint(code)).hasSize(2)
         }
 
         it("does not report TODO comments") {
             val code = """
-				fun f() {
-					// TODO
-				}"""
+			fun f() {
+				// TODO
+			}"""
             assertThat(subject.lint(code)).hasSize(0)
         }
     }
