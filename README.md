@@ -76,6 +76,7 @@ detekt {
     toolVersion = "[version]"
     input = files("src/main/kotlin")
     filters = ".*/resources/.*,.*/build/.*"
+    baseline = file("my-detekt-baseline.xml") // Just if you want to create a baseline file.
 }
 ```
 
