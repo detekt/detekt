@@ -10,7 +10,8 @@ class DslGradleRunner(
     val buildFileName: String,
     val mainBuildFileContent: String,
     val configFileOrNone: String? = null,
-    val baselineFileOrNone: String? = null
+    val baselineFileOrNone: String? = null,
+    val gradleVersionOrNone: String? = null
 ) {
 
     private val rootDir: File = createTempDir(prefix = "applyPlugin")
@@ -80,11 +81,12 @@ class DslGradleRunner(
     fun runTasksAndCheckResult(vararg tasks: String, doAssert: DslGradleRunner.(BuildResult) -> Unit) {
 
         val args = listOf("--stacktrace", "--info", "--build-cache") + tasks
-        val result = GradleRunner.create()
-                .withProjectDir(rootDir)
-                .withPluginClasspath()
-                .withArguments(args)
-                .build()
+        val result = GradleRunner.create().apply {
+            withProjectDir(rootDir)
+            withPluginClasspath()
+            withArguments(args)
+            gradleVersionOrNone?.let { withGradleVersion(gradleVersionOrNone) }
+        }.build()
         this.doAssert(result)
     }
 
