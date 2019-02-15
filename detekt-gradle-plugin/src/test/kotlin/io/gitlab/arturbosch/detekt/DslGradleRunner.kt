@@ -14,7 +14,6 @@ class DslGradleRunner(
 ) {
 
     private val rootDir: File = createTempDir(prefix = "applyPlugin")
-    private val cacheDir = createTempDir(prefix = "cache")
     private val randomString = UUID.randomUUID().toString()
 
     private val settingsContent = """
@@ -80,10 +79,7 @@ class DslGradleRunner(
 
     fun runTasksAndCheckResult(vararg tasks: String, doAssert: DslGradleRunner.(BuildResult) -> Unit) {
 
-        // Using a custom "project-cache-dir" to avoid a Gradle error on Windows
-        val cacheArgs = listOf("--project-cache-dir", cacheDir.absolutePath, "--build-cache")
-
-        val args = listOf("--stacktrace", "--info") + cacheArgs + tasks
+        val args = listOf("--stacktrace", "--info", "--build-cache") + tasks
         val result = GradleRunner.create()
                 .withProjectDir(rootDir)
                 .withPluginClasspath()

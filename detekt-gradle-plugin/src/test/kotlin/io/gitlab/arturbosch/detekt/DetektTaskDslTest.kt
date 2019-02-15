@@ -205,7 +205,7 @@ internal class DetektTaskDslTest : Spek({
 
                     val config = """
 						|detekt {
-						|	input = files("${"$"}projectDir")
+						|	input = files("${"$"}projectDir/src")
 						|	filters = ".*/test/.*"
 						|}
 						"""
@@ -270,7 +270,7 @@ internal class DetektTaskDslTest : Spek({
 					|task detektFailFast(type: io.gitlab.arturbosch.detekt.Detekt) {
 					|	description = "Runs a failfast detekt build."
 					|
-					|	input = files("${"$"}projectDir")
+					|	input = files("${"$"}projectDir/src")
 					|	config = files("config.yml")
 					|	debug = true
 					|	parallel = true
@@ -303,7 +303,7 @@ internal class DetektTaskDslTest : Spek({
 					|task<io.gitlab.arturbosch.detekt.Detekt>("detektFailFast") {
 					|	description = "Runs a failfast detekt build."
 					|
-					|	input = files("${"$"}projectDir")
+					|	input = files("${"$"}projectDir/src")
 					|	config = files("config.yml")
 					|	debug = true
 					|	parallel = true
