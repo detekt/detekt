@@ -13,6 +13,8 @@ import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
+import org.jetbrains.kotlin.psi.KtReferenceExpression
+import org.jetbrains.kotlin.psi.KtThisExpression
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
@@ -64,9 +66,14 @@ private fun KtCallExpression.receiverIsUnused(): Boolean {
 private fun KtCallExpression.hasOnlyOneStatement(): Boolean {
     val lambdaBody = firstLambdaArg?.bodyExpression
     if (lambdaBody.hasOnlyOneStatement()) {
-        return lambdaBody.statements[0]
+        val expr = lambdaBody.statements[0]
+        val notAnAssignment = expr
                 ?.safeAs<KtBinaryExpression>()
                 ?.operationToken != KtTokens.EQ
+        val isMemberAccess = expr is KtReferenceExpression ||
+                expr is KtCallExpression ||
+                expr.safeAs<KtDotQualifiedExpression>()?.receiverExpression is KtThisExpression
+        return notAnAssignment && isMemberAccess
     }
     return false
 }
