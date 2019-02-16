@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
@@ -29,6 +30,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * @configuration thresholdInEnums - threshold in enums (default: 11)
  * @configuration ignoreDeprecated - ignore deprecated functions (default: false)
  * @configuration ignorePrivate - ignore private functions (default: false)
+ * @configuration ignoreOverridden - ignore overridden functions (default: false)
  *
  * @active since v1.0.0
  * @author Artur Bosch
@@ -51,6 +53,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
     private val thresholdInEnums = valueOrDefault(THRESHOLD_IN_ENUMS, DEFAULT_THRESHOLD)
     private val ignoreDeprecated = valueOrDefault(IGNORE_DEPRECATED, false)
     private val ignorePrivate = valueOrDefault(IGNORE_PRIVATE, false)
+    private val ignoreOverridden = valueOrDefault(IGNORE_OVERRIDDEN, false)
 
     private var amountOfTopLevelFunctions: Int = 0
 
@@ -124,6 +127,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
     private fun isIgnoredFunction(function: KtNamedFunction): Boolean = when {
         ignoreDeprecated && function.annotationEntries.any { it.typeReference?.text == DEPRECATED } -> true
         ignorePrivate && function.isPrivate() -> true
+        ignoreOverridden && (function.modifierList?.hasModifier(KtTokens.OVERRIDE_KEYWORD) ?: false) -> true
         else -> false
     }
 
@@ -136,6 +140,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
         const val THRESHOLD_IN_ENUMS = "thresholdInEnums"
         const val IGNORE_DEPRECATED = "ignoreDeprecated"
         const val IGNORE_PRIVATE = "ignorePrivate"
+        const val IGNORE_OVERRIDDEN = "ignoreOverridden"
         private const val DEPRECATED = "Deprecated"
     }
 }

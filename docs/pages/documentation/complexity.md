@@ -327,3 +327,7 @@ which clearly belongs together in separate parts of the code.
 * `ignorePrivate` (default: `false`)
 
    ignore private functions
+
+* `ignoreOverridden` (default: `false`)
+
+   ignore overridden functions
