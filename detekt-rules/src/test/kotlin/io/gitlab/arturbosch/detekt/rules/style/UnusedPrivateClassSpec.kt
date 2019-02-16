@@ -290,6 +290,9 @@ class UnusedPrivateClassSpec : Spek({
 							val instance = SomeClass(name = "test")
 							assertNotEquals(AnotherClass::class.java.simpleName, instance::class.java.simpleName)
 						}
+
+                        fun getSomeObject(): ((String) -> Any) = ::InternalClass
+                        private class InternalClass(val param: String)
 					}
 				""".trimIndent()
 

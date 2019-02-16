@@ -8,7 +8,9 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.safeAs
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtDoubleColonExpression
@@ -129,6 +131,12 @@ class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
 
         override fun visitDoubleColonExpression(expression: KtDoubleColonExpression) {
             checkReceiverForClassUsage(expression.receiverExpression)
+            if (expression.isEmptyLHS) {
+                expression.safeAs<KtCallableReferenceExpression>()
+                        ?.callableReference
+                        ?.takeIf { looksLikeAClassName(it.getReferencedName()) }
+                        ?.let { namedClasses.add(it.getReferencedName()) }
+            }
             super.visitDoubleColonExpression(expression)
         }
 
