@@ -87,7 +87,7 @@ internal class DetektTaskDslTest : Spek({
                             .withDetektConfig(config)
                             .build()
 
-                    gradleRunner.runDetektTaskAndCheckResult() { result ->
+                    gradleRunner.runDetektTaskAndCheckResult { result ->
 
                         assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
                         val expectedInputParam = "--input ${projectFile(customSrc).absolutePath}"
@@ -111,7 +111,7 @@ internal class DetektTaskDslTest : Spek({
                             .withDetektConfig(config)
                             .build()
 
-                    gradleRunner.runDetektTaskAndCheckResult() { result ->
+                    gradleRunner.runDetektTaskAndCheckResult { result ->
 
                         assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
                         val expectedInputParam =
@@ -132,7 +132,7 @@ internal class DetektTaskDslTest : Spek({
                             .withDetektConfig(config)
                             .build()
 
-                    gradleRunner.runDetektTaskAndCheckResult() { result ->
+                    gradleRunner.runDetektTaskAndCheckResult { result ->
                         assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
                         assertThat(projectFile("build/detekt-reports/detekt.xml")).exists()
                         assertThat(projectFile("build/detekt-reports/detekt.html")).exists()
@@ -153,7 +153,7 @@ internal class DetektTaskDslTest : Spek({
                             .withDetektConfig(config)
                             .build()
 
-                    gradleRunner.runDetektTaskAndCheckResult() { result ->
+                    gradleRunner.runDetektTaskAndCheckResult { result ->
                         assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
                         assertThat(projectFile("build/xml-reports/custom-detekt.xml")).exists()
                         assertThat(projectFile("build/detekt-reports/detekt.html")).exists()
@@ -176,7 +176,7 @@ internal class DetektTaskDslTest : Spek({
                             .withDetektConfig(config)
                             .build()
 
-                    gradleRunner.runDetektTaskAndCheckResult() { result ->
+                    gradleRunner.runDetektTaskAndCheckResult { result ->
                         assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
                         assertThat(projectFile("build/reports/detekt/detekt.xml")).doesNotExist()
                         assertThat(projectFile("build/reports/detekt/detekt.html")).doesNotExist()
@@ -196,7 +196,7 @@ internal class DetektTaskDslTest : Spek({
                             .withDetektConfig(config)
                             .build()
 
-                    gradleRunner.runDetektTaskAndCheckResult() { result ->
+                    gradleRunner.runDetektTaskAndCheckResult { result ->
                         assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
                         assertThat(result.output).contains("--debug", "--parallel", "--disable-default-rulesets")
                     }
@@ -217,7 +217,7 @@ internal class DetektTaskDslTest : Spek({
                             .withProjectLayout(projectLayout)
                             .build()
 
-                    gradleRunner.runDetektTaskAndCheckResult() { result ->
+                    gradleRunner.runDetektTaskAndCheckResult { result ->
                         assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
                         assertThat(result.output).contains("number of classes: 1")
                     }
@@ -237,7 +237,7 @@ internal class DetektTaskDslTest : Spek({
                             .withBaseline(baselineFilename)
                             .build()
 
-                    gradleRunner.runDetektTaskAndCheckResult() { result ->
+                    gradleRunner.runDetektTaskAndCheckResult { result ->
                         assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
                         val expectedBaselineArgument = "--baseline ${projectFile(baselineFilename).absolutePath}"
                         assertThat(result.output).contains(expectedBaselineArgument)

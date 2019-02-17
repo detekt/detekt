@@ -12,6 +12,7 @@ abstract class DslTestBuilder {
     private var projectLayout: ProjectLayout = ProjectLayout(1)
     private var baselineFile: String? = null
     private var configFile: String? = null
+    private var gradleVersion: String? = null
 
     fun withDetektConfig(config: String): DslTestBuilder {
         detektConfig = config
@@ -33,6 +34,11 @@ abstract class DslTestBuilder {
         return this
     }
 
+    fun withGradleVersion(version: String): DslTestBuilder {
+        gradleVersion = version
+        return this
+    }
+
     fun build(): DslGradleRunner {
         val mainBuildFileContent = """
 			| $gradleBuildConfig
@@ -43,7 +49,8 @@ abstract class DslTestBuilder {
                 gradleBuildName,
                 mainBuildFileContent,
                 configFile,
-                baselineFile)
+                baselineFile,
+                gradleVersion)
         runner.setupProject()
         return runner
     }
