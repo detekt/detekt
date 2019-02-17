@@ -117,6 +117,7 @@ complexity:
     thresholdInEnums: 11
     ignoreDeprecated: false
     ignorePrivate: false
+    ignoreOverridden: false
 
 empty-blocks:
   active: true

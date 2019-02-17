@@ -171,14 +171,48 @@ class TooManyFunctionsSpec : Spek({
 					private fun b() = Unit
 					@Deprecated
 					private fun c() = Unit
+
+                    class D : E {
+                        override fun f() = Unit
+                        override fun e() = Unit
+                    }
 				""".trimIndent()
                 val configuredRule = TooManyFunctions(TestConfig(mapOf(
                         TooManyFunctions.THRESHOLD_IN_CLASSES to "1",
                         TooManyFunctions.THRESHOLD_IN_FILES to "1",
                         TooManyFunctions.IGNORE_PRIVATE to "true",
-                        TooManyFunctions.IGNORE_DEPRECATED to "true"
+                        TooManyFunctions.IGNORE_DEPRECATED to "true",
+                        TooManyFunctions.IGNORE_OVERRIDDEN to "true"
                 )))
                 assertThat(configuredRule.lint(code)).isEmpty()
+            }
+        }
+
+        describe("overridden functions") {
+
+            val code = """
+                    class Foo : Bar {
+                        override fun func1() = Unit
+                        override fun func2() = Unit
+                    }
+                """.trimIndent()
+
+            it("should not report class with overridden functions, if ignoreOverridden is enabled") {
+                val configuredRule = TooManyFunctions(TestConfig(mapOf(
+                        TooManyFunctions.THRESHOLD_IN_CLASSES to "1",
+                        TooManyFunctions.THRESHOLD_IN_FILES to "1",
+                        TooManyFunctions.IGNORE_OVERRIDDEN to "true"
+                )))
+                assertThat(configuredRule.lint(code)).isEmpty()
+            }
+
+            it("should count overridden functions, if ignoreOverridden is disabled") {
+                val configuredRule = TooManyFunctions(TestConfig(mapOf(
+                        TooManyFunctions.THRESHOLD_IN_CLASSES to "1",
+                        TooManyFunctions.THRESHOLD_IN_FILES to "1",
+                        TooManyFunctions.IGNORE_OVERRIDDEN to "false"
+                )))
+                assertThat(configuredRule.lint(code)).hasSize(1)
             }
         }
     }
