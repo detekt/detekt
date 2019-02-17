@@ -123,5 +123,38 @@ class UnnecessaryApplySpec : Spek({
 			""".trimIndent())).isEmpty()
             }
         }
+
+        context("false positive in single nesting expressions - #1473") {
+
+            it("should not report the if expression") {
+                assertThat(subject.lint("""
+                    class Preference {
+                        fun shouldDisable() = true
+                    }
+                    fun falsePositive() {
+                        Preference().apply {
+                            if (shouldDisable()) {
+                                // actions
+                            }
+                        }
+                    }
+                """.trimIndent())).isEmpty()
+            }
+
+            it("should report reference expressions") {
+                assertThat(subject.lint("""
+                    class Preference { val propertyAccess = 5 }
+                    fun correctReporting() {
+                        Preference().apply {
+                            propertyAccess
+                        }
+
+                        Preference().apply {
+                            this.propertyAccess
+                        }
+                    }
+                """.trimIndent())).hasSize(2)
+            }
+        }
     }
 })
