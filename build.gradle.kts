@@ -217,7 +217,7 @@ subprojects {
             from(components["java"])
             artifact(sourcesJar)
             artifact(javadocJar)
-            if (project.name in shadowedProjects) {
+            if (project.name == "detekt-cli") {
                 artifact(tasks.getByName("shadowJar"))
             }
             groupId = this@subprojects.group as? String
