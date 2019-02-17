@@ -23,11 +23,11 @@ plugins {
     kotlin("jvm") version "1.3.21"
     id("org.jetbrains.dokka") version "0.9.17"
     id("com.github.ben-manes.versions") version "0.20.0"
-    id("io.gitlab.arturbosch.detekt") version "1.0.0-RC12"
+    id("io.gitlab.arturbosch.detekt") version "1.0.0-RC13"
 }
 
 group = "io.gitlab.arturbosch.detekt"
-version = "1.0.0-RC13"
+version = "1.0.0-RC14"
 
 val detektGradleVersion: String by project
 val jcommanderVersion: String by project
