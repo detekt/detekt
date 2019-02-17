@@ -8,7 +8,8 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
-import org.jetbrains.kotlin.lexer.KtTokens
+import io.gitlab.arturbosch.detekt.rules.hasAnnotation
+import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
@@ -125,9 +126,9 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
             ?.size ?: 0
 
     private fun isIgnoredFunction(function: KtNamedFunction): Boolean = when {
-        ignoreDeprecated && function.annotationEntries.any { it.typeReference?.text == DEPRECATED } -> true
+        ignoreDeprecated && function.hasAnnotation(DEPRECATED) -> true
         ignorePrivate && function.isPrivate() -> true
-        ignoreOverridden && (function.modifierList?.hasModifier(KtTokens.OVERRIDE_KEYWORD) ?: false) -> true
+        ignoreOverridden && function.isOverride() -> true
         else -> false
     }
 
