@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.cli.baseline
 
-import java.time.Instant
 import org.xml.sax.Attributes
 import org.xml.sax.helpers.DefaultHandler
+import java.time.Instant
 
 /**
  * @author Artur Bosch

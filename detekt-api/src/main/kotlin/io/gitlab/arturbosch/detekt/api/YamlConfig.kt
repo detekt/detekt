@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.api
 
+import org.yaml.snakeyaml.Yaml
 import java.io.BufferedReader
 import java.net.URL
 import java.nio.file.Files
 import java.nio.file.Path
-import org.yaml.snakeyaml.Yaml
 
 /**
  * Config implementation using the yaml format. SubConfigurations can return sub maps according to the

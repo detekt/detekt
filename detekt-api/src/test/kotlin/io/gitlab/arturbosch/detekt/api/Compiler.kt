@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.api
 
-import java.io.File
-import java.net.URI
 import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import org.jetbrains.kotlin.com.intellij.psi.PsiFileFactory
 import org.jetbrains.kotlin.idea.KotlinLanguage
 import org.jetbrains.kotlin.psi.KtFile
+import java.io.File
+import java.net.URI
 
 /**
  * @author Artur Bosch

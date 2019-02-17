@@ -4,9 +4,9 @@ import io.gitlab.arturbosch.detekt.api.BaseRule
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.test.KotlinScriptEngine.compile
-import java.nio.file.Path
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.psi.KtFile
+import java.nio.file.Path
 
 fun BaseRule.compileAndLint(@Language("kotlin") content: String): List<Finding> {
     compile(content)

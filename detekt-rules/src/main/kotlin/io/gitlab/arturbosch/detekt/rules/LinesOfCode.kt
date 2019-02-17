@@ -1,7 +1,5 @@
 package io.gitlab.arturbosch.detekt.rules
 
-import java.util.ArrayDeque
-import kotlin.reflect.KClass
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.com.intellij.psi.PsiComment
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
@@ -21,6 +19,8 @@ import org.jetbrains.kotlin.kdoc.psi.impl.KDocSection
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocTag
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
+import java.util.ArrayDeque
+import kotlin.reflect.KClass
 
 fun ASTNode.tokenSequence(skipTreesOf: Set<KClass<out PsiElement>>): Sequence<ASTNode> = sequence {
     val queue = ArrayDeque<ASTNode>()

@@ -7,8 +7,6 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 /**
  * See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
  *
- * @active since v1.0.0
- * @autoCorrect since v1.0.0
  * @author Artur Bosch
  */
 class ImportOrdering(config: Config) : FormattingRule(config) {

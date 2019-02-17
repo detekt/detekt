@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt
 
-import java.io.File
-import java.util.UUID
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
+import java.io.File
+import java.util.UUID
 
 class DslGradleRunner(
     val projectLayout: ProjectLayout,

@@ -214,8 +214,7 @@ formatting:
     active: true
     autoCorrect: true
   ImportOrdering:
-    active: true
-    autoCorrect: true
+    active: false
   Indentation:
     active: true
     autoCorrect: true
@@ -237,7 +236,7 @@ formatting:
     active: true
     autoCorrect: true
   NoItParamInMultilineLambda:
-    active: true
+    active: false
   NoLineBreakAfterElse:
     active: true
     autoCorrect: true

@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.extensions
 
-import java.io.File
 import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.plugins.quality.CodeQualityExtension
+import java.io.File
 
 /**
  * @author Artur Bosch

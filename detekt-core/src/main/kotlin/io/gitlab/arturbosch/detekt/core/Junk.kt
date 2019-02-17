@@ -1,13 +1,13 @@
 package io.gitlab.arturbosch.detekt.core
 
 import io.gitlab.arturbosch.detekt.api.Finding
+import org.jetbrains.kotlin.psi.KtFile
 import java.io.PrintStream
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.HashMap
 import java.util.stream.Collectors
 import java.util.stream.Stream
-import org.jetbrains.kotlin.psi.KtFile
 
 /**
  * @author Artur Bosch

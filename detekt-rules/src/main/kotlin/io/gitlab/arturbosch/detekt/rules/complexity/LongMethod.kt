@@ -10,10 +10,10 @@ import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.rules.linesOfCode
 import io.gitlab.arturbosch.detekt.rules.parentOfType
-import java.util.IdentityHashMap
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.utils.addToStdlib.flattenTo
+import java.util.IdentityHashMap
 
 /**
  * Methods should have one responsibility. Long methods can indicate that a method handles too many cases at once.

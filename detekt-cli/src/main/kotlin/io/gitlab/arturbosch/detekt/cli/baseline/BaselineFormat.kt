@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.cli.baseline
 
+import org.xml.sax.SAXParseException
 import java.nio.file.Files
 import java.nio.file.Path
 import javax.xml.parsers.SAXParserFactory
 import javax.xml.stream.XMLStreamException
 import javax.xml.stream.XMLStreamWriter
-import org.xml.sax.SAXParseException
 
 /**
  * @author Artur Bosch

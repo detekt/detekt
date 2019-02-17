@@ -3,9 +3,9 @@ package io.gitlab.arturbosch.detekt.core
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleId
 import io.gitlab.arturbosch.detekt.core.TestPattern.Companion.TEST_PATTERN_SUB_CONFIG
+import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
 import java.nio.file.Paths
-import org.jetbrains.kotlin.psi.KtFile
 
 /**
  * @author Artur Bosch
