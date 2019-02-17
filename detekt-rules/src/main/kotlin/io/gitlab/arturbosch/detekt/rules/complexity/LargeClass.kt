@@ -10,10 +10,10 @@ import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.rules.linesOfCode
 import io.gitlab.arturbosch.detekt.rules.parentOfType
-import java.util.IdentityHashMap
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.utils.addToStdlib.flattenTo
+import java.util.IdentityHashMap
 
 /**
  * This rule reports large classes. Classes should generally have one responsibility. Large classes can indicate that

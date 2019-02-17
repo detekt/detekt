@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.extensions
 
 import io.gitlab.arturbosch.detekt.internal.fileProperty
-import java.io.File
 import org.gradle.api.Project
 import org.gradle.api.file.RegularFile
 import org.gradle.api.provider.Provider
+import java.io.File
 
 class DetektReport(val type: DetektReportType, private val project: Project) {
 

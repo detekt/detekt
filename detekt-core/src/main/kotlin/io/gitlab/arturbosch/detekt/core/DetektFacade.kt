@@ -5,8 +5,8 @@ import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import java.nio.file.Path
 import org.jetbrains.kotlin.psi.KtFile
+import java.nio.file.Path
 
 /**
  * @author Artur Bosch

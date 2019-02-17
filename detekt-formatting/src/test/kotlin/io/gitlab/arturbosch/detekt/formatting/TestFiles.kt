@@ -2,9 +2,9 @@ package io.gitlab.arturbosch.detekt.formatting
 
 import io.gitlab.arturbosch.detekt.test.compileForTest
 import io.gitlab.arturbosch.detekt.test.resource
+import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import java.io.File
 import java.nio.file.Paths
-import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 
 /**
  * @author Artur Bosch

@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.test
 
-import javax.script.ScriptEngineManager
-import javax.script.ScriptException
 import org.jetbrains.kotlin.cli.common.environment.setIdeaIoUseFallback
 import org.jetbrains.kotlin.script.jsr223.KotlinJsr223JvmLocalScriptEngine
+import javax.script.ScriptEngineManager
+import javax.script.ScriptException
 
 /**
  * The object to create the Kotlin script engine for code compilation.

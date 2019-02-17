@@ -3,11 +3,11 @@ package io.gitlab.arturbosch.detekt.cli
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.YamlConfig
-import java.lang.reflect.Field
-import java.lang.reflect.Modifier
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.reflections.Reflections
+import java.lang.reflect.Field
+import java.lang.reflect.Modifier
 
 class ConfigAssert(
     private val config: Config,

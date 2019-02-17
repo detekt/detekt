@@ -7,15 +7,14 @@ import io.gitlab.arturbosch.detekt.watcher.service.PathEvent
 import io.gitlab.arturbosch.detekt.watcher.service.WatchedDir
 import io.gitlab.arturbosch.detekt.watcher.state.Parameters
 import io.gitlab.arturbosch.detekt.watcher.state.State
-import java.io.ByteArrayOutputStream
-import java.io.PrintStream
-import java.lang.UnsupportedOperationException
-import java.nio.file.Files
-import java.nio.file.Paths
-import java.nio.file.WatchEvent.Kind
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
+import java.io.ByteArrayOutputStream
+import java.io.PrintStream
+import java.nio.file.Files
+import java.nio.file.Paths
+import java.nio.file.WatchEvent.Kind
 
 class DetektServiceSpec : Spek({
 

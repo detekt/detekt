@@ -10,9 +10,9 @@ import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.test.resource
+import org.jetbrains.kotlin.psi.KtClassOrObject
 import java.nio.file.Path
 import java.nio.file.Paths
-import org.jetbrains.kotlin.psi.KtClassOrObject
 
 /**
  * @author Artur Bosch

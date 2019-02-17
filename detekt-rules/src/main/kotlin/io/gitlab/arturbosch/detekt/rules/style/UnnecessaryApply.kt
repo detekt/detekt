@@ -8,13 +8,13 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.safeAs
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.contract
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 
 /**
  * `apply` expressions are used frequently, but sometimes their usage should be replaced with
