@@ -13,6 +13,7 @@ import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
+import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtThisExpression
 import kotlin.contracts.ExperimentalContracts
@@ -45,7 +46,7 @@ class UnnecessaryApply(config: Config) : Rule(config) {
         super.visitCallExpression(expression)
 
         if (expression.isApplyExpr() &&
-                expression.hasOnlyOneStatement() &&
+                expression.hasOnlyOneMemberAccessStatement() &&
                 expression.receiverIsUnused()) {
             report(CodeSmell(
                     issue, Entity.from(expression),
@@ -63,17 +64,21 @@ private fun KtCallExpression.receiverIsUnused(): Boolean {
     return false
 }
 
-private fun KtCallExpression.hasOnlyOneStatement(): Boolean {
+private fun KtCallExpression.hasOnlyOneMemberAccessStatement(): Boolean {
+
+    fun KtExpression.notAnAssignment() =
+            safeAs<KtBinaryExpression>()
+                    ?.operationToken != KtTokens.EQ
+
+    fun KtExpression.isMemberAccess() =
+            this is KtReferenceExpression ||
+                    this is KtCallExpression ||
+                    this.safeAs<KtDotQualifiedExpression>()?.receiverExpression is KtThisExpression
+
     val lambdaBody = firstLambdaArg?.bodyExpression
     if (lambdaBody.hasOnlyOneStatement()) {
         val expr = lambdaBody.statements[0]
-        val notAnAssignment = expr
-                ?.safeAs<KtBinaryExpression>()
-                ?.operationToken != KtTokens.EQ
-        val isMemberAccess = expr is KtReferenceExpression ||
-                expr is KtCallExpression ||
-                expr.safeAs<KtDotQualifiedExpression>()?.receiverExpression is KtThisExpression
-        return notAnAssignment && isMemberAccess
+        return expr.notAnAssignment() && expr.isMemberAccess()
     }
     return false
 }

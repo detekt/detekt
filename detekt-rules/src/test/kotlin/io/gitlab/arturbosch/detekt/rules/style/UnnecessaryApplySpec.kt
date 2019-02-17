@@ -138,7 +138,7 @@ class UnnecessaryApplySpec : Spek({
                             }
                         }
                     }
-			    """.trimIndent())).isEmpty()
+                """.trimIndent())).isEmpty()
             }
 
             it("should report reference expressions") {
@@ -153,7 +153,7 @@ class UnnecessaryApplySpec : Spek({
                             this.propertyAccess
                         }
                     }
-			    """.trimIndent())).hasSize(2)
+                """.trimIndent())).hasSize(2)
             }
         }
     }
