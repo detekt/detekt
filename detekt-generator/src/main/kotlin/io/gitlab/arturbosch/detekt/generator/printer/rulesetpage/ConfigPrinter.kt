@@ -64,7 +64,6 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
     private fun defaultGenericConfiguration(): String {
         return """
 			autoCorrect: true
-			failFast: false
 			""".trimIndent()
     }
 
