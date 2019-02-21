@@ -27,4 +27,7 @@ sealed class SealedClass {
     protected fun a() {}
 }
 
-
+enum class EnumClass {
+    ;
+    protected fun foo() {}
+}

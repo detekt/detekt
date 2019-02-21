@@ -58,7 +58,8 @@ class ProtectedMemberInFinalClass(config: Config = Config.empty) : Rule(config) 
         val isNotAbstract = !klass.isAbstract()
         val isFinal = !klass.isOpen()
         val isNotSealed = !klass.isSealed()
-        return isNotAbstract && isFinal && isNotSealed
+        val isNotEnum = !klass.isEnum()
+        return isNotAbstract && isFinal && isNotSealed && isNotEnum
     }
 
     internal inner class DeclarationVisitor : DetektVisitor() {
