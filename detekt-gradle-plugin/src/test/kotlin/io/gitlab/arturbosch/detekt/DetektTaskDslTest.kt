@@ -201,27 +201,6 @@ internal class DetektTaskDslTest : Spek({
                         assertThat(result.output).contains("--debug", "--parallel", "--disable-default-rulesets")
                     }
                 }
-                it("can ignore tests by using filters") {
-
-                    val config = """
-						|detekt {
-						|	input = files("${"$"}projectDir/src")
-						|	filters = ".*/test/.*"
-						|}
-						"""
-
-                    val projectLayout = ProjectLayout(1, srcDirs = listOf("src/main/kotlin", "src/test/kotlin"))
-
-                    val gradleRunner = builder
-                            .withDetektConfig(config)
-                            .withProjectLayout(projectLayout)
-                            .build()
-
-                    gradleRunner.runDetektTaskAndCheckResult { result ->
-                        assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-                        assertThat(result.output).contains("number of classes: 1")
-                    }
-                }
                 it("allows setting a baseline file") {
 
                     val baselineFilename = "detekt-baseline.xml"

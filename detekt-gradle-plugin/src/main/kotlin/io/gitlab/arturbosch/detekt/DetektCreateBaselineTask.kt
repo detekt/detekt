@@ -9,7 +9,6 @@ import io.gitlab.arturbosch.detekt.invoke.DebugArgument
 import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import io.gitlab.arturbosch.detekt.invoke.DisableDefaultRuleSetArgument
 import io.gitlab.arturbosch.detekt.invoke.FailFastArgument
-import io.gitlab.arturbosch.detekt.invoke.FiltersArgument
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
 import io.gitlab.arturbosch.detekt.invoke.PluginsArgument
@@ -51,6 +50,7 @@ open class DetektCreateBaselineTask : SourceTask() {
 
     @Input
     @Optional
+    @Deprecated("Replace with setIncludes/setExcludes")
     var filters: Property<String> = project.objects.property(String::class.java)
 
     @InputFiles
@@ -88,7 +88,6 @@ open class DetektCreateBaselineTask : SourceTask() {
 				CreateBaselineArgument,
                 BaselineArgument(baseline.get()) ,
                 InputArgument(source) ,
-                FiltersArgument(filters.orNull) ,
                 ConfigArgument(config) ,
                 PluginsArgument(plugins.orNull) ,
                 DebugArgument(debug.getOrElse(false)),

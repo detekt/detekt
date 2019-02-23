@@ -40,6 +40,7 @@ open class DetektExtension(project: Project) : CodeQualityExtension() {
 
 	var disableDefaultRuleSets: Boolean = DEFAULT_DISABLE_RULESETS_VALUE
 
+    @Deprecated("Replace with task setIncludes/setExcludes")
     var filters: String? = null
 
     var plugins: String? = null
