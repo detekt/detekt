@@ -1,4 +1,4 @@
-@GrabResolver(name='detekt', root='http://dl.bintray.com/arturbosch/code-analysis/', m2Compatible='true')
+@GrabResolver(name='detekt', root='https://dl.bintray.com/arturbosch/code-analysis/', m2Compatible='true')
 @Grab('org.vcsreader:vcsreader:1.1.1')
 import org.vcsreader.VcsProject
 import org.vcsreader.vcs.VcsError
