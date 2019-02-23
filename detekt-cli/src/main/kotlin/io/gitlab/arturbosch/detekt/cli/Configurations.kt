@@ -50,10 +50,14 @@ fun CliArgs.loadConfiguration(): Config {
 }
 
 private fun Config.deprecatedFailFastUsage(): Boolean {
-    val value = valueOrDefault("failFast", false)
-    LOG.printer.println("Using deprecated property 'failFast' in the yaml config. " +
-            "Please migrate to the new '--fail-fast' cli-flag or 'failFast' detekt extension property.")
-    return value
+    val value: Boolean? = valueOrNull("failFast")
+    value?.let {
+        LOG.printer.println(
+            "Using deprecated property 'failFast' in the yaml config. " +
+                    "Please migrate to the new '--fail-fast' cli-flag or 'failFast' detekt extension property."
+        )
+    }
+    return value ?: false
 }
 
 private fun parseResourceConfig(configPath: String): Config {
