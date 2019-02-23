@@ -12,6 +12,14 @@ summary:
 2. `gradle build`
 3. `java -jar detekt-cli/build/libs/detekt-cli-[version]-all.jar [parameters]*`
 
+detekt will exit with one of the following exit codes:
+
+| Exit code | Description                                                                                     |
+|-----------|-------------------------------------------------------------------------------------------------|
+| 0         | detekt ran normally and maxIssues or failThreshold count was not reached in BuildFailureReport. |
+| 1         | An unexpected error occurred                                                                    |
+| 2         | maxIssues or failThreshold count was reached in BuildFailureReport.                             |
+
 The following parameters are shown when `--help` is entered.
 
 ```

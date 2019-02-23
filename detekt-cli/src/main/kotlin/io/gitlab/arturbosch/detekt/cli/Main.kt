@@ -2,16 +2,19 @@
 
 package io.gitlab.arturbosch.detekt.cli
 
+import io.gitlab.arturbosch.detekt.cli.console.BuildFailure
 import io.gitlab.arturbosch.detekt.cli.runners.AstPrinter
 import io.gitlab.arturbosch.detekt.cli.runners.ConfigExporter
 import io.gitlab.arturbosch.detekt.cli.runners.Runner
 import io.gitlab.arturbosch.detekt.cli.runners.SingleRuleRunner
 import org.jetbrains.kotlin.utils.addToStdlib.ifNotEmpty
+import kotlin.system.exitProcess
 
 /**
  * @author Artur Bosch
  * @author Marvin Ramin
  */
+@Suppress("TooGenericExceptionCaught")
 fun main(args: Array<String>) {
     val arguments = parseArguments(args)
     LOG.active = arguments.debug
@@ -21,7 +24,18 @@ fun main(args: Array<String>) {
         arguments.printAst -> AstPrinter(arguments)
         else -> Runner(arguments)
     }
-    executable.execute()
+    try {
+        executable.execute()
+    } catch (e: BuildFailure) {
+        // Exit with status code 2 when maxIssues or failThreshold count was reached in BuildFailureReport.
+        exitProcess(2)
+    } catch (e: Exception) {
+        // Exit with status code 1 when an unexpected error occurred.
+        exitProcess(1)
+    }
+    // Exit with status code 0 when detekt ran normally and maxIssues or failThreshold count was not reached in
+    // BuildFailureReport.
+    exitProcess(0)
 }
 
 private fun parseArguments(args: Array<String>): CliArgs {
