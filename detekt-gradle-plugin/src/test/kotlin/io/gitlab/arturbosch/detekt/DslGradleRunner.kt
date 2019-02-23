@@ -49,7 +49,7 @@ class DslGradleRunner(
         baselineFileOrNone?.let { writeProjectFile(baselineFileOrNone, baselineContent) }
         projectLayout.srcDirs.forEach { sourceDir ->
             (1..projectLayout.numberOfSourceFilesInRootPerSourceDir).forEach {
-                writeKtFile(File(rootDir, sourceDir), "MyRoot${it}Class.kt")
+                writeKtFile(File(rootDir, sourceDir), "MyRoot${it}Class")
             }
         }
 
@@ -59,7 +59,7 @@ class DslGradleRunner(
             File(moduleRoot, buildFileName).writeText(submodule.detektConfig ?: "")
             submodule.srcDirs.forEach { moduleSourceDir ->
                 (1..submodule.numberOfSourceFiles).forEach {
-                    writeKtFile(File(moduleRoot, moduleSourceDir), "My${submodule.name}${it}Class.kt")
+                    writeKtFile(File(moduleRoot, moduleSourceDir), "My${submodule.name}${it}Class")
                 }
             }
         }
@@ -75,7 +75,7 @@ class DslGradleRunner(
 
     private fun writeKtFile(dir: File, className: String) {
         dir.mkdirs()
-        File(dir, className).writeText(ktFileContent(className))
+        File(dir, "$className.kt").writeText(ktFileContent(className))
     }
 
     fun runTasksAndCheckResult(vararg tasks: String, doAssert: DslGradleRunner.(BuildResult) -> Unit) {
