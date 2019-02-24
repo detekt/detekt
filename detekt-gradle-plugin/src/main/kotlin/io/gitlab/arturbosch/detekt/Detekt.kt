@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.extensions.DetektReports
+import io.gitlab.arturbosch.detekt.internal.fileProperty
 import io.gitlab.arturbosch.detekt.invoke.BaselineArgument
 import io.gitlab.arturbosch.detekt.invoke.BuildUponDefaultConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.ConfigArgument
@@ -57,7 +58,7 @@ open class Detekt : DefaultTask() {
     @InputFile
     @Optional
     @PathSensitive(PathSensitivity.RELATIVE)
-    var baseline: RegularFileProperty = project.layout.fileProperty()
+    var baseline: RegularFileProperty = createNewInputFile()
 
     @InputFiles
     @Optional
@@ -156,4 +157,6 @@ open class Detekt : DefaultTask() {
 
         DetektInvoker.invokeCli(project, arguments.toList(), debugProp.getOrElse(false))
     }
+
+    private fun createNewInputFile() = project.fileProperty()
 }
