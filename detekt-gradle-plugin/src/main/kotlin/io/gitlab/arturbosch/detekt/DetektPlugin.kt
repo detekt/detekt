@@ -16,21 +16,20 @@ import org.gradle.language.base.plugins.LifecycleBasePlugin
  */
 class DetektPlugin : Plugin<Project> {
 
-    override fun apply(project: Project) {
-        val extension = project.extensions.create(DETEKT, DetektExtension::class.java, project)
+	override fun apply(project: Project) {
+		val extension = project.extensions.create(DETEKT, DetektExtension::class.java, project)
 
-        configurePluginDependencies(project, extension)
+		configurePluginDependencies(project, extension)
 
-        registerDetektTask(project, extension)
-        registerCreateBaselineTask(project, extension)
-        registerGenerateConfigTask(project, extension)
+		registerDetektTask(project, extension)
+		registerCreateBaselineTask(project, extension)
+		registerGenerateConfigTask(project, extension)
 
-        registerIdeaTasks(project, extension)
-    }
+		registerIdeaTasks(project, extension)
+	}
 
 	private fun registerDetektTask(project: Project, extension: DetektExtension) {
-		val taskName = DETEKT
-		val detektTaskProvider = project.tasks.register(taskName, Detekt::class.java) {
+		val detektTaskProvider = project.tasks.register(DETEKT, Detekt::class.java) {
 			it.debugProp.set(project.provider { extension.debug })
 			it.parallelProp.set(project.provider { extension.parallel })
 			it.disableDefaultRuleSetsProp.set(project.provider { extension.disableDefaultRuleSets })
@@ -47,20 +46,20 @@ class DetektPlugin : Plugin<Project> {
 
 
 			project.subprojects.forEach { subProject ->
-				subProject.getTasksByName(taskName, false).forEach { subProjectTask ->
-					it.dependsOn(subProjectTask)
+				subProject.tasks.firstOrNull { t -> t.name == DETEKT }?.let { subprojectTask ->
+					it.dependsOn(subprojectTask)
 				}
 			}
         }
 
-        val checkTaskProvider = try {
-            project.tasks.named(LifecycleBasePlugin.CHECK_TASK_NAME)
-        } catch (ignored: UnknownTaskException) {
-            null
-        }
+		val checkTaskProvider = try {
+			project.tasks.named(LifecycleBasePlugin.CHECK_TASK_NAME)
+		} catch (ignored: UnknownTaskException) {
+			null
+		}
 
-        checkTaskProvider?.configure { it.dependsOn(detektTaskProvider) }
-    }
+		checkTaskProvider?.configure { it.dependsOn(detektTaskProvider) }
+	}
 
     private fun registerCreateBaselineTask(project: Project, extension: DetektExtension) =
             project.tasks.register(BASELINE, DetektCreateBaselineTask::class.java) {
@@ -102,30 +101,30 @@ class DetektPlugin : Plugin<Project> {
         }
     }
 
-    private fun existingInputDirectoriesProvider(
-        project: Project,
-        extension: DetektExtension
-    ): Provider<FileCollection> = project.provider { extension.input.filter { it.exists() } }
+	private fun existingInputDirectoriesProvider(
+		project: Project,
+		extension: DetektExtension
+	): Provider<FileCollection> = project.provider { extension.input.filter { it.exists() } }
 
-    private fun configurePluginDependencies(project: Project, extension: DetektExtension) {
-        project.configurations.create(CONFIGURATION_DETEKT_PLUGINS) { configuration ->
-            configuration.isVisible = false
-            configuration.isTransitive = true
-            configuration.description = "The $CONFIGURATION_DETEKT_PLUGINS libraries to be used for this project."
-        }
+	private fun configurePluginDependencies(project: Project, extension: DetektExtension) {
+		project.configurations.create(CONFIGURATION_DETEKT_PLUGINS) { configuration ->
+			configuration.isVisible = false
+			configuration.isTransitive = true
+			configuration.description = "The $CONFIGURATION_DETEKT_PLUGINS libraries to be used for this project."
+		}
 
-        project.configurations.create(CONFIGURATION_DETEKT) { configuration ->
-            configuration.isVisible = false
-            configuration.isTransitive = true
-            configuration.description = "The $CONFIGURATION_DETEKT dependencies to be used for this project."
+		project.configurations.create(CONFIGURATION_DETEKT) { configuration ->
+			configuration.isVisible = false
+			configuration.isTransitive = true
+			configuration.description = "The $CONFIGURATION_DETEKT dependencies to be used for this project."
 
-            configuration.defaultDependencies { dependencySet ->
-                @Suppress("USELESS_ELVIS")
-                val version = extension.toolVersion ?: DEFAULT_DETEKT_VERSION
-                dependencySet.add(project.dependencies.create("io.gitlab.arturbosch.detekt:detekt-cli:$version"))
-            }
-        }
-    }
+			configuration.defaultDependencies { dependencySet ->
+				@Suppress("USELESS_ELVIS")
+				val version = extension.toolVersion ?: DEFAULT_DETEKT_VERSION
+				dependencySet.add(project.dependencies.create("io.gitlab.arturbosch.detekt:detekt-cli:$version"))
+			}
+		}
+	}
 
     companion object {
         private const val DETEKT = "detekt"
