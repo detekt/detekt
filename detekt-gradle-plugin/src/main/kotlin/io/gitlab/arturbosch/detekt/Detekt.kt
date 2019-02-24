@@ -22,6 +22,7 @@ import org.gradle.api.file.Directory
 import org.gradle.api.file.FileCollection
 import org.gradle.api.file.RegularFile
 import org.gradle.api.file.RegularFileProperty
+import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
 import org.gradle.api.reporting.ReportingExtension
 import org.gradle.api.tasks.CacheableTask
@@ -66,41 +67,41 @@ open class Detekt : SourceTask() {
     @PathSensitive(PathSensitivity.RELATIVE)
     var config: ConfigurableFileCollection = project.configurableFileCollection()
 
-    @Input
-    @Optional
-    var plugins: Property<String> = project.objects.property(String::class.java)
+	@Input
+	@Optional
+	var plugins: Property<String> = project.objects.property(String::class.java)
 
-    @Internal
-    @Optional
-    val debugProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
-    var debug: Boolean
-        @Internal
-        get() = debugProp.get()
-        set(value) = debugProp.set(value)
+	@Internal
+	@Optional
+	val debugProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+	var debug: Boolean
+		@Internal
+		get() = debugProp.get()
+		set(value) = debugProp.set(value)
 
-    @Internal
-    @Optional
-    val parallelProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
-    var parallel: Boolean
-        @Internal
-        get() = parallelProp.get()
-        set(value) = parallelProp.set(value)
+	@Internal
+	@Optional
+	val parallelProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+	var parallel: Boolean
+		@Internal
+		get() = parallelProp.get()
+		set(value) = parallelProp.set(value)
 
-    @Optional
-    @Input
-    val disableDefaultRuleSetsProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
-    var disableDefaultRuleSets: Boolean
-        @Internal
-        get() = disableDefaultRuleSetsProp.get()
-        set(value) = disableDefaultRuleSetsProp.set(value)
+	@Optional
+	@Input
+	val disableDefaultRuleSetsProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+	var disableDefaultRuleSets: Boolean
+		@Internal
+		get() = disableDefaultRuleSetsProp.get()
+		set(value) = disableDefaultRuleSetsProp.set(value)
 
-    @Optional
-    @Input
-    val buildUponDefaultConfigProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
-    var buildUponDefaultConfig: Boolean
-        @Internal
-        get() = buildUponDefaultConfigProp.get()
-        set(value) = buildUponDefaultConfigProp.set(value)
+	@Optional
+	@Input
+	val buildUponDefaultConfigProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+	var buildUponDefaultConfig: Boolean
+		@Internal
+		get() = buildUponDefaultConfigProp.get()
+		set(value) = buildUponDefaultConfigProp.set(value)
 
     @Optional
     @Input
@@ -110,37 +111,37 @@ open class Detekt : SourceTask() {
         get() = failFastProp.get()
         set(value) = failFastProp.set(value)
 
-    @Internal
-    var reports = DetektReports(project)
+	@Internal
+	var reports = DetektReports(project)
 
-    fun reports(configure: Action<DetektReports>) = configure.execute(reports)
+	fun reports(configure: Action<DetektReports>) = configure.execute(reports)
 
-    @Internal
-    @Optional
-    var reportsDir: Property<File> = project.objects.property(File::class.java)
+	@Internal
+	@Optional
+	var reportsDir: Property<File> = project.objects.property(File::class.java)
 
-    val xmlReportFile: Provider<RegularFile>
-        @OutputFile
-        @Optional
-        get() = reports.xml.getTargetFileProvider(effectiveReportsDir)
+	val xmlReportFile: Provider<RegularFile>
+		@OutputFile
+		@Optional
+		get() = reports.xml.getTargetFileProvider(effectiveReportsDir)
 
-    val htmlReportFile: Provider<RegularFile>
-        @OutputFile
-        @Optional
-        get() = reports.html.getTargetFileProvider(effectiveReportsDir)
+	val htmlReportFile: Provider<RegularFile>
+		@OutputFile
+		@Optional
+		get() = reports.html.getTargetFileProvider(effectiveReportsDir)
 
-    private val defaultReportsDir: Directory = project.layout.buildDirectory.get()
-            .dir(ReportingExtension.DEFAULT_REPORTS_DIR_NAME)
-            .dir("detekt")
+	private val defaultReportsDir: Directory = project.layout.buildDirectory.get()
+		.dir(ReportingExtension.DEFAULT_REPORTS_DIR_NAME)
+		.dir("detekt")
 
-    private val effectiveReportsDir = project.provider { reportsDir.getOrElse(defaultReportsDir.asFile) }
+	private val effectiveReportsDir = project.provider { reportsDir.getOrElse(defaultReportsDir.asFile) }
 
-    init {
-        group = LifecycleBasePlugin.VERIFICATION_GROUP
-    }
+	init {
+		group = LifecycleBasePlugin.VERIFICATION_GROUP
+	}
 
-    @TaskAction
-    fun check() {
+	@TaskAction
+	fun check() {
 		val xmlReportTargetFile = xmlReportFile.orNull
         val arguments = mutableListOf(
                 InputArgument(source) ,

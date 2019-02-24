@@ -2,9 +2,8 @@ package io.gitlab.arturbosch.detekt
 
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.TaskOutcome
-import org.jetbrains.spek.api.Spek
-import org.jetbrains.spek.api.dsl.describe
-import org.jetbrains.spek.api.dsl.it
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
 private const val SOURCE_DIRECTORY = "src/main/java"
 
@@ -14,8 +13,8 @@ private const val SOURCE_DIRECTORY = "src/main/java"
 internal class DetektTaskMultiModuleConsolidationTest : Spek({
 	describe("The Detekt Gradle plugin consolidates xml reports in a multi module project") {
 		val projectLayout = ProjectLayout(1)
-				.withSubmodule("child1", 2)
-				.withSubmodule("child2", 4)
+			.withSubmodule("child1", 2)
+			.withSubmodule("child2", 4)
 
 		lateinit var gradleRunner: DslGradleRunner
 
@@ -34,9 +33,9 @@ internal class DetektTaskMultiModuleConsolidationTest : Spek({
 				val linesInMainProject = 3 * codeSmellsPerProject
 
 				val expectedLinesInConsolidatedReport =
-						headerAndFooter +
-								linesInMainProject +
-								(projectLayout.submodules.size * linesPerSubModule)
+					headerAndFooter +
+							linesInMainProject +
+							(projectLayout.submodules.size * linesPerSubModule)
 				assertThat(consolidatedReport).hasSize(expectedLinesInConsolidatedReport)
 			}
 
