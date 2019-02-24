@@ -5,8 +5,6 @@ import org.gradle.testkit.runner.TaskOutcome
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-private const val SOURCE_DIRECTORY = "src/main/java"
-
 /**
  * @author Markus Schwarz
  */
@@ -40,7 +38,7 @@ internal class DetektTaskMultiModuleConsolidationTest : Spek({
 			}
 
 		}
-		it("can be done using the groovy dsl") {
+		it("using the groovy dsl") {
 
 			val mainBuildFileContent: String = """
 				|import io.gitlab.arturbosch.detekt.DetektPlugin
@@ -65,7 +63,7 @@ internal class DetektTaskMultiModuleConsolidationTest : Spek({
 			gradleRunner = DslGradleRunner(projectLayout, "build.gradle", mainBuildFileContent)
 
 		}
-		it("can be done using the kotlin dsl") {
+		it("using the kotlin dsl") {
 
 			val mainBuildFileContent: String = """
 				|import io.gitlab.arturbosch.detekt.detekt

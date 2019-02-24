@@ -160,9 +160,11 @@ open class Detekt : SourceTask() {
 		DetektInvoker.invokeCli(project, arguments.toList(), debugProp.getOrElse(false))
 
 		if (xmlReportTargetFile != null) {
-			val xmlReports = project.subprojects.mapNotNull { subproject ->
-				subproject.tasks.findByName(name)?.let { (it as Detekt).xmlReportFile.orNull?.asFile }
-			}
+			val xmlReports = project.subprojects.flatMap { subproject ->
+                subproject.tasks.mapNotNull { task ->
+                    if (task is Detekt) task.xmlReportFile.orNull?.asFile else null
+                }
+            }
 			if (!xmlReports.isEmpty()) {
 				logger.info("Merging report files of subprojects $xmlReports into $xmlReportTargetFile")
 			}

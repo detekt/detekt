@@ -46,7 +46,7 @@ class DetektPlugin : Plugin<Project> {
 
 
 			project.subprojects.forEach { subProject ->
-				subProject.tasks.firstOrNull { t -> t.name == DETEKT }?.let { subprojectTask ->
+				subProject.tasks.firstOrNull { t -> t is Detekt }?.let { subprojectTask ->
 					it.dependsOn(subprojectTask)
 				}
 			}
