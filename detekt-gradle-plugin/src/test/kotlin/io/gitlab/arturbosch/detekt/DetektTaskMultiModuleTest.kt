@@ -7,8 +7,6 @@ import org.gradle.testkit.runner.TaskOutcome
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-private const val SOURCE_DIRECTORY = "src/main/java"
-
 /**
  * @author Markus Schwarz
  */
