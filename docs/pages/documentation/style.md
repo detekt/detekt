@@ -610,7 +610,7 @@ This rule reports unnecessary braces in when expressions. These optional braces 
 
 ```kotlin
 val i = 1
-when (1) {
+when (i) {
     1 -> { println("one") } // unnecessary curly braces since there is only one statement
     else -> println("else")
 }
@@ -620,7 +620,7 @@ when (1) {
 
 ```kotlin
 val i = 1
-when (1) {
+when (i) {
     1 -> println("one")
     else -> println("else")
 }
