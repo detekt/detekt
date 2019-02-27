@@ -22,7 +22,7 @@ class YamlConfig internal constructor(val properties: Map<String, Any>) : BaseCo
 
     override fun <T : Any> valueOrDefault(key: String, default: T): T {
         val result = properties[key]
-        return valueOrDefaultInternal(result, default) as T
+        return valueOrDefaultInternal(key, result, default) as T
     }
 
     override fun <T : Any> valueOrNull(key: String): T? {

@@ -12,12 +12,12 @@ open class TestConfig(private val values: Map<String, String> = mutableMapOf()) 
 
     override fun <T : Any> valueOrDefault(key: String, default: T) = when (key) {
         "active" -> getActiveValue(default) as T
-        else -> valueOrDefaultInternal(values[key], default) as T
+        else -> valueOrDefaultInternal(key, values[key], default) as T
     }
 
     private fun <T : Any> getActiveValue(default: T): Any {
         val active = values["active"]
-        return if (active != null) valueOrDefaultInternal(active, default) else true
+        return if (active != null) valueOrDefaultInternal("active", active, default) else true
     }
 
     override fun <T : Any> valueOrNull(key: String): T? = when (key) {

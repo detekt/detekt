@@ -63,7 +63,7 @@ internal object EmptyConfig : Config {
  */
 abstract class BaseConfig : Config {
 
-    protected open fun valueOrDefaultInternal(result: Any?, default: Any): Any {
+    protected open fun valueOrDefaultInternal(key: String, result: Any?, default: Any): Any {
         return try {
             if (result != null) {
                 when (result) {
@@ -74,9 +74,9 @@ abstract class BaseConfig : Config {
                 default
             }
         } catch (e: ClassCastException) {
-            throw IllegalArgumentException("Type of value $result does not match the type of default value $default!")
+            throw IllegalArgumentException("Value \"$result\" set for config parameter '$key' is not of required type ${default::class.simpleName}.")
         } catch (e: NumberFormatException) {
-            throw IllegalArgumentException("Type of value $result does not match the type of default value $default!", e)
+            throw IllegalArgumentException("Value \"$result\" set for config parameter '$key' is not of required type ${default::class.simpleName}.", e)
         }
     }
 
