@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.extensions
 
+import io.gitlab.arturbosch.detekt.internal.fileProperty
 import org.gradle.api.Project
 import org.gradle.api.file.RegularFile
 import org.gradle.api.provider.Provider
@@ -25,7 +26,7 @@ class DetektReport(val type: DetektReportType, private val project: Project) {
     }
 
     private fun getTargetFile(reportsDir: File): RegularFile {
-        val prop = project.layout.fileProperty()
+        val prop = project.fileProperty()
         val customDestination = destination
         if (customDestination != null)
             prop.set(customDestination)

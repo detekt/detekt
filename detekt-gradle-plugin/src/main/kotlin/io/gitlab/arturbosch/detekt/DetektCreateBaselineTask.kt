@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt
 
+import io.gitlab.arturbosch.detekt.internal.fileProperty
 import io.gitlab.arturbosch.detekt.invoke.BaselineArgument
 import io.gitlab.arturbosch.detekt.invoke.BuildUponDefaultConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.ConfigArgument
@@ -41,7 +42,7 @@ open class DetektCreateBaselineTask : DefaultTask() {
 
     @OutputFile
     @PathSensitive(PathSensitivity.RELATIVE)
-    var baseline: RegularFileProperty = project.layout.fileProperty()
+    var baseline: RegularFileProperty = project.fileProperty()
 
     @InputFiles
     @PathSensitive(PathSensitivity.RELATIVE)
