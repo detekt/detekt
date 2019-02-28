@@ -12,6 +12,9 @@ toc: true
 ##### Migration
 
 - 'failFast' inside the yaml config was deprecated. Please use the `--fail-fast` cli flag or `failFast` detekt extension property in the gradle plugin.
+- Including or excluding paths and files from detekt scanning is now done by setting `include` & `exclude` on the
+  detekt task. Any use of `filters` will be ignored. See custom task examples for [Groovy][1] and [Kotlin][2].
+  For details of syntax see https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/util/PatternFilterable.html
 
 -->
 
@@ -1618,3 +1621,6 @@ More issues: https://gitlab.com/arturbosch/detekt/milestones/2
 - style rule set
 
 More issues: https://gitlab.com/arturbosch/detekt/milestones/1
+
+[1]: https://arturbosch.github.io/detekt/groovydsl.html#defining-custom-detekt-task
+[2]: https://arturbosch.github.io/detekt/kotlindsl.html#defining-custom-detekt-task
