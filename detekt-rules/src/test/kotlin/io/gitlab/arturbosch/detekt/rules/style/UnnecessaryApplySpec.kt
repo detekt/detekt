@@ -74,6 +74,20 @@ class UnnecessaryApplySpec : Spek({
 			""")).isEmpty()
             }
 
+            it("does report single assignment statement in apply used as function argument - #1517") {
+                assertThat(subject.lint("""
+                    list.add(
+                        if (something) {
+                            SomeObject().apply {
+                                x = y
+                            }
+                        } else {
+                            SomeOtherObject()
+                        }
+                    )
+                """)).isEmpty()
+            }
+
             it("does not report applies with lambda body containing more than one statement") {
                 assertThat(subject.lint("""
 				fun b(i : Int?) {
