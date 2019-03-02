@@ -1,4 +1,3 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import com.jfrog.bintray.gradle.BintrayExtension
 import io.gitlab.arturbosch.detekt.Detekt
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
@@ -10,16 +9,16 @@ import java.util.Date
 plugins {
     kotlin("jvm") version "1.3.21"
     id("com.jfrog.bintray") version "1.8.4"
-    id("com.github.ben-manes.versions") version "0.20.0"
-    id("com.github.johnrengelman.shadow") version "4.0.3" apply false
-    id("org.sonarqube") version "2.6.2"
+    id("com.github.ben-manes.versions") version "0.21.0"
+    id("com.github.johnrengelman.shadow") version "5.0.0" apply false
+    id("org.sonarqube") version "2.7"
     id("io.gitlab.arturbosch.detekt")
     id("org.jetbrains.dokka") version "0.9.17"
     jacoco
 }
 
 tasks.withType<Wrapper> {
-    gradleVersion = "5.2"
+    gradleVersion = "5.2.1"
     distributionType = Wrapper.DistributionType.ALL
     doLast {
         /*
@@ -112,9 +111,6 @@ subprojects {
         apply {
             plugin("application")
             plugin("com.github.johnrengelman.shadow")
-            tasks.withType<ShadowJar> {
-                archiveClassifier.set("all")
-            }
         }
     }
 
