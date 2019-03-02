@@ -2,7 +2,6 @@ import com.jfrog.bintray.gradle.BintrayExtension
 import io.gitlab.arturbosch.detekt.Detekt
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
-import org.gradle.util.GFileUtils
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.util.Date
@@ -26,11 +25,9 @@ tasks.withType<Wrapper> {
          * Copy the properties file into the detekt-gradle-plugin project.
          * This allows IDEs like IntelliJ to import the detekt-gradle-plugin as a standalone project.
          */
-        val gradlePluginWrapperDir = File(gradle.includedBuild("detekt-gradle-plugin").projectDir, "/gradle/wrapper")
-        GFileUtils.mkdirs(gradlePluginWrapperDir)
         copy {
             from(propertiesFile)
-            into(gradlePluginWrapperDir)
+            into(file("${gradle.includedBuild("detekt-gradle-plugin").projectDir}/gradle/wrapper"))
         }
     }
 }
