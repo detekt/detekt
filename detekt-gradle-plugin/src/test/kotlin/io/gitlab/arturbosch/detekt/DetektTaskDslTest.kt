@@ -115,7 +115,7 @@ internal class DetektTaskDslTest : Spek({
 
                         assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
                         val expectedInputParam =
-                                "--input ${projectFile(customSrc1).absolutePath},${projectFile(customSrc2).absolutePath}"
+                                "--input ${projectFile("$customSrc1/MyRoot1Class.kt").absolutePath},${projectFile("$customSrc2/MyRoot1Class.kt").absolutePath}"
                         assertThat(result.output).contains(expectedInputParam)
                         assertThat(result.output).contains("number of classes: 2")
                     }
@@ -201,27 +201,6 @@ internal class DetektTaskDslTest : Spek({
                         assertThat(result.output).contains("--debug", "--parallel", "--disable-default-rulesets")
                     }
                 }
-                it("can ignore tests by using filters") {
-
-                    val config = """
-						|detekt {
-						|	input = files("${"$"}projectDir/src")
-						|	filters = ".*/test/.*"
-						|}
-						"""
-
-                    val projectLayout = ProjectLayout(1, srcDirs = listOf("src/main/kotlin", "src/test/kotlin"))
-
-                    val gradleRunner = builder
-                            .withDetektConfig(config)
-                            .withProjectLayout(projectLayout)
-                            .build()
-
-                    gradleRunner.runDetektTaskAndCheckResult { result ->
-                        assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-                        assertThat(result.output).contains("number of classes: 1")
-                    }
-                }
                 it("allows setting a baseline file") {
 
                     val baselineFilename = "detekt-baseline.xml"
@@ -270,8 +249,10 @@ internal class DetektTaskDslTest : Spek({
 					|task detektFailFast(type: io.gitlab.arturbosch.detekt.Detekt) {
 					|	description = "Runs a failfast detekt build."
 					|
-					|	input = files("${"$"}projectDir/src")
+					|	input = files("${"$"}projectDir")
 					|	config = files("config.yml")
+					|	includes = ["**/*.kt", "**/*.kts"]
+					|	excludes = ["build/"]
 					|	debug = true
 					|	parallel = true
 					|	disableDefaultRuleSets = true
@@ -303,7 +284,9 @@ internal class DetektTaskDslTest : Spek({
 					|task<io.gitlab.arturbosch.detekt.Detekt>("detektFailFast") {
 					|	description = "Runs a failfast detekt build."
 					|
-					|	input = files("${"$"}projectDir/src")
+					|	input = files("${"$"}projectDir")
+					|	setIncludes(listOf("**/*.kt", "**/*.kts"))
+					|	setExcludes(listOf("build/"))
 					|	config = files("config.yml")
 					|	debug = true
 					|	parallel = true

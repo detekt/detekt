@@ -2,15 +2,11 @@ package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.extensions.IdeaExtension
 import io.gitlab.arturbosch.detekt.invoke.ProcessExecutor
-import org.gradle.api.DefaultTask
-import org.gradle.api.file.ConfigurableFileCollection
+import org.gradle.api.file.FileCollection
 import org.gradle.api.provider.Property
-import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Optional
-import org.gradle.api.tasks.PathSensitive
-import org.gradle.api.tasks.PathSensitivity
-import org.gradle.api.tasks.SkipWhenEmpty
+import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 
@@ -18,17 +14,17 @@ import org.gradle.language.base.plugins.LifecycleBasePlugin
  * @author Artur Bosch
  * @author Marvin Ramin
  */
-open class DetektIdeaInspectionTask : DefaultTask() {
+open class DetektIdeaInspectionTask : SourceTask() {
 
     init {
         description = "Uses an external idea installation to inspect your code."
         group = LifecycleBasePlugin.VERIFICATION_GROUP
     }
 
-    @InputFiles
-    @PathSensitive(PathSensitivity.RELATIVE)
-    @SkipWhenEmpty
-    var input: ConfigurableFileCollection = project.layout.configurableFiles()
+    @Deprecated("Replace with getSource/setSource")
+    var input: FileCollection
+        get() = source
+        set(value) = setSource(value)
 
     @Internal
     @Optional
@@ -44,6 +40,6 @@ open class DetektIdeaInspectionTask : DefaultTask() {
             println("Running inspection task in debug mode")
             println("$ideaExtension")
         }
-        ProcessExecutor.startProcess(ideaExtension.inspectArgs(input.asPath), debugState)
+        ProcessExecutor.startProcess(ideaExtension.inspectArgs(source.asPath), debugState)
     }
 }

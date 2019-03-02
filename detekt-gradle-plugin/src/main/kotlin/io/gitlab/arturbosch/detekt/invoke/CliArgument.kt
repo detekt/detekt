@@ -4,7 +4,6 @@ import org.gradle.api.file.FileCollection
 import org.gradle.api.file.RegularFile
 
 private const val DEBUG_PARAMETER = "--debug"
-private const val FILTERS_PARAMETER = "--filters"
 private const val INPUT_PARAMETER = "--input"
 private const val CONFIG_PARAMETER = "--config"
 private const val BASELINE_PARAMETER = "--baseline"
@@ -31,10 +30,6 @@ internal object GenerateConfigArgument : CliArgument() {
 
 internal data class InputArgument(val fileCollection: FileCollection) : CliArgument() {
     override fun toArgument() = listOf(INPUT_PARAMETER, fileCollection.joinToString(",") { it.absolutePath })
-}
-
-internal data class FiltersArgument(val filters: String?) : CliArgument() {
-    override fun toArgument() = filters?.let { listOf(FILTERS_PARAMETER, it) } ?: emptyList()
 }
 
 internal data class PluginsArgument(val plugins: String?) : CliArgument() {

@@ -9,16 +9,15 @@ import io.gitlab.arturbosch.detekt.invoke.DebugArgument
 import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import io.gitlab.arturbosch.detekt.invoke.DisableDefaultRuleSetArgument
 import io.gitlab.arturbosch.detekt.invoke.FailFastArgument
-import io.gitlab.arturbosch.detekt.invoke.FiltersArgument
 import io.gitlab.arturbosch.detekt.invoke.HtmlReportArgument
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
 import io.gitlab.arturbosch.detekt.invoke.PluginsArgument
 import io.gitlab.arturbosch.detekt.invoke.XmlReportArgument
 import org.gradle.api.Action
-import org.gradle.api.DefaultTask
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
+import org.gradle.api.file.FileCollection
 import org.gradle.api.file.RegularFile
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
@@ -33,7 +32,7 @@ import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
-import org.gradle.api.tasks.SkipWhenEmpty
+import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import java.io.File
@@ -44,15 +43,16 @@ import java.io.File
  * @author Markus Schwarz
  */
 @CacheableTask
-open class Detekt : DefaultTask() {
+open class Detekt : SourceTask() {
 
-    @InputFiles
-    @PathSensitive(PathSensitivity.RELATIVE)
-    @SkipWhenEmpty
-    var input: ConfigurableFileCollection = project.layout.configurableFiles()
+    @Deprecated("Replace with getSource/setSource")
+    var input: FileCollection
+        get() = source
+        set(value) = setSource(value)
 
     @Input
     @Optional
+    @Deprecated("Replace with setIncludes/setExcludes")
     var filters: Property<String> = project.objects.property(String::class.java)
 
     @InputFile
@@ -141,8 +141,7 @@ open class Detekt : DefaultTask() {
     @TaskAction
     fun check() {
         val arguments = mutableListOf(
-                InputArgument(input) ,
-                FiltersArgument(filters.orNull) ,
+                InputArgument(source) ,
                 ConfigArgument(config) ,
                 PluginsArgument(plugins.orNull) ,
                 BaselineArgument(baseline.orNull) ,

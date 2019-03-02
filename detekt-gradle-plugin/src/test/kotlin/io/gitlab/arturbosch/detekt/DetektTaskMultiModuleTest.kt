@@ -319,7 +319,6 @@ internal class DetektTaskMultiModuleTest : Spek({
             val detektConfig: String = """
 				|detekt {
 				|	input = files("${"$"}projectDir/src", "${"$"}projectDir/child1/src", "${"$"}projectDir/child2/src")
-				|	filters = ".*build.gradle.kts"
 				|}
 				""".trimMargin()
             val gradleRunner = builder

@@ -142,7 +142,6 @@ detekt {
             project.rootDir.resolve("../detekt-cli/src/main/resources/default-detekt-config.yml"),
             project.rootDir.resolve("../reports/failfast.yml")
     )
-    filters = ".*/resources/.*,.*/build/.*"
 }
 
 publishing {

@@ -22,7 +22,6 @@ internal class PluginTaskBehaviorTest : Spek({
 					|detekt {
 					|	config = files("$configFileName")
 					|	baseline = file("$baselineFileName")
-					|	filters = ".*/resources/.*, .*/build/.*"
 					|}
 				"""
 

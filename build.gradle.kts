@@ -83,6 +83,11 @@ subprojects {
         dependsOn(tasks.named("test"))
     }
 
+    tasks.withType<Detekt> {
+        exclude("resources/")
+        exclude("build/")
+    }
+
     val userHome = System.getProperty("user.home")
 
     detekt {
@@ -92,7 +97,6 @@ subprojects {
                 project.rootDir.resolve("detekt-cli/src/main/resources/default-detekt-config.yml"),
                 project.rootDir.resolve("reports/failfast.yml")
         )
-        filters = ".*/resources/.*,.*/build/.*"
         baseline = project.rootDir.resolve("reports/baseline.xml")
 
         reports {
@@ -275,8 +279,11 @@ dependencies {
 
 val detektFormat by tasks.registering(Detekt::class) {
     description = "Reformats whole code base."
-    input = files(projectDir)
-    filters.set(".*/resources/.*")
+    setSource(files(projectDir))
+    include("**/*.kt")
+    include("**/*.kts")
+    exclude("resources/")
+    exclude("build/")
     config = files(
             projectDir.resolve("detekt-cli/src/main/resources/default-detekt-config.yml"),
             projectDir.resolve("reports/format.yml")
@@ -293,12 +300,15 @@ val detektFormat by tasks.registering(Detekt::class) {
 val detektAll by tasks.registering(Detekt::class) {
     debug = true
     parallel = true
-    input = files(projectDir)
+    setSource(files(projectDir))
     config = files(
             project.rootDir.resolve("detekt-cli/src/main/resources/default-detekt-config.yml"),
             project.rootDir.resolve("reports/failfast.yml")
     )
-    filters.set(".*/resources/.*,.*/build/.*")
+    include("**/*.kt")
+    include("**/*.kts")
+    exclude("resources/")
+    exclude("build/")
     baseline.set(project.rootDir.resolve("reports/baseline.xml"))
     reports {
         xml.enabled = false

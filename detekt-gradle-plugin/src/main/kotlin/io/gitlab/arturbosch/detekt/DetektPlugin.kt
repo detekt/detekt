@@ -35,11 +35,12 @@ class DetektPlugin : Plugin<Project> {
             it.disableDefaultRuleSetsProp.set(project.provider { extension.disableDefaultRuleSets })
             it.buildUponDefaultConfigProp.set(project.provider { extension.buildUponDefaultConfig })
 			it.failFastProp.set(project.provider { extension.failFast })
-            it.filters.set(project.provider { extension.filters })
             it.config.setFrom(project.provider { extension.config })
             it.baseline.set(project.layout.file(project.provider { extension.baseline }))
             it.plugins.set(project.provider { extension.plugins })
-            it.input.setFrom(existingInputDirectoriesProvider(project, extension))
+            it.setSource(existingInputDirectoriesProvider(project, extension))
+            it.setIncludes(defaultIncludes)
+            it.setExcludes(defaultExcludes)
             it.reportsDir.set(project.provider { extension.customReportsDir })
             it.reports = extension.reports
         }
@@ -62,26 +63,33 @@ class DetektPlugin : Plugin<Project> {
                 it.disableDefaultRuleSets.set(project.provider { extension.disableDefaultRuleSets })
                 it.buildUponDefaultConfig.set(project.provider { extension.buildUponDefaultConfig })
 				it.failFast.set(project.provider { extension.failFast })
-                it.filters.set(project.provider { extension.filters })
                 it.plugins.set(project.provider { extension.plugins })
-                it.input.setFrom(existingInputDirectoriesProvider(project, extension))
+                it.setSource(existingInputDirectoriesProvider(project, extension))
+                it.setIncludes(defaultIncludes)
+                it.setExcludes(defaultExcludes)
             }
 
     private fun registerGenerateConfigTask(project: Project, extension: DetektExtension) =
             project.tasks.register(GENERATE_CONFIG, DetektGenerateConfigTask::class.java) {
-                it.input.setFrom(existingInputDirectoriesProvider(project, extension))
+                it.setSource(existingInputDirectoriesProvider(project, extension))
+                it.setIncludes(listOf("**/*.kt", "**/*.kts"))
+                it.setExcludes(listOf("build/"))
             }
 
     private fun registerIdeaTasks(project: Project, extension: DetektExtension) {
         project.tasks.register(IDEA_FORMAT, DetektIdeaFormatTask::class.java) {
             it.debug.set(project.provider { extension.debug })
-            it.input.setFrom(existingInputDirectoriesProvider(project, extension))
+            it.setSource(existingInputDirectoriesProvider(project, extension))
+            it.setIncludes(defaultIncludes)
+            it.setExcludes(defaultExcludes)
             it.ideaExtension = extension.idea
         }
 
         project.tasks.register(IDEA_INSPECT, DetektIdeaInspectionTask::class.java) {
             it.debug.set(project.provider { extension.debug })
-            it.input.setFrom(existingInputDirectoriesProvider(project, extension))
+            it.setSource(existingInputDirectoriesProvider(project, extension))
+            it.setIncludes(defaultIncludes)
+            it.setExcludes(defaultExcludes)
             it.ideaExtension = extension.idea
         }
     }
@@ -117,6 +125,8 @@ class DetektPlugin : Plugin<Project> {
         private const val IDEA_INSPECT = "detektIdeaInspect"
         private const val GENERATE_CONFIG = "detektGenerateConfig"
         private const val BASELINE = "detektBaseline"
+        private val defaultExcludes = listOf("build/")
+        private val defaultIncludes = listOf("**/*.kt", "**/*.kts")
     }
 }
 
