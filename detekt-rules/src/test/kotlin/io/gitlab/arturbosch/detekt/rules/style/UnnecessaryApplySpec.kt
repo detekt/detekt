@@ -25,16 +25,29 @@ class UnnecessaryApplySpec : Spek({
 			""")).hasSize(1)
             }
 
-            it("reports a false negative apply on nullable type") {
+            it("reports an apply on nullable type") {
                 assertThat(subject.lint("""
 				fun f() {
 					val a : Int? = null
 					// Resolution: we can't say here if plus is on 'this' or just a side effects when a is not null
+                    // However such cases should be better handled with an if-null check instead misusing apply
 					a?.apply {
 						plus(1)
 					}
 				}
-			""")).isEmpty()
+			""")).hasSize(1)
+            }
+
+            it("reports a false negative apply on nullable type - #1485") {
+                assertThat(subject.lint("""
+                    val firebaseHttpMetric: Any? = Any()
+                    fun Any.setHttpResponseCode() = Unit
+                    fun f() {
+                        firebaseHttpMetric?.apply {
+                            setHttpResponseCode()
+                        }
+                    }
+                """)).hasSize(1)
             }
 
             it("does not report an apply with lambda block") {
