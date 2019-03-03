@@ -89,10 +89,8 @@ subprojects {
     detekt {
         debug = true
         toolVersion = usedDetektVersion
-        config = files(
-                project.rootDir.resolve("detekt-cli/src/main/resources/default-detekt-config.yml"),
-                project.rootDir.resolve("reports/failfast.yml")
-        )
+        buildUponDefaultConfig = true
+        config = files(project.rootDir.resolve("reports/failfast.yml"))
         baseline = project.rootDir.resolve("reports/baseline.xml")
 
         reports {
