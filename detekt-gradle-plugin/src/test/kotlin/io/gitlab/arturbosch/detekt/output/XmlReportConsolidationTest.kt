@@ -12,7 +12,6 @@ private fun fileContent(data: String = "") = """<?xml version="1.0" encoding="ut
 		|$data</checkstyle>""".trimMargin()
 
 private val emptyContent = fileContent()
-private val lineSeparator = System.getProperty("line.separator")
 
 internal class XmlReportConsolidationTest : Spek({
 

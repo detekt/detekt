@@ -39,9 +39,10 @@ class DslGradleRunner(
 	 */
 	private fun ktFileContent(className: String, withCodeSmell: Boolean = false) = """
 	|internal class $className(
-	|	val randomDefaultValue: String = "$randomString",
-	|	val smellyConstant: Int = ${if (withCodeSmell) "42" else "0"}
-	|)
+	|	val randomDefaultValue: String = "$randomString"
+	|) {
+	|	val smellyConstant: Int = ${if (withCodeSmell) "11" else "0"}
+	|}
 	|
 	""".trimMargin()
 
