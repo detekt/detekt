@@ -8,9 +8,9 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class EqualsAlwaysReturnsTrueOrFalseSpec : Spek({
-	val subject by memoized { EqualsAlwaysReturnsTrueOrFalse(Config.empty) }
+    val subject by memoized { EqualsAlwaysReturnsTrueOrFalse(Config.empty) }
 
-	describe("Equals Always Returns True Or False rule") {
+    describe("Equals Always Returns True Or False rule") {
 
         it("reports equals() methods") {
             assertThat(subject.lint(Case.EqualsAlwaysReturnsTrueOrFalsePositive.path())).hasSize(6)

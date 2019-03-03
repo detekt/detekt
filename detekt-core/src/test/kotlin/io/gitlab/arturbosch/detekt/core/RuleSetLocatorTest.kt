@@ -9,7 +9,7 @@ import org.spekframework.spek2.style.specification.describe
 import java.lang.reflect.Modifier
 
 class RuleSetLocatorTest : Spek({
-	describe("Reulset") {
+    describe("Reulset") {
 
         it("containsAllRuleProviders") {
             val locator = RuleSetLocator(ProcessingSettings(path))

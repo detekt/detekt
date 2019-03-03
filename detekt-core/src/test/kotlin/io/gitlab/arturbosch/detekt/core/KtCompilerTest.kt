@@ -8,7 +8,7 @@ import org.spekframework.spek2.style.specification.describe
  * @author Artur Bosch
  */
 class KtCompilerTest : Spek({
-	describe("Kotlin Compiler") {
+    describe("Kotlin Compiler") {
 
         it("ktFileHasExtraUserData") {
             val ktCompiler = KtCompiler()

@@ -19,7 +19,7 @@ import java.nio.file.Paths
  * @author schalkms
  */
 class BaselineFacadeTest : Spek({
-	describe("a baseline facade") {
+    describe("a baseline facade") {
 
         val dir = Files.createTempDirectory("baseline_format")
 

@@ -7,7 +7,7 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class FieldCountVisitorTest : Spek({
-	describe("something") {
+    describe("something") {
 
         it("defaultFieldCount") {
             val file = compileForTest(path.resolve("../fields/ClassWithFields.kt"))

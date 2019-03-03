@@ -7,7 +7,7 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class CLOCVisitorTest : Spek({
-	describe("CLOC") {
+    describe("CLOC") {
 
         it("commentCases") {
             val file = compileForTest(path.resolve("../comments/CommentsClass.kt"))

@@ -11,7 +11,7 @@ import java.nio.file.Path
  * @author Artur Bosch
  */
 class ComplexityVisitorTest : Spek({
-	describe("something") {
+    describe("something") {
 
         it("complexityOfDefaultCaseIsOne") {
             val path = path.resolve("Default.kt")

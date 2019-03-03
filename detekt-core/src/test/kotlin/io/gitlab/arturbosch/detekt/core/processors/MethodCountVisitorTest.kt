@@ -8,7 +8,7 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class MethodCountVisitorTest : Spek({
-	describe("Method Count Visitor") {
+    describe("Method Count Visitor") {
 
         it("defaultMethodCount") {
             val file = compileForTest(path.resolve("ComplexClass.kt"))
