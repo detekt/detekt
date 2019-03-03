@@ -12,6 +12,7 @@ private fun fileContent(data: String = "") = """<?xml version="1.0" encoding="ut
 		|$data</checkstyle>""".trimMargin()
 
 private val emptyContent = fileContent()
+private val lineSeparator = System.getProperty("line.separator")
 
 internal class XmlReportConsolidationTest : Spek({
 
@@ -44,7 +45,7 @@ internal class XmlReportConsolidationTest : Spek({
 
 			mergeXmlReports(target, emptyList())
 
-			assertThat(target.readText()).isEqualTo(emptyContent)
+			assertThat(target.readText()).isEqualToNormalizingNewlines(emptyContent)
 		}
 		it("data is merged from multiple sources into an empty target file") {
 			val content1 = """
@@ -68,7 +69,7 @@ internal class XmlReportConsolidationTest : Spek({
 
 			mergeXmlReports(target, listOf(merge1, merge2))
 
-			assertThat(target.readText()).isEqualTo(fileContent(content1 + content2))
+			assertThat(target.readText()).isEqualToNormalizingNewlines(fileContent(content1 + content2))
 		}
 		it("data is merged from multiple sources into a non empty target file") {
 			val targetContent = """
@@ -97,7 +98,7 @@ internal class XmlReportConsolidationTest : Spek({
 
 			mergeXmlReports(target, listOf(merge1, merge2))
 
-			assertThat(target.readText()).isEqualTo(fileContent(targetContent + content1 + content2))
+			assertThat(target.readText()).isEqualToNormalizingNewlines(fileContent(targetContent + content1 + content2))
 		}
 	}
 })
