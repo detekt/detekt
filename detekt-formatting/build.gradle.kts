@@ -1,7 +1,6 @@
-import java.util.concurrent.Callable
-
-configurations.testImplementation.extendsFrom(configurations["kotlinTest"])
-configurations["compile"].isTransitive = false
+configurations["implementation"].isCanBeResolved = true
+configurations.testImplementation.get()
+    .extendsFrom(configurations["kotlinTest"])
 
 val ktlintVersion: String by project
 val junitPlatformVersion: String by project
@@ -24,9 +23,9 @@ dependencies {
 }
 
 tasks.withType<Jar> {
-    from(Callable {
-        configurations["compile"].map {
-            if (it.isDirectory) it else zipTree(it)
-        }
-    })
+    from(
+        configurations["implementation"]
+            .filter { "com.github.shyiko.ktlint" in it.toString() }
+            .map { if (it.isDirectory) it else zipTree(it) }
+    )
 }
