@@ -121,10 +121,10 @@ subprojects {
         testLogging {
             // set options for log level LIFECYCLE
             events = setOf(
-                    TestLogEvent.FAILED,
-                    TestLogEvent.PASSED,
-                    TestLogEvent.SKIPPED,
-                    TestLogEvent.STANDARD_OUT
+                TestLogEvent.FAILED,
+                TestLogEvent.PASSED,
+                TestLogEvent.SKIPPED,
+                TestLogEvent.STANDARD_OUT
             )
             exceptionFormat = TestExceptionFormat.FULL
             showExceptions = true
@@ -137,9 +137,9 @@ subprojects {
         kotlinOptions.jvmTarget = "1.8"
         // https://youtrack.jetbrains.com/issue/KT-24946
         kotlinOptions.freeCompilerArgs = listOf(
-                "-Xskip-runtime-version-check",
-                "-Xdisable-default-scripting-plugin",
-                "-Xuse-experimental=kotlin.Experimental"
+            "-Xskip-runtime-version-check",
+            "-Xdisable-default-scripting-plugin",
+            "-Xuse-experimental=kotlin.Experimental"
         )
         kotlinOptions.allWarningsAsErrors = shouldTreatCompilerWarningsAsErrors()
     }
@@ -270,18 +270,15 @@ dependencies {
 
 val detektFormat by tasks.registering(Detekt::class) {
     description = "Reformats whole code base."
+    parallel = true
+    disableDefaultRuleSets = true
+    buildUponDefaultConfig = true
     setSource(files(projectDir))
     include("**/*.kt")
     include("**/*.kts")
     exclude("resources/")
     exclude("build/")
-    config = files(
-            projectDir.resolve("detekt-cli/src/main/resources/default-detekt-config.yml"),
-            projectDir.resolve("reports/format.yml")
-    )
-    debug = true
-    parallel = true
-    disableDefaultRuleSets = true
+    config = files(projectDir.resolve("reports/format.yml"))
     reports {
         xml { enabled = false }
         html { enabled = false }
@@ -289,13 +286,11 @@ val detektFormat by tasks.registering(Detekt::class) {
 }
 
 val detektAll by tasks.registering(Detekt::class) {
-    debug = true
+    description = "Runs over whole code base without the starting overhead for each module."
     parallel = true
+    buildUponDefaultConfig = true
     setSource(files(projectDir))
-    config = files(
-            project.rootDir.resolve("detekt-cli/src/main/resources/default-detekt-config.yml"),
-            project.rootDir.resolve("reports/failfast.yml")
-    )
+    config = files(project.rootDir.resolve("reports/failfast.yml"))
     include("**/*.kt")
     include("**/*.kts")
     exclude("resources/")
