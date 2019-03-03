@@ -22,7 +22,9 @@ internal class ComplexityReportSpec : Spek({
                 val expectedContent = readResource("complexity-report.txt")
                 val detektion = createDetektion()
                 addData(detektion)
-                assertThat(generateComplexityReport(detektion)).isEqualTo(expectedContent)
+                // Casting expectedContent to Any is workaround for
+                // https://github.com/joel-costigliola/assertj-core/issues/1440#issuecomment-465032464
+                assertThat(generateComplexityReport(detektion)).isEqualTo(expectedContent as Any)
             }
 
             it("returns null for missing complexity metrics") {
