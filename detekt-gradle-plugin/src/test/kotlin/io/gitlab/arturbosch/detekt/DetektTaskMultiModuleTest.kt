@@ -27,7 +27,7 @@ internal class DetektTaskMultiModuleTest : Spek({
                     assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.NO_SOURCE)
                     projectLayout.submodules.forEach { submodule ->
                         assertThat(result.task(":${submodule.name}:detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-                        assertThat(result.output).contains("number of classes: ${submodule.numberOfSourceFiles}")
+						assertThat(result.output).contains("number of classes: ${submodule.numberOfSourceFilesPerSourceDir}")
                     }
 
                     assertThat(projectFile("build/reports/detekt/detekt.xml")).doesNotExist()
@@ -100,7 +100,7 @@ internal class DetektTaskMultiModuleTest : Spek({
                     assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
                     projectLayout.submodules.forEach { submodule ->
                         assertThat(result.task(":${submodule.name}:detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-                        assertThat(result.output).contains("number of classes: ${submodule.numberOfSourceFiles}")
+						assertThat(result.output).contains("number of classes: ${submodule.numberOfSourceFilesPerSourceDir}")
                     }
 
                     assertThat(projectFile("build/reports/detekt/detekt.xml")).exists()

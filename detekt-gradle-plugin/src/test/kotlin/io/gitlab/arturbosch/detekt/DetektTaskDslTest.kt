@@ -114,8 +114,9 @@ internal class DetektTaskDslTest : Spek({
                     gradleRunner.runDetektTaskAndCheckResult { result ->
 
                         assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-                        val expectedInputParam =
-                                "--input ${projectFile("$customSrc1/MyRoot1Class.kt").absolutePath},${projectFile("$customSrc2/MyRoot1Class.kt").absolutePath}"
+						val file1 = projectFile("$customSrc1/MyRoot0Class.kt").absolutePath
+						val file2 = projectFile("$customSrc2/MyRoot0Class.kt").absolutePath
+						val expectedInputParam = "--input $file1,$file2"
                         assertThat(result.output).contains(expectedInputParam)
                         assertThat(result.output).contains("number of classes: 2")
                     }

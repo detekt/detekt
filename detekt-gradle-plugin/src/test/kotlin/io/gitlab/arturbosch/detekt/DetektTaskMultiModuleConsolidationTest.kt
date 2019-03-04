@@ -10,9 +10,12 @@ import org.spekframework.spek2.style.specification.describe
  */
 internal class DetektTaskMultiModuleConsolidationTest : Spek({
 	describe("The Detekt Gradle plugin consolidates xml reports in a multi module project") {
-		val projectLayout = ProjectLayout(1)
-			.withSubmodule("child1", 2)
-			.withSubmodule("child2", 4)
+		val projectLayout = ProjectLayout(
+			numberOfSourceFilesInRootPerSourceDir = 1,
+			numberOfCodeSmellsInRootPerSourceDir = 1
+		)
+			.withSubmodule(name = "child1", numberOfSourceFilesPerSourceDir = 2, numberOfCodeSmells = 1)
+			.withSubmodule(name = "child2", numberOfSourceFilesPerSourceDir = 4, numberOfCodeSmells = 1)
 
 		lateinit var gradleRunner: DslGradleRunner
 
