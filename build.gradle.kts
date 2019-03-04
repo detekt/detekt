@@ -7,6 +7,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.util.Date
 
 plugins {
+    id("com.gradle.build-scan") version "2.2.1"
     kotlin("jvm") version "1.3.31"
     id("com.jfrog.bintray") version "1.8.4"
     id("com.github.ben-manes.versions") version "0.21.0"
@@ -15,6 +16,11 @@ plugins {
     id("io.gitlab.arturbosch.detekt")
     id("org.jetbrains.dokka") version "0.9.18"
     jacoco
+}
+
+buildScan {
+    termsOfServiceUrl   = "https://gradle.com/terms-of-service"
+    termsOfServiceAgree = "yes"
 }
 
 tasks.wrapper {
