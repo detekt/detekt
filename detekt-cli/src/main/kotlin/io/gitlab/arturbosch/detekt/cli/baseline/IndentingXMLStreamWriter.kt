@@ -68,6 +68,11 @@ class IndentingXMLStreamWriter(
         super.writeCharacters("\n")
     }
 
+    override fun writeEndDocument() {
+        super.writeEndDocument()
+        super.writeCharacters("\n")
+    }
+
     override fun writeStartElement(localName: String) {
         onStartTag()
         super.writeStartElement(localName)
