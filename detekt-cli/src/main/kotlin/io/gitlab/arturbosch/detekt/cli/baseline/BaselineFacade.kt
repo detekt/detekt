@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.core.exists
 import io.gitlab.arturbosch.detekt.core.isFile
 import java.nio.file.Files
 import java.nio.file.Path
-import java.time.Instant
 
 /**
  * @author Artur Bosch
@@ -27,14 +26,13 @@ class BaselineFacade(val baselineFile: Path) {
             } else smells
 
     fun create(smells: List<Finding>) {
-        val timestamp = Instant.now().toEpochMilli().toString()
         val blacklist = if (baselineExists()) {
             BaselineFormat().read(baselineFile).blacklist
         } else {
-            Blacklist(emptySet(), timestamp)
+            Blacklist(emptySet())
         }
         val ids = smells.map { it.baselineId }.toSortedSet()
-        val smellBaseline = Baseline(blacklist, Whitelist(ids, timestamp))
+        val smellBaseline = Baseline(blacklist, Whitelist(ids))
         baselineFile.parent?.let { Files.createDirectories(it) }
         BaselineFormat().write(smellBaseline, baselineFile)
         println("Successfully wrote smell baseline to $baselineFile")
