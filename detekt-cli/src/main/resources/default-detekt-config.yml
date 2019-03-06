@@ -514,6 +514,8 @@ style:
   UseDataClass:
     active: false
     excludeAnnotatedClasses: ""
+  UselessCallOnNotNull:
+    active: false
   UtilityClassWithPublicConstructor:
     active: false
   VarCouldBeVal:
