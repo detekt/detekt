@@ -22,6 +22,7 @@ data class ProcessingSettings @JvmOverloads constructor(
     val parallelCompilation: Boolean = false,
     val excludeDefaultRuleSets: Boolean = false,
     val pluginPaths: List<Path> = emptyList(),
+    val classpath: List<String> = emptyList(),
     val executorService: ExecutorService = ForkJoinPool.commonPool(),
     val outPrinter: PrintStream = System.out,
     val errorPrinter: PrintStream = System.err
@@ -36,12 +37,13 @@ data class ProcessingSettings @JvmOverloads constructor(
         parallelCompilation: Boolean = false,
         excludeDefaultRuleSets: Boolean = false,
         pluginPaths: List<Path> = emptyList(),
+        classpath: List<String> = emptyList(),
         executorService: ExecutorService = ForkJoinPool.commonPool(),
         outPrinter: PrintStream = System.out,
         errorPrinter: PrintStream = System.err
     ) : this(
         listOf(inputPath), config, pathFilters, parallelCompilation,
-        excludeDefaultRuleSets, pluginPaths, executorService, outPrinter, errorPrinter
+        excludeDefaultRuleSets, pluginPaths, classpath, executorService, outPrinter, errorPrinter
     )
 
     init {

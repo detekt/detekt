@@ -18,10 +18,10 @@
 - Windows support!
 - `sonar-plugin` (has it's own space [here](https://github.com/arturbosch/sonar-kotlin))
 - Allow to exclude rules or rule sets for test sources
+- figure out how kotlinc/intellij does type and symbol resolution
 
 ## Beyond 1.0.0
 
-- figure out how kotlinc/intellij does type and symbol resolution
 - finish `FeatureEnvy` rule -> needs type resolution
 
 ## Ideas for new major versions
