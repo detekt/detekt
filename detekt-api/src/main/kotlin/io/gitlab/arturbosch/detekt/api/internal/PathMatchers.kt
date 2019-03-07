@@ -9,20 +9,19 @@ import java.nio.file.PathMatcher
 private val supportedSyntax = setOf("glob", "regex")
 
 /**
- * Converts given [syntaxAndPattern] into a [PathMatcher] specified by [FileSystem.getPathMatcher].
+ * Converts given [pattern] into a [PathMatcher] specified by [FileSystem.getPathMatcher].
  * If no syntax (glob or regex) is specified before the pattern, the glob syntax is assumed
  * if not otherwise specified by [defaultSyntax].
  */
-fun pathMatcher(syntaxAndPattern: String, defaultSyntax: String = "glob"): PathMatcher {
+fun pathMatcher(pattern: String, defaultSyntax: String = "regex"): PathMatcher {
 
-    fun assumeDefaultSyntax(pattern: String) = "$defaultSyntax:$pattern"
+    fun assumeDefaultSyntax() = "$defaultSyntax:$pattern"
 
-    val syntax = syntaxAndPattern.substringBefore(":")
+    val syntax = pattern.substringBefore(":")
     val result = when (syntax) {
-        syntaxAndPattern -> assumeDefaultSyntax(syntaxAndPattern)
-        in supportedSyntax -> syntaxAndPattern
-        else -> throw IllegalArgumentException(
-            "Unsupported syntax '$syntax' for a PathMatcher. See FileSystem.getPathMatcher.")
+        pattern -> assumeDefaultSyntax()
+        in supportedSyntax -> pattern
+        else -> assumeDefaultSyntax()
     }
 
     return FileSystems.getDefault().getPathMatcher(result)

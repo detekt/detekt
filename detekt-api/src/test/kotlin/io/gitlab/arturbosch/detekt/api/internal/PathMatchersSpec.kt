@@ -15,12 +15,6 @@ class PathMatchersSpec : Spek({
 
     describe("supports globing") {
         val libraryPattern = "**/detekt/api/**"
-
-        it("should work as a globing path matcher when syntax not specified") {
-            val matcher = pathMatcher(libraryPattern)
-            assertThat(matcher.matches(expectedMatch)).isTrue()
-        }
-
         val matcher = pathMatcher("glob:$libraryPattern")
 
         it("should match") {
@@ -38,6 +32,11 @@ class PathMatchersSpec : Spek({
 
     describe("supports regex") {
         val libraryPattern = ".*/detekt/api/.*"
+
+        it("should work as a regex path matcher when syntax not specified") {
+            val matcher = pathMatcher(libraryPattern)
+            assertThat(matcher.matches(expectedMatch)).isTrue()
+        }
 
         it("should work as a regex path matcher when syntax not specified but default overridden") {
             val matcher = pathMatcher(libraryPattern, defaultSyntax = "regex")
