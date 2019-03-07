@@ -47,11 +47,11 @@ open class KtCompiler {
         return psiFile as? KtFile ?: throw IllegalStateException("kotlin file expected")
     }
 
-	private fun String.determineLineSeparator(): String {
-		val i = this.lastIndexOf('\n')
-		if (i == -1) {
-			return if (this.lastIndexOf('\r') == -1) System.getProperty("line.separator") else "\r"
-		}
-		return if (i != 0 && this[i] == '\r') "\r\n" else "\n"
-	}
+    private fun String.determineLineSeparator(): String {
+        val i = this.lastIndexOf('\n')
+        if (i == -1) {
+            return if (this.lastIndexOf('\r') == -1) System.getProperty("line.separator") else "\r"
+        }
+        return if (i != 0 && this[i] == '\r') "\r\n" else "\n"
+    }
 }
