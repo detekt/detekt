@@ -8,7 +8,7 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class ClassCountVisitorTest : Spek({
-	describe("something") {
+    describe("something") {
 
         it("twoClassesInSeparateFile") {
             val files = arrayOf(

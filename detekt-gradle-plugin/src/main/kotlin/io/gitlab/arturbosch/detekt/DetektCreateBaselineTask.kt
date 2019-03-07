@@ -75,27 +75,27 @@ open class DetektCreateBaselineTask : SourceTask() {
     var disableDefaultRuleSets: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
     @Internal
-	@Optional
-	var buildUponDefaultConfig: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    @Optional
+    var buildUponDefaultConfig: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
-	@Internal
-	@Optional
-	var failFast: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    @Internal
+    @Optional
+    var failFast: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
-	@TaskAction
+    @TaskAction
     fun baseline() {
         val arguments = mutableListOf(
-				CreateBaselineArgument,
-                BaselineArgument(baseline.get()) ,
-                InputArgument(source) ,
-                ConfigArgument(config) ,
-                PluginsArgument(plugins.orNull) ,
+                CreateBaselineArgument,
+                BaselineArgument(baseline.get()),
+                InputArgument(source),
+                ConfigArgument(config),
+                PluginsArgument(plugins.orNull),
                 DebugArgument(debug.getOrElse(false)),
                 ParallelArgument(parallel.getOrElse(false)),
                 BuildUponDefaultConfigArgument(buildUponDefaultConfig.getOrElse(false)),
-				FailFastArgument(failFast.getOrElse(false)),
-				DisableDefaultRuleSetArgument(disableDefaultRuleSets.getOrElse(false))
-		)
+                FailFastArgument(failFast.getOrElse(false)),
+                DisableDefaultRuleSetArgument(disableDefaultRuleSets.getOrElse(false))
+        )
 
         DetektInvoker.invokeCli(project, arguments.toList(), debug.getOrElse(false))
     }

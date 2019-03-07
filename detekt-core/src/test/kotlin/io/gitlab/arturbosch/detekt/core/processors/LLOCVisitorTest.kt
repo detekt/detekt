@@ -10,7 +10,7 @@ import org.spekframework.spek2.style.specification.describe
  * @author Artur Bosch
  */
 class LLOCVisitorTest : Spek({
-	describe("seomthing") {
+    describe("seomthing") {
 
         it("defaultCaseHasOneClassAndAnnotationLine") {
             val file = compileForTest(path.resolve("Default.kt"))

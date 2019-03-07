@@ -7,7 +7,7 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class ThrowingExceptionsWithoutMessageOrCauseSpec : Spek({
-    val subject by memoized{
+    val subject by memoized {
         ThrowingExceptionsWithoutMessageOrCause(
                 TestConfig(mapOf(ThrowingExceptionsWithoutMessageOrCause.EXCEPTIONS to "IllegalArgumentException"))
         )

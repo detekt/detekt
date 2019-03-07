@@ -94,22 +94,22 @@ open class Detekt : SourceTask() {
         set(value) = disableDefaultRuleSetsProp.set(value)
 
     @Optional
-	@Input
-	val buildUponDefaultConfigProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
-	var buildUponDefaultConfig: Boolean
-		@Internal
-		get() = buildUponDefaultConfigProp.get()
-		set(value) = buildUponDefaultConfigProp.set(value)
+    @Input
+    val buildUponDefaultConfigProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    var buildUponDefaultConfig: Boolean
+        @Internal
+        get() = buildUponDefaultConfigProp.get()
+        set(value) = buildUponDefaultConfigProp.set(value)
 
-	@Optional
-	@Input
-	val failFastProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
-	var failFast: Boolean
-		@Internal
-		get() = failFastProp.get()
-		set(value) = failFastProp.set(value)
+    @Optional
+    @Input
+    val failFastProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    var failFast: Boolean
+        @Internal
+        get() = failFastProp.get()
+        set(value) = failFastProp.set(value)
 
-	@Internal
+    @Internal
     var reports = DetektReports(project)
 
     fun reports(configure: Action<DetektReports>) = configure.execute(reports)
@@ -141,20 +141,19 @@ open class Detekt : SourceTask() {
     @TaskAction
     fun check() {
         val arguments = mutableListOf(
-                InputArgument(source) ,
-                ConfigArgument(config) ,
-                PluginsArgument(plugins.orNull) ,
-                BaselineArgument(baseline.orNull) ,
-                XmlReportArgument(xmlReportFile.orNull) ,
-                HtmlReportArgument(htmlReportFile.orNull) ,
+                InputArgument(source),
+                ConfigArgument(config),
+                PluginsArgument(plugins.orNull),
+                BaselineArgument(baseline.orNull),
+                XmlReportArgument(xmlReportFile.orNull),
+                HtmlReportArgument(htmlReportFile.orNull),
                 DebugArgument(debugProp.getOrElse(false)),
                 ParallelArgument(parallelProp.getOrElse(false)),
                 BuildUponDefaultConfigArgument(buildUponDefaultConfigProp.getOrElse(false)),
-				FailFastArgument(failFastProp.getOrElse(false)),
-				DisableDefaultRuleSetArgument(disableDefaultRuleSetsProp.getOrElse(false))
-		)
+                FailFastArgument(failFastProp.getOrElse(false)),
+                DisableDefaultRuleSetArgument(disableDefaultRuleSetsProp.getOrElse(false))
+        )
 
         DetektInvoker.invokeCli(project, arguments.toList(), debugProp.getOrElse(false))
     }
-
 }

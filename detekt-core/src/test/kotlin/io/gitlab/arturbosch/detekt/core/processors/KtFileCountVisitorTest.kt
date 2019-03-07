@@ -8,7 +8,7 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class KtFileCountVisitorTest : Spek({
-	describe("files") {
+    describe("files") {
 
         it("twoFiles") {
             val files = arrayOf(

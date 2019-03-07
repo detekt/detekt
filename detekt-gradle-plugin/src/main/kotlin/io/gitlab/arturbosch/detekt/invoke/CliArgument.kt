@@ -49,12 +49,11 @@ internal data class HtmlReportArgument(val file: RegularFile?) : CliArgument() {
 }
 
 internal data class ConfigArgument(val config: FileCollection) : CliArgument() {
-    override fun toArgument() = if (config.isEmpty){
+    override fun toArgument() = if (config.isEmpty) {
         emptyList()
     } else {
         listOf(CONFIG_PARAMETER, config.joinToString(",") { it.absolutePath })
 }
-
 }
 
 internal sealed class BoolCliArgument(open val value: Boolean, val configSwitch: String) : CliArgument() {
@@ -62,15 +61,15 @@ internal sealed class BoolCliArgument(open val value: Boolean, val configSwitch:
 }
 
 internal data class DebugArgument(override val value: Boolean)
-	: BoolCliArgument(value, DEBUG_PARAMETER)
+    : BoolCliArgument(value, DEBUG_PARAMETER)
 
 internal data class ParallelArgument(override val value: Boolean)
-	: BoolCliArgument(value, PARALLEL_PARAMETER)
+    : BoolCliArgument(value, PARALLEL_PARAMETER)
     internal data class DisableDefaultRuleSetArgument(override val value: Boolean)
-	: BoolCliArgument(value, DISABLE_DEFAULT_RULESETS_PARAMETER)
+    : BoolCliArgument(value, DISABLE_DEFAULT_RULESETS_PARAMETER)
 
 internal data class BuildUponDefaultConfigArgument(override val value: Boolean)
-	: BoolCliArgument(value, BUILD_UPON_DEFAULT_CONFIG_PARAMETER)
+    : BoolCliArgument(value, BUILD_UPON_DEFAULT_CONFIG_PARAMETER)
 
 internal data class FailFastArgument(override val value: Boolean)
-	: BoolCliArgument(value, FAIL_FAST_PARAMETER)
+    : BoolCliArgument(value, FAIL_FAST_PARAMETER)

@@ -10,9 +10,9 @@ import org.spekframework.spek2.style.specification.describe
  * @author Artur Bosch
  */
 class DuplicateCaseInWhenExpressionSpec : Spek({
-	val subject by memoized { DuplicateCaseInWhenExpression(Config.empty) }
+    val subject by memoized { DuplicateCaseInWhenExpression(Config.empty) }
 
-	describe("Duplicate Case In When Expression rule") {
+    describe("Duplicate Case In When Expression rule") {
 
         it("reports duplicated label in when") {
             val code = """

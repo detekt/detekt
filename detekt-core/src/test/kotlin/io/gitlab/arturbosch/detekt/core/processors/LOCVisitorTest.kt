@@ -7,7 +7,7 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class LOCVisitorTest : Spek({
-	describe("LOC Visitor") {
+    describe("LOC Visitor") {
 
         it("defaultClass") {
             val file = compileForTest(path.resolve("Default.kt"))
