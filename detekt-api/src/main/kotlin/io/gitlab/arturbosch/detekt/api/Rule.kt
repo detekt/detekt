@@ -21,7 +21,7 @@ import java.nio.file.Paths
 abstract class Rule(
     override val ruleSetConfig: Config = Config.empty,
     ruleContext: Context = DefaultContext()) :
-        BaseRule(ruleContext), ConfigAware {
+    BaseRule(ruleContext), ConfigAware {
 
     /**
      * A rule is motivated to point out a specific issue in the code base.
@@ -49,25 +49,48 @@ abstract class Rule(
      */
     open val defaultRuleIdAliases: Set<String> = emptySet()
 
-    open val pathMatchers: Set<PathMatcher>?
-        get() = run {
-            val raw = valueOrNull<String>("pathMatchers")?.trim()
-            if (raw == null) {
-                null
-            } else {
-                SplitPattern(raw).mapAll { pathMatcher(it) }.toSet()
-            }
+    /**
+     *
+     */
+    open val includes: Set<PathMatcher>?
+        get() = pathMatchers(Config.INCLUDES_KEY)
+
+    private fun pathMatchers(key: String): Set<PathMatcher>? {
+        val raw = valueOrNull<String>(key)?.trim()
+        return if (raw == null) {
+            null
+        } else {
+            SplitPattern(raw).mapAll { pathMatcher(it) }.toSet()
         }
+    }
+
+    open val excludes: Set<PathMatcher>?
+        get() = pathMatchers(Config.EXCLUDES_KEY)
 
     private fun shouldRunOnFile(file: KtFile): Boolean {
-        val matchers = pathMatchers ?: return true
+        val excludeMatchers = excludes
+        val includeMatchers = includes
+
+        if (excludeMatchers == null && includeMatchers == null) {
+            return true // need no checking
+        }
+
         val rawPath = file.absolutePath()
             ?: throw IllegalStateException("KtFile '${file.name}' expected to have an absolute path.")
         val path = Paths.get(rawPath)
-        return matchers.any { it.matches(path) }
+
+        fun isIncluded() = includeMatchers?.any { it.matches(path) }
+        fun isExcluded() = excludeMatchers?.any { it.matches(path) }
+
+        return if (isExcluded() == true) {
+            isIncluded() ?: false
+        } else {
+            isIncluded() ?: true
+        }
     }
 
-    override fun visitCondition(root: KtFile): Boolean = active &&
+    override fun visitCondition(root: KtFile): Boolean =
+        active &&
             shouldRunOnFile(root) &&
             !root.isSuppressedBy(ruleId, aliases)
 
