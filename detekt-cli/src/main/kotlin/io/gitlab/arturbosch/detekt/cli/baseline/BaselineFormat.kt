@@ -44,14 +44,10 @@ class BaselineFormat {
         document {
             tag(SMELL_BASELINE) {
                 tag(BLACKLIST) {
-                    val (ids, timestamp) = baseline.blacklist
-                    attribute(TIMESTAMP, timestamp)
-                    ids.forEach { tag(ID, it) }
+                    baseline.blacklist.ids.forEach { tag(ID, it) }
                 }
                 tag(WHITELIST) {
-                    val (ids, timestamp) = baseline.whitelist
-                    attribute(TIMESTAMP, timestamp)
-                    ids.forEach { tag(ID, it) }
+                    baseline.whitelist.ids.forEach { tag(ID, it) }
                 }
             }
         }

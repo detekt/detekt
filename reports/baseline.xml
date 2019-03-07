@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <SmellBaseline>
-  <Blacklist timestamp="1540322472112"></Blacklist>
-  <Whitelist timestamp="1549734024500">
+  <Blacklist></Blacklist>
+  <Whitelist>
     <ID>LargeClass:UnusedPrivateMemberSpec.kt$UnusedPrivateMemberSpec : Spek</ID>
     <ID>MaxLineLength:BaselineFacade.kt$BaselineFacade$val blackFiltered = whiteFiltered.filterNot { finding -&gt; listings.second.ids.contains(finding.baselineId) }</ID>
     <ID>MaxLineLength:ComplexityReportGenerator.kt$ComplexityReportGenerator.Factory$fun create(detektion: Detektion): ComplexityReportGenerator</ID>

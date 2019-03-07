@@ -24,10 +24,8 @@ class BaselineFormatTest : Spek({
             assertThat(blacklist.ids).hasSize(2)
             assertThat(blacklist.ids).anySatisfy { it.startsWith("LongParameterList") }
             assertThat(blacklist.ids).anySatisfy { it.startsWith("LongMethod") }
-            assertThat(blacklist.timestamp).isEqualTo("123456789")
             assertThat(whitelist.ids).hasSize(1)
             assertThat(whitelist.ids).anySatisfy { it.startsWith("FeatureEnvy") }
-            assertThat(whitelist.timestamp).isEqualTo("987654321")
         }
 
         it("savedAndLoadedXmlAreEqual") {
@@ -35,8 +33,8 @@ class BaselineFormatTest : Spek({
             val tempFile = Files.createTempFile("baseline", now)
 
             val savedBaseline = Baseline(
-                    Blacklist(setOf("4", "2", "2"), now),
-                    Whitelist(setOf("1", "2", "3"), now))
+                    Blacklist(setOf("4", "2", "2")),
+                    Whitelist(setOf("1", "2", "3")))
 
             val format = BaselineFormat()
             format.write(savedBaseline, tempFile)

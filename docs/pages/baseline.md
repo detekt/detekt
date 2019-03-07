@@ -19,10 +19,10 @@ Both values can be found inside the report file.
 
 ```xml
 <SmellBaseline>
-  <Blacklist timestamp="1483388204705">
+  <Blacklist>
     <ID>CatchRuntimeException:Junk.kt$e: RuntimeException</ID>
   </Blacklist>
-  <Whitelist timestamp="1496432564542">
+  <Whitelist>
     <ID>NestedBlockDepth:Indentation.kt$Indentation$override fun procedure(node: ASTNode)</ID>
     <ID>TooManyFunctions:LargeClass.kt$io.gitlab.arturbosch.detekt.rules.complexity.LargeClass.kt</ID>
     <ID>ComplexMethod:DetektExtension.kt$DetektExtension$fun convertToArguments(): MutableList&lt;String&gt;</ID>
