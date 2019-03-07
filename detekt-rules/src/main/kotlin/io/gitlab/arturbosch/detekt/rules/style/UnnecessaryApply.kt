@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtReferenceExpression
+import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.KtThisExpression
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
@@ -56,12 +57,12 @@ class UnnecessaryApply(config: Config) : Rule(config) {
     }
 }
 
-private fun KtCallExpression.receiverIsUnused(): Boolean {
-    if (parent is KtDotQualifiedExpression) {
+private fun KtCallExpression.receiverIsUnused(): Boolean = when (parent) {
+    is KtSafeQualifiedExpression, is KtDotQualifiedExpression -> {
         val scopeOfApplyCall = parent.parent
-        return scopeOfApplyCall == null || scopeOfApplyCall is KtBlockExpression
+        scopeOfApplyCall == null || scopeOfApplyCall is KtBlockExpression
     }
-    return false
+    else -> false
 }
 
 private fun KtCallExpression.hasOnlyOneMemberAccessStatement(): Boolean {
