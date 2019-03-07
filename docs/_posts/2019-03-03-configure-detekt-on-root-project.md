@@ -38,8 +38,8 @@ subprojecs {
 ```
 
 There is a slight starting overhead for starting the _Kotlin_ compiler for each gradle module.
-So sometimes it makes sense to add an additional _detekt_ task which runs over the whole project and produce one big report. 
-Such a setup could look like following in its simplest form:
+So sometimes it makes sense to add an additional _detekt_ task which runs over the whole project and produces one big report. 
+Such a setup could look like the following in its simplest form:
 ```gradle
 plugins {
     id "io.gitlab.arturbosch.detekt" version "1.0.0-RC14"
@@ -54,7 +54,7 @@ detekt {
     buildUponDefaultConfig = true
 }
 ```
-Make sure to specify the `input` parameter or no sources get located and _detekt_ won't run!
+Make sure to specify the `input` parameter or no sources are found and _detekt_ won't run!
 
 Having such a task can save up to 500ms per module in CI runs.
 
