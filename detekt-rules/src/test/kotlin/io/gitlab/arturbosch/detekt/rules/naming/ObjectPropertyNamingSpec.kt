@@ -195,6 +195,25 @@ class ObjectPropertyNamingSpec : Spek({
             assertThat(subject.lint(code)).isEmpty()
         }
     }
+
+    describe("local properties") {
+        it("should not detect local properties") {
+            val config = TestConfig(mapOf(
+                ObjectPropertyNaming.PROPERTY_PATTERN to "valid"
+            ))
+            val subject = ObjectPropertyNaming(config)
+
+            val code = """
+                object O {
+                    fun foo() {
+                        val somethingElse = 1
+                    }
+                }
+            """
+
+            assertThat(subject.lint(code)).isEmpty()
+        }
+    }
 })
 
 abstract class NamingSnippet(private val isPrivate: Boolean, private val isConst: Boolean) {
