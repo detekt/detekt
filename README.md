@@ -161,6 +161,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Alistair Sykes](https://github.com/alistairsykes) - Doc improvement
 - [Andrew Arnott](https://github.com/andrew-arnott) - UnusedPrivateMember improvement
 - [Tyler Wong](https://github.com/tylerbwong) - UnderscoresInNumericLiterals rule
+- [Daniele Conti](https://github.com/fourlastor) - ObjectPropertyNaming improvement
 
 ### Mentions
 
