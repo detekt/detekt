@@ -15,7 +15,7 @@ import java.util.concurrent.ForkJoinPool
  * @author Marvin Ramin
  */
 @Suppress("LongParameterList")
-data class ProcessingSettings(
+data class ProcessingSettings @JvmOverloads constructor(
     val inputPaths: List<Path>,
     val config: Config = Config.empty,
     val pathFilters: List<PathFilter> = listOf(),
@@ -26,7 +26,6 @@ data class ProcessingSettings(
     val outPrinter: PrintStream = System.out,
     val errorPrinter: PrintStream = System.err
 ) {
-
     /**
      * Single project input path constructor.
      */
@@ -41,8 +40,8 @@ data class ProcessingSettings(
         outPrinter: PrintStream = System.out,
         errorPrinter: PrintStream = System.err
     ) : this(
-            listOf(inputPath), config, pathFilters, parallelCompilation,
-            excludeDefaultRuleSets, pluginPaths, executorService, outPrinter, errorPrinter
+        listOf(inputPath), config, pathFilters, parallelCompilation,
+        excludeDefaultRuleSets, pluginPaths, executorService, outPrinter, errorPrinter
     )
 
     init {
