@@ -137,6 +137,7 @@ subprojects {
         kotlinOptions.jvmTarget = "1.8"
         // https://youtrack.jetbrains.com/issue/KT-24946
         kotlinOptions.freeCompilerArgs = listOf(
+            "-progressive",
             "-Xskip-runtime-version-check",
             "-Xdisable-default-scripting-plugin",
             "-Xuse-experimental=kotlin.Experimental"
