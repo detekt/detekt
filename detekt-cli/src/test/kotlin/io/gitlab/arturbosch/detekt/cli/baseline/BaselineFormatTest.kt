@@ -47,5 +47,20 @@ class BaselineFormatTest : Spek({
             val path = Paths.get(resource("/invalid-smell-baseline.txt"))
             assertThatThrownBy { BaselineFormat().read(path) }.isInstanceOf(InvalidBaselineState::class.java)
         }
+
+        it("newlineAtTheEndOfFile") {
+            val now = Instant.now().toEpochMilli().toString()
+            val tempFile = Files.createTempFile("baseline", now)
+
+            val savedBaseline = Baseline(
+                Blacklist(setOf("4", "2", "2")),
+                Whitelist(setOf("1", "2", "3")))
+
+            val format = BaselineFormat()
+            format.write(savedBaseline, tempFile)
+            val bytes = Files.readAllBytes(tempFile)
+            val content = String(bytes, Charsets.UTF_8)
+            assertThat(content).endsWith(">\n")
+        }
     }
 })
