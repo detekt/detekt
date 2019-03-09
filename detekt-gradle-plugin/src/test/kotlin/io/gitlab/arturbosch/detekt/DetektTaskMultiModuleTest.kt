@@ -12,12 +12,14 @@ import org.spekframework.spek2.style.specification.describe
  */
 internal class DetektTaskMultiModuleTest : Spek({
     describe("The Detekt Gradle plugin used in a multi module project") {
-        describe("is applied with defaults to all subprojects individually without sources in root project using the" +
+        describe(
+            "is applied with defaults to all subprojects individually without sources in root project using the" +
                 " " +
-                "subprojects block") {
+                "subprojects block"
+        ) {
             val projectLayout = ProjectLayout(0)
-                    .withSubmodule("child1", 2)
-                    .withSubmodule("child2", 4)
+                .withSubmodule("child1", 2)
+                .withSubmodule("child2", 4)
 
             lateinit var gradleRunner: DslGradleRunner
 
@@ -27,7 +29,7 @@ internal class DetektTaskMultiModuleTest : Spek({
                     assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.NO_SOURCE)
                     projectLayout.submodules.forEach { submodule ->
                         assertThat(result.task(":${submodule.name}:detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-						assertThat(result.output).contains("number of classes: ${submodule.numberOfSourceFilesPerSourceDir}")
+                        assertThat(result.output).contains("number of classes: ${submodule.numberOfSourceFilesPerSourceDir}")
                     }
 
                     assertThat(projectFile("build/reports/detekt/detekt.xml")).doesNotExist()
@@ -89,8 +91,8 @@ internal class DetektTaskMultiModuleTest : Spek({
         }
         describe("is applied with defaults to main project and subprojects individually using the allprojects block") {
             val projectLayout = ProjectLayout(1)
-                    .withSubmodule("child1", 2)
-                    .withSubmodule("child2", 4)
+                .withSubmodule("child1", 2)
+                .withSubmodule("child2", 4)
 
             lateinit var gradleRunner: DslGradleRunner
 
@@ -100,7 +102,7 @@ internal class DetektTaskMultiModuleTest : Spek({
                     assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
                     projectLayout.submodules.forEach { submodule ->
                         assertThat(result.task(":${submodule.name}:detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-						assertThat(result.output).contains("number of classes: ${submodule.numberOfSourceFilesPerSourceDir}")
+                        assertThat(result.output).contains("number of classes: ${submodule.numberOfSourceFilesPerSourceDir}")
                     }
 
                     assertThat(projectFile("build/reports/detekt/detekt.xml")).exists()
@@ -158,8 +160,8 @@ internal class DetektTaskMultiModuleTest : Spek({
         }
         describe("uses custom configs when configured in allprojects block") {
             val projectLayout = ProjectLayout(1)
-                    .withSubmodule("child1", 2)
-                    .withSubmodule("child2", 4)
+                .withSubmodule("child1", 2)
+                .withSubmodule("child2", 4)
 
             lateinit var gradleRunner: DslGradleRunner
 
@@ -237,8 +239,8 @@ internal class DetektTaskMultiModuleTest : Spek({
 				| }
 			""".trimMargin()
             val projectLayout = ProjectLayout(1)
-                    .withSubmodule("child1", 2)
-                    .withSubmodule("child2", 4, detektConfig = child2DetektConfig)
+                .withSubmodule("child1", 2)
+                .withSubmodule("child2", 4, detektConfig = child2DetektConfig)
 
             lateinit var gradleRunner: DslGradleRunner
 
@@ -311,8 +313,8 @@ internal class DetektTaskMultiModuleTest : Spek({
         }
         listOf(groovy(), kotlin()).forEach { builder ->
             val projectLayout = ProjectLayout(1)
-                    .withSubmodule("child1", 2)
-                    .withSubmodule("child2", 4)
+                .withSubmodule("child1", 2)
+                .withSubmodule("child2", 4)
 
             val detektConfig: String = """
 				|detekt {
@@ -320,9 +322,9 @@ internal class DetektTaskMultiModuleTest : Spek({
 				|}
 				""".trimMargin()
             val gradleRunner = builder
-                    .withProjectLayout(projectLayout)
-                    .withDetektConfig(detektConfig)
-                    .build()
+                .withProjectLayout(projectLayout)
+                .withDetektConfig(detektConfig)
+                .build()
 
             describe("can be used in ${builder.gradleBuildName}") {
                 it("can be applied to all files in entire project resulting in 1 report") {

@@ -83,9 +83,9 @@ internal class DetektTaskDslTest : Spek({
 						"""
 
                     val gradleRunner = builder
-                            .withProjectLayout(ProjectLayout(1, srcDirs = listOf(customSrc)))
-                            .withDetektConfig(config)
-                            .build()
+                        .withProjectLayout(ProjectLayout(1, srcDirs = listOf(customSrc)))
+                        .withDetektConfig(config)
+                        .build()
 
                     gradleRunner.runDetektTaskAndCheckResult { result ->
 
@@ -107,16 +107,16 @@ internal class DetektTaskDslTest : Spek({
 
                     val projectLayout = ProjectLayout(1, srcDirs = listOf(customSrc1, customSrc2))
                     val gradleRunner = builder
-                            .withProjectLayout(projectLayout)
-                            .withDetektConfig(config)
-                            .build()
+                        .withProjectLayout(projectLayout)
+                        .withDetektConfig(config)
+                        .build()
 
                     gradleRunner.runDetektTaskAndCheckResult { result ->
 
                         assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-						val file1 = projectFile("$customSrc1/MyRoot0Class.kt").absolutePath
-						val file2 = projectFile("$customSrc2/MyRoot0Class.kt").absolutePath
-						val expectedInputParam = "--input $file1,$file2"
+                        val file1 = projectFile("$customSrc1/MyRoot0Class.kt").absolutePath
+                        val file2 = projectFile("$customSrc2/MyRoot0Class.kt").absolutePath
+                        val expectedInputParam = "--input $file1,$file2"
                         assertThat(result.output).contains(expectedInputParam)
                         assertThat(result.output).contains("number of classes: 2")
                     }
@@ -130,8 +130,8 @@ internal class DetektTaskDslTest : Spek({
 						"""
 
                     val gradleRunner = builder
-                            .withDetektConfig(config)
-                            .build()
+                        .withDetektConfig(config)
+                        .build()
 
                     gradleRunner.runDetektTaskAndCheckResult { result ->
                         assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
@@ -151,8 +151,8 @@ internal class DetektTaskDslTest : Spek({
 						"""
 
                     val gradleRunner = builder
-                            .withDetektConfig(config)
-                            .build()
+                        .withDetektConfig(config)
+                        .build()
 
                     gradleRunner.runDetektTaskAndCheckResult { result ->
                         assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
@@ -174,8 +174,8 @@ internal class DetektTaskDslTest : Spek({
 						"""
 
                     val gradleRunner = builder
-                            .withDetektConfig(config)
-                            .build()
+                        .withDetektConfig(config)
+                        .build()
 
                     gradleRunner.runDetektTaskAndCheckResult { result ->
                         assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
@@ -194,8 +194,8 @@ internal class DetektTaskDslTest : Spek({
 						"""
 
                     val gradleRunner = builder
-                            .withDetektConfig(config)
-                            .build()
+                        .withDetektConfig(config)
+                        .build()
 
                     gradleRunner.runDetektTaskAndCheckResult { result ->
                         assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
@@ -213,9 +213,9 @@ internal class DetektTaskDslTest : Spek({
 						"""
 
                     val gradleRunner = builder
-                            .withDetektConfig(config)
-                            .withBaseline(baselineFilename)
-                            .build()
+                        .withDetektConfig(config)
+                        .withBaseline(baselineFilename)
+                        .build()
 
                     gradleRunner.runDetektTaskAndCheckResult { result ->
                         assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
@@ -232,8 +232,8 @@ internal class DetektTaskDslTest : Spek({
 						"""
 
                     val gradleRunner = builder
-                            .withDetektConfig(config)
-                            .build()
+                        .withDetektConfig(config)
+                        .build()
 
                     gradleRunner.runTasksAndCheckResult("dependencies", "--configuration", "detektPlugins") { result ->
                         assertThat(result.task(":dependencies")?.outcome).isEqualTo(TaskOutcome.SUCCESS)

@@ -9,41 +9,40 @@ import org.spekframework.spek2.style.specification.describe
  * @author Markus Schwarz
  */
 internal class DetektTaskMultiModuleConsolidationTest : Spek({
-	describe("The Detekt Gradle plugin consolidates xml reports in a multi module project") {
-		val projectLayout = ProjectLayout(
-			numberOfSourceFilesInRootPerSourceDir = 1,
-			numberOfCodeSmellsInRootPerSourceDir = 1
-		)
-			.withSubmodule(name = "child1", numberOfSourceFilesPerSourceDir = 2, numberOfCodeSmells = 1)
-			.withSubmodule(name = "child2", numberOfSourceFilesPerSourceDir = 4, numberOfCodeSmells = 1)
+    describe("The Detekt Gradle plugin consolidates xml reports in a multi module project") {
+        val projectLayout = ProjectLayout(
+            numberOfSourceFilesInRootPerSourceDir = 1,
+            numberOfCodeSmellsInRootPerSourceDir = 1
+        )
+            .withSubmodule(name = "child1", numberOfSourceFilesPerSourceDir = 2, numberOfCodeSmells = 1)
+            .withSubmodule(name = "child2", numberOfSourceFilesPerSourceDir = 4, numberOfCodeSmells = 1)
 
-		lateinit var gradleRunner: DslGradleRunner
+        lateinit var gradleRunner: DslGradleRunner
 
-		afterEachTest {
-			gradleRunner.setupProject()
-			gradleRunner.runDetektTaskAndCheckResult { result ->
-				assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-				projectLayout.submodules.forEach { submodule ->
-					assertThat(result.task(":${submodule.name}:detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-				}
+        afterEachTest {
+            gradleRunner.setupProject()
+            gradleRunner.runDetektTaskAndCheckResult { result ->
+                assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+                projectLayout.submodules.forEach { submodule ->
+                    assertThat(result.task(":${submodule.name}:detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+                }
 
-				val consolidatedReport = projectFile("build/reports/detekt/detekt.xml").readLines()
-				val codeSmellsPerProject = 1
-				val headerAndFooter = 3
-				val linesPerSubModule = 3 * codeSmellsPerProject
-				val linesInMainProject = 3 * codeSmellsPerProject
+                val consolidatedReport = projectFile("build/reports/detekt/detekt.xml").readLines()
+                val codeSmellsPerProject = 1
+                val headerAndFooter = 3
+                val linesPerSubModule = 3 * codeSmellsPerProject
+                val linesInMainProject = 3 * codeSmellsPerProject
 
-				val expectedLinesInConsolidatedReport =
-					headerAndFooter +
-							linesInMainProject +
-							(projectLayout.submodules.size * linesPerSubModule)
-				assertThat(consolidatedReport).hasSize(expectedLinesInConsolidatedReport)
-			}
+                val expectedLinesInConsolidatedReport =
+                    headerAndFooter +
+                        linesInMainProject +
+                        (projectLayout.submodules.size * linesPerSubModule)
+                assertThat(consolidatedReport).hasSize(expectedLinesInConsolidatedReport)
+            }
+        }
+        it("using the groovy dsl") {
 
-		}
-		it("using the groovy dsl") {
-
-			val mainBuildFileContent: String = """
+            val mainBuildFileContent: String = """
 				|import io.gitlab.arturbosch.detekt.DetektPlugin
 				|
 				|plugins {
@@ -63,12 +62,11 @@ internal class DetektTaskMultiModuleConsolidationTest : Spek({
 				|}
 				""".trimMargin()
 
-			gradleRunner = DslGradleRunner(projectLayout, "build.gradle", mainBuildFileContent)
+            gradleRunner = DslGradleRunner(projectLayout, "build.gradle", mainBuildFileContent)
+        }
+        it("using the kotlin dsl") {
 
-		}
-		it("using the kotlin dsl") {
-
-			val mainBuildFileContent: String = """
+            val mainBuildFileContent: String = """
 				|import io.gitlab.arturbosch.detekt.detekt
 				|
 				|plugins {
@@ -88,7 +86,7 @@ internal class DetektTaskMultiModuleConsolidationTest : Spek({
 				|}
 				""".trimMargin()
 
-			gradleRunner = DslGradleRunner(projectLayout, "build.gradle.kts", mainBuildFileContent)
-		}
-	}
+            gradleRunner = DslGradleRunner(projectLayout, "build.gradle.kts", mainBuildFileContent)
+        }
+    }
 })

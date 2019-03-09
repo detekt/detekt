@@ -9,21 +9,21 @@ import java.nio.file.Files
  * @author Markus Schwarz
  */
 internal fun mergeXmlReports(target: File, input: List<File>) {
-	check(target.exists() && target.isFile) { "$target does not exist." }
-	check(input.none { it == target }) { "$target cannot be source and target at the same time." }
+    check(target.exists() && target.isFile) { "$target does not exist." }
+    check(input.none { it == target }) { "$target cannot be source and target at the same time." }
 
-	if (input.isEmpty()) return
+    if (input.isEmpty()) return
 
-	val content = readContent(target).toMutableList()
+    val content = readContent(target).toMutableList()
 
-	input.forEach { file ->
-		content.addAll(readContent(file))
-	}
+    input.forEach { file ->
+        content.addAll(readContent(file))
+    }
 
-	val startOfFile = listOf("""<?xml version="1.0" encoding="utf-8"?>""", """<checkstyle version="4.3">""")
-	val endOfFile = listOf("</checkstyle>")
-	val data = (startOfFile + content + endOfFile).joinToString(lineSeparator)
-	Files.write(target.toPath(), data.toByteArray())
+    val startOfFile = listOf("""<?xml version="1.0" encoding="utf-8"?>""", """<checkstyle version="4.3">""")
+    val endOfFile = listOf("</checkstyle>")
+    val data = (startOfFile + content + endOfFile).joinToString(lineSeparator)
+    Files.write(target.toPath(), data.toByteArray())
 }
 
 /**
@@ -41,8 +41,8 @@ internal fun mergeXmlReports(target: File, input: List<File>) {
  * @author Markus Schwarz
  */
 internal fun readContent(file: File): List<String> {
-	check(file.exists() && file.isFile) { "$file does not exist" }
-	return file.bufferedReader().use { it.readLines() }.drop(2).dropLast(1)
+    check(file.exists() && file.isFile) { "$file does not exist" }
+    return file.bufferedReader().use { it.readLines() }.drop(2).dropLast(1)
 }
 
 private val lineSeparator = System.getProperty("line.separator")
