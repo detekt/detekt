@@ -25,7 +25,7 @@ install:
   - gradlew.bat --version
 
 build_script:
-  - gradlew build -PwarningsAsErrors=true
+  - gradlew build --build-cache -PwarningsAsErrors=true
   - gradlew installShadowDist
   - detekt-cli\build\install\detekt-cli-shadow\bin\detekt-cli --help
 
