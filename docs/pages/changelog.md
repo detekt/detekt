@@ -11,7 +11,7 @@ toc: true
 
 ##### Migration
 
-- 'failFast' inside the yaml config was deprecated. Please use the `--fail-fast` cli flag or `failFast` detekt extension property in the gradle plugin.
+- 'failFast' inside the yaml config was deprecated. Please use the `--fail-fast` cli flag or `failFast` detekt extension property in the Gradle plugin.
 - Including or excluding paths and files from detekt scanning is now done by setting `include` & `exclude` on the
   detekt task. Any use of `filters` will be ignored. See custom task examples for [Groovy][1] and [Kotlin][2].
   For details of syntax see https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/util/PatternFilterable.html
@@ -41,12 +41,10 @@ See all issues at: [Upcoming](https://github.com/arturbosch/detekt/milestone/43)
 
 ##### Migration
 
-- 'failFast' inside the yaml config was deprecated. Please use the `--fail-fast` cli flag or `failFast` detekt extension property in the gradle plugin.
-- `--buildUponDefaultConfig` allows to run detekt with the default config without duplicating it in your project.
-All users who use the default config and override some properties in a second config file are encouraged to migrate.
-- `LongMethod` and `LargeClass` rules got refactored and now count source lines of code and not statements anymore.
-You may need to change your defaults.
-- `.*/androidTest/.*` and `*Spek.kt` are now part of the `test-pattern` by default.
+- 'failFast' inside the yaml config was deprecated. Please use the `--fail-fast` cli flag or `failFast` detekt extension property in the Gradle plugin.
+- The `--buildUponDefaultConfig` CLI flag or `buildUponDefaultConfig` detekt Gradle extension property allow to run detekt with the default config without duplicating it in your project. All users who use the default config and override some properties in a second config file are encouraged to migrate.
+- `LongMethod` and `LargeClass` rules got refactored and now count source lines of code and not statements anymore. You may need to change your defaults.
+- Files matching `.*/androidTest/.*` and `*Spek.kt` are now part of the `test-pattern` by default.
 
 ##### Changelog
 
