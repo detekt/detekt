@@ -9,7 +9,7 @@ import org.spekframework.spek2.style.specification.describe
 
 object MultiVersionTest : Spek({
 
-    val testedGradleVersions = listOf("4.9", "5.2.1")
+    val testedGradleVersions = listOf("4.9", "5.3")
 
     describe("detekt plugin running on different Gradle versions") {
         listOf(groovy(), kotlin()).forEach { builder ->

@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.extensions
 
+import io.gitlab.arturbosch.detekt.internal.configurableFileCollection
 import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.api.file.ConfigurableFileCollection
@@ -24,11 +25,11 @@ open class DetektExtension(project: Project) : CodeQualityExtension() {
     fun idea(configure: Action<IdeaExtension>) = configure.execute(idea)
 
     var input: ConfigurableFileCollection =
-            project.layout.configurableFiles(DEFAULT_SRC_DIR_JAVA, DEFAULT_SRC_DIR_KOTLIN)
+            project.configurableFileCollection().from(DEFAULT_SRC_DIR_JAVA, DEFAULT_SRC_DIR_KOTLIN)
 
     var baseline: File? = null
 
-    var config: ConfigurableFileCollection = project.layout.configurableFiles()
+    var config: ConfigurableFileCollection = project.configurableFileCollection()
 
     var debug: Boolean = DEFAULT_DEBUG_VALUE
 

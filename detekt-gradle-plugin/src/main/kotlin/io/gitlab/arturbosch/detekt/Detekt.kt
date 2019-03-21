@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.extensions.DetektReports
+import io.gitlab.arturbosch.detekt.internal.configurableFileCollection
 import io.gitlab.arturbosch.detekt.internal.fileProperty
 import io.gitlab.arturbosch.detekt.invoke.BaselineArgument
 import io.gitlab.arturbosch.detekt.invoke.BuildUponDefaultConfigArgument
@@ -63,7 +64,7 @@ open class Detekt : SourceTask() {
     @InputFiles
     @Optional
     @PathSensitive(PathSensitivity.RELATIVE)
-    var config: ConfigurableFileCollection = project.layout.configurableFiles()
+    var config: ConfigurableFileCollection = project.configurableFileCollection()
 
     @Input
     @Optional

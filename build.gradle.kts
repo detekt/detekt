@@ -17,8 +17,8 @@ plugins {
     jacoco
 }
 
-tasks.withType<Wrapper> {
-    gradleVersion = "5.2.1"
+tasks.wrapper {
+    gradleVersion = "5.3"
     distributionType = Wrapper.DistributionType.ALL
     doLast {
         /*
