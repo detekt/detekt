@@ -21,7 +21,7 @@ plugins {
     id("com.gradle.plugin-publish") version "0.10.1"
     id("com.jfrog.bintray") version "1.8.4"
     kotlin("jvm") version "1.3.21"
-    id("org.jetbrains.dokka") version "0.9.17"
+    id("org.jetbrains.dokka") version "0.9.18"
     id("com.github.ben-manes.versions") version "0.21.0"
     id("io.gitlab.arturbosch.detekt") version "1.0.0-RC14"
 }
@@ -32,8 +32,8 @@ version = "1.0.0-RC14"
 val detektGradleVersion: String by project
 val jcommanderVersion: String by project
 val spekVersion = "2.0.1"
-val junitPlatformVersion = "1.4.0"
-val assertjVersion = "3.12.1"
+val junitPlatformVersion = "1.4.1"
+val assertjVersion = "3.12.2"
 
 dependencies {
     implementation(kotlin("stdlib"))
