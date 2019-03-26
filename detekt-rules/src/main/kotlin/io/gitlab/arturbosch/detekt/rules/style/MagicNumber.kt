@@ -98,6 +98,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
     private val ignoreAnnotation = valueOrDefault(IGNORE_ANNOTATION, false)
     private val ignoreHashCodeFunction = valueOrDefault(IGNORE_HASH_CODE, true)
     private val ignorePropertyDeclaration = valueOrDefault(IGNORE_PROPERTY_DECLARATION, false)
+    private val ignoreLocalVariables = valueOrDefault(IGNORE_LOCAL_VARIABLES, false)
     private val ignoreNamedArgument = valueOrDefault(IGNORE_NAMED_ARGUMENT, false)
     private val ignoreEnums = valueOrDefault(IGNORE_ENUMS, false)
     private val ignoreConstantDeclaration = valueOrDefault(IGNORE_CONSTANT_DECLARATION, true)
@@ -126,6 +127,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 
     private fun isIgnoredByConfig(expression: KtConstantExpression) = when {
         ignorePropertyDeclaration && expression.isProperty() -> true
+        ignoreLocalVariables && (expression.isLocalProperty()) -> true
         ignoreConstantDeclaration && expression.isConstantProperty() -> true
         ignoreCompanionObjectPropertyDeclaration && expression.isCompanionObjectProperty() -> true
         ignoreAnnotation && expression.isPartOf(KtAnnotationEntry::class) -> true
@@ -165,6 +167,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
         const val IGNORE_NUMBERS = "ignoreNumbers"
         const val IGNORE_HASH_CODE = "ignoreHashCodeFunction"
         const val IGNORE_PROPERTY_DECLARATION = "ignorePropertyDeclaration"
+        const val IGNORE_LOCAL_VARIABLES = "ignoreLocalVariableDeclaration"
         const val IGNORE_CONSTANT_DECLARATION = "ignoreConstantDeclaration"
         const val IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION = "ignoreCompanionObjectPropertyDeclaration"
         const val IGNORE_ANNOTATION = "ignoreAnnotation"
@@ -194,6 +197,9 @@ private fun KtConstantExpression.isPartOfHashCode(): Boolean {
     val containingFunction = getNonStrictParentOfType<KtNamedFunction>()
     return containingFunction?.isHashCodeFunction() == true
 }
+
+private fun KtConstantExpression.isLocalProperty() =
+        getNonStrictParentOfType<KtProperty>()?.isLocal ?: false
 
 private fun KtConstantExpression.isProperty() =
         getNonStrictParentOfType<KtProperty>()?.let { !it.isLocal } ?: false

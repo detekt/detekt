@@ -34,6 +34,9 @@ complexity:
     active: true
     threshold: 10
     includeStaticDeclarations: false
+  ComplexMethod:
+    active: true
+    ignoreSingleWhenExpression: true
   MethodOverloading:
     active: true
 
