@@ -13,12 +13,12 @@ plugins {
     id("com.github.johnrengelman.shadow") version "5.0.0" apply false
     id("org.sonarqube") version "2.7"
     id("io.gitlab.arturbosch.detekt")
-    id("org.jetbrains.dokka") version "0.9.17"
+    id("org.jetbrains.dokka") version "0.9.18"
     jacoco
 }
 
-tasks.withType<Wrapper> {
-    gradleVersion = "5.2.1"
+tasks.wrapper {
+    gradleVersion = "5.3"
     distributionType = Wrapper.DistributionType.ALL
     doLast {
         /*
