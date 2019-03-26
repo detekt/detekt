@@ -31,3 +31,5 @@ Both values can be found inside the report file.
 ```
 
 If you are using the gradle-plugin run the `detektBaseline` task to generate yourself a `baseline.xml`.
+
+Be aware that auto formatting cannot be combined with the `baseline`.
