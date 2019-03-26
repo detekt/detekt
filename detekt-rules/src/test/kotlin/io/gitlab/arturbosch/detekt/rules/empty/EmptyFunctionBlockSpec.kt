@@ -2,13 +2,14 @@ package io.gitlab.arturbosch.detekt.rules.empty
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 /**
  * @author Artur Bosch
+ * @author schalkms
  */
 class EmptyFunctionBlockSpec : Spek({
 
@@ -17,13 +18,19 @@ class EmptyFunctionBlockSpec : Spek({
     describe("EmptyFunctionBlock rule") {
 
         it("should flag function with protected modifier") {
-            val code = "protected fun stuff() {}"
-            assertThat(subject.lint(code)).hasSize(1)
+            val code = """
+                class A {
+                    protected fun stuff() {}
+                }"""
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         it("should not flag function with open modifier") {
-            val code = "open fun stuff() {}"
-            assertThat(subject.lint(code)).isEmpty()
+            val code = """
+                open class A {
+                    open fun stuff() {}
+                }"""
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("should flag the nested empty function") {
@@ -31,31 +38,41 @@ class EmptyFunctionBlockSpec : Spek({
 				fun a() {
 					fun b() {}
 				}"""
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         context("some overridden functions") {
 
             val code = """
-					fun empty() {}
+                fun empty() {}
 
-					override fun stuff1() {}
+                open class Base {
+                    open fun stuff() {}
+                }
 
-					override fun stuff2() {
-						TODO("Implement this")
-					}
+                class A : Base() {
+                    override fun stuff() {}
+                }
 
-					override fun stuff3() {
-						// this is necessary...
-					}"""
+                class B : Base() {
+                    override fun stuff() {
+                        TODO("Implement this")
+                    }
+                }
+
+                class C : Base() {
+                    override fun stuff() {
+                        // this is necessary...
+                    }
+                }"""
 
             it("should flag empty block in overridden function") {
-                assertThat(subject.lint(code)).hasSize(2)
+                assertThat(subject.compileAndLint(code)).hasSize(2)
             }
 
             it("should not flag overridden functions") {
                 val config = TestConfig(mapOf(EmptyFunctionBlock.IGNORE_OVERRIDDEN_FUNCTIONS to "true"))
-                assertThat(EmptyFunctionBlock(config).lint(code)).hasSize(1)
+                assertThat(EmptyFunctionBlock(config).compileAndLint(code)).hasSize(1)
             }
         }
     }
