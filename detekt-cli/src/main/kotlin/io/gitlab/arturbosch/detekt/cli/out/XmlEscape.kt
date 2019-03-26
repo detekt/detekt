@@ -77,9 +77,10 @@ object XmlEscape {
              * Shortcut: most characters will be ASCII/Alphanumeric, and we won't need to do anything at
              * all for them
             */
-            if (codepoint <= Xml10EscapeSymbolsInitializer.XmlEscapeSymbols.LEVELS_LEN - 2
-                    && level < symbols.ESCAPE_LEVELS[codepoint]
-                    && codepointValid) {
+            if (codepoint <= Xml10EscapeSymbolsInitializer.XmlEscapeSymbols.LEVELS_LEN - 2 &&
+                level < symbols.ESCAPE_LEVELS[codepoint] &&
+                codepointValid
+            ) {
                 i++
                 continue
             }
@@ -87,9 +88,10 @@ object XmlEscape {
             /*
              * Shortcut: we might not want to escape non-ASCII chars at all either.
              */
-            if (codepoint > Xml10EscapeSymbolsInitializer.XmlEscapeSymbols.LEVELS_LEN - 2
-                    && level < symbols.ESCAPE_LEVELS[Xml10EscapeSymbolsInitializer.XmlEscapeSymbols.LEVELS_LEN - 1]
-                    && codepointValid) {
+            if (codepoint > Xml10EscapeSymbolsInitializer.XmlEscapeSymbols.LEVELS_LEN - 2 &&
+                level < symbols.ESCAPE_LEVELS[Xml10EscapeSymbolsInitializer.XmlEscapeSymbols.LEVELS_LEN - 1] &&
+                codepointValid
+            ) {
                 if (Character.charCount(codepoint) > 1) {
                     // This is to compensate that we are actually escaping two char[] positions with a single codepoint.
                     i++
@@ -161,7 +163,6 @@ object XmlEscape {
             strBuilder.append(text, readOffset, max)
         }
         return strBuilder.toString()
-
     }
 }
 
@@ -195,7 +196,6 @@ private object Xml10EscapeSymbolsInitializer {
             }
             return true
         }
-
     }
 
     fun initializeXml10(): XmlEscapeSymbols {
@@ -306,14 +306,16 @@ private object Xml10EscapeSymbolsInitializer {
      * Create a new XmlEscapeSymbols structure. This will initialize all the structures needed to cover the
      * specified references and escape levels, including sorted arrays, overflow maps, etc.
      */
-    internal constructor(references: References,
-                         escapeLevels: ByteArray,
-            /*
-            * This object will be in charge of validating each codepoint in input, in order to determine
-            * whether such codepoint will be allowed in escaped output (escaped or not). Invalid codepoints
-            * will be simply discarded.
-            */
-                         val CODEPOINT_VALIDATOR: XmlCodepointValidator) {
+    internal constructor(
+        references: References,
+        escapeLevels: ByteArray,
+        /*
+        * This object will be in charge of validating each codepoint in input, in order to determine
+        * whether such codepoint will be allowed in escaped output (escaped or not). Invalid codepoints
+        * will be simply discarded.
+        */
+        val CODEPOINT_VALIDATOR: XmlCodepointValidator
+    ) {
 
         /*
          * This array will hold the 'escape level' assigned to chars (not codepoints) up to LEVELS_LEN.
@@ -434,4 +436,3 @@ private object Xml10EscapeSymbolsInitializer {
         }
     }
 }
-
