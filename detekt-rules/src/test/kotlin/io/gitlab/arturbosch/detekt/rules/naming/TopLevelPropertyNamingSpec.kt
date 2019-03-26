@@ -14,20 +14,20 @@ class TopLevelPropertyNamingSpec : Spek({
 
         it("should not detect any constants not complying to the naming rules") {
             val code = compileContentForTest("""
-				const val MY_NAME_8 = "Artur"
-            	const val MYNAME = "Artur"
-			""")
+                const val MY_NAME_8 = "Artur"
+                const val MYNAME = "Artur"
+            """)
             assertThat(subject.lint(code)).hasSize(0)
         }
 
         it("should detect five constants not complying to the naming rules") {
             val code = compileContentForTest("""
-            	const val MyNAME = "Artur"
-				const val name = "Artur"
-				const val nAme = "Artur"
-				private const val _nAme = "Artur"
-            	const val serialVersionUID = 42L
-			""")
+                const val MyNAME = "Artur"
+                const val name = "Artur"
+                const val nAme = "Artur"
+                private const val _nAme = "Artur"
+                const val serialVersionUID = 42L
+            """)
             assertThat(subject.lint(code)).hasSize(5)
         }
     }
@@ -36,30 +36,30 @@ class TopLevelPropertyNamingSpec : Spek({
 
         it("should not report any") {
             val code = compileContentForTest("""
-				val name = "Artur"
-				val nAme8 = "Artur"
-				private val _name = "Artur"
-            	val serialVersionUID = 42L
+                val name = "Artur"
+                val nAme8 = "Artur"
+                private val _name = "Artur"
+                val serialVersionUID = 42L
                 val MY_NAME = "Artur"
-        	    val MYNAME = "Artur"
-        	    val MyNAME = "Artur"
-				private val NAME = "Artur"
-				val s_d_d_1 = listOf("")
-			""")
+                val MYNAME = "Artur"
+                val MyNAME = "Artur"
+                private val NAME = "Artur"
+                val s_d_d_1 = listOf("")
+            """)
             assertThat(subject.lint(code)).hasSize(0)
         }
 
         it("should report non private top level property using underscore") {
             val code = compileContentForTest("""
-				val _nAme = "Artur"
-			""")
+                val _nAme = "Artur"
+            """)
             assertThat(subject.lint(code)).hasSize(1)
         }
 
         it("should report private top level property using two underscores") {
             val code = compileContentForTest("""
-				private val __NAME = "Artur"
-			""")
+                private val __NAME = "Artur"
+            """)
             io.gitlab.arturbosch.detekt.test.assertThat(subject.lint(code)).hasSize(1)
         }
     }
