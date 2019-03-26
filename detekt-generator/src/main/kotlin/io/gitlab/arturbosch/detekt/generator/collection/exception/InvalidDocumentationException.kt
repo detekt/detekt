@@ -5,5 +5,5 @@ package io.gitlab.arturbosch.detekt.generator.collection.exception
  *
  * @author Marvin Ramin
  */
-class InvalidDocumentationException(message: String)
-    : RuntimeException(message)
+class InvalidDocumentationException(message: String) :
+    RuntimeException(message)
