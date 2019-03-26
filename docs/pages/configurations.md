@@ -14,7 +14,7 @@ _detekt_ uses a yaml style configuration file for various things:
 - test-pattern to exclude rule sets/rules for test classes
 - processors
 - console and output formats
-- autoCorrect and failfast support
+- autoCorrect support
 
 See the [default-detekt-config.yml](https://github.com/arturbosch/detekt/blob/master/detekt-cli/src/main/resources/default-detekt-config.yml) file for all defined configuration options and their default values.
 
@@ -93,13 +93,6 @@ processors:
   # - 'PackageCountProcessor'
   # - 'KtFileCountProcessor'
 ```
-
-#### failfast property
-
-Set `failFast: true` in your detekt.yml configuration file.
-As a result, every rule will be enabled and `maxIssues` will be set to 0.
-Weights can then be ignored and left untouched.
-
 
 #### autoCorrect property
 
