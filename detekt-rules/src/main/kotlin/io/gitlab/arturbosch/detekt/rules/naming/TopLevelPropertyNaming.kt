@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  *
  * @configuration constantPattern - naming pattern (default: '[A-Z][_A-Z0-9]*')
  * @configuration propertyPattern - naming pattern (default: '[A-Za-z][_A-Za-z0-9]*')
- * @configuration privatePropertyPattern - naming pattern (default: '_?[A-Za-z][A-Za-z0-9]*')
+ * @configuration privatePropertyPattern - naming pattern (default: '_?[A-Za-z][_A-Za-z0-9]*')
  *
  * @active since v1.0.0
  * @author Marvin Ramin
@@ -32,7 +32,7 @@ class TopLevelPropertyNaming(config: Config = Config.empty) : Rule(config) {
 
     private val constantPattern by LazyRegex(CONSTANT_PATTERN, "[A-Z][_A-Z0-9]*")
     private val propertyPattern by LazyRegex(PROPERTY_PATTERN, "[A-Za-z][_A-Za-z0-9]*")
-    private val privatePropertyPattern by LazyRegex(PRIVATE_PROPERTY_PATTERN, "_?[A-Za-z][A-Za-z0-9]*")
+    private val privatePropertyPattern by LazyRegex(PRIVATE_PROPERTY_PATTERN, "_?[A-Za-z][_A-Za-z0-9]*")
 
     override fun visitProperty(property: KtProperty) {
         if (property.isConstant()) {

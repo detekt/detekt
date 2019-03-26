@@ -45,6 +45,7 @@ class TopLevelPropertyNamingSpec : Spek({
                 val MyNAME = "Artur"
                 private val NAME = "Artur"
                 val s_d_d_1 = listOf("")
+                private val INTERNAL_VERSION = "1.0.0"
             """)
             assertThat(subject.lint(code)).hasSize(0)
         }
