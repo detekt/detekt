@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
-import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -13,7 +13,7 @@ class EnumNamingSpec : Spek({
     describe("some enum entry declarations") {
 
         it("should detect no violation") {
-            val findings = NamingRules().lint(
+            val findings = NamingRules().compileAndLint(
                     """
 				enum class WorkFlow {
 					ACTIVE, NOT_ACTIVE, Unknown, Number1
@@ -28,7 +28,7 @@ class EnumNamingSpec : Spek({
 				enum class WorkFlow {
 					_Default
 				}"""
-            assertThat(NamingRules().lint(code)).hasSize(1)
+            assertThat(NamingRules().compileAndLint(code)).hasSize(1)
         }
     }
 })
