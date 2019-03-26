@@ -3,6 +3,7 @@ jdk:
   - openjdk8
   - openjdk11
   - openjdk12
+install: true
 script:
   - ./gradlew build --build-cache -PwarningsAsErrors=true
   - ./gradlew shadowJar
