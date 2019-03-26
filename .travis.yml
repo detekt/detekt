@@ -3,7 +3,7 @@ jdk:
   - openjdk8
   - openjdk11
 script:
-  - ./gradlew build -PwarningsAsErrors=true
+  - ./gradlew build --build-cache -PwarningsAsErrors=true
   - ./gradlew shadowJar
   - java -jar ./detekt-cli/build/libs/detekt-cli-*-all.jar --help
   - java -jar ./detekt-cli/build/libs/detekt-cli-*-all.jar -i . --baseline ./reports/baseline.xml -f ".*/resources/.*,.*/build/.*" -c ./detekt-cli/src/main/resources/default-detekt-config.yml,./reports/failfast.yml
