@@ -6,7 +6,6 @@ include("detekt-api",
         "detekt-test",
         "detekt-sample-extensions",
         "detekt-generator",
-        "detekt-watcher",
         "detekt-formatting")
 
 includeBuild("detekt-gradle-plugin")
