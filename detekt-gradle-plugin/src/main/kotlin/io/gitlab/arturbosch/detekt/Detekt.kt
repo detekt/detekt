@@ -143,6 +143,7 @@ open class Detekt : SourceTask() {
     @TaskAction
     fun check() {
         val xmlReportTargetFile = xmlReportFile.orNull
+        val debugOrDefault = debugProp.getOrElse(false)
         val arguments = mutableListOf(
             InputArgument(source),
             ConfigArgument(config),
@@ -150,14 +151,14 @@ open class Detekt : SourceTask() {
             BaselineArgument(baseline.orNull),
             XmlReportArgument(xmlReportTargetFile),
             HtmlReportArgument(htmlReportFile.orNull),
-            DebugArgument(debugProp.getOrElse(false)),
+            DebugArgument(debugOrDefault),
             ParallelArgument(parallelProp.getOrElse(false)),
             BuildUponDefaultConfigArgument(buildUponDefaultConfigProp.getOrElse(false)),
             FailFastArgument(failFastProp.getOrElse(false)),
             DisableDefaultRuleSetArgument(disableDefaultRuleSetsProp.getOrElse(false))
         )
 
-        DetektInvoker.invokeCli(project, arguments.toList(), debugProp.getOrElse(false))
+        DetektInvoker.invokeCli(project, arguments.toList(), debugOrDefault)
 
         if (xmlReportTargetFile != null) {
             val xmlReports = project.subprojects.flatMap { subproject ->
@@ -165,7 +166,7 @@ open class Detekt : SourceTask() {
                     if (task is Detekt) task.xmlReportFile.orNull?.asFile else null
                 }
             }
-            if (!xmlReports.isEmpty()) {
+            if (!xmlReports.isEmpty() && debugOrDefault) {
                 logger.info("Merging report files of subprojects $xmlReports into $xmlReportTargetFile")
             }
             mergeXmlReports(xmlReportTargetFile.asFile, xmlReports)
