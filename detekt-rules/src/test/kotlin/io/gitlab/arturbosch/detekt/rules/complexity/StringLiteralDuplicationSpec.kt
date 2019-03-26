@@ -1,14 +1,17 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
-import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.assertj.core.api.Java6Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.util.regex.PatternSyntaxException
 
+/**
+ * @author schalkms
+ * @author Artur Bosch
+ */
 class StringLiteralDuplicationSpec : Spek({
 
     val subject by memoized { StringLiteralDuplication() }
@@ -25,28 +28,28 @@ class StringLiteralDuplicationSpec : Spek({
 						s1.equals("lorem")
 					}
 				}"""
-                assertThat(subject.lint(code)).hasSize(1)
+                assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
             it("does not report 2 equal hardcoded strings") {
                 val code = """val str = "lorem" + "lorem" + "ipsum""""
-                assertThat(subject.lint(code)).hasSize(0)
+                assertThat(subject.compileAndLint(code)).hasSize(0)
             }
         }
 
         context("strings in annotations") {
 
             val code = """
-		@Suppress("unused")
-		class A
-		@Suppress("unused")
-		class B
-		@Suppress("unused")
-		class C
-		""""
+		        @Suppress("unused")
+		        class A
+		        @Suppress("unused")
+		        class B
+		        @Suppress("unused")
+		        class C
+            """
 
             it("does not report strings in annotations") {
-                assertThat(subject.lint(code)).hasSize(0)
+                assertThat(subject.compileAndLint(code)).hasSize(0)
             }
 
             it("reports strings in annotations according to config") {
@@ -60,7 +63,7 @@ class StringLiteralDuplicationSpec : Spek({
             val code = """val str = "amet" + "amet" + "amet""""
 
             it("does not report strings with 4 characters") {
-                assertThat(subject.lint(code)).hasSize(0)
+                assertThat(subject.compileAndLint(code)).hasSize(0)
             }
 
             it("reports string with 4 characters") {
@@ -78,9 +81,9 @@ class StringLiteralDuplicationSpec : Spek({
 
             it("does not report lorem or ipsum according to config in regex") {
                 val code = """
-				val str1 = "lorem" + "lorem" + "lorem"
-				val str2 = "ipsum" + "ipsum" + "ipsum"
-			"""
+			    	val str1 = "lorem" + "lorem" + "lorem"
+			    	val str2 = "ipsum" + "ipsum" + "ipsum"
+			    """
                 val config = TestConfig(mapOf(StringLiteralDuplication.IGNORE_STRINGS_REGEX to "(lorem|ipsum)"))
                 assertFindingWithConfig(code, config, 0)
             }
@@ -97,7 +100,7 @@ class StringLiteralDuplicationSpec : Spek({
             it("should fail with invalid regex") {
                 val config = TestConfig(mapOf(StringLiteralDuplication.IGNORE_STRINGS_REGEX to "*lorem"))
                 assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
-                    StringLiteralDuplication(config).lint(regexTestingCode)
+                    StringLiteralDuplication(config).compileAndLint(regexTestingCode)
                 }
             }
         }
@@ -112,7 +115,7 @@ class StringLiteralDuplicationSpec : Spek({
 						s1.equals("lorem")
 					}
 				}"""
-                val finding = subject.lint(code)[0]
+                val finding = subject.compileAndLint(code)[0]
                 val locations = finding.references.map { it.location } + finding.entity.location
                 assertThat(locations).hasSize(3)
             }
@@ -121,14 +124,21 @@ class StringLiteralDuplicationSpec : Spek({
         describe("multiline strings with string interpolation") {
 
             it("does not report duplicated parts in multiline strings") {
-                val path = Case.MultilineStringLiteralDuplication.path()
-                assertThat(subject.lint(path)).hasSize(0)
+                val code = """
+                    // does not report because it treats the multiline string parts as one string
+                    val str = ""${'"'}
+	                    |
+                        |
+                        |
+	                    ""${'"'}
+                """
+                assertThat(subject.compileAndLint(code)).hasSize(0)
             }
         }
     }
 })
 
 private fun assertFindingWithConfig(code: String, config: TestConfig, expected: Int) {
-    val findings = StringLiteralDuplication(config).lint(code)
+    val findings = StringLiteralDuplication(config).compileAndLint(code)
     assertThat(findings).hasSize(expected)
 }
