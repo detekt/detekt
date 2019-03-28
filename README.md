@@ -191,7 +191,9 @@ Integrations:
 - [sputnik is a free tool for static code review and provides support for detekt](https://github.com/TouK/sputnik)
 - [Novoda Gradle Static Analysis plugin](https://github.com/novoda/gradle-static-analysis-plugin)
 - [Maven plugin that wraps the Detekt CLI](https://github.com/Ozsie/detekt-maven-plugin)
+- [Gradle plugin that helps facilitate GitHub PR checking and automatic commenting of violations](https://github.com/btkelly/gnag)
 
 #### Credits
+
 - [JetBrains](https://github.com/jetbrains/) - Creating Intellij + Kotlin
 - [PMD](https://github.com/pmd/pmd) & [Checkstyle](https://github.com/checkstyle/checkstyle) & [KtLint](https://github.com/shyiko/ktlint) - Ideas for threshold values and style rules
