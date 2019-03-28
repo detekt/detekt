@@ -689,5 +689,24 @@ class MagicNumberSpec : Spek({
                 assertThat(MagicNumber().lint(code)).isEmpty()
             }
         }
+
+        context("meaningful variables - #1536") {
+
+            val rule = MagicNumber(TestConfig(mapOf(
+                "ignoreLocalVariableDeclaration" to "true",
+                "ignoreNamedArgument" to "true")))
+
+            it("should report 3") {
+                assertThat(rule.lint("""fun bar() { foo(3) }""")).hasSize(1)
+            }
+
+            it("should not report named 3") {
+                assertThat(rule.lint("""fun bar() { foo(param=3) }""")).isEmpty()
+            }
+
+            it("should not report 3 due to scoped describing variable") {
+                assertThat(rule.lint("""fun bar() { val a = 3; foo(a) }""")).isEmpty()
+            }
+        }
     }
 })
