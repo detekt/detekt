@@ -43,6 +43,10 @@ Usage: detekt [options]
     --disable-default-rulesets, -dd
       Disables default rule sets.
       Default: false
+    --fail-fast
+      Shortcut for 'build-upon-default-config' together with all available rules active 
+      and exit code 0 only when no code smells are found.
+      Additional configuration files can override properties but not the 'active' one.
     --filters, -f
       Path filters defined through regex with separator ';' or ','
       (".*test.*"). These filters apply on relative paths from the project
