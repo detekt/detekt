@@ -13,6 +13,7 @@ import io.gitlab.arturbosch.detekt.rules.isPartOf
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
+import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallElement
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtEnumEntry
@@ -76,6 +77,7 @@ import java.util.Locale
  * @configuration ignoreNamedArgument - whether magic numbers in named arguments should be ignored
  * (default: true)
  * @configuration ignoreEnums - whether magic numbers in enums should be ignored (default: false)
+ * @configuration ignoreRanges - whether magic numbers in ranges should be ignored (default: false)
  *
  * @active since v1.0.0
  * @author Marvin Ramin
@@ -104,6 +106,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
     private val ignoreConstantDeclaration = valueOrDefault(IGNORE_CONSTANT_DECLARATION, true)
     private val ignoreCompanionObjectPropertyDeclaration =
             valueOrDefault(IGNORE_COMPANION_OBJECT_PROPERTY_DECLARATION, true)
+    private val ignoreRanges = valueOrDefault(IGNORE_RANGES, false)
 
     override fun visitConstantExpression(expression: KtConstantExpression) {
         if (isIgnoredByConfig(expression) || expression.isPartOfFunctionReturnConstant() ||
@@ -134,6 +137,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
         ignoreHashCodeFunction && expression.isPartOfHashCode() -> true
         ignoreEnums && expression.isPartOf(KtEnumEntry::class) -> true
         ignoreNamedArgument && expression.isNamedArgument() -> true
+        ignoreRanges && expression.isPartOfRange() -> true
         else -> false
     }
 
@@ -173,6 +177,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
         const val IGNORE_ANNOTATION = "ignoreAnnotation"
         const val IGNORE_NAMED_ARGUMENT = "ignoreNamedArgument"
         const val IGNORE_ENUMS = "ignoreEnums"
+        const val IGNORE_RANGES = "ignoreRanges"
 
         private const val HEX_RADIX = 16
         private const val BINARY_RADIX = 2
@@ -191,6 +196,16 @@ private fun KtConstantExpression.isPartOfConstructorOrFunctionConstant(): Boolea
                 is KtNamedFunction, is KtPrimaryConstructor, is KtSecondaryConstructor -> true
                 else -> false
             }
+}
+
+private fun KtConstantExpression.isPartOfRange(): Boolean {
+    val theParent = parent
+    val rangeOperators = setOf("downTo", "until", "step")
+    return when (theParent is KtBinaryExpression) {
+        true -> theParent.operationToken == KtTokens.RANGE ||
+                theParent.operationReference.getReferencedName() in rangeOperators
+        else -> false
+    }
 }
 
 private fun KtConstantExpression.isPartOfHashCode(): Boolean {
@@ -213,4 +228,4 @@ private fun KtConstantExpression.isConstantProperty(): Boolean =
         isProperty() && getNonStrictParentOfType<KtProperty>()?.isConstant() ?: false
 
 private fun PsiElement.hasUnaryMinusPrefix(): Boolean = this is KtPrefixExpression &&
-        (this.firstChild as? KtOperationReferenceExpression)?.operationSignTokenType == KtTokens.MINUS
+        (firstChild as? KtOperationReferenceExpression)?.operationSignTokenType == KtTokens.MINUS

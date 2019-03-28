@@ -582,7 +582,7 @@ class MagicNumberSpec : Spek({
 			""")
 
                 it("should detect the argument") {
-                    val rule = MagicNumber(TestConfig(mapOf("ignoreNamedArgument" to "true")))
+                    val rule = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NAMED_ARGUMENT to "true")))
                     assertThat(rule.lint(code("53"))).hasSize(1)
                 }
             }
@@ -687,6 +687,45 @@ class MagicNumberSpec : Spek({
             it("reports no finding") {
                 val code = compileContentForTest("fun f(p: Int = 100)")
                 assertThat(MagicNumber().lint(code)).isEmpty()
+            }
+        }
+
+        context("a number as part of a range") {
+
+            val magicNumberInRangeExpressions = listOf(
+                    "val range = 1..27",
+                    "val range = (1..27)",
+                    "val range = 27 downTo 1",
+                    "val range = 1 until 27 step 1",
+                    "val inRange = 1 in 1..27",
+                    "val inRange = (1 in 27 downTo 0 step 1)",
+                    "val inRange = (1..27 step 1).last"
+            )
+
+            magicNumberInRangeExpressions.forEach { codeWithMagicNumberInRange ->
+                it("'$codeWithMagicNumberInRange' reports a code smell by default") {
+                    val code = compileContentForTest(codeWithMagicNumberInRange)
+                    assertThat(MagicNumber().lint(code)).hasSize(1)
+                }
+                it("'$codeWithMagicNumberInRange' reports a code smell if ranges are not ignored") {
+                    val code = compileContentForTest(codeWithMagicNumberInRange)
+                    assertThat(MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_RANGES to "false"))).lint(code))
+                            .hasSize(1)
+                }
+                it("'$codeWithMagicNumberInRange' reports no finding if ranges are ignored") {
+                    val code = compileContentForTest(codeWithMagicNumberInRange)
+                    assertThat(MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_RANGES to "true"))).lint(code))
+                            .isEmpty()
+                }
+            }
+
+            it("reports a finding for a parenthesized number if ranges are ignored") {
+                val code = compileContentForTest("val foo : Int = (127)")
+                assertThat(MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_RANGES to "true"))).lint(code)).hasSize(1)
+            }
+            it("reports a finding for an addition if ramges are ignored") {
+                val code = compileContentForTest("val foo : Int = 1 + 27")
+                assertThat(MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_RANGES to "true"))).lint(code)).hasSize(1)
             }
         }
 
