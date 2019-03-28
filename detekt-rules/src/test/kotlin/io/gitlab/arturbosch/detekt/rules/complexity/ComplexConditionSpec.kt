@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
-import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -22,7 +22,7 @@ class ComplexConditionSpec : Spek({
 		"""
 
         it("reports some complex conditions") {
-            assertThat(ComplexCondition().lint(code)).hasSize(3)
+            assertThat(ComplexCondition().compileAndLint(code)).hasSize(3)
         }
     }
 })
