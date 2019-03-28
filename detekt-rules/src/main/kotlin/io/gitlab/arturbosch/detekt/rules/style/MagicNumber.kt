@@ -82,6 +82,7 @@ import java.util.Locale
  * @active since v1.0.0
  * @author Marvin Ramin
  */
+@Suppress("TooManyFunctions")
 class MagicNumber(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(javaClass.simpleName, Severity.Style,
@@ -167,6 +168,52 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
                 .removeSuffix("f")
     }
 
+    private fun KtConstantExpression.isNamedArgument() =
+        parent is KtValueArgument && (parent as? KtValueArgument)?.isNamed() == true && isPartOf(KtCallElement::class)
+
+    private fun KtConstantExpression.isPartOfFunctionReturnConstant() =
+        parent is KtNamedFunction || parent is KtReturnExpression && parent.parent.children.size == 1
+
+    private fun KtConstantExpression.isPartOfConstructorOrFunctionConstant(): Boolean {
+        return parent is KtParameter &&
+                when (parent.parent.parent) {
+                    is KtNamedFunction, is KtPrimaryConstructor, is KtSecondaryConstructor -> true
+                    else -> false
+                }
+    }
+
+    private fun KtConstantExpression.isPartOfRange(): Boolean {
+        val theParent = parent
+        val rangeOperators = setOf("downTo", "until", "step")
+        return when (theParent is KtBinaryExpression) {
+            true -> theParent.operationToken == KtTokens.RANGE ||
+                    theParent.operationReference.getReferencedName() in rangeOperators
+            else -> false
+        }
+    }
+
+    private fun KtConstantExpression.isPartOfHashCode(): Boolean {
+        val containingFunction = getNonStrictParentOfType<KtNamedFunction>()
+        return containingFunction?.isHashCodeFunction() == true
+    }
+
+    private fun KtConstantExpression.isLocalProperty() =
+        getNonStrictParentOfType<KtProperty>()?.isLocal ?: false
+
+    private fun KtConstantExpression.isProperty() =
+        getNonStrictParentOfType<KtProperty>()?.let { !it.isLocal } ?: false
+
+    private fun KtConstantExpression.isCompanionObjectProperty() = isProperty() && isInCompanionObject()
+
+    private fun KtConstantExpression.isInCompanionObject() =
+        getNonStrictParentOfType<KtObjectDeclaration>()?.isCompanion() ?: false
+
+    private fun KtConstantExpression.isConstantProperty(): Boolean =
+        isProperty() && getNonStrictParentOfType<KtProperty>()?.isConstant() ?: false
+
+    private fun PsiElement.hasUnaryMinusPrefix(): Boolean = this is KtPrefixExpression &&
+            (firstChild as? KtOperationReferenceExpression)?.operationSignTokenType == KtTokens.MINUS
+
     companion object {
         const val IGNORE_NUMBERS = "ignoreNumbers"
         const val IGNORE_HASH_CODE = "ignoreHashCodeFunction"
@@ -183,49 +230,3 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
         private const val BINARY_RADIX = 2
     }
 }
-
-private fun KtConstantExpression.isNamedArgument() =
-        parent is KtValueArgument && (parent as? KtValueArgument)?.isNamed() == true && isPartOf(KtCallElement::class)
-
-private fun KtConstantExpression.isPartOfFunctionReturnConstant() =
-        parent is KtNamedFunction || parent is KtReturnExpression && parent.parent.children.size == 1
-
-private fun KtConstantExpression.isPartOfConstructorOrFunctionConstant(): Boolean {
-    return parent is KtParameter &&
-            when (parent.parent.parent) {
-                is KtNamedFunction, is KtPrimaryConstructor, is KtSecondaryConstructor -> true
-                else -> false
-            }
-}
-
-private fun KtConstantExpression.isPartOfRange(): Boolean {
-    val theParent = parent
-    val rangeOperators = setOf("downTo", "until", "step")
-    return when (theParent is KtBinaryExpression) {
-        true -> theParent.operationToken == KtTokens.RANGE ||
-                theParent.operationReference.getReferencedName() in rangeOperators
-        else -> false
-    }
-}
-
-private fun KtConstantExpression.isPartOfHashCode(): Boolean {
-    val containingFunction = getNonStrictParentOfType<KtNamedFunction>()
-    return containingFunction?.isHashCodeFunction() == true
-}
-
-private fun KtConstantExpression.isLocalProperty() =
-        getNonStrictParentOfType<KtProperty>()?.isLocal ?: false
-
-private fun KtConstantExpression.isProperty() =
-        getNonStrictParentOfType<KtProperty>()?.let { !it.isLocal } ?: false
-
-private fun KtConstantExpression.isCompanionObjectProperty() = isProperty() && isInCompanionObject()
-
-private fun KtConstantExpression.isInCompanionObject() =
-        getNonStrictParentOfType<KtObjectDeclaration>()?.isCompanion() ?: false
-
-private fun KtConstantExpression.isConstantProperty(): Boolean =
-        isProperty() && getNonStrictParentOfType<KtProperty>()?.isConstant() ?: false
-
-private fun PsiElement.hasUnaryMinusPrefix(): Boolean = this is KtPrefixExpression &&
-        (firstChild as? KtOperationReferenceExpression)?.operationSignTokenType == KtTokens.MINUS
