@@ -1,13 +1,14 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 /**
  * @author Artur Bosch
+ * @author schalkms
  */
 class EqualsWithHashCodeExistSpec : Spek({
     val subject by memoized { EqualsWithHashCodeExist(Config.empty) }
@@ -21,7 +22,7 @@ class EqualsWithHashCodeExistSpec : Spek({
 				class A {
 					override fun hashCode(): Int { return super.hashCode() }
 				}"""
-                assertThat(subject.lint(code)).hasSize(1)
+                assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
             it("reports equals() without hashCode() function") {
@@ -29,7 +30,7 @@ class EqualsWithHashCodeExistSpec : Spek({
 				class A {
 					override fun equals(other: Any?): Boolean { return super.equals(other) }
 				}"""
-                assertThat(subject.lint(code)).hasSize(1)
+                assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
             it("does not report equals() with hashCode() function") {
@@ -38,7 +39,7 @@ class EqualsWithHashCodeExistSpec : Spek({
 					override fun equals(other: Any?): Boolean { return super.equals(other) }
 					override fun hashCode(): Int { return super.hashCode() }
 				}"""
-                assertThat(subject.lint(code)).isEmpty()
+                assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
             it("does not report when using kotlin.Any?") {
@@ -47,7 +48,7 @@ class EqualsWithHashCodeExistSpec : Spek({
 					override fun equals(other: kotlin.Any?): Boolean { return super.equals(other) }
 					override fun hashCode(): Int { return super.hashCode() }
 				}"""
-                assertThat(subject.lint(code)).isEmpty()
+                assertThat(subject.compileAndLint(code)).isEmpty()
             }
         }
 
@@ -60,7 +61,7 @@ class EqualsWithHashCodeExistSpec : Spek({
 						return super.equals(other)
 					}
 				}"""
-                assertThat(subject.lint(code)).hasSize(0)
+                assertThat(subject.compileAndLint(code)).hasSize(0)
             }
         }
     }

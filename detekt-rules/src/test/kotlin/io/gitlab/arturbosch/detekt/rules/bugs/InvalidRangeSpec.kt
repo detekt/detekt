@@ -1,11 +1,14 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
+/**
+ * @author schalkms
+ */
 class InvalidRangeSpec : Spek({
     val subject by memoized { InvalidRange(Config.empty) }
 
@@ -20,7 +23,7 @@ class InvalidRangeSpec : Spek({
 					for (i in 2 until 4 step 2) {}
 					for (i in (1+1)..3) { }
 				}"""
-            assertThat(subject.lint(code)).hasSize(0)
+            assertThat(subject.compileAndLint(code)).hasSize(0)
         }
 
         it("reports incorrect bounds in for loop conditions") {
@@ -31,7 +34,7 @@ class InvalidRangeSpec : Spek({
 					for (i in 2 until 1) { }
 					for (i in 2 until 1 step 2) { }
 				}"""
-            assertThat(subject.lint(code)).hasSize(4)
+            assertThat(subject.compileAndLint(code)).hasSize(4)
         }
 
         it("reports nested loops with incorrect bounds in for loop conditions") {
@@ -41,7 +44,7 @@ class InvalidRangeSpec : Spek({
 						for (i in 2..1) { }
 					}
 				}"""
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
     }
 
@@ -49,12 +52,12 @@ class InvalidRangeSpec : Spek({
 
         it("reports for '..'") {
             val code = "val r = 2..1"
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         it("does not report binary expressions without an invalid range") {
             val code = "val sum = 1 + 2"
-            assertThat(subject.lint(code)).hasSize(0)
+            assertThat(subject.compileAndLint(code)).hasSize(0)
         }
     }
 })

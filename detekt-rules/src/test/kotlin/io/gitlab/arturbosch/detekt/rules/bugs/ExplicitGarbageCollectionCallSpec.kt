@@ -1,11 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
+/**
+ * @author Artur Bosch
+ * @author schalkms
+ */
 class ExplicitGarbageCollectionCallSpec : Spek({
     val subject by memoized { ExplicitGarbageCollectionCall(Config.empty) }
 
@@ -18,7 +22,7 @@ class ExplicitGarbageCollectionCallSpec : Spek({
 					Runtime.getRuntime().gc()
 					System.runFinalization()
 				}"""
-            assertThat(subject.lint(code)).hasSize(3)
+            assertThat(subject.compileAndLint(code)).hasSize(3)
         }
     }
 })
