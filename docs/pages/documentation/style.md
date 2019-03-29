@@ -363,6 +363,10 @@ declarations should be ignored
 
    whether magic numbers in enums should be ignored
 
+* `ignoreRanges` (default: `false`)
+
+   whether magic numbers in ranges should be ignored
+
 #### Noncompliant Code:
 
 ```kotlin
