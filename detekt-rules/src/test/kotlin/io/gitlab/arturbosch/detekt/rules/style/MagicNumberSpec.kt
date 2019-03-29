@@ -10,6 +10,7 @@ import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
+@Suppress("LargeClass")
 class MagicNumberSpec : Spek({
 
     val fileName = TEST_FILENAME
