@@ -64,5 +64,22 @@ class UseRequireSpec : Spek({
                 }"""
             assertThat(subject.lint(code)).isEmpty()
         }
+
+        it("does not report an issue if the exception thrown as the only action in a block") {
+            val code = """
+                fun unsafeRunSync(): A =
+                    foo.fold({ throw IllegalArgumentException("message") }, ::identity)"""
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        it("does not report an issue if the exception thrown unconditionally") {
+            val code = """fun doThrow() = throw IllegalArgumentException("message")"""
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        it("does not report an issue if the exception thrown unconditionally in a function block") {
+            val code = """fun doThrow() { throw IllegalArgumentException("message") }"""
+            assertThat(subject.lint(code)).isEmpty()
+        }
     }
 })

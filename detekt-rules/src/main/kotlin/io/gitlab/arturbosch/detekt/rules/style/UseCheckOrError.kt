@@ -7,7 +7,9 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtFunctionLiteral
 import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 
@@ -44,15 +46,22 @@ class UseCheckOrError(config: Config = Config.empty) : Rule(config) {
     )
 
     override fun visitThrowExpression(expression: KtThrowExpression) {
-        if (expression.isIllegalStateExceptionWithoutCause()) {
+        if (expression.isIllegalStateExceptionWithMaxOneArgument() && !expression.isOnlyExpressionInLambda()) {
             report(CodeSmell(issue, Entity.from(expression), issue.description))
         }
     }
 
-    private fun KtThrowExpression.isIllegalStateExceptionWithoutCause(): Boolean {
+    private fun KtThrowExpression.isIllegalStateExceptionWithMaxOneArgument(): Boolean {
         val callExpression = findDescendantOfType<KtCallExpression>()
         val argumentCount = callExpression?.valueArgumentList?.children?.size ?: 0
 
         return callExpression?.firstChild?.text == "IllegalStateException" && argumentCount < 2
+    }
+
+    private fun KtThrowExpression.isOnlyExpressionInLambda(): Boolean {
+        return when (val p = parent) {
+            is KtBlockExpression -> p.statements.size == 1 && p.parent is KtFunctionLiteral
+            else -> false
+        }
     }
 }

@@ -76,5 +76,23 @@ class UseCheckOrErrorSpec : Spek({
                 }"""
             assertThat(subject.lint(code)).isEmpty()
         }
+
+        it("does not report an issue if the exception thrown as the only action in a block") {
+            val code = """
+                fun unsafeRunSync(): A =
+                    unsafeRunTimed(Duration.INFINITE)
+                        .fold({ throw IllegalStateException("message") }, ::identity)"""
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        it("reports an issue if the exception thrown as the only action in a function") {
+            val code = """fun doThrow() = throw IllegalStateException("message")"""
+            assertThat(subject.lint(code)).hasSize(1)
+        }
+
+        it("reports an issue if the exception thrown as the only action in a function block") {
+            val code = """fun doThrow() { throw IllegalStateException("message") }"""
+            assertThat(subject.lint(code)).hasSize(1)
+        }
     }
 })
