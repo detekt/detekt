@@ -9,7 +9,6 @@ import io.gitlab.arturbosch.detekt.rules.style.WildcardImport
 import io.gitlab.arturbosch.detekt.rules.style.optional.OptionalUnit
 import io.gitlab.arturbosch.detekt.test.compileForTest
 import io.gitlab.arturbosch.detekt.test.loadRuleSet
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -28,8 +27,8 @@ class RunRuleSetWithRuleFiltersSpec : Spek({
 
         it("filters WildcardImport, runs OptionalUnit") {
             val findings = ruleSet.accept(defaultFile, setOf("WildcardImport"))
-            Assertions.assertThat(findings).allMatch { it.id != "WildcardImport" }
-            Assertions.assertThat(findings).anySatisfy { it.id != "OptionalUnit" }
+            assertThat(findings).allMatch { it.id != "WildcardImport" }
+            assertThat(findings).anySatisfy { it.id != "OptionalUnit" }
         }
     }
 

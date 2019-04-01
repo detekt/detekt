@@ -4,8 +4,8 @@ import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.core.FileProcessorLocator
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.test.resource
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.fail
 import org.reflections.Reflections
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -28,7 +28,7 @@ class FileProcessorLocatorTest : Spek({
             assertThat(processorClasses).isNotEmpty
             processorClasses
                     .filter { clazz -> processors.firstOrNull { clazz == it.javaClass } == null }
-                    .forEach { Assertions.fail("$it processor is not loaded by the FileProcessorLocator") }
+                    .forEach { fail("$it processor is not loaded by the FileProcessorLocator") }
         }
     }
 })
