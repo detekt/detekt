@@ -68,7 +68,8 @@ abstract class Rule(
         return if (raw == null) {
             null
         } else {
-            SplitPattern(raw).mapAll { pathMatcher(it) }.toSet()
+            SplitPattern(raw, removeTrailingAsterisks = false)
+                .mapAll { pathMatcher(it) }.toSet()
         }
     }
 
