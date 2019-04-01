@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.test
 
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import org.assertj.core.api.AbstractAssert
-import org.assertj.core.internal.Objects
 
 fun assertThat(thresholdedCodeSmell: ThresholdedCodeSmell) = ThresholdedCodeSmellAssert(thresholdedCodeSmell)
 
@@ -19,14 +18,14 @@ class ThresholdedCodeSmellAssert(actual: ThresholdedCodeSmell?) :
 
     fun withValue(expected: Int) = hasValue(expected).let { this }
 
-    private val objects = Objects.instance()
-
     @Suppress("UnsafeCast") // False positive, see issue #1137
     fun hasValue(expected: Int) {
         isNotNull
 
         val smell = actual as ThresholdedCodeSmell
-        objects.assertEqual(writableAssertionInfo, smell.value, expected)
+        if (expected != smell.value) {
+            failWithMessage("Expected value to be <%s> but was <%s>", expected, smell.value)
+        }
     }
 
     fun withThreshold(expected: Int) = hasThreshold(expected).let { this }
@@ -36,6 +35,8 @@ class ThresholdedCodeSmellAssert(actual: ThresholdedCodeSmell?) :
         isNotNull
 
         val smell = actual as ThresholdedCodeSmell
-        objects.assertEqual(writableAssertionInfo, smell.threshold, expected)
+        if (expected != smell.threshold) {
+            failWithMessage("Expected threshold to be <%s> but was <%s>", expected, smell.threshold)
+        }
     }
 }

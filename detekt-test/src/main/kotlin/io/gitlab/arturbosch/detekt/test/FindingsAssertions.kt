@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import org.assertj.core.api.AbstractAssert
 import org.assertj.core.api.AbstractListAssert
-import org.assertj.core.internal.Objects
+import org.assertj.core.util.Objects.areEqual
 
 fun assertThat(findings: List<Finding>) = FindingsAssert(findings)
 
@@ -44,11 +44,6 @@ class FindingsAssert(actual: List<Finding>) :
                 .sortedWith(compareBy({ it.line }, { it.column }))
 
         areEqual(actualSources.toList(), expectedSources.toList())
-    }
-
-    private fun <T> areEqual(actual: List<T>, expected: List<T>) {
-        Objects.instance()
-                .assertEqual(writableAssertionInfo, actual, expected)
     }
 }
 
