@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.lint
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -18,7 +18,7 @@ class UseRequireSpec : Spek({
                     if (a < 0) throw IllegalArgumentException()
 					doSomething()
 				}"""
-            Assertions.assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         it("reports if a precondition throws an IllegalArgumentException with more details") {
@@ -27,7 +27,7 @@ class UseRequireSpec : Spek({
                     if (a < 0) throw IllegalArgumentException("More details")
 					doSomething()
 				}"""
-            Assertions.assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         it("reports if a precondition throws a fully qualified IllegalArgumentException") {
@@ -36,7 +36,7 @@ class UseRequireSpec : Spek({
                     if (a < 0) throw java.lang.IllegalArgumentException()
 					doSomething()
 				}"""
-            Assertions.assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         it("reports if a precondition throws a fully qualified IllegalArgumentException using the kotlin type alias") {
@@ -45,7 +45,7 @@ class UseRequireSpec : Spek({
                     if (a < 0) throw kotlin.IllegalArgumentException()
 					doSomething()
 				}"""
-            Assertions.assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
         }
 
         it("does not report if a precondition throws a different kind of exception") {
@@ -54,7 +54,7 @@ class UseRequireSpec : Spek({
                     if (a < 0) throw SomeBusinessException()
 					doSomething()
 				}"""
-            Assertions.assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 })
