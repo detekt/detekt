@@ -22,7 +22,7 @@ class InclusionExclusionPatternsSpec : Spek({
 
     describe("rule should only run on library file specified by 'includes' pattern") {
 
-        val config = TestConfig(mapOf("includes" to ".*/library/.*.kt"))
+        val config = TestConfig(mapOf("includes" to "**/library/*.kt"))
 
         it("should run") {
             Case.Library.path()
@@ -39,7 +39,7 @@ class InclusionExclusionPatternsSpec : Spek({
 
     describe("rule should only run on library file not matching the specified 'excludes' pattern") {
 
-        val config = TestConfig(mapOf("excludes" to "glob:**/**/Default.kt"))
+        val config = TestConfig(mapOf("excludes" to "glob:**/Default.kt"))
 
         it("should run") {
             Case.Library.path()
@@ -72,8 +72,8 @@ class InclusionExclusionPatternsSpec : Spek({
     describe("rule should only run on library file when both patterns are defined") {
 
         val config = TestConfig(mapOf(
-            "includes" to ".*/Library.kt",
-            "excludes" to ".*/library/.*"))
+            "includes" to "**Library.kt",
+            "excludes" to "**/library/**"))
 
         it("should run only on library path") {
             OnlyLibraryTrackingRule(config).apply {

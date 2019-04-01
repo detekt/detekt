@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.api.internal
 
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.nio.file.Paths
@@ -30,27 +31,11 @@ class PathMatchersSpec : Spek({
         }
     }
 
-    describe("supports regex") {
-        val libraryPattern = ".*/detekt/api/.*"
-
+    describe("does not support regex") {
         it("should work as a regex path matcher when syntax not specified") {
-            val matcher = pathMatcher(libraryPattern)
-            assertThat(matcher.matches(expectedMatch)).isTrue()
-        }
-
-        it("should work as a regex path matcher when syntax not specified but default overridden") {
-            val matcher = pathMatcher(libraryPattern, defaultSyntax = "regex")
-            assertThat(matcher.matches(expectedMatch)).isTrue()
-        }
-
-        val matcher = pathMatcher("regex:$libraryPattern")
-
-        it("should match") {
-            assertThat(matcher.matches(expectedMatch)).isTrue()
-        }
-
-        it("should not match") {
-            assertThat(matcher.matches(nonMatchingPath)).isFalse()
+            assertThatThrownBy { pathMatcher("regex:.*/detekt/api/.*") }
+                .isInstanceOf(IllegalArgumentException::class.java)
+                .hasMessage("Only globbing patterns are supported as they are treated os-independently by the PathMatcher api.")
         }
     }
 })

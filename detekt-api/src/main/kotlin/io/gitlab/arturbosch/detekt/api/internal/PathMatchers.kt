@@ -6,26 +6,25 @@ import java.nio.file.FileSystem
 import java.nio.file.FileSystems
 import java.nio.file.PathMatcher
 
-private val supportedSyntax = setOf("glob", "regex")
-
 /**
  * Converts given [pattern] into a [PathMatcher] specified by [FileSystem.getPathMatcher].
- * If no syntax (glob or regex) is specified before the pattern, the glob syntax is assumed
- * if not otherwise specified by [defaultSyntax].
+ * We only support the "glob:" syntax to stay os independently.
+ * Internally a globbing pattern is transformed to a regex respecting the Windows file system.
  */
-fun pathMatcher(pattern: String, defaultSyntax: String = "regex"): PathMatcher {
-
-    fun assumeDefaultSyntax() = "$defaultSyntax:$pattern"
+fun pathMatcher(pattern: String): PathMatcher {
 
     val syntax = pattern.substringBefore(":")
     val result = when (syntax) {
-        pattern -> assumeDefaultSyntax()
-        in supportedSyntax -> pattern
-        else -> assumeDefaultSyntax()
+        "glob" -> pattern
+        "regex" -> throw IllegalArgumentException(USE_GLOB_MSG)
+        else -> "glob:$pattern"
     }
 
     return FileSystems.getDefault().getPathMatcher(result)
 }
+
+private const val USE_GLOB_MSG =
+    "Only globbing patterns are supported as they are treated os-independently by the PathMatcher api."
 
 fun KtFile.absolutePath(): String? = getUserData(ABSOLUTE_PATH)
 fun KtFile.relativePath(): String? = getUserData(RELATIVE_PATH)
