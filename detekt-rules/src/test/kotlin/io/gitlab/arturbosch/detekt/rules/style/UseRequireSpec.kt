@@ -14,46 +14,46 @@ class UseRequireSpec : Spek({
 
         it("reports if a precondition throws an IllegalArgumentException") {
             val code = """
-				fun x(a: Int) {
+                fun x(a: Int) {
                     if (a < 0) throw IllegalArgumentException()
-					doSomething()
-				}"""
+                    doSomething()
+                }"""
             assertThat(subject.lint(code)).hasSize(1)
         }
 
         it("reports if a precondition throws an IllegalArgumentException with more details") {
             val code = """
-				fun x(a: Int) {
+                fun x(a: Int) {
                     if (a < 0) throw IllegalArgumentException("More details")
-					doSomething()
-				}"""
+                    doSomething()
+                }"""
             assertThat(subject.lint(code)).hasSize(1)
         }
 
         it("reports if a precondition throws a fully qualified IllegalArgumentException") {
             val code = """
-				fun x(a: Int) {
+                fun x(a: Int) {
                     if (a < 0) throw java.lang.IllegalArgumentException()
-					doSomething()
-				}"""
+                    doSomething()
+                }"""
             assertThat(subject.lint(code)).hasSize(1)
         }
 
         it("reports if a precondition throws a fully qualified IllegalArgumentException using the kotlin type alias") {
             val code = """
-				fun x(a: Int) {
+                fun x(a: Int) {
                     if (a < 0) throw kotlin.IllegalArgumentException()
-					doSomething()
-				}"""
+                    doSomething()
+                }"""
             assertThat(subject.lint(code)).hasSize(1)
         }
 
         it("does not report if a precondition throws a different kind of exception") {
             val code = """
-				fun x(a: Int) {
+                fun x(a: Int) {
                     if (a < 0) throw SomeBusinessException()
-					doSomething()
-				}"""
+                    doSomething()
+                }"""
             assertThat(subject.lint(code)).isEmpty()
         }
     }

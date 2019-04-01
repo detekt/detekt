@@ -14,19 +14,19 @@ class UseCheckOrErrorSpec : Spek({
 
         it("reports if a an IllegalStateException is thrown") {
             val code = """
-				fun x() {
-					doSomething()
+                fun x() {
+                    doSomething()
                     if (a < 0) throw IllegalStateException()
-				}"""
+                }"""
             assertThat(subject.lint(code)).hasSize(1)
         }
 
         it("reports if a an IllegalStateException is thrown with an error message") {
             val code = """
-				fun x() {
-					doSomething()
+                fun x() {
+                    doSomething()
                     if (a < 0) throw IllegalStateException("More details")
-				}"""
+                }"""
             assertThat(subject.lint(code)).hasSize(1)
         }
 
@@ -42,28 +42,28 @@ class UseCheckOrErrorSpec : Spek({
 
         it("reports if an IllegalStateException is thrown by its fully qualified name") {
             val code = """
-				fun x() {
-					doSomething()
+                fun x() {
+                    doSomething()
                     if (a < 0) throw java.lang.IllegalStateException()
-				}"""
+                }"""
             assertThat(subject.lint(code)).hasSize(1)
         }
 
         it("reports if an IllegalStateException is thrown by its fully qualified name using the kotlin type alias") {
             val code = """
-				fun x() {
-					doSomething()
+                fun x() {
+                    doSomething()
                     if (a < 0) throw kotlin.IllegalStateException()
-				}"""
+                }"""
             assertThat(subject.lint(code)).hasSize(1)
         }
 
         it("does not report if any other kind of exception is thrown") {
             val code = """
-				fun x() {
-					doSomething()
+                fun x() {
+                    doSomething()
                     if (a < 0) throw SomeBusinessException()
-				}"""
+                }"""
             assertThat(subject.lint(code)).isEmpty()
         }
     }
