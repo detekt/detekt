@@ -44,12 +44,15 @@ class UseCheckOrError(config: Config = Config.empty) : Rule(config) {
     )
 
     override fun visitThrowExpression(expression: KtThrowExpression) {
-        if (expression.isIllegalStateException()) {
+        if (expression.isIllegalStateExceptionWithoutCause()) {
             report(CodeSmell(issue, Entity.from(expression), issue.description))
         }
     }
 
-    private fun KtThrowExpression.isIllegalStateException(): Boolean {
-        return findDescendantOfType<KtCallExpression>()?.firstChild?.text == "IllegalStateException"
+    private fun KtThrowExpression.isIllegalStateExceptionWithoutCause(): Boolean {
+        val callExpression = findDescendantOfType<KtCallExpression>()
+        val argumentCount = callExpression?.valueArgumentList?.children?.size ?: 0
+
+        return callExpression?.firstChild?.text == "IllegalStateException" && argumentCount < 2
     }
 }

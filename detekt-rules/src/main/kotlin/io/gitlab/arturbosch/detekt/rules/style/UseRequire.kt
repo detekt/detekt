@@ -42,6 +42,9 @@ class UseRequire(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun KtThrowExpression.isIllegalArgumentException(): Boolean {
-        return findDescendantOfType<KtCallExpression>()?.firstChild?.text == "IllegalArgumentException"
+        val callExpression = findDescendantOfType<KtCallExpression>()
+        val argumentCount = callExpression?.valueArgumentList?.children?.size ?: 0
+
+        return callExpression?.firstChild?.text == "IllegalArgumentException" && argumentCount < 2
     }
 }

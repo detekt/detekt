@@ -66,5 +66,15 @@ class UseCheckOrErrorSpec : Spek({
                 }"""
             assertThat(subject.lint(code)).isEmpty()
         }
+
+        it("does not report an issue if the exception thrown has a message and a cause") {
+            val code = """
+                private fun missing(): Nothing {
+                    if  (cause != null) {
+                        throw IllegalStateException("message", cause)
+                    }
+                }"""
+            assertThat(subject.lint(code)).isEmpty()
+        }
     }
 })

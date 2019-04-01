@@ -56,5 +56,13 @@ class UseRequireSpec : Spek({
                 }"""
             assertThat(subject.lint(code)).isEmpty()
         }
+
+        it("does not report an issue if the exception thrown has a message and a cause") {
+            val code = """
+                private fun x(a: Int): Nothing {
+                    throw IllegalArgumentException("message", cause)
+                }"""
+            assertThat(subject.lint(code)).isEmpty()
+        }
     }
 })
