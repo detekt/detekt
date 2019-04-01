@@ -13,7 +13,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 /**
  * Reports when very short function names are used.
  *
- * @configuration minimumFunctionNameLength - minimum name length (default: 3)
+ * @configuration minimumFunctionNameLength - minimum name length (default: `3`)
  * @author Marvin Ramin
  */
 class FunctionMinLength(config: Config = Config.empty) : Rule(config) {

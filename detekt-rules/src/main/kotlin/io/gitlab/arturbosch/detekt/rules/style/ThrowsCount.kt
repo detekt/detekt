@@ -34,7 +34,7 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  * }
  * </compliant>
  *
- * @configuration max - maximum amount of throw statements in a method (default: 2)
+ * @configuration max - maximum amount of throw statements in a method (default: `2`)
  *
  * @active since v1.0.0
  * @author schalkms

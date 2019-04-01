@@ -39,7 +39,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isAbstract
  * </noncompliant>
  *
  * @configuration excludeAnnotatedClasses - Allows you to provide a list of annotations that disable
- * this check. (default: "dagger.Module")
+ * this check. (default: `"dagger.Module"`)
  *
  * @author schalkms
  * @author Marvin Ramin

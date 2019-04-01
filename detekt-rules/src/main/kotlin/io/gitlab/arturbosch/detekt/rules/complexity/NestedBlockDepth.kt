@@ -25,7 +25,7 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  *
  * Prefer extracting the nested code into well-named functions to make it easier to understand.
  *
- * @configuration threshold - maximum nesting depth (default: 4)
+ * @configuration threshold - maximum nesting depth (default: `4`)
  *
  * @active since v1.0.0
  * @author Artur Bosch

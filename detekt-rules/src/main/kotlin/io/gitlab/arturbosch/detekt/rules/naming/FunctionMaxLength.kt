@@ -13,7 +13,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 /**
  * Reports when very long function names are used.
  *
- * @configuration maximumFunctionNameLength - maximum name length (default: 30)
+ * @configuration maximumFunctionNameLength - maximum name length (default: `30`)
  * @author Marvin Ramin
  */
 class FunctionMaxLength(config: Config = Config.empty) : Rule(config) {

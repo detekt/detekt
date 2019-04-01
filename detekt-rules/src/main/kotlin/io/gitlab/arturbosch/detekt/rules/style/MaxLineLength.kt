@@ -18,10 +18,10 @@ data class KtFileContent(val file: KtFile, val content: Sequence<String>)
  * Long lines might be hard to read on smaller screens or printouts. Additionally having a maximum line length
  * in the codebase will help make the code more uniform.
  *
- * @configuration maxLineLength - maximum line length (default: 120)
- * @configuration excludePackageStatements - if package statements should be ignored (default: true)
- * @configuration excludeImportStatements - if import statements should be ignored (default: true)
- * @configuration excludeCommentStatements - if comment statements should be ignored (default: false)
+ * @configuration maxLineLength - maximum line length (default: `120`)
+ * @configuration excludePackageStatements - if package statements should be ignored (default: `true`)
+ * @configuration excludeImportStatements - if import statements should be ignored (default: `true`)
+ * @configuration excludeCommentStatements - if comment statements should be ignored (default: `false`)
  *
  * @active since v1.0.0
  * @author Robbin Voortman

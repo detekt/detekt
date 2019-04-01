@@ -14,7 +14,7 @@ import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
 /**
  * Reports when very short variable names are used.
  *
- * @configuration minimumVariableNameLength - maximum name length (default: 1)
+ * @configuration minimumVariableNameLength - maximum name length (default: `1`)
  * @author Marvin Ramin, Niklas Baudy
  */
 class VariableMinLength(config: Config = Config.empty) : Rule(config) {

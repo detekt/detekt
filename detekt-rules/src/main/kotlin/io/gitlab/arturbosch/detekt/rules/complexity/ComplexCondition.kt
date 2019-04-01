@@ -36,7 +36,7 @@ import org.jetbrains.kotlin.psi.KtWhileExpression
  * fun hasCorrectEnding() = return !str.endsWith("foo") && !str.endsWith("bar") && !str.endsWith("_")
  * </compliant>
  *
- * @configuration threshold - (default: 4)
+ * @configuration threshold - (default: `4`)
  *
  * @active since v1.0.0
  * @author Artur Bosch

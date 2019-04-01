@@ -11,8 +11,8 @@ import io.gitlab.arturbosch.detekt.formatting.merge
 /**
  * See <a href="https://ktlint.github.io/#rule-indentation">ktlint-website</a> for documentation.
  *
- * @configuration indentSize - indentation size (default: 4)
- * @configuration continuationIndentSize - continuation indentation size (default: 4)
+ * @configuration indentSize - indentation size (default: `4`)
+ * @configuration continuationIndentSize - continuation indentation size (default: `4`)
  *
  * @active since v1.0.0
  * @autoCorrect since v1.0.0

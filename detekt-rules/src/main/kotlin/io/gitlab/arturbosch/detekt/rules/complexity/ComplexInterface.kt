@@ -23,8 +23,8 @@ import org.jetbrains.kotlin.psi.KtProperty
  * Large interfaces should be split into smaller interfaces which have a clear responsibility and are easier
  * to understand and implement.
  *
- * @configuration threshold - maximum amount of definitions in an interface (default: 10)
- * @configuration includeStaticDeclarations - whether static declarations should be included (default: false)
+ * @configuration threshold - maximum amount of definitions in an interface (default: `10`)
+ * @configuration includeStaticDeclarations - whether static declarations should be included (default: `false`)
  *
  * @author schalkms
  * @author Marvin Ramin

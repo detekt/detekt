@@ -20,10 +20,10 @@ import org.jetbrains.kotlin.psi.KtObjectDeclaration
  * By default this rule also searches for nested and inner classes and objects. This default behavior can be changed
  * with the configuration options of this rule.
  *
- * @configuration searchInNestedClass - if nested classes should be searched (default: true)
- * @configuration searchInInnerClass - if inner classes should be searched (default: true)
- * @configuration searchInInnerObject - if inner objects should be searched (default: true)
- * @configuration searchInInnerInterface - if inner interfaces should be searched (default: true)
+ * @configuration searchInNestedClass - if nested classes should be searched (default: `true`)
+ * @configuration searchInInnerClass - if inner classes should be searched (default: `true`)
+ * @configuration searchInInnerObject - if inner objects should be searched (default: `true`)
+ * @configuration searchInInnerInterface - if inner interfaces should be searched (default: `true`)
  *
  * @author Artur Bosch
  * @author Marvin Ramin

@@ -10,7 +10,7 @@ import org.jetbrains.kotlin.psi.KtCatchClause
  * Reports empty `catch` blocks. Empty blocks of code serve no purpose and should be removed.
  *
  * @configuration allowedExceptionNameRegex - ignores exception types which match this regex
- * (default: "^(_|(ignore|expected).*)")
+ * (default: `"^(_|(ignore|expected).*)"`)
  * @active since v1.0.0
  * @author Artur Bosch
  * @author Marvin Ramin

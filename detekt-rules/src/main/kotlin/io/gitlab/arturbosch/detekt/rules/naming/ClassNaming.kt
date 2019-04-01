@@ -14,7 +14,7 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
 /**
  * Reports when class or object names which do not follow the specified naming convention are used.
  *
- * @configuration classPattern - naming pattern (default: '[A-Z$][a-zA-Z0-9$]*')
+ * @configuration classPattern - naming pattern (default: `'[A-Z$][a-zA-Z0-9$]*'`)
  * @active since v1.0.0
  * @author Marvin Ramin
  */

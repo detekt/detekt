@@ -43,13 +43,13 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
  * </compliant>
  *
  * @configuration max - define the maximum number of return statements allowed per function
- * (default: 2)
+ * (default: `2`)
  * @configuration excludedFunctions - define functions to be ignored by this check
- * (default: "equals")
+ * (default: `"equals"`)
  * @configuration excludeLabeled - if labeled return statements should be ignored
- * (default: false)
+ * (default: `false`)
  * @configuration excludeReturnFromLambda - if labeled return from a lambda should be ignored
- * (default: true)
+ * (default: `true`)
  * @active since v1.0.0
  *
  * @author Niklas Baudy

@@ -14,7 +14,7 @@ import org.jetbrains.kotlin.psi.KtEnumEntry
 /**
  * Reports when enum names which do not follow the specified naming convention are used.
  *
- * @configuration enumEntryPattern - naming pattern (default: '^[A-Z][_a-zA-Z0-9]*')
+ * @configuration enumEntryPattern - naming pattern (default: `'^[A-Z][_a-zA-Z0-9]*'`)
  * @active since v1.0.0
  * @author Marvin Ramin
  */

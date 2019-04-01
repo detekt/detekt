@@ -16,9 +16,9 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 /**
  * Reports constructor parameter names which do not follow the specified naming convention are used.
  *
- * @configuration parameterPattern - naming pattern (default: '[a-z][A-Za-z0-9]*')
- * @configuration privateParameterPattern - naming pattern (default: '[a-z][A-Za-z0-9]*')
- * @configuration excludeClassPattern - ignores variables in classes which match this regex (default: '$^')
+ * @configuration parameterPattern - naming pattern (default: `'[a-z][A-Za-z0-9]*'`)
+ * @configuration privateParameterPattern - naming pattern (default: `'[a-z][A-Za-z0-9]*'`)
+ * @configuration excludeClassPattern - ignores variables in classes which match this regex (default: `'$^'`)
  *
  * @active since v1.0.0
  * @author Mickele Moriconi

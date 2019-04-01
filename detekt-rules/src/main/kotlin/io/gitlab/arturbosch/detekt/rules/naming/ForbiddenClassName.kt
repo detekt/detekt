@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
  * By default this rule does not report any classes.
  * Examples for forbidden names might be too generic class names like `...Manager`.
  *
- * @configuration forbiddenName - forbidden class names (default: '')
+ * @configuration forbiddenName - forbidden class names (default: `''`)
  * @author Marvin Ramin
  */
 class ForbiddenClassName(config: Config = Config.empty) : Rule(config) {

@@ -25,7 +25,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * }
  * </noncompliant>
  *
- * @configuration conversionFunctionPrefix - allowed conversion function names (default: 'to')
+ * @configuration conversionFunctionPrefix - allowed conversion function names (default: `'to'`)
  * @author Ivan Balaksha
  * @author schalkms
  * @author Marvin Ramin

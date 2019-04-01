@@ -267,7 +267,7 @@ class RuleCollectorSpec : Spek({
 
 				/**
 				 * $description
-				 * @configuration config - description (default: '[A-Z$]')
+				 * @configuration config - description (default: `'[A-Z$]'`)
 				 */
 				class $name: Rule {
 				}
@@ -287,14 +287,67 @@ class RuleCollectorSpec : Spek({
 
 				/**
 				 * $description
-				 * @configuration config - description (default: "")
-				 * @configuration config2 - description2 (default: "")
+				 * @configuration config - description (default: `""`)
+				 * @configuration config2 - description2 (default: `""`)
 				 */
 				class $name: Rule {
 				}
 			"""
             val items = subject.run(code)
             assertThat(items[0].configuration).hasSize(2)
+        }
+
+        it("doesn't have a default value") {
+            val name = "SomeRandomClass"
+            val description = "some description"
+            val code = """
+				package foo
+
+				/**
+				 * $description
+				 * @configuration config - description
+				 */
+				class $name: Rule {
+				}
+			"""
+            assertThatExceptionOfType(InvalidDocumentationException::class.java)
+                .isThrownBy { subject.run(code) }
+        }
+
+
+        it("has a blank default value") {
+            val name = "SomeRandomClass"
+            val description = "some description"
+            val code = """
+				package foo
+
+				/**
+				 * $description
+				 * @configuration config2 - description2 (default: ``)
+				 */
+				class $name: Rule {
+				}
+			"""
+            assertThatExceptionOfType(InvalidDocumentationException::class.java)
+                .isThrownBy { subject.run(code) }
+        }
+
+
+        it("has an incorrectly delimited default value") {
+            val name = "SomeRandomClass"
+            val description = "some description"
+            val code = """
+				package foo
+
+				/**
+				 * $description
+				 * @configuration config2 - description2 (default: true)
+				 */
+				class $name: Rule {
+				}
+			"""
+            assertThatExceptionOfType(InvalidDocumentationException::class.java)
+                .isThrownBy { subject.run(code) }
         }
 
         it("contains a misconfigured configuration option") {

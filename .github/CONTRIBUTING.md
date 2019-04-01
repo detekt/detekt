@@ -30,7 +30,7 @@ automatically. The format of the KDoc should be as follows:
      * // add the compliant code example here
      * </compliant>
      *
-     * @configuration name - Description for the configuration option (default: "whatever should be the default")
+     * @configuration name - Description for the configuration option (default: `whatever should be the default`)
      *
      * @author name
      */
