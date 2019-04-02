@@ -1,7 +1,5 @@
 package io.gitlab.arturbosch.detekt.api
 
-import org.jetbrains.kotlin.psi.KtFile
-
 /**
  * A context describes the storing and reporting mechanism of [Finding]'s inside a [Rule].
  * Additionally it handles suppression and aliases management.
