@@ -8,12 +8,12 @@ import org.jetbrains.kotlin.psi.KtFile
 typealias RuleId = String
 
 /**
- * Defines the visiting mechanism for [KtFile]'s.
+ * Defines the visiting mechanism for KtFile's.
  *
  * Custom rule implementations should actually use [Rule] as base class.
  *
  * The extraction of this class from [Rule] actually resulted from the need
- * of running many different checks on the same [KtFile] but within a single
+ * of running many different checks on the same KtFile but within a single
  * potential costly visiting process, see [MultiRule].
  *
  * This base rule class abstracts over single and multi rules and allows the

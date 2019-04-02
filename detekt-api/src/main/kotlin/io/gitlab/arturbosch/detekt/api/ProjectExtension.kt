@@ -18,7 +18,6 @@ import org.jetbrains.kotlin.com.intellij.pom.impl.PomTransactionBase
 import org.jetbrains.kotlin.com.intellij.pom.tree.TreeAspect
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.TreeCopyHandler
 import org.jetbrains.kotlin.config.CompilerConfiguration
-import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtPsiFactory
 import sun.reflect.ReflectionFactory
 
@@ -28,7 +27,7 @@ import sun.reflect.ReflectionFactory
 val psiProject: Project = createKotlinCoreEnvironment()
 
 /**
- * Allows to generate different kinds of [KtElement]'s.
+ * Allows to generate different kinds of KtElement's.
  */
 val psiFactory: KtPsiFactory = KtPsiFactory(psiProject, false)
 

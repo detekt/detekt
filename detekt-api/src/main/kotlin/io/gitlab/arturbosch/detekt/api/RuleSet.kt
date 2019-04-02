@@ -27,7 +27,7 @@ class RuleSet(val id: RuleSetId, val rules: List<BaseRule>) {
      * If a rule is a [MultiRule] the filters are passed to it via a setter
      * and later used to filter sub rules of the [MultiRule].
      *
-     * A list of findings is returned for given [KtFile]
+     * A list of findings is returned for given KtFile
      */
     fun accept(file: KtFile, ruleFilters: Set<RuleId>): List<Finding> =
             rules.asSequence()
