@@ -7,11 +7,11 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.argumentCount
+import io.gitlab.arturbosch.detekt.rules.isIllegalStateException
 import org.jetbrains.kotlin.psi.KtBlockExpression
-import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtFunctionLiteral
 import org.jetbrains.kotlin.psi.KtThrowExpression
-import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 
 /**
  * Kotlin provides a much more concise way to check invariants as well as pre- and post conditions than to manually throw
@@ -40,22 +40,17 @@ import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 class UseCheckOrError(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-        "UseRequire", Severity.Style,
+        "UseCheckOrError", Severity.Style,
         "Use check() or error() instead of throwing an IllegalStateException.",
         Debt.FIVE_MINS
     )
 
     override fun visitThrowExpression(expression: KtThrowExpression) {
-        if (expression.isIllegalStateExceptionWithMaxOneArgument() && !expression.isOnlyExpressionInLambda()) {
+        if (expression.isOnlyExpressionInLambda()) return
+
+        if (expression.isIllegalStateException() && expression.argumentCount < 2) {
             report(CodeSmell(issue, Entity.from(expression), issue.description))
         }
-    }
-
-    private fun KtThrowExpression.isIllegalStateExceptionWithMaxOneArgument(): Boolean {
-        val callExpression = findDescendantOfType<KtCallExpression>()
-        val argumentCount = callExpression?.valueArgumentList?.children?.size ?: 0
-
-        return callExpression?.firstChild?.text == "IllegalStateException" && argumentCount < 2
     }
 
     private fun KtThrowExpression.isOnlyExpressionInLambda(): Boolean {
