@@ -32,48 +32,52 @@ class ForbiddenVoidSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
-        it("should not report Void in overriding function declarations if ignoreOverridden is enabled") {
-            val code = """
+        describe("ignoreOverridden is enabled") {
+            val config = TestConfig(mapOf(ForbiddenVoid.IGNORE_OVERRIDDEN to "true"))
+
+            it("should not report Void in overriding function declarations") {
+                val code = """
                 override fun method(param: Void) : Void {
                     doSomething()
                 }
                 """
 
-            val findings = ForbiddenVoid(TestConfig(mapOf(ForbiddenVoid.IGNORE_OVERRIDDEN to "true"))).lint(code)
-            assertThat(findings).isEmpty()
-        }
+                val findings = ForbiddenVoid(config).lint(code)
+                assertThat(findings).isEmpty()
+            }
 
-        it("should not report Void in overriding function declarations with parametrized types if ignoreOverridden is enabled") {
-            val code = """
+            it("should not report Void in overriding function declarations with parametrized types") {
+                val code = """
                 override fun method(param: Future<Foo<Void>>) : Future<Foo<Void>> {
                     doSomething()
                 }
                 """
 
-            val findings = ForbiddenVoid(TestConfig(mapOf(ForbiddenVoid.IGNORE_OVERRIDDEN to "true"))).lint(code)
-            assertThat(findings).isEmpty()
-        }
+                val findings = ForbiddenVoid(config).lint(code)
+                assertThat(findings).isEmpty()
+            }
 
-        it("should report Void in body of overriding function even if ignoreOverridden is enabled") {
-            val code = """
+            it("should report Void in body of overriding function even") {
+                val code = """
                 override fun method(param: String) : Int {
                     val a: Void? = null
                 }
-            """
+                """
 
-            val findings = ForbiddenVoid(TestConfig(mapOf(ForbiddenVoid.IGNORE_OVERRIDDEN to "true"))).lint(code)
-            assertThat(findings).hasSize(1)
-        }
+                val findings = ForbiddenVoid(config).lint(code)
+                assertThat(findings).hasSize(1)
+            }
 
-        it("should report Void in not overridden function declarations if ignoreOverridden is enabled") {
-            val code = """
+            it("should report Void in not overridden function declarations") {
+                val code = """
                 fun method(param: Void) : Void {
                     doSomething()
                 }
-            """
+                """
 
-            val findings = ForbiddenVoid(TestConfig(mapOf(ForbiddenVoid.IGNORE_OVERRIDDEN to "true"))).lint(code)
-            assertThat(findings).hasSize(2)
+                val findings = ForbiddenVoid(config).lint(code)
+                assertThat(findings).hasSize(2)
+            }
         }
     }
 })
