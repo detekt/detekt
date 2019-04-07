@@ -7,8 +7,13 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.isOverride
+import io.gitlab.arturbosch.detekt.rules.parentOfType
 import org.jetbrains.kotlin.psi.KtClassLiteralExpression
+import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
 /**
@@ -26,24 +31,52 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  * Void::class
  * </compliant>
  *
+ * @configuration ignoreOverridden - ignores void types in signatures of overridden functions (default: false)
+ *
  * @author Egor Neliuba
+ * @author Markus Schwarz
  */
 class ForbiddenVoid(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-            javaClass.simpleName,
-            Severity.Style,
-            "`Unit` should be used instead of `Void`.",
-            Debt.FIVE_MINS)
+        javaClass.simpleName,
+        Severity.Style,
+        "`Unit` should be used instead of `Void`.",
+        Debt.FIVE_MINS
+    )
 
     override fun visitSimpleNameExpression(expression: KtSimpleNameExpression) {
-        if (expression.getReferencedName() == Void::class.java.simpleName && !expression.isClassLiteral) {
+        if (expression.isReferencingVoid()) {
+            if (ruleSetConfig.valueOrDefault(IGNORE_OVERRIDDEN, false) && expression.isPartOfOverriddenSignature()) {
+                return
+            }
+
             report(CodeSmell(issue, Entity.from(expression), message = "'Void' should be replaced with 'Unit'."))
         }
 
         super.visitSimpleNameExpression(expression)
     }
 
+    private fun KtSimpleNameExpression.isReferencingVoid() =
+        getReferencedName() == Void::class.java.simpleName && !isClassLiteral
+
     private val KtSimpleNameExpression.isClassLiteral: Boolean
         get() = getStrictParentOfType<KtClassLiteralExpression>() != null
+
+    private fun KtSimpleNameExpression.isPartOfOverriddenSignature() =
+        (isPartOfReturnTypeOfFunction() || isParameterTypeOfFunction()) &&
+                parentOfType<KtNamedFunction>()?.isOverride() == true
+
+    private fun KtSimpleNameExpression.isPartOfReturnTypeOfFunction() =
+        parentOfType<KtNamedFunction>()
+            ?.typeReference
+            ?.collectDescendantsOfType<KtSimpleNameExpression>()
+            ?.any { it == this } ?: false
+
+    private fun KtSimpleNameExpression.isParameterTypeOfFunction() =
+        parentOfType<KtParameter>() != null
+
+    companion object {
+        const val IGNORE_OVERRIDDEN = "ignoreOverridden"
+    }
 }
