@@ -50,15 +50,15 @@ abstract class Rule(
     open val defaultRuleIdAliases: Set<String> = emptySet()
 
     /**
-     * When specified this rule only runs on [KtFile]'s with paths matching any inclusion pattern.
-     * @return path matchers or null which means for every [KtFile] this rule must run
+     * When specified this rule only runs on KtFile's with paths matching any inclusion pattern.
+     * @return path matchers or null which means for every KtFile this rule must run
      */
     open val includes: Set<PathMatcher>?
         get() = pathMatchers(Config.INCLUDES_KEY)
 
     /**
-     * When specified this rule will not run on [KtFile]'s having a path matching any exclusion pattern.
-     * @return path matchers or null which means no [KtFile]'s get excluded except inclusion patterns are defined
+     * When specified this rule will not run on KtFile's having a path matching any exclusion pattern.
+     * @return path matchers or null which means no KtFile's get excluded except inclusion patterns are defined
      */
     open val excludes: Set<PathMatcher>?
         get() = pathMatchers(Config.EXCLUDES_KEY)

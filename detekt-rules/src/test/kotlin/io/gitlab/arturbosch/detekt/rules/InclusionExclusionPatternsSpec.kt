@@ -69,18 +69,34 @@ class InclusionExclusionPatternsSpec : Spek({
         }
     }
 
-    describe("rule should only run on library file when both patterns are defined") {
+    describe("rule should only run on included files") {
 
-        val config = TestConfig(mapOf(
-            "includes" to "**Library.kt",
-            "excludes" to "**/library/**"))
 
-        it("should run only on library path") {
+        it("should only run on dummies") {
+            val config = TestConfig(mapOf(
+                "includes" to "**Dummy*.kt",
+                "excludes" to "**/library/**"))
+
             OnlyLibraryTrackingRule(config).apply {
                 Files.walk(Case.Library.path().parent)
                     .filter { Files.isRegularFile(it) }
                     .forEach { this.lint(it) }
-                assertOnlyLibraryFileVisited()
+                assertOnlyLibraryFileVisited(false)
+                assertCounterWasCalledTimes(2)
+            }
+        }
+
+        it("should only run on library file") {
+            val config = TestConfig(mapOf(
+                "includes" to "**Library.kt",
+                "excludes" to "**/library/**"))
+
+            OnlyLibraryTrackingRule(config).apply {
+                Files.walk(Case.Library.path().parent)
+                    .filter { Files.isRegularFile(it) }
+                    .forEach { this.lint(it) }
+                assertOnlyLibraryFileVisited(true)
+                assertCounterWasCalledTimes(0)
             }
         }
     }
@@ -91,7 +107,7 @@ private fun Path.runWith(rule: DummyRule): DummyRule {
     return rule
 }
 
-class OnlyLibraryTrackingRule(config: Config) : Rule(config) {
+private class OnlyLibraryTrackingRule(config: Config) : Rule(config) {
 
     override val issue: Issue = Issue("test", Severity.CodeSmell, "", Debt.FIVE_MINS)
     private var libraryFileVisited = false
@@ -105,12 +121,16 @@ class OnlyLibraryTrackingRule(config: Config) : Rule(config) {
         }
     }
 
-    fun assertOnlyLibraryFileVisited() {
-        assertThat(counter == 0 && libraryFileVisited).isTrue()
+    fun assertOnlyLibraryFileVisited(wasVisited: Boolean) {
+        assertThat(libraryFileVisited).isEqualTo(wasVisited)
+    }
+
+    fun assertCounterWasCalledTimes(size: Int) {
+        assertThat(counter).isEqualTo(size)
     }
 }
 
-class DummyRule(config: Config = Config.empty) : Rule(config) {
+private class DummyRule(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue("test", Severity.CodeSmell, "", Debt.FIVE_MINS)
     private var isDirty: Boolean = false
