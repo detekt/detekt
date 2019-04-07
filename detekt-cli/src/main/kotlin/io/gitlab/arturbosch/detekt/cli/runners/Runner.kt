@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.cli.runners
 
 import io.gitlab.arturbosch.detekt.cli.CliArgs
 import io.gitlab.arturbosch.detekt.cli.OutputFacade
+import io.gitlab.arturbosch.detekt.cli.createClasspath
 import io.gitlab.arturbosch.detekt.cli.createPathFilters
 import io.gitlab.arturbosch.detekt.cli.createPlugins
 import io.gitlab.arturbosch.detekt.cli.loadConfiguration
@@ -30,6 +31,7 @@ class Runner(private val arguments: CliArgs) : Executable {
         with(arguments) {
             val pathFilters = createPathFilters()
             val plugins = createPlugins()
+            val classpath = createClasspath()
             val config = loadConfiguration()
 
             return ProcessingSettings(
@@ -38,7 +40,9 @@ class Runner(private val arguments: CliArgs) : Executable {
                     pathFilters = pathFilters,
                     parallelCompilation = parallel,
                     excludeDefaultRuleSets = disableDefaultRuleSets,
-                    pluginPaths = plugins)
+                    pluginPaths = plugins,
+                    classpath = classpath
+            )
         }
     }
 }

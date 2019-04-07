@@ -23,6 +23,13 @@ class CliArgs : Args {
                     "These filters apply on relative paths from the project root.")
     var filters: String? = null // Using a converter for List<PathFilter> resulted in a ClassCastException
 
+    @Parameter(
+        names = ["--classpath", "-cp"],
+        required = false,
+        description = "EXPERIMENTAL: Compile Classpath of the project."
+    )
+    var classpath: String? = null
+
     @Parameter(names = ["--config", "-c"],
             description = "Path to the config file (path/to/config.yml). " +
                     "Multiple configuration files can be specified with ',' or ';' as separator.")
