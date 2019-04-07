@@ -13,7 +13,7 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.cli.CliArgs
 import io.gitlab.arturbosch.detekt.test.resource
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtClass
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -43,7 +43,7 @@ class SingleRuleRunnerSpec : Spek({
 
 class TestConsoleReport : ConsoleReport() {
     override fun render(detektion: Detektion): String? {
-        Assertions.assertThat(detektion.findings).hasSize(1)
+        assertThat(detektion.findings).hasSize(1)
         return "I've run!"
     }
 }
