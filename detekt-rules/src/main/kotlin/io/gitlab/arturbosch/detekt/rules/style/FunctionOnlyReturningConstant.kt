@@ -29,8 +29,8 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
  * const val constantString = "1"
  * </compliant>
  *
- * @configuration ignoreOverridableFunction - if overriden functions should be ignored (default: true)
- * @configuration excludedFunctions - excluded functions (default: 'describeContents')
+ * @configuration ignoreOverridableFunction - if overriden functions should be ignored (default: `true`)
+ * @configuration excludedFunctions - excluded functions (default: `'describeContents'`)
  * @author schalkms
  * @author Marvin Ramin
  */

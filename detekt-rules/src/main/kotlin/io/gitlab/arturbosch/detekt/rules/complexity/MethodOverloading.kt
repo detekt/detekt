@@ -21,7 +21,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isExtensionDeclaration
  *
  * Refactor these methods and try to use optional parameters instead to prevent some of the overloading.
  *
- * @configuration threshold - (default: 6)
+ * @configuration threshold - (default: `6`)
  *
  * @author schalkms
  * @author Marvin Ramin

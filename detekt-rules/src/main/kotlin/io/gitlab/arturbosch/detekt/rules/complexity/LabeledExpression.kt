@@ -59,7 +59,7 @@ import org.jetbrains.kotlin.psi.psiUtil.parents
  * </compliant>
  *
  * @configuration ignoredLabels - allows to provide a list of label names which should be ignored by this rule
- * (default: "")
+ * (default: `""`)
  *
  * @author Ivan Balaksha
  * @author Marvin Ramin

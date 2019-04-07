@@ -108,7 +108,7 @@ class EndOfSentenceFormatSpec : Spek({
         it("does not report KDoc which doesn't contain any real sentence but many tags") {
             val code = """
 			/**
-			 * @configuration this - just an example (default: 150)
+			 * @configuration this - just an example (default: `150`)
 			 *
 			 * @active since v1.0.0
 			 * @author person1

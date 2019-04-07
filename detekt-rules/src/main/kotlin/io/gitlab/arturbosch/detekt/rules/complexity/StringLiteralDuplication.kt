@@ -42,10 +42,10 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  * }
  * </compliant>
  *
- * @configuration threshold - amount of duplications to trigger rule (default: 3)
- * @configuration ignoreAnnotation - if values in Annotations should be ignored (default: true)
- * @configuration excludeStringsWithLessThan5Characters - if short strings should be excluded (default: true)
- * @configuration ignoreStringsRegex - RegEx of Strings that should be ignored (default: '$^')
+ * @configuration threshold - amount of duplications to trigger rule (default: `3`)
+ * @configuration ignoreAnnotation - if values in Annotations should be ignored (default: `true`)
+ * @configuration excludeStringsWithLessThan5Characters - if short strings should be excluded (default: `true`)
+ * @configuration ignoreStringsRegex - RegEx of Strings that should be ignored (default: `'$^'`)
  *
  * @author schalkms
  * @author Artur Bosch

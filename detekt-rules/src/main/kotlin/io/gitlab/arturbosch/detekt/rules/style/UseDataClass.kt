@@ -40,7 +40,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
  * </compliant>
  *
  * @configuration excludeAnnotatedClasses - allows to provide a list of annotations that disable this check
- * (default: "")
+ * (default: `""`)
  *
  * @author Ivan Balaksha
  * @author Artur Bosch

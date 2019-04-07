@@ -32,7 +32,7 @@ import java.util.Locale
  * </compliant>
  *
  * @configuration acceptableDecimalLength - Length under which decimal base 10 literals are not required to have
- * underscores (default: 5)
+ * underscores (default: `5`)
  *
  * @author Tyler Wong
  */

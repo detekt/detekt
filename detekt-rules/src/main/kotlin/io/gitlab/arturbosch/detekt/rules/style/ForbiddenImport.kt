@@ -21,7 +21,7 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  * import kotlin.SinceKotlin
  * </noncompliant>
  *
- * @configuration imports - imports which should not be used (default: '')
+ * @configuration imports - imports which should not be used (default: `''`)
  *
  * @author Niklas Baudy
  * @author Marvin Ramin

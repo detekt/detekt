@@ -9,7 +9,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * Reports empty functions. Empty blocks of code serve no purpose and should be removed.
  * This rule will not report functions overriding others.
  *
- * @configuration ignoreOverriddenFunctions - excludes overridden functions with an empty body (default: false)
+ * @configuration ignoreOverriddenFunctions - excludes overridden functions with an empty body (default: `false`)
  *
  * @active since v1.0.0
  * @author Artur Bosch

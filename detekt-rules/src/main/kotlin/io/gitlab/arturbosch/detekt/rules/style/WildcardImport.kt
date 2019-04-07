@@ -40,7 +40,7 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  * </compliant>
  *
  * @configuration excludeImports - Define a whitelist of package names that should be allowed to be imported
- * with wildcard imports. (default: 'java.util.*,kotlinx.android.synthetic.*')
+ * with wildcard imports. (default: `'java.util.*,kotlinx.android.synthetic.*'`)
  *
  * @active since v1.0.0
  * @author Artur Bosch

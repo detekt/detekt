@@ -33,7 +33,7 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
  * }
  * </compliant>
  *
- * @configuration includeLineWrapping - include return statements with line wraps in it (default: false)
+ * @configuration includeLineWrapping - include return statements with line wraps in it (default: `false`)
  *
  * @author Artur Bosch
  * @author Marvin Ramin

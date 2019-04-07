@@ -21,7 +21,7 @@ import java.util.IdentityHashMap
  *
  * Extract parts of the functionality of long methods into separate, smaller methods.
  *
- * @configuration threshold - maximum lines in a method (default: 60)
+ * @configuration threshold - maximum lines in a method (default: `60`)
  *
  * @active since v1.0.0
  * @author Artur Bosch

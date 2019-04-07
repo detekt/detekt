@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiComment
  * fun foo() { }
  * </noncompliant>
  *
- * @configuration values - forbidden comment strings (default: 'TODO:,FIXME:,STOPSHIP:')
+ * @configuration values - forbidden comment strings (default: `'TODO:,FIXME:,STOPSHIP:'`)
  *
  * @active since v1.0.0
  * @author Niklas Baudy
