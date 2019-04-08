@@ -11,7 +11,7 @@ import io.gitlab.arturbosch.detekt.formatting.merge
 /**
  * See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
  *
- * @configuration maxLineLength - maximum line length (default: 120)
+ * @configuration maxLineLength - maximum line length (default: `120`)
  *
  * @active since v1.0.0
  * @author Artur Bosch

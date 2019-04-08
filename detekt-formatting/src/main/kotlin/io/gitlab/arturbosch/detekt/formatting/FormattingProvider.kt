@@ -13,8 +13,8 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
  * to your gradle dependencies or reference the `detekt-formatting`-jar with the `--plugins` option
  * in the command line interface.
  *
- * @configuration android - if android style guides should be preferred (default: false)
- * @configuration autoCorrect - if rules should auto correct style violation (default: true)
+ * @configuration android - if android style guides should be preferred (default: `false`)
+ * @configuration autoCorrect - if rules should auto correct style violation (default: `true`)
  * @active since v1.0.0
  * @author Artur Bosch
  */

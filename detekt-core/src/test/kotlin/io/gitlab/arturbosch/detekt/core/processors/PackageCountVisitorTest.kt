@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.core.processors
 
 import io.gitlab.arturbosch.detekt.core.path
 import io.gitlab.arturbosch.detekt.test.compileForTest
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -19,7 +19,7 @@ class PackageCountVisitorTest : Spek({
                     .map { getData(it) }
                     .distinct()
                     .count()
-            Assertions.assertThat(count).isEqualTo(2)
+            assertThat(count).isEqualTo(2)
         }
     }
 })

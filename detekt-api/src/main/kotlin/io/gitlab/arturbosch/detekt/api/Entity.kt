@@ -23,7 +23,7 @@ data class Entity(
 
     companion object {
         /**
-         * Factory function which retrieves all needed information from the [PsiElement] itself.
+         * Factory function which retrieves all needed information from the PsiElement itself.
          */
         fun from(element: PsiElement, offset: Int = 0): Entity {
             val name = element.searchName()

@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.SplitPattern
 import org.jetbrains.kotlin.psi.KtImportDirective
 
 /**
@@ -21,26 +20,39 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  * import kotlin.SinceKotlin
  * </noncompliant>
  *
- * @configuration imports - imports which should not be used (default: '')
+ * @configuration imports - imports which should not be used (default: `''`)
  *
  * @author Niklas Baudy
  * @author Marvin Ramin
  */
 class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName, Severity.Style,
-            "Mark forbidden imports. A forbidden import could be an import for an unstable / experimental api" +
-                    "and hence you might want to mark it as forbidden in order to get warned about the usage.", Debt.TEN_MINS)
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Style,
+        "Mark forbidden imports. A forbidden import could be an import for an unstable / experimental api" +
+                "and hence you might want to mark it as forbidden in order to get warned about the usage.",
+        Debt.TEN_MINS
+    )
 
-    private val forbiddenImports = SplitPattern(valueOrDefault(IMPORTS, ""))
+    private val forbiddenImports = valueOrDefault(IMPORTS, "").split(",")
+        .map { it.trim() }
+        .filter { it.isNotBlank() }
+        .map { it.replace(".", "\\.") }
+        .map { it.replace("*", ".*") }
+        .map { Regex(it) }
 
     override fun visitImportDirective(importDirective: KtImportDirective) {
         super.visitImportDirective(importDirective)
 
         val import = importDirective.importedFqName?.asString() ?: ""
-        if (forbiddenImports.contains(import)) {
-            report(CodeSmell(issue, Entity.from(importDirective), "The import " +
-                    "$import has been forbidden in the Detekt config."))
+        if (forbiddenImports.any { it.matches(import) }) {
+            report(
+                CodeSmell(
+                    issue, Entity.from(importDirective), "The import " +
+                            "$import has been forbidden in the Detekt config."
+                )
+            )
         }
     }
 

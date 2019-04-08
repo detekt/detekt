@@ -5,6 +5,8 @@ import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.api.createCompilerConfiguration
+import io.gitlab.arturbosch.detekt.api.createKotlinCoreEnvironment
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
 
@@ -19,6 +21,9 @@ class DetektFacade(
 
     private val saveSupported = settings.config.valueOrDefault("autoCorrect", false)
     private val pathsToAnalyze = settings.inputPaths
+    private val classpath = settings.classpath
+    private val compilerConfiguration = createCompilerConfiguration(classpath, pathsToAnalyze)
+    private val environment = createKotlinCoreEnvironment(compilerConfiguration)
     private val compiler = KtTreeCompiler.instance(settings)
 
     fun run(): Detektion {
@@ -30,7 +35,7 @@ class DetektFacade(
             val files = compiler.compile(current)
 
             processors.forEach { it.onStart(files) }
-            findings.mergeSmells(detektor.run(files))
+            findings.mergeSmells(detektor.run(files, environment, classpath.isNotEmpty()))
             if (saveSupported) {
                 KtFileModifier(current).saveModifiedFiles(files) {
                     notifications.add(it)

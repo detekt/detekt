@@ -5,7 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.com.intellij.util.keyFMap.KeyFMap
 import org.spekframework.spek2.Spek
@@ -25,7 +25,7 @@ class QualifiedNameProcessorTest : Spek({
             processor.onFinish(listOf(ktFile), result)
 
             val data = result.getData(fqNamesKey)
-            Assertions.assertThat(data).contains(
+            assertThat(data).contains(
                     "io.gitlab.arturbosch.detekt.sample.Foo",
                     "io.gitlab.arturbosch.detekt.sample.Bar",
                     "io.gitlab.arturbosch.detekt.sample.Bla")

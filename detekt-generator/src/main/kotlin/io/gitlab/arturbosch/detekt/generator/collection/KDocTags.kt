@@ -33,7 +33,7 @@ fun KDocTag.parseConfigTag(): Configuration {
 }
 
 private const val EXPECTED_CONFIGURATION_FORMAT =
-        "Expected format: @configuration {paramName} - {paramDescription} (default: {defaultValue})."
+        "Expected format: @configuration {paramName} - {paramDescription} (default: `{defaultValue}`)."
 
 fun KDocTag.isValidConfigurationTag(entity: String = "Rule"): Boolean {
     val content: String = getContent()
@@ -42,7 +42,7 @@ fun KDocTag.isValidConfigurationTag(entity: String = "Rule"): Boolean {
                 "[${containingFile.name}] $entity '$content' doesn't seem to contain a description.\n" +
                         EXPECTED_CONFIGURATION_FORMAT)
     }
-    if (!content.contains(configurationDefaultValueRegex)) {
+    if (content.substringAfter("`", "").substringBeforeLast("`", "").isBlank()) {
         val parameterName = content.substringBefore(" - ")
         throw InvalidDocumentationException(
                 "[${containingFile.name}] $entity '$parameterName' doesn't seem to contain a default value.\n" +
@@ -51,5 +51,5 @@ fun KDocTag.isValidConfigurationTag(entity: String = "Rule"): Boolean {
     return true
 }
 
-val configurationDefaultValueRegex = "\\(default: (.+)\\)".toRegex(RegexOption.DOT_MATCHES_ALL)
+val configurationDefaultValueRegex = "\\(default: `(.+)`\\)".toRegex(RegexOption.DOT_MATCHES_ALL)
 const val TAG_CONFIGURATION = "configuration"

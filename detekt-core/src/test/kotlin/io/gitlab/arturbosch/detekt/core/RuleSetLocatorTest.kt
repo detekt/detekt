@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.core
 
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.fail
 import org.reflections.Reflections
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -19,7 +19,7 @@ class RuleSetLocatorTest : Spek({
             assertThat(providerClasses).isNotEmpty
             providerClasses
                     .filter { clazz -> providers.firstOrNull { it.javaClass == clazz } == null }
-                    .forEach { Assertions.fail("$it rule set is not loaded by the RuleSetLocator") }
+                    .forEach { fail("$it rule set is not loaded by the RuleSetLocator") }
         }
     }
 })

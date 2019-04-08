@@ -16,9 +16,9 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 /**
  * Reports when top level constant names which do not follow the specified naming convention are used.
  *
- * @configuration constantPattern - naming pattern (default: '[A-Z][_A-Z0-9]*')
- * @configuration propertyPattern - naming pattern (default: '[A-Za-z][_A-Za-z0-9]*')
- * @configuration privatePropertyPattern - naming pattern (default: '_?[A-Za-z][_A-Za-z0-9]*')
+ * @configuration constantPattern - naming pattern (default: `'[A-Z][_A-Z0-9]*'`)
+ * @configuration propertyPattern - naming pattern (default: `'[A-Za-z][_A-Za-z0-9]*'`)
+ * @configuration privatePropertyPattern - naming pattern (default: `'_?[A-Za-z][_A-Za-z0-9]*'`)
  *
  * @active since v1.0.0
  * @author Marvin Ramin

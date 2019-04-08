@@ -42,6 +42,7 @@ import io.gitlab.arturbosch.detekt.rules.style.UnusedPrivateMember
 import io.gitlab.arturbosch.detekt.rules.style.UseCheckOrError
 import io.gitlab.arturbosch.detekt.rules.style.UseDataClass
 import io.gitlab.arturbosch.detekt.rules.style.UseRequire
+import io.gitlab.arturbosch.detekt.rules.style.UselessCallOnNotNull
 import io.gitlab.arturbosch.detekt.rules.style.UtilityClassWithPublicConstructor
 import io.gitlab.arturbosch.detekt.rules.style.VarCouldBeVal
 import io.gitlab.arturbosch.detekt.rules.style.WildcardImport
@@ -107,6 +108,7 @@ class StyleGuideProvider : RuleSetProvider {
                 VarCouldBeVal(config),
                 ForbiddenVoid(config),
                 ExplicitItLambdaParameter(config),
+                UselessCallOnNotNull(config),
                 UnderscoresInNumericLiterals(config),
                 UseRequire(config),
                 UseCheckOrError(config)

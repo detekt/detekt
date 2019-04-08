@@ -1,10 +1,13 @@
 package io.gitlab.arturbosch.detekt.api
 
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
+import org.jetbrains.kotlin.cli.common.config.addKotlinSourceRoots
 import org.jetbrains.kotlin.cli.common.messages.MessageRenderer
 import org.jetbrains.kotlin.cli.common.messages.PrintingMessageCollector
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
+import org.jetbrains.kotlin.cli.jvm.config.addJavaSourceRoots
+import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
 import org.jetbrains.kotlin.com.intellij.mock.MockProject
 import org.jetbrains.kotlin.com.intellij.openapi.extensions.ExtensionPoint
 import org.jetbrains.kotlin.com.intellij.openapi.extensions.Extensions
@@ -18,29 +21,58 @@ import org.jetbrains.kotlin.com.intellij.pom.impl.PomTransactionBase
 import org.jetbrains.kotlin.com.intellij.pom.tree.TreeAspect
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.TreeCopyHandler
 import org.jetbrains.kotlin.config.CompilerConfiguration
-import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtPsiFactory
 import sun.reflect.ReflectionFactory
+import java.io.File
+import java.nio.file.Path
 
 /**
  * The initialized kotlin environment which is used to translate kotlin code to a Kotlin-AST.
  */
-val psiProject: Project = createKotlinCoreEnvironment()
+val psiProject: Project = createProject()
 
 /**
- * Allows to generate different kinds of [KtElement]'s.
+ * Allows to generate different kinds of KtElement's.
  */
 val psiFactory: KtPsiFactory = KtPsiFactory(psiProject, false)
 
-private fun createKotlinCoreEnvironment(): Project {
+fun createKotlinCoreEnvironment(configuration: CompilerConfiguration = CompilerConfiguration()): KotlinCoreEnvironment {
     System.setProperty("idea.io.use.fallback", "true")
-    val configuration = CompilerConfiguration()
     configuration.put(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY,
             PrintingMessageCollector(System.err, MessageRenderer.PLAIN_FULL_PATHS, false))
     return KotlinCoreEnvironment.createForProduction(Disposer.newDisposable(),
-            configuration, EnvironmentConfigFiles.JVM_CONFIG_FILES).project.apply {
+        configuration, EnvironmentConfigFiles.JVM_CONFIG_FILES)
+}
+
+private fun createProject(configuration: CompilerConfiguration = CompilerConfiguration()): Project {
+    return createKotlinCoreEnvironment(configuration).project.apply {
         makeMutable(this as? MockProject ?: throw IllegalStateException(
                 "Unexpected Type for psi project. MockProject expected. Please report this!"))
+    }
+}
+
+fun createCompilerConfiguration(
+    classpath: List<String>,
+    pathsToAnalyze: List<Path>
+): CompilerConfiguration {
+
+    val javaFiles = pathsToAnalyze.flatMap { path ->
+        path.toFile().walk()
+            .filter { it.isFile && it.extension.equals("java", true) }
+            .toList()
+    }
+    val kotlinFiles = pathsToAnalyze.flatMap { path ->
+        path.toFile().walk()
+            .filter { it.isFile }
+            .filter { it.extension.equals("kt", true) || it.extension.equals("kts", true) }
+            .map { it.absolutePath }
+            .toList()
+    }
+
+    return CompilerConfiguration().apply {
+        addJavaSourceRoots(javaFiles)
+        addKotlinSourceRoots(kotlinFiles)
+        addJvmClasspathRoots(classpath.map { File(it) })
     }
 }
 

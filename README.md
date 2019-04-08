@@ -119,7 +119,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Andrew Ochsner](https://github.com/aochsner) - Updated Readme for `failFast` option
 - [Paul Merlin](https://github.com/eskatos) - Gradle build improvements
 - [Konstantin Aksenov](https://github.com/vacxe) - Coding improvement
-- [Matthew Haughton](https://github.com/3flex) - Started type resolution, Dependency updates, Coding + Documentation improvements
+- [Matthew Haughton](https://github.com/3flex) - Added type resolution, Dependency updates, Coding + Documentation improvements
 - [Janusz Bagiński](https://github.com/jbaginski) - Fixed line number reporting for MaxLineLengthRule 
 - [Mike Kobit](https://github.com/mkobit) - Gradle build improvements
 - [Philipp Hofmann](https://github.com/philipphofmann) - Readme improvements

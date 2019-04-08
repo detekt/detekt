@@ -3,8 +3,8 @@ package io.gitlab.arturbosch.detekt.cli
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.YamlConfig
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.fail
 import org.reflections.Reflections
 import java.lang.reflect.Field
 import java.lang.reflect.Modifier
@@ -29,7 +29,7 @@ class ConfigAssert(
         for (ruleClass in ruleClasses) {
             val ymlDeclaration = ymlDeclarations.filter { it.key == ruleClass.simpleName }
             if (ymlDeclaration.keys.size != 1) {
-                Assertions.fail<String>("${ruleClass.simpleName} rule is not correctly defined in $CONFIG_FILE")
+                fail<String>("${ruleClass.simpleName} rule is not correctly defined in $CONFIG_FILE")
             }
 
             @Suppress("UNCHECKED_CAST")
@@ -48,7 +48,7 @@ class ConfigAssert(
         for (ymlOption in filter) {
             val configField = configFields.singleOrNull { ymlOption.key == it.get(null) }
             if (configField == null) {
-                Assertions.fail<String>("${ymlOption.key} option for ${ruleClass.simpleName} rule is not correctly " +
+                fail<String>("${ymlOption.key} option for ${ruleClass.simpleName} rule is not correctly " +
                         "defined")
             }
         }

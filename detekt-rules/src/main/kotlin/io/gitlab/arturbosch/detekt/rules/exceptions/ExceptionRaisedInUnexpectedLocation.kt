@@ -29,7 +29,7 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  * </noncompliant>
  *
  * @configuration methodNames - methods which should not throw exceptions
- * (default: 'toString,hashCode,equals,finalize')
+ * (default: `'toString,hashCode,equals,finalize'`)
  *
  * @author schalkms
  * @author Artur Bosch

@@ -24,14 +24,14 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * Too many functions indicate a violation of the single responsibility principle. Prefer extracting functionality
  * which clearly belongs together in separate parts of the code.
  *
- * @configuration thresholdInFiles - threshold in files (default: 11)
- * @configuration thresholdInClasses - threshold in classes (default: 11)
- * @configuration thresholdInInterfaces - threshold in interfaces (default: 11)
- * @configuration thresholdInObjects - threshold in objects (default: 11)
- * @configuration thresholdInEnums - threshold in enums (default: 11)
- * @configuration ignoreDeprecated - ignore deprecated functions (default: false)
- * @configuration ignorePrivate - ignore private functions (default: false)
- * @configuration ignoreOverridden - ignore overridden functions (default: false)
+ * @configuration thresholdInFiles - threshold in files (default: `11`)
+ * @configuration thresholdInClasses - threshold in classes (default: `11`)
+ * @configuration thresholdInInterfaces - threshold in interfaces (default: `11`)
+ * @configuration thresholdInObjects - threshold in objects (default: `11`)
+ * @configuration thresholdInEnums - threshold in enums (default: `11`)
+ * @configuration ignoreDeprecated - ignore deprecated functions (default: `false`)
+ * @configuration ignorePrivate - ignore private functions (default: `false`)
+ * @configuration ignoreOverridden - ignore overridden functions (default: `false`)
  *
  * @active since v1.0.0
  * @author Artur Bosch

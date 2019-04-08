@@ -16,10 +16,10 @@ import org.jetbrains.kotlin.psi.KtParameter
 /**
  * Reports function parameter names which do not follow the specified naming convention are used.
  *
- * @configuration parameterPattern - naming pattern (default: '[a-z][A-Za-z0-9]*')
- * @configuration excludeClassPattern - ignores variables in classes which match this regex (default: '$^')
+ * @configuration parameterPattern - naming pattern (default: `'[a-z][A-Za-z0-9]*'`)
+ * @configuration excludeClassPattern - ignores variables in classes which match this regex (default: `'$^'`)
  * @configuration ignoreOverriddenFunctions - ignores overridden functions with parameters not matching the pattern
- * (default: true)
+ * (default: `true`)
  *
  * @active since v1.0.0
  * @author Mickele Moriconi

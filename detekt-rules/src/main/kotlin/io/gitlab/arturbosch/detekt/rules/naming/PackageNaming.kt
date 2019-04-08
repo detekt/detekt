@@ -13,7 +13,7 @@ import org.jetbrains.kotlin.psi.KtPackageDirective
 /**
  * Reports when package names which do not follow the specified naming convention are used.
  *
- * @configuration packagePattern - naming pattern (default: '^[a-z]+(\.[a-z][A-Za-z0-9]*)*$')
+ * @configuration packagePattern - naming pattern (default: `'^[a-z]+(\.[a-z][A-Za-z0-9]*)*$'`)
  * @active since v1.0.0
  * @author Marvin Ramin
  */

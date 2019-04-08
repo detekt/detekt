@@ -53,7 +53,7 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  * </compliant>
  *
  * @configuration ignoredExceptionTypes - exception types which should be ignored by this rule
- * (default: 'InterruptedException,NumberFormatException,ParseException,MalformedURLException')
+ * (default: `'InterruptedException,NumberFormatException,ParseException,MalformedURLException'`)
  *
  * @author schalkms
  * @author Marvin Ramin

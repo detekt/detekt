@@ -20,10 +20,10 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  * Prefer splitting up complex methods into smaller methods that are in turn easier to understand.
  * Smaller methods can also be named much clearer which leads to improved readability of the code.
  *
- * @configuration threshold - MCC threshold for a method (default: 10)
+ * @configuration threshold - MCC threshold for a method (default: `10`)
  * @configuration ignoreSingleWhenExpression - Ignores a complex method if it only contains a single when expression.
- * (default: false)
- * @configuration ignoreSimpleWhenEntries - Whether to ignore simple (braceless) when entries. (default: false)
+ * (default: `false`)
+ * @configuration ignoreSimpleWhenEntries - Whether to ignore simple (braceless) when entries. (default: `false`)
  *
  * @active since v1.0.0
  * @author Artur Bosch

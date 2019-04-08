@@ -5,7 +5,9 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.test.KotlinScriptEngine.compile
 import org.intellij.lang.annotations.Language
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.resolve.BindingContext
 import java.nio.file.Path
 
 fun BaseRule.compileAndLint(@Language("kotlin") content: String): List<Finding> {
@@ -23,10 +25,19 @@ fun BaseRule.lint(path: Path): List<Finding> {
     return findingsAfterVisit(ktFile)
 }
 
+fun BaseRule.lintWithContext(environment: KotlinCoreEnvironment, content: String): List<Finding> {
+    val ktFile = KtTestCompiler.compileFromContent(content.trimIndent())
+    val bindingContext = KtTestCompiler.getContextForPaths(environment, listOf(ktFile))
+    return findingsAfterVisit(ktFile, bindingContext)
+}
+
 fun BaseRule.lint(ktFile: KtFile) = findingsAfterVisit(ktFile)
 
-private fun BaseRule.findingsAfterVisit(ktFile: KtFile): List<Finding> {
-    this.visitFile(ktFile)
+private fun BaseRule.findingsAfterVisit(
+    ktFile: KtFile,
+    bindingContext: BindingContext = BindingContext.EMPTY
+): List<Finding> {
+    this.visitFile(ktFile, bindingContext)
     return this.findings
 }
 

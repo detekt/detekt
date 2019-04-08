@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.core.processors
 
 import io.gitlab.arturbosch.detekt.core.path
 import io.gitlab.arturbosch.detekt.test.compileForTest
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -18,7 +18,7 @@ class KtFileCountVisitorTest : Spek({
             val count = files
                     .map { getData(it) }
                     .sum()
-            Assertions.assertThat(count).isEqualTo(2)
+            assertThat(count).isEqualTo(2)
         }
     }
 })
