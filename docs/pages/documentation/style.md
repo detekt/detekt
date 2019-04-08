@@ -246,6 +246,12 @@ and has only one value - the `Unit` object.
 
 **Debt**: 5min
 
+#### Configuration options:
+
+* `ignoreOverridden` (default: `false`)
+
+   ignores void types in signatures of overridden functions
+
 #### Noncompliant Code:
 
 ```kotlin

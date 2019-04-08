@@ -424,6 +424,7 @@ style:
     imports: ''
   ForbiddenVoid:
     active: false
+    ignoreOverridden: false
   FunctionOnlyReturningConstant:
     active: false
     ignoreOverridableFunction: true
