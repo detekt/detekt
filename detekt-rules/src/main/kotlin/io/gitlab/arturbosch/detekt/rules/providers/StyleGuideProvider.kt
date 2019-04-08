@@ -39,7 +39,9 @@ import io.gitlab.arturbosch.detekt.rules.style.UntilInsteadOfRangeTo
 import io.gitlab.arturbosch.detekt.rules.style.UnusedImports
 import io.gitlab.arturbosch.detekt.rules.style.UnusedPrivateClass
 import io.gitlab.arturbosch.detekt.rules.style.UnusedPrivateMember
+import io.gitlab.arturbosch.detekt.rules.style.UseCheckOrError
 import io.gitlab.arturbosch.detekt.rules.style.UseDataClass
+import io.gitlab.arturbosch.detekt.rules.style.UseRequire
 import io.gitlab.arturbosch.detekt.rules.style.UselessCallOnNotNull
 import io.gitlab.arturbosch.detekt.rules.style.UtilityClassWithPublicConstructor
 import io.gitlab.arturbosch.detekt.rules.style.VarCouldBeVal
@@ -61,7 +63,9 @@ class StyleGuideProvider : RuleSetProvider {
     override val ruleSetId: String = "style"
 
     override fun instance(config: Config): RuleSet {
-        return RuleSet(ruleSetId, listOf(
+        return RuleSet(
+            ruleSetId,
+            listOf(
                 CollapsibleIfStatements(config),
                 ReturnCount(config),
                 ThrowsCount(config),
@@ -105,7 +109,10 @@ class StyleGuideProvider : RuleSetProvider {
                 ForbiddenVoid(config),
                 ExplicitItLambdaParameter(config),
                 UselessCallOnNotNull(config),
-                UnderscoresInNumericLiterals(config)
-        ))
+                UnderscoresInNumericLiterals(config),
+                UseRequire(config),
+                UseCheckOrError(config)
+            )
+        )
     }
 }

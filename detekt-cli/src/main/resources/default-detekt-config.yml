@@ -513,9 +513,13 @@ style:
   UnusedPrivateMember:
     active: false
     allowedNames: "(_|ignored|expected|serialVersionUID)"
+  UseCheckOrError:
+    active: false
   UseDataClass:
     active: false
     excludeAnnotatedClasses: ""
+  UseRequire:
+    active: false
   UselessCallOnNotNull:
     active: false
   UtilityClassWithPublicConstructor:

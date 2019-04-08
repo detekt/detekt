@@ -31,7 +31,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  * Void::class
  * </compliant>
  *
- * @configuration ignoreOverridden - ignores void types in signatures of overridden functions (default: false)
+ * @configuration ignoreOverridden - ignores void types in signatures of overridden functions (default: `false`)
  *
  * @author Egor Neliuba
  * @author Markus Schwarz

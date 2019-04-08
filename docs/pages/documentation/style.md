@@ -1128,6 +1128,37 @@ can lead to confusion and potential bugs.
 
    unused private member names matching this regex are ignored
 
+### UseCheckOrError
+
+Kotlin provides a much more concise way to check invariants as well as pre- and post conditions than to manually throw
+an IllegalStateException.
+
+**Severity**: Style
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+if (value == null) throw new IllegalStateException("value should not be null")
+if (value < 0) throw new IllegalStateException("value is $value but should be at least 0")
+when(a) {
+1 -> doSomething()
+else -> throw IllegalStateException("Unexpected value")
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+checkNotNull(value) {"value should not be null"}
+check(value >= 0) { "value is $value but should be at least 0" }
+when(a) {
+1 -> doSomething()
+else -> error("Unexpected value")
+}
+```
+
 ### UseDataClass
 
 Classes that simply hold data should be refactored into a `data class`. Data classes are specialized to hold data
@@ -1158,6 +1189,29 @@ class DataClassCandidate(val i: Int) {
 
 ```kotlin
 data class DataClass(val i: Int, val i2: Int)
+```
+
+### UseRequire
+
+Kotlin provides a much more concise way to check preconditions than to manually throw an
+IllegalArgumentException.
+
+**Severity**: Style
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+if (value == null) throw new IllegalArgumentException("value should not be null")
+if (value < 0) throw new IllegalArgumentException("value is $value but should be at least 0")
+```
+
+#### Compliant Code:
+
+```kotlin
+requireNotNull(value) {"value should not be null"}
+require(value >= 0) { "value is $value but should be at least 0" }
 ```
 
 ### UselessCallOnNotNull
