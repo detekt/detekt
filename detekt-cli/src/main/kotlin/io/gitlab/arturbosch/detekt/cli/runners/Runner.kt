@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.cli.runners
 
 import io.gitlab.arturbosch.detekt.cli.CliArgs
+import io.gitlab.arturbosch.detekt.cli.LOG
 import io.gitlab.arturbosch.detekt.cli.OutputFacade
 import io.gitlab.arturbosch.detekt.cli.createClasspath
 import io.gitlab.arturbosch.detekt.cli.createPathFilters
@@ -24,7 +25,7 @@ class Runner(private val arguments: CliArgs) : Executable {
             OutputFacade(arguments, detektion, settings).run()
         }
 
-        println("\ndetekt finished in $time ms.")
+        LOG.debug("\ndetekt finished in $time ms.")
     }
 
     private fun createSettings(): ProcessingSettings {

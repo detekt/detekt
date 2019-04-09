@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.generator
 
+import io.gitlab.arturbosch.detekt.cli.LOG
 import io.gitlab.arturbosch.detekt.core.KtTreeCompiler
 import io.gitlab.arturbosch.detekt.generator.collection.DetektCollector
 import io.gitlab.arturbosch.detekt.generator.printer.DetektPrinter
@@ -29,6 +30,6 @@ class Runner(private val arguments: GeneratorArgs) {
             printer.print(collector.items)
         }
 
-        println("\nGenerated all detekt documentation in $time ms.")
+        LOG.error("\nGenerated all detekt documentation in $time ms.")
     }
 }

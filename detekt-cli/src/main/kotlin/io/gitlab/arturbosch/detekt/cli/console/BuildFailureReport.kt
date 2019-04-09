@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.SingleAssign
+import io.gitlab.arturbosch.detekt.cli.LOG
 import java.util.HashMap
 
 /**
@@ -57,7 +58,7 @@ class BuildFailureReport : ConsoleReport() {
     private fun checkDeprecation() {
         if (buildConfig.valueOrDefault(WARNING_THRESHOLD, Int.MIN_VALUE) != Int.MIN_VALUE ||
                 buildConfig.valueOrDefault(FAIL_THRESHOLD, Int.MIN_VALUE) != Int.MIN_VALUE) {
-            println("[Deprecation] - 'warningThreshold' and 'failThreshold' properties are deprecated." +
+            LOG.warn("[Deprecation] - 'warningThreshold' and 'failThreshold' properties are deprecated." +
                     " Please use the new 'maxIssues' config property.")
         }
     }

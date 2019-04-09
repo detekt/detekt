@@ -47,14 +47,14 @@ fun CliArgs.loadConfiguration(): Config {
         declaredConfig = FailFastConfig(declaredConfig ?: initializedDefaultConfig, initializedDefaultConfig)
     }
 
-    if (debug) println("\n$declaredConfig\n")
+    LOG.debug("\n$declaredConfig\n")
     return declaredConfig ?: loadDefaultConfig()
 }
 
 private fun Config.deprecatedFailFastUsage(): Boolean {
     val value: Boolean? = valueOrNull("failFast")
     value?.let {
-        LOG.printer.println(
+        LOG.warn(
             "Using deprecated property 'failFast' in the yaml config. " +
                     "Please migrate to the new '--fail-fast' cli-flag or 'failFast' detekt extension property."
         )

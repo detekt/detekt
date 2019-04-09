@@ -35,9 +35,9 @@ fun JCommander.failWithErrorMessages(vararg messages: String?) {
 
 fun JCommander.failWithErrorMessages(messages: Iterable<String?>) {
     messages.forEach {
-        println(it)
+        LOG.error(it)
     }
-    println()
+    LOG.error("")
     this.usage()
     exitProcess(1)
 }

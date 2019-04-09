@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.generator.out
 
+import io.gitlab.arturbosch.detekt.cli.LOG
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -14,7 +15,7 @@ internal abstract class AbstractWriter {
         val filePath = path.resolve("$fileName.$ending")
         filePath.parent?.let { Files.createDirectories(it) }
         Files.write(filePath, content().toByteArray())
-        println("Wrote: $fileName.$ending")
+        LOG.info("Wrote: $fileName.$ending")
     }
 }
 

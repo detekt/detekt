@@ -10,11 +10,11 @@ import org.jetbrains.kotlin.psi.KtFile
 class DetektProgressListener : FileProcessListener {
 
     override fun onProcess(file: KtFile) {
-        kotlin.io.print(".")
+        LOG.debug(".", newLine = false)
     }
 
     override fun onFinish(files: List<KtFile>, result: Detektion) {
         val middlePart = if (files.size == 1) "file was" else "files were"
-        kotlin.io.println("\n\n${files.size} kotlin $middlePart analyzed.")
+        LOG.info("\n\n${files.size} kotlin $middlePart analyzed.")
     }
 }

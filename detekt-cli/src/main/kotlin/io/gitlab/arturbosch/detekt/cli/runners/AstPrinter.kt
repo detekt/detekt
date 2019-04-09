@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.cli.runners
 
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.cli.CliArgs
+import io.gitlab.arturbosch.detekt.cli.LOG
 import io.gitlab.arturbosch.detekt.core.KtCompiler
 import io.gitlab.arturbosch.detekt.core.isFile
 import org.jetbrains.kotlin.diagnostics.PsiDiagnosticUtils
@@ -26,7 +27,7 @@ class AstPrinter(private val arguments: CliArgs) : Executable {
 
         val input = arguments.inputPaths.first()
         val ktFile = KtCompiler().compile(input, input)
-        println(ElementPrinter.dump(ktFile))
+        LOG.error(ElementPrinter.dump(ktFile))
     }
 }
 

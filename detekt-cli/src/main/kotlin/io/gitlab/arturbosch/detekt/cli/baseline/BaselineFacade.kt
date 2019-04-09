@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.cli.baseline
 
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.cli.LOG
 import io.gitlab.arturbosch.detekt.cli.baselineId
 import io.gitlab.arturbosch.detekt.core.exists
 import io.gitlab.arturbosch.detekt.core.isFile
@@ -35,7 +36,7 @@ class BaselineFacade(val baselineFile: Path) {
         val smellBaseline = Baseline(blacklist, Whitelist(ids))
         baselineFile.parent?.let { Files.createDirectories(it) }
         BaselineFormat().write(smellBaseline, baselineFile)
-        println("Successfully wrote smell baseline to $baselineFile")
+        LOG.info("Successfully wrote smell baseline to $baselineFile")
     }
 
     private fun baselineExists() = baselineFile.exists() && baselineFile.isFile()
