@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.cli.LogLevel.ERROR
 import io.gitlab.arturbosch.detekt.cli.LogLevel.INFO
 import io.gitlab.arturbosch.detekt.cli.LogLevel.VERBOSE
 import io.gitlab.arturbosch.detekt.cli.LogLevel.WARN
-import io.gitlab.arturbosch.detekt.cli.LogLevel.NONE
 import java.io.PrintStream
 
 /**
@@ -13,18 +12,6 @@ import java.io.PrintStream
  */
 @Suppress("TooManyFunctions")
 object LOG {
-    @Deprecated("Use LOG.level instead", ReplaceWith("LOG.level", "io.gitlab.arturbosch.detekt.cli.LOG"))
-    var active: Boolean
-        get() = level != NONE
-        set(value) {
-            level = when {
-                value -> {
-                    // Only reset the level if log is not set
-                    if (level == NONE) INFO else level
-                }
-                else -> NONE
-            }
-        }
     var level: LogLevel = INFO
     var printer: PrintStream = System.out
 

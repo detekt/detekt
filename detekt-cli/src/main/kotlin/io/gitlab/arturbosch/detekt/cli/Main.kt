@@ -17,7 +17,9 @@ import kotlin.system.exitProcess
 @Suppress("TooGenericExceptionCaught")
 fun main(args: Array<String>) {
     val arguments = parseArguments(args)
-    LOG.active = arguments.debug
+    if (arguments.debug) {
+        LOG.level = LogLevel.DEBUG
+    }
     val executable = when {
         arguments.generateConfig -> ConfigExporter()
         arguments.runRule != null -> SingleRuleRunner(arguments)
