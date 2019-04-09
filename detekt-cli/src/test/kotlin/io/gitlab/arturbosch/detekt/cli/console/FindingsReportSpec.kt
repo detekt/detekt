@@ -22,12 +22,13 @@ class FindingsReportSpec : Spek({
                             Pair("TestSmell", listOf(createFinding(), createFinding())),
                             Pair("EmptySmells", emptyList()))
                 }
-                assertThat(subject.render(detektion)?.trimEnd()).isEqualTo(expectedContent)
+                val output = subject.render(detektion)?.trimEnd()?.decolorized()
+                assertThat(output).isEqualTo(expectedContent)
             }
 
             it("reports no findings") {
                 val detektion = TestDetektion()
-                assertThat(subject.render(detektion))
+                assertThat(subject.render(detektion)).isEmpty()
             }
         }
     }

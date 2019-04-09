@@ -44,34 +44,47 @@ class BuildFailureReport : ConsoleReport() {
 
         checkDeprecation()
         return when {
-            maxIssues.reached(amount) -> throw BuildFailure("Build failed with $amount weighted issues " +
-                    "(threshold defined was $maxIssues).")
-            failThreshold.reached(amount) -> throw BuildFailure("Build failure threshold of " +
-                    "$failThreshold reached with $amount weighted smells!")
-            warningThreshold.reached(amount) -> "Warning: $amount weighted code smells found. " +
-                    "Warning threshold is $warningThreshold and fail threshold is $failThreshold!"
+            maxIssues.reached(amount) -> {
+                val message = "Build failed with $amount weighted issues (threshold defined was $maxIssues)."
+                println(message.red())
+                throw BuildFailure(message)
+            }
+            failThreshold.reached(amount) -> {
+                val message = "Build failure threshold of $failThreshold reached with $amount weighted smells!"
+                println(message.red())
+                throw BuildFailure(message)
+            }
+            warningThreshold.reached(amount) -> {
+                val message = "Warning: $amount weighted code smells found. " +
+                        "Warning threshold is $warningThreshold and fail threshold is $failThreshold!"
+                message.yellow()
+            }
             else -> null
         }
     }
 
     private fun checkDeprecation() {
         if (buildConfig.valueOrDefault(WARNING_THRESHOLD, Int.MIN_VALUE) != Int.MIN_VALUE ||
-                buildConfig.valueOrDefault(FAIL_THRESHOLD, Int.MIN_VALUE) != Int.MIN_VALUE) {
-            println("[Deprecation] - 'warningThreshold' and 'failThreshold' properties are deprecated." +
-                    " Please use the new 'maxIssues' config property.")
+            buildConfig.valueOrDefault(FAIL_THRESHOLD, Int.MIN_VALUE) != Int.MIN_VALUE
+        ) {
+            val message = "[Deprecation] - 'warningThreshold' and 'failThreshold' properties are deprecated. " +
+                    "Please use the new 'maxIssues' config property."
+            println(message.yellow())
         }
     }
 
     private fun extractRuleToRuleSetIdMap(detektion: Detektion): HashMap<RuleSetId, String> {
         return detektion.findings.mapValues { it.value.map(Finding::id).toSet() }
-                .map { map -> map.value.map { it to map.key }.toMap() }
-                .fold(HashMap()) { result, map -> result.putAll(map); result }
+            .map { map -> map.value.map { it to map.key }.toMap() }
+            .fold(HashMap()) { result, map -> result.putAll(map); result }
     }
 
     private fun Finding.weighted(ids: Map<String, String>): Int {
         val key = ids[id] // entry of ID > entry of RuleSet ID > default weight 1
-        return weightsConfig.valueOrDefault(id,
-                if (key != null) weightsConfig.valueOrDefault(key, 1) else 1)
+        return weightsConfig.valueOrDefault(
+            id,
+            if (key != null) weightsConfig.valueOrDefault(key, 1) else 1
+        )
     }
 
     fun Int.reached(amount: Int): Boolean = !(this == 0 && amount == 0) && this != -1 && this <= amount
