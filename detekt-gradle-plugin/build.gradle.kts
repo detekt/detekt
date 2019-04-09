@@ -31,7 +31,7 @@ version = "1.0.0-RC14"
 
 val detektGradleVersion: String by project
 val jcommanderVersion: String by project
-val spekVersion = "2.0.1"
+val spekVersion = "2.0.2"
 val junitPlatformVersion = "1.4.1"
 val assertjVersion = "3.12.2"
 
