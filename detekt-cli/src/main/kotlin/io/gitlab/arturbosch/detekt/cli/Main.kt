@@ -17,9 +17,7 @@ import kotlin.system.exitProcess
 @Suppress("TooGenericExceptionCaught")
 fun main(args: Array<String>) {
     val arguments = parseArguments(args)
-    if (arguments.debug) {
-        LOG.level = LogLevel.DEBUG
-    }
+    LOG.level = parseLogLevel(arguments)
     val executable = when {
         arguments.generateConfig -> ConfigExporter()
         arguments.runRule != null -> SingleRuleRunner(arguments)
@@ -39,6 +37,9 @@ fun main(args: Array<String>) {
     // BuildFailureReport.
     exitProcess(0)
 }
+
+private fun parseLogLevel(arguments: CliArgs) =
+    arguments.logLevel ?: if (arguments.debug) LogLevel.DEBUG else LOG.level
 
 private fun parseArguments(args: Array<String>): CliArgs {
     val (arguments, jcommander) = parseArguments<CliArgs>(args)

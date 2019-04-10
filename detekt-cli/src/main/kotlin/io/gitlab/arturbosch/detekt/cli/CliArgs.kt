@@ -1,6 +1,9 @@
 package io.gitlab.arturbosch.detekt.cli
 
+import com.beust.jcommander.IParameterValidator
+import com.beust.jcommander.IStringConverter
 import com.beust.jcommander.Parameter
+import com.beust.jcommander.ParameterException
 import java.nio.file.Path
 
 /**
@@ -89,6 +92,13 @@ class CliArgs : Args {
             description = "Prints extra information about configurations and extensions.")
     var debug: Boolean = false
 
+    @Parameter(names = ["--log-level", "-l"],
+            description = "Sets the level of the log output verbosity.",
+            validateWith = [LogLevelHelper::class],
+            converter = LogLevelHelper::class,
+            hidden = true)
+    var logLevel: LogLevel? = null
+
     @Parameter(names = ["--help", "-h"],
             help = true, description = "Shows the usage.")
     override var help: Boolean = false
@@ -118,4 +128,33 @@ class CliArgs : Args {
          */
         operator fun invoke(init: CliArgs.() -> Unit): CliArgs = CliArgs().apply(init)
     }
+}
+
+class LogLevelHelper : IStringConverter<LogLevel>, IParameterValidator {
+    private val logLevelsMap = mapOf(
+        "v" to LogLevel.VERBOSE,
+        "d" to LogLevel.DEBUG,
+        "i" to LogLevel.INFO,
+        "w" to LogLevel.WARN,
+        "e" to LogLevel.ERROR,
+        "verbose" to LogLevel.VERBOSE,
+        "debug" to LogLevel.DEBUG,
+        "info" to LogLevel.INFO,
+        "warn" to LogLevel.WARN,
+        "error" to LogLevel.ERROR,
+        "none" to LogLevel.NONE
+    )
+
+    override fun convert(value: String): LogLevel = logLevelsMap.getValue(sanitizeValue(value))
+
+    @Throws(ParameterException::class)
+    override fun validate(name: String, value: String) {
+        if (name !in listOf("--log-level", "-l")) return
+
+        if (sanitizeValue(value) !in logLevelsMap) {
+            throw ParameterException("Log level should be one of [${logLevelsMap.keys.joinToString()}]")
+        }
+    }
+
+    private fun sanitizeValue(value: String): String = value.toLowerCase()
 }
