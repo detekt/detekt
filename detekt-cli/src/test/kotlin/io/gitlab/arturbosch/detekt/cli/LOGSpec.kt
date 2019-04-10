@@ -90,5 +90,18 @@ internal class LOGSpec : Spek({
             assertThat(warn).isTrue()
             assertThat(error).isTrue()
         }
+
+        it ("no new lines are printed") {
+            LOG.level = LogLevel.VERBOSE
+
+            val logLines = captureLog {
+                LOG.verbose(newLine = false) { "a" }
+                LOG.debug(newLine = false) { "b" }
+                LOG.info("c", newLine = false)
+            }
+
+            assertThat(logLines.size).isEqualTo(1)
+            assertThat(logLines[0]).isEqualTo("abc")
+        }
     }
 })
