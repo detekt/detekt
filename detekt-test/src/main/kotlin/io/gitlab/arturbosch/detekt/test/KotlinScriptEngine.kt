@@ -12,12 +12,6 @@ import javax.script.ScriptException
  */
 object KotlinScriptEngine {
 
-    private lateinit var engine: KotlinJsr223JvmLocalScriptEngine
-
-    init {
-        createEngine()
-    }
-
     /**
      * Compiles a given code string with the Jsr223 script engine.
      * If a compilation error occurs the script engine is recovered.
@@ -27,19 +21,19 @@ object KotlinScriptEngine {
      */
     fun compile(code: String) {
         try {
+            val engine = createEngine()
             engine.compile(code)
         } catch (e: ScriptException) {
-            createEngine() // recover
             throw KotlinScriptException(e)
         }
     }
 
-    private fun createEngine() {
+    private fun createEngine(): KotlinJsr223JvmLocalScriptEngine {
         setIdeaIoUseFallback() // To avoid error on Windows
 
         val scriptEngineManager = ScriptEngineManager()
         val localEngine = scriptEngineManager.getEngineByExtension("kts") as? KotlinJsr223JvmLocalScriptEngine
         requireNotNull(localEngine) { "Kotlin script engine not supported" }
-        engine = localEngine
+        return localEngine
     }
 }

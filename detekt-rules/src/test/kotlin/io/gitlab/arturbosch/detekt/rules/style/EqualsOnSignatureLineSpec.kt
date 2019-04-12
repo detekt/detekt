@@ -1,11 +1,14 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
+/**
+* @author Nycto
+*/
 class EqualsOnSignatureLineSpec : Spek({
     val subject by memoized { EqualsOnSignatureLine(Config.empty) }
 
@@ -13,15 +16,15 @@ class EqualsOnSignatureLineSpec : Spek({
 
         context("with expression syntax and without a return type") {
             it("reports when the equals is on a new line") {
-                val findings = subject.lint("""
-				fun foo()
-					= 1
+                val findings = subject.compileAndLint("""
+				    fun foo()
+				    	= 1
 				""")
                 assertThat(findings).hasSize(1)
             }
 
-            it("succeeds when the equals is on the same line") {
-                val findings = subject.lint("""
+            it("does not report when the equals is on the same line") {
+                val findings = subject.compileAndLint("""
 				fun foo() = 1
 
 				fun bar() =
@@ -33,7 +36,7 @@ class EqualsOnSignatureLineSpec : Spek({
 
         context("with expression syntax and with a return type") {
             it("reports when the equals is on a new line") {
-                val findings = subject.lint("""
+                val findings = subject.compileAndLint("""
 				fun one(): Int
 					= 1
 
@@ -50,8 +53,8 @@ class EqualsOnSignatureLineSpec : Spek({
                 assertThat(findings).hasSize(3)
             }
 
-            it("succeeds when the equals is on the same line") {
-                val findings = subject.lint("""
+            it("does not report when the equals is on the same line") {
+                val findings = subject.compileAndLint("""
 				fun one(): Int =
 					1
 
@@ -87,7 +90,7 @@ class EqualsOnSignatureLineSpec : Spek({
 
         context("with expression syntax and with a where clause") {
             it("reports when the equals is on a new line") {
-                val findings = subject.lint("""
+                val findings = subject.compileAndLint("""
 				fun <V> one(): Int where V : Number
 					= 1
 
@@ -105,8 +108,8 @@ class EqualsOnSignatureLineSpec : Spek({
                 assertThat(findings).hasSize(3)
             }
 
-            it("succeeds when the equals is on the same line") {
-                val findings = subject.lint("""
+            it("does not report when the equals is on the same line") {
+                val findings = subject.compileAndLint("""
 				fun <V> one(): Int where V : Number =
 					1
 
@@ -119,8 +122,8 @@ class EqualsOnSignatureLineSpec : Spek({
             }
         }
 
-        it("for non-expression functions") {
-            val findings = subject.lint("""
+        it("does not report non-expression functions") {
+            val findings = subject.compileAndLint("""
 			fun foo() {
 			}
 

@@ -31,6 +31,8 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  *
  * fun <V> foo(): Int where V : Int = 5
  * </compliant>
+ *
+ * @author Nycto
  */
 class EqualsOnSignatureLine(config: Config = Config.empty) : Rule(config) {
 
