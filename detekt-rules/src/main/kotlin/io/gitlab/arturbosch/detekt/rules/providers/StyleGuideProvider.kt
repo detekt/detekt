@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.rules.style.CollapsibleIfStatements
 import io.gitlab.arturbosch.detekt.rules.style.DataClassContainsFunctions
+import io.gitlab.arturbosch.detekt.rules.style.DataClassShouldBeImmutable
 import io.gitlab.arturbosch.detekt.rules.style.EqualsNullCall
 import io.gitlab.arturbosch.detekt.rules.style.EqualsOnSignatureLine
 import io.gitlab.arturbosch.detekt.rules.style.ExplicitItLambdaParameter
@@ -92,6 +93,7 @@ class StyleGuideProvider : RuleSetProvider {
                 MagicNumber(config),
                 ModifierOrder(config),
                 DataClassContainsFunctions(config),
+                DataClassShouldBeImmutable(config),
                 UseDataClass(config),
                 UnusedImports(config),
                 UnusedPrivateClass(config),
