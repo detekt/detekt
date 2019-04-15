@@ -314,7 +314,6 @@ class RuleCollectorSpec : Spek({
                 .isThrownBy { subject.run(code) }
         }
 
-
         it("has a blank default value") {
             val name = "SomeRandomClass"
             val description = "some description"
@@ -331,7 +330,6 @@ class RuleCollectorSpec : Spek({
             assertThatExceptionOfType(InvalidDocumentationException::class.java)
                 .isThrownBy { subject.run(code) }
         }
-
 
         it("has an incorrectly delimited default value") {
             val name = "SomeRandomClass"

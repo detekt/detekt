@@ -33,11 +33,11 @@ internal class BuildFailureReportSpec : Spek({
                 assertThat(report).isNull()
             }
 
-            it("should print a warning if threshold met") {
+            it("should print a warning in yellow if threshold met") {
                 subject.init(TestConfig(mapOf("warningThreshold" to "1")))
                 val report = subject.render(detektion)
-                assertThat(report).isEqualTo("Warning: 1 weighted code smells found." +
-                        " Warning threshold is 1 and fail threshold is -1!")
+                val expectedMessage = "Warning: 1 weighted code smells found. Warning threshold is 1 and fail threshold is -1!"
+                assertThat(report).isEqualTo(expectedMessage.yellow())
             }
 
             it("should throw a build failure error") {

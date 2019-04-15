@@ -30,7 +30,7 @@ class FindingsReport : ConsoleReport() {
                             "\n"
                         }
                 append(rulesetFindings.key.format(prefix = "Ruleset: ", suffix = debtString))
-                append(issuesString)
+                append(issuesString.yellow())
             }
             val debt = totalDebt.calculateDebt()
             if (debt != null) {
