@@ -45,12 +45,13 @@ abstract class DslTestBuilder {
 			| $detektConfig
 		""".trimMargin()
         val runner = DslGradleRunner(
-                projectLayout,
-                gradleBuildName,
-                mainBuildFileContent,
-                configFile,
-                baselineFile,
-                gradleVersion)
+            projectLayout,
+            gradleBuildName,
+            mainBuildFileContent,
+            configFile,
+            baselineFile,
+            gradleVersion
+        )
         runner.setupProject()
         return runner
     }

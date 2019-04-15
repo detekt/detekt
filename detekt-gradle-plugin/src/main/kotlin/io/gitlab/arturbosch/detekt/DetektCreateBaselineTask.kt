@@ -86,16 +86,16 @@ open class DetektCreateBaselineTask : SourceTask() {
     @TaskAction
     fun baseline() {
         val arguments = mutableListOf(
-                CreateBaselineArgument,
-                BaselineArgument(baseline.get()),
-                InputArgument(source),
-                ConfigArgument(config),
-                PluginsArgument(plugins.orNull),
-                DebugArgument(debug.getOrElse(false)),
-                ParallelArgument(parallel.getOrElse(false)),
-                BuildUponDefaultConfigArgument(buildUponDefaultConfig.getOrElse(false)),
-                FailFastArgument(failFast.getOrElse(false)),
-                DisableDefaultRuleSetArgument(disableDefaultRuleSets.getOrElse(false))
+            CreateBaselineArgument,
+            BaselineArgument(baseline.get()),
+            InputArgument(source),
+            ConfigArgument(config),
+            PluginsArgument(plugins.orNull),
+            DebugArgument(debug.getOrElse(false)),
+            ParallelArgument(parallel.getOrElse(false)),
+            BuildUponDefaultConfigArgument(buildUponDefaultConfig.getOrElse(false)),
+            FailFastArgument(failFast.getOrElse(false)),
+            DisableDefaultRuleSetArgument(disableDefaultRuleSets.getOrElse(false))
         )
 
         DetektInvoker.invokeCli(project, arguments.toList(), debug.getOrElse(false))

@@ -30,15 +30,22 @@ class DslGradleRunner(
 		""".trimMargin()
 
     private val configFileContent = """
-		|autoCorrect: true
-		|failFast: false
+		|build:
+		|  maxIssues: 5
+		|style:
+		|  MagicNumber:
+		|    active: true
 		""".trimMargin()
 
     /**
      * Each generated file is different so the artifacts are not cached in between test runs
      */
-    private fun ktFileContent(className: String) = """
-	|internal class $className(val randomDefaultValue: String = "$randomString")
+    private fun ktFileContent(className: String, withCodeSmell: Boolean = false) = """
+	|internal class $className(
+	|	val randomDefaultValue: String = "$randomString"
+	|) {
+	|	val smellyConstant: Int = ${if (withCodeSmell) "11" else "0"}
+	|}
 	|
 	""".trimMargin()
 
@@ -47,9 +54,11 @@ class DslGradleRunner(
         writeProjectFile(SETTINGS_FILENAME, settingsContent)
         configFileOrNone?.let { writeProjectFile(configFileOrNone, configFileContent) }
         baselineFileOrNone?.let { writeProjectFile(baselineFileOrNone, baselineContent) }
-        projectLayout.srcDirs.forEach { sourceDir ->
-            (1..projectLayout.numberOfSourceFilesInRootPerSourceDir).forEach {
-                writeKtFile(File(rootDir, sourceDir), "MyRoot${it}Class")
+        projectLayout.srcDirs.forEachIndexed { srcDirIdx, sourceDir ->
+            repeat(projectLayout.numberOfSourceFilesInRootPerSourceDir) {
+                val withCodeSmell =
+                    srcDirIdx * projectLayout.numberOfSourceFilesInRootPerSourceDir + it < projectLayout.numberOfCodeSmellsInRootPerSourceDir
+                writeKtFile(File(rootDir, sourceDir), "MyRoot${it}Class", withCodeSmell)
             }
         }
 
@@ -57,9 +66,11 @@ class DslGradleRunner(
             val moduleRoot = File(rootDir, submodule.name)
             moduleRoot.mkdirs()
             File(moduleRoot, buildFileName).writeText(submodule.detektConfig ?: "")
-            submodule.srcDirs.forEach { moduleSourceDir ->
-                (1..submodule.numberOfSourceFiles).forEach {
-                    writeKtFile(File(moduleRoot, moduleSourceDir), "My${submodule.name}${it}Class")
+            submodule.srcDirs.forEachIndexed { srcDirIdx, moduleSourceDir ->
+                repeat(submodule.numberOfSourceFilesPerSourceDir) {
+                    val withCodeSmell =
+                        srcDirIdx * submodule.numberOfSourceFilesPerSourceDir + it < submodule.numberOfCodeSmells
+                    writeKtFile(File(moduleRoot, moduleSourceDir), "My${submodule.name}${it}Class", withCodeSmell)
                 }
             }
         }
@@ -73,9 +84,9 @@ class DslGradleRunner(
         writeKtFile(File(rootDir, srcDir), className)
     }
 
-    private fun writeKtFile(dir: File, className: String) {
+    private fun writeKtFile(dir: File, className: String, withCodeSmell: Boolean = false) {
         dir.mkdirs()
-        File(dir, "$className.kt").writeText(ktFileContent(className))
+        File(dir, "$className.kt").writeText(ktFileContent(className, withCodeSmell))
     }
 
     fun runTasksAndCheckResult(vararg tasks: String, doAssert: DslGradleRunner.(BuildResult) -> Unit) {

@@ -53,23 +53,20 @@ internal data class ConfigArgument(val config: FileCollection) : CliArgument() {
         emptyList()
     } else {
         listOf(CONFIG_PARAMETER, config.joinToString(",") { it.absolutePath })
-}
+    }
 }
 
 internal sealed class BoolCliArgument(open val value: Boolean, val configSwitch: String) : CliArgument() {
     override fun toArgument() = if (value) listOf(configSwitch) else emptyList()
 }
 
-internal data class DebugArgument(override val value: Boolean)
-    : BoolCliArgument(value, DEBUG_PARAMETER)
+internal data class DebugArgument(override val value: Boolean) : BoolCliArgument(value, DEBUG_PARAMETER)
 
-internal data class ParallelArgument(override val value: Boolean)
-    : BoolCliArgument(value, PARALLEL_PARAMETER)
-    internal data class DisableDefaultRuleSetArgument(override val value: Boolean)
-    : BoolCliArgument(value, DISABLE_DEFAULT_RULESETS_PARAMETER)
+internal data class ParallelArgument(override val value: Boolean) : BoolCliArgument(value, PARALLEL_PARAMETER)
+internal data class DisableDefaultRuleSetArgument(override val value: Boolean) :
+    BoolCliArgument(value, DISABLE_DEFAULT_RULESETS_PARAMETER)
 
-internal data class BuildUponDefaultConfigArgument(override val value: Boolean)
-    : BoolCliArgument(value, BUILD_UPON_DEFAULT_CONFIG_PARAMETER)
+internal data class BuildUponDefaultConfigArgument(override val value: Boolean) :
+    BoolCliArgument(value, BUILD_UPON_DEFAULT_CONFIG_PARAMETER)
 
-internal data class FailFastArgument(override val value: Boolean)
-    : BoolCliArgument(value, FAIL_FAST_PARAMETER)
+internal data class FailFastArgument(override val value: Boolean) : BoolCliArgument(value, FAIL_FAST_PARAMETER)

@@ -43,6 +43,12 @@ class DetektPlugin : Plugin<Project> {
             it.setExcludes(defaultExcludes)
             it.reportsDir.set(project.provider { extension.customReportsDir })
             it.reports = extension.reports
+
+            project.subprojects.forEach { subProject ->
+                subProject.tasks.firstOrNull { t -> t is Detekt }?.let { subprojectTask ->
+                    it.dependsOn(subprojectTask)
+                }
+            }
         }
 
         val checkTaskProvider = try {
@@ -55,26 +61,26 @@ class DetektPlugin : Plugin<Project> {
     }
 
     private fun registerCreateBaselineTask(project: Project, extension: DetektExtension) =
-            project.tasks.register(BASELINE, DetektCreateBaselineTask::class.java) {
-                it.baseline.set(project.layout.file(project.provider { extension.baseline }))
-                it.config.setFrom(project.provider { extension.config })
-                it.debug.set(project.provider { extension.debug })
-                it.parallel.set(project.provider { extension.parallel })
-                it.disableDefaultRuleSets.set(project.provider { extension.disableDefaultRuleSets })
-                it.buildUponDefaultConfig.set(project.provider { extension.buildUponDefaultConfig })
-                it.failFast.set(project.provider { extension.failFast })
-                it.plugins.set(project.provider { extension.plugins })
-                it.setSource(existingInputDirectoriesProvider(project, extension))
-                it.setIncludes(defaultIncludes)
-                it.setExcludes(defaultExcludes)
-            }
+        project.tasks.register(BASELINE, DetektCreateBaselineTask::class.java) {
+            it.baseline.set(project.layout.file(project.provider { extension.baseline }))
+            it.config.setFrom(project.provider { extension.config })
+            it.debug.set(project.provider { extension.debug })
+            it.parallel.set(project.provider { extension.parallel })
+            it.disableDefaultRuleSets.set(project.provider { extension.disableDefaultRuleSets })
+            it.buildUponDefaultConfig.set(project.provider { extension.buildUponDefaultConfig })
+            it.failFast.set(project.provider { extension.failFast })
+            it.plugins.set(project.provider { extension.plugins })
+            it.setSource(existingInputDirectoriesProvider(project, extension))
+            it.setIncludes(defaultIncludes)
+            it.setExcludes(defaultExcludes)
+        }
 
     private fun registerGenerateConfigTask(project: Project, extension: DetektExtension) =
-            project.tasks.register(GENERATE_CONFIG, DetektGenerateConfigTask::class.java) {
-                it.setSource(existingInputDirectoriesProvider(project, extension))
-                it.setIncludes(listOf("**/*.kt", "**/*.kts"))
-                it.setExcludes(listOf("build/"))
-            }
+        project.tasks.register(GENERATE_CONFIG, DetektGenerateConfigTask::class.java) {
+            it.setSource(existingInputDirectoriesProvider(project, extension))
+            it.setIncludes(listOf("**/*.kt", "**/*.kts"))
+            it.setExcludes(listOf("build/"))
+        }
 
     private fun registerIdeaTasks(project: Project, extension: DetektExtension) {
         project.tasks.register(IDEA_FORMAT, DetektIdeaFormatTask::class.java) {

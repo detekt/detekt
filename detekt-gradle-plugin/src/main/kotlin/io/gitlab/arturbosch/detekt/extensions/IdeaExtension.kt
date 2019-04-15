@@ -28,16 +28,16 @@ open class IdeaExtension(
     }
 
     override fun toString(): String = "IdeaExtension(path=$path, " +
-            "codeStyleScheme=$codeStyleScheme, inspectionsProfile=$inspectionsProfile, report=$report, mask='$mask')"
+        "codeStyleScheme=$codeStyleScheme, inspectionsProfile=$inspectionsProfile, report=$report, mask='$mask')"
 }
 
 private val isWindows: Boolean = System.getProperty("os.name").contains("Windows")
 
 private const val IDEA_PATH_ERROR = "Make sure the idea path is specified to run idea tasks!"
 private const val REPORT_PATH_ERROR =
-        "Make sure the report path is specified where idea inspections are stored!"
+    "Make sure the report path is specified where idea inspections are stored!"
 private const val INSPECTION_PROFILE_ERROR =
-        "Make sure the path to an inspection profile is provided!"
+    "Make sure the path to an inspection profile is provided!"
 
 private fun inspectScript(path: String): String = "$path/bin/" + if (isWindows) "inspect.bat" else "inspect.sh"
 private fun formatScript(path: String): String = "$path/bin/" + if (isWindows) "format.bat" else "format.sh"

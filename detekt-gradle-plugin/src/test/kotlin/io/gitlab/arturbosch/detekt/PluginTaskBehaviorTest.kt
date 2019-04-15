@@ -30,10 +30,10 @@ internal class PluginTaskBehaviorTest : Spek({
 
         beforeEachTest {
             gradleRunner = kotlin()
-                    .withDetektConfig(detektConfig)
-                    .withBaseline(baselineFileName)
-                    .withConfigFile(configFileName)
-                    .build()
+                .withDetektConfig(detektConfig)
+                .withBaseline(baselineFileName)
+                .withConfigFile(configFileName)
+                .build()
         }
 
         it("should be UP-TO-DATE the 2nd run without changes") {

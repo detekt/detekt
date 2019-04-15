@@ -19,8 +19,8 @@ internal class CreateBaselineTaskDslTest : Spek({
 						|}
 						"""
                     val gradleRunner = builder
-                            .withDetektConfig(detektConfig)
-                            .build()
+                        .withDetektConfig(detektConfig)
+                        .build()
 
                     gradleRunner.runTasksAndCheckResult("detektBaseline") { result ->
                         assertThat(result.task(":detektBaseline")?.outcome).isEqualTo(TaskOutcome.SUCCESS)

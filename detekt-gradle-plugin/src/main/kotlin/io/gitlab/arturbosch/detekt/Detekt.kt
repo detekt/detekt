@@ -15,6 +15,7 @@ import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
 import io.gitlab.arturbosch.detekt.invoke.PluginsArgument
 import io.gitlab.arturbosch.detekt.invoke.XmlReportArgument
+import io.gitlab.arturbosch.detekt.output.mergeXmlReports
 import org.gradle.api.Action
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
@@ -130,8 +131,8 @@ open class Detekt : SourceTask() {
         get() = reports.html.getTargetFileProvider(effectiveReportsDir)
 
     private val defaultReportsDir: Directory = project.layout.buildDirectory.get()
-            .dir(ReportingExtension.DEFAULT_REPORTS_DIR_NAME)
-            .dir("detekt")
+        .dir(ReportingExtension.DEFAULT_REPORTS_DIR_NAME)
+        .dir("detekt")
 
     private val effectiveReportsDir = project.provider { reportsDir.getOrElse(defaultReportsDir.asFile) }
 
@@ -141,20 +142,34 @@ open class Detekt : SourceTask() {
 
     @TaskAction
     fun check() {
+        val xmlReportTargetFile = xmlReportFile.orNull
+        val debugOrDefault = debugProp.getOrElse(false)
         val arguments = mutableListOf(
-                InputArgument(source),
-                ConfigArgument(config),
-                PluginsArgument(plugins.orNull),
-                BaselineArgument(baseline.orNull),
-                XmlReportArgument(xmlReportFile.orNull),
-                HtmlReportArgument(htmlReportFile.orNull),
-                DebugArgument(debugProp.getOrElse(false)),
-                ParallelArgument(parallelProp.getOrElse(false)),
-                BuildUponDefaultConfigArgument(buildUponDefaultConfigProp.getOrElse(false)),
-                FailFastArgument(failFastProp.getOrElse(false)),
-                DisableDefaultRuleSetArgument(disableDefaultRuleSetsProp.getOrElse(false))
+            InputArgument(source),
+            ConfigArgument(config),
+            PluginsArgument(plugins.orNull),
+            BaselineArgument(baseline.orNull),
+            XmlReportArgument(xmlReportTargetFile),
+            HtmlReportArgument(htmlReportFile.orNull),
+            DebugArgument(debugOrDefault),
+            ParallelArgument(parallelProp.getOrElse(false)),
+            BuildUponDefaultConfigArgument(buildUponDefaultConfigProp.getOrElse(false)),
+            FailFastArgument(failFastProp.getOrElse(false)),
+            DisableDefaultRuleSetArgument(disableDefaultRuleSetsProp.getOrElse(false))
         )
 
-        DetektInvoker.invokeCli(project, arguments.toList(), debugProp.getOrElse(false))
+        DetektInvoker.invokeCli(project, arguments.toList(), debugOrDefault)
+
+        if (xmlReportTargetFile != null) {
+            val xmlReports = project.subprojects.flatMap { subproject ->
+                subproject.tasks.mapNotNull { task ->
+                    if (task is Detekt) task.xmlReportFile.orNull?.asFile else null
+                }
+            }
+            if (!xmlReports.isEmpty() && debugOrDefault) {
+                logger.info("Merging report files of subprojects $xmlReports into $xmlReportTargetFile")
+            }
+            mergeXmlReports(xmlReportTargetFile.asFile, xmlReports)
+        }
     }
 }
