@@ -1,7 +1,5 @@
 package io.gitlab.arturbosch.detekt.api
 
-private val regex = Regex(",")
-
 /**
  * Splits given text into parts and provides testing utilities for its elements.
  * Basic use cases are to specify different function or class names in the detekt
@@ -9,15 +7,23 @@ private val regex = Regex(",")
  */
 class SplitPattern(
     text: String,
-    delimiters: Regex = regex
+    delimiters: String = ",",
+    removeTrailingAsterisks: Boolean = true
 ) {
 
     private val excludes = text
-            .split(delimiters)
-            .map { it.trim() }
-            .filter { it.isNotBlank() }
-            .map { it.removePrefix("*") }
-            .map { it.removeSuffix("*") }
+        .splitToSequence(delimiters)
+        .map { it.trim() }
+        .filter { it.isNotBlank() }
+        .mapIf(removeTrailingAsterisks) { seq ->
+            seq.map { it.removePrefix("*") }
+                .map { it.removeSuffix("*") }
+        }.toList()
+
+    private fun <T> Sequence<T>.mapIf(
+        condition: Boolean,
+        then: (Sequence<T>) -> Sequence<T>
+    ): Sequence<T> = if (condition) then(this) else this
 
     fun contains(value: String?): Boolean = excludes.any { value?.contains(it, ignoreCase = true) == true }
     fun equals(value: String?): Boolean = excludes.any { value?.equals(it, ignoreCase = true) == true }

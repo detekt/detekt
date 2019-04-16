@@ -13,14 +13,14 @@ class WildcardImportSpec : Spek({
 
         context("a kt file with wildcard imports") {
             val code = """
-			package test
+                package test
 
-			import io.gitlab.arturbosch.detekt.*
-			import test.test.detekt.*
+                import io.gitlab.arturbosch.detekt.*
+                import test.test.detekt.*
 
-			class Test {
-			}
-		"""
+                class Test {
+                }
+            """
 
             val file = compileContentForTest(code).text
 

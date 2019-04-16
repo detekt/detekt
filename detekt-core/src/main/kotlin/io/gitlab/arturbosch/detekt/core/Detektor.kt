@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.createKotlinCoreEnvironment
+import io.gitlab.arturbosch.detekt.api.internal.absolutePath
 import org.jetbrains.kotlin.cli.common.messages.AnalyzerWithCompilerReport
 import org.jetbrains.kotlin.cli.common.messages.MessageRenderer
 import org.jetbrains.kotlin.cli.common.messages.PrintingMessageCollector

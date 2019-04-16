@@ -41,6 +41,9 @@ interface Config {
          * Always returns the default value except when 'active' is queried, it returns true .
          */
         val empty: Config = EmptyConfig
+
+        const val EXCLUDES_KEY = "excludes"
+        const val INCLUDES_KEY = "includes"
     }
 }
 
