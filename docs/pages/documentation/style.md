@@ -81,13 +81,18 @@ mutable properties.
 #### Noncompliant Code:
 
 ```kotlin
-data class MutableDataClass(var i: Int)
+data class MutableDataClass(var i: Int) {
+    var s: String? = null
+}
 ```
 
 #### Compliant Code:
 
 ```kotlin
-data class ImmutableDataClass(val i: Int)
+data class ImmutableDataClass(
+    val i: Int,
+    val s: String?
+)
 ```
 
 ### EqualsNullCall

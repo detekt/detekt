@@ -7,9 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtClass
-import org.jetbrains.kotlin.psi.KtParameter
-import org.jetbrains.kotlin.psi.KtProperty
 
 /**
  * This rule reports mutable properties inside data classes.
@@ -18,11 +17,16 @@ import org.jetbrains.kotlin.psi.KtProperty
  * mutable properties.
  *
  * <noncompliant>
- * data class MutableDataClass(var i: Int)
+ * data class MutableDataClass(var i: Int) {
+ *     var s: String? = null
+ * }
  * </noncompliant>
  *
  * <compliant>
- * data class ImmutableDataClass(val i: Int)
+ * data class ImmutableDataClass(
+ *     val i: Int,
+ *     val s: String?
+ * )
  * </compliant>
  *
  * @author Maxim Pestryakov
@@ -33,39 +37,31 @@ class DataClassShouldBeImmutable(config: Config = Config.empty) : Rule(config) {
         "DataClassShouldBeImmutable",
         Severity.Style,
         "Data classes should mainly be immutable and should not have any side effects. " +
-                "(To change some property use copy function)",
+                "(To copy an object altering some of its properties use the copy function)",
         Debt.TWENTY_MINS
     )
 
     override fun visitClass(klass: KtClass) {
         if (klass.isData()) {
-            klass.primaryConstructorParameters.forEach { checkParameter(klass, it) }
-            klass.getProperties().forEach { checkProperty(klass, it) }
+            klass.primaryConstructorParameters
+                .filter { it.isMutable }
+                .forEach { report(it, klass.name, it.name) }
+
+            klass.getProperties()
+                .filter { it.isVar }
+                .forEach { report(it, klass.name, it.name) }
         }
         super.visitClass(klass)
     }
 
-    private fun checkParameter(klass: KtClass, parameter: KtParameter) {
-        if (parameter.isMutable) {
-            report(
-                CodeSmell(
-                    issue, Entity.from(parameter),
-                    "The data class ${klass.name} contains mutable parameter. " +
-                            "The offending parameter is called ${parameter.name}"
-                )
+    private fun report(element: PsiElement, className: String?, propertyName: String?) {
+        report(
+            CodeSmell(
+                issue,
+                Entity.from(element),
+                "The data class $className contains a mutable property. " +
+                        "The offending property is called $propertyName"
             )
-        }
-    }
-
-    private fun checkProperty(klass: KtClass, property: KtProperty) {
-        if (property.isVar) {
-            report(
-                CodeSmell(
-                    issue, Entity.from(property),
-                    "The data class ${klass.name} contains mutable property. " +
-                            "The offending property is called ${property.name}"
-                )
-            )
-        }
+        )
     }
 }
