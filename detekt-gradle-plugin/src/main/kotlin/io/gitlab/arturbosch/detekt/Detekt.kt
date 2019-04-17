@@ -1,20 +1,22 @@
 package io.gitlab.arturbosch.detekt
 
+import io.gitlab.arturbosch.detekt.extensions.CustomDetektReport
+import io.gitlab.arturbosch.detekt.extensions.DetektReportType
 import io.gitlab.arturbosch.detekt.extensions.DetektReports
 import io.gitlab.arturbosch.detekt.internal.configurableFileCollection
 import io.gitlab.arturbosch.detekt.internal.fileProperty
 import io.gitlab.arturbosch.detekt.invoke.BaselineArgument
 import io.gitlab.arturbosch.detekt.invoke.BuildUponDefaultConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.ConfigArgument
+import io.gitlab.arturbosch.detekt.invoke.CustomReportArgument
 import io.gitlab.arturbosch.detekt.invoke.DebugArgument
+import io.gitlab.arturbosch.detekt.invoke.DefaultReportArgument
 import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import io.gitlab.arturbosch.detekt.invoke.DisableDefaultRuleSetArgument
 import io.gitlab.arturbosch.detekt.invoke.FailFastArgument
-import io.gitlab.arturbosch.detekt.invoke.HtmlReportArgument
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
 import io.gitlab.arturbosch.detekt.invoke.PluginsArgument
-import io.gitlab.arturbosch.detekt.invoke.XmlReportArgument
 import io.gitlab.arturbosch.detekt.output.mergeXmlReports
 import org.gradle.api.Action
 import org.gradle.api.file.ConfigurableFileCollection
@@ -30,6 +32,7 @@ import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.Nested
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.PathSensitive
@@ -136,40 +139,55 @@ open class Detekt : SourceTask() {
 
     private val effectiveReportsDir = project.provider { reportsDir.getOrElse(defaultReportsDir.asFile) }
 
+    val customReports: Provider<Collection<CustomDetektReport>>
+        @Nested
+        get() = project.provider { reports.custom }
+
     init {
         group = LifecycleBasePlugin.VERIFICATION_GROUP
     }
 
     @TaskAction
     fun check() {
-        val xmlReportTargetFile = xmlReportFile.orNull
+        val xmlReportTargetFileOrNull = xmlReportFile.orNull
+        val htmlReportTargetFileOrNull = htmlReportFile.orNull
         val debugOrDefault = debugProp.getOrElse(false)
         val arguments = mutableListOf(
             InputArgument(source),
             ConfigArgument(config),
             PluginsArgument(plugins.orNull),
             BaselineArgument(baseline.orNull),
-            XmlReportArgument(xmlReportTargetFile),
-            HtmlReportArgument(htmlReportFile.orNull),
+            DefaultReportArgument(DetektReportType.XML, xmlReportTargetFileOrNull),
+            DefaultReportArgument(DetektReportType.HTML, htmlReportTargetFileOrNull),
             DebugArgument(debugOrDefault),
             ParallelArgument(parallelProp.getOrElse(false)),
             BuildUponDefaultConfigArgument(buildUponDefaultConfigProp.getOrElse(false)),
             FailFastArgument(failFastProp.getOrElse(false)),
             DisableDefaultRuleSetArgument(disableDefaultRuleSetsProp.getOrElse(false))
         )
+        arguments.addAll(customReports.get().map {
+            val type = it.typeProperty.orNull
+            val destination = it.destinationProperty.orNull
+
+            checkNotNull(type) { "If a custom report is specified, the type must be present" }
+            check(!DetektReportType.isWellKnownReportTypeId(type)) { "The custom report type may not be same as one of the default types" }
+            checkNotNull(destination) { "If a custom report is specified, the destination must be present" }
+
+            CustomReportArgument(type, destination)
+        })
 
         DetektInvoker.invokeCli(project, arguments.toList(), debugOrDefault)
 
-        if (xmlReportTargetFile != null) {
+        if (xmlReportTargetFileOrNull != null) {
             val xmlReports = project.subprojects.flatMap { subproject ->
                 subproject.tasks.mapNotNull { task ->
                     if (task is Detekt) task.xmlReportFile.orNull?.asFile else null
                 }
             }
             if (!xmlReports.isEmpty() && debugOrDefault) {
-                logger.info("Merging report files of subprojects $xmlReports into $xmlReportTargetFile")
+                logger.info("Merging report files of subprojects $xmlReports into $xmlReportTargetFileOrNull")
             }
-            mergeXmlReports(xmlReportTargetFile.asFile, xmlReports)
+            mergeXmlReports(xmlReportTargetFileOrNull.asFile, xmlReports)
         }
     }
 }

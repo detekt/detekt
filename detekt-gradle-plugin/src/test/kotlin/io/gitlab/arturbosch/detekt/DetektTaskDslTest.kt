@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.DslTestBuilder.Companion.groovy
 import io.gitlab.arturbosch.detekt.DslTestBuilder.Companion.kotlin
+import io.gitlab.arturbosch.detekt.extensions.DetektReportType
 import org.assertj.core.api.Assertions.assertThat
 import org.gradle.testkit.runner.TaskOutcome
 import org.spekframework.spek2.Spek
@@ -95,6 +96,7 @@ internal class DetektTaskDslTest : Spek({
                         assertThat(result.output).doesNotContain("folder_that_does_not_exist")
                     }
                 }
+
                 it("can be applied with classes in multiple custom input directories") {
 
                     val customSrc1 = "gensrc/kotlin"
@@ -121,6 +123,7 @@ internal class DetektTaskDslTest : Spek({
                         assertThat(result.output).contains("number of classes: 2")
                     }
                 }
+
                 it("can change the general reports dir") {
 
                     val config = """
@@ -139,6 +142,7 @@ internal class DetektTaskDslTest : Spek({
                         assertThat(projectFile("build/detekt-reports/detekt.html")).exists()
                     }
                 }
+
                 it("can change the general reports dir but overwrite single report") {
 
                     val config = """
@@ -160,6 +164,7 @@ internal class DetektTaskDslTest : Spek({
                         assertThat(projectFile("build/detekt-reports/detekt.html")).exists()
                     }
                 }
+
                 it("can disable reports") {
 
                     val config = """
@@ -183,6 +188,7 @@ internal class DetektTaskDslTest : Spek({
                         assertThat(projectFile("build/reports/detekt/detekt.html")).doesNotExist()
                     }
                 }
+
                 it("can change all flags") {
 
                     val config = """
@@ -202,6 +208,7 @@ internal class DetektTaskDslTest : Spek({
                         assertThat(result.output).contains("--debug", "--parallel", "--disable-default-rulesets")
                     }
                 }
+
                 it("allows setting a baseline file") {
 
                     val baselineFilename = "detekt-baseline.xml"
@@ -223,6 +230,7 @@ internal class DetektTaskDslTest : Spek({
                         assertThat(result.output).contains(expectedBaselineArgument)
                     }
                 }
+
                 it("can be used with formatting plugin") {
 
                     val config = """
@@ -238,6 +246,119 @@ internal class DetektTaskDslTest : Spek({
                     gradleRunner.runTasksAndCheckResult("dependencies", "--configuration", "detektPlugins") { result ->
                         assertThat(result.task(":dependencies")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
                         assertThat(result.output).contains("io.gitlab.arturbosch.detekt:detekt-formatting:$VERSION_UNDER_TEST")
+                    }
+                }
+
+                describe("with custom report types") {
+                    it("passes multiple custom report params to cli") {
+
+                        val config = """
+                        |detekt {
+                        |	reports {
+                        |		custom {
+                        |           type = "customXml"
+                        |           destination = file("build/reports/custom.xml")
+                        |       }
+                        |		custom {
+                        |           type = "customJson"
+                        |           destination = file("build/reports/custom.json")
+                        |       }
+                        |	}
+                        |}
+						"""
+
+                        val gradleRunner = builder
+                            .withDetektConfig(config)
+                            .build()
+
+                        val customXmlReportFilePath = gradleRunner.projectFile("build/reports/custom.xml").absolutePath
+                        val customJsonReportFilePath =
+                            gradleRunner.projectFile("build/reports/custom.json").absolutePath
+
+                        gradleRunner.runDetektTaskAndCheckResult { result ->
+                            assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+                            assertThat(result.output).contains("--report customXml:$customXmlReportFilePath")
+                            assertThat(result.output).contains("--report customJson:$customJsonReportFilePath")
+                        }
+                    }
+                    it("fails if type of custom report is missing") {
+
+                        val config = """
+                        |detekt {
+                        |	reports {
+                        |		custom {
+                        |           destination = file("build/reports/custom.xml")
+                        |       }
+                        |	}
+                        |}
+						"""
+
+                        val gradleRunner = builder
+                            .withDetektConfig(config)
+                            .build()
+
+                        gradleRunner.runDetektTaskAndExpectFailure()
+                    }
+                    it("fails if destination of custom report is missing") {
+
+                        val config = """
+                        |detekt {
+                        |	reports {
+                        |		custom {
+                        |           type = "foo"
+                        |       }
+                        |	}
+                        |}
+						"""
+
+                        val gradleRunner = builder
+                            .withDetektConfig(config)
+                            .build()
+
+                        gradleRunner.runDetektTaskAndExpectFailure()
+                    }
+
+                    it("fails if the destination is a directory") {
+                        val aDirectory = "\${rootDir}/src"
+
+                        val config = """
+                        |detekt {
+                        |	reports {
+                        |		custom {
+                        |           type = "foo"
+                        |           destination = file("$aDirectory")
+                        |       }
+                        |	}
+                        |}
+						"""
+
+                        val gradleRunner = builder
+                            .withDetektConfig(config)
+                            .build()
+
+                        gradleRunner.runDetektTaskAndExpectFailure()
+                    }
+
+                    DetektReportType.values().forEach { wellKnownType ->
+                        it("fails if type of custom report is $wellKnownType") {
+
+                            val config = """
+                                |detekt {
+                                |	reports {
+                                |		custom {
+                                |           type = "${wellKnownType.typeId}"
+                                |           destination = file("build/reports/custom.xml")
+                                |       }
+                                |	}
+                                |}
+                                """
+
+                            val gradleRunner = builder
+                                .withDetektConfig(config)
+                                .build()
+
+                            gradleRunner.runDetektTaskAndExpectFailure()
+                        }
                     }
                 }
             }
