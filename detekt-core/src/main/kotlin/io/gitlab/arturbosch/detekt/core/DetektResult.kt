@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.core
 
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.FormattingInfo
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.api.RuleSetId
@@ -17,6 +18,7 @@ data class DetektResult(override val findings: Map<RuleSetId, List<Finding>>) : 
     private var userData = KeyFMap.EMPTY_MAP
     private val _metrics = ArrayList<ProjectMetric>()
     override val metrics: Collection<ProjectMetric> = _metrics
+    override val formatting: MutableCollection<FormattingInfo> = ArrayList()
 
     override fun add(projectMetric: ProjectMetric) {
         _metrics.add(projectMetric)

@@ -3,11 +3,12 @@ package io.gitlab.arturbosch.detekt.core
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.Notification
+import io.gitlab.arturbosch.detekt.api.FormattingInfo
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.createCompilerConfiguration
 import io.gitlab.arturbosch.detekt.api.createKotlinCoreEnvironment
 import org.jetbrains.kotlin.psi.KtFile
+import java.nio.file.Files
 import java.nio.file.Path
 
 /**
@@ -27,7 +28,7 @@ class DetektFacade(
     private val compiler = KtTreeCompiler.instance(settings)
 
     fun run(): Detektion {
-        val notifications = mutableListOf<Notification>()
+        val formatting = mutableListOf<FormattingInfo>()
         val ktFiles = mutableListOf<KtFile>()
         val findings = HashMap<String, List<Finding>>()
 
@@ -36,16 +37,23 @@ class DetektFacade(
 
             processors.forEach { it.onStart(files) }
             findings.mergeSmells(detektor.run(files, environment, classpath.isNotEmpty()))
-            if (saveSupported) {
-                KtFileModifier(current).saveModifiedFiles(files) {
-                    notifications.add(it)
-                }
+            KtFileModifier(current).saveModifiedFiles(files) {
+                formatting.add(it)
             }
 
             ktFiles.addAll(files)
         }
 
         val result = DetektResult(findings.toSortedMap())
+        result.formatting.addAll(formatting)
+
+        if (saveSupported) {
+            result.formatting.forEach {
+                result.add(ModificationNotification(it.path))
+                Files.write(it.path, it.formattedContent.toByteArray())
+            }
+        }
+
         processors.forEach { it.onFinish(ktFiles, result) }
         return result
     }
@@ -57,9 +65,14 @@ class DetektFacade(
 
         val findings = detektor.run(files)
         val detektion = DetektResult(findings.toSortedMap())
+        KtFileModifier(current).saveModifiedFiles(files) {
+            detektion.formatting.add(it)
+        }
+
         if (saveSupported) {
-            KtFileModifier(current).saveModifiedFiles(files) {
-                detektion.add(it)
+            detektion.formatting.forEach {
+                detektion.add(ModificationNotification(it.path))
+                Files.write(it.path, it.formattedContent.toByteArray())
             }
         }
 

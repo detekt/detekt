@@ -12,6 +12,7 @@ interface Detektion {
     val findings: Map<RuleSetId, List<Finding>>
     val notifications: Collection<Notification>
     val metrics: Collection<ProjectMetric>
+    val formatting: Collection<FormattingInfo>
 
     fun <V> getData(key: Key<V>): V?
     fun <V> addData(key: Key<V>, value: V)
