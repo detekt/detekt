@@ -44,7 +44,7 @@ open class DetektExtension(project: Project) : CodeQualityExtension() {
     @Deprecated("Replace with task setIncludes/setExcludes")
     var filters: String? = null
 
-    var plugins: String? = null
+    var plugins: ConfigurableFileCollection = project.configurableFileCollection()
 
     companion object {
         const val DEFAULT_SRC_DIR_JAVA = "src/main/java"

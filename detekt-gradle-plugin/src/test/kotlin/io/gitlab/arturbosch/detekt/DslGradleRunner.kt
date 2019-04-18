@@ -76,9 +76,8 @@ class DslGradleRunner(
         }
     }
 
-    fun writeProjectFile(filename: String, content: String) {
-        File(rootDir, filename).writeText(content)
-    }
+    fun writeProjectFile(filename: String, content: String) =
+        File(rootDir, filename).apply { writeText(content) }
 
     fun writeKtFile(srcDir: String, className: String) {
         writeKtFile(File(rootDir, srcDir), className)

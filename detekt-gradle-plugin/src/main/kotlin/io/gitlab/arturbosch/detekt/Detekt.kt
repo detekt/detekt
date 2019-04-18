@@ -70,9 +70,10 @@ open class Detekt : SourceTask() {
     @PathSensitive(PathSensitivity.RELATIVE)
     var config: ConfigurableFileCollection = project.configurableFileCollection()
 
-    @Input
+    @InputFiles
     @Optional
-    var plugins: Property<String> = project.objects.property(String::class.java)
+    @PathSensitive(PathSensitivity.RELATIVE)
+    var plugins: ConfigurableFileCollection = project.configurableFileCollection()
 
     @Internal
     @Optional
@@ -155,7 +156,7 @@ open class Detekt : SourceTask() {
         val arguments = mutableListOf(
             InputArgument(source),
             ConfigArgument(config),
-            PluginsArgument(plugins.orNull),
+            PluginsArgument(plugins),
             BaselineArgument(baseline.orNull),
             DefaultReportArgument(DetektReportType.XML, xmlReportTargetFileOrNull),
             DefaultReportArgument(DetektReportType.HTML, htmlReportTargetFileOrNull),

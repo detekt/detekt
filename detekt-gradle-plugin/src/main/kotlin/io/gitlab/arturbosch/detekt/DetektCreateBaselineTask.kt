@@ -59,9 +59,10 @@ open class DetektCreateBaselineTask : SourceTask() {
     @PathSensitive(PathSensitivity.RELATIVE)
     var config: ConfigurableFileCollection = project.configurableFileCollection()
 
-    @Input
+    @InputFiles
     @Optional
-    var plugins: Property<String> = project.objects.property(String::class.java)
+    @PathSensitive(PathSensitivity.RELATIVE)
+    var plugins: ConfigurableFileCollection = project.configurableFileCollection()
 
     @Internal
     @Optional
@@ -90,7 +91,7 @@ open class DetektCreateBaselineTask : SourceTask() {
             BaselineArgument(baseline.get()),
             InputArgument(source),
             ConfigArgument(config),
-            PluginsArgument(plugins.orNull),
+            PluginsArgument(plugins),
             DebugArgument(debug.getOrElse(false)),
             ParallelArgument(parallel.getOrElse(false)),
             BuildUponDefaultConfigArgument(buildUponDefaultConfig.getOrElse(false)),

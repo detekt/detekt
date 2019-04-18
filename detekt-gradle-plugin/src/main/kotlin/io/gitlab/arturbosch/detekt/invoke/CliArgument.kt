@@ -33,8 +33,12 @@ internal data class InputArgument(val fileCollection: FileCollection) : CliArgum
     override fun toArgument() = listOf(INPUT_PARAMETER, fileCollection.joinToString(",") { it.absolutePath })
 }
 
-internal data class PluginsArgument(val plugins: String?) : CliArgument() {
-    override fun toArgument() = plugins?.let { listOf(PLUGINS_PARAMETER, it) } ?: emptyList()
+internal data class PluginsArgument(val plugins: FileCollection) : CliArgument() {
+    override fun toArgument() =
+        if (plugins.isEmpty)
+            emptyList()
+        else
+            listOf(PLUGINS_PARAMETER, plugins.joinToString(",") { it.absolutePath })
 }
 
 internal data class BaselineArgument(val baseline: RegularFile?) : CliArgument() {

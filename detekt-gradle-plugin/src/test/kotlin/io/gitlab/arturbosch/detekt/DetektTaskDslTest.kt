@@ -231,6 +231,49 @@ internal class DetektTaskDslTest : Spek({
                     }
                 }
 
+                describe("using plugins property") {
+
+                    it("passes multiple plugin files separated by comma") {
+
+                        val firstPluginFilename = "some-plugin.jar"
+                        val secondPluginFilename = "other-plugin.jar"
+                        val config = """
+                        |detekt {
+                        |	plugins = files("$firstPluginFilename", "$secondPluginFilename")
+                        |}
+						"""
+
+                        val gradleRunner = builder
+                            .withDetektConfig(config)
+                            .build()
+
+                        val firstPluginFile = gradleRunner.writeProjectFile(firstPluginFilename, "")
+                        val secondPluginFile = gradleRunner.writeProjectFile(secondPluginFilename, "")
+
+                        gradleRunner.runDetektTaskAndCheckResult { result ->
+                            assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+                            assertThat(result.output).contains("--plugins ${firstPluginFile.absolutePath},${secondPluginFile.absolutePath}")
+                        }
+                    }
+
+                    it("fails if the plugin file does not exist") {
+
+                        val config = """
+                        |detekt {
+                        |	plugins = files("some-plugin.jar")
+                        |}
+						"""
+
+                        val gradleRunner = builder
+                            .withDetektConfig(config)
+                            .build()
+
+                        gradleRunner.runDetektTaskAndExpectFailure { result ->
+                            assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.FAILED)
+                        }
+                    }
+                }
+
                 it("can be used with formatting plugin") {
 
                     val config = """
