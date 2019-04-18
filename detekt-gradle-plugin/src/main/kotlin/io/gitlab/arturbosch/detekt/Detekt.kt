@@ -171,7 +171,9 @@ open class Detekt : SourceTask() {
             val destination = it.destinationProperty.orNull
 
             checkNotNull(type) { "If a custom report is specified, the type must be present" }
-            check(!DetektReportType.isWellKnownReportTypeId(type)) { "The custom report type may not be same as one of the default types" }
+            check(!DetektReportType.isWellKnownReportTypeId(type)) {
+                "The custom report type may not be same as one of the default types"
+            }
             checkNotNull(destination) { "If a custom report is specified, the destination must be present" }
 
             CustomReportArgument(type, destination)

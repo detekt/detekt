@@ -90,13 +90,13 @@ class DslGradleRunner(
 
     private fun buildGradleRunner(tasks: List<String>): GradleRunner {
         val args = listOf("--stacktrace", "--info", "--build-cache") + tasks.toList()
-        val runner = GradleRunner.create().apply {
+
+        return GradleRunner.create().apply {
             withProjectDir(rootDir)
             withPluginClasspath()
             withArguments(args)
             gradleVersionOrNone?.let { withGradleVersion(gradleVersionOrNone) }
         }
-        return runner
     }
 
     fun runTasksAndCheckResult(vararg tasks: String, doAssert: DslGradleRunner.(BuildResult) -> Unit) {
