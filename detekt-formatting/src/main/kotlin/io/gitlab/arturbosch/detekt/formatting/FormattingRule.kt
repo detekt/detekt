@@ -69,7 +69,8 @@ abstract class FormattingRule(config: Config) : Rule(config) {
                                     TextLocation(node.startOffset, node.psi.endOffset),
                                     "($line, $column)",
                                     root.originalFilePath() ?: root.containingFile.name)),
-                    message))
+                    message,
+                    autoCorrect = autoCorrect))
         }
     }
 
