@@ -71,7 +71,6 @@ class InclusionExclusionPatternsSpec : Spek({
 
     describe("rule should only run on included files") {
 
-
         it("should only run on dummies") {
             val config = TestConfig(mapOf(
                 "includes" to "**Dummy*.kt",
