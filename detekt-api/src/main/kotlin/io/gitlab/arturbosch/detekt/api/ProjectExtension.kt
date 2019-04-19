@@ -20,6 +20,7 @@ import org.jetbrains.kotlin.com.intellij.pom.PomTransaction
 import org.jetbrains.kotlin.com.intellij.pom.impl.PomTransactionBase
 import org.jetbrains.kotlin.com.intellij.pom.tree.TreeAspect
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.TreeCopyHandler
+import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.psi.KtPsiFactory
 import sun.reflect.ReflectionFactory
@@ -40,6 +41,7 @@ fun createKotlinCoreEnvironment(configuration: CompilerConfiguration = CompilerC
     System.setProperty("idea.io.use.fallback", "true")
     configuration.put(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY,
             PrintingMessageCollector(System.err, MessageRenderer.PLAIN_FULL_PATHS, false))
+    configuration.put(CommonConfigurationKeys.MODULE_NAME, "detekt")
     return KotlinCoreEnvironment.createForProduction(Disposer.newDisposable(),
         configuration, EnvironmentConfigFiles.JVM_CONFIG_FILES)
 }
