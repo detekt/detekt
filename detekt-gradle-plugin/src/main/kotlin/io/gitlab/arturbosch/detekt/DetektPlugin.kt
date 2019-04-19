@@ -66,6 +66,7 @@ class DetektPlugin : Plugin<Project> {
             it.setExcludes(defaultExcludes)
             it.reportsDir.set(project.provider { extension.customReportsDir })
             it.reports = extension.reports
+            it.ignoreFailures.set(project.provider { extension.ignoreFailures })
 
             project.subprojects.forEach { subProject ->
                 subProject.tasks.firstOrNull { t -> t is Detekt }?.let { subprojectTask ->
@@ -109,6 +110,7 @@ class DetektPlugin : Plugin<Project> {
             it.disableDefaultRuleSets.set(project.provider { extension.disableDefaultRuleSets })
             it.buildUponDefaultConfig.set(project.provider { extension.buildUponDefaultConfig })
             it.failFast.set(project.provider { extension.failFast })
+            it.ignoreFailures.set(project.provider { extension.ignoreFailures })
             it.plugins.set(project.provider { extension.plugins })
             it.setSource(existingInputDirectoriesProvider(project, extension))
             it.setIncludes(defaultIncludes)

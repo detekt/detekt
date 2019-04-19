@@ -196,6 +196,7 @@ internal class DetektTaskDslTest : Spek({
                         |    debug = true
                         |    parallel = true
                         |    disableDefaultRuleSets = true
+                        |    ignoreFailures = true
                         |}
                         """
 

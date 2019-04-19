@@ -140,6 +140,10 @@ open class Detekt : SourceTask() {
         get() = failFastProp.get()
         set(value) = failFastProp.set(value)
 
+    @Input
+    @Optional
+    val ignoreFailures: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+
     @Optional
     @Input
     val autoCorrectProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
@@ -217,6 +221,13 @@ open class Detekt : SourceTask() {
 
             CustomReportArgument(reportId, destination)
         })
+
+        DetektInvoker.invokeCli(
+            project = project,
+            arguments = arguments.toList(),
+            debug = debugOrDefault,
+            ignoreFailures = ignoreFailures.getOrElse(false)
+        )
 
         DetektInvoker.invokeCli(project, arguments.toList(), detektClasspath.plus(pluginClasspath), debugOrDefault)
 

@@ -95,6 +95,10 @@ open class DetektCreateBaselineTask : SourceTask() {
     @Optional
     var failFast: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
+    @Input
+    @Optional
+    val ignoreFailures: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+
     @Optional
     @Input
     val autoCorrectProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
@@ -123,10 +127,12 @@ open class DetektCreateBaselineTask : SourceTask() {
         )
 
         DetektInvoker.invokeCli(
-            project,
-            arguments.toList(),
-            detektClasspath.plus(pluginClasspath),
-            debug.getOrElse(false)
-        )
+            project = project,
+            arguments = arguments.toList(),
+            debug = debug.getOrElse(false),
+            ignoreFailures = ignoreFailures.getOrElse(false),
+            classpath = detektClasspath.plus(pluginClasspath),
+
+            )
     }
 }
