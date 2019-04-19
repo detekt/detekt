@@ -8,7 +8,9 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.createCompilerConfiguration
 import io.gitlab.arturbosch.detekt.api.createKotlinCoreEnvironment
 import org.jetbrains.kotlin.cli.common.messages.AnalyzerWithCompilerReport
-import org.jetbrains.kotlin.cli.common.messages.MessageRenderer
+import org.jetbrains.kotlin.cli.common.messages.CompilerMessageLocation
+import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
+import org.jetbrains.kotlin.cli.common.messages.PlainTextMessageRenderer
 import org.jetbrains.kotlin.cli.common.messages.PrintingMessageCollector
 import org.jetbrains.kotlin.cli.jvm.compiler.NoScopeRecordCliBindingTrace
 import org.jetbrains.kotlin.cli.jvm.compiler.TopDownAnalyzerFacadeForJVM
@@ -68,7 +70,7 @@ class DetektFacade(
     private fun generateBindingContext(filesForEnvironment: List<KtFile>): BindingContext {
         return if (classpath.isNotEmpty()) {
             val analyzer = AnalyzerWithCompilerReport(
-                PrintingMessageCollector(System.err, MessageRenderer.PLAIN_FULL_PATHS, true),
+                PrintingMessageCollector(System.err, DetektMessageRenderer, true),
                 environment.configuration.languageVersionSettings
             )
             analyzer.analyzeAndReport(filesForEnvironment) {
@@ -99,6 +101,18 @@ class DetektFacade(
 
         processors.forEach { it.onFinish(files, detektion) }
         return detektion
+    }
+
+    private object DetektMessageRenderer : PlainTextMessageRenderer() {
+        override fun getPath(location: CompilerMessageLocation) = location.path
+        override fun render(
+            severity: CompilerMessageSeverity,
+            message: String,
+            location: CompilerMessageLocation?
+        ): String {
+            if (!severity.isError) return ""
+            return super.render(severity, message, location)
+        }
     }
 
     companion object {
