@@ -14,10 +14,10 @@ internal class CreateBaselineTaskDslTest : Spek({
             describe("using ${builder.gradleBuildName}") {
                 it("can be executed when baseline file is specified") {
                     val detektConfig = """
-						|detekt {
-						| 	baseline = file("build/baseline.xml")
-						|}
-						"""
+                        |detekt {
+                        |   baseline = file("build/baseline.xml")
+                        |}
+                        """
                     val gradleRunner = builder
                         .withDetektConfig(detektConfig)
                         .build()
