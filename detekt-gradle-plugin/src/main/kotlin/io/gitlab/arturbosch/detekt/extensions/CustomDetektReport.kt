@@ -11,10 +11,10 @@ import java.io.File
 class CustomDetektReport(private val project: Project) {
 
     @Internal
-    val typeProperty: Property<String> = project.objects.property(String::class.java)
-    var type: String
-        get() = typeProperty.get()
-        set(value) = typeProperty.set(value)
+    val reportIdProp: Property<String> = project.objects.property(String::class.java)
+    var reportId: String
+        get() = reportIdProp.get()
+        set(value) = reportIdProp.set(value)
 
     @OutputFile
     val destinationProperty: RegularFileProperty = project.fileProperty()
@@ -23,6 +23,6 @@ class CustomDetektReport(private val project: Project) {
         set(value) = destinationProperty.set(value)
 
     override fun toString(): String {
-        return "CustomDetektReport(type=$type, destination=$destination)"
+        return "CustomDetektReport(reportId=$reportId, destination=$destination)"
     }
 }

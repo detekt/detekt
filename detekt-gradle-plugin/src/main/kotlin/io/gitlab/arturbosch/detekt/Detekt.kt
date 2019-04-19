@@ -166,16 +166,16 @@ open class Detekt : SourceTask() {
             DisableDefaultRuleSetArgument(disableDefaultRuleSetsProp.getOrElse(false))
         )
         arguments.addAll(customReports.get().map {
-            val type = it.typeProperty.orNull
+            val reportId = it.reportIdProp.orNull
             val destination = it.destinationProperty.orNull
 
-            checkNotNull(type) { "If a custom report is specified, the type must be present" }
-            check(!DetektReportType.isWellKnownReportTypeId(type)) {
-                "The custom report type may not be same as one of the default types"
+            checkNotNull(reportId) { "If a custom report is specified, the reportId must be present" }
+            check(!DetektReportType.isWellKnownReportId(reportId)) {
+                "The custom report reportId may not be same as one of the default reports"
             }
             checkNotNull(destination) { "If a custom report is specified, the destination must be present" }
 
-            CustomReportArgument(type, destination)
+            CustomReportArgument(reportId, destination)
         })
 
         DetektInvoker.invokeCli(project, arguments.toList(), debugOrDefault)

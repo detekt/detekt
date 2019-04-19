@@ -43,11 +43,11 @@ internal data class BaselineArgument(val baseline: RegularFile?) : CliArgument()
 
 internal data class DefaultReportArgument(val type: DetektReportType, val file: RegularFile?) : CliArgument() {
     override fun toArgument() =
-        file?.let { listOf(REPORT_PARAMETER, "${type.typeId}:${it.asFile.absoluteFile}") } ?: emptyList()
+        file?.let { listOf(REPORT_PARAMETER, "${type.reportId}:${it.asFile.absoluteFile}") } ?: emptyList()
 }
 
-internal data class CustomReportArgument(val type: String, val file: RegularFile) : CliArgument() {
-    override fun toArgument() = listOf(REPORT_PARAMETER, "$type:${file.asFile.absolutePath}")
+internal data class CustomReportArgument(val reportId: String, val file: RegularFile) : CliArgument() {
+    override fun toArgument() = listOf(REPORT_PARAMETER, "$reportId:${file.asFile.absolutePath}")
 }
 
 internal data class ConfigArgument(val config: FileCollection) : CliArgument() {

@@ -248,18 +248,18 @@ internal class DetektTaskDslTest : Spek({
                     }
                 }
 
-                describe("with custom report types") {
+                describe("with custom reports") {
                     it("passes multiple custom report params to cli") {
 
                         val config = """
                         |detekt {
                         |    reports {
                         |        custom {
-                        |           type = "customXml"
+                        |           reportId = "customXml"
                         |           destination = file("build/reports/custom.xml")
                         |       }
                         |        custom {
-                        |           type = "customJson"
+                        |           reportId = "customJson"
                         |           destination = file("build/reports/custom.json")
                         |       }
                         |    }
@@ -280,7 +280,7 @@ internal class DetektTaskDslTest : Spek({
                             assertThat(result.output).contains("--report customJson:$customJsonReportFilePath")
                         }
                     }
-                    it("fails if type of custom report is missing") {
+                    it("fails if reportId of custom report is missing") {
 
                         val config = """
                         |detekt {
@@ -304,7 +304,7 @@ internal class DetektTaskDslTest : Spek({
                         |detekt {
                         |    reports {
                         |        custom {
-                        |           type = "foo"
+                        |           reportId = "foo"
                         |       }
                         |    }
                         |}
@@ -324,7 +324,7 @@ internal class DetektTaskDslTest : Spek({
                         |detekt {
                         |    reports {
                         |        custom {
-                        |           type = "foo"
+                        |           reportId = "foo"
                         |           destination = file("$aDirectory")
                         |       }
                         |    }
@@ -339,13 +339,13 @@ internal class DetektTaskDslTest : Spek({
                     }
 
                     DetektReportType.values().forEach { wellKnownType ->
-                        it("fails if type of custom report is $wellKnownType") {
+                        it("fails if reportId of custom report is $wellKnownType") {
 
                             val config = """
                                 |detekt {
                                 |    reports {
                                 |        custom {
-                                |           type = "${wellKnownType.typeId}"
+                                |           reportId = "${wellKnownType.reportId}"
                                 |           destination = file("build/reports/custom.xml")
                                 |       }
                                 |    }
