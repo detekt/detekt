@@ -69,6 +69,7 @@ open class Detekt : SourceTask() {
 
     @Input
     @Optional
+    @Deprecated("Use detektPlugins within dependencies instead")
     var plugins: Property<String> = project.objects.property(String::class.java)
 
     @Internal

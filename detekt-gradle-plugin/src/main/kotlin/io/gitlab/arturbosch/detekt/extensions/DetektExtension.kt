@@ -44,6 +44,7 @@ open class DetektExtension(project: Project) : CodeQualityExtension() {
     @Deprecated("Replace with task setIncludes/setExcludes")
     var filters: String? = null
 
+    @Deprecated("Use detektPlugins within dependencies instead")
     var plugins: String? = null
 
     companion object {

@@ -32,6 +32,7 @@ internal data class InputArgument(val fileCollection: FileCollection) : CliArgum
     override fun toArgument() = listOf(INPUT_PARAMETER, fileCollection.joinToString(",") { it.absolutePath })
 }
 
+@Deprecated("Will be removed in favor of 'detektPlugins'")
 internal data class PluginsArgument(val plugins: String?) : CliArgument() {
     override fun toArgument() = plugins?.let { listOf(PLUGINS_PARAMETER, it) } ?: emptyList()
 }

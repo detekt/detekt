@@ -43,7 +43,7 @@ detekt {
     config = files("path/to/config.yml")                  // Define the detekt configuration(s) you want to use. Defaults to the default detekt configuration.
     baseline = file("path/to/baseline.xml")               // Specifying a baseline file. All findings stored in this file in subsequent runs of detekt.
     disableDefaultRuleSets = false                        // Disables all default detekt rulesets and will only run detekt with custom rules defined in `plugins`. `false` by default.
-    plugins = "other/optional/ruleset.jar"                // Additional jar file containing custom detekt rules.
+    plugins = "other/optional/ruleset.jar"                // Additional jar file containing custom detekt rules. (Deprecated: Use detektPlugins instead.)
     debug = false                                         // Adds debug output during task execution. `false` by default.
     reports {
         xml {
