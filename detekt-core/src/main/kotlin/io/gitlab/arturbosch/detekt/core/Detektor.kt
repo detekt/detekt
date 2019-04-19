@@ -5,18 +5,9 @@ import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.api.createKotlinCoreEnvironment
 import io.gitlab.arturbosch.detekt.api.internal.absolutePath
-import org.jetbrains.kotlin.cli.common.messages.AnalyzerWithCompilerReport
-import org.jetbrains.kotlin.cli.common.messages.MessageRenderer
-import org.jetbrains.kotlin.cli.common.messages.PrintingMessageCollector
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.jetbrains.kotlin.cli.jvm.compiler.NoScopeRecordCliBindingTrace
-import org.jetbrains.kotlin.cli.jvm.compiler.TopDownAnalyzerFacadeForJVM
-import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
 import java.util.concurrent.ExecutorService
 
 /**
@@ -34,27 +25,9 @@ class Detektor(
     private val logger = settings.errorPrinter
 
     fun run(
-        ktFiles: List<KtFile>,
-        environment: KotlinCoreEnvironment = createKotlinCoreEnvironment(),
-        resolveTypes: Boolean = false
+        ktFiles: Collection<KtFile>,
+        bindingContext: BindingContext = BindingContext.EMPTY
     ): Map<RuleSetId, List<Finding>> = withExecutor(executor) {
-        val bindingContext = if (resolveTypes) {
-            val analyzer = AnalyzerWithCompilerReport(
-                PrintingMessageCollector(System.out, MessageRenderer.PLAIN_FULL_PATHS, true),
-                environment.configuration.languageVersionSettings
-            )
-            analyzer.analyzeAndReport(ktFiles) {
-                TopDownAnalyzerFacadeForJVM.analyzeFilesWithJavaIntegration(
-                    environment.project, ktFiles, NoScopeRecordCliBindingTrace(),
-                    environment.configuration, environment::createPackagePartProvider,
-                    ::FileBasedDeclarationProviderFactory
-                )
-            }
-            analyzer.analysisResult.bindingContext
-        } else {
-            BindingContext.EMPTY
-        }
-
         val futures = ktFiles.map { file ->
             runAsync {
                 processors.forEach { it.onProcess(file) }

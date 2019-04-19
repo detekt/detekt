@@ -9,6 +9,7 @@ import org.jetbrains.kotlin.com.intellij.testFramework.LightVirtualFile
 import org.jetbrains.kotlin.idea.KotlinLanguage
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
+import java.nio.file.Paths
 
 /**
  * @author Artur Bosch
@@ -47,11 +48,23 @@ open class KtCompiler {
         return psiFile as? KtFile ?: throw IllegalStateException("kotlin file expected")
     }
 
-    private fun String.determineLineSeparator(): String {
-        val i = this.lastIndexOf('\n')
-        if (i == -1) {
-            return if (this.lastIndexOf('\r') == -1) System.getProperty("line.separator") else "\r"
-        }
-        return if (i != 0 && this[i] == '\r') "\r\n" else "\n"
+}
+
+fun KtFile.addUserData(rootPath: String) {
+    val root = Paths.get(rootPath)
+    val content = root.toFile().readText()
+    val lineSeparator = content.determineLineSeparator()
+
+    this.apply {
+        putUserData(LINE_SEPARATOR, lineSeparator)
+        putUserData(ABSOLUTE_PATH, rootPath)
     }
+}
+
+internal fun String.determineLineSeparator(): String {
+    val i = this.lastIndexOf('\n')
+    if (i == -1) {
+        return if (this.lastIndexOf('\r') == -1) System.getProperty("line.separator") else "\r"
+    }
+    return if (i != 0 && this[i] == '\r') "\r\n" else "\n"
 }
