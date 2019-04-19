@@ -17,6 +17,7 @@ private const val REPORT_PARAMETER = "--report"
 private const val GENERATE_CONFIG_PARAMETER = "--generate-config"
 private const val CREATE_BASELINE_PARAMETER = "--create-baseline"
 private const val CLASSPATH_PARAMETER = "--classpath"
+private const val JVM_TARGET_PARAMETER = "--jvm-target"
 
 internal sealed class CliArgument {
     abstract fun toArgument(): List<String>
@@ -38,6 +39,10 @@ internal data class ClasspathArgument(val fileCollection: FileCollection) : CliA
     override fun toArgument() = if (!fileCollection.isEmpty) listOf(
         CLASSPATH_PARAMETER,
         fileCollection.joinToString(";") { it.absolutePath }) else emptyList()
+}
+
+internal data class JvmTargetArgument(val jvmTarget: String?) : CliArgument() {
+    override fun toArgument() = jvmTarget?.let { listOf(JVM_TARGET_PARAMETER, it) } ?: emptyList()
 }
 
 internal data class PluginsArgument(val plugins: String?) : CliArgument() {

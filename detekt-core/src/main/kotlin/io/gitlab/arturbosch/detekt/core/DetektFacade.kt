@@ -32,7 +32,8 @@ class DetektFacade(
     private val inputPaths = settings.inputPaths
     private val classpath = settings.classpath
     private val pathFilters = settings.pathFilters
-    private val compilerConfiguration = createCompilerConfiguration(classpath, inputPaths)
+    private val jvmTarget = settings.jvmTarget
+    private val compilerConfiguration = createCompilerConfiguration(inputPaths, classpath, jvmTarget)
     private val environment = createKotlinCoreEnvironment(compilerConfiguration)
     private val compiler = KtTreeCompiler.instance(settings)
 

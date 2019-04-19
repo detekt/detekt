@@ -16,6 +16,7 @@ import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import io.gitlab.arturbosch.detekt.invoke.DisableDefaultRuleSetArgument
 import io.gitlab.arturbosch.detekt.invoke.FailFastArgument
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
+import io.gitlab.arturbosch.detekt.invoke.JvmTargetArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
 import io.gitlab.arturbosch.detekt.invoke.PluginsArgument
 import io.gitlab.arturbosch.detekt.output.mergeXmlReports
@@ -75,6 +76,14 @@ open class Detekt : SourceTask() {
     @Classpath
     @Optional
     val classpath = project.configurableFileCollection()
+
+    @Input
+    @Optional
+    internal val jvmTargetProp: Property<String> = project.objects.property(String::class.javaObjectType)
+    var jvmTarget: String
+        @Internal
+        get() = jvmTargetProp.get()
+        set(value) = jvmTargetProp.set(value)
 
     @Input
     @Optional
@@ -161,6 +170,7 @@ open class Detekt : SourceTask() {
         val arguments = mutableListOf(
             InputArgument(source),
             ClasspathArgument(classpath),
+            JvmTargetArgument(jvmTargetProp.orNull),
             ConfigArgument(config),
             PluginsArgument(plugins.orNull),
             BaselineArgument(baseline.orNull),

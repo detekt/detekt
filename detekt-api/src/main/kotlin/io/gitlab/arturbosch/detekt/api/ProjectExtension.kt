@@ -22,6 +22,8 @@ import org.jetbrains.kotlin.com.intellij.pom.tree.TreeAspect
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.TreeCopyHandler
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
+import org.jetbrains.kotlin.config.JVMConfigurationKeys
+import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.psi.KtPsiFactory
 import sun.reflect.ReflectionFactory
 import java.io.File
@@ -54,8 +56,9 @@ private fun createProject(configuration: CompilerConfiguration = CompilerConfigu
 }
 
 fun createCompilerConfiguration(
+    pathsToAnalyze: List<Path>,
     classpath: List<String>,
-    pathsToAnalyze: List<Path>
+    jvmTarget: JvmTarget
 ): CompilerConfiguration {
 
     val javaFiles = pathsToAnalyze.flatMap { path ->
@@ -72,6 +75,7 @@ fun createCompilerConfiguration(
     }
 
     return CompilerConfiguration().apply {
+        put(JVMConfigurationKeys.JVM_TARGET, jvmTarget)
         addJavaSourceRoots(javaFiles)
         addKotlinSourceRoots(kotlinFiles)
         addJvmClasspathRoots(classpath.map { File(it) })
