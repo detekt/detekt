@@ -19,7 +19,7 @@ open class CodeSmell(
     override val message: String,
     override val metrics: List<Metric> = listOf(),
     override val references: List<Entity> = listOf(),
-    override val autoCorrect: Boolean = false
+    override val autoCorrectEnabled: Boolean = false
 ) : Finding {
 
     override val id: String = issue.id

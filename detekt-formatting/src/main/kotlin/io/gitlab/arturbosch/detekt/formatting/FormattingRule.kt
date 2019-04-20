@@ -70,7 +70,7 @@ abstract class FormattingRule(config: Config) : Rule(config) {
                                     "($line, $column)",
                                     root.originalFilePath() ?: root.containingFile.name)),
                     message,
-                    autoCorrect = autoCorrect))
+                    autoCorrectEnabled = autoCorrect))
         }
     }
 
