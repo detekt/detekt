@@ -11,6 +11,7 @@ import io.gitlab.arturbosch.detekt.rules.bugs.InvalidRange
 import io.gitlab.arturbosch.detekt.rules.bugs.IteratorHasNextCallsNextMethod
 import io.gitlab.arturbosch.detekt.rules.bugs.IteratorNotThrowingNoSuchElementException
 import io.gitlab.arturbosch.detekt.rules.bugs.LateinitUsage
+import io.gitlab.arturbosch.detekt.rules.bugs.MissingWhenCase
 import io.gitlab.arturbosch.detekt.rules.bugs.UnconditionalJumpStatementInLoop
 import io.gitlab.arturbosch.detekt.rules.bugs.UnreachableCode
 import io.gitlab.arturbosch.detekt.rules.bugs.UnsafeCallOnNullableType
@@ -40,6 +41,7 @@ class PotentialBugProvider : RuleSetProvider {
                 WrongEqualsTypeParameter(config),
                 ExplicitGarbageCollectionCall(config),
                 LateinitUsage(config),
+                MissingWhenCase(config),
                 UnconditionalJumpStatementInLoop(config),
                 UnreachableCode(config),
                 UnsafeCallOnNullableType(config),

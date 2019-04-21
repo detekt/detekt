@@ -387,6 +387,8 @@ potential-bugs:
     active: false
     excludeAnnotatedProperties: ""
     ignoreOnClassesPattern: ""
+  MissingWhenCase:
+    active: false
   UnconditionalJumpStatementInLoop:
     active: false
   UnreachableCode:
