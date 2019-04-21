@@ -388,6 +388,8 @@ potential-bugs:
     ignoreOnClassesPattern: ""
   MissingWhenCase:
     active: false
+  RedundantElseInWhen:
+    active: false
   UnconditionalJumpStatementInLoop:
     active: false
   UnreachableCode:
