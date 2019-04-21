@@ -66,7 +66,7 @@ class DetektPlugin : Plugin<Project> {
             it.setExcludes(defaultExcludes)
             it.reportsDir.set(project.provider { extension.customReportsDir })
             it.reports = extension.reports
-            it.ignoreFailures.set(project.provider { extension.ignoreFailures })
+            it.setIgnoreFailures(project.provider { extension.ignoreFailures })
 
             project.subprojects.forEach { subProject ->
                 subProject.tasks.firstOrNull { t -> t is Detekt }?.let { subprojectTask ->

@@ -380,6 +380,7 @@ internal class DetektTaskDslTest : Spek({
                     |    disableDefaultRuleSets = true
                     |    buildUponDefaultConfig = true
                     |    failFast = false
+                    |    ignoreFailures = false
                     |    autoCorrect = false
                     |    reports {
                     |        xml {
@@ -416,6 +417,7 @@ internal class DetektTaskDslTest : Spek({
                     |    disableDefaultRuleSets = true
                     |    buildUponDefaultConfig = true
                     |    failFast = false
+                    |    ignoreFailures = false
                     |    autoCorrect = false
                     |    reports {
                     |        xml {

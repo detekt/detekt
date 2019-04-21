@@ -44,6 +44,7 @@ import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.VerificationTask
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import java.io.File
 
@@ -54,7 +55,7 @@ import java.io.File
  * @author Matthew Haughton
  */
 @CacheableTask
-open class Detekt : SourceTask() {
+open class Detekt : SourceTask(), VerificationTask {
 
     @Deprecated("Replace with getSource/setSource")
     var input: FileCollection
@@ -140,9 +141,12 @@ open class Detekt : SourceTask() {
         get() = failFastProp.get()
         set(value) = failFastProp.set(value)
 
+    private val ignoreFailuresProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     @Input
     @Optional
-    val ignoreFailures: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    override fun getIgnoreFailures(): Boolean = ignoreFailuresProp.get()
+    override fun setIgnoreFailures(value: Boolean) = ignoreFailuresProp.set(value)
+    fun setIgnoreFailures(value: Provider<Boolean>) = ignoreFailuresProp.set(value)
 
     @Optional
     @Input
@@ -226,7 +230,7 @@ open class Detekt : SourceTask() {
             project = project,
             arguments = arguments.toList(),
             debug = debugOrDefault,
-            ignoreFailures = ignoreFailures.getOrElse(false)
+            ignoreFailures = ignoreFailuresProp.getOrElse(false)
         )
 
         DetektInvoker.invokeCli(project, arguments.toList(), detektClasspath.plus(pluginClasspath), debugOrDefault)
