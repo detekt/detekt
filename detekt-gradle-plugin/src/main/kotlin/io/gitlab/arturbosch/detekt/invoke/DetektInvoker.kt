@@ -1,8 +1,10 @@
 package io.gitlab.arturbosch.detekt.invoke
 
+import io.gitlab.arturbosch.detekt.CONFIGURATION_DETEKT
+import io.gitlab.arturbosch.detekt.CONFIGURATION_DETEKT_PLUGINS
+import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.file.FileCollection
-import org.gradle.process.internal.ExecException
 
 /**
  * @author Marvin Ramin
@@ -30,8 +32,8 @@ object DetektInvoker {
         if (debug) println("Detekt finished with exit value $exitValue")
 
         when (exitValue) {
-            1 -> throw ExecException("There was a problem running detekt.")
-            2 -> if (!ignoreFailures) throw ExecException("MaxIssues or failThreshold count was reached.")
+            1 -> throw GradleException("There was a problem running detekt.")
+            2 -> if (!ignoreFailures) throw GradleException("MaxIssues or failThreshold count was reached.")
         }
     }
 }
