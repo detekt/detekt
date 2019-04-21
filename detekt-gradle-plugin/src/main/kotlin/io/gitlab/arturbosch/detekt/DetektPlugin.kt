@@ -110,7 +110,6 @@ class DetektPlugin : Plugin<Project> {
             it.disableDefaultRuleSets.set(project.provider { extension.disableDefaultRuleSets })
             it.buildUponDefaultConfig.set(project.provider { extension.buildUponDefaultConfig })
             it.failFast.set(project.provider { extension.failFast })
-            it.ignoreFailures.set(project.provider { extension.ignoreFailures })
             it.plugins.set(project.provider { extension.plugins })
             it.setSource(existingInputDirectoriesProvider(project, extension))
             it.setIncludes(defaultIncludes)

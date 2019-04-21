@@ -132,7 +132,6 @@ open class DetektCreateBaselineTask : SourceTask() {
             debug = debug.getOrElse(false),
             ignoreFailures = ignoreFailures.getOrElse(false),
             classpath = detektClasspath.plus(pluginClasspath),
-
-            )
+        )
     }
 }
