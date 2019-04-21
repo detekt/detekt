@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.cli.CliArgs
 import io.gitlab.arturbosch.detekt.cli.DetektProgressListener
 import io.gitlab.arturbosch.detekt.cli.OutputFacade
+import io.gitlab.arturbosch.detekt.cli.createFilters
 import io.gitlab.arturbosch.detekt.cli.createPathFilters
 import io.gitlab.arturbosch.detekt.cli.createPlugins
 import io.gitlab.arturbosch.detekt.cli.loadConfiguration
@@ -24,13 +25,16 @@ class SingleRuleRunner(private val arguments: CliArgs) : Executable {
         val (ruleSet, rule: RuleId) = arguments.runRule?.split(":")
             ?: throw IllegalStateException("Unexpected empty 'runRule' argument.")
 
-        val settings = ProcessingSettings(
-                arguments.inputPaths,
-                arguments.loadConfiguration(),
-                arguments.createPathFilters(),
-                arguments.parallel,
-                arguments.disableDefaultRuleSets,
-                arguments.createPlugins())
+        val settings = with(arguments) {
+            ProcessingSettings(
+                inputPaths = inputPaths,
+                config = loadConfiguration(),
+                pathFilters = createPathFilters(),
+                pathFiltersNew = createFilters(),
+                parallelCompilation = parallel,
+                excludeDefaultRuleSets = disableDefaultRuleSets,
+                pluginPaths = createPlugins())
+        }
 
         val realProvider = RuleSetLocator(settings).load()
                 .find { it.ruleSetId == ruleSet }

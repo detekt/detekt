@@ -13,8 +13,7 @@ import java.nio.file.PathMatcher
  */
 fun pathMatcher(pattern: String): PathMatcher {
 
-    val syntax = pattern.substringBefore(":")
-    val result = when (syntax) {
+    val result = when (pattern.substringBefore(":")) {
         "glob" -> pattern
         "regex" -> throw IllegalArgumentException(USE_GLOB_MSG)
         else -> "glob:$pattern"
@@ -27,7 +26,10 @@ private const val USE_GLOB_MSG =
     "Only globbing patterns are supported as they are treated os-independently by the PathMatcher api."
 
 fun KtFile.absolutePath(): String? = getUserData(ABSOLUTE_PATH)
+    ?: throw IllegalStateException("KtFile '$name' expected to have an absolute path.")
+
 fun KtFile.relativePath(): String? = getUserData(RELATIVE_PATH)
+    ?: throw IllegalStateException("KtFile '$name' expected to have an relative path.")
 
 val RELATIVE_PATH: Key<String> = Key("relativePath")
 val ABSOLUTE_PATH: Key<String> = Key("absolutePath")

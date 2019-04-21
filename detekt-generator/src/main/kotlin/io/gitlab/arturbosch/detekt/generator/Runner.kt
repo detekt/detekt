@@ -1,8 +1,10 @@
 package io.gitlab.arturbosch.detekt.generator
 
 import io.gitlab.arturbosch.detekt.core.KtTreeCompiler
+import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.generator.collection.DetektCollector
 import io.gitlab.arturbosch.detekt.generator.printer.DetektPrinter
+import java.nio.file.Path
 import kotlin.system.measureTimeMillis
 
 /**
@@ -14,11 +16,13 @@ class Runner(private val arguments: GeneratorArgs) {
     private val collector = DetektCollector()
     private val printer = DetektPrinter(arguments)
 
+    private fun createCompiler(path: Path) =
+        KtTreeCompiler.instance(ProcessingSettings(path))
+
     fun execute() {
         val time = measureTimeMillis {
-            val compiler = KtTreeCompiler()
             val ktFiles = arguments.inputPath
-                    .flatMap { compiler.compile(it) }
+                .flatMap { createCompiler(it).compile(it) }
             listeners.forEach { it.onStart(ktFiles) }
 
             ktFiles.forEach { file ->

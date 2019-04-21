@@ -23,6 +23,12 @@ class CliArgs : Args {
                     "These filters apply on relative paths from the project root.")
     var filters: String? = null // Using a converter for List<PathFilter> resulted in a ClassCastException
 
+    @Parameter(names = ["--include", "-in"])
+    var inclusions: String? = null
+
+    @Parameter(names = ["--exclude", "-ex"])
+    var exclusions: String? = null
+
     @Parameter(
         names = ["--classpath", "-cp"],
         required = false,

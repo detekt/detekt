@@ -11,15 +11,12 @@ import java.util.stream.Collectors
  */
 class KtTreeCompiler(
     private val compiler: KtCompiler = KtCompiler(),
-    private val filters: List<PathFilter> = listOf(),
-    private val parallel: Boolean = false,
-    private val debug: Boolean = false
+    private val settings: ProcessingSettings
 ) {
 
     companion object {
-        fun instance(settings: ProcessingSettings) = with(settings) {
-            KtTreeCompiler(KtCompiler(), pathFilters, parallelCompilation)
-        }
+        val KT_ENDINGS = setOf("kt", "kts")
+        fun instance(settings: ProcessingSettings): KtTreeCompiler = KtTreeCompiler(KtCompiler(), settings)
     }
 
     fun compile(path: Path): List<KtFile> {
@@ -28,28 +25,32 @@ class KtTreeCompiler(
             path.isFile() && path.isKotlinFile() -> listOf(compiler.compile(path, path))
             path.isDirectory() -> compileInternal(path)
             else -> {
-                if (debug) {
+                if (settings.debug) {
                     println("Ignoring a file detekt cannot handle: $path")
                 }
-                listOf()
+                emptyList()
             }
         }
     }
 
-    private fun streamFor(project: Path) = Files.walk(project).apply { if (parallel) parallel() }
+    private fun streamFor(project: Path) =
+        Files.walk(project).apply { if (settings.parallelCompilation) parallel() }
 
     private fun compileInternal(project: Path): List<KtFile> = streamFor(project)
-            .filter(Path::isFile)
-            .filter { it.isKotlinFile() }
-            .filter { notIgnored(it) }
-            .map { compiler.compile(project, it) }
-            .collect(Collectors.toList())
+        .filter(Path::isFile)
+        .filter { it.isKotlinFile() }
+        .filter { !ignored(it) }
+        .map { compiler.compile(project, it) }
+        .collect(Collectors.toList())
 
     private fun Path.isKotlinFile(): Boolean {
         val fullPath = toAbsolutePath().toString()
         val kotlinEnding = fullPath.substring(fullPath.lastIndexOf('.') + 1)
-        return kotlinEnding == "kt" || kotlinEnding == "kts"
+        return kotlinEnding in KT_ENDINGS
     }
 
-    private fun notIgnored(path: Path) = !filters.any { it.matches(path) }
+    private fun ignored(path: Path): Boolean {
+        val matchers = settings.pathFiltersNew ?: return false
+        return matchers.isIgnored(path)
+    }
 }
