@@ -49,6 +49,7 @@ import java.io.File
  * @author Artur Bosch
  * @author Marvin Ramin
  * @author Markus Schwarz
+ * @author Matthew Haughton
  */
 @CacheableTask
 open class Detekt : SourceTask() {
@@ -62,6 +63,12 @@ open class Detekt : SourceTask() {
     @Optional
     @Deprecated("Replace with setIncludes/setExcludes")
     var filters: Property<String> = project.objects.property(String::class.java)
+
+    @Classpath
+    val detektClasspath = project.configurableFileCollection()
+
+    @Classpath
+    val pluginClasspath = project.configurableFileCollection()
 
     @InputFile
     @Optional
@@ -195,7 +202,7 @@ open class Detekt : SourceTask() {
             CustomReportArgument(reportId, destination)
         })
 
-        DetektInvoker.invokeCli(project, arguments.toList(), debugOrDefault)
+        DetektInvoker.invokeCli(project, arguments.toList(), detektClasspath.plus(pluginClasspath), debugOrDefault)
 
         if (xmlReportTargetFileOrNull != null) {
             val xmlReports = project.subprojects.flatMap { subproject ->

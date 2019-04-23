@@ -17,6 +17,7 @@ import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.FileCollection
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
+import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
@@ -32,6 +33,7 @@ import org.gradle.language.base.plugins.LifecycleBasePlugin
  * @author Artur Bosch
  * @author Marvin Ramin
  * @author Markus Schwarz
+ * @author Matthew Haughton
  */
 open class DetektCreateBaselineTask : SourceTask() {
 
@@ -62,6 +64,12 @@ open class DetektCreateBaselineTask : SourceTask() {
     @Input
     @Optional
     var plugins: Property<String> = project.objects.property(String::class.java)
+
+    @Classpath
+    val detektClasspath = project.configurableFileCollection()
+
+    @Classpath
+    val pluginClasspath = project.configurableFileCollection()
 
     @Internal
     @Optional
@@ -98,6 +106,11 @@ open class DetektCreateBaselineTask : SourceTask() {
             DisableDefaultRuleSetArgument(disableDefaultRuleSets.getOrElse(false))
         )
 
-        DetektInvoker.invokeCli(project, arguments.toList(), debug.getOrElse(false))
+        DetektInvoker.invokeCli(
+            project,
+            arguments.toList(),
+            detektClasspath.plus(pluginClasspath),
+            debug.getOrElse(false)
+        )
     }
 }
