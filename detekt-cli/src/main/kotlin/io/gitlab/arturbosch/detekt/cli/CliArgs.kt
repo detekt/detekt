@@ -18,10 +18,12 @@ class CliArgs : Args {
                     "current working directory is used.")
     private var input: String? = null
 
-    @Parameter(names = ["--include", "-in"])
+    @Parameter(names = ["--include", "-in"],
+        description = "Globing patterns describing paths to include in the analysis. Useful in combination with 'excludes' patterns.")
     var includes: String? = null
 
-    @Parameter(names = ["--exclude", "-ex"])
+    @Parameter(names = ["--exclude", "-ex"],
+        description = "Globing patterns describing paths to exclude from the analysis.")
     var excludes: String? = null
 
     @Parameter(
