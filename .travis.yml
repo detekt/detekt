@@ -18,7 +18,7 @@ matrix:
       osx_image: xcode10.2
 install: true
 script:
-  - ./gradlew build --build-cache -PwarningsAsErrors=true --scan
+  - ./gradlew build --build-cache --parallel -PwarningsAsErrors=true --scan
   - ./gradlew shadowJar
   - java -jar ./detekt-cli/build/libs/detekt-cli-*-all.jar --help
   - java -jar ./detekt-cli/build/libs/detekt-cli-*-all.jar -i . --baseline ./reports/baseline.xml -ex "**/resources/**,**/detekt*/build/**" -c ./detekt-cli/src/main/resources/default-detekt-config.yml,./reports/failfast.yml
