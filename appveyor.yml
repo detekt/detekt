@@ -30,7 +30,7 @@ build_script:
   - detekt-cli\build\install\detekt-cli-shadow\bin\detekt-cli --help
 
 test_script:
-  - detekt-cli\build\install\detekt-cli-shadow\bin\detekt-cli -i . --baseline reports\baseline.xml -f ".*/resources/.*,.*/build/.*" -c detekt-cli\src\main\resources\default-detekt-config.yml,reports\failfast.yml
+  - detekt-cli\build\install\detekt-cli-shadow\bin\detekt-cli -i . --baseline reports\baseline.xml -ex "**/resources/**,**/detekt*/build/**" -c detekt-cli\src\main\resources\default-detekt-config.yml,reports\failfast.yml
   - gradlew verifyGeneratorOutput
 
 after_test:
