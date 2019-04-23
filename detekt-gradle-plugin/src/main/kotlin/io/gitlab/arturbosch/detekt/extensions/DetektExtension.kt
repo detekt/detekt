@@ -12,6 +12,7 @@ import java.io.File
  * @author Said Tahsin Dane
  * @author Marvin Ramin
  * @author Markus Schwarz
+ * @author Matthew Haughton
  */
 open class DetektExtension(project: Project) : CodeQualityExtension() {
 
@@ -44,6 +45,8 @@ open class DetektExtension(project: Project) : CodeQualityExtension() {
     @Deprecated("Replace with task setIncludes/setExcludes")
     var filters: String? = null
 
+    @Deprecated("Set plugins using the detektPlugins configuration " +
+            "(see https://arturbosch.github.io/detekt/extensions.html#let-detekt-know-about-your-extensions)")
     var plugins: String? = null
 
     companion object {

@@ -21,6 +21,7 @@ import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
 import io.gitlab.arturbosch.detekt.invoke.PluginsArgument
 import io.gitlab.arturbosch.detekt.output.mergeXmlReports
 import org.gradle.api.Action
+import org.gradle.api.GradleException
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
 import org.gradle.api.file.FileCollection
@@ -94,6 +95,8 @@ open class Detekt : SourceTask() {
 
     @Input
     @Optional
+    @Deprecated("Set plugins using the detektPlugins configuration " +
+            "(see https://arturbosch.github.io/detekt/extensions.html#let-detekt-know-about-your-extensions)")
     var plugins: Property<String> = project.objects.property(String::class.java)
 
     @Internal
@@ -171,6 +174,9 @@ open class Detekt : SourceTask() {
 
     @TaskAction
     fun check() {
+        if (plugins.isPresent && !pluginClasspath.isEmpty)
+            throw GradleException("Cannot set value for plugins on detekt task and apply detektPlugins configuration " +
+                    "at the same time.")
         val xmlReportTargetFileOrNull = xmlReportFile.orNull
         val htmlReportTargetFileOrNull = htmlReportFile.orNull
         val debugOrDefault = debugProp.getOrElse(false)
