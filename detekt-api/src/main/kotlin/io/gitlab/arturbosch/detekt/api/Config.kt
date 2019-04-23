@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.api
 
 import io.gitlab.arturbosch.detekt.api.Config.Companion.PRIMITIVES
+import java.util.LinkedList
 import kotlin.reflect.KClass
 
 /**
@@ -113,12 +114,11 @@ abstract class BaseConfig : HierarchicalConfig {
     }
 
     private fun keySequence(key: String): String {
-        val seq: Sequence<String> = sequence {
-            var current = parent
-            while (current != null) {
-                yield(current.key)
-                current = (current.config as? HierarchicalConfig)?.parent
-            }
+        val seq = LinkedList<String>()
+        var current = parent
+        while (current != null) {
+            seq.addFirst(current.key)
+            current = (current.config as? HierarchicalConfig)?.parent
         }
         val keySeq = seq.joinToString(" > ")
         return if (keySeq.isEmpty()) key else "$keySeq > $key"

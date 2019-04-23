@@ -67,7 +67,7 @@ class ConfigSpec : Spek({
                 config.subConfig("RuleSet")
                     .subConfig("Rule")
                     .valueOrDefault("threshold", 6)
-            }.withMessage("Value \"v5.7\" set for config parameter \"Rule > RuleSet > threshold\" is not of required type Int.")
+            }.withMessage("Value \"v5.7\" set for config parameter \"RuleSet > Rule > threshold\" is not of required type Int.")
         }
 
         it("prints whole config-key path for ClassCastException") {
@@ -76,7 +76,7 @@ class ConfigSpec : Spek({
                 val bool: Int = config.subConfig("RuleSet")
                     .subConfig("Rule")
                     .valueOrDefault("active", 1)
-            }.withMessage("Value \"[]\" set for config parameter \"Rule > RuleSet > active\" is not of required type Int.")
+            }.withMessage("Value \"[]\" set for config parameter \"RuleSet > Rule > active\" is not of required type Int.")
         }
     }
 })
