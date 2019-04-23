@@ -21,8 +21,9 @@ class PathFilters internal constructor(
             if (value == null) {
                 null
             } else {
-                SplitPattern(value, removeTrailingAsterisks = false)
-                    .mapAll { pathMatcher(it) }.toSet()
+                SplitPattern(value, delimiters = ",;", removeTrailingAsterisks = false)
+                    .mapAll { pathMatcher(it) }
+                    .toSet()
             }
     }
 
