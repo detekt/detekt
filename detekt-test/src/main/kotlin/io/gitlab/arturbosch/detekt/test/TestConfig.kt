@@ -1,12 +1,16 @@
 package io.gitlab.arturbosch.detekt.test
 
 import io.gitlab.arturbosch.detekt.api.BaseConfig
+import io.gitlab.arturbosch.detekt.api.HierarchicalConfig
 
 /**
  * @author Artur Bosch
  */
 @Suppress("UNCHECKED_CAST")
-open class TestConfig(private val values: Map<String, String> = mutableMapOf()) : BaseConfig() {
+open class TestConfig(
+    private val values: Map<String, String> = mutableMapOf(),
+    override val parent: HierarchicalConfig.Parent? = null
+) : BaseConfig() {
 
     override fun subConfig(key: String) = this
 
@@ -35,9 +39,9 @@ open class TestConfig(private val values: Map<String, String> = mutableMapOf()) 
         if (result.startsWith('[') && result.endsWith(']')) {
             val str = result.substring(1, result.length - 1)
             return str.splitToSequence(',')
-                    .map { it.trim() }
-                    .filter { it.isNotEmpty() }
-                    .toList()
+                .map { it.trim() }
+                .filter { it.isNotEmpty() }
+                .toList()
         }
         throw ClassCastException()
     }

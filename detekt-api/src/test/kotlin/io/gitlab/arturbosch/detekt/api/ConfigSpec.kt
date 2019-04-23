@@ -5,7 +5,6 @@ import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.assertj.core.api.Assertions.fail
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
-import java.nio.file.Paths
 
 /**
  * @author Artur Bosch
@@ -13,8 +12,8 @@ import java.nio.file.Paths
 class ConfigSpec : Spek({
 
     describe("load yaml config") {
-        val configPath = Paths.get(resource("/detekt.yml"))
-        val config = YamlConfig.load(configPath)
+
+        val config by memoized { yamlConfig("detekt.yml") }
 
         it("should create a sub config") {
             try {
@@ -41,10 +40,10 @@ class ConfigSpec : Spek({
         }
 
         it("tests wrong sub config conversion") {
-            assertThatExceptionOfType(ClassCastException::class.java).isThrownBy {
+            assertThatExceptionOfType(IllegalStateException::class.java).isThrownBy {
                 @Suppress("UNUSED_VARIABLE")
                 val ignored = config.valueOrDefault("style", "")
-            }
+            }.withMessage("Value \"{WildcardImport={active=true}, NoElseInWhenExpression={active=true}, MagicNumber={active=true, ignoreNumbers=-1,0,1,2}}\" set for config parameter \"style\" is not of required type String.")
         }
     }
 
@@ -56,6 +55,28 @@ class ConfigSpec : Spek({
 
         it("single item in yaml file is valid") {
             YamlConfig.loadResource(javaClass.getResource("/oneitem.yml"))
+        }
+    }
+
+    describe("meaningful error messages") {
+
+        val config by memoized { yamlConfig("wrong-property-type.yml") }
+
+        it("prints whole config-key path for NumberFormatException") {
+            assertThatExceptionOfType(IllegalStateException::class.java).isThrownBy {
+                config.subConfig("RuleSet")
+                    .subConfig("Rule")
+                    .valueOrDefault("threshold", 6)
+            }.withMessage("Value \"v5.7\" set for config parameter \"Rule > RuleSet > threshold\" is not of required type Int.")
+        }
+
+        it("prints whole config-key path for ClassCastException") {
+            assertThatExceptionOfType(IllegalStateException::class.java).isThrownBy {
+                @Suppress("UNUSED_VARIABLE")
+                val bool: Int = config.subConfig("RuleSet")
+                    .subConfig("Rule")
+                    .valueOrDefault("active", 1)
+            }.withMessage("Value \"[]\" set for config parameter \"Rule > RuleSet > active\" is not of required type Int.")
         }
     }
 })
