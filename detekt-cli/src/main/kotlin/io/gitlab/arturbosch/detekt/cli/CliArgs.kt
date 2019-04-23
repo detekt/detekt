@@ -19,10 +19,10 @@ class CliArgs : Args {
     private var input: String? = null
 
     @Parameter(names = ["--include", "-in"])
-    var inclusions: String? = null
+    var includes: String? = null
 
     @Parameter(names = ["--exclude", "-ex"])
-    var exclusions: String? = null
+    var excludes: String? = null
 
     @Parameter(
         names = ["--classpath", "-cp"],

@@ -10,7 +10,7 @@ import java.nio.file.Path
  * @author Artur Bosch
  */
 
-fun CliArgs.createFilters(): PathFilters? = PathFilters.of(inclusions, exclusions)
+fun CliArgs.createFilters(): PathFilters? = PathFilters.of(includes, excludes)
 
 fun CliArgs.createPlugins(): List<Path> = plugins.letIfNonEmpty {
     MultipleExistingPathConverter().convert(this)

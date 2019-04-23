@@ -88,7 +88,7 @@ internal class ConfigurationsSpec : Spek({
     describe("parse different filter settings") {
 
         it("should load single filter") {
-            val filters = CliArgs { exclusions = "**/one/**" }.createFilters()
+            val filters = CliArgs { excludes = "**/one/**" }.createFilters()
             assertThat(filters?.isIgnored(Paths.get("/one/path"))).isTrue()
             assertThat(filters?.isIgnored(Paths.get("/two/path"))).isFalse()
         }
@@ -105,39 +105,39 @@ internal class ConfigurationsSpec : Spek({
             }
 
             it("should load multiple comma-separated filters with no spaces around commas") {
-                val filters = CliArgs { exclusions = "**/one/**,**/two/**,**/three" }.createFilters()
+                val filters = CliArgs { excludes = "**/one/**,**/two/**,**/three" }.createFilters()
                 assertFilters(filters)
             }
 
             it("should load multiple semicolon-separated filters with no spaces around semicolons") {
-                val filters = CliArgs { exclusions = "**/one/**;**/two/**;**/three" }.createFilters()
+                val filters = CliArgs { excludes = "**/one/**;**/two/**;**/three" }.createFilters()
                 assertFilters(filters)
             }
 
             it("should load multiple comma-separated filters with spaces around commas") {
-                val filters = CliArgs { exclusions = "**/one/** ,**/two/**, **/three" }.createFilters()
+                val filters = CliArgs { excludes = "**/one/** ,**/two/**, **/three" }.createFilters()
                 assertFilters(filters)
             }
 
             it("should load multiple semicolon-separated filters with spaces around semicolons") {
-                val filters = CliArgs { exclusions = "**/one/** ;**/two/**; **/three" }.createFilters()
+                val filters = CliArgs { excludes = "**/one/** ;**/two/**; **/three" }.createFilters()
                 assertFilters(filters)
             }
 
             it("should load multiple mixed-separated filters with no spaces around separators") {
-                val filters = CliArgs { exclusions = "**/one/**,**/two/**;**/three" }.createFilters()
+                val filters = CliArgs { excludes = "**/one/**,**/two/**;**/three" }.createFilters()
                 assertFilters(filters)
             }
 
             it("should load multiple mixed-separated filters with spaces around separators") {
-                val filters = CliArgs { exclusions = "**/one/** ,**/two/**; **/three" }.createFilters()
+                val filters = CliArgs { excludes = "**/one/** ,**/two/**; **/three" }.createFilters()
                 assertFilters(filters)
             }
 
         }
 
         it("should ignore empty and blank filters") {
-            val filters = CliArgs { exclusions = " ,,**/three" }.createFilters()
+            val filters = CliArgs { excludes = " ,,**/three" }.createFilters()
             assertThat(filters?.isIgnored(Paths.get("/three"))).isTrue()
             assertThat(filters?.isIgnored(Paths.get("/root/three"))).isTrue()
             assertThat(filters?.isIgnored(Paths.get("/one/path"))).isFalse()
