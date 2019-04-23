@@ -67,6 +67,34 @@ data class DataClassWithFunctions(val i: Int) {
 }
 ```
 
+### DataClassShouldBeImmutable
+
+This rule reports mutable properties inside data classes.
+
+Data classes should mainly be used to store immutable data. This rule assumes that they should not contain any
+mutable properties.
+
+**Severity**: Style
+
+**Debt**: 20min
+
+#### Noncompliant Code:
+
+```kotlin
+data class MutableDataClass(var i: Int) {
+    var s: String? = null
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+data class ImmutableDataClass(
+    val i: Int,
+    val s: String?
+)
+```
+
 ### EqualsNullCall
 
 To compare an object with `null` prefer using `==`. This rule detects and reports instances in the code where the

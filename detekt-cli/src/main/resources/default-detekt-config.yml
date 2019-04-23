@@ -407,6 +407,8 @@ style:
   DataClassContainsFunctions:
     active: false
     conversionFunctionPrefix: 'to'
+  DataClassShouldBeImmutable:
+    active: false
   EqualsNullCall:
     active: false
   EqualsOnSignatureLine:

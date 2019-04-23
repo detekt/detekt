@@ -18,6 +18,8 @@ enum class Case(val file: String) {
     ConstInObjects("/cases/ConstInObjects.kt"),
     DataClassContainsFunctionsPositive("/cases/DataClassContainsFunctionsPositive.kt"),
     DataClassContainsFunctionsNegative("/cases/DataClassContainsFunctionsNegative.kt"),
+    DataClassShouldBeImmutablePositive("/cases/DataClassShouldBeImmutablePositive.kt"),
+    DataClassShouldBeImmutableNegative("/cases/DataClassShouldBeImmutableNegative.kt"),
     Default("/cases/Default.kt"),
     Empty("/cases/Empty.kt"),
     EmptyKtFile("/cases/EmptyKtFile.kt"),
