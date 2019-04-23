@@ -50,7 +50,7 @@ class KtTreeCompiler(
     }
 
     private fun ignored(path: Path): Boolean {
-        val matchers = settings.pathFiltersNew ?: return false
+        val matchers = settings.pathFilters ?: return false
         return matchers.isIgnored(path)
     }
 }

@@ -19,8 +19,7 @@ import java.util.concurrent.ForkJoinPool
 data class ProcessingSettings @JvmOverloads constructor(
     val inputPaths: List<Path>,
     val config: Config = Config.empty,
-    val pathFilters: List<PathFilter> = listOf(),
-    val pathFiltersNew: PathFilters? = null,
+    val pathFilters: PathFilters? = null,
     val parallelCompilation: Boolean = false,
     val excludeDefaultRuleSets: Boolean = false,
     val pluginPaths: List<Path> = emptyList(),
@@ -36,8 +35,7 @@ data class ProcessingSettings @JvmOverloads constructor(
     constructor(
         inputPath: Path,
         config: Config = Config.empty,
-        pathFilters: List<PathFilter> = listOf(),
-        pathFiltersNew: PathFilters? = null,
+        pathFilters: PathFilters? = null,
         parallelCompilation: Boolean = false,
         excludeDefaultRuleSets: Boolean = false,
         pluginPaths: List<Path> = emptyList(),
@@ -50,7 +48,6 @@ data class ProcessingSettings @JvmOverloads constructor(
         listOf(inputPath),
         config,
         pathFilters,
-        pathFiltersNew,
         parallelCompilation,
         excludeDefaultRuleSets,
         pluginPaths,

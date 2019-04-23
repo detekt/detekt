@@ -12,7 +12,7 @@ class KtTreeCompilerSpec : Spek({
 
     fun fixture(vararg filters: String): KtTreeCompiler =
         KtTreeCompiler(settings = ProcessingSettings(path,
-            pathFiltersNew = PathFilters.of(null, filters.joinToString(","))))
+            pathFilters = PathFilters.of(null, filters.joinToString(","))))
 
     describe("tree compiler functionality") {
 

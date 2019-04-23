@@ -18,11 +18,6 @@ class CliArgs : Args {
                     "current working directory is used.")
     private var input: String? = null
 
-    @Parameter(names = ["--filters", "-f"],
-            description = "Path filters defined through regex with separator ';' or ',' (\".*test.*\"). " +
-                    "These filters apply on relative paths from the project root.")
-    var filters: String? = null // Using a converter for List<PathFilter> resulted in a ClassCastException
-
     @Parameter(names = ["--include", "-in"])
     var inclusions: String? = null
 

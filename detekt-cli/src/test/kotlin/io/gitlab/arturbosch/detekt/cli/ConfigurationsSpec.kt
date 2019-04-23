@@ -2,13 +2,14 @@ package io.gitlab.arturbosch.detekt.cli
 
 import com.beust.jcommander.ParameterException
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.core.PathFilter
+import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
+import java.nio.file.Paths
 
 /**
  * @author Artur Bosch
@@ -31,45 +32,45 @@ internal class ConfigurationsSpec : Spek({
         val pathThree = resource("/configs/three.yml").path
 
         it("should load single config") {
-            val config = CliArgs().apply { config = pathOne }.loadConfiguration()
+            val config = CliArgs { config = pathOne }.loadConfiguration()
             assertThat(config.valueOrDefault("one", -1)).isEqualTo(1)
         }
 
         it("should load two configs") {
-            val config = CliArgs().apply { config = "$pathOne, $pathTwo" }.loadConfiguration()
+            val config = CliArgs { config = "$pathOne, $pathTwo" }.loadConfiguration()
             assertThat(config.valueOrDefault("one", -1)).isEqualTo(1)
             assertThat(config.valueOrDefault("two", -1)).isEqualTo(2)
         }
 
         it("should load three configs") {
-            val config = CliArgs().apply { config = "$pathOne, $pathTwo;$pathThree" }.loadConfiguration()
+            val config = CliArgs { config = "$pathOne, $pathTwo;$pathThree" }.loadConfiguration()
             assertThat(config.valueOrDefault("one", -1)).isEqualTo(1)
             assertThat(config.valueOrDefault("two", -1)).isEqualTo(2)
             assertThat(config.valueOrDefault("three", -1)).isEqualTo(3)
         }
 
         it("should fail on invalid config value") {
-            assertThatIllegalArgumentException().isThrownBy { CliArgs().apply { config = "," }.loadConfiguration() }
-            assertThatExceptionOfType(ParameterException::class.java).isThrownBy { CliArgs().apply { config = "sfsjfsdkfsd" }.loadConfiguration() }
-            assertThatExceptionOfType(ParameterException::class.java).isThrownBy { CliArgs().apply { config = "./i.do.not.exist.yml" }.loadConfiguration() }
+            assertThatIllegalArgumentException().isThrownBy { CliArgs { config = "," }.loadConfiguration() }
+            assertThatExceptionOfType(ParameterException::class.java).isThrownBy { CliArgs { config = "sfsjfsdkfsd" }.loadConfiguration() }
+            assertThatExceptionOfType(ParameterException::class.java).isThrownBy { CliArgs { config = "./i.do.not.exist.yml" }.loadConfiguration() }
         }
     }
 
     describe("parse different resource based configuration settings") {
 
         it("should load single config") {
-            val config = CliArgs().apply { configResource = "/configs/one.yml" }.loadConfiguration()
+            val config = CliArgs { configResource = "/configs/one.yml" }.loadConfiguration()
             assertThat(config.valueOrDefault("one", -1)).isEqualTo(1)
         }
 
         it("should load two configs") {
-            val config = CliArgs().apply { configResource = "/configs/one.yml, /configs/two.yml" }.loadConfiguration()
+            val config = CliArgs { configResource = "/configs/one.yml, /configs/two.yml" }.loadConfiguration()
             assertThat(config.valueOrDefault("one", -1)).isEqualTo(1)
             assertThat(config.valueOrDefault("two", -1)).isEqualTo(2)
         }
 
         it("should load three configs") {
-            val config = CliArgs().apply {
+            val config = CliArgs {
                 configResource = "/configs/one.yml, /configs/two.yml;configs/three.yml"
             }.loadConfiguration()
             assertThat(config.valueOrDefault("one", -1)).isEqualTo(1)
@@ -78,86 +79,75 @@ internal class ConfigurationsSpec : Spek({
         }
 
         it("should fail on invalid config value") {
-            assertThatExceptionOfType(Config.InvalidConfigurationError::class.java).isThrownBy { CliArgs().apply { configResource = "," }.loadConfiguration() }
-            assertThatExceptionOfType(ParameterException::class.java).isThrownBy { CliArgs().apply { configResource = "sfsjfsdkfsd" }.loadConfiguration() }
-            assertThatExceptionOfType(ParameterException::class.java).isThrownBy { CliArgs().apply { configResource = "./i.do.not.exist.yml" }.loadConfiguration() }
+            assertThatExceptionOfType(Config.InvalidConfigurationError::class.java).isThrownBy { CliArgs { configResource = "," }.loadConfiguration() }
+            assertThatExceptionOfType(ParameterException::class.java).isThrownBy { CliArgs { configResource = "sfsjfsdkfsd" }.loadConfiguration() }
+            assertThatExceptionOfType(ParameterException::class.java).isThrownBy { CliArgs { configResource = "./i.do.not.exist.yml" }.loadConfiguration() }
         }
     }
 
     describe("parse different filter settings") {
 
         it("should load single filter") {
-            val filters = CliArgs().apply { filters = ".*/one/.*" }.createPathFilters()
-            assertThat(filters).containsExactly(PathFilter(".*/one/.*"))
+            val filters = CliArgs { exclusions = "**/one/**" }.createFilters()
+            assertThat(filters?.isIgnored(Paths.get("/one/path"))).isTrue()
+            assertThat(filters?.isIgnored(Paths.get("/two/path"))).isFalse()
         }
 
-        it("should load multiple comma-separated filters with no spaces around commas") {
-            val filters = CliArgs().apply { filters = ".*/one/.*,.*/two/.*,.*/three" }.createPathFilters()
-            assertThat(filters).containsExactly(
-                    PathFilter(".*/one/.*"),
-                    PathFilter(".*/two/.*"),
-                    PathFilter(".*/three")
-            )
-        }
+        describe("parsing with different separators") {
 
-        it("should load multiple semicolon-separated filters with no spaces around semicolons") {
-            val filters = CliArgs().apply { filters = ".*/one/.*;.*/two/.*;.*/three" }.createPathFilters()
-            assertThat(filters).containsExactly(
-                    PathFilter(".*/one/.*"),
-                    PathFilter(".*/two/.*"),
-                    PathFilter(".*/three")
-            )
-        }
+            // can parse pattern **/one/**,**/two/**,**/three
+            fun assertFilters(filters: PathFilters?) {
+                assertThat(filters?.isIgnored(Paths.get("/one/path"))).isTrue()
+                assertThat(filters?.isIgnored(Paths.get("/two/path"))).isTrue()
+                assertThat(filters?.isIgnored(Paths.get("/three"))).isTrue()
+                assertThat(filters?.isIgnored(Paths.get("/root/three"))).isTrue()
+                assertThat(filters?.isIgnored(Paths.get("/three/path"))).isFalse()
+            }
 
-        it("should load multiple comma-separated filters with spaces around commas") {
-            val filters = CliArgs().apply { filters = ".*/one/.* ,.*/two/.*, .*/three" }.createPathFilters()
-            assertThat(filters).containsExactly(
-                    PathFilter(".*/one/.*"),
-                    PathFilter(".*/two/.*"),
-                    PathFilter(".*/three")
-            )
-        }
+            it("should load multiple comma-separated filters with no spaces around commas") {
+                val filters = CliArgs { exclusions = "**/one/**,**/two/**,**/three" }.createFilters()
+                assertFilters(filters)
+            }
 
-        it("should load multiple semicolon-separated filters with spaces around semicolons") {
-            val filters = CliArgs().apply { filters = ".*/one/.* ;.*/two/.*; .*/three" }.createPathFilters()
-            assertThat(filters).containsExactly(
-                    PathFilter(".*/one/.*"),
-                    PathFilter(".*/two/.*"),
-                    PathFilter(".*/three")
-            )
-        }
+            it("should load multiple semicolon-separated filters with no spaces around semicolons") {
+                val filters = CliArgs { exclusions = "**/one/**;**/two/**;**/three" }.createFilters()
+                assertFilters(filters)
+            }
 
-        it("should load multiple mixed-separated filters with no spaces around separators") {
-            val filters = CliArgs().apply { filters = ".*/one/.*,.*/two/.*;.*/three" }.createPathFilters()
-            assertThat(filters).containsExactly(
-                    PathFilter(".*/one/.*"),
-                    PathFilter(".*/two/.*"),
-                    PathFilter(".*/three")
-            )
-        }
+            it("should load multiple comma-separated filters with spaces around commas") {
+                val filters = CliArgs { exclusions = "**/one/** ,**/two/**, **/three" }.createFilters()
+                assertFilters(filters)
+            }
 
-        it("should load multiple mixed-separated filters with spaces around separators") {
-            val filters = CliArgs().apply { filters = ".*/one/.* ,.*/two/.*; .*/three" }.createPathFilters()
-            assertThat(filters).containsExactly(
-                    PathFilter(".*/one/.*"),
-                    PathFilter(".*/two/.*"),
-                    PathFilter(".*/three")
-            )
+            it("should load multiple semicolon-separated filters with spaces around semicolons") {
+                val filters = CliArgs { exclusions = "**/one/** ;**/two/**; **/three" }.createFilters()
+                assertFilters(filters)
+            }
+
+            it("should load multiple mixed-separated filters with no spaces around separators") {
+                val filters = CliArgs { exclusions = "**/one/**,**/two/**;**/three" }.createFilters()
+                assertFilters(filters)
+            }
+
+            it("should load multiple mixed-separated filters with spaces around separators") {
+                val filters = CliArgs { exclusions = "**/one/** ,**/two/**; **/three" }.createFilters()
+                assertFilters(filters)
+            }
+
         }
 
         it("should ignore empty and blank filters") {
-            val filters = CliArgs().apply { filters = " ,,.*/three" }.createPathFilters()
-            assertThat(filters).containsExactly(PathFilter(".*/three"))
-        }
-
-        it("should fail on invalid filters values") {
-            assertThatIllegalArgumentException().isThrownBy { CliArgs().apply { filters = "*." }.createPathFilters() }
-            assertThatIllegalArgumentException().isThrownBy { CliArgs().apply { filters = "(ahel" }.createPathFilters() }
+            val filters = CliArgs { exclusions = " ,,**/three" }.createFilters()
+            assertThat(filters?.isIgnored(Paths.get("/three"))).isTrue()
+            assertThat(filters?.isIgnored(Paths.get("/root/three"))).isTrue()
+            assertThat(filters?.isIgnored(Paths.get("/one/path"))).isFalse()
+            assertThat(filters?.isIgnored(Paths.get("/two/path"))).isFalse()
+            assertThat(filters?.isIgnored(Paths.get("/three/path"))).isFalse()
         }
     }
 
     describe("fail fast only") {
-        val config = CliArgs().apply { configResource = "/configs/fail-fast-only.yml" }.loadConfiguration()
+        val config = CliArgs { configResource = "/configs/fail-fast-only.yml" }.loadConfiguration()
 
         it("should override active to true by default") {
             assertThat(config.subConfig("comments").subConfig("UndocumentedPublicClass").valueOrDefault("active", false)).isEqualTo(true)
@@ -173,7 +163,7 @@ internal class ConfigurationsSpec : Spek({
     }
 
     describe("fail fast override") {
-        val config = CliArgs().apply { configResource = "/configs/fail-fast-override.yml" }.loadConfiguration()
+        val config = CliArgs { configResource = "/configs/fail-fast-override.yml" }.loadConfiguration()
 
         it("should override config when specified") {
             assertThat(config.subConfig("style").subConfig("MaxLineLength").valueOrDefault("maxLineLength", -1)).isEqualTo(100)

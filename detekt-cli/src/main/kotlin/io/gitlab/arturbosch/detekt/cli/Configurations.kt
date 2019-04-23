@@ -4,21 +4,11 @@ import io.gitlab.arturbosch.detekt.api.CompositeConfig
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.YamlConfig
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
-import io.gitlab.arturbosch.detekt.core.PathFilter
 import java.nio.file.Path
 
 /**
  * @author Artur Bosch
  */
-
-fun CliArgs.createPathFilters(): List<PathFilter> = filters.letIfNonEmpty {
-    split(SEPARATOR_COMMA, SEPARATOR_SEMICOLON)
-        .asSequence()
-        .map { it.trim() }
-        .filter { it.isNotEmpty() }
-        .map { filter -> PathFilter(filter) }
-        .toList()
-}
 
 fun CliArgs.createFilters(): PathFilters? = PathFilters.of(inclusions, exclusions)
 
