@@ -12,7 +12,7 @@ script:
   - ./gradlew verifyGeneratorOutput
 after_success:
   - .buildscript/deploy_snapshot.sh
-  - ./gradlew rootJacocoTestReport
+  - ./gradlew jacocoTestReport
   - bash <(curl -s https://codecov.io/bash)
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
