@@ -14,7 +14,8 @@ import java.nio.file.Paths
 
 fun createTestPattern(
     config: Config,
-    root: Path = Paths.get("").toAbsolutePath()): TestPattern {
+    root: Path = Paths.get("").toAbsolutePath()
+): TestPattern {
     return with(config.subConfig(TEST_PATTERN_SUB_CONFIG)) {
         TestPattern(valueOrDefault(TestPattern.ACTIVE, false),
                 valueOrDefault(TestPattern.PATTERNS, TestPattern.DEFAULT_PATTERNS).toSet(),

@@ -18,7 +18,8 @@ open class CodeSmell(
     override val entity: Entity,
     override val message: String,
     override val metrics: List<Metric> = listOf(),
-    override val references: List<Entity> = listOf()) : Finding {
+    override val references: List<Entity> = listOf()
+) : Finding {
 
     override val id: String = issue.id
 

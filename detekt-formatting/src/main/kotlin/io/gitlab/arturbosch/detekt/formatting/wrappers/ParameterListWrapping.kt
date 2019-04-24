@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.formatting.wrappers
 
-import com.github.shyiko.ktlint.core.EditorConfig
-import com.github.shyiko.ktlint.ruleset.standard.ParameterListWrappingRule
+import com.pinterest.ktlint.core.EditorConfig
+import com.pinterest.ktlint.ruleset.standard.ParameterListWrappingRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.formatting.DEFAULT_INDENT
 import io.gitlab.arturbosch.detekt.formatting.FormattingRule

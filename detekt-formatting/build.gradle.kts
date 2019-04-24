@@ -9,10 +9,13 @@ val spekVersion: String by project
 dependencies {
     implementation(kotlin("compiler-embeddable"))
     implementation(project(":detekt-api"))
-    implementation("com.github.shyiko.ktlint:ktlint-ruleset-standard:$ktlintVersion") {
+    implementation("com.pinterest.ktlint:ktlint-ruleset-standard:$ktlintVersion") {
         exclude(group = "org.jetbrains.kotlin")
     }
-    implementation("com.github.shyiko.ktlint:ktlint-core:$ktlintVersion") {
+    implementation("com.pinterest.ktlint:ktlint-core:$ktlintVersion") {
+        exclude(group = "org.jetbrains.kotlin")
+    }
+    implementation("com.pinterest.ktlint:ktlint-ruleset-experimental:$ktlintVersion") {
         exclude(group = "org.jetbrains.kotlin")
     }
 
@@ -25,7 +28,7 @@ dependencies {
 tasks.withType<Jar> {
     from(
         configurations["implementation"]
-            .filter { "com.github.shyiko.ktlint" in it.toString() }
+            .filter { "com.pinterest.ktlint" in it.toString() }
             .map { if (it.isDirectory) it else zipTree(it) }
     )
 }

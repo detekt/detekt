@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import com.github.shyiko.ktlint.core.EditorConfig
+import com.pinterest.ktlint.core.EditorConfig
 
 /**
  * Creates new EditorConfig by merging existing EditorConfig with properties values passed by parameters.

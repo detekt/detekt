@@ -25,7 +25,8 @@ import java.util.concurrent.ExecutorService
 class Detektor(
     settings: ProcessingSettings,
     private val providers: List<RuleSetProvider>,
-    private val processors: List<FileProcessListener> = emptyList()) {
+    private val processors: List<FileProcessListener> = emptyList()
+) {
 
     private val config: Config = settings.config
     private val testPattern: TestPattern = settings.loadTestPattern()
