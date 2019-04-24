@@ -18,7 +18,7 @@ plugins {
 }
 
 tasks.wrapper {
-    gradleVersion = "5.3"
+    gradleVersion = "5.4"
     distributionType = Wrapper.DistributionType.ALL
     doLast {
         /*
