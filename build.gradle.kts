@@ -200,9 +200,8 @@ subprojects {
     }
 
     val javadocJar by tasks.creating(Jar::class) {
-        dependsOn("dokka")
+        from(tasks.javadoc)
         archiveClassifier.set("javadoc")
-        from(buildDir.resolve("javadoc"))
     }
 
     artifacts {
