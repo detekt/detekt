@@ -88,8 +88,8 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
 
     private fun Rule.lastModifier(): Boolean {
         val rule = (this as? FormattingRule)?.wrapping ?: return false
-        return rule is com.github.shyiko.ktlint.core.Rule.Modifier.Last ||
-                rule is com.github.shyiko.ktlint.core.Rule.Modifier.RestrictToRootLast
+        return rule is com.pinterest.ktlint.core.Rule.Modifier.Last ||
+                rule is com.pinterest.ktlint.core.Rule.Modifier.RestrictToRootLast
     }
 
     private fun ASTNode.visitTokens(currentNode: (node: ASTNode) -> Unit) {

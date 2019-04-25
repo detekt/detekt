@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-import com.github.shyiko.ktlint.core.EditorConfig
-import com.github.shyiko.ktlint.core.KtLint
+import com.pinterest.ktlint.core.EditorConfig
+import com.pinterest.ktlint.core.KtLint
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
@@ -27,7 +27,7 @@ import org.jetbrains.kotlin.psi.psiUtil.endOffset
  */
 abstract class FormattingRule(config: Config) : Rule(config) {
 
-    abstract val wrapping: com.github.shyiko.ktlint.core.Rule
+    abstract val wrapping: com.pinterest.ktlint.core.Rule
 
     protected fun issueFor(description: String) =
             Issue(javaClass.simpleName, Severity.Style, description, Debt.FIVE_MINS)
@@ -74,7 +74,7 @@ abstract class FormattingRule(config: Config) : Rule(config) {
     }
 
     private fun ruleShouldOnlyRunOnFileNode(node: ASTNode) =
-            wrapping is com.github.shyiko.ktlint.core.Rule.Modifier.RestrictToRoot &&
+            wrapping is com.pinterest.ktlint.core.Rule.Modifier.RestrictToRoot &&
                     node !is FileASTNode
 
     private fun PsiElement.originalFilePath() =

@@ -7,7 +7,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.util.Date
 
 plugins {
-    kotlin("jvm") version "1.3.21"
+    kotlin("jvm") version "1.3.30"
     id("com.jfrog.bintray") version "1.8.4"
     id("com.github.ben-manes.versions") version "0.21.0"
     id("com.github.johnrengelman.shadow") version "5.0.0" apply false
@@ -18,7 +18,7 @@ plugins {
 }
 
 tasks.wrapper {
-    gradleVersion = "5.3"
+    gradleVersion = "5.4"
     distributionType = Wrapper.DistributionType.ALL
     doLast {
         /*

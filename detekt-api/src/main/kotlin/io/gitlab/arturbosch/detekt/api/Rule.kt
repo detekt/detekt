@@ -20,8 +20,8 @@ import java.nio.file.Paths
  */
 abstract class Rule(
     override val ruleSetConfig: Config = Config.empty,
-    ruleContext: Context = DefaultContext()) :
-    BaseRule(ruleContext), ConfigAware {
+    ruleContext: Context = DefaultContext()
+) : BaseRule(ruleContext), ConfigAware {
 
     /**
      * A rule is motivated to point out a specific issue in the code base.
