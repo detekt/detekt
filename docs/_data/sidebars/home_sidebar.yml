@@ -80,3 +80,9 @@ entries:
     - title: style
       url: /style.html
       output: web
+  - title: KDoc
+    output: web
+    folderitems:
+    - title: detekt-api
+      url: /pages/kdoc/detekt-api/index.html
+      output: web

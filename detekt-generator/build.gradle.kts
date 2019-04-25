@@ -69,7 +69,9 @@ fun assertDefaultConfigUpToDate() {
 fun assertDocumentationUpToDate() {
     val configDiff = ByteArrayOutputStream()
     exec {
-        commandLine = listOf("git", "diff", "${rootProject.rootDir}/docs/pages/documentation")
+        commandLine = listOf(
+            "git", "diff", "${rootProject.rootDir}/docs/pages/documentation", "${rootProject.rootDir}/docs/pages/kdoc"
+        )
         standardOutput = configDiff
     }
 
