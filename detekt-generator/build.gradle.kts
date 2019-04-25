@@ -18,6 +18,7 @@ val detektVersion: String by project
 val generateDocumentation: Task by tasks.creating {
     dependsOn(":detekt-generator:shadowJar")
     description = "Generates detekt documentation and the default config.yml based on Rule KDoc"
+    group = "documentation"
 
     inputs.files(
         fileTree("${rootProject.rootDir}/detekt-rules/src/main/kotlin"),
