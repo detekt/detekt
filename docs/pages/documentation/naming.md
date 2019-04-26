@@ -148,6 +148,20 @@ Reports function parameter names which do not follow the specified naming conven
 
    ignores overridden functions with parameters not matching the pattern
 
+### InvalidPackageDeclaration
+
+Reports when the package declaration is missing or the file location does not match the declared package.
+
+**Severity**: Maintainability
+
+**Debt**: 5min
+
+#### Configuration options:
+
+* `rootPackage` (default: `''`)
+
+   if specified this part of the package structure is ignored
+
 ### MatchingDeclarationName
 
 "If a Kotlin file contains a single non-private class (potentially with related top-level declarations),
