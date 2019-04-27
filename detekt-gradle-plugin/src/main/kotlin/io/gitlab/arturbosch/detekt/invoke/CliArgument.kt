@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.invoke
 
+import io.gitlab.arturbosch.detekt.extensions.DetektReportType
 import org.gradle.api.file.FileCollection
 import org.gradle.api.file.RegularFile
 
@@ -40,12 +41,13 @@ internal data class BaselineArgument(val baseline: RegularFile?) : CliArgument()
     override fun toArgument() = baseline?.let { listOf(BASELINE_PARAMETER, it.asFile.absolutePath) } ?: emptyList()
 }
 
-internal data class XmlReportArgument(val file: RegularFile?) : CliArgument() {
-    override fun toArgument() = file?.let { listOf(REPORT_PARAMETER, "xml:${it.asFile.absoluteFile}") } ?: emptyList()
+internal data class DefaultReportArgument(val type: DetektReportType, val file: RegularFile?) : CliArgument() {
+    override fun toArgument() =
+        file?.let { listOf(REPORT_PARAMETER, "${type.reportId}:${it.asFile.absoluteFile}") } ?: emptyList()
 }
 
-internal data class HtmlReportArgument(val file: RegularFile?) : CliArgument() {
-    override fun toArgument() = file?.let { listOf(REPORT_PARAMETER, "html:${it.asFile.absolutePath}") } ?: emptyList()
+internal data class CustomReportArgument(val reportId: String, val file: RegularFile) : CliArgument() {
+    override fun toArgument() = listOf(REPORT_PARAMETER, "$reportId:${file.asFile.absolutePath}")
 }
 
 internal data class ConfigArgument(val config: FileCollection) : CliArgument() {

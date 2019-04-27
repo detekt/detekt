@@ -89,25 +89,35 @@ class DslGradleRunner(
         File(dir, "$className.kt").writeText(ktFileContent(className, withCodeSmell))
     }
 
-    fun runTasksAndCheckResult(vararg tasks: String, doAssert: DslGradleRunner.(BuildResult) -> Unit) {
+    private fun buildGradleRunner(tasks: List<String>): GradleRunner {
+        val args = listOf("--stacktrace", "--info", "--build-cache") + tasks.toList()
 
-        val args = listOf("--stacktrace", "--info", "--build-cache") + tasks
-        val result = GradleRunner.create().apply {
+        return GradleRunner.create().apply {
             withProjectDir(rootDir)
             withPluginClasspath()
             withArguments(args)
             gradleVersionOrNone?.let { withGradleVersion(gradleVersionOrNone) }
-        }.build()
+        }
+    }
+
+    fun runTasksAndCheckResult(vararg tasks: String, doAssert: DslGradleRunner.(BuildResult) -> Unit) {
+        val result: BuildResult = buildGradleRunner(tasks.toList()).build()
         this.doAssert(result)
     }
 
     fun runDetektTaskAndCheckResult(doAssert: DslGradleRunner.(BuildResult) -> Unit) {
-        runTasksAndCheckResult("detekt") { doAssert(it) }
+        runTasksAndCheckResult(DETEKT_TASK) { this.doAssert(it) }
+    }
+
+    fun runDetektTaskAndExpectFailure(doAssert: DslGradleRunner.(BuildResult) -> Unit = {}) {
+        val result = buildGradleRunner(listOf(DETEKT_TASK)).buildAndFail()
+        this.doAssert(result)
     }
 
     fun projectFile(path: String): File = File(rootDir, path)
 
     companion object {
         const val SETTINGS_FILENAME = "settings.gradle"
+        private const val DETEKT_TASK = "detekt"
     }
 }

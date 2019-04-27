@@ -41,9 +41,9 @@ abstract class DslTestBuilder {
 
     fun build(): DslGradleRunner {
         val mainBuildFileContent = """
-			| $gradleBuildConfig
-			| $detektConfig
-		""".trimMargin()
+            | $gradleBuildConfig
+            | $detektConfig
+        """.trimMargin()
         val runner = DslGradleRunner(
             projectLayout,
             gradleBuildName,
@@ -59,35 +59,35 @@ abstract class DslTestBuilder {
     private class GroovyBuilder : DslTestBuilder() {
         override val gradleBuildName: String = "build.gradle"
         override val gradleBuildConfig: String = """
-				|import io.gitlab.arturbosch.detekt.DetektPlugin
-				|
-				|plugins {
-				|   id "java-library"
-				|   id "io.gitlab.arturbosch.detekt"
-				|}
-				|
-				|repositories {
-				|	jcenter()
-				|	mavenLocal()
-				|}
-				""".trimMargin()
+                |import io.gitlab.arturbosch.detekt.DetektPlugin
+                |
+                |plugins {
+                |   id "java-library"
+                |   id "io.gitlab.arturbosch.detekt"
+                |}
+                |
+                |repositories {
+                |    jcenter()
+                |    mavenLocal()
+                |}
+                """.trimMargin()
     }
 
     private class KotlinBuilder : DslTestBuilder() {
         override val gradleBuildName: String = "build.gradle.kts"
         override val gradleBuildConfig: String = """
-				|import io.gitlab.arturbosch.detekt.detekt
-				|
-				|plugins {
-				|   `java-library`
-				|	id("io.gitlab.arturbosch.detekt")
-				|}
-				|
-				|repositories {
-				|	jcenter()
-				|	mavenLocal()
-				|}
-				""".trimMargin()
+                |import io.gitlab.arturbosch.detekt.detekt
+                |
+                |plugins {
+                |   `java-library`
+                |    id("io.gitlab.arturbosch.detekt")
+                |}
+                |
+                |repositories {
+                |    jcenter()
+                |    mavenLocal()
+                |}
+                """.trimMargin()
     }
 
     companion object {

@@ -8,8 +8,8 @@ import java.io.File
 import java.nio.file.Files
 
 private fun fileContent(data: String = "") = """<?xml version="1.0" encoding="utf-8"?>
-		|<checkstyle version="4.3">
-		|$data</checkstyle>""".trimMargin()
+        |<checkstyle version="4.3">
+        |$data</checkstyle>""".trimMargin()
 
 private val emptyContent = fileContent()
 
@@ -48,16 +48,16 @@ internal class XmlReportConsolidationTest : Spek({
         }
         it("data is merged from multiple sources into an empty target file") {
             val content1 = """
-				|<file name="Dummy1.kt">
-				|	<error line="1" column="2" severity="warning" message="a" source="A" />
-				|</file>
-				|""".trimMargin()
+                |<file name="Dummy1.kt">
+                |    <error line="1" column="2" severity="warning" message="a" source="A" />
+                |</file>
+                |""".trimMargin()
             val content2 = """
-				|<file name="Dummy2.kt">
-				|	<error line="2" column="2" severity="warning" message="b" source="B" />
-				|	<error line="22" column="22" severity="warning" message="b" source="B" />
-				|</file>
-				|""".trimMargin()
+                |<file name="Dummy2.kt">
+                |    <error line="2" column="2" severity="warning" message="b" source="B" />
+                |    <error line="22" column="22" severity="warning" message="b" source="B" />
+                |</file>
+                |""".trimMargin()
 
             val target = Files.createTempFile("target", ".xml").toFile()
             target.writeText(emptyContent)
@@ -72,21 +72,21 @@ internal class XmlReportConsolidationTest : Spek({
         }
         it("data is merged from multiple sources into a non empty target file") {
             val targetContent = """
-				|<file name="Target.kt">
-				|	<error line="1" column="2" severity="warning" message="a" source="A" />
-				|</file>
-				|""".trimMargin()
+                |<file name="Target.kt">
+                |    <error line="1" column="2" severity="warning" message="a" source="A" />
+                |</file>
+                |""".trimMargin()
             val content1 = """
-				|<file name="Dummy1.kt">
-				|	<error line="1" column="2" severity="warning" message="a" source="A" />
-				|</file>
-				|""".trimMargin()
+                |<file name="Dummy1.kt">
+                |    <error line="1" column="2" severity="warning" message="a" source="A" />
+                |</file>
+                |""".trimMargin()
             val content2 = """
-				|<file name="Dummy2.kt">
-				|	<error line="2" column="2" severity="warning" message="b" source="B" />
-				|	<error line="22" column="22" severity="warning" message="b" source="B" />
-				|</file>
-				|""".trimMargin()
+                |<file name="Dummy2.kt">
+                |    <error line="2" column="2" severity="warning" message="b" source="B" />
+                |    <error line="22" column="22" severity="warning" message="b" source="B" />
+                |</file>
+                |""".trimMargin()
 
             val target = Files.createTempFile("target", ".xml").toFile()
             target.writeText(fileContent(targetContent))

@@ -19,11 +19,11 @@ internal class PluginTaskBehaviorTest : Spek({
     val baselineFileName = "baseline.xml"
 
     val detektConfig = """
-					|detekt {
-					|	config = files("$configFileName")
-					|	baseline = file("$baselineFileName")
-					|}
-				"""
+                    |detekt {
+                    |    config = files("$configFileName")
+                    |    baseline = file("$baselineFileName")
+                    |}
+                """
 
     describe("The Detekt Gradle Plugin :detekt Task") {
         lateinit var gradleRunner: DslGradleRunner
@@ -67,11 +67,11 @@ internal class PluginTaskBehaviorTest : Spek({
         }
         it("should run again after changing config") {
             val configFileWithCommentsDisabled = """
-							|autoCorrect: true
-							|failFast: false
-							|comments:
-							|  active: false
-						""".trimMargin()
+                            |autoCorrect: true
+                            |failFast: false
+                            |comments:
+                            |  active: false
+                        """.trimMargin()
 
             gradleRunner.runDetektTaskAndCheckResult { result ->
                 assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
@@ -86,11 +86,11 @@ internal class PluginTaskBehaviorTest : Spek({
         }
         it("should run again after changing baseline") {
             val changedBaselineContent = """
-							|<some>
-							|	<more/>
-							|	<xml/>
-							|</some>
-						""".trimMargin()
+                            |<some>
+                            |    <more/>
+                            |    <xml/>
+                            |</some>
+                        """.trimMargin()
 
             gradleRunner.runDetektTaskAndCheckResult { result ->
                 assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)

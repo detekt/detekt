@@ -54,6 +54,10 @@ detekt {
             enabled = true                                // Enable/Disable HTML report (default: true)
             destination = file("build/reports/detekt.html") // Path where HTML report will be stored (default: `build/reports/detekt/detekt.html`)
         }
+        custom {
+            reportId = "CustomJsonReport"                   // The simple class name of your custom report.
+            destination = file("build/reports/detekt.json") // Path where report will be stored
+        }
     }
 }
 ```

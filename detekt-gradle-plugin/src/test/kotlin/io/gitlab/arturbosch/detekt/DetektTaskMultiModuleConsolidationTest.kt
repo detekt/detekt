@@ -43,48 +43,48 @@ internal class DetektTaskMultiModuleConsolidationTest : Spek({
         it("using the groovy dsl") {
 
             val mainBuildFileContent: String = """
-				|import io.gitlab.arturbosch.detekt.DetektPlugin
-				|
-				|plugins {
-				|   id "java-library"
-				|   id "io.gitlab.arturbosch.detekt"
-				|}
-				|
-				|allprojects {
-				|	repositories {
-				|		mavenLocal()
-				|		jcenter()
-				|	}
-				|}
-				|subprojects {
-				|	apply plugin: "java-library"
-				|	apply plugin: "io.gitlab.arturbosch.detekt"
-				|}
-				""".trimMargin()
+                |import io.gitlab.arturbosch.detekt.DetektPlugin
+                |
+                |plugins {
+                |   id "java-library"
+                |   id "io.gitlab.arturbosch.detekt"
+                |}
+                |
+                |allprojects {
+                |    repositories {
+                |        mavenLocal()
+                |        jcenter()
+                |    }
+                |}
+                |subprojects {
+                |    apply plugin: "java-library"
+                |    apply plugin: "io.gitlab.arturbosch.detekt"
+                |}
+                """.trimMargin()
 
             gradleRunner = DslGradleRunner(projectLayout, "build.gradle", mainBuildFileContent)
         }
         it("using the kotlin dsl") {
 
             val mainBuildFileContent: String = """
-				|import io.gitlab.arturbosch.detekt.detekt
-				|
-				|plugins {
-				|   `java-library`
-				|	id("io.gitlab.arturbosch.detekt")
-				|}
-				|
-				|allprojects {
-				|	repositories {
-				|		mavenLocal()
-				|		jcenter()
-				|	}
-				|}
-				|subprojects {
-				|	plugins.apply("java-library")
-				|	plugins.apply("io.gitlab.arturbosch.detekt")
-				|}
-				""".trimMargin()
+                |import io.gitlab.arturbosch.detekt.detekt
+                |
+                |plugins {
+                |   `java-library`
+                |    id("io.gitlab.arturbosch.detekt")
+                |}
+                |
+                |allprojects {
+                |    repositories {
+                |        mavenLocal()
+                |        jcenter()
+                |    }
+                |}
+                |subprojects {
+                |    plugins.apply("java-library")
+                |    plugins.apply("io.gitlab.arturbosch.detekt")
+                |}
+                """.trimMargin()
 
             gradleRunner = DslGradleRunner(projectLayout, "build.gradle.kts", mainBuildFileContent)
         }
