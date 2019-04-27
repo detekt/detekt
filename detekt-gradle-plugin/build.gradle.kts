@@ -20,7 +20,7 @@ plugins {
     `maven-publish`
     id("com.gradle.plugin-publish") version "0.10.1"
     id("com.jfrog.bintray") version "1.8.4"
-    kotlin("jvm") version "1.3.30"
+    kotlin("jvm") version "1.3.31"
     id("org.jetbrains.dokka") version "0.9.18"
     id("com.github.ben-manes.versions") version "0.21.0"
     id("io.gitlab.arturbosch.detekt") version "1.0.0-RC14"
