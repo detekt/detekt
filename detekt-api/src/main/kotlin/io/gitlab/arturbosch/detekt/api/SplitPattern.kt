@@ -11,8 +11,9 @@ class SplitPattern(
     removeTrailingAsterisks: Boolean = true
 ) {
 
+    @Suppress("detekt.SpreadOperator")
     private val excludes = text
-        .splitToSequence(delimiters)
+        .splitToSequence(*delimiters.toCharArray())
         .map { it.trim() }
         .filter { it.isNotBlank() }
         .mapIf(removeTrailingAsterisks) { seq ->

@@ -14,7 +14,7 @@ private data class Color(private val value: Byte) {
 
 private fun CharSequence.colorized(color: Color) = "${color.escapeSequence}$this${RESET.escapeSequence}"
 
-internal fun CharSequence.red() = colorized(RED)
-internal fun CharSequence.yellow() = colorized(YELLOW)
+fun CharSequence.red() = colorized(RED)
+fun CharSequence.yellow() = colorized(YELLOW)
 
-internal fun CharSequence.decolorized() = this.replace(escapeSequenceRegex, "")
+fun CharSequence.decolorized() = this.replace(escapeSequenceRegex, "")

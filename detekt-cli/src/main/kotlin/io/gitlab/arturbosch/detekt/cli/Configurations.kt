@@ -3,21 +3,14 @@ package io.gitlab.arturbosch.detekt.cli
 import io.gitlab.arturbosch.detekt.api.CompositeConfig
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.YamlConfig
-import io.gitlab.arturbosch.detekt.core.PathFilter
+import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import java.nio.file.Path
 
 /**
  * @author Artur Bosch
  */
 
-fun CliArgs.createPathFilters(): List<PathFilter> = filters.letIfNonEmpty {
-    split(SEPARATOR_COMMA, SEPARATOR_SEMICOLON)
-            .asSequence()
-            .map { it.trim() }
-            .filter { it.isNotEmpty() }
-            .map { filter -> PathFilter(filter) }
-            .toList()
-}
+fun CliArgs.createFilters(): PathFilters? = PathFilters.of(includes, excludes)
 
 fun CliArgs.createPlugins(): List<Path> = plugins.letIfNonEmpty {
     MultipleExistingPathConverter().convert(this)
@@ -26,7 +19,7 @@ fun CliArgs.createPlugins(): List<Path> = plugins.letIfNonEmpty {
 fun CliArgs.createClasspath(): List<String> = classpath.letIfNonEmpty { split(";") }
 
 private fun <T> String?.letIfNonEmpty(init: String.() -> List<T>): List<T> =
-        if (this == null || this.isEmpty()) listOf() else this.init()
+    if (this == null || this.isEmpty()) listOf() else this.init()
 
 fun CliArgs.loadConfiguration(): Config {
     var declaredConfig: Config? = when {
@@ -56,7 +49,7 @@ private fun Config.deprecatedFailFastUsage(): Boolean {
     value?.let {
         LOG.printer.println(
             "Using deprecated property 'failFast' in the yaml config. " +
-                    "Please migrate to the new '--fail-fast' cli-flag or 'failFast' detekt extension property."
+                "Please migrate to the new '--fail-fast' cli-flag or 'failFast' detekt extension property."
         )
     }
     return value ?: false
@@ -68,8 +61,8 @@ private fun parseResourceConfig(configPath: String): Config {
         YamlConfig.loadResource(urls[0])
     } else {
         urls.asSequence()
-                .map { YamlConfig.loadResource(it) }
-                .reduce { composite, config -> CompositeConfig(config, composite) }
+            .map { YamlConfig.loadResource(it) }
+            .reduce { composite, config -> CompositeConfig(config, composite) }
     }
 }
 
@@ -79,8 +72,8 @@ private fun parsePathConfig(configPath: String): Config {
         YamlConfig.load(paths[0])
     } else {
         paths.asSequence()
-                .map { YamlConfig.load(it) }
-                .reduce { composite, config -> CompositeConfig(config, composite) }
+            .map { YamlConfig.load(it) }
+            .reduce { composite, config -> CompositeConfig(config, composite) }
     }
 }
 

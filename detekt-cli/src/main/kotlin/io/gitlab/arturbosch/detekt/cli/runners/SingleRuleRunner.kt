@@ -8,7 +8,7 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.cli.CliArgs
 import io.gitlab.arturbosch.detekt.cli.DetektProgressListener
 import io.gitlab.arturbosch.detekt.cli.OutputFacade
-import io.gitlab.arturbosch.detekt.cli.createPathFilters
+import io.gitlab.arturbosch.detekt.cli.createFilters
 import io.gitlab.arturbosch.detekt.cli.createPlugins
 import io.gitlab.arturbosch.detekt.cli.loadConfiguration
 import io.gitlab.arturbosch.detekt.core.DetektFacade
@@ -24,23 +24,25 @@ class SingleRuleRunner(private val arguments: CliArgs) : Executable {
         val (ruleSet, rule: RuleId) = arguments.runRule?.split(":")
             ?: throw IllegalStateException("Unexpected empty 'runRule' argument.")
 
-        val settings = ProcessingSettings(
-                arguments.inputPaths,
-                arguments.loadConfiguration(),
-                arguments.createPathFilters(),
-                arguments.parallel,
-                arguments.disableDefaultRuleSets,
-                arguments.createPlugins())
+        val settings = with(arguments) {
+            ProcessingSettings(
+                inputPaths = inputPaths,
+                config = loadConfiguration(),
+                pathFilters = createFilters(),
+                parallelCompilation = parallel,
+                excludeDefaultRuleSets = disableDefaultRuleSets,
+                pluginPaths = createPlugins())
+        }
 
         val realProvider = RuleSetLocator(settings).load()
-                .find { it.ruleSetId == ruleSet }
+            .find { it.ruleSetId == ruleSet }
             ?: throw IllegalArgumentException("There was no rule set with id '$ruleSet'.")
 
         val provider = RuleProducingProvider(rule, realProvider)
         val detektion = DetektFacade.create(
-                settings,
-                listOf(provider),
-                listOf(DetektProgressListener())
+            settings,
+            listOf(provider),
+            listOf(DetektProgressListener())
         ).run()
         OutputFacade(arguments, detektion, settings).run()
     }
@@ -54,12 +56,12 @@ private class RuleProducingProvider(
     override val ruleSetId: String = provider.ruleSetId + "-" + ruleId
 
     override fun instance(config: Config): RuleSet = RuleSet(
-            ruleSetId,
-            listOf(produceRule())
+        ruleSetId,
+        listOf(produceRule())
     )
 
     private fun produceRule(): BaseRule = (provider.buildRuleset(Config.empty)
-            ?.rules
-            ?.find { it.ruleId == ruleId }
+        ?.rules
+        ?.find { it.ruleId == ruleId }
         ?: throw IllegalArgumentException("There was no rule '$ruleId' in rule set '${provider.ruleSetId}'."))
 }
