@@ -66,8 +66,10 @@ class EmptyBlocks(val config: Config = Config.empty) : MultiRule() {
 
     override fun visitKtFile(file: KtFile) {
         emptyKtFile.runIfActive { visitFile(file) }
-        file.declarations.filterIsInstance<KtClassOrObject>().forEach {
-            emptyClassBlock.runIfActive { visitClassOrObject(it) }
+        emptyClassBlock.runIfActive {
+            file.declarations.filterIsInstance<KtClassOrObject>().forEach {
+                visitClassOrObject(it)
+            }
         }
         super.visitKtFile(file)
     }
