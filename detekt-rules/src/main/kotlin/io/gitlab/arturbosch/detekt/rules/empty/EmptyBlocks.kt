@@ -66,17 +66,15 @@ class EmptyBlocks(val config: Config = Config.empty) : MultiRule() {
 
     override fun visitKtFile(file: KtFile) {
         emptyKtFile.runIfActive { visitFile(file) }
+        file.declarations.filterIsInstance<KtClassOrObject>().forEach {
+            emptyClassBlock.runIfActive { visitClassOrObject(it) }
+        }
         super.visitKtFile(file)
     }
 
     override fun visitCatchSection(catchClause: KtCatchClause) {
         emptyCatchBlock.runIfActive { visitCatchSection(catchClause) }
         super.visitCatchSection(catchClause)
-    }
-
-    override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-        emptyClassBlock.runIfActive { visitClassOrObject(classOrObject) }
-        super.visitClassOrObject(classOrObject)
     }
 
     override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
@@ -106,7 +104,7 @@ class EmptyBlocks(val config: Config = Config.empty) : MultiRule() {
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        emptyFinallyBlock.runIfActive { visitNamedFunction(function) }
+        emptyFunctionBlock.runIfActive { visitNamedFunction(function) }
         super.visitNamedFunction(function)
     }
 

@@ -21,6 +21,15 @@ class EmptyClassBlockSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
+        it("reports the empty nested class body") {
+            val code = """
+                class SomeClass {
+                    class EmptyClass {}
+                }
+            """
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+
         it("reports the empty object body") {
             val code = "object SomeObject {}"
             assertThat(subject.compileAndLint(code)).hasSize(1)
