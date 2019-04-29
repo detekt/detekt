@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
+import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.UnknownTaskException
@@ -13,7 +14,6 @@ import org.gradle.api.reporting.ReportingExtension
 import org.gradle.api.tasks.SourceSet
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.io.File
 
 /**
@@ -89,8 +89,8 @@ class DetektPlugin : Plugin<Project> {
     }
 
     private fun registerDetektTask(project: Project, extension: DetektExtension, sourceSet: SourceSet) {
-        @Suppress("UnsafeCast")
-        val kotlinSourceSet = sourceSet.getConvention("kotlin") as KotlinSourceSet
+        val kotlinSourceSet = sourceSet.getConvention("kotlin") as? KotlinSourceSet
+            ?: throw GradleException("Kotlin source set not found. Please report on detekt's issue tracker")
         project.tasks.register(DETEKT + sourceSet.name.capitalize(), Detekt::class.java) {
             it.debugProp.set(project.provider { extension.debug })
             it.parallelProp.set(project.provider { extension.parallel })

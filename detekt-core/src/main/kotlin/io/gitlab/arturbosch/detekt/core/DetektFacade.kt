@@ -44,7 +44,7 @@ class DetektFacade(
         val findings = HashMap<String, List<Finding>>()
 
         val filesToAnalyze = environment.getSourceFiles()
-            .filter { file -> !pathFilters.any { it.matches(Paths.get(file.virtualFilePath)) } }
+            .filterNot { file -> pathFilters?.isIgnored(Paths.get(file.virtualFilePath)) ?: false }
             .apply { forEach { it.addUserData(it.virtualFilePath) } }
         val bindingContext = generateBindingContext(filesToAnalyze)
 
@@ -104,6 +104,7 @@ class DetektFacade(
     }
 
     private object DetektMessageRenderer : PlainTextMessageRenderer() {
+        override fun getName() = "detekt message renderer"
         override fun getPath(location: CompilerMessageLocation) = location.path
         override fun render(
             severity: CompilerMessageSeverity,
