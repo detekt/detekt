@@ -1,8 +1,21 @@
 language: java
-jdk:
-  - openjdk8
-  - openjdk11
-  - openjdk12
+matrix:
+  include:
+    - os: linux
+      jdk: openjdk8
+    - os: linux
+      jdk: openjdk11
+    - os: linux
+      jdk: openjdk12
+    # JDK 8 - see https://docs.travis-ci.com/user/reference/osx/#jdk-and-macos
+    - os: osx
+      osx_image: xcode9.3
+    # JDK 11
+    - os: osx
+      osx_image: xcode10.1
+    # JDK 12
+    - os: osx
+      osx_image: xcode10.2
 install: true
 script:
   - ./gradlew build --build-cache -PwarningsAsErrors=true
