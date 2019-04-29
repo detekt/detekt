@@ -270,9 +270,9 @@ internal class DetektTaskDslTest : Spek({
                             .withDetektConfig(config)
                             .build()
 
-                        val customXmlReportFilePath = gradleRunner.projectFile("build/reports/custom.xml").absolutePath
+                        val customXmlReportFilePath = gradleRunner.projectFile("build/reports/custom.xml").canonicalPath
                         val customJsonReportFilePath =
-                            gradleRunner.projectFile("build/reports/custom.json").absolutePath
+                            gradleRunner.projectFile("build/reports/custom.json").canonicalPath
 
                         gradleRunner.runDetektTaskAndCheckResult { result ->
                             assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
