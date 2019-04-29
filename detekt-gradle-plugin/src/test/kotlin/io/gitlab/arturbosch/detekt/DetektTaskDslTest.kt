@@ -69,7 +69,7 @@ internal class DetektTaskDslTest : Spek({
 
                     gradleRunner.runDetektTaskAndCheckResult { result ->
                         assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-                        val expectedConfigParam = "--config ${firstConfig.absolutePath},${secondConfig.absolutePath}"
+                        val expectedConfigParam = "--config ${firstConfig.canonicalPath},${secondConfig.canonicalPath}"
                         assertThat(result.output).contains(expectedConfigParam)
                     }
                 }
@@ -91,7 +91,7 @@ internal class DetektTaskDslTest : Spek({
                     gradleRunner.runDetektTaskAndCheckResult { result ->
 
                         assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-                        val expectedInputParam = "--input ${projectFile(customSrc).absolutePath}"
+                        val expectedInputParam = "--input ${projectFile(customSrc).canonicalPath}"
                         assertThat(result.output).contains(expectedInputParam)
                         assertThat(result.output).doesNotContain("folder_that_does_not_exist")
                     }
@@ -116,8 +116,8 @@ internal class DetektTaskDslTest : Spek({
                     gradleRunner.runDetektTaskAndCheckResult { result ->
 
                         assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-                        val file1 = projectFile("$customSrc1/MyRoot0Class.kt").absolutePath
-                        val file2 = projectFile("$customSrc2/MyRoot0Class.kt").absolutePath
+                        val file1 = projectFile("$customSrc1/MyRoot0Class.kt").canonicalPath
+                        val file2 = projectFile("$customSrc2/MyRoot0Class.kt").canonicalPath
                         val expectedInputParam = "--input $file1,$file2"
                         assertThat(result.output).contains(expectedInputParam)
                         assertThat(result.output).contains("number of classes: 2")
@@ -226,7 +226,7 @@ internal class DetektTaskDslTest : Spek({
 
                     gradleRunner.runDetektTaskAndCheckResult { result ->
                         assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-                        val expectedBaselineArgument = "--baseline ${projectFile(baselineFilename).absolutePath}"
+                        val expectedBaselineArgument = "--baseline ${projectFile(baselineFilename).canonicalPath}"
                         assertThat(result.output).contains(expectedBaselineArgument)
                     }
                 }
