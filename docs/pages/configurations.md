@@ -18,7 +18,7 @@ _detekt_ uses a yaml style configuration file for various things:
 
 See the [default-detekt-config.yml](https://github.com/arturbosch/detekt/blob/master/detekt-cli/src/main/resources/default-detekt-config.yml) file for all defined configuration options and their default values. 
 
-_Note:_ When using a custom config file, the default values are ignored unless you also set the `build-upon-default-config` flag.
+_Note:_ When using a custom config file, the default values are ignored unless you also set the `--build-upon-default-config` flag.
 
 #### Rule sets and rules
 
