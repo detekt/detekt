@@ -1,10 +1,13 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
+/**
+ * @author schalkms
+ */
 class OptionalAbstractKeywordSpec : Spek({
     val subject by memoized { OptionalAbstractKeyword() }
 
@@ -12,17 +15,17 @@ class OptionalAbstractKeywordSpec : Spek({
 
         it("does not report abstract keywords on an interface") {
             val code = "interface A {}"
-            assertThat(subject.lint(code)).hasSize(0)
+            assertThat(subject.compileAndLint(code)).hasSize(0)
         }
 
         it("reports abstract interface with abstract property") {
             val code = "abstract interface A { abstract var x: Int }"
-            assertThat(subject.lint(code)).hasSize(2)
+            assertThat(subject.compileAndLint(code)).hasSize(2)
         }
 
         it("reports abstract interface with abstract function") {
             val code = "abstract interface A { abstract fun x() }"
-            assertThat(subject.lint(code)).hasSize(2)
+            assertThat(subject.compileAndLint(code)).hasSize(2)
         }
 
         it("reports nested abstract interface") {
@@ -32,22 +35,22 @@ class OptionalAbstractKeywordSpec : Spek({
 						abstract fun x()
 					}
 				}"""
-            assertThat(subject.lint(code)).hasSize(2)
+            assertThat(subject.compileAndLint(code)).hasSize(2)
         }
 
         it("does not report an abstract class") {
             val code = "abstract class A { abstract fun x() }"
-            assertThat(subject.lint(code)).hasSize(0)
+            assertThat(subject.compileAndLint(code)).hasSize(0)
         }
 
         it("does not report a nested abstract class function") {
-            val code = """@Subcomponent
-				interface I {
-				    abstract class A {
-						abstract fun dependency
+            val code = """
+                interface I {
+                    abstract class A {
+						abstract fun dependency()
 				    }
 				}"""
-            assertThat(subject.lint(code)).hasSize(0)
+            assertThat(subject.compileAndLint(code)).hasSize(0)
         }
     }
 })

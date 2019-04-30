@@ -88,9 +88,7 @@ enum class Case(val file: String) {
     NoTabsNegative("/cases/NoTabsNegative.kt"),
     NoTabsPositive("/cases/NoTabsPositive.kt"),
     UnusedPrivateMemberPositive("/cases/UnusedPrivateMemberPositive.kt"),
-    UnusedPrivateMemberNegative("/cases/UnusedPrivateMemberNegative.kt"),
-    PreferToOverPairSyntaxPositive("/cases/PreferToOverPairSyntaxPositive.kt"),
-    PreferToOverPairSyntaxNegative("/cases/PreferToOverPairSyntaxNegative.kt");
+    UnusedPrivateMemberNegative("/cases/UnusedPrivateMemberNegative.kt");
 
     fun path(): Path = Paths.get(resource(file))
 
