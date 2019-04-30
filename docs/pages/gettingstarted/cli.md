@@ -43,6 +43,10 @@ Usage: detekt [options]
     --disable-default-rulesets, -dd
       Disables default rule sets.
       Default: false
+    --build-upon-default-config
+      Apply values from config files as changes to the default configuration
+      (instead of starting from an empty configuration).
+      Default: false
     --fail-fast
       Shortcut for 'build-upon-default-config' together with all available rules active 
       and exit code 0 only when no code smells are found.
