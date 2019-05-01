@@ -2,8 +2,8 @@ package io.gitlab.arturbosch.detekt.formatting
 
 import com.pinterest.ktlint.core.EditorConfig
 import com.pinterest.ktlint.core.KtLint
-import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
@@ -63,7 +63,7 @@ abstract class FormattingRule(config: Config) : Rule(config) {
         }
         wrapping.visit(node, autoCorrect) { _, message, _ ->
             val (line, column) = positionByOffset(node.startOffset)
-            report(CodeSmell(issue,
+            report(CorrectableCodeSmell(issue,
                     Entity(node.toString(), "", "",
                             Location(SourceLocation(line, column),
                                     TextLocation(node.startOffset, node.psi.endOffset),

@@ -18,8 +18,7 @@ open class CodeSmell(
     override val entity: Entity,
     override val message: String,
     override val metrics: List<Metric> = listOf(),
-    override val references: List<Entity> = listOf(),
-    override val autoCorrectEnabled: Boolean = false
+    override val references: List<Entity> = listOf()
 ) : Finding {
 
     override val id: String = issue.id
@@ -44,8 +43,41 @@ open class CodeSmell(
 }
 
 /**
+ * Represents a code smell for that can be auto corrected.
+ *
+ * @see CodeSmell
+ */
+open class CorrectableCodeSmell(
+    issue: Issue,
+    entity: Entity,
+    message: String,
+    metrics: List<Metric> = listOf(),
+    references: List<Entity> = listOf(),
+    val autoCorrectEnabled: Boolean
+) : CodeSmell(
+    issue,
+    entity,
+    message,
+    metrics,
+    references
+) {
+    override fun toString(): String {
+        return "CorrectableCodeSmell(" +
+                "autoCorrectEnabled=$autoCorrectEnabled," +
+                "issue=$issue, " +
+                "entity=$entity, " +
+                "message=$message, " +
+                "metrics=$metrics, " +
+                "references=$references, " +
+                "id='$id')"
+    }
+}
+
+/**
  * Represents a code smell for which a specific metric can be determined which is responsible
  * for the existence of this rule violation.
+ *
+ * @see CodeSmell
  */
 open class ThresholdedCodeSmell(
     issue: Issue,

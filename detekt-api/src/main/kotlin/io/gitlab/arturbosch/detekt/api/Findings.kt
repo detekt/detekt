@@ -14,7 +14,6 @@ interface Finding : Compactable, HasEntity, HasMetrics {
     val issue: Issue
     val references: List<Entity>
     val message: String
-    val autoCorrectEnabled: Boolean
 
     fun messageOrDescription(): String
 }
