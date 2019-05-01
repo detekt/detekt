@@ -233,5 +233,19 @@ class UnusedImportsSpec : Spek({
 			""".trimIndent()
             assertThat(subject.lint(code)).isEmpty()
         }
+
+        it("should not report import of provideDelegate operator overload - #1608") {
+            val code = """
+                import org.gradle.api.tasks.WriteProperties
+                import org.gradle.kotlin.dsl.getValue
+                import org.gradle.kotlin.dsl.provideDelegate // this line specifically should not be reported
+                import org.gradle.kotlin.dsl.registering
+
+                class DumpVersionProperties {
+                    private val dumpVersionProperties by tasks.registering(WriteProperties::class)
+                }
+                """
+            assertThat(subject.lint(code)).isEmpty()
+        }
     }
 })
