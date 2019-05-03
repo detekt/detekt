@@ -120,7 +120,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Paul Merlin](https://github.com/eskatos) - Gradle build improvements
 - [Konstantin Aksenov](https://github.com/vacxe) - Coding improvement
 - [Matthew Haughton](https://github.com/3flex) - Added type resolution, Dependency updates, Coding + Documentation improvements
-- [Janusz Bagiński](https://github.com/jbaginski) - Fixed line number reporting for MaxLineLengthRule 
+- [Janusz Bagiński](https://github.com/jbaginski) - Fixed line number reporting for MaxLineLengthRule
 - [Mike Kobit](https://github.com/mkobit) - Gradle build improvements
 - [Philipp Hofmann](https://github.com/philipphofmann) - Readme improvements
 - [Olivier PEREZ](https://github.com/olivierperez) - Fixed Typo in Readme
@@ -165,7 +165,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 
 ### Mentions
 
-[![androidweekly](https://img.shields.io/badge/androidweekly.net-259-orange.svg?style=flat-square)](http://androidweekly.net/issues/issue-259) 
+[![androidweekly](https://img.shields.io/badge/androidweekly.net-259-orange.svg?style=flat-square)](http://androidweekly.net/issues/issue-259)
 [![androidweekly](https://img.shields.io/badge/androidweekly.cn-154-orange.svg?style=flat-square)](http://androidweekly.cn/android-dev-wekly-issue-154/)
 
 As mentioned in...
