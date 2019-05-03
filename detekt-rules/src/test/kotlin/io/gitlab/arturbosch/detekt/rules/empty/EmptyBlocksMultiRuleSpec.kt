@@ -11,6 +11,7 @@ import org.spekframework.spek2.style.specification.describe
 
 /**
  * @author Artur Bosch
+ * @author schalkms
  */
 class EmptyBlocksMultiRuleSpec : Spek({
 
@@ -39,6 +40,20 @@ class EmptyBlocksMultiRuleSpec : Spek({
         it("reports an empty kt file") {
             val findings = subject.lint(Case.EmptyKtFile.path())
             assertThat(findings).hasSize(1)
+        }
+
+        it("reports no duplicated findings - issue #1605") {
+            val findings = subject.lint("""
+                class EmptyBlocks {
+                    class EmptyClass {}
+                    fun exceptionHandling() {
+                        try {
+                        } finally {
+                        }
+                    }
+                }
+            """)
+            assertThat(findings).hasSize(2)
         }
     }
 })
