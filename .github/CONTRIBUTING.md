@@ -1,7 +1,6 @@
 # Contributing to detekt
 
 - Read [this article](https://chris.beams.io/posts/git-commit/) before writing commit messages
-- Copy the file `commit-msg` to `.git/hooks`
 - Use `gradle build -x dokka` to build the source but exclude documentation jar generating to save time.
 - `gradle detekt` should not report any errors
 - This repository follows the [Kotlin Coding Conventions](https://kotlinlang.org/docs/reference/coding-conventions.html) which are enforced by KtLint when running `gradle detekt`.
