@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.providers
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.rules.naming.InvalidPackageDeclaration
 import io.gitlab.arturbosch.detekt.rules.naming.MatchingDeclarationName
 import io.gitlab.arturbosch.detekt.rules.naming.MemberNameEqualsClassName
 import io.gitlab.arturbosch.detekt.rules.naming.NamingRules
@@ -18,10 +19,13 @@ class NamingProvider : RuleSetProvider {
     override val ruleSetId: String = "naming"
 
     override fun instance(config: Config): RuleSet {
-        return RuleSet(ruleSetId, listOf(
+        return RuleSet(
+            ruleSetId, listOf(
                 MatchingDeclarationName(config),
                 MemberNameEqualsClassName(config),
-                NamingRules(config)
-        ))
+                NamingRules(config),
+                InvalidPackageDeclaration(config)
+            )
+        )
     }
 }
