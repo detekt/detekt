@@ -20,7 +20,7 @@ object DetektPluginTest : Spek({
             project.pluginManager.apply(DetektPlugin::class.java)
             project.pluginManager.apply(LifecycleBasePlugin::class.java)
 
-            assertThat(project.tasks.getAt("check").dependencies().map {it.name }).contains("detekt")
+            assertThat(project.tasks.getAt("check").dependencies().map { it.name }).contains("detekt")
         }
     }
 })
