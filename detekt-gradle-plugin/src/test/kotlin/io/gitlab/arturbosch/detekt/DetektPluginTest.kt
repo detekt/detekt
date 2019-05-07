@@ -15,7 +15,7 @@ object DetektPluginTest : Spek({
         it("lazily adds detekt as a dependency of the `check` task") {
             val project = ProjectBuilder.builder().build()
 
-            /** Ordering here is important - to prove lazily adding the dependency works the LifecycleBasePlugin must be
+            /* Ordering here is important - to prove lazily adding the dependency works the LifecycleBasePlugin must be
              * added to the project after the detekt plugin. */
             project.pluginManager.apply(DetektPlugin::class.java)
             project.pluginManager.apply(LifecycleBasePlugin::class.java)
