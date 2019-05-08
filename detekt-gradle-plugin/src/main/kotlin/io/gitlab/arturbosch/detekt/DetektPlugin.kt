@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.UnknownTaskException
 import org.gradle.api.file.FileCollection
 import org.gradle.api.provider.Provider
 import org.gradle.language.base.plugins.LifecycleBasePlugin
@@ -51,13 +50,9 @@ class DetektPlugin : Plugin<Project> {
             }
         }
 
-        val checkTaskProvider = try {
-            project.tasks.named(LifecycleBasePlugin.CHECK_TASK_NAME)
-        } catch (ignored: UnknownTaskException) {
-            null
+        project.tasks.matching { it.name == LifecycleBasePlugin.CHECK_TASK_NAME }.configureEach {
+            it.dependsOn(detektTaskProvider)
         }
-
-        checkTaskProvider?.configure { it.dependsOn(detektTaskProvider) }
     }
 
     private fun registerCreateBaselineTask(project: Project, extension: DetektExtension) =
