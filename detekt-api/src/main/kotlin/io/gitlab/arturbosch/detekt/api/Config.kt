@@ -62,12 +62,19 @@ interface Config {
     }
 }
 
+/**
+ * A configuration which keeps track of the config it got sub-config'ed from by the [subConfig] function.
+ * It's main usage is to recreate the property-path which was taken when using the [subConfig] function repeatedly.
+ */
 interface HierarchicalConfig : Config {
     /**
      * Returns the parent config which encloses this config part.
      */
     val parent: Parent?
 
+    /**
+     * Keeps track of which key was taken to [subConfig] this configuration.
+     */
     data class Parent(val config: Config, val key: String)
 }
 
@@ -106,7 +113,7 @@ abstract class BaseConfig : HierarchicalConfig {
             } else {
                 default
             }
-        } catch (e: ClassCastException) {
+        } catch (_: ClassCastException) {
             error("Value \"$result\" set for config parameter \"${keySequence(key)}\" is not of required type ${default::class.simpleName}.")
         } catch (_: NumberFormatException) {
             error("Value \"$result\" set for config parameter \"${keySequence(key)}\" is not of required type ${default::class.simpleName}.")

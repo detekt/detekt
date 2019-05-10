@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.api
 
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatExceptionOfType
+import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.assertj.core.api.Assertions.fail
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -40,7 +40,7 @@ class ConfigSpec : Spek({
         }
 
         it("tests wrong sub config conversion") {
-            assertThatExceptionOfType(IllegalStateException::class.java).isThrownBy {
+            assertThatIllegalStateException().isThrownBy {
                 @Suppress("UNUSED_VARIABLE")
                 val ignored = config.valueOrDefault("style", "")
             }.withMessage("Value \"{WildcardImport={active=true}, NoElseInWhenExpression={active=true}, MagicNumber={active=true, ignoreNumbers=-1,0,1,2}}\" set for config parameter \"style\" is not of required type String.")
@@ -63,7 +63,7 @@ class ConfigSpec : Spek({
         val config by memoized { yamlConfig("wrong-property-type.yml") }
 
         it("prints whole config-key path for NumberFormatException") {
-            assertThatExceptionOfType(IllegalStateException::class.java).isThrownBy {
+            assertThatIllegalStateException().isThrownBy {
                 config.subConfig("RuleSet")
                     .subConfig("Rule")
                     .valueOrDefault("threshold", 6)
@@ -71,7 +71,7 @@ class ConfigSpec : Spek({
         }
 
         it("prints whole config-key path for ClassCastException") {
-            assertThatExceptionOfType(IllegalStateException::class.java).isThrownBy {
+            assertThatIllegalStateException().isThrownBy {
                 @Suppress("UNUSED_VARIABLE")
                 val bool: Int = config.subConfig("RuleSet")
                     .subConfig("Rule")
