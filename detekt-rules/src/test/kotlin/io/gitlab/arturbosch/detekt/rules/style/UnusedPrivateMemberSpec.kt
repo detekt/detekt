@@ -148,8 +148,8 @@ class UnusedPrivateMemberSpec : Spek({
 
         it("does not fail when disabled with invalid regex") {
             val configRules = mapOf(
-                    "active" to "false",
-                    UnusedPrivateMember.ALLOWED_NAMES_PATTERN to "*foo"
+                "active" to "false",
+                UnusedPrivateMember.ALLOWED_NAMES_PATTERN to "*foo"
             )
             val config = TestConfig(configRules)
             assertThat(UnusedPrivateMember(config).lint(regexTestingCode)).isEmpty()
@@ -159,7 +159,7 @@ class UnusedPrivateMemberSpec : Spek({
             val configRules = mapOf(UnusedPrivateMember.ALLOWED_NAMES_PATTERN to "*foo")
             val config = TestConfig(configRules)
             assertThatExceptionOfType(PatternSyntaxException::class.java)
-                    .isThrownBy { UnusedPrivateMember(config).lint(regexTestingCode) }
+                .isThrownBy { UnusedPrivateMember(config).lint(regexTestingCode) }
         }
     }
 
@@ -467,6 +467,19 @@ class UnusedPrivateMemberSpec : Spek({
 			"""
 
             assertThat(subject.lint(code)).hasSize(1)
+        }
+
+        it("does not report function used in interface - #1613") {
+            val code = """
+                interface Bar {
+                    fun doSomething() {
+                        doSomethingElse()
+                    }
+                }
+                private fun doSomethingElse() {}
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 
