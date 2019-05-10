@@ -18,6 +18,7 @@ val detektVersion: String by project
 val generateDocumentation: Task by tasks.creating {
     dependsOn(":detekt-generator:shadowJar")
     description = "Generates detekt documentation and the default config.yml based on Rule KDoc"
+    group = "documentation"
 
     inputs.files(
         fileTree("${rootProject.rootDir}/detekt-rules/src/main/kotlin"),
@@ -68,7 +69,9 @@ fun assertDefaultConfigUpToDate() {
 fun assertDocumentationUpToDate() {
     val configDiff = ByteArrayOutputStream()
     exec {
-        commandLine = listOf("git", "diff", "${rootProject.rootDir}/docs/pages/documentation")
+        commandLine = listOf(
+            "git", "diff", "${rootProject.rootDir}/docs/pages/documentation", "${rootProject.rootDir}/docs/pages/kdoc"
+        )
         standardOutput = configDiff
     }
 

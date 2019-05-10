@@ -2,7 +2,6 @@ import com.jfrog.bintray.gradle.BintrayExtension
 import io.gitlab.arturbosch.detekt.Detekt
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
-import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import java.util.Date
 
@@ -14,7 +13,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "5.0.0" apply false
     id("org.sonarqube") version "2.7"
     id("io.gitlab.arturbosch.detekt")
-    id("org.jetbrains.dokka") version "0.9.18"
+    id("org.jetbrains.dokka") version "0.9.18" apply false
     jacoco
 }
 
@@ -72,7 +71,6 @@ subprojects {
         plugin("com.jfrog.bintray")
         plugin("maven-publish")
         plugin("io.gitlab.arturbosch.detekt")
-        plugin("org.jetbrains.dokka")
     }
 
     if (project.name != "detekt-test") {
@@ -189,16 +187,6 @@ subprojects {
         })
     }
 
-    tasks.withType<DokkaTask> {
-        // suppresses undocumented classes but not dokka warnings https://github.com/Kotlin/dokka/issues/90
-        reportUndocumented = false
-        outputFormat = "javadoc"
-        outputDirectory = "$buildDir/javadoc"
-        // Java 8 is only version supported both by Oracle/OpenJDK and Dokka itself
-        // https://github.com/Kotlin/dokka/issues/294
-        enabled = JavaVersion.current().isJava8
-    }
-
     val sourcesJar by tasks.creating(Jar::class) {
         dependsOn("classes")
         archiveClassifier.set("sources")
@@ -206,9 +194,8 @@ subprojects {
     }
 
     val javadocJar by tasks.creating(Jar::class) {
-        dependsOn("dokka")
+        from(tasks.javadoc)
         archiveClassifier.set("javadoc")
-        from(buildDir.resolve("javadoc"))
     }
 
     artifacts {
