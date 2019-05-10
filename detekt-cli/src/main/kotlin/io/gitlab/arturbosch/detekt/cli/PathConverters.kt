@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.cli
 
 import com.beust.jcommander.IStringConverter
 import com.beust.jcommander.ParameterException
+import org.jetbrains.kotlin.config.JvmTarget
 import java.io.File
 import java.net.URL
 import java.nio.file.Files
@@ -44,6 +45,11 @@ class MultipleClasspathResourceConverter : DetektInputPathConverter<URL> {
 
 class MultipleExistingPathConverter : DetektInputPathConverter<Path> {
     override val converter = ExistingPathConverter()
+}
+
+class JvmTargetConverter : IStringConverter<JvmTarget> {
+    override fun convert(value: String): JvmTarget =
+        checkNotNull(JvmTarget.fromString(value)) { "Invalid value passed to --jvm-target" }
 }
 
 /**

@@ -35,7 +35,8 @@ class Runner(private val arguments: CliArgs) : Executable {
             parallelCompilation = parallel,
             excludeDefaultRuleSets = disableDefaultRuleSets,
             pluginPaths = createPlugins(),
-            classpath = createClasspath()
+            classpath = createClasspath(),
+            jvmTarget = jvmTarget
         )
     }
 }

@@ -20,7 +20,10 @@ import org.jetbrains.kotlin.com.intellij.pom.PomTransaction
 import org.jetbrains.kotlin.com.intellij.pom.impl.PomTransactionBase
 import org.jetbrains.kotlin.com.intellij.pom.tree.TreeAspect
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.tree.TreeCopyHandler
+import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
+import org.jetbrains.kotlin.config.JVMConfigurationKeys
+import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.psi.KtPsiFactory
 import sun.reflect.ReflectionFactory
 import java.io.File
@@ -40,6 +43,7 @@ fun createKotlinCoreEnvironment(configuration: CompilerConfiguration = CompilerC
     System.setProperty("idea.io.use.fallback", "true")
     configuration.put(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY,
             PrintingMessageCollector(System.err, MessageRenderer.PLAIN_FULL_PATHS, false))
+    configuration.put(CommonConfigurationKeys.MODULE_NAME, "detekt")
     return KotlinCoreEnvironment.createForProduction(Disposer.newDisposable(),
         configuration, EnvironmentConfigFiles.JVM_CONFIG_FILES)
 }
@@ -52,8 +56,9 @@ private fun createProject(configuration: CompilerConfiguration = CompilerConfigu
 }
 
 fun createCompilerConfiguration(
+    pathsToAnalyze: List<Path>,
     classpath: List<String>,
-    pathsToAnalyze: List<Path>
+    jvmTarget: JvmTarget
 ): CompilerConfiguration {
 
     val javaFiles = pathsToAnalyze.flatMap { path ->
@@ -70,6 +75,7 @@ fun createCompilerConfiguration(
     }
 
     return CompilerConfiguration().apply {
+        put(JVMConfigurationKeys.JVM_TARGET, jvmTarget)
         addJavaSourceRoots(javaFiles)
         addKotlinSourceRoots(kotlinFiles)
         addJvmClasspathRoots(classpath.map { File(it) })

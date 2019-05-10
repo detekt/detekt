@@ -28,9 +28,11 @@ fun main(args: Array<String>) {
         executable.execute()
     } catch (e: BuildFailure) {
         // Exit with status code 2 when maxIssues or failThreshold count was reached in BuildFailureReport.
+        e.printStackTrace()
         exitProcess(2)
     } catch (e: Exception) {
         // Exit with status code 1 when an unexpected error occurred.
+        e.printStackTrace()
         exitProcess(1)
     }
     // Exit with status code 0 when detekt ran normally and maxIssues or failThreshold count was not reached in

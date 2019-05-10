@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.internal.configurableFileCollection
 import io.gitlab.arturbosch.detekt.internal.fileProperty
 import io.gitlab.arturbosch.detekt.invoke.BaselineArgument
 import io.gitlab.arturbosch.detekt.invoke.BuildUponDefaultConfigArgument
+import io.gitlab.arturbosch.detekt.invoke.ClasspathArgument
 import io.gitlab.arturbosch.detekt.invoke.ConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.CustomReportArgument
 import io.gitlab.arturbosch.detekt.invoke.DebugArgument
@@ -15,6 +16,7 @@ import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import io.gitlab.arturbosch.detekt.invoke.DisableDefaultRuleSetArgument
 import io.gitlab.arturbosch.detekt.invoke.FailFastArgument
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
+import io.gitlab.arturbosch.detekt.invoke.JvmTargetArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
 import io.gitlab.arturbosch.detekt.invoke.PluginsArgument
 import io.gitlab.arturbosch.detekt.output.mergeXmlReports
@@ -28,6 +30,7 @@ import org.gradle.api.provider.Property
 import org.gradle.api.provider.Provider
 import org.gradle.api.reporting.ReportingExtension
 import org.gradle.api.tasks.CacheableTask
+import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.InputFiles
@@ -69,6 +72,18 @@ open class Detekt : SourceTask() {
     @Optional
     @PathSensitive(PathSensitivity.RELATIVE)
     var config: ConfigurableFileCollection = project.configurableFileCollection()
+
+    @Classpath
+    @Optional
+    val classpath = project.configurableFileCollection()
+
+    @Input
+    @Optional
+    internal val jvmTargetProp: Property<String> = project.objects.property(String::class.javaObjectType)
+    var jvmTarget: String
+        @Internal
+        get() = jvmTargetProp.get()
+        set(value) = jvmTargetProp.set(value)
 
     @Input
     @Optional
@@ -154,6 +169,8 @@ open class Detekt : SourceTask() {
         val debugOrDefault = debugProp.getOrElse(false)
         val arguments = mutableListOf(
             InputArgument(source),
+            ClasspathArgument(classpath),
+            JvmTargetArgument(jvmTargetProp.orNull),
             ConfigArgument(config),
             PluginsArgument(plugins.orNull),
             BaselineArgument(baseline.orNull),
