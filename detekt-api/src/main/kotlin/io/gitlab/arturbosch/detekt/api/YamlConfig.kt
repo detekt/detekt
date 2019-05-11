@@ -13,11 +13,14 @@ import java.nio.file.Path
  * @author Artur Bosch
  */
 @Suppress("UNCHECKED_CAST")
-class YamlConfig internal constructor(val properties: Map<String, Any>) : BaseConfig() {
+class YamlConfig internal constructor(
+    val properties: Map<String, Any>,
+    override val parent: HierarchicalConfig.Parent?
+) : BaseConfig() {
 
     override fun subConfig(key: String): Config {
         val subProperties = properties.getOrElse(key) { mapOf<String, Any>() }
-        return YamlConfig(subProperties as Map<String, Any>)
+        return YamlConfig(subProperties as Map<String, Any>, HierarchicalConfig.Parent(this, key))
     }
 
     override fun <T : Any> valueOrDefault(key: String, default: T): T {
@@ -61,7 +64,7 @@ class YamlConfig internal constructor(val properties: Map<String, Any>) : BaseCo
             } else {
                 val map: Any = Yaml().load(yamlInput)
                 if (map is Map<*, *>) {
-                    YamlConfig(map as Map<String, Any>)
+                    YamlConfig(map as Map<String, Any>, parent = null)
                 } else {
                     throw Config.InvalidConfigurationError()
                 }
