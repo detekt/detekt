@@ -7,6 +7,9 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.sequenceOfType
+import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -42,31 +45,34 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
 class ExpressionBodySyntax(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(
-            javaClass.simpleName,
-            Severity.Style,
-            "Functions with exact one statement, the return statement," +
-                    " can be rewritten with ExpressionBodySyntax.",
-            Debt.FIVE_MINS)
+        javaClass.simpleName,
+        Severity.Style,
+        "Functions with exact one statement, the return statement," +
+            " can be rewritten with ExpressionBodySyntax.",
+        Debt.FIVE_MINS)
 
     private val includeLineWrapping = valueOrDefault(INCLUDE_LINE_WRAPPING, false)
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        if (function.bodyExpression != null) {
-            val body = function.bodyExpression!!
-            body.singleReturnStatement()?.run {
-                if (includeLineWrapping || !isLineWrapped(body)) {
-                    report(CodeSmell(issue, Entity.from(body), issue.description))
-                }
-            }
+        val stmt = function.bodyExpression
+            ?.singleReturnStatement()
+            ?.takeUnless { it.containsReturnStmtsInNullableArguments() }
+
+        if (stmt != null && (includeLineWrapping || !isLineWrapped(stmt))) {
+            report(CodeSmell(issue, Entity.from(stmt), issue.description))
         }
     }
 
-    private fun KtExpression.singleReturnStatement(): KtReturnExpression? {
-        val statements = (this as? KtBlockExpression)?.statements
-        return statements
-                ?.takeIf { it.size == 1 }
-                ?.let { it[0] as? KtReturnExpression }
-    }
+    private fun KtExpression.singleReturnStatement(): KtReturnExpression? =
+        (this as? KtBlockExpression)?.statements
+            ?.takeIf { it.size == 1 }
+            ?.let { it[0] as? KtReturnExpression }
+
+    private fun KtReturnExpression.containsReturnStmtsInNullableArguments(): Boolean =
+        sequenceOfType<KtReturnExpression>()
+            .map { it.parent }
+            .filterIsInstance<KtBinaryExpression>()
+            .firstOrNull { it.operationToken == KtTokens.ELVIS } != null
 
     private fun isLineWrapped(expression: KtExpression): Boolean {
         return expression.children.any {

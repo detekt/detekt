@@ -54,6 +54,16 @@ class ExpressionBodySyntaxSpec : Spek({
 			    	}
 			    """)).isEmpty()
             }
+
+            it("does not report when using shortcut return") {
+                assertThat(subject.compileAndLint("""
+                    fun caller(): String {
+                        return callee("" as String? ?: return "")
+                    }
+
+                    fun callee(a: String): String = ""
+                """.trimIndent())).isEmpty()
+            }
         }
 
         context("several return statements with multiline method chain") {
@@ -84,7 +94,7 @@ class ExpressionBodySyntaxSpec : Spek({
 			    		else -> 1
 			    	}
 			    }"""
-            
+
             it("does not report with the default configuration") {
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
