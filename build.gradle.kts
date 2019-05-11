@@ -18,7 +18,7 @@ plugins {
 }
 
 buildScan {
-    termsOfServiceUrl   = "https://gradle.com/terms-of-service"
+    termsOfServiceUrl = "https://gradle.com/terms-of-service"
     termsOfServiceAgree = "yes"
 }
 
@@ -71,19 +71,16 @@ subprojects {
         plugin("com.jfrog.bintray")
         plugin("maven-publish")
         plugin("io.gitlab.arturbosch.detekt")
+        plugin("jacoco")
     }
 
-    if (project.name != "detekt-test") {
-        apply { plugin("jacoco") }
+    val jacocoVersion: String by project
+    jacoco.toolVersion = jacocoVersion
 
-        val jacocoVersion: String by project
-        jacoco.toolVersion = jacocoVersion
-
-        tasks.jacocoTestReport.configure {
-            reports.xml.isEnabled = false
-            reports.html.isEnabled = false
-            dependsOn(tasks.named("test"))
-        }
+    tasks.named<JacocoReport>("jacocoTestReport").configure {
+        reports.xml.isEnabled = true
+        reports.html.isEnabled = true
+        dependsOn(tasks.named("test"))
     }
 
     tasks.withType<Detekt> {
@@ -295,26 +292,5 @@ val detektAll by tasks.registering(Detekt::class) {
     reports {
         xml.enabled = false
         html.enabled = false
-    }
-}
-
-tasks.create<JacocoReport>("rootJacocoTestReport") {
-    val jacocoReportTasks =
-        subprojects
-            .filterNot { it.project.name == "detekt-test" }
-            .map { it.tasks["jacocoTestReport"] as? JacocoReport }
-    dependsOn(jacocoReportTasks)
-
-    val executionData = jacocoReportTasks.mapNotNull { it?.executionData }.toTypedArray()
-    executionData(executionData)
-    reports.xml.isEnabled = true
-    reports.xml.destination = file("$buildDir/reports/jacoco/jacocoRootReport.xml")
-
-    subprojects.forEach { testedProject ->
-        val sourceSets = testedProject.sourceSets
-        this@create.additionalSourceDirs.from(files(sourceSets.main.get().allSource.srcDirs))
-        this@create.sourceDirectories.from(files(sourceSets.main.get().allSource.srcDirs))
-        this@create.classDirectories.from(files(sourceSets.main.get().output))
-        this@create.dependsOn(testedProject.tasks.named("test"))
     }
 }
