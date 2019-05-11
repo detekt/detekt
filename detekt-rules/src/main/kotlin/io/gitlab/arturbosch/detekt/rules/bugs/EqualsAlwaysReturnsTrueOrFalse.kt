@@ -69,7 +69,7 @@ class EqualsAlwaysReturnsTrueOrFalse(config: Config = Config.empty) : Rule(confi
         val returnExpressionsInBlock = bodyExpression.asBlockExpression()?.statements
                 ?.filterIsInstance<KtReturnExpression>() ?: return false
         val lastValidReturnExpression = returnExpressionsInBlock.first().returnedExpression
-        val allReturnExpressions = bodyExpression.collectByType<KtReturnExpression>()
+        val allReturnExpressions = bodyExpression.collectByType<KtReturnExpression>().toList()
         val hasNoNestedReturnExpression = allReturnExpressions.size == returnExpressionsInBlock.size
         return lastValidReturnExpression?.isBooleanConstant() == true &&
                 (hasNoNestedReturnExpression ||
