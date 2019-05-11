@@ -16,6 +16,7 @@ import io.gitlab.arturbosch.detekt.rules.isMainFunction
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOperator
 import io.gitlab.arturbosch.detekt.rules.isOverride
+import io.gitlab.arturbosch.detekt.rules.parentOfType
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
@@ -93,23 +94,21 @@ private class UnusedFunctionVisitor(allowedNames: Regex) : UnusedMemberVisitor(a
         return functions.map { CodeSmell(issue, Entity.from(it.value), "Private function ${it.key} is unused.") }
     }
 
-    override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-        if (classOrObject.isInterface()) {
-            return
-        }
-        super.visitClassOrObject(classOrObject)
-    }
-
     override fun visitNamedFunction(function: KtNamedFunction) {
-        when {
-            function.isOperator() -> {
-                // Resolution: we skip overloaded operators due to no symbol resolution #1444
+        if (!isDeclaredInsideAnInterface(function)) {
+            when {
+                function.isOperator() -> {
+                    // Resolution: we skip overloaded operators due to no symbol resolution #1444
+                }
+                function.isPrivate() -> collectFunction(function)
             }
-            function.isPrivate() -> collectFunction(function)
         }
 
         super.visitNamedFunction(function)
     }
+
+    private fun isDeclaredInsideAnInterface(function: KtNamedFunction) =
+        function.parentOfType<KtClassOrObject>(strict = true)?.isInterface() == true
 
     private fun collectFunction(function: KtNamedFunction) {
         val name = function.nameAsSafeName.identifier
