@@ -10,28 +10,18 @@ import java.util.ArrayDeque
  * Returns a list of all parents of type [T] before first occurrence of [S].
  */
 inline fun <reified T : KtElement, reified S : KtElement> KtElement.parentsOfTypeUntil(strict: Boolean = true) =
-        sequence<T> {
-            var current: PsiElement? = if (strict) this@parentsOfTypeUntil.parent else this@parentsOfTypeUntil
-            while (current != null && current !is S) {
-                if (current is T) {
-                    yield(current)
-                }
-                current = current.parent
+    sequence<T> {
+        var current: PsiElement? = if (strict) this@parentsOfTypeUntil.parent else this@parentsOfTypeUntil
+        while (current != null && current !is S) {
+            if (current is T) {
+                yield(current)
             }
+            current = current.parent
         }
-
-inline fun <reified T : KtElement, reified S : KtElement> KtElement.parentsOfTypeUntil() = sequence<T> {
-    var current: PsiElement? = this@parentsOfTypeUntil
-    while (current != null && current !is S) {
-        if (current is T) {
-            yield(current)
-        }
-        current = current.parent
     }
-}
 
 inline fun <reified T : KtElement> KtElement.parentOfType(strict: Boolean = true) =
-        parentsOfTypeUntil<T, KtFile>(strict).firstOrNull()
+    parentsOfTypeUntil<T, KtFile>(strict).firstOrNull()
 
 inline fun <reified T : KtElement> KtElement.collectByType(): List<T> {
     val list = mutableListOf<T>()
