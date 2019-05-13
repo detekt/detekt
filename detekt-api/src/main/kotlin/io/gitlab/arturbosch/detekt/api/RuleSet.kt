@@ -20,6 +20,8 @@ class RuleSet(val id: RuleSetId, val rules: List<BaseRule>) {
         validateIdentifier(id)
     }
 
+    var pathFilters: PathFilters? = null
+
     /**
      * Is used to determine if a given [KtFile] should be analyzed at all.
      */
