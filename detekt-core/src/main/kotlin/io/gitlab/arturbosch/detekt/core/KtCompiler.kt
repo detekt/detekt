@@ -47,7 +47,6 @@ open class KtCompiler {
                 LightVirtualFile(path.toString()))
         return psiFile as? KtFile ?: throw IllegalStateException("kotlin file expected")
     }
-
 }
 
 fun KtFile.addUserData(rootPath: String) {

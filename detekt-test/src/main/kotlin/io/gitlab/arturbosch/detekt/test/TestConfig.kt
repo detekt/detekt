@@ -45,4 +45,8 @@ open class TestConfig(
         }
         throw ClassCastException()
     }
+
+    companion object {
+        operator fun invoke(vararg pairs: Pair<String, String>) = TestConfig(mapOf(*pairs))
+    }
 }
