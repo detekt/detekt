@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
+import io.gitlab.arturbosch.detekt.test.compileForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
 import org.spekframework.spek2.Spek
@@ -13,7 +14,7 @@ internal class MultiRuleTest : Spek({
     describe("a multi rule can have filters") {
 
         fun ruleSet() = RuleSet("TestMultiRule", listOf(TestMultiRule()))
-        val file = compilerFor("FilteredClass.kt")
+        val file = compileForTest(Case.FilteredClass.path())
 
         it("should not run any rules if both are filtered out") {
             val filters = setOf("TestRuleOne", "TestRuleTwo")

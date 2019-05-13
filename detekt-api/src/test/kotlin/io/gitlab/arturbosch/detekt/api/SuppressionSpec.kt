@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.api
 
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
+import io.gitlab.arturbosch.detekt.test.compileForTest
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -17,21 +18,21 @@ internal class SuppressionSpec : Spek({
     describe("different suppression scenarios") {
 
         it("rule should be suppressed") {
-            val ktFile = compilerFor("SuppressedObject.kt")
+            val ktFile = compileForTest(Case.SuppressedObject.path())
             val rule = TestRule()
             rule.visitFile(ktFile)
             assertThat(rule.expected).isNotNull()
         }
 
         it("findings are suppressed") {
-            val ktFile = compilerFor("SuppressedElements.kt")
+            val ktFile = compileForTest(Case.SuppressedElements.path())
             val ruleSet = RuleSet("Test", listOf(TestLM(), TestLPL()))
             val findings = ruleSet.accept(ktFile)
             assertThat(findings.size).isZero()
         }
 
         it("rule should be suppressed by ALL") {
-            val ktFile = compilerFor("SuppressedByAllObject.kt")
+            val ktFile = compileForTest(Case.SuppressedByAllObject.path())
             val rule = TestRule()
             rule.visitFile(ktFile)
             assertThat(rule.expected).isNotNull()
