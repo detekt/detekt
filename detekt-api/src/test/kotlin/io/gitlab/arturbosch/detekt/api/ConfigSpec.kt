@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
+import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.assertj.core.api.Assertions.fail
