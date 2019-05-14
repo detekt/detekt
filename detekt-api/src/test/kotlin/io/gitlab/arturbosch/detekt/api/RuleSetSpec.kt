@@ -6,7 +6,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
-import java.nio.file.Paths
 
 class RuleSetProviderSpec : Spek({
 
@@ -28,7 +27,7 @@ class RuleSetProviderSpec : Spek({
 
             context("filtering by paths") {
 
-                val file = compileForTest(Paths.get(resource("FilteredClass.kt").path))
+                val file = compileForTest(Case.FilteredClass.path())
 
                 it("excludes file and does not report") {
                     val config = TestConfig(Config.EXCLUDES_KEY to "**/*.kt")
