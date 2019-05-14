@@ -19,7 +19,10 @@ import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
 data class MultiRule(
     val name: String,
     val rules: List<String> = listOf()
-)
+) {
+
+    operator fun contains(ruleName: String) = ruleName in this.rules
+}
 
 private val multiRule = io.gitlab.arturbosch.detekt.api.MultiRule::class.simpleName ?: ""
 

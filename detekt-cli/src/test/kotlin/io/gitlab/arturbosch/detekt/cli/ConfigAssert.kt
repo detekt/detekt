@@ -14,9 +14,14 @@ class ConfigAssert(
     private val name: String,
     private val packageName: String
 ) {
+    private val allowedOptions = setOf(
+        Config.ACTIVE_KEY,
+        Config.EXCLUDES_KEY,
+        Config.INCLUDES_KEY
+    )
 
     fun assert() {
-        val ymlDeclarations = getYmlRuleConfig().properties.filter { it.key != "active" }
+        val ymlDeclarations = getYmlRuleConfig().properties.filter { it.key !in allowedOptions }
         assertThat(ymlDeclarations).isNotEmpty
         val ruleClasses = getRuleClasses()
         assertThat(ruleClasses).isNotEmpty
@@ -40,7 +45,7 @@ class ConfigAssert(
 
     private fun checkOptions(ymlOptions: HashMap<String, *>, ruleClass: Class<out Rule>) {
         val configFields = ruleClass.declaredFields.filter { isPublicStaticFinal(it) && it.name != "Companion" }
-        var filter = ymlOptions.filterKeys { it != "active" }
+        var filter = ymlOptions.filterKeys { it !in allowedOptions }
         if (filter.containsKey(THRESHOLD)) {
             assertThat(ruleClass.superclass.simpleName).isEqualTo(THRESHOLD_RULE)
             filter = filter.filterKeys { it != THRESHOLD }

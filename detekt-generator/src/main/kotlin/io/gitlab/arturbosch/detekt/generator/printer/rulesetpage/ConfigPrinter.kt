@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.generator.printer.rulesetpage
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.generator.collection.Rule
 import io.gitlab.arturbosch.detekt.generator.collection.RuleSetProvider
 import io.gitlab.arturbosch.detekt.generator.out.YamlNode
@@ -8,6 +9,7 @@ import io.gitlab.arturbosch.detekt.generator.out.list
 import io.gitlab.arturbosch.detekt.generator.out.node
 import io.gitlab.arturbosch.detekt.generator.out.yaml
 import io.gitlab.arturbosch.detekt.generator.printer.DocumentationPrinter
+import io.gitlab.arturbosch.detekt.generator.printer.rulesetpage.TestExclusions.isExcludedInTests
 
 /**
  * @author Marvin Ramin
@@ -28,13 +30,17 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
             emptyLine()
 
             item.sortedBy { it.ruleSet.name }
-                    .forEach { printRuleSet(it.ruleSet, it.rules) }
+                .forEach { printRuleSet(it.ruleSet, it.rules) }
         }
     }
 
+    @Suppress("ComplexMethod") // preserving the declarative structure while building the dsl
     private fun YamlNode.printRuleSet(ruleSet: RuleSetProvider, rules: List<Rule>) {
         node(ruleSet.name) {
             keyValue { "active" to "${ruleSet.active}" }
+            if (ruleSet.name in TestExclusions.ruleSets) {
+                keyValue { Config.EXCLUDES_KEY to TestExclusions.pattern }
+            }
             ruleSet.configuration.forEach { configuration ->
                 if (configuration.defaultValue.isYamlList()) {
                     list(configuration.name, configuration.defaultValue.toList())
@@ -47,6 +53,9 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
                     keyValue { "active" to "${rule.active}" }
                     if (rule.autoCorrect) {
                         keyValue { "autoCorrect" to "true" }
+                    }
+                    if (rule.isExcludedInTests()) {
+                        keyValue { Config.EXCLUDES_KEY to TestExclusions.pattern }
                     }
                     rule.configuration.forEach { configuration ->
                         if (configuration.defaultValue.isYamlList()) {

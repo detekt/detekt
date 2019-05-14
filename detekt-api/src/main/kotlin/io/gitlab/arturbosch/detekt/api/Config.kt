@@ -46,6 +46,7 @@ interface Config {
          */
         val empty: Config = EmptyConfig
 
+        const val ACTIVE_KEY = "active"
         const val EXCLUDES_KEY = "excludes"
         const val INCLUDES_KEY = "includes"
 
