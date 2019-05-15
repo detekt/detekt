@@ -33,19 +33,20 @@ import org.jetbrains.kotlin.psi.psiUtil.parents
 class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue("ReturnFromFinally", Severity.Defect,
-            "Do not return within a finally statement. This can discard exceptions.", Debt.TWENTY_MINS)
+        "Do not return within a finally statement. This can discard exceptions.", Debt.TWENTY_MINS)
 
     override fun visitFinallySection(finallySection: KtFinallySection) {
-        val returnExpressions = finallySection.finalExpression.collectByType<KtReturnExpression>()
-        val innerFunctions = finallySection.finalExpression.collectByType<KtNamedFunction>()
-        returnExpressions.forEach {
-            if (isNotInInnerFunction(it, innerFunctions)) {
-                report(CodeSmell(issue, Entity.from(it), issue.description))
-            }
-        }
+        val innerFunctions = finallySection.finalExpression
+            .collectByType<KtNamedFunction>()
+            .toSet()
+        finallySection.finalExpression
+            .collectByType<KtReturnExpression>()
+            .filter { isNotInInnerFunction(it, innerFunctions) }
+            .forEach { report(CodeSmell(issue, Entity.from(it), issue.description)) }
     }
 
-    private fun isNotInInnerFunction(it: KtReturnExpression, childFunctions: List<KtNamedFunction>): Boolean {
-        return !it.parents.any { childFunctions.contains(it) }
-    }
+    private fun isNotInInnerFunction(
+        returnStmts: KtReturnExpression,
+        childFunctions: Set<KtNamedFunction>
+    ): Boolean = !returnStmts.parents.any { childFunctions.contains(it) }
 }

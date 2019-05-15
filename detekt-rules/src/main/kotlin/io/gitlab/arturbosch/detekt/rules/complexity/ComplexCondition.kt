@@ -70,7 +70,7 @@ class ComplexCondition(
     }
 
     private fun checkIfComplex(condition: KtExpression?) {
-        val binaryExpressions = condition?.collectByType<KtBinaryExpression>()
+        val binaryExpressions = condition?.collectByType<KtBinaryExpression>()?.toList()
 
         if (binaryExpressions != null && binaryExpressions.size > 1) {
             val longestBinExpr = binaryExpressions.reduce { acc, binExpr ->
