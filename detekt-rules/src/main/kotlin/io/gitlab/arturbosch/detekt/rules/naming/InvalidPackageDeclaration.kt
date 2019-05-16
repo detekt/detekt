@@ -44,7 +44,7 @@ class InvalidPackageDeclaration(config: Config = Config.empty) : Rule(config) {
         if (declaredPath.isBlank()) {
             root.reportInvalidPackageDeclaration("The file does not contain a package declaration.")
         } else {
-            val normalizedFilePath = root.absolutePath()?.let { Paths.get(it).parent?.toNormalizedForm() }
+            val normalizedFilePath = Paths.get(root.absolutePath()).parent.toNormalizedForm()
             val normalizedRootPackage = packageNameToNormalizedForm(rootPackage)
             val expectedPath = if (normalizedRootPackage.isBlank())
                 declaredPath
@@ -52,7 +52,7 @@ class InvalidPackageDeclaration(config: Config = Config.empty) : Rule(config) {
                 declaredPath.substringAfter(normalizedRootPackage)
 
             val isInRootPackage = expectedPath.isBlank()
-            if (!isInRootPackage && normalizedFilePath != null && !normalizedFilePath.endsWith(expectedPath)) {
+            if (!isInRootPackage && !normalizedFilePath.endsWith(expectedPath)) {
                 root.reportInvalidPackageDeclaration("The package declaration does not match the actual file location.")
             }
         }

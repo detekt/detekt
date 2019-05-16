@@ -37,7 +37,7 @@ data class TestPattern(
 
     fun matches(path: String) = _patterns.any { it.matches(Paths.get(path)) }
     fun matchesRuleSet(ruleSet: String) = excludingRuleSets.any { it == ruleSet }
-    fun isTestSource(file: KtFile) = active && file.absolutePath()?.let { matches(it) } == true
+    fun isTestSource(file: KtFile) = active && matches(file.absolutePath())
 
     companion object {
         const val TEST_PATTERN_SUB_CONFIG = "test-pattern"
