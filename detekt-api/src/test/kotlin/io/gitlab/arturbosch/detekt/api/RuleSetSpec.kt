@@ -7,7 +7,20 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-class RuleSetProviderSpec : Spek({
+class RuleSetSpec : Spek({
+
+    class Test : Rule() {
+        override val issue: Issue = Issue("Test", Severity.Style, "", Debt.FIVE_MINS)
+        override fun visit(root: KtFile) {
+            report(CodeSmell(issue, Entity.from(root), ""))
+        }
+    }
+
+    class TestProvider : RuleSetProvider {
+
+        override val ruleSetId: String = "test"
+        override fun instance(config: Config): RuleSet = RuleSet(ruleSetId, listOf(Test()))
+    }
 
     fun ruleSetInstance(config: Config) = TestProvider().buildRuleset(config)
         ?: throw AssertionError("Expected a rule set")
@@ -34,7 +47,7 @@ class RuleSetProviderSpec : Spek({
                     assertThat(ruleSetInstance(config).accept(file)).isEmpty()
                 }
 
-                it("should include and report file") {
+                it("should report the file as it's path is excluded but also included") {
                     val config = TestConfig(
                         Config.EXCLUDES_KEY to "**/*.kt",
                         Config.INCLUDES_KEY to "**/*.kt"
@@ -45,30 +58,3 @@ class RuleSetProviderSpec : Spek({
         }
     }
 })
-
-class TestProvider : RuleSetProvider {
-
-    override val ruleSetId: String = "test"
-
-    override fun instance(config: Config): RuleSet = RuleSet(ruleSetId, listOf(Test()))
-}
-
-class Test : BaseRule() {
-
-    override fun visitCondition(root: KtFile): Boolean = true
-
-    override fun visit(root: KtFile) {
-        report(
-            CodeSmell(
-                Issue(
-                    "Test",
-                    Severity.Style,
-                    "",
-                    Debt.FIVE_MINS
-                ),
-                Entity.from(root),
-                ""
-            )
-        )
-    }
-}
