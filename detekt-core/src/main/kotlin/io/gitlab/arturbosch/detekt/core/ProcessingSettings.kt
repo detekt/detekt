@@ -70,6 +70,4 @@ data class ProcessingSettings @JvmOverloads constructor(
     }
 
     val pluginUrls = pluginPaths.map { it.toUri().toURL() }.toTypedArray()
-
-    fun loadTestPattern() = createTestPattern(config)
 }

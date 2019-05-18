@@ -20,8 +20,6 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
         return yaml {
             yaml { defaultGenericConfiguration() }
             emptyLine()
-            yaml { defaultTestPatternConfiguration() }
-            emptyLine()
             yaml { defaultBuildConfiguration() }
             emptyLine()
             yaml { defaultProcessorsConfiguration() }
@@ -73,34 +71,6 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
     private fun defaultGenericConfiguration(): String {
         return """
 			autoCorrect: true
-			""".trimIndent()
-    }
-
-    private fun defaultTestPatternConfiguration(): String {
-        return """
-			test-pattern: # Configure exclusions for test sources
-			  active: true
-			  patterns: # Test file regexes
-			    - '.*/test/.*'
-			    - '.*/androidTest/.*'
-			    - '.*Test.kt'
-			    - '.*Spec.kt'
-			    - '.*Spek.kt'
-			  exclude-rule-sets:
-			    - 'comments'
-			  exclude-rules:
-			    - 'NamingRules'
-			    - 'WildcardImport'
-			    - 'MagicNumber'
-			    - 'MaxLineLength'
-			    - 'LateinitUsage'
-			    - 'StringLiteralDuplication'
-			    - 'SpreadOperator'
-			    - 'TooManyFunctions'
-			    - 'ForEachOnRange'
-			    - 'FunctionMaxLength'
-			    - 'TooGenericExceptionCaught'
-			    - 'InstanceOfCheckForException'
 			""".trimIndent()
     }
 
