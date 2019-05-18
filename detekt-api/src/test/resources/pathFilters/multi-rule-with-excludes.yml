@@ -1,0 +1,8 @@
+TestMultiRule:
+  active: true
+  TestRuleOne:
+    active: true
+    excludes: "**/*.kt"
+  TestRuleTwo:
+    active: true
+    excludes: "**/*.kt"
