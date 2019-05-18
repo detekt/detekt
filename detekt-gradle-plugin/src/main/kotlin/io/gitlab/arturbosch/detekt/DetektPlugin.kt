@@ -30,6 +30,7 @@ class DetektPlugin : Plugin<Project> {
         extension.reportsDir = project.extensions.getByType(ReportingExtension::class.java).file("detekt")
 
         configurePluginDependencies(project, extension)
+        setTaskDefaults(project)
 
         registerOldDetektTask(project, extension)
         registerDetektTasks(project, extension)
@@ -38,10 +39,6 @@ class DetektPlugin : Plugin<Project> {
 
         registerIdeaTasks(project, extension)
     }
-
-    @Suppress("UnsafeCast")
-    private fun Any.getConvention(name: String): Any? =
-        (this as HasConvention).convention.plugins[name]
 
     private fun registerDetektTasks(project: Project, extension: DetektExtension) {
         // Kotlin JVM plugin
@@ -52,7 +49,6 @@ class DetektPlugin : Plugin<Project> {
                 }
             }
         }
-
     }
 
     private fun registerOldDetektTask(project: Project, extension: DetektExtension) {
@@ -84,7 +80,7 @@ class DetektPlugin : Plugin<Project> {
     }
 
     private fun registerDetektTask(project: Project, extension: DetektExtension, sourceSet: SourceSet) {
-        val kotlinSourceSet = sourceSet.getConvention("kotlin") as? KotlinSourceSet
+        val kotlinSourceSet = (sourceSet as HasConvention).convention.plugins["kotlin"] as? KotlinSourceSet
             ?: throw GradleException("Kotlin source set not found. Please report on detekt's issue tracker")
         project.tasks.register(DETEKT + sourceSet.name.capitalize(), Detekt::class.java) {
             it.debugProp.set(project.provider { extension.debug })
@@ -166,6 +162,22 @@ class DetektPlugin : Plugin<Project> {
                 val version = extension.toolVersion ?: DEFAULT_DETEKT_VERSION
                 dependencySet.add(project.dependencies.create("io.gitlab.arturbosch.detekt:detekt-cli:$version"))
             }
+        }
+    }
+
+    private fun setTaskDefaults(project: Project) {
+        project.tasks.withType(Detekt::class.java).configureEach {
+            it.detektClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT))
+            it.pluginClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT_PLUGINS))
+        }
+
+        project.tasks.withType(DetektCreateBaselineTask::class.java).configureEach {
+            it.detektClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT))
+            it.pluginClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT_PLUGINS))
+        }
+
+        project.tasks.withType(DetektGenerateConfigTask::class.java).configureEach {
+            it.detektClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT))
         }
     }
 

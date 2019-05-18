@@ -1,9 +1,11 @@
 package io.gitlab.arturbosch.detekt
 
+import io.gitlab.arturbosch.detekt.internal.configurableFileCollection
 import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import io.gitlab.arturbosch.detekt.invoke.GenerateConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import org.gradle.api.file.FileCollection
+import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.language.base.plugins.LifecycleBasePlugin
@@ -11,6 +13,7 @@ import org.gradle.language.base.plugins.LifecycleBasePlugin
 /**
  * @author Artur Bosch
  * @author Marvin Ramin
+ * @author Matthew Haughton
  */
 open class DetektGenerateConfigTask : SourceTask() {
 
@@ -24,6 +27,9 @@ open class DetektGenerateConfigTask : SourceTask() {
         get() = source
         set(value) = setSource(value)
 
+    @Classpath
+    val detektClasspath = project.configurableFileCollection()
+
     @TaskAction
     fun generateConfig() {
         val arguments = mutableListOf(
@@ -31,6 +37,6 @@ open class DetektGenerateConfigTask : SourceTask() {
             InputArgument(source)
         )
 
-        DetektInvoker.invokeCli(project, arguments.toList())
+        DetektInvoker.invokeCli(project, arguments.toList(), detektClasspath)
     }
 }

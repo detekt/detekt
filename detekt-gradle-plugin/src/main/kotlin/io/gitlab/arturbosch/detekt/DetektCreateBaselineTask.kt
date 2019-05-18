@@ -13,10 +13,12 @@ import io.gitlab.arturbosch.detekt.invoke.FailFastArgument
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
 import io.gitlab.arturbosch.detekt.invoke.PluginsArgument
+import org.gradle.api.GradleException
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.FileCollection
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
+import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
@@ -32,6 +34,7 @@ import org.gradle.language.base.plugins.LifecycleBasePlugin
  * @author Artur Bosch
  * @author Marvin Ramin
  * @author Markus Schwarz
+ * @author Matthew Haughton
  */
 open class DetektCreateBaselineTask : SourceTask() {
 
@@ -61,7 +64,15 @@ open class DetektCreateBaselineTask : SourceTask() {
 
     @Input
     @Optional
+    @Deprecated("Set plugins using the detektPlugins configuration " +
+            "(see https://arturbosch.github.io/detekt/extensions.html#let-detekt-know-about-your-extensions)")
     var plugins: Property<String> = project.objects.property(String::class.java)
+
+    @Classpath
+    val detektClasspath = project.configurableFileCollection()
+
+    @Classpath
+    val pluginClasspath = project.configurableFileCollection()
 
     @Internal
     @Optional
@@ -85,6 +96,9 @@ open class DetektCreateBaselineTask : SourceTask() {
 
     @TaskAction
     fun baseline() {
+        if (plugins.isPresent && !pluginClasspath.isEmpty)
+            throw GradleException("Cannot set value for plugins on detekt task and apply detektPlugins configuration " +
+                    "at the same time.")
         val arguments = mutableListOf(
             CreateBaselineArgument,
             BaselineArgument(baseline.get()),
@@ -98,6 +112,11 @@ open class DetektCreateBaselineTask : SourceTask() {
             DisableDefaultRuleSetArgument(disableDefaultRuleSets.getOrElse(false))
         )
 
-        DetektInvoker.invokeCli(project, arguments.toList(), debug.getOrElse(false))
+        DetektInvoker.invokeCli(
+            project,
+            arguments.toList(),
+            detektClasspath.plus(pluginClasspath),
+            debug.getOrElse(false)
+        )
     }
 }

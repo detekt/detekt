@@ -21,6 +21,7 @@ import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
 import io.gitlab.arturbosch.detekt.invoke.PluginsArgument
 import io.gitlab.arturbosch.detekt.output.mergeXmlReports
 import org.gradle.api.Action
+import org.gradle.api.GradleException
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
 import org.gradle.api.file.FileCollection
@@ -49,6 +50,7 @@ import java.io.File
  * @author Artur Bosch
  * @author Marvin Ramin
  * @author Markus Schwarz
+ * @author Matthew Haughton
  */
 @CacheableTask
 open class Detekt : SourceTask() {
@@ -62,6 +64,12 @@ open class Detekt : SourceTask() {
     @Optional
     @Deprecated("Replace with setIncludes/setExcludes")
     var filters: Property<String> = project.objects.property(String::class.java)
+
+    @Classpath
+    val detektClasspath = project.configurableFileCollection()
+
+    @Classpath
+    val pluginClasspath = project.configurableFileCollection()
 
     @InputFile
     @Optional
@@ -87,6 +95,8 @@ open class Detekt : SourceTask() {
 
     @Input
     @Optional
+    @Deprecated("Set plugins using the detektPlugins configuration " +
+            "(see https://arturbosch.github.io/detekt/extensions.html#let-detekt-know-about-your-extensions)")
     var plugins: Property<String> = project.objects.property(String::class.java)
 
     @Internal
@@ -164,6 +174,9 @@ open class Detekt : SourceTask() {
 
     @TaskAction
     fun check() {
+        if (plugins.isPresent && !pluginClasspath.isEmpty)
+            throw GradleException("Cannot set value for plugins on detekt task and apply detektPlugins configuration " +
+                    "at the same time.")
         val xmlReportTargetFileOrNull = xmlReportFile.orNull
         val htmlReportTargetFileOrNull = htmlReportFile.orNull
         val debugOrDefault = debugProp.getOrElse(false)
@@ -195,7 +208,7 @@ open class Detekt : SourceTask() {
             CustomReportArgument(reportId, destination)
         })
 
-        DetektInvoker.invokeCli(project, arguments.toList(), debugOrDefault)
+        DetektInvoker.invokeCli(project, arguments.toList(), detektClasspath.plus(pluginClasspath), debugOrDefault)
 
         if (xmlReportTargetFileOrNull != null) {
             val xmlReports = project.subprojects.flatMap { subproject ->
