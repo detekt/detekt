@@ -41,28 +41,4 @@ class RuleSet(val id: RuleSetId, val rules: List<BaseRule>) {
 
     private fun isFileIgnored(file: KtFile) =
         pathFilters?.isIgnored(Paths.get(file.relativePath())) == true
-
-    /**
-     * Visits given file with all non-filtered rules of this rule set.
-     * If a rule is a [MultiRule] the filters are passed to it via a setter
-     * and later used to filter sub rules of the [MultiRule].
-     *
-     * A list of findings is returned for given KtFile
-     */
-    fun accept(
-        file: KtFile,
-        ruleFilters: Set<RuleId>,
-        bindingContext: BindingContext = BindingContext.EMPTY
-    ): List<Finding> =
-        if (isFileIgnored(file)) {
-            emptyList()
-        } else {
-            rules.asSequence()
-                .filterNot { it.ruleId in ruleFilters }
-                .onEach { if (it is MultiRule) it.ruleFilters = ruleFilters }
-                .flatMap {
-                    it.visitFile(file, bindingContext)
-                    it.findings.asSequence()
-                }.toList()
-        }
 }

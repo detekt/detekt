@@ -1,0 +1,6 @@
+TestMultiRule:
+  active: true
+  TestRuleOne:
+    active: true
+  TestRuleTwo:
+    active: true
