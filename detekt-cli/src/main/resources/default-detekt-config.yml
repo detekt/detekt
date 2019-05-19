@@ -1,5 +1,3 @@
-autoCorrect: true
-
 build:
   maxIssues: 10
   weights:
