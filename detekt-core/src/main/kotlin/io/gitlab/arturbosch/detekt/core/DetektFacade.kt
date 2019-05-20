@@ -44,8 +44,8 @@ class DetektFacade(
         val findings = HashMap<String, List<Finding>>()
 
         val filesToAnalyze = environment.getSourceFiles()
-            .filterNot { file -> pathFilters?.isIgnored(Paths.get(file.virtualFilePath)) ?: false }
-            .apply { forEach { it.addUserData(it.virtualFilePath) } }
+            .filterNot { file -> pathFilters?.isIgnored(Paths.get(file.virtualFilePath)) == true }
+            .onEach { it.addUserData(it.virtualFilePath) }
         val bindingContext = generateBindingContext(filesToAnalyze)
 
         processors.forEach { it.onStart(filesToAnalyze) }
