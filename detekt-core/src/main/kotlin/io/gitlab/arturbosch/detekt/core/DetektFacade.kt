@@ -50,19 +50,15 @@ class DetektFacade(
 
         processors.forEach { it.onStart(filesToAnalyze) }
 
-        if (saveSupported) {
-            for (current in inputPaths) {
-                val files = compiler.compile(current)
+        findings.mergeSmells(detektor.run(filesToAnalyze, bindingContext))
+        val result = DetektResult(findings.toSortedMap())
 
-                KtFileModifier(current).saveModifiedFiles(files) {
-                    notifications.add(it)
-                }
+        if (saveSupported) {
+            KtFileModifier().saveModifiedFiles(filesToAnalyze) {
+                notifications.add(it)
             }
         }
 
-        findings.mergeSmells(detektor.run(filesToAnalyze, bindingContext))
-
-        val result = DetektResult(findings.toSortedMap())
         processors.forEach { it.onFinish(filesToAnalyze, result) }
         return result
     }
@@ -94,7 +90,7 @@ class DetektFacade(
         val findings = detektor.run(files)
         val detektion = DetektResult(findings.toSortedMap())
         if (saveSupported) {
-            KtFileModifier(current).saveModifiedFiles(files) {
+            KtFileModifier().saveModifiedFiles(files) {
                 detektion.add(it)
             }
         }

@@ -6,21 +6,20 @@ import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import org.jetbrains.kotlin.fileClasses.javaFileFacadeFqName
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Files
-import java.nio.file.Path
+import java.nio.file.Paths
 
 /**
  * @author Artur Bosch
  */
-class KtFileModifier(private val project: Path) {
+class KtFileModifier {
 
     fun saveModifiedFiles(ktFiles: List<KtFile>, notification: (Notification) -> Unit) {
         ktFiles.filter { it.modificationStamp > 0 }
-                .map { it.absolutePath() to it.unnormalizeContent() }
-                .map { project.resolve(it.first) to it.second }
-                .forEach {
-                    notification.invoke(ModificationNotification(it.first))
-                    Files.write(it.first, it.second.toByteArray())
-                }
+            .map { Paths.get(it.absolutePath()) to it.unnormalizeContent() }
+            .forEach {
+                notification.invoke(ModificationNotification(it.first))
+                Files.write(it.first, it.second.toByteArray())
+            }
     }
 
     private fun KtFile.unnormalizeContent(): String {
