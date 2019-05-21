@@ -18,7 +18,6 @@ import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
-import java.nio.file.Path
 import java.nio.file.Paths
 
 /**
@@ -80,23 +79,6 @@ class DetektFacade(
         } else {
             BindingContext.EMPTY
         }
-    }
-
-    fun run(project: Path, files: List<KtFile>): Detektion = runOnFiles(project, files)
-
-    private fun runOnFiles(current: Path, files: List<KtFile>): DetektResult {
-        processors.forEach { it.onStart(files) }
-
-        val findings = detektor.run(files)
-        val detektion = DetektResult(findings.toSortedMap())
-        if (saveSupported) {
-            KtFileModifier().saveModifiedFiles(files) {
-                detektion.add(it)
-            }
-        }
-
-        processors.forEach { it.onFinish(files, detektion) }
-        return detektion
     }
 
     private object DetektMessageRenderer : PlainTextMessageRenderer() {
