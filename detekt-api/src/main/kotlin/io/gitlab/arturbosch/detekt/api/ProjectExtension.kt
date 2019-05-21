@@ -45,7 +45,10 @@ fun createKotlinCoreEnvironment(configuration: CompilerConfiguration = CompilerC
             PrintingMessageCollector(System.err, MessageRenderer.PLAIN_FULL_PATHS, false))
     configuration.put(CommonConfigurationKeys.MODULE_NAME, "detekt")
     return KotlinCoreEnvironment.createForProduction(Disposer.newDisposable(),
-        configuration, EnvironmentConfigFiles.JVM_CONFIG_FILES)
+        configuration, EnvironmentConfigFiles.JVM_CONFIG_FILES).apply {
+        makeMutable(project as? MockProject ?: throw IllegalStateException(
+            "Unexpected Type for psi project. MockProject expected. Please report this!"))
+    }
 }
 
 private fun createProject(configuration: CompilerConfiguration = CompilerConfiguration()): Project {

@@ -1,6 +1,8 @@
 package io.gitlab.arturbosch.detekt.formatting
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Detektion
+import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
@@ -37,14 +39,19 @@ class AutoCorrectLevelSpec : Spek({
 
             it("should format the test file but not print to disc") {
                 val project = Paths.get(resource("before.kt"))
-                val detekt = DetektFacade.create(ProcessingSettings(project, config))
-                val file = loadFile("before.kt")
-                val expected = file.text
-                val findings = detekt.run(project, listOf(file))
-                        .findings.flatMap { it.value }
+                val contentChanged = object : FileProcessListener {
+                    override fun onFinish(files: List<KtFile>, result: Detektion) {
+                        assertThat(files).hasSize(1)
+                        println(files[0].text)
+                        assertThat(wasFormatted(files[0])).isTrue()
+                    }
+                }
+                val detekt = DetektFacade.create(
+                    ProcessingSettings(project, config), listOf(FormattingProvider()), listOf(contentChanged))
+                val expected = loadFile("before.kt").text
+                val findings = detekt.run().findings.flatMap { it.value }
 
                 assertThat(wasLinted(findings)).isTrue()
-                assertThat(wasFormatted(file)).isTrue()
                 assertThat(loadFileContent("before.kt")).isEqualTo(expected)
             }
         }
