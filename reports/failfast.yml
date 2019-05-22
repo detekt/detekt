@@ -1,24 +1,6 @@
 build:
   maxIssues: 1
 
-test-pattern: # Configure exclusions for test sources
-  active: true
-  patterns: # Test file regexes
-    - '.*/test/.*'
-    - '.*Test.kt'
-    - '.*Spec.kt'
-  exclude-rule-sets:
-    - 'comments'
-  exclude-rules:
-    - 'NamingRules'
-    - 'WildcardImport'
-    - 'MagicNumber'
-    - 'MaxLineLength'
-    - 'LateinitUsage'
-    - 'StringLiteralDuplication'
-    - 'SpreadOperator'
-    - 'UnsafeCast'
-
 comments:
   CommentOverPrivateProperty:
     active: true
@@ -26,6 +8,7 @@ comments:
 complexity:
   StringLiteralDuplication:
     active: true
+    excludes: "**/test/**,**/*.Test.kt,**/*.Spec.kt"
     threshold: 5
     ignoreAnnotation: true
     excludeStringsWithLessThan5Characters: true
@@ -77,6 +60,7 @@ naming:
 potential-bugs:
   UnsafeCast:
     active: true
+    excludes: "**/test/**,**/*.Test.kt,**/*.Spec.kt"
   UselessPostfixExpression:
     active: true
 
@@ -84,6 +68,7 @@ style:
   CollapsibleIfStatements:
     active: true
   MaxLineLength:
+    excludes: "**/test/**,**/*.Test.kt,**/*.Spec.kt"
     excludeCommentStatements: true
   MagicNumber:
     ignoreHashCodeFunction: true
