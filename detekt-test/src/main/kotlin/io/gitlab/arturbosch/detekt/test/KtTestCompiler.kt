@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.test
 
+import io.gitlab.arturbosch.detekt.api.internal.ABSOLUTE_PATH
 import io.gitlab.arturbosch.detekt.core.KtCompiler
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
@@ -32,11 +33,12 @@ object KtTestCompiler : KtCompiler() {
     fun compile(path: Path) = compile(root, path)
 
     fun compileFromContent(content: String): KtFile {
-        val psiFile = psiFileFactory.createFileFromText(
+        val file = psiFileFactory.createFileFromText(
             TEST_FILENAME,
             KotlinLanguage.INSTANCE,
-            StringUtilRt.convertLineSeparators(content))
-        return psiFile as? KtFile ?: throw IllegalStateException("kotlin file expected")
+            StringUtilRt.convertLineSeparators(content)) as? KtFile
+        file?.putUserData(ABSOLUTE_PATH, TEST_FILENAME)
+        return file ?: throw IllegalStateException("kotlin file expected")
     }
 
     fun getContextForPaths(environment: KotlinCoreEnvironment, paths: List<KtFile>) =

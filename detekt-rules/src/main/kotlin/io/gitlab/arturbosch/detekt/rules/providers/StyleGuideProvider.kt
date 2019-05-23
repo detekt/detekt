@@ -15,6 +15,7 @@ import io.gitlab.arturbosch.detekt.rules.style.ForbiddenComment
 import io.gitlab.arturbosch.detekt.rules.style.ForbiddenImport
 import io.gitlab.arturbosch.detekt.rules.style.ForbiddenVoid
 import io.gitlab.arturbosch.detekt.rules.style.FunctionOnlyReturningConstant
+import io.gitlab.arturbosch.detekt.rules.style.LibraryCodeMustSpecifyReturnType
 import io.gitlab.arturbosch.detekt.rules.style.LoopWithTooManyJumpStatements
 import io.gitlab.arturbosch.detekt.rules.style.MagicNumber
 import io.gitlab.arturbosch.detekt.rules.style.MayBeConst
@@ -113,7 +114,8 @@ class StyleGuideProvider : RuleSetProvider {
                 UselessCallOnNotNull(config),
                 UnderscoresInNumericLiterals(config),
                 UseRequire(config),
-                UseCheckOrError(config)
+                UseCheckOrError(config),
+                LibraryCodeMustSpecifyReturnType(config)
             )
         )
     }
