@@ -32,7 +32,7 @@ import org.jetbrains.kotlin.types.TypeUtils
  *
  * <compliant>
  * val testList = listOf("string")
- * val testList2 = listOf("string").map { _ }
+ * val testList2 = listOf("string").map { }
  * val testString = ""?.isBlank()
  * </compliant>
  *

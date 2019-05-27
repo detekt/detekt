@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.performance
 
 import io.gitlab.arturbosch.detekt.test.KtTestCompiler
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import io.gitlab.arturbosch.detekt.test.lintWithContext
+import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
@@ -37,7 +37,7 @@ class SpreadOperatorSpec : Spek({
                     fun foo(vararg xs: Int) {}
                     val testVal = foo(xs = *xsArray)
                 """
-                val actual = subject.lintWithContext(environment, code)
+                val actual = subject.compileAndLintWithContext(environment, code)
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().message).isEqualTo(typeResolutionEnabledMessage)
             }
@@ -47,7 +47,7 @@ class SpreadOperatorSpec : Spek({
                     fun foo(vararg xs: Int) {}
                     val testVal = foo(*xsArray)
                 """
-                val actual = subject.lintWithContext(environment, code)
+                val actual = subject.compileAndLintWithContext(environment, code)
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().message).isEqualTo(typeResolutionEnabledMessage)
             }
@@ -56,7 +56,7 @@ class SpreadOperatorSpec : Spek({
                     fun foo(vararg xs: Int) {}
                     val testVal = foo(xs = *intArrayOf(1))
                 """
-                assertThat(subject.lintWithContext(environment, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(environment, code)).isEmpty()
             }
 
             it("doesn't report when using array constructor with spread operator when varargs parameter comes first") {
@@ -64,7 +64,7 @@ class SpreadOperatorSpec : Spek({
                     fun <T> asList(vararg ts: T, stringValue: String): List<Int> = listOf(1,2,3)
                     val list = asList(-1, 0, *arrayOf(1, 2, 3), 4, stringValue = "5")
                 """
-                assertThat(subject.lintWithContext(environment, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(environment, code)).isEmpty()
             }
 
             it("doesn't report when passing values directly") {
@@ -72,7 +72,7 @@ class SpreadOperatorSpec : Spek({
                     fun <T> asList(vararg ts: T, stringValue: String): List<Int> = listOf(1,2,3)
                     val list = asList(-1, 0, 1, 2, 3, 4, stringValue = "5")
                 """
-                assertThat(subject.lintWithContext(environment, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(environment, code)).isEmpty()
             }
 
             it("doesn't report when function doesn't take a vararg parameter") {
@@ -85,7 +85,7 @@ class SpreadOperatorSpec : Spek({
 					strs.forEach { println(it) }
 				}
                 """
-                assertThat(subject.lintWithContext(environment, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(environment, code)).isEmpty()
             }
 
             it("doesn't report with expression inside params") {
@@ -98,7 +98,7 @@ class SpreadOperatorSpec : Spek({
 					println(test)
 				}
                 """
-                assertThat(subject.lintWithContext(environment, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(environment, code)).isEmpty()
             }
         }
 
