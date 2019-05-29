@@ -17,7 +17,7 @@ import java.util.Locale
  * This rule detects and reports decimal base 10 numeric literals above a certain length that should be underscore
  * separated for readability. Underscores that do not make groups of 3 digits are also reported even if their length is
  * under the `acceptableDecimalLength`. For `Serializable` classes or objects, the field `serialVersionUID` is
- * explicitly ignored.
+ * explicitly ignored. For floats and doubles, anything to the right of the decimal is ignored.
  *
  * <noncompliant>
  * object Money {
@@ -54,21 +54,17 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
             return
         }
 
-        val numberStringParts = normalizedText.split('.')
+        val numberString = normalizedText.split('.').first()
 
-        if (numberStringParts.sumBy { it.length } >= acceptableDecimalLength ||
-                numberStringParts.any { it.contains('_') }) {
-            reportIfInvalidUnderscorePattern(expression, numberStringParts)
+        if (numberString.length >= acceptableDecimalLength || numberString.contains('_')) {
+            reportIfInvalidUnderscorePattern(expression, numberString)
         }
     }
 
-    private fun reportIfInvalidUnderscorePattern(expression: KtConstantExpression, numberStringParts: List<String>) {
-        for (part in numberStringParts) {
-            if (!part.matches(underscoreNumberRegex)) {
-                report(CodeSmell(issue, Entity.from(expression), "This numeric literal should be separated " +
-                        "by underscores in order to increase readability."))
-                break
-            }
+    private fun reportIfInvalidUnderscorePattern(expression: KtConstantExpression, numberString: String) {
+        if (!numberString.matches(underscoreNumberRegex)) {
+            report(CodeSmell(issue, Entity.from(expression), "This numeric literal should be separated " +
+                    "by underscores in order to increase readability."))
         }
     }
 
