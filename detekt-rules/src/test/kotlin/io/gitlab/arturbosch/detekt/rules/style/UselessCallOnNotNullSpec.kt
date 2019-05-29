@@ -60,11 +60,11 @@ object UselessCallOnNotNullSpec : Spek({
 
         it("only reports on a Kotlin list") {
             val code = """
-                fun main() {
-                    val javaList = Java().list.orEmpty()
-                    val list = listOf(1, 2, 3).orEmpty()
-                }
-            """.trimMargin()
+                fun String.orEmpty(): List<Char> = this.toCharArray().asList()
+
+                val noList = "str".orEmpty()
+                val list = listOf(1, 2, 3).orEmpty()
+            """
             assertThat(subject.compileAndLintWithContext(environment, code)).hasSize(1)
         }
     }
