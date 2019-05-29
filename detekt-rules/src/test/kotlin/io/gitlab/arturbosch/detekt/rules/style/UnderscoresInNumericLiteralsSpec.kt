@@ -188,6 +188,15 @@ class UnderscoresInNumericLiteralsSpec : Spek({
         }
     }
 
+    describe("a hexadecimal Int of 0xFFFFFF") {
+        val ktFile = compileContentForTest("const val myHexInt = 0xFFFFFF")
+
+        it("should not be reported") {
+            val findings = UnderscoresInNumericLiterals().lint(ktFile)
+            assertThat(findings).isEmpty()
+        }
+    }
+
     describe("a property named serialVersionUID in an object that implements Serializable") {
         val ktFile = compileContentForTest("""
             object TestSerializable : Serializable {
