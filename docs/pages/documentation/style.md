@@ -924,7 +924,7 @@ This rule reports lines that end with a whitespace.
 This rule detects and reports decimal base 10 numeric literals above a certain length that should be underscore
 separated for readability. Underscores that do not make groups of 3 digits are also reported even if their length is
 under the `acceptableDecimalLength`. For `Serializable` classes or objects, the field `serialVersionUID` is
-explicitly ignored.
+explicitly ignored. For floats and doubles, anything to the right of the decimal is ignored.
 
 **Severity**: Style
 
