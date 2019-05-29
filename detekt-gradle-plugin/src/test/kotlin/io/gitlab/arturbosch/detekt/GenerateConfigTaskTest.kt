@@ -6,6 +6,9 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class GenerateConfigTaskTest : Spek({
+
+    defaultTimeout = GRADLE_TEST_TIMEOUT
+
     describe("The generate config task of the Detekt Gradle plugin") {
         listOf(DslTestBuilder.groovy(), DslTestBuilder.kotlin()).forEach { builder ->
             describe("using ${builder.gradleBuildName}") {

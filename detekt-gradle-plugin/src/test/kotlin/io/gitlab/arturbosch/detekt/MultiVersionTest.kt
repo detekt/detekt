@@ -9,6 +9,8 @@ import org.spekframework.spek2.style.specification.describe
 
 object MultiVersionTest : Spek({
 
+    defaultTimeout = GRADLE_TEST_TIMEOUT
+
     val testedGradleVersions = listOf("4.9", "5.4")
 
     describe("detekt plugin running on different Gradle versions") {

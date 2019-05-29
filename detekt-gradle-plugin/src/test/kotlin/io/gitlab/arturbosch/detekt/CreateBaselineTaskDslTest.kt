@@ -9,6 +9,9 @@ import org.spekframework.spek2.style.specification.describe
  * @author Markus Schwarz
  */
 internal class CreateBaselineTaskDslTest : Spek({
+
+    defaultTimeout = GRADLE_TEST_TIMEOUT
+
     describe("The detektBaseline task of the Detekt Gradle plugin") {
         listOf(DslTestBuilder.groovy(), DslTestBuilder.kotlin()).forEach { builder ->
             describe("using ${builder.gradleBuildName}") {

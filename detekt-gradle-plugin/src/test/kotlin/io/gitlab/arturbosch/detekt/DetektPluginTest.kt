@@ -8,6 +8,9 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 object DetektPluginTest : Spek({
+
+    defaultTimeout = GRADLE_TEST_TIMEOUT
+
     describe("detekt plugin") {
 
         fun Task.dependencies() = taskDependencies.getDependencies(this)

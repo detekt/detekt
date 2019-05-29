@@ -15,6 +15,8 @@ import org.spekframework.spek2.style.specification.describe
  */
 internal class PluginTaskBehaviorTest : Spek({
 
+    defaultTimeout = GRADLE_TEST_TIMEOUT
+
     val configFileName = "config.yml"
     val baselineFileName = "baseline.xml"
 

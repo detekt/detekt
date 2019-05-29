@@ -9,6 +9,9 @@ import org.spekframework.spek2.style.specification.describe
  * @author Markus Schwarz
  */
 internal class DetektTaskMultiModuleConsolidationTest : Spek({
+
+    defaultTimeout = GRADLE_TEST_TIMEOUT
+
     describe("The Detekt Gradle plugin consolidates xml reports in a multi module project") {
         val projectLayout = ProjectLayout(
             numberOfSourceFilesInRootPerSourceDir = 1,

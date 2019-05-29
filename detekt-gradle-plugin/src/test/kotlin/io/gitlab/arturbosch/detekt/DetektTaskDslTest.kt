@@ -14,6 +14,8 @@ import org.spekframework.spek2.style.specification.describe
  */
 internal class DetektTaskDslTest : Spek({
 
+    defaultTimeout = GRADLE_TEST_TIMEOUT
+
     describe("When applying the detekt gradle plugin") {
         listOf(groovy(), kotlin()).forEach { builder ->
             describe("using ${builder.gradleBuildName}") {

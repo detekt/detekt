@@ -11,6 +11,9 @@ import org.spekframework.spek2.style.specification.describe
  * @author Markus Schwarz
  */
 internal class DetektTaskMultiModuleTest : Spek({
+
+    defaultTimeout = GRADLE_TEST_TIMEOUT
+
     describe("The Detekt Gradle plugin used in a multi module project") {
         describe(
             "is applied with defaults to all subprojects individually without sources in root project using the" +
