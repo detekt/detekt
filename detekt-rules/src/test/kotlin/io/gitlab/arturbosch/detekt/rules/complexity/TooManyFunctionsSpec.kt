@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.TestConfig
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
@@ -42,7 +43,7 @@ class TooManyFunctionsSpec : Spek({
 				}
 			"""
 
-            assertThat(rule.lint(code)).hasSize(1)
+            assertThat(rule.compileAndLint(code)).hasSize(1)
         }
 
         it("finds one function in object") {
@@ -52,7 +53,7 @@ class TooManyFunctionsSpec : Spek({
 				}
 			"""
 
-            assertThat(rule.lint(code)).hasSize(1)
+            assertThat(rule.compileAndLint(code)).hasSize(1)
         }
 
         it("finds one function in interface") {
@@ -62,69 +63,67 @@ class TooManyFunctionsSpec : Spek({
 				}
 			"""
 
-            assertThat(rule.lint(code)).hasSize(1)
+            assertThat(rule.compileAndLint(code)).hasSize(1)
         }
 
         it("finds one function in enum") {
             val code = """
 				enum class E {
-					fun E()
+                    A;
+					fun e() {}
 				}
 			"""
 
-            assertThat(rule.lint(code)).hasSize(1)
+            assertThat(rule.compileAndLint(code)).hasSize(1)
         }
 
         it("finds one function in file") {
-            val code = "fun f = Unit"
+            val code = "fun f() = Unit"
 
-            assertThat(rule.lint(code)).hasSize(1)
+            assertThat(rule.compileAndLint(code)).hasSize(1)
         }
 
         it("finds one function in file ignoring other declarations") {
             val code = """
-				fun f1 = Unit
+				fun f1() = Unit
 				class C
 				object O
-				fun f2 = Unit
+				fun f2() = Unit
 				interface I
 				enum class E
-				fun f3 = Unit
+				fun f3() = Unit
 			"""
 
-            assertThat(rule.lint(code)).hasSize(1)
+            assertThat(rule.compileAndLint(code)).hasSize(1)
         }
 
         it("finds one function in nested class") {
             val code = """
 				class A {
 					class B {
-						class C {
-							fun a() = Unit
-						}
+						fun a() = Unit
 					}
 				}
 			"""
 
-            assertThat(rule.lint(code)).hasSize(1)
+            assertThat(rule.compileAndLint(code)).hasSize(1)
         }
 
         describe("different deprecated functions") {
-
             val code = """
-				@Deprecated
+				@Deprecated("")
 				fun f() {
 				}
 
 				class A {
-					@Deprecated
+					@Deprecated("")
 					fun f() {
 					}
 				}
 				"""
             it("finds all deprecated functions per default") {
 
-                assertThat(rule.lint(code)).hasSize(2)
+                assertThat(rule.compileAndLint(code)).hasSize(2)
             }
 
             it("finds no deprecated functions") {
@@ -133,24 +132,20 @@ class TooManyFunctionsSpec : Spek({
                         TooManyFunctions.THRESHOLD_IN_FILES to "1",
                         TooManyFunctions.IGNORE_DEPRECATED to "true"
                 )))
-                assertThat(configuredRule.lint(code)).isEmpty()
+                assertThat(configuredRule.compileAndLint(code)).isEmpty()
             }
         }
 
         describe("different private functions") {
 
             val code = """
-				private fun f() {
-				}
-
 				class A {
-					private fun f() {
-					}
+					private fun f() {}
 				}
 				"""
 
-            it("finds all private functions per default") {
-                assertThat(rule.lint(code)).hasSize(2)
+            it("finds the private function per default") {
+                assertThat(rule.compileAndLint(code)).hasSize(1)
             }
 
             it("finds no private functions") {
@@ -159,7 +154,7 @@ class TooManyFunctionsSpec : Spek({
                         TooManyFunctions.THRESHOLD_IN_FILES to "1",
                         TooManyFunctions.IGNORE_PRIVATE to "true"
                 )))
-                assertThat(configuredRule.lint(code)).isEmpty()
+                assertThat(configuredRule.compileAndLint(code)).isEmpty()
             }
         }
 
@@ -167,14 +162,21 @@ class TooManyFunctionsSpec : Spek({
 
             it("should not report when file has no public functions") {
                 val code = """
-					private fun a() = Unit
-					private fun b() = Unit
-					@Deprecated
-					private fun c() = Unit
+                    class A {
+                        private fun a() = Unit
+                        private fun b() = Unit
+                        @Deprecated("")
+                        private fun c() = Unit
+                    }
 
-                    class D : E {
-                        override fun f() = Unit
-                        override fun e() = Unit
+                    interface I {
+                        fun a() = Unit
+                        fun b() = Unit
+                    }
+
+                    class B : I {
+                        override fun a() = Unit
+                        override fun b() = Unit
                     }
 				""".trimIndent()
                 val configuredRule = TooManyFunctions(TestConfig(mapOf(
@@ -184,14 +186,19 @@ class TooManyFunctionsSpec : Spek({
                         TooManyFunctions.IGNORE_DEPRECATED to "true",
                         TooManyFunctions.IGNORE_OVERRIDDEN to "true"
                 )))
-                assertThat(configuredRule.lint(code)).isEmpty()
+                assertThat(configuredRule.compileAndLint(code)).isEmpty()
             }
         }
 
         describe("overridden functions") {
 
             val code = """
-                    class Foo : Bar {
+                    interface I1 {
+                        fun func1()
+                        fun func2()
+                    }
+
+                    class Foo : I1 {
                         override fun func1() = Unit
                         override fun func2() = Unit
                     }
@@ -203,7 +210,7 @@ class TooManyFunctionsSpec : Spek({
                         TooManyFunctions.THRESHOLD_IN_FILES to "1",
                         TooManyFunctions.IGNORE_OVERRIDDEN to "true"
                 )))
-                assertThat(configuredRule.lint(code)).isEmpty()
+                assertThat(configuredRule.compileAndLint(code)).isEmpty()
             }
 
             it("should count overridden functions, if ignoreOverridden is disabled") {
@@ -212,7 +219,7 @@ class TooManyFunctionsSpec : Spek({
                         TooManyFunctions.THRESHOLD_IN_FILES to "1",
                         TooManyFunctions.IGNORE_OVERRIDDEN to "false"
                 )))
-                assertThat(configuredRule.lint(code)).hasSize(1)
+                assertThat(configuredRule.compileAndLint(code)).hasSize(1)
             }
         }
     }

@@ -79,21 +79,25 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
     override fun visitClass(klass: KtClass) {
         val amount = calcFunctions(klass)
         when {
-            klass.isInterface() && amount >= thresholdInInterfaces -> {
-                report(ThresholdedCodeSmell(issue,
+            klass.isInterface() -> {
+                if (amount >= thresholdInInterfaces) {
+                    report(ThresholdedCodeSmell(issue,
                         Entity.from(klass),
                         Metric("SIZE", amount, thresholdInInterfaces),
                         "Interface '${klass.name}' with '$amount' functions detected. " +
                                 "Defined threshold inside interfaces is set to " +
                                 "'$thresholdInInterfaces'"))
+                }
             }
-            klass.isEnum() && amount >= thresholdInEnums -> {
-                report(ThresholdedCodeSmell(issue,
+            klass.isEnum() -> {
+                if (amount >= thresholdInEnums) {
+                    report(ThresholdedCodeSmell(issue,
                         Entity.from(klass),
                         Metric("SIZE", amount, thresholdInEnums),
                         "Enum class '${klass.name}' with '$amount' functions detected. " +
                                 "Defined threshold inside enum classes is set to " +
                                 "'$thresholdInEnums'"))
+                }
             }
             else -> {
                 if (amount >= thresholdInClasses) {
