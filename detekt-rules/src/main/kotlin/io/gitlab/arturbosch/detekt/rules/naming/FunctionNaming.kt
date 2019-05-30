@@ -15,6 +15,8 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
  * Reports when function names which do not follow the specified naming convention are used.
+ * One exception are factory functions used to create instances of classes.
+ * These factory functions can have the same name as the class being created.
  *
  * @configuration functionPattern - naming pattern (default: `'^([a-z$][a-zA-Z$0-9]*)|(`.*`)$'`)
  * @configuration excludeClassPattern - ignores functions in classes which match this regex (default: `'$^'`)
@@ -45,7 +47,8 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
         }
 
         if (!function.isContainingExcludedClassOrObject(excludeClassPattern) &&
-                !function.identifierName().matches(functionPattern)) {
+                !function.identifierName().matches(functionPattern) &&
+                function.identifierName() != function.typeReference?.name) {
             report(CodeSmell(
                     issue,
                     Entity.from(function),

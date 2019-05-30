@@ -52,6 +52,19 @@ class FunctionNamingSpec : Spek({
             assertThat(FunctionNaming().lint(code)).isEmpty()
         }
 
+
+
+        it("does not report when the function name is identical to the type of the result") {
+            val code = """
+            interface Foo
+            private class FooImpl : Foo
+
+			fun Foo(): Foo = FooImpl()
+		"""
+            val config = TestConfig(mapOf("ignoreOverridden" to "false"))
+            assertThat(FunctionNaming(config).lint(code))
+        }
+
         it("flags functions with bad names inside overridden functions by default") {
             val code = """
 			override fun SHOULD_NOT_BE_FLAGGED() {
