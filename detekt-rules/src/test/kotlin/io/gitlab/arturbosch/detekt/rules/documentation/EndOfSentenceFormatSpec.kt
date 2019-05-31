@@ -173,6 +173,17 @@ class EndOfSentenceFormatSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
+        it("does not report KDoc ending with colon") {
+            val code = """
+			/**
+			 * Something correct:
+			 */
+			class Test {
+			}
+			"""
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
         it("does not report URLs in comments") {
             val code = """
 			/** http://www.google.com */

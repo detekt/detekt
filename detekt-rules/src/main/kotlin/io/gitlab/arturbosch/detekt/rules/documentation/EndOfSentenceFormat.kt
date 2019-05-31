@@ -30,7 +30,7 @@ class KDocStyle(config: Config = Config.empty) : MultiRule() {
  * It should end with proper punctuation or with a correct URL.
  *
  * @configuration endOfSentenceFormat - regular expression which should match the end of the first sentence in the KDoc
- * (default: `([.?!][ \t\n\r\f<])|([.?!]$)`)
+ * (default: `([.?!][ \t\n\r\f<])|([.?!:]$)`)
  *
  *  @author Marvin Ramin
  *  @author schalkms
@@ -43,7 +43,7 @@ class EndOfSentenceFormat(config: Config = Config.empty) : Rule(config) {
             Debt.FIVE_MINS)
 
     private val endOfSentenceFormat =
-            Regex(valueOrDefault(END_OF_SENTENCE_FORMAT, "([.?!][ \\t\\n\\r\\f<])|([.?!]\$)"))
+            Regex(valueOrDefault(END_OF_SENTENCE_FORMAT, "([.?!][ \\t\\n\\r\\f<])|([.?!:]\$)"))
     private val htmlTag = Regex("<.+>")
 
     fun verify(declaration: KtDeclaration) {
