@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.TestConfig
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
@@ -28,7 +29,7 @@ class ExceptionRaisedInUnexpectedLocationSpec : Spek({
 
         it("reports the configured method") {
             val config = TestConfig(mapOf(ExceptionRaisedInUnexpectedLocation.METHOD_NAMES to "toDo,todo2"))
-            val findings = ExceptionRaisedInUnexpectedLocation(config).lint("""
+            val findings = ExceptionRaisedInUnexpectedLocation(config).compileAndLint("""
 			fun toDo() {
 				throw IllegalStateException()
 			}""")

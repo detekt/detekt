@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
-import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -20,7 +20,7 @@ class PrintStackTraceSpec : Spek({
 						e.printStackTrace()
 					}
 				}"""
-                assertThat(subject.lint(code)).hasSize(1)
+                assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
             it("does not print a stacktrace") {
@@ -28,12 +28,14 @@ class PrintStackTraceSpec : Spek({
 				fun x() {
 					try {
 					} catch (e: Exception) {
-						e.foo()
-						val bar = e.bar
+						e.fillInStackTrace()
+						val msg = e.message
+                        fun printStackTrace() {}
 						printStackTrace()
 					}
-				}"""
-                assertThat(subject.lint(code)).hasSize(0)
+				}
+                """
+                assertThat(subject.compileAndLint(code)).hasSize(0)
             }
         }
 
@@ -43,9 +45,11 @@ class PrintStackTraceSpec : Spek({
                 val code = """
 				fun x() {
 					Thread.dumpStack()
-					UnusedPrivateMemberPositiveObject.Foo.dumpStack()
+
+                    fun dumpStack() {}
+                    dumpStack()
 				}"""
-                assertThat(subject.lint(code)).hasSize(1)
+                assertThat(subject.compileAndLint(code)).hasSize(1)
             }
         }
     }

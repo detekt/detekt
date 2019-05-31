@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.rules.Case
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
@@ -26,7 +27,7 @@ class MethodOverloadingSpec : Spek({
             }
 
             it("does not report overloaded methods which do not exceed the threshold") {
-                subject.lint("""
+                subject.compileAndLint("""
 				class Test {
 					fun x() { }
 					fun x(i: Int) { }
@@ -38,7 +39,7 @@ class MethodOverloadingSpec : Spek({
         context("several overloaded extensions functions") {
 
             it("does not report extension methods with a different receiver") {
-                subject.lint("""
+                subject.compileAndLint("""
 				fun Boolean.foo() {}
 				fun Int.foo() {}
 				fun Long.foo() {}""")
@@ -46,7 +47,7 @@ class MethodOverloadingSpec : Spek({
             }
 
             it("reports extension methods with the same receiver") {
-                subject.lint("""
+                subject.compileAndLint("""
 				fun Int.foo() {}
 				fun Int.foo(i: Int) {}
 				fun Int.foo(i: String) {}""")
