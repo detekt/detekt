@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.core
 
-import io.gitlab.arturbosch.detekt.api.createKotlinCoreEnvironment
+import io.gitlab.arturbosch.detekt.api.internal.createKotlinCoreEnvironment
 import io.gitlab.arturbosch.detekt.api.internal.ABSOLUTE_PATH
 import io.gitlab.arturbosch.detekt.api.internal.RELATIVE_PATH
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment

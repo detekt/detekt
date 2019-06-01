@@ -5,8 +5,8 @@ import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.api.createCompilerConfiguration
-import io.gitlab.arturbosch.detekt.api.createKotlinCoreEnvironment
+import io.gitlab.arturbosch.detekt.api.internal.createCompilerConfiguration
+import io.gitlab.arturbosch.detekt.api.internal.createKotlinCoreEnvironment
 import org.jetbrains.kotlin.cli.common.messages.AnalyzerWithCompilerReport
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageLocation
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
@@ -42,9 +42,6 @@ class DetektFacade(
         val findings = HashMap<String, List<Finding>>()
 
         val filesToAnalyze = inputPaths.flatMap(compiler::compile)
-//        val filesToAnalyze = environment.getSourceFiles()
-//            .filterNot { file -> pathFilters?.isIgnored(Paths.get(file.virtualFilePath)) == true }
-//            .onEach { it.addUserData(it.virtualFilePath) }
         val bindingContext = generateBindingContext(filesToAnalyze)
 
         processors.forEach { it.onStart(filesToAnalyze) }

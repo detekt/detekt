@@ -1,6 +1,5 @@
-package io.gitlab.arturbosch.detekt.api
+package io.gitlab.arturbosch.detekt.api.internal
 
-import io.gitlab.arturbosch.detekt.api.internal.DetektPomModel
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.config.addKotlinSourceRoots
 import org.jetbrains.kotlin.cli.common.messages.MessageRenderer
