@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.test
 import io.gitlab.arturbosch.detekt.api.BaseRule
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.test.KotlinScriptEngine.compile
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.psi.KtFile
@@ -11,7 +10,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
 import java.nio.file.Path
 
 fun BaseRule.compileAndLint(@Language("kotlin") content: String): List<Finding> {
-    compile(content)
+    KotlinScriptEngine.compile(content)
     return lint(content)
 }
 
@@ -25,7 +24,8 @@ fun BaseRule.lint(path: Path): List<Finding> {
     return findingsAfterVisit(ktFile)
 }
 
-fun BaseRule.lintWithContext(environment: KotlinCoreEnvironment, content: String): List<Finding> {
+fun BaseRule.compileAndLintWithContext(environment: KotlinCoreEnvironment, content: String): List<Finding> {
+    KotlinScriptEngine.compile(content)
     val ktFile = KtTestCompiler.compileFromContent(content.trimIndent())
     val bindingContext = KtTestCompiler.getContextForPaths(environment, listOf(ktFile))
     return findingsAfterVisit(ktFile, bindingContext)
