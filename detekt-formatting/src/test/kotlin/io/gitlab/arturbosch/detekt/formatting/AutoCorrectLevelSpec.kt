@@ -39,20 +39,25 @@ class AutoCorrectLevelSpec : Spek({
 
             it("should format the test file but not print to disc") {
                 val project = Paths.get(resource("before.kt"))
+                var expectedContentBeforeRun: String? = null
                 val contentChanged = object : FileProcessListener {
+                    override fun onStart(files: List<KtFile>) {
+                        assertThat(files).hasSize(1)
+                        expectedContentBeforeRun = files[0].text
+                    }
+
                     override fun onFinish(files: List<KtFile>, result: Detektion) {
                         assertThat(files).hasSize(1)
-                        println(files[0].text)
                         assertThat(wasFormatted(files[0])).isTrue()
                     }
                 }
                 val detekt = DetektFacade.create(
                     ProcessingSettings(project, config), listOf(FormattingProvider()), listOf(contentChanged))
-                val expected = loadFile("before.kt").text
                 val findings = detekt.run().findings.flatMap { it.value }
+                val actualContentAfterRun = loadFileContent("before.kt")
 
                 assertThat(wasLinted(findings)).isTrue()
-                assertThat(loadFileContent("before.kt")).isEqualTo(expected)
+                assertThat(actualContentAfterRun).isEqualTo(expectedContentBeforeRun)
             }
         }
 
