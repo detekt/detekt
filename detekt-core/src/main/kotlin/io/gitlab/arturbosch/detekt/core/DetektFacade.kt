@@ -5,8 +5,6 @@ import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.api.internal.createCompilerConfiguration
-import io.gitlab.arturbosch.detekt.api.internal.createKotlinCoreEnvironment
 import org.jetbrains.kotlin.cli.common.messages.AnalyzerWithCompilerReport
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageLocation
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
@@ -33,9 +31,8 @@ class DetektFacade(
     private val classpath = settings.classpath
     private val pathFilters = settings.pathFilters
     private val jvmTarget = settings.jvmTarget
-    private val compilerConfiguration = createCompilerConfiguration(inputPaths, classpath, jvmTarget)
-    private val environment = createKotlinCoreEnvironment(compilerConfiguration)
-    private val compiler = KtTreeCompiler(KtCompiler(environment), settings)
+    private val environment = settings.environment
+    private val compiler = KtTreeCompiler.instance(settings)
 
     fun run(): Detektion {
         val notifications = mutableListOf<Notification>()

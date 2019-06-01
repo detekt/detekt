@@ -10,13 +10,13 @@ import java.util.stream.Collectors
  * @author Marvin Ramin
  */
 class KtTreeCompiler(
-    private val compiler: KtCompiler = KtCompiler(),
-    private val settings: ProcessingSettings
+    private val settings: ProcessingSettings,
+    private val compiler: KtCompiler = KtCompiler(settings.environment)
 ) {
 
     companion object {
         val KT_ENDINGS = setOf("kt", "kts")
-        fun instance(settings: ProcessingSettings): KtTreeCompiler = KtTreeCompiler(KtCompiler(), settings)
+        fun instance(settings: ProcessingSettings): KtTreeCompiler = KtTreeCompiler(settings)
     }
 
     fun compile(path: Path): List<KtFile> {
