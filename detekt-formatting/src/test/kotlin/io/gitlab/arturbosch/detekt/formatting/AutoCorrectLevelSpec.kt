@@ -18,6 +18,8 @@ import java.nio.file.Paths
  */
 class AutoCorrectLevelSpec : Spek({
 
+    defaultTimeout = FORMATTING_TIMEOUT
+
     describe("test different autoCorrect levels in configuration") {
 
         describe("autoCorrect: true on all levels") {

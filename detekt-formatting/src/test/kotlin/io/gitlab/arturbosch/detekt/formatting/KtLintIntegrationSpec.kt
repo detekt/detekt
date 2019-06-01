@@ -11,6 +11,8 @@ import org.spekframework.spek2.style.specification.describe
  */
 class KtLintIntegrationSpec : Spek({
 
+    defaultTimeout = FORMATTING_TIMEOUT
+
     describe("tests integration of formatting") {
 
         it("should work like KtLint") {
