@@ -32,9 +32,9 @@ object KtTestCompiler : KtCompiler() {
 
     fun compileFromContent(content: String): KtFile {
         val psiFile = psiFileFactory.createFileFromText(
-                TEST_FILENAME,
-                KotlinLanguage.INSTANCE,
-                StringUtilRt.convertLineSeparators(content))
+            TEST_FILENAME,
+            KotlinLanguage.INSTANCE,
+            StringUtilRt.convertLineSeparators(content))
         return psiFile as? KtFile ?: throw IllegalStateException("kotlin file expected")
     }
 
@@ -62,7 +62,7 @@ object KtTestCompiler : KtCompiler() {
     }
 
     class TestDisposable : Disposable {
-        override fun dispose() { } // Don't want to dispose the test KotlinCoreEnvironment
+        override fun dispose() {} // Don't want to dispose the test KotlinCoreEnvironment
     }
 }
 

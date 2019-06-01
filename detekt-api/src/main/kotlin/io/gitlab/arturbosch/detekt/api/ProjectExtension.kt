@@ -11,7 +11,6 @@ import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
 import org.jetbrains.kotlin.com.intellij.mock.MockProject
 import org.jetbrains.kotlin.com.intellij.openapi.extensions.ExtensionPoint
 import org.jetbrains.kotlin.com.intellij.openapi.extensions.Extensions
-import org.jetbrains.kotlin.com.intellij.openapi.project.Project
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.com.intellij.openapi.util.UserDataHolderBase
 import org.jetbrains.kotlin.com.intellij.pom.PomModel
@@ -24,38 +23,27 @@ import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.JVMConfigurationKeys
 import org.jetbrains.kotlin.config.JvmTarget
-import org.jetbrains.kotlin.psi.KtPsiFactory
 import sun.reflect.ReflectionFactory
 import java.io.File
 import java.nio.file.Path
 
-/**
- * The initialized kotlin environment which is used to translate kotlin code to a Kotlin-AST.
- */
-val psiProject: Project = createProject()
-
-/**
- * Allows to generate different kinds of KtElement's.
- */
-val psiFactory: KtPsiFactory = KtPsiFactory(psiProject, false)
-
 fun createKotlinCoreEnvironment(configuration: CompilerConfiguration = CompilerConfiguration()): KotlinCoreEnvironment {
     System.setProperty("idea.io.use.fallback", "true")
     configuration.put(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY,
-            PrintingMessageCollector(System.err, MessageRenderer.PLAIN_FULL_PATHS, false))
+        PrintingMessageCollector(System.err, MessageRenderer.PLAIN_FULL_PATHS, false))
     configuration.put(CommonConfigurationKeys.MODULE_NAME, "detekt")
-    return KotlinCoreEnvironment.createForProduction(Disposer.newDisposable(),
-        configuration, EnvironmentConfigFiles.JVM_CONFIG_FILES).apply {
-        makeMutable(project as? MockProject ?: throw IllegalStateException(
-            "Unexpected Type for psi project. MockProject expected. Please report this!"))
-    }
-}
 
-private fun createProject(configuration: CompilerConfiguration = CompilerConfiguration()): Project {
-    return createKotlinCoreEnvironment(configuration).project.apply {
-        makeMutable(this as? MockProject ?: throw IllegalStateException(
-                "Unexpected Type for psi project. MockProject expected. Please report this!"))
-    }
+    val environment = KotlinCoreEnvironment.createForProduction(
+        Disposer.newDisposable(),
+        configuration,
+        EnvironmentConfigFiles.JVM_CONFIG_FILES
+    )
+
+    val mockProject = environment.project as? MockProject ?: error("MockProject class type expected")
+    makeMutable(mockProject)
+//    mockProject?.registerService(PomModel::class.java, DetektPomModel())
+
+    return environment
 }
 
 fun createCompilerConfiguration(
@@ -85,7 +73,7 @@ fun createCompilerConfiguration(
     }
 }
 
-private fun makeMutable(project: MockProject) {
+fun makeMutable(project: MockProject) {
     // Based on KtLint by Shyiko
     val pomModel: PomModel = object : UserDataHolderBase(), PomModel {
 
@@ -100,7 +88,7 @@ private fun makeMutable(project: MockProject) {
                 // (check constructor signature and compare it to the source)
                 // (org.jetbrains.kotlin:kotlin-compiler-embeddable:1.0.3)
                 val constructor = ReflectionFactory.getReflectionFactory().newConstructorForSerialization(
-                        aspect, Any::class.java.getDeclaredConstructor())
+                    aspect, Any::class.java.getDeclaredConstructor())
                 return constructor.newInstance() as T
             }
             return null
@@ -109,7 +97,7 @@ private fun makeMutable(project: MockProject) {
     val extensionPoint = "org.jetbrains.kotlin.com.intellij.treeCopyHandler"
     val extensionClassName = TreeCopyHandler::class.java.name!!
     arrayOf(Extensions.getArea(project), Extensions.getArea(null))
-            .filter { !it.hasExtensionPoint(extensionPoint) }
-            .forEach { it.registerExtensionPoint(extensionPoint, extensionClassName, ExtensionPoint.Kind.INTERFACE) }
+        .filter { !it.hasExtensionPoint(extensionPoint) }
+        .forEach { it.registerExtensionPoint(extensionPoint, extensionClassName, ExtensionPoint.Kind.INTERFACE) }
     project.registerService(PomModel::class.java, pomModel)
 }

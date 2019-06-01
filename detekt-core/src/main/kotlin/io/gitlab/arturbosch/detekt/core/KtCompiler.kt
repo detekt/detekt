@@ -1,31 +1,36 @@
 package io.gitlab.arturbosch.detekt.core
 
+import io.gitlab.arturbosch.detekt.api.createKotlinCoreEnvironment
 import io.gitlab.arturbosch.detekt.api.internal.ABSOLUTE_PATH
 import io.gitlab.arturbosch.detekt.api.internal.RELATIVE_PATH
-import io.gitlab.arturbosch.detekt.api.psiProject
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import org.jetbrains.kotlin.com.intellij.psi.PsiFileFactory
 import org.jetbrains.kotlin.com.intellij.testFramework.LightVirtualFile
 import org.jetbrains.kotlin.idea.KotlinLanguage
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtPsiFactory
 import java.nio.file.Path
 import java.nio.file.Paths
 
 /**
  * @author Artur Bosch
  */
-open class KtCompiler {
+open class KtCompiler(
+    environment: KotlinCoreEnvironment = createKotlinCoreEnvironment()
+) {
 
-    protected val psiFileFactory: PsiFileFactory = PsiFileFactory.getInstance(psiProject)
+    val psiFileFactory: PsiFileFactory = PsiFileFactory.getInstance(environment.project)
+    val psiFactory: KtPsiFactory = KtPsiFactory(environment.project, false)
 
     fun compile(root: Path, subPath: Path): KtFile {
         require(subPath.isFile()) { "Given sub path should be a regular file!" }
         val relativePath =
-                (if (root == subPath) subPath.fileName
-                else root.fileName.resolve(root.relativize(subPath))).normalize()
+            (if (root == subPath) subPath.fileName
+            else root.fileName.resolve(root.relativize(subPath))).normalize()
         val absolutePath =
-                (if (root == subPath) subPath
-                else subPath).toAbsolutePath().normalize()
+            (if (root == subPath) subPath
+            else subPath).toAbsolutePath().normalize()
         val content = subPath.toFile().readText()
         val lineSeparator = content.determineLineSeparator()
         val normalizedContent = StringUtilRt.convertLineSeparators(content)
@@ -40,11 +45,11 @@ open class KtCompiler {
 
     private fun createKtFile(content: String, path: Path): KtFile {
         val psiFile = psiFileFactory.createFileFromText(
-                path.fileName.toString(),
-                KotlinLanguage.INSTANCE,
-                StringUtilRt.convertLineSeparators(content),
-                true, true, false,
-                LightVirtualFile(path.toString()))
+            path.fileName.toString(),
+            KotlinLanguage.INSTANCE,
+            StringUtilRt.convertLineSeparators(content),
+            true, true, false,
+            LightVirtualFile(path.toString()))
         return psiFile as? KtFile ?: throw IllegalStateException("kotlin file expected")
     }
 }

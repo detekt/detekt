@@ -47,8 +47,8 @@ class ElementPrinter : DetektVisitor() {
 
     private val KtElement.line
         get() = PsiDiagnosticUtils.offsetToLineAndColumn(
-                containingFile.viewProvider.document,
-                textRange.startOffset).line
+            containingFile.viewProvider.document,
+            textRange.startOffset).line
 
     private val KtElement.dump
         get() = indentation + line + ": " + javaClass.simpleName
@@ -78,7 +78,7 @@ class ElementPrinter : DetektVisitor() {
     }
 
     private fun KtElement.isContainer() =
-            this is KtStatementExpression ||
-                    this is KtDeclarationContainer ||
-                    this is KtContainerNode
+        this is KtStatementExpression ||
+            this is KtDeclarationContainer ||
+            this is KtContainerNode
 }

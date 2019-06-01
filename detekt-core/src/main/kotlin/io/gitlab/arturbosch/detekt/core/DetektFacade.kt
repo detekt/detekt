@@ -18,7 +18,6 @@ import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
-import java.nio.file.Paths
 
 /**
  * @author Artur Bosch
@@ -36,15 +35,16 @@ class DetektFacade(
     private val jvmTarget = settings.jvmTarget
     private val compilerConfiguration = createCompilerConfiguration(inputPaths, classpath, jvmTarget)
     private val environment = createKotlinCoreEnvironment(compilerConfiguration)
-    private val compiler = KtTreeCompiler.instance(settings)
+    private val compiler = KtTreeCompiler(KtCompiler(environment), settings)
 
     fun run(): Detektion {
         val notifications = mutableListOf<Notification>()
         val findings = HashMap<String, List<Finding>>()
 
-        val filesToAnalyze = environment.getSourceFiles()
-            .filterNot { file -> pathFilters?.isIgnored(Paths.get(file.virtualFilePath)) == true }
-            .onEach { it.addUserData(it.virtualFilePath) }
+        val filesToAnalyze = inputPaths.flatMap(compiler::compile)
+//        val filesToAnalyze = environment.getSourceFiles()
+//            .filterNot { file -> pathFilters?.isIgnored(Paths.get(file.virtualFilePath)) == true }
+//            .onEach { it.addUserData(it.virtualFilePath) }
         val bindingContext = generateBindingContext(filesToAnalyze)
 
         processors.forEach { it.onStart(filesToAnalyze) }
