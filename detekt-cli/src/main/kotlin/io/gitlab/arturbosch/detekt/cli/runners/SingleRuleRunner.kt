@@ -30,6 +30,7 @@ class SingleRuleRunner(private val arguments: CliArgs) : Executable {
                 config = loadConfiguration(),
                 pathFilters = createFilters(),
                 parallelCompilation = parallel,
+                autoCorrect = autoCorrect,
                 excludeDefaultRuleSets = disableDefaultRuleSets,
                 pluginPaths = createPlugins())
         }

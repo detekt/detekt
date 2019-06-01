@@ -29,6 +29,7 @@ data class ProcessingSettings @JvmOverloads constructor(
     val executorService: ExecutorService = ForkJoinPool.commonPool(),
     val outPrinter: PrintStream = System.out,
     val errorPrinter: PrintStream = System.err,
+    val autoCorrect: Boolean = false,
     val debug: Boolean = false
 ) {
     /**
@@ -46,6 +47,7 @@ data class ProcessingSettings @JvmOverloads constructor(
         executorService: ExecutorService = ForkJoinPool.commonPool(),
         outPrinter: PrintStream = System.out,
         errorPrinter: PrintStream = System.err,
+        autoCorrect: Boolean = false,
         debug: Boolean = false
     ) : this(
         listOf(inputPath),
@@ -59,6 +61,7 @@ data class ProcessingSettings @JvmOverloads constructor(
         executorService,
         outPrinter,
         errorPrinter,
+        autoCorrect,
         debug
     )
 

@@ -18,8 +18,6 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 
     override fun print(item: List<RuleSetPage>): String {
         return yaml {
-            yaml { defaultGenericConfiguration() }
-            emptyLine()
             yaml { defaultBuildConfiguration() }
             emptyLine()
             yaml { defaultProcessorsConfiguration() }
@@ -66,12 +64,6 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
             }
             emptyLine()
         }
-    }
-
-    private fun defaultGenericConfiguration(): String {
-        return """
-			autoCorrect: true
-			""".trimIndent()
     }
 
     private fun defaultBuildConfiguration(): String {

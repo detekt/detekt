@@ -30,7 +30,7 @@ class DetektFacade(
     private val processors: List<FileProcessListener>
 ) {
 
-    private val saveSupported = settings.config.valueOrDefault("autoCorrect", false)
+    private val saveSupported = settings.autoCorrect
     private val inputPaths = settings.inputPaths
     private val classpath = settings.classpath
     private val pathFilters = settings.pathFilters

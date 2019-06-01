@@ -83,6 +83,13 @@ class CliArgs : Args {
             "Additional configuration files can override properties but not the 'active' one.")
     var failFast: Boolean = false
 
+    @Parameter(names = ["--auto-correct", "-ac"],
+        description = "Allow rules to auto correct code if they support it. " +
+            "The default rule sets do NOT support auto correcting and won't change any line in the users code base. " +
+            "However custom rules can be written to support auto correcting. " +
+            "The additional 'formatting' rule set, added with '--plugins', does support it and needs this flag.")
+    var autoCorrect: Boolean = false
+
     @Parameter(names = ["--debug"],
         description = "Prints extra information about configurations and extensions.")
     var debug: Boolean = false
@@ -116,7 +123,7 @@ class CliArgs : Args {
         names = ["--jvm-target"],
         converter = JvmTargetConverter::class,
         description = "EXPERIMENTAL: Target version of the generated JVM bytecode that was generated during " +
-                "compilation and is now being used for type resolution (1.6, 1.8, 9, 10, 11 or 12)"
+            "compilation and is now being used for type resolution (1.6, 1.8, 9, 10, 11 or 12)"
     )
     var jvmTarget: JvmTarget = JvmTarget.DEFAULT
 
