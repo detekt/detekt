@@ -5,10 +5,22 @@ class MaxLineLengthSuppressed {
     companion object {
         @Suppress("MaxLineLength")
         val LOREM_IPSUM = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
+
+        @Suppress("MaxLineLength")
+        val A_VERY_LONG_MULTI_LINE = """
+            This is anotehr very very very very very very very very, very long multiline String that will break the MaxLineLength"
+        """.trimIndent()
     }
 
     @Suppress("MaxLineLength")
     val loremIpsumField = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
+
+    @Suppress("MaxLineLength")
+    val longMultiLineField = """
+            This is anotehr very very very very very very very very
+            very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very
+            very long multiline String that will break the MaxLineLength
+        """.trimIndent()
 
     fun main() {
         val thisIsAVeryLongValName = "This is a very, very long String that will break the MaxLineLength"
