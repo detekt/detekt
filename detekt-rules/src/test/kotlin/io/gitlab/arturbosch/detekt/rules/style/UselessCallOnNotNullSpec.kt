@@ -59,7 +59,7 @@ object UselessCallOnNotNullSpec : Spek({
         }
 
         it("reports when calling orEmpty on a list with a platform type") {
-            // System.getenv().keys will be of type List<String!>.
+            // System.getenv().keys.toList() will be of type List<String!>.
             val code = """val testSequence = System.getenv().keys.toList().orEmpty()"""
             assertThat(subject.compileAndLintWithContext(environment, code)).hasSize(1)
         }
