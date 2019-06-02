@@ -58,6 +58,12 @@ object UselessCallOnNotNullSpec : Spek({
             assertThat(subject.compileAndLintWithContext(environment, code)).hasSize(1)
         }
 
+        it("reports when calling orEmpty on a list with a platform type") {
+            // System.getenv().keys.toList() will be of type List<String!>.
+            val code = """val testSequence = System.getenv().keys.toList().orEmpty()"""
+            assertThat(subject.compileAndLintWithContext(environment, code)).hasSize(1)
+        }
+
         it("only reports on a Kotlin list") {
             val code = """
                 fun String.orEmpty(): List<Char> = this.toCharArray().asList()
