@@ -3,19 +3,6 @@
   <Blacklist></Blacklist>
   <Whitelist>
     <ID>LargeClass:UnusedPrivateMemberSpec.kt$UnusedPrivateMemberSpec : Spek</ID>
-    <ID>MaxLineLength:BaselineFacade.kt$BaselineFacade$val blackFiltered = whiteFiltered.filterNot { finding -&gt; listings.second.ids.contains(finding.baselineId) }</ID>
-    <ID>MaxLineLength:ComplexityReportGenerator.kt$ComplexityReportGenerator.Factory$fun create(detektion: Detektion): ComplexityReportGenerator</ID>
-    <ID>MaxLineLength:Config.kt$io.gitlab.arturbosch.detekt.api.Config.kt</ID>
-    <ID>MaxLineLength:ConstructorParameterNaming.kt$io.gitlab.arturbosch.detekt.rules.naming.ConstructorParameterNaming.kt</ID>
-    <ID>MaxLineLength:Detektor.kt$io.gitlab.arturbosch.detekt.core.Detektor.kt</ID>
-    <ID>MaxLineLength:ForbiddenImport.kt$io.gitlab.arturbosch.detekt.rules.style.ForbiddenImport.kt</ID>
-    <ID>MaxLineLength:IteratorNotThrowingNoSuchElementException.kt$io.gitlab.arturbosch.detekt.rules.bugs.IteratorNotThrowingNoSuchElementException.kt</ID>
-    <ID>MaxLineLength:ProtectedMemberInFinalClass.kt$io.gitlab.arturbosch.detekt.rules.style.ProtectedMemberInFinalClass.kt</ID>
-    <ID>MaxLineLength:SwallowedException.kt$SwallowedException$val parameterNameReferences = throwExpr.thrownExpression?.collectByType&lt;KtNameReferenceExpression&gt;()?.filter { it.text == parameterName }</ID>
-    <ID>MaxLineLength:ThrowingExceptionInMain.kt$io.gitlab.arturbosch.detekt.rules.exceptions.ThrowingExceptionInMain.kt</ID>
-    <ID>MaxLineLength:TooGenericExceptionThrown.kt$TooGenericExceptionThrown$private val exceptions: Set&lt;String&gt; = valueOrDefault(THROWN_EXCEPTIONS_PROPERTY, thrownExceptionDefaults).toHashSet()</ID>
-    <ID>MaxLineLength:UnusedImports.kt$io.gitlab.arturbosch.detekt.rules.style.UnusedImports.kt</ID>
-    <ID>MaxLineLength:UnusedPrivateMember.kt$io.gitlab.arturbosch.detekt.rules.style.UnusedPrivateMember.kt</ID>
     <ID>NewLineAtEndOfFile:PluginVersion.kt$io.gitlab.arturbosch.detekt.PluginVersion.kt</ID>
   </Whitelist>
 </SmellBaseline>

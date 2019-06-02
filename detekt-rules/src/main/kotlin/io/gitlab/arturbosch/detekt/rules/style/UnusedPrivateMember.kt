@@ -209,7 +209,8 @@ private class UnusedPropertyVisitor(allowedNames: Regex) : UnusedMemberVisitor(a
     override fun getUnusedReports(issue: Issue): List<CodeSmell> {
         return properties
                 .filter { it.nameAsSafeName.identifier !in nameAccesses }
-                .map { CodeSmell(issue, Entity.from(it), "Private property ${it.nameAsSafeName.identifier} is unused.") }
+                .map { CodeSmell(issue, Entity.from(it),
+                    "Private property ${it.nameAsSafeName.identifier} is unused.") }
     }
 
     override fun visitParameter(parameter: KtParameter) {

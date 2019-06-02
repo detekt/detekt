@@ -21,7 +21,9 @@ class BaselineFacade(val baselineFile: Path) {
     fun filter(smells: List<Finding>) =
             if (listings != null) {
                 val whiteFiltered = smells.filterNot { finding -> listings.first.ids.contains(finding.baselineId) }
-                val blackFiltered = whiteFiltered.filterNot { finding -> listings.second.ids.contains(finding.baselineId) }
+                val blackFiltered = whiteFiltered.filterNot { finding ->
+                    listings.second.ids.contains(finding.baselineId)
+                }
                 blackFiltered
             } else smells
 
