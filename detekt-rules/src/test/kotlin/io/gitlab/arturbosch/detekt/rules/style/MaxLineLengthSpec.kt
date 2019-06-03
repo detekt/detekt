@@ -28,7 +28,7 @@ class MaxLineLengthSpec : Spek({
                 val rule = MaxLineLength()
 
                 rule.visit(fileContent)
-                assertThat(rule.findings).hasSize(5)
+                assertThat(rule.findings).hasSize(6)
             }
         }
 

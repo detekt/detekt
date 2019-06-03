@@ -22,6 +22,13 @@ class MaxLineLengthSuppressed {
             very long multiline String that will break the MaxLineLength
         """.trimIndent()
 
+    @Suppress("MaxLineLength")
+    val longMultiLineFieldWithLineBreaks =
+        """
+            This is anotehr very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very very
+            very long multiline String with Line Break that will break the MaxLineLength
+        """.trimIndent()
+
     fun main() {
         val thisIsAVeryLongValName = "This is a very, very long String that will break the MaxLineLength"
 
