@@ -10,7 +10,8 @@ class ComplexityReportGenerator(private val complexityMetric: ComplexityMetric) 
     private var commentSourceRatio = 0
 
     companion object Factory {
-        fun create(detektion: Detektion): ComplexityReportGenerator = ComplexityReportGenerator(ComplexityMetric(detektion))
+        fun create(detektion: Detektion): ComplexityReportGenerator =
+            ComplexityReportGenerator(ComplexityMetric(detektion))
     }
 
     fun generate(): String? {

@@ -27,7 +27,7 @@ class TrailingWhitespace(config: Config = Config.empty) : Rule(config) {
             offset += line.length
             if (hasTrailingWhitespace(line)) {
                 val file = fileContent.file
-                val ktElement = findAnnotatedStatementInLine(file, offset, line)
+                val ktElement = findFirstKtElementInParents(file, offset, line)
                 if (ktElement != null) {
                     report(CodeSmell(issue, Entity.from(ktElement), createMessage(index)))
                 } else {

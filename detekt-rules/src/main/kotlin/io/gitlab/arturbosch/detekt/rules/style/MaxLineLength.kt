@@ -52,7 +52,7 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
         for (line in lines) {
             offset += line.length
             if (!isValidLine(line)) {
-                val ktElement = findAnnotatedStatementInLine(file, offset, line)
+                val ktElement = findFirstKtElementInParents(file, offset, line)
                 if (ktElement != null) {
                     report(CodeSmell(issue, Entity.from(ktElement), issue.description))
                 } else {

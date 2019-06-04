@@ -45,7 +45,8 @@ class ConstructorParameterNaming(config: Config = Config.empty) : Rule(config) {
                 report(CodeSmell(
                         issue,
                         Entity.from(parameter),
-                        message = "Constructor private parameter names should match the pattern: $privateParameterPattern"))
+                        message = "Constructor private parameter names should " +
+                                "match the pattern: $privateParameterPattern"))
             }
         } else {
             if (!identifier.matches(parameterPattern)) {
