@@ -18,6 +18,10 @@ import org.jetbrains.kotlin.config.JvmTarget
 import java.io.File
 import java.nio.file.Path
 
+/**
+ * Creates an environment instance which can be used to compile source code to KtFile's.
+ * This environment also allows to modify the resulting AST files.
+ */
 fun createKotlinCoreEnvironment(configuration: CompilerConfiguration = CompilerConfiguration()): KotlinCoreEnvironment {
     System.setProperty("idea.io.use.fallback", "true")
     configuration.put(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY,
@@ -36,6 +40,10 @@ fun createKotlinCoreEnvironment(configuration: CompilerConfiguration = CompilerC
     return environment
 }
 
+/**
+ * Creates a compiler configuration for the kotlin compiler with all known sources and classpath jars.
+ * Be aware that if any path of [pathsToAnalyze] is a directory it is scanned for java and kotlin files.
+ */
 fun createCompilerConfiguration(
     pathsToAnalyze: List<Path>,
     classpath: List<String>,

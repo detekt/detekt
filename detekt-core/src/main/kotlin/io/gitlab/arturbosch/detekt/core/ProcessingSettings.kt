@@ -77,6 +77,10 @@ data class ProcessingSettings @JvmOverloads constructor(
 
     val pluginUrls = pluginPaths.map { it.toUri().toURL() }.toTypedArray()
 
+    /**
+     * Lazily instantiates a Kotlin environment which can be shared between compiling and
+     * analyzing logic.
+     */
     val environment: KotlinCoreEnvironment by lazy {
         val compilerConfiguration = createCompilerConfiguration(inputPaths, classpath, jvmTarget)
         createKotlinCoreEnvironment(compilerConfiguration)
