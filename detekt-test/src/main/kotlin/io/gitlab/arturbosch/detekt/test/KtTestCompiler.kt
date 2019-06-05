@@ -14,6 +14,7 @@ import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.idea.KotlinLanguage
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtPsiFactory
 import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
 import java.io.File
 import java.nio.file.Path
@@ -60,6 +61,8 @@ object KtTestCompiler : KtCompiler() {
             EnvironmentConfigFiles.JVM_CONFIG_FILES
         )
     }
+
+    fun createPsiFactory(): KtPsiFactory = KtPsiFactory(KtTestCompiler.environment.project, false)
 
     class TestDisposable : Disposable {
         override fun dispose() {} // Don't want to dispose the test KotlinCoreEnvironment

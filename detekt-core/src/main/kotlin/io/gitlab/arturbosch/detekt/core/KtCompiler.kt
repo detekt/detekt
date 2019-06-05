@@ -1,15 +1,14 @@
 package io.gitlab.arturbosch.detekt.core
 
-import io.gitlab.arturbosch.detekt.api.internal.createKotlinCoreEnvironment
 import io.gitlab.arturbosch.detekt.api.internal.ABSOLUTE_PATH
 import io.gitlab.arturbosch.detekt.api.internal.RELATIVE_PATH
+import io.gitlab.arturbosch.detekt.api.internal.createKotlinCoreEnvironment
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import org.jetbrains.kotlin.com.intellij.psi.PsiFileFactory
 import org.jetbrains.kotlin.com.intellij.testFramework.LightVirtualFile
 import org.jetbrains.kotlin.idea.KotlinLanguage
 import org.jetbrains.kotlin.psi.KtFile
-import org.jetbrains.kotlin.psi.KtPsiFactory
 import java.nio.file.Path
 import java.nio.file.Paths
 
@@ -17,11 +16,10 @@ import java.nio.file.Paths
  * @author Artur Bosch
  */
 open class KtCompiler(
-    environment: KotlinCoreEnvironment = createKotlinCoreEnvironment()
+    protected val environment: KotlinCoreEnvironment = createKotlinCoreEnvironment()
 ) {
 
-    val psiFileFactory: PsiFileFactory = PsiFileFactory.getInstance(environment.project)
-    val psiFactory: KtPsiFactory = KtPsiFactory(environment.project, false)
+    protected val psiFileFactory: PsiFileFactory = PsiFileFactory.getInstance(environment.project)
 
     fun compile(root: Path, subPath: Path): KtFile {
         require(subPath.isFile()) { "Given sub path should be a regular file!" }

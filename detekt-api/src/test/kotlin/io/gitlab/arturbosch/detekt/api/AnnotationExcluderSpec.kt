@@ -8,7 +8,7 @@ import org.spekframework.spek2.style.specification.describe
 
 class AnnotationExcluderSpec : Spek({
 
-    val psiFactory = KtTestCompiler.psiFactory
+    val psiFactory = KtTestCompiler.createPsiFactory()
 
     describe("a kt file with some imports") {
         val jvmFieldAnnotation = psiFactory.createAnnotationEntry("@JvmField")
