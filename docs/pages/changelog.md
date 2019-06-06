@@ -9,14 +9,119 @@ toc: true
 <!--
 #### Coming up
 
+-->
+
+#### RC15 
+
 ##### Migration
 
-- 'failFast' inside the yaml config was deprecated. Please use the `--fail-fast` cli flag or `failFast` detekt extension property in the Gradle plugin.
-- Including or excluding paths and files from detekt scanning is now done by setting `include` & `exclude` on the
-  detekt task. Any use of `filters` will be ignored. See custom task examples for [Groovy][1] and [Kotlin][2].
+- **Cli**: `filters` concept got deprecated and removed. Please use the new `excludes` and `includes` options.
+  `excludes` works exactly like `filters` did except it takes now a comma separated list of [*globing patterns*](https://en.wikipedia.org/wiki/Glob_%28programming%29) instead of a *regular expressions*.
+  For example `--filters .*/resources/.*` becomes `--excludes **/resources/**`. `includes` also accepts *globing patterns*.
+  *Globing patterns* allow us to reuse some common logic of the `java.nio.file` package which for example handle Windows specific paths for us.
+  This change also allows to be more fine granular with analyzing files: `--excludes **/generated/** --includes **/generated/this-needs-to-be-checked`.
+- **Gradle Plugin**: Including or excluding paths and files from detekt scanning is now done by setting `include` & `exclude` on the
+  detekt task which aligns with how other static analysis tools handle filters. Any use of `filters` will be ignored. See custom task examples for [Groovy][1] and [Kotlin][2].
   For details of syntax see https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/util/PatternFilterable.html
+- **Cli/Gradle Plugin**: `autoCorrect` inside the yaml config was removed. Please use the `--auto-correct` cli flag or `autoCorrect` detekt extension property in the Gradle plugin.
 
--->
+##### Changelog
+
+- Adding test for UselessCallOnNotNull and platform types - [#1674](https://github.com/arturbosch/detekt/pull/1674) 
+- Fix MaxLineLength and suppressing issues with multiline strings - [#1673](https://github.com/arturbosch/detekt/pull/1673) 
+- Update website for all breaking changes in RC15 - [#1671](https://github.com/arturbosch/detekt/issues/1671) 
+- Fix TooManyFunctions report logic - [#1669](https://github.com/arturbosch/detekt/pull/1669) 
+- Rework UnderscoresInNumericLiterals Rule - [#1664](https://github.com/arturbosch/detekt/pull/1664) 
+- JaCoCo 0.8.4 - [#1663](https://github.com/arturbosch/detekt/pull/1663) 
+- Add support for JSR test infrastructure for type resolved rules - [#1661](https://github.com/arturbosch/detekt/pull/1661) 
+- Unify use of kotlin environment and make AST modification work again - [#1657](https://github.com/arturbosch/detekt/pull/1657) 
+- Do not use relativePath as it is not set anymore and will crash the detekt run - [#1655](https://github.com/arturbosch/detekt/pull/1655) 
+- Move autocorrect to cli - [#1654](https://github.com/arturbosch/detekt/pull/1654) 
+- Replace test pattern concept with rule excludes - [#1651](https://github.com/arturbosch/detekt/pull/1651) 
+- Refactor api tests to use test-api - [#1649](https://github.com/arturbosch/detekt/pull/1649) 
+- Allow to configure exclusion and inclusion patterns for rule sets - [#1648](https://github.com/arturbosch/detekt/pull/1648) 
+- Revert cross module coverage - [#1647](https://github.com/arturbosch/detekt/pull/1647) 
+- Migrate to lazy searching of child nodes - [#1646](https://github.com/arturbosch/detekt/pull/1646) 
+- Do not report when using shortcut 'return' on nullable types - [#1645](https://github.com/arturbosch/detekt/pull/1645) 
+- Consider default functions inside interface for used private functions - [#1644](https://github.com/arturbosch/detekt/pull/1644) 
+- Lazily add `detekt` task as a dependency of the `check` task - [#1641](https://github.com/arturbosch/detekt/pull/1641) 
+- Detekt gradle task is not executed upon check - [#1640](https://github.com/arturbosch/detekt/issues/1640) 
+- Remove git commit message check - [#1638](https://github.com/arturbosch/detekt/pull/1638) 
+- Remove additional space in EmptyClassBlock report msg - [#1636](https://github.com/arturbosch/detekt/pull/1636) 
+- Whitelist provideDelegate operator in UnusedImports rule - [#1632](https://github.com/arturbosch/detekt/pull/1632) 
+- Reports no duplicated findings in empty ruleset - [#1623](https://github.com/arturbosch/detekt/pull/1623) 
+- Add support for JSR test infrastructure in style ruleset - [#1620](https://github.com/arturbosch/detekt/pull/1620) 
+- Update to kotlin version 1.3.31 - [#1618](https://github.com/arturbosch/detekt/pull/1618) 
+- Publish detekt-api docs to the detekt documentation site - [#1615](https://github.com/arturbosch/detekt/pull/1615) 
+- False Positive on UnusedPrivateMember with interface's default method - [#1613](https://github.com/arturbosch/detekt/issues/1613) 
+- Update dependencies - [#1612](https://github.com/arturbosch/detekt/pull/1612) 
+- Improve handling of classpaths in Gradle plugin - [#1609](https://github.com/arturbosch/detekt/pull/1609) 
+- False positive from UnusedImports on org.gradle.kotlin.dsl.provideDelegate - [#1608](https://github.com/arturbosch/detekt/issues/1608) 
+- Provide meaningful config error message by tracking sub configurations - [#1607](https://github.com/arturbosch/detekt/pull/1607) 
+- Replace cli filters parameter with incudes and excludes - [#1606](https://github.com/arturbosch/detekt/pull/1606) 
+- Duplicated findings are being added to `Detektion.findings` - [#1605](https://github.com/arturbosch/detekt/issues/1605) 
+- Don't trigger SpreadOperator rule when array copy not required - [#1604](https://github.com/arturbosch/detekt/pull/1604) 
+- Add MissingWhenCase rule - [#1602](https://github.com/arturbosch/detekt/pull/1602) 
+- Custom reports in gradle plugin - [#1598](https://github.com/arturbosch/detekt/pull/1598) 
+- Gradle plugin: create task per source set (JVM) - [#1597](https://github.com/arturbosch/detekt/pull/1597) 
+- Added auto correct information to finding - [#1595](https://github.com/arturbosch/detekt/pull/1595) 
+- Add DataClassShouldBeImmutable rule - [#1588](https://github.com/arturbosch/detekt/pull/1588) 
+- Using custom output inside Gradle plugin - [#1583](https://github.com/arturbosch/detekt/issues/1583) 
+- Colorizes CLI output. - [#1581](https://github.com/arturbosch/detekt/pull/1581) 
+- Using the Gradle Plugin analyzes files sequentially - [#1580](https://github.com/arturbosch/detekt/issues/1580) 
+- Bump Spek version - [#1578](https://github.com/arturbosch/detekt/pull/1578) 
+- Ignore void types in overridden function signatures. - [#1576](https://github.com/arturbosch/detekt/pull/1576) 
+- Test case and fix for issue #1573 - [#1575](https://github.com/arturbosch/detekt/pull/1575) 
+- ForbiddenImport matches on substring, not full class - [#1573](https://github.com/arturbosch/detekt/issues/1573) 
+- Silence dokka - [#1572](https://github.com/arturbosch/detekt/pull/1572) 
+- AssertJ housekeeping - [#1571](https://github.com/arturbosch/detekt/pull/1571) 
+- Add rules to suggest usage of check(), require() and error(). - [#1570](https://github.com/arturbosch/detekt/pull/1570) 
+- Allow configuration to ignore magic number in ranges. - [#1567](https://github.com/arturbosch/detekt/pull/1567) 
+- Add support for JSR test infrastructure in naming ruleset - [#1564](https://github.com/arturbosch/detekt/pull/1564) 
+- Add support for JSR test infrastructure in empty ruleset - [#1563](https://github.com/arturbosch/detekt/pull/1563) 
+- Add support for JSR test infrastructure in complexity ruleset - [#1562](https://github.com/arturbosch/detekt/pull/1562) 
+- Add support for JSR test infrastructure in bugs ruleset - [#1561](https://github.com/arturbosch/detekt/pull/1561) 
+- Add detekt mention to readme - [#1560](https://github.com/arturbosch/detekt/pull/1560) 
+- Add formatting issue to baseline - [#1559](https://github.com/arturbosch/detekt/pull/1559) 
+- Update doc for fail-fast argument - [#1558](https://github.com/arturbosch/detekt/pull/1558) 
+- Travis: Skip default install step - [#1557](https://github.com/arturbosch/detekt/pull/1557) 
+- Fix the check for private top-level property naming - [#1556](https://github.com/arturbosch/detekt/pull/1556) 
+- Allow to ignore local properties in magic number - Closes #1536 - [#1555](https://github.com/arturbosch/detekt/pull/1555) 
+- Test on OpenJDK 12 - [#1554](https://github.com/arturbosch/detekt/pull/1554) 
+- Update Gradle & dependencies - [#1549](https://github.com/arturbosch/detekt/pull/1549) 
+- Simplify Java interop - [#1547](https://github.com/arturbosch/detekt/pull/1547) 
+- Improve RC13 migration instructions in changelog - [#1546](https://github.com/arturbosch/detekt/pull/1546) 
+- Enable local build cache for CI - [#1544](https://github.com/arturbosch/detekt/pull/1544) 
+- ktlint 0.31.0 - [#1543](https://github.com/arturbosch/detekt/pull/1543) 
+- Add code formatting instructions to CONTRIBUTING.md - [#1542](https://github.com/arturbosch/detekt/pull/1542) 
+- Remove non popular watcher module - [#1541](https://github.com/arturbosch/detekt/pull/1541) 
+- Add ignoreVariables to MagicNumber - [#1536](https://github.com/arturbosch/detekt/issues/1536) 
+- Ignore local properties - [#1535](https://github.com/arturbosch/detekt/pull/1535) 
+- Enable Kotlin's progressive compilation mode - [#1534](https://github.com/arturbosch/detekt/pull/1534) 
+- Type and symbol resolving - [#1532](https://github.com/arturbosch/detekt/pull/1532) 
+- Remove the timestamp from the baseline doc #1524 - [#1531](https://github.com/arturbosch/detekt/pull/1531) 
+- Add newline at end of baseline files - [#1527](https://github.com/arturbosch/detekt/pull/1527) 
+- Add a final newline in the baseline files - [#1525](https://github.com/arturbosch/detekt/issues/1525) 
+- Configure build-scan plugin - [#1523](https://github.com/arturbosch/detekt/pull/1523) 
+- [docs] Introduce guides in the news section - [#1522](https://github.com/arturbosch/detekt/pull/1522) 
+- Repackage formatting to make it able to use the jar as --plugins jar for cli runs - [#1521](https://github.com/arturbosch/detekt/pull/1521) 
+- Single statement in nullable apply calls - [#1520](https://github.com/arturbosch/detekt/pull/1520) 
+- Update dependencies - [#1519](https://github.com/arturbosch/detekt/pull/1519) 
+- Fix compliant/noncompliant code example in OptionalWhenBraces - [#1511](https://github.com/arturbosch/detekt/pull/1511) 
+- Ensure IntelliJ is configured to use official Kotlin style - [#1510](https://github.com/arturbosch/detekt/pull/1510) 
+- Fix deprecation warnings - [#1509](https://github.com/arturbosch/detekt/pull/1509) 
+- Exit process with specific code when detekt finds code issues - [#1508](https://github.com/arturbosch/detekt/pull/1508) 
+- Show friendlier error when wrong type used for a config parameter - [#1507](https://github.com/arturbosch/detekt/pull/1507) 
+- Show message only when failFast in config is not null - [#1506](https://github.com/arturbosch/detekt/pull/1506) 
+- Convert tasks to SourceTasks - [#1505](https://github.com/arturbosch/detekt/pull/1505) 
+- Load dependencies over HTTPS - [#1504](https://github.com/arturbosch/detekt/pull/1504) 
+- Exception thrown when running detekt with -p [detekt-format jar] - [#1503](https://github.com/arturbosch/detekt/issues/1503) 
+- Ignore enums in ProtectedMemberInFinalClass rule - #1489 - [#1496](https://github.com/arturbosch/detekt/pull/1496) 
+- Add "issues found" exit code - [#1493](https://github.com/arturbosch/detekt/issues/1493) 
+- Project dependency to override detekt-cli in composite build does not run assemble automatically - [#1208](https://github.com/arturbosch/detekt/issues/1208) 
+- Gradle plugin: create task per source set - [#1198](https://github.com/arturbosch/detekt/issues/1198) 
+
+See all issues at: [RC15](https://github.com/arturbosch/detekt/milestone/44)
 
 #### RC14
 
@@ -47,8 +152,6 @@ See all issues at: [Upcoming](https://github.com/arturbosch/detekt/milestone/43)
 - Files matching `.*/androidTest/.*` and `*Spek.kt` are now part of the `test-pattern` by default.
 
 ##### Changelog
-
-#### RC13
 
 - Support new flags in gradle plugin - [#1465](https://github.com/arturbosch/detekt/pull/1465)
 - Add UnderscoresInNumericLiterals Rule - [#1464](https://github.com/arturbosch/detekt/pull/1464)
