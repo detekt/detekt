@@ -78,9 +78,9 @@ class CliArgs : Args {
     var buildUponDefaultConfig: Boolean = false
 
     @Parameter(names = ["--fail-fast"],
-        description = "Shortcut for 'build-upon-default-config' together with all available rules active and " +
-            "exit code 0 only when no code smells are found. " +
-            "Additional configuration files can override properties but not the 'active' one.")
+        description = "Same as 'build-upon-default-config' but explicitly running all available rules. " +
+            "With this setting only exit code 0 is returned when the analysis does not find a single code smell. " +
+            "Additional configuration files can override rule properties which includes turning off specific rules.")
     var failFast: Boolean = false
 
     @Parameter(names = ["--auto-correct", "-ac"],
@@ -115,7 +115,8 @@ class CliArgs : Args {
     */
     @Parameter(
         names = ["--classpath", "-cp"],
-        description = "EXPERIMENTAL: Paths where to find user class files"
+        description = "EXPERIMENTAL: Paths where to find user class files and depending jar files. " +
+            "Used for type resolution."
     )
     var classpath: String? = null
 
