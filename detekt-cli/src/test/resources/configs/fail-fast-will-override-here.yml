@@ -1,5 +1,3 @@
-failFast: true
-
 build:
   warningThreshold: 1
   failThreshold: 1

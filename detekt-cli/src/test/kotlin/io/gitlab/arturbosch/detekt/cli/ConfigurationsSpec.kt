@@ -133,7 +133,6 @@ internal class ConfigurationsSpec : Spek({
                 val filters = CliArgs { excludes = "**/one/** ,**/two/**; **/three" }.createFilters()
                 assertFilters(filters)
             }
-
         }
 
         it("should ignore empty and blank filters") {
@@ -147,7 +146,10 @@ internal class ConfigurationsSpec : Spek({
     }
 
     describe("fail fast only") {
-        val config = CliArgs { configResource = "/configs/fail-fast-only.yml" }.loadConfiguration()
+        val config = CliArgs {
+            configResource = "/configs/empty.yml"
+            failFast = true
+        }.loadConfiguration()
 
         it("should override active to true by default") {
             assertThat(config.subConfig("comments").subConfig("UndocumentedPublicClass").valueOrDefault("active", false)).isEqualTo(true)
@@ -163,7 +165,10 @@ internal class ConfigurationsSpec : Spek({
     }
 
     describe("fail fast override") {
-        val config = CliArgs { configResource = "/configs/fail-fast-override.yml" }.loadConfiguration()
+        val config = CliArgs {
+            configResource = "/configs/fail-fast-will-override-here.yml"
+            failFast = true
+        }.loadConfiguration()
 
         it("should override config when specified") {
             assertThat(config.subConfig("style").subConfig("MaxLineLength").valueOrDefault("maxLineLength", -1)).isEqualTo(100)
@@ -182,7 +187,8 @@ internal class ConfigurationsSpec : Spek({
 
         val config = CliArgs {
             buildUponDefaultConfig = true
-            configResource = "/configs/no-fail-fast-override.yml"
+            failFast = false
+            configResource = "/configs/fail-fast-wont-override-here.yml"
         }.loadConfiguration()
 
         it("should override config when specified") {
