@@ -5,8 +5,6 @@ import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.api.createCompilerConfiguration
-import io.gitlab.arturbosch.detekt.api.createKotlinCoreEnvironment
 import org.jetbrains.kotlin.cli.common.messages.AnalyzerWithCompilerReport
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageLocation
 import org.jetbrains.kotlin.cli.common.messages.CompilerMessageSeverity
@@ -18,8 +16,6 @@ import org.jetbrains.kotlin.config.languageVersionSettings
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
-import java.nio.file.Path
-import java.nio.file.Paths
 
 /**
  * @author Artur Bosch
@@ -35,34 +31,27 @@ class DetektFacade(
     private val classpath = settings.classpath
     private val pathFilters = settings.pathFilters
     private val jvmTarget = settings.jvmTarget
-    private val compilerConfiguration = createCompilerConfiguration(inputPaths, classpath, jvmTarget)
-    private val environment = createKotlinCoreEnvironment(compilerConfiguration)
+    private val environment = settings.environment
     private val compiler = KtTreeCompiler.instance(settings)
 
     fun run(): Detektion {
         val notifications = mutableListOf<Notification>()
         val findings = HashMap<String, List<Finding>>()
 
-        val filesToAnalyze = environment.getSourceFiles()
-            .filterNot { file -> pathFilters?.isIgnored(Paths.get(file.virtualFilePath)) == true }
-            .onEach { it.addUserData(it.virtualFilePath) }
+        val filesToAnalyze = inputPaths.flatMap(compiler::compile)
         val bindingContext = generateBindingContext(filesToAnalyze)
 
         processors.forEach { it.onStart(filesToAnalyze) }
 
-        if (saveSupported) {
-            for (current in inputPaths) {
-                val files = compiler.compile(current)
+        findings.mergeSmells(detektor.run(filesToAnalyze, bindingContext))
+        val result = DetektResult(findings.toSortedMap())
 
-                KtFileModifier(current).saveModifiedFiles(files) {
-                    notifications.add(it)
-                }
+        if (saveSupported) {
+            KtFileModifier().saveModifiedFiles(filesToAnalyze) {
+                notifications.add(it)
             }
         }
 
-        findings.mergeSmells(detektor.run(filesToAnalyze, bindingContext))
-
-        val result = DetektResult(findings.toSortedMap())
         processors.forEach { it.onFinish(filesToAnalyze, result) }
         return result
     }
@@ -84,23 +73,6 @@ class DetektFacade(
         } else {
             BindingContext.EMPTY
         }
-    }
-
-    fun run(project: Path, files: List<KtFile>): Detektion = runOnFiles(project, files)
-
-    private fun runOnFiles(current: Path, files: List<KtFile>): DetektResult {
-        processors.forEach { it.onStart(files) }
-
-        val findings = detektor.run(files)
-        val detektion = DetektResult(findings.toSortedMap())
-        if (saveSupported) {
-            KtFileModifier(current).saveModifiedFiles(files) {
-                detektion.add(it)
-            }
-        }
-
-        processors.forEach { it.onFinish(files, detektion) }
-        return detektion
     }
 
     private object DetektMessageRenderer : PlainTextMessageRenderer() {

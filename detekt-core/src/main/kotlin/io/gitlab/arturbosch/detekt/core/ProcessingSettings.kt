@@ -2,6 +2,9 @@ package io.gitlab.arturbosch.detekt.core
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
+import io.gitlab.arturbosch.detekt.api.internal.createCompilerConfiguration
+import io.gitlab.arturbosch.detekt.api.internal.createKotlinCoreEnvironment
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.config.JvmTarget
 import java.io.PrintStream
 import java.nio.file.Files
@@ -73,4 +76,13 @@ data class ProcessingSettings @JvmOverloads constructor(
     }
 
     val pluginUrls = pluginPaths.map { it.toUri().toURL() }.toTypedArray()
+
+    /**
+     * Lazily instantiates a Kotlin environment which can be shared between compiling and
+     * analyzing logic.
+     */
+    val environment: KotlinCoreEnvironment by lazy {
+        val compilerConfiguration = createCompilerConfiguration(inputPaths, classpath, jvmTarget)
+        createKotlinCoreEnvironment(compilerConfiguration)
+    }
 }

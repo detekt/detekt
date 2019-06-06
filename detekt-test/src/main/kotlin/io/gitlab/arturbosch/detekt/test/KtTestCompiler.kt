@@ -14,6 +14,7 @@ import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.idea.KotlinLanguage
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.KtPsiFactory
 import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
 import java.io.File
 import java.nio.file.Path
@@ -32,9 +33,9 @@ object KtTestCompiler : KtCompiler() {
 
     fun compileFromContent(content: String): KtFile {
         val psiFile = psiFileFactory.createFileFromText(
-                TEST_FILENAME,
-                KotlinLanguage.INSTANCE,
-                StringUtilRt.convertLineSeparators(content))
+            TEST_FILENAME,
+            KotlinLanguage.INSTANCE,
+            StringUtilRt.convertLineSeparators(content))
         return psiFile as? KtFile ?: throw IllegalStateException("kotlin file expected")
     }
 
@@ -61,8 +62,10 @@ object KtTestCompiler : KtCompiler() {
         )
     }
 
+    fun createPsiFactory(): KtPsiFactory = KtPsiFactory(KtTestCompiler.environment.project, false)
+
     class TestDisposable : Disposable {
-        override fun dispose() { } // Don't want to dispose the test KotlinCoreEnvironment
+        override fun dispose() {} // Don't want to dispose the test KotlinCoreEnvironment
     }
 }
 
