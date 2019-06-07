@@ -34,25 +34,13 @@ fun CliArgs.loadConfiguration(): Config {
         declaredConfig = CompositeConfig(declaredConfig ?: defaultConfig, defaultConfig)
     }
 
-    val failFastUsed = declaredConfig?.deprecatedFailFastUsage() ?: false
-    if (failFast || failFastUsed) {
+    if (failFast) {
         val initializedDefaultConfig = defaultConfig ?: loadDefaultConfig()
         declaredConfig = FailFastConfig(declaredConfig ?: initializedDefaultConfig, initializedDefaultConfig)
     }
 
     if (debug) println("\n$declaredConfig\n")
     return declaredConfig ?: loadDefaultConfig()
-}
-
-private fun Config.deprecatedFailFastUsage(): Boolean {
-    val value: Boolean? = valueOrNull("failFast")
-    value?.let {
-        LOG.printer.println(
-            "Using deprecated property 'failFast' in the yaml config. " +
-                "Please migrate to the new '--fail-fast' cli-flag or 'failFast' detekt extension property."
-        )
-    }
-    return value ?: false
 }
 
 private fun parseResourceConfig(configPath: String): Config {
