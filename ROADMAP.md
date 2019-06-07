@@ -1,9 +1,10 @@
-## Roadmap to 1.0.0
+# Roadmap 
+
+## ~ 1.0.0
 
 ### todo
 
-- rework gradle plugin to behave like other static analysis tools
-- `no new complex rules` (maybe only some easy or contributed ones)
+- release RC15 and fix regressions
 
 ### done
 
@@ -19,19 +20,24 @@
 - `sonar-plugin` (has it's own space [here](https://github.com/arturbosch/sonar-kotlin))
 - Allow to exclude rules or rule sets for test sources
 - figure out how kotlinc/intellij does type and symbol resolution
+- rework gradle plugin to behave like other static analysis tools
+- `no new complex rules` (maybe only some easy or contributed ones)
 
-## Beyond 1.0.0
+## > 1.0.0
 
 - finish `FeatureEnvy` rule -> needs type resolution
 
 ## Ideas for new major versions
 
-- `idea-plugin`
-- `jenkins-plugin`
+### Finished or Started
+
+- `idea-plugin` -> https://github.com/arturbosch/detekt-intellij-plugin
+- `jenkins-plugin` -> The [`Jenkins Warnings Plugin - Next Generation`](https://github.com/jenkinsci/warnings-ng-plugin) supports importing `detekt`'s xml format.
 
 ## Won't do
 
 - implement formatting rules, instead please use:
-	- KtLint
-	- IntelliJ's format.sh
+    - `detekt-formatting`, a wrapper over KtLint
+	- [KtLint](https://github.com/pinterest/ktlint)
+	- [IntelliJ's format.sh](https://www.jetbrains.com/help/idea/command-line-formatter.html)
 	- or `detektIdeaFormat` and `detektIdeaInspect` wrapper over a local intellij
