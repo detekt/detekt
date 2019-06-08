@@ -379,6 +379,7 @@ internal class DetektTaskDslTest : Spek({
                     |    disableDefaultRuleSets = true
                     |    buildUponDefaultConfig = true
                     |    failFast = false
+                    |    autoCorrect = false
                     |    reports {
                     |        xml {
                     |            enabled = true
@@ -414,6 +415,7 @@ internal class DetektTaskDslTest : Spek({
                     |    disableDefaultRuleSets = true
                     |    buildUponDefaultConfig = true
                     |    failFast = false
+                    |    autoCorrect = false
                     |    reports {
                     |        xml {
                     |            enabled = true
