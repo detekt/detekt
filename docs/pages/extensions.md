@@ -208,3 +208,9 @@ them in the `detekt` yaml configuration file.
 subproject is build before `gradle detekt` is run.
 In the `kotlin-dsl` you could add something like `tasks.withType<Detekt> { dependsOn(":my-rules:assemble") }` to explicitly run `detekt` only 
 after your extension sub project is built.
+
+#### autoCorrect property
+
+In detekt you can write custom rules which can manipulate your code base.
+For this a cli flag `--auto-corect` and the gradle plugin property `autoCorrect` exists.
+Only write auto correcting code within the `Rule#withAutoCorrect()`-function.
