@@ -11,10 +11,8 @@ _detekt_ uses a yaml style configuration file for various things:
 
 - rule set and rule properties
 - build failure
-- test-pattern to exclude rule sets/rules for test classes
-- processors
+- kotlin file processors
 - console and output formats
-- autoCorrect support
 
 See the [default-detekt-config.yml](https://github.com/arturbosch/detekt/blob/master/detekt-cli/src/main/resources/default-detekt-config.yml) file for all defined configuration options and their default values. 
 
@@ -23,7 +21,7 @@ _Note:_ When using a custom config file, the default values are ignored unless y
 #### Rule sets and rules
 
 _detekt_ allows easily to just pick the rules you want and configure them the way you like.
-For example if you want to allow 20 functions inside a kotlin file instead of the default threshold of 10, write:
+For example if you want to allow up to 20 functions inside a kotlin file instead of the default threshold of 10, write:
 ```
 complexity:
   TooManyFunctions:
@@ -34,29 +32,24 @@ To read about all supported rule sets and rules, use the side navigation `Rule S
 
 #### Test-Pattern
 
-The configuration file contains a whole section to treat test code differently.
-Specify test patterns to detect test code and exclude rules or rule sets for them.
+The `test-pattern` is a deprecated feature and can be replaced with rule and rule set level excludes and includes.
 
-```yaml
-test-pattern: # Configure exclusions for test sources
-  active: true
-  patterns: # Test file regexes
-    - '.*/test/.*'
-    - '.*Test.kt'
-    - '.*Spec.kt'
-  exclude-rule-sets:
-    - 'comments'
-  exclude-rules:
-    - 'NamingRules'
-    - 'WildcardImport'
-    - 'MagicNumber'
-    - 'MaxLineLength'
-    - 'LateinitUsage'
-    - 'StringLiteralDuplication'
-    - 'SpreadOperator'
-    - 'TooManyFunctions'
+#### Path Filters / Excludes / Includes
+
+Starting with version **RC15** fine grained path filters can be defined for each rule or rule set:
 
 ```
+complexity:
+  TooManyFunctions:
+    ...
+    excludes: "**/internal/**"
+    includes: "**/internal/util/NeedsToBeChecked.kt"
+```
+
+This gives the user more freedom in analyzing only specific files
+and rule authors the ability to write *library only* rules.
+
+Be aware that detekt now expects globing patterns instead of regular expressions!
 
 #### Console and Output Reports
 
@@ -95,10 +88,3 @@ processors:
   # - 'PackageCountProcessor'
   # - 'KtFileCountProcessor'
 ```
-
-#### autoCorrect property
-
-This option is still present due to legacy reasons. In the first milestone releases detekt also formatted kotlin code.
-Within the detekt team we decided to not mess with user code and let other tools do the formatting eg. intellij or KtLint.
-Still as detekt can be extended with custom rules, you are free to write rules which support auto correction.
-Only write correcting code within the `withAutoCorrect()`-function.

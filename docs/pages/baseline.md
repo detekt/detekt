@@ -14,8 +14,9 @@ The intention of a whitelist is that only new code smells are printed on further
 The blacklist can be used to write down false positive detections (instead of suppressing them and polute your code base). 
 
 The `ID` node has the following structure: `<RuleID>:<Codesmell_Signature>`.  
-When adding a custom issue to the xml file, make sure the `RuleID` should be self-explaining. The `Codesmell_Signature` is not printed to the console but can be retrieved from an output file (see output sections).
-Both values can be found inside the report file.
+When adding a custom issue to the xml file, make sure the `RuleID` should be self-explaining.
+The `Codesmell_Signature` is not printed to the console but can be retrieved from the **txt** output file when using
+the `--report txt:path/to/report` cli flag.
 
 ```xml
 <SmellBaseline>
@@ -33,3 +34,4 @@ Both values can be found inside the report file.
 If you are using the gradle-plugin run the `detektBaseline` task to generate yourself a `baseline.xml`.
 
 Be aware that auto formatting cannot be combined with the `baseline`.
+The signatures for a `;` for example would be to ambiguous.

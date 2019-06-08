@@ -17,7 +17,7 @@ entries:
     - title: Pre 1.0 Release Notes
       url: /changelog-rc.html
       output: web
-    - title: detekt configuration file
+    - title: detekt Configuration File
       url: /configurations.html
       output: web
     - title: Suppressing Issues in Code
