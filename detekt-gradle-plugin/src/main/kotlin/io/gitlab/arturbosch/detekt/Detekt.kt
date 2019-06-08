@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.extensions.DetektReportType
 import io.gitlab.arturbosch.detekt.extensions.DetektReports
 import io.gitlab.arturbosch.detekt.internal.configurableFileCollection
 import io.gitlab.arturbosch.detekt.internal.fileProperty
+import io.gitlab.arturbosch.detekt.invoke.AutoCorrectArgument
 import io.gitlab.arturbosch.detekt.invoke.BaselineArgument
 import io.gitlab.arturbosch.detekt.invoke.BuildUponDefaultConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.ClasspathArgument
@@ -139,6 +140,14 @@ open class Detekt : SourceTask() {
         get() = failFastProp.get()
         set(value) = failFastProp.set(value)
 
+    @Optional
+    @Input
+    val autoCorrectProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    var autoCorrect: Boolean
+        @Internal
+        get() = autoCorrectProp.get()
+        set(value) = autoCorrectProp.set(value)
+
     @Internal
     var reports = DetektReports(project)
 
@@ -193,6 +202,7 @@ open class Detekt : SourceTask() {
             ParallelArgument(parallelProp.getOrElse(false)),
             BuildUponDefaultConfigArgument(buildUponDefaultConfigProp.getOrElse(false)),
             FailFastArgument(failFastProp.getOrElse(false)),
+            AutoCorrectArgument(autoCorrectProp.getOrElse(false)),
             DisableDefaultRuleSetArgument(disableDefaultRuleSetsProp.getOrElse(false))
         )
         arguments.addAll(customReports.get().map {

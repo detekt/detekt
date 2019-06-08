@@ -13,7 +13,7 @@ import org.spekframework.spek2.style.specification.describe
 class ForbiddenNameSpec : Spek({
 
     describe("ForbiddenClassName rule") {
-        
+
         it("should report classes with forbidden names") {
             val code = """
 				class TestManager {} // violation

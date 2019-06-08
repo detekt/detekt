@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.internal.configurableFileCollection
 import io.gitlab.arturbosch.detekt.internal.fileProperty
+import io.gitlab.arturbosch.detekt.invoke.AutoCorrectArgument
 import io.gitlab.arturbosch.detekt.invoke.BaselineArgument
 import io.gitlab.arturbosch.detekt.invoke.BuildUponDefaultConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.ConfigArgument
@@ -94,6 +95,14 @@ open class DetektCreateBaselineTask : SourceTask() {
     @Optional
     var failFast: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
+    @Optional
+    @Input
+    val autoCorrectProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    var autoCorrect: Boolean
+        @Internal
+        get() = autoCorrectProp.get()
+        set(value) = autoCorrectProp.set(value)
+
     @TaskAction
     fun baseline() {
         if (plugins.isPresent && !pluginClasspath.isEmpty)
@@ -109,6 +118,7 @@ open class DetektCreateBaselineTask : SourceTask() {
             ParallelArgument(parallel.getOrElse(false)),
             BuildUponDefaultConfigArgument(buildUponDefaultConfig.getOrElse(false)),
             FailFastArgument(failFast.getOrElse(false)),
+            AutoCorrectArgument(autoCorrectProp.getOrElse(false)),
             DisableDefaultRuleSetArgument(disableDefaultRuleSets.getOrElse(false))
         )
 

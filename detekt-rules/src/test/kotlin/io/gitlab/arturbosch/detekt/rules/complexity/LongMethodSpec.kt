@@ -29,7 +29,7 @@ class LongMethodSpec : Spek({
                     }
                 }
             """
-            
+
             assertThat(subject.compileAndLint(code)).hasSize(2)
         }
 
@@ -43,7 +43,7 @@ class LongMethodSpec : Spek({
                     }
                 }
             """
-            
+
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }

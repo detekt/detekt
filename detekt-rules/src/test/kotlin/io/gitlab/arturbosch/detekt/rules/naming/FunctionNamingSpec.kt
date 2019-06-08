@@ -52,8 +52,6 @@ class FunctionNamingSpec : Spek({
             assertThat(FunctionNaming().lint(code)).isEmpty()
         }
 
-
-
         it("does not report when the function name is identical to the type of the result") {
             val code = """
             interface Foo

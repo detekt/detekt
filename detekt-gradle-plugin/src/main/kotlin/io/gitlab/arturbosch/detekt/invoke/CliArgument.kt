@@ -11,6 +11,7 @@ private const val BASELINE_PARAMETER = "--baseline"
 private const val PARALLEL_PARAMETER = "--parallel"
 private const val DISABLE_DEFAULT_RULESETS_PARAMETER = "--disable-default-rulesets"
 private const val BUILD_UPON_DEFAULT_CONFIG_PARAMETER = "--build-upon-default-config"
+private const val AUTO_CORRECT_PARAMETER = "--auto-correct"
 private const val FAIL_FAST_PARAMETER = "--fail-fast"
 private const val PLUGINS_PARAMETER = "--plugins"
 private const val REPORT_PARAMETER = "--report"
@@ -84,3 +85,5 @@ internal data class BuildUponDefaultConfigArgument(override val value: Boolean) 
     BoolCliArgument(value, BUILD_UPON_DEFAULT_CONFIG_PARAMETER)
 
 internal data class FailFastArgument(override val value: Boolean) : BoolCliArgument(value, FAIL_FAST_PARAMETER)
+
+internal data class AutoCorrectArgument(override val value: Boolean) : BoolCliArgument(value, AUTO_CORRECT_PARAMETER)
