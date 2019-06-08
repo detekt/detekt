@@ -86,7 +86,6 @@ object MissingWhenCaseSpec : Spek({
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().issue.id).isEqualTo("MissingWhenCase")
                 assertThat(actual.first().message).isEqualTo("When expression is missing cases: VariantC. Either add missing cases or a default `else` case.")
-
             }
 
             it("does not report when `when` expression used as statement and all cases covered") {

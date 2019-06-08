@@ -264,6 +264,7 @@ val detektFormat by tasks.registering(Detekt::class) {
     parallel = true
     disableDefaultRuleSets = true
     buildUponDefaultConfig = true
+    autoCorrect = true
     setSource(files(projectDir))
     include("**/*.kt")
     include("**/*.kts")
