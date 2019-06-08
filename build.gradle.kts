@@ -267,8 +267,8 @@ val detektFormat by tasks.registering(Detekt::class) {
     setSource(files(projectDir))
     include("**/*.kt")
     include("**/*.kts")
-    exclude("resources/")
-    exclude("build/")
+    exclude("**/resources/**")
+    exclude("**/build/**")
     config = files(projectDir.resolve("reports/format.yml"))
     reports {
         xml { enabled = false }
@@ -284,8 +284,8 @@ val detektAll by tasks.registering(Detekt::class) {
     config = files(project.rootDir.resolve("reports/failfast.yml"))
     include("**/*.kt")
     include("**/*.kts")
-    exclude("resources/")
-    exclude("build/")
+    exclude("**/resources/**")
+    exclude("**/build/**")
     baseline.set(project.rootDir.resolve("reports/baseline.xml"))
     reports {
         xml.enabled = false
