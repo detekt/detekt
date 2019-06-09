@@ -230,10 +230,9 @@ open class Detekt : SourceTask(), VerificationTask {
             project = project,
             arguments = arguments.toList(),
             debug = debugOrDefault,
-            ignoreFailures = ignoreFailuresProp.getOrElse(false)
+            ignoreFailures = ignoreFailuresProp.getOrElse(false),
+            classpath = detektClasspath.plus(pluginClasspath)
         )
-
-        DetektInvoker.invokeCli(project, arguments.toList(), detektClasspath.plus(pluginClasspath), debugOrDefault)
 
         if (xmlReportTargetFileOrNull != null) {
             val xmlReports = project.subprojects.flatMap { subproject ->
