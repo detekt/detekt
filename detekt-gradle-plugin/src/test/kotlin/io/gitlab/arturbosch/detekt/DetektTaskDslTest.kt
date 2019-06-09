@@ -361,6 +361,46 @@ internal class DetektTaskDslTest : Spek({
                         }
                     }
                 }
+
+                describe("using the ignoreFailures toggle") {
+                    val projectLayoutWithTooManyIssues = ProjectLayout(
+                        numberOfSourceFilesInRootPerSourceDir = 15,
+                        numberOfCodeSmellsInRootPerSourceDir = 15
+                    )
+
+                    it("build succeeds with more issues than threshold if enabled") {
+
+                        val config = """
+                        |detekt {
+                        |   ignoreFailures = true
+                        |}
+                        """
+
+                        val gradleRunner = builder
+                            .withProjectLayout(projectLayoutWithTooManyIssues)
+                            .withDetektConfig(config)
+                            .build()
+
+                        gradleRunner.runDetektTaskAndCheckResult { result ->
+                            assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
+                        }
+                    }
+                    it("build fails with more issues than threshold successfully if disabled") {
+
+                        val config = """
+                        |detekt {
+                        |   ignoreFailures = false
+                        |}
+                        """
+
+                        val gradleRunner = builder
+                            .withProjectLayout(projectLayoutWithTooManyIssues)
+                            .withDetektConfig(config)
+                            .build()
+
+                        gradleRunner.runDetektTaskAndExpectFailure()
+                    }
+                }
             }
         }
 
