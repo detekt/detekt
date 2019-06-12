@@ -33,10 +33,14 @@ abstract class EmptyRule(config: Config) : Rule(config) {
         checkBlockExpr(true)
     }
 
-    private fun KtExpression.checkBlockExpr(hasComment: Boolean) {
+    private fun KtExpression.checkBlockExpr(skipIfCommented: Boolean = false) {
         val blockExpression = this.asBlockExpression()
         blockExpression?.statements?.let {
-            if (it.isEmpty() && blockExpression.hasCommentInside() == hasComment) {
+            val hasComment = blockExpression.hasCommentInside()
+            if (skipIfCommented && hasComment) {
+                return
+            }
+            if (it.isEmpty() && !hasComment) {
                 report(CodeSmell(issue, Entity.from(this), "This empty block of code can be removed."))
             }
         }

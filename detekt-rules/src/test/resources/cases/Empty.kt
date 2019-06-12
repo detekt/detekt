@@ -19,10 +19,6 @@ class Empty : Runnable {
 
     }
 
-    fun emptyMethod() {
-
-    }
-
     fun stuff() {
         try {
 

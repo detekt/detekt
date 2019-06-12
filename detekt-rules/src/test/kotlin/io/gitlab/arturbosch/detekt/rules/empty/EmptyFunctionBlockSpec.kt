@@ -75,5 +75,33 @@ class EmptyFunctionBlockSpec : Spek({
                 assertThat(EmptyFunctionBlock(config).compileAndLint(code)).hasSize(1)
             }
         }
+
+        context("some overridden functions") {
+            val code = """
+                private interface Listener {
+                    fun listenThis()
+
+                    fun listenThat()
+                }
+
+                private interface AnimationEndListener : Listener {
+                    override fun listenThis() {
+                        // no-op
+                    }
+
+                    override fun listenThat() {
+
+                    }
+                }
+            """.trimIndent()
+            it("should not flag overridden functions with commented body") {
+                assertThat(subject.compileAndLint(code)).hasSize(1)
+            }
+
+            it("should not flag overridden functions with ignoreOverriddenFunctions") {
+                val config = TestConfig(mapOf(EmptyFunctionBlock.IGNORE_OVERRIDDEN_FUNCTIONS to "true"))
+                assertThat(EmptyFunctionBlock(config).compileAndLint(code)).hasSize(0)
+            }
+        }
     }
 })
