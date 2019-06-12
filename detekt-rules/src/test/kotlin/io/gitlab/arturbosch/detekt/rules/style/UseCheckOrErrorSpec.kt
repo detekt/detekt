@@ -85,14 +85,41 @@ class UseCheckOrErrorSpec : Spek({
             assertThat(subject.lint(code)).isEmpty()
         }
 
-        it("reports an issue if the exception thrown as the only action in a function") {
+        it("does not report an issue if the exception thrown unconditionally") {
             val code = """fun doThrow() = throw IllegalStateException("message")"""
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(0)
         }
 
-        it("reports an issue if the exception thrown as the only action in a function block") {
+        it("does not report an issue if the exception thrown unconditionally in a function block") {
             val code = """fun doThrow() { throw IllegalStateException("message") }"""
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(0)
+        }
+
+        context("throw is not after a precondition"){
+
+            it("does not report an issue if the exception is after a block") {
+                val code = """
+                    fun doSomethingOrThrow(test: Int): Int {
+                        var index = 0
+                        repeat(test){
+                            if (Math.random() == 1.0) {
+                                return it
+                            }
+                        }
+                        throw IllegalStateException("Test was too big")
+                    }""".trimIndent()
+                assertThat(subject.lint(code)).isEmpty()
+            }
+
+            it("does not report an issue if the exception is after a elvis operator") {
+                val code = """
+                    fun tryToCastOrThrow(list: List<*>) : LinkedList<*> {
+                        val subclass = list as? LinkedList
+                            ?: throw IllegalStateException("List is not a LinkedList")
+                        return subclass
+                    }""".trimIndent()
+                assertThat(subject.lint(code)).isEmpty()
+            }
         }
     }
 })

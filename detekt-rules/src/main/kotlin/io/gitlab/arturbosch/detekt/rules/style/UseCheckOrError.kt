@@ -8,7 +8,9 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.argumentCount
+import io.gitlab.arturbosch.detekt.rules.isAfterAPreCondition
 import io.gitlab.arturbosch.detekt.rules.isIllegalStateException
+import io.gitlab.arturbosch.detekt.rules.isInAWhenElseBranch
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtFunctionLiteral
 import org.jetbrains.kotlin.psi.KtThrowExpression
@@ -46,9 +48,11 @@ class UseCheckOrError(config: Config = Config.empty) : Rule(config) {
     )
 
     override fun visitThrowExpression(expression: KtThrowExpression) {
+        if (!expression.isIllegalStateException()) return
+
         if (expression.isOnlyExpressionInLambda()) return
 
-        if (expression.isIllegalStateException() && expression.argumentCount < 2) {
+        if (expression.argumentCount < 2 && (expression.isAfterAPreCondition() || expression.isInAWhenElseBranch())) {
             report(CodeSmell(issue, Entity.from(expression), issue.description))
         }
     }

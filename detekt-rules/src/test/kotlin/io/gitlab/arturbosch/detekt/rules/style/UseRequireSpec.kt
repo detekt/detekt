@@ -82,5 +82,43 @@ class UseRequireSpec : Spek({
             val code = """fun doThrow() { throw IllegalArgumentException("message") }"""
             assertThat(subject.lint(code)).isEmpty()
         }
+
+        context("throw is not after a precondition"){
+
+            it("does not report an issue if the exception is inside a when") {
+                val code = """
+                    fun whenOrThrow(item : List<*>) = when(item) {
+                        is ArrayList<*> -> 1
+                        is LinkedList<*> -> 2
+                        else -> throw IllegalArgumentException("Not supported List type")
+                    }
+                    """.trimIndent()
+                assertThat(subject.lint(code)).isEmpty()
+            }
+
+            it("does not report an issue if the exception is after a block") {
+                val code = """
+                    fun doSomethingOrThrow(test: Int): Int {
+                        var index = 0
+                        repeat(test){
+                            if (Math.random() == 1.0) {
+                                return it
+                            }
+                        }
+                        throw IllegalArgumentException("Test was too big")
+                    }""".trimIndent()
+                assertThat(subject.lint(code)).isEmpty()
+            }
+
+            it("does not report an issue if the exception is after a elvis operator") {
+                val code = """
+                    fun tryToCastOrThrow(list: List<*>) : LinkedList<*> {
+                        val subclass = list as? LinkedList
+                            ?: throw IllegalArgumentException("List is not a LinkedList")
+                        return subclass
+                    }""".trimIndent()
+                assertThat(subject.lint(code)).isEmpty()
+            }
+        }
     }
 })
