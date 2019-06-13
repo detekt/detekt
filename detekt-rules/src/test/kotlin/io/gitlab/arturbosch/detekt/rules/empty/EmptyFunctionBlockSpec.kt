@@ -1,9 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.empty
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.test.TEST_FILENAME
 import io.gitlab.arturbosch.detekt.test.TestConfig
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -12,6 +13,8 @@ import org.spekframework.spek2.style.specification.describe
  * @author schalkms
  */
 class EmptyFunctionBlockSpec : Spek({
+
+    val fileName = TEST_FILENAME
 
     val subject by memoized { EmptyFunctionBlock(Config.empty) }
 
@@ -22,7 +25,7 @@ class EmptyFunctionBlockSpec : Spek({
                 class A {
                     protected fun stuff() {}
                 }"""
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasLocationStrings("'{}' at (2,27) in /$fileName")
         }
 
         it("should not flag function with open modifier") {
@@ -38,7 +41,7 @@ class EmptyFunctionBlockSpec : Spek({
 				fun a() {
 					fun b() {}
 				}"""
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasLocationStrings("'{}' at (2,10) in /$fileName")
         }
 
         context("some overridden functions") {
@@ -72,7 +75,7 @@ class EmptyFunctionBlockSpec : Spek({
 
             it("should not flag overridden functions") {
                 val config = TestConfig(mapOf(EmptyFunctionBlock.IGNORE_OVERRIDDEN_FUNCTIONS to "true"))
-                assertThat(EmptyFunctionBlock(config).compileAndLint(code)).hasSize(1)
+                assertThat(EmptyFunctionBlock(config).compileAndLint(code)).hasLocationStrings("'{}' at (1,13) in /$fileName")
             }
         }
 
@@ -95,12 +98,13 @@ class EmptyFunctionBlockSpec : Spek({
                 }
             """.trimIndent()
             it("should not flag overridden functions with commented body") {
-                assertThat(subject.compileAndLint(code)).hasSize(1)
+                assertThat(subject.compileAndLint(code))
+                    .hasLocationStrings("'{\n\n    }' at (12,31) in /$fileName")
             }
 
             it("should not flag overridden functions with ignoreOverriddenFunctions") {
                 val config = TestConfig(mapOf(EmptyFunctionBlock.IGNORE_OVERRIDDEN_FUNCTIONS to "true"))
-                assertThat(EmptyFunctionBlock(config).compileAndLint(code)).hasSize(0)
+                assertThat(EmptyFunctionBlock(config).compileAndLint(code)).isEmpty()
             }
         }
     }
