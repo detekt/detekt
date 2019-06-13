@@ -65,7 +65,9 @@ object KtTestCompiler : KtCompiler() {
     fun createPsiFactory(): KtPsiFactory = KtPsiFactory(KtTestCompiler.environment.project, false)
 
     class TestDisposable : Disposable {
-        override fun dispose() {} // Don't want to dispose the test KotlinCoreEnvironment
+        override fun dispose() {
+            // Don't want to dispose the test KotlinCoreEnvironment
+        }
     }
 }
 
