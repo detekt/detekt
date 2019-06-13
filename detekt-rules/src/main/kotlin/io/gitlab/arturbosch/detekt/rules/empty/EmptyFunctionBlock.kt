@@ -7,12 +7,13 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
  * Reports empty functions. Empty blocks of code serve no purpose and should be removed.
- * This rule will report all the functions with an empty body, with an exception: overriding functions with a
- * comment in the body (e.g. a `// no-op` comment).
+ * This rule will not report functions with the override modifier that have a comment as their only body contents
+ * (e.g., a // no-op comment in an unused listener function).
  *
- * To ignore all the override functions, please use the [ignoreOverriddenFunctions] configuration field.
+ * Set the [ignoreOverriddenFunctions] parameter to `true` to exclude all functions which are overriding other
+ * functions from the superclass or from an interface (i.e., functions declared with the override modifier).
  *
- * @configuration ignoreOverriddenFunctions - excludes overridden functions with an empty body (default: `false`)
+ * @configuration ignoreOverriddenFunctions - Excludes all the overridden functions (default: `false`)
  *
  * @active since v1.0.0
  * @author Artur Bosch
@@ -31,7 +32,6 @@ class EmptyFunctionBlock(config: Config) : EmptyRule(config) {
         val bodyExpression = function.bodyExpression
         if (!ignoreOverriddenFunctions) {
             if (function.isOverride()) {
-                // If this function is an override, let's ignore empty bodies with comments.
                 bodyExpression?.addFindingIfBlockExprIsEmptyAndNotCommented()
             } else {
                 bodyExpression?.addFindingIfBlockExprIsEmpty()
