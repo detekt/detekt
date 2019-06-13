@@ -45,6 +45,7 @@ detekt {
     baseline = file("path/to/baseline.xml")               // Specifying a baseline file. All findings stored in this file in subsequent runs of detekt.
     disableDefaultRuleSets = false                        // Disables all default detekt rulesets and will only run detekt with custom rules defined in plugins passed in with `detektPlugins` configuration. `false` by default.
     debug = false                                         // Adds debug output during task execution. `false` by default.
+    ignoreFailures = false                                // If set to `true` the build does not fail when maxIssues or failThreshold count was reached. Defaults to `false`.
     reports {
         xml {
             enabled = true                                // Enable/Disable XML report (default: true)

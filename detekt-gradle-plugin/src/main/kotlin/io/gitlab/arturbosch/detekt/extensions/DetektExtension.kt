@@ -16,6 +16,12 @@ import java.io.File
  */
 open class DetektExtension(project: Project) : CodeQualityExtension() {
 
+    var ignoreFailures: Boolean
+        @JvmName("ignoreFailures_")
+        get() = isIgnoreFailures
+        @JvmName("ignoreFailures_")
+        set(value) = setIgnoreFailures(value)
+
     val customReportsDir: File?
         get() = reportsDir
 
@@ -26,7 +32,7 @@ open class DetektExtension(project: Project) : CodeQualityExtension() {
     fun idea(configure: Action<IdeaExtension>) = configure.execute(idea)
 
     var input: ConfigurableFileCollection =
-            project.configurableFileCollection().from(DEFAULT_SRC_DIR_JAVA, DEFAULT_SRC_DIR_KOTLIN)
+        project.configurableFileCollection().from(DEFAULT_SRC_DIR_JAVA, DEFAULT_SRC_DIR_KOTLIN)
 
     var baseline: File? = null
 
