@@ -96,6 +96,7 @@ class DetektPlugin : Plugin<Project> {
             it.classpath.setFrom(sourceSet.compileClasspath, sourceSet.output.classesDirs)
             it.reports.xml.destination = File(extension.reportsDir, sourceSet.name + ".xml")
             it.reports.html.destination = File(extension.reportsDir, sourceSet.name + ".html")
+            it.setIgnoreFailures(project.provider { extension.ignoreFailures })
             it.description =
                 "EXPERIMENTAL & SLOW: Run detekt analysis for ${sourceSet.name} classes with type resolution"
         }
