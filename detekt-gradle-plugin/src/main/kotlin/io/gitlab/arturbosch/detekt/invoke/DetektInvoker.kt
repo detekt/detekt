@@ -1,7 +1,5 @@
 package io.gitlab.arturbosch.detekt.invoke
 
-import io.gitlab.arturbosch.detekt.CONFIGURATION_DETEKT
-import io.gitlab.arturbosch.detekt.CONFIGURATION_DETEKT_PLUGINS
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.file.FileCollection
