@@ -13,7 +13,6 @@ object DetektInvoker {
         project: Project,
         arguments: List<CliArgument>,
         classpath: FileCollection,
-        debug: Boolean = false,
         ignoreFailures: Boolean = false
     ) {
         val detektTmpDir = project.mkdir("${project.buildDir}/tmp/detekt")
@@ -23,7 +22,7 @@ object DetektInvoker {
 
         argsFile.writeText(cliArguments.joinToString("\n"))
 
-        if (debug) println(cliArguments)
+        project.logger.debug(cliArguments.joinToString(" "))
 
         val proc = project.javaexec {
             it.main = DETEKT_MAIN
@@ -32,7 +31,7 @@ object DetektInvoker {
             it.isIgnoreExitValue = true
         }
         val exitValue = proc.exitValue
-        if (debug) println("Detekt finished with exit value $exitValue")
+        project.logger.debug("Detekt finished with exit value $exitValue")
 
         when (exitValue) {
             1 -> throw GradleException("There was a problem running detekt.")

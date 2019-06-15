@@ -229,7 +229,6 @@ open class Detekt : SourceTask(), VerificationTask {
         DetektInvoker.invokeCli(
             project = project,
             arguments = arguments.toList(),
-            debug = debugOrDefault,
             ignoreFailures = ignoreFailuresProp.getOrElse(false),
             classpath = detektClasspath.plus(pluginClasspath)
         )
