@@ -16,14 +16,19 @@ object DetektInvoker {
         debug: Boolean = false,
         ignoreFailures: Boolean = false
     ) {
+        val detektTmpDir = project.mkdir("${project.buildDir}/tmp/detekt")
+        val argsFile = project.file("$detektTmpDir/args")
+
         val cliArguments = arguments.flatMap(CliArgument::toArgument)
+
+        argsFile.writeText(cliArguments.joinToString("\n"))
 
         if (debug) println(cliArguments)
 
         val proc = project.javaexec {
             it.main = DETEKT_MAIN
             it.classpath = classpath
-            it.args = cliArguments
+            it.args = listOf("@${argsFile.absolutePath}")
             it.isIgnoreExitValue = true
         }
         val exitValue = proc.exitValue
