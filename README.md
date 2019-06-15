@@ -48,6 +48,8 @@ Visit https://arturbosch.github.io/detekt/ for installation guides, release note
     - multi project (kotlin dsl): https://github.com/arturbosch/detekt/blob/master/build.gradle.kts
     - single project (groovy dsl): https://github.com/arturbosch/kutils/blob/master/build.gradle
     - single project (unofficial maven plugin): https://github.com/arturbosch/sonar-kotlin/blob/master/pom.xml
+    - setup additional detekt task for all modules (kotlin dsl): https://github.com/arturbosch/detekt/blob/3357abba87e1550c65b6610012bb291e0fbb64ce/build.gradle.kts#L280-L295
+    - setup additional formatting task for all modules (kotlin dsl): https://github.com/arturbosch/detekt/blob/3357abba87e1550c65b6610012bb291e0fbb64ce/build.gradle.kts#L262-L278
 
 ### Quick Start ...
 
@@ -193,6 +195,7 @@ Integrations:
 - [Novoda Gradle Static Analysis plugin](https://github.com/novoda/gradle-static-analysis-plugin)
 - [Maven plugin that wraps the Detekt CLI](https://github.com/Ozsie/detekt-maven-plugin)
 - [Gradle plugin that helps facilitate GitHub PR checking and automatic commenting of violations](https://github.com/btkelly/gnag)
+- [Codefactor](http://codefactor.io/)
 
 #### Credits
 
