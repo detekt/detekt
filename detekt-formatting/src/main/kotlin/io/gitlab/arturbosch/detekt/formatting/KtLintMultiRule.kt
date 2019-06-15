@@ -34,6 +34,8 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundParens
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundRangeOperator
 import io.gitlab.arturbosch.detekt.formatting.wrappers.StringTemplate
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
+import org.jetbrains.kotlin.com.intellij.psi.impl.source.JavaDummyElement
+import org.jetbrains.kotlin.com.intellij.psi.impl.source.JavaDummyHolder
 import org.jetbrains.kotlin.psi.KtFile
 
 /**
@@ -92,8 +94,15 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
                 rule is com.pinterest.ktlint.core.Rule.Modifier.RestrictToRootLast
     }
 
-    private fun ASTNode.visitTokens(currentNode: (node: ASTNode) -> Unit) {
-        currentNode(this)
+    private fun ASTNode.visitTokens(currentNode: (ASTNode) -> Unit) {
+        if (this.isNoFakeElement()) {
+            currentNode(this)
+        }
         getChildren(null).forEach { it.visitTokens(currentNode) }
+    }
+
+    private fun ASTNode.isNoFakeElement(): Boolean {
+        val parent = this.psi?.parent
+        return parent !is JavaDummyHolder && parent !is JavaDummyElement
     }
 }
