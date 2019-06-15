@@ -130,7 +130,8 @@ open class DetektCreateBaselineTask : SourceTask() {
             project = project,
             arguments = arguments.toList(),
             ignoreFailures = ignoreFailures.getOrElse(false),
-            classpath = detektClasspath.plus(pluginClasspath)
+            classpath = detektClasspath.plus(pluginClasspath),
+            taskName = name
         )
     }
 }

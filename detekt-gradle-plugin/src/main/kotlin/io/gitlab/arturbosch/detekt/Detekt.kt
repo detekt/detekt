@@ -230,7 +230,8 @@ open class Detekt : SourceTask(), VerificationTask {
             project = project,
             arguments = arguments.toList(),
             ignoreFailures = ignoreFailuresProp.getOrElse(false),
-            classpath = detektClasspath.plus(pluginClasspath)
+            classpath = detektClasspath.plus(pluginClasspath),
+            taskName = name
         )
 
         if (xmlReportTargetFileOrNull != null) {

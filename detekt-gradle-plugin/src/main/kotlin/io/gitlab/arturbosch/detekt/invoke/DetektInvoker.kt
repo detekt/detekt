@@ -13,10 +13,11 @@ object DetektInvoker {
         project: Project,
         arguments: List<CliArgument>,
         classpath: FileCollection,
+        taskName: String,
         ignoreFailures: Boolean = false
     ) {
         val detektTmpDir = project.mkdir("${project.buildDir}/tmp/detekt")
-        val argsFile = project.file("$detektTmpDir/args")
+        val argsFile = project.file("$detektTmpDir/$taskName.args")
 
         val cliArguments = arguments.flatMap(CliArgument::toArgument)
 
