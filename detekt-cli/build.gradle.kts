@@ -5,6 +5,7 @@ application {
 val junitPlatformVersion: String by project
 val spekVersion: String by project
 val jcommanderVersion: String by project
+val jansiVersion: String by project
 val detektVersion: String by project
 val reflectionsVersion: String by project
 
@@ -15,6 +16,7 @@ dependencies {
     implementation(project(":detekt-core"))
     runtimeOnly(project(":detekt-rules"))
     implementation("com.beust:jcommander:$jcommanderVersion")
+    implementation("org.fusesource.jansi:jansi:$jansiVersion")
     implementation(kotlin("compiler-embeddable"))
 
     testImplementation(project(":detekt-test"))
