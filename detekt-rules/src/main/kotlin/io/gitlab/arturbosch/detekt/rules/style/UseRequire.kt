@@ -8,7 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.argumentCount
-import io.gitlab.arturbosch.detekt.rules.isAfterAPreCondition
+import io.gitlab.arturbosch.detekt.rules.isEnclosedByConditionalStatement
 import io.gitlab.arturbosch.detekt.rules.isIllegalArgumentException
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -43,7 +43,7 @@ class UseRequire(config: Config = Config.empty) : Rule(config) {
 
         if (expression.isOnlyExpressionInBlock()) return
 
-        if (expression.isAfterAPreCondition() &&
+        if (expression.isEnclosedByConditionalStatement() &&
             expression.argumentCount < 2) {
             report(CodeSmell(issue, Entity.from(expression), issue.description))
         }
