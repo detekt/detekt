@@ -166,7 +166,7 @@ class NumberOfLoopsProcessorSpec : Spek({
 _detekt_ allows you to extend the console output and to create custom output formats.
 If you want to customize the output, take a look at the `ConsoleReport` and `OutputReport` classes.
 
-All they need are implementation of the `render()`-function which takes a object with all findings and returns a string.
+All they need are an implementation of the `render()`-function which takes an object with all findings and returns a string to be printed out.
 
 ```kotlin
 abstract fun render(detektion: Detektion): String?
