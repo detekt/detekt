@@ -1,7 +1,10 @@
 package io.gitlab.arturbosch.detekt.cli.console
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.ConsoleReport
 import io.gitlab.arturbosch.detekt.api.Detektion
+import io.gitlab.arturbosch.detekt.cli.ConsoleReportConfig
+import io.gitlab.arturbosch.detekt.cli.ReportConfig
 
 /**
  * @author Artur Bosch
@@ -11,32 +14,43 @@ class FindingsReport : ConsoleReport() {
 
     override val priority: Int = 40
 
-    override fun render(detektion: Detektion): String? {
-        val findings = detektion.findings
+    private lateinit var config: ConsoleReportConfig
+
+    override fun init(config: Config) {
+        super.init(config)
+        this.config = ReportConfig(config).consoleReport
+    }
+
+    override fun render(detektion: Detektion) = buildString {
         val totalDebt = DebtSumming()
-        return with(StringBuilder()) {
-            findings.forEach { rulesetFindings ->
-                val debtSumming = DebtSumming()
-                val issuesString = rulesetFindings.value.joinToString("") {
-                    debtSumming.add(it.issue.debt)
-                    it.compact().format("\t")
+        detektion.findings.forEach { (rule, findings) ->
+            val debtSumming = DebtSumming()
+            findings.forEach { debtSumming.add(it.issue.debt) }
+
+            val debt = debtSumming.calculateDebt()
+            if (config.showProgress || findings.isNotEmpty() || debt != null) {
+                append("Ruleset: $rule")
+                if (debt != null) {
+                    totalDebt.add(debt)
+                    append(" - $debt debt")
                 }
-                val debt = debtSumming.calculateDebt()
-                val debtString =
-                        if (debt != null) {
-                            totalDebt.add(debt)
-                            " - $debt debt".format()
-                        } else {
-                            "\n"
-                        }
-                append(rulesetFindings.key.format(prefix = "Ruleset: ", suffix = debtString))
-                append(issuesString.yellow())
+                append("\n")
             }
-            val debt = totalDebt.calculateDebt()
-            if (debt != null) {
-                append("Overall debt: $debt".format("\n"))
+
+            findings.forEach { finding ->
+                append("\t${finding.compact().yellow()}\n")
+                if (config.showMessages) {
+                    val message = finding.messageOrDescription()
+                    if (message.isNotEmpty()) {
+                        append("\t\t${message.yellow()}\n")
+                    }
+                }
             }
-            toString()
+        }
+
+        val debt = totalDebt.calculateDebt()
+        if (debt != null) {
+            append("\nOverall debt: $debt\n")
         }
     }
 }

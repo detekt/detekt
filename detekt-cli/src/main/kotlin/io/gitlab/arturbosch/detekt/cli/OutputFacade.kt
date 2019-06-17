@@ -33,26 +33,29 @@ class OutputFacade(
             FilteredDetectionResult(detektion, baselineFacade)
         } else detektion
 
-        val reports = ReportLocator(settings)
-                .load()
-                .filterNot { createBaseline && it is BuildFailureReport }
-                .sortedBy { it.priority }
-                .asReversed()
+        val reportConfig = ReportConfig(config)
+        val reports = ReportLocator(reportConfig, settings.pluginUrls)
+            .load()
+            .filterNot { createBaseline && it is BuildFailureReport }
+            .sortedBy { it.priority }
+            .asReversed()
 
         reports.forEach { report ->
             report.init(config)
             when (report) {
                 is ConsoleReport -> handleConsoleReport(report, result)
-                is OutputReport -> handleOutputReport(report, result)
+                is OutputReport -> handleOutputReport(report, result, reportConfig.outputReport)
             }
         }
     }
 
-    private fun handleOutputReport(report: OutputReport, result: Detektion) {
+    private fun handleOutputReport(report: OutputReport, result: Detektion, outputReportsConfig: OutputReportConfig) {
         val filePath = reportPaths[report.id]
         if (filePath != null) {
             report.write(filePath, result)
-            printStream.println("Successfully generated ${report.name} at $filePath")
+            if (outputReportsConfig.showProgress) {
+                printStream.println("Successfully generated ${report.name} at $filePath")
+            }
         }
     }
 

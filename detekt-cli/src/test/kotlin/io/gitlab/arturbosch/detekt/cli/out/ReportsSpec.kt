@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.cli.out
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.cli.CliArgs
+import io.gitlab.arturbosch.detekt.cli.ReportConfig
 import io.gitlab.arturbosch.detekt.cli.ReportLocator
 import io.gitlab.arturbosch.detekt.cli.parseArguments
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
@@ -61,7 +62,8 @@ internal class ReportsSpec : Spek({
                 assertThat(htmlReport.path).isEqualTo(Paths.get("D:_Gradle\\xxx\\xxx\\build\\reports\\detekt\\detekt.html"))
             }
 
-            val extensions = ReportLocator(ProcessingSettings(listOf())).load()
+            val settings = ProcessingSettings(listOf())
+            val extensions = ReportLocator(ReportConfig(settings.config), settings.pluginUrls).load()
             val extensionsIds = extensions.mapTo(HashSet()) { it.id }
 
             it("should be able to convert to output reports") {
