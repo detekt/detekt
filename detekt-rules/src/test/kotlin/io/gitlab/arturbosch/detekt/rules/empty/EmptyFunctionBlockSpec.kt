@@ -25,7 +25,7 @@ class EmptyFunctionBlockSpec : Spek({
                 class A {
                     protected fun stuff() {}
                 }"""
-            assertThat(subject.compileAndLint(code)).hasLocationStrings("'{}' at (2,27) in /$fileName")
+            assertThat(subject.compileAndLint(code)).hasExactlyLocationStrings("'{}' at (2,27) in /$fileName")
         }
 
         it("should not flag function with open modifier") {
@@ -41,7 +41,7 @@ class EmptyFunctionBlockSpec : Spek({
 				fun a() {
 					fun b() {}
 				}"""
-            assertThat(subject.compileAndLint(code)).hasLocationStrings("'{}' at (2,10) in /$fileName")
+            assertThat(subject.compileAndLint(code)).hasExactlyLocationStrings("'{}' at (2,10) in /$fileName")
         }
 
         context("some overridden functions") {
@@ -75,7 +75,8 @@ class EmptyFunctionBlockSpec : Spek({
 
             it("should not flag overridden functions") {
                 val config = TestConfig(mapOf(EmptyFunctionBlock.IGNORE_OVERRIDDEN_FUNCTIONS to "true"))
-                assertThat(EmptyFunctionBlock(config).compileAndLint(code)).hasLocationStrings("'{}' at (1,13) in /$fileName")
+                assertThat(EmptyFunctionBlock(config).compileAndLint(code))
+                    .hasExactlyLocationStrings("'{}' at (1,13) in /$fileName")
             }
         }
 
@@ -99,7 +100,7 @@ class EmptyFunctionBlockSpec : Spek({
             """.trimIndent()
             it("should not flag overridden functions with commented body") {
                 assertThat(subject.compileAndLint(code))
-                    .hasLocationStrings("'{\n\n    }' at (12,31) in /$fileName")
+                    .hasExactlyLocationStrings("'{\n\n    }' at (12,31) in /$fileName")
             }
 
             it("should not flag overridden functions with ignoreOverriddenFunctions") {
