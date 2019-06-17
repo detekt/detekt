@@ -33,6 +33,11 @@ class FindingsAssert(actual: List<Finding>) :
         }
     }
 
+    fun hasExactlyLocationStrings(vararg expected: String, trimIndent: Boolean = false) {
+        hasSize(expected.size)
+        hasLocationStrings(*expected, trimIndent = trimIndent)
+    }
+
     fun hasSourceLocations(vararg expected: SourceLocation) {
         isNotNull
 
