@@ -17,8 +17,6 @@ processors:
 
 console-reports:
   active: true
-  showProgress: true
-  showMessages: false
   exclude:
   #  - 'ProjectStatisticsReport'
   #  - 'ComplexityReport'

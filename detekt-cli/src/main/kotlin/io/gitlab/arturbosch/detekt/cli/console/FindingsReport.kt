@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.cli.console
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.ConsoleReport
 import io.gitlab.arturbosch.detekt.api.Detektion
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.cli.ConsoleReportConfig
 import io.gitlab.arturbosch.detekt.cli.ReportConfig
 
@@ -38,12 +39,8 @@ class FindingsReport : ConsoleReport() {
             }
 
             findings.forEach { finding ->
-                append("\t${finding.compact().yellow()}\n")
-                if (config.showMessages) {
-                    val message = finding.messageOrDescription()
-                    if (message.isNotEmpty()) {
-                        append("\t\t${message.yellow()}\n")
-                    }
+                finding.messages.forEach {
+                    append("\t${it.yellow()}\n")
                 }
             }
         }
@@ -53,4 +50,20 @@ class FindingsReport : ConsoleReport() {
             append("\nOverall debt: $debt\n")
         }
     }
+
+    private val Finding.messages: List<String>
+        get() = mutableListOf<String>().apply {
+            add(compact())
+
+            if (config.showMessages) {
+                if (message.isNotEmpty()) {
+                    add("\t$message")
+                }
+
+                val description = issue.description
+                if (description.isNotEmpty()) {
+                    add("\t$description")
+                }
+            }
+        }
 }

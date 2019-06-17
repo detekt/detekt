@@ -1,8 +1,10 @@
 Ruleset: TestSmell - 10min debt
 	TestSmell - [TestEntity] at TestFile.kt:1:1
 		TestMessage
+		For Test
 	TestSmell - [TestEntity] at TestFile.kt:1:1
 		TestMessage
+		For Test
 Ruleset: EmptySmells
 
 Overall debt: 10min
