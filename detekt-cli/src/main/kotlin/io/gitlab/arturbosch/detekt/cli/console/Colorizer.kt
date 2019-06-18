@@ -13,10 +13,10 @@ private data class Color(private val value: Byte) {
 }
 
 private val isColoredOutputSupported: Boolean = !System.getProperty("os.name", "").contains("win", true)
-private fun CharSequence.colorized(color: Color): String = if (isColoredOutputSupported) {
+private fun CharSequence.colorized(color: Color): CharSequence = if (isColoredOutputSupported) {
     "${color.escapeSequence}$this${RESET.escapeSequence}"
 } else {
-    this.toString()
+    this
 }
 
 fun CharSequence.red() = colorized(RED)
