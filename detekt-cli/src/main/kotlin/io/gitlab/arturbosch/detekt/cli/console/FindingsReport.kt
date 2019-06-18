@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.ConsoleReport
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.SingleAssign
 import io.gitlab.arturbosch.detekt.cli.ConsoleReportConfig
 import io.gitlab.arturbosch.detekt.cli.ReportConfig
 
@@ -15,7 +16,7 @@ class FindingsReport : ConsoleReport() {
 
     override val priority: Int = 40
 
-    private lateinit var config: ConsoleReportConfig
+    private var config: ConsoleReportConfig by SingleAssign()
 
     override fun init(config: Config) {
         super.init(config)
