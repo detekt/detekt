@@ -95,6 +95,8 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
         return """
 			console-reports:
 			  active: true
+			  showProgress: true
+			  showMessages: false
 			  exclude:
 			  #  - 'ProjectStatisticsReport'
 			  #  - 'ComplexityReport'
