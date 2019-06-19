@@ -13,16 +13,12 @@ private data class Color(private val value: Byte) {
 }
 
 private val isColoredOutputSupported: Boolean = !System.getProperty("os.name", "").startsWith("Windows")
-private fun CharSequence.colorized(color: Color): CharSequence = if (isColoredOutputSupported) {
+private fun String.colorized(color: Color) = if (isColoredOutputSupported) {
     "${color.escapeSequence}$this${RESET.escapeSequence}"
 } else {
     this
 }
 
-fun CharSequence.red(): CharSequence = colorized(RED)
-fun CharSequence.yellow(): CharSequence = colorized(YELLOW)
-fun CharSequence.decolorized(): CharSequence = this.replace(escapeSequenceRegex, "")
-
-fun String.red(): String = colorized(RED).toString()
-fun String.yellow(): String = colorized(YELLOW).toString()
-fun String.decolorized(): String = this.replace(escapeSequenceRegex, "")
+fun String.red() = colorized(RED).toString()
+fun String.yellow() = colorized(YELLOW).toString()
+fun String.decolorized() = this.replace(escapeSequenceRegex, "")
