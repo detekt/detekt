@@ -41,6 +41,7 @@ class UnusedImports(config: Config) : Rule(config) {
         private val kotlinDocReferencesRegExp = Regex("\\[([^]]+)](?!\\[)")
         private val kotlinDocSeeReferenceRegExp = Regex("^@see (.+)")
         private val whiteSpaceRegex = Regex("\\s+")
+        private val componentNRegex = Regex("component\\d+")
     }
 
     override fun visit(root: KtFile) {
@@ -78,6 +79,7 @@ class UnusedImports(config: Config) : Rule(config) {
                     .filter { it.identifier()?.contains("*")?.not() == true }
                     .filter { it.identifier() != null }
                     .filter { !operatorSet.contains(it.identifier()) }
+                    .filter { !componentNRegex.matches(it.identifier()!!) }
             super.visitImportList(importList)
         }
 
