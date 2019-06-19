@@ -23,22 +23,26 @@ class FindingsAssert(actual: List<Finding>) :
     override fun toAssert(value: Finding?, description: String?): FindingAssert =
             FindingAssert(value).`as`(description)
 
-    fun hasLocationStrings(vararg expected: String, trimIndent: Boolean = false) {
+    fun hasLocationStrings(vararg expected: String, trimIndent: Boolean = false) = apply {
         isNotNull
         val locationStrings = actual.asSequence().map { it.locationAsString }.sorted()
-        if (trimIndent) {
-            areEqual(locationStrings.map { it.trimIndent() }.toList(), expected.map { it.trimIndent() }.sorted())
+        val (actualLocationsList, expectedLocationsList) = if (trimIndent) {
+            locationStrings.map { it.trimIndent() }.toList() to expected.map { it.trimIndent() }.sorted()
         } else {
-            areEqual(locationStrings.toList(), expected.toList().sorted())
+            locationStrings.toList() to expected.toList().sorted()
+        }
+
+        if (!areEqual(actualLocationsList, expectedLocationsList)) {
+            failWithMessage("Expected locations string to be $expectedLocationsList but was $actualLocationsList")
         }
     }
 
-    fun hasExactlyLocationStrings(vararg expected: String, trimIndent: Boolean = false) {
+    fun hasExactlyLocationStrings(vararg expected: String, trimIndent: Boolean = false) = apply {
         hasSize(expected.size)
         hasLocationStrings(*expected, trimIndent = trimIndent)
     }
 
-    fun hasSourceLocations(vararg expected: SourceLocation) {
+    fun hasSourceLocations(vararg expected: SourceLocation) = apply {
         isNotNull
 
         val actualSources = actual.asSequence()
@@ -48,7 +52,9 @@ class FindingsAssert(actual: List<Finding>) :
         val expectedSources = expected.asSequence()
                 .sortedWith(compareBy({ it.line }, { it.column }))
 
-        areEqual(actualSources.toList(), expectedSources.toList())
+        if (!areEqual(actualSources.toList(), expectedSources.toList())) {
+            failWithMessage("Expected source locations to be ${expectedSources.toList()} but was ${actualSources.toList()}")
+        }
     }
 }
 
