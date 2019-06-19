@@ -164,6 +164,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Tyler Wong](https://github.com/tylerbwong) - UnderscoresInNumericLiterals rule
 - [Daniele Conti](https://github.com/fourlastor) - ObjectPropertyNaming improvement
 - [Nicola Corti](https://github.com/cortinico) - Fixed Suppress of MaxLineLenght
+- [Michael Lotkowski](https://github.com/DownMoney) - Rule improvement: False positive UnusedImport for componentN
 
 ### Mentions
 

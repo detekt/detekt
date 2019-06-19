@@ -247,5 +247,38 @@ class UnusedImportsSpec : Spek({
                 """
             assertThat(subject.lint(code)).isEmpty()
         }
+
+        it("should not report import of componentN operator") {
+            val code = """
+                import com.example.MyClass.component1
+                import com.example.MyClass.component2
+                import com.example.MyClass.component543
+
+                val (a, b) = MyClass(1, 2)
+            """.trimIndent()
+
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        it("should report import of identifiers with component in the name") {
+            val lint = subject.lint(
+                """
+                import com.example.TestComponent
+                import com.example.component1.Unused
+                import com.example.components
+                import com.example.component1AndSomethingElse
+
+                println("Testing")
+            """.trimIndent()
+            )
+
+            with(lint) {
+                assertThat(this).hasSize(4)
+                assertThat(this[0].entity.signature).endsWith("import com.example.TestComponent")
+                assertThat(this[1].entity.signature).endsWith("import com.example.component1.Unused")
+                assertThat(this[2].entity.signature).endsWith("import com.example.components")
+                assertThat(this[3].entity.signature).endsWith("import com.example.component1AndSomethingElse")
+            }
+        }
     }
 })
