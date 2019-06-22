@@ -85,4 +85,17 @@ data class ProcessingSettings @JvmOverloads constructor(
         val compilerConfiguration = createCompilerConfiguration(inputPaths, classpath, jvmTarget)
         createKotlinCoreEnvironment(compilerConfiguration)
     }
+
+    fun info(msg: String) = outPrinter.println(msg)
+
+    fun error(msg: String, error: Throwable) {
+        errorPrinter.println(msg)
+        error.printStacktraceRecursively(errorPrinter)
+    }
+
+    fun debug(msg: () -> String) {
+        if (debug) {
+            outPrinter.println(msg())
+        }
+    }
 }

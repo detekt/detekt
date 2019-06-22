@@ -35,7 +35,6 @@ fun main(args: Array<String>) {
 
 fun buildRunner(args: Array<String>): Executable {
     val arguments = parseArguments(args)
-    LOG.active = arguments.debug
     return when {
         arguments.generateConfig -> ConfigExporter()
         arguments.runRule != null -> SingleRuleRunner(arguments)
