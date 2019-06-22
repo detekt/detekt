@@ -46,7 +46,6 @@ tasks.withType<Detekt> {
 }
 
 val detektVersion: String by project
-val usedDetektVersion: String by project
 
 allprojects {
     group = "io.gitlab.arturbosch.detekt"
@@ -90,7 +89,6 @@ subprojects {
 
     detekt {
         debug = true
-        toolVersion = usedDetektVersion
         buildUponDefaultConfig = true
         config = files(project.rootDir.resolve("reports/failfast.yml"))
         baseline = project.rootDir.resolve("reports/baseline.xml")

@@ -1,13 +1,16 @@
 val assertjVersion: String by project
-val usedDetektVersion: String by project
 val junitPlatformVersion: String by project
 val spekVersion: String by project
 
 dependencies {
-    implementation("io.gitlab.arturbosch.detekt:detekt-api:$usedDetektVersion")
+    // When creating a sample extesion, change this dependency to the detekt-api version you build against, e.g.
+    // io.gitlab.arturbosch.detekt:detekt-api:1.0.0-RC15
+    implementation(project(":detekt-api"))
     implementation(kotlin("compiler-embeddable"))
 
-    testImplementation("io.gitlab.arturbosch.detekt:detekt-test:$usedDetektVersion")
+    // When creating a sample extesion, change this dependency to the detekt-test version you build against, e.g.
+    // io.gitlab.arturbosch.detekt:detekt-test:1.0.0-RC15
+    testImplementation(project(":detekt-test"))
     testImplementation("org.assertj:assertj-core:$assertjVersion")
     testImplementation("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
 
