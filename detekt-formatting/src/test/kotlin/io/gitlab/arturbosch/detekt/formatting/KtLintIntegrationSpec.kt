@@ -18,7 +18,7 @@ class KtLintIntegrationSpec : Spek({
             val expected = loadFileContent("integration/after.kt")
 
             val ruleSet = loadRuleSet<FormattingProvider>(
-                    TestConfig(mapOf("autoCorrect" to "true")))
+                TestConfig(mapOf("autoCorrect" to "true")))
             val findings = ruleSet.accept(fileBefore)
 
             assertThat(findings).isNotEmpty
