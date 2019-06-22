@@ -265,6 +265,7 @@ val detektFormat by tasks.registering(Detekt::class) {
     buildUponDefaultConfig = true
     autoCorrect = true
     setSource(files(projectDir))
+    ignoreFailures = false
     include("**/*.kt")
     include("**/*.kts")
     exclude("**/resources/**")
@@ -282,6 +283,7 @@ val detektAll by tasks.registering(Detekt::class) {
     buildUponDefaultConfig = true
     setSource(files(projectDir))
     config = files(project.rootDir.resolve("reports/failfast.yml"))
+    ignoreFailures = false
     include("**/*.kt")
     include("**/*.kts")
     exclude("**/resources/**")
