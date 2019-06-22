@@ -24,11 +24,10 @@ object DetektInvoker {
         project: Project,
         arguments: List<CliArgument>,
         classpath: FileCollection,
-        taskName: String,
+        @Suppress("UNUSED_PARAMETER") taskName: String,
         ignoreFailures: Boolean = false
     ) {
         val cliArguments = arguments.flatMap(CliArgument::toArgument)
-
         project.logger.debug(cliArguments.joinToString(" "))
 
         try {
@@ -36,7 +35,6 @@ object DetektInvoker {
                 classpath.map { it.toURI().toURL() }.toTypedArray(),
                 DetektInvoker.javaClass.classLoader
             )
-<<<<<<< HEAD
 
             val mainClass = loader.loadClass(MAIN_CLASS_NAME)
             val parseArguments = checkNotNull(mainClass.declaredMethods
@@ -54,25 +52,6 @@ object DetektInvoker {
                 runner to runnerClass
             }
 
-=======
-
-            val mainClass = loader.loadClass(MAIN_CLASS_NAME)
-            val parseArguments = checkNotNull(mainClass.declaredMethods
-                .find { it.name == MAIN_PARSE_ARGUMENTS_METHOD_NAME })
-            parseArguments.isAccessible = true
-            val cliArgs = parseArguments.invoke(null, cliArguments.toTypedArray())
-
-            val (runner, runnerClass) = if (arguments.find { it is GenerateConfigArgument } != null) {
-                val runnerClass = loader.loadClass(CONFIG_EXPORTER_CLASS_NAME)
-                val runner = runnerClass.newInstance()
-                runner to runnerClass
-            } else {
-                val runnerClass = loader.loadClass(RUNNER_CLASS_NAME)
-                val runner = runnerClass.declaredConstructors.first().newInstance(cliArgs)
-                runner to runnerClass
-            }
-
->>>>>>> Use reflection to invoke detekt cli in gradle plugin - #1686
             val executeMethod = checkNotNull(runnerClass.declaredMethods.find { it.name == RUNNER_EXECUTE_METHOD_NAME })
 
             try {
