@@ -60,7 +60,7 @@ class LibraryCodeMustSpecifyReturnType(config: Config = Config.empty) : Rule(con
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        if (!function.isLocal && function.isPublic && !function.hasDeclaredReturnType()) {
+        if (!function.isLocal && function.isPublic && function.hasExpressionBodyWithoutExplicitReturnType()) {
             report(CodeSmell(
                 issue,
                 Entity.from(function),
@@ -69,4 +69,7 @@ class LibraryCodeMustSpecifyReturnType(config: Config = Config.empty) : Rule(con
         }
         super.visitNamedFunction(function)
     }
+
+    private fun KtNamedFunction.hasExpressionBodyWithoutExplicitReturnType(): Boolean =
+        equalsToken != null && !hasDeclaredReturnType()
 }

@@ -50,11 +50,17 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
             }
         }
 
-        describe("negative cases with no public scope") {
+        describe("negative cases with public scope") {
 
             it("should not report a top level function") {
                 assertThat(subject.compileAndLint("""
                     fun foo(): Int = 5
+                """.trimIndent())).isEmpty()
+            }
+
+            it("should not report a non expression function") {
+                assertThat(subject.compileAndLint("""
+                    fun foo() {}
                 """.trimIndent())).isEmpty()
             }
 
