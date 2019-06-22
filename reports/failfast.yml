@@ -92,4 +92,4 @@ style:
   LibraryCodeMustSpecifyReturnType:
     active: true
     excludes: "**/*.kt"
-    includes: "**/detekt-api/**"
+    includes: "**/detekt-api/src/main/**"
