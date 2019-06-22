@@ -60,12 +60,12 @@ data class Location(
  * Stores line and column information of a location.
  */
 data class SourceLocation(val line: Int, val column: Int) {
-    override fun toString() = "$line:$column"
+    override fun toString(): String = "$line:$column"
 }
 
 /**
  * Stores character start and end positions of an text file.
  */
 data class TextLocation(val start: Int, val end: Int) {
-    override fun toString() = "$start:$end"
+    override fun toString(): String = "$start:$end"
 }

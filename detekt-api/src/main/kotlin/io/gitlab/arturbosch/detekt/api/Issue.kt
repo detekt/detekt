@@ -45,9 +45,9 @@ data class Debt(val days: Int = 0, val hours: Int = 0, val mins: Int = 0) {
     }
 
     companion object {
-        val TWENTY_MINS = Debt(0, 0, 20)
-        val TEN_MINS = Debt(0, 0, 10)
-        val FIVE_MINS = Debt(0, 0, 5)
+        val TWENTY_MINS: Debt = Debt(0, 0, 20)
+        val TEN_MINS: Debt = Debt(0, 0, 10)
+        val FIVE_MINS: Debt = Debt(0, 0, 5)
     }
 
     override fun toString(): String {

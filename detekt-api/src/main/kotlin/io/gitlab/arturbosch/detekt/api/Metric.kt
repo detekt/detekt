@@ -36,4 +36,4 @@ data class Metric(
 /**
  * To represent a value of 0.5, use the metric value 50 and the conversion factor of 100. (50 / 100 = 0.5)
  */
-const val DEFAULT_FLOAT_CONVERSION_FACTOR = 100
+const val DEFAULT_FLOAT_CONVERSION_FACTOR: Int = 100
