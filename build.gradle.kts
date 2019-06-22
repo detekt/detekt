@@ -256,6 +256,7 @@ fun shouldTreatCompilerWarningsAsErrors(): Boolean {
 }
 
 dependencies {
+    detekt(project(":detekt-cli"))
     detektPlugins(project(":detekt-formatting"))
 }
 
