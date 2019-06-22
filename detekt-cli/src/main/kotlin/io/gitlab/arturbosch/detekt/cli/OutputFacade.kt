@@ -17,7 +17,6 @@ class OutputFacade(
     private val settings: ProcessingSettings
 ) {
 
-    private val printStream = settings.outPrinter
     private val config = settings.config
     private val baselineFacade = arguments.baseline?.let { BaselineFacade(it) }
     private val createBaseline = arguments.createBaseline
@@ -34,10 +33,10 @@ class OutputFacade(
         } else detektion
 
         val reports = ReportLocator(settings)
-                .load()
-                .filterNot { createBaseline && it is BuildFailureReport }
-                .sortedBy { it.priority }
-                .asReversed()
+            .load()
+            .filterNot { createBaseline && it is BuildFailureReport }
+            .sortedBy { it.priority }
+            .asReversed()
 
         reports.forEach { report ->
             report.init(config)
@@ -52,11 +51,11 @@ class OutputFacade(
         val filePath = reportPaths[report.id]
         if (filePath != null) {
             report.write(filePath, result)
-            printStream.println("Successfully generated ${report.name} at $filePath")
+            settings.info("Successfully generated ${report.name} at $filePath")
         }
     }
 
     private fun handleConsoleReport(report: ConsoleReport, result: Detektion) {
-        report.print(printStream, result)
+        report.print(settings.outPrinter, result)
     }
 }
