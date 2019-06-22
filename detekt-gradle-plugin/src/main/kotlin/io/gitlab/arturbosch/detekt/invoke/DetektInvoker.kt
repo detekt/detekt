@@ -24,12 +24,12 @@ object DetektInvoker {
         project: Project,
         arguments: List<CliArgument>,
         classpath: FileCollection,
-        debug: Boolean = false,
+        taskName: String,
         ignoreFailures: Boolean = false
     ) {
         val cliArguments = arguments.flatMap(CliArgument::toArgument)
 
-        if (debug) println(cliArguments)
+        project.logger.debug(cliArguments.joinToString(" "))
 
         try {
             val loader = URLClassLoader(

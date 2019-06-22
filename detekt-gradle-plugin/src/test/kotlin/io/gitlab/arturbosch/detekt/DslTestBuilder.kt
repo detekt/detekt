@@ -76,8 +76,6 @@ abstract class DslTestBuilder {
     private class KotlinBuilder : DslTestBuilder() {
         override val gradleBuildName: String = "build.gradle.kts"
         override val gradleBuildConfig: String = """
-                |import io.gitlab.arturbosch.detekt.detekt
-                |
                 |plugins {
                 |   `java-library`
                 |    id("io.gitlab.arturbosch.detekt")
