@@ -66,6 +66,10 @@ See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
 
 See <a href="https://ktlint.github.io/#rule-modifier-order">ktlint-website</a> for documentation.
 
+### MultiLineIfElse
+
+See <a href="https://ktlint.github.io/#rule-modifier-order">ktlint-website</a> for documentation.
+
 ### NoBlankLineBeforeRbrace
 
 See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
@@ -157,6 +161,10 @@ See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for docu
 See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.
 
 ### SpacingAroundRangeOperator
+
+See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.
+
+### SpacingAroundUnaryOperators
 
 See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.
 
