@@ -90,7 +90,7 @@ class DslGradleRunner(
     }
 
     private fun buildGradleRunner(tasks: List<String>): GradleRunner {
-        val args = listOf("--stacktrace", "--info", "--build-cache") + tasks.toList()
+        val args = listOf("--stacktrace", "--info", "--build-cache", "--debug") + tasks.toList()
 
         return GradleRunner.create().apply {
             withProjectDir(rootDir)
