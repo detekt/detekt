@@ -3,12 +3,12 @@ val junitPlatformVersion: String by project
 val spekVersion: String by project
 
 dependencies {
-    // When creating a sample extesion, change this dependency to the detekt-api version you build against, e.g.
+    // When creating a sample extension, change this dependency to the detekt-api version you build against, e.g.
     // io.gitlab.arturbosch.detekt:detekt-api:1.0.0-RC15
     implementation(project(":detekt-api"))
     implementation(kotlin("compiler-embeddable"))
 
-    // When creating a sample extesion, change this dependency to the detekt-test version you build against, e.g.
+    // When creating a sample extension, change this dependency to the detekt-test version you build against, e.g.
     // io.gitlab.arturbosch.detekt:detekt-test:1.0.0-RC15
     testImplementation(project(":detekt-test"))
     testImplementation("org.assertj:assertj-core:$assertjVersion")
