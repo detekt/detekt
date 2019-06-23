@@ -46,7 +46,6 @@ tasks.withType<Detekt> {
 }
 
 val detektVersion: String by project
-val usedDetektVersion: String by project
 
 allprojects {
     group = "io.gitlab.arturbosch.detekt"
@@ -90,7 +89,6 @@ subprojects {
 
     detekt {
         debug = true
-        toolVersion = usedDetektVersion
         buildUponDefaultConfig = true
         config = files(project.rootDir.resolve("reports/failfast.yml"))
         baseline = project.rootDir.resolve("reports/baseline.xml")
@@ -256,6 +254,7 @@ fun shouldTreatCompilerWarningsAsErrors(): Boolean {
 }
 
 dependencies {
+    detekt(project(":detekt-cli"))
     detektPlugins(project(":detekt-formatting"))
 }
 
@@ -266,6 +265,7 @@ val detektFormat by tasks.registering(Detekt::class) {
     buildUponDefaultConfig = true
     autoCorrect = true
     setSource(files(projectDir))
+    ignoreFailures = false
     include("**/*.kt")
     include("**/*.kts")
     exclude("**/resources/**")
@@ -283,6 +283,7 @@ val detektAll by tasks.registering(Detekt::class) {
     buildUponDefaultConfig = true
     setSource(files(projectDir))
     config = files(project.rootDir.resolve("reports/failfast.yml"))
+    ignoreFailures = false
     include("**/*.kt")
     include("**/*.kts")
     exclude("**/resources/**")
