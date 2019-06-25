@@ -4,7 +4,6 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtContainerNodeForControlStructureBody
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtThrowExpression
-import org.jetbrains.kotlin.psi.KtWhenEntry
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import kotlin.reflect.KClass
 
@@ -23,8 +22,4 @@ internal val KtThrowExpression.argumentCount
 
 internal fun KtThrowExpression.isEnclosedByConditionalStatement(): Boolean {
     return parent is KtIfExpression || parent is KtContainerNodeForControlStructureBody
-}
-
-internal fun KtThrowExpression.isInAWhenElseBranch(): Boolean {
-    return (parent as? KtWhenEntry)?.isElse ?: false
 }
