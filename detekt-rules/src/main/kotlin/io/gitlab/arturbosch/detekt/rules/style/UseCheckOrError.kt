@@ -48,12 +48,9 @@ class UseCheckOrError(config: Config = Config.empty) : Rule(config) {
     )
 
     override fun visitThrowExpression(expression: KtThrowExpression) {
-        if (!expression.isIllegalStateException()) return
-
         if (expression.isOnlyExpressionInLambda()) return
 
-        if (expression.argumentCount < 2 &&
-            (expression.isEnclosedByConditionalStatement() || expression.isInAWhenElseBranch())) {
+        if (expression.isIllegalStateException() && expression.argumentCount < 2) {
             report(CodeSmell(issue, Entity.from(expression), issue.description))
         }
     }
