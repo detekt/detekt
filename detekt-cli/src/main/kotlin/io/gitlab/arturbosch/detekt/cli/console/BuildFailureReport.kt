@@ -59,6 +59,10 @@ class BuildFailureReport : ConsoleReport() {
                         "Warning threshold is $warningThreshold and fail threshold is $failThreshold!"
                 message.yellow()
             }
+            amount > 0 && maxIssues != -1 -> {
+                val message = "Build succeeded with $amount weighted issues (threshold defined was $maxIssues)."
+                message.yellow()
+            }
             else -> null
         }
     }
