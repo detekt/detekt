@@ -64,6 +64,20 @@ internal class BuildFailureReportSpec : Spek({
                     assertThat(e.stackTrace).isEmpty()
                 }
             }
+
+            it("should print a warning in yellow if weighted issues are not zero but below threshold") {
+                subject.init(TestConfig(mapOf("maxIssues" to "10")))
+                val report = subject.render(detektion)
+                val expectedMessage = "Build succeeded with 1 weighted issues (threshold defined was 10)."
+                assertThat(report).isEqualTo(expectedMessage.yellow())
+            }
+
+            it("should not print a warning if weighted issues are zero") {
+                subject.init(TestConfig(mapOf("maxIssues" to "10")))
+                val report = subject.render(TestDetektion())
+                assertThat(report).isNull()
+            }
+
         }
     }
 
