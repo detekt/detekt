@@ -45,11 +45,12 @@ class NestedBlockDepth(
     override fun visitNamedFunction(function: KtNamedFunction) {
         val visitor = FunctionDepthVisitor(threshold)
         visitor.visitNamedFunction(function)
-        if (visitor.isTooDeep)
+        if (visitor.isTooDeep) {
             report(ThresholdedCodeSmell(issue,
                     Entity.from(function),
                     Metric("SIZE", visitor.maxDepth, threshold),
                     "Function ${function.name} is nested too deeply."))
+        }
     }
 
     private class FunctionDepthVisitor(val threshold: Int) : DetektVisitor() {

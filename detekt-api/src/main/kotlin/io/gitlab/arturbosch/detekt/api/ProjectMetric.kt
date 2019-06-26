@@ -13,6 +13,12 @@ open class ProjectMetric(
     val conversionFactor: Int = DEFAULT_FLOAT_CONVERSION_FACTOR
 ) {
 
-    override fun toString(): String = "$type: ${if (isDouble)
-        (value.toDouble() / conversionFactor).toString() else value.toString()}"
+    override fun toString(): String {
+        val stringValue = if (isDouble) {
+            (value.toDouble() / conversionFactor).toString()
+        } else {
+            value.toString()
+        }
+        return "$type: $stringValue"
+    }
 }

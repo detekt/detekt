@@ -46,10 +46,12 @@ class InvalidPackageDeclaration(config: Config = Config.empty) : Rule(config) {
         } else {
             val normalizedFilePath = Paths.get(root.absolutePath()).parent.toNormalizedForm()
             val normalizedRootPackage = packageNameToNormalizedForm(rootPackage)
-            val expectedPath = if (normalizedRootPackage.isBlank())
-                declaredPath
-            else
-                declaredPath.substringAfter(normalizedRootPackage)
+            val expectedPath =
+                if (normalizedRootPackage.isBlank()) {
+                    declaredPath
+                } else {
+                    declaredPath.substringAfter(normalizedRootPackage)
+                }
 
             val isInRootPackage = expectedPath.isBlank()
             if (!isInRootPackage && !normalizedFilePath.endsWith(expectedPath)) {
