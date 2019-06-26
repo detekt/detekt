@@ -45,6 +45,27 @@ tasks.withType<Detekt> {
     dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":detekt"))
 }
 
+val jacocoVersion: String by project
+jacoco.toolVersion = jacocoVersion
+
+tasks {
+    jacocoTestReport {
+        executionData.setFrom(fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec"))
+
+        subprojects
+            .filterNot { it.name in listOf("detekt-test", "detekt-sample-extensions") }
+            .forEach {
+                this@jacocoTestReport.sourceSets(it.sourceSets["main"])
+                this@jacocoTestReport.dependsOn(it.tasks["test"])
+            }
+
+        reports {
+            xml.isEnabled = true
+            xml.destination = file("$buildDir/reports/jacoco/report.xml")
+        }
+    }
+}
+
 val detektVersion: String by project
 
 allprojects {
@@ -68,16 +89,13 @@ subprojects {
         plugin("com.jfrog.bintray")
         plugin("maven-publish")
         plugin("io.gitlab.arturbosch.detekt")
-        plugin("jacoco")
     }
 
-    val jacocoVersion: String by project
-    jacoco.toolVersion = jacocoVersion
-
-    tasks.named<JacocoReport>("jacocoTestReport").configure {
-        reports.xml.isEnabled = true
-        reports.html.isEnabled = true
-        dependsOn(tasks.named("test"))
+    if (project.name !in listOf("detekt-test", "detekt-sample-extensions")) {
+        apply {
+            plugin("jacoco")
+        }
+        jacoco.toolVersion = jacocoVersion
     }
 
     tasks.withType<Detekt> {
