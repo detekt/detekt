@@ -182,8 +182,7 @@ formatting:
   android: false
   autoCorrect: true
   AnnotationOnSeparateLine:
-    active: true
-    autoCorrect: true
+    active: false
   ChainWrapping:
     active: true
     autoCorrect: true
