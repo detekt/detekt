@@ -34,7 +34,7 @@ class McCabeVisitor(private val ignoreSimpleWhenEntries: Boolean) : DetektVisito
         }
     }
 
-    fun isInsideObjectLiteral(function: KtNamedFunction) =
+    fun isInsideObjectLiteral(function: KtNamedFunction): Boolean =
             function.getStrictParentOfType<KtObjectLiteralExpression>() != null
 
     override fun visitIfExpression(expression: KtIfExpression) {

@@ -52,7 +52,7 @@ interface ConfigAware : Config {
      */
     val autoCorrect: Boolean
         get() = valueOrDefault("autoCorrect", false) &&
-                ruleSetConfig.valueOrDefault("autoCorrect", true)
+            ruleSetConfig.valueOrDefault("autoCorrect", true)
 
     /**
      * Is this rule specified as active in configuration?
@@ -61,11 +61,11 @@ interface ConfigAware : Config {
     val active: Boolean get() = valueOrDefault("active", false)
 
     override fun subConfig(key: String): Config =
-            ruleConfig.subConfig(key)
+        ruleConfig.subConfig(key)
 
-    override fun <T : Any> valueOrDefault(key: String, default: T) =
-            ruleConfig.valueOrDefault(key, default)
+    override fun <T : Any> valueOrDefault(key: String, default: T): T =
+        ruleConfig.valueOrDefault(key, default)
 
     override fun <T : Any> valueOrNull(key: String): T? =
-            ruleConfig.valueOrNull(key)
+        ruleConfig.valueOrNull(key)
 }

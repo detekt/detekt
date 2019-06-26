@@ -25,7 +25,7 @@ open class CodeSmell(
 
     override fun compact(): String = "$id - ${entity.compact()}"
 
-    override fun compactWithSignature() = compact() + " - Signature=" + entity.signature
+    override fun compactWithSignature(): String = compact() + " - Signature=" + entity.signature
 
     override fun toString(): String {
         return "CodeSmell(issue=$issue, " +
@@ -36,7 +36,7 @@ open class CodeSmell(
                 "id='$id')"
     }
 
-    override fun messageOrDescription() = when {
+    override fun messageOrDescription(): String = when {
         message.isEmpty() -> issue.description
         else -> message
     }
@@ -96,7 +96,7 @@ open class ThresholdedCodeSmell(
 
     override fun compact(): String = "$id - $metric - ${entity.compact()}"
 
-    override fun messageOrDescription() = when {
+    override fun messageOrDescription(): String = when {
         message.isEmpty() -> issue.description
         else -> message
     }
