@@ -1,6 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules
 
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtContainerNodeForControlStructureBody
+import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import kotlin.reflect.KClass
@@ -17,3 +19,7 @@ internal fun <T : Exception> KtThrowExpression.isExceptionOfType(clazz: KClass<T
 
 internal val KtThrowExpression.argumentCount
     get() = findDescendantOfType<KtCallExpression>()?.valueArgumentList?.children?.size ?: 0
+
+internal fun KtThrowExpression.isEnclosedByConditionalStatement(): Boolean {
+    return parent is KtIfExpression || parent is KtContainerNodeForControlStructureBody
+}
