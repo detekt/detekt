@@ -14,11 +14,11 @@ summary:
 
 detekt will exit with one of the following exit codes:
 
-| Exit code | Description                                                                                     |
-|-----------|-------------------------------------------------------------------------------------------------|
-| 0         | detekt ran normally and maxIssues or failThreshold count was not reached in BuildFailureReport. |
-| 1         | An unexpected error occurred                                                                    |
-| 2         | maxIssues or failThreshold count was reached in BuildFailureReport.                             |
+| Exit code | Description                                                                    |
+|-----------|--------------------------------------------------------------------------------|
+| 0         | detekt ran normally and maxIssues count was not reached in BuildFailureReport. |
+| 1         | An unexpected error occurred                                                   |
+| 2         | maxIssues count was reached in BuildFailureReport.                             |
 
 The following parameters are shown when `--help` is entered.
 
