@@ -17,23 +17,17 @@ class BuildFailureReport : ConsoleReport() {
 
     private var weightsConfig: Config by SingleAssign()
     private var buildConfig: Config by SingleAssign()
-    private var warningThreshold: Int by SingleAssign()
-    private var failThreshold: Int by SingleAssign()
     private var maxIssues: Int by SingleAssign()
 
     companion object {
         private const val BUILD = "build"
         private const val WEIGHTS = "weights"
-        private const val WARNING_THRESHOLD = "warningThreshold"
-        private const val FAIL_THRESHOLD = "failThreshold"
         private const val MAX_ISSUES = "maxIssues"
     }
 
     override fun init(config: Config) {
         buildConfig = config.subConfig(BUILD)
         weightsConfig = buildConfig.subConfig(WEIGHTS)
-        warningThreshold = buildConfig.valueOrDefault(WARNING_THRESHOLD, -1)
-        failThreshold = buildConfig.valueOrDefault(FAIL_THRESHOLD, -1)
         maxIssues = buildConfig.valueOrDefault(MAX_ISSUES, -1)
     }
 
@@ -42,38 +36,17 @@ class BuildFailureReport : ConsoleReport() {
         val ruleToRuleSetId = extractRuleToRuleSetIdMap(detektion)
         val amount = smells.map { it.weighted(ruleToRuleSetId) }.sum()
 
-        checkDeprecation()
         return when {
             maxIssues.reached(amount) -> {
                 val message = "Build failed with $amount weighted issues (threshold defined was $maxIssues)."
                 println(message.red())
                 throw BuildFailure(message)
             }
-            failThreshold.reached(amount) -> {
-                val message = "Build failure threshold of $failThreshold reached with $amount weighted smells!"
-                println(message.red())
-                throw BuildFailure(message)
-            }
-            warningThreshold.reached(amount) -> {
-                val message = "Warning: $amount weighted code smells found. " +
-                        "Warning threshold is $warningThreshold and fail threshold is $failThreshold!"
-                message.yellow()
-            }
             amount > 0 && maxIssues != -1 -> {
                 val message = "Build succeeded with $amount weighted issues (threshold defined was $maxIssues)."
                 message.yellow()
             }
             else -> null
-        }
-    }
-
-    private fun checkDeprecation() {
-        if (buildConfig.valueOrDefault(WARNING_THRESHOLD, Int.MIN_VALUE) != Int.MIN_VALUE ||
-            buildConfig.valueOrDefault(FAIL_THRESHOLD, Int.MIN_VALUE) != Int.MIN_VALUE
-        ) {
-            val message = "[Deprecation] - 'warningThreshold' and 'failThreshold' properties are deprecated. " +
-                    "Please use the new 'maxIssues' config property."
-            println(message.yellow())
         }
     }
 
