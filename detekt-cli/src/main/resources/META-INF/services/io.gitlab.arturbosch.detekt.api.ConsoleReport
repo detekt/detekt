@@ -1,5 +1,6 @@
 io.gitlab.arturbosch.detekt.cli.console.BuildFailureReport
 io.gitlab.arturbosch.detekt.cli.console.ComplexityReport
 io.gitlab.arturbosch.detekt.cli.console.FindingsReport
+io.gitlab.arturbosch.detekt.cli.console.VerboseFindingsReport
 io.gitlab.arturbosch.detekt.cli.console.NotificationReport
 io.gitlab.arturbosch.detekt.cli.console.ProjectStatisticsReport

@@ -12,7 +12,7 @@ import io.gitlab.arturbosch.detekt.cli.ReportConfig
  * @author Artur Bosch
  * @author schalkms
  */
-class FindingsReport : ConsoleReport() {
+class VerboseFindingsReport : ConsoleReport() {
 
     override val priority: Int = 40
 

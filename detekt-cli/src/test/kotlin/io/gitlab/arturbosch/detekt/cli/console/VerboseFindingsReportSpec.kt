@@ -10,14 +10,14 @@ import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-class FindingsReportSpec : Spek({
+class VerboseFindingsReportSpec : Spek({
 
     describe("findings report") {
 
         context("several detekt findings") {
 
             it("reports the debt per ruleset and the overall debt") {
-                val report = FindingsReport().apply {
+                val report = VerboseFindingsReport().apply {
                     init(ReportConfig())
                 }
                 val expectedContent = readResource("findings-report.txt")
@@ -32,7 +32,7 @@ class FindingsReportSpec : Spek({
             }
 
             it("hides empty ruleset if showProgress = false") {
-                val report = FindingsReport().apply {
+                val report = VerboseFindingsReport().apply {
                     val config = CliArgs { configResource = "/configs/report-without-progress.yml" }.loadConfiguration()
                     init(ReportConfig(config))
                 }
@@ -48,7 +48,7 @@ class FindingsReportSpec : Spek({
             }
 
             it("displays messages if showMessages = true") {
-                val report = FindingsReport().apply {
+                val report = VerboseFindingsReport().apply {
                     val config = CliArgs { configResource = "/configs/report-with-messages.yml" }.loadConfiguration()
                     init(ReportConfig(config))
                 }
@@ -64,7 +64,7 @@ class FindingsReportSpec : Spek({
             }
 
             it("reports no findings") {
-                val report = FindingsReport().apply {
+                val report = VerboseFindingsReport().apply {
                     init(ReportConfig())
                 }
                 val detektion = TestDetektion()
