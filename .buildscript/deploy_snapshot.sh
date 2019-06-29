@@ -7,7 +7,7 @@
 # https://github.com/JakeWharton/RxBinding/blob/master/.buildscript/deploy_snapshot.sh
 
 SLUG="arturbosch/detekt"
-JDK="oraclejdk8"
+JDK="openjdk8"
 BRANCH="master"
 
 set -e
@@ -22,6 +22,6 @@ elif [ "$TRAVIS_BRANCH" != "$BRANCH" ]; then
   echo "Skipping snapshot deployment: wrong branch. Expected '$BRANCH' but was '$TRAVIS_BRANCH'."
 else
   echo "Deploying snapshot..."
-  ./gradlew bintrayUpload
+  ./gradlew artifactoryPublish -Dsnapshot=true --stacktrace
   echo "Snapshot deployed!"
 fi
