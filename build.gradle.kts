@@ -119,6 +119,7 @@ subprojects {
         reports {
             xml.enabled = true
             html.enabled = true
+            txt.enabled = true
         }
 
         idea {
@@ -329,6 +330,7 @@ val detektFormat by tasks.registering(Detekt::class) {
     reports {
         xml { enabled = false }
         html { enabled = false }
+        txt { enabled = false }
     }
 }
 
@@ -347,5 +349,6 @@ val detektAll by tasks.registering(Detekt::class) {
     reports {
         xml.enabled = false
         html.enabled = false
+        txt.enabled = false
     }
 }

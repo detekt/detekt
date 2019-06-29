@@ -45,9 +45,11 @@ internal class DetektTaskMultiModuleTest : Spek({
 
                         assertThat(projectFile("build/reports/detekt/detekt.xml")).doesNotExist()
                         assertThat(projectFile("build/reports/detekt/detekt.html")).doesNotExist()
+                        assertThat(projectFile("build/reports/detekt/detekt.txt")).doesNotExist()
                         projectLayout.submodules.forEach {
                             assertThat(projectFile("${it.name}/build/reports/detekt/detekt.xml")).exists()
                             assertThat(projectFile("${it.name}/build/reports/detekt/detekt.html")).exists()
+                            assertThat(projectFile("${it.name}/build/reports/detekt/detekt.txt")).exists()
                         }
                     }
                 }
@@ -77,9 +79,11 @@ internal class DetektTaskMultiModuleTest : Spek({
 
                         assertThat(projectFile("build/reports/detekt/detekt.xml")).exists()
                         assertThat(projectFile("build/reports/detekt/detekt.html")).exists()
+                        assertThat(projectFile("build/reports/detekt/detekt.txt")).exists()
                         projectLayout.submodules.forEach {
                             assertThat(projectFile("${it.name}/build/reports/detekt/detekt.xml")).exists()
                             assertThat(projectFile("${it.name}/build/reports/detekt/detekt.html")).exists()
+                            assertThat(projectFile("${it.name}/build/reports/detekt/detekt.txt")).exists()
                         }
                     }
                 }
@@ -111,9 +115,11 @@ internal class DetektTaskMultiModuleTest : Spek({
 
                         assertThat(projectFile("build/detekt-reports/detekt.xml")).exists()
                         assertThat(projectFile("build/detekt-reports/detekt.html")).exists()
+                        assertThat(projectFile("build/detekt-reports/detekt.txt")).exists()
                         projectLayout.submodules.forEach {
                             assertThat(projectFile("${it.name}/build/detekt-reports/detekt.xml")).exists()
                             assertThat(projectFile("${it.name}/build/detekt-reports/detekt.html")).exists()
+                            assertThat(projectFile("${it.name}/build/detekt-reports/detekt.txt")).exists()
                         }
                     }
                 }
@@ -152,10 +158,13 @@ internal class DetektTaskMultiModuleTest : Spek({
 
                         assertThat(projectFile("build/detekt-reports/detekt.xml")).exists()
                         assertThat(projectFile("build/detekt-reports/detekt.html")).exists()
+                        assertThat(projectFile("build/detekt-reports/detekt.txt")).exists()
                         assertThat(projectFile("child1/build/detekt-reports/detekt.xml")).exists()
                         assertThat(projectFile("child1/build/detekt-reports/detekt.html")).exists()
+                        assertThat(projectFile("child1/build/detekt-reports/detekt.txt")).exists()
                         assertThat(projectFile("child2/build/custom/detekt.xml")).exists()
                         assertThat(projectFile("child2/build/custom/detekt.html")).exists()
+                        assertThat(projectFile("child2/build/custom/detekt.txt")).exists()
                     }
                 }
                 it("can be applied to all files in entire project resulting in 1 report") {
@@ -183,9 +192,11 @@ internal class DetektTaskMultiModuleTest : Spek({
 
                         assertThat(projectFile("build/reports/detekt/detekt.xml")).exists()
                         assertThat(projectFile("build/reports/detekt/detekt.html")).exists()
+                        assertThat(projectFile("build/reports/detekt/detekt.txt")).exists()
                         projectLayout.submodules.forEach { submodule ->
                             assertThat(projectFile("${submodule.name}/build/reports/detekt/detekt.xml")).doesNotExist()
                             assertThat(projectFile("${submodule.name}/build/reports/detekt/detekt.html")).doesNotExist()
+                            assertThat(projectFile("${submodule.name}/build/reports/detekt/detekt.txt")).doesNotExist()
                         }
                     }
                 }

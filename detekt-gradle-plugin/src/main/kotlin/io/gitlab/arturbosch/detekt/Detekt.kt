@@ -176,6 +176,11 @@ open class Detekt : SourceTask(), VerificationTask {
         @Optional
         get() = reports.html.getTargetFileProvider(effectiveReportsDir)
 
+    val txtReportFile: Provider<RegularFile>
+        @OutputFile
+        @Optional
+        get() = reports.txt.getTargetFileProvider(effectiveReportsDir)
+
     private val defaultReportsDir: Directory = project.layout.buildDirectory.get()
         .dir(ReportingExtension.DEFAULT_REPORTS_DIR_NAME)
         .dir("detekt")
@@ -197,6 +202,7 @@ open class Detekt : SourceTask(), VerificationTask {
                     "at the same time.")
         val xmlReportTargetFileOrNull = xmlReportFile.orNull
         val htmlReportTargetFileOrNull = htmlReportFile.orNull
+        val txtReportTargetFileOrNull = txtReportFile.orNull
         val debugOrDefault = debugProp.getOrElse(false)
         val arguments = mutableListOf(
             InputArgument(source),
@@ -207,6 +213,7 @@ open class Detekt : SourceTask(), VerificationTask {
             BaselineArgument(baseline.orNull),
             DefaultReportArgument(DetektReportType.XML, xmlReportTargetFileOrNull),
             DefaultReportArgument(DetektReportType.HTML, htmlReportTargetFileOrNull),
+            DefaultReportArgument(DetektReportType.TXT, txtReportTargetFileOrNull),
             DebugArgument(debugOrDefault),
             ParallelArgument(parallelProp.getOrElse(false)),
             BuildUponDefaultConfigArgument(buildUponDefaultConfigProp.getOrElse(false)),
