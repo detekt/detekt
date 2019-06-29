@@ -8,6 +8,7 @@ build:
 
 processors:
   active: true
+  showProgress: true
   exclude:
   # - 'FunctionCountProcessor'
   # - 'PropertyCountProcessor'
@@ -18,12 +19,12 @@ processors:
 console-reports:
   active: true
   showProgress: true
-  showMessages: false
   exclude:
   #  - 'ProjectStatisticsReport'
   #  - 'ComplexityReport'
   #  - 'NotificationReport'
   #  - 'FindingsReport'
+    - 'VerboseFindingsReport'
   #  - 'BuildFailureReport'
 
 comments:

@@ -82,6 +82,7 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
         return """
 			processors:
 			  active: true
+			  showProgress: true
 			  exclude:
 			  # - 'FunctionCountProcessor'
 			  # - 'PropertyCountProcessor'
@@ -96,12 +97,12 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 			console-reports:
 			  active: true
 			  showProgress: true
-			  showMessages: false
 			  exclude:
 			  #  - 'ProjectStatisticsReport'
 			  #  - 'ComplexityReport'
 			  #  - 'NotificationReport'
 			  #  - 'FindingsReport'
+			    - 'VerboseFindingsReport'
 			  #  - 'BuildFailureReport'
 			""".trimIndent()
     }

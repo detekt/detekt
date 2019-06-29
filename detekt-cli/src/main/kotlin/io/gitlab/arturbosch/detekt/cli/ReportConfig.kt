@@ -29,8 +29,6 @@ abstract class BaseReportsConfig(protected val delegate: Config) : Config by del
     val showProgress: Boolean get() = valueOrDefault("showProgress", true)
 }
 
-class ConsoleReportConfig(delegate: Config = Config.empty) : BaseReportsConfig(delegate) {
-    val showMessages: Boolean get() = valueOrDefault("showMessages", false)
-}
+class ConsoleReportConfig(delegate: Config = Config.empty) : BaseReportsConfig(delegate)
 
 class OutputReportConfig(delegate: Config = Config.empty) : BaseReportsConfig(delegate)

@@ -3,15 +3,13 @@ package io.gitlab.arturbosch.detekt.cli.console
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.ConsoleReport
 import io.gitlab.arturbosch.detekt.api.Detektion
+import io.gitlab.arturbosch.detekt.api.ExtensionIsNotCompatibleWith
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.SingleAssign
 import io.gitlab.arturbosch.detekt.cli.ConsoleReportConfig
 import io.gitlab.arturbosch.detekt.cli.ReportConfig
 
-/**
- * @author Artur Bosch
- * @author schalkms
- */
+@ExtensionIsNotCompatibleWith(FindingsReport::class)
 class VerboseFindingsReport : ConsoleReport() {
 
     override val priority: Int = 40
@@ -56,15 +54,13 @@ class VerboseFindingsReport : ConsoleReport() {
         get() = mutableListOf<String>().apply {
             add(compact())
 
-            if (config.showMessages) {
-                if (message.isNotEmpty()) {
-                    add("\t$message")
-                }
+            if (message.isNotEmpty()) {
+                add("\t$message")
+            }
 
-                val description = issue.description
-                if (description.isNotEmpty()) {
-                    add("\t$description")
-                }
+            val description = issue.description
+            if (description.isNotEmpty()) {
+                add("\t$description")
             }
         }
 }

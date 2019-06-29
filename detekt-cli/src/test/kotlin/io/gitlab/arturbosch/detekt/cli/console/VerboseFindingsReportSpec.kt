@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.cli.console
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.cli.CliArgs
 import io.gitlab.arturbosch.detekt.cli.ReportConfig
@@ -16,11 +17,11 @@ class VerboseFindingsReportSpec : Spek({
 
         context("several detekt findings") {
 
-            it("reports the debt per ruleset and the overall debt") {
+            it("reports the messages, the debt per ruleset and the overall debt") {
                 val report = VerboseFindingsReport().apply {
-                    init(ReportConfig())
+                    init(Config.empty)
                 }
-                val expectedContent = readResource("findings-report.txt")
+                val expectedContent = readResource("findings-report-with-messages.txt")
                 val detektion = object : TestDetektion() {
                     override val findings: Map<String, List<Finding>> = mapOf(
                         Pair("TestSmell", listOf(createFinding(), createFinding())),
@@ -36,23 +37,7 @@ class VerboseFindingsReportSpec : Spek({
                     val config = CliArgs { configResource = "/configs/report-without-progress.yml" }.loadConfiguration()
                     init(ReportConfig(config))
                 }
-                val expectedContent = readResource("findings-report-without-progress.txt")
-                val detektion = object : TestDetektion() {
-                    override val findings: Map<String, List<Finding>> = mapOf(
-                        Pair("TestSmell", listOf(createFinding(), createFinding())),
-                        Pair("EmptySmells", emptyList())
-                    )
-                }
-                val output = report.render(detektion).trimEnd().decolorized()
-                assertThat(output).isEqualTo(expectedContent)
-            }
-
-            it("displays messages if showMessages = true") {
-                val report = VerboseFindingsReport().apply {
-                    val config = CliArgs { configResource = "/configs/report-with-messages.yml" }.loadConfiguration()
-                    init(ReportConfig(config))
-                }
-                val expectedContent = readResource("findings-report-with-messages.txt")
+                val expectedContent = readResource("findings-report-with-messages-without-progress.txt")
                 val detektion = object : TestDetektion() {
                     override val findings: Map<String, List<Finding>> = mapOf(
                         Pair("TestSmell", listOf(createFinding(), createFinding())),

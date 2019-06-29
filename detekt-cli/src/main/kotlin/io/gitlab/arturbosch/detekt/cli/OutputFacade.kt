@@ -2,7 +2,9 @@ package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.api.ConsoleReport
 import io.gitlab.arturbosch.detekt.api.Detektion
+import io.gitlab.arturbosch.detekt.api.Extension
 import io.gitlab.arturbosch.detekt.api.OutputReport
+import io.gitlab.arturbosch.detekt.api.notCompatibleClasses
 import io.gitlab.arturbosch.detekt.cli.baseline.BaselineFacade
 import io.gitlab.arturbosch.detekt.cli.console.BuildFailureReport
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
@@ -40,6 +42,8 @@ class OutputFacade(
             .sortedBy { it.priority }
             .asReversed()
 
+        checkReportsCompatibility(reports)
+
         reports.forEach { report ->
             report.init(config)
             when (report) {
@@ -61,5 +65,21 @@ class OutputFacade(
 
     private fun handleConsoleReport(report: ConsoleReport, result: Detektion) {
         report.print(printStream, result)
+    }
+
+    private fun checkReportsCompatibility(reports: List<Extension>) {
+        reports.forEach { report ->
+            val notCompatibleClasses = report.javaClass.notCompatibleClasses
+            reports.forEach { extension ->
+                if (notCompatibleClasses.any { it.isInstance(extension) }) {
+                    settings.errorPrinter.println(
+                        "%s report is not compatible with %s".format(
+                            report.javaClass.simpleName,
+                            extension.javaClass.simpleName
+                        )
+                    )
+                }
+            }
+        }
     }
 }
