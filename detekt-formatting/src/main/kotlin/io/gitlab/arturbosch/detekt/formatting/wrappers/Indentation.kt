@@ -14,8 +14,6 @@ import io.gitlab.arturbosch.detekt.formatting.merge
  * @configuration indentSize - indentation size (default: `4`)
  * @configuration continuationIndentSize - continuation indentation size (default: `4`)
  *
- * @active since v1.0.0
- * @autoCorrect since v1.0.0
  * @author Artur Bosch
  */
 class Indentation(config: Config) : FormattingRule(config) {

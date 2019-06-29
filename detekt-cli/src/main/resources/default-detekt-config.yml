@@ -181,6 +181,8 @@ formatting:
   active: true
   android: false
   autoCorrect: true
+  AnnotationOnSeparateLine:
+    active: false
   ChainWrapping:
     active: true
     autoCorrect: true
@@ -195,14 +197,16 @@ formatting:
   ImportOrdering:
     active: false
   Indentation:
-    active: true
-    autoCorrect: true
+    active: false
     indentSize: 4
     continuationIndentSize: 4
   MaximumLineLength:
     active: true
     maxLineLength: 120
   ModifierOrdering:
+    active: true
+    autoCorrect: true
+  MultiLineIfElse:
     active: true
     autoCorrect: true
   NoBlankLineBeforeRbrace:
@@ -256,6 +260,9 @@ formatting:
   SpacingAroundCurly:
     active: true
     autoCorrect: true
+  SpacingAroundDot:
+    active: true
+    autoCorrect: true
   SpacingAroundKeyword:
     active: true
     autoCorrect: true
@@ -266,6 +273,9 @@ formatting:
     active: true
     autoCorrect: true
   SpacingAroundRangeOperator:
+    active: true
+    autoCorrect: true
+  SpacingAroundUnaryOperators:
     active: true
     autoCorrect: true
   StringTemplate:

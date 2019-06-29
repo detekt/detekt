@@ -1,3 +1,6 @@
+// https://github.com/pinterest/ktlint/issues/498
+@file:Suppress("AnnotationOnSeparateLine")
+
 package io.gitlab.arturbosch.detekt.test
 
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
@@ -13,8 +16,8 @@ fun FindingAssert.isThresholded(): ThresholdedCodeSmellAssert {
 }
 
 class ThresholdedCodeSmellAssert(actual: ThresholdedCodeSmell?) :
-        AbstractAssert<ThresholdedCodeSmellAssert, ThresholdedCodeSmell>(
-                actual, ThresholdedCodeSmellAssert::class.java) {
+    AbstractAssert<ThresholdedCodeSmellAssert, ThresholdedCodeSmell>(
+        actual, ThresholdedCodeSmellAssert::class.java) {
 
     fun withValue(expected: Int) = hasValue(expected).let { this }
 

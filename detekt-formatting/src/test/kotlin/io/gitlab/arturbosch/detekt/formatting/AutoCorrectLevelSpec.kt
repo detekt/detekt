@@ -18,6 +18,9 @@ import java.nio.file.Paths
 /**
  * @author Artur Bosch
  */
+// Error:(31, 49) Kotlin: Cannot infer type parameter SELF in
+// val <SELF : AbstractBooleanAssert<SELF!>!> AbstractBooleanAssert<SELF>.isTrue: SELF!
+@Suppress("UsePropertyAccessSyntax")
 class AutoCorrectLevelSpec : Spek({
 
     describe("test different autoCorrect levels in configuration") {
@@ -38,7 +41,7 @@ class AutoCorrectLevelSpec : Spek({
             val config = yamlConfig("/autocorrect/autocorrect-toplevel-false.yml")
 
             it("should format the test file but not print to disc") {
-                val project = Paths.get(resource("before.kt"))
+                val project = Paths.get(resource("configTests/fixed.kt"))
                 var expectedContentBeforeRun: String? = null
                 val contentChanged = object : FileProcessListener {
                     override fun onStart(files: List<KtFile>) {
@@ -54,7 +57,7 @@ class AutoCorrectLevelSpec : Spek({
                 val detekt = DetektFacade.create(
                     ProcessingSettings(project, config), listOf(FormattingProvider()), listOf(contentChanged))
                 val findings = detekt.run().findings.flatMap { it.value }
-                val actualContentAfterRun = loadFileContent("before.kt")
+                val actualContentAfterRun = loadFileContent("configTests/fixed.kt")
 
                 assertThat(wasLinted(findings)).isTrue()
                 assertThat(actualContentAfterRun).isEqualTo(expectedContentBeforeRun)
@@ -97,7 +100,7 @@ class AutoCorrectLevelSpec : Spek({
 })
 
 private fun runAnalysis(config: Config): Pair<KtFile, List<Finding>> {
-    val testFile = loadFile("before.kt")
+    val testFile = loadFile("configTests/fixed.kt")
     val ruleSet = loadRuleSet<FormattingProvider>(config)
     val findings = ruleSet.accept(testFile)
     return testFile to findings

@@ -14,6 +14,10 @@ To enable this rule set, add <i>detektPlugins "io.gitlab.arturbosch.detekt:detek
 to your gradle dependencies or reference the `detekt-formatting`-jar with the `--plugins` option
 in the command line interface.
 
+### AnnotationOnSeparateLine
+
+See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
+
 ### ChainWrapping
 
 See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
@@ -59,6 +63,10 @@ See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
    maximum line length
 
 ### ModifierOrdering
+
+See <a href="https://ktlint.github.io/#rule-modifier-order">ktlint-website</a> for documentation.
+
+### MultiLineIfElse
 
 See <a href="https://ktlint.github.io/#rule-modifier-order">ktlint-website</a> for documentation.
 
@@ -136,6 +144,10 @@ See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for docu
 
 See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.
 
+### SpacingAroundDot
+
+See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.
+
 ### SpacingAroundKeyword
 
 See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.
@@ -149,6 +161,10 @@ See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for docu
 See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.
 
 ### SpacingAroundRangeOperator
+
+See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.
+
+### SpacingAroundUnaryOperators
 
 See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.
 
