@@ -14,14 +14,13 @@ import java.util.concurrent.ExecutorService
  * @author Artur Bosch
  */
 class Detektor(
-    settings: ProcessingSettings,
+    private val settings: ProcessingSettings,
     private val providers: List<RuleSetProvider>,
     private val processors: List<FileProcessListener> = emptyList()
 ) {
 
     private val config: Config = settings.config
     private val executor: ExecutorService = settings.executorService
-    private val logger = settings.errorPrinter
 
     fun run(
         ktFiles: Collection<KtFile>,
@@ -34,12 +33,11 @@ class Detektor(
                     processors.forEach { it.onProcessComplete(file, this) }
                 }
             }.exceptionally { error ->
-                logger.println("Analyzing '${file.absolutePath()}' led to an exception.\n" +
+                settings.error("Analyzing '${file.absolutePath()}' led to an exception.\n" +
                     "The original exception message was: ${error.localizedMessage}\n" +
                     "Running detekt '${whichDetekt()}' on Java '${whichJava()}' on OS '${whichOS()}'.\n" +
-                    "If the exception message does not help, please feel free to create an issue on our github page."
-                )
-                error.printStacktraceRecursively(logger)
+                    "If the exception message does not help, please feel free to create an issue on our github page.",
+                    error)
                 emptyMap()
             }
         }
