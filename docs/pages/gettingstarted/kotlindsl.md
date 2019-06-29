@@ -63,6 +63,23 @@ detekt {
 }
 ```
 
+##### <a name="excluding">Leveraging Gradle's SourceTask - Excluding and including source files</a>
+
+A detekt task extends the Gradle `SourceTask` to be only scheduled when watched source files are changed.
+It also allows to match files that should be excluded from the analysis.
+To do this introduce a query on detekt tasks and define include and exclude patterns outside the detekt closure:
+
+```kotlin
+detekt {
+    ...
+}
+
+tasks.withType<io.gitlab.arturbosch.detekt.Detekt> {
+    // include("**/special/package/**") // only analyze a sub package inside src/main/kotlin
+    exclude("**/special/package/internal/**") // but exclude our legacy internal package
+}
+```
+
 ##### <a name="customdetekttask">Defining custom detekt task</a>
 
 Custom tasks for alternative configurations or different source sets can be defined by creating a custom task that
