@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.isThresholded
 import io.gitlab.arturbosch.detekt.test.lint
 import org.spekframework.spek2.Spek
@@ -60,30 +61,25 @@ class ComplexMethodSpec : Spek({
                 val config = TestConfig(mapOf(ComplexMethod.IGNORE_SIMPLE_WHEN_ENTRIES to "true"))
                 val subject = ComplexMethod(config)
                 val code = """
-				internal fun Map<String, Any>.asBundle(): Bundle {
-					val bundle = Bundle(size)
+			    	 fun f() {
+                        val map = HashMap<Any, String>()
+                        for ((key, value) in map) {
+                            when (key) {
+                                is Int -> print("int")
+                                is String -> print("String")
+                                is Float -> print("Float")
+                                is Double -> print("Double")
+                                is Byte -> print("Byte")
+                                is Short -> print("Short")
+                                is Long -> print("Long")
+                                is Boolean -> print("Boolean")
+                                else -> throw IllegalArgumentException("Unexpected type value")
+                            }
+                        }
+                    }
+			    """
 
-					for ((key, value) in this) {
-						val transformedKey = key.asFcmId()
-
-						when (value) {
-							is Int -> bundle.putInt(transformedKey, value)
-							is String -> bundle.putString(transformedKey, value)
-							is Float -> bundle.putFloat(transformedKey, value)
-							is Double -> bundle.putDouble(transformedKey, value)
-							is Byte -> bundle.putByte(transformedKey, value)
-							is Short -> bundle.putShort(transformedKey, value)
-							is Long -> bundle.putLong(transformedKey, value)
-							is Boolean -> bundle.putBoolean(transformedKey, value)
-							else -> throw IllegalArgumentException("Unexpected type value")
-						}
-					}
-
-					return bundle
-				}
-			""".trimIndent()
-
-                val findings = subject.lint(code)
+                val findings = subject.compileAndLint(code)
                 assertThat(findings).isEmpty()
             }
         }
@@ -139,7 +135,7 @@ class ComplexMethodSpec : Spek({
 			""".trimIndent()
 
             it("should not count these overridden functions to base functions complexity") {
-                assertThat(ComplexMethod().lint(code)).isEmpty()
+                assertThat(ComplexMethod().compileAndLint(code)).isEmpty()
             }
         }
     }

@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.empty
 
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.rules.providers.EmptyCodeProvider
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileForTest
 import io.gitlab.arturbosch.detekt.test.lint
 import io.gitlab.arturbosch.detekt.test.yamlConfig
@@ -43,7 +44,7 @@ class EmptyBlocksMultiRuleSpec : Spek({
         }
 
         it("reports no duplicated findings - issue #1605") {
-            val findings = subject.lint("""
+            val findings = subject.compileAndLint("""
                 class EmptyBlocks {
                     class EmptyClass {}
                     fun exceptionHandling() {

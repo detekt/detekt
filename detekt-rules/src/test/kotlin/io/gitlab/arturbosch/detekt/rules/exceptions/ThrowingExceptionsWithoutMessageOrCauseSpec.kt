@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -25,12 +25,12 @@ class ThrowingExceptionsWithoutMessageOrCauseSpec : Spek({
 				}"""
 
             it("reports calls to the default constructor") {
-                assertThat(subject.lint(code)).hasSize(2)
+                assertThat(subject.compileAndLint(code)).hasSize(2)
             }
 
             it("does not report calls to the default constructor with empty configuration") {
                 val config = TestConfig(mapOf(ThrowingExceptionsWithoutMessageOrCause.EXCEPTIONS to ""))
-                val findings = ThrowingExceptionsWithoutMessageOrCause(config).lint(code)
+                val findings = ThrowingExceptionsWithoutMessageOrCause(config).compileAndLint(code)
                 assertThat(findings).hasSize(0)
             }
         }
@@ -40,10 +40,10 @@ class ThrowingExceptionsWithoutMessageOrCauseSpec : Spek({
             it("does not report a call to this exception") {
                 val code = """
 				fun test() {
-					assertThatIllegalArgumentException().isThrownBy { }
+					org.assertj.core.api.Assertions.assertThatIllegalArgumentException().isThrownBy { println() }
 				}
 			"""
-                assertThat(subject.lint(code)).isEmpty()
+                assertThat(subject.compileAndLint(code)).isEmpty()
             }
         }
     }
