@@ -22,13 +22,12 @@ class FindingsReport : ConsoleReport() {
                     it.compact().format("\t")
                 }
                 val debt = debtSumming.calculateDebt()
-                val debtString =
-                    if (debt != null) {
-                        totalDebt.add(debt)
-                        " - $debt debt".format()
-                    } else {
-                        "\n"
-                    }
+                val debtString = if (debt != null) {
+                    totalDebt.add(debt)
+                    " - $debt debt".format()
+                } else {
+                    "\n"
+                }
                 append(rulesetFindings.key.format(prefix = "Ruleset: ", suffix = debtString))
                 append(issuesString.yellow())
             }
