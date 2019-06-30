@@ -109,7 +109,7 @@ class ForbiddenVoidSpec : Spek({
         describe("ignoreUsageInGenerics is enabled") {
             val config = TestConfig(mapOf(ForbiddenVoid.IGNORE_USAGE_IN_GENERICS to "true"))
 
-            it("should not report Void in generic type usage") {
+            it("should not report Void in generic type declaration") {
                 val code = """
                     interface A<T>
 
@@ -124,6 +124,26 @@ class ForbiddenVoidSpec : Spek({
                     }
 
                     class D : A<Void>
+                """
+
+                val findings = ForbiddenVoid(config).compileAndLint(code)
+                assertThat(findings).isEmpty()
+            }
+
+            it("should not report Void in nested generic type definition") {
+                val code = """
+                    interface A<T>
+                    interface B<T>
+                    class C : A<B<Void>>
+                """
+
+                val findings = ForbiddenVoid(config).compileAndLint(code)
+                assertThat(findings).isEmpty()
+            }
+
+            it("should not report Void in definition with multiple generic parameters") {
+                val code = """
+                    val foo = mutableMapOf<Int, Void>()
                 """
 
                 val findings = ForbiddenVoid(config).compileAndLint(code)
