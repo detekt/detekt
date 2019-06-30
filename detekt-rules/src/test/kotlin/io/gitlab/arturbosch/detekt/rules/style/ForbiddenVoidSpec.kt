@@ -17,22 +17,22 @@ class ForbiddenVoidSpec : Spek({
     describe("ForbiddenVoid rule") {
         it("should report all Void type usage") {
             val code = """
-				lateinit var c: () -> Void
+                lateinit var c: () -> Void
 
-				fun method(param: Void) {
-					val a: Void? = null
-					val b: Void = null!!
-				}
-			"""
+                fun method(param: Void) {
+                    val a: Void? = null
+                    val b: Void = null!!
+                }
+            """
 
             assertThat(subject.compileAndLint(code)).hasSize(4)
         }
 
         it("should not report Void class literal") {
             val code = """
-				val clazz = java.lang.Void::class
-				val klass = Void::class
-			"""
+                val clazz = java.lang.Void::class
+                val klass = Void::class
+            """
 
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
@@ -132,13 +132,13 @@ class ForbiddenVoidSpec : Spek({
 
             it("should report non-generic Void type usage") {
                 val code = """
-				lateinit var c: () -> Void
+                    lateinit var c: () -> Void
 
-				fun method(param: Void) {
-					val a: Void? = null
-					val b: Void = null!!
-				}
-			"""
+                    fun method(param: Void) {
+                        val a: Void? = null
+                        val b: Void = null!!
+                    }
+                """
 
                 assertThat(subject.compileAndLint(code)).hasSize(4)
             }
