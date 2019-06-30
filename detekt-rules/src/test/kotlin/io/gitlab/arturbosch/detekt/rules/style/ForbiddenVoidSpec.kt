@@ -42,7 +42,6 @@ class ForbiddenVoidSpec : Spek({
 				class Void {
                     fun void() {}
                 }
-                
                 enum class E {
                     Void;
                 }
