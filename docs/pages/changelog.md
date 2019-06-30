@@ -66,6 +66,7 @@ See all issues at: [RC16](https://github.com/arturbosch/detekt/milestone/45)
 - **Gradle Plugin**: Including or excluding paths and files from detekt scanning is now done by setting `include` & `exclude` on the
   detekt task which aligns with how other static analysis tools handle filters. Any use of `filters` will be ignored. See custom task examples for [Groovy][1] and [Kotlin][2].
   For details of syntax see https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/util/PatternFilterable.html
+- **Gradle Plugin**: Adds support for TXT report.
 - **Cli/Gradle Plugin**: `autoCorrect` inside the yaml config was removed. Please use the `--auto-correct` cli flag or `autoCorrect` detekt extension property in the Gradle plugin.
 
 ##### Changelog
