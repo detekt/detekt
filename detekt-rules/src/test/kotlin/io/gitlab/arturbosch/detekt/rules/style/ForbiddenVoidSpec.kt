@@ -37,6 +37,20 @@ class ForbiddenVoidSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
+        it("does not report when functions or classes are called 'Void'") {
+            val code = """
+				class Void {
+                    fun void() {}
+                }
+                
+                enum class E {
+                    Void;
+                }
+			"""
+
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
         describe("ignoreOverridden is enabled") {
             val config = TestConfig(mapOf(ForbiddenVoid.IGNORE_OVERRIDDEN to "true"))
 
