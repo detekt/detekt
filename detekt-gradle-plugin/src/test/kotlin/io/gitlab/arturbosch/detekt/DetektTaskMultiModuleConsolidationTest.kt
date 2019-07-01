@@ -67,8 +67,6 @@ internal class DetektTaskMultiModuleConsolidationTest : Spek({
         it("using the kotlin dsl") {
 
             val mainBuildFileContent: String = """
-                |import io.gitlab.arturbosch.detekt.detekt
-                |
                 |plugins {
                 |   `java-library`
                 |    id("io.gitlab.arturbosch.detekt")

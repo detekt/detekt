@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
-import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -20,7 +20,7 @@ class ThrowingExceptionFromFinallySpec : Spek({
 						}
 					}
 				}"""
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         it("should report a nested throw expression") {
@@ -31,7 +31,7 @@ class ThrowingExceptionFromFinallySpec : Spek({
 						throw IllegalArgumentException()
 					}
 				}"""
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         it("should not report a finally expression without a throw expression") {
@@ -42,7 +42,7 @@ class ThrowingExceptionFromFinallySpec : Spek({
 						println()
 					}
 				}"""
-            assertThat(subject.lint(code)).hasSize(0)
+            assertThat(subject.compileAndLint(code)).hasSize(0)
         }
     }
 })

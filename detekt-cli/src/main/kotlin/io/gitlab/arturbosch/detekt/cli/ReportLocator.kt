@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.cli
 import io.gitlab.arturbosch.detekt.api.ConsoleReport
 import io.gitlab.arturbosch.detekt.api.Extension
 import io.gitlab.arturbosch.detekt.api.OutputReport
-import java.net.URL
+import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import java.net.URLClassLoader
 import java.util.ServiceLoader
 
@@ -11,8 +11,8 @@ import java.util.ServiceLoader
  * @author Artur Bosch
  */
 class ReportLocator(
-    reportConfig: ReportConfig,
-    private val pluginUrls: Array<URL>
+    private val settings: ProcessingSettings,
+    reportConfig: ReportConfig
 ) {
 
     private val consoleSubConfig = reportConfig.consoleReport
@@ -26,15 +26,15 @@ class ReportLocator(
     private val outputExcludes = outputSubConfig.excludes
 
     fun load(): List<Extension> {
-        val detektLoader = URLClassLoader(pluginUrls, javaClass.classLoader)
+        val detektLoader = URLClassLoader(settings.pluginUrls, javaClass.classLoader)
 
-        LOG.debug("console-report=$consoleActive")
+        settings.debug { "console-report=$consoleActive" }
         val consoleReports = loadConsoleReports(detektLoader)
-        LOG.debug { "ConsoleReports: $consoleReports" }
+        settings.debug { "ConsoleReports: $consoleReports" }
 
-        LOG.debug("output-report=$outputActive")
+        settings.debug { "output-report=$outputActive" }
         val outputReports = loadOutputReports(detektLoader)
-        LOG.debug { "OutputReports: $outputReports" }
+        settings.debug { "OutputReports: $outputReports" }
 
         return consoleReports + outputReports
     }

@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
-import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -16,7 +16,7 @@ class NotImplementedDeclarationSpec : Spek({
 				if (1 == 1) throw NotImplementedError()
 				throw NotImplementedError()
 			}"""
-            assertThat(subject.lint(code)).hasSize(2)
+            assertThat(subject.compileAndLint(code)).hasSize(2)
         }
 
         it("reports TODO method calls") {
@@ -25,7 +25,7 @@ class NotImplementedDeclarationSpec : Spek({
 				TODO("not implemented")
 				TODO()
 			}"""
-            assertThat(subject.lint(code)).hasSize(2)
+            assertThat(subject.compileAndLint(code)).hasSize(2)
         }
 
         it("does not report TODO comments") {
@@ -33,7 +33,7 @@ class NotImplementedDeclarationSpec : Spek({
 			fun f() {
 				// TODO
 			}"""
-            assertThat(subject.lint(code)).hasSize(0)
+            assertThat(subject.compileAndLint(code)).hasSize(0)
         }
     }
 })

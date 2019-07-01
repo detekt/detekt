@@ -11,6 +11,49 @@ toc: true
 
 -->
 
+#### RC16
+
+##### Migration
+
+- Notice that we removed the deprecated `warningThreshold` and `failThreshold`. Use `maxIssues` from now on instead.
+- We updated KtLint integration to 0.33.0 which introduces four new rules. Make sure to enable them.
+
+##### Changelog
+
+- Use Codecov's recommended JaCoCo config - [#1739](https://github.com/arturbosch/detekt/pull/1739)
+- Write a post about how to use snapshot releases - [#1737](https://github.com/arturbosch/detekt/pull/1737)
+- Document how to include/exclude source files in the gradle plugin - [#1736](https://github.com/arturbosch/detekt/pull/1736)
+- Publish snapshots to jfrogs oss artifactory - [#1734](https://github.com/arturbosch/detekt/pull/1734)
+- Extract building runner - [#1733](https://github.com/arturbosch/detekt/pull/1733)
+- Move to JSR compilation for rule Specs - [#1732](https://github.com/arturbosch/detekt/pull/1732)
+- Remove deprecated threshold settings doc - [#1730](https://github.com/arturbosch/detekt/pull/1730)
+- Publish snapshots to jfrogs oss artifactory - [#1729](https://github.com/arturbosch/detekt/pull/1729)
+- Remove deprecated build failure threshold settings - #1723 - [#1728](https://github.com/arturbosch/detekt/pull/1728)
+- Print to console the count of weighted issues if above 0 - [#1725](https://github.com/arturbosch/detekt/pull/1725)
+- Extract building a runner from main method - [#1719](https://github.com/arturbosch/detekt/pull/1719)
+- Run all detekt tasks with project dependencies - [#1718](https://github.com/arturbosch/detekt/pull/1718)
+- Update doc for UnusedImports rule - [#1714](https://github.com/arturbosch/detekt/pull/1714)
+- Update Kotlin to 1.3.40 - [#1713](https://github.com/arturbosch/detekt/pull/1713)
+- Unable to use "exclude" in 1.0.0-RC15 with groovy dsl - [#1712](https://github.com/arturbosch/detekt/issues/1712)
+- Introduce lock-bot - [#1711](https://github.com/arturbosch/detekt/pull/1711)
+- Fix broken hasLocationStrings and similar broken assert - [#1707](https://github.com/arturbosch/detekt/pull/1707)
+- Rule improvement: False positive UnusedImport for componentN - [#1705](https://github.com/arturbosch/detekt/pull/1705)
+- Update doc (report extension section) - [#1703](https://github.com/arturbosch/detekt/pull/1703)
+- Disable colors on Windows OS - [#1701](https://github.com/arturbosch/detekt/pull/1701)
+- Add two more examples and one integrating site - [#1699](https://github.com/arturbosch/detekt/pull/1699)
+- Filter fake elements when processing ast nodes - Closes #1688 - [#1698](https://github.com/arturbosch/detekt/pull/1698)
+- Set ignoreFailures on all sourceset tasks - [#1697](https://github.com/arturbosch/detekt/pull/1697)
+- Gradle plugin: Pass arguments to detekt in a file - [#1696](https://github.com/arturbosch/detekt/pull/1696)
+- Gradle: Upgrade the ktlint version to 0.33.0 - [#1692](https://github.com/arturbosch/detekt/pull/1692)
+- Fixed bug reporting false positives with EmptyFunctionBlock - [#1690](https://github.com/arturbosch/detekt/pull/1690)
+- Fix reporting logic for UseRequire and UseCheckOrErrorSpec - [#1689](https://github.com/arturbosch/detekt/pull/1689)
+- Bogus NoTrailingSpaces findings in some files - [#1688](https://github.com/arturbosch/detekt/issues/1688)
+- Implement LibraryCodeMustSpecifyReturnType rule - [#1659](https://github.com/arturbosch/detekt/pull/1659)
+- Add RedundantElseInWhen rule - [#1603](https://github.com/arturbosch/detekt/pull/1603)
+- Wrap four new KtLint rules - [#1455](https://github.com/arturbosch/detekt/pull/1455)
+
+See all issues at: [RC16](https://github.com/arturbosch/detekt/milestone/45)
+
 #### RC15 
 
 ##### Migration

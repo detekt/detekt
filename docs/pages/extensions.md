@@ -166,7 +166,7 @@ class NumberOfLoopsProcessorSpec : Spek({
 _detekt_ allows you to extend the console output and to create custom output formats.
 If you want to customize the output, take a look at the `ConsoleReport` and `OutputReport` classes.
 
-All they need are implementation of the `render()`-function which takes a object with all findings and returns a string.
+All they need are an implementation of the `render()`-function which takes an object with all findings and returns a string to be printed out.
 
 ```kotlin
 abstract fun render(detektion: Detektion): String?
@@ -204,7 +204,7 @@ dependencies {
 - By default all rules not marked with `@active` in their `KDoc` are disabled.
 That means your custom rules are also disabled if you have not explicitly enabled
 them in the `detekt` yaml configuration file.
-- If your extension is part of your project and you integrate it like `detektPlugins project(":my-rules"")` make sure that this
+- If your extension is part of your project and you integrate it like `detektPlugins project(":my-rules")` make sure that this
 subproject is build before `gradle detekt` is run.
 In the `kotlin-dsl` you could add something like `tasks.withType<Detekt> { dependsOn(":my-rules:assemble") }` to explicitly run `detekt` only 
 after your extension sub project is built.

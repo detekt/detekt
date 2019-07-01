@@ -7,9 +7,8 @@
 [![codecov](https://codecov.io/gh/arturbosch/detekt/branch/master/graph/badge.svg)](https://codecov.io/gh/arturbosch/detekt)
 [![Download](https://api.bintray.com/packages/arturbosch/code-analysis/detekt/images/download.svg) ](https://bintray.com/arturbosch/code-analysis/detekt/_latestVersion)
 <!-- Version needs to be hardcoded until rc phase is over. Change to '-'RC for semantic versioning broke the badge. [![gradle plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/io/gitlab/arturbosch/detekt/detekt-gradle-plugin/maven-metadata.xml.svg?label=gradle&style=flat-square)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)-->
-[![gradle plugin](https://img.shields.io/badge/Gradle-1.0.0--RC14-blue.svg)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
+[![gradle plugin](https://img.shields.io/badge/Gradle-1.0.0--RC16-blue.svg)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
 
-[![All Contributors](https://img.shields.io/badge/all_contributors-78-orange.svg?style=flat-square)](#contributors)
 [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
 
 Meet _detekt_, a static code analysis tool for the _Kotlin_ programming language.
@@ -81,6 +80,8 @@ detekt {
     baseline = file("my-detekt-baseline.xml") // Just if you want to create a baseline file.
 }
 ```
+
+See [bintray](https://bintray.com/arturbosch/code-analysis/detekt) for releases and [artifactory](https://oss.jfrog.org/artifactory/webapp/#/artifacts/browse/tree/General/oss-snapshot-local/io/gitlab/arturbosch/detekt/detekt-cli/) for snapshots.
 
 ### Adding more rule sets
 
@@ -165,6 +166,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Tyler Wong](https://github.com/tylerbwong) - UnderscoresInNumericLiterals rule
 - [Daniele Conti](https://github.com/fourlastor) - ObjectPropertyNaming improvement
 - [Nicola Corti](https://github.com/cortinico) - Fixed Suppress of MaxLineLenght
+- [Michael Lotkowski](https://github.com/DownMoney) - Rule improvement: False positive UnusedImport for componentN
 
 ### Mentions
 
@@ -176,7 +178,7 @@ As mentioned in...
 - [SBCARS '18 -  Are you still smelling it?: A comparative study between Java and Kotlin language](https://doi.org/10.1145/3267183.3267186) by [Flauzino et al.](https://github.com/matheusflauzino/smells-experiment-Kotlin-and-Java)
 - [KotlinConf 2018 - Safe(r) Kotlin Code - Static Analysis Tools for Kotlin by Marvin Ramin](https://www.youtube.com/watch?v=yjhQiP0329M)
 - [droidcon NYC 2018 - Static Code Analysis For Kotlin](https://www.youtube.com/watch?v=LT6m5_LO2DQ)
-- Kotlin on Code Quality Tools - by @vanniktech [Presentation](https://docs.google.com/presentation/d/1sUoQCRHTR01JfaS67Qkd7K1rdRLOhO6QGCelZZwxOKs/edit) [Slides](https://www.youtube.com/watch?v=FKDNE6PPTTE)
+- Kotlin on Code Quality Tools - by @vanniktech [Slides](https://docs.google.com/presentation/d/1sUoQCRHTR01JfaS67Qkd7K1rdRLOhO6QGCelZZwxOKs/edit) [Presentation](https://www.youtube.com/watch?v=FKDNE6PPTTE)
 - [@medium/acerezoluna/static-code-analysis-tools-for-kotlin-in-android](https://medium.com/@acerezoluna/static-code-analysis-tools-for-kotlin-in-android-fa072125fd50)
 - [@medium/annayan/writing-custom-lint-rules-for-your-kotlin-project-with-detekt](https://proandroiddev.com/writing-custom-lint-rules-for-your-kotlin-project-with-detekt-653e4dbbe8b9)
 - [Free Continuous Integration for modern Android apps with CircleCI](https://tips.seebrock3r.me/free-continuous-integration-for-modern-android-apps-with-circleci-940e33451c83)

@@ -29,7 +29,7 @@ class AnnotationExcluder(
      * Is true if any given annotation name is declared in the SplitPattern
      * which basically describes entries to exclude.
      */
-    fun shouldExclude(annotations: List<KtAnnotationEntry>) =
+    fun shouldExclude(annotations: List<KtAnnotationEntry>): Boolean =
             annotations.firstOrNull(::isExcluded) != null
 
     private fun isExcluded(annotation: KtAnnotationEntry): Boolean =

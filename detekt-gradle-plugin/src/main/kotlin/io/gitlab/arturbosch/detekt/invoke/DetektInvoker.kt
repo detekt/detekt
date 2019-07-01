@@ -1,7 +1,5 @@
 package io.gitlab.arturbosch.detekt.invoke
 
-import io.gitlab.arturbosch.detekt.CONFIGURATION_DETEKT
-import io.gitlab.arturbosch.detekt.CONFIGURATION_DETEKT_PLUGINS
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.file.FileCollection
@@ -15,21 +13,26 @@ object DetektInvoker {
         project: Project,
         arguments: List<CliArgument>,
         classpath: FileCollection,
-        debug: Boolean = false,
+        taskName: String,
         ignoreFailures: Boolean = false
     ) {
+        val detektTmpDir = project.mkdir("${project.buildDir}/tmp/detekt")
+        val argsFile = project.file("$detektTmpDir/$taskName.args")
+
         val cliArguments = arguments.flatMap(CliArgument::toArgument)
 
-        if (debug) println(cliArguments)
+        argsFile.writeText(cliArguments.joinToString("\n"))
+
+        project.logger.debug(cliArguments.joinToString(" "))
 
         val proc = project.javaexec {
             it.main = DETEKT_MAIN
             it.classpath = classpath
-            it.args = cliArguments
+            it.args = listOf("@${argsFile.absolutePath}")
             it.isIgnoreExitValue = true
         }
         val exitValue = proc.exitValue
-        if (debug) println("Detekt finished with exit value $exitValue")
+        project.logger.debug("Detekt finished with exit value $exitValue")
 
         when (exitValue) {
             1 -> throw GradleException("There was a problem running detekt.")

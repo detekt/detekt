@@ -37,9 +37,9 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
 class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(javaClass.simpleName, Severity.Style,
-            "A function that only returns a constant is misleading. " +
-                    "Consider declaring a constant instead",
-            Debt.TEN_MINS)
+        "A function that only returns a constant is misleading. " +
+            "Consider declaring a constant instead",
+        Debt.TEN_MINS)
 
     private val ignoreOverridableFunction = valueOrDefault(IGNORE_OVERRIDABLE_FUNCTION, true)
     private val excludedFunctions = SplitPattern(valueOrDefault(EXCLUDED_FUNCTIONS, ""))
@@ -47,16 +47,17 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (checkOverridableFunction(function) && isNotExcluded(function) && isReturningAConstant(function)) {
             report(CodeSmell(issue, Entity.from(function),
-                    "${function.nameAsSafeName} is returning a constant. Prefer declaring a constant instead."))
+                "${function.nameAsSafeName} is returning a constant. Prefer declaring a constant instead."))
         }
         super.visitNamedFunction(function)
     }
 
-    private fun checkOverridableFunction(function: KtNamedFunction): Boolean {
-        return if (ignoreOverridableFunction)
+    private fun checkOverridableFunction(function: KtNamedFunction): Boolean =
+        if (ignoreOverridableFunction) {
             !function.isOverride() && !function.isOpen() && !checkContainingInterface(function)
-        else true
-    }
+        } else {
+            true
+        }
 
     private fun checkContainingInterface(function: KtNamedFunction): Boolean {
         val containingClass = function.containingClass()
@@ -64,10 +65,10 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
     }
 
     private fun isNotExcluded(function: KtNamedFunction) =
-            !excludedFunctions.contains(function.name)
+        !excludedFunctions.contains(function.name)
 
     private fun isReturningAConstant(function: KtNamedFunction) =
-            isConstantExpression(function.bodyExpression) || returnsConstant(function)
+        isConstantExpression(function.bodyExpression) || returnsConstant(function)
 
     private fun isConstantExpression(expression: KtExpression?): Boolean {
         if (expression is KtConstantExpression) {

@@ -1,5 +1,7 @@
+import com.jfrog.bintray.gradle.BintrayExtension
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
+import java.util.Date
 
 buildscript {
     repositories {
@@ -20,14 +22,14 @@ plugins {
     `maven-publish`
     id("com.gradle.plugin-publish") version "0.10.1"
     id("com.jfrog.bintray") version "1.8.4"
-    kotlin("jvm") version "1.3.31"
+    kotlin("jvm") version "1.3.40"
     id("org.jetbrains.dokka") version "0.9.18"
     id("com.github.ben-manes.versions") version "0.21.0"
     id("io.gitlab.arturbosch.detekt") version "1.0.0-RC15"
 }
 
 group = "io.gitlab.arturbosch.detekt"
-version = "1.0.0-RC15"
+version = "1.0.0-RC16"
 
 val detektGradleVersion: String by project
 val jcommanderVersion: String by project
@@ -61,10 +63,10 @@ tasks.test {
     testLogging {
         // set options for log level LIFECYCLE
         events = setOf(
-                TestLogEvent.FAILED,
-                TestLogEvent.PASSED,
-                TestLogEvent.SKIPPED,
-                TestLogEvent.STANDARD_OUT
+            TestLogEvent.FAILED,
+            TestLogEvent.PASSED,
+            TestLogEvent.SKIPPED,
+            TestLogEvent.STANDARD_OUT
         )
         exceptionFormat = TestExceptionFormat.FULL
         showExceptions = true
@@ -101,7 +103,7 @@ tasks.dokka {
 
 val generateDefaultDetektVersionFile: Task by tasks.creating {
     val defaultDetektVersionFile =
-            File("$buildDir/generated/src/io/gitlab/arturbosch/detekt", "PluginVersion.kt")
+        File("$buildDir/generated/src/io/gitlab/arturbosch/detekt", "PluginVersion.kt")
 
     outputs.file(defaultDetektVersionFile)
 
@@ -141,13 +143,26 @@ artifacts {
 
 detekt {
     config = files(
-            project.rootDir.resolve("../detekt-cli/src/main/resources/default-detekt-config.yml"),
-            project.rootDir.resolve("../reports/failfast.yml")
+        project.rootDir.resolve("../detekt-cli/src/main/resources/default-detekt-config.yml"),
+        project.rootDir.resolve("../reports/failfast.yml")
     )
 }
+val bintrayUser: String? =
+    if (project.hasProperty("bintrayUser")) {
+        project.property("bintrayUser").toString()
+    } else {
+        System.getenv("BINTRAY_USER")
+    }
+val bintrayKey: String? =
+    if (project.hasProperty("bintrayKey")) {
+        project.property("bintrayKey").toString()
+    } else {
+        System.getenv("BINTRAY_API_KEY")
+    }
+val detektPublication = "DetektPublication"
 
 publishing {
-    publications.create<MavenPublication>("DetektPublication") {
+    publications.create<MavenPublication>(detektPublication) {
         from(components["java"])
         artifact(sourcesJar)
         artifact(javadocJar)
@@ -174,4 +189,37 @@ publishing {
             }
         }
     }
+}
+
+bintray {
+    user = bintrayUser
+    key = bintrayKey
+    val mavenCentralUser = System.getenv("MAVEN_CENTRAL_USER") ?: ""
+    val mavenCentralPassword = System.getenv("MAVEN_CENTRAL_PW") ?: ""
+
+    setPublications(detektPublication)
+
+    pkg(delegateClosureOf<BintrayExtension.PackageConfig> {
+        repo = "code-analysis"
+        name = "detekt"
+        userOrg = "arturbosch"
+        setLicenses("Apache-2.0")
+        vcsUrl = "https://github.com/arturbosch/detekt"
+
+        version(delegateClosureOf<BintrayExtension.VersionConfig> {
+            name = project.version as? String
+            released = Date().toString()
+
+            gpg(delegateClosureOf<BintrayExtension.GpgConfig> {
+                sign = true
+            })
+
+            mavenCentralSync(delegateClosureOf<BintrayExtension.MavenCentralSyncConfig> {
+                sync = true
+                user = mavenCentralUser
+                password = mavenCentralPassword
+                close = "1"
+            })
+        })
+    })
 }

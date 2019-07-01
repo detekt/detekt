@@ -45,7 +45,7 @@ detekt {
     baseline = file("path/to/baseline.xml")               // Specifying a baseline file. All findings stored in this file in subsequent runs of detekt.
     disableDefaultRuleSets = false                        // Disables all default detekt rulesets and will only run detekt with custom rules defined in plugins passed in with `detektPlugins` configuration. `false` by default.
     debug = false                                         // Adds debug output during task execution. `false` by default.
-    ignoreFailures = false                                // If set to `true` the build does not fail when maxIssues or failThreshold count was reached. Defaults to `false`.
+    ignoreFailures = false                                // If set to `true` the build does not fail when the maxIssues count was reached. Defaults to `false`.
     reports {
         xml {
             enabled = true                                // Enable/Disable XML report (default: true)
@@ -60,6 +60,23 @@ detekt {
             destination = file("build/reports/detekt.json") // Path where report will be stored
         }
     }
+}
+```
+
+##### <a name="excluding">Leveraging Gradle's SourceTask - Excluding and including source files</a>
+
+A detekt task extends the Gradle `SourceTask` to be only scheduled when watched source files are changed.
+It also allows to match files that should be excluded from the analysis.
+To do this introduce a query on detekt tasks and define include and exclude patterns outside the detekt closure:
+
+```kotlin
+detekt {
+    ...
+}
+
+tasks.withType<io.gitlab.arturbosch.detekt.Detekt> {
+    // include("**/special/package/**") // only analyze a sub package inside src/main/kotlin
+    exclude("**/special/package/internal/**") // but exclude our legacy internal package
 }
 ```
 

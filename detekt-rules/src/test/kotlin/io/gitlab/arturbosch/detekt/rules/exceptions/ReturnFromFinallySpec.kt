@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
-import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -21,7 +21,7 @@ class ReturnFromFinallySpec : Spek({
 		"""
 
             it("should report") {
-                val findings = subject.lint(code)
+                val findings = subject.compileAndLint(code)
                 assertThat(findings).hasSize(1)
             }
         }
@@ -36,7 +36,7 @@ class ReturnFromFinallySpec : Spek({
 		"""
 
             it("should not report") {
-                val findings = subject.lint(code)
+                val findings = subject.compileAndLint(code)
                 assertThat(findings).hasSize(0)
             }
         }
@@ -54,7 +54,7 @@ class ReturnFromFinallySpec : Spek({
 		"""
 
             it("should report") {
-                val findings = subject.lint(code)
+                val findings = subject.compileAndLint(code)
                 assertThat(findings).hasSize(1)
             }
         }
@@ -73,7 +73,7 @@ class ReturnFromFinallySpec : Spek({
 		"""
 
             it("should not report") {
-                val findings = subject.lint(code)
+                val findings = subject.compileAndLint(code)
                 assertThat(findings).hasSize(0)
             }
         }

@@ -1,12 +1,15 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.test.TEST_FILENAME
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
-import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class UseCheckOrErrorSpec : Spek({
+
+    val fileName = TEST_FILENAME
 
     val subject by memoized { UseCheckOrError(Config.empty) }
 
@@ -18,7 +21,7 @@ class UseCheckOrErrorSpec : Spek({
                     doSomething()
                     if (a < 0) throw IllegalStateException()
                 }"""
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasExactlyLocationStrings("'throw IllegalStateException()' at (3,16) in /$fileName")
         }
 
         it("reports if a an IllegalStateException is thrown with an error message") {
@@ -27,7 +30,7 @@ class UseCheckOrErrorSpec : Spek({
                     doSomething()
                     if (a < 0) throw IllegalStateException("More details")
                 }"""
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasExactlyLocationStrings("'throw IllegalStateException(\"More details\")' at (3,16) in /$fileName")
         }
 
         it("reports if a an IllegalStateException is thrown as default case of a when expression") {
@@ -37,7 +40,7 @@ class UseCheckOrErrorSpec : Spek({
                         1 -> doSomething()
                         else -> throw IllegalStateException()
                     }"""
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasExactlyLocationStrings("'throw IllegalStateException()' at (4,17) in /$fileName")
         }
 
         it("reports if an IllegalStateException is thrown by its fully qualified name") {
@@ -46,7 +49,7 @@ class UseCheckOrErrorSpec : Spek({
                     doSomething()
                     if (a < 0) throw java.lang.IllegalStateException()
                 }"""
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasExactlyLocationStrings("'throw java.lang.IllegalStateException()' at (3,16) in /$fileName")
         }
 
         it("reports if an IllegalStateException is thrown by its fully qualified name using the kotlin type alias") {
@@ -55,7 +58,7 @@ class UseCheckOrErrorSpec : Spek({
                     doSomething()
                     if (a < 0) throw kotlin.IllegalStateException()
                 }"""
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasExactlyLocationStrings("'throw kotlin.IllegalStateException()' at (3,16) in /$fileName")
         }
 
         it("does not report if any other kind of exception is thrown") {
@@ -87,12 +90,12 @@ class UseCheckOrErrorSpec : Spek({
 
         it("reports an issue if the exception thrown as the only action in a function") {
             val code = """fun doThrow() = throw IllegalStateException("message")"""
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasExactlyLocationStrings("'throw IllegalStateException(\"message\")' at (1,17) in /$fileName")
         }
 
         it("reports an issue if the exception thrown as the only action in a function block") {
             val code = """fun doThrow() { throw IllegalStateException("message") }"""
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasExactlyLocationStrings("'throw IllegalStateException(\"message\")' at (1,17) in /$fileName")
         }
     }
 })

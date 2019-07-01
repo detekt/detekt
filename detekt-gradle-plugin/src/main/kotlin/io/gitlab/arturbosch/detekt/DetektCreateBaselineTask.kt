@@ -129,9 +129,9 @@ open class DetektCreateBaselineTask : SourceTask() {
         DetektInvoker.invokeCli(
             project = project,
             arguments = arguments.toList(),
-            debug = debug.getOrElse(false),
             ignoreFailures = ignoreFailures.getOrElse(false),
-            classpath = detektClasspath.plus(pluginClasspath)
+            classpath = detektClasspath.plus(pluginClasspath),
+            taskName = name
         )
     }
 }

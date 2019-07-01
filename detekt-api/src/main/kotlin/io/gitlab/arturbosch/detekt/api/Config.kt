@@ -46,9 +46,9 @@ interface Config {
          */
         val empty: Config = EmptyConfig
 
-        const val ACTIVE_KEY = "active"
-        const val EXCLUDES_KEY = "excludes"
-        const val INCLUDES_KEY = "includes"
+        const val ACTIVE_KEY: String = "active"
+        const val EXCLUDES_KEY: String = "excludes"
+        const val INCLUDES_KEY: String = "includes"
 
         val PRIMITIVES: Set<KClass<out Any>> = setOf(
             Int::class,
@@ -86,7 +86,7 @@ internal object EmptyConfig : HierarchicalConfig {
 
     override val parent: HierarchicalConfig.Parent? = null
 
-    override fun subConfig(key: String) = this
+    override fun subConfig(key: String): EmptyConfig = this
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : Any> valueOrDefault(key: String, default: T): T = when (key) {

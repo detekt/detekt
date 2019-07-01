@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.TestConfig
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
@@ -31,7 +32,7 @@ class FunctionOnlyReturningConstantSpec : Spek({
             val code = "fun f() = 1"
             val config = TestConfig(mapOf("excludedFunctions" to "f"))
             val rule = FunctionOnlyReturningConstant(config)
-            assertThat(rule.lint(code)).hasSize(0)
+            assertThat(rule.compileAndLint(code)).hasSize(0)
         }
     }
 

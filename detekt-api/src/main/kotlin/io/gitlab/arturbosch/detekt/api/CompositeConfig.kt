@@ -19,5 +19,5 @@ class CompositeConfig(private val lookFirst: Config, private val lookSecond: Con
         return lookFirst.valueOrNull(key) ?: lookSecond.valueOrNull(key)
     }
 
-    override fun toString() = "CompositeConfig(lookFirst=$lookFirst, lookSecond=$lookSecond)"
+    override fun toString(): String = "CompositeConfig(lookFirst=$lookFirst, lookSecond=$lookSecond)"
 }

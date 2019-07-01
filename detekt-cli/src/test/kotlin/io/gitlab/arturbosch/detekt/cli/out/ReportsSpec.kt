@@ -25,10 +25,10 @@ internal class ReportsSpec : Spek({
 
             val reportUnderTest = TestOutputReport::class.java.simpleName
             val args = arrayOf(
-                    "--report", "xml:/tmp/path1",
-                    "--report", "txt:/tmp/path2",
-                    "--report", "$reportUnderTest:/tmp/path3",
-                    "--report", "html:D:_Gradle\\xxx\\xxx\\build\\reports\\detekt\\detekt.html"
+                "--report", "xml:/tmp/path1",
+                "--report", "txt:/tmp/path2",
+                "--report", "$reportUnderTest:/tmp/path3",
+                "--report", "html:D:_Gradle\\xxx\\xxx\\build\\reports\\detekt\\detekt.html"
             )
             val (cli, _) = parseArguments<CliArgs>(args)
 
@@ -63,7 +63,7 @@ internal class ReportsSpec : Spek({
             }
 
             val settings = ProcessingSettings(listOf())
-            val extensions = ReportLocator(ReportConfig(settings.config), settings.pluginUrls).load()
+            val extensions = ReportLocator(settings, ReportConfig(settings.config)).load()
             val extensionsIds = extensions.mapTo(HashSet()) { it.id }
 
             it("should be able to convert to output reports") {
@@ -71,13 +71,21 @@ internal class ReportsSpec : Spek({
             }
 
             it("should recognize custom output format") {
-                assertThat(reports).haveExactly(1,
-                        Condition(Predicate { it.kind == reportUnderTest },
-                                "Corresponds exactly to the test output report."))
+                assertThat(reports).haveExactly(
+                    1,
+                    Condition(
+                        Predicate { it.kind == reportUnderTest },
+                        "Corresponds exactly to the test output report."
+                    )
+                )
 
-                assertThat(extensions).haveExactly(1,
-                        Condition(Predicate { it is TestOutputReport && it.ending == "yml" },
-                                "Is exactly the test output report."))
+                assertThat(extensions).haveExactly(
+                    1,
+                    Condition(
+                        Predicate { it is TestOutputReport && it.ending == "yml" },
+                        "Is exactly the test output report."
+                    )
+                )
             }
         }
     }

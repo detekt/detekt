@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.TestConfig
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
@@ -30,9 +31,10 @@ class LabeledExpressionSpec : Spek({
         it("does not report excluded label") {
             val code = """fun f() {
     			loop@ for (i in 1..5) {}
+            }
     		"""
             val config = TestConfig(mapOf(LabeledExpression.IGNORED_LABELS to "loop"))
-            val findings = LabeledExpression(config).lint(code)
+            val findings = LabeledExpression(config).compileAndLint(code)
             assertThat(findings).isEmpty()
         }
     }

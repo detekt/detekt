@@ -1,14 +1,18 @@
 import com.jfrog.bintray.gradle.BintrayExtension
+import groovy.lang.GroovyObject
 import io.gitlab.arturbosch.detekt.Detekt
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jfrog.gradle.plugin.artifactory.dsl.ArtifactoryPluginConvention
+import org.jfrog.gradle.plugin.artifactory.dsl.PublisherConfig
 import java.util.Date
 
 plugins {
     id("com.gradle.build-scan") version "2.3"
-    kotlin("jvm") version "1.3.31"
+    kotlin("jvm") version "1.3.40"
     id("com.jfrog.bintray") version "1.8.4"
+    id("com.jfrog.artifactory") version "4.9.7" apply false
     id("com.github.ben-manes.versions") version "0.21.0"
     id("com.github.johnrengelman.shadow") version "5.0.0" apply false
     id("org.sonarqube") version "2.7"
@@ -45,12 +49,32 @@ tasks.withType<Detekt> {
     dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":detekt"))
 }
 
+val jacocoVersion: String by project
+jacoco.toolVersion = jacocoVersion
+
+tasks {
+    jacocoTestReport {
+        executionData.setFrom(fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec"))
+
+        subprojects
+            .filterNot { it.name in listOf("detekt-test", "detekt-sample-extensions") }
+            .forEach {
+                this@jacocoTestReport.sourceSets(it.sourceSets["main"])
+                this@jacocoTestReport.dependsOn(it.tasks["test"])
+            }
+
+        reports {
+            xml.isEnabled = true
+            xml.destination = file("$buildDir/reports/jacoco/report.xml")
+        }
+    }
+}
+
 val detektVersion: String by project
-val usedDetektVersion: String by project
 
 allprojects {
     group = "io.gitlab.arturbosch.detekt"
-    version = detektVersion
+    version = detektVersion + if (System.getProperty("snapshot")?.toBoolean() == true) "-SNAPSHOT" else ""
 
     repositories {
         mavenLocal()
@@ -67,18 +91,16 @@ subprojects {
         plugin("java-library")
         plugin("kotlin")
         plugin("com.jfrog.bintray")
+        plugin("com.jfrog.artifactory")
         plugin("maven-publish")
         plugin("io.gitlab.arturbosch.detekt")
-        plugin("jacoco")
     }
 
-    val jacocoVersion: String by project
-    jacoco.toolVersion = jacocoVersion
-
-    tasks.named<JacocoReport>("jacocoTestReport").configure {
-        reports.xml.isEnabled = true
-        reports.html.isEnabled = true
-        dependsOn(tasks.named("test"))
+    if (project.name !in listOf("detekt-test", "detekt-sample-extensions")) {
+        apply {
+            plugin("jacoco")
+        }
+        jacoco.toolVersion = jacocoVersion
     }
 
     tasks.withType<Detekt> {
@@ -90,7 +112,6 @@ subprojects {
 
     detekt {
         debug = true
-        toolVersion = usedDetektVersion
         buildUponDefaultConfig = true
         config = files(project.rootDir.resolve("reports/failfast.yml"))
         baseline = project.rootDir.resolve("reports/baseline.xml")
@@ -147,15 +168,27 @@ subprojects {
         kotlinOptions.allWarningsAsErrors = shouldTreatCompilerWarningsAsErrors()
     }
 
+    val bintrayUser =
+    if (project.hasProperty("bintrayUser")) {
+        project.property("bintrayUser").toString()
+    } else {
+        System.getenv("BINTRAY_USER")
+    }
+    val bintrayKey =
+    if (project.hasProperty("bintrayKey")) {
+        project.property("bintrayKey").toString()
+    } else {
+        System.getenv("BINTRAY_API_KEY")
+    }
+    val detektPublication = "DetektPublication"
+
     bintray {
-        user = System.getenv("BINTRAY_USER") ?: ""
-        key = System.getenv("BINTRAY_API_KEY") ?: ""
+        user = bintrayUser
+        key = bintrayKey
         val mavenCentralUser = System.getenv("MAVEN_CENTRAL_USER") ?: ""
         val mavenCentralPassword = System.getenv("MAVEN_CENTRAL_PW") ?: ""
 
-        setPublications("DetektPublication")
-
-        override = (project.version as? String)?.endsWith("-SNAPSHOT") == true
+        setPublications(detektPublication)
 
         pkg(delegateClosureOf<BintrayExtension.PackageConfig> {
             repo = "code-analysis"
@@ -199,7 +232,7 @@ subprojects {
     }
 
     configure<PublishingExtension> {
-        publications.create<MavenPublication>("DetektPublication") {
+        publications.create<MavenPublication>(detektPublication) {
             from(components["java"])
             artifact(sourcesJar)
             artifact(javadocJar)
@@ -231,6 +264,26 @@ subprojects {
         }
     }
 
+    fun artifactory(configure: ArtifactoryPluginConvention.() -> Unit): Unit =
+        configure(project.convention.getPluginByName("artifactory"))
+
+    artifactory {
+        setContextUrl("https://oss.jfrog.org/artifactory")
+        publish(delegateClosureOf<PublisherConfig> {
+            repository(delegateClosureOf<GroovyObject> {
+                setProperty("repoKey", "oss-snapshot-local")
+                setProperty("username", bintrayUser)
+                setProperty("password", bintrayKey)
+                setProperty("maven", true)
+            })
+            defaults(delegateClosureOf<GroovyObject> {
+                invokeMethod("publications", detektPublication)
+                setProperty("publishArtifacts", true)
+                setProperty("publishPom", true)
+            })
+        })
+    }
+
     val assertjVersion: String by project
     val spekVersion: String by project
     val kotlinTest by configurations.creating
@@ -256,6 +309,7 @@ fun shouldTreatCompilerWarningsAsErrors(): Boolean {
 }
 
 dependencies {
+    detekt(project(":detekt-cli"))
     detektPlugins(project(":detekt-formatting"))
 }
 
@@ -266,6 +320,7 @@ val detektFormat by tasks.registering(Detekt::class) {
     buildUponDefaultConfig = true
     autoCorrect = true
     setSource(files(projectDir))
+    ignoreFailures = false
     include("**/*.kt")
     include("**/*.kts")
     exclude("**/resources/**")
@@ -283,6 +338,7 @@ val detektAll by tasks.registering(Detekt::class) {
     buildUponDefaultConfig = true
     setSource(files(projectDir))
     config = files(project.rootDir.resolve("reports/failfast.yml"))
+    ignoreFailures = false
     include("**/*.kt")
     include("**/*.kts")
     exclude("**/resources/**")

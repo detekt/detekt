@@ -16,8 +16,9 @@ import java.nio.file.Paths
 class ExistingPathConverter : IStringConverter<Path> {
     override fun convert(value: String): Path {
         val config = File(value).toPath()
-        if (Files.notExists(config))
+        if (Files.notExists(config)) {
             throw ParameterException("Provided path '$value' does not exist!")
+        }
         return config
     }
 }

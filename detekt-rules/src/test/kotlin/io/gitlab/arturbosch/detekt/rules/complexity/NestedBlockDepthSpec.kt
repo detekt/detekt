@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.rules.Case
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
@@ -33,7 +34,7 @@ class NestedBlockDepthSpec : Spek({
 						}
 					}
 				}"""
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         it("should not detect valid nested block depth") {
@@ -46,7 +47,7 @@ class NestedBlockDepthSpec : Spek({
 						}
 					}
 				}"""
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("should not count else if as two") {
