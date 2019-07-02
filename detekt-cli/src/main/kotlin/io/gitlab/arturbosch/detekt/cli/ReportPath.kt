@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.cli
 
+import io.gitlab.arturbosch.detekt.cli.out.FindBugsXmlOutputReport
 import io.gitlab.arturbosch.detekt.cli.out.HtmlOutputReport
 import io.gitlab.arturbosch.detekt.cli.out.TxtOutputReport
 import io.gitlab.arturbosch.detekt.cli.out.XmlOutputReport
@@ -17,7 +18,7 @@ data class ReportPath(val kind: String, val path: Path) {
         private const val NUM_OF_PARTS_WINDOWS = 3
         private const val REPORT_PATH_SEPARATOR = ":"
         private const val ILLEGAL_PARTS_SIZE_ERROR =
-                "Must consist of two parts for Unix OSs or three for Windows (report-id:path)."
+            "Must consist of two parts for Unix OSs or three for Windows (report-id:path)."
 
         fun from(input: String): ReportPath {
             val parts = input.split(REPORT_PATH_SEPARATOR)
@@ -44,6 +45,7 @@ data class ReportPath(val kind: String, val path: Path) {
         private fun defaultMapping(reportId: String) = when (reportId) {
             "txt" -> TxtOutputReport::class.java.simpleName
             "xml" -> XmlOutputReport::class.java.simpleName
+            "findbugs" -> FindBugsXmlOutputReport::class.java.simpleName
             "html" -> HtmlOutputReport::class.java.simpleName
             else -> reportId
         }

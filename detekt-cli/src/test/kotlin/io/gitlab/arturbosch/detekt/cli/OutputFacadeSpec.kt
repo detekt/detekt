@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.cli.console.BuildFailure
+import io.gitlab.arturbosch.detekt.cli.out.FindBugsXmlOutputReport
 import io.gitlab.arturbosch.detekt.cli.out.HtmlOutputReport
 import io.gitlab.arturbosch.detekt.cli.out.TxtOutputReport
 import io.gitlab.arturbosch.detekt.cli.out.XmlOutputReport
@@ -29,6 +30,7 @@ internal class OutputFacadeSpec : Spek({
     val plainOutputPath = File.createTempFile("detekt", ".txt")
     val htmlOutputPath = File.createTempFile("detekt", ".html")
     val xmlOutputPath = File.createTempFile("detekt", ".xml")
+    val findbugsOutputPath = File.createTempFile("detekt-findbugs", ".xml")
 
     val defaultDetektion = DetektResult(mapOf(Pair("Key", listOf(createFinding()))))
     val defaultSettings = ProcessingSettings(inputPath, outPrinter = PrintStream(outputStream))
@@ -40,7 +42,8 @@ internal class OutputFacadeSpec : Spek({
                     "--input", inputPath.toString(),
                     "--report", "xml:$xmlOutputPath",
                     "--report", "txt:$plainOutputPath",
-                    "--report", "html:$htmlOutputPath"
+                    "--report", "html:$htmlOutputPath",
+                    "--report", "findbugs:$findbugsOutputPath"
             ).toCliArgs()
 
             it("creates all output files") {
@@ -51,6 +54,7 @@ internal class OutputFacadeSpec : Spek({
                 outputStream.assertThatItPrintsReportPath(TxtOutputReport().name)
                 outputStream.assertThatItPrintsReportPath(XmlOutputReport().name)
                 outputStream.assertThatItPrintsReportPath(HtmlOutputReport().name)
+                outputStream.assertThatItPrintsReportPath(FindBugsXmlOutputReport().name)
             }
         }
 

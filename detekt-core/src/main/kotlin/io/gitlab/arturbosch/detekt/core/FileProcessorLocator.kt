@@ -18,14 +18,15 @@ class FileProcessorLocator(settings: ProcessingSettings) {
     private val excludes = subConfig.valueOrDefault("exclude", emptyList<String>())
 
     fun load(): List<FileProcessListener> {
-        val detektLoader = URLClassLoader(plugins, javaClass.classLoader)
-        return if (processorsActive) {
-            ServiceLoader.load(FileProcessListener::class.java, detektLoader)
-                .filter { it.id !in excludes }
-                .onEach { it.init(config) }
-                .toList()
-        } else {
-            emptyList()
+        URLClassLoader(plugins, javaClass.classLoader).use { detektLoader ->
+            return if (processorsActive) {
+                ServiceLoader.load(FileProcessListener::class.java, detektLoader)
+                    .filter { it.id !in excludes }
+                    .onEach { it.init(config) }
+                    .toList()
+            } else {
+                emptyList()
+            }
         }
     }
 }

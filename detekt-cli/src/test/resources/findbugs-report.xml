@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BugCollection>
+    <BugInstance category="TestSmell" type="TestSmell" priority="3">
+        <LongMessage>TestMessage</LongMessage>
+        <SourceLine sourcepath="TestFile.kt" sourcefile="TestFile.kt" start="1" startOffset="1"/>
+    </BugInstance>
+    <BugInstance category="TestSmell" type="TestSmell" priority="3">
+        <LongMessage>TestMessage</LongMessage>
+        <SourceLine sourcepath="TestFile.kt" sourcefile="TestFile.kt" start="1" startOffset="1"/>
+    </BugInstance>
+    <BugPattern type="TestSmell">
+        <Details>For Test</Details>
+    </BugPattern>
+</BugCollection>
