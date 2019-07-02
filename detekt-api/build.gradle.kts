@@ -11,7 +11,6 @@ plugins {
 
 configurations.testImplementation.extendsFrom(configurations["kotlinTest"])
 
-val detektVersion: String by project
 val yamlVersion: String by project
 val junitPlatformVersion: String by project
 val spekVersion: String by project
