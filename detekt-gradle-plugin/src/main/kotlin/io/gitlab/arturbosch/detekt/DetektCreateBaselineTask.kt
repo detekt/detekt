@@ -65,8 +65,10 @@ open class DetektCreateBaselineTask : SourceTask() {
 
     @Input
     @Optional
-    @Deprecated("Set plugins using the detektPlugins configuration " +
-            "(see https://arturbosch.github.io/detekt/extensions.html#let-detekt-know-about-your-extensions)")
+    @Deprecated(
+        "Set plugins using the detektPlugins configuration " +
+                "(see https://arturbosch.github.io/detekt/extensions.html#let-detekt-know-about-your-extensions)"
+    )
     var plugins: Property<String> = project.objects.property(String::class.java)
 
     @Classpath
@@ -109,9 +111,12 @@ open class DetektCreateBaselineTask : SourceTask() {
 
     @TaskAction
     fun baseline() {
-        if (plugins.isPresent && !pluginClasspath.isEmpty)
-            throw GradleException("Cannot set value for plugins on detekt task and apply detektPlugins configuration " +
-                    "at the same time.")
+        if (plugins.isPresent && !pluginClasspath.isEmpty) {
+            throw GradleException(
+                "Cannot set value for plugins on detekt task and apply detektPlugins configuration " +
+                        "at the same time."
+            )
+        }
         val arguments = mutableListOf(
             CreateBaselineArgument,
             BaselineArgument(baseline.get()),

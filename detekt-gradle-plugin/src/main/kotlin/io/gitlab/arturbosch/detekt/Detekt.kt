@@ -18,6 +18,7 @@ import io.gitlab.arturbosch.detekt.invoke.DisableDefaultRuleSetArgument
 import io.gitlab.arturbosch.detekt.invoke.FailFastArgument
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.JvmTargetArgument
+import io.gitlab.arturbosch.detekt.invoke.LanguageVersionArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
 import io.gitlab.arturbosch.detekt.invoke.PluginsArgument
 import io.gitlab.arturbosch.detekt.output.mergeXmlReports
@@ -47,6 +48,7 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.VerificationTask
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import java.io.File
+import java.net.URLClassLoader
 
 /**
  * @author Artur Bosch
@@ -89,6 +91,14 @@ open class Detekt : SourceTask(), VerificationTask {
 
     @Input
     @Optional
+    internal val languageVersionProp: Property<String> = project.objects.property(String::class.javaObjectType)
+    var languageVersion: String
+        @Internal
+        get() = languageVersionProp.get()
+        set(value) = languageVersionProp.set(value)
+
+    @Input
+    @Optional
     internal val jvmTargetProp: Property<String> = project.objects.property(String::class.javaObjectType)
     var jvmTarget: String
         @Internal
@@ -97,8 +107,10 @@ open class Detekt : SourceTask(), VerificationTask {
 
     @Input
     @Optional
-    @Deprecated("Set plugins using the detektPlugins configuration " +
-            "(see https://arturbosch.github.io/detekt/extensions.html#let-detekt-know-about-your-extensions)")
+    @Deprecated(
+        "Set plugins using the detektPlugins configuration " +
+                "(see https://arturbosch.github.io/detekt/extensions.html#let-detekt-know-about-your-extensions)"
+    )
     var plugins: Property<String> = project.objects.property(String::class.java)
 
     @Internal
@@ -145,6 +157,7 @@ open class Detekt : SourceTask(), VerificationTask {
     @Input
     @Optional
     override fun getIgnoreFailures(): Boolean = ignoreFailuresProp.get()
+
     override fun setIgnoreFailures(value: Boolean) = ignoreFailuresProp.set(value)
     fun setIgnoreFailures(value: Provider<Boolean>) = ignoreFailuresProp.set(value)
 
@@ -191,15 +204,19 @@ open class Detekt : SourceTask(), VerificationTask {
 
     @TaskAction
     fun check() {
-        if (plugins.isPresent && !pluginClasspath.isEmpty)
-            throw GradleException("Cannot set value for plugins on detekt task and apply detektPlugins configuration " +
-                    "at the same time.")
+        if (plugins.isPresent && !pluginClasspath.isEmpty) {
+            throw GradleException(
+                "Cannot set value for plugins on detekt task and apply detektPlugins configuration " +
+                        "at the same time."
+            )
+        }
         val xmlReportTargetFileOrNull = xmlReportFile.orNull
         val htmlReportTargetFileOrNull = htmlReportFile.orNull
         val debugOrDefault = debugProp.getOrElse(false)
         val arguments = mutableListOf(
             InputArgument(source),
             ClasspathArgument(classpath),
+            LanguageVersionArgument(languageVersionProp.orNull ?: classpath.getKotlinLanguageVersion()),
             JvmTargetArgument(jvmTargetProp.orNull),
             ConfigArgument(config),
             PluginsArgument(plugins.orNull),
@@ -240,10 +257,29 @@ open class Detekt : SourceTask(), VerificationTask {
                     if (task is Detekt) task.xmlReportFile.orNull?.asFile else null
                 }
             }
-            if (!xmlReports.isEmpty() && debugOrDefault) {
+            if (xmlReports.isNotEmpty() && debugOrDefault) {
                 logger.info("Merging report files of subprojects $xmlReports into $xmlReportTargetFileOrNull")
             }
             mergeXmlReports(xmlReportTargetFileOrNull.asFile, xmlReports)
         }
+    }
+
+    @Suppress("TooGenericExceptionCaught")
+    private fun Iterable<File>.getKotlinLanguageVersion(): String? {
+        val urls = map { it.toURI().toURL() }
+        if (urls.isNotEmpty()) {
+            URLClassLoader(urls.toTypedArray()).use { classLoader ->
+                try {
+                    val clazz = classLoader.loadClass("kotlin.KotlinVersion")
+                    val field = clazz.getField("CURRENT")
+                    field.isAccessible = true
+                    val versionObj = field.get(null)
+                    return versionObj?.toString()
+                } catch (e: Throwable) {
+                    logger.warn("Kotlin language version can't be retrieved: {}", e.toString())
+                }
+            }
+        }
+        return null
     }
 }

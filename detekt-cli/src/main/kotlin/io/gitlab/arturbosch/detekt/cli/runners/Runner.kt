@@ -37,7 +37,9 @@ class Runner(private val arguments: CliArgs) : Executable {
             excludeDefaultRuleSets = disableDefaultRuleSets,
             pluginPaths = createPlugins(),
             classpath = createClasspath(),
-            jvmTarget = jvmTarget
+            languageVersion = languageVersion,
+            jvmTarget = jvmTarget,
+            debug = arguments.debug
         )
     }
 }

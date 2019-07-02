@@ -11,10 +11,13 @@ import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
 import org.jetbrains.kotlin.com.intellij.mock.MockProject
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.com.intellij.pom.PomModel
+import org.jetbrains.kotlin.config.ApiVersion
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.JVMConfigurationKeys
 import org.jetbrains.kotlin.config.JvmTarget
+import org.jetbrains.kotlin.config.LanguageVersion
+import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl
 import java.io.File
 import java.nio.file.Path
 
@@ -24,8 +27,10 @@ import java.nio.file.Path
  */
 fun createKotlinCoreEnvironment(configuration: CompilerConfiguration = CompilerConfiguration()): KotlinCoreEnvironment {
     System.setProperty("idea.io.use.fallback", "true")
-    configuration.put(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY,
-        PrintingMessageCollector(System.err, MessageRenderer.PLAIN_FULL_PATHS, false))
+    configuration.put(
+        CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY,
+        PrintingMessageCollector(System.err, MessageRenderer.PLAIN_FULL_PATHS, false)
+    )
     configuration.put(CommonConfigurationKeys.MODULE_NAME, "detekt")
 
     val environment = KotlinCoreEnvironment.createForProduction(
@@ -47,6 +52,7 @@ fun createKotlinCoreEnvironment(configuration: CompilerConfiguration = CompilerC
 fun createCompilerConfiguration(
     pathsToAnalyze: List<Path>,
     classpath: List<String>,
+    languageVersion: LanguageVersion,
     jvmTarget: JvmTarget
 ): CompilerConfiguration {
 
@@ -64,6 +70,11 @@ fun createCompilerConfiguration(
     }
 
     return CompilerConfiguration().apply {
+        val languageVersionSettings = LanguageVersionSettingsImpl(
+            languageVersion = languageVersion,
+            apiVersion = ApiVersion.createByLanguageVersion(languageVersion)
+        )
+        put(CommonConfigurationKeys.LANGUAGE_VERSION_SETTINGS, languageVersionSettings)
         put(JVMConfigurationKeys.JVM_TARGET, jvmTarget)
         addJavaSourceRoots(javaFiles)
         addKotlinSourceRoots(kotlinFiles)

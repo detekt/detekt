@@ -29,8 +29,6 @@ class DetektFacade(
     private val saveSupported = settings.autoCorrect
     private val inputPaths = settings.inputPaths
     private val classpath = settings.classpath
-    private val pathFilters = settings.pathFilters
-    private val jvmTarget = settings.jvmTarget
     private val environment = settings.environment
     private val compiler = KtTreeCompiler.instance(settings)
 
