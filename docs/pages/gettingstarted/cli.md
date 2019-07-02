@@ -77,7 +77,7 @@ Usage: detekt [options]
     --input, -i
       Input paths to analyze. Multiple paths are separated by comma. If not
       specified the current working directory is used.
-    --jvm-target
+    --language-version
       EXPERIMENTAL: Compatibility mode for Kotlin language version X.Y, reports
       errors for all language features that came out later.
       Default: latest stable
