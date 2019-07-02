@@ -18,36 +18,43 @@ class FindBugsXmlOutputReport : OutputReport() {
 
     override val name = "FindBugs XML report"
 
-    override fun render(detektion: Detektion) = buildString {
-        append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
-        append("<BugCollection")
-        append(" tool=\"Detekt\"")
-        append(" version=\"${DetektVersion.current.toXmlString()}\"")
-        currentTimeMillis().let {
-            append(" analysisTimestamp=\"$it\"")
-            append(" timestamp=\"$it\"")
-        }
-        append(">\n")
+    override fun render(detektion: Detektion): String {
+        val lines = mutableListOf<String>()
+        lines.add("<?xml version=\"1.0\" encoding=\"UTF-8\"?>")
+        lines.add(buildString {
+            append("<BugCollection")
+            append(" tool=\"Detekt\"")
+            append(" version=\"${DetektVersion.current.toXmlString()}\"")
+            currentTimeMillis().let {
+                append(" analysisTimestamp=\"$it\"")
+                append(" timestamp=\"$it\"")
+            }
+            append(">")
+        })
 
         detektion.findings.asSequence()
             .flatMap { entry -> entry.value.asSequence().map { entry.key to it } }
             .forEach { (category, finding) ->
-                append("    <BugInstance")
-                append(" category=\"${category.toXmlString()}\"")
-                append(" type=\"${finding.issue.id.toXmlString()}\"")
-                append(" priority=\"${finding.issue.priority.toXmlString()}\"")
-                append(">\n")
+                lines.add(buildString {
+                    append("    <BugInstance")
+                    append(" category=\"${category.toXmlString()}\"")
+                    append(" type=\"${finding.issue.id.toXmlString()}\"")
+                    append(" priority=\"${finding.issue.priority.toXmlString()}\"")
+                    append(">")
+                })
 
-                append("        <LongMessage>${finding.message.toXmlString()}</LongMessage>\n")
+                lines.add("        <LongMessage>${finding.message.toXmlString()}</LongMessage>")
 
-                append("        <SourceLine")
-                append(" sourcepath=\"${finding.location.file.toXmlString()}\"")
-                append(" sourcefile=\"${finding.location.file.toXmlString()}\"")
-                append(" start=\"${finding.location.source.line.toXmlString()}\"")
-                append(" startOffset=\"${finding.location.source.column.toXmlString()}\"")
-                append(" />\n")
+                lines.add(buildString {
+                    append("        <SourceLine")
+                    append(" sourcepath=\"${finding.location.file.toXmlString()}\"")
+                    append(" sourcefile=\"${finding.location.file.toXmlString()}\"")
+                    append(" start=\"${finding.location.source.line.toXmlString()}\"")
+                    append(" startOffset=\"${finding.location.source.column.toXmlString()}\"")
+                    append("/>")
+                })
 
-                append("    </BugInstance>\n")
+                lines.add("    </BugInstance>")
             }
 
         detektion.findings.asSequence()
@@ -57,15 +64,17 @@ class FindBugsXmlOutputReport : OutputReport() {
             .groupBy(TypeDescription::type).asSequence()
             .map { TypeDescription(it.key, it.value.first().description) }
             .forEach { (type, description) ->
-                append("    <BugPattern type=\"${type.toXmlString()}\">\n")
+                lines.add("    <BugPattern type=\"${type.toXmlString()}\">")
                 val htmlDescription = description
                     .replace("\r", "")
                     .replace("\n", "\n<br>")
-                append("        <Details>${htmlDescription.toXmlString()}</Details>\n")
-                append("    </BugPattern>\n")
+                lines.add("        <Details>${htmlDescription.toXmlString()}</Details>")
+                lines.add("    </BugPattern>")
             }
 
-        append("</BugCollection>\n")
+        lines.add("</BugCollection>")
+
+        return lines.joinToString("\n") + "\n"
     }
 
     private data class TypeDescription(
