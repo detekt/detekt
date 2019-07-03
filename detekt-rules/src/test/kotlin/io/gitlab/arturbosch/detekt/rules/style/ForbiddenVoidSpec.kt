@@ -17,22 +17,22 @@ class ForbiddenVoidSpec : Spek({
     describe("ForbiddenVoid rule") {
         it("should report all Void type usage") {
             val code = """
-				lateinit var c: () -> Void
+                lateinit var c: () -> Void
 
-				fun method(param: Void) {
-					val a: Void? = null
-					val b: Void = null!!
-				}
-			"""
+                fun method(param: Void) {
+                    val a: Void? = null
+                    val b: Void = null!!
+                }
+            """
 
             assertThat(subject.compileAndLint(code)).hasSize(4)
         }
 
         it("should not report Void class literal") {
             val code = """
-				val clazz = java.lang.Void::class
-				val klass = Void::class
-			"""
+                val clazz = java.lang.Void::class
+                val klass = Void::class
+            """
 
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
@@ -69,8 +69,7 @@ class ForbiddenVoidSpec : Spek({
 
                     class B : A() {
                         override fun method(param: Foo<Void>) : Foo<Void> {
-                            @Suppress("ForbiddenVoid")
-                            return Foo<Void>()
+                            throw IllegalStateException()
                         }
                     }
                 """
@@ -105,6 +104,63 @@ class ForbiddenVoidSpec : Spek({
 
                 val findings = ForbiddenVoid(config).compileAndLint(code)
                 assertThat(findings).hasSize(2)
+            }
+        }
+        describe("ignoreUsageInGenerics is enabled") {
+            val config = TestConfig(mapOf(ForbiddenVoid.IGNORE_USAGE_IN_GENERICS to "true"))
+
+            it("should not report Void in generic type declaration") {
+                val code = """
+                    interface A<T>
+
+                    class B {
+                        fun method(): A<Void>? = null
+                    }
+
+                    class C(private val b: B) {
+                        fun method() {
+                            val a: A<Void>? = b.method()
+                        }
+                    }
+
+                    class D : A<Void>
+                """
+
+                val findings = ForbiddenVoid(config).compileAndLint(code)
+                assertThat(findings).isEmpty()
+            }
+
+            it("should not report Void in nested generic type definition") {
+                val code = """
+                    interface A<T>
+                    interface B<T>
+                    class C : A<B<Void>>
+                """
+
+                val findings = ForbiddenVoid(config).compileAndLint(code)
+                assertThat(findings).isEmpty()
+            }
+
+            it("should not report Void in definition with multiple generic parameters") {
+                val code = """
+                    val foo = mutableMapOf<Int, Void>()
+                """
+
+                val findings = ForbiddenVoid(config).compileAndLint(code)
+                assertThat(findings).isEmpty()
+            }
+
+            it("should report non-generic Void type usage") {
+                val code = """
+                    lateinit var c: () -> Void
+
+                    fun method(param: Void) {
+                        val a: Void? = null
+                        val b: Void = null!!
+                    }
+                """
+
+                assertThat(subject.compileAndLint(code)).hasSize(4)
             }
         }
     }
