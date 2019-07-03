@@ -85,9 +85,8 @@ Usage: detekt [options]
     --jvm-target
       EXPERIMENTAL: Target version of the generated JVM bytecode that was
       generated during compilation and is now being used for type resolution
-      (1.6, 1.8, 9, 10, 11 or 12)
-      Default: JVM_1_6
-      Possible Values: [JVM_1_6, JVM_1_8, JVM_9, JVM_10, JVM_11, JVM_12]
+      Default: 1.6
+      Possible Values: [1.6, 1.8, 9, 10, 11, 12]
     --parallel
       Enables parallel compilation of source files. Should only be used if the
       analyzing project has more than ~200 kotlin files.

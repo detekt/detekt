@@ -440,6 +440,7 @@ style:
   ForbiddenVoid:
     active: false
     ignoreOverridden: false
+    ignoreUsageInGenerics: false
   FunctionOnlyReturningConstant:
     active: false
     ignoreOverridableFunction: true
