@@ -166,7 +166,7 @@ class CliArgs : Args {
         description = "EXPERIMENTAL: Compatibility mode for Kotlin language version X.Y, reports errors for all " +
                 "language features that came out later (1.0, 1.1, 1.2, 1.3, 1.4)"
     )
-    var languageVersion: LanguageVersion = LanguageVersion.LATEST_STABLE
+    var languageVersion: LanguageVersion? = null
 
     @Parameter(
         names = ["--jvm-target"],

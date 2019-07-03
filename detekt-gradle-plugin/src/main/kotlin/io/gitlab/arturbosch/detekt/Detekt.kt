@@ -48,7 +48,6 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.VerificationTask
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import java.io.File
-import java.net.URLClassLoader
 
 /**
  * @author Artur Bosch
@@ -216,7 +215,7 @@ open class Detekt : SourceTask(), VerificationTask {
         val arguments = mutableListOf(
             InputArgument(source),
             ClasspathArgument(classpath),
-            LanguageVersionArgument(languageVersionProp.orNull ?: classpath.getKotlinLanguageVersion()),
+            LanguageVersionArgument(languageVersionProp.orNull),
             JvmTargetArgument(jvmTargetProp.orNull),
             ConfigArgument(config),
             PluginsArgument(plugins.orNull),
@@ -262,24 +261,5 @@ open class Detekt : SourceTask(), VerificationTask {
             }
             mergeXmlReports(xmlReportTargetFileOrNull.asFile, xmlReports)
         }
-    }
-
-    @Suppress("TooGenericExceptionCaught")
-    private fun Iterable<File>.getKotlinLanguageVersion(): String? {
-        val urls = map { it.toURI().toURL() }
-        if (urls.isNotEmpty()) {
-            URLClassLoader(urls.toTypedArray()).use { classLoader ->
-                try {
-                    val clazz = classLoader.loadClass("kotlin.KotlinVersion")
-                    val field = clazz.getField("CURRENT")
-                    field.isAccessible = true
-                    val versionObj = field.get(null)
-                    return versionObj?.toString()
-                } catch (e: Throwable) {
-                    logger.warn("Kotlin language version can't be retrieved: {}", e.toString())
-                }
-            }
-        }
-        return null
     }
 }

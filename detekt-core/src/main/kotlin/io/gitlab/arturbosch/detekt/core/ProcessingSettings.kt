@@ -29,7 +29,7 @@ data class ProcessingSettings @JvmOverloads constructor(
     val excludeDefaultRuleSets: Boolean = false,
     val pluginPaths: List<Path> = emptyList(),
     val classpath: List<String> = emptyList(),
-    val languageVersion: LanguageVersion = LanguageVersion.LATEST_STABLE,
+    val languageVersion: LanguageVersion? = null,
     val jvmTarget: JvmTarget = JvmTarget.DEFAULT,
     val executorService: ExecutorService = ForkJoinPool.commonPool(),
     val outPrinter: PrintStream = System.out,

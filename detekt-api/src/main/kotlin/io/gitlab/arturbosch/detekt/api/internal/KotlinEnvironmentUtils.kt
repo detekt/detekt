@@ -17,8 +17,10 @@ import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.JVMConfigurationKeys
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
+import org.jetbrains.kotlin.config.LanguageVersionSettings
 import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl
 import java.io.File
+import java.net.URLClassLoader
 import java.nio.file.Path
 
 /**
@@ -52,7 +54,7 @@ fun createKotlinCoreEnvironment(configuration: CompilerConfiguration = CompilerC
 fun createCompilerConfiguration(
     pathsToAnalyze: List<Path>,
     classpath: List<String>,
-    languageVersion: LanguageVersion,
+    languageVersion: LanguageVersion?,
     jvmTarget: JvmTarget
 ): CompilerConfiguration {
 
@@ -69,15 +71,42 @@ fun createCompilerConfiguration(
             .toList()
     }
 
-    return CompilerConfiguration().apply {
-        val languageVersionSettings = LanguageVersionSettingsImpl(
-            languageVersion = languageVersion,
-            apiVersion = ApiVersion.createByLanguageVersion(languageVersion)
+    val classpathFiles = classpath.map { File(it) }
+    val retrievedLanguageVersion = languageVersion ?: classpathFiles.getKotlinLanguageVersion()
+    val languageVersionSettings: LanguageVersionSettings? = retrievedLanguageVersion?.let {
+        LanguageVersionSettingsImpl(
+            languageVersion = it,
+            apiVersion = ApiVersion.createByLanguageVersion(it)
         )
-        put(CommonConfigurationKeys.LANGUAGE_VERSION_SETTINGS, languageVersionSettings)
+    }
+
+    return CompilerConfiguration().apply {
+        if (languageVersionSettings != null) {
+            put(CommonConfigurationKeys.LANGUAGE_VERSION_SETTINGS, languageVersionSettings)
+        }
         put(JVMConfigurationKeys.JVM_TARGET, jvmTarget)
         addJavaSourceRoots(javaFiles)
         addKotlinSourceRoots(kotlinFiles)
-        addJvmClasspathRoots(classpath.map { File(it) })
+        addJvmClasspathRoots(classpathFiles)
     }
+}
+
+@Suppress("TooGenericExceptionCaught")
+private fun Iterable<File>.getKotlinLanguageVersion(): LanguageVersion? {
+    val urls = map { it.toURI().toURL() }
+    if (urls.isNotEmpty()) {
+        URLClassLoader(urls.toTypedArray()).use { classLoader ->
+            try {
+                val clazz = classLoader.loadClass("kotlin.KotlinVersion")
+                val field = clazz.getField("CURRENT")
+                field.isAccessible = true
+                val versionObj = field.get(null)
+                val versionString = versionObj?.toString()
+                return versionString?.let { LanguageVersion.fromFullVersionString(it) }
+            } catch (e: Throwable) {
+                // do nothing
+            }
+        }
+    }
+    return null
 }
