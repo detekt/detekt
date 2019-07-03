@@ -95,18 +95,18 @@ fun createCompilerConfiguration(
 private fun Iterable<File>.getKotlinLanguageVersion(): LanguageVersion? {
     val urls = map { it.toURI().toURL() }
     if (urls.isNotEmpty()) {
-        URLClassLoader(urls.toTypedArray()).use { classLoader ->
-            try {
-                val clazz = classLoader.loadClass("kotlin.KotlinVersion")
-                val field = clazz.getField("CURRENT")
-                field.isAccessible = true
-                val versionObj = field.get(null)
-                val versionString = versionObj?.toString()
-                return versionString?.let { LanguageVersion.fromFullVersionString(it) }
-            } catch (e: Throwable) {
-                // do nothing
-            }
+        return null
+    }
+    return URLClassLoader(urls.toTypedArray()).use { classLoader ->
+        try {
+            val clazz = classLoader.loadClass("kotlin.KotlinVersion")
+            val field = clazz.getField("CURRENT")
+            field.isAccessible = true
+            val versionObj = field.get(null)
+            val versionString = versionObj?.toString()
+            return@use versionString?.let { LanguageVersion.fromFullVersionString(it) }
+        } catch (e: Throwable) {
+            return@use null // do nothing
         }
     }
-    return null
 }
