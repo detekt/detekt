@@ -13,6 +13,7 @@ import org.jetbrains.kotlin.psi.KtClassLiteralExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtSimpleNameExpression
+import org.jetbrains.kotlin.psi.KtTypeArgumentList
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
@@ -32,6 +33,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  * </compliant>
  *
  * @configuration ignoreOverridden - ignores void types in signatures of overridden functions (default: `false`)
+ * @configuration ignoreUsageInGenerics - ignore void types as generic arguments (default: `false`)
  *
  * @author Egor Neliuba
  * @author Markus Schwarz
@@ -50,7 +52,9 @@ class ForbiddenVoid(config: Config = Config.empty) : Rule(config) {
             if (ruleSetConfig.valueOrDefault(IGNORE_OVERRIDDEN, false) && expression.isPartOfOverriddenSignature()) {
                 return
             }
-
+            if (ruleSetConfig.valueOrDefault(IGNORE_USAGE_IN_GENERICS, false) && expression.isGenericArgument()) {
+                return
+            }
             report(CodeSmell(issue, Entity.from(expression), message = "'Void' should be replaced with 'Unit'."))
         }
 
@@ -76,7 +80,11 @@ class ForbiddenVoid(config: Config = Config.empty) : Rule(config) {
     private fun KtSimpleNameExpression.isParameterTypeOfFunction() =
         parentOfType<KtParameter>() != null
 
+    private fun KtSimpleNameExpression.isGenericArgument() =
+        parentOfType<KtTypeArgumentList>() != null
+
     companion object {
         const val IGNORE_OVERRIDDEN = "ignoreOverridden"
+        const val IGNORE_USAGE_IN_GENERICS = "ignoreUsageInGenerics"
     }
 }

@@ -280,6 +280,10 @@ and has only one value - the `Unit` object.
 
    ignores void types in signatures of overridden functions
 
+* `ignoreUsageInGenerics` (default: `false`)
+
+   ignore void types as generic arguments
+
 #### Noncompliant Code:
 
 ```kotlin
