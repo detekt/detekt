@@ -92,9 +92,9 @@ fun createCompilerConfiguration(
 }
 
 @Suppress("TooGenericExceptionCaught")
-private fun Iterable<File>.getKotlinLanguageVersion(): LanguageVersion? {
+internal fun Iterable<File>.getKotlinLanguageVersion(): LanguageVersion? {
     val urls = map { it.toURI().toURL() }
-    if (urls.isNotEmpty()) {
+    if (urls.isEmpty()) {
         return null
     }
     return URLClassLoader(urls.toTypedArray()).use { classLoader ->
