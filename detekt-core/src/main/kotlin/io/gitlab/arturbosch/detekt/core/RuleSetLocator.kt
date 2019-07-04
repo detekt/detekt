@@ -14,11 +14,10 @@ class RuleSetLocator(settings: ProcessingSettings) {
     private val plugins: Array<URL> = settings.pluginUrls
 
     fun load(): List<RuleSetProvider> {
-        URLClassLoader(plugins, javaClass.classLoader).use { detektLoader ->
-            return ServiceLoader.load(RuleSetProvider::class.java, detektLoader).asIterable()
-                .mapNotNull { it.nullIfDefaultAndExcluded() }
-                .toList()
-        }
+        val detektLoader = URLClassLoader(plugins, javaClass.classLoader)
+        return ServiceLoader.load(RuleSetProvider::class.java, detektLoader).asIterable()
+            .mapNotNull { it.nullIfDefaultAndExcluded() }
+            .toList()
     }
 
     private fun RuleSetProvider.nullIfDefaultAndExcluded() = if (excludeDefaultRuleSets && provided()) null else this
