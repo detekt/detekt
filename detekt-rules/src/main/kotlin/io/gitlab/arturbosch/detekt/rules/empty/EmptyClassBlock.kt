@@ -3,12 +3,9 @@ package io.gitlab.arturbosch.detekt.rules.empty
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.rules.asBlockExpression
 import io.gitlab.arturbosch.detekt.rules.hasCommentInside
 import io.gitlab.arturbosch.detekt.rules.isObjectOfAnonymousClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
-import org.jetbrains.kotlin.psi.psiUtil.blockExpressionsOrSingle
-import org.jetbrains.kotlin.psi.psiUtil.lastBlockStatementOrThis
 
 /**
  * Reports empty classes. Empty blocks of code serve no purpose and should be removed.
