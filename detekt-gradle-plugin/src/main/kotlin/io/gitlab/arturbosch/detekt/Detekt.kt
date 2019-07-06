@@ -98,7 +98,7 @@ open class Detekt : SourceTask(), VerificationTask {
     @Input
     @Optional
     @Deprecated("Set plugins using the detektPlugins configuration " +
-            "(see https://arturbosch.github.io/detekt/extensions.html#let-detekt-know-about-your-extensions)")
+        "(see https://arturbosch.github.io/detekt/extensions.html#let-detekt-know-about-your-extensions)")
     var plugins: Property<String> = project.objects.property(String::class.java)
 
     @Internal
@@ -141,10 +141,13 @@ open class Detekt : SourceTask(), VerificationTask {
         get() = failFastProp.get()
         set(value) = failFastProp.set(value)
 
-    private val ignoreFailuresProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    val ignoreFailuresProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+        .apply { set(false) } // also gets called by Gradle, we need to provide a default value
+
     @Input
     @Optional
     override fun getIgnoreFailures(): Boolean = ignoreFailuresProp.get()
+
     override fun setIgnoreFailures(value: Boolean) = ignoreFailuresProp.set(value)
     fun setIgnoreFailures(value: Provider<Boolean>) = ignoreFailuresProp.set(value)
 
@@ -193,7 +196,7 @@ open class Detekt : SourceTask(), VerificationTask {
     fun check() {
         if (plugins.isPresent && !pluginClasspath.isEmpty)
             throw GradleException("Cannot set value for plugins on detekt task and apply detektPlugins configuration " +
-                    "at the same time.")
+                "at the same time.")
         val xmlReportTargetFileOrNull = xmlReportFile.orNull
         val htmlReportTargetFileOrNull = htmlReportFile.orNull
         val debugOrDefault = debugProp.getOrElse(false)
