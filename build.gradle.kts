@@ -10,7 +10,7 @@ import java.util.Date
 
 plugins {
     id("com.gradle.build-scan") version "2.3"
-    kotlin("jvm") version "1.3.40"
+    kotlin("jvm") version "1.3.41"
     id("com.jfrog.bintray") version "1.8.4"
     id("com.jfrog.artifactory") version "4.9.7" apply false
     id("com.github.ben-manes.versions") version "0.21.0"
