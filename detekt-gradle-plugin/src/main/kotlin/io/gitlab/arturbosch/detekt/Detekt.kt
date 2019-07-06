@@ -23,6 +23,7 @@ import io.gitlab.arturbosch.detekt.invoke.PluginsArgument
 import io.gitlab.arturbosch.detekt.output.mergeXmlReports
 import org.gradle.api.Action
 import org.gradle.api.GradleException
+import org.gradle.api.Task
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
 import org.gradle.api.file.FileCollection
@@ -235,15 +236,16 @@ open class Detekt : SourceTask(), VerificationTask {
         )
 
         if (xmlReportTargetFileOrNull != null) {
-            val xmlReports = project.subprojects.flatMap { subproject ->
-                subproject.tasks.mapNotNull { task ->
-                    if (task is Detekt) task.xmlReportFile.orNull?.asFile else null
-                }
-            }
-            if (!xmlReports.isEmpty() && debugOrDefault) {
+            val xmlReports = project.subprojects
+                .flatMap { it.tasks.mapNotNull(::getDetektXmlReportFile) }
+                .filter { it.exists() }
+            if (xmlReports.isNotEmpty() && debugOrDefault) {
                 logger.info("Merging report files of subprojects $xmlReports into $xmlReportTargetFileOrNull")
             }
             mergeXmlReports(xmlReportTargetFileOrNull.asFile, xmlReports)
         }
     }
+
+    private fun getDetektXmlReportFile(task: Task?) =
+        if (task is Detekt) task.xmlReportFile.orNull?.asFile else null
 }
