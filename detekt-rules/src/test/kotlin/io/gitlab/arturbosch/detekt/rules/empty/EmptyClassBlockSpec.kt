@@ -33,7 +33,7 @@ class EmptyClassBlockSpec : Spek({
         it("does not report class with multiline comments in the body") {
             val code = """
                 class SomeClass {
-                    /* 
+                    /*
                     Some comment to explain what this class is supposed to do
                     */
                 }
