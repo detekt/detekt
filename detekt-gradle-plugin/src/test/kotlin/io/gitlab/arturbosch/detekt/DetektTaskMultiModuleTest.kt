@@ -13,9 +13,8 @@ import org.spekframework.spek2.style.specification.describe
 internal class DetektTaskMultiModuleTest : Spek({
     describe("The Detekt Gradle plugin used in a multi module project") {
         describe(
-            "is applied with defaults to all subprojects individually without sources in root project using the" +
-                " " +
-                "subprojects block"
+            "is applied with defaults to all subprojects individually without sources in root project " +
+                "using the subprojects block"
         ) {
             val projectLayout = ProjectLayout(0)
                 .withSubmodule("child1", 2)
@@ -43,46 +42,29 @@ internal class DetektTaskMultiModuleTest : Spek({
             it("can be done using the groovy dsl") {
 
                 val mainBuildFileContent: String = """
-				|import io.gitlab.arturbosch.detekt.DetektPlugin
-				|
-				|plugins {
-				|   id "java-library"
-				|   id "io.gitlab.arturbosch.detekt"
-				|}
-				|
-				|allprojects {
-				|	repositories {
-				|		mavenLocal()
-				|		jcenter()
-				|	}
-				|}
-				|subprojects {
-				|	apply plugin: "java-library"
-				|	apply plugin: "io.gitlab.arturbosch.detekt"
-				|}
-				""".trimMargin()
+                |$GROOVY_PLUGINS_SECTION
+                |allprojects {
+                |   $REPOSITORIES_SECTION
+                |}
+                |subprojects {
+                |   $GROOVY_APPLY_PLUGINS
+                |}
+                |""".trimMargin()
 
                 gradleRunner = DslGradleRunner(projectLayout, "build.gradle", mainBuildFileContent)
             }
             it("can be done using the kotlin dsl") {
 
                 val mainBuildFileContent: String = """
-				|plugins {
-				|   `java-library`
-				|	id("io.gitlab.arturbosch.detekt")
-				|}
-				|
-				|allprojects {
-				|	repositories {
-				|		mavenLocal()
-				|		jcenter()
-				|	}
-				|}
-				|subprojects {
-				|	plugins.apply("java-library")
-				|	plugins.apply("io.gitlab.arturbosch.detekt")
-				|}
-				""".trimMargin()
+                |$KOTLIN_PLUGINS_SECTION
+                |
+                |allprojects {
+                |   $REPOSITORIES_SECTION
+                |}
+                |subprojects {
+                |   $KOTLIN_APPLY_PLUGINS
+                |}
+                |""".trimMargin()
 
                 gradleRunner = DslGradleRunner(projectLayout, "build.gradle.kts", mainBuildFileContent)
             }
@@ -114,42 +96,28 @@ internal class DetektTaskMultiModuleTest : Spek({
             it("can be done using the groovy dsl") {
 
                 val mainBuildFileContent: String = """
-				|import io.gitlab.arturbosch.detekt.DetektPlugin
-				|
-				|plugins {
-				|   id "java-library"
-				|   id "io.gitlab.arturbosch.detekt"
-				|}
-				|
-				|allprojects {
-				|	repositories {
-				|		mavenLocal()
-				|		jcenter()
-				|	}
-				|	apply plugin: "java-library"
-				|	apply plugin: "io.gitlab.arturbosch.detekt"
-				|}
-				""".trimMargin()
+                |$GROOVY_PLUGINS_SECTION
+                |
+                |allprojects {
+                |   $REPOSITORIES_SECTION
+                |
+                |   $GROOVY_APPLY_PLUGINS
+                |}
+                |""".trimMargin()
 
                 gradleRunner = DslGradleRunner(projectLayout, "build.gradle", mainBuildFileContent)
             }
             it("can be done using the kotlin dsl") {
 
                 val mainBuildFileContent: String = """
-				|plugins {
-				|   `java-library`
-				|	id("io.gitlab.arturbosch.detekt")
-				|}
-				|
-				|allprojects {
-				|	repositories {
-				|		mavenLocal()
-				|		jcenter()
-				|	}
-				|	plugins.apply("java-library")
-				|	plugins.apply("io.gitlab.arturbosch.detekt")
-				|}
-				""".trimMargin()
+                |$KOTLIN_PLUGINS_SECTION
+                |
+                |allprojects {
+                |   $REPOSITORIES_SECTION
+                |
+                |   $KOTLIN_APPLY_PLUGINS
+                |}
+                """.trimMargin()
 
                 gradleRunner = DslGradleRunner(projectLayout, "build.gradle.kts", mainBuildFileContent)
             }
@@ -180,58 +148,46 @@ internal class DetektTaskMultiModuleTest : Spek({
             it("can be done using the groovy dsl") {
 
                 val mainBuildFileContent: String = """
-				|import io.gitlab.arturbosch.detekt.DetektPlugin
-				|
-				|plugins {
-				|   id "java-library"
-				|   id "io.gitlab.arturbosch.detekt"
-				|}
-				|
-				|allprojects {
-				|	repositories {
-				|		mavenLocal()
-				|		jcenter()
-				|	}
-				|	apply plugin: "java-library"
-				|	apply plugin: "io.gitlab.arturbosch.detekt"
-				|	detekt {
-				|		reportsDir = file("build/detekt-reports")
-				|	}
-				|}
-				""".trimMargin()
+                |$GROOVY_PLUGINS_SECTION
+                |
+                |allprojects {
+                |   $REPOSITORIES_SECTION
+                |
+                |   $GROOVY_APPLY_PLUGINS
+                |
+                |   detekt {
+                |       reportsDir = file("build/detekt-reports")
+                |   }
+                |}
+                """.trimMargin()
 
                 gradleRunner = DslGradleRunner(projectLayout, "build.gradle", mainBuildFileContent)
             }
             it("can be done using the kotlin dsl") {
 
                 val mainBuildFileContent: String = """
-				|plugins {
-				|   `java-library`
-				|	id("io.gitlab.arturbosch.detekt")
-				|}
-				|
-				|allprojects {
-				|	repositories {
-				|		mavenLocal()
-				|		jcenter()
-				|	}
-				|	plugins.apply("java-library")
-				|	plugins.apply("io.gitlab.arturbosch.detekt")
-				|	detekt {
-				|		reportsDir = file("build/detekt-reports")
-				|	}
-				|}
-				""".trimMargin()
+                |$KOTLIN_PLUGINS_SECTION
+                |
+                |allprojects {
+                |   $REPOSITORIES_SECTION
+                |
+                |   $KOTLIN_APPLY_PLUGINS
+                |
+                |   detekt {
+                |       reportsDir = file("build/detekt-reports")
+                |   }
+                |}
+                """.trimMargin()
 
                 gradleRunner = DslGradleRunner(projectLayout, "build.gradle.kts", mainBuildFileContent)
             }
         }
         describe("allows changing defaults in allprojects block that can be overwritten in subprojects") {
             val child2DetektConfig = """
-				| detekt {
-				| 	reportsDir = file("build/custom")
-				| }
-			""".trimMargin()
+                |detekt {
+                |   reportsDir = file("build/custom")
+                |}
+                |""".trimMargin()
             val projectLayout = ProjectLayout(1)
                 .withSubmodule("child1", 2)
                 .withSubmodule("child2", 4, detektConfig = child2DetektConfig)
@@ -257,48 +213,36 @@ internal class DetektTaskMultiModuleTest : Spek({
             it("can be done using the groovy dsl") {
 
                 val mainBuildFileContent: String = """
-				|import io.gitlab.arturbosch.detekt.DetektPlugin
-				|
-				|plugins {
-				|   id "java-library"
-				|   id "io.gitlab.arturbosch.detekt"
-				|}
-				|
-				|allprojects {
-				|	repositories {
-				|		mavenLocal()
-				|		jcenter()
-				|	}
-				|	apply plugin: "java-library"
-				|	apply plugin: "io.gitlab.arturbosch.detekt"
-				|	detekt {
-				|		reportsDir = file("build/detekt-reports")
-				|	}
-				|}
-				""".trimMargin()
+                |$GROOVY_PLUGINS_SECTION
+                |
+                |allprojects {
+                |   $REPOSITORIES_SECTION
+                |
+                |   $GROOVY_APPLY_PLUGINS
+                |
+                |   detekt {
+                |       reportsDir = file("build/detekt-reports")
+                |   }
+                |}
+                """.trimMargin()
 
                 gradleRunner = DslGradleRunner(projectLayout, "build.gradle", mainBuildFileContent)
             }
             it("can be done using the kotlin dsl") {
 
                 val mainBuildFileContent: String = """
-				|plugins {
-				|   `java-library`
-				|	id("io.gitlab.arturbosch.detekt")
-				|}
-				|
-				|allprojects {
-				|	repositories {
-				|		mavenLocal()
-				|		jcenter()
-				|	}
-				|	plugins.apply("java-library")
-				|	plugins.apply("io.gitlab.arturbosch.detekt")
-				|	detekt {
-				|		reportsDir = file("build/detekt-reports")
-				|	}
-				|}
-				""".trimMargin()
+                |$KOTLIN_PLUGINS_SECTION
+                |
+                |allprojects {
+                |   $REPOSITORIES_SECTION
+                |
+                |   $KOTLIN_APPLY_PLUGINS
+                |
+                |   detekt {
+                |       reportsDir = file("build/detekt-reports")
+                |   }
+                |}
+                """.trimMargin()
 
                 gradleRunner = DslGradleRunner(projectLayout, "build.gradle.kts", mainBuildFileContent)
             }
@@ -309,10 +253,10 @@ internal class DetektTaskMultiModuleTest : Spek({
                 .withSubmodule("child2", 4)
 
             val detektConfig: String = """
-				|detekt {
-				|	input = files("${"$"}projectDir/src", "${"$"}projectDir/child1/src", "${"$"}projectDir/child2/src")
-				|}
-				""".trimMargin()
+                |detekt {
+                |    input = files("${"$"}projectDir/src", "${"$"}projectDir/child1/src", "${"$"}projectDir/child2/src")
+                |}
+                """.trimMargin()
             val gradleRunner = builder
                 .withProjectLayout(projectLayout)
                 .withDetektConfig(detektConfig)
@@ -339,4 +283,37 @@ internal class DetektTaskMultiModuleTest : Spek({
             }
         }
     }
-})
+}) {
+    companion object {
+        private const val GROOVY_PLUGINS_SECTION = """
+            |plugins {
+            |   id "org.jetbrains.kotlin.jvm"
+            |   id "io.gitlab.arturbosch.detekt"
+            |}
+            |"""
+
+        private const val KOTLIN_PLUGINS_SECTION = """
+            |plugins {
+            |   kotlin("jvm")
+            |   id("io.gitlab.arturbosch.detekt")
+            |}
+            |"""
+
+        private const val REPOSITORIES_SECTION = """
+            |repositories {
+            |   mavenLocal()
+            |   mavenCentral()
+            |}
+            |"""
+
+        private const val GROOVY_APPLY_PLUGINS = """
+            |apply plugin: "kotlin"
+            |apply plugin: "io.gitlab.arturbosch.detekt"
+            |"""
+
+        private const val KOTLIN_APPLY_PLUGINS = """
+            |plugins.apply("kotlin")
+            |plugins.apply("io.gitlab.arturbosch.detekt")
+            |"""
+    }
+}

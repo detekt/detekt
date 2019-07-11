@@ -59,16 +59,19 @@ abstract class DslTestBuilder {
     private class GroovyBuilder : DslTestBuilder() {
         override val gradleBuildName: String = "build.gradle"
         override val gradleBuildConfig: String = """
-                |import io.gitlab.arturbosch.detekt.DetektPlugin
-                |
                 |plugins {
-                |   id "java-library"
-                |   id "io.gitlab.arturbosch.detekt"
+                |   id 'org.jetbrains.kotlin.jvm' version '1.3.41'
+                |   id 'io.gitlab.arturbosch.detekt'
                 |}
                 |
                 |repositories {
-                |    jcenter()
-                |    mavenLocal()
+                |   mavenLocal()
+                |   mavenCentral()
+                |   jcenter()
+                |}
+                |
+                |dependencies {
+                |   implementation "org.jetbrains.kotlin:kotlin-stdlib"
                 |}
                 """.trimMargin()
     }
@@ -77,13 +80,18 @@ abstract class DslTestBuilder {
         override val gradleBuildName: String = "build.gradle.kts"
         override val gradleBuildConfig: String = """
                 |plugins {
-                |   `java-library`
-                |    id("io.gitlab.arturbosch.detekt")
+                |   kotlin("jvm") version "1.3.41"
+                |   id("io.gitlab.arturbosch.detekt")
                 |}
                 |
                 |repositories {
-                |    jcenter()
-                |    mavenLocal()
+                |   mavenLocal()
+                |   mavenCentral()
+                |   jcenter()
+                |}
+                |
+                |dependencies {
+                |   implementation(kotlin("stdlib"))
                 |}
                 """.trimMargin()
     }
