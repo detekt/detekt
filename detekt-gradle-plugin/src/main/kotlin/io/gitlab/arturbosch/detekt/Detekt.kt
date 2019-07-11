@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt
 
+import io.gitlab.arturbosch.detekt.DetektPlugin.Companion.DETEKT_TASK_NAME
 import io.gitlab.arturbosch.detekt.extensions.CustomDetektReport
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType
 import io.gitlab.arturbosch.detekt.extensions.DetektReports
@@ -234,10 +235,13 @@ open class Detekt : SourceTask(), VerificationTask {
             taskName = name
         )
 
-        if (xmlReportTargetFileOrNull != null) {
+        if (name == DETEKT_TASK_NAME && xmlReportTargetFileOrNull != null) {
             val xmlReports = project.subprojects.flatMap { subproject ->
                 subproject.tasks.mapNotNull { task ->
-                    if (task is Detekt) task.xmlReportFile.orNull?.asFile else null
+                    if (task is Detekt && task.name == DETEKT_TASK_NAME)
+                        task.xmlReportFile.orNull?.asFile
+                    else
+                        null
                 }
             }
             if (!xmlReports.isEmpty() && debugOrDefault) {

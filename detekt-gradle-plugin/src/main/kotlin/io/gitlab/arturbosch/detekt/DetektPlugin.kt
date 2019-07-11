@@ -26,7 +26,7 @@ class DetektPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
         project.pluginManager.apply(ReportingBasePlugin::class.java)
-        val extension = project.extensions.create(DETEKT, DetektExtension::class.java, project)
+        val extension = project.extensions.create(DETEKT_TASK_NAME, DetektExtension::class.java, project)
         extension.reportsDir = project.extensions.getByType(ReportingExtension::class.java).file("detekt")
 
         configurePluginDependencies(project, extension)
@@ -52,7 +52,7 @@ class DetektPlugin : Plugin<Project> {
     }
 
     private fun registerOldDetektTask(project: Project, extension: DetektExtension) {
-        val detektTaskProvider = project.tasks.register(DETEKT, Detekt::class.java) {
+        val detektTaskProvider = project.tasks.register(DETEKT_TASK_NAME, Detekt::class.java) {
             it.debugProp.set(project.provider { extension.debug })
             it.parallelProp.set(project.provider { extension.parallel })
             it.disableDefaultRuleSetsProp.set(project.provider { extension.disableDefaultRuleSets })
@@ -69,7 +69,7 @@ class DetektPlugin : Plugin<Project> {
             it.setIgnoreFailures(project.provider { extension.ignoreFailures })
 
             project.subprojects.forEach { subProject ->
-                subProject.tasks.firstOrNull { t -> t is Detekt }?.let { subprojectTask ->
+                subProject.tasks.firstOrNull { t -> t is Detekt && t.name == DETEKT_TASK_NAME }?.let { subprojectTask ->
                     it.dependsOn(subprojectTask)
                 }
             }
@@ -83,7 +83,7 @@ class DetektPlugin : Plugin<Project> {
     private fun registerDetektTask(project: Project, extension: DetektExtension, sourceSet: SourceSet) {
         val kotlinSourceSet = (sourceSet as HasConvention).convention.plugins["kotlin"] as? KotlinSourceSet
             ?: throw GradleException("Kotlin source set not found. Please report on detekt's issue tracker")
-        project.tasks.register(DETEKT + sourceSet.name.capitalize(), Detekt::class.java) {
+        project.tasks.register(DETEKT_TASK_NAME + sourceSet.name.capitalize(), Detekt::class.java) {
             it.debugProp.set(project.provider { extension.debug })
             it.parallelProp.set(project.provider { extension.parallel })
             it.disableDefaultRuleSetsProp.set(project.provider { extension.disableDefaultRuleSets })
@@ -184,7 +184,7 @@ class DetektPlugin : Plugin<Project> {
     }
 
     companion object {
-        private const val DETEKT = "detekt"
+        const val DETEKT_TASK_NAME = "detekt"
         private const val IDEA_FORMAT = "detektIdeaFormat"
         private const val IDEA_INSPECT = "detektIdeaInspect"
         private const val GENERATE_CONFIG = "detektGenerateConfig"

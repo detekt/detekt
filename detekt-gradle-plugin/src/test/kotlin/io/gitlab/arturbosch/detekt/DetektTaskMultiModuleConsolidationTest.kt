@@ -43,11 +43,9 @@ internal class DetektTaskMultiModuleConsolidationTest : Spek({
         it("using the groovy dsl") {
 
             val mainBuildFileContent: String = """
-                |import io.gitlab.arturbosch.detekt.DetektPlugin
-                |
                 |plugins {
-                |   id "java-library"
                 |   id "io.gitlab.arturbosch.detekt"
+                |   id "org.jetbrains.kotlin.jvm"
                 |}
                 |
                 |allprojects {
@@ -57,8 +55,8 @@ internal class DetektTaskMultiModuleConsolidationTest : Spek({
                 |    }
                 |}
                 |subprojects {
-                |    apply plugin: "java-library"
                 |    apply plugin: "io.gitlab.arturbosch.detekt"
+                |    apply plugin: "kotlin"
                 |}
                 """.trimMargin()
 
@@ -68,7 +66,7 @@ internal class DetektTaskMultiModuleConsolidationTest : Spek({
 
             val mainBuildFileContent: String = """
                 |plugins {
-                |   `java-library`
+                |    kotlin("jvm")
                 |    id("io.gitlab.arturbosch.detekt")
                 |}
                 |
@@ -79,7 +77,7 @@ internal class DetektTaskMultiModuleConsolidationTest : Spek({
                 |    }
                 |}
                 |subprojects {
-                |    plugins.apply("java-library")
+                |    plugins.apply("kotlin")
                 |    plugins.apply("io.gitlab.arturbosch.detekt")
                 |}
                 """.trimMargin()
