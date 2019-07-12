@@ -120,8 +120,7 @@ open class DetektCreateBaselineTask : SourceTask() {
             DisableDefaultRuleSetArgument(disableDefaultRuleSets.getOrElse(false))
         )
 
-        DetektInvoker.invokeCli(
-            project = project,
+        DetektInvoker.create(project).invokeCli(
             arguments = arguments.toList(),
             ignoreFailures = ignoreFailures.getOrElse(false),
             classpath = detektClasspath.plus(pluginClasspath),

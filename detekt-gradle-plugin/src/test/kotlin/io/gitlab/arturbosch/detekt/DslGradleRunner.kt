@@ -11,7 +11,8 @@ class DslGradleRunner(
     val mainBuildFileContent: String,
     val configFileOrNone: String? = null,
     val baselineFileOrNone: String? = null,
-    val gradleVersionOrNone: String? = null
+    val gradleVersionOrNone: String? = null,
+    val dryRun: Boolean = false
 ) {
 
     private val rootDir: File = createTempDir(prefix = "applyPlugin")
@@ -90,7 +91,11 @@ class DslGradleRunner(
     }
 
     private fun buildGradleRunner(tasks: List<String>): GradleRunner {
-        val args = listOf("--stacktrace", "--info", "--build-cache", "--debug") + tasks.toList()
+        val args = mutableListOf("--stacktrace", "--info", "--build-cache")
+        if (dryRun) {
+            args.add("-Pdetekt-dry-run=true")
+        }
+        args.addAll(tasks.toList())
 
         return GradleRunner.create().apply {
             withProjectDir(rootDir)
@@ -101,20 +106,24 @@ class DslGradleRunner(
     }
 
     fun runTasksAndCheckResult(vararg tasks: String, doAssert: DslGradleRunner.(BuildResult) -> Unit) {
-        val result: BuildResult = buildGradleRunner(tasks.toList()).build()
+        val result: BuildResult = runTasks(*tasks)
         this.doAssert(result)
     }
+
+    fun runTasks(vararg tasks: String): BuildResult = buildGradleRunner(tasks.toList()).build()
 
     fun runDetektTaskAndCheckResult(doAssert: DslGradleRunner.(BuildResult) -> Unit) {
         runTasksAndCheckResult(DETEKT_TASK) { this.doAssert(it) }
     }
+
+    fun runDetektTask(): BuildResult = runTasks(DETEKT_TASK)
 
     fun runDetektTaskAndExpectFailure(doAssert: DslGradleRunner.(BuildResult) -> Unit = {}) {
         val result = buildGradleRunner(listOf(DETEKT_TASK)).buildAndFail()
         this.doAssert(result)
     }
 
-    fun projectFile(path: String): File = File(rootDir, path)
+    fun projectFile(path: String): File = File(rootDir, path).canonicalFile
 
     companion object {
         const val SETTINGS_FILENAME = "settings.gradle"

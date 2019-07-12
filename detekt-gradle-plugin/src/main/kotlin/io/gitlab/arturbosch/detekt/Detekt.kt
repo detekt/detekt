@@ -226,15 +226,21 @@ open class Detekt : SourceTask(), VerificationTask {
             CustomReportArgument(reportId, destination)
         })
 
-        DetektInvoker.invokeCli(
-            project = project,
+        DetektInvoker.create(project).invokeCli(
             arguments = arguments.toList(),
             ignoreFailures = ignoreFailuresProp.get(),
             classpath = detektClasspath.plus(pluginClasspath),
             taskName = name
         )
 
-        if (name == DETEKT_TASK_NAME && xmlReportTargetFileOrNull != null) {
+        mergeReportsIfApplicable(xmlReportTargetFileOrNull?.asFile, debugOrDefault)
+    }
+
+    private fun mergeReportsIfApplicable(xmlReportTargetFile: File?, debug: Boolean) {
+
+        val isDefaultDetektTask = name == DETEKT_TASK_NAME
+
+        if (isDefaultDetektTask && xmlReportTargetFile != null && xmlReportTargetFile.exists()) {
             val xmlReports = project.subprojects.flatMap { subproject ->
                 subproject.tasks.mapNotNull { task ->
                     if (task is Detekt && task.name == DETEKT_TASK_NAME)
@@ -243,10 +249,10 @@ open class Detekt : SourceTask(), VerificationTask {
                         null
                 }
             }
-            if (!xmlReports.isEmpty() && debugOrDefault) {
-                logger.info("Merging report files of subprojects $xmlReports into $xmlReportTargetFileOrNull")
+            if (!xmlReports.isEmpty() && debug) {
+                logger.info("Merging report files of subprojects $xmlReports into $xmlReportTargetFile")
             }
-            mergeXmlReports(xmlReportTargetFileOrNull.asFile, xmlReports)
+            mergeXmlReports(xmlReportTargetFile, xmlReports)
         }
     }
 }
