@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.empty
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.rules.hasCommentInside
 import io.gitlab.arturbosch.detekt.rules.isObjectOfAnonymousClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 
@@ -19,6 +20,7 @@ class EmptyClassBlock(config: Config) : EmptyRule(config) {
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         super.visitClassOrObject(classOrObject)
         if (classOrObject.isObjectOfAnonymousClass()) return
+        if (classOrObject.hasCommentInside()) return
 
         classOrObject.body?.declarations?.let {
             if (it.isEmpty()) {
