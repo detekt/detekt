@@ -21,6 +21,26 @@ class EmptyClassBlockSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
+        it("does not report class with comments in the body") {
+            val code = """
+                class SomeClass {
+                    // Some comment to explain what this class is supposed to do
+                }
+            """.trimIndent()
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        it("does not report class with multiline comments in the body") {
+            val code = """
+                class SomeClass {
+                    /*
+                    Some comment to explain what this class is supposed to do
+                    */
+                }
+            """.trimIndent()
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
         it("reports the empty nested class body") {
             val code = """
                 class SomeClass {

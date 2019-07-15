@@ -7,6 +7,9 @@ abstract class DslTestBuilder {
 
     abstract val gradleBuildConfig: String
     abstract val gradleBuildName: String
+    abstract val gradlePluginsSection: String
+    val gradleRepositoriesSection = REPOSITORIES_SECTION
+    abstract val gradleApplyPlugins: String
 
     private var detektConfig: String = ""
     private var projectLayout: ProjectLayout = ProjectLayout(1)
@@ -41,9 +44,9 @@ abstract class DslTestBuilder {
 
     fun build(): DslGradleRunner {
         val mainBuildFileContent = """
-            | $gradleBuildConfig
-            | $detektConfig
-        """.trimMargin()
+            |$gradleBuildConfig
+            |$detektConfig
+            """.trimMargin()
         val runner = DslGradleRunner(
             projectLayout,
             gradleBuildName,
@@ -58,38 +61,68 @@ abstract class DslTestBuilder {
 
     private class GroovyBuilder : DslTestBuilder() {
         override val gradleBuildName: String = "build.gradle"
+        override val gradlePluginsSection = GROOVY_PLUGINS_SECTION
+        override val gradleApplyPlugins = GROOVY_APPLY_PLUGINS
         override val gradleBuildConfig: String = """
-                |import io.gitlab.arturbosch.detekt.DetektPlugin
-                |
-                |plugins {
-                |   id "java-library"
-                |   id "io.gitlab.arturbosch.detekt"
-                |}
-                |
-                |repositories {
-                |    jcenter()
-                |    mavenLocal()
-                |}
-                """.trimMargin()
+            |$gradlePluginsSection
+            |
+            |$gradleRepositoriesSection
+            |
+            |dependencies {
+            |   implementation "org.jetbrains.kotlin:kotlin-stdlib"
+            |}
+            """.trimMargin()
     }
 
     private class KotlinBuilder : DslTestBuilder() {
         override val gradleBuildName: String = "build.gradle.kts"
+        override val gradlePluginsSection = KOTLIN_PLUGINS_SECTION
+        override val gradleApplyPlugins = KOTLIN_APPLY_PLUGINS
         override val gradleBuildConfig: String = """
-                |plugins {
-                |   `java-library`
-                |    id("io.gitlab.arturbosch.detekt")
-                |}
-                |
-                |repositories {
-                |    jcenter()
-                |    mavenLocal()
-                |}
-                """.trimMargin()
+            |$gradlePluginsSection
+            |
+            |$gradleRepositoriesSection
+            |
+            |dependencies {
+            |   implementation(kotlin("stdlib"))
+            |}
+            """.trimMargin()
     }
 
     companion object {
         fun kotlin(): DslTestBuilder = KotlinBuilder()
         fun groovy(): DslTestBuilder = GroovyBuilder()
+
+        private const val GROOVY_PLUGINS_SECTION = """
+            |plugins {
+            |   id "org.jetbrains.kotlin.jvm"
+            |   id "io.gitlab.arturbosch.detekt"
+            |}
+            |"""
+
+        private const val KOTLIN_PLUGINS_SECTION = """
+            |plugins {
+            |   kotlin("jvm")
+            |   id("io.gitlab.arturbosch.detekt")
+            |}
+            |"""
+
+        private const val REPOSITORIES_SECTION = """
+            |repositories {
+            |   mavenLocal()
+            |   mavenCentral()
+            |   jcenter()
+            |}
+            |"""
+
+        private const val GROOVY_APPLY_PLUGINS = """
+            |apply plugin: "kotlin"
+            |apply plugin: "io.gitlab.arturbosch.detekt"
+            |"""
+
+        private const val KOTLIN_APPLY_PLUGINS = """
+            |plugins.apply("kotlin")
+            |plugins.apply("io.gitlab.arturbosch.detekt")
+            |"""
     }
 }

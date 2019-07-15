@@ -29,7 +29,9 @@ fun KtCallExpression.isUsedForNesting(): Boolean = when (getCallNameExpression()
     else -> false
 }
 
-fun KtBlockExpression.hasCommentInside(): Boolean {
+fun KtClassOrObject.hasCommentInside() = this.body?.hasCommentInside() ?: false
+
+fun PsiElement.hasCommentInside(): Boolean {
     val commentKey = Key<Boolean>("comment")
     this.acceptChildren(object : DetektVisitor() {
         override fun visitComment(comment: PsiComment?) {
