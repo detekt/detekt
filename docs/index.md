@@ -67,6 +67,10 @@ detekt {
             enabled = true
             destination = file("path/to/destination.html")
         }
+        txt {
+            enabled = true
+            destination = file("path/to/destination.txt")
+        }
     }
 }
 ``` 
