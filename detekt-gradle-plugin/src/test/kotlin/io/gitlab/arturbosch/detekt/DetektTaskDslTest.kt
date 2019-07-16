@@ -25,6 +25,7 @@ internal class DetektTaskDslTest : Spek({
                         assertThat(result.output).contains("number of classes: 1")
                         assertThat(projectFile("build/reports/detekt/detekt.xml")).exists()
                         assertThat(projectFile("build/reports/detekt/detekt.html")).exists()
+                        assertThat(projectFile("build/reports/detekt/detekt.txt")).exists()
                     }
                 }
 
@@ -140,6 +141,7 @@ internal class DetektTaskDslTest : Spek({
                         assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
                         assertThat(projectFile("build/detekt-reports/detekt.xml")).exists()
                         assertThat(projectFile("build/detekt-reports/detekt.html")).exists()
+                        assertThat(projectFile("build/detekt-reports/detekt.txt")).exists()
                     }
                 }
 
@@ -162,6 +164,7 @@ internal class DetektTaskDslTest : Spek({
                         assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
                         assertThat(projectFile("build/xml-reports/custom-detekt.xml")).exists()
                         assertThat(projectFile("build/detekt-reports/detekt.html")).exists()
+                        assertThat(projectFile("build/detekt-reports/detekt.txt")).exists()
                     }
                 }
 
@@ -172,6 +175,9 @@ internal class DetektTaskDslTest : Spek({
                         |    reports {
                         |        xml.enabled = false
                         |        html {
+                        |            enabled = false
+                        |        }
+                        |        txt {
                         |            enabled = false
                         |        }
                         |    }
@@ -186,6 +192,7 @@ internal class DetektTaskDslTest : Spek({
                         assertThat(result.task(":detekt")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
                         assertThat(projectFile("build/reports/detekt/detekt.xml")).doesNotExist()
                         assertThat(projectFile("build/reports/detekt/detekt.html")).doesNotExist()
+                        assertThat(projectFile("build/reports/detekt/detekt.txt")).doesNotExist()
                     }
                 }
 
@@ -428,6 +435,7 @@ internal class DetektTaskDslTest : Spek({
                     |            destination = file("build/reports/failfast.xml")
                     |        }
                     |        html.destination = file("build/reports/failfast.html")
+                    |        txt.destination = file("build/reports/failfast.txt")
                     |    }
                     |}
                 """
@@ -439,6 +447,7 @@ internal class DetektTaskDslTest : Spek({
                     assertThat(result.task(":detektFailFast")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
                     assertThat(projectFile("build/reports/failfast.xml")).exists()
                     assertThat(projectFile("build/reports/failfast.html")).exists()
+                    assertThat(projectFile("build/reports/failfast.txt")).exists()
                 }
             }
 
@@ -465,6 +474,7 @@ internal class DetektTaskDslTest : Spek({
                     |            destination = file("build/reports/failfast.xml")
                     |        }
                     |        html.destination = file("build/reports/failfast.html")
+                    |        txt.destination = file("build/reports/failfast.txt")
                     |    }
                     |}
                 """
@@ -475,6 +485,7 @@ internal class DetektTaskDslTest : Spek({
                     assertThat(result.task(":detektFailFast")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
                     assertThat(gradleRunner.projectFile("build/reports/failfast.xml")).exists()
                     assertThat(gradleRunner.projectFile("build/reports/failfast.html")).exists()
+                    assertThat(gradleRunner.projectFile("build/reports/failfast.txt")).exists()
                 }
             }
         }
