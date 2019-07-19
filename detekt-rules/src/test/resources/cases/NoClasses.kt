@@ -1,8 +1,5 @@
 package cases
 
-/**
- * @author Marvin Ramin
- */
 const val test = 1
 
 fun test() {

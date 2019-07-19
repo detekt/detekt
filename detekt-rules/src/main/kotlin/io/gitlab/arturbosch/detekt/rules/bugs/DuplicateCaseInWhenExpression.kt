@@ -31,8 +31,6 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  * </compliant>
  *
  * @active since v1.0.0
- * @author Artur Bosch
- * @author Marvin Ramin
  */
 class DuplicateCaseInWhenExpression(config: Config) : Rule(config) {
 

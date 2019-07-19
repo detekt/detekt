@@ -32,10 +32,6 @@ import org.jetbrains.kotlin.psi.KtProperty
  *     fun bar()
  * }
  * </compliant>
- *
- * @author Ivan Balaksha
- * @author schalkms
- * @author Marvin Ramin
  */
 class RedundantVisibilityModifierRule(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue("RedundantVisibilityModifierRule",

@@ -24,8 +24,6 @@ import java.util.IdentityHashMap
  * @configuration threshold - maximum lines in a method (default: `60`)
  *
  * @active since v1.0.0
- * @author Artur Bosch
- * @author Marvin Ramin
  */
 class LongMethod(
     config: Config = Config.empty,

@@ -7,7 +7,6 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 /**
-* @author Nycto
 */
 class EqualsOnSignatureLineSpec : Spek({
     val subject by memoized { EqualsOnSignatureLine(Config.empty) }

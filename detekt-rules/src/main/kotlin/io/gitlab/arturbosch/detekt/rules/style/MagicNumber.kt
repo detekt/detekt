@@ -80,7 +80,6 @@ import java.util.Locale
  * @configuration ignoreRanges - whether magic numbers in ranges should be ignored (default: `false`)
  *
  * @active since v1.0.0
- * @author Marvin Ramin
  */
 @Suppress("TooManyFunctions")
 class MagicNumber(config: Config = Config.empty) : Rule(config) {

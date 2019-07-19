@@ -47,10 +47,6 @@ import org.jetbrains.kotlin.psi.KtTypeReference
  * @configuration allowedExceptionNameRegex - ignores too generic exception types which match this regex
  * (default: `"^(_|(ignore|expected).*)"`)
  * @active since v1.0.0
- * @author Artur Bosch
- * @author Marvin Ramin
- * @author schalkms
- * @author olivierlemasle
  */
 class TooGenericExceptionCaught(config: Config) : Rule(config) {
 

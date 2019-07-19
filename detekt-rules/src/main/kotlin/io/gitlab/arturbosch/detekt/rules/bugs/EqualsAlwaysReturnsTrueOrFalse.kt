@@ -35,9 +35,6 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
  *     return this == other
  * }
  * </compliant>
- *
- * @author schalkms
- * @author Marvin Ramin
  */
 class EqualsAlwaysReturnsTrueOrFalse(config: Config = Config.empty) : Rule(config) {
 

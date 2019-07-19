@@ -16,7 +16,6 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
  *
  * @configuration classPattern - naming pattern (default: `'[A-Z$][a-zA-Z0-9$]*'`)
  * @active since v1.0.0
- * @author Marvin Ramin
  */
 class ClassNaming(config: Config = Config.empty) : Rule(config) {
 

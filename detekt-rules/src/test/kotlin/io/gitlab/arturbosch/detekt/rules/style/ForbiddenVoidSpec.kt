@@ -7,10 +7,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-/**
- * @author Egor Neliuba
- * @author schalkms
- */
 class ForbiddenVoidSpec : Spek({
     val subject by memoized { ForbiddenVoid(Config.empty) }
 

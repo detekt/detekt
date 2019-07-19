@@ -6,10 +6,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-/**
- * @author Marvin Ramin
- * @author schalkms
- */
 class ForbiddenNameSpec : Spek({
 
     describe("ForbiddenClassName rule") {

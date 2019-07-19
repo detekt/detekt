@@ -27,9 +27,6 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  *     }
  * }
  * </noncompliant>
- *
- * @author Marvin Ramin
- * @author schalkms
  */
 class IteratorHasNextCallsNextMethod(config: Config = Config.empty) : Rule(config) {
 

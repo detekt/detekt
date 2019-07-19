@@ -7,8 +7,6 @@ import org.jetbrains.kotlin.psi.KtFinallySection
  * Reports empty `finally` blocks. Empty blocks of code serve no purpose and should be removed.
  *
  * @active since v1.0.0
- * @author Artur Bosch
- * @author Marvin Ramin
  */
 class EmptyFinallyBlock(config: Config) : EmptyRule(config) {
 

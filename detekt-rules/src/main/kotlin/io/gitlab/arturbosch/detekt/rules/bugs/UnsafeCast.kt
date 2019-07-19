@@ -24,9 +24,6 @@ import org.jetbrains.kotlin.psi.KtPsiUtil
  *     println((s as? Int) ?: 0)
  * }
  * </compliant>
- *
- * @author Ivan Balaksha
- * @author Marvin Ramin
  */
 class UnsafeCast(config: Config = Config.empty) : Rule(config) {
 

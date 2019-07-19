@@ -26,9 +26,6 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * </noncompliant>
  *
  * @configuration conversionFunctionPrefix - allowed conversion function names (default: `'to'`)
- * @author Ivan Balaksha
- * @author schalkms
- * @author Marvin Ramin
  */
 class DataClassContainsFunctions(config: Config = Config.empty) : Rule(config) {
 

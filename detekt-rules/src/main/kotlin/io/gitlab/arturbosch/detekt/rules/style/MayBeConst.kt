@@ -33,9 +33,6 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
  * <compliant>
  * const val MY_CONSTANT = "abc"
  * </compliant>
- *
- * @author Marvin Ramin
- * @author schalkms
  */
 class MayBeConst(config: Config = Config.empty) : Rule(config) {
 

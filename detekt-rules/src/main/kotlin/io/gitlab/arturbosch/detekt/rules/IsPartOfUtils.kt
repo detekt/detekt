@@ -5,9 +5,6 @@ import org.jetbrains.kotlin.psi.KtStringTemplateEntry
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 import kotlin.reflect.KClass
 
-/**
- * @author Artur Bosch
- */
 
 /**
  * Tests if this element is part of given PsiElement.

@@ -37,8 +37,6 @@ import org.jetbrains.kotlin.psi.KtLambdaExpression
  * a?.let { it.plus(it) }
  * a?.let { param -> param.plus(param) }
  * </compliant>
- *
- * @author mishkun
  */
 class UnnecessaryLet(config: Config) : Rule(config) {
 

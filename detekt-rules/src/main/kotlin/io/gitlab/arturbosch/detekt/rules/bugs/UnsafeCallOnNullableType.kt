@@ -26,9 +26,6 @@ import org.jetbrains.kotlin.psi.KtUnaryExpression
  *     println(str?.length)
  * }
  * </compliant>
- *
- * @author Ivan Balaksha
- * @author Marvin Ramin
  */
 class UnsafeCallOnNullableType(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue("UnsafeCallOnNullableType",

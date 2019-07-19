@@ -29,9 +29,6 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  *     else -> println("else")
  * }
  * </compliant>
- *
- * @author schalkms
- * @author Marvin Ramin
  */
 class OptionalWhenBraces(config: Config = Config.empty) : Rule(config) {
 

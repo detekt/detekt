@@ -1,9 +1,6 @@
 package cases
 
 
-/**
- * @author Artur Bosch
- */
 class MyClass {
     companion object {
         val const = "${MyClass::class.java.name}.EXTRA_DETAILS"

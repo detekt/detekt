@@ -24,9 +24,6 @@ import org.jetbrains.kotlin.psi.KtTypeReference
  *     throw IOException() // exception should not be thrown here
  * }
  * </noncompliant>
- *
- * @author schalkms
- * @author Marvin Ramin
  */
 class ThrowingExceptionInMain(config: Config = Config.empty) : Rule(config) {
 

@@ -15,9 +15,6 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 
-/**
- * @author Artur Bosch
- */
 
 fun KtExpression?.asBlockExpression(): KtBlockExpression? = this as? KtBlockExpression
 

@@ -10,9 +10,6 @@ import io.gitlab.arturbosch.detekt.test.lint
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-/**
- * @author Artur Bosch
- */
 class ComplexMethodSpec : Spek({
     describe("ComplexMethod rule") {
 

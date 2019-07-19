@@ -48,9 +48,6 @@ import org.jetbrains.kotlin.util.collectionUtils.concat
  * </compliant>
  *
  * @configuration ignoreOverriddenFunction - if overridden functions should be ignored (default: `true`)
- *
- * @author schalkms
- * @author Marvin Ramin
  */
 class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
 

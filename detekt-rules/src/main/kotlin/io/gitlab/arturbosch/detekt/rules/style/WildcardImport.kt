@@ -43,8 +43,6 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  * with wildcard imports. (default: `'java.util.*,kotlinx.android.synthetic.*'`)
  *
  * @active since v1.0.0
- * @author Artur Bosch
- * @author Marvin Ramin
  */
 class WildcardImport(config: Config = Config.empty) : Rule(config) {
 

@@ -5,10 +5,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-/**
- * @author Marvin Ramin
- * @author schalkms
- */
 class EndOfSentenceFormatSpec : Spek({
     val subject by memoized { KDocStyle() }
 
@@ -97,7 +93,6 @@ class EndOfSentenceFormatSpec : Spek({
         it("does not report KDoc which doesn't contain any real sentence") {
             val code = """
 			/**
-			 * @author Someone
 			 */
 			class Test {
 			}
@@ -111,8 +106,6 @@ class EndOfSentenceFormatSpec : Spek({
 			 * @configuration this - just an example (default: `150`)
 			 *
 			 * @active since v1.0.0
-			 * @author person1
-			 * @author person2
 			 */
 			class Test {
 			}
@@ -132,7 +125,6 @@ class EndOfSentenceFormatSpec : Spek({
 			 * fun foo() { }
 			 * </compliant>
 			 *
-			 * @author someone
 			 */
 			class Test {
 			}

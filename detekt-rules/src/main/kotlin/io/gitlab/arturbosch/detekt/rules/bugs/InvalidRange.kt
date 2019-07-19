@@ -29,9 +29,6 @@ import org.jetbrains.kotlin.psi.KtBinaryExpression
  *
  * val range =  2 until 2)
  * </compliant>
- *
- * @author schalkms
- * @author Marvin Ramin
  */
 class InvalidRange(config: Config = Config.empty) : Rule(config) {
 

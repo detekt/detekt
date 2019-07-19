@@ -23,8 +23,6 @@ import org.jetbrains.kotlin.psi.psiUtil.getQualifiedElementOrCallableRef
  * <compliant>
  * val pair = 1 to 2
  * </compliant>
- *
- * @author jkaan
  */
 class PreferToOverPairSyntax(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue("PreferToOverPairSyntax", Severity.Style,

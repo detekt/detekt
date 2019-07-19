@@ -2,9 +2,6 @@
 
 package cases
 
-/**
- * @author Artur Bosch
- */
 @Suppress("unused")
 class NestedClasses {
 

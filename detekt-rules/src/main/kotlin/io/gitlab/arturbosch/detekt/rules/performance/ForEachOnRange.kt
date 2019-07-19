@@ -42,10 +42,6 @@ import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
  * </compliant>
  *
  * @active since v1.0.0
- *
- * @author Marvin Ramin
- * @author Ivan Balaksha
- * @author schalkms
  */
 class ForEachOnRange(config: Config = Config.empty) : Rule(config) {
 

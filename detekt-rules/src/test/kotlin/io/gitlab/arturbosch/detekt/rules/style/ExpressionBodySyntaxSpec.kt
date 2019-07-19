@@ -7,9 +7,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-/**
- * @author Artur Bosch
- */
 class ExpressionBodySyntaxSpec : Spek({
     val subject by memoized { ExpressionBodySyntax(Config.empty) }
 

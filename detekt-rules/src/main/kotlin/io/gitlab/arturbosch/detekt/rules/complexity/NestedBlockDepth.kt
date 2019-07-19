@@ -28,8 +28,6 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  * @configuration threshold - maximum nesting depth (default: `4`)
  *
  * @active since v1.0.0
- * @author Artur Bosch
- * @author Marvin Ramin
  */
 class NestedBlockDepth(
     config: Config = Config.empty,

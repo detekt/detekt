@@ -24,9 +24,6 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  *     }
  * }
  * </noncompliant>
- *
- * @author schalkms
- * @author Marvin Ramin
  */
 class ThrowingExceptionFromFinally(config: Config = Config.empty) : Rule(config) {
 

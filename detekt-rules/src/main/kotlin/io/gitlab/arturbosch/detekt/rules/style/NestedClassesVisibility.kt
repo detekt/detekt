@@ -32,10 +32,6 @@ import org.jetbrains.kotlin.psi.psiUtil.isPublic
  *     internal class NestedPublicClass
  * }
  * </compliant>
- *
- * @author Ivan Balaksha
- * @author schalkms
- * @author Marvin Ramin
  */
 class NestedClassesVisibility(config: Config = Config.empty) : Rule(config) {
 

@@ -28,8 +28,6 @@ import org.jetbrains.kotlin.psi.KtClass
  *     val s: String?
  * )
  * </compliant>
- *
- * @author Maxim Pestryakov
  */
 class DataClassShouldBeImmutable(config: Config = Config.empty) : Rule(config) {
 

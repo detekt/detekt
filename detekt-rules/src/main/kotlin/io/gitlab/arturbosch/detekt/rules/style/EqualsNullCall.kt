@@ -20,9 +20,6 @@ import org.jetbrains.kotlin.psi.KtCallExpression
  * <compliant>
  * fun isNull(str: String) = str == null
  * </compliant>
- *
- * @author schalkms
- * @author Marvin Ramin
  */
 class EqualsNullCall(config: Config = Config.empty) : Rule(config) {
 
