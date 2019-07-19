@@ -6,9 +6,6 @@ import kotlin.reflect.KClass
 
 /**
  * A configuration holds information about how to configure specific rules.
- *
- * @author Artur Bosch
- * @author schalkms
  */
 interface Config {
 

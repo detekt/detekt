@@ -6,8 +6,6 @@ package io.gitlab.arturbosch.detekt.api
  *
  * Basic behaviour of a finding is that is can be assigned to an id and a source code position described as
  * an entity. Metrics and entity references can also considered for deeper characterization.
- *
- * @author Artur Bosch
  */
 interface Finding : Compactable, HasEntity, HasMetrics {
     val id: String

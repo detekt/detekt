@@ -14,8 +14,6 @@ package io.gitlab.arturbosch.detekt.api
  * rule in the #RuleSetProvider interface. This is due the fact that users create the
  * rule set and all rules upfront and letting them 'sub config' the rule set config would
  * be error-prone.
- *
- * @author Artur Bosch
  */
 interface ConfigAware : Config {
 

@@ -13,8 +13,6 @@ import org.jetbrains.kotlin.psi.psiUtil.startOffset
 
 /**
  * Specifies a position within a source code fragment.
- *
- * @author Artur Bosch
  */
 data class Location(
     val source: SourceLocation,

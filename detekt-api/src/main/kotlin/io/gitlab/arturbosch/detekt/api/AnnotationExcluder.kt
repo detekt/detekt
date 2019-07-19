@@ -7,10 +7,6 @@ import org.jetbrains.kotlin.psi.KtFile
  * Primary use case for an AnnotationExcluder is to decide if a KtElement should be
  * excluded from further analysis. This is done by checking if a special annotation
  * is present over the element.
- *
- * @author Niklas Baudy
- * @author Artur Bosch
- * @author schalkms
  */
 class AnnotationExcluder(
     root: KtFile,

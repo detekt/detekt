@@ -15,10 +15,6 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
 /**
  * Counts the cyclomatic complexity of functions.
- *
- * @author Artur Bosch
- * @author schalkms
- * @author Sebastiano Poggi
  */
 class McCabeVisitor(private val ignoreSimpleWhenEntries: Boolean) : DetektVisitor() {
 

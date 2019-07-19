@@ -7,9 +7,6 @@ import org.jetbrains.kotlin.psi.KtClass
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-/**
- * @author Marvin Ramin
- */
 internal class SuppressibleSpec : Spek({
 
     describe("a Test rule") {

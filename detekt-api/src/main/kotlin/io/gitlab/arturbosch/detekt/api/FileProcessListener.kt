@@ -5,8 +5,6 @@ import org.jetbrains.kotlin.psi.KtFile
 /**
  * Gather additional metrics about the analyzed kotlin file.
  * Pay attention to the thread policy of each function!
- *
- * @author Artur Bosch
  */
 @Suppress("EmptyFunctionBlock")
 interface FileProcessListener : Extension {
