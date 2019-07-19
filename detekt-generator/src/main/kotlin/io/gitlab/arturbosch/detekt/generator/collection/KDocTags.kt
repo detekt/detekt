@@ -5,7 +5,6 @@ import org.jetbrains.kotlin.kdoc.psi.impl.KDocSection
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocTag
 import org.jetbrains.kotlin.psi.KtClassOrObject
 
-
 fun KtClassOrObject.parseConfigurationTags() =
         kDocSection()?.findTagsByName(TAG_CONFIGURATION)
                 ?.filter { it.isValidConfigurationTag() }
