@@ -22,8 +22,6 @@ import org.jetbrains.kotlin.psi.psiUtil.endOffset
 
 /**
  * Rule to detect formatting violations.
- *
- * @author Artur Bosch
  */
 abstract class FormattingRule(config: Config) : Rule(config) {
 

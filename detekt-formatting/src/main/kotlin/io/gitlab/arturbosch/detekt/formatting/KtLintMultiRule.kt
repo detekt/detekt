@@ -44,8 +44,6 @@ import org.jetbrains.kotlin.psi.KtFile
 
 /**
  * Runs all KtLint rules.
- *
- * @author Artur Bosch
  */
 class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
 

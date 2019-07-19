@@ -14,7 +14,6 @@ import io.gitlab.arturbosch.detekt.formatting.merge
  *
  * @active since v1.0.0
  * @autoCorrect since v1.0.0
- * @author Artur Bosch
  */
 class ParameterListWrapping(config: Config) : FormattingRule(config) {
 
