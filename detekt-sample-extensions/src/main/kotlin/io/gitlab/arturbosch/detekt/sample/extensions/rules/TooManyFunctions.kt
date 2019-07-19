@@ -11,9 +11,6 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
  * This is a sample rule reporting too many functions inside a file.
- *
- * @author Artur Bosch
- * @author Marvin Ramin
  */
 class TooManyFunctions : Rule() {
 
