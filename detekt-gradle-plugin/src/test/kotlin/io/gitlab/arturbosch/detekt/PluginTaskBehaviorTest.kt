@@ -9,9 +9,6 @@ import org.spekframework.spek2.style.specification.describe
 /**
  * Tests that run the Detekt Gradle Plugins tasks multiple times to check for correct
  * UP-TO-DATE states and correct build caching.
- *
- * @author Marvin Ramin
- * @author Markus Schwarz
  */
 internal class PluginTaskBehaviorTest : Spek({
 

@@ -7,13 +7,6 @@ import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.plugins.quality.CodeQualityExtension
 import java.io.File
 
-/**
- * @author Artur Bosch
- * @author Said Tahsin Dane
- * @author Marvin Ramin
- * @author Markus Schwarz
- * @author Matthew Haughton
- */
 open class DetektExtension(project: Project) : CodeQualityExtension() {
 
     var ignoreFailures: Boolean

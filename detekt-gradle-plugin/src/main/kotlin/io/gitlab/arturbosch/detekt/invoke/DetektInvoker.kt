@@ -4,10 +4,6 @@ import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.file.FileCollection
 
-/**
- * @author Marvin Ramin
- * @author Matthew Haughton
- */
 object DetektInvoker {
     internal fun invokeCli(
         project: Project,

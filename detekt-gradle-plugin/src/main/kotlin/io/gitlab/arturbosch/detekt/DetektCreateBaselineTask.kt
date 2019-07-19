@@ -31,12 +31,6 @@ import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 
-/**
- * @author Artur Bosch
- * @author Marvin Ramin
- * @author Markus Schwarz
- * @author Matthew Haughton
- */
 open class DetektCreateBaselineTask : SourceTask() {
 
     init {

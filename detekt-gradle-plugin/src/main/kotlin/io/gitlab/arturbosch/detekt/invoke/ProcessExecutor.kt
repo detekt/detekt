@@ -5,10 +5,6 @@ import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.InputStreamReader
 
-/**
- * @author Artur Bosch
- * @author Marvin Ramin
- */
 object ProcessExecutor {
     fun startProcess(args: Array<String>, debug: Boolean = false) {
         val process = Runtime.getRuntime().exec(args)

@@ -10,10 +10,6 @@ import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 
-/**
- * @author Artur Bosch
- * @author Marvin Ramin
- */
 open class DetektIdeaFormatTask : SourceTask() {
 
     init {

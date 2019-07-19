@@ -15,13 +15,6 @@ import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import java.io.File
 
-/**
- * @author Marvin Ramin
- * @author Markus Schwarz
- * @author Artem Zinnatullin
- * @author Niklas Baudy
- * @author Matthew Haughton
- */
 class DetektPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {

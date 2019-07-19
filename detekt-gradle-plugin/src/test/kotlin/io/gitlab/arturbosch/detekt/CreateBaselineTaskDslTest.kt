@@ -5,9 +5,6 @@ import org.gradle.testkit.runner.TaskOutcome
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-/**
- * @author Markus Schwarz
- */
 internal class CreateBaselineTaskDslTest : Spek({
     describe("The detektBaseline task of the Detekt Gradle plugin") {
         listOf(DslTestBuilder.groovy(), DslTestBuilder.kotlin()).forEach { builder ->
