@@ -23,8 +23,6 @@ import java.nio.file.Paths
 
 /**
  * Test compiler extends kt compiler and adds ability to compile from text content.
- *
- * @author Artur Bosch
  */
 object KtTestCompiler : KtCompiler() {
 
