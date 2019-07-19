@@ -14,10 +14,6 @@ import io.gitlab.arturbosch.detekt.generator.out.markdown
 import io.gitlab.arturbosch.detekt.generator.out.paragraph
 import io.gitlab.arturbosch.detekt.generator.printer.DocumentationPrinter
 
-/**
- * @author Marvin Ramin
- * @author Artur Bosch
- */
 object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
 
     override fun print(item: RuleSetPage): String {

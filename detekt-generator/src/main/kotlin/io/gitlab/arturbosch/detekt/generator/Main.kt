@@ -8,10 +8,6 @@ import io.gitlab.arturbosch.detekt.core.isFile
 import org.jetbrains.kotlin.utils.addToStdlib.ifNotEmpty
 import java.nio.file.Files
 
-/**
- * @author Marvin Ramin
- * @author Artur Bosch
- */
 fun main(args: Array<String>) {
     val arguments = parseArgumentsCheckingReportDirectory(args)
     val executable = Runner(arguments)

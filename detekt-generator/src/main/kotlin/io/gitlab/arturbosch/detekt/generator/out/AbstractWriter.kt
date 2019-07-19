@@ -3,9 +3,6 @@ package io.gitlab.arturbosch.detekt.generator.out
 import java.nio.file.Files
 import java.nio.file.Path
 
-/**
- * @author Marvin Ramin
- */
 internal abstract class AbstractWriter {
 
     protected abstract val ending: String

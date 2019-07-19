@@ -1,8 +1,5 @@
 package io.gitlab.arturbosch.detekt.generator.out
 
-/**
- * @author Marvin Ramin
- */
 sealed class YML(open val indent: Int = 0, open var content: String = "") {
     fun append(value: String) {
         content = if (content.isEmpty()) {

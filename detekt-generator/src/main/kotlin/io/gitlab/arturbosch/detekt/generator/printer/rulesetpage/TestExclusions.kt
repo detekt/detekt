@@ -5,8 +5,6 @@ import io.gitlab.arturbosch.detekt.generator.collection.Rule
 /**
  * Tracks rules and rule sets which needs an extra `exclusions: $pattern` property
  * when printing the default detekt config yaml file.
- *
- * @author Artur Bosch
  */
 object TestExclusions {
 
