@@ -3,9 +3,6 @@ package io.gitlab.arturbosch.detekt.cli.baseline
 import java.util.Stack
 import javax.xml.stream.XMLStreamWriter
 
-/**
- * @author Artur Bosch
- */
 @Suppress("TooManyFunctions")
 class IndentingXMLStreamWriter(
     writer: XMLStreamWriter,

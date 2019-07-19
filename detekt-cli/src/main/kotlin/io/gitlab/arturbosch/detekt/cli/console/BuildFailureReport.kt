@@ -8,9 +8,6 @@ import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.SingleAssign
 import java.util.HashMap
 
-/**
- * @author Artur Bosch
- */
 class BuildFailureReport : ConsoleReport() {
 
     override val priority: Int = Int.MIN_VALUE

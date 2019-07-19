@@ -15,9 +15,6 @@ import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.RuleSetLocator
 
-/**
- * @author Artur Bosch
- */
 class SingleRuleRunner(private val arguments: CliArgs) : Executable {
 
     override fun execute() {

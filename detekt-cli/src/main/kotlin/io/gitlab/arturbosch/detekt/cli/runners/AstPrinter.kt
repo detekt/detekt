@@ -11,9 +11,6 @@ import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtStatementExpression
 
-/**
- * @author Artur Bosch
- */
 class AstPrinter(private val arguments: CliArgs) : Executable {
 
     override fun execute() {

@@ -5,9 +5,6 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.cli.baseline.BaselineFacade
 
-/**
- * @author Artur Bosch
- */
 class FilteredDetectionResult(detektion: Detektion, baselineFacade: BaselineFacade) : Detektion by detektion {
 
     private val filteredFindings: Map<RuleSetId, List<Finding>>

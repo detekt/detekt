@@ -11,9 +11,6 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.nio.file.Paths
 
-/**
- * @author Artur Bosch
- */
 internal class ConfigurationsSpec : Spek({
 
     describe("a configuration") {

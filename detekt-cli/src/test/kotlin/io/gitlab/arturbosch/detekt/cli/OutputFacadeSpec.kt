@@ -19,9 +19,6 @@ import java.io.PrintStream
 import java.nio.file.Path
 import java.nio.file.Paths
 
-/**
- * @author Sebastiano Poggi
- */
 internal class OutputFacadeSpec : Spek({
 
     val outputStream = ByteArrayOutputStream()

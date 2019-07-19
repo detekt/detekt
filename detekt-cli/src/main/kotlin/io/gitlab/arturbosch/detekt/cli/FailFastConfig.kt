@@ -2,9 +2,6 @@ package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.api.Config
 
-/**
- * @author vanniktech
- */
 @Suppress("UNCHECKED_CAST")
 data class FailFastConfig(private val originalConfig: Config, private val defaultConfig: Config) : Config {
     override fun subConfig(key: String) = FailFastConfig(originalConfig.subConfig(key), defaultConfig.subConfig(key))
