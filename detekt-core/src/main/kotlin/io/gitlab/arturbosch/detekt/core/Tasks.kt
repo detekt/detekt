@@ -5,10 +5,6 @@ import java.util.concurrent.Executor
 import java.util.concurrent.ForkJoinPool
 import java.util.function.Supplier
 
-/**
- * @author Artur Bosch
- */
-
 fun <T> withExecutor(executor: Executor? = null, block: Executor.() -> T): T {
     if (executor == null) {
         val defaultExecutor = ForkJoinPool.commonPool()

@@ -4,10 +4,6 @@ import java.io.IOException
 import java.net.URL
 import java.util.jar.Manifest
 
-/**
- * @author Artur Bosch
- */
-
 fun whichOS(): String = System.getProperty("os.name")
 
 fun whichJava(): String = System.getProperty("java.runtime.version")

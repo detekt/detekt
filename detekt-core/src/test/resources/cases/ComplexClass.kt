@@ -2,9 +2,6 @@ package cases
 
 import org.jetbrains.kotlin.utils.sure
 
-/**
- * @author Artur Bosch
- */
 @Suppress("unused")
 class ComplexClass {// McCabe: 56, LLOC: 20 + 20 + 4x4
 
