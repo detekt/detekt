@@ -6,7 +6,6 @@ import io.gitlab.arturbosch.detekt.api.YamlConfig
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import java.nio.file.Path
 
-
 fun CliArgs.createFilters(): PathFilters? = PathFilters.of(includes, excludes)
 
 fun CliArgs.createPlugins(): List<Path> = plugins.letIfNonEmpty {
