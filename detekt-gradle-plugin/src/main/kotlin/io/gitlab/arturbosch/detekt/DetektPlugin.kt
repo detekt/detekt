@@ -178,7 +178,7 @@ class DetektPlugin : Plugin<Project> {
     }
 
     companion object {
-        const val DETEKT_TASK_NAME = "detekt"
+        private const val DETEKT_TASK_NAME = "detekt"
         private const val IDEA_FORMAT = "detektIdeaFormat"
         private const val IDEA_INSPECT = "detektIdeaInspect"
         private const val GENERATE_CONFIG = "detektGenerateConfig"
