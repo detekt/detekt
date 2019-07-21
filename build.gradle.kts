@@ -17,6 +17,7 @@ plugins {
     id("com.github.johnrengelman.shadow") version "5.0.0" apply false
     id("org.sonarqube") version "2.7"
     id("io.gitlab.arturbosch.detekt")
+    id("org.owasp.dependencycheck") version "5.1.0"
     id("org.jetbrains.dokka") version "0.9.18" apply false
     jacoco
 }
@@ -39,6 +40,22 @@ tasks.wrapper {
             into(file("${gradle.includedBuild("detekt-gradle-plugin").projectDir}/gradle/wrapper"))
         }
     }
+}
+
+apply {
+    plugin("org.owasp.dependencycheck")
+}
+
+dependencyCheck {
+    analyzers {
+        assemblyEnabled = false
+    }
+    /*
+     * Specifies that the build fails when the CVSS score is equal or above the severity level medium.
+     * CVSS scoring explanation:
+     * https://nvd.nist.gov/vuln-metrics/cvss?source=post_page
+     */
+    failBuildOnCVSS = 4.0F
 }
 
 tasks.withType<Test> {
@@ -67,6 +84,10 @@ tasks {
             xml.isEnabled = true
             xml.destination = file("$buildDir/reports/jacoco/report.xml")
         }
+    }
+
+    check {
+        dependsOn(dependencyCheckAnalyze)
     }
 }
 
