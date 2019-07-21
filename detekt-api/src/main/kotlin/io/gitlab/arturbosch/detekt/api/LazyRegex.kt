@@ -9,8 +9,6 @@ import kotlin.reflect.KProperty
  * value when requested again.
  *
  * `key` & `default` are used to retrieve a value from config.
- *
- * @author Pavlos-Petros Tournaris
  */
 class LazyRegex(
     private val key: String,

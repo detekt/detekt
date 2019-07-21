@@ -6,9 +6,6 @@ import java.nio.file.Path
 /**
  * Translates detekt's result container - [Detektion] - into an output report
  * which is written inside a file.
- *
- * @author Artur Bosch
- * @author Marvin Ramin
  */
 abstract class OutputReport : Extension {
 

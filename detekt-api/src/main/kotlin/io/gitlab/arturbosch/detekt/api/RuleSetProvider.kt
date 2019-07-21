@@ -7,8 +7,6 @@ import io.gitlab.arturbosch.detekt.api.internal.PathFilters
  *
  * When writing own rule set providers make sure to register them according the ServiceLoader documentation.
  * http://docs.oracle.com/javase/8/docs/api/java/util/ServiceLoader.html
- *
- * @author Artur Bosch
  */
 interface RuleSetProvider {
 

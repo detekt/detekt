@@ -13,9 +13,6 @@ import java.nio.file.Paths
  * A rule is implemented using the visitor pattern and should be started using the visit(KtFile)
  * function. If calculations must be done before or after the visiting process, here are
  * two predefined (preVisit/postVisit) functions which can be overridden to setup/teardown additional data.
- *
- * @author Artur Bosch
- * @author Marvin Ramin
  */
 abstract class Rule(
     override val ruleSetConfig: Config = Config.empty,

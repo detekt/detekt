@@ -6,11 +6,6 @@ import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
 
 /**
- * @author Artur Bosch
- * @author Marvin Ramin
- */
-
-/**
  * Checks if this psi element is suppressed by @Suppress or @SuppressWarnings annotations.
  * If this element cannot have annotations, the first annotative parent is searched.
  */
