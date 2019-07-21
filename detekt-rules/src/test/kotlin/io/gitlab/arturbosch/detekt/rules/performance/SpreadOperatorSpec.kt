@@ -8,10 +8,6 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-/**
- * @author Ivan Balaksha
- * @author schalkms
- */
 class SpreadOperatorSpec : Spek({
     val subject by memoized { SpreadOperator() }
 

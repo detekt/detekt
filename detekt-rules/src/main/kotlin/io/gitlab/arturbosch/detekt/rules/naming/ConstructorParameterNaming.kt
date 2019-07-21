@@ -21,7 +21,6 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * @configuration excludeClassPattern - ignores variables in classes which match this regex (default: `'$^'`)
  *
  * @active since v1.0.0
- * @author Mickele Moriconi
  */
 class ConstructorParameterNaming(config: Config = Config.empty) : Rule(config) {
 

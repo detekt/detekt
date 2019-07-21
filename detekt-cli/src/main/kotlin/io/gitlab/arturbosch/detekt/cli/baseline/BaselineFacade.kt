@@ -7,9 +7,6 @@ import io.gitlab.arturbosch.detekt.core.isFile
 import java.nio.file.Files
 import java.nio.file.Path
 
-/**
- * @author Artur Bosch
- */
 class BaselineFacade(val baselineFile: Path) {
 
     private val listings: Pair<Whitelist, Blacklist>? =

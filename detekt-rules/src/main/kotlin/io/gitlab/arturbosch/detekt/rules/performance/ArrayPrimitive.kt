@@ -31,10 +31,6 @@ import org.jetbrains.kotlin.psi.KtTypeReference
  *
  * fun returningFunction(): DoubleArray { }
  * </compliant>
- *
- * @author elaydis
- * @author inytar
- * @author schalkms
  */
 class ArrayPrimitive(config: Config = Config.empty) : Rule(config) {
 

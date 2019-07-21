@@ -31,9 +31,6 @@ class KDocStyle(config: Config = Config.empty) : MultiRule() {
  *
  * @configuration endOfSentenceFormat - regular expression which should match the end of the first sentence in the KDoc
  * (default: `([.?!][ \t\n\r\f<])|([.?!:]$)`)
- *
- *  @author Marvin Ramin
- *  @author schalkms
  */
 class EndOfSentenceFormat(config: Config = Config.empty) : Rule(config) {
 

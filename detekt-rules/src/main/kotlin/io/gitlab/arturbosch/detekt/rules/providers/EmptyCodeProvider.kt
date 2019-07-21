@@ -10,7 +10,6 @@ import io.gitlab.arturbosch.detekt.rules.empty.EmptyBlocks
  * which should be avoided.
  *
  * @active since v1.0.0
- * @author Artur Bosch
  */
 class EmptyCodeProvider : RuleSetProvider {
 

@@ -7,10 +7,6 @@ import io.gitlab.arturbosch.detekt.cli.baseline.BaselineFacade
 import io.gitlab.arturbosch.detekt.cli.console.BuildFailureReport
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 
-/**
- * @author Artur Bosch
- * @author Marvin Ramin
- */
 class OutputFacade(
     arguments: CliArgs,
     private val detektion: Detektion,

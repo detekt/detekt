@@ -5,9 +5,6 @@ import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-/**
- * @author Ivan Balaksha
- */
 class RedundantVisibilityModifierRuleSpec : Spek({
     val subject by memoized { RedundantVisibilityModifierRule() }
 

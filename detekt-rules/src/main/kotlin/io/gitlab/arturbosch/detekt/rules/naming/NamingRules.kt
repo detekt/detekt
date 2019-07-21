@@ -15,9 +15,6 @@ import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtVariableDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 
-/**
- * @author Artur Bosch
- */
 class NamingRules(config: Config = Config.empty) : MultiRule() {
 
     private val variableNamingRule = VariableNaming(config)

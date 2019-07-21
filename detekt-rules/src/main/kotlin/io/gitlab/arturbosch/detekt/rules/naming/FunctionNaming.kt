@@ -23,8 +23,6 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * @configuration ignoreOverridden - ignores functions that have the override modifier (default: `true`)
  *
  * @active since v1.0.0
- * @author Marvin Ramin
- * @author schalkms
  */
 class FunctionNaming(config: Config = Config.empty) : Rule(config) {
 

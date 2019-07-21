@@ -18,9 +18,6 @@ import org.jetbrains.kotlin.psi.KtProperty
  * Instead of simply removing the comment to solve this issue prefer renaming the property to a more self-explanatory
  * name. If this property is inside a bigger class it could make senes to refactor and split up the class. This can
  * increase readability and make the documentation obsolete.
- *
- * @author Artur Bosch
- * @author Marvin Ramin
  */
 class CommentOverPrivateProperty(config: Config = Config.empty) : Rule(config) {
 

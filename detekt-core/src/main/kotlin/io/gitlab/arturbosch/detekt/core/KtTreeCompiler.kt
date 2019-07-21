@@ -5,10 +5,6 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.util.stream.Collectors
 
-/**
- * @author Artur Bosch
- * @author Marvin Ramin
- */
 class KtTreeCompiler(
     private val settings: ProcessingSettings,
     private val compiler: KtCompiler = KtCompiler(settings.environment)

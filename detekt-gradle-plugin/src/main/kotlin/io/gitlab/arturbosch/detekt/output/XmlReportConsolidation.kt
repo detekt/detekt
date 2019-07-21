@@ -5,8 +5,6 @@ import java.nio.file.Files
 
 /**
  * Merges the content of input with the content of target.
- *
- * @author Markus Schwarz
  */
 internal fun mergeXmlReports(target: File, input: List<File>) {
     check(target.exists() && target.isFile) { "$target does not exist." }
@@ -38,7 +36,6 @@ internal fun mergeXmlReports(target: File, input: List<File>) {
  *     </checkstyle>%
  * </pre>
  *
- * @author Markus Schwarz
  */
 internal fun readContent(file: File): List<String> {
     check(file.exists() && file.isFile) { "$file does not exist" }

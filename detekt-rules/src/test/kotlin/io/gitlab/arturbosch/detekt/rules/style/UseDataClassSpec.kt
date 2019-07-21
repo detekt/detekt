@@ -8,9 +8,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-/**
- * @author Ivan Balaksha
- */
 class UseDataClassSpec : Spek({
 
     val subject by memoized { UseDataClass(Config.empty) }

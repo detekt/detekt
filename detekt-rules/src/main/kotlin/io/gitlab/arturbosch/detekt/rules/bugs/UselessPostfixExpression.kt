@@ -51,11 +51,6 @@ import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
  *     return i
  * }
  * </compliant>
- *
- * @author schalkms
- * @author Artur Bosch
- * @author Marvin Ramin
- * @author Olivier Lemasle
  */
 class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
 

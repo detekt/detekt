@@ -24,9 +24,6 @@ import org.jetbrains.kotlin.psi.KtObjectDeclaration
  * @configuration searchInInnerClass - if inner classes should be searched (default: `true`)
  * @configuration searchInInnerObject - if inner objects should be searched (default: `true`)
  * @configuration searchInInnerInterface - if inner interfaces should be searched (default: `true`)
- *
- * @author Artur Bosch
- * @author Marvin Ramin
  */
 class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
 

@@ -37,10 +37,6 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
  * </compliant>
  *
  * @configuration includeLineWrapping - include return statements with line wraps in it (default: `false`)
- *
- * @author Artur Bosch
- * @author Marvin Ramin
- * @author schalkms
  */
 class ExpressionBodySyntax(config: Config = Config.empty) : Rule(config) {
 

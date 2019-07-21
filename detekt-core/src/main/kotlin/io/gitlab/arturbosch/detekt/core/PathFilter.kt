@@ -8,8 +8,6 @@ import java.util.regex.PatternSyntaxException
  * Filter that works on relative paths to the project root.
  * Filters out files that match the regex defined in the CLI --filters argument.
  * Respects both *nix and Windows paths.
- *
- * @author Artur Bosch
  */
 class PathFilter(pattern: String, private val root: Path = Paths.get("").toAbsolutePath()) {
 

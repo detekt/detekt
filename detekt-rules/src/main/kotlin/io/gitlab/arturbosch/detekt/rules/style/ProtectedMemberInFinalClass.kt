@@ -30,9 +30,6 @@ import org.jetbrains.kotlin.psi.psiUtil.isProtected
  *     private var i = 0
  * }
  * </compliant>
- *
- * @author schalkms
- * @author Marvin Ramin
  */
 class ProtectedMemberInFinalClass(config: Config = Config.empty) : Rule(config) {
 

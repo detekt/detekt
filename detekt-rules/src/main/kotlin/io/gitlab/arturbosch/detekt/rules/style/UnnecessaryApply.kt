@@ -35,8 +35,6 @@ import kotlin.contracts.contract
  *     environment = "test"
  * }
  * </compliant>
- *
- * @author arjank
  */
 class UnnecessaryApply(config: Config) : Rule(config) {
 

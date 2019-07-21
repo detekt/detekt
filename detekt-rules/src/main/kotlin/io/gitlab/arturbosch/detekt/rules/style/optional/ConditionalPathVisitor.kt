@@ -10,9 +10,6 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.KtTryExpression
 import org.jetbrains.kotlin.psi.KtWhenExpression
 
-/**
- * @author Artur Bosch
- */
 class ConditionalPathVisitor(private val block: (KtReturnExpression) -> Unit) : DetektVisitor() {
 
     override fun visitIfExpression(expression: KtIfExpression) {

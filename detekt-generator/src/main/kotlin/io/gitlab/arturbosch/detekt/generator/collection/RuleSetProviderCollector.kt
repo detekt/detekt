@@ -12,10 +12,6 @@ import org.jetbrains.kotlin.psi.KtSuperTypeList
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
 
-/**
- * @author Marvin Ramin
- * @author Artur Bosch
- */
 data class RuleSetProvider(
     val name: String,
     val description: String,

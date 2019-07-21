@@ -12,9 +12,6 @@ import org.jetbrains.kotlin.psi.KtCatchClause
  * @configuration allowedExceptionNameRegex - ignores exception types which match this regex
  * (default: `"^(_|(ignore|expected).*)"`)
  * @active since v1.0.0
- * @author Artur Bosch
- * @author Marvin Ramin
- * @author schalkms
  */
 class EmptyCatchBlock(config: Config) : EmptyRule(config = config) {
 

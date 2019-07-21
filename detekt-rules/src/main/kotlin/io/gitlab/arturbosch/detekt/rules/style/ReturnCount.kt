@@ -51,13 +51,6 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
  * @configuration excludeReturnFromLambda - if labeled return from a lambda should be ignored
  * (default: `true`)
  * @active since v1.0.0
- *
- * @author Niklas Baudy
- * @author schalkms
- * @author Marvin Ramin
- * @author Patrick Pilch
- * @author Ilya Tretyakov
- * @author Artur Bosch
  */
 class ReturnCount(config: Config = Config.empty) : Rule(config) {
 

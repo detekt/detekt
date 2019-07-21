@@ -5,11 +5,6 @@ import org.jetbrains.kotlin.kdoc.psi.impl.KDocSection
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocTag
 import org.jetbrains.kotlin.psi.KtClassOrObject
 
-/**
- * @author Marvin Ramin
- * @author Artur Bosch
- */
-
 fun KtClassOrObject.parseConfigurationTags() =
         kDocSection()?.findTagsByName(TAG_CONFIGURATION)
                 ?.filter { it.isValidConfigurationTag() }

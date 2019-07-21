@@ -27,8 +27,6 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  * requireNotNull(value) {"value should not be null"}
  * require(value >= 0) { "value is $value but should be at least 0" }
  * </compliant>
- *
- * @author Markus Schwarz
  */
 class UseRequire(config: Config = Config.empty) : Rule(config) {
 

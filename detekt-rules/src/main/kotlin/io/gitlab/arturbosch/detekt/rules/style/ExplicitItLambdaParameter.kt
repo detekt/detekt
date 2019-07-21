@@ -36,8 +36,6 @@ import org.jetbrains.kotlin.psi.KtLambdaExpression
  * 		Pair(prev, next)
  * }
  * </compliant>
- *
- * @author mishkun
  */
 class ExplicitItLambdaParameter(val config: Config) : Rule(config) {
     override val issue = Issue(javaClass.simpleName, Severity.Style,

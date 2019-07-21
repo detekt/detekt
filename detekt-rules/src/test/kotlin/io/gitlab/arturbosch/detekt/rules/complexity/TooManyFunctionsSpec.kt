@@ -8,9 +8,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-/**
- * @author Artur Bosch
- */
 class TooManyFunctionsSpec : Spek({
 
     describe("a simple test") {

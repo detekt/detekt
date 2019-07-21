@@ -19,7 +19,6 @@ import io.gitlab.arturbosch.detekt.rules.complexity.TooManyFunctions
  * This rule set contains rules that report complex code.
  *
  * @active since v1.0.0
- * @author Artur Bosch
  */
 class ComplexityProvider : RuleSetProvider {
 

@@ -4,9 +4,6 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import org.jetbrains.kotlin.psi.KtFile
 
-/**
- * @author Artur Bosch
- */
 class DetektProgressListener : FileProcessListener {
 
     override fun onProcess(file: KtFile) {

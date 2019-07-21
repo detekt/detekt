@@ -46,8 +46,6 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
  * </compliant>
  *
  * @active since v1.0.0
- * @author Ivan Balaksha
- * @author Matthew Haughton
  */
 class SpreadOperator(config: Config = Config.empty) : Rule(config) {
 

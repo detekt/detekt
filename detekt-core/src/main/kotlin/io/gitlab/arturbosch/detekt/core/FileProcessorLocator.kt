@@ -6,9 +6,6 @@ import java.net.URL
 import java.net.URLClassLoader
 import java.util.ServiceLoader
 
-/**
- * @author Artur Bosch
- */
 class FileProcessorLocator(settings: ProcessingSettings) {
 
     private val plugins: Array<URL> = settings.pluginUrls

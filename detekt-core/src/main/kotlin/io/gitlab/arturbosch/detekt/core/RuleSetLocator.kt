@@ -5,9 +5,6 @@ import java.net.URL
 import java.net.URLClassLoader
 import java.util.ServiceLoader
 
-/**
- * @author Artur Bosch
- */
 class RuleSetLocator(settings: ProcessingSettings) {
 
     private val excludeDefaultRuleSets: Boolean = settings.excludeDefaultRuleSets

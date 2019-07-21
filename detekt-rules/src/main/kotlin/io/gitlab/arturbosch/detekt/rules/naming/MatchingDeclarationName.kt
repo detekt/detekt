@@ -44,8 +44,6 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * </compliant>
  *
  * @active since v1.0.0
- * @author Artur Bosch
- * @author schalkms
  */
 class MatchingDeclarationName(config: Config = Config.empty) : Rule(config) {
 

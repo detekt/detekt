@@ -13,9 +13,6 @@ import org.jetbrains.kotlin.psi.KtValueArgumentList
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
 
-/**
- * @author Marvin Ramin
- */
 data class MultiRule(
     val name: String,
     val rules: List<String> = listOf()

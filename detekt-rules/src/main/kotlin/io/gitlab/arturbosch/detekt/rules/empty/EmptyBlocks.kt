@@ -26,8 +26,6 @@ import org.jetbrains.kotlin.psi.KtWhileExpression
  * </noncompliant>
  *
  * @active since v1.0.0
- * @author Artur Bosch
- * @author Marvin Ramin
  */
 @Suppress("TooManyFunctions")
 class EmptyBlocks(val config: Config = Config.empty) : MultiRule() {

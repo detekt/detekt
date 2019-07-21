@@ -17,9 +17,6 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.lazy.declarations.FileBasedDeclarationProviderFactory
 
-/**
- * @author Artur Bosch
- */
 class DetektFacade(
     private val detektor: Detektor,
     settings: ProcessingSettings,

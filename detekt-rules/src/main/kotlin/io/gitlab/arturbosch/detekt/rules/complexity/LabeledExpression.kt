@@ -60,10 +60,6 @@ import org.jetbrains.kotlin.psi.psiUtil.parents
  *
  * @configuration ignoredLabels - allows to provide a list of label names which should be ignored by this rule
  * (default: `""`)
- *
- * @author Ivan Balaksha
- * @author Marvin Ramin
- * @author schalkms
  */
 class LabeledExpression(config: Config = Config.empty) : Rule(config) {
 

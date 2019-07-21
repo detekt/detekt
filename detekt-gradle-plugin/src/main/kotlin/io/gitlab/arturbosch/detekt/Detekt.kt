@@ -49,12 +49,6 @@ import org.gradle.api.tasks.VerificationTask
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import java.io.File
 
-/**
- * @author Artur Bosch
- * @author Marvin Ramin
- * @author Markus Schwarz
- * @author Matthew Haughton
- */
 @CacheableTask
 open class Detekt : SourceTask(), VerificationTask {
 

@@ -10,9 +10,6 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import java.util.concurrent.ExecutorService
 
-/**
- * @author Artur Bosch
- */
 class Detektor(
     private val settings: ProcessingSettings,
     private val providers: List<RuleSetProvider>,

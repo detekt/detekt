@@ -24,8 +24,6 @@ import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
  * </noncompliant>
  *
  * @active since v1.0.0
- * @author Artur Bosch
- * @author Marvin Ramin
  */
 class ExplicitGarbageCollectionCall(config: Config) : Rule(config) {
 

@@ -26,9 +26,6 @@ import org.jetbrains.kotlin.psi.psiUtil.parents
  *     }
  * }
  * </noncompliant>
- *
- * @author schalkms
- * @author Marvin Ramin
  */
 class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
 

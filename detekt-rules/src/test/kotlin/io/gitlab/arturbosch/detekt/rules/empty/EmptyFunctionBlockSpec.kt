@@ -8,10 +8,6 @@ import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-/**
- * @author Artur Bosch
- * @author schalkms
- */
 class EmptyFunctionBlockSpec : Spek({
 
     val fileName = TEST_FILENAME

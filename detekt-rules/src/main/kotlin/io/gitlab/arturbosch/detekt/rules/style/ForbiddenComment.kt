@@ -21,8 +21,6 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiComment
  * @configuration values - forbidden comment strings (default: `'TODO:,FIXME:,STOPSHIP:'`)
  *
  * @active since v1.0.0
- * @author Niklas Baudy
- * @author Marvin Ramin
  */
 class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
 

@@ -8,9 +8,6 @@ import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Files
 import java.nio.file.Paths
 
-/**
- * @author Artur Bosch
- */
 class KtFileModifier {
 
     fun saveModifiedFiles(ktFiles: List<KtFile>, notification: (Notification) -> Unit) {

@@ -18,9 +18,6 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * Instead of simply removing this comment to solve this issue prefer to split up the function into smaller functions
  * with better names if necessary. Giving the function a better, more descriptive name can also help in
  * solving this issue.
- *
- * @author Artur Bosch
- * @author Marvin Ramin
  */
 class CommentOverPrivateFunction(config: Config = Config.empty) : Rule(config) {
 

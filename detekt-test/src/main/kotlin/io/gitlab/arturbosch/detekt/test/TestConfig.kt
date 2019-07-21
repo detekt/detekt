@@ -3,9 +3,6 @@ package io.gitlab.arturbosch.detekt.test
 import io.gitlab.arturbosch.detekt.api.BaseConfig
 import io.gitlab.arturbosch.detekt.api.HierarchicalConfig
 
-/**
- * @author Artur Bosch
- */
 @Suppress("UNCHECKED_CAST")
 open class TestConfig(
     private val values: Map<String, String> = mutableMapOf(),

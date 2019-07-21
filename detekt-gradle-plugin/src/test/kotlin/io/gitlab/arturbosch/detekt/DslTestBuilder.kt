@@ -1,8 +1,5 @@
 package io.gitlab.arturbosch.detekt
 
-/**
- * @author Markus Schwarz
- */
 abstract class DslTestBuilder {
 
     abstract val gradleBuildConfig: String

@@ -7,10 +7,6 @@ import io.gitlab.arturbosch.detekt.generator.printer.DetektPrinter
 import java.nio.file.Path
 import kotlin.system.measureTimeMillis
 
-/**
- * @author Marvin Ramin
- * @author Artur Bosch
- */
 class Runner(private val arguments: GeneratorArgs) {
     private val listeners = listOf(DetektProgressListener())
     private val collector = DetektCollector()

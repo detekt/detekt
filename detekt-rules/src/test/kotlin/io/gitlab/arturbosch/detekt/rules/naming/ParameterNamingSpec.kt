@@ -6,10 +6,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-/**
- * @author Mickele Moriconi
- * @author Paweł Gajda
- */
 class ParameterNamingSpec : Spek({
 
     describe("parameters in a constructor of a class") {
