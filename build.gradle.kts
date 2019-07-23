@@ -50,12 +50,13 @@ dependencyCheck {
     analyzers {
         assemblyEnabled = false
     }
+    val severityLevel: String by project
     /*
      * Specifies that the build fails when the CVSS score is equal or above the severity level medium.
      * CVSS scoring explanation:
      * https://nvd.nist.gov/vuln-metrics/cvss?source=post_page
      */
-    failBuildOnCVSS = 4.0F
+    failBuildOnCVSS = severityLevel.toFloat()
 }
 
 tasks.withType<Test> {
