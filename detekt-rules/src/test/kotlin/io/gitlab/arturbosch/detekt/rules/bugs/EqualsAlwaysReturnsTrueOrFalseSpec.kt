@@ -2,21 +2,22 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.Case
-import io.gitlab.arturbosch.detekt.test.compileForTest
 import io.gitlab.arturbosch.detekt.test.lint
-import org.assertj.core.api.Assertions
-import org.jetbrains.spek.api.dsl.describe
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.assertj.core.api.Assertions.assertThat
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-class EqualsAlwaysReturnsTrueOrFalseSpec : SubjectSpek<EqualsAlwaysReturnsTrueOrFalse>({
-	subject { EqualsAlwaysReturnsTrueOrFalse(Config.empty) }
+class EqualsAlwaysReturnsTrueOrFalseSpec : Spek({
+    val subject by memoized { EqualsAlwaysReturnsTrueOrFalse(Config.empty) }
 
-	describe("check if equals() method always returns true or false") {
+    describe("Equals Always Returns True Or False rule") {
 
-		it("returns constant boolean") {
-			val file = compileForTest(Case.EqualsAlwaysReturnsConstant.path())
-			Assertions.assertThat(subject.lint(file.text)).hasSize(2)
-		}
-	}
+        it("reports equals() methods") {
+            assertThat(subject.lint(Case.EqualsAlwaysReturnsTrueOrFalsePositive.path())).hasSize(6)
+        }
+
+        it("does not report equals() methods") {
+            assertThat(subject.lint(Case.EqualsAlwaysReturnsTrueOrFalseNegative.path())).hasSize(0)
+        }
+    }
 })

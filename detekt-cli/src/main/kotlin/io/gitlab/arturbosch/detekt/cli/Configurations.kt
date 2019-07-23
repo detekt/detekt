@@ -3,84 +3,64 @@ package io.gitlab.arturbosch.detekt.cli
 import io.gitlab.arturbosch.detekt.api.CompositeConfig
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.YamlConfig
-import io.gitlab.arturbosch.detekt.core.PathFilter
-import java.io.File
+import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import java.nio.file.Path
 
-/**
- * @author Artur Bosch
- */
+fun CliArgs.createFilters(): PathFilters? = PathFilters.of(includes, excludes)
 
-fun Args.createPathFilters(): List<PathFilter> = filters.letIfNonEmpty {
-	split(SEPARATOR_COMMA, SEPARATOR_SEMICOLON).map(::PathFilter)
+fun CliArgs.createPlugins(): List<Path> = plugins.letIfNonEmpty {
+    MultipleExistingPathConverter().convert(this)
 }
 
-fun Args.createPlugins(): List<Path> = plugins.letIfNonEmpty {
-	MultipleExistingPathConverter().convert(this)
-}
+fun CliArgs.createClasspath(): List<String> = classpath.letIfNonEmpty { split(";") }
 
 private fun <T> String?.letIfNonEmpty(init: String.() -> List<T>): List<T> =
-		if (this == null || this.isEmpty()) listOf() else this.init()
+    if (this == null || this.isEmpty()) listOf() else this.init()
 
-fun Args.loadConfiguration(): Config {
-	var config = when {
-		!config.isNullOrBlank() -> parsePathConfig(config!!)
-		!configResource.isNullOrBlank() -> parseResourceConfig(configResource!!)
-		else -> loadDefaultConfig()
-	}
+fun CliArgs.loadConfiguration(): Config {
+    var declaredConfig: Config? = when {
+        !config.isNullOrBlank() -> parsePathConfig(config!!)
+        !configResource.isNullOrBlank() -> parseResourceConfig(configResource!!)
+        else -> null
+    }
+    var defaultConfig: Config? = null
 
-	if (config.valueOrDefault("failFast", false)) {
-		config = FailFastConfig(config, loadDefaultConfig())
-	}
+    if (buildUponDefaultConfig) {
+        defaultConfig = loadDefaultConfig()
+        declaredConfig = CompositeConfig(declaredConfig ?: defaultConfig, defaultConfig)
+    }
 
-	if (debug) println("\n$config\n")
-	return config
+    if (failFast) {
+        val initializedDefaultConfig = defaultConfig ?: loadDefaultConfig()
+        declaredConfig = FailFastConfig(declaredConfig ?: initializedDefaultConfig, initializedDefaultConfig)
+    }
+
+    if (debug) println("\n$declaredConfig\n")
+    return declaredConfig ?: loadDefaultConfig()
 }
 
 private fun parseResourceConfig(configPath: String): Config {
-	val urls = MultipleClasspathResourceConverter().convert(configPath)
-	return if (urls.size == 1) {
-		YamlConfig.loadResource(urls[0])
-	} else {
-		urls.map { YamlConfig.loadResource(it) }.reduce { composite, config -> CompositeConfig(config, composite) }
-	}
+    val urls = MultipleClasspathResourceConverter().convert(configPath)
+    return if (urls.size == 1) {
+        YamlConfig.loadResource(urls[0])
+    } else {
+        urls.asSequence()
+            .map { YamlConfig.loadResource(it) }
+            .reduce { composite, config -> CompositeConfig(config, composite) }
+    }
 }
 
 private fun parsePathConfig(configPath: String): Config {
-	val paths = MultipleExistingPathConverter().convert(configPath)
-	return if (paths.size == 1) {
-		YamlConfig.load(paths[0])
-	} else {
-		paths.map { YamlConfig.load(it) }.reduce { composite, config -> CompositeConfig(config, composite) }
-	}
-}
-
-data class FailFastConfig(private val originalConfig: Config, private val defaultConfig: Config) : Config {
-	override fun subConfig(key: String) = FailFastConfig(originalConfig.subConfig(key), defaultConfig.subConfig(key))
-
-	override fun <T : Any> valueOrDefault(key: String, default: T): T {
-		@Suppress("UNCHECKED_CAST")
-		return when (key) {
-			"active" -> originalConfig.valueOrDefault(key, true) as T
-			"warningThreshold", "failThreshold" -> originalConfig.valueOrDefault(key, 0) as T
-			else -> originalConfig.valueOrDefault(key, defaultConfig.valueOrDefault(key, default))
-		}
-	}
+    val paths = MultipleExistingPathConverter().convert(configPath)
+    return if (paths.size == 1) {
+        YamlConfig.load(paths[0])
+    } else {
+        paths.asSequence()
+            .map { YamlConfig.load(it) }
+            .reduce { composite, config -> CompositeConfig(config, composite) }
+    }
 }
 
 private fun loadDefaultConfig() = YamlConfig.loadResource(ClasspathResourceConverter().convert(DEFAULT_CONFIG))
 
-private val DEFAULT_CONFIG = "default-detekt-config.yml"
-
-/**
- * @author lummax
- */
-class ConfigExporter : Executable {
-
-	override fun execute() {
-		val defaultConfig = ClasspathResourceConverter().convert(DEFAULT_CONFIG).openStream()
-		defaultConfig.copyTo(File(DEFAULT_CONFIG).outputStream())
-		println("\nSuccessfully copied $DEFAULT_CONFIG to project location.")
-	}
-
-}
+const val DEFAULT_CONFIG = "default-detekt-config.yml"

@@ -2,28 +2,30 @@ package io.gitlab.arturbosch.detekt.core.processors
 
 import io.gitlab.arturbosch.detekt.core.path
 import io.gitlab.arturbosch.detekt.test.compileForTest
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
-import org.junit.jupiter.api.Test
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-class KtFileCountVisitorTest {
+class KtFileCountVisitorTest : Spek({
+    describe("files") {
 
-	@Test
-	fun twoFiles() {
-		val files = arrayOf(
-				compileForTest(path.resolve("Default.kt")),
-				compileForTest(path.resolve("Test.kt"))
-		)
-		val count = files
-				.map { getData(it) }
-				.sum()
-		Assertions.assertThat(count).isEqualTo(2)
-	}
+        it("twoFiles") {
+            val files = arrayOf(
+                    compileForTest(path.resolve("Default.kt")),
+                    compileForTest(path.resolve("Test.kt"))
+            )
+            val count = files
+                    .map { getData(it) }
+                    .sum()
+            assertThat(count).isEqualTo(2)
+        }
+    }
+})
 
-	private fun getData(file: KtFile): Int {
-		return with(file) {
-			accept(KtFileCountVisitor())
-			getUserData(NUMBER_OF_FILES_KEY)!!
-		}
-	}
+private fun getData(file: KtFile): Int {
+    return with(file) {
+        accept(KtFileCountVisitor())
+        getUserData(numberOfFilesKey)!!
+    }
 }

@@ -1,25 +1,24 @@
 package io.gitlab.arturbosch.detekt.api
 
-import org.jetbrains.spek.api.Spek
-import org.jetbrains.spek.api.dsl.it
-import kotlin.test.assertEquals
-import kotlin.test.assertFails
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatIllegalStateException
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-/**
- * @author Artur Bosch
- */
 class MetricSpec : Spek({
 
-	it("should convert double values to int") {
-		val metric = Metric("LOC", 0.33, 0.10, 100)
-		assertEquals(0.33, metric.doubleValue())
-		assertEquals(0.10, metric.doubleThreshold())
-	}
+    describe("Metrics") {
 
-	it("should throw error if double value is asked for int metric") {
-		assertFails {
-			Metric("LOC", 100, 50).doubleValue()
-		}
-	}
+        it("should convert double values to int") {
+            val metric = Metric("LOC", 0.33, 0.10, 100)
+            assertThat(metric.doubleValue()).isEqualTo(0.33)
+            assertThat(metric.doubleThreshold()).isEqualTo(0.10)
+        }
 
+        it("should throw error if double value is asked for int metric") {
+            assertThatIllegalStateException().isThrownBy {
+                Metric("LOC", 100, 50).doubleValue()
+            }
+        }
+    }
 })

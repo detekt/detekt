@@ -1,82 +1,113 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.rules.Case
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
-import org.assertj.core.api.Assertions
-import org.jetbrains.spek.api.Spek
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
+import org.assertj.core.api.Assertions.assertThat
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
 class ModifierOrderSpec : Spek({
+    val subject by memoized { ModifierOrder(Config.empty) }
 
-	given("a kt class with wrongly ordered modifiers") {
-		val file = "data internal class Test(val test: String)"
+    describe("ModifierOrder rule") {
 
-		it("should report modifiers") {
-			val rule = ModifierOrder()
+        context("kt classes with modifiers") {
+            val bad1 = "data internal class Test(val test: String)"
+            val bad2 = "actual private class Test(val test: String)"
+            val bad3 = "annotation expect class Test"
 
-			val findings = rule.lint(file)
-			Assertions.assertThat(findings).hasSize(1)
-		}
+            it("should report incorrectly ordered modifiers") {
+                assertThat(subject.compileAndLint(bad1)).hasSize(1)
+                assertThat(subject.lint(bad2)).hasSize(1)
+                assertThat(subject.lint(bad3)).hasSize(1)
+            }
 
-		it("should not report issues if inactive") {
-			val rule = ModifierOrder(TestConfig(mapOf("active" to "false")))
+            it("does not report correctly ordered modifiers") {
+                assertThat(subject.compileAndLint("internal data class Test(val test: String)")).isEmpty()
+                assertThat(subject.lint("private actual class Test(val test: String)")).isEmpty()
+                assertThat(subject.lint("expect annotation class Test")).isEmpty()
+            }
 
-			val findings = rule.lint(file)
-			Assertions.assertThat(findings).isEmpty()
-		}
-	}
+            it("should not report issues if inactive") {
+                val rule = ModifierOrder(TestConfig(mapOf("active" to "false")))
+                assertThat(rule.compileAndLint(bad1)).isEmpty()
+                assertThat(rule.lint(bad2)).isEmpty()
+                assertThat(rule.lint(bad3)).isEmpty()
+            }
+        }
 
-	given("a kt class with correctly ordered modifiers") {
-		val file = "internal data class Test(val test: String)"
+        context("a kt parameter with modifiers") {
 
-		it("should not report modifiers") {
-			val rule = ModifierOrder()
+            it("should report wrongly ordered modifiers") {
+                val code = "lateinit internal var test: String"
+                assertThat(subject.compileAndLint(code)).hasSize(1)
+            }
 
-			val findings = rule.lint(file)
-			Assertions.assertThat(findings).isEmpty()
-		}
-	}
+            it("should not report correctly ordered modifiers") {
+                val code = "internal lateinit var test: String"
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+        }
 
-	given("a kt parameter with wrongly ordered modifiers") {
-		val code = "lateinit internal private val test: String"
+        context("an overridden function") {
 
-		it("should report modifiers") {
-			val rule = ModifierOrder()
+            it("should report incorrectly ordered modifiers") {
+                val code = """
+                    abstract class A {
+                        abstract fun test()
+                    }
+                    abstract class Test : A() {
+                        override open fun test() {}
+                    }"""
+                assertThat(subject.compileAndLint(code)).hasSize(1)
+            }
 
-			val findings = rule.lint(code)
-			Assertions.assertThat(findings).hasSize(1)
-		}
-	}
+            it("should not report correctly ordered modifiers") {
+                val code = """
+                    abstract class A {
+                        abstract fun test()
+                    }
+				    abstract class Test : A() {
+				    	override fun test() {}
+				    }"""
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+        }
 
-	given("a kt parameter with correctly ordered modifiers") {
-		val code = "private internal lateinit val test: String"
+        context("a tailrec function") {
 
-		it("should not report modifiers") {
-			val rule = ModifierOrder()
+            it("should report incorrectly ordered modifiers") {
+                val code = """
+                    public class A {
+                        tailrec private fun foo(x: Double = 1.0): Double = 1.0
+                    }
+                """
+                assertThat(subject.compileAndLint(code)).hasSize(1)
+            }
 
-			val findings = rule.lint(code)
-			Assertions.assertThat(findings).isEmpty()
-		}
-	}
+            it("should not report correctly ordered modifiers") {
+                val code = """
+                    public class A {
+                        private tailrec fun foo(x: Double = 1.0): Double = 1.0
+                    }
+                """
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+        }
 
-	given("a kt file with correctly ordered modifiers") {
-		it("should not report modifiers") {
-			val rule = ModifierOrder()
+        context("a vararg argument") {
 
-			val findings = rule.lint(Case.Default.path())
-			Assertions.assertThat(findings).isEmpty()
-		}
-	}
+            it("should report incorrectly ordered modifiers") {
+                val code = "class Foo(vararg private val strings: String) {}"
+                assertThat(subject.compileAndLint(code)).hasSize(1)
+            }
 
-	given("a kt file with correctly ordered modifiers") {
-		it("should not report modifiers") {
-			val rule = ModifierOrder()
-
-			val findings = rule.lint(Case.ModifierOrder.path())
-			Assertions.assertThat(findings).hasSize(3)
-		}
-	}
-
+            it("should not report correctly ordered modifiers") {
+                val code = "class Foo(private vararg val strings: String) {}"
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+        }
+    }
 })

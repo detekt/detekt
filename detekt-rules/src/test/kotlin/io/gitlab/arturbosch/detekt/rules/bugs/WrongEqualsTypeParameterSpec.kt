@@ -1,43 +1,42 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.lint
-import org.assertj.core.api.Assertions
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import io.gitlab.arturbosch.detekt.test.compileAndLint
+import org.assertj.core.api.Assertions.assertThat
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-class WrongEqualsTypeParameterSpec  : SubjectSpek<WrongEqualsTypeParameter>({
-	subject { WrongEqualsTypeParameter(Config.empty) }
+class WrongEqualsTypeParameterSpec : Spek({
+    val subject by memoized { WrongEqualsTypeParameter(Config.empty) }
 
-	given("an equals method") {
+    describe("WrongEqualsTypeParameter rule") {
 
-		it("uses Any? as parameter") {
-			val code = """
+        it("does not report Any? as parameter") {
+            val code = """
 				class A {
 					override fun equals(other: Any?): Boolean {
 						return super.equals(other)
 					}
 				}"""
-			Assertions.assertThat(subject.lint(code).size).isEqualTo(0)
-		}
+            assertThat(subject.compileAndLint(code).size).isEqualTo(0)
+        }
 
-		it("uses String as parameter") {
-			val code = """
+        it("reports a String as parameter") {
+            val code = """
 				class A {
 					fun equals(other: String): Boolean {
 						return super.equals(other)
 					}
 				}"""
-			Assertions.assertThat(subject.lint(code).size).isEqualTo(1)
-		}
+            assertThat(subject.compileAndLint(code).size).isEqualTo(1)
+        }
 
-		it("uses an interface declaration") {
-			val code = """
-				interface EqualsInterf {
+        it("does not report an interface declaration") {
+            val code = """
+				interface I {
 					fun equals(other: String)
 				}"""
-			Assertions.assertThat(subject.lint(code).size).isEqualTo(0)
-		}
-	}
+            assertThat(subject.compileAndLint(code).size).isEqualTo(0)
+        }
+    }
 })

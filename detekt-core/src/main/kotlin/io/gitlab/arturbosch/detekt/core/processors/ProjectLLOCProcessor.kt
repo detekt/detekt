@@ -7,17 +7,17 @@ import org.jetbrains.kotlin.psi.KtFile
 
 class ProjectLLOCProcessor : AbstractProcessor() {
 
-	override val visitor = LLOCVisitor()
-	override val key = LLOC_KEY
+    override val visitor = LLOCVisitor()
+    override val key = logicalLinesKey
 }
 
-val LLOC_KEY = Key<Int>("lloc")
+val logicalLinesKey = Key<Int>("lloc")
 
 class LLOCVisitor : DetektVisitor() {
 
-	override fun visitKtFile(file: KtFile) {
-		val lines = file.text.split("\n")
-		val value = LLOC.analyze(lines)
-		file.putUserData(LLOC_KEY, value)
-	}
+    override fun visitKtFile(file: KtFile) {
+        val lines = file.text.split("\n")
+        val value = LLOC.analyze(lines)
+        file.putUserData(logicalLinesKey, value)
+    }
 }

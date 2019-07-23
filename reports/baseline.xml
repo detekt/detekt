@@ -1,11 +1,8 @@
 <?xml version="1.0" ?>
 <SmellBaseline>
-  <Blacklist timestamp="1496430248166"></Blacklist>
-  <Whitelist timestamp="1500749383368">
-    <ID>ComplexMethod:ProfileExtension.kt$ProfileExtension$fun arguments(debug: Boolean = false): MutableMap&lt;String, String&gt;</ID>
-    <ID>TooManyFunctions:LargeClass.kt$LargeClass : ThresholdRule</ID>
-    <ID>SpreadOperator:JCommander.kt$(*args)</ID>
-    <ID>SpreadOperator:Main.kt$(*args)</ID>
-    <ID>TooManyFunctions:DetektExtension.kt$DetektExtension</ID>
+  <Blacklist></Blacklist>
+  <Whitelist>
+    <ID>LargeClass:UnusedPrivateMemberSpec.kt$UnusedPrivateMemberSpec : Spek</ID>
+    <ID>NewLineAtEndOfFile:PluginVersion.kt$io.gitlab.arturbosch.detekt.PluginVersion.kt</ID>
   </Whitelist>
 </SmellBaseline>

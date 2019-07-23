@@ -3,90 +3,116 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
+import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.isPartOf
-import org.jetbrains.kotlin.com.intellij.psi.PsiFile
+import io.gitlab.arturbosch.detekt.rules.isPartOf
 import org.jetbrains.kotlin.kdoc.psi.impl.KDocTag
+import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtDeclaration
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.kotlin.psi.KtImportList
+import org.jetbrains.kotlin.psi.KtPackageDirective
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 
 /**
- * @author Artur Bosch
+ * This rule reports unused imports. Unused imports are dead code and should be removed.
+ * Exempt from this rule are imports resulting from references to elements within KDoc and
+ * from destructuring declarations (componentN imports).
  */
 class UnusedImports(config: Config) : Rule(config) {
 
-	override val issue = Issue(
-			javaClass.simpleName,
-			Severity.Style,
-			"Unused Imports are dead code and should be removed.",
-			Debt.FIVE_MINS)
+    override val issue = Issue(
+            javaClass.simpleName,
+            Severity.Style,
+            "Unused Imports are dead code and should be removed.",
+            Debt.FIVE_MINS)
 
-	private val operatorSet = setOf("unaryPlus", "unaryMinus", "not", "inc", "dec", "plus", "minus", "times", "div",
-			"mod", "rangeTo", "contains", "get", "set", "invoke", "plusAssign", "minusAssign", "timesAssign", "divAssign",
-			"modAssign", "equals", "compareTo", "iterator", "getValue", "setValue")
+    companion object {
+        private val operatorSet = setOf("unaryPlus", "unaryMinus", "not", "inc", "dec", "plus", "minus", "times", "div",
+                "mod", "rangeTo", "contains", "get", "set", "invoke", "plusAssign", "minusAssign", "timesAssign",
+                "divAssign", "modAssign", "equals", "compareTo", "iterator", "getValue", "setValue", "provideDelegate")
 
-	private var imports = mutableListOf<Pair<String, KtImportDirective>>()
-	private val kotlinDocReferencesRegExp = Regex("\\[([^]]+)](?!\\[)")
+        private val kotlinDocReferencesRegExp = Regex("\\[([^]]+)](?!\\[)")
+        private val kotlinDocSeeReferenceRegExp = Regex("^@see (.+)")
+        private val whiteSpaceRegex = Regex("\\s+")
+        private val componentNRegex = Regex("component\\d+")
+    }
 
-	override fun visitFile(file: PsiFile?) {
-		imports.clear()
-		super.visitFile(file)
-		imports.forEach { report(CodeSmell(issue, Entity.from(it.second))) }
-	}
+    override fun visit(root: KtFile) {
+        with(UnusedImportsVisitor()) {
+            root.accept(this)
+            unusedImports().forEach {
+                report(CodeSmell(issue, Entity.from(it), "The import '${it.importedFqName}' is unused."))
+            }
+        }
+        super.visit(root)
+    }
 
-	override fun visitImportList(importList: KtImportList) {
-		imports = importList.imports.filter { it.isValidImport }
-				.filter { it.identifier()?.contains("*")?.not() == true }
-				.filter { it.identifier() != null }
-				.filter { !operatorSet.contains(it.identifier()) }
-				.map { it.identifier()!! to it }
-				.toMutableList()
-		super.visitImportList(importList)
-	}
+    private class UnusedImportsVisitor : DetektVisitor() {
+        private var currentPackage: FqName? = null
+        private var imports: List<KtImportDirective>? = null
+        private val namedReferences = mutableSetOf<String>()
 
-	override fun visitReferenceExpression(expression: KtReferenceExpression) {
-		if (expression.isPartOf(KtImportDirective::class)) return
+        fun unusedImports(): List<KtImportDirective> {
+            fun KtImportDirective.isFromSamePackage() =
+                    importedFqName?.parent() == currentPackage && alias == null
 
-		val reference = expression.text.trim('`')
-		imports.find { it.first == reference }?.let {
-			imports.remove(it)
-		}
+            fun KtImportDirective.isNotUsed() =
+                    aliasName !in namedReferences && identifier() !in namedReferences
 
-		super.visitReferenceExpression(expression)
-	}
+            return imports?.filter { it.isFromSamePackage() || it.isNotUsed() }.orEmpty()
+        }
 
-	override fun visitDeclaration(dcl: KtDeclaration) {
-		val kdoc = dcl.docComment?.getDefaultSection()
+        override fun visitPackageDirective(directive: KtPackageDirective) {
+            currentPackage = directive.fqName
+            super.visitPackageDirective(directive)
+        }
 
-		kdoc?.children
-				?.filter { it is KDocTag }
-				?.map { it.text }
-				?.forEach { handleKDoc(it) }
+        override fun visitImportList(importList: KtImportList) {
+            imports = importList.imports.filter { it.isValidImport }
+                    .filter { it.identifier()?.contains("*")?.not() == true }
+                    .filter { it.identifier() != null }
+                    .filter { !operatorSet.contains(it.identifier()) }
+                    .filter { !componentNRegex.matches(it.identifier()!!) }
+            super.visitImportList(importList)
+        }
 
-		kdoc?.getContent()?.let {
-			handleKDoc(it)
-		}
-		super.visitDeclaration(dcl)
-	}
+        override fun visitReferenceExpression(expression: KtReferenceExpression) {
+            expression
+                    .takeIf { !it.isPartOf(KtImportDirective::class) && !it.isPartOf(KtPackageDirective::class) }
+                    ?.takeIf { it.children.isEmpty() }
+                    ?.run { namedReferences.add(text.trim('`')) }
+            super.visitReferenceExpression(expression)
+        }
 
-	private fun handleKDoc(content: String) {
-		kotlinDocReferencesRegExp.findAll(content, 0)
-				.map { it.groupValues[1] }
-				.forEach { checkImports(it) }
-	}
+        override fun visitDeclaration(dcl: KtDeclaration) {
+            val kdoc = dcl.docComment?.getDefaultSection()
 
-	private fun checkImports(it: String) {
-		imports.removeIf { pair ->
-			val identifier = pair.second.identifier()
-			identifier != null && it.startsWith(identifier)
-		}
-	}
+            kdoc?.children
+                    ?.filter { it is KDocTag }
+                    ?.map { it.text }
+                    ?.forEach { handleKDoc(it) }
 
-	private fun KtImportDirective.identifier() = this.importPath?.importedName?.identifier
+            kdoc?.getContent()?.let {
+                handleKDoc(it)
+            }
+            super.visitDeclaration(dcl)
+        }
 
+        private fun handleKDoc(content: String) {
+            kotlinDocReferencesRegExp.findAll(content, 0)
+                    .map { it.groupValues[1] }
+                    .forEach { namedReferences.add(it.split(".")[0]) }
+            kotlinDocSeeReferenceRegExp.find(content)?.let {
+                val str = it.groupValues[1].split(whiteSpaceRegex)[0]
+                namedReferences.add(str.split(".")[0])
+            }
+        }
+    }
 }
+
+private fun KtImportDirective.identifier() = this.importPath?.importedName?.identifier

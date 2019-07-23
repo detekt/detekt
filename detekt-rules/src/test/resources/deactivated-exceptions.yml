@@ -2,9 +2,9 @@ exceptions:
   active: true
   TooGenericExceptionCaught:
     active: true
-    exceptions:
+    exceptionNames:
       -
   TooGenericExceptionThrown:
     active: true
-    exceptions:
+    exceptionNames:
       -

@@ -1,0 +1,9 @@
+formatting:
+  active: true
+  android: false
+  autoCorrect: true
+  # reports false positive for calls named 'it' in Spek
+  NoItParamInMultilineLambda:
+    active: false
+  MaximumLineLength:
+    active: false

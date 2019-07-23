@@ -2,159 +2,106 @@
 
 package cases
 
-/**
- * @author Artur Bosch
- */
 @Suppress("unused")
 class NestedClasses {
 
-	override fun equals(other: Any?): Boolean {
-		return super.equals(other)
-	}
+    private val i = 0
 
-	override fun hashCode(): Int {
-		return super.hashCode()
-	}
+    class InnerClass {
 
-	class InnerClass {
+        class NestedInnerClass {
 
-		override fun equals(other: Any?): Boolean {
-			return super.equals(other)
-		}
+            fun nestedLongMethod() {
+                if (true) {
+                    if (true) {
+                        if (true) {
+                            5.run {
+                                this.let {
+                                    listOf(1, 2, 3).map { it * 2 }
+                                            .groupBy(Int::toString, Int::toString)
+                                }
+                            }
+                        }
+                    }
+                }
 
-		class NestedInnerClass {
+                try {
+                    for (i in 1..5) {
+                        when (i) {
+                            1 -> print(1)
+                        }
+                    }
+                } finally {
 
-			override fun hashCode(): Int {
-				return super.hashCode()
-			}
+                }
 
-			fun nestedLongMethod() {
-				if (true) {
-					if (true) {
-						if (true) {
-							5.run {
-								this.let {
-									listOf(1, 2, 3).map { it * 2 }
-											.groupBy(Int::toString, Int::toString)
-								}
-							}
-						}
-					}
-				}
-
-				fun nestedLocalMethod() {
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-					println()
-				}
-				nestedLocalMethod()
-			}
-		}
-	}
+                fun nestedLocalMethod() {
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                    println()
+                }
+                nestedLocalMethod()
+            }
+        }
+    }
 
 }
+
+@Suppress("unused")
+        /**
+         * Top level members must be skipped for LargeClass rule
+         */
+val aTopLevelPropertyOfNestedClasses = 0

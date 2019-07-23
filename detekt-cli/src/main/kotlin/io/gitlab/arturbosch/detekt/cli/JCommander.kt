@@ -2,38 +2,42 @@ package io.gitlab.arturbosch.detekt.cli
 
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.ParameterException
+import kotlin.system.exitProcess
 
-private val jCommander = JCommander()
+inline fun <reified T : Args> parseArguments(args: Array<String>): Pair<T, JCommander> {
+    val cli = T::class.java.declaredConstructors.firstOrNull()?.newInstance() as? T
+        ?: throw IllegalStateException("Could not create Args object for class ${T::class.java}")
 
-fun parseArguments(args: Array<String>): Args {
-	val cli = Args()
-	jCommander.addObject(cli)
-	jCommander.programName = "detekt"
+    val jCommander = JCommander()
 
-	try {
-		jCommander.parse(*args)
-	} catch (ex: ParameterException) {
-		val message = ex.message
-		failWithErrorMessages(message)
-	}
+    jCommander.addObject(cli)
+    jCommander.programName = "detekt"
 
-	if (cli.help) {
-		jCommander.usage()
-		System.exit(0)
-	}
+    try {
+        @Suppress("SpreadOperator")
+        jCommander.parse(*args)
+    } catch (ex: ParameterException) {
+        val message = ex.message
+        jCommander.failWithErrorMessages(message)
+    }
 
-	return cli
+    if (cli.help) {
+        jCommander.usage()
+        exitProcess(0)
+    }
+
+    return cli to jCommander
 }
 
-fun failWithErrorMessages(vararg messages: String?) {
-	failWithErrorMessages(messages.asIterable())
+fun JCommander.failWithErrorMessages(vararg messages: String?) {
+    failWithErrorMessages(messages.asIterable())
 }
 
-fun failWithErrorMessages(messages: Iterable<String?>) {
-	messages.forEach {
-		println(it)
-	}
-	println()
-	jCommander.usage()
-	System.exit(-1)
+fun JCommander.failWithErrorMessages(messages: Iterable<String?>) {
+    messages.forEach {
+        println(it)
+    }
+    println()
+    this.usage()
+    exitProcess(1)
 }

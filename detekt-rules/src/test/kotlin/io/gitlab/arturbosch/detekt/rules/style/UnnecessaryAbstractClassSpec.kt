@@ -1,35 +1,54 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.rules.Case
-import io.gitlab.arturbosch.detekt.test.compileForTest
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-class UnnecessaryAbstractClassSpec : SubjectSpek<UnnecessaryAbstractClass>({
-	subject { UnnecessaryAbstractClass(Config.empty) }
+class UnnecessaryAbstractClassSpec : Spek({
+    val subject by memoized {
+        UnnecessaryAbstractClass(TestConfig(mapOf(
+                UnnecessaryAbstractClass.EXCLUDE_ANNOTATED_CLASSES to "jdk.nashorn.internal.ir.annotations.Ignore"
+        )))
+    }
 
-	val noConcreteMemberDescription = "An abstract class without a concrete member can be refactored to an interface."
-	val noAbstractMemberDescription = "An abstract class without an abstract member can be refactored to a concrete class."
+    val noConcreteMemberDescription = "An abstract class without a concrete member can be refactored to an interface."
+    val noAbstractMemberDescription = "An abstract class without an abstract member can be refactored to a concrete class."
 
-	given("abstract classes with some members") {
+    describe("UnnecessaryAbstractClass rule") {
 
-		val file = compileForTest(Case.UnnecessaryAbstractClass.path())
-		val findings = subject.lint(file.text)
+        context("abstract classes with no abstract members") {
 
-		it("has no abstract member violation") {
-			assertThat(countViolationsWithDescription(findings, noAbstractMemberDescription)).isEqualTo(3)
-		}
+            val path = Case.UnnecessaryAbstractClassPositive.path()
+            val findings = subject.lint(path)
 
-		it("has no concrete member violation") {
-			assertThat(countViolationsWithDescription(findings, noConcreteMemberDescription)).isEqualTo(1)
-		}
-	}
+            it("has no abstract member violation") {
+                assertThat(countViolationsWithDescription(findings, noAbstractMemberDescription)).isEqualTo(5)
+            }
+
+            it("has no concrete member violation") {
+                assertThat(countViolationsWithDescription(findings, noConcreteMemberDescription)).isEqualTo(1)
+            }
+        }
+
+        context("abstract classes with members") {
+
+            val path = Case.UnnecessaryAbstractClassNegative.path()
+            val findings = subject.lint(path)
+
+            it("does not report no abstract member violation") {
+                assertThat(countViolationsWithDescription(findings, noAbstractMemberDescription)).isEqualTo(0)
+            }
+
+            it("does not report no concrete member violation") {
+                assertThat(countViolationsWithDescription(findings, noConcreteMemberDescription)).isEqualTo(0)
+            }
+        }
+    }
 })
 
 private fun countViolationsWithDescription(findings: List<Finding>, description: String) =
-		findings.count { it.issue.description.contains(description) }
+        findings.count { it.message.contains(description) }

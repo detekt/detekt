@@ -1,78 +1,78 @@
 package io.gitlab.arturbosch.detekt.cli.console
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.Notification
-import io.gitlab.arturbosch.detekt.api.ProjectMetric
+import io.gitlab.arturbosch.detekt.cli.TestDetektion
+import io.gitlab.arturbosch.detekt.cli.createFinding
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.com.intellij.openapi.util.Key
-import org.jetbrains.spek.api.dsl.describe
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
-import kotlin.test.assertFails
+import org.assertj.core.api.Assertions.assertThatExceptionOfType
+import org.assertj.core.api.Assertions.assertThatIllegalStateException
+import org.assertj.core.api.Assertions.fail
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-/**
- * @author Artur Bosch
- */
-internal class BuildFailureReportSpec : SubjectSpek<BuildFailureReport>({
+internal class BuildFailureReportSpec : Spek({
 
-	subject { BuildFailureReport() }
+    val subject by memoized { BuildFailureReport() }
 
-	describe("build failure threshold is configurable by configuration") {
+    describe("build failure threshold is configurable by configuration") {
 
-		describe("empty code smell result") {
-			val detektion = object : Detektion {
-				override val metrics: Collection<ProjectMetric> = listOf()
-				override val findings: Map<String, List<Finding>> = mapOf()
-				override val notifications: List<Notification> = listOf()
-				override fun add(notification: Notification) = throw UnsupportedOperationException("not implemented")
-				override fun add(projectMetric: ProjectMetric) = throw UnsupportedOperationException("not implemented")
-				override fun <V> getData(key: Key<V>) = throw UnsupportedOperationException("not implemented")
-				override fun <V> addData(key: Key<V>, value: V) = throw UnsupportedOperationException("not implemented")
-			}
+        describe("empty code smell result") {
+            val detektion = TestDetektion(createFinding())
 
-			it("should fail because no config is provided for configurable console reporter") {
-				assertFails { subject.render(detektion) }
-			}
+            it("should fail because no config is provided for configurable console reporter") {
+                assertThatIllegalStateException().isThrownBy { subject.render(detektion) }
+            }
 
-			it("should return no report if build failure not configured") {
-				subject.init(Config.empty)
-				val report = subject.render(detektion)
-				assertThat(report).isNull()
-			}
+            it("should return no report if build failure not configured") {
+                subject.init(Config.empty)
+                val report = subject.render(detektion)
+                assertThat(report).isNull()
+            }
 
-			it("should print a warning if threshold met") {
-				subject.init(TestConfig(mapOf("warningThreshold" to "-2")))
-				val report = subject.render(detektion)
-				assertThat(report).isEqualTo("Warning: 0 weighted code smells found." +
-						" Warning threshold is -2 and fail threshold is -1!")
-			}
+            it("should throw a build failure error when maxIssues met") {
+                subject.init(TestConfig(mapOf("maxIssues" to "-2")))
+                assertThatExceptionOfType(BuildFailure::class.java).isThrownBy { subject.render(detektion) }
+            }
 
-			it("should throw a build failure error") {
-				subject.init(TestConfig(mapOf("failThreshold" to "-2")))
-				assertFails { subject.render(detektion) }
-			}
+            it("should contain no stacktrace on fail") {
+                subject.init(TestConfig(mapOf("maxIssues" to "-2")))
+                try {
+                    subject.render(detektion)
+                    fail("Render should throw")
+                } catch (e: BuildFailure) {
+                    assertThat(e.stackTrace).isEmpty()
+                }
+            }
 
-			it("should throw a build failure error even if warning threshold is also met") {
-				subject.init(TestConfig(mapOf("failThreshold" to "-2", "warningThreshold" to "-2")))
-				assertFails { subject.render(detektion) }
-			}
-		}
-	}
+            it("should print a warning in yellow if weighted issues are not zero but below threshold") {
+                subject.init(TestConfig(mapOf("maxIssues" to "10")))
+                val report = subject.render(detektion)
+                val expectedMessage = "Build succeeded with 1 weighted issues (threshold defined was 10)."
+                assertThat(report).isEqualTo(expectedMessage.yellow())
+            }
 
-	describe("reached extension function tests") {
-		assertThat(0.reached(0)).isEqualTo(false)
+            it("should not print a warning if weighted issues are zero") {
+                subject.init(TestConfig(mapOf("maxIssues" to "10")))
+                val report = subject.render(TestDetektion())
+                assertThat(report).isNull()
+            }
+        }
+    }
 
-		assertThat((-1).reached(0)).isEqualTo(false)
+    describe("reached extension function tests") {
+        subject.apply {
+            assertThat(0.reached(0)).isEqualTo(false)
 
-		assertThat(1.reached(0)).isEqualTo(false)
-		assertThat(1.reached(1)).isEqualTo(true)
-		assertThat(1.reached(2)).isEqualTo(true)
+            assertThat((-1).reached(0)).isEqualTo(false)
 
-		assertThat(12.reached(11)).isEqualTo(false)
-		assertThat(12.reached(12)).isEqualTo(true)
-		assertThat(12.reached(13)).isEqualTo(true)
-	}
+            assertThat(1.reached(0)).isEqualTo(false)
+            assertThat(1.reached(1)).isEqualTo(true)
+            assertThat(1.reached(2)).isEqualTo(true)
+
+            assertThat(12.reached(11)).isEqualTo(false)
+            assertThat(12.reached(12)).isEqualTo(true)
+            assertThat(12.reached(13)).isEqualTo(true)
+        }
+    }
 })

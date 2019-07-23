@@ -3,66 +3,46 @@ package io.gitlab.arturbosch.detekt.rules
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.com.intellij.psi.PsiComment
-import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
-import org.jetbrains.kotlin.psi.KtDeclaration
-import org.jetbrains.kotlin.psi.KtElement
-import org.jetbrains.kotlin.psi.KtEnumEntry
+import org.jetbrains.kotlin.psi.KtClassOrObject
+import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtExpression
-import org.jetbrains.kotlin.psi.KtFunction
-import org.jetbrains.kotlin.psi.KtModifierListOwner
+import org.jetbrains.kotlin.psi.KtObjectDeclaration
+import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
-
-/**
- * @author Artur Bosch
- */
+import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 
 fun KtExpression?.asBlockExpression(): KtBlockExpression? = this as? KtBlockExpression
 
-fun KtModifierListOwner.isPublicNotOverridden() =
-		isPublic() && !isOverridden()
-
-fun KtModifierListOwner.isOverridden() = this.hasModifier(KtTokens.OVERRIDE_KEYWORD)
-
-fun KtModifierListOwner.isPublic(): Boolean {
-	return this.hasModifier(KtTokens.PUBLIC_KEYWORD)
-			|| !(this.hasModifier(KtTokens.PRIVATE_KEYWORD)
-			|| this.hasModifier(KtTokens.PROTECTED_KEYWORD)
-			|| this.hasModifier(KtTokens.INTERNAL_KEYWORD))
-}
-
-fun KtModifierListOwner.isInternal() = this.hasModifier(KtTokens.INTERNAL_KEYWORD)
-
-fun KtClass.isDataClass() = this.modifierList?.hasModifier(KtTokens.DATA_KEYWORD) == true
+fun KtClassOrObject.isObjectOfAnonymousClass() =
+        this.getNonStrictParentOfType<KtObjectDeclaration>() != null && this.name == null
 
 fun KtCallExpression.isUsedForNesting(): Boolean = when (getCallNameExpression()?.text) {
-	"run", "let", "apply", "with", "use", "forEach" -> true
-	else -> false
+    "run", "let", "apply", "with", "use", "forEach" -> true
+    else -> false
 }
 
-fun KtBlockExpression.hasCommentInside(): Boolean {
-	val commentKey = Key<Boolean>("comment")
-	this.acceptChildren(object : DetektVisitor() {
-		override fun visitComment(comment: PsiComment?) {
-			if (comment != null) putUserData(commentKey, true)
-		}
-	})
-	return getUserData(commentKey) == true
+fun KtClassOrObject.hasCommentInside() = this.body?.hasCommentInside() ?: false
+
+fun PsiElement.hasCommentInside(): Boolean {
+    val commentKey = Key<Boolean>("comment")
+    this.acceptChildren(object : DetektVisitor() {
+        override fun visitComment(comment: PsiComment?) {
+            if (comment != null) putUserData(commentKey, true)
+        }
+    })
+    return getUserData(commentKey) == true
 }
+
+fun getIntValueForPsiElement(element: PsiElement): Int? {
+    return (element as? KtConstantExpression)?.text?.toIntOrNull()
+}
+
+fun KtStringTemplateExpression.plainText() = text.substring(1, text.length - 1)
 
 fun KtClass.companionObject() = this.companionObjects.singleOrNull { it.isCompanion() }
 
-inline fun <reified T : KtElement> KtElement.collectByType(): List<T> {
-	val list = mutableListOf<T>()
-	this.accept(object : DetektVisitor() {
-		override fun visitKtElement(element: KtElement) {
-			if (element is T) {
-				list.add(element)
-			}
-			element.children.forEach { it.accept(this) }
-		}
-	})
-	return list
-}
+inline fun <reified T : Any> Any.safeAs(): T? = this as? T

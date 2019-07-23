@@ -1,22 +1,20 @@
 package io.gitlab.arturbosch.detekt.rules.performance
 
-import io.gitlab.arturbosch.detekt.test.lint
-import org.jetbrains.spek.api.dsl.describe
-import org.jetbrains.spek.subject.SubjectSpek
-import kotlin.test.assertEquals
+import io.gitlab.arturbosch.detekt.test.compileAndLint
+import org.assertj.core.api.Assertions.assertThat
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-class UnnecessaryTemporaryInstantiationSpec : SubjectSpek<UnnecessaryTemporaryInstantiation>({
-	subject { UnnecessaryTemporaryInstantiation() }
+class UnnecessaryTemporaryInstantiationSpec : Spek({
+    val subject by memoized { UnnecessaryTemporaryInstantiation() }
 
-	describe("temporary instantiation for conversion") {
-		val code = "val i = Integer(1).toString()"
-		subject.lint(code)
-		assertEquals(subject.findings.size, 1)
-	}
+    describe("temporary instantiation for conversion") {
+        val code = "val i = Integer(1).toString()"
+        assertThat(subject.compileAndLint(code)).hasSize(1)
+    }
 
-	describe("right conversion without instantiation") {
-		val code = "val i = Integer.toString(1)"
-		subject.lint(code)
-		assertEquals(subject.findings.size, 0)
-	}
+    describe("right conversion without instantiation") {
+        val code = "val i = Integer.toString(1)"
+        assertThat(subject.compileAndLint(code)).isEmpty()
+    }
 })

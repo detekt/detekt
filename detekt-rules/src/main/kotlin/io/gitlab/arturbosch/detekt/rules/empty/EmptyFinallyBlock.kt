@@ -4,12 +4,14 @@ import io.gitlab.arturbosch.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtFinallySection
 
 /**
- * @author Artur Bosch
+ * Reports empty `finally` blocks. Empty blocks of code serve no purpose and should be removed.
+ *
+ * @active since v1.0.0
  */
 class EmptyFinallyBlock(config: Config) : EmptyRule(config) {
 
-	override fun visitFinallySection(finallySection: KtFinallySection) {
-		finallySection.finalExpression?.addFindingIfBlockExprIsEmpty()
-	}
-
+    override fun visitFinallySection(finallySection: KtFinallySection) {
+        super.visitFinallySection(finallySection)
+        finallySection.finalExpression?.addFindingIfBlockExprIsEmpty()
+    }
 }

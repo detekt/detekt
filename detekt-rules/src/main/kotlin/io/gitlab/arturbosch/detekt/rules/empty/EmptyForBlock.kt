@@ -4,11 +4,14 @@ import io.gitlab.arturbosch.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtForExpression
 
 /**
- * @author Artur Bosch
+ * Reports empty `for` loops. Empty blocks of code serve no purpose and should be removed.
+ *
+ * @active since v1.0.0
  */
 class EmptyForBlock(config: Config) : EmptyRule(config) {
 
-	override fun visitForExpression(expression: KtForExpression) {
-		expression.body?.addFindingIfBlockExprIsEmpty()
-	}
+    override fun visitForExpression(expression: KtForExpression) {
+        super.visitForExpression(expression)
+        expression.body?.addFindingIfBlockExprIsEmpty()
+    }
 }

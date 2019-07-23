@@ -1,53 +1,58 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
-import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.dsl.given
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-class InstanceOfCheckForExceptionSpec : SubjectSpek<InstanceOfCheckForException>({
-	subject { InstanceOfCheckForException() }
+class InstanceOfCheckForExceptionSpec : Spek({
+    val subject by memoized { InstanceOfCheckForException() }
 
-	given("several catch blocks") {
+    describe("InstanceOfCheckForException rule") {
 
-		it("has is and as checks") {
-			val code = """
+        it("has is and as checks") {
+
+            val code = """
 				fun x() {
 					try {
-					} catch(e: IOException) {
-						if (e is MyException || (e as MyException) != null) {
-							return
-						}
-					}
+                    } catch(e: Exception) {
+                        if (e is IllegalArgumentException || (e as IllegalArgumentException) != null) {
+                            return
+                        }
+                    }
 				}
 				"""
-			assertThat(subject.lint(code)).hasSize(2)
-		}
+            assertThat(subject.compileAndLint(code)).hasSize(2)
+        }
 
-		it("has nested is and as checks") {
-			val code = """
+        it("has nested is and as checks") {
+            val code = """
 				fun x() {
 					try {
-					} catch(e: IOException) {
+					} catch(e: Exception) {
 						if (1 == 1) {
-							val b = e !is MyException || (e as MyException) != null
+							val b = e !is IllegalArgumentException || (e as IllegalArgumentException) != null
 						}
 					}
 				}
 				"""
-			assertThat(subject.lint(code)).hasSize(2)
-		}
+            assertThat(subject.compileAndLint(code)).hasSize(2)
+        }
 
-		it("has no instance of check") {
-			val code = """
+        it("has no instance of check") {
+            val code = """
 				fun x() {
 					try {
-					} catch(e: IOException) {
+					} catch(e: Exception) {
+						val s = ""
+						if (s is String || (s as String) != null) {
+                            val other: Exception? = null
+							val b = other !is IllegalArgumentException || (other as IllegalArgumentException) != null
+						}
 					}
 				}
 				"""
-			assertThat(subject.lint(code)).hasSize(0)
-		}
-	}
+            assertThat(subject.compileAndLint(code)).hasSize(0)
+        }
+    }
 })

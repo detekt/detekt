@@ -1,32 +1,37 @@
 package io.gitlab.arturbosch.detekt
 
-import io.gitlab.arturbosch.detekt.extensions.DetektExtension
-import org.gradle.api.DefaultTask
-import org.gradle.api.internal.artifacts.dependencies.DefaultExternalModuleDependency
+import io.gitlab.arturbosch.detekt.internal.configurableFileCollection
+import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
+import io.gitlab.arturbosch.detekt.invoke.GenerateConfigArgument
+import io.gitlab.arturbosch.detekt.invoke.InputArgument
+import org.gradle.api.file.FileCollection
+import org.gradle.api.tasks.Classpath
+import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
+import org.gradle.language.base.plugins.LifecycleBasePlugin
 
-/**
- * @author Artur Bosch
- */
-open class DetektGenerateConfigTask : DefaultTask() {
+open class DetektGenerateConfigTask : SourceTask() {
 
-	init {
-		description = "Generate a detekt configuration file inside your project."
-		group = "verification"
-	}
+    init {
+        description = "Generate a detekt configuration file inside your project."
+        group = LifecycleBasePlugin.VERIFICATION_GROUP
+    }
 
-	@TaskAction
-	fun generateConfig() {
-		val detektExtension = project.extensions.getByName("detekt") as DetektExtension
+    @Deprecated("Replace with getSource/setSource")
+    var input: FileCollection
+        get() = source
+        set(value) = setSource(value)
 
-		val configuration = project.buildscript.configurations.maybeCreate("detektConfig")
-		project.buildscript.dependencies.add(configuration.name, DefaultExternalModuleDependency(
-				"io.gitlab.arturbosch.detekt", "detekt-cli", detektExtension.version))
+    @Classpath
+    val detektClasspath = project.configurableFileCollection()
 
-		project.javaexec {
-			it.main = "io.gitlab.arturbosch.detekt.cli.Main"
-			it.classpath = configuration
-			it.args("--input", project.projectDir.absolutePath, "--generate-config")
-		}
-	}
+    @TaskAction
+    fun generateConfig() {
+        val arguments = mutableListOf(
+            GenerateConfigArgument,
+            InputArgument(source)
+        )
+
+        DetektInvoker.invokeCli(project, arguments.toList(), detektClasspath, name)
+    }
 }

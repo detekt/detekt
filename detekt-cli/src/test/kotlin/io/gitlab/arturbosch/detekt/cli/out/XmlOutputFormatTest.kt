@@ -1,76 +1,72 @@
 package io.gitlab.arturbosch.detekt.cli.out
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
+import io.gitlab.arturbosch.detekt.cli.TestDetektion
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Test
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-internal class XmlOutputFormatTest {
+class XmlOutputFormatTest : Spek({
 
-	private val entity1 = Entity("Sample1", "com.sample.Sample1", "",
-			Location(SourceLocation(11, 1), TextLocation(0, 10),
-					"abcd", "src/main/com/sample/Sample1.kt"))
-	private val entity2 = Entity("Sample2", "com.sample.Sample2", "",
-			Location(SourceLocation(22, 2), TextLocation(0, 20),
-					"efgh", "src/main/com/sample/Sample2.kt"))
+    val entity1 = Entity("Sample1", "com.sample.Sample1", "",
+            Location(SourceLocation(11, 1), TextLocation(0, 10),
+                    "abcd", "src/main/com/sample/Sample1.kt"))
+    val entity2 = Entity("Sample2", "com.sample.Sample2", "",
+            Location(SourceLocation(22, 2), TextLocation(0, 20),
+                    "efgh", "src/main/com/sample/Sample2.kt"))
 
-	private val outputFormat = XmlOutputReport()
+    val outputFormat = XmlOutputReport()
 
-	@Test
-	fun renderEmpty() {
-		val result = outputFormat.render(TestDetektion())
+    describe("XML output format") {
 
-		//language=XML
-		assertThat(result).isEqualTo("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<checkstyle version=\"4.3\">\n</checkstyle>")
-	}
+        it("renderEmpty") {
+            val result = outputFormat.render(TestDetektion())
 
-	@Test
-	fun renderOneForSingleFile() {
-		val smell = CodeSmell(Issue("id_a", Severity.CodeSmell, ""), entity1)
+            assertThat(result).isEqualTo("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<checkstyle version=\"4.3\">\n</checkstyle>")
+        }
 
-		val result = outputFormat.render(TestDetektion(smell))
+        it("renderOneForSingleFile") {
+            val smell = CodeSmell(Issue("id_a", Severity.CodeSmell, "", Debt.TWENTY_MINS), entity1, message = "")
 
-		//language=XML
-		assertThat(result).isEqualTo("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<checkstyle version=\"4.3\">\n<file name=\"src/main/com/sample/Sample1.kt\">\n\t<error line=\"11\" column=\"1\" severity=\"warning\" message=\"\" source=\"detekt.id_a\" />\n</file>\n</checkstyle>")
-	}
+            val result = outputFormat.render(TestDetektion(smell))
 
-	@Test
-	fun renderTwoForSingleFile() {
-		val smell1 = CodeSmell(Issue("id_a", Severity.CodeSmell, ""), entity1)
-		val smell2 = CodeSmell(Issue("id_b", Severity.CodeSmell, ""), entity1)
+            assertThat(result).isEqualTo("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<checkstyle version=\"4.3\">\n<file name=\"src/main/com/sample/Sample1.kt\">\n\t<error line=\"11\" column=\"1\" severity=\"warning\" message=\"\" source=\"detekt.id_a\" />\n</file>\n</checkstyle>")
+        }
 
-		val result = outputFormat.render(TestDetektion(smell1, smell2))
+        it("renderTwoForSingleFile") {
+            val smell1 = CodeSmell(Issue("id_a", Severity.CodeSmell, "", Debt.TWENTY_MINS), entity1, message = "")
+            val smell2 = CodeSmell(Issue("id_b", Severity.CodeSmell, "", Debt.TWENTY_MINS), entity1, message = "")
 
-		//language=XML
-		assertThat(result).isEqualTo("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<checkstyle version=\"4.3\">\n<file name=\"src/main/com/sample/Sample1.kt\">\n\t<error line=\"11\" column=\"1\" severity=\"warning\" message=\"\" source=\"detekt.id_a\" />\n\t<error line=\"11\" column=\"1\" severity=\"warning\" message=\"\" source=\"detekt.id_b\" />\n</file>\n</checkstyle>")
-	}
+            val result = outputFormat.render(TestDetektion(smell1, smell2))
 
-	@Test
-	fun renderOneForMultipleFiles() {
-		val smell1 = CodeSmell(Issue("id_a", Severity.CodeSmell, ""), entity1)
-		val smell2 = CodeSmell(Issue("id_a", Severity.CodeSmell, ""), entity2)
+            assertThat(result).isEqualTo("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<checkstyle version=\"4.3\">\n<file name=\"src/main/com/sample/Sample1.kt\">\n\t<error line=\"11\" column=\"1\" severity=\"warning\" message=\"\" source=\"detekt.id_a\" />\n\t<error line=\"11\" column=\"1\" severity=\"warning\" message=\"\" source=\"detekt.id_b\" />\n</file>\n</checkstyle>")
+        }
 
-		val result = outputFormat.render(TestDetektion(smell1, smell2))
+        it("renderOneForMultipleFiles") {
+            val smell1 = CodeSmell(Issue("id_a", Severity.CodeSmell, "", Debt.TWENTY_MINS), entity1, message = "")
+            val smell2 = CodeSmell(Issue("id_a", Severity.CodeSmell, "", Debt.TWENTY_MINS), entity2, message = "")
 
-		//language=XML
-		assertThat(result).isEqualTo("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<checkstyle version=\"4.3\">\n<file name=\"src/main/com/sample/Sample1.kt\">\n\t<error line=\"11\" column=\"1\" severity=\"warning\" message=\"\" source=\"detekt.id_a\" />\n</file>\n<file name=\"src/main/com/sample/Sample2.kt\">\n\t<error line=\"22\" column=\"2\" severity=\"warning\" message=\"\" source=\"detekt.id_a\" />\n</file>\n</checkstyle>")
-	}
+            val result = outputFormat.render(TestDetektion(smell1, smell2))
 
-	@Test
-	fun renderTwoForMultipleFiles() {
-		val smell1 = CodeSmell(Issue("id_a", Severity.CodeSmell, ""), entity1)
-		val smell2 = CodeSmell(Issue("id_b", Severity.CodeSmell, ""), entity1)
-		val smell3 = CodeSmell(Issue("id_a", Severity.CodeSmell, ""), entity2)
-		val smell4 = CodeSmell(Issue("id_b", Severity.CodeSmell, ""), entity2)
+            assertThat(result).isEqualTo("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<checkstyle version=\"4.3\">\n<file name=\"src/main/com/sample/Sample1.kt\">\n\t<error line=\"11\" column=\"1\" severity=\"warning\" message=\"\" source=\"detekt.id_a\" />\n</file>\n<file name=\"src/main/com/sample/Sample2.kt\">\n\t<error line=\"22\" column=\"2\" severity=\"warning\" message=\"\" source=\"detekt.id_a\" />\n</file>\n</checkstyle>")
+        }
 
-		val result = outputFormat.render(TestDetektion(smell1, smell2, smell3, smell4))
+        it("renderTwoForMultipleFiles") {
+            val smell1 = CodeSmell(Issue("id_a", Severity.CodeSmell, "", Debt.TWENTY_MINS), entity1, message = "")
+            val smell2 = CodeSmell(Issue("id_b", Severity.CodeSmell, "", Debt.TWENTY_MINS), entity1, message = "")
+            val smell3 = CodeSmell(Issue("id_a", Severity.CodeSmell, "", Debt.TWENTY_MINS), entity2, message = "")
+            val smell4 = CodeSmell(Issue("id_b", Severity.CodeSmell, "", Debt.TWENTY_MINS), entity2, message = "")
 
-		//language=XML
-		assertThat(result).isEqualTo("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<checkstyle version=\"4.3\">\n<file name=\"src/main/com/sample/Sample1.kt\">\n\t<error line=\"11\" column=\"1\" severity=\"warning\" message=\"\" source=\"detekt.id_a\" />\n\t<error line=\"11\" column=\"1\" severity=\"warning\" message=\"\" source=\"detekt.id_b\" />\n</file>\n<file name=\"src/main/com/sample/Sample2.kt\">\n\t<error line=\"22\" column=\"2\" severity=\"warning\" message=\"\" source=\"detekt.id_a\" />\n\t<error line=\"22\" column=\"2\" severity=\"warning\" message=\"\" source=\"detekt.id_b\" />\n</file>\n</checkstyle>")
-	}
-}
+            val result = outputFormat.render(TestDetektion(smell1, smell2, smell3, smell4))
+
+            assertThat(result).isEqualTo("<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<checkstyle version=\"4.3\">\n<file name=\"src/main/com/sample/Sample1.kt\">\n\t<error line=\"11\" column=\"1\" severity=\"warning\" message=\"\" source=\"detekt.id_a\" />\n\t<error line=\"11\" column=\"1\" severity=\"warning\" message=\"\" source=\"detekt.id_b\" />\n</file>\n<file name=\"src/main/com/sample/Sample2.kt\">\n\t<error line=\"22\" column=\"2\" severity=\"warning\" message=\"\" source=\"detekt.id_a\" />\n\t<error line=\"22\" column=\"2\" severity=\"warning\" message=\"\" source=\"detekt.id_b\" />\n</file>\n</checkstyle>")
+        }
+    }
+})

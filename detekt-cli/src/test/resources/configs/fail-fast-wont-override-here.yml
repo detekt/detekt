@@ -1,0 +1,8 @@
+build:
+  # maxIssues default is 10
+
+style:
+  MaxLineLength:
+    maxLineLength: 100 # default is 120
+    # excludeImportStatements: true #
+    excludeCommentStatements: true # default is false

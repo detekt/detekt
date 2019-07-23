@@ -1,42 +1,43 @@
 package io.gitlab.arturbosch.detekt.core
 
+import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.Spek
-import org.jetbrains.spek.api.dsl.describe
-import org.jetbrains.spek.api.dsl.it
-import kotlin.test.assertNull
-import kotlin.test.assertTrue
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-/**
- * @author Artur Bosch
- */
 class KtTreeCompilerSpec : Spek({
 
-	describe("tree compiler functionality") {
+    fun fixture(vararg filters: String): KtTreeCompiler =
+        KtTreeCompiler(settings = ProcessingSettings(path,
+            pathFilters = PathFilters.of(null, filters.joinToString(","))))
 
-		it("should compile all files") {
-			val ktFiles = KtTreeCompiler(path).compile()
-			assertTrue(ktFiles.size >= 2, "It should compile more than two files, but did ${ktFiles.size}")
-		}
+    describe("tree compiler functionality") {
 
-		it("should filter the file 'Default.kt'") {
-			val filter = PathFilter(".*Default.kt")
-			val ktFiles = KtTreeCompiler(path, listOf(filter)).compile()
-			val ktFile = ktFiles.find { it.name == "Default.kt" }
-			assertNull(ktFile, "It should have no Default.kt file")
-		}
+        it("should compile all files") {
+            val ktFiles = fixture().compile(path)
+            assertThat(ktFiles.size)
+                .describedAs("It should compile at least three files, but did ${ktFiles.size}")
+                .isGreaterThanOrEqualTo(3)
+        }
 
-		it("should work with two or more filters") {
-			val filter = PathFilter(".*Default.kt")
-			val filterTwo = PathFilter(".*Test.*")
-			val filterThree = PathFilter(".*Complex.*")
-			val ktFiles = KtTreeCompiler(path, listOf(filter, filterTwo, filterThree)).compile()
-			assertThat(ktFiles).isEmpty()
-		}
+        it("should filter the file 'Default.kt'") {
+            val ktFiles = fixture("**/Default.kt").compile(path)
+            val ktFile = ktFiles.find { it.name == "Default.kt" }
+            assertThat(ktFile).describedAs("It should have no Default.kt file").isNull()
+        }
 
-		it("should also compile regular files") {
-			assertTrue { KtTreeCompiler(path.resolve("Default.kt")).compile().size == 1 }
-		}
-	}
+        it("should work with two or more filters") {
+            val ktFiles = fixture(
+                "**/Default.kt",
+                "**/*Test*",
+                "**/*Complex*",
+                "**/*KotlinScript*"
+            ).compile(path)
+            assertThat(ktFiles).isEmpty()
+        }
 
+        it("should also compile regular files") {
+            assertThat(fixture().compile(path.resolve("Default.kt")).size).isEqualTo(1)
+        }
+    }
 })

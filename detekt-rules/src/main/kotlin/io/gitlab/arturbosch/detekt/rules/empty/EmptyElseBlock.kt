@@ -4,12 +4,14 @@ import io.gitlab.arturbosch.detekt.api.Config
 import org.jetbrains.kotlin.psi.KtIfExpression
 
 /**
- * @author Artur Bosch
+ * Reports empty `else` blocks. Empty blocks of code serve no purpose and should be removed.
+ *
+ * @active since v1.0.0
  */
 class EmptyElseBlock(config: Config) : EmptyRule(config) {
 
-	override fun visitIfExpression(expression: KtIfExpression) {
-		expression.`else`?.addFindingIfBlockExprIsEmpty()
-	}
-
+    override fun visitIfExpression(expression: KtIfExpression) {
+        super.visitIfExpression(expression)
+        expression.`else`?.addFindingIfBlockExprIsEmpty()
+    }
 }

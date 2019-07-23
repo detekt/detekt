@@ -1,30 +1,46 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
-import io.gitlab.arturbosch.detekt.rules.Case
-import io.gitlab.arturbosch.detekt.test.lint
-import org.jetbrains.spek.api.dsl.describe
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
-import kotlin.test.assertEquals
+import io.gitlab.arturbosch.detekt.test.assertThat
+import io.gitlab.arturbosch.detekt.test.compileAndLint
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-/**
- * @author Artur Bosch
- */
-class LongMethodSpec : SubjectSpek<LongMethod>({
-	subject { LongMethod(threshold = 10) }
+class LongMethodSpec : Spek({
 
-	describe("nested functions can be long") {
-		it("should find two long methods") {
-			subject.lint(Case.NestedLongMethods.path())
-			assertEquals(subject.findings.size, 2)
-		}
-	}
+    val subject by memoized { LongMethod(threshold = 5) }
 
-	describe("nested classes can contain long methods") {
-		it("should detect one nested long method") {
-			subject.lint(Case.NestedClasses.path())
-			assertEquals(subject.findings.size, 1)
-		}
+    describe("nested functions can be long") {
 
-	}
+        it("should find two long methods") {
+            val code = """
+                fun longMethod() { // 5 lines
+                    println()
+                    println()
+                    println()
+            
+                    fun nestedLongMethod() { // 5 lines
+                        println()
+                        println()
+                        println()
+                    }
+                }
+            """
+
+            assertThat(subject.compileAndLint(code)).hasSize(2)
+        }
+
+        it("should not find too long methods") {
+            val code = """
+                fun methodOk() { // 3 lines
+                    println()
+                    fun localMethodOk() { // 4 lines
+                        println()
+                        println()
+                    }
+                }
+            """
+
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+    }
 })

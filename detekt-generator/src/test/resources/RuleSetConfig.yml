@@ -1,0 +1,11 @@
+style:
+  active: true
+  WildcardImport:
+    active: true
+    excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
+    conf1: foo
+  EqualsNull:
+    active: false
+  NoUnitKeyword:
+    active: true
+    autoCorrect: true

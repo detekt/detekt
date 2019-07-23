@@ -8,45 +8,66 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import org.jetbrains.kotlin.lexer.KtTokens
+import io.gitlab.arturbosch.detekt.rules.isOpen
+import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtDeclaration
+import org.jetbrains.kotlin.psi.psiUtil.isAbstract
+import org.jetbrains.kotlin.psi.psiUtil.isProtected
 
+/**
+ * Kotlin classes are `final` by default. Thus classes which are not marked as `open` should not contain any `protected`
+ * members. Consider using `private` or `internal` modifiers instead.
+ *
+ * <noncompliant>
+ * class ProtectedMemberInFinalClass {
+ *     protected var i = 0
+ * }
+ * </noncompliant>
+ *
+ * <compliant>
+ * class ProtectedMemberInFinalClass {
+ *     private var i = 0
+ * }
+ * </compliant>
+ */
 class ProtectedMemberInFinalClass(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName, Severity.Warning,
-			"Member with protected visibility in final class is private. Consider using private or internal as modifier.",
-			Debt.TEN_MINS)
+    override val issue = Issue(
+        javaClass.simpleName, Severity.Warning,
+        "Member with protected visibility in final class is private. " +
+                "Consider using private or internal as modifier.",
+        Debt.FIVE_MINS
+    )
 
-	private val visitor = DeclarationVisitor()
+    private val visitor = DeclarationVisitor()
 
-	/**
-	 * Only classes and companion objects can contain protected members.
-	 */
-	override fun visitClass(klass: KtClass) {
-		if (hasModifiers(klass)) {
-			klass.primaryConstructor?.accept(visitor)
-			klass.getBody()?.declarations?.forEach { it.accept(visitor) }
-			klass.companionObjects.forEach { it.accept(visitor) }
-		}
-		super.visitClass(klass)
-	}
+    /**
+     * Only classes and companion objects can contain protected members.
+     */
+    override fun visitClass(klass: KtClass) {
+        if (hasModifiers(klass)) {
+            klass.primaryConstructor?.accept(visitor)
+            klass.body?.declarations?.forEach { it.accept(visitor) }
+            klass.companionObjects.forEach { it.accept(visitor) }
+        }
+        super.visitClass(klass)
+    }
 
-	private fun hasModifiers(klass: KtClass): Boolean {
-		val isNotAbstract = !klass.hasModifier(KtTokens.ABSTRACT_KEYWORD)
-		val isFinal = !klass.hasModifier(KtTokens.OPEN_KEYWORD)
-		val isNotSealed = !klass.hasModifier(KtTokens.SEALED_KEYWORD)
-		return isNotAbstract && isFinal && isNotSealed
-	}
+    private fun hasModifiers(klass: KtClass): Boolean {
+        val isNotAbstract = !klass.isAbstract()
+        val isFinal = !klass.isOpen()
+        val isNotSealed = !klass.isSealed()
+        val isNotEnum = !klass.isEnum()
+        return isNotAbstract && isFinal && isNotSealed && isNotEnum
+    }
 
-	internal inner class DeclarationVisitor : DetektVisitor() {
+    internal inner class DeclarationVisitor : DetektVisitor() {
 
-		override fun visitDeclaration(dcl: KtDeclaration) {
-			val isProtected = dcl.hasModifier(KtTokens.PROTECTED_KEYWORD)
-			val isNotOverridden = !dcl.hasModifier(KtTokens.OVERRIDE_KEYWORD)
-			if (isProtected && isNotOverridden) {
-				report(CodeSmell(issue, Entity.from(dcl)))
-			}
-		}
-	}
+        override fun visitDeclaration(dcl: KtDeclaration) {
+            if (dcl.isProtected() && !dcl.isOverride()) {
+                report(CodeSmell(issue, Entity.from(dcl), issue.description))
+            }
+        }
+    }
 }

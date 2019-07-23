@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Metric
@@ -14,41 +15,57 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtProperty
 
-class ComplexInterface(config: Config = Config.empty,
-					   threshold: Int = DEFAULT_LARGE_INTERFACE_COUNT) : ThresholdRule(config, threshold) {
+/**
+ * Complex interfaces which contain too many functions and/or properties indicate that this interface is handling too
+ * many things at once. Interfaces should follow the single-responsibility principle to also encourage implementations
+ * of this interface to not handle too many things at once.
+ *
+ * Large interfaces should be split into smaller interfaces which have a clear responsibility and are easier
+ * to understand and implement.
+ *
+ * @configuration threshold - maximum amount of definitions in an interface (default: `10`)
+ * @configuration includeStaticDeclarations - whether static declarations should be included (default: `false`)
+ */
+class ComplexInterface(
+    config: Config = Config.empty,
+    threshold: Int = DEFAULT_LARGE_INTERFACE_COUNT
+) : ThresholdRule(config, threshold) {
 
-	override val issue = Issue(javaClass.simpleName, Severity.Maintainability,
-			"An interface contains too many functions and properties. " +
-					"Large classes tend to handle many things at once. " +
-					"An interface should have one responsibility. " +
-					"Split up large interfaces into smaller ones that are easier to understand.")
+    override val issue = Issue(javaClass.simpleName, Severity.Maintainability,
+            "An interface contains too many functions and properties. " +
+                    "Large classes tend to handle many things at once. " +
+                    "An interface should have one responsibility. " +
+                    "Split up large interfaces into smaller ones that are easier to understand.",
+            Debt.TWENTY_MINS)
 
-	private val includeStaticDeclarations = valueOrDefault(INCLUDE_STATIC_DECLARATIONS, false)
+    private val includeStaticDeclarations = valueOrDefault(INCLUDE_STATIC_DECLARATIONS, false)
 
-	override fun visitClass(klass: KtClass) {
-		if (klass.isInterface()) {
-			val body = klass.getBody() ?: return
-			var size = calculateMembers(body)
-			if (includeStaticDeclarations) {
-				size += countStaticDeclarations(klass.companionObject())
-			}
-			if (size > threshold) {
-				report(ThresholdedCodeSmell(issue, Entity.from(klass), Metric("SIZE: ", size, threshold)))
-			}
-		}
-		super.visitClass(klass)
-	}
+    override fun visitClass(klass: KtClass) {
+        if (klass.isInterface()) {
+            val body = klass.body ?: return
+            var size = calculateMembers(body)
+            if (includeStaticDeclarations) {
+                size += countStaticDeclarations(klass.companionObject())
+            }
+            if (size >= threshold) {
+                report(ThresholdedCodeSmell(issue,
+                        Entity.from(klass),
+                        Metric("SIZE: ", size, threshold),
+                        "The interface ${klass.name} is too complex. Consider splitting it up."))
+            }
+        }
+        super.visitClass(klass)
+    }
 
-	private fun countStaticDeclarations(companionObject: KtObjectDeclaration?): Int {
-		val body = companionObject?.getBody()
-		return if (body != null) calculateMembers(body) else 0
-	}
+    private fun countStaticDeclarations(companionObject: KtObjectDeclaration?): Int {
+        val body = companionObject?.body
+        return if (body != null) calculateMembers(body) else 0
+    }
 
-	private fun calculateMembers(body: KtClassBody) = body.children.count { it is KtNamedFunction || it is KtProperty }
+    private fun calculateMembers(body: KtClassBody) = body.children.count { it is KtNamedFunction || it is KtProperty }
 
-	companion object {
-		const val INCLUDE_STATIC_DECLARATIONS = "includeStaticDeclarations"
-	}
+    companion object {
+        const val INCLUDE_STATIC_DECLARATIONS = "includeStaticDeclarations"
+        const val DEFAULT_LARGE_INTERFACE_COUNT = 10
+    }
 }
-
-private const val DEFAULT_LARGE_INTERFACE_COUNT = 10

@@ -1,11 +1,8 @@
 @file:SuppressWarnings("ALL")
 
-/**
- * @author lummax
- */
 object SuppressedByAllObject {
 
-	fun stuff() {
-		println("FAILED TEST")
-	}
+    fun stuff() {
+        println("FAILED TEST")
+    }
 }

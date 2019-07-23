@@ -1,88 +1,115 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
-import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.spek.api.dsl.it
-import org.jetbrains.spek.subject.SubjectSpek
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
 
-/**
- * @author Artur Bosch
- */
-class UndocumentedPublicClassSpec : SubjectSpek<UndocumentedPublicClass>({
-	subject { UndocumentedPublicClass() }
+class UndocumentedPublicClassSpec : Spek({
+    val subject by memoized { UndocumentedPublicClass() }
 
-	it("finds two undocumented classes") {
-		assertThat(subject.lint(Case.Comments.path())).hasSize(3)
-	}
-
-	val inner = """
+    val inner = """
 			/** Some doc */
 			class TestInner {
 				inner class Inner
 			}"""
 
-	val innerObject = """
+    val innerObject = """
 			/** Some doc */
 			class TestInner {
 				object Inner
 			}"""
 
-	val innerInterface = """
+    val innerInterface = """
 			/** Some doc */
 			class TestInner {
 				interface Something
 			}"""
 
-	val nested = """
+    val nested = """
 			/** Some doc */
 			class TestNested {
 				class Nested
 			}"""
 
-	it("should report inner classes by default") {
-		assertThat(subject.lint(inner)).hasSize(1)
-	}
+    val nestedPublic = """
+    		/** Some doc */
+			class TestNested {
+				public class Nested
+			}
+			"""
 
-	it("should report inner object by default") {
-		assertThat(subject.lint(innerObject)).hasSize(1)
-	}
+    val nestedPrivate = """
+    		/** Some doc */
+			class TestNested {
+				private class Nested
+			}
+			"""
 
-	it("should report inner interfaces by default") {
-		assertThat(subject.lint(innerInterface)).hasSize(1)
-	}
+    val privateClass = "private class TestNested {}"
+    val internalClass = "internal class TestNested {}"
 
-	it("should report nested classes by default") {
-		assertThat(subject.lint(nested)).hasSize(1)
-	}
+    describe("UndocumentedPublicClass rule") {
 
-	it("should not report inner classes when turned off") {
-		val findings = UndocumentedPublicClass(TestConfig(mapOf(UndocumentedPublicClass.SEARCH_IN_INNER_CLASS to "false"))).lint(inner)
-		assertThat(findings).isEmpty()
-	}
+        it("should report inner classes by default") {
+            assertThat(subject.compileAndLint(inner)).hasSize(1)
+        }
 
-	it("should not report inner objects when turned off") {
-		val findings = UndocumentedPublicClass(TestConfig(mapOf(UndocumentedPublicClass.SEARCH_IN_INNER_OBJECT to "false"))).lint(innerObject)
-		assertThat(findings).isEmpty()
-	}
+        it("should report inner object by default") {
+            assertThat(subject.compileAndLint(innerObject)).hasSize(1)
+        }
 
-	it("should not report inner interfaces when turned off") {
-		val findings = UndocumentedPublicClass(TestConfig(mapOf(UndocumentedPublicClass.SEARCH_IN_INNER_INTERFACE to "false"))).lint(innerInterface)
-		assertThat(findings).isEmpty()
-	}
+        it("should report inner interfaces by default") {
+            assertThat(subject.compileAndLint(innerInterface)).hasSize(1)
+        }
 
-	it("should not report nested classes when turned off") {
-		val findings = UndocumentedPublicClass(TestConfig(mapOf(UndocumentedPublicClass.SEARCH_IN_NESTED_CLASS to "false"))).lint(nested)
-		assertThat(findings).isEmpty()
-	}
+        it("should report nested classes by default") {
+            assertThat(subject.compileAndLint(nested)).hasSize(1)
+        }
 
-	it("should report missing doc over object declaration") {
-		assertThat(subject.lint("object o")).hasSize(1)
-	}
+        it("should report explicit public nested classes by default") {
+            assertThat(subject.compileAndLint(nestedPublic)).hasSize(1)
+        }
 
-	it("should not report for documented public object") {
-		val code = """
+        it("should not report internal classes") {
+            assertThat(subject.compileAndLint(internalClass)).hasSize(0)
+        }
+
+        it("should not report private classes") {
+            assertThat(subject.compileAndLint(privateClass)).hasSize(0)
+        }
+
+        it("should not report nested private classes") {
+            assertThat(subject.compileAndLint(nestedPrivate)).hasSize(0)
+        }
+
+        it("should not report inner classes when turned off") {
+            val findings = UndocumentedPublicClass(TestConfig(mapOf(UndocumentedPublicClass.SEARCH_IN_INNER_CLASS to "false"))).compileAndLint(inner)
+            assertThat(findings).isEmpty()
+        }
+
+        it("should not report inner objects when turned off") {
+            val findings = UndocumentedPublicClass(TestConfig(mapOf(UndocumentedPublicClass.SEARCH_IN_INNER_OBJECT to "false"))).compileAndLint(innerObject)
+            assertThat(findings).isEmpty()
+        }
+
+        it("should not report inner interfaces when turned off") {
+            val findings = UndocumentedPublicClass(TestConfig(mapOf(UndocumentedPublicClass.SEARCH_IN_INNER_INTERFACE to "false"))).compileAndLint(innerInterface)
+            assertThat(findings).isEmpty()
+        }
+
+        it("should not report nested classes when turned off") {
+            val findings = UndocumentedPublicClass(TestConfig(mapOf(UndocumentedPublicClass.SEARCH_IN_NESTED_CLASS to "false"))).compileAndLint(nested)
+            assertThat(findings).isEmpty()
+        }
+
+        it("should report missing doc over object declaration") {
+            assertThat(subject.compileAndLint("object o")).hasSize(1)
+        }
+
+        it("should not report for documented public object") {
+            val code = """
 			/**
 			 * Class docs not being recognized.
 			 */
@@ -98,34 +125,40 @@ class UndocumentedPublicClassSpec : SubjectSpek<UndocumentedPublicClass>({
 			}
 		"""
 
-		assertThat(subject.lint(code)).isEmpty()
-	}
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
 
-	it("should not report for anonymous objects") {
-		val code = """
+        it("should not report for anonymous objects") {
+            val code = """
 			fun main(args: Array<String>) {
-				recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {}
+				val value = object : Iterator<Int> {
+        		    override fun hasNext() = true
+        		    override fun next() = 1
+        		}
 			}
 		"""
 
-		assertThat(subject.lint(code)).isEmpty()
-	}
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
 
-	it("should report for enum classes") {
-		val code = "enum class Enum"
+        it("should report for enum classes") {
+            val code = """
+		    enum class Enum {
+				CONSTANT
+			}
+		"""
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
 
-		assertThat(subject.lint(code)).hasSize(1)
-	}
-
-	it("should not report for enum constants") {
-		val code = """
+        it("should not report for enum constants") {
+            val code = """
 			/** Some doc */
 			enum class Enum {
 				CONSTANT
 			}
 		"""
 
-		assertThat(subject.lint(code)).isEmpty()
-	}
-
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+    }
 })

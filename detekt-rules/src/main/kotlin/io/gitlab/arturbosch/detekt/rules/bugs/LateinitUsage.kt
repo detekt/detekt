@@ -1,69 +1,73 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.gitlab.arturbosch.detekt.api.AnnotationExcluder
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Excludes
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import org.jetbrains.kotlin.lexer.KtTokens
-import org.jetbrains.kotlin.preprocessor.typeReferenceName
+import io.gitlab.arturbosch.detekt.api.SplitPattern
+import io.gitlab.arturbosch.detekt.rules.isLateinit
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
 
+/**
+ * Turn on this rule to flag usages of the lateinit modifier.
+ *
+ * Using lateinit for property initialization can be error prone and the actual initialization is not
+ * guaranteed. Try using constructor injection or delegation to initialize properties.
+ *
+ * <noncompliant>
+ * class Foo {
+ *     @JvmField lateinit var i1: Int
+ *     @JvmField @SinceKotlin("1.0.0") lateinit var i2: Int
+ * }
+ * </noncompliant>
+ *
+ * @configuration excludeAnnotatedProperties - Allows you to provide a list of annotations that disable
+ * this check. (default: `""`)
+ * @configuration ignoreOnClassesPattern - Allows you to disable the rule for a list of classes (default: `""`)
+ */
 class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 
-	override val issue = Issue(javaClass.simpleName,
-			Severity.Defect,
-			"Usage of lateinit. Using lateinit for property initialization " +
-					"is error prone, try using constructor injection or delegation.")
+    override val issue = Issue(javaClass.simpleName,
+            Severity.Defect,
+            "Usage of lateinit detected. Using lateinit for property initialization " +
+                    "is error prone, try using constructor injection or delegation.",
+            Debt.TWENTY_MINS)
 
-	private val excludeAnnotatedProperties = Excludes(valueOrDefault(EXCLUDE_ANNOTATED_PROPERTIES, ""))
+    private val excludeAnnotatedProperties = SplitPattern(valueOrDefault(EXCLUDE_ANNOTATED_PROPERTIES, ""))
 
-	private val ignoreOnClassesPattern = Regex(valueOrDefault(IGNORE_ON_CLASSES_PATTERN, ""))
+    private val ignoreOnClassesPattern by LazyRegex(key = IGNORE_ON_CLASSES_PATTERN, default = "")
 
-	private var properties = mutableListOf<KtProperty>()
+    private var properties = mutableListOf<KtProperty>()
 
-	override fun visitProperty(property: KtProperty) {
-		if (isLateinitProperty(property)) {
-			properties.add(property)
-		}
-	}
+    override fun visitProperty(property: KtProperty) {
+        if (property.isLateinit()) {
+            properties.add(property)
+        }
+    }
 
-	override fun visit(root: KtFile) {
-		properties = mutableListOf()
+    override fun visit(root: KtFile) {
+        properties = mutableListOf()
 
-		super.visit(root)
+        super.visit(root)
 
-		val resolvedAnnotations = root.importList
-				?.imports
-				?.filterNot { it.isAllUnder }
-				?.mapNotNull { it.importedFqName?.asString() }
-				?.map { Pair(it.split(".").last(), it) }
-				?.toMap()
+        val annotationExcluder = AnnotationExcluder(root, excludeAnnotatedProperties)
 
-		properties.filterNot { isExcludedByAnnotation(it, resolvedAnnotations) }
-				.filterNot { it.containingClass()?.name?.matches(ignoreOnClassesPattern) == true }
-				.forEach {
-					report(CodeSmell(issue, Entity.from(it)))
-				}
-	}
+        properties.filterNot { annotationExcluder.shouldExclude(it.annotationEntries) }
+                .filterNot { it.containingClass()?.name?.matches(ignoreOnClassesPattern) == true }
+                .forEach {
+                    report(CodeSmell(issue, Entity.from(it), "Usages of lateinit should be avoided."))
+                }
+    }
 
-	private fun isLateinitProperty(property: KtProperty)
-			= property.modifierList?.hasModifier(KtTokens.LATEINIT_KEYWORD) == true
-
-	private fun isExcludedByAnnotation(property: KtProperty, resolvedAnnotations: Map<String, String>?)
-			= property.annotationEntries
-			.mapNotNull {
-				val shortName = it.typeReferenceName
-				resolvedAnnotations?.get(shortName) ?: shortName
-			}
-			.any { !excludeAnnotatedProperties.none(it) }
-
-	companion object {
-		const val EXCLUDE_ANNOTATED_PROPERTIES = "excludeAnnotatedProperties"
-		const val IGNORE_ON_CLASSES_PATTERN = "ignoreOnClassesPattern"
-	}
+    companion object {
+        const val EXCLUDE_ANNOTATED_PROPERTIES = "excludeAnnotatedProperties"
+        const val IGNORE_ON_CLASSES_PATTERN = "ignoreOnClassesPattern"
+    }
 }

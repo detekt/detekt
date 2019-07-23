@@ -8,20 +8,22 @@ import org.jetbrains.kotlin.lexer.KtSingleValueToken
 import org.jetbrains.kotlin.psi.KtIfExpression
 
 /**
- * @author Artur Bosch
+ * Reports empty `if` blocks. Empty blocks of code serve no purpose and should be removed.
+ *
+ * @active since v1.0.0
  */
 class EmptyIfBlock(config: Config) : EmptyRule(config) {
 
-	override fun visitIfExpression(expression: KtIfExpression) {
-		expression.then?.addFindingIfBlockExprIsEmpty()
-		checkThenBodyForLoneSemicolon(expression)
-	}
+    override fun visitIfExpression(expression: KtIfExpression) {
+        super.visitIfExpression(expression)
+        expression.then?.addFindingIfBlockExprIsEmpty()
+        checkThenBodyForLoneSemicolon(expression)
+    }
 
-	private fun checkThenBodyForLoneSemicolon(expression: KtIfExpression) {
-		val valueOfNextSibling = (expression.nextSibling as? LeafPsiElement)?.elementType as? KtSingleValueToken
-		if (valueOfNextSibling?.value?.trim() == ";") {
-			report(CodeSmell(issue, Entity.from(expression)))
-		}
-	}
-
+    private fun checkThenBodyForLoneSemicolon(expression: KtIfExpression) {
+        val valueOfNextSibling = (expression.nextSibling as? LeafPsiElement)?.elementType as? KtSingleValueToken
+        if (valueOfNextSibling?.value?.trim() == ";") {
+            report(CodeSmell(issue, Entity.from(expression), "This if block is empty and can be removed."))
+        }
+    }
 }

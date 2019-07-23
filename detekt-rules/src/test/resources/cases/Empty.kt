@@ -2,57 +2,56 @@
 
 package cases
 
-/**
- * @author Artur Bosch
- */
 class Empty : Runnable {
 
-	init {
+    init {
 
-	}
+    }
 
-	constructor() {
+    constructor() {
 
-	}
+    }
 
-	override fun run() {
+    override fun run() {
 
-	}
+    }
 
-	fun emptyMethod() {
+    fun stuff() {
+        try {
 
-	}
+        } catch (e: Exception) {
 
-	fun stuff() {
-		try {
+        } catch (e: Exception) {
+            //no-op
+        } catch (e: Exception) {
+            println()
+        } catch (ignored: Exception) {
 
-		} catch (e: Exception) {
+        } catch (expected: Exception) {
 
-		} catch (e: Exception) {
-			//no-op
-		} catch (e: Exception) {
-			println()
-		} finally {
+        } catch (_: Exception) {
 
-		}
-		if (true) {
+        } finally {
 
-		} else {
+        }
+        if (true) {
 
-		}
-		when (true) {
+        } else {
 
-		}
-		for (i in 1..10) {
+        }
+        when (true) {
 
-		}
-		while (true) {
+        }
+        for (i in 1..10) {
 
-		}
-		do {
+        }
+        while (true) {
 
-		} while (true)
-	}
+        }
+        do {
+
+        } while (true)
+    }
 }
 
 class EmptyClass() {}
