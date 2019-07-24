@@ -114,8 +114,8 @@ class DetektPlugin : Plugin<Project> {
     private fun registerGenerateConfigTask(project: Project, extension: DetektExtension) =
         project.tasks.register(GENERATE_CONFIG, DetektGenerateConfigTask::class.java) {
             it.setSource(existingInputDirectoriesProvider(project, extension))
-            it.setIncludes(listOf("**/*.kt", "**/*.kts"))
-            it.setExcludes(listOf("build/"))
+            it.setIncludes(defaultIncludes)
+            it.setExcludes(defaultExcludes)
         }
 
     private fun registerIdeaTasks(project: Project, extension: DetektExtension) {
