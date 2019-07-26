@@ -40,7 +40,7 @@ class UseDataClassSpec : Spek({
         it("does not report a class with a delegated property") {
             val code = """
                 class C(val i: Int) {
-                    var prop: String by Delegates.observable("") { 
+                    var prop: String by Delegates.observable("") {
                             prop, old, new -> println("")
                     }
                 }
