@@ -7,3 +7,6 @@ title: Severity.Security - detekt-api
 # Security
 
 `Security`
+
+Places in the source code that can be exploited and possibly result in significant damage.
+

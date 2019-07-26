@@ -7,3 +7,6 @@ title: Severity.Style - detekt-api
 # Style
 
 `Style`
+
+Inspections in this category detect violations of code syntax styles.
+
