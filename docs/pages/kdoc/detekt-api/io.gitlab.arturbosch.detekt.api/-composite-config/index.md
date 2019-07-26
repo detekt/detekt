@@ -10,9 +10,6 @@ title: CompositeConfig - detekt-api
 
 Wraps two different configuration which should be considered when retrieving properties.
 
-**Author**
-Artur Bosch
-
 ### Constructors
 
 | [&lt;init&gt;](-init-.html) | `CompositeConfig(lookFirst: `[`Config`](../-config/index.html)`, lookSecond: `[`Config`](../-config/index.html)`)`<br>Wraps two different configuration which should be considered when retrieving properties. |

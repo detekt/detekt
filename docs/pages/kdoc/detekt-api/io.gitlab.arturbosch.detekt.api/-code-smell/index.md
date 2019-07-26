@@ -17,12 +17,6 @@ can describe further the kind of metrics.
 If the design problem manifests by different source locations, references to these
 locations can be stored in additional [Entity](../-entity/index.html)'s.
 
-**Author**
-Artur Bosch
-
-**Author**
-Marvin Ramin
-
 ### Constructors
 
 | [&lt;init&gt;](-init-.html) | `CodeSmell(issue: `[`Issue`](../-issue/index.html)`, entity: `[`Entity`](../-entity/index.html)`, message: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, metrics: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Metric`](../-metric/index.html)`> = listOf(), references: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Entity`](../-entity/index.html)`> = listOf())`<br>A code smell indicates any possible design problem inside a program's source code. The type of a code smell is described by an [Issue](../-issue/index.html). |
@@ -45,5 +39,6 @@ Marvin Ramin
 
 ### Inheritors
 
+| [CorrectableCodeSmell](../-correctable-code-smell/index.html) | `open class CorrectableCodeSmell : `[`CodeSmell`](./index.html)<br>Represents a code smell for that can be auto corrected. |
 | [ThresholdedCodeSmell](../-thresholded-code-smell/index.html) | `open class ThresholdedCodeSmell : `[`CodeSmell`](./index.html)<br>Represents a code smell for which a specific metric can be determined which is responsible for the existence of this rule violation. |
 

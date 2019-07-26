@@ -14,9 +14,6 @@ from sub interfaces.
 Basic behaviour of a finding is that is can be assigned to an id and a source code position described as
 an entity. Metrics and entity references can also considered for deeper characterization.
 
-**Author**
-Artur Bosch
-
 ### Properties
 
 | [id](id.html) | `abstract val id: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |

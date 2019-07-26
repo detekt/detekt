@@ -10,6 +10,3 @@ title: RuleSet.<init> - detekt-api
 
 A rule set is a collection of rules and must be defined within a rule set provider implementation.
 
-**Author**
-Artur Bosch
-

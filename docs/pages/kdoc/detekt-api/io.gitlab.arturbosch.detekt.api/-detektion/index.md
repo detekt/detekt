@@ -11,9 +11,6 @@ title: Detektion - detekt-api
 Storage for all kinds of findings and additional information
 which needs to be transferred from the detekt engine to the user.
 
-**Author**
-Artur Bosch
-
 ### Properties
 
 | [findings](findings.html) | `abstract val findings: `[`Map`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html)`<`[`RuleSetId`](../-rule-set-id.html)`, `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Finding`](../-finding/index.html)`>>` |

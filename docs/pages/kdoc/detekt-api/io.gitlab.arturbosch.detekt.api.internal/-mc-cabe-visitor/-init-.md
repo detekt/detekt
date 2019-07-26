@@ -10,12 +10,3 @@ title: McCabeVisitor.<init> - detekt-api
 
 Counts the cyclomatic complexity of functions.
 
-**Author**
-Artur Bosch
-
-**Author**
-schalkms
-
-**Author**
-Sebastiano Poggi
-

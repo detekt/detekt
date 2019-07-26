@@ -14,6 +14,3 @@ value when requested again.
 
 `key` &amp; `default` are used to retrieve a value from config.
 
-**Author**
-Pavlos-Petros Tournaris
-

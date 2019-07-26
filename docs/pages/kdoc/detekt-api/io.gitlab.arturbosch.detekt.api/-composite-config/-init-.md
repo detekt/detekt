@@ -10,6 +10,3 @@ title: CompositeConfig.<init> - detekt-api
 
 Wraps two different configuration which should be considered when retrieving properties.
 
-**Author**
-Artur Bosch
-

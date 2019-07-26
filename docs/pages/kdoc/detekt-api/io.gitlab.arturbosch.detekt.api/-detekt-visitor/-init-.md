@@ -11,6 +11,3 @@ title: DetektVisitor.<init> - detekt-api
 Basic visitor which is used inside detekt.
 Guarantees a better looking name as the extended base class :).
 
-**Author**
-Artur Bosch
-

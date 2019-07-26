@@ -6,4 +6,4 @@ title: absolutePath - detekt-api
 
 # absolutePath
 
-`fun KtFile.absolutePath(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`?`
+`fun KtFile.absolutePath(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)

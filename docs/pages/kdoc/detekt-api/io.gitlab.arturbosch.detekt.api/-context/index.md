@@ -14,12 +14,6 @@ Additionally it handles suppression and aliases management.
 The detekt engine retrieves the findings after each KtFile visit and resets the context
 before the next KtFile.
 
-**Author**
-Artur Bosch
-
-**Author**
-Marvin Ramin
-
 ### Properties
 
 | [findings](findings.html) | `abstract val findings: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Finding`](../-finding/index.html)`>` |

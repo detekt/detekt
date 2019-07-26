@@ -23,9 +23,6 @@ rule in the #RuleSetProvider interface. This is due the fact that users create t
 rule set and all rules upfront and letting them 'sub config' the rule set config would
 be error-prone.
 
-**Author**
-Artur Bosch
-
 ### Properties
 
 | [active](active.html) | `open val active: `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)<br>Is this rule specified as active in configuration? If an rule is not specified in the underlying configuration, we assume it should not be run. |

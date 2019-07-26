@@ -10,9 +10,6 @@ title: Entity - detekt-api
 
 Stores information about a specific code fragment.
 
-**Author**
-Artur Bosch
-
 ### Constructors
 
 | [&lt;init&gt;](-init-.html) | `Entity(name: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, className: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, signature: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, location: `[`Location`](../-location/index.html)`, ktElement: KtElement? = null)`<br>Stores information about a specific code fragment. |

@@ -6,4 +6,4 @@ title: relativePath - detekt-api
 
 # relativePath
 
-`fun KtFile.relativePath(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`?`
+`fun KtFile.relativePath(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)

@@ -11,11 +11,9 @@ title: YamlConfig - detekt-api
 Config implementation using the yaml format. SubConfigurations can return sub maps according to the
 yaml specification.
 
-**Author**
-Artur Bosch
-
 ### Properties
 
+| [parent](parent.html) | `val parent: `[`HierarchicalConfig.Parent`](../-hierarchical-config/-parent/index.html)`?`<br>Returns the parent config which encloses this config part. |
 | [properties](properties.html) | `val properties: `[`Map`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-map/index.html)`<`[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, `[`Any`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)`>` |
 
 ### Functions

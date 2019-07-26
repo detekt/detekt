@@ -10,6 +10,3 @@ title: Location.<init> - detekt-api
 
 Specifies a position within a source code fragment.
 
-**Author**
-Artur Bosch
-

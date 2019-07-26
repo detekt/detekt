@@ -10,12 +10,3 @@ title: Issue.<init> - detekt-api
 
 An issue represents a problem in the codebase.
 
-**Author**
-Artur Bosch
-
-**Author**
-Marvin Ramin
-
-**Author**
-schalkms
-
