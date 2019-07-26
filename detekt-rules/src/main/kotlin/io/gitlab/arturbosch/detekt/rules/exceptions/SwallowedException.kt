@@ -73,11 +73,14 @@ class SwallowedException(config: Config = Config.empty) : Rule(config) {
     override fun visitCatchSection(catchClause: KtCatchClause) {
         val exceptionType = catchClause.catchParameter?.typeReference?.text
         if (!ignoredExceptionTypes.contains(exceptionType) &&
-            (isExceptionUnused(catchClause) || isExceptionSwallowed(catchClause)) &&
+            isExceptionSwallowedOrUnused(catchClause) &&
             !catchClause.isAllowedExceptionName(allowedExceptionNameRegex)) {
             report(CodeSmell(issue, Entity.from(catchClause), issue.description))
         }
     }
+
+    private fun isExceptionSwallowedOrUnused(catchClause: KtCatchClause) =
+        isExceptionUnused(catchClause) || isExceptionSwallowed(catchClause)
 
     private fun isExceptionUnused(catchClause: KtCatchClause): Boolean {
         val parameterName = catchClause.catchParameter?.name

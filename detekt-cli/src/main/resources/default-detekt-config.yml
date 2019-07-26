@@ -147,6 +147,7 @@ exceptions:
   SwallowedException:
     active: false
     ignoredExceptionTypes: 'InterruptedException,NumberFormatException,ParseException,MalformedURLException'
+    allowedExceptionNameRegex: "^(_|(ignore|expected).*)"
   ThrowingExceptionFromFinally:
     active: false
   ThrowingExceptionInMain:
