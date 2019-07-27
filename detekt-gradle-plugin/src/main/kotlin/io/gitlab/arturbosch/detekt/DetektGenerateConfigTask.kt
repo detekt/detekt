@@ -10,11 +10,6 @@ import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 
-/**
- * @author Artur Bosch
- * @author Marvin Ramin
- * @author Matthew Haughton
- */
 open class DetektGenerateConfigTask : SourceTask() {
 
     init {

@@ -5,9 +5,6 @@ import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-/**
- * @author Artur Bosch
- */
 class MetricSpec : Spek({
 
     describe("Metrics") {

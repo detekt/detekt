@@ -7,10 +7,6 @@ import io.gitlab.arturbosch.detekt.generator.printer.rulesetpage.ConfigPrinter
 import io.gitlab.arturbosch.detekt.generator.printer.rulesetpage.RuleSetPage
 import io.gitlab.arturbosch.detekt.generator.printer.rulesetpage.RuleSetPagePrinter
 
-/**
- * @author Marvin Ramin
- * @author Artur Bosch
- */
 class DetektPrinter(private val arguments: GeneratorArgs) {
 
     private val markdownWriter = MarkdownWriter()

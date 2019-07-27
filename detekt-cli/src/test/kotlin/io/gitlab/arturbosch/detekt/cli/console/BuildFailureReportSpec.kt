@@ -11,9 +11,6 @@ import org.assertj.core.api.Assertions.fail
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-/**
- * @author Artur Bosch
- */
 internal class BuildFailureReportSpec : Spek({
 
     val subject by memoized { BuildFailureReport() }

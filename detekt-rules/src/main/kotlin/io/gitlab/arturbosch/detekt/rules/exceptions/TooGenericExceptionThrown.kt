@@ -39,9 +39,6 @@ import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
  * 			 - RuntimeException`)
  *
  * @active since v1.0.0
- * @author Artur Bosch
- * @author Marvin Ramin
- * @author schalkms
  */
 class TooGenericExceptionThrown(config: Config) : Rule(config) {
 

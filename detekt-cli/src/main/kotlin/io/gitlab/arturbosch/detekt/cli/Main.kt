@@ -11,10 +11,6 @@ import io.gitlab.arturbosch.detekt.cli.runners.SingleRuleRunner
 import org.jetbrains.kotlin.utils.addToStdlib.ifNotEmpty
 import kotlin.system.exitProcess
 
-/**
- * @author Artur Bosch
- * @author Marvin Ramin
- */
 @Suppress("TooGenericExceptionCaught")
 fun main(args: Array<String>) {
     try {

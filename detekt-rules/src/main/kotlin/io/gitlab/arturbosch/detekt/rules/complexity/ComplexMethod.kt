@@ -38,9 +38,6 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  * @configuration ignoreSimpleWhenEntries - Whether to ignore simple (braceless) when entries. (default: `false`)
  *
  * @active since v1.0.0
- * @author Artur Bosch
- * @author Marvin Ramin
- * @author schalkms
  */
 class ComplexMethod(
     config: Config = Config.empty,

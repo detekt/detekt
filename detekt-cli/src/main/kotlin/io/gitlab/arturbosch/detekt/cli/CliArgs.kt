@@ -4,10 +4,6 @@ import com.beust.jcommander.Parameter
 import org.jetbrains.kotlin.config.JvmTarget
 import java.nio.file.Path
 
-/**
- * @author Artur Bosch
- * @author Marvin Ramin
- */
 interface Args {
     var help: Boolean
 }

@@ -21,7 +21,6 @@ import io.gitlab.arturbosch.detekt.rules.exceptions.TooGenericExceptionThrown
  * Rules in this rule set report issues related to how code throws and handles Exceptions.
  *
  * @active since v1.0.0
- * @author Artur Bosch
  */
 class ExceptionsProvider : RuleSetProvider {
 

@@ -10,9 +10,6 @@ import org.jetbrains.kotlin.psi.psiUtil.lastBlockStatementOrThis
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-/**
- * @author Artur Bosch
- */
 internal class SuppressionSpec : Spek({
 
     describe("different suppression scenarios") {

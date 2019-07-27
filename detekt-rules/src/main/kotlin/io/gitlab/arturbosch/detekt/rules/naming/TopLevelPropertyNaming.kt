@@ -21,7 +21,6 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * @configuration privatePropertyPattern - naming pattern (default: `'_?[A-Za-z][_A-Za-z0-9]*'`)
  *
  * @active since v1.0.0
- * @author Marvin Ramin
  */
 class TopLevelPropertyNaming(config: Config = Config.empty) : Rule(config) {
 

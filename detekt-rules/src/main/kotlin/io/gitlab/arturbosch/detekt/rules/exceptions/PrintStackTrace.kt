@@ -43,9 +43,6 @@ import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
  *     }
  * }
  * </compliant>
- *
- * @author schalkms
- * @author Marvin Ramin
  */
 class PrintStackTrace(config: Config = Config.empty) : Rule(config) {
 

@@ -4,8 +4,6 @@ import javax.script.ScriptException
 
 /**
  * The object to use the Kotlin script engine for code compilation.
- *
- * @author schalkms
  */
 object KotlinScriptEngine {
 

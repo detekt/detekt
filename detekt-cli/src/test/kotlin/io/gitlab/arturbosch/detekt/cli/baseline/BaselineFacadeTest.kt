@@ -14,10 +14,6 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 
-/**
- * @author Artur Bosch
- * @author schalkms
- */
 class BaselineFacadeTest : Spek({
     describe("a baseline facade") {
 

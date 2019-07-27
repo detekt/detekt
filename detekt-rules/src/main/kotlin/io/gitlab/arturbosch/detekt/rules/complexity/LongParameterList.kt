@@ -19,9 +19,6 @@ import org.jetbrains.kotlin.psi.KtParameterList
  * @configuration ignoreDefaultParameters - ignore parameters that have a default value (default: `false`)
  *
  * @active since v1.0.0
- * @author Artur Bosch
- * @author Marvin Ramin
- * @author Serj Lotutovici
  */
 class LongParameterList(
     config: Config = Config.empty,

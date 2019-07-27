@@ -41,11 +41,6 @@ import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
  *
  * @configuration excludeAnnotatedClasses - allows to provide a list of annotations that disable this check
  * (default: `""`)
- *
- * @author Ivan Balaksha
- * @author Artur Bosch
- * @author schalkms
- * @author Marvin Ramin
  */
 class UseDataClass(config: Config = Config.empty) : Rule(config) {
 

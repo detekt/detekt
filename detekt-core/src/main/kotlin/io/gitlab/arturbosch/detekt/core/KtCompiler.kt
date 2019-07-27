@@ -12,9 +12,6 @@ import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
 import java.nio.file.Paths
 
-/**
- * @author Artur Bosch
- */
 open class KtCompiler(
     protected val environment: KotlinCoreEnvironment = createKotlinCoreEnvironment()
 ) {

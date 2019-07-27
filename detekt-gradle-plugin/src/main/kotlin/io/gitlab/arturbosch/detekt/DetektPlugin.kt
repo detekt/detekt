@@ -15,13 +15,6 @@ import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import java.io.File
 
-/**
- * @author Marvin Ramin
- * @author Markus Schwarz
- * @author Artem Zinnatullin
- * @author Niklas Baudy
- * @author Matthew Haughton
- */
 class DetektPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
@@ -121,8 +114,8 @@ class DetektPlugin : Plugin<Project> {
     private fun registerGenerateConfigTask(project: Project, extension: DetektExtension) =
         project.tasks.register(GENERATE_CONFIG, DetektGenerateConfigTask::class.java) {
             it.setSource(existingInputDirectoriesProvider(project, extension))
-            it.setIncludes(listOf("**/*.kt", "**/*.kts"))
-            it.setExcludes(listOf("build/"))
+            it.setIncludes(defaultIncludes)
+            it.setExcludes(defaultExcludes)
         }
 
     private fun registerIdeaTasks(project: Project, extension: DetektExtension) {

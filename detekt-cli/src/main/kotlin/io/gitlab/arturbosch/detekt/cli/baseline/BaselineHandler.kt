@@ -3,9 +3,6 @@ package io.gitlab.arturbosch.detekt.cli.baseline
 import org.xml.sax.Attributes
 import org.xml.sax.helpers.DefaultHandler
 
-/**
- * @author Artur Bosch
- */
 class BaselineHandler : DefaultHandler() {
 
     private var current: String? = null

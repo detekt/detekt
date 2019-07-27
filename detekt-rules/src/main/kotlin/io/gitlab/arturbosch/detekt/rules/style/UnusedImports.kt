@@ -22,10 +22,6 @@ import org.jetbrains.kotlin.psi.KtReferenceExpression
  * This rule reports unused imports. Unused imports are dead code and should be removed.
  * Exempt from this rule are imports resulting from references to elements within KDoc and
  * from destructuring declarations (componentN imports).
- *
- * @author Artur Bosch
- * @author Marvin Ramin
- * @author schalkms
  */
 class UnusedImports(config: Config) : Rule(config) {
 

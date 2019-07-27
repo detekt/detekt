@@ -7,9 +7,6 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.nio.file.Path
 
-/**
- * @author Artur Bosch
- */
 class ComplexityVisitorTest : Spek({
     describe("something") {
 

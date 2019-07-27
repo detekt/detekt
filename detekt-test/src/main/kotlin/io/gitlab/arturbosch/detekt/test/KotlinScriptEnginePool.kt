@@ -7,8 +7,6 @@ import javax.script.ScriptEngineManager
 /**
  * The object to manage a pool of Kotlin script engines to distribute the load for compiling code.
  * The load for compiling code is distributed over a number of engines.
- *
- * @author schalkms
  */
 object KotlinScriptEnginePool {
 

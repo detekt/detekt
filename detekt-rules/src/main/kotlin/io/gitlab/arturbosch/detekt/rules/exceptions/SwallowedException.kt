@@ -54,9 +54,6 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  *
  * @configuration ignoredExceptionTypes - exception types which should be ignored by this rule
  * (default: `'InterruptedException,NumberFormatException,ParseException,MalformedURLException'`)
- *
- * @author schalkms
- * @author Marvin Ramin
  */
 class SwallowedException(config: Config = Config.empty) : Rule(config) {
 

@@ -36,10 +36,6 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * // overridden no-op functions are allowed
  * override fun foo() = Unit
  * </compliant>
- *
- * @author Artur Bosch
- * @author Marvin Ramin
- * @author schalkms
  */
 class OptionalUnit(config: Config = Config.empty) : Rule(config) {
 

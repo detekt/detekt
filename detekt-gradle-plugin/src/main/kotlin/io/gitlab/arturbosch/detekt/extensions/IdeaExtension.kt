@@ -1,8 +1,5 @@
 package io.gitlab.arturbosch.detekt.extensions
 
-/**
- * @author Artur Bosch
- */
 open class IdeaExtension(
     open var path: String? = null,
     open var codeStyleScheme: String? = null,

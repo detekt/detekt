@@ -41,9 +41,6 @@ import org.jetbrains.kotlin.psi.KtValueArgumentList
  *     function { input -> println(input) }
  * }
  * </compliant>
- *
- * @author Marvin Ramin
- * @author schalkms
  */
 class UnnecessaryParentheses(config: Config = Config.empty) : Rule(config) {
 

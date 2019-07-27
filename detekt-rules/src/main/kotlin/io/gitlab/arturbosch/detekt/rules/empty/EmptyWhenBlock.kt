@@ -9,8 +9,6 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  * Reports empty `when` expressions. Empty blocks of code serve no purpose and should be removed.
  *
  * @active since v1.0.0
- * @author Artur Bosch
- * @author Marvin Ramin
  */
 class EmptyWhenBlock(config: Config) : EmptyRule(config) {
 

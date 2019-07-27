@@ -17,10 +17,6 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
  * class A : Any()
  * class B : Object()
  * </noncompliant>
- *
- * @author schalkms
- * @author Artur Bosch
- * @author Marvin Ramin
  */
 class UnnecessaryInheritance(config: Config = Config.empty) : Rule(config) {
 

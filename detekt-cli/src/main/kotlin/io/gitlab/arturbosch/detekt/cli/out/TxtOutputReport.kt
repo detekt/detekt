@@ -3,9 +3,6 @@ package io.gitlab.arturbosch.detekt.cli.out
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.OutputReport
 
-/**
- * @author Marvin Ramin
- */
 class TxtOutputReport : OutputReport() {
 
     override val ending: String = "txt"

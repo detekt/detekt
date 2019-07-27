@@ -9,7 +9,6 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
  *
  * @active since v1.0.0
  * @autoCorrect since v1.0.0
- * @author Artur Bosch
  */
 class NoMultipleSpaces(config: Config) : FormattingRule(config) {
 

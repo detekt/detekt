@@ -2,9 +2,6 @@ package io.gitlab.arturbosch.detekt.generator.collection
 
 import org.jetbrains.kotlin.psi.KtFile
 
-/**
- * @author Marvin Ramin
- */
 class RuleCollector : Collector<Rule> {
     override val items = mutableListOf<Rule>()
 

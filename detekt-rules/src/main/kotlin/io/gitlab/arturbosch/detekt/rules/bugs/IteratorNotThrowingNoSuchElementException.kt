@@ -39,9 +39,6 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
  *     }
  * }
  * </compliant>
- *
- * @author schalkms
- * @author Marvin Ramin
  */
 class IteratorNotThrowingNoSuchElementException(config: Config = Config.empty) : Rule(config) {
 

@@ -34,9 +34,6 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  *
  * @configuration ignoreOverridden - ignores void types in signatures of overridden functions (default: `false`)
  * @configuration ignoreUsageInGenerics - ignore void types as generic arguments (default: `false`)
- *
- * @author Egor Neliuba
- * @author Markus Schwarz
  */
 class ForbiddenVoid(config: Config = Config.empty) : Rule(config) {
 

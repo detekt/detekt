@@ -16,7 +16,6 @@ import org.jetbrains.kotlin.psi.KtEnumEntry
  *
  * @configuration enumEntryPattern - naming pattern (default: `'^[A-Z][_a-zA-Z0-9]*'`)
  * @active since v1.0.0
- * @author Marvin Ramin
  */
 class EnumNaming(config: Config = Config.empty) : Rule(config) {
 

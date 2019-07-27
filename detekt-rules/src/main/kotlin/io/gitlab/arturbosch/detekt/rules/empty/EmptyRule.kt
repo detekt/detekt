@@ -13,10 +13,6 @@ import org.jetbrains.kotlin.psi.KtExpression
 
 /**
  * Rule to detect empty blocks of code.
- *
- * @author Artur Bosch
- * @author Marvin Ramin
- * @author schalkms
  */
 abstract class EmptyRule(config: Config) : Rule(config) {
 

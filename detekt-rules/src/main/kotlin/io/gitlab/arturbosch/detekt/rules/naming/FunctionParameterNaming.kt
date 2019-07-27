@@ -22,8 +22,6 @@ import org.jetbrains.kotlin.psi.KtParameter
  * (default: `true`)
  *
  * @active since v1.0.0
- * @author Mickele Moriconi
- * @author Paweł Gajda
  */
 class FunctionParameterNaming(config: Config = Config.empty) : Rule(config) {
 

@@ -37,8 +37,6 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  * @configuration max - maximum amount of throw statements in a method (default: `2`)
  *
  * @active since v1.0.0
- * @author schalkms
- * @author Marvin Ramin
  */
 class ThrowsCount(config: Config = Config.empty) : Rule(config) {
 

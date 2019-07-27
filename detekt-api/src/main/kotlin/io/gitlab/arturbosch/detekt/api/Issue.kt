@@ -4,10 +4,6 @@ import io.gitlab.arturbosch.detekt.api.internal.validateIdentifier
 
 /**
  * An issue represents a problem in the codebase.
- *
- * @author Artur Bosch
- * @author Marvin Ramin
- * @author schalkms
  */
 data class Issue(
     val id: String,

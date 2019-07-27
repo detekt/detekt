@@ -7,8 +7,6 @@ import org.jetbrains.kotlin.psi.KtWhileExpression
  * Reports empty `while` expressions. Empty blocks of code serve no purpose and should be removed.
  *
  * @active since v1.0.0
- * @author Artur Bosch
- * @author Marvin Ramin
  */
 class EmptyWhileBlock(config: Config) : EmptyRule(config) {
 

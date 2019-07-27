@@ -9,8 +9,6 @@ import java.nio.file.Path
 /**
  * Config implementation using the yaml format. SubConfigurations can return sub maps according to the
  * yaml specification.
- *
- * @author Artur Bosch
  */
 @Suppress("UNCHECKED_CAST")
 class YamlConfig internal constructor(

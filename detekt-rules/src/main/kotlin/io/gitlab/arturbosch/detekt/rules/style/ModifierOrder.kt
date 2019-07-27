@@ -50,7 +50,6 @@ import java.util.Arrays
  * </compliant>
  *
  * @active since v1.0.0
- * @author Marvin Ramin
  */
 class ModifierOrder(config: Config = Config.empty) : Rule(config) {
 

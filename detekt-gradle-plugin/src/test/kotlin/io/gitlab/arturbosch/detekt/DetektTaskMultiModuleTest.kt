@@ -7,9 +7,6 @@ import org.gradle.testkit.runner.TaskOutcome
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-/**
- * @author Markus Schwarz
- */
 internal class DetektTaskMultiModuleTest : Spek({
     describe("The Detekt Gradle plugin used in a multi module project") {
         listOf(groovy(), kotlin()).forEach { builder ->

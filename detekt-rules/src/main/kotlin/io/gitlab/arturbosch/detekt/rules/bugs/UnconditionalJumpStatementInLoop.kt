@@ -28,9 +28,6 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
  *     if (i == 1) break
  * }
  * </compliant>
- *
- * @author schalkms
- * @author Marvin Ramin
  */
 class UnconditionalJumpStatementInLoop(config: Config = Config.empty) : Rule(config) {
 

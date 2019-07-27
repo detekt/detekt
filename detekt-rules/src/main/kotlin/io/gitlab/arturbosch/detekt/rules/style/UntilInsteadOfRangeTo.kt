@@ -27,9 +27,6 @@ import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
  * for (i in 0 until 10) {}
  * val range = 0 until 10
  * </compliant>
- *
- * @author Ilya Zorin
- * @author schalkms
  */
 class UntilInsteadOfRangeTo(config: Config = Config.empty) : Rule(config) {
 

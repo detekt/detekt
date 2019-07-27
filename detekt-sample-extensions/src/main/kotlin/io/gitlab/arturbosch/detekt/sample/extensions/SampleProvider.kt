@@ -6,9 +6,6 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.sample.extensions.rules.TooManyFunctions
 import io.gitlab.arturbosch.detekt.sample.extensions.rules.TooManyFunctionsTwo
 
-/**
- * @author Artur Bosch
- */
 class SampleProvider : RuleSetProvider {
 
     override val ruleSetId: String = "sample"

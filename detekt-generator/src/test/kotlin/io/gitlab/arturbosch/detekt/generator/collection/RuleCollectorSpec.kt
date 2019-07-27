@@ -145,7 +145,6 @@ class RuleCollectorSpec : Spek({
 
 				/**
 				 * $description
-				 * @author Marvin Ramin
 				 */
 				class $name: Rule {
 				}
@@ -162,7 +161,6 @@ class RuleCollectorSpec : Spek({
 
 				/**
 				 * $description
-				 * @author Marvin Ramin
 				 */
 				class $name: Rule {
 				}

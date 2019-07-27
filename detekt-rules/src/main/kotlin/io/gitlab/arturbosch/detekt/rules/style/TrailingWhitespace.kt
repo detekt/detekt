@@ -10,9 +10,6 @@ import io.gitlab.arturbosch.detekt.api.Severity
 
 /**
  * This rule reports lines that end with a whitespace.
- *
- * @author Misa Torres
- * @author schalkms
  */
 class TrailingWhitespace(config: Config = Config.empty) : Rule(config) {
 

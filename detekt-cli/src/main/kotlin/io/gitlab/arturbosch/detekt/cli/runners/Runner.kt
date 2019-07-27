@@ -10,10 +10,6 @@ import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import kotlin.system.measureTimeMillis
 
-/**
- * @author Artur Bosch
- * @author Marvin Ramin
- */
 class Runner(private val arguments: CliArgs) : Executable {
 
     override fun execute() {

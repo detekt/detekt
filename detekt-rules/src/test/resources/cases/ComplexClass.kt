@@ -1,8 +1,5 @@
 package cases
 
-/**
- * @author Artur Bosch
- */
 @Suppress("unused", "ConstantConditionIf")
 fun complex() { //20
     try {//5

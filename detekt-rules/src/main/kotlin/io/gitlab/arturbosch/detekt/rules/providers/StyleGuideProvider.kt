@@ -58,7 +58,6 @@ import io.gitlab.arturbosch.detekt.rules.style.optional.PreferToOverPairSyntax
  * code style guidelines.
  *
  * @active since v1.0.0
- * @author Artur Bosch
  */
 class StyleGuideProvider : RuleSetProvider {
 

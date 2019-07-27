@@ -14,7 +14,6 @@ import org.jetbrains.kotlin.psi.KtProperty
  * Reports when very long variable names are used.
  *
  * @configuration maximumVariableNameLength - maximum name length (default: `64`)
- * @author Marvin Ramin
  */
 class VariableMaxLength(config: Config = Config.empty) : Rule(config) {
 

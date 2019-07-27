@@ -24,8 +24,6 @@ import java.util.IdentityHashMap
  * @configuration threshold - maximum size of a class (default: `600`)
  *
  * @active since v1.0.0
- * @author Artur Bosch
- * @author Marvin Ramin
  */
 class LargeClass(
     config: Config = Config.empty,

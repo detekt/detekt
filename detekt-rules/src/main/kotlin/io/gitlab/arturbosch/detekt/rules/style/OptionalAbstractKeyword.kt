@@ -32,8 +32,6 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * </compliant>
  *
  * @active since v1.0.0
- * @author schalkms
- * @author Marvin Ramin
  */
 class OptionalAbstractKeyword(config: Config = Config.empty) : Rule(config) {
 

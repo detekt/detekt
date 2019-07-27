@@ -6,10 +6,6 @@ import io.gitlab.arturbosch.detekt.cli.ExistingPathConverter
 import io.gitlab.arturbosch.detekt.cli.MultipleExistingPathConverter
 import java.nio.file.Path
 
-/**
- * @author Marvin Ramin
- * @author Artur Bosch
- */
 class GeneratorArgs : Args {
 
     @Parameter(names = ["--input", "-i"],

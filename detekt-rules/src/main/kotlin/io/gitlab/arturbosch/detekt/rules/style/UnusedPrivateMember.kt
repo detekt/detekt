@@ -40,11 +40,6 @@ import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
  *
  * @configuration allowedNames - unused private member names matching this regex are ignored
  * (default: `"(_|ignored|expected|serialVersionUID)"`)
- *
- * @author Marvin Ramin
- * @author Artur Bosch
- * @author schalkms
- * @author Andrew Arnott
  */
 class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 

@@ -7,9 +7,6 @@ import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
 
-/**
- * @author Artur Bosch
- */
 class QualifiedNameProcessor : FileProcessListener {
 
     override fun onProcess(file: KtFile) {

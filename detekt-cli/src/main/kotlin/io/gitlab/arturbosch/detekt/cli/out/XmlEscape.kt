@@ -30,7 +30,6 @@ import java.util.Collections
  *
  * Utility class for performing XML escape/unescape operations.
  *
- * @author Daniel Fernndez
  * @since 1.0.0
  */
 object XmlEscape {

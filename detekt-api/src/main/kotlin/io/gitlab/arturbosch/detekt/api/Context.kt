@@ -6,9 +6,6 @@ package io.gitlab.arturbosch.detekt.api
  *
  * The detekt engine retrieves the findings after each KtFile visit and resets the context
  * before the next KtFile.
- *
- * @author Artur Bosch
- * @author Marvin Ramin
  */
 interface Context {
     val findings: List<Finding>

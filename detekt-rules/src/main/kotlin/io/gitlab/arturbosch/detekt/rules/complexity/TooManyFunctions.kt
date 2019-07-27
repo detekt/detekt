@@ -34,9 +34,6 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * @configuration ignoreOverridden - ignore overridden functions (default: `false`)
  *
  * @active since v1.0.0
- * @author Artur Bosch
- * @author Marvin Ramin
- * @author schalkms
  */
 class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
 

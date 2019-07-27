@@ -9,9 +9,6 @@ package io.gitlab.arturbosch.detekt.api
  *
  * If the design problem manifests by different source locations, references to these
  * locations can be stored in additional [Entity]'s.
- *
- * @author Artur Bosch
- * @author Marvin Ramin
  */
 open class CodeSmell(
     final override val issue: Issue,

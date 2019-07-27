@@ -6,10 +6,6 @@ import io.gitlab.arturbosch.detekt.cli.out.XmlOutputReport
 import java.nio.file.Path
 import java.nio.file.Paths
 
-/**
- * @author Artur Bosch
- * @author Pavlos-Petros Tournaris
- */
 data class ReportPath(val kind: String, val path: Path) {
 
     companion object {

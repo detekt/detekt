@@ -5,8 +5,6 @@ import kotlin.reflect.KProperty
 /**
  * Allows to assign a property just once.
  * Further assignments result in [IllegalStateException]'s.
- *
- * @author Artur Bosch
  */
 class SingleAssign<T : Any> {
 
