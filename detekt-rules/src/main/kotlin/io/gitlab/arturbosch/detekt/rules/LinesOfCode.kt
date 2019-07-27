@@ -38,7 +38,6 @@ fun ASTNode.tokenSequence(skipTreesOf: Set<KClass<out PsiElement>>): Sequence<AS
     } while (queue.isNotEmpty())
 }
 
-fun KtFile.linesOfCode(): Int = linesOfCode(this)
 fun KtElement.linesOfCode(inFile: KtFile = this.containingKtFile): Int = node.tokenSequence(comments)
         .map { it.line(inFile) }
         .distinct()
