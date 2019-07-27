@@ -203,6 +203,7 @@ open class Detekt : SourceTask(), VerificationTask {
     }
 
     @TaskAction
+    @Suppress("detekt.LongMethod")
     fun check() {
         if (plugins.isPresent && !pluginClasspath.isEmpty) {
             throw GradleException(
