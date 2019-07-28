@@ -44,6 +44,7 @@ open class DetektCreateBaselineTask : SourceTask() {
 
     @Deprecated("Replace with getSource/setSource")
     var input: FileCollection
+        @Internal
         get() = source
         set(value) = setSource(value)
 
@@ -95,8 +96,8 @@ open class DetektCreateBaselineTask : SourceTask() {
     @Optional
     val ignoreFailures: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
-    @Optional
-    @Input
+    @get:Optional
+    @get:Input
     internal val autoCorrectProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     var autoCorrect: Boolean
         @Internal
