@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
@@ -51,6 +53,7 @@ class DetektPlugin : Plugin<Project> {
             it.disableDefaultRuleSetsProp.set(project.provider { extension.disableDefaultRuleSets })
             it.buildUponDefaultConfigProp.set(project.provider { extension.buildUponDefaultConfig })
             it.failFastProp.set(project.provider { extension.failFast })
+            it.autoCorrectProp.set(project.provider { extension.autoCorrect })
             it.config.setFrom(project.provider { extension.config })
             it.baseline.set(project.layout.file(project.provider { extension.baseline }))
             it.plugins.set(project.provider { extension.plugins })
@@ -76,6 +79,7 @@ class DetektPlugin : Plugin<Project> {
             it.disableDefaultRuleSetsProp.set(project.provider { extension.disableDefaultRuleSets })
             it.buildUponDefaultConfigProp.set(project.provider { extension.buildUponDefaultConfig })
             it.failFastProp.set(project.provider { extension.failFast })
+            it.autoCorrectProp.set(project.provider { extension.autoCorrect })
             it.config.setFrom(project.provider { extension.config })
             it.baseline.set(project.layout.file(project.provider { extension.baseline }))
             it.plugins.set(project.provider { extension.plugins })
@@ -99,6 +103,7 @@ class DetektPlugin : Plugin<Project> {
             it.disableDefaultRuleSets.set(project.provider { extension.disableDefaultRuleSets })
             it.buildUponDefaultConfig.set(project.provider { extension.buildUponDefaultConfig })
             it.failFast.set(project.provider { extension.failFast })
+            it.autoCorrect.set(project.provider { extension.autoCorrect })
             it.plugins.set(project.provider { extension.plugins })
             it.setSource(existingInputDirectoriesProvider(project, extension))
             it.setIncludes(defaultIncludes)
@@ -148,7 +153,6 @@ class DetektPlugin : Plugin<Project> {
             configuration.description = "The $CONFIGURATION_DETEKT dependencies to be used for this project."
 
             configuration.defaultDependencies { dependencySet ->
-                @Suppress("USELESS_ELVIS")
                 val version = extension.toolVersion ?: DEFAULT_DETEKT_VERSION
                 dependencySet.add(project.dependencies.create("io.gitlab.arturbosch.detekt:detekt-cli:$version"))
             }

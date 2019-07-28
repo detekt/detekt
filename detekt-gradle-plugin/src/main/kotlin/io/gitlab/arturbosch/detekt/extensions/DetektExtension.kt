@@ -13,7 +13,9 @@ open class DetektExtension(project: Project) : CodeQualityExtension() {
         @JvmName("ignoreFailures_")
         get() = isIgnoreFailures
         @JvmName("ignoreFailures_")
-        set(value) = setIgnoreFailures(value)
+        set(value) {
+            isIgnoreFailures = value
+        }
 
     val customReportsDir: File?
         get() = reportsDir
@@ -41,6 +43,8 @@ open class DetektExtension(project: Project) : CodeQualityExtension() {
 
     var disableDefaultRuleSets: Boolean = DEFAULT_DISABLE_RULESETS_VALUE
 
+    var autoCorrect: Boolean = DEFAULT_AUTO_CORRECT_VALUE
+
     @Deprecated("Replace with task setIncludes/setExcludes")
     var filters: String? = null
 
@@ -53,6 +57,7 @@ open class DetektExtension(project: Project) : CodeQualityExtension() {
         const val DEFAULT_SRC_DIR_KOTLIN = "src/main/kotlin"
         const val DEFAULT_DEBUG_VALUE = false
         const val DEFAULT_PARALLEL_VALUE = false
+        const val DEFAULT_AUTO_CORRECT_VALUE = false
         const val DEFAULT_DISABLE_RULESETS_VALUE = false
         const val DEFAULT_REPORT_ENABLED_VALUE = true
         const val DEFAULT_FAIL_FAST_VALUE = false
