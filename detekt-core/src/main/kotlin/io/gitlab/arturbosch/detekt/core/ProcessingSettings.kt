@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.api.internal.createCompilerConfiguration
 import io.gitlab.arturbosch.detekt.api.internal.createKotlinCoreEnvironment
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.config.JvmTarget
+import org.jetbrains.kotlin.config.LanguageVersion
 import java.io.PrintStream
 import java.nio.file.Files
 import java.nio.file.Path
@@ -25,6 +26,7 @@ data class ProcessingSettings @JvmOverloads constructor(
     val excludeDefaultRuleSets: Boolean = false,
     val pluginPaths: List<Path> = emptyList(),
     val classpath: List<String> = emptyList(),
+    val languageVersion: LanguageVersion? = null,
     val jvmTarget: JvmTarget = JvmTarget.DEFAULT,
     val executorService: ExecutorService = ForkJoinPool.commonPool(),
     val outPrinter: PrintStream = System.out,
@@ -43,6 +45,7 @@ data class ProcessingSettings @JvmOverloads constructor(
         excludeDefaultRuleSets: Boolean = false,
         pluginPaths: List<Path> = emptyList(),
         classpath: List<String> = emptyList(),
+        languageVersion: LanguageVersion = LanguageVersion.LATEST_STABLE,
         jvmTarget: JvmTarget = JvmTarget.DEFAULT,
         executorService: ExecutorService = ForkJoinPool.commonPool(),
         outPrinter: PrintStream = System.out,
@@ -57,6 +60,7 @@ data class ProcessingSettings @JvmOverloads constructor(
         excludeDefaultRuleSets,
         pluginPaths,
         classpath,
+        languageVersion,
         jvmTarget,
         executorService,
         outPrinter,
@@ -79,7 +83,7 @@ data class ProcessingSettings @JvmOverloads constructor(
      * analyzing logic.
      */
     val environment: KotlinCoreEnvironment by lazy {
-        val compilerConfiguration = createCompilerConfiguration(inputPaths, classpath, jvmTarget)
+        val compilerConfiguration = createCompilerConfiguration(inputPaths, classpath, languageVersion, jvmTarget)
         createKotlinCoreEnvironment(compilerConfiguration)
     }
 

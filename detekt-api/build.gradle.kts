@@ -29,3 +29,11 @@ tasks.withType<DokkaTask> {
     @Suppress("MagicNumber")
     jdkVersion = 8
 }
+
+tasks.withType<Test> {
+    systemProperty("kotlinVersion", embeddedKotlinVersion)
+
+    doFirst {
+        systemProperty("testClasspath", classpath.joinToString(";"))
+    }
+}

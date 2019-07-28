@@ -86,7 +86,7 @@ class UseRequireSpec : Spek({
             assertThat(subject.lint(code)).isEmpty()
         }
 
-        context("throw is not after a precondition"){
+        context("throw is not after a precondition") {
 
             it("does not report an issue if the exception is inside a when") {
                 val code = """

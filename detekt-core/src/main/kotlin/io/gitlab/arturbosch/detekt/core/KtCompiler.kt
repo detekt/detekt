@@ -23,9 +23,7 @@ open class KtCompiler(
         val relativePath =
             (if (root == subPath) subPath.fileName
             else root.fileName.resolve(root.relativize(subPath))).normalize()
-        val absolutePath =
-            (if (root == subPath) subPath
-            else subPath).toAbsolutePath().normalize()
+        val absolutePath = subPath.toAbsolutePath().normalize()
         val content = subPath.toFile().readText()
         val lineSeparator = content.determineLineSeparator()
         val normalizedContent = StringUtilRt.convertLineSeparators(content)
@@ -44,7 +42,8 @@ open class KtCompiler(
             KotlinLanguage.INSTANCE,
             StringUtilRt.convertLineSeparators(content),
             true, true, false,
-            LightVirtualFile(path.toString()))
+            LightVirtualFile(path.toString())
+        )
         return psiFile as? KtFile ?: throw IllegalStateException("kotlin file expected")
     }
 }

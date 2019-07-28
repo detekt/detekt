@@ -18,6 +18,7 @@ import io.gitlab.arturbosch.detekt.invoke.DisableDefaultRuleSetArgument
 import io.gitlab.arturbosch.detekt.invoke.FailFastArgument
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.JvmTargetArgument
+import io.gitlab.arturbosch.detekt.invoke.LanguageVersionArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
 import io.gitlab.arturbosch.detekt.invoke.PluginsArgument
 import org.gradle.api.Action
@@ -82,6 +83,14 @@ open class Detekt : SourceTask(), VerificationTask {
 
     @Input
     @Optional
+    internal val languageVersionProp: Property<String> = project.objects.property(String::class.javaObjectType)
+    var languageVersion: String
+        @Internal
+        get() = languageVersionProp.get()
+        set(value) = languageVersionProp.set(value)
+
+    @Input
+    @Optional
     internal val jvmTargetProp: Property<String> = project.objects.property(String::class.javaObjectType)
     var jvmTarget: String
         @Internal
@@ -90,8 +99,10 @@ open class Detekt : SourceTask(), VerificationTask {
 
     @Input
     @Optional
-    @Deprecated("Set plugins using the detektPlugins configuration " +
-            "(see https://arturbosch.github.io/detekt/extensions.html#let-detekt-know-about-your-extensions)")
+    @Deprecated(
+        "Set plugins using the detektPlugins configuration " +
+                "(see https://arturbosch.github.io/detekt/extensions.html#let-detekt-know-about-your-extensions)"
+    )
     var plugins: Property<String> = project.objects.property(String::class.java)
 
     @Internal
@@ -136,6 +147,7 @@ open class Detekt : SourceTask(), VerificationTask {
 
     internal val ignoreFailuresProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     @Input
+    @Optional
     override fun getIgnoreFailures(): Boolean = ignoreFailuresProp.getOrElse(false)
     override fun setIgnoreFailures(value: Boolean) = ignoreFailuresProp.set(value)
 
@@ -187,9 +199,12 @@ open class Detekt : SourceTask(), VerificationTask {
 
     @TaskAction
     fun check() {
-        if (plugins.isPresent && !pluginClasspath.isEmpty)
-            throw GradleException("Cannot set value for plugins on detekt task and apply detektPlugins configuration " +
-                    "at the same time.")
+        if (plugins.isPresent && !pluginClasspath.isEmpty) {
+            throw GradleException(
+                "Cannot set value for plugins on detekt task and apply detektPlugins configuration " +
+                        "at the same time."
+            )
+        }
         val xmlReportTargetFileOrNull = xmlReportFile.orNull
         val htmlReportTargetFileOrNull = htmlReportFile.orNull
         val txtReportTargetFileOrNull = txtReportFile.orNull
@@ -197,6 +212,7 @@ open class Detekt : SourceTask(), VerificationTask {
         val arguments = mutableListOf(
             InputArgument(source),
             ClasspathArgument(classpath),
+            LanguageVersionArgument(languageVersionProp.orNull),
             JvmTargetArgument(jvmTargetProp.orNull),
             ConfigArgument(config),
             PluginsArgument(plugins.orNull),
