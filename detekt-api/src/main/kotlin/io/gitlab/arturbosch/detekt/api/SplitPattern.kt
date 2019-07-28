@@ -41,7 +41,7 @@ class SplitPattern(
     fun equals(value: String?): Boolean = excludes.any { value?.equals(it, ignoreCase = true) == true }
 
     /**
-     * Is there any element which matches given [value]?
+     * Is there any element which matches the given [value]?
      */
     fun any(value: String?): Boolean = excludes.any { value?.equals(it, ignoreCase = true) == true }
 
@@ -51,12 +51,12 @@ class SplitPattern(
     fun none(value: String): Boolean = !contains(value)
 
     /**
-     * Finds all parts which match given [value].
+     * Finds all parts which match the given [value].
      */
     fun matches(value: String): List<String> = excludes.filter { value.contains(it, ignoreCase = true) }
 
     /**
-     * Tests if any part starts with given [value]
+     * Tests if any part starts with the given [value]
      */
     fun startWith(value: String?): Boolean = excludes.any { value?.startsWith(it) ?: false }
 

@@ -26,7 +26,7 @@ abstract class MultiRule : BaseRule() {
 
     /**
      * Preferred way to run child rules because this composite rule
-     * takes care of evaluating if a specific child run should be run at all.
+     * takes care of evaluating if a specific child should be run at all.
      */
     fun <T : Rule> T.runIfActive(block: T.() -> Unit) {
         if (this in activeRules) {

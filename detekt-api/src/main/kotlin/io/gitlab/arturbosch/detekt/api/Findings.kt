@@ -63,7 +63,8 @@ interface Compactable {
     fun compact(): String
 
     /**
-     * Same as [compact] except the content should contain a substring which
+     * Same as [compact] except the content should contain a substring which represents
+     * this exact findings via a custom identifier.
      */
     fun compactWithSignature(): String = compact()
 }
