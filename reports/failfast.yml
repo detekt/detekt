@@ -4,6 +4,14 @@ build:
 comments:
   CommentOverPrivateProperty:
     active: true
+  UndocumentedPublicClass:
+    active: true
+    excludes: "**/*.kt"
+    includes: "**/detekt-api/src/main/**/api/*.kt"
+  UndocumentedPublicFunction:
+    active: true
+    excludes: "**/*.kt"
+    includes: "**/detekt-api/src/main/**/api/*.kt"
 
 complexity:
   StringLiteralDuplication:
@@ -95,4 +103,4 @@ style:
   LibraryCodeMustSpecifyReturnType:
     active: true
     excludes: "**/*.kt"
-    includes: "**/detekt-api/src/main/**"
+    includes: "**/detekt-api/src/main/**/api/*.kt"
