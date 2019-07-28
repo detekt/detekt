@@ -49,7 +49,7 @@ class ThrowingExceptionsWithoutMessageOrCause(config: Config = Config.empty) : R
 
     override fun visitCallExpression(expression: KtCallExpression) {
         val calleeExpressionText = expression.calleeExpression?.text
-        if (exceptions.equals(calleeExpressionText) && expression.valueArguments.isEmpty()) {
+        if (exceptions.any(calleeExpressionText) && expression.valueArguments.isEmpty()) {
             report(CodeSmell(issue, Entity.from(expression), issue.description))
         }
         super.visitCallExpression(expression)

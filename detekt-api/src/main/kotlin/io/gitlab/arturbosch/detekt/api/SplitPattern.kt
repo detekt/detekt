@@ -34,7 +34,16 @@ class SplitPattern(
     /**
      * Is there any element which matches given [value]?
      */
+    @Deprecated(
+        "The name 'equals' should only be used when matching the 'equals contract'.",
+        replaceWith = ReplaceWith("any(value)")
+    )
     fun equals(value: String?): Boolean = excludes.any { value?.equals(it, ignoreCase = true) == true }
+
+    /**
+     * Is there any element which matches given [value]?
+     */
+    fun any(value: String?): Boolean = excludes.any { value?.equals(it, ignoreCase = true) == true }
 
     /**
      * Tests if none of the parts contain the given [value].
