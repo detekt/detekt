@@ -22,6 +22,12 @@ class SwallowedExceptionSpec : Spek({
             assertThat(rule.lint(Case.SwallowedExceptionPositive.path())).hasSize(4)
         }
 
+        it("ignores given exception name") {
+            val config = TestConfig(mapOf(SwallowedException.ALLOWED_EXCEPTION_NAME_REGEX to "myIgnore"))
+            val rule = SwallowedException(config)
+            assertThat(rule.lint(Case.SwallowedExceptionPositive.path())).hasSize(4)
+        }
+
         it("does not report thrown catch blocks") {
             assertThat(subject.lint(Case.SwallowedExceptionNegative.path())).hasSize(0)
         }
