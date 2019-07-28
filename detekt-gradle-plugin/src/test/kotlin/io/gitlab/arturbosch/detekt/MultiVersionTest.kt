@@ -12,7 +12,7 @@ object MultiVersionTest : Spek({
     val testedGradleVersions = listOf("4.9", "5.4")
 
     describe("detekt plugin running on different Gradle versions") {
-        listOf(groovy(), kotlin()).forEach { builder ->
+        listOf(groovy().dryRun(), kotlin().dryRun()).forEach { builder ->
             describe("using ${builder.gradleBuildName}") {
                 testedGradleVersions.forEach { gradleVersion ->
                     it("runs on version $gradleVersion of Gradle") {

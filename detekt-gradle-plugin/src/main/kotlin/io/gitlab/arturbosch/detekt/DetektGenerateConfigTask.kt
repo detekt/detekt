@@ -32,6 +32,6 @@ open class DetektGenerateConfigTask : SourceTask() {
             InputArgument(source)
         )
 
-        DetektInvoker.invokeCli(project, arguments.toList(), detektClasspath, name)
+        DetektInvoker.create(project).invokeCli(arguments.toList(), detektClasspath, name)
     }
 }

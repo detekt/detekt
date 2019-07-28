@@ -224,8 +224,7 @@ open class Detekt : SourceTask(), VerificationTask {
             CustomReportArgument(reportId, destination)
         })
 
-        DetektInvoker.invokeCli(
-            project = project,
+        DetektInvoker.create(project).invokeCli(
             arguments = arguments.toList(),
             ignoreFailures = ignoreFailuresProp.get(),
             classpath = detektClasspath.plus(pluginClasspath),

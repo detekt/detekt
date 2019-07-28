@@ -26,7 +26,7 @@ class UseDataClassSpec : Spek({
             assertThat(subject.lint("inline class A(val x: Int)")).isEmpty()
         }
 
-        it("does not report a potential data class when class has an annotation which is ignored") {
+        it("does not report a class which has an ignored annotation") {
             val code = """
 				import kotlin.SinceKotlin
 
@@ -35,6 +35,30 @@ class UseDataClassSpec : Spek({
 				"""
             val config = TestConfig(mapOf(UseDataClass.EXCLUDE_ANNOTATED_CLASSES to "kotlin.*"))
             assertThat(UseDataClass(config).lint(code)).isEmpty()
+        }
+
+        it("does not report a class with a delegated property") {
+            val code = """
+                class C(val i: Int) {
+                    var prop: String by Delegates.observable("") {
+                            prop, old, new -> println("")
+                    }
+                }
+                """
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        it("reports class with nested delegation") {
+            val code = """
+                class C(val i: Int) {
+                    var prop: C = C(1).apply {
+                        var str: String by Delegates.observable("") {
+                                prop, old, new -> println("")
+                        }
+                    }
+                }
+            """
+            assertThat(subject.lint(code)).hasSize(1)
         }
     }
 })
