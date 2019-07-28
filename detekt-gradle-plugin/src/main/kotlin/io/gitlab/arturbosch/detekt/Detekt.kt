@@ -136,12 +136,10 @@ open class Detekt : SourceTask(), VerificationTask {
         get() = failFastProp.get()
         set(value) = failFastProp.set(value)
 
-    private val ignoreFailuresProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    internal val ignoreFailuresProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     @Input
-    @Optional
-    override fun getIgnoreFailures(): Boolean = ignoreFailuresProp.get()
+    override fun getIgnoreFailures(): Boolean = ignoreFailuresProp.getOrElse(false)
     override fun setIgnoreFailures(value: Boolean) = ignoreFailuresProp.set(value)
-    fun setIgnoreFailures(value: Provider<Boolean>) = ignoreFailuresProp.set(value)
 
     @Optional
     @Input
@@ -231,7 +229,7 @@ open class Detekt : SourceTask(), VerificationTask {
         DetektInvoker.invokeCli(
             project = project,
             arguments = arguments.toList(),
-            ignoreFailures = ignoreFailuresProp.getOrElse(false),
+            ignoreFailures = ignoreFailuresProp.get(),
             classpath = detektClasspath.plus(pluginClasspath),
             taskName = name
         )
