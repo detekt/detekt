@@ -11,11 +11,20 @@ import java.io.PrintStream
  */
 abstract class ConsoleReport : Extension {
 
+    /**
+     * Prints the rendered report to the given printer
+     * if anything was rendered at all.
+     */
     fun print(printer: PrintStream, detektion: Detektion) {
         render(detektion)?.let {
             printer.println(it)
         }
     }
 
+    /**
+     * Converts the given [detektion] into a string representation
+     * to present it to the client.
+     * The implementation specifies which parts of the report are important to the user.
+     */
     abstract fun render(detektion: Detektion): String?
 }

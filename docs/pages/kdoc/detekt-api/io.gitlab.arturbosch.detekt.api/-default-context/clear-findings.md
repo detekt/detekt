@@ -10,3 +10,6 @@ title: DefaultContext.clearFindings - detekt-api
 
 Overrides [Context.clearFindings](../-context/clear-findings.html)
 
+Clears previous findings.
+Normally this is done on every new [KtFile](#) analyzed and should be called by clients.
+

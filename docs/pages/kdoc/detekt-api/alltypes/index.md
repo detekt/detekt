@@ -36,7 +36,7 @@ title: alltypes - detekt-api
 | [io.gitlab.arturbosch.detekt.api.Location](../io.gitlab.arturbosch.detekt.api/-location/index.html) | Specifies a position within a source code fragment. |
 | [io.gitlab.arturbosch.detekt.api.internal.McCabeVisitor](../io.gitlab.arturbosch.detekt.api.internal/-mc-cabe-visitor/index.html) | Counts the cyclomatic complexity of functions. |
 | [io.gitlab.arturbosch.detekt.api.Metric](../io.gitlab.arturbosch.detekt.api/-metric/index.html) | Metric type, can be an integer or double value. Internally it is stored as an integer, but the conversion factor and is double attributes can be used to retrieve it as a double value. |
-| [io.gitlab.arturbosch.detekt.api.MultiRule](../io.gitlab.arturbosch.detekt.api/-multi-rule/index.html) |  |
+| [io.gitlab.arturbosch.detekt.api.MultiRule](../io.gitlab.arturbosch.detekt.api/-multi-rule/index.html) | Composite rule which delegates work to child rules. Can be used to combine different rules which do similar work like scanning the source code line by line to increase performance. |
 | [io.gitlab.arturbosch.detekt.api.Notification](../io.gitlab.arturbosch.detekt.api/-notification/index.html) | Any kind of notification which should be printed to the console. For example when using the formatting rule set, any change to your kotlin file is a notification. |
 | [io.gitlab.arturbosch.detekt.api.OutputReport](../io.gitlab.arturbosch.detekt.api/-output-report/index.html) | Translates detekt's result container - [Detektion](../io.gitlab.arturbosch.detekt.api/-detektion/index.html) - into an output report which is written inside a file. |
 | [io.gitlab.arturbosch.detekt.api.internal.PathFilters](../io.gitlab.arturbosch.detekt.api.internal/-path-filters/index.html) |  |

@@ -26,11 +26,11 @@ open class CodeSmell(
 
     override fun toString(): String {
         return "CodeSmell(issue=$issue, " +
-                "entity=$entity, " +
-                "message=$message, " +
-                "metrics=$metrics, " +
-                "references=$references, " +
-                "id='$id')"
+            "entity=$entity, " +
+            "message=$message, " +
+            "metrics=$metrics, " +
+            "references=$references, " +
+            "id='$id')"
     }
 
     override fun messageOrDescription(): String = when {
@@ -60,13 +60,13 @@ open class CorrectableCodeSmell(
 ) {
     override fun toString(): String {
         return "CorrectableCodeSmell(" +
-                "autoCorrectEnabled=$autoCorrectEnabled," +
-                "issue=$issue, " +
-                "entity=$entity, " +
-                "message=$message, " +
-                "metrics=$metrics, " +
-                "references=$references, " +
-                "id='$id')"
+            "autoCorrectEnabled=$autoCorrectEnabled," +
+            "issue=$issue, " +
+            "entity=$entity, " +
+            "message=$message, " +
+            "metrics=$metrics, " +
+            "references=$references, " +
+            "id='$id')"
     }
 }
 
@@ -83,7 +83,7 @@ open class ThresholdedCodeSmell(
     message: String,
     references: List<Entity> = emptyList()
 ) : CodeSmell(
-        issue, entity, message, metrics = listOf(metric), references = references
+    issue, entity, message, metrics = listOf(metric), references = references
 ) {
 
     val value: Int

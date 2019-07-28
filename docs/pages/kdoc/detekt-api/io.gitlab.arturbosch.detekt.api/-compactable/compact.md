@@ -7,3 +7,6 @@ title: Compactable.compact - detekt-api
 # compact
 
 `abstract fun compact(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)
+
+Contract to format implementing object to a string representation.
+

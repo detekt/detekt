@@ -36,13 +36,13 @@ an entity. Metrics and entity references can also considered for deeper characte
 
 ### Functions
 
-| [messageOrDescription](message-or-description.html) | `abstract fun messageOrDescription(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
+| [messageOrDescription](message-or-description.html) | `abstract fun messageOrDescription(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)<br>Explanation why this finding was raised. |
 
 ### Inherited Functions
 
-| [compact](../-compactable/compact.html) | `abstract fun compact(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
-| [compactWithSignature](../-compactable/compact-with-signature.html) | `open fun compactWithSignature(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
-| [metricByType](../-has-metrics/metric-by-type.html) | `open fun metricByType(type: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`): `[`Metric`](../-metric/index.html)`?` |
+| [compact](../-compactable/compact.html) | `abstract fun compact(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)<br>Contract to format implementing object to a string representation. |
+| [compactWithSignature](../-compactable/compact-with-signature.html) | `open fun compactWithSignature(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)<br>Same as [compact](../-compactable/compact.html) except the content should contain a substring which represents this exact findings via a custom identifier. |
+| [metricByType](../-has-metrics/metric-by-type.html) | `open fun metricByType(type: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`): `[`Metric`](../-metric/index.html)`?`<br>Finds the first metric matching given [type](../-has-metrics/metric-by-type.html#io.gitlab.arturbosch.detekt.api.HasMetrics$metricByType(kotlin.String)/type). |
 
 ### Inheritors
 

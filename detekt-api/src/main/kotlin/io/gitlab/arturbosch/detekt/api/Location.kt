@@ -7,6 +7,7 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.com.intellij.testFramework.LightVirtualFile
 import org.jetbrains.kotlin.diagnostics.DiagnosticUtils
 import org.jetbrains.kotlin.diagnostics.PsiDiagnosticUtils
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.endOffset
 import org.jetbrains.kotlin.psi.psiUtil.getTextWithLocation
 import org.jetbrains.kotlin.psi.psiUtil.startOffset
@@ -24,6 +25,10 @@ data class Location(
     override fun compact(): String = "$file:$source"
 
     companion object {
+        /**
+         * Creates a [Location] from a [PsiElement].
+         * If the element can't be determined, the [KtFile] with a character offset can be used.
+         */
         fun from(element: PsiElement, offset: Int = 0): Location {
             val start = startLineAndColumn(element, offset)
             val sourceLocation = SourceLocation(start.line, start.column)
@@ -33,12 +38,15 @@ data class Location(
             return Location(sourceLocation, textLocation, locationText, fileName)
         }
 
+        /**
+         * Determines the line and column of a [PsiElement] in the source file.
+         */
         @Suppress("TooGenericExceptionCaught")
         fun startLineAndColumn(element: PsiElement, offset: Int = 0): PsiDiagnosticUtils.LineAndColumn {
             return try {
                 val range = element.textRange
                 DiagnosticUtils.getLineAndColumnInPsiFile(element.containingFile,
-                        TextRange(range.startOffset + offset, range.endOffset + offset))
+                    TextRange(range.startOffset + offset, range.endOffset + offset))
             } catch (e: IndexOutOfBoundsException) {
                 // #18 - somehow the TextRange is out of bound on '}' leaf nodes, returning fail safe -1
                 PsiDiagnosticUtils.LineAndColumn(-1, -1, null)
@@ -46,11 +54,11 @@ data class Location(
         }
 
         private fun PsiElement.originalFilePath() =
-                (containingFile.viewProvider.virtualFile as? LightVirtualFile)?.originalFile?.name
-                    ?: containingFile.name
+            (containingFile.viewProvider.virtualFile as? LightVirtualFile)?.originalFile?.name
+                ?: containingFile.name
 
         private fun PsiElement.getTextAtLocationSafe() =
-                getTextSafe({ searchName() }, { getTextWithLocation() })
+            getTextSafe({ searchName() }, { getTextWithLocation() })
     }
 }
 

@@ -10,3 +10,5 @@ title: CodeSmell.messageOrDescription - detekt-api
 
 Overrides [Finding.messageOrDescription](../-finding/message-or-description.html)
 
+Explanation why this finding was raised.
+

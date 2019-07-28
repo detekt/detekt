@@ -16,7 +16,7 @@ Adds metric container behaviour.
 
 ### Functions
 
-| [metricByType](metric-by-type.html) | `open fun metricByType(type: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`): `[`Metric`](../-metric/index.html)`?` |
+| [metricByType](metric-by-type.html) | `open fun metricByType(type: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`): `[`Metric`](../-metric/index.html)`?`<br>Finds the first metric matching given [type](metric-by-type.html#io.gitlab.arturbosch.detekt.api.HasMetrics$metricByType(kotlin.String)/type). |
 
 ### Inheritors
 

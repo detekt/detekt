@@ -7,3 +7,6 @@ title: Detektion.getData - detekt-api
 # getData
 
 `abstract fun <V> getData(key: Key<`[`V`](get-data.html#V)`>): `[`V`](get-data.html#V)`?`
+
+Retrieves a value stored by the given key of the result.
+
