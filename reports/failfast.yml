@@ -67,6 +67,9 @@ potential-bugs:
 style:
   CollapsibleIfStatements:
     active: true
+  ForbiddenComment:
+    active: true
+    values: 'TODO:,FIXME:,STOPSHIP:,@author'
   MaxLineLength:
     excludes: "**/test/**,**/*.Test.kt,**/*.Spec.kt"
     excludeCommentStatements: true
