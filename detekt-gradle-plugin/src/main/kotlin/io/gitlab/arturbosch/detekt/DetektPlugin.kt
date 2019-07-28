@@ -59,7 +59,7 @@ class DetektPlugin : Plugin<Project> {
             it.setExcludes(defaultExcludes)
             it.reportsDir.set(project.provider { extension.customReportsDir })
             it.reports = extension.reports
-            it.setIgnoreFailures(project.provider { extension.ignoreFailures })
+            it.ignoreFailuresProp.set(project.provider { extension.ignoreFailures })
 
             project.subprojects.forEach { subProject ->
                 subProject.tasks.firstOrNull { t -> t is Detekt && t.name == DETEKT_TASK_NAME }?.let { subprojectTask ->
@@ -90,7 +90,7 @@ class DetektPlugin : Plugin<Project> {
             it.reports.xml.destination = File(extension.reportsDir, sourceSet.name + ".xml")
             it.reports.html.destination = File(extension.reportsDir, sourceSet.name + ".html")
             it.reports.txt.destination = File(extension.reportsDir, sourceSet.name + ".txt")
-            it.setIgnoreFailures(project.provider { extension.ignoreFailures })
+            it.ignoreFailuresProp.set(project.provider { extension.ignoreFailures })
             it.description =
                 "EXPERIMENTAL & SLOW: Run detekt analysis for ${sourceSet.name} classes with type resolution"
         }
