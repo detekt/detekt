@@ -10,3 +10,5 @@ title: ThresholdedCodeSmell.messageOrDescription - detekt-api
 
 Overrides [CodeSmell.messageOrDescription](../-code-smell/message-or-description.html)
 
+Explanation why this finding was raised.
+

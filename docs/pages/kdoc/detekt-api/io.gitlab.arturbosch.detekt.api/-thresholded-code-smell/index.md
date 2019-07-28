@@ -36,11 +36,11 @@ for the existence of this rule violation.
 
 ### Functions
 
-| [compact](compact.html) | `open fun compact(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
-| [messageOrDescription](message-or-description.html) | `open fun messageOrDescription(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
+| [compact](compact.html) | `open fun compact(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)<br>Contract to format implementing object to a string representation. |
+| [messageOrDescription](message-or-description.html) | `open fun messageOrDescription(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)<br>Explanation why this finding was raised. |
 
 ### Inherited Functions
 
-| [compactWithSignature](../-code-smell/compact-with-signature.html) | `open fun compactWithSignature(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
+| [compactWithSignature](../-code-smell/compact-with-signature.html) | `open fun compactWithSignature(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)<br>Same as [compact](../-compactable/compact.html) except the content should contain a substring which represents this exact findings via a custom identifier. |
 | [toString](../-code-smell/to-string.html) | `open fun toString(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 

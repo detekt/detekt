@@ -32,9 +32,9 @@ locations can be stored in additional [Entity](../-entity/index.html)'s.
 
 ### Functions
 
-| [compact](compact.html) | `open fun compact(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
-| [compactWithSignature](compact-with-signature.html) | `open fun compactWithSignature(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
-| [messageOrDescription](message-or-description.html) | `open fun messageOrDescription(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
+| [compact](compact.html) | `open fun compact(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)<br>Contract to format implementing object to a string representation. |
+| [compactWithSignature](compact-with-signature.html) | `open fun compactWithSignature(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)<br>Same as [compact](../-compactable/compact.html) except the content should contain a substring which represents this exact findings via a custom identifier. |
+| [messageOrDescription](message-or-description.html) | `open fun messageOrDescription(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)<br>Explanation why this finding was raised. |
 | [toString](to-string.html) | `open fun toString(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 
 ### Inheritors

@@ -25,7 +25,7 @@ but the conversion factor and is double attributes can be used to retrieve it as
 
 ### Functions
 
-| [doubleThreshold](double-threshold.html) | `fun doubleThreshold(): `[`Double`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html) |
-| [doubleValue](double-value.html) | `fun doubleValue(): `[`Double`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html) |
+| [doubleThreshold](double-threshold.html) | `fun doubleThreshold(): `[`Double`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html)<br>Specified threshold for this metric as a double value. |
+| [doubleValue](double-value.html) | `fun doubleValue(): `[`Double`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html)<br>Convenient method to retrieve the raised value as a double. Internally the value is stored as an int with a conversion factor to not loose any precision in calculations. |
 | [toString](to-string.html) | `fun toString(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 

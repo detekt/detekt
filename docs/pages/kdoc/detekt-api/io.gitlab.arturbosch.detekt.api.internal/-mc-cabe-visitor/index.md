@@ -20,7 +20,6 @@ Counts the cyclomatic complexity of functions.
 
 ### Functions
 
-| [isInsideObjectLiteral](is-inside-object-literal.html) | `fun isInsideObjectLiteral(function: KtNamedFunction): `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html) |
 | [visitCallExpression](visit-call-expression.html) | `fun visitCallExpression(expression: KtCallExpression): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html) |
 | [visitIfExpression](visit-if-expression.html) | `fun visitIfExpression(expression: KtIfExpression): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html) |
 | [visitLoopExpression](visit-loop-expression.html) | `fun visitLoopExpression(loopExpression: KtLoopExpression): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html) |
