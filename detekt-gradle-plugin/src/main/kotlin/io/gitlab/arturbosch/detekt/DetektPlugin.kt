@@ -60,12 +60,6 @@ class DetektPlugin : Plugin<Project> {
             it.reportsDir.set(project.provider { extension.customReportsDir })
             it.reports = extension.reports
             it.ignoreFailuresProp.set(project.provider { extension.ignoreFailures })
-
-            project.subprojects.forEach { subProject ->
-                subProject.tasks.firstOrNull { t -> t is Detekt && t.name == DETEKT_TASK_NAME }?.let { subprojectTask ->
-                    it.dependsOn(subprojectTask)
-                }
-            }
         }
 
         project.tasks.matching { it.name == LifecycleBasePlugin.CHECK_TASK_NAME }.configureEach {
@@ -178,7 +172,7 @@ class DetektPlugin : Plugin<Project> {
     }
 
     companion object {
-        const val DETEKT_TASK_NAME = "detekt"
+        private const val DETEKT_TASK_NAME = "detekt"
         private const val IDEA_FORMAT = "detektIdeaFormat"
         private const val IDEA_INSPECT = "detektIdeaInspect"
         private const val GENERATE_CONFIG = "detektGenerateConfig"

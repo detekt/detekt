@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt
 
-import io.gitlab.arturbosch.detekt.DetektPlugin.Companion.DETEKT_TASK_NAME
 import io.gitlab.arturbosch.detekt.extensions.CustomDetektReport
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType
 import io.gitlab.arturbosch.detekt.extensions.DetektReports
@@ -21,7 +20,6 @@ import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.JvmTargetArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
 import io.gitlab.arturbosch.detekt.invoke.PluginsArgument
-import io.gitlab.arturbosch.detekt.output.mergeXmlReports
 import org.gradle.api.Action
 import org.gradle.api.GradleException
 import org.gradle.api.file.ConfigurableFileCollection
@@ -232,27 +230,5 @@ open class Detekt : SourceTask(), VerificationTask {
             classpath = detektClasspath.plus(pluginClasspath),
             taskName = name
         )
-
-        mergeReportsIfApplicable(xmlReportTargetFileOrNull?.asFile, debugOrDefault)
-    }
-
-    private fun mergeReportsIfApplicable(xmlReportTargetFile: File?, debug: Boolean) {
-
-        val isDefaultDetektTask = name == DETEKT_TASK_NAME
-
-        if (isDefaultDetektTask && xmlReportTargetFile != null && xmlReportTargetFile.exists()) {
-            val xmlReports = project.subprojects.flatMap { subproject ->
-                subproject.tasks.mapNotNull { task ->
-                    if (task is Detekt && task.name == DETEKT_TASK_NAME)
-                        task.xmlReportFile.orNull?.asFile
-                    else
-                        null
-                }
-            }
-            if (!xmlReports.isEmpty() && debug) {
-                logger.info("Merging report files of subprojects $xmlReports into $xmlReportTargetFile")
-            }
-            mergeXmlReports(xmlReportTargetFile, xmlReports)
-        }
     }
 }
