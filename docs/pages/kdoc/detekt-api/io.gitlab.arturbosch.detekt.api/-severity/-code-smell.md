@@ -7,3 +7,6 @@ title: Severity.CodeSmell - detekt-api
 # CodeSmell
 
 `CodeSmell`
+
+Represents clean coding violations which may lead to maintainability issues.
+
