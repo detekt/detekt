@@ -16,9 +16,6 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * @configuration ignoreOverriddenFunctions - Excludes all the overridden functions (default: `false`)
  *
  * @active since v1.0.0
- * @author Artur Bosch
- * @author Marvin Ramin
- * @author schalkms
  */
 class EmptyFunctionBlock(config: Config) : EmptyRule(config) {
 

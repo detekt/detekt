@@ -35,8 +35,6 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  * </noncompliant>
  *
  * @active since v1.0.0
- * @author schalkms
- * @author Marvin Ramin
  */
 class UnreachableCode(config: Config = Config.empty) : Rule(config) {
 

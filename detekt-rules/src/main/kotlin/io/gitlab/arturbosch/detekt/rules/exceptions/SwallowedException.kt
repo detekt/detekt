@@ -5,10 +5,13 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SplitPattern
+import io.gitlab.arturbosch.detekt.rules.ALLOWED_EXCEPTION_NAME
 import io.gitlab.arturbosch.detekt.rules.collectByType
+import io.gitlab.arturbosch.detekt.rules.isAllowedExceptionName
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtThrowExpression
@@ -54,9 +57,8 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  *
  * @configuration ignoredExceptionTypes - exception types which should be ignored by this rule
  * (default: `'InterruptedException,NumberFormatException,ParseException,MalformedURLException'`)
- *
- * @author schalkms
- * @author Marvin Ramin
+ * @configuration allowedExceptionNameRegex - ignores too generic exception types which match this regex
+ * (default: `"^(_|(ignore|expected).*)"`)
  */
 class SwallowedException(config: Config = Config.empty) : Rule(config) {
 
@@ -66,14 +68,19 @@ class SwallowedException(config: Config = Config.empty) : Rule(config) {
 
     private val ignoredExceptionTypes = SplitPattern(valueOrDefault(IGNORED_EXCEPTION_TYPES, ""))
 
+    private val allowedExceptionNameRegex by LazyRegex(ALLOWED_EXCEPTION_NAME_REGEX, ALLOWED_EXCEPTION_NAME)
+
     override fun visitCatchSection(catchClause: KtCatchClause) {
         val exceptionType = catchClause.catchParameter?.typeReference?.text
         if (!ignoredExceptionTypes.contains(exceptionType) &&
-            isExceptionUnused(catchClause) ||
-            isExceptionSwallowed(catchClause)) {
+            isExceptionSwallowedOrUnused(catchClause) &&
+            !catchClause.isAllowedExceptionName(allowedExceptionNameRegex)) {
             report(CodeSmell(issue, Entity.from(catchClause), issue.description))
         }
     }
+
+    private fun isExceptionSwallowedOrUnused(catchClause: KtCatchClause) =
+        isExceptionUnused(catchClause) || isExceptionSwallowed(catchClause)
 
     private fun isExceptionUnused(catchClause: KtCatchClause): Boolean {
         val parameterName = catchClause.catchParameter?.name
@@ -108,5 +115,6 @@ class SwallowedException(config: Config = Config.empty) : Rule(config) {
 
     companion object {
         const val IGNORED_EXCEPTION_TYPES = "ignoredExceptionTypes"
+        const val ALLOWED_EXCEPTION_NAME_REGEX = "allowedExceptionNameRegex"
     }
 }

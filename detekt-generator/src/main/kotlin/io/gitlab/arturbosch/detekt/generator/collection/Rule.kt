@@ -1,8 +1,5 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
-/**
- * @author Marvin Ramin
- */
 data class Rule(
     val name: String,
     val description: String,

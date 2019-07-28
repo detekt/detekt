@@ -24,8 +24,6 @@ import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
  * @configuration ignoreOverridden - ignores member properties that have the override modifier (default: `true`)
  *
  * @active since v1.0.0
- * @author Marvin Ramin
- * @author schalkms
  */
 class VariableNaming(config: Config = Config.empty) : Rule(config) {
 

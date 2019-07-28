@@ -6,9 +6,6 @@ import io.gitlab.arturbosch.detekt.test.resource
 import java.nio.file.Path
 import java.nio.file.Paths
 
-/**
- * @author Artur Bosch
- */
 enum class Case(val file: String) {
     CasesFolder("/cases"),
     CollapsibleIfsPositive("/cases/CollapsibleIfsPositive.kt"),

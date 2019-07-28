@@ -26,8 +26,6 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  * <compliant>
  * val x = if (condition) 5 else 4
  * </compliant>
- *
- * @author jkaan
  */
 class MandatoryBracesIfStatements(config: Config = Config.empty) : Rule(config) {
 

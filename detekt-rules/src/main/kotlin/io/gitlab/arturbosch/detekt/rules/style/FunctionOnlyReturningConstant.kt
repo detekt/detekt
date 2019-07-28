@@ -31,8 +31,6 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
  *
  * @configuration ignoreOverridableFunction - if overriden functions should be ignored (default: `true`)
  * @configuration excludedFunctions - excluded functions (default: `'describeContents'`)
- * @author schalkms
- * @author Marvin Ramin
  */
 class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config) {
 

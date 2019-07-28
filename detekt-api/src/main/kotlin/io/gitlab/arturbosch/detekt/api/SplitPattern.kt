@@ -26,10 +26,42 @@ class SplitPattern(
         then: (Sequence<T>) -> Sequence<T>
     ): Sequence<T> = if (condition) then(this) else this
 
+    /**
+     * Does any part contain given [value]?
+     */
     fun contains(value: String?): Boolean = excludes.any { value?.contains(it, ignoreCase = true) == true }
+
+    /**
+     * Is there any element which matches given [value]?
+     */
+    @Deprecated(
+        "The name 'equals' should only be used when matching the 'equals contract'.",
+        replaceWith = ReplaceWith("any(value)")
+    )
     fun equals(value: String?): Boolean = excludes.any { value?.equals(it, ignoreCase = true) == true }
+
+    /**
+     * Is there any element which matches the given [value]?
+     */
+    fun any(value: String?): Boolean = excludes.any { value?.equals(it, ignoreCase = true) == true }
+
+    /**
+     * Tests if none of the parts contain the given [value].
+     */
     fun none(value: String): Boolean = !contains(value)
+
+    /**
+     * Finds all parts which match the given [value].
+     */
     fun matches(value: String): List<String> = excludes.filter { value.contains(it, ignoreCase = true) }
-    fun startWith(name: String?): Boolean = excludes.any { name?.startsWith(it) ?: false }
+
+    /**
+     * Tests if any part starts with the given [value]
+     */
+    fun startWith(value: String?): Boolean = excludes.any { value?.startsWith(it) ?: false }
+
+    /**
+     * Transforms all parts by given [transform] function.
+     */
     fun <T> mapAll(transform: (String) -> T): List<T> = excludes.map(transform)
 }

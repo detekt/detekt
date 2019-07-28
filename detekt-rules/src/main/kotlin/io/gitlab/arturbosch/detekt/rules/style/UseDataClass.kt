@@ -10,15 +10,15 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.rules.collectByType
+import io.gitlab.arturbosch.detekt.rules.doesNotExtendAnything
+import io.gitlab.arturbosch.detekt.rules.isClosedForExtension
 import io.gitlab.arturbosch.detekt.rules.isInline
-import io.gitlab.arturbosch.detekt.rules.isOpen
+import io.gitlab.arturbosch.detekt.rules.extractDeclarations
 import org.jetbrains.kotlin.psi.KtClass
-import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
-import org.jetbrains.kotlin.psi.psiUtil.isAbstract
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
 
@@ -41,11 +41,6 @@ import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
  *
  * @configuration excludeAnnotatedClasses - allows to provide a list of annotations that disable this check
  * (default: `""`)
- *
- * @author Ivan Balaksha
- * @author Artur Bosch
- * @author schalkms
- * @author Marvin Ramin
  */
 class UseDataClass(config: Config = Config.empty) : Rule(config) {
 
@@ -77,9 +72,10 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 
             val containsFunctions = functions.none { !defaultFunctionNames.contains(it.name) }
             val containsPropertyOrPropertyParameters = properties.isNotEmpty() || propertyParameters.isNotEmpty()
+            val containsDelegatedProperty = properties.any { it.hasDelegate() }
 
-            if (containsFunctions && containsPropertyOrPropertyParameters) {
-                report(CodeSmell(issue, Entity.from(klass), "The class ${klass.nameAsSafeName} defines no" +
+            if (containsFunctions && containsPropertyOrPropertyParameters && !containsDelegatedProperty) {
+                report(CodeSmell(issue, Entity.from(klass), "The class ${klass.nameAsSafeName} defines no " +
                         "functionality and only holds data. Consider converting it to a data class."))
             }
         }
@@ -97,12 +93,6 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
         return (primaryConstructor == null || primaryConstructor.isPrivate()) &&
                 klass.secondaryConstructors.all { it.isPrivate() }
     }
-
-    private fun KtClass.doesNotExtendAnything() = superTypeListEntries.isEmpty()
-
-    private fun KtClass.isClosedForExtension() = !isAbstract() && !isOpen()
-
-    private fun KtClass.extractDeclarations(): List<KtDeclaration> = body?.declarations.orEmpty()
 
     private fun KtClass.extractConstructorPropertyParameters(): List<KtParameter> =
             getPrimaryConstructorParameterList()

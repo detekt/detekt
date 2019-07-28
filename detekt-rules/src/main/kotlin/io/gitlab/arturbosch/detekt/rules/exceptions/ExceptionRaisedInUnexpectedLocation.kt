@@ -30,10 +30,6 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  *
  * @configuration methodNames - methods which should not throw exceptions
  * (default: `'toString,hashCode,equals,finalize'`)
- *
- * @author schalkms
- * @author Artur Bosch
- * @author Marvin Ramin
  */
 class ExceptionRaisedInUnexpectedLocation(config: Config = Config.empty) : Rule(config) {
 
@@ -49,7 +45,7 @@ class ExceptionRaisedInUnexpectedLocation(config: Config = Config.empty) : Rule(
         }
     }
 
-    private fun isPotentialMethod(function: KtNamedFunction) = methods.equals(function.name)
+    private fun isPotentialMethod(function: KtNamedFunction) = methods.any(function.name)
 
     private fun hasThrowExpression(declaration: KtExpression?) =
             declaration?.collectByType<KtThrowExpression>()?.any() == true

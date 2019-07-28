@@ -5,10 +5,6 @@ import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
 import java.nio.file.Path
 
-/**
- * @author Artur Bosch
- * @author Marvin Ramin
- */
 interface Args {
     var help: Boolean
 }

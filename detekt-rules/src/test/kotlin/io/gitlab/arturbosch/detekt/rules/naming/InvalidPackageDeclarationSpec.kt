@@ -14,7 +14,6 @@ import java.nio.file.Paths
 
 /**
  * @configuration rootPackage - maximum name length (default: `64`)
- * @author Markus Schwarz
  */
 internal class InvalidPackageDeclarationSpec : Spek({
 

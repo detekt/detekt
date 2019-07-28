@@ -15,9 +15,6 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.nio.file.Paths
 
-/**
- * @author Artur Bosch
- */
 // Error:(31, 49) Kotlin: Cannot infer type parameter SELF in
 // val <SELF : AbstractBooleanAssert<SELF!>!> AbstractBooleanAssert<SELF>.isTrue: SELF!
 @Suppress("UsePropertyAccessSyntax")

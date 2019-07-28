@@ -36,9 +36,6 @@ import org.jetbrains.kotlin.psi.KtCallExpression
  *
  * @configuration exceptions - exceptions which should not be thrown without message or cause
  * (default: `'IllegalArgumentException,IllegalStateException,IOException'`)
- *
- * @author schalkms
- * @author Marvin Ramin
  */
 class ThrowingExceptionsWithoutMessageOrCause(config: Config = Config.empty) : Rule(config) {
 
@@ -52,7 +49,7 @@ class ThrowingExceptionsWithoutMessageOrCause(config: Config = Config.empty) : R
 
     override fun visitCallExpression(expression: KtCallExpression) {
         val calleeExpressionText = expression.calleeExpression?.text
-        if (exceptions.equals(calleeExpressionText) && expression.valueArguments.isEmpty()) {
+        if (exceptions.any(calleeExpressionText) && expression.valueArguments.isEmpty()) {
             report(CodeSmell(issue, Entity.from(expression), issue.description))
         }
         super.visitCallExpression(expression)

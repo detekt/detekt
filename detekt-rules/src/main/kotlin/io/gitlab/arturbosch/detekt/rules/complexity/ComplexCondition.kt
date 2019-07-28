@@ -39,8 +39,6 @@ import org.jetbrains.kotlin.psi.KtWhileExpression
  * @configuration threshold - (default: `4`)
  *
  * @active since v1.0.0
- * @author Artur Bosch
- * @author Marvin Ramin
  */
 class ComplexCondition(
     config: Config = Config.empty,

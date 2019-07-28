@@ -7,9 +7,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-/**
- * @author schalkms
- */
 class SwallowedExceptionSpec : Spek({
     val subject by memoized { SwallowedException() }
 
@@ -21,6 +18,12 @@ class SwallowedExceptionSpec : Spek({
 
         it("ignores given exception types in configuration") {
             val config = TestConfig(mapOf(SwallowedException.IGNORED_EXCEPTION_TYPES to "IOException"))
+            val rule = SwallowedException(config)
+            assertThat(rule.lint(Case.SwallowedExceptionPositive.path())).hasSize(4)
+        }
+
+        it("ignores given exception name") {
+            val config = TestConfig(mapOf(SwallowedException.ALLOWED_EXCEPTION_NAME_REGEX to "myIgnore"))
             val rule = SwallowedException(config)
             assertThat(rule.lint(Case.SwallowedExceptionPositive.path())).hasSize(4)
         }

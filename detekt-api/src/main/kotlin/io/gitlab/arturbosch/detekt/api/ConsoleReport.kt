@@ -8,16 +8,23 @@ import java.io.PrintStream
  * Additional [ConsoleReport]'s can be made available through the [java.util.ServiceLoader] pattern.
  * If the default reporting mechanism should be turned off, exclude the entry 'FindingsReport'
  * in the 'console-reports' property of a detekt yaml config.
- *
- * @author Artur Bosch
  */
 abstract class ConsoleReport : Extension {
 
+    /**
+     * Prints the rendered report to the given printer
+     * if anything was rendered at all.
+     */
     fun print(printer: PrintStream, detektion: Detektion) {
         render(detektion)?.let {
             printer.println(it)
         }
     }
 
+    /**
+     * Converts the given [detektion] into a string representation
+     * to present it to the client.
+     * The implementation specifies which parts of the report are important to the user.
+     */
     abstract fun render(detektion: Detektion): String?
 }

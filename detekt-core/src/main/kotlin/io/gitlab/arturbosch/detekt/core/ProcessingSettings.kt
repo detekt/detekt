@@ -16,9 +16,6 @@ import java.util.concurrent.ForkJoinPool
 /**
  * Settings to be used by detekt.
  * If using a custom executor service be aware that detekt won't shut it down after use!
- *
- * @author Artur Bosch
- * @author Marvin Ramin
  */
 @Suppress("LongParameterList")
 data class ProcessingSettings @JvmOverloads constructor(

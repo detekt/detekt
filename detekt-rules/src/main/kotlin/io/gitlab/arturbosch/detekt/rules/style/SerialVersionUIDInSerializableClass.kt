@@ -37,10 +37,6 @@ import org.jetbrains.kotlin.psi.KtProperty
  *     }
  * }
  * </compliant>
- *
- * @author schalkms
- * @author Marvin Ramin
- * @author Dmitriy Samaryan
  */
 class SerialVersionUIDInSerializableClass(config: Config = Config.empty) : Rule(config) {
 

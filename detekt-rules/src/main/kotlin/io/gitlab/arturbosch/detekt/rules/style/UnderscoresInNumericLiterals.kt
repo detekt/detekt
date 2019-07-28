@@ -33,8 +33,6 @@ import java.util.Locale
  *
  * @configuration acceptableDecimalLength - Length under which decimal base 10 literals are not required to have
  * underscores (default: `5`)
- *
- * @author Tyler Wong
  */
 class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config) {
 

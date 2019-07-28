@@ -31,10 +31,6 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
  * @configuration excludeAnnotatedProperties - Allows you to provide a list of annotations that disable
  * this check. (default: `""`)
  * @configuration ignoreOnClassesPattern - Allows you to disable the rule for a list of classes (default: `""`)
- *
- * @author Marvin Ramin
- * @author Niklas Baudy
- * @author schalkms
  */
 class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 

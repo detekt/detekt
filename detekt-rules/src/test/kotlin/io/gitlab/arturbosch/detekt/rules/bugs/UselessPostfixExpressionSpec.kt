@@ -5,11 +5,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-/**
- * @author schalkms
- * @author Artur Bosch
- * @author Marvin Ramin
- */
 class UselessPostfixExpressionSpec : Spek({
     val subject by memoized { UselessPostfixExpression() }
 

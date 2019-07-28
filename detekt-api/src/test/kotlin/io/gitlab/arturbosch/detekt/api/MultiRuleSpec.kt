@@ -9,9 +9,6 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-/**
- * @author Artur Bosch
- */
 internal class MultiRuleSpec : Spek({
 
     describe("a multi rule") {

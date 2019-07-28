@@ -15,7 +15,6 @@ import org.jetbrains.kotlin.psi.KtPackageDirective
  *
  * @configuration packagePattern - naming pattern (default: `'^[a-z]+(\.[a-z][A-Za-z0-9]*)*$'`)
  * @active since v1.0.0
- * @author Marvin Ramin
  */
 class PackageNaming(config: Config = Config.empty) : Rule(config) {
 

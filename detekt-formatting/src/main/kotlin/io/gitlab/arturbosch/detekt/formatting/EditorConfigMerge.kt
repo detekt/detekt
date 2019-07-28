@@ -5,8 +5,6 @@ import com.pinterest.ktlint.core.EditorConfig
 /**
  * Creates new EditorConfig by merging existing EditorConfig with properties values passed by parameters.
  * Values of properties passed by parameters are more important than properties in sourceEditorConfig.
- *
- * @author Lukasz Jazgar
  */
 fun EditorConfig.Companion.merge(
     sourceEditorConfig: EditorConfig?,

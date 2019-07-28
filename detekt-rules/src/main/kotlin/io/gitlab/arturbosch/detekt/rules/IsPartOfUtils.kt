@@ -6,10 +6,6 @@ import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 import kotlin.reflect.KClass
 
 /**
- * @author Artur Bosch
- */
-
-/**
  * Tests if this element is part of given PsiElement.
  */
 fun PsiElement.isPartOf(clazz: KClass<out PsiElement>): Boolean = getNonStrictParentOfType(clazz.java) != null

@@ -11,9 +11,6 @@ import io.gitlab.arturbosch.detekt.generator.out.yaml
 import io.gitlab.arturbosch.detekt.generator.printer.DocumentationPrinter
 import io.gitlab.arturbosch.detekt.generator.printer.rulesetpage.TestExclusions.isExcludedInTests
 
-/**
- * @author Marvin Ramin
- */
 object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 
     override fun print(item: List<RuleSetPage>): String {

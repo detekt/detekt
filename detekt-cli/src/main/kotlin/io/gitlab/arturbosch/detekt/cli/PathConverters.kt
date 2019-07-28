@@ -10,10 +10,6 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 
-/**
- * @author Artur Bosch
- * @author Marvin Ramin
- */
 class ExistingPathConverter : IStringConverter<Path> {
     override fun convert(value: String): Path {
         val config = File(value).toPath()
@@ -60,7 +56,6 @@ class JvmTargetConverter : IStringConverter<JvmTarget> {
 }
 
 /**
- * @author Sean Flanigan <a href="mailto:sflaniga@redhat.com">sflaniga@redhat.com</a>
  */
 class ClasspathResourceConverter : IStringConverter<URL> {
     override fun convert(resource: String): URL {

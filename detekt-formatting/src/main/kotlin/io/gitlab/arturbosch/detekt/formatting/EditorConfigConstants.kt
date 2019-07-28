@@ -1,8 +1,5 @@
 package io.gitlab.arturbosch.detekt.formatting
 
-/**
- * @author Artur Bosch
- */
 const val DEFAULT_INDENT = 4
 const val DEFAULT_CONTINUATION_INDENT = 4
 const val ANDROID_MAX_LINE_LENGTH = 100

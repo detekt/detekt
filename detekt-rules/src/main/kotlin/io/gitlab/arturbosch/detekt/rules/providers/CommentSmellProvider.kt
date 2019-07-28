@@ -14,7 +14,6 @@ import io.gitlab.arturbosch.detekt.rules.documentation.UndocumentedPublicFunctio
  * of the code.
  *
  * @active since v1.0.0
- * @author Artur Bosch
  */
 class CommentSmellProvider : RuleSetProvider {
 

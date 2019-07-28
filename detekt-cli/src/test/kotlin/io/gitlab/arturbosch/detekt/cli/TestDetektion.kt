@@ -6,10 +6,6 @@ import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 
-/**
- * @author Artur Bosch
- * @author schalkms
- */
 open class TestDetektion(vararg findings: Finding) : Detektion {
 
     override val metrics: Collection<ProjectMetric> = listOf()

@@ -15,8 +15,6 @@ import org.jetbrains.kotlin.psi.psiUtil.visibilityModifierType
  * Reports empty default constructors. Empty blocks of code serve no purpose and should be removed.
  *
  * @active since v1.0.0
- * @author schalkms
- * @author Marvin Ramin
  */
 class EmptyDefaultConstructor(config: Config) : EmptyRule(config = config) {
 

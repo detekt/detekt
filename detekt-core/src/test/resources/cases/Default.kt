@@ -1,7 +1,7 @@
 package cases
 
 /**
- * @author Artur Bosch
+ * A comment
  */
 @Suppress("Unused")
 class Default

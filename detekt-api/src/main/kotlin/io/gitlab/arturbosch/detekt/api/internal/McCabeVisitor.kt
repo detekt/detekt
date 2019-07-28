@@ -15,10 +15,6 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
 /**
  * Counts the cyclomatic complexity of functions.
- *
- * @author Artur Bosch
- * @author schalkms
- * @author Sebastiano Poggi
  */
 class McCabeVisitor(private val ignoreSimpleWhenEntries: Boolean) : DetektVisitor() {
 
@@ -34,7 +30,7 @@ class McCabeVisitor(private val ignoreSimpleWhenEntries: Boolean) : DetektVisito
         }
     }
 
-    fun isInsideObjectLiteral(function: KtNamedFunction): Boolean =
+    private fun isInsideObjectLiteral(function: KtNamedFunction): Boolean =
             function.getStrictParentOfType<KtObjectLiteralExpression>() != null
 
     override fun visitIfExpression(expression: KtIfExpression) {
@@ -87,6 +83,6 @@ class McCabeVisitor(private val ignoreSimpleWhenEntries: Boolean) : DetektVisito
 }
 
 fun KtCallExpression.isUsedForNesting(): Boolean = when (getCallNameExpression()?.text) {
-    "run", "let", "apply", "with", "use", "forEach" -> true
+    "run", "let", "apply", "with", "also", "use", "forEach", "isNotNull", "ifNull" -> true
     else -> false
 }

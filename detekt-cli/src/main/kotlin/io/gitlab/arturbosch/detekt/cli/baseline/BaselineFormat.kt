@@ -7,9 +7,6 @@ import javax.xml.parsers.SAXParserFactory
 import javax.xml.stream.XMLStreamException
 import javax.xml.stream.XMLStreamWriter
 
-/**
- * @author Artur Bosch
- */
 class BaselineFormat {
 
     fun read(path: Path): Baseline {

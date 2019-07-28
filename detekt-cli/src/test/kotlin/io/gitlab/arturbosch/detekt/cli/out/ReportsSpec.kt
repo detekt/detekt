@@ -13,9 +13,6 @@ import org.spekframework.spek2.style.specification.describe
 import java.nio.file.Paths
 import java.util.function.Predicate
 
-/**
- * @author Artur Bosch
- */
 internal class ReportsSpec : Spek({
 
     describe("reports") {

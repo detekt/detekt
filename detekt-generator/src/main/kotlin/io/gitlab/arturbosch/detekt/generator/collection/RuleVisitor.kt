@@ -18,11 +18,6 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.getSuperNames
 import java.lang.reflect.Modifier
 
-/**
- * @author Marvin Ramin
- * @author Artur Bosch
- * @author schalkms
- */
 internal class RuleVisitor : DetektVisitor() {
 
     val containsRule

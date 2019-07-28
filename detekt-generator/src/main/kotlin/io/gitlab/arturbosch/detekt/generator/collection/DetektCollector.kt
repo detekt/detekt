@@ -4,9 +4,6 @@ import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumen
 import io.gitlab.arturbosch.detekt.generator.printer.rulesetpage.RuleSetPage
 import org.jetbrains.kotlin.psi.KtFile
 
-/**
- * @author Marvin Ramin
- */
 class DetektCollector : Collector<RuleSetPage> {
 
     private val ruleSetProviderCollector = RuleSetProviderCollector()

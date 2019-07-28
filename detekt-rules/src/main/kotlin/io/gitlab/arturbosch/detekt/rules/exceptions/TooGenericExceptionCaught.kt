@@ -9,9 +9,8 @@ import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.ALLOWED_EXCEPTION_NAME
-import io.gitlab.arturbosch.detekt.rules.identifierName
+import io.gitlab.arturbosch.detekt.rules.isAllowedExceptionName
 import org.jetbrains.kotlin.psi.KtCatchClause
-import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtTypeReference
 
 /**
@@ -47,10 +46,6 @@ import org.jetbrains.kotlin.psi.KtTypeReference
  * @configuration allowedExceptionNameRegex - ignores too generic exception types which match this regex
  * (default: `"^(_|(ignore|expected).*)"`)
  * @active since v1.0.0
- * @author Artur Bosch
- * @author Marvin Ramin
- * @author schalkms
- * @author olivierlemasle
  */
 class TooGenericExceptionCaught(config: Config) : Rule(config) {
 
@@ -67,7 +62,8 @@ class TooGenericExceptionCaught(config: Config) : Rule(config) {
 
     override fun visitCatchSection(catchClause: KtCatchClause) {
         catchClause.catchParameter?.let {
-            if (isTooGenericException(it.typeReference) && !isAllowedExceptionName(it)) {
+            if (isTooGenericException(it.typeReference) &&
+                !catchClause.isAllowedExceptionName(allowedExceptionNameRegex)) {
                 report(CodeSmell(issue, Entity.from(it), issue.description))
             }
         }
@@ -77,9 +73,6 @@ class TooGenericExceptionCaught(config: Config) : Rule(config) {
     private fun isTooGenericException(typeReference: KtTypeReference?): Boolean {
         return typeReference?.text in exceptions
     }
-
-    private fun isAllowedExceptionName(catchParameter: KtParameter) =
-            catchParameter.identifierName().matches(allowedExceptionNameRegex)
 
     companion object {
         const val CAUGHT_EXCEPTIONS_PROPERTY = "exceptionNames"

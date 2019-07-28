@@ -24,9 +24,6 @@ data class KtFileContent(val file: KtFile, val content: Sequence<String>)
  * @configuration excludeCommentStatements - if comment statements should be ignored (default: `false`)
  *
  * @active since v1.0.0
- * @author Robbin Voortman
- * @author Marvin Ramin
- * @author Artur Bosch
  */
 class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 

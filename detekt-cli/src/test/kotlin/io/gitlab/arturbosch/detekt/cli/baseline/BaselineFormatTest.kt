@@ -9,10 +9,6 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.time.Instant
 
-/**
- * @author Artur Bosch
- * @author schalkms
- */
 class BaselineFormatTest : Spek({
 
     describe("baseline format") {

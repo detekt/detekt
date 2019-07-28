@@ -10,11 +10,6 @@ import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 
-/**
- * @author Artur Bosch
- * @author Marvin Ramin
- * @author Matthew Haughton
- */
 open class DetektGenerateConfigTask : SourceTask() {
 
     init {
@@ -37,6 +32,6 @@ open class DetektGenerateConfigTask : SourceTask() {
             InputArgument(source)
         )
 
-        DetektInvoker.invokeCli(project, arguments.toList(), detektClasspath, name)
+        DetektInvoker.create(project).invokeCli(arguments.toList(), detektClasspath, name)
     }
 }

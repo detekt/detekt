@@ -12,7 +12,6 @@ import io.gitlab.arturbosch.detekt.rules.performance.UnnecessaryTemporaryInstant
  * The performance rule set analyzes code for potential performance problems.
  *
  * @active since v1.0.0
- * @author Marvin Ramin
  */
 class PerformanceProvider : RuleSetProvider {
 

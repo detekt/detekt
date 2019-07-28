@@ -33,9 +33,6 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  *     }
  * }
  * </compliant>
- *
- * @author schalkms
- * @author Marvin Ramin
  */
 class WrongEqualsTypeParameter(config: Config = Config.empty) : Rule(config) {
 

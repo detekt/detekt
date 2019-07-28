@@ -36,9 +36,6 @@ import org.jetbrains.kotlin.psi.KtValueArgument
  *     }
  * }
  * </compliant>
- *
- * @author schalkms
- * @author Marvin Ramin
  */
 class ThrowingNewInstanceOfSameException(config: Config = Config.empty) : Rule(config) {
 

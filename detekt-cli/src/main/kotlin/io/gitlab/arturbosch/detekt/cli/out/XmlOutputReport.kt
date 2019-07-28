@@ -7,8 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Severity
 
 /**
  * Generates an XML report following the structure of a Checkstyle report.
- *
- * @author Marvin Ramin
  */
 class XmlOutputReport : OutputReport() {
 

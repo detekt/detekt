@@ -6,8 +6,6 @@ package io.gitlab.arturbosch.detekt.api
  * - [FileProcessListener]
  * - [ConsoleReport]
  * - [OutputReport]
- *
- * @author Artur Bosch
  */
 interface Extension {
     /**

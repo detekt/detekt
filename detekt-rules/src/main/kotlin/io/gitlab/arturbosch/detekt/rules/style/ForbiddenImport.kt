@@ -21,9 +21,6 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  * </noncompliant>
  *
  * @configuration imports - imports which should not be used (default: `''`)
- *
- * @author Niklas Baudy
- * @author Marvin Ramin
  */
 class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
 

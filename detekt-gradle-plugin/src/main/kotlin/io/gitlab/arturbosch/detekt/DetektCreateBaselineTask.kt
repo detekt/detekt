@@ -31,12 +31,6 @@ import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 
-/**
- * @author Artur Bosch
- * @author Marvin Ramin
- * @author Markus Schwarz
- * @author Matthew Haughton
- */
 open class DetektCreateBaselineTask : SourceTask() {
 
     init {
@@ -131,8 +125,7 @@ open class DetektCreateBaselineTask : SourceTask() {
             DisableDefaultRuleSetArgument(disableDefaultRuleSets.getOrElse(false))
         )
 
-        DetektInvoker.invokeCli(
-            project = project,
+        DetektInvoker.create(project).invokeCli(
             arguments = arguments.toList(),
             ignoreFailures = ignoreFailures.getOrElse(false),
             classpath = detektClasspath.plus(pluginClasspath),

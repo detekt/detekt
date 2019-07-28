@@ -1,8 +1,5 @@
 package io.gitlab.arturbosch.detekt.core.processors.util
 
-/**
- * @author Artur Bosch
- */
 object LLOC {
 
     private val comments = arrayOf("//", "/*", "*/", "*")

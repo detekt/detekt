@@ -2,9 +2,6 @@
 
 package io.gitlab.arturbosch.detekt.generator.out
 
-/**
- * @author Marvin Ramin
- */
 sealed class Markdown(open var content: String = "") {
     fun append(value: String) {
         content = if (content.isEmpty()) {

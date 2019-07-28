@@ -2,8 +2,6 @@ package io.gitlab.arturbosch.detekt.api
 
 /**
  * Anything that can be expressed as a number value for projects.
- *
- * @author Artur Bosch
  */
 open class ProjectMetric(
     val type: String,

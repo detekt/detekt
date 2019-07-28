@@ -8,8 +8,6 @@ import org.jetbrains.kotlin.psi.KtElement
 
 /**
  * Stores information about a specific code fragment.
- *
- * @author Artur Bosch
  */
 data class Entity(
     val name: String,

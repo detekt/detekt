@@ -1,19 +1,34 @@
 package io.gitlab.arturbosch.detekt.api
 
+import org.jetbrains.kotlin.psi.KtFile
+
 /**
  * A context describes the storing and reporting mechanism of [Finding]'s inside a [Rule].
  * Additionally it handles suppression and aliases management.
  *
  * The detekt engine retrieves the findings after each KtFile visit and resets the context
  * before the next KtFile.
- *
- * @author Artur Bosch
- * @author Marvin Ramin
  */
 interface Context {
     val findings: List<Finding>
+    /**
+     * Reports a single new violation.
+     * By contract the implementation can check if
+     * this finding is already suppressed and should not get reported.
+     * An alias set can be given to additionally check if any
+     * alias was used when suppressing.
+     */
     fun report(finding: Finding, aliases: Set<String> = emptySet())
+
+    /**
+     * Same as [report] but reports a list of findings.
+     */
     fun report(findings: List<Finding>, aliases: Set<String> = emptySet())
+
+    /**
+     * Clears previous findings.
+     * Normally this is done on every new [KtFile] analyzed and should be called by clients.
+     */
     fun clearFindings()
 }
 

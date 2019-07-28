@@ -17,8 +17,6 @@ import java.nio.file.Paths
  * Reports when the package declaration is missing or the file location does not match the declared package.
  *
  * @configuration rootPackage - if specified this part of the package structure is ignored (default: `''`)
- *
- * @author Markus Schwarz
  */
 class InvalidPackageDeclaration(config: Config = Config.empty) : Rule(config) {
 

@@ -6,8 +6,6 @@ import io.gitlab.arturbosch.detekt.formatting.FormattingRule
 
 /**
  * See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
- *
- * @author Artur Bosch
  */
 class AnnotationOnSeparateLine(config: Config) : FormattingRule(config) {
 

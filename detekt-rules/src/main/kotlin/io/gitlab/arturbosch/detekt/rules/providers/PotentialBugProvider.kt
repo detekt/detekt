@@ -24,7 +24,6 @@ import io.gitlab.arturbosch.detekt.rules.bugs.WrongEqualsTypeParameter
  * The potential-bugs rule set provides rules that detect potential bugs.
  *
  * @active since v1.0.0
- * @author Artur Bosch
  */
 class PotentialBugProvider : RuleSetProvider {
 

@@ -17,9 +17,6 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  * through the detekt configuration file.
  * A [ThresholdedCodeSmell] can then be used to provide more information about the
  * raised metric.
- *
- * @author Artur Bosch
- * @author Marvin Ramin
  */
 class TooManyFunctionsTwo(config: Config) : ThresholdRule(config, THRESHOLD) {
 

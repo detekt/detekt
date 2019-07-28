@@ -15,13 +15,6 @@ import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import java.io.File
 
-/**
- * @author Marvin Ramin
- * @author Markus Schwarz
- * @author Artem Zinnatullin
- * @author Niklas Baudy
- * @author Matthew Haughton
- */
 class DetektPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
@@ -66,13 +59,7 @@ class DetektPlugin : Plugin<Project> {
             it.setExcludes(defaultExcludes)
             it.reportsDir.set(project.provider { extension.customReportsDir })
             it.reports = extension.reports
-            it.setIgnoreFailures(project.provider { extension.ignoreFailures })
-
-            project.subprojects.forEach { subProject ->
-                subProject.tasks.firstOrNull { t -> t is Detekt && t.name == DETEKT_TASK_NAME }?.let { subprojectTask ->
-                    it.dependsOn(subprojectTask)
-                }
-            }
+            it.ignoreFailuresProp.set(project.provider { extension.ignoreFailures })
         }
 
         project.tasks.matching { it.name == LifecycleBasePlugin.CHECK_TASK_NAME }.configureEach {
@@ -96,7 +83,8 @@ class DetektPlugin : Plugin<Project> {
             it.classpath.setFrom(sourceSet.compileClasspath, sourceSet.output.classesDirs)
             it.reports.xml.destination = File(extension.reportsDir, sourceSet.name + ".xml")
             it.reports.html.destination = File(extension.reportsDir, sourceSet.name + ".html")
-            it.setIgnoreFailures(project.provider { extension.ignoreFailures })
+            it.reports.txt.destination = File(extension.reportsDir, sourceSet.name + ".txt")
+            it.ignoreFailuresProp.set(project.provider { extension.ignoreFailures })
             it.description =
                 "EXPERIMENTAL & SLOW: Run detekt analysis for ${sourceSet.name} classes with type resolution"
         }
@@ -120,8 +108,8 @@ class DetektPlugin : Plugin<Project> {
     private fun registerGenerateConfigTask(project: Project, extension: DetektExtension) =
         project.tasks.register(GENERATE_CONFIG, DetektGenerateConfigTask::class.java) {
             it.setSource(existingInputDirectoriesProvider(project, extension))
-            it.setIncludes(listOf("**/*.kt", "**/*.kts"))
-            it.setExcludes(listOf("build/"))
+            it.setIncludes(defaultIncludes)
+            it.setExcludes(defaultExcludes)
         }
 
     private fun registerIdeaTasks(project: Project, extension: DetektExtension) {
@@ -184,7 +172,7 @@ class DetektPlugin : Plugin<Project> {
     }
 
     companion object {
-        const val DETEKT_TASK_NAME = "detekt"
+        private const val DETEKT_TASK_NAME = "detekt"
         private const val IDEA_FORMAT = "detektIdeaFormat"
         private const val IDEA_INSPECT = "detektIdeaInspect"
         private const val GENERATE_CONFIG = "detektGenerateConfig"

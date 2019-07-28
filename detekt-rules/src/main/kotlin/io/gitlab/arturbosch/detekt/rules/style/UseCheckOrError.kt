@@ -34,8 +34,6 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  *   else -> error("Unexpected value")
  * }
  * </compliant>
- *
- * @author Markus Schwarz
  */
 class UseCheckOrError(config: Config = Config.empty) : Rule(config) {
 

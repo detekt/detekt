@@ -45,6 +45,10 @@ abstract class BaseRule(
         }
     }
 
+    /**
+     * Init function to start visiting the [KtFile].
+     * Can be overridden to start a different visiting process.
+     */
     open fun visit(root: KtFile) {
         root.accept(this)
     }

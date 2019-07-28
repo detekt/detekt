@@ -11,8 +11,6 @@ import org.jetbrains.kotlin.psi.KtIfExpression
  * Reports empty `if` blocks. Empty blocks of code serve no purpose and should be removed.
  *
  * @active since v1.0.0
- * @author Artur Bosch
- * @author Marvin Ramin
  */
 class EmptyIfBlock(config: Config) : EmptyRule(config) {
 

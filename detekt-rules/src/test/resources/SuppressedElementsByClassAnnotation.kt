@@ -1,6 +1,3 @@
-/**
- * @author Artur Bosch
- */
 @Suppress("unused", "LongMethod", "LongParameterList", "ComplexCondition", "TooManyFunctions")
 class SuppressedElements3 {
 

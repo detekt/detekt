@@ -7,7 +7,7 @@ title: Config.InvalidConfigurationError.<init> - detekt-api
 # &lt;init&gt;
 
 `InvalidConfigurationError(msg: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)` = "Provided configuration file is invalid:" +
-                " Structure must be from type Map<String,Any>!")`
+            " Structure must be from type Map<String,Any>!")`
 
 Is thrown when loading a configuration results in errors.
 

@@ -25,9 +25,6 @@ import org.jetbrains.kotlin.psi.KtExpression
  * </compliant>
  *
  * @active since v1.0.0
- *
- * @author schalkms
- * @author Marvin Ramin
  */
 class UnnecessaryTemporaryInstantiation(config: Config = Config.empty) : Rule(config) {
 

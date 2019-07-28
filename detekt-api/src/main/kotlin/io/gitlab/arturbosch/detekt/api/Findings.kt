@@ -6,8 +6,6 @@ package io.gitlab.arturbosch.detekt.api
  *
  * Basic behaviour of a finding is that is can be assigned to an id and a source code position described as
  * an entity. Metrics and entity references can also considered for deeper characterization.
- *
- * @author Artur Bosch
  */
 interface Finding : Compactable, HasEntity, HasMetrics {
     val id: String
@@ -15,6 +13,9 @@ interface Finding : Compactable, HasEntity, HasMetrics {
     val references: List<Entity>
     val message: String
 
+    /**
+     * Explanation why this finding was raised.
+     */
     fun messageOrDescription(): String
 }
 
@@ -46,6 +47,9 @@ interface HasEntity {
  */
 interface HasMetrics {
     val metrics: List<Metric>
+    /**
+     * Finds the first metric matching given [type].
+     */
     fun metricByType(type: String): Metric? = metrics.find { it.type == type }
 }
 
@@ -53,6 +57,14 @@ interface HasMetrics {
  * Provides a compact string representation.
  */
 interface Compactable {
+    /**
+     * Contract to format implementing object to a string representation.
+     */
     fun compact(): String
+
+    /**
+     * Same as [compact] except the content should contain a substring which represents
+     * this exact findings via a custom identifier.
+     */
     fun compactWithSignature(): String = compact()
 }

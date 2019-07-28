@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.empty
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.rules.ALLOWED_EXCEPTION_NAME
-import io.gitlab.arturbosch.detekt.rules.identifierName
+import io.gitlab.arturbosch.detekt.rules.isAllowedExceptionName
 import org.jetbrains.kotlin.psi.KtCatchClause
 
 /**
@@ -12,9 +12,6 @@ import org.jetbrains.kotlin.psi.KtCatchClause
  * @configuration allowedExceptionNameRegex - ignores exception types which match this regex
  * (default: `"^(_|(ignore|expected).*)"`)
  * @active since v1.0.0
- * @author Artur Bosch
- * @author Marvin Ramin
- * @author schalkms
  */
 class EmptyCatchBlock(config: Config) : EmptyRule(config = config) {
 
@@ -22,8 +19,7 @@ class EmptyCatchBlock(config: Config) : EmptyRule(config = config) {
 
     override fun visitCatchSection(catchClause: KtCatchClause) {
         super.visitCatchSection(catchClause)
-        val name = catchClause.catchParameter?.identifierName()
-        if (name != null && name.matches(allowedExceptionNameRegex)) {
+        if (catchClause.isAllowedExceptionName(allowedExceptionNameRegex)) {
             return
         }
         catchClause.catchBody?.addFindingIfBlockExprIsEmpty()

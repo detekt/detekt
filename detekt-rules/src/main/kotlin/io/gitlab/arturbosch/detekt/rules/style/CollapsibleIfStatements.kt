@@ -33,9 +33,6 @@ import org.jetbrains.kotlin.psi.KtIfExpression
  *     println(i)
  * }
  * </compliant>
- *
- * @author schalkms
- * @author Marvin Ramin
  */
 class CollapsibleIfStatements(config: Config = Config.empty) : Rule(config) {
 

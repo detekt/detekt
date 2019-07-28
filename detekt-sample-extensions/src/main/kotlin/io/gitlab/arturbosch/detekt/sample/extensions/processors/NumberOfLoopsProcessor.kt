@@ -6,9 +6,6 @@ import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtLoopExpression
 
-/**
- * @author Artur Bosch
- */
 class NumberOfLoopsProcessor : FileProcessListener {
 
     override fun onProcess(file: KtFile) {

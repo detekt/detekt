@@ -20,15 +20,24 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  * Prefer splitting up complex methods into smaller methods that are in turn easier to understand.
  * Smaller methods can also be named much clearer which leads to improved readability of the code.
  *
- * @configuration threshold - MCC threshold for a method (default: `10`)
+ * This rule uses McCabe's Cyclomatic Complexity (MCC) metric to measure the number of
+ * linearly independent paths through a function's source code.
+ * The higher the number of independent paths, the more complex a method is.
+ * Complex methods use too many of the following statements.
+ * Each one of them adds one to the complexity count.
+ *
+ * - __Conditional statements__ - `if`, `else`, `when`
+ * - __Loops__ - `for`, `while`, `do-while`, `forEach`
+ * - __Exceptions__ - `try`, `catch`, `finally`, `use`
+ * - __Scope Functions__ - `let`, `run`, `with`, `apply`, and `also` ->
+ *  [Reference](https://kotlinlang.org/docs/reference/scope-functions.html)
+ *
+ * @configuration threshold - McCabe's Cyclomatic Complexity (MCC) number for a method (default: `10`)
  * @configuration ignoreSingleWhenExpression - Ignores a complex method if it only contains a single when expression.
  * (default: `false`)
  * @configuration ignoreSimpleWhenEntries - Whether to ignore simple (braceless) when entries. (default: `false`)
  *
  * @active since v1.0.0
- * @author Artur Bosch
- * @author Marvin Ramin
- * @author schalkms
  */
 class ComplexMethod(
     config: Config = Config.empty,

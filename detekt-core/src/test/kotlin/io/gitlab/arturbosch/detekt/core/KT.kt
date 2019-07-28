@@ -14,10 +14,6 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
 import java.nio.file.Path
 import java.nio.file.Paths
 
-/**
- * @author Artur Bosch
- */
-
 val path: Path = Paths.get(resource("/cases"))
 
 class TestProvider(override val ruleSetId: String = "Test") : RuleSetProvider {

@@ -1,9 +1,6 @@
 package cases
 
 @Suppress("unused")
-/**
- * @author Artur Bosch
- */
 class TooGenericExceptions {
 
     fun main() {

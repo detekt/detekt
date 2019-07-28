@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt
 
-import io.gitlab.arturbosch.detekt.DetektPlugin.Companion.DETEKT_TASK_NAME
 import io.gitlab.arturbosch.detekt.extensions.CustomDetektReport
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType
 import io.gitlab.arturbosch.detekt.extensions.DetektReports
@@ -22,7 +21,6 @@ import io.gitlab.arturbosch.detekt.invoke.JvmTargetArgument
 import io.gitlab.arturbosch.detekt.invoke.LanguageVersionArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
 import io.gitlab.arturbosch.detekt.invoke.PluginsArgument
-import io.gitlab.arturbosch.detekt.output.mergeXmlReports
 import org.gradle.api.Action
 import org.gradle.api.GradleException
 import org.gradle.api.file.ConfigurableFileCollection
@@ -50,12 +48,6 @@ import org.gradle.api.tasks.VerificationTask
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import java.io.File
 
-/**
- * @author Artur Bosch
- * @author Marvin Ramin
- * @author Markus Schwarz
- * @author Matthew Haughton
- */
 @CacheableTask
 open class Detekt : SourceTask(), VerificationTask {
 
@@ -153,13 +145,11 @@ open class Detekt : SourceTask(), VerificationTask {
         get() = failFastProp.get()
         set(value) = failFastProp.set(value)
 
-    private val ignoreFailuresProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    internal val ignoreFailuresProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     @Input
     @Optional
-    override fun getIgnoreFailures(): Boolean = ignoreFailuresProp.get()
-
+    override fun getIgnoreFailures(): Boolean = ignoreFailuresProp.getOrElse(false)
     override fun setIgnoreFailures(value: Boolean) = ignoreFailuresProp.set(value)
-    fun setIgnoreFailures(value: Provider<Boolean>) = ignoreFailuresProp.set(value)
 
     @Optional
     @Input
@@ -188,6 +178,11 @@ open class Detekt : SourceTask(), VerificationTask {
         @Optional
         get() = reports.html.getTargetFileProvider(effectiveReportsDir)
 
+    val txtReportFile: Provider<RegularFile>
+        @OutputFile
+        @Optional
+        get() = reports.txt.getTargetFileProvider(effectiveReportsDir)
+
     private val defaultReportsDir: Directory = project.layout.buildDirectory.get()
         .dir(ReportingExtension.DEFAULT_REPORTS_DIR_NAME)
         .dir("detekt")
@@ -203,7 +198,6 @@ open class Detekt : SourceTask(), VerificationTask {
     }
 
     @TaskAction
-    @Suppress("detekt.LongMethod")
     fun check() {
         if (plugins.isPresent && !pluginClasspath.isEmpty) {
             throw GradleException(
@@ -213,6 +207,7 @@ open class Detekt : SourceTask(), VerificationTask {
         }
         val xmlReportTargetFileOrNull = xmlReportFile.orNull
         val htmlReportTargetFileOrNull = htmlReportFile.orNull
+        val txtReportTargetFileOrNull = txtReportFile.orNull
         val debugOrDefault = debugProp.getOrElse(false)
         val arguments = mutableListOf(
             InputArgument(source),
@@ -224,6 +219,7 @@ open class Detekt : SourceTask(), VerificationTask {
             BaselineArgument(baseline.orNull),
             DefaultReportArgument(DetektReportType.XML, xmlReportTargetFileOrNull),
             DefaultReportArgument(DetektReportType.HTML, htmlReportTargetFileOrNull),
+            DefaultReportArgument(DetektReportType.TXT, txtReportTargetFileOrNull),
             DebugArgument(debugOrDefault),
             ParallelArgument(parallelProp.getOrElse(false)),
             BuildUponDefaultConfigArgument(buildUponDefaultConfigProp.getOrElse(false)),
@@ -244,27 +240,11 @@ open class Detekt : SourceTask(), VerificationTask {
             CustomReportArgument(reportId, destination)
         })
 
-        DetektInvoker.invokeCli(
-            project = project,
+        DetektInvoker.create(project).invokeCli(
             arguments = arguments.toList(),
-            ignoreFailures = ignoreFailuresProp.getOrElse(false),
+            ignoreFailures = ignoreFailuresProp.get(),
             classpath = detektClasspath.plus(pluginClasspath),
             taskName = name
         )
-
-        if (name == DETEKT_TASK_NAME && xmlReportTargetFileOrNull != null) {
-            val xmlReports = project.subprojects.flatMap { subproject ->
-                subproject.tasks.mapNotNull { task ->
-                    if (task is Detekt && task.name == DETEKT_TASK_NAME)
-                        task.xmlReportFile.orNull?.asFile
-                    else
-                        null
-                }
-            }
-            if (xmlReports.isNotEmpty() && debugOrDefault) {
-                logger.info("Merging report files of subprojects $xmlReports into $xmlReportTargetFileOrNull")
-            }
-            mergeXmlReports(xmlReportTargetFileOrNull.asFile, xmlReports)
-        }
     }
 }

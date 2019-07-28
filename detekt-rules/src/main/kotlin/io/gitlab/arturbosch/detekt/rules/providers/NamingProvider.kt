@@ -12,7 +12,6 @@ import io.gitlab.arturbosch.detekt.rules.naming.NamingRules
  * The naming ruleset contains rules which assert the naming of different parts of the codebase.
  *
  * @active since v1.0.0
- * @author Marvin Ramin
  */
 class NamingProvider : RuleSetProvider {
 

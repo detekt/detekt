@@ -14,8 +14,8 @@ The detekt Gradle plugin will generate multiple tasks
 
 - `detekt` - Runs a detekt analysis and complexity report on your source files. Configure the analysis inside the 
 `detekt` closure. By default the standard rule set without any white- or blacklist is executed on sources files located
- in `src/main/java` and `src/main/kotlin`. Reports are automatically generated in xml and html format and can be 
- found in `build/reports/detekt/detekt.[xml|html]` respectively. Please note that the `detekt` task is automatically 
+ in `src/main/java` and `src/main/kotlin`. Reports are automatically generated in xml, html and txt format and can be 
+ found in `build/reports/detekt/detekt.[xml|html|txt]` respectively. Please note that the `detekt` task is automatically 
  run when executing `gradle check`.
 - `detektGenerateConfig` - Generates a default detekt configuration file into your project directory.
 - `detektBaseline` - Similar to `detekt`, but creates a code smell baseline. Further detekt runs will only feature new smells not in this list.
@@ -114,6 +114,10 @@ detekt {
         html {
             enabled = true                                // Enable/Disable HTML report (default: true)
             destination = file("build/reports/detekt.html") // Path where HTML report will be stored (default: `build/reports/detekt/detekt.html`)
+        }
+        txt {
+            enabled = true                                // Enable/Disable TXT report (default: true)
+            destination = file("build/reports/detekt.txt") // Path where TXT report will be stored (default: `build/reports/detekt/detekt.txt`)
         }
         custom {
             reportId = "CustomJsonReport"                   // The simple class name of your custom report.

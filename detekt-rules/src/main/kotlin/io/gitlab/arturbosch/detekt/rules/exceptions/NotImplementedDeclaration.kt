@@ -26,9 +26,6 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getCalleeExpressionIfAny
  *     TODO("")
  * }
  * </noncompliant>
- *
- * @author schalkms
- * @author Marvin Ramin
  */
 class NotImplementedDeclaration(config: Config = Config.empty) : Rule(config) {
 

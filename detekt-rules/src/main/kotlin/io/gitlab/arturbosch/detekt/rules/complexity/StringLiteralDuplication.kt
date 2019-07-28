@@ -46,10 +46,6 @@ import org.jetbrains.kotlin.psi.KtStringTemplateExpression
  * @configuration ignoreAnnotation - if values in Annotations should be ignored (default: `true`)
  * @configuration excludeStringsWithLessThan5Characters - if short strings should be excluded (default: `true`)
  * @configuration ignoreStringsRegex - RegEx of Strings that should be ignored (default: `'$^'`)
- *
- * @author schalkms
- * @author Artur Bosch
- * @author Marvin Ramin
  */
 class StringLiteralDuplication(
     config: Config = Config.empty,

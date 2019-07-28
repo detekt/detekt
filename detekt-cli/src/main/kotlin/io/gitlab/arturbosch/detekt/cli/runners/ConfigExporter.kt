@@ -4,9 +4,6 @@ import io.gitlab.arturbosch.detekt.cli.ClasspathResourceConverter
 import io.gitlab.arturbosch.detekt.cli.DEFAULT_CONFIG
 import java.io.File
 
-/**
- * @author lummax
- */
 class ConfigExporter : Executable {
 
     override fun execute() {

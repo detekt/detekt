@@ -6,9 +6,6 @@ import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-/**
- * @author Niklas Baudy
- */
 class ForbiddenCommentSpec : Spek({
 
     val todoColon = "// TODO: I need to fix this."

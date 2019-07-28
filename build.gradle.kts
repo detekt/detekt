@@ -119,6 +119,7 @@ subprojects {
         reports {
             xml.enabled = true
             html.enabled = true
+            txt.enabled = true
         }
 
         idea {
@@ -320,7 +321,6 @@ val detektFormat by tasks.registering(Detekt::class) {
     buildUponDefaultConfig = true
     autoCorrect = true
     setSource(files(projectDir))
-    ignoreFailures = false
     include("**/*.kt")
     include("**/*.kts")
     exclude("**/resources/**")
@@ -329,6 +329,7 @@ val detektFormat by tasks.registering(Detekt::class) {
     reports {
         xml { enabled = false }
         html { enabled = false }
+        txt { enabled = false }
     }
 }
 
@@ -338,7 +339,6 @@ val detektAll by tasks.registering(Detekt::class) {
     buildUponDefaultConfig = true
     setSource(files(projectDir))
     config = files(project.rootDir.resolve("reports/failfast.yml"))
-    ignoreFailures = false
     include("**/*.kt")
     include("**/*.kts")
     exclude("**/resources/**")
@@ -347,5 +347,6 @@ val detektAll by tasks.registering(Detekt::class) {
     reports {
         xml.enabled = false
         html.enabled = false
+        txt.enabled = false
     }
 }

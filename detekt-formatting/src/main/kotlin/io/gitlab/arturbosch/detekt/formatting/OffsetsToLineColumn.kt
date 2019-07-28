@@ -4,8 +4,6 @@ import java.util.ArrayList
 
 /**
  * Extracted and adapted from KtLint.
- *
- * @author Artur Bosch
  */
 
 internal fun calculateLineColByOffset(text: String): (offset: Int) -> Pair<Int, Int> {

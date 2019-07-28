@@ -1,8 +1,5 @@
 package io.gitlab.arturbosch.detekt
 
-/**
- * @author Markus Schwarz
- */
 abstract class DslTestBuilder {
 
     abstract val gradleBuildConfig: String
@@ -16,6 +13,7 @@ abstract class DslTestBuilder {
     private var baselineFile: String? = null
     private var configFile: String? = null
     private var gradleVersion: String? = null
+    private var dryRun: Boolean = false
 
     fun withDetektConfig(config: String): DslTestBuilder {
         detektConfig = config
@@ -42,6 +40,11 @@ abstract class DslTestBuilder {
         return this
     }
 
+    fun dryRun(): DslTestBuilder {
+        dryRun = true
+        return this
+    }
+
     fun build(): DslGradleRunner {
         val mainBuildFileContent = """
             |$gradleBuildConfig
@@ -53,7 +56,8 @@ abstract class DslTestBuilder {
             mainBuildFileContent,
             configFile,
             baselineFile,
-            gradleVersion
+            gradleVersion,
+            dryRun
         )
         runner.setupProject()
         return runner

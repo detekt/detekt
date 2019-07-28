@@ -31,8 +31,6 @@ automatically. The format of the KDoc should be as follows:
      * </compliant>
      *
      * @configuration name - Description for the configuration option (default: `whatever should be the default`)
-     *
-     * @author name
      */
     class SomeRule : Rule {
   
@@ -53,8 +51,6 @@ automatically. The format of the KDoc should be as follows:
        active: false
        name: whatever should be the default
     ```
-
-    Last but not least, the `@author` tag should be added.
 
 - ... do not forget to test the new rule and/or add tests for any changes made to a rule.
 Run detekt on itself and other kotlin projects with the `--run-rule RuleSet:RuleId` option to test your rule in isolation.
