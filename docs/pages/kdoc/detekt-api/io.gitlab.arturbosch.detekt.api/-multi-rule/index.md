@@ -15,7 +15,6 @@ title: MultiRule - detekt-api
 ### Properties
 
 | [activeRules](active-rules.html) | `var activeRules: `[`Set`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html)`<`[`Rule`](../-rule/index.html)`>` |
-| [ruleFilters](rule-filters.html) | `var ruleFilters: `[`Set`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html)`<`[`RuleId`](../-rule-id.html)`>` |
 | [rules](rules.html) | `abstract val rules: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Rule`](../-rule/index.html)`>` |
 
 ### Inherited Properties

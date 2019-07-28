@@ -11,9 +11,3 @@ title: OutputReport.<init> - detekt-api
 Translates detekt's result container - [Detektion](../-detektion/index.html) - into an output report
 which is written inside a file.
 
-**Author**
-Artur Bosch
-
-**Author**
-Marvin Ramin
-

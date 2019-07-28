@@ -11,3 +11,7 @@ title: ThresholdedCodeSmell.<init> - detekt-api
 Represents a code smell for which a specific metric can be determined which is responsible
 for the existence of this rule violation.
 
+**See Also**
+
+[CodeSmell](../-code-smell/index.html)
+

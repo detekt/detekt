@@ -10,15 +10,6 @@ title: McCabeVisitor - detekt-api
 
 Counts the cyclomatic complexity of functions.
 
-**Author**
-Artur Bosch
-
-**Author**
-schalkms
-
-**Author**
-Sebastiano Poggi
-
 ### Constructors
 
 | [&lt;init&gt;](-init-.html) | `McCabeVisitor(ignoreSimpleWhenEntries: `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)`)`<br>Counts the cyclomatic complexity of functions. |

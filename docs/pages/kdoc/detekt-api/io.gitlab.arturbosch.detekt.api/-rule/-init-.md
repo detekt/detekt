@@ -16,9 +16,3 @@ A rule is implemented using the visitor pattern and should be started using the 
 function. If calculations must be done before or after the visiting process, here are
 two predefined (preVisit/postVisit) functions which can be overridden to setup/teardown additional data.
 
-**Author**
-Artur Bosch
-
-**Author**
-Marvin Ramin
-

@@ -15,9 +15,6 @@ Currently supported extensions are:
 * [ConsoleReport](../-console-report/index.html)
 * [OutputReport](../-output-report/index.html)
 
-**Author**
-Artur Bosch
-
 ### Properties
 
 | [id](id.html) | `open val id: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)<br>Name of the extension. |

@@ -11,6 +11,3 @@ title: Metric.<init> - detekt-api
 Metric type, can be an integer or double value. Internally it is stored as an integer,
 but the conversion factor and is double attributes can be used to retrieve it as a double value.
 
-**Author**
-Artur Bosch
-

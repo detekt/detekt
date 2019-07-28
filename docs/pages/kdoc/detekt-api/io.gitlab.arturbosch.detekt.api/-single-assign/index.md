@@ -11,9 +11,6 @@ title: SingleAssign - detekt-api
 Allows to assign a property just once.
 Further assignments result in [IllegalStateException](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-illegal-state-exception/index.html)'s.
 
-**Author**
-Artur Bosch
-
 ### Constructors
 
 | [&lt;init&gt;](-init-.html) | `SingleAssign()`<br>Allows to assign a property just once. Further assignments result in [IllegalStateException](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-illegal-state-exception/index.html)'s. |

@@ -17,9 +17,3 @@ can describe further the kind of metrics.
 If the design problem manifests by different source locations, references to these
 locations can be stored in additional [Entity](../-entity/index.html)'s.
 
-**Author**
-Artur Bosch
-
-**Author**
-Marvin Ramin
-
