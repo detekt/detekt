@@ -97,7 +97,7 @@ open class DetektCreateBaselineTask : SourceTask() {
 
     @Optional
     @Input
-    val autoCorrectProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    internal val autoCorrectProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     var autoCorrect: Boolean
         @Internal
         get() = autoCorrectProp.get()

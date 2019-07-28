@@ -107,7 +107,7 @@ open class Detekt : SourceTask(), VerificationTask {
 
     @Internal
     @Optional
-    val debugProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    internal val debugProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     var debug: Boolean
         @Internal
         get() = debugProp.get()
@@ -115,7 +115,7 @@ open class Detekt : SourceTask(), VerificationTask {
 
     @Internal
     @Optional
-    val parallelProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    internal val parallelProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     var parallel: Boolean
         @Internal
         get() = parallelProp.get()
@@ -123,7 +123,7 @@ open class Detekt : SourceTask(), VerificationTask {
 
     @Optional
     @Input
-    val disableDefaultRuleSetsProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    internal val disableDefaultRuleSetsProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     var disableDefaultRuleSets: Boolean
         @Internal
         get() = disableDefaultRuleSetsProp.get()
@@ -131,7 +131,7 @@ open class Detekt : SourceTask(), VerificationTask {
 
     @Optional
     @Input
-    val buildUponDefaultConfigProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    internal val buildUponDefaultConfigProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     var buildUponDefaultConfig: Boolean
         @Internal
         get() = buildUponDefaultConfigProp.get()
@@ -139,7 +139,7 @@ open class Detekt : SourceTask(), VerificationTask {
 
     @Optional
     @Input
-    val failFastProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    internal val failFastProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     var failFast: Boolean
         @Internal
         get() = failFastProp.get()
@@ -153,7 +153,7 @@ open class Detekt : SourceTask(), VerificationTask {
 
     @Optional
     @Input
-    val autoCorrectProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    internal val autoCorrectProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     var autoCorrect: Boolean
         @Internal
         get() = autoCorrectProp.get()
