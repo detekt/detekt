@@ -19,6 +19,7 @@ open class DetektIdeaInspectionTask : SourceTask() {
 
     @Deprecated("Replace with getSource/setSource")
     var input: FileCollection
+        @Internal
         get() = source
         set(value) = setSource(value)
 

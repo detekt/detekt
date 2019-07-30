@@ -41,8 +41,8 @@ tasks.wrapper {
     }
 }
 
-tasks.withType<Test> {
-    dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":test"))
+tasks.check {
+    dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":check"))
 }
 
 tasks.withType<Detekt> {
