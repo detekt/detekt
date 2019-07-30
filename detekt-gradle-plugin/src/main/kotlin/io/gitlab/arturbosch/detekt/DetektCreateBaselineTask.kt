@@ -96,13 +96,9 @@ open class DetektCreateBaselineTask : SourceTask() {
     @Optional
     val ignoreFailures: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
-    @get:Optional
-    @get:Input
-    internal val autoCorrectProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
-    var autoCorrect: Boolean
-        @Internal
-        get() = autoCorrectProp.get()
-        set(value) = autoCorrectProp.set(value)
+    @Input
+    @Optional
+    val autoCorrect: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
     @TaskAction
     fun baseline() {
@@ -122,7 +118,7 @@ open class DetektCreateBaselineTask : SourceTask() {
             ParallelArgument(parallel.getOrElse(false)),
             BuildUponDefaultConfigArgument(buildUponDefaultConfig.getOrElse(false)),
             FailFastArgument(failFast.getOrElse(false)),
-            AutoCorrectArgument(autoCorrectProp.getOrElse(false)),
+            AutoCorrectArgument(autoCorrect.getOrElse(false)),
             DisableDefaultRuleSetArgument(disableDefaultRuleSets.getOrElse(false))
         )
 

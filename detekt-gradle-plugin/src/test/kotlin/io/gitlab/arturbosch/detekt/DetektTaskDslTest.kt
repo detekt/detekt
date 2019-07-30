@@ -355,6 +355,9 @@ internal object DetektTaskDslTest : Spek({
                         |    debug = true
                         |    parallel = true
                         |    disableDefaultRuleSets = true
+                        |    failFast = true
+                        |    autoCorrect = true
+                        |    buildUponDefaultConfig = true
                         |    ignoreFailures = true
                         |}
                         """
@@ -379,6 +382,18 @@ internal object DetektTaskDslTest : Spek({
 
                     it("ignores failures") {
                         assertThat(result.output).contains("Ignore failures: true")
+                    }
+
+                    it("enables fail fast") {
+                        assertThat(result.output).contains("--fail-fast")
+                    }
+
+                    it("enables auto correcting") {
+                        assertThat(result.output).contains("--auto-correct")
+                    }
+
+                    it("enables using default config as baseline") {
+                        assertThat(result.output).contains("--build-upon-default-config")
                     }
                 }
 
