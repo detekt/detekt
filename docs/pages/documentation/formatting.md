@@ -82,10 +82,6 @@ See <a href="https://ktlint.github.io/#rule-blank">ktlint-website</a> for docume
 
 See <a href="https://ktlint.github.io/#rule-empty-class-body">ktlint-website</a> for documentation.
 
-### NoItParamInMultilineLambda
-
-See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
-
 ### NoLineBreakAfterElse
 
 See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
@@ -161,10 +157,6 @@ See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for docu
 See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.
 
 ### SpacingAroundRangeOperator
-
-See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.
-
-### SpacingAroundUnaryOperators
 
 See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.
 

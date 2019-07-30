@@ -16,7 +16,6 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.MultiLineIfElse
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoBlankLineBeforeRbrace
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoConsecutiveBlankLines
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoEmptyClassBody
-import io.gitlab.arturbosch.detekt.formatting.wrappers.NoItParamInMultilineLambda
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoLineBreakAfterElse
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoLineBreakBeforeAssignment
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoMultipleSpaces
@@ -35,7 +34,6 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundKeyword
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundOperators
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundParens
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundRangeOperator
-import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundUnaryOperators
 import io.gitlab.arturbosch.detekt.formatting.wrappers.StringTemplate
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.JavaDummyElement
@@ -61,7 +59,6 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
         NoBlankLineBeforeRbrace(config),
         NoConsecutiveBlankLines(config),
         NoEmptyClassBody(config),
-        NoItParamInMultilineLambda(config),
         NoLineBreakAfterElse(config),
         NoLineBreakBeforeAssignment(config),
         NoMultipleSpaces(config),
@@ -80,7 +77,6 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
         SpacingAroundOperators(config),
         SpacingAroundParens(config),
         SpacingAroundRangeOperator(config),
-        SpacingAroundUnaryOperators(config),
         StringTemplate(config)
     )
 
