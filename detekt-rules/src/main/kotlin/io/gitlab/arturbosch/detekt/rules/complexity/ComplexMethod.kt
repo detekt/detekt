@@ -26,9 +26,10 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  * Complex methods use too many of the following statements.
  * Each one of them adds one to the complexity count.
  *
- * - __Conditional statements__ - `if`, `else`, `when`
+ * - __Conditional statements__ - `if`, `else if`, `when`
  * - __Loops__ - `for`, `while`, `do-while`, `forEach`
- * - __Exceptions__ - `try`, `catch`, `finally`, `use`
+ * - __Operators__ `&&`, `||`
+ * - __Exceptions__ - `catch`, `use`
  * - __Scope Functions__ - `let`, `run`, `with`, `apply`, and `also` ->
  *  [Reference](https://kotlinlang.org/docs/reference/scope-functions.html)
  *

@@ -3,10 +3,12 @@ package io.gitlab.arturbosch.detekt.api.internal
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtContinueExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtLoopExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectLiteralExpression
+import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
 import org.jetbrains.kotlin.psi.KtTryExpression
 import org.jetbrains.kotlin.psi.KtWhenEntry
 import org.jetbrains.kotlin.psi.KtWhenExpression
@@ -35,8 +37,10 @@ class McCabeVisitor(private val ignoreSimpleWhenEntries: Boolean) : DetektVisito
 
     override fun visitIfExpression(expression: KtIfExpression) {
         mcc++
-        if (expression.`else` != null) {
-            mcc++
+        val condition = expression.condition
+        if (condition != null) {
+            mcc += condition.children.count { it is KtOperationReferenceExpression
+                    && it.text == "&&" || it.text == "||" }
         }
         super.visitIfExpression(expression)
     }
@@ -58,12 +62,7 @@ class McCabeVisitor(private val ignoreSimpleWhenEntries: Boolean) : DetektVisito
     }
 
     override fun visitTryExpression(expression: KtTryExpression) {
-        mcc++
         mcc += expression.catchClauses.size
-        expression.finallyBlock?.let {
-            mcc++
-            Unit
-        }
         super.visitTryExpression(expression)
     }
 
@@ -79,6 +78,11 @@ class McCabeVisitor(private val ignoreSimpleWhenEntries: Boolean) : DetektVisito
             }
         }
         super.visitCallExpression(expression)
+    }
+
+    override fun visitContinueExpression(expression: KtContinueExpression) {
+        mcc++
+        super.visitContinueExpression(expression)
     }
 }
 
