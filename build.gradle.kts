@@ -42,10 +42,6 @@ tasks.wrapper {
     }
 }
 
-apply {
-    plugin("org.owasp.dependencycheck")
-}
-
 dependencyCheck {
     analyzers {
         assemblyEnabled = false
