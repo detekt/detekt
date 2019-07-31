@@ -12,12 +12,3 @@ Primary use case for an AnnotationExcluder is to decide if a KtElement should be
 excluded from further analysis. This is done by checking if a special annotation
 is present over the element.
 
-**Author**
-Niklas Baudy
-
-**Author**
-Artur Bosch
-
-**Author**
-schalkms
-

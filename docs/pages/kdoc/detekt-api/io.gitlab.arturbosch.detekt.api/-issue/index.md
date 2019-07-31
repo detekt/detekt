@@ -10,15 +10,6 @@ title: Issue - detekt-api
 
 An issue represents a problem in the codebase.
 
-**Author**
-Artur Bosch
-
-**Author**
-Marvin Ramin
-
-**Author**
-schalkms
-
 ### Constructors
 
 | [&lt;init&gt;](-init-.html) | `Issue(id: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, severity: `[`Severity`](../-severity/index.html)`, description: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, debt: `[`Debt`](../-debt/index.html)`)`<br>An issue represents a problem in the codebase. |

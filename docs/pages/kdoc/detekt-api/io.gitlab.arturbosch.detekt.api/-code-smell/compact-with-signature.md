@@ -10,3 +10,6 @@ title: CodeSmell.compactWithSignature - detekt-api
 
 Overrides [Compactable.compactWithSignature](../-compactable/compact-with-signature.html)
 
+Same as [compact](../-compactable/compact.html) except the content should contain a substring which represents
+this exact findings via a custom identifier.
+

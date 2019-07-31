@@ -10,3 +10,5 @@ title: ThresholdedCodeSmell.compact - detekt-api
 
 Overrides [CodeSmell.compact](../-code-smell/compact.html)
 
+Contract to format implementing object to a string representation.
+

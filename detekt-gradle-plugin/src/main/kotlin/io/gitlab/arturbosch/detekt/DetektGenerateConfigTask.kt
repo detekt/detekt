@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.invoke.GenerateConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import org.gradle.api.file.FileCollection
 import org.gradle.api.tasks.Classpath
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.language.base.plugins.LifecycleBasePlugin
@@ -19,6 +20,7 @@ open class DetektGenerateConfigTask : SourceTask() {
 
     @Deprecated("Replace with getSource/setSource")
     var input: FileCollection
+        @Internal
         get() = source
         set(value) = setSource(value)
 
@@ -32,6 +34,6 @@ open class DetektGenerateConfigTask : SourceTask() {
             InputArgument(source)
         )
 
-        DetektInvoker.invokeCli(project, arguments.toList(), detektClasspath, name)
+        DetektInvoker.create(project).invokeCli(arguments.toList(), detektClasspath, name)
     }
 }

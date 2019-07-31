@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
@@ -51,6 +53,7 @@ class DetektPlugin : Plugin<Project> {
             it.disableDefaultRuleSetsProp.set(project.provider { extension.disableDefaultRuleSets })
             it.buildUponDefaultConfigProp.set(project.provider { extension.buildUponDefaultConfig })
             it.failFastProp.set(project.provider { extension.failFast })
+            it.autoCorrectProp.set(project.provider { extension.autoCorrect })
             it.config.setFrom(project.provider { extension.config })
             it.baseline.set(project.layout.file(project.provider { extension.baseline }))
             it.plugins.set(project.provider { extension.plugins })
@@ -59,13 +62,7 @@ class DetektPlugin : Plugin<Project> {
             it.setExcludes(defaultExcludes)
             it.reportsDir.set(project.provider { extension.customReportsDir })
             it.reports = extension.reports
-            it.setIgnoreFailures(project.provider { extension.ignoreFailures })
-
-            project.subprojects.forEach { subProject ->
-                subProject.tasks.firstOrNull { t -> t is Detekt && t.name == DETEKT_TASK_NAME }?.let { subprojectTask ->
-                    it.dependsOn(subprojectTask)
-                }
-            }
+            it.ignoreFailuresProp.set(project.provider { extension.ignoreFailures })
         }
 
         project.tasks.matching { it.name == LifecycleBasePlugin.CHECK_TASK_NAME }.configureEach {
@@ -82,6 +79,7 @@ class DetektPlugin : Plugin<Project> {
             it.disableDefaultRuleSetsProp.set(project.provider { extension.disableDefaultRuleSets })
             it.buildUponDefaultConfigProp.set(project.provider { extension.buildUponDefaultConfig })
             it.failFastProp.set(project.provider { extension.failFast })
+            it.autoCorrectProp.set(project.provider { extension.autoCorrect })
             it.config.setFrom(project.provider { extension.config })
             it.baseline.set(project.layout.file(project.provider { extension.baseline }))
             it.plugins.set(project.provider { extension.plugins })
@@ -90,7 +88,7 @@ class DetektPlugin : Plugin<Project> {
             it.reports.xml.destination = File(extension.reportsDir, sourceSet.name + ".xml")
             it.reports.html.destination = File(extension.reportsDir, sourceSet.name + ".html")
             it.reports.txt.destination = File(extension.reportsDir, sourceSet.name + ".txt")
-            it.setIgnoreFailures(project.provider { extension.ignoreFailures })
+            it.ignoreFailuresProp.set(project.provider { extension.ignoreFailures })
             it.description =
                 "EXPERIMENTAL & SLOW: Run detekt analysis for ${sourceSet.name} classes with type resolution"
         }
@@ -105,6 +103,7 @@ class DetektPlugin : Plugin<Project> {
             it.disableDefaultRuleSets.set(project.provider { extension.disableDefaultRuleSets })
             it.buildUponDefaultConfig.set(project.provider { extension.buildUponDefaultConfig })
             it.failFast.set(project.provider { extension.failFast })
+            it.autoCorrect.set(project.provider { extension.autoCorrect })
             it.plugins.set(project.provider { extension.plugins })
             it.setSource(existingInputDirectoriesProvider(project, extension))
             it.setIncludes(defaultIncludes)
@@ -114,8 +113,8 @@ class DetektPlugin : Plugin<Project> {
     private fun registerGenerateConfigTask(project: Project, extension: DetektExtension) =
         project.tasks.register(GENERATE_CONFIG, DetektGenerateConfigTask::class.java) {
             it.setSource(existingInputDirectoriesProvider(project, extension))
-            it.setIncludes(listOf("**/*.kt", "**/*.kts"))
-            it.setExcludes(listOf("build/"))
+            it.setIncludes(defaultIncludes)
+            it.setExcludes(defaultExcludes)
         }
 
     private fun registerIdeaTasks(project: Project, extension: DetektExtension) {
@@ -154,7 +153,6 @@ class DetektPlugin : Plugin<Project> {
             configuration.description = "The $CONFIGURATION_DETEKT dependencies to be used for this project."
 
             configuration.defaultDependencies { dependencySet ->
-                @Suppress("USELESS_ELVIS")
                 val version = extension.toolVersion ?: DEFAULT_DETEKT_VERSION
                 dependencySet.add(project.dependencies.create("io.gitlab.arturbosch.detekt:detekt-cli:$version"))
             }
@@ -178,7 +176,7 @@ class DetektPlugin : Plugin<Project> {
     }
 
     companion object {
-        const val DETEKT_TASK_NAME = "detekt"
+        private const val DETEKT_TASK_NAME = "detekt"
         private const val IDEA_FORMAT = "detektIdeaFormat"
         private const val IDEA_INSPECT = "detektIdeaInspect"
         private const val GENERATE_CONFIG = "detektGenerateConfig"

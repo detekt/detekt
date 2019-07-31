@@ -11,9 +11,6 @@ title: FileProcessListener - detekt-api
 Gather additional metrics about the analyzed kotlin file.
 Pay attention to the thread policy of each function!
 
-**Author**
-Artur Bosch
-
 ### Inherited Properties
 
 | [id](../-extension/id.html) | `open val id: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)<br>Name of the extension. |

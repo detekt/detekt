@@ -159,7 +159,6 @@ object RedundantElseInWhenSpec : Spek({
                 """
                 val actual = subject.compileAndLintWithContext(environment, code)
                 assertThat(actual).hasSize(1)
-
             }
 
             it("does not report when `when` expression contains `else` case when not all cases explicitly covered") {

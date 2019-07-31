@@ -10,3 +10,5 @@ title: Entity.compact - detekt-api
 
 Overrides [Compactable.compact](../-compactable/compact.html)
 
+Contract to format implementing object to a string representation.
+

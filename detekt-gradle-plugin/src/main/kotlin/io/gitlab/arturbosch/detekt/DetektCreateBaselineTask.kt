@@ -44,6 +44,7 @@ open class DetektCreateBaselineTask : SourceTask() {
 
     @Deprecated("Replace with getSource/setSource")
     var input: FileCollection
+        @Internal
         get() = source
         set(value) = setSource(value)
 
@@ -59,8 +60,10 @@ open class DetektCreateBaselineTask : SourceTask() {
 
     @Input
     @Optional
-    @Deprecated("Set plugins using the detektPlugins configuration " +
-            "(see https://arturbosch.github.io/detekt/extensions.html#let-detekt-know-about-your-extensions)")
+    @Deprecated(
+        "Set plugins using the detektPlugins configuration " +
+                "(see https://arturbosch.github.io/detekt/extensions.html#let-detekt-know-about-your-extensions)"
+    )
     var plugins: Property<String> = project.objects.property(String::class.java)
 
     @Classpath
@@ -93,19 +96,18 @@ open class DetektCreateBaselineTask : SourceTask() {
     @Optional
     val ignoreFailures: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
-    @Optional
     @Input
-    val autoCorrectProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
-    var autoCorrect: Boolean
-        @Internal
-        get() = autoCorrectProp.get()
-        set(value) = autoCorrectProp.set(value)
+    @Optional
+    val autoCorrect: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
     @TaskAction
     fun baseline() {
-        if (plugins.isPresent && !pluginClasspath.isEmpty)
-            throw GradleException("Cannot set value for plugins on detekt task and apply detektPlugins configuration " +
-                    "at the same time.")
+        if (plugins.isPresent && !pluginClasspath.isEmpty) {
+            throw GradleException(
+                "Cannot set value for plugins on detekt task and apply detektPlugins configuration " +
+                        "at the same time."
+            )
+        }
         val arguments = mutableListOf(
             CreateBaselineArgument,
             BaselineArgument(baseline.get()),
@@ -116,12 +118,11 @@ open class DetektCreateBaselineTask : SourceTask() {
             ParallelArgument(parallel.getOrElse(false)),
             BuildUponDefaultConfigArgument(buildUponDefaultConfig.getOrElse(false)),
             FailFastArgument(failFast.getOrElse(false)),
-            AutoCorrectArgument(autoCorrectProp.getOrElse(false)),
+            AutoCorrectArgument(autoCorrect.getOrElse(false)),
             DisableDefaultRuleSetArgument(disableDefaultRuleSets.getOrElse(false))
         )
 
-        DetektInvoker.invokeCli(
-            project = project,
+        DetektInvoker.create(project).invokeCli(
             arguments = arguments.toList(),
             ignoreFailures = ignoreFailures.getOrElse(false),
             classpath = detektClasspath.plus(pluginClasspath),

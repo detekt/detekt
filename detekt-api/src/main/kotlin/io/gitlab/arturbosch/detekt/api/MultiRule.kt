@@ -2,6 +2,11 @@ package io.gitlab.arturbosch.detekt.api
 
 import org.jetbrains.kotlin.psi.KtFile
 
+/**
+ * Composite rule which delegates work to child rules.
+ * Can be used to combine different rules which do similar work like
+ * scanning the source code line by line to increase performance.
+ */
 abstract class MultiRule : BaseRule() {
 
     abstract val rules: List<Rule>
@@ -19,6 +24,10 @@ abstract class MultiRule : BaseRule() {
         }
     }
 
+    /**
+     * Preferred way to run child rules because this composite rule
+     * takes care of evaluating if a specific child should be run at all.
+     */
     fun <T : Rule> T.runIfActive(block: T.() -> Unit) {
         if (this in activeRules) {
             block()

@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt
 
-import io.gitlab.arturbosch.detekt.DetektPlugin.Companion.DETEKT_TASK_NAME
 import io.gitlab.arturbosch.detekt.extensions.CustomDetektReport
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType
 import io.gitlab.arturbosch.detekt.extensions.DetektReports
@@ -19,9 +18,9 @@ import io.gitlab.arturbosch.detekt.invoke.DisableDefaultRuleSetArgument
 import io.gitlab.arturbosch.detekt.invoke.FailFastArgument
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.JvmTargetArgument
+import io.gitlab.arturbosch.detekt.invoke.LanguageVersionArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
 import io.gitlab.arturbosch.detekt.invoke.PluginsArgument
-import io.gitlab.arturbosch.detekt.output.mergeXmlReports
 import org.gradle.api.Action
 import org.gradle.api.GradleException
 import org.gradle.api.file.ConfigurableFileCollection
@@ -54,6 +53,7 @@ open class Detekt : SourceTask(), VerificationTask {
 
     @Deprecated("Replace with getSource/setSource")
     var input: FileCollection
+        @Internal
         get() = source
         set(value) = setSource(value)
 
@@ -82,8 +82,16 @@ open class Detekt : SourceTask(), VerificationTask {
     @Optional
     val classpath = project.configurableFileCollection()
 
-    @Input
-    @Optional
+    @get:Input
+    @get:Optional
+    internal val languageVersionProp: Property<String> = project.objects.property(String::class.javaObjectType)
+    var languageVersion: String
+        @Internal
+        get() = languageVersionProp.get()
+        set(value) = languageVersionProp.set(value)
+
+    @get:Input
+    @get:Optional
     internal val jvmTargetProp: Property<String> = project.objects.property(String::class.javaObjectType)
     var jvmTarget: String
         @Internal
@@ -92,60 +100,62 @@ open class Detekt : SourceTask(), VerificationTask {
 
     @Input
     @Optional
-    @Deprecated("Set plugins using the detektPlugins configuration " +
-            "(see https://arturbosch.github.io/detekt/extensions.html#let-detekt-know-about-your-extensions)")
+    @Deprecated(
+        "Set plugins using the detektPlugins configuration " +
+                "(see https://arturbosch.github.io/detekt/extensions.html#let-detekt-know-about-your-extensions)"
+    )
     var plugins: Property<String> = project.objects.property(String::class.java)
 
-    @Internal
-    @Optional
-    val debugProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    @get:Internal
+    @get:Optional
+    internal val debugProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     var debug: Boolean
         @Internal
         get() = debugProp.get()
         set(value) = debugProp.set(value)
 
-    @Internal
-    @Optional
-    val parallelProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    @get:Internal
+    @get:Optional
+    internal val parallelProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     var parallel: Boolean
         @Internal
         get() = parallelProp.get()
         set(value) = parallelProp.set(value)
 
-    @Optional
-    @Input
-    val disableDefaultRuleSetsProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    @get:Optional
+    @get:Input
+    internal val disableDefaultRuleSetsProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     var disableDefaultRuleSets: Boolean
         @Internal
         get() = disableDefaultRuleSetsProp.get()
         set(value) = disableDefaultRuleSetsProp.set(value)
 
-    @Optional
-    @Input
-    val buildUponDefaultConfigProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    @get:Optional
+    @get:Input
+    internal val buildUponDefaultConfigProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     var buildUponDefaultConfig: Boolean
         @Internal
         get() = buildUponDefaultConfigProp.get()
         set(value) = buildUponDefaultConfigProp.set(value)
 
-    @Optional
-    @Input
-    val failFastProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    @get:Optional
+    @get:Input
+    internal val failFastProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     var failFast: Boolean
         @Internal
         get() = failFastProp.get()
         set(value) = failFastProp.set(value)
 
-    private val ignoreFailuresProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    @get:Internal
+    internal val ignoreFailuresProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     @Input
     @Optional
-    override fun getIgnoreFailures(): Boolean = ignoreFailuresProp.get()
+    override fun getIgnoreFailures(): Boolean = ignoreFailuresProp.getOrElse(false)
     override fun setIgnoreFailures(value: Boolean) = ignoreFailuresProp.set(value)
-    fun setIgnoreFailures(value: Provider<Boolean>) = ignoreFailuresProp.set(value)
 
-    @Optional
-    @Input
-    val autoCorrectProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    @get:Optional
+    @get:Input
+    internal val autoCorrectProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     var autoCorrect: Boolean
         @Internal
         get() = autoCorrectProp.get()
@@ -191,9 +201,12 @@ open class Detekt : SourceTask(), VerificationTask {
 
     @TaskAction
     fun check() {
-        if (plugins.isPresent && !pluginClasspath.isEmpty)
-            throw GradleException("Cannot set value for plugins on detekt task and apply detektPlugins configuration " +
-                    "at the same time.")
+        if (plugins.isPresent && !pluginClasspath.isEmpty) {
+            throw GradleException(
+                "Cannot set value for plugins on detekt task and apply detektPlugins configuration " +
+                        "at the same time."
+            )
+        }
         val xmlReportTargetFileOrNull = xmlReportFile.orNull
         val htmlReportTargetFileOrNull = htmlReportFile.orNull
         val txtReportTargetFileOrNull = txtReportFile.orNull
@@ -201,6 +214,7 @@ open class Detekt : SourceTask(), VerificationTask {
         val arguments = mutableListOf(
             InputArgument(source),
             ClasspathArgument(classpath),
+            LanguageVersionArgument(languageVersionProp.orNull),
             JvmTargetArgument(jvmTargetProp.orNull),
             ConfigArgument(config),
             PluginsArgument(plugins.orNull),
@@ -228,27 +242,11 @@ open class Detekt : SourceTask(), VerificationTask {
             CustomReportArgument(reportId, destination)
         })
 
-        DetektInvoker.invokeCli(
-            project = project,
+        DetektInvoker.create(project).invokeCli(
             arguments = arguments.toList(),
-            ignoreFailures = ignoreFailuresProp.getOrElse(false),
+            ignoreFailures = ignoreFailuresProp.get(),
             classpath = detektClasspath.plus(pluginClasspath),
             taskName = name
         )
-
-        if (name == DETEKT_TASK_NAME && xmlReportTargetFileOrNull != null) {
-            val xmlReports = project.subprojects.flatMap { subproject ->
-                subproject.tasks.mapNotNull { task ->
-                    if (task is Detekt && task.name == DETEKT_TASK_NAME)
-                        task.xmlReportFile.orNull?.asFile
-                    else
-                        null
-                }
-            }
-            if (!xmlReports.isEmpty() && debugOrDefault) {
-                logger.info("Merging report files of subprojects $xmlReports into $xmlReportTargetFileOrNull")
-            }
-            mergeXmlReports(xmlReportTargetFileOrNull.asFile, xmlReports)
-        }
     }
 }

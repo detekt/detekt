@@ -11,11 +11,16 @@ import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
 import org.jetbrains.kotlin.com.intellij.mock.MockProject
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.com.intellij.pom.PomModel
+import org.jetbrains.kotlin.config.ApiVersion
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
 import org.jetbrains.kotlin.config.JVMConfigurationKeys
 import org.jetbrains.kotlin.config.JvmTarget
+import org.jetbrains.kotlin.config.LanguageVersion
+import org.jetbrains.kotlin.config.LanguageVersionSettings
+import org.jetbrains.kotlin.config.LanguageVersionSettingsImpl
 import java.io.File
+import java.net.URLClassLoader
 import java.nio.file.Path
 
 /**
@@ -24,8 +29,10 @@ import java.nio.file.Path
  */
 fun createKotlinCoreEnvironment(configuration: CompilerConfiguration = CompilerConfiguration()): KotlinCoreEnvironment {
     System.setProperty("idea.io.use.fallback", "true")
-    configuration.put(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY,
-        PrintingMessageCollector(System.err, MessageRenderer.PLAIN_FULL_PATHS, false))
+    configuration.put(
+        CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY,
+        PrintingMessageCollector(System.err, MessageRenderer.PLAIN_FULL_PATHS, false)
+    )
     configuration.put(CommonConfigurationKeys.MODULE_NAME, "detekt")
 
     val environment = KotlinCoreEnvironment.createForProduction(
@@ -47,6 +54,7 @@ fun createKotlinCoreEnvironment(configuration: CompilerConfiguration = CompilerC
 fun createCompilerConfiguration(
     pathsToAnalyze: List<Path>,
     classpath: List<String>,
+    languageVersion: LanguageVersion?,
     jvmTarget: JvmTarget
 ): CompilerConfiguration {
 
@@ -63,10 +71,42 @@ fun createCompilerConfiguration(
             .toList()
     }
 
+    val classpathFiles = classpath.map { File(it) }
+    val retrievedLanguageVersion = languageVersion ?: classpathFiles.getKotlinLanguageVersion()
+    val languageVersionSettings: LanguageVersionSettings? = retrievedLanguageVersion?.let {
+        LanguageVersionSettingsImpl(
+            languageVersion = it,
+            apiVersion = ApiVersion.createByLanguageVersion(it)
+        )
+    }
+
     return CompilerConfiguration().apply {
+        if (languageVersionSettings != null) {
+            put(CommonConfigurationKeys.LANGUAGE_VERSION_SETTINGS, languageVersionSettings)
+        }
         put(JVMConfigurationKeys.JVM_TARGET, jvmTarget)
         addJavaSourceRoots(javaFiles)
         addKotlinSourceRoots(kotlinFiles)
-        addJvmClasspathRoots(classpath.map { File(it) })
+        addJvmClasspathRoots(classpathFiles)
+    }
+}
+
+@Suppress("TooGenericExceptionCaught")
+internal fun Iterable<File>.getKotlinLanguageVersion(): LanguageVersion? {
+    val urls = map { it.toURI().toURL() }
+    if (urls.isEmpty()) {
+        return null
+    }
+    return URLClassLoader(urls.toTypedArray()).use { classLoader ->
+        try {
+            val clazz = classLoader.loadClass("kotlin.KotlinVersion")
+            val field = clazz.getField("CURRENT")
+            field.isAccessible = true
+            val versionObj = field.get(null)
+            val versionString = versionObj?.toString()
+            return@use versionString?.let { LanguageVersion.fromFullVersionString(it) }
+        } catch (e: Throwable) {
+            return@use null // do nothing
+        }
     }
 }
