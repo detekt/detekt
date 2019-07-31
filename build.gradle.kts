@@ -53,6 +53,7 @@ dependencyCheck {
      * https://nvd.nist.gov/vuln-metrics/cvss?source=post_page
      */
     failBuildOnCVSS = severityLevel.toFloat()
+    failOnError = false
 }
 
 tasks.withType<Test> {
