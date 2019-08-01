@@ -31,16 +31,6 @@ class VarCouldBeValSpec : Spek({
             assertThat(subject.lint(code)).isEmpty()
         }
 
-        it("does not report variables that are re-assigned with assignment operator") {
-            val code = """
-    		fun test() {
-				var a = 1
-				a += 2
-			}
-			"""
-            assertThat(subject.lint(code)).isEmpty()
-        }
-
         it("does not report variables that are re-assigned with postfix operators") {
             val code = """
 			fun test() {
