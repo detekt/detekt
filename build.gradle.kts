@@ -9,18 +9,18 @@ import org.jfrog.gradle.plugin.artifactory.dsl.PublisherConfig
 import java.util.Date
 
 plugins {
-    // Plugin versions for these plugins are defined in gradle.properties and applied in settings.gradle.kts
-    id("com.gradle.build-scan")
-    kotlin("jvm")
-    id("com.jfrog.bintray")
-    id("com.jfrog.artifactory") apply false
-    id("com.github.ben-manes.versions")
-    id("com.github.johnrengelman.shadow") apply false
-    id("org.sonarqube")
     id("io.gitlab.arturbosch.detekt")
-    id("org.jetbrains.dokka") apply false
     jacoco
     `maven-publish`
+    // Plugin versions for these plugins are defined in gradle.properties and applied in settings.gradle.kts
+    id("com.jfrog.artifactory") apply false
+    id("com.jfrog.bintray")
+    id("com.gradle.build-scan")
+    id("org.jetbrains.dokka") apply false
+    id("com.github.ben-manes.versions")
+    kotlin("jvm")
+    id("com.github.johnrengelman.shadow") apply false
+    id("org.sonarqube")
 }
 
 buildScan {
