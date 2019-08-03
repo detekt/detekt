@@ -47,7 +47,8 @@ class CliArgs : Args {
 
     @Parameter(
         names = ["--generate-config", "-gc"],
-        description = "Export default config to default-detekt-config.yml."
+        description = "Export default config. " +
+                "Path can be specified with --config option (default path: default-detekt-config.yml)"
     )
     var generateConfig: Boolean = false
 
