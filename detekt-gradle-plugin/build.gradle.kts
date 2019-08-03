@@ -31,8 +31,6 @@ plugins {
 group = "io.gitlab.arturbosch.detekt"
 version = "1.0.0"
 
-val detektGradleVersion: String by project
-val jcommanderVersion: String by project
 val spekVersion = "2.0.2"
 val junitPlatformVersion = "1.4.1"
 val assertjVersion = "3.12.2"
