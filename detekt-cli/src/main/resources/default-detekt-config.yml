@@ -184,6 +184,7 @@ formatting:
   autoCorrect: true
   AnnotationOnSeparateLine:
     active: false
+    autoCorrect: true
   ChainWrapping:
     active: true
     autoCorrect: true
@@ -197,8 +198,10 @@ formatting:
     autoCorrect: true
   ImportOrdering:
     active: false
+    autoCorrect: true
   Indentation:
     active: false
+    autoCorrect: true
     indentSize: 4
     continuationIndentSize: 4
   MaximumLineLength:
