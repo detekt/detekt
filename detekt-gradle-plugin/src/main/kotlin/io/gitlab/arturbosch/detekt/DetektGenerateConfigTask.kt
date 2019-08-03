@@ -1,6 +1,9 @@
 package io.gitlab.arturbosch.detekt
 
+import io.gitlab.arturbosch.detekt.DetektPlugin.Companion.CONFIG_DIR_NAME
+import io.gitlab.arturbosch.detekt.DetektPlugin.Companion.CONFIG_FILE
 import io.gitlab.arturbosch.detekt.internal.configurableFileCollection
+import io.gitlab.arturbosch.detekt.invoke.ConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import io.gitlab.arturbosch.detekt.invoke.GenerateConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
@@ -29,11 +32,20 @@ open class DetektGenerateConfigTask : SourceTask() {
 
     @TaskAction
     fun generateConfig() {
+
+        val configDir = project.mkdir("${project.rootDir}/$CONFIG_DIR_NAME")
+        val config = project.files("${configDir.canonicalPath}/$CONFIG_FILE")
+
         val arguments = mutableListOf(
             GenerateConfigArgument,
+            ConfigArgument(config),
             InputArgument(source)
         )
 
-        DetektInvoker.create(project).invokeCli(arguments.toList(), detektClasspath, name)
+        if (config.first().exists()) {
+            project.logger.warn("Skipping config file generation. Config file already exists at ${config.first()}")
+        } else {
+            DetektInvoker.create(project).invokeCli(arguments.toList(), detektClasspath, name)
+        }
     }
 }
