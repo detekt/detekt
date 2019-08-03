@@ -244,7 +244,7 @@ open class Detekt : SourceTask(), VerificationTask {
 
         DetektInvoker.create(project).invokeCli(
             arguments = arguments.toList(),
-            ignoreFailures = ignoreFailuresProp.get(),
+            ignoreFailures = ignoreFailures,
             classpath = detektClasspath.plus(pluginClasspath),
             taskName = name
         )
