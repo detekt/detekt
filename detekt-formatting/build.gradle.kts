@@ -7,7 +7,6 @@ val junitPlatformVersion: String by project
 val spekVersion: String by project
 
 dependencies {
-    implementation(kotlin("compiler-embeddable"))
     implementation(project(":detekt-api"))
     implementation("com.pinterest.ktlint:ktlint-ruleset-standard:$ktlintVersion") {
         exclude(group = "org.jetbrains.kotlin")

@@ -5,7 +5,6 @@ val spekVersion: String by project
 val reflectionsVersion: String by project
 
 dependencies {
-    implementation(kotlin("compiler-embeddable"))
     api(project(":detekt-api"))
 
     testImplementation(project(":detekt-rules"))
