@@ -29,7 +29,7 @@ plugins {
 }
 
 group = "io.gitlab.arturbosch.detekt"
-version = "1.0.0-RC16"
+version = "1.0.0"
 
 val detektGradleVersion: String by project
 val jcommanderVersion: String by project
