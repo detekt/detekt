@@ -233,32 +233,32 @@ subprojects {
             groupId = this@subprojects.group as? String
             artifactId = this@subprojects.name
             version = this@subprojects.version as? String
-            pom.withXml {
-                asNode().apply {
-                    appendNode("description", "Static code analysis for Kotlin")
-                    appendNode("name", "detekt")
-                    appendNode("url", "https://arturbosch.github.io/detekt")
-
-                    val license = appendNode("licenses").appendNode("license")
-                    license.appendNode("name", "The Apache Software License, Version 2.0")
-                    license.appendNode("url", "http://www.apache.org/licenses/LICENSE-2.0.txt")
-                    license.appendNode("distribution", "repo")
-
-                    val developer = appendNode("developers").appendNode("developer")
-                    developer.appendNode("id", "Artur Bosch")
-                    developer.appendNode("name", "Artur Bosch")
-                    developer.appendNode("email", "arturbosch@gmx.de")
-
-                    appendNode("scm").appendNode("url", "https://github.com/arturbosch/detekt")
+            pom {
+                description.set("Static code analysis for Kotlin")
+                name.set("detekt")
+                url.set("https://arturbosch.github.io/detekt")
+                licenses {
+                    license {
+                        name.set("The Apache Software License, Version 2.0")
+                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                        distribution.set("repo")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("Artur Bosch")
+                        name.set("Artur Bosch")
+                        email.set("arturbosch@gmx.de")
+                    }
+                }
+                scm {
+                    url.set("https://github.com/arturbosch/detekt")
                 }
             }
         }
     }
 
-    fun artifactory(configure: ArtifactoryPluginConvention.() -> Unit): Unit =
-        configure(project.convention.getPluginByName("artifactory"))
-
-    artifactory {
+    configure<ArtifactoryPluginConvention> {
         setContextUrl("https://oss.jfrog.org/artifactory")
         publish(delegateClosureOf<PublisherConfig> {
             repository(delegateClosureOf<GroovyObject> {
@@ -317,9 +317,9 @@ val detektFormat by tasks.registering(Detekt::class) {
     exclude("**/build/**")
     config = files("$rootDir/config/detekt/format.yml")
     reports {
-        xml { enabled = false }
-        html { enabled = false }
-        txt { enabled = false }
+        xml.enabled = false
+        html.enabled = false
+        txt.enabled = false
     }
 }
 
