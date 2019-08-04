@@ -20,7 +20,12 @@ def projects = [
 		"git@github.com:spekframework/spek.git",
 		"git@github.com:Kotlin/kotlinx.coroutines.git",
 		"git@github.com:kotlintest/kotlintest.git",
-		"git@github.com:tipsy/javalin.git"
+		"git@github.com:tipsy/javalin.git",
+		"git@github.com:arturbosch/ksh.git",
+		"git@github.com:arturbosch/kutils.git",
+		"git@github.com:arturbosch/deps.git",
+		"git@github.com:arturbosch/detekt.git",
+		"git@github.com:arturbosch/sonar-kotlin.git"
 ]
 
 if (args.size() == 0) {
