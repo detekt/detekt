@@ -24,6 +24,12 @@ class DetektPlugin : Plugin<Project> {
         val extension = project.extensions.create(DETEKT_TASK_NAME, DetektExtension::class.java, project)
         extension.reportsDir = project.extensions.getByType(ReportingExtension::class.java).file("detekt")
 
+        val defaultConfigFile =
+            project.file("${project.rootProject.layout.projectDirectory.dir(CONFIG_DIR_NAME)}/$CONFIG_FILE")
+        if (defaultConfigFile.exists()) {
+            extension.config = project.files(defaultConfigFile)
+        }
+
         configurePluginDependencies(project, extension)
         setTaskDefaults(project)
 
@@ -183,6 +189,8 @@ class DetektPlugin : Plugin<Project> {
         private const val BASELINE = "detektBaseline"
         private val defaultExcludes = listOf("build/")
         private val defaultIncludes = listOf("**/*.kt", "**/*.kts")
+        internal const val CONFIG_DIR_NAME = "config/detekt"
+        internal const val CONFIG_FILE = "detekt.yml"
     }
 }
 
