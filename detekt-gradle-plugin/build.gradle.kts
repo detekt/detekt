@@ -119,20 +119,20 @@ val generateDefaultDetektVersionFile: Task by tasks.creating {
     }
 }
 
-sourceSets["main"].java.srcDir("$buildDir/generated/src")
+sourceSets.main.get().java.srcDir("$buildDir/generated/src")
 
 tasks.compileKotlin {
     dependsOn(generateDefaultDetektVersionFile)
 }
 
 val sourcesJar by tasks.creating(Jar::class) {
-    dependsOn("classes")
+    dependsOn(tasks.classes)
     archiveClassifier.set("sources")
-    from(sourceSets["main"].allSource)
+    from(sourceSets.main.get().allSource)
 }
 
 val javadocJar by tasks.creating(Jar::class) {
-    dependsOn("dokka")
+    dependsOn(tasks.dokka)
     archiveClassifier.set("javadoc")
     from(buildDir.resolve("javadoc"))
 }

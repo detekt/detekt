@@ -1,6 +1,5 @@
-configurations["implementation"].isCanBeResolved = true
-configurations.testImplementation.get()
-    .extendsFrom(configurations["kotlinTest"])
+configurations.implementation.get().isCanBeResolved = true
+configurations.testImplementation.get().extendsFrom(configurations.kotlinTest.get())
 
 val ktlintVersion: String by project
 val junitPlatformVersion: String by project
@@ -26,7 +25,7 @@ dependencies {
 
 tasks.withType<Jar> {
     from(
-        configurations["implementation"]
+        configurations.implementation.get()
             .filter { "com.pinterest.ktlint" in it.toString() }
             .map { if (it.isDirectory) it else zipTree(it) }
     )

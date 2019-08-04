@@ -9,7 +9,7 @@ val detektVersion: String by project
 val reflectionsVersion: String by project
 
 // implementation.extendsFrom kotlin is not enough for using cli in a gradle task - #58
-configurations.testImplementation.get().extendsFrom(configurations["kotlinTest"])
+configurations.testImplementation.get().extendsFrom(configurations.kotlinTest.get())
 
 dependencies {
     implementation(project(":detekt-core"))

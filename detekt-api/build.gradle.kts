@@ -4,7 +4,7 @@ plugins {
     id("org.jetbrains.dokka")
 }
 
-configurations.testImplementation.extendsFrom(configurations["kotlinTest"])
+configurations.testImplementation.get().extendsFrom(configurations.kotlinTest.get())
 
 val yamlVersion: String by project
 val junitPlatformVersion: String by project

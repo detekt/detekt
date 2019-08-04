@@ -19,6 +19,7 @@ plugins {
     id("io.gitlab.arturbosch.detekt")
     id("org.jetbrains.dokka") version "0.9.18" apply false
     jacoco
+    `maven-publish`
 }
 
 buildScan {
@@ -59,8 +60,8 @@ tasks {
         subprojects
             .filterNot { it.name in listOf("detekt-test", "detekt-sample-extensions") }
             .forEach {
-                this@jacocoTestReport.sourceSets(it.sourceSets["main"])
-                this@jacocoTestReport.dependsOn(it.tasks["test"])
+                this@jacocoTestReport.sourceSets(it.sourceSets.main.get())
+                this@jacocoTestReport.dependsOn(it.tasks.test)
             }
 
         reports {
@@ -206,9 +207,9 @@ subprojects {
     }
 
     val sourcesJar by tasks.creating(Jar::class) {
-        dependsOn("classes")
+        dependsOn(tasks.classes)
         archiveClassifier.set("sources")
-        from(sourceSets["main"].allSource)
+        from(sourceSets.main.get().allSource)
     }
 
     val javadocJar by tasks.creating(Jar::class) {
@@ -221,7 +222,7 @@ subprojects {
         archives(javadocJar)
     }
 
-    configure<PublishingExtension> {
+    publishing {
         publications.create<MavenPublication>(detektPublication) {
             from(components["java"])
             artifact(sourcesJar)
@@ -288,7 +289,7 @@ subprojects {
         kotlinTest("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
     }
 
-    sourceSets["main"].java.srcDirs("src/main/kotlin")
+    sourceSets.main.get().java.srcDirs("src/main/kotlin")
 }
 
 /**
