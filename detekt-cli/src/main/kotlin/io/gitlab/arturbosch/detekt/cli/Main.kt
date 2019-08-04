@@ -32,7 +32,7 @@ fun main(args: Array<String>) {
 fun buildRunner(args: Array<String>): Executable {
     val arguments = parseArguments(args)
     return when {
-        arguments.generateConfig -> ConfigExporter()
+        arguments.generateConfig -> ConfigExporter(arguments)
         arguments.runRule != null -> SingleRuleRunner(arguments)
         arguments.printAst -> AstPrinter(arguments)
         else -> Runner(arguments)

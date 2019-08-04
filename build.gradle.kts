@@ -113,8 +113,7 @@ subprojects {
     detekt {
         debug = true
         buildUponDefaultConfig = true
-        config = files(project.rootDir.resolve("reports/failfast.yml"))
-        baseline = project.rootDir.resolve("reports/baseline.xml")
+        baseline = file("$rootDir/config/detekt/baseline.xml")
 
         reports {
             xml.enabled = true
@@ -325,7 +324,7 @@ val detektFormat by tasks.registering(Detekt::class) {
     include("**/*.kts")
     exclude("**/resources/**")
     exclude("**/build/**")
-    config = files(projectDir.resolve("reports/format.yml"))
+    config = files("$rootDir/config/detekt/format.yml")
     reports {
         xml { enabled = false }
         html { enabled = false }
@@ -338,12 +337,11 @@ val detektAll by tasks.registering(Detekt::class) {
     parallel = true
     buildUponDefaultConfig = true
     setSource(files(projectDir))
-    config = files(project.rootDir.resolve("reports/failfast.yml"))
     include("**/*.kt")
     include("**/*.kts")
     exclude("**/resources/**")
     exclude("**/build/**")
-    baseline.set(project.rootDir.resolve("reports/baseline.xml"))
+    baseline.set(file("$rootDir/config/detekt/baseline.xml"))
     reports {
         xml.enabled = false
         html.enabled = false

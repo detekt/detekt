@@ -145,7 +145,7 @@ artifacts {
 detekt {
     config = files(
         project.rootDir.resolve("../detekt-cli/src/main/resources/default-detekt-config.yml"),
-        project.rootDir.resolve("../reports/failfast.yml")
+        project.rootDir.resolve("../config/detekt/detekt.yml")
     )
 }
 val bintrayUser: String? =
