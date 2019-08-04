@@ -23,8 +23,6 @@ dependencies {
     testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spekVersion")
 }
 
-tasks["test"].dependsOn(":detekt-generator:generateDocumentation")
-
 // bundle detekt's version for debug logging on rule exceptions
 tasks.withType<Jar> {
     manifest {
