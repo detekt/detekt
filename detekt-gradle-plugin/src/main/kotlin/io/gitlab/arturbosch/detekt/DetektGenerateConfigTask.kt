@@ -42,10 +42,14 @@ open class DetektGenerateConfigTask : SourceTask() {
             InputArgument(source)
         )
 
-        if (config.first().exists()) {
-            project.logger.warn("Skipping config file generation. Config file already exists at ${config.first()}")
-        } else {
-            DetektInvoker.create(project).invokeCli(arguments.toList(), detektClasspath, name)
+        try {
+            if (config.singleFile.exists()) {
+                project.logger.warn("Skipping config file generation; file already exists at ${config.singleFile}")
+            } else {
+                DetektInvoker.create(project).invokeCli(arguments.toList(), detektClasspath, name)
+            }
+        } catch (e: IllegalStateException) {
+            project.logger.error("Unexpected error. Please raise an issue on detekt's issue tracker.")
         }
     }
 }
