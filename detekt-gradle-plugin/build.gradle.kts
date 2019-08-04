@@ -148,18 +148,8 @@ detekt {
         project.rootDir.resolve("../config/detekt/detekt.yml")
     )
 }
-val bintrayUser: String? =
-    if (project.hasProperty("bintrayUser")) {
-        project.property("bintrayUser").toString()
-    } else {
-        System.getenv("BINTRAY_USER")
-    }
-val bintrayKey: String? =
-    if (project.hasProperty("bintrayKey")) {
-        project.property("bintrayKey").toString()
-    } else {
-        System.getenv("BINTRAY_API_KEY")
-    }
+val bintrayUser = findProperty("bintrayUser")?.toString() ?: System.getenv("BINTRAY_USER")
+val bintrayKey = findProperty("bintrayKey")?.toString() ?: System.getenv("BINTRAY_API_KEY")
 val detektPublication = "DetektPublication"
 
 publishing {
