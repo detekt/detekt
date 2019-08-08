@@ -26,8 +26,8 @@ There are **2516** commits, **52** releases on GitHub and a total **93** contrib
 **~780k** downloads in the last **30 days** is a pretty high number ... three months ago it was like **500k**.
 One can clearly see when weekends are ;).
 
-This does however not mean "1 download = 1 user". There are like eight detekt modules each with a jar and pom which needs to be downloaded etc.
-Most of the downloads should be coming from CI though it is pretty hard to calculate the number of users detekt actually has.
+This does however not mean "1 download = 1 user". There are like eight detekt modules each with a jar and pom which needs to be downloaded.
+Most of the downloads should be coming from CI which makes it hard to calculate the number of users detekt actually has.
 
 ![numbers](/images/one-zero/4-bintray-percent.png)
 
@@ -41,7 +41,7 @@ What I also noticed is the high number of "early adopters" in the Kotlin world (
 - RC16 was released in Jun 2019
 
 **65%** of users are on a version published in 2019. But we clearly lost some users in the older versions due to breaking changes in RC13 and RC15.
-I'm excited to see how many users will jump to the 1.x.x release train and how this numbers will look like.
+We are excited to see how many users will jump to the 1.x.x release train and how these numbers will look like.
 
 Last but not least here is a worldmap of where detekt users are coming from.
 
