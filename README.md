@@ -3,7 +3,7 @@
 [![Join the chat at https://kotlinlang.slack.com/messages/C88E12QH4/convo/C0BQ5GZ0S-1511956674.000289/](https://img.shields.io/badge/chat-on_slack-red.svg?style=flat-square)](https://kotlinlang.slack.com/messages/C88E12QH4/convo/C0BQ5GZ0S-1511956674.000289/)
 [![Visit the website at https://arturbosch.github.io/detekt/](https://img.shields.io/badge/visit-website-red.svg?style=flat-square)](https://arturbosch.github.io/detekt/)
 [![Download](https://api.bintray.com/packages/arturbosch/code-analysis/detekt/images/download.svg) ](https://bintray.com/arturbosch/code-analysis/detekt/_latestVersion)
-[![gradle plugin](https://img.shields.io/badge/Gradle-1.0.0--RC16-blue.svg)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
+[![gradle plugin](https://img.shields.io/badge/Gradle-1.0.0-blue.svg)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
 <!-- Version needs to be hardcoded until rc phase is over. Change to '-'RC for semantic versioning broke the badge. [![gradle plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/io/gitlab/arturbosch/detekt/detekt-gradle-plugin/maven-metadata.xml.svg?label=gradle&style=flat-square)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)-->
 
 [![build status](https://travis-ci.org/arturbosch/detekt.svg?branch=master)](https://travis-ci.org/arturbosch/detekt)
@@ -20,13 +20,13 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 ### Features
 
 - Code smell analysis for your Kotlin projects
-- Complexity report based on logical lines of code, McCabe complexity and amount of code smells
-- Highly configurable
+- Complexity reports based on lines of code, cyclomatic complexity and amount of code smells
+- Highly configurable rule sets
 - Suppress findings with Kotlin's `@Suppress` and Java's `@SuppressWarnings` annotations
 - Specify code smell thresholds to break your build
 - Code Smell baseline and ignore lists for legacy projects
 - [Gradle plugin](#with-gradle) for code analysis via Gradle builds
-- Gradle tasks to use local `IntelliJ` distribution for [formatting and inspecting](#idea) Kotlin code
+- Gradle tasks to use local `IntelliJ` distribution for formatting and inspecting Kotlin code
 - [SonarQube integration](https://github.com/arturbosch/sonar-kotlin)
 - Extensible by own rule sets, `FileProcessListener's` and `OutputReport's`
 - [IntelliJ integration](https://github.com/arturbosch/detekt-intellij-plugin)

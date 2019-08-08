@@ -14,7 +14,7 @@ class GenerateConfigTaskTest : Spek({
 
                     gradleRunner.runTasksAndCheckResult("detektGenerateConfig") { result ->
                         assertThat(result.task(":detektGenerateConfig")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
-                        assertThat(projectFile("default-detekt-config.yml")).exists()
+                        assertThat(projectFile("config/detekt/detekt.yml")).exists()
                     }
                 }
             }
