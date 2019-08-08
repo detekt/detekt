@@ -27,7 +27,7 @@ programming flaws like unused or too complex constructs. Think as *pmd* or *chec
 
 Here are some metrics describing detekt's lifespan so far:
 
-![lifespan](/images/one-zero/1-lifespan.png)
+![lifespan](images/one-zero/1-lifespan.png)
 
 detekt is nearly **3** years old already!  
 As GitHub tells us the project is pretty active.  
@@ -35,12 +35,12 @@ You may say that in 2018 it was more active telling by the number of commits, ho
 we also changed our merge strategy from merge-with-rebase to squash-and-merge.
 That said, it is much harder to achieve these high commit numbers now ;).
 
-![numbers](/images/one-zero/2-numbers.png)
+![numbers](images/one-zero/2-numbers.png)
 
 There are **2516** commits, **52** releases on GitHub and a total **93** contributors by the time of writing.
 **20** out of the 93 authors contributed once or more in the last three months.
 
-![numbers](/images/one-zero/3-bintray-absolute.png)
+![numbers](images/one-zero/3-bintray-absolute.png)
 
 **~780k** downloads in the last **30 days** is a pretty high number ... three months ago it was like **500k**.
 One can clearly see when weekends are ;).
@@ -48,7 +48,7 @@ One can clearly see when weekends are ;).
 This does however not mean "1 download = 1 user". There are like eight detekt modules each with a jar and pom which needs to be downloaded.
 Most of the downloads should be coming from CI which makes it hard to calculate the number of users detekt actually has.
 
-![numbers](/images/one-zero/4-bintray-percent.png)
+![numbers](images/one-zero/4-bintray-percent.png)
 
 What I also noticed is the high number of "early adopters" in the Kotlin world (or just detekt).
 - RC09 was released in Sep 2018
@@ -64,7 +64,7 @@ We are excited to see how many users will jump to the 1.x.x release train and ho
 
 Last but not least here is a worldmap of where detekt users are coming from.
 
-![numbers](/images/one-zero/5-bintray-world.png)
+![numbers](images/one-zero/5-bintray-world.png)
 
 References:
 - https://bintray.com/arturbosch/code-analysis/detekt#statistics
