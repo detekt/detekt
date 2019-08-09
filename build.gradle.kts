@@ -52,24 +52,6 @@ tasks.withType<Detekt> {
 val jacocoVersion: String by project
 jacoco.toolVersion = jacocoVersion
 
-tasks {
-    jacocoTestReport {
-        executionData.setFrom(fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec"))
-
-        subprojects
-            .filterNot { it.name in listOf("detekt-test", "detekt-sample-extensions") }
-            .forEach {
-                this@jacocoTestReport.sourceSets(it.sourceSets["main"])
-                this@jacocoTestReport.dependsOn(it.tasks["test"])
-            }
-
-        reports {
-            xml.isEnabled = true
-            xml.destination = file("$buildDir/reports/jacoco/report.xml")
-        }
-    }
-}
-
 val detektVersion: String by project
 
 allprojects {
@@ -299,6 +281,24 @@ subprojects {
     }
 
     sourceSets["main"].java.srcDirs("src/main/kotlin")
+}
+
+tasks {
+    val codeCoverageReport by creating(JacocoReport::class) {
+        executionData.setFrom(fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec"))
+
+        subprojects
+            .filterNot { it.name in listOf("detekt-test", "detekt-sample-extensions") }
+            .forEach {
+                sourceSets(it.sourceSets["main"])
+                dependsOn(it.tasks["test"])
+            }
+
+        reports {
+            xml.isEnabled = true
+            xml.destination = file("$buildDir/reports/jacoco/report.xml")
+        }
+    }
 }
 
 /**

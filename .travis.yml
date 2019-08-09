@@ -17,15 +17,18 @@ matrix:
     - os: osx
       osx_image: xcode10.2
 install: true
+before_script:
+  - chmod +x gradlew
 script:
   - ./gradlew build --build-cache --parallel -PwarningsAsErrors=true --scan
   - ./gradlew shadowJar
   - java -jar ./detekt-cli/build/libs/detekt-cli-*-all.jar --help
   - java -jar ./detekt-cli/build/libs/detekt-cli-*-all.jar -i . --baseline ./config/detekt/baseline.xml -ex "**/resources/**,**/detekt*/build/**" -c ./detekt-cli/src/main/resources/default-detekt-config.yml,./config/detekt/detekt.yml
   - ./gradlew verifyGeneratorOutput
+  - ./gradlew check
+  - ./gradlew codeCoverageReport
 after_success:
   - .buildscript/deploy_snapshot.sh
-  - ./gradlew jacocoTestReport --scan
   - bash <(curl -s https://codecov.io/bash)
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
