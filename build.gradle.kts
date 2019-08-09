@@ -284,6 +284,7 @@ subprojects {
 }
 
 tasks {
+    @Suppress("UNUSED_VARIABLE", "UnusedPrivateMember")
     val codeCoverageReport by creating(JacocoReport::class) {
         executionData.setFrom(fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec"))
 
