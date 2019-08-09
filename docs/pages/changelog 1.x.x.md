@@ -11,7 +11,7 @@ toc: true
 ##### Migration
 
 - Gradle Plugin: removed report consolidation. It was flawed and some users were stuck with RC14. It will be replaced in a further version.
-- Gradle Plugin: `autoCorrect` property is not allowed on the detekt extension. No need to create a new task anymore.
+- Gradle Plugin: `autoCorrect` property is now allowed on the detekt extension. No need to create a new task anymore.
 - Formatting: updated to KtLint 0.34.2 which removed the two rules `NoItParamInMultilineLambda` and `SpacingAroundUnaryOperators`. 
 
 ##### Changelog
