@@ -19,6 +19,7 @@ matrix:
 install: true
 before_script:
   - chmod +x gradlew
+  - chmod +x gradle/wrapper/gradle-wrapper.jar
 script:
   - ./gradlew build --build-cache --parallel -PwarningsAsErrors=true --scan
   - ./gradlew shadowJar
@@ -26,6 +27,7 @@ script:
   - java -jar ./detekt-cli/build/libs/detekt-cli-*-all.jar -i . --baseline ./config/detekt/baseline.xml -ex "**/resources/**,**/detekt*/build/**" -c ./detekt-cli/src/main/resources/default-detekt-config.yml,./config/detekt/detekt.yml
   - ./gradlew verifyGeneratorOutput
   - ./gradlew check
+  - ./gradlew test build
   - ./gradlew codeCoverageReport
 after_success:
   - .buildscript/deploy_snapshot.sh
