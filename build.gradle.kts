@@ -78,9 +78,7 @@ allprojects {
     version = detektVersion + if (System.getProperty("snapshot")?.toBoolean() == true) "-SNAPSHOT" else ""
 
     repositories {
-        mavenLocal()
         jcenter()
-        maven(url = "https://dl.bintray.com/arturbosch/generic")
     }
 }
 

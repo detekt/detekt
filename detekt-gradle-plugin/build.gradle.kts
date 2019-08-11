@@ -3,17 +3,7 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import java.util.Date
 
-buildscript {
-    repositories {
-        mavenCentral()
-        mavenLocal()
-        jcenter()
-    }
-}
-
 repositories {
-    gradlePluginPortal()
-    mavenLocal()
     jcenter()
 }
 
