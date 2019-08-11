@@ -21,7 +21,7 @@ dependencies {
     testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spekVersion")
 }
 
-tasks.withType<DokkaTask> {
+tasks.withType<DokkaTask>().configureEach {
     // suppresses undocumented classes but not dokka warnings https://github.com/Kotlin/dokka/issues/90
     reportUndocumented = false
     outputFormat = "jekyll"
@@ -30,7 +30,7 @@ tasks.withType<DokkaTask> {
     jdkVersion = 8
 }
 
-tasks.withType<Test> {
+tasks.withType<Test>().configureEach {
     systemProperty("kotlinVersion", embeddedKotlinVersion)
 
     doFirst {

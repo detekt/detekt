@@ -90,7 +90,7 @@ tasks.dokka {
     outputDirectory = "$buildDir/javadoc"
 }
 
-val generateDefaultDetektVersionFile: Task by tasks.creating {
+val generateDefaultDetektVersionFile by tasks.registering {
     val defaultDetektVersionFile =
         File("$buildDir/generated/src/io/gitlab/arturbosch/detekt", "PluginVersion.kt")
 

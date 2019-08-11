@@ -15,7 +15,7 @@ configurations.testImplementation.get().extendsFrom(configurations.kotlinTest.ge
 
 val detektVersion: String by project
 
-val generateDocumentation: Task by tasks.creating {
+val generateDocumentation by tasks.registering {
     dependsOn(tasks.shadowJar)
     description = "Generates detekt documentation and the default config.yml based on Rule KDoc"
     group = "documentation"
@@ -43,7 +43,7 @@ val generateDocumentation: Task by tasks.creating {
     }
 }
 
-val verifyGeneratorOutput: Task by tasks.creating {
+val verifyGeneratorOutput by tasks.registering {
     dependsOn(listOf(tasks.shadowJar, generateDocumentation))
     description = "Verifies that all documentation and the config.yml are up-to-date"
     doLast {

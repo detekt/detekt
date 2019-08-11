@@ -23,7 +23,7 @@ dependencies {
     testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spekVersion")
 }
 
-tasks.withType<Jar> {
+tasks.withType<Jar>().configureEach {
     from(
         configurations.implementation.get()
             .filter { "com.pinterest.ktlint" in it.toString() }

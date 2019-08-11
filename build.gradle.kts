@@ -46,7 +46,7 @@ tasks.check {
     dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":check"))
 }
 
-tasks.withType<Detekt> {
+tasks.withType<Detekt>().configureEach {
     dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":detekt"))
 }
 
@@ -102,7 +102,7 @@ subprojects {
         jacoco.toolVersion = jacocoVersion
     }
 
-    tasks.withType<Detekt> {
+    tasks.withType<Detekt>().configureEach {
         exclude("resources/")
         exclude("build/")
     }
@@ -129,7 +129,7 @@ subprojects {
         }
     }
 
-    val shadowedProjects = listOf("detekt-cli", "detekt-watcher", "detekt-generator")
+    val shadowedProjects = listOf("detekt-cli", "detekt-generator")
 
     if (project.name in shadowedProjects) {
         apply {
@@ -138,7 +138,7 @@ subprojects {
         }
     }
 
-    tasks.withType<Test> {
+    tasks.withType<Test>().configureEach {
         useJUnitPlatform()
         testLogging {
             // set options for log level LIFECYCLE
@@ -155,7 +155,7 @@ subprojects {
         }
     }
 
-    tasks.withType<KotlinCompile> {
+    tasks.withType<KotlinCompile>().configureEach {
         kotlinOptions.jvmTarget = "1.8"
         // https://youtrack.jetbrains.com/issue/KT-24946
         kotlinOptions.freeCompilerArgs = listOf(
