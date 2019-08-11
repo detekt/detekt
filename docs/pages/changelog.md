@@ -63,6 +63,7 @@ See all issues at: [RC16](https://github.com/arturbosch/detekt/milestone/45)
   For example `--filters .*/resources/.*` becomes `--excludes **/resources/**`. `includes` also accepts *globing patterns*.
   *Globing patterns* allow us to reuse some common logic of the `java.nio.file` package which for example handle Windows specific paths for us.
   This change also allows to be more fine granular with analyzing files: `--excludes **/generated/** --includes **/generated/this-needs-to-be-checked`.
+  The following [how-to guide](https://arturbosch.github.io/detekt/howto-migratetestpattern.html) describes the migration process from the **test-pattern** functionality.
 - **Gradle Plugin**: Including or excluding paths and files from detekt scanning is now done by setting `include` & `exclude` on the
   detekt task which aligns with how other static analysis tools handle filters. Any use of `filters` will be ignored. See custom task examples for [Groovy][1] and [Kotlin][2].
   For details of syntax see https://docs.gradle.org/current/javadoc/org/gradle/api/tasks/util/PatternFilterable.html
