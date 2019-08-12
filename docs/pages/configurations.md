@@ -30,10 +30,6 @@ complexity:
 
 To read about all supported rule sets and rules, use the side navigation `Rule Sets`.
 
-#### Test-Pattern
-
-The `test-pattern` is a deprecated feature and can be replaced with rule and rule set level excludes and includes.
-
 #### Path Filters / Excludes / Includes
 
 Starting with version **RC15** fine grained path filters can be defined for each rule or rule set:
@@ -48,6 +44,7 @@ complexity:
 
 This gives the user more freedom in analyzing only specific files
 and rule authors the ability to write *library only* rules.
+This is the replacement for the `test-pattern` feature.
 
 Be aware that detekt now expects globing patterns instead of regular expressions!
 
