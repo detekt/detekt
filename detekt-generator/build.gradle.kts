@@ -11,12 +11,12 @@ val jar by tasks.getting(Jar::class) {
 }
 
 // implementation.extendsFrom kotlin is not enough for using cli in a gradle task - #58
-configurations.testImplementation.get().extendsFrom(configurations["kotlinTest"])
+configurations.testImplementation.get().extendsFrom(configurations.kotlinTest.get())
 
 val detektVersion: String by project
 
-val generateDocumentation: Task by tasks.creating {
-    dependsOn(":detekt-generator:shadowJar")
+val generateDocumentation by tasks.registering {
+    dependsOn(tasks.shadowJar)
     description = "Generates detekt documentation and the default config.yml based on Rule KDoc"
     group = "documentation"
 
@@ -43,8 +43,8 @@ val generateDocumentation: Task by tasks.creating {
     }
 }
 
-val verifyGeneratorOutput: Task by tasks.creating {
-    dependsOn(listOf(":detekt-generator:shadowJar", ":detekt-generator:generateDocumentation"))
+val verifyGeneratorOutput by tasks.registering {
+    dependsOn(listOf(tasks.shadowJar, generateDocumentation))
     description = "Verifies that all documentation and the config.yml are up-to-date"
     doLast {
         assertDefaultConfigUpToDate()
@@ -91,7 +91,6 @@ dependencies {
     implementation(project(":detekt-rules"))
     implementation(project(":detekt-formatting"))
     implementation("com.beust:jcommander:$jcommanderVersion")
-    implementation(kotlin("compiler-embeddable"))
     implementation(kotlin("reflect"))
 
     testImplementation(project(":detekt-test"))

@@ -19,6 +19,7 @@ plugins {
     id("io.gitlab.arturbosch.detekt")
     id("org.jetbrains.dokka") version "0.9.18" apply false
     jacoco
+    `maven-publish`
 }
 
 buildScan {
@@ -45,7 +46,7 @@ tasks.check {
     dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":check"))
 }
 
-tasks.withType<Detekt> {
+tasks.withType<Detekt>().configureEach {
     dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":detekt"))
 }
 
@@ -59,8 +60,8 @@ tasks {
         subprojects
             .filterNot { it.name in listOf("detekt-test", "detekt-sample-extensions") }
             .forEach {
-                this@jacocoTestReport.sourceSets(it.sourceSets["main"])
-                this@jacocoTestReport.dependsOn(it.tasks["test"])
+                this@jacocoTestReport.sourceSets(it.sourceSets.main.get())
+                this@jacocoTestReport.dependsOn(it.tasks.test)
             }
 
         reports {
@@ -77,9 +78,7 @@ allprojects {
     version = detektVersion + if (System.getProperty("snapshot")?.toBoolean() == true) "-SNAPSHOT" else ""
 
     repositories {
-        mavenLocal()
         jcenter()
-        maven(url = "https://dl.bintray.com/arturbosch/generic")
     }
 }
 
@@ -103,7 +102,7 @@ subprojects {
         jacoco.toolVersion = jacocoVersion
     }
 
-    tasks.withType<Detekt> {
+    tasks.withType<Detekt>().configureEach {
         exclude("resources/")
         exclude("build/")
     }
@@ -130,7 +129,7 @@ subprojects {
         }
     }
 
-    val shadowedProjects = listOf("detekt-cli", "detekt-watcher", "detekt-generator")
+    val shadowedProjects = listOf("detekt-cli", "detekt-generator")
 
     if (project.name in shadowedProjects) {
         apply {
@@ -139,7 +138,7 @@ subprojects {
         }
     }
 
-    tasks.withType<Test> {
+    tasks.withType<Test>().configureEach {
         useJUnitPlatform()
         testLogging {
             // set options for log level LIFECYCLE
@@ -156,7 +155,7 @@ subprojects {
         }
     }
 
-    tasks.withType<KotlinCompile> {
+    tasks.withType<KotlinCompile>().configureEach {
         kotlinOptions.jvmTarget = "1.8"
         // https://youtrack.jetbrains.com/issue/KT-24946
         kotlinOptions.freeCompilerArgs = listOf(
@@ -168,18 +167,8 @@ subprojects {
         kotlinOptions.allWarningsAsErrors = shouldTreatCompilerWarningsAsErrors()
     }
 
-    val bintrayUser =
-    if (project.hasProperty("bintrayUser")) {
-        project.property("bintrayUser").toString()
-    } else {
-        System.getenv("BINTRAY_USER")
-    }
-    val bintrayKey =
-    if (project.hasProperty("bintrayKey")) {
-        project.property("bintrayKey").toString()
-    } else {
-        System.getenv("BINTRAY_API_KEY")
-    }
+    val bintrayUser = findProperty("bintrayUser")?.toString() ?: System.getenv("BINTRAY_USER")
+    val bintrayKey = findProperty("bintrayKey")?.toString() ?: System.getenv("BINTRAY_API_KEY")
     val detektPublication = "DetektPublication"
 
     bintray {
@@ -216,9 +205,9 @@ subprojects {
     }
 
     val sourcesJar by tasks.creating(Jar::class) {
-        dependsOn("classes")
+        dependsOn(tasks.classes)
         archiveClassifier.set("sources")
-        from(sourceSets["main"].allSource)
+        from(sourceSets.main.get().allSource)
     }
 
     val javadocJar by tasks.creating(Jar::class) {
@@ -231,7 +220,7 @@ subprojects {
         archives(javadocJar)
     }
 
-    configure<PublishingExtension> {
+    publishing {
         publications.create<MavenPublication>(detektPublication) {
             from(components["java"])
             artifact(sourcesJar)
@@ -242,32 +231,32 @@ subprojects {
             groupId = this@subprojects.group as? String
             artifactId = this@subprojects.name
             version = this@subprojects.version as? String
-            pom.withXml {
-                asNode().apply {
-                    appendNode("description", "Static code analysis for Kotlin")
-                    appendNode("name", "detekt")
-                    appendNode("url", "https://arturbosch.github.io/detekt")
-
-                    val license = appendNode("licenses").appendNode("license")
-                    license.appendNode("name", "The Apache Software License, Version 2.0")
-                    license.appendNode("url", "http://www.apache.org/licenses/LICENSE-2.0.txt")
-                    license.appendNode("distribution", "repo")
-
-                    val developer = appendNode("developers").appendNode("developer")
-                    developer.appendNode("id", "Artur Bosch")
-                    developer.appendNode("name", "Artur Bosch")
-                    developer.appendNode("email", "arturbosch@gmx.de")
-
-                    appendNode("scm").appendNode("url", "https://github.com/arturbosch/detekt")
+            pom {
+                description.set("Static code analysis for Kotlin")
+                name.set("detekt")
+                url.set("https://arturbosch.github.io/detekt")
+                licenses {
+                    license {
+                        name.set("The Apache Software License, Version 2.0")
+                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                        distribution.set("repo")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("Artur Bosch")
+                        name.set("Artur Bosch")
+                        email.set("arturbosch@gmx.de")
+                    }
+                }
+                scm {
+                    url.set("https://github.com/arturbosch/detekt")
                 }
             }
         }
     }
 
-    fun artifactory(configure: ArtifactoryPluginConvention.() -> Unit): Unit =
-        configure(project.convention.getPluginByName("artifactory"))
-
-    artifactory {
+    configure<ArtifactoryPluginConvention> {
         setContextUrl("https://oss.jfrog.org/artifactory")
         publish(delegateClosureOf<PublisherConfig> {
             repository(delegateClosureOf<GroovyObject> {
@@ -298,7 +287,7 @@ subprojects {
         kotlinTest("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
     }
 
-    sourceSets["main"].java.srcDirs("src/main/kotlin")
+    sourceSets.main.get().java.srcDirs("src/main/kotlin")
 }
 
 /**
@@ -326,9 +315,9 @@ val detektFormat by tasks.registering(Detekt::class) {
     exclude("**/build/**")
     config = files("$rootDir/config/detekt/format.yml")
     reports {
-        xml { enabled = false }
-        html { enabled = false }
-        txt { enabled = false }
+        xml.enabled = false
+        html.enabled = false
+        txt.enabled = false
     }
 }
 

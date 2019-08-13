@@ -1,6 +1,6 @@
-configurations.testImplementation.extendsFrom(configurations["kotlinTest"])
+configurations.testImplementation.get().extendsFrom(configurations.kotlinTest.get())
 
-tasks["build"].finalizedBy(":detekt-generator:generateDocumentation")
+tasks.build { finalizedBy(":detekt-generator:generateDocumentation") }
 
 val junitPlatformVersion: String by project
 val spekVersion: String by project
@@ -8,7 +8,6 @@ val reflectionsVersion: String by project
 
 dependencies {
     implementation(project(":detekt-api"))
-    implementation(kotlin("compiler-embeddable"))
 
     testImplementation("org.reflections:reflections:$reflectionsVersion")
     testImplementation(project(":detekt-test"))
