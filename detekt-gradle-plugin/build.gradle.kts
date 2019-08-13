@@ -3,17 +3,7 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import java.util.Date
 
-buildscript {
-    repositories {
-        mavenCentral()
-        mavenLocal()
-        jcenter()
-    }
-}
-
 repositories {
-    gradlePluginPortal()
-    mavenLocal()
     jcenter()
 }
 
@@ -31,8 +21,6 @@ plugins {
 group = "io.gitlab.arturbosch.detekt"
 version = "1.0.0"
 
-val detektGradleVersion: String by project
-val jcommanderVersion: String by project
 val spekVersion = "2.0.2"
 val junitPlatformVersion = "1.4.1"
 val assertjVersion = "3.12.2"
@@ -102,7 +90,7 @@ tasks.dokka {
     outputDirectory = "$buildDir/javadoc"
 }
 
-val generateDefaultDetektVersionFile: Task by tasks.creating {
+val generateDefaultDetektVersionFile by tasks.registering {
     val defaultDetektVersionFile =
         File("$buildDir/generated/src/io/gitlab/arturbosch/detekt", "PluginVersion.kt")
 
@@ -119,20 +107,20 @@ val generateDefaultDetektVersionFile: Task by tasks.creating {
     }
 }
 
-sourceSets["main"].java.srcDir("$buildDir/generated/src")
+sourceSets.main.get().java.srcDir("$buildDir/generated/src")
 
 tasks.compileKotlin {
     dependsOn(generateDefaultDetektVersionFile)
 }
 
 val sourcesJar by tasks.creating(Jar::class) {
-    dependsOn("classes")
+    dependsOn(tasks.classes)
     archiveClassifier.set("sources")
-    from(sourceSets["main"].allSource)
+    from(sourceSets.main.get().allSource)
 }
 
 val javadocJar by tasks.creating(Jar::class) {
-    dependsOn("dokka")
+    dependsOn(tasks.dokka)
     archiveClassifier.set("javadoc")
     from(buildDir.resolve("javadoc"))
 }
@@ -148,18 +136,8 @@ detekt {
         project.rootDir.resolve("../config/detekt/detekt.yml")
     )
 }
-val bintrayUser: String? =
-    if (project.hasProperty("bintrayUser")) {
-        project.property("bintrayUser").toString()
-    } else {
-        System.getenv("BINTRAY_USER")
-    }
-val bintrayKey: String? =
-    if (project.hasProperty("bintrayKey")) {
-        project.property("bintrayKey").toString()
-    } else {
-        System.getenv("BINTRAY_API_KEY")
-    }
+val bintrayUser = findProperty("bintrayUser")?.toString() ?: System.getenv("BINTRAY_USER")
+val bintrayKey = findProperty("bintrayKey")?.toString() ?: System.getenv("BINTRAY_API_KEY")
 val detektPublication = "DetektPublication"
 
 publishing {
@@ -170,23 +148,26 @@ publishing {
         groupId = rootProject.group as? String
         artifactId = rootProject.name
         version = rootProject.version as? String
-        pom.withXml {
-            asNode().apply {
-                appendNode("description", "Static code analysis for Kotlin")
-                appendNode("name", "detekt")
-                appendNode("url", "https://github.com/arturbosch/detekt")
-
-                val license = appendNode("licenses").appendNode("license")
-                license.appendNode("name", "The Apache Software License, Version 2.0")
-                license.appendNode("url", "http://www.apache.org/licenses/LICENSE-2.0.txt")
-                license.appendNode("distribution", "repo")
-
-                val developer = appendNode("developers").appendNode("developer")
-                developer.appendNode("id", "Artur Bosch")
-                developer.appendNode("name", "Artur Bosch")
-                developer.appendNode("email", "arturbosch@gmx.de")
-
-                appendNode("scm").appendNode("url", "https://github.com/arturbosch/detekt")
+        pom {
+            description.set("Static code analysis for Kotlin")
+            name.set("detekt")
+            url.set("https://github.com/arturbosch/detekt")
+            licenses {
+                license {
+                    name.set("The Apache Software License, Version 2.0")
+                    url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                    distribution.set("repo")
+                }
+            }
+            developers {
+                developer {
+                    id.set("Artur Bosch")
+                    name.set("Artur Bosch")
+                    email.set("arturbosch@gmx.de")
+                }
+            }
+            scm {
+                url.set("https://github.com/arturbosch/detekt")
             }
         }
     }
