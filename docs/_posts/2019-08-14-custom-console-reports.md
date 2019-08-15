@@ -15,7 +15,7 @@ A typical detekt report will look like following:
 
 There are many different parts which might or might not interest you.
 If one part is not important to you, it can be excluded in the yaml configuration file.
-A _silent_ configuration would exclude all possible processors and reports:
+A __silent__ configuration would exclude all possible processors and reports:
 ```yaml
 processors:
   active: true
@@ -43,8 +43,8 @@ Running with this config won't produce any console messages:
 
 Just verify that the `./report.txt` is not empty ;).
 
-We mind find detekt's `FindingsReport` too verbose and just want to print one line of message per finding.
-This can be archived by implementing a `ConsoleReport`.
+We might find detekt's `FindingsReport` too verbose and just want to print one message line per finding.
+This can be achieved by implementing a custom `ConsoleReport`.
 
 ```kotlin
 class SingleLineFindingsReport : ConsoleReport() {
