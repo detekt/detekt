@@ -37,6 +37,8 @@ class SingleRuleRunner(private val arguments: CliArgs) : Executable {
             ?: throw IllegalArgumentException("There was no rule set with id '$ruleSet'.")
 
         val provider = RuleProducingProvider(rule, realProvider)
+        assert(provider.instance(settings.config).rules.size == 1) { "Eager testing if rule exists failed." }
+
         val detektion = DetektFacade.create(
             settings,
             listOf(provider),

@@ -9,7 +9,6 @@ interface Args {
     var help: Boolean
 }
 
-@Suppress("MaxLineLength")
 class CliArgs : Args {
 
     @Parameter(
@@ -48,7 +47,7 @@ class CliArgs : Args {
     @Parameter(
         names = ["--generate-config", "-gc"],
         description = "Export default config. " +
-                "Path can be specified with --config option (default path: default-detekt-config.yml)"
+            "Path can be specified with --config option (default path: default-detekt-config.yml)"
     )
     var generateConfig: Boolean = false
 
@@ -187,5 +186,11 @@ class CliArgs : Args {
          * of the arguments should be used.
          */
         operator fun invoke(init: CliArgs.() -> Unit): CliArgs = CliArgs().apply(init)
+
+        /**
+         * Creates an instance of [CliArgs]. Verification if the settings are sound
+         * must be made by the caller.
+         */
+        fun parse(args: Array<String>): CliArgs = parseArguments<CliArgs>(args).first
     }
 }
