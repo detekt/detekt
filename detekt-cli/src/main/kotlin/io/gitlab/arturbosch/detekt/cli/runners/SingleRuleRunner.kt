@@ -68,8 +68,10 @@ private class RuleProducingProvider(
         listOf(produceRule())
     )
 
-    private fun produceRule(): BaseRule = (provider.buildRuleset(Config.empty)
-        ?.rules
-        ?.find { it.ruleId == ruleId }
-        ?: throw IllegalArgumentException("There was no rule '$ruleId' in rule set '${provider.ruleSetId}'."))
+    private fun produceRule(): BaseRule =
+        checkNotNull(
+            provider.buildRuleset(Config.empty)
+                ?.rules
+                ?.find { it.ruleId == ruleId }
+        ) { "There was no rule '$ruleId' in rule set '${provider.ruleSetId}'." }
 }

@@ -536,6 +536,8 @@ style:
   UnusedPrivateMember:
     active: false
     allowedNames: "(_|ignored|expected|serialVersionUID)"
+  UseArrayLiteralsInAnnotations:
+    active: false
   UseCheckOrError:
     active: false
   UseDataClass:

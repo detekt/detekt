@@ -1231,10 +1231,31 @@ can lead to confusion and potential bugs.
 
    unused private member names matching this regex are ignored
 
+### UseArrayLiteralsInAnnotations
+
+This rule detects annotations which us the 'arrayOf(..)' syntax instead of the array literal '[..]' syntax.
+Later should be preferred as it is more readable.
+
+**Severity**: Style
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+&#064;PositiveCase(arrayOf("..."))
+```
+
+#### Compliant Code:
+
+```kotlin
+&#064;NegativeCase(["..."])
+```
+
 ### UseCheckOrError
 
-Kotlin provides a much more concise way to check invariants as well as pre- and post conditions than to manually throw
-an IllegalStateException.
+Kotlin provides a much more concise way to check invariants as well as pre- and post conditions.
+Prefer them instead of manually throwing an IllegalStateException.
 
 **Severity**: Style
 

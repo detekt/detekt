@@ -42,6 +42,7 @@ import io.gitlab.arturbosch.detekt.rules.style.UntilInsteadOfRangeTo
 import io.gitlab.arturbosch.detekt.rules.style.UnusedImports
 import io.gitlab.arturbosch.detekt.rules.style.UnusedPrivateClass
 import io.gitlab.arturbosch.detekt.rules.style.UnusedPrivateMember
+import io.gitlab.arturbosch.detekt.rules.style.UseArrayLiteralsInAnnotations
 import io.gitlab.arturbosch.detekt.rules.style.UseCheckOrError
 import io.gitlab.arturbosch.detekt.rules.style.UseDataClass
 import io.gitlab.arturbosch.detekt.rules.style.UseIfInsteadOfWhen
@@ -118,7 +119,8 @@ class StyleGuideProvider : RuleSetProvider {
                 UseCheckOrError(config),
                 UseIfInsteadOfWhen(),
                 RedundantExplicitType(config),
-                LibraryCodeMustSpecifyReturnType(config)
+                LibraryCodeMustSpecifyReturnType(config),
+                UseArrayLiteralsInAnnotations(config)
             )
         )
     }
