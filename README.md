@@ -22,13 +22,13 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 - Code smell analysis for your Kotlin projects
 - Complexity reports based on lines of code, cyclomatic complexity and amount of code smells
 - Highly configurable rule sets
-- Suppress findings with Kotlin's `@Suppress` and Java's `@SuppressWarnings` annotations
-- Specify code smell thresholds to break your build
-- Code Smell baseline and ignore lists for legacy projects
+- Suppression of findings with Kotlin's `@Suppress` and Java's `@SuppressWarnings` annotations
+- Specification of quality gates which will break your build 
+- Code Smell baseline and whitelisting for legacy projects
 - [Gradle plugin](#with-gradle) for code analysis via Gradle builds
 - Gradle tasks to use local `IntelliJ` distribution for formatting and inspecting Kotlin code
 - [SonarQube integration](https://github.com/arturbosch/sonar-kotlin)
-- Extensible by own rule sets, `FileProcessListener's` and `OutputReport's`
+- Extensibility by enabling incorporation of personal rule sets, `FileProcessListener's` and `OutputReport's`
 - [IntelliJ integration](https://github.com/arturbosch/detekt-intellij-plugin)
 - Unofficial [Maven plugin](https://github.com/Ozsie/detekt-maven-plugin) by [Ozsie](https://github.com/Ozsie)
 
