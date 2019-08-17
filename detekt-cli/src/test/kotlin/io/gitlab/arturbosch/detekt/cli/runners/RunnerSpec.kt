@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.cli.CliArgs
 import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
-import org.assertj.core.api.Assertions.fail
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.nio.file.Files
@@ -48,9 +47,9 @@ class RunnerSpec : Spek({
                 "--config-resource", "/configs/max-issues--1.yml"
             ))
 
-            runCatching { Runner(cliArgs).execute() }
-                .onSuccess { assertThat(Files.readAllLines(tmpReport)).hasSize(1) }
-                .onFailure { fail("should not fail with a BuildFailure exception") }
+            Runner(cliArgs).execute()
+
+            assertThat(Files.readAllLines(tmpReport)).hasSize(1)
         }
     }
 })
