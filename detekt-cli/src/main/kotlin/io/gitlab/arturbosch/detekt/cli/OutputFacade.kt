@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.cli
 import io.gitlab.arturbosch.detekt.api.ConsoleReport
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.OutputReport
+import io.gitlab.arturbosch.detekt.api.internal.SimpleNotification
 import io.gitlab.arturbosch.detekt.cli.baseline.BaselineFacade
 import io.gitlab.arturbosch.detekt.cli.console.BuildFailureReport
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
@@ -47,7 +48,7 @@ class OutputFacade(
         val filePath = reportPaths[report.id]
         if (filePath != null) {
             report.write(filePath, result)
-            settings.info("Successfully generated ${report.name} at $filePath")
+            result.add(SimpleNotification("Successfully generated ${report.name} at $filePath"))
         }
     }
 

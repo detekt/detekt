@@ -63,47 +63,43 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
         }
     }
 
-    private fun defaultBuildConfiguration(): String {
-        return """
-			build:
-			  maxIssues: 10
-			  weights:
-			    # complexity: 2
-			    # LongParameterList: 1
-			    # style: 1
-			    # comments: 1
-			""".trimIndent()
-    }
+    private fun defaultBuildConfiguration(): String = """
+      build:
+        maxIssues: 10
+        weights:
+          # complexity: 2
+          # LongParameterList: 1
+          # style: 1
+          # comments: 1
+    """.trimIndent()
 
-    private fun defaultProcessorsConfiguration(): String {
-        return """
-			processors:
-			  active: true
-			  exclude:
-			  # - 'FunctionCountProcessor'
-			  # - 'PropertyCountProcessor'
-			  # - 'ClassCountProcessor'
-			  # - 'PackageCountProcessor'
-			  # - 'KtFileCountProcessor'
-			""".trimIndent()
-    }
+    private fun defaultProcessorsConfiguration(): String = """
+      processors:
+        active: true
+        exclude:
+        # - 'DetektProgressListener'
+        # - 'FunctionCountProcessor'
+        # - 'PropertyCountProcessor'
+        # - 'ClassCountProcessor'
+        # - 'PackageCountProcessor'
+        # - 'KtFileCountProcessor'
+    """.trimIndent()
 
-    private fun defaultConsoleReportsConfiguration(): String {
-        return """
-			console-reports:
-			  active: true
-			  exclude:
-			  #  - 'ProjectStatisticsReport'
-			  #  - 'ComplexityReport'
-			  #  - 'NotificationReport'
-			  #  - 'FindingsReport'
-			  #  - 'BuildFailureReport'
-			""".trimIndent()
-    }
+    private fun defaultConsoleReportsConfiguration(): String = """
+      console-reports:
+        active: true
+        exclude:
+        #  - 'ProjectStatisticsReport'
+        #  - 'ComplexityReport'
+        #  - 'NotificationReport'
+        #  - 'FindingsReport'
+        #  - 'BuildFailureReport'
+    """.trimIndent()
 
     private fun String.isYamlList() = trim().startsWith("-")
 
-    private fun String.toList(): List<String> {
-        return split("\n").map { it.replace("-", "") }.map { it.trim() }
-    }
+    private fun String.toList(): List<String> =
+        split("\n")
+            .map { it.replace("-", "") }
+            .map { it.trim() }
 }
