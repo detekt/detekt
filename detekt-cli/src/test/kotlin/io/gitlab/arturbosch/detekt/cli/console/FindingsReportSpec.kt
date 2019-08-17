@@ -13,23 +13,31 @@ class FindingsReportSpec : Spek({
 
     describe("findings report") {
 
-        context("several detekt findings") {
+        describe("reports the debt per rule set and the overall debt") {
+            val expectedContent = readResource("findings-report.txt")
+            val detektion = object : TestDetektion() {
+                override val findings: Map<String, List<Finding>> = mapOf(
+                    Pair("TestSmell", listOf(createFinding(), createFinding())),
+                    Pair("EmptySmells", emptyList()))
+            }
+            val output = subject.render(detektion)?.trimEnd()?.decolorized()
 
-            it("reports the debt per ruleset and the overall debt") {
-                val expectedContent = readResource("findings-report.txt")
-                val detektion = object : TestDetektion() {
-                    override val findings: Map<String, List<Finding>> = mapOf(
-                            Pair("TestSmell", listOf(createFinding(), createFinding())),
-                            Pair("EmptySmells", emptyList()))
-                }
-                val output = subject.render(detektion)?.trimEnd()?.decolorized()
+            it("has the reference content") {
                 assertThat(output).isEqualTo(expectedContent)
             }
 
-            it("reports no findings") {
-                val detektion = TestDetektion()
-                assertThat(subject.render(detektion)).isEmpty()
+            it("does not print rule set ids when no findings of this rule set is found") {
+                assertThat(output).doesNotContain("EmptySmells")
             }
+
+            it("does contain the rule set id of rule sets with findings") {
+                assertThat(output).contains("TestSmell")
+            }
+        }
+
+        it("reports no findings") {
+            val detektion = TestDetektion()
+            assertThat(subject.render(detektion)).isEmpty()
         }
     }
 })

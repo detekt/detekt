@@ -2,7 +2,6 @@
 
 package io.gitlab.arturbosch.detekt.cli
 
-import io.gitlab.arturbosch.detekt.cli.console.BuildFailure
 import io.gitlab.arturbosch.detekt.cli.runners.AstPrinter
 import io.gitlab.arturbosch.detekt.cli.runners.ConfigExporter
 import io.gitlab.arturbosch.detekt.cli.runners.Executable
@@ -16,7 +15,7 @@ fun main(args: Array<String>) {
     try {
         buildRunner(args).execute()
     } catch (e: BuildFailure) {
-        // Exit with status code 2 when maxIssues or failThreshold count was reached in BuildFailureReport.
+        // Exit with status code 2 when maxIssues value from configuration was reached.
         e.printStackTrace()
         exitProcess(2)
     } catch (e: Exception) {

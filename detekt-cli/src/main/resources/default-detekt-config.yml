@@ -9,6 +9,7 @@ build:
 processors:
   active: true
   exclude:
+  # - 'DetektProgressListener'
   # - 'FunctionCountProcessor'
   # - 'PropertyCountProcessor'
   # - 'ClassCountProcessor'

@@ -37,12 +37,22 @@ class SingleRuleRunner(private val arguments: CliArgs) : Executable {
             ?: throw IllegalArgumentException("There was no rule set with id '$ruleSet'.")
 
         val provider = RuleProducingProvider(rule, realProvider)
+
+        assertRuleExistsBeforeRunningItLater(provider, settings)
+
         val detektion = DetektFacade.create(
             settings,
             listOf(provider),
             listOf(DetektProgressListener())
         ).run()
         OutputFacade(arguments, detektion, settings).run()
+    }
+
+    private fun assertRuleExistsBeforeRunningItLater(
+        provider: RuleProducingProvider,
+        settings: ProcessingSettings
+    ) {
+        assert(provider.instance(settings.config).rules.size == 1) { "Expected a single rule to be loaded." }
     }
 }
 

@@ -19,6 +19,6 @@ private fun String.colorized(color: Color) = if (isColoredOutputSupported) {
     this
 }
 
-fun String.red() = colorized(RED).toString()
-fun String.yellow() = colorized(YELLOW).toString()
+fun String.red() = colorized(RED)
+fun String.yellow() = colorized(YELLOW)
 fun String.decolorized() = this.replace(escapeSequenceRegex, "")
