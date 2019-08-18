@@ -32,8 +32,8 @@ summary:
                                   classpathref="maven.plugin.classpath">
                                 <arg value="--input"/>
                                 <arg value="${basedir}/src/main/kotlin"/>
-                                <arg value="--filters"/>
-                                <arg value=".*/target/.*,.*/resources/.*"/>
+                                <arg value="--excludes"/>
+                                <arg value="**/special/package/internal/**"/>
                                 <arg value="--report"/>
                                 <arg value="xml:${basedir}/reports/detekt.xml"/>
                                 <arg value="--baseline"/>
