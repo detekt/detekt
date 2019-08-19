@@ -54,22 +54,4 @@ summary:
         </plugin>
     </plugins>
 </build>
-
-<!-- You need this repository as detekt is not yet on MavenCentral -->
-<pluginRepositories>
-  <pluginRepository>
-    <id>arturbosch-code-analysis</id>
-    <name>arturbosch-code-analysis (for detekt)</name>
-    <url>https://dl.bintray.com/arturbosch/code-analysis/</url>
-    <layout>default</layout>
-    <releases>
-      <enabled>true</enabled>
-      <updatePolicy>never</updatePolicy>
-    </releases>
-    <snapshots>
-      <enabled>false</enabled>
-      <updatePolicy>never</updatePolicy>
-    </snapshots>
-  </pluginRepository>
-</pluginRepositories>
 ```
