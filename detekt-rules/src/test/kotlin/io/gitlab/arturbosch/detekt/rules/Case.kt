@@ -7,7 +7,6 @@ import java.nio.file.Path
 import java.nio.file.Paths
 
 enum class Case(val file: String) {
-    CasesFolder("/cases"),
     CollapsibleIfsPositive("/cases/CollapsibleIfsPositive.kt"),
     CollapsibleIfsNegative("/cases/CollapsibleIfsNegative.kt"),
     ComplexMethods("/cases/ComplexMethods.kt"),
@@ -44,7 +43,6 @@ enum class Case(val file: String) {
     MayBeConstNegative("cases/MayBeConstNegative.kt"),
     MandatoryBracesIfStatementsPositive("cases/MandatoryBracesIfStatementsPositive.kt"),
     MandatoryBracesIfStatementsNegative("cases/MandatoryBracesIfStatementsNegative.kt"),
-    NamingConventions("/cases/NamingConventions.kt"),
     NewLineAtEndOfFile("/cases/NewLineAtEndOfFile.kt"),
     MaxLineLength("/cases/MaxLineLength.kt"),
     MaxLineLengthSuppressed("/cases/MaxLineLengthSuppressed.kt"),
