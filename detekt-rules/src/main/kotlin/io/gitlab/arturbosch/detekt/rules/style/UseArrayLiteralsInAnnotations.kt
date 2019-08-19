@@ -10,7 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 
 /**
- * This rule detects annotations which us the 'arrayOf(..)' syntax instead of the array literal '[..]' syntax.
+ * This rule detects annotations which use the 'arrayOf(...)' syntax instead of the array literal '[...]' syntax.
  * Later should be preferred as it is more readable.
  *
  * <noncompliant>
