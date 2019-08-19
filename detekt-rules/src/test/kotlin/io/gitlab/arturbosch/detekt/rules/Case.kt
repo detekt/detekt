@@ -53,8 +53,6 @@ enum class Case(val file: String) {
     MemberNameEqualsClassNamePositive("/cases/MemberNameEqualsClassNamePositive.kt"),
     OverloadedMethods("/cases/OverloadedMethods.kt"),
     ComplexClass("/cases/ComplexClass.kt"),
-    ComplexInterfaceNegative("/cases/ComplexInterfaceNegative.kt"),
-    ComplexInterfacePositive("/cases/ComplexInterfacePositive.kt"),
     NestedClasses("/cases/NestedClasses.kt"),
     NoClasses("/cases/NoClasses.kt"),
     UnreachableCode("/cases/UnreachableCode.kt"),
