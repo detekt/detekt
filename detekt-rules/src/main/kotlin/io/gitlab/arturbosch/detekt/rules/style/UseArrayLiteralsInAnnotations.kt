@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.psi.KtAnnotationEntry
 
 /**
  * This rule detects annotations which use the 'arrayOf(...)' syntax instead of the array literal '[...]' syntax.
- * Later should be preferred as it is more readable.
+ * The latter should be preferred as it is more readable.
  *
  * <noncompliant>
  * &#064;PositiveCase(arrayOf("..."))
