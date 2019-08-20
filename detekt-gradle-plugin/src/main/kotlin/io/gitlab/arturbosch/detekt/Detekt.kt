@@ -61,7 +61,7 @@ open class Detekt : SourceTask(), VerificationTask {
     @Input
     @Optional
     @Deprecated("Replace with setIncludes/setExcludes")
-    val filters: Property<String> = project.objects.property(String::class.java)
+    var filters: Property<String> = project.objects.property(String::class.java)
 
     @Classpath
     val detektClasspath = project.configurableFileCollection()
@@ -72,12 +72,12 @@ open class Detekt : SourceTask(), VerificationTask {
     @InputFile
     @Optional
     @PathSensitive(PathSensitivity.RELATIVE)
-    val baseline: RegularFileProperty = project.fileProperty()
+    var baseline: RegularFileProperty = project.fileProperty()
 
     @InputFiles
     @Optional
     @PathSensitive(PathSensitivity.RELATIVE)
-    val config: ConfigurableFileCollection = project.configurableFileCollection()
+    var config: ConfigurableFileCollection = project.configurableFileCollection()
 
     @Classpath
     @Optional
@@ -105,19 +105,19 @@ open class Detekt : SourceTask(), VerificationTask {
         "Set plugins using the detektPlugins configuration " +
                 "(see https://arturbosch.github.io/detekt/extensions.html#let-detekt-know-about-your-extensions)"
     )
-    val plugins: Property<String> = project.objects.property(String::class.java)
+    var plugins: Property<String> = project.objects.property(String::class.java)
 
     @get:Internal
     internal val debugProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     var debug: Boolean
-        @Input
+        @Console
         get() = debugProp.get()
         set(value) = debugProp.set(value)
 
     @get:Internal
     internal val parallelProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     var parallel: Boolean
-        @Console
+        @Internal
         get() = parallelProp.get()
         set(value) = parallelProp.set(value)
 
@@ -166,7 +166,7 @@ open class Detekt : SourceTask(), VerificationTask {
 
     @Internal
     @Optional
-    val reportsDir: Property<File> = project.objects.property(File::class.java)
+    var reportsDir: Property<File> = project.objects.property(File::class.java)
 
     val xmlReportFile: Provider<RegularFile>
         @OutputFile

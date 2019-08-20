@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.extensions.IdeaExtension
 import io.gitlab.arturbosch.detekt.invoke.ProcessExecutor.startProcess
 import org.gradle.api.file.FileCollection
 import org.gradle.api.provider.Property
+import org.gradle.api.tasks.Console
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.SourceTask
@@ -23,9 +24,8 @@ open class DetektIdeaFormatTask : SourceTask() {
         get() = source
         set(value) = setSource(value)
 
-    @Internal
-    @Optional
-    val debug: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    @Console
+    var debug: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
     @Internal
     lateinit var ideaExtension: IdeaExtension
