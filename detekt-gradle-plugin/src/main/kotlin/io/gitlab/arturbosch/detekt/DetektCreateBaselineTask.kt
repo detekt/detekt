@@ -39,8 +39,7 @@ open class DetektCreateBaselineTask : SourceTask() {
     }
 
     @OutputFile
-    @PathSensitive(PathSensitivity.RELATIVE)
-    var baseline: RegularFileProperty = project.fileProperty()
+    val baseline: RegularFileProperty = project.fileProperty()
 
     @Deprecated("Replace with getSource/setSource")
     var input: FileCollection
@@ -51,12 +50,12 @@ open class DetektCreateBaselineTask : SourceTask() {
     @Input
     @Optional
     @Deprecated("Replace with setIncludes/setExcludes")
-    var filters: Property<String> = project.objects.property(String::class.java)
+    val filters: Property<String> = project.objects.property(String::class.java)
 
     @InputFiles
     @Optional
     @PathSensitive(PathSensitivity.RELATIVE)
-    var config: ConfigurableFileCollection = project.configurableFileCollection()
+    val config: ConfigurableFileCollection = project.configurableFileCollection()
 
     @Input
     @Optional
@@ -64,7 +63,7 @@ open class DetektCreateBaselineTask : SourceTask() {
         "Set plugins using the detektPlugins configuration " +
                 "(see https://arturbosch.github.io/detekt/extensions.html#let-detekt-know-about-your-extensions)"
     )
-    var plugins: Property<String> = project.objects.property(String::class.java)
+    val plugins: Property<String> = project.objects.property(String::class.java)
 
     @Classpath
     val detektClasspath = project.configurableFileCollection()
@@ -74,23 +73,23 @@ open class DetektCreateBaselineTask : SourceTask() {
 
     @Internal
     @Optional
-    var debug: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    val debug: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
     @Internal
     @Optional
-    var parallel: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    val parallel: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
     @Internal
     @Optional
-    var disableDefaultRuleSets: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    val disableDefaultRuleSets: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
     @Internal
     @Optional
-    var buildUponDefaultConfig: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    val buildUponDefaultConfig: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
     @Internal
     @Optional
-    var failFast: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    val failFast: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
     @Input
     @Optional

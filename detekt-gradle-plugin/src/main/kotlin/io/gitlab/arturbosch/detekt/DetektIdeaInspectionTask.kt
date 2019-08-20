@@ -25,7 +25,7 @@ open class DetektIdeaInspectionTask : SourceTask() {
 
     @Internal
     @Optional
-    var debug: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    val debug: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
     @Internal
     lateinit var ideaExtension: IdeaExtension

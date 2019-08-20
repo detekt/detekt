@@ -33,6 +33,7 @@ import org.gradle.api.provider.Provider
 import org.gradle.api.reporting.ReportingExtension
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Classpath
+import org.gradle.api.tasks.Console
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.InputFiles
@@ -60,7 +61,7 @@ open class Detekt : SourceTask(), VerificationTask {
     @Input
     @Optional
     @Deprecated("Replace with setIncludes/setExcludes")
-    var filters: Property<String> = project.objects.property(String::class.java)
+    val filters: Property<String> = project.objects.property(String::class.java)
 
     @Classpath
     val detektClasspath = project.configurableFileCollection()
@@ -71,12 +72,12 @@ open class Detekt : SourceTask(), VerificationTask {
     @InputFile
     @Optional
     @PathSensitive(PathSensitivity.RELATIVE)
-    var baseline: RegularFileProperty = project.fileProperty()
+    val baseline: RegularFileProperty = project.fileProperty()
 
     @InputFiles
     @Optional
     @PathSensitive(PathSensitivity.RELATIVE)
-    var config: ConfigurableFileCollection = project.configurableFileCollection()
+    val config: ConfigurableFileCollection = project.configurableFileCollection()
 
     @Classpath
     @Optional
@@ -104,21 +105,19 @@ open class Detekt : SourceTask(), VerificationTask {
         "Set plugins using the detektPlugins configuration " +
                 "(see https://arturbosch.github.io/detekt/extensions.html#let-detekt-know-about-your-extensions)"
     )
-    var plugins: Property<String> = project.objects.property(String::class.java)
+    val plugins: Property<String> = project.objects.property(String::class.java)
 
     @get:Internal
-    @get:Optional
     internal val debugProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     var debug: Boolean
-        @Internal
+        @Input
         get() = debugProp.get()
         set(value) = debugProp.set(value)
 
     @get:Internal
-    @get:Optional
     internal val parallelProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     var parallel: Boolean
-        @Internal
+        @Console
         get() = parallelProp.get()
         set(value) = parallelProp.set(value)
 
@@ -149,7 +148,6 @@ open class Detekt : SourceTask(), VerificationTask {
     @get:Internal
     internal val ignoreFailuresProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     @Input
-    @Optional
     override fun getIgnoreFailures(): Boolean = ignoreFailuresProp.getOrElse(false)
     override fun setIgnoreFailures(value: Boolean) = ignoreFailuresProp.set(value)
 
@@ -168,7 +166,7 @@ open class Detekt : SourceTask(), VerificationTask {
 
     @Internal
     @Optional
-    var reportsDir: Property<File> = project.objects.property(File::class.java)
+    val reportsDir: Property<File> = project.objects.property(File::class.java)
 
     val xmlReportFile: Provider<RegularFile>
         @OutputFile
