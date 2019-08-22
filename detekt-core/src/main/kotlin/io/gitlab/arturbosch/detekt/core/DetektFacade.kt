@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.core
 
+import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
@@ -39,7 +40,6 @@ class DetektFacade(
         processors.forEach { it.onStart(filesToAnalyze) }
 
         findings.mergeSmells(detektor.run(filesToAnalyze, bindingContext))
-        val result = DetektResult(findings.toSortedMap())
 
         if (saveSupported) {
             KtFileModifier().saveModifiedFiles(filesToAnalyze) {
@@ -47,6 +47,14 @@ class DetektFacade(
             }
         }
 
+        for ((key, value) in findings) {
+            findings[key] = value.filter {
+                val correctableCodeSmell = it as? CorrectableCodeSmell
+                correctableCodeSmell == null || !correctableCodeSmell.autoCorrectEnabled
+            }
+        }
+
+        val result = DetektResult(findings.toSortedMap())
         processors.forEach { it.onFinish(filesToAnalyze, result) }
         return result
     }
