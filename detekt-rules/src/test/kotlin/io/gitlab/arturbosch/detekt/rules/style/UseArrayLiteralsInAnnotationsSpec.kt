@@ -5,7 +5,7 @@ import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-class ArrayLiteralsInAnnotationsSpec : Spek({
+class UseArrayLiteralsInAnnotationsSpec : Spek({
 
     val subject = UseArrayLiteralsInAnnotations()
 
