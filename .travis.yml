@@ -2,10 +2,13 @@ language: java
 matrix:
   include:
     - os: linux
+      dist: xenial
       jdk: openjdk8
     - os: linux
+      dist: bionic
       jdk: openjdk11
     - os: linux
+      dist: bionic
       jdk: openjdk12
     # JDK 8 - see https://docs.travis-ci.com/user/reference/osx/#jdk-and-macos
     - os: osx
