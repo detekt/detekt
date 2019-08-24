@@ -28,7 +28,7 @@ buildScan {
 }
 
 tasks.wrapper {
-    gradleVersion = "5.4"
+    gradleVersion = "5.5"
     distributionType = Wrapper.DistributionType.ALL
     doLast {
         /*
