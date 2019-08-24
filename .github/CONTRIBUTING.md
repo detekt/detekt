@@ -68,6 +68,6 @@ Rules that contain an `@active` tag in their KDoc will be marked as active in th
 ### Release checklist
 
 - add changes in CHANGELOG.md -> `groovy github-milestone-report.groovy arturbosch detekt [milestone-number]`
-- migrations expected? -> Add migration sub-section to current release changelog in CHANGELOG.md
+- migrations expected? -> Add `Migration` sub-section
+- important non-breaking changes? Add `Notable Changes` sub-section
 - all new contributors mentioned? -> README.md>Contributors, Update `all contributors`-Badge
-- new gradle-plugin release? -> Update gradle-version badge

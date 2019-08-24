@@ -6,6 +6,34 @@ permalink: changelog.html
 toc: true
 ---
 
+#### 1.0.1
+
+##### Notable changes
+
+- [detekt runs can be completely silent on absence of findings](https://arturbosch.github.io/detekt/howto-silent-reports.html)
+- All detekt's dependencies are now on MavenCentral. Bogus "*could not find JCommander dependency*" should be gone.
+
+##### Changelog
+
+- Migrate SafeCast test cases to JSR223 - [#1832](https://github.com/arturbosch/detekt/pull/1832)
+- Remove unused case entries - [#1831](https://github.com/arturbosch/detekt/pull/1831)
+- Migrate ComplexInterface test cases to JSR223 - [#1830](https://github.com/arturbosch/detekt/pull/1830)
+- Remove <pluginrepository> from maventask.md - [#1827](https://github.com/arturbosch/detekt/pull/1827)
+- Update maven-task --excludes arg - [#1825](https://github.com/arturbosch/detekt/pull/1825)
+- Improve grammar on 1.0 release post - [#1822](https://github.com/arturbosch/detekt/pull/1822)
+- Write guide on how to make detekt silent - [#1819](https://github.com/arturbosch/detekt/pull/1819)
+- Use notifications instead of println - [#1818](https://github.com/arturbosch/detekt/pull/1818)
+- JCommander 1.78 - [#1817](https://github.com/arturbosch/detekt/pull/1817)
+- Fix typo in spelling of --auto-correct flag - [#1816](https://github.com/arturbosch/detekt/pull/1816)
+- Update dependency versions - [#1815](https://github.com/arturbosch/detekt/pull/1815)
+- Tidy the build files - [#1814](https://github.com/arturbosch/detekt/pull/1814)
+- Downgrade to jcommander v1.72 - [#1809](https://github.com/arturbosch/detekt/pull/1809)
+- Update docs to mention test-pattern deprecation - [#1808](https://github.com/arturbosch/detekt/pull/1808)
+- Quiet mode or ability to disable all output in Gradle - [#1797](https://github.com/arturbosch/detekt/issues/1797)
+
+See all issues at: [1.0.1](https://github.com/arturbosch/detekt/milestone/47)
+
+
 #### 1.0.0
 
 ##### Migration
