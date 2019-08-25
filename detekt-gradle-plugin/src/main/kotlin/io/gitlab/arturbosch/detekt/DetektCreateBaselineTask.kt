@@ -76,19 +76,15 @@ open class DetektCreateBaselineTask : SourceTask() {
     var debug: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
     @Internal
-    @Optional
     var parallel: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
     @Internal
-    @Optional
     var disableDefaultRuleSets: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
     @Internal
-    @Optional
     var buildUponDefaultConfig: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
     @Internal
-    @Optional
     var failFast: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
     @Input

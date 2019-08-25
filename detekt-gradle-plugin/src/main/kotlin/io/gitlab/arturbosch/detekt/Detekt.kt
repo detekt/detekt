@@ -165,7 +165,6 @@ open class Detekt : SourceTask(), VerificationTask {
     fun reports(configure: Action<DetektReports>) = configure.execute(reports)
 
     @Internal
-    @Optional
     var reportsDir: Property<File> = project.objects.property(File::class.java)
 
     val xmlReportFile: Provider<RegularFile>
