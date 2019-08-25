@@ -20,6 +20,7 @@ import org.gradle.api.file.FileCollection
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Classpath
+import org.gradle.api.tasks.Console
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.Internal
@@ -39,7 +40,6 @@ open class DetektCreateBaselineTask : SourceTask() {
     }
 
     @OutputFile
-    @PathSensitive(PathSensitivity.RELATIVE)
     var baseline: RegularFileProperty = project.fileProperty()
 
     @Deprecated("Replace with getSource/setSource")
@@ -72,24 +72,19 @@ open class DetektCreateBaselineTask : SourceTask() {
     @Classpath
     val pluginClasspath = project.configurableFileCollection()
 
-    @Internal
-    @Optional
+    @Console
     var debug: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
     @Internal
-    @Optional
     var parallel: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
     @Internal
-    @Optional
     var disableDefaultRuleSets: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
     @Internal
-    @Optional
     var buildUponDefaultConfig: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
     @Internal
-    @Optional
     var failFast: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
     @Input

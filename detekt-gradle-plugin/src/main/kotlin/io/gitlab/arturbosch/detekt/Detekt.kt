@@ -33,6 +33,7 @@ import org.gradle.api.provider.Provider
 import org.gradle.api.reporting.ReportingExtension
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Classpath
+import org.gradle.api.tasks.Console
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.InputFiles
@@ -107,15 +108,13 @@ open class Detekt : SourceTask(), VerificationTask {
     var plugins: Property<String> = project.objects.property(String::class.java)
 
     @get:Internal
-    @get:Optional
     internal val debugProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     var debug: Boolean
-        @Internal
+        @Console
         get() = debugProp.get()
         set(value) = debugProp.set(value)
 
     @get:Internal
-    @get:Optional
     internal val parallelProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     var parallel: Boolean
         @Internal
@@ -149,7 +148,6 @@ open class Detekt : SourceTask(), VerificationTask {
     @get:Internal
     internal val ignoreFailuresProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     @Input
-    @Optional
     override fun getIgnoreFailures(): Boolean = ignoreFailuresProp.getOrElse(false)
     override fun setIgnoreFailures(value: Boolean) = ignoreFailuresProp.set(value)
 
@@ -167,7 +165,6 @@ open class Detekt : SourceTask(), VerificationTask {
     fun reports(configure: Action<DetektReports>) = configure.execute(reports)
 
     @Internal
-    @Optional
     var reportsDir: Property<File> = project.objects.property(File::class.java)
 
     val xmlReportFile: Provider<RegularFile>

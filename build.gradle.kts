@@ -9,17 +9,18 @@ import org.jfrog.gradle.plugin.artifactory.dsl.PublisherConfig
 import java.util.Date
 
 plugins {
-    id("com.gradle.build-scan") version "2.4"
-    kotlin("jvm") version "1.3.50"
-    id("com.jfrog.bintray") version "1.8.4"
-    id("com.jfrog.artifactory") version "4.9.8" apply false
-    id("com.github.ben-manes.versions") version "0.22.0"
-    id("com.github.johnrengelman.shadow") version "5.1.0" apply false
-    id("org.sonarqube") version "2.7"
     id("io.gitlab.arturbosch.detekt")
-    id("org.jetbrains.dokka") version "0.9.18" apply false
     jacoco
     `maven-publish`
+    // Plugin versions for these plugins are defined in gradle.properties and applied in settings.gradle.kts
+    id("com.jfrog.artifactory") apply false
+    id("com.jfrog.bintray")
+    id("com.gradle.build-scan")
+    id("org.jetbrains.dokka") apply false
+    id("com.github.ben-manes.versions")
+    kotlin("jvm")
+    id("com.github.johnrengelman.shadow") apply false
+    id("org.sonarqube")
 }
 
 buildScan {
@@ -28,7 +29,8 @@ buildScan {
 }
 
 tasks.wrapper {
-    gradleVersion = "5.4"
+    val gradleVersion: String by project
+    this.gradleVersion = gradleVersion
     distributionType = Wrapper.DistributionType.ALL
     doLast {
         /*

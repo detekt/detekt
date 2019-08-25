@@ -65,7 +65,6 @@ tasks.test {
 
 tasks.validateTaskProperties {
     enableStricterValidation = true
-    failOnWarning = true
 }
 
 pluginBundle {

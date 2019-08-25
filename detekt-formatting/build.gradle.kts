@@ -24,6 +24,7 @@ dependencies {
 }
 
 tasks.withType<Jar>().configureEach {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE // allow duplicates
     from(
         configurations.implementation.get()
             .filter { "com.pinterest.ktlint" in it.toString() }
