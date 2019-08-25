@@ -219,7 +219,7 @@ class ReturnCountSpec : Spek({
 					return@flatMap Flowable.just(it[0])
 				}
     		}
-		""".trimIndent()
+		"""
 
             it("should not count labeled returns from lambda by default") {
                 val findings = ReturnCount().lint(code)

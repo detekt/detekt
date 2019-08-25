@@ -129,7 +129,7 @@ class ComplexMethodSpec : Spek({
 					}
 				}
 			}
-			""".trimIndent()
+			"""
 
             it("should not count these overridden functions to base functions complexity") {
                 assertThat(ComplexMethod().compileAndLint(code)).isEmpty()

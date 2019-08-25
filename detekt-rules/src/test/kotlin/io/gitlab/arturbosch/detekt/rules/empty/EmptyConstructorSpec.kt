@@ -1,3 +1,4 @@
+
 package io.gitlab.arturbosch.detekt.rules.empty
 
 import io.gitlab.arturbosch.detekt.api.Config
@@ -17,7 +18,7 @@ class EmptyConstructorSpec : Spek({
 
 			@NeedsConstructor
 			fun annotatedFunction() = Unit
-		""".trimIndent()
+		"""
 
             val findings = EmptyDefaultConstructor(Config.empty).lint(code)
 

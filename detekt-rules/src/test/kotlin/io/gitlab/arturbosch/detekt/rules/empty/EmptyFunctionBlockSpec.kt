@@ -93,7 +93,7 @@ class EmptyFunctionBlockSpec : Spek({
 
                     }
                 }
-            """.trimIndent()
+            """
             it("should not flag overridden functions with commented body") {
                 assertThat(subject.compileAndLint(code))
                     .hasExactlyLocationStrings("'{\n\n    }' at (12,31) in /$fileName")

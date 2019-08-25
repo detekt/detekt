@@ -95,7 +95,7 @@ class UseRequireSpec : Spek({
                         is LinkedList<*> -> 2
                         else -> throw IllegalArgumentException("Not supported List type")
                     }
-                    """.trimIndent()
+                    """
                 assertThat(subject.lint(code)).isEmpty()
             }
 
@@ -109,7 +109,7 @@ class UseRequireSpec : Spek({
                             }
                         }
                         throw IllegalArgumentException("Test was too big")
-                    }""".trimIndent()
+                    }"""
                 assertThat(subject.lint(code)).isEmpty()
             }
 
@@ -119,7 +119,7 @@ class UseRequireSpec : Spek({
                         val subclass = list as? LinkedList
                             ?: throw IllegalArgumentException("List is not a LinkedList")
                         return subclass
-                    }""".trimIndent()
+                    }"""
                 assertThat(subject.lint(code)).isEmpty()
             }
         }
