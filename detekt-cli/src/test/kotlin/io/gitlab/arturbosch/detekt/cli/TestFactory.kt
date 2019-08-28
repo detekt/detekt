@@ -12,12 +12,12 @@ import io.gitlab.arturbosch.detekt.core.ModificationNotification
 import io.gitlab.arturbosch.detekt.test.resource
 import java.nio.file.Paths
 
-fun createFinding(ruleSet: String = "TestSmell") = CodeSmell(createIssue(ruleSet), createEntity(), "TestMessage")
+fun createFinding(ruleSet: String = "TestSmell", fileName: String = "TestFile.kt") = CodeSmell(createIssue(ruleSet), createEntity(fileName), "TestMessage")
 
 fun createIssue(id: String = "TestSmell") = Issue(id, Severity.CodeSmell, "For Test", Debt.FIVE_MINS)
 
-fun createEntity() = Entity("TestEntity", "TestEntity", "S1", createLocation())
+fun createEntity(fileName: String) = Entity("TestEntity", "TestEntity", "S1", createLocation(fileName))
 
-fun createLocation() = Location(SourceLocation(1, 1), TextLocation(1, 1), "", "TestFile.kt")
+fun createLocation(fileName: String) = Location(SourceLocation(1, 1), TextLocation(1, 1), "", fileName)
 
 fun createNotification() = ModificationNotification(Paths.get(resource("empty.txt")))

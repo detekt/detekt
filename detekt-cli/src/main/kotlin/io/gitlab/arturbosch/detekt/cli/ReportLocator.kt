@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.api.ConsoleReport
 import io.gitlab.arturbosch.detekt.api.Extension
+import io.gitlab.arturbosch.detekt.api.FileBasedConsoleReport
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import java.net.URLClassLoader
@@ -12,6 +13,7 @@ class ReportLocator(private val settings: ProcessingSettings) {
     private val consoleSubConfig = settings.config.subConfig("console-reports")
     private val consoleActive = consoleSubConfig.valueOrDefault(ACTIVE, true)
     private val consoleExcludes = consoleSubConfig.valueOrDefault(EXCLUDE, emptyList<String>()).toSet()
+    private val consoleGroupByRule = consoleSubConfig.valueOrDefault(GROUP_BY_RULE, true)
 
     private val outputSubConfig = settings.config.subConfig("output-reports")
     private val outputActive = outputSubConfig.valueOrDefault(ACTIVE, true)
@@ -39,7 +41,8 @@ class ReportLocator(private val settings: ProcessingSettings) {
 
     private fun loadConsoleReports(detektLoader: URLClassLoader) =
         if (consoleActive) {
-            ServiceLoader.load(ConsoleReport::class.java, detektLoader)
+            val reportType = if (consoleGroupByRule) ConsoleReport::class.java else FileBasedConsoleReport::class.java
+            ServiceLoader.load(reportType, detektLoader)
                 .filter { it.id !in consoleExcludes }
                 .toList()
         } else {
@@ -49,5 +52,6 @@ class ReportLocator(private val settings: ProcessingSettings) {
     companion object {
         private const val ACTIVE = "active"
         private const val EXCLUDE = "exclude"
+        private const val GROUP_BY_RULE = "groupByRule"
     }
 }
