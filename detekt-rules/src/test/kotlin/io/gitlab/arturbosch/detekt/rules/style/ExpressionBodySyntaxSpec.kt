@@ -59,7 +59,7 @@ class ExpressionBodySyntaxSpec : Spek({
                     }
 
                     fun callee(a: String): String = ""
-                """.trimIndent())).isEmpty()
+                """)).isEmpty()
             }
         }
 

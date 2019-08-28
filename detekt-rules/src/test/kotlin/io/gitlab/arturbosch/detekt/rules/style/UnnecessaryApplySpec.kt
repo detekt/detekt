@@ -116,13 +116,13 @@ class UnnecessaryApplySpec : Spek({
             it("is used within an assignment expr itself") {
                 assertThat(subject.lint("""
                     val content = Intent().apply { putExtra("", 1) }
-                """.trimIndent())).isEmpty()
+                """)).isEmpty()
             }
 
             it("is used as return type of extension function") {
                 assertThat(subject.lint("""
                     fun setColor(color: Int) = apply { initialColor = color }
-                """.trimIndent())).isEmpty()
+                """)).isEmpty()
             }
 
             it("should not flag apply when assigning property on this") {
@@ -130,14 +130,14 @@ class UnnecessaryApplySpec : Spek({
                     private val requestedInterval by lazy {
                         MutableLiveData<Int>().apply { value = UsageFragment.INTERVAL_DAY }
                     }
-                """.trimIndent())).isEmpty()
+                """)).isEmpty()
             }
 
             it("should not report apply when using it after returning something") {
                 assertThat(subject.lint("""
                     inline class Money(var amount: Int)
                     fun returnMe = (Money(5)).apply { amount = 10 }
-                """.trimIndent())).isEmpty()
+                """)).isEmpty()
             }
 
             it("should not report apply usage inside safe chained expressions") {
@@ -148,7 +148,7 @@ class UnnecessaryApplySpec : Spek({
                         ?.apply { if (true) add(4) }
                         ?: listOf(0)
                     }
-                """.trimIndent())).isEmpty()
+                """)).isEmpty()
             }
         }
 
@@ -166,7 +166,7 @@ class UnnecessaryApplySpec : Spek({
                             }
                         }
                     }
-                """.trimIndent())).isEmpty()
+                """)).isEmpty()
             }
 
             it("should report reference expressions") {
@@ -181,7 +181,7 @@ class UnnecessaryApplySpec : Spek({
                             this.propertyAccess
                         }
                     }
-                """.trimIndent())).hasSize(2)
+                """)).hasSize(2)
             }
         }
     }

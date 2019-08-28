@@ -175,7 +175,7 @@ class TooManyFunctionsSpec : Spek({
                         override fun a() = Unit
                         override fun b() = Unit
                     }
-				""".trimIndent()
+				"""
                 val configuredRule = TooManyFunctions(TestConfig(mapOf(
                         TooManyFunctions.THRESHOLD_IN_CLASSES to "1",
                         TooManyFunctions.THRESHOLD_IN_FILES to "1",
@@ -199,7 +199,7 @@ class TooManyFunctionsSpec : Spek({
                         override fun func1() = Unit
                         override fun func2() = Unit
                     }
-                """.trimIndent()
+                """
 
             it("should not report class with overridden functions, if ignoreOverridden is enabled") {
                 val configuredRule = TooManyFunctions(TestConfig(mapOf(

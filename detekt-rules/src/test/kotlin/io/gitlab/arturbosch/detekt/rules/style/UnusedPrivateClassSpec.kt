@@ -250,7 +250,7 @@ class UnusedPrivateClassSpec : Spek({
             val code = """
 				private class Foo
 				fun bar(clazz: KClass<*>) = Unit
-			""".trimIndent()
+			"""
 
             val findings = UnusedPrivateClass().lint(code)
 
@@ -270,7 +270,7 @@ class UnusedPrivateClassSpec : Spek({
 						B("B"),
 						C("C")
 					}
-				""".trimIndent()
+				"""
 
             val findings = UnusedPrivateClass().lint(code)
 
@@ -294,7 +294,7 @@ class UnusedPrivateClassSpec : Spek({
                         fun getSomeObject(): ((String) -> Any) = ::InternalClass
                         private class InternalClass(val param: String)
 					}
-				""".trimIndent()
+				"""
 
             val findings = UnusedPrivateClass().lint(code)
 

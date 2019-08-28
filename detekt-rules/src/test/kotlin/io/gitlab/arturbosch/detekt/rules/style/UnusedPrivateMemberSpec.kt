@@ -477,7 +477,7 @@ class UnusedPrivateMemberSpec : Spek({
                     }
                 }
                 private fun doSomethingElse() {}
-            """.trimIndent()
+            """
 
             assertThat(subject.lint(code)).isEmpty()
         }
@@ -950,7 +950,7 @@ class UnusedPrivateMemberSpec : Spek({
 						println("b")
 					}
 				}
-			""".trimIndent()
+			"""
             assertThat(subject.lint(code)).isEmpty()
         }
 
@@ -959,7 +959,7 @@ class UnusedPrivateMemberSpec : Spek({
 				fun main(args: Array<String>) {
 					println("b")
 				}
-			""".trimIndent()
+			"""
             assertThat(subject.lint(code)).isEmpty()
         }
     }
@@ -975,7 +975,7 @@ class UnusedPrivateMemberSpec : Spek({
 						private operator fun Date.plus(diff: Long): Date = Date(this.time + diff)
 					}
 				}
-			""".trimIndent()
+			"""
             assertThat(subject.lint(code)).isEmpty()
         }
     }

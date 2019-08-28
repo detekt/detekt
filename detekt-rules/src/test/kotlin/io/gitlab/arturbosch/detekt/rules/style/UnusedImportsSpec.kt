@@ -224,7 +224,7 @@ class UnusedImportsSpec : Spek({
 				fun f() : Boolean {
 					return myFoo() == otherFoo()
 				}
-			""".trimIndent()
+			"""
             assertThat(subject.lint(code)).isEmpty()
         }
 
@@ -249,7 +249,7 @@ class UnusedImportsSpec : Spek({
                 import com.example.MyClass.component543
 
                 val (a, b) = MyClass(1, 2)
-            """.trimIndent()
+            """
 
             assertThat(subject.lint(code)).isEmpty()
         }
@@ -263,7 +263,7 @@ class UnusedImportsSpec : Spek({
                 import com.example.component1AndSomethingElse
 
                 println("Testing")
-            """.trimIndent()
+            """
             )
 
             with(lint) {

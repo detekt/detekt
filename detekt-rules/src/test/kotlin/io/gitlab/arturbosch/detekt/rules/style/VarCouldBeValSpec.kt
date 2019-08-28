@@ -122,7 +122,7 @@ class VarCouldBeValSpec : Spek({
 						var myVar = value
 					}
 				}
-			""".trimIndent()
+			"""
             assertThat(subject.lint(code)).hasSize(2)
         }
 
@@ -134,7 +134,7 @@ class VarCouldBeValSpec : Spek({
 						this.myVar = value
 					}
 				}
-			""".trimIndent()
+			"""
             assertThat(subject.lint(code)).isEmpty()
         }
 
@@ -147,7 +147,7 @@ class VarCouldBeValSpec : Spek({
 						this.myVar = value
 					}
 				}
-			""".trimIndent()
+			"""
             with(subject.lint(code)[0]) {
                 // we accept wrong entity reporting here due to no symbol solving
                 // false reporting with shadowed vars vs false positives
