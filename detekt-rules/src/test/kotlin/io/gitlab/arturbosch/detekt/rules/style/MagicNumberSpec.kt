@@ -290,11 +290,11 @@ class MagicNumberSpec : Spek({
 			fun test(x: Int) {
 				val i = 5
 			}
-		""".trimMargin())
+		""")
 
             it("should be reported") {
                 val findings = MagicNumber().lint(ktFile)
-                assertThat(findings).hasLocationStrings("'5' at (2,13) in /$fileName")
+                assertThat(findings).hasSize(1)
             }
         }
 
@@ -303,7 +303,7 @@ class MagicNumberSpec : Spek({
 			fun test() : Boolean {
 				return true;
 			}
-		""".trimMargin())
+		""")
 
             it("should not be reported") {
                 val findings = MagicNumber().lint(ktFile)
