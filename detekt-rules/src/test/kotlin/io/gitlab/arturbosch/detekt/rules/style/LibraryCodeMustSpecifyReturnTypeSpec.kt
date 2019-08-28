@@ -19,7 +19,7 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
                     fun b() = 2
                     val c = 2
                 }
-            """.trimIndent())).isEmpty()
+            """)).isEmpty()
         }
 
         val subject by memoized {
@@ -31,13 +31,13 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
             it("should report a top level function") {
                 assertThat(subject.compileAndLint("""
                     fun foo() = 5
-                """.trimIndent())).hasSize(1)
+                """)).hasSize(1)
             }
 
             it("should report a top level property") {
                 assertThat(subject.compileAndLint("""
                     val foo = 5
-                """.trimIndent())).hasSize(1)
+                """)).hasSize(1)
             }
 
             it("should report a public class with public members") {
@@ -46,7 +46,7 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
                         val foo = 5
                         fun bar() = 5
                     }
-                """.trimIndent())).hasSize(2)
+                """)).hasSize(2)
             }
         }
 
@@ -55,19 +55,19 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
             it("should not report a top level function") {
                 assertThat(subject.compileAndLint("""
                     fun foo(): Int = 5
-                """.trimIndent())).isEmpty()
+                """)).isEmpty()
             }
 
             it("should not report a non expression function") {
                 assertThat(subject.compileAndLint("""
                     fun foo() {}
-                """.trimIndent())).isEmpty()
+                """)).isEmpty()
             }
 
             it("should not report a top level property") {
                 assertThat(subject.compileAndLint("""
                     val foo: Int = 5
-                """.trimIndent())).isEmpty()
+                """)).isEmpty()
             }
 
             it("should not report a public class with public members") {
@@ -76,7 +76,7 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
                         val foo: Int = 5
                         fun bar(): Int = 5
                     }
-                """.trimIndent())).isEmpty()
+                """)).isEmpty()
             }
         }
         describe("negative cases with no public scope") {
@@ -86,13 +86,13 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
                 assertThat(subject.lint("""
                     internal fun bar() = 5
                     private fun foo() = 5
-                """.trimIndent())).isEmpty()
+                """)).isEmpty()
             }
 
             it("should not report a internal top level property") {
                 assertThat(subject.compileAndLint("""
                     internal val foo = 5
-                """.trimIndent())).isEmpty()
+                """)).isEmpty()
             }
 
             it("should not report members and local variables") {
@@ -104,7 +104,7 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
                             val a = 5
                         }
                     }
-                """.trimIndent())).isEmpty()
+                """)).isEmpty()
             }
         }
     }

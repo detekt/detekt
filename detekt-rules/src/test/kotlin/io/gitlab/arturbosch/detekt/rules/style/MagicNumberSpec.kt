@@ -556,7 +556,7 @@ class MagicNumberSpec : Spek({
 					abstract class A(n: Int)
 
 					object B : A(n = 5)
-				""".trimIndent()
+				"""
                     val rule = MagicNumber(TestConfig(mapOf("ignoreNamedArgument" to "true")))
                     assertThat(rule.lint(code)).isEmpty()
                 }

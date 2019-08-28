@@ -111,7 +111,7 @@ class UnnecessaryParenthesesSpec : Spek({
 				) {
 					constructor() : this({ first, second -> true })
 				}
-			""".trimIndent()
+			"""
             assertThat(subject.lint(code)).hasSize(0)
         }
 
@@ -127,7 +127,7 @@ class UnnecessaryParenthesesSpec : Spek({
 						test({ println(it) }) { println(it) }
 					}
 				}
-			""".trimIndent()
+			"""
             assertThat(subject.lint(code)).hasSize(0)
         }
 
@@ -143,7 +143,7 @@ class UnnecessaryParenthesesSpec : Spek({
 						test({ println(it) }, { println(it) })
 					}
 				}
-			""".trimIndent()
+			"""
             assertThat(subject.lint(code)).hasSize(0)
         }
 
@@ -159,7 +159,7 @@ class UnnecessaryParenthesesSpec : Spek({
 						test("hello", { println(it) }) { println(it) }
 					}
 				}
-			""".trimIndent()
+			"""
             assertThat(subject.lint(code)).hasSize(0)
         }
     }
