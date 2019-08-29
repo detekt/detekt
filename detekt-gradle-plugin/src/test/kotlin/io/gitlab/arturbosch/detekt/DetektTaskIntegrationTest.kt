@@ -7,10 +7,6 @@ import org.gradle.testkit.runner.TaskOutcome
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-/**
- * @author Marvin Ramin
- * @author Markus Schwarz
- */
 internal class DetektTaskIntegrationTest : Spek({
 
     describe("When applying the detekt gradle plugin") {
