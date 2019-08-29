@@ -12,7 +12,7 @@ class ConsoleReportSpec : Spek({
     describe("print rendered reports") {
         it("render a string") {
             val output = printReport("hello")
-            assertThat(output).isEqualTo("hello\n")
+            assertThat(output).startsWith("hello")
         }
     }
 
@@ -42,5 +42,5 @@ private fun printReport(str: String?): String {
     }
 
     report.print(PrintStream(outputStream), detektion)
-    return outputStream.toString(Charsets.UTF_8.name())
+    return outputStream.toString()
 }
