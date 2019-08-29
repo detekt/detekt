@@ -10,6 +10,7 @@ object KotlinScriptEngine {
     /**
      * Compiles a given code string with the Jsr223 script engine.
      * If a compilation error occurs the script engine is recovered.
+     * Afterwards this method throws a [KotlinScriptException].
      *
      * @param code the String to compile
      * @throws ScriptException
