@@ -15,9 +15,6 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.nio.file.Paths
 
-// Error:(31, 49) Kotlin: Cannot infer type parameter SELF in
-// val <SELF : AbstractBooleanAssert<SELF!>!> AbstractBooleanAssert<SELF>.isTrue: SELF!
-@Suppress("UsePropertyAccessSyntax")
 class AutoCorrectLevelSpec : Spek({
 
     describe("test different autoCorrect levels in configuration") {
@@ -103,5 +100,5 @@ private fun runAnalysis(config: Config): Pair<KtFile, List<Finding>> {
     return testFile to findings
 }
 
-private fun wasLinted(findings: List<Finding>): Boolean = findings.isNotEmpty()
-private fun wasFormatted(file: KtFile): Boolean = file.text == contentAfterChainWrapping
+private fun wasLinted(findings: List<Finding>) = findings.isNotEmpty()
+private fun wasFormatted(file: KtFile) = file.text == contentAfterChainWrapping
