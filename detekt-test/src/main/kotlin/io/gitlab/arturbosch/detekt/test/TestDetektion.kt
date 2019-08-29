@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.cli
+package io.gitlab.arturbosch.detekt.test
 
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding

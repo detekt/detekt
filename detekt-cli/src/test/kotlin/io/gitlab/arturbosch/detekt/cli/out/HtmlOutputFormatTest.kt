@@ -9,7 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
-import io.gitlab.arturbosch.detekt.cli.TestDetektion
+import io.gitlab.arturbosch.detekt.test.TestDetektion
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -76,7 +76,8 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
                     "ijkl", "src/main/com/sample/Sample3.kt"))
 
     return TestDetektion(
-            CodeSmell(Issue("id_a", Severity.CodeSmell, "A1", Debt.TWENTY_MINS), entity1, message = "B1"),
-            CodeSmell(Issue("id_b", Severity.CodeSmell, "A2", Debt.TWENTY_MINS), entity2, message = "B2"),
-            CodeSmell(Issue("id_c", Severity.CodeSmell, "A3", Debt.TWENTY_MINS), entity3, message = "B3"))
+        CodeSmell(Issue("id_a", Severity.CodeSmell, "A1", Debt.TWENTY_MINS), entity1, message = "B1"),
+        CodeSmell(Issue("id_b", Severity.CodeSmell, "A2", Debt.TWENTY_MINS), entity2, message = "B2"),
+        CodeSmell(Issue("id_c", Severity.CodeSmell, "A3", Debt.TWENTY_MINS), entity3, message = "B3")
+    )
 }
