@@ -112,7 +112,6 @@ subprojects {
     val userHome = System.getProperty("user.home")
 
     detekt {
-        debug = true
         buildUponDefaultConfig = true
         baseline = file("$rootDir/config/detekt/baseline.xml")
 
