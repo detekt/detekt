@@ -16,8 +16,9 @@ abstract class ConsoleReport : Extension {
      * if anything was rendered at all.
      */
     fun print(printer: PrintStream, detektion: Detektion) {
-        render(detektion)?.let {
-            printer.println(it)
+        val output = render(detektion)
+        if (!output.isNullOrBlank()) {
+            printer.println(output)
         }
     }
 
