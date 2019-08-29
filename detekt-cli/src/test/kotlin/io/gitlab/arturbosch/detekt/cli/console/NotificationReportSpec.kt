@@ -21,5 +21,10 @@ class NotificationReportSpec : Spek({
             }
             assertThat(subject.render(detektion)).isEqualTo("File $path was modified.\nFile $path was modified.")
         }
+
+        it("reports no findings") {
+            val detektion = TestDetektion()
+            assertThat(subject.render(detektion)).isNull()
+        }
     }
 })
