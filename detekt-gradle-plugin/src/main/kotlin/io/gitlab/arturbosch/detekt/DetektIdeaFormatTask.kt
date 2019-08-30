@@ -4,12 +4,15 @@ import io.gitlab.arturbosch.detekt.extensions.IdeaExtension
 import io.gitlab.arturbosch.detekt.invoke.ProcessExecutor.startProcess
 import org.gradle.api.file.FileCollection
 import org.gradle.api.provider.Property
+import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Console
 import org.gradle.api.tasks.Internal
+import org.gradle.api.tasks.Nested
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 
+@CacheableTask
 open class DetektIdeaFormatTask : SourceTask() {
 
     init {
@@ -23,10 +26,10 @@ open class DetektIdeaFormatTask : SourceTask() {
         get() = source
         set(value) = setSource(value)
 
-    @Console
+    @get:Console
     var debug: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
-    @Internal
+    @get:Nested
     lateinit var ideaExtension: IdeaExtension
 
     @TaskAction
