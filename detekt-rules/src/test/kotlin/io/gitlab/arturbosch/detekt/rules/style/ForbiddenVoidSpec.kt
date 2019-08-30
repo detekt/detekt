@@ -37,9 +37,14 @@ class ForbiddenVoidSpec : Spek({
             val code = """
 				class Void {
                     fun void() {}
+                    val void = "string"
                 }
                 enum class E {
                     Void;
+                }
+                abstract class Test {
+                    fun myFun2(): E = E.Void
+                    abstract fun myFun(): Void
                 }
 			"""
 
