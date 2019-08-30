@@ -58,29 +58,29 @@ open class Detekt : SourceTask(), VerificationTask {
         get() = source
         set(value) = setSource(value)
 
-    @Input
-    @Optional
+    @get:Input
+    @get:Optional
     @Deprecated("Replace with setIncludes/setExcludes")
     var filters: Property<String> = project.objects.property(String::class.java)
 
-    @Classpath
+    @get:Classpath
     val detektClasspath = project.configurableFileCollection()
 
-    @Classpath
+    @get:Classpath
     val pluginClasspath = project.configurableFileCollection()
 
-    @InputFile
-    @Optional
-    @PathSensitive(PathSensitivity.RELATIVE)
+    @get:InputFile
+    @get:Optional
+    @get:PathSensitive(PathSensitivity.RELATIVE)
     var baseline: RegularFileProperty = project.fileProperty()
 
-    @InputFiles
-    @Optional
-    @PathSensitive(PathSensitivity.RELATIVE)
+    @get:InputFiles
+    @get:Optional
+    @get:PathSensitive(PathSensitivity.RELATIVE)
     var config: ConfigurableFileCollection = project.configurableFileCollection()
 
-    @Classpath
-    @Optional
+    @get:Classpath
+    @get:Optional
     val classpath = project.configurableFileCollection()
 
     @get:Input
@@ -99,8 +99,8 @@ open class Detekt : SourceTask(), VerificationTask {
         get() = jvmTargetProp.get()
         set(value) = jvmTargetProp.set(value)
 
-    @Input
-    @Optional
+    @get:Input
+    @get:Optional
     @Deprecated(
         "Set plugins using the detektPlugins configuration " +
                 "(see https://arturbosch.github.io/detekt/extensions.html#let-detekt-know-about-your-extensions)"
@@ -121,27 +121,24 @@ open class Detekt : SourceTask(), VerificationTask {
         get() = parallelProp.get()
         set(value) = parallelProp.set(value)
 
-    @get:Optional
-    @get:Input
+    @get:Internal
     internal val disableDefaultRuleSetsProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     var disableDefaultRuleSets: Boolean
-        @Internal
+        @Input
         get() = disableDefaultRuleSetsProp.get()
         set(value) = disableDefaultRuleSetsProp.set(value)
 
-    @get:Optional
-    @get:Input
+    @get:Internal
     internal val buildUponDefaultConfigProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     var buildUponDefaultConfig: Boolean
-        @Internal
+        @Input
         get() = buildUponDefaultConfigProp.get()
         set(value) = buildUponDefaultConfigProp.set(value)
 
-    @get:Optional
-    @get:Input
+    @get:Internal
     internal val failFastProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     var failFast: Boolean
-        @Internal
+        @Input
         get() = failFastProp.get()
         set(value) = failFastProp.set(value)
 
@@ -151,20 +148,19 @@ open class Detekt : SourceTask(), VerificationTask {
     override fun getIgnoreFailures(): Boolean = ignoreFailuresProp.getOrElse(false)
     override fun setIgnoreFailures(value: Boolean) = ignoreFailuresProp.set(value)
 
-    @get:Optional
-    @get:Input
+    @get:Internal
     internal val autoCorrectProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     var autoCorrect: Boolean
-        @Internal
+        @Input
         get() = autoCorrectProp.get()
         set(value) = autoCorrectProp.set(value)
 
-    @Internal
+    @get:Internal
     var reports = DetektReports(project)
 
     fun reports(configure: Action<DetektReports>) = configure.execute(reports)
 
-    @Internal
+    @get:Internal
     var reportsDir: Property<File> = project.objects.property(File::class.java)
 
     val xmlReportFile: Provider<RegularFile>
