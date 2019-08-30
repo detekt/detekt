@@ -4,3 +4,9 @@ codecov:
   notify:
     require_ci_to_pass: no
     after_n_builds: 4
+coverage:
+  status:
+    # pull-requests only
+    patch:
+      default:
+        threshold: 0.1%
