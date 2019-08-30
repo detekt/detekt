@@ -379,13 +379,13 @@ exception is too broad it can lead to unintended exceptions being caught.
 #### Configuration options:
 
 * `exceptionNames` (default: `- ArrayIndexOutOfBoundsException
-- Error
-- Exception
-- IllegalMonitorStateException
-- NullPointerException
-- IndexOutOfBoundsException
-- RuntimeException
-- Throwable`)
+    - Error
+    - Exception
+    - IllegalMonitorStateException
+    - NullPointerException
+    - IndexOutOfBoundsException
+    - RuntimeException
+    - Throwable`)
 
    exceptions which are too generic and should not be caught
 
@@ -425,9 +425,9 @@ exceptions to the case that has currently occurred.
 #### Configuration options:
 
 * `exceptionNames` (default: `- Error
-- Exception
-- Throwable
-- RuntimeException`)
+    - Exception
+    - Throwable
+    - RuntimeException`)
 
    exceptions which are too generic and should not be thrown
 

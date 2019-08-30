@@ -17,17 +17,17 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  *
  * <noncompliant>
  * fun stuff(): Int
- * 		= 5
+ *     = 5
  *
  * fun <V> foo(): Int where V : Int
- * 		= 5
+ *     = 5
  * </noncompliant>
  *
  * <compliant>
  * fun stuff() = 5
  *
  * fun stuff() =
- * 		foo.bar()
+ *     foo.bar()
  *
  * fun <V> foo(): Int where V : Int = 5
  * </compliant>
