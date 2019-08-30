@@ -68,6 +68,13 @@ internal class RuleVisitor : DetektVisitor() {
         }
 
         name = classOrObject.name?.trim() ?: ""
+
+        // Use unparsed KDoc text here to check for tabs
+        // Parsed [KDocSection] element contains no tabs
+        if (classOrObject.docComment?.text?.contains('\t') == true) {
+            throw InvalidDocumentationException("KDoc for rule $name must not contain tabs")
+        }
+
         active = classOrObject.kDocSection()?.findTagByName(TAG_ACTIVE) != null
         autoCorrect = classOrObject.kDocSection()?.findTagByName(TAG_AUTO_CORRECT) != null
 
