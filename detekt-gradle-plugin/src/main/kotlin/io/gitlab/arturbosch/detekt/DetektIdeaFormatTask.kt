@@ -6,7 +6,6 @@ import org.gradle.api.file.FileCollection
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Console
 import org.gradle.api.tasks.Internal
-import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.language.base.plugins.LifecycleBasePlugin
@@ -32,10 +31,7 @@ open class DetektIdeaFormatTask : SourceTask() {
 
     @TaskAction
     fun format() {
-        val debugState = debug.getOrElse(false)
-        if (debugState) {
-            println("$ideaExtension")
-        }
-        startProcess(ideaExtension.formatArgs(source.asPath), debugState)
+        logger.debug("$ideaExtension")
+        startProcess(ideaExtension.formatArgs(source.asPath))
     }
 }
