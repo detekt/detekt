@@ -8,12 +8,14 @@ import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import io.gitlab.arturbosch.detekt.invoke.GenerateConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import org.gradle.api.file.FileCollection
+import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 
+@CacheableTask
 open class DetektGenerateConfigTask : SourceTask() {
 
     init {
@@ -21,13 +23,15 @@ open class DetektGenerateConfigTask : SourceTask() {
         group = LifecycleBasePlugin.VERIFICATION_GROUP
     }
 
+    // When this deprecated property is removed, also stop extending SourceTask as this task does not need any file
+    // input.
     @Deprecated("Replace with getSource/setSource")
     var input: FileCollection
         @Internal
         get() = source
         set(value) = setSource(value)
 
-    @Classpath
+    @get:Classpath
     val detektClasspath = project.configurableFileCollection()
 
     @TaskAction
