@@ -45,6 +45,7 @@ class ForbiddenVoid(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
+    @Suppress("ReturnCount")
     override fun visitTypeReference(typeReference: KtTypeReference) {
         if (bindingContext == BindingContext.EMPTY) return
         val kotlinType = typeReference.getAbbreviatedTypeOrType(bindingContext) ?: return
