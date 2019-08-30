@@ -32,6 +32,6 @@ open class DetektIdeaFormatTask : SourceTask() {
     @TaskAction
     fun format() {
         logger.debug("$ideaExtension")
-        startProcess(ideaExtension.formatArgs(source.asPath), logger)
+        startProcess(ideaExtension.formatArgs(source.asPath))
     }
 }

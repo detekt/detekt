@@ -32,6 +32,6 @@ open class DetektIdeaInspectionTask : SourceTask() {
     @TaskAction
     fun inspect() {
         logger.debug("$ideaExtension")
-        startProcess(ideaExtension.inspectArgs(source.asPath), logger)
+        startProcess(ideaExtension.inspectArgs(source.asPath))
     }
 }
