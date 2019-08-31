@@ -11,14 +11,13 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isAbstract
 import io.gitlab.arturbosch.detekt.rules.isExternal
-import io.gitlab.arturbosch.detekt.rules.isInterface
 import io.gitlab.arturbosch.detekt.rules.isMainFunction
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOperator
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import io.gitlab.arturbosch.detekt.rules.parentOfType
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtClassOrObject
+import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
@@ -103,7 +102,7 @@ private class UnusedFunctionVisitor(allowedNames: Regex) : UnusedMemberVisitor(a
     }
 
     private fun isDeclaredInsideAnInterface(function: KtNamedFunction) =
-        function.parentOfType<KtClassOrObject>(strict = true)?.isInterface() == true
+        function.parentOfType<KtClass>(strict = true)?.isInterface() == true
 
     private fun collectFunction(function: KtNamedFunction) {
         val name = function.nameAsSafeName.identifier
@@ -146,11 +145,10 @@ private class UnusedParameterVisitor(allowedNames: Regex) : UnusedMemberVisitor(
         }
     }
 
-    override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-        if (classOrObject.isInterface()) {
-            return
-        }
-        super.visitClassOrObject(classOrObject)
+    override fun visitClass(klass: KtClass) {
+        if (klass.isInterface()) return
+
+        super.visitClassOrObject(klass)
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {

@@ -91,7 +91,7 @@ class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
                     ?.forEach {
                         namedClasses.add(it.text)
                         // Recursively register for nested generic types (e.g. List<List<Foo>>)
-                        (it as? KtTypeReference)?.run { registerAccess(it) }
+                        if (it is KtTypeReference) registerAccess(it)
                     }
         }
 

@@ -97,12 +97,8 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
             }
         }
 
-        private fun indexOfFirstMember(isAbstract: Boolean, members: List<PsiElement> = this.namedMembers): Int {
-            return members.indexOfFirst {
-                val namedDeclaration = it as? KtNamedDeclaration
-                namedDeclaration != null && namedDeclaration.isAbstract() == isAbstract
-            }
-        }
+        private fun indexOfFirstMember(isAbstract: Boolean, members: List<PsiElement> = this.namedMembers) =
+            members.indexOfFirst { it is KtNamedDeclaration && it.isAbstract() == isAbstract }
 
         private fun isAbstractClassWithoutConcreteMembers(indexOfFirstAbstractMember: Int) =
                 indexOfFirstAbstractMember == 0 && hasNoConcreteMemberLeft() && hasNoConstructorParameter(klass)
