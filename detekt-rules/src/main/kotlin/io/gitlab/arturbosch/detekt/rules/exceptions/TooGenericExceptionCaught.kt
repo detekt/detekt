@@ -36,13 +36,13 @@ import org.jetbrains.kotlin.psi.KtTypeReference
  *
  * @configuration exceptionNames - exceptions which are too generic and should not be caught
  * (default: `- ArrayIndexOutOfBoundsException
- *			 - Error
- *			 - Exception
- *			 - IllegalMonitorStateException
- *			 - NullPointerException
- *			 - IndexOutOfBoundsException
- *			 - RuntimeException
- *			 - Throwable`)
+ *            - Error
+ *            - Exception
+ *            - IllegalMonitorStateException
+ *            - NullPointerException
+ *            - IndexOutOfBoundsException
+ *            - RuntimeException
+ *            - Throwable`)
  * @configuration allowedExceptionNameRegex - ignores too generic exception types which match this regex
  * (default: `"^(_|(ignore|expected).*)"`)
  * @active since v1.0.0

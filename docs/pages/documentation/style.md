@@ -129,10 +129,10 @@ rest of the function signature.
 
 ```kotlin
 fun stuff(): Int
-= 5
+    = 5
 
 fun <V> foo(): Int where V : Int
-= 5
+    = 5
 ```
 
 #### Compliant Code:
@@ -141,7 +141,7 @@ fun <V> foo(): Int where V : Int
 fun stuff() = 5
 
 fun stuff() =
-foo.bar()
+    foo.bar()
 
 fun <V> foo(): Int where V : Int = 5
 ```
@@ -164,7 +164,7 @@ makes your code misleading, especially when dealing with nested functions.
 a?.let { it -> it.plus(1) }
 foo.flatMapObservable { it -> Observable.fromIterable(it) }
 listOfPairs.map(::second).forEach { it ->
-it.execute()
+    it.execute()
 }
 collection.zipWithNext { it, next -> Pair(it, next) }
 ```
@@ -174,11 +174,15 @@ collection.zipWithNext { it, next -> Pair(it, next) }
 ```kotlin
 a?.let { it.plus(1) } // Much better to use implicit it
 foo.flatMapObservable(Observable::fromIterable) // Here we can have a method reference
-listOfPairs.map(::second).forEach { apiRequest -> // For multiline blocks it is usually better come up with a clear and more meaningful name
-apiRequest.execute()
+
+// For multiline blocks it is usually better come up with a clear and more meaningful name
+listOfPairs.map(::second).forEach { apiRequest ->
+    apiRequest.execute()
 }
-collection.zipWithNext { prev, next -> // Lambdas with multiple parameter should be named clearly, using it for one of them can be confusing
-Pair(prev, next)
+
+// Lambdas with multiple parameter should be named clearly, using it for one of them can be confusing
+collection.zipWithNext { prev, next ->
+    Pair(prev, next)
 }
 ```
 
