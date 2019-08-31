@@ -1,29 +1,53 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
-import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.KtTestCompiler
+import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class UnsafeCastSpec : Spek({
     val subject by memoized { UnsafeCast() }
 
+    lateinit var environment: KotlinCoreEnvironment
+
+    beforeEachTest {
+        environment = KtTestCompiler.createEnvironment()
+    }
+
     describe("check safe and unsafe casts") {
 
-        it("reports unsafe cast") {
+        it("reports cast that cannot succeed") {
+            val code = """
+                fun test(s: String) {
+                    println(s as Int)
+                }"""
+            assertThat(subject.compileAndLintWithContext(environment, code)).hasSize(1)
+        }
+
+        it("reports 'safe' cast that cannot succeed") {
+            val code = """
+                fun test(s: String) {
+                    println((s as? Int) ?: 0)
+                }"""
+            assertThat(subject.compileAndLintWithContext(environment, code)).hasSize(1)
+        }
+
+        it("does not report cast that might succeed") {
             val code = """
 				fun test(s: Any) {
 					println(s as Int)
 				}"""
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(environment, code)).isEmpty()
         }
 
-        it("does not report safe cast") {
+        it("does not report 'safe' cast that might succeed") {
             val code = """
 				fun test(s: Any) {
 					println((s as? Int) ?: 0)
 				}"""
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(environment, code)).isEmpty()
         }
     }
 })

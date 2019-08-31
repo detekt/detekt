@@ -7,8 +7,9 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import org.jetbrains.kotlin.diagnostics.Errors
 import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
-import org.jetbrains.kotlin.psi.KtPsiUtil
+import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Reports casts which are unsafe. In case the cast is not possible it will throw an exception.
@@ -35,9 +36,15 @@ class UnsafeCast(config: Config = Config.empty) : Rule(config) {
             Debt.TWENTY_MINS)
 
     override fun visitBinaryWithTypeRHSExpression(expression: KtBinaryExpressionWithTypeRHS) {
-        if (KtPsiUtil.isUnsafeCast(expression)) {
+        if (bindingContext == BindingContext.EMPTY) return
+
+        if (bindingContext.diagnostics.forElement(expression.operationReference)
+                .any { it.factory == Errors.CAST_NEVER_SUCCEEDS }
+        ) {
             report(CodeSmell(issue, Entity.from(expression),
-                    "${expression.left.text} cannot be safely cast to ${expression.right?.text ?: ""}."))
+                    "${expression.left.text} cast to ${expression.right?.text ?: ""} cannot succeed."))
         }
+
+        super.visitBinaryWithTypeRHSExpression(expression)
     }
 }
