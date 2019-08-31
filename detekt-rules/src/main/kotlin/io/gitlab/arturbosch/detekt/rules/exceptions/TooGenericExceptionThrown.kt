@@ -34,9 +34,9 @@ import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
  *
  * @configuration exceptionNames - exceptions which are too generic and should not be thrown
  * (default: `- Error
- * 			 - Exception
- *			 - Throwable
- * 			 - RuntimeException`)
+ *            - Exception
+ *            - Throwable
+ *            - RuntimeException`)
  *
  * @active since v1.0.0
  */
