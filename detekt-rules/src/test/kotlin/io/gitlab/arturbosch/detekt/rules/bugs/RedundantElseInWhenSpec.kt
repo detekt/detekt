@@ -1,11 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
-import io.gitlab.arturbosch.detekt.test.KtTestCompiler
+import io.gitlab.arturbosch.detekt.rules.setupKotlinCoreEnvironment
+import io.gitlab.arturbosch.detekt.test.KotlinCoreEnvironmentWrapper
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.jetbrains.kotlin.com.intellij.openapi.Disposable
-import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -13,14 +11,8 @@ object RedundantElseInWhenSpec : Spek({
 
     val subject by memoized { RedundantElseInWhen() }
 
-    var environment: KotlinCoreEnvironment? = null
-    lateinit var disposable: Disposable
-
-    beforeEachTest {
-        val pair = KtTestCompiler.createEnvironment()
-        disposable = pair.first
-        environment = pair.second
-    }
+    setupKotlinCoreEnvironment()
+    val wrapper: KotlinCoreEnvironmentWrapper by memoized()
 
     describe("RedundantElseInWhen rule") {
         context("enum") {
@@ -41,7 +33,7 @@ object RedundantElseInWhenSpec : Spek({
                     }
                 }
                 """
-                val actual = subject.compileAndLintWithContext(environment!!, code)
+                val actual = subject.compileAndLintWithContext(wrapper.getEnvironment(), code)
                 assertThat(actual).hasSize(1)
             }
 
@@ -62,7 +54,7 @@ object RedundantElseInWhenSpec : Spek({
                     }
                 }
                 """
-                val actual = subject.compileAndLintWithContext(environment!!, code)
+                val actual = subject.compileAndLintWithContext(wrapper.getEnvironment(), code)
                 assertThat(actual).hasSize(1)
             }
 
@@ -88,7 +80,7 @@ object RedundantElseInWhenSpec : Spek({
                     }
                 }
                 """
-                assertThat(subject.compileAndLintWithContext(environment!!, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(wrapper.getEnvironment(), code)).isEmpty()
             }
 
             it("does not report when `when` expression does not contain else case") {
@@ -120,7 +112,7 @@ object RedundantElseInWhenSpec : Spek({
                     }
                 }
                 """
-                assertThat(subject.compileAndLintWithContext(environment!!, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(wrapper.getEnvironment(), code)).isEmpty()
             }
         }
         context("sealed classes") {
@@ -141,7 +133,7 @@ object RedundantElseInWhenSpec : Spek({
                         }
                     }
                 """
-                val actual = subject.compileAndLintWithContext(environment!!, code)
+                val actual = subject.compileAndLintWithContext(wrapper.getEnvironment(), code)
                 assertThat(actual).hasSize(1)
             }
 
@@ -162,7 +154,7 @@ object RedundantElseInWhenSpec : Spek({
                         }
                     }
                 """
-                val actual = subject.compileAndLintWithContext(environment!!, code)
+                val actual = subject.compileAndLintWithContext(wrapper.getEnvironment(), code)
                 assertThat(actual).hasSize(1)
             }
 
@@ -188,7 +180,7 @@ object RedundantElseInWhenSpec : Spek({
                         }
                     }
                 """
-                assertThat(subject.compileAndLintWithContext(environment!!, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(wrapper.getEnvironment(), code)).isEmpty()
             }
             it("does not report when `when` expression does not contain else case") {
                 val code = """
@@ -205,7 +197,7 @@ object RedundantElseInWhenSpec : Spek({
                         }
                     }
                 """
-                assertThat(subject.compileAndLintWithContext(environment!!, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(wrapper.getEnvironment(), code)).isEmpty()
             }
         }
         context("standard when") {
@@ -243,13 +235,8 @@ object RedundantElseInWhenSpec : Spek({
                         }
                     }
                 """
-                assertThat(subject.compileAndLintWithContext(environment!!, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(wrapper.getEnvironment(), code)).isEmpty()
             }
         }
-    }
-
-    afterEachTest {
-        Disposer.dispose(disposable)
-        environment = null
     }
 })
