@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.rules.performance
 
-import io.gitlab.arturbosch.detekt.test.KotlinCoreEnvironmentWrapper
 import io.gitlab.arturbosch.detekt.test.KtTestCompiler
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
@@ -18,11 +17,10 @@ class SpreadOperatorSpec : Spek({
          */
         context("with type resolution") {
 
-            lateinit var wrapper: KotlinCoreEnvironmentWrapper
-
-            beforeEachTest {
-                wrapper = KtTestCompiler.createEnvironment()
-            }
+            val wrapper by memoized(
+                factory = { KtTestCompiler.createEnvironment() },
+                destructor = { it.dispose() }
+            )
 
             val typeResolutionEnabledMessage = "Used in this way a spread operator causes a full copy of the array to" +
                     " be created before calling a method which has a very high performance penalty."
@@ -95,10 +93,6 @@ class SpreadOperatorSpec : Spek({
 				}
                 """
                 assertThat(subject.compileAndLintWithContext(wrapper.getEnvironment(), code)).isEmpty()
-            }
-
-            afterEachTest {
-                wrapper.dispose()
             }
         }
 

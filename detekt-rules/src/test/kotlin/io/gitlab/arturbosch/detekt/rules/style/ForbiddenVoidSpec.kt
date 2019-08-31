@@ -1,8 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.setupKotlinCoreEnvironment
-import io.gitlab.arturbosch.detekt.test.KotlinCoreEnvironmentWrapper
+import io.gitlab.arturbosch.detekt.test.KtTestCompiler
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
@@ -13,8 +12,10 @@ import org.spekframework.spek2.style.specification.describe
 class ForbiddenVoidSpec : Spek({
     val subject by memoized { ForbiddenVoid(Config.empty) }
 
-    setupKotlinCoreEnvironment()
-    val wrapper: KotlinCoreEnvironmentWrapper by memoized()
+    val wrapper by memoized(
+        factory = { KtTestCompiler.createEnvironment() },
+        destructor = { it.dispose() }
+    )
 
     describe("ForbiddenVoid rule") {
         it("should report all Void type usage") {

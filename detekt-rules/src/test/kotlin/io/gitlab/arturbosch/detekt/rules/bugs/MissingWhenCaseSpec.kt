@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
-import io.gitlab.arturbosch.detekt.rules.setupKotlinCoreEnvironment
-import io.gitlab.arturbosch.detekt.test.KotlinCoreEnvironmentWrapper
+import io.gitlab.arturbosch.detekt.test.KtTestCompiler
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
@@ -11,8 +10,10 @@ object MissingWhenCaseSpec : Spek({
 
     val subject by memoized { MissingWhenCase() }
 
-    setupKotlinCoreEnvironment()
-    val wrapper: KotlinCoreEnvironmentWrapper by memoized()
+    val wrapper by memoized(
+        factory = { KtTestCompiler.createEnvironment() },
+        destructor = { it.dispose() }
+    )
 
     describe("MissingWhenCase rule") {
         context("enum") {
