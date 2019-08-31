@@ -10,6 +10,7 @@ import org.jetbrains.kotlin.cli.jvm.compiler.NoScopeRecordCliBindingTrace
 import org.jetbrains.kotlin.cli.jvm.compiler.TopDownAnalyzerFacadeForJVM
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoot
 import org.jetbrains.kotlin.com.intellij.openapi.Disposable
+import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
@@ -45,7 +46,7 @@ object KtTestCompiler : KtCompiler() {
             environment.configuration, environment::createPackagePartProvider, ::FileBasedDeclarationProviderFactory
         ).bindingContext
 
-    fun createEnvironment(): KotlinCoreEnvironment {
+    fun createEnvironment(): Pair<Disposable, KotlinCoreEnvironment> {
         val configuration = CompilerConfiguration()
         configuration.put(CommonConfigurationKeys.MODULE_NAME, "test_module")
         configuration.put(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY, MessageCollector.NONE)
@@ -55,20 +56,17 @@ object KtTestCompiler : KtCompiler() {
         val path = File(CharRange::class.java.protectionDomain.codeSource.location.path)
         configuration.addJvmClasspathRoot(path)
 
-        return KotlinCoreEnvironment.createForTests(
-            TestDisposable(),
-            configuration,
-            EnvironmentConfigFiles.JVM_CONFIG_FILES
-        )
+        val parentDisposable = Disposer.newDisposable()
+        val kotlinCoreEnvironment =
+            KotlinCoreEnvironment.createForTests(
+                parentDisposable,
+                configuration,
+                EnvironmentConfigFiles.JVM_CONFIG_FILES
+            )
+        return Pair(parentDisposable, kotlinCoreEnvironment)
     }
 
     fun createPsiFactory(): KtPsiFactory = KtPsiFactory(KtTestCompiler.environment.project, false)
-
-    class TestDisposable : Disposable {
-        override fun dispose() {
-            // Don't want to dispose the test KotlinCoreEnvironment
-        }
-    }
 }
 
 const val TEST_FILENAME = "Test.kt"
