@@ -19,6 +19,7 @@ import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.FileCollection
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
+import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Classpath
 import org.gradle.api.tasks.Console
 import org.gradle.api.tasks.Input
@@ -32,6 +33,7 @@ import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 
+@CacheableTask
 open class DetektCreateBaselineTask : SourceTask() {
 
     init {
@@ -39,7 +41,7 @@ open class DetektCreateBaselineTask : SourceTask() {
         group = LifecycleBasePlugin.VERIFICATION_GROUP
     }
 
-    @OutputFile
+    @get:OutputFile
     var baseline: RegularFileProperty = project.fileProperty()
 
     @Deprecated("Replace with getSource/setSource")
@@ -48,51 +50,54 @@ open class DetektCreateBaselineTask : SourceTask() {
         get() = source
         set(value) = setSource(value)
 
-    @Input
-    @Optional
+    @get:Input
+    @get:Optional
     @Deprecated("Replace with setIncludes/setExcludes")
     var filters: Property<String> = project.objects.property(String::class.java)
 
-    @InputFiles
-    @Optional
+    @get:InputFiles
+    @get:Optional
     @PathSensitive(PathSensitivity.RELATIVE)
     var config: ConfigurableFileCollection = project.configurableFileCollection()
 
-    @Input
-    @Optional
+    @get:Input
+    @get:Optional
     @Deprecated(
         "Set plugins using the detektPlugins configuration " +
                 "(see https://arturbosch.github.io/detekt/extensions.html#let-detekt-know-about-your-extensions)"
     )
     var plugins: Property<String> = project.objects.property(String::class.java)
 
-    @Classpath
+    @get:Classpath
     val detektClasspath = project.configurableFileCollection()
 
-    @Classpath
+    @get:Classpath
     val pluginClasspath = project.configurableFileCollection()
 
-    @Console
+    @get:Console
     var debug: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
-    @Internal
+    @get:Internal
     var parallel: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
-    @Internal
+    @get:Input
+    @get:Optional
     var disableDefaultRuleSets: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
-    @Internal
+    @get:Input
+    @get:Optional
     var buildUponDefaultConfig: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
-    @Internal
+    @get:Input
+    @get:Optional
     var failFast: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
-    @Input
-    @Optional
+    @get:Input
+    @get:Optional
     val ignoreFailures: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
-    @Input
-    @Optional
+    @get:Input
+    @get:Optional
     val autoCorrect: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
     @TaskAction
