@@ -5,16 +5,15 @@ import org.jetbrains.kotlin.psi.KtContainerNodeForControlStructureBody
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
-import kotlin.reflect.KClass
 
 internal fun KtThrowExpression.isIllegalStateException() =
-    isExceptionOfType(IllegalStateException::class)
+    isExceptionOfType<IllegalStateException>()
 
 internal fun KtThrowExpression.isIllegalArgumentException() =
-    isExceptionOfType(IllegalArgumentException::class)
+    isExceptionOfType<IllegalArgumentException>()
 
-internal fun <T : Exception> KtThrowExpression.isExceptionOfType(clazz: KClass<T>): Boolean {
-    return findDescendantOfType<KtCallExpression>()?.firstChild?.text == clazz.java.simpleName
+inline fun <reified T : Exception> KtThrowExpression.isExceptionOfType(): Boolean {
+    return findDescendantOfType<KtCallExpression>()?.firstChild?.text == T::class.java.simpleName
 }
 
 internal val KtThrowExpression.argumentCount

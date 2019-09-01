@@ -52,5 +52,5 @@ class NoTabs(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun PsiWhiteSpace.isStringInterpolated(): Boolean =
-            this.isPartOf(KtStringTemplateEntryWithExpression::class)
+            this.isPartOf<KtStringTemplateEntryWithExpression>()
 }

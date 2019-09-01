@@ -20,14 +20,13 @@ import org.jetbrains.kotlin.kdoc.psi.impl.KDocTag
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
 import java.util.ArrayDeque
-import kotlin.reflect.KClass
 
-fun ASTNode.tokenSequence(skipTreesOf: Set<KClass<out PsiElement>>): Sequence<ASTNode> = sequence {
+fun ASTNode.tokenSequence(skipTreesOf: Set<Class<out PsiElement>>): Sequence<ASTNode> = sequence {
     val queue = ArrayDeque<ASTNode>()
     queue.add(this@tokenSequence)
     do {
         val curr = queue.pop()
-        if (curr.psi::class !in skipTreesOf) {
+        if (curr.psi::class.java !in skipTreesOf) {
             // Yields only tokens which can be identified in the source code.
             // Composite elements, e.g. classes or files, are abstractions over many leaf nodes.
             if (curr is LeafElement) {
@@ -45,18 +44,18 @@ fun KtElement.linesOfCode(inFile: KtFile = this.containingKtFile): Int = node.to
 
 fun ASTNode.line(inFile: KtFile) = DiagnosticUtils.getLineAndColumnInPsiFile(inFile, this.textRange).line
 
-private val comments: Set<KClass<out PsiElement>> = setOf(
-        PsiWhiteSpace::class,
-        PsiWhiteSpaceImpl::class,
-        PsiComment::class,
-        PsiCommentImpl::class,
-        PsiCoreCommentImpl::class,
-        KDoc::class,
-        KDocImpl::class,
-        KDocElementImpl::class,
-        KDocElement::class,
-        KDocLink::class,
-        KDocSection::class,
-        KDocTag::class,
-        KDocName::class
+private val comments: Set<Class<out PsiElement>> = setOf(
+        PsiWhiteSpace::class.java,
+        PsiWhiteSpaceImpl::class.java,
+        PsiComment::class.java,
+        PsiCommentImpl::class.java,
+        PsiCoreCommentImpl::class.java,
+        KDoc::class.java,
+        KDocImpl::class.java,
+        KDocElementImpl::class.java,
+        KDocElement::class.java,
+        KDocLink::class.java,
+        KDocSection::class.java,
+        KDocTag::class.java,
+        KDocName::class.java
 )
