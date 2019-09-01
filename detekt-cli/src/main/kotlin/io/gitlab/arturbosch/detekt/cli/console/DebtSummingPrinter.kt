@@ -12,7 +12,6 @@ class DebtSummingPrinter {
         with(StringBuilder()) {
             issues
                 .filter { it.value.isNotEmpty() }
-                .also { if (it.isEmpty()) return null }
                 .forEach { (ruleSetId, issues) ->
                     val debtSumming = DebtSumming()
                     val issuesString = issues.joinToString("") {

@@ -8,17 +8,23 @@ class FindingsReport : ConsoleReport() {
     override val priority: Int = 40
 
     override fun render(detektion: Detektion): String? {
+        val findings = detektion
+            .findings
+            .filter { it.value.isNotEmpty() }
+        if (findings.isEmpty()) {
+            return null
+        }
+
         val totalDebt = DebtSumming()
         val debtSummingPrinter = DebtSummingPrinter()
         return with(StringBuilder()) {
-            debtSummingPrinter.printDebtInformation(detektion.findings, totalDebt)?.let {
-                append(it)
-                val debt = totalDebt.calculateDebt()
-                if (debt != null) {
-                    append("Overall debt: $debt".format("\n"))
-                }
-                toString()
+            val debtInfo = debtSummingPrinter.printDebtInformation(findings, totalDebt)
+            append(debtInfo)
+            val debt = totalDebt.calculateDebt()
+            if (debt != null) {
+                append("Overall debt: $debt".format("\n"))
             }
+            toString()
         }
     }
 }
