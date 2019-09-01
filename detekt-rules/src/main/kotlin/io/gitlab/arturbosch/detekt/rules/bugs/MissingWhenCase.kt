@@ -8,10 +8,10 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.cfg.WhenChecker
-import org.jetbrains.kotlin.codegen.kotlinType
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
+import org.jetbrains.kotlin.resolve.calls.callUtil.getType
 
 /**
  * Turn on this rule to flag `when` expressions that do not check that all cases are covered when the subject is an enum
@@ -76,7 +76,7 @@ class MissingWhenCase(config: Config = Config.empty) : Rule(config) {
         if (expression.entries.find { it.isElse } != null) return
         if (expression.isUsedAsExpression(bindingContext)) return
         val subjectExpression = expression.subjectExpression ?: return
-        val subjectType = subjectExpression.kotlinType(bindingContext)
+        val subjectType = subjectExpression.getType(bindingContext)
         val enumClassDescriptor = WhenChecker.getClassDescriptorOfTypeIfEnum(subjectType)
         if (enumClassDescriptor != null) {
             val enumMissingCases = WhenChecker.getEnumMissingCases(expression, bindingContext, enumClassDescriptor)

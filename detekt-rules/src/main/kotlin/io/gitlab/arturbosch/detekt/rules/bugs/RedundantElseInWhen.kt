@@ -9,12 +9,12 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.cfg.WhenChecker
-import org.jetbrains.kotlin.codegen.kotlinType
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.load.kotlin.toSourceElement
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.BindingContext.DECLARATION_TO_DESCRIPTOR
+import org.jetbrains.kotlin.resolve.calls.callUtil.getType
 import org.jetbrains.kotlin.resolve.descriptorUtil.module
 import org.jetbrains.kotlin.resolve.source.getPsi
 
@@ -80,7 +80,7 @@ class RedundantElseInWhen(config: Config = Config.empty) : Rule(config) {
         if (bindingContext == BindingContext.EMPTY) return
         if (whenExpression.entries.find { it.isElse } == null) return
         val subjectExpression = whenExpression.subjectExpression ?: return
-        val subjectType = subjectExpression.kotlinType(bindingContext) ?: return
+        val subjectType = subjectExpression.getType(bindingContext) ?: return
 
         if (WhenChecker.getMissingCases(whenExpression, bindingContext).isEmpty()) {
             val subjectClass = subjectType.constructor.declarationDescriptor as? ClassDescriptor
