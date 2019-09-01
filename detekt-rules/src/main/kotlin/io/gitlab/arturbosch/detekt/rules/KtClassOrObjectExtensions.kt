@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules
 
 import org.jetbrains.kotlin.psi.KtClass
-import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.isAbstract
 
