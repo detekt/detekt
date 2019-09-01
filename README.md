@@ -204,5 +204,5 @@ Integrations:
 
 #### Credits
 
-- [JetBrains](https://github.com/jetbrains/) - Creating Intellij + Kotlin
+- [JetBrains](https://github.com/jetbrains/) - Creating IntelliJ + Kotlin
 - [PMD](https://github.com/pmd/pmd) & [Checkstyle](https://github.com/checkstyle/checkstyle) & [KtLint](https://github.com/shyiko/ktlint) - Ideas for threshold values and style rules
