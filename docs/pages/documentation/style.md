@@ -237,6 +237,10 @@ development. Offending code comments will then be reported.
 
    forbidden comment strings
 
+* `allowedPatterns` (default: `""`)
+
+   ignores comments which match any of specified regex
+
 #### Noncompliant Code:
 
 ```kotlin
