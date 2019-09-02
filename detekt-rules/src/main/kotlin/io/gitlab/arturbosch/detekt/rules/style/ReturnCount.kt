@@ -89,11 +89,13 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
         function.accept(object : DetektVisitor() {
             override fun visitKtElement(element: KtElement) {
                 if (element is KtReturnExpression) {
-                    if (excludeLabeled && element.labeledExpression != null) {
-                        return
-                    } else if (excludeLambdas && isNamedReturnFromLambda(element)) {
-                        return
-                    } else if (excludeGuardClauses && isGuardClause(element)) {
+                    val breakRecursion = when {
+                        excludeLabeled && element.labeledExpression != null -> true
+                        excludeLambdas && isNamedReturnFromLambda(element) -> true
+                        excludeGuardClauses && isGuardClause(element) -> true
+                        else -> false
+                    }
+                    if (breakRecursion) {
                         return
                     } else {
                         returnsNumber++
@@ -133,10 +135,12 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun isElvisOperatorGuardClause(expression: KtReturnExpression): Boolean {
-        val ktBinaryExpression = expression.parent as? KtBinaryExpression
-        ktBinaryExpression?.let {
-            return (it.parent as? KtElement)?.isFirstStatement() ?: false
-                    && (it.operationToken as? KtSingleValueToken)?.value == "?:"
+        val elvisGuardClauseExpression = expression.parent as? KtBinaryExpression
+        elvisGuardClauseExpression?.let {
+            val elvisGuardClauseParent = it.parent as? KtElement
+            val isFirstStatement = elvisGuardClauseParent?.isFirstStatement() ?: false
+            val operationTokenValue = (it.operationToken as? KtSingleValueToken)?.value
+            return isFirstStatement && operationTokenValue == ELVIS_OPERATOR
         }
 
         return false
@@ -148,5 +152,6 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
         const val EXCLUDE_LABELED = "excludeLabeled"
         const val EXCLUDE_RETURN_FROM_LAMBDA = "excludeReturnFromLambda"
         const val EXCLUDE_GUARD_CLAUSES = "excludeGuardClauses"
+        const val ELVIS_OPERATOR = "?:"
     }
 }
