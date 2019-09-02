@@ -1,9 +1,24 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.api.*
+import io.gitlab.arturbosch.detekt.api.CodeSmell
+import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Debt
+import io.gitlab.arturbosch.detekt.api.DetektVisitor
+import io.gitlab.arturbosch.detekt.api.Entity
+import io.gitlab.arturbosch.detekt.api.Issue
+import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.rules.parentsOfTypeUntil
 import org.jetbrains.kotlin.lexer.KtSingleValueToken
-import org.jetbrains.kotlin.psi.*
+import org.jetbrains.kotlin.psi.KtBinaryExpression
+import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtIfExpression
+import org.jetbrains.kotlin.psi.KtNameReferenceExpression
+import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtReturnExpression
+import org.jetbrains.kotlin.psi.psiUtil.isFirstStatement
 
 /**
  * Restrict the number of return methods allowed in methods.
@@ -109,7 +124,7 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
     private fun isIfConditionGuardClause(expression: KtReturnExpression): Boolean {
         val ifConditionParent = expression.parent?.parent as? KtIfExpression
         ifConditionParent?.let {
-            return it.`else` == null
+            return it.isFirstStatement() && it.`else` == null
         }
 
         return false
@@ -118,7 +133,8 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
     private fun isElvisOperatorGuardClause(expression: KtReturnExpression): Boolean {
         val ktBinaryExpression = expression.parent as? KtBinaryExpression
         ktBinaryExpression?.let {
-            return (it.operationToken as? KtSingleValueToken)?.value == "?:"
+            return (it.parent as? KtElement)?.isFirstStatement() ?: false
+                    && (it.operationToken as? KtSingleValueToken)?.value == "?:"
         }
 
         return false

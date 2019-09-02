@@ -31,7 +31,6 @@ class ReturnCountSpec : Spek({
         context("a file with an ELVIS operator guard clause and 2 returns") {
             val code = """
 			fun test(x: Int): Int {
-                val x = null
                 val y = x ?: return 0
 				when (x) {
 					5 -> return 5
@@ -44,6 +43,42 @@ class ReturnCountSpec : Spek({
                 val findings = ReturnCount(TestConfig(mapOf(ReturnCount.EXCLUDE_GUARD_CLAUSES to "true")))
                     .lint(code)
                 assertThat(findings).hasSize(0)
+            }
+        }
+
+        context("a file with 2 returns and an if condition guard clause which is not the first statement") {
+            val code = """
+			fun test(x: Int): Int {
+				when (x) {
+					5 -> return 5
+					4 -> return 4
+				}
+                if (x < 4) return 0
+			}
+		"""
+
+            it("should get flagged for an if condition guard clause which is not the first statement") {
+                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.EXCLUDE_GUARD_CLAUSES to "true")))
+                    .lint(code)
+                assertThat(findings).hasSize(1)
+            }
+        }
+
+        context("a file with 2 returns and an ELVIS guard clause which is not the first statement") {
+            val code = """
+			fun test(x: Int): Int {
+				when (x) {
+					5 -> return 5
+					4 -> return 4
+				}
+                val y = x ?: return 0
+			}
+		"""
+
+            it("should get flagged for an ELVIS guard clause which is not the first statement") {
+                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.EXCLUDE_GUARD_CLAUSES to "true")))
+                    .lint(code)
+                assertThat(findings).hasSize(1)
             }
         }
 
