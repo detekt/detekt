@@ -50,6 +50,27 @@ class ForbiddenCommentSpec : Spek({
                 val findings = ForbiddenComment().compileAndLint(stopShip)
                 assertThat(findings).hasSize(0)
             }
+
+            it("should report violation in multiline comment") {
+                val code = """
+                   /*
+                    TODO: I need to fix this.
+                    */
+                """
+                val findings = ForbiddenComment().compileAndLint(code)
+                assertThat(findings).hasSize(1)
+            }
+
+            it("should report violation in KDoc") {
+                val code = """
+                    /*
+                     * TODO: I need to fix this.
+                     */
+                    class A
+                """
+                val findings = ForbiddenComment().compileAndLint(code)
+                assertThat(findings).hasSize(1)
+            }
         }
 
         context("custom default values are configured") {
