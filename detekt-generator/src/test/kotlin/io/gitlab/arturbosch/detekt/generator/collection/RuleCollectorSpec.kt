@@ -488,14 +488,14 @@ class RuleCollectorSpec : Spek({
             val name = "SomeRandomClass"
             val description = "\t"
             val code = """
-				package foo
+                package foo
 
-				/**
-				 * $description
-				 */
-				class $name: Rule {
-				}
-			"""
+                /**
+                 * $description
+                 */
+                class $name: Rule {
+                }
+            """
             assertThatExceptionOfType(InvalidDocumentationException::class.java)
                 .isThrownBy { subject.run(code) }
         }
