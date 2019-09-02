@@ -806,6 +806,10 @@ code.
 
    if labeled return from a lambda should be ignored
 
+* `excludeGuardClauses` (default: `false`)
+
+   if true guard clauses at the beginning of a method will be ignored
+
 #### Noncompliant Code:
 
 ```kotlin
