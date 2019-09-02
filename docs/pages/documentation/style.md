@@ -1410,6 +1410,11 @@ Library updates can introduce naming clashes with your own classes which might r
    Define a whitelist of package names that should be allowed to be imported
 with wildcard imports.
 
+**NOTE:** This rule conflicts with `NoWildcardImports` formatting rule.
+Effectively that rule will fail the check regardless of the whitelist
+configured here.
+Therefore if whitelist is needed `NoWildcardImports` rule should be disabled.
+
 #### Noncompliant Code:
 
 ```kotlin
