@@ -483,5 +483,21 @@ class RuleCollectorSpec : Spek({
             assertThatExceptionOfType(InvalidAliasesDeclaration::class.java)
                     .isThrownBy { subject.run(code) }
         }
+
+        it("contains tabs in KDoc") {
+            val name = "SomeRandomClass"
+            val description = "\t"
+            val code = """
+                package foo
+
+                /**
+                 * $description
+                 */
+                class $name: Rule {
+                }
+            """
+            assertThatExceptionOfType(InvalidDocumentationException::class.java)
+                .isThrownBy { subject.run(code) }
+        }
     }
 })
