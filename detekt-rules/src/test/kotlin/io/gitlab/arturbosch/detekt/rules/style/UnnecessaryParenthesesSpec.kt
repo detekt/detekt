@@ -36,6 +36,19 @@ class UnnecessaryParenthesesSpec : Spek({
             assertThat(subject.lint(code)).hasSize(1)
         }
 
+        it("does not report unnecessary parentheses around lambdas") {
+            val code = """
+                fun function (a: (input: String) -> Unit) {
+                    a.invoke("TEST")
+                }
+
+                fun test() {
+                    function({ input -> println(input) })
+                }
+                """
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
         it("doesn't report function calls containing lambdas and other parameters") {
             val code = """
 				fun function (integer: Int, a: (input: String) -> Unit) {
