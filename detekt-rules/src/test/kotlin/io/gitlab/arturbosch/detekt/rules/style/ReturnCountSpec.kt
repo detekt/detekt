@@ -13,7 +13,7 @@ class ReturnCountSpec : Spek({
         context("a file with an if condition guard clause and 2 returns") {
             val code = """
 			fun test(x: Int): Int {
-                if (x < 4) return 0
+				if (x < 4) return 0
 				when (x) {
 					5 -> return 5
 					4 -> return 4
@@ -31,7 +31,7 @@ class ReturnCountSpec : Spek({
         context("a file with an ELVIS operator guard clause and 2 returns") {
             val code = """
 			fun test(x: Int): Int {
-                val y = x ?: return 0
+				val y = x ?: return 0
 				when (x) {
 					5 -> return 5
 					4 -> return 4
@@ -53,7 +53,7 @@ class ReturnCountSpec : Spek({
 					5 -> return 5
 					4 -> return 4
 				}
-                if (x < 4) return 0
+				if (x < 4) return 0
 			}
 		"""
 
@@ -71,7 +71,7 @@ class ReturnCountSpec : Spek({
 					5 -> return 5
 					4 -> return 4
 				}
-                val y = x ?: return 0
+				val y = x ?: return 0
 			}
 		"""
 
