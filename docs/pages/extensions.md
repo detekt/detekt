@@ -13,30 +13,32 @@ _detekt_ uses the `ServiceLoader` pattern to collect all instances of `RuleSetPr
 So it is possible to define rules/rule sets and enhance _detekt_ with your own flavor. 
 
 Attention: You need a `resources/META-INF/services/io.gitlab.arturbosch.detekt.api.RuleSetProvider` file which 
-has as content the fully qualified name of your `RuleSetProvider` e.g. _io.gitlab.arturbosch.detekt.sampleruleset.SampleProvider_.
+has as content the fully qualified name of your `RuleSetProvider` e.g. _io.gitlab.arturbosch.detekt.sample.extensions.SampleProvider_.
 
-The easiest way to define a rule set is to clone the provided detekt-sample-extensions project.
+The easiest way to define a rule set is to clone the provided **detekt-sample-extensions** project.
 
 Own rules have to extend the abstract _Rule_ class and override the `visitXXX()`-functions from the AST.  
-A `RuleSetProvider` must be implemented which declares a `RuleSet` in the `instance()`-function.
+A `RuleSetProvider` must be implemented, which declares a `RuleSet` in the `instance()`-function.
 To allow your rule to be configurable, pass it a Config object from within your rule set provider.  
-An `Issue` property defines what ID, severity and message should be printed on the console or on any output format.
+An `Issue` property defines what ID, severity and message should be printed on the console or on any other output format.
 
 Example of a custom rule:
 ```kotlin
-class TooManyFunctions : Rule("TooManyFunctions") {
+class TooManyFunctions : Rule() {
 
     override val issue = Issue(javaClass.simpleName,
         Severity.CodeSmell,
-        "This rule reports a file with an excessive function count.")
+        "This rule reports a file with an excessive function count.",
+        Debt.TWENTY_MINS)
 
-    private val threshold = valueOrDefault("threshold", 10)
+    private val threshold = 10
     private var amount: Int = 0
 
     override fun visitFile(file: PsiFile) {
         super.visitFile(file)
         if (amount > threshold) {
-            addFindings(CodeSmell(id, Entity.from(file)))
+            report(CodeSmell(issue, Entity.from(file), 
+                "Too many functions can make the maintainability of a file costlier")
         }
     }
 
@@ -48,23 +50,25 @@ class TooManyFunctions : Rule("TooManyFunctions") {
 
 Example of a much preciser rule in terms of more specific CodeSmell constructor and Rule attributes:
 ```kotlin
-class TooManyFunctions2(config: Config) : 
-        Rule("TooManyFunctionsTwo", Severity.Maintainability, config) {
+class TooManyFunctions2(config: Config) : ThresholdRule(config, THRESHOLD) {
 
     override val issue = Issue(javaClass.simpleName,
         Severity.CodeSmell,
-        "This rule reports a file with an excessive function count.")
+        "This rule reports a file with an excessive function count.",
+        Debt.TWENTY_MINS)
 
+    private val threshold = valueOrDefault("threshold", 10)
     private var amount: Int = 0
 
     override fun visitFile(file: PsiFile) {
         super.visitFile(file)
         if (amount > 10) {
-            addFindings(CodeSmell(
-                id = id, entity = Entity.from(file),
-                description = "Too many functions can make the maintainability of a file costlier",
-                metrics = listOf(Metric(type = "SIZE", value = amount, threshold = 10)),
-                references = listOf())
+            report(ThresholdedCodeSmell(issue,
+                entity = Entity.from(file),
+                metric = Metric(type = "SIZE", value = amount, threshold = THRESHOLD),
+                message = "The file ${file.name} has $amount function declarations. " +
+                        "Threshold is specified with $THRESHOLD.",
+                references = emptyList())
             )
         }
     }
@@ -79,7 +83,7 @@ If you want your rule to be configurable, write down your properties inside the 
 
 ```yaml
 MyRuleSet:
-  MyRule:
+  TooManyFunctions2:
     threshold: 10
   OtherRule:
     active: false
@@ -87,7 +91,7 @@ MyRuleSet:
 
 By specifying the rule set and rule ids, _detekt_ will use the sub configuration of MyRule:
 
-```val threshold = valueOrDefault("threshold") { threshold }```
+```val threshold = valueOrDefault("threshold", 10)```
 
 
 ##### <a name="testing">Testing your rules</a>
@@ -100,8 +104,6 @@ The easiest way to detect issues with your newly created rule is to use the `lin
 If you need to reuse the kotlin file for performance reasons within similar test cases, please use one of these functions:
 - `compileContentForTest(content: String): KtFile`
 - `compileForTest(path: Path): KtFile`
-
-
 
 #### <a name="customprocessors">Custom Processors</a>
 
