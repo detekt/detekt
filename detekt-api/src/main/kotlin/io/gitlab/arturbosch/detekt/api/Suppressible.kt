@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.api
 
-import org.jetbrains.kotlin.com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
 /**
  * Checks if this psi element is suppressed by @Suppress or @SuppressWarnings annotations.
@@ -13,7 +13,7 @@ fun KtElement.isSuppressedBy(id: String, aliases: Set<String>): Boolean =
         this is KtAnnotated && this.isSuppressedBy(id, aliases) || findAnnotatedSuppressedParent(id, aliases)
 
 private fun KtElement.findAnnotatedSuppressedParent(id: String, aliases: Set<String>): Boolean {
-    val parent = PsiTreeUtil.getParentOfType(this, KtAnnotated::class.java, true)
+    val parent = getStrictParentOfType<KtAnnotated>()
 
     var suppressed = false
     if (parent != null && parent !is KtFile) {

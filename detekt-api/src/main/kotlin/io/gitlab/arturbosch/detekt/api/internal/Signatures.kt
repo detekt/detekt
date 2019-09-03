@@ -17,10 +17,10 @@ internal fun PsiElement.searchName(): String {
 }
 
 internal fun PsiElement.searchClass(): String {
-    val classElement = this.getNonStrictParentOfType(KtClassOrObject::class.java)
+    val classElement = this.getNonStrictParentOfType<KtClassOrObject>()
     var className = classElement?.name
     if (className != null && className == "Companion") {
-        classElement?.parent?.getNonStrictParentOfType(KtClassOrObject::class.java)?.name?.let {
+        classElement?.parent?.getNonStrictParentOfType<KtClassOrObject>()?.name?.let {
             className = "$it.$className"
         }
     }
@@ -38,7 +38,7 @@ internal fun PsiElement.buildFullSignature(): String {
 }
 
 private fun PsiElement.extractClassName() =
-        this.getNonStrictParentOfType(KtClassOrObject::class.java)?.nameAsSafeName?.asString() ?: ""
+        this.getNonStrictParentOfType<KtClassOrObject>()?.nameAsSafeName?.asString() ?: ""
 
 private fun PsiElement.searchSignature(): String {
     return when (this) {
