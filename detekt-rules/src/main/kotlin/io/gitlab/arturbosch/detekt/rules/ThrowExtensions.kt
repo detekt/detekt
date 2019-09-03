@@ -12,7 +12,7 @@ internal fun KtThrowExpression.isIllegalStateException() =
 internal fun KtThrowExpression.isIllegalArgumentException() =
     isExceptionOfType<IllegalArgumentException>()
 
-inline fun <reified T : Exception> KtThrowExpression.isExceptionOfType(): Boolean {
+internal inline fun <reified T : Exception> KtThrowExpression.isExceptionOfType(): Boolean {
     return findDescendantOfType<KtCallExpression>()?.firstChild?.text == T::class.java.simpleName
 }
 
