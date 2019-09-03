@@ -55,7 +55,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isFirstStatement
  * @configuration excludeReturnFromLambda - if labeled return from a lambda should be ignored
  * (default: `true`)
  * @configuration excludeGuardClauses - if true guard clauses at the beginning of a method should be ignored
- * (default: `false`)
+ * (default: `true`)
  * @active since v1.0.0
  */
 class ReturnCount(config: Config = Config.empty) : Rule(config) {
