@@ -133,9 +133,9 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
         ignoreLocalVariables && (expression.isLocalProperty()) -> true
         ignoreConstantDeclaration && expression.isConstantProperty() -> true
         ignoreCompanionObjectPropertyDeclaration && expression.isCompanionObjectProperty() -> true
-        ignoreAnnotation && expression.isPartOf(KtAnnotationEntry::class) -> true
+        ignoreAnnotation && expression.isPartOf<KtAnnotationEntry>() -> true
         ignoreHashCodeFunction && expression.isPartOfHashCode() -> true
-        ignoreEnums && expression.isPartOf(KtEnumEntry::class) -> true
+        ignoreEnums && expression.isPartOf<KtEnumEntry>() -> true
         ignoreNamedArgument && expression.isNamedArgument() -> true
         ignoreRanges && expression.isPartOfRange() -> true
         else -> false
@@ -168,7 +168,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun KtConstantExpression.isNamedArgument() =
-        parent is KtValueArgument && (parent as? KtValueArgument)?.isNamed() == true && isPartOf(KtCallElement::class)
+        (parent as? KtValueArgument)?.isNamed() == true && isPartOf<KtCallElement>()
 
     private fun KtConstantExpression.isPartOfFunctionReturnConstant() =
         parent is KtNamedFunction || parent is KtReturnExpression && parent.parent.children.size == 1

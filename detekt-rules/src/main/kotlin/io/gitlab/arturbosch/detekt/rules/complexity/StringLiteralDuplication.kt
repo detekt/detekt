@@ -94,7 +94,7 @@ class StringLiteralDuplication(
         override fun visitStringTemplateExpression(expression: KtStringTemplateExpression) {
             val text = expression.plainText()
             when {
-                ignoreAnnotation && expression.isPartOf(KtAnnotationEntry::class) -> pass
+                ignoreAnnotation && expression.isPartOf<KtAnnotationEntry>() -> pass
                 excludeStringsWithLessThan5Characters && text.length < STRING_EXCLUSION_LENGTH -> pass
                 text.matches(ignoreStringsRegex) -> pass
                 else -> add(expression)

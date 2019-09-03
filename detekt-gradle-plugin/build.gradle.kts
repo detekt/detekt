@@ -30,7 +30,6 @@ dependencies {
     implementation(kotlin("gradle-plugin"))
     implementation(kotlin("gradle-plugin-api"))
 
-    testImplementation(kotlin("reflect"))
     testImplementation("org.assertj:assertj-core:$assertjVersion")
     testImplementation("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")

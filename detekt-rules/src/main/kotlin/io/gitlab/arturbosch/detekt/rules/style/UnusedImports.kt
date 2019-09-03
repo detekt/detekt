@@ -83,7 +83,7 @@ class UnusedImports(config: Config) : Rule(config) {
 
         override fun visitReferenceExpression(expression: KtReferenceExpression) {
             expression
-                    .takeIf { !it.isPartOf(KtImportDirective::class) && !it.isPartOf(KtPackageDirective::class) }
+                    .takeIf { !it.isPartOf<KtImportDirective>() && !it.isPartOf<KtPackageDirective>() }
                     ?.takeIf { it.children.isEmpty() }
                     ?.run { namedReferences.add(text.trim('`')) }
             super.visitReferenceExpression(expression)
