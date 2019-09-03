@@ -54,7 +54,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isFirstStatement
  * (default: `false`)
  * @configuration excludeReturnFromLambda - if labeled return from a lambda should be ignored
  * (default: `true`)
- * @configuration excludeGuardClauses - if true guard clauses at the beginning of a method will be ignored
+ * @configuration excludeGuardClauses - if true guard clauses at the beginning of a method should be ignored
  * (default: `false`)
  * @active since v1.0.0
  */
