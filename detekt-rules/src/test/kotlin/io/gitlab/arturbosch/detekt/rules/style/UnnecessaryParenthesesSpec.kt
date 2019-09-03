@@ -36,17 +36,17 @@ class UnnecessaryParenthesesSpec : Spek({
             assertThat(subject.lint(code)).hasSize(1)
         }
 
-        it("reports unnecessary parentheses around lambdas") {
+        it("does not report unnecessary parentheses around lambdas") {
             val code = """
-				fun function (a: (input: String) -> Unit) {
-					a.invoke("TEST")
-				}
+                fun function (a: (input: String) -> Unit) {
+                    a.invoke("TEST")
+                }
 
-				fun test() {
-					function({ input -> println(input) })
-				}
-				"""
-            assertThat(subject.lint(code)).hasSize(1)
+                fun test() {
+                    function({ input -> println(input) })
+                }
+                """
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         it("doesn't report function calls containing lambdas and other parameters") {
@@ -59,7 +59,7 @@ class UnnecessaryParenthesesSpec : Spek({
 					function(1, { input -> println(input) })
 				}
 				"""
-            assertThat(subject.lint(code)).hasSize(0)
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report unnecessary parentheses when assigning a lambda to a val") {
@@ -67,7 +67,7 @@ class UnnecessaryParenthesesSpec : Spek({
 				fun f() {
 					instance.copy(value = { false })
 				}"""
-            assertThat(subject.lint(code)).hasSize(0)
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report well behaved parentheses") {
@@ -77,7 +77,7 @@ class UnnecessaryParenthesesSpec : Spek({
 					 	println("Test")
 					}
 				}"""
-            assertThat(subject.lint(code)).hasSize(0)
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report well behaved parentheses in super constructors") {
@@ -89,7 +89,7 @@ class UnnecessaryParenthesesSpec : Spek({
 					}
 				})
 				"""
-            assertThat(subject.lint(code)).hasSize(0)
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report well behaved parentheses in constructors") {
@@ -101,7 +101,7 @@ class UnnecessaryParenthesesSpec : Spek({
 					}
 				})
 				"""
-            assertThat(subject.lint(code)).hasSize(0)
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         it("should not report lambdas within super constructor calls") {
@@ -112,7 +112,7 @@ class UnnecessaryParenthesesSpec : Spek({
 					constructor() : this({ first, second -> true })
 				}
 			"""
-            assertThat(subject.lint(code)).hasSize(0)
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         it("should not report call to function with two lambda parameters with one as block body") {
@@ -128,7 +128,7 @@ class UnnecessaryParenthesesSpec : Spek({
 					}
 				}
 			"""
-            assertThat(subject.lint(code)).hasSize(0)
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         it("should not report call to function with two lambda parameters") {
@@ -144,7 +144,7 @@ class UnnecessaryParenthesesSpec : Spek({
 					}
 				}
 			"""
-            assertThat(subject.lint(code)).hasSize(0)
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         it("should not report call to function with multiple lambdas as parameters but also other parameters") {
@@ -160,7 +160,7 @@ class UnnecessaryParenthesesSpec : Spek({
 					}
 				}
 			"""
-            assertThat(subject.lint(code)).hasSize(0)
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 })
