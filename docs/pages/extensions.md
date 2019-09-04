@@ -76,6 +76,8 @@ class TooManyFunctions2(config: Config) : ThresholdRule(config, THRESHOLD) {
     override fun visitNamedFunction(function: KtNamedFunction) {
         amount++
     }
+    
+    const val THRESHOLD = 10
 }
 ```
 
@@ -89,7 +91,7 @@ MyRuleSet:
     active: false
 ```
 
-By specifying the rule set and rule ids, _detekt_ will use the sub configuration of TooManyFunctions2:
+By specifying the rule set and rule ids, _detekt_ will use the sub configuration of `TooManyFunctions2`:
 
 ```val threshold = valueOrDefault("threshold", THRESHOLD)```
 
