@@ -1399,6 +1399,10 @@ which classes are imported and helps prevent naming conflicts.
 
 Library updates can introduce naming clashes with your own classes which might result in compilation errors.
 
+**NOTE:** This rule is effectively overridden by the `NoWildcardImports` formatting rule (a wrapped KtLint rule).
+That rule will fail the check regardless of the whitelist configured here.
+Therefore if whitelist is needed `NoWildcardImports` rule should be disabled.
+
 **Severity**: Style
 
 **Debt**: 5min
@@ -1409,12 +1413,6 @@ Library updates can introduce naming clashes with your own classes which might r
 
    Define a whitelist of package names that should be allowed to be imported
 with wildcard imports.
-
-**NOTE:** This rule is effectively overriden by `NoWildcardImports`
-formatting rule (a wrapper of a KtLint rule).
-That rule will fail the check regardless of the whitelist
-configured here.
-Therefore if whitelist is needed `NoWildcardImports` rule should be disabled.
 
 #### Noncompliant Code:
 
