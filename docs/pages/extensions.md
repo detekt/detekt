@@ -57,17 +57,17 @@ class TooManyFunctions2(config: Config) : ThresholdRule(config, THRESHOLD) {
         "This rule reports a file with an excessive function count.",
         Debt.TWENTY_MINS)
 
-    private val threshold = valueOrDefault("threshold", 10)
+    private val threshold = valueOrDefault("threshold", THRESHOLD)
     private var amount: Int = 0
 
     override fun visitFile(file: PsiFile) {
         super.visitFile(file)
-        if (amount > 10) {
+        if (amount > threshold) {
             report(ThresholdedCodeSmell(issue,
                 entity = Entity.from(file),
-                metric = Metric(type = "SIZE", value = amount, threshold = THRESHOLD),
+                metric = Metric(type = "SIZE", value = amount, threshold = threshold),
                 message = "The file ${file.name} has $amount function declarations. " +
-                        "Threshold is specified with $THRESHOLD.",
+                        "Threshold is specified with $threshold.",
                 references = emptyList())
             )
         }
@@ -89,9 +89,9 @@ MyRuleSet:
     active: false
 ```
 
-By specifying the rule set and rule ids, _detekt_ will use the sub configuration of MyRule:
+By specifying the rule set and rule ids, _detekt_ will use the sub configuration of TooManyFunctions2:
 
-```val threshold = valueOrDefault("threshold", 10)```
+```val threshold = valueOrDefault("threshold", THRESHOLD)```
 
 
 ##### <a name="testing">Testing your rules</a>
