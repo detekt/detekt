@@ -8,10 +8,10 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtImportList
 import org.jetbrains.kotlin.psi.KtPackageDirective
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
@@ -43,9 +43,9 @@ class SpacingBetweenPackageAndImports(config: Config = Config.empty) : Rule(conf
             "Violation of the package declaration style.",
             Debt.FIVE_MINS)
 
-    override fun visitFile(file: PsiFile?) {
-        containsClassOrObject = file?.collectDescendantsOfType<KtClassOrObject>()?.any() == true
-        super.visitFile(file)
+    override fun visitKtFile(file: KtFile) {
+        containsClassOrObject = file.collectDescendantsOfType<KtClassOrObject>().any() == true
+        super.visitKtFile(file)
     }
 
     override fun visitImportList(importList: KtImportList) {
