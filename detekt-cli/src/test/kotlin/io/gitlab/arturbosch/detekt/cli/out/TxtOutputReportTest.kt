@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.cli.out
 
-import io.gitlab.arturbosch.detekt.cli.TestDetektion
+import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.cli.createFinding
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
