@@ -30,6 +30,7 @@ class TooManyFunctions : Rule() {
                 message = "The file ${file.name} has $amount function declarations. " +
                     "Threshold is specified with $THRESHOLD."))
         }
+        amount = 0
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {

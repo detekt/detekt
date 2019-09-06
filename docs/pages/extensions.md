@@ -40,6 +40,7 @@ class TooManyFunctions : Rule() {
             report(CodeSmell(issue, Entity.from(file), 
                 "Too many functions can make the maintainability of a file costlier")
         }
+        amount = 0
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
@@ -71,6 +72,7 @@ class TooManyFunctions2(config: Config) : ThresholdRule(config, THRESHOLD) {
                 references = emptyList())
             )
         }
+        amount = 0
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {

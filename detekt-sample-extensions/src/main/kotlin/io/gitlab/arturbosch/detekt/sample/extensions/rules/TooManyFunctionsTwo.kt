@@ -40,6 +40,7 @@ class TooManyFunctionsTwo(config: Config) : ThresholdRule(config, THRESHOLD) {
                 references = emptyList())
             )
         }
+        amount = 0
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
