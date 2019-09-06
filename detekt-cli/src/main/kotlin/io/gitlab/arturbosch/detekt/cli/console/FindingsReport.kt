@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.cli.console
 
 import io.gitlab.arturbosch.detekt.api.ConsoleReport
+import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
 import io.gitlab.arturbosch.detekt.api.Detektion
 
 class FindingsReport : ConsoleReport() {
@@ -11,6 +12,10 @@ class FindingsReport : ConsoleReport() {
         val findings = detektion
             .findings
             .filter { it.value.isNotEmpty() }
+            .filter {
+                val correctableCodeSmell = it as? CorrectableCodeSmell
+                correctableCodeSmell == null || !correctableCodeSmell.autoCorrectEnabled
+            }
         if (findings.isEmpty()) {
             return null
         }

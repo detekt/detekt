@@ -47,13 +47,6 @@ class DetektFacade(
             }
         }
 
-        for ((key, value) in findings) {
-            findings[key] = value.filter {
-                val correctableCodeSmell = it as? CorrectableCodeSmell
-                correctableCodeSmell == null || !correctableCodeSmell.autoCorrectEnabled
-            }
-        }
-
         val result = DetektResult(findings.toSortedMap())
         processors.forEach { it.onFinish(filesToAnalyze, result) }
         return result
