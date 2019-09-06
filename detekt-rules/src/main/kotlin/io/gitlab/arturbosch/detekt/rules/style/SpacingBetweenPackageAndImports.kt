@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
@@ -15,6 +14,7 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtImportList
 import org.jetbrains.kotlin.psi.KtPackageDirective
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.siblings
 
 /**
@@ -44,11 +44,7 @@ class SpacingBetweenPackageAndImports(config: Config = Config.empty) : Rule(conf
             Debt.FIVE_MINS)
 
     override fun visitFile(file: PsiFile?) {
-        file?.accept(object : DetektVisitor() {
-            override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-                containsClassOrObject = true
-            }
-        })
+        containsClassOrObject = file?.collectDescendantsOfType<KtClassOrObject>()?.any() == true
         super.visitFile(file)
     }
 
