@@ -20,7 +20,7 @@ class TooManyFunctionsSpec : Spek({
 })
 
 const val code: String =
-        """
+    """
 			class TooManyFunctions : Rule("TooManyFunctions") {
 
 				override fun visitUserType(type: KtUserType) {
