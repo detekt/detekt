@@ -23,9 +23,10 @@ class QualifiedNameProcessorTest : Spek({
 
             val data = result.getData(fqNamesKey)
             assertThat(data).contains(
-                    "io.gitlab.arturbosch.detekt.sample.Foo",
-                    "io.gitlab.arturbosch.detekt.sample.Bar",
-                    "io.gitlab.arturbosch.detekt.sample.Bla")
+                "io.gitlab.arturbosch.detekt.sample.Foo",
+                "io.gitlab.arturbosch.detekt.sample.Bar",
+                "io.gitlab.arturbosch.detekt.sample.Bla"
+            )
         }
     }
 })
