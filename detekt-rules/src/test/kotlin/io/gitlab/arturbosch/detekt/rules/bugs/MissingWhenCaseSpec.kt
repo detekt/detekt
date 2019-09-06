@@ -32,7 +32,7 @@ object MissingWhenCaseSpec : Spek({
                     }
                 }
                 """
-                val actual = subject.compileAndLintWithContext(wrapper.getEnvironment(), code)
+                val actual = subject.compileAndLintWithContext(wrapper.env, code)
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().issue.id).isEqualTo("MissingWhenCase")
                 assertThat(actual.first().message).isEqualTo("When expression is missing cases: RED. Either add missing cases or a default `else` case.")
@@ -61,7 +61,7 @@ object MissingWhenCaseSpec : Spek({
                     }
                 }
                 """
-                assertThat(subject.compileAndLintWithContext(wrapper.getEnvironment(), code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
             }
         }
         context("sealed classes") {
@@ -80,7 +80,7 @@ object MissingWhenCaseSpec : Spek({
                         }
                     }
                 """
-                val actual = subject.compileAndLintWithContext(wrapper.getEnvironment(), code)
+                val actual = subject.compileAndLintWithContext(wrapper.env, code)
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().issue.id).isEqualTo("MissingWhenCase")
                 assertThat(actual.first().message).isEqualTo("When expression is missing cases: VariantC. Either add missing cases or a default `else` case.")
@@ -110,7 +110,7 @@ object MissingWhenCaseSpec : Spek({
                         }
                     }
                 """
-                assertThat(subject.compileAndLintWithContext(wrapper.getEnvironment(), code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
             }
         }
         context("standard when") {
@@ -148,7 +148,7 @@ object MissingWhenCaseSpec : Spek({
                         }
                     }
                 """
-                assertThat(subject.compileAndLintWithContext(wrapper.getEnvironment(), code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
             }
         }
     }

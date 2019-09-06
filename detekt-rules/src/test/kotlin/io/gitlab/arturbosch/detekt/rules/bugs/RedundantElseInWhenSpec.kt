@@ -34,7 +34,7 @@ object RedundantElseInWhenSpec : Spek({
                     }
                 }
                 """
-                val actual = subject.compileAndLintWithContext(wrapper.getEnvironment(), code)
+                val actual = subject.compileAndLintWithContext(wrapper.env, code)
                 assertThat(actual).hasSize(1)
             }
 
@@ -55,7 +55,7 @@ object RedundantElseInWhenSpec : Spek({
                     }
                 }
                 """
-                val actual = subject.compileAndLintWithContext(wrapper.getEnvironment(), code)
+                val actual = subject.compileAndLintWithContext(wrapper.env, code)
                 assertThat(actual).hasSize(1)
             }
 
@@ -81,7 +81,7 @@ object RedundantElseInWhenSpec : Spek({
                     }
                 }
                 """
-                assertThat(subject.compileAndLintWithContext(wrapper.getEnvironment(), code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
             }
 
             it("does not report when `when` expression does not contain else case") {
@@ -113,7 +113,7 @@ object RedundantElseInWhenSpec : Spek({
                     }
                 }
                 """
-                assertThat(subject.compileAndLintWithContext(wrapper.getEnvironment(), code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
             }
         }
         context("sealed classes") {
@@ -134,7 +134,7 @@ object RedundantElseInWhenSpec : Spek({
                         }
                     }
                 """
-                val actual = subject.compileAndLintWithContext(wrapper.getEnvironment(), code)
+                val actual = subject.compileAndLintWithContext(wrapper.env, code)
                 assertThat(actual).hasSize(1)
             }
 
@@ -155,7 +155,7 @@ object RedundantElseInWhenSpec : Spek({
                         }
                     }
                 """
-                val actual = subject.compileAndLintWithContext(wrapper.getEnvironment(), code)
+                val actual = subject.compileAndLintWithContext(wrapper.env, code)
                 assertThat(actual).hasSize(1)
             }
 
@@ -181,7 +181,7 @@ object RedundantElseInWhenSpec : Spek({
                         }
                     }
                 """
-                assertThat(subject.compileAndLintWithContext(wrapper.getEnvironment(), code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
             }
             it("does not report when `when` expression does not contain else case") {
                 val code = """
@@ -198,7 +198,7 @@ object RedundantElseInWhenSpec : Spek({
                         }
                     }
                 """
-                assertThat(subject.compileAndLintWithContext(wrapper.getEnvironment(), code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
             }
         }
         context("standard when") {
@@ -236,7 +236,7 @@ object RedundantElseInWhenSpec : Spek({
                         }
                     }
                 """
-                assertThat(subject.compileAndLintWithContext(wrapper.getEnvironment(), code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
             }
         }
     }

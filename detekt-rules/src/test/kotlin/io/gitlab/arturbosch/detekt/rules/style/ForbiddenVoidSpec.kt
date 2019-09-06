@@ -28,7 +28,7 @@ class ForbiddenVoidSpec : Spek({
                 }
             """
 
-            assertThat(subject.compileAndLintWithContext(wrapper.getEnvironment(), code)).hasSize(4)
+            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(4)
         }
 
         it("should not report Void class literal") {
@@ -55,7 +55,7 @@ class ForbiddenVoidSpec : Spek({
                 }
 			"""
 
-            assertThat(subject.compileAndLintWithContext(wrapper.getEnvironment(), code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
         }
 
         describe("ignoreOverridden is enabled") {
@@ -75,7 +75,7 @@ class ForbiddenVoidSpec : Spek({
                     }
                 """
 
-                val findings = ForbiddenVoid(config).compileAndLintWithContext(wrapper.getEnvironment(), code)
+                val findings = ForbiddenVoid(config).compileAndLintWithContext(wrapper.env, code)
                 assertThat(findings).isEmpty()
             }
 
@@ -95,7 +95,7 @@ class ForbiddenVoidSpec : Spek({
                     }
                 """
 
-                val findings = ForbiddenVoid(config).compileAndLintWithContext(wrapper.getEnvironment(), code)
+                val findings = ForbiddenVoid(config).compileAndLintWithContext(wrapper.env, code)
                 assertThat(findings).isEmpty()
             }
 
@@ -112,7 +112,7 @@ class ForbiddenVoidSpec : Spek({
                     }
                 """
 
-                val findings = ForbiddenVoid(config).compileAndLintWithContext(wrapper.getEnvironment(), code)
+                val findings = ForbiddenVoid(config).compileAndLintWithContext(wrapper.env, code)
                 assertThat(findings).hasSize(1)
             }
 
@@ -123,7 +123,7 @@ class ForbiddenVoidSpec : Spek({
                     }
                 """
 
-                val findings = ForbiddenVoid(config).compileAndLintWithContext(wrapper.getEnvironment(), code)
+                val findings = ForbiddenVoid(config).compileAndLintWithContext(wrapper.env, code)
                 assertThat(findings).hasSize(2)
             }
         }
@@ -147,7 +147,7 @@ class ForbiddenVoidSpec : Spek({
                     class D : A<Void>
                 """
 
-                val findings = ForbiddenVoid(config).compileAndLintWithContext(wrapper.getEnvironment(), code)
+                val findings = ForbiddenVoid(config).compileAndLintWithContext(wrapper.env, code)
                 assertThat(findings).isEmpty()
             }
 
@@ -158,7 +158,7 @@ class ForbiddenVoidSpec : Spek({
                     class C : A<B<Void>>
                 """
 
-                val findings = ForbiddenVoid(config).compileAndLintWithContext(wrapper.getEnvironment(), code)
+                val findings = ForbiddenVoid(config).compileAndLintWithContext(wrapper.env, code)
                 assertThat(findings).isEmpty()
             }
 
@@ -167,7 +167,7 @@ class ForbiddenVoidSpec : Spek({
                     val foo = mutableMapOf<Int, Void>()
                 """
 
-                val findings = ForbiddenVoid(config).compileAndLintWithContext(wrapper.getEnvironment(), code)
+                val findings = ForbiddenVoid(config).compileAndLintWithContext(wrapper.env, code)
                 assertThat(findings).isEmpty()
             }
 
@@ -181,7 +181,7 @@ class ForbiddenVoidSpec : Spek({
                     }
                 """
 
-                assertThat(subject.compileAndLintWithContext(wrapper.getEnvironment(), code)).hasSize(4)
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(4)
             }
         }
     }

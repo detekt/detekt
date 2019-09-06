@@ -74,7 +74,7 @@ class KotlinCoreEnvironmentWrapper(
     private val disposable: Disposable
 ) {
 
-    fun getEnvironment() = environment!!
+    val env get() = environment!!
 
     fun dispose() {
         Disposer.dispose(disposable)
