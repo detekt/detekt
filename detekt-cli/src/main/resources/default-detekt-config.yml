@@ -489,6 +489,8 @@ style:
     active: false
   ProtectedMemberInFinalClass:
     active: false
+  RedundantExplicitType:
+    active: false
   RedundantVisibilityModifierRule:
     active: false
   ReturnCount:
