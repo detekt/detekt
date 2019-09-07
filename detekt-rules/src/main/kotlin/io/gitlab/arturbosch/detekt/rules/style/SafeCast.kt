@@ -42,19 +42,18 @@ class SafeCast(config: Config = Config.empty) : Rule(config) {
             "Safe cast instead of if-else-null",
             Debt.FIVE_MINS
     )
-    private var identifier = ""
 
     override fun visitIfExpression(expression: KtIfExpression) {
         val condition = expression.condition as? KtIsExpression
         if (condition != null) {
             val leftHandSide = condition.leftHandSide as? KtNameReferenceExpression
             if (leftHandSide != null) {
-                identifier = leftHandSide.text
+                val identifier = leftHandSide.text
                 val thenClause = expression.then
                 val elseClause = expression.`else`
                 val result = when (condition.isNegated) {
-                    true -> isIfElseNull(elseClause, thenClause)
-                    false -> isIfElseNull(thenClause, elseClause)
+                    true -> isIfElseNull(elseClause, thenClause, identifier)
+                    false -> isIfElseNull(thenClause, elseClause, identifier)
                 }
                 if (result) {
                     addReport(expression)
@@ -63,7 +62,7 @@ class SafeCast(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun isIfElseNull(thenClause: KtExpression?, elseClause: KtExpression?): Boolean {
+    private fun isIfElseNull(thenClause: KtExpression?, elseClause: KtExpression?, identifier: String): Boolean {
         val hasIdentifier = thenClause?.asBlockExpression()?.statements?.firstOrNull()?.text == identifier
         val elseStatement = elseClause?.asBlockExpression()?.statements?.firstOrNull()
         val hasNull = elseStatement is KtConstantExpression && elseStatement.node.elementType == KtNodeTypes.NULL

@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
@@ -65,26 +66,26 @@ class SpacingBetweenPackageAndImportsSpec : Spek({
             assertThat(subject.lint(code)).hasSize(2)
         }
 
-        it("should be valid") {
+        it("has multiple imports in file") {
             val code = """
-				package com.my.package
+				package com.my
 
-				import android.util.Log
-				import java.util.concurrent.TimeUnit
+				import kotlin.collections.List
+				import kotlin.collections.Set
 
-				class MyClass { }
+				class A { }
 				"""
-            assertThat(subject.lint(code)).hasSize(0)
+            assertThat(subject.compileAndLint(code)).hasSize(0)
         }
 
         it("has no class") {
             val code = """
-				package com.my.package
+				package com.my
 
-				import android.util.Log
-				import java.util.concurrent.TimeUnit
+				import kotlin.collections.List
+				import kotlin.collections.Set
 				"""
-            assertThat(subject.lint(code)).hasSize(0)
+            assertThat(subject.compileAndLint(code)).hasSize(0)
         }
     }
 })
