@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.extensions.CustomDetektReport
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType
 import io.gitlab.arturbosch.detekt.extensions.DetektReports
 import io.gitlab.arturbosch.detekt.internal.configurableFileCollection
-import io.gitlab.arturbosch.detekt.internal.fileProperty
 import io.gitlab.arturbosch.detekt.invoke.AutoCorrectArgument
 import io.gitlab.arturbosch.detekt.invoke.BaselineArgument
 import io.gitlab.arturbosch.detekt.invoke.BuildUponDefaultConfigArgument
@@ -58,8 +57,7 @@ open class Detekt : SourceTask(), VerificationTask {
     @get:InputFile
     @get:Optional
     @get:PathSensitive(PathSensitivity.RELATIVE)
-    var baseline: RegularFileProperty = project.fileProperty()
-        @Deprecated("Use baseline.set()") set
+    val baseline: RegularFileProperty = project.objects.fileProperty()
 
     @get:InputFiles
     @get:Optional
