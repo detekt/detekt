@@ -1261,6 +1261,31 @@ class DataClassCandidate(val i: Int) {
 data class DataClass(val i: Int, val i2: Int)
 ```
 
+### UseIfInsteadOfWhen
+
+Binary expressions are better expressed using an 'if' expression than a 'when' expression.
+
+See https://kotlinlang.org/docs/reference/coding-conventions.html#if-versus-when
+
+**Severity**: Style
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+when (x) {
+null -> true
+else -> false
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+if (x == null) true else false
+```
+
 ### UseRequire
 
 Kotlin provides a much more concise way to check preconditions than to manually throw an
