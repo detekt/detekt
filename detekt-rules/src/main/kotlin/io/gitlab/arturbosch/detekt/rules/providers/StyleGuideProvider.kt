@@ -43,6 +43,7 @@ import io.gitlab.arturbosch.detekt.rules.style.UnusedPrivateClass
 import io.gitlab.arturbosch.detekt.rules.style.UnusedPrivateMember
 import io.gitlab.arturbosch.detekt.rules.style.UseCheckOrError
 import io.gitlab.arturbosch.detekt.rules.style.UseDataClass
+import io.gitlab.arturbosch.detekt.rules.style.UseIfInsteadOfWhen
 import io.gitlab.arturbosch.detekt.rules.style.UseRequire
 import io.gitlab.arturbosch.detekt.rules.style.UselessCallOnNotNull
 import io.gitlab.arturbosch.detekt.rules.style.UtilityClassWithPublicConstructor
@@ -114,6 +115,7 @@ class StyleGuideProvider : RuleSetProvider {
                 UnderscoresInNumericLiterals(config),
                 UseRequire(config),
                 UseCheckOrError(config),
+                UseIfInsteadOfWhen(),
                 LibraryCodeMustSpecifyReturnType(config)
             )
         )

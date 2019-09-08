@@ -52,9 +52,7 @@ class UseCheckOrError(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun KtThrowExpression.isOnlyExpressionInLambda(): Boolean {
-        return when (val p = parent) {
-            is KtBlockExpression -> p.statements.size == 1 && p.parent is KtFunctionLiteral
-            else -> false
-        }
+        val p = parent
+        return if (p is KtBlockExpression) p.statements.size == 1 && p.parent is KtFunctionLiteral else false
     }
 }
