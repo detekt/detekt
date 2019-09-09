@@ -536,6 +536,8 @@ style:
   UseDataClass:
     active: false
     excludeAnnotatedClasses: ""
+  UseIfInsteadOfWhen:
+    active: false
   UseRequire:
     active: false
   UselessCallOnNotNull:

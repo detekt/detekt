@@ -86,10 +86,7 @@ internal object EmptyConfig : HierarchicalConfig {
     override fun subConfig(key: String): EmptyConfig = this
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T : Any> valueOrDefault(key: String, default: T): T = when (key) {
-        "active" -> true as T
-        else -> default
-    }
+    override fun <T : Any> valueOrDefault(key: String, default: T): T = if (key == "active") true as T else default
 
     override fun <T : Any> valueOrNull(key: String): T? = null
 }

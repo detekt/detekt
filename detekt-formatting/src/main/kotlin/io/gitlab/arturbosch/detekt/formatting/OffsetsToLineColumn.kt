@@ -49,14 +49,11 @@ internal class SegmentTree(sortedArray: Array<Int>) {
     fun get(i: Int): Segment = segments[i]
     fun indexOf(v: Int): Int = binarySearch(v, 0, this.segments.size - 1)
 
-    private fun binarySearch(v: Int, l: Int, r: Int): Int = when {
-        l > r -> -1
-        else -> {
-            val i = l + (r - l) / 2
-            val s = segments[i]
-            if (v < s.left) binarySearch(v, l, i - 1)
-            else (if (s.right < v) binarySearch(v, i + 1, r) else i)
-        }
+    private fun binarySearch(v: Int, l: Int, r: Int): Int = if (l > r) -1 else {
+        val i = l + (r - l) / 2
+        val s = segments[i]
+        if (v < s.left) binarySearch(v, l, i - 1)
+        else (if (s.right < v) binarySearch(v, i + 1, r) else i)
     }
 
     init {
