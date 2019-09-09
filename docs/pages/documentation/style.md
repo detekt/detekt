@@ -1263,7 +1263,7 @@ data class DataClass(val i: Int, val i2: Int)
 
 ### UseIfInsteadOfWhen
 
-Binary expressions are better expressed using an 'if' expression than a 'when' expression.
+Binary expressions are better expressed using an `if` expression than a `when` expression.
 
 See https://kotlinlang.org/docs/reference/coding-conventions.html#if-versus-when
 
