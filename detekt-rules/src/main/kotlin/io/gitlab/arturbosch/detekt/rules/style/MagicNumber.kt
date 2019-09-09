@@ -184,11 +184,9 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
     private fun KtConstantExpression.isPartOfRange(): Boolean {
         val theParent = parent
         val rangeOperators = setOf("downTo", "until", "step")
-        return when (theParent is KtBinaryExpression) {
-            true -> theParent.operationToken == KtTokens.RANGE ||
-                    theParent.operationReference.getReferencedName() in rangeOperators
-            else -> false
-        }
+        return if (theParent is KtBinaryExpression) theParent.operationToken == KtTokens.RANGE ||
+                theParent.operationReference.getReferencedName() in rangeOperators
+        else false
     }
 
     private fun KtConstantExpression.isPartOfHashCode(): Boolean {

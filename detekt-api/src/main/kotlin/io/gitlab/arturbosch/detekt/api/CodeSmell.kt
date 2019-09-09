@@ -33,10 +33,7 @@ open class CodeSmell(
             "id='$id')"
     }
 
-    override fun messageOrDescription(): String = when {
-        message.isEmpty() -> issue.description
-        else -> message
-    }
+    override fun messageOrDescription(): String = if (message.isEmpty()) issue.description else message
 }
 
 /**
@@ -93,8 +90,5 @@ open class ThresholdedCodeSmell(
 
     override fun compact(): String = "$id - $metric - ${entity.compact()}"
 
-    override fun messageOrDescription(): String = when {
-        message.isEmpty() -> issue.description
-        else -> message
-    }
+    override fun messageOrDescription(): String = if (message.isEmpty()) issue.description else message
 }
