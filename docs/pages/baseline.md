@@ -11,7 +11,7 @@ With the cli option `--baseline` or the detekt-gradle-plugin closure-property `b
 It is a file where code smells are white- or blacklisted.
 
 The intention of a whitelist is that only new code smells are printed on further analysis. 
-The blacklist can be used to write down false positive detections (instead of suppressing them and polute your code base). 
+The blacklist can be used to write down false positive detections (instead of suppressing them and pollute your code base). 
 
 The `ID` node has the following structure: `<RuleID>:<Codesmell_Signature>`.  
 When adding a custom issue to the xml file, make sure the `RuleID` should be self-explaining.
@@ -34,4 +34,4 @@ the `--report txt:path/to/report` cli flag.
 If you are using the gradle-plugin run the `detektBaseline` task to generate yourself a `baseline.xml`.
 
 Be aware that auto formatting cannot be combined with the `baseline`.
-The signatures for a `;` for example would be to ambiguous.
+The signatures for a `;` for example would be too ambiguous.

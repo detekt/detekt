@@ -89,7 +89,7 @@ Usage: detekt [options]
       Possible Values: [1.6, 1.8, 9, 10, 11, 12]
     --parallel
       Enables parallel compilation of source files. Should only be used if the
-      analyzing project has more than ~200 kotlin files.
+      analyzing project has more than ~200 Kotlin files.
       Default: false
     --plugins, -p
       Extra paths to plugin jars separated by ',' or ';'.
