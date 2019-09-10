@@ -108,12 +108,6 @@ class ForbiddenCommentSpec : Spek({
                 assertThat(findings).hasSize(0)
             }
 
-            it("should not report Comment usages when pattern is present irrespective ofcase") {
-                val comment = "// Comment TASK - 568."
-                val findings = ForbiddenComment(patternsConfig).compileAndLint(comment)
-                assertThat(findings).hasSize(0)
-            }
-
         }
     }
 })

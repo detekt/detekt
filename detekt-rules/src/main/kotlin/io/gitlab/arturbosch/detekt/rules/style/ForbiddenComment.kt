@@ -19,7 +19,8 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiComment
  * </noncompliant>
  *
  * @configuration values - forbidden comment strings (default: `'TODO:,FIXME:,STOPSHIP:'`)
- * @configuration allowedPatterns - ignores comments which match any of specified regex (default: `""`)
+ * @configuration allowedPatterns - ignores comments which match any of the specified regular expressions.
+   The regular expressions are separated by `,`, like for instance `\\s*Ticket\\s*, \\s*Task\\s*`. (default: `""`)
  * @active since v1.0.0
  */
 class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
@@ -38,7 +39,7 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
             valueOrDefault(ALLOWED_PATTERNS, "")
                 .split(",")
                 .filter { it.isNotBlank() }
-                .map { r -> r.toRegex(RegexOption.IGNORE_CASE) }
+                .map { r -> r.toRegex() }
 
     override fun visitComment(comment: PsiComment) {
         super.visitComment(comment)
