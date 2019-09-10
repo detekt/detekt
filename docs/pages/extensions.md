@@ -103,7 +103,7 @@ To test your rules, add the dependency on `detekt-test` to your project: `testCo
 The easiest way to detect issues with your newly created rule is to use the `lint` extension function:
 - `Rule.lint(StringContent/Path/KtFile): List<Finding>`
 
-If you need to reuse the kotlin file for performance reasons within similar test cases, please use one of these functions:
+If you need to reuse the Kotlin file for performance reasons within similar test cases, please use one of these functions:
 - `compileContentForTest(content: String): KtFile`
 - `compileForTest(path: Path): KtFile`
 
