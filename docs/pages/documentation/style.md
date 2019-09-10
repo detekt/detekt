@@ -806,7 +806,7 @@ code.
 
    if labeled return from a lambda should be ignored
 
-* `excludeGuardClauses` (default: `true`)
+* `excludeGuardClauses` (default: `false`)
 
    if true guard clauses at the beginning of a method should be ignored
 

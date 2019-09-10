@@ -10,7 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.rules.parentsOfTypeUntil
-import org.jetbrains.kotlin.lexer.KtSingleValueToken
+import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtElement
@@ -55,7 +55,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isFirstStatement
  * @configuration excludeReturnFromLambda - if labeled return from a lambda should be ignored
  * (default: `true`)
  * @configuration excludeGuardClauses - if true guard clauses at the beginning of a method should be ignored
- * (default: `true`)
+ * (default: `false`)
  * @active since v1.0.0
  */
 class ReturnCount(config: Config = Config.empty) : Rule(config) {
@@ -91,8 +91,8 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
                 if (element is KtReturnExpression) {
                     val breakRecursion = when {
                         excludeLabeled && element.labeledExpression != null -> true
-                        excludeLambdas && isNamedReturnFromLambda(element) -> true
-                        excludeGuardClauses && isGuardClause(element) -> true
+                        excludeLambdas && element.isNamedReturnFromLambda() -> true
+                        excludeGuardClauses && element.isGuardClause() -> true
                         else -> false
                     }
                     if (breakRecursion) {
@@ -109,10 +109,10 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
         return returnsNumber
     }
 
-    private fun isNamedReturnFromLambda(expression: KtReturnExpression): Boolean {
-        val label = expression.labeledExpression
+    private fun KtReturnExpression.isNamedReturnFromLambda(): Boolean {
+        val label = this.labeledExpression
         if (label != null) {
-            return expression.parentsOfTypeUntil<KtCallExpression, KtNamedFunction>()
+            return this.parentsOfTypeUntil<KtCallExpression, KtNamedFunction>()
                     .map { it.calleeExpression }
                     .mapNotNull { it as? KtNameReferenceExpression }
                     .map { it.text }
@@ -121,12 +121,12 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
         return false
     }
 
-    private fun isGuardClause(expression: KtReturnExpression): Boolean {
-        return isIfConditionGuardClause(expression) || isElvisOperatorGuardClause(expression)
+    private fun KtReturnExpression.isGuardClause(): Boolean {
+        return this.isIfConditionGuardClause() || this.isElvisOperatorGuardClause()
     }
 
-    private fun isIfConditionGuardClause(expression: KtReturnExpression): Boolean {
-        val ifConditionParent = expression.parent?.parent as? KtIfExpression
+    private fun KtReturnExpression.isIfConditionGuardClause(): Boolean {
+        val ifConditionParent = this.parent?.parent as? KtIfExpression
         ifConditionParent?.let {
             return it.isFirstStatement() && it.`else` == null
         }
@@ -134,13 +134,12 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
         return false
     }
 
-    private fun isElvisOperatorGuardClause(expression: KtReturnExpression): Boolean {
-        val elvisGuardClauseExpression = expression.parent as? KtBinaryExpression
+    private fun KtReturnExpression.isElvisOperatorGuardClause(): Boolean {
+        val elvisGuardClauseExpression = this.parent as? KtBinaryExpression
         elvisGuardClauseExpression?.let {
             val elvisGuardClauseParent = it.parent as? KtElement
             val isFirstStatement = elvisGuardClauseParent?.isFirstStatement() ?: false
-            val operationTokenValue = (it.operationToken as? KtSingleValueToken)?.value
-            return isFirstStatement && operationTokenValue == ELVIS_OPERATOR
+            return isFirstStatement && it.operationToken == KtTokens.ELVIS
         }
 
         return false
@@ -152,6 +151,5 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
         const val EXCLUDE_LABELED = "excludeLabeled"
         const val EXCLUDE_RETURN_FROM_LAMBDA = "excludeReturnFromLambda"
         const val EXCLUDE_GUARD_CLAUSES = "excludeGuardClauses"
-        const val ELVIS_OPERATOR = "?:"
     }
 }
