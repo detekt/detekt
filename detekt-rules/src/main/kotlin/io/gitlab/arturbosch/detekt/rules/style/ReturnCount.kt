@@ -10,11 +10,15 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.rules.parentsOfTypeUntil
+import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
+import org.jetbrains.kotlin.psi.psiUtil.isFirstStatement
 
 /**
  * Restrict the number of return methods allowed in methods.
@@ -50,6 +54,8 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
  * (default: `false`)
  * @configuration excludeReturnFromLambda - if labeled return from a lambda should be ignored
  * (default: `true`)
+ * @configuration excludeGuardClauses - if true guard clauses at the beginning of a method should be ignored
+ * (default: `false`)
  * @active since v1.0.0
  */
 class ReturnCount(config: Config = Config.empty) : Rule(config) {
@@ -61,6 +67,7 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
     private val excludedFunctions = SplitPattern(valueOrDefault(EXCLUDED_FUNCTIONS, ""))
     private val excludeLabeled = valueOrDefault(EXCLUDE_LABELED, false)
     private val excludeLambdas = valueOrDefault(EXCLUDE_RETURN_FROM_LAMBDA, true)
+    private val excludeGuardClauses = valueOrDefault(EXCLUDE_GUARD_CLAUSES, false)
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
@@ -82,9 +89,13 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
         function.accept(object : DetektVisitor() {
             override fun visitKtElement(element: KtElement) {
                 if (element is KtReturnExpression) {
-                    if (excludeLabeled && element.labeledExpression != null) {
-                        return
-                    } else if (excludeLambdas && isNamedReturnFromLambda(element)) {
+                    val breakRecursion = when {
+                        excludeLabeled && element.labeledExpression != null -> true
+                        excludeLambdas && element.isNamedReturnFromLambda() -> true
+                        excludeGuardClauses && element.isGuardClause() -> true
+                        else -> false
+                    }
+                    if (breakRecursion) {
                         return
                     } else {
                         returnsNumber++
@@ -98,10 +109,10 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
         return returnsNumber
     }
 
-    private fun isNamedReturnFromLambda(expression: KtReturnExpression): Boolean {
-        val label = expression.labeledExpression
+    private fun KtReturnExpression.isNamedReturnFromLambda(): Boolean {
+        val label = this.labeledExpression
         if (label != null) {
-            return expression.parentsOfTypeUntil<KtCallExpression, KtNamedFunction>()
+            return this.parentsOfTypeUntil<KtCallExpression, KtNamedFunction>()
                     .map { it.calleeExpression }
                     .mapNotNull { it as? KtNameReferenceExpression }
                     .map { it.text }
@@ -110,10 +121,35 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
         return false
     }
 
+    private fun KtReturnExpression.isGuardClause(): Boolean {
+        return this.isIfConditionGuardClause() || this.isElvisOperatorGuardClause()
+    }
+
+    private fun KtReturnExpression.isIfConditionGuardClause(): Boolean {
+        val ifConditionParent = this.parent?.parent as? KtIfExpression
+        ifConditionParent?.let {
+            return it.isFirstStatement() && it.`else` == null
+        }
+
+        return false
+    }
+
+    private fun KtReturnExpression.isElvisOperatorGuardClause(): Boolean {
+        val elvisGuardClauseExpression = this.parent as? KtBinaryExpression
+        elvisGuardClauseExpression?.let {
+            val elvisGuardClauseParent = it.parent as? KtElement
+            val isFirstStatement = elvisGuardClauseParent?.isFirstStatement() ?: false
+            return isFirstStatement && it.operationToken == KtTokens.ELVIS
+        }
+
+        return false
+    }
+
     companion object {
         const val MAX = "max"
         const val EXCLUDED_FUNCTIONS = "excludedFunctions"
         const val EXCLUDE_LABELED = "excludeLabeled"
         const val EXCLUDE_RETURN_FROM_LAMBDA = "excludeReturnFromLambda"
+        const val EXCLUDE_GUARD_CLAUSES = "excludeGuardClauses"
     }
 }
