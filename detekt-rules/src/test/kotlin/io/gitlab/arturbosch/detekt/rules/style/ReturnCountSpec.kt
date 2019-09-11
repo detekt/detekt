@@ -10,6 +10,78 @@ class ReturnCountSpec : Spek({
 
     describe("ReturnCount rule") {
 
+        context("a file with an if condition guard clause and 2 returns") {
+            val code = """
+			fun test(x: Int): Int {
+				if (x < 4) return 0
+				when (x) {
+					5 -> return 5
+					4 -> return 4
+				}
+			}
+		"""
+
+            it("should not get flagged for if condition guard clauses") {
+                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.EXCLUDE_GUARD_CLAUSES to "true")))
+                    .lint(code)
+                assertThat(findings).hasSize(0)
+            }
+        }
+
+        context("a file with an ELVIS operator guard clause and 2 returns") {
+            val code = """
+			fun test(x: Int): Int {
+				val y = x ?: return 0
+				when (x) {
+					5 -> return 5
+					4 -> return 4
+				}
+			}
+		"""
+
+            it("should not get flagged for ELVIS operator guard clauses") {
+                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.EXCLUDE_GUARD_CLAUSES to "true")))
+                    .lint(code)
+                assertThat(findings).hasSize(0)
+            }
+        }
+
+        context("a file with 2 returns and an if condition guard clause which is not the first statement") {
+            val code = """
+			fun test(x: Int): Int {
+				when (x) {
+					5 -> return 5
+					4 -> return 4
+				}
+				if (x < 4) return 0
+			}
+		"""
+
+            it("should get flagged for an if condition guard clause which is not the first statement") {
+                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.EXCLUDE_GUARD_CLAUSES to "true")))
+                    .lint(code)
+                assertThat(findings).hasSize(1)
+            }
+        }
+
+        context("a file with 2 returns and an ELVIS guard clause which is not the first statement") {
+            val code = """
+			fun test(x: Int): Int {
+				when (x) {
+					5 -> return 5
+					4 -> return 4
+				}
+				val y = x ?: return 0
+			}
+		"""
+
+            it("should get flagged for an ELVIS guard clause which is not the first statement") {
+                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.EXCLUDE_GUARD_CLAUSES to "true")))
+                    .lint(code)
+                assertThat(findings).hasSize(1)
+            }
+        }
+
         context("a file with 3 returns") {
             val code = """
 			fun test(x: Int): Int {
@@ -235,8 +307,8 @@ class ReturnCountSpec : Spek({
             it("should be empty when labeled returns are de-activated") {
                 val findings = ReturnCount(
                         TestConfig(mapOf(
-                                "excludeLabeled" to "true",
-                                "excludeReturnFromLambda" to "false"
+                                ReturnCount.EXCLUDE_LABELED to "true",
+                                ReturnCount.EXCLUDE_RETURN_FROM_LAMBDA to "false"
                         ))).lint(code)
                 assertThat(findings).isEmpty()
             }
