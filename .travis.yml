@@ -1,3 +1,6 @@
+branches:
+  only:
+    - master
 language: java
 matrix:
   include:
