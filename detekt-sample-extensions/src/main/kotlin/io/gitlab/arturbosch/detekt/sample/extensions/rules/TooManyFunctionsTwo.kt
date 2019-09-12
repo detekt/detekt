@@ -8,7 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
-import org.jetbrains.kotlin.com.intellij.psi.PsiFile
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
@@ -29,8 +29,8 @@ class TooManyFunctionsTwo(config: Config) : ThresholdRule(config, THRESHOLD) {
 
     private var amount: Int = 0
 
-    override fun visitFile(file: PsiFile) {
-        super.visitFile(file)
+    override fun visitKtFile(file: KtFile) {
+        super.visitKtFile(file)
         if (amount > threshold) {
             report(ThresholdedCodeSmell(issue,
                 entity = Entity.from(file),
@@ -40,6 +40,7 @@ class TooManyFunctionsTwo(config: Config) : ThresholdRule(config, THRESHOLD) {
                 references = emptyList())
             )
         }
+        amount = 0
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {

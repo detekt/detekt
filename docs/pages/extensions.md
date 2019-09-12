@@ -34,12 +34,13 @@ class TooManyFunctions : Rule() {
     private val threshold = 10
     private var amount: Int = 0
 
-    override fun visitFile(file: PsiFile) {
-        super.visitFile(file)
+    override fun visitKtFile(file: KtFile) {
+        super.visitKtFile(file)
         if (amount > threshold) {
             report(CodeSmell(issue, Entity.from(file), 
                 "Too many functions can make the maintainability of a file costlier")
         }
+        amount = 0
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
@@ -60,8 +61,8 @@ class TooManyFunctions2(config: Config) : ThresholdRule(config, THRESHOLD) {
     private val threshold = valueOrDefault("threshold", THRESHOLD)
     private var amount: Int = 0
 
-    override fun visitFile(file: PsiFile) {
-        super.visitFile(file)
+    override fun visitKtFile(file: KtFile) {
+        super.visitKtFile(file)
         if (amount > threshold) {
             report(ThresholdedCodeSmell(issue,
                 entity = Entity.from(file),
@@ -71,6 +72,7 @@ class TooManyFunctions2(config: Config) : ThresholdRule(config, THRESHOLD) {
                 references = emptyList())
             )
         }
+        amount = 0
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
