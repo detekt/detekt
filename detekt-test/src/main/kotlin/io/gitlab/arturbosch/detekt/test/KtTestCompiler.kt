@@ -46,7 +46,7 @@ object KtTestCompiler : KtCompiler() {
             environment.configuration, environment::createPackagePartProvider, ::FileBasedDeclarationProviderFactory
         ).bindingContext
 
-    fun createEnvironment(): Pair<Disposable, KotlinCoreEnvironment> {
+    fun createEnvironment(): KotlinCoreEnvironmentWrapper {
         val configuration = CompilerConfiguration()
         configuration.put(CommonConfigurationKeys.MODULE_NAME, "test_module")
         configuration.put(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY, MessageCollector.NONE)
@@ -63,10 +63,23 @@ object KtTestCompiler : KtCompiler() {
                 configuration,
                 EnvironmentConfigFiles.JVM_CONFIG_FILES
             )
-        return Pair(parentDisposable, kotlinCoreEnvironment)
+        return KotlinCoreEnvironmentWrapper(kotlinCoreEnvironment, parentDisposable)
     }
 
     fun createPsiFactory(): KtPsiFactory = KtPsiFactory(KtTestCompiler.environment.project, false)
+}
+
+class KotlinCoreEnvironmentWrapper(
+    private var environment: KotlinCoreEnvironment?,
+    private val disposable: Disposable
+) {
+
+    val env get() = environment!!
+
+    fun dispose() {
+        Disposer.dispose(disposable)
+        environment = null
+    }
 }
 
 const val TEST_FILENAME = "Test.kt"
