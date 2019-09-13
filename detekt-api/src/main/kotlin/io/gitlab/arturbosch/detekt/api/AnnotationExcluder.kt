@@ -18,7 +18,7 @@ class AnnotationExcluder(
             ?.asSequence()
             ?.filterNot { it.isAllUnder }
             ?.mapNotNull { it.importedFqName?.asString() }
-            ?.map { Pair(it.substringAfterLast('.'), it) }
+            ?.map { it.substringAfterLast('.') to it }
             ?.toMap()
 
     /**

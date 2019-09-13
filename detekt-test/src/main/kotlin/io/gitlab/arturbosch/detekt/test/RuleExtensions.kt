@@ -24,7 +24,10 @@ fun BaseRule.lint(path: Path): List<Finding> {
     return findingsAfterVisit(ktFile)
 }
 
-fun BaseRule.compileAndLintWithContext(environment: KotlinCoreEnvironment, content: String): List<Finding> {
+fun BaseRule.compileAndLintWithContext(
+    environment: KotlinCoreEnvironment,
+    @Language("kotlin") content: String
+): List<Finding> {
     KotlinScriptEngine.compile(content)
     val ktFile = KtTestCompiler.compileFromContent(content.trimIndent())
     val bindingContext = KtTestCompiler.getContextForPaths(environment, listOf(ktFile))
