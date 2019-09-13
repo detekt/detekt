@@ -31,11 +31,11 @@ class HtmlOutputReport : OutputReport() {
     }
 
     private fun renderFindings(findings: Map<String, List<Finding>>) = htmlSnippet {
-        for ((group, groupFindings) in findings.filter { !it.value.isEmpty() }) {
+        for ((group, groupFindings) in findings.filter { it.value.isNotEmpty() }) {
             h3 { group }
 
             groupFindings.groupBy { it.id }.forEach { rule, findings ->
-                if (!findings.isEmpty()) {
+                if (findings.isNotEmpty()) {
                     div("rule-container") {
                         span("rule") { rule }
                         span("description") { findings.first().issue.description }
@@ -45,7 +45,7 @@ class HtmlOutputReport : OutputReport() {
                 list(findings) {
                     span("location") { "${it.file}:${it.location.source.line}:${it.location.source.column}" }
 
-                    if (!it.message.isEmpty()) {
+                    if (it.message.isNotEmpty()) {
                         br()
                         span("message") { it.message }
                     }

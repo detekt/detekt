@@ -67,7 +67,7 @@ class SpacingBetweenPackageAndImports(config: Config = Config.empty) : Rule(conf
             element is KtPackageDirective && element.text.isNotEmpty()
 
     private fun checkKtElementsDeclaration(importList: KtImportList) {
-        val ktElements = importList.siblings(withItself = false).toList().filter { it is KtElement }
+        val ktElements = importList.siblings(withItself = false).toList().filterIsInstance<KtElement>()
         val nextSibling = importList.nextSibling
         if (ktElements.isNotEmpty() &&
                 (nextSibling is PsiWhiteSpace || nextSibling is KtElement)) {
