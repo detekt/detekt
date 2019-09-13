@@ -239,8 +239,8 @@ development. Offending code comments will then be reported.
 
 * `allowedPatterns` (default: `""`)
 
-   ignores comments which match any of the specified regular expressions.
-The regular expressions are separated by `,`, like for instance `\\s*Ticket\\s*, \\s*Task\\s*`.
+   ignores comments which match the specified regular expression.
+For example `Ticket|Task`.
 
 #### Noncompliant Code:
 
