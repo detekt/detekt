@@ -8,6 +8,41 @@ folder: documentation
 ---
 The potential-bugs rule set provides rules that detect potential bugs.
 
+### Deprecation
+
+Deprecated elements are expected to be removed in future. Alternatives should be found if possible.
+
+**Severity**: Defect
+
+**Debt**: 20min
+
+#### Noncompliant Code:
+
+```kotlin
+\@Deprecated("deprecation message")
+abstract class Foo {
+abstract fun bar() : Int
+fun baz() {}
+}
+
+abstract class Oof : Foo() {
+fun spam() {}
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+abstract class Foo {
+abstract fun bar() : Int
+fun baz() {}
+}
+
+abstract class Oof : Foo() {
+fun spam() {}
+}
+```
+
 ### DuplicateCaseInWhenExpression
 
 Flags duplicate case statements in when expressions.

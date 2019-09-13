@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * Deprecated elements are expected to be removed in future. Alternatives should be found if possible.
  *
  * <noncompliant>
- * @Deprecated("deprecation message")
+ * \@Deprecated("deprecation message")
  * abstract class Foo {
  *   abstract fun bar() : Int
  *   fun baz() {}
