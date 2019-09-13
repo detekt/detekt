@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.cli.console
 
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.FileBasedConsoleReport
+import io.gitlab.arturbosch.detekt.api.ConsoleReport
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 
-class FileBasedFindingsReport : FileBasedConsoleReport() {
+class FileBasedFindingsReport : ConsoleReport() {
 
     override val priority: Int = 40
 
@@ -18,7 +18,6 @@ class FileBasedFindingsReport : FileBasedConsoleReport() {
         }
 
         val totalDebt = DebtSumming()
-        val debtSummingPrinter = DebtSummingPrinter()
         return with(StringBuilder()) {
             val distinctFileNames = findings.values.flatten().map { it.entity.location.file }.distinct()
             distinctFileNames
@@ -27,7 +26,7 @@ class FileBasedFindingsReport : FileBasedConsoleReport() {
                     findings.forEach { (key, value) ->
                         newRuleSetMap[key] = value.filter { it.entity.location.file == filename }
                     }
-                    val debtInfo = debtSummingPrinter.printDebtInformation(newRuleSetMap, totalDebt)
+                    val debtInfo = printDebtInformation(newRuleSetMap, totalDebt)
                     append(debtInfo)
                 }
             val debt = totalDebt.calculateDebt()

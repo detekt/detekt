@@ -60,6 +60,7 @@ console-reports:
   #  - 'ComplexityReport'
   #  - 'NotificationReport'
   #  - 'FindingsReport'
+  #  - 'FileBasedFindingsReport'
   #  - 'BuildFailureReport'
 
 output-reports:
