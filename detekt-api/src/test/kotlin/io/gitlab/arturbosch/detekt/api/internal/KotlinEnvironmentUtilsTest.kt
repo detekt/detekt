@@ -21,7 +21,7 @@ class KotlinEnvironmentUtilsTest : Spek({
                 .toList()
 
             val languageVersion = classpathFiles.getKotlinLanguageVersion()
-            assertThat(languageVersion).isNotNull()
+            assertThat(languageVersion).isNotNull
             assertThat(languageVersion?.versionString).isEqualTo(expectedVersionString)
         }
     }
