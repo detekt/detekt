@@ -4,3 +4,10 @@ codecov:
   notify:
     require_ci_to_pass: no
     after_n_builds: 4
+coverage:
+  status:
+    # master branch only
+    project:
+      default:
+        # Fail the status if coverage drops by >= 0.1%
+        threshold: 0.1
