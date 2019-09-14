@@ -8,7 +8,6 @@ import org.assertj.core.api.AbstractAssert
 
 fun assertThat(thresholdedCodeSmell: ThresholdedCodeSmell) = ThresholdedCodeSmellAssert(thresholdedCodeSmell)
 
-@Suppress("UnsafeCast") // False positive, see issue #1137
 fun FindingAssert.isThresholded(): ThresholdedCodeSmellAssert {
     isNotNull
     assert(actual is ThresholdedCodeSmell) { "The finding '$actual' is not a ThresholdedCodeSmell" }
@@ -21,7 +20,6 @@ class ThresholdedCodeSmellAssert(actual: ThresholdedCodeSmell?) :
 
     fun withValue(expected: Int) = hasValue(expected).let { this }
 
-    @Suppress("UnsafeCast") // False positive, see issue #1137
     fun hasValue(expected: Int) {
         isNotNull
 
@@ -33,7 +31,6 @@ class ThresholdedCodeSmellAssert(actual: ThresholdedCodeSmell?) :
 
     fun withThreshold(expected: Int) = hasThreshold(expected).let { this }
 
-    @Suppress("UnsafeCast") // False positive, see issue #1137
     fun hasThreshold(expected: Int) {
         isNotNull
 

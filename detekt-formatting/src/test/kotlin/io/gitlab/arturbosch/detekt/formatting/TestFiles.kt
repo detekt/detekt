@@ -6,7 +6,6 @@ import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import java.io.File
 import java.nio.file.Paths
 
-
 fun loadFile(resourceName: String) = compileForTest(Paths.get(resource(resourceName)))
 
 fun loadFileContent(resourceName: String) =

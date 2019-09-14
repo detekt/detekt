@@ -44,10 +44,10 @@ class SafeCast(config: Config = Config.empty) : Rule(config) {
     )
 
     override fun visitIfExpression(expression: KtIfExpression) {
-        val condition = expression.condition as? KtIsExpression
-        if (condition != null) {
-            val leftHandSide = condition.leftHandSide as? KtNameReferenceExpression
-            if (leftHandSide != null) {
+        val condition = expression.condition
+        if (condition is KtIsExpression) {
+            val leftHandSide = condition.leftHandSide
+            if (leftHandSide is KtNameReferenceExpression) {
                 val identifier = leftHandSide.text
                 val thenClause = expression.then
                 val elseClause = expression.`else`

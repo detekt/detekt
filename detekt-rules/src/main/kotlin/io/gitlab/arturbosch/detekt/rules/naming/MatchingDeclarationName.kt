@@ -57,7 +57,7 @@ class MatchingDeclarationName(config: Config = Config.empty) : Rule(config) {
                 .filterIsInstance<KtClassOrObject>()
                 .filterNot { it.isPrivate() }
         if (declarations.size == 1) {
-            val declaration = declarations[0] as? KtClassOrObject
+            val declaration = declarations.firstOrNull()
             val declarationName = declaration?.name ?: return
             val filename = file.name.removeSuffix(KOTLIN_SUFFIX)
             if (declarationName != filename &&

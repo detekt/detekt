@@ -114,7 +114,7 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
         if (label != null) {
             return this.parentsOfTypeUntil<KtCallExpression, KtNamedFunction>()
                     .map { it.calleeExpression }
-                    .mapNotNull { it as? KtNameReferenceExpression }
+                    .filterIsInstance<KtNameReferenceExpression>()
                     .map { it.text }
                     .any { it in label.text }
         }

@@ -72,8 +72,7 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
         if (expression is KtConstantExpression) {
             return true
         }
-        val stringTemplate = expression as? KtStringTemplateExpression
-        return stringTemplate?.hasInterpolation() == false
+        return expression is KtStringTemplateExpression && !expression.hasInterpolation()
     }
 
     private fun returnsConstant(function: KtNamedFunction): Boolean {
