@@ -113,12 +113,12 @@ class RuleListVisitor : DetektVisitor() {
 
         // Call Expression = Constructor of rule
         ruleNames.addAll(argumentExpressions
-                .filter { it is KtCallExpression }
-                .map { (it as? KtCallExpression)?.calleeExpression?.text ?: "" })
+                .filterIsInstance<KtCallExpression>()
+                .map { it.calleeExpression?.text ?: "" })
 
         // Reference Expression = variable we need to search for
         ruleProperties.addAll(argumentExpressions
-                .filter { it is KtReferenceExpression }
-                .map { it?.text ?: "" })
+                .filterIsInstance<KtReferenceExpression>()
+                .map { it.text ?: "" })
     }
 }

@@ -68,10 +68,8 @@ class EqualsWithHashCodeExist(config: Config = Config.empty) : Rule(config) {
     }
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-        val klass = classOrObject as? KtClass
-        if (klass != null && klass.isData()) {
-            return
-        }
+        if (classOrObject is KtClass && classOrObject.isData()) return
+
         queue.push(ViolationHolder())
         super.visitClassOrObject(classOrObject)
         if (queue.pop().violation()) {
