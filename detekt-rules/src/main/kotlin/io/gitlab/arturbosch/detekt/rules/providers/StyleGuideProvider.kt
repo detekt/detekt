@@ -25,6 +25,7 @@ import io.gitlab.arturbosch.detekt.rules.style.NewLineAtEndOfFile
 import io.gitlab.arturbosch.detekt.rules.style.OptionalAbstractKeyword
 import io.gitlab.arturbosch.detekt.rules.style.OptionalWhenBraces
 import io.gitlab.arturbosch.detekt.rules.style.ProtectedMemberInFinalClass
+import io.gitlab.arturbosch.detekt.rules.style.RedundantExplicitType
 import io.gitlab.arturbosch.detekt.rules.style.RedundantVisibilityModifierRule
 import io.gitlab.arturbosch.detekt.rules.style.ReturnCount
 import io.gitlab.arturbosch.detekt.rules.style.SafeCast
@@ -116,6 +117,7 @@ class StyleGuideProvider : RuleSetProvider {
                 UseRequire(config),
                 UseCheckOrError(config),
                 UseIfInsteadOfWhen(),
+                RedundantExplicitType(config),
                 LibraryCodeMustSpecifyReturnType(config)
             )
         )
