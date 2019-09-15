@@ -45,13 +45,6 @@ open class DetektExtension(project: Project) : CodeQualityExtension() {
 
     var autoCorrect: Boolean = DEFAULT_AUTO_CORRECT_VALUE
 
-    @Deprecated("Replace with task setIncludes/setExcludes")
-    var filters: String? = null
-
-    @Deprecated("Set plugins using the detektPlugins configuration " +
-            "(see https://arturbosch.github.io/detekt/extensions.html#let-detekt-know-about-your-extensions)")
-    var plugins: String? = null
-
     companion object {
         const val DEFAULT_SRC_DIR_JAVA = "src/main/java"
         const val DEFAULT_SRC_DIR_KOTLIN = "src/main/kotlin"

@@ -13,10 +13,7 @@ import io.gitlab.arturbosch.detekt.invoke.DisableDefaultRuleSetArgument
 import io.gitlab.arturbosch.detekt.invoke.FailFastArgument
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
-import io.gitlab.arturbosch.detekt.invoke.PluginsArgument
-import org.gradle.api.GradleException
 import org.gradle.api.file.ConfigurableFileCollection
-import org.gradle.api.file.FileCollection
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.CacheableTask
@@ -45,30 +42,11 @@ open class DetektCreateBaselineTask : SourceTask() {
     var baseline: RegularFileProperty = project.fileProperty()
         @Deprecated("Use baseline.set()") set
 
-    @Deprecated("Replace with getSource/setSource")
-    var input: FileCollection
-        @Internal
-        get() = source
-        set(value) = setSource(value)
-
-    @get:Input
-    @get:Optional
-    @Deprecated("Replace with setIncludes/setExcludes")
-    var filters: Property<String> = project.objects.property(String::class.java)
-
     @get:InputFiles
     @get:Optional
     @PathSensitive(PathSensitivity.RELATIVE)
     var config: ConfigurableFileCollection = project.configurableFileCollection()
         @Deprecated("Use config.setFrom()") set
-
-    @get:Input
-    @get:Optional
-    @Deprecated(
-        "Set plugins using the detektPlugins configuration " +
-                "(see https://arturbosch.github.io/detekt/extensions.html#let-detekt-know-about-your-extensions)"
-    )
-    var plugins: Property<String> = project.objects.property(String::class.java)
 
     @get:Classpath
     val detektClasspath = project.configurableFileCollection()
@@ -109,18 +87,11 @@ open class DetektCreateBaselineTask : SourceTask() {
 
     @TaskAction
     fun baseline() {
-        if (plugins.isPresent && !pluginClasspath.isEmpty) {
-            throw GradleException(
-                "Cannot set value for plugins on detekt task and apply detektPlugins configuration " +
-                        "at the same time."
-            )
-        }
         val arguments = mutableListOf(
             CreateBaselineArgument,
             BaselineArgument(baseline.get()),
             InputArgument(source),
             ConfigArgument(config),
-            PluginsArgument(plugins.orNull),
             DebugArgument(debug.getOrElse(false)),
             ParallelArgument(parallel.getOrElse(false)),
             BuildUponDefaultConfigArgument(buildUponDefaultConfig.getOrElse(false)),

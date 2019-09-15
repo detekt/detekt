@@ -36,7 +36,7 @@ class DetektPlugin : Plugin<Project> {
         registerOldDetektTask(project, extension)
         registerDetektTasks(project, extension)
         registerCreateBaselineTask(project, extension)
-        registerGenerateConfigTask(project, extension)
+        registerGenerateConfigTask(project)
 
         registerIdeaTasks(project, extension)
     }
@@ -62,7 +62,6 @@ class DetektPlugin : Plugin<Project> {
             it.autoCorrectProp.set(project.provider { extension.autoCorrect })
             it.config.setFrom(project.provider { extension.config })
             it.baseline.set(project.layout.file(project.provider { extension.baseline }))
-            it.plugins.set(project.provider { extension.plugins })
             it.setSource(existingInputDirectoriesProvider(project, extension))
             it.setIncludes(defaultIncludes)
             it.setExcludes(defaultExcludes)
@@ -88,7 +87,6 @@ class DetektPlugin : Plugin<Project> {
             it.autoCorrectProp.set(project.provider { extension.autoCorrect })
             it.config.setFrom(project.provider { extension.config })
             it.baseline.set(project.layout.file(project.provider { extension.baseline }))
-            it.plugins.set(project.provider { extension.plugins })
             it.setSource(kotlinSourceSet.kotlin.files)
             it.classpath.setFrom(sourceSet.compileClasspath, sourceSet.output.classesDirs)
             it.reports.xml.destination = File(extension.reportsDir, sourceSet.name + ".xml")
@@ -110,22 +108,16 @@ class DetektPlugin : Plugin<Project> {
             it.buildUponDefaultConfig.set(project.provider { extension.buildUponDefaultConfig })
             it.failFast.set(project.provider { extension.failFast })
             it.autoCorrect.set(project.provider { extension.autoCorrect })
-            it.plugins.set(project.provider { extension.plugins })
             it.setSource(existingInputDirectoriesProvider(project, extension))
             it.setIncludes(defaultIncludes)
             it.setExcludes(defaultExcludes)
         }
 
-    private fun registerGenerateConfigTask(project: Project, extension: DetektExtension) =
-        project.tasks.register(GENERATE_CONFIG, DetektGenerateConfigTask::class.java) {
-            it.setSource(existingInputDirectoriesProvider(project, extension))
-            it.setIncludes(defaultIncludes)
-            it.setExcludes(defaultExcludes)
-        }
+    private fun registerGenerateConfigTask(project: Project) =
+        project.tasks.register(GENERATE_CONFIG, DetektGenerateConfigTask::class.java)
 
     private fun registerIdeaTasks(project: Project, extension: DetektExtension) {
         project.tasks.register(IDEA_FORMAT, DetektIdeaFormatTask::class.java) {
-            it.debug.set(project.provider { extension.debug })
             it.setSource(existingInputDirectoriesProvider(project, extension))
             it.setIncludes(defaultIncludes)
             it.setExcludes(defaultExcludes)
@@ -133,7 +125,6 @@ class DetektPlugin : Plugin<Project> {
         }
 
         project.tasks.register(IDEA_INSPECT, DetektIdeaInspectionTask::class.java) {
-            it.debug.set(project.provider { extension.debug })
             it.setSource(existingInputDirectoriesProvider(project, extension))
             it.setIncludes(defaultIncludes)
             it.setExcludes(defaultExcludes)

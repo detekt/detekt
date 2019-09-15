@@ -454,7 +454,7 @@ internal object DetektTaskDslTest : Spek({
                         |task detektFailFast(type: io.gitlab.arturbosch.detekt.Detekt) {
                         |    description = "Runs a failfast detekt build."
                         |
-                        |    input = files("${"$"}projectDir")
+                        |    setSource("${"$"}projectDir")
                         |    config = files("config.yml")
                         |    includes = ["**/*.kt", "**/*.kts"]
                         |    excludes = ["build/"]
@@ -530,7 +530,7 @@ internal object DetektTaskDslTest : Spek({
                         |task<io.gitlab.arturbosch.detekt.Detekt>("detektFailFast") {
                         |    description = "Runs a failfast detekt build."
                         |
-                        |    input = files("${"$"}projectDir")
+                        |    setSource(files("${"$"}projectDir"))
                         |    setIncludes(listOf("**/*.kt", "**/*.kts"))
                         |    setExcludes(listOf("build/"))
                         |    config = files("config.yml")

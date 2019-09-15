@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.internal
 
 import org.gradle.api.Project
 import org.gradle.api.file.ConfigurableFileCollection
-import org.gradle.api.file.RegularFileProperty
 import org.gradle.util.GradleVersion
 
 fun Project.fileProperty(): RegularFileProperty {
