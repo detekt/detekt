@@ -315,7 +315,7 @@ val detektFormat by tasks.registering(Detekt::class) {
     include("**/*.kts")
     exclude("**/resources/**")
     exclude("**/build/**")
-    config = files("$rootDir/config/detekt/format.yml")
+    config.setFrom(files("$rootDir/config/detekt/format.yml"))
     reports {
         xml.enabled = false
         html.enabled = false

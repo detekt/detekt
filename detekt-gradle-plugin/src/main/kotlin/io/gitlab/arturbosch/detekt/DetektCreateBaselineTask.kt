@@ -43,8 +43,7 @@ open class DetektCreateBaselineTask : SourceTask() {
     @get:InputFiles
     @get:Optional
     @PathSensitive(PathSensitivity.RELATIVE)
-    var config: ConfigurableFileCollection = project.configurableFileCollection()
-        @Deprecated("Use config.setFrom()") set
+    val config: ConfigurableFileCollection = project.configurableFileCollection()
 
     @get:Classpath
     val detektClasspath = project.configurableFileCollection()
@@ -53,27 +52,22 @@ open class DetektCreateBaselineTask : SourceTask() {
     val pluginClasspath = project.configurableFileCollection()
 
     @get:Console
-    var debug: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
-        @Deprecated("Use debug.set()") set
+    val debug: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
     @get:Internal
-    var parallel: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
-        @Deprecated("Use parallel.set()") set
+    val parallel: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
     @get:Input
     @get:Optional
-    var disableDefaultRuleSets: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
-        @Deprecated("Use disableDefaultRuleSets.set()") set
+    val disableDefaultRuleSets: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
     @get:Input
     @get:Optional
-    var buildUponDefaultConfig: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
-        @Deprecated("Use buildUponDefaultConfig.set()") set
+    val buildUponDefaultConfig: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
     @get:Input
     @get:Optional
-    var failFast: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
-        @Deprecated("Use failFast.set()") set
+    val failFast: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
     @get:Input
     @get:Optional

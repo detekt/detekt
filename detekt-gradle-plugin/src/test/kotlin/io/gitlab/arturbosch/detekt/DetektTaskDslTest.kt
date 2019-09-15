@@ -49,7 +49,7 @@ internal object DetektTaskDslTest : Spek({
                     beforeGroup {
                         val config = """
                         |detekt {
-                        |    config = files("firstConfig.yml", "secondConfig.yml")
+                        |    config.setFrom(files("firstConfig.yml", "secondConfig.yml"))
                         |}
                         """
 
@@ -455,7 +455,7 @@ internal object DetektTaskDslTest : Spek({
                         |    description = "Runs a failfast detekt build."
                         |
                         |    setSource("${"$"}projectDir")
-                        |    config = files("config.yml")
+                        |    config.setFrom(files("config.yml"))
                         |    includes = ["**/*.kt", "**/*.kts"]
                         |    excludes = ["build/"]
                         |    debug = true
@@ -533,7 +533,7 @@ internal object DetektTaskDslTest : Spek({
                         |    setSource(files("${"$"}projectDir"))
                         |    setIncludes(listOf("**/*.kt", "**/*.kts"))
                         |    setExcludes(listOf("build/"))
-                        |    config = files("config.yml")
+                        |    config.setFrom(files("config.yml"))
                         |    debug = true
                         |    parallel = true
                         |    disableDefaultRuleSets = true

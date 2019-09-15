@@ -62,8 +62,7 @@ open class Detekt : SourceTask(), VerificationTask {
     @get:InputFiles
     @get:Optional
     @get:PathSensitive(PathSensitivity.RELATIVE)
-    var config: ConfigurableFileCollection = project.configurableFileCollection()
-        @Deprecated("Use config.setFrom()") set
+    val config: ConfigurableFileCollection = project.configurableFileCollection()
 
     @get:Classpath
     @get:Optional
@@ -141,8 +140,7 @@ open class Detekt : SourceTask(), VerificationTask {
     fun reports(configure: Action<DetektReports>) = configure.execute(reports)
 
     @get:Internal
-    var reportsDir: Property<File> = project.objects.property(File::class.java)
-        @Deprecated("Use reportsDir.set()") set
+    val reportsDir: Property<File> = project.objects.property(File::class.java)
 
     val xmlReportFile: Provider<RegularFile>
         @OutputFile
