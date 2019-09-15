@@ -30,3 +30,28 @@ fun printDebtInformation(
         return toString()
     }
 }
+
+fun printFileBasedDebtInformation(
+    issues: Map<RuleSetId, List<Finding>>,
+    fileDebt: DebtSumming,
+    totalDebt: DebtSumming
+): String? {
+    with(StringBuilder()) {
+        issues
+            .filter { it.value.isNotEmpty() }
+            .forEach { (_, issues) ->
+                val debtSumming = DebtSumming()
+                val issuesString = issues.joinToString("") {
+                    debtSumming.add(it.issue.debt)
+                    it.compact().format("\t")
+                }
+                val debt = debtSumming.calculateDebt()
+                debt?.let {
+                    fileDebt.add(debt)
+                    totalDebt.add(debt)
+                } ?: append("\n")
+                append(issuesString.yellow())
+            }
+        return toString()
+    }
+}

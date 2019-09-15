@@ -1,11 +1,9 @@
-Ruleset: AnotherTestSmell - 5min debt
-	TestSmell - [TestEntity] at AnotherFile.kt:1:1
-Ruleset: TestSmell - 10min debt
-	TestSmell - [TestEntity] at AnotherFile.kt:1:1
-	TestSmell - [TestEntity] at AnotherFile.kt:1:1
-Ruleset: AnotherTestSmell - 5min debt
-	TestSmell - [TestEntity] at TestFile.kt:1:1
-Ruleset: TestSmell - 5min debt
-	TestSmell - [TestEntity] at TestFile.kt:1:1
+AnotherFile.kt - 15min debt
+	AnotherRule - [TestEntity] at AnotherFile.kt:1:1
+	NewRule - [TestEntity] at AnotherFile.kt:1:1
+	RandomRule - [TestEntity] at AnotherFile.kt:1:1
+TestFile.kt - 10min debt
+	AnotherRandomRule - [TestEntity] at TestFile.kt:1:1
+	NewRule - [TestEntity] at TestFile.kt:1:1
 
 Overall debt: 25min

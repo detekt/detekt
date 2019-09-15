@@ -20,16 +20,16 @@ class FileBasedFindingsReportSpec : Spek({
                     Pair(
                         "TestSmell",
                         listOf(
-                            createFinding(fileName = "AnotherFile.kt"),
-                            createFinding(fileName = "TestFile.kt"),
-                            createFinding(fileName = "AnotherFile.kt")
+                            createFinding(ruleSet = "NewRule", fileName = "AnotherFile.kt"),
+                            createFinding(ruleSet = "NewRule", fileName = "TestFile.kt"),
+                            createFinding(ruleSet = "RandomRule", fileName = "AnotherFile.kt")
                         )
                     ),
                     Pair(
                         "AnotherTestSmell",
                         listOf(
-                            createFinding(fileName = "AnotherFile.kt"),
-                            createFinding(fileName = "TestFile.kt")
+                            createFinding(ruleSet = "AnotherRule", fileName = "AnotherFile.kt"),
+                            createFinding(ruleSet = "AnotherRandomRule", fileName = "TestFile.kt")
                         )
                     ),
                     Pair("EmptySmells", emptyList())
