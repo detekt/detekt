@@ -12,7 +12,7 @@ import io.gitlab.arturbosch.detekt.core.ModificationNotification
 import io.gitlab.arturbosch.detekt.test.resource
 import java.nio.file.Paths
 
-fun createFinding(ruleSet: String = "TestSmell", fileName: String = "TestFile.kt") = CodeSmell(createIssue(ruleSet), createEntity(fileName), "TestMessage")
+fun createFinding(ruleName: String = "TestSmell", fileName: String = "TestFile.kt") = CodeSmell(createIssue(ruleName), createEntity(fileName), "TestMessage")
 
 fun createIssue(id: String = "TestSmell") = Issue(id, Severity.CodeSmell, "For Test", Debt.FIVE_MINS)
 
