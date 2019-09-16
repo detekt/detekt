@@ -23,7 +23,7 @@ class ComplexMethodSpec : Spek({
 
                 assertThat(subject.findings.first())
                         .isThresholded()
-                        .withValue(20)
+                        .withValue(14)
                         .withThreshold(10)
             }
         }
