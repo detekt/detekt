@@ -93,7 +93,7 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
         #  - 'ComplexityReport'
         #  - 'NotificationReport'
         #  - 'FindingsReport'
-        #  - 'FileBasedFindingsReport'
+           - 'FileBasedFindingsReport'
         #  - 'BuildFailureReport'
     """.trimIndent()
 

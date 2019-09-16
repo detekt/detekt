@@ -27,7 +27,7 @@ class FileBasedFindingsReport : ConsoleReport() {
                     findings.forEach { (key, value) ->
                         newRuleSetMap[key] = value.filter { it.entity.location.file == filename }
                     }
-                    val debtInfo = printFileBasedDebtInformation(newRuleSetMap, fileDebt, totalDebt)
+                    val debtInfo = fileDebt.printFileBasedDebtInformation(newRuleSetMap, fileDebt, totalDebt)
                     val debt = fileDebt.calculateDebt()
                     if (debt != null) {
                         append("$filename - $debt debt".format())
