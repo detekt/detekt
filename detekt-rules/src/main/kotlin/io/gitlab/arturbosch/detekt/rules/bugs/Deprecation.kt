@@ -13,30 +13,6 @@ import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * Deprecated elements are expected to be removed in future. Alternatives should be found if possible.
- *
- * <noncompliant>
- * \@Deprecated("deprecation message")
- * abstract class Foo {
- *   abstract fun bar() : Int
- *   fun baz() {}
- * }
- *
- * abstract class Oof : Foo() {
- *   fun spam() {}
- * }
- * </noncompliant>
- *
- * <compliant>
- * abstract class Foo {
- *   abstract fun bar() : Int
- *   fun baz() {}
- * }
- *
- * abstract class Oof : Foo() {
- *   fun spam() {}
- * }
- * </compliant>
- *
  */
 class Deprecation(config: Config) : Rule(config) {
 

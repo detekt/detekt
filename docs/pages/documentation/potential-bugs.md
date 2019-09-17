@@ -16,32 +16,6 @@ Deprecated elements are expected to be removed in future. Alternatives should be
 
 **Debt**: 20min
 
-#### Noncompliant Code:
-
-```kotlin
-\@Deprecated("deprecation message")
-abstract class Foo {
-abstract fun bar() : Int
-fun baz() {}
-}
-
-abstract class Oof : Foo() {
-fun spam() {}
-}
-```
-
-#### Compliant Code:
-
-```kotlin
-abstract class Foo {
-abstract fun bar() : Int
-fun baz() {}
-}
-
-abstract class Oof : Foo() {
-fun spam() {}
-}
-```
 
 ### DuplicateCaseInWhenExpression
 
