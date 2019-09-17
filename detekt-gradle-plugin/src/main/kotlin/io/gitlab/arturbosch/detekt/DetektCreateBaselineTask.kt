@@ -43,6 +43,7 @@ open class DetektCreateBaselineTask : SourceTask() {
 
     @get:OutputFile
     var baseline: RegularFileProperty = project.fileProperty()
+        @Deprecated("Use baseline.set()") set
 
     @Deprecated("Replace with getSource/setSource")
     var input: FileCollection
@@ -59,6 +60,7 @@ open class DetektCreateBaselineTask : SourceTask() {
     @get:Optional
     @PathSensitive(PathSensitivity.RELATIVE)
     var config: ConfigurableFileCollection = project.configurableFileCollection()
+        @Deprecated("Use config.setFrom()") set
 
     @get:Input
     @get:Optional
@@ -76,21 +78,26 @@ open class DetektCreateBaselineTask : SourceTask() {
 
     @get:Console
     var debug: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+        @Deprecated("Use debug.set()") set
 
     @get:Internal
     var parallel: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+        @Deprecated("Use parallel.set()") set
 
     @get:Input
     @get:Optional
     var disableDefaultRuleSets: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+        @Deprecated("Use disableDefaultRuleSets.set()") set
 
     @get:Input
     @get:Optional
     var buildUponDefaultConfig: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+        @Deprecated("Use buildUponDefaultConfig.set()") set
 
     @get:Input
     @get:Optional
     var failFast: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+        @Deprecated("Use failFast.set()") set
 
     @get:Input
     @get:Optional
