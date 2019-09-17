@@ -27,7 +27,6 @@ open class DetektIdeaFormatTask : SourceTask() {
         set(value) = setSource(value)
 
     @get:Console
-    @get:Deprecated("Has no effect - will be removed in future release.")
     var debug: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
     @get:Nested
