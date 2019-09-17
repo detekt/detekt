@@ -10,7 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 
 /**
- * This rule detects annotations which use the 'arrayOf(...)' syntax instead of the array literal '[...]' syntax.
+ * This rule detects annotations which use the arrayOf(...) syntax instead of the array literal [...] syntax.
  * The latter should be preferred as it is more readable.
  *
  * <noncompliant>
@@ -33,13 +33,13 @@ class UseArrayLiteralsInAnnotations(config: Config = Config.empty) : Rule(config
     override fun visitAnnotationEntry(annotationEntry: KtAnnotationEntry) {
         for (argument in annotationEntry.valueArguments) {
             val expr = argument.getArgumentExpression()?.text ?: continue
-            if (ARRAY_OF_REGEX.matches(expr)) {
+            if (expr.startsWith(LONG_ANNOTATION_LITERAL_FORM)) {
                 report(CodeSmell(issue, Entity.from(argument.asElement()), issue.description))
             }
         }
     }
 
     companion object {
-        val ARRAY_OF_REGEX = Regex("arrayOf\\(.*\\)")
+        const val LONG_ANNOTATION_LITERAL_FORM = "arrayOf("
     }
 }

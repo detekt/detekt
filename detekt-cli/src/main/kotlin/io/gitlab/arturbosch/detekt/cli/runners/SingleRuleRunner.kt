@@ -34,8 +34,7 @@ class SingleRuleRunner(private val arguments: CliArgs) : Executable {
         }
 
         val realProvider = requireNotNull(
-            RuleSetLocator(settings).load()
-                .find { it.ruleSetId == ruleSet }
+            RuleSetLocator(settings).load().find { it.ruleSetId == ruleSet }
         ) { "There was no rule set with id '$ruleSet'." }
 
         val provider = RuleProducingProvider(rule, realProvider)
