@@ -78,6 +78,9 @@ class UndocumentedPublicFunctionSpec : Spek({
     			internal class NoComments {
 					fun nope1() {}
 					public fun nope2() {}
+                    internal fun nope2() {}		
+ 					protected fun nope3() {}		
+ 					private fun nope4() {}
 				}
 			"""
             assertThat(subject.compileAndLint(code)).isEmpty()
