@@ -16,6 +16,7 @@ Deprecated elements are expected to be removed in future. Alternatives should be
 
 **Debt**: 20min
 
+**Aliases**: DEPRECATION
 
 ### DuplicateCaseInWhenExpression
 

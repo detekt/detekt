@@ -23,6 +23,8 @@ class Deprecation(config: Config) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
+    override val defaultRuleIdAliases = setOf("DEPRECATION")
+
     override fun visitElement(element: PsiElement) {
         if (bindingContext == BindingContext.EMPTY) return
         if (bindingContext.diagnostics.forElement(element).firstOrNull { it.factory == Errors.DEPRECATION } != null) {
