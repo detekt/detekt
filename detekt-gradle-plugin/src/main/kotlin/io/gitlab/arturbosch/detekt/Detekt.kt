@@ -187,6 +187,7 @@ open class Detekt : SourceTask(), VerificationTask {
 
     private val effectiveReportsDir = project.provider { reportsDir.getOrElse(defaultReportsDir.asFile) }
 
+    @Deprecated("Use reports {} to configure custom reports")
     val customReports: Provider<Collection<CustomDetektReport>>
         @Nested
         get() = project.provider { reports.custom }
