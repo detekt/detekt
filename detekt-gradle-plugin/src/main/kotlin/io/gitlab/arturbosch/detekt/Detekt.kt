@@ -204,10 +204,6 @@ open class Detekt : SourceTask(), VerificationTask {
                         "at the same time."
             )
         }
-        val xmlReportTargetFileOrNull = xmlReportFile.orNull
-        val htmlReportTargetFileOrNull = htmlReportFile.orNull
-        val txtReportTargetFileOrNull = txtReportFile.orNull
-        val debugOrDefault = debugProp.getOrElse(false)
         val arguments = mutableListOf(
             InputArgument(source),
             ClasspathArgument(classpath),
@@ -216,10 +212,10 @@ open class Detekt : SourceTask(), VerificationTask {
             ConfigArgument(config),
             PluginsArgument(plugins.orNull),
             BaselineArgument(baseline.orNull),
-            DefaultReportArgument(DetektReportType.XML, xmlReportTargetFileOrNull),
-            DefaultReportArgument(DetektReportType.HTML, htmlReportTargetFileOrNull),
-            DefaultReportArgument(DetektReportType.TXT, txtReportTargetFileOrNull),
-            DebugArgument(debugOrDefault),
+            DefaultReportArgument(DetektReportType.XML, xmlReportFile.orNull),
+            DefaultReportArgument(DetektReportType.HTML, htmlReportFile.orNull),
+            DefaultReportArgument(DetektReportType.TXT, txtReportFile.orNull),
+            DebugArgument(debugProp.getOrElse(false)),
             ParallelArgument(parallelProp.getOrElse(false)),
             BuildUponDefaultConfigArgument(buildUponDefaultConfigProp.getOrElse(false)),
             FailFastArgument(failFastProp.getOrElse(false)),
