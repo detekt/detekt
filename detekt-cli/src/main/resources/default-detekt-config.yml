@@ -23,6 +23,7 @@ console-reports:
   #  - 'ComplexityReport'
   #  - 'NotificationReport'
   #  - 'FindingsReport'
+     - 'FileBasedFindingsReport'
   #  - 'BuildFailureReport'
 
 comments:
