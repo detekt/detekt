@@ -279,7 +279,7 @@ subprojects {
     val kotlinTest by configurations.creating
 
     dependencies {
-        implementation(kotlin("stdlib"))
+        implementation(kotlin("stdlib", "1.3.50"))
 
         detekt(project(":detekt-cli"))
         detektPlugins(project(":detekt-formatting"))

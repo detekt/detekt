@@ -26,9 +26,9 @@ val junitPlatformVersion = "1.4.1"
 val assertjVersion = "3.12.2"
 
 dependencies {
-    implementation(kotlin("stdlib"))
-    implementation(kotlin("gradle-plugin"))
-    implementation(kotlin("gradle-plugin-api"))
+    implementation(kotlin("stdlib", "1.3.50"))
+    implementation(kotlin("gradle-plugin", "1.3.50"))
+    implementation(kotlin("gradle-plugin-api", "1.3.50"))
 
     testImplementation("org.assertj:assertj-core:$assertjVersion")
     testImplementation("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
