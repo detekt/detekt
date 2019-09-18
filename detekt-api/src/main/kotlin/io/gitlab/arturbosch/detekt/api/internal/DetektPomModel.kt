@@ -16,6 +16,7 @@ import sun.reflect.ReflectionFactory
  * Adapted from https://github.com/pinterest/ktlint/blob/master/ktlint-core/src/main/kotlin/com/pinterest/ktlint/core/KtLint.kt
  * Licenced under the MIT licence - https://github.com/pinterest/ktlint/blob/master/LICENSE
  */
+@Suppress("UnsafeCallOnNullableType")
 class DetektPomModel(project: Project) : UserDataHolderBase(), PomModel {
 
     init {

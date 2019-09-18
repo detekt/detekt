@@ -72,6 +72,7 @@ class UnusedImports(config: Config) : Rule(config) {
             super.visitPackageDirective(directive)
         }
 
+        @Suppress("UnsafeCallOnNullableType")
         override fun visitImportList(importList: KtImportList) {
             imports = importList.imports.filter { it.isValidImport }
                     .filter { it.identifier()?.contains("*")?.not() == true }

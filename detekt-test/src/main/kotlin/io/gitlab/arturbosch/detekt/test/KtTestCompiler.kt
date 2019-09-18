@@ -74,6 +74,7 @@ class KotlinCoreEnvironmentWrapper(
     private val disposable: Disposable
 ) {
 
+    @Suppress("UnsafeCallOnNullableType")
     val env get() = environment!!
 
     fun dispose() {
