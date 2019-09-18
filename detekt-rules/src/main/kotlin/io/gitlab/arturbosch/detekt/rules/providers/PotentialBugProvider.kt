@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.providers
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.rules.bugs.Deprecation
 import io.gitlab.arturbosch.detekt.rules.bugs.DuplicateCaseInWhenExpression
 import io.gitlab.arturbosch.detekt.rules.bugs.EqualsAlwaysReturnsTrueOrFalse
 import io.gitlab.arturbosch.detekt.rules.bugs.EqualsWithHashCodeExist
@@ -32,6 +33,7 @@ class PotentialBugProvider : RuleSetProvider {
 
     override fun instance(config: Config): RuleSet {
         return RuleSet(ruleSetId, listOf(
+                Deprecation(config),
                 DuplicateCaseInWhenExpression(config),
                 EqualsAlwaysReturnsTrueOrFalse(config),
                 EqualsWithHashCodeExist(config),

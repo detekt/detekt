@@ -8,6 +8,16 @@ folder: documentation
 ---
 The potential-bugs rule set provides rules that detect potential bugs.
 
+### Deprecation
+
+Deprecated elements are expected to be removed in future. Alternatives should be found if possible.
+
+**Severity**: Defect
+
+**Debt**: 20min
+
+**Aliases**: DEPRECATION
+
 ### DuplicateCaseInWhenExpression
 
 Flags duplicate case statements in when expressions.

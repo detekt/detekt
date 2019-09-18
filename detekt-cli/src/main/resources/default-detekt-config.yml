@@ -377,6 +377,8 @@ performance:
 
 potential-bugs:
   active: true
+  Deprecation:
+    active: false
   DuplicateCaseInWhenExpression:
     active: true
   EqualsAlwaysReturnsTrueOrFalse:
