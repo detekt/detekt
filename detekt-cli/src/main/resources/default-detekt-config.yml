@@ -387,6 +387,8 @@ potential-bugs:
     active: true
   ExplicitGarbageCollectionCall:
     active: true
+  HasPlatformType:
+    active: false
   InvalidRange:
     active: false
   IteratorHasNextCallsNextMethod:
