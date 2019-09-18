@@ -67,6 +67,10 @@ naming:
     privateVariablePattern: '(_)?[a-z][A-Za-z0-9]*'
     excludeClassPattern: '$^'
 
+performance:
+  ArrayPrimitive:
+    active: true
+
 potential-bugs:
   EqualsAlwaysReturnsTrueOrFalse:
     active: true
