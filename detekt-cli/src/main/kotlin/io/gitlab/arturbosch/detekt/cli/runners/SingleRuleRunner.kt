@@ -18,8 +18,9 @@ import io.gitlab.arturbosch.detekt.core.RuleSetLocator
 class SingleRuleRunner(private val arguments: CliArgs) : Executable {
 
     override fun execute() {
-        val (ruleSet, rule: RuleId) = arguments.runRule?.split(":")
-            ?: throw IllegalStateException("Unexpected empty 'runRule' argument.")
+        val (ruleSet, rule: RuleId) = checkNotNull(
+            arguments.runRule?.split(":")
+        ) { "Unexpected empty 'runRule' argument." }
 
         val settings = with(arguments) {
             ProcessingSettings(
@@ -32,9 +33,9 @@ class SingleRuleRunner(private val arguments: CliArgs) : Executable {
                 pluginPaths = createPlugins())
         }
 
-        val realProvider = RuleSetLocator(settings).load()
-            .find { it.ruleSetId == ruleSet }
-            ?: throw IllegalArgumentException("There was no rule set with id '$ruleSet'.")
+        val realProvider = requireNotNull(
+            RuleSetLocator(settings).load().find { it.ruleSetId == ruleSet }
+        ) { "There was no rule set with id '$ruleSet'." }
 
         val provider = RuleProducingProvider(rule, realProvider)
 
@@ -68,8 +69,10 @@ private class RuleProducingProvider(
         listOf(produceRule())
     )
 
-    private fun produceRule(): BaseRule = (provider.buildRuleset(Config.empty)
-        ?.rules
-        ?.find { it.ruleId == ruleId }
-        ?: throw IllegalArgumentException("There was no rule '$ruleId' in rule set '${provider.ruleSetId}'."))
+    private fun produceRule(): BaseRule =
+        requireNotNull(
+            provider.buildRuleset(Config.empty)
+                ?.rules
+                ?.find { it.ruleId == ruleId }
+        ) { "There was no rule '$ruleId' in rule set '${provider.ruleSetId}'." }
 }
