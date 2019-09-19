@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.test.KtTestCompiler
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
@@ -64,6 +65,12 @@ class SpacingBetweenPackageAndImportsSpec : Spek({
         it("has package declarations in same line") {
             val code = "package test;import a.b;class A {}"
             assertThat(subject.lint(code)).hasSize(2)
+        }
+
+        it("does not report for Kotlin script file") {
+            val code = "package test\nimport a.b\nclass A {}"
+            val ktsFile = KtTestCompiler.compileFromContent(code, "Test.kts")
+            assertThat(subject.lint(ktsFile)).hasSize(0)
         }
 
         it("has multiple imports in file") {
