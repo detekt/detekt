@@ -73,11 +73,13 @@ open class Detekt : SourceTask(), VerificationTask {
     @get:Optional
     @get:PathSensitive(PathSensitivity.RELATIVE)
     var baseline: RegularFileProperty = project.fileProperty()
+        @Deprecated("Use baseline.set()") set
 
     @get:InputFiles
     @get:Optional
     @get:PathSensitive(PathSensitivity.RELATIVE)
     var config: ConfigurableFileCollection = project.configurableFileCollection()
+        @Deprecated("Use config.setFrom()") set
 
     @get:Classpath
     @get:Optional
@@ -162,6 +164,7 @@ open class Detekt : SourceTask(), VerificationTask {
 
     @get:Internal
     var reportsDir: Property<File> = project.objects.property(File::class.java)
+        @Deprecated("Use reportsDir.set()") set
 
     val xmlReportFile: Provider<RegularFile>
         @OutputFile
@@ -184,6 +187,7 @@ open class Detekt : SourceTask(), VerificationTask {
 
     private val effectiveReportsDir = project.provider { reportsDir.getOrElse(defaultReportsDir.asFile) }
 
+    @Deprecated("Use reports {} to configure custom reports")
     val customReports: Provider<Collection<CustomDetektReport>>
         @Nested
         get() = project.provider { reports.custom }
@@ -200,10 +204,6 @@ open class Detekt : SourceTask(), VerificationTask {
                         "at the same time."
             )
         }
-        val xmlReportTargetFileOrNull = xmlReportFile.orNull
-        val htmlReportTargetFileOrNull = htmlReportFile.orNull
-        val txtReportTargetFileOrNull = txtReportFile.orNull
-        val debugOrDefault = debugProp.getOrElse(false)
         val arguments = mutableListOf(
             InputArgument(source),
             ClasspathArgument(classpath),
@@ -212,10 +212,10 @@ open class Detekt : SourceTask(), VerificationTask {
             ConfigArgument(config),
             PluginsArgument(plugins.orNull),
             BaselineArgument(baseline.orNull),
-            DefaultReportArgument(DetektReportType.XML, xmlReportTargetFileOrNull),
-            DefaultReportArgument(DetektReportType.HTML, htmlReportTargetFileOrNull),
-            DefaultReportArgument(DetektReportType.TXT, txtReportTargetFileOrNull),
-            DebugArgument(debugOrDefault),
+            DefaultReportArgument(DetektReportType.XML, xmlReportFile.orNull),
+            DefaultReportArgument(DetektReportType.HTML, htmlReportFile.orNull),
+            DefaultReportArgument(DetektReportType.TXT, txtReportFile.orNull),
+            DebugArgument(debugProp.getOrElse(false)),
             ParallelArgument(parallelProp.getOrElse(false)),
             BuildUponDefaultConfigArgument(buildUponDefaultConfigProp.getOrElse(false)),
             FailFastArgument(failFastProp.getOrElse(false)),
