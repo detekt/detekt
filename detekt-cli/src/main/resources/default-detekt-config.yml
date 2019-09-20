@@ -545,6 +545,7 @@ style:
   UseDataClass:
     active: false
     excludeAnnotatedClasses: ""
+    allowVars: false
   UseIfInsteadOfWhen:
     active: false
   UseRequire:
