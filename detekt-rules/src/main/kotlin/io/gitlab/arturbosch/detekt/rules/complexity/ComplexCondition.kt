@@ -8,12 +8,12 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
-import io.gitlab.arturbosch.detekt.rules.collectByType
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtDoWhileExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtWhileExpression
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 
 /**
  * Complex conditions make it hard to understand which cases lead to the condition being true or false. To improve
@@ -68,7 +68,7 @@ class ComplexCondition(
     }
 
     private fun checkIfComplex(condition: KtExpression?) {
-        val binaryExpressions = condition?.collectByType<KtBinaryExpression>()?.toList()
+        val binaryExpressions = condition?.collectDescendantsOfType<KtBinaryExpression>()?.toList()
 
         if (binaryExpressions != null && binaryExpressions.size > 1) {
             val longestBinExpr = binaryExpressions.reduce { acc, binExpr ->

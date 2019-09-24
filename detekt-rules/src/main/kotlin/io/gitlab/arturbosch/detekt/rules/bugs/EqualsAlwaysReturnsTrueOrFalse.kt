@@ -8,7 +8,6 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.asBlockExpression
-import io.gitlab.arturbosch.detekt.rules.collectByType
 import io.gitlab.arturbosch.detekt.rules.isEqualsFunction
 import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
@@ -16,6 +15,7 @@ import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 
 /**
  * Reports equals() methods which will always return true or false.
@@ -66,7 +66,7 @@ class EqualsAlwaysReturnsTrueOrFalse(config: Config = Config.empty) : Rule(confi
         val returnExpressionsInBlock = bodyExpression.asBlockExpression()?.statements
                 ?.filterIsInstance<KtReturnExpression>() ?: return false
         val lastValidReturnExpression = returnExpressionsInBlock.first().returnedExpression
-        val allReturnExpressions = bodyExpression.collectByType<KtReturnExpression>().toList()
+        val allReturnExpressions = bodyExpression.collectDescendantsOfType<KtReturnExpression>().toList()
         val hasNoNestedReturnExpression = allReturnExpressions.size == returnExpressionsInBlock.size
         return lastValidReturnExpression?.isBooleanConstant() == true &&
                 (hasNoNestedReturnExpression ||

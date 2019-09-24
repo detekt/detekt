@@ -10,11 +10,11 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.rules.ALLOWED_EXCEPTION_NAME
-import io.gitlab.arturbosch.detekt.rules.collectByType
 import io.gitlab.arturbosch.detekt.rules.isAllowedExceptionName
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtThrowExpression
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 
 /**
  * Exceptions should not be swallowed. This rule reports all instances where exceptions are `caught` and not correctly
@@ -86,17 +86,17 @@ class SwallowedException(config: Config = Config.empty) : Rule(config) {
         val parameterName = catchClause.catchParameter?.name
         val catchBody = catchClause.catchBody ?: return true
         return !catchBody
-            .collectByType<KtNameReferenceExpression>()
+            .collectDescendantsOfType<KtNameReferenceExpression>()
             .any { it.text == parameterName }
     }
 
     private fun isExceptionSwallowed(catchClause: KtCatchClause): Boolean {
         val parameterName = catchClause.catchParameter?.name
         catchClause.catchBody
-            ?.collectByType<KtThrowExpression>()
+            ?.collectDescendantsOfType<KtThrowExpression>()
             ?.forEach { throwExpr ->
                 val parameterNameReferences = throwExpr.thrownExpression
-                    ?.collectByType<KtNameReferenceExpression>()?.filter { it.text == parameterName }
+                    ?.collectDescendantsOfType<KtNameReferenceExpression>()?.filter { it.text == parameterName }
                     ?.toList()
                 return hasParameterReferences(parameterNameReferences)
             }
