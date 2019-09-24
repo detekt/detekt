@@ -7,10 +7,10 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.collectByType
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.getReceiverExpression
 
@@ -60,7 +60,7 @@ class PrintStackTrace(config: Config = Config.empty) : Rule(config) {
     }
 
     override fun visitCatchSection(catchClause: KtCatchClause) {
-        catchClause.catchBody?.collectByType<KtNameReferenceExpression>()?.forEach {
+        catchClause.catchBody?.collectDescendantsOfType<KtNameReferenceExpression>()?.forEach {
             if (it.text == catchClause.catchParameter?.name && hasPrintStacktraceCallExpression(it)) {
                 report(CodeSmell(issue, Entity.from(it), issue.description))
             }
