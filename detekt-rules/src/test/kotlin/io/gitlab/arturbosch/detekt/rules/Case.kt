@@ -70,8 +70,6 @@ enum class Case(val file: String) {
     SwallowedExceptionPositive("/cases/SwallowedExceptionPositive.kt"),
     TooManyFunctions("/cases/TooManyFunctions.kt"),
     TooManyFunctionsTopLevel("/cases/TooManyFunctionsTopLevel.kt"),
-    UseDataClassNegative("/cases/UseDataClassNegative.kt"),
-    UseDataClassPositive("/cases/UseDataClassPositive.kt"),
     UnconditionalJumpStatementInLoopNegative("/cases/UnconditionalJumpStatementInLoopNegative.kt"),
     UnconditionalJumpStatementInLoopPositive("/cases/UnconditionalJumpStatementInLoopPositive.kt"),
     NestedClassVisibilityPositive("/cases/NestedClassVisibilityPositive.kt"),
