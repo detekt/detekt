@@ -96,7 +96,7 @@ class UseDataClassSpec : Spek({
                 val code = """
                     class DataClassCandidateWithProperties(val i: Int) {
                         val i2: Int = 0
-                    }                    
+                    }
                 """
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
@@ -131,7 +131,7 @@ class UseDataClassSpec : Spek({
                         override fun toString(): String {
                             return super.toString()
                         }
-                    }                    
+                    }
                 """
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
@@ -149,7 +149,7 @@ class UseDataClassSpec : Spek({
                 val code = """
                     class DataClassCandidateWithProperties(var i: Int) {
                         var i2: Int = 0
-                    }                    
+                    }
                 """
                 val config = TestConfig(mapOf(UseDataClass.ALLOW_VARS to "true"))
                 assertThat(UseDataClass(config).compileAndLint(code)).isEmpty()
@@ -159,7 +159,7 @@ class UseDataClassSpec : Spek({
                 val code = """
                     class DataClassCandidateWithMixedProperties(val i: Int) {
                         var i2: Int = 0
-                    }                    
+                    }
                 """
                 val config = TestConfig(mapOf(UseDataClass.ALLOW_VARS to "true"))
                 assertThat(UseDataClass(config).compileAndLint(code)).isEmpty()
@@ -169,7 +169,7 @@ class UseDataClassSpec : Spek({
                 val code = """
                     class DataClassCandidateWithMixedProperties(var i: Int) {
                         val i2: Int = 0
-                    }                    
+                    }
                 """
                 val config = TestConfig(mapOf(UseDataClass.ALLOW_VARS to "true"))
                 assertThat(UseDataClass(config).compileAndLint(code)).isEmpty()
@@ -194,7 +194,6 @@ class UseDataClassSpec : Spek({
         it("does not report a class with a delegated property") {
             val code = """
                 import kotlin.properties.Delegates
-                
                 class C(val i: Int) {
                     var prop: String by Delegates.observable("") {
                             prop, old, new -> println("")
@@ -207,7 +206,6 @@ class UseDataClassSpec : Spek({
         it("reports class with nested delegation") {
             val code = """
                 import kotlin.properties.Delegates
-                
                 class C(val i: Int) {
                     var prop: C = C(1).apply {
                         var str: String by Delegates.observable("") {
