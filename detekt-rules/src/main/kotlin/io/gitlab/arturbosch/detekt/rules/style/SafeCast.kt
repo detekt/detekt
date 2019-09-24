@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.asBlockExpression
 import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -63,8 +62,8 @@ class SafeCast(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun isIfElseNull(thenClause: KtExpression?, elseClause: KtExpression?, identifier: String): Boolean {
-        val hasIdentifier = thenClause?.asBlockExpression()?.statements?.firstOrNull()?.text == identifier
-        val elseStatement = elseClause?.asBlockExpression()?.statements?.firstOrNull()
+        val hasIdentifier = thenClause?.children?.firstOrNull()?.text == identifier
+        val elseStatement = elseClause?.children?.firstOrNull()
         val hasNull = elseStatement is KtConstantExpression && elseStatement.node.elementType == KtNodeTypes.NULL
         return hasIdentifier && hasNull
     }

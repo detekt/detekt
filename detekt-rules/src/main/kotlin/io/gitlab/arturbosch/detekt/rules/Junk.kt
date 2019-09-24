@@ -4,18 +4,14 @@ import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.com.intellij.psi.PsiComment
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtConstantExpression
-import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
-
-fun KtExpression?.asBlockExpression(): KtBlockExpression? = this as? KtBlockExpression
 
 fun KtClassOrObject.isObjectOfAnonymousClass() =
         this.getNonStrictParentOfType<KtObjectDeclaration>() != null && this.name == null

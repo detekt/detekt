@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.asBlockExpression
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtThrowExpression
 
@@ -55,7 +54,7 @@ class RethrowCaughtException(config: Config = Config.empty) : Rule(config) {
 
     override fun visitCatchSection(catchClause: KtCatchClause) {
         val exceptionName = catchClause.catchParameter?.name ?: return
-        val statements = catchClause.catchBody.asBlockExpression()?.statements ?: return
+        val statements = catchClause.catchBody?.children ?: return
         val throwExpression = statements.firstOrNull() as? KtThrowExpression
         if (throwExpression != null && throwExpression.thrownExpression?.text == exceptionName) {
             report(CodeSmell(issue, Entity.from(throwExpression), issue.description))
