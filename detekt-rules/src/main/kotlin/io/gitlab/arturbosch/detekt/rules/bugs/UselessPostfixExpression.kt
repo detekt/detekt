@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.collectByType
 import org.jetbrains.kotlin.lexer.KtTokens.MINUSMINUS
 import org.jetbrains.kotlin.lexer.KtTokens.PLUSPLUS
 import org.jetbrains.kotlin.psi.KtBinaryExpression
@@ -17,6 +16,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtPostfixExpression
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtReturnExpression
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
 
@@ -97,7 +97,7 @@ class UselessPostfixExpression(config: Config = Config.empty) : Rule(config) {
 
     private fun KtPostfixExpression.shouldBeReported(): Boolean {
         val functionProperties = this.getNonStrictParentOfType<KtNamedFunction>()
-                ?.collectByType<KtProperty>()
+                ?.collectDescendantsOfType<KtProperty>()
                 ?.map { it.name }
                 ?.toSet()
         val postfixReceiverName = this.baseExpression?.text

@@ -9,10 +9,10 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.bugs.util.getMethod
 import io.gitlab.arturbosch.detekt.rules.bugs.util.isImplementingIterator
-import io.gitlab.arturbosch.detekt.rules.collectByType
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 
 /**
  * Verifies implementations of the Iterator interface.
@@ -49,7 +49,7 @@ class IteratorHasNextCallsNextMethod(config: Config = Config.empty) : Rule(confi
 
     private fun callsNextMethod(method: KtNamedFunction): Boolean {
         return method.bodyExpression
-                ?.collectByType<KtCallExpression>()
+                ?.collectDescendantsOfType<KtCallExpression>()
                 ?.any { it.calleeExpression?.text == "next" } == true
     }
 }

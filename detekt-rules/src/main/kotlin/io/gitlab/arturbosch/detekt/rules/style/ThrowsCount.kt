@@ -7,10 +7,10 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.collectByType
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtThrowExpression
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 
 /**
  * Functions should have clear `throw` statements. Functions with many `throw` statements can be harder to read and lead
@@ -49,7 +49,7 @@ class ThrowsCount(config: Config = Config.empty) : Rule(config) {
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
         if (!function.isOverride()) {
-            val count = function.collectByType<KtThrowExpression>().count()
+            val count = function.collectDescendantsOfType<KtThrowExpression>().count()
             if (count > max) {
                 report(CodeSmell(issue, Entity.from(function), "Too many throw statements in the function" +
                         " ${function.nameAsSafeName}. The maximum number of allowed throw statements is $max."))

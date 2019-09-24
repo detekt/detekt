@@ -7,12 +7,12 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.collectByType
 import io.gitlab.arturbosch.detekt.rules.isMainFunction
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.KtTypeReference
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 
 /**
  * This rule reports all exceptions that are thrown in a `main` method.
@@ -47,6 +47,6 @@ class ThrowingExceptionInMain(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun containsThrowExpression(function: KtNamedFunction): Boolean {
-        return function.bodyExpression?.collectByType<KtThrowExpression>()?.any() == true
+        return function.bodyExpression?.collectDescendantsOfType<KtThrowExpression>()?.any() == true
     }
 }
