@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.asBlockExpression
 import io.gitlab.arturbosch.detekt.rules.collectByType
 import io.gitlab.arturbosch.detekt.rules.isEqualsFunction
 import org.jetbrains.kotlin.KtNodeTypes
@@ -63,8 +62,7 @@ class EqualsAlwaysReturnsTrueOrFalse(config: Config = Config.empty) : Rule(confi
     }
 
     private fun isSingleReturnWithBooleanConstant(bodyExpression: KtExpression): Boolean {
-        val returnExpressionsInBlock = bodyExpression.asBlockExpression()?.statements
-                ?.filterIsInstance<KtReturnExpression>() ?: return false
+        val returnExpressionsInBlock = bodyExpression.children.filterIsInstance<KtReturnExpression>()
         val lastValidReturnExpression = returnExpressionsInBlock.first().returnedExpression
         val allReturnExpressions = bodyExpression.collectByType<KtReturnExpression>().toList()
         val hasNoNestedReturnExpression = allReturnExpressions.size == returnExpressionsInBlock.size
