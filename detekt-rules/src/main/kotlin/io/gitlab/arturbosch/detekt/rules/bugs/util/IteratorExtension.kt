@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.bugs.util
 
-import io.gitlab.arturbosch.detekt.rules.collectByType
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtThrowExpression
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 
 internal fun KtClassOrObject.isImplementingIterator(): Boolean {
     val typeList = this.getSuperTypeList()?.entries
@@ -19,7 +19,7 @@ internal fun KtClassOrObject.getMethod(name: String): KtNamedFunction? {
 
 internal fun KtNamedFunction.throwsNoSuchElementExceptionThrown(): Boolean {
     return this.bodyExpression
-            ?.collectByType<KtThrowExpression>()
+            ?.collectDescendantsOfType<KtThrowExpression>()
             ?.any { isNoSuchElementExpression(it) } ?: false
 }
 

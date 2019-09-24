@@ -7,11 +7,11 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.collectByType
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtTypeReference
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 
 /**
  * Using Array<Primitive> leads to implicit boxing and performance hit. Prefer using Kotlin specialized Array
@@ -69,7 +69,7 @@ class ArrayPrimitive(config: Config = Config.empty) : Rule(config) {
 
     private fun reportArrayPrimitives(element: KtElement) {
         return element
-                .collectByType<KtTypeReference>()
+                .collectDescendantsOfType<KtTypeReference>()
                 .filter { isArrayPrimitive(it) }
                 .forEach { report(CodeSmell(issue, Entity.from(it), issue.description)) }
     }

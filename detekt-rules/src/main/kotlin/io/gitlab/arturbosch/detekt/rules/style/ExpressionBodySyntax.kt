@@ -7,13 +7,13 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.collectByType
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 
 /**
  * Functions which only contain a `return` statement can be collapsed to an expression body. This shortens and
@@ -65,7 +65,7 @@ class ExpressionBodySyntax(config: Config = Config.empty) : Rule(config) {
             ?.let { it[0] as? KtReturnExpression }
 
     private fun KtReturnExpression.containsReturnStmtsInNullableArguments(): Boolean =
-        collectByType<KtReturnExpression>()
+        collectDescendantsOfType<KtReturnExpression>()
             .map { it.parent }
             .filterIsInstance<KtBinaryExpression>()
             .firstOrNull { it.operationToken == KtTokens.ELVIS } != null

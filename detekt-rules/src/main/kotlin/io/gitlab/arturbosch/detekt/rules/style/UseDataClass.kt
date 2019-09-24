@@ -9,16 +9,16 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SplitPattern
-import io.gitlab.arturbosch.detekt.rules.collectByType
 import io.gitlab.arturbosch.detekt.rules.doesNotExtendAnything
+import io.gitlab.arturbosch.detekt.rules.extractDeclarations
 import io.gitlab.arturbosch.detekt.rules.isClosedForExtension
 import io.gitlab.arturbosch.detekt.rules.isInline
-import io.gitlab.arturbosch.detekt.rules.extractDeclarations
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
 
@@ -57,7 +57,7 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
     override fun visit(root: KtFile) {
         super.visit(root)
         val annotationExcluder = AnnotationExcluder(root, excludeAnnotatedClasses)
-        root.collectByType<KtClass>().forEach { visitKlass(it, annotationExcluder) }
+        root.collectDescendantsOfType<KtClass>().forEach { visitKlass(it, annotationExcluder) }
     }
 
     private fun visitKlass(klass: KtClass, annotationExcluder: AnnotationExcluder) {

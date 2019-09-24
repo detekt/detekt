@@ -7,10 +7,10 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.collectByType
 import org.jetbrains.kotlin.psi.KtFinallySection
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.parents
 
 /**
@@ -34,10 +34,10 @@ class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
 
     override fun visitFinallySection(finallySection: KtFinallySection) {
         val innerFunctions = finallySection.finalExpression
-            .collectByType<KtNamedFunction>()
+            .collectDescendantsOfType<KtNamedFunction>()
             .toSet()
         finallySection.finalExpression
-            .collectByType<KtReturnExpression>()
+            .collectDescendantsOfType<KtReturnExpression>()
             .filter { isNotInInnerFunction(it, innerFunctions) }
             .forEach { report(CodeSmell(issue, Entity.from(it), issue.description)) }
     }

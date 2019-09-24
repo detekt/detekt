@@ -8,10 +8,10 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SplitPattern
-import io.gitlab.arturbosch.detekt.rules.collectByType
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtThrowExpression
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 
 /**
  * This rule allows to define functions which should never throw an exception. If a function exists that does throw
@@ -48,7 +48,7 @@ class ExceptionRaisedInUnexpectedLocation(config: Config = Config.empty) : Rule(
     private fun isPotentialMethod(function: KtNamedFunction) = methods.any(function.name)
 
     private fun hasThrowExpression(declaration: KtExpression?) =
-            declaration?.collectByType<KtThrowExpression>()?.any() == true
+            declaration?.collectDescendantsOfType<KtThrowExpression>()?.any() == true
 
     companion object {
         const val METHOD_NAMES = "methodNames"
