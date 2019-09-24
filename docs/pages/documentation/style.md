@@ -273,6 +273,31 @@ import kotlin.jvm.JvmField
 import kotlin.SinceKotlin
 ```
 
+### ForbiddenMethod
+
+This rule allows to set a list of forbidden methods. This can be used to discourage the use of unstable, experimental
+or deprecated methods, especially for methods imported from external libraries.
+Detekt will then report all methods invocation that are forbidden.
+
+**Severity**: Style
+
+**Debt**: 10min
+
+#### Configuration options:
+
+* `methods` (default: `''`)
+
+   Fully qualified method signatures which should not be used
+
+#### Noncompliant Code:
+
+```kotlin
+import java.lang.System
+fun main() {
+    System.gc()
+}
+```
+
 ### ForbiddenVoid
 
 This rule detects usages of `Void` and reports them as forbidden.

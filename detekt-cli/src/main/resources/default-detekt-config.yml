@@ -440,6 +440,9 @@ style:
   ForbiddenImport:
     active: false
     imports: ''
+  ForbiddenMethod:
+    active: false
+    methods: ''
   ForbiddenVoid:
     active: false
     ignoreOverridden: false
