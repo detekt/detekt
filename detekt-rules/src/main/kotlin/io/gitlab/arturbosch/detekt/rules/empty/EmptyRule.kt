@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.hasCommentInside
+import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtExpression
 
 /**
@@ -29,6 +30,7 @@ abstract class EmptyRule(config: Config) : Rule(config) {
     }
 
     private fun KtExpression.checkBlockExpr(skipIfCommented: Boolean = false) {
+        if (this !is KtBlockExpression) return
         children.let {
             val hasComment = hasCommentInside()
             if (skipIfCommented && hasComment) {
