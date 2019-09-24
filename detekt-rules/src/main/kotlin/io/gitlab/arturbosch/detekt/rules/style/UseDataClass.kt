@@ -79,7 +79,6 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 
             if (containsFunctions && containsPropertyOrPropertyParameters && !containsDelegatedProperty) {
                 if (allowVars && containsVars) {
-                    // #1920 Allows users to relax this rule to allow vars.
                     return
                 }
                 report(

@@ -140,9 +140,7 @@ class UseDataClassSpec : Spek({
         describe("does report class with vars and allowVars") {
 
             it("does not report class with mutable constructor parameter") {
-                val code = """
-                    class DataClassCandidateWithVar(var i: Int)
-				"""
+                val code = """class DataClassCandidateWithVar(var i: Int)"""
                 val config = TestConfig(mapOf(UseDataClass.ALLOW_VARS to "true"))
                 assertThat(UseDataClass(config).compileAndLint(code)).isEmpty()
             }
