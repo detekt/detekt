@@ -41,6 +41,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
  *
  * @configuration excludeAnnotatedClasses - allows to provide a list of annotations that disable this check
  * (default: `""`)
+ * @configuration allowVars - allows to relax this rule in order to exclude classes that contains one (or more) Vars (default: `false`)
  */
 class UseDataClass(config: Config = Config.empty) : Rule(config) {
 
@@ -51,6 +52,7 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 
     private val excludeAnnotatedClasses = SplitPattern(valueOrDefault(EXCLUDE_ANNOTATED_CLASSES, ""))
     private val defaultFunctionNames = hashSetOf("hashCode", "equals", "toString", "copy")
+    private val allowVars = valueOrDefault(ALLOW_VARS, false)
 
     override fun visit(root: KtFile) {
         super.visit(root)
@@ -72,11 +74,19 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 
             val containsFunctions = functions.none { !defaultFunctionNames.contains(it.name) }
             val containsPropertyOrPropertyParameters = properties.isNotEmpty() || propertyParameters.isNotEmpty()
+            val containsVars = properties.any { it.isVar } || propertyParameters.any { it.isMutable }
             val containsDelegatedProperty = properties.any { it.hasDelegate() }
 
             if (containsFunctions && containsPropertyOrPropertyParameters && !containsDelegatedProperty) {
-                report(CodeSmell(issue, Entity.from(klass), "The class ${klass.nameAsSafeName} defines no " +
-                        "functionality and only holds data. Consider converting it to a data class."))
+                if (allowVars && containsVars) {
+                    return
+                }
+                report(
+                    CodeSmell(
+                        issue, Entity.from(klass), "The class ${klass.nameAsSafeName} defines no " +
+                                "functionality and only holds data. Consider converting it to a data class."
+                    )
+                )
             }
         }
     }
@@ -101,6 +111,7 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
                     .orEmpty()
 
     companion object {
+        const val ALLOW_VARS = "allowVars"
         const val EXCLUDE_ANNOTATED_CLASSES = "excludeAnnotatedClasses"
     }
 }

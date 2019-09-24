@@ -1300,6 +1300,10 @@ Read more about `data class`: https://kotlinlang.org/docs/reference/data-classes
 
    allows to provide a list of annotations that disable this check
 
+* `allowVars` (default: `false`)
+
+   allows to relax this rule in order to exclude classes that contains one (or more) Vars
+
 #### Noncompliant Code:
 
 ```kotlin
