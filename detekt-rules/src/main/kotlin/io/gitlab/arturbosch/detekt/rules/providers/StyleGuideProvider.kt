@@ -14,6 +14,7 @@ import io.gitlab.arturbosch.detekt.rules.style.FileParsingRule
 import io.gitlab.arturbosch.detekt.rules.style.ForbiddenComment
 import io.gitlab.arturbosch.detekt.rules.style.ForbiddenImport
 import io.gitlab.arturbosch.detekt.rules.style.ForbiddenPublicDataClass
+import io.gitlab.arturbosch.detekt.rules.style.ForbiddenMethodCall
 import io.gitlab.arturbosch.detekt.rules.style.ForbiddenVoid
 import io.gitlab.arturbosch.detekt.rules.style.FunctionOnlyReturningConstant
 import io.gitlab.arturbosch.detekt.rules.style.LibraryCodeMustSpecifyReturnType
@@ -83,6 +84,7 @@ class StyleGuideProvider : RuleSetProvider {
                 EqualsNullCall(config),
                 ForbiddenComment(config),
                 ForbiddenImport(config),
+                ForbiddenMethodCall(config),
                 ForbiddenPublicDataClass(config),
                 FunctionOnlyReturningConstant(config),
                 SpacingBetweenPackageAndImports(config),
