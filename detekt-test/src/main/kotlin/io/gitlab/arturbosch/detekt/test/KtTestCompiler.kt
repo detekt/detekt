@@ -31,12 +31,12 @@ object KtTestCompiler : KtCompiler() {
 
     fun compile(path: Path) = compile(root, path)
 
-    fun compileFromContent(content: String, filename: String = TEST_FILENAME): KtFile {
+    fun compileFromContent(content: String): KtFile {
         val file = psiFileFactory.createFileFromText(
-            filename,
+            TEST_FILENAME,
             KotlinLanguage.INSTANCE,
             StringUtilRt.convertLineSeparators(content)) as? KtFile
-        file?.putUserData(ABSOLUTE_PATH, filename)
+        file?.putUserData(ABSOLUTE_PATH, TEST_FILENAME)
         return file ?: throw IllegalStateException("kotlin file expected")
     }
 

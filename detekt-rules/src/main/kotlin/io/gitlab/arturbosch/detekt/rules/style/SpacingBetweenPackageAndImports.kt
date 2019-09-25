@@ -44,10 +44,8 @@ class SpacingBetweenPackageAndImports(config: Config = Config.empty) : Rule(conf
             Debt.FIVE_MINS)
 
     override fun visitKtFile(file: KtFile) {
-        if (!file.isScript()) {
-            containsClassOrObject = file.collectDescendantsOfType<KtClassOrObject>().any() == true
-            super.visitKtFile(file)
-        }
+        containsClassOrObject = file.collectDescendantsOfType<KtClassOrObject>().any() == true
+        super.visitKtFile(file)
     }
 
     override fun visitImportList(importList: KtImportList) {
