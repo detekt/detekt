@@ -333,6 +333,25 @@ class UnusedPrivateMemberSpec : Spek({
             assertThat(subject.lint(code)).hasSize(1)
         }
 
+        it("reports two parameters if they are unused and called the same in different methods") {
+            val code = """
+            class Test {
+                val value = usedMethod(1)
+                val value2 = usedMethod2(1)
+
+                private fun usedMethod(unusedParameter: Int): Int {
+                    return 5
+                }
+
+                private fun usedMethod2(unusedParameter: Int) {
+                    return 5
+                }
+            }
+            """
+
+            assertThat(subject.lint(code)).hasSize(2)
+        }
+
         it("does not report single parameters if they used in return statement") {
             val code = """
             class Test {
