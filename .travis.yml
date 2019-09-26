@@ -6,7 +6,7 @@ matrix:
   include:
     - os: linux
       dist: xenial
-      jdk: openjdk8
+      jdk: oraclejdk8
     - os: linux
       dist: bionic
       jdk: openjdk11
