@@ -44,7 +44,7 @@ class SpacingBetweenPackageAndImports(config: Config = Config.empty) : Rule(conf
             Debt.FIVE_MINS)
 
     override fun visitKtFile(file: KtFile) {
-        if (file.packageDirective != null) {
+        if (file.packageDirective?.name?.isNotEmpty() == true) {
             containsClassOrObject = file.collectDescendantsOfType<KtClassOrObject>().any() == true
             super.visitKtFile(file)
         }
