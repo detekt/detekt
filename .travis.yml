@@ -5,7 +5,7 @@ language: java
 matrix:
   include:
     - os: linux
-      dist: xenial
+      dist: trusty
       jdk: oraclejdk8
     - os: linux
       dist: bionic
