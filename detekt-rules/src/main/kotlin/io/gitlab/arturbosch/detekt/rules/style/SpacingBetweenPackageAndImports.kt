@@ -37,25 +37,24 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  */
 class SpacingBetweenPackageAndImports(config: Config = Config.empty) : Rule(config) {
 
-    private var containsClassOrObject = false
-
     override val issue = Issue(javaClass.simpleName, Severity.Style,
             "Violation of the package declaration style.",
             Debt.FIVE_MINS)
 
     override fun visitKtFile(file: KtFile) {
-        if (file.packageDirective?.name?.isNotEmpty() == true) {
-            containsClassOrObject = file.collectDescendantsOfType<KtClassOrObject>().any() == true
-            super.visitKtFile(file)
+        if (file.hasPackage() && file.containsClassOrObject()) {
+            file.importList?.let {
+                if (it.imports.isNotEmpty()) {
+                    checkPackageDeclaration(it)
+                    checkKtElementsDeclaration(it)
+                }
+            }
         }
     }
 
-    override fun visitImportList(importList: KtImportList) {
-        if (containsClassOrObject && importList.imports.isNotEmpty()) {
-            checkPackageDeclaration(importList)
-            checkKtElementsDeclaration(importList)
-        }
-    }
+    private fun KtFile.hasPackage() = packageDirective?.name?.isNotEmpty() == true
+
+    private fun KtFile.containsClassOrObject() = collectDescendantsOfType<KtClassOrObject>().any()
 
     private fun checkPackageDeclaration(importList: KtImportList) {
         val prevSibling = importList.prevSibling
