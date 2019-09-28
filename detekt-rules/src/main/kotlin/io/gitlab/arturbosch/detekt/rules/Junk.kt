@@ -8,12 +8,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtConstantExpression
-import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
-import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
-
-fun KtClassOrObject.isObjectOfAnonymousClass() =
-        this.getNonStrictParentOfType<KtObjectDeclaration>() != null && this.name == null
 
 fun KtCallExpression.isUsedForNesting(): Boolean = when (getCallNameExpression()?.text) {
     "run", "let", "apply", "with", "use", "forEach" -> true
