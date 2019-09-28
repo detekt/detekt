@@ -6,12 +6,6 @@ import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 
-internal fun KtClassOrObject.isImplementingIterator(): Boolean {
-    val typeList = this.getSuperTypeList()?.entries
-    val name = typeList?.firstOrNull()?.typeAsUserType?.referencedName
-    return name == "Iterator"
-}
-
 internal fun KtNamedDeclaration.throwsNoSuchElementExceptionThrown() =
     anyDescendantOfType<KtThrowExpression> { isNoSuchElementExpression(it) }
 
