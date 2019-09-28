@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtThrowExpression
-import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 
 internal fun KtClassOrObject.isImplementingIterator(): Boolean {
     val typeList = this.getSuperTypeList()?.entries
@@ -19,8 +19,7 @@ internal fun KtClassOrObject.getMethod(name: String): KtNamedFunction? {
 
 internal fun KtNamedFunction.throwsNoSuchElementExceptionThrown(): Boolean {
     return this.bodyExpression
-            ?.collectDescendantsOfType<KtThrowExpression>()
-            ?.any { isNoSuchElementExpression(it) } ?: false
+            ?.anyDescendantOfType<KtThrowExpression> { isNoSuchElementExpression(it) } == true
 }
 
 private fun isNoSuchElementExpression(expression: KtThrowExpression): Boolean {

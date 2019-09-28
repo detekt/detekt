@@ -13,7 +13,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtTypeArgumentList
 import org.jetbrains.kotlin.psi.KtTypeReference
-import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.getAbbreviatedTypeOrType
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
@@ -70,8 +70,7 @@ class ForbiddenVoid(config: Config = Config.empty) : Rule(config) {
     private fun KtTypeReference.isPartOfReturnTypeOfFunction() =
         parentOfType<KtNamedFunction>()
             ?.typeReference
-            ?.collectDescendantsOfType<KtTypeReference>()
-            ?.any { it == this } ?: false
+            ?.anyDescendantOfType<KtTypeReference> { it == this } ?: false
 
     private fun KtTypeReference.isParameterTypeOfFunction() =
         parentOfType<KtParameter>() != null

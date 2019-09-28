@@ -12,7 +12,7 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.KtTypeReference
-import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 
 /**
  * This rule reports all exceptions that are thrown in a `main` method.
@@ -47,6 +47,6 @@ class ThrowingExceptionInMain(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun containsThrowExpression(function: KtNamedFunction): Boolean {
-        return function.bodyExpression?.collectDescendantsOfType<KtThrowExpression>()?.any() == true
+        return function.bodyExpression?.anyDescendantOfType<KtThrowExpression>() == true
     }
 }

@@ -14,7 +14,7 @@ import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtImportList
 import org.jetbrains.kotlin.psi.KtPackageDirective
-import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.siblings
 
 /**
@@ -42,7 +42,7 @@ class SpacingBetweenPackageAndImports(config: Config = Config.empty) : Rule(conf
             Debt.FIVE_MINS)
 
     override fun visitKtFile(file: KtFile) {
-        if (file.hasPackage() && file.containsClassOrObject()) {
+        if (file.hasPackage() && file.anyDescendantOfType<KtClassOrObject>()) {
             file.importList?.let {
                 if (it.imports.isNotEmpty()) {
                     checkPackageDeclaration(it)
@@ -53,8 +53,6 @@ class SpacingBetweenPackageAndImports(config: Config = Config.empty) : Rule(conf
     }
 
     private fun KtFile.hasPackage() = packageDirective?.name?.isNotEmpty() == true
-
-    private fun KtFile.containsClassOrObject() = collectDescendantsOfType<KtClassOrObject>().any()
 
     private fun checkPackageDeclaration(importList: KtImportList) {
         val prevSibling = importList.prevSibling

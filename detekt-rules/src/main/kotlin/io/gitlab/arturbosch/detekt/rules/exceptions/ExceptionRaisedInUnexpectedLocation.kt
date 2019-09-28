@@ -11,7 +11,7 @@ import io.gitlab.arturbosch.detekt.api.SplitPattern
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtThrowExpression
-import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 
 /**
  * This rule allows to define functions which should never throw an exception. If a function exists that does throw
@@ -48,7 +48,7 @@ class ExceptionRaisedInUnexpectedLocation(config: Config = Config.empty) : Rule(
     private fun isPotentialMethod(function: KtNamedFunction) = methods.any(function.name)
 
     private fun hasThrowExpression(declaration: KtExpression?) =
-            declaration?.collectDescendantsOfType<KtThrowExpression>()?.any() == true
+            declaration?.anyDescendantOfType<KtThrowExpression>() == true
 
     companion object {
         const val METHOD_NAMES = "methodNames"
