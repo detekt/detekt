@@ -14,8 +14,8 @@ import org.jetbrains.kotlin.psi.KtExpressionWithLabel
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtThisExpression
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
+import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.isExtensionDeclaration
-import org.jetbrains.kotlin.psi.psiUtil.parents
 
 /**
  * This rule reports labeled expressions. Expressions with labels generally increase complexity and worsen the
@@ -93,7 +93,7 @@ class LabeledExpression(config: Config = Config.empty) : Rule(config) {
 
     private fun isAllowedToReferenceContainingClass(klass: KtClass, expression: KtExpressionWithLabel): Boolean {
         return !klass.isInner() ||
-                expression.parents.filterIsInstance<KtNamedFunction>().any { it.isExtensionDeclaration() }
+                expression.getStrictParentOfType<KtNamedFunction>()?.isExtensionDeclaration() == true
     }
 
     private fun getClassHierarchy(element: KtElement, classes: MutableList<KtClass>) {

@@ -17,6 +17,7 @@ import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.kotlin.psi.KtImportList
 import org.jetbrains.kotlin.psi.KtPackageDirective
 import org.jetbrains.kotlin.psi.KtReferenceExpression
+import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
 
 /**
  * This rule reports unused imports. Unused imports are dead code and should be removed.
@@ -92,8 +93,7 @@ class UnusedImports(config: Config) : Rule(config) {
         override fun visitDeclaration(dcl: KtDeclaration) {
             val kdoc = dcl.docComment?.getDefaultSection()
 
-            kdoc?.children
-                    ?.filter { it is KDocTag }
+            kdoc?.getChildrenOfType<KDocTag>()
                     ?.map { it.text }
                     ?.forEach { handleKDoc(it) }
 
