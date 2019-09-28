@@ -11,7 +11,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.KtValueArgument
-import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 
 /**
  * Exceptions should not be wrapped inside the same exception type and then rethrown. Prefer wrapping exceptions in more
@@ -46,7 +46,7 @@ class ThrowingNewInstanceOfSameException(config: Config = Config.empty) : Rule(c
     override fun visitCatchSection(catchClause: KtCatchClause) {
         val parameterName = catchClause.catchParameter?.name
         val typeReference = catchClause.catchParameter?.typeReference?.text
-        val throwExpression = catchClause.catchBody?.collectDescendantsOfType<KtThrowExpression>()?.firstOrNull {
+        val throwExpression = catchClause.catchBody?.findDescendantOfType<KtThrowExpression> {
             val thrownExpression = it.thrownExpression as? KtCallExpression
             thrownExpression != null &&
                     createsSameExceptionType(thrownExpression, typeReference) &&
