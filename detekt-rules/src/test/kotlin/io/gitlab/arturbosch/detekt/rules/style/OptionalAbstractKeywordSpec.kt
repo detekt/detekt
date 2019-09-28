@@ -27,11 +27,11 @@ class OptionalAbstractKeywordSpec : Spek({
 
         it("reports nested abstract interface") {
             val code = """
-				class A {
-					abstract interface B {
-						abstract fun x()
-					}
-				}"""
+                class A {
+                    abstract interface B {
+                        abstract fun x()
+                    }
+                }"""
             assertThat(subject.compileAndLint(code)).hasSize(2)
         }
 
@@ -44,9 +44,9 @@ class OptionalAbstractKeywordSpec : Spek({
             val code = """
                 interface I {
                     abstract class A {
-						abstract fun dependency()
-				    }
-				}"""
+                        abstract fun dependency()
+                    }
+                }"""
             assertThat(subject.compileAndLint(code)).hasSize(0)
         }
     }

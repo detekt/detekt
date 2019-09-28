@@ -30,9 +30,9 @@ class ExceptionRaisedInUnexpectedLocationSpec : Spek({
         it("reports the configured method") {
             val config = TestConfig(mapOf(ExceptionRaisedInUnexpectedLocation.METHOD_NAMES to "toDo,todo2"))
             val findings = ExceptionRaisedInUnexpectedLocation(config).compileAndLint("""
-			fun toDo() {
-				throw IllegalStateException()
-			}""")
+            fun toDo() {
+                throw IllegalStateException()
+            }""")
             assertThat(findings).hasSize(1)
         }
     }

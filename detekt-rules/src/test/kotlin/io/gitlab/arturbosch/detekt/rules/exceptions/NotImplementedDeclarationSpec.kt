@@ -12,27 +12,27 @@ class NotImplementedDeclarationSpec : Spek({
 
         it("reports NotImplementedErrors") {
             val code = """
-			fun f() {
-				if (1 == 1) throw NotImplementedError()
-				throw NotImplementedError()
-			}"""
+            fun f() {
+                if (1 == 1) throw NotImplementedError()
+                throw NotImplementedError()
+            }"""
             assertThat(subject.compileAndLint(code)).hasSize(2)
         }
 
         it("reports TODO method calls") {
             val code = """
-			fun f() {
-				TODO("not implemented")
-				TODO()
-			}"""
+            fun f() {
+                TODO("not implemented")
+                TODO()
+            }"""
             assertThat(subject.compileAndLint(code)).hasSize(2)
         }
 
         it("does not report TODO comments") {
             val code = """
-			fun f() {
-				// TODO
-			}"""
+            fun f() {
+                // TODO
+            }"""
             assertThat(subject.compileAndLint(code)).hasSize(0)
         }
     }

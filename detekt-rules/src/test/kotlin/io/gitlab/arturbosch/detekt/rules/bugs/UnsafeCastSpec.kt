@@ -34,17 +34,17 @@ class UnsafeCastSpec : Spek({
 
         it("does not report cast that might succeed") {
             val code = """
-				fun test(s: Any) {
-					println(s as Int)
-				}"""
+                fun test(s: Any) {
+                    println(s as Int)
+                }"""
             assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
         }
 
         it("does not report 'safe' cast that might succeed") {
             val code = """
-				fun test(s: Any) {
-					println((s as? Int) ?: 0)
-				}"""
+                fun test(s: Any) {
+                    println((s as? Int) ?: 0)
+                }"""
             assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
         }
     }

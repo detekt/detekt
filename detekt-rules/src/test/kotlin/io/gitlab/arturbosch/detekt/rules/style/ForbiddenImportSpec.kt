@@ -9,15 +9,15 @@ import org.spekframework.spek2.style.specification.describe
 class ForbiddenImportSpec : Spek({
     describe("ForbiddenImport rule") {
         val code = """
-			package foo
+            package foo
 
-			import kotlin.jvm.JvmField
-			import kotlin.SinceKotlin
+            import kotlin.jvm.JvmField
+            import kotlin.SinceKotlin
 
-			import com.example.R.string
-			import net.example.R.dimen
-			import net.example.R.dimension
-		"""
+            import com.example.R.string
+            import net.example.R.dimen
+            import net.example.R.dimension
+        """
 
         it("should report nothing by default") {
             val findings = ForbiddenImport().lint(code)

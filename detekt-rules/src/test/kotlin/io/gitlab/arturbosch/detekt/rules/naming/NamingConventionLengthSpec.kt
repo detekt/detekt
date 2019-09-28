@@ -35,9 +35,9 @@ class NamingConventionLengthSpec : Spek({
 
             it("does not report a variable with only a single underscore") {
                 val code = """
-			class C {
-				val prop: (Int) -> Unit = { _ -> Unit }
-			}"""
+            class C {
+                val prop: (Int) -> Unit = { _ -> Unit }
+            }"""
                 assertThat(variableMinLength.lint(code)).hasSize(0)
             }
         }

@@ -12,29 +12,29 @@ class ThrowsCountSpec : Spek({
     describe("ThrowsCount rule") {
 
         val code = """
-			fun f1(x: Int) {
-				when (x) {
-					1 -> throw IOException()
-					2 -> throw IOException()
-					3 -> throw IOException()
-				}
-			}
+            fun f1(x: Int) {
+                when (x) {
+                    1 -> throw IOException()
+                    2 -> throw IOException()
+                    3 -> throw IOException()
+                }
+            }
 
-			fun f2(x: Int) {
-				when (x) {
-					1 -> throw IOException()
-					2 -> throw IOException()
-				}
-			}
+            fun f2(x: Int) {
+                when (x) {
+                    1 -> throw IOException()
+                    2 -> throw IOException()
+                }
+            }
 
-			override fun f3(x: Int) { // does not report overridden function
-				when (x) {
-					1 -> throw IOException()
-					2 -> throw IOException()
-					3 -> throw IOException()
-				}
-			}
-		"""
+            override fun f3(x: Int) { // does not report overridden function
+                when (x) {
+                    1 -> throw IOException()
+                    2 -> throw IOException()
+                    3 -> throw IOException()
+                }
+            }
+        """
 
         context("default config") {
             val subject = ThrowsCount(Config.empty)

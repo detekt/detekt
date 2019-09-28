@@ -38,18 +38,18 @@ class UtilityClassWithPublicConstructorSpec : Spek({
 
             it("should not get triggered for utility class") {
                 val code = """
-				@Retention(AnnotationRetention.SOURCE)
-				@StringDef(
-					Gender.MALE,
-					Gender.FEMALE
-				)
-				annotation class Gender {
-					companion object {
-						const val MALE = "male"
-						const val FEMALE = "female"
-					}
-				}
-			"""
+                @Retention(AnnotationRetention.SOURCE)
+                @StringDef(
+                    Gender.MALE,
+                    Gender.FEMALE
+                )
+                annotation class Gender {
+                    companion object {
+                        const val MALE = "male"
+                        const val FEMALE = "female"
+                    }
+                }
+            """
                 assertThat(subject.lint(code)).isEmpty()
             }
         }

@@ -13,24 +13,24 @@ class DuplicateCaseInWhenExpressionSpec : Spek({
 
         it("reports duplicated label in when") {
             val code = """
-				fun f() {
-					when (1) {
-						1 -> println()
-						1 -> println()
-						else -> println()
-					}
-				}"""
+                fun f() {
+                    when (1) {
+                        1 -> println()
+                        1 -> println()
+                        else -> println()
+                    }
+                }"""
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         it("does not report duplicated label in when") {
             val code = """
-				fun f() {
-					when (1) {
-						1 -> println()
-						else -> println()
-					}
-				}"""
+                fun f() {
+                    when (1) {
+                        1 -> println()
+                        else -> println()
+                    }
+                }"""
             assertThat(subject.compileAndLint(code)).hasSize(0)
         }
     }

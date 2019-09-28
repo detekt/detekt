@@ -12,36 +12,36 @@ class ThrowingExceptionFromFinallySpec : Spek({
 
         it("should report a throw expression") {
             val code = """
-				fun x() {
-					try {
-					} finally {
-						if (1 == 1) {
-							throw IllegalArgumentException()
-						}
-					}
-				}"""
+                fun x() {
+                    try {
+                    } finally {
+                        if (1 == 1) {
+                            throw IllegalArgumentException()
+                        }
+                    }
+                }"""
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         it("should report a nested throw expression") {
             val code = """
-				fun x() {
-					try {
-					} finally {
-						throw IllegalArgumentException()
-					}
-				}"""
+                fun x() {
+                    try {
+                    } finally {
+                        throw IllegalArgumentException()
+                    }
+                }"""
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         it("should not report a finally expression without a throw expression") {
             val code = """
-				fun x() {
-					try {
-					} finally {
-						println()
-					}
-				}"""
+                fun x() {
+                    try {
+                    } finally {
+                        println()
+                    }
+                }"""
             assertThat(subject.compileAndLint(code)).hasSize(0)
         }
     }

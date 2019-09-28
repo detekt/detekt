@@ -34,10 +34,10 @@ class EmptyFunctionBlockSpec : Spek({
 
         it("should flag the nested empty function") {
             val code = """
-				fun a() {
-					fun b() {}
-				}"""
-            assertThat(subject.compileAndLint(code)).hasExactlyLocationStrings("'{}' at (2,10) in /$fileName")
+                fun a() {
+                    fun b() {}
+                }"""
+            assertThat(subject.compileAndLint(code)).hasExactlyLocationStrings("'{}' at (2,13) in /$fileName")
         }
 
         context("some overridden functions") {

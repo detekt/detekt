@@ -12,97 +12,97 @@ class UndocumentedPublicFunctionSpec : Spek({
 
         it("reports undocumented public functions") {
             val code = """
-    			fun noComment1() {}
-			"""
+                fun noComment1() {}
+            """
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         it("reports undocumented public functions in companion object") {
             val code = """
-    			class Test {
-    				companion object {
-    					fun noComment1() {}
-    					public fun noComment2() {}
-    				}
-    			}
-			"""
+                class Test {
+                    companion object {
+                        fun noComment1() {}
+                        public fun noComment2() {}
+                    }
+                }
+            """
             assertThat(subject.compileAndLint(code)).hasSize(2)
         }
 
         it("does not report documented public function") {
             val code = """
-    			/**
-			     * Comment
-				 */
-				fun commented1() {}
-			"""
+                /**
+                 * Comment
+                 */
+                fun commented1() {}
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("does not report documented public function in class") {
             val code = """
-				class Test {
-					/**
-					*
-					*/
-					fun commented1() {}
+                class Test {
+                    /**
+                    *
+                    */
+                    fun commented1() {}
 
-					/**
-					*
-					*/
-					fun commented2() {}
-				}
-			"""
+                    /**
+                    *
+                    */
+                    fun commented2() {}
+                }
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("does not report udocumented internal and private function") {
             val code = """
-    			class Test {
-    				internal fun no1(){}
-    				private fun no2(){}
-    			}
-			"""
+                class Test {
+                    internal fun no1(){}
+                    private fun no2(){}
+                }
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("does not report undocumented nested function") {
             val code = """
-    			/**
-			     * Comment
-				 */
-				fun commented() {
-					fun iDontNeedDoc() {}
-				}
-			"""
+                /**
+                 * Comment
+                 */
+                fun commented() {
+                    fun iDontNeedDoc() {}
+                }
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("does not report public functions in internal class") {
             val code = """
-    			internal class NoComments {
+                internal class NoComments {
 
-					fun nope0() {}
-					public fun nope1() {}
-					internal fun nope2() {}
-					protected fun nope3() {}
-					private fun nope4() {}
-				}
-			"""
+                    fun nope0() {}
+                    public fun nope1() {}
+                    internal fun nope2() {}
+                    protected fun nope3() {}
+                    private fun nope4() {}
+                }
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("does not report public functions in private class") {
             val code = """
-    			private class NoComments {
+                private class NoComments {
 
-					fun nope0() {}
-					public fun nope1() {}
-					internal fun nope2() {}
-					protected fun nope3() {}
-					private fun nope4() {}
-				}
-			"""
+                    fun nope0() {}
+                    public fun nope1() {}
+                    internal fun nope2() {}
+                    protected fun nope3() {}
+                    private fun nope4() {}
+                }
+            """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }

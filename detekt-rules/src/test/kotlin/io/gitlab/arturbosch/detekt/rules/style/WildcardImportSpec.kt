@@ -62,13 +62,13 @@ class WildcardImportSpec : Spek({
 
         context("a kt file with no wildcard imports") {
             val code = """
-			package test
+            package test
 
-			import test.Test
+            import test.Test
 
-			class Test {
-			}
-		"""
+            class Test {
+            }
+        """
 
             it("should not report any issues") {
                 val findings = WildcardImport().lint(code)

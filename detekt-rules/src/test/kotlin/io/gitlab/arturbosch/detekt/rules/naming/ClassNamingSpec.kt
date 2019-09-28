@@ -12,27 +12,27 @@ class ClassNamingSpec : Spek({
         it("should detect no violations") {
             val findings = NamingRules().compileAndLint(
                     """
-					class MyClassWithNumbers5
+                    class MyClassWithNumbers5
 
-					class NamingConventions {
+                    class NamingConventions {
 
-						private val _classVariable = 5
-						val classVariable = 5
+                        private val _classVariable = 5
+                        val classVariable = 5
 
-						fun classMethod() {}
+                        fun classMethod() {}
 
-						fun underscoreTestMethod() {
-							val (_, status) = Pair(1, 2) // valid: _
-						}
+                        fun underscoreTestMethod() {
+                            val (_, status) = Pair(1, 2) // valid: _
+                        }
 
-						companion object {
-							const val stUff = "stuff"
-							val SSS = "stuff"
-							val ooo = Any()
-							val OOO = Any()
-						}
-					}
-				"""
+                        companion object {
+                            const val stUff = "stuff"
+                            val SSS = "stuff"
+                            val ooo = Any()
+                            val OOO = Any()
+                        }
+                    }
+                """
             )
             assertThat(findings).isEmpty()
         }
@@ -40,20 +40,20 @@ class ClassNamingSpec : Spek({
         it("should find seven violations") {
             val findings = NamingRules().compileAndLint(
                     """
-					class _NamingConventions {
+                    class _NamingConventions {
 
-						val C_lassVariable = 5
-						val CLASSVARIABLE = 5
+                        val C_lassVariable = 5
+                        val CLASSVARIABLE = 5
 
-						fun _classmethod() {}
-						fun Classmethod() {}
+                        fun _classmethod() {}
+                        fun Classmethod() {}
 
-						companion object {
-							val __bla = Any()
-						}
-					}
-					class namingConventions {}
-				"""
+                        companion object {
+                            val __bla = Any()
+                        }
+                    }
+                    class namingConventions {}
+                """
             )
             assertThat(findings).hasSize(7)
         }
