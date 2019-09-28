@@ -36,8 +36,7 @@ class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
         val innerFunctions = finallySection.finalExpression
             .collectDescendantsOfType<KtNamedFunction>()
         finallySection.finalExpression
-            .collectDescendantsOfType<KtReturnExpression>()
-            .filter { isNotInInnerFunction(it, innerFunctions) }
+            .collectDescendantsOfType<KtReturnExpression> { isNotInInnerFunction(it, innerFunctions) }
             .forEach { report(CodeSmell(issue, Entity.from(it), issue.description)) }
     }
 

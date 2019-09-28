@@ -95,7 +95,7 @@ class SwallowedException(config: Config = Config.empty) : Rule(config) {
             ?.collectDescendantsOfType<KtThrowExpression>()
             ?.forEach { throwExpr ->
                 val parameterNameReferences = throwExpr.thrownExpression
-                    ?.collectDescendantsOfType<KtNameReferenceExpression>()?.filter { it.text == parameterName }
+                    ?.collectDescendantsOfType<KtNameReferenceExpression> { it.text == parameterName }
                 return hasParameterReferences(parameterNameReferences)
             }
         return false
