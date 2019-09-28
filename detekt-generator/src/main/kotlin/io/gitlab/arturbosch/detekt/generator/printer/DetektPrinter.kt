@@ -24,14 +24,14 @@ class DetektPrinter(private val arguments: GeneratorArgs) {
     private fun jekyllHeader(ruleSet: String): String {
         check(ruleSet.length > 1) { "Rule set name must be not empty or less than two symbols." }
         return """
-			|---
-			|title: ${ruleSet[0].toUpperCase()}${ruleSet.substring(1)} Rule Set
-			|sidebar: home_sidebar
-			|keywords: rules, $ruleSet
-			|permalink: $ruleSet.html
-			|toc: true
-			|folder: documentation
-			|---
-		""".trimMargin()
+            |---
+            |title: ${ruleSet[0].toUpperCase()}${ruleSet.substring(1)} Rule Set
+            |sidebar: home_sidebar
+            |keywords: rules, $ruleSet
+            |permalink: $ruleSet.html
+            |toc: true
+            |folder: documentation
+            |---
+        """.trimMargin()
     }
 }
