@@ -7,8 +7,11 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.bugs.util.throwsNoSuchElementExceptionThrown
+import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClassOrObject
+import org.jetbrains.kotlin.psi.KtNamedDeclaration
+import org.jetbrains.kotlin.psi.KtThrowExpression
+import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.findFunctionByName
 import org.jetbrains.kotlin.psi.psiUtil.getSuperNames
 
@@ -57,5 +60,13 @@ class IteratorNotThrowingNoSuchElementException(config: Config = Config.empty) :
             }
         }
         super.visitClassOrObject(classOrObject)
+    }
+
+    private fun KtNamedDeclaration.throwsNoSuchElementExceptionThrown() =
+        anyDescendantOfType<KtThrowExpression> { isNoSuchElementExpression(it) }
+
+    private fun isNoSuchElementExpression(expression: KtThrowExpression): Boolean {
+        val calleeExpression = (expression.thrownExpression as? KtCallExpression)?.calleeExpression
+        return calleeExpression?.text == "NoSuchElementException"
     }
 }
