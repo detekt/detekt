@@ -64,7 +64,7 @@ class EqualsAlwaysReturnsTrueOrFalse(config: Config = Config.empty) : Rule(confi
     private fun isSingleReturnWithBooleanConstant(bodyExpression: KtExpression): Boolean {
         val returnExpressionsInBlock = bodyExpression.children.filterIsInstance<KtReturnExpression>()
         val lastValidReturnExpression = returnExpressionsInBlock.first().returnedExpression
-        val allReturnExpressions = bodyExpression.collectDescendantsOfType<KtReturnExpression>().toList()
+        val allReturnExpressions = bodyExpression.collectDescendantsOfType<KtReturnExpression>()
         val hasNoNestedReturnExpression = allReturnExpressions.size == returnExpressionsInBlock.size
         return lastValidReturnExpression?.isBooleanConstant() == true &&
                 (hasNoNestedReturnExpression ||
