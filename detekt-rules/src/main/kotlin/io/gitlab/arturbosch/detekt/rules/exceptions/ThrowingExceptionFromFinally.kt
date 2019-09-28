@@ -9,7 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtFinallySection
 import org.jetbrains.kotlin.psi.KtThrowExpression
-import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
 
 /**
  * This rule reports all cases where exceptions are thrown from a `finally` block. Throwing exceptions from a `finally`
@@ -32,8 +32,7 @@ class ThrowingExceptionFromFinally(config: Config = Config.empty) : Rule(config)
             Debt.TWENTY_MINS)
 
     override fun visitFinallySection(finallySection: KtFinallySection) {
-        val throwExpressions = finallySection.finalExpression.collectDescendantsOfType<KtThrowExpression>()
-        throwExpressions.forEach {
+        finallySection.finalExpression.forEachDescendantOfType<KtThrowExpression> {
             report(CodeSmell(issue, Entity.from(it), issue.description))
         }
     }

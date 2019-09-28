@@ -18,7 +18,7 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtProperty
-import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.psi.psiUtil.isPropertyParameter
 
@@ -57,7 +57,7 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
     override fun visit(root: KtFile) {
         super.visit(root)
         val annotationExcluder = AnnotationExcluder(root, excludeAnnotatedClasses)
-        root.collectDescendantsOfType<KtClass>().forEach { visitKlass(it, annotationExcluder) }
+        root.forEachDescendantOfType<KtClass> { visitKlass(it, annotationExcluder) }
     }
 
     private fun visitKlass(klass: KtClass, annotationExcluder: AnnotationExcluder) {
