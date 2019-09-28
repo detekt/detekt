@@ -7,10 +7,10 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.bugs.util.getMethod
 import io.gitlab.arturbosch.detekt.rules.bugs.util.isImplementingIterator
 import io.gitlab.arturbosch.detekt.rules.bugs.util.throwsNoSuchElementExceptionThrown
 import org.jetbrains.kotlin.psi.KtClassOrObject
+import org.jetbrains.kotlin.psi.psiUtil.findFunctionByName
 
 /**
  * Reports implementations of the `Iterator` interface which do not throw a NoSuchElementException in the
@@ -49,7 +49,7 @@ class IteratorNotThrowingNoSuchElementException(config: Config = Config.empty) :
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         if (classOrObject.isImplementingIterator()) {
-            val nextMethod = classOrObject.getMethod("next")
+            val nextMethod = classOrObject.findFunctionByName("next")
             if (nextMethod != null && !nextMethod.throwsNoSuchElementExceptionThrown()) {
                 report(CodeSmell(issue, Entity.from(classOrObject),
                         "This implementation of Iterator does not correctly implement the next() method as " +
