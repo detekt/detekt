@@ -47,6 +47,27 @@ class SpacingBetweenPackageAndImportsSpec : Spek({
             assertThat(subject.lint("")).isEmpty()
         }
 
+        describe("Kotlin scripts") {
+
+            it("has no package declaration in script") {
+                val code = "import a.b\n\nprint(1)"
+                val ktsFile = KtTestCompiler.compileFromContent(code, "Test.kts")
+                assertThat(subject.lint(ktsFile)).isEmpty()
+            }
+
+            it("has no package and import declaration in script") {
+                val code = "print(1)"
+                val ktsFile = KtTestCompiler.compileFromContent(code, "Test.kts")
+                assertThat(subject.lint(ktsFile)).isEmpty()
+            }
+
+            it("has import declarations separated by new line in script") {
+                val code = "import a.b\n\nimport a.c\n\nprint(1)"
+                val ktsFile = KtTestCompiler.compileFromContent(code, "Test.kts")
+                assertThat(subject.lint(ktsFile)).isEmpty()
+            }
+        }
+
         it("has code on new line") {
             val code = "package test\nimport a.b\nclass A {}"
             assertThat(subject.lint(code)).hasSize(2)
@@ -65,12 +86,6 @@ class SpacingBetweenPackageAndImportsSpec : Spek({
         it("has package declarations in same line") {
             val code = "package test;import a.b;class A {}"
             assertThat(subject.lint(code)).hasSize(2)
-        }
-
-        it("does not report for Kotlin script file") {
-            val code = "package test\nimport a.b\nclass A {}"
-            val ktsFile = KtTestCompiler.compileFromContent(code, "Test.kts")
-            assertThat(subject.lint(ktsFile)).isEmpty()
         }
 
         it("has multiple imports in file") {
