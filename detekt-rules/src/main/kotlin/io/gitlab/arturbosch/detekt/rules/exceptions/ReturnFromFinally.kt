@@ -35,7 +35,6 @@ class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
     override fun visitFinallySection(finallySection: KtFinallySection) {
         val innerFunctions = finallySection.finalExpression
             .collectDescendantsOfType<KtNamedFunction>()
-            .toSet()
         finallySection.finalExpression
             .collectDescendantsOfType<KtReturnExpression>()
             .filter { isNotInInnerFunction(it, innerFunctions) }
@@ -44,6 +43,6 @@ class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
 
     private fun isNotInInnerFunction(
         returnStmts: KtReturnExpression,
-        childFunctions: Set<KtNamedFunction>
+        childFunctions: Collection<KtNamedFunction>
     ): Boolean = !returnStmts.parents.any { childFunctions.contains(it) }
 }
