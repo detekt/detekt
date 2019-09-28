@@ -91,9 +91,9 @@ internal class SuppressibleSpec : Spek({
 
 private fun checkSuppression(annotation: String, argument: String): Boolean {
     val annotated = """
-			@$annotation("$argument")
-			class Test {}
-			 """
+            @$annotation("$argument")
+            class Test {}
+             """
     val file = compileContentForTest(annotated)
     val annotatedClass = file.children.first { it is KtClass } as KtAnnotated
     return annotatedClass.isSuppressedBy("Test", setOf("alias"))

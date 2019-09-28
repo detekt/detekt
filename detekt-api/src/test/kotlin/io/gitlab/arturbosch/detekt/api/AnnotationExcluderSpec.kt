@@ -15,10 +15,10 @@ class AnnotationExcluderSpec : Spek({
         val sinceKotlinAnnotation = psiFactory.createAnnotationEntry("@SinceKotlin")
 
         val file = compileContentForTest("""
-			package foo
+            package foo
 
-			import kotlin.jvm.JvmField
-		""".trimIndent())
+            import kotlin.jvm.JvmField
+        """.trimIndent())
 
         it("should exclude when the annotation was found") {
             val excluder = AnnotationExcluder(file, SplitPattern("JvmField"))
