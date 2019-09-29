@@ -39,11 +39,11 @@ class RuleCollectorSpec : Spek({
         it("collects the rule name") {
             val name = "SomeRandomClass"
             val code = """
-				/**
-				 * description
-				 */
-				class $name : Rule
-			"""
+                /**
+                 * description
+                 */
+                class $name : Rule
+            """
             val items = subject.run(code)
             assertThat(items[0].name).isEqualTo(name)
         }
@@ -51,11 +51,11 @@ class RuleCollectorSpec : Spek({
         it("collects the rule description") {
             val description = "description"
             val code = """
-				/**
-				 * $description
-				 */
-				class SomeRandomClass : Rule
-			"""
+                /**
+                 * $description
+                 */
+                class SomeRandomClass : Rule
+            """
             val items = subject.run(code)
             assertThat(items[0].description).isEqualTo(description)
         }
@@ -63,13 +63,13 @@ class RuleCollectorSpec : Spek({
         it("has a multi paragraph description") {
             val description = "description"
             val code = """
-				/**
-				 * $description
-				 *
-				 * more...
-				 */
-				class SomeRandomClass : Rule
-			"""
+                /**
+                 * $description
+                 *
+                 * more...
+                 */
+                class SomeRandomClass : Rule
+            """
             val items = subject.run(code)
             assertThat(items[0].description).startsWith(description)
             assertThat(items[0].description).contains("more...")
@@ -77,61 +77,61 @@ class RuleCollectorSpec : Spek({
 
         it("is not active") {
             val code = """
-				/**
-				 * description
-				 */
-				class SomeRandomClass : Rule
-			"""
+                /**
+                 * description
+                 */
+                class SomeRandomClass : Rule
+            """
             val items = subject.run(code)
             assertThat(items[0].active).isFalse()
         }
 
         it("is active tag present") {
             val code = """
-				/**
-				 * description
-				 * @active
-				 */
-				class SomeRandomClass : Rule
-			"""
+                /**
+                 * description
+                 * @active
+                 */
+                class SomeRandomClass : Rule
+            """
             val items = subject.run(code)
             assertThat(items[0].active).isTrue()
         }
 
         it("is auto-correctable tag is present") {
             val code = """
-				/**
-				 * description
-				 * @autoCorrect
-				 */
-				class SomeRandomClass : Rule
-			"""
+                /**
+                 * description
+                 * @autoCorrect
+                 */
+                class SomeRandomClass : Rule
+            """
             val items = subject.run(code)
             assertThat(items[0].autoCorrect).isTrue()
         }
 
         it("is active if the tag is there and has a description") {
             val code = """
-				/**
-				 * description
-				 * @active description about the active tag
-				 */
-				class SomeRandomClass : Rule
-			"""
+                /**
+                 * description
+                 * @active description about the active tag
+                 */
+                class SomeRandomClass : Rule
+            """
             val items = subject.run(code)
             assertThat(items[0].active).isTrue()
         }
 
         it("collects the issue property") {
             val code = """
-				/**
-				 * description
-				 */
-				class SomeRandomClass : Rule {
-					override val defaultRuleIdAliases = setOf("RULE", "RULE2")
+                /**
+                 * description
+                 */
+                class SomeRandomClass : Rule {
+                    override val defaultRuleIdAliases = setOf("RULE", "RULE2")
                     override val issue = Issue(javaClass.simpleName, Severity.Style, "", Debt.TEN_MINS)
-				}
-			"""
+                }
+            """
             val items = subject.run(code)
             assertThat(items[0].severity).isEqualTo("Style")
             assertThat(items[0].debt).isEqualTo("10min")
@@ -140,23 +140,23 @@ class RuleCollectorSpec : Spek({
 
         it("contains no configuration options by default") {
             val code = """
-				/**
-				 * description
-				 */
-				class SomeRandomClass : Rule
-			"""
+                /**
+                 * description
+                 */
+                class SomeRandomClass : Rule
+            """
             val items = subject.run(code)
             assertThat(items[0].configuration).isEmpty()
         }
 
         it("contains one configuration option with correct formatting") {
             val code = """
-				/**
-				 * description
-				 * @configuration config - description (default: `'[A-Z$]'`)
-				 */
-				class SomeRandomClass : Rule
-			"""
+                /**
+                 * description
+                 * @configuration config - description (default: `'[A-Z$]'`)
+                 */
+                class SomeRandomClass : Rule
+            """
             val items = subject.run(code)
             assertThat(items[0].configuration).hasSize(1)
             assertThat(items[0].configuration[0].name).isEqualTo("config")
@@ -166,76 +166,76 @@ class RuleCollectorSpec : Spek({
 
         it("contains multiple configuration options") {
             val code = """
-				/**
-				 * description
-				 * @configuration config - description (default: `""`)
-				 * @configuration config2 - description2 (default: `""`)
-				 */
-				class SomeRandomClass: Rule
-			"""
+                /**
+                 * description
+                 * @configuration config - description (default: `""`)
+                 * @configuration config2 - description2 (default: `""`)
+                 */
+                class SomeRandomClass: Rule
+            """
             val items = subject.run(code)
             assertThat(items[0].configuration).hasSize(2)
         }
 
         it("config option doesn't have a default value") {
             val code = """
-				/**
-				 * description
-				 * @configuration config - description
-				 */
-				class SomeRandomClass : Rule
-			"""
+                /**
+                 * description
+                 * @configuration config - description
+                 */
+                class SomeRandomClass : Rule
+            """
             assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
         }
 
         it("has a blank default value") {
             val code = """
-				/**
-				 * description
-				 * @configuration config - description (default: ``)
-				 */
-				class SomeRandomClass : Rule
-			"""
+                /**
+                 * description
+                 * @configuration config - description (default: ``)
+                 */
+                class SomeRandomClass : Rule
+            """
             assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
         }
 
         it("has an incorrectly delimited default value") {
             val code = """
-				/**
-				 * description
-				 * @configuration config - description (default: true)
-				 */
-				class SomeRandomClass : Rule
-			"""
+                /**
+                 * description
+                 * @configuration config - description (default: true)
+                 */
+                class SomeRandomClass : Rule
+            """
             assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
         }
 
         it("contains a misconfigured configuration option") {
             val code = """
-				/**
-				 * description
-				 * @configuration something: description
-				 */
-				class SomeRandomClass : Rule
-			"""
+                /**
+                 * description
+                 * @configuration something: description
+                 */
+                class SomeRandomClass : Rule
+            """
             assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy { subject.run(code) }
         }
 
         it("contains compliant and noncompliant code examples") {
             val code = """
-				/**
-				 * description
-				 *
-				 * <noncompliant>
-				 * val one = 2
-				 * </noncompliant>
-				 *
-				 * <compliant>
-				 * val one = 1
-				 * </compliant>
-				 */
-				class RandomClass : Rule
-			"""
+                /**
+                 * description
+                 *
+                 * <noncompliant>
+                 * val one = 2
+                 * </noncompliant>
+                 *
+                 * <compliant>
+                 * val one = 1
+                 * </compliant>
+                 */
+                class RandomClass : Rule
+            """
             val items = subject.run(code)
             assertThat(items[0].nonCompliantCodeExample).isEqualTo("val one = 2")
             assertThat(items[0].compliantCodeExample).isEqualTo("val one = 1")
@@ -243,80 +243,80 @@ class RuleCollectorSpec : Spek({
 
         it("has wrong noncompliant code example declaration") {
             val code = """
-				/**
-				 * description
-				 *
-				 * <noncompliant>
-				 */
-				class RandomClass : Rule
-			"""
+                /**
+                 * description
+                 *
+                 * <noncompliant>
+                 */
+                class RandomClass : Rule
+            """
             assertThatExceptionOfType(InvalidCodeExampleDocumentationException::class.java)
                 .isThrownBy { subject.run(code) }
         }
 
         it("has wrong compliant code example declaration") {
             val code = """
-				/**
-				 * description
-				 *
-				 * <noncompliant>
-				 * val one = 2
-				 * </noncompliant>
-				 * <compliant>
-				 */
-				class RandomClass : Rule
-			"""
+                /**
+                 * description
+                 *
+                 * <noncompliant>
+                 * val one = 2
+                 * </noncompliant>
+                 * <compliant>
+                 */
+                class RandomClass : Rule
+            """
             assertThatExceptionOfType(InvalidCodeExampleDocumentationException::class.java)
                 .isThrownBy { subject.run(code) }
         }
 
         it("has wrong compliant without noncompliant code example declaration") {
             val code = """
-				/**
-				 * description
-				 *
-				 * <compliant>
-				 * val one = 1
-				 * </compliant>
-				 */
-				class RandomClass : Rule
-			"""
+                /**
+                 * description
+                 *
+                 * <compliant>
+                 * val one = 1
+                 * </compliant>
+                 */
+                class RandomClass : Rule
+            """
             assertThatExceptionOfType(InvalidCodeExampleDocumentationException::class.java)
                 .isThrownBy { subject.run(code) }
         }
 
         it("has wrong issue style property") {
             val code = """
-				/**
-				 * description
-				 */
-				class SomeRandomClass : Rule {
+                /**
+                 * description
+                 */
+                class SomeRandomClass : Rule {
 
-					val style = Severity.Style
-					override val issue = Issue(javaClass.simpleName,
-							style,
-							"",
-							debt = Debt.TEN_MINS)
-				}
-			"""
+                    val style = Severity.Style
+                    override val issue = Issue(javaClass.simpleName,
+                            style,
+                            "",
+                            debt = Debt.TEN_MINS)
+                }
+            """
             assertThatExceptionOfType(InvalidIssueDeclaration::class.java).isThrownBy { subject.run(code) }
         }
 
         it("has wrong aliases property structure") {
             val code = """
-				/**
-				 * description
-				 */
-				class SomeRandomClass : Rule {
+                /**
+                 * description
+                 */
+                class SomeRandomClass : Rule {
 
-					val a = setOf("UNUSED_VARIABLE")
-					override val defaultRuleIdAliases = a
-					override val issue = Issue(javaClass.simpleName,
-							Severity.Style,
-							"",
-							debt = Debt.TEN_MINS)
-				}
-			"""
+                    val a = setOf("UNUSED_VARIABLE")
+                    override val defaultRuleIdAliases = a
+                    override val issue = Issue(javaClass.simpleName,
+                            Severity.Style,
+                            "",
+                            debt = Debt.TEN_MINS)
+                }
+            """
             assertThatExceptionOfType(InvalidAliasesDeclaration::class.java).isThrownBy { subject.run(code) }
         }
 

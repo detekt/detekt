@@ -19,36 +19,36 @@ class DslGradleRunner(
     private val randomString = UUID.randomUUID().toString()
 
     private val settingsContent = """
-    	|rootProject.name = "rootDir-project"
-		|include(${projectLayout.submodules.map { "\"${it.name}\"" }.joinToString(",")})
-		|
-		""".trimMargin()
+        |rootProject.name = "rootDir-project"
+        |include(${projectLayout.submodules.map { "\"${it.name}\"" }.joinToString(",")})
+        |
+        """.trimMargin()
 
     private val baselineContent = """
-		|<some>
-		|	<xml/>
-		|</some>
-		""".trimMargin()
+        |<some>
+        |   <xml/>
+        |</some>
+        """.trimMargin()
 
     private val configFileContent = """
-		|build:
-		|  maxIssues: 5
-		|style:
-		|  MagicNumber:
-		|    active: true
-		""".trimMargin()
+        |build:
+        |  maxIssues: 5
+        |style:
+        |  MagicNumber:
+        |    active: true
+        """.trimMargin()
 
     /**
      * Each generated file is different so the artifacts are not cached in between test runs
      */
     private fun ktFileContent(className: String, withCodeSmell: Boolean = false) = """
-	|internal class $className(
-	|	val randomDefaultValue: String = "$randomString"
-	|) {
-	|	val smellyConstant: Int = ${if (withCodeSmell) "11" else "0"}
-	|}
-	|
-	""".trimMargin()
+    |internal class $className(
+    |   val randomDefaultValue: String = "$randomString"
+    |) {
+    |   val smellyConstant: Int = ${if (withCodeSmell) "11" else "0"}
+    |}
+    |
+    """.trimMargin()
 
     fun setupProject() {
         writeProjectFile(buildFileName, mainBuildFileContent)

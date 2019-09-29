@@ -13,14 +13,14 @@ class McCabeVisitorSpec : Spek({
 
         it("counts simple when branches as 1") {
             val code = """
-				fun test() {
-					when (System.currentTimeMillis()) {
-						0 -> println("Epoch!")
-						1 -> println("1 past epoch.")
-						else -> println("Meh")
-					}
-				}
-			"""
+                fun test() {
+                    when (System.currentTimeMillis()) {
+                        0 -> println("Epoch!")
+                        1 -> println("1 past epoch.")
+                        else -> println("Meh")
+                    }
+                }
+            """
             val subject = McCabeVisitor(ignoreSimpleWhenEntries = false)
 
             subject.visitFile(code.compile())
@@ -30,16 +30,16 @@ class McCabeVisitorSpec : Spek({
 
         it("counts block when branches as 1") {
             val code = """
-				fun test() {
-					when (System.currentTimeMillis()) {
-						0 -> {
-							println("Epoch!")
-						}
-						1 -> println("1 past epoch.")
-						else -> println("Meh")
-					}
-				}
-			"""
+                fun test() {
+                    when (System.currentTimeMillis()) {
+                        0 -> {
+                            println("Epoch!")
+                        }
+                        1 -> println("1 past epoch.")
+                        else -> println("Meh")
+                    }
+                }
+            """
             val subject = McCabeVisitor(ignoreSimpleWhenEntries = false)
 
             subject.visitFile(code.compile())
@@ -52,14 +52,14 @@ class McCabeVisitorSpec : Spek({
 
         it("counts a when with only simple branches as 1") {
             val code = """
-				fun test() {
-					when (System.currentTimeMillis()) {
-						0 -> println("Epoch!")
-						1 -> println("1 past epoch.")
-						else -> println("Meh")
-					}
-				}
-			"""
+                fun test() {
+                    when (System.currentTimeMillis()) {
+                        0 -> println("Epoch!")
+                        1 -> println("1 past epoch.")
+                        else -> println("Meh")
+                    }
+                }
+            """
             val subject = McCabeVisitor(ignoreSimpleWhenEntries = true)
 
             subject.visitFile(code.compile())
@@ -69,19 +69,19 @@ class McCabeVisitorSpec : Spek({
 
         it("does not count simple when branches") {
             val code = """
-				fun test() {
-					when (System.currentTimeMillis()) {
-						0 -> {
-							println("Epoch!")
-							println("yay")
-						}
-						1 -> {
-							println("1 past epoch!")
-						}
-						else -> println("Meh")
-					}
-				}
-			"""
+                fun test() {
+                    when (System.currentTimeMillis()) {
+                        0 -> {
+                            println("Epoch!")
+                            println("yay")
+                        }
+                        1 -> {
+                            println("1 past epoch!")
+                        }
+                        else -> println("Meh")
+                    }
+                }
+            """
             val subject = McCabeVisitor(ignoreSimpleWhenEntries = true)
 
             subject.visitFile(code.compile())
@@ -92,21 +92,21 @@ class McCabeVisitorSpec : Spek({
         it("counts block when branches as 1") {
             val subject = McCabeVisitor(ignoreSimpleWhenEntries = true)
             val code = """
-				fun test() {
-					when (System.currentTimeMillis()) {
-						0 -> {
-							println("Epoch!")
-							println("yay!")
-						}
-						1 -> {
-							println("1 past epoch.")
-							println("yay?")
-						}
-						2 -> println("shrug")
-						else -> println("Meh")
-					}
-				}
-			"""
+                fun test() {
+                    when (System.currentTimeMillis()) {
+                        0 -> {
+                            println("Epoch!")
+                            println("yay!")
+                        }
+                        1 -> {
+                            println("1 past epoch.")
+                            println("yay?")
+                        }
+                        2 -> println("shrug")
+                        else -> println("Meh")
+                    }
+                }
+            """
 
             subject.visitFile(code.compile())
 

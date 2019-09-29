@@ -12,14 +12,14 @@ class NumberOfLoopsProcessorSpec : Spek({
 
         it("should expect two loops") {
             val code = """
-			fun main() {
-				for (i in 0..10) {
-					while (i < 5) {
-						println(i)
-					}
-				}
-			}
-		"""
+            fun main() {
+                for (i in 0..10) {
+                    while (i < 5) {
+                        println(i)
+                    }
+                }
+            }
+        """
 
             val ktFile = compileContentForTest(code)
             ktFile.accept(DetektVisitor())
