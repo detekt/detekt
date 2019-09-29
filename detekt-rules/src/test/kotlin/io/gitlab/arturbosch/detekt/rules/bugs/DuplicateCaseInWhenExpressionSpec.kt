@@ -17,7 +17,6 @@ class DuplicateCaseInWhenExpressionSpec : Spek({
                     when (1) {
                         1 -> println()
                         1 -> kotlin.io.println()
-                        1 -> println()
                         1, 2 -> println()
                         1, 2 -> kotlin.io.println()
                         else -> println()
