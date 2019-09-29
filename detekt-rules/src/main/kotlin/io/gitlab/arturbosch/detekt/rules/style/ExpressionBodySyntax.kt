@@ -60,9 +60,7 @@ class ExpressionBodySyntax(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun KtExpression.singleReturnStatement(): KtReturnExpression? =
-        (this as? KtBlockExpression)?.statements
-            ?.takeIf { it.size == 1 }
-            ?.let { it[0] as? KtReturnExpression }
+        (this as? KtBlockExpression)?.statements?.singleOrNull() as? KtReturnExpression
 
     private fun KtReturnExpression.containsReturnStmtsInNullableArguments(): Boolean =
         collectDescendantsOfType<KtReturnExpression>()
