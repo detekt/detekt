@@ -26,9 +26,9 @@ class LabeledExpressionSpec : Spek({
 
         it("does not report excluded label") {
             val code = """fun f() {
-    			loop@ for (i in 1..5) {}
+                loop@ for (i in 1..5) {}
             }
-    		"""
+            """
             val config = TestConfig(mapOf(LabeledExpression.IGNORED_LABELS to "loop"))
             val findings = LabeledExpression(config).compileAndLint(code)
             assertThat(findings).isEmpty()

@@ -13,35 +13,35 @@ class UntilInsteadOfRangeToSpec : Spek({
 
         it("reports for '..'") {
             val code = """
-				fun f() {
-					for (i in 0 .. 10 - 1) {}
-				}"""
+                fun f() {
+                    for (i in 0 .. 10 - 1) {}
+                }"""
             assertThat(subject.lint(code)).hasSize(1)
         }
 
         it("does not report if rangeTo not used") {
             val code = """
-				fun f() {
-					for (i in 0 until 10 - 1) {}
-					for (i in 10 downTo 2 - 1) {}
-				}"""
+                fun f() {
+                    for (i in 0 until 10 - 1) {}
+                    for (i in 10 downTo 2 - 1) {}
+                }"""
             assertThat(subject.lint(code)).hasSize(0)
         }
 
         it("does not report if upper value isn't a binary expression") {
             val code = """
-				fun f() {
-					for (i in 0 .. 10) {}
-				}"""
+                fun f() {
+                    for (i in 0 .. 10) {}
+                }"""
             assertThat(subject.lint(code)).hasSize(0)
         }
 
         it("does not report if not minus one") {
             val code = """
-				fun f() {
-					for (i in 0 .. 10 + 1) {}
-					for (i in 0 .. 10 - 2) {}
-				}"""
+                fun f() {
+                    for (i in 0 .. 10 + 1) {}
+                    for (i in 0 .. 10 - 2) {}
+                }"""
             assertThat(subject.lint(code)).hasSize(0)
         }
 

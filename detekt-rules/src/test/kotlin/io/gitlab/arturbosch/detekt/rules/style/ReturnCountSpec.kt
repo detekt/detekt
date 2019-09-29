@@ -12,14 +12,14 @@ class ReturnCountSpec : Spek({
 
         context("a file with an if condition guard clause and 2 returns") {
             val code = """
-			fun test(x: Int): Int {
-				if (x < 4) return 0
-				when (x) {
-					5 -> return 5
-					4 -> return 4
-				}
-			}
-		"""
+            fun test(x: Int): Int {
+                if (x < 4) return 0
+                when (x) {
+                    5 -> return 5
+                    4 -> return 4
+                }
+            }
+        """
 
             it("should not get flagged for if condition guard clauses") {
                 val findings = ReturnCount(TestConfig(mapOf(ReturnCount.EXCLUDE_GUARD_CLAUSES to "true")))
@@ -30,14 +30,14 @@ class ReturnCountSpec : Spek({
 
         context("a file with an ELVIS operator guard clause and 2 returns") {
             val code = """
-			fun test(x: Int): Int {
-				val y = x ?: return 0
-				when (x) {
-					5 -> return 5
-					4 -> return 4
-				}
-			}
-		"""
+            fun test(x: Int): Int {
+                val y = x ?: return 0
+                when (x) {
+                    5 -> return 5
+                    4 -> return 4
+                }
+            }
+        """
 
             it("should not get flagged for ELVIS operator guard clauses") {
                 val findings = ReturnCount(TestConfig(mapOf(ReturnCount.EXCLUDE_GUARD_CLAUSES to "true")))
@@ -48,14 +48,14 @@ class ReturnCountSpec : Spek({
 
         context("a file with 2 returns and an if condition guard clause which is not the first statement") {
             val code = """
-			fun test(x: Int): Int {
-				when (x) {
-					5 -> return 5
-					4 -> return 4
-				}
-				if (x < 4) return 0
-			}
-		"""
+            fun test(x: Int): Int {
+                when (x) {
+                    5 -> return 5
+                    4 -> return 4
+                }
+                if (x < 4) return 0
+            }
+        """
 
             it("should get flagged for an if condition guard clause which is not the first statement") {
                 val findings = ReturnCount(TestConfig(mapOf(ReturnCount.EXCLUDE_GUARD_CLAUSES to "true")))
@@ -66,14 +66,14 @@ class ReturnCountSpec : Spek({
 
         context("a file with 2 returns and an ELVIS guard clause which is not the first statement") {
             val code = """
-			fun test(x: Int): Int {
-				when (x) {
-					5 -> return 5
-					4 -> return 4
-				}
-				val y = x ?: return 0
-			}
-		"""
+            fun test(x: Int): Int {
+                when (x) {
+                    5 -> return 5
+                    4 -> return 4
+                }
+                val y = x ?: return 0
+            }
+        """
 
             it("should get flagged for an ELVIS guard clause which is not the first statement") {
                 val findings = ReturnCount(TestConfig(mapOf(ReturnCount.EXCLUDE_GUARD_CLAUSES to "true")))
@@ -84,14 +84,14 @@ class ReturnCountSpec : Spek({
 
         context("a file with 3 returns") {
             val code = """
-			fun test(x: Int): Int {
-				when (x) {
-					5 -> return 5
-					4 -> return 4
-					3 -> return 3
-				}
-			}
-		"""
+            fun test(x: Int): Int {
+                when (x) {
+                    5 -> return 5
+                    4 -> return 4
+                    3 -> return 3
+                }
+            }
+        """
 
             it("should get flagged by default") {
                 val findings = ReturnCount().lint(code)
@@ -111,13 +111,13 @@ class ReturnCountSpec : Spek({
 
         context("a file with 2 returns") {
             val code = """
-			fun test(x: Int): Int {
-				when (x) {
-					5 -> return 5
-					4 -> return 4
-				}
-			}
-		"""
+            fun test(x: Int): Int {
+                when (x) {
+                    5 -> return 5
+                    4 -> return 4
+                }
+            }
+        """
 
             it("should not get flagged by default") {
                 val findings = ReturnCount().lint(code)
@@ -137,14 +137,14 @@ class ReturnCountSpec : Spek({
 
         context("a function is ignored") {
             val code = """
-    		fun test(x: Int): Int {
-				when (x) {
-					5 -> return 5
-					4 -> return 4
-					3 -> return 3
-				}
-			}
-		"""
+            fun test(x: Int): Int {
+                when (x) {
+                    5 -> return 5
+                    4 -> return 4
+                    3 -> return 3
+                }
+            }
+        """
 
             it("should not get flagged") {
                 val findings = ReturnCount(TestConfig(mapOf(
@@ -157,30 +157,30 @@ class ReturnCountSpec : Spek({
 
         context("a subset of functions are ignored") {
             val code = """
-    		fun test1(x: Int): Int {
-				when (x) {
-					5 -> return 5
-					4 -> return 4
-					3 -> return 3
-				}
-			}
+            fun test1(x: Int): Int {
+                when (x) {
+                    5 -> return 5
+                    4 -> return 4
+                    3 -> return 3
+                }
+            }
 
-			fun test2(x: Int): Int {
-				when (x) {
-					5 -> return 5
-					4 -> return 4
-					3 -> return 3
-				}
-			}
+            fun test2(x: Int): Int {
+                when (x) {
+                    5 -> return 5
+                    4 -> return 4
+                    3 -> return 3
+                }
+            }
 
-			fun test3(x: Int): Int {
-				when (x) {
-					5 -> return 5
-					4 -> return 4
-					3 -> return 3
-				}
-			}
-		"""
+            fun test3(x: Int): Int {
+                when (x) {
+                    5 -> return 5
+                    4 -> return 4
+                    3 -> return 3
+                }
+            }
+        """
 
             it("should flag none of the ignored functions") {
                 val findings = ReturnCount(TestConfig(mapOf(
@@ -193,21 +193,21 @@ class ReturnCountSpec : Spek({
 
         context("a function with inner object") {
             val code = """
-			fun test(x: Int): Int {
-				val a = object {
-					fun test2(x: Int): Int {
-						when (x) {
-							5 -> return 5
-							else -> return 0
-						}
-					}
-				}
-				when (x) {
-					5 -> return 5
-					else -> return 0
-				}
-			}
-    	"""
+            fun test(x: Int): Int {
+                val a = object {
+                    fun test2(x: Int): Int {
+                        when (x) {
+                            5 -> return 5
+                            else -> return 0
+                        }
+                    }
+                }
+                when (x) {
+                    5 -> return 5
+                    else -> return 0
+                }
+            }
+        """
 
             it("should not get flag when returns is in inner object") {
                 val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "2"))).lint(code)
@@ -217,29 +217,29 @@ class ReturnCountSpec : Spek({
 
         context("a function with 2 inner object") {
             val code = """
-			fun test(x: Int): Int {
-				val a = object {
-					fun test2(x: Int): Int {
-						val b = object {
-							fun test3(x: Int): Int {
-								when (x) {
-									5 -> return 5
-									else -> return 0
-								}
-							}
-						}
-						when (x) {
-							5 -> return 5
-							else -> return 0
-						}
-					}
-				}
-				when (x) {
-					5 -> return 5
-					else -> return 0
-				}
-			}
-    	"""
+            fun test(x: Int): Int {
+                val a = object {
+                    fun test2(x: Int): Int {
+                        val b = object {
+                            fun test3(x: Int): Int {
+                                when (x) {
+                                    5 -> return 5
+                                    else -> return 0
+                                }
+                            }
+                        }
+                        when (x) {
+                            5 -> return 5
+                            else -> return 0
+                        }
+                    }
+                }
+                when (x) {
+                    5 -> return 5
+                    else -> return 0
+                }
+            }
+        """
 
             it("should not get flag when returns is in inner object") {
                 val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "2"))).lint(code)
@@ -249,31 +249,31 @@ class ReturnCountSpec : Spek({
 
         context("a function with 2 inner object and exceeded max") {
             val code = """
-			fun test(x: Int): Int {
-				val a = object {
-					fun test2(x: Int): Int {
-						val b = object {
-							fun test3(x: Int): Int {
-								when (x) {
-									5 -> return 5
-									else -> return 0
-								}
-							}
-						}
-						when (x) {
-							5 -> return 5
-							else -> return 0
-						}
-					}
-				}
-				when (x) {
-					5 -> return 5
-					4 -> return 4
-					3 -> return 3
-					else -> return 0
-				}
-			}
-    	"""
+            fun test(x: Int): Int {
+                val a = object {
+                    fun test2(x: Int): Int {
+                        val b = object {
+                            fun test3(x: Int): Int {
+                                when (x) {
+                                    5 -> return 5
+                                    else -> return 0
+                                }
+                            }
+                        }
+                        when (x) {
+                            5 -> return 5
+                            else -> return 0
+                        }
+                    }
+                }
+                when (x) {
+                    5 -> return 5
+                    4 -> return 4
+                    3 -> return 3
+                    else -> return 0
+                }
+            }
+        """
 
             it("should get flagged when returns is in inner object") {
                 val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "2"))).lint(code)
@@ -284,14 +284,14 @@ class ReturnCountSpec : Spek({
         context("function with multiple labeled return statements") {
 
             val code = """
-			fun readUsers(name: String): Flowable<User> {
-			return userDao.read(name)
-				.flatMap {
-					if (it.isEmpty()) return@flatMap Flowable.empty<User>()
-					return@flatMap Flowable.just(it[0])
-				}
-    		}
-		"""
+            fun readUsers(name: String): Flowable<User> {
+            return userDao.read(name)
+                .flatMap {
+                    if (it.isEmpty()) return@flatMap Flowable.empty<User>()
+                    return@flatMap Flowable.just(it[0])
+                }
+            }
+        """
 
             it("should not count labeled returns from lambda by default") {
                 val findings = ReturnCount().lint(code)

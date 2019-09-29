@@ -69,9 +69,9 @@ class ModifierOrderSpec : Spek({
                     abstract class A {
                         abstract fun test()
                     }
-				    abstract class Test : A() {
-				    	override fun test() {}
-				    }"""
+                    abstract class Test : A() {
+                        override fun test() {}
+                    }"""
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
         }

@@ -12,13 +12,13 @@ class LateinitUsageSpec : Spek({
 
     describe("LateinitUsage rule") {
         val code = """
-			import kotlin.SinceKotlin
+            import kotlin.SinceKotlin
 
-			class SomeRandomTest {
-				lateinit var v1: String
-				@SinceKotlin("1.0.0") lateinit var v2: String
-			}
-		"""
+            class SomeRandomTest {
+                lateinit var v1: String
+                @SinceKotlin("1.0.0") lateinit var v2: String
+            }
+        """
 
         it("should report lateinit usages") {
             val findings = LateinitUsage().compileAndLint(code)

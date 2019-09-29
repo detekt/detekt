@@ -182,11 +182,11 @@ class UseDataClassSpec : Spek({
 
         it("does not report a class which has an ignored annotation") {
             val code = """
-				import kotlin.SinceKotlin
+                import kotlin.SinceKotlin
 
-				@SinceKotlin("1.0.0")
-				class AnnotatedClass(val i: Int) {}
-				"""
+                @SinceKotlin("1.0.0")
+                class AnnotatedClass(val i: Int) {}
+                """
             val config = TestConfig(mapOf(UseDataClass.EXCLUDE_ANNOTATED_CLASSES to "kotlin.*"))
             assertThat(UseDataClass(config).compileAndLint(code)).isEmpty()
         }

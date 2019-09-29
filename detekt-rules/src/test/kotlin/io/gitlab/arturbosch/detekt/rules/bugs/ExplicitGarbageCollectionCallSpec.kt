@@ -13,11 +13,11 @@ class ExplicitGarbageCollectionCallSpec : Spek({
 
         it("reports garbage collector calls") {
             val code = """
-				fun f() {
-					System.gc()
-					Runtime.getRuntime().gc()
-					System.runFinalization()
-				}"""
+                fun f() {
+                    System.gc()
+                    Runtime.getRuntime().gc()
+                    System.runFinalization()
+                }"""
             assertThat(subject.compileAndLint(code)).hasSize(3)
         }
     }

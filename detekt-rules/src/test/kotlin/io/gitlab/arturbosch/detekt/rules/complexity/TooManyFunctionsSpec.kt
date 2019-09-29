@@ -35,41 +35,41 @@ class TooManyFunctionsSpec : Spek({
 
         it("finds one function in class") {
             val code = """
-				class A {
-					fun a() = Unit
-				}
-			"""
+                class A {
+                    fun a() = Unit
+                }
+            """
 
             assertThat(rule.compileAndLint(code)).hasSize(1)
         }
 
         it("finds one function in object") {
             val code = """
-				object O {
-					fun o() = Unit
-				}
-			"""
+                object O {
+                    fun o() = Unit
+                }
+            """
 
             assertThat(rule.compileAndLint(code)).hasSize(1)
         }
 
         it("finds one function in interface") {
             val code = """
-				interface I {
-					fun i()
-				}
-			"""
+                interface I {
+                    fun i()
+                }
+            """
 
             assertThat(rule.compileAndLint(code)).hasSize(1)
         }
 
         it("finds one function in enum") {
             val code = """
-				enum class E {
+                enum class E {
                     A;
-					fun e() {}
-				}
-			"""
+                    fun e() {}
+                }
+            """
 
             assertThat(rule.compileAndLint(code)).hasSize(1)
         }
@@ -82,42 +82,42 @@ class TooManyFunctionsSpec : Spek({
 
         it("finds one function in file ignoring other declarations") {
             val code = """
-				fun f1() = Unit
-				class C
-				object O
-				fun f2() = Unit
-				interface I
-				enum class E
-				fun f3() = Unit
-			"""
+                fun f1() = Unit
+                class C
+                object O
+                fun f2() = Unit
+                interface I
+                enum class E
+                fun f3() = Unit
+            """
 
             assertThat(rule.compileAndLint(code)).hasSize(1)
         }
 
         it("finds one function in nested class") {
             val code = """
-				class A {
-					class B {
-						fun a() = Unit
-					}
-				}
-			"""
+                class A {
+                    class B {
+                        fun a() = Unit
+                    }
+                }
+            """
 
             assertThat(rule.compileAndLint(code)).hasSize(1)
         }
 
         describe("different deprecated functions") {
             val code = """
-				@Deprecated("")
-				fun f() {
-				}
+                @Deprecated("")
+                fun f() {
+                }
 
-				class A {
-					@Deprecated("")
-					fun f() {
-					}
-				}
-				"""
+                class A {
+                    @Deprecated("")
+                    fun f() {
+                    }
+                }
+                """
             it("finds all deprecated functions per default") {
 
                 assertThat(rule.compileAndLint(code)).hasSize(2)
@@ -136,10 +136,10 @@ class TooManyFunctionsSpec : Spek({
         describe("different private functions") {
 
             val code = """
-				class A {
-					private fun f() {}
-				}
-				"""
+                class A {
+                    private fun f() {}
+                }
+                """
 
             it("finds the private function per default") {
                 assertThat(rule.compileAndLint(code)).hasSize(1)
@@ -175,7 +175,7 @@ class TooManyFunctionsSpec : Spek({
                         override fun a() = Unit
                         override fun b() = Unit
                     }
-				"""
+                """
                 val configuredRule = TooManyFunctions(TestConfig(mapOf(
                         TooManyFunctions.THRESHOLD_IN_CLASSES to "1",
                         TooManyFunctions.THRESHOLD_IN_FILES to "1",

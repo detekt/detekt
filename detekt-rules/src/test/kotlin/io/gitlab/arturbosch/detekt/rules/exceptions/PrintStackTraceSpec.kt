@@ -14,26 +14,26 @@ class PrintStackTraceSpec : Spek({
 
             it("prints a stacktrace") {
                 val code = """
-				fun x() {
-					try {
-					} catch (e: Exception) {
-						e.printStackTrace()
-					}
-				}"""
+                fun x() {
+                    try {
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }"""
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
             it("does not print a stacktrace") {
                 val code = """
-				fun x() {
-					try {
-					} catch (e: Exception) {
-						e.fillInStackTrace()
-						val msg = e.message
+                fun x() {
+                    try {
+                    } catch (e: Exception) {
+                        e.fillInStackTrace()
+                        val msg = e.message
                         fun printStackTrace() {}
-						printStackTrace()
-					}
-				}
+                        printStackTrace()
+                    }
+                }
                 """
                 assertThat(subject.compileAndLint(code)).hasSize(0)
             }
@@ -43,12 +43,12 @@ class PrintStackTraceSpec : Spek({
 
             it("prints one") {
                 val code = """
-				fun x() {
-					Thread.dumpStack()
+                fun x() {
+                    Thread.dumpStack()
 
                     fun dumpStack() {}
                     dumpStack()
-				}"""
+                }"""
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
         }

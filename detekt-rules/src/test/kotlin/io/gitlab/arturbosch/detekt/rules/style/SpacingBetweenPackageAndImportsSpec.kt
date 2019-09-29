@@ -90,23 +90,23 @@ class SpacingBetweenPackageAndImportsSpec : Spek({
 
         it("has multiple imports in file") {
             val code = """
-				package com.my
+                package com.my
 
-				import kotlin.collections.List
-				import kotlin.collections.Set
+                import kotlin.collections.List
+                import kotlin.collections.Set
 
-				class A { }
-				"""
+                class A { }
+                """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("has no class") {
             val code = """
-				package com.my
+                package com.my
 
-				import kotlin.collections.List
-				import kotlin.collections.Set
-				"""
+                import kotlin.collections.List
+                import kotlin.collections.Set
+                """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }

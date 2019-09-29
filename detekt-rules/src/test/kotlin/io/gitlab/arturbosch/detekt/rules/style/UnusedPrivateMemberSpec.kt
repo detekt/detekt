@@ -14,15 +14,15 @@ class UnusedPrivateMemberSpec : Spek({
     val subject by memoized { UnusedPrivateMember() }
 
     val regexTestingCode = """
-				class Test {
-					private val used = "This is used"
-					private val unused = "This is not used"
+                class Test {
+                    private val used = "This is used"
+                    private val unused = "This is not used"
 
-					fun use() {
-						println(used)
-					}
-				}
-				"""
+                    fun use() {
+                        println(used)
+                    }
+                }
+                """
 
     describe("cases file with different findings") {
 
@@ -39,11 +39,11 @@ class UnusedPrivateMemberSpec : Spek({
 
         it("should not report parameters in interface functions") {
             val code = """
-				interface UserPlugin {
-					fun plug(application: Application)
-					fun unplug()
-				}
-			"""
+                interface UserPlugin {
+                    fun plug(application: Application)
+                    fun unplug()
+                }
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
     }
@@ -60,14 +60,14 @@ class UnusedPrivateMemberSpec : Spek({
 
         it("should not report parameters in not private functions") {
             val code = """
-				override fun funA() {
-					objectA.resolve(valA, object : MyCallback {
-						override fun onResolveFailed(throwable: Throwable) {
-							errorMessage.visibility = View.VISIBLE
-						}
-					})
-				}
-			"""
+                override fun funA() {
+                    objectA.resolve(valA, object : MyCallback {
+                        override fun onResolveFailed(throwable: Throwable) {
+                            errorMessage.visibility = View.VISIBLE
+                        }
+                    })
+                }
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
     }
@@ -76,17 +76,17 @@ class UnusedPrivateMemberSpec : Spek({
 
         it("should not report used constants") {
             val code = """
-				class A {
-					companion object {
-						private const val MY_CONST = 42
-					}
+                class A {
+                    companion object {
+                        private const val MY_CONST = 42
+                    }
 
-					fun a() {
-						Completable.timer(MY_CONST.toLong(), TimeUnit.MILLISECONDS)
-								.subscribe()
-					}
-				}
-			"""
+                    fun a() {
+                        Completable.timer(MY_CONST.toLong(), TimeUnit.MILLISECONDS)
+                                .subscribe()
+                    }
+                }
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
     }
@@ -95,54 +95,54 @@ class UnusedPrivateMemberSpec : Spek({
 
         it("reports an unused member") {
             val code = """
-				class Test {
-					private val unused = "This is not used"
+                class Test {
+                    private val unused = "This is not used"
 
-					fun use() {
-						println("This is not using a property")
-					}
-				}
-				"""
+                    fun use() {
+                        println("This is not using a property")
+                    }
+                }
+                """
             assertThat(subject.lint(code)).hasSize(1)
         }
 
         it("does not report unused public members") {
             val code = """
-				class Test {
-					val unused = "This is not used"
+                class Test {
+                    val unused = "This is not used"
 
-					fun use() {
-						println("This is not using a property")
-					}
-				}
-				"""
+                    fun use() {
+                        println("This is not using a property")
+                    }
+                }
+                """
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report used members") {
             val code = """
-				class Test {
-					private val used = "This is used"
+                class Test {
+                    private val used = "This is used"
 
-					fun use() {
-						println(used)
-					}
-				}
-				"""
+                    fun use() {
+                        println(used)
+                    }
+                }
+                """
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report used members but reports unused members") {
             val code = """
-				class Test {
-					private val used = "This is used"
-					private val unused = "This is not used"
+                class Test {
+                    private val used = "This is used"
+                    private val unused = "This is not used"
 
-					fun use() {
-						println(used)
-					}
-				}
-				"""
+                    fun use() {
+                        println(used)
+                    }
+                }
+                """
             assertThat(subject.lint(code)).hasSize(1)
         }
 
@@ -167,43 +167,43 @@ class UnusedPrivateMemberSpec : Spek({
 
         it("reports an unused member") {
             val code = """
-				class Test {
-					private val unused = "This is not used"
+                class Test {
+                    private val unused = "This is not used"
 
-					fun use() {
-						val used = "This is used"
-						println(used)
-					}
-				}
-				"""
+                    fun use() {
+                        val used = "This is used"
+                        println(used)
+                    }
+                }
+                """
             assertThat(subject.lint(code)).hasSize(1)
         }
 
         it("does not report used members") {
             val code = """
-				class Test {
-					private val used = "This is used"
+                class Test {
+                    private val used = "This is used"
 
-					fun use() {
-						val text = used
-						println(text)
-					}
-				}
-				"""
+                    fun use() {
+                        val text = used
+                        println(text)
+                    }
+                }
+                """
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("reports unused local properties") {
             val code = """
-				class Test {
-					private val used = "This is used"
+                class Test {
+                    private val used = "This is used"
 
-					fun use() {
-						val unused = used
-						println(used)
-					}
-				}
-				"""
+                    fun use() {
+                        val unused = used
+                        println(used)
+                    }
+                }
+                """
             assertThat(subject.lint(code)).hasSize(1)
         }
     }
@@ -212,78 +212,78 @@ class UnusedPrivateMemberSpec : Spek({
 
         it("should not depend on evaluation order of functions or properties") {
             val code = """
-				fun RuleSetProvider.provided() = ruleSetId in defaultRuleSetIds
+                fun RuleSetProvider.provided() = ruleSetId in defaultRuleSetIds
 
-				val defaultRuleSetIds = listOf("comments", "complexity", "empty-blocks",
-						"exceptions", "potential-bugs", "performance", "style")
-			"""
+                val defaultRuleSetIds = listOf("comments", "complexity", "empty-blocks",
+                        "exceptions", "potential-bugs", "performance", "style")
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("doesn't report loop properties") {
             val code = """
-				class Test {
-					fun use() {
-						for (i in 0 until 10) {
-							println(i)
-						}
-					}
-				}
-				"""
+                class Test {
+                    fun use() {
+                        for (i in 0 until 10) {
+                            println(i)
+                        }
+                    }
+                }
+                """
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("reports unused loop property") {
             val code = """
-				class Test {
-					fun use() {
-						for (i in 0 until 10) {
-						}
-					}
-				}
-				"""
+                class Test {
+                    fun use() {
+                        for (i in 0 until 10) {
+                        }
+                    }
+                }
+                """
             assertThat(subject.lint(code)).hasSize(1)
         }
 
         it("reports unused loop property in indexed array") {
             val code = """
-				class Test {
-					fun use() {
-						val array = intArrayOf(1, 2, 3)
-						for ((index, value) in array.withIndex()) {
-							println(index)
-						}
-					}
-				}
-				"""
+                class Test {
+                    fun use() {
+                        val array = intArrayOf(1, 2, 3)
+                        for ((index, value) in array.withIndex()) {
+                            println(index)
+                        }
+                    }
+                }
+                """
             assertThat(subject.lint(code)).hasSize(1)
         }
 
         it("reports all unused loop properties in indexed array") {
             val code = """
-				class Test {
-					fun use() {
-						val array = intArrayOf(1, 2, 3)
-						for ((index, value) in array.withIndex()) {
-						}
-					}
-				}
-				"""
+                class Test {
+                    fun use() {
+                        val array = intArrayOf(1, 2, 3)
+                        for ((index, value) in array.withIndex()) {
+                        }
+                    }
+                }
+                """
             assertThat(subject.lint(code)).hasSize(2)
         }
 
         it("does not report used loop properties in indexed array") {
             val code = """
-				class Test {
-					fun use() {
-						val array = intArrayOf(1, 2, 3)
-						for ((index, value) in array.withIndex()) {
-							println(index)
-							println(value)
-						}
-					}
-				}
-				"""
+                class Test {
+                    fun use() {
+                        val array = intArrayOf(1, 2, 3)
+                        for ((index, value) in array.withIndex()) {
+                            println(index)
+                            println(value)
+                        }
+                    }
+                }
+                """
             assertThat(subject.lint(code)).isEmpty()
         }
     }
@@ -292,28 +292,28 @@ class UnusedPrivateMemberSpec : Spek({
 
         it("does not report properties used by other properties") {
             val code = """
-				class Test {
-					private val used = "This is used"
-					private val text = used
+                class Test {
+                    private val used = "This is used"
+                    private val text = used
 
-					fun use() {
-						println(text)
-					}
-				}
-				"""
+                    fun use() {
+                        println(text)
+                    }
+                }
+                """
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report properties used by inner classes") {
             val code = """
-				class Test {
-					private val unused = "This is not used"
+                class Test {
+                    private val unused = "This is not used"
 
-					inner class Something {
-						val test = unused
-					}
-				}
-				"""
+                    inner class Something {
+                        val test = unused
+                    }
+                }
+                """
             assertThat(subject.lint(code)).isEmpty()
         }
     }
@@ -321,70 +321,70 @@ class UnusedPrivateMemberSpec : Spek({
     describe("function parameters") {
         it("reports single parameters if they are unused") {
             val code = """
-			class Test {
-				val value = usedMethod(1)
+            class Test {
+                val value = usedMethod(1)
 
-				private fun usedMethod(unusedParameter: Int): Int {
-					return 5
-				}
-			}
-			"""
+                private fun usedMethod(unusedParameter: Int): Int {
+                    return 5
+                }
+            }
+            """
 
             assertThat(subject.lint(code)).hasSize(1)
         }
 
         it("does not report single parameters if they used in return statement") {
             val code = """
-			class Test {
-				val value = usedMethod(1)
+            class Test {
+                val value = usedMethod(1)
 
-				private fun usedMethod(used: Int): Int {
-					return used
-				}
-			}
-			"""
+                private fun usedMethod(used: Int): Int {
+                    return used
+                }
+            }
+            """
 
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report single parameters if they used in function") {
             val code = """
-			class Test {
-				val value = usedMethod(1)
+            class Test {
+                val value = usedMethod(1)
 
-				private fun usedMethod(used: Int) {
-					println(used)
-				}
-			}
-			"""
+                private fun usedMethod(used: Int) {
+                    println(used)
+                }
+            }
+            """
 
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("reports parameters that are unused in return statement") {
             val code = """
-			class Test {
-				val value = usedMethod(1, 2)
+            class Test {
+                val value = usedMethod(1, 2)
 
-				private fun usedMethod(unusedParameter: Int, usedParameter: Int): Int {
-					return usedParameter
-				}
-			}
-			"""
+                private fun usedMethod(unusedParameter: Int, usedParameter: Int): Int {
+                    return usedParameter
+                }
+            }
+            """
 
             assertThat(subject.lint(code)).hasSize(1)
         }
 
         it("reports parameters that are unused in function") {
             val code = """
-			class Test {
-				val value = usedMethod(1, 2)
+            class Test {
+                val value = usedMethod(1, 2)
 
-				private fun usedMethod(unusedParameter: Int, usedParameter: Int) {
-					println(usedParameter)
-				}
-			}
-			"""
+                private fun usedMethod(unusedParameter: Int, usedParameter: Int) {
+                    println(usedParameter)
+                }
+            }
+            """
 
             assertThat(subject.lint(code)).hasSize(1)
         }
@@ -393,50 +393,50 @@ class UnusedPrivateMemberSpec : Spek({
     describe("top level function parameters") {
         it("reports single parameters if they are unused") {
             val code = """
-			fun function(unusedParameter: Int): Int {
-				return 5
-			}
-			"""
+            fun function(unusedParameter: Int): Int {
+                return 5
+            }
+            """
 
             assertThat(subject.lint(code)).hasSize(1)
         }
 
         it("does not report single parameters if they used in return statement") {
             val code = """
-			fun function(used: Int): Int {
-				return used
-			}
-			"""
+            fun function(used: Int): Int {
+                return used
+            }
+            """
 
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report single parameters if they used in function") {
             val code = """
-			fun function(used: Int) {
-				println(used)
-			}
-			"""
+            fun function(used: Int) {
+                println(used)
+            }
+            """
 
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("reports parameters that are unused in return statement") {
             val code = """
-			fun function(unusedParameter: Int, usedParameter: Int): Int {
-				return usedParameter
-			}
-			"""
+            fun function(unusedParameter: Int, usedParameter: Int): Int {
+                return usedParameter
+            }
+            """
 
             assertThat(subject.lint(code)).hasSize(1)
         }
 
         it("reports parameters that are unused in function") {
             val code = """
-			fun function(unusedParameter: Int, usedParameter: Int) {
-				println(usedParameter)
-			}
-			"""
+            fun function(unusedParameter: Int, usedParameter: Int) {
+                println(usedParameter)
+            }
+            """
 
             assertThat(subject.lint(code)).hasSize(1)
         }
@@ -445,26 +445,26 @@ class UnusedPrivateMemberSpec : Spek({
     describe("unused private functions") {
         it("does not report used private functions") {
             val code = """
-			class Test {
-				val value = usedMethod()
+            class Test {
+                val value = usedMethod()
 
-				private fun usedMethod(): Int {
-					return 5
-				}
-			}
-			"""
+                private fun usedMethod(): Int {
+                    return 5
+                }
+            }
+            """
 
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("reports unused private functions") {
             val code = """
-			class Test {
-				private fun unusedFunction(): Int {
-					return 5
-				}
-			}
-			"""
+            class Test {
+                private fun unusedFunction(): Int {
+                    return 5
+                }
+            }
+            """
 
             assertThat(subject.lint(code)).hasSize(1)
         }
@@ -487,16 +487,16 @@ class UnusedPrivateMemberSpec : Spek({
 
         it("reports the non called private function") {
             val code = """
-			class Test {
-				private fun unusedFunction(): Int {
-					return someOtherUnusedFunction()
-				}
+            class Test {
+                private fun unusedFunction(): Int {
+                    return someOtherUnusedFunction()
+                }
 
-				private fun someOtherUnusedFunction() {
-					println("Never used")
-				}
-			}
-			"""
+                private fun someOtherUnusedFunction() {
+                    println("Never used")
+                }
+            }
+            """
 
             assertThat(subject.lint(code)).hasSize(1)
         }
@@ -506,17 +506,17 @@ class UnusedPrivateMemberSpec : Spek({
 
         it("does not report the unused private property") {
             val code = """
-				class Test {
-					private val ignored = ""
-				}"""
+                class Test {
+                    private val ignored = ""
+                }"""
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report the unused private function and parameter") {
             val code = """
-				class Test {
-					private fun ignored(ignored: Int) {}
-				}"""
+                class Test {
+                    private fun ignored(ignored: Int) {}
+                }"""
             assertThat(subject.lint(code)).isEmpty()
         }
     }
@@ -525,22 +525,22 @@ class UnusedPrivateMemberSpec : Spek({
 
         it("reports unused nested private property") {
             val code = """
-				class Test {
-					class Inner {
-						private val unused = 1
-					}
-				}"""
+                class Test {
+                    class Inner {
+                        private val unused = 1
+                    }
+                }"""
             assertThat(subject.lint(code)).hasSize(1)
         }
 
         it("does not report used nested private property") {
             val code = """
-				class Test {
-					class Inner {
-						private val used = 1
-						fun someFunction() = used
-					}
-				}"""
+                class Test {
+                    class Inner {
+                        private val used = 1
+                        fun someFunction() = used
+                    }
+                }"""
             assertThat(subject.lint(code)).isEmpty()
         }
     }
@@ -548,70 +548,70 @@ class UnusedPrivateMemberSpec : Spek({
     describe("parameters in primary constructors") {
         it("reports unused private property") {
             val code = """
-				class Test(private val unused: Any)
-				"""
+                class Test(private val unused: Any)
+                """
             assertThat(subject.lint(code)).hasSize(1)
         }
 
         it("reports unused parameter") {
             val code = """
-				class Test(unused: Any)
-				"""
+                class Test(unused: Any)
+                """
             assertThat(subject.lint(code)).hasSize(1)
         }
 
         it("does not report used parameter for calling super") {
             val code = """
-    			class Parent(val ignored: Any)
-				class Test(used: Any) : Parent(used)
-				"""
+                class Parent(val ignored: Any)
+                class Test(used: Any) : Parent(used)
+                """
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report used parameter in init block") {
             val code = """
-				class Test(used: Any) {
-					init {
-						used.toString()
-					}
-				}
-				"""
+                class Test(used: Any) {
+                    init {
+                        used.toString()
+                    }
+                }
+                """
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report used parameter to initialize property") {
             val code = """
-				class Test(used: Any) {
-					val usedString = used.toString()
-				}
-				"""
+                class Test(used: Any) {
+                    val usedString = used.toString()
+                }
+                """
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report public property") {
             val code = """
-				class Test(val unused: Any)
-				"""
+                class Test(val unused: Any)
+                """
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report private property used in init block") {
             val code = """
-				class Test(private val used: Any) {
-					init { used.toString() }
-				}
-				"""
+                class Test(private val used: Any) {
+                    init { used.toString() }
+                }
+                """
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report private property used in function") {
             val code = """
-				class Test(private val used: Any) {
-					fun something() {
-						used.toString()
-					}
-				}
-				"""
+                class Test(private val used: Any) {
+                    fun something() {
+                        used.toString()
+                    }
+                }
+                """
             assertThat(subject.lint(code)).isEmpty()
         }
     }
@@ -619,8 +619,8 @@ class UnusedPrivateMemberSpec : Spek({
     describe("error messages") {
         it("are specific for function parameters") {
             val code = """
-				fun foo(unused: Int){}
-			"""
+                fun foo(unused: Int){}
+            """
 
             val lint = subject.lint(code)
 
@@ -629,8 +629,8 @@ class UnusedPrivateMemberSpec : Spek({
 
         it("are specific for local variables") {
             val code = """
-				fun foo(){ val unused = 1 }
-			"""
+                fun foo(){ val unused = 1 }
+            """
 
             val lint = subject.lint(code)
 
@@ -639,12 +639,12 @@ class UnusedPrivateMemberSpec : Spek({
 
         it("are specific for private functions") {
             val code = """
-			class Test {
-				private fun unusedFunction(): Int {
-					return 5
-				}
-			}
-			"""
+            class Test {
+                private fun unusedFunction(): Int {
+                    return 5
+                }
+            }
+            """
 
             val lint = subject.lint(code)
 
@@ -655,16 +655,16 @@ class UnusedPrivateMemberSpec : Spek({
     describe("suppress unused parameter warning annotations") {
         it("does not report annotated parameters") {
             val code = """
-				fun foo(@Suppress("UNUSED_PARAMETER") unused: String){}
-			"""
+                fun foo(@Suppress("UNUSED_PARAMETER") unused: String){}
+            """
 
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("reports parameters without annotation") {
             val code = """
-				fun foo(@Suppress("UNUSED_PARAMETER") unused: String, unusedWithoutAnnotation: String){}
-			"""
+                fun foo(@Suppress("UNUSED_PARAMETER") unused: String, unusedWithoutAnnotation: String){}
+            """
 
             val lint = subject.lint(code)
 
@@ -674,63 +674,63 @@ class UnusedPrivateMemberSpec : Spek({
 
         it("does not report parameters in annotated function") {
             val code = """
-        		@Suppress("UNUSED_PARAMETER")
-				fun foo(unused: String, otherUnused: String){}
-			"""
+                @Suppress("UNUSED_PARAMETER")
+                fun foo(unused: String, otherUnused: String){}
+            """
 
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report parameters in annotated class") {
             val code = """
-        		@Suppress("UNUSED_PARAMETER")
-        		class Test {
-					fun foo(unused: String, otherUnused: String){}
-					fun bar(unused: String){}
-				}
-			"""
+                @Suppress("UNUSED_PARAMETER")
+                class Test {
+                    fun foo(unused: String, otherUnused: String){}
+                    fun bar(unused: String){}
+                }
+            """
 
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report parameters in annotated object") {
             val code = """
-				@Suppress("UNUSED_PARAMETER")
-				object Test {
-					fun foo(unused: String){}
-				}
-			"""
+                @Suppress("UNUSED_PARAMETER")
+                object Test {
+                    fun foo(unused: String){}
+                }
+            """
 
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report parameters in class with annotated outer class") {
             val code = """
-        		@Suppress("UNUSED_PARAMETER")
-				class Test {
-					fun foo(unused: String){}
+                @Suppress("UNUSED_PARAMETER")
+                class Test {
+                    fun foo(unused: String){}
 
-					class InnerTest {
-						fun bar(unused: String){}
-					}
-				}
-			"""
+                    class InnerTest {
+                        fun bar(unused: String){}
+                    }
+                }
+            """
 
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report parameters in annotated file") {
             val code = """
-				@file:Suppress("UNUSED_PARAMETER")
+                @file:Suppress("UNUSED_PARAMETER")
 
-				class Test {
-					fun foo(unused: String){}
+                class Test {
+                    fun foo(unused: String){}
 
-					class InnerTest {
-						fun bar(unused: String){}
-					}
-				}
-			"""
+                    class InnerTest {
+                        fun bar(unused: String){}
+                    }
+                }
+            """
 
             assertThat(subject.lint(code)).isEmpty()
         }
@@ -739,19 +739,19 @@ class UnusedPrivateMemberSpec : Spek({
     describe("suppress unused property warning annotations") {
         it("does not report annotated private constructor properties") {
             val code = """
-				class Test(@Suppress("unused") private val foo: String) {}
-			"""
+                class Test(@Suppress("unused") private val foo: String) {}
+            """
 
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("reports private constructor properties without annotation") {
             val code = """
-				class Test(
-					@Suppress("unused") private val foo: String,
-					private val bar: String
-				) {}
-			"""
+                class Test(
+                    @Suppress("unused") private val foo: String,
+                    private val bar: String
+                ) {}
+            """
 
             val lint = subject.lint(code)
 
@@ -761,66 +761,66 @@ class UnusedPrivateMemberSpec : Spek({
 
         it("does not report private constructor properties in annotated class") {
             val code = """
-        		@Suppress("unused")
-				class Test(
-					private val foo: String,
-					private val bar: String
-				) {}
-			"""
+                @Suppress("unused")
+                class Test(
+                    private val foo: String,
+                    private val bar: String
+                ) {}
+            """
 
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report private constructor properties in class with annotated outer class") {
             val code = """
-        		@Suppress("unused")
-				class Test(
-					private val foo: String,
-					private val bar: String
-				) {
-					class InnerTest(
-						private val baz: String
-					) {}
-				}
-			"""
+                @Suppress("unused")
+                class Test(
+                    private val foo: String,
+                    private val bar: String
+                ) {
+                    class InnerTest(
+                        private val baz: String
+                    ) {}
+                }
+            """
 
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report private constructor properties in annotated file") {
             val code = """
-				@file:Suppress("unused")
+                @file:Suppress("unused")
 
-				class Test(
-					private val foo: String,
-					private val bar: String
-				) {
-					class InnerTest(
-						private val baz: String
-					) {}
-				}
-			"""
+                class Test(
+                    private val foo: String,
+                    private val bar: String
+                ) {
+                    class InnerTest(
+                        private val baz: String
+                    ) {}
+                }
+            """
 
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report annotated private properties") {
             val code = """
-				class Test {
-					@Suppress("unused") private val foo: String
-				}
-			"""
+                class Test {
+                    @Suppress("unused") private val foo: String
+                }
+            """
 
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("reports private properties without annotation") {
             val code = """
-				class Test {
-					@Suppress("unused") private val foo: String
-					private val bar: String
-				}
-			"""
+                class Test {
+                    @Suppress("unused") private val foo: String
+                    private val bar: String
+                }
+            """
 
             val lint = subject.lint(code)
 
@@ -830,45 +830,45 @@ class UnusedPrivateMemberSpec : Spek({
 
         it("does not report private properties in annotated class") {
             val code = """
-        		@Suppress("unused")
-				class Test {
-					private val foo: String
-					private val bar: String
-				}
-			"""
+                @Suppress("unused")
+                class Test {
+                    private val foo: String
+                    private val bar: String
+                }
+            """
 
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report private properties in class with annotated outer class") {
             val code = """
-        		@Suppress("unused")
-				class Test {
-					private val foo: String
-					private val bar: String
+                @Suppress("unused")
+                class Test {
+                    private val foo: String
+                    private val bar: String
 
-					class InnerTest {
-						private val baz: String
-					}
-				}
-			"""
+                    class InnerTest {
+                        private val baz: String
+                    }
+                }
+            """
 
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report private properties in annotated file") {
             val code = """
-				@file:Suppress("unused")
+                @file:Suppress("unused")
 
-				class Test {
-					private val foo: String
-					private val bar: String
+                class Test {
+                    private val foo: String
+                    private val bar: String
 
-					class InnerTest {
-						private val baz: String
-					}
-				}
-			"""
+                    class InnerTest {
+                        private val baz: String
+                    }
+                }
+            """
 
             assertThat(subject.lint(code)).isEmpty()
         }
@@ -877,17 +877,17 @@ class UnusedPrivateMemberSpec : Spek({
     describe("suppress unused function warning annotations") {
         it("does not report annotated private functions") {
             val code = """
-				@Suppress("unused")
-				private fun foo(): String = ""
-			"""
+                @Suppress("unused")
+                private fun foo(): String = ""
+            """
 
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("reports private functions without annotation") {
             val code = """
-				private fun foo(): String = ""
-			"""
+                private fun foo(): String = ""
+            """
 
             val lint = subject.lint(code)
 
@@ -897,43 +897,43 @@ class UnusedPrivateMemberSpec : Spek({
 
         it("does not report private functions in annotated class") {
             val code = """
-        		@Suppress("unused")
-				class Test {
-					private fun foo(): String = ""
-				}
-			"""
+                @Suppress("unused")
+                class Test {
+                    private fun foo(): String = ""
+                }
+            """
 
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report private functions in class with annotated outer class") {
             val code = """
-        		@Suppress("unused")
-				class Test {
-					private fun foo(): String = ""
-					private fun bar(): String = ""
+                @Suppress("unused")
+                class Test {
+                    private fun foo(): String = ""
+                    private fun bar(): String = ""
 
-					class InnerTest {
-						private fun baz(): String = ""
-					}
-				}
-			"""
+                    class InnerTest {
+                        private fun baz(): String = ""
+                    }
+                }
+            """
 
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report private functions in annotated file") {
             val code = """
-				@file:Suppress("unused")
-				class Test {
-					private fun foo(): String = ""
-					private fun bar(): String = ""
+                @file:Suppress("unused")
+                class Test {
+                    private fun foo(): String = ""
+                    private fun bar(): String = ""
 
-					class InnerTest {
-						private fun baz(): String = ""
-					}
-				}
-			"""
+                    class InnerTest {
+                        private fun baz(): String = ""
+                    }
+                }
+            """
 
             assertThat(subject.lint(code)).isEmpty()
         }
@@ -943,23 +943,23 @@ class UnusedPrivateMemberSpec : Spek({
 
         it("does not report the args parameter of the main function inside an object") {
             val code = """
-				object O {
+                object O {
 
-					@JvmStatic
-					fun main(args: Array<String>) {
-						println("b")
-					}
-				}
-			"""
+                    @JvmStatic
+                    fun main(args: Array<String>) {
+                        println("b")
+                    }
+                }
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report the args parameter of the main function as top level function") {
             val code = """
-				fun main(args: Array<String>) {
-					println("b")
-				}
-			"""
+                fun main(args: Array<String>) {
+                    println("b")
+                }
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
     }
@@ -968,14 +968,14 @@ class UnusedPrivateMemberSpec : Spek({
 
         it("does not report used plus operator - #1354") {
             val code = """
-				import java.util.Date
-				class Foo {
-					val bla: Date = Date(System.currentTimeMillis()) + 300L
-					companion object {
-						private operator fun Date.plus(diff: Long): Date = Date(this.time + diff)
-					}
-				}
-			"""
+                import java.util.Date
+                class Foo {
+                    val bla: Date = Date(System.currentTimeMillis()) + 300L
+                    companion object {
+                        private operator fun Date.plus(diff: Long): Date = Date(this.time + diff)
+                    }
+                }
+            """
             assertThat(subject.lint(code)).isEmpty()
         }
     }
