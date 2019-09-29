@@ -33,11 +33,13 @@ class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
     )
 
     private val forbiddenImports = valueOrDefault(IMPORTS, "").split(",")
+        .asSequence()
         .map { it.trim() }
         .filter { it.isNotBlank() }
         .map { it.replace(".", "\\.") }
         .map { it.replace("*", ".*") }
         .map { Regex(it) }
+        .toList()
 
     override fun visitImportDirective(importDirective: KtImportDirective) {
         super.visitImportDirective(importDirective)

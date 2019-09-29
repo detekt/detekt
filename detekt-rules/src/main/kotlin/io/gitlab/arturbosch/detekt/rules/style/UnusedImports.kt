@@ -73,11 +73,11 @@ class UnusedImports(config: Config) : Rule(config) {
         }
 
         override fun visitImportList(importList: KtImportList) {
-            imports = importList.imports.filter { it.isValidImport }
-                    .filter { it.identifier()?.contains("*")?.not() == true }
-                    .filter { it.identifier() != null }
-                    .filter { !operatorSet.contains(it.identifier()) }
-                    .filter { !componentNRegex.matches(it.identifier()!!) }
+            imports = importList.imports.asSequence().filter { it.isValidImport }
+                .filter { it.identifier()?.contains("*")?.not() == true }
+                .filter { it.identifier() != null }
+                .filter { !operatorSet.contains(it.identifier()) }
+                .filter { !componentNRegex.matches(it.identifier()!!) }.toList()
             super.visitImportList(importList)
         }
 
