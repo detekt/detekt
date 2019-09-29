@@ -16,11 +16,16 @@ class DuplicateCaseInWhenExpressionSpec : Spek({
                 fun f() {
                     when (1) {
                         1 -> println()
+                        1 -> kotlin.io.println()
                         1 -> println()
+                        1, 2 -> println()
+                        1, 2 -> kotlin.io.println()
                         else -> println()
                     }
                 }"""
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            val result = subject.compileAndLint(code)
+            assertThat(result).hasSize(1)
+            assertThat(result.first().message).isEqualTo("When expression has multiple case statements for 1; 1, 2.")
         }
 
         it("does not report duplicated label in when") {
@@ -31,7 +36,7 @@ class DuplicateCaseInWhenExpressionSpec : Spek({
                         else -> println()
                     }
                 }"""
-            assertThat(subject.compileAndLint(code)).hasSize(0)
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
 })
