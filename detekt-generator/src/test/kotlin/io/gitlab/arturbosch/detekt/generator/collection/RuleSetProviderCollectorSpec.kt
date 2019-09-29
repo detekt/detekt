@@ -14,14 +14,14 @@ class RuleSetProviderCollectorSpec : Spek({
     describe("RuleSetProviderCollector rule") {
         context("a non-RuleSetProvider class extending nothing") {
             val code = """
-			package foo
+            package foo
 
-			class SomeRandomClass {
-				fun logSomething(message: String) {
-					println(message)
-				}
-			}
-		"""
+            class SomeRandomClass {
+                fun logSomething(message: String) {
+                    println(message)
+                }
+            }
+        """
             it("collects no rulesets") {
                 val items = subject.run(code)
                 assertThat(items).isEmpty()
@@ -30,14 +30,14 @@ class RuleSetProviderCollectorSpec : Spek({
 
         context("a non-RuleSetProvider class extending a class that is not related to rules") {
             val code = """
-			package foo
+            package foo
 
-			class SomeRandomClass: SomeOtherClass {
-				fun logSomething(message: String) {
-					println(message)
-				}
-			}
-		"""
+            class SomeRandomClass: SomeOtherClass {
+                fun logSomething(message: String) {
+                    println(message)
+                }
+            }
+        """
             it("collects no rulesets") {
                 val items = subject.run(code)
                 assertThat(items).isEmpty()
@@ -46,14 +46,14 @@ class RuleSetProviderCollectorSpec : Spek({
 
         context("a RuleSetProvider without documentation") {
             val code = """
-			package foo
+            package foo
 
-			class TestProvider: RuleSetProvider {
-				fun logSomething(message: String) {
-					println(message)
-				}
-			}
-		"""
+            class TestProvider: RuleSetProvider {
+                fun logSomething(message: String) {
+                    println(message)
+                }
+            }
+        """
             it("throws an exception") {
                 assertThatExceptionOfType(InvalidDocumentationException::class.java)
                         .isThrownBy { subject.run(code) }
@@ -62,14 +62,14 @@ class RuleSetProviderCollectorSpec : Spek({
 
         context("a correct RuleSetProvider class extending RuleSetProvider but missing parameters") {
             val code = """
-			package foo
+            package foo
 
-			class TestProvider: RuleSetProvider {
-				fun logSomething(message: String) {
-					println(message)
-				}
-			}
-		"""
+            class TestProvider: RuleSetProvider {
+                fun logSomething(message: String) {
+                    println(message)
+                }
+            }
+        """
 
             it("throws an exception") {
                 assertThatExceptionOfType(InvalidDocumentationException::class.java)
@@ -82,23 +82,23 @@ class RuleSetProviderCollectorSpec : Spek({
             val ruleSetId = "test"
             val ruleName = "TestRule"
             val code = """
-			package foo
+            package foo
 
-			/**
-			 * $description
-			 *
-			 * @active since v1.0.0
-			 */
-			class TestProvider: RuleSetProvider {
-				override val ruleSetId: String = "$ruleSetId"
+            /**
+             * $description
+             *
+             * @active since v1.0.0
+             */
+            class TestProvider: RuleSetProvider {
+                override val ruleSetId: String = "$ruleSetId"
 
-				override fun instance(config: Config): RuleSet {
-					return RuleSet(ruleSetId, listOf(
-							$ruleName(config)
-					))
-				}
-			}
-		"""
+                override fun instance(config: Config): RuleSet {
+                    return RuleSet(ruleSetId, listOf(
+                            $ruleName(config)
+                    ))
+                }
+            }
+        """
 
             it("collects a RuleSetProvider") {
                 val items = subject.run(code)
@@ -136,21 +136,21 @@ class RuleSetProviderCollectorSpec : Spek({
             val ruleSetId = "test"
             val ruleName = "TestRule"
             val code = """
-			package foo
+            package foo
 
-			/**
-			 * $description
-			 */
-			class TestProvider: RuleSetProvider {
-				override val ruleSetId: String = "$ruleSetId"
+            /**
+             * $description
+             */
+            class TestProvider: RuleSetProvider {
+                override val ruleSetId: String = "$ruleSetId"
 
-				override fun instance(config: Config): RuleSet {
-					return RuleSet(ruleSetId, listOf(
-							$ruleName(config)
-					))
-				}
-			}
-		"""
+                override fun instance(config: Config): RuleSet {
+                    return RuleSet(ruleSetId, listOf(
+                            $ruleName(config)
+                    ))
+                }
+            }
+        """
 
             it("is not active") {
                 val items = subject.run(code)
@@ -163,19 +163,19 @@ class RuleSetProviderCollectorSpec : Spek({
             val description = "This is a description"
             val ruleName = "TestRule"
             val code = """
-			package foo
+            package foo
 
-			/**
-			 * $description
-			 */
-			class TestProvider: RuleSetProvider {
-				override fun instance(config: Config): RuleSet {
-					return RuleSet(ruleSetId, listOf(
-							$ruleName(config)
-					))
-				}
-			}
-		"""
+            /**
+             * $description
+             */
+            class TestProvider: RuleSetProvider {
+                override fun instance(config: Config): RuleSet {
+                    return RuleSet(ruleSetId, listOf(
+                            $ruleName(config)
+                    ))
+                }
+            }
+        """
 
             it("throws an exception") {
                 assertThatExceptionOfType(InvalidDocumentationException::class.java)
@@ -187,18 +187,18 @@ class RuleSetProviderCollectorSpec : Spek({
             val ruleSetId = "test"
             val ruleName = "TestRule"
             val code = """
-			package foo
+            package foo
 
-			class TestProvider: RuleSetProvider {
-				override val ruleSetId: String = "$ruleSetId"
+            class TestProvider: RuleSetProvider {
+                override val ruleSetId: String = "$ruleSetId"
 
-				override fun instance(config: Config): RuleSet {
-					return RuleSet(ruleSetId, listOf(
-							$ruleName(config)
-					))
-				}
-			}
-		"""
+                override fun instance(config: Config): RuleSet {
+                    return RuleSet(ruleSetId, listOf(
+                            $ruleName(config)
+                    ))
+                }
+            }
+        """
 
             it("throws an exception") {
                 assertThatExceptionOfType(InvalidDocumentationException::class.java)
@@ -209,16 +209,16 @@ class RuleSetProviderCollectorSpec : Spek({
         context("a RuleSetProvider with no rules") {
             val ruleSetId = "test"
             val code = """
-			package foo
+            package foo
 
-			class TestProvider: RuleSetProvider {
-				override val ruleSetId: String = "$ruleSetId"
+            class TestProvider: RuleSetProvider {
+                override val ruleSetId: String = "$ruleSetId"
 
-				override fun instance(config: Config): RuleSet {
-					return RuleSet(ruleSetId, emptyListOf())
-				}
-			}
-		"""
+                override fun instance(config: Config): RuleSet {
+                    return RuleSet(ruleSetId, emptyListOf())
+                }
+            }
+        """
 
             it("throws an exception") {
                 assertThatExceptionOfType(InvalidDocumentationException::class.java)
@@ -232,24 +232,24 @@ class RuleSetProviderCollectorSpec : Spek({
             val ruleName = "TestRule"
             val secondRuleName = "SecondRule"
             val code = """
-			package foo
+            package foo
 
-			/**
-			 * $description
-			 *
-			 * @active since v1.0.0
-			 */
-			class TestProvider: RuleSetProvider {
-				override val ruleSetId: String = "$ruleSetId"
+            /**
+             * $description
+             *
+             * @active since v1.0.0
+             */
+            class TestProvider: RuleSetProvider {
+                override val ruleSetId: String = "$ruleSetId"
 
-				override fun instance(config: Config): RuleSet {
-					return RuleSet(ruleSetId, listOf(
-							$ruleName(config),
-							$secondRuleName(config)
-					))
-				}
-			}
-		"""
+                override fun instance(config: Config): RuleSet {
+                    return RuleSet(ruleSetId, listOf(
+                            $ruleName(config),
+                            $secondRuleName(config)
+                    ))
+                }
+            }
+        """
 
             it("collects multiple rules") {
                 val items = subject.run(code)

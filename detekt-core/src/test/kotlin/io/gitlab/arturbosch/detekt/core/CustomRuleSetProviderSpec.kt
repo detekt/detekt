@@ -11,10 +11,10 @@ import java.nio.file.Paths
  * When any breaking change in 'detekt-api' is done, this test will break.
  *
  * The procedure to repair this test is:
- * 	1. 'gradle build -x test publishToMavenLocal'
- * 	2. 'gradle build' again to let the 'sample' project pick up the new api changes.
- * 	3. 'cp detekt-sample-extensions/build/libs/detekt-sample-extensions-<version>.jar detekt-core/src/test/resources/sample-rule-set.jar'
- * 	4. Now 'gradle build' should be green again.
+ *  1. 'gradle build -x test publishToMavenLocal'
+ *  2. 'gradle build' again to let the 'sample' project pick up the new api changes.
+ *  3. 'cp detekt-sample-extensions/build/libs/detekt-sample-extensions-<version>.jar detekt-core/src/test/resources/sample-rule-set.jar'
+ *  4. Now 'gradle build' should be green again.
  */
 class CustomRuleSetProviderSpec : Spek({
 
