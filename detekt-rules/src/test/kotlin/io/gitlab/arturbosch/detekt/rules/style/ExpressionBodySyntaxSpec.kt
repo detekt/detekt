@@ -16,40 +16,40 @@ class ExpressionBodySyntaxSpec : Spek({
 
             it("reports constant return") {
                 assertThat(subject.compileAndLint("""
-			    	fun stuff(): Int {
-			    		return 5
-			    	}
-			    """
+                    fun stuff(): Int {
+                        return 5
+                    }
+                """
                 )).hasSize(1)
             }
 
             it("reports return statement with method chain") {
                 assertThat(subject.compileAndLint("""
-			    	fun stuff(): String {
-			    		return StringBuilder().append(0).toString()
-			    	}
-			    """
+                    fun stuff(): String {
+                        return StringBuilder().append(0).toString()
+                    }
+                """
                 )).hasSize(1)
             }
 
             it("reports return statements with conditionals") {
                 assertThat(subject.compileAndLint("""
-			    	fun stuff(): Int {
-			    		return if (true) return 5 else return 3
-			    	}
-			    	fun stuff(): Int {
-			    		return try { return 5 } catch (e: Exception) { return 3 }
-			    	}
-			    """)).hasSize(2)
+                    fun stuff(): Int {
+                        return if (true) return 5 else return 3
+                    }
+                    fun stuff(): Int {
+                        return try { return 5 } catch (e: Exception) { return 3 }
+                    }
+                """)).hasSize(2)
             }
 
             it("does not report multiple if statements") {
                 assertThat(subject.compileAndLint("""
-			    	fun stuff(): Boolean {
-			    		if (true) return true
-			    		return false
-			    	}
-			    """)).isEmpty()
+                    fun stuff(): Boolean {
+                        if (true) return true
+                        return false
+                    }
+                """)).isEmpty()
             }
 
             it("does not report when using shortcut return") {
@@ -66,11 +66,11 @@ class ExpressionBodySyntaxSpec : Spek({
         context("several return statements with multiline method chain") {
 
             val code = """
-			    fun stuff(): String {
-			    	return StringBuilder()
-			    		.append(1)
-			    		.toString()
-			    }"""
+                fun stuff(): String {
+                    return StringBuilder()
+                        .append(1)
+                        .toString()
+                }"""
 
             it("does not report with the default configuration") {
                 assertThat(subject.compileAndLint(code)).isEmpty()
@@ -85,12 +85,12 @@ class ExpressionBodySyntaxSpec : Spek({
         context("several return statements with multiline when expression") {
 
             val code = """
-			    fun stuff(arg: Int): Int {
-			    	return when(arg) {
-			    		0 -> 0
-			    		else -> 1
-			    	}
-			    }"""
+                fun stuff(arg: Int): Int {
+                    return when(arg) {
+                        0 -> 0
+                        else -> 1
+                    }
+                }"""
 
             it("does not report with the default configuration") {
                 assertThat(subject.compileAndLint(code)).isEmpty()
@@ -105,10 +105,10 @@ class ExpressionBodySyntaxSpec : Spek({
         context("several return statements with multiline if expression") {
 
             val code = """
-			    fun stuff(arg: Int): Int {
-			    	return if (arg == 0) 0
-			    	else 1
-			    }
+                fun stuff(arg: Int): Int {
+                    return if (arg == 0) 0
+                    else 1
+                }
             """
 
             it("does not report with the default configuration") {

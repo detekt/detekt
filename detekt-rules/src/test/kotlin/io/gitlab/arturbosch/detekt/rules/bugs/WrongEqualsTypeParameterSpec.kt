@@ -13,29 +13,29 @@ class WrongEqualsTypeParameterSpec : Spek({
 
         it("does not report Any? as parameter") {
             val code = """
-				class A {
-					override fun equals(other: Any?): Boolean {
-						return super.equals(other)
-					}
-				}"""
+                class A {
+                    override fun equals(other: Any?): Boolean {
+                        return super.equals(other)
+                    }
+                }"""
             assertThat(subject.compileAndLint(code).size).isEqualTo(0)
         }
 
         it("reports a String as parameter") {
             val code = """
-				class A {
-					fun equals(other: String): Boolean {
-						return super.equals(other)
-					}
-				}"""
+                class A {
+                    fun equals(other: String): Boolean {
+                        return super.equals(other)
+                    }
+                }"""
             assertThat(subject.compileAndLint(code).size).isEqualTo(1)
         }
 
         it("does not report an interface declaration") {
             val code = """
-				interface I {
-					fun equals(other: String)
-				}"""
+                interface I {
+                    fun equals(other: String)
+                }"""
             assertThat(subject.compileAndLint(code).size).isEqualTo(0)
         }
     }

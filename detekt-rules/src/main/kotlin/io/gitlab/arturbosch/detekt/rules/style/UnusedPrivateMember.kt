@@ -112,10 +112,10 @@ private class UnusedFunctionVisitor(allowedNames: Regex) : UnusedMemberVisitor(a
     }
 
     /*
-	 * We need to collect all private function declarations and references to these functions
-	 * for the whole file as Kotlin allows to access private and internal object declarations
-	 * from everywhere in the file.
-	 */
+     * We need to collect all private function declarations and references to these functions
+     * for the whole file as Kotlin allows to access private and internal object declarations
+     * from everywhere in the file.
+     */
 
     override fun visitReferenceExpression(expression: KtReferenceExpression) {
         super.visitReferenceExpression(expression)

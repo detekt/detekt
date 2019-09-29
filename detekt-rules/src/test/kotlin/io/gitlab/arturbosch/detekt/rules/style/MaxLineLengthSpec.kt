@@ -47,13 +47,13 @@ class MaxLineLengthSpec : Spek({
 
         context("a kt file with a long package name and long import statements") {
             val code = """
-			package anIncrediblyLongAndComplexPackageNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
+            package anIncrediblyLongAndComplexPackageNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
 
-			import anIncrediblyLongAndComplexImportNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
+            import anIncrediblyLongAndComplexImportNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
 
-			class Test {
-			}
-		"""
+            class Test {
+            }
+        """
 
             val file = compileContentForTest(code)
             val lines = file.text.splitToSequence("\n")
@@ -130,14 +130,14 @@ class MaxLineLengthSpec : Spek({
 
         context("a kt file with a long package name, long import statements and a long line") {
             val code = """
-			package anIncrediblyLongAndComplexPackageNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
+            package anIncrediblyLongAndComplexPackageNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
 
-			import anIncrediblyLongAndComplexImportNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
+            import anIncrediblyLongAndComplexImportNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
 
-			class Test {
-				fun anIncrediblyLongAndComplexMethodNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot() {}
-			}
-		""".trim()
+            class Test {
+                fun anIncrediblyLongAndComplexMethodNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot() {}
+            }
+        """.trim()
 
             val file = compileContentForTest(code)
             val lines = file.text.splitToSequence("\n")
@@ -185,7 +185,7 @@ class MaxLineLengthSpec : Spek({
                 assertThat(rule.findings).hasSize(1)
                 val findingSource = rule.findings[0].location.source
                 assertThat(findingSource.line).isEqualTo(6)
-                assertThat(findingSource.column).isEqualTo(5)
+                assertThat(findingSource.column).isEqualTo(17)
             }
         }
     }

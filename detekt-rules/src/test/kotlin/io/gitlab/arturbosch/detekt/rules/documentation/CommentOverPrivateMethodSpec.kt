@@ -12,32 +12,32 @@ class CommentOverPrivateMethodSpec : Spek({
 
         it("reports private method with a comment") {
             val code = """
-    			class Test {
-					/**
-					 * asdf
-					 */
-					private fun f() {}
-				}"""
+                class Test {
+                    /**
+                     * asdf
+                     */
+                    private fun f() {}
+                }"""
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         it("does not report public method with a comment") {
             val code = """
-				/**
-				 * asdf
-				 */
-				fun f() {}"""
+                /**
+                 * asdf
+                 */
+                fun f() {}"""
             assertThat(subject.compileAndLint(code)).hasSize(0)
         }
 
         it("does not report public method in a class with a comment") {
             val code = """
-    			class Test {
-					/**
-					 * asdf
-					 */
-					fun f() {}
-				}"""
+                class Test {
+                    /**
+                     * asdf
+                     */
+                    fun f() {}
+                }"""
             assertThat(subject.compileAndLint(code)).hasSize(0)
         }
     }

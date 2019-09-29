@@ -12,19 +12,19 @@ class EnumNamingSpec : Spek({
         it("should detect no violation") {
             val findings = NamingRules().compileAndLint(
                     """
-				enum class WorkFlow {
-					ACTIVE, NOT_ACTIVE, Unknown, Number1
-				}
-				"""
+                enum class WorkFlow {
+                    ACTIVE, NOT_ACTIVE, Unknown, Number1
+                }
+                """
             )
             assertThat(findings).isEmpty()
         }
 
         it("reports an underscore in enum name") {
             val code = """
-				enum class WorkFlow {
-					_Default
-				}"""
+                enum class WorkFlow {
+                    _Default
+                }"""
             assertThat(NamingRules().compileAndLint(code)).hasSize(1)
         }
     }

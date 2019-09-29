@@ -18,11 +18,11 @@ class ThrowingExceptionsWithoutMessageOrCauseSpec : Spek({
         context("several exception calls") {
 
             val code = """
-				fun x() {
-					IllegalArgumentException(IllegalArgumentException())
-					IllegalArgumentException("foo")
-					throw IllegalArgumentException()
-				}"""
+                fun x() {
+                    IllegalArgumentException(IllegalArgumentException())
+                    IllegalArgumentException("foo")
+                    throw IllegalArgumentException()
+                }"""
 
             it("reports calls to the default constructor") {
                 assertThat(subject.compileAndLint(code)).hasSize(2)
@@ -39,10 +39,10 @@ class ThrowingExceptionsWithoutMessageOrCauseSpec : Spek({
 
             it("does not report a call to this exception") {
                 val code = """
-				fun test() {
-					org.assertj.core.api.Assertions.assertThatIllegalArgumentException().isThrownBy { println() }
-				}
-			"""
+                fun test() {
+                    org.assertj.core.api.Assertions.assertThatIllegalArgumentException().isThrownBy { println() }
+                }
+            """
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
         }

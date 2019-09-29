@@ -58,7 +58,7 @@ class ComplexMethodSpec : Spek({
                 val config = TestConfig(mapOf(ComplexMethod.IGNORE_SIMPLE_WHEN_ENTRIES to "true"))
                 val subject = ComplexMethod(config)
                 val code = """
-			    	 fun f() {
+                     fun f() {
                         val map = HashMap<Any, String>()
                         for ((key, value) in map) {
                             when (key) {
@@ -74,7 +74,7 @@ class ComplexMethodSpec : Spek({
                             }
                         }
                     }
-			    """
+                """
 
                 val findings = subject.compileAndLint(code)
                 assertThat(findings).isEmpty()
@@ -84,52 +84,52 @@ class ComplexMethodSpec : Spek({
         context("function containing object literal with many overridden functions") {
 
             val code = """
-			fun f(): List<Any> {
-				return object : List<Any> {
-					override val size: Int get() = TODO("not implemented")
+            fun f(): List<Any> {
+                return object : List<Any> {
+                    override val size: Int get() = TODO("not implemented")
 
-					override fun contains(element: Any): Boolean {
-						TODO("not implemented")
-					}
+                    override fun contains(element: Any): Boolean {
+                        TODO("not implemented")
+                    }
 
-					override fun containsAll(elements: Collection<Any>): Boolean {
-						TODO("not implemented")
-					}
+                    override fun containsAll(elements: Collection<Any>): Boolean {
+                        TODO("not implemented")
+                    }
 
-					override fun get(index: Int): Any {
-						TODO("not implemented")
-					}
+                    override fun get(index: Int): Any {
+                        TODO("not implemented")
+                    }
 
-					override fun indexOf(element: Any): Int {
-						TODO("not implemented")
-					}
+                    override fun indexOf(element: Any): Int {
+                        TODO("not implemented")
+                    }
 
-					override fun isEmpty(): Boolean {
-						TODO("not implemented")
-					}
+                    override fun isEmpty(): Boolean {
+                        TODO("not implemented")
+                    }
 
-					override fun iterator(): Iterator<Any> {
-						TODO("not implemented")
-					}
+                    override fun iterator(): Iterator<Any> {
+                        TODO("not implemented")
+                    }
 
-					override fun lastIndexOf(element: Any): Int {
-						TODO("not implemented")
-					}
+                    override fun lastIndexOf(element: Any): Int {
+                        TODO("not implemented")
+                    }
 
-					override fun listIterator(): ListIterator<Any> {
-						TODO("not implemented")
-					}
+                    override fun listIterator(): ListIterator<Any> {
+                        TODO("not implemented")
+                    }
 
-					override fun listIterator(index: Int): ListIterator<Any> {
-						TODO("not implemented")
-					}
+                    override fun listIterator(index: Int): ListIterator<Any> {
+                        TODO("not implemented")
+                    }
 
-					override fun subList(fromIndex: Int, toIndex: Int): List<Any> {
-						TODO("not implemented")
-					}
-				}
-			}
-			"""
+                    override fun subList(fromIndex: Int, toIndex: Int): List<Any> {
+                        TODO("not implemented")
+                    }
+                }
+            }
+            """
 
             it("should not count these overridden functions to base functions complexity") {
                 assertThat(ComplexMethod().compileAndLint(code)).isEmpty()

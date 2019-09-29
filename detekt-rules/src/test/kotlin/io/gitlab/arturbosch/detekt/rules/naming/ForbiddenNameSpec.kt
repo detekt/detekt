@@ -12,9 +12,9 @@ class ForbiddenNameSpec : Spek({
 
         it("should report classes with forbidden names") {
             val code = """
-				class TestManager {} // violation
-				class TestProvider {} // violation
-				class TestHolder"""
+                class TestManager {} // violation
+                class TestProvider {} // violation
+                class TestHolder"""
             assertThat(NamingRules(TestConfig(mapOf(ForbiddenClassName.FORBIDDEN_NAME to "Manager, Provider")))
                     .compileAndLint(code))
                     .hasSize(2)

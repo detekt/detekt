@@ -12,13 +12,13 @@ class ReturnFromFinallySpec : Spek({
 
         context("a finally block with a return statement") {
             val code = """
-			fun x() {
-				try {
-				} finally {
-					return
-				}
-			}
-		"""
+            fun x() {
+                try {
+                } finally {
+                    return
+                }
+            }
+        """
 
             it("should report") {
                 val findings = subject.compileAndLint(code)
@@ -28,12 +28,12 @@ class ReturnFromFinallySpec : Spek({
 
         context("a finally block with no return statement") {
             val code = """
-			fun x() {
-				try {
-				} finally {
-				}
-			}
-		"""
+            fun x() {
+                try {
+                } finally {
+                }
+            }
+        """
 
             it("should not report") {
                 val findings = subject.compileAndLint(code)
@@ -43,15 +43,15 @@ class ReturnFromFinallySpec : Spek({
 
         context("a finally block with a nested return statement") {
             val code = """
-			fun x() {
-				try {
-				} finally {
-					if (1 == 1) {
-						return
-					}
-				}
-			}
-		"""
+            fun x() {
+                try {
+                } finally {
+                    if (1 == 1) {
+                        return
+                    }
+                }
+            }
+        """
 
             it("should report") {
                 val findings = subject.compileAndLint(code)
@@ -61,16 +61,16 @@ class ReturnFromFinallySpec : Spek({
 
         context("a finally block with a return in an inner function") {
             val code = """
-			fun x() {
-				try {
-				} finally {
-					fun y() {
-						return
-					}
-					y()
-				}
-			}
-		"""
+            fun x() {
+                try {
+                } finally {
+                    fun y() {
+                        return
+                    }
+                    y()
+                }
+            }
+        """
 
             it("should not report") {
                 val findings = subject.compileAndLint(code)

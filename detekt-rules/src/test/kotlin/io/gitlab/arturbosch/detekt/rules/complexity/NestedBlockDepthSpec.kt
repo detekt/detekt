@@ -21,29 +21,29 @@ class NestedBlockDepthSpec : Spek({
 
         it("should detect too nested block depth") {
             val code = """
-				fun f() {
-					if (true) {
-						if (true) {
-							if (true) {
-								if (true) {
-								}
-							}
-						}
-					}
-				}"""
+                fun f() {
+                    if (true) {
+                        if (true) {
+                            if (true) {
+                                if (true) {
+                                }
+                            }
+                        }
+                    }
+                }"""
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         it("should not detect valid nested block depth") {
             val code = """
-				fun f() {
-					if (true) {
-						if (true) {
-							if (true) {
-							}
-						}
-					}
-				}"""
+                fun f() {
+                    if (true) {
+                        if (true) {
+                            if (true) {
+                            }
+                        }
+                    }
+                }"""
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -55,20 +55,20 @@ class NestedBlockDepthSpec : Spek({
 })
 
 const val nestedBlockCode = """
-	override fun procedure(node: ASTNode) {
-		val psi = node.psi
-		if (psi.isNotPartOfEnum() && psi.isNotPartOfString()) {
-			if (psi.isDoubleSemicolon()) {
-				addFindings(CodeSmell(id, Entity.from(psi)))
-				withAutoCorrect {
-					deleteOneOrTwoSemicolons(node as LeafPsiElement)
-				}
-			} else if (psi.isSemicolon()) {
-				val nextLeaf = psi.nextLeaf()
-				if (nextLeaf.isSemicolonOrEOF() || nextTokenHasSpaces(nextLeaf)) {
-					addFindings(CodeSmell(id, Entity.from(psi)))
-					withAutoCorrect { psi.delete() }
-				}
-			}
-		}
-	}"""
+    override fun procedure(node: ASTNode) {
+        val psi = node.psi
+        if (psi.isNotPartOfEnum() && psi.isNotPartOfString()) {
+            if (psi.isDoubleSemicolon()) {
+                addFindings(CodeSmell(id, Entity.from(psi)))
+                withAutoCorrect {
+                    deleteOneOrTwoSemicolons(node as LeafPsiElement)
+                }
+            } else if (psi.isSemicolon()) {
+                val nextLeaf = psi.nextLeaf()
+                if (nextLeaf.isSemicolonOrEOF() || nextTokenHasSpaces(nextLeaf)) {
+                    addFindings(CodeSmell(id, Entity.from(psi)))
+                    withAutoCorrect { psi.delete() }
+                }
+            }
+        }
+    }"""

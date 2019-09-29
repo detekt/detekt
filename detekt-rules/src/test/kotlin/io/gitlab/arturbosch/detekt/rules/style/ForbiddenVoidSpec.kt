@@ -42,7 +42,7 @@ class ForbiddenVoidSpec : Spek({
 
         it("does not report when functions or classes are called 'Void'") {
             val code = """
-				class Void {
+                class Void {
                     fun void() {}
                     val void = "string"
                 }
@@ -53,7 +53,7 @@ class ForbiddenVoidSpec : Spek({
                     fun myFun2(): E = E.Void
                     abstract fun myFun(): Void
                 }
-			"""
+            """
 
             assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
         }

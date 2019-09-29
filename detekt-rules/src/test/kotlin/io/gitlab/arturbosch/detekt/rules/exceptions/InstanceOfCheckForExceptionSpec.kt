@@ -13,45 +13,45 @@ class InstanceOfCheckForExceptionSpec : Spek({
         it("has is and as checks") {
 
             val code = """
-				fun x() {
-					try {
+                fun x() {
+                    try {
                     } catch(e: Exception) {
                         if (e is IllegalArgumentException || (e as IllegalArgumentException) != null) {
                             return
                         }
                     }
-				}
-				"""
+                }
+                """
             assertThat(subject.compileAndLint(code)).hasSize(2)
         }
 
         it("has nested is and as checks") {
             val code = """
-				fun x() {
-					try {
-					} catch(e: Exception) {
-						if (1 == 1) {
-							val b = e !is IllegalArgumentException || (e as IllegalArgumentException) != null
-						}
-					}
-				}
-				"""
+                fun x() {
+                    try {
+                    } catch(e: Exception) {
+                        if (1 == 1) {
+                            val b = e !is IllegalArgumentException || (e as IllegalArgumentException) != null
+                        }
+                    }
+                }
+                """
             assertThat(subject.compileAndLint(code)).hasSize(2)
         }
 
         it("has no instance of check") {
             val code = """
-				fun x() {
-					try {
-					} catch(e: Exception) {
-						val s = ""
-						if (s is String || (s as String) != null) {
+                fun x() {
+                    try {
+                    } catch(e: Exception) {
+                        val s = ""
+                        if (s is String || (s as String) != null) {
                             val other: Exception? = null
-							val b = other !is IllegalArgumentException || (other as IllegalArgumentException) != null
-						}
-					}
-				}
-				"""
+                            val b = other !is IllegalArgumentException || (other as IllegalArgumentException) != null
+                        }
+                    }
+                }
+                """
             assertThat(subject.compileAndLint(code)).hasSize(0)
         }
     }
