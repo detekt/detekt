@@ -78,7 +78,7 @@ class RedundantElseInWhen(config: Config = Config.empty) : Rule(config) {
     @Suppress("ReturnCount")
     override fun visitWhenExpression(whenExpression: KtWhenExpression) {
         if (bindingContext == BindingContext.EMPTY) return
-        if (whenExpression.entries.find { it.isElse } == null) return
+        if (whenExpression.elseExpression == null) return
         val subjectExpression = whenExpression.subjectExpression ?: return
         val subjectType = subjectExpression.getType(bindingContext) ?: return
 

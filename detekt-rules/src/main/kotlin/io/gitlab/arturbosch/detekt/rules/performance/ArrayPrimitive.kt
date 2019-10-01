@@ -69,8 +69,7 @@ class ArrayPrimitive(config: Config = Config.empty) : Rule(config) {
 
     private fun reportArrayPrimitives(element: KtElement) {
         return element
-                .collectDescendantsOfType<KtTypeReference>()
-                .filter { isArrayPrimitive(it) }
+                .collectDescendantsOfType<KtTypeReference> { isArrayPrimitive(it) }
                 .forEach { report(CodeSmell(issue, Entity.from(it), issue.description)) }
     }
 

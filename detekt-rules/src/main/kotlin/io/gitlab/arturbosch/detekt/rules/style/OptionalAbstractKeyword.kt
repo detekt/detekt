@@ -11,6 +11,7 @@ import io.gitlab.arturbosch.detekt.rules.isAbstract
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
 
 /**
  * This rule reports `abstract` modifiers which are unnecessary and can be removed.
@@ -44,13 +45,13 @@ class OptionalAbstractKeyword(config: Config = Config.empty) : Rule(config) {
             val body = klass.body
             if (body != null) {
                 body.properties.forEach { handleAbstractKeyword(it) }
-                body.children.filterIsInstance<KtNamedFunction>().forEach { handleAbstractKeyword(it) }
+                body.getChildrenOfType<KtNamedFunction>().forEach { handleAbstractKeyword(it) }
             }
         }
         super.visitClass(klass)
     }
 
-    internal fun handleAbstractKeyword(dcl: KtDeclaration) {
+    private fun handleAbstractKeyword(dcl: KtDeclaration) {
         if (dcl.isAbstract()) {
             report(CodeSmell(issue, Entity.from(dcl), "The abstract keyword on this declaration is unnecessary."))
         }

@@ -35,7 +35,7 @@ class UseIfInsteadOfWhen : Rule() {
         super.visitWhenExpression(expression)
 
         if (expression.entries.size == 2 &&
-            expression.entries.find { it.isElse } != null &&
+            expression.elseExpression != null &&
             expression.entries.none { it.conditions.size > 1 }) {
             report(
                 CodeSmell(

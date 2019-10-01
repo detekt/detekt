@@ -31,7 +31,6 @@ class UndocumentedPublicFunction(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun KtNamedFunction.shouldBeDocumented() = isContainingClassPublic() && isPublicNotOverridden()
-
-    private fun KtNamedFunction.isContainingClassPublic() = containingClass().let { it == null || it.isPublic }
+    private fun KtNamedFunction.shouldBeDocumented() =
+        (isTopLevel || containingClass()?.isPublic == true) && isPublicNotOverridden()
 }

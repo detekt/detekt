@@ -8,12 +8,12 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isOverride
-import io.gitlab.arturbosch.detekt.rules.parentOfType
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtTypeArgumentList
 import org.jetbrains.kotlin.psi.KtTypeReference
-import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
+import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.getAbbreviatedTypeOrType
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
@@ -65,19 +65,18 @@ class ForbiddenVoid(config: Config = Config.empty) : Rule(config) {
 
     private fun KtTypeReference.isPartOfOverriddenSignature() =
         (isPartOfReturnTypeOfFunction() || isParameterTypeOfFunction()) &&
-                parentOfType<KtNamedFunction>()?.isOverride() == true
+                getStrictParentOfType<KtNamedFunction>()?.isOverride() == true
 
     private fun KtTypeReference.isPartOfReturnTypeOfFunction() =
-        parentOfType<KtNamedFunction>()
+        getStrictParentOfType<KtNamedFunction>()
             ?.typeReference
-            ?.collectDescendantsOfType<KtTypeReference>()
-            ?.any { it == this } ?: false
+            ?.anyDescendantOfType<KtTypeReference> { it == this } ?: false
 
     private fun KtTypeReference.isParameterTypeOfFunction() =
-        parentOfType<KtParameter>() != null
+        getStrictParentOfType<KtParameter>() != null
 
     private fun KtTypeReference.isGenericArgument() =
-        parentOfType<KtTypeArgumentList>() != null
+        getStrictParentOfType<KtTypeArgumentList>() != null
 
     companion object {
         const val IGNORE_OVERRIDDEN = "ignoreOverridden"

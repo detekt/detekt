@@ -13,6 +13,7 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
 import org.jetbrains.kotlin.psi.psiUtil.isExtensionDeclaration
 
 /**
@@ -43,7 +44,7 @@ class MethodOverloading(
 
     override fun visitKtFile(file: KtFile) {
         val visitor = OverloadedMethodVisitor()
-        file.children.filterIsInstance<KtNamedFunction>().forEach { it.accept(visitor) }
+        file.getChildrenOfType<KtNamedFunction>().forEach { it.accept(visitor) }
         visitor.reportIfThresholdExceeded(file)
         super.visitKtFile(file)
     }

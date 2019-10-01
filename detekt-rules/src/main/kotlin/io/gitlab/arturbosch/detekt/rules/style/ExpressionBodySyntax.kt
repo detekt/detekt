@@ -13,7 +13,7 @@ import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
-import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 
 /**
  * Functions which only contain a `return` statement can be collapsed to an expression body. This shortens and
@@ -60,15 +60,10 @@ class ExpressionBodySyntax(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun KtExpression.singleReturnStatement(): KtReturnExpression? =
-        (this as? KtBlockExpression)?.statements
-            ?.takeIf { it.size == 1 }
-            ?.let { it[0] as? KtReturnExpression }
+        (this as? KtBlockExpression)?.statements?.singleOrNull() as? KtReturnExpression
 
     private fun KtReturnExpression.containsReturnStmtsInNullableArguments(): Boolean =
-        collectDescendantsOfType<KtReturnExpression>()
-            .map { it.parent }
-            .filterIsInstance<KtBinaryExpression>()
-            .firstOrNull { it.operationToken == KtTokens.ELVIS } != null
+        anyDescendantOfType<KtReturnExpression> { (it.parent as? KtBinaryExpression)?.operationToken == KtTokens.ELVIS }
 
     private fun isLineWrapped(expression: KtExpression): Boolean =
         expression.children.any { it.text.contains('\n') }
