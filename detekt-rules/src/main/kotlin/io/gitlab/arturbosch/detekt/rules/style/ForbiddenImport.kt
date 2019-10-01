@@ -21,6 +21,7 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  * </noncompliant>
  *
  * @configuration imports - imports which should not be used (default: `''`)
+ * @configuration forbiddenPatterns - reports imports which match the specified regular expression. For example `net.*R`. (default: `""`)
  */
 class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
 
@@ -39,11 +40,13 @@ class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
         .map { it.replace("*", ".*") }
         .map { Regex(it) }
 
+    private val forbiddenPatterns: Regex = Regex(valueOrDefault(FORBIDDEN_PATTERNS, ""))
+
     override fun visitImportDirective(importDirective: KtImportDirective) {
         super.visitImportDirective(importDirective)
 
         val import = importDirective.importedFqName?.asString() ?: ""
-        if (forbiddenImports.any { it.matches(import) }) {
+        if (forbiddenImports.any { it.matches(import) } || containsForbiddenPattern(import)) {
             report(
                 CodeSmell(
                     issue, Entity.from(importDirective), "The import " +
@@ -53,7 +56,12 @@ class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
         }
     }
 
+    private fun containsForbiddenPattern(import: String): Boolean {
+        return forbiddenPatterns.pattern.isNotEmpty() && forbiddenPatterns.containsMatchIn(import)
+    }
+
     companion object {
         const val IMPORTS = "imports"
+        const val FORBIDDEN_PATTERNS = "forbiddenPatterns"
     }
 }

@@ -264,6 +264,10 @@ or deprecated APIs. Detekt will then report all imports that are forbidden.
 
    imports which should not be used
 
+* `forbiddenPatterns` (default: `""`)
+
+   reports imports which match the specified regular expression. For example `net.*R`.
+
 #### Noncompliant Code:
 
 ```kotlin
