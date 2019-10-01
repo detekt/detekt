@@ -39,4 +39,16 @@ fun collapsibleIfsNegative() {
         } else if (2 == 2) {
         }
     }
+
+    if (true) {
+        if (1 == 1) {
+        }
+        println()
+    }
+
+    if (true) {
+        println()
+        if (1 == 1) {
+        }
+    }
 }

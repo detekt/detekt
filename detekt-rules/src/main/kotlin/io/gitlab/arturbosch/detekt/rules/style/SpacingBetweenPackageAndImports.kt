@@ -66,11 +66,10 @@ class SpacingBetweenPackageAndImports(config: Config = Config.empty) : Rule(conf
             element is KtPackageDirective && element.text.isNotEmpty()
 
     private fun checkKtElementsDeclaration(importList: KtImportList) {
-        val ktElements = importList.siblings(withItself = false).filterIsInstance<KtElement>().toList()
+        val ktElement = importList.siblings(withItself = false).filterIsInstance<KtElement>().firstOrNull() ?: return
         val nextSibling = importList.nextSibling
-        if (ktElements.isNotEmpty() &&
-                (nextSibling is PsiWhiteSpace || nextSibling is KtElement)) {
-            val name = (ktElements.first() as? KtClassOrObject)?.name ?: "the class or object"
+        if (nextSibling is PsiWhiteSpace || nextSibling is KtElement) {
+            val name = (ktElement as? KtClassOrObject)?.name ?: "the class or object"
 
             checkLinebreakAfterElement(nextSibling, "There should be exactly one empty line in between the " +
                     "list of imports and the declaration of $name.")
