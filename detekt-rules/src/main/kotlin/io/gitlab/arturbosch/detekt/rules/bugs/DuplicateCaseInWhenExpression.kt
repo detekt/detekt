@@ -36,32 +36,18 @@ class DuplicateCaseInWhenExpression(config: Config) : Rule(config) {
 
     override val issue = Issue("DuplicateCaseInWhenExpression",
             Severity.Warning,
-            "Duplicated case statements in when expression. " +
-                    "Both cases should be merged.",
+            "Duplicated case statements in when expression. Both cases should be merged.",
             Debt.TEN_MINS)
 
     override fun visitWhenExpression(expression: KtWhenExpression) {
-        val entries = expression.entries
-                .map { it.conditions }
-                .fold(mutableListOf<String>()) { state, conditions ->
-                    state.apply { add(conditions.joinToString { it.text }) }
-                }
-        val duplicates = findDuplicates(entries)
-        if (duplicates.isNotEmpty()) {
-            report(CodeSmell(issue, Entity.from(expression),
-                    "When expression has multiple case statements " + "for ${duplicates.joinToString { ", " }}."))
-        }
-    }
+        val distinctEntries = expression.entries.distinctBy { entry -> entry.conditions.joinToString { it.text } }
 
-    private fun findDuplicates(list: List<String>): MutableSet<String> {
-        val duplicates = mutableSetOf<String>()
-        for (i in 0 until list.size) {
-            for (j in i + 1 until list.size) {
-                if (list[i] == list[j]) {
-                    duplicates.add(list[i])
-                }
-            }
+        if (distinctEntries != expression.entries) {
+            val duplicateEntries = expression.entries
+                .subtract(distinctEntries)
+                .map { entry -> entry.conditions.joinToString { it.text } }
+            report(CodeSmell(issue, Entity.from(expression),
+                "When expression has multiple case statements for ${duplicateEntries.joinToString("; ")}."))
         }
-        return duplicates
     }
 }

@@ -15,7 +15,6 @@ import io.gitlab.arturbosch.detekt.rules.isMainFunction
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOperator
 import io.gitlab.arturbosch.detekt.rules.isOverride
-import io.gitlab.arturbosch.detekt.rules.parentOfType
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
@@ -29,6 +28,7 @@ import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtSecondaryConstructor
+import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
 
@@ -102,7 +102,7 @@ private class UnusedFunctionVisitor(allowedNames: Regex) : UnusedMemberVisitor(a
     }
 
     private fun isDeclaredInsideAnInterface(function: KtNamedFunction) =
-        function.parentOfType<KtClass>(strict = true)?.isInterface() == true
+        function.getStrictParentOfType<KtClass>()?.isInterface() == true
 
     private fun collectFunction(function: KtNamedFunction) {
         val name = function.nameAsSafeName.identifier

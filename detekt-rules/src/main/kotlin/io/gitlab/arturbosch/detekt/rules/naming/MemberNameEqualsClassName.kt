@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
+import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
 import org.jetbrains.kotlin.util.collectionUtils.concat
 
 /**
@@ -86,9 +87,9 @@ class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun getFunctions(body: KtClassBody): List<KtNamedDeclaration> {
-        var functions = body.children.filterIsInstance<KtNamedFunction>()
+        val functions = body.getChildrenOfType<KtNamedFunction>().toMutableList()
         if (ignoreOverriddenFunction) {
-            functions = functions.filter { !it.isOverride() }
+            functions.removeAll { it.isOverride() }
         }
         return functions
     }

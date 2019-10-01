@@ -33,13 +33,13 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
             Debt.FIVE_MINS)
 
     private val maxLineLength: Int =
-            valueOrDefault(MaxLineLength.MAX_LINE_LENGTH, MaxLineLength.DEFAULT_IDEA_LINE_LENGTH)
+            valueOrDefault(MAX_LINE_LENGTH, DEFAULT_IDEA_LINE_LENGTH)
     private val excludePackageStatements: Boolean =
-            valueOrDefault(MaxLineLength.EXCLUDE_PACKAGE_STATEMENTS, true)
+            valueOrDefault(EXCLUDE_PACKAGE_STATEMENTS, true)
     private val excludeImportStatements: Boolean =
-            valueOrDefault(MaxLineLength.EXCLUDE_IMPORT_STATEMENTS, true)
+            valueOrDefault(EXCLUDE_IMPORT_STATEMENTS, true)
     private val excludeCommentStatements: Boolean =
-            valueOrDefault(MaxLineLength.EXCLUDE_COMMENT_STATEMENTS, false)
+            valueOrDefault(EXCLUDE_COMMENT_STATEMENTS, false)
 
     fun visit(element: KtFileContent) {
         var offset = 0

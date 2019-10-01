@@ -13,7 +13,7 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtIsExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtPsiUtil
-import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
 
 /**
  * This rule reports `catch` blocks which check for the type of an exception via `is` checks or casts.
@@ -48,12 +48,12 @@ class InstanceOfCheckForException(config: Config = Config.empty) : Rule(config) 
             Debt.TWENTY_MINS)
 
     override fun visitCatchSection(catchClause: KtCatchClause) {
-        catchClause.catchBody?.collectDescendantsOfType<KtIsExpression>()?.forEach {
+        catchClause.catchBody?.forEachDescendantOfType<KtIsExpression> {
             if (isExceptionReferenced(it.leftHandSide, catchClause)) {
                 report(CodeSmell(issue, Entity.from(it), issue.description))
             }
         }
-        catchClause.catchBody?.collectDescendantsOfType<KtBinaryExpressionWithTypeRHS>()?.forEach {
+        catchClause.catchBody?.forEachDescendantOfType<KtBinaryExpressionWithTypeRHS> {
             if (KtPsiUtil.isUnsafeCast(it) && isExceptionReferenced(it.left, catchClause)) {
                 report(CodeSmell(issue, Entity.from(it), issue.description))
             }

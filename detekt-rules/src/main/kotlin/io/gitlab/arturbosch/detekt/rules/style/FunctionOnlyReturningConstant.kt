@@ -76,12 +76,8 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
     }
 
     private fun returnsConstant(function: KtNamedFunction): Boolean {
-        val children = function.bodyExpression?.children
-        if (children?.size == 1) {
-            val returnExpression = children[0] as? KtReturnExpression
-            return isConstantExpression(returnExpression?.returnedExpression)
-        }
-        return false
+        val returnExpression = function.bodyExpression?.children?.singleOrNull() as? KtReturnExpression
+        return isConstantExpression(returnExpression?.returnedExpression)
     }
 
     companion object {

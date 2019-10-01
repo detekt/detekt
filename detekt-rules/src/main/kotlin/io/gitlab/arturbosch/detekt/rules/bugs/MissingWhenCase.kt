@@ -73,7 +73,7 @@ class MissingWhenCase(config: Config = Config.empty) : Rule(config) {
     @Suppress("ReturnCount")
     override fun visitWhenExpression(expression: KtWhenExpression) {
         if (bindingContext == BindingContext.EMPTY) return
-        if (expression.entries.find { it.isElse } != null) return
+        if (expression.elseExpression != null) return
         if (expression.isUsedAsExpression(bindingContext)) return
         val subjectExpression = expression.subjectExpression ?: return
         val subjectType = subjectExpression.getType(bindingContext)

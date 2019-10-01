@@ -81,10 +81,8 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun isInInterface(function: KtNamedFunction): Boolean {
-        val parent = function.getStrictParentOfType<KtClass>()
-        return parent is KtClass && parent.isInterface()
-    }
+    private fun isInInterface(function: KtNamedFunction) =
+        function.getStrictParentOfType<KtClass>()?.isInterface() ?: false
 
     private fun createMessage(function: KtNamedFunction) = "The function ${function.name} " +
             "defines a return type of Unit. This is unnecessary and can safely be removed."

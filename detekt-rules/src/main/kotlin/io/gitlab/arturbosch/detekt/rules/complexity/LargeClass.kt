@@ -9,9 +9,9 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.rules.linesOfCode
-import io.gitlab.arturbosch.detekt.rules.parentOfType
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtFile
+import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.utils.addToStdlib.flattenTo
 import java.util.IdentityHashMap
 
@@ -58,7 +58,7 @@ class LargeClass(
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         val lines = classOrObject.linesOfCode()
         classToLinesCache[classOrObject] = lines
-        classOrObject.parentOfType<KtClassOrObject>()
+        classOrObject.getStrictParentOfType<KtClassOrObject>()
                 ?.let { nestedClassTracking.getOrPut(it) { HashSet() }.add(classOrObject) }
         super.visitClassOrObject(classOrObject)
         findAllNestedClasses(classOrObject)

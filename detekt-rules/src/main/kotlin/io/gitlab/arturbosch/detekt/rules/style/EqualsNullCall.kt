@@ -35,8 +35,6 @@ class EqualsNullCall(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun hasNullParameter(expression: KtCallExpression): Boolean {
-        val valueArguments = expression.valueArguments
-        return valueArguments.size == 1 && valueArguments.first().text == "null"
-    }
+    private fun hasNullParameter(expression: KtCallExpression) =
+        expression.valueArguments.singleOrNull()?.text == "null"
 }

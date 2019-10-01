@@ -9,9 +9,9 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.rules.linesOfCode
-import io.gitlab.arturbosch.detekt.rules.parentOfType
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.utils.addToStdlib.flattenTo
 import java.util.IdentityHashMap
 
@@ -59,7 +59,7 @@ class LongMethod(
     override fun visitNamedFunction(function: KtNamedFunction) {
         val lines = function.linesOfCode()
         functionToLinesCache[function] = lines
-        function.parentOfType<KtNamedFunction>()
+        function.getStrictParentOfType<KtNamedFunction>()
                 ?.let { nestedFunctionTracking.getOrPut(it) { HashSet() }.add(function) }
         super.visitNamedFunction(function)
         findAllNestedFunctions(function)
