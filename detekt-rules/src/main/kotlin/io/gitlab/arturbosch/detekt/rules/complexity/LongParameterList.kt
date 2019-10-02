@@ -39,7 +39,7 @@ class LongParameterList(
         val parameterList = function.valueParameterList
         val parameters = parameterList?.parameterCount()
 
-        if (parameters != null && parameters >= threshold) {
+        if (parameters != null && parameters > threshold) {
             report(ThresholdedCodeSmell(issue,
                     Entity.from(parameterList),
                     Metric("SIZE", parameters, threshold),

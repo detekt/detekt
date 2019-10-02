@@ -13,24 +13,24 @@ class LongParameterListSpec : Spek({
     describe("LongParameterList rule") {
 
         it("reports too long parameter list") {
-            val code = "fun long(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int) {}"
+            val code = "fun long(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int) {}"
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("does not reports short parameter list") {
+        it("does not report short parameter list") {
             val code = "fun long(a: Int, b: Int, c: Int, d: Int, e: Int) {}"
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("reports too long parameter list event for parameters with defaults") {
-            val code = "fun long(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int = 1) {}"
+            val code = "fun long(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int = 1) {}"
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         it("does not report long parameter list if parameters with defaults should be ignored") {
             val config = TestConfig(mapOf(LongParameterList.IGNORE_DEFAULT_PARAMETERS to "true"))
             val rule = LongParameterList(config)
-            val code = "fun long(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int = 1, g: Int = 2) {}"
+            val code = "fun long(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int = 1, h: Int = 2) {}"
             assertThat(rule.compileAndLint(code)).isEmpty()
         }
     }
