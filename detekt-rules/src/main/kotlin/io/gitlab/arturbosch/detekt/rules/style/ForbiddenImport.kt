@@ -56,9 +56,8 @@ class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun containsForbiddenPattern(import: String): Boolean {
-        return forbiddenPatterns.pattern.isNotEmpty() && forbiddenPatterns.containsMatchIn(import)
-    }
+    private fun containsForbiddenPattern(import: String): Boolean =
+        forbiddenPatterns.pattern.isNotEmpty() && forbiddenPatterns.containsMatchIn(import)
 
     companion object {
         const val IMPORTS = "imports"
