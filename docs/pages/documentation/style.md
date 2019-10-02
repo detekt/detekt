@@ -326,6 +326,10 @@ as a `const val`.
 
    excluded functions
 
+* `excludeAnnotatedFunction` (default: `"dagger.Provides"`)
+
+   allows to provide a list of annotations that disable this check
+
 #### Noncompliant Code:
 
 ```kotlin

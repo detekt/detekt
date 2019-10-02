@@ -448,6 +448,7 @@ style:
     active: false
     ignoreOverridableFunction: true
     excludedFunctions: 'describeContents'
+    excludeAnnotatedFunction: "dagger.Provides"
   LibraryCodeMustSpecifyReturnType:
     active: false
   LoopWithTooManyJumpStatements:
