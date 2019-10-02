@@ -112,6 +112,83 @@ class VarCouldBeValSpec : Spek({
         }
     }
 
+    describe("declarations at class level") {
+
+        it("reports variables that are not re-assigned at class level") {
+            val code = """
+            class Test {
+               private val someVar = 2
+               private var viewModel = BaseViewModel()
+               fun test() {
+                   var a = 1
+                   a += 2
+               }
+            }
+            """
+            assertThat(subject.lint(code)).hasSize(1)
+        }
+
+        it("reports variables that are not re-assigned at class level but same variable name is present in a function") {
+            val code = """
+            class Test {
+               private var viewModel = 3
+               fun test() {
+                   val viewModel = 4
+               }
+            }
+            """
+            assertThat(subject.lint(code)).hasSize(1)
+        }
+
+        it("reports variables that are not re-assigned at object level") {
+            val code = """
+            object Test {
+                private var someVar = 3
+                fun foo() {
+                    print(someVar)
+                }
+            }
+            """
+            assertThat(subject.lint(code)).hasSize(1)
+        }
+
+        it("does not report variables that are re-assigned in some member function") {
+            val code = """
+            class Test {
+               private var viewModel = 3
+               fun test() {
+                   viewModel = 4
+               }
+            }
+            """
+            assertThat(subject.lint(code)).hasSize(0)
+        }
+
+        it("does not report variables that are re-assigned in some member function1") {
+            val code = """
+            class Test {
+               private var viewModel = 3
+               fun test() {
+                   viewModel = 4
+               }
+            }
+            """
+            assertThat(subject.lint(code)).hasSize(0)
+        }
+
+        it("does not report variables that are of type lateinit") {
+            val code = """
+            class Test {
+               private lateinit var viewModel = 3
+               fun test() {
+                   val a = 4
+               }
+            }
+            """
+            assertThat(subject.lint(code)).hasSize(0)
+        }
+    }
+
     describe("this-prefixed properties - #1257") {
 
         it("finds unused field and local") {

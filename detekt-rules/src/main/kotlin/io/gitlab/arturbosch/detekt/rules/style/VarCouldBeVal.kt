@@ -8,21 +8,21 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.isLateinit
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
-import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtThisExpression
 import org.jetbrains.kotlin.psi.KtUnaryExpression
-import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
 private val unaryAssignmentOperators = setOf(KtTokens.MINUSMINUS, KtTokens.PLUSPLUS)
 
 /**
- * Reports var declarations (locally-scoped variables) that could be val, as they are not re-assigned.
+ * Reports var declarations that could be val, as they are not re-assigned.
  * Val declarations are assign-once (read-only), which makes understanding the current state easier.
  *
  * <noncompliant>
@@ -48,22 +48,19 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
             "Var declaration could be val.",
             Debt.FIVE_MINS)
 
-    override fun visitNamedFunction(function: KtNamedFunction) {
-        if (function.isSomehowNested()) {
-            return
-        }
-
+    override fun visit(root: KtFile) {
         val assignmentVisitor = AssignmentVisitor()
-        function.accept(assignmentVisitor)
+        root.accept(assignmentVisitor)
 
+        reportCodeSmell(assignmentVisitor)
+
+        super.visit(root)
+    }
+
+    private fun reportCodeSmell(assignmentVisitor: AssignmentVisitor) =
         assignmentVisitor.getNonReAssignedDeclarations().forEach {
             report(CodeSmell(issue, Entity.from(it), "Variable '${it.nameAsSafeName.identifier}' could be val."))
         }
-        super.visitNamedFunction(function)
-    }
-
-    private fun KtNamedFunction.isSomehowNested() =
-            getStrictParentOfType<KtNamedFunction>() != null
 
     private class AssignmentVisitor : DetektVisitor() {
 
@@ -81,7 +78,7 @@ class VarCouldBeVal(config: Config = Config.empty) : Rule(config) {
         }
 
         override fun visitProperty(property: KtProperty) {
-            if (property.isVar) {
+            if (property.isVar && property.isLateinit().not()) {
                 declarations.add(property)
                 val identifier = property.nameAsSafeName.identifier
                 val contextsForName = contextsByDeclarationName.getOrPut(identifier) { mutableSetOf() }

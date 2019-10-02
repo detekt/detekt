@@ -1448,7 +1448,7 @@ object UtilityClass {
 
 ### VarCouldBeVal
 
-Reports var declarations (locally-scoped variables) that could be val, as they are not re-assigned.
+Reports var declarations that could be val, as they are not re-assigned.
 Val declarations are assign-once (read-only), which makes understanding the current state easier.
 
 **Severity**: Maintainability
