@@ -442,6 +442,7 @@ style:
   ForbiddenImport:
     active: false
     imports: ''
+    forbiddenPatterns: ""
   ForbiddenVoid:
     active: false
     ignoreOverridden: false
