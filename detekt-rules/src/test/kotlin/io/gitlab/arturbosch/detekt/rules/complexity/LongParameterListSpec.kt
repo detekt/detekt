@@ -18,7 +18,7 @@ class LongParameterListSpec : Spek({
         }
 
         it("does not report short parameter list") {
-            val code = "fun long(a: Int, b: Int, c: Int, d: Int, e: Int) {}"
+            val code = "fun long(a: Int, b: Int, c: Int, d: Int, e: Int, f:Int) {}"
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
