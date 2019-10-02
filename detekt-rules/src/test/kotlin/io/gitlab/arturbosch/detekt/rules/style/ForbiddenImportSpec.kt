@@ -68,5 +68,18 @@ class ForbiddenImportSpec : Spek({
                 ForbiddenImport(TestConfig(mapOf(ForbiddenImport.IMPORTS to "net.example.R.dimen"))).lint(code)
             assertThat(findings).hasSize(1)
         }
+
+        it("should not report import when it does not match any pattern") {
+            val findings =
+                ForbiddenImport(TestConfig(mapOf(ForbiddenImport.FORBIDDEN_PATTERNS to "nets.*R"))).lint(code)
+            assertThat(findings).hasSize(0)
+        }
+
+        it("should report import when it matches the forbidden pattern") {
+            val findings =
+                ForbiddenImport(TestConfig(mapOf(ForbiddenImport.FORBIDDEN_PATTERNS to "net.*R|com.*expiremental"))).lint(code)
+            assertThat(findings).hasSize(2)
+        }
+
     }
 })
