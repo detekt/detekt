@@ -23,7 +23,7 @@ import org.jetbrains.kotlin.psi.KtProperty
  * Large interfaces should be split into smaller interfaces which have a clear responsibility and are easier
  * to understand and implement.
  *
- * @configuration threshold - the amount of definitions in an interface to trigger a warning (default: `10`)
+ * @configuration threshold - the amount of definitions in an interface to trigger the rule (default: `10`)
  * @configuration includeStaticDeclarations - whether static declarations should be included (default: `false`)
  */
 class ComplexInterface(

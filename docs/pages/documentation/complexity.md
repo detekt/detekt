@@ -24,7 +24,6 @@ and call those instead.
 
   the number of conditions which will trigger the rule
 
-
 #### Noncompliant Code:
 
 ```kotlin
