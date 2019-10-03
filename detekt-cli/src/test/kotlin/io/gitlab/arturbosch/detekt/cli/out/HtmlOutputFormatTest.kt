@@ -42,8 +42,8 @@ class HtmlOutputFormatTest : Spek({
             val result = outputFormat.render(createTestDetektionWithMultipleSmells())
 
             assertThat(result).contains("<span class=\"rule\">\nid_a\n</span>")
-            assertThat(result).contains("<span class=\"rule\">\nid_a\n</span>")
-            assertThat(result).contains("<span class=\"rule\">\nid_a\n</span>")
+            assertThat(result).contains("<span class=\"rule\">\nid_b\n</span>")
+            assertThat(result).contains("<span class=\"rule\">\nid_c\n</span>")
         }
 
         it("testRenderResultContainsMessages") {
