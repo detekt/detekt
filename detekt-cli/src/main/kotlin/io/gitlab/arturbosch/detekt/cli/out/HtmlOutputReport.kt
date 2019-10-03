@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
+import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.cli.ClasspathResourceConverter
 import kotlinx.html.CommonAttributeGroupFacadeFlowInteractiveContent
 import kotlinx.html.FlowContent
@@ -96,6 +97,12 @@ class HtmlOutputReport : OutputReport() {
             br()
             span("message") { text(finding.message) }
         }
+
+        val psiFile = finding.entity.ktElement?.containingFile
+        if (psiFile != null) {
+            val lineSequence = psiFile.text.splitToSequence('\n')
+            snippetCode(lineSequence, finding.startPosition, finding.charPosition.length())
+        }
     }
 }
 
@@ -117,3 +124,5 @@ private class SUMMARY(
     false
 ),
     CommonAttributeGroupFacadeFlowInteractiveContent
+
+private fun TextLocation.length(): Int = end - start
