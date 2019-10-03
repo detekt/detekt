@@ -26,11 +26,15 @@ import org.jetbrains.kotlin.psi.psiUtil.parents
  *     }
  * }
  * </noncompliant>
+ *
+ * @configuration ignoreLabeled - ignores labeled return statements (default: `false`)
  */
 class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue("ReturnFromFinally", Severity.Defect,
         "Do not return within a finally statement. This can discard exceptions.", Debt.TWENTY_MINS)
+
+    private val ignoreLabeled = valueOrDefault(IGNORE_LABELED, false)
 
     override fun visitFinallySection(finallySection: KtFinallySection) {
         val innerFunctions = finallySection.finalExpression
@@ -39,6 +43,7 @@ class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
         finallySection.finalExpression
             .collectDescendantsOfType<KtReturnExpression>()
             .filter { isNotInInnerFunction(it, innerFunctions) }
+            .filter { canFilterLabeledExpression(it) }
             .forEach { report(CodeSmell(issue, Entity.from(it), issue.description)) }
     }
 
@@ -46,4 +51,12 @@ class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
         returnStmts: KtReturnExpression,
         childFunctions: Set<KtNamedFunction>
     ): Boolean = !returnStmts.parents.any { childFunctions.contains(it) }
+
+    private fun canFilterLabeledExpression(
+        returnStmt: KtReturnExpression
+    ): Boolean = !ignoreLabeled || returnStmt.labeledExpression == null
+
+    companion object {
+        const val IGNORE_LABELED = "ignoreLabeled"
+    }
 }

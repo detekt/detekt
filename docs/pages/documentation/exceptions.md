@@ -185,6 +185,12 @@ Using `return` statements in `finally` blocks can discard and hide exceptions th
 
 **Debt**: 20min
 
+#### Configuration options:
+
+* `ignoreLabeled` (default: `false`)
+
+   ignores labeled return statements
+
 #### Noncompliant Code:
 
 ```kotlin
