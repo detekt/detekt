@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.AnnotationExcluder
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
@@ -12,6 +13,7 @@ import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
@@ -31,6 +33,7 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
  *
  * @configuration ignoreOverridableFunction - if overriden functions should be ignored (default: `true`)
  * @configuration excludedFunctions - excluded functions (default: `'describeContents'`)
+ * @configuration excludeAnnotatedFunction - allows to provide a list of annotations that disable this check (default: `"dagger.Provides"`)
  */
 class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config) {
 
@@ -41,6 +44,13 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
 
     private val ignoreOverridableFunction = valueOrDefault(IGNORE_OVERRIDABLE_FUNCTION, true)
     private val excludedFunctions = SplitPattern(valueOrDefault(EXCLUDED_FUNCTIONS, ""))
+    private val excludeAnnotatedFunctions = SplitPattern(valueOrDefault(EXCLUDE_ANNOTATED_FUNCTION, "dagger.Provides"))
+    private lateinit var annotationExcluder: AnnotationExcluder
+
+    override fun visit(root: KtFile) {
+        annotationExcluder = AnnotationExcluder(root, excludeAnnotatedFunctions)
+        super.visit(root)
+    }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (checkOverridableFunction(function) && isNotExcluded(function) && isReturningAConstant(function)) {
@@ -63,7 +73,7 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
     }
 
     private fun isNotExcluded(function: KtNamedFunction) =
-        !excludedFunctions.contains(function.name)
+        !excludedFunctions.contains(function.name) && !annotationExcluder.shouldExclude(function.annotationEntries)
 
     private fun isReturningAConstant(function: KtNamedFunction) =
         isConstantExpression(function.bodyExpression) || returnsConstant(function)
@@ -83,5 +93,6 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
     companion object {
         const val IGNORE_OVERRIDABLE_FUNCTION = "ignoreOverridableFunction"
         const val EXCLUDED_FUNCTIONS = "excludedFunctions"
+        const val EXCLUDE_ANNOTATED_FUNCTION = "excludeAnnotatedFunction"
     }
 }
