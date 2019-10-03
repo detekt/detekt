@@ -22,7 +22,8 @@ and call those instead.
 
 * `threshold` (default: `4`)
 
-   
+  the number of conditions which will trigger the rule
+
 
 #### Noncompliant Code:
 
@@ -61,7 +62,7 @@ to understand and implement.
 
 * `threshold` (default: `10`)
 
-   maximum amount of definitions in an interface
+   the number of definitions in an interface that will trigger the rule
 
 * `includeStaticDeclarations` (default: `false`)
 
@@ -174,7 +175,7 @@ things.
 
 * `threshold` (default: `600`)
 
-   maximum size of a class
+   size of class required to trigger the rule
 
 ### LongMethod
 
@@ -191,7 +192,7 @@ Extract parts of the functionality of long methods into separate, smaller method
 
 * `threshold` (default: `60`)
 
-   maximum lines in a method
+   number of lines in a method to trigger the rule
 
 ### LongParameterList
 
@@ -205,7 +206,7 @@ Reports functions which have more parameters than a certain threshold (default: 
 
 * `threshold` (default: `6`)
 
-   maximum number of parameters
+   number of parameters required to trigger the rule
 
 * `ignoreDefaultParameters` (default: `false`)
 
@@ -226,6 +227,7 @@ Refactor these methods and try to use optional parameters instead to prevent som
 
 * `threshold` (default: `6`)
 
+  number of overloads which will trigger the rule
    
 
 ### NestedBlockDepth
@@ -243,7 +245,7 @@ Prefer extracting the nested code into well-named functions to make it easier to
 
 * `threshold` (default: `4`)
 
-   maximum nesting depth
+   the nested depth required to trigger rule
 
 ### StringLiteralDuplication
 
