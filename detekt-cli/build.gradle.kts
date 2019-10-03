@@ -15,6 +15,7 @@ dependencies {
     implementation(project(":detekt-core"))
     runtimeOnly(project(":detekt-rules"))
     implementation("com.beust:jcommander:$jcommanderVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.6.12")
 
     testImplementation(project(":detekt-test"))
     testImplementation(project(":detekt-rules"))

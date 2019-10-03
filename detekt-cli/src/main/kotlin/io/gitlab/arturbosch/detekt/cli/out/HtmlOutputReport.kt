@@ -5,6 +5,13 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.cli.ClasspathResourceConverter
+import kotlinx.html.br
+import kotlinx.html.div
+import kotlinx.html.h3
+import kotlinx.html.li
+import kotlinx.html.span
+import kotlinx.html.stream.createHTML
+import kotlinx.html.ul
 
 private const val DEFAULT_TEMPLATE = "default-html-report-template.html"
 private const val PLACEHOLDER_METRICS = "@@@metrics@@@"
@@ -24,30 +31,38 @@ class HtmlOutputReport : OutputReport() {
                     .replace(PLACEHOLDER_METRICS, renderMetrics(detektion.metrics))
                     .replace(PLACEHOLDER_FINDINGS, renderFindings(detektion.findings))
 
-    private fun renderMetrics(metrics: Collection<ProjectMetric>) = htmlSnippet {
-        list(metrics) {
-            text { "${it.type}: ${it.value}" }
+    private fun renderMetrics(metrics: Collection<ProjectMetric>) = createHTML().div {
+        ul {
+            metrics.forEach {
+                li { text("${it.type}: ${it.value}") }
+            }
         }
     }
 
-    private fun renderFindings(findings: Map<String, List<Finding>>) = htmlSnippet {
+    private fun renderFindings(findings: Map<String, List<Finding>>) = createHTML().div {
         for ((group, groupFindings) in findings.filter { it.value.isNotEmpty() }) {
-            h3 { group }
+            h3 { text(group) }
 
             groupFindings.groupBy { it.id }.forEach { rule, findings ->
                 if (findings.isNotEmpty()) {
                     div("rule-container") {
-                        span("rule") { rule }
-                        span("description") { findings.first().issue.description }
+                        span("rule") { text("$rule ") }
+                        span("description") { text(findings.first().issue.description) }
                     }
                 }
 
-                list(findings) {
-                    span("location") { "${it.file}:${it.location.source.line}:${it.location.source.column}" }
+                ul {
+                    findings.forEach {
+                        li {
+                            span("location") {
+                                text("${it.file}:${it.location.source.line}:${it.location.source.column}")
+                            }
 
-                    if (it.message.isNotEmpty()) {
-                        br()
-                        span("message") { it.message }
+                            if (it.message.isNotEmpty()) {
+                                br()
+                                span("message") { text(it.message) }
+                            }
+                        }
                     }
                 }
             }
