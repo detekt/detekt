@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
@@ -118,26 +119,35 @@ class VarCouldBeValSpec : Spek({
             val code = """
             class Test {
                private val someVar = 2
-               private var viewModel = BaseViewModel()
+               private var newVar = 3
                fun test() {
                    var a = 1
                    a += 2
                }
             }
             """
-            assertThat(subject.lint(code)).hasSize(1)
+            val result = subject.compileAndLint(code)
+            assertThat(result).hasSize(1)
+            with(result[0].entity) {
+                assertThat(ktElement?.text).isEqualTo("private var newVar = 3")
+            }
         }
 
-        it("reports variables that are not re-assigned at class level but same variable name is present in a function") {
+        it("reports variables that are not re-assigned at class level but is shadowed in a function") {
             val code = """
             class Test {
-               private var viewModel = 3
+               private var someVar = 3
                fun test() {
-                   val viewModel = 4
+                   var someVar = 4
+                   someVar = 5
                }
             }
             """
-            assertThat(subject.lint(code)).hasSize(1)
+            val result = subject.compileAndLint(code)
+            assertThat(result).hasSize(1)
+            with(result[0].entity) {
+                assertThat(result[0].entity.ktElement?.text).isEqualTo("private var someVar = 3")
+            }
         }
 
         it("reports variables that are not re-assigned at object level") {
@@ -149,7 +159,28 @@ class VarCouldBeValSpec : Spek({
                 }
             }
             """
-            assertThat(subject.lint(code)).hasSize(1)
+            val result = subject.compileAndLint(code)
+            assertThat(result).hasSize(1)
+            with(result[0].entity) {
+                assertThat(ktElement?.text).isEqualTo("private var someVar = 3")
+            }
+        }
+
+        it("reports variables that are not but only used in inner class") {
+            val code = """
+            class Test {
+                private var unused = 2
+
+                inner class Something {
+                    val unused = Test().unused
+                }
+            }
+            """
+            val result = subject.compileAndLint(code)
+            assertThat(result).hasSize(1)
+            with(result[0].entity) {
+                assertThat(ktElement?.text).isEqualTo("private var unused = 2")
+            }
         }
 
         it("does not report variables that are re-assigned in some member function") {
@@ -161,7 +192,7 @@ class VarCouldBeValSpec : Spek({
                }
             }
             """
-            assertThat(subject.lint(code)).hasSize(0)
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("does not report variables that are re-assigned in some member function1") {
@@ -173,19 +204,19 @@ class VarCouldBeValSpec : Spek({
                }
             }
             """
-            assertThat(subject.lint(code)).hasSize(0)
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("does not report variables that are of type lateinit") {
             val code = """
             class Test {
-               private lateinit var viewModel = 3
+               lateinit var someVar: String
                fun test() {
                    val a = 4
                }
             }
             """
-            assertThat(subject.lint(code)).hasSize(0)
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
 
