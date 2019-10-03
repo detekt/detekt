@@ -34,18 +34,17 @@ class FunctionOnlyReturningConstantSpec : Spek({
 
         it("does not report excluded annotated function which returns a constant") {
             val code = """
-                import jdk.nashorn.internal.ir.annotations.Ignore
+                import kotlin.SinceKotlin
                 class Test {
-                    @Ignore
+                    @SinceKotlin("1.0.0")
                     fun someIgnoredFun(): String {
                         return "I am a constant"
                     }
                 }
             """.trimIndent()
-            val config = TestConfig(mapOf("excludeAnnotatedFunction" to "jdk.nashorn.internal.ir.annotations.Ignore"))
+            val config = TestConfig(mapOf("excludeAnnotatedFunction" to "kotlin.SinceKotlin"))
             val rule = FunctionOnlyReturningConstant(config)
-            assertThat(rule.compileAndLint(code)).hasSize(0)
-
+            assertThat(rule.compileAndLint(code)).isEmpty()
         }
     }
 
