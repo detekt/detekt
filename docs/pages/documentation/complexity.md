@@ -22,7 +22,7 @@ and call those instead.
 
 * `threshold` (default: `4`)
 
-  the number of conditions which will trigger the rule
+   the number of conditions which will trigger the rule
 
 #### Noncompliant Code:
 
@@ -61,7 +61,7 @@ to understand and implement.
 
 * `threshold` (default: `10`)
 
-   the number of definitions in an interface that will trigger the rule
+   the amount of definitions in an interface to trigger the rule
 
 * `includeStaticDeclarations` (default: `false`)
 
@@ -174,7 +174,7 @@ things.
 
 * `threshold` (default: `600`)
 
-   size of class required to trigger the rule
+   the size of class required to trigger the rule
 
 ### LongMethod
 
@@ -226,8 +226,7 @@ Refactor these methods and try to use optional parameters instead to prevent som
 
 * `threshold` (default: `6`)
 
-  number of overloads which will trigger the rule
-   
+   number of overloads which will trigger the rule
 
 ### NestedBlockDepth
 
