@@ -1,8 +1,10 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.SourceLocation
+import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.rules.Case
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileForTest
-import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -20,10 +22,28 @@ class TrailingWhitespaceSpec : Spek({
                 assertThat(rule.findings).hasSize(7)
             }
 
-            it("should report the correct source location for a comment with trailing whitespace") {
-                val findingSource = rule.findings[1].location.source
-                assertThat(findingSource.line).isEqualTo(5)
-                assertThat(findingSource.column).isEqualTo(1)
+            it("should report the correct source location") {
+                assertThat(rule.findings).hasSourceLocations(
+                    SourceLocation(4, 1),
+                    SourceLocation(6, 13),
+                    SourceLocation(8, 35),
+                    SourceLocation(10, 1),
+                    SourceLocation(12, 23),
+                    SourceLocation(14, 29),
+                    SourceLocation(16, 6)
+                )
+            }
+
+            it("should report the correct text location") {
+                assertThat(rule.findings).hasTextLocation(
+                    TextLocation(55, 56),
+                    TextLocation(114, 115),
+                    TextLocation(163, 164),
+                    TextLocation(204, 208),
+                    TextLocation(245, 246),
+                    TextLocation(311, 312),
+                    TextLocation(329, 331)
+                )
             }
         }
 
