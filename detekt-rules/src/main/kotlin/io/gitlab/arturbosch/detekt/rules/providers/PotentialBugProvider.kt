@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.rules.bugs.DuplicateCaseInWhenExpression
 import io.gitlab.arturbosch.detekt.rules.bugs.EqualsAlwaysReturnsTrueOrFalse
 import io.gitlab.arturbosch.detekt.rules.bugs.EqualsWithHashCodeExist
 import io.gitlab.arturbosch.detekt.rules.bugs.ExplicitGarbageCollectionCall
+import io.gitlab.arturbosch.detekt.rules.bugs.HasPlatformType
 import io.gitlab.arturbosch.detekt.rules.bugs.InvalidRange
 import io.gitlab.arturbosch.detekt.rules.bugs.IteratorHasNextCallsNextMethod
 import io.gitlab.arturbosch.detekt.rules.bugs.IteratorNotThrowingNoSuchElementException
@@ -37,6 +38,7 @@ class PotentialBugProvider : RuleSetProvider {
                 DuplicateCaseInWhenExpression(config),
                 EqualsAlwaysReturnsTrueOrFalse(config),
                 EqualsWithHashCodeExist(config),
+                HasPlatformType(config),
                 IteratorNotThrowingNoSuchElementException(config),
                 IteratorHasNextCallsNextMethod(config),
                 UselessPostfixExpression(config),
