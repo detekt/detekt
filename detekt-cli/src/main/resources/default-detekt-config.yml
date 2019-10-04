@@ -146,6 +146,7 @@ exceptions:
     active: false
   ReturnFromFinally:
     active: false
+    ignoreLabeled: false
   SwallowedException:
     active: false
     ignoredExceptionTypes: 'InterruptedException,NumberFormatException,ParseException,MalformedURLException'
