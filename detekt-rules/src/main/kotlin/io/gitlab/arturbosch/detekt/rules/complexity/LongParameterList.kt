@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.psi.KtParameterList
 /**
  * Reports functions which have more parameters than a certain threshold (default: 6).
  *
- * @configuration threshold - maximum number of parameters (default: `6`)
+ * @configuration threshold - number of parameters required to trigger the rule (default: `6`)
  * @configuration ignoreDefaultParameters - ignore parameters that have a default value (default: `false`)
  *
  * @active since v1.0.0

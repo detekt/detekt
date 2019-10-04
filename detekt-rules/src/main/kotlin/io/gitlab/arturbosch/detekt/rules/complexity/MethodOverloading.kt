@@ -22,7 +22,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isExtensionDeclaration
  *
  * Refactor these methods and try to use optional parameters instead to prevent some of the overloading.
  *
- * @configuration threshold - (default: `6`)
+ * @configuration threshold - number of overloads which will trigger the rule (default: `6`)
  */
 class MethodOverloading(
     config: Config = Config.empty,
