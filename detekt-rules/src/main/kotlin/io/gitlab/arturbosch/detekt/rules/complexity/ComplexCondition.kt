@@ -36,7 +36,7 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  * fun hasCorrectEnding() = return !str.endsWith("foo") && !str.endsWith("bar") && !str.endsWith("_")
  * </compliant>
  *
- * @configuration threshold - (default: `4`)
+ * @configuration threshold - the number of conditions which will trigger the rule (default: `4`)
  *
  * @active since v1.0.0
  */
