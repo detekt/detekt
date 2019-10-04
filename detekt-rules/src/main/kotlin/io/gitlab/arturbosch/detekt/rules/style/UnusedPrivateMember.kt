@@ -137,11 +137,11 @@ private class UnusedFunctionVisitor(allowedNames: Regex) : UnusedMemberVisitor(a
 
 private class UnusedParameterVisitor(allowedNames: Regex) : UnusedMemberVisitor(allowedNames) {
 
-    private var unusedParameters: MutableMap<String, KtParameter> = mutableMapOf()
+    private var unusedParameters: MutableSet<KtParameter> = mutableSetOf()
 
     override fun getUnusedReports(issue: Issue): List<CodeSmell> {
         return unusedParameters.map {
-            CodeSmell(issue, Entity.from(it.value), "Function parameter ${it.key} is unused.")
+            CodeSmell(issue, Entity.from(it), "Function parameter ${it.nameAsSafeName.identifier} is unused.")
         }
     }
 
@@ -162,30 +162,30 @@ private class UnusedParameterVisitor(allowedNames: Regex) : UnusedMemberVisitor(
     }
 
     private fun collectParameters(function: KtNamedFunction) {
+        val parameters = mutableMapOf<String, KtParameter>()
         function.valueParameterList?.parameters?.forEach { parameter ->
             val name = parameter.nameAsSafeName.identifier
             if (!allowedNames.matches(name)) {
-                unusedParameters[name] = parameter
+                parameters[name] = parameter
             }
         }
 
-        val localProperties = mutableListOf<String>()
         function.accept(object : DetektVisitor() {
             override fun visitProperty(property: KtProperty) {
                 if (property.isLocal) {
                     val name = property.nameAsSafeName.identifier
-                    localProperties.add(name)
+                    parameters.remove(name)
                 }
                 super.visitProperty(property)
             }
 
             override fun visitReferenceExpression(expression: KtReferenceExpression) {
-                localProperties.add(expression.text)
+                parameters.remove(expression.text)
                 super.visitReferenceExpression(expression)
             }
         })
 
-        unusedParameters = unusedParameters.filterTo(mutableMapOf()) { it.key !in localProperties }
+        unusedParameters.addAll(parameters.values)
     }
 
     private fun KtNamedFunction.isRelevant() = !isAllowedToHaveUnusedParameters()
