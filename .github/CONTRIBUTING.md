@@ -71,3 +71,11 @@ Rules that contain an `@active` tag in their KDoc will be marked as active in th
 - migrations expected? -> Add `Migration` sub-section
 - important non-breaking changes? Add `Notable Changes` sub-section
 - all new contributors mentioned? -> README.md>Contributors, Update `all contributors`-Badge
+
+#### Releasing process
+
+- Increment `detektVersion` in `gradle.properties`
+- `gradle build publishToMavenLocal`
+- Increment version of the Gradle Plugin
+- `gradle bU` - uploads artifacts to Bintray
+- `gradle pluPub` - uploads the Gradle Plugin to the Plugin Repositories
