@@ -14,15 +14,17 @@ import io.gitlab.arturbosch.detekt.cli.loadConfiguration
 import io.gitlab.arturbosch.detekt.cli.maxIssues
 import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
+import org.jetbrains.kotlin.konan.file.use
 
 class Runner(private val arguments: CliArgs) : Executable {
 
     override fun execute() {
-        val settings = createSettings()
-        val (time, result) = measure { DetektFacade.create(settings).run() }
-        result.add(SimpleNotification("detekt finished in $time ms."))
-        OutputFacade(arguments, result, settings).run()
-        checkBuildFailureThreshold(result, settings)
+        createSettings().use { settings ->
+            val (time, result) = measure { DetektFacade.create(settings).run() }
+            result.add(SimpleNotification("detekt finished in $time ms."))
+            OutputFacade(arguments, result, settings).run()
+            checkBuildFailureThreshold(result, settings)
+        }
     }
 
     private fun checkBuildFailureThreshold(result: Detektion, settings: ProcessingSettings) {

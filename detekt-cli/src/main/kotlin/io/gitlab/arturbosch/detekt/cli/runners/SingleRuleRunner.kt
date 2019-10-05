@@ -14,6 +14,7 @@ import io.gitlab.arturbosch.detekt.cli.loadConfiguration
 import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.RuleSetLocator
+import org.jetbrains.kotlin.konan.file.use
 
 class SingleRuleRunner(private val arguments: CliArgs) : Executable {
 
@@ -39,14 +40,17 @@ class SingleRuleRunner(private val arguments: CliArgs) : Executable {
 
         val provider = RuleProducingProvider(rule, realProvider)
 
-        assertRuleExistsBeforeRunningItLater(provider, settings)
+        settings.use {
+            assertRuleExistsBeforeRunningItLater(provider, settings)
 
-        val detektion = DetektFacade.create(
-            settings,
-            listOf(provider),
-            listOf(DetektProgressListener())
-        ).run()
-        OutputFacade(arguments, detektion, settings).run()
+            val detektion = DetektFacade.create(
+                settings,
+                listOf(provider),
+                listOf(DetektProgressListener())
+            ).run()
+
+            OutputFacade(arguments, detektion, settings).run()
+        }
     }
 
     private fun assertRuleExistsBeforeRunningItLater(
