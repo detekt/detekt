@@ -18,7 +18,7 @@ class RuleProviderConfigTest : Spek({
             val providers = reflections.getSubTypesOf(RuleSetProvider::class.java)
 
             providers.forEach {
-                val provider = it.newInstance()
+                val provider = it.getDeclaredConstructor().newInstance()
                 val ruleSet = provider.instance(config)
                 ruleSet.rules.forEach { baseRule ->
                     val rule = baseRule as? Rule
