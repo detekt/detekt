@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.core
 
+import java.io.Closeable
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -21,7 +22,7 @@ fun <T> awaitAll(tasks: TaskList<T>) = tasks.map { it.join() }
 class TaskPool private constructor(
     private val service: ExecutorService,
     private val shouldClose: Boolean
-) : ExecutorService by service, AutoCloseable {
+) : ExecutorService by service, AutoCloseable, Closeable {
 
     constructor(executorService: ExecutorService?) : this(
         executorService ?: Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors()),

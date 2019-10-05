@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.internal.createKotlinCoreEnvironment
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
+import java.io.Closeable
 import java.io.PrintStream
 import java.nio.file.Files
 import java.nio.file.Path
@@ -33,7 +34,7 @@ data class ProcessingSettings @JvmOverloads constructor(
     val errorPrinter: PrintStream = System.err,
     val autoCorrect: Boolean = false,
     val debug: Boolean = false
-) : AutoCloseable {
+) : AutoCloseable, Closeable {
     /**
      * Single project input path constructor.
      */

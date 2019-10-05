@@ -14,7 +14,6 @@ import io.gitlab.arturbosch.detekt.cli.loadConfiguration
 import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.RuleSetLocator
-import org.jetbrains.kotlin.konan.file.use
 
 class SingleRuleRunner(private val arguments: CliArgs) : Executable {
 
