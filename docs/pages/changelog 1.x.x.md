@@ -6,6 +6,14 @@ permalink: changelog.html
 toc: true
 ---
 
+#### 1.2.0 - unreleased
+
+##### Notable changes
+
+- `parallel=true` and `--parallel` now effect both the compilation and analysis phase. 
+- Users of Gradle's `--parallel` flag are encouraged to turn off the parallelism of detekt. Or turn it on otherwise.
+- detekt does not use the `ForkJoinPool.commonPool()` anymore internally. When embedding detekt feel free to pass your own `ExecutionService` to the `ProcessingSettings`.
+
 #### 1.1.0
 
 ##### Changelog
