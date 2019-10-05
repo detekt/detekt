@@ -6,6 +6,68 @@ permalink: changelog.html
 toc: true
 ---
 
+#### 1.1.0
+
+##### Changelog
+
+- Clarify threshold pararameter meaning in docs - [#1974](https://github.com/arturbosch/detekt/pull/1974)
+- Introduce ignoreLabeled config for ReturnFromFinally - [#1973](https://github.com/arturbosch/detekt/pull/1973)
+- Ignore FunctionOnlyReturningConstant for allowed annotations - [#1968](https://github.com/arturbosch/detekt/pull/1968)
+- Allow regex configuration support for Forbidden Import rule - [#1963](https://github.com/arturbosch/detekt/pull/1963)
+- Refactor and simplify RuleCollectorSpec - [#1959](https://github.com/arturbosch/detekt/pull/1959)
+- Use inline code snippets instead of case files - [#1958](https://github.com/arturbosch/detekt/pull/1958)
+- Improve UnusedPrivateMember when it's related with parameters - [#1949](https://github.com/arturbosch/detekt/pull/1949)
+- Fix SpacingBetweenPackageAndImports issue for scripts without packages - [#1947](https://github.com/arturbosch/detekt/pull/1947)
+- Remove ConditionalPathVisitor - [#1944](https://github.com/arturbosch/detekt/pull/1944)
+- Extend UseDataClass with the allowVars configuration property - [#1942](https://github.com/arturbosch/detekt/pull/1942)
+- HasPlatformType rule - [#1938](https://github.com/arturbosch/detekt/pull/1938)
+- Bogus SpacingBetweenPackageAndImports violation for KTS without package - [#1937](https://github.com/arturbosch/detekt/issues/1937)
+- Gradle deprecations - [#1934](https://github.com/arturbosch/detekt/pull/1934)
+- UnnecessaryParentheses should be ignored for bit operations - [#1929](https://github.com/arturbosch/detekt/issues/1929)
+- Prepare 1.1.0 release - [#1919](https://github.com/arturbosch/detekt/pull/1919)
+- Deprecate debug in IDEA tasks - [#1918](https://github.com/arturbosch/detekt/pull/1918)
+- Refactoring: use more readable functions - [#1916](https://github.com/arturbosch/detekt/pull/1916)
+- Don't fail on master when test coverage decreases - [#1914](https://github.com/arturbosch/detekt/pull/1914)
+- Detect deprecations - [#1913](https://github.com/arturbosch/detekt/pull/1913)
+- Fix typos - [#1908](https://github.com/arturbosch/detekt/pull/1908)
+- Report PreferToOverPairSyntax only for kotlin.Pair - [#1905](https://github.com/arturbosch/detekt/pull/1905)
+- Fix TimeoutCancellationException - downgrade Spek - [#1903](https://github.com/arturbosch/detekt/pull/1903)
+- Update dependencies - [#1901](https://github.com/arturbosch/detekt/pull/1901)
+- Add RedundantExplicitType rule - [#1900](https://github.com/arturbosch/detekt/pull/1900)
+- Remove unused KtAnnotated util functions - [#1899](https://github.com/arturbosch/detekt/pull/1899)
+- Simplify detekt rules - [#1898](https://github.com/arturbosch/detekt/pull/1898)
+- Fix shared variable in detekt-extension rules - [#1897](https://github.com/arturbosch/detekt/pull/1897)
+- Make samples more idiomatic - [#1895](https://github.com/arturbosch/detekt/pull/1895)
+- Update detekt extensions doc - [#1893](https://github.com/arturbosch/detekt/pull/1893)
+- Clarify `WildcardImport` rule configuration - [#1888](https://github.com/arturbosch/detekt/pull/1888)
+- Add configuration to allow patterns for forbidden comment - [#1887](https://github.com/arturbosch/detekt/pull/1887)
+- Only report UnsafeCallOnNullableType on actual nullable types - [#1886](https://github.com/arturbosch/detekt/pull/1886)
+- Minimise usage of Kotlin reflection - [#1883](https://github.com/arturbosch/detekt/pull/1883)
+- Refactor KotlinCoreEnvironment test setup - [#1880](https://github.com/arturbosch/detekt/pull/1880)
+- Trust Kotlin compiler to identify unsafe casts - [#1879](https://github.com/arturbosch/detekt/pull/1879)
+- Replace tabs with spaces in rule KDoc - [#1876](https://github.com/arturbosch/detekt/pull/1876)
+- Make all Gradle tasks cacheable - [#1875](https://github.com/arturbosch/detekt/pull/1875)
+- Indentation for compliant and non-compliant code examples is missing - [#1871](https://github.com/arturbosch/detekt/issues/1871)
+- Don't build twice when PR created from branch - [#1866](https://github.com/arturbosch/detekt/pull/1866)
+- Print rendered report if it's null or blank - [#1862](https://github.com/arturbosch/detekt/pull/1862)
+- Silence report if containing no findings - [#1860](https://github.com/arturbosch/detekt/pull/1860)
+- Group console violation reports by file - [#1852](https://github.com/arturbosch/detekt/pull/1852)
+- Update Kotlin to v1.3.50 - [#1841](https://github.com/arturbosch/detekt/pull/1841)
+- Gradle 5.6 - [#1833](https://github.com/arturbosch/detekt/pull/1833)
+- Implement rule to suggest array literal instead of arrayOf-expression in annotations - [#1823](https://github.com/arturbosch/detekt/pull/1823)
+- Make UnsafeCast less aggressive - [#1601](https://github.com/arturbosch/detekt/issues/1601)
+- Consider publishing artifacts to mavenCentral instead of jCenter - [#1396](https://github.com/arturbosch/detekt/issues/1396)
+- false positive unnecessary parentheses in conjunction with lambdas - [#1222](https://github.com/arturbosch/detekt/issues/1222)
+- False positives on UnsafeCast on AppVeyor (Windows?) only - [#1137](https://github.com/arturbosch/detekt/issues/1137)
+- PreferToOverPairSyntax false positive - [#1066](https://github.com/arturbosch/detekt/issues/1066)
+- Rule ForbiddenComment - regexp support - [#959](https://github.com/arturbosch/detekt/issues/959)
+- UnsafeCallOnNullableType should not be reported for platform types - [#880](https://github.com/arturbosch/detekt/issues/880)
+- Exclusion patterns in detekt-config - [#775](https://github.com/arturbosch/detekt/issues/775)
+- Rule: OptionalTypeDeclaration - [#336](https://github.com/arturbosch/detekt/issues/336)
+- Check if it is feasible to integrate ktlint as a rule set - [#38](https://github.com/arturbosch/detekt/issues/38)
+
+See all issues at: [1.1.0](https://github.com/arturbosch/detekt/milestone/19)
+
 #### 1.0.1
 
 ##### Notable changes

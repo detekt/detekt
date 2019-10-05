@@ -1,5 +1,9 @@
 # Roadmap 
 
+This document is deprecated.
+Please follow https://github.com/arturbosch/detekt/milestones
+for current roadmap based on milestone feature of GitHub.
+
 ## ~ 1.0.0
 
 ### todo
