@@ -20,7 +20,11 @@ class FindingsReportSpec : Spek({
                     Pair("TestSmell", listOf(createFinding(), createFinding())),
                     Pair("EmptySmells", emptyList()))
             }
-            val output by memoized { subject.render(detektion)?.trimEnd()?.decolorized() }
+            var output: String? = null
+
+            beforeEachTest {
+                output = subject.render(detektion)?.trimEnd()?.decolorized()
+            }
 
             it("has the reference content") {
                 assertThat(output).isEqualTo(expectedContent)

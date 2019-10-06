@@ -35,9 +35,9 @@ class FileBasedFindingsReportSpec : Spek({
                     Pair("EmptySmells", emptyList())
                 )
             }
-            val output by memoized { subject.render(detektion)?.trimEnd()?.decolorized() }
 
             it("has the reference content") {
+                val output = subject.render(detektion)?.trimEnd()?.decolorized()
                 assertThat(output).isEqualTo(expectedContent)
             }
 

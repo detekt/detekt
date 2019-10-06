@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
@@ -14,7 +15,11 @@ class UtilityClassWithPublicConstructorSpec : Spek({
 
         context("several UtilityClassWithPublicConstructor rule violations") {
 
-            val findings by memoized { subject.lint(Case.UtilityClassesPositive.path()) }
+            lateinit var findings: List<Finding>
+
+            beforeEachTest {
+                findings = subject.lint(Case.UtilityClassesPositive.path())
+            }
 
             it("reports utility classes with a public constructor") {
                 assertThat(findings).hasSize(6)

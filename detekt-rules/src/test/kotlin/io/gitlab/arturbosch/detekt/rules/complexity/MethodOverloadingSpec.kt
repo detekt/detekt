@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
@@ -15,7 +16,11 @@ class MethodOverloadingSpec : Spek({
 
         context("several overloaded methods") {
 
-            val findings by memoized { subject.lint(Case.OverloadedMethods.path()) }
+            lateinit var findings: List<Finding>
+
+            beforeEachTest {
+                findings = subject.lint(Case.OverloadedMethods.path())
+            }
 
             it("reports overloaded methods which exceed the threshold") {
                 assertThat(findings.size).isEqualTo(3)

@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
@@ -24,7 +25,11 @@ class MemberNameEqualsClassNameSpec : Spek({
         context("some classes with methods which have the same name") {
 
             val path = Case.MemberNameEqualsClassNamePositive.path()
-            val findings by memoized { subject.lint(path) }
+            lateinit var findings: List<Finding>
+
+            beforeEachTest {
+                findings = subject.lint(path)
+            }
 
             it("reports methods which are named after the class") {
                 assertThat(findings).hasSize(8)
