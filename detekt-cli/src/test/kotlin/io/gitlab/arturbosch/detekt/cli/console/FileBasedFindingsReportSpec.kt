@@ -40,7 +40,6 @@ class FileBasedFindingsReportSpec : Spek({
             it("has the reference content") {
                 assertThat(output).isEqualTo(expectedContent)
             }
-
         }
 
         it("reports no findings") {
