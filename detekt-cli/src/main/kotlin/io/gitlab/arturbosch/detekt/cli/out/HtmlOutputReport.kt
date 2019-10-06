@@ -41,9 +41,11 @@ class HtmlOutputReport : OutputReport() {
     }
 
     private fun renderFindings(findings: Map<String, List<Finding>>) = createHTML().div {
-        for ((group, groupFindings) in findings.filter { it.value.isNotEmpty() }) {
-            renderGroup(group, groupFindings)
-        }
+        findings
+            .filter { it.value.isNotEmpty() }
+            .forEach { (group, groupFindings) ->
+                renderGroup(group, groupFindings)
+            }
     }
 
     private fun FlowContent.renderGroup(group: String, findings: List<Finding>) {
