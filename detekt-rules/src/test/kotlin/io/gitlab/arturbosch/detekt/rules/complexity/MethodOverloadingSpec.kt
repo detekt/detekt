@@ -15,7 +15,7 @@ class MethodOverloadingSpec : Spek({
 
         context("several overloaded methods") {
 
-            val findings = subject.lint(Case.OverloadedMethods.path())
+            val findings by memoized { subject.lint(Case.OverloadedMethods.path()) }
 
             it("reports overloaded methods which exceed the threshold") {
                 assertThat(findings.size).isEqualTo(3)

@@ -23,7 +23,7 @@ class OptionalUnitSpec : Spek({
 
                 fun returnsUnit2() = Unit
             """
-            val findings = subject.compileAndLint(code)
+            val findings by memoized { subject.compileAndLint(code) }
 
             it("should report functions returning Unit") {
                 assertThat(findings).hasSize(3)
@@ -70,7 +70,7 @@ class OptionalUnitSpec : Spek({
                     }
                 }
             """
-            val findings = subject.compileAndLint(code)
+            val findings by memoized { subject.compileAndLint(code) }
 
             it("should report lone Unit statement") {
                 assertThat(findings).hasSize(4)

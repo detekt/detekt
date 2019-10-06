@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.cli.console
 
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.cli.createFinding
+import io.gitlab.arturbosch.detekt.test.TestDetektion
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -13,14 +13,14 @@ class FindingsReportSpec : Spek({
 
     describe("findings report") {
 
-        describe("reports the debt per rule set and the overall debt") {
+        context("reports the debt per rule set and the overall debt") {
             val expectedContent = readResource("findings-report.txt")
             val detektion = object : TestDetektion() {
                 override val findings: Map<String, List<Finding>> = mapOf(
                     Pair("TestSmell", listOf(createFinding(), createFinding())),
                     Pair("EmptySmells", emptyList()))
             }
-            val output = subject.render(detektion)?.trimEnd()?.decolorized()
+            val output by memoized { subject.render(detektion)?.trimEnd()?.decolorized() }
 
             it("has the reference content") {
                 assertThat(output).isEqualTo(expectedContent)

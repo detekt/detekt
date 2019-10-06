@@ -13,7 +13,7 @@ class FileBasedFindingsReportSpec : Spek({
 
     describe("findings report") {
 
-        describe("reports the debt per file and rule set with the overall debt") {
+        context("reports the debt per file and rule set with the overall debt") {
             val expectedContent = readResource("grouped-findings-report.txt")
             val detektion = object : TestDetektion() {
                 override val findings: Map<String, List<Finding>> = mapOf(
@@ -35,7 +35,7 @@ class FileBasedFindingsReportSpec : Spek({
                     Pair("EmptySmells", emptyList())
                 )
             }
-            val output = subject.render(detektion)?.trimEnd()?.decolorized()
+            val output by memoized { subject.render(detektion)?.trimEnd()?.decolorized() }
 
             it("has the reference content") {
                 assertThat(output).isEqualTo(expectedContent)

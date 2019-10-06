@@ -14,7 +14,7 @@ class UtilityClassWithPublicConstructorSpec : Spek({
 
         context("several UtilityClassWithPublicConstructor rule violations") {
 
-            val findings = subject.lint(Case.UtilityClassesPositive.path())
+            val findings by memoized { subject.lint(Case.UtilityClassesPositive.path()) }
 
             it("reports utility classes with a public constructor") {
                 assertThat(findings).hasSize(6)

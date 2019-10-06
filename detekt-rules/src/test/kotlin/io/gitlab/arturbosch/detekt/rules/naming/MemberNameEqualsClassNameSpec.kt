@@ -24,7 +24,7 @@ class MemberNameEqualsClassNameSpec : Spek({
         context("some classes with methods which have the same name") {
 
             val path = Case.MemberNameEqualsClassNamePositive.path()
-            val findings = subject.lint(path)
+            val findings by memoized { subject.lint(path) }
 
             it("reports methods which are named after the class") {
                 assertThat(findings).hasSize(8)
