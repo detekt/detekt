@@ -3,6 +3,5 @@
   <Blacklist></Blacklist>
   <Whitelist>
     <ID>LargeClass:UnusedPrivateMemberSpec.kt$UnusedPrivateMemberSpec : Spek</ID>
-    <ID>NewLineAtEndOfFile:PluginVersion.kt$io.gitlab.arturbosch.detekt.PluginVersion.kt</ID>
   </Whitelist>
 </SmellBaseline>
