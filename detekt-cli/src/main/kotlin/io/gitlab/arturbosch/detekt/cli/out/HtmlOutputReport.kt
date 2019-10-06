@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.cli.ClasspathResourceConverter
+import kotlinx.html.FlowContent
 import kotlinx.html.br
 import kotlinx.html.div
 import kotlinx.html.h3
@@ -41,31 +42,45 @@ class HtmlOutputReport : OutputReport() {
 
     private fun renderFindings(findings: Map<String, List<Finding>>) = createHTML().div {
         for ((group, groupFindings) in findings.filter { it.value.isNotEmpty() }) {
-            h3 { text(group) }
+            renderGroup(group, groupFindings)
+        }
+    }
 
-            groupFindings.groupBy { it.id }.forEach { (rule, findings) ->
-                if (findings.isNotEmpty()) {
-                    div("rule-container") {
-                        span("rule") { text("$rule ") }
-                        span("description") { text(findings.first().issue.description) }
-                    }
-                }
+    private fun FlowContent.renderGroup(group: String, findings: List<Finding>) {
+        h3 { text(group) }
 
-                ul {
-                    findings.forEach {
-                        li {
-                            span("location") {
-                                text("${it.file}:${it.location.source.line}:${it.location.source.column}")
-                            }
+        findings
+            .groupBy { it.id }
+            .forEach { (rule, ruleFindings) ->
+                renderRule(rule, ruleFindings)
+            }
+    }
 
-                            if (it.message.isNotEmpty()) {
-                                br()
-                                span("message") { text(it.message) }
-                            }
-                        }
-                    }
+    private fun FlowContent.renderRule(rule: String, findings: List<Finding>) {
+        if (findings.isNotEmpty()) {
+            div("rule-container") {
+                span("rule") { text("$rule ") }
+                span("description") { text(findings.first().issue.description) }
+            }
+        }
+
+        ul {
+            findings.forEach {
+                li {
+                    renderFinding(it)
                 }
             }
+        }
+    }
+
+    private fun FlowContent.renderFinding(it: Finding) {
+        span("location") {
+            text("${it.file}:${it.location.source.line}:${it.location.source.column}")
+        }
+
+        if (it.message.isNotEmpty()) {
+            br()
+            span("message") { text(it.message) }
         }
     }
 }
