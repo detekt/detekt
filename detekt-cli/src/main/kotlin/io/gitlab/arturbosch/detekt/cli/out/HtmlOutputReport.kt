@@ -5,7 +5,13 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.cli.ClasspathResourceConverter
+import kotlinx.html.CommonAttributeGroupFacadeFlowInteractiveContent
 import kotlinx.html.FlowContent
+import kotlinx.html.FlowOrInteractiveContent
+import kotlinx.html.HTMLTag
+import kotlinx.html.HtmlTagMarker
+import kotlinx.html.TagConsumer
+import kotlinx.html.attributesMapOf
 import kotlinx.html.br
 import kotlinx.html.div
 import kotlinx.html.h3
@@ -13,6 +19,7 @@ import kotlinx.html.li
 import kotlinx.html.span
 import kotlinx.html.stream.createHTML
 import kotlinx.html.ul
+import kotlinx.html.visit
 
 private const val DEFAULT_TEMPLATE = "default-html-report-template.html"
 private const val PLACEHOLDER_METRICS = "@@@metrics@@@"
@@ -84,3 +91,22 @@ class HtmlOutputReport : OutputReport() {
         }
     }
 }
+
+@HtmlTagMarker
+private fun FlowOrInteractiveContent.summary(
+    classes: String? = null,
+    block: SUMMARY.() -> Unit = {}
+): Unit = SUMMARY(attributesMapOf("class", classes), consumer).visit(block)
+
+private class SUMMARY(
+    initialAttributes: Map<String, String>,
+    override val consumer: TagConsumer<*>
+) : HTMLTag(
+    "summary",
+    consumer,
+    initialAttributes,
+    null,
+    false,
+    false
+),
+    CommonAttributeGroupFacadeFlowInteractiveContent
