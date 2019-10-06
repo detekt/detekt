@@ -6,4 +6,9 @@ class TrailingWhitespaceNegative {
     fun myFunction() {
         println("A message")
     }
+
+    val str = """
+        test 
+        
+    """
 }
