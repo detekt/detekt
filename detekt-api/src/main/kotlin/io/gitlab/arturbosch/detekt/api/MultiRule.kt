@@ -20,7 +20,7 @@ abstract class MultiRule : BaseRule() {
 
     override fun postVisit(root: KtFile) {
         for (activeRule in activeRules) {
-            report(activeRule.findings, activeRule.aliases)
+            report(activeRule.findings, activeRule.aliases, activeRule.ruleId)
         }
     }
 

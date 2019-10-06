@@ -50,13 +50,10 @@ class YamlConfig internal constructor(
         /**
          * Factory method to load a yaml configuration from a URL.
          */
-        fun loadResource(url: URL): Config {
-            val reader = url.openStream().bufferedReader()
-            return load(reader)
-        }
+        fun loadResource(url: URL): Config = load(url.openStream().bufferedReader())
 
         private fun load(reader: BufferedReader): Config = reader.use {
-            val yamlInput = it.readText()
+            val yamlInput = it.lineSequence().joinToString("\n")
             if (yamlInput.isEmpty()) {
                 Config.empty
             } else {
@@ -68,7 +65,5 @@ class YamlConfig internal constructor(
                 }
             }
         }
-
-        private fun BufferedReader.readText() = lineSequence().joinToString("\n")
     }
 }

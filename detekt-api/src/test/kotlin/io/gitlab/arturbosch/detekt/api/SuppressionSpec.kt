@@ -3,6 +3,8 @@ package io.gitlab.arturbosch.detekt.api
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.compileForTest
+import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -98,6 +100,44 @@ internal class SuppressionSpec : Spek({
             assertThat(rule.expected).isNotNull()
         }
     }
+
+    describe("suppression's via rule set id") {
+
+        val code = """
+            fun lpl(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int) = Unit
+        """.trimIndent()
+        val config = yamlConfig("ruleset-suppression.yml").subConfig("complexity")
+
+        it("reports without a suppression") {
+            val findings = TestLPL(config).lint(code)
+            assertThat(findings).isNotEmpty()
+        }
+
+        fun assertCodeIsSuppressed(code: String) {
+            val findings = TestLPL(config).lint(code)
+            assertThat(findings).isEmpty()
+        }
+
+        it("suppresses by rule set id") {
+            assertCodeIsSuppressed("""@Suppress("complexity")$code""")
+        }
+
+        it("suppresses by rule set id and detekt prefix") {
+            assertCodeIsSuppressed("""@Suppress("detekt.complexity")$code""")
+        }
+
+        it("suppresses by rule id") {
+            assertCodeIsSuppressed("""@Suppress("LongParameterList")$code""")
+        }
+
+        it("suppresses by combination of rule set and rule id") {
+            assertCodeIsSuppressed("""@Suppress("complexity.LongParameterList")$code""")
+        }
+
+        it("suppresses by combination of detekt prefix, rule set and rule id") {
+            assertCodeIsSuppressed("""@Suppress("detekt:complexity:LongParameterList")$code""")
+        }
+    }
 })
 
 class TestRule(config: Config = Config.empty) : Rule(config) {
@@ -118,7 +158,7 @@ class TestLM : Rule() {
     }
 }
 
-class TestLPL : Rule() {
+class TestLPL(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue("LongParameterList", Severity.CodeSmell, "", Debt.TWENTY_MINS)
     override fun visitNamedFunction(function: KtNamedFunction) {
         val size = function.valueParameters.size
