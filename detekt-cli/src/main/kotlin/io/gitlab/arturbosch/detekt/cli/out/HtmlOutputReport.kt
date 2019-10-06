@@ -43,7 +43,7 @@ class HtmlOutputReport : OutputReport() {
         for ((group, groupFindings) in findings.filter { it.value.isNotEmpty() }) {
             h3 { text(group) }
 
-            groupFindings.groupBy { it.id }.forEach { rule, findings ->
+            groupFindings.groupBy { it.id }.forEach { (rule, findings) ->
                 if (findings.isNotEmpty()) {
                     div("rule-container") {
                         span("rule") { text("$rule ") }
