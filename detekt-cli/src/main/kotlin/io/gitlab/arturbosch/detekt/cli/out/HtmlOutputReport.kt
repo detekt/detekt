@@ -57,11 +57,9 @@ class HtmlOutputReport : OutputReport() {
     }
 
     private fun FlowContent.renderRule(rule: String, findings: List<Finding>) {
-        if (findings.isNotEmpty()) {
-            div("rule-container") {
-                span("rule") { text("$rule ") }
-                span("description") { text(findings.first().issue.description) }
-            }
+        div("rule-container") {
+            span("rule") { text("$rule ") }
+            span("description") { text(findings.first().issue.description) }
         }
 
         ul {
