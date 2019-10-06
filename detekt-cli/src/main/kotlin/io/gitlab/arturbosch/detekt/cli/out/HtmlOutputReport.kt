@@ -13,8 +13,10 @@ import kotlinx.html.HtmlTagMarker
 import kotlinx.html.TagConsumer
 import kotlinx.html.attributesMapOf
 import kotlinx.html.br
+import kotlinx.html.details
 import kotlinx.html.div
 import kotlinx.html.h3
+import kotlinx.html.id
 import kotlinx.html.li
 import kotlinx.html.span
 import kotlinx.html.stream.createHTML
@@ -66,15 +68,20 @@ class HtmlOutputReport : OutputReport() {
     }
 
     private fun FlowContent.renderRule(rule: String, findings: List<Finding>) {
-        div("rule-container") {
-            span("rule") { text("$rule ") }
-            span("description") { text(findings.first().issue.description) }
-        }
+        details {
+            id = rule
+            open = true
 
-        ul {
-            findings.forEach {
-                li {
-                    renderFinding(it)
+            summary("rule-container") {
+                span("rule") { text("$rule ") }
+                span("description") { text(findings.first().issue.description) }
+            }
+
+            ul {
+                findings.forEach {
+                    li {
+                        renderFinding(it)
+                    }
                 }
             }
         }
