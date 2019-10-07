@@ -133,7 +133,7 @@ class VarCouldBeValSpec : Spek({
             }
         }
 
-        it("reports variables that are not re-assigned at class level but is shadowed in a function") {
+        it("reports variables that are not re-assigned at class level but are shadowed in a function") {
             val code = """
             class Test {
                private var someVar = 3
@@ -166,7 +166,7 @@ class VarCouldBeValSpec : Spek({
             }
         }
 
-        it("reports variables that are not but only used in inner class") {
+        it("reports variables that are only used in inner class") {
             val code = """
             class Test {
                 private var unused = 2
