@@ -41,22 +41,17 @@ class UndocumentedPublicFunctionSpec : Spek({
 
         it("does not report documented public function in class") {
             val code = """
-                class Test {
-                    /**
-                    *
-                    */
-                    fun commented1() {}
-
-                    /**
-                    *
-                    */
-                    fun commented2() {}
-                }
-            """
+				class Test {
+					/**
+					*
+					*/
+					fun commented() {}
+				}
+			"""
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report udocumented internal and private function") {
+        it("does not report undocumented internal and private function") {
             val code = """
                 class Test {
                     internal fun no1(){}
@@ -80,29 +75,21 @@ class UndocumentedPublicFunctionSpec : Spek({
 
         it("does not report public functions in internal class") {
             val code = """
-                internal class NoComments {
-
-                    fun nope0() {}
-                    public fun nope1() {}
-                    internal fun nope2() {}
-                    protected fun nope3() {}
-                    private fun nope4() {}
-                }
-            """
+    			internal class NoComments {
+					fun nope1() {}
+					public fun nope2() {}
+				}
+			"""
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("does not report public functions in private class") {
             val code = """
-                private class NoComments {
-
-                    fun nope0() {}
-                    public fun nope1() {}
-                    internal fun nope2() {}
-                    protected fun nope3() {}
-                    private fun nope4() {}
-                }
-            """
+    			private class NoComments {
+					fun nope1() {}
+					public fun nope2() {}
+				}
+			"""
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
