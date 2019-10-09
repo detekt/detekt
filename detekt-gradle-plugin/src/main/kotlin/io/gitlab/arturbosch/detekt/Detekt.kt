@@ -105,7 +105,7 @@ open class Detekt : SourceTask(), VerificationTask {
     @get:Optional
     @Deprecated(
         "Set plugins using the detektPlugins configuration " +
-                "(see https://arturbosch.github.io/detekt/extensions.html#let-detekt-know-about-your-extensions)"
+            "(see https://arturbosch.github.io/detekt/extensions.html#let-detekt-know-about-your-extensions)"
     )
     var plugins: Property<String> = project.objects.property(String::class.java)
 
@@ -113,48 +113,50 @@ open class Detekt : SourceTask(), VerificationTask {
     internal val debugProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     var debug: Boolean
         @Console
-        get() = debugProp.get()
+        get() = debugProp.getOrElse(false)
         set(value) = debugProp.set(value)
 
     @get:Internal
     internal val parallelProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     var parallel: Boolean
         @Internal
-        get() = parallelProp.get()
+        get() = parallelProp.getOrElse(false)
         set(value) = parallelProp.set(value)
 
     @get:Internal
     internal val disableDefaultRuleSetsProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     var disableDefaultRuleSets: Boolean
         @Input
-        get() = disableDefaultRuleSetsProp.get()
+        get() = disableDefaultRuleSetsProp.getOrElse(false)
         set(value) = disableDefaultRuleSetsProp.set(value)
 
     @get:Internal
     internal val buildUponDefaultConfigProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     var buildUponDefaultConfig: Boolean
         @Input
-        get() = buildUponDefaultConfigProp.get()
+        get() = buildUponDefaultConfigProp.getOrElse(false)
         set(value) = buildUponDefaultConfigProp.set(value)
 
     @get:Internal
     internal val failFastProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     var failFast: Boolean
         @Input
-        get() = failFastProp.get()
+        get() = failFastProp.getOrElse(false)
         set(value) = failFastProp.set(value)
 
     @get:Internal
     internal val ignoreFailuresProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+
     @Input
     override fun getIgnoreFailures(): Boolean = ignoreFailuresProp.getOrElse(false)
+
     override fun setIgnoreFailures(value: Boolean) = ignoreFailuresProp.set(value)
 
     @get:Internal
     internal val autoCorrectProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
     var autoCorrect: Boolean
         @Input
-        get() = autoCorrectProp.get()
+        get() = autoCorrectProp.getOrElse(false)
         set(value) = autoCorrectProp.set(value)
 
     @get:Internal
@@ -201,7 +203,7 @@ open class Detekt : SourceTask(), VerificationTask {
         if (plugins.isPresent && !pluginClasspath.isEmpty) {
             throw GradleException(
                 "Cannot set value for plugins on detekt task and apply detektPlugins configuration " +
-                        "at the same time."
+                    "at the same time."
             )
         }
         val arguments = mutableListOf(

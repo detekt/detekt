@@ -128,7 +128,6 @@ class ForbiddenCommentSpec : Spek({
                 val findings = ForbiddenComment(patternsConfig).compileAndLint(comment)
                 assertThat(findings).isEmpty()
             }
-
         }
     }
 })
