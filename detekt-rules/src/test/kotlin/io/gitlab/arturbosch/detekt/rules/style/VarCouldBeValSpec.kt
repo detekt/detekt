@@ -146,7 +146,7 @@ class VarCouldBeValSpec : Spek({
             val result = subject.compileAndLint(code)
             assertThat(result).hasSize(1)
             with(result[0].entity) {
-                assertThat(result[0].entity.ktElement?.text).isEqualTo("private var someVar = 3")
+                assertThat(ktElement?.text).isEqualTo("private var someVar = 3")
             }
         }
 
@@ -184,18 +184,6 @@ class VarCouldBeValSpec : Spek({
         }
 
         it("does not report variables that are re-assigned in some member function") {
-            val code = """
-            class Test {
-               private var viewModel = 3
-               fun test() {
-                   viewModel = 4
-               }
-            }
-            """
-            assertThat(subject.compileAndLint(code)).isEmpty()
-        }
-
-        it("does not report variables that are re-assigned in some member function1") {
             val code = """
             class Test {
                private var viewModel = 3
