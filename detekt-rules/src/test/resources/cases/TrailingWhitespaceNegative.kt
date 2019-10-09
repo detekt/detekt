@@ -7,8 +7,11 @@ class TrailingWhitespaceNegative {
         println("A message")
     }
 
-    val str = """
-        test 
+    // Indents inside multi-line strings should not be reported
+    val multiLineStringWithIndents = """
+        Should ignore indent on the next line
         
-    """
+        Should ignore indent on the previous line
+    """.trimIndent()
+
 }
