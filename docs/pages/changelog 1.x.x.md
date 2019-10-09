@@ -6,6 +6,21 @@ permalink: changelog.html
 toc: true
 ---
 
+#### 1.1.1
+
+##### Changelog
+
+- Improved test case for resolved #1971 (TrailingWhitespace and multiline string) - [#2003](https://github.com/arturbosch/detekt/pull/2003)
+- Set defaults for boolean property when writing custom detekt tasks - [#1996](https://github.com/arturbosch/detekt/pull/1996)
+- Generate PluginVersion.kt with newline at end - [#1993](https://github.com/arturbosch/detekt/pull/1993)
+- Remove unnecessary logs from RuleProviderTest - [#1990](https://github.com/arturbosch/detekt/pull/1990)
+- Use inline code snippets instead of case files - [#1989](https://github.com/arturbosch/detekt/pull/1989)
+- Use config parameter for UseIfInsteadOfWhen rule - [#1987](https://github.com/arturbosch/detekt/pull/1987)
+- Use inline code snippets instead of case files - [#1976](https://github.com/arturbosch/detekt/pull/1976)
+- Don't flag trailing whitespaces in multiline strings - [#1971](https://github.com/arturbosch/detekt/pull/1971)
+
+See all issues at: [1.1.1](https://github.com/arturbosch/detekt/milestone/50)
+
 #### 1.1.0
 
 ##### Changelog
