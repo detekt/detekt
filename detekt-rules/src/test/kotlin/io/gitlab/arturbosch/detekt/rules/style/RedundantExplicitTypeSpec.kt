@@ -4,9 +4,6 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.KtTestCompiler
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
-import org.jetbrains.kotlin.com.intellij.openapi.Disposable
-import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 

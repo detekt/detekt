@@ -50,7 +50,7 @@ object UseIfInsteadOfWhenSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it ("does not report when second branch is not 'else'") {
+        it("does not report when second branch is not 'else'") {
             val code = """
                 fun function(): Boolean? {
                     val x = null
