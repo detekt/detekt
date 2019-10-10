@@ -9,10 +9,17 @@ import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
+import io.gitlab.arturbosch.detekt.cli.CliArgs
+import io.gitlab.arturbosch.detekt.cli.runners.Runner
 import io.gitlab.arturbosch.detekt.test.TestDetektion
+import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
+import java.io.File
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
 
 class HtmlOutputFormatTest : Spek({
 
@@ -60,6 +67,19 @@ class HtmlOutputFormatTest : Spek({
             assertThat(result).contains("<span class=\"description\">A1</span>")
             assertThat(result).contains("<span class=\"description\">A2</span>")
             assertThat(result).contains("<span class=\"description\">A3</span>")
+        }
+
+        it("integration") {
+            val result = outputFormat.render(createTestDetektionWithMultipleSmells())
+
+            val tmpReport = Files.createTempFile("HtmlOutputFormatTest", ".html")
+            Files.write(tmpReport, result.toByteArray())
+
+            try {
+                assertThat(tmpReport).hasSameContentAs(Paths.get(resource("/reports/HtmlOutputFormatTest.html")))
+            } finally {
+                Files.delete(tmpReport)
+            }
         }
     }
 })

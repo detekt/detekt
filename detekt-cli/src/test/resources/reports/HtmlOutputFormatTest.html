@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>detekt report</title>
+    <style>
+h2 {
+  background-color: #666666;
+  padding: 0.2em;
+  color: #ffffff;
+}
+h3 {
+  background-color:#f8dfdf;
+  padding:0.5em;
+}
+.rule {
+  background-color: #dddddd;
+  padding: 0.3em;
+  font-weight: bold;
+}
+.description {
+  color:#000000;
+  padding:0.3em;
+}
+.location {
+  color: #690505;
+  font-family: monospace;
+}
+.message {
+  font-size: 0.8em;
+  color: #444444;
+}
+.rule-container {
+  border: 0.1em dashed #dddddd;
+  padding: 0.1em;
+  line-height: 1.5em;
+  margin-bottom: 8px;
+  margin-top: 8px;
+}
+pre {
+  border: 1px solid #e0e0e0;
+  overflow: scroll;
+}
+.lineno {
+  color: #999999;
+  background-color: #f0f0f0;
+}
+.error {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AwCFR4T/3uLMgAAADxJREFUCNdNyLERQEAABMCjL4lQwIzcjErpguAL+C9AvgKJDbeD/PRpLdm35Hm+MU+cB+tCKaJW4L4YBy+CAiLJrFs9mgAAAABJRU5ErkJggg==) bottom repeat-x;
+}
+</style>
+</head>
+<body>
+
+<h1>detekt report</h1>
+
+<h2>Metrics</h2>
+
+<div>
+  <ul></ul>
+</div>
+
+
+<h2>Findings</h2>
+<div>
+  <h3>id_a</h3>
+  <details id="id_a" open="open">
+    <summary class="rule-container"><span class="rule">id_a </span><span class="description">A1</span></summary>
+    <ul>
+      <li><span class="location">src/main/com/sample/Sample1.kt:11:1</span><br><span class="message">B1</span></li>
+    </ul>
+  </details>
+  <h3>id_b</h3>
+  <details id="id_b" open="open">
+    <summary class="rule-container"><span class="rule">id_b </span><span class="description">A2</span></summary>
+    <ul>
+      <li><span class="location">src/main/com/sample/Sample2.kt:22:2</span><br><span class="message">B2</span></li>
+    </ul>
+  </details>
+  <h3>id_c</h3>
+  <details id="id_c" open="open">
+    <summary class="rule-container"><span class="rule">id_c </span><span class="description">A3</span></summary>
+    <ul>
+      <li><span class="location">src/main/com/sample/Sample3.kt:33:3</span><br><span class="message">B3</span></li>
+    </ul>
+  </details>
+</div>
+
+
+</body>
+</html>
