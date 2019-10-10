@@ -87,14 +87,14 @@ class HtmlOutputReport : OutputReport() {
         }
     }
 
-    private fun FlowContent.renderFinding(it: Finding) {
+    private fun FlowContent.renderFinding(finding: Finding) {
         span("location") {
-            text("${it.file}:${it.location.source.line}:${it.location.source.column}")
+            text("${finding.file}:${finding.location.source.line}:${finding.location.source.column}")
         }
 
-        if (it.message.isNotEmpty()) {
+        if (finding.message.isNotEmpty()) {
             br()
-            span("message") { text(it.message) }
+            span("message") { text(finding.message) }
         }
     }
 }
