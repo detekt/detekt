@@ -5,6 +5,23 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.cli.ClasspathResourceConverter
+import kotlinx.html.CommonAttributeGroupFacadeFlowInteractiveContent
+import kotlinx.html.FlowContent
+import kotlinx.html.FlowOrInteractiveContent
+import kotlinx.html.HTMLTag
+import kotlinx.html.HtmlTagMarker
+import kotlinx.html.TagConsumer
+import kotlinx.html.attributesMapOf
+import kotlinx.html.br
+import kotlinx.html.details
+import kotlinx.html.div
+import kotlinx.html.h3
+import kotlinx.html.id
+import kotlinx.html.li
+import kotlinx.html.span
+import kotlinx.html.stream.createHTML
+import kotlinx.html.ul
+import kotlinx.html.visit
 
 private const val DEFAULT_TEMPLATE = "default-html-report-template.html"
 private const val PLACEHOLDER_METRICS = "@@@metrics@@@"
@@ -24,33 +41,79 @@ class HtmlOutputReport : OutputReport() {
                     .replace(PLACEHOLDER_METRICS, renderMetrics(detektion.metrics))
                     .replace(PLACEHOLDER_FINDINGS, renderFindings(detektion.findings))
 
-    private fun renderMetrics(metrics: Collection<ProjectMetric>) = htmlSnippet {
-        list(metrics) {
-            text { "${it.type}: ${it.value}" }
+    private fun renderMetrics(metrics: Collection<ProjectMetric>) = createHTML().div {
+        ul {
+            metrics.forEach {
+                li { text("${it.type}: ${it.value}") }
+            }
         }
     }
 
-    private fun renderFindings(findings: Map<String, List<Finding>>) = htmlSnippet {
-        for ((group, groupFindings) in findings.filter { it.value.isNotEmpty() }) {
-            h3 { group }
+    private fun renderFindings(findings: Map<String, List<Finding>>) = createHTML().div {
+        findings
+            .filter { it.value.isNotEmpty() }
+            .forEach { (group, groupFindings) ->
+                renderGroup(group, groupFindings)
+            }
+    }
 
-            groupFindings.groupBy { it.id }.forEach { rule, findings ->
-                if (findings.isNotEmpty()) {
-                    div("rule-container") {
-                        span("rule") { rule }
-                        span("description") { findings.first().issue.description }
-                    }
-                }
+    private fun FlowContent.renderGroup(group: String, findings: List<Finding>) {
+        h3 { text(group) }
 
-                list(findings) {
-                    span("location") { "${it.file}:${it.location.source.line}:${it.location.source.column}" }
+        findings
+            .groupBy { it.id }
+            .forEach { (rule, ruleFindings) ->
+                renderRule(rule, ruleFindings)
+            }
+    }
 
-                    if (it.message.isNotEmpty()) {
-                        br()
-                        span("message") { it.message }
+    private fun FlowContent.renderRule(rule: String, findings: List<Finding>) {
+        details {
+            id = rule
+            open = true
+
+            summary("rule-container") {
+                span("rule") { text("$rule ") }
+                span("description") { text(findings.first().issue.description) }
+            }
+
+            ul {
+                findings.forEach {
+                    li {
+                        renderFinding(it)
                     }
                 }
             }
         }
     }
+
+    private fun FlowContent.renderFinding(it: Finding) {
+        span("location") {
+            text("${it.file}:${it.location.source.line}:${it.location.source.column}")
+        }
+
+        if (it.message.isNotEmpty()) {
+            br()
+            span("message") { text(it.message) }
+        }
+    }
 }
+
+@HtmlTagMarker
+private fun FlowOrInteractiveContent.summary(
+    classes: String? = null,
+    block: SUMMARY.() -> Unit = {}
+): Unit = SUMMARY(attributesMapOf("class", classes), consumer).visit(block)
+
+private class SUMMARY(
+    initialAttributes: Map<String, String>,
+    override val consumer: TagConsumer<*>
+) : HTMLTag(
+    "summary",
+    consumer,
+    initialAttributes,
+    null,
+    false,
+    false
+),
+    CommonAttributeGroupFacadeFlowInteractiveContent
