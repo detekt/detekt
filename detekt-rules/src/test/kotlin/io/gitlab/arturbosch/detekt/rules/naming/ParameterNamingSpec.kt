@@ -33,6 +33,16 @@ class ParameterNamingSpec : Spek({
             """
             assertThat(NamingRules().lint(code)).hasSize(5)
         }
+
+        it("should find a violation in the correct text locaction") {
+            val code = """
+                class C(val PARAM: String)
+            """
+            val findings = NamingRules().lint(code)
+            val source = findings.first().location.text
+            assertThat(source.start).isEqualTo(8)
+            assertThat(source.end).isEqualTo(25)
+        }
     }
 
     describe("parameters in a function of a class") {
