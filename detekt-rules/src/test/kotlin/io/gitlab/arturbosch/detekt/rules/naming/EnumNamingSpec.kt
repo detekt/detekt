@@ -28,6 +28,14 @@ class EnumNamingSpec : Spek({
             assertThat(NamingRules().compileAndLint(code)).hasSize(1)
         }
 
+        it("no reports an underscore in enum name because it's suppressed") {
+            val code = """
+                enum class WorkFlow {
+                    @Suppress("EnumNaming") _Default
+                }"""
+            assertThat(NamingRules().compileAndLint(code)).isEmpty()
+        }
+
         it("reports the correct text location in enum name") {
             val code = """
                 enum class WorkFlow {

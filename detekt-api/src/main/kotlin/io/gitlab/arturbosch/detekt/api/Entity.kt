@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.internal.searchClass
 import io.gitlab.arturbosch.detekt.api.internal.searchName
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 
 /**
  * Stores information about a specific code fragment.
@@ -27,7 +28,8 @@ data class Entity(
             val name = element.searchName()
             val signature = element.buildFullSignature()
             val clazz = element.searchClass()
-            return Entity(name, clazz, signature, Location.from(element, offset), element as? KtElement)
+            val ktElement = element.getNonStrictParentOfType<KtElement>()!!
+            return Entity(name, clazz, signature, Location.from(element, offset), ktElement)
         }
     }
 }
