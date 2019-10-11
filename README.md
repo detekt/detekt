@@ -35,7 +35,7 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 
 Visit [the project website](https://arturbosch.github.io/detekt/) for installation guides, release notes, migration guides, rule descriptions and configuration options.
 
-##### Quick-Links
+#### Quick-Links
 
 - [Changelog and migration guides](https://arturbosch.github.io/detekt/changelog.html)
 - [Available CLI options](https://arturbosch.github.io/detekt/cli.html)
@@ -54,6 +54,7 @@ Visit [the project website](https://arturbosch.github.io/detekt/) for installati
 ### Quick Start ...
 
 #### with command-line interface
+
 - `git clone https://github.com/arturbosch/detekt`
 - `cd detekt`
 - `./gradlew build shadowJar`
@@ -192,6 +193,7 @@ As mentioned in...
 - [Check the quality of Kotlin code](https://blog.frankel.ch/check-quality-kotlin-code/)
 
 Integrations:
+
 - [SonarKotlin](https://docs.sonarqube.org/display/PLUG/SonarKotlin)
 - [Codacy](https://www.codacy.com)
 - [Gradle plugin that generates ErrorProne, Findbugs, Checkstyle, PMD, CPD, Lint, Detekt & Ktlint Tasks for every subproject](https://github.com/vanniktech/gradle-code-quality-tools-plugin)
