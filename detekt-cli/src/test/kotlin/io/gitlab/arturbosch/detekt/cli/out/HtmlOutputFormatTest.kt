@@ -49,7 +49,6 @@ class HtmlOutputFormatTest : Spek({
             val result = outputFormat.render(createTestDetektionWithMultipleSmells())
 
             assertThat(result).contains("<span class=\"rule\">id_a </span>")
-            assertThat(result).contains("<span class=\"rule\">id_b </span>")
             assertThat(result).contains("<span class=\"rule\">id_c </span>")
         }
 
@@ -58,14 +57,13 @@ class HtmlOutputFormatTest : Spek({
 
             assertThat(result).contains("<span class=\"message\">B1</span>")
             assertThat(result).contains("<span class=\"message\">B2</span>")
-            assertThat(result).contains("<span class=\"message\">B3</span>")
         }
 
         it("testRenderResultContainsDescriptions") {
             val result = outputFormat.render(createTestDetektionWithMultipleSmells())
 
             assertThat(result).contains("<span class=\"description\">A1</span>")
-            assertThat(result).contains("<span class=\"description\">A2</span>")
+            assertThat(result).doesNotContain("<span class=\"description\">A2</span>")
             assertThat(result).contains("<span class=\"description\">A3</span>")
         }
 
@@ -86,8 +84,8 @@ class HtmlOutputFormatTest : Spek({
 
 private fun createTestDetektionWithMultipleSmells(): Detektion {
     val entity1 = Entity("Sample1", "com.sample.Sample1", "",
-            Location(SourceLocation(11, 1), TextLocation(0, 10),
-                    "abcd", "src/main/com/sample/Sample1.kt"))
+            Location(SourceLocation(11, 1), TextLocation(10, 14),
+                    "abcd", "src/main/com/sample/Sample1.kt"), FakeKtElement("\n\n\n\n\n\n\n\n\n\nabcdef\nhi\n"))
     val entity2 = Entity("Sample2", "com.sample.Sample2", "",
             Location(SourceLocation(22, 2), TextLocation(0, 20),
                     "efgh", "src/main/com/sample/Sample2.kt"))
@@ -97,7 +95,7 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
 
     return TestDetektion(
         CodeSmell(Issue("id_a", Severity.CodeSmell, "A1", Debt.TWENTY_MINS), entity1, message = "B1"),
-        CodeSmell(Issue("id_b", Severity.CodeSmell, "A2", Debt.TWENTY_MINS), entity2, message = "B2"),
-        CodeSmell(Issue("id_c", Severity.CodeSmell, "A3", Debt.TWENTY_MINS), entity3, message = "B3")
+        CodeSmell(Issue("id_a", Severity.CodeSmell, "A2", Debt.TWENTY_MINS), entity2, message = "B2"),
+        CodeSmell(Issue("id_c", Severity.CodeSmell, "A3", Debt.TWENTY_MINS), entity3, message = "")
     )
 }
