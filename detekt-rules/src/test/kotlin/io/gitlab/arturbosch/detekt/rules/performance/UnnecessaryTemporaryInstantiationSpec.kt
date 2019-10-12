@@ -8,13 +8,16 @@ import org.spekframework.spek2.style.specification.describe
 class UnnecessaryTemporaryInstantiationSpec : Spek({
     val subject by memoized { UnnecessaryTemporaryInstantiation() }
 
-    describe("temporary instantiation for conversion") {
-        val code = "val i = Integer(1).toString()"
-        assertThat(subject.compileAndLint(code)).hasSize(1)
-    }
+    describe("UnnecessaryTemporaryInstantiation rule") {
 
-    describe("right conversion without instantiation") {
-        val code = "val i = Integer.toString(1)"
-        assertThat(subject.compileAndLint(code)).isEmpty()
+        it("temporary instantiation for conversion") {
+            val code = "val i = Integer(1).toString()"
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+
+        it("right conversion without instantiation") {
+            val code = "val i = Integer.toString(1)"
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
     }
 })
