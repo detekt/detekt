@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -30,6 +30,7 @@ class ClassNamingSpec : Spek({
                 """
             )
             assertThat(findings).hasSize(2)
+            assertThat(findings).hasTextLocations(6 to 24, 32 to 49)
         }
     }
 })
