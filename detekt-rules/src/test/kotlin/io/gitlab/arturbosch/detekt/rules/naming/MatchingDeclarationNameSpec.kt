@@ -121,18 +121,14 @@ internal class MatchingDeclarationNameSpec : Spek({
 
             it("should not pass for class declaration with utility functions") {
                 val ktFile = compileContentForTest("""
-                class C
                 fun a() = 5
+                class C
                 fun C.b() = 5
 
             """.trimIndent())
                 ktFile.name = "ClassUtils.kt"
                 val findings = MatchingDeclarationName().lint(ktFile)
-                assertThat(findings).hasLocationStrings("""
-                'class C
-                fun a() = 5
-                fun C.b() = 5
-                ' at (1,1) in /ClassUtils.kt""", trimIndent = true)
+                assertThat(findings).hasLocationStrings("'class C' at (2,1) in /ClassUtils.kt")
             }
 
             it("should not pass for interface declaration") {
@@ -154,8 +150,7 @@ internal class MatchingDeclarationNameSpec : Spek({
                 assertThat(findings).hasLocationStrings("""
                 'enum class NOT_E {
                     ONE, TWO, THREE
-                }
-                ' at (1,1) in /E.kt""", trimIndent = true)
+                }' at (1,1) in /E.kt""", trimIndent = true)
             }
 
             it("should not pass for a typealias with a different name") {
