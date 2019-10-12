@@ -19,6 +19,13 @@ internal class MatchingDeclarationNameSpec : Spek({
                 assertThat(findings).isEmpty()
             }
 
+            it("should pass for suppress") {
+                val ktFile = compileContentForTest("""@file:Suppress("MatchingDeclarationName") object O""")
+                ktFile.name = "Objects.kt"
+                val findings = MatchingDeclarationName().lint(ktFile)
+                assertThat(findings).isEmpty()
+            }
+
             it("should pass for class declaration") {
                 val ktFile = compileContentForTest("class C")
                 ktFile.name = "C.kt"
@@ -95,6 +102,14 @@ internal class MatchingDeclarationNameSpec : Spek({
                 ktFile.name = "Objects.kt"
                 val findings = MatchingDeclarationName().lint(ktFile)
                 assertThat(findings).hasLocationStrings("'object O' at (1,1) in /Objects.kt")
+            }
+
+            it("should not pass for object declaration even with suppress on the object") {
+                val ktFile = compileContentForTest("""@Suppress("MatchingDeclarationName") object O""")
+                ktFile.name = "Objects.kt"
+                val findings = MatchingDeclarationName().lint(ktFile)
+                assertThat(findings).hasLocationStrings(
+                    """'@Suppress("MatchingDeclarationName") object O' at (1,1) in /Objects.kt""")
             }
 
             it("should not pass for class declaration") {
