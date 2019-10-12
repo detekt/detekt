@@ -20,6 +20,14 @@ class EnumNamingSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
+        it("enum name that start with lowercase") {
+            val code = """
+                enum class WorkFlow {
+                    default
+                }"""
+            assertThat(NamingRules().compileAndLint(code)).hasSize(1)
+        }
+
         it("reports an underscore in enum name") {
             val code = """
                 enum class WorkFlow {
