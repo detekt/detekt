@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style.optional
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
@@ -23,7 +24,11 @@ class OptionalUnitSpec : Spek({
 
                 fun returnsUnit2() = Unit
             """
-            val findings = subject.compileAndLint(code)
+            lateinit var findings: List<Finding>
+
+            beforeEachTest {
+                findings = subject.compileAndLint(code)
+            }
 
             it("should report functions returning Unit") {
                 assertThat(findings).hasSize(3)
@@ -70,7 +75,11 @@ class OptionalUnitSpec : Spek({
                     }
                 }
             """
-            val findings = subject.compileAndLint(code)
+            lateinit var findings: List<Finding>
+
+            beforeEachTest {
+                findings = subject.compileAndLint(code)
+            }
 
             it("should report lone Unit statement") {
                 assertThat(findings).hasSize(4)

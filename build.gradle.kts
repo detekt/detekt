@@ -141,6 +141,7 @@ subprojects {
 
     tasks.withType<Test>().configureEach {
         useJUnitPlatform()
+        systemProperty("SPEK_TIMEOUT", 0) // disable test timeout
         testLogging {
             // set options for log level LIFECYCLE
             events = setOf(
