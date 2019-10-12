@@ -14,7 +14,7 @@ import org.jetbrains.kotlin.psi.KtEnumEntry
 /**
  * Reports when enum names which do not follow the specified naming convention are used.
  *
- * @configuration enumEntryPattern - naming pattern (default: `'[A-Z][_a-zA-Z0-9]*'`)
+ * @configuration enumEntryPattern - naming pattern (default: `'[A-Z][A-Za-z0-9]*|[A-Z][_A-Z0-9]*'`)
  * @active since v1.0.0
  */
 class EnumNaming(config: Config = Config.empty) : Rule(config) {
@@ -24,7 +24,7 @@ class EnumNaming(config: Config = Config.empty) : Rule(config) {
             "Enum names should follow the naming convention set in the projects configuration.",
             debt = Debt.FIVE_MINS)
 
-    private val enumEntryPattern by LazyRegex(ENUM_PATTERN, "[A-Z][_a-zA-Z0-9]*")
+    private val enumEntryPattern by LazyRegex(ENUM_PATTERN, "[A-Z][A-Za-z0-9]*|[A-Z][_A-Z0-9]*")
 
     override fun visitEnumEntry(enumEntry: KtEnumEntry) {
         if (!enumEntry.identifierName().matches(enumEntryPattern)) {
