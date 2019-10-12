@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.lint
-import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -42,10 +42,9 @@ class TopLevelPropertyNamingSpec : Spek({
                 val serialVersionUID = 42L
                 val MY_NAME = "Artur"
                 val MYNAME = "Artur"
-                val MyNAME = "Artur"
                 private val NAME = "Artur"
-                val s_d_d_1 = listOf("")
                 private val INTERNAL_VERSION = "1.0.0"
+                private val _INTERNAL_VERSION = "1.0.0"
             """)
             assertThat(subject.lint(code)).hasSize(0)
         }
@@ -61,7 +60,35 @@ class TopLevelPropertyNamingSpec : Spek({
             val code = compileContentForTest("""
                 private val __NAME = "Artur"
             """)
-            io.gitlab.arturbosch.detekt.test.assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(1)
+        }
+
+        it("should report top level property using lowercases and underscores") {
+            val code = compileContentForTest("""
+                val s_d_d_1 = listOf("")
+            """)
+            assertThat(subject.lint(code)).hasSize(1)
+        }
+
+        it("should report private top level property using lowercases and underscores") {
+            val code = compileContentForTest("""
+                private val s_d_d_1 = listOf("")
+            """)
+            assertThat(subject.lint(code)).hasSize(1)
+        }
+
+        it("should report top level property starting with upercase and then using lowercases") {
+            val code = compileContentForTest("""
+                val MyNAME = "Artur"
+            """)
+            assertThat(subject.lint(code)).hasSize(1)
+        }
+
+        it("should report private top level property starting with upercase and then using lowercases") {
+            val code = compileContentForTest("""
+                private val MyNAME = "Artur"
+            """)
+            assertThat(subject.lint(code)).hasSize(1)
         }
     }
 })

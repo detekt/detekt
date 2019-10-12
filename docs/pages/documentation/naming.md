@@ -54,7 +54,7 @@ Reports when enum names which do not follow the specified naming convention are 
 
 #### Configuration options:
 
-* `enumEntryPattern` (default: `'^[A-Z][_a-zA-Z0-9]*'`)
+* `enumEntryPattern` (default: `'[A-Z][A-Za-z0-9]*|[A-Z][_A-Z0-9]*'`)
 
    naming pattern
 
@@ -255,15 +255,15 @@ Reports when property names inside objects which do not follow the specified nam
 
 #### Configuration options:
 
-* `constantPattern` (default: `'[A-Za-z][_A-Za-z0-9]*'`)
+* `constantPattern` (default: `'[a-z][A-Za-z0-9]*|[A-Z][_A-Z0-9]*'`)
 
    naming pattern
 
-* `propertyPattern` (default: `'[A-Za-z][_A-Za-z0-9]*'`)
+* `propertyPattern` (default: `'[a-z][A-Za-z0-9]*|[A-Z][_A-Z0-9]*'`)
 
    naming pattern
 
-* `privatePropertyPattern` (default: `'(_)?[A-Za-z][_A-Za-z0-9]*'`)
+* `privatePropertyPattern` (default: `'_?[a-z][A-Za-z0-9]*|_?[A-Z][_A-Z0-9]*'`)
 
    naming pattern
 
@@ -295,11 +295,11 @@ Reports when top level constant names which do not follow the specified naming c
 
    naming pattern
 
-* `propertyPattern` (default: `'[A-Za-z][_A-Za-z0-9]*'`)
+* `propertyPattern` (default: `'[a-z][A-Za-z0-9]*|[A-Z][_A-Z0-9]*'`)
 
    naming pattern
 
-* `privatePropertyPattern` (default: `'_?[A-Za-z][_A-Za-z0-9]*'`)
+* `privatePropertyPattern` (default: `'_?[a-z][A-Za-z0-9]*|_?[A-Z][_A-Z0-9]*'`)
 
    naming pattern
 

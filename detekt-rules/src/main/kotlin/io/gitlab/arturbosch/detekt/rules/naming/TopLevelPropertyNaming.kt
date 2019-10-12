@@ -17,8 +17,8 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * Reports when top level constant names which do not follow the specified naming convention are used.
  *
  * @configuration constantPattern - naming pattern (default: `'[A-Z][_A-Z0-9]*'`)
- * @configuration propertyPattern - naming pattern (default: `'[A-Za-z][_A-Za-z0-9]*'`)
- * @configuration privatePropertyPattern - naming pattern (default: `'_?[A-Za-z][_A-Za-z0-9]*'`)
+ * @configuration propertyPattern - naming pattern (default: `'[a-z][A-Za-z0-9]*|[A-Z][_A-Z0-9]*'`)
+ * @configuration privatePropertyPattern - naming pattern (default: `'_?[a-z][A-Za-z0-9]*|_?[A-Z][_A-Z0-9]*'`)
  *
  * @active since v1.0.0
  */
@@ -30,8 +30,8 @@ class TopLevelPropertyNaming(config: Config = Config.empty) : Rule(config) {
             debt = Debt.FIVE_MINS)
 
     private val constantPattern by LazyRegex(CONSTANT_PATTERN, "[A-Z][_A-Z0-9]*")
-    private val propertyPattern by LazyRegex(PROPERTY_PATTERN, "[A-Za-z][_A-Za-z0-9]*")
-    private val privatePropertyPattern by LazyRegex(PRIVATE_PROPERTY_PATTERN, "_?[A-Za-z][_A-Za-z0-9]*")
+    private val propertyPattern by LazyRegex(PROPERTY_PATTERN, "[a-z][A-Za-z0-9]*|[A-Z][_A-Z0-9]*")
+    private val privatePropertyPattern by LazyRegex(PRIVATE_PROPERTY_PATTERN, "_?[a-z][A-Za-z0-9]*|_?[A-Z][_A-Z0-9]*")
 
     override fun visitProperty(property: KtProperty) {
         if (property.isConstant()) {

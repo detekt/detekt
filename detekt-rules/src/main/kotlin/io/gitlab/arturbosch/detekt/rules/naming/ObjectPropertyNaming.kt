@@ -16,9 +16,9 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 /**
  * Reports when property names inside objects which do not follow the specified naming convention are used.
  *
- * @configuration constantPattern - naming pattern (default: `'[A-Za-z][_A-Za-z0-9]*'`)
- * @configuration propertyPattern - naming pattern (default: `'[A-Za-z][_A-Za-z0-9]*'`)
- * @configuration privatePropertyPattern - naming pattern (default: `'(_)?[A-Za-z][_A-Za-z0-9]*'`)
+ * @configuration constantPattern - naming pattern (default: `'[a-z][A-Za-z0-9]*|[A-Z][_A-Z0-9]*'`)
+ * @configuration propertyPattern - naming pattern (default: `'[a-z][A-Za-z0-9]*|[A-Z][_A-Z0-9]*'`)
+ * @configuration privatePropertyPattern - naming pattern (default: `'_?[a-z][A-Za-z0-9]*|_?[A-Z][_A-Z0-9]*'`)
  * @active since v1.0.0
  */
 class ObjectPropertyNaming(config: Config = Config.empty) : Rule(config) {
@@ -28,9 +28,9 @@ class ObjectPropertyNaming(config: Config = Config.empty) : Rule(config) {
             "Property names inside objects should follow the naming convention set in the projects configuration.",
             debt = Debt.FIVE_MINS)
 
-    private val constantPattern by LazyRegex(CONSTANT_PATTERN, "[A-Za-z][_A-Za-z0-9]*")
-    private val propertyPattern by LazyRegex(PROPERTY_PATTERN, "[A-Za-z][_A-Za-z0-9]*")
-    private val privatePropertyPattern by LazyRegex(PRIVATE_PROPERTY_PATTERN, "(_)?[A-Za-z][_A-Za-z0-9]*")
+    private val constantPattern by LazyRegex(CONSTANT_PATTERN, "[a-z][A-Za-z0-9]*|[A-Z][_A-Z0-9]*")
+    private val propertyPattern by LazyRegex(PROPERTY_PATTERN, "[a-z][A-Za-z0-9]*|[A-Z][_A-Z0-9]*")
+    private val privatePropertyPattern by LazyRegex(PRIVATE_PROPERTY_PATTERN, "_?[a-z][A-Za-z0-9]*|_?[A-Z][_A-Z0-9]*")
 
     override fun visitProperty(property: KtProperty) {
         if (property.isLocal) {

@@ -157,13 +157,26 @@ class ObjectPropertyNamingSpec : Spek({
             assertThat(subject.lint(code)).isEmpty()
         }
 
+        it("should detect variables not complying to the naming rules") {
+            val code = compileContentForTest("""
+                object O {
+                    val MyNAME = "Artur"
+                    val n_a_m_e = "Artur"
+                }
+            """)
+            assertThat(subject.lint(code)).hasSize(2)
+        }
+
         it("should detect private variables not complying to the naming rules") {
             val code = compileContentForTest("""
                 object O {
                     private val __NAME = "Artur"
+                    private val MyNAME = "Artur"
+                    private val n_a_m_e = "Artur"
+                    private val _MY_NAME = "Artur"
                 }
             """)
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.lint(code)).hasSize(3)
         }
     }
 
@@ -221,7 +234,6 @@ abstract class NamingSnippet(private val isPrivate: Boolean, private val isConst
     val negative = """
                     ${visibility()}${const()}val MY_NAME_8 = "Artur"
                     ${visibility()}${const()}val MYNAME = "Artur"
-                    ${visibility()}${const()}val MyNAME = "Artur"
                     ${visibility()}${const()}val name = "Artur"
                     ${visibility()}${const()}val nAme = "Artur"
                     ${visibility()}${const()}val serialVersionUID = 42L"""
