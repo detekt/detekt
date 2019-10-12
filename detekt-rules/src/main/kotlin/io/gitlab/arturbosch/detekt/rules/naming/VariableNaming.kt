@@ -49,19 +49,20 @@ class VariableNaming(config: Config = Config.empty) : Rule(config) {
         val identifier = property.identifierName()
         if (property.isPrivate()) {
             if (!identifier.matches(privateVariablePattern)) {
-                report(CodeSmell(
-                        issue,
-                        Entity.from(property),
-                        message = "Private variable names should match the pattern: $privateVariablePattern"))
+                report(property, "Private variable names should match the pattern: $privateVariablePattern")
             }
         } else {
             if (!identifier.matches(variablePattern)) {
-                report(CodeSmell(
-                        issue,
-                        Entity.from(property),
-                        message = "Variable names should match the pattern: $variablePattern"))
+                report(property, "Variable names should match the pattern: $variablePattern")
             }
         }
+    }
+
+    private fun report(property: KtProperty, message: String) {
+        report(CodeSmell(
+            issue,
+            Entity.from(property),
+            message = message))
     }
 
     companion object {
