@@ -285,6 +285,11 @@ formatting:
     active: true
     autoCorrect: true
 
+junit:
+  active: false
+  TestWithoutAssertion:
+    active: false
+
 naming:
   active: true
   ClassNaming:
