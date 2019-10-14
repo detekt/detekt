@@ -50,7 +50,7 @@ It should end with proper punctuation or with a correct URL.
 
 #### Configuration options:
 
-* `endOfSentenceFormat` (default: `([.?!][ \t\n\r\f<])|([.?!:]$)`)
+* ``endOfSentenceFormat`` (default: ``([.?!][ \t\n\r\f<])|([.?!:]$)``)
 
    regular expression which should match the end of the first sentence in the KDoc
 
@@ -68,19 +68,19 @@ with the configuration options of this rule.
 
 #### Configuration options:
 
-* `searchInNestedClass` (default: `true`)
+* ``searchInNestedClass`` (default: ``true``)
 
    if nested classes should be searched
 
-* `searchInInnerClass` (default: `true`)
+* ``searchInInnerClass`` (default: ``true``)
 
    if inner classes should be searched
 
-* `searchInInnerObject` (default: `true`)
+* ``searchInInnerObject`` (default: ``true``)
 
    if inner objects should be searched
 
-* `searchInInnerInterface` (default: `true`)
+* ``searchInInnerInterface`` (default: ``true``)
 
    if inner interfaces should be searched
 

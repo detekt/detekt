@@ -20,7 +20,7 @@ and call those instead.
 
 #### Configuration options:
 
-* `threshold` (default: `4`)
+* ``threshold`` (default: ``4``)
 
    the number of conditions which will trigger the rule
 
@@ -59,11 +59,11 @@ to understand and implement.
 
 #### Configuration options:
 
-* `threshold` (default: `10`)
+* ``threshold`` (default: ``10``)
 
    the amount of definitions in an interface to trigger the rule
 
-* `includeStaticDeclarations` (default: `false`)
+* ``includeStaticDeclarations`` (default: ``false``)
 
    whether static declarations should be included
 
@@ -91,15 +91,15 @@ Each one of them adds one to the complexity count.
 
 #### Configuration options:
 
-* `threshold` (default: `10`)
+* ``threshold`` (default: ``10``)
 
    McCabe's Cyclomatic Complexity (MCC) number for a method
 
-* `ignoreSingleWhenExpression` (default: `false`)
+* ``ignoreSingleWhenExpression`` (default: ``false``)
 
    Ignores a complex method if it only contains a single when expression.
 
-* `ignoreSimpleWhenEntries` (default: `false`)
+* ``ignoreSimpleWhenEntries`` (default: ``false``)
 
    Whether to ignore simple (braceless) when entries.
 
@@ -116,7 +116,7 @@ way to get the instance of an outer class from an inner class in Kotlin.
 
 #### Configuration options:
 
-* `ignoredLabels` (default: `""`)
+* ``ignoredLabels`` (default: ``""``)
 
    allows to provide a list of label names which should be ignored by this rule
 
@@ -172,7 +172,7 @@ things.
 
 #### Configuration options:
 
-* `threshold` (default: `600`)
+* ``threshold`` (default: ``600``)
 
    the size of class required to trigger the rule
 
@@ -189,7 +189,7 @@ Extract parts of the functionality of long methods into separate, smaller method
 
 #### Configuration options:
 
-* `threshold` (default: `60`)
+* ``threshold`` (default: ``60``)
 
    number of lines in a method to trigger the rule
 
@@ -203,11 +203,11 @@ Reports functions which have more parameters than a certain threshold (default: 
 
 #### Configuration options:
 
-* `threshold` (default: `6`)
+* ``threshold`` (default: ``6``)
 
    number of parameters required to trigger the rule
 
-* `ignoreDefaultParameters` (default: `false`)
+* ``ignoreDefaultParameters`` (default: ``false``)
 
    ignore parameters that have a default value
 
@@ -224,7 +224,7 @@ Refactor these methods and try to use optional parameters instead to prevent som
 
 #### Configuration options:
 
-* `threshold` (default: `6`)
+* ``threshold`` (default: ``6``)
 
    number of overloads which will trigger the rule
 
@@ -241,7 +241,7 @@ Prefer extracting the nested code into well-named functions to make it easier to
 
 #### Configuration options:
 
-* `threshold` (default: `4`)
+* ``threshold`` (default: ``4``)
 
    the nested depth required to trigger rule
 
@@ -258,19 +258,19 @@ Instead, prefer extracting the String literal into a property or constant.
 
 #### Configuration options:
 
-* `threshold` (default: `3`)
+* ``threshold`` (default: ``3``)
 
    amount of duplications to trigger rule
 
-* `ignoreAnnotation` (default: `true`)
+* ``ignoreAnnotation`` (default: ``true``)
 
    if values in Annotations should be ignored
 
-* `excludeStringsWithLessThan5Characters` (default: `true`)
+* ``excludeStringsWithLessThan5Characters`` (default: ``true``)
 
    if short strings should be excluded
 
-* `ignoreStringsRegex` (default: `'$^'`)
+* ``ignoreStringsRegex`` (default: ``'$^'``)
 
    RegEx of Strings that should be ignored
 
@@ -312,34 +312,34 @@ which clearly belongs together in separate parts of the code.
 
 #### Configuration options:
 
-* `thresholdInFiles` (default: `11`)
+* ``thresholdInFiles`` (default: ``11``)
 
    threshold in files
 
-* `thresholdInClasses` (default: `11`)
+* ``thresholdInClasses`` (default: ``11``)
 
    threshold in classes
 
-* `thresholdInInterfaces` (default: `11`)
+* ``thresholdInInterfaces`` (default: ``11``)
 
    threshold in interfaces
 
-* `thresholdInObjects` (default: `11`)
+* ``thresholdInObjects`` (default: ``11``)
 
    threshold in objects
 
-* `thresholdInEnums` (default: `11`)
+* ``thresholdInEnums`` (default: ``11``)
 
    threshold in enums
 
-* `ignoreDeprecated` (default: `false`)
+* ``ignoreDeprecated`` (default: ``false``)
 
    ignore deprecated functions
 
-* `ignorePrivate` (default: `false`)
+* ``ignorePrivate`` (default: ``false``)
 
    ignore private functions
 
-* `ignoreOverridden` (default: `false`)
+* ``ignoreOverridden`` (default: ``false``)
 
    ignore overridden functions
