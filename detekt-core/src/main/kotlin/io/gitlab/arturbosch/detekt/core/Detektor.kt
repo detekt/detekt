@@ -80,5 +80,5 @@ class Detektor(
         "Analyzing '${file.absolutePath()}' led to an exception.\n" +
             "The original exception message was: ${error.localizedMessage}\n" +
             "Running detekt '${whichDetekt()}' on Java '${whichJava()}' on OS '${whichOS()}'.\n" +
-            "If the exception message does not help, please feel free to create an issue on our github page."
+            "If the exception message does not help, please feel free to create an issue on our GitHub page."
 }
