@@ -109,8 +109,11 @@ internal class SuppressionSpec : Spek({
         val config = yamlConfig("ruleset-suppression.yml").subConfig("complexity")
 
         it("reports without a suppression") {
-            val findings = TestLPL(config).lint(code)
-            assertThat(findings).isNotEmpty()
+            assertThat(TestLPL(config).lint(code)).isNotEmpty()
+        }
+
+        it("reports with wrong suppression") {
+            assertThat(TestLPL(config).lint("""@Suppress("wrong_name_used")$code""")).isNotEmpty()
         }
 
         fun assertCodeIsSuppressed(code: String) {
@@ -136,6 +139,24 @@ internal class SuppressionSpec : Spek({
 
         it("suppresses by combination of detekt prefix, rule set and rule id") {
             assertCodeIsSuppressed("""@Suppress("detekt:complexity:LongParameterList")$code""")
+        }
+
+        context("MultiRule") {
+            class ThisMultiRule : MultiRule() {
+                override val rules: List<Rule> = listOf(TestLPL(config))
+            }
+
+            it("is suppressed by rule id") {
+                assertThat(ThisMultiRule().lint("""@Suppress("complexity")$code""")).isEmpty()
+            }
+
+            it("is suppressed by rule id") {
+                assertThat(ThisMultiRule().lint("""@Suppress("LongParameterList")$code""")).isEmpty()
+            }
+
+            it("is suppressed by combination of detekt.ruleSetId.ruleId") {
+                assertThat(ThisMultiRule().lint("""@Suppress("detekt.complexity.LongParameterList")$code""")).isEmpty()
+            }
         }
     }
 })
