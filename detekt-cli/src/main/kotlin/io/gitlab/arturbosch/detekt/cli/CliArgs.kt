@@ -61,7 +61,7 @@ class CliArgs : Args {
         names = ["--parallel"],
         description = "Enables parallel compilation and analysis of source files." +
             " Do some benchmarks first before enabling this flag." +
-            " Heuristics show performance benefits starting from 2000 lines of kotlin code."
+            " Heuristics show performance benefits starting from 2000 lines of Kotlin code."
     )
     var parallel: Boolean = false
 
