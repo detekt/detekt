@@ -3,11 +3,11 @@ package cases
 import org.jetbrains.kotlin.utils.sure
 
 @Suppress("unused")
-class ComplexClass {// McCabe: 56, LLOC: 20 + 20 + 4x4
+class ComplexClass {// McCabe: 44, LLOC: 20 + 20 + 4x4
 
-    class NestedClass { //20
+    class NestedClass { //14
         fun complex() { //1 +
-            try {//5
+            try {//4
                 while (true) {
                     if (true) {
                         when ("string") {
@@ -16,7 +16,7 @@ class ComplexClass {// McCabe: 56, LLOC: 20 + 20 + 4x4
                         }
                     }
                 }
-            } catch (ex: Exception) { //1 + 5
+            } catch (ex: Exception) { //1 + 3
                 try {
                     println()
                 } catch (ex: Exception) {
@@ -28,7 +28,7 @@ class ComplexClass {// McCabe: 56, LLOC: 20 + 20 + 4x4
                         }
                     }
                 }
-            } finally { // 6
+            } finally { // 3
                 try {
                     println()
                 } catch (ex: Exception) {
@@ -52,7 +52,7 @@ class ComplexClass {// McCabe: 56, LLOC: 20 + 20 + 4x4
     }
 
     fun complex() { //1 +
-        try {//5
+        try {//4
             while (true) {
                 if (true) {
                     when ("string") {
@@ -61,7 +61,7 @@ class ComplexClass {// McCabe: 56, LLOC: 20 + 20 + 4x4
                     }
                 }
             }
-        } catch (ex: Exception) { //1 + 5
+        } catch (ex: Exception) { //1 + 3
             try {
                 println()
             } catch (ex: Exception) {
@@ -73,7 +73,7 @@ class ComplexClass {// McCabe: 56, LLOC: 20 + 20 + 4x4
                     }
                 }
             }
-        } finally { // 6
+        } finally { // 3
             try {
                 println()
             } catch (ex: Exception) {
