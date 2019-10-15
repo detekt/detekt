@@ -117,7 +117,7 @@ class StyleGuideProvider : RuleSetProvider {
                 UnderscoresInNumericLiterals(config),
                 UseRequire(config),
                 UseCheckOrError(config),
-                UseIfInsteadOfWhen(),
+                UseIfInsteadOfWhen(config),
                 RedundantExplicitType(config),
                 LibraryCodeMustSpecifyReturnType(config),
                 UseArrayLiteralsInAnnotations(config)

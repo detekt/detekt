@@ -1,15 +1,18 @@
 package io.gitlab.arturbosch.detekt.api.internal
 
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
+import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtLoopExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectLiteralExpression
+import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
 import org.jetbrains.kotlin.psi.KtTryExpression
 import org.jetbrains.kotlin.psi.KtWhenEntry
 import org.jetbrains.kotlin.psi.KtWhenExpression
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
@@ -19,9 +22,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 class McCabeVisitor(private val ignoreSimpleWhenEntries: Boolean) : DetektVisitor() {
 
     var mcc: Int = 0
-        private set(value) {
-            field = value
-        }
+        private set
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (!isInsideObjectLiteral(function)) {
@@ -35,8 +36,11 @@ class McCabeVisitor(private val ignoreSimpleWhenEntries: Boolean) : DetektVisito
 
     override fun visitIfExpression(expression: KtIfExpression) {
         mcc++
-        if (expression.`else` != null) {
-            mcc++
+        val condition = expression.condition
+        if (condition != null) {
+            mcc += condition
+                .collectDescendantsOfType<KtOperationReferenceExpression>()
+                .count { it.operationSignTokenType == KtTokens.ANDAND || it.operationSignTokenType == KtTokens.OROR }
         }
         super.visitIfExpression(expression)
     }
@@ -58,12 +62,7 @@ class McCabeVisitor(private val ignoreSimpleWhenEntries: Boolean) : DetektVisito
     }
 
     override fun visitTryExpression(expression: KtTryExpression) {
-        mcc++
         mcc += expression.catchClauses.size
-        expression.finallyBlock?.let {
-            mcc++
-            Unit
-        }
         super.visitTryExpression(expression)
     }
 

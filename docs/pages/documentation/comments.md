@@ -88,6 +88,17 @@ with the configuration options of this rule.
 
 This rule will report any public function which does not have the required documentation.
 If the codebase should have documentation on all public functions enable this rule to enforce this.
+Overridden functions are excluded by this rule.
+
+**Severity**: Maintainability
+
+**Debt**: 20min
+
+### UndocumentedPublicProperty
+
+This rule will report any public property which does not have the required documentation.
+If the codebase should have documentation on all public properties enable this rule to enforce this.
+Overridden functions are excluded by this rule.
 
 **Severity**: Maintainability
 

@@ -40,6 +40,7 @@ internal class MultiRuleSpec : Spek({
     }
 })
 
+@Suppress("UnusedPrivateClass") // bug: doesn't resolve usage as generic type
 private class MultiRuleProvider : RuleSetProvider {
     override val ruleSetId: String = "TestMultiRule"
     override fun instance(config: Config): RuleSet = RuleSet(ruleSetId, listOf(TestMultiRule(config)))

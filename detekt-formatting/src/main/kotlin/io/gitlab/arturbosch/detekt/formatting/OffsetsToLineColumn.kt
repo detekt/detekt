@@ -15,7 +15,7 @@ internal fun calculateLineColByOffset(text: String): (offset: Int) -> Pair<Int, 
         i = text.indexOf('\n', i + 1)
     } while (i != -1)
     arr.add(e + if (arr.last() == e) 1 else 0)
-    val segmentTree = SegmentTree(arr.toTypedArray())
+    val segmentTree = SegmentTree(arr.toIntArray())
     return { offset ->
         val line = segmentTree.indexOf(offset)
         if (line != -1) {
@@ -36,13 +36,13 @@ internal fun calculateLineBreakOffset(fileContent: String): (offset: Int) -> Int
     } while (i != -1)
     arr.add(fileContent.length)
     return if (arr.size != 2) {
-        SegmentTree(arr.toTypedArray()).let { return { offset -> it.indexOf(offset) } }
+        SegmentTree(arr.toIntArray()).let { return { offset -> it.indexOf(offset) } }
     } else { _ ->
         0
     }
 }
 
-internal class SegmentTree(sortedArray: Array<Int>) {
+internal class SegmentTree(sortedArray: IntArray) {
 
     private val segments: List<Segment>
 

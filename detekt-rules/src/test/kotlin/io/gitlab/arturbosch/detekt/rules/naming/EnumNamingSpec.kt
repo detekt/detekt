@@ -27,5 +27,16 @@ class EnumNamingSpec : Spek({
                 }"""
             assertThat(NamingRules().compileAndLint(code)).hasSize(1)
         }
+
+        it("reports the correct text location in enum name") {
+            val code = """
+                enum class WorkFlow {
+                    _Default,
+                }"""
+            val findings = NamingRules().compileAndLint(code)
+            val source = findings.first().location.text
+            assertThat(source.start).isEqualTo(26)
+            assertThat(source.end).isEqualTo(34)
+        }
     }
 })

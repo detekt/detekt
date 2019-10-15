@@ -100,7 +100,6 @@ class ReturnFromFinallySpec : Spek({
                 val findings = ReturnFromFinally(config).compileAndLint(code)
                 assertThat(findings).isEmpty()
             }
-
         }
     }
 })

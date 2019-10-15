@@ -33,33 +33,33 @@ class HtmlOutputFormatTest : Spek({
         it("testRenderResultContainsFileLocations") {
             val result = outputFormat.render(createTestDetektionWithMultipleSmells())
 
-            assertThat(result).contains("<span class=\"location\">\nsrc/main/com/sample/Sample1.kt:11:1\n</span>")
-            assertThat(result).contains("<span class=\"location\">\nsrc/main/com/sample/Sample2.kt:22:2\n</span>")
-            assertThat(result).contains("<span class=\"location\">\nsrc/main/com/sample/Sample3.kt:33:3\n</span>")
+            assertThat(result).contains("<span class=\"location\">src/main/com/sample/Sample1.kt:11:1</span>")
+            assertThat(result).contains("<span class=\"location\">src/main/com/sample/Sample2.kt:22:2</span>")
+            assertThat(result).contains("<span class=\"location\">src/main/com/sample/Sample3.kt:33:3</span>")
         }
 
         it("testRenderResultContainsRules") {
             val result = outputFormat.render(createTestDetektionWithMultipleSmells())
 
-            assertThat(result).contains("<span class=\"rule\">\nid_a\n</span>")
-            assertThat(result).contains("<span class=\"rule\">\nid_a\n</span>")
-            assertThat(result).contains("<span class=\"rule\">\nid_a\n</span>")
+            assertThat(result).contains("<span class=\"rule\">id_a </span>")
+            assertThat(result).contains("<span class=\"rule\">id_b </span>")
+            assertThat(result).contains("<span class=\"rule\">id_c </span>")
         }
 
         it("testRenderResultContainsMessages") {
             val result = outputFormat.render(createTestDetektionWithMultipleSmells())
 
-            assertThat(result).contains("<span class=\"message\">\nB1\n</span>")
-            assertThat(result).contains("<span class=\"message\">\nB2\n</span>")
-            assertThat(result).contains("<span class=\"message\">\nB3\n</span>")
+            assertThat(result).contains("<span class=\"message\">B1</span>")
+            assertThat(result).contains("<span class=\"message\">B2</span>")
+            assertThat(result).contains("<span class=\"message\">B3</span>")
         }
 
         it("testRenderResultContainsDescriptions") {
             val result = outputFormat.render(createTestDetektionWithMultipleSmells())
 
-            assertThat(result).contains("<span class=\"description\">\nA1\n</span>")
-            assertThat(result).contains("<span class=\"description\">\nA2\n</span>")
-            assertThat(result).contains("<span class=\"description\">\nA3\n</span>")
+            assertThat(result).contains("<span class=\"description\">A1</span>")
+            assertThat(result).contains("<span class=\"description\">A2</span>")
+            assertThat(result).contains("<span class=\"description\">A3</span>")
         }
     }
 })

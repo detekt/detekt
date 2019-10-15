@@ -80,6 +80,5 @@ class ForbiddenImportSpec : Spek({
                 ForbiddenImport(TestConfig(mapOf(ForbiddenImport.FORBIDDEN_PATTERNS to "net.*R|com.*expiremental"))).lint(code)
             assertThat(findings).hasSize(2)
         }
-
     }
 })

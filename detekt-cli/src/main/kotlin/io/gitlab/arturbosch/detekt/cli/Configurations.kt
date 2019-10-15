@@ -17,6 +17,7 @@ fun CliArgs.createClasspath(): List<String> = classpath.letIfNonEmpty { split(";
 private fun <T> String?.letIfNonEmpty(init: String.() -> List<T>): List<T> =
     if (this == null || this.isEmpty()) listOf() else this.init()
 
+@Suppress("UnsafeCallOnNullableType")
 fun CliArgs.loadConfiguration(): Config {
     var declaredConfig: Config? = when {
         !config.isNullOrBlank() -> parsePathConfig(config!!)

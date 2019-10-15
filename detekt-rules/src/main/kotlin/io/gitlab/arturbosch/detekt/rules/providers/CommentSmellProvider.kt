@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.rules.documentation.CommentOverPrivatePropert
 import io.gitlab.arturbosch.detekt.rules.documentation.KDocStyle
 import io.gitlab.arturbosch.detekt.rules.documentation.UndocumentedPublicClass
 import io.gitlab.arturbosch.detekt.rules.documentation.UndocumentedPublicFunction
+import io.gitlab.arturbosch.detekt.rules.documentation.UndocumentedPublicProperty
 
 /**
  * This rule set provides rules that address issues in comments and documentation
@@ -25,7 +26,8 @@ class CommentSmellProvider : RuleSetProvider {
                 CommentOverPrivateProperty(config),
                 KDocStyle(config),
                 UndocumentedPublicClass(config),
-                UndocumentedPublicFunction(config)
+                UndocumentedPublicFunction(config),
+                UndocumentedPublicProperty(config)
         ))
     }
 }

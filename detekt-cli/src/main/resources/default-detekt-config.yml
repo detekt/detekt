@@ -44,6 +44,8 @@ comments:
     searchInInnerInterface: true
   UndocumentedPublicFunction:
     active: false
+  UndocumentedPublicProperty:
+    active: false
 
 complexity:
   active: true

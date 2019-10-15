@@ -19,7 +19,7 @@ plugins {
 }
 
 group = "io.gitlab.arturbosch.detekt"
-version = "1.1.0"
+version = "1.1.1"
 
 val spekVersion = "2.0.2"
 val junitPlatformVersion = "1.4.1"
@@ -100,6 +100,7 @@ val generateDefaultDetektVersionFile by tasks.registering {
             package io.gitlab.arturbosch.detekt
 
             internal const val DEFAULT_DETEKT_VERSION = "$version"
+
             """.trimIndent()
         )
     }

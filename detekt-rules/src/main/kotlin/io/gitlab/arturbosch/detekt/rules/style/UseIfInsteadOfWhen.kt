@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
@@ -24,7 +25,7 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  * if (x == null) true else false
  * </compliant>
  */
-class UseIfInsteadOfWhen : Rule() {
+class UseIfInsteadOfWhen(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue("UseIfInsteadOfWhen",
             Severity.Style,

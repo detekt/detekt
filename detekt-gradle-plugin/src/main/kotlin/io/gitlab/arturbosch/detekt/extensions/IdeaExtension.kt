@@ -6,6 +6,7 @@ import org.gradle.api.tasks.OutputDirectory
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
 
+@Suppress("UnsafeCallOnNullableType")
 open class IdeaExtension {
 
     @get:InputFile
