@@ -60,6 +60,7 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
         root.forEachDescendantOfType<KtClass> { visitKlass(it, annotationExcluder) }
     }
 
+    @Suppress("ComplexMethod")
     private fun visitKlass(klass: KtClass, annotationExcluder: AnnotationExcluder) {
         if (isIncorrectClassType(klass) || hasOnlyPrivateConstructors(klass)) {
             return

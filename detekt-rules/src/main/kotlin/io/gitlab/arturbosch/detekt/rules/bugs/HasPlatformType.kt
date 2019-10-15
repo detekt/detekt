@@ -59,7 +59,7 @@ class HasPlatformType(config: Config) : Rule(config) {
         }
     }
 
-    @Suppress("ReturnCount")
+    @Suppress("ReturnCount", "ComplexMethod")
     private fun KtCallableDeclaration.hasImplicitPlatformType(): Boolean {
         when (this) {
             is KtFunction -> if (isLocal || hasDeclaredReturnType()) return false
