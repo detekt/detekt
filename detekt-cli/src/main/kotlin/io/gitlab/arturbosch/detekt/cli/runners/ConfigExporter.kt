@@ -8,7 +8,7 @@ import java.io.File
 class ConfigExporter(private val arguments: CliArgs) : Executable {
 
     override fun execute() {
-        val configPath = if (arguments.config != null) arguments.config!! else DEFAULT_CONFIG
+        val configPath = arguments.config ?: DEFAULT_CONFIG
         val defaultConfig = ClasspathResourceConverter().convert(DEFAULT_CONFIG).openStream()
         defaultConfig.copyTo(File(configPath).outputStream())
         println("Successfully copied default config to ${File(configPath).absolutePath}")

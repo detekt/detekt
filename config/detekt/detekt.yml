@@ -59,25 +59,57 @@ formatting:
     active: false
 
 naming:
+  MemberNameEqualsClassName:
+    active: true
   VariableNaming:
     active: true
     variablePattern: '[a-z][A-Za-z0-9]*'
     privateVariablePattern: '(_)?[a-z][A-Za-z0-9]*'
     excludeClassPattern: '$^'
 
+performance:
+  ArrayPrimitive:
+    active: true
+
 potential-bugs:
+  EqualsAlwaysReturnsTrueOrFalse:
+    active: true
+  InvalidRange:
+    active: true
+  IteratorHasNextCallsNextMethod:
+    active: true
+  IteratorNotThrowingNoSuchElementException:
+    active: true
+  MissingWhenCase:
+    active: true
+  RedundantElseInWhen:
+    active: true
+  UnsafeCallOnNullableType:
+    active: true
   UnsafeCast:
     active: true
     excludes: "**/test/**,**/*.Test.kt,**/*.Spec.kt"
   UselessPostfixExpression:
     active: true
+  WrongEqualsTypeParameter:
+    active: true
 
 style:
   CollapsibleIfStatements:
     active: true
+  EqualsNullCall:
+    active: true
   ForbiddenComment:
     active: true
     values: 'TODO:,FIXME:,STOPSHIP:,@author'
+  FunctionOnlyReturningConstant:
+    active: true
+  LoopWithTooManyJumpStatements:
+    active: true
+  LibraryCodeMustSpecifyReturnType:
+    active: true
+    excludes: "**/*.kt"
+    includes: "**/detekt-api/src/main/**/api/*.kt"
   MaxLineLength:
     excludes: "**/test/**,**/*.Test.kt,**/*.Spec.kt"
     excludeCommentStatements: true
@@ -86,21 +118,27 @@ style:
     ignorePropertyDeclaration: true
     ignoreAnnotation: true
     ignoreNumbers: '-1,0,1,2,100,1000'
-  NestedClassesVisibility:
-    active: true
   MayBeConst:
     active: true
-  SpacingBetweenPackageAndImports:
+  NestedClassesVisibility:
     active: true
-  UtilityClassWithPublicConstructor:
+  ProtectedMemberInFinalClass:
+    active: true
+  SpacingBetweenPackageAndImports:
     active: true
   VariableNaming:
     active: true
     variablePattern: '(_)?[a-z][a-zA-Z0-9]*'
+  UnnecessaryAbstractClass:
+    active: true
+  UnnecessaryInheritance:
+    active: true
+  UnusedPrivateClass:
+    active: true
   UnusedPrivateMember:
     active: true
     allowedNames: "(_|ignored|expected)"
-  LibraryCodeMustSpecifyReturnType:
+  UselessCallOnNotNull:
     active: true
-    excludes: "**/*.kt"
-    includes: "**/detekt-api/src/main/**/api/*.kt"
+  UtilityClassWithPublicConstructor:
+    active: true
