@@ -38,6 +38,7 @@ class SplitPattern(
         "The name 'equals' should only be used when matching the 'equals contract'.",
         replaceWith = ReplaceWith("any(value)")
     )
+    @Suppress("WrongEqualsTypeParameter")
     fun equals(value: String?): Boolean = excludes.any { value?.equals(it, ignoreCase = true) == true }
 
     /**

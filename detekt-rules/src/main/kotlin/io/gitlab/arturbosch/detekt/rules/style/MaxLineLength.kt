@@ -25,6 +25,7 @@ data class KtFileContent(val file: KtFile, val content: Sequence<String>)
  *
  * @active since v1.0.0
  */
+@Suppress("MemberNameEqualsClassName")
 class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(javaClass.simpleName,
