@@ -19,7 +19,7 @@ Reports empty `catch` blocks. Empty blocks of code serve no purpose and should b
 
 #### Configuration options:
 
-* `allowedExceptionNameRegex` (default: `"^(_|(ignore|expected).*)"`)
+* ``allowedExceptionNameRegex`` (default: ``"^(_|(ignore|expected).*)"``)
 
    ignores exception types which match this regex
 
@@ -86,7 +86,7 @@ functions from the superclass or from an interface (i.e., functions declared wit
 
 #### Configuration options:
 
-* `ignoreOverriddenFunctions` (default: `false`)
+* ``ignoreOverriddenFunctions`` (default: ``false``)
 
    Excludes all the overridden functions
 

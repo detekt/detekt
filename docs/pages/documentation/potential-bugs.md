@@ -258,12 +258,12 @@ guaranteed. Try using constructor injection or delegation to initialize properti
 
 #### Configuration options:
 
-* `excludeAnnotatedProperties` (default: `""`)
+* ``excludeAnnotatedProperties`` (default: ``""``)
 
    Allows you to provide a list of annotations that disable
 this check.
 
-* `ignoreOnClassesPattern` (default: `""`)
+* ``ignoreOnClassesPattern`` (default: ``""``)
 
    Allows you to disable the rule for a list of classes
 

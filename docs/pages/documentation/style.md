@@ -55,7 +55,7 @@ Data classes will automatically have a generated `equals`, `toString` and `hashC
 
 #### Configuration options:
 
-* `conversionFunctionPrefix` (default: `'to'`)
+* ``conversionFunctionPrefix`` (default: ``'to'``)
 
    allowed conversion function names
 
@@ -197,7 +197,7 @@ cleans up the code.
 
 #### Configuration options:
 
-* `includeLineWrapping` (default: `false`)
+* ``includeLineWrapping`` (default: ``false``)
 
    include return statements with line wraps in it
 
@@ -233,11 +233,11 @@ development. Offending code comments will then be reported.
 
 #### Configuration options:
 
-* `values` (default: `'TODO:,FIXME:,STOPSHIP:'`)
+* ``values`` (default: ``'TODO:,FIXME:,STOPSHIP:'``)
 
    forbidden comment strings
 
-* `allowedPatterns` (default: `""`)
+* ``allowedPatterns`` (default: ``""``)
 
    ignores comments which match the specified regular expression.
 For example `Ticket|Task`.
@@ -260,11 +260,11 @@ or deprecated APIs. Detekt will then report all imports that are forbidden.
 
 #### Configuration options:
 
-* `imports` (default: `''`)
+* ``imports`` (default: ``''``)
 
    imports which should not be used
 
-* `forbiddenPatterns` (default: `""`)
+* ``forbiddenPatterns`` (default: ``""``)
 
    reports imports which match the specified regular expression. For example `net.*R`.
 
@@ -289,11 +289,11 @@ and has only one value - the `Unit` object.
 
 #### Configuration options:
 
-* `ignoreOverridden` (default: `false`)
+* ``ignoreOverridden`` (default: ``false``)
 
    ignores void types in signatures of overridden functions
 
-* `ignoreUsageInGenerics` (default: `false`)
+* ``ignoreUsageInGenerics`` (default: ``false``)
 
    ignore void types as generic arguments
 
@@ -322,15 +322,15 @@ as a `const val`.
 
 #### Configuration options:
 
-* `ignoreOverridableFunction` (default: `true`)
+* ``ignoreOverridableFunction`` (default: ``true``)
 
    if overriden functions should be ignored
 
-* `excludedFunctions` (default: `'describeContents'`)
+* ``excludedFunctions`` (default: ``'describeContents'``)
 
    excluded functions
 
-* `excludeAnnotatedFunction` (default: `"dagger.Provides"`)
+* ``excludeAnnotatedFunction`` (default: ``"dagger.Provides"``)
 
    allows to provide a list of annotations that disable this check
 
@@ -389,7 +389,7 @@ To increase readability they should be refactored into simpler loops.
 
 #### Configuration options:
 
-* `maxJumpCount` (default: `1`)
+* ``maxJumpCount`` (default: ``1``)
 
    maximum allowed jumps in a loop
 
@@ -417,40 +417,40 @@ describing what the magic number means.
 
 #### Configuration options:
 
-* `ignoreNumbers` (default: `'-1,0,1,2'`)
+* ``ignoreNumbers`` (default: ``'-1,0,1,2'``)
 
    numbers which do not count as magic numbers
 
-* `ignoreHashCodeFunction` (default: `true`)
+* ``ignoreHashCodeFunction`` (default: ``true``)
 
    whether magic numbers in hashCode functions should be ignored
 
-* `ignorePropertyDeclaration` (default: `false`)
+* ``ignorePropertyDeclaration`` (default: ``false``)
 
    whether magic numbers in property declarations should be ignored
 
-* `ignoreConstantDeclaration` (default: `true`)
+* ``ignoreConstantDeclaration`` (default: ``true``)
 
    whether magic numbers in property declarations should be ignored
 
-* `ignoreCompanionObjectPropertyDeclaration` (default: `true`)
+* ``ignoreCompanionObjectPropertyDeclaration`` (default: ``true``)
 
    whether magic numbers in companion object
 declarations should be ignored
 
-* `ignoreAnnotation` (default: `false`)
+* ``ignoreAnnotation`` (default: ``false``)
 
    whether magic numbers in annotations should be ignored
 
-* `ignoreNamedArgument` (default: `true`)
+* ``ignoreNamedArgument`` (default: ``true``)
 
    whether magic numbers in named arguments should be ignored
 
-* `ignoreEnums` (default: `false`)
+* ``ignoreEnums`` (default: ``false``)
 
    whether magic numbers in enums should be ignored
 
-* `ignoreRanges` (default: `false`)
+* ``ignoreRanges`` (default: ``false``)
 
    whether magic numbers in ranges should be ignored
 
@@ -522,19 +522,19 @@ in the codebase will help make the code more uniform.
 
 #### Configuration options:
 
-* `maxLineLength` (default: `120`)
+* ``maxLineLength`` (default: ``120``)
 
    maximum line length
 
-* `excludePackageStatements` (default: `true`)
+* ``excludePackageStatements`` (default: ``true``)
 
    if package statements should be ignored
 
-* `excludeImportStatements` (default: `true`)
+* ``excludeImportStatements`` (default: ``true``)
 
    if import statements should be ignored
 
-* `excludeCommentStatements` (default: `false`)
+* ``excludeCommentStatements`` (default: ``false``)
 
    if comment statements should be ignored
 
@@ -827,23 +827,23 @@ code.
 
 #### Configuration options:
 
-* `max` (default: `2`)
+* ``max`` (default: ``2``)
 
    define the maximum number of return statements allowed per function
 
-* `excludedFunctions` (default: `"equals"`)
+* ``excludedFunctions`` (default: ``"equals"``)
 
    define functions to be ignored by this check
 
-* `excludeLabeled` (default: `false`)
+* ``excludeLabeled`` (default: ``false``)
 
    if labeled return statements should be ignored
 
-* `excludeReturnFromLambda` (default: `true`)
+* ``excludeReturnFromLambda`` (default: ``true``)
 
    if labeled return from a lambda should be ignored
 
-* `excludeGuardClauses` (default: `false`)
+* ``excludeGuardClauses`` (default: ``false``)
 
    if true guard clauses at the beginning of a method should be ignored
 
@@ -966,7 +966,7 @@ to confusion. Instead prefer to limit the amount of `throw` statements in a func
 
 #### Configuration options:
 
-* `max` (default: `2`)
+* ``max`` (default: ``2``)
 
    maximum amount of throw statements in a method
 
@@ -1013,7 +1013,7 @@ explicitly ignored. For floats and doubles, anything to the right of the decimal
 
 #### Configuration options:
 
-* `acceptableDecimalLength` (default: `5`)
+* ``acceptableDecimalLength`` (default: ``5``)
 
    Length under which decimal base 10 literals are not required to have
 underscores
@@ -1046,7 +1046,7 @@ refactored into concrete classes.
 
 #### Configuration options:
 
-* `excludeAnnotatedClasses` (default: `"dagger.Module"`)
+* ``excludeAnnotatedClasses`` (default: ``"dagger.Module"``)
 
    Allows you to provide a list of annotations that disable
 this check.
@@ -1235,7 +1235,7 @@ can lead to confusion and potential bugs.
 
 #### Configuration options:
 
-* `allowedNames` (default: `"(_|ignored|expected|serialVersionUID)"`)
+* ``allowedNames`` (default: ``"(_|ignored|expected|serialVersionUID)"``)
 
    unused private member names matching this regex are ignored
 
@@ -1304,11 +1304,11 @@ Read more about `data class`: https://kotlinlang.org/docs/reference/data-classes
 
 #### Configuration options:
 
-* `excludeAnnotatedClasses` (default: `""`)
+* ``excludeAnnotatedClasses`` (default: ``""``)
 
    allows to provide a list of annotations that disable this check
 
-* `allowVars` (default: `false`)
+* ``allowVars`` (default: ``false``)
 
    allows to relax this rule in order to exclude classes that contains one (or more) Vars
 
@@ -1500,7 +1500,7 @@ Therefore if whitelist is needed `NoWildcardImports` rule should be disabled.
 
 #### Configuration options:
 
-* `excludeImports` (default: `'java.util.*,kotlinx.android.synthetic.*'`)
+* ``excludeImports`` (default: ``'java.util.*,kotlinx.android.synthetic.*'``)
 
    Define a whitelist of package names that should be allowed to be imported
 with wildcard imports.

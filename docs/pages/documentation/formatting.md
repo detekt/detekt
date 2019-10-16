@@ -44,11 +44,11 @@ See <a href="https://ktlint.github.io/#rule-indentation">ktlint-website</a> for 
 
 #### Configuration options:
 
-* `indentSize` (default: `4`)
+* ``indentSize`` (default: ``4``)
 
    indentation size
 
-* `continuationIndentSize` (default: `4`)
+* ``continuationIndentSize`` (default: ``4``)
 
    continuation indentation size
 
@@ -58,7 +58,7 @@ See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
 
 #### Configuration options:
 
-* `maxLineLength` (default: `120`)
+* ``maxLineLength`` (default: ``120``)
 
    maximum line length
 
@@ -124,7 +124,7 @@ See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
 
 #### Configuration options:
 
-* `indentSize` (default: `4`)
+* ``indentSize`` (default: ``4``)
 
    indentation size
 
