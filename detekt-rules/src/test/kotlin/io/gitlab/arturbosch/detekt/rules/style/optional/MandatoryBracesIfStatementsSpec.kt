@@ -88,6 +88,18 @@ class MandatoryBracesIfStatementsSpec : Spek({
 
             assertThat(findings).hasSize(1)
         }
+
+        it("only else body in new line") {
+            val findings = subject.lint("""
+            fun f() {
+                if (true) println() else
+                    println()
+            }
+            """.trimIndent())
+
+            assertThat(findings).hasSize(1)
+        }
+
     }
 
     describe("MandatoryBracesIfStatements rule") {

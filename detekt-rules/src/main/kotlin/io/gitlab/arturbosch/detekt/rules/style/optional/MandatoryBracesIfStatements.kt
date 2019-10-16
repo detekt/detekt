@@ -52,6 +52,7 @@ class MandatoryBracesIfStatements(config: Config = Config.empty) : Rule(config) 
 
     private fun hasNewLine(element: PsiElement?): Boolean =
             element?.siblings(true, false)
+                    ?.takeWhile { it.text != "else" }
                     ?.filterIsInstance<PsiWhiteSpace>()
                     ?.firstOrNull { it.textContains('\n') } != null
 
