@@ -94,39 +94,18 @@ class HtmlUtilsTest : Spek({
 
         it("first line") {
             val snippet = createHTML().div() {
-                snippetCode(code.asSequence(), SourceLocation(1, 1), 13)
+                snippetCode(code.asSequence(), SourceLocation(1, 1), 1)
             }
 
-            assertThat(snippet).isEqualTo("""
-                <div>
-                  <pre><code><span class="lineno">   1 </span><span class="error">package cases</span>
-                <span class="lineno">   2 </span>// reports 1 - line with just one space
-                <span class="lineno">   3 </span>
-                <span class="lineno">   4 </span>// reports 1 - a comment with trailing space
-                </code></pre>
-                </div>
-
-                """.trimIndent()
-            )
+            assertThat(snippet).contains((1..4).map { "  $it " })
         }
 
         it("second line") {
             val snippet = createHTML().div() {
-                snippetCode(code.asSequence(), SourceLocation(2, 1), 39)
+                snippetCode(code.asSequence(), SourceLocation(2, 1), 1)
             }
 
-            assertThat(snippet).isEqualTo("""
-                <div>
-                  <pre><code><span class="lineno">   1 </span>package cases
-                <span class="lineno">   2 </span><span class="error">// reports 1 - line with just one space</span>
-                <span class="lineno">   3 </span>
-                <span class="lineno">   4 </span>// reports 1 - a comment with trailing space
-                <span class="lineno">   5 </span>// A comment
-                </code></pre>
-                </div>
-
-                """.trimIndent()
-            )
+            assertThat(snippet).contains((1..5).map { "  $it " })
         }
 
         it("penultimate line") {
@@ -134,18 +113,7 @@ class HtmlUtilsTest : Spek({
                 snippetCode(code.asSequence(), SourceLocation(15, 1), 1)
             }
 
-            assertThat(snippet).isEqualTo("""
-                <div>
-                  <pre><code><span class="lineno">  12 </span>        // reports 1 - line with 1 trailing tab
-                <span class="lineno">  13 </span>        println(&quot;A message&quot;)
-                <span class="lineno">  14 </span>    // reports 1
-                <span class="lineno">  15 </span><span class="error"> </span>   }
-                <span class="lineno">  16 </span>}
-                </code></pre>
-                </div>
-
-                """.trimIndent()
-            )
+            assertThat(snippet).contains((12..16).map { "  $it " })
         }
 
         it("last line") {
@@ -153,17 +121,7 @@ class HtmlUtilsTest : Spek({
                 snippetCode(code.asSequence(), SourceLocation(16, 1), 1)
             }
 
-            assertThat(snippet).isEqualTo("""
-                <div>
-                  <pre><code><span class="lineno">  13 </span>        println(&quot;A message&quot;)
-                <span class="lineno">  14 </span>    // reports 1
-                <span class="lineno">  15 </span>    }
-                <span class="lineno">  16 </span><span class="error">}</span>
-                </code></pre>
-                </div>
-
-                """.trimIndent()
-            )
+            assertThat(snippet).contains((13..16).map { "  $it " })
         }
     }
 })
