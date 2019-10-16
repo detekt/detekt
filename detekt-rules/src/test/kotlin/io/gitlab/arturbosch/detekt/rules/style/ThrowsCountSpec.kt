@@ -34,13 +34,19 @@ class ThrowsCountSpec : Spek({
                     3 -> throw IOException()
                 }
             }
+
+            fun f4(x: String?) {
+                val denulled = x ?: throw IOException()
+                val int = x?.toInt() ?: throw IOException()
+                val double = x?.toDouble() ?: throw IOException()
+            }
         """
 
         context("default config") {
             val subject = ThrowsCount(Config.empty)
 
             it("reports violation by default") {
-                assertThat(subject.lint(code)).hasSize(1)
+                assertThat(subject.lint(code)).hasSize(2)
             }
         }
 
@@ -50,6 +56,15 @@ class ThrowsCountSpec : Spek({
 
             it("does not report for configuration max parameter") {
                 assertThat(subject.lint(code)).hasSize(0)
+            }
+        }
+
+        context("should not get flagged for ELVIS operator guard clauses") {
+            val config = TestConfig(mapOf(ThrowsCount.EXCLUDE_GUARD_CLAUSES to "true"))
+            val subject = ThrowsCount(config)
+
+            it("reports violation by default") {
+                assertThat(subject.lint(code)).hasSize(1)
             }
         }
     }
