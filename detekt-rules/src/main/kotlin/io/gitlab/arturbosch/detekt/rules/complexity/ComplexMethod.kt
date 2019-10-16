@@ -62,7 +62,7 @@ class ComplexMethod(
         val mcc = visitor.mcc
         if (mcc >= threshold) {
             report(ThresholdedCodeSmell(issue,
-                    Entity.from(function),
+                    Entity.from(function.nameIdentifier!!),
                     Metric("MCC", mcc, threshold),
                     "The function ${function.nameAsSafeName} appears to be too complex."))
         }
