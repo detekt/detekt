@@ -17,7 +17,7 @@ class ComplexMethodSpec : Spek({
 
             it("finds one complex method") {
                 val subject = ComplexMethod()
-                subject.lint(Case.ComplexClass.path())
+                subject.lint(Case.ComplexMethod.path())
 
                 assertThat(subject.findings).hasSourceLocations(SourceLocation(3, 1))
 
