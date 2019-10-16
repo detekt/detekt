@@ -45,7 +45,7 @@ class NestedBlockDepth(
         visitor.visitNamedFunction(function)
         if (visitor.isTooDeep) {
             report(ThresholdedCodeSmell(issue,
-                    Entity.from(function),
+                    Entity.from(function.nameIdentifier!!),
                     Metric("SIZE", visitor.maxDepth, threshold),
                     "Function ${function.name} is nested too deeply."))
         }
