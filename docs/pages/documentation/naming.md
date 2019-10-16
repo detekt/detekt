@@ -18,7 +18,7 @@ Reports when class or object names which do not follow the specified naming conv
 
 #### Configuration options:
 
-* `classPattern` (default: `'[A-Z$][a-zA-Z0-9$]*'`)
+* ``classPattern`` (default: ``'[A-Z$][a-zA-Z0-9$]*'``)
 
    naming pattern
 
@@ -32,15 +32,15 @@ Reports constructor parameter names which do not follow the specified naming con
 
 #### Configuration options:
 
-* `parameterPattern` (default: `'[a-z][A-Za-z0-9]*'`)
+* ``parameterPattern`` (default: ``'[a-z][A-Za-z0-9]*'``)
 
    naming pattern
 
-* `privateParameterPattern` (default: `'[a-z][A-Za-z0-9]*'`)
+* ``privateParameterPattern`` (default: ``'[a-z][A-Za-z0-9]*'``)
 
    naming pattern
 
-* `excludeClassPattern` (default: `'$^'`)
+* ``excludeClassPattern`` (default: ``'$^'``)
 
    ignores variables in classes which match this regex
 
@@ -54,7 +54,7 @@ Reports when enum names which do not follow the specified naming convention are 
 
 #### Configuration options:
 
-* `enumEntryPattern` (default: `'^[A-Z][_a-zA-Z0-9]*'`)
+* ``enumEntryPattern`` (default: ``'^[A-Z][_a-zA-Z0-9]*'``)
 
    naming pattern
 
@@ -70,7 +70,7 @@ Examples for forbidden names might be too generic class names like `...Manager`.
 
 #### Configuration options:
 
-* `forbiddenName` (default: `''`)
+* ``forbiddenName`` (default: ``''``)
 
    forbidden class names
 
@@ -84,7 +84,7 @@ Reports when very long function names are used.
 
 #### Configuration options:
 
-* `maximumFunctionNameLength` (default: `30`)
+* ``maximumFunctionNameLength`` (default: ``30``)
 
    maximum name length
 
@@ -98,7 +98,7 @@ Reports when very short function names are used.
 
 #### Configuration options:
 
-* `minimumFunctionNameLength` (default: `3`)
+* ``minimumFunctionNameLength`` (default: ``3``)
 
    minimum name length
 
@@ -116,15 +116,15 @@ These factory functions can have the same name as the class being created.
 
 #### Configuration options:
 
-* `functionPattern` (default: `'^([a-z$][a-zA-Z$0-9]*)|(`.*`)$'`)
+* ``functionPattern`` (default: ``'^([a-z$][a-zA-Z$0-9]*)|(`.*`)$'``)
 
    naming pattern
 
-* `excludeClassPattern` (default: `'$^'`)
+* ``excludeClassPattern`` (default: ``'$^'``)
 
    ignores functions in classes which match this regex
 
-* `ignoreOverridden` (default: `true`)
+* ``ignoreOverridden`` (default: ``true``)
 
    ignores functions that have the override modifier
 
@@ -138,15 +138,15 @@ Reports function parameter names which do not follow the specified naming conven
 
 #### Configuration options:
 
-* `parameterPattern` (default: `'[a-z][A-Za-z0-9]*'`)
+* ``parameterPattern`` (default: ``'[a-z][A-Za-z0-9]*'``)
 
    naming pattern
 
-* `excludeClassPattern` (default: `'$^'`)
+* ``excludeClassPattern`` (default: ``'$^'``)
 
    ignores variables in classes which match this regex
 
-* `ignoreOverriddenFunctions` (default: `true`)
+* ``ignoreOverriddenFunctions`` (default: ``true``)
 
    ignores overridden functions with parameters not matching the pattern
 
@@ -160,7 +160,7 @@ Reports when the package declaration is missing or the file location does not ma
 
 #### Configuration options:
 
-* `rootPackage` (default: `''`)
+* ``rootPackage`` (default: ``''``)
 
    if specified this part of the package structure is ignored
 
@@ -213,7 +213,7 @@ Factory functions that create an instance of the class are exempt from this rule
 
 #### Configuration options:
 
-* `ignoreOverriddenFunction` (default: `true`)
+* ``ignoreOverriddenFunction`` (default: ``true``)
 
    if overridden functions should be ignored
 
@@ -255,15 +255,15 @@ Reports when property names inside objects which do not follow the specified nam
 
 #### Configuration options:
 
-* `constantPattern` (default: `'[A-Za-z][_A-Za-z0-9]*'`)
+* ``constantPattern`` (default: ``'[A-Za-z][_A-Za-z0-9]*'``)
 
    naming pattern
 
-* `propertyPattern` (default: `'[A-Za-z][_A-Za-z0-9]*'`)
+* ``propertyPattern`` (default: ``'[A-Za-z][_A-Za-z0-9]*'``)
 
    naming pattern
 
-* `privatePropertyPattern` (default: `'(_)?[A-Za-z][_A-Za-z0-9]*'`)
+* ``privatePropertyPattern`` (default: ``'(_)?[A-Za-z][_A-Za-z0-9]*'``)
 
    naming pattern
 
@@ -277,7 +277,7 @@ Reports when package names which do not follow the specified naming convention a
 
 #### Configuration options:
 
-* `packagePattern` (default: `'^[a-z]+(\.[a-z][A-Za-z0-9]*)*$'`)
+* ``packagePattern`` (default: ``'^[a-z]+(\.[a-z][A-Za-z0-9]*)*$'``)
 
    naming pattern
 
@@ -291,15 +291,15 @@ Reports when top level constant names which do not follow the specified naming c
 
 #### Configuration options:
 
-* `constantPattern` (default: `'[A-Z][_A-Z0-9]*'`)
+* ``constantPattern`` (default: ``'[A-Z][_A-Z0-9]*'``)
 
    naming pattern
 
-* `propertyPattern` (default: `'[A-Za-z][_A-Za-z0-9]*'`)
+* ``propertyPattern`` (default: ``'[A-Za-z][_A-Za-z0-9]*'``)
 
    naming pattern
 
-* `privatePropertyPattern` (default: `'_?[A-Za-z][_A-Za-z0-9]*'`)
+* ``privatePropertyPattern`` (default: ``'_?[A-Za-z][_A-Za-z0-9]*'``)
 
    naming pattern
 
@@ -313,7 +313,7 @@ Reports when very long variable names are used.
 
 #### Configuration options:
 
-* `maximumVariableNameLength` (default: `64`)
+* ``maximumVariableNameLength`` (default: ``64``)
 
    maximum name length
 
@@ -327,7 +327,7 @@ Reports when very short variable names are used.
 
 #### Configuration options:
 
-* `minimumVariableNameLength` (default: `1`)
+* ``minimumVariableNameLength`` (default: ``1``)
 
    maximum name length
 
@@ -341,18 +341,18 @@ Reports when variable names which do not follow the specified naming convention 
 
 #### Configuration options:
 
-* `variablePattern` (default: `'[a-z][A-Za-z0-9]*'`)
+* ``variablePattern`` (default: ``'[a-z][A-Za-z0-9]*'``)
 
    naming pattern
 
-* `privateVariablePattern` (default: `'(_)?[a-z][A-Za-z0-9]*'`)
+* ``privateVariablePattern`` (default: ``'(_)?[a-z][A-Za-z0-9]*'``)
 
    naming pattern
 
-* `excludeClassPattern` (default: `'$^'`)
+* ``excludeClassPattern`` (default: ``'$^'``)
 
    ignores variables in classes which match this regex
 
-* `ignoreOverridden` (default: `true`)
+* ``ignoreOverridden`` (default: ``true``)
 
    ignores member properties that have the override modifier
