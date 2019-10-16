@@ -35,7 +35,7 @@ class MandatoryBracesIfStatements(config: Config = Config.empty) : Rule(config) 
             Debt.FIVE_MINS)
 
     override fun visitIfExpression(expression: KtIfExpression) {
-        if (isNotBlockExpression(expression) && hasNewLine(expression)) {
+        if (isNotBlockExpression(expression) && hasNewLine(expression.rightParenthesis)) {
             report(CodeSmell(issue, Entity.from(expression),
                     message = "Multi-line if statement was found that does not have braces. " +
                             "These should be added to improve readability."))
@@ -49,11 +49,6 @@ class MandatoryBracesIfStatements(config: Config = Config.empty) : Rule(config) 
 
         super.visitIfExpression(expression)
     }
-
-    private fun hasNewLine(expression: KtIfExpression): Boolean =
-            expression.rightParenthesis?.siblings(true, false)
-                    ?.filterIsInstance<PsiWhiteSpace>()
-                    ?.firstOrNull { it.textContains('\n') } != null
 
     private fun hasNewLine(element: PsiElement?): Boolean =
             element?.siblings(true, false)
