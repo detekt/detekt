@@ -19,9 +19,9 @@ class EmptyClassBlock(config: Config) : EmptyRule(config) {
         if (classOrObject.isObjectLiteral()) return
         if (classOrObject.hasCommentInside()) return
 
-        classOrObject.body?.declarations?.let {
-            if (it.isEmpty()) {
-                report(CodeSmell(issue, Entity.from(classOrObject),
+        classOrObject.body?.let { body ->
+            if (body.declarations.isEmpty()) {
+                report(CodeSmell(issue, Entity.from(body),
                     "The class or object ${classOrObject.name} is empty."))
             }
         }
