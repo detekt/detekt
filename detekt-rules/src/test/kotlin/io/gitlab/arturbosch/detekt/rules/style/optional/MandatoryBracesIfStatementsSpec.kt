@@ -21,6 +21,7 @@ class MandatoryBracesIfStatementsSpec : Spek({
             """.trimIndent())
 
             assertThat(findings).hasSize(1)
+            assertThat(findings).hasTextLocations(32 to 41)
         }
 
         it("if-else") {
@@ -34,6 +35,7 @@ class MandatoryBracesIfStatementsSpec : Spek({
             """.trimIndent())
 
             assertThat(findings).hasSize(2)
+            assertThat(findings).hasTextLocations(32 to 41, 59 to 68)
         }
 
         it("if-else with else-if") {
@@ -49,6 +51,7 @@ class MandatoryBracesIfStatementsSpec : Spek({
             """.trimIndent())
 
             assertThat(findings).hasSize(3)
+            assertThat(findings).hasTextLocations(32 to 41, 70 to 79, 97 to 106)
         }
 
         it("if with braces but else without") {
@@ -62,6 +65,7 @@ class MandatoryBracesIfStatementsSpec : Spek({
             """.trimIndent())
 
             assertThat(findings).hasSize(1)
+            assertThat(findings).hasTextLocations(63 to 72)
         }
 
         it("else with braces but if without") {
@@ -76,6 +80,7 @@ class MandatoryBracesIfStatementsSpec : Spek({
             """.trimIndent())
 
             assertThat(findings).hasSize(1)
+            assertThat(findings).hasTextLocations(32 to 41)
         }
 
         it("else in new line") {
@@ -87,6 +92,7 @@ class MandatoryBracesIfStatementsSpec : Spek({
             """.trimIndent())
 
             assertThat(findings).hasSize(1)
+            assertThat(findings).hasTextLocations(24 to 33)
         }
 
         it("only else body in new line") {
@@ -98,6 +104,7 @@ class MandatoryBracesIfStatementsSpec : Spek({
             """.trimIndent())
 
             assertThat(findings).hasSize(1)
+            assertThat(findings).hasTextLocations(47 to 56)
         }
 
     }
