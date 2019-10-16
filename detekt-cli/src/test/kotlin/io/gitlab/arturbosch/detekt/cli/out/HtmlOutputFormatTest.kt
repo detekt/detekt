@@ -67,7 +67,7 @@ class HtmlOutputFormatTest : Spek({
             assertThat(result).contains("<span class=\"description\">A3</span>")
         }
 
-        it("integration") {
+        it("assert that the html generated is the expected") {
             val result = outputFormat.render(createTestDetektionWithMultipleSmells())
 
             val tmpReport = Files.createTempFile("HtmlOutputFormatTest", ".html")
