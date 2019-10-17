@@ -69,6 +69,16 @@ class EmptyIfBlockSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
+        it("does not report nonempty if without braces but semicolon") {
+            val code = """
+                fun f() {
+                    var i = 0
+                    if (i == 0) i++;
+                }
+            """
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
         it("does not report empty if but nonempty else") {
             val code = """
                 fun f() {
