@@ -16,7 +16,7 @@ class ImplicitDefaultLocaleSpec : Spek({
                 fun x() {
                     String.format("%d", 1)
                 }"""
-            assertThat(subject.compileAndLint(code).size).isEqualTo(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         it("does not report String.format call with explicit locale") {
