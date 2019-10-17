@@ -10,12 +10,12 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isEqualsFunction
 import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.psi.KtAnnotatedExpression
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
-import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
 
 /**
  * Reports equals() methods which will always return true or false.
@@ -63,7 +63,9 @@ class EqualsAlwaysReturnsTrueOrFalse(config: Config = Config.empty) : Rule(confi
     }
 
     private fun isSingleReturnWithBooleanConstant(bodyExpression: KtExpression): Boolean {
-        val returnExpressionsInBlock = bodyExpression.getChildrenOfType<KtReturnExpression>()
+        val returnExpressionsInBlock = bodyExpression.collectDescendantsOfType<KtReturnExpression> {
+            it.parent == bodyExpression || it.parent is KtAnnotatedExpression && it.parent.parent == bodyExpression
+        }
         val lastValidReturnExpression = returnExpressionsInBlock.first().returnedExpression
         val allReturnExpressions = bodyExpression.collectDescendantsOfType<KtReturnExpression>()
         val hasNoNestedReturnExpression = allReturnExpressions.size == returnExpressionsInBlock.size
