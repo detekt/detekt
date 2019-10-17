@@ -39,14 +39,17 @@ class SingleRuleRunner(private val arguments: CliArgs) : Executable {
 
         val provider = RuleProducingProvider(rule, realProvider)
 
-        assertRuleExistsBeforeRunningItLater(provider, settings)
+        settings.use {
+            assertRuleExistsBeforeRunningItLater(provider, settings)
 
-        val detektion = DetektFacade.create(
-            settings,
-            listOf(provider),
-            listOf(DetektProgressListener())
-        ).run()
-        OutputFacade(arguments, detektion, settings).run()
+            val detektion = DetektFacade.create(
+                settings,
+                listOf(provider),
+                listOf(DetektProgressListener())
+            ).run()
+
+            OutputFacade(arguments, detektion, settings).run()
+        }
     }
 
     private fun assertRuleExistsBeforeRunningItLater(
