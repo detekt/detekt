@@ -47,14 +47,14 @@ class EqualsAlwaysReturnsTrueOrFalse(config: Config = Config.empty) : Rule(confi
             Debt.TWENTY_MINS)
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        if (function.isEqualsFunction() && isReturningBooleanConstant(function)) {
+        if (function.isEqualsFunction() && function.returnsBooleanConstant()) {
             report(CodeSmell(issue, Entity.from(function), "This equals function always returns the same " +
                     "result regardless on the input parameters."))
         }
     }
 
-    private fun isReturningBooleanConstant(function: KtNamedFunction): Boolean {
-        val bodyExpression = function.bodyExpression ?: return false
+    private fun KtNamedFunction.returnsBooleanConstant(): Boolean {
+        val bodyExpression = bodyExpression ?: return false
         return if (bodyExpression is KtConstantExpression) {
             bodyExpression.isBooleanConstant()
         } else {
