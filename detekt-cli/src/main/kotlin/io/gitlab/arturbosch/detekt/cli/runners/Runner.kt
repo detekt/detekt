@@ -22,7 +22,9 @@ class Runner(private val arguments: CliArgs) : Executable {
             val (time, result) = measure { DetektFacade.create(settings).run() }
             result.add(SimpleNotification("detekt finished in $time ms."))
             OutputFacade(arguments, result, settings).run()
-            checkBuildFailureThreshold(result, settings)
+            if (!arguments.createBaseline) {
+                checkBuildFailureThreshold(result, settings)
+            }
         }
     }
 
