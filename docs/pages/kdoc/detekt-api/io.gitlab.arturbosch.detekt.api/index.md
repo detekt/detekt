@@ -8,52 +8,49 @@ title: io.gitlab.arturbosch.detekt.api - detekt-api
 
 ### Types
 
-| [AnnotationExcluder](-annotation-excluder/index.html) | `class AnnotationExcluder`<br>Primary use case for an AnnotationExcluder is to decide if a KtElement should be excluded from further analysis. This is done by checking if a special annotation is present over the element. |
-| [BaseConfig](-base-config/index.html) | `abstract class BaseConfig : `[`HierarchicalConfig`](-hierarchical-config/index.html)<br>Convenient base configuration which parses/casts the configuration value based on the type of the default value. |
-| [BaseRule](-base-rule/index.html) | `abstract class BaseRule : `[`DetektVisitor`](-detekt-visitor/index.html)`, `[`Context`](-context/index.html)<br>Defines the visiting mechanism for KtFile's. |
-| [CodeSmell](-code-smell/index.html) | `open class CodeSmell : `[`Finding`](-finding/index.html)<br>A code smell indicates any possible design problem inside a program's source code. The type of a code smell is described by an [Issue](-issue/index.html). |
-| [Compactable](-compactable/index.html) | `interface Compactable`<br>Provides a compact string representation. |
-| [CompositeConfig](-composite-config/index.html) | `class CompositeConfig : `[`Config`](-config/index.html)<br>Wraps two different configuration which should be considered when retrieving properties. |
-| [Config](-config/index.html) | `interface Config`<br>A configuration holds information about how to configure specific rules. |
-| [ConfigAware](-config-aware/index.html) | `interface ConfigAware : `[`Config`](-config/index.html)<br>Interface which is implemented by each Rule class to provide utility functions to retrieve specific or generic properties from the underlying detekt configuration file. |
-| [ConsoleReport](-console-report/index.html) | `abstract class ConsoleReport : `[`Extension`](-extension/index.html)<br>Extension point which describes how findings should be printed on the console. |
-| [Context](-context/index.html) | `interface Context`<br>A context describes the storing and reporting mechanism of [Finding](-finding/index.html)'s inside a [Rule](-rule/index.html). Additionally it handles suppression and aliases management. |
-| [CorrectableCodeSmell](-correctable-code-smell/index.html) | `open class CorrectableCodeSmell : `[`CodeSmell`](-code-smell/index.html)<br>Represents a code smell for that can be auto corrected. |
-| [Debt](-debt/index.html) | `data class Debt`<br>Debt describes the estimated amount of work needed to fix a given issue. |
-| [DefaultContext](-default-context/index.html) | `open class DefaultContext : `[`Context`](-context/index.html)<br>Default [Context](-context/index.html) implementation. |
-| [Detektion](-detektion/index.html) | `interface Detektion`<br>Storage for all kinds of findings and additional information which needs to be transferred from the detekt engine to the user. |
-| [DetektVisitor](-detekt-visitor/index.html) | `open class DetektVisitor : KtTreeVisitorVoid`<br>Basic visitor which is used inside detekt. Guarantees a better looking name as the extended base class :). |
-| [Entity](-entity/index.html) | `data class Entity : `[`Compactable`](-compactable/index.html)<br>Stores information about a specific code fragment. |
-| [Extension](-extension/index.html) | `interface Extension`<br>Defines extension points in detekt. Currently supported extensions are: |
-| [FileProcessListener](-file-process-listener/index.html) | `interface FileProcessListener : `[`Extension`](-extension/index.html)<br>Gather additional metrics about the analyzed kotlin file. Pay attention to the thread policy of each function! |
-| [Finding](-finding/index.html) | `interface Finding : `[`Compactable`](-compactable/index.html)`, `[`HasEntity`](-has-entity/index.html)`, `[`HasMetrics`](-has-metrics/index.html)<br>Base interface of detection findings. Inherits a bunch of useful behaviour from sub interfaces. |
-| [HasEntity](-has-entity/index.html) | `interface HasEntity`<br>Describes a source code position. |
-| [HasMetrics](-has-metrics/index.html) | `interface HasMetrics`<br>Adds metric container behaviour. |
-| [HierarchicalConfig](-hierarchical-config/index.html) | `interface HierarchicalConfig : `[`Config`](-config/index.html)<br>A configuration which keeps track of the config it got sub-config'ed from by the [subConfig](-config/sub-config.html) function. It's main usage is to recreate the property-path which was taken when using the [subConfig](-config/sub-config.html) function repeatedly. |
-| [Issue](-issue/index.html) | `data class Issue`<br>An issue represents a problem in the codebase. |
-| [LazyRegex](-lazy-regex/index.html) | `class LazyRegex : `[`ReadOnlyProperty`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.properties/-read-only-property/index.html)`<`[`Rule`](-rule/index.html)`, `[`Regex`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/-regex/index.html)`>`<br>LazyRegex class provides a lazy evaluation of a Regex pattern for usages inside Rules. It computes the value once when reaching the point of its usage and returns the same value when requested again. |
-| [Location](-location/index.html) | `data class Location : `[`Compactable`](-compactable/index.html)<br>Specifies a position within a source code fragment. |
-| [Metric](-metric/index.html) | `data class Metric`<br>Metric type, can be an integer or double value. Internally it is stored as an integer, but the conversion factor and is double attributes can be used to retrieve it as a double value. |
-| [MultiRule](-multi-rule/index.html) | `abstract class MultiRule : `[`BaseRule`](-base-rule/index.html)<br>Composite rule which delegates work to child rules. Can be used to combine different rules which do similar work like scanning the source code line by line to increase performance. |
-| [Notification](-notification/index.html) | `interface Notification`<br>Any kind of notification which should be printed to the console. For example when using the formatting rule set, any change to your kotlin file is a notification. |
-| [OutputReport](-output-report/index.html) | `abstract class OutputReport : `[`Extension`](-extension/index.html)<br>Translates detekt's result container - [Detektion](-detektion/index.html) - into an output report which is written inside a file. |
-| [ProjectMetric](-project-metric/index.html) | `open class ProjectMetric`<br>Anything that can be expressed as a number value for projects. |
-| [Rule](-rule/index.html) | `abstract class Rule : `[`BaseRule`](-base-rule/index.html)`, `[`ConfigAware`](-config-aware/index.html)<br>A rule defines how one specific code structure should look like. If code is found which does not meet this structure, it is considered as harmful regarding maintainability or readability. |
-| [RuleSet](-rule-set/index.html) | `class RuleSet`<br>A rule set is a collection of rules and must be defined within a rule set provider implementation. |
-| [RuleSetProvider](-rule-set-provider/index.html) | `interface RuleSetProvider`<br>A rule set provider, as the name states, is responsible for creating rule sets. |
-| [Severity](-severity/index.html) | `enum class Severity`<br>Rules can classified into different severity grades. Maintainer can choose a grade which is most harmful to their projects. |
-| [SingleAssign](-single-assign/index.html) | `class SingleAssign<T : `[`Any`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)`>`<br>Allows to assign a property just once. Further assignments result in [IllegalStateException](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-illegal-state-exception/index.html)'s. |
-| [SourceLocation](-source-location/index.html) | `data class SourceLocation`<br>Stores line and column information of a location. |
-| [SplitPattern](-split-pattern/index.html) | `class SplitPattern`<br>Splits given text into parts and provides testing utilities for its elements. Basic use cases are to specify different function or class names in the detekt yaml config and test for their appearance in specific rules. |
-| [TextLocation](-text-location/index.html) | `data class TextLocation`<br>Stores character start and end positions of an text file. |
-| [ThresholdedCodeSmell](-thresholded-code-smell/index.html) | `open class ThresholdedCodeSmell : `[`CodeSmell`](-code-smell/index.html)<br>Represents a code smell for which a specific metric can be determined which is responsible for the existence of this rule violation. |
-| [ThresholdRule](-threshold-rule/index.html) | `abstract class ThresholdRule : `[`Rule`](-rule/index.html)<br>Provides a threshold attribute for this rule, which is specified manually for default values but can be also obtained from within a configuration object. |
-| [YamlConfig](-yaml-config/index.html) | `class YamlConfig : `[`BaseConfig`](-base-config/index.html)<br>Config implementation using the yaml format. SubConfigurations can return sub maps according to the yaml specification. |
-
-### Type Aliases
-
-| [RuleId](-rule-id.html) | `typealias RuleId = `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)<br>The type to use when referring to rule ids giving it more context then a String would. |
+| [AnnotationExcluder](-annotation-excluder/index.html) | Primary use case for an AnnotationExcluder is to decide if a KtElement should be excluded from further analysis. This is done by checking if a special annotation is present over the element.`class AnnotationExcluder` |
+| [BaseConfig](-base-config/index.html) | Convenient base configuration which parses/casts the configuration value based on the type of the default value.`abstract class BaseConfig : `[`HierarchicalConfig`](-hierarchical-config/index.html) |
+| [BaseRule](-base-rule/index.html) | Defines the visiting mechanism for KtFile's.`abstract class BaseRule : `[`DetektVisitor`](-detekt-visitor/index.html)`, `[`Context`](-context/index.html) |
+| [CodeSmell](-code-smell/index.html) | A code smell indicates any possible design problem inside a program's source code. The type of a code smell is described by an [Issue](-issue/index.html).`open class CodeSmell : `[`Finding`](-finding/index.html) |
+| [Compactable](-compactable/index.html) | Provides a compact string representation.`interface Compactable` |
+| [CompositeConfig](-composite-config/index.html) | Wraps two different configuration which should be considered when retrieving properties.`class CompositeConfig : `[`Config`](-config/index.html) |
+| [Config](-config/index.html) | A configuration holds information about how to configure specific rules.`interface Config` |
+| [ConfigAware](-config-aware/index.html) | Interface which is implemented by each Rule class to provide utility functions to retrieve specific or generic properties from the underlying detekt configuration file.`interface ConfigAware : `[`Config`](-config/index.html) |
+| [ConsoleReport](-console-report/index.html) | Extension point which describes how findings should be printed on the console.`abstract class ConsoleReport : `[`Extension`](-extension/index.html) |
+| [Context](-context/index.html) | A context describes the storing and reporting mechanism of [Finding](-finding/index.html)'s inside a [Rule](-rule/index.html). Additionally it handles suppression and aliases management.`interface Context` |
+| [CorrectableCodeSmell](-correctable-code-smell/index.html) | Represents a code smell for that can be auto corrected.`open class CorrectableCodeSmell : `[`CodeSmell`](-code-smell/index.html) |
+| [Debt](-debt/index.html) | Debt describes the estimated amount of work needed to fix a given issue.`data class Debt` |
+| [DefaultContext](-default-context/index.html) | Default [Context](-context/index.html) implementation.`open class DefaultContext : `[`Context`](-context/index.html) |
+| [Detektion](-detektion/index.html) | Storage for all kinds of findings and additional information which needs to be transferred from the detekt engine to the user.`interface Detektion` |
+| [DetektVisitor](-detekt-visitor/index.html) | Basic visitor which is used inside detekt. Guarantees a better looking name as the extended base class :).`open class DetektVisitor : KtTreeVisitorVoid` |
+| [Entity](-entity/index.html) | Stores information about a specific code fragment.`data class Entity : `[`Compactable`](-compactable/index.html) |
+| [Extension](-extension/index.html) | Defines extension points in detekt. Currently supported extensions are:`interface Extension` |
+| [FileProcessListener](-file-process-listener/index.html) | Gather additional metrics about the analyzed kotlin file. Pay attention to the thread policy of each function!`interface FileProcessListener : `[`Extension`](-extension/index.html) |
+| [Finding](-finding/index.html) | Base interface of detection findings. Inherits a bunch of useful behaviour from sub interfaces.`interface Finding : `[`Compactable`](-compactable/index.html)`, `[`HasEntity`](-has-entity/index.html)`, `[`HasMetrics`](-has-metrics/index.html) |
+| [HasEntity](-has-entity/index.html) | Describes a source code position.`interface HasEntity` |
+| [HasMetrics](-has-metrics/index.html) | Adds metric container behaviour.`interface HasMetrics` |
+| [HierarchicalConfig](-hierarchical-config/index.html) | A configuration which keeps track of the config it got sub-config'ed from by the [subConfig](-config/sub-config.html) function. It's main usage is to recreate the property-path which was taken when using the [subConfig](-config/sub-config.html) function repeatedly.`interface HierarchicalConfig : `[`Config`](-config/index.html) |
+| [Issue](-issue/index.html) | An issue represents a problem in the codebase.`data class Issue` |
+| [LazyRegex](-lazy-regex/index.html) | LazyRegex class provides a lazy evaluation of a Regex pattern for usages inside Rules. It computes the value once when reaching the point of its usage and returns the same value when requested again.`class LazyRegex : `[`ReadOnlyProperty`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.properties/-read-only-property/index.html)`<`[`Rule`](-rule/index.html)`, `[`Regex`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/-regex/index.html)`>` |
+| [Location](-location/index.html) | Specifies a position within a source code fragment.`data class Location : `[`Compactable`](-compactable/index.html) |
+| [Metric](-metric/index.html) | Metric type, can be an integer or double value. Internally it is stored as an integer, but the conversion factor and is double attributes can be used to retrieve it as a double value.`data class Metric` |
+| [MultiRule](-multi-rule/index.html) | Composite rule which delegates work to child rules. Can be used to combine different rules which do similar work like scanning the source code line by line to increase performance.`abstract class MultiRule : `[`BaseRule`](-base-rule/index.html) |
+| [Notification](-notification/index.html) | Any kind of notification which should be printed to the console. For example when using the formatting rule set, any change to your kotlin file is a notification.`interface Notification` |
+| [OutputReport](-output-report/index.html) | Translates detekt's result container - [Detektion](-detektion/index.html) - into an output report which is written inside a file.`abstract class OutputReport : `[`Extension`](-extension/index.html) |
+| [ProjectMetric](-project-metric/index.html) | Anything that can be expressed as a number value for projects.`open class ProjectMetric` |
+| [Rule](-rule/index.html) | A rule defines how one specific code structure should look like. If code is found which does not meet this structure, it is considered as harmful regarding maintainability or readability.`abstract class Rule : `[`BaseRule`](-base-rule/index.html)`, `[`ConfigAware`](-config-aware/index.html) |
+| [RuleId](-rule-id.html) | The type to use when referring to rule ids giving it more context then a String would.`typealias RuleId = `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
+| [RuleSet](-rule-set/index.html) | A rule set is a collection of rules and must be defined within a rule set provider implementation.`class RuleSet` |
 | [RuleSetId](-rule-set-id.html) | `typealias RuleSetId = `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
+| [RuleSetProvider](-rule-set-provider/index.html) | A rule set provider, as the name states, is responsible for creating rule sets.`interface RuleSetProvider` |
+| [Severity](-severity/index.html) | Rules can classified into different severity grades. Maintainer can choose a grade which is most harmful to their projects.`enum class Severity` |
+| [SingleAssign](-single-assign/index.html) | Allows to assign a property just once. Further assignments result in [IllegalStateException](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-illegal-state-exception/index.html)'s.`class SingleAssign<T : `[`Any`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)`>` |
+| [SourceLocation](-source-location/index.html) | Stores line and column information of a location.`data class SourceLocation` |
+| [SplitPattern](-split-pattern/index.html) | Splits given text into parts and provides testing utilities for its elements. Basic use cases are to specify different function or class names in the detekt yaml config and test for their appearance in specific rules.`class SplitPattern` |
+| [TextLocation](-text-location/index.html) | Stores character start and end positions of an text file.`data class TextLocation` |
+| [ThresholdedCodeSmell](-thresholded-code-smell/index.html) | Represents a code smell for which a specific metric can be determined which is responsible for the existence of this rule violation.`open class ThresholdedCodeSmell : `[`CodeSmell`](-code-smell/index.html) |
+| [ThresholdRule](-threshold-rule/index.html) | Provides a threshold attribute for this rule, which is specified manually for default values but can be also obtained from within a configuration object.`abstract class ThresholdRule : `[`Rule`](-rule/index.html) |
+| [YamlConfig](-yaml-config/index.html) | Config implementation using the yaml format. SubConfigurations can return sub maps according to the yaml specification.`class YamlConfig : `[`BaseConfig`](-base-config/index.html) |
 
 ### Extensions for External Classes
 
@@ -62,5 +59,5 @@ title: io.gitlab.arturbosch.detekt.api - detekt-api
 
 ### Properties
 
-| [DEFAULT_FLOAT_CONVERSION_FACTOR](-d-e-f-a-u-l-t_-f-l-o-a-t_-c-o-n-v-e-r-s-i-o-n_-f-a-c-t-o-r.html) | `const val DEFAULT_FLOAT_CONVERSION_FACTOR: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)<br>To represent a value of 0.5, use the metric value 50 and the conversion factor of 100. (50 / 100 = 0.5) |
+| [DEFAULT_FLOAT_CONVERSION_FACTOR](-d-e-f-a-u-l-t_-f-l-o-a-t_-c-o-n-v-e-r-s-i-o-n_-f-a-c-t-o-r.html) | To represent a value of 0.5, use the metric value 50 and the conversion factor of 100. (50 / 100 = 0.5)`const val DEFAULT_FLOAT_CONVERSION_FACTOR: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html) |
 

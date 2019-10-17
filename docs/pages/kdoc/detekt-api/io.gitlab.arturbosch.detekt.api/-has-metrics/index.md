@@ -16,9 +16,9 @@ Adds metric container behaviour.
 
 ### Functions
 
-| [metricByType](metric-by-type.html) | `open fun metricByType(type: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`): `[`Metric`](../-metric/index.html)`?`<br>Finds the first metric matching given [type](metric-by-type.html#io.gitlab.arturbosch.detekt.api.HasMetrics$metricByType(kotlin.String)/type). |
+| [metricByType](metric-by-type.html) | Finds the first metric matching given [type](metric-by-type.html#io.gitlab.arturbosch.detekt.api.HasMetrics$metricByType(kotlin.String)/type).`open fun metricByType(type: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`): `[`Metric`](../-metric/index.html)`?` |
 
 ### Inheritors
 
-| [Finding](../-finding/index.html) | `interface Finding : `[`Compactable`](../-compactable/index.html)`, `[`HasEntity`](../-has-entity/index.html)`, `[`HasMetrics`](./index.html)<br>Base interface of detection findings. Inherits a bunch of useful behaviour from sub interfaces. |
+| [Finding](../-finding/index.html) | Base interface of detection findings. Inherits a bunch of useful behaviour from sub interfaces.`interface Finding : `[`Compactable`](../-compactable/index.html)`, `[`HasEntity`](../-has-entity/index.html)`, `[`HasMetrics`](./index.html) |
 

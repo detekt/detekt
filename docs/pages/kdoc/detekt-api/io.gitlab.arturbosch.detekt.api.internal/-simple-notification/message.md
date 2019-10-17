@@ -7,6 +7,3 @@ title: SimpleNotification.message - detekt-api
 # message
 
 `val message: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)
-
-Overrides [Notification.message](../../io.gitlab.arturbosch.detekt.api/-notification/message.html)
-

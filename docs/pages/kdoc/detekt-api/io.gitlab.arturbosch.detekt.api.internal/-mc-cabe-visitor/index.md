@@ -12,7 +12,7 @@ Counts the cyclomatic complexity of functions.
 
 ### Constructors
 
-| [&lt;init&gt;](-init-.html) | `McCabeVisitor(ignoreSimpleWhenEntries: `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)`)`<br>Counts the cyclomatic complexity of functions. |
+| [&lt;init&gt;](-init-.html) | Counts the cyclomatic complexity of functions.`McCabeVisitor(ignoreSimpleWhenEntries: `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)`)` |
 
 ### Properties
 

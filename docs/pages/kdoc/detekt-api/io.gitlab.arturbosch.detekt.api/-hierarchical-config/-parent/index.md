@@ -12,7 +12,7 @@ Keeps track of which key was taken to [subConfig](../../-config/sub-config.html)
 
 ### Constructors
 
-| [&lt;init&gt;](-init-.html) | `Parent(config: `[`Config`](../../-config/index.html)`, key: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`)`<br>Keeps track of which key was taken to [subConfig](../../-config/sub-config.html) this configuration. |
+| [&lt;init&gt;](-init-.html) | Keeps track of which key was taken to [subConfig](../../-config/sub-config.html) this configuration.`Parent(config: `[`Config`](../../-config/index.html)`, key: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`)` |
 
 ### Properties
 

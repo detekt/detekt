@@ -21,7 +21,7 @@ detekt core engine to only care about a single type.
 
 ### Constructors
 
-| [&lt;init&gt;](-init-.html) | `BaseRule(context: `[`Context`](../-context/index.html)` = DefaultContext())`<br>Defines the visiting mechanism for KtFile's. |
+| [&lt;init&gt;](-init-.html) | Defines the visiting mechanism for KtFile's.`BaseRule(context: `[`Context`](../-context/index.html)` = DefaultContext())` |
 
 ### Properties
 
@@ -31,14 +31,14 @@ detekt core engine to only care about a single type.
 
 ### Functions
 
-| [postVisit](post-visit.html) | `open fun postVisit(root: KtFile): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)<br>Could be overridden by subclasses to specify a behaviour which should be done after visiting kotlin elements. |
-| [preVisit](pre-visit.html) | `open fun preVisit(root: KtFile): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)<br>Could be overridden by subclasses to specify a behaviour which should be done before visiting kotlin elements. |
-| [visit](visit.html) | `open fun visit(root: KtFile): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)<br>Init function to start visiting the [KtFile](#). Can be overridden to start a different visiting process. |
-| [visitCondition](visit-condition.html) | `abstract fun visitCondition(root: KtFile): `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)<br>Basic mechanism to decide if a rule should run or not. |
-| [visitFile](visit-file.html) | `fun visitFile(root: KtFile, bindingContext: BindingContext = BindingContext.EMPTY): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)<br>Before starting visiting kotlin elements, a check is performed if this rule should be triggered. Pre- and post-visit-hooks are executed before/after the visiting process. BindingContext holds the result of the semantic analysis of the source code by the Kotlin compiler. Rules that rely on symbols and types being resolved can use the BindingContext for this analysis. Note that detekt must receive the correct compile classpath for the code being analyzed otherwise the default value BindingContext.EMPTY will be used and it will not be possible for detekt to resolve types or symbols. |
+| [postVisit](post-visit.html) | Could be overridden by subclasses to specify a behaviour which should be done after visiting kotlin elements.`open fun postVisit(root: KtFile): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html) |
+| [preVisit](pre-visit.html) | Could be overridden by subclasses to specify a behaviour which should be done before visiting kotlin elements.`open fun preVisit(root: KtFile): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html) |
+| [visit](visit.html) | Init function to start visiting the [KtFile](#). Can be overridden to start a different visiting process.`open fun visit(root: KtFile): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html) |
+| [visitCondition](visit-condition.html) | Basic mechanism to decide if a rule should run or not.`abstract fun visitCondition(root: KtFile): `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html) |
+| [visitFile](visit-file.html) | Before starting visiting kotlin elements, a check is performed if this rule should be triggered. Pre- and post-visit-hooks are executed before/after the visiting process. BindingContext holds the result of the semantic analysis of the source code by the Kotlin compiler. Rules that rely on symbols and types being resolved can use the BindingContext for this analysis. Note that detekt must receive the correct compile classpath for the code being analyzed otherwise the default value BindingContext.EMPTY will be used and it will not be possible for detekt to resolve types or symbols.`fun visitFile(root: KtFile, bindingContext: BindingContext = BindingContext.EMPTY): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html) |
 
 ### Inheritors
 
-| [MultiRule](../-multi-rule/index.html) | `abstract class MultiRule : `[`BaseRule`](./index.html)<br>Composite rule which delegates work to child rules. Can be used to combine different rules which do similar work like scanning the source code line by line to increase performance. |
-| [Rule](../-rule/index.html) | `abstract class Rule : `[`BaseRule`](./index.html)`, `[`ConfigAware`](../-config-aware/index.html)<br>A rule defines how one specific code structure should look like. If code is found which does not meet this structure, it is considered as harmful regarding maintainability or readability. |
+| [MultiRule](../-multi-rule/index.html) | Composite rule which delegates work to child rules. Can be used to combine different rules which do similar work like scanning the source code line by line to increase performance.`abstract class MultiRule : `[`BaseRule`](./index.html) |
+| [Rule](../-rule/index.html) | A rule defines how one specific code structure should look like. If code is found which does not meet this structure, it is considered as harmful regarding maintainability or readability.`abstract class Rule : `[`BaseRule`](./index.html)`, `[`ConfigAware`](../-config-aware/index.html) |
 
