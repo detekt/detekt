@@ -18,7 +18,7 @@ class WrongEqualsTypeParameterSpec : Spek({
                         return super.equals(other)
                     }
                 }"""
-            assertThat(subject.compileAndLint(code).size).isEqualTo(0)
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("reports a String as parameter") {
@@ -28,7 +28,7 @@ class WrongEqualsTypeParameterSpec : Spek({
                         return super.equals(other)
                     }
                 }"""
-            assertThat(subject.compileAndLint(code).size).isEqualTo(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         it("does not report an interface declaration") {
@@ -36,7 +36,12 @@ class WrongEqualsTypeParameterSpec : Spek({
                 interface I {
                     fun equals(other: String)
                 }"""
-            assertThat(subject.compileAndLint(code).size).isEqualTo(0)
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        it("does not report a top level function") {
+            val code = "fun equals(other: String) {}"
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
 })
