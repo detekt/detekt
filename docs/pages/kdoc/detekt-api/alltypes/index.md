@@ -47,6 +47,7 @@ title: alltypes - detekt-api
 | [io.gitlab.arturbosch.detekt.api.RuleSetId](../io.gitlab.arturbosch.detekt.api/-rule-set-id.html) |  |
 | [io.gitlab.arturbosch.detekt.api.RuleSetProvider](../io.gitlab.arturbosch.detekt.api/-rule-set-provider/index.html) | A rule set provider, as the name states, is responsible for creating rule sets. |
 | [io.gitlab.arturbosch.detekt.api.Severity](../io.gitlab.arturbosch.detekt.api/-severity/index.html) | Rules can classified into different severity grades. Maintainer can choose a grade which is most harmful to their projects. |
+| [io.gitlab.arturbosch.detekt.api.internal.SimpleNotification](../io.gitlab.arturbosch.detekt.api.internal/-simple-notification/index.html) |  |
 | [io.gitlab.arturbosch.detekt.api.SingleAssign](../io.gitlab.arturbosch.detekt.api/-single-assign/index.html) | Allows to assign a property just once. Further assignments result in [IllegalStateException](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-illegal-state-exception/index.html)'s. |
 | [io.gitlab.arturbosch.detekt.api.SourceLocation](../io.gitlab.arturbosch.detekt.api/-source-location/index.html) | Stores line and column information of a location. |
 | [io.gitlab.arturbosch.detekt.api.SplitPattern](../io.gitlab.arturbosch.detekt.api/-split-pattern/index.html) | Splits given text into parts and provides testing utilities for its elements. Basic use cases are to specify different function or class names in the detekt yaml config and test for their appearance in specific rules. |
