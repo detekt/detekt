@@ -16,3 +16,7 @@ your kotlin file is a notification.
 
 | [message](message.html) | `abstract val message: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 
+### Inheritors
+
+| [SimpleNotification](../../io.gitlab.arturbosch.detekt.api.internal/-simple-notification/index.html) | `data class SimpleNotification : `[`Notification`](./index.html) |
+

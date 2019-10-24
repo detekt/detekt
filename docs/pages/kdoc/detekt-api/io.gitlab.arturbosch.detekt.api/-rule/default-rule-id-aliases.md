@@ -13,5 +13,7 @@ The default names which can be used instead of this #ruleId to refer to this rul
 When overriding this property make sure to meet following structure for detekt-generator to pick
 it up and generate documentation for aliases:
 
-override val defaultRuleIdAliases = setOf("Name1", "Name2")
+```
+    override val defaultRuleIdAliases = setOf("Name1", "Name2")
+```
 
