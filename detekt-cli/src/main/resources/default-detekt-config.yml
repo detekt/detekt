@@ -392,6 +392,8 @@ potential-bugs:
     active: true
   HasPlatformType:
     active: false
+  ImplicitDefaultLocale:
+    active: false
   InvalidRange:
     active: false
   IteratorHasNextCallsNextMethod:
