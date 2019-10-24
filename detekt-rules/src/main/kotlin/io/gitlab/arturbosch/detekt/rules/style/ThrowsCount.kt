@@ -54,9 +54,7 @@ class ThrowsCount(config: Config = Config.empty) : Rule(config) {
         if (!function.isOverride()) {
             val count = function
                 .collectDescendantsOfType<KtThrowExpression>()
-                .filterNot {
-                    excludeGuardClauses && it.isGuardClause()
-                }
+                .filterNot { excludeGuardClauses && it.isGuardClause() }
                 .count()
 
             if (count > max) {
