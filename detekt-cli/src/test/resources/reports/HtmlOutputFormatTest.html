@@ -56,10 +56,38 @@ pre {
 
 <h2>Metrics</h2>
 
-@@@metrics@@@
+<div>
+  <ul></ul>
+</div>
+
 
 <h2>Findings</h2>
-@@@findings@@@
+<div>
+  <h3>id_a</h3>
+  <details id="id_a" open="open">
+    <summary class="rule-container"><span class="rule">id_a </span><span class="description">A1</span></summary>
+    <ul>
+      <li><span class="location">src/main/com/sample/Sample1.kt:11:1</span><br><span class="message">B1</span>
+        <pre><code><span class="lineno">   8 </span>
+<span class="lineno">   9 </span>
+<span class="lineno">  10 </span>
+<span class="lineno">  11 </span><span class="error">abcd</span>ef
+<span class="lineno">  12 </span>hi
+<span class="lineno">  13 </span>
+</code></pre>
+      </li>
+      <li><span class="location">src/main/com/sample/Sample2.kt:22:2</span><br><span class="message">B2</span></li>
+    </ul>
+  </details>
+  <h3>id_c</h3>
+  <details id="id_c" open="open">
+    <summary class="rule-container"><span class="rule">id_c </span><span class="description">A3</span></summary>
+    <ul>
+      <li><span class="location">src/main/com/sample/Sample3.kt:33:3</span></li>
+    </ul>
+  </details>
+</div>
+
 
 </body>
 </html>
