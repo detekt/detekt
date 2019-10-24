@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.test.TestConfig
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
-import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -39,9 +39,7 @@ class ParameterNamingSpec : Spek({
                 class C(val PARAM: String)
             """
             val findings = NamingRules().lint(code)
-            val source = findings.first().location.text
-            assertThat(source.start).isEqualTo(8)
-            assertThat(source.end).isEqualTo(25)
+            assertThat(findings).hasTextLocations(8 to 25)
         }
     }
 

@@ -1,10 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.TestConfig
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.compileForTest
-import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -183,9 +184,7 @@ class MaxLineLengthSpec : Spek({
 
                 rule.visit(fileContent)
                 assertThat(rule.findings).hasSize(1)
-                val findingSource = rule.findings[0].location.source
-                assertThat(findingSource.line).isEqualTo(6)
-                assertThat(findingSource.column).isEqualTo(17)
+                assertThat(rule.findings).hasSourceLocations(SourceLocation(6, 17))
             }
         }
     }
