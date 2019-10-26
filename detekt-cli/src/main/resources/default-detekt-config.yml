@@ -289,6 +289,7 @@ junit:
   active: false
   TestWithoutAssertion:
     active: false
+    assertionPattern: 'assert'
 
 naming:
   active: true

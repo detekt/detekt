@@ -1,12 +1,13 @@
 package io.gitlab.arturbosch.detekt.rules.junit
 
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class TestWithoutAssertionSpec : Spek({
-    describe("junit test assertion") {
+    describe("junit test without assertion rule") {
 
         it("should report if test has no assertion") {
             val code = """
@@ -31,6 +32,23 @@ class TestWithoutAssertionSpec : Spek({
             """.trimIndent()
 
             val findings = TestWithoutAssertion().lint(code)
+
+            assertThat(findings).isEmpty()
+        }
+
+        it("should allow configuring the assertion pattern") {
+            val code = """
+                @Test
+                fun `should display message`() {
+                    loadFragment()
+
+                    onView(withId(R.id.message)).check(matches(isDisplayed()))
+                }
+            """.trimIndent()
+
+            val findings = TestWithoutAssertion(
+                TestConfig("assertionPattern" to "onView")
+            ).lint(code)
 
             assertThat(findings).isEmpty()
         }

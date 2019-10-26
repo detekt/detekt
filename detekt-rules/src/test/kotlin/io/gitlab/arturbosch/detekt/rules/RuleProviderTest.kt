@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.rules.providers.CommentSmellProvider
 import io.gitlab.arturbosch.detekt.rules.providers.ComplexityProvider
 import io.gitlab.arturbosch.detekt.rules.providers.EmptyCodeProvider
 import io.gitlab.arturbosch.detekt.rules.providers.ExceptionsProvider
+import io.gitlab.arturbosch.detekt.rules.providers.JUnitProvider
 import io.gitlab.arturbosch.detekt.rules.providers.NamingProvider
 import io.gitlab.arturbosch.detekt.rules.providers.PerformanceProvider
 import io.gitlab.arturbosch.detekt.rules.providers.PotentialBugProvider
@@ -51,7 +52,8 @@ private val ruleMap = mapOf<Class<*>, String>(
     Pair(NamingProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.naming"),
     Pair(PerformanceProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.performance"),
     Pair(PotentialBugProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.bugs"),
-    Pair(StyleGuideProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.style")
+    Pair(StyleGuideProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.style"),
+    Pair(JUnitProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.junit")
 )
 
 private fun getRulesPackageNameForProvider(providerType: Class<out RuleSetProvider>): String {
@@ -72,7 +74,7 @@ private fun getRules(provider: RuleSetProvider): List<BaseRule> {
 private fun getClasses(packageName: String): List<Class<out Rule>> {
     val classes = Reflections(packageName)
         .getSubTypesOf(Rule::class.java)
-        .filterNot { "Test" in it.name }
+        .filterNot { "Test.kt" in it.name }
         .filter { !Modifier.isAbstract(it.modifiers) && !Modifier.isStatic(it.modifiers) }
     assertThat(classes).isNotEmpty
     return classes

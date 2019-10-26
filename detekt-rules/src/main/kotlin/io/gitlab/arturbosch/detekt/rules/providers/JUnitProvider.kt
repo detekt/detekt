@@ -6,7 +6,7 @@ import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.rules.junit.TestWithoutAssertion
 
 /**
- * Rules in this rule set report issues related to JUnit tests
+ * Rules in this ruleset report issues related to JUnit tests
  *
  */
 class JUnitProvider : RuleSetProvider {

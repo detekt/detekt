@@ -6,7 +6,7 @@ permalink: junit.html
 toc: true
 folder: documentation
 ---
-Rules in this rule set report issues related to JUnit tests
+Rules in this ruleset report issues related to JUnit tests
 
 ### TestWithoutAssertion
 
@@ -16,3 +16,9 @@ Assertions help to understand the purpose of the test.
 **Severity**: CodeSmell
 
 **Debt**: 10min
+
+#### Configuration options:
+
+* ``assertionPattern`` (default: ``'assert'``)
+
+   assertion pattern
