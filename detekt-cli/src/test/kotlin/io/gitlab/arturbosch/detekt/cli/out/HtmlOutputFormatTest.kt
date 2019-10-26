@@ -9,16 +9,16 @@ import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
-import io.gitlab.arturbosch.detekt.cli.CliArgs
-import io.gitlab.arturbosch.detekt.cli.runners.Runner
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.resource
+import io.mockk.every
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.com.intellij.psi.PsiFile
+import org.jetbrains.kotlin.psi.KtElement
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
-import java.io.File
 import java.nio.file.Files
-import java.nio.file.Path
 import java.nio.file.Paths
 
 class HtmlOutputFormatTest : Spek({
@@ -83,9 +83,15 @@ class HtmlOutputFormatTest : Spek({
 })
 
 private fun createTestDetektionWithMultipleSmells(): Detektion {
+    val ktElementMock = mockk<KtElement>()
+    val psiFileMock = mockk<PsiFile>()
+    every { psiFileMock.text } returns "\n\n\n\n\n\n\n\n\n\nabcdef\nhi\n"
+    every { ktElementMock.containingFile } returns psiFileMock
+
     val entity1 = Entity("Sample1", "com.sample.Sample1", "",
             Location(SourceLocation(11, 1), TextLocation(10, 14),
-                    "abcd", "src/main/com/sample/Sample1.kt"), FakeKtElement("\n\n\n\n\n\n\n\n\n\nabcdef\nhi\n"))
+                    "abcd", "src/main/com/sample/Sample1.kt"), ktElementMock
+    )
     val entity2 = Entity("Sample2", "com.sample.Sample2", "",
             Location(SourceLocation(22, 2), TextLocation(0, 20),
                     "efgh", "src/main/com/sample/Sample2.kt"))
