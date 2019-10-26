@@ -30,6 +30,6 @@ but can be also obtained from within a configuration object.
 
 ### Inherited Functions
 
-| [report](../-rule/report.html) | `fun report(finding: `[`Finding`](../-finding/index.html)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)<br>`fun report(findings: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Finding`](../-finding/index.html)`>): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)<br>Simplified version of [Context.report](../-context/report.html) with aliases retrieval from the config. |
+| [report](../-rule/report.html) | `fun report(finding: `[`Finding`](../-finding/index.html)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)<br>`fun report(findings: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Finding`](../-finding/index.html)`>): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)<br>Simplified version of [Context.report](../-context/report.html) with rule defaults. |
 | [visitCondition](../-rule/visit-condition.html) | `open fun visitCondition(root: KtFile): `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)<br>Basic mechanism to decide if a rule should run or not. |
 
