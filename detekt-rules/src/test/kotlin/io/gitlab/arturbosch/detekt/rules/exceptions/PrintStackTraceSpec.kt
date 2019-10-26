@@ -35,7 +35,7 @@ class PrintStackTraceSpec : Spek({
                     }
                 }
                 """
-                assertThat(subject.compileAndLint(code)).hasSize(0)
+                assertThat(subject.compileAndLint(code)).isEmpty()
             }
         }
 

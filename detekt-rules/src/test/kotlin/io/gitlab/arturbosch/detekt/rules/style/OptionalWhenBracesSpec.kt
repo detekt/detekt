@@ -25,7 +25,7 @@ class OptionalWhenBracesSpec : Spek({
                         }
                     }
                 }"""
-            assertThat(subject.compileAndLint(code)).hasSize(0)
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("reports unnecessary braces") {

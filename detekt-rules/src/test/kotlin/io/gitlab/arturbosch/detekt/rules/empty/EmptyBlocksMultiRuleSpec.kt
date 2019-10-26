@@ -31,7 +31,7 @@ class EmptyBlocksMultiRuleSpec : Spek({
 
             val findings = ruleSet?.accept(file)
 
-            assertThat(findings).hasSize(0)
+            assertThat(findings).isEmpty()
         }
 
         it("reports an empty kt file") {

@@ -29,7 +29,7 @@ class FunctionOnlyReturningConstantSpec : Spek({
             val code = "fun f() = 1"
             val config = TestConfig(mapOf("excludedFunctions" to "f"))
             val rule = FunctionOnlyReturningConstant(config)
-            assertThat(rule.compileAndLint(code)).hasSize(0)
+            assertThat(rule.compileAndLint(code)).isEmpty()
         }
 
         it("does not report excluded annotated function which returns a constant") {

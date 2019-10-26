@@ -12,7 +12,7 @@ class OptionalAbstractKeywordSpec : Spek({
 
         it("does not report abstract keywords on an interface") {
             val code = "interface A {}"
-            assertThat(subject.compileAndLint(code)).hasSize(0)
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("reports abstract interface with abstract property") {
@@ -37,7 +37,7 @@ class OptionalAbstractKeywordSpec : Spek({
 
         it("does not report an abstract class") {
             val code = "abstract class A { abstract fun x() }"
-            assertThat(subject.compileAndLint(code)).hasSize(0)
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("does not report a nested abstract class function") {
@@ -47,7 +47,7 @@ class OptionalAbstractKeywordSpec : Spek({
                         abstract fun dependency()
                     }
                 }"""
-            assertThat(subject.compileAndLint(code)).hasSize(0)
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
 })

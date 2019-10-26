@@ -21,7 +21,7 @@ class NoTabsSpec : Spek({
         it("should not flag a line that does not contain a tab") {
             val file = compileForTest(Case.NoTabsNegative.path())
             subject.findTabs(file)
-            assertThat(subject.findings).hasSize(0)
+            assertThat(subject.findings).isEmpty()
         }
     }
 })

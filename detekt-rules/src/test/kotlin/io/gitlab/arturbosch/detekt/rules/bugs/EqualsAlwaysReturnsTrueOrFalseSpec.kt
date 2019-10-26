@@ -17,7 +17,7 @@ class EqualsAlwaysReturnsTrueOrFalseSpec : Spek({
         }
 
         it("does not report equals() methods") {
-            assertThat(subject.lint(Case.EqualsAlwaysReturnsTrueOrFalseNegative.path())).hasSize(0)
+            assertThat(subject.lint(Case.EqualsAlwaysReturnsTrueOrFalseNegative.path())).isEmpty()
         }
     }
 })
