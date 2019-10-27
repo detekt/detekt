@@ -54,7 +54,9 @@ class InvalidPackageDeclaration(config: Config = Config.empty) : Rule(config) {
 
             val isInRootPackage = expectedPath.isBlank()
             if (!isInRootPackage && !normalizedFilePath.endsWith(expectedPath)) {
-                packageDeclaration.reportInvalidPackageDeclaration("The package declaration does not match the actual file location.")
+                packageDeclaration.reportInvalidPackageDeclaration(
+                    "The package declaration does not match the actual file location."
+                )
             }
         }
     }
@@ -65,7 +67,8 @@ class InvalidPackageDeclaration(config: Config = Config.empty) : Rule(config) {
 
     private fun <T> Iterable<T>.toNormalizedForm() = joinToString("|")
 
-    private fun packageNameToNormalizedForm(packageName: String) = packageName.split('.').toNormalizedForm()
+    private fun packageNameToNormalizedForm(packageName: String) =
+        packageName.split('.').toNormalizedForm()
 
     companion object {
         const val ROOT_PACKAGE = "rootPackage"
