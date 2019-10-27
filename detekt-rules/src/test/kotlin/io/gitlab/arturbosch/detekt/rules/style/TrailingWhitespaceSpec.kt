@@ -32,7 +32,7 @@ class TrailingWhitespaceSpec : Spek({
             it("should not flag it") {
                 val rule = TrailingWhitespace()
                 rule.visit(Case.TrailingWhitespaceNegative.getKtFileContent())
-                assertThat(rule.findings).hasSize(0)
+                assertThat(rule.findings).isEmpty()
             }
         }
     }

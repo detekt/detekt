@@ -31,7 +31,7 @@ class ThrowingExceptionsWithoutMessageOrCauseSpec : Spek({
             it("does not report calls to the default constructor with empty configuration") {
                 val config = TestConfig(mapOf(ThrowingExceptionsWithoutMessageOrCause.EXCEPTIONS to ""))
                 val findings = ThrowingExceptionsWithoutMessageOrCause(config).compileAndLint(code)
-                assertThat(findings).hasSize(0)
+                assertThat(findings).isEmpty()
             }
         }
 

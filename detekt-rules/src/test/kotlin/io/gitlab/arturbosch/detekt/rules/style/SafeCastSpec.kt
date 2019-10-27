@@ -44,7 +44,7 @@ class SafeCastSpec : Spek({
                         null
                     }
                 }"""
-            assertThat(subject.compileAndLint(code)).hasSize(0)
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("does not report wrong else clause") {
@@ -56,7 +56,7 @@ class SafeCastSpec : Spek({
                         String()
                     }
                 }"""
-            assertThat(subject.compileAndLint(code)).hasSize(0)
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
 })

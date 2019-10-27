@@ -33,7 +33,7 @@ class NotImplementedDeclarationSpec : Spek({
             fun f() {
                 // TODO
             }"""
-            assertThat(subject.compileAndLint(code)).hasSize(0)
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
 })

@@ -73,15 +73,15 @@ class UndocumentedPublicClassSpec : Spek({
         }
 
         it("should not report internal classes") {
-            assertThat(subject.compileAndLint(internalClass)).hasSize(0)
+            assertThat(subject.compileAndLint(internalClass)).isEmpty()
         }
 
         it("should not report private classes") {
-            assertThat(subject.compileAndLint(privateClass)).hasSize(0)
+            assertThat(subject.compileAndLint(privateClass)).isEmpty()
         }
 
         it("should not report nested private classes") {
-            assertThat(subject.compileAndLint(nestedPrivate)).hasSize(0)
+            assertThat(subject.compileAndLint(nestedPrivate)).isEmpty()
         }
 
         it("should not report inner classes when turned off") {

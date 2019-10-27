@@ -24,7 +24,7 @@ class ExceptionRaisedInUnexpectedLocationSpec : Spek({
 
         it("does not report methods raising no exception") {
             val path = Case.ExceptionRaisedInMethodsNegative.path()
-            assertThat(subject.lint(path)).hasSize(0)
+            assertThat(subject.lint(path)).isEmpty()
         }
 
         it("reports the configured method") {

@@ -19,7 +19,7 @@ class ProtectedMemberInFinalClassSpec : Spek({
 
         it("does not report protected visibility") {
             val path = Case.FinalClassNegative.path()
-            assertThat(subject.lint(path)).hasSize(0)
+            assertThat(subject.lint(path)).isEmpty()
         }
     }
 })
