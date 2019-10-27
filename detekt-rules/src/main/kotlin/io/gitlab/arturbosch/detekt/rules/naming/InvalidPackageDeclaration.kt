@@ -54,7 +54,8 @@ class InvalidPackageDeclaration(config: Config = Config.empty) : Rule(config) {
 
             val isInRootPackage = expectedPath.isBlank()
             if (!isInRootPackage && !normalizedFilePath.endsWith(expectedPath)) {
-                packageDeclaration.reportInvalidPackageDeclaration("The package declaration does not match the actual file location.")
+                packageDeclaration
+                    .reportInvalidPackageDeclaration("The package declaration does not match the actual file location.")
             }
         }
     }
