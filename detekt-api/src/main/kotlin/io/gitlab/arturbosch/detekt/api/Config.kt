@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.api
 
 import io.gitlab.arturbosch.detekt.api.Config.Companion.PRIMITIVES
+import io.gitlab.arturbosch.detekt.api.internal.validateConfig
 import java.util.LinkedList
 import kotlin.reflect.KClass
 
@@ -57,6 +58,11 @@ interface Config {
             Char::class,
             Long::class
         )
+
+        /**
+         * Validates given first config according to properties defined in given baseline config.
+         */
+        fun validate(config: Config, baseline: Config): List<Notification> = validateConfig(config, baseline)
     }
 }
 
@@ -110,10 +116,10 @@ abstract class BaseConfig : HierarchicalConfig {
             }
         } catch (_: ClassCastException) {
             error("Value \"$result\" set for config parameter \"${keySequence(key)}\" is not of" +
-                    " required type ${default::class.simpleName}.")
+                " required type ${default::class.simpleName}.")
         } catch (_: NumberFormatException) {
             error("Value \"$result\" set for config parameter \"${keySequence(key)}\" is not of" +
-                    " required type ${default::class.simpleName}.")
+                " required type ${default::class.simpleName}.")
         }
     }
 

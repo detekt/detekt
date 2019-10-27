@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.api.internal
 
+import io.gitlab.arturbosch.detekt.api.CompositeConfig
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.YamlConfig
@@ -13,14 +14,17 @@ internal fun validateIdentifier(id: String) {
     require(id.matches(identifierRegex)) { "id must match [aA-zZ]+([-][aA-zZ]+)*" }
 }
 
-fun verifyConfig(config: Config, baseline: Config): List<Notification> {
-    if (config == Config.empty && baseline == Config.empty) {
+@Suppress("UNCHECKED_CAST", "ComplexMethod")
+fun validateConfig(config: Config, baseline: Config): List<Notification> {
+    require(baseline != Config.empty) { "Cannot validate configuration based on an empty baseline config." }
+    require(baseline is YamlConfig) { "Only supported baseline config is the YamlConfig." }
+
+    if (config == Config.empty) {
         return emptyList()
     }
 
     val notifications = mutableListOf<Notification>()
 
-    @Suppress("UNCHECKED_CAST")
     fun testKeys(current: Map<String, Any>, base: Map<String, Any>, parentPath: String?) {
         for (prop in current.keys) {
 
@@ -29,8 +33,8 @@ fun verifyConfig(config: Config, baseline: Config): List<Notification> {
                 notifications.add(doesNotExistsMessage(propertyPath))
             }
 
-            val next = current[prop]?.let { it as? Map<String, Any> }
-            val nextBase = base[prop]?.let { it as? Map<String, Any> }
+            val next = current[prop] as? Map<String, Any>
+            val nextBase = base[prop] as? Map<String, Any>
 
             when {
                 next == null && nextBase != null -> notifications.add(nestedConfigExpectedMessage(propertyPath))
@@ -41,8 +45,10 @@ fun verifyConfig(config: Config, baseline: Config): List<Notification> {
         }
     }
 
-    if (config is YamlConfig && baseline is YamlConfig) {
-        testKeys(config.properties, baseline.properties, null)
+    when (config) {
+        is YamlConfig -> testKeys(config.properties, baseline.properties, null)
+        is CompositeConfig -> notifications.addAll(CompositeConfig.validate(config, baseline))
+        else -> error("Unsupported config type for validation: '${config::class}'.")
     }
 
     return notifications
