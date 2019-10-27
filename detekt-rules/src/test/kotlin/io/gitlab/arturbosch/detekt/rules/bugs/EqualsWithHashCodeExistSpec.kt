@@ -57,7 +57,7 @@ class EqualsWithHashCodeExistSpec : Spek({
                         return super.equals(other)
                     }
                 }"""
-                assertThat(subject.compileAndLint(code)).hasSize(0)
+                assertThat(subject.compileAndLint(code)).isEmpty()
             }
         }
     }

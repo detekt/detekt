@@ -20,7 +20,7 @@ class UnnecessaryInheritanceSpec : Spek({
 
         it("has no unnecessary super type declarations") {
             val findings = subject.lint("class C : An()")
-            assertThat(findings).hasSize(0)
+            assertThat(findings).isEmpty()
         }
     }
 })

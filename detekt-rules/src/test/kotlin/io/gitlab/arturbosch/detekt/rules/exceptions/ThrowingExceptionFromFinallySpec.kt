@@ -42,7 +42,7 @@ class ThrowingExceptionFromFinallySpec : Spek({
                         println()
                     }
                 }"""
-            assertThat(subject.compileAndLint(code)).hasSize(0)
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
 })

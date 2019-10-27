@@ -49,7 +49,7 @@ class ThrowsCountSpec : Spek({
             val subject = ThrowsCount(config)
 
             it("does not report for configuration max parameter") {
-                assertThat(subject.lint(code)).hasSize(0)
+                assertThat(subject.lint(code)).isEmpty()
             }
         }
     }

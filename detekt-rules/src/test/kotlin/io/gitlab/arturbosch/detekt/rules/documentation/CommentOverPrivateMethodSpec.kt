@@ -27,7 +27,7 @@ class CommentOverPrivateMethodSpec : Spek({
                  * asdf
                  */
                 fun f() {}"""
-            assertThat(subject.compileAndLint(code)).hasSize(0)
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("does not report public method in a class with a comment") {
@@ -38,7 +38,7 @@ class CommentOverPrivateMethodSpec : Spek({
                      */
                     fun f() {}
                 }"""
-            assertThat(subject.compileAndLint(code)).hasSize(0)
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
 })

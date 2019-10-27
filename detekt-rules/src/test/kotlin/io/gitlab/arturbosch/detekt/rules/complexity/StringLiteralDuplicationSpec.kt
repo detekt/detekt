@@ -29,7 +29,7 @@ class StringLiteralDuplicationSpec : Spek({
 
             it("does not report 2 equal hardcoded strings") {
                 val code = """val str = "lorem" + "lorem" + "ipsum""""
-                assertThat(subject.compileAndLint(code)).hasSize(0)
+                assertThat(subject.compileAndLint(code)).isEmpty()
             }
         }
 
@@ -45,7 +45,7 @@ class StringLiteralDuplicationSpec : Spek({
             """
 
             it("does not report strings in annotations") {
-                assertThat(subject.compileAndLint(code)).hasSize(0)
+                assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
             it("reports strings in annotations according to config") {
@@ -59,7 +59,7 @@ class StringLiteralDuplicationSpec : Spek({
             val code = """val str = "amet" + "amet" + "amet""""
 
             it("does not report strings with 4 characters") {
-                assertThat(subject.compileAndLint(code)).hasSize(0)
+                assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
             it("reports string with 4 characters") {
@@ -128,7 +128,7 @@ class StringLiteralDuplicationSpec : Spek({
                         |
                         ""${'"'}
                 """
-                assertThat(subject.compileAndLint(code)).hasSize(0)
+                assertThat(subject.compileAndLint(code)).isEmpty()
             }
         }
     }

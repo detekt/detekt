@@ -19,7 +19,7 @@ class CollapsibleIfStatementsSpec : Spek({
 
         it("does not report if statements which can't be merged") {
             val path = Case.CollapsibleIfsNegative.path()
-            assertThat(subject.lint(path)).hasSize(0)
+            assertThat(subject.lint(path)).isEmpty()
         }
     }
 })

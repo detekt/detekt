@@ -18,7 +18,7 @@ class IteratorHasNextCallsNextMethodSpec : Spek({
 
         it("does not report correct iterator implementations") {
             val path = Case.IteratorImplNegative.path()
-            assertThat(subject.lint(path)).hasSize(0)
+            assertThat(subject.lint(path)).isEmpty()
         }
     }
 })

@@ -18,7 +18,7 @@ class MemberNameEqualsClassNameSpec : Spek({
 
             it("reports methods which are not named after the class") {
                 val path = Case.MemberNameEqualsClassNameNegative.path()
-                assertThat(subject.lint(path)).hasSize(0)
+                assertThat(subject.lint(path)).isEmpty()
             }
         }
 

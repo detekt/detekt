@@ -19,7 +19,7 @@ class MandatoryBracesIfStatementsSpec : Spek({
 
         it("reports non multi-line if statements should have braces") {
             val path = Case.MandatoryBracesIfStatementsNegative.path()
-            assertThat(subject.lint(path)).hasSize(0)
+            assertThat(subject.lint(path)).isEmpty()
         }
     }
 })
