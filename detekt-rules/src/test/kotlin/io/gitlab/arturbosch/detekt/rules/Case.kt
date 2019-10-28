@@ -34,7 +34,6 @@ enum class Case(val file: String) {
     LoopWithTooManyJumpStatementsNegative("cases/LoopWithTooManyJumpStatementsNegative.kt"),
     LoopWithTooManyJumpStatementsPositive("cases/LoopWithTooManyJumpStatementsPositive.kt"),
     MayBeConstNegative("cases/MayBeConstNegative.kt"),
-    MandatoryBracesIfStatementsPositive("cases/MandatoryBracesIfStatementsPositive.kt"),
     MandatoryBracesIfStatementsNegative("cases/MandatoryBracesIfStatementsNegative.kt"),
     NewLineAtEndOfFile("/cases/NewLineAtEndOfFile.kt"),
     MaxLineLength("/cases/MaxLineLength.kt"),
