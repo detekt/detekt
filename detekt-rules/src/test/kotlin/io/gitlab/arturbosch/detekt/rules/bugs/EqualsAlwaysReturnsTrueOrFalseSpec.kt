@@ -19,5 +19,15 @@ class EqualsAlwaysReturnsTrueOrFalseSpec : Spek({
         it("does not report equals() methods") {
             assertThat(subject.lint(Case.EqualsAlwaysReturnsTrueOrFalseNegative.path())).isEmpty()
         }
+
+        it("detects and doesn't crash when return expression is annotated - #2021") {
+            val code = """
+            override fun equals(other: Any?): Boolean {
+                @Suppress("UnsafeCallOnNullableType")
+                return true
+            }
+            """
+            assertThat(subject.lint(code)).hasSize(1)
+        }
     }
 })
