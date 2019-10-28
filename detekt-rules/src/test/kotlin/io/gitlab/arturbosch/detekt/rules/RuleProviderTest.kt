@@ -23,97 +23,57 @@ class RuleProviderTest : Spek({
 
     describe("Rule Provider") {
 
-        it("commentSmellProvider") {
-            RuleProviderAssert(
-                    CommentSmellProvider(),
-                    "io.gitlab.arturbosch.detekt.rules.documentation",
-                    Rule::class.java)
-                    .assert()
-        }
-
-        it("complexityProvider") {
-            RuleProviderAssert(
-                    ComplexityProvider(),
-                    "io.gitlab.arturbosch.detekt.rules.complexity",
-                    Rule::class.java)
-                    .assert()
-        }
-
-        it("emptyCodeProvider") {
-            RuleProviderAssert(
-                    EmptyCodeProvider(),
-                    "io.gitlab.arturbosch.detekt.rules.empty",
-                    Rule::class.java)
-                    .assert()
-        }
-
-        it("exceptionsProvider") {
-            RuleProviderAssert(
-                    ExceptionsProvider(),
-                    "io.gitlab.arturbosch.detekt.rules.exceptions",
-                    Rule::class.java)
-                    .assert()
-        }
-
-        it("namingProvider") {
-            RuleProviderAssert(
-                    NamingProvider(),
-                    "io.gitlab.arturbosch.detekt.rules.naming",
-                    Rule::class.java)
-                    .assert()
-        }
-
-        it("performanceProvider") {
-            RuleProviderAssert(
-                    PerformanceProvider(),
-                    "io.gitlab.arturbosch.detekt.rules.performance",
-                    Rule::class.java)
-                    .assert()
-        }
-
-        it("potentialBugProvider") {
-            RuleProviderAssert(
-                    PotentialBugProvider(),
-                    "io.gitlab.arturbosch.detekt.rules.bugs",
-                    Rule::class.java)
-                    .assert()
-        }
-
-        it("styleGuideProvider") {
-            RuleProviderAssert(
-                    StyleGuideProvider(),
-                    "io.gitlab.arturbosch.detekt.rules.style",
-                    Rule::class.java)
-                    .assert()
+        it("checks whether all rules are called in the corresponding RuleSetProvider") {
+            val reflections = Reflections("io.gitlab.arturbosch.detekt.rules.providers")
+            val providers = reflections.getSubTypesOf(RuleSetProvider::class.java)
+            providers.forEach { providerType ->
+                val packageName = getRulesPackageNameForProvider(providerType)
+                val provider = providerType.getDeclaredConstructor().newInstance()
+                val rules = getRules(provider)
+                val classes = getClasses(packageName)
+                classes
+                    .forEach { clazz ->
+                        val rule = rules.singleOrNull { it.javaClass.simpleName == clazz.simpleName }
+                        assertThat(rule).withFailMessage(
+                            "Rule $clazz is not called in the corresponding RuleSetProvider $providerType")
+                            .isNotNull()
+                    }
+            }
         }
     }
 })
 
-private class RuleProviderAssert<T>(
-    private val provider: RuleSetProvider,
-    private val packageName: String,
-    private val clazz: Class<T>
-) {
+private val ruleMap = mapOf<Class<*>, String>(
+    Pair(CommentSmellProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.documentation"),
+    Pair(ComplexityProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.complexity"),
+    Pair(EmptyCodeProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.empty"),
+    Pair(ExceptionsProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.exceptions"),
+    Pair(NamingProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.naming"),
+    Pair(PerformanceProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.performance"),
+    Pair(PotentialBugProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.bugs"),
+    Pair(StyleGuideProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.style")
+)
 
-    fun assert() {
-        val rules = getRules(provider)
-        assertThat(rules).isNotEmpty
-        val classes = getClasses()
-        assertThat(classes).isNotEmpty
-        classes
-                .map { c -> rules.singleOrNull { it.javaClass.simpleName == c.simpleName } }
-                .forEach { assertThat(it).isNotNull() }
-    }
+private fun getRulesPackageNameForProvider(providerType: Class<out RuleSetProvider>): String {
+    val packageName = ruleMap[providerType]
+    assertThat(packageName)
+        .withFailMessage("No rules package for provider of type $providerType was defined in the ruleMap")
+        .isNotNull()
+    return packageName!!
+}
 
-    private fun getRules(provider: RuleSetProvider): List<BaseRule> {
-        return provider.buildRuleset(Config.empty)!!.rules
-                .flatMap { (it as? MultiRule)?.rules ?: listOf(it) }
-    }
+private fun getRules(provider: RuleSetProvider): List<BaseRule> {
+    val ruleSet = provider.buildRuleset(Config.empty)!!
+    val rules = ruleSet.rules.flatMap { (it as? MultiRule)?.rules ?: listOf(it) }
+    assertThat(rules).isNotEmpty
+    return rules
+}
 
-    private fun getClasses(): List<Class<out T>> {
-        return Reflections(packageName)
-                .getSubTypesOf(clazz)
-                .filterNot { "Test" in it.name }
-                .filter { !Modifier.isAbstract(it.modifiers) && !Modifier.isStatic(it.modifiers) }
-    }
+private fun getClasses(packageName: String): List<Class<out Rule>> {
+    val classes = Reflections(packageName)
+        .getSubTypesOf(Rule::class.java)
+        .filterNot { "Test" in it.name }
+        .filter { !Modifier.isAbstract(it.modifiers) && !Modifier.isStatic(it.modifiers) }
+    assertThat(classes).isNotEmpty
+    return classes
 }

@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.core
 
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.RuleSetId
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import java.io.PrintStream
 import java.nio.file.Files
@@ -33,3 +34,5 @@ fun <K, V> List<Pair<K, List<V>>>.toMergedMap(): Map<K, List<V>> {
     }
     return map
 }
+
+typealias FindingsResult = List<Map<RuleSetId, List<Finding>>>

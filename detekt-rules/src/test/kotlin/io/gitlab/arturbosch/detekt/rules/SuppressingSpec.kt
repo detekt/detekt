@@ -24,7 +24,7 @@ class SuppressingSpec : Spek({
             findings.forEach {
                 println(it.compact())
             }
-            assertThat(findings).hasSize(0)
+            assertThat(findings).isEmpty()
         }
 
         it("all findings are suppressed on file levels") {
@@ -34,7 +34,7 @@ class SuppressingSpec : Spek({
             findings.forEach {
                 println(it.compact())
             }
-            assertThat(findings).hasSize(0)
+            assertThat(findings).isEmpty()
         }
 
         it("all findings are suppressed on class levels") {
@@ -44,7 +44,7 @@ class SuppressingSpec : Spek({
             findings.forEach {
                 println(it.compact())
             }
-            assertThat(findings).hasSize(0)
+            assertThat(findings).isEmpty()
         }
 
         it("should suppress TooManyFunctionsRule on class level") {

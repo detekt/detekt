@@ -21,7 +21,7 @@ class NamingConventionLengthSpec : Spek({
         it("should not report a variable with single letter name") {
             val code = "private val a = 3"
             subject.lint(code)
-            assertThat(subject.findings).hasSize(0)
+            assertThat(subject.findings).isEmpty()
         }
 
         context("VariableMinLength rule with a custom minimum length") {
@@ -38,14 +38,14 @@ class NamingConventionLengthSpec : Spek({
             class C {
                 val prop: (Int) -> Unit = { _ -> Unit }
             }"""
-                assertThat(variableMinLength.lint(code)).hasSize(0)
+                assertThat(variableMinLength.lint(code)).isEmpty()
             }
         }
 
         it("should not report a variable with 64 letters") {
             val code = "private val varThatIsExactly64LettersLongWhichYouMightNotWantToBelieveInLolz = 3"
             subject.lint(code)
-            assertThat(subject.findings).hasSize(0)
+            assertThat(subject.findings).isEmpty()
         }
 
         it("should report a variable name that is too long") {

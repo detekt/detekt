@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.internal.createKotlinCoreEnvironment
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
+import java.io.Closeable
 import java.io.PrintStream
 import java.nio.file.Files
 import java.nio.file.Path
@@ -28,12 +29,12 @@ data class ProcessingSettings @JvmOverloads constructor(
     val classpath: List<String> = emptyList(),
     val languageVersion: LanguageVersion? = null,
     val jvmTarget: JvmTarget = JvmTarget.DEFAULT,
-    val executorService: ExecutorService = ForkJoinPool.commonPool(),
+    val executorService: ExecutorService? = null,
     val outPrinter: PrintStream = System.out,
     val errorPrinter: PrintStream = System.err,
     val autoCorrect: Boolean = false,
     val debug: Boolean = false
-) {
+) : AutoCloseable, Closeable {
     /**
      * Single project input path constructor.
      */
@@ -87,6 +88,8 @@ data class ProcessingSettings @JvmOverloads constructor(
         createKotlinCoreEnvironment(compilerConfiguration)
     }
 
+    val taskPool: TaskPool by lazy { TaskPool(executorService) }
+
     fun info(msg: String) = outPrinter.println(msg)
 
     fun error(msg: String, error: Throwable) {
@@ -98,5 +101,9 @@ data class ProcessingSettings @JvmOverloads constructor(
         if (debug) {
             outPrinter.println(msg())
         }
+    }
+
+    override fun close() {
+        taskPool.close()
     }
 }

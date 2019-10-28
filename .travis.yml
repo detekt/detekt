@@ -16,9 +16,6 @@ matrix:
     # JDK 8 - see https://docs.travis-ci.com/user/reference/osx/#jdk-and-macos
     - os: osx
       osx_image: xcode9.3
-    # JDK 11
-    - os: osx
-      osx_image: xcode10.1
     # JDK 12
     - os: osx
       osx_image: xcode10.2

@@ -19,25 +19,30 @@ class KtTreeCompiler(
         require(Files.exists(path)) { "Given path $path does not exist!" }
         return when {
             path.isFile() && path.isKotlinFile() -> listOf(compiler.compile(path, path))
-            path.isDirectory() -> compileInternal(path)
+            path.isDirectory() -> compileProject(path)
             else -> {
-                if (settings.debug) {
-                    println("Ignoring a file detekt cannot handle: $path")
-                }
+                settings.info("Ignoring a file detekt cannot handle: $path")
                 emptyList()
             }
         }
     }
 
-    private fun streamFor(project: Path) =
-        Files.walk(project).apply { if (settings.parallelCompilation) parallel() }
-
-    private fun compileInternal(project: Path): List<KtFile> = streamFor(project)
-        .filter(Path::isFile)
-        .filter { it.isKotlinFile() }
-        .filter { !ignored(it) }
-        .map { compiler.compile(project, it) }
-        .collect(Collectors.toList())
+    private fun compileProject(project: Path): List<KtFile> {
+        val kotlinFiles = Files.walk(project)
+            .filter(Path::isFile)
+            .filter { it.isKotlinFile() }
+            .filter { !isIgnored(it) }
+        return if (settings.parallelCompilation) {
+            val service = settings.taskPool
+            val tasks = kotlinFiles.map { path ->
+                service.task { compiler.compile(project, path) }
+                    .recover { settings.error("Could not compile '$path'.", it); null }
+            }.collect(Collectors.toList())
+            return awaitAll(tasks).filterNotNull()
+        } else {
+            kotlinFiles.map { compiler.compile(project, it) }.collect(Collectors.toList())
+        }
+    }
 
     private fun Path.isKotlinFile(): Boolean {
         val fullPath = toAbsolutePath().toString()
@@ -45,8 +50,5 @@ class KtTreeCompiler(
         return kotlinEnding in KT_ENDINGS
     }
 
-    private fun ignored(path: Path): Boolean {
-        val matchers = settings.pathFilters ?: return false
-        return matchers.isIgnored(path)
-    }
+    private fun isIgnored(path: Path): Boolean = settings.pathFilters?.isIgnored(path) ?: false
 }

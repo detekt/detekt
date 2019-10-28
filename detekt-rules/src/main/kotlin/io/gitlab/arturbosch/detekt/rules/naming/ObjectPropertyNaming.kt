@@ -46,27 +46,25 @@ class ObjectPropertyNaming(config: Config = Config.empty) : Rule(config) {
 
     private fun handleConstant(property: KtProperty) {
         if (!property.identifierName().matches(constantPattern)) {
-            report(CodeSmell(
-                    issue,
-                    Entity.from(property),
-                    message = "Object constant names should match the pattern: $constantPattern"))
+            report(property, "Object constant names should match the pattern: $constantPattern")
         }
     }
 
     private fun handleProperty(property: KtProperty) {
         if (property.isPrivate()) {
             if (!property.identifierName().matches(privatePropertyPattern)) {
-                report(CodeSmell(
-                        issue,
-                        Entity.from(property),
-                        message = "Private object property names should match the pattern: $privatePropertyPattern"))
+                report(property, "Private object property names should match the pattern: $privatePropertyPattern")
             }
         } else if (!property.identifierName().matches(propertyPattern)) {
-            report(CodeSmell(
-                    issue,
-                    Entity.from(property),
-                    message = "Object property names should match the pattern: $propertyPattern"))
+            report(property, "Object property names should match the pattern: $propertyPattern")
         }
+    }
+
+    private fun report(property: KtProperty, message: String) {
+        report(CodeSmell(
+            issue,
+            Entity.from(property),
+            message = message))
     }
 
     companion object {

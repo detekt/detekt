@@ -21,6 +21,7 @@ import io.gitlab.arturbosch.detekt.rules.bugs.UnsafeCallOnNullableType
 import io.gitlab.arturbosch.detekt.rules.bugs.UnsafeCast
 import io.gitlab.arturbosch.detekt.rules.bugs.UselessPostfixExpression
 import io.gitlab.arturbosch.detekt.rules.bugs.WrongEqualsTypeParameter
+import io.gitlab.arturbosch.detekt.rules.bugs.ImplicitDefaultLocale
 
 /**
  * The potential-bugs rule set provides rules that detect potential bugs.
@@ -50,7 +51,8 @@ class PotentialBugProvider : RuleSetProvider {
                 UnconditionalJumpStatementInLoop(config),
                 UnreachableCode(config),
                 UnsafeCallOnNullableType(config),
-                UnsafeCast(config)
+                UnsafeCast(config),
+                ImplicitDefaultLocale(config)
         ))
     }
 }

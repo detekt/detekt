@@ -17,7 +17,7 @@ class TopLevelPropertyNamingSpec : Spek({
                 const val MY_NAME_8 = "Artur"
                 const val MYNAME = "Artur"
             """)
-            assertThat(subject.lint(code)).hasSize(0)
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         it("should detect five constants not complying to the naming rules") {
@@ -47,7 +47,7 @@ class TopLevelPropertyNamingSpec : Spek({
                 val s_d_d_1 = listOf("")
                 private val INTERNAL_VERSION = "1.0.0"
             """)
-            assertThat(subject.lint(code)).hasSize(0)
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         it("should report non private top level property using underscore") {
