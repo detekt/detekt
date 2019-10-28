@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.rules.Case
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
@@ -15,7 +16,7 @@ class NestedBlockDepthSpec : Spek({
     describe("nested classes are also considered") {
         it("should detect only the nested large class") {
             subject.lint(Case.NestedClasses.path())
-            assertThat(subject.findings.size).isEqualTo(1)
+            assertThat(subject.findings).hasSize(1)
             assertThat((subject.findings[0] as ThresholdedCodeSmell).value).isEqualTo(5)
         }
 
@@ -31,7 +32,10 @@ class NestedBlockDepthSpec : Spek({
                         }
                     }
                 }"""
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            val findings = subject.compileAndLint(code)
+
+            assertThat(findings).hasSize(1)
+            assertThat(findings).hasTextLocations(4 to 5)
         }
 
         it("should not detect valid nested block depth") {
