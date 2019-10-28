@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.empty
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -48,7 +48,9 @@ class EmptyClassBlockSpec : Spek({
 
         it("reports the empty object body") {
             val code = "object SomeObject {}"
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings).hasTextLocations(18 to 20)
         }
 
         it("does not report the object if it is of an anonymous class") {
