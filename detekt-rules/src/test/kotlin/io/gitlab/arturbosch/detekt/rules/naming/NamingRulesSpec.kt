@@ -79,7 +79,7 @@ class NamingRulesSpec : Spek({
                     override val SHOULD_BE_FLAGGED_2 = "banana"
                 }
             """
-            val config = TestConfig(mapOf("ignoreOverridden" to "false"))
+            val config = TestConfig(mapOf(NamingRules.IGNORE_OVERRIDDEN to "false"))
             assertThat(NamingRules(config).lint(code)).hasLocationStrings(
                     "'override val SHOULD_BE_FLAGGED = \"banana\"' at (2,5) in /$fileName",
                     "'override val SHOULD_BE_FLAGGED_2 = \"banana\"' at (5,5) in /$fileName"
