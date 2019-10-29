@@ -8,7 +8,5 @@ title: CodeSmell.compact - detekt-api
 
 `open fun compact(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)
 
-Overrides [Compactable.compact](../-compactable/compact.html)
-
 Contract to format implementing object to a string representation.
 

@@ -8,10 +8,6 @@ title: Rule.ruleId - detekt-api
 
 `val ruleId: `[`RuleId`](../-rule-id.html)
 
-Overrides [BaseRule.ruleId](../-base-rule/rule-id.html)
-
-Overrides [ConfigAware.ruleId](../-config-aware/rule-id.html)
-
 An id this rule is identified with.
 Conventionally the rule id is derived from the issue id as these two classes have a coexistence.
 

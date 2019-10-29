@@ -6,7 +6,7 @@ title: Detektion.addData - detekt-api
 
 # addData
 
-`abstract fun <V> addData(key: Key<`[`V`](add-data.html#V)`>, value: `[`V`](add-data.html#V)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+`abstract fun <V> addData(key: Key<V>, value: V): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
 
 Stores an arbitrary value inside the result binded to the given key.
 

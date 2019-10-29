@@ -19,7 +19,7 @@ which needs to be transferred from the detekt engine to the user.
 
 ### Functions
 
-| [add](add.html) | `abstract fun add(notification: `[`Notification`](../-notification/index.html)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)<br>Stores a notification in the result.`abstract fun add(projectMetric: `[`ProjectMetric`](../-project-metric/index.html)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)<br>Stores a metric calculated for the whole project in the result. |
-| [addData](add-data.html) | `abstract fun <V> addData(key: Key<`[`V`](add-data.html#V)`>, value: `[`V`](add-data.html#V)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)<br>Stores an arbitrary value inside the result binded to the given key. |
-| [getData](get-data.html) | `abstract fun <V> getData(key: Key<`[`V`](get-data.html#V)`>): `[`V`](get-data.html#V)`?`<br>Retrieves a value stored by the given key of the result. |
+| [add](add.html) | Stores a notification in the result.`abstract fun add(notification: `[`Notification`](../-notification/index.html)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)<br>Stores a metric calculated for the whole project in the result.`abstract fun add(projectMetric: `[`ProjectMetric`](../-project-metric/index.html)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html) |
+| [addData](add-data.html) | Stores an arbitrary value inside the result binded to the given key.`abstract fun <V> addData(key: Key<V>, value: V): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html) |
+| [getData](get-data.html) | Retrieves a value stored by the given key of the result.`abstract fun <V> getData(key: Key<V>): V?` |
 

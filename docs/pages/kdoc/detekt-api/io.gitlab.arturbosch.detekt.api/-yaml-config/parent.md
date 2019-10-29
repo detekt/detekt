@@ -6,9 +6,7 @@ title: YamlConfig.parent - detekt-api
 
 # parent
 
-`val parent: `[`HierarchicalConfig.Parent`](../-hierarchical-config/-parent/index.html)`?`
-
-Overrides [HierarchicalConfig.parent](../-hierarchical-config/parent.html)
+`val parent: Parent?`
 
 Returns the parent config which encloses this config part.
 

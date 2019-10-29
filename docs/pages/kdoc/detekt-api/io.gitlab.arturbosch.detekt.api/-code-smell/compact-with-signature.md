@@ -8,8 +8,6 @@ title: CodeSmell.compactWithSignature - detekt-api
 
 `open fun compactWithSignature(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)
 
-Overrides [Compactable.compactWithSignature](../-compactable/compact-with-signature.html)
-
 Same as [compact](../-compactable/compact.html) except the content should contain a substring which represents
 this exact findings via a custom identifier.
 

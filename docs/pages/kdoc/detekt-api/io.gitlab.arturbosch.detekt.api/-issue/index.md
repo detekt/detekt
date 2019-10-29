@@ -12,7 +12,7 @@ An issue represents a problem in the codebase.
 
 ### Constructors
 
-| [&lt;init&gt;](-init-.html) | `Issue(id: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, severity: `[`Severity`](../-severity/index.html)`, description: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, debt: `[`Debt`](../-debt/index.html)`)`<br>An issue represents a problem in the codebase. |
+| [&lt;init&gt;](-init-.html) | An issue represents a problem in the codebase.`Issue(id: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, severity: `[`Severity`](../-severity/index.html)`, description: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, debt: `[`Debt`](../-debt/index.html)`)` |
 
 ### Properties
 
