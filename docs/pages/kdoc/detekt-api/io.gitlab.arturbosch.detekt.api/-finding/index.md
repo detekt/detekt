@@ -21,30 +21,11 @@ an entity. Metrics and entity references can also considered for deeper characte
 | [message](message.html) | `abstract val message: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 | [references](references.html) | `abstract val references: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Entity`](../-entity/index.html)`>` |
 
-### Inherited Properties
-
-| [charPosition](../-has-entity/char-position.html) | `open val charPosition: `[`TextLocation`](../-text-location/index.html) |
-| [entity](../-has-entity/entity.html) | `abstract val entity: `[`Entity`](../-entity/index.html) |
-| [file](../-has-entity/file.html) | `open val file: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
-| [inClass](../-has-entity/in-class.html) | `open val inClass: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
-| [location](../-has-entity/location.html) | `open val location: `[`Location`](../-location/index.html) |
-| [locationAsString](../-has-entity/location-as-string.html) | `open val locationAsString: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
-| [metrics](../-has-metrics/metrics.html) | `abstract val metrics: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Metric`](../-metric/index.html)`>` |
-| [name](../-has-entity/name.html) | `open val name: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
-| [signature](../-has-entity/signature.html) | `open val signature: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
-| [startPosition](../-has-entity/start-position.html) | `open val startPosition: `[`SourceLocation`](../-source-location/index.html) |
-
 ### Functions
 
-| [messageOrDescription](message-or-description.html) | `abstract fun messageOrDescription(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)<br>Explanation why this finding was raised. |
-
-### Inherited Functions
-
-| [compact](../-compactable/compact.html) | `abstract fun compact(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)<br>Contract to format implementing object to a string representation. |
-| [compactWithSignature](../-compactable/compact-with-signature.html) | `open fun compactWithSignature(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)<br>Same as [compact](../-compactable/compact.html) except the content should contain a substring which represents this exact findings via a custom identifier. |
-| [metricByType](../-has-metrics/metric-by-type.html) | `open fun metricByType(type: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`): `[`Metric`](../-metric/index.html)`?`<br>Finds the first metric matching given [type](../-has-metrics/metric-by-type.html#io.gitlab.arturbosch.detekt.api.HasMetrics$metricByType(kotlin.String)/type). |
+| [messageOrDescription](message-or-description.html) | Explanation why this finding was raised.`abstract fun messageOrDescription(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 
 ### Inheritors
 
-| [CodeSmell](../-code-smell/index.html) | `open class CodeSmell : `[`Finding`](./index.html)<br>A code smell indicates any possible design problem inside a program's source code. The type of a code smell is described by an [Issue](../-issue/index.html). |
+| [CodeSmell](../-code-smell/index.html) | A code smell indicates any possible design problem inside a program's source code. The type of a code smell is described by an [Issue](../-issue/index.html).`open class CodeSmell : `[`Finding`](./index.html) |
 

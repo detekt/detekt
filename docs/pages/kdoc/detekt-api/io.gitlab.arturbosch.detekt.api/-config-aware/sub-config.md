@@ -8,7 +8,5 @@ title: ConfigAware.subConfig - detekt-api
 
 `open fun subConfig(key: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`): `[`Config`](../-config/index.html)
 
-Overrides [Config.subConfig](../-config/sub-config.html)
-
 Tries to retrieve part of the configuration based on given key.
 

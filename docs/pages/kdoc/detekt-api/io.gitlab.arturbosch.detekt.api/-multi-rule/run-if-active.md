@@ -6,7 +6,7 @@ title: MultiRule.runIfActive - detekt-api
 
 # runIfActive
 
-`fun <T : `[`Rule`](../-rule/index.html)`> `[`T`](run-if-active.html#T)`.runIfActive(block: `[`T`](run-if-active.html#T)`.() -> `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+`fun <T : `[`Rule`](../-rule/index.html)`> T.runIfActive(block: T.() -> `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
 
 Preferred way to run child rules because this composite rule
 takes care of evaluating if a specific child should be run at all.

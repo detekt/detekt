@@ -7,6 +7,3 @@ title: CorrectableCodeSmell.toString - detekt-api
 # toString
 
 `open fun toString(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)
-
-Overrides [CodeSmell.toString](../-code-smell/to-string.html)
-

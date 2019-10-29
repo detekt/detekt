@@ -7,6 +7,3 @@ title: CodeSmell.metrics - detekt-api
 # metrics
 
 `open val metrics: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Metric`](../-metric/index.html)`>`
-
-Overrides [HasMetrics.metrics](../-has-metrics/metrics.html)
-

@@ -6,7 +6,7 @@ title: HierarchicalConfig.parent - detekt-api
 
 # parent
 
-`abstract val parent: `[`HierarchicalConfig.Parent`](-parent/index.html)`?`
+`abstract val parent: Parent?`
 
 Returns the parent config which encloses this config part.
 

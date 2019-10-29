@@ -13,17 +13,17 @@ plugins {
     id("com.gradle.plugin-publish") version "0.10.1"
     id("com.jfrog.bintray") version "1.8.4"
     kotlin("jvm") version "1.3.50"
-    id("org.jetbrains.dokka") version "0.9.18"
-    id("com.github.ben-manes.versions") version "0.21.0"
-    id("io.gitlab.arturbosch.detekt") version "1.0.1"
+    id("org.jetbrains.dokka") version "0.10.0"
+    id("com.github.ben-manes.versions") version "0.27.0"
+    id("io.gitlab.arturbosch.detekt") version "1.1.1"
 }
 
 group = "io.gitlab.arturbosch.detekt"
 version = "1.1.1"
 
-val spekVersion = "2.0.2"
-val junitPlatformVersion = "1.4.1"
-val assertjVersion = "3.12.2"
+val spekVersion = "2.0.8"
+val junitPlatformVersion = "1.5.2"
+val assertjVersion = "3.13.2"
 
 dependencies {
     implementation(kotlin("stdlib"))
@@ -47,6 +47,7 @@ gradlePlugin {
 
 tasks.test {
     useJUnitPlatform()
+    systemProperty("SPEK_TIMEOUT", 0) // disable test timeout
     testLogging {
         // set options for log level LIFECYCLE
         events = setOf(
@@ -81,11 +82,13 @@ pluginBundle {
 }
 
 tasks.dokka {
-    // suppresses undocumented classes but not dokka warnings
-    // https://github.com/Kotlin/dokka/issues/229 && https://github.com/Kotlin/dokka/issues/319
-    reportUndocumented = false
     outputFormat = "javadoc"
     outputDirectory = "$buildDir/javadoc"
+    configuration {
+        // suppresses undocumented classes but not dokka warnings
+        // https://github.com/Kotlin/dokka/issues/229 && https://github.com/Kotlin/dokka/issues/319
+        reportUndocumented = false
+    }
 }
 
 val generateDefaultDetektVersionFile by tasks.registering {

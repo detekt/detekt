@@ -12,7 +12,7 @@ Stores line and column information of a location.
 
 ### Constructors
 
-| [&lt;init&gt;](-init-.html) | `SourceLocation(line: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`, column: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`)`<br>Stores line and column information of a location. |
+| [&lt;init&gt;](-init-.html) | Stores line and column information of a location.`SourceLocation(line: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`, column: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)`)` |
 
 ### Properties
 

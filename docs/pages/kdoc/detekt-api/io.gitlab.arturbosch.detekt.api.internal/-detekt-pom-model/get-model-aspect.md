@@ -6,4 +6,4 @@ title: DetektPomModel.getModelAspect - detekt-api
 
 # getModelAspect
 
-`fun <T : PomModelAspect?> getModelAspect(aspect: `[`Class`](https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html)`<`[`T`](get-model-aspect.html#T)`>): `[`T`](get-model-aspect.html#T)`?`
+`fun <T : PomModelAspect?> getModelAspect(aspect: `[`Class`](https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html)`<T>): T?`
