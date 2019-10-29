@@ -106,7 +106,6 @@ class MandatoryBracesIfStatementsSpec : Spek({
             assertThat(findings).hasSize(1)
             assertThat(findings).hasTextLocations(47 to 56)
         }
-
     }
 
     describe("MandatoryBracesIfStatements rule") {
