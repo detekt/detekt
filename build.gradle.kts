@@ -107,6 +107,7 @@ subprojects {
     tasks.withType<Detekt>().configureEach {
         exclude("resources/")
         exclude("build/")
+        jvmTarget = "1.8"
     }
 
     val userHome = System.getProperty("user.home")

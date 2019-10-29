@@ -59,10 +59,12 @@ private fun getRulesPackageNameForProvider(providerType: Class<out RuleSetProvid
     assertThat(packageName)
         .withFailMessage("No rules package for provider of type $providerType was defined in the ruleMap")
         .isNotNull()
+    @Suppress("UnsafeCallOnNullableType")
     return packageName!!
 }
 
 private fun getRules(provider: RuleSetProvider): List<BaseRule> {
+    @Suppress("UnsafeCallOnNullableType")
     val ruleSet = provider.buildRuleset(Config.empty)!!
     val rules = ruleSet.rules.flatMap { (it as? MultiRule)?.rules ?: listOf(it) }
     assertThat(rules).isNotEmpty
