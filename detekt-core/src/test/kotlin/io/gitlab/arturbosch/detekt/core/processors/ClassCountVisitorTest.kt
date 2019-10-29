@@ -45,6 +45,7 @@ private fun getClassCount(files: Array<KtFile>): Int {
 private fun getData(file: KtFile): Int {
     return with(file) {
         accept(ClassCountVisitor())
+        @Suppress("UnsafeCallOnNullableType")
         getUserData(numberOfClassesKey)!!
     }
 }
