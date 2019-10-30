@@ -34,7 +34,8 @@ A configuration holds information about how to configure specific rules.
 
 ### Inheritors
 
-| [CompositeConfig](../-composite-config/index.html) | Wraps two different configuration which should be considered when retrieving properties.`class CompositeConfig : `[`Config`](./index.html) |
+| [CompositeConfig](../-composite-config/index.html) | Wraps two different configuration which should be considered when retrieving properties.`class CompositeConfig : `[`Config`](./index.html)`, `[`ValidatableConfiguration`](../../io.gitlab.arturbosch.detekt.api.internal/-validatable-configuration/index.html) |
 | [ConfigAware](../-config-aware/index.html) | Interface which is implemented by each Rule class to provide utility functions to retrieve specific or generic properties from the underlying detekt configuration file.`interface ConfigAware : `[`Config`](./index.html) |
+| [FailFastConfig](../../io.gitlab.arturbosch.detekt.api.internal/-fail-fast-config/index.html) | `data class FailFastConfig : `[`Config`](./index.html)`, `[`ValidatableConfiguration`](../../io.gitlab.arturbosch.detekt.api.internal/-validatable-configuration/index.html) |
 | [HierarchicalConfig](../-hierarchical-config/index.html) | A configuration which keeps track of the config it got sub-config'ed from by the [subConfig](sub-config.html) function. It's main usage is to recreate the property-path which was taken when using the [subConfig](sub-config.html) function repeatedly.`interface HierarchicalConfig : `[`Config`](./index.html) |
 

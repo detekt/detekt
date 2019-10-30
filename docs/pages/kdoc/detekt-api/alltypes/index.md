@@ -142,6 +142,11 @@ Currently supported extensions are:
 
 |
 
+##### [io.gitlab.arturbosch.detekt.api.internal.FailFastConfig](../io.gitlab.arturbosch.detekt.api.internal/-fail-fast-config/index.html)
+
+
+|
+
 ##### [io.gitlab.arturbosch.detekt.api.FileProcessListener](../io.gitlab.arturbosch.detekt.api/-file-process-listener/index.html)
 
 Gather additional metrics about the analyzed kotlin file.
@@ -377,6 +382,11 @@ for the existence of this rule violation.
 
 Provides a threshold attribute for this rule, which is specified manually for default values
 but can be also obtained from within a configuration object.
+
+
+|
+
+##### [io.gitlab.arturbosch.detekt.api.internal.ValidatableConfiguration](../io.gitlab.arturbosch.detekt.api.internal/-validatable-configuration/index.html)
 
 
 |

@@ -52,6 +52,12 @@ class CliArgs : Args {
     var generateConfig: Boolean = false
 
     @Parameter(
+        names = ["--validate-config", "-vc"],
+        description = "Validates the properties of the specified configuration (--config)."
+    )
+    var shouldValidateConfig: Boolean = false
+
+    @Parameter(
         names = ["--plugins", "-p"],
         description = "Extra paths to plugin jars separated by ',' or ';'."
     )

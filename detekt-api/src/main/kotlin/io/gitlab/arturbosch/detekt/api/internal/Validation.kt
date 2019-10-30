@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.api.internal
 
-import io.gitlab.arturbosch.detekt.api.CompositeConfig
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.YamlConfig
@@ -12,6 +11,10 @@ private val identifierRegex = Regex("[aA-zZ]+([-][aA-zZ]+)*")
  */
 internal fun validateIdentifier(id: String) {
     require(id.matches(identifierRegex)) { "id must match [aA-zZ]+([-][aA-zZ]+)*" }
+}
+
+interface ValidatableConfiguration {
+    fun validate(baseline: Config): List<Notification>
 }
 
 @Suppress("UNCHECKED_CAST", "ComplexMethod")
@@ -47,7 +50,7 @@ fun validateConfig(config: Config, baseline: Config): List<Notification> {
 
     when (config) {
         is YamlConfig -> testKeys(config.properties, baseline.properties, null)
-        is CompositeConfig -> notifications.addAll(CompositeConfig.validate(config, baseline))
+        is ValidatableConfiguration -> notifications.addAll(config.validate(baseline))
         else -> error("Unsupported config type for validation: '${config::class}'.")
     }
 

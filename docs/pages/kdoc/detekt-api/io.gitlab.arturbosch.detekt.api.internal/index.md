@@ -9,9 +9,11 @@ title: io.gitlab.arturbosch.detekt.api.internal - detekt-api
 ### Types
 
 | [DetektPomModel](-detekt-pom-model/index.html) | Adapted from https://github.com/pinterest/ktlint/blob/master/ktlint-core/src/main/kotlin/com/pinterest/ktlint/core/KtLint.kt Licenced under the MIT licence - https://github.com/pinterest/ktlint/blob/master/LICENSE`class DetektPomModel : UserDataHolderBase, PomModel` |
+| [FailFastConfig](-fail-fast-config/index.html) | `data class FailFastConfig : `[`Config`](../io.gitlab.arturbosch.detekt.api/-config/index.html)`, `[`ValidatableConfiguration`](-validatable-configuration/index.html) |
 | [McCabeVisitor](-mc-cabe-visitor/index.html) | Counts the cyclomatic complexity of functions.`class McCabeVisitor : `[`DetektVisitor`](../io.gitlab.arturbosch.detekt.api/-detekt-visitor/index.html) |
 | [PathFilters](-path-filters/index.html) | `class PathFilters` |
 | [SimpleNotification](-simple-notification/index.html) | `data class SimpleNotification : `[`Notification`](../io.gitlab.arturbosch.detekt.api/-notification/index.html) |
+| [ValidatableConfiguration](-validatable-configuration/index.html) | `interface ValidatableConfiguration` |
 
 ### Extensions for External Classes
 
