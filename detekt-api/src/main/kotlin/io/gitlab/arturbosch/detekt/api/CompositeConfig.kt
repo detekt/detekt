@@ -6,8 +6,8 @@ import io.gitlab.arturbosch.detekt.api.internal.validateConfig
 /**
  * Wraps two different configuration which should be considered when retrieving properties.
  */
-class CompositeConfig(private val lookFirst: Config, private val lookSecond: Config)
-    : Config, ValidatableConfiguration {
+class CompositeConfig(private val lookFirst: Config, private val lookSecond: Config) :
+    Config, ValidatableConfiguration {
 
     override fun subConfig(key: String): Config {
         return CompositeConfig(lookFirst.subConfig(key), lookSecond.subConfig(key))

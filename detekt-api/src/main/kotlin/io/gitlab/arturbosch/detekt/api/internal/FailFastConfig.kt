@@ -3,8 +3,8 @@ package io.gitlab.arturbosch.detekt.api.internal
 import io.gitlab.arturbosch.detekt.api.Config
 
 @Suppress("UNCHECKED_CAST")
-data class FailFastConfig(private val originalConfig: Config, private val defaultConfig: Config)
-    : Config, ValidatableConfiguration {
+data class FailFastConfig(private val originalConfig: Config, private val defaultConfig: Config) :
+    Config, ValidatableConfiguration {
 
     override fun subConfig(key: String) =
         FailFastConfig(originalConfig.subConfig(key), defaultConfig.subConfig(key))

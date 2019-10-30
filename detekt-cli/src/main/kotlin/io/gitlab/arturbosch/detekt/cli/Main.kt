@@ -14,7 +14,7 @@ import kotlin.system.exitProcess
 fun main(args: Array<String>) {
     try {
         buildRunner(args).execute()
-    } catch(e: InvalidConfig) {
+    } catch (e: InvalidConfig) {
         // Exit with status code 3 when some properties in the configuration file are not expected to exist.
         e.messages.forEach(::println)
         exitProcess(3)

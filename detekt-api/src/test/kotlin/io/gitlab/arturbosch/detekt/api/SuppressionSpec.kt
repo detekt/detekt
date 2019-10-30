@@ -29,7 +29,6 @@ internal class SuppressionSpec : Spek({
             return annotatedClass.isSuppressedBy("Test", setOf("alias"))
         }
 
-
         it("should not be suppressed by a @Deprecated annotation") {
             assertThat(checkSuppression("Deprecated", "This should no longer be used")).isFalse()
         }
