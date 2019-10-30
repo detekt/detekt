@@ -53,8 +53,6 @@ formatting:
   active: true
   android: false
   autoCorrect: true
-  NoItParamInMultilineLambda:
-    active: false
   MaximumLineLength:
     active: false
 
@@ -126,9 +124,6 @@ style:
     active: true
   SpacingBetweenPackageAndImports:
     active: true
-  VariableNaming:
-    active: true
-    variablePattern: '(_)?[a-z][a-zA-Z0-9]*'
   UnnecessaryAbstractClass:
     active: true
   UnnecessaryInheritance:
