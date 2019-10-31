@@ -12,7 +12,7 @@ Debt describes the estimated amount of work needed to fix a given issue.
 
 ### Constructors
 
-| [&lt;init&gt;](-init-.html) | `Debt(days: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)` = 0, hours: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)` = 0, mins: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)` = 0)`<br>Debt describes the estimated amount of work needed to fix a given issue. |
+| [&lt;init&gt;](-init-.html) | Debt describes the estimated amount of work needed to fix a given issue.`Debt(days: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)` = 0, hours: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)` = 0, mins: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)` = 0)` |
 
 ### Properties
 

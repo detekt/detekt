@@ -8,8 +8,6 @@ title: Rule.ruleSetConfig - detekt-api
 
 `open val ruleSetConfig: `[`Config`](../-config/index.html)
 
-Overrides [ConfigAware.ruleSetConfig](../-config-aware/rule-set-config.html)
-
 Wrapped configuration of the ruleSet this rule is in.
 Use #valueOrDefault function to retrieve properties specified for the rule
 implementing this interface instead.

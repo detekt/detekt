@@ -6,7 +6,7 @@ title: SplitPattern.mapAll - detekt-api
 
 # mapAll
 
-`fun <T> mapAll(transform: (`[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`) -> `[`T`](map-all.html#T)`): `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`T`](map-all.html#T)`>`
+`fun <T> mapAll(transform: (`[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`) -> T): `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<T>`
 
 Transforms all parts by given [transform](map-all.html#io.gitlab.arturbosch.detekt.api.SplitPattern$mapAll(kotlin.Function1((kotlin.String, io.gitlab.arturbosch.detekt.api.SplitPattern.mapAll.T)))/transform) function.
 

@@ -12,7 +12,7 @@ Specifies a position within a source code fragment.
 
 ### Constructors
 
-| [&lt;init&gt;](-init-.html) | `Location(source: `[`SourceLocation`](../-source-location/index.html)`, text: `[`TextLocation`](../-text-location/index.html)`, locationString: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, file: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`)`<br>Specifies a position within a source code fragment. |
+| [&lt;init&gt;](-init-.html) | Specifies a position within a source code fragment.`Location(source: `[`SourceLocation`](../-source-location/index.html)`, text: `[`TextLocation`](../-text-location/index.html)`, locationString: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, file: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`)` |
 
 ### Properties
 
@@ -23,14 +23,10 @@ Specifies a position within a source code fragment.
 
 ### Functions
 
-| [compact](compact.html) | `fun compact(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)<br>Contract to format implementing object to a string representation. |
-
-### Inherited Functions
-
-| [compactWithSignature](../-compactable/compact-with-signature.html) | `open fun compactWithSignature(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)<br>Same as [compact](../-compactable/compact.html) except the content should contain a substring which represents this exact findings via a custom identifier. |
+| [compact](compact.html) | Contract to format implementing object to a string representation.`fun compact(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 
 ### Companion Object Functions
 
-| [from](from.html) | `fun from(element: PsiElement, offset: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)` = 0): `[`Location`](./index.html)<br>Creates a [Location](./index.html) from a [PsiElement](#). If the element can't be determined, the [KtFile](#) with a character offset can be used. |
-| [startLineAndColumn](start-line-and-column.html) | `fun startLineAndColumn(element: PsiElement, offset: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)` = 0): LineAndColumn`<br>Determines the line and column of a [PsiElement](#) in the source file. |
+| [from](from.html) | Creates a [Location](./index.html) from a [PsiElement](#). If the element can't be determined, the [KtFile](#) with a character offset can be used.`fun from(element: PsiElement, offset: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)` = 0): `[`Location`](./index.html) |
+| [startLineAndColumn](start-line-and-column.html) | Determines the line and column of a [PsiElement](#) in the source file.`fun startLineAndColumn(element: PsiElement, offset: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)` = 0): LineAndColumn` |
 

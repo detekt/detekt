@@ -12,6 +12,6 @@ Is thrown when loading a configuration results in errors.
 
 ### Constructors
 
-| [&lt;init&gt;](-init-.html) | `InvalidConfigurationError(msg: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)` = "Provided configuration file is invalid:" +
-            " Structure must be from type Map<String,Any>!")`<br>Is thrown when loading a configuration results in errors. |
+| [&lt;init&gt;](-init-.html) | Is thrown when loading a configuration results in errors.`InvalidConfigurationError(msg: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)` = "Provided configuration file is invalid:" +
+            " Structure must be from type Map<String,Any>!")` |
 

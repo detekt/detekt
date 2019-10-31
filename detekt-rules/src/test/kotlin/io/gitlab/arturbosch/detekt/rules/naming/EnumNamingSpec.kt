@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -42,9 +42,7 @@ class EnumNamingSpec : Spek({
                     _Default,
                 }"""
             val findings = NamingRules().compileAndLint(code)
-            val source = findings.first().location.text
-            assertThat(source.start).isEqualTo(26)
-            assertThat(source.end).isEqualTo(34)
+            assertThat(findings).hasTextLocations(26 to 34)
         }
     }
 })

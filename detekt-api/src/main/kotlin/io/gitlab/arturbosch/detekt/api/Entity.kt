@@ -28,6 +28,7 @@ data class Entity(
             val name = element.searchName()
             val signature = element.buildFullSignature()
             val clazz = element.searchClass()
+            @Suppress("UnsafeCallOnNullableType")
             val ktElement = element.getNonStrictParentOfType<KtElement>()!!
             return Entity(name, clazz, signature, Location.from(element, offset), ktElement)
         }

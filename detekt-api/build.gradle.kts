@@ -22,12 +22,14 @@ dependencies {
 }
 
 tasks.withType<DokkaTask>().configureEach {
-    // suppresses undocumented classes but not dokka warnings https://github.com/Kotlin/dokka/issues/90
-    reportUndocumented = false
     outputFormat = "jekyll"
     outputDirectory = "$rootDir/docs/pages/kdoc"
-    @Suppress("MagicNumber")
-    jdkVersion = 8
+    configuration {
+        // suppresses undocumented classes but not dokka warnings https://github.com/Kotlin/dokka/issues/90
+        reportUndocumented = false
+        @Suppress("MagicNumber")
+        jdkVersion = 8
+    }
 }
 
 tasks.withType<Test>().configureEach {

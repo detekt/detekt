@@ -24,5 +24,5 @@ Describes a source code position.
 
 ### Inheritors
 
-| [Finding](../-finding/index.html) | `interface Finding : `[`Compactable`](../-compactable/index.html)`, `[`HasEntity`](./index.html)`, `[`HasMetrics`](../-has-metrics/index.html)<br>Base interface of detection findings. Inherits a bunch of useful behaviour from sub interfaces. |
+| [Finding](../-finding/index.html) | Base interface of detection findings. Inherits a bunch of useful behaviour from sub interfaces.`interface Finding : `[`Compactable`](../-compactable/index.html)`, `[`HasEntity`](./index.html)`, `[`HasMetrics`](../-has-metrics/index.html) |
 

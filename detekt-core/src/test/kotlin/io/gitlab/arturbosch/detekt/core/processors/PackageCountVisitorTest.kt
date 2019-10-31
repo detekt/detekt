@@ -27,6 +27,7 @@ class PackageCountVisitorTest : Spek({
 private fun getData(file: KtFile): String {
     return with(file) {
         accept(PackageCountVisitor())
+        @Suppress("UnsafeCallOnNullableType")
         getUserData(numberOfPackagesKey)!!
     }
 }

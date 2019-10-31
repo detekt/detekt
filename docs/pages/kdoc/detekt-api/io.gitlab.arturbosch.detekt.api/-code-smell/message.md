@@ -7,6 +7,3 @@ title: CodeSmell.message - detekt-api
 # message
 
 `open val message: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)
-
-Overrides [Finding.message](../-finding/message.html)
-

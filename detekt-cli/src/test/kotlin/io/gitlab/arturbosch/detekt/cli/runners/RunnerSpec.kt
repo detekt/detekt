@@ -52,4 +52,21 @@ class RunnerSpec : Spek({
             assertThat(Files.readAllLines(tmpReport)).hasSize(1)
         }
     }
+
+    describe("executes the runner with create baseline") {
+
+        it("should not throw on maxIssues=0") {
+            val tmpReport = Files.createTempFile("RunnerSpec", ".txt")
+            val cliArgs = CliArgs.parse(arrayOf(
+                "--input", inputPath.toString(),
+                "--create-baseline",
+                "--report", "txt:$tmpReport",
+                "--config-resource", "/configs/max-issues-0.yml"
+            ))
+
+            Runner(cliArgs).execute()
+
+            assertThat(Files.readAllLines(tmpReport)).hasSize(1)
+        }
+    }
 })

@@ -25,7 +25,7 @@ class UntilInsteadOfRangeToSpec : Spek({
                     for (i in 0 until 10 - 1) {}
                     for (i in 10 downTo 2 - 1) {}
                 }"""
-            assertThat(subject.lint(code)).hasSize(0)
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report if upper value isn't a binary expression") {
@@ -33,7 +33,7 @@ class UntilInsteadOfRangeToSpec : Spek({
                 fun f() {
                     for (i in 0 .. 10) {}
                 }"""
-            assertThat(subject.lint(code)).hasSize(0)
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report if not minus one") {
@@ -42,7 +42,7 @@ class UntilInsteadOfRangeToSpec : Spek({
                     for (i in 0 .. 10 + 1) {}
                     for (i in 0 .. 10 - 2) {}
                 }"""
-            assertThat(subject.lint(code)).hasSize(0)
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         it("reports for '..'") {
@@ -52,7 +52,7 @@ class UntilInsteadOfRangeToSpec : Spek({
 
         it("does not report binary expressions without a range operator") {
             val code = "val sum = 1 + 2"
-            assertThat(subject.lint(code)).hasSize(0)
+            assertThat(subject.lint(code)).isEmpty()
         }
     }
 })

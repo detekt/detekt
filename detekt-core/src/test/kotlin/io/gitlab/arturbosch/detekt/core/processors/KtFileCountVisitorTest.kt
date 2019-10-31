@@ -26,6 +26,7 @@ class KtFileCountVisitorTest : Spek({
 private fun getData(file: KtFile): Int {
     return with(file) {
         accept(KtFileCountVisitor())
+        @Suppress("UnsafeCallOnNullableType")
         getUserData(numberOfFilesKey)!!
     }
 }

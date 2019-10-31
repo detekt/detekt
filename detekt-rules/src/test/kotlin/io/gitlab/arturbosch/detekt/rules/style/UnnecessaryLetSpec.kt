@@ -32,7 +32,7 @@ class UnnecessaryLetSpec : Spek({
                     a?.let { that -> 1.plus(that) }
                     a?.let { that -> 1.plus(that) }?.let { print(it) }
                 }""")
-            assertThat(findings).hasSize(0)
+            assertThat(findings).isEmpty()
         }
         it("does not report lets with lambda body containing more than one statement") {
             val findings = subject.lint("""
@@ -50,7 +50,7 @@ class UnnecessaryLetSpec : Spek({
                      ?.let { it.plus(1)
                              it.plus(2) }
                 }""")
-            assertThat(findings).hasSize(0)
+            assertThat(findings).isEmpty()
         }
         it("does not report lets where it is used multiple times") {
             val findings = subject.lint("""
@@ -59,7 +59,7 @@ class UnnecessaryLetSpec : Spek({
                     a?.let { it.plus(it) }
                     a?.let { foo -> foo.plus(foo) }
                 }""")
-            assertThat(findings).hasSize(0)
+            assertThat(findings).isEmpty()
         }
     }
 })

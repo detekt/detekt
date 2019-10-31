@@ -8,7 +8,5 @@ title: ThresholdedCodeSmell.messageOrDescription - detekt-api
 
 `open fun messageOrDescription(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)
 
-Overrides [CodeSmell.messageOrDescription](../-code-smell/message-or-description.html)
-
 Explanation why this finding was raised.
 

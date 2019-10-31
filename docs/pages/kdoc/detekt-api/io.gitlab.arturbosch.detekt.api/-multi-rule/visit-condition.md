@@ -8,8 +8,6 @@ title: MultiRule.visitCondition - detekt-api
 
 `open fun visitCondition(root: KtFile): `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html)
 
-Overrides [BaseRule.visitCondition](../-base-rule/visit-condition.html)
-
 Basic mechanism to decide if a rule should run or not.
 
 By default any rule which is declared 'active' in the [Config](../-config/index.html)

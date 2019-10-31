@@ -19,7 +19,7 @@ internal object DetektTaskDslTest : Spek({
             context("using ${builder.gradleBuildName}") {
                 describe("without detekt config") {
 
-                    before {
+                    beforeGroup {
                         gradleRunner = builder.build()
                         result = gradleRunner.runDetektTask()
                     }
@@ -46,7 +46,7 @@ internal object DetektTaskDslTest : Spek({
 
                 describe("without multiple detekt configs") {
 
-                    before {
+                    beforeGroup {
                         val config = """
                         |detekt {
                         |    config = files("firstConfig.yml", "secondConfig.yml")
@@ -70,7 +70,7 @@ internal object DetektTaskDslTest : Spek({
                 describe("with custom baseline file") {
                     val baselineFilename = "detekt-baseline.xml"
 
-                    before {
+                    beforeGroup {
 
                         val config = """
                         |detekt {
@@ -96,7 +96,7 @@ internal object DetektTaskDslTest : Spek({
                     val customSrc1 = "gensrc/kotlin"
                     val customSrc2 = "src/main/kotlin"
 
-                    before {
+                    beforeGroup {
 
                         val config = """
                         |detekt {
@@ -126,7 +126,7 @@ internal object DetektTaskDslTest : Spek({
 
                 describe("with custom reports dir") {
 
-                    before {
+                    beforeGroup {
 
                         val config = """
                         |detekt {
@@ -158,7 +158,7 @@ internal object DetektTaskDslTest : Spek({
 
                 describe("with custom reports dir and custom report filename") {
 
-                    before {
+                    beforeGroup {
 
                         val config = """
                         |detekt {
@@ -193,7 +193,7 @@ internal object DetektTaskDslTest : Spek({
 
                 describe("with disabled reports") {
 
-                    before {
+                    beforeGroup {
 
                         val config = """
                         |detekt {
@@ -222,7 +222,7 @@ internal object DetektTaskDslTest : Spek({
 
                 describe("with custom report types") {
                     describe("configured correctly") {
-                        before {
+                        beforeGroup {
 
                             val config = """
                                 |detekt {
@@ -255,7 +255,7 @@ internal object DetektTaskDslTest : Spek({
                     }
 
                     describe("report id is missing") {
-                        before {
+                        beforeGroup {
 
                             val config = """
                                 |detekt {
@@ -276,7 +276,7 @@ internal object DetektTaskDslTest : Spek({
                     }
 
                     describe("report filename is missing") {
-                        before {
+                        beforeGroup {
 
                             val config = """
                                 |detekt {
@@ -297,7 +297,7 @@ internal object DetektTaskDslTest : Spek({
                     }
 
                     describe("report filename is a directory") {
-                        before {
+                        beforeGroup {
 
                             val aDirectory = "\${rootDir}/src"
 
@@ -323,7 +323,7 @@ internal object DetektTaskDslTest : Spek({
                     describe("using the report id of a well known type") {
                         DetektReportType.values().forEach { wellKnownType ->
                             context(wellKnownType.name) {
-                                before {
+                                beforeGroup {
 
                                     val config = """
                                         |detekt {
@@ -348,7 +348,7 @@ internal object DetektTaskDslTest : Spek({
 
                 describe("with flags") {
 
-                    before {
+                    beforeGroup {
 
                         val config = """
                         |detekt {
@@ -398,7 +398,7 @@ internal object DetektTaskDslTest : Spek({
                 }
 
                 describe("with an additional plugin") {
-                    before {
+                    beforeGroup {
                         val config = """
                             |dependencies {
                             |   detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:$VERSION_UNDER_TEST")
@@ -422,7 +422,7 @@ internal object DetektTaskDslTest : Spek({
 
                 describe("with a custom tool version") {
                     val customVersion = "1.0.0.RC8"
-                    before {
+                    beforeGroup {
                         val config = """
                             |detekt {
                             |    toolVersion = "$customVersion"
@@ -449,7 +449,7 @@ internal object DetektTaskDslTest : Spek({
         describe("and creating a custom task") {
             context("using the groovy dsl") {
                 val builder = groovy().dryRun()
-                before {
+                beforeGroup {
                     val config = """
                         |task detektFailFast(type: io.gitlab.arturbosch.detekt.Detekt) {
                         |    description = "Runs a failfast detekt build."
@@ -525,7 +525,7 @@ internal object DetektTaskDslTest : Spek({
 
             context("using the kotlin dsl") {
                 val builder = kotlin().dryRun()
-                before {
+                beforeGroup {
                     val config = """
                         |task<io.gitlab.arturbosch.detekt.Detekt>("detektFailFast") {
                         |    description = "Runs a failfast detekt build."

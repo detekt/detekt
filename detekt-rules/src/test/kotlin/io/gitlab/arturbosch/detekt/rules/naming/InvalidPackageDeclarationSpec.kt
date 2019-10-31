@@ -42,11 +42,12 @@ internal class InvalidPackageDeclarationSpec : Spek({
                 package foo
                 
                 class C
-                """
+                """.trimIndent()
             val ktFile = compileContentForTest(source)
             ktFile.setAbsolutePath("project/src/bar/File.kt")
             val findings = InvalidPackageDeclaration().lint(ktFile)
             assertThat(findings).hasSize(1)
+            assertThat(findings).hasTextLocations(0 to 11)
         }
 
         describe("with root package specified") {
@@ -117,5 +118,5 @@ private fun KtFile.setAbsolutePath(universalPath: String) {
     val pathSegments = universalPath.split('/')
     val aRootPath = FileSystems.getDefault().rootDirectories.first()
     val path = Paths.get(aRootPath.toString(), *pathSegments.toTypedArray())
-    putUserData(ABSOLUTE_PATH, path?.toString())
+    putUserData(ABSOLUTE_PATH, path.toString())
 }

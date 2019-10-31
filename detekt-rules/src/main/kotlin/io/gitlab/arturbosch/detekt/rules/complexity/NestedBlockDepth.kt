@@ -44,8 +44,9 @@ class NestedBlockDepth(
         val visitor = FunctionDepthVisitor(threshold)
         visitor.visitNamedFunction(function)
         if (visitor.isTooDeep) {
+            @Suppress("UnsafeCallOnNullableType")
             report(ThresholdedCodeSmell(issue,
-                    Entity.from(function),
+                    Entity.from(function.nameIdentifier!!),
                     Metric("SIZE", visitor.maxDepth, threshold),
                     "Function ${function.name} is nested too deeply."))
         }
