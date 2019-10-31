@@ -52,7 +52,7 @@ class HtmlOutputReport : OutputReport() {
         }
     }
 
-    private fun renderComplexity(complexityReport : String) = createHTML().div {
+    private fun renderComplexity(complexityReport: String) = createHTML().div {
         text(complexityReport)
     }
 
@@ -105,10 +105,10 @@ class HtmlOutputReport : OutputReport() {
         }
     }
 
-    private fun getComplexityMetrics(detektion: Detektion) : String {
+    private fun getComplexityMetrics(detektion: Detektion): String {
         val complexityReportGenerator = ComplexityReportGenerator.create(detektion)
         val complexityReport = complexityReportGenerator.generate()
-        return if(complexityReport.isNullOrBlank()) "" else complexityReport
+        return if (complexityReport.isNullOrBlank()) "" else complexityReport
     }
 }
 
