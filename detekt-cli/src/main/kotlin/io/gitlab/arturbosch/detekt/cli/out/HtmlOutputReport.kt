@@ -52,8 +52,12 @@ class HtmlOutputReport : OutputReport() {
         }
     }
 
-    private fun renderComplexity(complexityReport: String) = createHTML().div {
-        text(complexityReport)
+    private fun renderComplexity(complexityReport: List<String>) = createHTML().div {
+        ul {
+            complexityReport.forEach {
+                li { text("$it") }
+            }
+        }
     }
 
     private fun renderFindings(findings: Map<String, List<Finding>>) = createHTML().div {
@@ -105,10 +109,14 @@ class HtmlOutputReport : OutputReport() {
         }
     }
 
-    private fun getComplexityMetrics(detektion: Detektion): String {
+    private fun getComplexityMetrics(detektion: Detektion): List<String> {
+        var complexities = listOf<String>()
         val complexityReportGenerator = ComplexityReportGenerator.create(detektion)
         val complexityReport = complexityReportGenerator.generate()
-        return if (complexityReport.isNullOrBlank()) "" else complexityReport
+        return if (complexityReport.isNullOrBlank()) complexities else {
+            complexities = complexityReport.split("\n")
+            return complexities.subList(1, complexities.size - 1)
+        }
     }
 }
 
