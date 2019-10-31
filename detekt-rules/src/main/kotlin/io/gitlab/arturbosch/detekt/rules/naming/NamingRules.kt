@@ -101,8 +101,4 @@ class NamingRules(config: Config = Config.empty) : MultiRule() {
 
     private fun KtVariableDeclaration.withinObjectDeclaration(): Boolean =
             this.getNonStrictParentOfType<KtObjectDeclaration>() != null
-
-    companion object {
-        const val IGNORE_OVERRIDDEN = "ignoreOverridden"
-    }
 }
