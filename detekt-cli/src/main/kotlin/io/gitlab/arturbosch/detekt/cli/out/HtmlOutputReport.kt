@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.cli.ClasspathResourceConverter
+import io.gitlab.arturbosch.detekt.cli.console.ComplexityReportGenerator
 import kotlinx.html.CommonAttributeGroupFacadeFlowInteractiveContent
 import kotlinx.html.FlowContent
 import kotlinx.html.FlowOrInteractiveContent
@@ -26,6 +27,7 @@ import kotlinx.html.visit
 private const val DEFAULT_TEMPLATE = "default-html-report-template.html"
 private const val PLACEHOLDER_METRICS = "@@@metrics@@@"
 private const val PLACEHOLDER_FINDINGS = "@@@findings@@@"
+private const val PLACEHOLDER_COMPLEXITY_REPORT = "@@@complexity@@@"
 
 /**
  * Generates a HTML report containing rule violations and metrics.
@@ -39,6 +41,7 @@ class HtmlOutputReport : OutputReport() {
     override fun render(detektion: Detektion) =
             ClasspathResourceConverter().convert(DEFAULT_TEMPLATE).openStream().bufferedReader().use { it.readText() }
                     .replace(PLACEHOLDER_METRICS, renderMetrics(detektion.metrics))
+                    .replace(PLACEHOLDER_COMPLEXITY_REPORT, renderComplexity(getComplexityMetrics(detektion)))
                     .replace(PLACEHOLDER_FINDINGS, renderFindings(detektion.findings))
 
     private fun renderMetrics(metrics: Collection<ProjectMetric>) = createHTML().div {
@@ -47,6 +50,10 @@ class HtmlOutputReport : OutputReport() {
                 li { text("${it.type}: ${it.value}") }
             }
         }
+    }
+
+    private fun renderComplexity(complexityReport : String) = createHTML().div {
+        text(complexityReport)
     }
 
     private fun renderFindings(findings: Map<String, List<Finding>>) = createHTML().div {
@@ -96,6 +103,12 @@ class HtmlOutputReport : OutputReport() {
             br()
             span("message") { text(it.message) }
         }
+    }
+
+    private fun getComplexityMetrics(detektion: Detektion) : String {
+        val complexityReportGenerator = ComplexityReportGenerator.create(detektion)
+        val complexityReport = complexityReportGenerator.generate()
+        return if(complexityReport.isNullOrBlank()) "" else complexityReport
     }
 }
 
