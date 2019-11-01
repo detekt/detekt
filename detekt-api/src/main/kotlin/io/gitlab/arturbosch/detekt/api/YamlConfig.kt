@@ -36,7 +36,8 @@ class YamlConfig internal constructor(
         return "YamlConfig(properties=$properties)"
     }
 
-    override fun validate(baseline: Config): List<Notification> = validateConfig(this, baseline)
+    override fun validate(baseline: Config, excludePatterns: Set<Regex>): List<Notification> =
+        validateConfig(this, baseline, excludePatterns)
 
     companion object {
 

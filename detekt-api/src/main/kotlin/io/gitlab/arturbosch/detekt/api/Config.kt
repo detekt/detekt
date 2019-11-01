@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
 import io.gitlab.arturbosch.detekt.api.Config.Companion.PRIMITIVES
-import io.gitlab.arturbosch.detekt.api.internal.validateConfig
 import java.util.LinkedList
 import kotlin.reflect.KClass
 
@@ -58,11 +57,6 @@ interface Config {
             Char::class,
             Long::class
         )
-
-        /**
-         * Validates given first config according to properties defined in given baseline config.
-         */
-        fun validate(config: Config, baseline: Config): List<Notification> = validateConfig(config, baseline)
     }
 }
 

@@ -25,5 +25,6 @@ data class FailFastConfig(private val originalConfig: Config, private val defaul
         }
     }
 
-    override fun validate(baseline: Config) = validateConfig(originalConfig, baseline)
+    override fun validate(baseline: Config, excludePatterns: Set<Regex>) =
+        validateConfig(originalConfig, baseline, excludePatterns)
 }

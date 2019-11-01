@@ -6,6 +6,10 @@ build:
     # style: 1
     # comments: 1
 
+config:
+  validation: true
+  excludes: '.*>.*>excludes,.*>.*>includes,.*>.*>active,.*>.*>autoCorrect'
+
 processors:
   active: true
   exclude:

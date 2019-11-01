@@ -26,6 +26,6 @@ class CompositeConfig(private val lookFirst: Config, private val lookSecond: Con
     /**
      * Validates both sides of the composite config according to defined properties of the baseline config.
      */
-    override fun validate(baseline: Config): List<Notification> =
-        validateConfig(lookFirst, baseline) + validateConfig(lookSecond, baseline)
+    override fun validate(baseline: Config, excludePatterns: Set<Regex>): List<Notification> =
+        validateConfig(lookFirst, baseline, excludePatterns) + validateConfig(lookSecond, baseline, excludePatterns)
 }

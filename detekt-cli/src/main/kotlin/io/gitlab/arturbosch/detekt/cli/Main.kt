@@ -15,21 +15,16 @@ fun main(args: Array<String>) {
     try {
         buildRunner(args).execute()
     } catch (e: InvalidConfig) {
-        // Exit with status code 3 when some properties in the configuration file are not expected to exist.
         e.messages.forEach(::println)
-        exitProcess(3)
+        exitProcess(ExitCode.INVALID_CONFIG.number)
     } catch (e: BuildFailure) {
-        // Exit with status code 2 when maxIssues value from configuration was reached.
         e.printStackTrace()
-        exitProcess(2)
+        exitProcess(ExitCode.MAX_ISSUES_REACHED.number)
     } catch (e: Exception) {
-        // Exit with status code 1 when an unexpected error occurred.
         e.printStackTrace()
-        exitProcess(1)
+        exitProcess(ExitCode.UNEXPECTED_DETEKT_ERROR.number)
     }
-    // Exit with status code 0 when detekt ran normally and maxIssues or failThreshold count was not reached in
-    // BuildFailureReport.
-    exitProcess(0)
+    exitProcess(ExitCode.NORMAL_RUN.number)
 }
 
 fun buildRunner(args: Array<String>): Executable {

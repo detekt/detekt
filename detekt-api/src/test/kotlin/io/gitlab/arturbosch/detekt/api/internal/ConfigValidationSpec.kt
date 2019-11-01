@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.api.internal
 
 import io.gitlab.arturbosch.detekt.api.CompositeConfig
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
@@ -86,6 +87,61 @@ internal class ConfigValidationSpec : Spek({
                     doesNotExistsMessage("complexity>LongLongMethod"),
                     doesNotExistsMessage("complexity>LongParameterList>enabled"),
                     doesNotExistsMessage("complexity>LargeClass>howMany"),
+                    doesNotExistsMessage("complexity>InnerMap>InnerKey"),
+                    doesNotExistsMessage("complexity>InnerMap>Inner2>nestedActive")
+                )
+            }
+        }
+
+        describe("configure additional exclude paths") {
+
+            fun patterns(str: String) =
+                SplitPattern(str, removeTrailingAsterisks = false)
+                    .mapAll(::Regex)
+                    .toSet()
+
+            it("does not report any complexity properties") {
+                val result = validateConfig(
+                    yamlConfig("config_validation/other-nested-property-names.yml"),
+                    baseline,
+                    patterns("complexity")
+                )
+                assertThat(result).isEmpty()
+            }
+
+            it("does not report 'complexity>LargeClass>howMany'") {
+                val result = validateConfig(
+                    yamlConfig("config_validation/other-nested-property-names.yml"),
+                    baseline,
+                    patterns(".*>.*>howMany")
+                )
+
+                assertThat(result).contains(
+                    doesNotExistsMessage("complexity>LongLongMethod"),
+                    doesNotExistsMessage("complexity>LongParameterList>enabled"),
+                    doesNotExistsMessage("complexity>InnerMap>InnerKey"),
+                    doesNotExistsMessage("complexity>InnerMap>Inner2>nestedActive")
+                )
+
+                assertThat(result).doesNotContain(
+                    doesNotExistsMessage("complexity>LargeClass>howMany")
+                )
+            }
+
+            it("does not report '.*>InnerMap'") {
+                val result = validateConfig(
+                    yamlConfig("config_validation/other-nested-property-names.yml"),
+                    baseline,
+                    patterns(".*>InnerMap")
+                )
+
+                assertThat(result).contains(
+                    doesNotExistsMessage("complexity>LargeClass>howMany"),
+                    doesNotExistsMessage("complexity>LongLongMethod"),
+                    doesNotExistsMessage("complexity>LongParameterList>enabled")
+                )
+
+                assertThat(result).doesNotContain(
                     doesNotExistsMessage("complexity>InnerMap>InnerKey"),
                     doesNotExistsMessage("complexity>InnerMap>Inner2>nestedActive")
                 )

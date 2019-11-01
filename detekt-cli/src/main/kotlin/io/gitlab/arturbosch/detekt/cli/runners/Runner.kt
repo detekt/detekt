@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.cli.runners
 
 import io.gitlab.arturbosch.detekt.api.Detektion
+import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.api.internal.SimpleNotification
 import io.gitlab.arturbosch.detekt.api.internal.validateConfig
 import io.gitlab.arturbosch.detekt.cli.BuildFailure
@@ -34,8 +35,18 @@ class Runner(private val arguments: CliArgs) : Executable {
 
     private fun checkConfiguration(settings: ProcessingSettings) {
         settings.debug { "\n${settings.config}\n" }
-        if (arguments.shouldValidateConfig) {
-            val notifications = validateConfig(settings.config, loadDefaultConfig())
+        val props = settings.config.subConfig("config")
+        val shouldValidate = props.valueOrDefault("validation", true)
+
+        fun patterns(): Set<Regex> {
+            val excludes = props.valueOrDefault("excludes", "")
+            return SplitPattern(excludes, delimiters = ",;", removeTrailingAsterisks = false)
+                .mapAll(::Regex)
+                .toSet()
+        }
+
+        if (shouldValidate) {
+            val notifications = validateConfig(settings.config, loadDefaultConfig(), patterns())
             if (notifications.isNotEmpty()) {
                 throw InvalidConfig(notifications)
             }

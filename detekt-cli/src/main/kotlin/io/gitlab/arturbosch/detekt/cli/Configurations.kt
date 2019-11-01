@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.api.CompositeConfig
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.YamlConfig
 import io.gitlab.arturbosch.detekt.api.internal.FailFastConfig
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
@@ -67,5 +66,3 @@ private fun parsePathConfig(configPath: String): Config {
 const val DEFAULT_CONFIG = "default-detekt-config.yml"
 
 fun loadDefaultConfig() = YamlConfig.loadResource(ClasspathResourceConverter().convert(DEFAULT_CONFIG))
-
-class InvalidConfig(val messages: List<Notification>) : RuntimeException()
