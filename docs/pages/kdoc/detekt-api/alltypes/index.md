@@ -37,6 +37,11 @@ The type of a code smell is described by an [Issue](../io.gitlab.arturbosch.dete
 
 |
 
+##### [io.gitlab.arturbosch.detekt.api.internal.CommaSeparatedPattern](../io.gitlab.arturbosch.detekt.api.internal/-comma-separated-pattern/index.html)
+
+
+|
+
 ##### [io.gitlab.arturbosch.detekt.api.Compactable](../io.gitlab.arturbosch.detekt.api/-compactable/index.html)
 
 Provides a compact string representation.

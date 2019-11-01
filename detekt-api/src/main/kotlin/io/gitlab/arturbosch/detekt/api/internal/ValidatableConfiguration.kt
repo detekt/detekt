@@ -9,8 +9,20 @@ interface ValidatableConfiguration {
     fun validate(baseline: Config, excludePatterns: Set<Regex>): List<Notification>
 }
 
+/**
+ * Known existing properties on rule's which my be absent in the default-detekt-config.yml.
+ *
+ * We need to predefine them as the user may not have already declared an 'config'-block
+ * in the configuration and we want to validate the config by default.
+ */
+const val DEFAULT_PROPERTY_EXCLUDES = ".*>.*>excludes,.*>.*>includes,.*>.*>active,.*>.*>autoCorrect"
+
 @Suppress("UNCHECKED_CAST", "ComplexMethod")
-fun validateConfig(config: Config, baseline: Config, excludePatterns: Set<Regex> = emptySet()): List<Notification> {
+fun validateConfig(
+    config: Config,
+    baseline: Config,
+    excludePatterns: Set<Regex> = CommaSeparatedPattern(DEFAULT_PROPERTY_EXCLUDES).mapToRegex()
+): List<Notification> {
     require(baseline != Config.empty) { "Cannot validate configuration based on an empty baseline config." }
     require(baseline is YamlConfig) { "Only supported baseline config is the YamlConfig." }
 
@@ -26,7 +38,7 @@ fun validateConfig(config: Config, baseline: Config, excludePatterns: Set<Regex>
             val propertyPath = "${if (parentPath == null) "" else "$parentPath>"}$prop"
 
             if (excludePatterns.any { it.matches(propertyPath) }) {
-                return
+                continue
             }
 
             if (!base.contains(prop)) {

@@ -1,7 +1,9 @@
 package io.gitlab.arturbosch.detekt.cli.runners
 
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.SplitPattern
+import io.gitlab.arturbosch.detekt.api.Notification
+import io.gitlab.arturbosch.detekt.api.internal.CommaSeparatedPattern
+import io.gitlab.arturbosch.detekt.api.internal.DEFAULT_PROPERTY_EXCLUDES
 import io.gitlab.arturbosch.detekt.api.internal.SimpleNotification
 import io.gitlab.arturbosch.detekt.api.internal.validateConfig
 import io.gitlab.arturbosch.detekt.cli.BuildFailure
@@ -39,16 +41,16 @@ class Runner(private val arguments: CliArgs) : Executable {
         val shouldValidate = props.valueOrDefault("validation", true)
 
         fun patterns(): Set<Regex> {
-            val excludes = props.valueOrDefault("excludes", "")
-            return SplitPattern(excludes, delimiters = ",;", removeTrailingAsterisks = false)
-                .mapAll(::Regex)
-                .toSet()
+            val excludes = props.valueOrDefault("excludes", "") + ",$DEFAULT_PROPERTY_EXCLUDES"
+            return CommaSeparatedPattern(excludes).mapToRegex()
         }
 
         if (shouldValidate) {
             val notifications = validateConfig(settings.config, loadDefaultConfig(), patterns())
             if (notifications.isNotEmpty()) {
-                throw InvalidConfig(notifications)
+                notifications.map(Notification::message).forEach(settings::info)
+                val propsString = if (notifications.size == 1) "property" else "properties"
+                throw InvalidConfig("Run failed with ${notifications.size} invalid config $propsString.")
             }
         }
     }

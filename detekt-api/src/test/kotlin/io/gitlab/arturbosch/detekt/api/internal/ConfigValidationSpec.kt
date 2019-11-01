@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.api.internal
 
 import io.gitlab.arturbosch.detekt.api.CompositeConfig
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
@@ -15,7 +14,16 @@ internal class ConfigValidationSpec : Spek({
         val baseline = yamlConfig("config_validation/baseline.yml")
 
         it("passes for same config test") {
-            validateConfig(baseline, baseline)
+            val result = validateConfig(baseline, baseline)
+            assertThat(result).isEmpty()
+        }
+
+        it("passes for properties which may appear on rules but may be not present in default config") {
+            val result = validateConfig(
+                yamlConfig("config_validation/default-excluded-properties.yml"),
+                baseline
+            )
+            assertThat(result).isEmpty()
         }
 
         it("reports different rule set name") {
@@ -95,10 +103,7 @@ internal class ConfigValidationSpec : Spek({
 
         describe("configure additional exclude paths") {
 
-            fun patterns(str: String) =
-                SplitPattern(str, removeTrailingAsterisks = false)
-                    .mapAll(::Regex)
-                    .toSet()
+            fun patterns(str: String) = CommaSeparatedPattern(str).mapToRegex()
 
             it("does not report any complexity properties") {
                 val result = validateConfig(

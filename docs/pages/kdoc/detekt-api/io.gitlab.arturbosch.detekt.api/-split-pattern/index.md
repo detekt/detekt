@@ -6,7 +6,7 @@ title: SplitPattern - detekt-api
 
 # SplitPattern
 
-`class SplitPattern`
+`open class SplitPattern`
 
 Splits given text into parts and provides testing utilities for its elements.
 Basic use cases are to specify different function or class names in the detekt
@@ -25,4 +25,8 @@ yaml config and test for their appearance in specific rules.
 | [matches](matches.html) | Finds all parts which match the given [value](matches.html#io.gitlab.arturbosch.detekt.api.SplitPattern$matches(kotlin.String)/value).`fun matches(value: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`): `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`>` |
 | [none](none.html) | Tests if none of the parts contain the given [value](none.html#io.gitlab.arturbosch.detekt.api.SplitPattern$none(kotlin.String)/value).`fun none(value: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`): `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html) |
 | [startWith](start-with.html) | Tests if any part starts with the given [value](start-with.html#io.gitlab.arturbosch.detekt.api.SplitPattern$startWith(kotlin.String)/value)`fun startWith(value: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`?): `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html) |
+
+### Inheritors
+
+| [CommaSeparatedPattern](../../io.gitlab.arturbosch.detekt.api.internal/-comma-separated-pattern/index.html) | `class CommaSeparatedPattern : `[`SplitPattern`](./index.html) |
 
