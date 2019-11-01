@@ -15,7 +15,7 @@ fun main(args: Array<String>) {
     try {
         buildRunner(args).execute()
     } catch (e: InvalidConfig) {
-        e.messages.forEach(::println)
+        e.printStackTrace()
         exitProcess(ExitCode.INVALID_CONFIG.number)
     } catch (e: BuildFailure) {
         e.printStackTrace()
