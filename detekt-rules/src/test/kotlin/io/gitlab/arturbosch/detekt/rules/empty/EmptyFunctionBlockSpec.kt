@@ -32,6 +32,14 @@ class EmptyFunctionBlockSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
+        it("should not flag a default function in an interface") {
+            val code = """
+                interface I {
+                    fun stuff() {}
+                }"""
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
         it("should flag the nested empty function") {
             val code = """
                 fun a() {
@@ -84,7 +92,7 @@ class EmptyFunctionBlockSpec : Spek({
                     fun listenThat()
                 }
 
-                private interface AnimationEndListener : Listener {
+                private class AnimationEndListener : Listener {
                     override fun listenThis() {
                         // no-op
                     }

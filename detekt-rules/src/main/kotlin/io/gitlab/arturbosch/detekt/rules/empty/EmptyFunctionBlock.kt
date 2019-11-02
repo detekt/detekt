@@ -3,7 +3,9 @@ package io.gitlab.arturbosch.detekt.rules.empty
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOverride
+import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 
 /**
  * Reports empty functions. Empty blocks of code serve no purpose and should be removed.
@@ -23,7 +25,7 @@ class EmptyFunctionBlock(config: Config) : EmptyRule(config) {
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
-        if (function.isOpen()) {
+        if (function.isOpen() || function.isDefaultFunction()) {
             return
         }
         val bodyExpression = function.bodyExpression
@@ -37,6 +39,9 @@ class EmptyFunctionBlock(config: Config) : EmptyRule(config) {
             bodyExpression?.addFindingIfBlockExprIsEmpty()
         }
     }
+
+    private fun KtNamedFunction.isDefaultFunction() =
+        getParentOfType<KtClass>(true)?.isInterface() == true && hasBody()
 
     companion object {
         const val IGNORE_OVERRIDDEN_FUNCTIONS = "ignoreOverriddenFunctions"
