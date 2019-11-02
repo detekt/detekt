@@ -62,7 +62,8 @@ class MatchingDeclarationName(config: Config = Config.empty) : Rule(config) {
             val filename = file.name.removeSuffix(KOTLIN_SUFFIX)
             if (declarationName != filename &&
                     file.declarations.filterIsInstance<KtTypeAlias>().all { it.name != filename }) {
-                report(CodeSmell(issue, Entity.from(file), "The file name '${file.name}' " +
+                val entity = Entity.from(declaration).copy(ktElement = file)
+                report(CodeSmell(issue, entity, "The file name '${file.name}' " +
                         "does not match the name of the single top-level declaration '$declarationName'."))
             }
         }

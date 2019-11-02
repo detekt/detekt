@@ -13,22 +13,27 @@ internal class MatchingDeclarationNameSpec : Spek({
         context("compliant test cases") {
 
             it("should pass for object declaration") {
-                val ktFile = compileContentForTest("object O")
-                ktFile.name = "O.kt"
+                val ktFile = compileContentForTest("object O", filename = "O.kt")
+                val findings = MatchingDeclarationName().lint(ktFile)
+                assertThat(findings).isEmpty()
+            }
+
+            it("should pass for suppress") {
+                val ktFile = compileContentForTest(
+                    """@file:Suppress("MatchingDeclarationName") object O""",
+                    filename = "Objects.kt")
                 val findings = MatchingDeclarationName().lint(ktFile)
                 assertThat(findings).isEmpty()
             }
 
             it("should pass for class declaration") {
-                val ktFile = compileContentForTest("class C")
-                ktFile.name = "C.kt"
+                val ktFile = compileContentForTest("class C", filename = "C.kt")
                 val findings = MatchingDeclarationName().lint(ktFile)
                 assertThat(findings).isEmpty()
             }
 
             it("should pass for interface declaration") {
-                val ktFile = compileContentForTest("interface I")
-                ktFile.name = "I.kt"
+                val ktFile = compileContentForTest("interface I", filename = "I.kt")
                 val findings = MatchingDeclarationName().lint(ktFile)
                 assertThat(findings).isEmpty()
             }
@@ -38,8 +43,7 @@ internal class MatchingDeclarationNameSpec : Spek({
                 enum class E {
                     ONE, TWO, THREE
                 }
-            """)
-                ktFile.name = "E.kt"
+            """, filename = "E.kt")
                 val findings = MatchingDeclarationName().lint(ktFile)
                 assertThat(findings).isEmpty()
             }
@@ -49,8 +53,7 @@ internal class MatchingDeclarationNameSpec : Spek({
                 class C
                 object O
                 fun a() = 5
-            """)
-                ktFile.name = "MultiDeclarations.kt"
+            """, filename = "MultiDeclarations.kt")
                 val findings = MatchingDeclarationName().lint(ktFile)
                 assertThat(findings).isEmpty()
             }
@@ -60,8 +63,7 @@ internal class MatchingDeclarationNameSpec : Spek({
                 class C
                 fun a() = 5
                 fun C.b() = 5
-            """)
-                ktFile.name = "C.kt"
+            """, filename = "C.kt")
                 val findings = MatchingDeclarationName().lint(ktFile)
                 assertThat(findings).isEmpty()
             }
@@ -70,8 +72,7 @@ internal class MatchingDeclarationNameSpec : Spek({
                 val ktFile = compileContentForTest("""
                 private class C
                 fun a() = 5
-            """)
-                ktFile.name = "b.kt"
+            """, filename = "b.kt")
                 val findings = MatchingDeclarationName().lint(ktFile)
                 assertThat(findings).isEmpty()
             }
@@ -81,8 +82,7 @@ internal class MatchingDeclarationNameSpec : Spek({
                 typealias Foo = FooImpl
 
                 class FooImpl {}"""
-                val ktFile = compileContentForTest(code)
-                ktFile.name = "Foo.kt"
+                val ktFile = compileContentForTest(code, filename = "Foo.kt")
                 val findings = MatchingDeclarationName().lint(ktFile)
                 assertThat(findings).isEmpty()
             }
@@ -91,37 +91,39 @@ internal class MatchingDeclarationNameSpec : Spek({
         context("non-compliant test cases") {
 
             it("should not pass for object declaration") {
-                val ktFile = compileContentForTest("object O")
-                ktFile.name = "Objects.kt"
+                val ktFile = compileContentForTest("object O", filename = "Objects.kt")
                 val findings = MatchingDeclarationName().lint(ktFile)
                 assertThat(findings).hasLocationStrings("'object O' at (1,1) in /Objects.kt")
             }
 
+            it("should not pass for object declaration even with suppress on the object") {
+                val ktFile = compileContentForTest(
+                    """@Suppress("MatchingDeclarationName") object O""",
+                    filename = "Objects.kt")
+                val findings = MatchingDeclarationName().lint(ktFile)
+                assertThat(findings).hasLocationStrings(
+                    """'@Suppress("MatchingDeclarationName") object O' at (1,1) in /Objects.kt""")
+            }
+
             it("should not pass for class declaration") {
-                val ktFile = compileContentForTest("class C")
-                ktFile.name = "Classes.kt"
+                val ktFile = compileContentForTest("class C", filename = "Classes.kt")
                 val findings = MatchingDeclarationName().lint(ktFile)
                 assertThat(findings).hasLocationStrings("'class C' at (1,1) in /Classes.kt")
             }
 
             it("should not pass for class declaration with utility functions") {
                 val ktFile = compileContentForTest("""
-                class C
                 fun a() = 5
+                class C
                 fun C.b() = 5
-            """)
-                ktFile.name = "ClassUtils.kt"
+
+            """.trimIndent(), filename = "ClassUtils.kt")
                 val findings = MatchingDeclarationName().lint(ktFile)
-                assertThat(findings).hasLocationStrings("""'
-                class C
-                fun a() = 5
-                fun C.b() = 5
-            ' at (1,1) in /ClassUtils.kt""", trimIndent = true)
+                assertThat(findings).hasLocationStrings("'class C' at (2,1) in /ClassUtils.kt")
             }
 
             it("should not pass for interface declaration") {
-                val ktFile = compileContentForTest("interface I")
-                ktFile.name = "Not_I.kt"
+                val ktFile = compileContentForTest("interface I", filename = "Not_I.kt")
                 val findings = MatchingDeclarationName().lint(ktFile)
                 assertThat(findings).hasLocationStrings("'interface I' at (1,1) in /Not_I.kt")
             }
@@ -131,14 +133,13 @@ internal class MatchingDeclarationNameSpec : Spek({
                 enum class NOT_E {
                     ONE, TWO, THREE
                 }
-            """)
-                ktFile.name = "E.kt"
+
+            """.trimIndent(), filename = "E.kt")
                 val findings = MatchingDeclarationName().lint(ktFile)
-                assertThat(findings).hasLocationStrings("""'
-                enum class NOT_E {
+                assertThat(findings).hasLocationStrings("""
+                'enum class NOT_E {
                     ONE, TWO, THREE
-                }
-            ' at (1,1) in /E.kt""", trimIndent = true)
+                }' at (1,1) in /E.kt""", trimIndent = true)
             }
 
             it("should not pass for a typealias with a different name") {
@@ -146,8 +147,7 @@ internal class MatchingDeclarationNameSpec : Spek({
                 typealias Bar = FooImpl
 
                 class FooImpl {}"""
-                val ktFile = compileContentForTest(code)
-                ktFile.name = "Foo.kt"
+                val ktFile = compileContentForTest(code, filename = "Foo.kt")
                 val findings = MatchingDeclarationName().lint(ktFile)
                 assertThat(findings).hasSize(1)
             }
