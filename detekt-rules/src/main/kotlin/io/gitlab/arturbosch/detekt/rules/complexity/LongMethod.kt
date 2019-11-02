@@ -48,7 +48,7 @@ class LongMethod(
         for ((function, lines) in functionToLinesCache) {
             if (lines >= threshold) {
                 report(ThresholdedCodeSmell(issue,
-                        Entity.from(function),
+                        Entity.from(function.nameIdentifier!!),
                         Metric("SIZE", lines, threshold),
                         "The function ${function.nameAsSafeName} is too long. " +
                                 "The maximum length is $threshold."))
