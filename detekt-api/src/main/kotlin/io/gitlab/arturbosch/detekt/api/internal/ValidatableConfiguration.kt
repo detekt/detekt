@@ -42,16 +42,16 @@ fun validateConfig(
             }
 
             if (!base.contains(prop)) {
-                notifications.add(doesNotExistsMessage(propertyPath))
+                notifications.add(propertyDoesNotExists(propertyPath))
             }
 
             val next = current[prop] as? Map<String, Any>
             val nextBase = base[prop] as? Map<String, Any>
 
             when {
-                next == null && nextBase != null -> notifications.add(nestedConfigExpectedMessage(propertyPath))
+                next == null && nextBase != null -> notifications.add(nestedConfigurationExpected(propertyPath))
                 base.contains(prop) && next != null && nextBase == null ->
-                    notifications.add(unexpectedNestedConfigMessage(propertyPath))
+                    notifications.add(unexpectedNestedConfiguration(propertyPath))
                 next != null && nextBase != null -> testKeys(next, nextBase, propertyPath)
             }
         }
@@ -66,11 +66,11 @@ fun validateConfig(
     return notifications
 }
 
-internal fun doesNotExistsMessage(prop: String): Notification =
+internal fun propertyDoesNotExists(prop: String): Notification =
     SimpleNotification("Property '$prop' is misspelled or does not exist.")
 
-internal fun nestedConfigExpectedMessage(prop: String): Notification =
+internal fun nestedConfigurationExpected(prop: String): Notification =
     SimpleNotification("Nested config expected for '$prop'.")
 
-internal fun unexpectedNestedConfigMessage(prop: String): Notification =
+internal fun unexpectedNestedConfiguration(prop: String): Notification =
     SimpleNotification("Unexpected nested config for '$prop'.")

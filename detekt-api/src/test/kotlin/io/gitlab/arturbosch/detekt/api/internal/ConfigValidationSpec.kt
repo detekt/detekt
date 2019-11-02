@@ -31,7 +31,7 @@ internal class ConfigValidationSpec : Spek({
                 yamlConfig("config_validation/other-ruleset-name.yml"),
                 baseline
             )
-            assertThat(result).contains(doesNotExistsMessage("code-smell"))
+            assertThat(result).contains(propertyDoesNotExists("code-smell"))
         }
 
         it("reports different nested property names") {
@@ -40,11 +40,11 @@ internal class ConfigValidationSpec : Spek({
                 baseline
             )
             assertThat(result).contains(
-                doesNotExistsMessage("complexity>LongLongMethod"),
-                doesNotExistsMessage("complexity>LongParameterList>enabled"),
-                doesNotExistsMessage("complexity>LargeClass>howMany"),
-                doesNotExistsMessage("complexity>InnerMap>InnerKey"),
-                doesNotExistsMessage("complexity>InnerMap>Inner2>nestedActive")
+                propertyDoesNotExists("complexity>LongLongMethod"),
+                propertyDoesNotExists("complexity>LongParameterList>enabled"),
+                propertyDoesNotExists("complexity>LargeClass>howMany"),
+                propertyDoesNotExists("complexity>InnerMap>InnerKey"),
+                propertyDoesNotExists("complexity>InnerMap>Inner2>nestedActive")
             )
         }
 
@@ -54,8 +54,8 @@ internal class ConfigValidationSpec : Spek({
                 baseline
             )
             assertThat(result).contains(
-                nestedConfigExpectedMessage("complexity"),
-                nestedConfigExpectedMessage("style>WildcardImport")
+                nestedConfigurationExpected("complexity"),
+                nestedConfigurationExpected("style>WildcardImport")
             )
         }
 
@@ -63,8 +63,8 @@ internal class ConfigValidationSpec : Spek({
             // note that the baseline config is now the first argument
             val result = validateConfig(baseline, yamlConfig("config_validation/no-value.yml"))
             assertThat(result).contains(
-                unexpectedNestedConfigMessage("style"),
-                unexpectedNestedConfigMessage("comments")
+                unexpectedNestedConfiguration("style"),
+                unexpectedNestedConfiguration("comments")
             )
         }
 
@@ -90,13 +90,13 @@ internal class ConfigValidationSpec : Spek({
                 )
 
                 assertThat(result).contains(
-                    nestedConfigExpectedMessage("complexity"),
-                    nestedConfigExpectedMessage("style>WildcardImport"),
-                    doesNotExistsMessage("complexity>LongLongMethod"),
-                    doesNotExistsMessage("complexity>LongParameterList>enabled"),
-                    doesNotExistsMessage("complexity>LargeClass>howMany"),
-                    doesNotExistsMessage("complexity>InnerMap>InnerKey"),
-                    doesNotExistsMessage("complexity>InnerMap>Inner2>nestedActive")
+                    nestedConfigurationExpected("complexity"),
+                    nestedConfigurationExpected("style>WildcardImport"),
+                    propertyDoesNotExists("complexity>LongLongMethod"),
+                    propertyDoesNotExists("complexity>LongParameterList>enabled"),
+                    propertyDoesNotExists("complexity>LargeClass>howMany"),
+                    propertyDoesNotExists("complexity>InnerMap>InnerKey"),
+                    propertyDoesNotExists("complexity>InnerMap>Inner2>nestedActive")
                 )
             }
         }
@@ -122,14 +122,14 @@ internal class ConfigValidationSpec : Spek({
                 )
 
                 assertThat(result).contains(
-                    doesNotExistsMessage("complexity>LongLongMethod"),
-                    doesNotExistsMessage("complexity>LongParameterList>enabled"),
-                    doesNotExistsMessage("complexity>InnerMap>InnerKey"),
-                    doesNotExistsMessage("complexity>InnerMap>Inner2>nestedActive")
+                    propertyDoesNotExists("complexity>LongLongMethod"),
+                    propertyDoesNotExists("complexity>LongParameterList>enabled"),
+                    propertyDoesNotExists("complexity>InnerMap>InnerKey"),
+                    propertyDoesNotExists("complexity>InnerMap>Inner2>nestedActive")
                 )
 
                 assertThat(result).doesNotContain(
-                    doesNotExistsMessage("complexity>LargeClass>howMany")
+                    propertyDoesNotExists("complexity>LargeClass>howMany")
                 )
             }
 
@@ -141,14 +141,14 @@ internal class ConfigValidationSpec : Spek({
                 )
 
                 assertThat(result).contains(
-                    doesNotExistsMessage("complexity>LargeClass>howMany"),
-                    doesNotExistsMessage("complexity>LongLongMethod"),
-                    doesNotExistsMessage("complexity>LongParameterList>enabled")
+                    propertyDoesNotExists("complexity>LargeClass>howMany"),
+                    propertyDoesNotExists("complexity>LongLongMethod"),
+                    propertyDoesNotExists("complexity>LongParameterList>enabled")
                 )
 
                 assertThat(result).doesNotContain(
-                    doesNotExistsMessage("complexity>InnerMap>InnerKey"),
-                    doesNotExistsMessage("complexity>InnerMap>Inner2>nestedActive")
+                    propertyDoesNotExists("complexity>InnerMap>InnerKey"),
+                    propertyDoesNotExists("complexity>InnerMap>Inner2>nestedActive")
                 )
             }
         }
