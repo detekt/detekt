@@ -1,10 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
+import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.TestConfig
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
-import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -15,7 +16,9 @@ class TooManyFunctionsSpec : Spek({
         val rule = TooManyFunctions()
 
         it("should find one file with too many functions") {
-            assertThat(rule.lint(Case.TooManyFunctions.path())).hasSize(1)
+            val findings = rule.lint(Case.TooManyFunctions.path())
+            assertThat(findings).hasSize(1)
+            assertThat(findings).hasSourceLocations(SourceLocation(4, 7))
         }
 
         it("should find one file with too many top level functions") {
@@ -40,7 +43,9 @@ class TooManyFunctionsSpec : Spek({
                 }
             """
 
-            assertThat(rule.compileAndLint(code)).hasSize(1)
+            val findings = rule.compileAndLint(code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings).hasTextLocations(6 to 7)
         }
 
         it("finds one function in object") {
@@ -50,7 +55,9 @@ class TooManyFunctionsSpec : Spek({
                 }
             """
 
-            assertThat(rule.compileAndLint(code)).hasSize(1)
+            val findings = rule.compileAndLint(code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings).hasTextLocations(7 to 8)
         }
 
         it("finds one function in interface") {
@@ -60,7 +67,9 @@ class TooManyFunctionsSpec : Spek({
                 }
             """
 
-            assertThat(rule.compileAndLint(code)).hasSize(1)
+            val findings = rule.compileAndLint(code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings).hasTextLocations(10 to 11)
         }
 
         it("finds one function in enum") {
@@ -71,7 +80,9 @@ class TooManyFunctionsSpec : Spek({
                 }
             """
 
-            assertThat(rule.compileAndLint(code)).hasSize(1)
+            val findings = rule.compileAndLint(code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings).hasTextLocations(11 to 12)
         }
 
         it("finds one function in file") {
@@ -103,7 +114,9 @@ class TooManyFunctionsSpec : Spek({
                 }
             """
 
-            assertThat(rule.compileAndLint(code)).hasSize(1)
+            val findings = rule.compileAndLint(code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings).hasTextLocations(20 to 21)
         }
 
         describe("different deprecated functions") {
