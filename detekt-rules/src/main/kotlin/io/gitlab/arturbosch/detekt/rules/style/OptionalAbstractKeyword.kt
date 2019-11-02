@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.isAbstract
+import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -52,8 +52,8 @@ class OptionalAbstractKeyword(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun handleAbstractKeyword(dcl: KtDeclaration) {
-        if (dcl.isAbstract()) {
-            report(CodeSmell(issue, Entity.from(dcl), "The abstract keyword on this declaration is unnecessary."))
+        dcl.modifierList?.getModifier(KtTokens.ABSTRACT_KEYWORD)?.let {
+            report(CodeSmell(issue, Entity.from(it), "The abstract keyword on this declaration is unnecessary."))
         }
     }
 }
