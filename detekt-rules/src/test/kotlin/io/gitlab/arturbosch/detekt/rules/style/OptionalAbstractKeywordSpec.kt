@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -22,7 +22,10 @@ class OptionalAbstractKeywordSpec : Spek({
 
         it("reports abstract interface with abstract function") {
             val code = "abstract interface A { abstract fun x() }"
-            assertThat(subject.compileAndLint(code)).hasSize(2)
+            val findings = subject.compileAndLint(code)
+
+            assertThat(findings).hasSize(2)
+            assertThat(findings).hasTextLocations(0 to 8, 23 to 31)
         }
 
         it("reports nested abstract interface") {
