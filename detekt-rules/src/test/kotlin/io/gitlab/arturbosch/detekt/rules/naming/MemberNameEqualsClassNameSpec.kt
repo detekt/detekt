@@ -41,7 +41,7 @@ class MemberNameEqualsClassNameSpec : Spek({
             }
 
             it("reports methods which are named after the class object including overridden functions") {
-                val config = TestConfig(mapOf("ignoreOverriddenFunction" to "false"))
+                val config = TestConfig(mapOf(MemberNameEqualsClassName.IGNORE_OVERRIDDEN_FUNCTION to "false"))
                 val rule = MemberNameEqualsClassName(config)
                 assertThat(rule.lint(path)).hasSize(9)
             }

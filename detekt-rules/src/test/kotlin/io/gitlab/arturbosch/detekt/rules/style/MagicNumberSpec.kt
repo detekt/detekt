@@ -547,7 +547,7 @@ class MagicNumberSpec : Spek({
                 }
 
                 it("should ignore numbers when 'ignoreNamedArgument' is set to true") {
-                    val rule = MagicNumber(TestConfig(mapOf("ignoreNamedArgument" to "true")))
+                    val rule = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NAMED_ARGUMENT to "true")))
                     assertThat(rule.lint(code("53"))).isEmpty()
                 }
 
@@ -557,14 +557,14 @@ class MagicNumberSpec : Spek({
 
                     object B : A(n = 5)
                 """
-                    val rule = MagicNumber(TestConfig(mapOf("ignoreNamedArgument" to "true")))
+                    val rule = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NAMED_ARGUMENT to "true")))
                     assertThat(rule.lint(code)).isEmpty()
                 }
 
                 it("should ignore named arguments in parameter annotations - #1115") {
                     val code =
                             "@JvmStatic fun setCustomDimension(@IntRange(from = 0, to = 19) index: Int, value: String?) {}"
-                    MagicNumber(TestConfig(mapOf("ignoreNamedArgument" to "true")))
+                    MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NAMED_ARGUMENT to "true")))
                             .lint(code)
                             .assert()
                             .isEmpty()
@@ -734,7 +734,7 @@ class MagicNumberSpec : Spek({
 
             val rule = MagicNumber(TestConfig(mapOf(
                 "ignoreLocalVariableDeclaration" to "true",
-                "ignoreNamedArgument" to "true")))
+                MagicNumber.IGNORE_NAMED_ARGUMENT to "true")))
 
             it("should report 3") {
                 assertThat(rule.lint("""fun bar() { foo(3) }""")).hasSize(1)

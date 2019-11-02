@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
@@ -23,7 +24,7 @@ internal class LibraryCodeMustSpecifyReturnTypeSpec : Spek({
         }
 
         val subject by memoized {
-            LibraryCodeMustSpecifyReturnType(TestConfig("includes" to "*.kt"))
+            LibraryCodeMustSpecifyReturnType(TestConfig(Config.INCLUDES_KEY to "*.kt"))
         }
 
         describe("positive cases") {
