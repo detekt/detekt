@@ -246,7 +246,7 @@ class UnusedPrivateClassSpec : Spek({
 
     describe("testcase for reported false positives") {
 
-        it("does not crash when using wildcasts in generics - #1345") {
+        it("does not crash when using wildcards in generics - #1345") {
             val code = """
                 private class Foo
                 fun bar(clazz: KClass<*>) = Unit

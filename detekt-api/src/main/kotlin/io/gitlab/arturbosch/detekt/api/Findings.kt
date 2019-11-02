@@ -22,6 +22,7 @@ interface Finding : Compactable, HasEntity, HasMetrics {
 /**
  * Describes a source code position.
  */
+@Suppress("DEPRECATION")
 interface HasEntity {
     val entity: Entity
     val location: Location

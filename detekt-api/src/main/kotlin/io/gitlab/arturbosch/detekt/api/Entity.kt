@@ -20,6 +20,7 @@ data class Entity(
     val ktElement: KtElement? = null
 ) : Compactable {
 
+    @Suppress("DEPRECATION")
     override fun compact(): String = "[$name] at ${location.compact()}"
 
     companion object {

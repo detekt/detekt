@@ -16,10 +16,10 @@ Stores information about a specific code fragment.
 
 ### Properties
 
-| [className](class-name.html) | `val className: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
+| [className](class-name.html) | `val ~~className~~: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 | [ktElement](kt-element.html) | `val ktElement: KtElement?` |
 | [location](location.html) | `val location: `[`Location`](../-location/index.html) |
-| [name](name.html) | `val name: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
+| [name](name.html) | `val ~~name~~: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 | [signature](signature.html) | `val signature: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 
 ### Functions
