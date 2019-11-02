@@ -17,9 +17,9 @@ class ComplexMethodSpec : Spek({
 
             it("finds one complex method") {
                 val subject = ComplexMethod()
-                subject.lint(Case.ComplexClass.path())
+                subject.lint(Case.ComplexMethod.path())
 
-                assertThat(subject.findings).hasSourceLocations(SourceLocation(3, 1))
+                assertThat(subject.findings).hasSourceLocations(SourceLocation(4, 5))
 
                 assertThat(subject.findings.first())
                         .isThresholded()
@@ -38,7 +38,7 @@ class ComplexMethodSpec : Spek({
                         ComplexMethod.IGNORE_SINGLE_WHEN_EXPRESSION to "true"))
                 val subject = ComplexMethod(config, threshold = 4)
 
-                assertThat(subject.lint(path)).hasSourceLocations(SourceLocation(42, 1))
+                assertThat(subject.lint(path)).hasSourceLocations(SourceLocation(43, 5))
             }
 
             it("reports all complex methods") {
@@ -46,11 +46,11 @@ class ComplexMethodSpec : Spek({
                 val subject = ComplexMethod(config, threshold = 4)
 
                 assertThat(subject.lint(path)).hasSourceLocations(
-                        SourceLocation(5, 1),
-                        SourceLocation(14, 1),
-                        SourceLocation(24, 1),
-                        SourceLocation(34, 1),
-                        SourceLocation(42, 1)
+                        SourceLocation(6, 5),
+                        SourceLocation(15, 5),
+                        SourceLocation(25, 5),
+                        SourceLocation(35, 5),
+                        SourceLocation(43, 5)
                 )
             }
 
