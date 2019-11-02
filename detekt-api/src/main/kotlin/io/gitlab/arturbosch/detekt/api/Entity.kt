@@ -11,7 +11,9 @@ import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
  * Stores information about a specific code fragment.
  */
 data class Entity(
+    @Deprecated("Will be made private in the future. Use queries on 'ktElement' instead.")
     val name: String,
+    @Deprecated("Will be removed in the future. Use queries on 'ktElement' instead.")
     val className: String,
     val signature: String,
     val location: Location,

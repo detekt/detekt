@@ -36,8 +36,10 @@ interface HasEntity {
         get() = location.file
     val signature: String
         get() = entity.signature
+    @Deprecated("Will be removed in the future. Use queries on 'ktElement' instead.")
     val name: String
         get() = entity.name
+    @Deprecated("Will be removed in the future. Use queries on 'ktElement' instead.")
     val inClass: String
         get() = entity.className
 }
