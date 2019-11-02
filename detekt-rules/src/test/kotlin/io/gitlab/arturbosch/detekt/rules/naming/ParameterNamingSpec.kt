@@ -69,7 +69,7 @@ class ParameterNamingSpec : Spek({
                     override fun someStuff(`object`: String) {}
                 }
             """
-            val config = TestConfig(mapOf("ignoreOverriddenFunctions" to "false"))
+            val config = TestConfig(mapOf(FunctionParameterNaming.IGNORE_OVERRIDDEN_FUNCTIONS to "false"))
             assertThat(FunctionParameterNaming(config).lint(code)).hasSize(1)
         }
 
@@ -85,7 +85,7 @@ class ParameterNamingSpec : Spek({
 
     describe("parameters in a function of an excluded class") {
 
-        val config = TestConfig(mapOf("excludeClassPattern" to "Excluded"))
+        val config = TestConfig(mapOf(FunctionParameterNaming.EXCLUDE_CLASS_PATTERN to "Excluded"))
 
         it("should not detect function parameter") {
             val code = """

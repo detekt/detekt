@@ -300,7 +300,7 @@ class ReturnCountSpec : Spek({
 
             it("should count labeled returns from lambda when activated") {
                 val findings = ReturnCount(
-                        TestConfig(mapOf("excludeReturnFromLambda" to "false"))).lint(code)
+                        TestConfig(mapOf(ReturnCount.EXCLUDE_RETURN_FROM_LAMBDA to "false"))).lint(code)
                 assertThat(findings).hasSize(1)
             }
 

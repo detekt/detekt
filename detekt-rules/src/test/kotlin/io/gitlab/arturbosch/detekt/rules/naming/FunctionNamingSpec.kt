@@ -27,7 +27,7 @@ class FunctionNamingSpec : Spek({
                 fun SHOULD_NOT_BE_FLAGGED() = TODO()
             }
         """
-            val config = TestConfig(mapOf("excludeClassPattern" to ".*Test$"))
+            val config = TestConfig(mapOf(FunctionNaming.EXCLUDE_CLASS_PATTERN to ".*Test$"))
             assertThat(FunctionNaming(config).lint(code)).isEmpty()
         }
 
@@ -56,7 +56,7 @@ class FunctionNamingSpec : Spek({
 
             fun Foo(): Foo = FooImpl()
         """
-            val config = TestConfig(mapOf("ignoreOverridden" to "false"))
+            val config = TestConfig(mapOf(FunctionNaming.IGNORE_OVERRIDDEN to "false"))
             assertThat(FunctionNaming(config).lint(code))
         }
 
@@ -75,7 +75,7 @@ class FunctionNamingSpec : Spek({
             val code = """
             override fun SHOULD_BE_FLAGGED() = TODO()
         """
-            val config = TestConfig(mapOf("ignoreOverridden" to "false"))
+            val config = TestConfig(mapOf(FunctionNaming.IGNORE_OVERRIDDEN to "false"))
             assertThat(FunctionNaming(config).lint(code)).hasLocationStrings(
                     "'override fun SHOULD_BE_FLAGGED() = TODO()' at (1,1) in /$fileName"
             )
