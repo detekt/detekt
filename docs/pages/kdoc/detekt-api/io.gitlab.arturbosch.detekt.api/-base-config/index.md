@@ -21,5 +21,5 @@ Convenient base configuration which parses/casts the configuration value based o
 
 ### Inheritors
 
-| [YamlConfig](../-yaml-config/index.html) | Config implementation using the yaml format. SubConfigurations can return sub maps according to the yaml specification.`class YamlConfig : `[`BaseConfig`](./index.html) |
+| [YamlConfig](../-yaml-config/index.html) | Config implementation using the yaml format. SubConfigurations can return sub maps according to the yaml specification.`class YamlConfig : `[`BaseConfig`](./index.html)`, `[`ValidatableConfiguration`](../../io.gitlab.arturbosch.detekt.api.internal/-validatable-configuration/index.html) |
 

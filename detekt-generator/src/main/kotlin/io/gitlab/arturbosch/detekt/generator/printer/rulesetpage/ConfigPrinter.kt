@@ -17,6 +17,8 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
         return yaml {
             yaml { defaultBuildConfiguration() }
             emptyLine()
+            yaml { defaultConfigConfiguration() }
+            emptyLine()
             yaml { defaultProcessorsConfiguration() }
             emptyLine()
             yaml { defaultConsoleReportsConfiguration() }
@@ -71,6 +73,13 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
           # LongParameterList: 1
           # style: 1
           # comments: 1
+    """.trimIndent()
+
+    private fun defaultConfigConfiguration(): String = """
+      config:
+        validation: true
+        # when writing own rules with new properties, exclude the property path e.g.: "my_rule_set,.*>.*>[my_property]"
+        excludes: ""
     """.trimIndent()
 
     private fun defaultProcessorsConfiguration(): String = """

@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.cli.runners
 
 import io.gitlab.arturbosch.detekt.cli.BuildFailure
 import io.gitlab.arturbosch.detekt.cli.CliArgs
+import io.gitlab.arturbosch.detekt.cli.InvalidConfig
 import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -37,6 +38,15 @@ class RunnerSpec : Spek({
             ))
 
             assertThatThrownBy { Runner(cliArgs).execute() }.isExactlyInstanceOf(BuildFailure::class.java)
+        }
+
+        it("should throw on invalid config property") {
+            val cliArgs = CliArgs.parse(arrayOf(
+                "--input", inputPath.toString(),
+                "--config-resource", "/configs/invalid-config.yml"
+            ))
+
+            assertThatThrownBy { Runner(cliArgs).execute() }.isExactlyInstanceOf(InvalidConfig::class.java)
         }
 
         it("should never throw on maxIssues=-1") {

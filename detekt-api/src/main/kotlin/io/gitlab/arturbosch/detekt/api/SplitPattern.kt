@@ -5,7 +5,7 @@ package io.gitlab.arturbosch.detekt.api
  * Basic use cases are to specify different function or class names in the detekt
  * yaml config and test for their appearance in specific rules.
  */
-class SplitPattern(
+open class SplitPattern(
     text: String,
     delimiters: String = ",",
     removeTrailingAsterisks: Boolean = true
