@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.cli
 import io.gitlab.arturbosch.detekt.api.CompositeConfig
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.YamlConfig
+import io.gitlab.arturbosch.detekt.api.internal.FailFastConfig
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import java.nio.file.Path
 
@@ -33,10 +34,10 @@ fun CliArgs.loadConfiguration(): Config {
 
     if (failFast) {
         val initializedDefaultConfig = defaultConfig ?: loadDefaultConfig()
-        declaredConfig = FailFastConfig(declaredConfig ?: initializedDefaultConfig, initializedDefaultConfig)
+        declaredConfig = FailFastConfig(declaredConfig
+            ?: initializedDefaultConfig, initializedDefaultConfig)
     }
 
-    if (debug) println("\n$declaredConfig\n")
     return declaredConfig ?: loadDefaultConfig()
 }
 
@@ -62,6 +63,6 @@ private fun parsePathConfig(configPath: String): Config {
     }
 }
 
-private fun loadDefaultConfig() = YamlConfig.loadResource(ClasspathResourceConverter().convert(DEFAULT_CONFIG))
-
 const val DEFAULT_CONFIG = "default-detekt-config.yml"
+
+fun loadDefaultConfig() = YamlConfig.loadResource(ClasspathResourceConverter().convert(DEFAULT_CONFIG))

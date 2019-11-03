@@ -1,5 +1,7 @@
 package io.gitlab.arturbosch.detekt.api
 
+import io.gitlab.arturbosch.detekt.api.internal.ValidatableConfiguration
+import io.gitlab.arturbosch.detekt.api.internal.validateConfig
 import org.yaml.snakeyaml.Yaml
 import java.io.BufferedReader
 import java.net.URL
@@ -14,7 +16,7 @@ import java.nio.file.Path
 class YamlConfig internal constructor(
     val properties: Map<String, Any>,
     override val parent: HierarchicalConfig.Parent?
-) : BaseConfig() {
+) : BaseConfig(), ValidatableConfiguration {
 
     override fun subConfig(key: String): Config {
         val subProperties = properties.getOrElse(key) { mapOf<String, Any>() }
@@ -33,6 +35,9 @@ class YamlConfig internal constructor(
     override fun toString(): String {
         return "YamlConfig(properties=$properties)"
     }
+
+    override fun validate(baseline: Config, excludePatterns: Set<Regex>): List<Notification> =
+        validateConfig(this, baseline, excludePatterns)
 
     companion object {
 

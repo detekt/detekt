@@ -1,0 +1,6 @@
+style:
+  MagicNumber:
+    active: true
+    autoCorrect: true
+    excludes: ""
+    includes: ""

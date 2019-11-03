@@ -13,7 +13,7 @@ title: io.gitlab.arturbosch.detekt.api - detekt-api
 | [BaseRule](-base-rule/index.html) | Defines the visiting mechanism for KtFile's.`abstract class BaseRule : `[`DetektVisitor`](-detekt-visitor/index.html)`, `[`Context`](-context/index.html) |
 | [CodeSmell](-code-smell/index.html) | A code smell indicates any possible design problem inside a program's source code. The type of a code smell is described by an [Issue](-issue/index.html).`open class CodeSmell : `[`Finding`](-finding/index.html) |
 | [Compactable](-compactable/index.html) | Provides a compact string representation.`interface Compactable` |
-| [CompositeConfig](-composite-config/index.html) | Wraps two different configuration which should be considered when retrieving properties.`class CompositeConfig : `[`Config`](-config/index.html) |
+| [CompositeConfig](-composite-config/index.html) | Wraps two different configuration which should be considered when retrieving properties.`class CompositeConfig : `[`Config`](-config/index.html)`, `[`ValidatableConfiguration`](../io.gitlab.arturbosch.detekt.api.internal/-validatable-configuration/index.html) |
 | [Config](-config/index.html) | A configuration holds information about how to configure specific rules.`interface Config` |
 | [ConfigAware](-config-aware/index.html) | Interface which is implemented by each Rule class to provide utility functions to retrieve specific or generic properties from the underlying detekt configuration file.`interface ConfigAware : `[`Config`](-config/index.html) |
 | [ConsoleReport](-console-report/index.html) | Extension point which describes how findings should be printed on the console.`abstract class ConsoleReport : `[`Extension`](-extension/index.html) |
@@ -46,11 +46,11 @@ title: io.gitlab.arturbosch.detekt.api - detekt-api
 | [Severity](-severity/index.html) | Rules can classified into different severity grades. Maintainer can choose a grade which is most harmful to their projects.`enum class Severity` |
 | [SingleAssign](-single-assign/index.html) | Allows to assign a property just once. Further assignments result in [IllegalStateException](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-illegal-state-exception/index.html)'s.`class SingleAssign<T : `[`Any`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)`>` |
 | [SourceLocation](-source-location/index.html) | Stores line and column information of a location.`data class SourceLocation` |
-| [SplitPattern](-split-pattern/index.html) | Splits given text into parts and provides testing utilities for its elements. Basic use cases are to specify different function or class names in the detekt yaml config and test for their appearance in specific rules.`class SplitPattern` |
+| [SplitPattern](-split-pattern/index.html) | Splits given text into parts and provides testing utilities for its elements. Basic use cases are to specify different function or class names in the detekt yaml config and test for their appearance in specific rules.`open class SplitPattern` |
 | [TextLocation](-text-location/index.html) | Stores character start and end positions of an text file.`data class TextLocation` |
 | [ThresholdedCodeSmell](-thresholded-code-smell/index.html) | Represents a code smell for which a specific metric can be determined which is responsible for the existence of this rule violation.`open class ThresholdedCodeSmell : `[`CodeSmell`](-code-smell/index.html) |
 | [ThresholdRule](-threshold-rule/index.html) | Provides a threshold attribute for this rule, which is specified manually for default values but can be also obtained from within a configuration object.`abstract class ThresholdRule : `[`Rule`](-rule/index.html) |
-| [YamlConfig](-yaml-config/index.html) | Config implementation using the yaml format. SubConfigurations can return sub maps according to the yaml specification.`class YamlConfig : `[`BaseConfig`](-base-config/index.html) |
+| [YamlConfig](-yaml-config/index.html) | Config implementation using the yaml format. SubConfigurations can return sub maps according to the yaml specification.`class YamlConfig : `[`BaseConfig`](-base-config/index.html)`, `[`ValidatableConfiguration`](../io.gitlab.arturbosch.detekt.api.internal/-validatable-configuration/index.html) |
 
 ### Extensions for External Classes
 

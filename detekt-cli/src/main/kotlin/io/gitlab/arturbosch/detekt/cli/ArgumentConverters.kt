@@ -55,8 +55,6 @@ class JvmTargetConverter : IStringConverter<JvmTarget> {
         checkNotNull(JvmTarget.fromString(value)) { "Invalid value passed to --jvm-target" }
 }
 
-/**
- */
 class ClasspathResourceConverter : IStringConverter<URL> {
     override fun convert(resource: String): URL {
         val relativeResource = if (resource.startsWith("/")) resource else "/$resource"

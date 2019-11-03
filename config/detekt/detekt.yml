@@ -53,8 +53,6 @@ formatting:
   active: true
   android: false
   autoCorrect: true
-  NoItParamInMultilineLambda:
-    active: false
   MaximumLineLength:
     active: false
 
@@ -117,6 +115,7 @@ style:
     ignoreHashCodeFunction: true
     ignorePropertyDeclaration: true
     ignoreAnnotation: true
+    ignoreEnums: true
     ignoreNumbers: '-1,0,1,2,100,1000'
   MayBeConst:
     active: true
@@ -126,9 +125,6 @@ style:
     active: true
   SpacingBetweenPackageAndImports:
     active: true
-  VariableNaming:
-    active: true
-    variablePattern: '(_)?[a-z][a-zA-Z0-9]*'
   UnnecessaryAbstractClass:
     active: true
   UnnecessaryInheritance:
