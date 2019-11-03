@@ -70,12 +70,10 @@ class VarCouldBeValSpec : Spek({
                 val b = a + 2
             }
             """
-            val lint = subject.lint(code)
+            val findings = subject.lint(code)
 
-            assertThat(lint).hasSize(1)
-            with(lint[0]) {
-                assertThat(entity.name).isEqualTo("a")
-            }
+            assertThat(findings).hasSize(1)
+            assertThat(findings[0].entity.signature).isEqualTo("Test.kt\$var a = 1")
         }
 
         it("reports variables that are not re-assigned, but used in function calls") {
@@ -85,12 +83,10 @@ class VarCouldBeValSpec : Spek({
                 something(a)
             }
             """
-            val lint = subject.lint(code)
+            val findings = subject.lint(code)
 
-            assertThat(lint).hasSize(1)
-            with(lint[0]) {
-                assertThat(entity.name).isEqualTo("a")
-            }
+            assertThat(findings).hasSize(1)
+            assertThat(findings[0].entity.signature).isEqualTo("Test.kt\$var a = 1")
         }
 
         it("reports variables that are not re-assigned, but shadowed by one that is") {
