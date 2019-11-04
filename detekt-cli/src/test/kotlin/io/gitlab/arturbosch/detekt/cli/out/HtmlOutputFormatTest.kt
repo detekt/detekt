@@ -6,9 +6,15 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Location
+import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
+import io.gitlab.arturbosch.detekt.core.processors.commentLinesKey
+import io.gitlab.arturbosch.detekt.core.processors.complexityKey
+import io.gitlab.arturbosch.detekt.core.processors.logicalLinesKey
+import io.gitlab.arturbosch.detekt.core.processors.sourceLinesKey
+import io.gitlab.arturbosch.detekt.core.processors.linesKey
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.resource
 import io.mockk.every
@@ -68,6 +74,30 @@ class HtmlOutputFormatTest : Spek({
             assertThat(result).contains("<span class=\"description\">A3</span>")
         }
 
+        it("testRenderResultContainingAtLeastOneMetric") {
+            val detektion = object : TestDetektion() {
+                override val metrics: Collection<ProjectMetric> = listOf(
+                    ProjectMetric("M1", 1), ProjectMetric("M2", 2)
+                )
+            }
+            val result = outputFormat.render(detektion)
+            assertThat(result).contains("<li>M1: 1</li>")
+            assertThat(result).contains("<li>M2: 2</li>")
+        }
+
+        it("testRenderResultContainingComplexityReport") {
+            val detektion = TestDetektion()
+            detektion.addData(complexityKey, 10)
+            detektion.addData(sourceLinesKey, 20)
+            detektion.addData(logicalLinesKey, 10)
+            detektion.addData(commentLinesKey, 2)
+            detektion.addData(linesKey, 22)
+            val result = outputFormat.render(detektion)
+            assertThat(result).contains("<li>- 22 lines of code (loc)</li>")
+            assertThat(result).contains("<li>- 20 source lines of code (sloc)</li>")
+            assertThat(result).contains("<li>- 10 logical lines of code (lloc)</li>")
+        }
+
         it("assert that the html generated is the expected") {
             val result = outputFormat.render(createTestDetektionWithMultipleSmells())
 
@@ -90,7 +120,8 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
     every { ktElementMock.containingFile } returns psiFileMock
 
     val entity1 = Entity("Sample1", "com.sample.Sample1", "",
-            Location(SourceLocation(11, 1), TextLocation(10, 14),
+            Location(
+                SourceLocation(11, 1), TextLocation(10, 14),
                     "abcd", "src/main/com/sample/Sample1.kt"), ktElementMock
     )
     val entity2 = Entity("Sample2", "com.sample.Sample2", "",
