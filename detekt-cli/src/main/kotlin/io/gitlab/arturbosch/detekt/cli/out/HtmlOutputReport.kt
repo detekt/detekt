@@ -117,10 +117,9 @@ class HtmlOutputReport : OutputReport() {
     }
 
     private fun getComplexityMetrics(detektion: Detektion): List<String> {
-        var complexities = listOf<String>()
         val complexityReport = ComplexityReportGenerator.create(detektion).generate()
         return if (complexityReport.isNullOrBlank()) listOf<String>() else {
-            complexities = complexityReport.split("\n")
+            var complexities = complexityReport.split("\n")
             return complexities.subList(1, complexities.size - 1)
         }
     }
