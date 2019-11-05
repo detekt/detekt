@@ -3,11 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.providers
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.rules.documentation.CommentOverPrivateFunction
-import io.gitlab.arturbosch.detekt.rules.documentation.CommentOverPrivateProperty
-import io.gitlab.arturbosch.detekt.rules.documentation.KDocStyle
-import io.gitlab.arturbosch.detekt.rules.documentation.UndocumentedPublicClass
-import io.gitlab.arturbosch.detekt.rules.documentation.UndocumentedPublicFunction
+import io.gitlab.arturbosch.detekt.rules.documentation.*
 
 /**
  * This rule set provides rules that address issues in comments and documentation
@@ -25,7 +21,8 @@ class CommentSmellProvider : RuleSetProvider {
                 CommentOverPrivateProperty(config),
                 KDocStyle(config),
                 UndocumentedPublicClass(config),
-                UndocumentedPublicFunction(config)
+                UndocumentedPublicFunction(config),
+                AbsentOrWrongFileLicense(config)
         ))
     }
 }
