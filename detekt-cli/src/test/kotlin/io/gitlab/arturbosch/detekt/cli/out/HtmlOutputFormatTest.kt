@@ -98,6 +98,11 @@ class HtmlOutputFormatTest : Spek({
             assertThat(result).contains("<li>- 10 logical lines of code (lloc)</li>")
         }
 
+        it("testRenderResultWithBlankComplexityReport") {
+            val result = outputFormat.render(createTestDetektionWithMultipleSmells())
+            assertThat(result).contains("<h2>Complexity Report</h2>\n\n<div>\n  <ul></ul>\n</div>")
+        }
+
         it("assert that the html generated is the expected") {
             val result = outputFormat.render(createTestDetektionWithMultipleSmells())
 
