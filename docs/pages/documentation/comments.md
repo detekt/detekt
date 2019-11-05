@@ -9,6 +9,20 @@ folder: documentation
 This rule set provides rules that address issues in comments and documentation
 of the code.
 
+### AbsentOrWrongFileLicense
+
+TODO: description
+
+**Severity**: Maintainability
+
+**Debt**: 5min
+
+#### Configuration options:
+
+* `licenseTemplateFile` (default: `config/detekt/license.template`)
+
+   relative or absolute path to file with license template that should be used in source files.
+
 ### CommentOverPrivateFunction
 
 This rule reports comments and documentation that has been added to private functions. These comments get reported
