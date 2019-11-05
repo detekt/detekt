@@ -201,7 +201,8 @@ This might be due to invalid ranges like (10..9) which will cause the loop to ne
 for (i in 2..1) {}
 for (i in 1 downTo 2) {}
 
-val range = 2 until 1
+val range1 = 2 until 1
+val range2 = 2 until 2
 ```
 
 #### Compliant Code:
@@ -210,7 +211,7 @@ val range = 2 until 1
 for (i in 2..2) {}
 for (i in 2 downTo 2) {}
 
-val range =  2 until 2)
+val range = 2 until 3
 ```
 
 ### IteratorHasNextCallsNextMethod
