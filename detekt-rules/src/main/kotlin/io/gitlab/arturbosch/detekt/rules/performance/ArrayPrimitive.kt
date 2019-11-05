@@ -31,6 +31,8 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  *
  * fun returningFunction(): DoubleArray { }
  * </compliant>
+ *
+ * @active since v1.2.0
  */
 class ArrayPrimitive(config: Config = Config.empty) : Rule(config) {
 

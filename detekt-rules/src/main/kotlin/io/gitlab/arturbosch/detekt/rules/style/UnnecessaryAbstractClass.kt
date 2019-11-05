@@ -40,6 +40,8 @@ import org.jetbrains.kotlin.psi.psiUtil.isAbstract
  *
  * @configuration excludeAnnotatedClasses - Allows you to provide a list of annotations that disable
  * this check. (default: `"dagger.Module"`)
+ *
+ * @active since v1.2.0
  */
 class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
 

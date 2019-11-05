@@ -42,6 +42,8 @@ import org.jetbrains.kotlin.psi.psiUtil.getSuperNames
  *     }
  * }
  * </compliant>
+ *
+ * @active since v1.2.0
  */
 class IteratorNotThrowingNoSuchElementException(config: Config = Config.empty) : Rule(config) {
 

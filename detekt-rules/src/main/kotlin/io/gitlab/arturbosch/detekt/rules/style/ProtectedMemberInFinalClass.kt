@@ -30,6 +30,8 @@ import org.jetbrains.kotlin.psi.psiUtil.isProtected
  *     private var i = 0
  * }
  * </compliant>
+ *
+ * @active since v1.2.0
  */
 class ProtectedMemberInFinalClass(config: Config = Config.empty) : Rule(config) {
 
