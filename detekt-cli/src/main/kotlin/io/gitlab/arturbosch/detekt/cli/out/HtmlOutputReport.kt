@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.api.OutputReport
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.cli.ClasspathResourceConverter
+import io.gitlab.arturbosch.detekt.cli.console.ComplexityReportGenerator
 import kotlinx.html.CommonAttributeGroupFacadeFlowInteractiveContent
 import kotlinx.html.FlowContent
 import kotlinx.html.FlowOrInteractiveContent
@@ -27,6 +28,7 @@ import kotlinx.html.visit
 private const val DEFAULT_TEMPLATE = "default-html-report-template.html"
 private const val PLACEHOLDER_METRICS = "@@@metrics@@@"
 private const val PLACEHOLDER_FINDINGS = "@@@findings@@@"
+private const val PLACEHOLDER_COMPLEXITY_REPORT = "@@@complexity@@@"
 
 /**
  * Generates a HTML report containing rule violations and metrics.
@@ -40,12 +42,21 @@ class HtmlOutputReport : OutputReport() {
     override fun render(detektion: Detektion) =
             ClasspathResourceConverter().convert(DEFAULT_TEMPLATE).openStream().bufferedReader().use { it.readText() }
                     .replace(PLACEHOLDER_METRICS, renderMetrics(detektion.metrics))
+                    .replace(PLACEHOLDER_COMPLEXITY_REPORT, renderComplexity(getComplexityMetrics(detektion)))
                     .replace(PLACEHOLDER_FINDINGS, renderFindings(detektion.findings))
 
     private fun renderMetrics(metrics: Collection<ProjectMetric>) = createHTML().div {
         ul {
             metrics.forEach {
                 li { text("${it.type}: ${it.value}") }
+            }
+        }
+    }
+
+    private fun renderComplexity(complexityReport: List<String>) = createHTML().div {
+        ul {
+            complexityReport.forEach {
+                li { text("${it.trim()}") }
             }
         }
     }
@@ -102,6 +113,14 @@ class HtmlOutputReport : OutputReport() {
         if (psiFile != null) {
             val lineSequence = psiFile.text.splitToSequence('\n')
             snippetCode(lineSequence, finding.startPosition, finding.charPosition.length())
+        }
+    }
+
+    private fun getComplexityMetrics(detektion: Detektion): List<String> {
+        val complexityReport = ComplexityReportGenerator.create(detektion).generate()
+        return if (complexityReport.isNullOrBlank()) listOf<String>() else {
+            var complexities = complexityReport.split("\n")
+            return complexities.subList(1, complexities.size - 1)
         }
     }
 }
