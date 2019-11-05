@@ -16,7 +16,7 @@ class InvalidRangeSpec : Spek({
                 fun f() {
                     for (i in 2..2) {}
                     for (i in 2 downTo 2) {}
-                    for (i in 2 until 2) {}
+                    for (i in 2 until 3) {}
                     for (i in 2 until 4 step 2) {}
                     for (i in (1+1)..3) { }
                 }"""
@@ -28,7 +28,7 @@ class InvalidRangeSpec : Spek({
                 fun f() {
                     for (i in 2..1) { }
                     for (i in 1 downTo 2) { }
-                    for (i in 2 until 1) { }
+                    for (i in 2 until 2) { }
                     for (i in 2 until 1 step 2) { }
                 }"""
             assertThat(subject.compileAndLint(code)).hasSize(4)
