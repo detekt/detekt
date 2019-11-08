@@ -7,7 +7,7 @@
 # https://github.com/JakeWharton/RxBinding/blob/master/.buildscript/deploy_snapshot.sh
 
 SLUG="arturbosch/detekt"
-JDK="openjdk8"
+JDK="oraclejdk8"
 BRANCH="master"
 
 set -e
