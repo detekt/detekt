@@ -11,7 +11,7 @@ of the code.
 
 ### AbsentOrWrongFileLicense
 
-TODO: description
+This rule will report every Kotlin source file which doesn't have required license header.
 
 **Severity**: Maintainability
 
@@ -19,9 +19,9 @@ TODO: description
 
 #### Configuration options:
 
-* `licenseTemplateFile` (default: `config/detekt/license.template`)
+* ``licenseTemplateFile`` (default: ``license.template``)
 
-   relative or absolute path to file with license template that should be used in source files.
+   path to file with license header template resolved relatively to config file
 
 ### CommentOverPrivateFunction
 

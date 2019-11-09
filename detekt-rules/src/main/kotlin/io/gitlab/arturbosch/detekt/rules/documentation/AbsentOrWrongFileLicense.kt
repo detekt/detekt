@@ -14,8 +14,8 @@ import java.nio.file.Files
 /**
  * This rule will report every Kotlin source file which doesn't have required license header.
  *
- * @configuration licenseTemplateFile - path to file with license header template
- * (default: `config/detekt/license.template`)
+ * @configuration licenseTemplateFile - path to file with license header template resolved relatively to config file
+ * (default: `license.template`)
  */
 class AbsentOrWrongFileLicense(config: Config = Config.empty) : Rule(config) {
 
@@ -71,4 +71,4 @@ class AbsentOrWrongFileLicense(config: Config = Config.empty) : Rule(config) {
 
 private const val PARAM_LICENSE_TEMPLATE_FILE = "licenseTemplateFile"
 
-private const val DEFAULT_LICENSE_TEMPLATE_FILE = "config/detekt/license.template"
+private const val DEFAULT_LICENSE_TEMPLATE_FILE = "license.template"

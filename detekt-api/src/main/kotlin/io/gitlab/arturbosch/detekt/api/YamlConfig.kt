@@ -50,22 +50,27 @@ class YamlConfig internal constructor(
         fun load(path: Path): Config {
             require(Files.exists(path)) { "File does not exist!" }
             require(path.toString().endsWith(YAML)) { "File does not end with $YAML!" }
-            return load(path, Files.newBufferedReader(path))
+            return load(Files.newBufferedReader(path), path)
         }
 
         /**
          * Factory method to load a yaml configuration from a URL.
          */
-        fun loadResource(url: URL): Config = load(Path.of(url.toURI()), url.openStream().bufferedReader())
+        fun loadResource(url: URL): Config = load(url.openStream().bufferedReader())
 
-        private fun load(path: Path, reader: BufferedReader): Config = reader.use {
+        private fun load(reader: BufferedReader, path: Path? = null): Config = reader.use {
             val yamlInput = it.lineSequence().joinToString("\n")
             if (yamlInput.isEmpty()) {
                 Config.empty
             } else {
                 val map: Any = Yaml().load(yamlInput)
                 if (map is Map<*, *>) {
-                    YamlConfig(map as Map<String, Any>, parent = null, location = Config.Location.FromDirectory(path.parent))
+                    val location = if (path != null) {
+                        Config.Location.FromDirectory(path.parent)
+                    } else {
+                        Config.Location.Undefined
+                    }
+                    YamlConfig(map as Map<String, Any>, parent = null, location = location)
                 } else {
                     throw Config.InvalidConfigurationError()
                 }
