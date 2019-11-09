@@ -54,7 +54,10 @@ enum class Case(val file: String) {
     NoTabsNegative("/cases/NoTabsNegative.kt"),
     NoTabsPositive("/cases/NoTabsPositive.kt"),
     UnusedPrivateMemberPositive("/cases/UnusedPrivateMemberPositive.kt"),
-    UnusedPrivateMemberNegative("/cases/UnusedPrivateMemberNegative.kt");
+    UnusedPrivateMemberNegative("/cases/UnusedPrivateMemberNegative.kt"),
+    FileWithCorrectLicenseHeader("/cases/CorrectLicenseHeader.kt"),
+    FileWithIncorrectLicenseHeader("/cases/IncorrectLicenseHeader.kt"),
+    FileWithAbsentLicenseHeader("/cases/AbsentLicenseHeader.kt");
 
     fun path(): Path = Paths.get(resource(file))
 }
