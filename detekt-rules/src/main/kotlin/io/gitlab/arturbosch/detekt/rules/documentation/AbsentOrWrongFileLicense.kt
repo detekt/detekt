@@ -2,13 +2,14 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Config.Location.Undefined
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.psi.KtFile
-import java.io.File
+import java.nio.file.Files
 
 /**
  * This rule will report every Kotlin source file which doesn't have required license header.
@@ -45,17 +46,26 @@ class AbsentOrWrongFileLicense(config: Config = Config.empty) : Rule(config) {
 
     // TODO cache this action
     private fun loadLicenseFromFile(): String {
-        val pathToTemplate = valueOrDefault(PARAM_LICENSE_TEMPLATE_FILE, DEFAULT_LICENSE_TEMPLATE_FILE)
-        val file = File(pathToTemplate)
+        val templateDir = when (val location = ruleSetConfig.location) {
+            Undefined ->
+                error("Config file should be loaded from FS directory.")
+            is Config.Location.FromDirectory ->
+                location.dir
+        }
 
-        require(file.exists()) {
+        val pathToTemplate = valueOrDefault(PARAM_LICENSE_TEMPLATE_FILE, DEFAULT_LICENSE_TEMPLATE_FILE)
+        val file = templateDir.resolve(pathToTemplate)
+
+        require(Files.exists(file)) {
             """
-                License template file not found at `${file.absolutePath}`.
+                License template file not found at `${file.toAbsolutePath()}`.
                 Create file license header file or check your running path.
             """.trimIndent()
         }
 
-        return file.readText()
+        return Files.newBufferedReader(file).use { reader ->
+            reader.readText()
+        }
     }
 }
 

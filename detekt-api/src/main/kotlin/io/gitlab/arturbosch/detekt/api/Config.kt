@@ -2,6 +2,9 @@
 
 package io.gitlab.arturbosch.detekt.api
 
+import io.gitlab.arturbosch.detekt.api.Config.Companion.PRIMITIVES
+import java.nio.file.Path
+import java.util.ArrayDeque
 import io.gitlab.arturbosch.detekt.api.internal.EmptyConfig
 import kotlin.reflect.KClass
 
@@ -9,6 +12,8 @@ import kotlin.reflect.KClass
  * A configuration holds information about how to configure specific rules.
  */
 interface Config {
+
+    val location: Location get() = Location.Undefined
 
     /**
      * Keeps track of which key was taken to [subConfig] this configuration.
@@ -69,6 +74,11 @@ interface Config {
             Char::class,
             Long::class
         )
+    }
+
+    sealed class Location {
+        object Undefined : Location()
+        data class FromDirectory(val dir: Path) : Location()
     }
 }
 
