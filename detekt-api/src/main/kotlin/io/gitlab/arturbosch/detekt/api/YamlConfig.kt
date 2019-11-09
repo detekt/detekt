@@ -15,7 +15,8 @@ import java.nio.file.Path
 @Suppress("UNCHECKED_CAST")
 class YamlConfig internal constructor(
     val properties: Map<String, Any>,
-    override val parent: HierarchicalConfig.Parent?
+    override val parent: HierarchicalConfig.Parent?,
+    override val location: Config.Location = parent?.config?.location ?: Config.Location.Undefined
 ) : BaseConfig(), ValidatableConfiguration {
 
     override fun subConfig(key: String): Config {
@@ -49,22 +50,22 @@ class YamlConfig internal constructor(
         fun load(path: Path): Config {
             require(Files.exists(path)) { "File does not exist!" }
             require(path.toString().endsWith(YAML)) { "File does not end with $YAML!" }
-            return load(Files.newBufferedReader(path))
+            return load(path, Files.newBufferedReader(path))
         }
 
         /**
          * Factory method to load a yaml configuration from a URL.
          */
-        fun loadResource(url: URL): Config = load(url.openStream().bufferedReader())
+        fun loadResource(url: URL): Config = load(Path.of(url.toURI()), url.openStream().bufferedReader())
 
-        private fun load(reader: BufferedReader): Config = reader.use {
+        private fun load(path: Path, reader: BufferedReader): Config = reader.use {
             val yamlInput = it.lineSequence().joinToString("\n")
             if (yamlInput.isEmpty()) {
                 Config.empty
             } else {
                 val map: Any = Yaml().load(yamlInput)
                 if (map is Map<*, *>) {
-                    YamlConfig(map as Map<String, Any>, parent = null)
+                    YamlConfig(map as Map<String, Any>, parent = null, location = Config.Location.FromDirectory(path.parent))
                 } else {
                     throw Config.InvalidConfigurationError()
                 }
