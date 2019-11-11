@@ -336,7 +336,7 @@ naming:
   MatchingDeclarationName:
     active: true
   MemberNameEqualsClassName:
-    active: false
+    active: true
     ignoreOverriddenFunction: true
   ObjectPropertyNaming:
     active: true
@@ -373,7 +373,7 @@ naming:
 performance:
   active: true
   ArrayPrimitive:
-    active: false
+    active: true
   ForEachOnRange:
     active: true
     excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
@@ -390,7 +390,7 @@ potential-bugs:
   DuplicateCaseInWhenExpression:
     active: true
   EqualsAlwaysReturnsTrueOrFalse:
-    active: false
+    active: true
   EqualsWithHashCodeExist:
     active: true
   ExplicitGarbageCollectionCall:
@@ -400,11 +400,11 @@ potential-bugs:
   ImplicitDefaultLocale:
     active: false
   InvalidRange:
-    active: false
+    active: true
   IteratorHasNextCallsNextMethod:
-    active: false
+    active: true
   IteratorNotThrowingNoSuchElementException:
-    active: false
+    active: true
   LateinitUsage:
     active: false
     excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
@@ -413,21 +413,21 @@ potential-bugs:
   MapGetWithNotNullAssert:
     active: false
   MissingWhenCase:
-    active: false
+    active: true
   RedundantElseInWhen:
-    active: false
+    active: true
   UnconditionalJumpStatementInLoop:
     active: false
   UnreachableCode:
     active: true
   UnsafeCallOnNullableType:
-    active: false
+    active: true
   UnsafeCast:
     active: false
   UselessPostfixExpression:
     active: false
   WrongEqualsTypeParameter:
-    active: false
+    active: true
 
 style:
   active: true
@@ -439,7 +439,7 @@ style:
   DataClassShouldBeImmutable:
     active: false
   EqualsNullCall:
-    active: false
+    active: true
   EqualsOnSignatureLine:
     active: false
   ExplicitItLambdaParameter:
@@ -460,14 +460,14 @@ style:
     ignoreOverridden: false
     ignoreUsageInGenerics: false
   FunctionOnlyReturningConstant:
-    active: false
+    active: true
     ignoreOverridableFunction: true
     excludedFunctions: 'describeContents'
     excludeAnnotatedFunction: "dagger.Provides"
   LibraryCodeMustSpecifyReturnType:
-    active: false
+    active: true
   LoopWithTooManyJumpStatements:
-    active: false
+    active: true
     maxJumpCount: 1
   MagicNumber:
     active: true
@@ -490,7 +490,7 @@ style:
     excludeImportStatements: true
     excludeCommentStatements: false
   MayBeConst:
-    active: false
+    active: true
   ModifierOrder:
     active: true
   NestedClassesVisibility:
@@ -508,7 +508,7 @@ style:
   PreferToOverPairSyntax:
     active: false
   ProtectedMemberInFinalClass:
-    active: false
+    active: true
   RedundantExplicitType:
     active: false
   RedundantVisibilityModifierRule:
@@ -535,12 +535,12 @@ style:
     active: false
     acceptableDecimalLength: 5
   UnnecessaryAbstractClass:
-    active: false
+    active: true
     excludeAnnotatedClasses: "dagger.Module"
   UnnecessaryApply:
     active: false
   UnnecessaryInheritance:
-    active: false
+    active: true
   UnnecessaryLet:
     active: false
   UnnecessaryParentheses:
@@ -550,7 +550,7 @@ style:
   UnusedImports:
     active: false
   UnusedPrivateClass:
-    active: false
+    active: true
   UnusedPrivateMember:
     active: false
     allowedNames: "(_|ignored|expected|serialVersionUID)"
@@ -567,9 +567,9 @@ style:
   UseRequire:
     active: false
   UselessCallOnNotNull:
-    active: false
+    active: true
   UtilityClassWithPublicConstructor:
-    active: false
+    active: true
   VarCouldBeVal:
     active: false
   WildcardImport:

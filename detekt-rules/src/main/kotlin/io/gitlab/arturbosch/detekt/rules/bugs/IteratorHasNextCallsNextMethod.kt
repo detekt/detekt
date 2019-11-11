@@ -27,6 +27,8 @@ import org.jetbrains.kotlin.psi.psiUtil.getSuperNames
  *     }
  * }
  * </noncompliant>
+ *
+ * @active since v1.2.0
  */
 class IteratorHasNextCallsNextMethod(config: Config = Config.empty) : Rule(config) {
 

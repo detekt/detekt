@@ -55,6 +55,8 @@ import org.jetbrains.kotlin.psi.psiUtil.isPublic
  *     val i = 0
  * }
  * </compliant>
+ *
+ * @active since v1.2.0
  */
 class UtilityClassWithPublicConstructor(config: Config = Config.empty) : Rule(config) {
 
