@@ -35,6 +35,8 @@ import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
  *     return this == other
  * }
  * </compliant>
+ *
+ * @active since v1.2.0
  */
 class EqualsAlwaysReturnsTrueOrFalse(config: Config = Config.empty) : Rule(config) {
 

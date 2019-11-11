@@ -30,6 +30,8 @@ import org.jetbrains.kotlin.psi.KtBinaryExpression
  *
  * val range = 2 until 3
  * </compliant>
+ *
+ * @active since v1.2.0
  */
 class InvalidRange(config: Config = Config.empty) : Rule(config) {
 

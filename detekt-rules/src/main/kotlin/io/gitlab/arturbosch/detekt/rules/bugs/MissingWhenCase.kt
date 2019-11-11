@@ -60,6 +60,8 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getType
  *
  * Based on code from Kotlin compiler:
  * https://github.com/JetBrains/kotlin/blob/v1.3.30/compiler/frontend/src/org/jetbrains/kotlin/cfg/ControlFlowInformationProvider.kt
+ *
+ * @active since v1.2.0
  */
 class MissingWhenCase(config: Config = Config.empty) : Rule(config) {
 

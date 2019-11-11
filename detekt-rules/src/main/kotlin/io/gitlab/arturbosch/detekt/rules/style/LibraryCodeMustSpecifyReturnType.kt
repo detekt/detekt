@@ -34,6 +34,8 @@ import org.jetbrains.kotlin.psi.psiUtil.isPublic
  *      fun parse(): ParsingResult = ...
  * }
  * </compliant>
+ *
+ * @active since v1.2.0
  */
 class LibraryCodeMustSpecifyReturnType(config: Config = Config.empty) : Rule(config) {
 
