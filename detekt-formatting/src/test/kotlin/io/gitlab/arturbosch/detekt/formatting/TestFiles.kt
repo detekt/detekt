@@ -1,15 +1,25 @@
 package io.gitlab.arturbosch.detekt.formatting
 
+import com.pinterest.ktlint.core.ast.visit
+import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.compileForTest
 import io.gitlab.arturbosch.detekt.test.resource
 import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import java.io.File
 import java.nio.file.Paths
 
+fun FormattingRule.lint(content: String): List<Finding> {
+    val root = compileContentForTest(content)
+    this.visit(root)
+    root.node.visit { node -> this.apply(node) }
+    return this.findings
+}
+
 fun loadFile(resourceName: String) = compileForTest(Paths.get(resource(resourceName)))
 
 fun loadFileContent(resourceName: String) =
-        StringUtilRt.convertLineSeparators(File(resource(resourceName)).readText())
+    StringUtilRt.convertLineSeparators(File(resource(resourceName)).readText())
 
 val contentAfterChainWrapping = """
 fun main() {
@@ -64,4 +74,13 @@ fun main() {
     -3
 }
 
+""".trimIndent()
+
+val longLines = """
+class C {
+    fun getLoremIpsum() = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
+    companion object {
+        val LOREM_IPSUM = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
+    }
+}
 """.trimIndent()

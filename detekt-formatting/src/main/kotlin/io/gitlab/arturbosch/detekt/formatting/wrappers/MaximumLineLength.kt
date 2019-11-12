@@ -20,15 +20,20 @@ class MaximumLineLength(config: Config) : FormattingRule(config) {
     override val wrapping = MaxLineLengthRule()
     override val issue = issueFor("Reports lines with exceeded length")
 
+    override val defaultRuleIdAliases: Set<String>
+        get() = setOf("MaxLineLength")
+
     private val defaultMaxLineLength =
-            if (isAndroid) ANDROID_MAX_LINE_LENGTH
-            else DEFAULT_IDEA_LINE_LENGTH
+        if (isAndroid) ANDROID_MAX_LINE_LENGTH
+        else DEFAULT_IDEA_LINE_LENGTH
+
     private val maxLineLength: Int = valueOrDefault(MAX_LINE_LENGTH, defaultMaxLineLength)
 
     override fun editorConfigUpdater(): ((oldEditorConfig: EditorConfig?) -> EditorConfig)? = {
-        EditorConfig.merge(it,
-                maxLineLength = maxLineLength)
+        EditorConfig.merge(it, maxLineLength = maxLineLength)
+    }
+
+    companion object {
+        private const val MAX_LINE_LENGTH = "maxLineLength"
     }
 }
-
-private const val MAX_LINE_LENGTH = "maxLineLength"
