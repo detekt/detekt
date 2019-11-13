@@ -1,15 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.TEST_FILENAME
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class UseRequireSpec : Spek({
-
-    val fileName = TEST_FILENAME
 
     val subject by memoized { UseRequire(Config.empty) }
 
@@ -21,7 +18,7 @@ class UseRequireSpec : Spek({
                     if (a < 0) throw IllegalArgumentException()
                     doSomething()
                 }"""
-            assertThat(subject.lint(code)).hasExactlyLocationStrings("'throw IllegalArgumentException()' at (2,16) in /$fileName")
+            assertThat(subject.lint(code)).hasSourceLocation(2, 16)
         }
 
         it("reports if a precondition throws an IllegalArgumentException with more details") {
@@ -30,7 +27,7 @@ class UseRequireSpec : Spek({
                     if (a < 0) throw IllegalArgumentException("More details")
                     doSomething()
                 }"""
-            assertThat(subject.lint(code)).hasExactlyLocationStrings("'throw IllegalArgumentException(\"More details\")' at (2,16) in /$fileName")
+            assertThat(subject.lint(code)).hasSourceLocation(2, 16)
         }
 
         it("reports if a precondition throws a fully qualified IllegalArgumentException") {
@@ -39,7 +36,7 @@ class UseRequireSpec : Spek({
                     if (a < 0) throw java.lang.IllegalArgumentException()
                     doSomething()
                 }"""
-            assertThat(subject.lint(code)).hasExactlyLocationStrings("'throw java.lang.IllegalArgumentException()' at (2,16) in /$fileName")
+            assertThat(subject.lint(code)).hasSourceLocation(2, 16)
         }
 
         it("reports if a precondition throws a fully qualified IllegalArgumentException using the kotlin type alias") {
@@ -48,7 +45,7 @@ class UseRequireSpec : Spek({
                     if (a < 0) throw kotlin.IllegalArgumentException()
                     doSomething()
                 }"""
-            assertThat(subject.lint(code)).hasExactlyLocationStrings("'throw kotlin.IllegalArgumentException()' at (2,16) in /$fileName")
+            assertThat(subject.lint(code)).hasSourceLocation(2, 16)
         }
 
         it("does not report if a precondition throws a different kind of exception") {

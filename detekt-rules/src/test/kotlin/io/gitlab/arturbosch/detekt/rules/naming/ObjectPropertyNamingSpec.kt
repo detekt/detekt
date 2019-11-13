@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
-import io.gitlab.arturbosch.detekt.test.TEST_FILENAME
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
@@ -9,8 +8,6 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class ObjectPropertyNamingSpec : Spek({
-
-    val fileName = TEST_FILENAME
 
     describe("constants in object declarations") {
 
@@ -58,9 +55,7 @@ class ObjectPropertyNamingSpec : Spek({
                     ${PublicConst.positive}
                 }
             """)
-            assertThat(subject.lint(code)).hasLocationStrings(
-                    "'const val _nAme = \"Artur\"' at (3,21) in /$fileName"
-            )
+            assertThat(subject.lint(code)).hasSourceLocation(3, 21)
         }
     }
 
@@ -120,9 +115,7 @@ class ObjectPropertyNamingSpec : Spek({
                     }
                 }
             """)
-            assertThat(subject.lint(code)).hasLocationStrings(
-                    "'const val _nAme = \"Artur\"' at (4,25) in /$fileName"
-            )
+            assertThat(subject.lint(code)).hasSourceLocation(4, 25)
         }
     }
 
