@@ -10,3 +10,8 @@ title: Entity.from - detekt-api
 
 Factory function which retrieves all needed information from the PsiElement itself.
 
+`fun from(element: PsiElement, location: `[`Location`](../-location/index.html)`): `[`Entity`](index.html)
+
+Use this factory method if the location can be calculated much more precisely than
+using the given PsiElement.
+

@@ -28,7 +28,7 @@ abstract class FormattingRule(config: Config) : Rule(config) {
     abstract val wrapping: com.pinterest.ktlint.core.Rule
 
     protected fun issueFor(description: String) =
-            Issue(javaClass.simpleName, Severity.Style, description, Debt.FIVE_MINS)
+        Issue(javaClass.simpleName, Severity.Style, description, Debt.FIVE_MINS)
 
     /**
      * Should the android style guide be enforced?
@@ -61,21 +61,24 @@ abstract class FormattingRule(config: Config) : Rule(config) {
         }
         wrapping.visit(node, autoCorrect) { _, message, _ ->
             val (line, column) = positionByOffset(node.startOffset)
-            report(CorrectableCodeSmell(issue,
-                    Entity(node.toString(), "", "",
-                            Location(SourceLocation(line, column),
-                                    TextLocation(node.startOffset, node.psi.endOffset),
-                                    "($line, $column)",
-                                    root.originalFilePath() ?: root.containingFile.name)),
+            val location = Location(
+                SourceLocation(line, column),
+                TextLocation(node.startOffset, node.psi.endOffset),
+                "($line, $column)",
+                root.originalFilePath() ?: root.containingFile.name
+            )
+            report(
+                CorrectableCodeSmell(issue,
+                    Entity.from(node.psi, location),
                     message,
-                    autoCorrectEnabled = autoCorrect))
+                    autoCorrectEnabled = autoCorrect)
+            )
         }
     }
 
     private fun ruleShouldOnlyRunOnFileNode(node: ASTNode) =
-            wrapping is com.pinterest.ktlint.core.Rule.Modifier.RestrictToRoot &&
-                    node !is FileASTNode
+        wrapping is com.pinterest.ktlint.core.Rule.Modifier.RestrictToRoot && node !is FileASTNode
 
     private fun PsiElement.originalFilePath() =
-            (this.containingFile.viewProvider.virtualFile as? LightVirtualFile)?.originalFile?.name
+        (this.containingFile.viewProvider.virtualFile as? LightVirtualFile)?.originalFile?.name
 }
