@@ -25,7 +25,6 @@ data class KtFileContent(val file: KtFile, val content: Sequence<String>)
  *
  * @active since v1.0.0
  */
-@Suppress("MemberNameEqualsClassName")
 class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(javaClass.simpleName,
@@ -33,7 +32,7 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
             "Line detected that is longer than the defined maximum line length in the code style.",
             Debt.FIVE_MINS)
 
-    private val maxLineLength: Int =
+    private val lengthThreshold: Int =
             valueOrDefault(MAX_LINE_LENGTH, DEFAULT_IDEA_LINE_LENGTH)
     private val excludePackageStatements: Boolean =
             valueOrDefault(EXCLUDE_PACKAGE_STATEMENTS, true)
@@ -64,7 +63,7 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 
     private fun isValidLine(line: String): Boolean {
         val isUrl = line.lastArgumentMatchesUrl()
-        return line.length <= maxLineLength || isIgnoredStatement(line) || isUrl
+        return line.length <= lengthThreshold || isIgnoredStatement(line) || isUrl
     }
 
     private fun isIgnoredStatement(line: String): Boolean {
