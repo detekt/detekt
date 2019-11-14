@@ -83,4 +83,4 @@ class KotlinCoreEnvironmentWrapper(
     }
 }
 
-const val TEST_FILENAME = "Test.kt"
+internal const val TEST_FILENAME = "Test.kt"

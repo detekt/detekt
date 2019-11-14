@@ -24,25 +24,6 @@ class FindingsAssert(actual: List<Finding>) :
     override fun toAssert(value: Finding?, description: String?): FindingAssert =
             FindingAssert(value).`as`(description)
 
-    fun hasLocationStrings(vararg expected: String, trimIndent: Boolean = false) = apply {
-        isNotNull
-        val locationStrings = actual.asSequence().map { it.locationAsString }.sorted()
-        val (actualLocationsList, expectedLocationsList) = if (trimIndent) {
-            locationStrings.map { it.trimIndent() }.toList() to expected.map { it.trimIndent() }.sorted()
-        } else {
-            locationStrings.toList() to expected.toList().sorted()
-        }
-
-        if (!areEqual(actualLocationsList, expectedLocationsList)) {
-            failWithMessage("Expected locations string to be $expectedLocationsList but was $actualLocationsList")
-        }
-    }
-
-    fun hasExactlyLocationStrings(vararg expected: String, trimIndent: Boolean = false) = apply {
-        hasSize(expected.size)
-        hasLocationStrings(*expected, trimIndent = trimIndent)
-    }
-
     fun hasSourceLocations(vararg expected: SourceLocation) = apply {
         isNotNull
 
@@ -56,6 +37,10 @@ class FindingsAssert(actual: List<Finding>) :
         if (!areEqual(actualSources.toList(), expectedSources.toList())) {
             failWithMessage("Expected source locations to be ${expectedSources.toList()} but was ${actualSources.toList()}")
         }
+    }
+
+    fun hasSourceLocation(line: Int, column: Int) = apply {
+        hasSourceLocations(SourceLocation(line, column))
     }
 
     fun hasTextLocations(vararg expected: Pair<Int, Int>) = apply {

@@ -1,6 +1,5 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
-import io.gitlab.arturbosch.detekt.test.TEST_FILENAME
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
@@ -8,8 +7,6 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class FunctionNamingSpec : Spek({
-
-    val fileName = TEST_FILENAME
 
     describe("FunctionNaming rule") {
 
@@ -37,9 +34,7 @@ class FunctionNamingSpec : Spek({
                 fun SHOULD_BE_FLAGGED() { }
             }
         """
-            assertThat(FunctionNaming().lint(code)).hasLocationStrings(
-                    "'fun SHOULD_BE_FLAGGED() { }' at (2,5) in /$fileName"
-            )
+            assertThat(FunctionNaming().lint(code)).hasSourceLocation(2, 5)
         }
 
         it("ignores overridden functions by default") {
@@ -66,9 +61,7 @@ class FunctionNamingSpec : Spek({
                 fun SHOULD_BE_FLAGGED() {}
             }
         """
-            assertThat(FunctionNaming().lint(code)).hasLocationStrings(
-                    "'fun SHOULD_BE_FLAGGED() {}' at (2,5) in /$fileName"
-            )
+            assertThat(FunctionNaming().lint(code)).hasSourceLocation(2, 5)
         }
 
         it("doesn't ignore overridden functions if ignoreOverridden is false") {
@@ -76,9 +69,7 @@ class FunctionNamingSpec : Spek({
             override fun SHOULD_BE_FLAGGED() = TODO()
         """
             val config = TestConfig(mapOf(FunctionNaming.IGNORE_OVERRIDDEN to "false"))
-            assertThat(FunctionNaming(config).lint(code)).hasLocationStrings(
-                    "'override fun SHOULD_BE_FLAGGED() = TODO()' at (1,1) in /$fileName"
-            )
+            assertThat(FunctionNaming(config).lint(code)).hasSourceLocation(1, 1)
         }
     }
 })

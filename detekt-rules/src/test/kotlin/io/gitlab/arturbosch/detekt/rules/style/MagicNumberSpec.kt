@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
-import io.gitlab.arturbosch.detekt.test.TEST_FILENAME
+import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assert
 import io.gitlab.arturbosch.detekt.test.assertThat
@@ -12,8 +12,6 @@ import org.spekframework.spek2.style.specification.describe
 
 @Suppress("LargeClass")
 class MagicNumberSpec : Spek({
-
-    val fileName = TEST_FILENAME
 
     describe("Magic Number rule") {
 
@@ -27,7 +25,7 @@ class MagicNumberSpec : Spek({
 
             it("should be reported when ignoredNumbers is empty") {
                 val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
-                assertThat(findings).hasLocationStrings("'1.0f' at (1,15) in /$fileName")
+                assertThat(findings).hasSourceLocation(1, 15)
             }
         }
 
@@ -55,7 +53,7 @@ class MagicNumberSpec : Spek({
 
             it("should be reported when ignoredNumbers is empty") {
                 val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
-                assertThat(findings).hasLocationStrings("'1' at (1,13) in /$fileName")
+                assertThat(findings).hasSourceLocation(1, 13)
             }
         }
 
@@ -83,7 +81,7 @@ class MagicNumberSpec : Spek({
 
             it("should be reported when ignoredNumbers is empty") {
                 val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
-                assertThat(findings).hasLocationStrings("'1L' at (1,14) in /$fileName")
+                assertThat(findings).hasSourceLocation(1, 14)
             }
         }
 
@@ -97,7 +95,7 @@ class MagicNumberSpec : Spek({
 
             it("should be reported when ignoredNumbers is empty") {
                 val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
-                assertThat(findings).hasLocationStrings("'1L' at (1,15) in /$fileName")
+                assertThat(findings).hasSourceLocation(1, 15)
             }
         }
 
@@ -106,7 +104,7 @@ class MagicNumberSpec : Spek({
 
             it("should be reported by default") {
                 val findings = MagicNumber().lint(ktFile)
-                assertThat(findings).hasLocationStrings("'2L' at (1,15) in /$fileName")
+                assertThat(findings).hasSourceLocation(1, 15)
             }
 
             it("should be ignored when ignoredNumbers contains it verbatim") {
@@ -121,7 +119,7 @@ class MagicNumberSpec : Spek({
 
             it("should not be ignored when ignoredNumbers contains 2 but not -2") {
                 val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "1,2,3,-1,0"))).lint(ktFile)
-                assertThat(findings).hasLocationStrings("'2L' at (1,15) in /$fileName")
+                assertThat(findings).hasSourceLocation(1, 15)
             }
         }
 
@@ -149,7 +147,7 @@ class MagicNumberSpec : Spek({
 
             it("should be reported when ignoredNumbers is empty") {
                 val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
-                assertThat(findings).hasLocationStrings("'1.0' at (1,16) in /$fileName")
+                assertThat(findings).hasSourceLocation(1, 16)
             }
         }
 
@@ -177,7 +175,7 @@ class MagicNumberSpec : Spek({
 
             it("should be reported when ignoredNumbers is empty") {
                 val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
-                assertThat(findings).hasLocationStrings("'0x1' at (1,13) in /$fileName")
+                assertThat(findings).hasSourceLocation(1, 13)
             }
         }
 
@@ -228,7 +226,7 @@ class MagicNumberSpec : Spek({
 
             it("should be reported by default") {
                 val findings = MagicNumber().lint(ktFile)
-                assertThat(findings).hasLocationStrings("'100_000' at (1,13) in /$fileName")
+                assertThat(findings).hasSourceLocation(1, 13)
             }
 
             it("should not be reported when ignored verbatim") {
@@ -252,12 +250,13 @@ class MagicNumberSpec : Spek({
 
             it("should be reported") {
                 val findings = MagicNumber().lint(ktFile)
-                assertThat(findings).hasLocationStrings(
-                        "'5' at (1,17) in /$fileName",
-                        "'6' at (1,21) in /$fileName",
-                        "'7' at (1,24) in /$fileName",
-                        "'8' at (1,31) in /$fileName"
-                )
+                assertThat(findings)
+                    .hasSourceLocations(
+                        SourceLocation(1, 17),
+                        SourceLocation(1, 21),
+                        SourceLocation(1, 24),
+                        SourceLocation(1, 31)
+                    )
             }
         }
 
@@ -274,13 +273,13 @@ class MagicNumberSpec : Spek({
 
             it("should be reported") {
                 val findings = MagicNumber().lint(ktFile)
-                assertThat(findings).hasLocationStrings(
-                        "'5' at (3,21) in /$fileName",
-                        "'5' at (3,33) in /$fileName",
-                        "'4' at (4,21) in /$fileName",
-                        "'4' at (4,33) in /$fileName",
-                        "'3' at (5,21) in /$fileName",
-                        "'3' at (5,33) in /$fileName"
+                assertThat(findings).hasSourceLocations(
+                    SourceLocation(3, 21),
+                    SourceLocation(3, 33),
+                    SourceLocation(4, 21),
+                    SourceLocation(4, 33),
+                    SourceLocation(5, 21),
+                    SourceLocation(5, 33)
                 )
             }
         }
@@ -325,7 +324,7 @@ class MagicNumberSpec : Spek({
 
             it("should be reported by default") {
                 val findings = MagicNumber().lint(ktFile)
-                assertThat(findings).hasLocationStrings("'0.5f' at (1,12) in /$fileName")
+                assertThat(findings).hasSourceLocation(1, 12)
             }
 
             it("should not be reported when ignoredNumbers contains it") {
@@ -389,14 +388,15 @@ class MagicNumberSpec : Spek({
                 )
 
                 val findings = MagicNumber(config).lint(ktFile)
-                assertThat(findings).hasLocationStrings(
-                        "'69' at (1,29) in /$fileName",
-                        "'42' at (3,36) in /$fileName",
-                        "'93871' at (4,45) in /$fileName",
-                        "'7328672' at (7,38) in /$fileName",
-                        "'43' at (11,47) in /$fileName",
-                        "'93872' at (12,55) in /$fileName"
-                )
+                assertThat(findings)
+                    .hasSourceLocations(
+                        SourceLocation(1, 29),
+                        SourceLocation(3, 36),
+                        SourceLocation(4, 45),
+                        SourceLocation(7, 38),
+                        SourceLocation(11, 47),
+                        SourceLocation(12, 55)
+                    )
             }
 
             it("should not report any issues with all ignore flags") {
@@ -493,7 +493,7 @@ class MagicNumberSpec : Spek({
                 )
 
                 val findings = MagicNumber(config).lint(ktFile)
-                assertThat(findings).hasLocationStrings("'43' at (4,47) in /$fileName")
+                assertThat(findings).hasSourceLocation(4, 47)
             }
 
             it("should report property and constant when not ignoring properties, constants nor companion objects") {
@@ -506,7 +506,11 @@ class MagicNumberSpec : Spek({
                 )
 
                 val findings = MagicNumber(config).lint(ktFile)
-                assertThat(findings).hasLocationStrings("'43' at (4,47) in /$fileName", "'93872' at (5,55) in /$fileName")
+                assertThat(findings)
+                    .hasSourceLocations(
+                        SourceLocation(4, 47),
+                        SourceLocation(5, 55)
+                    )
             }
         }
 
@@ -724,7 +728,7 @@ class MagicNumberSpec : Spek({
                 val code = compileContentForTest("val foo : Int = (127)")
                 assertThat(MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_RANGES to "true"))).lint(code)).hasSize(1)
             }
-            it("reports a finding for an addition if ramges are ignored") {
+            it("reports a finding for an addition if ranges are ignored") {
                 val code = compileContentForTest("val foo : Int = 1 + 27")
                 assertThat(MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_RANGES to "true"))).lint(code)).hasSize(1)
             }

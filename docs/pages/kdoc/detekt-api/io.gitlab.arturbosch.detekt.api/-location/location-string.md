@@ -6,4 +6,6 @@ title: Location.locationString - detekt-api
 
 # locationString
 
-`val locationString: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)
+`val ~~locationString~~: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)
+**Deprecated:** Will be removed in the future. Use queries on 'ktElement' instead.
+

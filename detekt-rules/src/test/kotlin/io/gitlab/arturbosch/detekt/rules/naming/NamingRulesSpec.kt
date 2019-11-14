@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
-import io.gitlab.arturbosch.detekt.test.TEST_FILENAME
+import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
@@ -8,8 +8,6 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class NamingRulesSpec : Spek({
-
-    val fileName = TEST_FILENAME
 
     val subject by memoized { NamingRules() }
 
@@ -26,16 +24,17 @@ class NamingRulesSpec : Spek({
                     fun doStuff(FUN_PARAMETER: String) {}
                 }
             """
-            assertThat(subject.lint(code)).hasLocationStrings(
-                    "'private val _FIELD = 5' at (2,5) in /$fileName",
-                    "'val FIELD get() = _field' at (3,5) in /$fileName",
-                    "'val camel_Case_Property = 5' at (4,5) in /$fileName",
-                    "'const val MY_CONST = 7' at (5,5) in /$fileName",
-                    "'const val MYCONST = 7' at (6,5) in /$fileName",
-                    "'val CONST_PARAMETER: String' at (1,9) in /$fileName",
-                    "'private val PRIVATE_CONST_PARAMETER: Int' at (1,38) in /$fileName",
-                    "'FUN_PARAMETER: String' at (7,17) in /$fileName"
-            )
+            assertThat(subject.lint(code))
+                .hasSourceLocations(
+                    SourceLocation(1, 9),
+                    SourceLocation(1, 38),
+                    SourceLocation(2, 5),
+                    SourceLocation(3, 5),
+                    SourceLocation(4, 5),
+                    SourceLocation(5, 5),
+                    SourceLocation(6, 5),
+                    SourceLocation(7, 17)
+                )
         }
 
         it("checks all negative cases") {
@@ -80,10 +79,11 @@ class NamingRulesSpec : Spek({
                 }
             """
             val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to "false"))
-            assertThat(NamingRules(config).lint(code)).hasLocationStrings(
-                    "'override val SHOULD_BE_FLAGGED = \"banana\"' at (2,5) in /$fileName",
-                    "'override val SHOULD_BE_FLAGGED_2 = \"banana\"' at (5,5) in /$fileName"
-            )
+            assertThat(NamingRules(config).lint(code))
+                .hasSourceLocations(
+                    SourceLocation(2, 5),
+                    SourceLocation(5, 5)
+                )
         }
     }
 

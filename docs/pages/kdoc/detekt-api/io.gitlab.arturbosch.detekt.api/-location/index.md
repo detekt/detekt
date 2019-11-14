@@ -17,7 +17,7 @@ Specifies a position within a source code fragment.
 ### Properties
 
 | [file](file.html) | `val file: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
-| [locationString](location-string.html) | `val locationString: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
+| [locationString](location-string.html) | `val ~~locationString~~: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 | [source](source.html) | `val source: `[`SourceLocation`](../-source-location/index.html) |
 | [text](text.html) | `val text: `[`TextLocation`](../-text-location/index.html) |
 
