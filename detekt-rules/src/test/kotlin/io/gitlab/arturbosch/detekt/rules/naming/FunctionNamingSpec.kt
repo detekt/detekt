@@ -1,8 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -13,35 +14,41 @@ class FunctionNamingSpec : Spek({
         it("allows FunctionName as alias for suppressing") {
             val code = """
             @Suppress("FunctionName")
-            fun MY_FUN() = TODO()
+            fun MY_FUN() {}
         """
-            assertThat(FunctionNaming().lint(code)).isEmpty()
+            assertThat(FunctionNaming().compileAndLint(code)).isEmpty()
         }
 
         it("ignores functions in classes matching excludeClassPattern") {
             val code = """
             class WhateverTest {
-                fun SHOULD_NOT_BE_FLAGGED() = TODO()
+                fun SHOULD_NOT_BE_FLAGGED() {}
             }
         """
             val config = TestConfig(mapOf(FunctionNaming.EXCLUDE_CLASS_PATTERN to ".*Test$"))
-            assertThat(FunctionNaming(config).lint(code)).isEmpty()
+            assertThat(FunctionNaming(config).compileAndLint(code)).isEmpty()
         }
 
         it("flags functions inside functions") {
             val code = """
-            override fun shouldNotBeFlagged() {
-                fun SHOULD_BE_FLAGGED() { }
+            class C : I{
+                override fun shouldNotBeFlagged() {
+                    fun SHOULD_BE_FLAGGED() { }
+                }
             }
+            interface I { fun shouldNotBeFlagged() }
         """
-            assertThat(FunctionNaming().lint(code)).hasSourceLocation(2, 5)
+            assertThat(FunctionNaming().compileAndLint(code)).hasSourceLocation(3, 9)
         }
 
         it("ignores overridden functions by default") {
             val code = """
-            override fun SHOULD_NOT_BE_FLAGGED() = TODO()
+            class C : I {
+                override fun SHOULD_NOT_BE_FLAGGED() {}
+            }
+            interface I { fun SHOULD_NOT_BE_FLAGGED() }
         """
-            assertThat(FunctionNaming().lint(code)).isEmpty()
+            assertThat(FunctionNaming().compileAndLint(code)).hasSize(1) // Only reports the interface
         }
 
         it("does not report when the function name is identical to the type of the result") {
@@ -52,24 +59,36 @@ class FunctionNamingSpec : Spek({
             fun Foo(): Foo = FooImpl()
         """
             val config = TestConfig(mapOf(FunctionNaming.IGNORE_OVERRIDDEN to "false"))
-            assertThat(FunctionNaming(config).lint(code))
+            assertThat(FunctionNaming(config).compileAndLint(code))
         }
 
         it("flags functions with bad names inside overridden functions by default") {
             val code = """
-            override fun SHOULD_NOT_BE_FLAGGED() {
-                fun SHOULD_BE_FLAGGED() {}
+            class C : I {
+                override fun SHOULD_NOT_BE_FLAGGED() {
+                    fun SHOULD_BE_FLAGGED() {}
+                }
             }
+            interface I { fun SHOULD_NOT_BE_FLAGGED() }
         """
-            assertThat(FunctionNaming().lint(code)).hasSourceLocation(2, 5)
+            assertThat(FunctionNaming().compileAndLint(code)).hasSourceLocations(
+                SourceLocation(3, 9),
+                SourceLocation(6, 15)
+            )
         }
 
         it("doesn't ignore overridden functions if ignoreOverridden is false") {
             val code = """
-            override fun SHOULD_BE_FLAGGED() = TODO()
+            class C : I {
+                override fun SHOULD_BE_FLAGGED() {}
+            }
+            interface I { fun SHOULD_BE_FLAGGED() }
         """
             val config = TestConfig(mapOf(FunctionNaming.IGNORE_OVERRIDDEN to "false"))
-            assertThat(FunctionNaming(config).lint(code)).hasSourceLocation(1, 1)
+            assertThat(FunctionNaming(config).compileAndLint(code)).hasSourceLocations(
+                SourceLocation(2, 5),
+                SourceLocation(4, 15)
+            )
         }
     }
 })

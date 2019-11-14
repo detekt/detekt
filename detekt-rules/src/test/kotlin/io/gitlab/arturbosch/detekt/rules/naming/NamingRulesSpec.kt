@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.naming
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -59,30 +60,37 @@ class NamingRulesSpec : Spek({
 
         it("should not flag overridden member properties by default") {
             val code = """
-                class C {
+                class C : I {
                     override val SHOULD_NOT_BE_FLAGGED = "banana"
                 }
-                interface I {
-                    override val SHOULD_NOT_BE_FLAGGED_2 = "banana"
+                interface I : I2 {
+                    override val SHOULD_NOT_BE_FLAGGED: String
+                }
+                interface I2 {
+                    val SHOULD_NOT_BE_FLAGGED: String
                 }
             """
-            assertThat(NamingRules().lint(code)).isEmpty()
+            assertThat(NamingRules().compileAndLint(code)).hasSize(1) // Only reports the interface
         }
 
         it("doesn't ignore overridden member properties if ignoreOverridden is false") {
             val code = """
-                class C {
-                    override val SHOULD_BE_FLAGGED = "banana"
+                class C : I {
+                    override val SHOULD_NOT_BE_FLAGGED = "banana"
                 }
-                interface I {
-                    override val SHOULD_BE_FLAGGED_2 = "banana"
+                interface I : I2 {
+                    override val SHOULD_NOT_BE_FLAGGED: String
+                }
+                interface I2 {
+                    val SHOULD_NOT_BE_FLAGGED: String
                 }
             """
             val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to "false"))
-            assertThat(NamingRules(config).lint(code))
+            assertThat(NamingRules(config).compileAndLint(code))
                 .hasSourceLocations(
                     SourceLocation(2, 5),
-                    SourceLocation(5, 5)
+                    SourceLocation(5, 5),
+                    SourceLocation(8, 5)
                 )
         }
     }
@@ -93,10 +101,10 @@ class NamingRulesSpec : Spek({
                 data class D(val i: Int, val j: Int)
                 fun doStuff() {
                     val (_, HOLY_GRAIL) = D(5, 4)
-                    emptyMap<String, String>().forEach { _, V -> println(v) }
+                    emptyMap<String, String>().forEach { _, V -> println(V) }
                 }
             """
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
 })
