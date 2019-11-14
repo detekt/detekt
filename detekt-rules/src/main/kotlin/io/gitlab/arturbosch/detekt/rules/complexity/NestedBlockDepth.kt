@@ -75,6 +75,8 @@ class NestedBlockDepth(
                 inc()
                 super.visitIfExpression(expression)
                 dec()
+            } else {
+                super.visitIfExpression(expression)
             }
         }
 
