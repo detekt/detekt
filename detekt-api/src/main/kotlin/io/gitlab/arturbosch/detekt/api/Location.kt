@@ -18,6 +18,7 @@ import org.jetbrains.kotlin.psi.psiUtil.startOffset
 data class Location(
     val source: SourceLocation,
     val text: TextLocation,
+    @Deprecated("Will be removed in the future. Use queries on 'ktElement' instead.")
     val locationString: String,
     val file: String
 ) : Compactable {

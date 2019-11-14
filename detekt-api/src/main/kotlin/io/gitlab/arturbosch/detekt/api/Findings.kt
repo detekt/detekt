@@ -27,6 +27,7 @@ interface HasEntity {
     val entity: Entity
     val location: Location
         get() = entity.location
+    @Deprecated("Will be removed in the future. Use queries on 'ktElement' instead.")
     val locationAsString: String
         get() = location.locationString
     val startPosition: SourceLocation

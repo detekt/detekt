@@ -6,4 +6,6 @@ title: HasEntity.locationAsString - detekt-api
 
 # locationAsString
 
-`open val locationAsString: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)
+`open val ~~locationAsString~~: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)
+**Deprecated:** Will be removed in the future. Use queries on 'ktElement' instead.
+
