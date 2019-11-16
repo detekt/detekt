@@ -21,19 +21,20 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  * Smaller methods can also be named much clearer which leads to improved readability of the code.
  *
  * This rule uses McCabe's Cyclomatic Complexity (MCC) metric to measure the number of
- * linearly independent paths through a function's source code.
+ * linearly independent paths through a function's source code (https://www.ndepend.com/docs/code-metrics#CC).
  * The higher the number of independent paths, the more complex a method is.
  * Complex methods use too many of the following statements.
  * Each one of them adds one to the complexity count.
  *
  * - __Conditional statements__ - `if`, `else if`, `when`
+ * - __Jump statements__ - `continue`, `break`
  * - __Loops__ - `for`, `while`, `do-while`, `forEach`
- * - __Operators__ `&&`, `||`
+ * - __Operators__ `&&`, `||`, `?:`
  * - __Exceptions__ - `catch`, `use`
  * - __Scope Functions__ - `let`, `run`, `with`, `apply`, and `also` ->
  *  [Reference](https://kotlinlang.org/docs/reference/scope-functions.html)
  *
- * @configuration threshold - McCabe's Cyclomatic Complexity (MCC) number for a method (default: `10`)
+ * @configuration threshold - McCabe's Cyclomatic Complexity (MCC) number for a method (default: `15`)
  * @configuration ignoreSingleWhenExpression - Ignores a complex method if it only contains a single when expression.
  * (default: `false`)
  * @configuration ignoreSimpleWhenEntries - Whether to ignore simple (braceless) when entries. (default: `false`)

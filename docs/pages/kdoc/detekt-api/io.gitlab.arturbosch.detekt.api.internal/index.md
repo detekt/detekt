@@ -9,9 +9,9 @@ title: io.gitlab.arturbosch.detekt.api.internal - detekt-api
 ### Types
 
 | [CommaSeparatedPattern](-comma-separated-pattern/index.html) | `class CommaSeparatedPattern : `[`SplitPattern`](../io.gitlab.arturbosch.detekt.api/-split-pattern/index.html) |
+| [CyclomaticComplexity](-cyclomatic-complexity/index.html) | Counts the cyclomatic complexity of functions.`class CyclomaticComplexity : `[`DetektVisitor`](../io.gitlab.arturbosch.detekt.api/-detekt-visitor/index.html) |
 | [DetektPomModel](-detekt-pom-model/index.html) | Adapted from https://github.com/pinterest/ktlint/blob/master/ktlint-core/src/main/kotlin/com/pinterest/ktlint/core/KtLint.kt Licenced under the MIT licence - https://github.com/pinterest/ktlint/blob/master/LICENSE`class DetektPomModel : UserDataHolderBase, PomModel` |
 | [FailFastConfig](-fail-fast-config/index.html) | `data class FailFastConfig : `[`Config`](../io.gitlab.arturbosch.detekt.api/-config/index.html)`, `[`ValidatableConfiguration`](-validatable-configuration/index.html) |
-| [McCabeVisitor](-mc-cabe-visitor/index.html) | Counts the cyclomatic complexity of functions.`class McCabeVisitor : `[`DetektVisitor`](../io.gitlab.arturbosch.detekt.api/-detekt-visitor/index.html) |
 | [PathFilters](-path-filters/index.html) | `class PathFilters` |
 | [SimpleNotification](-simple-notification/index.html) | `data class SimpleNotification : `[`Notification`](../io.gitlab.arturbosch.detekt.api/-notification/index.html) |
 | [ValidatableConfiguration](-validatable-configuration/index.html) | `interface ValidatableConfiguration` |
@@ -19,7 +19,6 @@ title: io.gitlab.arturbosch.detekt.api.internal - detekt-api
 ### Extensions for External Classes
 
 | [org.jetbrains.kotlin.psi.KtAnnotated](org.jetbrains.kotlin.psi.-kt-annotated/index.html) |  |
-| [org.jetbrains.kotlin.psi.KtCallExpression](org.jetbrains.kotlin.psi.-kt-call-expression/index.html) |  |
 | [org.jetbrains.kotlin.psi.KtElement](org.jetbrains.kotlin.psi.-kt-element/index.html) |  |
 | [org.jetbrains.kotlin.psi.KtFile](org.jetbrains.kotlin.psi.-kt-file/index.html) |  |
 
