@@ -55,6 +55,45 @@ class CyclomaticComplexitySpec : Spek({
         }
     }
 
+    describe("counts function calls used for nesting") {
+        val code = compileContentForTest("""
+                    fun test(i: Int) {
+                        (1..10).forEach { println(it) }
+                    }
+                """.trimIndent()
+        )
+
+        it("counts them by default") {
+            assertThat(
+                CyclomaticComplexity.calculate(code)
+            ).isEqualTo(defaultFunctionComplexity + 1)
+        }
+
+        it("does not count them when ignored") {
+            assertThat(
+                CyclomaticComplexity.calculate(code) {
+                    ignoreNestingFunctions = true
+                }
+            ).isEqualTo(defaultFunctionComplexity)
+        }
+
+        it("does not count when forEach is not specified") {
+            assertThat(
+                CyclomaticComplexity.calculate(code) {
+                    nestingFunctions = setOf()
+                }
+            ).isEqualTo(defaultFunctionComplexity)
+        }
+
+        it("counts them by default") {
+            assertThat(
+                CyclomaticComplexity.calculate(code) {
+                    nestingFunctions = setOf("forEach")
+                }
+            ).isEqualTo(defaultFunctionComplexity + 1)
+        }
+    }
+
     describe("ignoreSimpleWhenEntries is false") {
 
         it("counts simple when branches as 1") {

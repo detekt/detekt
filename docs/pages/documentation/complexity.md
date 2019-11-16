@@ -105,6 +105,15 @@ Each one of them adds one to the complexity count.
 
    Whether to ignore simple (braceless) when entries.
 
+* ``ignoreNestingFunctions`` (default: ``false``)
+
+   Whether to ignore functions which are often used instead of an 'if' or
+'for' statement
+
+* ``nestingFunctions`` (default: ``run,let,apply,with,also,use,forEach,isNotNull,ifNull``)
+
+   Comma separated list of function names which add complexity
+
 ### LabeledExpression
 
 This rule reports labeled expressions. Expressions with labels generally increase complexity and worsen the

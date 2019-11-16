@@ -19,21 +19,36 @@ import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
 /**
- * Counts the cyclomatic complexity of functions.
+ * Counts the cyclomatic complexity of nodes.
  */
 @Suppress("TooManyFunctions")
-class CyclomaticComplexity(private val ignoreSimpleWhenEntries: Boolean) : DetektVisitor() {
+class CyclomaticComplexity(private val config: Config) : DetektVisitor() {
 
-    data class Config(var ignoreSimpleWhenEntries: Boolean = false)
+    data class Config(
+        var ignoreSimpleWhenEntries: Boolean = false,
+        var ignoreNestingFunctions: Boolean = false,
+        var nestingFunctions: Set<String> = DEFAULT_NESTING_FUNCTIONS
+    )
 
     companion object {
 
-        private val conditionals = setOf(KtTokens.ELVIS, KtTokens.ANDAND, KtTokens.OROR)
+        val CONDITIONALS = setOf(KtTokens.ELVIS, KtTokens.ANDAND, KtTokens.OROR)
+        val DEFAULT_NESTING_FUNCTIONS = setOf(
+            "run",
+            "let",
+            "apply",
+            "with",
+            "also",
+            "use",
+            "forEach",
+            "isNotNull",
+            "ifNull"
+        )
 
         fun calculate(node: KtElement, configure: (Config.() -> Unit)? = null): Int {
             val config = Config()
             configure?.invoke(config)
-            val visitor = CyclomaticComplexity(config.ignoreSimpleWhenEntries)
+            val visitor = CyclomaticComplexity(config)
             node.accept(visitor)
             return visitor.complexity
         }
@@ -53,7 +68,7 @@ class CyclomaticComplexity(private val ignoreSimpleWhenEntries: Boolean) : Detek
         function.getStrictParentOfType<KtObjectLiteralExpression>() != null
 
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
-        if (expression.operationToken in conditionals) {
+        if (expression.operationToken in CONDITIONALS) {
             complexity++
         }
         super.visitBinaryExpression(expression)
@@ -80,14 +95,14 @@ class CyclomaticComplexity(private val ignoreSimpleWhenEntries: Boolean) : Detek
     }
 
     override fun visitWhenExpression(expression: KtWhenExpression) {
-        val entries = expression.extractEntries(ignoreSimpleWhenEntries)
-        complexity += if (ignoreSimpleWhenEntries && entries.count() == 0) 1 else entries.count()
+        val entries = expression.extractEntries()
+        complexity += if (config.ignoreSimpleWhenEntries && entries.count() == 0) 1 else entries.count()
         super.visitWhenExpression(expression)
     }
 
-    private fun KtWhenExpression.extractEntries(ignoreSimpleWhenEntries: Boolean): Sequence<KtWhenEntry> {
+    private fun KtWhenExpression.extractEntries(): Sequence<KtWhenEntry> {
         val entries = entries.asSequence()
-        return if (ignoreSimpleWhenEntries) entries.filter { it.expression is KtBlockExpression } else entries
+        return if (config.ignoreSimpleWhenEntries) entries.filter { it.expression is KtBlockExpression } else entries
     }
 
     override fun visitTryExpression(expression: KtTryExpression) {
@@ -96,18 +111,17 @@ class CyclomaticComplexity(private val ignoreSimpleWhenEntries: Boolean) : Detek
     }
 
     private fun KtCallExpression.isUsedForNesting(): Boolean = when (getCallNameExpression()?.text) {
-        "run", "let", "apply", "with", "also", "use", "forEach", "isNotNull", "ifNull" -> true
+        in config.nestingFunctions -> true
         else -> false
     }
 
     override fun visitCallExpression(expression: KtCallExpression) {
-        if (expression.isUsedForNesting()) {
+        if (!config.ignoreNestingFunctions && expression.isUsedForNesting()) {
             val lambdaArguments = expression.lambdaArguments
             if (lambdaArguments.size > 0) {
                 val lambdaArgument = lambdaArguments[0]
                 lambdaArgument.getLambdaExpression()?.bodyExpression?.let {
                     complexity++
-                    Unit
                 }
             }
         }

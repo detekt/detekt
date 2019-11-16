@@ -96,7 +96,7 @@ Represents a code smell for that can be auto corrected.
 
 ##### [io.gitlab.arturbosch.detekt.api.internal.CyclomaticComplexity](../io.gitlab.arturbosch.detekt.api.internal/-cyclomatic-complexity/index.html)
 
-Counts the cyclomatic complexity of functions.
+Counts the cyclomatic complexity of nodes.
 
 
 |

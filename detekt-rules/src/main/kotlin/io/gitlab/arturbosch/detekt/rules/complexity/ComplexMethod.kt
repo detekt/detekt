@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.api.internal.CommaSeparatedPattern
 import io.gitlab.arturbosch.detekt.api.internal.CyclomaticComplexity
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -38,6 +39,9 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  * @configuration ignoreSingleWhenExpression - Ignores a complex method if it only contains a single when expression.
  * (default: `false`)
  * @configuration ignoreSimpleWhenEntries - Whether to ignore simple (braceless) when entries. (default: `false`)
+ * @configuration ignoreNestingFunctions - Whether to ignore functions which are often used instead of an 'if' or
+ * 'for' statement (default: `false`)
+ * @configuration nestingFunctions - Comma separated list of function names which add complexity (default: `run,let,apply,with,also,use,forEach,isNotNull,ifNull`)
  *
  * @active since v1.0.0
  */
@@ -53,6 +57,13 @@ class ComplexMethod(
 
     private val ignoreSingleWhenExpression = valueOrDefault(IGNORE_SINGLE_WHEN_EXPRESSION, false)
     private val ignoreSimpleWhenEntries = valueOrDefault(IGNORE_SIMPLE_WHEN_ENTRIES, false)
+    private val ignoreNestingFunctions = valueOrDefault(IGNORE_NESTING_FUNCTIONS, false)
+    private val nestingFunctions =
+        CommaSeparatedPattern(valueOrDefault(NESTING_FUNCTIONS, ""), delimiters = ",;")
+            .mapAll { it }
+            .toSet()
+            .takeIf { it.isNotEmpty() }
+            ?: CyclomaticComplexity.DEFAULT_NESTING_FUNCTIONS
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (ignoreSingleWhenExpression && hasSingleWhenExpression(function.bodyExpression)) {
@@ -61,6 +72,8 @@ class ComplexMethod(
 
         val complexity = CyclomaticComplexity.calculate(function) {
             this.ignoreSimpleWhenEntries = this@ComplexMethod.ignoreSimpleWhenEntries
+            this.ignoreNestingFunctions = this@ComplexMethod.ignoreNestingFunctions
+            this.nestingFunctions = this@ComplexMethod.nestingFunctions
         }
 
         if (complexity >= threshold) {
@@ -68,7 +81,7 @@ class ComplexMethod(
                 ThresholdedCodeSmell(
                     issue,
                     Entity.from(function.nameIdentifier!!),
-                    Metric("CyclomaticComplexity", complexity, threshold),
+                    Metric("MCC", complexity, threshold),
                     "The function ${function.nameAsSafeName} appears to be too complex."
                 )
             )
@@ -89,8 +102,10 @@ class ComplexMethod(
         this is KtReturnExpression && this.returnedExpression is KtWhenExpression
 
     companion object {
-        const val DEFAULT_ACCEPTED_METHOD_COMPLEXITY = 10
+        const val DEFAULT_ACCEPTED_METHOD_COMPLEXITY = 15
         const val IGNORE_SINGLE_WHEN_EXPRESSION = "ignoreSingleWhenExpression"
         const val IGNORE_SIMPLE_WHEN_ENTRIES = "ignoreSimpleWhenEntries"
+        const val IGNORE_NESTING_FUNCTIONS = "ignoreNestingFunctions"
+        const val NESTING_FUNCTIONS = "nestingFunctions"
     }
 }
