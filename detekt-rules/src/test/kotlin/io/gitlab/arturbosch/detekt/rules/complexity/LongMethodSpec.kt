@@ -28,7 +28,7 @@ class LongMethodSpec : Spek({
             val findings = subject.compileAndLint(code)
 
             assertThat(findings).hasSize(2)
-            assertThat(findings).hasTextLocations(4 to 14, 81 to 97)
+            assertThat(findings).hasTextLocations("longMethod", "nestedLongMethod")
         }
 
         it("should not find too long methods") {
