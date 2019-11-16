@@ -2,29 +2,33 @@ package io.gitlab.arturbosch.detekt.api.internal
 
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBlockExpression
+import org.jetbrains.kotlin.psi.KtBreakExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtContinueExpression
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtLoopExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectLiteralExpression
-import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
 import org.jetbrains.kotlin.psi.KtTryExpression
 import org.jetbrains.kotlin.psi.KtWhenEntry
 import org.jetbrains.kotlin.psi.KtWhenExpression
-import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
 /**
  * Counts the cyclomatic complexity of functions.
  */
+@Suppress("TooManyFunctions")
 class CyclomaticComplexity(private val ignoreSimpleWhenEntries: Boolean) : DetektVisitor() {
 
     data class Config(var ignoreSimpleWhenEntries: Boolean = false)
 
     companion object {
+
+        private val conditionals = setOf(KtTokens.ELVIS, KtTokens.ANDAND, KtTokens.OROR)
 
         fun calculate(node: KtElement, configure: (Config.() -> Unit)? = null): Int {
             val config = Config()
@@ -48,14 +52,25 @@ class CyclomaticComplexity(private val ignoreSimpleWhenEntries: Boolean) : Detek
     private fun isInsideObjectLiteral(function: KtNamedFunction): Boolean =
         function.getStrictParentOfType<KtObjectLiteralExpression>() != null
 
+    override fun visitBinaryExpression(expression: KtBinaryExpression) {
+        if (expression.operationToken in conditionals) {
+            complexity++
+        }
+        super.visitBinaryExpression(expression)
+    }
+
+    override fun visitContinueExpression(expression: KtContinueExpression) {
+        complexity++
+        super.visitContinueExpression(expression)
+    }
+
+    override fun visitBreakExpression(expression: KtBreakExpression) {
+        complexity++
+        super.visitBreakExpression(expression)
+    }
+
     override fun visitIfExpression(expression: KtIfExpression) {
         complexity++
-        val condition = expression.condition
-        if (condition != null) {
-            complexity += condition
-                .collectDescendantsOfType<KtOperationReferenceExpression>()
-                .count { it.operationSignTokenType == KtTokens.ANDAND || it.operationSignTokenType == KtTokens.OROR }
-        }
         super.visitIfExpression(expression)
     }
 

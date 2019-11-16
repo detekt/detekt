@@ -10,6 +10,51 @@ class CyclomaticComplexitySpec : Spek({
 
     val defaultFunctionComplexity = 1
 
+    describe("basic function expressions are tested") {
+
+        it("counts for safe navigation") {
+            val code = compileContentForTest("""
+                    fun test() = null as? String ?: ""
+                """.trimIndent())
+
+            val actual = CyclomaticComplexity.calculate(code)
+
+            assertThat(actual).isEqualTo(defaultFunctionComplexity + 1)
+        }
+
+        it("counts if and && and || expressions") {
+            val code = compileContentForTest("""
+                    fun test() = if (true || true && false) 1 else 0
+                """.trimIndent())
+
+            val actual = CyclomaticComplexity.calculate(code)
+
+            assertThat(actual).isEqualTo(defaultFunctionComplexity + 3)
+        }
+
+        it("counts while, continue and break") {
+            val code = compileContentForTest("""
+                    fun test(i: Int) {
+                        var j = i
+                        while(true) { // 1
+                            if (j == 5) { // 1
+                                continue // 1
+                            } else if (j == 2) { // 1
+                                break // 1
+                            } else {
+                                j += i
+                            }
+                        }
+                        println("finished")
+                    }
+                """.trimIndent())
+
+            val actual = CyclomaticComplexity.calculate(code)
+
+            assertThat(actual).isEqualTo(defaultFunctionComplexity + 5)
+        }
+    }
+
     describe("ignoreSimpleWhenEntries is false") {
 
         it("counts simple when branches as 1") {
