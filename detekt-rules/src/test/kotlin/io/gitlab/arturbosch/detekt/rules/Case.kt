@@ -61,7 +61,6 @@ enum class Case(val file: String) {
     NestedClassVisibilityPositive("/cases/NestedClassVisibilityPositive.kt"),
     NestedClassVisibilityNegative("/cases/NestedClassVisibilityNegative.kt"),
     TrailingWhitespaceNegative("/cases/TrailingWhitespaceNegative.kt"),
-    TrailingWhitespacePositive("/cases/TrailingWhitespacePositive.kt"),
     NoTabsNegative("/cases/NoTabsNegative.kt"),
     NoTabsPositive("/cases/NoTabsPositive.kt"),
     UnusedPrivateMemberPositive("/cases/UnusedPrivateMemberPositive.kt"),

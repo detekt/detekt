@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.rules.Case
-import io.gitlab.arturbosch.detekt.test.compileForTest
-import org.assertj.core.api.Assertions.assertThat
+import io.gitlab.arturbosch.detekt.test.assertThat
+import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -10,20 +10,39 @@ class TrailingWhitespaceSpec : Spek({
 
     describe("TrailingWhitespace rule") {
 
-        context("a kt file that contains lines that end with a whitespace") {
+        context("a line just with a whitespace") {
             val rule = TrailingWhitespace()
-            val file = compileForTest(Case.TrailingWhitespacePositive.path())
-            val lines = file.text.splitToSequence("\n")
-            rule.visit(KtFileContent(file, lines))
+            rule.visit(" ".toKtFileContent())
 
-            it("should flag it") {
-                assertThat(rule.findings).hasSize(7)
+            it("should report the correct text location") {
+                assertThat(rule.findings).hasTextLocations(0 to 1)
             }
+        }
 
-            it("should report the correct source location for a comment with trailing whitespace") {
-                val findingSource = rule.findings[1].location.source
-                assertThat(findingSource.line).isEqualTo(5)
-                assertThat(findingSource.column).isEqualTo(1)
+        context("a commented line just with a whitespace") {
+            val rule = TrailingWhitespace()
+            rule.visit("// A comment ".toKtFileContent())
+
+            it("should report the correct text location") {
+                assertThat(rule.findings).hasTextLocations(12 to 13)
+            }
+        }
+
+        context("a line with a whitespace") {
+            val rule = TrailingWhitespace()
+            rule.visit("  class TrailingWhitespacePositive { \n  }".toKtFileContent())
+
+            it("should report the correct text location") {
+                assertThat(rule.findings).hasTextLocations(36 to 37)
+            }
+        }
+
+        context("a line with a whitespace") {
+            val rule = TrailingWhitespace()
+            rule.visit("\t\tprintln(\"A message\")\t".toKtFileContent())
+
+            it("should report the correct text location") {
+                assertThat(rule.findings).hasTextLocations(22 to 23)
             }
         }
 
@@ -37,3 +56,9 @@ class TrailingWhitespaceSpec : Spek({
         }
     }
 })
+
+private fun String.toKtFileContent(): KtFileContent {
+    val file = compileContentForTest(this)
+    val lines = file.text.splitToSequence("\n")
+    return KtFileContent(file, lines)
+}

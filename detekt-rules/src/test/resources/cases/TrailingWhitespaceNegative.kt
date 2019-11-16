@@ -5,6 +5,7 @@ class TrailingWhitespaceNegative {
 
     fun myFunction() {
         println("A message")
+        println("Another message") ;
     }
 
     // Indents inside multi-line strings should not be reported
