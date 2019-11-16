@@ -51,7 +51,7 @@ class NestedBlockDepthSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("should not count else if as two") {
+        it("does not report valid nested if else branches") {
             val code = """
                 fun f() {
                     if (true) {
