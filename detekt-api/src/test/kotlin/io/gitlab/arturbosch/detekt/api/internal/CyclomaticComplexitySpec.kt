@@ -1,18 +1,19 @@
 package io.gitlab.arturbosch.detekt.api.internal
 
-import io.gitlab.arturbosch.detekt.test.KtTestCompiler
+import io.gitlab.arturbosch.detekt.test.compileContentForTest
+import io.gitlab.arturbosch.detekt.test.getFunctionByName
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-private const val FUN_MCC = 1
+class CyclomaticComplexitySpec : Spek({
 
-class McCabeVisitorSpec : Spek({
+    val defaultFunctionComplexity = 1
 
     describe("ignoreSimpleWhenEntries is false") {
 
         it("counts simple when branches as 1") {
-            val code = """
+            val function = compileContentForTest("""
                 fun test() {
                     when (System.currentTimeMillis()) {
                         0 -> println("Epoch!")
@@ -20,16 +21,17 @@ class McCabeVisitorSpec : Spek({
                         else -> println("Meh")
                     }
                 }
-            """
-            val subject = McCabeVisitor(ignoreSimpleWhenEntries = false)
+            """).getFunctionByName("test")
 
-            subject.visitFile(code.compile())
+            val actual = CyclomaticComplexity.calculate(function) {
+                ignoreSimpleWhenEntries = false
+            }
 
-            assertThat(subject.mcc).isEqualTo(FUN_MCC + 3)
+            assertThat(actual).isEqualTo(defaultFunctionComplexity + 3)
         }
 
         it("counts block when branches as 1") {
-            val code = """
+            val function = compileContentForTest("""
                 fun test() {
                     when (System.currentTimeMillis()) {
                         0 -> {
@@ -39,19 +41,20 @@ class McCabeVisitorSpec : Spek({
                         else -> println("Meh")
                     }
                 }
-            """
-            val subject = McCabeVisitor(ignoreSimpleWhenEntries = false)
+            """).getFunctionByName("test")
 
-            subject.visitFile(code.compile())
+            val actual = CyclomaticComplexity.calculate(function) {
+                ignoreSimpleWhenEntries = false
+            }
 
-            assertThat(subject.mcc).isEqualTo(FUN_MCC + 3)
+            assertThat(actual).isEqualTo(defaultFunctionComplexity + 3)
         }
     }
 
     describe("ignoreSimpleWhenEntries is true") {
 
         it("counts a when with only simple branches as 1") {
-            val code = """
+            val function = compileContentForTest("""
                 fun test() {
                     when (System.currentTimeMillis()) {
                         0 -> println("Epoch!")
@@ -59,16 +62,17 @@ class McCabeVisitorSpec : Spek({
                         else -> println("Meh")
                     }
                 }
-            """
-            val subject = McCabeVisitor(ignoreSimpleWhenEntries = true)
+            """).getFunctionByName("test")
 
-            subject.visitFile(code.compile())
+            val actual = CyclomaticComplexity.calculate(function) {
+                ignoreSimpleWhenEntries = true
+            }
 
-            assertThat(subject.mcc).isEqualTo(FUN_MCC + 1)
+            assertThat(actual).isEqualTo(defaultFunctionComplexity + 1)
         }
 
         it("does not count simple when branches") {
-            val code = """
+            val function = compileContentForTest("""
                 fun test() {
                     when (System.currentTimeMillis()) {
                         0 -> {
@@ -81,17 +85,17 @@ class McCabeVisitorSpec : Spek({
                         else -> println("Meh")
                     }
                 }
-            """
-            val subject = McCabeVisitor(ignoreSimpleWhenEntries = true)
+            """).getFunctionByName("test")
 
-            subject.visitFile(code.compile())
+            val actual = CyclomaticComplexity.calculate(function) {
+                ignoreSimpleWhenEntries = true
+            }
 
-            assertThat(subject.mcc).isEqualTo(FUN_MCC + 2)
+            assertThat(actual).isEqualTo(defaultFunctionComplexity + 2)
         }
 
         it("counts block when branches as 1") {
-            val subject = McCabeVisitor(ignoreSimpleWhenEntries = true)
-            val code = """
+            val function = compileContentForTest("""
                 fun test() {
                     when (System.currentTimeMillis()) {
                         0 -> {
@@ -106,13 +110,13 @@ class McCabeVisitorSpec : Spek({
                         else -> println("Meh")
                     }
                 }
-            """
+            """).getFunctionByName("test")
 
-            subject.visitFile(code.compile())
+            val actual = CyclomaticComplexity.calculate(function) {
+                ignoreSimpleWhenEntries = true
+            }
 
-            assertThat(subject.mcc).isEqualTo(FUN_MCC + 2)
+            assertThat(actual).isEqualTo(defaultFunctionComplexity + 2)
         }
     }
 })
-
-private fun String.compile() = KtTestCompiler.compileFromContent(this.trimIndent())

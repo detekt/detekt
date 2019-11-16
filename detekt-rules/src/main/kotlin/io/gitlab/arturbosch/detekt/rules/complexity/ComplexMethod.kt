@@ -8,7 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
-import io.gitlab.arturbosch.detekt.api.internal.McCabeVisitor
+import io.gitlab.arturbosch.detekt.api.internal.CyclomaticComplexity
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -46,43 +46,46 @@ class ComplexMethod(
 ) : ThresholdRule(config, threshold) {
 
     override val issue = Issue("ComplexMethod",
-            Severity.Maintainability,
-            "Prefer splitting up complex methods into smaller, easier to understand methods.",
-            Debt.TWENTY_MINS)
+        Severity.Maintainability,
+        "Prefer splitting up complex methods into smaller, easier to understand methods.",
+        Debt.TWENTY_MINS)
 
     private val ignoreSingleWhenExpression = valueOrDefault(IGNORE_SINGLE_WHEN_EXPRESSION, false)
     private val ignoreSimpleWhenEntries = valueOrDefault(IGNORE_SIMPLE_WHEN_ENTRIES, false)
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        if (hasSingleWhenExpression(function.bodyExpression)) {
+        if (ignoreSingleWhenExpression && hasSingleWhenExpression(function.bodyExpression)) {
             return
         }
-        val visitor = McCabeVisitor(ignoreSimpleWhenEntries)
-        visitor.visitNamedFunction(function)
-        val mcc = visitor.mcc
-        if (mcc >= threshold) {
-            report(ThresholdedCodeSmell(issue,
+
+        val complexity = CyclomaticComplexity.calculate(function) {
+            this.ignoreSimpleWhenEntries = this@ComplexMethod.ignoreSimpleWhenEntries
+        }
+
+        if (complexity >= threshold) {
+            report(
+                ThresholdedCodeSmell(
+                    issue,
                     Entity.from(function.nameIdentifier!!),
-                    Metric("MCC", mcc, threshold),
-                    "The function ${function.nameAsSafeName} appears to be too complex."))
+                    Metric("CyclomaticComplexity", complexity, threshold),
+                    "The function ${function.nameAsSafeName} appears to be too complex."
+                )
+            )
         }
     }
 
-    private fun hasSingleWhenExpression(bodyExpression: KtExpression?): Boolean {
-        if (ignoreSingleWhenExpression) {
-            return when {
-                bodyExpression is KtBlockExpression && bodyExpression.statements.size == 1 -> {
-                    val statement = bodyExpression.statements.single()
-                    statement is KtWhenExpression ||
-                            (statement is KtReturnExpression && statement.returnedExpression is KtWhenExpression)
-                }
-                // the case where function-expression syntax is used: `fun test() = when { ... }`
-                bodyExpression is KtWhenExpression -> true
-                else -> false
-            }
+    private fun hasSingleWhenExpression(bodyExpression: KtExpression?): Boolean = when {
+        bodyExpression is KtBlockExpression && bodyExpression.statements.size == 1 -> {
+            val statement = bodyExpression.statements.single()
+            statement is KtWhenExpression || statement.returnsWhenExpression()
         }
-        return false
+        // the case where function-expression syntax is used: `fun test() = when { ... }`
+        bodyExpression is KtWhenExpression -> true
+        else -> false
     }
+
+    private fun KtExpression.returnsWhenExpression() =
+        this is KtReturnExpression && this.returnedExpression is KtWhenExpression
 
     companion object {
         const val DEFAULT_ACCEPTED_METHOD_COMPLEXITY = 10

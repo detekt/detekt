@@ -11,6 +11,7 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class ComplexMethodSpec : Spek({
+
     describe("ComplexMethod rule") {
 
         context("a complex method") {

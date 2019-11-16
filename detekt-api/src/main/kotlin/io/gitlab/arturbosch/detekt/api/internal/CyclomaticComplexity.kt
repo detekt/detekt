@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtLoopExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -19,26 +20,39 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 /**
  * Counts the cyclomatic complexity of functions.
  */
-class McCabeVisitor(private val ignoreSimpleWhenEntries: Boolean) : DetektVisitor() {
+class CyclomaticComplexity(private val ignoreSimpleWhenEntries: Boolean) : DetektVisitor() {
 
-    var mcc: Int = 0
+    data class Config(var ignoreSimpleWhenEntries: Boolean = false)
+
+    companion object {
+
+        fun calculate(node: KtElement, configure: (Config.() -> Unit)? = null): Int {
+            val config = Config()
+            configure?.invoke(config)
+            val visitor = CyclomaticComplexity(config.ignoreSimpleWhenEntries)
+            node.accept(visitor)
+            return visitor.complexity
+        }
+    }
+
+    var complexity: Int = 0
         private set
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (!isInsideObjectLiteral(function)) {
-            mcc++
+            complexity++
             super.visitNamedFunction(function)
         }
     }
 
     private fun isInsideObjectLiteral(function: KtNamedFunction): Boolean =
-            function.getStrictParentOfType<KtObjectLiteralExpression>() != null
+        function.getStrictParentOfType<KtObjectLiteralExpression>() != null
 
     override fun visitIfExpression(expression: KtIfExpression) {
-        mcc++
+        complexity++
         val condition = expression.condition
         if (condition != null) {
-            mcc += condition
+            complexity += condition
                 .collectDescendantsOfType<KtOperationReferenceExpression>()
                 .count { it.operationSignTokenType == KtTokens.ANDAND || it.operationSignTokenType == KtTokens.OROR }
         }
@@ -46,13 +60,13 @@ class McCabeVisitor(private val ignoreSimpleWhenEntries: Boolean) : DetektVisito
     }
 
     override fun visitLoopExpression(loopExpression: KtLoopExpression) {
-        mcc++
+        complexity++
         super.visitLoopExpression(loopExpression)
     }
 
     override fun visitWhenExpression(expression: KtWhenExpression) {
         val entries = expression.extractEntries(ignoreSimpleWhenEntries)
-        mcc += if (ignoreSimpleWhenEntries && entries.count() == 0) 1 else entries.count()
+        complexity += if (ignoreSimpleWhenEntries && entries.count() == 0) 1 else entries.count()
         super.visitWhenExpression(expression)
     }
 
@@ -62,8 +76,13 @@ class McCabeVisitor(private val ignoreSimpleWhenEntries: Boolean) : DetektVisito
     }
 
     override fun visitTryExpression(expression: KtTryExpression) {
-        mcc += expression.catchClauses.size
+        complexity += expression.catchClauses.size
         super.visitTryExpression(expression)
+    }
+
+    private fun KtCallExpression.isUsedForNesting(): Boolean = when (getCallNameExpression()?.text) {
+        "run", "let", "apply", "with", "also", "use", "forEach", "isNotNull", "ifNull" -> true
+        else -> false
     }
 
     override fun visitCallExpression(expression: KtCallExpression) {
@@ -72,16 +91,11 @@ class McCabeVisitor(private val ignoreSimpleWhenEntries: Boolean) : DetektVisito
             if (lambdaArguments.size > 0) {
                 val lambdaArgument = lambdaArguments[0]
                 lambdaArgument.getLambdaExpression()?.bodyExpression?.let {
-                    mcc++
+                    complexity++
                     Unit
                 }
             }
         }
         super.visitCallExpression(expression)
     }
-}
-
-fun KtCallExpression.isUsedForNesting(): Boolean = when (getCallNameExpression()?.text) {
-    "run", "let", "apply", "with", "also", "use", "forEach", "isNotNull", "ifNull" -> true
-    else -> false
 }
