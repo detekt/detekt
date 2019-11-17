@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import io.gitlab.arturbosch.detekt.test.lint
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -18,11 +17,11 @@ class NamingRulesSpec : Spek({
             val code = """
                 class C {
                     private val _FIELD = 5
-                    val FIELD get() = _field
+                    val FIELD get() = _FIELD
                     val camel_Case_Property = 5
                 }
             """
-            assertThat(subject.lint(code))
+            assertThat(subject.compileAndLint(code))
                 .hasSourceLocations(
                     SourceLocation(2, 5),
                     SourceLocation(3, 5),
@@ -38,7 +37,7 @@ class NamingRulesSpec : Spek({
                     val camelCaseProperty = 5
                 }
             """
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("should not flag overridden member properties by default") {
