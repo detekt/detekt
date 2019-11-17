@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.test
 
 import io.gitlab.arturbosch.detekt.api.internal.ABSOLUTE_PATH
 import io.gitlab.arturbosch.detekt.core.KtCompiler
+import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
@@ -31,7 +32,7 @@ object KtTestCompiler : KtCompiler() {
 
     fun compile(path: Path) = compile(root, path)
 
-    fun compileFromContent(content: String, filename: String = TEST_FILENAME): KtFile {
+    fun compileFromContent(@Language("kotlin") content: String, filename: String = TEST_FILENAME): KtFile {
         val file = psiFileFactory.createFileFromText(
             filename,
             KotlinLanguage.INSTANCE,

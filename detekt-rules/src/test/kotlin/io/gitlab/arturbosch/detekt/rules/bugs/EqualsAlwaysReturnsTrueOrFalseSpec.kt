@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -22,12 +23,14 @@ class EqualsAlwaysReturnsTrueOrFalseSpec : Spek({
 
         it("detects and doesn't crash when return expression is annotated - #2021") {
             val code = """
-            override fun equals(other: Any?): Boolean {
-                @Suppress("UnsafeCallOnNullableType")
-                return true
+            class C {
+                override fun equals(other: Any?): Boolean {
+                    @Suppress("UnsafeCallOnNullableType")
+                    return true
+                }
             }
             """
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
     }
 })
