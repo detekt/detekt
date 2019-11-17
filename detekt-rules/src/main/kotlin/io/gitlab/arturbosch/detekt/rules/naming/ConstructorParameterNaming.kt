@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.identifierName
+import io.gitlab.arturbosch.detekt.rules.isOverride
 import io.gitlab.arturbosch.detekt.rules.naming.util.isContainingExcludedClassOrObject
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
@@ -19,6 +20,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isPrivate
  * @configuration parameterPattern - naming pattern (default: `'[a-z][A-Za-z0-9]*'`)
  * @configuration privateParameterPattern - naming pattern (default: `'[a-z][A-Za-z0-9]*'`)
  * @configuration excludeClassPattern - ignores variables in classes which match this regex (default: `'$^'`)
+ * @configuration ignoreOverridden - ignores constructor properties that have the override modifier (default: `true`)
  *
  * @active since v1.0.0
  */
@@ -32,9 +34,14 @@ class ConstructorParameterNaming(config: Config = Config.empty) : Rule(config) {
     private val parameterPattern by LazyRegex(PARAMETER_PATTERN, "[a-z][A-Za-z\\d]*")
     private val privateParameterPattern by LazyRegex(PRIVATE_PARAMETER_PATTERN, "[a-z][A-Za-z\\d]*")
     private val excludeClassPattern by LazyRegex(EXCLUDE_CLASS_PATTERN, "$^")
+    private val ignoreOverridden = valueOrDefault(IGNORE_OVERRIDDEN, true)
 
     override fun visitParameter(parameter: KtParameter) {
         if (parameter.isContainingExcludedClassOrObject(excludeClassPattern)) {
+            return
+        }
+
+        if (ignoreOverridden && parameter.isOverride()) {
             return
         }
 
@@ -61,5 +68,6 @@ class ConstructorParameterNaming(config: Config = Config.empty) : Rule(config) {
         const val PARAMETER_PATTERN = "parameterPattern"
         const val PRIVATE_PARAMETER_PATTERN = "privateParameterPattern"
         const val EXCLUDE_CLASS_PATTERN = "excludeClassPattern"
+        const val IGNORE_OVERRIDDEN = "ignoreOverridden"
     }
 }
