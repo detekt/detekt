@@ -1,0 +1,44 @@
+package io.gitlab.arturbosch.detekt.rules.naming
+
+import io.gitlab.arturbosch.detekt.test.assertThat
+import io.gitlab.arturbosch.detekt.test.compileAndLint
+import org.spekframework.spek2.Spek
+import org.spekframework.spek2.style.specification.describe
+
+class ConstructorParameterNamingSpec : Spek({
+
+    describe("parameters in a constructor of a class") {
+
+        it("should detect no violations") {
+            val code = """
+                class C(val param: String, private val privateParam: String)
+
+                class D {
+                    constructor(param: String) {}
+                    constructor(param: String, privateParam: String) {}
+                }
+            """
+            assertThat(ConstructorParameterNaming().compileAndLint(code)).isEmpty()
+        }
+
+        it("should find some violations") {
+            val code = """
+                class C(val PARAM: String, private val PRIVATE_PARAM: String)
+
+                class C {
+                    constructor(PARAM: String) {}
+                    constructor(PARAM: String, PRIVATE_PARAM: String) {}
+                }
+            """
+            assertThat(NamingRules().compileAndLint(code)).hasSize(5)
+        }
+
+        it("should find a violation in the correct text locaction") {
+            val code = """
+                class C(val PARAM: String)
+            """
+            val findings = NamingRules().compileAndLint(code)
+            assertThat(findings).hasTextLocations(8 to 25)
+        }
+    }
+})
