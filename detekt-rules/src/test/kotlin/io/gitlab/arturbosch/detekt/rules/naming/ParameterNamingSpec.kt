@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -14,12 +14,12 @@ class ParameterNamingSpec : Spek({
             val code = """
                 class C(val param: String, private val privateParam: String)
 
-                class C {
-                    construct(val param: String) {}
-                    construct(val param: String, private val privateParam: String) {}
+                class D {
+                    constructor(param: String) {}
+                    constructor(param: String, privateParam: String) {}
                 }
             """
-            assertThat(ConstructorParameterNaming().lint(code)).isEmpty()
+            assertThat(ConstructorParameterNaming().compileAndLint(code)).isEmpty()
         }
 
         it("should find some violations") {
@@ -27,18 +27,18 @@ class ParameterNamingSpec : Spek({
                 class C(val PARAM: String, private val PRIVATE_PARAM: String)
 
                 class C {
-                    construct(val PARAM: String) {}
-                    construct(val PARAM: String, private val PRIVATE_PARAM: String) {}
+                    constructor(PARAM: String) {}
+                    constructor(PARAM: String, PRIVATE_PARAM: String) {}
                 }
             """
-            assertThat(NamingRules().lint(code)).hasSize(5)
+            assertThat(NamingRules().compileAndLint(code)).hasSize(5)
         }
 
         it("should find a violation in the correct text locaction") {
             val code = """
                 class C(val PARAM: String)
             """
-            val findings = NamingRules().lint(code)
+            val findings = NamingRules().compileAndLint(code)
             assertThat(findings).hasTextLocations(8 to 25)
         }
     }
@@ -51,26 +51,28 @@ class ParameterNamingSpec : Spek({
                     fun someStuff(param: String) {}
                 }
             """
-            assertThat(ConstructorParameterNaming().lint(code)).isEmpty()
+            assertThat(ConstructorParameterNaming().compileAndLint(code)).isEmpty()
         }
 
         it("should not detect violations in overridden function by default") {
             val code = """
-                class C {
+                class C : I {
                     override fun someStuff(`object`: String) {}
                 }
+                interface I { fun someStuff(@Suppress("FunctionParameterNaming") `object`: String) }
             """
-            assertThat(FunctionParameterNaming().lint(code)).isEmpty()
+            assertThat(FunctionParameterNaming().compileAndLint(code)).isEmpty()
         }
 
         it("should detect violations in overridden function if ignoreOverriddenFunctions is false") {
             val code = """
-                class C {
+                class C : I {
                     override fun someStuff(`object`: String) {}
                 }
+                interface I { fun someStuff(`object`: String) }
             """
             val config = TestConfig(mapOf(FunctionParameterNaming.IGNORE_OVERRIDDEN_FUNCTIONS to "false"))
-            assertThat(FunctionParameterNaming(config).lint(code)).hasSize(1)
+            assertThat(FunctionParameterNaming(config).compileAndLint(code)).hasSize(2)
         }
 
         it("should find some violations") {
@@ -79,7 +81,7 @@ class ParameterNamingSpec : Spek({
                     fun someStuff(PARAM: String) {}
                 }
             """
-            assertThat(NamingRules().lint(code)).hasSize(1)
+            assertThat(NamingRules().compileAndLint(code)).hasSize(1)
         }
     }
 
@@ -90,15 +92,15 @@ class ParameterNamingSpec : Spek({
         it("should not detect function parameter") {
             val code = """
                 class Excluded {
-                    fun f(PARAM: Int)
+                    fun f(PARAM: Int) {}
                 }
             """
-            assertThat(FunctionParameterNaming(config).lint(code)).isEmpty()
+            assertThat(FunctionParameterNaming(config).compileAndLint(code)).isEmpty()
         }
 
         it("should not detect constructor parameter") {
             val code = "class Excluded(val PARAM: Int) {}"
-            assertThat(ConstructorParameterNaming(config).lint(code)).isEmpty()
+            assertThat(ConstructorParameterNaming(config).compileAndLint(code)).isEmpty()
         }
     }
 })

@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.test.assert
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -336,8 +337,8 @@ class MagicNumberSpec : Spek({
         context("a magic number number in a constructor call") {
 
             it("should report") {
-                val code = "val file = File(42)"
-                val findings = MagicNumber().lint(code)
+                val code = "val file = Array<String?>(42) { null }"
+                val findings = MagicNumber().compileAndLint(code)
                 assertThat(findings).hasSize(1)
             }
         }
@@ -562,7 +563,7 @@ class MagicNumberSpec : Spek({
                     object B : A(n = 5)
                 """
                     val rule = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NAMED_ARGUMENT to "true")))
-                    assertThat(rule.lint(code)).isEmpty()
+                    assertThat(rule.compileAndLint(code)).isEmpty()
                 }
 
                 it("should ignore named arguments in parameter annotations - #1115") {
@@ -651,15 +652,15 @@ class MagicNumberSpec : Spek({
             it("does not report functions that always returns a constant value") {
                 val code = """
                 fun x() = 9
-                fun y() { return 9 }"""
-                assertThat(MagicNumber().lint(code)).isEmpty()
+                fun y(): Int { return 9 }"""
+                assertThat(MagicNumber().compileAndLint(code)).isEmpty()
             }
 
             it("reports functions that does not return a constant value") {
                 val code = """
                 fun x() = 9 + 1
                 fun y(): Int { return 9 + 1 }"""
-                assertThat(MagicNumber().lint(code)).hasSize(2)
+                assertThat(MagicNumber().compileAndLint(code)).hasSize(2)
             }
         }
 
@@ -741,15 +742,15 @@ class MagicNumberSpec : Spek({
                 MagicNumber.IGNORE_NAMED_ARGUMENT to "true")))
 
             it("should report 3") {
-                assertThat(rule.lint("""fun bar() { foo(3) }""")).hasSize(1)
+                assertThat(rule.compileAndLint("""fun bar() { foo(3) }; fun foo(n: Int) {}""")).hasSize(1)
             }
 
             it("should not report named 3") {
-                assertThat(rule.lint("""fun bar() { foo(param=3) }""")).isEmpty()
+                assertThat(rule.compileAndLint("""fun bar() { foo(param=3) }; fun foo(param: Int) {}""")).isEmpty()
             }
 
             it("should not report 3 due to scoped describing variable") {
-                assertThat(rule.lint("""fun bar() { val a = 3; foo(a) }""")).isEmpty()
+                assertThat(rule.compileAndLint("""fun bar() { val a = 3; foo(a) }; fun foo(n: Int) {}""")).isEmpty()
             }
         }
     }
