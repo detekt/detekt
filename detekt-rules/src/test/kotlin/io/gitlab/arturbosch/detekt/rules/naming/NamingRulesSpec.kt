@@ -67,30 +67,29 @@ class NamingRulesSpec : Spek({
                     override val SHOULD_NOT_BE_FLAGGED: String
                 }
                 interface I2 {
-                    val SHOULD_NOT_BE_FLAGGED: String
+                    @Suppress("VariableNaming") val SHOULD_NOT_BE_FLAGGED: String
                 }
             """
-            assertThat(NamingRules().compileAndLint(code)).hasSize(1) // Only reports the interface
+            assertThat(NamingRules().compileAndLint(code)).isEmpty()
         }
 
         it("doesn't ignore overridden member properties if ignoreOverridden is false") {
             val code = """
                 class C : I {
-                    override val SHOULD_NOT_BE_FLAGGED = "banana"
+                    override val SHOULD_BE_FLAGGED = "banana"
                 }
                 interface I : I2 {
-                    override val SHOULD_NOT_BE_FLAGGED: String
+                    override val SHOULD_BE_FLAGGED: String
                 }
                 interface I2 {
-                    val SHOULD_NOT_BE_FLAGGED: String
+                    @Suppress("VariableNaming") val SHOULD_BE_FLAGGED: String
                 }
             """
             val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to "false"))
             assertThat(NamingRules(config).compileAndLint(code))
                 .hasSourceLocations(
                     SourceLocation(2, 5),
-                    SourceLocation(5, 5),
-                    SourceLocation(8, 5)
+                    SourceLocation(5, 5)
                 )
         }
     }

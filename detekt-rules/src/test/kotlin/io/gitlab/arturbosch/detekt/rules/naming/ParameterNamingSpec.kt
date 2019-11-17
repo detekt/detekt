@@ -59,9 +59,9 @@ class ParameterNamingSpec : Spek({
                 class C : I {
                     override fun someStuff(`object`: String) {}
                 }
-                interface I { fun someStuff(`object`: String) }
+                interface I { fun someStuff(@Suppress("FunctionParameterNaming") `object`: String) }
             """
-            assertThat(FunctionParameterNaming().compileAndLint(code)).hasSize(1) // Only reports the interface
+            assertThat(FunctionParameterNaming().compileAndLint(code)).isEmpty()
         }
 
         it("should detect violations in overridden function if ignoreOverriddenFunctions is false") {

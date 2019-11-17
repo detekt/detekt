@@ -31,7 +31,7 @@ class FunctionNamingSpec : Spek({
 
         it("flags functions inside functions") {
             val code = """
-            class C : I{
+            class C : I {
                 override fun shouldNotBeFlagged() {
                     fun SHOULD_BE_FLAGGED() { }
                 }
@@ -46,9 +46,9 @@ class FunctionNamingSpec : Spek({
             class C : I {
                 override fun SHOULD_NOT_BE_FLAGGED() {}
             }
-            interface I { fun SHOULD_NOT_BE_FLAGGED() }
+            interface I { @Suppress("FunctionNaming") fun SHOULD_NOT_BE_FLAGGED() }
         """
-            assertThat(FunctionNaming().compileAndLint(code)).hasSize(1) // Only reports the interface
+            assertThat(FunctionNaming().compileAndLint(code)).isEmpty()
         }
 
         it("does not report when the function name is identical to the type of the result") {
@@ -65,16 +65,13 @@ class FunctionNamingSpec : Spek({
         it("flags functions with bad names inside overridden functions by default") {
             val code = """
             class C : I {
-                override fun SHOULD_NOT_BE_FLAGGED() {
+                override fun SHOULD_BE_FLAGGED() {
                     fun SHOULD_BE_FLAGGED() {}
                 }
             }
-            interface I { fun SHOULD_NOT_BE_FLAGGED() }
+            interface I { @Suppress("FunctionNaming") fun SHOULD_BE_FLAGGED() }
         """
-            assertThat(FunctionNaming().compileAndLint(code)).hasSourceLocations(
-                SourceLocation(3, 9),
-                SourceLocation(6, 15)
-            )
+            assertThat(FunctionNaming().compileAndLint(code)).hasSourceLocation(3, 9)
         }
 
         it("doesn't ignore overridden functions if ignoreOverridden is false") {
