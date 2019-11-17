@@ -70,7 +70,7 @@ class NamingRulesSpec : Spek({
                     @Suppress("VariableNaming") val SHOULD_NOT_BE_FLAGGED: String
                 }
             """
-            assertThat(NamingRules().compileAndLint(code)).isEmpty()
+            assertThat(VariableNaming().compileAndLint(code)).isEmpty()
         }
 
         it("doesn't ignore overridden member properties if ignoreOverridden is false") {
@@ -86,7 +86,7 @@ class NamingRulesSpec : Spek({
                 }
             """
             val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to "false"))
-            assertThat(NamingRules(config).compileAndLint(code))
+            assertThat(VariableNaming(config).compileAndLint(code))
                 .hasSourceLocations(
                     SourceLocation(2, 5),
                     SourceLocation(5, 5)

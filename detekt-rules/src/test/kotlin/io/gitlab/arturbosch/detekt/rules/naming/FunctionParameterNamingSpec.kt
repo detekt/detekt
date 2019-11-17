@@ -46,7 +46,7 @@ class FunctionParameterNamingSpec : Spek({
                     fun someStuff(PARAM: String) {}
                 }
             """
-            assertThat(NamingRules().compileAndLint(code)).hasSize(1)
+            assertThat(FunctionParameterNaming().compileAndLint(code)).hasSize(1)
         }
     }
 

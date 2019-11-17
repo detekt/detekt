@@ -30,15 +30,14 @@ class ConstructorParameterNamingSpec : Spek({
                     constructor(PARAM: String, PRIVATE_PARAM: String) {}
                 }
             """
-            assertThat(NamingRules().compileAndLint(code)).hasSize(5)
+            assertThat(ConstructorParameterNaming().compileAndLint(code)).hasSize(5)
         }
 
         it("should find a violation in the correct text locaction") {
             val code = """
                 class C(val PARAM: String)
             """
-            val findings = NamingRules().compileAndLint(code)
-            assertThat(findings).hasTextLocations(8 to 25)
+            assertThat(ConstructorParameterNaming().compileAndLint(code)).hasTextLocations(8 to 25)
         }
     }
 })
