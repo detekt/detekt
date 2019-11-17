@@ -9,8 +9,6 @@ import org.spekframework.spek2.style.specification.describe
 
 class NamingRulesSpec : Spek({
 
-    val subject by memoized { NamingRules() }
-
     describe("properties in classes") {
 
         it("should detect all positive cases") {
@@ -21,7 +19,7 @@ class NamingRulesSpec : Spek({
                     val camel_Case_Property = 5
                 }
             """
-            assertThat(subject.compileAndLint(code))
+            assertThat(VariableNaming().compileAndLint(code))
                 .hasSourceLocations(
                     SourceLocation(2, 5),
                     SourceLocation(3, 5),
@@ -37,7 +35,7 @@ class NamingRulesSpec : Spek({
                     val camelCaseProperty = 5
                 }
             """
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(VariableNaming().compileAndLint(code)).isEmpty()
         }
 
         it("should not flag overridden member properties by default") {
@@ -85,7 +83,7 @@ class NamingRulesSpec : Spek({
                     emptyMap<String, String>().forEach { _, V -> println(V) }
                 }
             """
-            assertThat(subject.compileAndLint(code)).isEmpty()
+            assertThat(NamingRules().compileAndLint(code)).isEmpty()
         }
     }
 })
