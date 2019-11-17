@@ -6,13 +6,94 @@ permalink: changelog.html
 toc: true
 ---
 
-#### 1.2.0 - unreleased
+#### 1.2.0
 
 ##### Notable changes
 
+- The HTML report now includes the complexity metrics and previews of the code locations.
+- Findings of `detekt-formatting` can now be suppressed and provide a signature which can be used to suppress it in the baseline file.
+Be aware that you need to put the `@Suppress` annotation above the previous parent like a function or class. It will not work on the statement level.
+- Suppression by rule set id is now supported `@Suppress("detekt.[RuleSetId].[RuleId]")` 
 - `parallel=true` and `--parallel` now effect both the compilation and analysis phase. 
 - Users of Gradle's `--parallel` flag are encouraged to turn off the parallelism of detekt. Or turn it on otherwise.
-- detekt does not use the `ForkJoinPool.commonPool()` anymore internally. When embedding detekt feel free to pass your own `ExecutionService` to the `ProcessingSettings`.
+- detekt internally does not use the `ForkJoinPool.commonPool()` anymore. When embedding detekt feel free to pass your own `ExecutionService` to the `ProcessingSettings`.
+
+##### Migration
+
+- Some reported positions of rules have changed, see issues starting with "Improve text location: ".
+This may lead to some unexpected changes in the baseline file.
+- The rule `ComplexMethod` got refactored and counts the cyclomatic complexity according to https://www.ndepend.com/docs/code-metrics#CC.
+This change lead to increasing the threshold to 15 (was ten).
+
+##### Changelog
+
+- Refactor ComplexMethod - [#2090](https://github.com/arturbosch/detekt/pull/2090)
+- Fix NestedBlockDepth false negative - [#2086](https://github.com/arturbosch/detekt/pull/2086)
+- NestedBlockDepth false negative - [#2085](https://github.com/arturbosch/detekt/issues/2085)
+- Deprecate Location.locationString - [#2084](https://github.com/arturbosch/detekt/pull/2084)
+- Allow to suppress formatting issues and add them to the baseline - [#2083](https://github.com/arturbosch/detekt/pull/2083)
+- Add license badge to README - [#2080](https://github.com/arturbosch/detekt/pull/2080)
+- Deploy SNAPSHOTs automatically - [#2079](https://github.com/arturbosch/detekt/pull/2079)
+- Fix TrailingWhitespace reported position - [#2078](https://github.com/arturbosch/detekt/pull/2078)
+- Activate more rules by default - #1911 - [#2075](https://github.com/arturbosch/detekt/pull/2075)
+- Report InvalidRange for empty until range - [#2074](https://github.com/arturbosch/detekt/pull/2074)
+- Deprecate properties on Entity - Closes #2014 - [#2072](https://github.com/arturbosch/detekt/pull/2072)
+- Add complexity report to html output - [#2071](https://github.com/arturbosch/detekt/pull/2071)
+- Use constants for config keys in tests - [#2070](https://github.com/arturbosch/detekt/pull/2070)
+- Mention location adjustment in rules for 1.2.0 - [#2068](https://github.com/arturbosch/detekt/issues/2068)
+- Improve text location: TooManyFunctions - [#2065](https://github.com/arturbosch/detekt/pull/2065)
+- Improve text location: OptionalAbstractKeyword - [#2064](https://github.com/arturbosch/detekt/pull/2064)
+- Improve text location: NestedBlockDepth - [#2063](https://github.com/arturbosch/detekt/pull/2063)
+- Improve text location: MatchingDeclarationName - [#2062](https://github.com/arturbosch/detekt/pull/2062)
+- Improve text location: LongMethod - [#2061](https://github.com/arturbosch/detekt/pull/2061)
+- Improve text location: LargeClass - [#2060](https://github.com/arturbosch/detekt/pull/2060)
+- Improve text location: ComplexMethod - [#2059](https://github.com/arturbosch/detekt/pull/2059)
+- Improve text location: EmptyClassBlock - [#2058](https://github.com/arturbosch/detekt/pull/2058)
+- Replace spek test hasSize(0) with isEmpty() - [#2057](https://github.com/arturbosch/detekt/pull/2057)
+- Remove MacOS JDK11 CI run as discussed in #2015 - [#2056](https://github.com/arturbosch/detekt/pull/2056)
+- Introduces mocking library 'mockk' - [#2055](https://github.com/arturbosch/detekt/pull/2055)
+- Improve text location: InvalidPackageDeclaration - [#2052](https://github.com/arturbosch/detekt/pull/2052)
+- Improve text location: MandatoryBracesIfStatements - [#2051](https://github.com/arturbosch/detekt/pull/2051)
+- Improve text location: ClassNaming - [#2050](https://github.com/arturbosch/detekt/pull/2050)
+- potential-bugs InvalidRange does not work in all cases - [#2044](https://github.com/arturbosch/detekt/issues/2044)
+- Don't checkBuildFailureThreshold if we are creating the baseline - [#2034](https://github.com/arturbosch/detekt/pull/2034)
+- gradle detektBaseline task fails - [#2033](https://github.com/arturbosch/detekt/issues/2033)
+- Fix #2021 - [#2032](https://github.com/arturbosch/detekt/pull/2032)
+- Update dependencies - [#2031](https://github.com/arturbosch/detekt/pull/2031)
+- Dokka fix - [#2030](https://github.com/arturbosch/detekt/pull/2030)
+- Simplify and refactor RuleProviderTest - [#2029](https://github.com/arturbosch/detekt/pull/2029)
+- Simplify MultiRuleCollector test cases - [#2028](https://github.com/arturbosch/detekt/pull/2028)
+- Dont check WrongEqualsTypeParameter if the function is topLevel - [#2027](https://github.com/arturbosch/detekt/pull/2027)
+- Fix false positive at EmptyIfBlock - [#2026](https://github.com/arturbosch/detekt/pull/2026)
+- Support guard clause exclusion for ThrowsCount rule - [#2025](https://github.com/arturbosch/detekt/pull/2025)
+- Add ImplicitDefaultLocale rule - [#2024](https://github.com/arturbosch/detekt/pull/2024)
+- Use double backtick for the in-line code - [#2022](https://github.com/arturbosch/detekt/pull/2022)
+- EqualsAlwaysReturnsTrueOrFalse: The original exception message was: java.util.NoSuchElementException: Array is empty. - [#2021](https://github.com/arturbosch/detekt/issues/2021)
+- Ignore sealed classes for utility class having public constructor rule - [#2016](https://github.com/arturbosch/detekt/pull/2016)
+- Better handling for the Suppresion of errors - [#2013](https://github.com/arturbosch/detekt/pull/2013)
+- Fix description of NoLineBreakBeforeAssignment - [#2011](https://github.com/arturbosch/detekt/pull/2011)
+- Copy paste error in message in NoLineBreakBeforeAssignment.kt - [#2008](https://github.com/arturbosch/detekt/issues/2008)
+- UtilityClassWithPublicConstructor should not be reported for sealed classes - [#2005](https://github.com/arturbosch/detekt/issues/2005)
+- Validate yaml configurations by comparing their structure - #516 - [#1998](https://github.com/arturbosch/detekt/pull/1998)
+- Allow the user to collapse the rules in the html report - [#1997](https://github.com/arturbosch/detekt/pull/1997)
+- Allow detekt findings to be suppessed with rule set id - Closes #766 - [#1994](https://github.com/arturbosch/detekt/pull/1994)
+- Upgrade Spek to v2.0.8 - [#1992](https://github.com/arturbosch/detekt/pull/1992)
+- Reimplement parallelism internal logic - [#1991](https://github.com/arturbosch/detekt/pull/1991)
+- Findings assertions - [#1978](https://github.com/arturbosch/detekt/pull/1978)
+- Fix EnumNaming textLocation - [#1977](https://github.com/arturbosch/detekt/pull/1977)
+- Add snippet code in html report - [#1975](https://github.com/arturbosch/detekt/pull/1975)
+- Change reported element in 2 documentation rules - [#1952](https://github.com/arturbosch/detekt/pull/1952)
+- Enable more rules in failfast - [#1935](https://github.com/arturbosch/detekt/pull/1935)
+- Add UndocumentedPublicProperty rule - closes #1670 - [#1923](https://github.com/arturbosch/detekt/pull/1923)
+- Calculate MCC (McCabe Complexity) accordingly - [#1921](https://github.com/arturbosch/detekt/issues/1921)
+- UseDataClass conflicts with DataClassShouldBeImmutable - [#1920](https://github.com/arturbosch/detekt/issues/1920)
+- Redesign "parallel" flag/property - [#1845](https://github.com/arturbosch/detekt/issues/1845)
+- SNAPSHOT process feedback - [#1826](https://github.com/arturbosch/detekt/issues/1826)
+- Initial MCC change - [#1793](https://github.com/arturbosch/detekt/pull/1793)
+- @Suppress("Detekt.ruleset") feature - [#766](https://github.com/arturbosch/detekt/issues/766)
+- Validate Configuration file before using it - [#516](https://github.com/arturbosch/detekt/issues/516)
+
+See all issues at: [1.2.0](https://github.com/arturbosch/detekt/milestone/49)
 
 #### 1.1.1
 
