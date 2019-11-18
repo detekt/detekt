@@ -107,8 +107,8 @@ Each one of them adds one to the complexity count.
 
 * ``ignoreNestingFunctions`` (default: ``false``)
 
-   Whether to ignore functions which are often used instead of an 'if' or
-'for' statement
+   Whether to ignore functions which are often used instead of an `if` or
+`for` statement
 
 * ``nestingFunctions`` (default: ``run,let,apply,with,also,use,forEach,isNotNull,ifNull``)
 

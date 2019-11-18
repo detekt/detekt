@@ -59,7 +59,7 @@ class ComplexMethod(
     private val ignoreSimpleWhenEntries = valueOrDefault(IGNORE_SIMPLE_WHEN_ENTRIES, false)
     private val ignoreNestingFunctions = valueOrDefault(IGNORE_NESTING_FUNCTIONS, false)
     private val nestingFunctions =
-        CommaSeparatedPattern(valueOrDefault(NESTING_FUNCTIONS, ""), delimiters = ",;")
+        CommaSeparatedPattern(valueOrDefault(NESTING_FUNCTIONS, ""))
             .mapAll { it }
             .toSet()
             .takeIf { it.isNotEmpty() }
