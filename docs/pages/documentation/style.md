@@ -1067,6 +1067,30 @@ abstract class OnlyConcreteMembersInAbstractClass { // violation: no abstract me
 }
 ```
 
+### UnnecessaryAnnotationUseSiteTarget
+
+This rule inspects the use of the Annotation use-site Target. In case that the use-site Target is not needed it can
+be removed. For more information check the kotlin documentation:
+https://kotlinlang.org/docs/reference/annotations.html#annotation-use-site-targets
+
+**Severity**: Style
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+@property:Inject private val foo: String = "bar" // violation: unnecessary @property:
+
+class Module(@param:Inject private val foo: String) // violation: unnecessary @param:
+```
+
+#### Compliant Code:
+
+```kotlin
+class Module(@Inject private val foo: String)
+```
+
 ### UnnecessaryApply
 
 `apply` expressions are used frequently, but sometimes their usage should be replaced with
