@@ -78,7 +78,7 @@ internal class RuleVisitor : DetektVisitor() {
         active = classOrObject.kDocSection()?.findTagByName(TAG_ACTIVE) != null
         autoCorrect = classOrObject.kDocSection()?.findTagByName(TAG_AUTO_CORRECT) != null
 
-        val comment = classOrObject.kDocSection()?.getContent()?.trim() ?: return
+        val comment = classOrObject.kDocSection()?.getContent()?.trim()?.replace("@@", "@") ?: return
         extractRuleDocumentation(comment)
         configuration.addAll(classOrObject.parseConfigurationTags())
     }
