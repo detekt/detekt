@@ -80,22 +80,20 @@ class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
         super.visitObjectDeclaration(declaration)
     }
 
-    private fun getMisnamedMembers(klassOrObject: KtClassOrObject, name: String?): List<KtNamedDeclaration> {
-        val body = klassOrObject.body ?: return emptyList()
-        val declarations = getFunctions(body) + body.properties
-        return declarations.filter { it.name?.equals(name, ignoreCase = true) == true }
+    private fun getMisnamedMembers(klassOrObject: KtClassOrObject, name: String?): Sequence<KtNamedDeclaration> {
+        val body = klassOrObject.body ?: return emptySequence()
+        return (getFunctions(body) + body.properties)
+            .filter { it.name?.equals(name, ignoreCase = true) == true }
     }
 
-    private fun getFunctions(body: KtClassBody): List<KtNamedDeclaration> {
-        val functions = body.getChildrenOfType<KtNamedFunction>().toMutableList()
-        if (ignoreOverriddenFunction) {
-            functions.removeAll { it.isOverride() }
-        }
-        return functions
+    private fun getFunctions(body: KtClassBody): Sequence<KtNamedDeclaration> {
+        return body.getChildrenOfType<KtNamedFunction>().asSequence()
+            .filter { !ignoreOverriddenFunction || !it.isOverride() }
     }
 
-    private fun getMisnamedCompanionObjectMembers(klass: KtClass): List<KtNamedDeclaration> {
+    private fun getMisnamedCompanionObjectMembers(klass: KtClass): Sequence<KtNamedDeclaration> {
         return klass.companionObjects
+                .asSequence()
                 .flatMap { getMisnamedMembers(it, klass.name) }
                 .filterNot { it is KtNamedFunction && isFactoryMethod(it, klass) }
     }
