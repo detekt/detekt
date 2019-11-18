@@ -12,48 +12,95 @@ import org.spekframework.spek2.style.specification.describe
 
 class ComplexMethodSpec : Spek({
 
+    val defaultComplexity = 1
+
     describe("ComplexMethod rule") {
 
-        context("a complex method") {
+        context("different complex constructs") {
 
-            it("finds one complex method") {
-                val findings = ComplexMethod(threshold = 10).lint(Case.ComplexMethod.path())
+            it("counts different loops") {
+                val findings = ComplexMethod(threshold = 1).compileAndLint("""
+                    fun test() {
+                        for (i in 1..10) {}
+                        while (true) {}
+                        do {} while(true)
+                        (1..10).forEach {}
+                    }
+                """.trimIndent())
 
-                assertThat(findings).hasSourceLocations(SourceLocation(4, 5))
+                assertThat(findings.first()).isThresholded().withValue(defaultComplexity + 4)
+            }
+
+            it("counts catch blocks") {
+                val findings = ComplexMethod(threshold = 1).compileAndLint("""
+                    fun test() {
+                        try {} catch(e: IllegalArgumentException) {} catch(e: Exception) {} finally {}
+                    }
+                """.trimIndent())
+
+                assertThat(findings.first()).isThresholded().withValue(defaultComplexity + 2)
+            }
+
+            it("counts nested conditional statements") {
+                val findings = ComplexMethod(threshold = 1).compileAndLint("""
+                    fun test() {
+                        try {
+                            while (true) {
+                                if (true) {
+                                    when ("string") {
+                                        "" -> println()
+                                        else -> println()
+                                    }
+                                }
+                            }
+                        } finally {
+                            // only catches count
+                        }
+                    }
+                """.trimIndent())
+
+                assertThat(findings.first()).isThresholded().withValue(defaultComplexity + 4)
+            }
+        }
+
+        context("nesting functions") {
+
+            val code = """
+                    fun test() {
+                        for (i in 1..10) {}
+                        (1..10).forEach {}
+                    }
+                """.trimIndent()
+
+            fun execute(config: TestConfig, expectedValue: Int) {
+                val findings = ComplexMethod(config, threshold = 1).lint(code)
+
+                assertThat(findings).hasSourceLocations(SourceLocation(1, 5))
 
                 assertThat(findings.first())
                     .isThresholded()
-                    .withValue(14)
-                    .withThreshold(10)
+                    .withValue(expectedValue)
+                    .withThreshold(1)
             }
 
-            context("nesting functions") {
+            it("counts three with nesting function 'forEach'") {
+                val config = TestConfig(mapOf(ComplexMethod.IGNORE_NESTING_FUNCTIONS to "false"))
+                execute(config, expectedValue = 3)
+            }
 
-                fun execute(config: TestConfig, expectedValue: Int) {
-                    val findings = ComplexMethod(config, threshold = 10).lint(Case.ComplexMethod.path())
+            it("can ignore nesting functions like 'forEach'") {
+                val config = TestConfig(mapOf(ComplexMethod.IGNORE_NESTING_FUNCTIONS to "true"))
+                execute(config, expectedValue = 2)
+            }
 
-                    assertThat(findings).hasSourceLocations(SourceLocation(4, 5))
+            it("defaults to a predefined set of nested functions for compatibility when empty") {
+                val config = TestConfig(mapOf(ComplexMethod.NESTING_FUNCTIONS to ""))
+                execute(config, expectedValue = 3)
+            }
 
-                    assertThat(findings.first())
-                        .isThresholded()
-                        .withValue(expectedValue)
-                        .withThreshold(10)
-                }
-
-                it("can ignore nesting functions like 'forEach'") {
-                    val config = TestConfig(mapOf(ComplexMethod.IGNORE_NESTING_FUNCTIONS to "true"))
-                    execute(config, expectedValue = 13)
-                }
-
-                it("defaults to a predefined set of nested functions for compatibility when empty") {
-                    val config = TestConfig(mapOf(ComplexMethod.NESTING_FUNCTIONS to ""))
-                    execute(config, expectedValue = 14)
-                }
-
-                it("skips 'forEach' as it is not specified") {
-                    val config = TestConfig(mapOf(ComplexMethod.NESTING_FUNCTIONS to "let,apply,also"))
-                    execute(config, expectedValue = 13)
-                }
+            it("skips 'forEach' as it is not specified") {
+                val config = TestConfig(mapOf(ComplexMethod.NESTING_FUNCTIONS to "let,apply,also"))
+                execute(config, expectedValue = 2)
             }
         }
 
