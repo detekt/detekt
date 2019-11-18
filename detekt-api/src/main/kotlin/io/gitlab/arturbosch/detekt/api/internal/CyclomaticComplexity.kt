@@ -64,7 +64,7 @@ class CyclomaticComplexity(private val config: Config) : DetektVisitor() {
         }
     }
 
-    private fun isInsideObjectLiteral(function: KtNamedFunction): Boolean =
+    private fun isInsideObjectLiteral(function: KtNamedFunction) =
         function.getStrictParentOfType<KtObjectLiteralExpression>() != null
 
     override fun visitBinaryExpression(expression: KtBinaryExpression) {
