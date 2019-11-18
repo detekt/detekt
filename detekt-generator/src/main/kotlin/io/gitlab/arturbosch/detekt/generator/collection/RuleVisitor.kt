@@ -92,7 +92,7 @@ internal class RuleVisitor : DetektVisitor() {
                 extractCompliantDocumentation(comment, compliantIndex)
             }
             compliantIndex != -1 -> throw InvalidCodeExampleDocumentationException(
-                    "Rule $name contains a compliant without a noncompliant code definition.")
+                    "Rule $name contains a compliant without a noncompliant code definition")
             else -> description = comment
         }
     }
@@ -101,7 +101,7 @@ internal class RuleVisitor : DetektVisitor() {
         val nonCompliantEndIndex = comment.indexOf(ENDTAG_NONCOMPLIANT)
         if (nonCompliantEndIndex == -1) {
             throw InvalidCodeExampleDocumentationException(
-                    "Rule $name contains an incorrect noncompliant code definition.")
+                    "Rule $name contains an incorrect noncompliant code definition")
         }
         description = comment.substring(0, nonCompliantIndex).trim()
         nonCompliant = comment.substring(nonCompliantIndex + TAG_NONCOMPLIANT.length, nonCompliantEndIndex)
@@ -114,7 +114,7 @@ internal class RuleVisitor : DetektVisitor() {
         if (compliantIndex != -1) {
             if (compliantEndIndex == -1) {
                 throw InvalidCodeExampleDocumentationException(
-                        "Rule $name contains an incorrect compliant code definition.")
+                        "Rule $name contains an incorrect compliant code definition")
             }
             compliant = comment.substring(compliantIndex + TAG_COMPLIANT.length, compliantEndIndex)
                     .trimStartingLineBreaks()
