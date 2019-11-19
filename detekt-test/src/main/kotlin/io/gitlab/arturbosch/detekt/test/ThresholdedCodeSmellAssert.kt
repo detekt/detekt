@@ -1,6 +1,3 @@
-// https://github.com/pinterest/ktlint/issues/498
-@file:Suppress("AnnotationOnSeparateLine")
-
 package io.gitlab.arturbosch.detekt.test
 
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
