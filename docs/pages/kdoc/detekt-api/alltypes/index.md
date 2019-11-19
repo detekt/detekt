@@ -94,6 +94,13 @@ Represents a code smell for that can be auto corrected.
 
 |
 
+##### [io.gitlab.arturbosch.detekt.api.internal.CyclomaticComplexity](../io.gitlab.arturbosch.detekt.api.internal/-cyclomatic-complexity/index.html)
+
+Counts the cyclomatic complexity of nodes.
+
+
+|
+
 ##### [io.gitlab.arturbosch.detekt.api.Debt](../io.gitlab.arturbosch.detekt.api/-debt/index.html)
 
 Debt describes the estimated amount of work needed to fix a given issue.
@@ -205,11 +212,6 @@ An issue represents a problem in the codebase.
 ##### [org.jetbrains.kotlin.psi.KtAnnotated](../io.gitlab.arturbosch.detekt.api.internal/org.jetbrains.kotlin.psi.-kt-annotated/index.html)
 
 
-| (extensions in package io.gitlab.arturbosch.detekt.api.internal)
-
-##### [org.jetbrains.kotlin.psi.KtCallExpression](../io.gitlab.arturbosch.detekt.api.internal/org.jetbrains.kotlin.psi.-kt-call-expression/index.html)
-
-
 | (extensions in package io.gitlab.arturbosch.detekt.api)
 
 ##### [org.jetbrains.kotlin.psi.KtElement](../io.gitlab.arturbosch.detekt.api/org.jetbrains.kotlin.psi.-kt-element/index.html)
@@ -239,13 +241,6 @@ value when requested again.
 ##### [io.gitlab.arturbosch.detekt.api.Location](../io.gitlab.arturbosch.detekt.api/-location/index.html)
 
 Specifies a position within a source code fragment.
-
-
-|
-
-##### [io.gitlab.arturbosch.detekt.api.internal.McCabeVisitor](../io.gitlab.arturbosch.detekt.api.internal/-mc-cabe-visitor/index.html)
-
-Counts the cyclomatic complexity of functions.
 
 
 |

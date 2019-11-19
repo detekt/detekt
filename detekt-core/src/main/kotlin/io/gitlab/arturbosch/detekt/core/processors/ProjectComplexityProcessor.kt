@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.core.processors
 
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
-import io.gitlab.arturbosch.detekt.api.internal.McCabeVisitor
+import io.gitlab.arturbosch.detekt.api.internal.CyclomaticComplexity
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.psi.KtFile
 
@@ -16,9 +16,9 @@ val complexityKey = Key<Int>("complexity")
 class ComplexityVisitor : DetektVisitor() {
 
     override fun visitKtFile(file: KtFile) {
-        with(McCabeVisitor(ignoreSimpleWhenEntries = false)) {
-            file.accept(this)
-            file.putUserData(complexityKey, mcc)
+        val complexity = CyclomaticComplexity.calculate(file) {
+            ignoreSimpleWhenEntries = false
         }
+        file.putUserData(complexityKey, complexity)
     }
 }
