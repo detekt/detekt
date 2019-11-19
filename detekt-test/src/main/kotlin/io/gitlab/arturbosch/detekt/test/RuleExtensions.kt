@@ -9,8 +9,12 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import java.nio.file.Path
 
+private val compileTestSnippets: Boolean = System.getProperty("compile-snippet-tests", "false")!!.toBoolean()
+
 fun BaseRule.compileAndLint(@Language("kotlin") content: String): List<Finding> {
-    KotlinScriptEngine.compile(content)
+    if (compileTestSnippets) {
+        KotlinScriptEngine.compile(content)
+    }
     return lint(content)
 }
 
