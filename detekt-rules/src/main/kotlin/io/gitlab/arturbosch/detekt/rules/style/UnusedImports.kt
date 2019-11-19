@@ -38,7 +38,7 @@ class UnusedImports(config: Config) : Rule(config) {
                 "divAssign", "modAssign", "equals", "compareTo", "iterator", "getValue", "setValue", "provideDelegate")
 
         private val kotlinDocReferencesRegExp = Regex("\\[([^]]+)](?!\\[)")
-        private val kotlinDocSeeReferenceRegExp = Regex("^@see (.+)")
+        private val kotlinDocBlockTagReferenceRegExp = Regex("^@(see|throws|exception) (.+)")
         private val whiteSpaceRegex = Regex("\\s+")
         private val componentNRegex = Regex("component\\d+")
     }
@@ -108,8 +108,8 @@ class UnusedImports(config: Config) : Rule(config) {
             kotlinDocReferencesRegExp.findAll(content, 0)
                     .map { it.groupValues[1] }
                     .forEach { namedReferences.add(it.split(".")[0]) }
-            kotlinDocSeeReferenceRegExp.find(content)?.let {
-                val str = it.groupValues[1].split(whiteSpaceRegex)[0]
+            kotlinDocBlockTagReferenceRegExp.find(content)?.let {
+                val str = it.groupValues[2].split(whiteSpaceRegex)[0]
                 namedReferences.add(str.split(".")[0])
             }
         }
