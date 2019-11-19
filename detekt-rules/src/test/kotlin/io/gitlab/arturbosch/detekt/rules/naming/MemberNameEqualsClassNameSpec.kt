@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.Case
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
@@ -12,6 +13,12 @@ class MemberNameEqualsClassNameSpec : Spek({
     val subject by memoized { MemberNameEqualsClassName(Config.empty) }
 
     describe("MemberNameEqualsClassName rule") {
+
+        val noIgnoreOverridden = TestConfig(
+            mapOf(
+                MemberNameEqualsClassName.IGNORE_OVERRIDDEN_FUNCTION to "false"
+            )
+        )
 
         context("some classes with methods which don't have the same name") {
 
@@ -104,6 +111,18 @@ class MemberNameEqualsClassNameSpec : Spek({
                     }
                 """
                 assertThat(MemberNameEqualsClassName().compileAndLint(code)).isEmpty()
+            }
+
+            it("reports overridden methods which are named after the class if they are not ignored") {
+                val code = """
+                    class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
+                        override fun AbstractMethodNameEqualsClassName() {}
+                    }
+                    abstract class BaseClassForMethodNameEqualsClassName {
+                        abstract fun AbstractMethodNameEqualsClassName()
+                    }
+                """
+                assertThat(MemberNameEqualsClassName(noIgnoreOverridden).compileAndLint(code)).hasSize(1)
             }
         }
     }
