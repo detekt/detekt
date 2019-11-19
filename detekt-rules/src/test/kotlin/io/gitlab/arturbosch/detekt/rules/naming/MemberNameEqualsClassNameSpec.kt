@@ -124,6 +124,30 @@ class MemberNameEqualsClassNameSpec : Spek({
                 """
                 assertThat(MemberNameEqualsClassName(noIgnoreOverridden).compileAndLint(code)).hasSize(1)
             }
+
+            it("doesn't report overridden properties which are named after the class") {
+                val code = """
+                    class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
+                        override val AbstractMethodNameEqualsClassName = ""
+                    }
+                    abstract class BaseClassForMethodNameEqualsClassName {
+                        abstract val AbstractMethodNameEqualsClassName: String
+                    }
+                """
+                assertThat(MemberNameEqualsClassName().compileAndLint(code)).isEmpty()
+            }
+
+            it("reports overridden properties which are named after the class if they are not ignored") {
+                val code = """
+                    class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
+                        override val AbstractMethodNameEqualsClassName = ""
+                    }
+                    abstract class BaseClassForMethodNameEqualsClassName {
+                        abstract val AbstractMethodNameEqualsClassName: String
+                    }
+                """
+                assertThat(MemberNameEqualsClassName(noIgnoreOverridden).compileAndLint(code)).hasSize(1)
+            }
         }
     }
 })

@@ -83,12 +83,12 @@ class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
     private fun getMisnamedMembers(klassOrObject: KtClassOrObject, name: String?): Sequence<KtNamedDeclaration> {
         val body = klassOrObject.body ?: return emptySequence()
         return (getFunctions(body) + body.properties)
+            .filter { !ignoreOverriddenFunction || !it.isOverride() }
             .filter { it.name?.equals(name, ignoreCase = true) == true }
     }
 
     private fun getFunctions(body: KtClassBody): Sequence<KtNamedDeclaration> {
         return body.getChildrenOfType<KtNamedFunction>().asSequence()
-            .filter { !ignoreOverriddenFunction || !it.isOverride() }
     }
 
     private fun getMisnamedCompanionObjectMembers(klass: KtClass): Sequence<KtNamedDeclaration> {
