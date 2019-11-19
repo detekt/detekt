@@ -32,6 +32,4 @@ the `--report txt:path/to/report` cli flag.
 ```
 
 If you are using the gradle-plugin run the `detektBaseline` task to generate yourself a `baseline.xml`.
-
-Be aware that auto formatting cannot be combined with the `baseline`.
 The signatures for a `;` for example would be too ambiguous.
