@@ -12,7 +12,7 @@ internal fun FlowContent.snippetCode(lines: Sequence<String>, location: SourceLo
     pre {
         code {
             val dropLineCount = max(location.line - 1 - EXTRA_LINES_IN_SNIPPET, 0)
-            val takeLineCount = EXTRA_LINES_IN_SNIPPET + 1 + Math.min(location.line - 1, EXTRA_LINES_IN_SNIPPET)
+            val takeLineCount = EXTRA_LINES_IN_SNIPPET + 1 + min(location.line - 1, EXTRA_LINES_IN_SNIPPET)
             var currentLineNumber = dropLineCount + 1
             var errorLength = length
             lines
