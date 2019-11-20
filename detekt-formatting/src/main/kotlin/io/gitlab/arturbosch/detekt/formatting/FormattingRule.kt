@@ -44,8 +44,7 @@ abstract class FormattingRule(config: Config) : Rule(config) {
         this.root = root
         root.node.putUserData(KtLint.ANDROID_USER_DATA_KEY, isAndroid)
         positionByOffset = calculateLineColByOffset(root.text).let {
-            val offsetDueToLineBreakNormalization = calculateLineBreakOffset(root.text)
-            return@let { offset: Int -> it(offset + offsetDueToLineBreakNormalization(offset)) }
+            return@let { offset: Int -> it(offset) }
         }
         editorConfigUpdater()?.let { updateFunc ->
             val oldEditorConfig = root.node.getUserData(KtLint.EDITOR_CONFIG_USER_DATA_KEY)
