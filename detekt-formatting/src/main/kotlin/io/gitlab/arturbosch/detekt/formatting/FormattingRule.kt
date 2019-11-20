@@ -67,13 +67,20 @@ abstract class FormattingRule(config: Config) : Rule(config) {
                 "($line, $column)",
                 root.originalFilePath() ?: root.containingFile.name
             )
-            report(
-                CorrectableCodeSmell(issue,
-                    Entity.from(node.psi, location),
-                    message,
-                    autoCorrectEnabled = autoCorrect)
-            )
+            // nodes of 'NoConsecutiveBlankLines' are dangling whitespace nodes
+            val element = getIfValidSignatureCanBeCreatedOrNull(node.psi)
+            val entity = if (element == null) {
+                Entity("", "", "", location)
+            } else {
+                Entity.from(element, location)
+            }
+            report(CorrectableCodeSmell(issue, entity, message, autoCorrectEnabled = autoCorrect))
         }
+    }
+
+    private fun getIfValidSignatureCanBeCreatedOrNull(psi: PsiElement): PsiElement? {
+        val result = runCatching { psi.containingFile }
+        return if (result.isSuccess) psi else null
     }
 
     private fun ruleShouldOnlyRunOnFileNode(node: ASTNode) =
