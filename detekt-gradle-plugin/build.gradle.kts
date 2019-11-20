@@ -23,7 +23,7 @@ version = "1.1.1"
 
 val spekVersion = "2.0.8"
 val junitPlatformVersion = "1.5.2"
-val assertjVersion = "3.13.2"
+val assertjVersion = "3.14.0"
 
 dependencies {
     implementation(kotlin("stdlib"))
