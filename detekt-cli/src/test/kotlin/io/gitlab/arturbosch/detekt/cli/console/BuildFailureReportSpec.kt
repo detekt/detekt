@@ -1,10 +1,9 @@
 package io.gitlab.arturbosch.detekt.cli.console
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.cli.createCorrectableFinding
-import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.cli.createFinding
 import io.gitlab.arturbosch.detekt.test.TestConfig
+import io.gitlab.arturbosch.detekt.test.TestDetektion
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.spekframework.spek2.Spek
@@ -49,11 +48,7 @@ internal class BuildFailureReportSpec : Spek({
             }
 
             it("should not report auto corrected issues as build failure") {
-                subject.init(TestConfig(mapOf("maxIssues" to "0", "excludeCorrectable" to "true")))
-                val correctableCodeSmell = createCorrectableFinding()
-                val detektionWithCorrectableSmell = TestDetektion(correctableCodeSmell)
-                val report = subject.render(detektionWithCorrectableSmell)
-                assertThat(report).isNull()
+                AutoCorrectableIssueAssert.isReportNull(subject)
             }
         }
     }
