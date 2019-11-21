@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSetId
@@ -28,7 +29,7 @@ fun Detektion.getOrComputeWeightedAmountOfIssues(config: Config): Int {
         return maybeAmount
     }
 
-    val smells = findings.flatMap { it.value }
+    val smells = filterAutoCorrectedIssues(config).flatMap { it.value }
     val ruleToRuleSetId = extractRuleToRuleSetIdMap(this)
     val weightsConfig = config.weightsConfig()
 
@@ -43,6 +44,16 @@ fun Detektion.getOrComputeWeightedAmountOfIssues(config: Config): Int {
     val amount = smells.sumBy { it.weighted() }
     this.addData(WEIGHTED_ISSUES_COUNT_KEY, amount)
     return amount
+}
+
+fun Detektion.filterAutoCorrectedIssues(config: Config): Map<RuleSetId, List<Finding>> {
+    if (config.excludeCorrectable()) {
+        return findings.filter {
+            val correctableCodeSmell = it as? CorrectableCodeSmell
+            correctableCodeSmell == null || !correctableCodeSmell.autoCorrectEnabled
+        }
+    }
+    return findings
 }
 
 private fun Config.weightsConfig(): Config = subConfig(BUILD).subConfig(WEIGHTS)

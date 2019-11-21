@@ -2,10 +2,9 @@ package io.gitlab.arturbosch.detekt.cli.console
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.ConsoleReport
-import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.SingleAssign
-import io.gitlab.arturbosch.detekt.cli.excludeCorrectable
+import io.gitlab.arturbosch.detekt.cli.filterAutoCorrectedIssues
 
 class FindingsReport : ConsoleReport() {
 
@@ -18,16 +17,9 @@ class FindingsReport : ConsoleReport() {
     }
 
     override fun render(detektion: Detektion): String? {
-        var findings = detektion
-            .findings
+        val findings = detektion
+            .filterAutoCorrectedIssues(config)
             .filter { it.value.isNotEmpty() }
-
-        if (config.excludeCorrectable()) {
-            findings = findings.filter {
-                val correctableCodeSmell = it as? CorrectableCodeSmell
-                correctableCodeSmell == null || !correctableCodeSmell.autoCorrectEnabled
-            }
-        }
 
         if (findings.isEmpty()) {
             return null
