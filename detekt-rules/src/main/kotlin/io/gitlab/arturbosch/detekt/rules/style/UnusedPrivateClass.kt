@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.safeAs
+import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
 import org.jetbrains.kotlin.psi.KtClass
@@ -28,6 +29,7 @@ import org.jetbrains.kotlin.psi.KtTypeElement
 import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.KtUserType
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
+import org.jetbrains.kotlin.utils.addIfNotNull
 
 /**
  * Reports unused private classes.
@@ -74,6 +76,11 @@ class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
                     ?.mapNotNull { it.typeReference }
                     ?.forEach { registerAccess(it) }
             super.visitClass(klass)
+        }
+
+        override fun visitAnnotationEntry(annotationEntry: KtAnnotationEntry) {
+            namedClasses.addIfNotNull(annotationEntry.typeReference?.text)
+            super.visitAnnotationEntry(annotationEntry)
         }
 
         private fun registerAccess(typeReference: KtTypeReference) {
