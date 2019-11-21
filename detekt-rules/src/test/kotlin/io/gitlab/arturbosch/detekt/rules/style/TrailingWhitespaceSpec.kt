@@ -57,7 +57,7 @@ class TrailingWhitespaceSpec : Spek({
                         
                         Should ignore indent on the previous line
                     ""${'"'}
-                """.trimIndent()
+                """.trim()
                 rule.visit(code.toKtFileContent())
                 assertThat(rule.findings).isEmpty()
             }
