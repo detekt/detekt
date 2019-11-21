@@ -8,9 +8,9 @@ import io.gitlab.arturbosch.detekt.cli.filterAutoCorrectedIssues
 
 class FindingsReport : ConsoleReport() {
 
-    override val priority: Int = 40
-
     private var config: Config by SingleAssign()
+
+    override val priority: Int = 40
 
     override fun init(config: Config) {
         this.config = config

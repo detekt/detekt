@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.cli.console
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.cli.createFinding
 import io.gitlab.arturbosch.detekt.test.TestDetektion
@@ -9,7 +10,7 @@ import org.spekframework.spek2.style.specification.describe
 
 class FindingsReportSpec : Spek({
 
-    val subject by memoized { FindingsReport() }
+    val subject by memoized { createFindingsReport() }
 
     describe("findings report") {
 
@@ -53,3 +54,9 @@ class FindingsReportSpec : Spek({
         }
     }
 })
+
+private fun createFindingsReport(): FindingsReport {
+    val report = FindingsReport()
+    report.init(Config.empty)
+    return report
+}
