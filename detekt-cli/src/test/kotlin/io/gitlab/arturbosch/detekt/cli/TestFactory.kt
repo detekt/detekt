@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.api.CodeSmell
+import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
@@ -12,7 +13,11 @@ import io.gitlab.arturbosch.detekt.core.ModificationNotification
 import io.gitlab.arturbosch.detekt.test.resource
 import java.nio.file.Paths
 
-fun createFinding(ruleName: String = "TestSmell", fileName: String = "TestFile.kt") = CodeSmell(createIssue(ruleName), createEntity(fileName), "TestMessage")
+fun createFinding(ruleName: String = "TestSmell", fileName: String = "TestFile.kt") =
+    CodeSmell(createIssue(ruleName), createEntity(fileName), "TestMessage")
+
+fun createCorrectableFinding(ruleName: String = "TestSmell", fileName: String = "TestFile.kt") =
+    CorrectableCodeSmell(createIssue(ruleName), createEntity(fileName), "TestMessage", autoCorrectEnabled = true)
 
 fun createIssue(id: String = "TestSmell") = Issue(id, Severity.CodeSmell, "For Test", Debt.FIVE_MINS)
 
