@@ -14,11 +14,11 @@ private val WEIGHTED_ISSUES_COUNT_KEY = Key.create<Int>("WEIGHTED_ISSUES_COUNT")
 private const val BUILD = "build"
 private const val WEIGHTS = "weights"
 private const val MAX_ISSUES = "maxIssues"
-private const val EXCLUDE_Correctable = "excludeCorrectable"
+private const val EXCLUDE_CORRECTABLE = "excludeCorrectable"
 
 fun Config.maxIssues(): Int = subConfig(BUILD).valueOrDefault(MAX_ISSUES, -1)
 
-fun Config.excludeCorrectable(): Boolean = subConfig(BUILD).valueOrDefault(EXCLUDE_Correctable, false)
+fun Config.excludeCorrectable(): Boolean = subConfig(BUILD).valueOrDefault(EXCLUDE_CORRECTABLE, false)
 
 fun Int.isValidAndSmallerOrEqual(amount: Int): Boolean =
     !(this == 0 && amount == 0) && this != -1 && this <= amount
