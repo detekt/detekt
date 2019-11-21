@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
@@ -295,6 +296,24 @@ class UnusedPrivateClassSpec : Spek({
                         private class InternalClass(val param: String)
                     }
                 """
+
+            val findings = UnusedPrivateClass().lint(code)
+
+            assertThat(findings).isEmpty()
+        }
+
+        it("does not report used private annotations - #2093") {
+            val code = """
+                private annotation class Test1
+                private annotation class Test2
+                private annotation class Test3
+                private annotation class Test4
+
+                @Test1 class Custom(@Test2 param: String) {
+                    @Test3 val property = ""
+                    @Test4 fun function() {}
+                }
+            """
 
             val findings = UnusedPrivateClass().lint(code)
 
