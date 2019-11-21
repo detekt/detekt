@@ -47,13 +47,18 @@ fun Detektion.getOrComputeWeightedAmountOfIssues(config: Config): Int {
 }
 
 fun Detektion.filterAutoCorrectedIssues(config: Config): Map<RuleSetId, List<Finding>> {
-    if (config.excludeCorrectable()) {
-        return findings.filter {
-            val correctableCodeSmell = it as? CorrectableCodeSmell
+    if (!config.excludeCorrectable()) {
+        return findings
+    }
+    val filteredFindings = HashMap<RuleSetId, List<Finding>>()
+    findings.forEach { (ruleSetId, findingsList) ->
+        val newFindingsList = findingsList.filter { finding ->
+            val correctableCodeSmell = finding as? CorrectableCodeSmell
             correctableCodeSmell == null || !correctableCodeSmell.autoCorrectEnabled
         }
+        filteredFindings[ruleSetId] = newFindingsList
     }
-    return findings
+    return filteredFindings
 }
 
 private fun Config.weightsConfig(): Config = subConfig(BUILD).subConfig(WEIGHTS)
