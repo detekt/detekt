@@ -455,6 +455,8 @@ style:
     active: false
     imports: ''
     forbiddenPatterns: ""
+  ForbiddenPublicDataClass:
+    active: false
   ForbiddenVoid:
     active: false
     ignoreOverridden: false
