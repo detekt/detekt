@@ -66,20 +66,14 @@ abstract class FormattingRule(config: Config) : Rule(config) {
                 "($line, $column)",
                 root.originalFilePath() ?: root.containingFile.name
             )
-            // nodes of 'NoConsecutiveBlankLines' are dangling whitespace nodes
-            val element = getIfValidSignatureCanBeCreatedOrNull(node.psi)
-            val entity = if (element == null) {
-                Entity("", "", "", location)
-            } else {
-                Entity.from(element, location)
-            }
+            // The formatting rules report slightly wrong positions - #1843.
+            // Also nodes reported by 'NoConsecutiveBlankLines' are dangling whitespace nodes which means they have
+            // no direct parent which we can use to get the containing file needed to baseline or suppress findings.
+            // For these reasons we do not report a KtElement which may lead to crashes when postprocessing it
+            // e.g. reports (html), baseline etc.
+            val entity = Entity("", "", "", location)
             report(CorrectableCodeSmell(issue, entity, message, autoCorrectEnabled = autoCorrect))
         }
-    }
-
-    private fun getIfValidSignatureCanBeCreatedOrNull(psi: PsiElement): PsiElement? {
-        val result = runCatching { psi.containingFile }
-        return if (result.isSuccess) psi else null
     }
 
     private fun ruleShouldOnlyRunOnFileNode(node: ASTNode) =
