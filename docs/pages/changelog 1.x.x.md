@@ -11,8 +11,6 @@ toc: true
 ##### Notable changes
 
 - The HTML report now includes the complexity metrics and previews of the code locations.
-- Findings of `detekt-formatting` can now be suppressed and provide a signature which can be used to suppress it in the baseline file.
-Be aware that you need to put the `@Suppress` annotation above the previous parent like a function or class. It will not work on the statement level.
 - Suppression by rule set id is now supported `@Suppress("detekt.[RuleSetId].[RuleId]")` 
 - `parallel=true` and `--parallel` now effect both the compilation and analysis phase. 
 - Users of Gradle's `--parallel` flag are encouraged to turn off the parallelism of detekt. Or turn it on otherwise.
@@ -27,11 +25,12 @@ This change lead to increasing the threshold to 15 (was ten).
 
 ##### Changelog
 
+- Update to Kotlin v1.3.60 - [#2109](https://github.com/arturbosch/detekt/pull/2109)
+- UnusedPrivateClass: Fix false positive with private annotations - [#2108](https://github.com/arturbosch/detekt/pull/2108)
 - Refactor ComplexMethod - [#2090](https://github.com/arturbosch/detekt/pull/2090)
 - Fix NestedBlockDepth false negative - [#2086](https://github.com/arturbosch/detekt/pull/2086)
 - NestedBlockDepth false negative - [#2085](https://github.com/arturbosch/detekt/issues/2085)
 - Deprecate Location.locationString - [#2084](https://github.com/arturbosch/detekt/pull/2084)
-- Allow to suppress formatting issues and add them to the baseline - [#2083](https://github.com/arturbosch/detekt/pull/2083)
 - Add license badge to README - [#2080](https://github.com/arturbosch/detekt/pull/2080)
 - Deploy SNAPSHOTs automatically - [#2079](https://github.com/arturbosch/detekt/pull/2079)
 - Fix TrailingWhitespace reported position - [#2078](https://github.com/arturbosch/detekt/pull/2078)
