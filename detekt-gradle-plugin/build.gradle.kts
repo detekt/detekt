@@ -19,7 +19,7 @@ plugins {
 }
 
 group = "io.gitlab.arturbosch.detekt"
-version = "1.1.1"
+version = "1.2.0"
 
 val spekVersion = "2.0.8"
 val junitPlatformVersion = "1.5.2"
