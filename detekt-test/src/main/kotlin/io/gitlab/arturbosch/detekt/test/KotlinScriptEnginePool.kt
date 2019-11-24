@@ -12,12 +12,10 @@ object KotlinScriptEnginePool {
 
     private const val NUMBER_OF_ENGINES = 8
 
-    private val engines: Array<KotlinJsr223JvmLocalScriptEngine>
-    private var id = 0
-
-    init {
-        engines = Array(NUMBER_OF_ENGINES) { createEngine() }
+    private val engines: Array<KotlinJsr223JvmLocalScriptEngine> by lazy {
+        Array(NUMBER_OF_ENGINES) { createEngine() }
     }
+    private var id = 0
 
     fun getEngine(): KotlinJsr223JvmLocalScriptEngine {
         id++
