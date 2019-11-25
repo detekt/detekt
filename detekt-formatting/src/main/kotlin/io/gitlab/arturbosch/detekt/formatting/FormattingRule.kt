@@ -44,8 +44,7 @@ abstract class FormattingRule(config: Config) : Rule(config) {
         this.root = root
         root.node.putUserData(KtLint.ANDROID_USER_DATA_KEY, isAndroid)
         positionByOffset = calculateLineColByOffset(root.text).let {
-            val offsetDueToLineBreakNormalization = calculateLineBreakOffset(root.text)
-            return@let { offset: Int -> it(offset + offsetDueToLineBreakNormalization(offset)) }
+            return@let { offset: Int -> it(offset) }
         }
         editorConfigUpdater()?.let { updateFunc ->
             val oldEditorConfig = root.node.getUserData(KtLint.EDITOR_CONFIG_USER_DATA_KEY)
@@ -67,12 +66,13 @@ abstract class FormattingRule(config: Config) : Rule(config) {
                 "($line, $column)",
                 root.originalFilePath() ?: root.containingFile.name
             )
-            report(
-                CorrectableCodeSmell(issue,
-                    Entity.from(node.psi, location),
-                    message,
-                    autoCorrectEnabled = autoCorrect)
-            )
+            // The formatting rules report slightly wrong positions - #1843.
+            // Also nodes reported by 'NoConsecutiveBlankLines' are dangling whitespace nodes which means they have
+            // no direct parent which we can use to get the containing file needed to baseline or suppress findings.
+            // For these reasons we do not report a KtElement which may lead to crashes when postprocessing it
+            // e.g. reports (html), baseline etc.
+            val entity = Entity("", "", "", location)
+            report(CorrectableCodeSmell(issue, entity, message, autoCorrectEnabled = autoCorrect))
         }
     }
 
