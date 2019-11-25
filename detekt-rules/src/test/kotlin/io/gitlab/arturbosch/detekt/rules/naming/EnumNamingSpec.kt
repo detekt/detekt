@@ -10,7 +10,7 @@ class EnumNamingSpec : Spek({
     describe("some enum entry declarations") {
 
         it("should detect no violation") {
-            val findings = NamingRules().compileAndLint(
+            val findings = EnumNaming().compileAndLint(
                     """
                 enum class WorkFlow {
                     ACTIVE, NOT_ACTIVE, Unknown, Number1
@@ -20,12 +20,20 @@ class EnumNamingSpec : Spek({
             assertThat(findings).isEmpty()
         }
 
+        it("enum name that start with lowercase") {
+            val code = """
+                enum class WorkFlow {
+                    default
+                }"""
+            assertThat(NamingRules().compileAndLint(code)).hasSize(1)
+        }
+
         it("reports an underscore in enum name") {
             val code = """
                 enum class WorkFlow {
                     _Default
                 }"""
-            assertThat(NamingRules().compileAndLint(code)).hasSize(1)
+            assertThat(EnumNaming().compileAndLint(code)).hasSize(1)
         }
 
         it("no reports an underscore in enum name because it's suppressed") {
@@ -33,7 +41,7 @@ class EnumNamingSpec : Spek({
                 enum class WorkFlow {
                     @Suppress("EnumNaming") _Default
                 }"""
-            assertThat(NamingRules().compileAndLint(code)).isEmpty()
+            assertThat(EnumNaming().compileAndLint(code)).isEmpty()
         }
 
         it("reports the correct text location in enum name") {
@@ -41,7 +49,7 @@ class EnumNamingSpec : Spek({
                 enum class WorkFlow {
                     _Default,
                 }"""
-            val findings = NamingRules().compileAndLint(code)
+            val findings = EnumNaming().compileAndLint(code)
             assertThat(findings).hasTextLocations(26 to 34)
         }
     }
