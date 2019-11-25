@@ -6,30 +6,19 @@ import io.gitlab.arturbosch.detekt.internal.configurableFileCollection
 import io.gitlab.arturbosch.detekt.invoke.ConfigArgument
 import io.gitlab.arturbosch.detekt.invoke.DetektInvoker
 import io.gitlab.arturbosch.detekt.invoke.GenerateConfigArgument
-import io.gitlab.arturbosch.detekt.invoke.InputArgument
-import org.gradle.api.file.FileCollection
+import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.CacheableTask
 import org.gradle.api.tasks.Classpath
-import org.gradle.api.tasks.Internal
-import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 
 @CacheableTask
-open class DetektGenerateConfigTask : SourceTask() {
+open class DetektGenerateConfigTask : DefaultTask() {
 
     init {
         description = "Generate a detekt configuration file inside your project."
         group = LifecycleBasePlugin.VERIFICATION_GROUP
     }
-
-    // When this deprecated property is removed, also stop extending SourceTask as this task does not need any file
-    // input.
-    @Deprecated("Replace with getSource/setSource")
-    var input: FileCollection
-        @Internal
-        get() = source
-        set(value) = setSource(value)
 
     @get:Classpath
     val detektClasspath = project.configurableFileCollection()
@@ -42,8 +31,7 @@ open class DetektGenerateConfigTask : SourceTask() {
 
         val arguments = mutableListOf(
             GenerateConfigArgument,
-            ConfigArgument(config),
-            InputArgument(source)
+            ConfigArgument(config)
         )
 
         try {

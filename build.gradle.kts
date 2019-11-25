@@ -15,7 +15,6 @@ plugins {
     // Plugin versions for these plugins are defined in gradle.properties and applied in settings.gradle.kts
     id("com.jfrog.artifactory") apply false
     id("com.jfrog.bintray")
-    id("com.gradle.build-scan")
     id("org.jetbrains.dokka") apply false
     id("com.github.ben-manes.versions")
     kotlin("jvm")
@@ -316,7 +315,7 @@ val detektFormat by tasks.registering(Detekt::class) {
     include("**/*.kts")
     exclude("**/resources/**")
     exclude("**/build/**")
-    config = files("$rootDir/config/detekt/format.yml")
+    config.setFrom(files("$rootDir/config/detekt/format.yml"))
     reports {
         xml.enabled = false
         html.enabled = false

@@ -63,8 +63,8 @@ tasks.test {
     }
 }
 
-tasks.validateTaskProperties {
-    enableStricterValidation = true
+tasks.validatePlugins {
+    enableStricterValidation.set(true)
 }
 
 pluginBundle {

@@ -63,7 +63,7 @@ Visit [the project website](https://arturbosch.github.io/detekt/) for installati
 
 #### with gradle
 
-Gradle 4.9+ is required:
+Gradle 5.0+ is required:
 
 ```kotlin
 buildscript {
