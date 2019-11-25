@@ -124,7 +124,7 @@ class ObjectPropertyNamingSpec : Spek({
 
         val subject by memoized { ObjectPropertyNaming() }
 
-        it("should not detect public constants complying to the naming rules") {
+        it("should not detect public variables complying to the naming rules") {
             val code = compileContentForTest("""
                 object O {
                     ${PublicVal.negative}
@@ -133,7 +133,7 @@ class ObjectPropertyNamingSpec : Spek({
             assertThat(subject.lint(code)).isEmpty()
         }
 
-        it("should detect public constants not complying to the naming rules") {
+        it("should detect public variables not complying to the naming rules") {
             val code = compileContentForTest("""
                 object O {
                     ${PublicVal.positive}
@@ -142,7 +142,7 @@ class ObjectPropertyNamingSpec : Spek({
             assertThat(subject.lint(code)).hasSize(1)
         }
 
-        it("should not detect private constants complying to the naming rules") {
+        it("should not detect private variables complying to the naming rules") {
             val code = compileContentForTest("""
                 object O {
                     ${PrivateVal.negative}
@@ -151,7 +151,7 @@ class ObjectPropertyNamingSpec : Spek({
             assertThat(subject.lint(code)).isEmpty()
         }
 
-        it("should detect private constants not complying to the naming rules") {
+        it("should detect private variables not complying to the naming rules") {
             val code = compileContentForTest("""
                 object O {
                     private val __NAME = "Artur"
