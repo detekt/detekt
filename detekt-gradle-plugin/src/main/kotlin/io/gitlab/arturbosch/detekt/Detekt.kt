@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.extensions.CustomDetektReport
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType
 import io.gitlab.arturbosch.detekt.extensions.DetektReports
 import io.gitlab.arturbosch.detekt.internal.configurableFileCollection
-import io.gitlab.arturbosch.detekt.internal.fileProperty
 import io.gitlab.arturbosch.detekt.invoke.AutoCorrectArgument
 import io.gitlab.arturbosch.detekt.invoke.BaselineArgument
 import io.gitlab.arturbosch.detekt.invoke.BuildUponDefaultConfigArgument
@@ -20,12 +19,9 @@ import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.JvmTargetArgument
 import io.gitlab.arturbosch.detekt.invoke.LanguageVersionArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
-import io.gitlab.arturbosch.detekt.invoke.PluginsArgument
 import org.gradle.api.Action
-import org.gradle.api.GradleException
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
-import org.gradle.api.file.FileCollection
 import org.gradle.api.file.RegularFile
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
@@ -52,17 +48,6 @@ import java.io.File
 @CacheableTask
 open class Detekt : SourceTask(), VerificationTask {
 
-    @Deprecated("Replace with getSource/setSource")
-    var input: FileCollection
-        @Internal
-        get() = source
-        set(value) = setSource(value)
-
-    @get:Input
-    @get:Optional
-    @Deprecated("Replace with setIncludes/setExcludes")
-    var filters: Property<String> = project.objects.property(String::class.java)
-
     @get:Classpath
     val detektClasspath = project.configurableFileCollection()
 
@@ -72,14 +57,12 @@ open class Detekt : SourceTask(), VerificationTask {
     @get:InputFile
     @get:Optional
     @get:PathSensitive(PathSensitivity.RELATIVE)
-    var baseline: RegularFileProperty = project.fileProperty()
-        @Deprecated("Use baseline.set()") set
+    val baseline: RegularFileProperty = project.objects.fileProperty()
 
     @get:InputFiles
     @get:Optional
     @get:PathSensitive(PathSensitivity.RELATIVE)
-    var config: ConfigurableFileCollection = project.configurableFileCollection()
-        @Deprecated("Use config.setFrom()") set
+    val config: ConfigurableFileCollection = project.configurableFileCollection()
 
     @get:Classpath
     @get:Optional
@@ -100,14 +83,6 @@ open class Detekt : SourceTask(), VerificationTask {
         @Internal
         get() = jvmTargetProp.get()
         set(value) = jvmTargetProp.set(value)
-
-    @get:Input
-    @get:Optional
-    @Deprecated(
-        "Set plugins using the detektPlugins configuration " +
-            "(see https://arturbosch.github.io/detekt/extensions.html#let-detekt-know-about-your-extensions)"
-    )
-    var plugins: Property<String> = project.objects.property(String::class.java)
 
     @get:Internal
     internal val debugProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
@@ -165,8 +140,7 @@ open class Detekt : SourceTask(), VerificationTask {
     fun reports(configure: Action<DetektReports>) = configure.execute(reports)
 
     @get:Internal
-    var reportsDir: Property<File> = project.objects.property(File::class.java)
-        @Deprecated("Use reportsDir.set()") set
+    val reportsDir: Property<File> = project.objects.property(File::class.java)
 
     val xmlReportFile: Provider<RegularFile>
         @OutputFile
@@ -200,19 +174,12 @@ open class Detekt : SourceTask(), VerificationTask {
 
     @TaskAction
     fun check() {
-        if (plugins.isPresent && !pluginClasspath.isEmpty) {
-            throw GradleException(
-                "Cannot set value for plugins on detekt task and apply detektPlugins configuration " +
-                    "at the same time."
-            )
-        }
         val arguments = mutableListOf(
             InputArgument(source),
             ClasspathArgument(classpath),
             LanguageVersionArgument(languageVersionProp.orNull),
             JvmTargetArgument(jvmTargetProp.orNull),
             ConfigArgument(config),
-            PluginsArgument(plugins.orNull),
             BaselineArgument(baseline.orNull),
             DefaultReportArgument(DetektReportType.XML, xmlReportFile.orNull),
             DefaultReportArgument(DetektReportType.HTML, htmlReportFile.orNull),

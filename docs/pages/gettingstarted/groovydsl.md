@@ -25,9 +25,7 @@ The detekt Gradle plugin will generate multiple tasks
 Use the Groovy or Kotlin DSL of Gradle to apply the detekt Gradle Plugin. You can further configure the Plugin
 using the detekt closure as described [here](#closure).
 
-##### <a name="gradlegroovy">Configuration when using groovy dsl</a>
-For gradle version >= 4.9
-
+##### <a name="gradlegroovy">Configuration when using Groovy DSL</a>
 ```groovy
 buildscript {
     repositories {
@@ -42,27 +40,6 @@ repositories {
 plugins {
     id "io.gitlab.arturbosch.detekt" version "[version]"
 }
-```
-
-For all gradle versions:
-
-```groovy
-buildscript {
-  repositories {
-    jcenter()
-    maven { url "https://plugins.gradle.org/m2/" }
-  }
-  dependencies {
-    // https://mvnrepository.com/artifact/gradle.plugin.io.gitlab.arturbosch.detekt/detekt-gradle-plugin 
-    // for version <= 1.0.0.RC9.2
-    classpath "gradle.plugin.io.gitlab.arturbosch.detekt:detekt-gradle-plugin:[version]"
-    // https://mvnrepository.com/artifact/io.gitlab.arturbosch.detekt/detekt-gradle-plugin?repo=gradle-plugins
-    // for version >= 1.0.0-RC10
-    classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:[version]"
-  }
-}
-
-apply plugin: "io.gitlab.arturbosch.detekt"
 ```
 
 ##### <a name="gradleandroid">Configuration for Android projects</a>

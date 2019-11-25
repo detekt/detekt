@@ -49,7 +49,7 @@ internal object DetektTaskDslTest : Spek({
                     beforeGroup {
                         val config = """
                         |detekt {
-                        |    config = files("firstConfig.yml", "secondConfig.yml")
+                        |    config.setFrom(files("firstConfig.yml", "secondConfig.yml"))
                         |}
                         """
 
@@ -454,8 +454,8 @@ internal object DetektTaskDslTest : Spek({
                         |task detektFailFast(type: io.gitlab.arturbosch.detekt.Detekt) {
                         |    description = "Runs a failfast detekt build."
                         |
-                        |    input = files("${"$"}projectDir")
-                        |    config = files("config.yml")
+                        |    setSource("${"$"}projectDir")
+                        |    config.setFrom(files("config.yml"))
                         |    includes = ["**/*.kt", "**/*.kts"]
                         |    excludes = ["build/"]
                         |    debug = true
@@ -530,10 +530,10 @@ internal object DetektTaskDslTest : Spek({
                         |task<io.gitlab.arturbosch.detekt.Detekt>("detektFailFast") {
                         |    description = "Runs a failfast detekt build."
                         |
-                        |    input = files("${"$"}projectDir")
+                        |    setSource(files("${"$"}projectDir"))
                         |    setIncludes(listOf("**/*.kt", "**/*.kts"))
                         |    setExcludes(listOf("build/"))
-                        |    config = files("config.yml")
+                        |    config.setFrom(files("config.yml"))
                         |    debug = true
                         |    parallel = true
                         |    disableDefaultRuleSets = true
