@@ -14,7 +14,7 @@ fun BaseRule.compileAndLint(@Language("kotlin") content: String): List<Finding> 
     return lint(content)
 }
 
-fun BaseRule.lint(content: String): List<Finding> {
+fun BaseRule.lint(@Language("kotlin") content: String): List<Finding> {
     val ktFile = KtTestCompiler.compileFromContent(content.trimIndent())
     return findingsAfterVisit(ktFile)
 }
@@ -44,7 +44,7 @@ private fun BaseRule.findingsAfterVisit(
     return this.findings
 }
 
-fun Rule.format(content: String): String {
+fun Rule.format(@Language("kotlin") content: String): String {
     val ktFile = KtTestCompiler.compileFromContent(content.trimIndent())
     return contentAfterVisit(ktFile)
 }

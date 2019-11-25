@@ -10,7 +10,7 @@ class ClassNamingSpec : Spek({
     describe("different naming conventions inside classes") {
 
         it("should detect no violations") {
-            val findings = NamingRules().compileAndLint(
+            val findings = ClassNaming().compileAndLint(
                     """
                     class MyClassWithNumbers5
 
@@ -22,7 +22,7 @@ class ClassNamingSpec : Spek({
         }
 
         it("should find two violations") {
-            val findings = NamingRules().compileAndLint(
+            val findings = ClassNaming().compileAndLint(
                     """
                     class _NamingConventions
 

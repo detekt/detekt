@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.test
 
+import org.intellij.lang.annotations.Language
 import javax.script.ScriptException
 
 /**
@@ -15,7 +16,7 @@ object KotlinScriptEngine {
      * @param code the String to compile
      * @throws ScriptException
      */
-    fun compile(code: String) {
+    fun compile(@Language("kotlin") code: String) {
         try {
             KotlinScriptEnginePool.getEngine().compile(code)
         } catch (e: ScriptException) {
