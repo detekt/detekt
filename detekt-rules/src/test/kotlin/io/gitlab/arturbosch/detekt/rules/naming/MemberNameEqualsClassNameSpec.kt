@@ -88,11 +88,24 @@ class MemberNameEqualsClassNameSpec : Spek({
                 assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
             }
 
-            it("reports companion function which are named after the class and they are not a factory") {
+            it("reports companion function which are named after the class and they are not a factory 1") {
                 val code = """
-                    class WrongFactoryClass {
+                    class WrongFactoryClass1 {
+
                         companion object {
-                            fun wrongFactoryClass(): Int {
+                            fun wrongFactoryClass1() {} // reports 1 - no return type
+                        }
+                    }
+                """
+                assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
+            }
+
+            it("reports companion function which are named after the class and they are not a factory 2") {
+                val code = """
+                    class WrongFactoryClass2 {
+
+                        companion object {
+                            fun wrongFactoryClass2(): Int { // reports 1 - wrong return type
                                 return 0
                             }
                         }
