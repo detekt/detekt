@@ -735,10 +735,25 @@ class MagicNumberSpec : Spek({
             }
         }
 
+        context("a number assigned to a local variable") {
+
+            val code = """fun f() { val a = 3; }"""
+
+            it("reports 3 due to the assignment to a local variable") {
+                val rule = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_LOCAL_VARIABLES to "false")))
+                assertThat(rule.compileAndLint(code)).hasSize(1)
+            }
+
+            it("should not report 3 due to the ignored local variable config") {
+                val rule = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_LOCAL_VARIABLES to "true")))
+                assertThat(rule.compileAndLint(code)).isEmpty()
+            }
+        }
+
         context("meaningful variables - #1536") {
 
             val rule = MagicNumber(TestConfig(mapOf(
-                "ignoreLocalVariableDeclaration" to "true",
+                MagicNumber.IGNORE_LOCAL_VARIABLES to "true",
                 MagicNumber.IGNORE_NAMED_ARGUMENT to "true")))
 
             it("should report 3") {
