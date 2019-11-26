@@ -28,8 +28,6 @@ enum class Case(val file: String) {
     FunctionReturningConstantNegative("/cases/FunctionReturningConstantNegative.kt"),
     IteratorImplNegative("/cases/IteratorImplNegative.kt"),
     IteratorImplPositive("/cases/IteratorImplPositive.kt"),
-    LabeledExpressionNegative("/cases/LabeledExpressionNegative.kt"),
-    LabeledExpressionPositive("/cases/LabeledExpressionPositive.kt"),
     Library("/cases/library/Library.kt"),
     LoopWithTooManyJumpStatementsNegative("cases/LoopWithTooManyJumpStatementsNegative.kt"),
     LoopWithTooManyJumpStatementsPositive("cases/LoopWithTooManyJumpStatementsPositive.kt"),
