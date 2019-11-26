@@ -29,6 +29,7 @@ import java.nio.file.Path
  * This environment also allows to modify the resulting AST files.
  */
 fun createKotlinCoreEnvironment(configuration: CompilerConfiguration = CompilerConfiguration()): KotlinCoreEnvironment {
+    // https://github.com/JetBrains/kotlin/commit/2568804eaa2c8f6b10b735777218c81af62919c1
     setIdeaIoUseFallback()
     configuration.put(
         CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY,
