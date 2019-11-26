@@ -59,7 +59,6 @@ enum class Case(val file: String) {
     UnconditionalJumpStatementInLoopPositive("/cases/UnconditionalJumpStatementInLoopPositive.kt"),
     NestedClassVisibilityPositive("/cases/NestedClassVisibilityPositive.kt"),
     NestedClassVisibilityNegative("/cases/NestedClassVisibilityNegative.kt"),
-    TrailingWhitespaceNegative("/cases/TrailingWhitespaceNegative.kt"),
     NoTabsNegative("/cases/NoTabsNegative.kt"),
     NoTabsPositive("/cases/NoTabsPositive.kt"),
     UnusedPrivateMemberPositive("/cases/UnusedPrivateMemberPositive.kt"),
