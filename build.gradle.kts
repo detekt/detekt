@@ -143,6 +143,12 @@ subprojects {
     tasks.withType<Test>().configureEach {
         useJUnitPlatform()
         systemProperty("SPEK_TIMEOUT", 0) // disable test timeout
+        val compileSnippetText: Boolean = if (project.hasProperty("compile-test-snippets")) {
+            (project.property("compile-test-snippets") as String).toBoolean()
+        } else {
+            false
+        }
+        systemProperty("compile-snippet-tests", compileSnippetText)
         testLogging {
             // set options for log level LIFECYCLE
             events = setOf(
