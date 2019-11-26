@@ -429,6 +429,11 @@ describing what the magic number means.
 
    whether magic numbers in property declarations should be ignored
 
+* ``ignoreLocalVariableDeclaration`` (default: ``false``)
+
+   whether magic numbers in local variable declarations should be
+ignored
+
 * ``ignoreConstantDeclaration`` (default: ``true``)
 
    whether magic numbers in property declarations should be ignored

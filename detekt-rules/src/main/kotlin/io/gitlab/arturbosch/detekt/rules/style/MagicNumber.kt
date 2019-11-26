@@ -68,6 +68,8 @@ import java.util.Locale
  * (default: `true`)
  * @configuration ignorePropertyDeclaration - whether magic numbers in property declarations should be ignored
  * (default: `false`)
+ * @configuration ignoreLocalVariableDeclaration - whether magic numbers in local variable declarations should be
+ * ignored (default: `false`)
  * @configuration ignoreConstantDeclaration - whether magic numbers in property declarations should be ignored
  * (default: `true`)
  * @configuration ignoreCompanionObjectPropertyDeclaration - whether magic numbers in companion object
