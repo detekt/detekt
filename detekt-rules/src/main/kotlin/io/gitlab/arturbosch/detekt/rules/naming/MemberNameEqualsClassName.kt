@@ -10,12 +10,10 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtClass
-import org.jetbrains.kotlin.psi.KtClassBody
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
-import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
 
 /**
  * This rule reports a member that has the same as the containing class or object.
@@ -82,13 +80,9 @@ class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
 
     private fun getMisnamedMembers(klassOrObject: KtClassOrObject, name: String?): Sequence<KtNamedDeclaration> {
         val body = klassOrObject.body ?: return emptySequence()
-        return (getFunctions(body) + body.properties)
-            .filter { !ignoreOverriddenFunction || !it.isOverride() }
+        return (body.functions.asSequence() as Sequence<KtNamedDeclaration> + body.properties)
+            .filterNot { ignoreOverriddenFunction && it.isOverride() }
             .filter { it.name?.equals(name, ignoreCase = true) == true }
-    }
-
-    private fun getFunctions(body: KtClassBody): Sequence<KtNamedDeclaration> {
-        return body.getChildrenOfType<KtNamedFunction>().asSequence()
     }
 
     private fun getMisnamedCompanionObjectMembers(klass: KtClass): Sequence<KtNamedDeclaration> {
