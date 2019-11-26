@@ -68,7 +68,7 @@ class EqualsAlwaysReturnsTrueOrFalse(config: Config = Config.empty) : Rule(confi
         val returnExpressionsInBlock = bodyExpression.collectDescendantsOfType<KtReturnExpression> {
             it.parent == bodyExpression || it.parent is KtAnnotatedExpression && it.parent.parent == bodyExpression
         }
-        val lastValidReturnExpression = returnExpressionsInBlock.first().returnedExpression
+        val lastValidReturnExpression = returnExpressionsInBlock.firstOrNull()?.returnedExpression
         val allReturnExpressions = bodyExpression.collectDescendantsOfType<KtReturnExpression>()
         val hasNoNestedReturnExpression = allReturnExpressions.size == returnExpressionsInBlock.size
         return lastValidReturnExpression?.isBooleanConstant() == true &&
