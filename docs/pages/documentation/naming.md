@@ -215,7 +215,7 @@ Factory functions that create an instance of the class are exempt from this rule
 
 * ``ignoreOverriddenFunction`` (default: ``true``)
 
-   if overridden functions should be ignored
+   if overridden functions and properties should be ignored
 
 #### Noncompliant Code:
 
