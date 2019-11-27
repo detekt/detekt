@@ -22,7 +22,7 @@ class DebtSumming {
     fun printDebtInformation(
         issues: Map<RuleSetId, List<Finding>>,
         totalDebt: DebtSumming
-    ): String? {
+    ): String {
         with(StringBuilder()) {
             issues
                 .filter { it.value.isNotEmpty() }
@@ -51,7 +51,7 @@ class DebtSumming {
         issues: Map<RuleSetId, List<Finding>>,
         fileDebt: DebtSumming,
         totalDebt: DebtSumming
-    ): String? {
+    ): String {
         with(StringBuilder()) {
             issues
                 .filter { it.value.isNotEmpty() }
