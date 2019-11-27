@@ -44,6 +44,10 @@ Reports constructor parameter names which do not follow the specified naming con
 
    ignores variables in classes which match this regex
 
+* ``ignoreOverridden`` (default: ``true``)
+
+   ignores constructor properties that have the override modifier
+
 ### EnumNaming
 
 Reports when enum names which do not follow the specified naming convention are used.
