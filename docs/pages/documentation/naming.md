@@ -150,7 +150,13 @@ Reports function parameter names which do not follow the specified naming conven
 
    ignores variables in classes which match this regex
 
-* ``ignoreOverriddenFunctions`` (default: ``true``)
+* ~~``ignoreOverriddenFunctions``~~ (default: ``true``)
+
+   **Deprecated**: Use `ignoreOverridden` instead
+
+   ignores overridden functions with parameters not matching the pattern
+
+* ``ignoreOverridden`` (default: ``true``)
 
    ignores overridden functions with parameters not matching the pattern
 
@@ -217,7 +223,13 @@ Factory functions that create an instance of the class are exempt from this rule
 
 #### Configuration options:
 
-* ``ignoreOverriddenFunction`` (default: ``true``)
+* ~~``ignoreOverriddenFunction``~~ (default: ``true``)
+
+   **Deprecated**: Use `ignoreOverridden` instead
+
+   if overridden functions and properties should be ignored
+
+* ``ignoreOverridden`` (default: ``true``)
 
    if overridden functions and properties should be ignored
 
