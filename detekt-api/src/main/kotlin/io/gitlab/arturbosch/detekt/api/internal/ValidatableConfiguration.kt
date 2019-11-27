@@ -15,7 +15,13 @@ interface ValidatableConfiguration {
  * We need to predefine them as the user may not have already declared an 'config'-block
  * in the configuration and we want to validate the config by default.
  */
-const val DEFAULT_PROPERTY_EXCLUDES = ".*>.*>excludes,.*>.*>includes,.*>.*>active,.*>.*>autoCorrect"
+val DEFAULT_PROPERTY_EXCLUDES = setOf(
+    ".*>.*>excludes",
+    ".*>.*>includes",
+    ".*>.*>active",
+    ".*>.*>autoCorrect",
+    "build>weights.*"
+).joinToString(",")
 
 @Suppress("UNCHECKED_CAST", "ComplexMethod")
 fun validateConfig(
