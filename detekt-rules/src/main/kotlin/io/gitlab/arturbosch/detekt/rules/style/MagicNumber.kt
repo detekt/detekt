@@ -70,7 +70,7 @@ import java.util.Locale
  * (default: `false`)
  * @configuration ignoreLocalVariableDeclaration - whether magic numbers in local variable declarations should be
  * ignored (default: `false`)
- * @configuration ignoreConstantDeclaration - whether magic numbers in property declarations should be ignored
+ * @configuration ignoreConstantDeclaration - whether magic numbers in constant declarations should be ignored
  * (default: `true`)
  * @configuration ignoreCompanionObjectPropertyDeclaration - whether magic numbers in companion object
  * declarations should be ignored (default: `true`)
