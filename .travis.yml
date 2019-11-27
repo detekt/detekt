@@ -20,6 +20,10 @@ matrix:
     - os: osx
       osx_image: xcode9.3
       env: COMPILE_TEST_SNIPPETS=false
+    # JDK 12.0.2		
+    - os: osx		
+      osx_image: xcode11
+      env: COMPILE_TEST_SNIPPETS=false
 install: true
 script:
   - ./gradlew build --build-cache --parallel -PwarningsAsErrors=true -Pcompile-test-snippets=$COMPILE_TEST_SNIPPETS --scan
