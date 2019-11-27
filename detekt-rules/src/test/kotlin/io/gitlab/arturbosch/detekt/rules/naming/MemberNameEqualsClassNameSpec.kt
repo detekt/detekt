@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.TestConfig
+import io.gitlab.arturbosch.detekt.test.assertThat
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
-import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -13,6 +13,12 @@ class MemberNameEqualsClassNameSpec : Spek({
     val subject by memoized { MemberNameEqualsClassName(Config.empty) }
 
     describe("MemberNameEqualsClassName rule") {
+
+        val noIgnoreOverridden = TestConfig(
+            mapOf(
+                MemberNameEqualsClassName.IGNORE_OVERRIDDEN_FUNCTION to "false"
+            )
+        )
 
         context("some classes with methods which don't have the same name") {
 
@@ -22,28 +28,138 @@ class MemberNameEqualsClassNameSpec : Spek({
             }
         }
 
-        context("some classes with methods which have the same name") {
+        context("some classes with members which have the same name") {
 
-            val path = Case.MemberNameEqualsClassNamePositive.path()
-            lateinit var findings: List<Finding>
-
-            beforeEachTest {
-                findings = subject.lint(path)
+            it("reports method which are named after the class") {
+                val code = """
+                    class MethodNameEqualsClassName {
+                        fun methodNameEqualsClassName() {}
+                    }
+                """
+                assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
             }
 
-            it("reports methods which are named after the class") {
-                assertThat(findings).hasSize(8)
+            it("reports method which are named after the object") {
+                val code = """
+                    object MethodNameEqualsObjectName {
+                        fun MethodNameEqualsObjectName() {}
+                    }
+                """
+                assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
             }
 
-            it("reports methods which are named after the class object") {
-                val objectFindings = findings.filter { it.message.contains("object") }
-                assertThat(objectFindings).hasSize(2)
+            it("reports property which are named after the class") {
+                val code = """
+                    class PropertyNameEqualsClassName {
+                        val propertyNameEqualsClassName = 0
+                    }
+                """
+                assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
             }
 
-            it("reports methods which are named after the class object including overridden functions") {
-                val config = TestConfig(mapOf(MemberNameEqualsClassName.IGNORE_OVERRIDDEN_FUNCTION to "false"))
-                val rule = MemberNameEqualsClassName(config)
-                assertThat(rule.lint(path)).hasSize(9)
+            it("reports property which are named after the object") {
+                val code = """
+                    object PropertyNameEqualsObjectName {
+                        val propertyNameEqualsObjectName = 0
+                    }
+                """
+                assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
+            }
+
+            it("reports companion function which are named after the class") {
+                val code = """
+                    class StaticMethodNameEqualsClassName {
+                        companion object {
+                            fun StaticMethodNameEqualsClassName() {}
+                        }
+                    }
+                """
+                assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
+            }
+
+            it("reports method which are named after the class even when it's inside another one") {
+                val code = """
+                    class MethodNameContainer {
+                        class MethodNameEqualsNestedClassName {
+                            fun MethodNameEqualsNestedClassName() {}
+                        }
+                    }
+                """
+                assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
+            }
+
+            it("reports companion function which are named after the class and they are not a factory 1") {
+                val code = """
+                    class WrongFactoryClass1 {
+
+                        companion object {
+                            fun wrongFactoryClass1() {} // reports 1 - no return type
+                        }
+                    }
+                """
+                assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
+            }
+
+            it("reports companion function which are named after the class and they are not a factory 2") {
+                val code = """
+                    class WrongFactoryClass2 {
+
+                        companion object {
+                            fun wrongFactoryClass2(): Int { // reports 1 - wrong return type
+                                return 0
+                            }
+                        }
+                    }
+                """
+                assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
+            }
+
+            it("doesn't report overridden methods which are named after the class") {
+                val code = """
+                    class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
+                        override fun AbstractMethodNameEqualsClassName() {}
+                    }
+                    abstract class BaseClassForMethodNameEqualsClassName {
+                        abstract fun AbstractMethodNameEqualsClassName()
+                    }
+                """
+                assertThat(MemberNameEqualsClassName().compileAndLint(code)).isEmpty()
+            }
+
+            it("reports overridden methods which are named after the class if they are not ignored") {
+                val code = """
+                    class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
+                        override fun AbstractMethodNameEqualsClassName() {}
+                    }
+                    abstract class BaseClassForMethodNameEqualsClassName {
+                        abstract fun AbstractMethodNameEqualsClassName()
+                    }
+                """
+                assertThat(MemberNameEqualsClassName(noIgnoreOverridden).compileAndLint(code)).hasSize(1)
+            }
+
+            it("doesn't report overridden properties which are named after the class") {
+                val code = """
+                    class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
+                        override val AbstractMethodNameEqualsClassName = ""
+                    }
+                    abstract class BaseClassForMethodNameEqualsClassName {
+                        abstract val AbstractMethodNameEqualsClassName: String
+                    }
+                """
+                assertThat(MemberNameEqualsClassName().compileAndLint(code)).isEmpty()
+            }
+
+            it("reports overridden properties which are named after the class if they are not ignored") {
+                val code = """
+                    class AbstractMethodNameEqualsClassName : BaseClassForMethodNameEqualsClassName() {
+                        override val AbstractMethodNameEqualsClassName = ""
+                    }
+                    abstract class BaseClassForMethodNameEqualsClassName {
+                        abstract val AbstractMethodNameEqualsClassName: String
+                    }
+                """
+                assertThat(MemberNameEqualsClassName(noIgnoreOverridden).compileAndLint(code)).hasSize(1)
             }
         }
     }
