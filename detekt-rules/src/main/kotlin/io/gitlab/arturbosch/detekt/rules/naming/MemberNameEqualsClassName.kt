@@ -46,6 +46,8 @@ import org.jetbrains.kotlin.psi.KtObjectDeclaration
  * </compliant>
  *
  * @configuration ignoreOverriddenFunction - if overridden functions and properties should be ignored (default: `true`)
+ * (deprecated: "Use `ignoreOverridden` instead")
+ * @configuration ignoreOverridden - if overridden functions and properties should be ignored (default: `true`)
  *
  * @active since v1.2.0
  */
@@ -60,7 +62,7 @@ class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
     private val objectMessage = "A member is named after the object. " +
             "This might result in confusion. Please rename the member."
 
-    private val ignoreOverriddenFunction = valueOrDefault(IGNORE_OVERRIDDEN_FUNCTION, true)
+    private val ignoreOverridden = valueOrDefault(IGNORE_OVERRIDDEN, valueOrDefault(IGNORE_OVERRIDDEN_FUNCTION, true))
 
     override fun visitClass(klass: KtClass) {
         if (!klass.isInterface()) {
@@ -81,7 +83,7 @@ class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
     private fun getMisnamedMembers(klassOrObject: KtClassOrObject, name: String?): Sequence<KtNamedDeclaration> {
         val body = klassOrObject.body ?: return emptySequence()
         return (body.functions.asSequence() as Sequence<KtNamedDeclaration> + body.properties)
-            .filterNot { ignoreOverriddenFunction && it.isOverride() }
+            .filterNot { ignoreOverridden && it.isOverride() }
             .filter { it.name?.equals(name, ignoreCase = true) == true }
     }
 
@@ -100,5 +102,6 @@ class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
 
     companion object {
         const val IGNORE_OVERRIDDEN_FUNCTION = "ignoreOverriddenFunction"
+        const val IGNORE_OVERRIDDEN = "ignoreOverridden"
     }
 }
