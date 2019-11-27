@@ -36,7 +36,8 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
             if (ruleSet.name in TestExclusions.ruleSets) {
                 keyValue { Config.EXCLUDES_KEY to TestExclusions.pattern }
             }
-            ruleSet.configuration.forEach { configuration ->
+            ruleSet.configuration
+                .forEach { configuration ->
                 if (configuration.defaultValue.isYamlList()) {
                     list(configuration.name, configuration.defaultValue.toList())
                 } else {
@@ -52,10 +53,11 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
                     if (rule.isExcludedInTests()) {
                         keyValue { Config.EXCLUDES_KEY to TestExclusions.pattern }
                     }
-                    rule.configuration.forEach { configuration ->
+                    rule.configuration
+                        .forEach { configuration ->
                         if (configuration.defaultValue.isYamlList()) {
                             list(configuration.name, configuration.defaultValue.toList())
-                        } else {
+                        } else if (configuration.deprecated == null) {
                             keyValue { configuration.name to configuration.defaultValue }
                         }
                     }
