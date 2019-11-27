@@ -436,7 +436,7 @@ ignored
 
 * ``ignoreConstantDeclaration`` (default: ``true``)
 
-   whether magic numbers in property declarations should be ignored
+   whether magic numbers in constant declarations should be ignored
 
 * ``ignoreCompanionObjectPropertyDeclaration`` (default: ``true``)
 
