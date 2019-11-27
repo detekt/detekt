@@ -37,11 +37,7 @@ class ConstructorParameterNaming(config: Config = Config.empty) : Rule(config) {
     private val ignoreOverridden = valueOrDefault(IGNORE_OVERRIDDEN, true)
 
     override fun visitParameter(parameter: KtParameter) {
-        if (parameter.isContainingExcludedClassOrObject(excludeClassPattern)) {
-            return
-        }
-
-        if (ignoreOverridden && parameter.isOverride()) {
+        if (parameter.isContainingExcludedClassOrObject(excludeClassPattern) || isIgnoreOverridden(parameter)) {
             return
         }
 
@@ -63,6 +59,8 @@ class ConstructorParameterNaming(config: Config = Config.empty) : Rule(config) {
             }
         }
     }
+
+    private fun isIgnoreOverridden(parameter: KtParameter) = ignoreOverridden && parameter.isOverride()
 
     companion object {
         const val PARAMETER_PATTERN = "parameterPattern"
