@@ -6,7 +6,7 @@ title: DEFAULT_PROPERTY_EXCLUDES - detekt-api
 
 # DEFAULT_PROPERTY_EXCLUDES
 
-`const val DEFAULT_PROPERTY_EXCLUDES: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)
+`val DEFAULT_PROPERTY_EXCLUDES: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)
 
 Known existing properties on rule's which my be absent in the default-detekt-config.yml.
 
