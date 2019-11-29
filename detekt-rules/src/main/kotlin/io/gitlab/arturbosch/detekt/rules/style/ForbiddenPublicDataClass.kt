@@ -11,6 +11,7 @@ import io.gitlab.arturbosch.detekt.api.commaSeparatedPattern
 import io.gitlab.arturbosch.detekt.api.simplePatternToRegex
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.psiUtil.visibilityModifierTypeOrDefault
 
 /**
@@ -46,6 +47,9 @@ class ForbiddenPublicDataClass(config: Config = Config.empty) : Rule(config) {
         .distinct()
         .map { it.simplePatternToRegex() }
         .toList()
+
+    override fun visitCondition(root: KtFile): Boolean =
+        super.visitCondition(root) && filters != null
 
     override fun visitClass(klass: KtClass) {
         val packageName = klass.containingKtFile.packageDirective?.packageNameExpression?.text

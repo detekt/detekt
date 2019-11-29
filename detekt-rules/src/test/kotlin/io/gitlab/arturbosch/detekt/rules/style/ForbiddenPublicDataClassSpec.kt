@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
@@ -8,12 +9,24 @@ import org.spekframework.spek2.style.specification.describe
 
 class ForbiddenPublicDataClassSpec : Spek({
     describe("ForbiddenPublicDataClass rule") {
+        it("public data class should pass without explicit filters set") {
+            val code = """
+                data class C(val a: String)                
+            """
+
+            assertThat(ForbiddenPublicDataClass().compileAndLint(code)).isEmpty()
+        }
+
+        val subject by memoized {
+            ForbiddenPublicDataClass(TestConfig(Config.INCLUDES_KEY to "*.kt"))
+        }
+
         it("public data class should fail") {
             val code = """
                 data class C(val a: String)                
             """
 
-            assertThat(ForbiddenPublicDataClass().compileAndLint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         it("private data class should pass") {
@@ -21,7 +34,7 @@ class ForbiddenPublicDataClassSpec : Spek({
                 private data class C(val a: String)                
             """
 
-            assertThat(ForbiddenPublicDataClass().compileAndLint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("internal data class should pass") {
@@ -29,7 +42,7 @@ class ForbiddenPublicDataClassSpec : Spek({
                 internal data class C(val a: String)                
             """
 
-            assertThat(ForbiddenPublicDataClass().compileAndLint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("public class should pass") {
@@ -37,7 +50,7 @@ class ForbiddenPublicDataClassSpec : Spek({
                 class C(val a: String) 
             """
 
-            assertThat(ForbiddenPublicDataClass().compileAndLint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("private data class inside a public class should pass") {
@@ -47,7 +60,7 @@ class ForbiddenPublicDataClassSpec : Spek({
                 }
             """
 
-            assertThat(ForbiddenPublicDataClass().compileAndLint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("public data class inside a public class should fail") {
@@ -57,7 +70,7 @@ class ForbiddenPublicDataClassSpec : Spek({
                 }
             """
 
-            assertThat(ForbiddenPublicDataClass().compileAndLint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         it("protected data class inside a public class should fail") {
@@ -67,7 +80,7 @@ class ForbiddenPublicDataClassSpec : Spek({
                 }
             """
 
-            assertThat(ForbiddenPublicDataClass().compileAndLint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         it("public data class inside an internal class should pass") {
@@ -77,7 +90,7 @@ class ForbiddenPublicDataClassSpec : Spek({
                 }
             """
 
-            assertThat(ForbiddenPublicDataClass().compileAndLint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("public data class inside an internal package should pass") {
@@ -87,7 +100,7 @@ class ForbiddenPublicDataClassSpec : Spek({
                 data class C(val a: String)                
             """
 
-            assertThat(ForbiddenPublicDataClass().compileAndLint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("public data class inside an internal subpackage should pass") {
@@ -97,7 +110,7 @@ class ForbiddenPublicDataClassSpec : Spek({
                 data class C(val a: String)                
             """
 
-            assertThat(ForbiddenPublicDataClass().compileAndLint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("public data class inside an internalise package should fail") {
@@ -107,7 +120,7 @@ class ForbiddenPublicDataClassSpec : Spek({
                 data class C(val a: String)                
             """
 
-            assertThat(ForbiddenPublicDataClass().compileAndLint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         it("public data class inside a random should fail") {
@@ -117,7 +130,7 @@ class ForbiddenPublicDataClassSpec : Spek({
                 data class C(val a: String)                
             """
 
-            assertThat(ForbiddenPublicDataClass().compileAndLint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         it("public data class inside an ignored package should pass") {
@@ -127,7 +140,7 @@ class ForbiddenPublicDataClassSpec : Spek({
                 data class C(val a: String)                
             """
 
-            val config = TestConfig(mapOf("ignorePackages" to "*.hello,com.example"))
+            val config = TestConfig("ignorePackages" to "*.hello,com.example", Config.INCLUDES_KEY to "*.kt")
             assertThat(ForbiddenPublicDataClass(config).compileAndLint(code)).isEmpty()
         }
     }
