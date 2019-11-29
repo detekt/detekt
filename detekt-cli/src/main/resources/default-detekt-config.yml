@@ -457,6 +457,7 @@ style:
     forbiddenPatterns: ""
   ForbiddenPublicDataClass:
     active: false
+    ignorePackages: '*.internal,*.internal.*'
   ForbiddenVoid:
     active: false
     ignoreOverridden: false

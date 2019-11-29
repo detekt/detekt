@@ -290,6 +290,12 @@ More info: https://jakewharton.com/public-api-challenges-in-kotlin/
 
 **Debt**: 20min
 
+#### Configuration options:
+
+* ``ignorePackages`` (default: ``'*.internal,*.internal.*'``)
+
+   ignores classes in the specified packages. Split by commas ','
+
 #### Noncompliant Code:
 
 ```kotlin
