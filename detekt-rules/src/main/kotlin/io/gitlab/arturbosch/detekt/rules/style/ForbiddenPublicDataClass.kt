@@ -26,6 +26,9 @@ import org.jetbrains.kotlin.psi.psiUtil.visibilityModifierTypeOrDefault
  * <compliant>
  * internal data class C(val a: String)
  * </compliant>
+ *
+ * @configuration ignorePackages - ignores classes in the specified packages. Split by commas ','
+ * (default: `'*.internal,*.internal.*'`)
  */
 class ForbiddenPublicDataClass(config: Config = Config.empty) : Rule(config) {
 
@@ -36,7 +39,22 @@ class ForbiddenPublicDataClass(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
+    private val ignorablePackages = valueOrDefault(IGNORE_PACKAGES, "*.internal,*.internal.*")
+        .splitToSequence(",")
+        .map { it.trim() }
+        .filter { it.isNotBlank() }
+        .map { it.replace(".", "\\.") }
+        .map { it.replace("*", ".*") }
+        .map { Regex(it) }
+        .toList()
+
     override fun visitClass(klass: KtClass) {
+        val packageName = klass.containingKtFile.packageDirective?.packageNameExpression?.text
+
+        if (packageName != null && ignorablePackages.any { it.matches(packageName) }) {
+            return
+        }
+
         val isPublicOrProtected = klass.visibilityModifierTypeOrDefault().let { visibility ->
             visibility != KtTokens.INTERNAL_KEYWORD && visibility != KtTokens.PRIVATE_KEYWORD
         }
@@ -46,5 +64,9 @@ class ForbiddenPublicDataClass(config: Config = Config.empty) : Rule(config) {
             }
             super.visitClass(klass)
         }
+    }
+
+    companion object {
+        const val IGNORE_PACKAGES = "ignorePackages"
     }
 }

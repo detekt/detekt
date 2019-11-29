@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
@@ -77,6 +78,57 @@ class ForbiddenPublicDataClassSpec : Spek({
             """
 
             assertThat(ForbiddenPublicDataClass().compileAndLint(code)).isEmpty()
+        }
+
+        it("public data class inside an internal package should pass") {
+            val code = """
+                package com.example.internal
+                
+                data class C(val a: String)                
+            """
+
+            assertThat(ForbiddenPublicDataClass().compileAndLint(code)).isEmpty()
+        }
+
+        it("public data class inside an internal subpackage should pass") {
+            val code = """
+                package com.example.internal.other
+                
+                data class C(val a: String)                
+            """
+
+            assertThat(ForbiddenPublicDataClass().compileAndLint(code)).isEmpty()
+        }
+
+        it("public data class inside an internalise package should fail") {
+            val code = """
+                package com.example.internalise
+                
+                data class C(val a: String)                
+            """
+
+            assertThat(ForbiddenPublicDataClass().compileAndLint(code)).hasSize(1)
+        }
+
+        it("public data class inside a random should fail") {
+            val code = """
+                package com.example
+                
+                data class C(val a: String)                
+            """
+
+            assertThat(ForbiddenPublicDataClass().compileAndLint(code)).hasSize(1)
+        }
+
+        it("public data class inside an ignored package should pass") {
+            val code = """
+                package com.example
+                
+                data class C(val a: String)                
+            """
+
+            val config = TestConfig(mapOf("ignorePackages" to "*.hello,com.example"))
+            assertThat(ForbiddenPublicDataClass(config).compileAndLint(code)).isEmpty()
         }
     }
 })
