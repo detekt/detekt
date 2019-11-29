@@ -9,7 +9,7 @@ import org.spekframework.spek2.style.specification.describe
 
 object MultiVersionTest : Spek({
 
-    val testedGradleVersions = createGradleVersionsToTest()
+    val testedGradleVersions = getGradleVersionsUnderTest()
 
     describe("detekt plugin running on different Gradle versions") {
         listOf(groovy().dryRun(), kotlin().dryRun()).forEach { builder ->
@@ -27,15 +27,12 @@ object MultiVersionTest : Spek({
     }
 })
 
-private fun createGradleVersionsToTest(): List<String> {
-    val versions = mutableListOf<String>()
-    val jdkVersion = getJdkVersion()
-    if (jdkVersion < 13) {
-        versions.add("5.0")
+private fun getGradleVersionsUnderTest() =
+    if (getJdkVersion() < 13) {
+        listOf("5.0", "6.0.1")
+    } else {
+        listOf("6.0.1")
     }
-    versions.add("6.0.1")
-    return versions
-}
 
 private fun getJdkVersion(): Int {
     val version = System.getProperty("java.version")
