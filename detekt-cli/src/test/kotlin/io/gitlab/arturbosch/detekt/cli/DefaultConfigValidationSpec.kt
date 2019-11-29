@@ -10,10 +10,14 @@ class DefaultConfigValidationSpec : Spek({
 
     describe("default configuration is valid") {
 
+        val baseline = yamlConfig("default-detekt-config.yml")
+
         it("is valid comparing itself") {
-            val baseline = yamlConfig("default-detekt-config.yml")
-            val result = validateConfig(baseline, baseline)
-            assertThat(result).isEmpty()
+            assertThat(validateConfig(baseline, baseline)).isEmpty()
+        }
+
+        it("does not flag common known config sub sections") {
+            assertThat(validateConfig(yamlConfig("configs/common_known_sections.yml"), baseline)).isEmpty()
         }
     }
 })
