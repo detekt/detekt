@@ -6,6 +6,41 @@ permalink: changelog.html
 toc: true
 ---
 
+#### 1.2.1
+
+##### Notable changes
+
+- Supports Kotlin 1.3.60
+- Fixed a regression in configuration validation logic when using `build>weights>[RuleSet|Rule]` properties.
+- Some rules got improvements (see changelog)
+
+##### Changelog
+
+- Exception analyzing file - [#2139](https://github.com/arturbosch/detekt/issues/2139)
+- Simplify ConstructorParameterNaming:ignoreOverridden check - [#2136](https://github.com/arturbosch/detekt/pull/2136)
+- Test common config sections pass through config validation - [#2135](https://github.com/arturbosch/detekt/pull/2135)
+- Kotlin 1.3.60 with fix for "Unable to load JNA library" warning - [#2129](https://github.com/arturbosch/detekt/pull/2129)
+- Unexpected nested config for 'build>weights'. - [#2128](https://github.com/arturbosch/detekt/issues/2128)
+- Remove redundant Javadoc - [#2127](https://github.com/arturbosch/detekt/pull/2127)
+- Lazy init KotlinScriptEnginePool - [#2126](https://github.com/arturbosch/detekt/pull/2126)
+- Add tests for MagicNumber:ignoreLocalVariableDeclaration - [#2125](https://github.com/arturbosch/detekt/pull/2125)
+- Fix NPE for EqualsAlwaysReturnsTrueOrFalse - [#2124](https://github.com/arturbosch/detekt/pull/2124)
+- Add MagicNumber:ignoreLocalVariableDeclaration config - [#2123](https://github.com/arturbosch/detekt/pull/2123)
+- Fix MagicNumber:ignoreConstantDeclaration doc - [#2116](https://github.com/arturbosch/detekt/pull/2116)
+- Return non-nullable string in DebtSumming class - [#2113](https://github.com/arturbosch/detekt/pull/2113)
+- Refactor TrailingWhitespace test - [#2112](https://github.com/arturbosch/detekt/pull/2112)
+- Use inline code snippets instead of case files - [#2111](https://github.com/arturbosch/detekt/pull/2111)
+- UnusedImports: False positive if referenced in @throws/@exception/@sample - [#2106](https://github.com/arturbosch/detekt/pull/2106)
+- Don't compile test snippets - [#2105](https://github.com/arturbosch/detekt/pull/2105)
+- MemberNameEqualsClassName should ignore overridden property names too - [#2104](https://github.com/arturbosch/detekt/pull/2104)
+- EqualsAlwaysReturnsTrueOrFalse crashes on certain input - [#2103](https://github.com/arturbosch/detekt/issues/2103)
+- UnusedImports: False positive if referenced only in @throws/@exception clause - [#2098](https://github.com/arturbosch/detekt/issues/2098)
+- Add config flag ignoreOverridden to ConstructorParameterNaming - [#2097](https://github.com/arturbosch/detekt/pull/2097)
+- compileAndLint is 2.5 times slower than lint - [#2095](https://github.com/arturbosch/detekt/issues/2095)
+- Improve naming tests - [#2094](https://github.com/arturbosch/detekt/pull/2094)
+
+See all issues at: [1.2.1](https://github.com/arturbosch/detekt/milestone/52)
+
 #### 1.2.0
 
 ##### Notable changes
