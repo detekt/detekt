@@ -25,7 +25,7 @@ title: io.gitlab.arturbosch.detekt.api.internal - detekt-api
 ### Properties
 
 | [ABSOLUTE_PATH](-a-b-s-o-l-u-t-e_-p-a-t-h.html) | `val ABSOLUTE_PATH: Key<`[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`>` |
-| [DEFAULT_PROPERTY_EXCLUDES](-d-e-f-a-u-l-t_-p-r-o-p-e-r-t-y_-e-x-c-l-u-d-e-s.html) | Known existing properties on rule's which my be absent in the default-detekt-config.yml.`const val DEFAULT_PROPERTY_EXCLUDES: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
+| [DEFAULT_PROPERTY_EXCLUDES](-d-e-f-a-u-l-t_-p-r-o-p-e-r-t-y_-e-x-c-l-u-d-e-s.html) | Known existing properties on rule's which my be absent in the default-detekt-config.yml.`val DEFAULT_PROPERTY_EXCLUDES: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 | [RELATIVE_PATH](-r-e-l-a-t-i-v-e_-p-a-t-h.html) | `val RELATIVE_PATH: Key<`[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`>` |
 
 ### Functions
