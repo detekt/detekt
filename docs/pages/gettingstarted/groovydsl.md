@@ -149,7 +149,7 @@ task detektFailFast(type: io.gitlab.arturbosch.detekt.Detekt) {
 
 ##### <a name="check-lifecycle">Disabling detekt from the check task</a>
 
-detekt tasks by default are verification tasks. They get executed whenever the Gradle check task gets executed.
+Detekt tasks by default are verification tasks. They get executed whenever the Gradle check task gets executed.
 This aligns with the behavior of other code analysis plugins for Gradle.
 
 If you are adding detekt to an already long running project you may want to increase the code quality incrementally and therefore
