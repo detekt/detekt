@@ -54,6 +54,7 @@ title: io.gitlab.arturbosch.detekt.api - detekt-api
 
 ### Extensions for External Classes
 
+| [kotlin.String](kotlin.-string/index.html) |  |
 | [org.jetbrains.kotlin.psi.KtAnnotated](org.jetbrains.kotlin.psi.-kt-annotated/index.html) |  |
 | [org.jetbrains.kotlin.psi.KtElement](org.jetbrains.kotlin.psi.-kt-element/index.html) |  |
 

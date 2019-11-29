@@ -7,6 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.commaSeparatedPattern
+import io.gitlab.arturbosch.detekt.api.simplePatternToRegex
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.psiUtil.visibilityModifierTypeOrDefault
@@ -40,12 +42,9 @@ class ForbiddenPublicDataClass(config: Config = Config.empty) : Rule(config) {
     )
 
     private val ignorablePackages = valueOrDefault(IGNORE_PACKAGES, "*.internal,*.internal.*")
-        .splitToSequence(",")
-        .map { it.trim() }
-        .filter { it.isNotBlank() }
-        .map { it.replace(".", "\\.") }
-        .map { it.replace("*", ".*") }
-        .map { Regex(it) }
+        .commaSeparatedPattern()
+        .distinct()
+        .map { it.simplePatternToRegex() }
         .toList()
 
     override fun visitClass(klass: KtClass) {
