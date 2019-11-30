@@ -9,10 +9,11 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import java.nio.file.Path
 
-private val compileTestSnippets: Boolean = System.getProperty("compile-snippet-tests", "false")!!.toBoolean()
+private val shouldCompileTestSnippets: Boolean =
+    System.getProperty("compile-snippet-tests", "false")!!.toBoolean()
 
 fun BaseRule.compileAndLint(@Language("kotlin") content: String): List<Finding> {
-    if (compileTestSnippets) {
+    if (shouldCompileTestSnippets) {
         KotlinScriptEngine.compile(content)
     }
     return lint(content)
@@ -32,7 +33,9 @@ fun BaseRule.compileAndLintWithContext(
     environment: KotlinCoreEnvironment,
     @Language("kotlin") content: String
 ): List<Finding> {
-    KotlinScriptEngine.compile(content)
+    if (shouldCompileTestSnippets) {
+        KotlinScriptEngine.compile(content)
+    }
     val ktFile = KtTestCompiler.compileFromContent(content.trimIndent())
     val bindingContext = KtTestCompiler.getContextForPaths(environment, listOf(ktFile))
     return findingsAfterVisit(ktFile, bindingContext)
