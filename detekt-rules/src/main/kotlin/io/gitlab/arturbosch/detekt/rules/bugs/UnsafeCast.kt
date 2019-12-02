@@ -12,17 +12,21 @@ import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
 import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
- * Reports casts which are unsafe. In case the cast is not possible it will throw an exception.
+ * Reports casts that will never succeed.
  *
  * <noncompliant>
- * fun foo(s: Any) {
+ * fun foo(s: String) {
  *     println(s as Int)
+ * }
+ *
+ * fun bar(s: String) {
+ *     println(s as? Int)
  * }
  * </noncompliant>
  *
  * <compliant>
  * fun foo(s: Any) {
- *     println((s as? Int) ?: 0)
+ *     println(s as Int)
  * }
  * </compliant>
  */
