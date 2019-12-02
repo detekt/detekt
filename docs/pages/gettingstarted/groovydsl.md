@@ -55,7 +55,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:[version]'
-        classpath "gradle.plugin.io.gitlab.arturbosch.detekt:detekt-gradle-plugin:[version]"
+        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:[version]"
     }
 
 }
