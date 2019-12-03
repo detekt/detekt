@@ -170,6 +170,24 @@ task detektFailFast(type: io.gitlab.arturbosch.detekt.Detekt) {
 }
 ```
 
+##### <a name="check-lifecycle">Disabling detekt from the check task</a>
+
+Detekt tasks by default are verification tasks. They get executed whenever the Gradle check task gets executed.
+This aligns with the behavior of other code analysis plugins for Gradle.
+
+If you are adding detekt to an already long running project you may want to increase the code quality incrementally and therefore
+exclude detekt from the check task.
+
+```gradle
+tasks.getByName("check") {
+    this.setDependsOn(this.dependsOn.filterNot {
+        it is TaskProvider<*> && it.name == "detekt"
+    })
+}
+```
+
+Instead of disabling detekt for the check task, you may want to increase the build failure threshold in the [configuration file](../configurations.md).
+
 ##### <a name="idea">Configure a local IDEA for detekt</a>
 
 - Download the community edition of [IntelliJ IDEA](https://www.jetbrains.com/idea/download/)
