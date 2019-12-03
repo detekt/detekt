@@ -14,7 +14,7 @@ matrix:
       env: COMPILE_TEST_SNIPPETS=false
     - os: linux
       dist: bionic
-      jdk: openjdk12
+      jdk: openjdk13
       env: COMPILE_TEST_SNIPPETS=false
     # JDK 8 - see https://docs.travis-ci.com/user/reference/osx/#jdk-and-macos
     - os: osx
