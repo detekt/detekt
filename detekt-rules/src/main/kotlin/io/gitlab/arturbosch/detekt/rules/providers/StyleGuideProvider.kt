@@ -34,6 +34,7 @@ import io.gitlab.arturbosch.detekt.rules.style.SpacingBetweenPackageAndImports
 import io.gitlab.arturbosch.detekt.rules.style.ThrowsCount
 import io.gitlab.arturbosch.detekt.rules.style.UnderscoresInNumericLiterals
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryAbstractClass
+import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryAnnotationUseSiteTarget
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryApply
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryInheritance
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryLet
@@ -85,6 +86,7 @@ class StyleGuideProvider : RuleSetProvider {
                 LoopWithTooManyJumpStatements(config),
                 SafeCast(config),
                 UnnecessaryAbstractClass(config),
+                UnnecessaryAnnotationUseSiteTarget(config),
                 UnnecessaryParentheses(config),
                 UnnecessaryInheritance(config),
                 UtilityClassWithPublicConstructor(config),
