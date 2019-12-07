@@ -493,7 +493,7 @@ fun foo(str: String?) {
 
 ### UnsafeCast
 
-Reports casts which are unsafe. In case the cast is not possible it will throw an exception.
+Reports casts that will never succeed.
 
 **Severity**: Defect
 
@@ -504,8 +504,12 @@ Reports casts which are unsafe. In case the cast is not possible it will throw a
 #### Noncompliant Code:
 
 ```kotlin
-fun foo(s: Any) {
+fun foo(s: String) {
     println(s as Int)
+}
+
+fun bar(s: String) {
+    println(s as? Int)
 }
 ```
 
@@ -513,7 +517,7 @@ fun foo(s: Any) {
 
 ```kotlin
 fun foo(s: Any) {
-    println((s as? Int) ?: 0)
+    println(s as Int)
 }
 ```
 
