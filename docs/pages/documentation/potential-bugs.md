@@ -305,8 +305,9 @@ class Foo {
 
 ### MapGetWithNotNullAssert
 
-Reports calls of the map access methods map[] or map.get() with a not-null assertion operator (!!).
+Reports calls of the map access methods `map[]` or `map.get()` with a not-null assertion operator `!!`.
 This may result in a NullPointerException.
+Preferred access methods are `map[]` without `!!`, `map.getValue()`, `map.getOrDefault()` or `map.getOrElse()`.
 
 Based on an IntelliJ IDEA inspection MapGetWithNotNullAssertionOperatorInspection.
 
