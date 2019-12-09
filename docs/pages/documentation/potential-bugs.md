@@ -239,6 +239,51 @@ class Foo {
 }
 ```
 
+### MapGetWithNotNullAssert
+
+Reports usage of the map[] or map.get() method with not-null assertion operator `!!`. This may result in a NullPointerException. 
+Preferred access methods are `map[]` without `!!`, `map.getValue()`, `map.getOrDefault()` or `map.getOrElse()`.
+
+Based on IntelliJ IDEA inspection: https://github.com/JetBrains/kotlin/blob/master/idea/src/org/jetbrains/kotlin/idea/inspections/MapGetWithNotNullAssertionOperatorInspection.kt
+
+**Severity**: CodeSmell
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+val map = emptyMap<String, String>()
+map["key"]!!
+```
+
+```kotlin
+val map = emptyMap<String, String>()
+map.get("key")!!
+```
+
+#### Compliant Code:
+
+```kotlin
+val map = emptyMap<String, String>()
+map["key"]
+```
+
+```kotlin
+val map = emptyMap<String, String>()
+map.getValue("key")
+```
+
+```kotlin
+val map = emptyMap<String, String>()
+map.getOrDefault("key", "")
+```
+
+```kotlin
+val map = emptyMap<String, String>()
+map.getOrElse("key", { "" })
+```
+
 ### MissingWhenCase
 
 Turn on this rule to flag `when` expressions that do not check that all cases are covered when the subject is an enum

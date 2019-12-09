@@ -36,6 +36,43 @@ class MapGetWithNotNullAssertSpec : Spek({
 				}"""
             assertThat(subject.compileAndLintWithContext(environment, code)).hasSize(1)
         }
+
+        it("does not report map[] call without not-null assert") {
+            val code = """
+				fun f() {
+                    val map = emptyMap<String, String>()
+                    map["key"]
+				}"""
+            assertThat(subject.compileAndLintWithContext(environment, code)).isEmpty()
+        }
+
+        it("does not report map.getValue() call") {
+            val code = """
+				fun f() {
+                    val map = emptyMap<String, String>()
+                    map.getValue("key")
+				}"""
+            assertThat(subject.compileAndLintWithContext(environment, code)).isEmpty()
+        }
+
+        it("does not report map.getOrDefault() call") {
+            val code = """
+				fun f() {
+                    val map = emptyMap<String, String>()
+                    map.getOrDefault("key", "")
+				}"""
+            assertThat(subject.compileAndLintWithContext(environment, code)).isEmpty()
+        }
+
+        it("does not report map.getOrElse() call") {
+            val code = """
+				fun f() {
+                    val map = emptyMap<String, String>()
+                    map.getOrElse("key", { "" })
+				}"""
+            assertThat(subject.compileAndLintWithContext(environment, code)).isEmpty()
+        }
+
     }
 
 })
