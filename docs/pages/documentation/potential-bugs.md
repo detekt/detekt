@@ -241,9 +241,9 @@ class Foo {
 
 ### MapGetWithNotNullAssert
 
-Reports usage of the map access methods map[] or map.get() with a not-null assertion operator (!!).
+Reports calls of the map access methods map[] or map.get() with a not-null assertion operator (!!).
 
-This may result in a NullPointerException. Based on an IntelliJ IDEA inspection MapGetWithNotNullAssertionOperatorInspection.
+Based on an IntelliJ IDEA inspection MapGetWithNotNullAssertionOperatorInspection.
 
 **Severity**: CodeSmell
 
@@ -253,20 +253,14 @@ This may result in a NullPointerException. Based on an IntelliJ IDEA inspection 
 
 ```kotlin
 val map = emptyMap<String, String>()
-
 map["key"]!!
-map.get("key")!!
 ```
 
 #### Compliant Code:
 
 ```kotlin
 val map = emptyMap<String, String>()
-
 map["key"]
-map.getValue("key")
-map.getOrDefault("key", "")
-map.getOrElse("key", { "" })
 ```
 
 ### MissingWhenCase
