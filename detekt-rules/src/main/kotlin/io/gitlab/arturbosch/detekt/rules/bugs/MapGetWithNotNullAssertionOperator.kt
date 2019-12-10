@@ -49,12 +49,12 @@ class MapGetWithNotNullAssertionOperator(config: Config) : Rule(config) {
             "MapGetWithNotNullAssertionOperator",
             Severity.CodeSmell,
             "map.get() with not-null assertion operator (!!) can result in a NullPointerException. " +
-                    "Consider usage of map.getValue(), map.getOrDefault() or map.getOrElse() instead",
+                    "Consider usage of map.getValue(), map.getOrDefault() or map.getOrElse() instead.",
             Debt.FIVE_MINS
         )
 
     override fun visitPostfixExpression(expression: KtPostfixExpression) {
-        if (expression.isMapGet() && expression.operationToken == KtTokens.EXCLEXCL) {
+        if (expression.operationToken == KtTokens.EXCLEXCL && expression.isMapGet()) {
             report(CodeSmell(issue, Entity.from(expression), "map.get() with not-null assertion operator (!!)"))
         }
         super.visitPostfixExpression(expression)
