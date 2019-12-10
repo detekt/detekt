@@ -8,7 +8,7 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class MapGetWithNotNullAssertSpec : Spek({
-    val subject by memoized { MapGetWithNotNullAssert(Config.empty) }
+    val subject by memoized { MapGetWithNotNullAssertionOperator(Config.empty) }
 
     val wrapper by memoized(
         factory = { KtTestCompiler.createEnvironment() },
@@ -70,7 +70,5 @@ class MapGetWithNotNullAssertSpec : Spek({
                 }"""
             assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
         }
-
     }
-
 })

@@ -413,7 +413,7 @@ potential-bugs:
     excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
     excludeAnnotatedProperties: ""
     ignoreOnClassesPattern: ""
-  MapGetWithNotNullAssert:
+  MapGetWithNotNullAssertionOperator:
     active: false
   MissingWhenCase:
     active: true

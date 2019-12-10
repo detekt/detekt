@@ -303,7 +303,7 @@ class Foo {
 }
 ```
 
-### MapGetWithNotNullAssert
+### MapGetWithNotNullAssertionOperator
 
 Reports calls of the map access methods `map[]` or `map.get()` with a not-null assertion operator `!!`.
 This may result in a NullPointerException.
