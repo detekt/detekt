@@ -13,6 +13,7 @@ import io.gitlab.arturbosch.detekt.rules.bugs.InvalidRange
 import io.gitlab.arturbosch.detekt.rules.bugs.IteratorHasNextCallsNextMethod
 import io.gitlab.arturbosch.detekt.rules.bugs.IteratorNotThrowingNoSuchElementException
 import io.gitlab.arturbosch.detekt.rules.bugs.LateinitUsage
+import io.gitlab.arturbosch.detekt.rules.bugs.MapGetWithNotNullAssertionOperator
 import io.gitlab.arturbosch.detekt.rules.bugs.MissingWhenCase
 import io.gitlab.arturbosch.detekt.rules.bugs.RedundantElseInWhen
 import io.gitlab.arturbosch.detekt.rules.bugs.UnconditionalJumpStatementInLoop
@@ -46,6 +47,7 @@ class PotentialBugProvider : RuleSetProvider {
                 WrongEqualsTypeParameter(config),
                 ExplicitGarbageCollectionCall(config),
                 LateinitUsage(config),
+                MapGetWithNotNullAssertionOperator(config),
                 MissingWhenCase(config),
                 RedundantElseInWhen(config),
                 UnconditionalJumpStatementInLoop(config),
