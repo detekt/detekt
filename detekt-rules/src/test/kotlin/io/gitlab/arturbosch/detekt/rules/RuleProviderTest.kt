@@ -5,14 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.rules.providers.CommentSmellProvider
-import io.gitlab.arturbosch.detekt.rules.providers.ComplexityProvider
-import io.gitlab.arturbosch.detekt.rules.providers.EmptyCodeProvider
-import io.gitlab.arturbosch.detekt.rules.providers.ExceptionsProvider
-import io.gitlab.arturbosch.detekt.rules.providers.NamingProvider
-import io.gitlab.arturbosch.detekt.rules.providers.PerformanceProvider
-import io.gitlab.arturbosch.detekt.rules.providers.PotentialBugProvider
-import io.gitlab.arturbosch.detekt.rules.providers.StyleGuideProvider
+import io.gitlab.arturbosch.detekt.rules.providers.*
 import org.assertj.core.api.Assertions.assertThat
 import org.reflections.Reflections
 import org.spekframework.spek2.Spek
@@ -51,7 +44,8 @@ private val ruleMap = mapOf<Class<*>, String>(
     Pair(NamingProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.naming"),
     Pair(PerformanceProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.performance"),
     Pair(PotentialBugProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.bugs"),
-    Pair(StyleGuideProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.style")
+    Pair(StyleGuideProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.style"),
+    Pair(ConcurrencyProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.concurrency")
 )
 
 private fun getRulesPackageNameForProvider(providerType: Class<out RuleSetProvider>): String {

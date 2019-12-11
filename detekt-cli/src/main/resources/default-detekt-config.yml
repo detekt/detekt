@@ -107,6 +107,11 @@ complexity:
     ignorePrivate: false
     ignoreOverridden: false
 
+concurrency:
+  active: true
+  GlobalScopeUsage:
+    active: false
+
 empty-blocks:
   active: true
   EmptyCatchBlock:

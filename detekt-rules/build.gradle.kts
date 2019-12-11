@@ -5,6 +5,7 @@ tasks.build { finalizedBy(":detekt-generator:generateDocumentation") }
 val junitPlatformVersion: String by project
 val spekVersion: String by project
 val reflectionsVersion: String by project
+val coroutinesVersion: String by project
 
 dependencies {
     implementation(project(":detekt-api"))
@@ -12,6 +13,10 @@ dependencies {
     testImplementation("org.reflections:reflections:$reflectionsVersion")
     testImplementation(project(":detekt-test"))
     testImplementation(kotlin("reflect"))
+
+    // used by concurrency tests
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
     testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spekVersion")
 }
