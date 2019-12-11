@@ -10,7 +10,7 @@ import io.gitlab.arturbosch.detekt.rules.concurrency.GlobalScopeUsage
  * @active since v1.3.0
  */
 class ConcurrencyProvider : RuleSetProvider {
-    override val ruleSetId: String = "performance"
+    override val ruleSetId: String = "concurrency"
 
     override fun instance(config: Config): RuleSet {
         return RuleSet(ruleSetId, listOf(
