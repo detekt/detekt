@@ -5,7 +5,15 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.rules.providers.*
+import io.gitlab.arturbosch.detekt.rules.providers.CommentSmellProvider
+import io.gitlab.arturbosch.detekt.rules.providers.ComplexityProvider
+import io.gitlab.arturbosch.detekt.rules.providers.ConcurrencyProvider
+import io.gitlab.arturbosch.detekt.rules.providers.EmptyCodeProvider
+import io.gitlab.arturbosch.detekt.rules.providers.ExceptionsProvider
+import io.gitlab.arturbosch.detekt.rules.providers.NamingProvider
+import io.gitlab.arturbosch.detekt.rules.providers.PerformanceProvider
+import io.gitlab.arturbosch.detekt.rules.providers.PotentialBugProvider
+import io.gitlab.arturbosch.detekt.rules.providers.StyleGuideProvider
 import org.assertj.core.api.Assertions.assertThat
 import org.reflections.Reflections
 import org.spekframework.spek2.Spek
