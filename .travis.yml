@@ -22,7 +22,7 @@ matrix:
       env: COMPILE_TEST_SNIPPETS=false
     # JDK 13
     - os: osx
-      osx_image: xcode11.1
+      osx_image: xcode11.2
       env: COMPILE_TEST_SNIPPETS=false
 install: true
 script:
