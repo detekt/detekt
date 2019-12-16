@@ -7,11 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import org.jetbrains.kotlin.descriptors.ClassDescriptor
-import org.jetbrains.kotlin.psi.KtSimpleNameExpression
-import org.jetbrains.kotlin.resolve.BindingContext
-import org.jetbrains.kotlin.resolve.calls.callUtil.getType
-import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
+import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
+import org.jetbrains.kotlin.resolve.calls.callUtil.getCalleeExpressionIfAny
 
 /**
  * Report usages of `GlobalScope.launch` and `GlobalScope.async`. It is highly discouraged by the Kotlin documentation:
@@ -40,21 +37,16 @@ class GlobalScopeUsage(config: Config = Config.empty) : Rule(config) {
         Debt.TEN_MINS
     )
 
-    override fun visitSimpleNameExpression(expression: KtSimpleNameExpression) {
-        super.visitExpression(expression)
-
-        if (bindingContext != BindingContext.EMPTY && expression.text == GLOBALSCOPE) {
-            val type = expression.getType(bindingContext)?.constructor?.declarationDescriptor as? ClassDescriptor
-
-            if (type?.fqNameOrNull()?.asString() == WANTED_TYPE) {
-                report(CodeSmell(issue, Entity.from(expression), MESSAGE))
-            }
+    override fun visitDotQualifiedExpression(expression: KtDotQualifiedExpression) {
+        if (expression.receiverExpression.text == "GlobalScope" &&
+            expression.getCalleeExpressionIfAny()?.text in listOf("launch", "async")) {
+            report(CodeSmell(issue, Entity.from(expression), MESSAGE))
         }
+
+        super.visitDotQualifiedExpression(expression)
     }
 
     companion object {
-        private const val GLOBALSCOPE = "GlobalScope"
-        private const val WANTED_TYPE = "kotlinx.coroutines.$GLOBALSCOPE"
         private const val MESSAGE =
             "This use of GlobalScope should be replaced by `CoroutineScope` or `coroutineScope`."
     }

@@ -14,9 +14,6 @@ dependencies {
     testImplementation(project(":detekt-test"))
     testImplementation(kotlin("reflect"))
 
-    // To have coroutines classpath in tests
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
-
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
     testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spekVersion")
 }

@@ -9,7 +9,7 @@ import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.cli.jvm.compiler.NoScopeRecordCliBindingTrace
 import org.jetbrains.kotlin.cli.jvm.compiler.TopDownAnalyzerFacadeForJVM
-import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
+import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoot
 import org.jetbrains.kotlin.com.intellij.openapi.Disposable
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
@@ -47,15 +47,15 @@ object KtTestCompiler : KtCompiler() {
             environment.configuration, environment::createPackagePartProvider, ::FileBasedDeclarationProviderFactory
         ).bindingContext
 
-    fun createEnvironment(optionalPaths: List<File> = emptyList()): KotlinCoreEnvironmentWrapper {
+    fun createEnvironment(): KotlinCoreEnvironmentWrapper {
         val configuration = CompilerConfiguration()
         configuration.put(CommonConfigurationKeys.MODULE_NAME, "test_module")
         configuration.put(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY, MessageCollector.NONE)
 
         // Get the runtime location of stdlib jar and pass to the compiler so it's available to generate the
         // BindingContext for rules under test.
-        val stdlibPath = File(CharRange::class.java.protectionDomain.codeSource.location.path)
-        configuration.addJvmClasspathRoots(optionalPaths + stdlibPath)
+        val path = File(CharRange::class.java.protectionDomain.codeSource.location.path)
+        configuration.addJvmClasspathRoot(path)
 
         val parentDisposable = Disposer.newDisposable()
         val kotlinCoreEnvironment =
