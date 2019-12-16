@@ -14,7 +14,14 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getType
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 
 /**
- * Report usages of GlobalScope. Usage of GlobalScope is highly discouraged by the Kotlin documentation.
+ * Report usages of `GlobalScope.launch` and `GlobalScope.async`. It is highly discouraged by the Kotlin documentation:
+ *
+ * > Global scope is used to launch top-level coroutines which are operating on the whole application lifetime and are
+ * > not cancelled prematurely.
+ *
+ * > Application code usually should use an application-defined CoroutineScope. Using async or launch on the instance
+ * > of GlobalScope is highly discouraged.
+ *
  * See https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-global-scope/
  *
  * <noncompliant>
