@@ -53,8 +53,7 @@ private val ruleMap = mapOf<Class<*>, String>(
     Pair(PerformanceProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.performance"),
     Pair(PotentialBugProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.bugs"),
     Pair(StyleGuideProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.style"),
-    Pair(CoroutinesProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.corouti" +
-            "nes")
+    Pair(CoroutinesProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.coroutines")
 )
 
 private fun getRulesPackageNameForProvider(providerType: Class<out RuleSetProvider>): String {
