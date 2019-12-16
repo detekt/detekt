@@ -107,7 +107,7 @@ complexity:
     ignorePrivate: false
     ignoreOverridden: false
 
-concurrency:
+coroutines:
   active: true
   GlobalScopeUsage:
     active: false

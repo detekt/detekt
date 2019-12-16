@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.rules.providers.CommentSmellProvider
 import io.gitlab.arturbosch.detekt.rules.providers.ComplexityProvider
-import io.gitlab.arturbosch.detekt.rules.providers.ConcurrencyProvider
+import io.gitlab.arturbosch.detekt.rules.providers.CoroutinesProvider
 import io.gitlab.arturbosch.detekt.rules.providers.EmptyCodeProvider
 import io.gitlab.arturbosch.detekt.rules.providers.ExceptionsProvider
 import io.gitlab.arturbosch.detekt.rules.providers.NamingProvider
@@ -53,7 +53,8 @@ private val ruleMap = mapOf<Class<*>, String>(
     Pair(PerformanceProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.performance"),
     Pair(PotentialBugProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.bugs"),
     Pair(StyleGuideProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.style"),
-    Pair(ConcurrencyProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.concurrency")
+    Pair(CoroutinesProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.corouti" +
+            "nes")
 )
 
 private fun getRulesPackageNameForProvider(providerType: Class<out RuleSetProvider>): String {

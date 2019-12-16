@@ -14,7 +14,7 @@ dependencies {
     testImplementation(project(":detekt-test"))
     testImplementation(kotlin("reflect"))
 
-    // used by concurrency tests
+    // To have coroutines classpath in tests
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
 
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
