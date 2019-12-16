@@ -26,13 +26,6 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * </compliant>
  */
 class GlobalScopeUsage(config: Config = Config.empty) : Rule(config) {
-    companion object {
-        private const val GLOBALSCOPE = "GlobalScope"
-        private const val WANTED_TYPE = "kotlinx.coroutines.$GLOBALSCOPE"
-        private const val MESSAGE =
-            "This use of GlobalScope should be replaced by `CoroutineScope` or `coroutineScope`."
-    }
-
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Defect,
@@ -50,5 +43,12 @@ class GlobalScopeUsage(config: Config = Config.empty) : Rule(config) {
                 report(CodeSmell(issue, Entity.from(expression), MESSAGE))
             }
         }
+    }
+
+    companion object {
+        private const val GLOBALSCOPE = "GlobalScope"
+        private const val WANTED_TYPE = "kotlinx.coroutines.$GLOBALSCOPE"
+        private const val MESSAGE =
+            "This use of GlobalScope should be replaced by `CoroutineScope` or `coroutineScope`."
     }
 }
