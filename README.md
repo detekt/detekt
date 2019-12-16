@@ -82,6 +82,12 @@ detekt {
     filters = ".*/resources/.*,.*/build/.*"
     baseline = file("my-detekt-baseline.xml") // Just if you want to create a baseline file.
 }
+
+tasks {
+    withType<Detekt> {
+        this.jvmTarget = "1.8"
+    }
+}
 ```
 
 See [bintray](https://bintray.com/arturbosch/code-analysis/detekt) for releases and [artifactory](https://oss.jfrog.org/artifactory/webapp/#/artifacts/browse/tree/General/oss-snapshot-local/io/gitlab/arturbosch/detekt/detekt-cli/) for snapshots.
