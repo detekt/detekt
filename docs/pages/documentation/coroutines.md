@@ -27,11 +27,21 @@ See https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.
 #### Noncompliant Code:
 
 ```kotlin
-GlobalScope.launch { delay(1_000L) }
+fun foo() {
+    GlobalScope.launch { delay(1_000L) }
+}
 ```
 
 #### Compliant Code:
 
 ```kotlin
-CoroutineScope(Dispatchers.Default).launch { delay(1_000L) }
+val scope = CoroutineScope(Dispatchers.Default)
+
+fun foo() {
+    scope.launch { delay(1_000L) }
+}
+
+fun onDestroy() {
+    scope.cancel()
+}
 ```

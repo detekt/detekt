@@ -22,11 +22,21 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getCalleeExpressionIfAny
  * See https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-global-scope/
  *
  * <noncompliant>
- * GlobalScope.launch { delay(1_000L) }
+ * fun foo() {
+ *     GlobalScope.launch { delay(1_000L) }
+ * }
  * </noncompliant>
  *
  * <compliant>
- * CoroutineScope(Dispatchers.Default).launch { delay(1_000L) }
+ * val scope = CoroutineScope(Dispatchers.Default)
+ *
+ * fun foo() {
+ *     scope.launch { delay(1_000L) }
+ * }
+ *
+ * fun onDestroy() {
+ *    scope.cancel()
+ * }
  * </compliant>
  */
 class GlobalScopeUsage(config: Config = Config.empty) : Rule(config) {
