@@ -103,10 +103,12 @@ subprojects {
         jacoco.toolVersion = jacocoVersion
     }
 
+    val projectJvmTarget = "1.8"
+
     tasks.withType<Detekt>().configureEach {
         exclude("resources/")
         exclude("build/")
-        jvmTarget = "1.8"
+        jvmTarget = projectJvmTarget
     }
 
     val userHome = System.getProperty("user.home")
@@ -164,7 +166,7 @@ subprojects {
     }
 
     tasks.withType<KotlinCompile>().configureEach {
-        kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.jvmTarget = projectJvmTarget
         // https://youtrack.jetbrains.com/issue/KT-24946
         kotlinOptions.freeCompilerArgs = listOf(
             "-progressive",
