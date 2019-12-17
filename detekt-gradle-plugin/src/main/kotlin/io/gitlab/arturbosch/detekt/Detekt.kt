@@ -39,6 +39,7 @@ import org.gradle.api.tasks.Optional
 import org.gradle.api.tasks.OutputFile
 import org.gradle.api.tasks.PathSensitive
 import org.gradle.api.tasks.PathSensitivity
+import org.gradle.api.tasks.SkipWhenEmpty
 import org.gradle.api.tasks.SourceTask
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.VerificationTask
@@ -53,6 +54,11 @@ open class Detekt : SourceTask(), VerificationTask {
 
     @get:Classpath
     val pluginClasspath = project.configurableFileCollection()
+
+    @InputFiles
+    @SkipWhenEmpty
+    @PathSensitive(PathSensitivity.RELATIVE)
+    override fun getSource() = super.getSource()
 
     @get:InputFile
     @get:Optional
