@@ -10,16 +10,9 @@ import io.gitlab.arturbosch.detekt.api.Severity
  */
 class XmlOutputReport : OutputReport() {
 
-    override val ending: String = "xml"
+    override val ending = "xml"
 
     override val name = "Checkstyle XML report"
-
-    private sealed class MessageType(val label: String) {
-        class Warning : MessageType("warning")
-        class Info : MessageType("info")
-        class Fatal : MessageType("fatal")
-        class Error : MessageType("error")
-    }
 
     override fun render(detektion: Detektion): String {
         val smells = detektion.findings.flatMap { it.value }
@@ -34,7 +27,7 @@ class XmlOutputReport : OutputReport() {
                 lines += arrayOf(
                         "\t<error line=\"${it.location.source.line.toXmlString()}\"",
                         "column=\"${it.location.source.column.toXmlString()}\"",
-                        "severity=\"${it.messageType.label.toXmlString()}\"",
+                        "severity=\"${it.severityLabel.toXmlString()}\"",
                         "message=\"${it.messageOrDescription().toXmlString()}\"",
                         "source=\"${"detekt.${it.id.toXmlString()}"}\" />"
                 ).joinToString(separator = " ")
@@ -46,16 +39,16 @@ class XmlOutputReport : OutputReport() {
         return lines.joinToString(separator = "\n")
     }
 
-    private val Finding.messageType: MessageType
+    private val Finding.severityLabel: String
         get() = when (issue.severity) {
-            Severity.CodeSmell -> MessageType.Warning()
-            Severity.Style -> MessageType.Warning()
-            Severity.Warning -> MessageType.Warning()
-            Severity.Maintainability -> MessageType.Warning()
-            Severity.Defect -> MessageType.Error()
-            Severity.Minor -> MessageType.Info()
-            Severity.Security -> MessageType.Fatal()
-            Severity.Performance -> MessageType.Warning()
+            Severity.CodeSmell,
+            Severity.Style,
+            Severity.Warning,
+            Severity.Maintainability,
+            Severity.Performance -> "warning"
+            Severity.Defect -> "error"
+            Severity.Minor -> "info"
+            Severity.Security -> "fatal"
         }
 
     private fun Any.toXmlString() = XmlEscape.escapeXml(toString().trim())
