@@ -123,7 +123,7 @@ class ForbiddenPublicDataClassSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        it("public data class inside a random should fail") {
+        it("public data class inside a random package should fail") {
             val code = """
                 package com.example
                 
