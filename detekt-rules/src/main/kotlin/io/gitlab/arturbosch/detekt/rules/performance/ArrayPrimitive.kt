@@ -78,7 +78,7 @@ class ArrayPrimitive(config: Config = Config.empty) : Rule(config) {
     private fun isArrayPrimitive(it: KtTypeReference): Boolean {
         if (it.text?.startsWith("Array<") == true) {
             val genericTypeArguments = it.typeElement?.typeArgumentsAsTypes
-            return genericTypeArguments?.size == 1 && primitiveTypes.contains(genericTypeArguments[0].text)
+            return genericTypeArguments?.singleOrNull()?.let { primitiveTypes.contains(it.text) } == true
         }
         return false
     }
