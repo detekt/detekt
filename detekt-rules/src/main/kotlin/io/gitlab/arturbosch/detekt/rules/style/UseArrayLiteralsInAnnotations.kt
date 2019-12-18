@@ -14,11 +14,11 @@ import org.jetbrains.kotlin.psi.KtAnnotationEntry
  * The latter should be preferred as it is more readable.
  *
  * <noncompliant>
- * &#064;PositiveCase(arrayOf("..."))
+ * @@PositiveCase(arrayOf("..."))
  * </noncompliant>
  *
  * <compliant>
- * &#064;NegativeCase(["..."])
+ * @@NegativeCase(["..."])
  * </compliant>
  */
 class UseArrayLiteralsInAnnotations(config: Config = Config.empty) : Rule(config) {
