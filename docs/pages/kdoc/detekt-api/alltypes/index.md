@@ -361,6 +361,11 @@ Basic use cases are to specify different function or class names in the detekt
 yaml config and test for their appearance in specific rules.
 
 
+| (extensions in package io.gitlab.arturbosch.detekt.api)
+
+##### [kotlin.String](../io.gitlab.arturbosch.detekt.api/kotlin.-string/index.html)
+
+
 |
 
 ##### [io.gitlab.arturbosch.detekt.api.TextLocation](../io.gitlab.arturbosch.detekt.api/-text-location/index.html)
