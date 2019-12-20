@@ -24,8 +24,8 @@ import java.io.PrintStream
 
 class Runner(
     private val arguments: CliArgs,
-    private val outputPrinter: PrintStream,
-    private val errorPrinter: PrintStream
+    private val outputPrinter: PrintStream = System.out,
+    private val errorPrinter: PrintStream = System.err
 ) : Executable {
 
     override fun execute() {
