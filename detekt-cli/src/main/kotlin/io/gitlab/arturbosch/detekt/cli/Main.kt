@@ -28,7 +28,11 @@ fun main(args: Array<String>) {
     exitProcess(ExitCode.NORMAL_RUN.number)
 }
 
-fun buildRunner(args: Array<String>, outputPrinter: PrintStream = System.out, errorPrinter: PrintStream = System.err): Executable {
+fun buildRunner(
+    args: Array<String>,
+    outputPrinter: PrintStream = System.out,
+    errorPrinter: PrintStream = System.err
+): Executable {
     val arguments = parseArguments(args)
     return when {
         arguments.generateConfig -> ConfigExporter(arguments)
