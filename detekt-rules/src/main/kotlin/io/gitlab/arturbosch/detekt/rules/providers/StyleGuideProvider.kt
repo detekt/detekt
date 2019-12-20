@@ -67,6 +67,7 @@ class StyleGuideProvider : RuleSetProvider {
 
     override val ruleSetId: String = "style"
 
+    @Suppress("LongMethod")
     override fun instance(config: Config): RuleSet {
         return RuleSet(
             ruleSetId,
