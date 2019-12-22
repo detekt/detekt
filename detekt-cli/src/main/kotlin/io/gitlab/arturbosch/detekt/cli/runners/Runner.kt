@@ -20,8 +20,13 @@ import io.gitlab.arturbosch.detekt.cli.loadDefaultConfig
 import io.gitlab.arturbosch.detekt.cli.maxIssues
 import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
+import java.io.PrintStream
 
-class Runner(private val arguments: CliArgs) : Executable {
+class Runner(
+    private val arguments: CliArgs,
+    private val outputPrinter: PrintStream = System.out,
+    private val errorPrinter: PrintStream = System.err
+) : Executable {
 
     override fun execute() {
         createSettings().use { settings ->
@@ -81,7 +86,9 @@ class Runner(private val arguments: CliArgs) : Executable {
             classpath = createClasspath(),
             languageVersion = languageVersion,
             jvmTarget = jvmTarget,
-            debug = arguments.debug
+            debug = arguments.debug,
+            outPrinter = outputPrinter,
+            errorPrinter = errorPrinter
         )
     }
 }
