@@ -15,13 +15,13 @@ plugins {
     kotlin("jvm") version "1.3.61"
     id("org.jetbrains.dokka") version "0.10.0"
     id("com.github.ben-manes.versions") version "0.27.0"
-    id("io.gitlab.arturbosch.detekt") version "1.2.1"
+    id("io.gitlab.arturbosch.detekt") version "1.3.0"
 }
 
 group = "io.gitlab.arturbosch.detekt"
-version = "1.2.1"
+version = "1.3.0"
 
-val spekVersion = "2.0.8"
+val spekVersion = "2.0.9"
 val junitPlatformVersion = "1.5.2"
 val assertjVersion = "3.14.0"
 
