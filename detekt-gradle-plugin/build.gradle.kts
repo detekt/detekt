@@ -19,9 +19,9 @@ plugins {
 }
 
 group = "io.gitlab.arturbosch.detekt"
-version = "1.2.1"
+version = "1.3.0"
 
-val spekVersion = "2.0.8"
+val spekVersion = "2.0.9"
 val junitPlatformVersion = "1.5.2"
 val assertjVersion = "3.14.0"
 
