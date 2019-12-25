@@ -6,8 +6,9 @@ permalink: formatting.html
 toc: true
 folder: documentation
 ---
-This rule set provides rules that address formatting issues.
+This rule set provides wrappers for rules implemented by KtLint - https://ktlint.github.io/.
 
+Note: Issues reported by this rule set can only be suppressed on file level (@file:Suppress("detekt.rule").
 Note: The formatting rule set is not included in the detekt-cli or gradle plugin.
 
 To enable this rule set, add <i>detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:$version"</i>
