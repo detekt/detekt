@@ -70,6 +70,17 @@ buildscript {
     repositories {
         jcenter()
     }
+
+    // or
+
+    mavenCentral()
+    jcenter {
+        content {
+            // just allow to include kotlinx projects
+            // detekt needs 'kotlinx-html' for the html report
+            includeGroup "org.jetbrains.kotlinx"
+        }
+    }
 }
 
 plugins {

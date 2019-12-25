@@ -8,6 +8,8 @@ folder: gettingstarted
 summary:
 ---
 
+detekt requires Gradle 5.0 or higher.
+
 #### <a name="tasks">Available plugin tasks</a>
 
 The detekt Gradle plugin will generate multiple tasks
@@ -26,15 +28,21 @@ Use the Groovy or Kotlin DSL of Gradle to apply the detekt Gradle Plugin. You ca
 using the detekt closure as described [here](#closure).
 
 ##### <a name="gradlegroovy">Configuration when using Groovy DSL</a>
-```groovy
-buildscript {
-    repositories {
-        jcenter()
-    }
-}
 
+```groovy
 repositories {
     jcenter()
+
+    // or
+
+    mavenCentral()
+    jcenter {
+        content {
+            // just allow to include kotlinx projects
+            // detekt needs 'kotlinx-html' for the html report
+            includeGroup "org.jetbrains.kotlinx"
+        }
+    }
 }
 
 plugins {
