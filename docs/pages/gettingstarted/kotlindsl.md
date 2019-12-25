@@ -11,22 +11,24 @@ summary:
 All information from Gradle Groovy DSL are still valid, but the
 DSL to apply the plugin changes slightly.
 
-
-##### <a name="gradlekotlin">Configuration when using Kotlin DSL</a>
-
-For gradle version >= 4.1
+##### <a name="gradlekotlin">Configuration when using Kotlin DSL</a> 
 
 ```kotlin
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 
-buildscript {
-    repositories {
-        jcenter()
-    }
-}
-
 repositories {
     jcenter()
+
+    // or
+
+    mavenCentral()
+    jcenter {
+        content {
+            // just allow to include kotlinx projects
+            // detekt needs 'kotlinx-html' for the html report
+            includeGroup "org.jetbrains.kotlinx"
+        }
+    }
 }
 
 plugins {
