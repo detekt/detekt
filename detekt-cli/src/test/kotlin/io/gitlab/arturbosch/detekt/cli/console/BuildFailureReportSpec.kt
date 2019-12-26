@@ -1,9 +1,9 @@
 package io.gitlab.arturbosch.detekt.cli.console
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.cli.createFinding
 import io.gitlab.arturbosch.detekt.test.TestConfig
+import io.gitlab.arturbosch.detekt.test.TestDetektion
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.spekframework.spek2.Spek
@@ -16,7 +16,8 @@ internal class BuildFailureReportSpec : Spek({
     describe("build failure threshold is configurable by configuration") {
 
         describe("empty code smell result") {
-            val detektion = TestDetektion(createFinding())
+            val codeSmell = createFinding()
+            val detektion = TestDetektion(codeSmell)
 
             it("should fail because no config is provided for configurable console reporter") {
                 assertThatIllegalStateException().isThrownBy { subject.render(detektion) }
@@ -41,9 +42,13 @@ internal class BuildFailureReportSpec : Spek({
             }
 
             it("should not print a warning if weighted issues are zero") {
-                subject.init(TestConfig(mapOf("maxIssues" to "10")))
+                subject.init(TestConfig(mapOf("maxIssues" to "0")))
                 val report = subject.render(TestDetektion())
                 assertThat(report).isNull()
+            }
+
+            it("should not report auto corrected issues as build failure") {
+                AutoCorrectableIssueAssert.isReportNull(subject)
             }
         }
     }

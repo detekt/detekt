@@ -39,7 +39,6 @@ class DetektFacade(
         processors.forEach { it.onStart(filesToAnalyze) }
 
         findings.mergeSmells(detektor.run(filesToAnalyze, bindingContext))
-        val result = DetektResult(findings.toSortedMap())
 
         if (saveSupported) {
             KtFileModifier().saveModifiedFiles(filesToAnalyze) {
@@ -47,6 +46,7 @@ class DetektFacade(
             }
         }
 
+        val result = DetektResult(findings.toSortedMap())
         processors.forEach { it.onFinish(filesToAnalyze, result) }
         return result
     }

@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSetId
@@ -13,8 +14,11 @@ private val WEIGHTED_ISSUES_COUNT_KEY = Key.create<Int>("WEIGHTED_ISSUES_COUNT")
 private const val BUILD = "build"
 private const val WEIGHTS = "weights"
 private const val MAX_ISSUES = "maxIssues"
+private const val EXCLUDE_CORRECTABLE = "excludeCorrectable"
 
 fun Config.maxIssues(): Int = subConfig(BUILD).valueOrDefault(MAX_ISSUES, -1)
+
+fun Config.excludeCorrectable(): Boolean = subConfig(BUILD).valueOrDefault(EXCLUDE_CORRECTABLE, false)
 
 fun Int.isValidAndSmallerOrEqual(amount: Int): Boolean =
     !(this == 0 && amount == 0) && this != -1 && this <= amount
@@ -25,7 +29,7 @@ fun Detektion.getOrComputeWeightedAmountOfIssues(config: Config): Int {
         return maybeAmount
     }
 
-    val smells = findings.flatMap { it.value }
+    val smells = filterAutoCorrectedIssues(config).flatMap { it.value }
     val ruleToRuleSetId = extractRuleToRuleSetIdMap(this)
     val weightsConfig = config.weightsConfig()
 
@@ -40,6 +44,21 @@ fun Detektion.getOrComputeWeightedAmountOfIssues(config: Config): Int {
     val amount = smells.sumBy { it.weighted() }
     this.addData(WEIGHTED_ISSUES_COUNT_KEY, amount)
     return amount
+}
+
+fun Detektion.filterAutoCorrectedIssues(config: Config): Map<RuleSetId, List<Finding>> {
+    if (!config.excludeCorrectable()) {
+        return findings
+    }
+    val filteredFindings = HashMap<RuleSetId, List<Finding>>()
+    findings.forEach { (ruleSetId, findingsList) ->
+        val newFindingsList = findingsList.filter { finding ->
+            val correctableCodeSmell = finding as? CorrectableCodeSmell
+            correctableCodeSmell == null || !correctableCodeSmell.autoCorrectEnabled
+        }
+        filteredFindings[ruleSetId] = newFindingsList
+    }
+    return filteredFindings
 }
 
 private fun Config.weightsConfig(): Config = subConfig(BUILD).subConfig(WEIGHTS)
