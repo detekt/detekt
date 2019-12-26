@@ -68,7 +68,7 @@ class Runner(
         }
     }
 
-    inline fun <T> measure(block: () -> T): Pair<Long, T> {
+    private inline fun <T> measure(block: () -> T): Pair<Long, T> {
         val start = System.currentTimeMillis()
         val result = block()
         return System.currentTimeMillis() - start to result

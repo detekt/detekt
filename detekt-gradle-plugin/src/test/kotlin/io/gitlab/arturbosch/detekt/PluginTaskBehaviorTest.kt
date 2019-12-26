@@ -64,8 +64,6 @@ internal class PluginTaskBehaviorTest : Spek({
         }
         it("should run again after changing config") {
             val configFileWithCommentsDisabled = """
-                            |autoCorrect: true
-                            |failFast: false
                             |comments:
                             |  active: false
                         """.trimMargin()
