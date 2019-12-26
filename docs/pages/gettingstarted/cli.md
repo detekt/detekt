@@ -18,7 +18,8 @@ detekt will exit with one of the following exit codes:
 |-----------|--------------------------------------------------------------------------------|
 | 0         | detekt ran normally and maxIssues count was not reached in BuildFailureReport. |
 | 1         | An unexpected error occurred                                                   |
-| 2         | maxIssues count was reached in BuildFailureReport.                             |
+| 2         | MaxIssues count was reached in BuildFailureReport.                             |
+| 3         | Invalid detekt configuration file detected.                                    |
 
 The following parameters are shown when `--help` is entered.
 

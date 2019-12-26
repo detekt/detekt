@@ -28,6 +28,11 @@ internal interface DetektInvoker {
     }
 }
 
+private const val NORMAL_RUN = 0
+private const val UNEXPECTED_RUN = 1
+private const val ISSUE_THRESHOLD_MET = 2
+private const val INVALID_CONFIG = 3
+
 private class DefaultCliInvoker(private val project: Project) : DetektInvoker {
 
     override fun invokeCli(
@@ -55,8 +60,13 @@ private class DefaultCliInvoker(private val project: Project) : DetektInvoker {
         project.logger.debug("Detekt finished with exit value $exitValue")
 
         when (exitValue) {
-            1 -> throw GradleException("There was a problem running detekt.")
-            2 -> if (!ignoreFailures) throw GradleException("MaxIssues or failThreshold count was reached.")
+            NORMAL_RUN -> return
+            UNEXPECTED_RUN -> throw GradleException("There was a problem running detekt.")
+            ISSUE_THRESHOLD_MET -> if (!ignoreFailures) {
+                throw GradleException("MaxIssues or failThreshold count was reached.")
+            }
+            INVALID_CONFIG -> throw GradleException("Invalid detekt configuration file detected.")
+            else -> throw GradleException("Unexpected detekt exit with code '${exitValue}'.")
         }
     }
 
