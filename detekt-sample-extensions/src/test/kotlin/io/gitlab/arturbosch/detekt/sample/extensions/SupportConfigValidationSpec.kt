@@ -17,7 +17,7 @@ class SupportConfigValidationSpec : Spek({
         it("fails when new rule set is not excluded") {
             val args = CliArgs {
                 input = testDir.toString()
-                configResource = "not-excluded-config.yml"
+                configResource = "included-config.yml"
             }
 
             assertThatCode { Runner(args).execute() }

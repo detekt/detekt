@@ -97,6 +97,17 @@ By specifying the rule set and rule ids, _detekt_ will use the sub configuration
 
 ```val threshold = valueOrDefault("threshold", THRESHOLD)```
 
+Note: As of version 1.2.0 detekt now verifies if all configured properties actually exist in a configuration created by `--generate-config`.
+This means that by default detekt does not know about your new properties.
+Therefore we need to mention them in the configuration under `config>excludes`:
+
+```yaml
+config:
+  validation: true
+  # 1. exclude rule set 'sample' and all its nested members
+  # 2. exclude every property in every rule under the rule set 'sample'
+  excludes: "sample.*,sample>.*>.*"
+```
 
 ##### <a name="testing">Testing your rules</a>
 
