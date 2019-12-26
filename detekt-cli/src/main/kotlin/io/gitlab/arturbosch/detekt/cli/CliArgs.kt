@@ -16,7 +16,7 @@ class CliArgs : Args {
         description = "Input paths to analyze. Multiple paths are separated by comma. If not specified the " +
             "current working directory is used."
     )
-    private var input: String? = null
+    var input: String? = null
 
     @Parameter(
         names = ["--includes", "-in"],
