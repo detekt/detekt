@@ -1,0 +1,9 @@
+config:
+  validation: true
+  # 1. exclude rule set 'sample' and all its nested members
+  # 2. exclude every property in every rule under the rule set 'sample'
+  excludes: "sample.*,sample>.*>.*"
+
+sample:
+  TooManyFunctions:
+    active: true
