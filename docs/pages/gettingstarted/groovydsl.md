@@ -135,19 +135,20 @@ Custom tasks for alternative configurations or different source sets can be defi
 uses the type `Detekt`.
 
 ###### Groovy DSL
+
 ```groovy
 task detektFailFast(type: io.gitlab.arturbosch.detekt.Detekt) {
-   description = "Runs a failfast detekt build."
+    description = "Runs a failfast detekt build."
 
-   input = files("src/main/java")
-   config = files("$rootDir/config.yml")
-   debug = true
-   reports {
-       xml {
-           destination = file("build/reports/failfast.xml")
-       }
-       html.destination = file("build/reports/failfast.html")
-   }
+    input = files("src/main/java")
+    config = files("$rootDir/config.yml")
+    debug = true
+    reports {
+        xml {
+            destination = file("build/reports/failfast.xml")
+        }
+        html.destination = file("build/reports/failfast.html")
+    }
     include '**/*.kt'
     include '**/*.kts'
     exclude 'resources/'
