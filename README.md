@@ -45,7 +45,7 @@ Visit [the project website](https://arturbosch.github.io/detekt/) for installati
 - [Suppressing issues in code](https://arturbosch.github.io/detekt/suppressing-rules.html)
 - [Suppressing issues via baseline file](https://arturbosch.github.io/detekt/baseline.html)
 - [Configuring detekt](https://arturbosch.github.io/detekt/configurations.html)
-- Sample gradle integrations examples:
+- Sample Gradle integrations examples:
     - [multi project (Kotlin DSL)](https://github.com/arturbosch/detekt/blob/master/build.gradle.kts)
     - [single project (Groovy DSL)](https://github.com/arturbosch/kutils/blob/master/build.gradle)
     - [single project (Unofficial Maven plugin)](https://github.com/arturbosch/sonar-kotlin/blob/master/pom.xml)
@@ -54,14 +54,14 @@ Visit [the project website](https://arturbosch.github.io/detekt/) for installati
 
 ### Quick Start ...
 
-#### with command-line interface
+#### with the command-line interface
 
 - `git clone https://github.com/arturbosch/detekt`
 - `cd detekt`
 - `./gradlew build shadowJar`
 - `java -jar detekt-cli/build/libs/detekt-cli-[version]-all.jar --help`
 
-#### with gradle
+#### with Gradle
 
 Gradle 5.0+ is required:
 
@@ -107,7 +107,7 @@ See [bintray](https://bintray.com/arturbosch/code-analysis/detekt) for releases 
 ### Adding more rule sets
 
 detekt itself provides a wrapper over [KtLint](https://github.com/shyiko/ktlint) as a `formatting` rule set
-which can be easily added to the gradle configuration:
+which can be easily added to the Gradle configuration:
 
 ```kotlin
 dependencies {
@@ -188,7 +188,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Daniele Conti](https://github.com/fourlastor) - ObjectPropertyNaming improvement
 - [Nicola Corti](https://github.com/cortinico) - Fixed Suppress of MaxLineLenght
 - [Michael Lotkowski](https://github.com/DownMoney) - Rule improvement: False positive UnusedImport for componentN
-- [Nuno Caro](https://github.com/Pak3nuh) - Adds TXT report support on gradle plugin
+- [Nuno Caro](https://github.com/Pak3nuh) - Adds TXT report support on Gradle plugin
 - [Minsuk Eom](https://github.com/boxresin) - Rule fix: PackageNaming
 
 ### Mentions
