@@ -13,6 +13,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SingleAssign
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
+import io.gitlab.arturbosch.detekt.api.internal.absolutePath
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.com.intellij.lang.FileASTNode
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
@@ -50,6 +51,7 @@ abstract class FormattingRule(config: Config) : Rule(config) {
             val oldEditorConfig = root.node.getUserData(KtLint.EDITOR_CONFIG_USER_DATA_KEY)
             root.node.putUserData(KtLint.EDITOR_CONFIG_USER_DATA_KEY, updateFunc(oldEditorConfig))
         }
+        root.node.putUserData(KtLint.FILE_PATH_USER_DATA_KEY, root.absolutePath())
     }
 
     open fun editorConfigUpdater(): ((oldEditorConfig: EditorConfig?) -> EditorConfig)? = null
