@@ -71,6 +71,9 @@ detekt {
 
 ##### Using Type Resolution
 
+Type resolution is experimental and works only for predefined `detektMain` and `detektTest` tasks or when implementing a 
+custom detekt task with the `classpath` and `jvmTarget` properties present.
+
 ```kotlin
 tasks {
     withType<Detekt> {
