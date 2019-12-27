@@ -27,7 +27,7 @@ import java.util.IdentityHashMap
  */
 class LargeClass(
     config: Config = Config.empty,
-    threshold: Int = DEFAULT_ACCEPTED_CLASS_LENGTH
+    threshold: Int = DEFAULT_THRESHOLD_CLASS_LENGTH
 ) : ThresholdRule(config, threshold) {
 
     override val issue = Issue("LargeClass",
@@ -76,6 +76,6 @@ class LargeClass(
     }
 
     companion object {
-        const val DEFAULT_ACCEPTED_CLASS_LENGTH = 600
+        const val DEFAULT_THRESHOLD_CLASS_LENGTH = 600
     }
 }

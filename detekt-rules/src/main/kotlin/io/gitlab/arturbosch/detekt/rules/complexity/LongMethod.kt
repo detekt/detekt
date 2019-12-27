@@ -27,7 +27,7 @@ import java.util.IdentityHashMap
  */
 class LongMethod(
     config: Config = Config.empty,
-    threshold: Int = DEFAULT_ACCEPTED_METHOD_LENGTH
+    threshold: Int = DEFAULT_THRESHOLD_METHOD_LENGTH
 ) : ThresholdRule(config, threshold) {
 
     override val issue = Issue("LongMethod",
@@ -77,6 +77,6 @@ class LongMethod(
     }
 
     companion object {
-        const val DEFAULT_ACCEPTED_METHOD_LENGTH = 60
+        const val DEFAULT_THRESHOLD_METHOD_LENGTH = 60
     }
 }

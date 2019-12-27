@@ -47,7 +47,7 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  */
 class ComplexMethod(
     config: Config = Config.empty,
-    threshold: Int = DEFAULT_ACCEPTED_METHOD_COMPLEXITY
+    threshold: Int = DEFAULT_THRESHOLD_METHOD_COMPLEXITY
 ) : ThresholdRule(config, threshold) {
 
     override val issue = Issue("ComplexMethod",
@@ -102,7 +102,7 @@ class ComplexMethod(
         this is KtReturnExpression && this.returnedExpression is KtWhenExpression
 
     companion object {
-        const val DEFAULT_ACCEPTED_METHOD_COMPLEXITY = 15
+        const val DEFAULT_THRESHOLD_METHOD_COMPLEXITY = 15
         const val IGNORE_SINGLE_WHEN_EXPRESSION = "ignoreSingleWhenExpression"
         const val IGNORE_SIMPLE_WHEN_ENTRIES = "ignoreSimpleWhenEntries"
         const val IGNORE_NESTING_FUNCTIONS = "ignoreNestingFunctions"
