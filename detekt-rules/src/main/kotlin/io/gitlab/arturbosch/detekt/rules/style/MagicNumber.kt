@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.commaSeparatedPattern
 import io.gitlab.arturbosch.detekt.rules.isConstant
 import io.gitlab.arturbosch.detekt.rules.isHashCodeFunction
 import io.gitlab.arturbosch.detekt.rules.isPartOf
@@ -93,8 +94,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
                     "By default, -1, 0, 1, and 2 are not considered to be magic numbers.", Debt.TEN_MINS)
 
     private val ignoredNumbers = valueOrDefault(IGNORE_NUMBERS, "-1,0,1,2")
-            .splitToSequence(",")
-            .filterNot { it.isEmpty() }
+            .commaSeparatedPattern()
             .map { parseAsDouble(it) }
             .sorted()
             .toList()
