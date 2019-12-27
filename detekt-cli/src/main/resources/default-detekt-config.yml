@@ -459,6 +459,9 @@ style:
     active: false
     imports: ''
     forbiddenPatterns: ""
+  ForbiddenMethodCall:
+    active: false
+    methods: ''
   ForbiddenPublicDataClass:
     active: false
     ignorePackages: '*.internal,*.internal.*'
