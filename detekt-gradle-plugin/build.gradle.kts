@@ -24,9 +24,10 @@ version = "1.4.0"
 val spekVersion = "2.0.9"
 val junitPlatformVersion = "1.5.2"
 val assertjVersion = "3.14.0"
-val detektFormattingVersion = "1.3.1"
+val detektVersion = "1.3.1"
 
 dependencies {
+    implementation("io.gitlab.arturbosch.detekt:detekt-cli:$detektVersion")
     implementation(kotlin("stdlib"))
     implementation(kotlin("gradle-plugin"))
     implementation(kotlin("gradle-plugin-api"))
@@ -36,7 +37,7 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
     testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spekVersion")
 
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:$detektFormattingVersion")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:$detektVersion")
 }
 
 gradlePlugin {
@@ -105,7 +106,7 @@ val generateDefaultDetektVersionFile by tasks.registering {
         defaultDetektVersionFile.writeText("""
             package io.gitlab.arturbosch.detekt
 
-            internal const val DEFAULT_DETEKT_VERSION = "$version"
+            internal const val DEFAULT_DETEKT_VERSION = "$detektVersion"
 
             """.trimIndent()
         )

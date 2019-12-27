@@ -138,6 +138,9 @@ class DetektPlugin : Plugin<Project> {
     ): Provider<FileCollection> = project.provider { extension.input.filter { it.exists() } }
 
     private fun configurePluginDependencies(project: Project, extension: DetektExtension) {
+
+        fun toolVersion(): String? = extension.toolVersion // force it to be nullable for the compiler
+
         project.configurations.create(CONFIGURATION_DETEKT_PLUGINS) { configuration ->
             configuration.isVisible = false
             configuration.isTransitive = true
@@ -149,9 +152,13 @@ class DetektPlugin : Plugin<Project> {
             configuration.isTransitive = true
             configuration.description = "The $CONFIGURATION_DETEKT dependencies to be used for this project."
 
-            configuration.defaultDependencies { dependencySet ->
-                val version = extension.toolVersion ?: DEFAULT_DETEKT_VERSION
-                dependencySet.add(project.dependencies.create("io.gitlab.arturbosch.detekt:detekt-cli:$version"))
+            if (toolVersion() != null) {
+                project.logger.warn(
+                    """ |Using 'detekt.toolVersion' is deprecated due to performance reasons.
+                        |This property will exist in the future due to Gradle api requirements but has no use anymore.
+                        |This plugin ships with version '$DEFAULT_DETEKT_VERSION' by default.
+                    """.trimMargin()
+                )
             }
         }
     }

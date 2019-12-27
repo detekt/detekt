@@ -1,5 +1,8 @@
 package io.gitlab.arturbosch.detekt.invoke
 
+import io.gitlab.arturbosch.detekt.cli.BuildFailure
+import io.gitlab.arturbosch.detekt.cli.InvalidConfig
+import io.gitlab.arturbosch.detekt.cli.buildRunner
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.file.FileCollection
@@ -28,11 +31,6 @@ internal interface DetektInvoker {
     }
 }
 
-private const val NORMAL_RUN = 0
-private const val UNEXPECTED_RUN = 1
-private const val ISSUE_THRESHOLD_MET = 2
-private const val INVALID_CONFIG = 3
-
 private class DefaultCliInvoker(private val project: Project) : DetektInvoker {
 
     override fun invokeCli(
@@ -41,37 +39,24 @@ private class DefaultCliInvoker(private val project: Project) : DetektInvoker {
         taskName: String,
         ignoreFailures: Boolean
     ) {
-        val detektTmpDir = project.mkdir("${project.buildDir}/tmp/detekt")
-        val argsFile = project.file("$detektTmpDir/$taskName.args")
-
         val cliArguments = arguments.flatMap(CliArgument::toArgument)
-
-        argsFile.writeText(cliArguments.joinToString("\n"))
 
         project.logger.debug(cliArguments.joinToString(" "))
 
-        val proc = project.javaexec {
-            it.main = DETEKT_MAIN
-            it.classpath = classpath
-            it.args = listOf("@${argsFile.absolutePath}")
-            it.isIgnoreExitValue = true
-        }
-        val exitValue = proc.exitValue
-        project.logger.debug("Detekt finished with exit value $exitValue")
-
-        when (exitValue) {
-            NORMAL_RUN -> return
-            UNEXPECTED_RUN -> throw GradleException("There was a problem running detekt.")
-            ISSUE_THRESHOLD_MET -> if (!ignoreFailures) {
+        @Suppress("TooGenericExceptionCaught")
+        try {
+            buildRunner(cliArguments.toTypedArray()).execute()
+            return
+        } catch (ignored: InvalidConfig) {
+            throw GradleException("Invalid detekt configuration file detected.")
+        } catch (ignored: BuildFailure) {
+            if (!ignoreFailures) {
                 throw GradleException("MaxIssues or failThreshold count was reached.")
             }
-            INVALID_CONFIG -> throw GradleException("Invalid detekt configuration file detected.")
-            else -> throw GradleException("Unexpected detekt exit with code '$exitValue'.")
+            return
+        } catch (e: Exception) {
+            throw GradleException("There was a problem running detekt.", e)
         }
-    }
-
-    companion object {
-        private const val DETEKT_MAIN = "io.gitlab.arturbosch.detekt.cli.Main"
     }
 }
 

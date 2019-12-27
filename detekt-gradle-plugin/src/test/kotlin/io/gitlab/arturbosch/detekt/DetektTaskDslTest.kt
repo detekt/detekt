@@ -438,10 +438,6 @@ internal object DetektTaskDslTest : Spek({
                     it("successfully checks dependencies") {
                         assertThat(result.task(":dependencies")?.outcome).isEqualTo(TaskOutcome.SUCCESS)
                     }
-
-                    it("adds the custom detekt version to the dependencies") {
-                        assertThat(result.output).contains("io.gitlab.arturbosch.detekt:detekt-cli:$customVersion")
-                    }
                 }
             }
         }
