@@ -112,6 +112,15 @@ detekt {
 }
 ```
 
+##### Using Type Resolution
+
+```kotlin
+tasks.withType(io.gitlab.arturbosch.detekt.Detekt) {
+    // Target version of the generated JVM bytecode. It is used for type resolution.
+    jvmTarget = "1.8"
+}
+```
+
 ##### <a name="excluding">Leveraging Gradle's SourceTask - Excluding and including source files</a>
 
 A detekt task extends the Gradle `SourceTask` to be only scheduled when watched source files are changed.
