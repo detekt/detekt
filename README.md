@@ -56,10 +56,12 @@ Visit [the project website](https://arturbosch.github.io/detekt/) for installati
 
 #### with the command-line interface
 
-- `git clone https://github.com/arturbosch/detekt`
-- `cd detekt`
-- `./gradlew build shadowJar`
-- `java -jar detekt-cli/build/libs/detekt-cli-[version]-all.jar --help`
+```shell script
+git clone https://github.com/arturbosch/detekt
+cd detekt
+./gradlew build shadowJar
+java -jar detekt-cli/build/libs/detekt-cli-[version]-all.jar --help
+```
 
 #### with Gradle
 
@@ -88,10 +90,16 @@ plugins {
 }
 
 detekt {
-    toolVersion = "[version]"
-    input = files("src/main/kotlin")
-    filters = ".*/resources/.*,.*/build/.*"
-    baseline = file("my-detekt-baseline.xml") // Just if you want to create a baseline file.
+    failFast = true // fail build on any finding
+    buildUponDefaultConfig = true // preconfigure defaults
+    config = files("$projectDir/config/detekt.yml") // point to your custom config defining rules to run, overwriting default behavior
+    baseline = file("$projectDir/config/baseline.xml") // a way of suppressing issues before introducing detekt
+
+    reports {
+        html.enabled = true // observe findings in your browser with structure and code snippets
+        xml.enabled = true // checkstyle like format mainly for integrations like Jenkins
+        txt.enabled = true // similar to the console output, contains issue signature to manually edit baseline files
+    }
 }
 
 tasks {
