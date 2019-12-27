@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.formatting
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ChainWrapping
 import io.gitlab.arturbosch.detekt.test.format
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -16,8 +16,8 @@ class ChainWrappingRegressionSpec : Spek({
 
             val findings = ChainWrapping(Config.empty).format(subject.text)
 
-            Assertions.assertThat(findings).isNotEmpty()
-            Assertions.assertThat(subject.text).isEqualTo(expected)
+            assertThat(findings).isNotEmpty()
+            assertThat(subject.text).isEqualTo(expected)
         }
     }
 })
