@@ -1,10 +1,6 @@
 build:
   maxIssues: 1
 
-# can be removed after 1.3.1 is published
-config:
-  excludes: "build>excludeCorrectable"
-
 comments:
   CommentOverPrivateProperty:
     active: true
