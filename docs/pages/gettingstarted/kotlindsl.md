@@ -69,6 +69,20 @@ detekt {
 }
 ```
 
+##### Using Type Resolution
+
+Type resolution is experimental and works only for predefined `detektMain` and `detektTest` tasks or when implementing a 
+custom detekt task with the `classpath` and `jvmTarget` properties present.
+
+```kotlin
+tasks {
+    withType<Detekt> {
+        // Target version of the generated JVM bytecode. It is used for type resolution.
+        this.jvmTarget = "1.8"
+    }
+}
+```
+
 ##### <a name="excluding">Leveraging Gradle's SourceTask - Excluding and including source files</a>
 
 A detekt task extends the Gradle `SourceTask` to be only scheduled when watched source files are changed.
