@@ -26,7 +26,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isExtensionDeclaration
  */
 class MethodOverloading(
     config: Config = Config.empty,
-    threshold: Int = DEFAULT_ACCEPTED_OVERLOAD_COUNT
+    threshold: Int = DEFAULT_THRESHOLD_OVERLOAD_COUNT
 ) : ThresholdRule(config, threshold) {
 
     override val issue = Issue("MethodOverloading", Severity.Maintainability,
@@ -73,6 +73,6 @@ class MethodOverloading(
     }
 
     companion object {
-        const val DEFAULT_ACCEPTED_OVERLOAD_COUNT = 6
+        const val DEFAULT_THRESHOLD_OVERLOAD_COUNT = 6
     }
 }

@@ -22,7 +22,7 @@ import org.jetbrains.kotlin.psi.KtParameterList
  */
 class LongParameterList(
     config: Config = Config.empty,
-    threshold: Int = DEFAULT_ACCEPTED_PARAMETER_LENGTH
+    threshold: Int = DEFAULT_THRESHOLD_PARAMETER_LENGTH
 ) : ThresholdRule(config, threshold) {
 
     override val issue = Issue("LongParameterList",
@@ -58,6 +58,6 @@ class LongParameterList(
 
     companion object {
         const val IGNORE_DEFAULT_PARAMETERS = "ignoreDefaultParameters"
-        const val DEFAULT_ACCEPTED_PARAMETER_LENGTH = 6
+        const val DEFAULT_THRESHOLD_PARAMETER_LENGTH = 6
     }
 }

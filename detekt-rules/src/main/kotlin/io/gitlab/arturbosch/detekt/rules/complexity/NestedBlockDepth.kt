@@ -31,7 +31,7 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  */
 class NestedBlockDepth(
     config: Config = Config.empty,
-    threshold: Int = DEFAULT_ACCEPTED_NESTING
+    threshold: Int = DEFAULT_THRESHOLD_NESTING
 ) : ThresholdRule(config, threshold) {
 
     override val issue = Issue("NestedBlockDepth",
@@ -118,6 +118,6 @@ class NestedBlockDepth(
     }
 
     companion object {
-        const val DEFAULT_ACCEPTED_NESTING = 4
+        const val DEFAULT_THRESHOLD_NESTING = 4
     }
 }
