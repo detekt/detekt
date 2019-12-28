@@ -6,4 +6,4 @@ title: SimpleNotification.<init> - detekt-api
 
 # &lt;init&gt;
 
-`SimpleNotification(message: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`)`
+`SimpleNotification(message: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, level: Level = Notification.Level.Error)`
