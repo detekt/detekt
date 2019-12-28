@@ -12,6 +12,7 @@ Level of severity of the notification
 
 ### Enum Values
 
+| [Info](-info.html) |  |
 | [Warning](-warning.html) |  |
 | [Error](-error.html) |  |
 

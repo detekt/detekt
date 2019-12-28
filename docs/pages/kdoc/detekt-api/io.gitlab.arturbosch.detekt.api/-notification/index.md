@@ -18,6 +18,7 @@ your kotlin file is a notification.
 
 ### Properties
 
+| [isError](is-error.html) | `open val isError: `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html) |
 | [level](level.html) | `abstract val level: Level` |
 | [message](message.html) | `abstract val message: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 
