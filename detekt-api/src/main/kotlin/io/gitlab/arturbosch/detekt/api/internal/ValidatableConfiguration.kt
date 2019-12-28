@@ -23,6 +23,12 @@ val DEFAULT_PROPERTY_EXCLUDES = setOf(
     "build>weights.*"
 ).joinToString(",")
 
+private val DEPRECATED_PROPERTIES = setOf(
+    "empty-blocks>EmptyFunctionBlock>ignoreOverriddenFunctions" to "Use 'ignoreOverridden' instead",
+    "naming>FunctionParameterNaming>ignoreOverriddenFunctions" to "Use 'ignoreOverridden' instead",
+    "naming>MemberNameEqualsClassName>ignoreOverriddenFunction" to "Use 'ignoreOverridden' instead"
+).map { (first, second) -> first.toRegex() to second }
+
 @Suppress("UNCHECKED_CAST", "ComplexMethod")
 fun validateConfig(
     config: Config,
@@ -46,6 +52,10 @@ fun validateConfig(
             if (excludePatterns.any { it.matches(propertyPath) }) {
                 continue
             }
+
+            DEPRECATED_PROPERTIES
+                .filter { (regex, _) -> regex.matches(propertyPath) }
+                .forEach { (_, description) -> notifications.add(propertyIsDeprecated(propertyPath, description)) }
 
             if (!base.contains(prop)) {
                 notifications.add(propertyDoesNotExists(propertyPath))
@@ -80,3 +90,6 @@ internal fun nestedConfigurationExpected(prop: String): Notification =
 
 internal fun unexpectedNestedConfiguration(prop: String): Notification =
     SimpleNotification("Unexpected nested config for '$prop'.")
+
+internal fun propertyIsDeprecated(prop: String, deprecationDescription: String): Notification =
+    SimpleNotification("Property '$prop' is deprecated. $deprecationDescription.", Notification.Level.Warning)
