@@ -112,7 +112,7 @@ class HtmlOutputReport : OutputReport() {
         val psiFile = finding.entity.ktElement?.containingFile
         if (psiFile != null) {
             val lineSequence = psiFile.text.splitToSequence('\n')
-            snippetCode(lineSequence, finding.startPosition, finding.charPosition.length())
+            snippetCode(finding.id, lineSequence, finding.startPosition, finding.charPosition.length())
         }
     }
 
