@@ -22,11 +22,7 @@ internal fun FlowContent.snippetCode(lines: Sequence<String>, location: SourceLo
                     span("lineno") { text("%1$4s ".format(currentLineNumber)) }
                     if (currentLineNumber >= location.line && errorLength > 0) {
                         val column = if (currentLineNumber == location.line) location.column - 1 else 0
-                        errorLength -= if (column < line.length) {
-                            writeErrorLine(line, column, errorLength) + 1 // we need to consume the \n
-                        } else {
-                            1
-                        }
+                        errorLength -= writeErrorLine(line, column, errorLength) + 1 // we need to consume the \n
                     } else {
                         text(line)
                     }
