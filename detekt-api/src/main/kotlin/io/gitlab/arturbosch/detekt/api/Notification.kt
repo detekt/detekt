@@ -8,6 +8,8 @@ package io.gitlab.arturbosch.detekt.api
 interface Notification {
     val message: String
     val level: Level
+    val isError: Boolean
+        get() = level == Level.Error
 
     /**
      * Level of severity of the notification
