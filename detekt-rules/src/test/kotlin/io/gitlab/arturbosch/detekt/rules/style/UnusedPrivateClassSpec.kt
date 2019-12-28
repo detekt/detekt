@@ -129,6 +129,21 @@ class UnusedPrivateClassSpec : Spek({
             assertThat(lint).isEmpty()
         }
 
+        it("should not report them if used as generic type in functions") {
+            val code = """
+                private class Foo
+                private var a = bar<Foo>()
+
+                fun <T> bar(): T {
+                    throw Exception()
+                }
+                """
+
+            val lint = subject.compileAndLint(code)
+
+            assertThat(lint).isEmpty()
+        }
+
         it("should not report them if used as nested generic type") {
             val code = """
                 private class Foo
