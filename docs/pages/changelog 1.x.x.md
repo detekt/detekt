@@ -6,6 +6,35 @@ permalink: changelog.html
 toc: true
 ---
 
+#### 1.3.1
+
+- Remove old unused documentation - [#2210](https://github.com/arturbosch/detekt/pull/2210)
+- Show code snippet erros in html reports - [#2209](https://github.com/arturbosch/detekt/pull/2209)
+- Use compileAndLint in UnusedPrivateClassSpec - [#2208](https://github.com/arturbosch/detekt/pull/2208)
+- Fix false positive in UnusedPrivateClass - [#2207](https://github.com/arturbosch/detekt/pull/2207)
+- Update readme promoting new properties of the gradle plugin - [#2205](https://github.com/arturbosch/detekt/pull/2205)
+- Rename default const containing _ACCEPTED_ - [#2204](https://github.com/arturbosch/detekt/pull/2204)
+- Mistake From LongParameterList.kt - [#2202](https://github.com/arturbosch/detekt/issues/2202)
+- Exclude yet unknown new build property - [#2201](https://github.com/arturbosch/detekt/pull/2201)
+- Add comment regarding type resolution to README - [#2199](https://github.com/arturbosch/detekt/pull/2199)
+- Type resolution doc - [#2198](https://github.com/arturbosch/detekt/pull/2198)
+- Correct indentation for Groovy DSL doc - [#2197](https://github.com/arturbosch/detekt/pull/2197)
+- Use shorthand syntax for assertThat() - [#2196](https://github.com/arturbosch/detekt/pull/2196)
+- Refactor MagicNumber to use commaSeparatedPatterns - [#2195](https://github.com/arturbosch/detekt/pull/2195)
+- Attach FILE_PATH_USER_DATA_KEY user data on FormattingRules (#1907) - [#2194](https://github.com/arturbosch/detekt/pull/2194)
+- Handle invalid config exit code in gradle plugin - [#2193](https://github.com/arturbosch/detekt/pull/2193)
+- Add tests showing how to exclude custom config properties in plugins - [#2192](https://github.com/arturbosch/detekt/pull/2192)
+- Fix suppression of KtLint rules on file level - #2179 - [#2191](https://github.com/arturbosch/detekt/pull/2191)
+- Mention needed kotlinx.html library from jcenter - #2146 - [#2190](https://github.com/arturbosch/detekt/pull/2190)
+- UnusedPrivateClass has false positive behavior for deserialized items - [#2158](https://github.com/arturbosch/detekt/issues/2158)
+- Use JDK 11 (LTS) + 13 for AppVeyor builds - [#2141](https://github.com/arturbosch/detekt/pull/2141)
+- Document how to create a common baseline file for multi module gradle projects - [#2140](https://github.com/arturbosch/detekt/pull/2140)
+- DetektAll with baseline fails with error - [#2100](https://github.com/arturbosch/detekt/issues/2100)
+- ForbiddenMethod Rule - [#1954](https://github.com/arturbosch/detekt/pull/1954)
+- Do not report auto-corrected formatting issues - [#1840](https://github.com/arturbosch/detekt/pull/1840)
+
+See all issues at: [1.3.1](https://github.com/arturbosch/detekt/milestone/54)
+
 #### 1.3.0
 
 ##### Notable changes
