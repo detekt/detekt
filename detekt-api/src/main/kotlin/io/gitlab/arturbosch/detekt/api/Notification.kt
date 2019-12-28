@@ -13,6 +13,7 @@ interface Notification {
      * Level of severity of the notification
      */
     enum class Level {
+        Info,
         Warning,
         Error
     }

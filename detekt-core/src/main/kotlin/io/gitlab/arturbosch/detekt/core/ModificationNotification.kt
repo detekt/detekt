@@ -6,6 +6,6 @@ import java.nio.file.Path
 class ModificationNotification(path: Path) : Notification {
 
     override val message: String = "File $path was modified."
-    override val level: Notification.Level = Notification.Level.Error
+    override val level: Notification.Level = Notification.Level.Info
     override fun toString(): String = message
 }
