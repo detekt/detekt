@@ -8,7 +8,7 @@ fun whichOS(): String = System.getProperty("os.name")
 
 fun whichJava(): String = System.getProperty("java.runtime.version")
 
-fun whichDetekt(): String {
+fun whichDetekt(): String? {
     for (resource in Detektor::class.java.classLoader.getResources("META-INF/MANIFEST.MF")) {
         try {
             val version = readDetektVersionInManifest(resource)
@@ -19,7 +19,7 @@ fun whichDetekt(): String {
             // we search for the manifest with the detekt version
         }
     }
-    return "unknown"
+    return null
 }
 
 private fun readDetektVersionInManifest(resource: URL) =

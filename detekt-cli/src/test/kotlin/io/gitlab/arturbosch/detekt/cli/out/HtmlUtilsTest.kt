@@ -31,7 +31,7 @@ class HtmlUtilsTest : Spek({
 
         it("all line") {
             val snippet = createHTML().div() {
-                snippetCode(code.asSequence(), SourceLocation(7, 1), 34)
+                snippetCode("ruleName", code.asSequence(), SourceLocation(7, 1), 34)
             }
 
             assertThat(snippet).isEqualTo("""
@@ -52,7 +52,7 @@ class HtmlUtilsTest : Spek({
 
         it("part of line") {
             val snippet = createHTML().div() {
-                snippetCode(code.asSequence(), SourceLocation(7, 7), 26)
+                snippetCode("ruleName", code.asSequence(), SourceLocation(7, 7), 26)
             }
 
             assertThat(snippet).isEqualTo("""
@@ -73,7 +73,7 @@ class HtmlUtilsTest : Spek({
 
         it("more than one line") {
             val snippet = createHTML().div() {
-                snippetCode(code.asSequence(), SourceLocation(7, 7), 66)
+                snippetCode("ruleName", code.asSequence(), SourceLocation(7, 7), 66)
             }
 
             assertThat(snippet).isEqualTo("""
@@ -94,7 +94,7 @@ class HtmlUtilsTest : Spek({
 
         it("first line") {
             val snippet = createHTML().div() {
-                snippetCode(code.asSequence(), SourceLocation(1, 1), 1)
+                snippetCode("ruleName", code.asSequence(), SourceLocation(1, 1), 1)
             }
 
             assertThat(snippet).contains((1..4).map { "  $it " })
@@ -102,7 +102,7 @@ class HtmlUtilsTest : Spek({
 
         it("second line") {
             val snippet = createHTML().div() {
-                snippetCode(code.asSequence(), SourceLocation(2, 1), 1)
+                snippetCode("ruleName", code.asSequence(), SourceLocation(2, 1), 1)
             }
 
             assertThat(snippet).contains((1..5).map { "  $it " })
@@ -110,7 +110,7 @@ class HtmlUtilsTest : Spek({
 
         it("penultimate line") {
             val snippet = createHTML().div() {
-                snippetCode(code.asSequence(), SourceLocation(15, 1), 1)
+                snippetCode("ruleName", code.asSequence(), SourceLocation(15, 1), 1)
             }
 
             assertThat(snippet).contains((12..16).map { "  $it " })
@@ -118,10 +118,18 @@ class HtmlUtilsTest : Spek({
 
         it("last line") {
             val snippet = createHTML().div() {
-                snippetCode(code.asSequence(), SourceLocation(16, 1), 1)
+                snippetCode("ruleName", code.asSequence(), SourceLocation(16, 1), 1)
             }
 
             assertThat(snippet).contains((13..16).map { "  $it " })
+        }
+
+        it("when we provide an invalid source location the exception div is shown") {
+            val snippet = createHTML().div() {
+                snippetCode("ruleName", code.asSequence(), SourceLocation(7, 100), 1)
+            }
+
+            assertThat(snippet).contains("""<div class="exception">""")
         }
     }
 })
