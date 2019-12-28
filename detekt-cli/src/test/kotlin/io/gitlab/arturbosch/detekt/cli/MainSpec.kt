@@ -25,7 +25,7 @@ class MainSpec : Spek({
                     emptyArray()
                 ).forEach { args ->
 
-                    val expectedRunnerClass = when  {
+                    val expectedRunnerClass = when {
                         args.contains("--generate-config") -> ConfigExporter::class
                         args.contains("--run-rule") -> SingleRuleRunner::class
                         args.contains("--print-ast") -> AstPrinter::class
@@ -41,5 +41,4 @@ class MainSpec : Spek({
             }
         }
     }
-
 })
