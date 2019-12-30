@@ -146,6 +146,30 @@ fun stuff() =
 fun <V> foo(): Int where V : Int = 5
 ```
 
+### ExplicitCollectionElementAccessMethod
+
+Prefer usage of indexed access operator [] for map element access or insert methods.
+
+**Severity**: Style
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+val map = Map<String, String>()
+map.put("key", "value")
+val value = map.get("key")
+```
+
+#### Compliant Code:
+
+```kotlin
+val map = Map<String, String>()
+map["key"] = "value"
+map["key"]
+```
+
 ### ExplicitItLambdaParameter
 
 Lambda expressions are one of the core features of the language. They often include very small chunks of
