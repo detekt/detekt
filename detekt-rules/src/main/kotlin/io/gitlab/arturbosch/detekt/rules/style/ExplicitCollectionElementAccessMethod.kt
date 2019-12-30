@@ -16,7 +16,7 @@ import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.typeUtil.supertypes
 
 /**
- * Prefer usage of indexed access operator [] for map element access or insert methods.
+ * Prefer usage of the indexed access operator [] for map or list element access or insert methods.
  *
  * <noncompliant>
  *  val map = Map<String, String>()
