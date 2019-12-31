@@ -148,7 +148,7 @@ fun <V> foo(): Int where V : Int = 5
 
 ### ExplicitCollectionElementAccessMethod
 
-Prefer usage of indexed access operator [] for map element access or insert methods.
+Prefer usage of the indexed access operator [] for map or list element access or insert methods.
 
 **Severity**: Style
 
