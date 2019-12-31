@@ -38,7 +38,7 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
 
     override val issue: Issue =
         Issue(
-            "ExplicitMapElementAccessMethod",
+            "ExplicitCollectionElementAccessMethod",
             Severity.Style,
             "Prefer usage of indexed access operator [] for map element access or insert methods",
             Debt.FIVE_MINS
