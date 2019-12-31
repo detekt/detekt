@@ -32,7 +32,7 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  */
 class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rule(config) {
 
-    private val ktCollections = setOf("Map", "List")
+    private val ktCollections = setOf("Map", "MutableMap", "List", "MutableList")
 
     private val ktAndJavaCollections = ktCollections + setOf("AbstractMap", "AbstractList")
 

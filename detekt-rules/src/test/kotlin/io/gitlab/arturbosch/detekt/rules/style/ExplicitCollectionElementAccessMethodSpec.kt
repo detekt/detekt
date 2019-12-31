@@ -30,7 +30,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
         it("reports map put method usage") {
             val code = """
                     fun f() {
-                        val map = mapOf<String, String>()
+                        val map = mutableMapOf<String, String>()
                         map.put("key", "val") 
                     }"""
             assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
@@ -66,7 +66,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
         it("does not report map insert with []") {
             val code = """
                     fun f() {
-                        val map = mapOf<String, String>()
+                        val map = mutableMapOf<String, String>()
                         map["key"] = "value" 
                     }"""
             assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
@@ -92,11 +92,19 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
     }
 
     describe("Kotlin list") {
-
         it("reports list element access with get method") {
             val code = """
                     fun f() {
                         val list = listOf<String>() 
+                        val value = list.get(0) 
+                    }"""
+            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+        }
+
+        it("reports mutable list element access with get method") {
+            val code = """
+                    fun f() {
+                        val list = mutableListOf<String>()
                         val value = list.get(0) 
                     }"""
             assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
@@ -114,8 +122,8 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
         it("reports element access with get method of non-abstract list") {
             val code = """
                     fun f() {
-                        val list = arrayListOf<String, String>() 
-                        val value = list.get("key") 
+                        val list = arrayListOf<String>() 
+                        val value = list.get(0) 
                     }"""
             assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
         }
