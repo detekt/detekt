@@ -9,10 +9,13 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtEnumEntry
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.psiUtil.containingClass
 import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
 import org.jetbrains.kotlin.psi.psiUtil.isExtensionDeclaration
 
@@ -63,13 +66,18 @@ class MethodOverloading(
         }
 
         override fun visitNamedFunction(function: KtNamedFunction) {
-            var name = function.name ?: return
+            var name = function.name
+            if (name == null || function.isOverriddenInsideEnumEntry()) {
+                return
+            }
             val receiver = function.receiverTypeReference
             if (function.isExtensionDeclaration() && receiver != null) {
                 name = receiver.text + '.' + name
             }
             methods[name] = methods.getOrDefault(name, 0) + 1
         }
+
+        private fun KtNamedFunction.isOverriddenInsideEnumEntry() = containingClass() is KtEnumEntry && isOverride()
     }
 
     companion object {
