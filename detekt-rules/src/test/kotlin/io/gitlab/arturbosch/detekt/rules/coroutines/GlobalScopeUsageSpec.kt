@@ -48,7 +48,7 @@ object GlobalScopeUsageSpec : Spek({
                     bar(GlobalScope)
                 }
             """
-            assertThat(subject.compileAndLint(code)).hasSize(0)
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("should not report `val scope = GlobalScope`") {
@@ -63,7 +63,7 @@ object GlobalScopeUsageSpec : Spek({
                     bar(scope)
                 }
             """
-            assertThat(subject.compileAndLint(code)).hasSize(0)
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
 })
