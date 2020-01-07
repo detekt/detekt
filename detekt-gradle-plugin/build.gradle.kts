@@ -133,11 +133,10 @@ artifacts {
 }
 
 detekt {
-    config = files(
-        project.rootDir.resolve("../detekt-cli/src/main/resources/default-detekt-config.yml"),
-        project.rootDir.resolve("../config/detekt/detekt.yml")
-    )
+    buildUponDefaultConfig = true
+    config.setFrom(file("../config/detekt/detekt.yml"))
 }
+
 val bintrayUser = findProperty("bintrayUser")?.toString() ?: System.getenv("BINTRAY_USER")
 val bintrayKey = findProperty("bintrayKey")?.toString() ?: System.getenv("BINTRAY_API_KEY")
 val detektPublication = "DetektPublication"
