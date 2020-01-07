@@ -24,6 +24,7 @@ version = "1.3.1"
 val spekVersion = "2.0.9"
 val junitPlatformVersion = "1.5.2"
 val assertjVersion = "3.14.0"
+val detektFormattingVersion = "1.3.1"
 
 dependencies {
     implementation(kotlin("stdlib"))
@@ -34,6 +35,8 @@ dependencies {
     testImplementation("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
     testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spekVersion")
+
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:$detektFormattingVersion")
 }
 
 gradlePlugin {
