@@ -50,6 +50,9 @@ entries:
     - title: with Maven Ant Task
       url: /mavenanttask.html
       output: web
+    - title: with a Git pre-commit hook
+      url: /git-pre-commit-hook.html
+      output: web
   - title: Rule Sets
     output: web
     folderitems:
