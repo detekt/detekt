@@ -111,6 +111,8 @@ coroutines:
   active: true
   GlobalCoroutineUsage:
     active: false
+  RedundantSuspendModifier:
+    active: false
 
 empty-blocks:
   active: true
