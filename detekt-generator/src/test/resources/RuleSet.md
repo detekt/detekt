@@ -16,6 +16,12 @@ a wildcard import
 
    a config option
 
+* ~~``conf2``~~ (default: ``false``)
+
+   **Deprecated**: use conf1 instead
+
+   deprecated config
+
 #### Noncompliant Code:
 
 ```kotlin

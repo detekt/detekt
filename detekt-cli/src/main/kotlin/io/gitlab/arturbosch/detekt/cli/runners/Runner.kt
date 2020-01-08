@@ -52,10 +52,11 @@ class Runner(
 
         if (shouldValidate) {
             val notifications = validateConfig(settings.config, loadDefaultConfig(), patterns())
-            if (notifications.isNotEmpty()) {
-                notifications.map(Notification::message).forEach(settings::info)
-                val propsString = if (notifications.size == 1) "property" else "properties"
-                throw InvalidConfig("Run failed with ${notifications.size} invalid config $propsString.")
+            notifications.map(Notification::message).forEach(settings::info)
+            val errors = notifications.filter(Notification::isError)
+            if (errors.isNotEmpty()) {
+                val propsString = if (errors.size == 1) "property" else "properties"
+                throw InvalidConfig("Run failed with ${errors.size} invalid config $propsString.")
             }
         }
     }

@@ -10,10 +10,11 @@ title: SimpleNotification - detekt-api
 
 ### Constructors
 
-| [&lt;init&gt;](-init-.html) | `SimpleNotification(message: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`)` |
+| [&lt;init&gt;](-init-.html) | `SimpleNotification(message: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`, level: Level = Notification.Level.Error)` |
 
 ### Properties
 
+| [level](level.html) | `val level: Level` |
 | [message](message.html) | `val message: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 
 ### Functions

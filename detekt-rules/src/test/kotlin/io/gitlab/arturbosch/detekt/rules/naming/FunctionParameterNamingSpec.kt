@@ -29,14 +29,14 @@ class FunctionParameterNamingSpec : Spek({
             assertThat(FunctionParameterNaming().compileAndLint(code)).isEmpty()
         }
 
-        it("should detect violations in overridden function if ignoreOverriddenFunctions is false") {
+        it("should detect violations in overridden function if ignoreOverridden is false") {
             val code = """
                 class C : I {
                     override fun someStuff(`object`: String) {}
                 }
                 interface I { fun someStuff(`object`: String) }
             """
-            val config = TestConfig(mapOf(FunctionParameterNaming.IGNORE_OVERRIDDEN_FUNCTIONS to "false"))
+            val config = TestConfig(mapOf(FunctionParameterNaming.IGNORE_OVERRIDDEN to "false"))
             assertThat(FunctionParameterNaming(config).compileAndLint(code)).hasSize(2)
         }
 

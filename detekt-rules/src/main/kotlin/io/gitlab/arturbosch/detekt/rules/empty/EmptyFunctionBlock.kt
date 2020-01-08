@@ -12,16 +12,19 @@ import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
  * This rule will not report functions with the override modifier that have a comment as their only body contents
  * (e.g., a // no-op comment in an unused listener function).
  *
- * Set the [ignoreOverriddenFunctions] parameter to `true` to exclude all functions which are overriding other
+ * Set the [ignoreOverridden] parameter to `true` to exclude all functions which are overriding other
  * functions from the superclass or from an interface (i.e., functions declared with the override modifier).
  *
  * @configuration ignoreOverriddenFunctions - Excludes all the overridden functions (default: `false`)
+ * (deprecated: "Use `ignoreOverridden` instead")
+ * @configuration ignoreOverridden - Excludes all the overridden functions (default: `false`)
  *
  * @active since v1.0.0
  */
 class EmptyFunctionBlock(config: Config) : EmptyRule(config) {
 
-    private val ignoreOverriddenFunctions = valueOrDefault(IGNORE_OVERRIDDEN_FUNCTIONS, false)
+    private val ignoreOverridden =
+        valueOrDefault(IGNORE_OVERRIDDEN, valueOrDefault(IGNORE_OVERRIDDEN_FUNCTIONS, false))
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
@@ -29,7 +32,7 @@ class EmptyFunctionBlock(config: Config) : EmptyRule(config) {
             return
         }
         val bodyExpression = function.bodyExpression
-        if (!ignoreOverriddenFunctions) {
+        if (!ignoreOverridden) {
             if (function.isOverride()) {
                 bodyExpression?.addFindingIfBlockExprIsEmptyAndNotCommented()
             } else {
@@ -45,5 +48,6 @@ class EmptyFunctionBlock(config: Config) : EmptyRule(config) {
 
     companion object {
         const val IGNORE_OVERRIDDEN_FUNCTIONS = "ignoreOverriddenFunctions"
+        const val IGNORE_OVERRIDDEN = "ignoreOverridden"
     }
 }

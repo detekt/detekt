@@ -12,8 +12,14 @@ Any kind of notification which should be printed to the console.
 For example when using the formatting rule set, any change to
 your kotlin file is a notification.
 
+### Types
+
+| [Level](-level/index.html) | Level of severity of the notification`enum class Level` |
+
 ### Properties
 
+| [isError](is-error.html) | `open val isError: `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html) |
+| [level](level.html) | `abstract val level: Level` |
 | [message](message.html) | `abstract val message: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 
 ### Inheritors
