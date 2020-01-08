@@ -7,5 +7,4 @@ gradle: detekt-gradle-plugin/src/**/*
 rules: detekt-rules/src/**/*
 
 # miscellaneous
-build:
-  - **/build.gradle.kts
+build: '**/build.gradle.kts'
