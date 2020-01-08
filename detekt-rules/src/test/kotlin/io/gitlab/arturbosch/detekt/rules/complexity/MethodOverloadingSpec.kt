@@ -41,7 +41,7 @@ class MethodOverloadingSpec : Spek({
             }
         }
 
-        context("several overloaded extensions functions") {
+        context("several overloaded extensions methods") {
 
             it("does not report extension methods with a different receiver") {
                 subject.compileAndLint("""
@@ -57,6 +57,54 @@ class MethodOverloadingSpec : Spek({
                 fun Int.foo(i: Int) {}
                 fun Int.foo(i: String) {}""")
                 assertThat(subject.findings.size).isEqualTo(1)
+            }
+        }
+
+        context("several overloaded methods inside enum classes") {
+
+            it("does not report overridden methods inside enum entries") {
+                val code = """
+                    enum class Test {
+                        E1 {
+                            override fun f() {}
+                        },
+                        E2 {
+                            override fun f() {}
+                        },
+                        E3 {
+                            override fun f() {}
+                        };
+
+                        abstract fun f()
+                    }
+                """
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+
+            it("reports overloaded methods in enum entry") {
+                val code = """
+                    enum class Test {
+                        E {
+                            fun f(i: Int) {}
+                            fun f(i: Int, j: Int) {}
+                        };
+                        fun f() {}
+                    }
+                """
+                assertThat(subject.compileAndLint(code)).hasSize(1)
+            }
+
+            it("reports overloaded methods in enum class") {
+                val code = """
+                    enum class Test {
+                        E;
+                    
+                        fun f() {}
+                        fun f(i: Int) {}
+                        fun f(i: Int, j: Int) {}
+                    }
+                """
+                assertThat(subject.compileAndLint(code)).hasSize(1)
             }
         }
     }
