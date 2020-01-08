@@ -1,0 +1,10 @@
+# core modules
+api: detekt-api/src/**/*
+core: detekt-core/src/**/*
+cli: detekt-cli/src/**/*
+formatting: detekt-formatting/src/**/*
+gradle: detekt-gradle-plugin/src/**/*
+rules: detekt-rules/src/**/*
+
+# miscellaneous
+build: **/build.gradle.kts
