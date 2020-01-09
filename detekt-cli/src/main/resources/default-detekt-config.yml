@@ -107,6 +107,11 @@ complexity:
     ignorePrivate: false
     ignoreOverridden: false
 
+coroutines:
+  active: true
+  GlobalCoroutineUsage:
+    active: false
+
 empty-blocks:
   active: true
   EmptyCatchBlock:
