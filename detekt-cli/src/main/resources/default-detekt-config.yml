@@ -109,7 +109,7 @@ complexity:
 
 coroutines:
   active: true
-  GlobalScopeUsage:
+  GlobalCoroutineUsage:
     active: false
 
 empty-blocks:

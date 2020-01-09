@@ -39,7 +39,7 @@ import org.jetbrains.kotlin.resolve.calls.callUtil.getCalleeExpressionIfAny
  * }
  * </compliant>
  */
-class GlobalScopeUsage(config: Config = Config.empty) : Rule(config) {
+class GlobalCoroutineUsage(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue(
         javaClass.simpleName,
         Severity.Defect,

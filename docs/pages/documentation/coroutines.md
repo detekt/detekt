@@ -8,7 +8,7 @@ folder: documentation
 ---
 The coroutines rule set analyzes code for potential coroutines problems.
 
-### GlobalScopeUsage
+### GlobalCoroutineUsage
 
 Report usages of `GlobalScope.launch` and `GlobalScope.async`. It is highly discouraged by the Kotlin documentation:
 

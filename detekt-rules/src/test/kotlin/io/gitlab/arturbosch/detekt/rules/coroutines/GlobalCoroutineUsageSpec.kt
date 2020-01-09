@@ -6,10 +6,10 @@ import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-object GlobalScopeUsageSpec : Spek({
-    val subject by memoized { GlobalScopeUsage(Config.empty) }
+object GlobalCoroutineUsageSpec : Spek({
+    val subject by memoized { GlobalCoroutineUsage(Config.empty) }
 
-    describe("GlobalScopeUsage rule") {
+    describe("GlobalCoroutineUsage rule") {
 
         it("should report GlobalScope.launch") {
             val code = """

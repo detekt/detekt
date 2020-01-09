@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.providers
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.rules.coroutines.GlobalScopeUsage
+import io.gitlab.arturbosch.detekt.rules.coroutines.GlobalCoroutineUsage
 
 /**
  * The coroutines rule set analyzes code for potential coroutines problems.
@@ -15,7 +15,7 @@ class CoroutinesProvider : RuleSetProvider {
 
     override fun instance(config: Config): RuleSet {
         return RuleSet(ruleSetId, listOf(
-            GlobalScopeUsage(config)
+            GlobalCoroutineUsage(config)
         ))
     }
 }
