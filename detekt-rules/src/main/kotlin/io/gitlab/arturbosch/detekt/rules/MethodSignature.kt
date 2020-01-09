@@ -12,7 +12,7 @@ fun KtFunction.isHashCodeFunction() =
 
 private val knownAnys = setOf("Any?", "kotlin.Any?")
 fun KtFunction.hasCorrectEqualsParameter() =
-        this.valueParameters.firstOrNull()?.typeReference?.text in knownAnys
+        this.valueParameters.singleOrNull()?.typeReference?.text in knownAnys
 
 fun KtNamedFunction.isMainFunction() =
         this.isTopLevelMain() || this.isMainInsideObject()
