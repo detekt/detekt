@@ -1,7 +1,7 @@
 ---
 title: "Run detekt using a Git pre-commit hook"
 keywords: detekt static analysis code kotlin
-tags: [getting_started git]
+tags: [getting_started, git]
 sidebar: 
 permalink: git-pre-commit-hook.html
 folder: gettingstarted
@@ -13,7 +13,7 @@ For that reason Git supports to run custom scripts automatically, when a specifi
 The mentioned pre-commit hook can be setup locally on your dev-machine.
 The following client-side detekt hook is triggered by a commit operation.
 
-```shell script
+```bash
 #!/usr/bin/env bash
 echo "Running detekt check..."
 OUTPUT="/tmp/detekt-$(date +%s)"
