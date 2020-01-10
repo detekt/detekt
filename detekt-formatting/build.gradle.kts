@@ -24,9 +24,9 @@ dependencies {
 
 tasks.withType<Jar>().configureEach {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE // allow duplicates
-    dependsOn(configurations.implementation)
+    dependsOn(configurations.runtimeClasspath)
     from(
-        configurations.implementation.get()
+        configurations.runtimeClasspath.get()
             .filter { "com.pinterest.ktlint" in it.toString() }
             .map { if (it.isDirectory) it else zipTree(it) }
     )
