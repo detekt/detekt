@@ -32,8 +32,13 @@ class ThrowingExceptionInMainSpec : Spek({
                         fun main(args: Array<String>) { throw IllegalArgumentException() }
                     }
                 }
+                
+                object O {
+                    @JvmStatic
+                    fun main(args: Array<String>) { throw IllegalArgumentException() }
+                }
             """
-            assertThat(subject.compileAndLint(code)).hasSize(2)
+            assertThat(subject.compileAndLint(code)).hasSize(3)
         }
 
         it("does not report top level main functions with a wrong signature") {
