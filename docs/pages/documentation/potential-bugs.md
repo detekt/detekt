@@ -159,6 +159,32 @@ fun apiCall(): String = System.getProperty("propertyName")
 }
 ```
 
+### IgnoredReturnValue
+
+The Kotlin compiler gives no warning for when a function which returns a value is called but its returned
+value is ignored.  This rule warns on instances where a function returns a value but that value is not
+used in any way.
+
+fun returnsValue() = 42
+fun returnsNoValue() {}
+
+**Severity**: Defect
+
+**Debt**: 20min
+
+#### Noncompliant Code:
+
+```kotlin
+    returnsValue()
+```
+
+#### Compliant Code:
+
+```kotlin
+    if (42 == returnsValue()) {}
+    val x = returnsValue()
+```
+
 ### ImplicitDefaultLocale
 
 Prefer passing [java.util.Locale] explicitly than using implicit default value when formatting

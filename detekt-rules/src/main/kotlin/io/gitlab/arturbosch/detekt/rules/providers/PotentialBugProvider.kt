@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.rules.bugs.EqualsWithHashCodeExist
 import io.gitlab.arturbosch.detekt.rules.bugs.ExplicitGarbageCollectionCall
 import io.gitlab.arturbosch.detekt.rules.bugs.HasPlatformType
 import io.gitlab.arturbosch.detekt.rules.bugs.ImplicitDefaultLocale
+import io.gitlab.arturbosch.detekt.rules.bugs.IgnoredReturnValue
 import io.gitlab.arturbosch.detekt.rules.bugs.InvalidRange
 import io.gitlab.arturbosch.detekt.rules.bugs.IteratorHasNextCallsNextMethod
 import io.gitlab.arturbosch.detekt.rules.bugs.IteratorNotThrowingNoSuchElementException
@@ -58,7 +59,8 @@ class PotentialBugProvider : DefaultRuleSetProvider {
                 UnsafeCallOnNullableType(config),
                 UnsafeCast(config),
                 UselessPostfixExpression(config),
-                WrongEqualsTypeParameter(config)
+                WrongEqualsTypeParameter(config),
+                IgnoredReturnValue(config)
         ))
     }
 }
