@@ -52,17 +52,6 @@ class FindingsReportSpec : Spek({
             assertThat(subject.render(detektion)).isNull()
         }
 
-        it("reports no findings with rule set containing only correctable smells") {
-            val detektion = object : TestDetektion() {
-                override val findings: Map<String, List<Finding>> = mapOf(
-                    Pair("Ruleset", listOf(createCorrectableFinding()))
-                )
-            }
-            val config = TestConfig(mapOf("excludeCorrectable" to "true"))
-            val report = createFindingsReport(config)
-            assertThat(report.render(detektion)).isNull()
-        }
-
         it("should not add auto corrected issues to report") {
             val report = FindingsReport()
             AutoCorrectableIssueAssert.isReportNull(report)
