@@ -20,6 +20,7 @@ import io.gitlab.arturbosch.detekt.cli.loadDefaultConfig
 import io.gitlab.arturbosch.detekt.cli.maxIssues
 import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
+import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import java.io.PrintStream
 
 class Runner(
@@ -37,6 +38,7 @@ class Runner(
             if (!arguments.createBaseline) {
                 checkBuildFailureThreshold(result, settings)
             }
+            Disposer.dispose(settings.environmentDisposable)
         }
     }
 
