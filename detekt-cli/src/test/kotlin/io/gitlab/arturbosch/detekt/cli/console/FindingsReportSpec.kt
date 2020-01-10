@@ -2,9 +2,7 @@ package io.gitlab.arturbosch.detekt.cli.console
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.cli.createCorrectableFinding
 import io.gitlab.arturbosch.detekt.cli.createFinding
-import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
@@ -59,8 +57,8 @@ class FindingsReportSpec : Spek({
     }
 })
 
-private fun createFindingsReport(config: Config = Config.empty): FindingsReport {
+private fun createFindingsReport(): FindingsReport {
     val report = FindingsReport()
-    report.init(config)
+    report.init(Config.empty)
     return report
 }
