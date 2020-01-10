@@ -10,6 +10,7 @@ import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.cli.jvm.config.addJavaSourceRoots
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoots
 import org.jetbrains.kotlin.com.intellij.mock.MockProject
+import org.jetbrains.kotlin.com.intellij.openapi.Disposable
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.com.intellij.pom.PomModel
 import org.jetbrains.kotlin.config.ApiVersion
@@ -28,7 +29,10 @@ import java.nio.file.Path
  * Creates an environment instance which can be used to compile source code to KtFile's.
  * This environment also allows to modify the resulting AST files.
  */
-fun createKotlinCoreEnvironment(configuration: CompilerConfiguration = CompilerConfiguration()): KotlinCoreEnvironment {
+fun createKotlinCoreEnvironment(
+    configuration: CompilerConfiguration = CompilerConfiguration(),
+    disposable: Disposable = Disposer.newDisposable()
+): KotlinCoreEnvironment {
     // https://github.com/JetBrains/kotlin/commit/2568804eaa2c8f6b10b735777218c81af62919c1
     setIdeaIoUseFallback()
     configuration.put(
@@ -38,7 +42,7 @@ fun createKotlinCoreEnvironment(configuration: CompilerConfiguration = CompilerC
     configuration.put(CommonConfigurationKeys.MODULE_NAME, "detekt")
 
     val environment = KotlinCoreEnvironment.createForProduction(
-        Disposer.newDisposable(),
+        disposable,
         configuration,
         EnvironmentConfigFiles.JVM_CONFIG_FILES
     )
