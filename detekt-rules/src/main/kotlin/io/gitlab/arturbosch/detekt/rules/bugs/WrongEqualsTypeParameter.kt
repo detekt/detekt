@@ -51,9 +51,12 @@ class WrongEqualsTypeParameter(config: Config = Config.empty) : Rule(config) {
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        if (function.name == "equals" && !function.isTopLevel && !function.hasCorrectEqualsParameter()) {
+        if (function.name == "equals" && !function.isTopLevel && function.hasWrongEqualsSignature()) {
             report(CodeSmell(issue, Entity.from(function), "equals() methods should only take one parameter " +
                     "of type Any?."))
         }
     }
+
+    private fun KtNamedFunction.hasWrongEqualsSignature() =
+        valueParameters.size == 1 && !hasCorrectEqualsParameter()
 }
