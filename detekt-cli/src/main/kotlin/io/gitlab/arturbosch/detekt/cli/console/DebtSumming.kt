@@ -4,9 +4,13 @@ import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 
-class DebtSumming {
+class DebtSumming() {
 
     private val debtList = mutableListOf<Debt>()
+
+    constructor(issues: List<Finding>) : this() {
+        issues.forEach { debtList.add(it.issue.debt) }
+    }
 
     fun add(debt: Debt) {
         debtList.add(debt)
@@ -16,35 +20,7 @@ class DebtSumming {
         if (debtList.isEmpty()) {
             return null
         }
-        return calculate()
-    }
-
-    fun printDebtInformation(
-        issues: Map<RuleSetId, List<Finding>>,
-        totalDebt: DebtSumming
-    ): String {
-        with(StringBuilder()) {
-            issues
-                .filter { it.value.isNotEmpty() }
-                .forEach { (ruleSetId, issues) ->
-                    val debtSumming = DebtSumming()
-                    val issuesString = issues.joinToString("") {
-                        debtSumming.add(it.issue.debt)
-                        it.compact().format("\t")
-                    }
-                    val debt = debtSumming.calculateDebt()
-                    val debtString =
-                        if (debt != null) {
-                            totalDebt.add(debt)
-                            " - $debt debt".format()
-                        } else {
-                            "\n"
-                        }
-                    append(ruleSetId.format(prefix = "Ruleset: ", suffix = debtString))
-                    append(issuesString.yellow())
-                }
-            return toString()
-        }
+        return calculate(debtList)
     }
 
     fun printFileBasedDebtInformation(
@@ -72,7 +48,7 @@ class DebtSumming {
         }
     }
 
-    private fun calculate(): Debt {
+    private fun calculate(debtList: List<Debt>): Debt {
         var minutes = 0
         var hours = 0
         var days = 0
