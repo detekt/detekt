@@ -29,6 +29,24 @@ class EqualsWithHashCodeExistSpec : Spek({
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
+            it("reports a different equals() function signature") {
+                val code = """
+                class A {
+                    fun equals(other: Any?, i: Int): Boolean { return super.equals(other) }
+                    override fun hashCode(): Int { return super.hashCode() }
+                }"""
+                assertThat(subject.compileAndLint(code)).hasSize(1)
+            }
+
+            it("reports a different hashcode() function signature") {
+                val code = """
+                class A {
+                    override fun equals(other: Any?): Boolean { return super.equals(other) }
+                    fun hashCode(i: Int): Int { return super.hashCode() }
+                }"""
+                assertThat(subject.compileAndLint(code)).hasSize(1)
+            }
+
             it("does not report equals() with hashCode() function") {
                 val code = """
                 class A {
