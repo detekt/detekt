@@ -19,21 +19,16 @@ class FileBasedFindingsReportSpec : Spek({
             val detektion = object : TestDetektion() {
                 override val findings: Map<String, List<Finding>> = mapOf(
                     Pair(
-                        "TestSmell",
+                        "Ruleset1",
                         listOf(
-                            createFinding(ruleName = "NewRule", fileName = "AnotherFile.kt"),
-                            createFinding(ruleName = "NewRule", fileName = "TestFile.kt"),
-                            createFinding(ruleName = "RandomRule", fileName = "AnotherFile.kt")
+                            createFinding(fileName = "File1.kt"),
+                            createFinding(fileName = "File2.kt")
                         )
                     ),
                     Pair(
-                        "AnotherTestSmell",
-                        listOf(
-                            createFinding(ruleName = "AnotherRule", fileName = "AnotherFile.kt"),
-                            createFinding(ruleName = "AnotherRandomRule", fileName = "TestFile.kt")
-                        )
-                    ),
-                    Pair("EmptySmells", emptyList())
+                        "Ruleset2",
+                        listOf(createFinding(fileName = "File1.kt"))
+                    )
                 )
             }
 
