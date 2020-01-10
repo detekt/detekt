@@ -34,7 +34,7 @@ import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
 
 /**
  * Reports unused private properties, function parameters and functions.
- * If private properties are unused they should be removed. Otherwise this dead code
+ * If these private elements are unused they should be removed. Otherwise this dead code
  * can lead to confusion and potential bugs.
  *
  * @configuration allowedNames - unused private member names matching this regex are ignored
@@ -116,7 +116,6 @@ private class UnusedFunctionVisitor(allowedNames: Regex) : UnusedMemberVisitor(a
      * for the whole file as Kotlin allows to access private and internal object declarations
      * from everywhere in the file.
      */
-
     override fun visitReferenceExpression(expression: KtReferenceExpression) {
         super.visitReferenceExpression(expression)
         when (expression) {
