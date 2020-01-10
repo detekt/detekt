@@ -1,4 +1,3 @@
-configurations.implementation.get().isCanBeResolved = true
 configurations.testImplementation.get().extendsFrom(configurations.kotlinTest.get())
 
 val ktlintVersion: String by project
@@ -25,6 +24,7 @@ dependencies {
 
 tasks.withType<Jar>().configureEach {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE // allow duplicates
+    dependsOn(configurations.implementation)
     from(
         configurations.implementation.get()
             .filter { "com.pinterest.ktlint" in it.toString() }
