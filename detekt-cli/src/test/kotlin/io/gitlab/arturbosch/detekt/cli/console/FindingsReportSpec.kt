@@ -2,7 +2,9 @@ package io.gitlab.arturbosch.detekt.cli.console
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.cli.createCorrectableFinding
 import io.gitlab.arturbosch.detekt.cli.createFinding
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
@@ -18,8 +20,9 @@ class FindingsReportSpec : Spek({
             val expectedContent = readResource("findings-report.txt")
             val detektion = object : TestDetektion() {
                 override val findings: Map<String, List<Finding>> = mapOf(
-                    Pair("TestSmell", listOf(createFinding(), createFinding())),
-                    Pair("EmptySmells", emptyList()))
+                    Pair("Ruleset1", listOf(createFinding(), createFinding())),
+                    Pair("Ruleset2", listOf(createFinding()))
+                )
             }
             var output: String? = null
 
@@ -29,10 +32,6 @@ class FindingsReportSpec : Spek({
 
             it("has the reference content") {
                 assertThat(output).isEqualTo(expectedContent)
-            }
-
-            it("does not print rule set ids when no findings of this rule set is found") {
-                assertThat(output).doesNotContain("EmptySmells")
             }
 
             it("does contain the rule set id of rule sets with findings") {
@@ -48,9 +47,20 @@ class FindingsReportSpec : Spek({
         it("reports no findings with rule set containing no smells") {
             val detektion = object : TestDetektion() {
                 override val findings: Map<String, List<Finding>> = mapOf(
-                    Pair("EmptySmells", emptyList()))
+                    Pair("Ruleset", emptyList()))
             }
             assertThat(subject.render(detektion)).isNull()
+        }
+
+        it("reports no findings with rule set containing only correctable smells") {
+            val detektion = object : TestDetektion() {
+                override val findings: Map<String, List<Finding>> = mapOf(
+                    Pair("Ruleset", listOf(createCorrectableFinding()))
+                )
+            }
+            val config = TestConfig(mapOf("excludeCorrectable" to "true"))
+            val report = createFindingsReport(config)
+            assertThat(report.render(detektion)).isNull()
         }
 
         it("should not add auto corrected issues to report") {
@@ -60,8 +70,8 @@ class FindingsReportSpec : Spek({
     }
 })
 
-private fun createFindingsReport(): FindingsReport {
+private fun createFindingsReport(config: Config = Config.empty): FindingsReport {
     val report = FindingsReport()
-    report.init(Config.empty)
+    report.init(config)
     return report
 }

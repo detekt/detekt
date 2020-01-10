@@ -25,8 +25,8 @@ class FindingsReport : ConsoleReport() {
             return null
         }
 
-        val totalDebt = DebtSumming()
         return with(StringBuilder()) {
+            val totalDebt = DebtSumming()
             val debtInfo = totalDebt.printDebtInformation(findings, totalDebt)
             append(debtInfo)
             val debt = totalDebt.calculateDebt()
