@@ -65,6 +65,14 @@ class ThrowingExceptionInMainSpec : Spek({
             assertThat(subject.lint(file)).isEmpty()
         }
 
+        it("does not report top level main functions with expression body which throw no exception") {
+            val file = compileContentForTest("""
+                fun main(args: Array<String>) = ""
+                fun main() = Unit
+            """)
+            assertThat(subject.lint(file)).isEmpty()
+        }
+
         it("does not report main functions with no @JvmStatic annotation inside a class") {
             val code = """
             class A {
