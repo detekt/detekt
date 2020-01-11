@@ -20,35 +20,10 @@ class DebtSumming() {
         if (debtList.isEmpty()) {
             return null
         }
-        return calculate(debtList)
+        return calculate()
     }
 
-    fun printFileBasedDebtInformation(
-        issues: Map<RuleSetId, List<Finding>>,
-        fileDebt: DebtSumming,
-        totalDebt: DebtSumming
-    ): String {
-        with(StringBuilder()) {
-            issues
-                .filter { it.value.isNotEmpty() }
-                .forEach { (_, issues) ->
-                    val debtSumming = DebtSumming()
-                    val issuesString = issues.joinToString("") {
-                        debtSumming.add(it.issue.debt)
-                        it.compact().format("\t")
-                    }
-                    val debt = debtSumming.calculateDebt()
-                    debt?.let {
-                        fileDebt.add(debt)
-                        totalDebt.add(debt)
-                    } ?: append("\n")
-                    append(issuesString.yellow())
-                }
-            return toString()
-        }
-    }
-
-    private fun calculate(debtList: List<Debt>): Debt {
+    private fun calculate(): Debt {
         var minutes = 0
         var hours = 0
         var days = 0
