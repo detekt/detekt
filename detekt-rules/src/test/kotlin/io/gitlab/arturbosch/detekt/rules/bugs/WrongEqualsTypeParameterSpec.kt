@@ -31,6 +31,33 @@ class WrongEqualsTypeParameterSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
+        it("does not report equals() with an additional parameter") {
+            val code = """
+                class A {
+                    fun equals(other: Any?, i: Int): Boolean {
+                        return super.equals(other)
+                    }
+                }"""
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        it("does not report an overridden equals() with a different signature") {
+            val code = """
+                interface I {
+                    fun equals(other: Any?, i: Int): Boolean
+                    fun equals(): Boolean
+                }
+                
+                class A : I {
+                    override fun equals(other: Any?, i: Int): Boolean {
+                        return super.equals(other)
+                    }
+                    
+                    override fun equals() = true
+                }"""
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
         it("does not report an interface declaration") {
             val code = """
                 interface I {
@@ -39,8 +66,11 @@ class WrongEqualsTypeParameterSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report a top level function") {
-            val code = "fun equals(other: String) {}"
+        it("does not report top level functions") {
+            val code = """
+                fun equals(other: String) {}
+                fun equals(other: Any?) {}
+                """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }

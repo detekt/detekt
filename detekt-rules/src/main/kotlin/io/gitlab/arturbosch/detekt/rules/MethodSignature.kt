@@ -5,14 +5,14 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 
 fun KtFunction.isEqualsFunction() =
-        this.name == "equals" && hasCorrectEqualsParameter() && this.isOverride()
+        this.name == "equals" && this.isOverride() && hasCorrectEqualsParameter()
 
 fun KtFunction.isHashCodeFunction() =
-        this.name == "hashCode" && this.valueParameters.isEmpty() && this.isOverride()
+        this.name == "hashCode" && this.isOverride() && this.valueParameters.isEmpty()
 
 private val knownAnys = setOf("Any?", "kotlin.Any?")
 fun KtFunction.hasCorrectEqualsParameter() =
-        this.valueParameters.firstOrNull()?.typeReference?.text in knownAnys
+        this.valueParameters.singleOrNull()?.typeReference?.text in knownAnys
 
 fun KtNamedFunction.isMainFunction() =
         this.isTopLevelMain() || this.isMainInsideObject()
