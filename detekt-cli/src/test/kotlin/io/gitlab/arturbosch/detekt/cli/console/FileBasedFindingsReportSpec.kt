@@ -25,6 +25,7 @@ class FileBasedFindingsReportSpec : Spek({
                             createFinding(fileName = "File2.kt")
                         )
                     ),
+                    Pair("EmptyRuleset", emptyList()),
                     Pair(
                         "Ruleset2",
                         listOf(createFinding(fileName = "File1.kt"))
