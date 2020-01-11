@@ -17,6 +17,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.MultiLineIfElse
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoBlankLineBeforeRbrace
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoConsecutiveBlankLines
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoEmptyClassBody
+import io.gitlab.arturbosch.detekt.formatting.wrappers.NoEmptyFirstLineInMethodBlock
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoLineBreakAfterElse
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoLineBreakBeforeAssignment
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoMultipleSpaces
@@ -61,6 +62,7 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
         NoBlankLineBeforeRbrace(config),
         NoConsecutiveBlankLines(config),
         NoEmptyClassBody(config),
+        NoEmptyFirstLineInMethodBlock(config),
         NoLineBreakAfterElse(config),
         NoLineBreakBeforeAssignment(config),
         NoMultipleSpaces(config),

@@ -87,6 +87,10 @@ See <a href="https://ktlint.github.io/#rule-blank">ktlint-website</a> for docume
 
 See <a href="https://ktlint.github.io/#rule-empty-class-body">ktlint-website</a> for documentation.
 
+### NoEmptyFirstLineInMethodBlock
+
+See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
+
 ### NoLineBreakAfterElse
 
 See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.

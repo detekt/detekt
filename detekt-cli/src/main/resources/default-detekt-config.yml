@@ -243,6 +243,9 @@ formatting:
   NoEmptyClassBody:
     active: true
     autoCorrect: true
+  NoEmptyFirstLineInMethodBlock:
+    active: false
+    autoCorrect: true
   NoLineBreakAfterElse:
     active: true
     autoCorrect: true
