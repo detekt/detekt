@@ -9,9 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isMainFunction
 import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtThrowExpression
-import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 
 /**
@@ -31,22 +29,11 @@ class ThrowingExceptionInMain(config: Config = Config.empty) : Rule(config) {
             "The main method should not throw an exception.", Debt.TWENTY_MINS)
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        if (function.isMainFunction() &&
-            hasArgsParameter(function.valueParameters) &&
-            containsThrowExpression(function)) {
+        if (function.isMainFunction() && containsThrowExpression(function)) {
             report(CodeSmell(issue, Entity.from(function), issue.description))
         }
     }
 
-    private fun hasArgsParameter(parameters: List<KtParameter>): Boolean {
-        return parameters.size == 1 && isStringArrayParameter(parameters.first().typeReference)
-    }
-
-    private fun isStringArrayParameter(typeReference: KtTypeReference?): Boolean {
-        return typeReference?.text?.replace("\\s+", "") == "Array<String>"
-    }
-
-    private fun containsThrowExpression(function: KtNamedFunction): Boolean {
-        return function.bodyExpression?.anyDescendantOfType<KtThrowExpression>() == true
-    }
+    private fun containsThrowExpression(function: KtNamedFunction) =
+        function.bodyExpression?.anyDescendantOfType<KtThrowExpression>() == true
 }
