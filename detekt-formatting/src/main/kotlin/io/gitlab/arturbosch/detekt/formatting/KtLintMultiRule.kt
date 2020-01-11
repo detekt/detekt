@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.formatting.wrappers.AnnotationOnSeparateLine
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ChainWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.CommentSpacing
+import io.gitlab.arturbosch.detekt.formatting.wrappers.EnumEntryNameCase
 import io.gitlab.arturbosch.detekt.formatting.wrappers.Filename
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FinalNewline
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ImportOrdering
@@ -49,6 +50,7 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
         AnnotationOnSeparateLine(config),
         ChainWrapping(config),
         CommentSpacing(config),
+        EnumEntryNameCase(config),
         Filename(config),
         FinalNewline(config),
         ImportOrdering(config),

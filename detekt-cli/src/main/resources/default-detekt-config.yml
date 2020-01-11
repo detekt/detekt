@@ -209,6 +209,9 @@ formatting:
   CommentSpacing:
     active: true
     autoCorrect: true
+  EnumEntryNameCase:
+    active: false
+    autoCorrect: true
   Filename:
     active: true
   FinalNewline:

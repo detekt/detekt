@@ -27,6 +27,10 @@ See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
 
 See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
 
+### EnumEntryNameCase
+
+See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
+
 ### Filename
 
 See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
