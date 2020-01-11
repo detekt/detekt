@@ -13,8 +13,11 @@ class ThrowingExceptionInMainSpec : Spek({
     describe("ThrowingExceptionInMain rule") {
 
         it("reports a runnable main function which throws an exception") {
-            val code = "fun main(args: Array<String>) { throw IllegalArgumentException() }"
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            val code = """
+                fun main(args: Array<String>) { throw IllegalArgumentException() }
+                fun main() { throw IllegalArgumentException() }
+            """
+            assertThat(subject.compileAndLint(code)).hasSize(2)
         }
 
         it("reports runnable main functions with @JvmStatic annotation which throw an exception") {
@@ -29,7 +32,7 @@ class ThrowingExceptionInMainSpec : Spek({
                 class B {
                     companion object {
                         @kotlin.jvm.JvmStatic
-                        fun main(args: Array<String>) { throw IllegalArgumentException() }
+                        fun main() { throw IllegalArgumentException() }
                     }
                 }
                 
@@ -42,12 +45,22 @@ class ThrowingExceptionInMainSpec : Spek({
         }
 
         it("does not report top level main functions with a wrong signature") {
-            val file = compileContentForTest(
-                """
-                    fun main(args: Array<String>) { }
-                    private fun main() { }
-                    fun mai() { }
-                    fun main(args: String) { }"""
+            val file = compileContentForTest("""
+                private fun main(args: Array<String>) { throw IllegalArgumentException() }
+                private fun main() { throw IllegalArgumentException() }
+                fun mai() { throw IllegalArgumentException() }
+                fun main(args: String) { throw IllegalArgumentException() }
+                fun main(args: Array<String>, i: Int) { throw IllegalArgumentException() }"""
+            )
+            assertThat(subject.lint(file)).isEmpty()
+        }
+
+        it("does not report top level main functions which throw no exception") {
+            val file = compileContentForTest("""
+                fun main(args: Array<String>) { }
+                fun main() { }
+                fun mai() { }
+                fun main(args: String) { }"""
             )
             assertThat(subject.lint(file)).isEmpty()
         }
