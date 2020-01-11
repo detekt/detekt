@@ -52,7 +52,7 @@ class ThrowingExceptionInMainSpec : Spek({
             assertThat(subject.lint(file)).isEmpty()
         }
 
-        it("does not report a mains function with no @JvmStatic annotation inside a class") {
+        it("does not report main functions with no @JvmStatic annotation inside a class") {
             val code = """
             class A {
                 fun main(args: Array<String>) { throw IllegalArgumentException() }
