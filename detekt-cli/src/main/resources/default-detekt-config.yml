@@ -209,6 +209,9 @@ formatting:
   CommentSpacing:
     active: true
     autoCorrect: true
+  EnumEntryNameCase:
+    active: false
+    autoCorrect: true
   Filename:
     active: true
   FinalNewline:
@@ -239,6 +242,9 @@ formatting:
     autoCorrect: true
   NoEmptyClassBody:
     active: true
+    autoCorrect: true
+  NoEmptyFirstLineInMethodBlock:
+    active: false
     autoCorrect: true
   NoLineBreakAfterElse:
     active: true
