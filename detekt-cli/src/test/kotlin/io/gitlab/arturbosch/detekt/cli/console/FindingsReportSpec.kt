@@ -19,6 +19,7 @@ class FindingsReportSpec : Spek({
             val detektion = object : TestDetektion() {
                 override val findings: Map<String, List<Finding>> = mapOf(
                     Pair("Ruleset1", listOf(createFinding(), createFinding())),
+                    Pair("EmptyRuleset", emptyList()),
                     Pair("Ruleset2", listOf(createFinding()))
                 )
             }
