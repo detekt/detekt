@@ -38,6 +38,7 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
+    @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
         println("Call expression: ${expression.text}")
