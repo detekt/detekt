@@ -11,7 +11,7 @@ import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.psi.KtClass
+import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtEnumEntry
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -38,18 +38,18 @@ class MethodOverloading(
                     "Refactor these methods and try to use optional parameters.",
             Debt.TWENTY_MINS)
 
-    override fun visitClass(klass: KtClass) {
-        val visitor = OverloadedMethodVisitor()
-        klass.accept(visitor)
-        visitor.reportIfThresholdExceeded(klass)
-        super.visitClass(klass)
-    }
-
     override fun visitKtFile(file: KtFile) {
         val visitor = OverloadedMethodVisitor()
-        file.getChildrenOfType<KtNamedFunction>().forEach { it.accept(visitor) }
+        file.getChildrenOfType<KtNamedFunction>().forEach { visitor.visitMethod(it) }
         visitor.reportIfThresholdExceeded(file)
         super.visitKtFile(file)
+    }
+
+    override fun visitClassOrObject(classOrObject: KtClassOrObject) {
+        val visitor = OverloadedMethodVisitor()
+        classOrObject.accept(visitor)
+        visitor.reportIfThresholdExceeded(classOrObject)
+        super.visitClassOrObject(classOrObject)
     }
 
     internal inner class OverloadedMethodVisitor : DetektVisitor() {
@@ -65,7 +65,15 @@ class MethodOverloading(
             }
         }
 
-        override fun visitNamedFunction(function: KtNamedFunction) {
+        override fun visitClassOrObject(classOrObject: KtClassOrObject) {
+            val body = classOrObject.body ?: return
+            body.functions.forEach { visitMethod(it) }
+            body.enumEntries.forEach { enumEntry ->
+                enumEntry.body?.functions?.forEach { visitMethod(it) }
+            }
+        }
+
+        fun visitMethod(function: KtNamedFunction) {
             var name = function.name
             if (name == null || function.isOverriddenInsideEnumEntry()) {
                 return

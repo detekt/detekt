@@ -60,6 +60,101 @@ class MethodOverloadingSpec : Spek({
             }
         }
 
+        context("several nested overloaded methods") {
+
+            it("reports nested overloaded methods which exceed the threshold") {
+                val code = """
+                    class Outer {
+                        internal class Inner {
+                            fun f() {}
+                            fun f(i: Int) {}
+                            fun f(i: Int, j: Int) {}
+                        }
+                    }
+                """
+                assertThat(subject.compileAndLint(code)).hasSize(1)
+            }
+
+            it("does not report nested overloaded methods which do not exceed the threshold") {
+                val code = """
+                    class Outer {
+
+                        fun f() {}
+
+                        internal class Inner {
+                            fun f(i: Int) {}
+                            fun f(i: Int, j: Int) {}
+                        }
+                    }
+                """
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+        }
+
+        context("several overloaded methods inside objects") {
+
+            it("reports overloaded methods inside an object which exceed the threshold") {
+                val code = """
+                    object Test {
+                        fun f() {}
+                        fun f(i: Int) {}
+                        fun f(i: Int, j: Int) {}
+                    }
+                """
+                assertThat(subject.compileAndLint(code)).hasSize(1)
+            }
+
+            it("does not report overloaded methods inside an object which do not exceed the threshold") {
+                val code = """
+                    object Test {
+                        fun f() {}
+                        fun f(i: Int) {}
+                    }
+                """
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+
+            it("reports overloaded methods inside a companion object which exceed the threshold") {
+                val code = """
+                    class Test {
+                        companion object {
+                            fun f() {}
+                            fun f(i: Int) {}
+                            fun f(i: Int, j: Int) {}
+                        }
+                    }
+                """
+                assertThat(subject.compileAndLint(code)).hasSize(1)
+            }
+
+            it("does not report overloaded methods in a companion object that do not exceed the threshold") {
+                val code = """
+                    class Test {
+                        companion object {
+                            fun f() {}
+                            fun f(i: Int) {}
+                        }
+                    }
+                """
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+
+            it("does not report overloaded methods in classes/objects that do not exceed the threshold") {
+                val code = """
+                    class Test {
+
+                        fun f() {}
+
+                        companion object {
+                            fun f() {}
+                            fun f(i: Int) {}
+                        }
+                    }
+                """
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+        }
+
         context("several overloaded methods inside enum classes") {
 
             it("does not report overridden methods inside enum entries") {
@@ -106,6 +201,11 @@ class MethodOverloadingSpec : Spek({
                 """
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
+        }
+
+        it("does not report a class without a body") {
+            val code = "class A"
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
 })
