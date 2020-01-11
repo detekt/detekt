@@ -55,10 +55,10 @@ class ThrowingExceptionInMainSpec : Spek({
         it("does not report a mains function with no @JvmStatic annotation inside a class") {
             val code = """
             class A {
-                fun main(args: Array<String>) { }
+                fun main(args: Array<String>) { throw IllegalArgumentException() }
                 
                 companion object {
-                    fun main(args: Array<String>) { }
+                    fun main(args: Array<String>) { throw IllegalArgumentException() }
                 }
             }
             """
