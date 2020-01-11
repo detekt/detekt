@@ -41,7 +41,6 @@ class IgnoredReturnValue(config: Config = Config.empty) : Rule(config) {
     @Suppress("ReturnCount")
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
-        println("Call expression: ${expression.text}")
 
         if (bindingContext == BindingContext.EMPTY) return
         val resolvedCall = expression.getResolvedCall(bindingContext) ?: return
