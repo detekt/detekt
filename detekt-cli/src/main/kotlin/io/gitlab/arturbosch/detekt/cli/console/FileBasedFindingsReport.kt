@@ -3,8 +3,6 @@ package io.gitlab.arturbosch.detekt.cli.console
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.ConsoleReport
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.SingleAssign
 import io.gitlab.arturbosch.detekt.cli.filterAutoCorrectedIssues
 
@@ -22,26 +20,29 @@ class FileBasedFindingsReport : ConsoleReport() {
         val findings = detektion
             .filterAutoCorrectedIssues(config)
             .filter { it.value.isNotEmpty() }
+
         if (findings.isEmpty()) {
             return null
         }
 
         val totalDebt = DebtSumming()
         return with(StringBuilder()) {
-            val distinctFileNames = findings.values.flatten().map { it.entity.location.file }.distinct()
-            distinctFileNames
-                .forEach { filename ->
-                    val fileDebt = DebtSumming()
-                    val newRuleSetMap = HashMap<RuleSetId, List<Finding>>()
-                    findings.forEach { (key, value) ->
-                        newRuleSetMap[key] = value.filter { it.entity.location.file == filename }
-                    }
-                    val debtInfo = fileDebt.printFileBasedDebtInformation(newRuleSetMap, fileDebt, totalDebt)
+            findings.values
+                .flatten()
+                .groupBy { it.entity.location.file }
+                .forEach { (filename, issues) ->
+                    val fileDebt = DebtSumming(issues)
                     val debt = fileDebt.calculateDebt()
                     if (debt != null) {
+                        totalDebt.add(debt)
                         append("$filename - $debt debt".format())
+                        val issuesString = issues.joinToString("") {
+                            it.compact().format("\t")
+                        }
+                        append(issuesString.yellow())
+                    } else {
+                        append("\n")
                     }
-                    append(debtInfo)
                 }
             val debt = totalDebt.calculateDebt()
             if (debt != null) {

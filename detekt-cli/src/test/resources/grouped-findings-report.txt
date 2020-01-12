@@ -1,9 +1,7 @@
-AnotherFile.kt - 15min debt
-	AnotherRule - [TestEntity] at AnotherFile.kt:1:1
-	NewRule - [TestEntity] at AnotherFile.kt:1:1
-	RandomRule - [TestEntity] at AnotherFile.kt:1:1
-TestFile.kt - 10min debt
-	AnotherRandomRule - [TestEntity] at TestFile.kt:1:1
-	NewRule - [TestEntity] at TestFile.kt:1:1
+File1.kt - 10min debt
+	TestSmell - [TestEntity] at File1.kt:1:1
+	TestSmell - [TestEntity] at File1.kt:1:1
+File2.kt - 5min debt
+	TestSmell - [TestEntity] at File2.kt:1:1
 
-Overall debt: 25min
+Overall debt: 15min

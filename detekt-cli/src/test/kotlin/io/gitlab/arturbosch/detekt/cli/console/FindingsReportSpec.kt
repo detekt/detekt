@@ -18,8 +18,10 @@ class FindingsReportSpec : Spek({
             val expectedContent = readResource("findings-report.txt")
             val detektion = object : TestDetektion() {
                 override val findings: Map<String, List<Finding>> = mapOf(
-                    Pair("TestSmell", listOf(createFinding(), createFinding())),
-                    Pair("EmptySmells", emptyList()))
+                    Pair("Ruleset1", listOf(createFinding(), createFinding())),
+                    Pair("EmptyRuleset", emptyList()),
+                    Pair("Ruleset2", listOf(createFinding()))
+                )
             }
             var output: String? = null
 
@@ -29,10 +31,6 @@ class FindingsReportSpec : Spek({
 
             it("has the reference content") {
                 assertThat(output).isEqualTo(expectedContent)
-            }
-
-            it("does not print rule set ids when no findings of this rule set is found") {
-                assertThat(output).doesNotContain("EmptySmells")
             }
 
             it("does contain the rule set id of rule sets with findings") {
@@ -48,7 +46,7 @@ class FindingsReportSpec : Spek({
         it("reports no findings with rule set containing no smells") {
             val detektion = object : TestDetektion() {
                 override val findings: Map<String, List<Finding>> = mapOf(
-                    Pair("EmptySmells", emptyList()))
+                    Pair("Ruleset", emptyList()))
             }
             assertThat(subject.render(detektion)).isNull()
         }
