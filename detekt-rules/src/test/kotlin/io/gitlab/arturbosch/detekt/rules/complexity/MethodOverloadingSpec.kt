@@ -1,9 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
-import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -16,19 +13,26 @@ class MethodOverloadingSpec : Spek({
 
         context("several overloaded methods") {
 
-            lateinit var findings: List<Finding>
-
-            beforeEachTest {
-                findings = subject.lint(Case.OverloadedMethods.path())
-            }
-
             it("reports overloaded methods which exceed the threshold") {
-                assertThat(findings.size).isEqualTo(3)
+                val code = """
+                    class Test {
+                        fun x() {}
+                        fun x(i: Int) {}
+                        fun x(i: Int, j: Int) {}
+                    }
+                """
+                val findings = subject.compileAndLint(code)
+                assertThat(findings).hasSize(1)
+                assertThat(findings[0].message).isEqualTo("The method 'x' is overloaded 3 times.")
             }
 
-            it("reports the correct method name") {
-                val expected = "The method 'overloadedMethod' is overloaded 3 times."
-                assertThat(findings[0].message).isEqualTo(expected)
+            it("reports overloaded top level methods which exceed the threshold") {
+                val code = """
+                    fun x() {}
+                    fun x(i: Int) {}
+                    fun x(i: Int, j: Int) {}
+                """
+                assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
             it("does not report overloaded methods which do not exceed the threshold") {
