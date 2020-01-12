@@ -9,9 +9,6 @@ val detektVersion: String by project
 val reflectionsVersion: String by project
 val mockkVersion: String by project
 
-// implementation.extendsFrom kotlin is not enough for using cli in a gradle task - #58
-configurations.testImplementation.get().extendsFrom(configurations.kotlinTest.get())
-
 dependencies {
     implementation(project(":detekt-core"))
     runtimeOnly(project(":detekt-rules"))
@@ -20,10 +17,6 @@ dependencies {
 
     testImplementation(project(":detekt-test"))
     testImplementation(project(":detekt-rules"))
-    testImplementation("org.reflections:reflections:$reflectionsVersion")
-    testImplementation("io.mockk:mockk:$mockkVersion")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
-    testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spekVersion")
 }
 
 // bundle detekt's version for debug logging on rule exceptions

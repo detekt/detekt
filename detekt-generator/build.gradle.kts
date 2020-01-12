@@ -10,9 +10,6 @@ val jar by tasks.getting(Jar::class) {
     }
 }
 
-// implementation.extendsFrom kotlin is not enough for using cli in a gradle task - #58
-configurations.testImplementation.get().extendsFrom(configurations.kotlinTest.get())
-
 val detektVersion: String by project
 
 val generateDocumentation by tasks.registering {
@@ -92,8 +89,5 @@ dependencies {
     implementation(project(":detekt-formatting"))
     implementation("com.beust:jcommander:$jcommanderVersion")
     implementation(kotlin("reflect"))
-
     testImplementation(project(":detekt-test"))
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
-    testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spekVersion")
 }

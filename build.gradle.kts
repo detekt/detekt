@@ -10,17 +10,16 @@ import org.jfrog.gradle.plugin.artifactory.dsl.PublisherConfig
 import java.util.Date
 
 plugins {
-    id("io.gitlab.arturbosch.detekt")
+    kotlin("jvm")
     jacoco
     `maven-publish`
-    // Plugin versions for these plugins are defined in gradle.properties and applied in settings.gradle.kts
-    id("com.jfrog.artifactory") apply false
-    id("com.jfrog.bintray")
-    id("org.jetbrains.dokka") apply false
     id("com.github.ben-manes.versions")
-    kotlin("jvm")
-    id("com.github.johnrengelman.shadow") apply false
+    id("io.gitlab.arturbosch.detekt")
     id("org.sonarqube")
+    id("com.jfrog.bintray")
+    id("com.jfrog.artifactory") apply false
+    id("org.jetbrains.dokka") apply false
+    id("com.github.johnrengelman.shadow") apply false
 }
 
 buildScan {
@@ -28,56 +27,24 @@ buildScan {
     termsOfServiceAgree = "yes"
 }
 
-tasks.wrapper {
-    val gradleVersion: String by project
-    this.gradleVersion = gradleVersion
-    distributionType = Wrapper.DistributionType.ALL
-    doLast {
-        /*
-         * Copy the properties file into the detekt-gradle-plugin project.
-         * This allows IDEs like IntelliJ to import the detekt-gradle-plugin as a standalone project.
-         */
-        copy {
-            from(propertiesFile)
-            into(file("${gradle.includedBuild("detekt-gradle-plugin").projectDir}/gradle/wrapper"))
-        }
-    }
-}
-
-tasks.check {
-    dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":check"))
-}
-
-tasks.withType<Detekt>().configureEach {
-    dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":detekt"))
-}
-
-val jacocoVersion: String by project
-jacoco.toolVersion = jacocoVersion
-
-tasks {
-    jacocoTestReport {
-        executionData.setFrom(fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec"))
-
-        subprojects
-            .filterNot { it.name in listOf("detekt-test", "detekt-sample-extensions") }
-            .forEach {
-                this@jacocoTestReport.sourceSets(it.sourceSets.main.get())
-                this@jacocoTestReport.dependsOn(it.tasks.test)
-            }
-
-        reports {
-            xml.isEnabled = true
-            xml.destination = file("$buildDir/reports/jacoco/report.xml")
-        }
-    }
-}
-
 val detektVersion: String by project
+val jacocoVersion: String by project
+val assertjVersion: String by project
+val spekVersion: String by project
+val reflectionsVersion: String by project
+val mockkVersion: String by project
+val junitPlatformVersion: String by project
+
+fun versionOrSnapshot(): String {
+    if (System.getProperty("snapshot")?.toBoolean() == true) {
+        return "$detektVersion-SNAPSHOT"
+    }
+    return detektVersion
+}
 
 allprojects {
     group = "io.gitlab.arturbosch.detekt"
-    version = detektVersion + if (System.getProperty("snapshot")?.toBoolean() == true) "-SNAPSHOT" else ""
+    version = versionOrSnapshot()
 
     repositories {
         jcenter()
@@ -95,6 +62,20 @@ subprojects {
         plugin("com.jfrog.artifactory")
         plugin("maven-publish")
         plugin("io.gitlab.arturbosch.detekt")
+    }
+
+    dependencies {
+        implementation(kotlin("stdlib"))
+
+        detekt(project(":detekt-cli"))
+        detektPlugins(project(":detekt-formatting"))
+
+        testImplementation("org.assertj:assertj-core:$assertjVersion")
+        testImplementation("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
+        testImplementation("org.reflections:reflections:$reflectionsVersion")
+        testImplementation("io.mockk:mockk:$mockkVersion")
+        testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
+        testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spekVersion")
     }
 
     if (project.name !in listOf("detekt-test", "detekt-sample-extensions")) {
@@ -283,30 +264,33 @@ subprojects {
             })
         })
     }
+}
 
-    val assertjVersion: String by project
-    val spekVersion: String by project
-    val kotlinTest by configurations.creating
+jacoco.toolVersion = jacocoVersion
 
-    dependencies {
-        implementation(kotlin("stdlib"))
+tasks {
+    jacocoTestReport {
+        executionData.setFrom(fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec"))
 
-        detekt(project(":detekt-cli"))
-        detektPlugins(project(":detekt-formatting"))
+        subprojects
+            .filterNot { it.name in listOf("detekt-test", "detekt-sample-extensions") }
+            .forEach {
+                this@jacocoTestReport.sourceSets(it.sourceSets.main.get())
+                this@jacocoTestReport.dependsOn(it.tasks.test)
+            }
 
-        kotlinTest("org.assertj:assertj-core:$assertjVersion")
-        kotlinTest("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
+        reports {
+            xml.isEnabled = true
+            xml.destination = file("$buildDir/reports/jacoco/report.xml")
+        }
     }
-
-    sourceSets.main.get().java.srcDirs("src/main/kotlin")
 }
 
 /**
  * Usage: <code>./gradlew build -PwarningsAsErrors=true</code>.
  */
-fun shouldTreatCompilerWarningsAsErrors(): Boolean {
-    return project.findProperty("warningsAsErrors") == "true"
-}
+fun shouldTreatCompilerWarningsAsErrors(): Boolean =
+    project.findProperty("warningsAsErrors") == "true"
 
 dependencies {
     detekt(project(":detekt-cli"))

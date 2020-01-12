@@ -1,4 +1,5 @@
 rootProject.name = "detekt"
+
 include("detekt-api",
     "detekt-core",
     "detekt-rules",
@@ -6,9 +7,9 @@ include("detekt-api",
     "detekt-test",
     "detekt-sample-extensions",
     "detekt-generator",
-    "detekt-formatting")
-
-includeBuild("detekt-gradle-plugin")
+    "detekt-formatting",
+    "detekt-gradle-plugin"
+)
 
 pluginManagement {
     val artifactoryVersion: String by settings
@@ -18,6 +19,8 @@ pluginManagement {
     val kotlinVersion: String by settings
     val shadowVersion: String by settings
     val sonarQubeVersion: String by settings
+    val detektVersion: String by settings
+    val gradlePublishVersion: String by settings
 
     plugins {
         id("com.jfrog.artifactory") version artifactoryVersion
@@ -27,6 +30,8 @@ pluginManagement {
         kotlin("jvm") version kotlinVersion
         id("com.github.johnrengelman.shadow") version shadowVersion
         id("org.sonarqube") version sonarQubeVersion
+        id("io.gitlab.arturbosch.detekt") version detektVersion
+        id("com.gradle.plugin-publish") version gradlePublishVersion
     }
 }
 
