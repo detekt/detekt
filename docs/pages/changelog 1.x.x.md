@@ -6,6 +6,65 @@ permalink: changelog.html
 toc: true
 ---
 
+#### 1.4.0
+
+##### Notable Changes
+
+New rule set `coroutines` with two specialized rules was added.  
+As always new rules must be activated by the user until they get stable.
+
+```yaml
+coroutines:
+  active: true
+  GlobalCoroutineUsage:
+    active: false
+  RedundantSuspendModifier:
+    active: false
+```
+
+Wrapped `KtLint` was updated to `0.36.0` introducing two rules
+- EnumEntryNameCase
+- NoEmptyFirstLineInMethodBlock
+
+##### Migration
+
+The properties `ignoreOverriddenFunction` and `ignoreOverriddenFunctions` of some rules got deprecated and unified to a new property `ignoreOverridden`.
+
+##### Changelog
+
+- Refactor BuildFailure code - [#2250](https://github.com/arturbosch/detekt/pull/2250)
+- Fix nested methods bug in MethodOverloading rule - [#2249](https://github.com/arturbosch/detekt/pull/2249)
+- ThrowingExceptionInMain rule should consider main() function with no parameters - [#2248](https://github.com/arturbosch/detekt/issues/2248)
+- MethodOverloading bug with nested overloaded methods - [#2247](https://github.com/arturbosch/detekt/issues/2247)
+- Reduce complexity in FindingsReport - [#2246](https://github.com/arturbosch/detekt/pull/2246)
+- Add RedundantSuspendModifier rule - [#2244](https://github.com/arturbosch/detekt/pull/2244)
+- New ktlint rules - [#2243](https://github.com/arturbosch/detekt/pull/2243)
+- Inline MethodOverloading case file - [#2241](https://github.com/arturbosch/detekt/pull/2241)
+- ThrowingExceptionInMain: fix #2248 and add tests - [#2240](https://github.com/arturbosch/detekt/pull/2240)
+- Add disposing Kotlin environment. - [#2238](https://github.com/arturbosch/detekt/pull/2238)
+- OOM on multiple invocations - [#2237](https://github.com/arturbosch/detekt/issues/2237)
+- Improve doc for UnusedPrivateMember - [#2236](https://github.com/arturbosch/detekt/pull/2236)
+- Don't resolve dependencies during project configuration - [#2235](https://github.com/arturbosch/detekt/pull/2235)
+- Revert "Introduce Pull Request Labeler" - [#2234](https://github.com/arturbosch/detekt/pull/2234)
+- Fix #2230 equals() func detection - [#2233](https://github.com/arturbosch/detekt/pull/2233)
+- Fix git commit-hook label and code snippet doc - [#2232](https://github.com/arturbosch/detekt/pull/2232)
+- WrongEqualsTypeParameter does not ignore multi-parameter equals methods - [#2230](https://github.com/arturbosch/detekt/issues/2230)
+- Introduce Pull Request Labeler - [#2228](https://github.com/arturbosch/detekt/pull/2228)
+- Gradle plugin: Build upon default detekt config - [#2227](https://github.com/arturbosch/detekt/pull/2227)
+- Apply ktlint formatting plugin to Gradle plugin - [#2226](https://github.com/arturbosch/detekt/pull/2226)
+- Bump dependencies - [#2225](https://github.com/arturbosch/detekt/pull/2225)
+- Run shadowJar & installShadowDist task with everything else - [#2220](https://github.com/arturbosch/detekt/pull/2220)
+- Travis: Use consistent Java vendor - [#2219](https://github.com/arturbosch/detekt/pull/2219)
+- "Property is misspelled or does not exist" error for new rules in default rulesets - [#2217](https://github.com/arturbosch/detekt/issues/2217)
+- MethodOverloading false positive if every entry of an enum implement a method. - [#2216](https://github.com/arturbosch/detekt/issues/2216)
+- Add Git detekt pre-commit hook doc - [#2214](https://github.com/arturbosch/detekt/pull/2214)
+- Remove exclude workaround for new build property - [#2203](https://github.com/arturbosch/detekt/pull/2203)
+- Add GlobalCoroutineUsage rule + coroutines ruleset - [#2174](https://github.com/arturbosch/detekt/pull/2174)
+- Add rule [RedundantSuspend] to detect redundant suspend modifiers - [#2156](https://github.com/arturbosch/detekt/issues/2156)
+- Deprecate ignoreOverriddenFunction/s in favor of ignoreOverridden - [#2132](https://github.com/arturbosch/detekt/pull/2132)
+
+See all issues at: [1.4.0](https://github.com/arturbosch/detekt/milestone/55)
+
 #### 1.3.1
 
 - Remove old unused documentation - [#2210](https://github.com/arturbosch/detekt/pull/2210)
