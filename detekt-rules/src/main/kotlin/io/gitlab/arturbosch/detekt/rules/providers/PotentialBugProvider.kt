@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.rules.bugs.EqualsAlwaysReturnsTrueOrFalse
 import io.gitlab.arturbosch.detekt.rules.bugs.EqualsWithHashCodeExist
 import io.gitlab.arturbosch.detekt.rules.bugs.ExplicitGarbageCollectionCall
 import io.gitlab.arturbosch.detekt.rules.bugs.HasPlatformType
+import io.gitlab.arturbosch.detekt.rules.bugs.ImplicitDefaultLocale
 import io.gitlab.arturbosch.detekt.rules.bugs.InvalidRange
 import io.gitlab.arturbosch.detekt.rules.bugs.IteratorHasNextCallsNextMethod
 import io.gitlab.arturbosch.detekt.rules.bugs.IteratorNotThrowingNoSuchElementException
@@ -22,7 +23,6 @@ import io.gitlab.arturbosch.detekt.rules.bugs.UnsafeCallOnNullableType
 import io.gitlab.arturbosch.detekt.rules.bugs.UnsafeCast
 import io.gitlab.arturbosch.detekt.rules.bugs.UselessPostfixExpression
 import io.gitlab.arturbosch.detekt.rules.bugs.WrongEqualsTypeParameter
-import io.gitlab.arturbosch.detekt.rules.bugs.ImplicitDefaultLocale
 
 /**
  * The potential-bugs rule set provides rules that detect potential bugs.

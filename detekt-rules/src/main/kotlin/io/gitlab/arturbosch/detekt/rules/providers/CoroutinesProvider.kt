@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.rules.coroutines.GlobalCoroutineUsage
+import io.gitlab.arturbosch.detekt.rules.coroutines.RedundantSuspendModifier
 
 /**
  * The coroutines rule set analyzes code for potential coroutines problems.
@@ -15,7 +16,8 @@ class CoroutinesProvider : RuleSetProvider {
 
     override fun instance(config: Config): RuleSet {
         return RuleSet(ruleSetId, listOf(
-            GlobalCoroutineUsage(config)
+            GlobalCoroutineUsage(config),
+            RedundantSuspendModifier(config)
         ))
     }
 }
