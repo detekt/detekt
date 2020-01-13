@@ -11,6 +11,7 @@ import org.jetbrains.kotlin.js.descriptorUtils.nameIfStandardType
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.typeUtil.supertypes
@@ -34,6 +35,8 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
 
     private val ktCollections = setOf("Map", "MutableMap", "List", "MutableList")
 
+    private val mapAccessMethods = setOf("get", "put")
+
     private val ktAndJavaCollections = ktCollections + setOf("AbstractMap", "AbstractList")
 
     override val issue: Issue =
@@ -52,26 +55,27 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
     }
 
     private fun isGetOrPut(expression: KtCallExpression): Boolean {
-        return expression
-            .calleeExpression
-            ?.text in setOf("get", "put")
+        return expression.calleeExpression?.text in mapAccessMethods
     }
 
-    @Suppress("ReturnCount")
     private fun isMapMethod(expression: KtCallExpression): Boolean {
         val dotExpression = expression.prevSibling
-        if (dotExpression.parent !is KtDotQualifiedExpression) return false
-        val caller = dotExpression.prevSibling
-        if (caller !is KtElement) return false
-        val callerReturnType = caller.getResolvedCall(bindingContext)
+        val caller = when (dotExpression.parent) {
+            is KtDotQualifiedExpression,
+            is KtSafeQualifiedExpression -> dotExpression.prevSibling
+            else -> return false
+        }
+        return (caller as KtElement).getResolvedCall(bindingContext)
             ?.resultingDescriptor
             ?.returnType
-        val standardTypeName = callerReturnType?.nameIfStandardType
-        standardTypeName?.let {
+            .isEligibleCollection()
+    }
+
+    private fun KotlinType?.isEligibleCollection(): Boolean {
+        this?.nameIfStandardType?.let {
             return it.toString() in ktCollections
         }
-        val returnTypes = callerReturnType?.collectTypes()
-        return returnTypes?.any { it.constructor.toString() in ktAndJavaCollections } ?: false
+        return this?.collectTypes()?.any { it.constructor.toString() in ktAndJavaCollections } ?: false
     }
 
     private fun KotlinType.collectTypes(): Set<KotlinType> {

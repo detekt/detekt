@@ -148,7 +148,7 @@ fun <V> foo(): Int where V : Int = 5
 
 ### ExplicitCollectionElementAccessMethod
 
-Prefer usage of the indexed access operator [] for map or list element access or insert methods.
+Prefer the usage of the indexed access operator `[]` for map or list element access or insert methods.
 
 **Severity**: Style
 
@@ -167,7 +167,7 @@ val value = map.get("key")
 ```kotlin
 val map = Map<String, String>()
 map["key"] = "value"
-map["key"]
+val value = map["key"]
 ```
 
 ### ExplicitItLambdaParameter
