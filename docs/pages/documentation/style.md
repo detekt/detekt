@@ -148,6 +148,8 @@ fun <V> foo(): Int where V : Int = 5
 
 ### ExplicitCollectionElementAccessMethod
 
+In Kotlin functions `get` or `set` can be replaced with the shorter operator — `[]`,
+see https://kotlinlang.org/docs/reference/operator-overloading.html#indexed.
 Prefer the usage of the indexed access operator `[]` for map or list element access or insert methods.
 
 **Severity**: Style

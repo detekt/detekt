@@ -17,6 +17,8 @@ import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.typeUtil.supertypes
 
 /**
+ * In Kotlin functions `get` or `set` can be replaced with the shorter operator — `[]`,
+ * see https://kotlinlang.org/docs/reference/operator-overloading.html#indexed.
  * Prefer the usage of the indexed access operator `[]` for map or list element access or insert methods.
  *
  * <noncompliant>
