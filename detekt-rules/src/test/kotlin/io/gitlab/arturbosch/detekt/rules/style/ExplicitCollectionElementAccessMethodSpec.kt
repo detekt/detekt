@@ -189,7 +189,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
             assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
         }
 
-        it("does not report element access with get method") {
+        it("does not report element access with []") {
             val code = """
                     fun f() {
                         val list = java.util.ArrayList<String>() 
