@@ -127,7 +127,6 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
                     }"""
             assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
         }
-
     }
 
     describe("Java map") {
