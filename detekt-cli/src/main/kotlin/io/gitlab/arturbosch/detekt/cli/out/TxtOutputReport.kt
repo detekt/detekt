@@ -10,7 +10,10 @@ class TxtOutputReport : OutputReport() {
     override val name = "plain text report"
 
     override fun render(detektion: Detektion): String {
-        val smells = detektion.findings.flatMap { it.value }
-        return smells.joinToString("\n") { it.compactWithSignature() }
+        val builder = StringBuilder()
+        detektion.findings
+            .flatMap { it.value }
+            .forEach { builder.append(it.compactWithSignature()).append("\n") }
+        return builder.toString()
     }
 }
