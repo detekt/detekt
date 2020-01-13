@@ -58,7 +58,7 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
             val code = """
                     fun f() {
                         val map = mapOf<String, String>()
-                        map["key"] 
+                        val value = map["key"] 
                     }"""
             assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
         }
