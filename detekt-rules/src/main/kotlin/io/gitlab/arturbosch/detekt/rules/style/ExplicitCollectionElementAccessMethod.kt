@@ -27,7 +27,7 @@ import org.jetbrains.kotlin.types.typeUtil.supertypes
  * <compliant>
  *  val map = Map<String, String>()
  *  map["key"] = "value"
- *  map["key"]
+ *  val value = map["key"]
  * </compliant>
  */
 class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rule(config) {
