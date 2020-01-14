@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.api
 
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileForTest
+import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
 import org.spekframework.spek2.Spek
@@ -18,7 +19,7 @@ class RuleSetSpec : Spek({
 
     class TestProvider : RuleSetProvider {
 
-        override val ruleSetId: String = "test"
+        override val ruleSetId: String = "comments"
         override fun instance(config: Config): RuleSet = RuleSet(ruleSetId, listOf(Test()))
     }
 
@@ -36,6 +37,12 @@ class RuleSetSpec : Spek({
             it("has filters from rule set entry in config") {
                 val config = TestConfig(Config.EXCLUDES_KEY to "**/*.kt")
                 assertThat(ruleSetInstance(config).pathFilters).isNotNull()
+            }
+
+            it("has an inactive rule set") {
+                val config = yamlConfig("detekt.yml")
+                val ruleSet = TestProvider().buildRuleset(config)
+                assertThat(ruleSet).isNull()
             }
 
             context("filtering by paths") {

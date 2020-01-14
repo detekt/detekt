@@ -2,8 +2,11 @@ package io.gitlab.arturbosch.detekt.api.internal
 
 import io.gitlab.arturbosch.detekt.api.CompositeConfig
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatIllegalStateException
+import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -66,6 +69,27 @@ internal class ConfigValidationSpec : Spek({
                 unexpectedNestedConfiguration("style"),
                 unexpectedNestedConfiguration("comments")
             )
+        }
+
+        it("returns an error for an invalid config type") {
+            val invalidConfig = TestConfig()
+            assertThatIllegalStateException().isThrownBy {
+                validateConfig(invalidConfig, baseline)
+            }.withMessageStartingWith("Unsupported config type for validation")
+        }
+
+        it("returns an error for an invalid baseline") {
+            val invalidBaseline = TestConfig()
+            assertThatIllegalArgumentException().isThrownBy {
+                validateConfig(Config.empty, invalidBaseline)
+            }.withMessageStartingWith("Only supported baseline config is the YamlConfig.")
+        }
+
+        it("returns an error for an empty baseline") {
+            val invalidBaseline = Config.empty
+            assertThatIllegalArgumentException().isThrownBy {
+                validateConfig(Config.empty, invalidBaseline)
+            }.withMessageStartingWith("Cannot validate configuration based on an empty baseline config.")
         }
 
         describe("validate composite configurations") {
@@ -149,6 +173,20 @@ internal class ConfigValidationSpec : Spek({
                 assertThat(result).doesNotContain(
                     propertyDoesNotExists("complexity>InnerMap>InnerKey"),
                     propertyDoesNotExists("complexity>InnerMap>Inner2>nestedActive")
+                )
+            }
+        }
+
+        describe("deprecated configuration option") {
+
+            it("uses a deprecated property") {
+                val description = "Use 'ignoreOverridden' instead"
+                val config = yamlConfig("config_validation/deprecated-property.yml")
+
+                val result = validateConfig(config, config)
+
+                assertThat(result).contains(
+                    propertyIsDeprecated("naming>FunctionParameterNaming>ignoreOverriddenFunctions", description)
                 )
             }
         }
