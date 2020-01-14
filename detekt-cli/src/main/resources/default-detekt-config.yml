@@ -459,6 +459,8 @@ style:
     active: true
   EqualsOnSignatureLine:
     active: false
+  ExplicitCollectionElementAccessMethod:
+    active: false
   ExplicitItLambdaParameter:
     active: false
   ExpressionBodySyntax:

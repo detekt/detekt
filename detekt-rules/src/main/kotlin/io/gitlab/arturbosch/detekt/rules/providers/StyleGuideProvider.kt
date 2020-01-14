@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.rules.style.DataClassShouldBeImmutable
 import io.gitlab.arturbosch.detekt.rules.style.EqualsNullCall
 import io.gitlab.arturbosch.detekt.rules.style.EqualsOnSignatureLine
 import io.gitlab.arturbosch.detekt.rules.style.ExplicitItLambdaParameter
+import io.gitlab.arturbosch.detekt.rules.style.ExplicitCollectionElementAccessMethod
 import io.gitlab.arturbosch.detekt.rules.style.ExpressionBodySyntax
 import io.gitlab.arturbosch.detekt.rules.style.FileParsingRule
 import io.gitlab.arturbosch.detekt.rules.style.ForbiddenComment
@@ -120,6 +121,7 @@ class StyleGuideProvider : RuleSetProvider {
                 VarCouldBeVal(config),
                 ForbiddenVoid(config),
                 ExplicitItLambdaParameter(config),
+                ExplicitCollectionElementAccessMethod(config),
                 UselessCallOnNotNull(config),
                 UnderscoresInNumericLiterals(config),
                 UseRequire(config),

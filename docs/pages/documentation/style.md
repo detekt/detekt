@@ -146,6 +146,32 @@ fun stuff() =
 fun <V> foo(): Int where V : Int = 5
 ```
 
+### ExplicitCollectionElementAccessMethod
+
+In Kotlin functions `get` or `set` can be replaced with the shorter operator — `[]`,
+see https://kotlinlang.org/docs/reference/operator-overloading.html#indexed.
+Prefer the usage of the indexed access operator `[]` for map or list element access or insert methods.
+
+**Severity**: Style
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+val map = Map<String, String>()
+map.put("key", "value")
+val value = map.get("key")
+```
+
+#### Compliant Code:
+
+```kotlin
+val map = Map<String, String>()
+map["key"] = "value"
+val value = map["key"]
+```
+
 ### ExplicitItLambdaParameter
 
 Lambda expressions are one of the core features of the language. They often include very small chunks of
