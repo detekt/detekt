@@ -77,7 +77,7 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
         this?.nameIfStandardType?.let {
             return it.toString() in ktCollections
         }
-        return this?.collectTypes()?.any { it.constructor.toString() in ktAndJavaCollections } ?: false
+        return this?.collectTypes()?.any { it.constructor.toString() in ktAndJavaCollections } == true
     }
 
     private fun KotlinType.collectTypes(): Set<KotlinType> {
