@@ -5,12 +5,14 @@ plugins {
     id("org.jetbrains.dokka")
 }
 
+val selfAnalysisVersion: String by project
+
 dependencies {
-    implementation("io.gitlab.arturbosch.detekt:detekt-cli:$version")
+    implementation(project(":detekt-cli"))
     implementation(kotlin("stdlib"))
     implementation(kotlin("gradle-plugin"))
     implementation(kotlin("gradle-plugin-api"))
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:$version")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:$selfAnalysisVersion")
 }
 
 gradlePlugin {

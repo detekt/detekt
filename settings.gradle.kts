@@ -19,7 +19,7 @@ pluginManagement {
     val kotlinVersion: String by settings
     val shadowVersion: String by settings
     val sonarQubeVersion: String by settings
-    val detektVersion: String by settings
+    val selfAnalysisVersion: String by settings
     val gradlePublishVersion: String by settings
 
     plugins {
@@ -30,7 +30,7 @@ pluginManagement {
         kotlin("jvm") version kotlinVersion
         id("com.github.johnrengelman.shadow") version shadowVersion
         id("org.sonarqube") version sonarQubeVersion
-        id("io.gitlab.arturbosch.detekt") version detektVersion
+        id("io.gitlab.arturbosch.detekt") version selfAnalysisVersion
         id("com.gradle.plugin-publish") version gradlePublishVersion
     }
 }
