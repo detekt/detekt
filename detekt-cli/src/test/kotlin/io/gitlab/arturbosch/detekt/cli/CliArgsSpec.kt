@@ -16,13 +16,13 @@ internal class CliArgsSpec : Spek({
     describe("Parsing the input path") {
 
         it("the current working directory is used if parameter is not set") {
-            val (cli, _) = parseArguments<CliArgs>(emptyArray())
+            val cli = parseArguments<CliArgs>(emptyArray())
             assertThat(cli.inputPaths).hasSize(1)
             assertThat(cli.inputPaths.first()).isEqualTo(Paths.get(System.getProperty("user.dir")))
         }
 
         it("a single value is converted to a path") {
-            val (cli, _) = parseArguments<CliArgs>(arrayOf("--input", "$projectPath"))
+            val cli = parseArguments<CliArgs>(arrayOf("--input", "$projectPath"))
             assertThat(cli.inputPaths).hasSize(1)
             assertThat(cli.inputPaths.first().toAbsolutePath()).isEqualTo(projectPath)
         }
@@ -30,8 +30,8 @@ internal class CliArgsSpec : Spek({
         it("multiple imput paths can be separated by comma") {
             val mainPath = projectPath.resolve("src/main").toAbsolutePath()
             val testPath = projectPath.resolve("src/test").toAbsolutePath()
-            val (cli, _) = parseArguments<CliArgs>(arrayOf(
-                    "--input", "$mainPath,$testPath")
+            val cli = parseArguments<CliArgs>(arrayOf(
+                "--input", "$mainPath,$testPath")
             )
             assertThat(cli.inputPaths).hasSize(2)
             assertThat(cli.inputPaths.map(Path::toAbsolutePath)).containsExactlyInAnyOrder(mainPath, testPath)
@@ -42,8 +42,8 @@ internal class CliArgsSpec : Spek({
             val params = arrayOf("--input", "$pathToNonExistentDirectory")
 
             assertThatExceptionOfType(ParameterException::class.java)
-                    .isThrownBy { parseArguments<CliArgs>(params).first.inputPaths }
-                    .withMessageContaining("does not exist")
+                .isThrownBy { parseArguments<CliArgs>(params).inputPaths }
+                .withMessageContaining("does not exist")
         }
     }
 })
