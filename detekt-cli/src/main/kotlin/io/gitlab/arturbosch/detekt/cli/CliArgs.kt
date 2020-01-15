@@ -192,6 +192,6 @@ class CliArgs : Args {
          * Creates an instance of [CliArgs]. Verification if the settings are sound
          * must be made by the caller.
          */
-        fun parse(args: Array<String>): CliArgs = parseArguments<CliArgs>(args).first
+        fun parse(args: Array<String>): CliArgs = parseArguments(args)
     }
 }

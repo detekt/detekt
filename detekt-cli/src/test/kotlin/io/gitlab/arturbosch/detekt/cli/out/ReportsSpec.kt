@@ -21,12 +21,12 @@ internal class ReportsSpec : Spek({
 
             val reportUnderTest = TestOutputReport::class.java.simpleName
             val args = arrayOf(
-                    "--report", "xml:/tmp/path1",
-                    "--report", "txt:/tmp/path2",
-                    "--report", "$reportUnderTest:/tmp/path3",
-                    "--report", "html:D:_Gradle\\xxx\\xxx\\build\\reports\\detekt\\detekt.html"
+                "--report", "xml:/tmp/path1",
+                "--report", "txt:/tmp/path2",
+                "--report", "$reportUnderTest:/tmp/path3",
+                "--report", "html:D:_Gradle\\xxx\\xxx\\build\\reports\\detekt\\detekt.html"
             )
-            val (cli, _) = parseArguments<CliArgs>(args)
+            val cli = parseArguments<CliArgs>(args)
 
             val reports = cli.reportPaths
 
@@ -55,7 +55,9 @@ internal class ReportsSpec : Spek({
             it("it should properly parse HTML report entry") {
                 val htmlReport = reports[3]
                 assertThat(htmlReport.kind).isEqualTo(HtmlOutputReport::class.java.simpleName)
-                assertThat(htmlReport.path).isEqualTo(Paths.get("D:_Gradle\\xxx\\xxx\\build\\reports\\detekt\\detekt.html"))
+                assertThat(htmlReport.path).isEqualTo(
+                    Paths.get("D:_Gradle\\xxx\\xxx\\build\\reports\\detekt\\detekt.html")
+                )
             }
 
             val extensions = ReportLocator(ProcessingSettings(listOf())).load()
@@ -67,12 +69,12 @@ internal class ReportsSpec : Spek({
 
             it("should recognize custom output format") {
                 assertThat(reports).haveExactly(1,
-                        Condition(Predicate { it.kind == reportUnderTest },
-                                "Corresponds exactly to the test output report."))
+                    Condition(Predicate { it.kind == reportUnderTest },
+                        "Corresponds exactly to the test output report."))
 
                 assertThat(extensions).haveExactly(1,
-                        Condition(Predicate { it is TestOutputReport && it.ending == "yml" },
-                                "Is exactly the test output report."))
+                    Condition(Predicate { it is TestOutputReport && it.ending == "yml" },
+                        "Is exactly the test output report."))
             }
         }
     }

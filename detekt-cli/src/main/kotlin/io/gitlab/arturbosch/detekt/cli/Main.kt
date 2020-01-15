@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.cli.runners.ConfigExporter
 import io.gitlab.arturbosch.detekt.cli.runners.Executable
 import io.gitlab.arturbosch.detekt.cli.runners.Runner
 import io.gitlab.arturbosch.detekt.cli.runners.SingleRuleRunner
-import org.jetbrains.kotlin.utils.addToStdlib.ifNotEmpty
 import java.io.PrintStream
 import kotlin.system.exitProcess
 
@@ -15,12 +14,17 @@ import kotlin.system.exitProcess
 fun main(args: Array<String>) {
     try {
         buildRunner(args).execute()
+    } catch (_: HelpRequest) {
+        // handled by JCommander, exit normally
     } catch (e: InvalidConfig) {
         e.printStackTrace()
         exitProcess(ExitCode.INVALID_CONFIG.number)
     } catch (e: BuildFailure) {
         e.printStackTrace()
         exitProcess(ExitCode.MAX_ISSUES_REACHED.number)
+    } catch (e: HandledArgumentViolation) {
+        // messages are handled when parsing arguments
+        exitProcess(ExitCode.UNEXPECTED_DETEKT_ERROR.number)
     } catch (e: Exception) {
         e.printStackTrace()
         exitProcess(ExitCode.UNEXPECTED_DETEKT_ERROR.number)
@@ -33,30 +37,19 @@ fun buildRunner(
     outputPrinter: PrintStream = System.out,
     errorPrinter: PrintStream = System.err
 ): Executable {
-    val arguments = parseArguments(args)
+    val arguments = parseArguments<CliArgs>(
+        args,
+        outputPrinter,
+        errorPrinter
+    ) { messages ->
+        if (createBaseline && baseline == null) {
+            messages += "Creating a baseline.xml requires the --baseline parameter to specify a path."
+        }
+    }
     return when {
         arguments.generateConfig -> ConfigExporter(arguments)
         arguments.runRule != null -> SingleRuleRunner(arguments)
         arguments.printAst -> AstPrinter(arguments)
         else -> Runner(arguments, outputPrinter, errorPrinter)
     }
-}
-
-private fun parseArguments(args: Array<String>): CliArgs {
-    val (arguments, jcommander) = parseArguments<CliArgs>(args)
-    val messages = validateCli(arguments)
-    messages.ifNotEmpty {
-        jcommander.failWithErrorMessages(messages)
-    }
-    return arguments
-}
-
-private fun validateCli(arguments: CliArgs): List<String> {
-    val violations = ArrayList<String>()
-    with(arguments) {
-        if (createBaseline && baseline == null) {
-            violations += "Creating a baseline.xml requires the --baseline parameter to specify a path."
-        }
-    }
-    return violations
 }
