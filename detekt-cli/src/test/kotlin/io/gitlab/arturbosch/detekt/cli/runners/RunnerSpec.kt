@@ -142,4 +142,37 @@ class RunnerSpec : Spek({
             }
         }
     }
+
+    describe("executes the runner with suppressed logs") {
+
+        val outputPrinterBuffer by memoized { ByteArrayOutputStream() }
+        val outputPrinter by memoized { PrintStream(outputPrinterBuffer) }
+
+        val errorPrinterBuffer by memoized { ByteArrayOutputStream() }
+        val errorPrinter by memoized { PrintStream(errorPrinterBuffer) }
+
+        context("execute with logs suppressed") {
+
+            beforeEachTest {
+                val args = CliArgs.parse(arrayOf("--input", inputPath.toString(), "--suppress-console-logs"))
+
+                Runner(args, outputPrinter, errorPrinter).execute()
+
+                outputPrinter.flush()
+                outputPrinter.close()
+
+                errorPrinter.flush()
+                errorPrinter.close()
+            }
+
+            it("writes output to output printer, asserts no logs") {
+                assertThat(outputPrinterBuffer.toString(Charset.defaultCharset().name())).isEmpty()
+            }
+
+            it("does not write anything to error printer") {
+                assertThat(errorPrinterBuffer.toString(Charset.defaultCharset().name())).isEmpty()
+            }
+        }
+    }
+
 })

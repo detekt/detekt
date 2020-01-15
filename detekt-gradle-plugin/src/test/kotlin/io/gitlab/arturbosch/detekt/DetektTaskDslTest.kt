@@ -359,6 +359,7 @@ internal object DetektTaskDslTest : Spek({
                         |    autoCorrect = true
                         |    buildUponDefaultConfig = true
                         |    ignoreFailures = true
+                        |    suppressConsoleLogs = true
                         |}
                         """
 
@@ -394,6 +395,10 @@ internal object DetektTaskDslTest : Spek({
 
                     it("enables using default config as baseline") {
                         assertThat(result.output).contains("--build-upon-default-config")
+                    }
+
+                    it("enables suppressing console logs") {
+                        assertThat(result.output).contains("--suppress-console-logs")
                     }
                 }
 
@@ -465,6 +470,7 @@ internal object DetektTaskDslTest : Spek({
                         |    failFast = false
                         |    ignoreFailures = false
                         |    autoCorrect = false
+                        |    suppressConsoleLogs = true
                         |    reports {
                         |        xml {
                         |            enabled = true
@@ -520,6 +526,10 @@ internal object DetektTaskDslTest : Spek({
 
                 it("disables the default ruleset") {
                     assertThat(result.output).contains("--disable-default-rulesets")
+                }
+
+                it("enables suppressing console logs") {
+                    assertThat(result.output).contains("--suppress-console-logs")
                 }
             }
 
@@ -541,6 +551,7 @@ internal object DetektTaskDslTest : Spek({
                         |    failFast = false
                         |    ignoreFailures = false
                         |    autoCorrect = false
+                        |    suppressConsoleLogs = true
                         |    reports {
                         |        xml {
                         |            enabled = true
@@ -596,6 +607,10 @@ internal object DetektTaskDslTest : Spek({
 
                 it("disables the default ruleset") {
                     assertThat(result.output).contains("--disable-default-rulesets")
+                }
+
+                it("enables suppressing console logs") {
+                    assertThat(result.output).contains("--suppress-console-logs")
                 }
             }
         }

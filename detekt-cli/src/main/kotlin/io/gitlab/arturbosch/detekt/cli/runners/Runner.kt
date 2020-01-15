@@ -91,7 +91,8 @@ class Runner(
             jvmTarget = jvmTarget,
             debug = arguments.debug,
             outPrinter = outputPrinter,
-            errorPrinter = errorPrinter
+            errorPrinter = errorPrinter,
+            suppressConsoleLogs = suppressConsoleLogs
         )
     }
 }

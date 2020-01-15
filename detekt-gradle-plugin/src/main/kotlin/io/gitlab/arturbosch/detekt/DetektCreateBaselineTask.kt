@@ -12,6 +12,7 @@ import io.gitlab.arturbosch.detekt.invoke.DisableDefaultRuleSetArgument
 import io.gitlab.arturbosch.detekt.invoke.FailFastArgument
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
+import io.gitlab.arturbosch.detekt.invoke.SuppressConsoleLogsArgument
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
@@ -77,6 +78,10 @@ open class DetektCreateBaselineTask : SourceTask() {
     @get:Optional
     val autoCorrect: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
+    @get:Input
+    @get:Optional
+    val suppressConsoleLogs: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+
     @TaskAction
     fun baseline() {
         val arguments = mutableListOf(
@@ -89,7 +94,8 @@ open class DetektCreateBaselineTask : SourceTask() {
             BuildUponDefaultConfigArgument(buildUponDefaultConfig.getOrElse(false)),
             FailFastArgument(failFast.getOrElse(false)),
             AutoCorrectArgument(autoCorrect.getOrElse(false)),
-            DisableDefaultRuleSetArgument(disableDefaultRuleSets.getOrElse(false))
+            DisableDefaultRuleSetArgument(disableDefaultRuleSets.getOrElse(false)),
+            SuppressConsoleLogsArgument(suppressConsoleLogs.getOrElse(false))
         )
 
         DetektInvoker.create(project).invokeCli(

@@ -35,7 +35,8 @@ data class ProcessingSettings @JvmOverloads constructor(
     val outPrinter: PrintStream = System.out,
     val errorPrinter: PrintStream = System.err,
     val autoCorrect: Boolean = false,
-    val debug: Boolean = false
+    val debug: Boolean = false,
+    val suppressConsoleLogs: Boolean = false
 ) : AutoCloseable, Closeable {
     /**
      * Single project input path constructor.
@@ -54,7 +55,8 @@ data class ProcessingSettings @JvmOverloads constructor(
         outPrinter: PrintStream = System.out,
         errorPrinter: PrintStream = System.err,
         autoCorrect: Boolean = false,
-        debug: Boolean = false
+        debug: Boolean = false,
+        suppressConsoleLogs: Boolean = false
     ) : this(
         listOf(inputPath),
         config,
@@ -69,7 +71,8 @@ data class ProcessingSettings @JvmOverloads constructor(
         outPrinter,
         errorPrinter,
         autoCorrect,
-        debug
+        debug,
+        suppressConsoleLogs
     )
 
     init {
@@ -94,7 +97,9 @@ data class ProcessingSettings @JvmOverloads constructor(
 
     val taskPool: TaskPool by lazy { TaskPool(executorService) }
 
-    fun info(msg: String) = outPrinter.println(msg)
+    fun info(msg: String) {
+        outPrinter.println(msg)
+    }
 
     fun error(msg: String, error: Throwable) {
         errorPrinter.println(msg)

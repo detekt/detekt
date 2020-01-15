@@ -41,6 +41,8 @@ open class DetektExtension(project: Project) : CodeQualityExtension() {
 
     var buildUponDefaultConfig: Boolean = DEFAULT_BUILD_UPON_DEFAULT_CONFIG_VALUE
 
+    var suppressConsoleLogs: Boolean = DEFAULT_SUPPRESS_CONSOLE_LOGS_VALUE
+
     var disableDefaultRuleSets: Boolean = DEFAULT_DISABLE_RULESETS_VALUE
 
     var autoCorrect: Boolean = DEFAULT_AUTO_CORRECT_VALUE
@@ -55,5 +57,6 @@ open class DetektExtension(project: Project) : CodeQualityExtension() {
         const val DEFAULT_REPORT_ENABLED_VALUE = true
         const val DEFAULT_FAIL_FAST_VALUE = false
         const val DEFAULT_BUILD_UPON_DEFAULT_CONFIG_VALUE = false
+        const val DEFAULT_SUPPRESS_CONSOLE_LOGS_VALUE = false
     }
 }

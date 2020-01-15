@@ -145,6 +145,12 @@ class CliArgs : Args {
     )
     var printAst: Boolean = false
 
+    @Parameter(
+        names = ["--suppress-console-logs"],
+        description = "Does not output any console logs when ran."
+    )
+    var suppressConsoleLogs: Boolean = false
+
     /*
         The following @Parameters are used for type and symbol resolving. When additional parameters are required the
         names should mirror the names found in this file (e.g. "classpath", "language-version", "jvm-target"):
