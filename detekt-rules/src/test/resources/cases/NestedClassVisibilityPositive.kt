@@ -4,19 +4,13 @@ package cases
 
 internal class NestedClassesVisibilityPositive {
 
-    // reports 1 - public visibility
-    public class NestedPublicClass1
+    // reports 1 - explicit public visibility
+    public interface NestedPublicInterface
 
-    // reports 1 - public visibility
-    class NestedPublicClass2
+    // reports 1 - explicit public visibility
+    public object A
 
-    // reports 1 - public visibility
-    interface NestedPublicInterface
-
-    // reports 1 - public visibility
-    object A
-
-    // reports 1 - public visibility
+    // reports 1 - explicit public visibility
     public class NestedClassWithNestedCLass {
 
         // classes with a nesting depth higher than 1 are excluded
@@ -28,5 +22,5 @@ internal enum class NestedEnumsVisibility {
 
     A;
 
-    class Inner // reports 1 - public visibility inside enum class
+    public class Inner // reports 1 - explicit public visibility inside enum class
 }
