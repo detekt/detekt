@@ -14,29 +14,31 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtEnumEntry
 
 /**
- * Nested classes are often used to implement functionality local to the class it is nested in. Therefore it should
- * not be public to other parts of the code.
- * Prefer keeping nested classes `private`.
+ * Nested classes inherit their visibility from the parent class
+ * and are often used to implement functionality local to the class it is nested in.
+ * These nested classes can't have a higher visibility than their parent.
+ * However, the visibility can be further restricted by using a private modifier for instance.
+ * In internal classes the _explicit_ public modifier for nested classes is misleading and thus unnecessary,
+ * because the nested class still has an internal visibility.
  *
  * <noncompliant>
- * internal class NestedClassesVisibility {
- *
- *     public class NestedPublicClass // should not be public
+ * internal class Outer {
+ *     // explicit public modifier still results in an internal nested class
+ *     public class Nested
  * }
  * </noncompliant>
  *
  * <compliant>
- * internal class NestedClassesVisibility {
- *
- *     internal class NestedPublicClass
+ * internal class Outer {
+ *     class Nested1
+ *     internal class Nested2
  * }
  * </compliant>
  */
 class NestedClassesVisibility(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue("NestedClassesVisibility", Severity.Style,
-            "Nested types are often used for implementing private functionality " +
-                    "and therefore this should not be public.",
+            "The explicit public modifier still results in an internal nested class.",
             Debt.FIVE_MINS)
 
     override fun visitClass(klass: KtClass) {
@@ -49,11 +51,7 @@ class NestedClassesVisibility(config: Config = Config.empty) : Rule(config) {
         klass.declarations
                 .filterIsInstance<KtClassOrObject>()
                 .filter { it.hasModifier(KtTokens.PUBLIC_KEYWORD) && it.isNoEnum() && it.isNoCompanionObj() }
-                .forEach {
-                    report(CodeSmell(issue, Entity.from(it),
-                            "Nested types are often used for implementing private functionality. " +
-                                    "However the visibility of ${klass.name} makes it visible externally."))
-                }
+                .forEach { report(CodeSmell(issue, Entity.from(it), issue.description)) }
     }
 
     private fun KtClassOrObject.isNoEnum() = !this.hasModifier(KtTokens.ENUM_KEYWORD) && this !is KtEnumEntry
