@@ -4,7 +4,8 @@ package cases
 
 internal class NestedClassVisibilityNegative1 {
 
-    class Inner
+    class Nested1
+    internal class Nested2
 
     // enums with public visibility are excluded
     enum class NestedEnum { One, Two }
