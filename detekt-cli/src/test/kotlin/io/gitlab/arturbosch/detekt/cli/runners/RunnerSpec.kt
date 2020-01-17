@@ -17,7 +17,8 @@ import java.nio.file.Paths
 
 class RunnerSpec : Spek({
 
-    val inputPath: Path = Paths.get(resource("/cases/Poko.kt"))
+    val inputPath: Path = Paths.get(resource("cases/Poko.kt"))
+    val charSetName = Charset.defaultCharset().name()
 
     describe("executes the runner with different maxIssues configurations") {
 
@@ -91,10 +92,12 @@ class RunnerSpec : Spek({
         val errorPrinterBuffer by memoized { ByteArrayOutputStream() }
         val errorPrinter by memoized { PrintStream(errorPrinterBuffer) }
 
-        context("execute with default config") {
+        context("execute with default config which allows no issues") {
+
+            val path: Path = Paths.get(resource("/cases/CleanPoko.kt"))
 
             beforeEachTest {
-                val args = CliArgs.parse(arrayOf("--input", inputPath.toString()))
+                val args = CliArgs.parse(arrayOf("--input", path.toString()))
 
                 Runner(args, outputPrinter, errorPrinter).execute()
 
@@ -105,12 +108,12 @@ class RunnerSpec : Spek({
                 errorPrinter.close()
             }
 
-            it("writes output to output printer") {
-                assertThat(outputPrinterBuffer.toString(Charset.defaultCharset().name())).contains("Build succeeded")
+            it("writes no build related output to output printer") {
+                assertThat(outputPrinterBuffer.toString(charSetName)).doesNotContain("Build")
             }
 
             it("does not write anything to error printer") {
-                assertThat(errorPrinterBuffer.toString(Charset.defaultCharset().name())).isEmpty()
+                assertThat(errorPrinterBuffer.toString(charSetName)).isEmpty()
             }
         }
 
@@ -134,11 +137,11 @@ class RunnerSpec : Spek({
             }
 
             it("writes output to output printer") {
-                assertThat(outputPrinterBuffer.toString(Charset.defaultCharset().name())).contains("Build failed")
+                assertThat(outputPrinterBuffer.toString(charSetName)).contains("Build failed")
             }
 
             it("does not write anything to error printer") {
-                assertThat(errorPrinterBuffer.toString(Charset.defaultCharset().name())).isEmpty()
+                assertThat(errorPrinterBuffer.toString(charSetName)).isEmpty()
             }
         }
     }

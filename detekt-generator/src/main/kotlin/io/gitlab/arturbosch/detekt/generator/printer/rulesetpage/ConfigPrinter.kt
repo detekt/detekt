@@ -69,7 +69,7 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
 
     private fun defaultBuildConfiguration(): String = """
       build:
-        maxIssues: 10
+        maxIssues: 0
         excludeCorrectable: false
         weights:
           # complexity: 2

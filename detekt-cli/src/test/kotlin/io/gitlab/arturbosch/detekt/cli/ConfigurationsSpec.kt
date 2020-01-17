@@ -197,8 +197,8 @@ internal class ConfigurationsSpec : Spek({
             assertThat(config.subConfig("comments").subConfig("CommentOverPrivateFunction").valueOrDefault("active", true)).isFalse()
         }
 
-        it("should be maxIssues=10 by default") {
-            assertThat(config.subConfig("build").valueOrDefault("maxIssues", -1)).isEqualTo(10)
+        it("should be maxIssues=0 by default") {
+            assertThat(config.subConfig("build").valueOrDefault("maxIssues", -1)).isEqualTo(0)
         }
     }
 })
