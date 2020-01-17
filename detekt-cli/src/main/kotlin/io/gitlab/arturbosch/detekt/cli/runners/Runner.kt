@@ -89,7 +89,7 @@ class Runner(
             classpath = createClasspath(),
             languageVersion = languageVersion,
             jvmTarget = jvmTarget,
-            debug = arguments.debug,
+            debug = debug,
             outPrinter = outputPrinter,
             errorPrinter = errorPrinter,
             maxIssues = maxIssues

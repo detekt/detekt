@@ -102,5 +102,4 @@ Usage: detekt [options]
     --max-issues
       Sets the max number of acceptable issues.  This overrides any value
       provided via config if a config supplies a max issues value.  
-
 ```

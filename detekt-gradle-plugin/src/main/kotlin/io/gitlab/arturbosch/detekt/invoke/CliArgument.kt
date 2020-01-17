@@ -90,5 +90,5 @@ internal data class FailFastArgument(override val value: Boolean) : BoolCliArgum
 internal data class AutoCorrectArgument(override val value: Boolean) : BoolCliArgument(value, AUTO_CORRECT_PARAMETER)
 
 internal data class MaxIssuesArgument(val maxIssues: Int) : CliArgument() {
-    override fun toArgument() = listOf(MAX_ISSUES_PARAMETER, maxIssues.toString())
+    override fun toArgument() = if (maxIssues == -1) emptyList() else listOf(MAX_ISSUES_PARAMETER, maxIssues.toString())
 }
