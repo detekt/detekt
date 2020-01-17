@@ -152,18 +152,10 @@ class DetektPlugin : Plugin<Project> {
             configuration.isTransitive = true
             configuration.description = "The $CONFIGURATION_DETEKT dependencies to be used for this project."
 
-            val version = toolVersion()
-            if (version != null) {
-                project.logger.warn(
-                    """ |Using 'detekt.toolVersion' is deprecated due to performance reasons.
-                        |You can use it to test snapshot releases of detekt but is discouraged to use in production.
-                        |This property will exist in the future due to Gradle api requirements.
-                        |This plugin ships with version '$DEFAULT_DETEKT_VERSION' by default.
-                    """.trimMargin()
-                )
-                configuration.defaultDependencies { dependencySet ->
-                    dependencySet.add(project.dependencies.create("$DETEKT_CLI_ARTIFACT:$version"))
-                }
+            configuration.defaultDependencies { dependencySet ->
+                dependencySet.add(project.dependencies.create(
+                    "$DETEKT_CLI_ARTIFACT:${toolVersion() ?: DEFAULT_DETEKT_VERSION}"
+                ))
             }
         }
     }

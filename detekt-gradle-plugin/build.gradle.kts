@@ -8,7 +8,6 @@ plugins {
 val selfAnalysisVersion: String by project
 
 dependencies {
-    implementation(project(":detekt-cli"))
     implementation(kotlin("stdlib"))
     implementation(kotlin("gradle-plugin"))
     implementation(kotlin("gradle-plugin-api"))

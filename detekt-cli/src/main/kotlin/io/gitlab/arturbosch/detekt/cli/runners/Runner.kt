@@ -20,6 +20,7 @@ import io.gitlab.arturbosch.detekt.cli.loadDefaultConfig
 import io.gitlab.arturbosch.detekt.cli.maxIssues
 import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
+import io.gitlab.arturbosch.detekt.core.whichDetekt
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import java.io.PrintStream
 
@@ -31,6 +32,7 @@ class Runner(
 
     override fun execute() {
         createSettings().use { settings ->
+            settings.debug { "Running detekt '${whichDetekt()}'" }
             checkConfiguration(settings)
             val (time, result) = measure { DetektFacade.create(settings).run() }
             result.add(SimpleNotification("detekt finished in $time ms."))

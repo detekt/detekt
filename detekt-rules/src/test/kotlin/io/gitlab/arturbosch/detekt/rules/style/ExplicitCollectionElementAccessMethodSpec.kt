@@ -206,5 +206,4 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
             assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
         }
     }
-
 })
