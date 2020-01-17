@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION", "UnstableApiUsage", "DeprecatedCallableAddReplaceWith")
+
 package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.extensions.CustomDetektReport

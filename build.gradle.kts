@@ -123,7 +123,7 @@ subprojects {
         }
     }
 
-    tasks.withType<Test>().configureEach {
+    tasks.withType<Test>() {
         useJUnitPlatform()
         systemProperty("SPEK_TIMEOUT", 0) // disable test timeout
         val compileSnippetText: Boolean = if (project.hasProperty("compile-test-snippets")) {
@@ -147,7 +147,7 @@ subprojects {
         }
     }
 
-    tasks.withType<KotlinCompile>().configureEach {
+    tasks.withType<KotlinCompile>() {
         kotlinOptions.jvmTarget = projectJvmTarget
         // https://youtrack.jetbrains.com/issue/KT-24946
         kotlinOptions.freeCompilerArgs = listOf(
