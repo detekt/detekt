@@ -18,6 +18,7 @@ class OutputFacade(
     private val baselineFacade = arguments.baseline?.let { BaselineFacade(it) }
     private val createBaseline = arguments.createBaseline
     private val reportPaths = arguments.reportPaths.toHashMap({ it.kind }, { it.path })
+    private val maxIssuesOverride = arguments.maxIssues
 
     fun run() {
         if (createBaseline) {
@@ -37,6 +38,7 @@ class OutputFacade(
 
         reports.forEach { report ->
             report.init(config)
+            if (report is BuildFailureReport && maxIssuesOverride != -1) report.maxIssues = maxIssuesOverride
             when (report) {
                 is ConsoleReport -> handleConsoleReport(report, result)
                 is OutputReport -> handleOutputReport(report, result)

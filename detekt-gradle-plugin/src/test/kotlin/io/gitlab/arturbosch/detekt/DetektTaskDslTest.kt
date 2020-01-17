@@ -359,6 +359,7 @@ internal object DetektTaskDslTest : Spek({
                         |    autoCorrect = true
                         |    buildUponDefaultConfig = true
                         |    ignoreFailures = true
+                        |    maxIssues = 1
                         |}
                         """
 
@@ -394,6 +395,10 @@ internal object DetektTaskDslTest : Spek({
 
                     it("enables using default config as baseline") {
                         assertThat(result.output).contains("--build-upon-default-config")
+                    }
+
+                    it("Checks that maxIssues is set") {
+                        assertThat(result.output).contains("--max-issues")
                     }
                 }
 
@@ -465,6 +470,7 @@ internal object DetektTaskDslTest : Spek({
                         |    failFast = false
                         |    ignoreFailures = false
                         |    autoCorrect = false
+                        |    maxIssues = 1
                         |    reports {
                         |        xml {
                         |            enabled = true
@@ -520,6 +526,10 @@ internal object DetektTaskDslTest : Spek({
 
                 it("disables the default ruleset") {
                     assertThat(result.output).contains("--disable-default-rulesets")
+                }
+
+                it("Checks that maxIssues is set") {
+                    assertThat(result.output).contains("--max-issues")
                 }
             }
 
@@ -541,6 +551,7 @@ internal object DetektTaskDslTest : Spek({
                         |    failFast = false
                         |    ignoreFailures = false
                         |    autoCorrect = false
+                        |    maxIssues = 1
                         |    reports {
                         |        xml {
                         |            enabled = true
@@ -596,6 +607,10 @@ internal object DetektTaskDslTest : Spek({
 
                 it("disables the default ruleset") {
                     assertThat(result.output).contains("--disable-default-rulesets")
+                }
+
+                it("Checks that maxIssues is set") {
+                    assertThat(result.output).contains("--max-issues")
                 }
             }
         }

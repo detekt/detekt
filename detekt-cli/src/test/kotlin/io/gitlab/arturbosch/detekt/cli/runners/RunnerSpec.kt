@@ -141,5 +141,32 @@ class RunnerSpec : Spek({
                 assertThat(errorPrinterBuffer.toString(Charset.defaultCharset().name())).isEmpty()
             }
         }
+
+        context("execute with default config and override maxIssues") {
+
+            beforeEachTest {
+                val args = CliArgs.parse(arrayOf("--input", inputPath.toString(), "--max-issues", "1"))
+
+                try {
+                    Runner(args, outputPrinter, errorPrinter).execute()
+                } catch (ignored: BuildFailure) {
+                }
+
+                outputPrinter.flush()
+                outputPrinter.close()
+
+                errorPrinter.flush()
+                errorPrinter.close()
+            }
+
+            it("checks that build fails with maxIssues overridden") {
+                assertThat(outputPrinterBuffer.toString(Charset.defaultCharset().name())).contains("Build failed")
+            }
+
+            it("does not write anything to error printer") {
+                assertThat(errorPrinterBuffer.toString(Charset.defaultCharset().name())).isEmpty()
+            }
+        }
+
     }
 })

@@ -145,6 +145,12 @@ class CliArgs : Args {
     )
     var printAst: Boolean = false
 
+    @Parameter(
+        names = ["--max-issues"],
+        description = "Set max issues overriding config file"
+    )
+    var maxIssues: Int = -1
+
     /*
         The following @Parameters are used for type and symbol resolving. When additional parameters are required the
         names should mirror the names found in this file (e.g. "classpath", "language-version", "jvm-target"):

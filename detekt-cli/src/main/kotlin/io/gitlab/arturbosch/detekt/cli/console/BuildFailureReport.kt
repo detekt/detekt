@@ -13,14 +13,15 @@ class BuildFailureReport : ConsoleReport() {
     override val priority: Int = Int.MIN_VALUE
 
     private var config: Config by SingleAssign()
+    var maxIssues: Int = -1
 
     override fun init(config: Config) {
         this.config = config
+        this.maxIssues = config.maxIssues()
     }
 
     override fun render(detektion: Detektion): String? {
         val amount = detektion.getOrComputeWeightedAmountOfIssues(config)
-        val maxIssues = config.maxIssues()
         return when {
             maxIssues.isValidAndSmallerOrEqual(amount) -> {
                 "Build failed with $amount weighted issues (threshold defined was $maxIssues).".red()

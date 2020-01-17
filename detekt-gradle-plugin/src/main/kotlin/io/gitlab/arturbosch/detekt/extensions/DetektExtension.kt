@@ -45,6 +45,8 @@ open class DetektExtension(project: Project) : CodeQualityExtension() {
 
     var autoCorrect: Boolean = DEFAULT_AUTO_CORRECT_VALUE
 
+    var maxIssues: Int = DEFAULT_MAX_ISSUES_VALUE
+
     companion object {
         const val DEFAULT_SRC_DIR_JAVA = "src/main/java"
         const val DEFAULT_SRC_DIR_KOTLIN = "src/main/kotlin"
@@ -55,5 +57,6 @@ open class DetektExtension(project: Project) : CodeQualityExtension() {
         const val DEFAULT_REPORT_ENABLED_VALUE = true
         const val DEFAULT_FAIL_FAST_VALUE = false
         const val DEFAULT_BUILD_UPON_DEFAULT_CONFIG_VALUE = false
+        const val DEFAULT_MAX_ISSUES_VALUE = -1
     }
 }

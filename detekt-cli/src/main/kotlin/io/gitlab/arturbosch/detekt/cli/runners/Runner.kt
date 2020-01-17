@@ -65,7 +65,7 @@ class Runner(
 
     private fun checkBuildFailureThreshold(result: Detektion, settings: ProcessingSettings) {
         val amount = result.getOrComputeWeightedAmountOfIssues(settings.config)
-        val maxIssues = settings.config.maxIssues()
+        val maxIssues = if (arguments.maxIssues != -1) arguments.maxIssues else settings.config.maxIssues()
         if (maxIssues.isValidAndSmallerOrEqual(amount)) {
             throw BuildFailure("Build failed with $amount weighted issues (threshold defined was $maxIssues).")
         }
@@ -91,7 +91,8 @@ class Runner(
             jvmTarget = jvmTarget,
             debug = arguments.debug,
             outPrinter = outputPrinter,
-            errorPrinter = errorPrinter
+            errorPrinter = errorPrinter,
+            maxIssues = maxIssues
         )
     }
 }

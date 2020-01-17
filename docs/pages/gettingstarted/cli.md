@@ -98,6 +98,9 @@ Usage: detekt [options]
       Generates a report for given 'report-id' and stores it on given 'path'.
       Entry should consist of: [report-id:path]. Available 'report-id' values:
       'txt', 'xml', 'html'. These can also be used in combination with each
-      other e.g. '-r txt:reports/detekt.txt -r xml:reports/detekt.xml'
+      other e.g. '-r txt:reports/detekt.txt -r xml:reports/detekt.xml'.
+    --max-issues
+      Sets the max number of acceptable issues.  This overrides any value
+      provided via config if a config supplies a max issues value.  
 
 ```

@@ -18,6 +18,7 @@ import io.gitlab.arturbosch.detekt.invoke.FailFastArgument
 import io.gitlab.arturbosch.detekt.invoke.InputArgument
 import io.gitlab.arturbosch.detekt.invoke.JvmTargetArgument
 import io.gitlab.arturbosch.detekt.invoke.LanguageVersionArgument
+import io.gitlab.arturbosch.detekt.invoke.MaxIssuesArgument
 import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
 import org.gradle.api.Action
 import org.gradle.api.file.ConfigurableFileCollection
@@ -126,6 +127,13 @@ open class Detekt : SourceTask(), VerificationTask {
         set(value) = failFastProp.set(value)
 
     @get:Internal
+    internal val maxIssuesProp: Property<Int> = project.objects.property(Int::class.javaObjectType)
+    var maxIssues: Int
+        @Input
+        get() = maxIssuesProp.getOrElse(-1)
+        set(value) = maxIssuesProp.set(value)
+
+    @get:Internal
     internal val ignoreFailuresProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
 
     @Input
@@ -195,7 +203,8 @@ open class Detekt : SourceTask(), VerificationTask {
             BuildUponDefaultConfigArgument(buildUponDefaultConfigProp.getOrElse(false)),
             FailFastArgument(failFastProp.getOrElse(false)),
             AutoCorrectArgument(autoCorrectProp.getOrElse(false)),
-            DisableDefaultRuleSetArgument(disableDefaultRuleSetsProp.getOrElse(false))
+            DisableDefaultRuleSetArgument(disableDefaultRuleSetsProp.getOrElse(false)),
+            MaxIssuesArgument(maxIssuesProp.getOrElse(-1))
         )
         arguments.addAll(customReports.get().map {
             val reportId = it.reportIdProp.orNull
