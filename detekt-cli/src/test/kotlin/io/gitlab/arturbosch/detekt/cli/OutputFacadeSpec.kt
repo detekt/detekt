@@ -24,7 +24,7 @@ internal class OutputFacadeSpec : Spek({
     val xmlOutputPath = File.createTempFile("detekt", ".xml")
 
     val defaultDetektion = DetektResult(mapOf(Pair("Key", listOf(createFinding()))))
-    val defaultSettings = ProcessingSettings(inputPath, outPrinter = PrintStream(outputStream))
+    val defaultSettings = ProcessingSettings(inputPath, outPrinter = PrintStream(outputStream), verbose = true)
 
     describe("Running the output facade") {
 
@@ -32,6 +32,7 @@ internal class OutputFacadeSpec : Spek({
             val cliArgs = CliArgs.parse(
                 arrayOf(
                     "--input", inputPath.toString(),
+                    "--verbose",
                     "--report", "xml:$xmlOutputPath",
                     "--report", "txt:$plainOutputPath",
                     "--report", "html:$htmlOutputPath"
