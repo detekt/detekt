@@ -174,5 +174,4 @@ class RunnerSpec : Spek({
             }
         }
     }
-
 })
