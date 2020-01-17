@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.extensions.CustomDetektReport
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType
 import io.gitlab.arturbosch.detekt.extensions.DetektReports
 import io.gitlab.arturbosch.detekt.internal.configurableFileCollection
-import io.gitlab.arturbosch.detekt.invoke.SuppressConsoleLogsArgument
+import io.gitlab.arturbosch.detekt.invoke.VerboseArgument
 import io.gitlab.arturbosch.detekt.invoke.AutoCorrectArgument
 import io.gitlab.arturbosch.detekt.invoke.BaselineArgument
 import io.gitlab.arturbosch.detekt.invoke.BuildUponDefaultConfigArgument
@@ -113,11 +113,11 @@ open class Detekt : SourceTask(), VerificationTask {
         set(value) = disableDefaultRuleSetsProp.set(value)
 
     @get:Internal
-    internal val suppressConsoleLogsProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
-    var suppressConsoleLogs: Boolean
+    internal val verboseProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
+    var verbose: Boolean
         @Input
-        get() = suppressConsoleLogsProp.getOrElse(false)
-        set(value) = suppressConsoleLogsProp.set(value)
+        get() = verboseProp.getOrElse(false)
+        set(value) = verboseProp.set(value)
 
     @get:Internal
     internal val buildUponDefaultConfigProp: Property<Boolean> = project.objects.property(Boolean::class.javaObjectType)
@@ -204,7 +204,7 @@ open class Detekt : SourceTask(), VerificationTask {
             FailFastArgument(failFastProp.getOrElse(false)),
             AutoCorrectArgument(autoCorrectProp.getOrElse(false)),
             DisableDefaultRuleSetArgument(disableDefaultRuleSetsProp.getOrElse(false)),
-            SuppressConsoleLogsArgument(suppressConsoleLogsProp.getOrElse(false))
+            VerboseArgument(verboseProp.getOrElse(false))
         )
         arguments.addAll(customReports.get().map {
             val reportId = it.reportIdProp.orNull

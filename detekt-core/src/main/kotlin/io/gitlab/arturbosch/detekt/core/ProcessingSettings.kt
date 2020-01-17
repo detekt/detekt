@@ -36,7 +36,7 @@ data class ProcessingSettings @JvmOverloads constructor(
     val errorPrinter: PrintStream = System.err,
     val autoCorrect: Boolean = false,
     val debug: Boolean = false,
-    val suppressConsoleLogs: Boolean = false
+    val verbose: Boolean = false
 ) : AutoCloseable, Closeable {
     /**
      * Single project input path constructor.
@@ -56,7 +56,7 @@ data class ProcessingSettings @JvmOverloads constructor(
         errorPrinter: PrintStream = System.err,
         autoCorrect: Boolean = false,
         debug: Boolean = false,
-        suppressConsoleLogs: Boolean = false
+        verbose: Boolean = false
     ) : this(
         listOf(inputPath),
         config,
@@ -72,7 +72,7 @@ data class ProcessingSettings @JvmOverloads constructor(
         errorPrinter,
         autoCorrect,
         debug,
-        suppressConsoleLogs
+        verbose
     )
 
     init {

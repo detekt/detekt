@@ -359,7 +359,7 @@ internal object DetektTaskDslTest : Spek({
                         |    autoCorrect = true
                         |    buildUponDefaultConfig = true
                         |    ignoreFailures = true
-                        |    suppressConsoleLogs = true
+                        |    verbose = true
                         |}
                         """
 
@@ -397,8 +397,8 @@ internal object DetektTaskDslTest : Spek({
                         assertThat(result.output).contains("--build-upon-default-config")
                     }
 
-                    it("enables suppressing console logs") {
-                        assertThat(result.output).contains("--suppress-console-logs")
+                    it("enables verbose reports") {
+                        assertThat(result.output).contains("--verbose")
                     }
                 }
 
@@ -470,7 +470,7 @@ internal object DetektTaskDslTest : Spek({
                         |    failFast = false
                         |    ignoreFailures = false
                         |    autoCorrect = false
-                        |    suppressConsoleLogs = true
+                        |    verbose = true
                         |    reports {
                         |        xml {
                         |            enabled = true
@@ -528,8 +528,8 @@ internal object DetektTaskDslTest : Spek({
                     assertThat(result.output).contains("--disable-default-rulesets")
                 }
 
-                it("enables suppressing console logs") {
-                    assertThat(result.output).contains("--suppress-console-logs")
+                it("enables verbose reports") {
+                    assertThat(result.output).contains("--verbose")
                 }
             }
 
@@ -551,7 +551,7 @@ internal object DetektTaskDslTest : Spek({
                         |    failFast = false
                         |    ignoreFailures = false
                         |    autoCorrect = false
-                        |    suppressConsoleLogs = true
+                        |    verbose = true
                         |    reports {
                         |        xml {
                         |            enabled = true
@@ -609,8 +609,8 @@ internal object DetektTaskDslTest : Spek({
                     assertThat(result.output).contains("--disable-default-rulesets")
                 }
 
-                it("enables suppressing console logs") {
-                    assertThat(result.output).contains("--suppress-console-logs")
+                it("enables verbose reports") {
+                    assertThat(result.output).contains("--verbose")
                 }
             }
         }

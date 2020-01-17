@@ -32,7 +32,8 @@ class Runner(
     override fun execute() {
         createSettings().use { settings ->
             checkConfiguration(settings)
-            val (time, result) = measure { DetektFacade.create(settings).run() }
+            val (time, result) = measure {
+                DetektFacade.create(settings, useDefaultFileProcessListeners = arguments.verbose).run() }
             result.add(SimpleNotification("detekt finished in $time ms."))
             OutputFacade(arguments, result, settings).run()
             if (!arguments.createBaseline) {
@@ -92,7 +93,7 @@ class Runner(
             debug = arguments.debug,
             outPrinter = outputPrinter,
             errorPrinter = errorPrinter,
-            suppressConsoleLogs = suppressConsoleLogs
+            verbose = verbose
         )
     }
 }

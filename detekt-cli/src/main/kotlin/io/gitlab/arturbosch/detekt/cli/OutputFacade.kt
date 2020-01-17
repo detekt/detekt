@@ -53,7 +53,7 @@ class OutputFacade(
     }
 
     private fun handleConsoleReport(report: ConsoleReport, result: Detektion) {
-        if (!settings.suppressConsoleLogs ||
+        if (settings.verbose ||
             config.maxIssues().isValidAndSmallerOrEqual(result.getOrComputeWeightedAmountOfIssues(config))) {
             report.print(settings.outPrinter, result)
         }

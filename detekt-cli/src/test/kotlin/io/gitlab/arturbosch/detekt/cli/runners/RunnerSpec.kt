@@ -105,8 +105,8 @@ class RunnerSpec : Spek({
                 errorPrinter.close()
             }
 
-            it("writes output to output printer") {
-                assertThat(outputPrinterBuffer.toString(Charset.defaultCharset().name())).contains("Build succeeded")
+            it("does not write any output when errors do not exist") {
+                assertThat(outputPrinterBuffer.toString(Charset.defaultCharset().name())).isEmpty()
             }
 
             it("does not write anything to error printer") {
@@ -143,7 +143,7 @@ class RunnerSpec : Spek({
         }
     }
 
-    describe("executes the runner with suppressed logs") {
+    describe("executes the runner with verbose logs and no errors") {
 
         val outputPrinterBuffer by memoized { ByteArrayOutputStream() }
         val outputPrinter by memoized { PrintStream(outputPrinterBuffer) }
@@ -151,10 +151,10 @@ class RunnerSpec : Spek({
         val errorPrinterBuffer by memoized { ByteArrayOutputStream() }
         val errorPrinter by memoized { PrintStream(errorPrinterBuffer) }
 
-        context("execute with logs suppressed") {
+        context("execute with verbose logs") {
 
             beforeEachTest {
-                val args = CliArgs.parse(arrayOf("--input", inputPath.toString(), "--suppress-console-logs"))
+                val args = CliArgs.parse(arrayOf("--input", inputPath.toString(), "--verbose"))
 
                 Runner(args, outputPrinter, errorPrinter).execute()
 
@@ -165,8 +165,8 @@ class RunnerSpec : Spek({
                 errorPrinter.close()
             }
 
-            it("writes output to output printer, asserts no logs") {
-                assertThat(outputPrinterBuffer.toString(Charset.defaultCharset().name())).isEmpty()
+            it("writes output to output printer, asserts logs present") {
+                assertThat(outputPrinterBuffer.toString(Charset.defaultCharset().name())).contains("Build succeeded")
             }
 
             it("does not write anything to error printer") {

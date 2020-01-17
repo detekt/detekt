@@ -45,7 +45,7 @@ class SingleRuleRunner(private val arguments: CliArgs) : Executable {
             val detektion = DetektFacade.create(
                 settings,
                 listOf(provider),
-                listOf(DetektProgressListener())
+                if (arguments.verbose) { listOf(DetektProgressListener()) } else { emptyList() }
             ).run()
 
             OutputFacade(arguments, detektion, settings).run()

@@ -99,8 +99,8 @@ Usage: detekt [options]
       Entry should consist of: [report-id:path]. Available 'report-id' values:
       'txt', 'xml', 'html'. These can also be used in combination with each
       other e.g. '-r txt:reports/detekt.txt -r xml:reports/detekt.xml'.
-    --suppress-console-logs
-      Prevents any console logging
+    --verbose
+      Enables output report even when no errors found
       Default: false
 
 ```

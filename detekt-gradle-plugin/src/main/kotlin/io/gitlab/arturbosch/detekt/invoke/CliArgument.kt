@@ -19,7 +19,7 @@ private const val CREATE_BASELINE_PARAMETER = "--create-baseline"
 private const val CLASSPATH_PARAMETER = "--classpath"
 private const val LANGUAGE_VERSION_PARAMETER = "--language-version"
 private const val JVM_TARGET_PARAMETER = "--jvm-target"
-private const val SUPPRESS_CONSOLE_LOGS_PARAMETER = "--suppress-console-logs"
+private const val VERBOSE_PARAMETER = "--verbose"
 
 internal sealed class CliArgument {
     abstract fun toArgument(): List<String>
@@ -89,5 +89,5 @@ internal data class FailFastArgument(override val value: Boolean) : BoolCliArgum
 
 internal data class AutoCorrectArgument(override val value: Boolean) : BoolCliArgument(value, AUTO_CORRECT_PARAMETER)
 
-internal data class SuppressConsoleLogsArgument(override val value: Boolean) :
-    BoolCliArgument(value, SUPPRESS_CONSOLE_LOGS_PARAMETER)
+internal data class VerboseArgument(override val value: Boolean) :
+    BoolCliArgument(value, VERBOSE_PARAMETER)

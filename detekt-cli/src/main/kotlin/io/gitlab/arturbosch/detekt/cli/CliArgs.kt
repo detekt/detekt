@@ -146,10 +146,10 @@ class CliArgs : Args {
     var printAst: Boolean = false
 
     @Parameter(
-        names = ["--suppress-console-logs"],
-        description = "Does not output any console logs when ran."
+        names = ["--verbose"],
+        description = "Enables full logging"
     )
-    var suppressConsoleLogs: Boolean = false
+    var verbose: Boolean = false
 
     /*
         The following @Parameters are used for type and symbol resolving. When additional parameters are required the
