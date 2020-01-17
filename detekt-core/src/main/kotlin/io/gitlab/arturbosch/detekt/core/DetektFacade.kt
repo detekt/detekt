@@ -90,12 +90,8 @@ class DetektFacade(
             useDefaultRuleSetProviders: Boolean = true,
             useDefaultFileProcessListeners: Boolean = true
         ): DetektFacade {
-            val providers = if (useDefaultRuleSetProviders) { RuleSetLocator(settings).load() } else { emptyList() }
-            val processors = if (useDefaultFileProcessListeners) {
-                FileProcessorLocator(settings).load()
-            } else {
-                emptyList()
-            }
+            val providers = if (useDefaultRuleSetProviders) RuleSetLocator(settings).load() else emptyList()
+            val processors = if (useDefaultFileProcessListeners) FileProcessorLocator(settings).load() else emptyList()
             return create(settings, providers, processors)
         }
 
