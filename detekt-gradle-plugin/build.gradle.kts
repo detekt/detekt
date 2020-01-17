@@ -2,7 +2,6 @@
 
 plugins {
     `java-gradle-plugin`
-    `maven-publish`
     id("com.gradle.plugin-publish")
     id("org.jetbrains.dokka")
 }

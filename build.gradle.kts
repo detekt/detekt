@@ -213,7 +213,7 @@ subprojects {
     }
 
     publishing {
-        publications.create<MavenPublication>(detektPublication) {
+        publications.register<MavenPublication>(detektPublication) {
             from(components["java"])
             artifact(sourcesJar)
             artifact(javadocJar)
