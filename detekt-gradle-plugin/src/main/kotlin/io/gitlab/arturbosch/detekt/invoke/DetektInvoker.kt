@@ -47,14 +47,15 @@ private class DefaultCliInvoker(private val project: Project) : DetektInvoker {
                 classpath.map { it.toURI().toURL() }.toTypedArray(),
                 null /* isolate detekt environment */
             )
-
-            val clazz = loader.loadClass("io.gitlab.arturbosch.detekt.cli.Main")
-            val runner = clazz.getMethod("buildRunner",
-                Array<String>::class.java,
-                PrintStream::class.java,
-                PrintStream::class.java
-            ).invoke(null, cliArguments.toTypedArray(), System.out, System.err)
-            runner::class.java.getMethod("execute").invoke(runner)
+            loader.use {
+                val clazz = it.loadClass("io.gitlab.arturbosch.detekt.cli.Main")
+                val runner = clazz.getMethod("buildRunner",
+                    Array<String>::class.java,
+                    PrintStream::class.java,
+                    PrintStream::class.java
+                ).invoke(null, cliArguments.toTypedArray(), System.out, System.err)
+                runner::class.java.getMethod("execute").invoke(runner)
+            }
         } catch (reflectionWrapper: InvocationTargetException) {
             val cause = reflectionWrapper.targetException
             val message = cause.message
