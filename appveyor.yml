@@ -30,7 +30,7 @@ install:
   - gradlew.bat --version
 
 build_script:
-  - gradlew build installShadowDist --build-cache --max-workers=2 --parallel -PwarningsAsErrors=true -Pcompile-test-snippets=%COMPILE_TEST_SNIPPETS%
+  - gradlew build installShadowDist --build-cache -PwarningsAsErrors=true -Pcompile-test-snippets=%COMPILE_TEST_SNIPPETS%
   - detekt-cli\build\install\detekt-cli-shadow\bin\detekt-cli --help
 
 test_script:
