@@ -26,7 +26,7 @@ matrix:
       env: COMPILE_TEST_SNIPPETS=false
 install: true
 script:
-  - ./gradlew build shadowJar --build-cache --parallel -PwarningsAsErrors=true -Pcompile-test-snippets=$COMPILE_TEST_SNIPPETS --scan
+  - ./gradlew build shadowJar --build-cache --max-workers=2 --parallel -PwarningsAsErrors=true -Pcompile-test-snippets=$COMPILE_TEST_SNIPPETS --scan
   - java -jar ./detekt-cli/build/libs/detekt-cli-*-all.jar --help
   - java -jar ./detekt-cli/build/libs/detekt-cli-*-all.jar -i . --baseline ./config/detekt/baseline.xml -ex "**/resources/**,**/detekt*/build/**" -c ./detekt-cli/src/main/resources/default-detekt-config.yml,./config/detekt/detekt.yml
   - ./gradlew verifyGeneratorOutput
