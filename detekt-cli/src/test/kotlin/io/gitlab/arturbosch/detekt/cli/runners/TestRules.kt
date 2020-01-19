@@ -19,6 +19,8 @@ class TestProvider : RuleSetProvider {
 class TestRule : Rule() {
     override val issue = Issue("test", Severity.Minor, "", Debt.FIVE_MINS)
     override fun visitClass(klass: KtClass) {
-        report(CodeSmell(issue, Entity.from(klass), issue.description))
+        if (klass.name == "Poko") {
+            report(CodeSmell(issue, Entity.from(klass), issue.description))
+        }
     }
 }
