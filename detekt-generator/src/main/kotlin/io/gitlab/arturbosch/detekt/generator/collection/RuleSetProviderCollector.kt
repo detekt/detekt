@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.generator.collection
 
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
+import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.generator.collection.exception.InvalidDocumentationException
 import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtCallExpression
@@ -36,6 +37,9 @@ class RuleSetProviderCollector : Collector<RuleSetProvider> {
 private const val TAG_ACTIVE = "active"
 private const val PROPERTY_RULE_SET_ID = "ruleSetId"
 
+private val SUPPORTED_PROVIDERS =
+    setOf(RuleSetProvider::class.simpleName, DefaultRuleSetProvider::class.simpleName)
+
 class RuleSetProviderVisitor : DetektVisitor() {
     var containsRuleSetProvider = false
     private var name: String = ""
@@ -57,9 +61,11 @@ class RuleSetProviderVisitor : DetektVisitor() {
     }
 
     override fun visitSuperTypeList(list: KtSuperTypeList) {
-        containsRuleSetProvider = list.entries
-                ?.map { it.typeAsUserType?.referencedName }
-                ?.contains(RuleSetProvider::class.simpleName) ?: false
+        val superTypes = list.entries
+            ?.map { it.typeAsUserType?.referencedName }
+            ?.toSet()
+            ?: emptySet()
+        containsRuleSetProvider = SUPPORTED_PROVIDERS.any { it in superTypes }
         super.visitSuperTypeList(list)
     }
 

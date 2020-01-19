@@ -115,6 +115,13 @@ Default [Context](../io.gitlab.arturbosch.detekt.api/-context/index.html) implem
 
 |
 
+##### [io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider](../io.gitlab.arturbosch.detekt.api.internal/-default-rule-set-provider.html)
+
+Interface which marks sub-classes as provided by detekt via the rules sub-module.
+
+
+|
+
 ##### [io.gitlab.arturbosch.detekt.api.Detektion](../io.gitlab.arturbosch.detekt.api/-detektion/index.html)
 
 Storage for all kinds of findings and additional information

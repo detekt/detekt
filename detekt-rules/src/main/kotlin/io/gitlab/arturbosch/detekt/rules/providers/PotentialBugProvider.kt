@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.providers
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.rules.bugs.Deprecation
 import io.gitlab.arturbosch.detekt.rules.bugs.DuplicateCaseInWhenExpression
 import io.gitlab.arturbosch.detekt.rules.bugs.EqualsAlwaysReturnsTrueOrFalse
@@ -29,7 +29,7 @@ import io.gitlab.arturbosch.detekt.rules.bugs.WrongEqualsTypeParameter
  *
  * @active since v1.0.0
  */
-class PotentialBugProvider : RuleSetProvider {
+class PotentialBugProvider : DefaultRuleSetProvider {
 
     override val ruleSetId: String = "potential-bugs"
 

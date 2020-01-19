@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.providers
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.rules.naming.InvalidPackageDeclaration
 import io.gitlab.arturbosch.detekt.rules.naming.MatchingDeclarationName
 import io.gitlab.arturbosch.detekt.rules.naming.MemberNameEqualsClassName
@@ -13,7 +13,7 @@ import io.gitlab.arturbosch.detekt.rules.naming.NamingRules
  *
  * @active since v1.0.0
  */
-class NamingProvider : RuleSetProvider {
+class NamingProvider : DefaultRuleSetProvider {
 
     override val ruleSetId: String = "naming"
 

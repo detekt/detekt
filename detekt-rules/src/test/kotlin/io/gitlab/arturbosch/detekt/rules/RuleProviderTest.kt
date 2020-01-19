@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.rules.providers.CommentSmellProvider
 import io.gitlab.arturbosch.detekt.rules.providers.ComplexityProvider
 import io.gitlab.arturbosch.detekt.rules.providers.CoroutinesProvider
@@ -26,34 +27,33 @@ class RuleProviderTest : Spek({
 
         it("checks whether all rules are called in the corresponding RuleSetProvider") {
             val reflections = Reflections("io.gitlab.arturbosch.detekt.rules.providers")
-            val providers = reflections.getSubTypesOf(RuleSetProvider::class.java)
+            val providers = reflections.getSubTypesOf(DefaultRuleSetProvider::class.java)
             providers.forEach { providerType ->
                 val packageName = getRulesPackageNameForProvider(providerType)
                 val provider = providerType.getDeclaredConstructor().newInstance()
                 val rules = getRules(provider)
                 val classes = getClasses(packageName)
-                classes
-                    .forEach { clazz ->
-                        val rule = rules.singleOrNull { it.javaClass.simpleName == clazz.simpleName }
-                        assertThat(rule).withFailMessage(
-                            "Rule $clazz is not called in the corresponding RuleSetProvider $providerType")
-                            .isNotNull()
-                    }
+                classes.forEach { clazz ->
+                    val rule = rules.singleOrNull { it.javaClass.simpleName == clazz.simpleName }
+                    assertThat(rule).withFailMessage(
+                        "Rule $clazz is not called in the corresponding RuleSetProvider $providerType"
+                    ).isNotNull()
+                }
             }
         }
     }
 })
 
 private val ruleMap = mapOf<Class<*>, String>(
-    Pair(CommentSmellProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.documentation"),
-    Pair(ComplexityProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.complexity"),
-    Pair(EmptyCodeProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.empty"),
-    Pair(ExceptionsProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.exceptions"),
-    Pair(NamingProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.naming"),
-    Pair(PerformanceProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.performance"),
-    Pair(PotentialBugProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.bugs"),
-    Pair(StyleGuideProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.style"),
-    Pair(CoroutinesProvider().javaClass, "io.gitlab.arturbosch.detekt.rules.coroutines")
+    CommentSmellProvider().javaClass to "io.gitlab.arturbosch.detekt.rules.documentation",
+    ComplexityProvider().javaClass to "io.gitlab.arturbosch.detekt.rules.complexity",
+    EmptyCodeProvider().javaClass to "io.gitlab.arturbosch.detekt.rules.empty",
+    ExceptionsProvider().javaClass to "io.gitlab.arturbosch.detekt.rules.exceptions",
+    NamingProvider().javaClass to "io.gitlab.arturbosch.detekt.rules.naming",
+    PerformanceProvider().javaClass to "io.gitlab.arturbosch.detekt.rules.performance",
+    PotentialBugProvider().javaClass to "io.gitlab.arturbosch.detekt.rules.bugs",
+    StyleGuideProvider().javaClass to "io.gitlab.arturbosch.detekt.rules.style",
+    CoroutinesProvider().javaClass to "io.gitlab.arturbosch.detekt.rules.coroutines"
 )
 
 private fun getRulesPackageNameForProvider(providerType: Class<out RuleSetProvider>): String {
