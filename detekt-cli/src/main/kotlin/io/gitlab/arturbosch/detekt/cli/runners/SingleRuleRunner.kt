@@ -22,7 +22,7 @@ class SingleRuleRunner(private val arguments: CliArgs) : Executable {
             arguments.runRule?.split(":")
         ) { "Unexpected empty 'runRule' argument." }
 
-        val settings = with(arguments) {
+        with(arguments) {
             ProcessingSettings(
                 inputPaths = inputPaths,
                 config = loadConfiguration(),
@@ -31,24 +31,22 @@ class SingleRuleRunner(private val arguments: CliArgs) : Executable {
                 autoCorrect = autoCorrect,
                 excludeDefaultRuleSets = disableDefaultRuleSets,
                 pluginPaths = createPlugins())
-        }
+        }.use { settings ->
+            val realProvider = requireNotNull(
+                RuleSetLocator(settings).load().find { it.ruleSetId == ruleSet }
+            ) { "There was no rule set with id '$ruleSet'." }
 
-        val realProvider = requireNotNull(
-            RuleSetLocator(settings).load().find { it.ruleSetId == ruleSet }
-        ) { "There was no rule set with id '$ruleSet'." }
+            val provider = RuleProducingProvider(rule, realProvider)
 
-        val provider = RuleProducingProvider(rule, realProvider)
-
-        settings.use {
             assertRuleExistsBeforeRunningItLater(provider, settings)
 
-            val detektion = DetektFacade.create(
+            val result = DetektFacade.create(
                 settings,
                 listOf(provider),
                 listOf(DetektProgressListener())
             ).run()
 
-            OutputFacade(arguments, detektion, settings).run()
+            OutputFacade(arguments, result, settings).run()
         }
     }
 
