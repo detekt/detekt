@@ -85,6 +85,9 @@ class ProcessingSettings @JvmOverloads constructor(
 
     private val environmentDisposable: Disposable = Disposer.newDisposable()
 
+    /**
+     * Shared class loader used to load services from plugin jars.
+     */
     val pluginLoader: URLClassLoader by lazy {
         val pluginUrls = pluginPaths.map { it.toUri().toURL() }.toTypedArray()
         URLClassLoader(pluginUrls, javaClass.classLoader)
