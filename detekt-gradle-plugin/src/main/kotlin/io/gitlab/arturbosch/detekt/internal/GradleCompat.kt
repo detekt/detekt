@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION", "UnstableApiUsage")
+
 package io.gitlab.arturbosch.detekt.internal
 
 import org.gradle.api.Project

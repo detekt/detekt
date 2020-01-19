@@ -21,7 +21,7 @@ dependencies {
     testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spekVersion")
 }
 
-tasks.withType<DokkaTask>().configureEach {
+tasks.withType<DokkaTask> {
     outputFormat = "jekyll"
     outputDirectory = "$rootDir/docs/pages/kdoc"
     configuration {
@@ -32,7 +32,7 @@ tasks.withType<DokkaTask>().configureEach {
     }
 }
 
-tasks.withType<Test>().configureEach {
+tasks.withType<Test> {
     systemProperty("kotlinVersion", embeddedKotlinVersion)
 
     doFirst {

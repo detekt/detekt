@@ -27,7 +27,7 @@ dependencies {
 }
 
 // bundle detekt's version for debug logging on rule exceptions
-tasks.withType<Jar>().configureEach {
+tasks.withType<Jar> {
     manifest {
         attributes(mapOf("DetektVersion" to detektVersion))
     }
