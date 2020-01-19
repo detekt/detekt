@@ -17,10 +17,10 @@ fun main(args: Array<String>) {
     } catch (_: HelpRequest) {
         // handled by JCommander, exit normally
     } catch (e: InvalidConfig) {
-        e.printStackTrace()
+        println(e.message)
         exitProcess(ExitCode.INVALID_CONFIG.number)
     } catch (e: BuildFailure) {
-        e.printStackTrace()
+        println(e.message)
         exitProcess(ExitCode.MAX_ISSUES_REACHED.number)
     } catch (e: HandledArgumentViolation) {
         // messages are handled when parsing arguments

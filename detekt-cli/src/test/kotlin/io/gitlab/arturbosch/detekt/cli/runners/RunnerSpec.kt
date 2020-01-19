@@ -101,7 +101,7 @@ class RunnerSpec : Spek({
         }
     }
 
-    describe("printers") {
+    describe("customize output and error printers") {
 
         val outputPrinterBuffer by memoized { ByteArrayOutputStream() }
         val outputPrinter by memoized { PrintStream(outputPrinterBuffer) }
@@ -126,7 +126,7 @@ class RunnerSpec : Spek({
             }
 
             it("writes no build related output to output printer") {
-                assertThat(outputPrinterBuffer.toString(charSetName)).doesNotContain("Build")
+                assertThat(outputPrinterBuffer.toString(charSetName)).doesNotContain("test - [Poko]")
             }
 
             it("does not write anything to error printer") {
@@ -154,7 +154,7 @@ class RunnerSpec : Spek({
             }
 
             it("writes output to output printer") {
-                assertThat(outputPrinterBuffer.toString(charSetName)).contains("Build failed")
+                assertThat(outputPrinterBuffer.toString(charSetName)).contains("test - [Poko]")
             }
 
             it("does not write anything to error printer") {

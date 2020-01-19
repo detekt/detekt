@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.sample.extensions
 
 import io.gitlab.arturbosch.detekt.cli.CliArgs
 import io.gitlab.arturbosch.detekt.cli.InvalidConfig
+import io.gitlab.arturbosch.detekt.cli.console.red
 import io.gitlab.arturbosch.detekt.cli.runners.Runner
 import org.assertj.core.api.Assertions.assertThatCode
 import org.spekframework.spek2.Spek
@@ -22,7 +23,7 @@ class SupportConfigValidationSpec : Spek({
 
             assertThatCode { Runner(args).execute() }
                 .isInstanceOf(InvalidConfig::class.java)
-                .hasMessage("Run failed with 1 invalid config property.")
+                .hasMessage("Run failed with 1 invalid config property.".red())
         }
 
         it("passes with excluded new rule set") {
