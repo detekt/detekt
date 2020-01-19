@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.core.DetektResult
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.utils.closeQuietly
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.io.ByteArrayOutputStream
@@ -25,6 +26,8 @@ internal class OutputFacadeSpec : Spek({
 
     val defaultDetektion = DetektResult(mapOf(Pair("Key", listOf(createFinding()))))
     val defaultSettings = ProcessingSettings(inputPath, outPrinter = PrintStream(outputStream))
+
+    afterGroup { closeQuietly(defaultSettings) }
 
     describe("Running the output facade") {
 

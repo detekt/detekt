@@ -48,9 +48,10 @@ class AutoCorrectLevelSpec : Spek({
                         assertThat(wasFormatted(files[0])).isTrue()
                     }
                 }
-                val detekt = DetektFacade.create(
-                    ProcessingSettings(project, config), listOf(FormattingProvider()), listOf(contentChanged))
-                val findings = detekt.run().findings.flatMap { it.value }
+                val result = ProcessingSettings(project, config).use {
+                    DetektFacade.create(it, listOf(FormattingProvider()), listOf(contentChanged)).run()
+                }
+                val findings = result.findings.flatMap { it.value }
                 val actualContentAfterRun = loadFileContent("configTests/fixed.kt")
 
                 assertThat(wasLinted(findings)).isTrue()

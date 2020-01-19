@@ -9,11 +9,11 @@ import org.spekframework.spek2.style.specification.describe
 import java.lang.reflect.Modifier
 
 class RuleSetLocatorTest : Spek({
-    describe("Reulset") {
 
-        it("containsAllRuleProviders") {
-            val locator = RuleSetLocator(ProcessingSettings(path))
-            val providers = locator.load()
+    describe("locating RuleSetProvider's") {
+
+        it("contains all RuleSetProviders") {
+            val providers = ProcessingSettings(path).use { RuleSetLocator(it).load() }
             val providerClasses = getProviderClasses()
 
             assertThat(providerClasses).isNotEmpty

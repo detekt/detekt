@@ -21,8 +21,7 @@ class FileProcessorLocatorTest : Spek({
 
         it("containsAllProcessors") {
             val path = Paths.get(resource(""))
-            val locator = FileProcessorLocator(ProcessingSettings(path))
-            val processors = locator.load()
+            val processors = ProcessingSettings(path).use { FileProcessorLocator(it).load() }
             val processorClasses = getProcessorClasses()
 
             assertThat(processorClasses).isNotEmpty

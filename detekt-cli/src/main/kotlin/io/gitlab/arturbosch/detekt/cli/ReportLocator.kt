@@ -20,10 +20,9 @@ class ReportLocator(private val settings: ProcessingSettings) {
     fun load(): List<Extension> {
         settings.debug { "console-report=$consoleActive" }
         settings.debug { "output-report=$outputActive" }
-        val detektLoader = URLClassLoader(settings.pluginUrls, javaClass.classLoader)
-        val consoleReports = loadConsoleReports(detektLoader)
+        val consoleReports = loadConsoleReports(settings.pluginLoader)
         settings.debug { "ConsoleReports: $consoleReports" }
-        val outputReports = loadOutputReports(detektLoader)
+        val outputReports = loadOutputReports(settings.pluginLoader)
         settings.debug { "OutputReports: $outputReports" }
         return consoleReports.plus(outputReports)
     }

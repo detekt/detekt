@@ -9,19 +9,23 @@ import org.jetbrains.kotlin.com.intellij.openapi.Disposable
 import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.config.JvmTarget
 import org.jetbrains.kotlin.config.LanguageVersion
+import org.jetbrains.kotlin.utils.closeQuietly
 import java.io.Closeable
 import java.io.PrintStream
+import java.net.URLClassLoader
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.ForkJoinPool
 
 /**
- * Settings to be used by detekt.
+ * Settings to be used by the detekt engine.
+ *
+ * Always close the settings as dispose the Kotlin compiler and detekt class loader.
  * If using a custom executor service be aware that detekt won't shut it down after use!
  */
 @Suppress("LongParameterList")
-data class ProcessingSettings @JvmOverloads constructor(
+class ProcessingSettings @JvmOverloads constructor(
     val inputPaths: List<Path>,
     val config: Config = Config.empty,
     val pathFilters: PathFilters? = null,
@@ -79,9 +83,15 @@ data class ProcessingSettings @JvmOverloads constructor(
         }
     }
 
-    val pluginUrls = pluginPaths.map { it.toUri().toURL() }.toTypedArray()
-
     private val environmentDisposable: Disposable = Disposer.newDisposable()
+
+    /**
+     * Shared class loader used to load services from plugin jars.
+     */
+    val pluginLoader: URLClassLoader by lazy {
+        val pluginUrls = pluginPaths.map { it.toUri().toURL() }.toTypedArray()
+        URLClassLoader(pluginUrls, javaClass.classLoader)
+    }
 
     /**
      * Lazily instantiates a Kotlin environment which can be shared between compiling and
@@ -108,7 +118,8 @@ data class ProcessingSettings @JvmOverloads constructor(
     }
 
     override fun close() {
-        taskPool.close()
+        closeQuietly(taskPool)
         Disposer.dispose(environmentDisposable)
+        closeQuietly(pluginLoader)
     }
 }

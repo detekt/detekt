@@ -60,7 +60,7 @@ internal class ReportsSpec : Spek({
                 )
             }
 
-            val extensions = ReportLocator(ProcessingSettings(listOf())).load()
+            val extensions = ProcessingSettings(listOf()).use { ReportLocator(it).load() }
             val extensionsIds = extensions.mapTo(HashSet()) { it.id }
 
             it("should be able to convert to output reports") {
