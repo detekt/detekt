@@ -3,6 +3,9 @@ package io.gitlab.arturbosch.detekt.invoke
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.file.FileCollection
+import java.io.PrintStream
+import java.lang.reflect.InvocationTargetException
+import java.net.URLClassLoader
 
 internal interface DetektInvoker {
     fun invokeCli(
@@ -28,11 +31,6 @@ internal interface DetektInvoker {
     }
 }
 
-private const val NORMAL_RUN = 0
-private const val UNEXPECTED_RUN = 1
-private const val ISSUE_THRESHOLD_MET = 2
-private const val INVALID_CONFIG = 3
-
 private class DefaultCliInvoker(private val project: Project) : DetektInvoker {
 
     override fun invokeCli(
@@ -41,38 +39,33 @@ private class DefaultCliInvoker(private val project: Project) : DetektInvoker {
         taskName: String,
         ignoreFailures: Boolean
     ) {
-        val detektTmpDir = project.mkdir("${project.buildDir}/tmp/detekt")
-        val argsFile = project.file("$detektTmpDir/$taskName.args")
-
         val cliArguments = arguments.flatMap(CliArgument::toArgument)
-
-        argsFile.writeText(cliArguments.joinToString("\n"))
-
-        project.logger.debug(cliArguments.joinToString(" "))
-
-        val proc = project.javaexec {
-            it.main = DETEKT_MAIN
-            it.classpath = classpath
-            it.args = listOf("@${argsFile.absolutePath}")
-            it.isIgnoreExitValue = true
-        }
-        val exitValue = proc.exitValue
-        project.logger.debug("Detekt finished with exit value $exitValue")
-
-        when (exitValue) {
-            NORMAL_RUN -> return
-            UNEXPECTED_RUN -> throw GradleException("There was a problem running detekt.")
-            ISSUE_THRESHOLD_MET -> if (!ignoreFailures) {
-                throw GradleException("MaxIssues count exceeded.")
+        try {
+            val loader = URLClassLoader(
+                classpath.map { it.toURI().toURL() }.toTypedArray(),
+                null /* isolate detekt environment */
+            )
+            loader.use {
+                val clazz = it.loadClass("io.gitlab.arturbosch.detekt.cli.Main")
+                val runner = clazz.getMethod("buildRunner",
+                    Array<String>::class.java,
+                    PrintStream::class.java,
+                    PrintStream::class.java
+                ).invoke(null, cliArguments.toTypedArray(), System.out, System.err)
+                runner::class.java.getMethod("execute").invoke(runner)
             }
-            INVALID_CONFIG -> throw GradleException("Invalid detekt configuration file detected.")
-            else -> throw GradleException("Unexpected detekt exit with code '$exitValue'.")
+        } catch (reflectionWrapper: InvocationTargetException) {
+            val cause = reflectionWrapper.targetException
+            val message = cause.message
+            if (message != null && isBuildFailure(message) && ignoreFailures) {
+                return
+            }
+            throw GradleException(message ?: "There was a problem running detekt.", cause)
         }
     }
 
-    companion object {
-        private const val DETEKT_MAIN = "io.gitlab.arturbosch.detekt.cli.Main"
-    }
+    private fun isBuildFailure(msg: String?) =
+        msg != null && "Build failed with" in msg && "issues" in msg
 }
 
 private class DryRunInvoker(private val project: Project) : DetektInvoker {
