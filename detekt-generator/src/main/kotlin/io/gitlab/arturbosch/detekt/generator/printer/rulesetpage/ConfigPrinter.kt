@@ -89,7 +89,7 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
       processors:
         active: true
         exclude:
-        # - 'DetektProgressListener'
+          - 'DetektProgressListener'
         # - 'FunctionCountProcessor'
         # - 'PropertyCountProcessor'
         # - 'ClassCountProcessor'
@@ -101,12 +101,11 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
       console-reports:
         active: true
         exclude:
-        #  - 'ProjectStatisticsReport'
-        #  - 'ComplexityReport'
-        #  - 'NotificationReport'
+           - 'ProjectStatisticsReport'
+           - 'ComplexityReport'
+           - 'NotificationReport'
         #  - 'FindingsReport'
            - 'FileBasedFindingsReport'
-        #  - 'BuildFailureReport'
     """.trimIndent()
 
     private fun String.isYamlList() = trim().startsWith("-")
