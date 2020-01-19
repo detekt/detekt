@@ -12,7 +12,7 @@ class NestedClassesVisibilitySpec : Spek({
     describe("NestedClassesVisibility rule") {
 
         it("reports public nested classes") {
-            assertThat(subject.lint(Case.NestedClassVisibilityPositive.path())).hasSize(6)
+            assertThat(subject.lint(Case.NestedClassVisibilityPositive.path())).hasSize(4)
         }
 
         it("does not report internal and (package) private nested classes") {
