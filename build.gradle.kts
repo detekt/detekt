@@ -52,7 +52,14 @@ tasks.withType<Detekt> {
     dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":detekt"))
 }
 
+val detektVersion: String by project
+val assertjVersion: String by project
+val spekVersion: String by project
+val reflectionsVersion: String by project
+val mockkVersion: String by project
+val junitPlatformVersion: String by project
 val jacocoVersion: String by project
+
 jacoco.toolVersion = jacocoVersion
 
 tasks {
@@ -73,11 +80,16 @@ tasks {
     }
 }
 
-val detektVersion: String by project
+fun versionOrSnapshot(): String {
+    if (System.getProperty("snapshot")?.toBoolean() == true) {
+        return "$detektVersion-SNAPSHOT"
+    }
+    return detektVersion
+}
 
 allprojects {
     group = "io.gitlab.arturbosch.detekt"
-    version = detektVersion + if (System.getProperty("snapshot")?.toBoolean() == true) "-SNAPSHOT" else ""
+    version = versionOrSnapshot()
 
     repositories {
         jcenter()
@@ -284,21 +296,20 @@ subprojects {
         })
     }
 
-    val assertjVersion: String by project
-    val spekVersion: String by project
-    val kotlinTest by configurations.creating
-
     dependencies {
         implementation(kotlin("stdlib"))
 
         detekt(project(":detekt-cli"))
         detektPlugins(project(":detekt-formatting"))
 
-        kotlinTest("org.assertj:assertj-core:$assertjVersion")
-        kotlinTest("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
-    }
+        testImplementation("org.assertj:assertj-core:$assertjVersion")
+        testImplementation("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
+        testImplementation("org.reflections:reflections:$reflectionsVersion")
+        testImplementation("io.mockk:mockk:$mockkVersion")
 
-    sourceSets.main.get().java.srcDirs("src/main/kotlin")
+        testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
+        testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spekVersion")
+    }
 }
 
 /**

@@ -4,8 +4,6 @@ plugins {
     id("org.jetbrains.dokka")
 }
 
-configurations.testImplementation.get().extendsFrom(configurations.kotlinTest.get())
-
 val yamlVersion: String by project
 val junitPlatformVersion: String by project
 val spekVersion: String by project
@@ -16,9 +14,6 @@ dependencies {
     implementation(kotlin("reflect"))
 
     testImplementation(project(":detekt-test"))
-
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
-    testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spekVersion")
 }
 
 tasks.withType<DokkaTask> {
