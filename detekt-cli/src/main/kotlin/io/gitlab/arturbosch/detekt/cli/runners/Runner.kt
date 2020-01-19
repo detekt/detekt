@@ -12,6 +12,7 @@ import io.gitlab.arturbosch.detekt.cli.FilteredDetectionResult
 import io.gitlab.arturbosch.detekt.cli.InvalidConfig
 import io.gitlab.arturbosch.detekt.cli.OutputFacade
 import io.gitlab.arturbosch.detekt.cli.baseline.BaselineFacade
+import io.gitlab.arturbosch.detekt.cli.console.red
 import io.gitlab.arturbosch.detekt.cli.createClasspath
 import io.gitlab.arturbosch.detekt.cli.createFilters
 import io.gitlab.arturbosch.detekt.cli.createPlugins
@@ -79,7 +80,7 @@ class Runner(
             val errors = notifications.filter(Notification::isError)
             if (errors.isNotEmpty()) {
                 val propsString = if (errors.size == 1) "property" else "properties"
-                throw InvalidConfig("Run failed with ${errors.size} invalid config $propsString.")
+                throw InvalidConfig("Run failed with ${errors.size} invalid config $propsString.".red())
             }
         }
     }
@@ -88,7 +89,7 @@ class Runner(
         val amount = result.getOrComputeWeightedAmountOfIssues(settings.config)
         val maxIssues = settings.config.maxIssues()
         if (maxIssues.isValidAndSmallerOrEqual(amount)) {
-            throw BuildFailure("Build failed with $amount weighted issues (threshold defined was $maxIssues).")
+            throw BuildFailure("Build failed with $amount weighted issues (threshold defined was $maxIssues).".red())
         }
     }
 

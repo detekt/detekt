@@ -16,10 +16,10 @@ fun main(args: Array<String>) {
     try {
         buildRunner(args).execute()
     } catch (e: InvalidConfig) {
-        e.printStackTrace()
+        println(e.message)
         exitProcess(ExitCode.INVALID_CONFIG.number)
     } catch (e: BuildFailure) {
-        e.printStackTrace()
+        println(e.message)
         exitProcess(ExitCode.MAX_ISSUES_REACHED.number)
     } catch (e: Exception) {
         e.printStackTrace()

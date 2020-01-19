@@ -63,7 +63,7 @@ private class DefaultCliInvoker(private val project: Project) : DetektInvoker {
             NORMAL_RUN -> return
             UNEXPECTED_RUN -> throw GradleException("There was a problem running detekt.")
             ISSUE_THRESHOLD_MET -> if (!ignoreFailures) {
-                throw GradleException("MaxIssues or failThreshold count was reached.")
+                throw GradleException("MaxIssues count exceeded.")
             }
             INVALID_CONFIG -> throw GradleException("Invalid detekt configuration file detected.")
             else -> throw GradleException("Unexpected detekt exit with code '$exitValue'.")
