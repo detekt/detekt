@@ -18,12 +18,10 @@ class ReportLocator(private val settings: ProcessingSettings) {
     private val outputExcludes = outputSubConfig.valueOrDefault(EXCLUDE, emptyList<String>()).toSet()
 
     fun load(): List<Extension> {
-        settings.debug { "console-report=$consoleActive" }
-        settings.debug { "output-report=$outputActive" }
         val consoleReports = loadConsoleReports(settings.pluginLoader)
-        settings.debug { "ConsoleReports: $consoleReports" }
+        settings.debug { "Registered console reports: $consoleReports" }
         val outputReports = loadOutputReports(settings.pluginLoader)
-        settings.debug { "OutputReports: $outputReports" }
+        settings.debug { "Registered output reports: $outputReports" }
         return consoleReports.plus(outputReports)
     }
 
