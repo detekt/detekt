@@ -65,6 +65,20 @@ After some time and testing there is a chance this rule will become active on de
 
 Rules that contain an `@active` tag in their KDoc will be marked as active in the `default-detekt-config.yml`.
 
+### When updating the website ...
+
+Make sure to test your changes locally.
+
+- install ruby and jekyll
+- gem install bundler
+- bundler install
+- jekyll build
+- jekyll serve
+
+Following warning is expected until [Jekyll](https://github.com/jekyll/jekyll/issues/7947) adopts to Ruby 2.7.0.
+
+`warning: Using the last argument as keyword parameters is deprecated (Ruby 2.7.0)`
+
 ### Release checklist
 
 - add changes in CHANGELOG.md -> `groovy github-milestone-report.groovy arturbosch detekt [milestone-number]`
