@@ -22,6 +22,7 @@ import io.gitlab.arturbosch.detekt.invoke.ParallelArgument
 import org.gradle.api.Action
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.Directory
+import org.gradle.api.file.FileTree
 import org.gradle.api.file.RegularFile
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.provider.Property
@@ -58,7 +59,7 @@ open class Detekt : SourceTask(), VerificationTask {
     @InputFiles
     @SkipWhenEmpty
     @PathSensitive(PathSensitivity.RELATIVE)
-    override fun getSource() = super.getSource()
+    override fun getSource(): FileTree = super.getSource()
 
     @get:InputFile
     @get:Optional

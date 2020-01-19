@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.invoke
 
-import io.gitlab.arturbosch.detekt.BuildFailure
+import org.gradle.api.GradleException
 import org.gradle.api.logging.Logging
 import java.io.BufferedInputStream
 import java.io.BufferedReader
@@ -19,7 +19,7 @@ object ProcessExecutor {
         BufferedReader(InputStreamReader(BufferedInputStream(process.errorStream))).use {
             val errors = it.readLines().joinToString("\n")
             if (errors.isNotEmpty()) {
-                throw BuildFailure(errors)
+                throw GradleException(errors)
             }
         }
 

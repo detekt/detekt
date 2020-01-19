@@ -1,5 +1,3 @@
-@file:Suppress("UnstableApiUsage")
-
 package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
@@ -157,17 +155,17 @@ class DetektPlugin : Plugin<Project> {
     }
 
     private fun setTaskDefaults(project: Project) {
-        project.tasks.withType(Detekt::class.java).configureEach {
+        project.tasks.withType(Detekt::class.java) {
             it.detektClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT))
             it.pluginClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT_PLUGINS))
         }
 
-        project.tasks.withType(DetektCreateBaselineTask::class.java).configureEach {
+        project.tasks.withType(DetektCreateBaselineTask::class.java) {
             it.detektClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT))
             it.pluginClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT_PLUGINS))
         }
 
-        project.tasks.withType(DetektGenerateConfigTask::class.java).configureEach {
+        project.tasks.withType(DetektGenerateConfigTask::class.java) {
             it.detektClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT))
         }
     }

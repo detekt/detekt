@@ -48,7 +48,7 @@ tasks.check {
     dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":check"))
 }
 
-tasks.withType<Detekt>().configureEach {
+tasks.withType<Detekt> {
     dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":detekt"))
 }
 
@@ -106,7 +106,7 @@ subprojects {
 
     val projectJvmTarget = "1.8"
 
-    tasks.withType<Detekt>().configureEach {
+    tasks.withType<Detekt> {
         exclude("resources/")
         exclude("build/")
         jvmTarget = projectJvmTarget
@@ -142,7 +142,7 @@ subprojects {
         }
     }
 
-    tasks.withType<Test>().configureEach {
+    tasks.withType<Test> {
         useJUnitPlatform()
         systemProperty("SPEK_TIMEOUT", 0) // disable test timeout
         val compileSnippetText: Boolean = if (project.hasProperty("compile-test-snippets")) {
@@ -166,7 +166,7 @@ subprojects {
         }
     }
 
-    tasks.withType<KotlinCompile>().configureEach {
+    tasks.withType<KotlinCompile> {
         kotlinOptions.jvmTarget = projectJvmTarget
         // https://youtrack.jetbrains.com/issue/KT-24946
         kotlinOptions.freeCompilerArgs = listOf(
@@ -232,7 +232,7 @@ subprojects {
     }
 
     publishing {
-        publications.create<MavenPublication>(detektPublication) {
+        publications.register<MavenPublication>(detektPublication) {
             from(components["java"])
             artifact(sourcesJar)
             artifact(javadocJar)
