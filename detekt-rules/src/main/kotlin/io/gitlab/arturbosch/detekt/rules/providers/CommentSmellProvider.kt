@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.providers
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.rules.documentation.CommentOverPrivateFunction
 import io.gitlab.arturbosch.detekt.rules.documentation.CommentOverPrivateProperty
 import io.gitlab.arturbosch.detekt.rules.documentation.KDocStyle
@@ -16,7 +16,7 @@ import io.gitlab.arturbosch.detekt.rules.documentation.UndocumentedPublicPropert
  *
  * @active since v1.0.0
  */
-class CommentSmellProvider : RuleSetProvider {
+class CommentSmellProvider : DefaultRuleSetProvider {
 
     override val ruleSetId: String = "comments"
 

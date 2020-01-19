@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.core
 
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 import java.util.ServiceLoader
 
 class RuleSetLocator(private val settings: ProcessingSettings) {
@@ -12,10 +13,6 @@ class RuleSetLocator(private val settings: ProcessingSettings) {
             .mapNotNull { it.nullIfDefaultAndExcluded() }
             .toList()
 
-    private fun RuleSetProvider.nullIfDefaultAndExcluded() = if (excludeDefaultRuleSets && provided()) null else this
-
-    private fun RuleSetProvider.provided() = ruleSetId in defaultRuleSetIds
-
-    private val defaultRuleSetIds = listOf("comments", "complexity", "empty-blocks",
-            "exceptions", "potential-bugs", "performance", "style", "naming")
+    private fun RuleSetProvider.nullIfDefaultAndExcluded() =
+        if (excludeDefaultRuleSets && this is DefaultRuleSetProvider) null else this
 }

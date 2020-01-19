@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.providers
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.rules.coroutines.GlobalCoroutineUsage
 import io.gitlab.arturbosch.detekt.rules.coroutines.RedundantSuspendModifier
 
@@ -11,7 +11,7 @@ import io.gitlab.arturbosch.detekt.rules.coroutines.RedundantSuspendModifier
  *
  * @active since v1.4.0
  */
-class CoroutinesProvider : RuleSetProvider {
+class CoroutinesProvider : DefaultRuleSetProvider {
     override val ruleSetId: String = "coroutines"
 
     override fun instance(config: Config): RuleSet {

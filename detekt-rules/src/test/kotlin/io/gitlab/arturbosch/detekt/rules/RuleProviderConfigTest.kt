@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules
 
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.reflections.Reflections
@@ -15,7 +15,7 @@ class RuleProviderConfigTest : Spek({
         it("should test if the config has been passed to all rules") {
             val config = TestConfig()
             val reflections = Reflections("io.gitlab.arturbosch.detekt.rules.providers")
-            val providers = reflections.getSubTypesOf(RuleSetProvider::class.java)
+            val providers = reflections.getSubTypesOf(DefaultRuleSetProvider::class.java)
 
             providers.forEach {
                 val provider = it.getDeclaredConstructor().newInstance()

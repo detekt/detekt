@@ -2,20 +2,20 @@ package io.gitlab.arturbosch.detekt.rules.providers
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.rules.style.CollapsibleIfStatements
 import io.gitlab.arturbosch.detekt.rules.style.DataClassContainsFunctions
 import io.gitlab.arturbosch.detekt.rules.style.DataClassShouldBeImmutable
 import io.gitlab.arturbosch.detekt.rules.style.EqualsNullCall
 import io.gitlab.arturbosch.detekt.rules.style.EqualsOnSignatureLine
-import io.gitlab.arturbosch.detekt.rules.style.ExplicitItLambdaParameter
 import io.gitlab.arturbosch.detekt.rules.style.ExplicitCollectionElementAccessMethod
+import io.gitlab.arturbosch.detekt.rules.style.ExplicitItLambdaParameter
 import io.gitlab.arturbosch.detekt.rules.style.ExpressionBodySyntax
 import io.gitlab.arturbosch.detekt.rules.style.FileParsingRule
 import io.gitlab.arturbosch.detekt.rules.style.ForbiddenComment
 import io.gitlab.arturbosch.detekt.rules.style.ForbiddenImport
-import io.gitlab.arturbosch.detekt.rules.style.ForbiddenPublicDataClass
 import io.gitlab.arturbosch.detekt.rules.style.ForbiddenMethodCall
+import io.gitlab.arturbosch.detekt.rules.style.ForbiddenPublicDataClass
 import io.gitlab.arturbosch.detekt.rules.style.ForbiddenVoid
 import io.gitlab.arturbosch.detekt.rules.style.FunctionOnlyReturningConstant
 import io.gitlab.arturbosch.detekt.rules.style.LibraryCodeMustSpecifyReturnType
@@ -66,7 +66,7 @@ import io.gitlab.arturbosch.detekt.rules.style.optional.PreferToOverPairSyntax
  *
  * @active since v1.0.0
  */
-class StyleGuideProvider : RuleSetProvider {
+class StyleGuideProvider : DefaultRuleSetProvider {
 
     override val ruleSetId: String = "style"
 
