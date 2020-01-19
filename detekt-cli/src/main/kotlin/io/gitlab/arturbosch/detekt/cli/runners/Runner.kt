@@ -63,7 +63,6 @@ class Runner(
     }
 
     private fun checkConfiguration(settings: ProcessingSettings) {
-        settings.debug { "\n${settings.config}\n" }
         val props = settings.config.subConfig("config")
         val shouldValidate = props.valueOrDefault("validation", true)
 
