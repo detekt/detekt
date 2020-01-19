@@ -8,8 +8,10 @@ import io.gitlab.arturbosch.detekt.api.internal.SimpleNotification
 import io.gitlab.arturbosch.detekt.api.internal.validateConfig
 import io.gitlab.arturbosch.detekt.cli.BuildFailure
 import io.gitlab.arturbosch.detekt.cli.CliArgs
+import io.gitlab.arturbosch.detekt.cli.FilteredDetectionResult
 import io.gitlab.arturbosch.detekt.cli.InvalidConfig
 import io.gitlab.arturbosch.detekt.cli.OutputFacade
+import io.gitlab.arturbosch.detekt.cli.baseline.BaselineFacade
 import io.gitlab.arturbosch.detekt.cli.createClasspath
 import io.gitlab.arturbosch.detekt.cli.createFilters
 import io.gitlab.arturbosch.detekt.cli.createPlugins
@@ -32,13 +34,32 @@ class Runner(
     override fun execute() {
         createSettings().use { settings ->
             checkConfiguration(settings)
-            val (time, result) = measure { DetektFacade.create(settings).run() }
+            var (time, result) = measure { DetektFacade.create(settings).run() }
             result.add(SimpleNotification("detekt finished in $time ms."))
+            checkBaselineCreation(result)
+            result = transformResult(result)
             OutputFacade(arguments, result, settings).run()
             if (!arguments.createBaseline) {
                 checkBuildFailureThreshold(result, settings)
             }
             Disposer.dispose(settings.environmentDisposable)
+        }
+    }
+
+    private fun transformResult(result: Detektion): Detektion {
+        val baselineFile = arguments.baseline
+        return if (baselineFile != null) {
+            FilteredDetectionResult(result, BaselineFacade(baselineFile))
+        } else {
+            result
+        }
+    }
+
+    private fun checkBaselineCreation(result: Detektion) {
+        val baselineFacade = arguments.baseline?.let { BaselineFacade(it) }
+        if (arguments.createBaseline) {
+            val smells = result.findings.flatMap { it.value }
+            baselineFacade?.create(smells)
         }
     }
 
