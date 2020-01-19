@@ -81,7 +81,7 @@ data class ProcessingSettings @JvmOverloads constructor(
 
     val pluginUrls = pluginPaths.map { it.toUri().toURL() }.toTypedArray()
 
-    val environmentDisposable: Disposable = Disposer.newDisposable()
+    private val environmentDisposable: Disposable = Disposer.newDisposable()
 
     /**
      * Lazily instantiates a Kotlin environment which can be shared between compiling and
@@ -109,5 +109,6 @@ data class ProcessingSettings @JvmOverloads constructor(
 
     override fun close() {
         taskPool.close()
+        Disposer.dispose(environmentDisposable)
     }
 }
