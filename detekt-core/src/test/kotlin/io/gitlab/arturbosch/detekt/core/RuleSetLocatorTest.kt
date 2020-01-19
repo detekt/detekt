@@ -12,7 +12,7 @@ class RuleSetLocatorTest : Spek({
 
     describe("locating RuleSetProvider's") {
 
-        it("contains all RuleSetProvider") {
+        it("contains all RuleSetProviders") {
             val providers = ProcessingSettings(path).use { RuleSetLocator(it).load() }
             val providerClasses = getProviderClasses()
 
