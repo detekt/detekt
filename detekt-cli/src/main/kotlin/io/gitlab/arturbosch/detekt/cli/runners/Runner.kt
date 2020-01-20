@@ -4,7 +4,6 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.internal.CommaSeparatedPattern
 import io.gitlab.arturbosch.detekt.api.internal.DEFAULT_PROPERTY_EXCLUDES
-import io.gitlab.arturbosch.detekt.api.internal.SimpleNotification
 import io.gitlab.arturbosch.detekt.api.internal.validateConfig
 import io.gitlab.arturbosch.detekt.cli.BuildFailure
 import io.gitlab.arturbosch.detekt.cli.CliArgs
@@ -33,12 +32,16 @@ class Runner(
 
     override fun execute() {
         createSettings().use { settings ->
-            checkConfiguration(settings)
-            var (time, result) = measure { DetektFacade.create(settings).run() }
-            result.add(SimpleNotification("detekt finished in $time ms."))
+            val (checkConfigTime) = measure { checkConfiguration(settings) }
+            settings.debug { "Checking config took $checkConfigTime ms" }
+            val (serviceLoadingTime, facade) = measure { DetektFacade.create(settings) }
+            settings.debug { "Loading services took $serviceLoadingTime ms" }
+            var (engineRunTime, result) = measure { facade.run() }
+            settings.debug { "Running core engine took $engineRunTime ms" }
             checkBaselineCreation(result)
             result = transformResult(result)
-            OutputFacade(arguments, result, settings).run()
+            val (outputResultsTime) = measure { OutputFacade(arguments, result, settings).run() }
+            settings.debug { "Writing results took $outputResultsTime ms" }
             if (!arguments.createBaseline) {
                 checkBuildFailureThreshold(result, settings)
             }
@@ -97,20 +100,26 @@ class Runner(
     }
 
     private fun createSettings(): ProcessingSettings = with(arguments) {
-        ProcessingSettings(
-            inputPaths = inputPaths,
-            config = loadConfiguration(),
-            pathFilters = createFilters(),
-            parallelCompilation = parallel,
-            autoCorrect = autoCorrect,
-            excludeDefaultRuleSets = disableDefaultRuleSets,
-            pluginPaths = createPlugins(),
-            classpath = createClasspath(),
-            languageVersion = languageVersion,
-            jvmTarget = jvmTarget,
-            debug = arguments.debug,
-            outPrinter = outputPrinter,
-            errorPrinter = errorPrinter
-        )
+        val (configLoadTime, configuration) = measure { loadConfiguration() }
+        val (settingsLoadTime, settings) = measure {
+            ProcessingSettings(
+                inputPaths = inputPaths,
+                config = configuration,
+                pathFilters = createFilters(),
+                parallelCompilation = parallel,
+                autoCorrect = autoCorrect,
+                excludeDefaultRuleSets = disableDefaultRuleSets,
+                pluginPaths = createPlugins(),
+                classpath = createClasspath(),
+                languageVersion = languageVersion,
+                jvmTarget = jvmTarget,
+                debug = arguments.debug,
+                outPrinter = outputPrinter,
+                errorPrinter = errorPrinter
+            )
+        }
+        settings.debug { "Loading config took $configLoadTime ms" }
+        settings.debug { "Creating settings took $settingsLoadTime ms" }
+        return settings
     }
 }
