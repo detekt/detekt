@@ -484,6 +484,32 @@ for (i in 1..2) {
 }
 ```
 
+### UnnecessaryNotNullOperators
+
+Reports Unnecessary Not Null operators that can be removed by the user.
+
+**Severity**: Defect
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+fun foo(s: String) {
+    val a = 1
+    val b = a!!
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+fun foo(s: String) {
+    val a = 1
+    val b = a
+}
+```
+
 ### UnreachableCode
 
 Reports unreachable code.
