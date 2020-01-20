@@ -21,6 +21,7 @@ import io.gitlab.arturbosch.detekt.rules.bugs.UnconditionalJumpStatementInLoop
 import io.gitlab.arturbosch.detekt.rules.bugs.UnreachableCode
 import io.gitlab.arturbosch.detekt.rules.bugs.UnsafeCallOnNullableType
 import io.gitlab.arturbosch.detekt.rules.bugs.UnnecessarySafeCall
+import io.gitlab.arturbosch.detekt.rules.bugs.UnnecessaryNotNullOperator
 import io.gitlab.arturbosch.detekt.rules.bugs.UnsafeCast
 import io.gitlab.arturbosch.detekt.rules.bugs.UselessPostfixExpression
 import io.gitlab.arturbosch.detekt.rules.bugs.WrongEqualsTypeParameter
@@ -40,23 +41,24 @@ class PotentialBugProvider : DefaultRuleSetProvider {
                 DuplicateCaseInWhenExpression(config),
                 EqualsAlwaysReturnsTrueOrFalse(config),
                 EqualsWithHashCodeExist(config),
-                HasPlatformType(config),
-                IteratorNotThrowingNoSuchElementException(config),
-                IteratorHasNextCallsNextMethod(config),
-                UselessPostfixExpression(config),
-                InvalidRange(config),
-                WrongEqualsTypeParameter(config),
                 ExplicitGarbageCollectionCall(config),
+                HasPlatformType(config),
+                ImplicitDefaultLocale(config),
+                InvalidRange(config),
+                IteratorHasNextCallsNextMethod(config),
+                IteratorNotThrowingNoSuchElementException(config),
                 LateinitUsage(config),
                 MapGetWithNotNullAssertionOperator(config),
                 MissingWhenCase(config),
                 RedundantElseInWhen(config),
                 UnconditionalJumpStatementInLoop(config),
+                UnnecessaryNotNullOperator(config),
                 UnnecessarySafeCall(config),
                 UnreachableCode(config),
                 UnsafeCallOnNullableType(config),
                 UnsafeCast(config),
-                ImplicitDefaultLocale(config)
+                UselessPostfixExpression(config),
+                WrongEqualsTypeParameter(config)
         ))
     }
 }

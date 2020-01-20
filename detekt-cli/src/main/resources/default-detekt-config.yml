@@ -446,6 +446,8 @@ potential-bugs:
     active: false
   UnnecessarySafeCall:
     active: false
+  UnnecessaryNotNullOperator:
+    active: false
   UnreachableCode:
     active: true
   UnsafeCallOnNullableType:
