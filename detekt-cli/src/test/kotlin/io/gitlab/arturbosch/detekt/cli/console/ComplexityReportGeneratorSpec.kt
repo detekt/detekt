@@ -12,26 +12,24 @@ import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-internal class ComplexityReportSpec : Spek({
+internal class ComplexityReportGeneratorSpec : Spek({
 
-    describe("complexity report") {
+    describe("complexity report generator") {
 
         context("several complexity metrics") {
 
             it("successfully generates a complexity report") {
-                val report = ComplexityReport()
                 val expectedContent = readResource("complexity-report.txt")
                 val detektion = createDetektion()
                 addData(detektion)
                 // Casting expectedContent to Any is workaround for
                 // https://github.com/joel-costigliola/assertj-core/issues/1440#issuecomment-465032464
-                assertThat(report.render(detektion)).isEqualTo(expectedContent as Any)
+                assertThat(generateComplexityReport(detektion)).isEqualTo(expectedContent as Any)
             }
 
-            it("returns null for missing complexity metrics in report") {
-                val report = ComplexityReport()
+            it("returns null for missing complexity metrics") {
                 val detektion = createDetektion()
-                assertThat(report.render(detektion)).isNull()
+                assertThat(generateComplexityReport(detektion)).isNull()
             }
         }
     }
@@ -45,4 +43,10 @@ private fun addData(detektion: Detektion) {
     detektion.addData(sourceLinesKey, 6)
     detektion.addData(logicalLinesKey, 5)
     detektion.addData(commentLinesKey, 4)
+}
+
+private fun generateComplexityReport(detektion: Detektion): String? {
+    val complexityMetric = ComplexityMetric(detektion)
+    val generator = ComplexityReportGenerator(complexityMetric)
+    return generator.generate()
 }
