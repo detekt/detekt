@@ -24,6 +24,7 @@ import kotlinx.html.span
 import kotlinx.html.stream.createHTML
 import kotlinx.html.ul
 import kotlinx.html.visit
+import java.util.Locale
 
 private const val DEFAULT_TEMPLATE = "default-html-report-template.html"
 private const val PLACEHOLDER_METRICS = "@@@metrics@@@"
@@ -48,7 +49,7 @@ class HtmlOutputReport : OutputReport() {
     private fun renderMetrics(metrics: Collection<ProjectMetric>) = createHTML().div {
         ul {
             metrics.forEach {
-                li { text("${it.type}: ${it.value}") }
+                li { text("${it.type}: %,d".format(Locale.US, it.value)) }
             }
         }
     }

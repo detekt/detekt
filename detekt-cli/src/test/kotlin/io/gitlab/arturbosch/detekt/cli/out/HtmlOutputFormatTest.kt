@@ -77,11 +77,11 @@ class HtmlOutputFormatTest : Spek({
         it("testRenderResultContainingAtLeastOneMetric") {
             val detektion = object : TestDetektion() {
                 override val metrics: Collection<ProjectMetric> = listOf(
-                    ProjectMetric("M1", 1), ProjectMetric("M2", 2)
+                    ProjectMetric("M1", 10000), ProjectMetric("M2", 2)
                 )
             }
             val result = outputFormat.render(detektion)
-            assertThat(result).contains("<li>M1: 1</li>")
+            assertThat(result).contains("<li>M1: 10,000</li>")
             assertThat(result).contains("<li>M2: 2</li>")
         }
 
