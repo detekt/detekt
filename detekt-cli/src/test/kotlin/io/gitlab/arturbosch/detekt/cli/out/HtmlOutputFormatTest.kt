@@ -1,6 +1,8 @@
 package io.gitlab.arturbosch.detekt.cli.out
 
 import io.gitlab.arturbosch.detekt.api.Detektion
+import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.cli.createEntity
 import io.gitlab.arturbosch.detekt.cli.createFinding
@@ -15,7 +17,9 @@ import io.gitlab.arturbosch.detekt.test.resource
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.com.intellij.psi.PsiFile
+import org.jetbrains.kotlin.com.intellij.util.keyFMap.KeyFMap
 import org.jetbrains.kotlin.psi.KtElement
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -132,9 +136,25 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
     val issueA = createIssue("id_a")
     val issueB = createIssue("id_b")
 
-    return TestDetektion(
-        createFinding(issueA, entity1, "Message finding 1"),
-        createFinding(issueA, entity2, "Message finding 2"),
-        createFinding(issueB, entity3, "")
+    return HtmlDetektion(
+        "Section 1" to listOf(
+            createFinding(issueA, entity1, "Message finding 1"),
+            createFinding(issueA, entity2, "Message finding 2")
+        ),
+        "Section 2" to listOf(createFinding(issueB, entity3, ""))
     )
+}
+
+private class HtmlDetektion(vararg findings: Pair<String, List<Finding>>) : Detektion {
+    override val metrics: Collection<ProjectMetric> = listOf()
+    override val findings: Map<String, List<Finding>> = findings.toMap()
+    override val notifications: List<Notification> = listOf()
+    private var userData = KeyFMap.EMPTY_MAP
+
+    override fun <V> getData(key: Key<V>): V? = userData.get(key)
+    override fun <V> addData(key: Key<V>, value: V) {
+        userData = userData.plus(key, value)
+    }
+    override fun add(notification: Notification) = throw UnsupportedOperationException("not implemented")
+    override fun add(projectMetric: ProjectMetric) = throw UnsupportedOperationException("not implemented")
 }
