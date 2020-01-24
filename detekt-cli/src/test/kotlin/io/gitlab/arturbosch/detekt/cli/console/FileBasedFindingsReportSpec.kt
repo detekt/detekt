@@ -34,7 +34,7 @@ class FileBasedFindingsReportSpec : Spek({
             }
 
             it("has the reference content") {
-                val output = subject.render(detektion)?.trimEnd()?.decolorized()
+                val output = subject.render(detektion)?.decolorized()
                 assertThat(output).isEqualTo(expectedContent)
             }
         }

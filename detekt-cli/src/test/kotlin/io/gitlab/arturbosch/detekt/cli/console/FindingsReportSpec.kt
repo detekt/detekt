@@ -26,7 +26,7 @@ class FindingsReportSpec : Spek({
             var output: String? = null
 
             beforeEachTest {
-                output = subject.render(detektion)?.trimEnd()?.decolorized()
+                output = subject.render(detektion)?.decolorized()
             }
 
             it("has the reference content") {

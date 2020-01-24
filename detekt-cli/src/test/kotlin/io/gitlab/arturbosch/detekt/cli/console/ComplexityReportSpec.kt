@@ -54,5 +54,5 @@ private fun addData(detektion: Detektion) {
 private fun generateComplexityReport(detektion: Detektion): String? {
     val complexityMetric = ComplexityMetric(detektion)
     val generator = ComplexityReportGenerator(complexityMetric)
-    return generator.generate()?.trimEnd()
+    return generator.generate()
 }
