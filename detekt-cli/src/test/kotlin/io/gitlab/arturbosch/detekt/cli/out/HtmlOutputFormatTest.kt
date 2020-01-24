@@ -120,6 +120,29 @@ class HtmlOutputFormatTest : Spek({
                 Files.delete(tmpReport)
             }
         }
+
+        it("assert that the html generated is the same even if we change the order of the findings") {
+            val findings = findings()
+            val reversedFindings = findings
+                .reversedArray()
+                .map { (section, findings) -> section to findings.asReversed() }
+                .toTypedArray()
+
+            val result1 = outputFormat.render(HtmlDetektion(*findings))
+            val result2 = outputFormat.render(HtmlDetektion(*reversedFindings))
+
+            val tmpReport1 = Files.createTempFile("HtmlOutputFormatTest", ".html")
+            val tmpReport2 = Files.createTempFile("HtmlOutputFormatTest", ".html")
+            Files.write(tmpReport1, result1.toByteArray())
+            Files.write(tmpReport2, result2.toByteArray())
+
+            try {
+                assertThat(tmpReport1).hasSameContentAs(tmpReport2)
+            } finally {
+                Files.delete(tmpReport1)
+                Files.delete(tmpReport2)
+            }
+        }
     }
 })
 
@@ -142,6 +165,34 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
             createFinding(issueA, entity2, "Message finding 2")
         ),
         "Section 2" to listOf(createFinding(issueB, entity3, ""))
+    )
+}
+
+private fun findings(): Array<Pair<String, List<Finding>>> {
+    val issueA = createIssue("id_a")
+    val issueB = createIssue("id_b")
+    val issueC = createIssue("id_c")
+
+    val entity1 = createEntity("src/main/com/sample/Sample1.kt", 11 to 5)
+    val entity2 = createEntity("src/main/com/sample/Sample1.kt", 22 to 2)
+    val entity3 = createEntity("src/main/com/sample/Sample1.kt", 11 to 2)
+    val entity4 = createEntity("src/main/com/sample/Sample2.kt", 1 to 1)
+
+    return arrayOf(
+        "Section 1" to listOf(
+            createFinding(issueA, entity1),
+            createFinding(issueA, entity2),
+            createFinding(issueA, entity3),
+            createFinding(issueA, entity4),
+            createFinding(issueB, entity2),
+            createFinding(issueB, entity1),
+            createFinding(issueB, entity4)
+        ),
+        "Section 2" to listOf(
+            createFinding(issueB, entity3),
+            createFinding(issueC, entity1),
+            createFinding(issueC, entity2)
+        )
     )
 }
 

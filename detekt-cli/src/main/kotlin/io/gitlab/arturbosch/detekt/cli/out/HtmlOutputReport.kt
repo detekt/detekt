@@ -72,6 +72,8 @@ class HtmlOutputReport : OutputReport() {
 
         findings
             .filter { it.value.isNotEmpty() }
+            .toList()
+            .sortedBy { (group, _) -> group }
             .forEach { (group, groupFindings) ->
                 renderGroup(group, groupFindings)
             }
@@ -82,6 +84,8 @@ class HtmlOutputReport : OutputReport() {
 
         findings
             .groupBy { it.id }
+            .toList()
+            .sortedBy { (rule, _) -> rule }
             .forEach { (rule, ruleFindings) ->
                 renderRule(rule, ruleFindings)
             }
@@ -98,11 +102,13 @@ class HtmlOutputReport : OutputReport() {
             }
 
             ul {
-                findings.forEach {
-                    li {
-                        renderFinding(it)
+                findings
+                    .sortedWith(compareBy({ it.file }, { it.location.source.line }, { it.location.source.column }))
+                    .forEach {
+                        li {
+                            renderFinding(it)
+                        }
                     }
-                }
             }
         }
     }
