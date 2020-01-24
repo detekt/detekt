@@ -26,7 +26,7 @@ internal class ComplexityReportGeneratorSpec : Spek({
                     "4 comment lines of code (cloc)",
                     "2 McCabe complexity (mcc)",
                     "1 number of total code smells",
-                    "66 % comment source ratio",
+                    "66% comment source ratio",
                     "400 mcc per 1,000 lloc",
                     "200 code smells per 1,000 lloc"
                 )

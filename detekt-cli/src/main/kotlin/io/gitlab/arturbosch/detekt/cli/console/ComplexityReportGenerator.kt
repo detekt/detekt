@@ -24,7 +24,7 @@ class ComplexityReportGenerator(private val complexityMetric: ComplexityMetric) 
             "%,d comment lines of code (cloc)".format(Locale.US, complexityMetric.cloc),
             "%,d McCabe complexity (mcc)".format(Locale.US, complexityMetric.mcc),
             "%,d number of total code smells".format(Locale.US, numberOfSmells),
-            "%,d %% comment source ratio".format(Locale.US, commentSourceRatio),
+            "%,d%% comment source ratio".format(Locale.US, commentSourceRatio),
             "%,d mcc per 1,000 lloc".format(Locale.US, mccPerThousandLines),
             "%,d code smells per 1,000 lloc".format(Locale.US, smellPerThousandLines)
         )
