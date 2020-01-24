@@ -14,21 +14,19 @@ class ComplexityReportGenerator(private val complexityMetric: ComplexityMetric) 
             ComplexityReportGenerator(ComplexityMetric(detektion))
     }
 
-    fun generate(): String? {
+    fun generate(): List<String>? {
         if (cannotGenerate()) return null
-        return with(StringBuilder()) {
-            append("Complexity Report:".format())
-            append("${complexityMetric.loc} lines of code (loc)".format(PREFIX))
-            append("${complexityMetric.sloc} source lines of code (sloc)".format(PREFIX))
-            append("${complexityMetric.lloc} logical lines of code (lloc)".format(PREFIX))
-            append("${complexityMetric.cloc} comment lines of code (cloc)".format(PREFIX))
-            append("${complexityMetric.mcc} McCabe complexity (mcc)".format(PREFIX))
-            append("$numberOfSmells number of total code smells".format(PREFIX))
-            append("$commentSourceRatio % comment source ratio".format(PREFIX))
-            append("$mccPerThousandLines mcc per 1000 lloc".format(PREFIX))
-            append("$smellPerThousandLines code smells per 1000 lloc".format(PREFIX))
-            toString()
-        }
+        return listOf(
+            "${complexityMetric.loc} lines of code (loc)",
+            "${complexityMetric.sloc} source lines of code (sloc)",
+            "${complexityMetric.lloc} logical lines of code (lloc)",
+            "${complexityMetric.cloc} comment lines of code (cloc)",
+            "${complexityMetric.mcc} McCabe complexity (mcc)",
+            "$numberOfSmells number of total code smells",
+            "$commentSourceRatio % comment source ratio",
+            "$mccPerThousandLines mcc per 1000 lloc",
+            "$smellPerThousandLines code smells per 1000 lloc"
+        )
     }
 
     private fun cannotGenerate(): Boolean {

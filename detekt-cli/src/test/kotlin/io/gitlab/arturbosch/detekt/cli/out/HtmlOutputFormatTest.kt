@@ -93,9 +93,9 @@ class HtmlOutputFormatTest : Spek({
             detektion.addData(commentLinesKey, 2)
             detektion.addData(linesKey, 22)
             val result = outputFormat.render(detektion)
-            assertThat(result).contains("<li>- 22 lines of code (loc)</li>")
-            assertThat(result).contains("<li>- 20 source lines of code (sloc)</li>")
-            assertThat(result).contains("<li>- 10 logical lines of code (lloc)</li>")
+            assertThat(result).contains("<li>22 lines of code (loc)</li>")
+            assertThat(result).contains("<li>20 source lines of code (sloc)</li>")
+            assertThat(result).contains("<li>10 logical lines of code (lloc)</li>")
         }
 
         it("testRenderResultWithBlankComplexityReport") {
