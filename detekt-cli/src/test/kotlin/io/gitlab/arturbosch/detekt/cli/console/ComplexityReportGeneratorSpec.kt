@@ -20,15 +20,15 @@ internal class ComplexityReportGeneratorSpec : Spek({
 
             it("successfully generates a complexity report") {
                 val expectedContent = listOf(
-                    "10 lines of code (loc)",
+                    "1,000 lines of code (loc)",
                     "6 source lines of code (sloc)",
                     "5 logical lines of code (lloc)",
                     "4 comment lines of code (cloc)",
                     "2 McCabe complexity (mcc)",
                     "1 number of total code smells",
                     "66 % comment source ratio",
-                    "400 mcc per 1000 lloc",
-                    "200 code smells per 1000 lloc"
+                    "400 mcc per 1,000 lloc",
+                    "200 code smells per 1,000 lloc"
                 )
                 val detektion = createDetektion()
                 addData(detektion)
@@ -47,7 +47,7 @@ private fun createDetektion(): Detektion = DetektResult(mapOf(Pair("Key", listOf
 
 private fun addData(detektion: Detektion) {
     detektion.addData(complexityKey, 2)
-    detektion.addData(linesKey, 10)
+    detektion.addData(linesKey, 1000)
     detektion.addData(sourceLinesKey, 6)
     detektion.addData(logicalLinesKey, 5)
     detektion.addData(commentLinesKey, 4)

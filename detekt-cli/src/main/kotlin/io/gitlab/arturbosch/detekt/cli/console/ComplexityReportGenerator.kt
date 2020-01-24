@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.cli.console
 
 import io.gitlab.arturbosch.detekt.api.Detektion
+import java.util.Locale
 
 class ComplexityReportGenerator(private val complexityMetric: ComplexityMetric) {
 
@@ -17,15 +18,15 @@ class ComplexityReportGenerator(private val complexityMetric: ComplexityMetric) 
     fun generate(): List<String>? {
         if (cannotGenerate()) return null
         return listOf(
-            "${complexityMetric.loc} lines of code (loc)",
-            "${complexityMetric.sloc} source lines of code (sloc)",
-            "${complexityMetric.lloc} logical lines of code (lloc)",
-            "${complexityMetric.cloc} comment lines of code (cloc)",
-            "${complexityMetric.mcc} McCabe complexity (mcc)",
-            "$numberOfSmells number of total code smells",
-            "$commentSourceRatio % comment source ratio",
-            "$mccPerThousandLines mcc per 1000 lloc",
-            "$smellPerThousandLines code smells per 1000 lloc"
+            "%,d lines of code (loc)".format(Locale.US, complexityMetric.loc),
+            "%,d source lines of code (sloc)".format(Locale.US, complexityMetric.sloc),
+            "%,d logical lines of code (lloc)".format(Locale.US, complexityMetric.lloc),
+            "%,d comment lines of code (cloc)".format(Locale.US, complexityMetric.cloc),
+            "%,d McCabe complexity (mcc)".format(Locale.US, complexityMetric.mcc),
+            "%,d number of total code smells".format(Locale.US, numberOfSmells),
+            "%,d %% comment source ratio".format(Locale.US, commentSourceRatio),
+            "%,d mcc per 1,000 lloc".format(Locale.US, mccPerThousandLines),
+            "%,d code smells per 1,000 lloc".format(Locale.US, smellPerThousandLines)
         )
     }
 

@@ -91,9 +91,9 @@ class HtmlOutputFormatTest : Spek({
             detektion.addData(sourceLinesKey, 20)
             detektion.addData(logicalLinesKey, 10)
             detektion.addData(commentLinesKey, 2)
-            detektion.addData(linesKey, 22)
+            detektion.addData(linesKey, 2222)
             val result = outputFormat.render(detektion)
-            assertThat(result).contains("<li>22 lines of code (loc)</li>")
+            assertThat(result).contains("<li>2,222 lines of code (loc)</li>")
             assertThat(result).contains("<li>20 source lines of code (sloc)</li>")
             assertThat(result).contains("<li>10 logical lines of code (lloc)</li>")
         }

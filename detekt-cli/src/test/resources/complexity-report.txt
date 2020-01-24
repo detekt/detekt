@@ -6,5 +6,5 @@ Complexity Report:
 	- 2 McCabe complexity (mcc)
 	- 1 number of total code smells
 	- 66 % comment source ratio
-	- 400 mcc per 1000 lloc
-	- 200 code smells per 1000 lloc
+	- 400 mcc per 1,000 lloc
+	- 200 code smells per 1,000 lloc
