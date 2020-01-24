@@ -24,6 +24,7 @@ import kotlinx.html.span
 import kotlinx.html.stream.createHTML
 import kotlinx.html.ul
 import kotlinx.html.visit
+import java.util.Locale
 
 private const val DEFAULT_TEMPLATE = "default-html-report-template.html"
 private const val PLACEHOLDER_METRICS = "@@@metrics@@@"
@@ -62,6 +63,13 @@ class HtmlOutputReport : OutputReport() {
     }
 
     private fun renderFindings(findings: Map<String, List<Finding>>) = createHTML().div {
+        val total = findings.values
+            .asSequence()
+            .map { it.size }
+            .fold(0) { a, b -> a + b }
+
+        text("Total: %,d".format(Locale.US, total))
+
         findings
             .filter { it.value.isNotEmpty() }
             .forEach { (group, groupFindings) ->
@@ -70,7 +78,7 @@ class HtmlOutputReport : OutputReport() {
     }
 
     private fun FlowContent.renderGroup(group: String, findings: List<Finding>) {
-        h3 { text(group) }
+        h3 { text("$group: %,d".format(Locale.US, findings.size)) }
 
         findings
             .groupBy { it.id }
@@ -85,7 +93,7 @@ class HtmlOutputReport : OutputReport() {
             open = true
 
             summary("rule-container") {
-                span("rule") { text("$rule ") }
+                span("rule") { text("$rule: %,d ".format(Locale.US, findings.size)) }
                 span("description") { text(findings.first().issue.description) }
             }
 

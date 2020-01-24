@@ -45,6 +45,12 @@ class HtmlOutputFormatTest : Spek({
             assertThat(result).contains("<h2>Findings</h2>")
         }
 
+        it("testRenderResultContainsTotalFindings") {
+            val result = outputFormat.render(createTestDetektionWithMultipleSmells())
+
+            assertThat(result).contains("Total: 3")
+        }
+
         it("testRenderResultContainsFileLocations") {
             val result = outputFormat.render(createTestDetektionWithMultipleSmells())
 
@@ -53,11 +59,11 @@ class HtmlOutputFormatTest : Spek({
             assertThat(result).contains("<span class=\"location\">src/main/com/sample/Sample3.kt:33:3</span>")
         }
 
-        it("testRenderResultContainsRules") {
+        it("testRenderResultContainsRulesAndCount") {
             val result = outputFormat.render(createTestDetektionWithMultipleSmells())
 
-            assertThat(result).contains("<span class=\"rule\">id_a </span>")
-            assertThat(result).contains("<span class=\"rule\">id_b </span>")
+            assertThat(result).contains("<span class=\"rule\">id_a: 2 </span>")
+            assertThat(result).contains("<span class=\"rule\">id_b: 1 </span>")
         }
 
         it("testRenderResultContainsMessages") {
