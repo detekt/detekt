@@ -218,6 +218,7 @@ As mentioned in...
 - [Android Basics: Continuous Integration](https://academy.realm.io/posts/360-andev-2017-mark-scheel-continuous-integration-android/)
 - [Kotlin Static Analysis — why and how?](https://proandroiddev.com/kotlin-static-analysis-why-and-how-a12042e34a98)
 - [Check the quality of Kotlin code](https://blog.frankel.ch/check-quality-kotlin-code/)
+- [Kotlin Static Analysis Tools](http://smyachenkov.com/posts/kotlin-static-analysis-tools/)
 
 Integrations:
 
