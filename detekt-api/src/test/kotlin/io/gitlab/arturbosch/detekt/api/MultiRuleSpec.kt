@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.api
 
 import io.gitlab.arturbosch.detekt.test.compileForTest
 import io.gitlab.arturbosch.detekt.test.loadRuleSet
-import io.gitlab.arturbosch.detekt.test.testEntity
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
@@ -60,7 +59,7 @@ private class TestMultiRule(config: Config) : MultiRule() {
 
 private abstract class AbstractRule(config: Config) : Rule(config) {
     override val issue: Issue = Issue(javaClass.simpleName, Severity.Minor, "", Debt.TWENTY_MINS)
-    override fun visitKtFile(file: KtFile) = report(CodeSmell(issue, testEntity(file), message = ""))
+    override fun visitKtFile(file: KtFile) = report(CodeSmell(issue, Entity.from(file), message = ""))
 }
 
 private class TestRuleOne(config: Config) : AbstractRule(config)
