@@ -1,15 +1,10 @@
 package io.gitlab.arturbosch.detekt.cli.out
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
-import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.SourceLocation
-import io.gitlab.arturbosch.detekt.api.TextLocation
+import io.gitlab.arturbosch.detekt.cli.createEntity
+import io.gitlab.arturbosch.detekt.cli.createFinding
+import io.gitlab.arturbosch.detekt.cli.createIssue
 import io.gitlab.arturbosch.detekt.core.processors.commentLinesKey
 import io.gitlab.arturbosch.detekt.core.processors.complexityKey
 import io.gitlab.arturbosch.detekt.core.processors.linesKey
@@ -26,7 +21,6 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.nio.file.Files
 import java.nio.file.Paths
-import java.util.UUID
 
 class HtmlOutputFormatTest : Spek({
 
@@ -144,34 +138,3 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
         createFinding(issueB, entity3, "")
     )
 }
-
-private fun createFinding(issue: Issue, entity: Entity, message: String = entity.signature) = CodeSmell(
-    issue = issue,
-    entity = entity,
-    message = message
-)
-
-private fun createEntity(
-    file: String,
-    position: Pair<Int, Int>,
-    text: IntRange = 0..0,
-    ktElement: KtElement? = null
-) = Entity(
-    name = "",
-    className = "",
-    signature = UUID.randomUUID().toString(),
-    location = Location(
-        source = SourceLocation(position.first, position.second),
-        text = TextLocation(text.first, text.last),
-        locationString = "",
-        file = file
-    ),
-    ktElement = ktElement
-)
-
-private fun createIssue(id: String) = Issue(
-    id = id,
-    severity = Severity.CodeSmell,
-    description = "Description $id",
-    debt = Debt.TWENTY_MINS
-)
