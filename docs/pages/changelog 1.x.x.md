@@ -11,7 +11,7 @@ toc: true
 ##### Notable Changes
 
 - detekt is now _silent_ by default. It only prints something if issues are found.
-Remove following excludes if you want the old behavior back.
+Remove the following excludes if you want the old behavior back.
 
 ```yaml
 console-reports:
