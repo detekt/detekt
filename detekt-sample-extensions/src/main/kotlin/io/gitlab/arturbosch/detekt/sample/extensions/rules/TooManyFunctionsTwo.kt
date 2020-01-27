@@ -44,6 +44,7 @@ class TooManyFunctionsTwo(config: Config) : ThresholdRule(config, THRESHOLD) {
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
+        super.visitNamedFunction(function)
         amount++
     }
 }
