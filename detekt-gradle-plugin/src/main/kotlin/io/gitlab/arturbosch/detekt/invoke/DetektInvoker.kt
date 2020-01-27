@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.invoke
 
+import io.gitlab.arturbosch.detekt.internal.ClassLoaderCache
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.file.FileCollection
 import java.io.PrintStream
 import java.lang.reflect.InvocationTargetException
-import java.net.URLClassLoader
 
 internal interface DetektInvoker {
     fun invokeCli(
@@ -41,19 +41,14 @@ private class DefaultCliInvoker(private val project: Project) : DetektInvoker {
     ) {
         val cliArguments = arguments.flatMap(CliArgument::toArgument)
         try {
-            val loader = URLClassLoader(
-                classpath.map { it.toURI().toURL() }.toTypedArray(),
-                null /* isolate detekt environment */
-            )
-            loader.use {
-                val clazz = it.loadClass("io.gitlab.arturbosch.detekt.cli.Main")
-                val runner = clazz.getMethod("buildRunner",
-                    Array<String>::class.java,
-                    PrintStream::class.java,
-                    PrintStream::class.java
-                ).invoke(null, cliArguments.toTypedArray(), System.out, System.err)
-                runner::class.java.getMethod("execute").invoke(runner)
-            }
+            val loader = ClassLoaderCache.getOrCreate(classpath)
+            val clazz = loader.loadClass("io.gitlab.arturbosch.detekt.cli.Main")
+            val runner = clazz.getMethod("buildRunner",
+                Array<String>::class.java,
+                PrintStream::class.java,
+                PrintStream::class.java
+            ).invoke(null, cliArguments.toTypedArray(), System.out, System.err)
+            runner::class.java.getMethod("execute").invoke(runner)
         } catch (reflectionWrapper: InvocationTargetException) {
             val cause = reflectionWrapper.targetException
             val message = cause.message
