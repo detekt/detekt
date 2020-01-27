@@ -29,7 +29,7 @@ build:
   maxIssues: 0
 ```
 
-- The `HTML` report now prints the issue counts per rule and rule set.
+- The `HTML` report now prints the issue count per rule and rule set.
 - New rules: `ExplicitCollectionElementAccessMethod` and `ForbiddenMethod`
 
 ##### Changelog
@@ -482,4 +482,3 @@ See all issues at: [1.0.1](https://github.com/arturbosch/detekt/milestone/47)
 - Default Gradle config path should be config/detekt/config.yml - [#1262](https://github.com/arturbosch/detekt/issues/1262)
 
 See all issues at: [1.0.0](https://github.com/arturbosch/detekt/milestone/46)
-
