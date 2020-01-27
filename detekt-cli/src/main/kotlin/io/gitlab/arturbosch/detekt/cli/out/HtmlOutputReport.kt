@@ -41,15 +41,15 @@ class HtmlOutputReport : OutputReport() {
     override val name = "HTML report"
 
     override fun render(detektion: Detektion) =
-            ClasspathResourceConverter().convert(DEFAULT_TEMPLATE).openStream().bufferedReader().use { it.readText() }
-                    .replace(PLACEHOLDER_METRICS, renderMetrics(detektion.metrics))
-                    .replace(PLACEHOLDER_COMPLEXITY_REPORT, renderComplexity(getComplexityMetrics(detektion)))
-                    .replace(PLACEHOLDER_FINDINGS, renderFindings(detektion.findings))
+        ClasspathResourceConverter().convert(DEFAULT_TEMPLATE).openStream().bufferedReader().use { it.readText() }
+            .replace(PLACEHOLDER_METRICS, renderMetrics(detektion.metrics))
+            .replace(PLACEHOLDER_COMPLEXITY_REPORT, renderComplexity(getComplexityMetrics(detektion)))
+            .replace(PLACEHOLDER_FINDINGS, renderFindings(detektion.findings))
 
     private fun renderMetrics(metrics: Collection<ProjectMetric>) = createHTML().div {
         ul {
             metrics.forEach {
-                li { text("${it.type}: ${it.value}") }
+                li { text("${it.type}: %,d".format(Locale.US, it.value)) }
             }
         }
     }
@@ -125,13 +125,7 @@ class HtmlOutputReport : OutputReport() {
     }
 
     private fun getComplexityMetrics(detektion: Detektion): List<String> {
-        val complexityReport = ComplexityReportGenerator.create(detektion).generate()
-        return if (complexityReport.isNullOrBlank()) {
-            emptyList()
-        } else {
-            val complexities = complexityReport.split("\n")
-            return complexities.subList(1, complexities.size - 1)
-        }
+        return ComplexityReportGenerator.create(detektion).generate() ?: emptyList()
     }
 }
 
