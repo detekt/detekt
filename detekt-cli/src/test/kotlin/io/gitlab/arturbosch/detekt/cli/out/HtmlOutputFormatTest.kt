@@ -1,20 +1,15 @@
 package io.gitlab.arturbosch.detekt.cli.out
 
-import io.gitlab.arturbosch.detekt.api.CodeSmell
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Location
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
-import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.SourceLocation
-import io.gitlab.arturbosch.detekt.api.TextLocation
+import io.gitlab.arturbosch.detekt.cli.createEntity
+import io.gitlab.arturbosch.detekt.cli.createFinding
+import io.gitlab.arturbosch.detekt.cli.createIssue
 import io.gitlab.arturbosch.detekt.core.processors.commentLinesKey
 import io.gitlab.arturbosch.detekt.core.processors.complexityKey
+import io.gitlab.arturbosch.detekt.core.processors.linesKey
 import io.gitlab.arturbosch.detekt.core.processors.logicalLinesKey
 import io.gitlab.arturbosch.detekt.core.processors.sourceLinesKey
-import io.gitlab.arturbosch.detekt.core.processors.linesKey
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.resource
 import io.mockk.every
@@ -44,6 +39,12 @@ class HtmlOutputFormatTest : Spek({
             assertThat(result).contains("<h2>Findings</h2>")
         }
 
+        it("testRenderResultContainsTotalFindings") {
+            val result = outputFormat.render(createTestDetektionWithMultipleSmells())
+
+            assertThat(result).contains("Total: 3")
+        }
+
         it("testRenderResultContainsFileLocations") {
             val result = outputFormat.render(createTestDetektionWithMultipleSmells())
 
@@ -52,26 +53,26 @@ class HtmlOutputFormatTest : Spek({
             assertThat(result).contains("<span class=\"location\">src/main/com/sample/Sample3.kt:33:3</span>")
         }
 
-        it("testRenderResultContainsRules") {
+        it("testRenderResultContainsRulesAndCount") {
             val result = outputFormat.render(createTestDetektionWithMultipleSmells())
 
-            assertThat(result).contains("<span class=\"rule\">id_a </span>")
-            assertThat(result).contains("<span class=\"rule\">id_c </span>")
+            assertThat(result).contains("<span class=\"rule\">id_a: 2 </span>")
+            assertThat(result).contains("<span class=\"rule\">id_b: 1 </span>")
         }
 
         it("testRenderResultContainsMessages") {
             val result = outputFormat.render(createTestDetektionWithMultipleSmells())
 
-            assertThat(result).contains("<span class=\"message\">B1</span>")
-            assertThat(result).contains("<span class=\"message\">B2</span>")
+            assertThat(result).contains("<span class=\"message\">Message finding 1</span>")
+            assertThat(result).contains("<span class=\"message\">Message finding 2</span>")
+            assertThat(result).doesNotContain("<span class=\"message\"></span>")
         }
 
         it("testRenderResultContainsDescriptions") {
             val result = outputFormat.render(createTestDetektionWithMultipleSmells())
 
-            assertThat(result).contains("<span class=\"description\">A1</span>")
-            assertThat(result).doesNotContain("<span class=\"description\">A2</span>")
-            assertThat(result).contains("<span class=\"description\">A3</span>")
+            assertThat(result).contains("<span class=\"description\">Description id_a</span>")
+            assertThat(result).contains("<span class=\"description\">Description id_b</span>")
         }
 
         it("testRenderResultContainingAtLeastOneMetric") {
@@ -124,21 +125,16 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
     every { psiFileMock.text } returns "\n\n\n\n\n\n\n\n\n\nabcdef\nhi\n"
     every { ktElementMock.containingFile } returns psiFileMock
 
-    val entity1 = Entity("Sample1", "com.sample.Sample1", "",
-            Location(
-                SourceLocation(11, 1), TextLocation(10, 14),
-                    "abcd", "src/main/com/sample/Sample1.kt"), ktElementMock
-    )
-    val entity2 = Entity("Sample2", "com.sample.Sample2", "",
-            Location(SourceLocation(22, 2), TextLocation(0, 20),
-                    "efgh", "src/main/com/sample/Sample2.kt"))
-    val entity3 = Entity("Sample3", "com.sample.Sample3", "",
-            Location(SourceLocation(33, 3), TextLocation(0, 30),
-                    "ijkl", "src/main/com/sample/Sample3.kt"))
+    val entity1 = createEntity("src/main/com/sample/Sample1.kt", 11 to 1, 10..14, ktElementMock)
+    val entity2 = createEntity("src/main/com/sample/Sample2.kt", 22 to 2)
+    val entity3 = createEntity("src/main/com/sample/Sample3.kt", 33 to 3)
+
+    val issueA = createIssue("id_a")
+    val issueB = createIssue("id_b")
 
     return TestDetektion(
-        CodeSmell(Issue("id_a", Severity.CodeSmell, "A1", Debt.TWENTY_MINS), entity1, message = "B1"),
-        CodeSmell(Issue("id_a", Severity.CodeSmell, "A2", Debt.TWENTY_MINS), entity2, message = "B2"),
-        CodeSmell(Issue("id_c", Severity.CodeSmell, "A3", Debt.TWENTY_MINS), entity3, message = "")
+        createFinding(issueA, entity1, "Message finding 1"),
+        createFinding(issueA, entity2, "Message finding 2"),
+        createFinding(issueB, entity3, "")
     )
 }
