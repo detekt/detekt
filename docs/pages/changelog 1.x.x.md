@@ -6,6 +6,66 @@ permalink: changelog.html
 toc: true
 ---
 
+#### 1.5.0
+
+##### Notable Changes
+
+- detekt is now _silent_ by default. It only prints something if issues are found.
+Remove following excludes if you want the old behavior back.
+
+```yaml
+console-reports:
+  active: true
+  exclude:
+     - 'ProjectStatisticsReport'
+     - 'ComplexityReport'
+     - 'NotificationReport'
+```
+
+- detekt now fails the build if any issue is found. Change the `maxIssues` property to 10 for the old threshold. 
+
+```yaml
+build:
+  maxIssues: 0
+```
+
+- The `HTML` report now prints the issue counts per rule and rule set.
+- New rules: `ExplicitCollectionElementAccessMethod` and `ForbiddenMethod`
+
+##### Changelog
+
+- add new mention to README.md - [#2293](https://github.com/arturbosch/detekt/pull/2293)
+- Sort html report - [#2290](https://github.com/arturbosch/detekt/pull/2290)
+- Number format in some report - [#2289](https://github.com/arturbosch/detekt/pull/2289)
+- Show the finding count in the html report - [#2288](https://github.com/arturbosch/detekt/pull/2288)
+- Keep the order of the issues in the html report - [#2287](https://github.com/arturbosch/detekt/issues/2287)
+- Show issue count in the html report - [#2286](https://github.com/arturbosch/detekt/issues/2286)
+- Fixing the Documentation not properly calling the superclass - [#2284](https://github.com/arturbosch/detekt/pull/2284)
+- Do you have to call super in custom rules? - [#2283](https://github.com/arturbosch/detekt/issues/2283)
+- Measure performance of various stages when using --debug - [#2281](https://github.com/arturbosch/detekt/pull/2281)
+- Remove printing the whole config for --debug - [#2280](https://github.com/arturbosch/detekt/pull/2280)
+- Introduce DefaultRuleSetProvider interface marking detekt-rules providers as default - [#2279](https://github.com/arturbosch/detekt/pull/2279)
+- Simplify test dependency setup in build files - [#2278](https://github.com/arturbosch/detekt/pull/2278)
+- Fix class loader memory leaks when loading services - [#2277](https://github.com/arturbosch/detekt/pull/2277)
+- Always dispose Kotlin environment fixing memory leak in error cases - [#2276](https://github.com/arturbosch/detekt/pull/2276)
+- Sanitize gradle build scripts and suppress unstable api usages - [#2271](https://github.com/arturbosch/detekt/pull/2271)
+- Update website ruby dependencies fixing potential security vulnerability - [#2270](https://github.com/arturbosch/detekt/pull/2270)
+- Fix regression not considering baseline file when calculating build failure threshold - [#2269](https://github.com/arturbosch/detekt/pull/2269)
+- Turn detekt silent by default - [#2268](https://github.com/arturbosch/detekt/pull/2268)
+- Remove redundant build failure message - #2264 - [#2266](https://github.com/arturbosch/detekt/pull/2266)
+- Build failed with... is printed twice in the cli - [#2264](https://github.com/arturbosch/detekt/issues/2264)
+- Update config:maxIssues value to 0 - [#2263](https://github.com/arturbosch/detekt/pull/2263)
+- Don't flag inherited visibility in NestedClassesVisibility - [#2261](https://github.com/arturbosch/detekt/pull/2261)
+- Simplify argument parsing logic, remove any exitProcess() calls from buildRunner - [#2260](https://github.com/arturbosch/detekt/pull/2260)
+- Modify default behavior to not output unless errors are found.  Adding a verbose flag which will have legacy behavior - [#2258](https://github.com/arturbosch/detekt/pull/2258)
+- Test some edge cases in detekt-api - [#2256](https://github.com/arturbosch/detekt/pull/2256)
+- Add a new line at the end of the txt report - [#2255](https://github.com/arturbosch/detekt/pull/2255)
+- Implement ExplicitCollectionElementAccessMethod rule - [#2215](https://github.com/arturbosch/detekt/pull/2215)
+- ForbiddenMethod Rule - [#1954](https://github.com/arturbosch/detekt/pull/1954)
+- NestedClassesVisibility(False negative): Nested class doesn't inherit visibility from parent - [#1930](https://github.com/arturbosch/detekt/issues/1930)
+
+See all issues at: [1.5.0](https://github.com/arturbosch/detekt/milestone/56)
+
 #### 1.4.0
 
 ##### Notable Changes
