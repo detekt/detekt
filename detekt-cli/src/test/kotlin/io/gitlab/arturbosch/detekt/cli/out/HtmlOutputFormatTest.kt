@@ -1,6 +1,8 @@
 package io.gitlab.arturbosch.detekt.cli.out
 
 import io.gitlab.arturbosch.detekt.api.Detektion
+import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.cli.createEntity
 import io.gitlab.arturbosch.detekt.cli.createFinding
@@ -15,7 +17,9 @@ import io.gitlab.arturbosch.detekt.test.resource
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
+import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.com.intellij.psi.PsiFile
+import org.jetbrains.kotlin.com.intellij.util.keyFMap.KeyFMap
 import org.jetbrains.kotlin.psi.KtElement
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -116,6 +120,29 @@ class HtmlOutputFormatTest : Spek({
                 Files.delete(tmpReport)
             }
         }
+
+        it("assert that the html generated is the same even if we change the order of the findings") {
+            val findings = findings()
+            val reversedFindings = findings
+                .reversedArray()
+                .map { (section, findings) -> section to findings.asReversed() }
+                .toTypedArray()
+
+            val result1 = outputFormat.render(HtmlDetektion(*findings))
+            val result2 = outputFormat.render(HtmlDetektion(*reversedFindings))
+
+            val tmpReport1 = Files.createTempFile("HtmlOutputFormatTest", ".html")
+            val tmpReport2 = Files.createTempFile("HtmlOutputFormatTest", ".html")
+            Files.write(tmpReport1, result1.toByteArray())
+            Files.write(tmpReport2, result2.toByteArray())
+
+            try {
+                assertThat(tmpReport1).hasSameContentAs(tmpReport2)
+            } finally {
+                Files.delete(tmpReport1)
+                Files.delete(tmpReport2)
+            }
+        }
     }
 })
 
@@ -132,9 +159,53 @@ private fun createTestDetektionWithMultipleSmells(): Detektion {
     val issueA = createIssue("id_a")
     val issueB = createIssue("id_b")
 
-    return TestDetektion(
-        createFinding(issueA, entity1, "Message finding 1"),
-        createFinding(issueA, entity2, "Message finding 2"),
-        createFinding(issueB, entity3, "")
+    return HtmlDetektion(
+        "Section 1" to listOf(
+            createFinding(issueA, entity1, "Message finding 1"),
+            createFinding(issueA, entity2, "Message finding 2")
+        ),
+        "Section 2" to listOf(createFinding(issueB, entity3, ""))
     )
+}
+
+private fun findings(): Array<Pair<String, List<Finding>>> {
+    val issueA = createIssue("id_a")
+    val issueB = createIssue("id_b")
+    val issueC = createIssue("id_c")
+
+    val entity1 = createEntity("src/main/com/sample/Sample1.kt", 11 to 5)
+    val entity2 = createEntity("src/main/com/sample/Sample1.kt", 22 to 2)
+    val entity3 = createEntity("src/main/com/sample/Sample1.kt", 11 to 2)
+    val entity4 = createEntity("src/main/com/sample/Sample2.kt", 1 to 1)
+
+    return arrayOf(
+        "Section 1" to listOf(
+            createFinding(issueA, entity1),
+            createFinding(issueA, entity2),
+            createFinding(issueA, entity3),
+            createFinding(issueA, entity4),
+            createFinding(issueB, entity2),
+            createFinding(issueB, entity1),
+            createFinding(issueB, entity4)
+        ),
+        "Section 2" to listOf(
+            createFinding(issueB, entity3),
+            createFinding(issueC, entity1),
+            createFinding(issueC, entity2)
+        )
+    )
+}
+
+private class HtmlDetektion(vararg findings: Pair<String, List<Finding>>) : Detektion {
+    override val metrics: Collection<ProjectMetric> = listOf()
+    override val findings: Map<String, List<Finding>> = findings.toMap()
+    override val notifications: List<Notification> = listOf()
+    private var userData = KeyFMap.EMPTY_MAP
+
+    override fun <V> getData(key: Key<V>): V? = userData.get(key)
+    override fun <V> addData(key: Key<V>, value: V) {
+        userData = userData.plus(key, value)
+    }
+    override fun add(notification: Notification) = throw UnsupportedOperationException("not implemented")
+    override fun add(projectMetric: ProjectMetric) = throw UnsupportedOperationException("not implemented")
 }
