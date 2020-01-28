@@ -34,6 +34,7 @@ class TooManyFunctions : Rule() {
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
+        super.visitNamedFunction(function)
         amount++
     }
 }
