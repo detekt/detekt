@@ -114,6 +114,25 @@ Each one of them adds one to the complexity count.
 
    Comma separated list of function names which add complexity
 
+### CoupledClass
+
+Complex classes which reference too many other classes indicate that this class is handling too
+many things at once. Classes should follow the single-responsibility principle to also encourage implementations
+of this interface to not handle too many things at once.
+
+Tightly coupled classes should be split into smaller interfaces which have a clear responsibility and are easier
+to understand and implement.
+
+**Severity**: Maintainability
+
+**Debt**: 20min
+
+#### Configuration options:
+
+* ``threshold`` (default: ``10``)
+
+   the amount of class references to trigger the rule
+
 ### LabeledExpression
 
 This rule reports labeled expressions. Expressions with labels generally increase complexity and worsen the

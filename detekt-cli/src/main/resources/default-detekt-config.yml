@@ -68,6 +68,9 @@ complexity:
     ignoreSimpleWhenEntries: false
     ignoreNestingFunctions: false
     nestingFunctions: run,let,apply,with,also,use,forEach,isNotNull,ifNull
+  CoupledClass:
+    active: false
+    threshold: 10
   LabeledExpression:
     active: false
     ignoredLabels: ""
