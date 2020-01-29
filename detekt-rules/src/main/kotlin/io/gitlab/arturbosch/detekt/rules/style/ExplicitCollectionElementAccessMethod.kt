@@ -50,7 +50,7 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
         )
 
     override fun visitCallExpression(expression: KtCallExpression) {
-        if (isGetOrPut(expression) && isMapMethod(expression)) {
+        if (isMapMethod(expression) && isGetOrPut(expression)) {
             report(CodeSmell(issue, Entity.from(expression), "Prefer usage of indexed access operator []."))
         }
         super.visitCallExpression(expression)
@@ -62,7 +62,7 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
 
     private fun isMapMethod(expression: KtCallExpression): Boolean {
         val dotExpression = expression.prevSibling
-        val caller = when (dotExpression.parent) {
+        val caller = when (dotExpression?.parent) {
             is KtDotQualifiedExpression,
             is KtSafeQualifiedExpression -> dotExpression.prevSibling
             else -> return false
