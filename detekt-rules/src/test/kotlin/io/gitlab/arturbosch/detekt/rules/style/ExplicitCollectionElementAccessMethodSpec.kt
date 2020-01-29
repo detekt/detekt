@@ -207,4 +207,16 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
         }
     }
 
+    describe("getters") {
+
+        it("does not crash for getter") {
+            val code = """
+                class A {
+                    val i1: Int? = get() ?: throw IllegalArgumentException("getter")
+                    val i2: Int = get()
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+        }
+    }
 })
