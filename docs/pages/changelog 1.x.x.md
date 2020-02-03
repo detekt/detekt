@@ -6,6 +6,17 @@ permalink: changelog.html
 toc: true
 ---
 
+#### 1.5.1
+
+- Update intro page to deprecate input property - [#2311](https://github.com/arturbosch/detekt/pull/2311)
+- Update codecov run settings to after_n_builds=4 - [#2305](https://github.com/arturbosch/detekt/pull/2305)
+- Update GroovyDSL doc to deprecate input property - [#2304](https://github.com/arturbosch/detekt/pull/2304)
+- Update KotlinDSL doc to deprecate input property - [#2303](https://github.com/arturbosch/detekt/pull/2303)
+- Fix ExplicitCollectionElementAccessMethod crash - [#2302](https://github.com/arturbosch/detekt/pull/2302)
+- ExplicitCollectionElementAccessMethod crashes - [#2301](https://github.com/arturbosch/detekt/issues/2301)
+
+See all issues at: [1.5.1](https://github.com/arturbosch/detekt/milestone/58)
+
 #### 1.5.0
 
 ##### Notable Changes
