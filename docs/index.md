@@ -1,7 +1,7 @@
 ---
 title: "detekt"
 keywords: detekt static analysis code kotlin
-tags: [features, quick_start]
+tags: [features, quickstart]
 sidebar: 
 permalink: index.html
 summary:
@@ -42,7 +42,7 @@ plugins {
 
 detekt {
     toolVersion = "[version]"
-    input = files("src/main/kotlin")
+    source = files("src/main/kotlin")
     config = files("path/to/config.yml")
 }
 ```
