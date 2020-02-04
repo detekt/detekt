@@ -198,6 +198,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Michael Lotkowski](https://github.com/DownMoney) - Rule improvement: False positive UnusedImport for componentN
 - [Nuno Caro](https://github.com/Pak3nuh) - Adds TXT report support on Gradle plugin
 - [Minsuk Eom](https://github.com/boxresin) - Rule fix: PackageNaming
+- [Jonas Alves](https://github.com/jonasfa) - Rule fix: MagicNumber with ignoreNamedArgument and a negative value
 
 ### Mentions
 
