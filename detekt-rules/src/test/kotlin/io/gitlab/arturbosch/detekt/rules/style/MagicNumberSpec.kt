@@ -4,9 +4,9 @@ import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assert
 import io.gitlab.arturbosch.detekt.test.assertThat
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.lint
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -554,6 +554,11 @@ class MagicNumberSpec : Spek({
                 it("should ignore numbers when 'ignoreNamedArgument' is set to true") {
                     val rule = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NAMED_ARGUMENT to "true")))
                     assertThat(rule.lint(code("53"))).isEmpty()
+                }
+
+                it("should ignore numbers when 'ignoreNamedArgument' is set to true and value is negative") {
+                    val rule = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NAMED_ARGUMENT to "true")))
+                    assertThat(rule.lint(code("-53"))).isEmpty()
                 }
 
                 it("should ignore named arguments in inheritance - #992") {
