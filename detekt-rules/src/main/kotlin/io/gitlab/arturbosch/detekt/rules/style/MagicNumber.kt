@@ -169,8 +169,18 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
                 .removeSuffix("f")
     }
 
-    private fun KtConstantExpression.isNamedArgument() =
-        (parent as? KtValueArgument)?.isNamed() == true && isPartOf<KtCallElement>()
+    private fun KtConstantExpression.isNamedArgument(): Boolean {
+        /**
+         * The information we need is in the enclosing [KtValueArgument]. When the number being evaluated is
+         * negative, there will be an [KtPrefixExpression] in between the receiver and the [KtValueArgument].
+         */
+        val valueArgument = when (parent) {
+            is KtPrefixExpression -> parent.parent
+            else -> parent
+        } as? KtValueArgument
+
+        return valueArgument?.isNamed() == true && isPartOf<KtCallElement>()
+    }
 
     private fun KtConstantExpression.isPartOfFunctionReturnConstant() =
         parent is KtNamedFunction || parent is KtReturnExpression && parent.parent.children.size == 1
