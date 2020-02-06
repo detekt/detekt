@@ -67,7 +67,7 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
             is KtSafeQualifiedExpression -> dotExpression.prevSibling
             else -> return false
         }
-        return (caller as KtElement).getResolvedCall(bindingContext)
+        return (caller as? KtElement).getResolvedCall(bindingContext)
             ?.resultingDescriptor
             ?.returnType
             .isEligibleCollection()

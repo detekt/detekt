@@ -219,4 +219,15 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
             assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
         }
     }
+
+    describe("fluent api doesn't crash") {
+
+        it("does not crash for fluent api") {
+            val code = """
+                val string = ""
+                    .toString()
+            """
+            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+        }
+    }
 })
