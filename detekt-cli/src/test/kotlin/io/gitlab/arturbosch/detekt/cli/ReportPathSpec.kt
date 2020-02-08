@@ -10,7 +10,6 @@ import java.nio.file.Paths
 class ReportPathSpec : Spek({
 
     describe("report paths") {
-
         if (IS_WINDOWS) {
             context("a Windows path") {
                 it("parses a valid absolute path correctly") {

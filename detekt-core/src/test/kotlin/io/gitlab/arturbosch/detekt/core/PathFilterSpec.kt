@@ -62,4 +62,25 @@ internal class PathFilterSpec : Spek({
             assertThat(PathFilter(filter, root).matches(path)).isTrue()
         }
     }
+
+    describe("equality") {
+
+        val filter = PathFilter("[a]")
+
+        it("matches the same filter") {
+            assertThat(filter == filter).isTrue()
+        }
+
+        it("matches the same pattern") {
+            assertThat(filter == PathFilter("[a]")).isTrue()
+        }
+
+        it("does not match a different pattern") {
+            assertThat(filter == PathFilter("[b]")).isFalse()
+        }
+
+        it("does not match a different object type") {
+            assertThat(filter.equals("")).isFalse()
+        }
+    }
 })

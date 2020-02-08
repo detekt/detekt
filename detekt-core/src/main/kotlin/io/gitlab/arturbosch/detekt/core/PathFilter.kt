@@ -53,7 +53,7 @@ class PathFilter(pattern: String, private val root: Path = Paths.get("").toAbsol
         if (other !is PathFilter) return false
 
         // We compare the patterns — there is no meaningful way to compare equality for regexes,
-        // but we control the creation of the regexes and we can say that all else is equal, so
+        // but we control the creation of the regexes and we can say that everything else is equal, so
         // that's good enough in this case.
         if (regex.pattern != other.regex.pattern) return false
 
