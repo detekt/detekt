@@ -211,5 +211,16 @@ class MethodOverloadingSpec : Spek({
             val code = "class A"
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
+
+        it("does not report overloaded local functions") {
+            val code = """
+                fun top() {
+                    fun f() {}
+                    fun f(i: Int) {}
+                    fun f(i: Int, j: Int) {}
+                }
+            """
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
     }
 })
