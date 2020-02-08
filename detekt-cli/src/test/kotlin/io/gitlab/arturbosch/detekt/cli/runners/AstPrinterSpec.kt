@@ -1,43 +1,64 @@
 package io.gitlab.arturbosch.detekt.cli.runners
 
-import io.gitlab.arturbosch.detekt.test.compileForTest
+import io.gitlab.arturbosch.detekt.cli.CliArgs
 import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
+import java.io.ByteArrayOutputStream
+import java.io.PrintStream
 import java.nio.file.Paths
 
 class AstPrinterSpec : Spek({
 
-    describe("AST printer") {
+    describe("element printer") {
 
-        it("should print the ast as string") {
-            val case = Paths.get(resource("cases/Poko.kt"))
-            val ktFile = compileForTest(case)
+        val path = Paths.get(resource("cases")).toString()
 
-            val dump = ElementPrinter.dump(ktFile)
+        describe("successful AST printing") {
 
-            assertThat(dump.trimIndent()).isEqualTo(expected)
+            val outStream = System.out
+            val output = ByteArrayOutputStream()
+
+            beforeEachTest {
+                System.setOut(PrintStream(output))
+            }
+
+            afterEachTest {
+                System.setOut(outStream)
+            }
+
+            it("should print the AST as string") {
+                val args = CliArgs()
+                args.input = Paths.get(resource("cases/Poko.kt")).toString()
+                val printer = AstPrinter(args)
+
+                printer.execute()
+
+                assertThat(output.toString()).isNotEmpty()
+            }
+        }
+
+        it("throws an exception when declaring multiple input files") {
+            val multiplePaths = "$path,$path"
+            val args = CliArgs()
+            args.input = multiplePaths
+            val printer = AstPrinter(args)
+
+            assertThatIllegalArgumentException()
+                .isThrownBy { printer.execute() }
+                .withMessage("More than one input path specified. Printing AST is only supported for single files.")
+        }
+
+        it("throws an exception when trying to print the AST of a directory") {
+            val args = CliArgs()
+            args.input = path
+            val printer = AstPrinter(args)
+
+            assertThatIllegalArgumentException()
+                .isThrownBy { printer.execute() }
+                .withMessage("Input path must be a kotlin file and not a directory.")
         }
     }
 })
-
-private val expected = """0: KtFile
-  1: KtPackageDirective
-    1: KtNameReferenceExpression
-    1: KtImportList
-    3: KtClass
-      3: KtClassBody
-        5: KtProperty
-          5: KtTypeReference
-          5: KtUserType
-          5: KtNameReferenceExpression
-          5: KtStringTemplateExpression
-          5: KtLiteralStringTemplateEntry
-        6: KtNamedFunction
-          6: KtParameterList
-          6: KtStringTemplateExpression
-          6: KtLiteralStringTemplateEntry
-          6: KtSimpleNameStringTemplateEntry
-          6: KtNameReferenceExpression
-""".trimIndent()
