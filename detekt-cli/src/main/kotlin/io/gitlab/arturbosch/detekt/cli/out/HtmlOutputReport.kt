@@ -49,7 +49,7 @@ class HtmlOutputReport : OutputReport() {
     private fun renderMetrics(metrics: Collection<ProjectMetric>) = createHTML().div {
         ul {
             metrics.forEach {
-                li { text("${it.type}: %,d".format(Locale.US, it.value)) }
+                li { text("%,d ${it.type}".format(Locale.US, it.value)) }
             }
         }
     }
