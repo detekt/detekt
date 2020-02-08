@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.cli
 import io.gitlab.arturbosch.detekt.core.PathFilter
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
+import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.nio.file.Paths
@@ -96,6 +97,11 @@ class ReportPathSpec : Spek({
         it("fails when the kind is empty") {
             assertThatIllegalArgumentException()
                     .isThrownBy { ReportPath.from(":/tmp/anything") }
+        }
+
+        it("fails when part size is illegal") {
+            assertThatIllegalStateException()
+                .isThrownBy { ReportPath.from("") }
         }
     }
 })
