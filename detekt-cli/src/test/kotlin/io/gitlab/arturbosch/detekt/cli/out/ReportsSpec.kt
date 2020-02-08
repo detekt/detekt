@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.cli.CliArgs
 import io.gitlab.arturbosch.detekt.cli.ReportLocator
 import io.gitlab.arturbosch.detekt.cli.parseArguments
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
+import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Condition
 import org.spekframework.spek2.Spek
@@ -75,6 +76,15 @@ internal class ReportsSpec : Spek({
                 assertThat(extensions).haveExactly(1,
                     Condition(Predicate { it is TestOutputReport && it.ending == "yml" },
                         "Is exactly the test output report."))
+            }
+        }
+
+        context("empty reports") {
+
+            it("yields empty extension list") {
+                val config = yamlConfig("configs/disabled-reports.yml")
+                val extensions = ProcessingSettings(listOf(), config).use { ReportLocator(it).load() }
+                assertThat(extensions).isEmpty()
             }
         }
     }
