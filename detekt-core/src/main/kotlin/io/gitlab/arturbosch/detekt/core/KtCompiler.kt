@@ -48,17 +48,6 @@ open class KtCompiler(
     }
 }
 
-fun KtFile.addUserData(rootPath: String) {
-    val root = Paths.get(rootPath)
-    val content = root.toFile().readText()
-    val lineSeparator = content.determineLineSeparator()
-
-    this.apply {
-        putUserData(LINE_SEPARATOR, lineSeparator)
-        putUserData(ABSOLUTE_PATH, rootPath)
-    }
-}
-
 internal fun String.determineLineSeparator(): String {
     val i = this.lastIndexOf('\n')
     if (i == -1) {
