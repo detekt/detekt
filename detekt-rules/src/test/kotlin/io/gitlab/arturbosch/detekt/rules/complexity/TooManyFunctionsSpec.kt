@@ -1,30 +1,12 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
-import io.gitlab.arturbosch.detekt.api.SourceLocation
-import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import io.gitlab.arturbosch.detekt.test.lint
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class TooManyFunctionsSpec : Spek({
-
-    describe("a simple test") {
-
-        val rule = TooManyFunctions()
-
-        it("should find one file with too many functions") {
-            val findings = rule.lint(Case.TooManyFunctions.path())
-            assertThat(findings).hasSize(1)
-            assertThat(findings).hasSourceLocations(SourceLocation(4, 7))
-        }
-
-        it("should find one file with too many top level functions") {
-            assertThat(rule.lint(Case.TooManyFunctionsTopLevel.path())).hasSize(1)
-        }
-    }
 
     describe("different declarations with one function as threshold") {
 
