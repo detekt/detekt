@@ -128,6 +128,14 @@ Reports empty secondary constructors. Empty blocks of code serve no purpose and 
 
 **Debt**: 5min
 
+### EmptyTryBlock
+
+Reports empty `try` blocks. Empty blocks of code serve no purpose and should be removed.
+
+**Severity**: Minor
+
+**Debt**: 5min
+
 ### EmptyWhenBlock
 
 Reports empty `when` expressions. Empty blocks of code serve no purpose and should be removed.

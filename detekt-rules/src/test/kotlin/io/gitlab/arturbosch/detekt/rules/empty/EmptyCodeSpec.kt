@@ -95,6 +95,10 @@ class EmptyCodeSpec : Spek({
             test { EmptyClassBlock(Config.empty) }
         }
 
+        it("findsEmptyTry") {
+            test { EmptyTryBlock(Config.empty) }
+        }
+
         it("findsEmptyWhen") {
             test { EmptyWhenBlock(Config.empty) }
         }

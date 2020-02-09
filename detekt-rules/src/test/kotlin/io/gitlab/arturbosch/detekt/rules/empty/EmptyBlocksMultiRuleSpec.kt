@@ -45,6 +45,7 @@ class EmptyBlocksMultiRuleSpec : Spek({
                     class EmptyClass {}
                     fun exceptionHandling() {
                         try {
+                            println()
                         } finally {
                         }
                     }

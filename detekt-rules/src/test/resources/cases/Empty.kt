@@ -1,4 +1,4 @@
-@file:Suppress("unused", "ConstantConditionIf")
+@file:Suppress("unused", "ConstantConditionIf", "ConvertSecondaryConstructorToPrimary")
 
 package cases
 
