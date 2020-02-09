@@ -10,7 +10,6 @@ import org.jetbrains.kotlin.com.intellij.testFramework.LightVirtualFile
 import org.jetbrains.kotlin.idea.KotlinLanguage
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
-import java.nio.file.Paths
 
 open class KtCompiler(
     protected val environment: KotlinCoreEnvironment = createKotlinCoreEnvironment()
@@ -45,17 +44,6 @@ open class KtCompiler(
             LightVirtualFile(path.toString())
         )
         return psiFile as? KtFile ?: throw IllegalStateException("kotlin file expected")
-    }
-}
-
-fun KtFile.addUserData(rootPath: String) {
-    val root = Paths.get(rootPath)
-    val content = root.toFile().readText()
-    val lineSeparator = content.determineLineSeparator()
-
-    this.apply {
-        putUserData(LINE_SEPARATOR, lineSeparator)
-        putUserData(ABSOLUTE_PATH, rootPath)
     }
 }
 
