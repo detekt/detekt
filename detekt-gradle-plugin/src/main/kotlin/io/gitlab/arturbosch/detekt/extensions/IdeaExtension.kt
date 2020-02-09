@@ -28,7 +28,7 @@ open class IdeaExtension {
     var mask: String = "*.kt"
 
     fun formatArgs(input: String): Array<String> {
-        require(path != null) { IDEA_PATH_ERROR }
+        requireNotNull(path) { IDEA_PATH_ERROR }
         return if (codeStyleScheme != null) {
             arrayOf(formatScript(path!!), "-r", input, "-s", codeStyleScheme!!, "-m", mask)
         } else {
@@ -37,9 +37,9 @@ open class IdeaExtension {
     }
 
     fun inspectArgs(input: String): Array<String> {
-        require(path != null) { IDEA_PATH_ERROR }
-        require(report != null) { REPORT_PATH_ERROR }
-        require(inspectionsProfile != null) { INSPECTION_PROFILE_ERROR }
+        requireNotNull(path) { IDEA_PATH_ERROR }
+        requireNotNull(report) { REPORT_PATH_ERROR }
+        requireNotNull(inspectionsProfile) { INSPECTION_PROFILE_ERROR }
         return arrayOf(inspectScript(path!!), input, inspectionsProfile!!, report!!)
     }
 
