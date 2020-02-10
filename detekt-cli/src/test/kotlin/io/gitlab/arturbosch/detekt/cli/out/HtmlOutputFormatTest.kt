@@ -86,8 +86,8 @@ class HtmlOutputFormatTest : Spek({
                 )
             }
             val result = outputFormat.render(detektion)
-            assertThat(result).contains("<li>M1: 10,000</li>")
-            assertThat(result).contains("<li>M2: 2</li>")
+            assertThat(result).contains("<li>10,000 M1</li>")
+            assertThat(result).contains("<li>2 M2</li>")
         }
 
         it("testRenderResultContainingComplexityReport") {
