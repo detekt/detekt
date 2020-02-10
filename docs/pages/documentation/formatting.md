@@ -39,6 +39,12 @@ See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
 
 See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
 
+#### Configuration options:
+
+* ``insertFinalNewLine`` (default: ``true``)
+
+   report absence or presence of a newline
+
 ### ImportOrdering
 
 See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
