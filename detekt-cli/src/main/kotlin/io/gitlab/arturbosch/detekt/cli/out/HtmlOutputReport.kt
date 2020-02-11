@@ -14,7 +14,6 @@ import kotlinx.html.HTMLTag
 import kotlinx.html.HtmlTagMarker
 import kotlinx.html.TagConsumer
 import kotlinx.html.attributesMapOf
-import kotlinx.html.br
 import kotlinx.html.details
 import kotlinx.html.div
 import kotlinx.html.h3
@@ -119,7 +118,6 @@ class HtmlOutputReport : OutputReport() {
         }
 
         if (finding.message.isNotEmpty()) {
-            br()
             span("message") { text(finding.message) }
         }
 

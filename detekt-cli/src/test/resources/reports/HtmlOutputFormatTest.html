@@ -25,10 +25,12 @@ h3 {
 .location {
   color: #690505;
   font-family: monospace;
+  display: block;
 }
 .message {
   font-size: 0.8em;
   color: #444444;
+  display: block;
 }
 .rule-container {
   border: 0.1em dashed #dddddd;
@@ -85,7 +87,7 @@ pre {
   <details id="id_a" open="open">
     <summary class="rule-container"><span class="rule">id_a: 2 </span><span class="description">Description id_a</span></summary>
     <ul>
-      <li><span class="location">src/main/com/sample/Sample1.kt:11:1</span><br><span class="message">Message finding 1</span>
+      <li><span class="location">src/main/com/sample/Sample1.kt:11:1</span><span class="message">Message finding 1</span>
         <pre><code><span class="lineno">   8 </span>
 <span class="lineno">   9 </span>
 <span class="lineno">  10 </span>
@@ -94,7 +96,7 @@ pre {
 <span class="lineno">  13 </span>
 </code></pre>
       </li>
-      <li><span class="location">src/main/com/sample/Sample2.kt:22:2</span><br><span class="message">Message finding 2</span></li>
+      <li><span class="location">src/main/com/sample/Sample2.kt:22:2</span><span class="message">Message finding 2</span></li>
     </ul>
   </details>
   <h3>Section 2: 1</h3>
