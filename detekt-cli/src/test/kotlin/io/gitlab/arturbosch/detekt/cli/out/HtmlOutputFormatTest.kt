@@ -115,7 +115,7 @@ class HtmlOutputFormatTest : Spek({
             Files.write(tmpReport, result.toByteArray())
 
             try {
-                assertThat(tmpReport).hasSameContentAs(Paths.get(resource("/reports/HtmlOutputFormatTest.html")))
+                assertThat(tmpReport).hasSameTextualContentAs(Paths.get(resource("/reports/HtmlOutputFormatTest.html")))
             } finally {
                 Files.delete(tmpReport)
             }
@@ -137,7 +137,7 @@ class HtmlOutputFormatTest : Spek({
             Files.write(tmpReport2, result2.toByteArray())
 
             try {
-                assertThat(tmpReport1).hasSameContentAs(tmpReport2)
+                assertThat(tmpReport1).hasSameTextualContentAs(tmpReport2)
             } finally {
                 Files.delete(tmpReport1)
                 Files.delete(tmpReport2)
