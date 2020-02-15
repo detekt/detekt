@@ -6,7 +6,7 @@ import org.jetbrains.kotlin.psi.KtTryExpression
 /**
  * Reports empty `try` blocks. Empty blocks of code serve no purpose and should be removed.
  *
- * @active since v1.5.1
+ * @active since v1.6.0
  */
 class EmptyTryBlock(config: Config) : EmptyRule(config) {
 
