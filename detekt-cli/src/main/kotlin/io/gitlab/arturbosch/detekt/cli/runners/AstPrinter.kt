@@ -14,14 +14,19 @@ import org.jetbrains.kotlin.psi.KtStatementExpression
 class AstPrinter(private val arguments: CliArgs) : Executable {
 
     override fun execute() {
-        require(arguments.inputPaths.size == 1) {
-            "More than one input path specified. Printing AST is only supported for single files."
-        }
-        require(arguments.inputPaths.first().isFile()) {
-            "Input path must be a kotlin file and not a directory."
+        val inputPaths = arguments.inputPaths
+        val inputPathsSize = inputPaths.size
+
+        require(inputPathsSize == 1) {
+            "$inputPathsSize input paths specified. Printing AST is only supported for single files."
         }
 
-        val input = arguments.inputPaths.first()
+        val input = inputPaths.first()
+
+        require(input.isFile()) {
+            "Input path ($input) must be a kotlin file and not a directory."
+        }
+
         val ktFile = KtCompiler().compile(input, input)
         println(ElementPrinter.dump(ktFile))
     }
@@ -45,7 +50,8 @@ class ElementPrinter : DetektVisitor() {
     private val KtElement.line
         get() = PsiDiagnosticUtils.offsetToLineAndColumn(
             containingFile.viewProvider.document,
-            textRange.startOffset).line
+            textRange.startOffset
+        ).line
 
     private val KtElement.dump
         get() = indentation + line + ": " + javaClass.simpleName
@@ -76,6 +82,6 @@ class ElementPrinter : DetektVisitor() {
 
     private fun KtElement.isContainer() =
         this is KtStatementExpression ||
-            this is KtDeclarationContainer ||
-            this is KtContainerNode
+                this is KtDeclarationContainer ||
+                this is KtContainerNode
 }

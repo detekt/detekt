@@ -41,7 +41,7 @@ open class DetektGenerateConfigTask : DefaultTask() {
                 DetektInvoker.create(project).invokeCli(arguments.toList(), detektClasspath, name)
             }
         } catch (e: IllegalStateException) {
-            project.logger.error("Unexpected error. Please raise an issue on detekt's issue tracker.")
+            project.logger.error("Unexpected error. Please raise an issue on detekt's issue tracker.", e)
         }
     }
 }

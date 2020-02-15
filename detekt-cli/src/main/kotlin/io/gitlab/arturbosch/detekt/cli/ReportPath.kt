@@ -19,7 +19,7 @@ data class ReportPath(val kind: String, val path: Path) {
             val parts = input.split(REPORT_PATH_SEPARATOR)
             val partsSize = parts.size
 
-            require(partsSize == NUM_OF_PARTS_UNIX || partsSize == NUM_OF_PARTS_WINDOWS) { ILLEGAL_PARTS_SIZE_ERROR }
+            require(partsSize == NUM_OF_PARTS_UNIX || partsSize == NUM_OF_PARTS_WINDOWS) { "$ILLEGAL_PARTS_SIZE_ERROR Actual parts count: $partsSize" }
 
             val kind = parts[0]
             val path = when (partsSize) {

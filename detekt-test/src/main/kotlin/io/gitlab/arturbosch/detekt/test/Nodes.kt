@@ -8,7 +8,12 @@ import org.jetbrains.kotlin.utils.addToStdlib.safeAs
 
 inline fun <reified T : KtElement> KtElement.getNodeByName(name: String): T {
     val node = getChildOfType<T>() ?: error("Expected node of type ${T::class}")
-    require(node.safeAs<KtNamed>()?.nameAsName?.identifier == name)
+    val identifier = node.safeAs<KtNamed>()?.nameAsName?.identifier
+
+    require(identifier == name) {
+        "Node should be $name, but was $identifier"
+    }
+
     return node
 }
 
