@@ -23,7 +23,7 @@ class NestedClassesVisibilitySpec : Spek({
 
         it("reports explicit public visibility in nested classes inside an enum") {
             val code = """
-                internal enum class Enum {
+                internal enum class Outer {
                     A;
                     public class C
                 }
@@ -36,7 +36,7 @@ class NestedClassesVisibilitySpec : Spek({
                 internal class Outer {
                      class A
                      internal class B
-                     enum class Enum { One }
+                     enum class E { One }
                      internal interface I
                 }
             """
@@ -55,7 +55,7 @@ class NestedClassesVisibilitySpec : Spek({
         it("does not report nested public enums") {
             val code = """
                 internal class Outer {
-                    public enum class Enum { One }
+                    public enum class E { E1; }
                 }
             """
             assertThat(subject.compileAndLint(code)).isEmpty()
