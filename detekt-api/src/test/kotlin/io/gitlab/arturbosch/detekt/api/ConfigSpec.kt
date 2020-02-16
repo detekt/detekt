@@ -1,8 +1,11 @@
 package io.gitlab.arturbosch.detekt.api
 
+import ch.tutteli.atrium.api.fluent.en_GB.*
+import ch.tutteli.atrium.api.verbs.expect
+import io.gitlab.arturbosch.detekt.test.hasKeyValue
+import io.gitlab.arturbosch.detekt.test.hasNotKey
+import io.gitlab.arturbosch.detekt.test.valueOrDefault
 import io.gitlab.arturbosch.detekt.test.yamlConfig
-import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.assertj.core.api.Assertions.fail
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -16,11 +19,15 @@ class ConfigSpec : Spek({
         it("should create a sub config") {
             try {
                 val subConfig = config.subConfig("style")
-                assertThat(subConfig.valueOrDefault("WildcardImport", mapOf<String, Any>())).isNotEmpty
-                assertThat(subConfig.valueOrDefault("WildcardImport", mapOf<String, Any>())["active"].toString()).isEqualTo("true")
-                assertThat(subConfig.valueOrDefault("WildcardImport", mapOf<String, Any>())["active"] as Boolean).isTrue()
-                assertThat(subConfig.valueOrDefault("NotFound", mapOf<String, Any>())).isEmpty()
-                assertThat(subConfig.valueOrDefault("NotFound", "")).isEmpty()
+                expect(subConfig) {
+                    valueOrDefault("WildcardImport", mapOf<String, Any>()) {
+                        isNotEmpty()
+                        getExisting("active").toBe(true)
+
+                    }
+                    valueOrDefault("NotFound", mapOf<String, Any>()).isEmpty()
+                    valueOrDefault("NotFound", "").isEmpty()
+                }
             } catch (ignored: Config.InvalidConfigurationError) {
                 fail("Creating a sub config should work for test resources config!")
             }
@@ -30,28 +37,36 @@ class ConfigSpec : Spek({
             try {
                 val subConfig = config.subConfig("style")
                 val subSubConfig = subConfig.subConfig("WildcardImport")
-                assertThat(subSubConfig.valueOrDefault("active", false)).isTrue()
-                assertThat(subSubConfig.valueOrDefault("NotFound", true)).isTrue()
+                expect(subSubConfig) {
+                    //active should always have a value
+                    valueOrDefault("active", false).toBe(true)
+                    hasNotKey("NotFound")
+                    valueOrDefault("NotFound", true).toBe(true)
+                }
             } catch (ignored: Config.InvalidConfigurationError) {
                 fail("Creating a sub config should work for test resources config!")
             }
         }
 
         it("tests wrong sub config conversion") {
-            assertThatIllegalStateException().isThrownBy {
+            expect {
                 @Suppress("UNUSED_VARIABLE")
                 val ignored = config.valueOrDefault("style", "")
-            }.withMessage("Value \"{WildcardImport={active=true}, NoElseInWhenExpression={active=true}, MagicNumber={active=true, ignoreNumbers=-1,0,1,2}}\" set for config parameter \"style\" is not of required type String.")
+            }.toThrow<IllegalStateException> {
+                message.toBe("Value \"{WildcardImport={active=true}, NoElseInWhenExpression={active=true}, MagicNumber={active=true, ignoreNumbers=-1,0,1,2}}\" set for config parameter \"style\" is not of required type String.")
+            }
         }
     }
 
     describe("loading empty configurations") {
 
         it("empty yaml file is equivalent to empty config") {
-            YamlConfig.loadResource(javaClass.getResource("/empty.yml"))
+            val config = YamlConfig.loadResource(javaClass.getResource("/empty.yml"))
+            // also an empty config should return true for active
+            expect(config).hasKeyValue("active", true)
         }
 
-        it("single item in yaml file is valid") {
+        it("single item without value in yaml file is valid") {
             YamlConfig.loadResource(javaClass.getResource("/oneitem.yml"))
         }
     }
@@ -61,20 +76,24 @@ class ConfigSpec : Spek({
         val config by memoized { yamlConfig("wrong-property-type.yml") }
 
         it("prints whole config-key path for NumberFormatException") {
-            assertThatIllegalStateException().isThrownBy {
+            expect {
                 config.subConfig("RuleSet")
                     .subConfig("Rule")
                     .valueOrDefault("threshold", 6)
-            }.withMessage("Value \"v5.7\" set for config parameter \"RuleSet > Rule > threshold\" is not of required type Int.")
+            }.toThrow<IllegalStateException> {
+                message.toBe("Value \"v5.7\" set for config parameter \"RuleSet > Rule > threshold\" is not of required type Int.")
+            }
         }
 
         it("prints whole config-key path for ClassCastException") {
-            assertThatIllegalStateException().isThrownBy {
+            expect {
                 @Suppress("UNUSED_VARIABLE")
                 val bool: Int = config.subConfig("RuleSet")
                     .subConfig("Rule")
                     .valueOrDefault("active", 1)
-            }.withMessage("Value \"[]\" set for config parameter \"RuleSet > Rule > active\" is not of required type Int.")
+            }.toThrow<IllegalStateException> {
+                message.toBe("Value \"[]\" set for config parameter \"RuleSet > Rule > active\" is not of required type Int.")
+            }
         }
     }
 })

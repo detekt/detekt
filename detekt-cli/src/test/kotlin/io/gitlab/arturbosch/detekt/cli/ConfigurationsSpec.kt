@@ -1,25 +1,30 @@
 package io.gitlab.arturbosch.detekt.cli
 
+import ch.tutteli.atrium.api.fluent.en_GB.toThrow
+import ch.tutteli.atrium.api.verbs.expect
 import com.beust.jcommander.ParameterException
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
+import io.gitlab.arturbosch.detekt.test.hasKeyValue
+import io.gitlab.arturbosch.detekt.test.hasNotKey
+import io.gitlab.arturbosch.detekt.test.isIgnored
+import io.gitlab.arturbosch.detekt.test.isNotIgnored
 import io.gitlab.arturbosch.detekt.test.resource
-import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatExceptionOfType
-import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
-import java.nio.file.Paths
 
 internal class ConfigurationsSpec : Spek({
+
 
     describe("a configuration") {
 
         it("should be an empty config") {
             val config = CliArgs().loadConfiguration()
-            assertThat(config.valueOrDefault("one", -1)).isEqualTo(-1)
-            assertThat(config.valueOrDefault("two", -1)).isEqualTo(-1)
-            assertThat(config.valueOrDefault("three", -1)).isEqualTo(-1)
+            expect(config) {
+                hasNotKey("one")
+                hasNotKey("two")
+                hasNotKey("three")
+            }
         }
     }
 
@@ -30,26 +35,32 @@ internal class ConfigurationsSpec : Spek({
 
         it("should load single config") {
             val config = CliArgs { config = pathOne }.loadConfiguration()
-            assertThat(config.valueOrDefault("one", -1)).isEqualTo(1)
+            expect(config) {
+                hasKeyValue("one", 1)
+            }
         }
 
         it("should load two configs") {
             val config = CliArgs { config = "$pathOne, $pathTwo" }.loadConfiguration()
-            assertThat(config.valueOrDefault("one", -1)).isEqualTo(1)
-            assertThat(config.valueOrDefault("two", -1)).isEqualTo(2)
+            expect(config) {
+                hasKeyValue("one", 1)
+                hasKeyValue("two", 2)
+            }
         }
 
         it("should load three configs") {
             val config = CliArgs { config = "$pathOne, $pathTwo;$pathThree" }.loadConfiguration()
-            assertThat(config.valueOrDefault("one", -1)).isEqualTo(1)
-            assertThat(config.valueOrDefault("two", -1)).isEqualTo(2)
-            assertThat(config.valueOrDefault("three", -1)).isEqualTo(3)
+            expect(config) {
+                hasKeyValue("one", 1)
+                hasKeyValue("two", 2)
+                hasKeyValue("three", 3)
+            }
         }
 
         it("should fail on invalid config value") {
-            assertThatIllegalArgumentException().isThrownBy { CliArgs { config = "," }.loadConfiguration() }
-            assertThatExceptionOfType(ParameterException::class.java).isThrownBy { CliArgs { config = "sfsjfsdkfsd" }.loadConfiguration() }
-            assertThatExceptionOfType(ParameterException::class.java).isThrownBy { CliArgs { config = "./i.do.not.exist.yml" }.loadConfiguration() }
+            expect { CliArgs { config = "," }.loadConfiguration() }.toThrow<IllegalArgumentException>()
+            expect { CliArgs { config = "sfsjfsdkfsd" }.loadConfiguration() }.toThrow<ParameterException>()
+            expect { CliArgs { config = "./i.do.not.exist.yml" }.loadConfiguration() }.toThrow<ParameterException>()
         }
     }
 
@@ -57,28 +68,32 @@ internal class ConfigurationsSpec : Spek({
 
         it("should load single config") {
             val config = CliArgs { configResource = "/configs/one.yml" }.loadConfiguration()
-            assertThat(config.valueOrDefault("one", -1)).isEqualTo(1)
+            expect(config).hasKeyValue("one", 1)
         }
 
         it("should load two configs") {
             val config = CliArgs { configResource = "/configs/one.yml, /configs/two.yml" }.loadConfiguration()
-            assertThat(config.valueOrDefault("one", -1)).isEqualTo(1)
-            assertThat(config.valueOrDefault("two", -1)).isEqualTo(2)
+            expect(config) {
+                hasKeyValue("one", 1)
+                hasKeyValue("two", 2)
+            }
         }
 
         it("should load three configs") {
             val config = CliArgs {
                 configResource = "/configs/one.yml, /configs/two.yml;configs/three.yml"
             }.loadConfiguration()
-            assertThat(config.valueOrDefault("one", -1)).isEqualTo(1)
-            assertThat(config.valueOrDefault("two", -1)).isEqualTo(2)
-            assertThat(config.valueOrDefault("three", -1)).isEqualTo(3)
+            expect(config) {
+                hasKeyValue("one", 1)
+                hasKeyValue("two", 2)
+                hasKeyValue("three", 3)
+            }
         }
 
         it("should fail on invalid config value") {
-            assertThatExceptionOfType(Config.InvalidConfigurationError::class.java).isThrownBy { CliArgs { configResource = "," }.loadConfiguration() }
-            assertThatExceptionOfType(ParameterException::class.java).isThrownBy { CliArgs { configResource = "sfsjfsdkfsd" }.loadConfiguration() }
-            assertThatExceptionOfType(ParameterException::class.java).isThrownBy { CliArgs { configResource = "./i.do.not.exist.yml" }.loadConfiguration() }
+            expect { CliArgs { configResource = "," }.loadConfiguration() }.toThrow<Config.InvalidConfigurationError>()
+            expect { CliArgs { configResource = "sfsjfsdkfsd" }.loadConfiguration() }.toThrow<ParameterException>()
+            expect { CliArgs { configResource = "./i.do.not.exist.yml" }.loadConfiguration() }.toThrow<ParameterException>()
         }
     }
 
@@ -86,19 +101,19 @@ internal class ConfigurationsSpec : Spek({
 
         it("should load single filter") {
             val filters = CliArgs { excludes = "**/one/**" }.createFilters()
-            assertThat(filters?.isIgnored(Paths.get("/one/path"))).isTrue()
-            assertThat(filters?.isIgnored(Paths.get("/two/path"))).isFalse()
+            expect(filters).isIgnored("/one/path")
+            expect(filters).isNotIgnored("/two/path")
         }
 
         describe("parsing with different separators") {
 
             // can parse pattern **/one/**,**/two/**,**/three
             fun assertFilters(filters: PathFilters?) {
-                assertThat(filters?.isIgnored(Paths.get("/one/path"))).isTrue()
-                assertThat(filters?.isIgnored(Paths.get("/two/path"))).isTrue()
-                assertThat(filters?.isIgnored(Paths.get("/three"))).isTrue()
-                assertThat(filters?.isIgnored(Paths.get("/root/three"))).isTrue()
-                assertThat(filters?.isIgnored(Paths.get("/three/path"))).isFalse()
+                expect(filters).isIgnored("/one/path")
+                expect(filters).isIgnored("/two/path")
+                expect(filters).isIgnored("/three")
+                expect(filters).isIgnored("/root/three")
+                expect(filters).isNotIgnored("/three/path")
             }
 
             it("should load multiple comma-separated filters with no spaces around commas") {
@@ -134,11 +149,11 @@ internal class ConfigurationsSpec : Spek({
 
         it("should ignore empty and blank filters") {
             val filters = CliArgs { excludes = " ,,**/three" }.createFilters()
-            assertThat(filters?.isIgnored(Paths.get("/three"))).isTrue()
-            assertThat(filters?.isIgnored(Paths.get("/root/three"))).isTrue()
-            assertThat(filters?.isIgnored(Paths.get("/one/path"))).isFalse()
-            assertThat(filters?.isIgnored(Paths.get("/two/path"))).isFalse()
-            assertThat(filters?.isIgnored(Paths.get("/three/path"))).isFalse()
+            expect(filters).isIgnored("/three")
+            expect(filters).isIgnored("/root/three")
+            expect(filters).isNotIgnored("/one/path")
+            expect(filters).isNotIgnored("/two/path")
+            expect(filters).isNotIgnored("/three/path")
         }
     }
 
@@ -149,15 +164,15 @@ internal class ConfigurationsSpec : Spek({
         }.loadConfiguration()
 
         it("should override active to true by default") {
-            assertThat(config.subConfig("comments").subConfig("UndocumentedPublicClass").valueOrDefault("active", false)).isEqualTo(true)
+            expect(config.subConfig("comments").subConfig("UndocumentedPublicClass")).hasKeyValue("active", true)
         }
 
         it("should override maxIssues to 0 by default") {
-            assertThat(config.subConfig("build").valueOrDefault("maxIssues", -1)).isEqualTo(0)
+            expect(config.subConfig("build")).hasKeyValue("maxIssues", 0)
         }
 
         it("should keep config from default") {
-            assertThat(config.subConfig("style").subConfig("MaxLineLength").valueOrDefault("maxLineLength", -1)).isEqualTo(120)
+            expect(config.subConfig("style").subConfig("MaxLineLength")).hasKeyValue("maxLineLength", 120)
         }
     }
 
@@ -168,15 +183,15 @@ internal class ConfigurationsSpec : Spek({
         }.loadConfiguration()
 
         it("should override config when specified") {
-            assertThat(config.subConfig("style").subConfig("MaxLineLength").valueOrDefault("maxLineLength", -1)).isEqualTo(100)
+            expect(config.subConfig("style").subConfig("MaxLineLength")).hasKeyValue("maxLineLength", 100)
         }
 
         it("should override active when specified") {
-            assertThat(config.subConfig("comments").subConfig("CommentOverPrivateMethod").valueOrDefault("active", true)).isEqualTo(false)
+            expect(config.subConfig("comments").subConfig("CommentOverPrivateMethod")).hasKeyValue("active", false)
         }
 
         it("should override maxIssues when specified") {
-            assertThat(config.subConfig("build").valueOrDefault("maxIssues", -1)).isEqualTo(1)
+            expect(config.subConfig("build")).hasKeyValue("maxIssues", 1)
         }
     }
 
@@ -189,16 +204,16 @@ internal class ConfigurationsSpec : Spek({
         }.loadConfiguration()
 
         it("should override config when specified") {
-            assertThat(config.subConfig("style").subConfig("MaxLineLength").valueOrDefault("maxLineLength", -1)).isEqualTo(100)
-            assertThat(config.subConfig("style").subConfig("MaxLineLength").valueOrDefault("excludeCommentStatements", false)).isTrue()
+            expect(config.subConfig("style").subConfig("MaxLineLength")).hasKeyValue("maxLineLength", 100)
+            expect(config.subConfig("style").subConfig("MaxLineLength")).hasKeyValue("excludeCommentStatements", true)
         }
 
         it("should be active=false by default") {
-            assertThat(config.subConfig("comments").subConfig("CommentOverPrivateFunction").valueOrDefault("active", true)).isFalse()
+            expect(config.subConfig("comments").subConfig("CommentOverPrivateFunction")).hasKeyValue("active", false)
         }
 
         it("should be maxIssues=0 by default") {
-            assertThat(config.subConfig("build").valueOrDefault("maxIssues", -1)).isEqualTo(0)
+            expect(config.subConfig("build")).hasKeyValue("maxIssues", 0)
         }
     }
 })

@@ -1,12 +1,11 @@
 package io.gitlab.arturbosch.detekt.cli
 
+import ch.tutteli.atrium.api.fluent.en_GB.*
+import ch.tutteli.atrium.api.verbs.expect
 import com.beust.jcommander.ParameterException
 import io.gitlab.arturbosch.detekt.test.resource
-import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
-import java.nio.file.Path
 import java.nio.file.Paths
 
 internal class CliArgsSpec : Spek({
@@ -17,14 +16,12 @@ internal class CliArgsSpec : Spek({
 
         it("the current working directory is used if parameter is not set") {
             val cli = parseArguments<CliArgs>(emptyArray())
-            assertThat(cli.inputPaths).hasSize(1)
-            assertThat(cli.inputPaths.first()).isEqualTo(Paths.get(System.getProperty("user.dir")))
+            expect(cli.inputPaths).containsExactly(Paths.get(System.getProperty("user.dir")))
         }
 
         it("a single value is converted to a path") {
             val cli = parseArguments<CliArgs>(arrayOf("--input", "$projectPath"))
-            assertThat(cli.inputPaths).hasSize(1)
-            assertThat(cli.inputPaths.first().toAbsolutePath()).isEqualTo(projectPath)
+            expect(cli.inputPaths).containsExactly(projectPath)
         }
 
         it("multiple input paths can be separated by comma") {
@@ -33,22 +30,24 @@ internal class CliArgsSpec : Spek({
             val cli = parseArguments<CliArgs>(arrayOf(
                 "--input", "$mainPath,$testPath")
             )
-            assertThat(cli.inputPaths).hasSize(2)
-            assertThat(cli.inputPaths.map(Path::toAbsolutePath)).containsExactlyInAnyOrder(mainPath, testPath)
+            expect(cli.inputPaths).contains.inAnyOrder.only.values(mainPath, testPath)
         }
 
         it("reports an error if the input path does not exist") {
             val pathToNonExistentDirectory = projectPath.resolve("nonExistent")
             val params = arrayOf("--input", "$pathToNonExistentDirectory")
 
-            assertThatExceptionOfType(ParameterException::class.java)
-                .isThrownBy { parseArguments<CliArgs>(params).inputPaths }
-                .withMessageContaining("does not exist")
+            expect {
+                parseArguments<CliArgs>(params).inputPaths
+            }.toThrow<ParameterException> {
+                messageContains("does not exist")
+            }
         }
 
         it("reports an error when using --create-baseline without a --baseline file") {
-            assertThatExceptionOfType(HandledArgumentViolation::class.java)
-                .isThrownBy { buildRunner(arrayOf("--create-baseline")) }
+            expect{
+                buildRunner(arrayOf("--create-baseline"))
+            }.toThrow<HandledArgumentViolation>()
         }
     }
 })

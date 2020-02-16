@@ -53,7 +53,6 @@ tasks.withType<Detekt> {
 }
 
 val detektVersion: String by project
-val assertjVersion: String by project
 val spekVersion: String by project
 val reflectionsVersion: String by project
 val mockkVersion: String by project
@@ -302,7 +301,6 @@ subprojects {
         detekt(project(":detekt-cli"))
         detektPlugins(project(":detekt-formatting"))
 
-        testImplementation("org.assertj:assertj-core:$assertjVersion")
         testImplementation("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
         testImplementation("org.reflections:reflections:$reflectionsVersion")
         testImplementation("io.mockk:mockk:$mockkVersion")
