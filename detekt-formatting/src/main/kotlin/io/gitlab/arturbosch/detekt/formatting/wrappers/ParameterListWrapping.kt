@@ -26,6 +26,8 @@ class ParameterListWrapping(config: Config) : FormattingRule(config) {
         EditorConfig.merge(it,
                 indentSize = indentSize)
     }
-}
 
-private const val INDENT_SIZE = "indentSize"
+    companion object {
+        const val INDENT_SIZE = "indentSize"
+    }
+}
