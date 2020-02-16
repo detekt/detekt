@@ -51,8 +51,6 @@ enum class Case(val file: String) {
     SuppressStringLiteralDuplication("/SuppressStringLiteralDuplication.kt"),
     UnconditionalJumpStatementInLoopNegative("/cases/UnconditionalJumpStatementInLoopNegative.kt"),
     UnconditionalJumpStatementInLoopPositive("/cases/UnconditionalJumpStatementInLoopPositive.kt"),
-    NestedClassVisibilityPositive("/cases/NestedClassVisibilityPositive.kt"),
-    NestedClassVisibilityNegative("/cases/NestedClassVisibilityNegative.kt"),
     NoTabsNegative("/cases/NoTabsNegative.kt"),
     NoTabsPositive("/cases/NoTabsPositive.kt"),
     UnusedPrivateMemberPositive("/cases/UnusedPrivateMemberPositive.kt"),
