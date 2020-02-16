@@ -25,8 +25,7 @@ open class KtCompiler(
         val absolutePath = subPath.toAbsolutePath().normalize()
         val content = subPath.toFile().readText()
         val lineSeparator = content.determineLineSeparator()
-        val normalizedContent = StringUtilRt.convertLineSeparators(content)
-        val ktFile = createKtFile(normalizedContent, absolutePath)
+        val ktFile = createKtFile(content, absolutePath)
 
         return ktFile.apply {
             putUserData(LINE_SEPARATOR, lineSeparator)
