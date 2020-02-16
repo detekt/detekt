@@ -9,7 +9,7 @@ import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import java.nio.file.Path
 
-private val shouldCompileTestSnippets: Boolean =
+val shouldCompileTestSnippets: Boolean =
     System.getProperty("compile-snippet-tests", "false")!!.toBoolean()
 
 fun BaseRule.compileAndLint(@Language("kotlin") content: String): List<Finding> {
