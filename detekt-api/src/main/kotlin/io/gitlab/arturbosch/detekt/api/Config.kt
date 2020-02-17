@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.api
 
 import io.gitlab.arturbosch.detekt.api.Config.Companion.PRIMITIVES
-import java.util.LinkedList
+import java.util.ArrayDeque
 import kotlin.reflect.KClass
 
 /**
@@ -119,7 +119,7 @@ abstract class BaseConfig : HierarchicalConfig {
     }
 
     private fun keySequence(key: String): String {
-        val seq = LinkedList<String>()
+        val seq = ArrayDeque<String>()
         var current = parent
         while (current != null) {
             seq.addFirst(current.key)
