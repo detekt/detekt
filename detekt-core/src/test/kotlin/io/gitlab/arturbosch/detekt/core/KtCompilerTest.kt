@@ -18,4 +18,18 @@ class KtCompilerTest : Spek({
                     .isEqualTo(path.fileName.resolve("Default.kt").toString())
         }
     }
+
+    describe("line ending detection") {
+        it("detects CRLF line endings") {
+            assertThat("1\r\n2".determineLineSeparator()).isEqualTo("\r\n")
+        }
+
+        it("detects LF line endings") {
+            assertThat("1\n2".determineLineSeparator()).isEqualTo("\n")
+        }
+
+        it("detects CR line endings") {
+            assertThat("1\r2".determineLineSeparator()).isEqualTo("\r")
+        }
+    }
 })
