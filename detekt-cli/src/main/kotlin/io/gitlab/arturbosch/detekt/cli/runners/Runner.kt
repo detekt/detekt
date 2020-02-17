@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Notification
 import io.gitlab.arturbosch.detekt.api.internal.CommaSeparatedPattern
 import io.gitlab.arturbosch.detekt.api.internal.DEFAULT_PROPERTY_EXCLUDES
+import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.api.internal.validateConfig
 import io.gitlab.arturbosch.detekt.cli.BuildFailure
 import io.gitlab.arturbosch.detekt.cli.CliArgs
@@ -22,6 +23,7 @@ import io.gitlab.arturbosch.detekt.cli.loadDefaultConfig
 import io.gitlab.arturbosch.detekt.cli.maxIssues
 import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
+import io.gitlab.arturbosch.detekt.core.RuleSetLocator
 import java.io.PrintStream
 
 class Runner(
@@ -70,7 +72,12 @@ class Runner(
         val shouldValidate = props.valueOrDefault("validation", true)
 
         fun patterns(): Set<Regex> {
-            val excludes = props.valueOrDefault("excludes", "") + ",$DEFAULT_PROPERTY_EXCLUDES"
+            val pluginExcludes = RuleSetLocator(settings).load()
+                .filter { it !is DefaultRuleSetProvider }
+                .joinToString(",") { "${it.ruleSetId}>.*" }
+            val excludes = props.valueOrDefault("excludes", "") +
+                ",$DEFAULT_PROPERTY_EXCLUDES," +
+                pluginExcludes
             return CommaSeparatedPattern(excludes).mapToRegex()
         }
 
