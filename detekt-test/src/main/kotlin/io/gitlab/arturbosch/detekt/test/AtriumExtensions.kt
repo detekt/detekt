@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.test
 
 import ch.tutteli.atrium.api.fluent.en_GB.feature
+import ch.tutteli.atrium.api.fluent.en_GB.notToBe
 import ch.tutteli.atrium.api.fluent.en_GB.toBe
 import ch.tutteli.atrium.creating.Expect
 import ch.tutteli.atrium.domain.builders.ExpectImpl
@@ -12,6 +13,10 @@ import java.nio.file.Paths
 
 fun <T : Config> Expect<T>.hasNotKey(key: String): Expect<T> =
     _valueOrNull<T, Any>(this, key) { toBe(null) }
+
+fun <T : Config> Expect<T>.hasKey(key: String): Expect<T> =
+    _valueOrNull<T, Any>(this, key) { notToBe(null) }
+
 
 fun <T : Config, V : Any> Expect<T>.hasKeyValue(key: String, value: V): Expect<T> =
     _valueOrNull<T, V>(this, key) { toBe(value) }

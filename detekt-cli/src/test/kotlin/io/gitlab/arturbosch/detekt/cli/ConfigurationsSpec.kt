@@ -5,11 +5,8 @@ import ch.tutteli.atrium.api.verbs.expect
 import com.beust.jcommander.ParameterException
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
-import io.gitlab.arturbosch.detekt.test.hasKeyValue
-import io.gitlab.arturbosch.detekt.test.hasNotKey
-import io.gitlab.arturbosch.detekt.test.isIgnored
-import io.gitlab.arturbosch.detekt.test.isNotIgnored
-import io.gitlab.arturbosch.detekt.test.resource
+import io.gitlab.arturbosch.detekt.test.*
+import org.assertj.core.api.Assertions
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -26,6 +23,23 @@ internal class ConfigurationsSpec : Spek({
                 hasNotKey("three")
             }
         }
+
+        it("fail on purpose with AssertJ - should be an empty config") {
+            val config = CliArgs().loadConfiguration()
+            Assertions.assertThat(config.valueOrDefault("one", -1)).isEqualTo(1)
+            Assertions.assertThat(config.valueOrDefault("two", -1)).isEqualTo(1)
+            Assertions.assertThat(config.valueOrDefault("three", -1)).isEqualTo(1)
+        }
+
+        it("fail on purpose with Atrium - should be an empty config") {
+            val config = CliArgs().loadConfiguration()
+            expect(config) {
+                hasKey("one")
+                hasKey("two")
+                hasKey("three")
+            }
+        }
+
     }
 
     describe("parse different path based configuration settings") {
@@ -61,6 +75,32 @@ internal class ConfigurationsSpec : Spek({
             expect { CliArgs { config = "," }.loadConfiguration() }.toThrow<IllegalArgumentException>()
             expect { CliArgs { config = "sfsjfsdkfsd" }.loadConfiguration() }.toThrow<ParameterException>()
             expect { CliArgs { config = "./i.do.not.exist.yml" }.loadConfiguration() }.toThrow<ParameterException>()
+        }
+
+
+
+        it("fail on purpose with AssertJ - should load three configs") {
+            val config = CliArgs { config = "$pathOne, $pathTwo;$pathThree" }.loadConfiguration()
+            Assertions.assertThat(config.valueOrDefault("one", -1)).isEqualTo(1)
+            Assertions.assertThat(config.valueOrDefault("two", -1)).isEqualTo(200)
+            Assertions.assertThat(config.valueOrDefault("three", -1)).isEqualTo(3)
+        }
+
+        it("fail on purpose with Atrium -should load three configs") {
+            val config = CliArgs { config = "$pathOne, $pathTwo;$pathThree" }.loadConfiguration()
+            expect(config) {
+                hasKeyValue("one", 1)
+                hasKeyValue("two", 200)
+                hasKeyValue("three", 3)
+            }
+        }
+
+        it("fail on purpose with AssertJ - should fail on invalid config value") {
+            Assertions.assertThatExceptionOfType(ParameterException::class.java).isThrownBy { CliArgs { config = "," }.loadConfiguration() }
+        }
+
+        it("fail on purpose with Atrium - should fail on invalid config value") {
+            expect { CliArgs { config = "," }.loadConfiguration() }.toThrow<ParameterException>()
         }
     }
 
