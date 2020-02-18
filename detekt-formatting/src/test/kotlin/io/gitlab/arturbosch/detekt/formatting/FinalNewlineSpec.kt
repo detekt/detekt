@@ -8,7 +8,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-class FinalNewlineRegressionSpec : Spek({
+class FinalNewlineSpec : Spek({
 
     describe("FinalNewline rule") {
 

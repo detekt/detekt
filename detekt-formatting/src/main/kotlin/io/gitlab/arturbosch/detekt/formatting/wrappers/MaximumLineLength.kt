@@ -34,6 +34,6 @@ class MaximumLineLength(config: Config) : FormattingRule(config) {
     }
 
     companion object {
-        private const val MAX_LINE_LENGTH = "maxLineLength"
+        const val MAX_LINE_LENGTH = "maxLineLength"
     }
 }
