@@ -1,9 +1,14 @@
 package io.gitlab.arturbosch.detekt.test
 
+import ch.tutteli.atrium.api.fluent.en_GB.feature
+import ch.tutteli.atrium.creating.Expect
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import org.assertj.core.api.AbstractAssert
 
 fun assertThat(thresholdedCodeSmell: ThresholdedCodeSmell) = ThresholdedCodeSmellAssert(thresholdedCodeSmell)
+
+val <T: ThresholdedCodeSmell> Expect<T>.value get(): Expect<Int> = feature(ThresholdedCodeSmell::value)
+val <T: ThresholdedCodeSmell> Expect<T>.threshhold get(): Expect<Int> = feature(ThresholdedCodeSmell::threshold)
 
 fun FindingAssert.isThresholded(): ThresholdedCodeSmellAssert {
     isNotNull

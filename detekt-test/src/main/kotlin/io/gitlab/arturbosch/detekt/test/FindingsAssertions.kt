@@ -1,5 +1,7 @@
 package io.gitlab.arturbosch.detekt.test
 
+import ch.tutteli.atrium.api.fluent.en_GB.*
+import ch.tutteli.atrium.creating.Expect
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
@@ -12,6 +14,15 @@ fun assertThat(findings: List<Finding>) = FindingsAssert(findings)
 fun assertThat(finding: Finding) = FindingAssert(finding)
 
 fun List<Finding>.assert() = FindingsAssert(this)
+
+fun<E: Finding, T: Iterable<E>> Expect<T>.hasSourceLocations(vararg expected: SourceLocation): Expect<T> =
+    feature("sorted source locations", {
+        asSequence().map { it.location.source }.sortedWith(compareBy({ it.line }, { it.column })).toList()
+    }) {
+        contains.inOrder.only.elementsOf(
+            expected.asSequence().sortedWith(compareBy({ it.line }, { it.column })).toList()
+        )
+    }
 
 class FindingsAssert(actual: List<Finding>) :
         AbstractListAssert<FindingsAssert, List<Finding>,

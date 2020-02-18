@@ -1,12 +1,13 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
+import ch.tutteli.atrium.api.fluent.en_GB.get
+import ch.tutteli.atrium.api.fluent.en_GB.isA
+import ch.tutteli.atrium.api.fluent.en_GB.toBe
+import ch.tutteli.atrium.api.verbs.expect
 import io.gitlab.arturbosch.detekt.api.SourceLocation
+import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.rules.Case
-import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.compileAndLint
-import io.gitlab.arturbosch.detekt.test.isThresholded
-import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.*
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -83,6 +84,17 @@ class ComplexMethodSpec : Spek({
                     .withThreshold(1)
             }
 
+            fun executeAtrium(config: TestConfig, expectedValue: Int) {
+                val findings = ComplexMethod(config, threshold = 1).lint(code)
+                expect(findings) {
+                    hasSourceLocations(SourceLocation(1, 5))
+                    get(0).isA<ThresholdedCodeSmell> {
+                        value.toBe(expectedValue)
+                        threshhold.toBe(1)
+                    }
+                }
+            }
+
             it("counts three with nesting function 'forEach'") {
                 val config = TestConfig(mapOf(ComplexMethod.IGNORE_NESTING_FUNCTIONS to "false"))
                 execute(config, expectedValue = 3)
@@ -101,6 +113,16 @@ class ComplexMethodSpec : Spek({
             it("skips 'forEach' as it is not specified") {
                 val config = TestConfig(mapOf(ComplexMethod.NESTING_FUNCTIONS to "let,apply,also"))
                 execute(config, expectedValue = 2)
+            }
+
+            it("fail on purpose AssertJ - skips 'forEach' as it is not specified") {
+                val config = TestConfig(mapOf(ComplexMethod.NESTING_FUNCTIONS to "let,apply,also"))
+                execute(config, expectedValue = 4)
+            }
+
+            it("fail on purpose Atrium - skips 'forEach' as it is not specified") {
+                val config = TestConfig(mapOf(ComplexMethod.NESTING_FUNCTIONS to "let,apply,also"))
+                executeAtrium(config, expectedValue = 4)
             }
         }
 
