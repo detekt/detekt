@@ -1,17 +1,12 @@
 package io.gitlab.arturbosch.detekt.cli.runners
 
 import io.gitlab.arturbosch.detekt.api.Detektion
-import io.gitlab.arturbosch.detekt.api.Notification
-import io.gitlab.arturbosch.detekt.api.internal.CommaSeparatedPattern
-import io.gitlab.arturbosch.detekt.api.internal.DEFAULT_PROPERTY_EXCLUDES
-import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
-import io.gitlab.arturbosch.detekt.api.internal.validateConfig
 import io.gitlab.arturbosch.detekt.cli.BuildFailure
 import io.gitlab.arturbosch.detekt.cli.CliArgs
 import io.gitlab.arturbosch.detekt.cli.FilteredDetectionResult
-import io.gitlab.arturbosch.detekt.cli.InvalidConfig
 import io.gitlab.arturbosch.detekt.cli.OutputFacade
 import io.gitlab.arturbosch.detekt.cli.baseline.BaselineFacade
+import io.gitlab.arturbosch.detekt.cli.config.checkConfiguration
 import io.gitlab.arturbosch.detekt.cli.console.red
 import io.gitlab.arturbosch.detekt.cli.createClasspath
 import io.gitlab.arturbosch.detekt.cli.createFilters
@@ -19,11 +14,9 @@ import io.gitlab.arturbosch.detekt.cli.createPlugins
 import io.gitlab.arturbosch.detekt.cli.getOrComputeWeightedAmountOfIssues
 import io.gitlab.arturbosch.detekt.cli.isValidAndSmallerOrEqual
 import io.gitlab.arturbosch.detekt.cli.loadConfiguration
-import io.gitlab.arturbosch.detekt.cli.loadDefaultConfig
 import io.gitlab.arturbosch.detekt.cli.maxIssues
 import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
-import io.gitlab.arturbosch.detekt.core.RuleSetLocator
 import java.io.PrintStream
 
 class Runner(
@@ -64,31 +57,6 @@ class Runner(
         if (arguments.createBaseline) {
             val smells = result.findings.flatMap { it.value }
             baselineFacade?.create(smells)
-        }
-    }
-
-    private fun checkConfiguration(settings: ProcessingSettings) {
-        val props = settings.config.subConfig("config")
-        val shouldValidate = props.valueOrDefault("validation", true)
-
-        fun patterns(): Set<Regex> {
-            val pluginExcludes = RuleSetLocator(settings).load()
-                .filter { it !is DefaultRuleSetProvider }
-                .joinToString(",") { "${it.ruleSetId}>.*" }
-            val excludes = props.valueOrDefault("excludes", "") +
-                ",$DEFAULT_PROPERTY_EXCLUDES," +
-                pluginExcludes
-            return CommaSeparatedPattern(excludes).mapToRegex()
-        }
-
-        if (shouldValidate) {
-            val notifications = validateConfig(settings.config, loadDefaultConfig(), patterns())
-            notifications.map(Notification::message).forEach(settings::info)
-            val errors = notifications.filter(Notification::isError)
-            if (errors.isNotEmpty()) {
-                val propsString = if (errors.size == 1) "property" else "properties"
-                throw InvalidConfig("Run failed with ${errors.size} invalid config $propsString.".red())
-            }
         }
     }
 

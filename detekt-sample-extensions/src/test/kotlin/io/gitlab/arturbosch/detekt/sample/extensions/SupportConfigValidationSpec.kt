@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.sample.extensions
 
 import io.gitlab.arturbosch.detekt.cli.CliArgs
-import io.gitlab.arturbosch.detekt.cli.InvalidConfig
+import io.gitlab.arturbosch.detekt.cli.config.InvalidConfig
 import io.gitlab.arturbosch.detekt.cli.console.red
 import io.gitlab.arturbosch.detekt.cli.runners.Runner
 import org.assertj.core.api.Assertions.assertThatCode
@@ -15,15 +15,22 @@ class SupportConfigValidationSpec : Spek({
 
         val testDir = Files.createTempDirectory("detekt-sample")
 
-        it("fails when new rule set is not excluded") {
-            val args = CliArgs {
-                input = testDir.toString()
-                configResource = "included-config.yml"
-            }
+        context("failing cases") {
+            arrayOf(
+                "fails when new rule set is not excluded" to "included-config.yml",
+                "fails due to no configuration property present for 'sample' rule set" to "wrong-property-config.yml"
+            ).forEach { (testCase, config) ->
+                it(testCase) {
+                    val args = CliArgs {
+                        input = testDir.toString()
+                        configResource = config
+                    }
 
-            assertThatCode { Runner(args).execute() }
-                .isInstanceOf(InvalidConfig::class.java)
-                .hasMessage("Run failed with 1 invalid config property.".red())
+                    assertThatCode { Runner(args).execute() }
+                        .isInstanceOf(InvalidConfig::class.java)
+                        .hasMessage("Run failed with 1 invalid config property.".red())
+                }
+            }
         }
 
         it("passes with excluded new rule set") {

@@ -26,6 +26,7 @@ Currently supported extensions are:
 
 ### Inheritors
 
+| [ConfigValidator](../-config-validator/index.html) | An extension which allows users to validate parts of the configuration.`interface ConfigValidator : `[`Extension`](./index.html) |
 | [ConsoleReport](../-console-report/index.html) | Extension point which describes how findings should be printed on the console.`abstract class ConsoleReport : `[`Extension`](./index.html) |
 | [FileProcessListener](../-file-process-listener/index.html) | Gather additional metrics about the analyzed kotlin file. Pay attention to the thread policy of each function!`interface FileProcessListener : `[`Extension`](./index.html) |
 | [OutputReport](../-output-report/index.html) | Translates detekt's result container - [Detektion](../-detektion/index.html) - into an output report which is written inside a file.`abstract class OutputReport : `[`Extension`](./index.html) |
