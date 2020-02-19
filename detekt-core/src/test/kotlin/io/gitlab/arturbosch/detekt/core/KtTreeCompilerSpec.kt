@@ -1,9 +1,12 @@
 package io.gitlab.arturbosch.detekt.core
 
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
+import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
+import java.nio.file.Paths
 
 class KtTreeCompilerSpec : Spek({
 
@@ -38,6 +41,25 @@ class KtTreeCompilerSpec : Spek({
 
         it("should also compile regular files") {
             assertThat(fixture().compile(path.resolve("Default.kt")).size).isEqualTo(1)
+        }
+
+        it("throws an exception if given file does not exist") {
+            val invalidPath = "NOTHERE"
+            assertThatIllegalArgumentException()
+                .isThrownBy { fixture().compile(Paths.get(invalidPath)) }
+                .withMessage("Given path $invalidPath does not exist!")
+        }
+
+        it("does not compile a folder with a css file") {
+            val cssPath = Paths.get(resource("css"))
+            val ktFiles = fixture().compile(cssPath)
+            assertThat(ktFiles).isEmpty()
+        }
+
+        it("does not compile a css file") {
+            val cssPath = Paths.get(resource("css")).resolve("test.css")
+            val ktFiles = fixture().compile(cssPath)
+            assertThat(ktFiles).isEmpty()
         }
     }
 })
