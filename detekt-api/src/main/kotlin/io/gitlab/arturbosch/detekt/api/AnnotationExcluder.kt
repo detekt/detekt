@@ -14,21 +14,36 @@ class AnnotationExcluder(
 ) {
 
     private var resolvedAnnotations = root.importList
-            ?.imports
-            ?.asSequence()
-            ?.filterNot { it.isAllUnder }
-            ?.mapNotNull { it.importedFqName?.asString() }
-            ?.map { it.substringAfterLast('.') to it }
-            ?.toMap()
+        ?.imports
+        ?.asSequence()
+        ?.filterNot { it.isAllUnder }
+        ?.mapNotNull { it.importedFqName?.asString() }
+        ?.map { it.substringAfterLast('.') to it }
+        ?.toMap() ?: emptyMap()
 
     /**
      * Is true if any given annotation name is declared in the SplitPattern
      * which basically describes entries to exclude.
      */
     fun shouldExclude(annotations: List<KtAnnotationEntry>): Boolean =
-            annotations.firstOrNull(::isExcluded) != null
+        annotations.firstOrNull(::isExcluded) != null
 
-    private fun isExcluded(annotation: KtAnnotationEntry): Boolean =
-            resolvedAnnotations?.get(annotation.typeReference?.text)
-                    ?.let { excludes.contains(it) } ?: false
+    private fun isExcluded(annotation: KtAnnotationEntry): Boolean {
+        val annotationText = annotation.typeReference?.text
+
+        // We check if resolvedAnnotations for annotation both in the keys and in the
+        // values set to catch usages of fully qualified annotations 
+        // (eg. @Module and @dagger.Module).
+        return when {
+            resolvedAnnotations.containsKey(annotationText) -> {
+                resolvedAnnotations[annotationText]?.let { excludes.contains(it) } ?: false
+            }
+            resolvedAnnotations.containsValue(annotationText) -> {
+                excludes.contains(annotationText)
+            }
+            else -> {
+                false
+            }
+        }
+    }
 }

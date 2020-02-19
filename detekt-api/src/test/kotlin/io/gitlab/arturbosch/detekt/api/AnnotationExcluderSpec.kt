@@ -12,6 +12,7 @@ class AnnotationExcluderSpec : Spek({
 
     describe("a kt file with some imports") {
         val jvmFieldAnnotation = psiFactory.createAnnotationEntry("@JvmField")
+        val fullyQualifiedJvmFieldAnnotation = psiFactory.createAnnotationEntry("@kotlin.jvm.JvmField")
         val sinceKotlinAnnotation = psiFactory.createAnnotationEntry("@SinceKotlin")
 
         val file = compileContentForTest("""
@@ -33,6 +34,11 @@ class AnnotationExcluderSpec : Spek({
         it("should not exclude when no annotations should be excluded") {
             val excluder = AnnotationExcluder(file, SplitPattern(""))
             assertThat(excluder.shouldExclude(listOf(jvmFieldAnnotation))).isFalse()
+        }
+
+        it("should exclude when the annotation was found with its fully qualified name") {
+            val excluder = AnnotationExcluder(file, SplitPattern("JvmField"))
+            assertThat(excluder.shouldExclude(listOf(fullyQualifiedJvmFieldAnnotation))).isTrue()
         }
 
         it("should not exclude an annotation that is not imported") {
