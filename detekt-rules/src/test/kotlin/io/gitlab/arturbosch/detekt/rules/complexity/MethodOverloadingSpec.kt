@@ -157,6 +157,22 @@ class MethodOverloadingSpec : Spek({
                 """
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
+
+            it("reports overloaded methods inside an anonymous object expression") {
+                val code = """
+                    class A {
+                    
+                        fun f() {
+                            object : Runnable {
+                                override fun run() {}
+                                fun run(i: Int) {}
+                                fun run(i: Int, j: Int) {}
+                            }
+                        }
+                    }
+                """
+                assertThat(subject.compileAndLint(code)).hasSize(1)
+            }
         }
 
         context("several overloaded methods inside enum classes") {
