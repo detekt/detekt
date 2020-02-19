@@ -32,7 +32,7 @@ class AnnotationExcluder(
         val annotationText = annotation.typeReference?.text
 
         // We check if resolvedAnnotations for annotation both in the keys and in the
-        // values set to catch usages of fully qualified annotations 
+        // values set to catch usages of fully qualified annotations
         // (eg. @Module and @dagger.Module).
         return when {
             resolvedAnnotations.containsKey(annotationText) -> {
