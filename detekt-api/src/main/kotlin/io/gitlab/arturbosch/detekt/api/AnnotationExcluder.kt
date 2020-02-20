@@ -14,12 +14,12 @@ class AnnotationExcluder(
 ) {
 
     private var resolvedAnnotations = root.importList
-        ?.imports
-        ?.asSequence()
-        ?.filterNot { it.isAllUnder }
-        ?.mapNotNull { it.importedFqName?.asString() }
-        ?.map { it.substringAfterLast('.') to it }
-        ?.toMap() ?: emptyMap()
+            ?.imports
+            ?.asSequence()
+            ?.filterNot { it.isAllUnder }
+            ?.mapNotNull { it.importedFqName?.asString() }
+            ?.map { it.substringAfterLast('.') to it }
+            ?.toMap() ?: emptyMap()
 
     /**
      * Is true if any given annotation name is declared in the SplitPattern
@@ -30,9 +30,9 @@ class AnnotationExcluder(
 
     private fun isExcluded(annotation: KtAnnotationEntry): Boolean {
         val annotationText = annotation.typeReference?.text
-
-        return if (resolvedAnnotations.containsKey(annotationText)) {
-            resolvedAnnotations[annotationText]?.let { excludes.contains(it) } ?: false
+        val value = resolvedAnnotations[annotationText]
+        return if (value != null) {
+            excludes.contains(value)
         } else {
             excludes.contains(annotationText)
         }
