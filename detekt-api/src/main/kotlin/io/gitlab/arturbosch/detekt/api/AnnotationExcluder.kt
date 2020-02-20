@@ -31,19 +31,10 @@ class AnnotationExcluder(
     private fun isExcluded(annotation: KtAnnotationEntry): Boolean {
         val annotationText = annotation.typeReference?.text
 
-        // We check if resolvedAnnotations for annotation both in the keys and in the
-        // values set to catch usages of fully qualified annotations
-        // (eg. @Module and @dagger.Module).
-        return when {
-            resolvedAnnotations.containsKey(annotationText) -> {
-                resolvedAnnotations[annotationText]?.let { excludes.contains(it) } ?: false
-            }
-            resolvedAnnotations.containsValue(annotationText) -> {
-                excludes.contains(annotationText)
-            }
-            else -> {
-                false
-            }
+        return if (resolvedAnnotations.containsKey(annotationText)) {
+            resolvedAnnotations[annotationText]?.let { excludes.contains(it) } ?: false
+        } else {
+            excludes.contains(annotationText)
         }
     }
 }

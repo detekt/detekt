@@ -41,9 +41,9 @@ class AnnotationExcluderSpec : Spek({
             assertThat(excluder.shouldExclude(listOf(fullyQualifiedJvmFieldAnnotation))).isTrue()
         }
 
-        it("should not exclude an annotation that is not imported") {
+        it("should also exclude an annotation that is not imported") {
             val excluder = AnnotationExcluder(file, SplitPattern("SinceKotlin"))
-            assertThat(excluder.shouldExclude(listOf(sinceKotlinAnnotation))).isFalse()
+            assertThat(excluder.shouldExclude(listOf(sinceKotlinAnnotation))).isTrue()
         }
     }
 })

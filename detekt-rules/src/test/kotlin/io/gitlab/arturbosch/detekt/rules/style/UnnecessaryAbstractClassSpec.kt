@@ -55,8 +55,6 @@ class UnnecessaryAbstractClassSpec : Spek({
 
         it("abstract class with fully qualified annotations usage"){
             val code = """
-                import jdk.nashorn.internal.ir.annotations.Ignore
-                
                 @jdk.nashorn.internal.ir.annotations.Ignore
                 abstract class AUselessAbstractClass {
                     abstract fun doSomething(): Int
