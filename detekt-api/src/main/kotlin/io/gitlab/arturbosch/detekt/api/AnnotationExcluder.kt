@@ -19,16 +19,22 @@ class AnnotationExcluder(
             ?.filterNot { it.isAllUnder }
             ?.mapNotNull { it.importedFqName?.asString() }
             ?.map { it.substringAfterLast('.') to it }
-            ?.toMap()
+            ?.toMap() ?: emptyMap()
 
     /**
      * Is true if any given annotation name is declared in the SplitPattern
      * which basically describes entries to exclude.
      */
     fun shouldExclude(annotations: List<KtAnnotationEntry>): Boolean =
-            annotations.firstOrNull(::isExcluded) != null
+        annotations.firstOrNull(::isExcluded) != null
 
-    private fun isExcluded(annotation: KtAnnotationEntry): Boolean =
-            resolvedAnnotations?.get(annotation.typeReference?.text)
-                    ?.let { excludes.contains(it) } ?: false
+    private fun isExcluded(annotation: KtAnnotationEntry): Boolean {
+        val annotationText = annotation.typeReference?.text
+        val value = resolvedAnnotations[annotationText]
+        return if (value != null) {
+            excludes.contains(value)
+        } else {
+            excludes.contains(annotationText)
+        }
+    }
 }
