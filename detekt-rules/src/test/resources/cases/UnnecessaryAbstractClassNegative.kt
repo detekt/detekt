@@ -29,3 +29,8 @@ abstract class AbstractClassDerivedFrom : EmptyAbstractClass1() {
 abstract class AbstractClassWithModuleAnnotation {
     abstract fun binds(foo: Integer): Number
 }
+
+@jdk.nashorn.internal.ir.annotations.Ignore
+abstract class AbstractClassWithModuleAnnotation {
+    abstract fun binds(foo: Integer): Number
+}

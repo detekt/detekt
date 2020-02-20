@@ -52,18 +52,6 @@ class UnnecessaryAbstractClassSpec : Spek({
                 assertThat(countViolationsWithDescription(findings, noConcreteMemberDescription)).isEqualTo(0)
             }
         }
-
-        it("abstract class with fully qualified annotations usage"){
-            val code = """
-                @jdk.nashorn.internal.ir.annotations.Ignore
-                abstract class AUselessAbstractClass {
-                    abstract fun doSomething(): Int
-                }
-            """.trimIndent()
-
-            val findings = subject.compileAndLint(code)
-            assertThat(findings).isEmpty()
-        }
     }
 })
 
