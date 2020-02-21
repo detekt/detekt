@@ -72,6 +72,13 @@ from the underlying detekt configuration file.
 
 |
 
+##### [io.gitlab.arturbosch.detekt.api.ConfigValidator](../io.gitlab.arturbosch.detekt.api/-config-validator/index.html)
+
+An extension which allows users to validate parts of the configuration.
+
+
+|
+
 ##### [io.gitlab.arturbosch.detekt.api.ConsoleReport](../io.gitlab.arturbosch.detekt.api/-console-report/index.html)
 
 Extension point which describes how findings should be printed on the console.
