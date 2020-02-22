@@ -7,5 +7,7 @@ private val identifierRegex = Regex("[aA-zZ]+([-][aA-zZ]+)*")
  */
 internal fun validateIdentifier(id: String) {
 
-    require(id.matches(identifierRegex)) { "id must match ${identifierRegex.pattern}" }
+    require(id.matches(identifierRegex)) {
+        "id '$id' must match ${identifierRegex.pattern}"
+    }
 }

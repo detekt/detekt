@@ -36,7 +36,12 @@ fun validateConfig(
     excludePatterns: Set<Regex> = CommaSeparatedPattern(DEFAULT_PROPERTY_EXCLUDES).mapToRegex()
 ): List<Notification> {
     require(baseline != Config.empty) { "Cannot validate configuration based on an empty baseline config." }
-    require(baseline is YamlConfig) { "Only supported baseline config is the ${YamlConfig::class.simpleName}. Actual type is ${baseline.javaClass.simpleName}" }
+    require(baseline is YamlConfig) {
+        val yamlConfigClass = YamlConfig::class.simpleName
+        val actualClass = baseline.javaClass.simpleName
+
+        "Only supported baseline config is the $yamlConfigClass. Actual type is $actualClass"
+    }
 
     if (config == Config.empty) {
         return emptyList()
