@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.api
 
 import io.gitlab.arturbosch.detekt.api.Config.Companion.PRIMITIVES
-import java.util.LinkedList
+import java.util.ArrayDeque
 import kotlin.reflect.KClass
 
 /**
@@ -18,7 +18,7 @@ interface Config {
      * Retrieves a sub configuration or value based on given key. If configuration property cannot be found
      * the specified default value is returned.
      */
-    fun <T : Any> valueOrDefault(key: String, default: T): T
+    fun <T : Any> valueOrDefault(key: String, default: T): T = valueOrNull(key) ?: default
 
     /**
      * Retrieves a sub configuration or value based on given key.
@@ -86,9 +86,10 @@ internal object EmptyConfig : HierarchicalConfig {
     override fun subConfig(key: String): EmptyConfig = this
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T : Any> valueOrDefault(key: String, default: T): T = if (key == "active") true as T else default
-
-    override fun <T : Any> valueOrNull(key: String): T? = null
+    override fun <T : Any> valueOrNull(key: String): T? = when (key) {
+        "active" -> true as? T
+        else -> null
+    }
 }
 
 /**
@@ -118,7 +119,7 @@ abstract class BaseConfig : HierarchicalConfig {
     }
 
     private fun keySequence(key: String): String {
-        val seq = LinkedList<String>()
+        val seq = ArrayDeque<String>()
         var current = parent
         while (current != null) {
             seq.addFirst(current.key)

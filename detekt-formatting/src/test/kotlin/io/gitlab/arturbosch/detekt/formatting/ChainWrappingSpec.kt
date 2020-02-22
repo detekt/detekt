@@ -7,7 +7,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-class ChainWrappingRegressionSpec : Spek({
+class ChainWrappingSpec : Spek({
     describe("tests integration of formatting") {
 
         it("should work like KtLint") {

@@ -29,7 +29,9 @@ class Indentation(config: Config) : FormattingRule(config) {
                 indentSize = indentSize,
                 continuationIndentSize = continuationIndentSize)
     }
-}
 
-private const val INDENT_SIZE = "indentSize"
-private const val CONTINUATION_INDENT_SIZE = "continuationIndentSize"
+    companion object {
+        const val INDENT_SIZE = "indentSize"
+        const val CONTINUATION_INDENT_SIZE = "continuationIndentSize"
+    }
+}

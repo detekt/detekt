@@ -17,17 +17,14 @@ data class ReportPath(val kind: String, val path: Path) {
 
         fun from(input: String): ReportPath {
             val parts = input.split(REPORT_PATH_SEPARATOR)
-            val partsSize = parts.size
 
-            require(partsSize == NUM_OF_PARTS_UNIX || partsSize == NUM_OF_PARTS_WINDOWS) { "$ILLEGAL_PARTS_SIZE_ERROR Actual parts count: $partsSize" }
-
-            val kind = parts[0]
-            val path = when (partsSize) {
+            val path = when (val partsSize = parts.size) {
                 NUM_OF_PARTS_UNIX -> parts[1]
                 NUM_OF_PARTS_WINDOWS -> parts.slice(1 until partsSize).joinToString(REPORT_PATH_SEPARATOR)
                 else -> throw IllegalStateException(ILLEGAL_PARTS_SIZE_ERROR)
             }
 
+            val kind = parts[0]
             assertNotEmpty(kind, path)
             return ReportPath(defaultMapping(kind), Paths.get(path))
         }
