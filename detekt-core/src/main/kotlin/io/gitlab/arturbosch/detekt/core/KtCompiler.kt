@@ -18,7 +18,7 @@ open class KtCompiler(
     protected val psiFileFactory: PsiFileFactory = PsiFileFactory.getInstance(environment.project)
 
     fun compile(root: Path, subPath: Path): KtFile {
-        require(subPath.isFile()) { "Given sub path should be a regular file!" }
+        require(subPath.isFile()) { "Given sub path ($subPath) should be a regular file!" }
         val relativePath =
             (if (root == subPath) subPath.fileName
             else root.fileName.resolve(root.relativize(subPath))).normalize()

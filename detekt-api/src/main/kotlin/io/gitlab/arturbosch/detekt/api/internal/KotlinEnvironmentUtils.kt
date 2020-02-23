@@ -47,7 +47,12 @@ fun createKotlinCoreEnvironment(
         EnvironmentConfigFiles.JVM_CONFIG_FILES
     )
 
-    val project = environment.project as? MockProject ?: error("MockProject type expected")
+    val projectCandidate = environment.project
+
+    val project = requireNotNull(projectCandidate as? MockProject) {
+        "MockProject type expected, actual - ${projectCandidate.javaClass.simpleName}"
+    }
+
     project.registerService(PomModel::class.java, DetektPomModel(project))
 
     return environment

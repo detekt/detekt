@@ -12,8 +12,6 @@ data class ReportPath(val kind: String, val path: Path) {
         private const val NUM_OF_PARTS_UNIX = 2
         private const val NUM_OF_PARTS_WINDOWS = 3
         private const val REPORT_PATH_SEPARATOR = ":"
-        private const val ILLEGAL_PARTS_SIZE_ERROR =
-                "Must consist of two parts for Unix OSs or three for Windows (report-id:path)."
 
         fun from(input: String): ReportPath {
             val parts = input.split(REPORT_PATH_SEPARATOR)
@@ -21,7 +19,9 @@ data class ReportPath(val kind: String, val path: Path) {
             val path = when (val partsSize = parts.size) {
                 NUM_OF_PARTS_UNIX -> parts[1]
                 NUM_OF_PARTS_WINDOWS -> parts.slice(1 until partsSize).joinToString(REPORT_PATH_SEPARATOR)
-                else -> throw IllegalStateException(ILLEGAL_PARTS_SIZE_ERROR)
+                else -> error(
+                    "Input '$input' must consist of two parts for Unix OSs or three for Windows (report-id:path)."
+                )
             }
 
             val kind = parts[0]
@@ -30,8 +30,8 @@ data class ReportPath(val kind: String, val path: Path) {
         }
 
         private fun assertNotEmpty(kind: String, path: String) {
-            require(kind.isNotEmpty()) { "The kind of report must not be empty" }
-            require(path.isNotEmpty()) { "The path of the report must not be empty" }
+            require(kind.isNotEmpty()) { "The kind of report must not be empty (path - $path)" }
+            require(path.isNotEmpty()) { "The path of the report must not be empty (kind - $kind)" }
         }
 
         private fun defaultMapping(reportId: String) = when (reportId) {

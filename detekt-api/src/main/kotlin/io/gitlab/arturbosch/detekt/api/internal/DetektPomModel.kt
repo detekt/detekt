@@ -28,7 +28,13 @@ class DetektPomModel(project: Project) : UserDataHolderBase(), PomModel {
     }
 
     override fun runTransaction(transaction: PomTransaction) {
-        (transaction as? PomTransactionBase ?: error("PomTransactionBase type expected")).run()
+        val transactionCandidate = transaction as? PomTransactionBase
+
+        val pomTransaction = requireNotNull(transactionCandidate) {
+            "${PomTransactionBase::class.simpleName} type expected, actual is ${transaction.javaClass.simpleName}"
+        }
+
+        pomTransaction.run()
     }
 
     override fun <T : PomModelAspect?> getModelAspect(aspect: Class<T>): T? {
