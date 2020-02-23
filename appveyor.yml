@@ -39,11 +39,10 @@ test_script:
 
 after_test:
   - ps: del C:\Users\appveyor\.gradle\caches\modules-2\modules-2.lock
-  - ps: del -Recurse C:\Users\appveyor\.gradle\caches\*\plugin-resolution
 
 cache:
-  - C:\Users\appveyor\.gradle\wrapper
-  - C:\Users\appveyor\.gradle\caches
+  - C:\Users\appveyor\.gradle\wrapper\dists
+  - C:\Users\appveyor\.gradle\caches\modules-2
 
 on_finish:
   - ps: |
