@@ -1,6 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.api.YamlConfig
+import io.gitlab.arturbosch.detekt.core.rules.createRuleSet
+import io.gitlab.arturbosch.detekt.core.rules.visitFile
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.rules.providers.ExceptionsProvider
 import io.gitlab.arturbosch.detekt.test.compileForTest
@@ -15,10 +17,10 @@ class TooGenericExceptionSpec : Spek({
 
         it("should not report any as all catch exception rules are deactivated") {
             val config = YamlConfig.loadResource(resource("deactivated-exceptions.yml").toURL())
-            val ruleSet = ExceptionsProvider().buildRuleset(config)
+            val ruleSet = ExceptionsProvider().createRuleSet(config)
             val file = compileForTest(Case.TooGenericExceptions.path())
 
-            val findings = ruleSet?.accept(file)
+            val findings = ruleSet.visitFile(file)
 
             assertThat(findings).isEmpty()
         }

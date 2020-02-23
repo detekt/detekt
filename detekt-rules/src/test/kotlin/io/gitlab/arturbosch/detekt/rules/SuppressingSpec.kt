@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules
 
 import io.gitlab.arturbosch.detekt.api.RuleSet
+import io.gitlab.arturbosch.detekt.core.rules.visitFile
 import io.gitlab.arturbosch.detekt.rules.complexity.ComplexCondition
 import io.gitlab.arturbosch.detekt.rules.complexity.LongMethod
 import io.gitlab.arturbosch.detekt.rules.complexity.LongParameterList
@@ -20,36 +21,34 @@ class SuppressingSpec : Spek({
         it("all findings are suppressed on element levels") {
             val ktFile = compileForTest(Case.SuppressedElements.path())
             val ruleSet = RuleSet("Test", listOf(LongMethod(), LongParameterList(), ComplexCondition()))
-            val findings = ruleSet.accept(ktFile)
-            findings.forEach {
-                println(it.compact())
-            }
+
+            val findings = ruleSet.visitFile(ktFile)
+
             assertThat(findings).isEmpty()
         }
 
         it("all findings are suppressed on file levels") {
             val ktFile = compileForTest(Case.SuppressedElementsByFile.path())
             val ruleSet = RuleSet("Test", listOf(LongMethod(), LongParameterList(), ComplexCondition()))
-            val findings = ruleSet.accept(ktFile)
-            findings.forEach {
-                println(it.compact())
-            }
+
+            val findings = ruleSet.visitFile(ktFile)
+
             assertThat(findings).isEmpty()
         }
 
         it("all findings are suppressed on class levels") {
             val ktFile = compileForTest(Case.SuppressedElementsByClass.path())
             val ruleSet = RuleSet("Test", listOf(LongMethod(), LongParameterList(), ComplexCondition()))
-            val findings = ruleSet.accept(ktFile)
-            findings.forEach {
-                println(it.compact())
-            }
+
+            val findings = ruleSet.visitFile(ktFile)
+
             assertThat(findings).isEmpty()
         }
 
         it("should suppress TooManyFunctionsRule on class level") {
-            val findings = TooManyFunctions(
-                    TestConfig(mapOf("thresholdInClass" to "0"))).lint(Case.SuppressedElementsByClass.path())
+            val rule = TooManyFunctions(TestConfig(mapOf("thresholdInClass" to "0")))
+
+            val findings = rule.lint(Case.SuppressedElementsByClass.path())
 
             assertThat(findings).isEmpty()
         }

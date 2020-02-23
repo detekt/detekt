@@ -6,7 +6,8 @@ title: RuleSet.accept - detekt-api
 
 # accept
 
-`fun accept(file: KtFile, bindingContext: BindingContext = BindingContext.EMPTY): `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Finding`](../-finding/index.html)`>`
+`fun ~~accept~~(file: KtFile, bindingContext: BindingContext = BindingContext.EMPTY): `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Finding`](../-finding/index.html)`>`
+**Deprecated:** Exposes detekt-core implementation details.
 
 Visits given file with all rules of this rule set, returning a list
 of all code smell findings.

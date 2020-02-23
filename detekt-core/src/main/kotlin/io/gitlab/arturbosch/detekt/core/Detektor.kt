@@ -5,7 +5,10 @@ import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.api.internal.absolutePath
+import io.gitlab.arturbosch.detekt.core.rules.createRuleSet
+import io.gitlab.arturbosch.detekt.core.rules.isActive
+import io.gitlab.arturbosch.detekt.core.rules.shouldAnalyzeFile
+import io.gitlab.arturbosch.detekt.core.rules.visitFile
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 
@@ -69,16 +72,10 @@ class Detektor(
 
     private fun KtFile.analyze(bindingContext: BindingContext): Map<RuleSetId, List<Finding>> =
         providers.asSequence()
-            .mapNotNull { it.buildRuleset(config) }
+            .filter { it.isActive(config) }
+            .map { it.createRuleSet(config) }
+            .filter { it.shouldAnalyzeFile(this, config) }
             .sortedBy { it.id }
-            .distinctBy { it.id }
-            .toList()
-            .map { ruleSet -> ruleSet.id to ruleSet.accept(this, bindingContext) }
+            .map { ruleSet -> ruleSet.id to ruleSet.visitFile(this, bindingContext) }
             .toMergedMap()
-
-    private fun createErrorMessage(file: KtFile, error: Throwable): String =
-        "Analyzing '${file.absolutePath()}' led to an exception.\n" +
-            "The original exception message was: ${error.localizedMessage}\n" +
-            "Running detekt '${whichDetekt() ?: "unknown"}' on Java '${whichJava()}' on OS '${whichOS()}'.\n" +
-            "If the exception message does not help, please feel free to create an issue on our GitHub page."
 }

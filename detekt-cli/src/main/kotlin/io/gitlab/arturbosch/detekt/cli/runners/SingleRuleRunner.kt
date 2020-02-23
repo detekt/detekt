@@ -14,6 +14,7 @@ import io.gitlab.arturbosch.detekt.cli.loadConfiguration
 import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.RuleSetLocator
+import io.gitlab.arturbosch.detekt.core.rules.createRuleSet
 
 class SingleRuleRunner(private val arguments: CliArgs) : Executable {
 
@@ -72,8 +73,8 @@ private class RuleProducingProvider(
 
     private fun produceRule(): BaseRule =
         requireNotNull(
-            provider.buildRuleset(Config.empty)
-                ?.rules
-                ?.find { it.ruleId == ruleId }
+            provider.createRuleSet(Config.empty)
+                .rules
+                .find { it.ruleId == ruleId }
         ) { "There was no rule '$ruleId' in rule set '${provider.ruleSetId}'." }
 }

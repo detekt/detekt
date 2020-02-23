@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.api
 
 import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
+import io.gitlab.arturbosch.detekt.core.rules.visitFile
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.compileForTest
@@ -12,6 +13,7 @@ import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.psiUtil.lastBlockStatementOrThis
+import org.jetbrains.kotlin.resolve.BindingContext
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -118,7 +120,7 @@ internal class SuppressionSpec : Spek({
         it("findings are suppressed") {
             val ktFile = compileForTest(Case.SuppressedElements.path())
             val ruleSet = RuleSet("Test", listOf(TestLM(), TestLPL()))
-            val findings = ruleSet.accept(ktFile)
+            val findings = ruleSet.visitFile(ktFile, BindingContext.EMPTY)
             assertThat(findings.size).isZero()
         }
 
