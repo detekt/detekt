@@ -58,7 +58,8 @@ class AstPrinterSpec : Spek({
 
             assertThatIllegalArgumentException()
                 .isThrownBy { printer.execute() }
-                .withMessage("Input path must be a kotlin file and not a directory.")
+                .withMessageStartingWith("Input path ")
+                .withMessageEndingWith(" must be a kotlin file and not a directory.")
         }
     }
 })

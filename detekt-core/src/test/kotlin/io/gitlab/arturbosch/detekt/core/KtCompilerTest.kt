@@ -26,7 +26,8 @@ class KtCompilerTest : Spek({
         it("throws an exception for an invalid sub path") {
             assertThatIllegalArgumentException()
                 .isThrownBy { ktCompiler.compile(path, path) }
-                .withMessage("Given sub path (/home/travis/build/arturbosch/detekt/detekt-core/build/resources/test/cases) should be a regular file!")
+                .withMessageStartingWith("Given sub path (")
+                .withMessageEndingWith(") should be a regular file!")
         }
 
         it("throws an exception for a css file") {
