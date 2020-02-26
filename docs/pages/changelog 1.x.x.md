@@ -6,6 +6,58 @@ permalink: changelog.html
 toc: true
 ---
 
+#### 1.6.0
+
+##### Migration
+
+Rule set authors do not need to exclude their rule set from config validation anymore.
+This will be done by default now. 
+
+If you need to include further config property checks, give the new `ConfigValidator` api a try.
+
+##### Changelog
+
+- Check-in ConfigValidator documentation - [#2368](https://github.com/arturbosch/detekt/pull/2368)
+- Remove obsolete PathFilter class - [#2367](https://github.com/arturbosch/detekt/pull/2367)
+- Reference coroutines doc for homepage - [#2363](https://github.com/arturbosch/detekt/pull/2363)
+- [Documentation Request] Coroutine Ruleset - [#2362](https://github.com/arturbosch/detekt/issues/2362)
+- Extend AnnotationExcluder to catch fully qualified annotations - [#2361](https://github.com/arturbosch/detekt/pull/2361)
+- UnnecessaryAbstractClass excludeAnnotatedClasses not working - [#2360](https://github.com/arturbosch/detekt/issues/2360)
+- Replace LinkedList with ArrayDeque - [#2358](https://github.com/arturbosch/detekt/pull/2358)
+- Fix detection of CRLF line endings - [#2357](https://github.com/arturbosch/detekt/pull/2357)
+- Introduce new ConfigValidator extensions - #2285 - [#2356](https://github.com/arturbosch/detekt/pull/2356)
+- Include options to better meet requirements for utility files - [#2355](https://github.com/arturbosch/detekt/pull/2355)
+- Don't normalize file content twice - [#2354](https://github.com/arturbosch/detekt/pull/2354)
+- Remove unused code in rules/Case.kt - [#2351](https://github.com/arturbosch/detekt/pull/2351)
+- Add blog post about speeding up a detekt task - [#2349](https://github.com/arturbosch/detekt/pull/2349)
+- Add tests for setting KtLint's config - [#2348](https://github.com/arturbosch/detekt/pull/2348)
+- add details into internal validation - [#2347](https://github.com/arturbosch/detekt/pull/2347)
+- Minor change in the HTML report: Remove extra space when you copy the file path - [#2344](https://github.com/arturbosch/detekt/pull/2344)
+- detekt does not always inject the required EDITOR_CONFIG_USER_DATA_KEY for ktlint - [#2339](https://github.com/arturbosch/detekt/issues/2339)
+- Remove duplicate tests for TooManyFunctions rule - [#2338](https://github.com/arturbosch/detekt/pull/2338)
+- Add EmptyTryBlock rule - [#2337](https://github.com/arturbosch/detekt/pull/2337)
+- Use requireNotNull for arguments checking - [#2336](https://github.com/arturbosch/detekt/pull/2336)
+- Refactor and add tests to Ast- and ElementPrinter - [#2335](https://github.com/arturbosch/detekt/pull/2335)
+- Add test case for disabled reports - [#2334](https://github.com/arturbosch/detekt/pull/2334)
+- Refactor ReportPath:load() - [#2333](https://github.com/arturbosch/detekt/pull/2333)
+- Add test case for FileProcessorLocator - [#2332](https://github.com/arturbosch/detekt/pull/2332)
+- Add test cases for Kt(Tree)Compiler - [#2331](https://github.com/arturbosch/detekt/pull/2331)
+- Add equality test cases for PathFiler - [#2330](https://github.com/arturbosch/detekt/pull/2330)
+- Add local function test case for MethodOverloading rule - [#2328](https://github.com/arturbosch/detekt/pull/2328)
+- Add anonymous object expression test case for MethodOverloading rule - [#2327](https://github.com/arturbosch/detekt/pull/2327)
+- Validate Gradle Wrapper - [#2326](https://github.com/arturbosch/detekt/pull/2326)
+- Use more consistent metrics in HtmlReport - [#2325](https://github.com/arturbosch/detekt/pull/2325)
+- Fix ClassCastException in ExplicitCollectionElementAccessMethod - [#2323](https://github.com/arturbosch/detekt/pull/2323)
+- ExplicitCollectionElementAccessMethod crashes - [#2322](https://github.com/arturbosch/detekt/issues/2322)
+- use same behaviour for valueOrNull as for valueOrDefault - [#2319](https://github.com/arturbosch/detekt/pull/2319)
+- FailFastConfig.valueOrNull should return specified value for active and maxIssues - [#2316](https://github.com/arturbosch/detekt/issues/2316)
+- Bugfix: MagicNumber with ignoreNamedArgument and a negative value - [#2315](https://github.com/arturbosch/detekt/pull/2315)
+- More consistent reports - [#2291](https://github.com/arturbosch/detekt/issues/2291)
+- Change MatchingDeclarationName to handle utility files - [#1500](https://github.com/arturbosch/detekt/issues/1500)
+- False-positive MagicNumber issue reported when using negative numbers - [#530](https://github.com/arturbosch/detekt/issues/530)
+
+See all issues at: [1.6.0](https://github.com/arturbosch/detekt/milestone/57)
+
 #### 1.5.1
 
 - Update intro page to deprecate input property - [#2311](https://github.com/arturbosch/detekt/pull/2311)
