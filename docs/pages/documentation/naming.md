@@ -191,6 +191,12 @@ More information at: http://kotlinlang.org/docs/reference/coding-conventions.htm
 
 **Debt**: 5min
 
+#### Configuration options:
+
+* ``mustBeFirst`` (default: ``true``)
+
+   name should only be checked if the file starts with a class or object
+
 #### Noncompliant Code:
 
 ```kotlin

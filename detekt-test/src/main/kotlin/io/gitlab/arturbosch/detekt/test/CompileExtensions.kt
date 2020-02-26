@@ -1,12 +1,16 @@
 package io.gitlab.arturbosch.detekt.test
 
 import org.intellij.lang.annotations.Language
+import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
 
 /**
  * Use this method if you define a kt file/class as a plain string in your test.
  */
-fun compileContentForTest(@Language("kotlin") content: String, filename: String = TEST_FILENAME) =
+fun compileContentForTest(
+    @Language("kotlin") content: String,
+    filename: String = TEST_FILENAME
+): KtFile =
     KtTestCompiler.compileFromContent(content, filename)
 
 /**

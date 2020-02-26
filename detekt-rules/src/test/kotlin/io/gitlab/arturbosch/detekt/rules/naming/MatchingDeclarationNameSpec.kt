@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
+import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.lint
@@ -40,30 +41,40 @@ internal class MatchingDeclarationNameSpec : Spek({
 
             it("should pass for enum declaration") {
                 val ktFile = compileContentForTest("""
-                enum class E {
-                    ONE, TWO, THREE
-                }
-            """, filename = "E.kt")
+                    enum class E {
+                        ONE, TWO, THREE
+                    }
+                """, filename = "E.kt")
                 val findings = MatchingDeclarationName().lint(ktFile)
                 assertThat(findings).isEmpty()
             }
 
             it("should pass for multiple declaration") {
                 val ktFile = compileContentForTest("""
-                class C
-                object O
-                fun a() = 5
-            """, filename = "MultiDeclarations.kt")
+                    class C
+                    object O
+                    fun a() = 5
+                """, filename = "MultiDeclarations.kt")
                 val findings = MatchingDeclarationName().lint(ktFile)
                 assertThat(findings).isEmpty()
             }
 
             it("should pass for class declaration with utility functions") {
                 val ktFile = compileContentForTest("""
-                class C
-                fun a() = 5
-                fun C.b() = 5
-            """, filename = "C.kt")
+                    class C
+                    fun a() = 5
+                    fun C.b() = 5
+                """, filename = "C.kt")
+                val findings = MatchingDeclarationName().lint(ktFile)
+                assertThat(findings).isEmpty()
+            }
+
+            it("should pass for class declaration not as first declaration with utility functions") {
+                val ktFile = compileContentForTest("""
+                    fun a() = 5
+                    fun C.b() = 5
+                    class C
+                """, filename = "Classes.kt")
                 val findings = MatchingDeclarationName().lint(ktFile)
                 assertThat(findings).isEmpty()
             }
@@ -110,15 +121,14 @@ internal class MatchingDeclarationNameSpec : Spek({
                 assertThat(findings).hasSourceLocation(1, 1)
             }
 
-            it("should not pass for class declaration with utility functions") {
+            it("should not pass for class declaration as first declaration with utility functions") {
                 val ktFile = compileContentForTest("""
-                fun a() = 5
-                class C
-                fun C.b() = 5
-
-            """.trimIndent(), filename = "ClassUtils.kt")
+                    class C
+                    fun a() = 5
+                    fun C.b() = 5
+                """.trimIndent(), filename = "ClassUtils.kt")
                 val findings = MatchingDeclarationName().lint(ktFile)
-                assertThat(findings).hasSourceLocation(2, 1)
+                assertThat(findings).hasSourceLocation(1, 1)
             }
 
             it("should not pass for interface declaration") {
@@ -129,23 +139,37 @@ internal class MatchingDeclarationNameSpec : Spek({
 
             it("should not pass for enum declaration") {
                 val ktFile = compileContentForTest("""
-                enum class NOT_E {
-                    ONE, TWO, THREE
-                }
-
-            """.trimIndent(), filename = "E.kt")
+                    enum class NOT_E {
+                        ONE, TWO, THREE
+                    }
+                """.trimIndent(), filename = "E.kt")
                 val findings = MatchingDeclarationName().lint(ktFile)
                 assertThat(findings).hasSourceLocation(1, 1)
             }
 
             it("should not pass for a typealias with a different name") {
                 val code = """
-                typealias Bar = FooImpl
-
-                class FooImpl {}"""
+                    class FooImpl {}
+                    typealias Bar = FooImpl
+                """
                 val ktFile = compileContentForTest(code, filename = "Foo.kt")
                 val findings = MatchingDeclarationName().lint(ktFile)
                 assertThat(findings).hasSize(1)
+            }
+
+            it("""
+                should not pass for class declaration not as first declaration with utility functions
+                when mustBeFirst is false.
+            """) {
+                val ktFile = compileContentForTest("""
+                    fun a() = 5
+                    fun C.b() = 5
+                    class C
+                """, filename = "Classes.kt")
+                val findings = MatchingDeclarationName(
+                    TestConfig("mustBeFirst" to "false")
+                ).lint(ktFile)
+                assertThat(findings).hasSourceLocation(4, 21)
             }
         }
     }
