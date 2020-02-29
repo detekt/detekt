@@ -1,14 +1,20 @@
 package io.gitlab.arturbosch.detekt.core.rules
 
+import io.gitlab.arturbosch.detekt.api.BaseRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.MultiRule
+import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.RuleId
 import io.gitlab.arturbosch.detekt.api.RuleSet
+import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import io.gitlab.arturbosch.detekt.api.internal.absolutePath
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import java.nio.file.Paths
+import java.util.HashMap
 
 fun RuleSetProvider.isActive(config: Config): Boolean =
     config.subConfig(ruleSetId)
@@ -41,3 +47,15 @@ fun RuleSet.visitFile(
         it.visitFile(file, bindingContext)
         it.findings
     }
+
+typealias IdMapping = Map<RuleId, RuleSetId>
+
+@Suppress("RemoveExplicitTypeArguments") // FIXME 1.4: type inference bug
+fun associateRuleIdToRuleSetId(rules: Map<RuleSetId, List<BaseRule>>): IdMapping {
+    fun extractIds(rule: BaseRule) =
+        if (rule is MultiRule) rule.rules.map(Rule::ruleId) else listOf(rule.ruleId)
+    return rules.asSequence()
+        .associate { (key, value) -> key to value.flatMapTo(HashSet<RuleId>(), ::extractIds) }
+        .map { (key, value) -> value.associateWith { key } }
+        .fold(HashMap()) { acc, map -> acc.putAll(map); acc }
+}

@@ -1,14 +1,15 @@
 package io.gitlab.arturbosch.detekt.core
 
+import io.gitlab.arturbosch.detekt.api.BaseRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.core.rules.associateRuleIdToRuleSetId
 import io.gitlab.arturbosch.detekt.core.rules.createRuleSet
 import io.gitlab.arturbosch.detekt.core.rules.isActive
 import io.gitlab.arturbosch.detekt.core.rules.shouldAnalyzeFile
-import io.gitlab.arturbosch.detekt.core.rules.visitFile
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 
@@ -44,7 +45,7 @@ class Detektor(
     ): FindingsResult =
         ktFiles.map { file ->
             processors.forEach { it.onProcess(file) }
-            val findings = runCatching { file.analyze(bindingContext) }
+            val findings = runCatching { analyze(file, bindingContext) }
                 .onFailure { settings.error(createErrorMessage(file, it), it) }
                 .getOrDefault(emptyMap())
             processors.forEach { it.onProcessComplete(file, findings) }
@@ -59,7 +60,7 @@ class Detektor(
         val tasks: TaskList<Map<RuleSetId, List<Finding>>?> = ktFiles.map { file ->
             service.task {
                 processors.forEach { it.onProcess(file) }
-                val findings = file.analyze(bindingContext)
+                val findings = analyze(file, bindingContext)
                 processors.forEach { it.onProcessComplete(file, findings) }
                 findings
             }.recover {
@@ -70,12 +71,36 @@ class Detektor(
         return awaitAll(tasks).filterNotNull()
     }
 
-    private fun KtFile.analyze(bindingContext: BindingContext): Map<RuleSetId, List<Finding>> =
-        providers.asSequence()
+    private fun analyze(file: KtFile, bindingContext: BindingContext): Map<RuleSetId, List<Finding>> {
+        val ruleSets = providers.asSequence()
             .filter { it.isActive(config) }
             .map { it.createRuleSet(config) }
-            .filter { it.shouldAnalyzeFile(this, config) }
-            .sortedBy { it.id }
-            .map { ruleSet -> ruleSet.id to ruleSet.visitFile(this, bindingContext) }
-            .toMergedMap()
+            .filter { it.shouldAnalyzeFile(file, config) }
+            .associate { it.id to it.rules }
+
+        val idMapping = associateRuleIdToRuleSetId(ruleSets)
+        val (correctableRules, otherRules) =
+            ruleSets.asSequence()
+                .flatMap { (_, value) -> value.asSequence() }
+                .partition { it.supportsAutoCorrect }
+
+        val result = HashMap<RuleSetId, MutableList<Finding>>()
+
+        fun executeRules(rules: List<BaseRule>) {
+            for (rule in rules) {
+                rule.visitFile(file, bindingContext)
+                for (finding in rule.findings) {
+                    val mappedRuleSet = idMapping[finding.id]
+                        ?: error("Mapping for '${finding.id}' expected.")
+                    result.putIfAbsent(mappedRuleSet, ArrayList())
+                    result[mappedRuleSet]?.add(finding)
+                }
+            }
+        }
+
+        executeRules(correctableRules)
+        executeRules(otherRules)
+
+        return result
+    }
 }

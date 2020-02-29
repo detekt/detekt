@@ -16,7 +16,6 @@ import java.nio.file.Paths
  *  3. 'cp detekt-sample-extensions/build/libs/detekt-sample-extensions-<version>.jar detekt-core/src/test/resources/sample-rule-set.jar'
  *  4. Now 'gradle build' should be green again.
  */
-@Suppress("MaxLineLength")
 class CustomRuleSetProviderSpec : Spek({
 
     describe("custom rule sets should be loadable through jars") {
@@ -24,13 +23,13 @@ class CustomRuleSetProviderSpec : Spek({
         val sampleRuleSet = Paths.get(resource("sample-rule-set.jar"))
 
         it("should load the sample provider") {
-            val result = ProcessingSettings(
+            val providers = ProcessingSettings(
                 path,
                 excludeDefaultRuleSets = true,
                 pluginPaths = listOf(sampleRuleSet)
-            ).use { DetektFacade.create(it).run() }
+            ).use { RuleSetLocator(it).load() }
 
-            assertThat(result.findings.keys).contains("sample")
+            assertThat(providers).filteredOn { it.ruleSetId == "sample" }.hasSize(1)
         }
     }
 })
