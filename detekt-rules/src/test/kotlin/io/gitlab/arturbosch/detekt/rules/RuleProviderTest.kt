@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
+import io.gitlab.arturbosch.detekt.core.rules.createRuleSet
 import io.gitlab.arturbosch.detekt.rules.providers.CommentSmellProvider
 import io.gitlab.arturbosch.detekt.rules.providers.ComplexityProvider
 import io.gitlab.arturbosch.detekt.rules.providers.CoroutinesProvider
@@ -67,7 +68,7 @@ private fun getRulesPackageNameForProvider(providerType: Class<out RuleSetProvid
 
 private fun getRules(provider: RuleSetProvider): List<BaseRule> {
     @Suppress("UnsafeCallOnNullableType")
-    val ruleSet = provider.buildRuleset(Config.empty)!!
+    val ruleSet = provider.createRuleSet(Config.empty)
     val rules = ruleSet.rules.flatMap { (it as? MultiRule)?.rules ?: listOf(it) }
     assertThat(rules).isNotEmpty
     return rules

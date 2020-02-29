@@ -21,12 +21,14 @@ class RuleSet(val id: RuleSetId, val rules: List<BaseRule>) {
     /**
      * Is used to determine if a given [KtFile] should be analyzed at all.
      */
+    @Deprecated("Exposes detekt-core implementation details.")
     var pathFilters: PathFilters? = null
 
     /**
      * Visits given file with all rules of this rule set, returning a list
      * of all code smell findings.
      */
+    @Deprecated("Exposes detekt-core implementation details.")
     fun accept(file: KtFile, bindingContext: BindingContext = BindingContext.EMPTY): List<Finding> =
         if (isFileIgnored(file)) {
             emptyList()
@@ -37,6 +39,7 @@ class RuleSet(val id: RuleSetId, val rules: List<BaseRule>) {
             }
         }
 
+    @Suppress("DEPRECATION")
     private fun isFileIgnored(file: KtFile) =
         pathFilters?.isIgnored(Paths.get(file.absolutePath())) == true
 }

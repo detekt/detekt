@@ -6,7 +6,8 @@ title: RuleSet.pathFilters - detekt-api
 
 # pathFilters
 
-`var pathFilters: `[`PathFilters`](../../io.gitlab.arturbosch.detekt.api.internal/-path-filters/index.html)`?`
+`var ~~pathFilters~~: `[`PathFilters`](../../io.gitlab.arturbosch.detekt.api.internal/-path-filters/index.html)`?`
+**Deprecated:** Exposes detekt-core implementation details.
 
 Is used to determine if a given [KtFile](#) should be analyzed at all.
 
