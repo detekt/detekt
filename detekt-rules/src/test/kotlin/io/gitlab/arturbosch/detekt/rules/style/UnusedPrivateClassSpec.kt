@@ -283,8 +283,6 @@ class UnusedPrivateClassSpec : Spek({
 
         it("does not report (companion-)object/named-dot references - #1347") {
             val code = """
-                    package com.example
-
                     class Test {
                         val items = Item.values().map { it.text }.toList()
                     }
