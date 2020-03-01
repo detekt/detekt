@@ -86,7 +86,7 @@ private fun createReportUrl(ruleName: String, throwable: Throwable): String {
     val bodyMessage = """
             |I found an error in the html report:
             |- Rule: $ruleName
-            |- Detetk version: ${whichDetekt() ?: "<WRITE HERE THE VERSION OF DETEKT THAT YOU ARE USING>"}
+            |- Detekt version: ${whichDetekt() ?: "<WRITE HERE THE VERSION OF DETEKT THAT YOU ARE USING>"}
             |- Stacktrace:
             |```
             |$stackTrace
