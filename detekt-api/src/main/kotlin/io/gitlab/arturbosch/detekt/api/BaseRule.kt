@@ -27,8 +27,6 @@ abstract class BaseRule(
     open val ruleId: RuleId = javaClass.simpleName
     var bindingContext: BindingContext = BindingContext.EMPTY
 
-    open val supportsAutoCorrect: Boolean = false
-
     /**
      * Before starting visiting kotlin elements, a check is performed if this rule should be triggered.
      * Pre- and post-visit-hooks are executed before/after the visiting process.

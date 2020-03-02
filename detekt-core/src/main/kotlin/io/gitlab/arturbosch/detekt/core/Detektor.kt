@@ -4,6 +4,8 @@ import io.gitlab.arturbosch.detekt.api.BaseRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.MultiRule
+import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.core.rules.associateRuleIdToRuleSetId
@@ -78,11 +80,17 @@ class Detektor(
             .filter { it.shouldAnalyzeFile(file, config) }
             .associate { it.id to it.rules }
 
+        fun isCorrectable(rule: BaseRule): Boolean = when (rule) {
+            is Rule -> rule.autoCorrect
+            is MultiRule -> rule.rules.any { it.autoCorrect }
+            else -> error("No other rule type expected.")
+        }
+
         val idMapping = associateRuleIdToRuleSetId(ruleSets)
         val (correctableRules, otherRules) =
             ruleSets.asSequence()
                 .flatMap { (_, value) -> value.asSequence() }
-                .partition { it.supportsAutoCorrect }
+                .partition { isCorrectable(it) }
 
         val result = HashMap<RuleSetId, MutableList<Finding>>()
 

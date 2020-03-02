@@ -26,8 +26,6 @@ import org.jetbrains.kotlin.psi.psiUtil.endOffset
  */
 abstract class FormattingRule(config: Config) : Rule(config) {
 
-    override val supportsAutoCorrect: Boolean = true
-
     abstract val wrapping: com.pinterest.ktlint.core.Rule
 
     protected fun issueFor(description: String) =

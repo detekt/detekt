@@ -54,8 +54,9 @@ typealias IdMapping = Map<RuleId, RuleSetId>
 fun associateRuleIdToRuleSetId(rules: Map<RuleSetId, List<BaseRule>>): IdMapping {
     fun extractIds(rule: BaseRule) =
         if (rule is MultiRule) rule.rules.map(Rule::ruleId) else listOf(rule.ruleId)
-    return rules.asSequence()
-        .associate { (key, value) -> key to value.flatMapTo(HashSet<RuleId>(), ::extractIds) }
+    return rules.entries
+        .associate { (key, value) -> key to value.flatMapTo(HashSet<RuleId>(value.size), ::extractIds) }
+        .asSequence()
         .map { (key, value) -> value.associateWith { key } }
         .fold(HashMap()) { acc, map -> acc.putAll(map); acc }
 }

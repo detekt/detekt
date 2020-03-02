@@ -47,8 +47,6 @@ import org.jetbrains.kotlin.psi.KtFile
  */
 class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
 
-    override val supportsAutoCorrect: Boolean = true
-
     override val rules: List<Rule> = listOf(
         AnnotationOnSeparateLine(config),
         ChainWrapping(config),
