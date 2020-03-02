@@ -10,7 +10,7 @@ class ConfigExporterSpec : Spek({
 
     describe("config exporter") {
 
-        it("should print the ast as string") {
+        it("should export the given config") {
             val tmpConfig = Files.createTempFile("ConfigPrinterSpec", ".yml")
             val cliArgs = CliArgs.parse(arrayOf(
                 "--config", tmpConfig.toString()
