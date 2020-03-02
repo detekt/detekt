@@ -64,6 +64,12 @@ private fun Config.weightsConfig(): Config = subConfig(BUILD).subConfig(WEIGHTS)
 
 private fun extractRuleToRuleSetIdMap(result: Detektion): Map<RuleId, RuleSetId> =
     result.findings
-        .mapValues { (_, findings) -> findings.mapTo(HashSet(findings.size), Finding::id) }
-        .map { (ruleSetId, ruleIds) -> ruleIds.associateWith { ruleSetId } }
-        .fold(HashMap()) { acc, cur -> acc.putAll(cur); acc }
+        .asSequence()
+        .flatMap { (ruleSetId, findings) ->
+            findings
+                .asSequence()
+                .map(Finding::id)
+                .distinct()
+                .map { it to ruleSetId }
+        }
+        .toMap()
