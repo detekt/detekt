@@ -1,0 +1,7 @@
+Test:
+  NonCorrectable:
+    active: true
+    autoCorrect: false
+  Correctable:
+    active: true
+    autoCorrect: true
