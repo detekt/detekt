@@ -8,7 +8,8 @@ import io.gitlab.arturbosch.detekt.api.MultiRule
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
-import io.gitlab.arturbosch.detekt.core.rules.associateRuleIdToRuleSetId
+import io.gitlab.arturbosch.detekt.core.rules.IdMapping
+import io.gitlab.arturbosch.detekt.core.rules.associateRuleIdsToRuleSetIds
 import io.gitlab.arturbosch.detekt.core.rules.createRuleSet
 import io.gitlab.arturbosch.detekt.core.rules.isActive
 import io.gitlab.arturbosch.detekt.core.rules.shouldAnalyzeFile
@@ -22,6 +23,8 @@ class Detektor(
 ) {
 
     private val config: Config = settings.config
+    private val idMapping: IdMapping =
+        associateRuleIdsToRuleSetIds(providers.associate { it.ruleSetId to it.instance(config).rules })
 
     fun run(
         ktFiles: Collection<KtFile>,
@@ -86,7 +89,6 @@ class Detektor(
             else -> error("No other rule type expected.")
         }
 
-        val idMapping = associateRuleIdToRuleSetId(ruleSets)
         val (correctableRules, otherRules) =
             ruleSets.asSequence()
                 .flatMap { (_, value) -> value.asSequence() }

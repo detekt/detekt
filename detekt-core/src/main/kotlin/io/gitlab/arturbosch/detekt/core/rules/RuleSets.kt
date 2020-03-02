@@ -51,7 +51,7 @@ fun RuleSet.visitFile(
 typealias IdMapping = Map<RuleId, RuleSetId>
 
 @Suppress("RemoveExplicitTypeArguments") // FIXME 1.4: type inference bug
-fun associateRuleIdToRuleSetId(rules: Map<RuleSetId, List<BaseRule>>): IdMapping {
+fun associateRuleIdsToRuleSetIds(rules: Map<RuleSetId, List<BaseRule>>): IdMapping {
     fun extractIds(rule: BaseRule) =
         if (rule is MultiRule) rule.rules.map(Rule::ruleId) else listOf(rule.ruleId)
     return rules.entries
