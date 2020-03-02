@@ -14,7 +14,6 @@ import io.gitlab.arturbosch.detekt.api.internal.absolutePath
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import java.nio.file.Paths
-import java.util.HashMap
 
 fun RuleSetProvider.isActive(config: Config): Boolean =
     config.subConfig(ruleSetId)
@@ -50,10 +49,13 @@ fun RuleSet.visitFile(
 
 typealias IdMapping = Map<RuleId, RuleSetId>
 
-@Suppress("RemoveExplicitTypeArguments") // FIXME 1.4: type inference bug
 fun associateRuleIdsToRuleSetIds(rules: Map<RuleSetId, List<BaseRule>>): IdMapping {
     fun extractIds(rule: BaseRule) =
-        if (rule is MultiRule) rule.rules.asSequence().map(Rule::ruleId) else sequenceOf(rule.ruleId)
+        if (rule is MultiRule) {
+            rule.rules.asSequence().map(Rule::ruleId)
+        } else {
+            sequenceOf(rule.ruleId)
+        }
     return rules
         .asSequence()
         .flatMap { (ruleSetId, baseRules) ->
