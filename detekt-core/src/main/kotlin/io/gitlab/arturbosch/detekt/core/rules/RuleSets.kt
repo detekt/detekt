@@ -53,10 +53,15 @@ typealias IdMapping = Map<RuleId, RuleSetId>
 @Suppress("RemoveExplicitTypeArguments") // FIXME 1.4: type inference bug
 fun associateRuleIdsToRuleSetIds(rules: Map<RuleSetId, List<BaseRule>>): IdMapping {
     fun extractIds(rule: BaseRule) =
-        if (rule is MultiRule) rule.rules.map(Rule::ruleId) else listOf(rule.ruleId)
-    return rules.entries
-        .associate { (key, value) -> key to value.flatMapTo(HashSet<RuleId>(value.size), ::extractIds) }
+        if (rule is MultiRule) rule.rules.asSequence().map(Rule::ruleId) else sequenceOf(rule.ruleId)
+    return rules
         .asSequence()
-        .map { (key, value) -> value.associateWith { key } }
-        .fold(HashMap()) { acc, map -> acc.putAll(map); acc }
+        .flatMap { (ruleSetId, baseRules) ->
+            baseRules
+                .asSequence()
+                .flatMap(::extractIds)
+                .distinct()
+                .map { ruleId -> ruleId to ruleSetId }
+        }
+        .toMap()
 }
