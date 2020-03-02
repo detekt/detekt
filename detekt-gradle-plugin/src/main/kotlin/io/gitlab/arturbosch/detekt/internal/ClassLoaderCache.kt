@@ -6,29 +6,28 @@ import java.net.URLClassLoader
 
 object ClassLoaderCache {
 
-    private var cached: URLClassLoader? = null
-    private var lastSeenClasspath: FileCollection? = null
+    private var loaderAndClasspath: Pair<URLClassLoader, FileCollection>? = null
 
-    fun getOrCreate(classpath: FileCollection): URLClassLoader {
-        val lastClasspath = lastSeenClasspath
+    fun getOrCreate(classpath: FileCollection): URLClassLoader = synchronized(ClassLoaderCache) {
+        val lastLoader = loaderAndClasspath?.first
+        val lastClasspath = loaderAndClasspath?.second
+
         if (lastClasspath == null) {
             cache(classpath)
         } else {
-            synchronized(ClassLoaderCache) {
-                if (!lastClasspath.minus(classpath).isEmpty) {
-                    DefaultGroovyMethodsSupport.closeQuietly(cached)
-                    cache(classpath)
-                }
+            if (!lastClasspath.minus(classpath).isEmpty) {
+                DefaultGroovyMethodsSupport.closeQuietly(lastLoader)
+                cache(classpath)
             }
         }
-        return cached ?: throw IllegalStateException("Detekt classloader expected.")
+
+        return loaderAndClasspath?.first ?: error("Cached or newly created detekt classloader expected.")
     }
 
     private fun cache(classpath: FileCollection) {
-        lastSeenClasspath = classpath
-        cached = URLClassLoader(
+        loaderAndClasspath = URLClassLoader(
             classpath.map { it.toURI().toURL() }.toTypedArray(),
             null /* isolate detekt environment */
-        )
+        ) to classpath
     }
 }
