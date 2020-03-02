@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.cli.runners.ConfigExporter
 import io.gitlab.arturbosch.detekt.cli.runners.Executable
 import io.gitlab.arturbosch.detekt.cli.runners.Runner
 import io.gitlab.arturbosch.detekt.cli.runners.SingleRuleRunner
+import io.gitlab.arturbosch.detekt.cli.runners.VersionPrinter
 import java.io.PrintStream
 import kotlin.system.exitProcess
 
@@ -51,6 +52,7 @@ fun buildRunner(
         arguments.generateConfig -> ConfigExporter(arguments)
         arguments.runRule != null -> SingleRuleRunner(arguments)
         arguments.printAst -> AstPrinter(arguments)
+        arguments.version -> VersionPrinter()
         else -> Runner(arguments, outputPrinter, errorPrinter)
     }
 }

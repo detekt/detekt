@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.cli.runners.AstPrinter
 import io.gitlab.arturbosch.detekt.cli.runners.ConfigExporter
 import io.gitlab.arturbosch.detekt.cli.runners.Runner
 import io.gitlab.arturbosch.detekt.cli.runners.SingleRuleRunner
+import io.gitlab.arturbosch.detekt.cli.runners.VersionPrinter
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -29,6 +30,7 @@ class MainSpec : Spek({
                         args.contains("--generate-config") -> ConfigExporter::class
                         args.contains("--run-rule") -> SingleRuleRunner::class
                         args.contains("--print-ast") -> AstPrinter::class
+                        args.contains("--version") -> VersionPrinter::class
                         else -> Runner::class
                     }
 
