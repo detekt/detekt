@@ -103,7 +103,7 @@ class Detektor(
                     val mappedRuleSet = idMapping[finding.id]
                         ?: error("Mapping for '${finding.id}' expected.")
                     result.putIfAbsent(mappedRuleSet, ArrayList())
-                    result[mappedRuleSet]?.add(finding)
+                    result[mappedRuleSet]!!.add(finding)
                 }
             }
         }
