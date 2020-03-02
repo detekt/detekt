@@ -6,6 +6,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
+import java.lang.IllegalStateException
 import java.nio.file.Files
 import java.nio.file.Paths
 
@@ -38,6 +39,13 @@ class SingleRuleRunnerSpec : Spek({
             val args = CliArgs.parse(arrayOf("--run-rule", "non_existing:test"))
             assertThatThrownBy { SingleRuleRunner(args).execute() }
                 .isExactlyInstanceOf(IllegalArgumentException::class.java)
+        }
+
+        it("should throw on non existing run-rule") {
+            val args = CliArgs.parse(arrayOf())
+            assertThatThrownBy { SingleRuleRunner(args).execute() }
+                .isExactlyInstanceOf(IllegalStateException::class.java)
+                .withFailMessage("Unexpected empty 'runRule' argument.")
         }
     }
 })
