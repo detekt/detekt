@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.CorrectableCodeSmell
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.RuleId
 import io.gitlab.arturbosch.detekt.api.RuleSetId
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import java.util.HashMap
@@ -61,7 +62,8 @@ fun Detektion.filterAutoCorrectedIssues(config: Config): Map<RuleSetId, List<Fin
 
 private fun Config.weightsConfig(): Config = subConfig(BUILD).subConfig(WEIGHTS)
 
-private fun extractRuleToRuleSetIdMap(detektion: Detektion): HashMap<RuleSetId, String> =
-    detektion.findings.mapValues { it.value.map(Finding::id).toSet() }
-        .map { map -> map.value.map { it to map.key }.toMap() }
-        .fold(HashMap()) { result, map -> result.putAll(map); result }
+private fun extractRuleToRuleSetIdMap(result: Detektion): Map<RuleId, RuleSetId> =
+    result.findings
+        .mapValues { (_, findings) -> findings.mapTo(HashSet(findings.size), Finding::id) }
+        .map { (ruleSetId, ruleIds) -> ruleIds.associateWith { ruleSetId } }
+        .fold(HashMap()) { acc, cur -> acc.putAll(cur); acc }
