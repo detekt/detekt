@@ -34,7 +34,7 @@ build_script:
   - detekt-cli\build\install\detekt-cli-shadow\bin\detekt-cli --help
 
 test_script:
-  - detekt-cli\build\install\detekt-cli-shadow\bin\detekt-cli -i . --baseline config\detekt\baseline.xml -ex "**/resources/**,**/detekt*/build/**" -c detekt-cli\src\main\resources\default-detekt-config.yml,config\detekt\detekt.yml
+  - detekt-cli\build\install\detekt-cli-shadow\bin\detekt-cli @config\detekt\argsfile_windows
   - gradlew verifyGeneratorOutput
 
 after_test:
