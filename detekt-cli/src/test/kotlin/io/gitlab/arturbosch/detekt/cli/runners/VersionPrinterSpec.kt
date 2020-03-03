@@ -12,7 +12,7 @@ class VersionPrinterSpec : Spek({
 
     describe("version printer") {
 
-        it("print the version") {
+        it("prints the version") {
             val byteArrayOutputStream = ByteArrayOutputStream()
 
             VersionPrinter(PrintStream(byteArrayOutputStream)).execute()
