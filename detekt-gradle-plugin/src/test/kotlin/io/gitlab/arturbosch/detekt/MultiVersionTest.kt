@@ -29,9 +29,9 @@ object MultiVersionTest : Spek({
 
 private fun getGradleVersionsUnderTest() =
     if (getJdkVersion() < 13) {
-        listOf("5.0", "6.1.1")
+        listOf("5.0", "6.2.1")
     } else {
-        listOf("6.1.1")
+        listOf("6.2.1")
     }
 
 private fun getJdkVersion(): Int {
