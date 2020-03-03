@@ -8,7 +8,6 @@ import org.jetbrains.kotlin.psi.KtFile
 import java.io.PrintStream
 import java.nio.file.Files
 import java.nio.file.Path
-import java.util.HashMap
 
 fun Path.exists(): Boolean = Files.exists(this)
 fun Path.isFile(): Boolean = Files.isRegularFile(this)
@@ -25,16 +24,6 @@ fun MutableMap<String, List<Finding>>.mergeSmells(other: Map<String, List<Findin
 fun Throwable.printStacktraceRecursively(logger: PrintStream) {
     stackTrace.forEach { logger.println(it) }
     cause?.printStacktraceRecursively(logger)
-}
-
-fun <K, V> Sequence<Pair<K, List<V>>>.toMergedMap(): Map<K, List<V>> {
-    val map = HashMap<K, MutableList<V>>()
-    for ((key, values) in this) {
-        map.merge(key, values.toMutableList()) { l1, l2 ->
-            l1.apply { addAll(l2) }
-        }
-    }
-    return map
 }
 
 typealias FindingsResult = List<Map<RuleSetId, List<Finding>>>

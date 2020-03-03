@@ -1,8 +1,13 @@
 package io.gitlab.arturbosch.detekt.core.rules
 
+import io.gitlab.arturbosch.detekt.api.BaseRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.MultiRule
+import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.RuleId
 import io.gitlab.arturbosch.detekt.api.RuleSet
+import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import io.gitlab.arturbosch.detekt.api.internal.absolutePath
@@ -41,3 +46,24 @@ fun RuleSet.visitFile(
         it.visitFile(file, bindingContext)
         it.findings
     }
+
+typealias IdMapping = Map<RuleId, RuleSetId>
+
+fun associateRuleIdsToRuleSetIds(rules: Map<RuleSetId, List<BaseRule>>): IdMapping {
+    fun extractIds(rule: BaseRule) =
+        if (rule is MultiRule) {
+            rule.rules.asSequence().map(Rule::ruleId)
+        } else {
+            sequenceOf(rule.ruleId)
+        }
+    return rules
+        .asSequence()
+        .flatMap { (ruleSetId, baseRules) ->
+            baseRules
+                .asSequence()
+                .flatMap(::extractIds)
+                .distinct()
+                .map { ruleId -> ruleId to ruleSetId }
+        }
+        .toMap()
+}
