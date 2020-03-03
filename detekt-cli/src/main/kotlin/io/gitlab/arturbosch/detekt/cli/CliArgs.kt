@@ -173,6 +173,12 @@ class CliArgs : Args {
     )
     var jvmTarget: JvmTarget = JvmTarget.DEFAULT
 
+    @Parameter(
+        names = ["--version"],
+        description = "Prints the detekt CLI version."
+    )
+    var showVersion: Boolean = false
+
     val inputPaths: List<Path> by lazy {
         MultipleExistingPathConverter().convert(input ?: System.getProperty("user.dir"))
     }
