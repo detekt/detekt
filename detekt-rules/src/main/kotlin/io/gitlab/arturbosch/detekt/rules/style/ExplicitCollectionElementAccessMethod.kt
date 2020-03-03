@@ -63,8 +63,7 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
     private fun isMapMethod(expression: KtCallExpression): Boolean {
         val dotExpression = expression.prevSibling
         val caller = when (dotExpression?.parent) {
-            is KtDotQualifiedExpression,
-            is KtSafeQualifiedExpression -> dotExpression.prevSibling
+            is KtDotQualifiedExpression -> dotExpression.prevSibling
             else -> return false
         }
         return (caller as? KtElement).getResolvedCall(bindingContext)

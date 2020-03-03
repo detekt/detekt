@@ -27,13 +27,13 @@ class ExplicitCollectionElementAccessMethodSpec : Spek({
             assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
         }
 
-        it("reports safe map element access") {
+        it("does not report safe map element access") {
             val code = """
                     fun f() {
                         val map = mapOf<String, String>() 
                         val value = map?.get("key") 
                     }"""
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
         }
 
         it("reports map put method usage") {
