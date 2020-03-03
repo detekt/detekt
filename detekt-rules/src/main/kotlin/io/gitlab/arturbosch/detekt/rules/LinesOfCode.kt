@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION") // FIXME remove PsiCoreCommentImpl in IntelliJ 2020.3
+
 package io.gitlab.arturbosch.detekt.rules
 
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
