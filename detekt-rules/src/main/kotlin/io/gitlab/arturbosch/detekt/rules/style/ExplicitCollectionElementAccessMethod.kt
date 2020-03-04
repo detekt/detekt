@@ -11,7 +11,6 @@ import org.jetbrains.kotlin.js.descriptorUtils.nameIfStandardType
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtElement
-import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 import org.jetbrains.kotlin.types.KotlinType
 import org.jetbrains.kotlin.types.typeUtil.supertypes
@@ -63,8 +62,7 @@ class ExplicitCollectionElementAccessMethod(config: Config = Config.empty) : Rul
     private fun isMapMethod(expression: KtCallExpression): Boolean {
         val dotExpression = expression.prevSibling
         val caller = when (dotExpression?.parent) {
-            is KtDotQualifiedExpression,
-            is KtSafeQualifiedExpression -> dotExpression.prevSibling
+            is KtDotQualifiedExpression -> dotExpression.prevSibling
             else -> return false
         }
         return (caller as? KtElement).getResolvedCall(bindingContext)
