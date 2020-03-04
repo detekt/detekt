@@ -17,8 +17,6 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.KtThisExpression
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.contract
 
 /**
  * `apply` expressions are used frequently, but sometimes their usage should be replaced with
@@ -75,7 +73,7 @@ private fun KtCallExpression.hasOnlyOneMemberAccessStatement(): Boolean {
                     this.safeAs<KtDotQualifiedExpression>()?.receiverExpression is KtThisExpression
 
     val lambdaBody = firstLambdaArg?.bodyExpression
-    if (lambdaBody.hasOnlyOneStatement()) {
+    if (lambdaBody?.children?.size == 1) {
         val expr = lambdaBody.statements[0]
         return expr.notAnAssignment() && expr.isMemberAccess()
     }
@@ -87,13 +85,4 @@ private const val APPLY_LITERAL = "apply"
 private fun KtCallExpression.isApplyExpr() = calleeExpression?.textMatches(APPLY_LITERAL) == true
 
 private val KtCallExpression.firstLambdaArg
-    get() = lambdaArguments.firstOrNull()
-            ?.getLambdaExpression()
-
-@UseExperimental(ExperimentalContracts::class)
-private fun KtBlockExpression?.hasOnlyOneStatement(): Boolean {
-    contract {
-        returns(true) implies (this@hasOnlyOneStatement != null)
-    }
-    return this?.children?.size == 1
-}
+    get() = lambdaArguments.firstOrNull()?.getLambdaExpression()
