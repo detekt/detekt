@@ -11,3 +11,7 @@ coverage:
       default:
         # Fail the status if coverage drops by >= 0.1%
         threshold: 0.1
+    patch:
+      default:
+        # Only post a patch status to pull requests
+        only_pulls: true
