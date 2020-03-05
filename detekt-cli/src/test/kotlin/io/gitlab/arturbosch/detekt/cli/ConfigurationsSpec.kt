@@ -47,9 +47,12 @@ internal class ConfigurationsSpec : Spek({
         }
 
         it("should fail on invalid config value") {
-            assertThatIllegalArgumentException().isThrownBy { CliArgs { config = "," }.loadConfiguration() }
-            assertThatExceptionOfType(ParameterException::class.java).isThrownBy { CliArgs { config = "sfsjfsdkfsd" }.loadConfiguration() }
-            assertThatExceptionOfType(ParameterException::class.java).isThrownBy { CliArgs { config = "./i.do.not.exist.yml" }.loadConfiguration() }
+            assertThatIllegalArgumentException()
+                .isThrownBy { CliArgs { config = "," }.loadConfiguration() }
+            assertThatExceptionOfType(ParameterException::class.java)
+                .isThrownBy { CliArgs { config = "sfsjfsdkfsd" }.loadConfiguration() }
+            assertThatExceptionOfType(ParameterException::class.java)
+                .isThrownBy { CliArgs { config = "./i.do.not.exist.yml" }.loadConfiguration() }
         }
     }
 
@@ -76,9 +79,12 @@ internal class ConfigurationsSpec : Spek({
         }
 
         it("should fail on invalid config value") {
-            assertThatExceptionOfType(Config.InvalidConfigurationError::class.java).isThrownBy { CliArgs { configResource = "," }.loadConfiguration() }
-            assertThatExceptionOfType(ParameterException::class.java).isThrownBy { CliArgs { configResource = "sfsjfsdkfsd" }.loadConfiguration() }
-            assertThatExceptionOfType(ParameterException::class.java).isThrownBy { CliArgs { configResource = "./i.do.not.exist.yml" }.loadConfiguration() }
+            assertThatExceptionOfType(Config.InvalidConfigurationError::class.java)
+                .isThrownBy { CliArgs { configResource = "," }.loadConfiguration() }
+            assertThatExceptionOfType(ParameterException::class.java)
+                .isThrownBy { CliArgs { configResource = "sfsjfsdkfsd" }.loadConfiguration() }
+            assertThatExceptionOfType(ParameterException::class.java)
+                .isThrownBy { CliArgs { configResource = "./i.do.not.exist.yml" }.loadConfiguration() }
         }
     }
 
@@ -149,7 +155,10 @@ internal class ConfigurationsSpec : Spek({
         }.loadConfiguration()
 
         it("should override active to true by default") {
-            assertThat(config.subConfig("comments").subConfig("UndocumentedPublicClass").valueOrDefault("active", false)).isEqualTo(true)
+            val actual = config.subConfig("comments")
+                .subConfig("UndocumentedPublicClass")
+                .valueOrDefault("active", false)
+            assertThat(actual).isEqualTo(true)
         }
 
         it("should override maxIssues to 0 by default") {
@@ -157,7 +166,10 @@ internal class ConfigurationsSpec : Spek({
         }
 
         it("should keep config from default") {
-            assertThat(config.subConfig("style").subConfig("MaxLineLength").valueOrDefault("maxLineLength", -1)).isEqualTo(120)
+            val actual = config.subConfig("style")
+                .subConfig("MaxLineLength")
+                .valueOrDefault("maxLineLength", -1)
+            assertThat(actual).isEqualTo(120)
         }
     }
 
@@ -168,11 +180,17 @@ internal class ConfigurationsSpec : Spek({
         }.loadConfiguration()
 
         it("should override config when specified") {
-            assertThat(config.subConfig("style").subConfig("MaxLineLength").valueOrDefault("maxLineLength", -1)).isEqualTo(100)
+            val actual = config.subConfig("style")
+                .subConfig("MaxLineLength")
+                .valueOrDefault("maxLineLength", -1)
+            assertThat(actual).isEqualTo(100)
         }
 
         it("should override active when specified") {
-            assertThat(config.subConfig("comments").subConfig("CommentOverPrivateMethod").valueOrDefault("active", true)).isEqualTo(false)
+            val actual = config.subConfig("comments")
+                .subConfig("CommentOverPrivateMethod")
+                .valueOrDefault("active", true)
+            assertThat(actual).isEqualTo(false)
         }
 
         it("should override maxIssues when specified") {
@@ -189,12 +207,19 @@ internal class ConfigurationsSpec : Spek({
         }.loadConfiguration()
 
         it("should override config when specified") {
-            assertThat(config.subConfig("style").subConfig("MaxLineLength").valueOrDefault("maxLineLength", -1)).isEqualTo(100)
-            assertThat(config.subConfig("style").subConfig("MaxLineLength").valueOrDefault("excludeCommentStatements", false)).isTrue()
+            val ruleConfig = config.subConfig("style").subConfig("MaxLineLength")
+            val lineLength = ruleConfig.valueOrDefault("maxLineLength", -1)
+            val excludeComments = ruleConfig.valueOrDefault("excludeCommentStatements", false)
+
+            assertThat(lineLength).isEqualTo(100)
+            assertThat(excludeComments).isTrue()
         }
 
         it("should be active=false by default") {
-            assertThat(config.subConfig("comments").subConfig("CommentOverPrivateFunction").valueOrDefault("active", true)).isFalse()
+            val actual = config.subConfig("comments")
+                .subConfig("CommentOverPrivateFunction")
+                .valueOrDefault("active", true)
+            assertThat(actual).isFalse()
         }
 
         it("should be maxIssues=0 by default") {
