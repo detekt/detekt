@@ -149,6 +149,7 @@ internal class ConfigurationsSpec : Spek({
     }
 
     describe("fail fast only") {
+
         val config = CliArgs {
             configResource = "/configs/empty.yml"
             failFast = true
@@ -174,6 +175,7 @@ internal class ConfigurationsSpec : Spek({
     }
 
     describe("fail fast override") {
+
         val config = CliArgs {
             configResource = "/configs/fail-fast-will-override-here.yml"
             failFast = true
@@ -223,7 +225,66 @@ internal class ConfigurationsSpec : Spek({
         }
 
         it("should be maxIssues=0 by default") {
-            assertThat(config.subConfig("build").valueOrDefault("maxIssues", -1)).isEqualTo(0)
+            val actual = config.subConfig("build").valueOrDefault("maxIssues", -1)
+            assertThat(actual).isEqualTo(0)
+        }
+    }
+
+    describe("auto correct config") {
+
+        context("when specified it respects all autoCorrect values of rules and rule sets") {
+            val config = CliArgs {
+                autoCorrect = true
+                configResource = "/configs/config-with-auto-correct.yml"
+            }.loadConfiguration()
+
+            val style = config.subConfig("style")
+            val comments = config.subConfig("comments")
+
+            it("is disabled for rule sets") {
+                assertThat(style.valueOrNull<Boolean>("autoCorrect")).isTrue()
+                assertThat(comments.valueOrNull<Boolean>("autoCorrect")).isFalse()
+            }
+
+            it("is disabled for rules") {
+                assertThat(style.subConfig("MagicNumber").valueOrNull<Boolean>("autoCorrect")).isTrue()
+                assertThat(style.subConfig("MagicString").valueOrNull<Boolean>("autoCorrect")).isFalse()
+                assertThat(comments.subConfig("ClassDoc").valueOrNull<Boolean>("autoCorrect")).isTrue()
+                assertThat(comments.subConfig("FunctionDoc").valueOrNull<Boolean>("autoCorrect")).isFalse()
+            }
+        }
+
+        mapOf(
+            CliArgs {
+                configResource = "/configs/config-with-auto-correct.yml"
+            }.loadConfiguration() to "when not specified all autoCorrect values are overridden to false",
+            CliArgs {
+                autoCorrect = false
+                configResource = "/configs/config-with-auto-correct.yml"
+            }.loadConfiguration() to "when specified as false, all autoCorrect values are overridden to false",
+            CliArgs {
+                autoCorrect = false
+                failFast = true
+                buildUponDefaultConfig = true
+                configResource = "/configs/config-with-auto-correct.yml"
+            }.loadConfiguration() to "regardless of other cli options, autoCorrect values are overridden to false"
+        ).forEach { (config, testContext) ->
+            context(testContext) {
+                val style = config.subConfig("style")
+                val comments = config.subConfig("comments")
+
+                it("is disabled for rule sets") {
+                    assertThat(style.valueOrNull<Boolean>("autoCorrect")).isFalse()
+                    assertThat(comments.valueOrNull<Boolean>("autoCorrect")).isFalse()
+                }
+
+                it("is disabled for rules") {
+                    assertThat(style.subConfig("MagicNumber").valueOrNull<Boolean>("autoCorrect")).isFalse()
+                    assertThat(style.subConfig("MagicString").valueOrNull<Boolean>("autoCorrect")).isFalse()
+                    assertThat(comments.subConfig("ClassDoc").valueOrNull<Boolean>("autoCorrect")).isFalse()
+                    assertThat(comments.subConfig("FunctionDoc").valueOrNull<Boolean>("autoCorrect")).isFalse()
+                }
+            }
         }
     }
 })

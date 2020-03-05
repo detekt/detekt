@@ -15,6 +15,7 @@ title: ValidatableConfiguration - detekt-api
 ### Inheritors
 
 | [CompositeConfig](../../io.gitlab.arturbosch.detekt.api/-composite-config/index.html) | Wraps two different configuration which should be considered when retrieving properties.`class CompositeConfig : `[`Config`](../../io.gitlab.arturbosch.detekt.api/-config/index.html)`, `[`ValidatableConfiguration`](./index.html) |
+| [DisabledAutoCorrectConfig](../-disabled-auto-correct-config/index.html) | `class DisabledAutoCorrectConfig : `[`Config`](../../io.gitlab.arturbosch.detekt.api/-config/index.html)`, `[`ValidatableConfiguration`](./index.html) |
 | [FailFastConfig](../-fail-fast-config/index.html) | `data class FailFastConfig : `[`Config`](../../io.gitlab.arturbosch.detekt.api/-config/index.html)`, `[`ValidatableConfiguration`](./index.html) |
 | [YamlConfig](../../io.gitlab.arturbosch.detekt.api/-yaml-config/index.html) | Config implementation using the yaml format. SubConfigurations can return sub maps according to the yaml specification.`class YamlConfig : `[`BaseConfig`](../../io.gitlab.arturbosch.detekt.api/-base-config/index.html)`, `[`ValidatableConfiguration`](./index.html) |
 
