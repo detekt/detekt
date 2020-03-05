@@ -6,6 +6,45 @@ permalink: changelog.html
 toc: true
 ---
 
+#### 1.7.0 - Upcoming
+
+##### Notable Changes
+
+- The Gradle plugin should be on par with the CLI performance-wise
+- Good to know: detekt CLI always supported argument files (`java -jar detekt-cli.jar @argsfile`)
+- New CLI `--version` flag
+
+##### Changelog
+
+- Stop using kotlin-reflect - [#2405](https://github.com/arturbosch/detekt/pull/2405)
+- Stop compiling with experimental flag - [#2404](https://github.com/arturbosch/detekt/pull/2404)
+- Only post a code coverage patch status to PRs - [#2402](https://github.com/arturbosch/detekt/pull/2402)
+- ExplicitCollectionElementAccessMethod: Don't report on nullable collection - [#2401](https://github.com/arturbosch/detekt/pull/2401)
+- Discourage new Case files - [#2399](https://github.com/arturbosch/detekt/pull/2399)
+- Use argsfiles for CI - [#2397](https://github.com/arturbosch/detekt/pull/2397)
+- Update to Kotlin v1.3.70 - [#2396](https://github.com/arturbosch/detekt/pull/2396)
+- Fix typo in VersionPrinter test - [#2395](https://github.com/arturbosch/detekt/pull/2395)
+- Add documentation for cli --version flag - [#2392](https://github.com/arturbosch/detekt/pull/2392)
+- ExplicitCollectionElementAccessMethod: Do not report map?.get("foo") - [#2391](https://github.com/arturbosch/detekt/issues/2391)
+- Update Gradle to 6.2.1 - [#2390](https://github.com/arturbosch/detekt/pull/2390)
+- Do not report conditional elvis continue statements - Closes#2388 - [#2389](https://github.com/arturbosch/detekt/pull/2389)
+- False positive: UnconditionalJumpStatementInLoop with elvis operator ?: - [#2388](https://github.com/arturbosch/detekt/issues/2388)
+- Refactor getting the detekt version for readability - [#2387](https://github.com/arturbosch/detekt/pull/2387)
+- Create less objects and sets when creating findings id map - [#2385](https://github.com/arturbosch/detekt/pull/2385)
+- Add --version to cli - [#2383](https://github.com/arturbosch/detekt/pull/2383)
+- Add `--version` CLI option - [#2382](https://github.com/arturbosch/detekt/issues/2382)
+- Add test cases for cli/runners package - [#2381](https://github.com/arturbosch/detekt/pull/2381)
+- Sort and run correctable rules first - #2341 - [#2378](https://github.com/arturbosch/detekt/pull/2378)
+- Deprecate rule set methods which expose implementation details of detekt-core - [#2366](https://github.com/arturbosch/detekt/pull/2366)
+- Mixing autocorrectable and non correctable rules results in obsolete issue locations for reports - [#2341](https://github.com/arturbosch/detekt/issues/2341)
+- Allow Detekt CLI to take an args file. - [#2318](https://github.com/arturbosch/detekt/issues/2318)
+- Call detekt reflectively - [#2282](https://github.com/arturbosch/detekt/pull/2282)
+- #1515. Copyright header rule for Kotlin files. - [#2077](https://github.com/arturbosch/detekt/pull/2077)
+- Detekt gradle is much slower than the jar - [#2035](https://github.com/arturbosch/detekt/issues/2035)
+- Cases files are super rigorous to work with - [#1089](https://github.com/arturbosch/detekt/issues/1089)
+
+See all issues at: [1.7.0](https://github.com/arturbosch/detekt/milestone/59)
+
 #### 1.6.0
 
 ##### Migration
