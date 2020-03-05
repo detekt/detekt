@@ -88,7 +88,6 @@ dependencies {
     implementation(project(":detekt-rules"))
     implementation(project(":detekt-formatting"))
     implementation("com.beust:jcommander:$jcommanderVersion")
-    implementation(kotlin("reflect"))
 
     testImplementation(project(":detekt-test"))
 }
