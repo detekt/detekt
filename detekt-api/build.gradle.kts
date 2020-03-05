@@ -11,7 +11,6 @@ val spekVersion: String by project
 dependencies {
     implementation("org.yaml:snakeyaml:$yamlVersion")
     api(kotlin("compiler-embeddable"))
-    implementation(kotlin("reflect"))
 
     testImplementation(project(":detekt-test"))
 }
