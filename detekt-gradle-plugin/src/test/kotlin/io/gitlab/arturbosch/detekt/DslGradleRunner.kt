@@ -5,7 +5,7 @@ import org.gradle.testkit.runner.GradleRunner
 import java.io.File
 import java.util.UUID
 
-class DslGradleRunner(
+class DslGradleRunner @Suppress("LongParameterList") constructor(
     val projectLayout: ProjectLayout,
     val buildFileName: String,
     val mainBuildFileContent: String,

@@ -210,7 +210,7 @@ Extract parts of the functionality of long methods into separate, smaller method
 
 ### LongParameterList
 
-Reports functions which have more parameters than a certain threshold (default: 6).
+Reports functions and constructors which have more parameters than a certain threshold.
 
 **Severity**: Maintainability
 
@@ -218,13 +218,27 @@ Reports functions which have more parameters than a certain threshold (default: 
 
 #### Configuration options:
 
-* ``threshold`` (default: ``6``)
+* ~~``threshold``~~ (default: ``6``)
+
+   **Deprecated**: Use `functionThreshold` and `constructorThreshold` instead
 
    number of parameters required to trigger the rule
+
+* ``functionThreshold`` (default: ``6``)
+
+   number of function parameters required to trigger the rule
+
+* ``constructorThreshold`` (default: ``7``)
+
+   number of constructor parameters required to trigger the rule
 
 * ``ignoreDefaultParameters`` (default: ``false``)
 
    ignore parameters that have a default value
+
+* ``ignoreDataClasses`` (default: ``true``)
+
+   ignore long constructor parameters list for data classes
 
 ### MethodOverloading
 
