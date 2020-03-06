@@ -153,6 +153,11 @@ Guarantees a better looking name as the extended base class :).
 
 |
 
+##### [io.gitlab.arturbosch.detekt.api.internal.DisabledAutoCorrectConfig](../io.gitlab.arturbosch.detekt.api.internal/-disabled-auto-correct-config/index.html)
+
+
+|
+
 ##### [io.gitlab.arturbosch.detekt.api.Entity](../io.gitlab.arturbosch.detekt.api/-entity/index.html)
 
 Stores information about a specific code fragment.

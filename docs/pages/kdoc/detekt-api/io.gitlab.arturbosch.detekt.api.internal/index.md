@@ -12,6 +12,7 @@ title: io.gitlab.arturbosch.detekt.api.internal - detekt-api
 | [CyclomaticComplexity](-cyclomatic-complexity/index.html) | Counts the cyclomatic complexity of nodes.`class CyclomaticComplexity : `[`DetektVisitor`](../io.gitlab.arturbosch.detekt.api/-detekt-visitor/index.html) |
 | [DefaultRuleSetProvider](-default-rule-set-provider.html) | Interface which marks sub-classes as provided by detekt via the rules sub-module.`interface DefaultRuleSetProvider : `[`RuleSetProvider`](../io.gitlab.arturbosch.detekt.api/-rule-set-provider/index.html) |
 | [DetektPomModel](-detekt-pom-model/index.html) | Adapted from https://github.com/pinterest/ktlint/blob/master/ktlint-core/src/main/kotlin/com/pinterest/ktlint/core/KtLint.kt Licenced under the MIT licence - https://github.com/pinterest/ktlint/blob/master/LICENSE`class DetektPomModel : UserDataHolderBase, PomModel` |
+| [DisabledAutoCorrectConfig](-disabled-auto-correct-config/index.html) | `class DisabledAutoCorrectConfig : `[`Config`](../io.gitlab.arturbosch.detekt.api/-config/index.html)`, `[`ValidatableConfiguration`](-validatable-configuration/index.html) |
 | [FailFastConfig](-fail-fast-config/index.html) | `data class FailFastConfig : `[`Config`](../io.gitlab.arturbosch.detekt.api/-config/index.html)`, `[`ValidatableConfiguration`](-validatable-configuration/index.html) |
 | [PathFilters](-path-filters/index.html) | `class PathFilters` |
 | [SimpleNotification](-simple-notification/index.html) | `data class SimpleNotification : `[`Notification`](../io.gitlab.arturbosch.detekt.api/-notification/index.html) |

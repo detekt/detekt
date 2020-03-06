@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.cli
 import io.gitlab.arturbosch.detekt.api.CompositeConfig
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.YamlConfig
+import io.gitlab.arturbosch.detekt.api.internal.DisabledAutoCorrectConfig
 import io.gitlab.arturbosch.detekt.api.internal.FailFastConfig
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import java.nio.file.Path
@@ -36,6 +37,10 @@ fun CliArgs.loadConfiguration(): Config {
         val initializedDefaultConfig = defaultConfig ?: loadDefaultConfig()
         declaredConfig = FailFastConfig(declaredConfig
             ?: initializedDefaultConfig, initializedDefaultConfig)
+    }
+
+    if (!autoCorrect) {
+        declaredConfig = DisabledAutoCorrectConfig(declaredConfig ?: loadDefaultConfig())
     }
 
     return declaredConfig ?: loadDefaultConfig()
