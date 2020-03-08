@@ -41,14 +41,11 @@ class YamlConfig internal constructor(
 
     companion object {
 
-        private const val YAML = ".yml"
-
         /**
-         * Factory method to load a yaml configuration. Given path must exist and end with "yml".
+         * Factory method to load a yaml configuration. Given path must exist.
          */
         fun load(path: Path): Config {
             require(Files.exists(path)) { "Unable to load config from '$path': file does not exist!" }
-            require(path.toString().endsWith(YAML)) { "Invalid config file name $path: file does not end with $YAML!" }
             return load(Files.newBufferedReader(path))
         }
 
