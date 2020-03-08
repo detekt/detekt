@@ -1,12 +1,11 @@
 package io.gitlab.arturbosch.detekt.api.internal
 
-import io.gitlab.arturbosch.detekt.api.CompositeConfig
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
+import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 

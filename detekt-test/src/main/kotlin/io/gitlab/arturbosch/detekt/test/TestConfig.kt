@@ -1,7 +1,9 @@
+@file:Suppress("DEPRECATION")
+
 package io.gitlab.arturbosch.detekt.test
 
-import io.gitlab.arturbosch.detekt.api.BaseConfig
 import io.gitlab.arturbosch.detekt.api.HierarchicalConfig
+import io.gitlab.arturbosch.detekt.api.internal.BaseConfig
 
 @Suppress("UNCHECKED_CAST")
 open class TestConfig(

@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.test
 
-import io.gitlab.arturbosch.detekt.api.YamlConfig
+import io.gitlab.arturbosch.detekt.api.internal.YamlConfig
 import java.net.URI
 
 internal object Resources

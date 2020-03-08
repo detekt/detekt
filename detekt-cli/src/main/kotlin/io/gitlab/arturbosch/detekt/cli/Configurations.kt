@@ -1,11 +1,11 @@
 package io.gitlab.arturbosch.detekt.cli
 
-import io.gitlab.arturbosch.detekt.api.CompositeConfig
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.YamlConfig
+import io.gitlab.arturbosch.detekt.api.internal.CompositeConfig
 import io.gitlab.arturbosch.detekt.api.internal.DisabledAutoCorrectConfig
 import io.gitlab.arturbosch.detekt.api.internal.FailFastConfig
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
+import io.gitlab.arturbosch.detekt.api.internal.YamlConfig
 import java.nio.file.Path
 
 fun CliArgs.createFilters(): PathFilters? = PathFilters.of(includes, excludes)

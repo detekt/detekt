@@ -6,7 +6,8 @@ title: Config.InvalidConfigurationError - detekt-api
 
 # InvalidConfigurationError
 
-`class InvalidConfigurationError : `[`RuntimeException`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-runtime-exception/index.html)
+`class ~~InvalidConfigurationError~~ : `[`RuntimeException`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-runtime-exception/index.html)
+**Deprecated:** Default value of parameter 'msg' applies only to YamlConfig and will be removed in the future
 
 Is thrown when loading a configuration results in errors.
 

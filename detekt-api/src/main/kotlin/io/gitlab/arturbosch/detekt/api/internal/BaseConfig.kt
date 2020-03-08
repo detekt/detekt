@@ -1,0 +1,51 @@
+package io.gitlab.arturbosch.detekt.api.internal
+
+import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.HierarchicalConfig
+import java.util.ArrayDeque
+
+/**
+ * Convenient base configuration which parses/casts the configuration value based on the type of the default value.
+ */
+abstract class BaseConfig : HierarchicalConfig {
+
+    protected open fun valueOrDefaultInternal(key: String, result: Any?, default: Any): Any {
+        return try {
+            if (result != null) {
+                when {
+                    result is String -> tryParseBasedOnDefault(result, default)
+                    default::class in Config.PRIMITIVES &&
+                        result::class != default::class -> throw ClassCastException()
+                    else -> result
+                }
+            } else {
+                default
+            }
+        } catch (_: ClassCastException) {
+            error("Value \"$result\" set for config parameter \"${keySequence(key)}\" is not of" +
+                " required type ${default::class.simpleName}.")
+        } catch (_: NumberFormatException) {
+            error("Value \"$result\" set for config parameter \"${keySequence(key)}\" is not of" +
+                " required type ${default::class.simpleName}.")
+        }
+    }
+
+    private fun keySequence(key: String): String {
+        val seq = ArrayDeque<String>()
+        var current = parent
+        while (current != null) {
+            seq.addFirst(current.key)
+            current = (current.config as? HierarchicalConfig)?.parent
+        }
+        val keySeq = seq.joinToString(" > ")
+        return if (keySeq.isEmpty()) key else "$keySeq > $key"
+    }
+
+    protected open fun tryParseBasedOnDefault(result: String, defaultResult: Any): Any = when (defaultResult) {
+        is Int -> result.toInt()
+        is Boolean -> result.toBoolean()
+        is Double -> result.toDouble()
+        is String -> result
+        else -> throw ClassCastException()
+    }
+}
