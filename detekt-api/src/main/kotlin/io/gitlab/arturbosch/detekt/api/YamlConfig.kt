@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.internal.validateConfig
 import org.yaml.snakeyaml.Yaml
 import java.io.BufferedReader
 import java.net.URL
-import java.nio.file.Files
 import java.nio.file.Path
 
 /**
