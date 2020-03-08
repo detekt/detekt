@@ -42,7 +42,7 @@ class YamlConfig internal constructor(
 
         /**
          * Factory method to load a yaml configuration. Given path must exist
-         * and point to a file.
+         * and point to a readable file.
          */
         fun load(path: Path): Config =
             load(path.toFile().apply {

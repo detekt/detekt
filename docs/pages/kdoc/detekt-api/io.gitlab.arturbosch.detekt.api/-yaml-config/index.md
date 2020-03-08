@@ -26,6 +26,6 @@ yaml specification.
 
 ### Companion Object Functions
 
-| [load](load.html) | Factory method to load a yaml configuration. Given path must exist and end with "yml".`fun load(path: `[`Path`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Path.html)`): `[`Config`](../-config/index.html) |
+| [load](load.html) | Factory method to load a yaml configuration. Given path must exist and point to a readable file.`fun load(path: `[`Path`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Path.html)`): `[`Config`](../-config/index.html) |
 | [loadResource](load-resource.html) | Factory method to load a yaml configuration from a URL.`fun loadResource(url: `[`URL`](https://docs.oracle.com/javase/8/docs/api/java/net/URL.html)`): `[`Config`](../-config/index.html) |
 
