@@ -42,12 +42,15 @@ class YamlConfig internal constructor(
     companion object {
 
         /**
-         * Factory method to load a yaml configuration. Given path must exist.
+         * Factory method to load a yaml configuration. Given path must exist
+         * and point to a file.
          */
-        fun load(path: Path): Config {
-            require(Files.exists(path)) { "Unable to load config from '$path': file does not exist!" }
-            return load(Files.newBufferedReader(path))
-        }
+        fun load(path: Path): Config =
+            load(path.toFile().apply {
+                require(exists()) { "Configuration does not exist: $path" }
+                require(isFile) { "Configuration must be a file: $path" }
+                require(canRead()) { "Configuration must be readable: $path" }
+            }.bufferedReader())
 
         /**
          * Factory method to load a yaml configuration from a URL.
