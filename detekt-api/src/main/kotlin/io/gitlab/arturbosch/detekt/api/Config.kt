@@ -29,6 +29,7 @@ interface Config {
     /**
      * Is thrown when loading a configuration results in errors.
      */
+    @Deprecated("Default value of parameter 'msg' applies only to YamlConfig and will be removed in the future")
     class InvalidConfigurationError(
         msg: String = "Provided configuration file is invalid:" +
             " Structure must be from type Map<String,Any>!"

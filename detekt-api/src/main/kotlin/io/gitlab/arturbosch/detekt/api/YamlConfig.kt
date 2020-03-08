@@ -65,7 +65,10 @@ class YamlConfig internal constructor(
                 if (map is Map<*, *>) {
                     YamlConfig(map as Map<String, Any>, parent = null)
                 } else {
-                    throw Config.InvalidConfigurationError()
+                    @Suppress("DEPRECATION")
+                    throw Config.InvalidConfigurationError(
+                        "Provided configuration file is invalid: Structure must be of type 'Map<String,Any>'."
+                    )
                 }
             }
         }
