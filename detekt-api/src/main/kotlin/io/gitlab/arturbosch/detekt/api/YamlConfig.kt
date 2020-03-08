@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.internal.validateConfig
 import org.yaml.snakeyaml.Yaml
 import java.io.BufferedReader
 import java.net.URL
-import java.nio.file.Files
 import java.nio.file.Path
 
 /**
@@ -41,16 +40,16 @@ class YamlConfig internal constructor(
 
     companion object {
 
-        private const val YAML = ".yml"
-
         /**
-         * Factory method to load a yaml configuration. Given path must exist and end with "yml".
+         * Factory method to load a yaml configuration. Given path must exist
+         * and point to a readable file.
          */
-        fun load(path: Path): Config {
-            require(Files.exists(path)) { "Unable to load config from '$path': file does not exist!" }
-            require(path.toString().endsWith(YAML)) { "Invalid config file name $path: file does not end with $YAML!" }
-            return load(Files.newBufferedReader(path))
-        }
+        fun load(path: Path): Config =
+            load(path.toFile().apply {
+                require(exists()) { "Configuration does not exist: $path" }
+                require(isFile) { "Configuration must be a file: $path" }
+                require(canRead()) { "Configuration must be readable: $path" }
+            }.bufferedReader())
 
         /**
          * Factory method to load a yaml configuration from a URL.
