@@ -13,5 +13,6 @@ coverage:
         threshold: 0.1
     patch:
       default:
+        target: 80%
         # Only post a patch status to pull requests
         only_pulls: true
