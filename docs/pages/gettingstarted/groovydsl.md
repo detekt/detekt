@@ -118,10 +118,7 @@ Type resolution is experimental and works only for predefined `detektMain` and `
 custom detekt task with the `classpath` and `jvmTarget` properties present.
 
 ```groovy
-tasks.withType(io.gitlab.arturbosch.detekt.Detekt) {
-    // Target version of the generated JVM bytecode. It is used for type resolution.
-    jvmTarget = "1.8"
-}
+tasks.detekt.jvmTarget = "1.8"
 ```
 
 ##### <a name="excluding">Leveraging Gradle's SourceTask - Excluding and including source files</a>
