@@ -102,6 +102,13 @@ detekt {
     }
 }
 
+
+// Groovy dsl
+tasks.detekt.jvmTarget = "1.8"
+
+// or
+
+// Kotlin dsl
 tasks {
     withType<Detekt> {
         // Target version of the generated JVM bytecode. It is used for type resolution.
