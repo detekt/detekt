@@ -1,8 +1,10 @@
+@file:Suppress("DEPRECATION")
+
 package io.gitlab.arturbosch.detekt.api.internal
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Config.Companion.CONFIG_SEPARATOR
 import io.gitlab.arturbosch.detekt.api.HierarchicalConfig
-import java.util.ArrayDeque
 
 /**
  * Convenient base configuration which parses/casts the configuration value based on the type of the default value.
@@ -30,16 +32,8 @@ abstract class BaseConfig : HierarchicalConfig {
         }
     }
 
-    private fun keySequence(key: String): String {
-        val seq = ArrayDeque<String>()
-        var current = parent
-        while (current != null) {
-            seq.addFirst(current.key)
-            current = (current.config as? HierarchicalConfig)?.parent
-        }
-        val keySeq = seq.joinToString(" > ")
-        return if (keySeq.isEmpty()) key else "$keySeq > $key"
-    }
+    private fun keySequence(key: String): String =
+        if (parentPath == null) key else "$parentPath $CONFIG_SEPARATOR $key"
 
     protected open fun tryParseBasedOnDefault(result: String, defaultResult: Any): Any = when (defaultResult) {
         is Int -> result.toInt()

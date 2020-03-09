@@ -14,6 +14,10 @@ A configuration holds information about how to configure specific rules.
 
 | [InvalidConfigurationError](-invalid-configuration-error/index.html) | Is thrown when loading a configuration results in errors.`class ~~InvalidConfigurationError~~ : `[`RuntimeException`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-runtime-exception/index.html) |
 
+### Properties
+
+| [parentPath](parent-path.html) | Keeps track of which key was taken to [subConfig](sub-config.html) this configuration. Sub-sequential calls to [subConfig](sub-config.html) are tracked with '&gt;' as a separator.`open val parentPath: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`?` |
+
 ### Functions
 
 | [subConfig](sub-config.html) | Tries to retrieve part of the configuration based on given key.`abstract fun subConfig(key: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`): `[`Config`](./index.html) |
@@ -23,6 +27,7 @@ A configuration holds information about how to configure specific rules.
 ### Companion Object Properties
 
 | [ACTIVE_KEY](-a-c-t-i-v-e_-k-e-y.html) | `const val ACTIVE_KEY: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
+| [CONFIG_SEPARATOR](-c-o-n-f-i-g_-s-e-p-a-r-a-t-o-r.html) | `const val CONFIG_SEPARATOR: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 | [empty](empty.html) | An empty configuration with no properties. This config should only be used in test cases. Always returns the default value except when 'active' is queried, it returns true .`val empty: `[`Config`](./index.html) |
 | [EXCLUDES_KEY](-e-x-c-l-u-d-e-s_-k-e-y.html) | `const val EXCLUDES_KEY: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 | [INCLUDES_KEY](-i-n-c-l-u-d-e-s_-k-e-y.html) | `const val INCLUDES_KEY: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
@@ -34,5 +39,5 @@ A configuration holds information about how to configure specific rules.
 | [ConfigAware](../-config-aware/index.html) | Interface which is implemented by each Rule class to provide utility functions to retrieve specific or generic properties from the underlying detekt configuration file.`interface ConfigAware : `[`Config`](./index.html) |
 | [DisabledAutoCorrectConfig](../../io.gitlab.arturbosch.detekt.api.internal/-disabled-auto-correct-config/index.html) | `class DisabledAutoCorrectConfig : `[`Config`](./index.html)`, `[`ValidatableConfiguration`](../../io.gitlab.arturbosch.detekt.api.internal/-validatable-configuration/index.html) |
 | [FailFastConfig](../../io.gitlab.arturbosch.detekt.api.internal/-fail-fast-config/index.html) | `data class FailFastConfig : `[`Config`](./index.html)`, `[`ValidatableConfiguration`](../../io.gitlab.arturbosch.detekt.api.internal/-validatable-configuration/index.html) |
-| [HierarchicalConfig](../-hierarchical-config/index.html) | A configuration which keeps track of the config it got sub-config'ed from by the [subConfig](sub-config.html) function. It's main usage is to recreate the property-path which was taken when using the [subConfig](sub-config.html) function repeatedly.`interface HierarchicalConfig : `[`Config`](./index.html) |
+| [HierarchicalConfig](../-hierarchical-config/index.html) | A configuration which keeps track of the config it got sub-config'ed from by the [subConfig](sub-config.html) function. It's main usage is to recreate the property-path which was taken when using the [subConfig](sub-config.html) function repeatedly.`interface ~~HierarchicalConfig~~ : `[`Config`](./index.html) |
 

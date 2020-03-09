@@ -1,6 +1,9 @@
+@file:Suppress("UNCHECKED_CAST", "DEPRECATION")
+
 package io.gitlab.arturbosch.detekt.api.internal
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Config.Companion.CONFIG_SEPARATOR
 import io.gitlab.arturbosch.detekt.api.HierarchicalConfig
 import io.gitlab.arturbosch.detekt.api.Notification
 import org.yaml.snakeyaml.Yaml
@@ -12,15 +15,19 @@ import java.nio.file.Path
  * Config implementation using the yaml format. SubConfigurations can return sub maps according to the
  * yaml specification.
  */
-@Suppress("UNCHECKED_CAST")
 class YamlConfig internal constructor(
     val properties: Map<String, Any>,
-    override val parent: HierarchicalConfig.Parent?
+    override val parent: HierarchicalConfig.Parent?,
+    override val parentPath: String? = null
 ) : BaseConfig(), ValidatableConfiguration {
 
     override fun subConfig(key: String): Config {
         val subProperties = properties.getOrElse(key) { mapOf<String, Any>() }
-        return YamlConfig(subProperties as Map<String, Any>, HierarchicalConfig.Parent(this, key))
+        return YamlConfig(
+            subProperties as Map<String, Any>,
+            HierarchicalConfig.Parent(this, key),
+            if (parentPath == null) key else "$parentPath $CONFIG_SEPARATOR $key"
+        )
     }
 
     override fun <T : Any> valueOrDefault(key: String, default: T): T {
@@ -66,7 +73,6 @@ class YamlConfig internal constructor(
                 if (map is Map<*, *>) {
                     YamlConfig(map as Map<String, Any>, parent = null)
                 } else {
-                    @Suppress("DEPRECATION")
                     throw Config.InvalidConfigurationError(
                         "Provided configuration file is invalid: Structure must be of type 'Map<String,Any>'."
                     )

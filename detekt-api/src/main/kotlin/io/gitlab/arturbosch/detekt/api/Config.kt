@@ -11,6 +11,15 @@ import kotlin.reflect.KClass
 interface Config {
 
     /**
+     * Keeps track of which key was taken to [subConfig] this configuration.
+     * Sub-sequential calls to [subConfig] are tracked with '>' as a separator.
+     *
+     * May be null if this is the top most configuration object.
+     */
+    val parentPath: String?
+        get() = null
+
+    /**
      * Tries to retrieve part of the configuration based on given key.
      */
     fun subConfig(key: String): Config
@@ -48,6 +57,7 @@ interface Config {
         const val ACTIVE_KEY: String = "active"
         const val EXCLUDES_KEY: String = "excludes"
         const val INCLUDES_KEY: String = "includes"
+        const val CONFIG_SEPARATOR: String = ">"
 
         val PRIMITIVES: Set<KClass<out Any>> = setOf(
             Int::class,
@@ -66,6 +76,12 @@ interface Config {
  * A configuration which keeps track of the config it got sub-config'ed from by the [subConfig] function.
  * It's main usage is to recreate the property-path which was taken when using the [subConfig] function repeatedly.
  */
+@Deprecated("""
+A Config is a long lived object and is derived via subConfig a lot.
+Keeping track of the parent it was derived, creates long-lived object chains which takes the GC longer to release them.
+It can even lead to OOM if detekt get's embedded in an other application which reuses the top most Config object. 
+The property 'parentPath' of the Config interface can be used as a replacement for parent.key calls.
+""")
 interface HierarchicalConfig : Config {
     /**
      * Returns the parent config which encloses this config part.
