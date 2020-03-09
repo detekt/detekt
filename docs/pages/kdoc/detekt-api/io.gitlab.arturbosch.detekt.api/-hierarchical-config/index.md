@@ -6,7 +6,8 @@ title: HierarchicalConfig - detekt-api
 
 # HierarchicalConfig
 
-`interface HierarchicalConfig : `[`Config`](../-config/index.html)
+`interface ~~HierarchicalConfig~~ : `[`Config`](../-config/index.html)
+**Deprecated:** \nA Config is a long lived object and is derived via subConfig a lot.\nKeeping track of the parent it was derived, creates long-lived object chains which takes the GC longer to release them.\nIt can even lead to OOM if detekt get's embedded in an other application which reuses the top most Config object. \nThe property 'parentPath' of the Config interface can be used as a replacement for parent.key calls.\n
 
 A configuration which keeps track of the config it got sub-config'ed from by the [subConfig](../-config/sub-config.html) function.
 It's main usage is to recreate the property-path which was taken when using the [subConfig](../-config/sub-config.html) function repeatedly.

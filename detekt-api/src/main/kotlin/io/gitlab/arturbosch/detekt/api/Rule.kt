@@ -46,7 +46,7 @@ abstract class Rule(
      */
     open val defaultRuleIdAliases: Set<String> = emptySet()
 
-    internal val ruleSetId: RuleId? get() = (ruleSetConfig as? HierarchicalConfig)?.parent?.key
+    internal val ruleSetId: RuleId? get() = ruleSetConfig.parentPath
 
     /**
      * Rules are aware of the paths they should run on via configuration properties.
