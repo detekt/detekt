@@ -1,22 +1,24 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.Case
+import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.YamlConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
+import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.resource
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
+import java.nio.file.Paths
 
 internal class AbsentOrWrongFileLicenseSpec : Spek({
 
-    val subject by memoized { AbsentOrWrongFileLicense(Config.empty) }
-
-    /*describe("AbsentOrWrongFileLicense rule") {
-
+    describe("AbsentOrWrongFileLicense rule") {
         context("file with correct license header") {
             it("reports nothing") {
-                val path = Case.FileWithCorrectLicenseHeader.path()
-                val findings = subject.lint(path)
+                val findings = checkLicence("""
+                    /* LICENSE */
+                    package cases
+                """.trimIndent())
 
                 assertThat(findings).isEmpty()
             }
@@ -24,20 +26,35 @@ internal class AbsentOrWrongFileLicenseSpec : Spek({
 
         context("file with incorrect license header") {
             it("reports missed license header") {
-                val path = Case.FileWithIncorrectLicenseHeader.path()
-                val findings = subject.lint(path)
+                val findings = checkLicence("""
+                    /* WRONG LICENSE */
+                    package cases
+                """.trimIndent())
 
-                //TODO()
+                assertThat(findings).hasSize(1)
             }
         }
 
         context("file with absent license header") {
             it("reports missed license header") {
-                val path = Case.FileWithAbsentLicenseHeader.path()
-                val findings = subject.lint(path)
+                val findings = checkLicence("""
+                    package cases
+                """.trimIndent())
 
-                //TODO()
+                assertThat(findings).hasSize(1)
             }
         }
-    }*/
+    }
 })
+
+private fun checkLicence(content: String): List<Finding> {
+    val file = compileContentForTest(content)
+
+    val config = YamlConfig.load(Paths.get(resource("license-config.yml")))
+    LicenceHeaderLoaderExtension().apply {
+        init(config)
+        onStart(listOf(file))
+    }
+
+    return AbsentOrWrongFileLicense().lint(file)
+}

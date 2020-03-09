@@ -19,7 +19,7 @@ This rule will report every Kotlin source file which doesn't have required licen
 
 #### Configuration options:
 
-* ``licenseTemplateFile`` (default: ``license.template``)
+* ``licenseTemplateFile`` (default: ``'license.template'``)
 
    path to file with license header template resolved relatively to config file
 
@@ -64,7 +64,7 @@ It should end with proper punctuation or with a correct URL.
 
 #### Configuration options:
 
-* ``endOfSentenceFormat`` (default: ``([.?!][ \t\n\r\f<])|([.?!:]$)``)
+* ``endOfSentenceFormat`` (default: ``'([.?!][ \t\n\r\f<])|([.?!:]$)'``)
 
    regular expression which should match the end of the first sentence in the KDoc
 

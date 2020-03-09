@@ -57,25 +57,27 @@ class YamlConfig internal constructor(
                 require(exists()) { "Configuration does not exist: $path" }
                 require(isFile) { "Configuration must be a file: $path" }
                 require(canRead()) { "Configuration must be readable: $path" }
-            }.bufferedReader())
+            }.bufferedReader(), Config.Location.FromDirectory(path.parent))
 
         /**
          * Factory method to load a yaml configuration from a URL.
          */
         fun loadResource(url: URL): Config = load(url.openStream().bufferedReader())
 
-        private fun load(reader: BufferedReader): Config = reader.use {
+        private fun load(reader: BufferedReader, location: Config.Location? = null) = reader.use {
             val yamlInput = it.lineSequence().joinToString("\n")
             if (yamlInput.isEmpty()) {
                 Config.empty
             } else {
                 val map: Any = Yaml().load(yamlInput)
                 if (map is Map<*, *>) {
-                    YamlConfig(map as Map<String, Any>, parent = null)
-                } else {
-                    throw Config.InvalidConfigurationError(
-                        "Provided configuration file is invalid: Structure must be of type 'Map<String,Any>'."
+                    io.gitlab.arturbosch.detekt.api.YamlConfig(
+                        map as Map<String, Any>,
+                        parent = null,
+                        location = location ?: Config.Location.Undefined
                     )
+                } else {
+                    throw Config.InvalidConfigurationError()
                 }
             }
         }

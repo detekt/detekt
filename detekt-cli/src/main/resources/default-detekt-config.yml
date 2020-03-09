@@ -34,13 +34,16 @@ console-reports:
 comments:
   active: true
   excludes: "**/test/**,**/androidTest/**,**/*.Test.kt,**/*.Spec.kt,**/*.Spek.kt"
+  AbsentOrWrongFileLicense:
+    active: false
+    licenseTemplateFile: 'license.template'
   CommentOverPrivateFunction:
     active: false
   CommentOverPrivateProperty:
     active: false
   EndOfSentenceFormat:
     active: false
-    endOfSentenceFormat: ([.?!][ \t\n\r\f<])|([.?!:]$)
+    endOfSentenceFormat: '([.?!][ \t\n\r\f<])|([.?!:]$)'
   UndocumentedPublicClass:
     active: false
     searchInNestedClass: true

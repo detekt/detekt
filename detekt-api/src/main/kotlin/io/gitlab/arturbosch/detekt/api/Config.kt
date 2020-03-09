@@ -78,7 +78,7 @@ interface Config {
 
     sealed class Location {
         object Undefined : Location()
-        data class FromDirectory(val dir: Path) : Location()
+        class FromDirectory(val dir: Path) : Location()
     }
 }
 

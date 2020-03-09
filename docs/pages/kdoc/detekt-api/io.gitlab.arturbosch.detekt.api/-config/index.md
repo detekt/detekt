@@ -10,6 +10,10 @@ title: Config - detekt-api
 
 A configuration holds information about how to configure specific rules.
 
+### Types
+
+| [Location](-location/index.html) | `sealed class Location` |
+
 ### Exceptions
 
 | [InvalidConfigurationError](-invalid-configuration-error/index.html) | Is thrown when loading a configuration results in errors.`class ~~InvalidConfigurationError~~ : `[`RuntimeException`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-runtime-exception/index.html) |
@@ -17,6 +21,10 @@ A configuration holds information about how to configure specific rules.
 ### Properties
 
 | [parentPath](parent-path.html) | Keeps track of which key was taken to [subConfig](sub-config.html) this configuration. Sub-sequential calls to [subConfig](sub-config.html) are tracked with '&gt;' as a separator.`open val parentPath: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`?` |
+
+### Properties
+
+| [location](location.html) | `open val location: Location` |
 
 ### Functions
 
