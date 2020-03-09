@@ -12,7 +12,7 @@ A configuration holds information about how to configure specific rules.
 
 ### Exceptions
 
-| [InvalidConfigurationError](-invalid-configuration-error/index.html) | Is thrown when loading a configuration results in errors.`class InvalidConfigurationError : `[`RuntimeException`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-runtime-exception/index.html) |
+| [InvalidConfigurationError](-invalid-configuration-error/index.html) | Is thrown when loading a configuration results in errors.`class ~~InvalidConfigurationError~~ : `[`RuntimeException`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-runtime-exception/index.html) |
 
 ### Functions
 
@@ -30,7 +30,7 @@ A configuration holds information about how to configure specific rules.
 
 ### Inheritors
 
-| [CompositeConfig](../-composite-config/index.html) | Wraps two different configuration which should be considered when retrieving properties.`class CompositeConfig : `[`Config`](./index.html)`, `[`ValidatableConfiguration`](../../io.gitlab.arturbosch.detekt.api.internal/-validatable-configuration/index.html) |
+| [CompositeConfig](../../io.gitlab.arturbosch.detekt.api.internal/-composite-config/index.html) | Wraps two different configuration which should be considered when retrieving properties.`class CompositeConfig : `[`Config`](./index.html)`, `[`ValidatableConfiguration`](../../io.gitlab.arturbosch.detekt.api.internal/-validatable-configuration/index.html) |
 | [ConfigAware](../-config-aware/index.html) | Interface which is implemented by each Rule class to provide utility functions to retrieve specific or generic properties from the underlying detekt configuration file.`interface ConfigAware : `[`Config`](./index.html) |
 | [DisabledAutoCorrectConfig](../../io.gitlab.arturbosch.detekt.api.internal/-disabled-auto-correct-config/index.html) | `class DisabledAutoCorrectConfig : `[`Config`](./index.html)`, `[`ValidatableConfiguration`](../../io.gitlab.arturbosch.detekt.api.internal/-validatable-configuration/index.html) |
 | [FailFastConfig](../../io.gitlab.arturbosch.detekt.api.internal/-fail-fast-config/index.html) | `data class FailFastConfig : `[`Config`](./index.html)`, `[`ValidatableConfiguration`](../../io.gitlab.arturbosch.detekt.api.internal/-validatable-configuration/index.html) |

@@ -1,4 +1,4 @@
-package io.gitlab.arturbosch.detekt.api
+package io.gitlab.arturbosch.detekt.api.internal
 
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
@@ -12,7 +12,10 @@ class CompositeConfigTest : Spek({
         val first = yamlConfig("detekt.yml")
         val compositeConfig = CompositeConfig(second, first)
 
-        it("should have style sub config with active false which is overridden in `second` config regardless of default value") {
+        it("""
+            should have style sub config with active false which is overridden
+            in `second` config regardless of default value
+        """) {
             val styleConfig = compositeConfig.subConfig("style").subConfig("WildcardImport")
             assertThat(styleConfig.valueOrDefault("active", true)).isEqualTo(false)
             assertThat(styleConfig.valueOrDefault("active", false)).isEqualTo(false)

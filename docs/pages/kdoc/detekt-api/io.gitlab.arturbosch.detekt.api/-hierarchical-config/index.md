@@ -21,5 +21,5 @@ It's main usage is to recreate the property-path which was taken when using the 
 
 ### Inheritors
 
-| [BaseConfig](../-base-config/index.html) | Convenient base configuration which parses/casts the configuration value based on the type of the default value.`abstract class BaseConfig : `[`HierarchicalConfig`](./index.html) |
+| [BaseConfig](../../io.gitlab.arturbosch.detekt.api.internal/-base-config/index.html) | Convenient base configuration which parses/casts the configuration value based on the type of the default value.`abstract class BaseConfig : `[`HierarchicalConfig`](./index.html) |
 

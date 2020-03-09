@@ -79,6 +79,7 @@ internal class ConfigurationsSpec : Spek({
         }
 
         it("should fail on invalid config value") {
+            @Suppress("DEPRECATION")
             assertThatExceptionOfType(Config.InvalidConfigurationError::class.java)
                 .isThrownBy { CliArgs { configResource = "," }.loadConfiguration() }
             assertThatExceptionOfType(ParameterException::class.java)

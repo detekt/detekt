@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.YamlConfig
+import io.gitlab.arturbosch.detekt.api.internal.YamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
 import org.reflections.Reflections
@@ -53,8 +53,7 @@ class ConfigAssert(
         for (ymlOption in filter) {
             val configField = configFields.singleOrNull { ymlOption.key == it.get(null) }
             if (configField == null) {
-                fail<String>("${ymlOption.key} option for ${ruleClass.simpleName} rule is not correctly " +
-                        "defined")
+                fail<String>("${ymlOption.key} option for ${ruleClass.simpleName} rule is not correctly defined")
             }
         }
     }
@@ -64,8 +63,8 @@ class ConfigAssert(
 
     private fun getRuleClasses(): List<Class<out Rule>> {
         return Reflections(packageName)
-                .getSubTypesOf(Rule::class.java)
-                .filter { !Modifier.isAbstract(it.modifiers) }
+            .getSubTypesOf(Rule::class.java)
+            .filter { !Modifier.isAbstract(it.modifiers) }
     }
 
     private fun isPublicStaticFinal(it: Field): Boolean {

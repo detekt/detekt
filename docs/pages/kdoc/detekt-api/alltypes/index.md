@@ -15,7 +15,14 @@ is present over the element.
 
 |
 
-##### [io.gitlab.arturbosch.detekt.api.BaseConfig](../io.gitlab.arturbosch.detekt.api/-base-config/index.html)
+##### [io.gitlab.arturbosch.detekt.api.BaseConfig](../io.gitlab.arturbosch.detekt.api/-base-config.html)
+
+Convenient base configuration which parses/casts the configuration value based on the type of the default value.
+
+
+|
+
+##### [io.gitlab.arturbosch.detekt.api.internal.BaseConfig](../io.gitlab.arturbosch.detekt.api.internal/-base-config/index.html)
 
 Convenient base configuration which parses/casts the configuration value based on the type of the default value.
 
@@ -49,7 +56,14 @@ Provides a compact string representation.
 
 |
 
-##### [io.gitlab.arturbosch.detekt.api.CompositeConfig](../io.gitlab.arturbosch.detekt.api/-composite-config/index.html)
+##### [io.gitlab.arturbosch.detekt.api.CompositeConfig](../io.gitlab.arturbosch.detekt.api/-composite-config.html)
+
+Wraps two different configuration which should be considered when retrieving properties.
+
+
+|
+
+##### [io.gitlab.arturbosch.detekt.api.internal.CompositeConfig](../io.gitlab.arturbosch.detekt.api.internal/-composite-config/index.html)
 
 Wraps two different configuration which should be considered when retrieving properties.
 
@@ -415,7 +429,15 @@ but can be also obtained from within a configuration object.
 
 |
 
-##### [io.gitlab.arturbosch.detekt.api.YamlConfig](../io.gitlab.arturbosch.detekt.api/-yaml-config/index.html)
+##### [io.gitlab.arturbosch.detekt.api.YamlConfig](../io.gitlab.arturbosch.detekt.api/-yaml-config.html)
+
+Config implementation using the yaml format. SubConfigurations can return sub maps according to the
+yaml specification.
+
+
+|
+
+##### [io.gitlab.arturbosch.detekt.api.internal.YamlConfig](../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/index.html)
 
 Config implementation using the yaml format. SubConfigurations can return sub maps according to the
 yaml specification.

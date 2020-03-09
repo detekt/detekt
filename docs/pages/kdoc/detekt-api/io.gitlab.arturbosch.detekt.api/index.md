@@ -9,11 +9,11 @@ title: io.gitlab.arturbosch.detekt.api - detekt-api
 ### Types
 
 | [AnnotationExcluder](-annotation-excluder/index.html) | Primary use case for an AnnotationExcluder is to decide if a KtElement should be excluded from further analysis. This is done by checking if a special annotation is present over the element.`class AnnotationExcluder` |
-| [BaseConfig](-base-config/index.html) | Convenient base configuration which parses/casts the configuration value based on the type of the default value.`abstract class BaseConfig : `[`HierarchicalConfig`](-hierarchical-config/index.html) |
+| [BaseConfig](-base-config.html) | Convenient base configuration which parses/casts the configuration value based on the type of the default value.`typealias ~~BaseConfig~~ = `[`BaseConfig`](../io.gitlab.arturbosch.detekt.api.internal/-base-config/index.html) |
 | [BaseRule](-base-rule/index.html) | Defines the visiting mechanism for KtFile's.`abstract class BaseRule : `[`DetektVisitor`](-detekt-visitor/index.html)`, `[`Context`](-context/index.html) |
 | [CodeSmell](-code-smell/index.html) | A code smell indicates any possible design problem inside a program's source code. The type of a code smell is described by an [Issue](-issue/index.html).`open class CodeSmell : `[`Finding`](-finding/index.html) |
 | [Compactable](-compactable/index.html) | Provides a compact string representation.`interface Compactable` |
-| [CompositeConfig](-composite-config/index.html) | Wraps two different configuration which should be considered when retrieving properties.`class CompositeConfig : `[`Config`](-config/index.html)`, `[`ValidatableConfiguration`](../io.gitlab.arturbosch.detekt.api.internal/-validatable-configuration/index.html) |
+| [CompositeConfig](-composite-config.html) | Wraps two different configuration which should be considered when retrieving properties.`typealias ~~CompositeConfig~~ = `[`CompositeConfig`](../io.gitlab.arturbosch.detekt.api.internal/-composite-config/index.html) |
 | [Config](-config/index.html) | A configuration holds information about how to configure specific rules.`interface Config` |
 | [ConfigAware](-config-aware/index.html) | Interface which is implemented by each Rule class to provide utility functions to retrieve specific or generic properties from the underlying detekt configuration file.`interface ConfigAware : `[`Config`](-config/index.html) |
 | [ConfigValidator](-config-validator/index.html) | An extension which allows users to validate parts of the configuration.`interface ConfigValidator : `[`Extension`](-extension/index.html) |
@@ -51,7 +51,7 @@ title: io.gitlab.arturbosch.detekt.api - detekt-api
 | [TextLocation](-text-location/index.html) | Stores character start and end positions of an text file.`data class TextLocation` |
 | [ThresholdedCodeSmell](-thresholded-code-smell/index.html) | Represents a code smell for which a specific metric can be determined which is responsible for the existence of this rule violation.`open class ThresholdedCodeSmell : `[`CodeSmell`](-code-smell/index.html) |
 | [ThresholdRule](-threshold-rule/index.html) | Provides a threshold attribute for this rule, which is specified manually for default values but can be also obtained from within a configuration object.`abstract class ThresholdRule : `[`Rule`](-rule/index.html) |
-| [YamlConfig](-yaml-config/index.html) | Config implementation using the yaml format. SubConfigurations can return sub maps according to the yaml specification.`class YamlConfig : `[`BaseConfig`](-base-config/index.html)`, `[`ValidatableConfiguration`](../io.gitlab.arturbosch.detekt.api.internal/-validatable-configuration/index.html) |
+| [YamlConfig](-yaml-config.html) | Config implementation using the yaml format. SubConfigurations can return sub maps according to the yaml specification.`typealias ~~YamlConfig~~ = `[`YamlConfig`](../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/index.html) |
 
 ### Extensions for External Classes
 

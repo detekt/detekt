@@ -6,7 +6,7 @@ title: YamlConfig - detekt-api
 
 # YamlConfig
 
-`class YamlConfig : `[`BaseConfig`](../-base-config/index.html)`, `[`ValidatableConfiguration`](../../io.gitlab.arturbosch.detekt.api.internal/-validatable-configuration/index.html)
+`class YamlConfig : `[`BaseConfig`](../-base-config.html)`, `[`ValidatableConfiguration`](../../io.gitlab.arturbosch.detekt.api.internal/-validatable-configuration/index.html)
 
 Config implementation using the yaml format. SubConfigurations can return sub maps according to the
 yaml specification.
