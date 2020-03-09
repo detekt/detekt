@@ -5,12 +5,14 @@ import io.gitlab.arturbosch.detekt.cli.runners.ConfigExporter
 import io.gitlab.arturbosch.detekt.cli.runners.Runner
 import io.gitlab.arturbosch.detekt.cli.runners.SingleRuleRunner
 import io.gitlab.arturbosch.detekt.cli.runners.VersionPrinter
+import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.io.ByteArrayOutputStream
 import java.io.PrintStream
+import java.nio.file.Paths
 
 class MainSpec : Spek({
 
@@ -72,6 +74,51 @@ class MainSpec : Spek({
                 "--baseline",
                 "baseline.xml"
             )
+
+            buildRunner(args, PrintStream(out), PrintStream(err))
+
+            assertThat(String(err.toByteArray())).isEmpty()
+        }
+
+        it("fails with --baseline if the file does not exist") {
+            val out = ByteArrayOutputStream()
+            val err = ByteArrayOutputStream()
+
+            val path = Paths.get("doesNotExist.xml")
+            try {
+                val args = arrayOf("--baseline", path.toString())
+
+                buildRunner(args, PrintStream(out), PrintStream(err))
+                Assertions.fail("This should throw an exception.")
+            } catch (_: HandledArgumentViolation) {
+                assertThat(String(err.toByteArray()).trim())
+                    .isEqualTo("The file specified by --baseline should exist '$path'.")
+            }
+        }
+
+        it("fails with --baseline if the path is a directory") {
+            val out = ByteArrayOutputStream()
+            val err = ByteArrayOutputStream()
+
+            val path = Paths.get(resource("/"))
+            try {
+                val args = arrayOf("--baseline", path.toString())
+
+                buildRunner(args, PrintStream(out), PrintStream(err))
+                Assertions.fail("This should throw an exception.")
+            } catch (_: HandledArgumentViolation) {
+                assertThat(String(err.toByteArray()).trim())
+                    .isEqualTo("The path specified by --baseline should be a file '$path'.")
+            }
+        }
+
+        it("succeed with --baseline if the path exists and is a file") {
+            val out = ByteArrayOutputStream()
+            val err = ByteArrayOutputStream()
+
+            val path = Paths.get(resource("smell-baseline.xml"))
+
+            val args = arrayOf("--baseline", path.toString())
 
             buildRunner(args, PrintStream(out), PrintStream(err))
 
