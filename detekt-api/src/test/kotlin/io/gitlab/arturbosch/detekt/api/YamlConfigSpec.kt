@@ -24,7 +24,7 @@ class YamlConfigSpec : Spek({
         }
 
         it("throws an exception on an non-existing file") {
-            val path = Paths.get(resource("/pathFilters/").toString() + "doesNotExist.yml")
+            val path = Paths.get("doesNotExist.yml")
             assertThatIllegalArgumentException()
                 .isThrownBy { YamlConfig.load(path) }
                 .withMessageStartingWith("Configuration does not exist")
