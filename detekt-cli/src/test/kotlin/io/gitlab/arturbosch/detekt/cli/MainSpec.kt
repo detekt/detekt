@@ -65,7 +65,7 @@ class MainSpec : Spek({
             }
         }
 
-        it("succeed --create-baseline and --baseline") {
+        it("succeeds with --create-baseline and --baseline") {
             val out = ByteArrayOutputStream()
             val err = ByteArrayOutputStream()
 
