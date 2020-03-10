@@ -3,22 +3,19 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.rules.parentsOfTypeUntil
-import org.jetbrains.kotlin.lexer.KtTokens
-import org.jetbrains.kotlin.psi.KtBinaryExpression
+import io.gitlab.arturbosch.detekt.rules.yieldStatementsSkippingGuardClauses
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtElement
-import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
-import org.jetbrains.kotlin.psi.psiUtil.isFirstStatement
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 
 /**
  * Restrict the number of return methods allowed in methods.
@@ -60,8 +57,12 @@ import org.jetbrains.kotlin.psi.psiUtil.isFirstStatement
  */
 class ReturnCount(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName, Severity.Style,
-            "Restrict the number of return statements in methods.", Debt.TEN_MINS)
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Style,
+        "Restrict the number of return statements in methods.",
+        Debt.TEN_MINS
+    )
 
     private val max = valueOrDefault(MAX, 2)
     private val excludedFunctions = SplitPattern(valueOrDefault(EXCLUDED_FUNCTIONS, ""))
@@ -72,76 +73,49 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
 
-        if (!isIgnoredFunction(function)) {
-            val numberOfReturns = countFunctionReturns(function)
+        if (!shouldBeIgnored(function)) {
+            val numberOfReturns = countReturnStatements(function)
 
             if (numberOfReturns > max) {
-                report(CodeSmell(issue, Entity.from(function), "Function ${function.name} has " +
-                        "$numberOfReturns return statements which exceeds the limit of $max."))
+                report(CodeSmell(
+                    issue,
+                    Entity.from(function),
+                    "Function ${function.name} has $numberOfReturns return statements which exceeds the limit of $max."
+                ))
             }
         }
     }
 
-    private fun isIgnoredFunction(function: KtNamedFunction) = excludedFunctions.contains(function.name)
+    private fun shouldBeIgnored(function: KtNamedFunction) = excludedFunctions.contains(function.name)
 
-    private fun countFunctionReturns(function: KtNamedFunction): Int {
-        var returnsNumber = 0
-        function.accept(object : DetektVisitor() {
-            override fun visitKtElement(element: KtElement) {
-                if (element is KtReturnExpression) {
-                    val breakRecursion = when {
-                        excludeLabeled && element.labeledExpression != null -> true
-                        excludeLambdas && element.isNamedReturnFromLambda() -> true
-                        excludeGuardClauses && element.isGuardClause() -> true
-                        else -> false
-                    }
-                    if (breakRecursion) {
-                        return
-                    } else {
-                        returnsNumber++
-                    }
-                }
-                element.children
-                        .filter { it !is KtNamedFunction }
-                        .forEach { it.accept(this) }
-            }
-        })
-        return returnsNumber
+    private fun countReturnStatements(function: KtNamedFunction): Int {
+        fun KtReturnExpression.isExcluded(): Boolean = when {
+            excludeLabeled && labeledExpression != null -> true
+            excludeLambdas && isNamedReturnFromLambda() -> true
+            else -> false
+        }
+
+        val statements = if (excludeGuardClauses) {
+            function.yieldStatementsSkippingGuardClauses()
+        } else {
+            function.bodyBlockExpression?.statements?.asSequence() ?: emptySequence()
+        }
+
+        return statements.flatMap { it.collectDescendantsOfType<KtReturnExpression>().asSequence() }
+            .filterNot { it.isExcluded() }
+            .filter { it.getParentOfType<KtNamedFunction>(true) == function }
+            .count()
     }
 
     private fun KtReturnExpression.isNamedReturnFromLambda(): Boolean {
         val label = this.labeledExpression
         if (label != null) {
             return this.parentsOfTypeUntil<KtCallExpression, KtNamedFunction>()
-                    .map { it.calleeExpression }
-                    .filterIsInstance<KtNameReferenceExpression>()
-                    .map { it.text }
-                    .any { it in label.text }
+                .map { it.calleeExpression }
+                .filterIsInstance<KtNameReferenceExpression>()
+                .map { it.text }
+                .any { it in label.text }
         }
-        return false
-    }
-
-    private fun KtReturnExpression.isGuardClause(): Boolean {
-        return this.isIfConditionGuardClause() || this.isElvisOperatorGuardClause()
-    }
-
-    private fun KtReturnExpression.isIfConditionGuardClause(): Boolean {
-        val ifConditionParent = this.parent?.parent as? KtIfExpression
-        ifConditionParent?.let {
-            return it.isFirstStatement() && it.`else` == null
-        }
-
-        return false
-    }
-
-    private fun KtReturnExpression.isElvisOperatorGuardClause(): Boolean {
-        val elvisGuardClauseExpression = this.parent as? KtBinaryExpression
-        elvisGuardClauseExpression?.let {
-            val elvisGuardClauseParent = it.parent as? KtElement
-            val isFirstStatement = elvisGuardClauseParent?.isFirstStatement() ?: false
-            return isFirstStatement && it.operationToken == KtTokens.ELVIS
-        }
-
         return false
     }
 
