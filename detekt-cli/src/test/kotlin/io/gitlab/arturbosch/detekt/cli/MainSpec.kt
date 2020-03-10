@@ -112,7 +112,7 @@ class MainSpec : Spek({
             }
         }
 
-        it("succeed with --baseline if the path exists and is a file") {
+        it("succeeds with --baseline if the path exists and is a file") {
             val out = ByteArrayOutputStream()
             val err = ByteArrayOutputStream()
 
