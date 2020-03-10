@@ -64,7 +64,7 @@ class YamlConfig internal constructor(
          */
         fun loadResource(url: URL): Config = load(url.openStream().bufferedReader())
 
-        private fun load(reader: BufferedReader) = reader.use {
+        private fun load(reader: BufferedReader): Config = reader.use {
             val yamlInput = it.lineSequence().joinToString("\n")
             if (yamlInput.isEmpty()) {
                 Config.empty
@@ -73,7 +73,9 @@ class YamlConfig internal constructor(
                 if (map is Map<*, *>) {
                     YamlConfig(map as Map<String, Any>, parent = null)
                 } else {
-                    throw Config.InvalidConfigurationError()
+                    throw Config.InvalidConfigurationError(
+                        "Provided configuration file is invalid: Structure must be of type 'Map<String,Any>'."
+                    )
                 }
             }
         }
