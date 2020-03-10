@@ -2,22 +2,29 @@ package io.gitlab.arturbosch.detekt.rules.documentation
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
+import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.SingleAssign
+import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.rules.documentation.AbsentOrWrongFileLicense.Companion.DEFAULT_LICENSE_TEMPLATE_FILE
 import io.gitlab.arturbosch.detekt.rules.documentation.AbsentOrWrongFileLicense.Companion.PARAM_LICENSE_TEMPLATE_FILE
 import io.gitlab.arturbosch.detekt.rules.documentation.AbsentOrWrongFileLicense.Companion.RULE_NAME
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
+import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import org.jetbrains.kotlin.psi.KtFile
 import java.io.BufferedReader
 import java.nio.file.Files
 import java.nio.file.Path
+import java.nio.file.Paths
 
+@OptIn(UnstableApi::class)
 class LicenceHeaderLoaderExtension : FileProcessListener {
 
     private var config: Config by SingleAssign()
+    private var configPath: Path? = null
 
-    override fun init(config: Config) {
-        this.config = config
+    override fun init(context: SetupContext) {
+        this.config = context.config
+        this.configPath = context.configUris.lastOrNull()?.let(Paths::get)
     }
 
     override fun onStart(files: List<KtFile>) {
@@ -38,12 +45,14 @@ class LicenceHeaderLoaderExtension : FileProcessListener {
 
             require(Files.exists(templateFile)) {
                 """
-                License template file not found at `${templateFile.toAbsolutePath()}`.
+                Rule '$RULE_NAME': License template file not found at `${templateFile.toAbsolutePath()}`.
                 Create file license header file or check your running path.
             """.trimIndent()
             }
 
-            return Files.newBufferedReader(templateFile).use(BufferedReader::readText).trim()
+            return Files.newBufferedReader(templateFile)
+                .use(BufferedReader::readText)
+                .let(StringUtilRt::convertLineSeparators)
         }
 
         fun cacheLicence(dir: Path) {
@@ -53,10 +62,10 @@ class LicenceHeaderLoaderExtension : FileProcessListener {
             }
         }
 
-        if (shouldRuleRun()) {
-            when (val location = config.location) {
-                Config.Location.Undefined -> return
-                is Config.Location.FromDirectory -> cacheLicence(location.dir)
+        if (configPath != null && shouldRuleRun()) {
+            val configDir = configPath?.parent
+            if (configDir != null) {
+                cacheLicence(configDir)
             }
         }
     }

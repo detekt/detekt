@@ -14,6 +14,7 @@ Currently supported extensions are:
 * [FileProcessListener](../-file-process-listener/index.html)
 * [ConsoleReport](../-console-report/index.html)
 * [OutputReport](../-output-report/index.html)
+* [ConfigValidator](../-config-validator/index.html)
 
 ### Properties
 
@@ -22,7 +23,7 @@ Currently supported extensions are:
 
 ### Functions
 
-| [init](init.html) | Allows to read any or even user defined properties from the detekt yaml config to setup this extension.`open fun init(config: `[`Config`](../-config/index.html)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html) |
+| [init](init.html) | Allows to read any or even user defined properties from the detekt yaml config to setup this extension.`open fun init(config: `[`Config`](../-config/index.html)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)<br>Setup extension by querying common paths and config options.`open fun init(context: `[`SetupContext`](../-setup-context/index.html)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html) |
 
 ### Inheritors
 

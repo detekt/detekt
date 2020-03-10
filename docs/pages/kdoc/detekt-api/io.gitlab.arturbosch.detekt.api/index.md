@@ -44,6 +44,7 @@ title: io.gitlab.arturbosch.detekt.api - detekt-api
 | [RuleSet](-rule-set/index.html) | A rule set is a collection of rules and must be defined within a rule set provider implementation.`class RuleSet` |
 | [RuleSetId](-rule-set-id.html) | `typealias RuleSetId = `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 | [RuleSetProvider](-rule-set-provider/index.html) | A rule set provider, as the name states, is responsible for creating rule sets.`interface RuleSetProvider` |
+| [SetupContext](-setup-context/index.html) | Context providing useful processing settings to initialize extensions.`interface SetupContext` |
 | [Severity](-severity/index.html) | Rules can classified into different severity grades. Maintainer can choose a grade which is most harmful to their projects.`enum class Severity` |
 | [SingleAssign](-single-assign/index.html) | Allows to assign a property just once. Further assignments result in [IllegalStateException](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-illegal-state-exception/index.html)'s.`class SingleAssign<T : `[`Any`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)`>` |
 | [SourceLocation](-source-location/index.html) | Stores line and column information of a location.`data class SourceLocation` |
@@ -52,6 +53,10 @@ title: io.gitlab.arturbosch.detekt.api - detekt-api
 | [ThresholdedCodeSmell](-thresholded-code-smell/index.html) | Represents a code smell for which a specific metric can be determined which is responsible for the existence of this rule violation.`open class ThresholdedCodeSmell : `[`CodeSmell`](-code-smell/index.html) |
 | [ThresholdRule](-threshold-rule/index.html) | Provides a threshold attribute for this rule, which is specified manually for default values but can be also obtained from within a configuration object.`abstract class ThresholdRule : `[`Rule`](-rule/index.html) |
 | [YamlConfig](-yaml-config.html) | Config implementation using the yaml format. SubConfigurations can return sub maps according to the yaml specification.`typealias ~~YamlConfig~~ = `[`YamlConfig`](../io.gitlab.arturbosch.detekt.api.internal/-yaml-config/index.html) |
+
+### Annotations
+
+| [UnstableApi](-unstable-api/index.html) | Experimental detekt api which may change on minor or patch versions.`annotation class UnstableApi` |
 
 ### Extensions for External Classes
 

@@ -11,6 +11,7 @@ import io.gitlab.arturbosch.detekt.cli.console.red
 import io.gitlab.arturbosch.detekt.cli.createClasspath
 import io.gitlab.arturbosch.detekt.cli.createFilters
 import io.gitlab.arturbosch.detekt.cli.createPlugins
+import io.gitlab.arturbosch.detekt.cli.extractUris
 import io.gitlab.arturbosch.detekt.cli.getOrComputeWeightedAmountOfIssues
 import io.gitlab.arturbosch.detekt.cli.isValidAndSmallerOrEqual
 import io.gitlab.arturbosch.detekt.cli.loadConfiguration
@@ -89,8 +90,8 @@ class Runner(
                 languageVersion = languageVersion,
                 jvmTarget = jvmTarget,
                 debug = arguments.debug,
-                outPrinter = outputPrinter,
-                errorPrinter = errorPrinter
+                outPrinter = outputPrinter, errorPrinter = errorPrinter,
+                configUris = extractUris()
             )
         }
         settings.debug { "Loading config took $configLoadTime ms" }

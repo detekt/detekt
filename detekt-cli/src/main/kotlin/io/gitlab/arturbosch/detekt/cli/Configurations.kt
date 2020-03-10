@@ -6,6 +6,8 @@ import io.gitlab.arturbosch.detekt.api.internal.DisabledAutoCorrectConfig
 import io.gitlab.arturbosch.detekt.api.internal.FailFastConfig
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import io.gitlab.arturbosch.detekt.api.internal.YamlConfig
+import java.net.URI
+import java.net.URL
 import java.nio.file.Path
 
 fun CliArgs.createFilters(): PathFilters? = PathFilters.of(includes, excludes)
@@ -71,3 +73,10 @@ private fun parsePathConfig(configPath: String): Config {
 const val DEFAULT_CONFIG = "default-detekt-config.yml"
 
 fun loadDefaultConfig() = YamlConfig.loadResource(ClasspathResourceConverter().convert(DEFAULT_CONFIG))
+
+fun CliArgs.extractUris(): Collection<URI> {
+    val pathUris = config?.let { MultipleExistingPathConverter().convert(it).map(Path::toUri) } ?: emptyList()
+    val resourceUris = configResource?.let { MultipleClasspathResourceConverter().convert(it).map(URL::toURI) }
+        ?: emptyList()
+    return resourceUris + pathUris
+}

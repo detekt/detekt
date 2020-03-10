@@ -1,13 +1,17 @@
 package io.gitlab.arturbosch.detekt.rules.documentation
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.api.YamlConfig
+import io.gitlab.arturbosch.detekt.api.SetupContext
+import io.gitlab.arturbosch.detekt.api.UnstableApi
+import io.gitlab.arturbosch.detekt.api.internal.YamlConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.lint
 import io.gitlab.arturbosch.detekt.test.resource
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
+import java.net.URI
 import java.nio.file.Paths
 
 internal class AbsentOrWrongFileLicenseSpec : Spek({
@@ -47,12 +51,17 @@ internal class AbsentOrWrongFileLicenseSpec : Spek({
     }
 })
 
+@OptIn(UnstableApi::class)
 private fun checkLicence(content: String): List<Finding> {
     val file = compileContentForTest(content)
 
-    val config = YamlConfig.load(Paths.get(resource("license-config.yml")))
+    val resource = resource("license-config.yml")
+    val config = YamlConfig.load(Paths.get(resource))
     LicenceHeaderLoaderExtension().apply {
-        init(config)
+        init(object : SetupContext {
+            override val configUris: Collection<URI> = listOf(resource)
+            override val config: Config = config
+        })
         onStart(listOf(file))
     }
 

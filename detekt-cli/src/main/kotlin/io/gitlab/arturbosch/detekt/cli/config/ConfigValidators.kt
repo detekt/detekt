@@ -7,7 +7,9 @@ import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import java.util.ServiceLoader
 
 fun loadValidators(settings: ProcessingSettings): List<ConfigValidator> =
-    ServiceLoader.load(ConfigValidator::class.java, settings.pluginLoader).toList()
+    ServiceLoader.load(ConfigValidator::class.java, settings.pluginLoader)
+        .onEach { it.init(settings.config); it.init(settings) }
+        .toList()
 
 fun checkConfiguration(settings: ProcessingSettings) {
     val props = settings.config.subConfig("config")

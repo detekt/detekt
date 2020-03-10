@@ -184,7 +184,8 @@ subprojects {
         kotlinOptions.freeCompilerArgs = listOf(
             "-progressive",
             "-Xskip-runtime-version-check",
-            "-Xdisable-default-scripting-plugin"
+            "-Xdisable-default-scripting-plugin",
+            "-Xopt-in=kotlin.RequiresOptIn"
         )
         kotlinOptions.allWarningsAsErrors = shouldTreatCompilerWarningsAsErrors()
     }

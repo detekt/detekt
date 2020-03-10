@@ -359,6 +359,13 @@ A rule set provider, as the name states, is responsible for creating rule sets.
 
 |
 
+##### [io.gitlab.arturbosch.detekt.api.SetupContext](../io.gitlab.arturbosch.detekt.api/-setup-context/index.html)
+
+Context providing useful processing settings to initialize extensions.
+
+
+|
+
 ##### [io.gitlab.arturbosch.detekt.api.Severity](../io.gitlab.arturbosch.detekt.api/-severity/index.html)
 
 Rules can classified into different severity grades. Maintainer can choose
@@ -420,6 +427,13 @@ for the existence of this rule violation.
 
 Provides a threshold attribute for this rule, which is specified manually for default values
 but can be also obtained from within a configuration object.
+
+
+|
+
+##### [io.gitlab.arturbosch.detekt.api.UnstableApi](../io.gitlab.arturbosch.detekt.api/-unstable-api/index.html)
+
+Experimental detekt api which may change on minor or patch versions.
 
 
 |

@@ -23,6 +23,7 @@ class OutputFacade(
 
         reports.forEach { report ->
             report.init(config)
+            report.init(settings)
             when (report) {
                 is ConsoleReport -> handleConsoleReport(report, result)
                 is OutputReport -> handleOutputReport(report, result)
