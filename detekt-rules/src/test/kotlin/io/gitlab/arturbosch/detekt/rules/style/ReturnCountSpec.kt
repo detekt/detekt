@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.test.TestConfig
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
@@ -82,6 +83,33 @@ class ReturnCountSpec : Spek({
             }
         }
 
+        context("a file with multiple guard clauses") {
+            val code = """
+                fun multipleGuards(a: Int?, b: Any?, c: Int?) {
+                    if(a == null) return
+                    val models = b as? Int ?: return
+                    val position = c?.takeIf { it != -1 } ?: return
+                    if(b !is String) return
+
+                    return
+                }
+            """.trimIndent()
+
+            it("should not count all four guard clauses") {
+                val findings = ReturnCount(TestConfig(
+                    ReturnCount.EXCLUDE_GUARD_CLAUSES to "true"
+                )).compileAndLint(code)
+                assertThat(findings).isEmpty()
+            }
+
+            it("should count all four guard clauses") {
+                val findings = ReturnCount(TestConfig(
+                    ReturnCount.EXCLUDE_GUARD_CLAUSES to "false"
+                )).compileAndLint(code)
+                assertThat(findings).hasSize(1)
+            }
+        }
+
         context("a file with 3 returns") {
             val code = """
             fun test(x: Int): Int {
@@ -148,8 +176,8 @@ class ReturnCountSpec : Spek({
 
             it("should not get flagged") {
                 val findings = ReturnCount(TestConfig(mapOf(
-                        ReturnCount.MAX to "2",
-                        ReturnCount.EXCLUDED_FUNCTIONS to "test")
+                    ReturnCount.MAX to "2",
+                    ReturnCount.EXCLUDED_FUNCTIONS to "test")
                 )).lint(code)
                 assertThat(findings).isEmpty()
             }
@@ -184,8 +212,8 @@ class ReturnCountSpec : Spek({
 
             it("should flag none of the ignored functions") {
                 val findings = ReturnCount(TestConfig(mapOf(
-                        ReturnCount.MAX to "2",
-                        ReturnCount.EXCLUDED_FUNCTIONS to "test1,test2")
+                    ReturnCount.MAX to "2",
+                    ReturnCount.EXCLUDED_FUNCTIONS to "test1,test2")
                 )).lint(code)
                 assertThat(findings).hasSize(1)
             }
@@ -300,16 +328,16 @@ class ReturnCountSpec : Spek({
 
             it("should count labeled returns from lambda when activated") {
                 val findings = ReturnCount(
-                        TestConfig(mapOf(ReturnCount.EXCLUDE_RETURN_FROM_LAMBDA to "false"))).lint(code)
+                    TestConfig(mapOf(ReturnCount.EXCLUDE_RETURN_FROM_LAMBDA to "false"))).lint(code)
                 assertThat(findings).hasSize(1)
             }
 
             it("should be empty when labeled returns are de-activated") {
                 val findings = ReturnCount(
-                        TestConfig(mapOf(
-                                ReturnCount.EXCLUDE_LABELED to "true",
-                                ReturnCount.EXCLUDE_RETURN_FROM_LAMBDA to "false"
-                        ))).lint(code)
+                    TestConfig(mapOf(
+                        ReturnCount.EXCLUDE_LABELED to "true",
+                        ReturnCount.EXCLUDE_RETURN_FROM_LAMBDA to "false"
+                    ))).lint(code)
                 assertThat(findings).isEmpty()
             }
         }
