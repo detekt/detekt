@@ -1,12 +1,15 @@
 package io.gitlab.arturbosch.detekt.api.internal
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.test.resource
 import io.gitlab.arturbosch.detekt.test.yamlConfig
+import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.assertj.core.api.Assertions.fail
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
+import java.nio.file.Paths
 
 @Suppress("DEPRECATION")
 class YamlConfigSpec : Spek({
@@ -77,6 +80,35 @@ class YamlConfigSpec : Spek({
                     .subConfig("Rule")
                     .valueOrDefault("active", 1)
             }.withMessage("Value \"[]\" set for config parameter \"RuleSet > Rule > active\" is not of required type Int.")
+        }
+    }
+
+    describe("yaml config") {
+
+        it("loads the config from a given yaml file") {
+            val path = Paths.get(resource("detekt.yml"))
+            val config = YamlConfig.load(path)
+            assertThat(config).isNotNull
+        }
+
+        it("loads the config from a given text file") {
+            val path = Paths.get(resource("detekt.txt"))
+            val config = YamlConfig.load(path)
+            assertThat(config).isNotNull
+        }
+
+        it("throws an exception on an non-existing file") {
+            val path = Paths.get("doesNotExist.yml")
+            Assertions.assertThatIllegalArgumentException()
+                .isThrownBy { YamlConfig.load(path) }
+                .withMessageStartingWith("Configuration does not exist")
+        }
+
+        it("throws an exception on a directory") {
+            val path = Paths.get(resource("/config_validation"))
+            Assertions.assertThatIllegalArgumentException()
+                .isThrownBy { YamlConfig.load(path) }
+                .withMessageStartingWith("Configuration must be a file")
         }
     }
 })
