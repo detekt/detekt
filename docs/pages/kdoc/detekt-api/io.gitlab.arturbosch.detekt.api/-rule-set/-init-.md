@@ -6,7 +6,7 @@ title: RuleSet.<init> - detekt-api
 
 # &lt;init&gt;
 
-`RuleSet(id: `[`RuleSetId`](../-rule-set-id.html)`, rules: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`BaseRule`](../-base-rule/index.html)`>)`
+`RuleSet(id: `[`RuleSetId`](../-rule-set-id.html)`, rules: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`BaseRule`](../../io.gitlab.arturbosch.detekt.api.internal/-base-rule/index.html)`>)`
 
 A rule set is a collection of rules and must be defined within a rule set provider implementation.
 
