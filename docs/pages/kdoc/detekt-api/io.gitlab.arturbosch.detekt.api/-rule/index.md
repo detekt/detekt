@@ -6,7 +6,7 @@ title: Rule - detekt-api
 
 # Rule
 
-`abstract class Rule : `[`BaseRule`](../-base-rule/index.html)`, `[`ConfigAware`](../-config-aware/index.html)
+`abstract class Rule : `[`BaseRule`](../../io.gitlab.arturbosch.detekt.api.internal/-base-rule/index.html)`, `[`ConfigAware`](../-config-aware/index.html)
 
 A rule defines how one specific code structure should look like. If code is found
 which does not meet this structure, it is considered as harmful regarding maintainability

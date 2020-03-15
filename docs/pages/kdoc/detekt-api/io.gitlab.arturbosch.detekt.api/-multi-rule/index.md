@@ -6,7 +6,7 @@ title: MultiRule - detekt-api
 
 # MultiRule
 
-`abstract class MultiRule : `[`BaseRule`](../-base-rule/index.html)
+`abstract class MultiRule : `[`BaseRule`](../../io.gitlab.arturbosch.detekt.api.internal/-base-rule/index.html)
 
 Composite rule which delegates work to child rules.
 Can be used to combine different rules which do similar work like

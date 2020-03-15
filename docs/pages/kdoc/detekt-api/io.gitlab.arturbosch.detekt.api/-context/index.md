@@ -25,6 +25,6 @@ before the next KtFile.
 
 ### Inheritors
 
-| [BaseRule](../-base-rule/index.html) | Defines the visiting mechanism for KtFile's.`abstract class BaseRule : `[`DetektVisitor`](../-detekt-visitor/index.html)`, `[`Context`](./index.html) |
+| [BaseRule](../../io.gitlab.arturbosch.detekt.api.internal/-base-rule/index.html) | `abstract class BaseRule : `[`DetektVisitor`](../-detekt-visitor/index.html)`, `[`Context`](./index.html) |
 | [DefaultContext](../-default-context/index.html) | Default [Context](./index.html) implementation.`open class DefaultContext : `[`Context`](./index.html) |
 

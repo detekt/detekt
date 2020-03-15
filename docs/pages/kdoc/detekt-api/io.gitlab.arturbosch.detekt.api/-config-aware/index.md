@@ -39,5 +39,5 @@ be error-prone.
 
 ### Inheritors
 
-| [Rule](../-rule/index.html) | A rule defines how one specific code structure should look like. If code is found which does not meet this structure, it is considered as harmful regarding maintainability or readability.`abstract class Rule : `[`BaseRule`](../-base-rule/index.html)`, `[`ConfigAware`](./index.html) |
+| [Rule](../-rule/index.html) | A rule defines how one specific code structure should look like. If code is found which does not meet this structure, it is considered as harmful regarding maintainability or readability.`abstract class Rule : `[`BaseRule`](../../io.gitlab.arturbosch.detekt.api.internal/-base-rule/index.html)`, `[`ConfigAware`](./index.html) |
 

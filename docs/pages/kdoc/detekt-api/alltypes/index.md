@@ -29,9 +29,14 @@ Convenient base configuration which parses/casts the configuration value based o
 
 |
 
-##### [io.gitlab.arturbosch.detekt.api.BaseRule](../io.gitlab.arturbosch.detekt.api/-base-rule/index.html)
+##### [io.gitlab.arturbosch.detekt.api.BaseRule](../io.gitlab.arturbosch.detekt.api/-base-rule.html)
 
 Defines the visiting mechanism for KtFile's.
+
+
+|
+
+##### [io.gitlab.arturbosch.detekt.api.internal.BaseRule](../io.gitlab.arturbosch.detekt.api.internal/-base-rule/index.html)
 
 
 |
