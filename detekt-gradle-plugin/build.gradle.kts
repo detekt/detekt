@@ -14,12 +14,12 @@ plugins {
     id("com.jfrog.bintray") version "1.8.4"
     kotlin("jvm") version "1.3.70"
     id("org.jetbrains.dokka") version "0.10.1"
-    id("com.github.ben-manes.versions") version "0.27.0"
-    id("io.gitlab.arturbosch.detekt") version "1.7.0-beta1"
+    id("com.github.ben-manes.versions") version "0.28.0"
+    id("io.gitlab.arturbosch.detekt") version "1.7.0-beta2"
 }
 
 group = "io.gitlab.arturbosch.detekt"
-version = "1.7.0-beta1"
+version = "1.7.0-beta2"
 
 val spekVersion = "2.0.9"
 val junitPlatformVersion = "1.6.0"
