@@ -1,6 +1,8 @@
 package io.gitlab.arturbosch.detekt.core
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.SetupContext
+import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import io.gitlab.arturbosch.detekt.api.internal.createCompilerConfiguration
 import io.gitlab.arturbosch.detekt.api.internal.createKotlinCoreEnvironment
@@ -12,6 +14,7 @@ import org.jetbrains.kotlin.config.LanguageVersion
 import org.jetbrains.kotlin.utils.closeQuietly
 import java.io.Closeable
 import java.io.PrintStream
+import java.net.URI
 import java.net.URLClassLoader
 import java.nio.file.Files
 import java.nio.file.Path
@@ -24,10 +27,11 @@ import java.util.concurrent.ForkJoinPool
  * Always close the settings as dispose the Kotlin compiler and detekt class loader.
  * If using a custom executor service be aware that detekt won't shut it down after use!
  */
+@OptIn(UnstableApi::class)
 @Suppress("LongParameterList")
 class ProcessingSettings @JvmOverloads constructor(
     val inputPaths: List<Path>,
-    val config: Config = Config.empty,
+    override val config: Config = Config.empty,
     val pathFilters: PathFilters? = null,
     val parallelCompilation: Boolean = false,
     val excludeDefaultRuleSets: Boolean = false,
@@ -39,8 +43,9 @@ class ProcessingSettings @JvmOverloads constructor(
     val outPrinter: PrintStream = System.out,
     val errorPrinter: PrintStream = System.err,
     val autoCorrect: Boolean = false,
-    val debug: Boolean = false
-) : AutoCloseable, Closeable {
+    val debug: Boolean = false,
+    override val configUris: Collection<URI> = emptyList()
+) : AutoCloseable, Closeable, SetupContext {
     /**
      * Single project input path constructor.
      */
@@ -58,7 +63,8 @@ class ProcessingSettings @JvmOverloads constructor(
         outPrinter: PrintStream = System.out,
         errorPrinter: PrintStream = System.err,
         autoCorrect: Boolean = false,
-        debug: Boolean = false
+        debug: Boolean = false,
+        configUris: Collection<URI> = emptyList()
     ) : this(
         listOf(inputPath),
         config,
@@ -73,7 +79,8 @@ class ProcessingSettings @JvmOverloads constructor(
         outPrinter,
         errorPrinter,
         autoCorrect,
-        debug
+        debug,
+        configUris
     )
 
     init {
