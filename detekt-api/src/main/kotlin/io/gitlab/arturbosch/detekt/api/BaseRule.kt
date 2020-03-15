@@ -19,7 +19,7 @@ typealias RuleId = String
  */
 @Deprecated("""
 Do not use this class directly. Use Rule or MultiRule instead.
-This class was introduced to support a common handling of the rule types mentioned.
+This class was introduced to support a common handling of the mentioned rule types.
 This class will be made sealed in a different release and you won't be able to derive from it. 
 """)
 typealias BaseRule = io.gitlab.arturbosch.detekt.api.internal.BaseRule
