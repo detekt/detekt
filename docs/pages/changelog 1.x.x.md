@@ -13,9 +13,26 @@ toc: true
 - The Gradle plugin should be on par with the CLI performance-wise
 - Good to know: detekt CLI always supported argument files (`java -jar detekt-cli.jar @argsfile`)
 - New CLI `--version` flag
+- New Rule `AbsentOrWrongFileLicense` and other rule improvements
 
 ##### Changelog
 
+- Deprecate BaseRule and state that it will be make sealed - #2365 - [#2432](https://github.com/arturbosch/detekt/pull/2432)
+- Add License rule - [#2429](https://github.com/arturbosch/detekt/pull/2429)
+- Skip all guard clauses at function start for ReturnCount - Closes #2342 - [#2428](https://github.com/arturbosch/detekt/pull/2428)
+- Fail if `--baseline` file not found - [#2427](https://github.com/arturbosch/detekt/pull/2427)
+- Add tests for YamlConfig - [#2426](https://github.com/arturbosch/detekt/pull/2426)
+- Choose a minimum codecov patch coverage ratio - [#2425](https://github.com/arturbosch/detekt/pull/2425)
+- Include ruleset-suppression feature doc - [#2424](https://github.com/arturbosch/detekt/pull/2424)
+- Add Groovy DSL example for jvmTarget to homepage - [#2423](https://github.com/arturbosch/detekt/pull/2423)
+- Add groovy dsl example for jvmTarget - Closes #2408 - [#2422](https://github.com/arturbosch/detekt/pull/2422)
+- Deprecate hierarchical config - [#2421](https://github.com/arturbosch/detekt/pull/2421)
+- Deprecate implementations of Config - [#2420](https://github.com/arturbosch/detekt/pull/2420)
+- Remove YAML Extension Requirement - [#2419](https://github.com/arturbosch/detekt/pull/2419)
+- Update Spek version to 2.0.10 - [#2418](https://github.com/arturbosch/detekt/pull/2418)
+- file does not end with .yml! - [#2417](https://github.com/arturbosch/detekt/issues/2417)
+- Disable autoCorrect property for all rules if global flag is set to false - [#2413](https://github.com/arturbosch/detekt/pull/2413)
+- Release 1.7.0 beta - [#2409](https://github.com/arturbosch/detekt/pull/2409)
 - Stop using kotlin-reflect - [#2405](https://github.com/arturbosch/detekt/pull/2405)
 - Stop compiling with experimental flag - [#2404](https://github.com/arturbosch/detekt/pull/2404)
 - Only post a code coverage patch status to PRs - [#2402](https://github.com/arturbosch/detekt/pull/2402)
@@ -35,16 +52,18 @@ toc: true
 - Add `--version` CLI option - [#2382](https://github.com/arturbosch/detekt/issues/2382)
 - Add test cases for cli/runners package - [#2381](https://github.com/arturbosch/detekt/pull/2381)
 - Sort and run correctable rules first - #2341 - [#2378](https://github.com/arturbosch/detekt/pull/2378)
+- Should fail if `--baseline` file does not found? - [#2374](https://github.com/arturbosch/detekt/issues/2374)
 - Deprecate rule set methods which expose implementation details of detekt-core - [#2366](https://github.com/arturbosch/detekt/pull/2366)
+- Deprecate api's exposing detekt-core implementation details - [#2365](https://github.com/arturbosch/detekt/issues/2365)
+- ReturnCount excludeGuardClauses not working - [#2342](https://github.com/arturbosch/detekt/issues/2342)
 - Mixing autocorrectable and non correctable rules results in obsolete issue locations for reports - [#2341](https://github.com/arturbosch/detekt/issues/2341)
 - Allow Detekt CLI to take an args file. - [#2318](https://github.com/arturbosch/detekt/issues/2318)
 - Call detekt reflectively - [#2282](https://github.com/arturbosch/detekt/pull/2282)
-- #1515. Copyright header rule for Kotlin files. - [#2077](https://github.com/arturbosch/detekt/pull/2077)
+- Copyright header rule for Kotlin files - #1515 - [#2077](https://github.com/arturbosch/detekt/pull/2077)
 - Detekt gradle is much slower than the jar - [#2035](https://github.com/arturbosch/detekt/issues/2035)
 - Cases files are super rigorous to work with - [#1089](https://github.com/arturbosch/detekt/issues/1089)
 
 See all issues at: [1.7.0](https://github.com/arturbosch/detekt/milestone/59)
-
 #### 1.6.0
 
 ##### Migration
