@@ -5,7 +5,7 @@
 - `gradle detekt` should not report any errors
 - This repository follows the [Kotlin Coding Conventions](https://kotlinlang.org/docs/reference/coding-conventions.html) which are enforced by KtLint when running `gradle detekt`.
 - Make sure your IDE uses [KtLint](https://github.com/shyiko/ktlint) formatting rules as well as the settings in [.editorconfig](../.editorconfig)
-- We use [Spek](https://github.com/spekframework/spek) for testing. Please use the `Spec.kt`-Suffix. For easier testing you might want to use the [Spek IntelliJ Plugin](https://plugins.jetbrains.com/plugin/8564-spek).
+- We use [Spek](https://github.com/spekframework/spek) for testing. Please use the `Spec.kt`-Suffix. For easier testing you might want to use the [Spek IntelliJ Plugin](https://plugins.jetbrains.com/plugin/10915-spek-framework).
 - Feel free to add your name to the contributors list at the end of the readme file when opening a pull request.
 - The code in `detekt-api` and any rule in `detekt-rules` must be documented. We generate documentation for our website based on these modules.
 - If some Kotlin code in `resources` folder (like `detekt-formatting`) shows a compilation error, right click on it and use `Mark as plain text`.
