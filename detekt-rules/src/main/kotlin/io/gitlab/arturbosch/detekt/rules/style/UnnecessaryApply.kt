@@ -58,8 +58,8 @@ class UnnecessaryApply(config: Config) : Rule(config) {
 private fun KtCallExpression.receiverIsUnused(context: BindingContext): Boolean =
     (parent as? KtQualifiedExpression)?.let {
         val scopeOfApplyCall = parent.parent
-        (scopeOfApplyCall == null || scopeOfApplyCall is KtBlockExpression)
-                && (context == BindingContext.EMPTY || !it.isUsedAsExpression(context))
+        (scopeOfApplyCall == null || scopeOfApplyCall is KtBlockExpression) && 
+            (context == BindingContext.EMPTY || !it.isUsedAsExpression(context))
     } ?: false
 
 private fun KtCallExpression.hasOnlyOneMemberAccessStatement(): Boolean {
