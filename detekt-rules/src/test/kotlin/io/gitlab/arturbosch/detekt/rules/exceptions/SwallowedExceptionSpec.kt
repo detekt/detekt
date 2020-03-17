@@ -53,6 +53,26 @@ class SwallowedExceptionSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(2)
         }
 
+        it("reports swallowed exceptions only using exception strings via variables in 'if' block") {
+            val code = """
+                fun f() {
+                    try {
+                    } catch (e: IllegalStateException) {
+                        if (true) {
+                            val message = e.message
+                            throw IllegalArgumentException(message)
+                        }
+                    } catch (f: Exception) {
+                        val message = f.toString()
+                        if (true) {
+                            throw Exception(IllegalArgumentException(message))
+                        }
+                    }
+                }
+            """
+            assertThat(subject.compileAndLint(code)).hasSize(2)
+        }
+
         it("reports a swallowed exception that is not logged") {
             val code = """
                 fun f() {

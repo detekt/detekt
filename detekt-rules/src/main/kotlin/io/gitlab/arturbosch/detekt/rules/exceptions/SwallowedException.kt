@@ -11,14 +11,18 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.rules.ALLOWED_EXCEPTION_NAME
 import io.gitlab.arturbosch.detekt.rules.isAllowedExceptionName
+import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
+import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtThrowExpression
 import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.getQualifiedExpressionForReceiverOrThis
+import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
 /**
  * Exceptions should not be swallowed. This rule reports all instances where exceptions are `caught` and not correctly
@@ -94,34 +98,61 @@ class SwallowedException(config: Config = Config.empty) : Rule(config) {
 
     private fun isExceptionSwallowed(catchClause: KtCatchClause): Boolean {
         val parameterName = catchClause.catchParameter?.name
-        val parameterNameReferencesInVariables = catchClause.catchBody?.children?.mapNotNull { child ->
-            val variable = child as? KtProperty ?: return@mapNotNull null
-            val variableName = variable.name ?: return@mapNotNull null
-            val parameterReference = when (val initializer = variable.initializer) {
-                is KtNameReferenceExpression -> initializer.takeIf { it.text == parameterName }
-                is KtDotQualifiedExpression -> initializer.receiverExpression.takeIf { it.text == parameterName }
-                else -> null
-            } ?: return@mapNotNull null
-            variableName to parameterReference
-        }.orEmpty().toMap()
-        catchClause.catchBody
+        val catchBody = catchClause.catchBody
+        catchBody
             ?.collectDescendantsOfType<KtThrowExpression>()
             ?.forEach { throwExpr ->
-                val parameterNameReferences = throwExpr.thrownExpression
-                    ?.collectDescendantsOfType<KtNameReferenceExpression>()
-                    ?.mapNotNull { reference ->
-                        val referenceText = reference.text
-                        if (referenceText == parameterName) {
-                            reference.getQualifiedExpressionForReceiverOrThis()
-                        } else {
-                            parameterNameReferencesInVariables[referenceText]?.getQualifiedExpressionForReceiverOrThis()
-                        }
-                    }
-                    .orEmpty()
-               return parameterNameReferences.isNotEmpty() &&
-                       parameterNameReferences.all { it is KtDotQualifiedExpression }
+                val parameterReferences = throwExpr.parameterReferences(parameterName, catchBody)
+                return parameterReferences.isNotEmpty() && parameterReferences.all { it is KtDotQualifiedExpression }
             }
         return false
+    }
+
+    private fun KtThrowExpression.parameterReferences(
+        parameterName: String?,
+        catchBody: KtExpression
+    ): List<KtExpression> {
+        val parameterReferencesInVariables = mutableMapOf<String, KtExpression>()
+        return thrownExpression
+            ?.collectDescendantsOfType<KtNameReferenceExpression>()
+            ?.mapNotNull { reference ->
+                val referenceText = reference.text
+                if (referenceText == parameterName) {
+                    reference.getQualifiedExpressionForReceiverOrThis()
+                } else {
+                    parameterReferencesInVariables[referenceText]
+                        ?: reference.findReferenceInVariable(parameterName, referenceText, catchBody)?.also {
+                            parameterReferencesInVariables[referenceText] = it
+                        }
+                }
+            }
+            .orEmpty()
+    }
+
+    private fun KtExpression.findReferenceInVariable(
+        referenceName: String?,
+        variableName: String,
+        catchBody: KtExpression
+    ): KtExpression? {
+        val block = getStrictParentOfType<KtBlockExpression>() ?: return null
+        fun find(block: KtBlockExpression): KtExpression? {
+            val reference = block
+                .findDescendantOfType<KtProperty> { it.name == variableName }
+                ?.let { property ->
+                    val initializer = property.initializer
+                    if (initializer is KtDotQualifiedExpression) {
+                        initializer.takeIf { it.receiverExpression.text == referenceName }
+                    } else {
+                        initializer.takeIf { it?.text == referenceName }
+                    }
+                }
+            return when {
+                reference != null -> reference
+                block == catchBody -> null
+                else -> block.getStrictParentOfType<KtBlockExpression>()?.let { find(it) }
+            }
+        }
+        return find(block)
     }
 
     companion object {
