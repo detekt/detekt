@@ -14,9 +14,11 @@ import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
 import org.jetbrains.kotlin.psi.KtExpression
+import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtReferenceExpression
-import org.jetbrains.kotlin.psi.KtSafeQualifiedExpression
 import org.jetbrains.kotlin.psi.KtThisExpression
+import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
 
 /**
  * `apply` expressions are used frequently, but sometimes their usage should be replaced with
@@ -44,7 +46,7 @@ class UnnecessaryApply(config: Config) : Rule(config) {
 
         if (expression.isApplyExpr() &&
                 expression.hasOnlyOneMemberAccessStatement() &&
-                expression.receiverIsUnused()) {
+                expression.receiverIsUnused(bindingContext)) {
             report(CodeSmell(
                     issue, Entity.from(expression),
                     "apply expression can be omitted"
@@ -53,13 +55,12 @@ class UnnecessaryApply(config: Config) : Rule(config) {
     }
 }
 
-private fun KtCallExpression.receiverIsUnused(): Boolean = when (parent) {
-    is KtSafeQualifiedExpression, is KtDotQualifiedExpression -> {
+private fun KtCallExpression.receiverIsUnused(context: BindingContext): Boolean =
+    (parent as? KtQualifiedExpression)?.let {
         val scopeOfApplyCall = parent.parent
-        scopeOfApplyCall == null || scopeOfApplyCall is KtBlockExpression
-    }
-    else -> false
-}
+        (scopeOfApplyCall == null || scopeOfApplyCall is KtBlockExpression) &&
+            (context == BindingContext.EMPTY || !it.isUsedAsExpression(context))
+    } ?: false
 
 private fun KtCallExpression.hasOnlyOneMemberAccessStatement(): Boolean {
 
