@@ -1,7 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.test.KtTestCompiler
 import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -9,6 +11,11 @@ import org.spekframework.spek2.style.specification.describe
 class UnnecessaryApplySpec : Spek({
 
     val subject by memoized { UnnecessaryApply(Config.empty) }
+
+    val wrapper by memoized(
+        factory = { KtTestCompiler.createEnvironment() },
+        destructor = { it.dispose() }
+    )
 
     describe("UnnecessaryApply rule") {
 
@@ -182,6 +189,46 @@ class UnnecessaryApplySpec : Spek({
                         }
                     }
                 """)).hasSize(2)
+            }
+        }
+
+        context("false positive when it's used as an expression - #2435") {
+
+            it("do not report when it's used as an assignment") {
+                assertThat(subject.compileAndLintWithContext(wrapper.env, """
+                    class Intent {
+                        fun putExtra(s: String, i: Int) {}
+                    }
+                    
+                    fun f(i: Int) {
+                        val content = if (5 >= 3) {
+                            Intent().apply { putExtra("", 1) }
+                        } else {
+                            Intent()
+                        }
+                    }
+                """
+                )).isEmpty()
+            }
+
+            it("do not report when it's used as the last statement of a block inside lambda") {
+                assertThat(subject.compileAndLintWithContext(wrapper.env, """
+                    class Intent {
+                        fun putExtra(s: String, s2: String) {}
+                    }
+
+                    fun printCountry(block: () -> Intent) {
+                        println(block())
+                    }
+                    
+                    fun main() {
+                        printCountry {
+                            println("Does nothing")
+                            Intent().apply { putExtra("COUNTRY", "us") }
+                        }
+                    }
+                """
+                )).isEmpty()
             }
         }
     }
