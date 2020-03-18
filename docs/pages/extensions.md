@@ -7,6 +7,9 @@ permalink: extensions.html
 summary:
 ---
 
+The following page describes how to extend detekt and how to customize it to your domain-specific needs.
+The associated **code samples** to this guide can be found in the package [detekt/detekt-sample-extensions](https://github.com/arturbosch/detekt/tree/master/detekt-sample-extensions).
+
 #### <a name="customrulesets">Custom RuleSets</a>
 
 _detekt_ uses the `ServiceLoader` pattern to collect all instances of `RuleSetProvider` interfaces. 
