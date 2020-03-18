@@ -30,21 +30,15 @@ class FindingsReport : ConsoleReport() {
             findings.forEach { (ruleSetId, issues) ->
                 val debtSumming = DebtSumming(issues)
                 val debt = debtSumming.calculateDebt()
-                if (debt != null) {
-                    totalDebt.add(debt)
-                    append("Ruleset: $ruleSetId - $debt debt".format())
-                    val issuesString = issues.joinToString("") {
-                        it.compact().format("\t")
-                    }
-                    append(issuesString.yellow())
-                } else {
-                    append("\n")
+                totalDebt.add(debt)
+                append("Ruleset: $ruleSetId - $debt debt".format())
+                val issuesString = issues.joinToString("") {
+                    it.compact().format("\t")
                 }
+                append(issuesString.yellow())
             }
             val debt = totalDebt.calculateDebt()
-            if (debt != null) {
-                append("Overall debt: $debt".format("\n"))
-            }
+            append("Overall debt: $debt".format("\n"))
             toString()
         }
     }
