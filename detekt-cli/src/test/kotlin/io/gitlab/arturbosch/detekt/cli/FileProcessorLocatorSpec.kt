@@ -16,7 +16,7 @@ import java.nio.file.Paths
 /**
  * This tests the existence of all metric processors in the META-INF config file in the core package
  */
-class FileProcessorLocatorTest : Spek({
+class FileProcessorLocatorSpec : Spek({
 
     describe("file processor locator") {
 

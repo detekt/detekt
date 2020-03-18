@@ -9,7 +9,7 @@ import java.nio.file.Files
 import java.nio.file.Paths
 import java.time.Instant
 
-class BaselineFormatTest : Spek({
+class BaselineFormatSpec : Spek({
 
     describe("baseline format") {
 
