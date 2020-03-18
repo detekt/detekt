@@ -14,7 +14,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 
-class BaselineFacadeTest : Spek({
+class BaselineFacadeSpec : Spek({
     describe("a baseline facade") {
 
         val dir = Files.createTempDirectory("baseline_format")

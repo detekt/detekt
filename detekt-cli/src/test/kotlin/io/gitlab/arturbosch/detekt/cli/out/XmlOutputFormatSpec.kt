@@ -13,7 +13,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
-class XmlOutputFormatTest : Spek({
+class XmlOutputFormatSpec : Spek({
 
     val entity1 = Entity("Sample1", "com.sample.Sample1", "",
             Location(SourceLocation(11, 1), TextLocation(0, 10),
