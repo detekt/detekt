@@ -61,7 +61,7 @@ class UnnecessaryApplySpec : Spek({
             it("does not report an apply with lambda block") {
                 assertThat(subject.compileAndLint("""
                     fun f() {
-                        val a : Int? = null
+                        val a: Int? = null
                         a?.apply({
                             plus(1)
                         })
@@ -74,7 +74,7 @@ class UnnecessaryApplySpec : Spek({
                     fun b(i : Int?) {}
 
                     fun main() {
-                        val a : Int? = null
+                        val a: Int? = null
                         b(a.apply {
                             toString()
                         })
