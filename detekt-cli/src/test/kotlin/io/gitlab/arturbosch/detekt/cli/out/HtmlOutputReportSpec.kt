@@ -26,13 +26,13 @@ import org.spekframework.spek2.style.specification.describe
 import java.nio.file.Files
 import java.nio.file.Paths
 
-class HtmlOutputFormatTest : Spek({
+class HtmlOutputReportSpec : Spek({
 
-    describe("HTML output format") {
-        val outputFormat = HtmlOutputReport()
+    describe("HTML output report") {
+        val htmlReport = HtmlOutputReport()
 
-        it("testRenderResultLooksLikeHtml") {
-            val result = outputFormat.render(TestDetektion())
+        it("renders the HTML headers correctly") {
+            val result = htmlReport.render(TestDetektion())
 
             assertThat(result).startsWith("<!DOCTYPE html>\n<html lang=\"en\">")
             assertThat(result).endsWith("</html>\n")
@@ -43,73 +43,83 @@ class HtmlOutputFormatTest : Spek({
             assertThat(result).contains("<h2>Findings</h2>")
         }
 
-        it("testRenderResultContainsTotalFindings") {
-            val result = outputFormat.render(createTestDetektionWithMultipleSmells())
+        it("contains the total number of findings") {
+            val result = htmlReport.render(createTestDetektionWithMultipleSmells())
 
             assertThat(result).contains("Total: 3")
         }
 
-        it("testRenderResultContainsFileLocations") {
-            val result = outputFormat.render(createTestDetektionWithMultipleSmells())
+        it("contains no findings") {
+            val detektion = object : TestDetektion() {
+                override val findings: Map<String, List<Finding>> = mapOf(
+                    Pair("EmptyRuleset", emptyList())
+                )
+            }
+            val result = htmlReport.render(detektion)
+            assertThat(result).contains("Total: 0")
+        }
+
+        it("renders the right file locations") {
+            val result = htmlReport.render(createTestDetektionWithMultipleSmells())
 
             assertThat(result).contains("<span class=\"location\">src/main/com/sample/Sample1.kt:11:1</span>")
             assertThat(result).contains("<span class=\"location\">src/main/com/sample/Sample2.kt:22:2</span>")
             assertThat(result).contains("<span class=\"location\">src/main/com/sample/Sample3.kt:33:3</span>")
         }
 
-        it("testRenderResultContainsRulesAndCount") {
-            val result = outputFormat.render(createTestDetektionWithMultipleSmells())
+        it("renders the right number of issues per rule") {
+            val result = htmlReport.render(createTestDetektionWithMultipleSmells())
 
             assertThat(result).contains("<span class=\"rule\">id_a: 2 </span>")
             assertThat(result).contains("<span class=\"rule\">id_b: 1 </span>")
         }
 
-        it("testRenderResultContainsMessages") {
-            val result = outputFormat.render(createTestDetektionWithMultipleSmells())
+        it("renders the right violation messages for the rules") {
+            val result = htmlReport.render(createTestDetektionWithMultipleSmells())
 
             assertThat(result).contains("<span class=\"message\">Message finding 1</span>")
             assertThat(result).contains("<span class=\"message\">Message finding 2</span>")
             assertThat(result).doesNotContain("<span class=\"message\"></span>")
         }
 
-        it("testRenderResultContainsDescriptions") {
-            val result = outputFormat.render(createTestDetektionWithMultipleSmells())
+        it("renders the right violation description for the rules") {
+            val result = htmlReport.render(createTestDetektionWithMultipleSmells())
 
             assertThat(result).contains("<span class=\"description\">Description id_a</span>")
             assertThat(result).contains("<span class=\"description\">Description id_b</span>")
         }
 
-        it("testRenderResultContainingAtLeastOneMetric") {
+        it("renders a metric report correctly") {
             val detektion = object : TestDetektion() {
                 override val metrics: Collection<ProjectMetric> = listOf(
                     ProjectMetric("M1", 10000), ProjectMetric("M2", 2)
                 )
             }
-            val result = outputFormat.render(detektion)
+            val result = htmlReport.render(detektion)
             assertThat(result).contains("<li>10,000 M1</li>")
             assertThat(result).contains("<li>2 M2</li>")
         }
 
-        it("testRenderResultContainingComplexityReport") {
+        it("renders the complexity report correctly") {
             val detektion = TestDetektion()
             detektion.addData(complexityKey, 10)
             detektion.addData(sourceLinesKey, 20)
             detektion.addData(logicalLinesKey, 10)
             detektion.addData(commentLinesKey, 2)
             detektion.addData(linesKey, 2222)
-            val result = outputFormat.render(detektion)
+            val result = htmlReport.render(detektion)
             assertThat(result).contains("<li>2,222 lines of code (loc)</li>")
             assertThat(result).contains("<li>20 source lines of code (sloc)</li>")
             assertThat(result).contains("<li>10 logical lines of code (lloc)</li>")
         }
 
-        it("testRenderResultWithBlankComplexityReport") {
-            val result = outputFormat.render(createTestDetektionWithMultipleSmells())
+        it("renders a blank complexity report correctly") {
+            val result = htmlReport.render(createTestDetektionWithMultipleSmells())
             assertThat(result).contains("<h2>Complexity Report</h2>\n\n<div>\n  <ul></ul>\n</div>")
         }
 
-        it("assert that the html generated is the expected") {
-            val result = outputFormat.render(createTestDetektionWithMultipleSmells())
+        it("asserts that the generated HTML is the same as expected") {
+            val result = htmlReport.render(createTestDetektionWithMultipleSmells())
 
             val tmpReport = Files.createTempFile("HtmlOutputFormatTest", ".html")
             Files.write(tmpReport, result.toByteArray())
@@ -121,15 +131,15 @@ class HtmlOutputFormatTest : Spek({
             }
         }
 
-        it("assert that the html generated is the same even if we change the order of the findings") {
+        it("asserts that the generated HTML is the same even if we change the order of the findings") {
             val findings = findings()
             val reversedFindings = findings
                 .reversedArray()
                 .map { (section, findings) -> section to findings.asReversed() }
                 .toTypedArray()
 
-            val result1 = outputFormat.render(HtmlDetektion(*findings))
-            val result2 = outputFormat.render(HtmlDetektion(*reversedFindings))
+            val result1 = htmlReport.render(HtmlDetektion(*findings))
+            val result2 = htmlReport.render(HtmlDetektion(*reversedFindings))
 
             val tmpReport1 = Files.createTempFile("HtmlOutputFormatTest", ".html")
             val tmpReport2 = Files.createTempFile("HtmlOutputFormatTest", ".html")

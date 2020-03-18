@@ -135,7 +135,7 @@ class HtmlOutputReport : OutputReport() {
 
 @HtmlTagMarker
 private fun FlowOrInteractiveContent.summary(
-    classes: String? = null,
+    classes: String,
     block: SUMMARY.() -> Unit = {}
 ): Unit = SUMMARY(attributesMapOf("class", classes), consumer).visit(block)
 
