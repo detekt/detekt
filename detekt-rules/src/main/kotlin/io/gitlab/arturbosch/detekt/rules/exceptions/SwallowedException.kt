@@ -99,13 +99,10 @@ class SwallowedException(config: Config = Config.empty) : Rule(config) {
     private fun isExceptionSwallowed(catchClause: KtCatchClause): Boolean {
         val parameterName = catchClause.catchParameter?.name
         val catchBody = catchClause.catchBody
-        catchBody
-            ?.collectDescendantsOfType<KtThrowExpression>()
-            ?.forEach { throwExpr ->
-                val parameterReferences = throwExpr.parameterReferences(parameterName, catchBody)
-                return parameterReferences.isNotEmpty() && parameterReferences.all { it is KtDotQualifiedExpression }
-            }
-        return false
+        return catchBody?.anyDescendantOfType<KtThrowExpression> { throwExpr ->
+            val parameterReferences = throwExpr.parameterReferences(parameterName, catchBody)
+            parameterReferences.isNotEmpty() && parameterReferences.all { it is KtDotQualifiedExpression }
+        } == true
     }
 
     private fun KtThrowExpression.parameterReferences(
