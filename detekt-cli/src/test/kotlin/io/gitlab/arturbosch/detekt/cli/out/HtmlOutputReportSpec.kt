@@ -203,7 +203,7 @@ private fun findings(): Array<Pair<String, List<Finding>>> {
     )
 }
 
-fun createHtmlDetektion(vararg findingPairs: Pair<String, List<Finding>>): Detektion {
+private fun createHtmlDetektion(vararg findingPairs: Pair<String, List<Finding>>): Detektion {
     return object : TestDetektion() {
         override val findings: Map<String, List<Finding>> = findingPairs.toMap()
     }
