@@ -84,19 +84,24 @@ class UnnecessaryApplySpec : Spek({
 
             it("does report single assignment statement in apply used as function argument - #1517") {
                 assertThat(subject.compileAndLint("""
-                    fun f() {
-                        val list = MutableList()
+                    class C {
+                        var prop = 0
+                    }
+                        
+                    fun main() {
+                        val list = ArrayList<C>()
                         list.add(
                             if (true) {
-                                SomeObject().apply {
-                                    x = y
+                                C().apply { 
+                                    prop = 1
                                 }
                             } else {
-                                SomeOtherObject()
+                                C()
                             }
                         )
                     }
-                """)).isEmpty()
+                """
+                )).isEmpty()
             }
 
             it("does not report applies with lambda body containing more than one statement") {
