@@ -33,21 +33,15 @@ class FileBasedFindingsReport : ConsoleReport() {
                 .forEach { (filename, issues) ->
                     val fileDebt = DebtSumming(issues)
                     val debt = fileDebt.calculateDebt()
-                    if (debt != null) {
-                        totalDebt.add(debt)
-                        append("$filename - $debt debt".format())
-                        val issuesString = issues.joinToString("") {
-                            it.compact().format("\t")
-                        }
-                        append(issuesString.yellow())
-                    } else {
-                        append("\n")
+                    totalDebt.add(debt)
+                    append("$filename - $debt debt".format())
+                    val issuesString = issues.joinToString("") {
+                        it.compact().format("\t")
                     }
+                    append(issuesString.yellow())
                 }
             val debt = totalDebt.calculateDebt()
-            if (debt != null) {
-                append("Overall debt: $debt".format("\n"))
-            }
+            append("Overall debt: $debt".format("\n"))
             toString()
         }
     }
