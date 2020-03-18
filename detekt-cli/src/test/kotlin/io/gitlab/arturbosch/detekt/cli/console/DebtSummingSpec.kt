@@ -23,7 +23,7 @@ internal class DebtSummingSpec : Spek({
     }
 })
 
-private fun createDebtSumming(days: Int = 0, hours: Int = 0, mins: Int = 0): Debt {
+private fun createDebtSumming(days: Int = 0, hours: Int = 0, mins: Int): Debt {
     val debt = Debt(days, hours, mins)
     val debtReport = DebtSumming()
     debtReport.add(debt)
