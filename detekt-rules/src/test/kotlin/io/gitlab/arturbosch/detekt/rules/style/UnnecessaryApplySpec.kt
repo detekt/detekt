@@ -62,7 +62,7 @@ class UnnecessaryApplySpec : Spek({
                 assertThat(subject.compileAndLint("""
                     fun f() {
                         val a : Int? = null
-                        a.apply({
+                        a?.apply({
                             plus(1)
                         })
                     }
@@ -105,7 +105,7 @@ class UnnecessaryApplySpec : Spek({
 
                     fun main() {
                         val a : Int? = null
-                        a.apply {
+                        a?.apply {
                             plus(1)
                             plus(2)
                         }
@@ -136,7 +136,7 @@ class UnnecessaryApplySpec : Spek({
 
             it("is used as return type of extension function") {
                 assertThat(subject.compileAndLint("""
-                    inline class C(var prop: Int)
+                    class C(var prop: Int)
                     
                     fun Int.f() = C(5).apply { prop = 10 }
                 """)).isEmpty()
@@ -154,7 +154,7 @@ class UnnecessaryApplySpec : Spek({
 
             it("should not report apply when using it after returning something") {
                 assertThat(subject.compileAndLint("""
-                    inline class C(var prop: Int)
+                    class C(var prop: Int)
                     
                     fun f() = (C(5)).apply { prop = 10 }
                 """)).isEmpty()
@@ -162,10 +162,10 @@ class UnnecessaryApplySpec : Spek({
 
             it("should not report apply usage inside safe chained expressions") {
                 assertThat(subject.compileAndLint("""
-                    fun test() {
+                    fun f() {
                         val arguments = listOf(1,2,3)
                             ?.map { it * 2 }
-                            ?.apply { if (true) add(4) }
+                            ?.apply { if (true) 4 }
                             ?: listOf(0)
                     }
                 """)).isEmpty()
