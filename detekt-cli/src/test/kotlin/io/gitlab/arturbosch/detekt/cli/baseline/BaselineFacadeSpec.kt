@@ -15,30 +15,43 @@ import java.nio.file.Path
 import java.nio.file.Paths
 
 class BaselineFacadeSpec : Spek({
+
     describe("a baseline facade") {
 
         val dir = Files.createTempDirectory("baseline_format")
 
-        it("create") {
+        it("creates a baseline file") {
             val fullPath = dir.resolve("baseline.xml")
-            val baselineFacade = BaselineFacade(fullPath)
-            baselineFacade.create(emptyList())
-            Files.newInputStream(fullPath).use<InputStream?, ListAssert<String>?> {
-                val reader = BufferedReader(InputStreamReader(it))
-                assertThat(reader.lines()).isNotEmpty
-            }
+            assertCreate(fullPath)
         }
 
-        it("filterWithExistingBaseline") {
+        it("creates on top of an existing a baseline file") {
+            val fullPath = dir.resolve("baseline2.xml")
+            val existingFile = Paths.get(resource("/smell-baseline.xml")).toFile()
+            existingFile.copyTo(fullPath.toFile(), overwrite = true)
+
+            assertCreate(fullPath)
+        }
+
+        it("filters without an existing baseline file") {
             assertFilter(dir)
         }
 
-        it("filterWithoutExistingBaseline") {
+        it("filters with an existing baseline file") {
             val path = Paths.get(resource("/smell-baseline.xml"))
             assertFilter(path)
         }
     }
 })
+
+private fun assertCreate(fullPath: Path) {
+    val baselineFacade = BaselineFacade(fullPath)
+    baselineFacade.create(emptyList())
+    Files.newInputStream(fullPath).use<InputStream?, ListAssert<String>?> {
+        val reader = BufferedReader(InputStreamReader(it))
+        assertThat(reader.lines()).isNotEmpty
+    }
+}
 
 private fun assertFilter(path: Path) {
     val findings = listOf<Finding>(createFinding())
