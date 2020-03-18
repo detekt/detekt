@@ -2,10 +2,9 @@ package io.gitlab.arturbosch.detekt.cli.console
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.ConsoleReport
-import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.SingleAssign
-import io.gitlab.arturbosch.detekt.cli.filterAutoCorrectedIssues
+import io.gitlab.arturbosch.detekt.cli.filterEmptyIssues
 
 class FindingsReport : ConsoleReport() {
 
@@ -18,30 +17,11 @@ class FindingsReport : ConsoleReport() {
     }
 
     override fun render(detektion: Detektion): String? {
-        val findings = detektion
-            .filterAutoCorrectedIssues(config)
-            .filter { it.value.isNotEmpty() }
-
+        val findings = detektion.filterEmptyIssues(config)
         if (findings.isEmpty()) {
             return null
         }
 
-        return with(StringBuilder()) {
-            val debtList = mutableListOf<Debt>()
-            findings.forEach { (ruleSetId, issues) ->
-                val debt = issues
-                    .map { it.issue.debt }
-                    .reduce { acc, d -> acc + d }
-                debtList.add(debt)
-                append("Ruleset: $ruleSetId - $debt debt".format())
-                val issuesString = issues.joinToString("") {
-                    it.compact().format("\t")
-                }
-                append(issuesString.yellow())
-            }
-            val debt = debtList.reduce { acc, d -> acc + d }
-            append("Overall debt: $debt".format("\n"))
-            toString()
-        }
+        return io.gitlab.arturbosch.detekt.cli.console.format(findings)
     }
 }

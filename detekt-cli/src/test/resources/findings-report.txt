@@ -1,7 +1,7 @@
-Ruleset: Ruleset1 - 10min debt
+Ruleset1 - 10min debt
 	TestSmell - [TestEntity] at TestFile.kt:1:1
 	TestSmell - [TestEntity] at TestFile.kt:1:1
-Ruleset: Ruleset2 - 5min debt
+Ruleset2 - 5min debt
 	TestSmell - [TestEntity] at TestFile.kt:1:1
 
 Overall debt: 15min

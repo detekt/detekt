@@ -45,6 +45,12 @@ fun Detektion.getOrComputeWeightedAmountOfIssues(config: Config): Int {
     return amount
 }
 
+fun Detektion.filterEmptyIssues(config: Config): Map<RuleSetId, List<Finding>> {
+    return this
+        .filterAutoCorrectedIssues(config)
+        .filter { it.value.isNotEmpty() }
+}
+
 fun Detektion.filterAutoCorrectedIssues(config: Config): Map<RuleSetId, List<Finding>> {
     if (!config.excludeCorrectable()) {
         return findings
