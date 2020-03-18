@@ -7,7 +7,7 @@ internal const val PREFIX = "\t- "
 
 internal fun Any.format(prefix: String = "", suffix: String = "\n") = "$prefix$this$suffix"
 
-internal fun format(findings: Map<String, List<Finding>>): String? {
+internal fun printFindings(findings: Map<String, List<Finding>>): String? {
     return with(StringBuilder()) {
         val debtList = mutableListOf<Debt>()
         findings.forEach { (key, issues) ->

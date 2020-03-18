@@ -22,6 +22,6 @@ class FindingsReport : ConsoleReport() {
             return null
         }
 
-        return io.gitlab.arturbosch.detekt.cli.console.format(findings)
+        return printFindings(findings)
     }
 }

@@ -25,6 +25,6 @@ class FileBasedFindingsReport : ConsoleReport() {
         val findingsPerFile = findings.values
             .flatten()
             .groupBy { it.entity.location.file }
-        return io.gitlab.arturbosch.detekt.cli.console.format(findingsPerFile)
+        return printFindings(findingsPerFile)
     }
 }
