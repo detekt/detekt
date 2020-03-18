@@ -37,6 +37,74 @@ class SwallowedExceptionSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(2)
         }
 
+        it("reports swallowed exceptions only using exception strings via variables") {
+            val code = """
+                fun f() {
+                    try {
+                    } catch (e: IllegalStateException) {
+                        val message = e.message
+                        throw IllegalArgumentException(message)
+                    } catch (f: Exception) {
+                        val message = f.toString()
+                        throw Exception(IllegalArgumentException(message))
+                    }
+                }
+            """
+            assertThat(subject.compileAndLint(code)).hasSize(2)
+        }
+
+        it("reports swallowed exceptions only using exception strings via variables in 'if' block") {
+            val code = """
+                fun f() {
+                    try {
+                    } catch (e: IllegalStateException) {
+                        if (true) {
+                            val message = e.message
+                            throw IllegalArgumentException(message)
+                        }
+                    } catch (f: Exception) {
+                        val message = f.toString()
+                        if (true) {
+                            throw Exception(IllegalArgumentException(message))
+                        }
+                    }
+                }
+            """
+            assertThat(subject.compileAndLint(code)).hasSize(2)
+        }
+
+        it("reports swallowed exceptions when it has multiple throw expressions") {
+            val code = """
+                fun f(condition: Boolean) {
+                    try {
+                        println()
+                    } catch (e: IllegalStateException) {
+                        if (condition) {
+                            throw IllegalArgumentException(e.message)
+                        }
+                        throw IllegalArgumentException(e)
+                    }
+                }
+            """
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+
+        it("reports swallowed exceptions when it has multiple throw expressions 2") {
+            val code = """
+                fun f(condition: Boolean) {
+                    try {
+                        println()
+                    } catch (e: IllegalStateException) {
+                        if (condition) {
+                            throw IllegalArgumentException(e)
+                        }
+                        throw IllegalArgumentException(e.message)
+                    }
+                }
+            """
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+
         it("reports a swallowed exception that is not logged") {
             val code = """
                 fun f() {
