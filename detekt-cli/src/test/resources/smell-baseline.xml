@@ -6,5 +6,6 @@
     </Blacklist>
     <Whitelist>
         <ID>FeatureEnvy:Signature</ID>
+        <ID></ID>
     </Whitelist>
 </SmellBaseline>
