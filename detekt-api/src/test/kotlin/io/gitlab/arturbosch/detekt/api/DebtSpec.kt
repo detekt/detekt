@@ -31,4 +31,28 @@ class DebtSpec : Spek({
             assertThat(Debt(1, 0, 20).toString()).isEqualTo("1d 20min")
         }
     }
+
+    describe("debt minutes, hours and days") {
+
+        it("outputs correct minutes, hours and days") {
+            val debt = createFormattedDebtTime(1, 23, 62)
+            assertThat(debt).isEqualTo("2d 2min")
+        }
+
+        it("outputs correct minutes and hours") {
+            val debt = createFormattedDebtTime(hours = 0, mins = 62)
+            assertThat(debt).isEqualTo("1h 2min")
+        }
+
+        it("outputs correct minutes") {
+            val debt = createFormattedDebtTime(mins = 42)
+            assertThat(debt).isEqualTo("42min")
+        }
+    }
 })
+
+private fun createFormattedDebtTime(days: Int = 0, hours: Int = 0, mins: Int): String {
+    return Debt(days, hours, mins)
+        .formatDebtTime()
+        .toString()
+}

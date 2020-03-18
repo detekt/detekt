@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.cli.console
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.ConsoleReport
+import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.SingleAssign
 import io.gitlab.arturbosch.detekt.cli.filterAutoCorrectedIssues
@@ -26,18 +27,19 @@ class FindingsReport : ConsoleReport() {
         }
 
         return with(StringBuilder()) {
-            val totalDebt = DebtSumming()
+            val debtList = mutableListOf<Debt>()
             findings.forEach { (ruleSetId, issues) ->
-                val debtSumming = DebtSumming(issues)
-                val debt = debtSumming.calculateDebt()
-                totalDebt.add(debt)
+                val debt = issues
+                    .map { it.issue.debt }
+                    .reduce { acc, d -> acc + d }
+                debtList.add(debt)
                 append("Ruleset: $ruleSetId - $debt debt".format())
                 val issuesString = issues.joinToString("") {
                     it.compact().format("\t")
                 }
                 append(issuesString.yellow())
             }
-            val debt = totalDebt.calculateDebt()
+            val debt = debtList.reduce { acc, d -> acc + d }
             append("Overall debt: $debt".format("\n"))
             toString()
         }

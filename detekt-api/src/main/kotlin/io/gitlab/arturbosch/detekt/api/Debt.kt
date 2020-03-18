@@ -11,6 +11,25 @@ data class Debt(val days: Int = 0, val hours: Int = 0, val mins: Int = 0) {
         require(!(days == 0 && hours == 0 && mins == 0))
     }
 
+    operator fun plus(other: Debt): Debt {
+        return Debt(
+            this.days + other.days,
+            this.hours + other.hours,
+            this.mins + other.mins
+        )
+    }
+
+    fun formatDebtTime(): Debt {
+        var minutes = this.mins
+        var hours = this.hours
+        var days = this.days
+        hours += minutes / MINUTES_PER_HOUR
+        minutes %= MINUTES_PER_HOUR
+        days += hours / HOURS_PER_DAY
+        hours %= HOURS_PER_DAY
+        return Debt(days, hours, minutes)
+    }
+
     companion object {
         val TWENTY_MINS: Debt =
             Debt(0, 0, 20)
@@ -18,6 +37,8 @@ data class Debt(val days: Int = 0, val hours: Int = 0, val mins: Int = 0) {
             Debt(0, 0, 10)
         val FIVE_MINS: Debt =
             Debt(0, 0, 5)
+        private const val HOURS_PER_DAY = 24
+        private const val MINUTES_PER_HOUR = 60
     }
 
     override fun toString(): String {
