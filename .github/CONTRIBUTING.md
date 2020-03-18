@@ -59,6 +59,7 @@ Make use of the `scripts/get_analysis_projects.groovy` script to automatically e
 as well as add the new/changed rules to the documentation.
 - To print the AST of sources you can pass the `--print-ast` flag to the CLI which will print each
 Kotlin files AST. This can be helpful when implementing and debugging rules.
+- To view the AST (PSI) of your source code you can use the [PSI Viewer plugin](https://plugins.jetbrains.com/plugin/227-psiviewer) for IntelliJ.
 - be aware that your PR will stay open for at least two days so that other users can give feedback.
 
 After some time and testing there is a chance this rule will become active on default.
