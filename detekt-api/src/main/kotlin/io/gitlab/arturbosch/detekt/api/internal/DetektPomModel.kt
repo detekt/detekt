@@ -16,18 +16,25 @@ import sun.reflect.ReflectionFactory
  * Adapted from https://github.com/pinterest/ktlint/blob/master/ktlint-core/src/main/kotlin/com/pinterest/ktlint/core/KtLint.kt
  * Licenced under the MIT licence - https://github.com/pinterest/ktlint/blob/master/LICENSE
  */
+@Suppress("UnsafeCallOnNullableType")
 class DetektPomModel(project: Project) : UserDataHolderBase(), PomModel {
 
     init {
         val extensionPoint = "org.jetbrains.kotlin.com.intellij.treeCopyHandler"
         val extensionClassName = TreeCopyHandler::class.java.name!!
-        arrayOf(Extensions.getArea(project), Extensions.getArea(null))
+        arrayOf(project.extensionArea, Extensions.getRootArea())
             .filter { !it.hasExtensionPoint(extensionPoint) }
             .forEach { it.registerExtensionPoint(extensionPoint, extensionClassName, ExtensionPoint.Kind.INTERFACE) }
     }
 
     override fun runTransaction(transaction: PomTransaction) {
-        (transaction as? PomTransactionBase ?: error("PomTransactionBase type expected")).run()
+        val transactionCandidate = transaction as? PomTransactionBase
+
+        val pomTransaction = requireNotNull(transactionCandidate) {
+            "${PomTransactionBase::class.simpleName} type expected, actual is ${transaction.javaClass.simpleName}"
+        }
+
+        pomTransaction.run()
     }
 
     override fun <T : PomModelAspect?> getModelAspect(aspect: Class<T>): T? {

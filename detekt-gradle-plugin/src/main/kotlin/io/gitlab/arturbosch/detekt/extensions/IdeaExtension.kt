@@ -1,15 +1,34 @@
 package io.gitlab.arturbosch.detekt.extensions
 
-open class IdeaExtension(
-    open var path: String? = null,
-    open var codeStyleScheme: String? = null,
-    open var inspectionsProfile: String? = null,
-    open var report: String? = null,
-    open var mask: String = "*.kt"
-) {
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputFile
+import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
+
+@Suppress("UnsafeCallOnNullableType")
+open class IdeaExtension {
+
+    @get:InputFile
+    @get:PathSensitive(PathSensitivity.RELATIVE)
+    var path: String? = null
+
+    @get:InputFile
+    @get:PathSensitive(PathSensitivity.RELATIVE)
+    var codeStyleScheme: String? = null
+
+    @get:InputFile
+    @get:PathSensitive(PathSensitivity.RELATIVE)
+    var inspectionsProfile: String? = null
+
+    @get:OutputDirectory
+    var report: String? = null
+
+    @get:Input
+    var mask: String = "*.kt"
 
     fun formatArgs(input: String): Array<String> {
-        require(path != null) { IDEA_PATH_ERROR }
+        requireNotNull(path) { IDEA_PATH_ERROR }
         return if (codeStyleScheme != null) {
             arrayOf(formatScript(path!!), "-r", input, "-s", codeStyleScheme!!, "-m", mask)
         } else {
@@ -18,9 +37,9 @@ open class IdeaExtension(
     }
 
     fun inspectArgs(input: String): Array<String> {
-        require(path != null) { IDEA_PATH_ERROR }
-        require(report != null) { REPORT_PATH_ERROR }
-        require(inspectionsProfile != null) { INSPECTION_PROFILE_ERROR }
+        requireNotNull(path) { IDEA_PATH_ERROR }
+        requireNotNull(report) { REPORT_PATH_ERROR }
+        requireNotNull(inspectionsProfile) { INSPECTION_PROFILE_ERROR }
         return arrayOf(inspectScript(path!!), input, inspectionsProfile!!, report!!)
     }
 

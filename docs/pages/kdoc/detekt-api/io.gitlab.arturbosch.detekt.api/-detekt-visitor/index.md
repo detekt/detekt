@@ -11,15 +11,12 @@ title: DetektVisitor - detekt-api
 Basic visitor which is used inside detekt.
 Guarantees a better looking name as the extended base class :).
 
-**Author**
-Artur Bosch
-
 ### Constructors
 
-| [&lt;init&gt;](-init-.html) | `DetektVisitor()`<br>Basic visitor which is used inside detekt. Guarantees a better looking name as the extended base class :). |
+| [&lt;init&gt;](-init-.html) | Basic visitor which is used inside detekt. Guarantees a better looking name as the extended base class :).`DetektVisitor()` |
 
 ### Inheritors
 
-| [BaseRule](../-base-rule/index.html) | `abstract class BaseRule : `[`DetektVisitor`](./index.html)`, `[`Context`](../-context/index.html)<br>Defines the visiting mechanism for KtFile's. |
-| [McCabeVisitor](../../io.gitlab.arturbosch.detekt.api.internal/-mc-cabe-visitor/index.html) | `class McCabeVisitor : `[`DetektVisitor`](./index.html)<br>Counts the cyclomatic complexity of functions. |
+| [BaseRule](../../io.gitlab.arturbosch.detekt.api.internal/-base-rule/index.html) | `abstract class BaseRule : `[`DetektVisitor`](./index.html)`, `[`Context`](../-context/index.html) |
+| [CyclomaticComplexity](../../io.gitlab.arturbosch.detekt.api.internal/-cyclomatic-complexity/index.html) | Counts the cyclomatic complexity of nodes.`class CyclomaticComplexity : `[`DetektVisitor`](./index.html) |
 

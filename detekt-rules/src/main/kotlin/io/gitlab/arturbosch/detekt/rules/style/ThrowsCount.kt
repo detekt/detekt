@@ -7,10 +7,12 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.collectByType
 import io.gitlab.arturbosch.detekt.rules.isOverride
+import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtThrowExpression
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 
 /**
  * Functions should have clear `throw` statements. Functions with many `throw` statements can be harder to read and lead
@@ -45,11 +47,16 @@ class ThrowsCount(config: Config = Config.empty) : Rule(config) {
             Debt.TEN_MINS)
 
     private val max = valueOrDefault(MAX, 2)
+    private val excludeGuardClauses = valueOrDefault(EXCLUDE_GUARD_CLAUSES, false)
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
         if (!function.isOverride()) {
-            val count = function.collectByType<KtThrowExpression>().count()
+            val count = function
+                .collectDescendantsOfType<KtThrowExpression>()
+                .filterNot { excludeGuardClauses && it.isGuardClause() }
+                .count()
+
             if (count > max) {
                 report(CodeSmell(issue, Entity.from(function), "Too many throw statements in the function" +
                         " ${function.nameAsSafeName}. The maximum number of allowed throw statements is $max."))
@@ -57,7 +64,12 @@ class ThrowsCount(config: Config = Config.empty) : Rule(config) {
         }
     }
 
+    private fun KtThrowExpression.isGuardClause(): Boolean {
+        return (this.parent as? KtBinaryExpression)?.operationToken == KtTokens.ELVIS
+    }
+
     companion object {
         const val MAX = "max"
+        const val EXCLUDE_GUARD_CLAUSES = "excludeGuardClauses"
     }
 }

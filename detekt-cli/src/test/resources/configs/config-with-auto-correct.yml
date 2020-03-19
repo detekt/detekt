@@ -1,0 +1,13 @@
+style:
+  autoCorrect: true
+  MagicNumber:
+    autoCorrect: true
+  MagicString:
+    autoCorrect: false
+
+comments:
+  autoCorrect: false
+  ClassDoc:
+    autoCorrect: true
+  FunctionDoc:
+    autoCorrect: false

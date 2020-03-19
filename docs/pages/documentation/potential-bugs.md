@@ -8,6 +8,16 @@ folder: documentation
 ---
 The potential-bugs rule set provides rules that detect potential bugs.
 
+### Deprecation
+
+Deprecated elements are expected to be removed in future. Alternatives should be found if possible.
+
+**Severity**: Defect
+
+**Debt**: 20min
+
+**Aliases**: DEPRECATION
+
 ### DuplicateCaseInWhenExpression
 
 Flags duplicate case statements in when expressions.
@@ -122,6 +132,59 @@ Runtime.getRuntime().gc()
 System.runFinalization()
 ```
 
+### HasPlatformType
+
+Platform types must be declared explicitly in public APIs to prevent unexpected errors.
+
+Based on code from Kotlin project:
+https://github.com/JetBrains/kotlin/blob/1.3.50/idea/src/org/jetbrains/kotlin/idea/intentions/SpecifyTypeExplicitlyIntention.kt#L86-L107
+
+**Severity**: Maintainability
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+class Person {
+fun apiCall() = System.getProperty("propertyName")
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+class Person {
+fun apiCall(): String = System.getProperty("propertyName")
+}
+```
+
+### ImplicitDefaultLocale
+
+Prefer passing [java.util.Locale] explicitly than using implicit default value when formatting
+strings.
+
+The default locale is almost always not appropriate for machine-readable text like HTTP headers.
+For example if locale with tag `ar-SA-u-nu-arab` is a current default then `%d` placeholders
+will be evaluated to numbers consisting of Eastern-Arabic (non-ASCII) digits.
+[java.util.Locale.US] is recommended for machine-readable output.
+
+**Severity**: CodeSmell
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+String.format("Timestamp: %d", System.currentTimeMillis())
+```
+
+#### Compliant Code:
+
+```kotlin
+String.format(Locale.US, "Timestamp: %d", System.currentTimeMillis())
+```
+
 ### InvalidRange
 
 Reports ranges which are empty.
@@ -138,7 +201,8 @@ This might be due to invalid ranges like (10..9) which will cause the loop to ne
 for (i in 2..1) {}
 for (i in 1 downTo 2) {}
 
-val range = 2 until 1
+val range1 = 2 until 1
+val range2 = 2 until 2
 ```
 
 #### Compliant Code:
@@ -147,7 +211,7 @@ val range = 2 until 1
 for (i in 2..2) {}
 for (i in 2 downTo 2) {}
 
-val range =  2 until 2)
+val range = 2 until 3
 ```
 
 ### IteratorHasNextCallsNextMethod
@@ -221,12 +285,12 @@ guaranteed. Try using constructor injection or delegation to initialize properti
 
 #### Configuration options:
 
-* `excludeAnnotatedProperties` (default: `""`)
+* ``excludeAnnotatedProperties`` (default: ``""``)
 
    Allows you to provide a list of annotations that disable
 this check.
 
-* `ignoreOnClassesPattern` (default: `""`)
+* ``ignoreOnClassesPattern`` (default: ``""``)
 
    Allows you to disable the rule for a list of classes
 
@@ -237,6 +301,44 @@ class Foo {
     @JvmField lateinit var i1: Int
     @JvmField @SinceKotlin("1.0.0") lateinit var i2: Int
 }
+```
+
+### MapGetWithNotNullAssertionOperator
+
+Reports calls of the map access methods `map[]` or `map.get()` with a not-null assertion operator `!!`.
+This may result in a NullPointerException.
+Preferred access methods are `map[]` without `!!`, `map.getValue()`, `map.getOrDefault()` or `map.getOrElse()`.
+
+Based on an IntelliJ IDEA inspection MapGetWithNotNullAssertionOperatorInspection.
+
+**Severity**: CodeSmell
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+val map = emptyMap<String, String>()
+map["key"]!!
+
+val map = emptyMap<String, String>()
+map.get("key")!!
+```
+
+#### Compliant Code:
+
+```kotlin
+val map = emptyMap<String, String>()
+map["key"]
+
+val map = emptyMap<String, String>()
+map.getValue("key")
+
+val map = emptyMap<String, String>()
+map.getOrDefault("key", "")
+
+val map = emptyMap<String, String>()
+map.getOrElse("key", { "" })
 ```
 
 ### MissingWhenCase
@@ -429,7 +531,7 @@ fun foo(str: String?) {
 
 ### UnsafeCast
 
-Reports casts which are unsafe. In case the cast is not possible it will throw an exception.
+Reports casts that will never succeed.
 
 **Severity**: Defect
 
@@ -440,8 +542,12 @@ Reports casts which are unsafe. In case the cast is not possible it will throw a
 #### Noncompliant Code:
 
 ```kotlin
-fun foo(s: Any) {
+fun foo(s: String) {
     println(s as Int)
+}
+
+fun bar(s: String) {
+    println(s as? Int)
 }
 ```
 
@@ -449,7 +555,7 @@ fun foo(s: Any) {
 
 ```kotlin
 fun foo(s: Any) {
-    println((s as? Int) ?: 0)
+    println(s as Int)
 }
 ```
 

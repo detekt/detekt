@@ -8,7 +8,5 @@ title: DefaultContext.findings - detekt-api
 
 `open val findings: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Finding`](../-finding/index.html)`>`
 
-Overrides [Context.findings](../-context/findings.html)
-
 Returns a copy of violations for this rule.
 

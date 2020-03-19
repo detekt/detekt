@@ -1,0 +1,19 @@
+build:
+  maxIssues: 10
+  weights:
+    complexity: 2
+    # style: 0
+
+config:
+  validation: true
+  excludes: "test>.*"
+
+processors:
+  active: true
+  exclude:
+    - 'DetektProgressListener'
+
+console-reports:
+  active: true
+  exclude:
+    - 'FileBasedFindingsReport'

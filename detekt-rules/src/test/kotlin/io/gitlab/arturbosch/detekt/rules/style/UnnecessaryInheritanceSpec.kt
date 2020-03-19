@@ -13,14 +13,14 @@ class UnnecessaryInheritanceSpec : Spek({
 
         it("has unnecessary super type declarations") {
             val findings = subject.lint("""
-				class A : Any()
-				class B : Object()""")
+                class A : Any()
+                class B : Object()""")
             assertThat(findings).hasSize(2)
         }
 
         it("has no unnecessary super type declarations") {
             val findings = subject.lint("class C : An()")
-            assertThat(findings).hasSize(0)
+            assertThat(findings).isEmpty()
         }
     }
 })

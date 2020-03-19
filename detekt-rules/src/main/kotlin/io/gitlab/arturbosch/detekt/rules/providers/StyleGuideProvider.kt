@@ -2,17 +2,20 @@ package io.gitlab.arturbosch.detekt.rules.providers
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.rules.style.CollapsibleIfStatements
 import io.gitlab.arturbosch.detekt.rules.style.DataClassContainsFunctions
 import io.gitlab.arturbosch.detekt.rules.style.DataClassShouldBeImmutable
 import io.gitlab.arturbosch.detekt.rules.style.EqualsNullCall
 import io.gitlab.arturbosch.detekt.rules.style.EqualsOnSignatureLine
+import io.gitlab.arturbosch.detekt.rules.style.ExplicitCollectionElementAccessMethod
 import io.gitlab.arturbosch.detekt.rules.style.ExplicitItLambdaParameter
 import io.gitlab.arturbosch.detekt.rules.style.ExpressionBodySyntax
 import io.gitlab.arturbosch.detekt.rules.style.FileParsingRule
 import io.gitlab.arturbosch.detekt.rules.style.ForbiddenComment
 import io.gitlab.arturbosch.detekt.rules.style.ForbiddenImport
+import io.gitlab.arturbosch.detekt.rules.style.ForbiddenMethodCall
+import io.gitlab.arturbosch.detekt.rules.style.ForbiddenPublicDataClass
 import io.gitlab.arturbosch.detekt.rules.style.ForbiddenVoid
 import io.gitlab.arturbosch.detekt.rules.style.FunctionOnlyReturningConstant
 import io.gitlab.arturbosch.detekt.rules.style.LibraryCodeMustSpecifyReturnType
@@ -25,6 +28,7 @@ import io.gitlab.arturbosch.detekt.rules.style.NewLineAtEndOfFile
 import io.gitlab.arturbosch.detekt.rules.style.OptionalAbstractKeyword
 import io.gitlab.arturbosch.detekt.rules.style.OptionalWhenBraces
 import io.gitlab.arturbosch.detekt.rules.style.ProtectedMemberInFinalClass
+import io.gitlab.arturbosch.detekt.rules.style.RedundantExplicitType
 import io.gitlab.arturbosch.detekt.rules.style.RedundantVisibilityModifierRule
 import io.gitlab.arturbosch.detekt.rules.style.ReturnCount
 import io.gitlab.arturbosch.detekt.rules.style.SafeCast
@@ -33,6 +37,7 @@ import io.gitlab.arturbosch.detekt.rules.style.SpacingBetweenPackageAndImports
 import io.gitlab.arturbosch.detekt.rules.style.ThrowsCount
 import io.gitlab.arturbosch.detekt.rules.style.UnderscoresInNumericLiterals
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryAbstractClass
+import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryAnnotationUseSiteTarget
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryApply
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryInheritance
 import io.gitlab.arturbosch.detekt.rules.style.UnnecessaryLet
@@ -41,8 +46,10 @@ import io.gitlab.arturbosch.detekt.rules.style.UntilInsteadOfRangeTo
 import io.gitlab.arturbosch.detekt.rules.style.UnusedImports
 import io.gitlab.arturbosch.detekt.rules.style.UnusedPrivateClass
 import io.gitlab.arturbosch.detekt.rules.style.UnusedPrivateMember
+import io.gitlab.arturbosch.detekt.rules.style.UseArrayLiteralsInAnnotations
 import io.gitlab.arturbosch.detekt.rules.style.UseCheckOrError
 import io.gitlab.arturbosch.detekt.rules.style.UseDataClass
+import io.gitlab.arturbosch.detekt.rules.style.UseIfInsteadOfWhen
 import io.gitlab.arturbosch.detekt.rules.style.UseRequire
 import io.gitlab.arturbosch.detekt.rules.style.UselessCallOnNotNull
 import io.gitlab.arturbosch.detekt.rules.style.UtilityClassWithPublicConstructor
@@ -59,10 +66,11 @@ import io.gitlab.arturbosch.detekt.rules.style.optional.PreferToOverPairSyntax
  *
  * @active since v1.0.0
  */
-class StyleGuideProvider : RuleSetProvider {
+class StyleGuideProvider : DefaultRuleSetProvider {
 
     override val ruleSetId: String = "style"
 
+    @Suppress("LongMethod")
     override fun instance(config: Config): RuleSet {
         return RuleSet(
             ruleSetId,
@@ -77,11 +85,14 @@ class StyleGuideProvider : RuleSetProvider {
                 EqualsNullCall(config),
                 ForbiddenComment(config),
                 ForbiddenImport(config),
+                ForbiddenMethodCall(config),
+                ForbiddenPublicDataClass(config),
                 FunctionOnlyReturningConstant(config),
                 SpacingBetweenPackageAndImports(config),
                 LoopWithTooManyJumpStatements(config),
                 SafeCast(config),
                 UnnecessaryAbstractClass(config),
+                UnnecessaryAnnotationUseSiteTarget(config),
                 UnnecessaryParentheses(config),
                 UnnecessaryInheritance(config),
                 UtilityClassWithPublicConstructor(config),
@@ -110,11 +121,15 @@ class StyleGuideProvider : RuleSetProvider {
                 VarCouldBeVal(config),
                 ForbiddenVoid(config),
                 ExplicitItLambdaParameter(config),
+                ExplicitCollectionElementAccessMethod(config),
                 UselessCallOnNotNull(config),
                 UnderscoresInNumericLiterals(config),
                 UseRequire(config),
                 UseCheckOrError(config),
-                LibraryCodeMustSpecifyReturnType(config)
+                UseIfInsteadOfWhen(config),
+                RedundantExplicitType(config),
+                LibraryCodeMustSpecifyReturnType(config),
+                UseArrayLiteralsInAnnotations(config)
             )
         )
     }

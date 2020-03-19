@@ -1,0 +1,15 @@
+complexity:
+  LongLongMethod:
+    active: true
+    threshold: 20
+  LongParameterList:
+    enabled: false
+    threshold: 5
+  LargeClass:
+    active: false
+    howMany: 70
+  InnerMap:
+    InnerKey:
+      active: true
+    Inner2:
+      nestedActive: true

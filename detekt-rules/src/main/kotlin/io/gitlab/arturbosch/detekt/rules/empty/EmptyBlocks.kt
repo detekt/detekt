@@ -14,6 +14,7 @@ import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtSecondaryConstructor
+import org.jetbrains.kotlin.psi.KtTryExpression
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.psi.KtWhileExpression
 
@@ -42,6 +43,7 @@ class EmptyBlocks(val config: Config = Config.empty) : MultiRule() {
     private val emptyInitBlock = EmptyInitBlock(config)
     private val emptyKtFile = EmptyKtFile(config)
     private val emptySecondaryConstructorBlock = EmptySecondaryConstructor(config)
+    private val emptyTryBlock = EmptyTryBlock(config)
     private val emptyWhenBlock = EmptyWhenBlock(config)
     private val emptyWhileBlock = EmptyWhileBlock(config)
 
@@ -58,6 +60,7 @@ class EmptyBlocks(val config: Config = Config.empty) : MultiRule() {
             emptyInitBlock,
             emptyKtFile,
             emptySecondaryConstructorBlock,
+            emptyTryBlock,
             emptyWhenBlock,
             emptyWhileBlock
     )
@@ -70,6 +73,11 @@ class EmptyBlocks(val config: Config = Config.empty) : MultiRule() {
             }
         }
         super.visitKtFile(file)
+    }
+
+    override fun visitTryExpression(expression: KtTryExpression) {
+        emptyTryBlock.runIfActive { visitTryExpression(expression) }
+        super.visitTryExpression(expression)
     }
 
     override fun visitCatchSection(catchClause: KtCatchClause) {

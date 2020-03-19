@@ -30,6 +30,8 @@ import org.jetbrains.kotlin.psi.KtLoopExpression
  * </noncompliant>
  *
  * @configuration maxJumpCount - maximum allowed jumps in a loop (default: `1`)
+ *
+ * @active since v1.2.0
  */
 class LoopWithTooManyJumpStatements(config: Config = Config.empty) : Rule(config) {
 

@@ -8,14 +8,15 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isOverride
-import io.gitlab.arturbosch.detekt.rules.parentOfType
-import org.jetbrains.kotlin.psi.KtClassLiteralExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
-import org.jetbrains.kotlin.psi.KtSimpleNameExpression
 import org.jetbrains.kotlin.psi.KtTypeArgumentList
-import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.psi.KtTypeReference
+import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
+import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.bindingContextUtil.getAbbreviatedTypeOrType
+import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
 
 /**
  * This rule detects usages of `Void` and reports them as forbidden.
@@ -44,44 +45,42 @@ class ForbiddenVoid(config: Config = Config.empty) : Rule(config) {
         Debt.FIVE_MINS
     )
 
-    override fun visitSimpleNameExpression(expression: KtSimpleNameExpression) {
-        if (expression.isReferencingVoid()) {
-            if (ruleSetConfig.valueOrDefault(IGNORE_OVERRIDDEN, false) && expression.isPartOfOverriddenSignature()) {
+    @Suppress("ReturnCount")
+    override fun visitTypeReference(typeReference: KtTypeReference) {
+        if (bindingContext == BindingContext.EMPTY) return
+        val kotlinType = typeReference.getAbbreviatedTypeOrType(bindingContext) ?: return
+
+        if (kotlinType.constructor.declarationDescriptor?.fqNameOrNull()?.asString() == VOID_CLASS_NAME) {
+            if (ruleSetConfig.valueOrDefault(IGNORE_OVERRIDDEN, false) && typeReference.isPartOfOverriddenSignature()) {
                 return
             }
-            if (ruleSetConfig.valueOrDefault(IGNORE_USAGE_IN_GENERICS, false) && expression.isGenericArgument()) {
+            if (ruleSetConfig.valueOrDefault(IGNORE_USAGE_IN_GENERICS, false) && typeReference.isGenericArgument()) {
                 return
             }
-            report(CodeSmell(issue, Entity.from(expression), message = "'Void' should be replaced with 'Unit'."))
+            report(CodeSmell(issue, Entity.from(typeReference), message = "'Void' should be replaced with 'Unit'."))
         }
 
-        super.visitSimpleNameExpression(expression)
+        super.visitTypeReference(typeReference)
     }
 
-    private fun KtSimpleNameExpression.isReferencingVoid() =
-        getReferencedName() == Void::class.java.simpleName && !isClassLiteral
-
-    private val KtSimpleNameExpression.isClassLiteral: Boolean
-        get() = getStrictParentOfType<KtClassLiteralExpression>() != null
-
-    private fun KtSimpleNameExpression.isPartOfOverriddenSignature() =
+    private fun KtTypeReference.isPartOfOverriddenSignature() =
         (isPartOfReturnTypeOfFunction() || isParameterTypeOfFunction()) &&
-                parentOfType<KtNamedFunction>()?.isOverride() == true
+                getStrictParentOfType<KtNamedFunction>()?.isOverride() == true
 
-    private fun KtSimpleNameExpression.isPartOfReturnTypeOfFunction() =
-        parentOfType<KtNamedFunction>()
+    private fun KtTypeReference.isPartOfReturnTypeOfFunction() =
+        getStrictParentOfType<KtNamedFunction>()
             ?.typeReference
-            ?.collectDescendantsOfType<KtSimpleNameExpression>()
-            ?.any { it == this } ?: false
+            ?.anyDescendantOfType<KtTypeReference> { it == this } ?: false
 
-    private fun KtSimpleNameExpression.isParameterTypeOfFunction() =
-        parentOfType<KtParameter>() != null
+    private fun KtTypeReference.isParameterTypeOfFunction() =
+        getStrictParentOfType<KtParameter>() != null
 
-    private fun KtSimpleNameExpression.isGenericArgument() =
-        parentOfType<KtTypeArgumentList>() != null
+    private fun KtTypeReference.isGenericArgument() =
+        getStrictParentOfType<KtTypeArgumentList>() != null
 
     companion object {
         const val IGNORE_OVERRIDDEN = "ignoreOverridden"
         const val IGNORE_USAGE_IN_GENERICS = "ignoreUsageInGenerics"
+        const val VOID_CLASS_NAME = "java.lang.Void"
     }
 }

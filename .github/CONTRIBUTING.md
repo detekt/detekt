@@ -5,9 +5,9 @@
 - `gradle detekt` should not report any errors
 - This repository follows the [Kotlin Coding Conventions](https://kotlinlang.org/docs/reference/coding-conventions.html) which are enforced by KtLint when running `gradle detekt`.
 - Make sure your IDE uses [KtLint](https://github.com/shyiko/ktlint) formatting rules as well as the settings in [.editorconfig](../.editorconfig)
-- We use [Spek](https://github.com/spekframework/spek) for testing. Please use the `Spec.kt`-Suffix. For easier testing you might want to use the [Spek IntelliJ Plugin](https://plugins.jetbrains.com/plugin/8564-spek).
+- We use [Spek](https://github.com/spekframework/spek) for testing. Please use the `Spec.kt`-Suffix. For easier testing you might want to use the [Spek IntelliJ Plugin](https://plugins.jetbrains.com/plugin/10915-spek-framework).
 - Feel free to add your name to the contributors list at the end of the readme file when opening a pull request.
-- The code in `detekt-api` and any rule in `detekt-rules` must be documented. We generate documentation for our website based on this modules.
+- The code in `detekt-api` and any rule in `detekt-rules` must be documented. We generate documentation for our website based on these modules.
 - If some Kotlin code in `resources` folder (like `detekt-formatting`) shows a compilation error, right click on it and use `Mark as plain text`.
 
 ### When implementing new rules ...
@@ -59,15 +59,38 @@ Make use of the `scripts/get_analysis_projects.groovy` script to automatically e
 as well as add the new/changed rules to the documentation.
 - To print the AST of sources you can pass the `--print-ast` flag to the CLI which will print each
 Kotlin files AST. This can be helpful when implementing and debugging rules.
+- To view the AST (PSI) of your source code you can use the [PSI Viewer plugin](https://plugins.jetbrains.com/plugin/227-psiviewer) for IntelliJ.
 - be aware that your PR will stay open for at least two days so that other users can give feedback.
 
 After some time and testing there is a chance this rule will become active on default.
 
 Rules that contain an `@active` tag in their KDoc will be marked as active in the `default-detekt-config.yml`.
 
+### When updating the website ...
+
+Make sure to test your changes locally.
+
+- install ruby and jekyll
+- gem install bundler
+- bundler install
+- jekyll build
+- jekyll serve
+
+Following warning is expected until [Jekyll](https://github.com/jekyll/jekyll/issues/7947) adopts to Ruby 2.7.0.
+
+`warning: Using the last argument as keyword parameters is deprecated (Ruby 2.7.0)`
+
 ### Release checklist
 
 - add changes in CHANGELOG.md -> `groovy github-milestone-report.groovy arturbosch detekt [milestone-number]`
-- migrations expected? -> Add migration sub-section to current release changelog in CHANGELOG.md
+- migrations expected? -> Add `Migration` sub-section
+- important non-breaking changes? Add `Notable Changes` sub-section
 - all new contributors mentioned? -> README.md>Contributors, Update `all contributors`-Badge
-- new gradle-plugin release? -> Update gradle-version badge
+
+#### Releasing process
+
+- Increment `detektVersion` in `gradle.properties`
+- `gradle build publishToMavenLocal`
+- Increment version of the Gradle Plugin
+- `gradle bU` - uploads artifacts to Bintray
+- `gradle pluPub` - uploads the Gradle Plugin to the Plugin Repositories

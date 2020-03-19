@@ -12,13 +12,13 @@ class ThrowingNewInstanceOfSameExceptionSpec : Spek({
 
         context("a catch block which rethrows a new instance of the caught exception") {
             val code = """
-			fun x() {
-				try {
-				} catch (e: IllegalStateException) {
-					throw IllegalStateException(e)
-				}
-			}
-		"""
+            fun x() {
+                try {
+                } catch (e: IllegalStateException) {
+                    throw IllegalStateException(e)
+                }
+            }
+        """
 
             it("should report") {
                 val findings = subject.compileAndLint(code)
@@ -28,33 +28,33 @@ class ThrowingNewInstanceOfSameExceptionSpec : Spek({
 
         context("a catch block which rethrows a new instance of another exception") {
             val code = """
-			fun x() {
-				try {
-				} catch (e: IllegalStateException) {
-					throw IllegalArgumentException(e)
-				}
-			}
-		"""
+            fun x() {
+                try {
+                } catch (e: IllegalStateException) {
+                    throw IllegalArgumentException(e)
+                }
+            }
+        """
 
             it("should not report") {
                 val findings = subject.compileAndLint(code)
-                assertThat(findings).hasSize(0)
+                assertThat(findings).isEmpty()
             }
         }
 
         context("a catch block which throws a new instance of the same exception type without wrapping the caught exception") {
             val code = """
-			fun x() {
-				try {
-				} catch (e: IllegalStateException) {
-					throw IllegalStateException()
-				}
-			}
-		"""
+            fun x() {
+                try {
+                } catch (e: IllegalStateException) {
+                    throw IllegalStateException()
+                }
+            }
+        """
 
             it("should not report") {
                 val findings = subject.compileAndLint(code)
-                assertThat(findings).hasSize(0)
+                assertThat(findings).isEmpty()
             }
         }
     }

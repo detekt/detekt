@@ -13,6 +13,8 @@ import io.gitlab.arturbosch.detekt.formatting.merge
  *
  * @configuration indentSize - indentation size (default: `4`)
  * @configuration continuationIndentSize - continuation indentation size (default: `4`)
+ *
+ * @autoCorrect since v1.0.0
  */
 class Indentation(config: Config) : FormattingRule(config) {
 
@@ -27,7 +29,9 @@ class Indentation(config: Config) : FormattingRule(config) {
                 indentSize = indentSize,
                 continuationIndentSize = continuationIndentSize)
     }
-}
 
-private const val INDENT_SIZE = "indentSize"
-private const val CONTINUATION_INDENT_SIZE = "continuationIndentSize"
+    companion object {
+        const val INDENT_SIZE = "indentSize"
+        const val CONTINUATION_INDENT_SIZE = "continuationIndentSize"
+    }
+}

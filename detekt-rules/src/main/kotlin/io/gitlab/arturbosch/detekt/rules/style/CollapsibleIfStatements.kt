@@ -7,10 +7,11 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import org.jetbrains.kotlin.com.intellij.psi.PsiComment
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtContainerNodeForControlStructureBody
+import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
+import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
 
 /**
  * This rule detects `if` statements which can be collapsed. This can reduce nesting and help improve readability.
@@ -52,8 +53,8 @@ class CollapsibleIfStatements(config: Config = Config.empty) : Rule(config) {
             expression.`else` == null && expression.parent !is KtContainerNodeForControlStructureBody
 
     private fun hasOneKtIfExpression(expression: KtIfExpression): Boolean {
-        val statements = expression.then?.children?.filterNot { it is PsiComment }
-        return statements != null && statements.size == 1 && isLoneIfExpression(statements[0])
+        val statement = expression.then?.getChildrenOfType<KtExpression>()?.singleOrNull()
+        return statement != null && isLoneIfExpression(statement)
     }
 
     private fun isLoneIfExpression(statement: PsiElement): Boolean {

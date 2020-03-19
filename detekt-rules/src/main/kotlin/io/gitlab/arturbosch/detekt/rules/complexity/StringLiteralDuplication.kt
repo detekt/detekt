@@ -11,10 +11,10 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.rules.isPartOf
-import io.gitlab.arturbosch.detekt.rules.plainText
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtStringTemplateExpression
+import org.jetbrains.kotlin.psi.psiUtil.plainContent
 
 /**
  * This rule detects and reports duplicated String literals. Repeatedly typing out the same String literal across the
@@ -92,9 +92,9 @@ class StringLiteralDuplication(
         }
 
         override fun visitStringTemplateExpression(expression: KtStringTemplateExpression) {
-            val text = expression.plainText()
+            val text = expression.plainContent
             when {
-                ignoreAnnotation && expression.isPartOf(KtAnnotationEntry::class) -> pass
+                ignoreAnnotation && expression.isPartOf<KtAnnotationEntry>() -> pass
                 excludeStringsWithLessThan5Characters && text.length < STRING_EXCLUSION_LENGTH -> pass
                 text.matches(ignoreStringsRegex) -> pass
                 else -> add(expression)
@@ -102,7 +102,7 @@ class StringLiteralDuplication(
         }
 
         private fun add(str: KtStringTemplateExpression) {
-            val text = str.plainText()
+            val text = str.plainContent
             literals.compute(text) { _, oldValue -> oldValue?.plus(1) ?: 1 }
             literalReferences.compute(text) { _, entries -> entries?.add(str); entries ?: mutableListOf(str) }
         }

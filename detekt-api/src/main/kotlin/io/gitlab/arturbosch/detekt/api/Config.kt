@@ -1,13 +1,23 @@
+@file:Suppress("unused")
+
 package io.gitlab.arturbosch.detekt.api
 
-import io.gitlab.arturbosch.detekt.api.Config.Companion.PRIMITIVES
-import java.util.LinkedList
+import io.gitlab.arturbosch.detekt.api.internal.EmptyConfig
 import kotlin.reflect.KClass
 
 /**
  * A configuration holds information about how to configure specific rules.
  */
 interface Config {
+
+    /**
+     * Keeps track of which key was taken to [subConfig] this configuration.
+     * Sub-sequential calls to [subConfig] are tracked with '>' as a separator.
+     *
+     * May be null if this is the top most configuration object.
+     */
+    val parentPath: String?
+        get() = null
 
     /**
      * Tries to retrieve part of the configuration based on given key.
@@ -18,7 +28,7 @@ interface Config {
      * Retrieves a sub configuration or value based on given key. If configuration property cannot be found
      * the specified default value is returned.
      */
-    fun <T : Any> valueOrDefault(key: String, default: T): T
+    fun <T : Any> valueOrDefault(key: String, default: T): T = valueOrNull(key) ?: default
 
     /**
      * Retrieves a sub configuration or value based on given key.
@@ -29,6 +39,7 @@ interface Config {
     /**
      * Is thrown when loading a configuration results in errors.
      */
+    @Deprecated("Default value of parameter 'msg' applies only to YamlConfig and will be removed in the future")
     class InvalidConfigurationError(
         msg: String = "Provided configuration file is invalid:" +
             " Structure must be from type Map<String,Any>!"
@@ -46,6 +57,7 @@ interface Config {
         const val ACTIVE_KEY: String = "active"
         const val EXCLUDES_KEY: String = "excludes"
         const val INCLUDES_KEY: String = "includes"
+        const val CONFIG_SEPARATOR: String = ">"
 
         val PRIMITIVES: Set<KClass<out Any>> = setOf(
             Int::class,
@@ -64,6 +76,12 @@ interface Config {
  * A configuration which keeps track of the config it got sub-config'ed from by the [subConfig] function.
  * It's main usage is to recreate the property-path which was taken when using the [subConfig] function repeatedly.
  */
+@Deprecated("""
+A Config is a long lived object and is derived via subConfig a lot.
+Keeping track of the parent it was derived, creates long-lived object chains which takes the GC longer to release them.
+It can even lead to OOM if detekt get's embedded in an other application which reuses the top most Config object. 
+The property 'parentPath' of the Config interface can be used as a replacement for parent.key calls.
+""")
 interface HierarchicalConfig : Config {
     /**
      * Returns the parent config which encloses this config part.
@@ -77,65 +95,7 @@ interface HierarchicalConfig : Config {
 }
 
 /**
- * NOP-implementation of a config object.
- */
-internal object EmptyConfig : HierarchicalConfig {
-
-    override val parent: HierarchicalConfig.Parent? = null
-
-    override fun subConfig(key: String): EmptyConfig = this
-
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : Any> valueOrDefault(key: String, default: T): T = when (key) {
-        "active" -> true as T
-        else -> default
-    }
-
-    override fun <T : Any> valueOrNull(key: String): T? = null
-}
-
-/**
  * Convenient base configuration which parses/casts the configuration value based on the type of the default value.
  */
-abstract class BaseConfig : HierarchicalConfig {
-
-    protected open fun valueOrDefaultInternal(key: String, result: Any?, default: Any): Any {
-        return try {
-            if (result != null) {
-                when {
-                    result is String -> tryParseBasedOnDefault(result, default)
-                    default::class in PRIMITIVES &&
-                        result::class != default::class -> throw ClassCastException()
-                    else -> result
-                }
-            } else {
-                default
-            }
-        } catch (_: ClassCastException) {
-            error("Value \"$result\" set for config parameter \"${keySequence(key)}\" is not of" +
-                    " required type ${default::class.simpleName}.")
-        } catch (_: NumberFormatException) {
-            error("Value \"$result\" set for config parameter \"${keySequence(key)}\" is not of" +
-                    " required type ${default::class.simpleName}.")
-        }
-    }
-
-    private fun keySequence(key: String): String {
-        val seq = LinkedList<String>()
-        var current = parent
-        while (current != null) {
-            seq.addFirst(current.key)
-            current = (current.config as? HierarchicalConfig)?.parent
-        }
-        val keySeq = seq.joinToString(" > ")
-        return if (keySeq.isEmpty()) key else "$keySeq > $key"
-    }
-
-    protected open fun tryParseBasedOnDefault(result: String, defaultResult: Any): Any = when (defaultResult) {
-        is Int -> result.toInt()
-        is Boolean -> result.toBoolean()
-        is Double -> result.toDouble()
-        is String -> result
-        else -> throw ClassCastException()
-    }
-}
+@Deprecated("'BaseConfig' exposes implementation details of 'YamlConfig' and should't be relied on.")
+typealias BaseConfig = io.gitlab.arturbosch.detekt.api.internal.BaseConfig

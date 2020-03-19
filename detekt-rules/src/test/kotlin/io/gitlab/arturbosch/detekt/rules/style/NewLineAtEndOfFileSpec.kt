@@ -13,7 +13,7 @@ class NewLineAtEndOfFileSpec : Spek({
     describe("NewLineAtEndOfFile rule") {
 
         it("should not flag a kt file containing new space at end") {
-            assertThat(subject.lint(Case.NewLineAtEndOfFile.path())).hasSize(0)
+            assertThat(subject.lint(Case.NewLineAtEndOfFile.path())).isEmpty()
         }
 
         it("should flag a kt file not containing new space at end") {
@@ -21,7 +21,7 @@ class NewLineAtEndOfFileSpec : Spek({
         }
 
         it("should not flag an empty kt file") {
-            assertThat(subject.lint(Case.EmptyKtFile.path())).hasSize(0)
+            assertThat(subject.lint(Case.EmptyKtFile.path())).isEmpty()
         }
     }
 })

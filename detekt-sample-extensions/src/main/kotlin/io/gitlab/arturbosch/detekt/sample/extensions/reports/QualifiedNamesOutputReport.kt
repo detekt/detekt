@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.api.OutputReport
 
 class QualifiedNamesOutputReport : OutputReport() {
 
-    var fileName: String = "fqNames"
     override val ending: String = "txt"
 
     override fun render(detektion: Detektion): String? {

@@ -21,10 +21,15 @@ fun KDocTag.parseConfigTag(): Configuration {
             ?.groupValues
             ?.get(1)
             ?.trim() ?: ""
+    val deprecatedMessage = configurationDeprecatedRegex.find(content)
+            ?.groupValues
+            ?.get(1)
+            ?.trim()
     val description = content.substring(delimiterIndex + 1)
             .replace(configurationDefaultValueRegex, "")
+            .replace(configurationDeprecatedRegex, "")
             .trim()
-    return Configuration(name, description, defaultValue)
+    return Configuration(name, description, defaultValue, deprecatedMessage)
 }
 
 private const val EXPECTED_CONFIGURATION_FORMAT =
@@ -47,4 +52,5 @@ fun KDocTag.isValidConfigurationTag(entity: String = "Rule"): Boolean {
 }
 
 val configurationDefaultValueRegex = "\\(default: `(.+)`\\)".toRegex(RegexOption.DOT_MATCHES_ALL)
+val configurationDeprecatedRegex = "\\(deprecated: \"(.+)\"\\)".toRegex(RegexOption.DOT_MATCHES_ALL)
 const val TAG_CONFIGURATION = "configuration"

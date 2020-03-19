@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
+import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.lint
@@ -11,7 +12,9 @@ class LargeClassSpec : Spek({
     describe("nested classes are also considered") {
 
         it("should detect only the nested large class which exceeds threshold 70") {
-            assertThat(LargeClass(threshold = 70).lint(Case.NestedClasses.path())).hasSize(1)
+            val findings = LargeClass(threshold = 70).lint(Case.NestedClasses.path())
+            assertThat(findings).hasSize(1)
+            assertThat(findings).hasSourceLocations(SourceLocation(12, 15))
         }
     }
 

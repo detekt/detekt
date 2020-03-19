@@ -25,8 +25,10 @@ class LongMethodSpec : Spek({
                     }
                 }
             """
+            val findings = subject.compileAndLint(code)
 
-            assertThat(subject.compileAndLint(code)).hasSize(2)
+            assertThat(findings).hasSize(2)
+            assertThat(findings).hasTextLocations("longMethod", "nestedLongMethod")
         }
 
         it("should not find too long methods") {

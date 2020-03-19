@@ -7,3 +7,8 @@ title: MultiRule.<init> - detekt-api
 # &lt;init&gt;
 
 `MultiRule()`
+
+Composite rule which delegates work to child rules.
+Can be used to combine different rules which do similar work like
+scanning the source code line by line to increase performance.
+

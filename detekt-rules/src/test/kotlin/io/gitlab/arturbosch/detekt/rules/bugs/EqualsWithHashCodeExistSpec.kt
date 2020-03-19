@@ -15,35 +15,79 @@ class EqualsWithHashCodeExistSpec : Spek({
 
             it("reports hashCode() without equals() function") {
                 val code = """
-				class A {
-					override fun hashCode(): Int { return super.hashCode() }
-				}"""
+                class A {
+                    override fun hashCode(): Int { return super.hashCode() }
+                }"""
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
             it("reports equals() without hashCode() function") {
                 val code = """
-				class A {
-					override fun equals(other: Any?): Boolean { return super.equals(other) }
-				}"""
+                class A {
+                    override fun equals(other: Any?): Boolean { return super.equals(other) }
+                }"""
+                assertThat(subject.compileAndLint(code)).hasSize(1)
+            }
+
+            it("reports a different equals() function signature") {
+                val code = """
+                class A {
+                    fun equals(other: Any?, i: Int): Boolean { return super.equals(other) }
+                    override fun hashCode(): Int { return super.hashCode() }
+                }"""
+                assertThat(subject.compileAndLint(code)).hasSize(1)
+            }
+
+            it("reports a different hashcode() function signature") {
+                val code = """
+                class A {
+                    override fun equals(other: Any?): Boolean { return super.equals(other) }
+                    fun hashCode(i: Int): Int { return super.hashCode() }
+                }"""
+                assertThat(subject.compileAndLint(code)).hasSize(1)
+            }
+
+            it("reports a different overridden equals() function signature") {
+                val code = """
+                interface I {
+                    fun equals(other: Any?, i: Int): Boolean
+                }                    
+
+                class A : I {
+                    override fun equals(other: Any?, i: Int): Boolean { return super.equals(other) }
+                    override fun hashCode(): Int { return super.hashCode() }
+                }"""
+                assertThat(subject.compileAndLint(code)).hasSize(1)
+            }
+
+            it("reports a different overridden hashCode() function signature") {
+                val code = """
+                interface I {
+                    fun hashCode(i: Int): Int
+                }                    
+
+                class A : I {
+                    override fun equals(other: Any?): Boolean { return super.equals(other) }
+                    override fun hashCode(i: Int): Int { return super.hashCode() }
+                }"""
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
             it("does not report equals() with hashCode() function") {
                 val code = """
-				class A {
-					override fun equals(other: Any?): Boolean { return super.equals(other) }
-					override fun hashCode(): Int { return super.hashCode() }
-				}"""
+                class A {
+                    override fun equals(other: Any?): Boolean { return super.equals(other) }
+                    override fun hashCode(): Int { return super.hashCode() }
+                }"""
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
             it("does not report when using kotlin.Any?") {
                 val code = """
-				class A {
-					override fun equals(other: kotlin.Any?): Boolean { return super.equals(other) }
-					override fun hashCode(): Int { return super.hashCode() }
-				}"""
+                class A {
+                    override fun equals(other: kotlin.Any?): Boolean { return super.equals(other) }
+                    override fun hashCode(): Int { return super.hashCode() }
+                }"""
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
         }
@@ -52,12 +96,12 @@ class EqualsWithHashCodeExistSpec : Spek({
 
             it("does not report equals() or hashcode() violation on data class") {
                 val code = """
-				data class EqualsData(val i: Int) {
-					override fun equals(other: Any?): Boolean {
-						return super.equals(other)
-					}
-				}"""
-                assertThat(subject.compileAndLint(code)).hasSize(0)
+                data class EqualsData(val i: Int) {
+                    override fun equals(other: Any?): Boolean {
+                        return super.equals(other)
+                    }
+                }"""
+                assertThat(subject.compileAndLint(code)).isEmpty()
             }
         }
     }

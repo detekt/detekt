@@ -24,6 +24,11 @@ class ArrayPrimitiveSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
+        it("is a star-projected array") {
+            val code = "fun function(array: Array<*>) {}"
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
         it("is not present") {
             val code = "fun function() {}"
             assertThat(subject.compileAndLint(code)).isEmpty()
@@ -70,6 +75,11 @@ class ArrayPrimitiveSpec : Spek({
 
         it("is a specialized array") {
             val code = "fun returningFunction(): CharArray { return CharArray(0) }"
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        it("is a star-projected array") {
+            val code = "fun returningFunction(): Array<*> { return emptyArray<Any>() }"
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 

@@ -202,7 +202,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
             object TestSerializable : Serializable {
                 private val serialVersionUID = 314159L
             }
-        """.trimIndent())
+        """)
 
         it("should not be reported") {
             val findings = UnderscoresInNumericLiterals().lint(ktFile)
@@ -215,7 +215,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
             object TestSerializable {
                 private val serialVersionUID = 314159L
             }
-        """.trimIndent())
+        """)
 
         it("should be reported by default") {
             val findings = UnderscoresInNumericLiterals().lint(ktFile)
@@ -228,7 +228,7 @@ class UnderscoresInNumericLiteralsSpec : Spek({
             object TestSerializable {
                 private val serialVersionUID = 314_159L
             }
-        """.trimIndent())
+        """)
 
         it("should not be reported") {
             val findings = UnderscoresInNumericLiterals().lint(ktFile)

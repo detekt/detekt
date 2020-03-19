@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
@@ -14,7 +15,11 @@ class UtilityClassWithPublicConstructorSpec : Spek({
 
         context("several UtilityClassWithPublicConstructor rule violations") {
 
-            val findings = subject.lint(Case.UtilityClassesPositive.path())
+            lateinit var findings: List<Finding>
+
+            beforeEachTest {
+                findings = subject.lint(Case.UtilityClassesPositive.path())
+            }
 
             it("reports utility classes with a public constructor") {
                 assertThat(findings).hasSize(6)
@@ -38,18 +43,18 @@ class UtilityClassWithPublicConstructorSpec : Spek({
 
             it("should not get triggered for utility class") {
                 val code = """
-				@Retention(AnnotationRetention.SOURCE)
-				@StringDef(
-					Gender.MALE,
-					Gender.FEMALE
-				)
-				annotation class Gender {
-					companion object {
-						const val MALE = "male"
-						const val FEMALE = "female"
-					}
-				}
-			""".trimIndent()
+                @Retention(AnnotationRetention.SOURCE)
+                @StringDef(
+                    Gender.MALE,
+                    Gender.FEMALE
+                )
+                annotation class Gender {
+                    companion object {
+                        const val MALE = "male"
+                        const val FEMALE = "female"
+                    }
+                }
+            """
                 assertThat(subject.lint(code)).isEmpty()
             }
         }

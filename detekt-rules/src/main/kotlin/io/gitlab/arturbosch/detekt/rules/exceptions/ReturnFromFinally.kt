@@ -7,10 +7,10 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.collectByType
 import org.jetbrains.kotlin.psi.KtFinallySection
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.parents
 
 /**
@@ -26,24 +26,35 @@ import org.jetbrains.kotlin.psi.psiUtil.parents
  *     }
  * }
  * </noncompliant>
+ *
+ * @configuration ignoreLabeled - ignores labeled return statements (default: `false`)
  */
 class ReturnFromFinally(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue("ReturnFromFinally", Severity.Defect,
         "Do not return within a finally statement. This can discard exceptions.", Debt.TWENTY_MINS)
 
+    private val ignoreLabeled = valueOrDefault(IGNORE_LABELED, false)
+
     override fun visitFinallySection(finallySection: KtFinallySection) {
         val innerFunctions = finallySection.finalExpression
-            .collectByType<KtNamedFunction>()
-            .toSet()
+            .collectDescendantsOfType<KtNamedFunction>()
         finallySection.finalExpression
-            .collectByType<KtReturnExpression>()
-            .filter { isNotInInnerFunction(it, innerFunctions) }
+            .collectDescendantsOfType<KtReturnExpression> { isNotInInnerFunction(it, innerFunctions) &&
+                    canFilterLabeledExpression(it) }
             .forEach { report(CodeSmell(issue, Entity.from(it), issue.description)) }
     }
 
     private fun isNotInInnerFunction(
         returnStmts: KtReturnExpression,
-        childFunctions: Set<KtNamedFunction>
+        childFunctions: Collection<KtNamedFunction>
     ): Boolean = !returnStmts.parents.any { childFunctions.contains(it) }
+
+    private fun canFilterLabeledExpression(
+        returnStmt: KtReturnExpression
+    ): Boolean = !ignoreLabeled || returnStmt.labeledExpression == null
+
+    companion object {
+        const val IGNORE_LABELED = "ignoreLabeled"
+    }
 }

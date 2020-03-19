@@ -13,25 +13,25 @@ class EqualsNullCallSpec : Spek({
 
         it("reports equals call with null as parameter") {
             val code = """
-				fun x(a: String) {
-					a.equals(null)
-				}"""
+                fun x(a: String) {
+                    a.equals(null)
+                }"""
             assertThat(subject.compileAndLint(code).size).isEqualTo(1)
         }
 
         it("reports nested equals call with null as parameter") {
             val code = """
-				fun x(a: String, b: String) {
-					a.equals(b.equals(null))
-				}"""
+                fun x(a: String, b: String) {
+                    a.equals(b.equals(null))
+                }"""
             assertThat(subject.compileAndLint(code).size).isEqualTo(1)
         }
 
         it("does not report equals call with parameter of type string") {
             val code = """
-				fun x(a: String, b: String) {
-					a.equals(b)
-				}"""
+                fun x(a: String, b: String) {
+                    a.equals(b)
+                }"""
             assertThat(subject.compileAndLint(code).size).isEqualTo(0)
         }
     }

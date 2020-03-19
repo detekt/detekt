@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.cli
 
-import io.gitlab.arturbosch.detekt.core.PathFilter
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
+import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.nio.file.Paths
@@ -10,7 +10,6 @@ import java.nio.file.Paths
 class ReportPathSpec : Spek({
 
     describe("report paths") {
-
         if (IS_WINDOWS) {
             context("a Windows path") {
                 it("parses a valid absolute path correctly") {
@@ -27,12 +26,12 @@ class ReportPathSpec : Spek({
 
                 it("fails when the path is empty") {
                     assertThatIllegalArgumentException()
-                            .isThrownBy { ReportPath.from("test:") }
+                        .isThrownBy { ReportPath.from("test:") }
                 }
 
                 it("fails when the path is malformed") {
                     assertThatIllegalArgumentException()
-                            .isThrownBy { ReportPath.from("test:a*a") }
+                        .isThrownBy { ReportPath.from("test:a*a") }
                 }
             }
         } else {
@@ -51,12 +50,12 @@ class ReportPathSpec : Spek({
 
                 it("fails when the path is empty") {
                     assertThatIllegalArgumentException()
-                            .isThrownBy { ReportPath.from("test:") }
+                        .isThrownBy { ReportPath.from("test:") }
                 }
 
                 it("fails when the path is malformed") {
                     assertThatIllegalArgumentException()
-                            .isThrownBy { ReportPath.from("test:a${0.toChar()}a") }
+                        .isThrownBy { ReportPath.from("test:a${0.toChar()}a") }
                 }
             }
         }
@@ -95,9 +94,12 @@ class ReportPathSpec : Spek({
 
         it("fails when the kind is empty") {
             assertThatIllegalArgumentException()
-                    .isThrownBy { ReportPath.from(":/tmp/anything") }
+                .isThrownBy { ReportPath.from(":/tmp/anything") }
+        }
+
+        it("fails when part size is illegal") {
+            assertThatIllegalStateException()
+                .isThrownBy { ReportPath.from("") }
         }
     }
 })
-
-private val IS_WINDOWS = PathFilter.IS_WINDOWS

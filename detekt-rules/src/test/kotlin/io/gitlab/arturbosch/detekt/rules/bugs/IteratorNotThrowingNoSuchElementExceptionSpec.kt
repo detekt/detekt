@@ -18,7 +18,7 @@ class IteratorNotThrowingNoSuchElementExceptionSpec : Spek({
 
         it("does not report correct next() implemenations") {
             val path = Case.IteratorImplNegative.path()
-            assertThat(subject.lint(path)).hasSize(0)
+            assertThat(subject.lint(path)).isEmpty()
         }
     }
 })

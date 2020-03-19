@@ -1,16 +1,14 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
-import io.gitlab.arturbosch.detekt.test.TEST_FILENAME
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class ObjectPropertyNamingSpec : Spek({
-
-    val fileName = TEST_FILENAME
 
     describe("constants in object declarations") {
 
@@ -18,49 +16,47 @@ class ObjectPropertyNamingSpec : Spek({
 
         it("should not detect public constants complying to the naming rules") {
             val code = compileContentForTest("""
-				object O {
-					${PublicConst.negative}
-				}
-			""")
+                object O {
+                    ${PublicConst.negative}
+                }
+            """)
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("should detect public constants not complying to the naming rules") {
             val code = compileContentForTest("""
-				object O {
-					${PublicConst.positive}
-				}
-			""")
+                object O {
+                    ${PublicConst.positive}
+                }
+            """)
             assertThat(subject.lint(code)).hasSize(1)
         }
 
         it("should not detect private constants complying to the naming rules") {
             val code = compileContentForTest("""
-				object O {
-					${PrivateConst.negative}
-				}
-			""")
+                object O {
+                    ${PrivateConst.negative}
+                }
+            """)
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("should detect private constants not complying to the naming rules") {
             val code = compileContentForTest("""
-				object O {
-					${PrivateConst.positive}
-				}
-			""")
+                object O {
+                    ${PrivateConst.positive}
+                }
+            """)
             assertThat(subject.lint(code)).hasSize(1)
         }
 
         it("should report constants not complying to the naming rules at the right position") {
             val code = compileContentForTest("""
-				object O {
-					${PublicConst.positive}
-				}
-			""")
-            assertThat(subject.lint(code)).hasLocationStrings(
-                    "'const val _nAme = \"Artur\"' at (3,6) in /$fileName"
-            )
+                object O {
+                    ${PublicConst.positive}
+                }
+            """)
+            assertThat(subject.lint(code)).hasSourceLocation(3, 21)
         }
     }
 
@@ -70,59 +66,57 @@ class ObjectPropertyNamingSpec : Spek({
 
         it("should not detect public constants complying to the naming rules") {
             val code = compileContentForTest("""
-				class C {
-					companion object {
-						${PublicConst.negative}
-					}
-				}
-			""")
+                class C {
+                    companion object {
+                        ${PublicConst.negative}
+                    }
+                }
+            """)
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("should detect public constants not complying to the naming rules") {
             val code = compileContentForTest("""
-				class C {
-					companion object {
-						${PublicConst.positive}
-					}
-				}
-			""")
+                class C {
+                    companion object {
+                        ${PublicConst.positive}
+                    }
+                }
+            """)
             assertThat(subject.lint(code)).hasSize(1)
         }
 
         it("should not detect private constants complying to the naming rules") {
             val code = compileContentForTest("""
-				class C {
-					companion object {
-						${PrivateConst.negative}
-					}
-				}
-			""")
+                class C {
+                    companion object {
+                        ${PrivateConst.negative}
+                    }
+                }
+            """)
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("should detect private constants not complying to the naming rules") {
             val code = compileContentForTest("""
-				class C {
-					companion object {
-						${PrivateConst.positive}
-					}
-				}
-			""")
+                class C {
+                    companion object {
+                        ${PrivateConst.positive}
+                    }
+                }
+            """)
             assertThat(subject.lint(code)).hasSize(1)
         }
 
         it("should report constants not complying to the naming rules at the right position") {
             val code = compileContentForTest("""
-				class C {
-					companion object {
-						${PublicConst.positive}
-					}
-				}
-			""")
-            assertThat(subject.lint(code)).hasLocationStrings(
-                    "'const val _nAme = \"Artur\"' at (4,7) in /$fileName"
-            )
+                class C {
+                    companion object {
+                        ${PublicConst.positive}
+                    }
+                }
+            """)
+            assertThat(subject.lint(code)).hasSourceLocation(4, 25)
         }
     }
 
@@ -130,39 +124,39 @@ class ObjectPropertyNamingSpec : Spek({
 
         val subject by memoized { ObjectPropertyNaming() }
 
-        it("should not detect public constants complying to the naming rules") {
+        it("should not detect public variables complying to the naming rules") {
             val code = compileContentForTest("""
-				object O {
-					${PublicVal.negative}
-				}
-			""")
+                object O {
+                    ${PublicVal.negative}
+                }
+            """)
             assertThat(subject.lint(code)).isEmpty()
         }
 
-        it("should detect public constants not complying to the naming rules") {
+        it("should detect public variables not complying to the naming rules") {
             val code = compileContentForTest("""
-				object O {
-					${PublicVal.positive}
-				}
-			""")
+                object O {
+                    ${PublicVal.positive}
+                }
+            """)
             assertThat(subject.lint(code)).hasSize(1)
         }
 
-        it("should not detect private constants complying to the naming rules") {
+        it("should not detect private variables complying to the naming rules") {
             val code = compileContentForTest("""
-				object O {
-					${PrivateVal.negative}
-				}
-			""")
+                object O {
+                    ${PrivateVal.negative}
+                }
+            """)
             assertThat(subject.lint(code)).isEmpty()
         }
 
-        it("should detect private constants not complying to the naming rules") {
+        it("should detect private variables not complying to the naming rules") {
             val code = compileContentForTest("""
-				object O {
-					private val __NAME = "Artur"
-				}
-			""")
+                object O {
+                    private val __NAME = "Artur"
+                }
+            """)
             assertThat(subject.lint(code)).hasSize(1)
         }
     }
@@ -177,21 +171,21 @@ class ObjectPropertyNamingSpec : Spek({
 
         it("should not detect constants in object with underscores") {
             val code = compileContentForTest("""
-				object O {
-					const val _NAME = "Artur"
-					const val _name = "Artur"
-				}
-			""")
+                object O {
+                    const val _NAME = "Artur"
+                    const val _name = "Artur"
+                }
+            """)
             assertThat(subject.lint(code)).isEmpty()
         }
 
         it("should not detect private properties in object") {
             val code = compileContentForTest("""
-				object O {
-					private val __NAME = "Artur"
-					private val _1234 = "Artur"
-				}
-			""")
+                object O {
+                    private val __NAME = "Artur"
+                    private val _1234 = "Artur"
+                }
+            """)
             assertThat(subject.lint(code)).isEmpty()
         }
     }
@@ -211,20 +205,21 @@ class ObjectPropertyNamingSpec : Spek({
                 }
             """
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
 })
 
+@Suppress("UnnecessaryAbstractClass")
 abstract class NamingSnippet(private val isPrivate: Boolean, private val isConst: Boolean) {
 
     val negative = """
-					${visibility()}${const()}val MY_NAME_8 = "Artur"
-					${visibility()}${const()}val MYNAME = "Artur"
-					${visibility()}${const()}val MyNAME = "Artur"
-					${visibility()}${const()}val name = "Artur"
-					${visibility()}${const()}val nAme = "Artur"
-					${visibility()}${const()}val serialVersionUID = 42L"""
+                    ${visibility()}${const()}val MY_NAME_8 = "Artur"
+                    ${visibility()}${const()}val MYNAME = "Artur"
+                    ${visibility()}${const()}val MyNAME = "Artur"
+                    ${visibility()}${const()}val name = "Artur"
+                    ${visibility()}${const()}val nAme = "Artur"
+                    ${visibility()}${const()}val serialVersionUID = 42L"""
     val positive = """${visibility()}${const()}val _nAme = "Artur""""
 
     private fun visibility() = if (isPrivate) "private " else ""

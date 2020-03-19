@@ -7,11 +7,11 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.collectByType
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtTypeReference
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 
 /**
  * Using Array<Primitive> leads to implicit boxing and performance hit. Prefer using Kotlin specialized Array
@@ -31,6 +31,8 @@ import org.jetbrains.kotlin.psi.KtTypeReference
  *
  * fun returningFunction(): DoubleArray { }
  * </compliant>
+ *
+ * @active since v1.2.0
  */
 class ArrayPrimitive(config: Config = Config.empty) : Rule(config) {
 
@@ -69,15 +71,14 @@ class ArrayPrimitive(config: Config = Config.empty) : Rule(config) {
 
     private fun reportArrayPrimitives(element: KtElement) {
         return element
-                .collectByType<KtTypeReference>()
-                .filter { isArrayPrimitive(it) }
+                .collectDescendantsOfType<KtTypeReference> { isArrayPrimitive(it) }
                 .forEach { report(CodeSmell(issue, Entity.from(it), issue.description)) }
     }
 
     private fun isArrayPrimitive(it: KtTypeReference): Boolean {
         if (it.text?.startsWith("Array<") == true) {
             val genericTypeArguments = it.typeElement?.typeArgumentsAsTypes
-            return genericTypeArguments?.size == 1 && primitiveTypes.contains(genericTypeArguments[0].text)
+            return genericTypeArguments?.singleOrNull()?.let { primitiveTypes.contains(it.text) } == true
         }
         return false
     }

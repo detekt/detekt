@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.providers
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.rules.complexity.ComplexCondition
 import io.gitlab.arturbosch.detekt.rules.complexity.ComplexInterface
 import io.gitlab.arturbosch.detekt.rules.complexity.ComplexMethod
@@ -20,7 +20,7 @@ import io.gitlab.arturbosch.detekt.rules.complexity.TooManyFunctions
  *
  * @active since v1.0.0
  */
-class ComplexityProvider : RuleSetProvider {
+class ComplexityProvider : DefaultRuleSetProvider {
 
     override val ruleSetId: String = "complexity"
 

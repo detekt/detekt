@@ -20,6 +20,8 @@ import org.jetbrains.kotlin.psi.KtCallExpression
  * <compliant>
  * fun isNull(str: String) = str == null
  * </compliant>
+ *
+ * @active since v1.2.0
  */
 class EqualsNullCall(config: Config = Config.empty) : Rule(config) {
 
@@ -35,8 +37,6 @@ class EqualsNullCall(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun hasNullParameter(expression: KtCallExpression): Boolean {
-        val valueArguments = expression.valueArguments
-        return valueArguments.size == 1 && valueArguments.first().text == "null"
-    }
+    private fun hasNullParameter(expression: KtCallExpression) =
+        expression.valueArguments.singleOrNull()?.text == "null"
 }

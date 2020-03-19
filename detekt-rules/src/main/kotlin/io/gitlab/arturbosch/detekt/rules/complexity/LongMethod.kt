@@ -9,9 +9,9 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.rules.linesOfCode
-import io.gitlab.arturbosch.detekt.rules.parentOfType
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.utils.addToStdlib.flattenTo
 import java.util.IdentityHashMap
 
@@ -21,13 +21,13 @@ import java.util.IdentityHashMap
  *
  * Extract parts of the functionality of long methods into separate, smaller methods.
  *
- * @configuration threshold - maximum lines in a method (default: `60`)
+ * @configuration threshold - number of lines in a method to trigger the rule (default: `60`)
  *
  * @active since v1.0.0
  */
 class LongMethod(
     config: Config = Config.empty,
-    threshold: Int = DEFAULT_ACCEPTED_METHOD_LENGTH
+    threshold: Int = DEFAULT_THRESHOLD_METHOD_LENGTH
 ) : ThresholdRule(config, threshold) {
 
     override val issue = Issue("LongMethod",
@@ -48,7 +48,7 @@ class LongMethod(
         for ((function, lines) in functionToLinesCache) {
             if (lines >= threshold) {
                 report(ThresholdedCodeSmell(issue,
-                        Entity.from(function),
+                        Entity.from(function.nameIdentifier!!),
                         Metric("SIZE", lines, threshold),
                         "The function ${function.nameAsSafeName} is too long. " +
                                 "The maximum length is $threshold."))
@@ -59,7 +59,7 @@ class LongMethod(
     override fun visitNamedFunction(function: KtNamedFunction) {
         val lines = function.linesOfCode()
         functionToLinesCache[function] = lines
-        function.parentOfType<KtNamedFunction>()
+        function.getStrictParentOfType<KtNamedFunction>()
                 ?.let { nestedFunctionTracking.getOrPut(it) { HashSet() }.add(function) }
         super.visitNamedFunction(function)
         findAllNestedFunctions(function)
@@ -77,6 +77,6 @@ class LongMethod(
     }
 
     companion object {
-        const val DEFAULT_ACCEPTED_METHOD_LENGTH = 60
+        const val DEFAULT_THRESHOLD_METHOD_LENGTH = 60
     }
 }

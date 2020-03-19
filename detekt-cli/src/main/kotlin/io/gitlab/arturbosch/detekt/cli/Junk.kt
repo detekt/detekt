@@ -19,3 +19,5 @@ inline fun <T, K, V> Collection<T>.toHashMap(
     }
     return result
 }
+
+val IS_WINDOWS = System.getProperty("os.name").contains("Windows")

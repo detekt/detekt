@@ -30,8 +30,9 @@ class KDocStyle(config: Config = Config.empty) : MultiRule() {
  * It should end with proper punctuation or with a correct URL.
  *
  * @configuration endOfSentenceFormat - regular expression which should match the end of the first sentence in the KDoc
- * (default: `([.?!][ \t\n\r\f<])|([.?!:]$)`)
+ * (default: `'([.?!][ \t\n\r\f<])|([.?!:]$)'`)
  */
+@Suppress("MemberNameEqualsClassName")
 class EndOfSentenceFormat(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(javaClass.simpleName,

@@ -13,11 +13,11 @@ private const val DISABLE_DEFAULT_RULESETS_PARAMETER = "--disable-default-rulese
 private const val BUILD_UPON_DEFAULT_CONFIG_PARAMETER = "--build-upon-default-config"
 private const val AUTO_CORRECT_PARAMETER = "--auto-correct"
 private const val FAIL_FAST_PARAMETER = "--fail-fast"
-private const val PLUGINS_PARAMETER = "--plugins"
 private const val REPORT_PARAMETER = "--report"
 private const val GENERATE_CONFIG_PARAMETER = "--generate-config"
 private const val CREATE_BASELINE_PARAMETER = "--create-baseline"
 private const val CLASSPATH_PARAMETER = "--classpath"
+private const val LANGUAGE_VERSION_PARAMETER = "--language-version"
 private const val JVM_TARGET_PARAMETER = "--jvm-target"
 
 internal sealed class CliArgument {
@@ -42,12 +42,12 @@ internal data class ClasspathArgument(val fileCollection: FileCollection) : CliA
         fileCollection.joinToString(";") { it.absolutePath }) else emptyList()
 }
 
-internal data class JvmTargetArgument(val jvmTarget: String?) : CliArgument() {
-    override fun toArgument() = jvmTarget?.let { listOf(JVM_TARGET_PARAMETER, it) } ?: emptyList()
+internal data class LanguageVersionArgument(val languageVersion: String?) : CliArgument() {
+    override fun toArgument() = languageVersion?.let { listOf(LANGUAGE_VERSION_PARAMETER, it) } ?: emptyList()
 }
 
-internal data class PluginsArgument(val plugins: String?) : CliArgument() {
-    override fun toArgument() = plugins?.let { listOf(PLUGINS_PARAMETER, it) } ?: emptyList()
+internal data class JvmTargetArgument(val jvmTarget: String?) : CliArgument() {
+    override fun toArgument() = jvmTarget?.let { listOf(JVM_TARGET_PARAMETER, it) } ?: emptyList()
 }
 
 internal data class BaselineArgument(val baseline: RegularFile?) : CliArgument() {

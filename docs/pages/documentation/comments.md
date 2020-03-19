@@ -9,6 +9,20 @@ folder: documentation
 This rule set provides rules that address issues in comments and documentation
 of the code.
 
+### AbsentOrWrongFileLicense
+
+This rule will report every Kotlin source file which doesn't have required license header.
+
+**Severity**: Maintainability
+
+**Debt**: 5min
+
+#### Configuration options:
+
+* ``licenseTemplateFile`` (default: ``'license.template'``)
+
+   path to file with license header template resolved relatively to config file
+
 ### CommentOverPrivateFunction
 
 This rule reports comments and documentation that has been added to private functions. These comments get reported
@@ -50,7 +64,7 @@ It should end with proper punctuation or with a correct URL.
 
 #### Configuration options:
 
-* `endOfSentenceFormat` (default: `([.?!][ \t\n\r\f<])|([.?!:]$)`)
+* ``endOfSentenceFormat`` (default: ``'([.?!][ \t\n\r\f<])|([.?!:]$)'``)
 
    regular expression which should match the end of the first sentence in the KDoc
 
@@ -68,19 +82,19 @@ with the configuration options of this rule.
 
 #### Configuration options:
 
-* `searchInNestedClass` (default: `true`)
+* ``searchInNestedClass`` (default: ``true``)
 
    if nested classes should be searched
 
-* `searchInInnerClass` (default: `true`)
+* ``searchInInnerClass`` (default: ``true``)
 
    if inner classes should be searched
 
-* `searchInInnerObject` (default: `true`)
+* ``searchInInnerObject`` (default: ``true``)
 
    if inner objects should be searched
 
-* `searchInInnerInterface` (default: `true`)
+* ``searchInInnerInterface`` (default: ``true``)
 
    if inner interfaces should be searched
 
@@ -88,6 +102,17 @@ with the configuration options of this rule.
 
 This rule will report any public function which does not have the required documentation.
 If the codebase should have documentation on all public functions enable this rule to enforce this.
+Overridden functions are excluded by this rule.
+
+**Severity**: Maintainability
+
+**Debt**: 20min
+
+### UndocumentedPublicProperty
+
+This rule will report any public property which does not have the required documentation.
+If the codebase should have documentation on all public properties enable this rule to enforce this.
+Overridden functions are excluded by this rule.
 
 **Severity**: Maintainability
 

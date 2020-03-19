@@ -7,10 +7,13 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.bugs.util.getMethod
-import io.gitlab.arturbosch.detekt.rules.bugs.util.isImplementingIterator
-import io.gitlab.arturbosch.detekt.rules.bugs.util.throwsNoSuchElementExceptionThrown
+import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClassOrObject
+import org.jetbrains.kotlin.psi.KtNamedDeclaration
+import org.jetbrains.kotlin.psi.KtThrowExpression
+import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
+import org.jetbrains.kotlin.psi.psiUtil.findFunctionByName
+import org.jetbrains.kotlin.psi.psiUtil.getSuperNames
 
 /**
  * Reports implementations of the `Iterator` interface which do not throw a NoSuchElementException in the
@@ -39,6 +42,8 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
  *     }
  * }
  * </compliant>
+ *
+ * @active since v1.2.0
  */
 class IteratorNotThrowingNoSuchElementException(config: Config = Config.empty) : Rule(config) {
 
@@ -48,8 +53,8 @@ class IteratorNotThrowingNoSuchElementException(config: Config = Config.empty) :
             Debt.TEN_MINS)
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-        if (classOrObject.isImplementingIterator()) {
-            val nextMethod = classOrObject.getMethod("next")
+        if (classOrObject.getSuperNames().contains("Iterator")) {
+            val nextMethod = classOrObject.findFunctionByName("next")
             if (nextMethod != null && !nextMethod.throwsNoSuchElementExceptionThrown()) {
                 report(CodeSmell(issue, Entity.from(classOrObject),
                         "This implementation of Iterator does not correctly implement the next() method as " +
@@ -57,5 +62,13 @@ class IteratorNotThrowingNoSuchElementException(config: Config = Config.empty) :
             }
         }
         super.visitClassOrObject(classOrObject)
+    }
+
+    private fun KtNamedDeclaration.throwsNoSuchElementExceptionThrown() =
+        anyDescendantOfType<KtThrowExpression> { isNoSuchElementExpression(it) }
+
+    private fun isNoSuchElementExpression(expression: KtThrowExpression): Boolean {
+        val calleeExpression = (expression.thrownExpression as? KtCallExpression)?.calleeExpression
+        return calleeExpression?.text == "NoSuchElementException"
     }
 }

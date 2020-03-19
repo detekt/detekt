@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <Blacklist></Blacklist>
+  <Whitelist>
+    <ID>LargeClass:UnusedPrivateMemberSpec.kt$UnusedPrivateMemberSpec$UnusedPrivateMemberSpec</ID>
+  </Whitelist>
+</SmellBaseline>

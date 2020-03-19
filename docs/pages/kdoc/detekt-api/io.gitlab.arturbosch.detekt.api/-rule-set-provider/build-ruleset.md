@@ -6,7 +6,8 @@ title: RuleSetProvider.buildRuleset - detekt-api
 
 # buildRuleset
 
-`open fun buildRuleset(config: `[`Config`](../-config/index.html)`): `[`RuleSet`](../-rule-set/index.html)`?`
+`open fun ~~buildRuleset~~(config: `[`Config`](../-config/index.html)`): `[`RuleSet`](../-rule-set/index.html)`?`
+**Deprecated:** Exposes detekt-core implementation details.
 
 Can return a rule set if this specific rule set is not considered as ignore.
 

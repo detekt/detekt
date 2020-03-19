@@ -33,6 +33,11 @@ class SplitPatternSpec : Spek({
             assertThat(matches).hasSize(1)
             assertThat(matches).contains("test")
         }
+
+        it("does not contain null value") {
+            val parameter = null
+            assertThat(excludes.contains(parameter)).isFalse()
+        }
     }
 
     describe("an excludes rule with multiple excludes") {
@@ -60,6 +65,36 @@ class SplitPatternSpec : Spek({
             val parameter = "detekt"
             assertThat(excludes.contains(parameter)).isFalse()
             assertThat(excludes.none(parameter)).isTrue()
+        }
+
+        it("starts with test") {
+            val parameter = "test.com"
+            assertThat(excludes.startWith(parameter)).isTrue()
+        }
+
+        it("does not start with a different") {
+            val parameter = "detekt"
+            assertThat(excludes.startWith(parameter)).isFalse()
+        }
+
+        it("does not start with null") {
+            val parameter = null
+            assertThat(excludes.startWith(parameter)).isFalse()
+        }
+
+        it("has a test") {
+            val parameter = "test.com"
+            assertThat(excludes.any(parameter)).isTrue()
+        }
+
+        it("has no different") {
+            val parameter = "detekt"
+            assertThat(excludes.any(parameter)).isFalse()
+        }
+
+        it("has no null value") {
+            val parameter = null
+            assertThat(excludes.any(parameter)).isFalse()
         }
     }
 

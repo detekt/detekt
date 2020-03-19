@@ -15,6 +15,17 @@ summary:
 ```groovy
 repositories {
     jcenter()
+
+    // or
+
+    mavenCentral()
+    jcenter {
+        content {
+            // just allow to include kotlinx projects
+            // detekt needs 'kotlinx-html' for the html report
+            includeGroup "org.jetbrains.kotlinx"
+        }
+    }
 }
 
 configurations {
@@ -26,9 +37,8 @@ task detekt(type: JavaExec) {
 	classpath = configurations.detekt
 	def input = "$projectDir"
 	def config = "$projectDir/detekt.yml"
-	def filters = ".*/build/.*,.*/resources/.*"
-	def rulesets = ""
-	def params = [ '-i', input, '-c', config, '-f', filters, '-r', rulesets]
+	def exclude = ".*/build/.*,.*/resources/.*"
+	def params = [ '-i', input, '-c', config, '-ex', exclude]
 	args(params)
 }
 

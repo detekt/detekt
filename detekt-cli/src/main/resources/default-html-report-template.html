@@ -25,15 +25,42 @@ h3 {
 .location {
   color: #690505;
   font-family: monospace;
+  display: block;
 }
 .message {
   font-size: 0.8em;
   color: #444444;
+  display: block;
+  margin-top: 1pt;
 }
 .rule-container {
   border: 0.1em dashed #dddddd;
   padding: 0.1em;
   line-height: 1.5em;
+  margin-bottom: 8px;
+  margin-top: 8px;
+}
+pre {
+  border: 1px solid #e0e0e0;
+  overflow: scroll;
+}
+.lineno {
+  color: #999999;
+  background-color: #f0f0f0;
+}
+.error {
+  background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AwCFR4T/3uLMgAAADxJREFUCNdNyLERQEAABMCjL4lQwIzcjErpguAL+C9AvgKJDbeD/PRpLdm35Hm+MU+cB+tCKaJW4L4YBy+CAiLJrFs9mgAAAABJRU5ErkJggg==) bottom repeat-x;
+}
+.exception {
+  color: #b60808;
+  display: inline-block;
+  background-color: #ecdada;
+  border-color: #b60808;
+  border-radius: 10px;
+  border: solid 2px;
+  padding-left: 16px;
+  padding-right: 16px;
+  margin-bottom: 16px;
 }
 </style>
 </head>
@@ -44,6 +71,10 @@ h3 {
 <h2>Metrics</h2>
 
 @@@metrics@@@
+
+<h2>Complexity Report</h2>
+
+@@@complexity@@@
 
 <h2>Findings</h2>
 @@@findings@@@

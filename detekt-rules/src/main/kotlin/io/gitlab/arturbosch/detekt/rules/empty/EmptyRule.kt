@@ -7,8 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.asBlockExpression
 import io.gitlab.arturbosch.detekt.rules.hasCommentInside
+import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtExpression
 
 /**
@@ -30,15 +30,13 @@ abstract class EmptyRule(config: Config) : Rule(config) {
     }
 
     private fun KtExpression.checkBlockExpr(skipIfCommented: Boolean = false) {
-        val blockExpression = this.asBlockExpression()
-        blockExpression?.statements?.let {
-            val hasComment = blockExpression.hasCommentInside()
-            if (skipIfCommented && hasComment) {
-                return
-            }
-            if (it.isEmpty() && !hasComment) {
-                report(CodeSmell(issue, Entity.from(this), "This empty block of code can be removed."))
-            }
+        if (this !is KtBlockExpression) return
+        val hasComment = hasCommentInside()
+        if (skipIfCommented && hasComment) {
+            return
+        }
+        if (children.isEmpty() && !hasComment) {
+            report(CodeSmell(issue, Entity.from(this), "This empty block of code can be removed."))
         }
     }
 }

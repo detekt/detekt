@@ -1,35 +1,65 @@
 package io.gitlab.arturbosch.detekt.cli.console
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Finding
-import io.gitlab.arturbosch.detekt.cli.TestDetektion
 import io.gitlab.arturbosch.detekt.cli.createFinding
+import io.gitlab.arturbosch.detekt.test.TestDetektion
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class FindingsReportSpec : Spek({
 
-    val subject by memoized { FindingsReport() }
+    val subject by memoized { createFindingsReport() }
 
     describe("findings report") {
 
-        context("several detekt findings") {
+        context("reports the debt per rule set and the overall debt") {
+            val expectedContent = readResource("findings-report.txt")
+            val detektion = object : TestDetektion() {
+                override val findings: Map<String, List<Finding>> = mapOf(
+                    Pair("Ruleset1", listOf(createFinding(), createFinding())),
+                    Pair("EmptyRuleset", emptyList()),
+                    Pair("Ruleset2", listOf(createFinding()))
+                )
+            }
+            var output: String? = null
 
-            it("reports the debt per ruleset and the overall debt") {
-                val expectedContent = readResource("findings-report.txt")
-                val detektion = object : TestDetektion() {
-                    override val findings: Map<String, List<Finding>> = mapOf(
-                            Pair("TestSmell", listOf(createFinding(), createFinding())),
-                            Pair("EmptySmells", emptyList()))
-                }
-                val output = subject.render(detektion)?.trimEnd()?.decolorized()
+            beforeEachTest {
+                output = subject.render(detektion)?.decolorized()
+            }
+
+            it("has the reference content") {
                 assertThat(output).isEqualTo(expectedContent)
             }
 
-            it("reports no findings") {
-                val detektion = TestDetektion()
-                assertThat(subject.render(detektion)).isEmpty()
+            it("does contain the rule set id of rule sets with findings") {
+                assertThat(output).contains("TestSmell")
             }
+        }
+
+        it("reports no findings") {
+            val detektion = TestDetektion()
+            assertThat(subject.render(detektion)).isNull()
+        }
+
+        it("reports no findings with rule set containing no smells") {
+            val detektion = object : TestDetektion() {
+                override val findings: Map<String, List<Finding>> = mapOf(
+                    Pair("Ruleset", emptyList()))
+            }
+            assertThat(subject.render(detektion)).isNull()
+        }
+
+        it("should not add auto corrected issues to report") {
+            val report = FindingsReport()
+            AutoCorrectableIssueAssert.isReportNull(report)
         }
     }
 })
+
+private fun createFindingsReport(): FindingsReport {
+    val report = FindingsReport()
+    report.init(Config.empty)
+    return report
+}

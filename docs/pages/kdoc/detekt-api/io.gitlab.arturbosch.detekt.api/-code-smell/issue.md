@@ -7,6 +7,3 @@ title: CodeSmell.issue - detekt-api
 # issue
 
 `val issue: `[`Issue`](../-issue/index.html)
-
-Overrides [Finding.issue](../-finding/issue.html)
-

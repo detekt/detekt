@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.lint
@@ -25,7 +26,7 @@ class WildcardImportSpec : Spek({
             val file = compileContentForTest(code).text
 
             it("should not report anything when the rule is turned off") {
-                val rule = WildcardImport(TestConfig(mapOf("active" to "false")))
+                val rule = WildcardImport(TestConfig(mapOf(Config.ACTIVE_KEY to "false")))
 
                 val findings = rule.lint(file)
                 assertThat(findings).isEmpty()
@@ -39,21 +40,21 @@ class WildcardImportSpec : Spek({
             }
 
             it("should not report excluded wildcard imports") {
-                val rule = WildcardImport(TestConfig(mapOf("excludeImports" to "test.test.*")))
+                val rule = WildcardImport(TestConfig(mapOf(WildcardImport.EXCLUDED_IMPORTS to "test.test.*")))
 
                 val findings = rule.lint(file)
                 assertThat(findings).hasSize(1)
             }
 
             it("should not report excluded wildcard imports when multiple are excluded") {
-                val rule = WildcardImport(TestConfig(mapOf("excludeImports" to "test.test.*, io.gitlab.arturbosch.detekt")))
+                val rule = WildcardImport(TestConfig(mapOf(WildcardImport.EXCLUDED_IMPORTS to "test.test.*, io.gitlab.arturbosch.detekt")))
 
                 val findings = rule.lint(file)
                 assertThat(findings).isEmpty()
             }
 
             it("ignores excludes that are not matching") {
-                val rule = WildcardImport(TestConfig(mapOf("excludeImports" to "other.test.*")))
+                val rule = WildcardImport(TestConfig(mapOf(WildcardImport.EXCLUDED_IMPORTS to "other.test.*")))
 
                 val findings = rule.lint(file)
                 assertThat(findings).hasSize(2)
@@ -62,13 +63,13 @@ class WildcardImportSpec : Spek({
 
         context("a kt file with no wildcard imports") {
             val code = """
-			package test
+            package test
 
-			import test.Test
+            import test.Test
 
-			class Test {
-			}
-		"""
+            class Test {
+            }
+        """
 
             it("should not report any issues") {
                 val findings = WildcardImport().lint(code)

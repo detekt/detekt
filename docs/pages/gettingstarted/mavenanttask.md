@@ -32,8 +32,8 @@ summary:
                                   classpathref="maven.plugin.classpath">
                                 <arg value="--input"/>
                                 <arg value="${basedir}/src/main/kotlin"/>
-                                <arg value="--filters"/>
-                                <arg value=".*/target/.*,.*/resources/.*"/>
+                                <arg value="--excludes"/>
+                                <arg value="**/special/package/internal/**"/>
                                 <arg value="--report"/>
                                 <arg value="xml:${basedir}/reports/detekt.xml"/>
                                 <arg value="--baseline"/>
@@ -54,22 +54,4 @@ summary:
         </plugin>
     </plugins>
 </build>
-
-<!-- You need this repository as detekt is not yet on MavenCentral -->
-<pluginRepositories>
-  <pluginRepository>
-    <id>arturbosch-code-analysis</id>
-    <name>arturbosch-code-analysis (for detekt)</name>
-    <url>https://dl.bintray.com/arturbosch/code-analysis/</url>
-    <layout>default</layout>
-    <releases>
-      <enabled>true</enabled>
-      <updatePolicy>never</updatePolicy>
-    </releases>
-    <snapshots>
-      <enabled>false</enabled>
-      <updatePolicy>never</updatePolicy>
-    </snapshots>
-  </pluginRepository>
-</pluginRepositories>
 ```

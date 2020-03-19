@@ -8,11 +8,11 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isOverride
-import org.jetbrains.kotlin.com.intellij.psi.util.PsiTreeUtil
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 
 /**
  * It is not necessary to define a return type of `Unit` on functions or to specify a lone Unit statement.
@@ -81,10 +81,8 @@ class OptionalUnit(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun isInInterface(function: KtNamedFunction): Boolean {
-        val parent = PsiTreeUtil.getParentOfType(function, KtClass::class.java, true)
-        return parent is KtClass && parent.isInterface()
-    }
+    private fun isInInterface(function: KtNamedFunction) =
+        function.getStrictParentOfType<KtClass>()?.isInterface() ?: false
 
     private fun createMessage(function: KtNamedFunction) = "The function ${function.name} " +
             "defines a return type of Unit. This is unnecessary and can safely be removed."

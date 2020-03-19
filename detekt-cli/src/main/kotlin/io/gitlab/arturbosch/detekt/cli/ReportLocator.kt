@@ -18,13 +18,10 @@ class ReportLocator(private val settings: ProcessingSettings) {
     private val outputExcludes = outputSubConfig.valueOrDefault(EXCLUDE, emptyList<String>()).toSet()
 
     fun load(): List<Extension> {
-        settings.debug { "console-report=$consoleActive" }
-        settings.debug { "output-report=$outputActive" }
-        val detektLoader = URLClassLoader(settings.pluginUrls, javaClass.classLoader)
-        val consoleReports = loadConsoleReports(detektLoader)
-        settings.debug { "ConsoleReports: $consoleReports" }
-        val outputReports = loadOutputReports(detektLoader)
-        settings.debug { "OutputReports: $outputReports" }
+        val consoleReports = loadConsoleReports(settings.pluginLoader)
+        settings.debug { "Registered console reports: $consoleReports" }
+        val outputReports = loadOutputReports(settings.pluginLoader)
+        settings.debug { "Registered output reports: $outputReports" }
         return consoleReports.plus(outputReports)
     }
 

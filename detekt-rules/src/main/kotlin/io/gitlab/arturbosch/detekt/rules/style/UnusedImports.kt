@@ -17,6 +17,7 @@ import org.jetbrains.kotlin.psi.KtImportDirective
 import org.jetbrains.kotlin.psi.KtImportList
 import org.jetbrains.kotlin.psi.KtPackageDirective
 import org.jetbrains.kotlin.psi.KtReferenceExpression
+import org.jetbrains.kotlin.psi.psiUtil.getChildrenOfType
 
 /**
  * This rule reports unused imports. Unused imports are dead code and should be removed.
@@ -37,7 +38,7 @@ class UnusedImports(config: Config) : Rule(config) {
                 "divAssign", "modAssign", "equals", "compareTo", "iterator", "getValue", "setValue", "provideDelegate")
 
         private val kotlinDocReferencesRegExp = Regex("\\[([^]]+)](?!\\[)")
-        private val kotlinDocSeeReferenceRegExp = Regex("^@see (.+)")
+        private val kotlinDocBlockTagReferenceRegExp = Regex("^@(see|throws|exception) (.+)")
         private val whiteSpaceRegex = Regex("\\s+")
         private val componentNRegex = Regex("component\\d+")
     }
@@ -72,18 +73,19 @@ class UnusedImports(config: Config) : Rule(config) {
             super.visitPackageDirective(directive)
         }
 
+        @Suppress("UnsafeCallOnNullableType")
         override fun visitImportList(importList: KtImportList) {
-            imports = importList.imports.filter { it.isValidImport }
-                    .filter { it.identifier()?.contains("*")?.not() == true }
-                    .filter { it.identifier() != null }
-                    .filter { !operatorSet.contains(it.identifier()) }
-                    .filter { !componentNRegex.matches(it.identifier()!!) }
+            imports = importList.imports.asSequence().filter { it.isValidImport }
+                .filter { it.identifier()?.contains("*")?.not() == true }
+                .filter { it.identifier() != null }
+                .filter { !operatorSet.contains(it.identifier()) }
+                .filter { !componentNRegex.matches(it.identifier()!!) }.toList()
             super.visitImportList(importList)
         }
 
         override fun visitReferenceExpression(expression: KtReferenceExpression) {
             expression
-                    .takeIf { !it.isPartOf(KtImportDirective::class) && !it.isPartOf(KtPackageDirective::class) }
+                    .takeIf { !it.isPartOf<KtImportDirective>() && !it.isPartOf<KtPackageDirective>() }
                     ?.takeIf { it.children.isEmpty() }
                     ?.run { namedReferences.add(text.trim('`')) }
             super.visitReferenceExpression(expression)
@@ -92,8 +94,7 @@ class UnusedImports(config: Config) : Rule(config) {
         override fun visitDeclaration(dcl: KtDeclaration) {
             val kdoc = dcl.docComment?.getDefaultSection()
 
-            kdoc?.children
-                    ?.filter { it is KDocTag }
+            kdoc?.getChildrenOfType<KDocTag>()
                     ?.map { it.text }
                     ?.forEach { handleKDoc(it) }
 
@@ -107,8 +108,8 @@ class UnusedImports(config: Config) : Rule(config) {
             kotlinDocReferencesRegExp.findAll(content, 0)
                     .map { it.groupValues[1] }
                     .forEach { namedReferences.add(it.split(".")[0]) }
-            kotlinDocSeeReferenceRegExp.find(content)?.let {
-                val str = it.groupValues[1].split(whiteSpaceRegex)[0]
+            kotlinDocBlockTagReferenceRegExp.find(content)?.let {
+                val str = it.groupValues[2].split(whiteSpaceRegex)[0]
                 namedReferences.add(str.split(".")[0])
             }
         }

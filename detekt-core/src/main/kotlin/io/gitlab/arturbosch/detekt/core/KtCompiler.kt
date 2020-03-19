@@ -10,7 +10,6 @@ import org.jetbrains.kotlin.com.intellij.testFramework.LightVirtualFile
 import org.jetbrains.kotlin.idea.KotlinLanguage
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Path
-import java.nio.file.Paths
 
 open class KtCompiler(
     protected val environment: KotlinCoreEnvironment = createKotlinCoreEnvironment()
@@ -19,17 +18,14 @@ open class KtCompiler(
     protected val psiFileFactory: PsiFileFactory = PsiFileFactory.getInstance(environment.project)
 
     fun compile(root: Path, subPath: Path): KtFile {
-        require(subPath.isFile()) { "Given sub path should be a regular file!" }
+        require(subPath.isFile()) { "Given sub path ($subPath) should be a regular file!" }
         val relativePath =
             (if (root == subPath) subPath.fileName
             else root.fileName.resolve(root.relativize(subPath))).normalize()
-        val absolutePath =
-            (if (root == subPath) subPath
-            else subPath).toAbsolutePath().normalize()
+        val absolutePath = subPath.toAbsolutePath().normalize()
         val content = subPath.toFile().readText()
         val lineSeparator = content.determineLineSeparator()
-        val normalizedContent = StringUtilRt.convertLineSeparators(content)
-        val ktFile = createKtFile(normalizedContent, absolutePath)
+        val ktFile = createKtFile(content, absolutePath)
 
         return ktFile.apply {
             putUserData(LINE_SEPARATOR, lineSeparator)
@@ -44,19 +40,9 @@ open class KtCompiler(
             KotlinLanguage.INSTANCE,
             StringUtilRt.convertLineSeparators(content),
             true, true, false,
-            LightVirtualFile(path.toString()))
+            LightVirtualFile(path.toString())
+        )
         return psiFile as? KtFile ?: throw IllegalStateException("kotlin file expected")
-    }
-}
-
-fun KtFile.addUserData(rootPath: String) {
-    val root = Paths.get(rootPath)
-    val content = root.toFile().readText()
-    val lineSeparator = content.determineLineSeparator()
-
-    this.apply {
-        putUserData(LINE_SEPARATOR, lineSeparator)
-        putUserData(ABSOLUTE_PATH, rootPath)
     }
 }
 
@@ -65,5 +51,5 @@ internal fun String.determineLineSeparator(): String {
     if (i == -1) {
         return if (this.lastIndexOf('\r') == -1) System.getProperty("line.separator") else "\r"
     }
-    return if (i != 0 && this[i] == '\r') "\r\n" else "\n"
+    return if (i != 0 && this[i - 1] == '\r') "\r\n" else "\n"
 }

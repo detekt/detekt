@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.generator.out.MarkdownContent
 import io.gitlab.arturbosch.detekt.generator.out.bold
 import io.gitlab.arturbosch.detekt.generator.out.code
 import io.gitlab.arturbosch.detekt.generator.out.codeBlock
+import io.gitlab.arturbosch.detekt.generator.out.crossOut
 import io.gitlab.arturbosch.detekt.generator.out.description
 import io.gitlab.arturbosch.detekt.generator.out.h3
 import io.gitlab.arturbosch.detekt.generator.out.h4
@@ -61,7 +62,14 @@ object RuleSetPagePrinter : DocumentationPrinter<RuleSetPage> {
                 h4 { "Configuration options:" }
                 list {
                     rule.configuration.forEach {
-                        item { "${code { it.name }} (default: ${code { it.defaultValue }})" }
+                        if (it.deprecated != null) {
+                            item {
+                                crossOut { code { it.name } } + " (default: ${code { it.defaultValue }})"
+                            }
+                            description { "${bold { "Deprecated" }}: ${it.deprecated}" }
+                        } else {
+                            item { "${code { it.name }} (default: ${code { it.defaultValue }})" }
+                        }
                         description { it.description }
                     }
                 }

@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.test
 
+import org.intellij.lang.annotations.Language
 import javax.script.ScriptException
 
 /**
@@ -10,11 +11,9 @@ object KotlinScriptEngine {
     /**
      * Compiles a given code string with the Jsr223 script engine.
      * If a compilation error occurs the script engine is recovered.
-     *
-     * @param code the String to compile
-     * @throws ScriptException
+     * Afterwards this method throws a [KotlinScriptException].
      */
-    fun compile(code: String) {
+    fun compile(@Language("kotlin") code: String) {
         try {
             KotlinScriptEnginePool.getEngine().compile(code)
         } catch (e: ScriptException) {

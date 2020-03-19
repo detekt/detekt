@@ -1,0 +1,140 @@
+build:
+  maxIssues: 1
+
+comments:
+  CommentOverPrivateProperty:
+    active: true
+  UndocumentedPublicClass:
+    active: true
+    excludes: "**/*.kt"
+    includes: "**/detekt-api/src/main/**/api/*.kt"
+  UndocumentedPublicFunction:
+    active: true
+    excludes: "**/*.kt"
+    includes: "**/detekt-api/src/main/**/api/*.kt"
+
+complexity:
+  StringLiteralDuplication:
+    active: true
+    excludes: "**/test/**,**/*.Test.kt,**/*.Spec.kt"
+    threshold: 5
+    ignoreAnnotation: true
+    excludeStringsWithLessThan5Characters: true
+    ignoreStringsRegex: '$^'
+  ComplexInterface:
+    active: true
+    threshold: 10
+    includeStaticDeclarations: false
+  ComplexMethod:
+    active: true
+    ignoreSingleWhenExpression: true
+  MethodOverloading:
+    active: true
+
+exceptions:
+  NotImplementedDeclaration:
+    active: true
+  InstanceOfCheckForException:
+    active: true
+  RethrowCaughtException:
+    active: true
+  ReturnFromFinally:
+    active: true
+  SwallowedException:
+    active: false
+  ThrowingExceptionFromFinally:
+    active: true
+  ThrowingExceptionsWithoutMessageOrCause:
+    active: true
+  ThrowingNewInstanceOfSameException:
+    active: true
+
+formatting:
+  active: true
+  android: false
+  autoCorrect: true
+  MaximumLineLength:
+    active: false
+
+naming:
+  MemberNameEqualsClassName:
+    active: true
+  VariableNaming:
+    active: true
+    variablePattern: '[a-z][A-Za-z0-9]*'
+    privateVariablePattern: '(_)?[a-z][A-Za-z0-9]*'
+    excludeClassPattern: '$^'
+
+performance:
+  ArrayPrimitive:
+    active: true
+
+potential-bugs:
+  EqualsAlwaysReturnsTrueOrFalse:
+    active: true
+  InvalidRange:
+    active: true
+  IteratorHasNextCallsNextMethod:
+    active: true
+  IteratorNotThrowingNoSuchElementException:
+    active: true
+  MissingWhenCase:
+    active: true
+  RedundantElseInWhen:
+    active: true
+  UnsafeCallOnNullableType:
+    active: true
+  UnsafeCast:
+    active: true
+    excludes: "**/test/**,**/*.Test.kt,**/*.Spec.kt"
+  UselessPostfixExpression:
+    active: true
+  WrongEqualsTypeParameter:
+    active: true
+
+style:
+  CollapsibleIfStatements:
+    active: true
+  EqualsNullCall:
+    active: true
+  ForbiddenComment:
+    active: true
+    values: 'TODO:,FIXME:,STOPSHIP:,@author'
+  FunctionOnlyReturningConstant:
+    active: true
+  LoopWithTooManyJumpStatements:
+    active: true
+  LibraryCodeMustSpecifyReturnType:
+    active: true
+    excludes: "**/*.kt"
+    includes: "**/detekt-api/src/main/**/api/*.kt"
+  MaxLineLength:
+    excludes: "**/test/**,**/*.Test.kt,**/*.Spec.kt"
+    excludeCommentStatements: true
+  MagicNumber:
+    ignoreHashCodeFunction: true
+    ignorePropertyDeclaration: true
+    ignoreAnnotation: true
+    ignoreEnums: true
+    ignoreNumbers: '-1,0,1,2,100,1000'
+  MayBeConst:
+    active: true
+  NestedClassesVisibility:
+    active: true
+  ProtectedMemberInFinalClass:
+    active: true
+  SpacingBetweenPackageAndImports:
+    active: true
+  UnnecessaryAbstractClass:
+    active: true
+  UnnecessaryInheritance:
+    active: true
+  UnusedPrivateClass:
+    active: true
+  UnusedPrivateMember:
+    active: true
+    allowedNames: "(_|ignored|expected)"
+  UselessCallOnNotNull:
+    active: true
+  UtilityClassWithPublicConstructor:
+    active: true

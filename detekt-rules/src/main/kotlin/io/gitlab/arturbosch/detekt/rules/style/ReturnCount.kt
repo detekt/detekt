@@ -3,18 +3,19 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.rules.parentsOfTypeUntil
+import io.gitlab.arturbosch.detekt.rules.yieldStatementsSkippingGuardClauses
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
+import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
 
 /**
  * Restrict the number of return methods allowed in methods.
@@ -50,62 +51,70 @@ import org.jetbrains.kotlin.psi.KtReturnExpression
  * (default: `false`)
  * @configuration excludeReturnFromLambda - if labeled return from a lambda should be ignored
  * (default: `true`)
+ * @configuration excludeGuardClauses - if true guard clauses at the beginning of a method should be ignored
+ * (default: `false`)
  * @active since v1.0.0
  */
 class ReturnCount(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName, Severity.Style,
-            "Restrict the number of return statements in methods.", Debt.TEN_MINS)
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Style,
+        "Restrict the number of return statements in methods.",
+        Debt.TEN_MINS
+    )
 
     private val max = valueOrDefault(MAX, 2)
     private val excludedFunctions = SplitPattern(valueOrDefault(EXCLUDED_FUNCTIONS, ""))
     private val excludeLabeled = valueOrDefault(EXCLUDE_LABELED, false)
     private val excludeLambdas = valueOrDefault(EXCLUDE_RETURN_FROM_LAMBDA, true)
+    private val excludeGuardClauses = valueOrDefault(EXCLUDE_GUARD_CLAUSES, false)
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         super.visitNamedFunction(function)
 
-        if (!isIgnoredFunction(function)) {
-            val numberOfReturns = countFunctionReturns(function)
+        if (!shouldBeIgnored(function)) {
+            val numberOfReturns = countReturnStatements(function)
 
             if (numberOfReturns > max) {
-                report(CodeSmell(issue, Entity.from(function), "Function ${function.name} has " +
-                        "$numberOfReturns return statements which exceeds the limit of $max."))
+                report(CodeSmell(
+                    issue,
+                    Entity.from(function),
+                    "Function ${function.name} has $numberOfReturns return statements which exceeds the limit of $max."
+                ))
             }
         }
     }
 
-    private fun isIgnoredFunction(function: KtNamedFunction) = excludedFunctions.contains(function.name)
+    private fun shouldBeIgnored(function: KtNamedFunction) = excludedFunctions.contains(function.name)
 
-    private fun countFunctionReturns(function: KtNamedFunction): Int {
-        var returnsNumber = 0
-        function.accept(object : DetektVisitor() {
-            override fun visitKtElement(element: KtElement) {
-                if (element is KtReturnExpression) {
-                    if (excludeLabeled && element.labeledExpression != null) {
-                        return
-                    } else if (excludeLambdas && isNamedReturnFromLambda(element)) {
-                        return
-                    } else {
-                        returnsNumber++
-                    }
-                }
-                element.children
-                        .filter { it !is KtNamedFunction }
-                        .forEach { it.accept(this) }
-            }
-        })
-        return returnsNumber
+    private fun countReturnStatements(function: KtNamedFunction): Int {
+        fun KtReturnExpression.isExcluded(): Boolean = when {
+            excludeLabeled && labeledExpression != null -> true
+            excludeLambdas && isNamedReturnFromLambda() -> true
+            else -> false
+        }
+
+        val statements = if (excludeGuardClauses) {
+            function.yieldStatementsSkippingGuardClauses()
+        } else {
+            function.bodyBlockExpression?.statements?.asSequence() ?: emptySequence()
+        }
+
+        return statements.flatMap { it.collectDescendantsOfType<KtReturnExpression>().asSequence() }
+            .filterNot { it.isExcluded() }
+            .filter { it.getParentOfType<KtNamedFunction>(true) == function }
+            .count()
     }
 
-    private fun isNamedReturnFromLambda(expression: KtReturnExpression): Boolean {
-        val label = expression.labeledExpression
+    private fun KtReturnExpression.isNamedReturnFromLambda(): Boolean {
+        val label = this.labeledExpression
         if (label != null) {
-            return expression.parentsOfTypeUntil<KtCallExpression, KtNamedFunction>()
-                    .map { it.calleeExpression }
-                    .mapNotNull { it as? KtNameReferenceExpression }
-                    .map { it.text }
-                    .any { it in label.text }
+            return this.parentsOfTypeUntil<KtCallExpression, KtNamedFunction>()
+                .map { it.calleeExpression }
+                .filterIsInstance<KtNameReferenceExpression>()
+                .map { it.text }
+                .any { it in label.text }
         }
         return false
     }
@@ -115,5 +124,6 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
         const val EXCLUDED_FUNCTIONS = "excludedFunctions"
         const val EXCLUDE_LABELED = "excludeLabeled"
         const val EXCLUDE_RETURN_FROM_LAMBDA = "excludeReturnFromLambda"
+        const val EXCLUDE_GUARD_CLAUSES = "excludeGuardClauses"
     }
 }

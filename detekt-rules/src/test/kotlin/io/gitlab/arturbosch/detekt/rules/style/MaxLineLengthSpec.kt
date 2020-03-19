@@ -1,10 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
+import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.TestConfig
+import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.compileForTest
-import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -18,7 +19,7 @@ class MaxLineLengthSpec : Spek({
             val fileContent = KtFileContent(file, lines)
 
             it("should report no errors when maxLineLength is set to 200") {
-                val rule = MaxLineLength(TestConfig(mapOf("maxLineLength" to "200")))
+                val rule = MaxLineLength(TestConfig(mapOf(MaxLineLength.MAX_LINE_LENGTH to "200")))
 
                 rule.visit(fileContent)
                 assertThat(rule.findings).isEmpty()
@@ -47,13 +48,13 @@ class MaxLineLengthSpec : Spek({
 
         context("a kt file with a long package name and long import statements") {
             val code = """
-			package anIncrediblyLongAndComplexPackageNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
+            package anIncrediblyLongAndComplexPackageNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
 
-			import anIncrediblyLongAndComplexImportNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
+            import anIncrediblyLongAndComplexImportNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
 
-			class Test {
-			}
-		"""
+            class Test {
+            }
+        """
 
             val file = compileContentForTest(code)
             val lines = file.text.splitToSequence("\n")
@@ -61,7 +62,7 @@ class MaxLineLengthSpec : Spek({
 
             it("should not report the package statement and import statements by default") {
                 val rule = MaxLineLength(TestConfig(mapOf(
-                        "maxLineLength" to "60"
+                        MaxLineLength.MAX_LINE_LENGTH to "60"
                 )))
 
                 rule.visit(fileContent)
@@ -70,9 +71,9 @@ class MaxLineLengthSpec : Spek({
 
             it("should report the package statement and import statements if they're enabled") {
                 val rule = MaxLineLength(TestConfig(mapOf(
-                        "maxLineLength" to "60",
-                        "excludePackageStatements" to "false",
-                        "excludeImportStatements" to "false"
+                        MaxLineLength.MAX_LINE_LENGTH to "60",
+                        MaxLineLength.EXCLUDE_PACKAGE_STATEMENTS to "false",
+                        MaxLineLength.EXCLUDE_IMPORT_STATEMENTS to "false"
                 )))
 
                 rule.visit(fileContent)
@@ -81,9 +82,9 @@ class MaxLineLengthSpec : Spek({
 
             it("should not report anything if both package and import statements are disabled") {
                 val rule = MaxLineLength(TestConfig(mapOf(
-                        "maxLineLength" to "60",
-                        "excludePackageStatements" to "true",
-                        "excludeImportStatements" to "true"
+                        MaxLineLength.MAX_LINE_LENGTH to "60",
+                        MaxLineLength.EXCLUDE_PACKAGE_STATEMENTS to "true",
+                        MaxLineLength.EXCLUDE_IMPORT_STATEMENTS to "true"
                 )))
 
                 rule.visit(fileContent)
@@ -98,7 +99,7 @@ class MaxLineLengthSpec : Spek({
 
             it("should report the package statement, import statements, line and comments by default") {
                 val rule = MaxLineLength(TestConfig(mapOf(
-                        "maxLineLength" to "60"
+                        MaxLineLength.MAX_LINE_LENGTH to "60"
                 )))
 
                 rule.visit(fileContent)
@@ -107,10 +108,10 @@ class MaxLineLengthSpec : Spek({
 
             it("should report the package statement, import statements, line and comments if they're enabled") {
                 val rule = MaxLineLength(TestConfig(mapOf(
-                        "maxLineLength" to "60",
-                        "excludePackageStatements" to "false",
-                        "excludeImportStatements" to "false",
-                        "excludeCommentStatements" to "false"
+                        MaxLineLength.MAX_LINE_LENGTH to "60",
+                        MaxLineLength.EXCLUDE_PACKAGE_STATEMENTS to "false",
+                        MaxLineLength.EXCLUDE_IMPORT_STATEMENTS to "false",
+                        MaxLineLength.EXCLUDE_COMMENT_STATEMENTS to "false"
                 )))
 
                 rule.visit(fileContent)
@@ -119,8 +120,8 @@ class MaxLineLengthSpec : Spek({
 
             it("should not report comments if they're disabled") {
                 val rule = MaxLineLength(TestConfig(mapOf(
-                        "maxLineLength" to "60",
-                        "excludeCommentStatements" to "true"
+                        MaxLineLength.MAX_LINE_LENGTH to "60",
+                        MaxLineLength.EXCLUDE_COMMENT_STATEMENTS to "true"
                 )))
 
                 rule.visit(fileContent)
@@ -130,14 +131,14 @@ class MaxLineLengthSpec : Spek({
 
         context("a kt file with a long package name, long import statements and a long line") {
             val code = """
-			package anIncrediblyLongAndComplexPackageNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
+            package anIncrediblyLongAndComplexPackageNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
 
-			import anIncrediblyLongAndComplexImportNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
+            import anIncrediblyLongAndComplexImportNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot
 
-			class Test {
-				fun anIncrediblyLongAndComplexMethodNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot() {}
-			}
-		""".trim()
+            class Test {
+                fun anIncrediblyLongAndComplexMethodNameThatProbablyShouldBeMuchShorterButForTheSakeOfTheTestItsNot() {}
+            }
+        """.trim()
 
             val file = compileContentForTest(code)
             val lines = file.text.splitToSequence("\n")
@@ -145,7 +146,7 @@ class MaxLineLengthSpec : Spek({
 
             it("should only the function line by default") {
                 val rule = MaxLineLength(TestConfig(mapOf(
-                        "maxLineLength" to "60"
+                        MaxLineLength.MAX_LINE_LENGTH to "60"
                 )))
 
                 rule.visit(fileContent)
@@ -154,9 +155,9 @@ class MaxLineLengthSpec : Spek({
 
             it("should report the package statement, import statements and line if they're not excluded") {
                 val rule = MaxLineLength(TestConfig(mapOf(
-                        "maxLineLength" to "60",
-                        "excludePackageStatements" to "false",
-                        "excludeImportStatements" to "false"
+                        MaxLineLength.MAX_LINE_LENGTH to "60",
+                        MaxLineLength.EXCLUDE_PACKAGE_STATEMENTS to "false",
+                        MaxLineLength.EXCLUDE_IMPORT_STATEMENTS to "false"
                 )))
 
                 rule.visit(fileContent)
@@ -165,9 +166,9 @@ class MaxLineLengthSpec : Spek({
 
             it("should report only method if both package and import statements are disabled") {
                 val rule = MaxLineLength(TestConfig(mapOf(
-                        "maxLineLength" to "60",
-                        "excludePackageStatements" to "true",
-                        "excludeImportStatements" to "true"
+                        MaxLineLength.MAX_LINE_LENGTH to "60",
+                        MaxLineLength.EXCLUDE_PACKAGE_STATEMENTS to "true",
+                        MaxLineLength.EXCLUDE_IMPORT_STATEMENTS to "true"
                 )))
 
                 rule.visit(fileContent)
@@ -176,16 +177,14 @@ class MaxLineLengthSpec : Spek({
 
             it("should report correct line and column for function with excessive length") {
                 val rule = MaxLineLength(TestConfig(mapOf(
-                        "maxLineLength" to "60",
-                        "excludePackageStatements" to "true",
-                        "excludeImportStatements" to "true"
+                        MaxLineLength.MAX_LINE_LENGTH to "60",
+                        MaxLineLength.EXCLUDE_PACKAGE_STATEMENTS to "true",
+                        MaxLineLength.EXCLUDE_IMPORT_STATEMENTS to "true"
                 )))
 
                 rule.visit(fileContent)
                 assertThat(rule.findings).hasSize(1)
-                val findingSource = rule.findings[0].location.source
-                assertThat(findingSource.line).isEqualTo(6)
-                assertThat(findingSource.column).isEqualTo(5)
+                assertThat(rule.findings).hasSourceLocations(SourceLocation(6, 17))
             }
         }
     }

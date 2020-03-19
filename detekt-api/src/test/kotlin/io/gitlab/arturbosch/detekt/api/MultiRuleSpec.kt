@@ -1,8 +1,9 @@
 package io.gitlab.arturbosch.detekt.api
 
+import io.gitlab.arturbosch.detekt.core.rules.shouldAnalyzeFile
+import io.gitlab.arturbosch.detekt.core.rules.visitFile
 import io.gitlab.arturbosch.detekt.test.compileForTest
 import io.gitlab.arturbosch.detekt.test.loadRuleSet
-import io.gitlab.arturbosch.detekt.test.testEntity
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.psi.KtFile
@@ -19,27 +20,28 @@ internal class MultiRuleSpec : Spek({
 
             it("should not run any rules if rule set defines the filter") {
                 val config = yamlConfig("/pathFilters/multi-rule-with-excludes-on-ruleset.yml")
-                assertThat(loadRuleSet<MultiRuleProvider>(config).accept(file)).isEmpty()
+                assertThat(loadRuleSet<MultiRuleProvider>(config).shouldAnalyzeFile(file, config)).isFalse()
             }
 
             it("should only run one rule as the other is filtered") {
                 val config = yamlConfig("/pathFilters/multi-rule-with-one-exclude.yml")
-                assertThat(loadRuleSet<MultiRuleProvider>(config).accept(file)).hasSize(1)
+                assertThat(loadRuleSet<MultiRuleProvider>(config).visitFile(file)).hasSize(1)
             }
 
             it("should run both when no filter is applied") {
                 val config = yamlConfig("/pathFilters/multi-rule-without-excludes.yml")
-                assertThat(loadRuleSet<MultiRuleProvider>(config).accept(file)).hasSize(2)
+                assertThat(loadRuleSet<MultiRuleProvider>(config).visitFile(file)).hasSize(2)
             }
 
             it("should run none when both rules are filtered") {
                 val config = yamlConfig("/pathFilters/multi-rule-with-excludes.yml")
-                assertThat(loadRuleSet<MultiRuleProvider>(config).accept(file)).isEmpty()
+                assertThat(loadRuleSet<MultiRuleProvider>(config).visitFile(file)).isEmpty()
             }
         }
     }
 })
 
+@Suppress("UnusedPrivateClass") // bug: doesn't resolve usage as generic type
 private class MultiRuleProvider : RuleSetProvider {
     override val ruleSetId: String = "TestMultiRule"
     override fun instance(config: Config): RuleSet = RuleSet(ruleSetId, listOf(TestMultiRule(config)))
@@ -59,7 +61,7 @@ private class TestMultiRule(config: Config) : MultiRule() {
 
 private abstract class AbstractRule(config: Config) : Rule(config) {
     override val issue: Issue = Issue(javaClass.simpleName, Severity.Minor, "", Debt.TWENTY_MINS)
-    override fun visitKtFile(file: KtFile) = report(CodeSmell(issue, testEntity(file), message = ""))
+    override fun visitKtFile(file: KtFile) = report(CodeSmell(issue, Entity.from(file), message = ""))
 }
 
 private class TestRuleOne(config: Config) : AbstractRule(config)

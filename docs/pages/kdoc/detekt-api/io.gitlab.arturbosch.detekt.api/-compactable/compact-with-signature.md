@@ -7,3 +7,7 @@ title: Compactable.compactWithSignature - detekt-api
 # compactWithSignature
 
 `open fun compactWithSignature(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)
+
+Same as [compact](compact.html) except the content should contain a substring which represents
+this exact findings via a custom identifier.
+

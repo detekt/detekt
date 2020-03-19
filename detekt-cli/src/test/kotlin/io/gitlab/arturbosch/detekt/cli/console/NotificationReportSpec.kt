@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.cli.console
 
-import io.gitlab.arturbosch.detekt.cli.TestDetektion
+import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.cli.createNotification
 import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
@@ -20,6 +20,11 @@ class NotificationReportSpec : Spek({
                 override val notifications = listOf(createNotification(), createNotification())
             }
             assertThat(subject.render(detektion)).isEqualTo("File $path was modified.\nFile $path was modified.")
+        }
+
+        it("reports no findings") {
+            val detektion = TestDetektion()
+            assertThat(subject.render(detektion)).isNull()
         }
     }
 })

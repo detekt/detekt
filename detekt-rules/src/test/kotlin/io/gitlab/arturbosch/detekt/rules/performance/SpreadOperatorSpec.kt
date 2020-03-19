@@ -4,18 +4,11 @@ import io.gitlab.arturbosch.detekt.test.KtTestCompiler
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class SpreadOperatorSpec : Spek({
     val subject by memoized { SpreadOperator() }
-
-    lateinit var environment: KotlinCoreEnvironment
-
-    beforeEachTest {
-        environment = KtTestCompiler.createEnvironment()
-    }
 
     describe("SpreadOperator rule") {
         /** This rule has different behaviour depending on whether type resolution is enabled in detekt or not. The two
@@ -23,6 +16,11 @@ class SpreadOperatorSpec : Spek({
          * as different warning messages are shown in each case.
          */
         context("with type resolution") {
+
+            val wrapper by memoized(
+                factory = { KtTestCompiler.createEnvironment() },
+                destructor = { it.dispose() }
+            )
 
             val typeResolutionEnabledMessage = "Used in this way a spread operator causes a full copy of the array to" +
                     " be created before calling a method which has a very high performance penalty."
@@ -33,7 +31,7 @@ class SpreadOperatorSpec : Spek({
                     fun foo(vararg xs: Int) {}
                     val testVal = foo(xs = *xsArray)
                 """
-                val actual = subject.compileAndLintWithContext(environment, code)
+                val actual = subject.compileAndLintWithContext(wrapper.env, code)
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().message).isEqualTo(typeResolutionEnabledMessage)
             }
@@ -43,7 +41,7 @@ class SpreadOperatorSpec : Spek({
                     fun foo(vararg xs: Int) {}
                     val testVal = foo(*xsArray)
                 """
-                val actual = subject.compileAndLintWithContext(environment, code)
+                val actual = subject.compileAndLintWithContext(wrapper.env, code)
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().message).isEqualTo(typeResolutionEnabledMessage)
             }
@@ -52,7 +50,7 @@ class SpreadOperatorSpec : Spek({
                     fun foo(vararg xs: Int) {}
                     val testVal = foo(xs = *intArrayOf(1))
                 """
-                assertThat(subject.compileAndLintWithContext(environment, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
             }
 
             it("doesn't report when using array constructor with spread operator when varargs parameter comes first") {
@@ -60,7 +58,7 @@ class SpreadOperatorSpec : Spek({
                     fun <T> asList(vararg ts: T, stringValue: String): List<Int> = listOf(1,2,3)
                     val list = asList(-1, 0, *arrayOf(1, 2, 3), 4, stringValue = "5")
                 """
-                assertThat(subject.compileAndLintWithContext(environment, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
             }
 
             it("doesn't report when passing values directly") {
@@ -68,33 +66,33 @@ class SpreadOperatorSpec : Spek({
                     fun <T> asList(vararg ts: T, stringValue: String): List<Int> = listOf(1,2,3)
                     val list = asList(-1, 0, 1, 2, 3, 4, stringValue = "5")
                 """
-                assertThat(subject.compileAndLintWithContext(environment, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
             }
 
             it("doesn't report when function doesn't take a vararg parameter") {
                 val code = """
-				fun test0(strs: Array<String>) {
-					test(strs)
-				}
+                fun test0(strs: Array<String>) {
+                    test(strs)
+                }
 
-				fun test(strs: Array<String>) {
-					strs.forEach { println(it) }
-				}
+                fun test(strs: Array<String>) {
+                    strs.forEach { println(it) }
+                }
                 """
-                assertThat(subject.compileAndLintWithContext(environment, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
             }
 
             it("doesn't report with expression inside params") {
                 val code = """
-				fun test0(strs: Array<String>) {
-					test(2*2)
-				}
+                fun test0(strs: Array<String>) {
+                    test(2*2)
+                }
 
-				fun test(test : Int) {
-					println(test)
-				}
+                fun test(test : Int) {
+                    println(test)
+                }
                 """
-                assertThat(subject.compileAndLintWithContext(environment, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
             }
         }
 
@@ -153,26 +151,26 @@ class SpreadOperatorSpec : Spek({
 
             it("doesn't report when function doesn't take a vararg parameter") {
                 val code = """
-				fun test0(strs: Array<String>) {
-					test(strs)
-				}
+                fun test0(strs: Array<String>) {
+                    test(strs)
+                }
 
-				fun test(strs: Array<String>) {
-					strs.forEach { println(it) }
-				}
+                fun test(strs: Array<String>) {
+                    strs.forEach { println(it) }
+                }
                 """
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
             it("doesn't report with expression inside params") {
                 val code = """
-				fun test0(strs: Array<String>) {
-					test(2*2)
-				}
+                fun test0(strs: Array<String>) {
+                    test(2*2)
+                }
 
-				fun test(test : Int) {
-					println(test)
-				}
+                fun test(test : Int) {
+                    println(test)
+                }
                 """
                 assertThat(subject.compileAndLint(code)).isEmpty()
             }

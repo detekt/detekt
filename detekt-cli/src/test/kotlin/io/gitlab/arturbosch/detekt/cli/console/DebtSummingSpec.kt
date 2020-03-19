@@ -20,14 +20,10 @@ internal class DebtSummingSpec : Spek({
         it("outputs correct minutes") {
             assertThat(createDebtSumming(mins = 42).toString()).isEqualTo("42min")
         }
-
-        it("outputs no debt") {
-            assertThat(DebtSumming().calculateDebt()).isNull()
-        }
     }
 })
 
-private fun createDebtSumming(days: Int = 0, hours: Int = 0, mins: Int): Debt? {
+private fun createDebtSumming(days: Int = 0, hours: Int = 0, mins: Int): Debt {
     val debt = Debt(days, hours, mins)
     val debtReport = DebtSumming()
     debtReport.add(debt)

@@ -17,6 +17,8 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
         return yaml {
             yaml { defaultBuildConfiguration() }
             emptyLine()
+            yaml { defaultConfigConfiguration() }
+            emptyLine()
             yaml { defaultProcessorsConfiguration() }
             emptyLine()
             yaml { defaultConsoleReportsConfiguration() }
@@ -34,7 +36,8 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
             if (ruleSet.name in TestExclusions.ruleSets) {
                 keyValue { Config.EXCLUDES_KEY to TestExclusions.pattern }
             }
-            ruleSet.configuration.forEach { configuration ->
+            ruleSet.configuration
+                .forEach { configuration ->
                 if (configuration.defaultValue.isYamlList()) {
                     list(configuration.name, configuration.defaultValue.toList())
                 } else {
@@ -50,10 +53,11 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
                     if (rule.isExcludedInTests()) {
                         keyValue { Config.EXCLUDES_KEY to TestExclusions.pattern }
                     }
-                    rule.configuration.forEach { configuration ->
+                    rule.configuration
+                        .forEach { configuration ->
                         if (configuration.defaultValue.isYamlList()) {
                             list(configuration.name, configuration.defaultValue.toList())
-                        } else {
+                        } else if (configuration.deprecated == null) {
                             keyValue { configuration.name to configuration.defaultValue }
                         }
                     }
@@ -63,47 +67,51 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
         }
     }
 
-    private fun defaultBuildConfiguration(): String {
-        return """
-			build:
-			  maxIssues: 10
-			  weights:
-			    # complexity: 2
-			    # LongParameterList: 1
-			    # style: 1
-			    # comments: 1
-			""".trimIndent()
-    }
+    private fun defaultBuildConfiguration(): String = """
+      build:
+        maxIssues: 0
+        excludeCorrectable: false
+        weights:
+          # complexity: 2
+          # LongParameterList: 1
+          # style: 1
+          # comments: 1
+    """.trimIndent()
 
-    private fun defaultProcessorsConfiguration(): String {
-        return """
-			processors:
-			  active: true
-			  exclude:
-			  # - 'FunctionCountProcessor'
-			  # - 'PropertyCountProcessor'
-			  # - 'ClassCountProcessor'
-			  # - 'PackageCountProcessor'
-			  # - 'KtFileCountProcessor'
-			""".trimIndent()
-    }
+    private fun defaultConfigConfiguration(): String = """
+      config:
+        validation: true
+        # when writing own rules with new properties, exclude the property path e.g.: "my_rule_set,.*>.*>[my_property]"
+        excludes: ""
+    """.trimIndent()
 
-    private fun defaultConsoleReportsConfiguration(): String {
-        return """
-			console-reports:
-			  active: true
-			  exclude:
-			  #  - 'ProjectStatisticsReport'
-			  #  - 'ComplexityReport'
-			  #  - 'NotificationReport'
-			  #  - 'FindingsReport'
-			  #  - 'BuildFailureReport'
-			""".trimIndent()
-    }
+    private fun defaultProcessorsConfiguration(): String = """
+      processors:
+        active: true
+        exclude:
+          - 'DetektProgressListener'
+        # - 'FunctionCountProcessor'
+        # - 'PropertyCountProcessor'
+        # - 'ClassCountProcessor'
+        # - 'PackageCountProcessor'
+        # - 'KtFileCountProcessor'
+    """.trimIndent()
+
+    private fun defaultConsoleReportsConfiguration(): String = """
+      console-reports:
+        active: true
+        exclude:
+           - 'ProjectStatisticsReport'
+           - 'ComplexityReport'
+           - 'NotificationReport'
+        #  - 'FindingsReport'
+           - 'FileBasedFindingsReport'
+    """.trimIndent()
 
     private fun String.isYamlList() = trim().startsWith("-")
 
-    private fun String.toList(): List<String> {
-        return split("\n").map { it.replace("-", "") }.map { it.trim() }
-    }
+    private fun String.toList(): List<String> =
+        split("\n")
+            .map { it.replace("-", "") }
+            .map { it.trim() }
 }

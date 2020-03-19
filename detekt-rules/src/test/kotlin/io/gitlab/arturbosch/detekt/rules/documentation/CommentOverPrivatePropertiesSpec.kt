@@ -12,42 +12,42 @@ class CommentOverPrivatePropertiesSpec : Spek({
 
         it("reports private property with a comment") {
             val code = """
-				/**
-				 * asdf
-				 */
-				private val v = 1"""
+                /**
+                 * asdf
+                 */
+                private val v = 1"""
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         it("does not report public property with a comment") {
             val code = """
-				/**
-				 * asdf
-				 */
-				val v = 1"""
-            assertThat(subject.compileAndLint(code)).hasSize(0)
+                /**
+                 * asdf
+                 */
+                val v = 1"""
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("reports private property in class with a comment") {
             val code = """
-					class Test {
-					/**
-					 * asdf
-					 */
-					private val v = 1
-				}"""
+                    class Test {
+                    /**
+                     * asdf
+                     */
+                    private val v = 1
+                }"""
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         it("does not report public property with a comment") {
             val code = """
-				class Test {
-					/**
-					 * asdf
-					 */
-					val v = 1
-				}"""
-            assertThat(subject.compileAndLint(code)).hasSize(0)
+                class Test {
+                    /**
+                     * asdf
+                     */
+                    val v = 1
+                }"""
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
 })

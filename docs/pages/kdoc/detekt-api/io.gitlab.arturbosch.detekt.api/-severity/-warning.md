@@ -7,3 +7,7 @@ title: Severity.Warning - detekt-api
 # Warning
 
 `Warning`
+
+Corresponds to issues that do not prevent the code from working,
+but may nevertheless represent coding inefficiencies.
+

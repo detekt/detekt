@@ -68,10 +68,17 @@ internal class RuleVisitor : DetektVisitor() {
         }
 
         name = classOrObject.name?.trim() ?: ""
+
+        // Use unparsed KDoc text here to check for tabs
+        // Parsed [KDocSection] element contains no tabs
+        if (classOrObject.docComment?.text?.contains('\t') == true) {
+            throw InvalidDocumentationException("KDoc for rule $name must not contain tabs")
+        }
+
         active = classOrObject.kDocSection()?.findTagByName(TAG_ACTIVE) != null
         autoCorrect = classOrObject.kDocSection()?.findTagByName(TAG_AUTO_CORRECT) != null
 
-        val comment = classOrObject.kDocSection()?.getContent()?.trim() ?: return
+        val comment = classOrObject.kDocSection()?.getContent()?.trim()?.replace("@@", "@") ?: return
         extractRuleDocumentation(comment)
         configuration.addAll(classOrObject.parseConfigurationTags())
     }
@@ -85,7 +92,7 @@ internal class RuleVisitor : DetektVisitor() {
                 extractCompliantDocumentation(comment, compliantIndex)
             }
             compliantIndex != -1 -> throw InvalidCodeExampleDocumentationException(
-                    "Rule $name contains a compliant without a noncompliant code definition.")
+                    "Rule $name contains a compliant without a noncompliant code definition")
             else -> description = comment
         }
     }
@@ -94,7 +101,7 @@ internal class RuleVisitor : DetektVisitor() {
         val nonCompliantEndIndex = comment.indexOf(ENDTAG_NONCOMPLIANT)
         if (nonCompliantEndIndex == -1) {
             throw InvalidCodeExampleDocumentationException(
-                    "Rule $name contains a incorrect noncompliant code definition.")
+                    "Rule $name contains an incorrect noncompliant code definition")
         }
         description = comment.substring(0, nonCompliantIndex).trim()
         nonCompliant = comment.substring(nonCompliantIndex + TAG_NONCOMPLIANT.length, nonCompliantEndIndex)
@@ -107,7 +114,7 @@ internal class RuleVisitor : DetektVisitor() {
         if (compliantIndex != -1) {
             if (compliantEndIndex == -1) {
                 throw InvalidCodeExampleDocumentationException(
-                        "Rule $name contains a incorrect compliant code definition.")
+                        "Rule $name contains an incorrect compliant code definition")
             }
             compliant = comment.substring(compliantIndex + TAG_COMPLIANT.length, compliantEndIndex)
                     .trimStartingLineBreaks()

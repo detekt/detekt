@@ -9,9 +9,9 @@ object LLOC {
         lines: List<String>,
         isCommentMode: Boolean = false,
         isFullMode: Boolean = false
-    ): Int = Counter(lines, isCommentMode, isFullMode).run()
+    ): Int = LLOCCounter(lines, isCommentMode, isFullMode).run()
 
-    private class Counter(
+    private class LLOCCounter(
         private val lines: List<String>,
         private val isCommentMode: Boolean = false,
         private val isFullMode: Boolean = false
@@ -22,6 +22,7 @@ object LLOC {
         private var closedBrackets = 0
         private var escape: Boolean = false
 
+        @Suppress("LoopWithTooManyJumpStatements")
         internal fun run(): Int {
             for (line in lines) {
 

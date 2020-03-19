@@ -20,9 +20,9 @@ and call those instead.
 
 #### Configuration options:
 
-* `threshold` (default: `4`)
+* ``threshold`` (default: ``4``)
 
-   
+   the number of conditions which will trigger the rule
 
 #### Noncompliant Code:
 
@@ -59,11 +59,11 @@ to understand and implement.
 
 #### Configuration options:
 
-* `threshold` (default: `10`)
+* ``threshold`` (default: ``10``)
 
-   maximum amount of definitions in an interface
+   the amount of definitions in an interface to trigger the rule
 
-* `includeStaticDeclarations` (default: `false`)
+* ``includeStaticDeclarations`` (default: ``false``)
 
    whether static declarations should be included
 
@@ -73,23 +73,46 @@ Complex methods are hard to understand and read. It might not be obvious what si
 Prefer splitting up complex methods into smaller methods that are in turn easier to understand.
 Smaller methods can also be named much clearer which leads to improved readability of the code.
 
+This rule uses McCabe's Cyclomatic Complexity (MCC) metric to measure the number of
+linearly independent paths through a function's source code (https://www.ndepend.com/docs/code-metrics#CC).
+The higher the number of independent paths, the more complex a method is.
+Complex methods use too many of the following statements.
+Each one of them adds one to the complexity count.
+
+- __Conditional statements__ - `if`, `else if`, `when`
+- __Jump statements__ - `continue`, `break`
+- __Loops__ - `for`, `while`, `do-while`, `forEach`
+- __Operators__ `&&`, `||`, `?:`
+- __Exceptions__ - `catch`, `use`
+- __Scope Functions__ - `let`, `run`, `with`, `apply`, and `also` ->
+[Reference](https://kotlinlang.org/docs/reference/scope-functions.html)
+
 **Severity**: Maintainability
 
 **Debt**: 20min
 
 #### Configuration options:
 
-* `threshold` (default: `10`)
+* ``threshold`` (default: ``15``)
 
-   MCC threshold for a method
+   McCabe's Cyclomatic Complexity (MCC) number for a method
 
-* `ignoreSingleWhenExpression` (default: `false`)
+* ``ignoreSingleWhenExpression`` (default: ``false``)
 
    Ignores a complex method if it only contains a single when expression.
 
-* `ignoreSimpleWhenEntries` (default: `false`)
+* ``ignoreSimpleWhenEntries`` (default: ``false``)
 
    Whether to ignore simple (braceless) when entries.
+
+* ``ignoreNestingFunctions`` (default: ``false``)
+
+   Whether to ignore functions which are often used instead of an `if` or
+`for` statement
+
+* ``nestingFunctions`` (default: ``run,let,apply,with,also,use,forEach,isNotNull,ifNull``)
+
+   Comma separated list of function names which add complexity
 
 ### LabeledExpression
 
@@ -104,7 +127,7 @@ way to get the instance of an outer class from an inner class in Kotlin.
 
 #### Configuration options:
 
-* `ignoredLabels` (default: `""`)
+* ``ignoredLabels`` (default: ``""``)
 
    allows to provide a list of label names which should be ignored by this rule
 
@@ -160,9 +183,9 @@ things.
 
 #### Configuration options:
 
-* `threshold` (default: `600`)
+* ``threshold`` (default: ``600``)
 
-   maximum size of a class
+   the size of class required to trigger the rule
 
 ### LongMethod
 
@@ -177,9 +200,9 @@ Extract parts of the functionality of long methods into separate, smaller method
 
 #### Configuration options:
 
-* `threshold` (default: `60`)
+* ``threshold`` (default: ``60``)
 
-   maximum lines in a method
+   number of lines in a method to trigger the rule
 
 ### LongParameterList
 
@@ -191,11 +214,11 @@ Reports functions which have more parameters than a certain threshold (default: 
 
 #### Configuration options:
 
-* `threshold` (default: `6`)
+* ``threshold`` (default: ``6``)
 
-   maximum number of parameters
+   number of parameters required to trigger the rule
 
-* `ignoreDefaultParameters` (default: `false`)
+* ``ignoreDefaultParameters`` (default: ``false``)
 
    ignore parameters that have a default value
 
@@ -212,9 +235,9 @@ Refactor these methods and try to use optional parameters instead to prevent som
 
 #### Configuration options:
 
-* `threshold` (default: `6`)
+* ``threshold`` (default: ``6``)
 
-   
+   number of overloads which will trigger the rule
 
 ### NestedBlockDepth
 
@@ -229,9 +252,9 @@ Prefer extracting the nested code into well-named functions to make it easier to
 
 #### Configuration options:
 
-* `threshold` (default: `4`)
+* ``threshold`` (default: ``4``)
 
-   maximum nesting depth
+   the nested depth required to trigger rule
 
 ### StringLiteralDuplication
 
@@ -246,19 +269,19 @@ Instead, prefer extracting the String literal into a property or constant.
 
 #### Configuration options:
 
-* `threshold` (default: `3`)
+* ``threshold`` (default: ``3``)
 
    amount of duplications to trigger rule
 
-* `ignoreAnnotation` (default: `true`)
+* ``ignoreAnnotation`` (default: ``true``)
 
    if values in Annotations should be ignored
 
-* `excludeStringsWithLessThan5Characters` (default: `true`)
+* ``excludeStringsWithLessThan5Characters`` (default: ``true``)
 
    if short strings should be excluded
 
-* `ignoreStringsRegex` (default: `'$^'`)
+* ``ignoreStringsRegex`` (default: ``'$^'``)
 
    RegEx of Strings that should be ignored
 
@@ -300,34 +323,34 @@ which clearly belongs together in separate parts of the code.
 
 #### Configuration options:
 
-* `thresholdInFiles` (default: `11`)
+* ``thresholdInFiles`` (default: ``11``)
 
    threshold in files
 
-* `thresholdInClasses` (default: `11`)
+* ``thresholdInClasses`` (default: ``11``)
 
    threshold in classes
 
-* `thresholdInInterfaces` (default: `11`)
+* ``thresholdInInterfaces`` (default: ``11``)
 
    threshold in interfaces
 
-* `thresholdInObjects` (default: `11`)
+* ``thresholdInObjects`` (default: ``11``)
 
    threshold in objects
 
-* `thresholdInEnums` (default: `11`)
+* ``thresholdInEnums`` (default: ``11``)
 
    threshold in enums
 
-* `ignoreDeprecated` (default: `false`)
+* ``ignoreDeprecated`` (default: ``false``)
 
    ignore deprecated functions
 
-* `ignorePrivate` (default: `false`)
+* ``ignorePrivate`` (default: ``false``)
 
    ignore private functions
 
-* `ignoreOverridden` (default: `false`)
+* ``ignoreOverridden`` (default: ``false``)
 
    ignore overridden functions

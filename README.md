@@ -3,13 +3,13 @@
 [![Join the chat at https://kotlinlang.slack.com/messages/C88E12QH4/convo/C0BQ5GZ0S-1511956674.000289/](https://img.shields.io/badge/chat-on_slack-red.svg?style=flat-square)](https://kotlinlang.slack.com/messages/C88E12QH4/convo/C0BQ5GZ0S-1511956674.000289/)
 [![Visit the website at https://arturbosch.github.io/detekt/](https://img.shields.io/badge/visit-website-red.svg?style=flat-square)](https://arturbosch.github.io/detekt/)
 [![Download](https://api.bintray.com/packages/arturbosch/code-analysis/detekt/images/download.svg) ](https://bintray.com/arturbosch/code-analysis/detekt/_latestVersion)
-[![gradle plugin](https://img.shields.io/badge/Gradle-1.0.0--RC16-blue.svg)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
-<!-- Version needs to be hardcoded until rc phase is over. Change to '-'RC for semantic versioning broke the badge. [![gradle plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/io/gitlab/arturbosch/detekt/detekt-gradle-plugin/maven-metadata.xml.svg?label=gradle&style=flat-square)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)-->
+[![gradle plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/io/gitlab/arturbosch/detekt/io.gitlab.arturbosch.detekt.gradle.plugin/maven-metadata.xml.svg?label=Gradle&style=flat-square)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
 
 [![build status](https://travis-ci.org/arturbosch/detekt.svg?branch=master)](https://travis-ci.org/arturbosch/detekt)
 [![build status windows](https://ci.appveyor.com/api/projects/status/3q9g98vveiul7yut/branch/master?svg=true)](https://ci.appveyor.com/project/arturbosch/detekt)
 [![codecov](https://codecov.io/gh/arturbosch/detekt/branch/master/graph/badge.svg)](https://codecov.io/gh/arturbosch/detekt)
 [![CodeFactor](https://www.codefactor.io/repository/github/arturbosch/detekt/badge)](https://www.codefactor.io/repository/github/arturbosch/detekt)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Farturbosch%2Fdetekt-intellij-plugin.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Farturbosch%2Fdetekt?ref=badge_shield)
 [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
 
 Meet _detekt_, a static code analysis tool for the _Kotlin_ programming language.
@@ -20,53 +20,68 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 ### Features
 
 - Code smell analysis for your Kotlin projects
-- Complexity report based on logical lines of code, McCabe complexity and amount of code smells
-- Highly configurable
-- Suppress findings with Kotlin's `@Suppress` and Java's `@SuppressWarnings` annotations
-- Specify code smell thresholds to break your build
-- Code Smell baseline and ignore lists for legacy projects
+- Complexity reports based on lines of code, cyclomatic complexity and amount of code smells
+- Highly configurable rule sets
+- Suppression of findings with Kotlin's `@Suppress` and Java's `@SuppressWarnings` annotations
+- Specification of quality gates which will break your build 
+- Code Smell baseline and whitelisting for legacy projects
 - [Gradle plugin](#with-gradle) for code analysis via Gradle builds
-- Gradle tasks to use local `IntelliJ` distribution for [formatting and inspecting](#idea) Kotlin code
+- Gradle tasks to use local `IntelliJ` distribution for formatting and inspecting Kotlin code
 - [SonarQube integration](https://github.com/arturbosch/sonar-kotlin)
-- Extensible by own rule sets, `FileProcessListener's` and `OutputReport's`
+- Extensibility by enabling incorporation of personal rule sets, `FileProcessListener's` and `OutputReport's`
 - [IntelliJ integration](https://github.com/arturbosch/detekt-intellij-plugin)
 - Unofficial [Maven plugin](https://github.com/Ozsie/detekt-maven-plugin) by [Ozsie](https://github.com/Ozsie)
 
 ### Project Website
 
-Visit https://arturbosch.github.io/detekt/ for installation guides, release notes, migration guides, rule descriptions and configuration options.
+Visit [the project website](https://arturbosch.github.io/detekt/) for installation guides, release notes, migration guides, rule descriptions and configuration options.
 
-##### Quick-Links
+#### Quick-Links
 
-- Changelog and migration guides: https://arturbosch.github.io/detekt/changelog.html
-- Available CLI options: https://arturbosch.github.io/detekt/cli.html
-- Rule set and rule descriptions: https://arturbosch.github.io/detekt/complexity.html
-- Writing custom rules and extending detekt: https://arturbosch.github.io/detekt/extensions.html
-- Suppressing findings? https://arturbosch.github.io/detekt/suppressing-rules.html https://arturbosch.github.io/detekt/baseline.html
-- Configuring detekt? https://arturbosch.github.io/detekt/configurations.html
-- Sample gradle integrations examples
-    - multi project (kotlin dsl): https://github.com/arturbosch/detekt/blob/master/build.gradle.kts
-    - single project (groovy dsl): https://github.com/arturbosch/kutils/blob/master/build.gradle
-    - single project (unofficial maven plugin): https://github.com/arturbosch/sonar-kotlin/blob/master/pom.xml
-    - setup additional detekt task for all modules (kotlin dsl): https://github.com/arturbosch/detekt/blob/3357abba87e1550c65b6610012bb291e0fbb64ce/build.gradle.kts#L280-L295
-    - setup additional formatting task for all modules (kotlin dsl): https://github.com/arturbosch/detekt/blob/3357abba87e1550c65b6610012bb291e0fbb64ce/build.gradle.kts#L262-L278
+- [Changelog and migration guides](https://arturbosch.github.io/detekt/changelog.html)
+- [Available CLI options](https://arturbosch.github.io/detekt/cli.html)
+- [Rule set and rule descriptions](https://arturbosch.github.io/detekt/complexity.html)
+- [Writing custom rules and extending detekt](https://arturbosch.github.io/detekt/extensions.html)
+- [Suppressing issues in code](https://arturbosch.github.io/detekt/suppressing-rules.html)
+- [Suppressing issues via baseline file](https://arturbosch.github.io/detekt/baseline.html)
+- [Configuring detekt](https://arturbosch.github.io/detekt/configurations.html)
+- Sample Gradle integrations examples:
+    - [multi project (Kotlin DSL)](https://github.com/arturbosch/detekt/blob/master/build.gradle.kts)
+    - [single project (Groovy DSL)](https://github.com/arturbosch/kutils/blob/master/build.gradle)
+    - [single project (Unofficial Maven plugin)](https://github.com/arturbosch/sonar-kotlin/blob/master/pom.xml)
+    - [setup additional detekt task for all modules (Kotlin DSL)](https://github.com/arturbosch/detekt/blob/3357abba87e1550c65b6610012bb291e0fbb64ce/build.gradle.kts#L280-L295)
+    - [setup additional formatting task for all modules (Kotlin DSL)](https://github.com/arturbosch/detekt/blob/3357abba87e1550c65b6610012bb291e0fbb64ce/build.gradle.kts#L262-L278)
 
 ### Quick Start ...
 
-#### with command-line interface
-- `git clone https://github.com/arturbosch/detekt`
-- `cd detekt`
-- `./gradlew build shadowJar`
-- `java -jar detekt-cli/build/libs/detekt-cli-[version]-all.jar --help`
+#### with the command-line interface
 
-#### with gradle
+```shell script
+git clone https://github.com/arturbosch/detekt
+cd detekt
+./gradlew build shadowJar
+java -jar detekt-cli/build/libs/detekt-cli-[version]-all.jar --help
+```
 
-Gradle 4.9+ is required:
+#### with Gradle
+
+Gradle 5.0+ is required:
 
 ```kotlin
 buildscript {
     repositories {
         jcenter()
+    }
+
+    // or
+
+    mavenCentral()
+    jcenter {
+        content {
+            // just allow to include kotlinx projects
+            // detekt needs 'kotlinx-html' for the html report
+            includeGroup "org.jetbrains.kotlinx"
+        }
     }
 }
 
@@ -75,10 +90,30 @@ plugins {
 }
 
 detekt {
-    toolVersion = "[version]"
-    input = files("src/main/kotlin")
-    filters = ".*/resources/.*,.*/build/.*"
-    baseline = file("my-detekt-baseline.xml") // Just if you want to create a baseline file.
+    failFast = true // fail build on any finding
+    buildUponDefaultConfig = true // preconfigure defaults
+    config = files("$projectDir/config/detekt.yml") // point to your custom config defining rules to run, overwriting default behavior
+    baseline = file("$projectDir/config/baseline.xml") // a way of suppressing issues before introducing detekt
+
+    reports {
+        html.enabled = true // observe findings in your browser with structure and code snippets
+        xml.enabled = true // checkstyle like format mainly for integrations like Jenkins
+        txt.enabled = true // similar to the console output, contains issue signature to manually edit baseline files
+    }
+}
+
+
+// Groovy dsl
+tasks.detekt.jvmTarget = "1.8"
+
+// or
+
+// Kotlin dsl
+tasks {
+    withType<Detekt> {
+        // Target version of the generated JVM bytecode. It is used for type resolution.
+        this.jvmTarget = "1.8"
+    }
 }
 ```
 
@@ -87,7 +122,7 @@ See [bintray](https://bintray.com/arturbosch/code-analysis/detekt) for releases 
 ### Adding more rule sets
 
 detekt itself provides a wrapper over [KtLint](https://github.com/shyiko/ktlint) as a `formatting` rule set
-which can be easily added to the gradle configuration:
+which can be easily added to the Gradle configuration:
 
 ```kotlin
 dependencies {
@@ -168,7 +203,9 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Daniele Conti](https://github.com/fourlastor) - ObjectPropertyNaming improvement
 - [Nicola Corti](https://github.com/cortinico) - Fixed Suppress of MaxLineLenght
 - [Michael Lotkowski](https://github.com/DownMoney) - Rule improvement: False positive UnusedImport for componentN
-- [Nuno Caro](https://github.com/Pak3nuh) - Adds TXT report support on gradle plugin
+- [Nuno Caro](https://github.com/Pak3nuh) - Adds TXT report support on Gradle plugin
+- [Minsuk Eom](https://github.com/boxresin) - Rule fix: PackageNaming
+- [Jonas Alves](https://github.com/jonasfa) - Rule fix: MagicNumber with ignoreNamedArgument and a negative value
 
 ### Mentions
 
@@ -177,7 +214,6 @@ If you contributed to detekt but your name is not in the list, please feel free 
 
 As mentioned in...
 
-- [SBCARS '18 -  Are you still smelling it?: A comparative study between Java and Kotlin language](https://doi.org/10.1145/3267183.3267186) by [Flauzino et al.](https://github.com/matheusflauzino/smells-experiment-Kotlin-and-Java)
 - [KotlinConf 2018 - Safe(r) Kotlin Code - Static Analysis Tools for Kotlin by Marvin Ramin](https://www.youtube.com/watch?v=yjhQiP0329M)
 - [droidcon NYC 2018 - Static Code Analysis For Kotlin](https://www.youtube.com/watch?v=LT6m5_LO2DQ)
 - Kotlin on Code Quality Tools - by @vanniktech [Slides](https://docs.google.com/presentation/d/1sUoQCRHTR01JfaS67Qkd7K1rdRLOhO6QGCelZZwxOKs/edit) [Presentation](https://www.youtube.com/watch?v=FKDNE6PPTTE)
@@ -189,8 +225,12 @@ As mentioned in...
 - [Android Basics: Continuous Integration](https://academy.realm.io/posts/360-andev-2017-mark-scheel-continuous-integration-android/)
 - [Kotlin Static Analysis — why and how?](https://proandroiddev.com/kotlin-static-analysis-why-and-how-a12042e34a98)
 - [Check the quality of Kotlin code](https://blog.frankel.ch/check-quality-kotlin-code/)
+- [Kotlin Static Analysis Tools](http://smyachenkov.com/posts/kotlin-static-analysis-tools/)
+- [Speeding up the detekt task in a multi-project Gradle build](https://madhead.me/posts/detekt-faster/)
+- [SBCARS '18 -  Are you still smelling it?: A comparative study between Java and Kotlin language](https://doi.org/10.1145/3267183.3267186) by [Flauzino et al.](https://github.com/matheusflauzino/smells-experiment-Kotlin-and-Java)
 
 Integrations:
+
 - [SonarKotlin](https://docs.sonarqube.org/display/PLUG/SonarKotlin)
 - [Codacy](https://www.codacy.com)
 - [Gradle plugin that generates ErrorProne, Findbugs, Checkstyle, PMD, CPD, Lint, Detekt & Ktlint Tasks for every subproject](https://github.com/vanniktech/gradle-code-quality-tools-plugin)
@@ -200,8 +240,9 @@ Integrations:
 - [Maven plugin that wraps the Detekt CLI](https://github.com/Ozsie/detekt-maven-plugin)
 - [Gradle plugin that helps facilitate GitHub PR checking and automatic commenting of violations](https://github.com/btkelly/gnag)
 - [Codefactor](http://codefactor.io/)
+- [detekt-hint is a plugin to detekt that provides detection of design principle violations through integration with Danger](https://github.com/mkohm/detekt-hint)
 
 #### Credits
 
-- [JetBrains](https://github.com/jetbrains/) - Creating Intellij + Kotlin
+- [JetBrains](https://github.com/jetbrains/) - Creating IntelliJ + Kotlin
 - [PMD](https://github.com/pmd/pmd) & [Checkstyle](https://github.com/checkstyle/checkstyle) & [KtLint](https://github.com/shyiko/ktlint) - Ideas for threshold values and style rules

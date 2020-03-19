@@ -19,7 +19,7 @@ Reports empty `catch` blocks. Empty blocks of code serve no purpose and should b
 
 #### Configuration options:
 
-* `allowedExceptionNameRegex` (default: `"^(_|(ignore|expected).*)"`)
+* ``allowedExceptionNameRegex`` (default: ``"^(_|(ignore|expected).*)"``)
 
    ignores exception types which match this regex
 
@@ -77,7 +77,7 @@ Reports empty functions. Empty blocks of code serve no purpose and should be rem
 This rule will not report functions with the override modifier that have a comment as their only body contents
 (e.g., a // no-op comment in an unused listener function).
 
-Set the [ignoreOverriddenFunctions] parameter to `true` to exclude all functions which are overriding other
+Set the [ignoreOverridden] parameter to `true` to exclude all functions which are overriding other
 functions from the superclass or from an interface (i.e., functions declared with the override modifier).
 
 **Severity**: Minor
@@ -86,7 +86,13 @@ functions from the superclass or from an interface (i.e., functions declared wit
 
 #### Configuration options:
 
-* `ignoreOverriddenFunctions` (default: `false`)
+* ~~``ignoreOverriddenFunctions``~~ (default: ``false``)
+
+   **Deprecated**: Use `ignoreOverridden` instead
+
+   Excludes all the overridden functions
+
+* ``ignoreOverridden`` (default: ``false``)
 
    Excludes all the overridden functions
 
@@ -117,6 +123,14 @@ Reports empty Kotlin (.kt) files. Empty blocks of code serve no purpose and shou
 ### EmptySecondaryConstructor
 
 Reports empty secondary constructors. Empty blocks of code serve no purpose and should be removed.
+
+**Severity**: Minor
+
+**Debt**: 5min
+
+### EmptyTryBlock
+
+Reports empty `try` blocks. Empty blocks of code serve no purpose and should be removed.
 
 **Severity**: Minor
 

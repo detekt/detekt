@@ -13,16 +13,21 @@ interface Finding : Compactable, HasEntity, HasMetrics {
     val references: List<Entity>
     val message: String
 
+    /**
+     * Explanation why this finding was raised.
+     */
     fun messageOrDescription(): String
 }
 
 /**
  * Describes a source code position.
  */
+@Suppress("DEPRECATION")
 interface HasEntity {
     val entity: Entity
     val location: Location
         get() = entity.location
+    @Deprecated("Will be removed in the future. Use queries on 'ktElement' instead.")
     val locationAsString: String
         get() = location.locationString
     val startPosition: SourceLocation
@@ -33,8 +38,10 @@ interface HasEntity {
         get() = location.file
     val signature: String
         get() = entity.signature
+    @Deprecated("Will be removed in the future. Use queries on 'ktElement' instead.")
     val name: String
         get() = entity.name
+    @Deprecated("Will be removed in the future. Use queries on 'ktElement' instead.")
     val inClass: String
         get() = entity.className
 }
@@ -44,6 +51,9 @@ interface HasEntity {
  */
 interface HasMetrics {
     val metrics: List<Metric>
+    /**
+     * Finds the first metric matching given [type].
+     */
     fun metricByType(type: String): Metric? = metrics.find { it.type == type }
 }
 
@@ -51,6 +61,14 @@ interface HasMetrics {
  * Provides a compact string representation.
  */
 interface Compactable {
+    /**
+     * Contract to format implementing object to a string representation.
+     */
     fun compact(): String
+
+    /**
+     * Same as [compact] except the content should contain a substring which represents
+     * this exact findings via a custom identifier.
+     */
     fun compactWithSignature(): String = compact()
 }

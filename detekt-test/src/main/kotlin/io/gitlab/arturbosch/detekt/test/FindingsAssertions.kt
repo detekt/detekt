@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.test
 
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.SourceLocation
+import io.gitlab.arturbosch.detekt.api.TextLocation
 import org.assertj.core.api.AbstractAssert
 import org.assertj.core.api.AbstractListAssert
 import org.assertj.core.util.Objects.areEqual
@@ -23,25 +24,6 @@ class FindingsAssert(actual: List<Finding>) :
     override fun toAssert(value: Finding?, description: String?): FindingAssert =
             FindingAssert(value).`as`(description)
 
-    fun hasLocationStrings(vararg expected: String, trimIndent: Boolean = false) = apply {
-        isNotNull
-        val locationStrings = actual.asSequence().map { it.locationAsString }.sorted()
-        val (actualLocationsList, expectedLocationsList) = if (trimIndent) {
-            locationStrings.map { it.trimIndent() }.toList() to expected.map { it.trimIndent() }.sorted()
-        } else {
-            locationStrings.toList() to expected.toList().sorted()
-        }
-
-        if (!areEqual(actualLocationsList, expectedLocationsList)) {
-            failWithMessage("Expected locations string to be $expectedLocationsList but was $actualLocationsList")
-        }
-    }
-
-    fun hasExactlyLocationStrings(vararg expected: String, trimIndent: Boolean = false) = apply {
-        hasSize(expected.size)
-        hasLocationStrings(*expected, trimIndent = trimIndent)
-    }
-
     fun hasSourceLocations(vararg expected: SourceLocation) = apply {
         isNotNull
 
@@ -55,6 +37,57 @@ class FindingsAssert(actual: List<Finding>) :
         if (!areEqual(actualSources.toList(), expectedSources.toList())) {
             failWithMessage("Expected source locations to be ${expectedSources.toList()} but was ${actualSources.toList()}")
         }
+    }
+
+    fun hasSourceLocation(line: Int, column: Int) = apply {
+        hasSourceLocations(SourceLocation(line, column))
+    }
+
+    fun hasTextLocations(vararg expected: Pair<Int, Int>) = apply {
+        isNotNull
+
+        val actualSources = actual.asSequence()
+                .map { it.location.text }
+                .sortedWith(compareBy({ it.start }, { it.end }))
+
+        val expectedSources = expected.asSequence()
+                .map { (start, end) -> TextLocation(start, end) }
+                .sortedWith(compareBy({ it.start }, { it.end }))
+
+        if (!areEqual(actualSources.toList(), expectedSources.toList())) {
+            failWithMessage("Expected text locations to be ${expectedSources.toList()} but was ${actualSources.toList()}")
+        }
+    }
+
+    fun hasTextLocations(vararg expected: String): FindingsAssert {
+        isNotNull
+
+        val finding = actual.firstOrNull()
+        if (finding == null) {
+            if (expected.isEmpty()) {
+                return this
+            } else {
+                failWithMessage("Expected ${expected.size} findings but was 0")
+            }
+        }
+        val code = finding!!.entity.ktElement?.containingKtFile?.text
+        if (code == null) {
+            failWithMessage("Expected ${expected.size} findings but was 0")
+        }
+
+        val textLocations = expected.map { snippet ->
+            val index = code!!.indexOf(snippet)
+            if (index < 0) {
+                failWithMessage("The snippet \"$snippet\" doesn't exist in the code")
+            } else {
+                if (code.indexOf(snippet, index + 1) >= 0) {
+                    failWithMessage("The snippet \"$snippet\" appears multiple times in the code")
+                }
+            }
+            index to index + snippet.length
+        }.toTypedArray()
+
+        return hasTextLocations(*textLocations)
     }
 }
 

@@ -6,12 +6,14 @@ package io.gitlab.arturbosch.detekt.api
  * - [FileProcessListener]
  * - [ConsoleReport]
  * - [OutputReport]
+ * - [ConfigValidator]
  */
 interface Extension {
     /**
      * Name of the extension.
      */
     val id: String get() = javaClass.simpleName
+
     /**
      * Is used to run extensions in a specific order.
      * The higher the priority the sooner the extension will run in detekt's lifecycle.
@@ -23,6 +25,14 @@ interface Extension {
      * to setup this extension.
      */
     fun init(config: Config) {
-        // for setup code
+        // implement for setup code
+    }
+
+    /**
+     * Setup extension by querying common paths and config options.
+     */
+    @OptIn(UnstableApi::class)
+    fun init(context: SetupContext) {
+        // implement for setup code
     }
 }

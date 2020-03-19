@@ -31,33 +31,8 @@ inline fun XMLStreamWriter.tag(
     writeEndElement()
 }
 
-fun XMLStreamWriter.emptyTag(
-    name: String,
-    init: (XMLStreamWriter.() -> Unit)? = null
-) = apply {
-    writeEmptyElement(name)
-    init?.invoke(this)
-}
-
-inline fun XMLStreamWriter.tag(
-    name: String,
-    content: String,
-    init: XMLStreamWriter.() -> Unit
-) = apply {
-    tag(name) {
-        init()
-        writeCharacters(content)
-    }
-}
-
 fun XMLStreamWriter.tag(name: String, content: String) {
     tag(name) {
         writeCharacters(content)
     }
 }
-
-fun XMLStreamWriter.comment(content: String) {
-    writeComment(content)
-}
-
-fun XMLStreamWriter.attribute(name: String, value: String) = writeAttribute(name, value)

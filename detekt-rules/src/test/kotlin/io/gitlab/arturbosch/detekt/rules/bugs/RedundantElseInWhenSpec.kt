@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 import io.gitlab.arturbosch.detekt.test.KtTestCompiler
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -11,11 +10,10 @@ object RedundantElseInWhenSpec : Spek({
 
     val subject by memoized { RedundantElseInWhen() }
 
-    lateinit var environment: KotlinCoreEnvironment
-
-    beforeEachTest {
-        environment = KtTestCompiler.createEnvironment()
-    }
+    val wrapper by memoized(
+        factory = { KtTestCompiler.createEnvironment() },
+        destructor = { it.dispose() }
+    )
 
     describe("RedundantElseInWhen rule") {
         context("enum") {
@@ -36,7 +34,7 @@ object RedundantElseInWhenSpec : Spek({
                     }
                 }
                 """
-                val actual = subject.compileAndLintWithContext(environment, code)
+                val actual = subject.compileAndLintWithContext(wrapper.env, code)
                 assertThat(actual).hasSize(1)
             }
 
@@ -57,7 +55,7 @@ object RedundantElseInWhenSpec : Spek({
                     }
                 }
                 """
-                val actual = subject.compileAndLintWithContext(environment, code)
+                val actual = subject.compileAndLintWithContext(wrapper.env, code)
                 assertThat(actual).hasSize(1)
             }
 
@@ -83,7 +81,7 @@ object RedundantElseInWhenSpec : Spek({
                     }
                 }
                 """
-                assertThat(subject.compileAndLintWithContext(environment, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
             }
 
             it("does not report when `when` expression does not contain else case") {
@@ -115,7 +113,7 @@ object RedundantElseInWhenSpec : Spek({
                     }
                 }
                 """
-                assertThat(subject.compileAndLintWithContext(environment, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
             }
         }
         context("sealed classes") {
@@ -136,7 +134,7 @@ object RedundantElseInWhenSpec : Spek({
                         }
                     }
                 """
-                val actual = subject.compileAndLintWithContext(environment, code)
+                val actual = subject.compileAndLintWithContext(wrapper.env, code)
                 assertThat(actual).hasSize(1)
             }
 
@@ -157,9 +155,8 @@ object RedundantElseInWhenSpec : Spek({
                         }
                     }
                 """
-                val actual = subject.compileAndLintWithContext(environment, code)
+                val actual = subject.compileAndLintWithContext(wrapper.env, code)
                 assertThat(actual).hasSize(1)
-
             }
 
             it("does not report when `when` expression contains `else` case when not all cases explicitly covered") {
@@ -184,7 +181,7 @@ object RedundantElseInWhenSpec : Spek({
                         }
                     }
                 """
-                assertThat(subject.compileAndLintWithContext(environment, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
             }
             it("does not report when `when` expression does not contain else case") {
                 val code = """
@@ -201,7 +198,7 @@ object RedundantElseInWhenSpec : Spek({
                         }
                     }
                 """
-                assertThat(subject.compileAndLintWithContext(environment, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
             }
         }
         context("standard when") {
@@ -239,7 +236,7 @@ object RedundantElseInWhenSpec : Spek({
                         }
                     }
                 """
-                assertThat(subject.compileAndLintWithContext(environment, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
             }
         }
     }

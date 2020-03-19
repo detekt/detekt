@@ -21,7 +21,7 @@ should not throw any exceptions.
 
 #### Configuration options:
 
-* `methodNames` (default: `'toString,hashCode,equals,finalize'`)
+* ``methodNames`` (default: ``'toString,hashCode,equals,finalize'``)
 
    methods which should not throw exceptions
 
@@ -185,6 +185,12 @@ Using `return` statements in `finally` blocks can discard and hide exceptions th
 
 **Debt**: 20min
 
+#### Configuration options:
+
+* ``ignoreLabeled`` (default: ``false``)
+
+   ignores labeled return statements
+
 #### Noncompliant Code:
 
 ```kotlin
@@ -208,9 +214,13 @@ passed into a newly thrown exception.
 
 #### Configuration options:
 
-* `ignoredExceptionTypes` (default: `'InterruptedException,NumberFormatException,ParseException,MalformedURLException'`)
+* ``ignoredExceptionTypes`` (default: ``'InterruptedException,NumberFormatException,ParseException,MalformedURLException'``)
 
    exception types which should be ignored by this rule
+
+* ``allowedExceptionNameRegex`` (default: ``"^(_|(ignore|expected).*)"``)
+
+   ignores too generic exception types which match this regex
 
 #### Noncompliant Code:
 
@@ -303,7 +313,7 @@ down an underlying issue in a better way.
 
 #### Configuration options:
 
-* `exceptions` (default: `'IllegalArgumentException,IllegalStateException,IOException'`)
+* ``exceptions`` (default: ``'IllegalArgumentException,IllegalStateException,IOException'``)
 
    exceptions which should not be thrown without message or cause
 
@@ -374,18 +384,18 @@ exception is too broad it can lead to unintended exceptions being caught.
 
 #### Configuration options:
 
-* `exceptionNames` (default: `- ArrayIndexOutOfBoundsException
-- Error
-- Exception
-- IllegalMonitorStateException
-- NullPointerException
-- IndexOutOfBoundsException
-- RuntimeException
-- Throwable`)
+* ``exceptionNames`` (default: ``- ArrayIndexOutOfBoundsException
+    - Error
+    - Exception
+    - IllegalMonitorStateException
+    - NullPointerException
+    - IndexOutOfBoundsException
+    - RuntimeException
+    - Throwable``)
 
    exceptions which are too generic and should not be caught
 
-* `allowedExceptionNameRegex` (default: `"^(_|(ignore|expected).*)"`)
+* ``allowedExceptionNameRegex`` (default: ``"^(_|(ignore|expected).*)"``)
 
    ignores too generic exception types which match this regex
 
@@ -420,10 +430,10 @@ exceptions to the case that has currently occurred.
 
 #### Configuration options:
 
-* `exceptionNames` (default: `- Error
-- Exception
-- Throwable
-- RuntimeException`)
+* ``exceptionNames`` (default: ``- Error
+    - Exception
+    - Throwable
+    - RuntimeException``)
 
    exceptions which are too generic and should not be thrown
 

@@ -25,13 +25,13 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  *
  * Prefer extracting the nested code into well-named functions to make it easier to understand.
  *
- * @configuration threshold - maximum nesting depth (default: `4`)
+ * @configuration threshold - the nested depth required to trigger rule (default: `4`)
  *
  * @active since v1.0.0
  */
 class NestedBlockDepth(
     config: Config = Config.empty,
-    threshold: Int = DEFAULT_ACCEPTED_NESTING
+    threshold: Int = DEFAULT_THRESHOLD_NESTING
 ) : ThresholdRule(config, threshold) {
 
     override val issue = Issue("NestedBlockDepth",
@@ -44,8 +44,9 @@ class NestedBlockDepth(
         val visitor = FunctionDepthVisitor(threshold)
         visitor.visitNamedFunction(function)
         if (visitor.isTooDeep) {
+            @Suppress("UnsafeCallOnNullableType")
             report(ThresholdedCodeSmell(issue,
-                    Entity.from(function),
+                    Entity.from(function.nameIdentifier!!),
                     Metric("SIZE", visitor.maxDepth, threshold),
                     "Function ${function.name} is nested too deeply."))
         }
@@ -74,6 +75,8 @@ class NestedBlockDepth(
                 inc()
                 super.visitIfExpression(expression)
                 dec()
+            } else {
+                super.visitIfExpression(expression)
             }
         }
 
@@ -115,6 +118,6 @@ class NestedBlockDepth(
     }
 
     companion object {
-        const val DEFAULT_ACCEPTED_NESTING = 4
+        const val DEFAULT_THRESHOLD_NESTING = 4
     }
 }

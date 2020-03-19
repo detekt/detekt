@@ -11,22 +11,24 @@ summary:
 All information from Gradle Groovy DSL are still valid, but the
 DSL to apply the plugin changes slightly.
 
-
-##### <a name="gradlekotlin">Configuration when using Kotlin DSL</a>
-
-For gradle version >= 4.1
+##### <a name="gradlekotlin">Configuration when using Kotlin DSL</a> 
 
 ```kotlin
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
 
-buildscript {
-    repositories {
-        jcenter()
-    }
-}
-
 repositories {
     jcenter()
+
+    // or
+
+    mavenCentral()
+    jcenter {
+        content {
+            // just allow to include kotlinx projects
+            // detekt needs 'kotlinx-html' for the html report
+            includeGroup "org.jetbrains.kotlinx"
+        }
+    }
 }
 
 plugins {
@@ -35,10 +37,7 @@ plugins {
 
 detekt {
     toolVersion = "[version]"                             // Version of the Detekt CLI that will be used. When unspecified the latest detekt version found will be used. Override to stay on the same version.
-    input = files(                                        // The directories where detekt looks for input files. Defaults to `files("src/main/java", "src/main/kotlin")`.
-        "src/main/kotlin",
-        "gensrc/main/kotlin"
-    )
+    source = files("src/main/java", "src/main/kotlin")    // The directories where detekt looks for source files. Defaults to `files("src/main/java", "src/main/kotlin")`.
     parallel = false                                      // Builds the AST in parallel. Rules are always executed in parallel. Can lead to speedups in larger projects. `false` by default.
     config = files("path/to/config.yml")                  // Define the detekt configuration(s) you want to use. Defaults to the default detekt configuration.
     buildUponDefaultConfig = false                        // Interpret config files as updates to the default config. `false` by default.
@@ -63,6 +62,20 @@ detekt {
             reportId = "CustomJsonReport"                   // The simple class name of your custom report.
             destination = file("build/reports/detekt.json") // Path where report will be stored
         }
+    }
+}
+```
+
+##### Using Type Resolution
+
+Type resolution is experimental and works only for predefined `detektMain` and `detektTest` tasks or when implementing a 
+custom detekt task with the `classpath` and `jvmTarget` properties present.
+
+```kotlin
+tasks {
+    withType<Detekt> {
+        // Target version of the generated JVM bytecode. It is used for type resolution.
+        this.jvmTarget = "1.8"
     }
 }
 ```
@@ -93,8 +106,7 @@ uses the type `Detekt`.
 ```kotlin
 task<io.gitlab.arturbosch.detekt.Detekt>("detektFailFast") {
     description = "Runs a failfast detekt build."
-
-    input = files("src/main/kotlin", "src/test/kotlin")
+    source = files("src/main/kotlin", "src/test/kotlin")
     config = files("$rootDir/config.yml")
     debug = true
     reports {

@@ -18,7 +18,8 @@ detekt will exit with one of the following exit codes:
 |-----------|--------------------------------------------------------------------------------|
 | 0         | detekt ran normally and maxIssues count was not reached in BuildFailureReport. |
 | 1         | An unexpected error occurred                                                   |
-| 2         | maxIssues count was reached in BuildFailureReport.                             |
+| 2         | MaxIssues count was reached in BuildFailureReport.                             |
+| 3         | Invalid detekt configuration file detected.                                    |
 
 The following parameters are shown when `--help` is entered.
 
@@ -77,6 +78,11 @@ Usage: detekt [options]
     --input, -i
       Input paths to analyze. Multiple paths are separated by comma. If not
       specified the current working directory is used.
+    --language-version
+      EXPERIMENTAL: Compatibility mode for Kotlin language version X.Y, reports
+      errors for all language features that came out later.
+      Default: latest stable
+      Possible Values: [1.0, 1.1, 1.2, 1.3, 1.4]
     --jvm-target
       EXPERIMENTAL: Target version of the generated JVM bytecode that was
       generated during compilation and is now being used for type resolution
@@ -84,7 +90,7 @@ Usage: detekt [options]
       Possible Values: [1.6, 1.8, 9, 10, 11, 12]
     --parallel
       Enables parallel compilation of source files. Should only be used if the
-      analyzing project has more than ~200 kotlin files.
+      analyzing project has more than ~200 Kotlin files.
       Default: false
     --plugins, -p
       Extra paths to plugin jars separated by ',' or ';'.
@@ -93,5 +99,6 @@ Usage: detekt [options]
       Entry should consist of: [report-id:path]. Available 'report-id' values:
       'txt', 'xml', 'html'. These can also be used in combination with each
       other e.g. '-r txt:reports/detekt.txt -r xml:reports/detekt.xml'
-
+    --version
+      Prints the detekt CLI version.
 ```

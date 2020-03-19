@@ -6,5 +6,5 @@ import java.nio.file.Paths
 
 internal fun readResource(filename: String): String {
     val path = Paths.get(resource(filename))
-    return Files.readAllLines(path).joinToString("\n").trimEnd()
+    return Files.readAllLines(path).joinToString("\n") + "\n"
 }

@@ -6,4 +6,4 @@ title: RuleSet.rules - detekt-api
 
 # rules
 
-`val rules: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`BaseRule`](../-base-rule/index.html)`>`
+`val rules: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`BaseRule`](../../io.gitlab.arturbosch.detekt.api.internal/-base-rule/index.html)`>`

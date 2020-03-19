@@ -7,6 +7,3 @@ title: CodeSmell.entity - detekt-api
 # entity
 
 `open val entity: `[`Entity`](../-entity/index.html)
-
-Overrides [HasEntity.entity](../-has-entity/entity.html)
-

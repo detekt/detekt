@@ -35,7 +35,6 @@ import org.jetbrains.kotlin.lexer.KtTokens.TAILREC_KEYWORD
 import org.jetbrains.kotlin.lexer.KtTokens.VARARG_KEYWORD
 import org.jetbrains.kotlin.psi.KtModifierList
 import org.jetbrains.kotlin.psi.psiUtil.allChildren
-import java.util.Arrays
 
 /**
  * This rule reports cases in the code where modifiers are not in the correct order. The default modifier order is
@@ -82,14 +81,12 @@ class ModifierOrder(config: Config = Config.empty) : Rule(config) {
         super.visitModifierList(list)
 
         val modifiers = list.allChildren
-                .toList()
-                .filter { it !is PsiWhiteSpace }
-                .toTypedArray()
+            .filter { it !is PsiWhiteSpace }
+            .toList()
 
-        val sortedModifiers = modifiers.copyOf()
-                .apply { sortWith(compareBy { order.indexOf(it.node.elementType) }) }
+        val sortedModifiers = modifiers.sortedWith(compareBy { order.indexOf(it.node.elementType) })
 
-        if (!Arrays.equals(modifiers, sortedModifiers)) {
+        if (modifiers != sortedModifiers) {
             val modifierString = sortedModifiers.joinToString(" ") { it.text }
 
             report(CodeSmell(Issue(javaClass.simpleName, Severity.Style,

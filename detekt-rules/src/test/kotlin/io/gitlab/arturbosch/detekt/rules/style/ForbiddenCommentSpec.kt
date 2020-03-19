@@ -28,7 +28,7 @@ class ForbiddenCommentSpec : Spek({
 
             it("should not report TODO usages") {
                 val findings = ForbiddenComment().compileAndLint(todo)
-                assertThat(findings).hasSize(0)
+                assertThat(findings).isEmpty()
             }
 
             it("should report FIXME: usages") {
@@ -38,7 +38,7 @@ class ForbiddenCommentSpec : Spek({
 
             it("should not report FIXME usages") {
                 val findings = ForbiddenComment().compileAndLint(fixme)
-                assertThat(findings).hasSize(0)
+                assertThat(findings).isEmpty()
             }
 
             it("should report STOPSHIP: usages") {
@@ -48,7 +48,28 @@ class ForbiddenCommentSpec : Spek({
 
             it("should not report STOPSHIP usages") {
                 val findings = ForbiddenComment().compileAndLint(stopShip)
-                assertThat(findings).hasSize(0)
+                assertThat(findings).isEmpty()
+            }
+
+            it("should report violation in multiline comment") {
+                val code = """
+                   /*
+                    TODO: I need to fix this.
+                    */
+                """
+                val findings = ForbiddenComment().compileAndLint(code)
+                assertThat(findings).hasSize(1)
+            }
+
+            it("should report violation in KDoc") {
+                val code = """
+                    /*
+                     * TODO: I need to fix this.
+                     */
+                    class A
+                """
+                val findings = ForbiddenComment().compileAndLint(code)
+                assertThat(findings).hasSize(1)
             }
         }
 
@@ -58,17 +79,17 @@ class ForbiddenCommentSpec : Spek({
 
             it("should not report TODO: usages") {
                 val findings = ForbiddenComment(config).compileAndLint(todoColon)
-                assertThat(findings).hasSize(0)
+                assertThat(findings).isEmpty()
             }
 
             it("should not report FIXME: usages") {
                 val findings = ForbiddenComment(config).compileAndLint(fixmeColon)
-                assertThat(findings).hasSize(0)
+                assertThat(findings).isEmpty()
             }
 
             it("should not report STOPME: usages") {
                 val findings = ForbiddenComment(config).compileAndLint(stopShipColon)
-                assertThat(findings).hasSize(0)
+                assertThat(findings).isEmpty()
             }
 
             it("should report Banana usages") {
@@ -80,6 +101,32 @@ class ForbiddenCommentSpec : Spek({
                 val forbiddenComment = ForbiddenComment(TestConfig(mapOf(ForbiddenComment.VALUES to "bAnAnA")))
                 val findings = forbiddenComment.compileAndLint(banana)
                 assertThat(findings).hasSize(1)
+            }
+        }
+
+        context("custom default values with allowed patterns are configured") {
+            val patternsConfig = TestConfig(
+                mapOf(
+                    ForbiddenComment.VALUES to "Comment",
+                    ForbiddenComment.ALLOWED_PATTERNS to "Ticket|Task"
+                )
+            )
+
+            it("should report Comment usages when regex does not match") {
+                val comment = "// Comment is added here."
+                val findings = ForbiddenComment(patternsConfig).compileAndLint(comment)
+                assertThat(findings).hasSize(1)
+            }
+            it("should not report Comment usages when any one pattern is present") {
+                val comment = "// Comment Ticket:234."
+                val findings = ForbiddenComment(patternsConfig).compileAndLint(comment)
+                assertThat(findings).isEmpty()
+            }
+
+            it("should not report Comment usages when all patterns are present") {
+                val comment = "// Comment Ticket:123 Task:456 comment."
+                val findings = ForbiddenComment(patternsConfig).compileAndLint(comment)
+                assertThat(findings).isEmpty()
             }
         }
     }
