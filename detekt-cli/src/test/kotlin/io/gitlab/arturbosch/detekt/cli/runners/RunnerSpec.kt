@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.cli.CliArgs
 import io.gitlab.arturbosch.detekt.cli.config.InvalidConfig
 import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatCode
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -44,13 +45,35 @@ class RunnerSpec : Spek({
             assertThatThrownBy { Runner(cliArgs).execute() }.isExactlyInstanceOf(BuildFailure::class.java)
         }
 
-        it("should throw on invalid config property") {
+        it("should throw on invalid config property when validation=true") {
             val cliArgs = CliArgs.parse(arrayOf(
                 "--input", inputPath.toString(),
                 "--config-resource", "/configs/invalid-config.yml"
             ))
 
-            assertThatThrownBy { Runner(cliArgs).execute() }.isExactlyInstanceOf(InvalidConfig::class.java)
+            assertThatThrownBy { Runner(cliArgs).execute() }
+                .isExactlyInstanceOf(InvalidConfig::class.java)
+                .hasMessageContaining("property")
+        }
+
+        it("should throw on invalid config properties when validation=true") {
+            val cliArgs = CliArgs.parse(arrayOf(
+                "--input", inputPath.toString(),
+                "--config-resource", "/configs/invalid-configs.yml"
+            ))
+
+            assertThatThrownBy { Runner(cliArgs).execute() }
+                .isExactlyInstanceOf(InvalidConfig::class.java)
+                .hasMessageContaining("properties")
+        }
+
+        it("should not throw on invalid config property when validation=false") {
+            val cliArgs = CliArgs.parse(arrayOf(
+                "--input", inputPath.toString(),
+                "--config-resource", "/configs/invalid-config_no-validation.yml"
+            ))
+
+            assertThatCode { Runner(cliArgs).execute() }.doesNotThrowAnyException()
         }
 
         it("should never throw on maxIssues=-1") {
