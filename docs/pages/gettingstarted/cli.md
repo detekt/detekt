@@ -1,7 +1,6 @@
 ---
 title: "Run detekt using Command Line Interface"
 keywords: cli
-tags: [getting_started, cli]
 sidebar: 
 permalink: cli.html
 folder: gettingstarted

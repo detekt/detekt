@@ -1,7 +1,6 @@
 ---
 title: "Run detekt using Maven Ant Task"
 keywords: maven anttask
-tags: [getting_started, maven]
 sidebar: 
 permalink: mavenanttask.html
 folder: gettingstarted

@@ -1,7 +1,6 @@
 ---
 title: "Extending detekt"
 keywords: extensions rulesets 
-tags: 
 sidebar: 
 permalink: extensions.html
 summary:

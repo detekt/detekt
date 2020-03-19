@@ -16,7 +16,7 @@ GEM
     colorator (1.1.0)
     commonmarker (0.17.13)
       ruby-enum (~> 0.5)
-    concurrent-ruby (1.1.5)
+    concurrent-ruby (1.1.6)
     dnsruby (1.61.3)
       addressable (~> 2.5)
     em-websocket (0.5.1)
@@ -28,7 +28,7 @@ GEM
     execjs (2.7.0)
     faraday (1.0.0)
       multipart-post (>= 1.2, < 3)
-    ffi (1.12.1)
+    ffi (1.12.2)
     forwardable-extended (2.6.0)
     gemoji (3.0.1)
     github-pages (204)
@@ -204,9 +204,9 @@ GEM
       jekyll-seo-tag (~> 2.1)
     minitest (5.14.0)
     multipart-post (2.1.1)
-    nokogiri (1.10.8)
+    nokogiri (1.10.9)
       mini_portile2 (~> 2.4.0)
-    octokit (4.15.0)
+    octokit (4.17.0)
       faraday (>= 0.9)
       sawyer (~> 0.8.0, >= 0.5.3)
     pathutil (0.16.2)
@@ -218,7 +218,7 @@ GEM
     rouge (3.13.0)
     ruby-enum (0.7.2)
       i18n
-    rubyzip (2.1.0)
+    rubyzip (2.3.0)
     safe_yaml (1.0.5)
     sass (3.7.4)
       sass-listen (~> 4.0.0)
@@ -235,8 +235,8 @@ GEM
       ethon (>= 0.9.0)
     tzinfo (1.2.6)
       thread_safe (~> 0.1)
-    unicode-display_width (1.6.1)
-    zeitwerk (2.2.2)
+    unicode-display_width (1.7.0)
+    zeitwerk (2.3.0)
 
 PLATFORMS
   ruby
@@ -245,4 +245,4 @@ DEPENDENCIES
   github-pages
 
 BUNDLED WITH
-   2.1.4
+   1.17.3

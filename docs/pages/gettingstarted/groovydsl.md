@@ -1,7 +1,6 @@
 ---
 title: "Run detekt using the Detekt Gradle Plugin"
 keywords: detekt static analysis code kotlin
-tags: [getting_started, gradle, plugin]
 sidebar: 
 permalink: groovydsl.html
 folder: gettingstarted

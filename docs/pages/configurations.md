@@ -1,7 +1,6 @@
 ---
 title: "Detekt Configuration File"
 keywords: config configuration yaml
-tags:
 sidebar:
 permalink: configurations.html
 summary:

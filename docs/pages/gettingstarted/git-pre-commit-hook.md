@@ -1,7 +1,6 @@
 ---
 title: "Run detekt using a Git pre-commit hook"
 keywords: detekt static analysis code kotlin
-tags: [getting_started, git]
 sidebar: 
 permalink: git-pre-commit-hook.html
 folder: gettingstarted
