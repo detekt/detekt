@@ -65,6 +65,12 @@ class YamlConfigSpec : Spek({
 
         val config by memoized { yamlConfig("wrong-property-type.yml") }
 
+        it("only accepts true and false boolean values") {
+            assertThatIllegalStateException()
+                .isThrownBy { config.valueOrDefault("bool", false) }
+                .withMessage("""Value "fasle" set for config parameter "bool" is not of required type Boolean.""")
+        }
+
         it("prints whole config-key path for NumberFormatException") {
             assertThatIllegalStateException().isThrownBy {
                 config.subConfig("RuleSet")

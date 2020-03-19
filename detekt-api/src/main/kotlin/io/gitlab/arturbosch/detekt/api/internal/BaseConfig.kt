@@ -37,9 +37,16 @@ abstract class BaseConfig : HierarchicalConfig {
 
     protected open fun tryParseBasedOnDefault(result: String, defaultResult: Any): Any = when (defaultResult) {
         is Int -> result.toInt()
-        is Boolean -> result.toBoolean()
+        is Boolean ->
+            if (result in ALLOWED_BOOL_VALUES) {
+                result.toBoolean()
+            } else {
+                throw ClassCastException()
+            }
         is Double -> result.toDouble()
         is String -> result
         else -> throw ClassCastException()
     }
 }
+
+private val ALLOWED_BOOL_VALUES = setOf("true", "false")
