@@ -44,22 +44,22 @@ class NamingConventionCustomPatternTest : Spek({
     }
 
     val excludeClassPatternVariableRegexCode = """
-			class Bar {
-				val MYVar = 3
-			}
+            class Bar {
+                val MYVar = 3
+            }
 
-			object Foo {
-				val MYVar = 3
-			}"""
+            object Foo {
+                val MYVar = 3
+            }"""
 
     val excludeClassPatternFunctionRegexCode = """
-			class Bar {
-				fun MYFun() {}
-			}
+            class Bar {
+                fun MYFun() {}
+            }
 
-			object Foo {
-				fun MYFun() {}
-			}"""
+            object Foo {
+                fun MYFun() {}
+            }"""
 
     describe("NamingRules rule") {
 
@@ -107,13 +107,13 @@ class NamingConventionCustomPatternTest : Spek({
 
         it("shouldExcludeClassesFromVariableNaming") {
             val code = """
-			class Bar {
-				val MYVar = 3
-			}
+            class Bar {
+                val MYVar = 3
+            }
 
-			object Foo {
-				val MYVar = 3
-			}"""
+            object Foo {
+                val MYVar = 3
+            }"""
             val config = TestConfig(mapOf(VariableNaming.EXCLUDE_CLASS_PATTERN to "Foo|Bar"))
             assertThat(VariableNaming(config).compileAndLint(code)).isEmpty()
         }
@@ -136,13 +136,13 @@ class NamingConventionCustomPatternTest : Spek({
 
         it("shouldExcludeClassesFromFunctionNaming") {
             val code = """
-			class Bar {
-				fun MYFun() {}
-			}
+            class Bar {
+                fun MYFun() {}
+            }
 
-			object Foo {
-				fun MYFun() {}
-			}"""
+            object Foo {
+                fun MYFun() {}
+            }"""
             val config = TestConfig(mapOf(FunctionNaming.EXCLUDE_CLASS_PATTERN to "Foo|Bar"))
             assertThat(FunctionNaming(config).compileAndLint(code)).isEmpty()
         }

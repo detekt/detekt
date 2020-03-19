@@ -3,6 +3,8 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.TestConfig
+import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
@@ -22,8 +24,11 @@ class UnnecessaryAbstractClassSpec : Spek({
 
         context("abstract classes with no abstract members") {
 
-            val path = Case.UnnecessaryAbstractClassPositive.path()
-            val findings = subject.lint(path)
+            lateinit var findings: List<Finding>
+
+            beforeEachTest {
+                findings = subject.lint(Case.UnnecessaryAbstractClassPositive.path())
+            }
 
             it("has no abstract member violation") {
                 assertThat(countViolationsWithDescription(findings, noAbstractMemberDescription)).isEqualTo(5)
@@ -37,7 +42,7 @@ class UnnecessaryAbstractClassSpec : Spek({
         context("abstract classes with members") {
 
             val path = Case.UnnecessaryAbstractClassNegative.path()
-            val findings = subject.lint(path)
+            val findings by memoized { subject.lint(path) }
 
             it("does not report no abstract member violation") {
                 assertThat(countViolationsWithDescription(findings, noAbstractMemberDescription)).isEqualTo(0)

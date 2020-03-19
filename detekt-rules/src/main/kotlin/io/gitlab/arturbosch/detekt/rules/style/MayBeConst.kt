@@ -33,6 +33,8 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
  * <compliant>
  * const val MY_CONSTANT = "abc"
  * </compliant>
+ *
+ * @active since v1.2.0
  */
 class MayBeConst(config: Config = Config.empty) : Rule(config) {
 
@@ -114,10 +116,10 @@ class MayBeConst(config: Config = Config.empty) : Rule(config) {
             (expression as? KtParenthesizedExpression)?.expression?.isConstantExpression() == true
 
     private fun isBinaryExpression(expression: KtExpression): Boolean {
-        val binaryExpression = expression as? KtBinaryExpression ?: return false
-        return expression.node.elementType == KtNodeTypes.BINARY_EXPRESSION &&
-                binaryTokens.contains(binaryExpression.operationToken) &&
-                binaryExpression.left?.isConstantExpression() == true &&
-                binaryExpression.right?.isConstantExpression() == true
+        return expression is KtBinaryExpression &&
+                expression.node.elementType == KtNodeTypes.BINARY_EXPRESSION &&
+                binaryTokens.contains(expression.operationToken) &&
+                expression.left?.isConstantExpression() == true &&
+                expression.right?.isConstantExpression() == true
     }
 }

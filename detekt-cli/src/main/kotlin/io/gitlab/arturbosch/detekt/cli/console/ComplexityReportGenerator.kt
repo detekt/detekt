@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.cli.console
 
 import io.gitlab.arturbosch.detekt.api.Detektion
+import java.util.Locale
 
 class ComplexityReportGenerator(private val complexityMetric: ComplexityMetric) {
 
@@ -14,21 +15,19 @@ class ComplexityReportGenerator(private val complexityMetric: ComplexityMetric) 
             ComplexityReportGenerator(ComplexityMetric(detektion))
     }
 
-    fun generate(): String? {
+    fun generate(): List<String>? {
         if (cannotGenerate()) return null
-        return with(StringBuilder()) {
-            append("Complexity Report:".format())
-            append("${complexityMetric.loc} lines of code (loc)".format(PREFIX))
-            append("${complexityMetric.sloc} source lines of code (sloc)".format(PREFIX))
-            append("${complexityMetric.lloc} logical lines of code (lloc)".format(PREFIX))
-            append("${complexityMetric.cloc} comment lines of code (cloc)".format(PREFIX))
-            append("${complexityMetric.mcc} McCabe complexity (mcc)".format(PREFIX))
-            append("$numberOfSmells number of total code smells".format(PREFIX))
-            append("$commentSourceRatio % comment source ratio".format(PREFIX))
-            append("$mccPerThousandLines mcc per 1000 lloc".format(PREFIX))
-            append("$smellPerThousandLines code smells per 1000 lloc".format(PREFIX))
-            toString()
-        }
+        return listOf(
+            "%,d lines of code (loc)".format(Locale.US, complexityMetric.loc),
+            "%,d source lines of code (sloc)".format(Locale.US, complexityMetric.sloc),
+            "%,d logical lines of code (lloc)".format(Locale.US, complexityMetric.lloc),
+            "%,d comment lines of code (cloc)".format(Locale.US, complexityMetric.cloc),
+            "%,d McCabe complexity (mcc)".format(Locale.US, complexityMetric.mcc),
+            "%,d number of total code smells".format(Locale.US, numberOfSmells),
+            "%,d%% comment source ratio".format(Locale.US, commentSourceRatio),
+            "%,d mcc per 1,000 lloc".format(Locale.US, mccPerThousandLines),
+            "%,d code smells per 1,000 lloc".format(Locale.US, smellPerThousandLines)
+        )
     }
 
     private fun cannotGenerate(): Boolean {

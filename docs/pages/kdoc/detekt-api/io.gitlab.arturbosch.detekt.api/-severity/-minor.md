@@ -7,3 +7,6 @@ title: Severity.Minor - detekt-api
 # Minor
 
 `Minor`
+
+Represents code quality issues which only slightly impact the code quality.
+

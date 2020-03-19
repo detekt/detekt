@@ -2,15 +2,19 @@ package io.gitlab.arturbosch.detekt.rules.providers
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
+import io.gitlab.arturbosch.detekt.rules.bugs.Deprecation
 import io.gitlab.arturbosch.detekt.rules.bugs.DuplicateCaseInWhenExpression
 import io.gitlab.arturbosch.detekt.rules.bugs.EqualsAlwaysReturnsTrueOrFalse
 import io.gitlab.arturbosch.detekt.rules.bugs.EqualsWithHashCodeExist
 import io.gitlab.arturbosch.detekt.rules.bugs.ExplicitGarbageCollectionCall
+import io.gitlab.arturbosch.detekt.rules.bugs.HasPlatformType
+import io.gitlab.arturbosch.detekt.rules.bugs.ImplicitDefaultLocale
 import io.gitlab.arturbosch.detekt.rules.bugs.InvalidRange
 import io.gitlab.arturbosch.detekt.rules.bugs.IteratorHasNextCallsNextMethod
 import io.gitlab.arturbosch.detekt.rules.bugs.IteratorNotThrowingNoSuchElementException
 import io.gitlab.arturbosch.detekt.rules.bugs.LateinitUsage
+import io.gitlab.arturbosch.detekt.rules.bugs.MapGetWithNotNullAssertionOperator
 import io.gitlab.arturbosch.detekt.rules.bugs.MissingWhenCase
 import io.gitlab.arturbosch.detekt.rules.bugs.RedundantElseInWhen
 import io.gitlab.arturbosch.detekt.rules.bugs.UnconditionalJumpStatementInLoop
@@ -25,15 +29,17 @@ import io.gitlab.arturbosch.detekt.rules.bugs.WrongEqualsTypeParameter
  *
  * @active since v1.0.0
  */
-class PotentialBugProvider : RuleSetProvider {
+class PotentialBugProvider : DefaultRuleSetProvider {
 
     override val ruleSetId: String = "potential-bugs"
 
     override fun instance(config: Config): RuleSet {
         return RuleSet(ruleSetId, listOf(
+                Deprecation(config),
                 DuplicateCaseInWhenExpression(config),
                 EqualsAlwaysReturnsTrueOrFalse(config),
                 EqualsWithHashCodeExist(config),
+                HasPlatformType(config),
                 IteratorNotThrowingNoSuchElementException(config),
                 IteratorHasNextCallsNextMethod(config),
                 UselessPostfixExpression(config),
@@ -41,12 +47,14 @@ class PotentialBugProvider : RuleSetProvider {
                 WrongEqualsTypeParameter(config),
                 ExplicitGarbageCollectionCall(config),
                 LateinitUsage(config),
+                MapGetWithNotNullAssertionOperator(config),
                 MissingWhenCase(config),
                 RedundantElseInWhen(config),
                 UnconditionalJumpStatementInLoop(config),
                 UnreachableCode(config),
                 UnsafeCallOnNullableType(config),
-                UnsafeCast(config)
+                UnsafeCast(config),
+                ImplicitDefaultLocale(config)
         ))
     }
 }

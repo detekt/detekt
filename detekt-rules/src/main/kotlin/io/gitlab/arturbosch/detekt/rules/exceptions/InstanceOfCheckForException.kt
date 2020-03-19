@@ -7,13 +7,13 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.collectByType
 import org.jetbrains.kotlin.psi.KtBinaryExpressionWithTypeRHS
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtIsExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
 import org.jetbrains.kotlin.psi.KtPsiUtil
+import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
 
 /**
  * This rule reports `catch` blocks which check for the type of an exception via `is` checks or casts.
@@ -48,12 +48,12 @@ class InstanceOfCheckForException(config: Config = Config.empty) : Rule(config) 
             Debt.TWENTY_MINS)
 
     override fun visitCatchSection(catchClause: KtCatchClause) {
-        catchClause.catchBody?.collectByType<KtIsExpression>()?.forEach {
+        catchClause.catchBody?.forEachDescendantOfType<KtIsExpression> {
             if (isExceptionReferenced(it.leftHandSide, catchClause)) {
                 report(CodeSmell(issue, Entity.from(it), issue.description))
             }
         }
-        catchClause.catchBody?.collectByType<KtBinaryExpressionWithTypeRHS>()?.forEach {
+        catchClause.catchBody?.forEachDescendantOfType<KtBinaryExpressionWithTypeRHS> {
             if (KtPsiUtil.isUnsafeCast(it) && isExceptionReferenced(it.left, catchClause)) {
                 report(CodeSmell(issue, Entity.from(it), issue.description))
             }

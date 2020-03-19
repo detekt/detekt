@@ -1,9 +1,13 @@
 package io.gitlab.arturbosch.detekt.cli
 
-import io.gitlab.arturbosch.detekt.api.CompositeConfig
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.YamlConfig
+import io.gitlab.arturbosch.detekt.api.internal.CompositeConfig
+import io.gitlab.arturbosch.detekt.api.internal.DisabledAutoCorrectConfig
+import io.gitlab.arturbosch.detekt.api.internal.FailFastConfig
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
+import io.gitlab.arturbosch.detekt.api.internal.YamlConfig
+import java.net.URI
+import java.net.URL
 import java.nio.file.Path
 
 fun CliArgs.createFilters(): PathFilters? = PathFilters.of(includes, excludes)
@@ -17,6 +21,7 @@ fun CliArgs.createClasspath(): List<String> = classpath.letIfNonEmpty { split(";
 private fun <T> String?.letIfNonEmpty(init: String.() -> List<T>): List<T> =
     if (this == null || this.isEmpty()) listOf() else this.init()
 
+@Suppress("UnsafeCallOnNullableType")
 fun CliArgs.loadConfiguration(): Config {
     var declaredConfig: Config? = when {
         !config.isNullOrBlank() -> parsePathConfig(config!!)
@@ -32,10 +37,14 @@ fun CliArgs.loadConfiguration(): Config {
 
     if (failFast) {
         val initializedDefaultConfig = defaultConfig ?: loadDefaultConfig()
-        declaredConfig = FailFastConfig(declaredConfig ?: initializedDefaultConfig, initializedDefaultConfig)
+        declaredConfig = FailFastConfig(declaredConfig
+            ?: initializedDefaultConfig, initializedDefaultConfig)
     }
 
-    if (debug) println("\n$declaredConfig\n")
+    if (!autoCorrect) {
+        declaredConfig = DisabledAutoCorrectConfig(declaredConfig ?: loadDefaultConfig())
+    }
+
     return declaredConfig ?: loadDefaultConfig()
 }
 
@@ -61,6 +70,13 @@ private fun parsePathConfig(configPath: String): Config {
     }
 }
 
-private fun loadDefaultConfig() = YamlConfig.loadResource(ClasspathResourceConverter().convert(DEFAULT_CONFIG))
-
 const val DEFAULT_CONFIG = "default-detekt-config.yml"
+
+fun loadDefaultConfig() = YamlConfig.loadResource(ClasspathResourceConverter().convert(DEFAULT_CONFIG))
+
+fun CliArgs.extractUris(): Collection<URI> {
+    val pathUris = config?.let { MultipleExistingPathConverter().convert(it).map(Path::toUri) } ?: emptyList()
+    val resourceUris = configResource?.let { MultipleClasspathResourceConverter().convert(it).map(URL::toURI) }
+        ?: emptyList()
+    return resourceUris + pathUris
+}

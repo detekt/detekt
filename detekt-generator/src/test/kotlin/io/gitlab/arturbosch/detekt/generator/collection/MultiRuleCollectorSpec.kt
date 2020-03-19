@@ -13,61 +13,40 @@ class MultiRuleCollectorSpec : Spek({
 
     describe("a MultiRuleCollector") {
 
-        it("collects no multirule when no class is extended") {
-            val code = """
-				package foo
-
-				class SomeRandomClass {
-				}
-			"""
-            val items = subject.run(code)
-            assertThat(items).isEmpty()
+        it("collects no MultiRule when no class is extended") {
+            val code = "class MyRule"
+            assertThat(subject.run(code)).isEmpty()
         }
 
-        it("collects no rules when no multirule class is extended") {
-            val code = """
-				package foo
-
-				class SomeRandomClass: SomeOtherClass {
-				}
-			"""
-            val items = subject.run(code)
-            assertThat(items).isEmpty()
+        it("collects no rules when no MultiRule class is extended") {
+            val code = "class MyRule : Other"
+            assertThat(subject.run(code)).isEmpty()
         }
 
         it("throws when no rules are added") {
-            val name = "SomeRandomClass"
-            val code = """
-				package foo
-
-				class $name: MultiRule {
-				}
-			"""
+            val code = "class MyRule : MultiRule"
             assertThatExceptionOfType(InvalidDocumentationException::class.java).isThrownBy {
                 subject.run(code)
             }
         }
 
         it("collects all rules in fields and in the rule property") {
-            val name = "SomeRandomClass"
             val code = """
-				package foo
+                class MyRule : MultiRule {
+                    val p1 = Rule3()
+                    val p2 = Rule4()
 
-				class $name: MultiRule {
-					val propertyRuleOne = RuleOne()
-					val propertyRuleTwo = RuleTwo()
-
-					override val rules: List<Rule> = listOf(
-								FirstRule(),
-								SecondRule(),
-								propertyRuleOne,
-								propertyRuleTwo
-						)
-				}
-			"""
+                    override val rules: List<Rule> = listOf(
+                        Rule1(),
+                        Rule2(),
+                        p1,
+                        p2
+                    )
+                }
+            """
             val items = subject.run(code)
             assertThat(items[0].rules).hasSize(4)
-            assertThat(items[0].rules).contains("FirstRule", "SecondRule", "RuleOne", "RuleTwo")
+            assertThat(items[0].rules).contains("Rule1", "Rule2", "Rule3", "Rule4")
         }
     }
 })

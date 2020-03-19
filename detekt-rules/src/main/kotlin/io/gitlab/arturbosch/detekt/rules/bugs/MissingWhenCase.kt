@@ -8,10 +8,10 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.cfg.WhenChecker
-import org.jetbrains.kotlin.codegen.kotlinType
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
+import org.jetbrains.kotlin.resolve.calls.callUtil.getType
 
 /**
  * Turn on this rule to flag `when` expressions that do not check that all cases are covered when the subject is an enum
@@ -60,6 +60,8 @@ import org.jetbrains.kotlin.resolve.bindingContextUtil.isUsedAsExpression
  *
  * Based on code from Kotlin compiler:
  * https://github.com/JetBrains/kotlin/blob/v1.3.30/compiler/frontend/src/org/jetbrains/kotlin/cfg/ControlFlowInformationProvider.kt
+ *
+ * @active since v1.2.0
  */
 class MissingWhenCase(config: Config = Config.empty) : Rule(config) {
 
@@ -73,10 +75,10 @@ class MissingWhenCase(config: Config = Config.empty) : Rule(config) {
     @Suppress("ReturnCount")
     override fun visitWhenExpression(expression: KtWhenExpression) {
         if (bindingContext == BindingContext.EMPTY) return
-        if (expression.entries.find { it.isElse } != null) return
+        if (expression.elseExpression != null) return
         if (expression.isUsedAsExpression(bindingContext)) return
         val subjectExpression = expression.subjectExpression ?: return
-        val subjectType = subjectExpression.kotlinType(bindingContext)
+        val subjectType = subjectExpression.getType(bindingContext)
         val enumClassDescriptor = WhenChecker.getClassDescriptorOfTypeIfEnum(subjectType)
         if (enumClassDescriptor != null) {
             val enumMissingCases = WhenChecker.getEnumMissingCases(expression, bindingContext, enumClassDescriptor)

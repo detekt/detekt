@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.isPartOfString
 
 /**
  * This rule reports lines that end with a whitespace.
@@ -22,21 +23,28 @@ class TrailingWhitespace(config: Config = Config.empty) : Rule(config) {
         var offset = 0
         fileContent.content.forEachIndexed { index, line ->
             offset += line.length
-            if (hasTrailingWhitespace(line)) {
+            val trailingWhitespaces = countTrailingWhitespace(line)
+            if (trailingWhitespaces > 0) {
                 val file = fileContent.file
                 val ktElement = findFirstKtElementInParents(file, offset, line)
-                if (ktElement != null) {
-                    report(CodeSmell(issue, Entity.from(ktElement), createMessage(index)))
-                } else {
-                    report(CodeSmell(issue, Entity.from(file, offset), createMessage(index)))
+                if (ktElement == null || !ktElement.isPartOfString()) {
+                    val entity = Entity.from(file, offset - trailingWhitespaces).let { entity ->
+                        entity.copy(
+                            location = entity.location.copy(
+                                text = entity.location.text.copy(end = offset)
+                            )
+                        )
+                    }
+                    report(CodeSmell(issue, entity, createMessage(index)))
                 }
             }
             offset += 1 /* '\n' */
         }
     }
 
-    private fun hasTrailingWhitespace(line: String) =
-            line.isNotEmpty() && (line.last() == ' ' || line.last() == '\t')
+    private fun countTrailingWhitespace(line: String): Int {
+        return line.length - line.indexOfLast { it != ' ' && it != '\t' } - 1
+    }
 
     private fun createMessage(line: Int) = "Line ${line + 1} ends with a whitespace."
 }

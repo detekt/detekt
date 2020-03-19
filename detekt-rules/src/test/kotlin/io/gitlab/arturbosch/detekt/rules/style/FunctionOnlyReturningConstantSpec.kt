@@ -20,16 +20,31 @@ class FunctionOnlyReturningConstantSpec : Spek({
         }
 
         it("reports overridden functions which return constants") {
-            val config = TestConfig(mapOf("ignoreOverridableFunction" to "false"))
+            val config = TestConfig(mapOf(FunctionOnlyReturningConstant.IGNORE_OVERRIDABLE_FUNCTION to "false"))
             val rule = FunctionOnlyReturningConstant(config)
             assertThat(rule.lint(path)).hasSize(9)
         }
 
         it("does not report excluded function which returns a constant") {
             val code = "fun f() = 1"
-            val config = TestConfig(mapOf("excludedFunctions" to "f"))
+            val config = TestConfig(mapOf(FunctionOnlyReturningConstant.EXCLUDED_FUNCTIONS to "f"))
             val rule = FunctionOnlyReturningConstant(config)
-            assertThat(rule.compileAndLint(code)).hasSize(0)
+            assertThat(rule.compileAndLint(code)).isEmpty()
+        }
+
+        it("does not report excluded annotated function which returns a constant") {
+            val code = """
+                import kotlin.SinceKotlin
+                class Test {
+                    @SinceKotlin("1.0.0")
+                    fun someIgnoredFun(): String {
+                        return "I am a constant"
+                    }
+                }
+            """.trimIndent()
+            val config = TestConfig(mapOf(FunctionOnlyReturningConstant.EXCLUDE_ANNOTATED_FUNCTION to "kotlin.SinceKotlin"))
+            val rule = FunctionOnlyReturningConstant(config)
+            assertThat(rule.compileAndLint(code)).isEmpty()
         }
     }
 

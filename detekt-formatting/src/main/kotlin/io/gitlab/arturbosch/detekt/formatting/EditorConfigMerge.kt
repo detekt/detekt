@@ -12,15 +12,14 @@ fun EditorConfig.Companion.merge(
     continuationIndentSize: Int? = null,
     maxLineLength: Int? = null,
     insertFinalNewline: Boolean? = null
-): EditorConfig =
-        EditorConfig.fromMap(
-                HashMap<String, String>().also {
-                    copyProperty(it, "indent_size", indentSize, sourceEditorConfig)
-                    copyProperty(it, "continuation_indent_size", continuationIndentSize, sourceEditorConfig)
-                    copyProperty(it, "max_line_length", maxLineLength, sourceEditorConfig)
-                    copyProperty(it, "insert_final_newline", insertFinalNewline, sourceEditorConfig)
-                }
-        )
+): EditorConfig = fromMap(
+    HashMap<String, String>().also {
+        copyProperty(it, "indent_size", indentSize, sourceEditorConfig)
+        copyProperty(it, "continuation_indent_size", continuationIndentSize, sourceEditorConfig)
+        copyProperty(it, "max_line_length", maxLineLength, sourceEditorConfig)
+        copyProperty(it, "insert_final_newline", insertFinalNewline, sourceEditorConfig)
+    }
+)
 
 private fun copyProperty(
     map: MutableMap<String, String>,

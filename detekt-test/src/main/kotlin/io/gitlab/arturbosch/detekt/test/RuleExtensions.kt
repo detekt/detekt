@@ -1,20 +1,25 @@
 package io.gitlab.arturbosch.detekt.test
 
-import io.gitlab.arturbosch.detekt.api.BaseRule
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Rule
+import io.gitlab.arturbosch.detekt.api.internal.BaseRule
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import java.nio.file.Path
 
+private val shouldCompileTestSnippets: Boolean =
+    System.getProperty("compile-snippet-tests", "false")!!.toBoolean()
+
 fun BaseRule.compileAndLint(@Language("kotlin") content: String): List<Finding> {
-    KotlinScriptEngine.compile(content)
+    if (shouldCompileTestSnippets) {
+        KotlinScriptEngine.compile(content)
+    }
     return lint(content)
 }
 
-fun BaseRule.lint(content: String): List<Finding> {
+fun BaseRule.lint(@Language("kotlin") content: String): List<Finding> {
     val ktFile = KtTestCompiler.compileFromContent(content.trimIndent())
     return findingsAfterVisit(ktFile)
 }
@@ -24,8 +29,13 @@ fun BaseRule.lint(path: Path): List<Finding> {
     return findingsAfterVisit(ktFile)
 }
 
-fun BaseRule.compileAndLintWithContext(environment: KotlinCoreEnvironment, content: String): List<Finding> {
-    KotlinScriptEngine.compile(content)
+fun BaseRule.compileAndLintWithContext(
+    environment: KotlinCoreEnvironment,
+    @Language("kotlin") content: String
+): List<Finding> {
+    if (shouldCompileTestSnippets) {
+        KotlinScriptEngine.compile(content)
+    }
     val ktFile = KtTestCompiler.compileFromContent(content.trimIndent())
     val bindingContext = KtTestCompiler.getContextForPaths(environment, listOf(ktFile))
     return findingsAfterVisit(ktFile, bindingContext)
@@ -41,7 +51,7 @@ private fun BaseRule.findingsAfterVisit(
     return this.findings
 }
 
-fun Rule.format(content: String): String {
+fun Rule.format(@Language("kotlin") content: String): String {
     val ktFile = KtTestCompiler.compileFromContent(content.trimIndent())
     return contentAfterVisit(ktFile)
 }

@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.cli.runners
 
-import io.gitlab.arturbosch.detekt.api.BaseRule
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleId
 import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.api.internal.BaseRule
 import io.gitlab.arturbosch.detekt.cli.CliArgs
 import io.gitlab.arturbosch.detekt.cli.DetektProgressListener
 import io.gitlab.arturbosch.detekt.cli.OutputFacade
@@ -14,14 +14,16 @@ import io.gitlab.arturbosch.detekt.cli.loadConfiguration
 import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.RuleSetLocator
+import io.gitlab.arturbosch.detekt.core.rules.createRuleSet
 
 class SingleRuleRunner(private val arguments: CliArgs) : Executable {
 
     override fun execute() {
-        val (ruleSet, rule: RuleId) = arguments.runRule?.split(":")
-            ?: throw IllegalStateException("Unexpected empty 'runRule' argument.")
+        val (ruleSet, rule: RuleId) = checkNotNull(
+            arguments.runRule?.split(":")
+        ) { "Unexpected empty 'runRule' argument." }
 
-        val settings = with(arguments) {
+        with(arguments) {
             ProcessingSettings(
                 inputPaths = inputPaths,
                 config = loadConfiguration(),
@@ -30,19 +32,30 @@ class SingleRuleRunner(private val arguments: CliArgs) : Executable {
                 autoCorrect = autoCorrect,
                 excludeDefaultRuleSets = disableDefaultRuleSets,
                 pluginPaths = createPlugins())
+        }.use { settings ->
+            val realProvider = requireNotNull(
+                RuleSetLocator(settings).load().find { it.ruleSetId == ruleSet }
+            ) { "There was no rule set with id '$ruleSet'." }
+
+            val provider = RuleProducingProvider(rule, realProvider)
+
+            assertRuleExistsBeforeRunningItLater(provider, settings)
+
+            val result = DetektFacade.create(
+                settings,
+                listOf(provider),
+                listOf(DetektProgressListener())
+            ).run()
+
+            OutputFacade(arguments, result, settings).run()
         }
+    }
 
-        val realProvider = RuleSetLocator(settings).load()
-            .find { it.ruleSetId == ruleSet }
-            ?: throw IllegalArgumentException("There was no rule set with id '$ruleSet'.")
-
-        val provider = RuleProducingProvider(rule, realProvider)
-        val detektion = DetektFacade.create(
-            settings,
-            listOf(provider),
-            listOf(DetektProgressListener())
-        ).run()
-        OutputFacade(arguments, detektion, settings).run()
+    private fun assertRuleExistsBeforeRunningItLater(
+        provider: RuleProducingProvider,
+        settings: ProcessingSettings
+    ) {
+        assert(provider.instance(settings.config).rules.size == 1) { "Expected a single rule to be loaded." }
     }
 }
 
@@ -58,8 +71,10 @@ private class RuleProducingProvider(
         listOf(produceRule())
     )
 
-    private fun produceRule(): BaseRule = (provider.buildRuleset(Config.empty)
-        ?.rules
-        ?.find { it.ruleId == ruleId }
-        ?: throw IllegalArgumentException("There was no rule '$ruleId' in rule set '${provider.ruleSetId}'."))
+    private fun produceRule(): BaseRule =
+        requireNotNull(
+            provider.createRuleSet(Config.empty)
+                .rules
+                .find { it.ruleId == ruleId }
+        ) { "There was no rule '$ruleId' in rule set '${provider.ruleSetId}'." }
 }

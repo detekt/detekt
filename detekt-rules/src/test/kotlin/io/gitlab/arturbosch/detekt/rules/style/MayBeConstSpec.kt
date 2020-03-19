@@ -21,47 +21,47 @@ class MayBeConstSpec : Spek({
 
             it("is const vals in object") {
                 val code = """
-				object Test {
-					const val TEST = "Test"
-				}
-				"""
+                object Test {
+                    const val TEST = "Test"
+                }
+                """
                 subject.lint(code)
                 assertThat(subject.findings).isEmpty()
             }
 
             it("isconst vals in companion objects") {
                 val code = """
-				class Test {
-					companion object {
-						const val B = 1
-					}
-				}
-				"""
+                class Test {
+                    companion object {
+                        const val B = 1
+                    }
+                }
+                """
                 subject.lint(code)
                 assertThat(subject.findings).isEmpty()
             }
 
             it("does not report const vals that use other const vals") {
                 val code = """
-				const val a = 0
+                const val a = 0
 
-				class Test {
-					companion object {
-						@JvmField
-						const val B = a + 1
-					}
-				}
-				"""
+                class Test {
+                    companion object {
+                        @JvmField
+                        const val B = a + 1
+                    }
+                }
+                """
                 subject.lint(code)
                 assertThat(subject.findings).isEmpty()
             }
 
             it("does not report none const val candidates") {
                 val code = """
-				const val a = 0
-				val p = Pair(a, a + a)
-				val p2 = emptyList<Int>().plus(a)
-				"""
+                const val a = 0
+                val p = Pair(a, a + a)
+                val p2 = emptyList<Int>().plus(a)
+                """
                 subject.lint(code)
                 assertThat(subject.findings).isEmpty()
             }
@@ -70,38 +70,38 @@ class MayBeConstSpec : Spek({
         context("some vals that could be constants") {
             it("is a simple val") {
                 val code = """
-				val x = 1
-				"""
+                val x = 1
+                """
                 subject.lint(code)
                 assertThat(subject.findings).hasSize(1)
             }
 
             it("is a simple JvmField val") {
                 val code = """
-				@JvmField val x = 1
-				"""
+                @JvmField val x = 1
+                """
                 subject.lint(code)
                 assertThat(subject.findings).hasSize(1)
             }
 
             it("is a field in an object") {
                 val code = """
-				object Test {
-    				@JvmField val test = "Test"
-				}
-				"""
+                object Test {
+                    @JvmField val test = "Test"
+                }
+                """
                 subject.lint(code)
                 assertThat(subject.findings).hasSize(1)
             }
 
             it("reports vals in companion objects") {
                 val code = """
-				class Test {
-					companion object {
-						val b = 1
-					}
-				}
-				"""
+                class Test {
+                    companion object {
+                        val b = 1
+                    }
+                }
+                """
                 subject.lint(code)
                 assertThat(subject.findings).hasSize(1)
             }
@@ -110,64 +110,64 @@ class MayBeConstSpec : Spek({
         context("vals that can be constants but detekt doesn't handle yet") {
             it("is a constant binary expression") {
                 val code = """
-				const val one = 1
-				val two = one * 2
-				"""
+                const val one = 1
+                val two = one * 2
+                """
                 subject.lint(code)
                 assertThat(subject.findings).hasSize(1)
             }
 
             it("is a constant binary expression in a companion object") {
                 val code = """
-				class Test {
-					companion object {
-						const val one = 1
-						val two = one * 2
-					}
-				}
-				"""
+                class Test {
+                    companion object {
+                        const val one = 1
+                        val two = one * 2
+                    }
+                }
+                """
                 subject.lint(code)
                 assertThat(subject.findings).hasSize(1)
             }
 
             it("is a nested constant binary expression") {
                 val code = """
-				const val one = 1
-				val two = one * 2 + 1
-				"""
+                const val one = 1
+                val two = one * 2 + 1
+                """
                 subject.lint(code)
                 assertThat(subject.findings).hasSize(1)
             }
 
             it("is a nested constant parenthesised expression") {
                 val code = """
-				const val one = 1
-				val two = one * (2 + 1)
-				"""
+                const val one = 1
+                val two = one * (2 + 1)
+                """
                 subject.lint(code)
                 assertThat(subject.findings).hasSize(1)
             }
 
             it("reports vals that use other const vals") {
                 val code = """
-				const val a = 0
+                const val a = 0
 
-				class Test {
-					companion object {
-						@JvmField
-						val b = a + 1
-					}
-				}
-				"""
+                class Test {
+                    companion object {
+                        @JvmField
+                        val b = a + 1
+                    }
+                }
+                """
                 subject.lint(code)
                 assertThat(subject.findings).hasSize(1)
             }
 
             it("reports concatenated string vals") {
                 val code = """
-				private const val A = "a"
-				private val B = A + "b"
-				"""
+                private const val A = "a"
+                private val B = A + "b"
+                """
                 subject.lint(code)
                 assertThat(subject.findings).hasSize(1)
             }
@@ -200,34 +200,34 @@ class MayBeConstSpec : Spek({
 
             it("is a JvmField in a class") {
                 val code = """
-				class Test {
-					@JvmField val a = 3
-				}
-			""".trimMargin()
+                class Test {
+                    @JvmField val a = 3
+                }
+            """
                 subject.lint(code)
                 assertThat(subject.findings).isEmpty()
             }
 
             it("has some annotation") {
                 val code = """
-				annotation class A
+                annotation class A
 
-				@A val a = 55
-			""".trimMargin()
+                @A val a = 55
+            """
                 subject.lint(code)
                 assertThat(subject.findings).isEmpty()
             }
 
             it("overrides something") {
                 val code = """
-				interface Base {
-					val property: Int
-				}
+                interface Base {
+                    val property: Int
+                }
 
-				object Derived : Base {
-					override val property = 1
-				}
-			""".trimMargin()
+                object Derived : Base {
+                    override val property = 1
+                }
+            """
                 subject.lint(code)
                 assertThat(subject.findings).isEmpty()
             }

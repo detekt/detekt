@@ -23,9 +23,10 @@ class QualifiedNameProcessorTest : Spek({
 
             val data = result.getData(fqNamesKey)
             assertThat(data).contains(
-                    "io.gitlab.arturbosch.detekt.sample.Foo",
-                    "io.gitlab.arturbosch.detekt.sample.Bar",
-                    "io.gitlab.arturbosch.detekt.sample.Bla")
+                "io.gitlab.arturbosch.detekt.sample.Foo",
+                "io.gitlab.arturbosch.detekt.sample.Bar",
+                "io.gitlab.arturbosch.detekt.sample.Bla"
+            )
         }
     }
 })
@@ -53,9 +54,9 @@ private val result = object : Detektion {
 }
 
 const val code = """
-	package io.gitlab.arturbosch.detekt.sample
+    package io.gitlab.arturbosch.detekt.sample
 
-	class Foo {}
-	object Bar {}
-	interface Bla {}
+    class Foo {}
+    object Bar {}
+    interface Bla {}
 """

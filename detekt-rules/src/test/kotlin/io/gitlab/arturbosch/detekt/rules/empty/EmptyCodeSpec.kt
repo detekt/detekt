@@ -16,11 +16,11 @@ import java.util.regex.PatternSyntaxException
 class EmptyCodeSpec : Spek({
 
     val regexTestingCode = """
-			fun f() {
-				try {
-				} catch (foo: Exception) {
-				}
-			}"""
+            fun f() {
+                try {
+                } catch (foo: Exception) {
+                }
+            }"""
 
     describe("EmptyCatchBlock rule") {
 
@@ -30,35 +30,35 @@ class EmptyCodeSpec : Spek({
 
         it("findsEmptyNestedCatch") {
             val code = """
-			fun f() {
-				try {
+            fun f() {
+                try {
                 } catch (ignore: Exception) {
-					try {
-					} catch (e: Exception) {
-					}
-				}
-			}"""
+                    try {
+                    } catch (e: Exception) {
+                    }
+                }
+            }"""
             assertThat(EmptyCatchBlock(Config.empty).compileAndLint(code)).hasSize(1)
         }
 
         it("doesNotReportIgnoredOrExpectedException") {
             val code = """
-			fun f() {
-				try {
+            fun f() {
+                try {
                 } catch (ignore: IllegalArgumentException) {
-				} catch (expected: Exception) {
-				}
-			}"""
+                } catch (expected: Exception) {
+                }
+            }"""
             assertThat(EmptyCatchBlock(Config.empty).compileAndLint(code)).isEmpty()
         }
 
         it("doesNotReportEmptyCatchWithConfig") {
             val code = """
-			fun f() {
-				try {
-				} catch (foo: Exception) {
-				}
-			}"""
+            fun f() {
+                try {
+                } catch (foo: Exception) {
+                }
+            }"""
             val config = TestConfig(mapOf(EmptyCatchBlock.ALLOWED_EXCEPTION_NAME_REGEX to "foo"))
             assertThat(EmptyCatchBlock(config).compileAndLint(code)).isEmpty()
         }
@@ -93,6 +93,10 @@ class EmptyCodeSpec : Spek({
 
         it("findsEmptyClass") {
             test { EmptyClassBlock(Config.empty) }
+        }
+
+        it("findsEmptyTry") {
+            test { EmptyTryBlock(Config.empty) }
         }
 
         it("findsEmptyWhen") {

@@ -22,13 +22,19 @@ class DetektPlugin : Plugin<Project> {
         val extension = project.extensions.create(DETEKT_TASK_NAME, DetektExtension::class.java, project)
         extension.reportsDir = project.extensions.getByType(ReportingExtension::class.java).file("detekt")
 
+        val defaultConfigFile =
+            project.file("${project.rootProject.layout.projectDirectory.dir(CONFIG_DIR_NAME)}/$CONFIG_FILE")
+        if (defaultConfigFile.exists()) {
+            extension.config = project.files(defaultConfigFile)
+        }
+
         configurePluginDependencies(project, extension)
         setTaskDefaults(project)
 
         registerOldDetektTask(project, extension)
         registerDetektTasks(project, extension)
         registerCreateBaselineTask(project, extension)
-        registerGenerateConfigTask(project, extension)
+        registerGenerateConfigTask(project)
 
         registerIdeaTasks(project, extension)
     }
@@ -51,21 +57,15 @@ class DetektPlugin : Plugin<Project> {
             it.disableDefaultRuleSetsProp.set(project.provider { extension.disableDefaultRuleSets })
             it.buildUponDefaultConfigProp.set(project.provider { extension.buildUponDefaultConfig })
             it.failFastProp.set(project.provider { extension.failFast })
+            it.autoCorrectProp.set(project.provider { extension.autoCorrect })
             it.config.setFrom(project.provider { extension.config })
             it.baseline.set(project.layout.file(project.provider { extension.baseline }))
-            it.plugins.set(project.provider { extension.plugins })
             it.setSource(existingInputDirectoriesProvider(project, extension))
             it.setIncludes(defaultIncludes)
             it.setExcludes(defaultExcludes)
             it.reportsDir.set(project.provider { extension.customReportsDir })
             it.reports = extension.reports
-            it.setIgnoreFailures(project.provider { extension.ignoreFailures })
-
-            project.subprojects.forEach { subProject ->
-                subProject.tasks.firstOrNull { t -> t is Detekt && t.name == DETEKT_TASK_NAME }?.let { subprojectTask ->
-                    it.dependsOn(subprojectTask)
-                }
-            }
+            it.ignoreFailuresProp.set(project.provider { extension.ignoreFailures })
         }
 
         project.tasks.matching { it.name == LifecycleBasePlugin.CHECK_TASK_NAME }.configureEach {
@@ -82,15 +82,15 @@ class DetektPlugin : Plugin<Project> {
             it.disableDefaultRuleSetsProp.set(project.provider { extension.disableDefaultRuleSets })
             it.buildUponDefaultConfigProp.set(project.provider { extension.buildUponDefaultConfig })
             it.failFastProp.set(project.provider { extension.failFast })
+            it.autoCorrectProp.set(project.provider { extension.autoCorrect })
             it.config.setFrom(project.provider { extension.config })
             it.baseline.set(project.layout.file(project.provider { extension.baseline }))
-            it.plugins.set(project.provider { extension.plugins })
             it.setSource(kotlinSourceSet.kotlin.files)
             it.classpath.setFrom(sourceSet.compileClasspath, sourceSet.output.classesDirs)
             it.reports.xml.destination = File(extension.reportsDir, sourceSet.name + ".xml")
             it.reports.html.destination = File(extension.reportsDir, sourceSet.name + ".html")
             it.reports.txt.destination = File(extension.reportsDir, sourceSet.name + ".txt")
-            it.setIgnoreFailures(project.provider { extension.ignoreFailures })
+            it.ignoreFailuresProp.set(project.provider { extension.ignoreFailures })
             it.description =
                 "EXPERIMENTAL & SLOW: Run detekt analysis for ${sourceSet.name} classes with type resolution"
         }
@@ -105,22 +105,17 @@ class DetektPlugin : Plugin<Project> {
             it.disableDefaultRuleSets.set(project.provider { extension.disableDefaultRuleSets })
             it.buildUponDefaultConfig.set(project.provider { extension.buildUponDefaultConfig })
             it.failFast.set(project.provider { extension.failFast })
-            it.plugins.set(project.provider { extension.plugins })
+            it.autoCorrect.set(project.provider { extension.autoCorrect })
             it.setSource(existingInputDirectoriesProvider(project, extension))
             it.setIncludes(defaultIncludes)
             it.setExcludes(defaultExcludes)
         }
 
-    private fun registerGenerateConfigTask(project: Project, extension: DetektExtension) =
-        project.tasks.register(GENERATE_CONFIG, DetektGenerateConfigTask::class.java) {
-            it.setSource(existingInputDirectoriesProvider(project, extension))
-            it.setIncludes(listOf("**/*.kt", "**/*.kts"))
-            it.setExcludes(listOf("build/"))
-        }
+    private fun registerGenerateConfigTask(project: Project) =
+        project.tasks.register(GENERATE_CONFIG, DetektGenerateConfigTask::class.java)
 
     private fun registerIdeaTasks(project: Project, extension: DetektExtension) {
         project.tasks.register(IDEA_FORMAT, DetektIdeaFormatTask::class.java) {
-            it.debug.set(project.provider { extension.debug })
             it.setSource(existingInputDirectoriesProvider(project, extension))
             it.setIncludes(defaultIncludes)
             it.setExcludes(defaultExcludes)
@@ -128,7 +123,6 @@ class DetektPlugin : Plugin<Project> {
         }
 
         project.tasks.register(IDEA_INSPECT, DetektIdeaInspectionTask::class.java) {
-            it.debug.set(project.provider { extension.debug })
             it.setSource(existingInputDirectoriesProvider(project, extension))
             it.setIncludes(defaultIncludes)
             it.setExcludes(defaultExcludes)
@@ -154,7 +148,6 @@ class DetektPlugin : Plugin<Project> {
             configuration.description = "The $CONFIGURATION_DETEKT dependencies to be used for this project."
 
             configuration.defaultDependencies { dependencySet ->
-                @Suppress("USELESS_ELVIS")
                 val version = extension.toolVersion ?: DEFAULT_DETEKT_VERSION
                 dependencySet.add(project.dependencies.create("io.gitlab.arturbosch.detekt:detekt-cli:$version"))
             }
@@ -162,29 +155,31 @@ class DetektPlugin : Plugin<Project> {
     }
 
     private fun setTaskDefaults(project: Project) {
-        project.tasks.withType(Detekt::class.java).configureEach {
+        project.tasks.withType(Detekt::class.java) {
             it.detektClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT))
             it.pluginClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT_PLUGINS))
         }
 
-        project.tasks.withType(DetektCreateBaselineTask::class.java).configureEach {
+        project.tasks.withType(DetektCreateBaselineTask::class.java) {
             it.detektClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT))
             it.pluginClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT_PLUGINS))
         }
 
-        project.tasks.withType(DetektGenerateConfigTask::class.java).configureEach {
+        project.tasks.withType(DetektGenerateConfigTask::class.java) {
             it.detektClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT))
         }
     }
 
     companion object {
-        const val DETEKT_TASK_NAME = "detekt"
+        private const val DETEKT_TASK_NAME = "detekt"
         private const val IDEA_FORMAT = "detektIdeaFormat"
         private const val IDEA_INSPECT = "detektIdeaInspect"
         private const val GENERATE_CONFIG = "detektGenerateConfig"
         private const val BASELINE = "detektBaseline"
         private val defaultExcludes = listOf("build/")
         private val defaultIncludes = listOf("**/*.kt", "**/*.kts")
+        internal const val CONFIG_DIR_NAME = "config/detekt"
+        internal const val CONFIG_FILE = "detekt.yml"
     }
 }
 

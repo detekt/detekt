@@ -1,6 +1,7 @@
 import com.jfrog.bintray.gradle.BintrayExtension
 import groovy.lang.GroovyObject
 import io.gitlab.arturbosch.detekt.Detekt
+import io.gitlab.arturbosch.detekt.DetektCreateBaselineTask
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
@@ -9,16 +10,17 @@ import org.jfrog.gradle.plugin.artifactory.dsl.PublisherConfig
 import java.util.Date
 
 plugins {
-    id("com.gradle.build-scan") version "2.3"
-    kotlin("jvm") version "1.3.41"
-    id("com.jfrog.bintray") version "1.8.4"
-    id("com.jfrog.artifactory") version "4.9.7" apply false
-    id("com.github.ben-manes.versions") version "0.21.0"
-    id("com.github.johnrengelman.shadow") version "5.0.0" apply false
-    id("org.sonarqube") version "2.7"
     id("io.gitlab.arturbosch.detekt")
-    id("org.jetbrains.dokka") version "0.9.18" apply false
     jacoco
+    `maven-publish`
+    // Plugin versions for these plugins are defined in gradle.properties and applied in settings.gradle.kts
+    id("com.jfrog.artifactory") apply false
+    id("com.jfrog.bintray")
+    id("org.jetbrains.dokka") apply false
+    id("com.github.ben-manes.versions")
+    kotlin("jvm")
+    id("com.github.johnrengelman.shadow") apply false
+    id("org.sonarqube")
 }
 
 buildScan {
@@ -27,7 +29,8 @@ buildScan {
 }
 
 tasks.wrapper {
-    gradleVersion = "5.4"
+    val gradleVersion: String by project
+    this.gradleVersion = gradleVersion
     distributionType = Wrapper.DistributionType.ALL
     doLast {
         /*
@@ -41,15 +44,22 @@ tasks.wrapper {
     }
 }
 
-tasks.withType<Test> {
-    dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":test"))
+tasks.check {
+    dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":check"))
 }
 
 tasks.withType<Detekt> {
     dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":detekt"))
 }
 
+val detektVersion: String by project
+val assertjVersion: String by project
+val spekVersion: String by project
+val reflectionsVersion: String by project
+val mockkVersion: String by project
+val junitPlatformVersion: String by project
 val jacocoVersion: String by project
+
 jacoco.toolVersion = jacocoVersion
 
 tasks {
@@ -59,8 +69,8 @@ tasks {
         subprojects
             .filterNot { it.name in listOf("detekt-test", "detekt-sample-extensions") }
             .forEach {
-                this@jacocoTestReport.sourceSets(it.sourceSets["main"])
-                this@jacocoTestReport.dependsOn(it.tasks["test"])
+                this@jacocoTestReport.sourceSets(it.sourceSets.main.get())
+                this@jacocoTestReport.dependsOn(it.tasks.test)
             }
 
         reports {
@@ -70,16 +80,19 @@ tasks {
     }
 }
 
-val detektVersion: String by project
+fun versionOrSnapshot(): String {
+    if (System.getProperty("snapshot")?.toBoolean() == true) {
+        return "$detektVersion-SNAPSHOT"
+    }
+    return detektVersion
+}
 
 allprojects {
     group = "io.gitlab.arturbosch.detekt"
-    version = detektVersion + if (System.getProperty("snapshot")?.toBoolean() == true) "-SNAPSHOT" else ""
+    version = versionOrSnapshot()
 
     repositories {
-        mavenLocal()
         jcenter()
-        maven(url = "https://dl.bintray.com/arturbosch/generic")
     }
 }
 
@@ -103,18 +116,19 @@ subprojects {
         jacoco.toolVersion = jacocoVersion
     }
 
+    val projectJvmTarget = "1.8"
+
     tasks.withType<Detekt> {
         exclude("resources/")
         exclude("build/")
+        jvmTarget = projectJvmTarget
     }
 
     val userHome = System.getProperty("user.home")
 
     detekt {
-        debug = true
         buildUponDefaultConfig = true
-        config = files(project.rootDir.resolve("reports/failfast.yml"))
-        baseline = project.rootDir.resolve("reports/baseline.xml")
+        baseline = file("$rootDir/config/detekt/baseline.xml")
 
         reports {
             xml.enabled = true
@@ -131,7 +145,7 @@ subprojects {
         }
     }
 
-    val shadowedProjects = listOf("detekt-cli", "detekt-watcher", "detekt-generator")
+    val shadowedProjects = listOf("detekt-cli", "detekt-generator")
 
     if (project.name in shadowedProjects) {
         apply {
@@ -142,6 +156,13 @@ subprojects {
 
     tasks.withType<Test> {
         useJUnitPlatform()
+        systemProperty("SPEK_TIMEOUT", 0) // disable test timeout
+        val compileSnippetText: Boolean = if (project.hasProperty("compile-test-snippets")) {
+            (project.property("compile-test-snippets") as String).toBoolean()
+        } else {
+            false
+        }
+        systemProperty("compile-snippet-tests", compileSnippetText)
         testLogging {
             // set options for log level LIFECYCLE
             events = setOf(
@@ -158,29 +179,19 @@ subprojects {
     }
 
     tasks.withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions.jvmTarget = projectJvmTarget
         // https://youtrack.jetbrains.com/issue/KT-24946
         kotlinOptions.freeCompilerArgs = listOf(
             "-progressive",
             "-Xskip-runtime-version-check",
             "-Xdisable-default-scripting-plugin",
-            "-Xuse-experimental=kotlin.Experimental"
+            "-Xopt-in=kotlin.RequiresOptIn"
         )
         kotlinOptions.allWarningsAsErrors = shouldTreatCompilerWarningsAsErrors()
     }
 
-    val bintrayUser =
-    if (project.hasProperty("bintrayUser")) {
-        project.property("bintrayUser").toString()
-    } else {
-        System.getenv("BINTRAY_USER")
-    }
-    val bintrayKey =
-    if (project.hasProperty("bintrayKey")) {
-        project.property("bintrayKey").toString()
-    } else {
-        System.getenv("BINTRAY_API_KEY")
-    }
+    val bintrayUser = findProperty("bintrayUser")?.toString() ?: System.getenv("BINTRAY_USER")
+    val bintrayKey = findProperty("bintrayKey")?.toString() ?: System.getenv("BINTRAY_API_KEY")
     val detektPublication = "DetektPublication"
 
     bintray {
@@ -217,9 +228,9 @@ subprojects {
     }
 
     val sourcesJar by tasks.creating(Jar::class) {
-        dependsOn("classes")
+        dependsOn(tasks.classes)
         archiveClassifier.set("sources")
-        from(sourceSets["main"].allSource)
+        from(sourceSets.main.get().allSource)
     }
 
     val javadocJar by tasks.creating(Jar::class) {
@@ -232,8 +243,8 @@ subprojects {
         archives(javadocJar)
     }
 
-    configure<PublishingExtension> {
-        publications.create<MavenPublication>(detektPublication) {
+    publishing {
+        publications.register<MavenPublication>(detektPublication) {
             from(components["java"])
             artifact(sourcesJar)
             artifact(javadocJar)
@@ -243,32 +254,32 @@ subprojects {
             groupId = this@subprojects.group as? String
             artifactId = this@subprojects.name
             version = this@subprojects.version as? String
-            pom.withXml {
-                asNode().apply {
-                    appendNode("description", "Static code analysis for Kotlin")
-                    appendNode("name", "detekt")
-                    appendNode("url", "https://arturbosch.github.io/detekt")
-
-                    val license = appendNode("licenses").appendNode("license")
-                    license.appendNode("name", "The Apache Software License, Version 2.0")
-                    license.appendNode("url", "http://www.apache.org/licenses/LICENSE-2.0.txt")
-                    license.appendNode("distribution", "repo")
-
-                    val developer = appendNode("developers").appendNode("developer")
-                    developer.appendNode("id", "Artur Bosch")
-                    developer.appendNode("name", "Artur Bosch")
-                    developer.appendNode("email", "arturbosch@gmx.de")
-
-                    appendNode("scm").appendNode("url", "https://github.com/arturbosch/detekt")
+            pom {
+                description.set("Static code analysis for Kotlin")
+                name.set("detekt")
+                url.set("https://arturbosch.github.io/detekt")
+                licenses {
+                    license {
+                        name.set("The Apache Software License, Version 2.0")
+                        url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                        distribution.set("repo")
+                    }
+                }
+                developers {
+                    developer {
+                        id.set("Artur Bosch")
+                        name.set("Artur Bosch")
+                        email.set("arturbosch@gmx.de")
+                    }
+                }
+                scm {
+                    url.set("https://github.com/arturbosch/detekt")
                 }
             }
         }
     }
 
-    fun artifactory(configure: ArtifactoryPluginConvention.() -> Unit): Unit =
-        configure(project.convention.getPluginByName("artifactory"))
-
-    artifactory {
+    configure<ArtifactoryPluginConvention> {
         setContextUrl("https://oss.jfrog.org/artifactory")
         publish(delegateClosureOf<PublisherConfig> {
             repository(delegateClosureOf<GroovyObject> {
@@ -285,21 +296,20 @@ subprojects {
         })
     }
 
-    val assertjVersion: String by project
-    val spekVersion: String by project
-    val kotlinTest by configurations.creating
-
     dependencies {
         implementation(kotlin("stdlib"))
 
         detekt(project(":detekt-cli"))
         detektPlugins(project(":detekt-formatting"))
 
-        kotlinTest("org.assertj:assertj-core:$assertjVersion")
-        kotlinTest("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
-    }
+        testImplementation("org.assertj:assertj-core:$assertjVersion")
+        testImplementation("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
+        testImplementation("org.reflections:reflections:$reflectionsVersion")
+        testImplementation("io.mockk:mockk:$mockkVersion")
 
-    sourceSets["main"].java.srcDirs("src/main/kotlin")
+        testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
+        testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spekVersion")
+    }
 }
 
 /**
@@ -321,16 +331,15 @@ val detektFormat by tasks.registering(Detekt::class) {
     buildUponDefaultConfig = true
     autoCorrect = true
     setSource(files(projectDir))
-    ignoreFailures = false
     include("**/*.kt")
     include("**/*.kts")
     exclude("**/resources/**")
     exclude("**/build/**")
-    config = files(projectDir.resolve("reports/format.yml"))
+    config.setFrom(files("$rootDir/config/detekt/format.yml"))
     reports {
-        xml { enabled = false }
-        html { enabled = false }
-        txt { enabled = false }
+        xml.enabled = false
+        html.enabled = false
+        txt.enabled = false
     }
 }
 
@@ -339,16 +348,28 @@ val detektAll by tasks.registering(Detekt::class) {
     parallel = true
     buildUponDefaultConfig = true
     setSource(files(projectDir))
-    config = files(project.rootDir.resolve("reports/failfast.yml"))
-    ignoreFailures = false
     include("**/*.kt")
     include("**/*.kts")
     exclude("**/resources/**")
     exclude("**/build/**")
-    baseline.set(project.rootDir.resolve("reports/baseline.xml"))
+    baseline.set(file("$rootDir/config/detekt/baseline.xml"))
     reports {
         xml.enabled = false
         html.enabled = false
         txt.enabled = false
     }
+}
+
+val detektProjectBaseline by tasks.registering(DetektCreateBaselineTask::class) {
+    description = "Overrides current baseline."
+    buildUponDefaultConfig.set(true)
+    ignoreFailures.set(true)
+    parallel.set(true)
+    setSource(files(rootDir))
+    config.setFrom(files("$rootDir/config/detekt/detekt.yml"))
+    baseline.set(file("$rootDir/config/detekt/baseline.xml"))
+    include("**/*.kt")
+    include("**/*.kts")
+    exclude("**/resources/**")
+    exclude("**/build/**")
 }

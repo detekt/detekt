@@ -22,6 +22,8 @@ interface RuleSetProvider {
      * Api notice: As the rule set id is not known before creating the rule set instance,
      * we must first create the rule set and then check if it is active.
      */
+    @Suppress("DEPRECATION")
+    @Deprecated("Exposes detekt-core implementation details.")
     fun buildRuleset(config: Config): RuleSet? {
         val subConfig = config.subConfig(ruleSetId)
         val active = subConfig.valueOrDefault("active", true)

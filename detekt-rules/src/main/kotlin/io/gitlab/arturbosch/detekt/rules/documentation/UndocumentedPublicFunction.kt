@@ -15,23 +15,23 @@ import org.jetbrains.kotlin.psi.psiUtil.isPublic
 /**
  * This rule will report any public function which does not have the required documentation.
  * If the codebase should have documentation on all public functions enable this rule to enforce this.
+ * Overridden functions are excluded by this rule.
  */
 class UndocumentedPublicFunction(config: Config = Config.empty) : Rule(config) {
 
     override val issue = Issue(javaClass.simpleName,
-            Severity.Maintainability,
-            "Public functions require documentation.", Debt.TWENTY_MINS)
+        Severity.Maintainability,
+        "Public functions require documentation.", Debt.TWENTY_MINS)
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (function.funKeyword == null && function.isLocal) return
 
         if (function.docComment == null && function.shouldBeDocumented()) {
             report(CodeSmell(issue, Entity.from(function),
-                    "The function ${function.nameAsSafeName} is missing documentation."))
+                "The function ${function.nameAsSafeName} is missing documentation."))
         }
     }
 
-    private fun KtNamedFunction.shouldBeDocumented() = isContainingClassPublic() && isPublicNotOverridden()
-
-    private fun KtNamedFunction.isContainingClassPublic() = containingClass().let { it == null || it.isPublic }
+    private fun KtNamedFunction.shouldBeDocumented() =
+        (isTopLevel || containingClass()?.isPublic == true) && isPublicNotOverridden()
 }

@@ -7,6 +7,3 @@ title: CodeSmell.references - detekt-api
 # references
 
 `open val references: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Entity`](../-entity/index.html)`>`
-
-Overrides [Finding.references](../-finding/references.html)
-

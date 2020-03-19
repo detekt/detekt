@@ -32,14 +32,14 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
             "Line detected that is longer than the defined maximum line length in the code style.",
             Debt.FIVE_MINS)
 
-    private val maxLineLength: Int =
-            valueOrDefault(MaxLineLength.MAX_LINE_LENGTH, MaxLineLength.DEFAULT_IDEA_LINE_LENGTH)
+    private val lengthThreshold: Int =
+            valueOrDefault(MAX_LINE_LENGTH, DEFAULT_IDEA_LINE_LENGTH)
     private val excludePackageStatements: Boolean =
-            valueOrDefault(MaxLineLength.EXCLUDE_PACKAGE_STATEMENTS, true)
+            valueOrDefault(EXCLUDE_PACKAGE_STATEMENTS, true)
     private val excludeImportStatements: Boolean =
-            valueOrDefault(MaxLineLength.EXCLUDE_IMPORT_STATEMENTS, true)
+            valueOrDefault(EXCLUDE_IMPORT_STATEMENTS, true)
     private val excludeCommentStatements: Boolean =
-            valueOrDefault(MaxLineLength.EXCLUDE_COMMENT_STATEMENTS, false)
+            valueOrDefault(EXCLUDE_COMMENT_STATEMENTS, false)
 
     fun visit(element: KtFileContent) {
         var offset = 0
@@ -63,7 +63,7 @@ class MaxLineLength(config: Config = Config.empty) : Rule(config) {
 
     private fun isValidLine(line: String): Boolean {
         val isUrl = line.lastArgumentMatchesUrl()
-        return line.length <= maxLineLength || isIgnoredStatement(line) || isUrl
+        return line.length <= lengthThreshold || isIgnoredStatement(line) || isUrl
     }
 
     private fun isIgnoredStatement(line: String): Boolean {

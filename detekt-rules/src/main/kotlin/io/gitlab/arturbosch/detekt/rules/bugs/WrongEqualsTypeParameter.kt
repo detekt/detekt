@@ -33,6 +33,8 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  *     }
  * }
  * </compliant>
+ *
+ * @active since v1.2.0
  */
 class WrongEqualsTypeParameter(config: Config = Config.empty) : Rule(config) {
 
@@ -49,9 +51,12 @@ class WrongEqualsTypeParameter(config: Config = Config.empty) : Rule(config) {
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        if (function.name == "equals" && !function.hasCorrectEqualsParameter()) {
+        if (function.name == "equals" && !function.isTopLevel && function.hasWrongEqualsSignature()) {
             report(CodeSmell(issue, Entity.from(function), "equals() methods should only take one parameter " +
                     "of type Any?."))
         }
     }
+
+    private fun KtNamedFunction.hasWrongEqualsSignature() =
+        valueParameters.size == 1 && !hasCorrectEqualsParameter()
 }

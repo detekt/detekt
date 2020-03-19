@@ -21,6 +21,7 @@ class MethodCountVisitorTest : Spek({
 private fun getMethodCount(file: KtFile): Int {
     return with(file) {
         accept(FunctionCountVisitor())
+        @Suppress("UnsafeCallOnNullableType")
         getUserData(numberOfFunctionsKey)!!
     }
 }

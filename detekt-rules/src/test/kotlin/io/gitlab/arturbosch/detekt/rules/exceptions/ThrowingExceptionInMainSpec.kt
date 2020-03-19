@@ -12,20 +12,78 @@ class ThrowingExceptionInMainSpec : Spek({
 
     describe("ThrowingExceptionInMain rule") {
 
-        it("has a runnable main method which throws an exception") {
-            val code = "fun main(args: Array<String>) { throw IllegalArgumentException() }"
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+        it("reports a runnable main function which throws an exception") {
+            val code = """
+                fun main(args: Array<String>) { throw IllegalArgumentException() }
+                fun main() { throw IllegalArgumentException() }
+            """
+            assertThat(subject.compileAndLint(code)).hasSize(2)
         }
 
-        it("has wrong main methods") {
-            val file = compileContentForTest(
-                """
-                    fun main(args: Array<String>) { }
-                    private fun main() { }
-                    fun mai() { }
-                    fun main(args: String) { }"""
+        it("reports runnable main functions with @JvmStatic annotation which throw an exception") {
+            val code = """
+                class A {
+                    companion object {
+                        @JvmStatic
+                        fun main(args: Array<String>) { throw IllegalArgumentException() }
+                    }
+                }
+                
+                class B {
+                    companion object {
+                        @kotlin.jvm.JvmStatic
+                        fun main() { throw IllegalArgumentException() }
+                    }
+                }
+                
+                object O {
+                    @JvmStatic
+                    fun main(args: Array<String>) { throw IllegalArgumentException() }
+                }
+            """
+            assertThat(subject.compileAndLint(code)).hasSize(3)
+        }
+
+        it("does not report top level main functions with a wrong signature") {
+            val file = compileContentForTest("""
+                private fun main(args: Array<String>) { throw IllegalArgumentException() }
+                private fun main() { throw IllegalArgumentException() }
+                fun mai() { throw IllegalArgumentException() }
+                fun main(args: String) { throw IllegalArgumentException() }
+                fun main(args: Array<String>, i: Int) { throw IllegalArgumentException() }"""
             )
-            assertThat(subject.lint(file)).hasSize(0)
+            assertThat(subject.lint(file)).isEmpty()
+        }
+
+        it("does not report top level main functions which throw no exception") {
+            val file = compileContentForTest("""
+                fun main(args: Array<String>) { }
+                fun main() { }
+                fun mai() { }
+                fun main(args: String) { }"""
+            )
+            assertThat(subject.lint(file)).isEmpty()
+        }
+
+        it("does not report top level main functions with expression body which throw no exception") {
+            val file = compileContentForTest("""
+                fun main(args: Array<String>) = ""
+                fun main() = Unit
+            """)
+            assertThat(subject.lint(file)).isEmpty()
+        }
+
+        it("does not report main functions with no @JvmStatic annotation inside a class") {
+            val code = """
+            class A {
+                fun main(args: Array<String>) { throw IllegalArgumentException() }
+                
+                companion object {
+                    fun main(args: Array<String>) { throw IllegalArgumentException() }
+                }
+            }
+            """
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
 })

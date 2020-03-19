@@ -9,6 +9,16 @@ class ComplexityReport : ConsoleReport() {
 
     override fun render(detektion: Detektion): String? {
         val complexityReportGenerator = ComplexityReportGenerator.create(detektion)
-        return complexityReportGenerator.generate()
+        return complexityReportGenerator.generate()?.let { list ->
+            with(StringBuilder()) {
+                append("Complexity Report:\n")
+                list.forEach {
+                    append(PREFIX)
+                    append(it)
+                    append("\n")
+                }
+                toString()
+            }
+        }
     }
 }

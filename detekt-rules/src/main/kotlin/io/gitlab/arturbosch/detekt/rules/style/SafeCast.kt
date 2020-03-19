@@ -7,7 +7,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.asBlockExpression
 import org.jetbrains.kotlin.KtNodeTypes
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtExpression
@@ -42,19 +41,18 @@ class SafeCast(config: Config = Config.empty) : Rule(config) {
             "Safe cast instead of if-else-null",
             Debt.FIVE_MINS
     )
-    private var identifier = ""
 
     override fun visitIfExpression(expression: KtIfExpression) {
-        val condition = expression.condition as? KtIsExpression
-        if (condition != null) {
-            val leftHandSide = condition.leftHandSide as? KtNameReferenceExpression
-            if (leftHandSide != null) {
-                identifier = leftHandSide.text
+        val condition = expression.condition
+        if (condition is KtIsExpression) {
+            val leftHandSide = condition.leftHandSide
+            if (leftHandSide is KtNameReferenceExpression) {
+                val identifier = leftHandSide.text
                 val thenClause = expression.then
                 val elseClause = expression.`else`
                 val result = when (condition.isNegated) {
-                    true -> isIfElseNull(elseClause, thenClause)
-                    false -> isIfElseNull(thenClause, elseClause)
+                    true -> isIfElseNull(elseClause, thenClause, identifier)
+                    false -> isIfElseNull(thenClause, elseClause, identifier)
                 }
                 if (result) {
                     addReport(expression)
@@ -63,9 +61,9 @@ class SafeCast(config: Config = Config.empty) : Rule(config) {
         }
     }
 
-    private fun isIfElseNull(thenClause: KtExpression?, elseClause: KtExpression?): Boolean {
-        val hasIdentifier = thenClause?.asBlockExpression()?.statements?.firstOrNull()?.text == identifier
-        val elseStatement = elseClause?.asBlockExpression()?.statements?.firstOrNull()
+    private fun isIfElseNull(thenClause: KtExpression?, elseClause: KtExpression?, identifier: String): Boolean {
+        val hasIdentifier = thenClause?.children?.firstOrNull()?.text == identifier
+        val elseStatement = elseClause?.children?.firstOrNull()
         val hasNull = elseStatement is KtConstantExpression && elseStatement.node.elementType == KtNodeTypes.NULL
         return hasIdentifier && hasNull
     }

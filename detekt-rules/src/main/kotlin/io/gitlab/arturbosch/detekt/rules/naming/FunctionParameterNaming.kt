@@ -19,6 +19,8 @@ import org.jetbrains.kotlin.psi.KtParameter
  * @configuration parameterPattern - naming pattern (default: `'[a-z][A-Za-z0-9]*'`)
  * @configuration excludeClassPattern - ignores variables in classes which match this regex (default: `'$^'`)
  * @configuration ignoreOverriddenFunctions - ignores overridden functions with parameters not matching the pattern
+ * (default: `true`) (deprecated: "Use `ignoreOverridden` instead")
+ * @configuration ignoreOverridden - ignores overridden functions with parameters not matching the pattern
  * (default: `true`)
  *
  * @active since v1.0.0
@@ -32,14 +34,14 @@ class FunctionParameterNaming(config: Config = Config.empty) : Rule(config) {
 
     private val parameterPattern by LazyRegex(PARAMETER_PATTERN, "[a-z][A-Za-z\\d]*")
     private val excludeClassPattern by LazyRegex(EXCLUDE_CLASS_PATTERN, "$^")
-    private val ignoreOverriddenFunctions = valueOrDefault(IGNORE_OVERRIDDEN_FUNCTIONS, true)
+    private val ignoreOverridden = valueOrDefault(IGNORE_OVERRIDDEN, valueOrDefault(IGNORE_OVERRIDDEN_FUNCTIONS, true))
 
     override fun visitParameter(parameter: KtParameter) {
         if (parameter.isContainingExcludedClass(excludeClassPattern)) {
             return
         }
 
-        if (ignoreOverriddenFunctions && parameter.ownerFunction?.isOverride() == true) {
+        if (ignoreOverridden && parameter.ownerFunction?.isOverride() == true) {
             return
         }
 
@@ -56,5 +58,6 @@ class FunctionParameterNaming(config: Config = Config.empty) : Rule(config) {
         const val PARAMETER_PATTERN = "parameterPattern"
         const val EXCLUDE_CLASS_PATTERN = "excludeClassPattern"
         const val IGNORE_OVERRIDDEN_FUNCTIONS = "ignoreOverriddenFunctions"
+        const val IGNORE_OVERRIDDEN = "ignoreOverridden"
     }
 }

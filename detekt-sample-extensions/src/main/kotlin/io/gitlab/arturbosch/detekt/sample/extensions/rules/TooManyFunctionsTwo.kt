@@ -8,7 +8,7 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
-import org.jetbrains.kotlin.com.intellij.psi.PsiFile
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedFunction
 
 /**
@@ -20,27 +20,31 @@ import org.jetbrains.kotlin.psi.KtNamedFunction
  */
 class TooManyFunctionsTwo(config: Config) : ThresholdRule(config, THRESHOLD) {
 
-    override val issue = Issue(javaClass.simpleName,
-            Severity.Maintainability,
-            "Too many functions can make the maintainability of a file more costly",
-            Debt(hours = 1))
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Maintainability,
+        "Too many functions can make the maintainability of a file more costly",
+        Debt(hours = 1)
+    )
 
     private var amount: Int = 0
 
-    override fun visitFile(file: PsiFile) {
-        super.visitFile(file)
+    override fun visitKtFile(file: KtFile) {
+        super.visitKtFile(file)
         if (amount > threshold) {
             report(ThresholdedCodeSmell(issue,
-                    entity = Entity.from(file),
-                    metric = Metric(type = "SIZE", value = amount, threshold = THRESHOLD),
-                    message = "The file ${file.name} has $amount function declarations. " +
-                            "Threshold is specified with $THRESHOLD.",
-                    references = emptyList())
+                entity = Entity.from(file),
+                metric = Metric(type = "SIZE", value = amount, threshold = THRESHOLD),
+                message = "The file ${file.name} has $amount function declarations. " +
+                    "Threshold is specified with $THRESHOLD.",
+                references = emptyList())
             )
         }
+        amount = 0
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
+        super.visitNamedFunction(function)
         amount++
     }
 }

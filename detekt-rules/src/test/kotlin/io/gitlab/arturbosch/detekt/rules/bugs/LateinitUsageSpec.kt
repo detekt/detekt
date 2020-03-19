@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.bugs
 
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.spekframework.spek2.Spek
@@ -12,71 +12,69 @@ class LateinitUsageSpec : Spek({
 
     describe("LateinitUsage rule") {
         val code = """
-			package foo
+            import kotlin.SinceKotlin
 
-			import kotlin.jvm.JvmField
-			import kotlin.SinceKotlin
-
-			class SomeRandomTest {
-				@JvmField lateinit var test: Int
-				@JvmField @SinceKotlin("1.0.0") lateinit var something: Int
-			}
-		"""
+            class SomeRandomTest {
+                lateinit var v1: String
+                @SinceKotlin("1.0.0") lateinit var v2: String
+            }
+        """
 
         it("should report lateinit usages") {
-            val findings = LateinitUsage().lint(code)
+            val findings = LateinitUsage().compileAndLint(code)
             assertThat(findings).hasSize(2)
         }
 
-        it("should not report lateinit properties annotated @JvmField") {
-            val findings = LateinitUsage(TestConfig(mapOf(LateinitUsage.EXCLUDE_ANNOTATED_PROPERTIES to "JvmField"))).lint(code)
-            assertThat(findings).isEmpty()
+        it("should only report lateinit property with no @SinceKotlin annotation") {
+            val findings = LateinitUsage(TestConfig(mapOf(LateinitUsage.EXCLUDE_ANNOTATED_PROPERTIES to "SinceKotlin"))).compileAndLint(code)
+            assertThat(findings).hasSize(1)
         }
 
-        it("should not report lateinit properties annotated @JvmField with trailing whitespace") {
-            val findings = LateinitUsage(TestConfig(mapOf(LateinitUsage.EXCLUDE_ANNOTATED_PROPERTIES to " JvmField "))).lint(code)
-            assertThat(findings).isEmpty()
+        it("should only report lateinit property with no @SinceKotlin annotation containing whitespaces") {
+            val findings = LateinitUsage(TestConfig(mapOf(LateinitUsage.EXCLUDE_ANNOTATED_PROPERTIES to " SinceKotlin "))).compileAndLint(code)
+            assertThat(findings).hasSize(1)
         }
 
-        it("should not report lateinit properties matching kotlin.*") {
-            val findings = LateinitUsage(TestConfig(mapOf(LateinitUsage.EXCLUDE_ANNOTATED_PROPERTIES to "kotlin.*"))).lint(code)
-            assertThat(findings).isEmpty()
+        it("should only report lateinit properties not matching kotlin.*") {
+            val findings = LateinitUsage(TestConfig(mapOf(LateinitUsage.EXCLUDE_ANNOTATED_PROPERTIES to "kotlin.*"))).compileAndLint(code)
+            assertThat(findings).hasSize(1)
         }
 
-        it("should not report lateinit properties matching kotlin.jvm.") {
-            val findings = LateinitUsage(TestConfig(mapOf(LateinitUsage.EXCLUDE_ANNOTATED_PROPERTIES to "kotlin.jvm."))).lint(code)
-            assertThat(findings).isEmpty()
+        it("should only report lateinit properties matching kotlin.") {
+            val findings = LateinitUsage(TestConfig(mapOf(LateinitUsage.EXCLUDE_ANNOTATED_PROPERTIES to "kotlin."))).compileAndLint(code)
+            assertThat(findings).hasSize(1)
         }
 
-        it("should not report lateinit properties matching kotlin.jvm.*") {
-            val findings = LateinitUsage(TestConfig(mapOf(LateinitUsage.EXCLUDE_ANNOTATED_PROPERTIES to "kotlin.jvm.*"))).lint(code)
-            assertThat(findings).isEmpty()
+        it("should only report lateinit properties matching kotlin.SinceKotlin") {
+            val config = TestConfig(mapOf(LateinitUsage.EXCLUDE_ANNOTATED_PROPERTIES to "kotlin.SinceKotlin"))
+            val findings = LateinitUsage(config).compileAndLint(code)
+            assertThat(findings).hasSize(1)
         }
 
-        it("should not exclude lateinit properties not matching the exclude pattern") {
-            val findings = LateinitUsage(TestConfig(mapOf(LateinitUsage.EXCLUDE_ANNOTATED_PROPERTIES to "IgnoreThis"))).lint(code)
+        it("should report lateinit properties not matching the exclude pattern") {
+            val findings = LateinitUsage(TestConfig(mapOf(LateinitUsage.EXCLUDE_ANNOTATED_PROPERTIES to "IgnoreThis"))).compileAndLint(code)
             assertThat(findings).hasSize(2)
         }
 
         it("should report lateinit properties when ignoreOnClassesPattern does not match") {
-            val findings = LateinitUsage(TestConfig(mapOf(LateinitUsage.IGNORE_ON_CLASSES_PATTERN to "[\\w]+Test1234"))).lint(code)
+            val findings = LateinitUsage(TestConfig(mapOf(LateinitUsage.IGNORE_ON_CLASSES_PATTERN to "[\\w]+Test1234"))).compileAndLint(code)
             assertThat(findings).hasSize(2)
         }
 
         it("should not report lateinit properties when ignoreOnClassesPattern does match") {
-            val findings = LateinitUsage(TestConfig(mapOf(LateinitUsage.IGNORE_ON_CLASSES_PATTERN to "[\\w]+Test"))).lint(code)
+            val findings = LateinitUsage(TestConfig(mapOf(LateinitUsage.IGNORE_ON_CLASSES_PATTERN to "[\\w]+Test"))).compileAndLint(code)
             assertThat(findings).isEmpty()
         }
 
         it("should fail when enabled with faulty regex pattern") {
             assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
-                LateinitUsage(TestConfig(mapOf(LateinitUsage.IGNORE_ON_CLASSES_PATTERN to "*Test"))).lint(code)
+                LateinitUsage(TestConfig(mapOf(LateinitUsage.IGNORE_ON_CLASSES_PATTERN to "*Test"))).compileAndLint(code)
             }
         }
 
         it("should not fail when disabled with faulty regex pattern") {
             val configValues = mapOf("active" to "false", LateinitUsage.IGNORE_ON_CLASSES_PATTERN to "*Test")
-            val findings = LateinitUsage(TestConfig(configValues)).lint(code)
+            val findings = LateinitUsage(TestConfig(configValues)).compileAndLint(code)
             assertThat(findings).isEmpty()
         }
     }

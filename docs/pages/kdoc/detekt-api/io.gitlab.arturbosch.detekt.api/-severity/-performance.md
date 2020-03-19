@@ -7,3 +7,6 @@ title: Severity.Performance - detekt-api
 # Performance
 
 `Performance`
+
+Places in the source code which degrade the performance of the application.
+

@@ -6,8 +6,9 @@ permalink: formatting.html
 toc: true
 folder: documentation
 ---
-This rule set provides rules that address formatting issues.
+This rule set provides wrappers for rules implemented by KtLint - https://ktlint.github.io/.
 
+Note: Issues reported by this rule set can only be suppressed on file level (@file:Suppress("detekt.rule").
 Note: The formatting rule set is not included in the detekt-cli or gradle plugin.
 
 To enable this rule set, add <i>detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:$version"</i>
@@ -26,6 +27,10 @@ See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
 
 See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
 
+### EnumEntryNameCase
+
+See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
+
 ### Filename
 
 See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
@@ -33,6 +38,12 @@ See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
 ### FinalNewline
 
 See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
+
+#### Configuration options:
+
+* ``insertFinalNewLine`` (default: ``true``)
+
+   report absence or presence of a newline
 
 ### ImportOrdering
 
@@ -44,11 +55,11 @@ See <a href="https://ktlint.github.io/#rule-indentation">ktlint-website</a> for 
 
 #### Configuration options:
 
-* `indentSize` (default: `4`)
+* ``indentSize`` (default: ``4``)
 
    indentation size
 
-* `continuationIndentSize` (default: `4`)
+* ``continuationIndentSize`` (default: ``4``)
 
    continuation indentation size
 
@@ -58,7 +69,7 @@ See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
 
 #### Configuration options:
 
-* `maxLineLength` (default: `120`)
+* ``maxLineLength`` (default: ``120``)
 
    maximum line length
 
@@ -82,7 +93,7 @@ See <a href="https://ktlint.github.io/#rule-blank">ktlint-website</a> for docume
 
 See <a href="https://ktlint.github.io/#rule-empty-class-body">ktlint-website</a> for documentation.
 
-### NoItParamInMultilineLambda
+### NoEmptyFirstLineInMethodBlock
 
 See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
 
@@ -128,7 +139,7 @@ See <a href="https://ktlint.github.io">ktlint-website</a> for documentation.
 
 #### Configuration options:
 
-* `indentSize` (default: `4`)
+* ``indentSize`` (default: ``4``)
 
    indentation size
 
@@ -161,10 +172,6 @@ See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for docu
 See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.
 
 ### SpacingAroundRangeOperator
-
-See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.
-
-### SpacingAroundUnaryOperators
 
 See <a href="https://ktlint.github.io/#rule-spacing">ktlint-website</a> for documentation.
 

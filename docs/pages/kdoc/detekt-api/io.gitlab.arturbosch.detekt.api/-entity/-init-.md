@@ -10,6 +10,3 @@ title: Entity.<init> - detekt-api
 
 Stores information about a specific code fragment.
 
-**Author**
-Artur Bosch
-

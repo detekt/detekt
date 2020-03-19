@@ -10,6 +10,3 @@ title: ProjectMetric.<init> - detekt-api
 
 Anything that can be expressed as a number value for projects.
 
-**Author**
-Artur Bosch
-

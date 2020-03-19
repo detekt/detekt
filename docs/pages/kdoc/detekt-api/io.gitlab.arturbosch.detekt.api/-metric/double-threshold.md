@@ -7,3 +7,6 @@ title: Metric.doubleThreshold - detekt-api
 # doubleThreshold
 
 `fun doubleThreshold(): `[`Double`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-double/index.html)
+
+Specified threshold for this metric as a double value.
+

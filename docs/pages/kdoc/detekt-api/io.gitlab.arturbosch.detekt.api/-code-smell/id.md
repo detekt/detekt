@@ -7,6 +7,3 @@ title: CodeSmell.id - detekt-api
 # id
 
 `open val id: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)
-
-Overrides [Finding.id](../-finding/id.html)
-

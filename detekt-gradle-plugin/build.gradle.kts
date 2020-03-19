@@ -3,17 +3,7 @@ import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import java.util.Date
 
-buildscript {
-    repositories {
-        mavenCentral()
-        mavenLocal()
-        jcenter()
-    }
-}
-
 repositories {
-    gradlePluginPortal()
-    mavenLocal()
     jcenter()
 }
 
@@ -22,31 +12,31 @@ plugins {
     `maven-publish`
     id("com.gradle.plugin-publish") version "0.10.1"
     id("com.jfrog.bintray") version "1.8.4"
-    kotlin("jvm") version "1.3.41"
-    id("org.jetbrains.dokka") version "0.9.18"
-    id("com.github.ben-manes.versions") version "0.21.0"
-    id("io.gitlab.arturbosch.detekt") version "1.0.0-RC15"
+    kotlin("jvm") version "1.3.70"
+    id("org.jetbrains.dokka") version "0.10.1"
+    id("com.github.ben-manes.versions") version "0.28.0"
+    id("io.gitlab.arturbosch.detekt") version "1.7.0-beta2"
 }
 
 group = "io.gitlab.arturbosch.detekt"
-version = "1.0.0-RC16"
+version = "1.7.0-beta2"
 
-val detektGradleVersion: String by project
-val jcommanderVersion: String by project
-val spekVersion = "2.0.2"
-val junitPlatformVersion = "1.4.1"
-val assertjVersion = "3.12.2"
+val spekVersion = "2.0.9"
+val junitPlatformVersion = "1.6.0"
+val assertjVersion = "3.15.0"
+val detektFormattingVersion = version
 
 dependencies {
     implementation(kotlin("stdlib"))
     implementation(kotlin("gradle-plugin"))
     implementation(kotlin("gradle-plugin-api"))
 
-    testImplementation(kotlin("reflect"))
     testImplementation("org.assertj:assertj-core:$assertjVersion")
     testImplementation("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
     testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spekVersion")
+
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:$detektFormattingVersion")
 }
 
 gradlePlugin {
@@ -60,6 +50,7 @@ gradlePlugin {
 
 tasks.test {
     useJUnitPlatform()
+    systemProperty("SPEK_TIMEOUT", 0) // disable test timeout
     testLogging {
         // set options for log level LIFECYCLE
         events = setOf(
@@ -75,8 +66,8 @@ tasks.test {
     }
 }
 
-tasks.validateTaskProperties {
-    enableStricterValidation = true
+tasks.validatePlugins {
+    enableStricterValidation.set(true)
 }
 
 pluginBundle {
@@ -94,14 +85,16 @@ pluginBundle {
 }
 
 tasks.dokka {
-    // suppresses undocumented classes but not dokka warnings
-    // https://github.com/Kotlin/dokka/issues/229 && https://github.com/Kotlin/dokka/issues/319
-    reportUndocumented = false
     outputFormat = "javadoc"
     outputDirectory = "$buildDir/javadoc"
+    configuration {
+        // suppresses undocumented classes but not dokka warnings
+        // https://github.com/Kotlin/dokka/issues/229 && https://github.com/Kotlin/dokka/issues/319
+        reportUndocumented = false
+    }
 }
 
-val generateDefaultDetektVersionFile: Task by tasks.creating {
+val generateDefaultDetektVersionFile by tasks.registering {
     val defaultDetektVersionFile =
         File("$buildDir/generated/src/io/gitlab/arturbosch/detekt", "PluginVersion.kt")
 
@@ -113,25 +106,26 @@ val generateDefaultDetektVersionFile: Task by tasks.creating {
             package io.gitlab.arturbosch.detekt
 
             internal const val DEFAULT_DETEKT_VERSION = "$version"
+
             """.trimIndent()
         )
     }
 }
 
-sourceSets["main"].java.srcDir("$buildDir/generated/src")
+sourceSets.main.get().java.srcDir("$buildDir/generated/src")
 
 tasks.compileKotlin {
     dependsOn(generateDefaultDetektVersionFile)
 }
 
 val sourcesJar by tasks.creating(Jar::class) {
-    dependsOn("classes")
+    dependsOn(tasks.classes)
     archiveClassifier.set("sources")
-    from(sourceSets["main"].allSource)
+    from(sourceSets.main.get().allSource)
 }
 
 val javadocJar by tasks.creating(Jar::class) {
-    dependsOn("dokka")
+    dependsOn(tasks.dokka)
     archiveClassifier.set("javadoc")
     from(buildDir.resolve("javadoc"))
 }
@@ -142,23 +136,12 @@ artifacts {
 }
 
 detekt {
-    config = files(
-        project.rootDir.resolve("../detekt-cli/src/main/resources/default-detekt-config.yml"),
-        project.rootDir.resolve("../reports/failfast.yml")
-    )
+    buildUponDefaultConfig = true
+    config.setFrom(file("../config/detekt/detekt.yml"))
 }
-val bintrayUser: String? =
-    if (project.hasProperty("bintrayUser")) {
-        project.property("bintrayUser").toString()
-    } else {
-        System.getenv("BINTRAY_USER")
-    }
-val bintrayKey: String? =
-    if (project.hasProperty("bintrayKey")) {
-        project.property("bintrayKey").toString()
-    } else {
-        System.getenv("BINTRAY_API_KEY")
-    }
+
+val bintrayUser: String? = findProperty("bintrayUser")?.toString() ?: System.getenv("BINTRAY_USER")
+val bintrayKey: String? = findProperty("bintrayKey")?.toString() ?: System.getenv("BINTRAY_API_KEY")
 val detektPublication = "DetektPublication"
 
 publishing {
@@ -169,23 +152,26 @@ publishing {
         groupId = rootProject.group as? String
         artifactId = rootProject.name
         version = rootProject.version as? String
-        pom.withXml {
-            asNode().apply {
-                appendNode("description", "Static code analysis for Kotlin")
-                appendNode("name", "detekt")
-                appendNode("url", "https://github.com/arturbosch/detekt")
-
-                val license = appendNode("licenses").appendNode("license")
-                license.appendNode("name", "The Apache Software License, Version 2.0")
-                license.appendNode("url", "http://www.apache.org/licenses/LICENSE-2.0.txt")
-                license.appendNode("distribution", "repo")
-
-                val developer = appendNode("developers").appendNode("developer")
-                developer.appendNode("id", "Artur Bosch")
-                developer.appendNode("name", "Artur Bosch")
-                developer.appendNode("email", "arturbosch@gmx.de")
-
-                appendNode("scm").appendNode("url", "https://github.com/arturbosch/detekt")
+        pom {
+            description.set("Static code analysis for Kotlin")
+            name.set("detekt")
+            url.set("https://github.com/arturbosch/detekt")
+            licenses {
+                license {
+                    name.set("The Apache Software License, Version 2.0")
+                    url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                    distribution.set("repo")
+                }
+            }
+            developers {
+                developer {
+                    id.set("Artur Bosch")
+                    name.set("Artur Bosch")
+                    email.set("arturbosch@gmx.de")
+                }
+            }
+            scm {
+                url.set("https://github.com/arturbosch/detekt")
             }
         }
     }

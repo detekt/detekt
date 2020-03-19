@@ -8,6 +8,8 @@ folder: gettingstarted
 summary:
 ---
 
+detekt requires Gradle 5.0 or higher.
+
 #### <a name="tasks">Available plugin tasks</a>
 
 The detekt Gradle plugin will generate multiple tasks
@@ -25,44 +27,27 @@ The detekt Gradle plugin will generate multiple tasks
 Use the Groovy or Kotlin DSL of Gradle to apply the detekt Gradle Plugin. You can further configure the Plugin
 using the detekt closure as described [here](#closure).
 
-##### <a name="gradlegroovy">Configuration when using groovy dsl</a>
-For gradle version >= 4.9
+##### <a name="gradlegroovy">Configuration when using Groovy DSL</a>
 
 ```groovy
-buildscript {
-    repositories {
-        jcenter()
-    }
-}
-
 repositories {
     jcenter()
+
+    // or
+
+    mavenCentral()
+    jcenter {
+        content {
+            // just allow to include kotlinx projects
+            // detekt needs 'kotlinx-html' for the html report
+            includeGroup "org.jetbrains.kotlinx"
+        }
+    }
 }
 
 plugins {
     id "io.gitlab.arturbosch.detekt" version "[version]"
 }
-```
-
-For all gradle versions:
-
-```groovy
-buildscript {
-  repositories {
-    jcenter()
-    maven { url "https://plugins.gradle.org/m2/" }
-  }
-  dependencies {
-    // https://mvnrepository.com/artifact/gradle.plugin.io.gitlab.arturbosch.detekt/detekt-gradle-plugin 
-    // for version <= 1.0.0.RC9.2
-    classpath "gradle.plugin.io.gitlab.arturbosch.detekt:detekt-gradle-plugin:[version]"
-    // https://mvnrepository.com/artifact/io.gitlab.arturbosch.detekt/detekt-gradle-plugin?repo=gradle-plugins
-    // for version >= 1.0.0-RC10
-    classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:[version]"
-  }
-}
-
-apply plugin: "io.gitlab.arturbosch.detekt"
 ```
 
 ##### <a name="gradleandroid">Configuration for Android projects</a>
@@ -78,7 +63,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:[version]'
-        classpath "gradle.plugin.io.gitlab.arturbosch.detekt:detekt-gradle-plugin:[version]"
+        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:[version]"
     }
 
 }
@@ -95,7 +80,7 @@ apply plugin: 'io.gitlab.arturbosch.detekt'
 ```groovy
 detekt {
     toolVersion = "[version]"                             // Version of the Detekt CLI that will be used. When unspecified the latest detekt version found will be used. Override to stay on the same version.
-    input = files(                                        // The directories where detekt looks for input files. Defaults to `files("src/main/java", "src/main/kotlin")`.
+    source = files(                                        // The directories where detekt looks for source files. Defaults to `files("src/main/java", "src/main/kotlin")`.
         "src/main/kotlin",
         "gensrc/main/kotlin"
     )
@@ -127,6 +112,15 @@ detekt {
 }
 ```
 
+##### Using Type Resolution
+
+Type resolution is experimental and works only for predefined `detektMain` and `detektTest` tasks or when implementing a 
+custom detekt task with the `classpath` and `jvmTarget` properties present.
+
+```groovy
+tasks.detekt.jvmTarget = "1.8"
+```
+
 ##### <a name="excluding">Leveraging Gradle's SourceTask - Excluding and including source files</a>
 
 A detekt task extends the Gradle `SourceTask` to be only scheduled when watched source files are changed.
@@ -150,25 +144,43 @@ Custom tasks for alternative configurations or different source sets can be defi
 uses the type `Detekt`.
 
 ###### Groovy DSL
+
 ```groovy
 task detektFailFast(type: io.gitlab.arturbosch.detekt.Detekt) {
-   description = "Runs a failfast detekt build."
-
-   input = files("src/main/java")
-   config = files("$rootDir/config.yml")
-   debug = true
-   reports {
-       xml {
-           destination = file("build/reports/failfast.xml")
-       }
-       html.destination = file("build/reports/failfast.html")
-   }
+    description = "Runs a failfast detekt build."
+    source = files("src/main/java")
+    config = files("$rootDir/config.yml")
+    debug = true
+    reports {
+        xml {
+            destination = file("build/reports/failfast.xml")
+        }
+        html.destination = file("build/reports/failfast.html")
+    }
     include '**/*.kt'
     include '**/*.kts'
     exclude 'resources/'
     exclude 'build/'
 }
 ```
+
+##### <a name="check-lifecycle">Disabling detekt from the check task</a>
+
+Detekt tasks by default are verification tasks. They get executed whenever the Gradle check task gets executed.
+This aligns with the behavior of other code analysis plugins for Gradle.
+
+If you are adding detekt to an already long running project you may want to increase the code quality incrementally and therefore
+exclude detekt from the check task.
+
+```gradle
+tasks.getByName("check") {
+    this.setDependsOn(this.dependsOn.filterNot {
+        it is TaskProvider<*> && it.name == "detekt"
+    })
+}
+```
+
+Instead of disabling detekt for the check task, you may want to increase the build failure threshold in the [configuration file](../configurations.md).
 
 ##### <a name="idea">Configure a local IDEA for detekt</a>
 

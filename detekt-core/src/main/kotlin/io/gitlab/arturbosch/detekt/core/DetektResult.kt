@@ -8,6 +8,7 @@ import io.gitlab.arturbosch.detekt.api.RuleSetId
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.com.intellij.util.keyFMap.KeyFMap
 
+@Suppress("DataClassShouldBeImmutable")
 data class DetektResult(override val findings: Map<RuleSetId, List<Finding>>) : Detektion {
 
     private val _notifications = ArrayList<Notification>()

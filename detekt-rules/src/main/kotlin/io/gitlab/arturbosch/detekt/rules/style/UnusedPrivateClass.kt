@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.safeAs
+import org.jetbrains.kotlin.psi.KtAnnotationEntry
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCallableReferenceExpression
 import org.jetbrains.kotlin.psi.KtClass
@@ -28,11 +29,14 @@ import org.jetbrains.kotlin.psi.KtTypeElement
 import org.jetbrains.kotlin.psi.KtTypeReference
 import org.jetbrains.kotlin.psi.KtUserType
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
+import org.jetbrains.kotlin.utils.addIfNotNull
 
 /**
  * Reports unused private classes.
  * If private classes are unused they should be removed. Otherwise this dead code
  * can lead to confusion and potential bugs.
+ *
+ * @active since v1.2.0
  */
 class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
 
@@ -74,6 +78,11 @@ class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
             super.visitClass(klass)
         }
 
+        override fun visitAnnotationEntry(annotationEntry: KtAnnotationEntry) {
+            namedClasses.addIfNotNull(annotationEntry.typeReference?.text)
+            super.visitAnnotationEntry(annotationEntry)
+        }
+
         private fun registerAccess(typeReference: KtTypeReference) {
             // Try with the actual type of the reference (e.g. Foo, Foo?)
             typeReference.orInnerType().run { namedClasses.add(text) }
@@ -91,7 +100,7 @@ class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
                     ?.forEach {
                         namedClasses.add(it.text)
                         // Recursively register for nested generic types (e.g. List<List<Foo>>)
-                        (it as? KtTypeReference)?.run { registerAccess(it) }
+                        if (it is KtTypeReference) registerAccess(it)
                     }
         }
 
@@ -124,6 +133,10 @@ class UnusedPrivateClass(config: Config = Config.empty) : Rule(config) {
 
         override fun visitCallExpression(expression: KtCallExpression) {
             expression.calleeExpression?.text?.run { namedClasses.add(this) }
+            expression.typeArguments
+                .forEach {
+                    namedClasses.add(it.text)
+                }
             super.visitCallExpression(expression)
         }
 

@@ -29,17 +29,18 @@ class InvalidPackageDeclaration(config: Config = Config.empty) : Rule(config) {
 
     private val rootPackage: String = valueOrDefault(ROOT_PACKAGE, "")
 
-    private var normalizedPathFromPackageDeclaration: String = ""
+    private var packageDeclaration: KtPackageDirective? = null
 
     override fun visitPackageDirective(directive: KtPackageDirective) {
         super.visitPackageDirective(directive)
-        normalizedPathFromPackageDeclaration = directive.packageNames.map(KtElement::getText).toNormalizedForm()
+        packageDeclaration = directive
     }
 
     override fun postVisit(root: KtFile) {
         super.postVisit(root)
-        val declaredPath = normalizedPathFromPackageDeclaration
-        if (declaredPath.isBlank()) {
+        val packageDeclaration = packageDeclaration
+        val declaredPath = packageDeclaration?.packageNames?.map(KtElement::getText)?.toNormalizedForm()
+        if (declaredPath.isNullOrBlank()) {
             root.reportInvalidPackageDeclaration("The file does not contain a package declaration.")
         } else {
             val normalizedFilePath = Paths.get(root.absolutePath()).parent.toNormalizedForm()
@@ -53,12 +54,13 @@ class InvalidPackageDeclaration(config: Config = Config.empty) : Rule(config) {
 
             val isInRootPackage = expectedPath.isBlank()
             if (!isInRootPackage && !normalizedFilePath.endsWith(expectedPath)) {
-                root.reportInvalidPackageDeclaration("The package declaration does not match the actual file location.")
+                packageDeclaration
+                    .reportInvalidPackageDeclaration("The package declaration does not match the actual file location.")
             }
         }
     }
 
-    private fun KtFile.reportInvalidPackageDeclaration(message: String) {
+    private fun KtElement.reportInvalidPackageDeclaration(message: String) {
         report(CodeSmell(issue, Entity.from(this), message))
     }
 

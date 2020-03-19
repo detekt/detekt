@@ -1,23 +1,21 @@
 package io.gitlab.arturbosch.detekt.cli.console
 
 import io.gitlab.arturbosch.detekt.api.Debt
+import io.gitlab.arturbosch.detekt.api.Finding
 
-class DebtSumming {
+class DebtSumming() {
 
     private val debtList = mutableListOf<Debt>()
+
+    constructor(issues: List<Finding>) : this() {
+        issues.forEach { debtList.add(it.issue.debt) }
+    }
 
     fun add(debt: Debt) {
         debtList.add(debt)
     }
 
-    fun calculateDebt(): Debt? {
-        if (debtList.isEmpty()) {
-            return null
-        }
-        return calculate()
-    }
-
-    private fun calculate(): Debt {
+    fun calculateDebt(): Debt {
         var minutes = 0
         var hours = 0
         var days = 0

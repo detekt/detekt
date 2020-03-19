@@ -1,17 +1,25 @@
+branches:
+  only:
+    - master
+
 version: '{build}'
 
 skip_tags: true
-
 skip_commits:
   message: /\[ci skip\]/
+skip_branch_with_pr: true
+
 clone_depth: 10
 
 environment:
   TERM: dumb
   matrix:
-    - JAVA_HOME: C:\Program Files\Java\jdk1.8.0
-    - JAVA_HOME: C:\Program Files\Java\jdk11
-    - JAVA_HOME: C:\Program Files\Java\jdk12
+    -
+      JAVA_HOME: C:\Program Files\Java\jdk1.8.0
+      COMPILE_TEST_SNIPPETS: true
+    -
+      JAVA_HOME: C:\Program Files\Java\jdk13
+      COMPILE_TEST_SNIPPETS: false
 
 init:
   - git config --global --unset core.autocrlf
@@ -26,12 +34,11 @@ install:
   - gradlew.bat --version
 
 build_script:
-  - gradlew build --build-cache --parallel -PwarningsAsErrors=true
-  - gradlew installShadowDist
+  - gradlew build installShadowDist --build-cache --parallel -PwarningsAsErrors=true -Pcompile-test-snippets=%COMPILE_TEST_SNIPPETS%
   - detekt-cli\build\install\detekt-cli-shadow\bin\detekt-cli --help
 
 test_script:
-  - detekt-cli\build\install\detekt-cli-shadow\bin\detekt-cli -i . --baseline reports\baseline.xml -ex "**/resources/**,**/detekt*/build/**" -c detekt-cli\src\main\resources\default-detekt-config.yml,reports\failfast.yml
+  - detekt-cli\build\install\detekt-cli-shadow\bin\detekt-cli @config\detekt\argsfile_windows
   - gradlew verifyGeneratorOutput
 
 after_test:

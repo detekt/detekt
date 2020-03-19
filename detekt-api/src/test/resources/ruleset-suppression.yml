@@ -1,0 +1,4 @@
+complexity:
+  LongParameterList:
+    active: true
+    threshold: 5

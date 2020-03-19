@@ -45,3 +45,18 @@ open class OpenUtilityClass { // violation - utility class should be final
         val C = 0
     }
 }
+
+sealed class SealedParent {
+    companion object {
+        fun create(foo: Int?, bar: String?): SealedParent? =
+            when {
+                foo != null -> FooChild(foo)
+                bar != null -> BarChild(bar)
+                else -> null
+            }
+    }
+}
+
+data class FooChild(val foo: Int) : SealedParent()
+
+data class BarChild(val bar: String) : SealedParent()

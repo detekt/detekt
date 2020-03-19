@@ -68,10 +68,8 @@ class EqualsWithHashCodeExist(config: Config = Config.empty) : Rule(config) {
     }
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-        val klass = classOrObject as? KtClass
-        if (klass != null && klass.isData()) {
-            return
-        }
+        if (classOrObject is KtClass && classOrObject.isData()) return
+
         queue.push(ViolationHolder())
         super.visitClassOrObject(classOrObject)
         if (queue.pop().violation()) {
@@ -82,10 +80,8 @@ class EqualsWithHashCodeExist(config: Config = Config.empty) : Rule(config) {
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (!function.isTopLevel) {
-            function.let {
-                if (it.isEqualsFunction()) queue.peek().equals = true
-                if (it.isHashCodeFunction()) queue.peek().hashCode = true
-            }
+            if (function.isEqualsFunction()) queue.peek().equals = true
+            if (function.isHashCodeFunction()) queue.peek().hashCode = true
         }
     }
 }

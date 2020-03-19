@@ -7,3 +7,6 @@ title: Severity.Defect - detekt-api
 # Defect
 
 `Defect`
+
+Corresponds to coding mistakes which could lead to unwanted behavior.
+

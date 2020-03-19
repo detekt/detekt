@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.formatting.wrappers.AnnotationOnSeparateLine
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ChainWrapping
 import io.gitlab.arturbosch.detekt.formatting.wrappers.CommentSpacing
+import io.gitlab.arturbosch.detekt.formatting.wrappers.EnumEntryNameCase
 import io.gitlab.arturbosch.detekt.formatting.wrappers.Filename
 import io.gitlab.arturbosch.detekt.formatting.wrappers.FinalNewline
 import io.gitlab.arturbosch.detekt.formatting.wrappers.ImportOrdering
@@ -16,7 +17,7 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.MultiLineIfElse
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoBlankLineBeforeRbrace
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoConsecutiveBlankLines
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoEmptyClassBody
-import io.gitlab.arturbosch.detekt.formatting.wrappers.NoItParamInMultilineLambda
+import io.gitlab.arturbosch.detekt.formatting.wrappers.NoEmptyFirstLineInMethodBlock
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoLineBreakAfterElse
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoLineBreakBeforeAssignment
 import io.gitlab.arturbosch.detekt.formatting.wrappers.NoMultipleSpaces
@@ -35,7 +36,6 @@ import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundKeyword
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundOperators
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundParens
 import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundRangeOperator
-import io.gitlab.arturbosch.detekt.formatting.wrappers.SpacingAroundUnaryOperators
 import io.gitlab.arturbosch.detekt.formatting.wrappers.StringTemplate
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.com.intellij.psi.impl.source.JavaDummyElement
@@ -51,6 +51,7 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
         AnnotationOnSeparateLine(config),
         ChainWrapping(config),
         CommentSpacing(config),
+        EnumEntryNameCase(config),
         Filename(config),
         FinalNewline(config),
         ImportOrdering(config),
@@ -61,7 +62,7 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
         NoBlankLineBeforeRbrace(config),
         NoConsecutiveBlankLines(config),
         NoEmptyClassBody(config),
-        NoItParamInMultilineLambda(config),
+        NoEmptyFirstLineInMethodBlock(config),
         NoLineBreakAfterElse(config),
         NoLineBreakBeforeAssignment(config),
         NoMultipleSpaces(config),
@@ -80,7 +81,6 @@ class KtLintMultiRule(config: Config = Config.empty) : MultiRule() {
         SpacingAroundOperators(config),
         SpacingAroundParens(config),
         SpacingAroundRangeOperator(config),
-        SpacingAroundUnaryOperators(config),
         StringTemplate(config)
     )
 

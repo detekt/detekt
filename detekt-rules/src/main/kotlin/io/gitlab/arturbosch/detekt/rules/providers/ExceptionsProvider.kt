@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.rules.providers
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.RuleSet
-import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.api.internal.DefaultRuleSetProvider
 import io.gitlab.arturbosch.detekt.rules.exceptions.ExceptionRaisedInUnexpectedLocation
 import io.gitlab.arturbosch.detekt.rules.exceptions.InstanceOfCheckForException
 import io.gitlab.arturbosch.detekt.rules.exceptions.NotImplementedDeclaration
@@ -22,7 +22,7 @@ import io.gitlab.arturbosch.detekt.rules.exceptions.TooGenericExceptionThrown
  *
  * @active since v1.0.0
  */
-class ExceptionsProvider : RuleSetProvider {
+class ExceptionsProvider : DefaultRuleSetProvider {
 
     override val ruleSetId: String = "exceptions"
 

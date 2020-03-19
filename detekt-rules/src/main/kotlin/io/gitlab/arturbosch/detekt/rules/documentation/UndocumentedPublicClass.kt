@@ -74,7 +74,7 @@ class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
 
     private fun KtClass.isInnerInterface() = !isTopLevel() && isInterface() && searchInInnerInterface
 
-    private fun KtClassOrObject.notEnumEntry() = this::class != KtEnumEntry::class
+    private fun KtClassOrObject.notEnumEntry() = this !is KtEnumEntry
 
     companion object {
         const val SEARCH_IN_NESTED_CLASS = "searchInNestedClass"

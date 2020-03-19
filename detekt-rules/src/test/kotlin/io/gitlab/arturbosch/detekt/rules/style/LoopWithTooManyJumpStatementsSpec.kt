@@ -21,12 +21,12 @@ class LoopWithTooManyJumpStatementsSpec : Spek({
         it("does not report when max count configuration is set to 2") {
             val config = TestConfig(mapOf(LoopWithTooManyJumpStatements.MAX_JUMP_COUNT to "2"))
             val findings = LoopWithTooManyJumpStatements(config).lint(path)
-            assertThat(findings).hasSize(0)
+            assertThat(findings).isEmpty()
         }
 
         it("does not report loop with less than 1 break or continue statement") {
             val findings = subject.lint(Case.LoopWithTooManyJumpStatementsNegative.path())
-            assertThat(findings).hasSize(0)
+            assertThat(findings).isEmpty()
         }
     }
 })

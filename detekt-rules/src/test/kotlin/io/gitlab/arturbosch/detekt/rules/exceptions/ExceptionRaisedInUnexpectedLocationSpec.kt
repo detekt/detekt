@@ -24,15 +24,15 @@ class ExceptionRaisedInUnexpectedLocationSpec : Spek({
 
         it("does not report methods raising no exception") {
             val path = Case.ExceptionRaisedInMethodsNegative.path()
-            assertThat(subject.lint(path)).hasSize(0)
+            assertThat(subject.lint(path)).isEmpty()
         }
 
         it("reports the configured method") {
             val config = TestConfig(mapOf(ExceptionRaisedInUnexpectedLocation.METHOD_NAMES to "toDo,todo2"))
             val findings = ExceptionRaisedInUnexpectedLocation(config).compileAndLint("""
-			fun toDo() {
-				throw IllegalStateException()
-			}""")
+            fun toDo() {
+                throw IllegalStateException()
+            }""")
             assertThat(findings).hasSize(1)
         }
     }

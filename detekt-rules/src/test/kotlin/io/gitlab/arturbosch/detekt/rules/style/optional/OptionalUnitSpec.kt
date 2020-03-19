@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style.optional
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
@@ -14,16 +15,20 @@ class OptionalUnitSpec : Spek({
         context("several functions which return Unit") {
 
             val code = """
-				fun returnsUnit1(): Unit {
-					fun returnsUnitNested(): Unit {
-						return Unit
-					}
-					return Unit
-				}
+                fun returnsUnit1(): Unit {
+                    fun returnsUnitNested(): Unit {
+                        return Unit
+                    }
+                    return Unit
+                }
 
-				fun returnsUnit2() = Unit
-			"""
-            val findings = subject.compileAndLint(code)
+                fun returnsUnit2() = Unit
+            """
+            lateinit var findings: List<Finding>
+
+            beforeEachTest {
+                findings = subject.compileAndLint(code)
+            }
 
             it("should report functions returning Unit") {
                 assertThat(findings).hasSize(3)
@@ -56,21 +61,25 @@ class OptionalUnitSpec : Spek({
         context("several lone Unit statements") {
 
             val code = """
-				fun returnsNothing() {
-					Unit
-					val i: (Int) -> Unit = { _ -> Unit }
-					if (true) {
-						Unit
-					}
-				}
+                fun returnsNothing() {
+                    Unit
+                    val i: (Int) -> Unit = { _ -> Unit }
+                    if (true) {
+                        Unit
+                    }
+                }
 
-				class A {
-					init {
-						Unit
-					}
-				}
-			"""
-            val findings = subject.compileAndLint(code)
+                class A {
+                    init {
+                        Unit
+                    }
+                }
+            """
+            lateinit var findings: List<Finding>
+
+            beforeEachTest {
+                findings = subject.compileAndLint(code)
+            }
 
             it("should report lone Unit statement") {
                 assertThat(findings).hasSize(4)
@@ -87,14 +96,14 @@ class OptionalUnitSpec : Spek({
 
             it("should not report Unit reference") {
                 val findings = subject.compileAndLint("""
-			    	fun returnsNothing(u: Unit, us: () -> String) {
-			    		val u1 = u is Unit
-			    		val u2: Unit = Unit
-			    		val Unit = 1
-			    		Unit.equals(null)
-			    		val i: (Int) -> Unit = { _ -> }
-			    	}
-			    """)
+                    fun returnsNothing(u: Unit, us: () -> String) {
+                        val u1 = u is Unit
+                        val u2: Unit = Unit
+                        val Unit = 1
+                        Unit.equals(null)
+                        val i: (Int) -> Unit = { _ -> }
+                    }
+                """)
                 assertThat(findings).isEmpty()
             }
         }

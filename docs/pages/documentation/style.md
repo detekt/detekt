@@ -55,7 +55,7 @@ Data classes will automatically have a generated `equals`, `toString` and `hashC
 
 #### Configuration options:
 
-* `conversionFunctionPrefix` (default: `'to'`)
+* ``conversionFunctionPrefix`` (default: ``'to'``)
 
    allowed conversion function names
 
@@ -129,10 +129,10 @@ rest of the function signature.
 
 ```kotlin
 fun stuff(): Int
-= 5
+    = 5
 
 fun <V> foo(): Int where V : Int
-= 5
+    = 5
 ```
 
 #### Compliant Code:
@@ -141,9 +141,35 @@ fun <V> foo(): Int where V : Int
 fun stuff() = 5
 
 fun stuff() =
-foo.bar()
+    foo.bar()
 
 fun <V> foo(): Int where V : Int = 5
+```
+
+### ExplicitCollectionElementAccessMethod
+
+In Kotlin functions `get` or `set` can be replaced with the shorter operator — `[]`,
+see https://kotlinlang.org/docs/reference/operator-overloading.html#indexed.
+Prefer the usage of the indexed access operator `[]` for map or list element access or insert methods.
+
+**Severity**: Style
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+val map = Map<String, String>()
+map.put("key", "value")
+val value = map.get("key")
+```
+
+#### Compliant Code:
+
+```kotlin
+val map = Map<String, String>()
+map["key"] = "value"
+val value = map["key"]
 ```
 
 ### ExplicitItLambdaParameter
@@ -164,7 +190,7 @@ makes your code misleading, especially when dealing with nested functions.
 a?.let { it -> it.plus(1) }
 foo.flatMapObservable { it -> Observable.fromIterable(it) }
 listOfPairs.map(::second).forEach { it ->
-it.execute()
+    it.execute()
 }
 collection.zipWithNext { it, next -> Pair(it, next) }
 ```
@@ -174,11 +200,15 @@ collection.zipWithNext { it, next -> Pair(it, next) }
 ```kotlin
 a?.let { it.plus(1) } // Much better to use implicit it
 foo.flatMapObservable(Observable::fromIterable) // Here we can have a method reference
-listOfPairs.map(::second).forEach { apiRequest -> // For multiline blocks it is usually better come up with a clear and more meaningful name
-apiRequest.execute()
+
+// For multiline blocks it is usually better come up with a clear and more meaningful name
+listOfPairs.map(::second).forEach { apiRequest ->
+    apiRequest.execute()
 }
-collection.zipWithNext { prev, next -> // Lambdas with multiple parameter should be named clearly, using it for one of them can be confusing
-Pair(prev, next)
+
+// Lambdas with multiple parameter should be named clearly, using it for one of them can be confusing
+collection.zipWithNext { prev, next ->
+    Pair(prev, next)
 }
 ```
 
@@ -193,7 +223,7 @@ cleans up the code.
 
 #### Configuration options:
 
-* `includeLineWrapping` (default: `false`)
+* ``includeLineWrapping`` (default: ``false``)
 
    include return statements with line wraps in it
 
@@ -229,9 +259,14 @@ development. Offending code comments will then be reported.
 
 #### Configuration options:
 
-* `values` (default: `'TODO:,FIXME:,STOPSHIP:'`)
+* ``values`` (default: ``'TODO:,FIXME:,STOPSHIP:'``)
 
    forbidden comment strings
+
+* ``allowedPatterns`` (default: ``""``)
+
+   ignores comments which match the specified regular expression.
+For example `Ticket|Task`.
 
 #### Noncompliant Code:
 
@@ -251,9 +286,13 @@ or deprecated APIs. Detekt will then report all imports that are forbidden.
 
 #### Configuration options:
 
-* `imports` (default: `''`)
+* ``imports`` (default: ``''``)
 
    imports which should not be used
+
+* ``forbiddenPatterns`` (default: ``""``)
+
+   reports imports which match the specified regular expression. For example `net.*R`.
 
 #### Noncompliant Code:
 
@@ -262,6 +301,62 @@ package foo
 
 import kotlin.jvm.JvmField
 import kotlin.SinceKotlin
+```
+
+### ForbiddenMethodCall
+
+This rule allows to set a list of forbidden methods. This can be used to discourage the use of unstable, experimental
+or deprecated methods, especially for methods imported from external libraries.
+Detekt will then report all methods invocation that are forbidden.
+
+**Severity**: Style
+
+**Debt**: 10min
+
+#### Configuration options:
+
+* ``methods`` (default: ``''``)
+
+   Comma separated list of fully qualified method signatures which are forbidden
+
+#### Noncompliant Code:
+
+```kotlin
+import java.lang.System
+fun main() {
+    System.gc()
+}
+```
+
+### ForbiddenPublicDataClass
+
+The data classes are bad for the binary compatibility in public APIs. Avoid to use it.
+
+This rule is aimed to library maintainers. If you are developing a final application you don't need to care about
+this issue.
+
+More info: https://jakewharton.com/public-api-challenges-in-kotlin/
+
+**Severity**: Style
+
+**Debt**: 20min
+
+#### Configuration options:
+
+* ``ignorePackages`` (default: ``'*.internal,*.internal.*'``)
+
+   ignores classes in the specified packages. Split by commas ','
+
+#### Noncompliant Code:
+
+```kotlin
+data class C(val a: String) // violation: public data class
+```
+
+#### Compliant Code:
+
+```kotlin
+internal data class C(val a: String)
 ```
 
 ### ForbiddenVoid
@@ -276,11 +371,11 @@ and has only one value - the `Unit` object.
 
 #### Configuration options:
 
-* `ignoreOverridden` (default: `false`)
+* ``ignoreOverridden`` (default: ``false``)
 
    ignores void types in signatures of overridden functions
 
-* `ignoreUsageInGenerics` (default: `false`)
+* ``ignoreUsageInGenerics`` (default: ``false``)
 
    ignore void types as generic arguments
 
@@ -309,13 +404,17 @@ as a `const val`.
 
 #### Configuration options:
 
-* `ignoreOverridableFunction` (default: `true`)
+* ``ignoreOverridableFunction`` (default: ``true``)
 
    if overriden functions should be ignored
 
-* `excludedFunctions` (default: `'describeContents'`)
+* ``excludedFunctions`` (default: ``'describeContents'``)
 
    excluded functions
+
+* ``excludeAnnotatedFunction`` (default: ``"dagger.Provides"``)
+
+   allows to provide a list of annotations that disable this check
 
 #### Noncompliant Code:
 
@@ -372,7 +471,7 @@ To increase readability they should be refactored into simpler loops.
 
 #### Configuration options:
 
-* `maxJumpCount` (default: `1`)
+* ``maxJumpCount`` (default: ``1``)
 
    maximum allowed jumps in a loop
 
@@ -400,40 +499,45 @@ describing what the magic number means.
 
 #### Configuration options:
 
-* `ignoreNumbers` (default: `'-1,0,1,2'`)
+* ``ignoreNumbers`` (default: ``'-1,0,1,2'``)
 
    numbers which do not count as magic numbers
 
-* `ignoreHashCodeFunction` (default: `true`)
+* ``ignoreHashCodeFunction`` (default: ``true``)
 
    whether magic numbers in hashCode functions should be ignored
 
-* `ignorePropertyDeclaration` (default: `false`)
+* ``ignorePropertyDeclaration`` (default: ``false``)
 
    whether magic numbers in property declarations should be ignored
 
-* `ignoreConstantDeclaration` (default: `true`)
+* ``ignoreLocalVariableDeclaration`` (default: ``false``)
 
-   whether magic numbers in property declarations should be ignored
+   whether magic numbers in local variable declarations should be
+ignored
 
-* `ignoreCompanionObjectPropertyDeclaration` (default: `true`)
+* ``ignoreConstantDeclaration`` (default: ``true``)
+
+   whether magic numbers in constant declarations should be ignored
+
+* ``ignoreCompanionObjectPropertyDeclaration`` (default: ``true``)
 
    whether magic numbers in companion object
 declarations should be ignored
 
-* `ignoreAnnotation` (default: `false`)
+* ``ignoreAnnotation`` (default: ``false``)
 
    whether magic numbers in annotations should be ignored
 
-* `ignoreNamedArgument` (default: `true`)
+* ``ignoreNamedArgument`` (default: ``true``)
 
    whether magic numbers in named arguments should be ignored
 
-* `ignoreEnums` (default: `false`)
+* ``ignoreEnums`` (default: ``false``)
 
    whether magic numbers in enums should be ignored
 
-* `ignoreRanges` (default: `false`)
+* ``ignoreRanges`` (default: ``false``)
 
    whether magic numbers in ranges should be ignored
 
@@ -505,19 +609,19 @@ in the codebase will help make the code more uniform.
 
 #### Configuration options:
 
-* `maxLineLength` (default: `120`)
+* ``maxLineLength`` (default: ``120``)
 
    maximum line length
 
-* `excludePackageStatements` (default: `true`)
+* ``excludePackageStatements`` (default: ``true``)
 
    if package statements should be ignored
 
-* `excludeImportStatements` (default: `true`)
+* ``excludeImportStatements`` (default: ``true``)
 
    if import statements should be ignored
 
-* `excludeCommentStatements` (default: `false`)
+* ``excludeCommentStatements`` (default: ``false``)
 
    if comment statements should be ignored
 
@@ -566,9 +670,12 @@ private internal lateinit val str: String
 
 ### NestedClassesVisibility
 
-Nested classes are often used to implement functionality local to the class it is nested in. Therefore it should
-not be public to other parts of the code.
-Prefer keeping nested classes `private`.
+Nested classes inherit their visibility from the parent class
+and are often used to implement functionality local to the class it is nested in.
+These nested classes can't have a higher visibility than their parent.
+However, the visibility can be further restricted by using a private modifier for instance.
+In internal classes the _explicit_ public modifier for nested classes is misleading and thus unnecessary,
+because the nested class still has an internal visibility.
 
 **Severity**: Style
 
@@ -577,18 +684,18 @@ Prefer keeping nested classes `private`.
 #### Noncompliant Code:
 
 ```kotlin
-internal class NestedClassesVisibility {
-
-    public class NestedPublicClass // should not be public
+internal class Outer {
+    // explicit public modifier still results in an internal nested class
+    public class Nested
 }
 ```
 
 #### Compliant Code:
 
 ```kotlin
-internal class NestedClassesVisibility {
-
-    internal class NestedPublicClass
+internal class Outer {
+    class Nested1
+    internal class Nested2
 }
 ```
 
@@ -747,6 +854,30 @@ class ProtectedMemberInFinalClass {
 }
 ```
 
+### RedundantExplicitType
+
+Local properties do not need their type to be explicitly provided when the inferred type matches the explicit type.
+
+**Severity**: Style
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+fun function() {
+val x: String = "string"
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+fun function() {
+val x = "string"
+}
+```
+
 ### RedundantVisibilityModifierRule
 
 This rule checks for redundant visibility modifiers.
@@ -786,21 +917,25 @@ code.
 
 #### Configuration options:
 
-* `max` (default: `2`)
+* ``max`` (default: ``2``)
 
    define the maximum number of return statements allowed per function
 
-* `excludedFunctions` (default: `"equals"`)
+* ``excludedFunctions`` (default: ``"equals"``)
 
    define functions to be ignored by this check
 
-* `excludeLabeled` (default: `false`)
+* ``excludeLabeled`` (default: ``false``)
 
    if labeled return statements should be ignored
 
-* `excludeReturnFromLambda` (default: `true`)
+* ``excludeReturnFromLambda`` (default: ``true``)
 
    if labeled return from a lambda should be ignored
+
+* ``excludeGuardClauses`` (default: ``false``)
+
+   if true guard clauses at the beginning of a method should be ignored
 
 #### Noncompliant Code:
 
@@ -921,7 +1056,7 @@ to confusion. Instead prefer to limit the amount of `throw` statements in a func
 
 #### Configuration options:
 
-* `max` (default: `2`)
+* ``max`` (default: ``2``)
 
    maximum amount of throw statements in a method
 
@@ -968,7 +1103,7 @@ explicitly ignored. For floats and doubles, anything to the right of the decimal
 
 #### Configuration options:
 
-* `acceptableDecimalLength` (default: `5`)
+* ``acceptableDecimalLength`` (default: ``5``)
 
    Length under which decimal base 10 literals are not required to have
 underscores
@@ -1001,7 +1136,7 @@ refactored into concrete classes.
 
 #### Configuration options:
 
-* `excludeAnnotatedClasses` (default: `"dagger.Module"`)
+* ``excludeAnnotatedClasses`` (default: ``"dagger.Module"``)
 
    Allows you to provide a list of annotations that disable
 this check.
@@ -1020,6 +1155,30 @@ abstract class OnlyConcreteMembersInAbstractClass { // violation: no abstract me
     val i: Int = 0
     fun f() { }
 }
+```
+
+### UnnecessaryAnnotationUseSiteTarget
+
+This rule inspects the use of the Annotation use-site Target. In case that the use-site Target is not needed it can
+be removed. For more information check the kotlin documentation:
+https://kotlinlang.org/docs/reference/annotations.html#annotation-use-site-targets
+
+**Severity**: Style
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+@property:Inject private val foo: String = "bar" // violation: unnecessary @property:
+
+class Module(@param:Inject private val foo: String) // violation: unnecessary @param:
+```
+
+#### Compliant Code:
+
+```kotlin
+class Module(@Inject private val foo: String)
 ```
 
 ### UnnecessaryApply
@@ -1179,7 +1338,7 @@ can lead to confusion and potential bugs.
 ### UnusedPrivateMember
 
 Reports unused private properties, function parameters and functions.
-If private properties are unused they should be removed. Otherwise this dead code
+If these private elements are unused they should be removed. Otherwise this dead code
 can lead to confusion and potential bugs.
 
 **Severity**: Maintainability
@@ -1190,14 +1349,35 @@ can lead to confusion and potential bugs.
 
 #### Configuration options:
 
-* `allowedNames` (default: `"(_|ignored|expected|serialVersionUID)"`)
+* ``allowedNames`` (default: ``"(_|ignored|expected|serialVersionUID)"``)
 
    unused private member names matching this regex are ignored
 
+### UseArrayLiteralsInAnnotations
+
+This rule detects annotations which use the arrayOf(...) syntax instead of the array literal [...] syntax.
+The latter should be preferred as it is more readable.
+
+**Severity**: Style
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+@PositiveCase(arrayOf("..."))
+```
+
+#### Compliant Code:
+
+```kotlin
+@NegativeCase(["..."])
+```
+
 ### UseCheckOrError
 
-Kotlin provides a much more concise way to check invariants as well as pre- and post conditions than to manually throw
-an IllegalStateException.
+Kotlin provides a much more concise way to check invariants as well as pre- and post conditions.
+Prefer them instead of manually throwing an IllegalStateException.
 
 **Severity**: Style
 
@@ -1238,9 +1418,13 @@ Read more about `data class`: https://kotlinlang.org/docs/reference/data-classes
 
 #### Configuration options:
 
-* `excludeAnnotatedClasses` (default: `""`)
+* ``excludeAnnotatedClasses`` (default: ``""``)
 
    allows to provide a list of annotations that disable this check
+
+* ``allowVars`` (default: ``false``)
+
+   allows to relax this rule in order to exclude classes that contains one (or more) Vars
 
 #### Noncompliant Code:
 
@@ -1255,6 +1439,31 @@ class DataClassCandidate(val i: Int) {
 
 ```kotlin
 data class DataClass(val i: Int, val i2: Int)
+```
+
+### UseIfInsteadOfWhen
+
+Binary expressions are better expressed using an `if` expression than a `when` expression.
+
+See https://kotlinlang.org/docs/reference/coding-conventions.html#if-versus-when
+
+**Severity**: Style
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+when (x) {
+null -> true
+else -> false
+}
+```
+
+#### Compliant Code:
+
+```kotlin
+if (x == null) true else false
 ```
 
 ### UseRequire
@@ -1395,13 +1604,17 @@ which classes are imported and helps prevent naming conflicts.
 
 Library updates can introduce naming clashes with your own classes which might result in compilation errors.
 
+**NOTE:** This rule is effectively overridden by the `NoWildcardImports` formatting rule (a wrapped KtLint rule).
+That rule will fail the check regardless of the whitelist configured here.
+Therefore if whitelist is needed `NoWildcardImports` rule should be disabled.
+
 **Severity**: Style
 
 **Debt**: 5min
 
 #### Configuration options:
 
-* `excludeImports` (default: `'java.util.*,kotlinx.android.synthetic.*'`)
+* ``excludeImports`` (default: ``'java.util.*,kotlinx.android.synthetic.*'``)
 
    Define a whitelist of package names that should be allowed to be imported
 with wildcard imports.

@@ -6,4 +6,6 @@ title: Entity.name - detekt-api
 
 # name
 
-`val name: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)
+`val ~~name~~: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)
+**Deprecated:** Will be made private in the future. Use queries on 'ktElement' instead.
+

@@ -1,7 +1,9 @@
 package io.gitlab.arturbosch.detekt.api
 
+import io.gitlab.arturbosch.detekt.api.internal.BaseRule
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import io.gitlab.arturbosch.detekt.api.internal.absolutePath
+import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Paths
 
@@ -41,9 +43,11 @@ abstract class Rule(
      * When overriding this property make sure to meet following structure for detekt-generator to pick
      * it up and generate documentation for aliases:
      *
-     * 		override val defaultRuleIdAliases = setOf("Name1", "Name2")
+     *      override val defaultRuleIdAliases = setOf("Name1", "Name2")
      */
     open val defaultRuleIdAliases: Set<String> = emptySet()
+
+    internal val ruleSetId: RuleId? get() = ruleSetConfig.parentPath
 
     /**
      * Rules are aware of the paths they should run on via configuration properties.
@@ -57,22 +61,22 @@ abstract class Rule(
     override fun visitCondition(root: KtFile): Boolean =
         active &&
             shouldRunOnGivenFile(root) &&
-            !root.isSuppressedBy(ruleId, aliases)
+            !root.isSuppressedBy(ruleId, aliases, ruleSetId)
 
     private fun shouldRunOnGivenFile(root: KtFile) =
         filters?.isIgnored(Paths.get(root.absolutePath()))?.not() ?: true
 
     /**
-     * Simplified version of [Context.report] with aliases retrieval from the config.
+     * Simplified version of [Context.report] with rule defaults.
      */
     fun report(finding: Finding) {
-        report(finding, aliases)
+        report(finding, aliases, ruleSetId)
     }
 
     /**
-     * Simplified version of [Context.report] with aliases retrieval from the config.
+     * Simplified version of [Context.report] with rule defaults.
      */
     fun report(findings: List<Finding>) {
-        report(findings, aliases)
+        report(findings, aliases, ruleSetId)
     }
 }

@@ -7,3 +7,7 @@ title: Context.clearFindings - detekt-api
 # clearFindings
 
 `abstract fun clearFindings(): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+
+Clears previous findings.
+Normally this is done on every new [KtFile](#) analyzed and should be called by clients.
+

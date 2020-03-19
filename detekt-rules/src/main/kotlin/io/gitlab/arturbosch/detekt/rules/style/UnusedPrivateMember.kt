@@ -11,14 +11,12 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isAbstract
 import io.gitlab.arturbosch.detekt.rules.isExternal
-import io.gitlab.arturbosch.detekt.rules.isInterface
 import io.gitlab.arturbosch.detekt.rules.isMainFunction
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOperator
 import io.gitlab.arturbosch.detekt.rules.isOverride
-import io.gitlab.arturbosch.detekt.rules.parentOfType
 import org.jetbrains.kotlin.psi.KtCallExpression
-import org.jetbrains.kotlin.psi.KtClassOrObject
+import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
@@ -30,12 +28,13 @@ import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtSecondaryConstructor
+import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
 
 /**
  * Reports unused private properties, function parameters and functions.
- * If private properties are unused they should be removed. Otherwise this dead code
+ * If these private elements are unused they should be removed. Otherwise this dead code
  * can lead to confusion and potential bugs.
  *
  * @configuration allowedNames - unused private member names matching this regex are ignored
@@ -103,7 +102,7 @@ private class UnusedFunctionVisitor(allowedNames: Regex) : UnusedMemberVisitor(a
     }
 
     private fun isDeclaredInsideAnInterface(function: KtNamedFunction) =
-        function.parentOfType<KtClassOrObject>(strict = true)?.isInterface() == true
+        function.getStrictParentOfType<KtClass>()?.isInterface() == true
 
     private fun collectFunction(function: KtNamedFunction) {
         val name = function.nameAsSafeName.identifier
@@ -113,11 +112,10 @@ private class UnusedFunctionVisitor(allowedNames: Regex) : UnusedMemberVisitor(a
     }
 
     /*
-	 * We need to collect all private function declarations and references to these functions
-	 * for the whole file as Kotlin allows to access private and internal object declarations
-	 * from everywhere in the file.
-	 */
-
+     * We need to collect all private function declarations and references to these functions
+     * for the whole file as Kotlin allows to access private and internal object declarations
+     * from everywhere in the file.
+     */
     override fun visitReferenceExpression(expression: KtReferenceExpression) {
         super.visitReferenceExpression(expression)
         when (expression) {
@@ -138,19 +136,18 @@ private class UnusedFunctionVisitor(allowedNames: Regex) : UnusedMemberVisitor(a
 
 private class UnusedParameterVisitor(allowedNames: Regex) : UnusedMemberVisitor(allowedNames) {
 
-    private var unusedParameters: MutableMap<String, KtParameter> = mutableMapOf()
+    private var unusedParameters: MutableSet<KtParameter> = mutableSetOf()
 
     override fun getUnusedReports(issue: Issue): List<CodeSmell> {
         return unusedParameters.map {
-            CodeSmell(issue, Entity.from(it.value), "Function parameter ${it.key} is unused.")
+            CodeSmell(issue, Entity.from(it), "Function parameter ${it.nameAsSafeName.identifier} is unused.")
         }
     }
 
-    override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-        if (classOrObject.isInterface()) {
-            return
-        }
-        super.visitClassOrObject(classOrObject)
+    override fun visitClass(klass: KtClass) {
+        if (klass.isInterface()) return
+
+        super.visitClassOrObject(klass)
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
@@ -164,30 +161,30 @@ private class UnusedParameterVisitor(allowedNames: Regex) : UnusedMemberVisitor(
     }
 
     private fun collectParameters(function: KtNamedFunction) {
+        val parameters = mutableMapOf<String, KtParameter>()
         function.valueParameterList?.parameters?.forEach { parameter ->
             val name = parameter.nameAsSafeName.identifier
             if (!allowedNames.matches(name)) {
-                unusedParameters[name] = parameter
+                parameters[name] = parameter
             }
         }
 
-        val localProperties = mutableListOf<String>()
         function.accept(object : DetektVisitor() {
             override fun visitProperty(property: KtProperty) {
                 if (property.isLocal) {
                     val name = property.nameAsSafeName.identifier
-                    localProperties.add(name)
+                    parameters.remove(name)
                 }
                 super.visitProperty(property)
             }
 
             override fun visitReferenceExpression(expression: KtReferenceExpression) {
-                localProperties.add(expression.text)
+                parameters.remove(expression.text)
                 super.visitReferenceExpression(expression)
             }
         })
 
-        unusedParameters = unusedParameters.filterTo(mutableMapOf()) { it.key !in localProperties }
+        unusedParameters.addAll(parameters.values)
     }
 
     private fun KtNamedFunction.isRelevant() = !isAllowedToHaveUnusedParameters()

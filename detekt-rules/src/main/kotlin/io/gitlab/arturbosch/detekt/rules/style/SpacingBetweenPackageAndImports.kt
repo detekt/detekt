@@ -3,18 +3,18 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
-import org.jetbrains.kotlin.com.intellij.psi.PsiFile
 import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtImportList
 import org.jetbrains.kotlin.psi.KtPackageDirective
+import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
 import org.jetbrains.kotlin.psi.psiUtil.siblings
 
 /**
@@ -37,27 +37,22 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  */
 class SpacingBetweenPackageAndImports(config: Config = Config.empty) : Rule(config) {
 
-    private var containsClassOrObject = false
-
     override val issue = Issue(javaClass.simpleName, Severity.Style,
             "Violation of the package declaration style.",
             Debt.FIVE_MINS)
 
-    override fun visitFile(file: PsiFile?) {
-        file?.accept(object : DetektVisitor() {
-            override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-                containsClassOrObject = true
+    override fun visitKtFile(file: KtFile) {
+        if (file.hasPackage() && file.anyDescendantOfType<KtClassOrObject>()) {
+            file.importList?.let {
+                if (it.imports.isNotEmpty()) {
+                    checkPackageDeclaration(it)
+                    checkKtElementsDeclaration(it)
+                }
             }
-        })
-        super.visitFile(file)
-    }
-
-    override fun visitImportList(importList: KtImportList) {
-        if (containsClassOrObject && importList.imports.isNotEmpty()) {
-            checkPackageDeclaration(importList)
-            checkKtElementsDeclaration(importList)
         }
     }
+
+    private fun KtFile.hasPackage() = packageDirective?.name?.isNotEmpty() == true
 
     private fun checkPackageDeclaration(importList: KtImportList) {
         val prevSibling = importList.prevSibling
@@ -71,11 +66,10 @@ class SpacingBetweenPackageAndImports(config: Config = Config.empty) : Rule(conf
             element is KtPackageDirective && element.text.isNotEmpty()
 
     private fun checkKtElementsDeclaration(importList: KtImportList) {
-        val ktElements = importList.siblings(withItself = false).toList().filter { it is KtElement }
+        val ktElement = importList.siblings(withItself = false).filterIsInstance<KtElement>().firstOrNull() ?: return
         val nextSibling = importList.nextSibling
-        if (ktElements.isNotEmpty() &&
-                (nextSibling is PsiWhiteSpace || nextSibling is KtElement)) {
-            val name = (ktElements.first() as? KtClassOrObject)?.name ?: "the class or object"
+        if (nextSibling is PsiWhiteSpace || nextSibling is KtElement) {
+            val name = (ktElement as? KtClassOrObject)?.name ?: "the class or object"
 
             checkLinebreakAfterElement(nextSibling, "There should be exactly one empty line in between the " +
                     "list of imports and the declaration of $name.")

@@ -30,7 +30,7 @@ class EnumNaming(config: Config = Config.empty) : Rule(config) {
         if (!enumEntry.identifierName().matches(enumEntryPattern)) {
             report(CodeSmell(
                     issue,
-                    Entity.from(enumEntry),
+                    Entity.from(enumEntry.nameIdentifier ?: enumEntry),
                     message = "Enum entry names should match the pattern: $enumEntryPattern"))
         }
     }

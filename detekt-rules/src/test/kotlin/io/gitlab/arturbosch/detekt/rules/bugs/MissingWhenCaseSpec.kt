@@ -3,7 +3,6 @@ package io.gitlab.arturbosch.detekt.rules.bugs
 import io.gitlab.arturbosch.detekt.test.KtTestCompiler
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import org.assertj.core.api.Assertions.assertThat
-import org.jetbrains.kotlin.cli.jvm.compiler.KotlinCoreEnvironment
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -11,11 +10,10 @@ object MissingWhenCaseSpec : Spek({
 
     val subject by memoized { MissingWhenCase() }
 
-    lateinit var environment: KotlinCoreEnvironment
-
-    beforeEachTest {
-        environment = KtTestCompiler.createEnvironment()
-    }
+    val wrapper by memoized(
+        factory = { KtTestCompiler.createEnvironment() },
+        destructor = { it.dispose() }
+    )
 
     describe("MissingWhenCase rule") {
         context("enum") {
@@ -34,7 +32,7 @@ object MissingWhenCaseSpec : Spek({
                     }
                 }
                 """
-                val actual = subject.compileAndLintWithContext(environment, code)
+                val actual = subject.compileAndLintWithContext(wrapper.env, code)
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().issue.id).isEqualTo("MissingWhenCase")
                 assertThat(actual.first().message).isEqualTo("When expression is missing cases: RED. Either add missing cases or a default `else` case.")
@@ -63,7 +61,7 @@ object MissingWhenCaseSpec : Spek({
                     }
                 }
                 """
-                assertThat(subject.compileAndLintWithContext(environment, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
             }
         }
         context("sealed classes") {
@@ -82,7 +80,7 @@ object MissingWhenCaseSpec : Spek({
                         }
                     }
                 """
-                val actual = subject.compileAndLintWithContext(environment, code)
+                val actual = subject.compileAndLintWithContext(wrapper.env, code)
                 assertThat(actual).hasSize(1)
                 assertThat(actual.first().issue.id).isEqualTo("MissingWhenCase")
                 assertThat(actual.first().message).isEqualTo("When expression is missing cases: VariantC. Either add missing cases or a default `else` case.")
@@ -112,7 +110,7 @@ object MissingWhenCaseSpec : Spek({
                         }
                     }
                 """
-                assertThat(subject.compileAndLintWithContext(environment, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
             }
         }
         context("standard when") {
@@ -150,7 +148,7 @@ object MissingWhenCaseSpec : Spek({
                         }
                     }
                 """
-                assertThat(subject.compileAndLintWithContext(environment, code)).isEmpty()
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
             }
         }
     }

@@ -2,8 +2,8 @@ package io.gitlab.arturbosch.detekt.extensions
 
 import groovy.lang.Closure
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType.HTML
-import io.gitlab.arturbosch.detekt.extensions.DetektReportType.XML
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType.TXT
+import io.gitlab.arturbosch.detekt.extensions.DetektReportType.XML
 import org.gradle.api.Project
 import org.gradle.util.ConfigureUtil
 

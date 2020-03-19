@@ -1,11 +1,13 @@
 package io.gitlab.arturbosch.detekt.core
 
 import io.gitlab.arturbosch.detekt.api.Finding
+import io.gitlab.arturbosch.detekt.api.RuleSetId
+import io.gitlab.arturbosch.detekt.api.internal.absolutePath
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
+import org.jetbrains.kotlin.psi.KtFile
 import java.io.PrintStream
 import java.nio.file.Files
 import java.nio.file.Path
-import java.util.HashMap
 
 fun Path.exists(): Boolean = Files.exists(this)
 fun Path.isFile(): Boolean = Files.isRegularFile(this)
@@ -24,12 +26,10 @@ fun Throwable.printStacktraceRecursively(logger: PrintStream) {
     cause?.printStacktraceRecursively(logger)
 }
 
-fun <K, V> List<Pair<K, List<V>>>.toMergedMap(): Map<K, List<V>> {
-    val map = HashMap<K, MutableList<V>>()
-    for ((key, values) in this) {
-        map.merge(key, values.toMutableList()) { l1, l2 ->
-            l1.apply { addAll(l2) }
-        }
-    }
-    return map
-}
+typealias FindingsResult = List<Map<RuleSetId, List<Finding>>>
+
+fun createErrorMessage(file: KtFile, error: Throwable): String =
+    "Analyzing '${file.absolutePath()}' led to an exception.\n" +
+        "The original exception message was: ${error.localizedMessage}\n" +
+        "Running detekt '${whichDetekt() ?: "unknown"}' on Java '${whichJava()}' on OS '${whichOS()}'.\n" +
+        "If the exception message does not help, please feel free to create an issue on our GitHub page."

@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.test
 
 import io.gitlab.arturbosch.detekt.api.internal.ABSOLUTE_PATH
 import io.gitlab.arturbosch.detekt.core.KtCompiler
+import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
 import org.jetbrains.kotlin.cli.common.messages.MessageCollector
 import org.jetbrains.kotlin.cli.jvm.compiler.EnvironmentConfigFiles
@@ -10,6 +11,7 @@ import org.jetbrains.kotlin.cli.jvm.compiler.NoScopeRecordCliBindingTrace
 import org.jetbrains.kotlin.cli.jvm.compiler.TopDownAnalyzerFacadeForJVM
 import org.jetbrains.kotlin.cli.jvm.config.addJvmClasspathRoot
 import org.jetbrains.kotlin.com.intellij.openapi.Disposable
+import org.jetbrains.kotlin.com.intellij.openapi.util.Disposer
 import org.jetbrains.kotlin.com.intellij.openapi.util.text.StringUtilRt
 import org.jetbrains.kotlin.config.CommonConfigurationKeys
 import org.jetbrains.kotlin.config.CompilerConfiguration
@@ -30,12 +32,12 @@ object KtTestCompiler : KtCompiler() {
 
     fun compile(path: Path) = compile(root, path)
 
-    fun compileFromContent(content: String): KtFile {
+    fun compileFromContent(@Language("kotlin") content: String, filename: String = TEST_FILENAME): KtFile {
         val file = psiFileFactory.createFileFromText(
-            TEST_FILENAME,
+            filename,
             KotlinLanguage.INSTANCE,
             StringUtilRt.convertLineSeparators(content)) as? KtFile
-        file?.putUserData(ABSOLUTE_PATH, TEST_FILENAME)
+        file?.putUserData(ABSOLUTE_PATH, filename)
         return file ?: throw IllegalStateException("kotlin file expected")
     }
 
@@ -45,7 +47,7 @@ object KtTestCompiler : KtCompiler() {
             environment.configuration, environment::createPackagePartProvider, ::FileBasedDeclarationProviderFactory
         ).bindingContext
 
-    fun createEnvironment(): KotlinCoreEnvironment {
+    fun createEnvironment(): KotlinCoreEnvironmentWrapper {
         val configuration = CompilerConfiguration()
         configuration.put(CommonConfigurationKeys.MODULE_NAME, "test_module")
         configuration.put(CLIConfigurationKeys.MESSAGE_COLLECTOR_KEY, MessageCollector.NONE)
@@ -55,20 +57,31 @@ object KtTestCompiler : KtCompiler() {
         val path = File(CharRange::class.java.protectionDomain.codeSource.location.path)
         configuration.addJvmClasspathRoot(path)
 
-        return KotlinCoreEnvironment.createForTests(
-            TestDisposable(),
-            configuration,
-            EnvironmentConfigFiles.JVM_CONFIG_FILES
-        )
+        val parentDisposable = Disposer.newDisposable()
+        val kotlinCoreEnvironment =
+            KotlinCoreEnvironment.createForTests(
+                parentDisposable,
+                configuration,
+                EnvironmentConfigFiles.JVM_CONFIG_FILES
+            )
+        return KotlinCoreEnvironmentWrapper(kotlinCoreEnvironment, parentDisposable)
     }
 
     fun createPsiFactory(): KtPsiFactory = KtPsiFactory(KtTestCompiler.environment.project, false)
+}
 
-    class TestDisposable : Disposable {
-        override fun dispose() {
-            // Don't want to dispose the test KotlinCoreEnvironment
-        }
+class KotlinCoreEnvironmentWrapper(
+    private var environment: KotlinCoreEnvironment?,
+    private val disposable: Disposable
+) {
+
+    @Suppress("UnsafeCallOnNullableType")
+    val env get() = environment!!
+
+    fun dispose() {
+        Disposer.dispose(disposable)
+        environment = null
     }
 }
 
-const val TEST_FILENAME = "Test.kt"
+internal const val TEST_FILENAME = "Test.kt"

@@ -23,7 +23,7 @@ class ComplexityVisitorTest : Spek({
 
             val mcc = calcComplexity(path)
 
-            assertThat(mcc).isEqualTo(56)
+            assertThat(mcc).isEqualTo(44)
         }
     }
 })

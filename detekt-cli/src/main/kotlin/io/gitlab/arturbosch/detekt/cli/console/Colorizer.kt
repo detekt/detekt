@@ -1,5 +1,7 @@
 package io.gitlab.arturbosch.detekt.cli.console
 
+import io.gitlab.arturbosch.detekt.cli.IS_WINDOWS
+
 private const val ESC = "\u001B"
 private val RESET = Color(0)
 private val RED = Color(31)
@@ -12,13 +14,13 @@ private data class Color(private val value: Byte) {
         get() = "$ESC[${value}m"
 }
 
-private val isColoredOutputSupported: Boolean = !System.getProperty("os.name", "").startsWith("Windows")
+private val isColoredOutputSupported: Boolean = !IS_WINDOWS
 private fun String.colorized(color: Color) = if (isColoredOutputSupported) {
     "${color.escapeSequence}$this${RESET.escapeSequence}"
 } else {
     this
 }
 
-fun String.red() = colorized(RED).toString()
-fun String.yellow() = colorized(YELLOW).toString()
+fun String.red() = colorized(RED)
+fun String.yellow() = colorized(YELLOW)
 fun String.decolorized() = this.replace(escapeSequenceRegex, "")

@@ -9,7 +9,9 @@ class DebtSpec : Spek({
 
     describe("creating issues with custom debt values") {
         it("should fail on negative values") {
-            assertThatIllegalArgumentException().isThrownBy { Debt(-1, -1, -1) }
+            assertThatIllegalArgumentException().isThrownBy { Debt(-1, 5, 5) }
+            assertThatIllegalArgumentException().isThrownBy { Debt(5, -1, 5) }
+            assertThatIllegalArgumentException().isThrownBy { Debt(5, 5, -1) }
         }
 
         it("should fail if all values are less than zero ") {

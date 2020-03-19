@@ -18,34 +18,34 @@ class StringLiteralDuplicationSpec : Spek({
 
             it("reports 3 equal hardcoded strings") {
                 val code = """
-				class Duplication {
-					var s1 = "lorem"
-					fun f(s: String = "lorem") {
-						s1.equals("lorem")
-					}
-				}"""
+                class Duplication {
+                    var s1 = "lorem"
+                    fun f(s: String = "lorem") {
+                        s1.equals("lorem")
+                    }
+                }"""
                 assertThat(subject.compileAndLint(code)).hasSize(1)
             }
 
             it("does not report 2 equal hardcoded strings") {
                 val code = """val str = "lorem" + "lorem" + "ipsum""""
-                assertThat(subject.compileAndLint(code)).hasSize(0)
+                assertThat(subject.compileAndLint(code)).isEmpty()
             }
         }
 
         context("strings in annotations") {
 
             val code = """
-		        @Suppress("unused")
-		        class A
-		        @Suppress("unused")
-		        class B
-		        @Suppress("unused")
-		        class C
+                @Suppress("unused")
+                class A
+                @Suppress("unused")
+                class B
+                @Suppress("unused")
+                class C
             """
 
             it("does not report strings in annotations") {
-                assertThat(subject.compileAndLint(code)).hasSize(0)
+                assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
             it("reports strings in annotations according to config") {
@@ -59,7 +59,7 @@ class StringLiteralDuplicationSpec : Spek({
             val code = """val str = "amet" + "amet" + "amet""""
 
             it("does not report strings with 4 characters") {
-                assertThat(subject.compileAndLint(code)).hasSize(0)
+                assertThat(subject.compileAndLint(code)).isEmpty()
             }
 
             it("reports string with 4 characters") {
@@ -71,15 +71,15 @@ class StringLiteralDuplicationSpec : Spek({
         context("strings with values to match for the regex") {
 
             val regexTestingCode = """
-				val str1 = "lorem" + "lorem" + "lorem"
-				val str2 = "ipsum" + "ipsum" + "ipsum"
-			"""
+                val str1 = "lorem" + "lorem" + "lorem"
+                val str2 = "ipsum" + "ipsum" + "ipsum"
+            """
 
             it("does not report lorem or ipsum according to config in regex") {
                 val code = """
-			    	val str1 = "lorem" + "lorem" + "lorem"
-			    	val str2 = "ipsum" + "ipsum" + "ipsum"
-			    """
+                    val str1 = "lorem" + "lorem" + "lorem"
+                    val str2 = "ipsum" + "ipsum" + "ipsum"
+                """
                 val config = TestConfig(mapOf(StringLiteralDuplication.IGNORE_STRINGS_REGEX to "(lorem|ipsum)"))
                 assertFindingWithConfig(code, config, 0)
             }
@@ -105,12 +105,12 @@ class StringLiteralDuplicationSpec : Spek({
 
             it("reports 3 locations for 'lorem'") {
                 val code = """
-				class Duplication {
-					var s1 = "lorem"
-					fun f(s: String = "lorem") {
-						s1.equals("lorem")
-					}
-				}"""
+                class Duplication {
+                    var s1 = "lorem"
+                    fun f(s: String = "lorem") {
+                        s1.equals("lorem")
+                    }
+                }"""
                 val finding = subject.compileAndLint(code)[0]
                 val locations = finding.references.map { it.location } + finding.entity.location
                 assertThat(locations).hasSize(3)
@@ -123,12 +123,12 @@ class StringLiteralDuplicationSpec : Spek({
                 val code = """
                     // does not report because it treats the multiline string parts as one string
                     val str = ""${'"'}
-	                    |
                         |
                         |
-	                    ""${'"'}
+                        |
+                        ""${'"'}
                 """
-                assertThat(subject.compileAndLint(code)).hasSize(0)
+                assertThat(subject.compileAndLint(code)).isEmpty()
             }
         }
     }

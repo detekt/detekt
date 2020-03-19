@@ -7,3 +7,6 @@ title: Finding.messageOrDescription - detekt-api
 # messageOrDescription
 
 `abstract fun messageOrDescription(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)
+
+Explanation why this finding was raised.
+

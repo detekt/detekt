@@ -11,3 +11,7 @@ title: Extension.init - detekt-api
 Allows to read any or even user defined properties from the detekt yaml config
 to setup this extension.
 
+`open fun init(context: `[`SetupContext`](../-setup-context/index.html)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)
+
+Setup extension by querying common paths and config options.
+

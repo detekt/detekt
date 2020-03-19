@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.commaSeparatedPattern
 import io.gitlab.arturbosch.detekt.rules.isConstant
 import io.gitlab.arturbosch.detekt.rules.isHashCodeFunction
 import io.gitlab.arturbosch.detekt.rules.isPartOf
@@ -68,7 +69,9 @@ import java.util.Locale
  * (default: `true`)
  * @configuration ignorePropertyDeclaration - whether magic numbers in property declarations should be ignored
  * (default: `false`)
- * @configuration ignoreConstantDeclaration - whether magic numbers in property declarations should be ignored
+ * @configuration ignoreLocalVariableDeclaration - whether magic numbers in local variable declarations should be
+ * ignored (default: `false`)
+ * @configuration ignoreConstantDeclaration - whether magic numbers in constant declarations should be ignored
  * (default: `true`)
  * @configuration ignoreCompanionObjectPropertyDeclaration - whether magic numbers in companion object
  * declarations should be ignored (default: `true`)
@@ -91,8 +94,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
                     "By default, -1, 0, 1, and 2 are not considered to be magic numbers.", Debt.TEN_MINS)
 
     private val ignoredNumbers = valueOrDefault(IGNORE_NUMBERS, "-1,0,1,2")
-            .splitToSequence(",")
-            .filterNot { it.isEmpty() }
+            .commaSeparatedPattern()
             .map { parseAsDouble(it) }
             .sorted()
             .toList()
@@ -133,9 +135,9 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
         ignoreLocalVariables && (expression.isLocalProperty()) -> true
         ignoreConstantDeclaration && expression.isConstantProperty() -> true
         ignoreCompanionObjectPropertyDeclaration && expression.isCompanionObjectProperty() -> true
-        ignoreAnnotation && expression.isPartOf(KtAnnotationEntry::class) -> true
+        ignoreAnnotation && expression.isPartOf<KtAnnotationEntry>() -> true
         ignoreHashCodeFunction && expression.isPartOfHashCode() -> true
-        ignoreEnums && expression.isPartOf(KtEnumEntry::class) -> true
+        ignoreEnums && expression.isPartOf<KtEnumEntry>() -> true
         ignoreNamedArgument && expression.isNamedArgument() -> true
         ignoreRanges && expression.isPartOfRange() -> true
         else -> false
@@ -167,8 +169,18 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
                 .removeSuffix("f")
     }
 
-    private fun KtConstantExpression.isNamedArgument() =
-        parent is KtValueArgument && (parent as? KtValueArgument)?.isNamed() == true && isPartOf(KtCallElement::class)
+    private fun KtConstantExpression.isNamedArgument(): Boolean {
+        /**
+         * The information we need is in the enclosing [KtValueArgument]. When the number being evaluated is
+         * negative, there will be an [KtPrefixExpression] in between the receiver and the [KtValueArgument].
+         */
+        val valueArgument = when (parent) {
+            is KtPrefixExpression -> parent.parent
+            else -> parent
+        } as? KtValueArgument
+
+        return valueArgument?.isNamed() == true && isPartOf<KtCallElement>()
+    }
 
     private fun KtConstantExpression.isPartOfFunctionReturnConstant() =
         parent is KtNamedFunction || parent is KtReturnExpression && parent.parent.children.size == 1
@@ -184,11 +196,9 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
     private fun KtConstantExpression.isPartOfRange(): Boolean {
         val theParent = parent
         val rangeOperators = setOf("downTo", "until", "step")
-        return when (theParent is KtBinaryExpression) {
-            true -> theParent.operationToken == KtTokens.RANGE ||
-                    theParent.operationReference.getReferencedName() in rangeOperators
-            else -> false
-        }
+        return if (theParent is KtBinaryExpression) theParent.operationToken == KtTokens.RANGE ||
+                theParent.operationReference.getReferencedName() in rangeOperators
+        else false
     }
 
     private fun KtConstantExpression.isPartOfHashCode(): Boolean {

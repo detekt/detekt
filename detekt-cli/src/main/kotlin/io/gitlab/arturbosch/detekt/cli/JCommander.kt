@@ -2,10 +2,18 @@ package io.gitlab.arturbosch.detekt.cli
 
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.ParameterException
-import kotlin.system.exitProcess
+import java.io.PrintStream
 
-inline fun <reified T : Args> parseArguments(args: Array<String>): Pair<T, JCommander> {
-    val cli = T::class.java.declaredConstructors.firstOrNull()?.newInstance() as? T
+@Suppress("detekt.SpreadOperator", "detekt.ThrowsCount")
+inline fun <reified T : Args> parseArguments(
+    args: Array<String>,
+    outPrinter: PrintStream = System.out,
+    errorPrinter: PrintStream = System.err,
+    validateCli: T.(MessageCollector) -> Unit = {}
+): T {
+    val cli = T::class.java.declaredConstructors
+        .firstOrNull()
+        ?.newInstance() as? T
         ?: throw IllegalStateException("Could not create Args object for class ${T::class.java}")
 
     val jCommander = JCommander()
@@ -14,30 +22,36 @@ inline fun <reified T : Args> parseArguments(args: Array<String>): Pair<T, JComm
     jCommander.programName = "detekt"
 
     try {
-        @Suppress("SpreadOperator")
         jCommander.parse(*args)
     } catch (ex: ParameterException) {
-        val message = ex.message
-        jCommander.failWithErrorMessages(message)
+        errorPrinter.println("${ex.message}\n")
+        jCommander.usage(outPrinter)
+        throw HandledArgumentViolation()
     }
 
     if (cli.help) {
-        jCommander.usage()
-        exitProcess(0)
+        jCommander.usage(outPrinter)
+        throw HelpRequest()
     }
 
-    return cli to jCommander
-}
-
-fun JCommander.failWithErrorMessages(vararg messages: String?) {
-    failWithErrorMessages(messages.asIterable())
-}
-
-fun JCommander.failWithErrorMessages(messages: Iterable<String?>) {
-    messages.forEach {
-        println(it)
+    val violations = mutableListOf<String>()
+    validateCli(cli, object : MessageCollector {
+        override fun plusAssign(msg: String) {
+            violations += msg
+        }
+    })
+    if (violations.isNotEmpty()) {
+        violations.forEach(errorPrinter::println)
+        errorPrinter.println()
+        jCommander.usage(outPrinter)
+        throw HandledArgumentViolation()
     }
-    println()
-    this.usage()
-    exitProcess(1)
+
+    return cli
+}
+
+fun JCommander.usage(outPrinter: PrintStream) {
+    val usage = StringBuilder()
+    this.usageFormatter.usage(usage)
+    outPrinter.println(usage.toString())
 }

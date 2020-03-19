@@ -20,15 +20,18 @@ import org.jetbrains.kotlin.psi.KtBinaryExpression
  * for (i in 2..1) {}
  * for (i in 1 downTo 2) {}
  *
- * val range = 2 until 1
+ * val range1 = 2 until 1
+ * val range2 = 2 until 2
  * </noncompliant>
  *
  * <compliant>
  * for (i in 2..2) {}
  * for (i in 2 downTo 2) {}
  *
- * val range =  2 until 2)
+ * val range = 2 until 3
  * </compliant>
+ *
+ * @active since v1.2.0
  */
 class InvalidRange(config: Config = Config.empty) : Rule(config) {
 
@@ -66,5 +69,5 @@ class InvalidRange(config: Config = Config.empty) : Rule(config) {
 
     private fun checkDownTo(lower: Int, upper: Int) = lower < upper
 
-    private fun checkUntil(lower: Int, upper: Int) = lower > upper
+    private fun checkUntil(lower: Int, upper: Int) = lower >= upper
 }

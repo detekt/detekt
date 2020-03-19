@@ -1,7 +1,5 @@
 package io.gitlab.arturbosch.detekt.cli
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.cli.console.BuildFailure
 import io.gitlab.arturbosch.detekt.cli.out.HtmlOutputReport
 import io.gitlab.arturbosch.detekt.cli.out.TxtOutputReport
 import io.gitlab.arturbosch.detekt.cli.out.XmlOutputReport
@@ -9,8 +7,7 @@ import io.gitlab.arturbosch.detekt.core.DetektResult
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.assertThatCode
-import org.assertj.core.api.Assertions.assertThatExceptionOfType
+import org.jetbrains.kotlin.utils.closeQuietly
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.io.ByteArrayOutputStream
@@ -30,15 +27,19 @@ internal class OutputFacadeSpec : Spek({
     val defaultDetektion = DetektResult(mapOf(Pair("Key", listOf(createFinding()))))
     val defaultSettings = ProcessingSettings(inputPath, outPrinter = PrintStream(outputStream))
 
+    afterGroup { closeQuietly(defaultSettings) }
+
     describe("Running the output facade") {
 
         describe("with multiple reports") {
-            val cliArgs = listOf(
+            val cliArgs = CliArgs.parse(
+                arrayOf(
                     "--input", inputPath.toString(),
                     "--report", "xml:$xmlOutputPath",
                     "--report", "txt:$plainOutputPath",
                     "--report", "html:$htmlOutputPath"
-            ).toCliArgs()
+                )
+            )
 
             it("creates all output files") {
                 val subject = OutputFacade(cliArgs, defaultDetektion, defaultSettings)
@@ -50,40 +51,10 @@ internal class OutputFacadeSpec : Spek({
                 outputStream.assertThatItPrintsReportPath(HtmlOutputReport().name)
             }
         }
-
-        describe("with more findings than issues allowed") {
-            it("reports build failure for default task") {
-                val cliArgs = listOf("--input", inputPath.toString()).toCliArgs()
-                val subject = OutputFacade(cliArgs, defaultDetektion, ProcessingSettings(inputPath, config = ZeroMaxIssuesConfig))
-
-                assertThatExceptionOfType(BuildFailure::class.java).isThrownBy { subject.run() }
-            }
-            it("does not throw an exception for createBaseline task") {
-                val cliArgs = listOf("--create-baseline", "--input", inputPath.toString()).toCliArgs()
-                val subject = OutputFacade(cliArgs, defaultDetektion, ProcessingSettings(inputPath, config = ZeroMaxIssuesConfig))
-
-                assertThatCode { subject.run() }.doesNotThrowAnyException()
-            }
-        }
     }
 })
 
-private fun List<String>.toCliArgs(): CliArgs {
-    val (cliArgs, _) = parseArguments<CliArgs>(this.toTypedArray())
-    return cliArgs
-}
-
-private object ZeroMaxIssuesConfig : Config {
-    override fun <T : Any> valueOrNull(key: String): T? = Config.empty.valueOrNull(key)
-    override fun subConfig(key: String) = this
-    @Suppress("UNCHECKED_CAST")
-    override fun <T : Any> valueOrDefault(key: String, default: T): T = when (key) {
-        "maxIssues" -> 0 as T
-        else -> Config.empty.valueOrDefault(key, default)
-    }
-}
-
 private fun ByteArrayOutputStream.assertThatItPrintsReportPath(reportName: String) {
     val outputString = toString(Charsets.UTF_8.name())
-    assertThat(outputString.contains("Successfully generated $reportName at ")).isTrue()
+    assertThat(outputString).contains("Successfully generated $reportName at ")
 }

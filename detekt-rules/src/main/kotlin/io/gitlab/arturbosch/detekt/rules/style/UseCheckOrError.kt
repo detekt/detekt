@@ -14,8 +14,8 @@ import org.jetbrains.kotlin.psi.KtFunctionLiteral
 import org.jetbrains.kotlin.psi.KtThrowExpression
 
 /**
- * Kotlin provides a much more concise way to check invariants as well as pre- and post conditions than to manually throw
- * an IllegalStateException.
+ * Kotlin provides a much more concise way to check invariants as well as pre- and post conditions.
+ * Prefer them instead of manually throwing an IllegalStateException.
  *
  * <noncompliant>
  * if (value == null) throw new IllegalStateException("value should not be null")
@@ -52,9 +52,7 @@ class UseCheckOrError(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun KtThrowExpression.isOnlyExpressionInLambda(): Boolean {
-        return when (val p = parent) {
-            is KtBlockExpression -> p.statements.size == 1 && p.parent is KtFunctionLiteral
-            else -> false
-        }
+        val p = parent
+        return if (p is KtBlockExpression) p.statements.size == 1 && p.parent is KtFunctionLiteral else false
     }
 }

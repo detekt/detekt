@@ -13,6 +13,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SingleAssign
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
+import io.gitlab.arturbosch.detekt.api.internal.absolutePath
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.com.intellij.lang.FileASTNode
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
@@ -28,7 +29,7 @@ abstract class FormattingRule(config: Config) : Rule(config) {
     abstract val wrapping: com.pinterest.ktlint.core.Rule
 
     protected fun issueFor(description: String) =
-            Issue(javaClass.simpleName, Severity.Style, description, Debt.FIVE_MINS)
+        Issue(javaClass.simpleName, Severity.Style, description, Debt.FIVE_MINS)
 
     /**
      * Should the android style guide be enforced?
@@ -44,13 +45,13 @@ abstract class FormattingRule(config: Config) : Rule(config) {
         this.root = root
         root.node.putUserData(KtLint.ANDROID_USER_DATA_KEY, isAndroid)
         positionByOffset = calculateLineColByOffset(root.text).let {
-            val offsetDueToLineBreakNormalization = calculateLineBreakOffset(root.text)
-            return@let { offset: Int -> it(offset + offsetDueToLineBreakNormalization(offset)) }
+            return@let { offset: Int -> it(offset) }
         }
         editorConfigUpdater()?.let { updateFunc ->
             val oldEditorConfig = root.node.getUserData(KtLint.EDITOR_CONFIG_USER_DATA_KEY)
             root.node.putUserData(KtLint.EDITOR_CONFIG_USER_DATA_KEY, updateFunc(oldEditorConfig))
         }
+        root.node.putUserData(KtLint.FILE_PATH_USER_DATA_KEY, root.absolutePath())
     }
 
     open fun editorConfigUpdater(): ((oldEditorConfig: EditorConfig?) -> EditorConfig)? = null
@@ -61,21 +62,25 @@ abstract class FormattingRule(config: Config) : Rule(config) {
         }
         wrapping.visit(node, autoCorrect) { _, message, _ ->
             val (line, column) = positionByOffset(node.startOffset)
-            report(CorrectableCodeSmell(issue,
-                    Entity(node.toString(), "", "",
-                            Location(SourceLocation(line, column),
-                                    TextLocation(node.startOffset, node.psi.endOffset),
-                                    "($line, $column)",
-                                    root.originalFilePath() ?: root.containingFile.name)),
-                    message,
-                    autoCorrectEnabled = autoCorrect))
+            val location = Location(
+                SourceLocation(line, column),
+                TextLocation(node.startOffset, node.psi.endOffset),
+                "($line, $column)",
+                root.originalFilePath() ?: root.containingFile.name
+            )
+            // The formatting rules report slightly wrong positions - #1843.
+            // Also nodes reported by 'NoConsecutiveBlankLines' are dangling whitespace nodes which means they have
+            // no direct parent which we can use to get the containing file needed to baseline or suppress findings.
+            // For these reasons we do not report a KtElement which may lead to crashes when postprocessing it
+            // e.g. reports (html), baseline etc.
+            val entity = Entity("", "", "", location, this.root)
+            report(CorrectableCodeSmell(issue, entity, message, autoCorrectEnabled = autoCorrect))
         }
     }
 
     private fun ruleShouldOnlyRunOnFileNode(node: ASTNode) =
-            wrapping is com.pinterest.ktlint.core.Rule.Modifier.RestrictToRoot &&
-                    node !is FileASTNode
+        wrapping is com.pinterest.ktlint.core.Rule.Modifier.RestrictToRoot && node !is FileASTNode
 
     private fun PsiElement.originalFilePath() =
-            (this.containingFile.viewProvider.virtualFile as? LightVirtualFile)?.originalFile?.name
+        (this.containingFile.viewProvider.virtualFile as? LightVirtualFile)?.originalFile?.name
 }

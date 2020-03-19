@@ -7,6 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.api.commaSeparatedPattern
+import io.gitlab.arturbosch.detekt.api.simplePatternToRegex
 import org.jetbrains.kotlin.psi.KtImportDirective
 
 /**
@@ -21,6 +23,7 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  * </noncompliant>
  *
  * @configuration imports - imports which should not be used (default: `''`)
+ * @configuration forbiddenPatterns - reports imports which match the specified regular expression. For example `net.*R`. (default: `""`)
  */
 class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
 
@@ -32,18 +35,19 @@ class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
         Debt.TEN_MINS
     )
 
-    private val forbiddenImports = valueOrDefault(IMPORTS, "").split(",")
-        .map { it.trim() }
-        .filter { it.isNotBlank() }
-        .map { it.replace(".", "\\.") }
-        .map { it.replace("*", ".*") }
-        .map { Regex(it) }
+    private val forbiddenImports = valueOrDefault(IMPORTS, "")
+        .commaSeparatedPattern()
+        .distinct()
+        .map { it.simplePatternToRegex() }
+        .toList()
+
+    private val forbiddenPatterns: Regex = Regex(valueOrDefault(FORBIDDEN_PATTERNS, ""))
 
     override fun visitImportDirective(importDirective: KtImportDirective) {
         super.visitImportDirective(importDirective)
 
         val import = importDirective.importedFqName?.asString() ?: ""
-        if (forbiddenImports.any { it.matches(import) }) {
+        if (forbiddenImports.any { it.matches(import) } || containsForbiddenPattern(import)) {
             report(
                 CodeSmell(
                     issue, Entity.from(importDirective), "The import " +
@@ -53,7 +57,11 @@ class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
         }
     }
 
+    private fun containsForbiddenPattern(import: String): Boolean =
+        forbiddenPatterns.pattern.isNotEmpty() && forbiddenPatterns.containsMatchIn(import)
+
     companion object {
         const val IMPORTS = "imports"
+        const val FORBIDDEN_PATTERNS = "forbiddenPatterns"
     }
 }

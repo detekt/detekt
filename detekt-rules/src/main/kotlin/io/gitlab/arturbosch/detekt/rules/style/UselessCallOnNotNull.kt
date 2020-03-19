@@ -35,6 +35,8 @@ import org.jetbrains.kotlin.types.TypeUtils
  * val testList2 = listOf("string").map { }
  * val testString = ""?.isBlank()
  * </compliant>
+ *
+ * @active since v1.2.0
  */
 class UselessCallOnNotNull(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(

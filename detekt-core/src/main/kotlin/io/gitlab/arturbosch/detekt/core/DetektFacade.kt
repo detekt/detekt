@@ -26,8 +26,6 @@ class DetektFacade(
     private val saveSupported = settings.autoCorrect
     private val inputPaths = settings.inputPaths
     private val classpath = settings.classpath
-    private val pathFilters = settings.pathFilters
-    private val jvmTarget = settings.jvmTarget
     private val environment = settings.environment
     private val compiler = KtTreeCompiler.instance(settings)
 
@@ -41,7 +39,6 @@ class DetektFacade(
         processors.forEach { it.onStart(filesToAnalyze) }
 
         findings.mergeSmells(detektor.run(filesToAnalyze, bindingContext))
-        val result = DetektResult(findings.toSortedMap())
 
         if (saveSupported) {
             KtFileModifier().saveModifiedFiles(filesToAnalyze) {
@@ -49,6 +46,7 @@ class DetektFacade(
             }
         }
 
+        val result = DetektResult(findings.toSortedMap())
         processors.forEach { it.onFinish(filesToAnalyze, result) }
         return result
     }
