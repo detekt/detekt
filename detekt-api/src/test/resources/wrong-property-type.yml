@@ -2,3 +2,5 @@ RuleSet:
   Rule:
     active: []
     threshold: v5.7
+
+bool: fasle

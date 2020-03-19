@@ -110,7 +110,6 @@ class ComplexMethodSpec : Spek({
 
             it("does not report complex methods with a single when expression") {
                 val config = TestConfig(mapOf(
-                    ComplexMethod.IGNORE_SIMPLE_WHEN_ENTRIES to "1.0",
                     ComplexMethod.IGNORE_SINGLE_WHEN_EXPRESSION to "true"))
                 val subject = ComplexMethod(config, threshold = 4)
 
@@ -118,8 +117,7 @@ class ComplexMethodSpec : Spek({
             }
 
             it("reports all complex methods") {
-                val config = TestConfig(mapOf(ComplexMethod.IGNORE_SIMPLE_WHEN_ENTRIES to "1.0"))
-                val subject = ComplexMethod(config, threshold = 4)
+                val subject = ComplexMethod(threshold = 4)
 
                 assertThat(subject.lint(path)).hasSourceLocations(
                     SourceLocation(6, 5),
