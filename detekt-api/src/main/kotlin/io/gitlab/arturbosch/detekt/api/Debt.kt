@@ -26,6 +26,6 @@ data class Debt(val days: Int = 0, val hours: Int = 0, val mins: Int = 0) {
             if (hours > 0) append("${hours}h ")
             if (mins > 0) append("${mins}min")
             toString()
-        }.trim()
+        }.trimEnd()
     }
 }
