@@ -1,7 +1,6 @@
 ---
 title: "Configure Build Failure Thresholds"
 keywords: build fail thresholds
-tags: 
 sidebar: 
 permalink: failonbuild.html
 summary:

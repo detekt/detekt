@@ -1,7 +1,6 @@
 ---
 title: "Code Smell Baseline"
 keywords: baseline suppressing smells
-tags: 
 sidebar: 
 permalink: baseline.html
 summary:
