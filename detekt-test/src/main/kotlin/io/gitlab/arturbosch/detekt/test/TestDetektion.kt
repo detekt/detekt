@@ -20,6 +20,10 @@ open class TestDetektion(vararg findings: Finding) : Detektion {
         userData = userData.plus(key, value)
     }
 
+    fun <V> removeData(key: Key<V>) {
+        userData = userData.minus(key)
+    }
+
     override fun add(notification: Notification) = throw UnsupportedOperationException("not implemented")
     override fun add(projectMetric: ProjectMetric) = throw UnsupportedOperationException("not implemented")
 }
