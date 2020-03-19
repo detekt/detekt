@@ -22,7 +22,7 @@ class BaselineFacadeSpec : Spek({
 
         it("creates a baseline file") {
             val fullPath = dir.resolve("baseline.xml")
-            assertCreate(fullPath)
+            assertNonEmptyBaseline(fullPath)
         }
 
         it("creates on top of an existing a baseline file") {
@@ -30,7 +30,7 @@ class BaselineFacadeSpec : Spek({
             val existingFile = Paths.get(resource("/smell-baseline.xml")).toFile()
             existingFile.copyTo(fullPath.toFile(), overwrite = true)
 
-            assertCreate(fullPath)
+            assertNonEmptyBaseline(fullPath)
         }
 
         it("filters without an existing baseline file") {
@@ -44,7 +44,7 @@ class BaselineFacadeSpec : Spek({
     }
 })
 
-private fun assertCreate(fullPath: Path) {
+private fun assertNonEmptyBaseline(fullPath: Path) {
     val baselineFacade = BaselineFacade(fullPath)
     baselineFacade.create(emptyList())
     Files.newInputStream(fullPath).use<InputStream?, ListAssert<String>?> {
