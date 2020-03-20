@@ -271,8 +271,10 @@ For example `Ticket|Task`.
 #### Noncompliant Code:
 
 ```kotlin
-// TODO:,FIXME:,STOPSHIP:
+val a = "" // TODO: remove please
+// FIXME: this is a hack
 fun foo() { }
+// STOPSHIP:
 ```
 
 ### ForbiddenImport
