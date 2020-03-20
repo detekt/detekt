@@ -22,7 +22,7 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiComment
  *
  * @configuration values - forbidden comment strings (default: `'TODO:,FIXME:,STOPSHIP:'`)
  * @configuration allowedPatterns - ignores comments which match the specified regular expression.
-   For example `Ticket|Task`. (default: `""`)
+   For example `Ticket|Task`. (default: `''`)
  * @active since v1.0.0
  */
 class ForbiddenComment(config: Config = Config.empty) : Rule(config) {

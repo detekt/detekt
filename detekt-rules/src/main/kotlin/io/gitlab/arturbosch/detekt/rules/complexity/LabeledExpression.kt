@@ -59,7 +59,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isExtensionDeclaration
  * </compliant>
  *
  * @configuration ignoredLabels - allows to provide a list of label names which should be ignored by this rule
- * (default: `""`)
+ * (default: `''`)
  */
 class LabeledExpression(config: Config = Config.empty) : Rule(config) {
 
