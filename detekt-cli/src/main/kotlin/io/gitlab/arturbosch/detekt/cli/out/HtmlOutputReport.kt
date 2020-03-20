@@ -24,7 +24,9 @@ import kotlinx.html.span
 import kotlinx.html.stream.createHTML
 import kotlinx.html.ul
 import kotlinx.html.visit
-import java.time.Instant
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 private const val DEFAULT_TEMPLATE = "default-html-report-template.html"
@@ -53,7 +55,11 @@ class HtmlOutputReport : OutputReport() {
 
     private fun renderVersion(): String = whichDetekt() ?: "unknown"
 
-    private fun renderDate(): String = Instant.now().toString()
+    private fun renderDate(): String {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        val now = OffsetDateTime.now(ZoneOffset.UTC).format(formatter) + " UTC"
+        return now
+    }
 
     private fun renderMetrics(metrics: Collection<ProjectMetric>) = createHTML().div {
         ul {
