@@ -54,10 +54,9 @@ class Runner(
     }
 
     private fun checkBaselineCreation(result: Detektion) {
-        val baselineFacade = arguments.baseline?.let { BaselineFacade(it) }
         if (arguments.createBaseline) {
             val smells = result.findings.flatMap { it.value }
-            baselineFacade?.create(smells)
+            BaselineFacade(arguments.baseline!!).create(smells)
         }
     }
 
