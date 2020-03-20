@@ -14,8 +14,10 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiComment
  * development. Offending code comments will then be reported.
  *
  * <noncompliant>
- * // TODO:,FIXME:,STOPSHIP:
+ * val a = "" // TODO: remove please
+ * // FIXME: this is a hack
  * fun foo() { }
+ * // STOPSHIP:
  * </noncompliant>
  *
  * @configuration values - forbidden comment strings (default: `'TODO:,FIXME:,STOPSHIP:'`)
