@@ -33,7 +33,9 @@ class BaselineFormatSpec : Spek({
 
             it("throws on an invalid baseline ID declaration") {
                 val path = Paths.get(resource("/invalid-smell-baseline.xml"))
-                assertThatIllegalStateException().isThrownBy { BaselineFormat().read(path) }
+                assertThatIllegalStateException()
+                    .isThrownBy { BaselineFormat().read(path) }
+                    .withMessage("The content of the ID element must not be empty")
             }
         }
 

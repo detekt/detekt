@@ -28,7 +28,7 @@ internal class BaselineHandler : DefaultHandler() {
     override fun endElement(uri: String, localName: String, qName: String) {
         when (qName) {
             ID -> {
-                check(content.isNotBlank())
+                check(content.isNotBlank()) { "The content of the ID element must not be empty" }
                 when (current) {
                     BLACKLIST -> blackIds.add(content)
                     WHITELIST -> whiteIds.add(content)
