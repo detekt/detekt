@@ -11,6 +11,7 @@ import io.gitlab.arturbosch.detekt.core.processors.complexityKey
 import io.gitlab.arturbosch.detekt.core.processors.linesKey
 import io.gitlab.arturbosch.detekt.core.processors.logicalLinesKey
 import io.gitlab.arturbosch.detekt.core.processors.sourceLinesKey
+import io.gitlab.arturbosch.detekt.core.whichDetekt
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.resource
 import io.mockk.every
@@ -40,6 +41,16 @@ class HtmlOutputReportSpec : Spek({
             assertThat(result).contains("<h2>Metrics</h2>")
             assertThat(result).contains("<h2>Complexity Report</h2>")
             assertThat(result).contains("<h2>Findings</h2>")
+        }
+
+        it("renders the 'generated with' text correctly") {
+            val header =
+                """generated with <a href="www.github.com/arturbosch/detekt">detekt version ${whichDetekt()}</a> on """
+
+            val result = htmlReport.render(TestDetektion())
+
+            assertThat(result).contains(header)
+            assertThat(result).doesNotContain("@@@date@@@")
         }
 
         it("contains the total number of findings") {
