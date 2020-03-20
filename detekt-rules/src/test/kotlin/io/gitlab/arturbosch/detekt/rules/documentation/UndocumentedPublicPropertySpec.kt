@@ -34,6 +34,11 @@ class UndocumentedPublicPropertySpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
+        it("reports undocumented public property in a primary constructor") {
+            val code = "/* comment */ class Test(val a: Int)"
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+
         it("does not report documented public property") {
             val code = """
                 /**
