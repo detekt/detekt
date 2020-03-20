@@ -29,6 +29,11 @@ class UndocumentedPublicPropertySpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(2)
         }
 
+        it("reports undocumented public properties in a primary constructor") {
+            val code = "class Test(val a: Int)"
+            assertThat(subject.compileAndLint(code)).hasSize(1)
+        }
+
         it("does not report documented public property") {
             val code = """
                 /**
@@ -90,11 +95,32 @@ class UndocumentedPublicPropertySpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report properties in constructor") {
+        it("does not report properties in a secondary constructor") {
             val code = """
-                class Test(public val a: Int) {
-                    constructor(a: Int, b: Int) : this(a)
+                class Test() {
+                    constructor(a: Int) : this()
                 }
+            """
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        it("does not report undocumented non-public properties in a primary constructor") {
+            val code = "class Test(internal val a: Int)"
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        it("does not report undocumented public properties in a primary constructor for an internal class") {
+            val code = "internal class Test(val a: Int)"
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        it("does not report documented public properties in a primary constructor") {
+            val code = """
+                /**
+                * @a int1
+                * [b] int2 
+                */
+                class Test(val a: Int, val b: Int)
             """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
