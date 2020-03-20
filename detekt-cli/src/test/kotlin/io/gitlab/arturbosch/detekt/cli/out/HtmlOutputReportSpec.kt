@@ -134,6 +134,7 @@ class HtmlOutputReportSpec : Spek({
             result = generatedRegex.replace(result, replacement)
 
             val actual = Files.createTempFile("actual-report", ".html")
+            actual.toFile().deleteOnExit()
             Files.write(actual, result.toByteArray())
 
             assertThat(actual).hasSameTextualContentAs(expected)
@@ -220,6 +221,7 @@ private fun createReportWithFindings(findings: Array<Pair<String, List<Finding>>
     var result = htmlReport.render(detektion)
     result = generatedRegex.replace(result, "")
     val reportPath = Files.createTempFile("report", ".html")
+    reportPath.toFile().deleteOnExit()
     Files.write(reportPath, result.toByteArray())
     return reportPath
 }
