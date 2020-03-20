@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.api.internal.BaseConfig
 
 @Suppress("UNCHECKED_CAST")
 open class TestConfig(
-    private val values: Map<String, String> = mutableMapOf(),
+    private val values: Map<String, Any> = mutableMapOf(),
     override val parent: HierarchicalConfig.Parent? = null
 ) : BaseConfig() {
 
