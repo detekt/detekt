@@ -73,7 +73,7 @@ class ComplexInterface(
             if (includePrivateDeclarations) {
                 true
             } else {
-                (it is KtTypeParameterListOwner && !it.isPrivate())
+                it is KtTypeParameterListOwner && !it.isPrivate()
             }
         }
         .count { it is KtNamedFunction || it is KtProperty }
