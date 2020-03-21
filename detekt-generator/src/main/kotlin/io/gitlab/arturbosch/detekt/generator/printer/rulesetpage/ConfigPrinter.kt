@@ -81,8 +81,8 @@ object ConfigPrinter : DocumentationPrinter<List<RuleSetPage>> {
     private fun defaultConfigConfiguration(): String = """
       config:
         validation: true
-        # when writing own rules with new properties, exclude the property path e.g.: "my_rule_set,.*>.*>[my_property]"
-        excludes: ""
+        # when writing own rules with new properties, exclude the property path e.g.: 'my_rule_set,.*>.*>[my_property]'
+        excludes: ''
     """.trimIndent()
 
     private fun defaultProcessorsConfiguration(): String = """

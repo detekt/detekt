@@ -23,7 +23,7 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  * </noncompliant>
  *
  * @configuration imports - imports which should not be used (default: `''`)
- * @configuration forbiddenPatterns - reports imports which match the specified regular expression. For example `net.*R`. (default: `""`)
+ * @configuration forbiddenPatterns - reports imports which match the specified regular expression. For example `net.*R`. (default: `''`)
  */
 class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
 

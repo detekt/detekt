@@ -33,7 +33,7 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
  *
  * @configuration ignoreOverridableFunction - if overriden functions should be ignored (default: `true`)
  * @configuration excludedFunctions - excluded functions (default: `'describeContents'`)
- * @configuration excludeAnnotatedFunction - allows to provide a list of annotations that disable this check (default: `"dagger.Provides"`)
+ * @configuration excludeAnnotatedFunction - allows to provide a list of annotations that disable this check (default: `'dagger.Provides'`)
  *
  * @active since v1.2.0
  */

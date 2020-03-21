@@ -44,7 +44,7 @@ import org.jetbrains.kotlin.psi.KtTypeReference
  *            - RuntimeException
  *            - Throwable`)
  * @configuration allowedExceptionNameRegex - ignores too generic exception types which match this regex
- * (default: `"^(_|(ignore|expected).*)"`)
+ * (default: `'^(_|(ignore|expected).*)'`)
  * @active since v1.0.0
  */
 class TooGenericExceptionCaught(config: Config) : Rule(config) {

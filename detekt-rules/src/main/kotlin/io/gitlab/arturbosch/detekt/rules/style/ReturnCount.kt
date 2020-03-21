@@ -46,7 +46,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getParentOfType
  * @configuration max - define the maximum number of return statements allowed per function
  * (default: `2`)
  * @configuration excludedFunctions - define functions to be ignored by this check
- * (default: `"equals"`)
+ * (default: `'equals'`)
  * @configuration excludeLabeled - if labeled return statements should be ignored
  * (default: `false`)
  * @configuration excludeReturnFromLambda - if labeled return from a lambda should be ignored
