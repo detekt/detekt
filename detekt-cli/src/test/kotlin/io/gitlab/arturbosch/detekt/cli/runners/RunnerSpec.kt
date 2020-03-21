@@ -113,6 +113,7 @@ class RunnerSpec : Spek({
             val tmpReport = Files.createTempFile("RunnerSpec", ".txt")
             val cliArgs = CliArgs.parse(arrayOf(
                 "--input", inputPath.toString(),
+                "--baseline", Paths.get(resource("configs/baseline-empty.xml")).toString(),
                 "--create-baseline",
                 "--report", "txt:$tmpReport",
                 "--config-resource", "/configs/max-issues-0.yml"
@@ -120,7 +121,7 @@ class RunnerSpec : Spek({
 
             Runner(cliArgs).execute()
 
-            assertThat(Files.readAllLines(tmpReport)).hasSize(1)
+            assertThat(tmpReport).hasContent("")
         }
     }
 

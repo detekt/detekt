@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.core.isFile
 import java.nio.file.Files
 import java.nio.file.Path
 
-class BaselineFacade(val baselineFile: Path) {
+class BaselineFacade(private val baselineFile: Path) {
 
     private val listings: Pair<Whitelist, Blacklist>? =
             if (baselineExists()) {
