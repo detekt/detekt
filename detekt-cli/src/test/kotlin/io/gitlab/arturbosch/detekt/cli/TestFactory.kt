@@ -13,7 +13,6 @@ import io.gitlab.arturbosch.detekt.core.ModificationNotification
 import io.gitlab.arturbosch.detekt.test.resource
 import org.jetbrains.kotlin.psi.KtElement
 import java.nio.file.Paths
-import java.util.UUID
 
 fun createFinding(ruleName: String = "TestSmell", fileName: String = "TestFile.kt") =
     CodeSmell(createIssue(ruleName), createEntity(fileName), "TestMessage")
