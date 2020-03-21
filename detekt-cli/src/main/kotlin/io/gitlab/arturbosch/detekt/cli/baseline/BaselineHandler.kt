@@ -3,7 +3,7 @@ package io.gitlab.arturbosch.detekt.cli.baseline
 import org.xml.sax.Attributes
 import org.xml.sax.helpers.DefaultHandler
 
-class BaselineHandler : DefaultHandler() {
+internal class BaselineHandler : DefaultHandler() {
 
     private var current: String? = null
     private var content: String = ""
@@ -27,7 +27,8 @@ class BaselineHandler : DefaultHandler() {
 
     override fun endElement(uri: String, localName: String, qName: String) {
         when (qName) {
-            ID -> if (content.isNotBlank()) {
+            ID -> {
+                check(content.isNotBlank()) { "The content of the ID element must not be empty" }
                 when (current) {
                     BLACKLIST -> blackIds.add(content)
                     WHITELIST -> whiteIds.add(content)

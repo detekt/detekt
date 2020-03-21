@@ -2,12 +2,12 @@ package io.gitlab.arturbosch.detekt.cli.baseline
 
 import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.assertThatIllegalStateException
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.nio.file.Files
 import java.nio.file.Paths
-import java.time.Instant
 
 class BaselineFormatSpec : Spek({
 
@@ -26,9 +26,16 @@ class BaselineFormatSpec : Spek({
                 assertThat(whitelist.ids).anySatisfy { it.startsWith("FeatureEnvy") }
             }
 
-            it("throws on an invalid baseline file") {
+            it("throws on an invalid baseline file extension") {
                 val path = Paths.get(resource("/invalid-smell-baseline.txt"))
                 assertThatThrownBy { BaselineFormat().read(path) }.isInstanceOf(InvalidBaselineState::class.java)
+            }
+
+            it("throws on an invalid baseline ID declaration") {
+                val path = Paths.get(resource("/invalid-smell-baseline.xml"))
+                assertThatIllegalStateException()
+                    .isThrownBy { BaselineFormat().read(path) }
+                    .withMessage("The content of the ID element must not be empty")
             }
         }
 
