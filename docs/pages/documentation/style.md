@@ -288,7 +288,7 @@ or deprecated APIs. Detekt will then report all imports that are forbidden.
 
 #### Configuration options:
 
-* ``imports`` (default: ``''``)
+* ``imports`` (default: ``[]``)
 
    imports which should not be used
 
