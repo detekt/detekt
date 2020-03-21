@@ -34,7 +34,6 @@ class BaselineFacade(val baselineFile: Path) {
         val smellBaseline = Baseline(blacklist, Whitelist(ids))
         baselineFile.parent?.let { Files.createDirectories(it) }
         BaselineFormat().write(smellBaseline, baselineFile)
-        println("Successfully wrote smell baseline to $baselineFile")
     }
 
     private fun baselineExists() = baselineFile.exists() && baselineFile.isFile()
