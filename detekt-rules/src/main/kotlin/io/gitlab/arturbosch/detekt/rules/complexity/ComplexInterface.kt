@@ -14,6 +14,8 @@ import org.jetbrains.kotlin.psi.KtClassBody
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.KtTypeParameterListOwner
+import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 
 /**
  * Complex interfaces which contain too many functions and/or properties indicate that this interface is handling too
@@ -25,6 +27,7 @@ import org.jetbrains.kotlin.psi.KtProperty
  *
  * @configuration threshold - the amount of definitions in an interface to trigger the rule (default: `10`)
  * @configuration includeStaticDeclarations - whether static declarations should be included (default: `false`)
+ * @configuration includePrivateDeclarations - whether private declarations should be included (default: `false`)
  */
 class ComplexInterface(
     config: Config = Config.empty,
@@ -39,6 +42,7 @@ class ComplexInterface(
             Debt.TWENTY_MINS)
 
     private val includeStaticDeclarations = valueOrDefault(INCLUDE_STATIC_DECLARATIONS, false)
+    private val includePrivateDeclarations = valueOrDefault(INCLUDE_PRIVATE_DECLARATIONS, false)
 
     override fun visitClass(klass: KtClass) {
         if (klass.isInterface()) {
@@ -48,10 +52,12 @@ class ComplexInterface(
                 size += countStaticDeclarations(klass.companionObject())
             }
             if (size >= threshold) {
-                report(ThresholdedCodeSmell(issue,
+                report(
+                    ThresholdedCodeSmell(issue,
                         Entity.from(klass),
                         Metric("SIZE: ", size, threshold),
-                        "The interface ${klass.name} is too complex. Consider splitting it up."))
+                        "The interface ${klass.name} is too complex. Consider splitting it up.")
+                )
             }
         }
         super.visitClass(klass)
@@ -62,10 +68,19 @@ class ComplexInterface(
         return if (body != null) calculateMembers(body) else 0
     }
 
-    private fun calculateMembers(body: KtClassBody) = body.children.count { it is KtNamedFunction || it is KtProperty }
+    private fun calculateMembers(body: KtClassBody) = body.children
+        .filter {
+            if (includePrivateDeclarations) {
+                true
+            } else {
+                (it is KtTypeParameterListOwner && !it.isPrivate())
+            }
+        }
+        .count { it is KtNamedFunction || it is KtProperty }
 
     companion object {
         const val INCLUDE_STATIC_DECLARATIONS = "includeStaticDeclarations"
+        const val INCLUDE_PRIVATE_DECLARATIONS = "includePrivateDeclarations"
         const val DEFAULT_LARGE_INTERFACE_COUNT = 10
     }
 }

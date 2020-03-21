@@ -9,7 +9,8 @@ import org.spekframework.spek2.style.specification.describe
 class ComplexInterfaceSpec : Spek({
 
     val subject by memoized { ComplexInterface(threshold = THRESHOLD) }
-    val config = TestConfig(mapOf(ComplexInterface.INCLUDE_STATIC_DECLARATIONS to "true"))
+    val staticDeclarationsConfig = TestConfig(mapOf(ComplexInterface.INCLUDE_STATIC_DECLARATIONS to "true"))
+    val privateDeclarationsConfig = TestConfig(mapOf(ComplexInterface.INCLUDE_PRIVATE_DECLARATIONS to "true"))
 
     describe("ComplexInterface rule positives") {
 
@@ -28,7 +29,7 @@ class ComplexInterfaceSpec : Spek({
             }
 
             it("reports complex interface with includeStaticDeclarations config") {
-                val rule = ComplexInterface(config, threshold = THRESHOLD)
+                val rule = ComplexInterface(staticDeclarationsConfig, threshold = THRESHOLD)
                 assertThat(rule.compileAndLint(code)).hasSize(1)
             }
         }
@@ -50,7 +51,7 @@ class ComplexInterfaceSpec : Spek({
             }
 
             it("reports complex interface with includeStaticDeclarations config") {
-                val rule = ComplexInterface(config, threshold = THRESHOLD)
+                val rule = ComplexInterface(staticDeclarationsConfig, threshold = THRESHOLD)
                 assertThat(rule.compileAndLint(code)).hasSize(1)
             }
         }
@@ -72,7 +73,47 @@ class ComplexInterfaceSpec : Spek({
             }
 
             it("reports complex interface with includeStaticDeclarations config") {
-                val rule = ComplexInterface(config, threshold = THRESHOLD)
+                val rule = ComplexInterface(staticDeclarationsConfig, threshold = THRESHOLD)
+                assertThat(rule.compileAndLint(code)).hasSize(1)
+            }
+        }
+
+        context("private function") {
+            val code = """
+                interface I {
+                    fun f1()
+                    fun f2()
+                    val i1: Int
+                    private fun fImpl() {}
+                }
+            """
+
+            it("does not report complex interface") {
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+
+            it("does report complex interface with includePrivateDeclarations config") {
+                val rule = ComplexInterface(privateDeclarationsConfig, threshold = THRESHOLD)
+                assertThat(rule.compileAndLint(code)).hasSize(1)
+            }
+        }
+
+        context("private member") {
+            val code = """
+                interface I {
+                    fun f1()
+                    fun f2()
+                    private val i1: Int
+                    fun fImpl() {}
+                }
+            """
+
+            it("does not report complex interface") {
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+
+            it("does report complex interface with includePrivateDeclarations config") {
+                val rule = ComplexInterface(privateDeclarationsConfig, threshold = THRESHOLD)
                 assertThat(rule.compileAndLint(code)).hasSize(1)
             }
         }
@@ -87,7 +128,7 @@ class ComplexInterfaceSpec : Spek({
                     fun fImpl() {
                         val x = 0 // should not report
                     }
- 
+
                     val i: Int
                     // a comment shouldn't be detected
                 }
