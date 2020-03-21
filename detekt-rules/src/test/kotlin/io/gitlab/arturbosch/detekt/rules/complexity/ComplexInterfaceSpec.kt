@@ -78,7 +78,7 @@ class ComplexInterfaceSpec : Spek({
             }
         }
 
-        context("private function") {
+        context("private functions") {
             val code = """
                 interface I {
                     fun f1()
@@ -98,12 +98,13 @@ class ComplexInterfaceSpec : Spek({
             }
         }
 
-        context("private member") {
+        context("private members") {
             val code = """
                 interface I {
                     fun f1()
                     fun f2()
                     private val i1: Int
+                        get() = 42
                     fun fImpl() {}
                 }
             """
