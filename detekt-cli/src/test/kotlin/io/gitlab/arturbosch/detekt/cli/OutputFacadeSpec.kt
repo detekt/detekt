@@ -5,27 +5,26 @@ import io.gitlab.arturbosch.detekt.cli.out.TxtOutputReport
 import io.gitlab.arturbosch.detekt.cli.out.XmlOutputReport
 import io.gitlab.arturbosch.detekt.core.DetektResult
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
+import io.gitlab.arturbosch.detekt.test.StringPrintStream
 import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.utils.closeQuietly
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
-import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.PrintStream
 import java.nio.file.Path
 import java.nio.file.Paths
 
 internal class OutputFacadeSpec : Spek({
 
-    val outputStream = ByteArrayOutputStream()
+    val printStream = StringPrintStream()
     val inputPath: Path = Paths.get(resource("/cases"))
     val plainOutputPath = File.createTempFile("detekt", ".txt")
     val htmlOutputPath = File.createTempFile("detekt", ".html")
     val xmlOutputPath = File.createTempFile("detekt", ".xml")
 
     val defaultDetektion = DetektResult(mapOf(Pair("Key", listOf(createFinding()))))
-    val defaultSettings = ProcessingSettings(inputPath, outPrinter = PrintStream(outputStream))
+    val defaultSettings = ProcessingSettings(inputPath, outPrinter = printStream)
 
     afterGroup { closeQuietly(defaultSettings) }
 
@@ -44,16 +43,13 @@ internal class OutputFacadeSpec : Spek({
 
                 subject.run()
 
-                outputStream.assertThatItPrintsReportPath(TxtOutputReport().name, plainOutputPath)
-                outputStream.assertThatItPrintsReportPath(XmlOutputReport().name, xmlOutputPath)
-                outputStream.assertThatItPrintsReportPath(HtmlOutputReport().name, htmlOutputPath)
+                assertThat(printStream.toString()).contains(
+                    "Successfully generated ${TxtOutputReport().name} at $plainOutputPath$LN",
+                    "Successfully generated ${XmlOutputReport().name} at $xmlOutputPath$LN",
+                    "Successfully generated ${HtmlOutputReport().name} at $htmlOutputPath$LN")
             }
         }
     }
 })
-
-private fun ByteArrayOutputStream.assertThatItPrintsReportPath(reportName: String, file: File) {
-    assertThat(toString()).contains("Successfully generated $reportName at $file$LN")
-}
 
 private val LN = System.lineSeparator()

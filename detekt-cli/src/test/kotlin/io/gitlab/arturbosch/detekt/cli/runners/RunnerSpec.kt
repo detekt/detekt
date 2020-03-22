@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.cli.runners
 
 import io.gitlab.arturbosch.detekt.cli.BuildFailure
+import io.gitlab.arturbosch.detekt.test.StringPrintStream
 import io.gitlab.arturbosch.detekt.cli.config.InvalidConfig
 import io.gitlab.arturbosch.detekt.cli.createCliArgs
 import io.gitlab.arturbosch.detekt.test.resource
@@ -9,9 +10,6 @@ import org.assertj.core.api.Assertions.assertThatCode
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
-import java.io.ByteArrayOutputStream
-import java.io.PrintStream
-import java.nio.charset.Charset
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
@@ -19,7 +17,6 @@ import java.nio.file.Paths
 class RunnerSpec : Spek({
 
     val inputPath: Path = Paths.get(resource("cases/Poko.kt"))
-    val charSetName = Charset.defaultCharset().name()
 
     describe("executes the runner with different maxIssues configurations") {
 
@@ -127,11 +124,8 @@ class RunnerSpec : Spek({
 
     describe("customize output and error printers") {
 
-        val outputPrinterBuffer by memoized { ByteArrayOutputStream() }
-        val outputPrinter by memoized { PrintStream(outputPrinterBuffer) }
-
-        val errorPrinterBuffer by memoized { ByteArrayOutputStream() }
-        val errorPrinter by memoized { PrintStream(errorPrinterBuffer) }
+        val outPrintStream by memoized { StringPrintStream() }
+        val errPrintStream by memoized { StringPrintStream() }
 
         context("execute with default config which allows no issues") {
 
@@ -140,21 +134,15 @@ class RunnerSpec : Spek({
             beforeEachTest {
                 val args = createCliArgs("--input", path.toString())
 
-                Runner(args, outputPrinter, errorPrinter).execute()
-
-                outputPrinter.flush()
-                outputPrinter.close()
-
-                errorPrinter.flush()
-                errorPrinter.close()
+                Runner(args, outPrintStream, errPrintStream).execute()
             }
 
             it("writes no build related output to output printer") {
-                assertThat(outputPrinterBuffer.toString(charSetName)).doesNotContain("test - [Poko]")
+                assertThat(outPrintStream.toString()).doesNotContain("test - [Poko]")
             }
 
             it("does not write anything to error printer") {
-                assertThat(errorPrinterBuffer.toString(charSetName)).isEmpty()
+                assertThat(errPrintStream.toString()).isEmpty()
             }
         }
 
@@ -166,23 +154,17 @@ class RunnerSpec : Spek({
                     "--config-resource", "/configs/max-issues-0.yml")
 
                 try {
-                    Runner(args, outputPrinter, errorPrinter).execute()
+                    Runner(args, outPrintStream, errPrintStream).execute()
                 } catch (ignored: BuildFailure) {
                 }
-
-                outputPrinter.flush()
-                outputPrinter.close()
-
-                errorPrinter.flush()
-                errorPrinter.close()
             }
 
             it("writes output to output printer") {
-                assertThat(outputPrinterBuffer.toString(charSetName)).contains("test - [Poko]")
+                assertThat(outPrintStream.toString()).contains("test - [Poko]")
             }
 
             it("does not write anything to error printer") {
-                assertThat(errorPrinterBuffer.toString(charSetName)).isEmpty()
+                assertThat(errPrintStream.toString()).isEmpty()
             }
         }
     }
