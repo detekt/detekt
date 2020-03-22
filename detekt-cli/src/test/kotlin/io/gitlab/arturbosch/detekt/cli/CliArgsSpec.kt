@@ -53,7 +53,7 @@ internal class CliArgsSpec : Spek({
 
         it("reports an error when using --create-baseline without a --baseline file") {
             assertThatExceptionOfType(HandledArgumentViolation::class.java)
-                .isThrownBy { buildRunner(arrayOf("--create-baseline")) }
+                .isThrownBy { buildRunner(arrayOf("--create-baseline"), NullPrintStream(), NullPrintStream()) }
         }
     }
 })

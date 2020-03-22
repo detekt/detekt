@@ -17,7 +17,7 @@ import kotlin.system.exitProcess
 @Suppress("TooGenericExceptionCaught")
 fun main(args: Array<String>) {
     try {
-        buildRunner(args).execute()
+        buildRunner(args, System.out, System.err).execute()
     } catch (_: HelpRequest) {
         // handled by JCommander, exit normally
     } catch (e: InvalidConfig) {
@@ -38,8 +38,8 @@ fun main(args: Array<String>) {
 
 fun buildRunner(
     args: Array<String>,
-    outputPrinter: PrintStream = System.out,
-    errorPrinter: PrintStream = System.err
+    outputPrinter: PrintStream,
+    errorPrinter: PrintStream
 ): Executable {
     val arguments = parseArguments<CliArgs>(
         args,

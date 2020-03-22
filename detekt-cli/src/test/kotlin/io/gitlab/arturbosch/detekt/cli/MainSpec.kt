@@ -18,32 +18,26 @@ class MainSpec : Spek({
 
     describe("build runner") {
 
-        listOf(NullPrintStream(), null).forEach { printer ->
+        listOf(
+            arrayOf("--generate-config"),
+            arrayOf("--run-rule", "Rule"),
+            arrayOf("--print-ast"),
+            arrayOf("--version"),
+            emptyArray()
+        ).forEach { args ->
 
-            context("printer is [${if (printer == null) "default" else "provided"}]") {
+            val expectedRunnerClass = when {
+                args.contains("--version") -> VersionPrinter::class
+                args.contains("--generate-config") -> ConfigExporter::class
+                args.contains("--run-rule") -> SingleRuleRunner::class
+                args.contains("--print-ast") -> AstPrinter::class
+                else -> Runner::class
+            }
 
-                listOf(
-                    arrayOf("--generate-config"),
-                    arrayOf("--run-rule", "Rule"),
-                    arrayOf("--print-ast"),
-                    arrayOf("--version"),
-                    emptyArray()
-                ).forEach { args ->
+            it("returns [${expectedRunnerClass.simpleName}] when arguments are $args") {
+                val runner = buildRunner(args, NullPrintStream(), NullPrintStream())
 
-                    val expectedRunnerClass = when {
-                        args.contains("--version") -> VersionPrinter::class
-                        args.contains("--generate-config") -> ConfigExporter::class
-                        args.contains("--run-rule") -> SingleRuleRunner::class
-                        args.contains("--print-ast") -> AstPrinter::class
-                        else -> Runner::class
-                    }
-
-                    it("returns [${expectedRunnerClass.simpleName}] when arguments are $args") {
-                        val runner = if (printer == null) buildRunner(args) else buildRunner(args, printer, printer)
-
-                        assertThat(runner).isExactlyInstanceOf(expectedRunnerClass.java)
-                    }
-                }
+                assertThat(runner).isExactlyInstanceOf(expectedRunnerClass.java)
             }
         }
     }
