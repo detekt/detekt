@@ -179,6 +179,7 @@ open class Detekt : SourceTask(), VerificationTask {
         group = LifecycleBasePlugin.VERIFICATION_GROUP
     }
 
+    @Suppress("DEPRECATION")
     @TaskAction
     fun check() {
         val arguments = mutableListOf(
