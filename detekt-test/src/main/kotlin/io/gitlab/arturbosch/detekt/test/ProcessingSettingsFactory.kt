@@ -25,8 +25,8 @@ fun createProcessingSettings(
     languageVersion: LanguageVersion = LanguageVersion.LATEST_STABLE,
     jvmTarget: JvmTarget = JvmTarget.DEFAULT,
     executorService: ExecutorService = ForkJoinPool.commonPool(),
-    outPrinter: PrintStream = System.out,
-    errorPrinter: PrintStream = System.err,
+    outPrinter: PrintStream = NullPrintStream(),
+    errorPrinter: PrintStream = NullPrintStream(),
     autoCorrect: Boolean = false,
     debug: Boolean = false,
     configUris: Collection<URI> = emptyList()

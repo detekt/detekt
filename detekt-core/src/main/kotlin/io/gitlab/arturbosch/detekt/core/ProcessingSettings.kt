@@ -39,8 +39,8 @@ class ProcessingSettings constructor(
     val languageVersion: LanguageVersion? = null,
     val jvmTarget: JvmTarget = JvmTarget.DEFAULT,
     val executorService: ExecutorService? = null,
-    val outPrinter: PrintStream = System.out,
-    val errorPrinter: PrintStream = System.err,
+    val outPrinter: PrintStream,
+    val errorPrinter: PrintStream,
     val autoCorrect: Boolean = false,
     val debug: Boolean = false,
     override val configUris: Collection<URI> = emptyList()

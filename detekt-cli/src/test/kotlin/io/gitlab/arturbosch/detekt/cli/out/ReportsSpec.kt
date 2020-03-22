@@ -6,6 +6,7 @@ import io.gitlab.arturbosch.detekt.cli.CliArgs
 import io.gitlab.arturbosch.detekt.cli.ReportLocator
 import io.gitlab.arturbosch.detekt.cli.parseArguments
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
+import io.gitlab.arturbosch.detekt.test.NullPrintStream
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Condition
@@ -61,7 +62,11 @@ internal class ReportsSpec : Spek({
                 )
             }
 
-            val extensions = ProcessingSettings(listOf()).use { ReportLocator(it).load() }
+            val extensions = ProcessingSettings(
+                listOf(),
+                outPrinter = NullPrintStream(),
+                errorPrinter = NullPrintStream()
+            ).use { ReportLocator(it).load() }
             val extensionsIds = extensions.mapTo(HashSet()) { it.id }
 
             it("should be able to convert to output reports") {
@@ -83,7 +88,12 @@ internal class ReportsSpec : Spek({
 
             it("yields empty extension list") {
                 val config = yamlConfig("configs/disabled-reports.yml")
-                val extensions = ProcessingSettings(listOf(), config).use { ReportLocator(it).load() }
+                val extensions = ProcessingSettings(
+                    listOf(),
+                    config,
+                    outPrinter = NullPrintStream(),
+                    errorPrinter = NullPrintStream()
+                ).use { ReportLocator(it).load() }
                 assertThat(extensions).isEmpty()
             }
         }
