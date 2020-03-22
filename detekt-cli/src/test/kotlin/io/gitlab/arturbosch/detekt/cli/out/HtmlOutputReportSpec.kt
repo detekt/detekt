@@ -11,6 +11,7 @@ import io.gitlab.arturbosch.detekt.core.processors.complexityKey
 import io.gitlab.arturbosch.detekt.core.processors.linesKey
 import io.gitlab.arturbosch.detekt.core.processors.logicalLinesKey
 import io.gitlab.arturbosch.detekt.core.processors.sourceLinesKey
+import io.gitlab.arturbosch.detekt.core.whichDetekt
 import io.gitlab.arturbosch.detekt.test.TestDetektion
 import io.gitlab.arturbosch.detekt.test.resource
 import io.mockk.every
@@ -21,11 +22,13 @@ import org.jetbrains.kotlin.psi.KtElement
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 import java.nio.file.Files
+import java.nio.file.Path
 import java.nio.file.Paths
 
 class HtmlOutputReportSpec : Spek({
 
     describe("HTML output report") {
+
         val htmlReport = HtmlOutputReport()
 
         it("renders the HTML headers correctly") {
@@ -38,6 +41,17 @@ class HtmlOutputReportSpec : Spek({
             assertThat(result).contains("<h2>Metrics</h2>")
             assertThat(result).contains("<h2>Complexity Report</h2>")
             assertThat(result).contains("<h2>Findings</h2>")
+        }
+
+        it("renders the 'generated with' text correctly") {
+            val version = whichDetekt()
+            val header =
+                """generated with <a href="https://arturbosch.github.io/detekt">detekt version $version</a> on """
+
+            val result = htmlReport.render(TestDetektion())
+
+            assertThat(result).contains(header)
+            assertThat(result).doesNotContain("@@@date@@@")
         }
 
         it("contains the total number of findings") {
@@ -116,16 +130,15 @@ class HtmlOutputReportSpec : Spek({
         }
 
         it("asserts that the generated HTML is the same as expected") {
-            val result = htmlReport.render(createTestDetektionWithMultipleSmells())
+            val expected = Paths.get(resource("/reports/HtmlOutputFormatTest.html"))
+            var result = htmlReport.render(createTestDetektionWithMultipleSmells())
+            result = generatedRegex.replace(result, replacement)
 
-            val tmpReport = Files.createTempFile("HtmlOutputFormatTest", ".html")
-            Files.write(tmpReport, result.toByteArray())
+            val actual = Files.createTempFile("actual-report", ".html")
+            actual.toFile().deleteOnExit()
+            Files.write(actual, result.toByteArray())
 
-            try {
-                assertThat(tmpReport).hasSameTextualContentAs(Paths.get(resource("/reports/HtmlOutputFormatTest.html")))
-            } finally {
-                Files.delete(tmpReport)
-            }
+            assertThat(actual).hasSameTextualContentAs(expected)
         }
 
         it("asserts that the generated HTML is the same even if we change the order of the findings") {
@@ -135,20 +148,10 @@ class HtmlOutputReportSpec : Spek({
                 .map { (section, findings) -> section to findings.asReversed() }
                 .toTypedArray()
 
-            val result1 = htmlReport.render(createHtmlDetektion(*findings))
-            val result2 = htmlReport.render(createHtmlDetektion(*reversedFindings))
+            val firstReport = createReportWithFindings(findings)
+            val secondReport = createReportWithFindings(reversedFindings)
 
-            val tmpReport1 = Files.createTempFile("HtmlOutputFormatTest", ".html")
-            val tmpReport2 = Files.createTempFile("HtmlOutputFormatTest", ".html")
-            Files.write(tmpReport1, result1.toByteArray())
-            Files.write(tmpReport2, result2.toByteArray())
-
-            try {
-                assertThat(tmpReport1).hasSameTextualContentAs(tmpReport2)
-            } finally {
-                Files.delete(tmpReport1)
-                Files.delete(tmpReport2)
-            }
+            assertThat(firstReport).hasSameTextualContentAs(secondReport)
         }
     }
 })
@@ -207,4 +210,18 @@ private fun createHtmlDetektion(vararg findingPairs: Pair<String, List<Finding>>
     return object : TestDetektion() {
         override val findings: Map<String, List<Finding>> = findingPairs.toMap()
     }
+}
+
+private val generatedRegex = """^generated\swith.*$""".toRegex(RegexOption.MULTILINE)
+private const val replacement = "generated with..."
+
+private fun createReportWithFindings(findings: Array<Pair<String, List<Finding>>>): Path {
+    val htmlReport = HtmlOutputReport()
+    val detektion = createHtmlDetektion(*findings)
+    var result = htmlReport.render(detektion)
+    result = generatedRegex.replace(result, replacement)
+    val reportPath = Files.createTempFile("report", ".html")
+    reportPath.toFile().deleteOnExit()
+    Files.write(reportPath, result.toByteArray())
+    return reportPath
 }
