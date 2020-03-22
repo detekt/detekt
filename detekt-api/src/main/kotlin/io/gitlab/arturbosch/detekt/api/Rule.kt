@@ -2,8 +2,8 @@ package io.gitlab.arturbosch.detekt.api
 
 import io.gitlab.arturbosch.detekt.api.internal.BaseRule
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
-import io.gitlab.arturbosch.detekt.api.internal.absolutePath
 import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
+import io.gitlab.arturbosch.detekt.api.internal.relativePath
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Paths
 
@@ -64,7 +64,7 @@ abstract class Rule(
             !root.isSuppressedBy(ruleId, aliases, ruleSetId)
 
     private fun shouldRunOnGivenFile(root: KtFile) =
-        filters?.isIgnored(Paths.get(root.absolutePath()))?.not() ?: true
+        filters?.isIgnored(Paths.get(root.relativePath()))?.not() ?: true
 
     /**
      * Simplified version of [Context.report] with rule defaults.

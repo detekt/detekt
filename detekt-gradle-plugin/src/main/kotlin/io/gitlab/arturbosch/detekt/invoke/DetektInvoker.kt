@@ -39,7 +39,11 @@ private class DefaultCliInvoker(private val project: Project) : DetektInvoker {
         taskName: String,
         ignoreFailures: Boolean
     ) {
-        val cliArguments = arguments.flatMap(CliArgument::toArgument)
+        val cliArguments = arguments.flatMap(CliArgument::toArgument) +
+            // Gradle passes files as input paths for detekt.
+            // We need a common base path to strip these input paths
+            // to support excludes/includes of relative input files.
+            WorkingDirArgument(project.rootDir).toArgument()
         try {
             val loader = ClassLoaderCache.getOrCreate(classpath)
             val clazz = loader.loadClass("io.gitlab.arturbosch.detekt.cli.Main")

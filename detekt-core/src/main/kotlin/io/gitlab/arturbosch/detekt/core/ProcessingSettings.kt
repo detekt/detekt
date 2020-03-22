@@ -24,7 +24,7 @@ import java.util.concurrent.ForkJoinPool
 /**
  * Settings to be used by the detekt engine.
  *
- * Always close the settings as dispose the Kotlin compiler and detekt class loader.
+ * Always close the settings as this will dispose the Kotlin compiler and detekt class loader.
  * If using a custom executor service be aware that detekt won't shut it down after use!
  */
 @OptIn(UnstableApi::class)
@@ -44,7 +44,8 @@ class ProcessingSettings @JvmOverloads constructor(
     val errorPrinter: PrintStream = System.err,
     val autoCorrect: Boolean = false,
     val debug: Boolean = false,
-    override val configUris: Collection<URI> = emptyList()
+    override val configUris: Collection<URI> = emptyList(),
+    val workingDir: Path? = null
 ) : AutoCloseable, Closeable, SetupContext {
     /**
      * Single project input path constructor.
@@ -64,7 +65,8 @@ class ProcessingSettings @JvmOverloads constructor(
         errorPrinter: PrintStream = System.err,
         autoCorrect: Boolean = false,
         debug: Boolean = false,
-        configUris: Collection<URI> = emptyList()
+        configUris: Collection<URI> = emptyList(),
+        workingDir: Path? = null
     ) : this(
         listOf(inputPath),
         config,
@@ -80,7 +82,8 @@ class ProcessingSettings @JvmOverloads constructor(
         errorPrinter,
         autoCorrect,
         debug,
-        configUris
+        configUris,
+        workingDir
     )
 
     init {

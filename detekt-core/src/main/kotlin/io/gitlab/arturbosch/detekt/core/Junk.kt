@@ -13,6 +13,15 @@ fun Path.exists(): Boolean = Files.exists(this)
 fun Path.isFile(): Boolean = Files.isRegularFile(this)
 fun Path.isDirectory(): Boolean = Files.isDirectory(this)
 
+fun relativize(root: Path, subPath: Path): Path {
+    val relativePath = if (root == subPath) {
+        subPath.fileName
+    } else {
+        root.fileName.resolve(root.relativize(subPath))
+    }
+    return relativePath.normalize()
+}
+
 val LINE_SEPARATOR: Key<String> = Key("lineSeparator")
 
 fun MutableMap<String, List<Finding>>.mergeSmells(other: Map<String, List<Finding>>) {

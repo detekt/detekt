@@ -5,6 +5,7 @@ import java.util.Date
 
 repositories {
     jcenter()
+    maven { setUrl("https://oss.jfrog.org/artifactory/oss-snapshot-local") }
 }
 
 plugins {
@@ -24,7 +25,6 @@ version = "1.7.0"
 val spekVersion = "2.0.9"
 val junitPlatformVersion = "1.6.0"
 val assertjVersion = "3.15.0"
-val detektFormattingVersion = version
 
 dependencies {
     implementation(kotlin("stdlib"))
@@ -36,7 +36,10 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
     testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spekVersion")
 
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:$detektFormattingVersion")
+    detekt("io.gitlab.arturbosch.detekt:detekt-api:1.7.0-20200322.191513-8")
+    detekt("io.gitlab.arturbosch.detekt:detekt-core:1.7.0-20200322.191513-8")
+    detekt("io.gitlab.arturbosch.detekt:detekt-cli:1.7.0-20200322.191601-8")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.7.0-20200322.191515-8")
 }
 
 gradlePlugin {

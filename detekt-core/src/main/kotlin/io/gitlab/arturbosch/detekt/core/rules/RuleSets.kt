@@ -10,7 +10,7 @@ import io.gitlab.arturbosch.detekt.api.RuleSetId
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 import io.gitlab.arturbosch.detekt.api.internal.BaseRule
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
-import io.gitlab.arturbosch.detekt.api.internal.absolutePath
+import io.gitlab.arturbosch.detekt.api.internal.relativePath
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.resolve.BindingContext
 import java.nio.file.Paths
@@ -32,7 +32,7 @@ fun RuleSet.shouldAnalyzeFile(file: KtFile, config: Config): Boolean {
 
     val filters = filters()
     if (filters != null) {
-        val path = Paths.get(file.absolutePath())
+        val path = Paths.get(file.relativePath())
         return !filters.isIgnored(path)
     }
     return true

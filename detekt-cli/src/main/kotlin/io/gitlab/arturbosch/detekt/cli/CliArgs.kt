@@ -19,6 +19,15 @@ class CliArgs : Args {
     var input: String? = null
 
     @Parameter(
+        names = ["--working-dir", "-wd"],
+        description = "Path where detekt was started. " +
+            "Must be a prefix of all input paths. " +
+            "Should only be used when input paths are plain files.",
+        converter = ExistingPathConverter::class
+    )
+    var workingDir: Path? = null
+
+    @Parameter(
         names = ["--includes", "-in"],
         description = "Globing patterns describing paths to include in the analysis. " +
             "Useful in combination with 'excludes' patterns."

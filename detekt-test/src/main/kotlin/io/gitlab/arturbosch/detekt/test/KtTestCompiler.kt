@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.test
 
 import io.gitlab.arturbosch.detekt.api.internal.ABSOLUTE_PATH
+import io.gitlab.arturbosch.detekt.api.internal.RELATIVE_PATH
 import io.gitlab.arturbosch.detekt.core.KtCompiler
 import org.intellij.lang.annotations.Language
 import org.jetbrains.kotlin.cli.common.CLIConfigurationKeys
@@ -38,6 +39,7 @@ object KtTestCompiler : KtCompiler() {
             KotlinLanguage.INSTANCE,
             StringUtilRt.convertLineSeparators(content)) as? KtFile
         file?.putUserData(ABSOLUTE_PATH, filename)
+        file?.putUserData(RELATIVE_PATH, filename)
         return file ?: throw IllegalStateException("kotlin file expected")
     }
 

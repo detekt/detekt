@@ -90,7 +90,8 @@ class Runner(
                 jvmTarget = jvmTarget,
                 debug = arguments.debug,
                 outPrinter = outputPrinter, errorPrinter = errorPrinter,
-                configUris = extractUris()
+                configUris = extractUris(),
+                workingDir = workingDir
             )
         }
         settings.debug { "Loading config took $configLoadTime ms" }

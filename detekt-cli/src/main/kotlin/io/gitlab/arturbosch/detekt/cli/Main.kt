@@ -45,24 +45,26 @@ fun buildRunner(
         args,
         outputPrinter,
         errorPrinter
-    ) { messages ->
-        val baseline = baseline
-        if (createBaseline && baseline == null) {
-            messages += "Creating a baseline.xml requires the --baseline parameter to specify a path."
-        }
-        if (!createBaseline && baseline != null) {
-            if (!baseline.exists()) {
-                messages += "The file specified by --baseline should exist '$baseline'."
-            } else if (!baseline.isFile()) {
-                messages += "The path specified by --baseline should be a file '$baseline'."
-            }
-        }
-    }
+    ) { messages -> checkInvariants(messages) }
     return when {
         arguments.showVersion -> VersionPrinter(outputPrinter)
         arguments.generateConfig -> ConfigExporter(arguments)
         arguments.runRule != null -> SingleRuleRunner(arguments)
         arguments.printAst -> AstPrinter(arguments, outputPrinter)
         else -> Runner(arguments, outputPrinter, errorPrinter)
+    }
+}
+
+private fun CliArgs.checkInvariants(messages: MessageCollector) {
+    val baseline = baseline
+    if (createBaseline && baseline == null) {
+        messages += "Creating a baseline.xml requires the --baseline parameter to specify a path."
+    }
+    if (!createBaseline && baseline != null) {
+        if (!baseline.exists()) {
+            messages += "The file specified by --baseline should exist '$baseline'."
+        } else if (!baseline.isFile()) {
+            messages += "The path specified by --baseline should be a file '$baseline'."
+        }
     }
 }

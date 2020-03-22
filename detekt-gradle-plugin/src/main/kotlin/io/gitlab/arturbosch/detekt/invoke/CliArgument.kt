@@ -3,11 +3,13 @@ package io.gitlab.arturbosch.detekt.invoke
 import io.gitlab.arturbosch.detekt.extensions.DetektReportType
 import org.gradle.api.file.FileCollection
 import org.gradle.api.file.RegularFile
+import java.io.File
 
 private const val DEBUG_PARAMETER = "--debug"
 private const val INPUT_PARAMETER = "--input"
 private const val CONFIG_PARAMETER = "--config"
 private const val BASELINE_PARAMETER = "--baseline"
+private const val WORKING_DIR_PARAMETER = "--working-dir"
 private const val PARALLEL_PARAMETER = "--parallel"
 private const val DISABLE_DEFAULT_RULESETS_PARAMETER = "--disable-default-rulesets"
 private const val BUILD_UPON_DEFAULT_CONFIG_PARAMETER = "--build-upon-default-config"
@@ -34,6 +36,10 @@ internal object GenerateConfigArgument : CliArgument() {
 
 internal data class InputArgument(val fileCollection: FileCollection) : CliArgument() {
     override fun toArgument() = listOf(INPUT_PARAMETER, fileCollection.joinToString(",") { it.absolutePath })
+}
+
+internal data class WorkingDirArgument(val workingDir: File) : CliArgument() {
+    override fun toArgument() = listOf(WORKING_DIR_PARAMETER, workingDir.absolutePath)
 }
 
 internal data class ClasspathArgument(val fileCollection: FileCollection) : CliArgument() {
