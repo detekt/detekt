@@ -37,7 +37,7 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
         Debt.TEN_MINS
     )
 
-    private val forbiddenMethods = valueOrDefault(METHODS, "").commaSeparatedPattern()
+    private val forbiddenMethods = valueOrDefault(METHODS, "").commaSeparatedPattern().toList()
 
     override fun visitQualifiedExpression(expression: KtQualifiedExpression) {
         super.visitQualifiedExpression(expression)

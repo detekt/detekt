@@ -53,6 +53,13 @@ class ForbiddenImportSpec : Spek({
             assertThat(findings).hasSize(2)
         }
 
+        it("should report kotlin.SinceKotlin and kotlin.jvm.JvmField when specified via fully qualified names list") {
+            val findings =
+                ForbiddenImport(TestConfig(mapOf(
+                    ForbiddenImport.IMPORTS to listOf("kotlin.SinceKotlin", "kotlin.jvm.JvmField")))).lint(code)
+            assertThat(findings).hasSize(2)
+        }
+
         it("should report kotlin.SinceKotlin when specified via kotlin.Since*") {
             val findings = ForbiddenImport(TestConfig(mapOf(ForbiddenImport.IMPORTS to "kotlin.Since*"))).lint(code)
             assertThat(findings).hasSize(1)

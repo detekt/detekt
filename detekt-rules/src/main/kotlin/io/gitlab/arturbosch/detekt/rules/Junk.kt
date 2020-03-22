@@ -1,6 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules
 
+import io.gitlab.arturbosch.detekt.api.ConfigAware
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
+import io.gitlab.arturbosch.detekt.api.commaSeparatedPattern
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
 import org.jetbrains.kotlin.com.intellij.psi.PsiComment
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
@@ -34,3 +36,17 @@ fun getIntValueForPsiElement(element: PsiElement): Int? {
 fun KtClass.companionObject() = this.companionObjects.singleOrNull { it.isCompanion() }
 
 inline fun <reified T : Any> Any.safeAs(): T? = this as? T
+
+internal fun ConfigAware.valueOrDefaultCommaSeparated(
+    key: String,
+    default: List<String>,
+    defaultString: String
+): List<String> {
+    return try {
+        valueOrDefault(key, default)
+    } catch (_: IllegalStateException) {
+        valueOrDefault(key, defaultString)
+            .commaSeparatedPattern()
+            .toList()
+    }
+}

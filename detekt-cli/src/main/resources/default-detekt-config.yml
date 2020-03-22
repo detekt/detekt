@@ -479,7 +479,7 @@ style:
     allowedPatterns: ''
   ForbiddenImport:
     active: false
-    imports: ''
+    imports: []
     forbiddenPatterns: ''
   ForbiddenMethodCall:
     active: false
