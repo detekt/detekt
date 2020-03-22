@@ -29,7 +29,7 @@ import java.util.concurrent.ForkJoinPool
  */
 @OptIn(UnstableApi::class)
 @Suppress("LongParameterList")
-class ProcessingSettings @JvmOverloads constructor(
+class ProcessingSettings constructor(
     val inputPaths: List<Path>,
     override val config: Config = Config.empty,
     val pathFilters: PathFilters? = null,
