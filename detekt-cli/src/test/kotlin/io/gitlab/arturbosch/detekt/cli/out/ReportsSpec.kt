@@ -28,7 +28,7 @@ internal class ReportsSpec : Spek({
                 "--report", "$reportUnderTest:/tmp/path3",
                 "--report", "html:D:_Gradle\\xxx\\xxx\\build\\reports\\detekt\\detekt.html"
             )
-            val cli = parseArguments<CliArgs>(args)
+            val cli = parseArguments<CliArgs>(args, NullPrintStream(), NullPrintStream())
 
             val reports = cli.reportPaths
 
