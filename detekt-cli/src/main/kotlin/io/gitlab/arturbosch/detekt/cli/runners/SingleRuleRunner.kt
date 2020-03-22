@@ -15,8 +15,13 @@ import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.RuleSetLocator
 import io.gitlab.arturbosch.detekt.core.rules.createRuleSet
+import java.io.PrintStream
 
-class SingleRuleRunner(private val arguments: CliArgs) : Executable {
+class SingleRuleRunner(
+    private val arguments: CliArgs,
+    private val outPrinter: PrintStream,
+    private val errPrinter: PrintStream
+) : Executable {
 
     override fun execute() {
         val (ruleSet, rule: RuleId) = checkNotNull(
@@ -31,7 +36,9 @@ class SingleRuleRunner(private val arguments: CliArgs) : Executable {
                 parallelCompilation = parallel,
                 autoCorrect = autoCorrect,
                 excludeDefaultRuleSets = disableDefaultRuleSets,
-                pluginPaths = createPlugins())
+                pluginPaths = createPlugins(),
+                outPrinter = outPrinter,
+                errorPrinter = errPrinter)
         }.use { settings ->
             val realProvider = requireNotNull(
                 RuleSetLocator(settings).load().find { it.ruleSetId == ruleSet }
