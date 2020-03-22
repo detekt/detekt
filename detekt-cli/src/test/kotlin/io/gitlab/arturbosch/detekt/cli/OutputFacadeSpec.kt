@@ -44,15 +44,16 @@ internal class OutputFacadeSpec : Spek({
 
                 subject.run()
 
-                outputStream.assertThatItPrintsReportPath(TxtOutputReport().name)
-                outputStream.assertThatItPrintsReportPath(XmlOutputReport().name)
-                outputStream.assertThatItPrintsReportPath(HtmlOutputReport().name)
+                outputStream.assertThatItPrintsReportPath(TxtOutputReport().name, plainOutputPath)
+                outputStream.assertThatItPrintsReportPath(XmlOutputReport().name, xmlOutputPath)
+                outputStream.assertThatItPrintsReportPath(HtmlOutputReport().name, htmlOutputPath)
             }
         }
     }
 })
 
-private fun ByteArrayOutputStream.assertThatItPrintsReportPath(reportName: String) {
-    val outputString = toString(Charsets.UTF_8.name())
-    assertThat(outputString).contains("Successfully generated $reportName at ")
+private fun ByteArrayOutputStream.assertThatItPrintsReportPath(reportName: String, file: File) {
+    assertThat(toString()).contains("Successfully generated $reportName at $file$LN")
 }
+
+private val LN = System.lineSeparator()
