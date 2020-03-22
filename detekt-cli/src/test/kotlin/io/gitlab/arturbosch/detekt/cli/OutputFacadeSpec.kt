@@ -32,13 +32,11 @@ internal class OutputFacadeSpec : Spek({
     describe("Running the output facade") {
 
         describe("with multiple reports") {
-            val cliArgs = CliArgs.parse(
-                arrayOf(
-                    "--input", inputPath.toString(),
-                    "--report", "xml:$xmlOutputPath",
-                    "--report", "txt:$plainOutputPath",
-                    "--report", "html:$htmlOutputPath"
-                )
+            val cliArgs = createCliArgs(
+                "--input", inputPath.toString(),
+                "--report", "xml:$xmlOutputPath",
+                "--report", "txt:$plainOutputPath",
+                "--report", "html:$htmlOutputPath"
             )
 
             it("creates all output files") {

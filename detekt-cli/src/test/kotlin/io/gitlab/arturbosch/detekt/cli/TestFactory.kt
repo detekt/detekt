@@ -67,3 +67,11 @@ fun createLocation(
 )
 
 fun createNotification() = ModificationNotification(Paths.get(resource("empty.txt")))
+
+/**
+ * Creates an instance of [CliArgs]. Verification if the settings are sound
+ * must be made by the caller.
+ */
+fun createCliArgs(vararg args: String): CliArgs {
+    return parseArguments(args)
+}
