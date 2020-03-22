@@ -3,24 +3,24 @@ build:
 
 # can be removed after 1.7.0 is published
 config:
-  excludes: "complexity>ComplexInterface>includePrivateDeclarations"
+  excludes: 'complexity>ComplexInterface>includePrivateDeclarations'
 
 comments:
   CommentOverPrivateProperty:
     active: true
   UndocumentedPublicClass:
     active: true
-    excludes: "**/*.kt"
-    includes: "**/detekt-api/src/main/**/api/*.kt"
+    excludes: '**/*.kt'
+    includes: '**/detekt-api/src/main/**/api/*.kt'
   UndocumentedPublicFunction:
     active: true
-    excludes: "**/*.kt"
-    includes: "**/detekt-api/src/main/**/api/*.kt"
+    excludes: '**/*.kt'
+    includes: '**/detekt-api/src/main/**/api/*.kt'
 
 complexity:
   StringLiteralDuplication:
     active: true
-    excludes: "**/test/**,**/*.Test.kt,**/*.Spec.kt"
+    excludes: '**/test/**,**/*.Test.kt,**/*.Spec.kt'
     threshold: 5
     ignoreAnnotation: true
     excludeStringsWithLessThan5Characters: true
@@ -91,7 +91,7 @@ potential-bugs:
     active: true
   UnsafeCast:
     active: true
-    excludes: "**/test/**,**/*.Test.kt,**/*.Spec.kt"
+    excludes: '**/test/**,**/*.Test.kt,**/*.Spec.kt'
   UselessPostfixExpression:
     active: true
   WrongEqualsTypeParameter:
@@ -111,10 +111,10 @@ style:
     active: true
   LibraryCodeMustSpecifyReturnType:
     active: true
-    excludes: "**/*.kt"
-    includes: "**/detekt-api/src/main/**/api/*.kt"
+    excludes: '**/*.kt'
+    includes: '**/detekt-api/src/main/**/api/*.kt'
   MaxLineLength:
-    excludes: "**/test/**,**/*.Test.kt,**/*.Spec.kt"
+    excludes: '**/test/**,**/*.Test.kt,**/*.Spec.kt'
     excludeCommentStatements: true
   MagicNumber:
     ignoreHashCodeFunction: true
@@ -138,7 +138,7 @@ style:
     active: true
   UnusedPrivateMember:
     active: true
-    allowedNames: "(_|ignored|expected)"
+    allowedNames: '(_|ignored|expected)'
   UselessCallOnNotNull:
     active: true
   UtilityClassWithPublicConstructor:
