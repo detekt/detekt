@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.cli.runners
 
 import io.gitlab.arturbosch.detekt.cli.CliArgs
+import io.gitlab.arturbosch.detekt.test.NullPrintStream
 import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
@@ -18,21 +19,12 @@ class AstPrinterSpec : Spek({
 
         describe("successful AST printing") {
 
-            val outStream = System.out
             val output = ByteArrayOutputStream()
-
-            beforeEachTest {
-                System.setOut(PrintStream(output))
-            }
-
-            afterEachTest {
-                System.setOut(outStream)
-            }
 
             it("should print the AST as string") {
                 val args = CliArgs()
                 args.input = Paths.get(resource("cases/Poko.kt")).toString()
-                val printer = AstPrinter(args)
+                val printer = AstPrinter(args, PrintStream(output))
 
                 printer.execute()
 
@@ -44,7 +36,7 @@ class AstPrinterSpec : Spek({
             val multiplePaths = "$path,$path"
             val args = CliArgs()
             args.input = multiplePaths
-            val printer = AstPrinter(args)
+            val printer = AstPrinter(args, NullPrintStream())
 
             assertThatIllegalArgumentException()
                 .isThrownBy { printer.execute() }
@@ -54,7 +46,7 @@ class AstPrinterSpec : Spek({
         it("throws an exception when trying to print the AST of a directory") {
             val args = CliArgs()
             args.input = path
-            val printer = AstPrinter(args)
+            val printer = AstPrinter(args, NullPrintStream())
 
             assertThatIllegalArgumentException()
                 .isThrownBy { printer.execute() }
