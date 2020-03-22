@@ -1,8 +1,8 @@
 package io.gitlab.arturbosch.detekt.cli.runners
 
 import io.gitlab.arturbosch.detekt.cli.BuildFailure
-import io.gitlab.arturbosch.detekt.cli.CliArgs
 import io.gitlab.arturbosch.detekt.cli.config.InvalidConfig
+import io.gitlab.arturbosch.detekt.cli.createCliArgs
 import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
@@ -25,11 +25,11 @@ class RunnerSpec : Spek({
 
         it("should report one issue when maxIssues=2") {
             val tmpReport = Files.createTempFile("RunnerSpec", ".txt")
-            val cliArgs = CliArgs.parse(arrayOf(
+            val cliArgs = createCliArgs(
                 "--input", inputPath.toString(),
                 "--report", "txt:$tmpReport",
                 "--config-resource", "/configs/max-issues-2.yml"
-            ))
+            )
 
             Runner(cliArgs).execute()
 
@@ -37,19 +37,19 @@ class RunnerSpec : Spek({
         }
 
         it("should throw on maxIssues=0") {
-            val cliArgs = CliArgs.parse(arrayOf(
+            val cliArgs = createCliArgs(
                 "--input", inputPath.toString(),
                 "--config-resource", "/configs/max-issues-0.yml"
-            ))
+            )
 
             assertThatThrownBy { Runner(cliArgs).execute() }.isExactlyInstanceOf(BuildFailure::class.java)
         }
 
         it("should throw on invalid config property when validation=true") {
-            val cliArgs = CliArgs.parse(arrayOf(
+            val cliArgs = createCliArgs(
                 "--input", inputPath.toString(),
                 "--config-resource", "/configs/invalid-config.yml"
-            ))
+            )
 
             assertThatThrownBy { Runner(cliArgs).execute() }
                 .isExactlyInstanceOf(InvalidConfig::class.java)
@@ -57,10 +57,10 @@ class RunnerSpec : Spek({
         }
 
         it("should throw on invalid config properties when validation=true") {
-            val cliArgs = CliArgs.parse(arrayOf(
+            val cliArgs = createCliArgs(
                 "--input", inputPath.toString(),
                 "--config-resource", "/configs/invalid-configs.yml"
-            ))
+            )
 
             assertThatThrownBy { Runner(cliArgs).execute() }
                 .isExactlyInstanceOf(InvalidConfig::class.java)
@@ -68,21 +68,21 @@ class RunnerSpec : Spek({
         }
 
         it("should not throw on invalid config property when validation=false") {
-            val cliArgs = CliArgs.parse(arrayOf(
+            val cliArgs = createCliArgs(
                 "--input", inputPath.toString(),
                 "--config-resource", "/configs/invalid-config_no-validation.yml"
-            ))
+            )
 
             assertThatCode { Runner(cliArgs).execute() }.doesNotThrowAnyException()
         }
 
         it("should never throw on maxIssues=-1") {
             val tmpReport = Files.createTempFile("RunnerSpec", ".txt")
-            val cliArgs = CliArgs.parse(arrayOf(
+            val cliArgs = createCliArgs(
                 "--input", inputPath.toString(),
                 "--report", "txt:$tmpReport",
                 "--config-resource", "/configs/max-issues--1.yml"
-            ))
+            )
 
             Runner(cliArgs).execute()
 
@@ -93,12 +93,12 @@ class RunnerSpec : Spek({
 
             it("should not throw on maxIssues=0 due to baseline blacklist") {
                 val tmpReport = Files.createTempFile("RunnerSpec", ".txt")
-                val cliArgs = CliArgs.parse(arrayOf(
+                val cliArgs = createCliArgs(
                     "--input", inputPath.toString(),
                     "--report", "txt:$tmpReport",
                     "--config-resource", "/configs/max-issues-0.yml",
                     "--baseline", Paths.get(resource("configs/baseline-with-two-excludes.xml")).toString()
-                ))
+                )
 
                 Runner(cliArgs).execute()
 
@@ -111,13 +111,13 @@ class RunnerSpec : Spek({
 
         it("should not throw on maxIssues=0") {
             val tmpReport = Files.createTempFile("RunnerSpec", ".txt")
-            val cliArgs = CliArgs.parse(arrayOf(
+            val cliArgs = createCliArgs(
                 "--input", inputPath.toString(),
                 "--baseline", Paths.get(resource("configs/baseline-empty.xml")).toString(),
                 "--create-baseline",
                 "--report", "txt:$tmpReport",
                 "--config-resource", "/configs/max-issues-0.yml"
-            ))
+            )
 
             Runner(cliArgs).execute()
 
@@ -138,7 +138,7 @@ class RunnerSpec : Spek({
             val path: Path = Paths.get(resource("/cases/CleanPoko.kt"))
 
             beforeEachTest {
-                val args = CliArgs.parse(arrayOf("--input", path.toString()))
+                val args = createCliArgs("--input", path.toString())
 
                 Runner(args, outputPrinter, errorPrinter).execute()
 
@@ -161,9 +161,9 @@ class RunnerSpec : Spek({
         context("execute with strict config") {
 
             beforeEachTest {
-                val args = CliArgs.parse(
-                    arrayOf("--input", inputPath.toString(), "--config-resource", "/configs/max-issues-0.yml")
-                )
+                val args = createCliArgs(
+                    "--input", inputPath.toString(),
+                    "--config-resource", "/configs/max-issues-0.yml")
 
                 try {
                     Runner(args, outputPrinter, errorPrinter).execute()

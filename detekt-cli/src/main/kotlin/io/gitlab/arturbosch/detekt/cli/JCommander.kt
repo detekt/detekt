@@ -6,7 +6,7 @@ import java.io.PrintStream
 
 @Suppress("detekt.SpreadOperator", "detekt.ThrowsCount")
 inline fun <reified T : Args> parseArguments(
-    args: Array<String>,
+    args: Array<out String>,
     outPrinter: PrintStream = System.out,
     errorPrinter: PrintStream = System.err,
     validateCli: T.(MessageCollector) -> Unit = {}
