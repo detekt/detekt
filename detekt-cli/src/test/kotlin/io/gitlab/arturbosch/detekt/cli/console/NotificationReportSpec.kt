@@ -19,7 +19,7 @@ class NotificationReportSpec : Spek({
             val detektion = object : TestDetektion() {
                 override val notifications = listOf(createNotification(), createNotification())
             }
-            assertThat(subject.render(detektion)).isEqualTo("File $path was modified.\nFile $path was modified.")
+            assertThat(subject.render(detektion)).isEqualTo("File $path was modified.${LN}File $path was modified.")
         }
 
         it("reports no findings") {
@@ -28,3 +28,5 @@ class NotificationReportSpec : Spek({
         }
     }
 })
+
+private val LN = System.lineSeparator()
