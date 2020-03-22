@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.rules.companionObject
+import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassBody
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -68,15 +69,16 @@ class ComplexInterface(
         return if (body != null) calculateMembers(body) else 0
     }
 
-    private fun calculateMembers(body: KtClassBody) = body.children
-        .filter {
-            if (includePrivateDeclarations) {
-                true
-            } else {
-                it is KtTypeParameterListOwner && !it.isPrivate()
-            }
-        }
-        .count { it is KtNamedFunction || it is KtProperty }
+    private fun calculateMembers(body: KtClassBody): Int {
+        fun PsiElement.considerPrivate() = includePrivateDeclarations ||
+                this is KtTypeParameterListOwner && !this.isPrivate()
+
+        fun PsiElement.isMember() = this is KtNamedFunction || this is KtProperty
+
+        return body.children
+            .filter(PsiElement::considerPrivate)
+            .count(PsiElement::isMember)
+    }
 
     companion object {
         const val INCLUDE_STATIC_DECLARATIONS = "includeStaticDeclarations"
