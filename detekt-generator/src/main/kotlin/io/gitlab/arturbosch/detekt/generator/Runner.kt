@@ -36,6 +36,6 @@ class Runner(
             printer.print(collector.items)
         }
 
-        println("\nGenerated all detekt documentation in $time ms.")
+        outPrinter.println("\nGenerated all detekt documentation in $time ms.")
     }
 }
