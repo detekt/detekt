@@ -80,6 +80,13 @@ Following warning is expected until [Jekyll](https://github.com/jekyll/jekyll/is
 
 `warning: Using the last argument as keyword parameters is deprecated (Ruby 2.7.0)`
 
+### When working on the Gradle plugin ...
+
+- Make changes to the core modules (e.g. adding a new CLI flag)
+- Run `gradle publishToMavenLocal`
+- Make changes to the Gradle plugin and add tests
+- Verify with `gradle detekt`
+
 ### Release checklist
 
 - add changes in CHANGELOG.md -> `groovy github-milestone-report.groovy arturbosch detekt [milestone-number]`

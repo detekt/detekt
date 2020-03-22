@@ -22,6 +22,11 @@ pluginManagement {
     val sonarQubeVersion: String by settings
     val detektAnalysisVersion: String by settings
 
+    repositories {
+        maven { setUrl("https://plugins.gradle.org/m2/") }
+        mavenLocal() // used to publish and test local gradle plugin changes
+    }
+
     plugins {
         id("io.gitlab.arturbosch.detekt") version detektAnalysisVersion
         id("com.jfrog.artifactory") version artifactoryVersion
