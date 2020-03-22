@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.core
 
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
+import io.gitlab.arturbosch.detekt.test.createProcessingSettings
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.fail
 import org.reflections.Reflections
@@ -13,7 +14,7 @@ class RuleSetLocatorTest : Spek({
     describe("locating RuleSetProvider's") {
 
         it("contains all RuleSetProviders") {
-            val providers = ProcessingSettings(path).use { RuleSetLocator(it).load() }
+            val providers = createProcessingSettings(path).use { RuleSetLocator(it).load() }
             val providerClasses = getProviderClasses()
 
             assertThat(providerClasses).isNotEmpty
@@ -23,7 +24,7 @@ class RuleSetLocatorTest : Spek({
         }
 
         it("does not load any default rule set provider when opt out") {
-            val providers = ProcessingSettings(path, excludeDefaultRuleSets = true)
+            val providers = createProcessingSettings(path, excludeDefaultRuleSets = true)
                 .use { RuleSetLocator(it).load() }
 
             val defaultProviders = getProviderClasses().toSet()

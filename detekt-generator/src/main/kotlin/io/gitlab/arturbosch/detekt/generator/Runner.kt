@@ -18,7 +18,7 @@ class Runner(
     private val printer = DetektPrinter(arguments)
 
     private fun createCompiler(path: Path) = KtTreeCompiler.instance(ProcessingSettings(
-        path,
+        listOf(path),
         outPrinter = outPrinter,
         errorPrinter = errPrinter))
 

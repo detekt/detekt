@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.core.DetektFacade
 import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.core.rules.visitFile
+import io.gitlab.arturbosch.detekt.test.createProcessingSettings
 import io.gitlab.arturbosch.detekt.test.loadRuleSet
 import io.gitlab.arturbosch.detekt.test.resource
 import io.gitlab.arturbosch.detekt.test.yamlConfig
@@ -49,7 +50,7 @@ class AutoCorrectLevelSpec : Spek({
                         assertThat(wasFormatted(files[0])).isTrue()
                     }
                 }
-                val result = ProcessingSettings(project, config).use {
+                val result = createProcessingSettings(project, config).use {
                     DetektFacade.create(it, listOf(FormattingProvider()), listOf(contentChanged)).run()
                 }
                 val findings = result.findings.flatMap { it.value }

@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.core
 
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
+import io.gitlab.arturbosch.detekt.test.createProcessingSettings
 import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalArgumentException
@@ -11,7 +12,7 @@ import java.nio.file.Paths
 class KtTreeCompilerSpec : Spek({
 
     fun fixture(vararg filters: String): KtTreeCompiler =
-        KtTreeCompiler(settings = ProcessingSettings(path,
+        KtTreeCompiler(settings = createProcessingSettings(path,
             pathFilters = PathFilters.of(null, filters.joinToString(","))))
 
     describe("tree compiler functionality") {

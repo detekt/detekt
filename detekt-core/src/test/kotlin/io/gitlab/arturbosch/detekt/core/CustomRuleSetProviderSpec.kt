@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.core
 
+import io.gitlab.arturbosch.detekt.test.createProcessingSettings
 import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
@@ -24,7 +25,7 @@ class CustomRuleSetProviderSpec : Spek({
         val sampleRuleSet = Paths.get(resource("sample-rule-set.jar"))
 
         it("should load the sample provider") {
-            val providers = ProcessingSettings(
+            val providers = createProcessingSettings(
                 path,
                 excludeDefaultRuleSets = true,
                 pluginPaths = listOf(sampleRuleSet)

@@ -19,7 +19,6 @@ import java.net.URLClassLoader
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.concurrent.ExecutorService
-import java.util.concurrent.ForkJoinPool
 
 /**
  * Settings to be used by the detekt engine.
@@ -46,42 +45,6 @@ class ProcessingSettings constructor(
     val debug: Boolean = false,
     override val configUris: Collection<URI> = emptyList()
 ) : AutoCloseable, Closeable, SetupContext {
-    /**
-     * Single project input path constructor.
-     */
-    constructor(
-        inputPath: Path,
-        config: Config = Config.empty,
-        pathFilters: PathFilters? = null,
-        parallelCompilation: Boolean = false,
-        excludeDefaultRuleSets: Boolean = false,
-        pluginPaths: List<Path> = emptyList(),
-        classpath: List<String> = emptyList(),
-        languageVersion: LanguageVersion = LanguageVersion.LATEST_STABLE,
-        jvmTarget: JvmTarget = JvmTarget.DEFAULT,
-        executorService: ExecutorService = ForkJoinPool.commonPool(),
-        outPrinter: PrintStream = System.out,
-        errorPrinter: PrintStream = System.err,
-        autoCorrect: Boolean = false,
-        debug: Boolean = false,
-        configUris: Collection<URI> = emptyList()
-    ) : this(
-        listOf(inputPath),
-        config,
-        pathFilters,
-        parallelCompilation,
-        excludeDefaultRuleSets,
-        pluginPaths,
-        classpath,
-        languageVersion,
-        jvmTarget,
-        executorService,
-        outPrinter,
-        errorPrinter,
-        autoCorrect,
-        debug,
-        configUris
-    )
 
     init {
         pluginPaths.forEach {
