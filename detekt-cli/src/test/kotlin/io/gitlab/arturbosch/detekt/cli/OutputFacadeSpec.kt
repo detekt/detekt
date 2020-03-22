@@ -53,7 +53,5 @@ internal class OutputFacadeSpec : Spek({
 })
 
 private fun ByteArrayOutputStream.assertThatItPrintsReportPath(reportName: String, file: File) {
-    assertThat(toString()).contains("Successfully generated $reportName at $file$LN")
+    assertThat(toString()).contains("Successfully generated $reportName at $file")
 }
-
-private val LN = System.lineSeparator()
