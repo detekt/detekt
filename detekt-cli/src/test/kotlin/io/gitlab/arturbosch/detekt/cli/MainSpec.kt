@@ -61,8 +61,8 @@ class MainSpec : Spek({
                 buildRunner(args, PrintStream(out), PrintStream(err))
                 Assertions.fail("This should throw an exception.")
             } catch (_: HandledArgumentViolation) {
-                assertThat(String(err.toByteArray()).trim())
-                    .isEqualTo("Creating a baseline.xml requires the --baseline parameter to specify a path.")
+                assertThat(String(err.toByteArray()))
+                    .isEqualTo("Creating a baseline.xml requires the --baseline parameter to specify a path.$LN$LN")
             }
         }
 
@@ -92,8 +92,8 @@ class MainSpec : Spek({
                 buildRunner(args, PrintStream(out), PrintStream(err))
                 Assertions.fail("This should throw an exception.")
             } catch (_: HandledArgumentViolation) {
-                assertThat(String(err.toByteArray()).trim())
-                    .isEqualTo("The file specified by --baseline should exist '$path'.")
+                assertThat(String(err.toByteArray()))
+                    .isEqualTo("The file specified by --baseline should exist '$path'.$LN$LN")
             }
         }
 
@@ -108,8 +108,8 @@ class MainSpec : Spek({
                 buildRunner(args, PrintStream(out), PrintStream(err))
                 Assertions.fail("This should throw an exception.")
             } catch (_: HandledArgumentViolation) {
-                assertThat(String(err.toByteArray()).trim())
-                    .isEqualTo("The path specified by --baseline should be a file '$path'.")
+                assertThat(String(err.toByteArray()))
+                    .isEqualTo("The path specified by --baseline should be a file '$path'.$LN$LN")
             }
         }
 
@@ -127,3 +127,5 @@ class MainSpec : Spek({
         }
     }
 })
+
+private val LN = System.lineSeparator()
