@@ -44,8 +44,9 @@ class HtmlOutputReportSpec : Spek({
         }
 
         it("renders the 'generated with' text correctly") {
+            val version = whichDetekt()
             val header =
-                """generated with <a href="www.github.com/arturbosch/detekt">detekt version ${whichDetekt()}</a> on """
+                """generated with <a href="https://arturbosch.github.io/detekt">detekt version $version</a> on """
 
             val result = htmlReport.render(TestDetektion())
 
@@ -212,14 +213,13 @@ private fun createHtmlDetektion(vararg findingPairs: Pair<String, List<Finding>>
 }
 
 private val generatedRegex = """^generated\swith.*$""".toRegex(RegexOption.MULTILINE)
-private const val replacement =
-    """generated with <a href="www.github.com/arturbosch/detekt">detekt version @@@version@@@</a> on @@@date@@@."""
+private const val replacement = "generated with..."
 
 private fun createReportWithFindings(findings: Array<Pair<String, List<Finding>>>): Path {
     val htmlReport = HtmlOutputReport()
     val detektion = createHtmlDetektion(*findings)
     var result = htmlReport.render(detektion)
-    result = generatedRegex.replace(result, "")
+    result = generatedRegex.replace(result, replacement)
     val reportPath = Files.createTempFile("report", ".html")
     reportPath.toFile().deleteOnExit()
     Files.write(reportPath, result.toByteArray())
