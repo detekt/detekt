@@ -15,6 +15,7 @@ import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.KtWhenExpression
+import org.jetbrains.kotlin.diagnostics.PsiDiagnosticUtils
 
 /**
  * Complex methods are hard to understand and read. It might not be obvious what side-effects a complex method has.
@@ -77,12 +78,19 @@ class ComplexMethod(
         }
 
         if (complexity >= threshold) {
+            val funcElement = function
+            val range = funcElement.textRange
+            val document = funcElement.containingFile.getViewProvider().getDocument()
+            val funcStart = PsiDiagnosticUtils.offsetToLineAndColumn(document, range.getStartOffset())
+            val funcEnd = PsiDiagnosticUtils.offsetToLineAndColumn(document, range.getEndOffset())
+            val mcc = Metric("MCC", complexity, threshold)
             report(
                 ThresholdedCodeSmell(
                     issue,
-                    Entity.from(function.nameIdentifier!!),
-                    Metric("MCC", complexity, threshold),
+                    Entity.from(funcElement.nameIdentifier!!),
+                    mcc,
                     "The function ${function.nameAsSafeName} appears to be too complex."
+                    .plus("The Mcc is ($mcc). The function range is $funcStart:$funcEnd")
                 )
             )
         }
