@@ -18,7 +18,13 @@ interface SetupContext {
      */
     val config: Config
 
+    /**
+     * The channel to log all the output
+     */
     val outPrinter: PrintStream
 
+    /**
+     * The channel to lod all the errors
+     */
     val errPrinter: PrintStream
 }
