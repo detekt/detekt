@@ -13,7 +13,7 @@ class Runner(
     private val outPrinter: PrintStream,
     private val errPrinter: PrintStream
 ) {
-    private val listeners = listOf(DetektProgressListener())
+    private val listeners = listOf(DetektProgressListener(outPrinter))
     private val collector = DetektCollector()
     private val printer = DetektPrinter(arguments)
 

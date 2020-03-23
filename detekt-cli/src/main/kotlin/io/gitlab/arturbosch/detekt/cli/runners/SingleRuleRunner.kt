@@ -51,7 +51,7 @@ class SingleRuleRunner(
             val result = DetektFacade.create(
                 settings,
                 listOf(provider),
-                listOf(DetektProgressListener())
+                listOf(DetektProgressListener().apply { init(settings) })
             ).run()
 
             OutputFacade(arguments, result, settings).run()
