@@ -19,7 +19,6 @@ import java.net.URLClassLoader
 import java.nio.file.Files
 import java.nio.file.Path
 import java.util.concurrent.ExecutorService
-import java.util.concurrent.ForkJoinPool
 
 /**
  * Settings to be used by the detekt engine.
@@ -28,8 +27,7 @@ import java.util.concurrent.ForkJoinPool
  * If using a custom executor service be aware that detekt won't shut it down after use!
  */
 @OptIn(UnstableApi::class)
-@Suppress("LongParameterList")
-class ProcessingSettings @JvmOverloads constructor(
+class ProcessingSettings @Suppress("LongParameterList") constructor(
     val inputPaths: List<Path>,
     override val config: Config = Config.empty,
     val pathFilters: PathFilters? = null,
@@ -40,48 +38,12 @@ class ProcessingSettings @JvmOverloads constructor(
     val languageVersion: LanguageVersion? = null,
     val jvmTarget: JvmTarget = JvmTarget.DEFAULT,
     val executorService: ExecutorService? = null,
-    val outPrinter: PrintStream = System.out,
-    val errorPrinter: PrintStream = System.err,
+    val outPrinter: PrintStream,
+    val errorPrinter: PrintStream,
     val autoCorrect: Boolean = false,
     val debug: Boolean = false,
     override val configUris: Collection<URI> = emptyList()
 ) : AutoCloseable, Closeable, SetupContext {
-    /**
-     * Single project input path constructor.
-     */
-    constructor(
-        inputPath: Path,
-        config: Config = Config.empty,
-        pathFilters: PathFilters? = null,
-        parallelCompilation: Boolean = false,
-        excludeDefaultRuleSets: Boolean = false,
-        pluginPaths: List<Path> = emptyList(),
-        classpath: List<String> = emptyList(),
-        languageVersion: LanguageVersion = LanguageVersion.LATEST_STABLE,
-        jvmTarget: JvmTarget = JvmTarget.DEFAULT,
-        executorService: ExecutorService = ForkJoinPool.commonPool(),
-        outPrinter: PrintStream = System.out,
-        errorPrinter: PrintStream = System.err,
-        autoCorrect: Boolean = false,
-        debug: Boolean = false,
-        configUris: Collection<URI> = emptyList()
-    ) : this(
-        listOf(inputPath),
-        config,
-        pathFilters,
-        parallelCompilation,
-        excludeDefaultRuleSets,
-        pluginPaths,
-        classpath,
-        languageVersion,
-        jvmTarget,
-        executorService,
-        outPrinter,
-        errorPrinter,
-        autoCorrect,
-        debug,
-        configUris
-    )
 
     init {
         pluginPaths.forEach {

@@ -4,8 +4,8 @@ import io.gitlab.arturbosch.detekt.cli.out.HtmlOutputReport
 import io.gitlab.arturbosch.detekt.cli.out.TxtOutputReport
 import io.gitlab.arturbosch.detekt.cli.out.XmlOutputReport
 import io.gitlab.arturbosch.detekt.core.DetektResult
-import io.gitlab.arturbosch.detekt.core.ProcessingSettings
 import io.gitlab.arturbosch.detekt.test.StringPrintStream
+import io.gitlab.arturbosch.detekt.test.createProcessingSettings
 import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
 import org.jetbrains.kotlin.utils.closeQuietly
@@ -24,7 +24,7 @@ internal class OutputFacadeSpec : Spek({
     val xmlOutputPath = File.createTempFile("detekt", ".xml")
 
     val defaultDetektion = DetektResult(mapOf(Pair("Key", listOf(createFinding()))))
-    val defaultSettings = ProcessingSettings(inputPath, outPrinter = printStream)
+    val defaultSettings = createProcessingSettings(inputPath, outPrinter = printStream)
 
     afterGroup { closeQuietly(defaultSettings) }
 

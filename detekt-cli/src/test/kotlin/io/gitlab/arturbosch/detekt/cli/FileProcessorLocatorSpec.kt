@@ -2,7 +2,7 @@ package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.api.FileProcessListener
 import io.gitlab.arturbosch.detekt.core.FileProcessorLocator
-import io.gitlab.arturbosch.detekt.core.ProcessingSettings
+import io.gitlab.arturbosch.detekt.test.createProcessingSettings
 import io.gitlab.arturbosch.detekt.test.resource
 import io.gitlab.arturbosch.detekt.test.yamlConfig
 import org.assertj.core.api.Assertions.assertThat
@@ -23,7 +23,7 @@ class FileProcessorLocatorSpec : Spek({
         val path = Paths.get(resource(""))
 
         it("contains all processors") {
-            val processors = ProcessingSettings(path).use { FileProcessorLocator(it).load() }
+            val processors = createProcessingSettings(path).use { FileProcessorLocator(it).load() }
             val processorClasses = getProcessorClasses()
 
             assertThat(processorClasses).isNotEmpty
@@ -34,7 +34,7 @@ class FileProcessorLocatorSpec : Spek({
 
         it("has disabled processors") {
             val config = yamlConfig("configs/disabled-processors.yml")
-            val processors = ProcessingSettings(path, config).use { FileProcessorLocator(it).load() }
+            val processors = createProcessingSettings(path, config).use { FileProcessorLocator(it).load() }
             assertThat(processors).isEmpty()
         }
     }

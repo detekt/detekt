@@ -39,6 +39,7 @@ class SingleRuleRunnerSpec : Spek({
         it("should throw on non existing rule set") {
             val args = createCliArgs("--run-rule", "non_existing:test")
             assertThatThrownBy { SingleRuleRunner(args, NullPrintStream(), NullPrintStream()).execute() }
+                .isExactlyInstanceOf(IllegalArgumentException::class.java)
         }
 
         it("should throw on non existing run-rule") {
