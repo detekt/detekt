@@ -7,8 +7,8 @@ import java.io.PrintStream
 @Suppress("detekt.SpreadOperator", "detekt.ThrowsCount")
 inline fun <reified T : Args> parseArguments(
     args: Array<out String>,
-    outPrinter: PrintStream = System.out,
-    errorPrinter: PrintStream = System.err,
+    outPrinter: PrintStream,
+    errorPrinter: PrintStream,
     validateCli: T.(MessageCollector) -> Unit = {}
 ): T {
     val cli = T::class.java.declaredConstructors

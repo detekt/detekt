@@ -10,6 +10,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.core.ModificationNotification
+import io.gitlab.arturbosch.detekt.test.NullPrintStream
 import io.gitlab.arturbosch.detekt.test.resource
 import org.jetbrains.kotlin.psi.KtElement
 import java.nio.file.Paths
@@ -73,5 +74,5 @@ fun createNotification() = ModificationNotification(Paths.get(resource("empty.tx
  * must be made by the caller.
  */
 fun createCliArgs(vararg args: String): CliArgs {
-    return parseArguments(args)
+    return parseArguments(args, NullPrintStream(), NullPrintStream())
 }

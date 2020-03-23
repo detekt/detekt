@@ -4,6 +4,7 @@ import io.gitlab.arturbosch.detekt.cli.CliArgs
 import io.gitlab.arturbosch.detekt.cli.config.InvalidConfig
 import io.gitlab.arturbosch.detekt.cli.console.red
 import io.gitlab.arturbosch.detekt.cli.runners.Runner
+import io.gitlab.arturbosch.detekt.test.NullPrintStream
 import org.assertj.core.api.Assertions.assertThatCode
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -26,7 +27,7 @@ class SupportConfigValidationSpec : Spek({
                         configResource = config
                     }
 
-                    assertThatCode { Runner(args).execute() }
+                    assertThatCode { Runner(args, NullPrintStream(), NullPrintStream()).execute() }
                         .isInstanceOf(InvalidConfig::class.java)
                         .hasMessage("Run failed with 1 invalid config property.".red())
                 }
@@ -39,7 +40,7 @@ class SupportConfigValidationSpec : Spek({
                 configResource = "excluded-config.yml"
             }
 
-            assertThatCode { Runner(args).execute() }
+            assertThatCode { Runner(args, NullPrintStream(), NullPrintStream()).execute() }
                 .doesNotThrowAnyException()
         }
     }
