@@ -38,7 +38,7 @@ class SingleRuleRunner(
                 excludeDefaultRuleSets = disableDefaultRuleSets,
                 pluginPaths = createPlugins(),
                 outPrinter = outPrinter,
-                errorPrinter = errPrinter)
+                errPrinter = errPrinter)
         }.use { settings ->
             val realProvider = requireNotNull(
                 RuleSetLocator(settings).load().find { it.ruleSetId == ruleSet }

@@ -20,7 +20,7 @@ class Runner(
     private fun createCompiler(path: Path) = KtTreeCompiler.instance(ProcessingSettings(
         listOf(path),
         outPrinter = outPrinter,
-        errorPrinter = errPrinter))
+        errPrinter = errPrinter))
 
     fun execute() {
         val time = measureTimeMillis {

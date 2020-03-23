@@ -5,12 +5,14 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.SetupContext
 import io.gitlab.arturbosch.detekt.api.UnstableApi
 import io.gitlab.arturbosch.detekt.api.internal.YamlConfig
+import io.gitlab.arturbosch.detekt.test.NullPrintStream
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.lint
 import io.gitlab.arturbosch.detekt.test.resource
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
+import java.io.PrintStream
 import java.net.URI
 import java.nio.file.Paths
 
@@ -61,6 +63,8 @@ private fun checkLicence(content: String): List<Finding> {
         init(object : SetupContext {
             override val configUris: Collection<URI> = listOf(resource)
             override val config: Config = config
+            override val outPrinter: PrintStream = NullPrintStream()
+            override val errPrinter: PrintStream = NullPrintStream()
         })
         onStart(listOf(file))
     }

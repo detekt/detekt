@@ -89,7 +89,8 @@ class Runner(
                 languageVersion = languageVersion,
                 jvmTarget = jvmTarget,
                 debug = arguments.debug,
-                outPrinter = outputPrinter, errorPrinter = errorPrinter,
+                outPrinter = outputPrinter,
+                errPrinter = errorPrinter,
                 configUris = extractUris()
             )
         }
