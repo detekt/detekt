@@ -27,8 +27,7 @@ import java.util.concurrent.ExecutorService
  * If using a custom executor service be aware that detekt won't shut it down after use!
  */
 @OptIn(UnstableApi::class)
-@Suppress("LongParameterList")
-class ProcessingSettings constructor(
+class ProcessingSettings @Suppress("LongParameterList") constructor(
     val inputPaths: List<Path>,
     override val config: Config = Config.empty,
     val pathFilters: PathFilters? = null,

@@ -14,6 +14,7 @@ import java.util.concurrent.ForkJoinPool
 /**
  * Single project input path constructor.
  */
+@Suppress("LongParameterList")
 fun createProcessingSettings(
     inputPath: Path,
     config: Config = Config.empty,
