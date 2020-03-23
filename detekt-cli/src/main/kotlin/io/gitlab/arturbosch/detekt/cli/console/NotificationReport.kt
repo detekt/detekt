@@ -13,6 +13,6 @@ class NotificationReport : ConsoleReport() {
         if (detektion.notifications.isEmpty()) {
             return null
         }
-        return detektion.notifications.joinToString("\n") { it.message }
+        return detektion.notifications.joinToString(System.lineSeparator()) { it.message }
     }
 }
