@@ -4,7 +4,7 @@ complexity:
     threshold: 20
   LongParameterList:
     active: false
-    threshold: 5
+    functionThreshold: 5
   LargeClass:
     active: false
     threshold: 70

@@ -23,6 +23,7 @@ val DEFAULT_PROPERTY_EXCLUDES = setOf(
 ).joinToString(",")
 
 private val DEPRECATED_PROPERTIES = setOf(
+    "complexity>LongParameterList>threshold" to "Use 'functionThreshold' and 'constructorThreshold' instead",
     "empty-blocks>EmptyFunctionBlock>ignoreOverriddenFunctions" to "Use 'ignoreOverridden' instead",
     "naming>FunctionParameterNaming>ignoreOverriddenFunctions" to "Use 'ignoreOverridden' instead",
     "naming>MemberNameEqualsClassName>ignoreOverriddenFunction" to "Use 'ignoreOverridden' instead"
