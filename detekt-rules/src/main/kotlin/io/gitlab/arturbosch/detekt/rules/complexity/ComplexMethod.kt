@@ -79,16 +79,15 @@ class ComplexMethod(
         }
 
         if (complexity >= threshold) {
-            val funcElement = function
-            val range = funcElement.textRange
-            val document = funcElement.containingFile.getViewProvider().getDocument()
+            val range = function.textRange
+            val document = function.containingFile.getViewProvider().getDocument()
             val funcStart = PsiDiagnosticUtils.offsetToLineAndColumn(document, range.getStartOffset())
             val funcEnd = PsiDiagnosticUtils.offsetToLineAndColumn(document, range.getEndOffset())
             val mcc = Metric("MCC", complexity, threshold)
             report(
                 ThresholdedCodeSmell(
                     issue,
-                    Entity.from(funcElement.nameIdentifier!!),
+                    Entity.from(function.nameIdentifier!!),
                     mcc,
                     "The function ${function.nameAsSafeName} appears to be too complex."
                     .plus("The Mcc is ($mcc). The function range is $funcStart:$funcEnd")
