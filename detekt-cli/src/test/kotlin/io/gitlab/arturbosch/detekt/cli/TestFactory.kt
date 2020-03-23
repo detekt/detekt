@@ -13,7 +13,6 @@ import io.gitlab.arturbosch.detekt.core.ModificationNotification
 import io.gitlab.arturbosch.detekt.test.resource
 import org.jetbrains.kotlin.psi.KtElement
 import java.nio.file.Paths
-import java.util.UUID
 
 fun createFinding(ruleName: String = "TestSmell", fileName: String = "TestFile.kt") =
     CodeSmell(createIssue(ruleName), createEntity(fileName), "TestMessage")
@@ -68,3 +67,11 @@ fun createLocation(
 )
 
 fun createNotification() = ModificationNotification(Paths.get(resource("empty.txt")))
+
+/**
+ * Creates an instance of [CliArgs]. Verification if the settings are sound
+ * must be made by the caller.
+ */
+fun createCliArgs(vararg args: String): CliArgs {
+    return parseArguments(args)
+}

@@ -21,6 +21,6 @@ fun main(args: Array<String>) {
         }
         // input paths are validated by MultipleExistingPathConverter
     }
-    val executable = Runner(arguments)
+    val executable = Runner(arguments, System.out, System.err)
     executable.execute()
 }

@@ -61,8 +61,8 @@ fun buildRunner(
     return when {
         arguments.showVersion -> VersionPrinter(outputPrinter)
         arguments.generateConfig -> ConfigExporter(arguments)
-        arguments.runRule != null -> SingleRuleRunner(arguments)
-        arguments.printAst -> AstPrinter(arguments)
+        arguments.runRule != null -> SingleRuleRunner(arguments, outputPrinter, errorPrinter)
+        arguments.printAst -> AstPrinter(arguments, outputPrinter)
         else -> Runner(arguments, outputPrinter, errorPrinter)
     }
 }

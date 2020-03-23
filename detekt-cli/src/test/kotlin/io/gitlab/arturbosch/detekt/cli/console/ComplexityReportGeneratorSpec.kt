@@ -2,12 +2,12 @@ package io.gitlab.arturbosch.detekt.cli.console
 
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.cli.createFinding
-import io.gitlab.arturbosch.detekt.core.DetektResult
 import io.gitlab.arturbosch.detekt.core.processors.commentLinesKey
 import io.gitlab.arturbosch.detekt.core.processors.complexityKey
 import io.gitlab.arturbosch.detekt.core.processors.linesKey
 import io.gitlab.arturbosch.detekt.core.processors.logicalLinesKey
 import io.gitlab.arturbosch.detekt.core.processors.sourceLinesKey
+import io.gitlab.arturbosch.detekt.test.TestDetektion
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -15,6 +15,13 @@ import org.spekframework.spek2.style.specification.describe
 internal class ComplexityReportGeneratorSpec : Spek({
 
     describe("complexity report generator") {
+
+        lateinit var detektion: TestDetektion
+
+        beforeEachTest {
+            detektion = TestDetektion(createFinding())
+            addData(detektion)
+        }
 
         context("several complexity metrics") {
 
@@ -30,20 +37,41 @@ internal class ComplexityReportGeneratorSpec : Spek({
                     "400 mcc per 1,000 lloc",
                     "200 code smells per 1,000 lloc"
                 )
-                val detektion = createDetektion()
-                addData(detektion)
+
                 assertThat(generateComplexityReport(detektion)).isEqualTo(expectedContent)
             }
+        }
 
-            it("returns null for missing complexity metrics") {
-                val detektion = createDetektion()
+        context("several invalid complexity metrics") {
+
+            it("returns null for missing mcc") {
+                detektion.removeData(complexityKey)
+                assertThat(generateComplexityReport(detektion)).isNull()
+            }
+
+            it("returns null for missing lloc") {
+                detektion.removeData(logicalLinesKey)
+                assertThat(generateComplexityReport(detektion)).isNull()
+
+                detektion.addData(logicalLinesKey, 0)
+                assertThat(generateComplexityReport(detektion)).isNull()
+            }
+
+            it("returns null for missing sloc") {
+                detektion.removeData(sourceLinesKey)
+                assertThat(generateComplexityReport(detektion)).isNull()
+
+                detektion.addData(sourceLinesKey, 0)
+                assertThat(generateComplexityReport(detektion)).isNull()
+            }
+
+            it("returns null for missing cloc") {
+                detektion.removeData(complexityKey)
                 assertThat(generateComplexityReport(detektion)).isNull()
             }
         }
     }
 })
-
-private fun createDetektion(): Detektion = DetektResult(mapOf(Pair("Key", listOf(createFinding()))))
 
 private fun addData(detektion: Detektion) {
     detektion.addData(complexityKey, 2)

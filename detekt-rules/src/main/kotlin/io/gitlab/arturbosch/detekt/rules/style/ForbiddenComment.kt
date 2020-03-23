@@ -14,13 +14,15 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiComment
  * development. Offending code comments will then be reported.
  *
  * <noncompliant>
- * // TODO:,FIXME:,STOPSHIP:
+ * val a = "" // TODO: remove please
+ * // FIXME: this is a hack
  * fun foo() { }
+ * // STOPSHIP:
  * </noncompliant>
  *
  * @configuration values - forbidden comment strings (default: `'TODO:,FIXME:,STOPSHIP:'`)
  * @configuration allowedPatterns - ignores comments which match the specified regular expression.
-   For example `Ticket|Task`. (default: `""`)
+   For example `Ticket|Task`. (default: `''`)
  * @active since v1.0.0
  */
 class ForbiddenComment(config: Config = Config.empty) : Rule(config) {

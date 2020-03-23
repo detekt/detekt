@@ -7,8 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.commaSeparatedPattern
 import io.gitlab.arturbosch.detekt.api.simplePatternToRegex
+import io.gitlab.arturbosch.detekt.rules.valueOrDefaultCommaSeparated
 import org.jetbrains.kotlin.psi.KtImportDirective
 
 /**
@@ -22,8 +22,8 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  * import kotlin.SinceKotlin
  * </noncompliant>
  *
- * @configuration imports - imports which should not be used (default: `''`)
- * @configuration forbiddenPatterns - reports imports which match the specified regular expression. For example `net.*R`. (default: `""`)
+ * @configuration imports - imports which should not be used (default: `[]`)
+ * @configuration forbiddenPatterns - reports imports which match the specified regular expression. For example `net.*R`. (default: `''`)
  */
 class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
 
@@ -35,8 +35,7 @@ class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
         Debt.TEN_MINS
     )
 
-    private val forbiddenImports = valueOrDefault(IMPORTS, "")
-        .commaSeparatedPattern()
+    private val forbiddenImports = valueOrDefaultCommaSeparated(IMPORTS, emptyList(), "")
         .distinct()
         .map { it.simplePatternToRegex() }
         .toList()

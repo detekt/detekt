@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.core.isFile
 import java.nio.file.Files
 import java.nio.file.Path
 
-class BaselineFacade(val baselineFile: Path) {
+class BaselineFacade(private val baselineFile: Path) {
 
     private val listings: Pair<Whitelist, Blacklist>? =
             if (baselineExists()) {
@@ -34,7 +34,6 @@ class BaselineFacade(val baselineFile: Path) {
         val smellBaseline = Baseline(blacklist, Whitelist(ids))
         baselineFile.parent?.let { Files.createDirectories(it) }
         BaselineFormat().write(smellBaseline, baselineFile)
-        println("Successfully wrote smell baseline to $baselineFile")
     }
 
     private fun baselineExists() = baselineFile.exists() && baselineFile.isFile()

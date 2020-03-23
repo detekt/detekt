@@ -42,7 +42,8 @@ import org.jetbrains.kotlin.diagnostics.PsiDiagnosticUtils
  * @configuration ignoreSimpleWhenEntries - Whether to ignore simple (braceless) when entries. (default: `false`)
  * @configuration ignoreNestingFunctions - Whether to ignore functions which are often used instead of an `if` or
  * `for` statement (default: `false`)
- * @configuration nestingFunctions - Comma separated list of function names which add complexity (default: `run,let,apply,with,also,use,forEach,isNotNull,ifNull`)
+ * @configuration nestingFunctions - Comma separated list of function names which add complexity
+ * (default: `run,let,apply,with,also,use,forEach,isNotNull,ifNull`)
  *
  * @active since v1.0.0
  */

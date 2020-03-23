@@ -263,7 +263,7 @@ development. Offending code comments will then be reported.
 
    forbidden comment strings
 
-* ``allowedPatterns`` (default: ``""``)
+* ``allowedPatterns`` (default: ``''``)
 
    ignores comments which match the specified regular expression.
 For example `Ticket|Task`.
@@ -271,8 +271,10 @@ For example `Ticket|Task`.
 #### Noncompliant Code:
 
 ```kotlin
-// TODO:,FIXME:,STOPSHIP:
+val a = "" // TODO: remove please
+// FIXME: this is a hack
 fun foo() { }
+// STOPSHIP:
 ```
 
 ### ForbiddenImport
@@ -286,11 +288,11 @@ or deprecated APIs. Detekt will then report all imports that are forbidden.
 
 #### Configuration options:
 
-* ``imports`` (default: ``''``)
+* ``imports`` (default: ``[]``)
 
    imports which should not be used
 
-* ``forbiddenPatterns`` (default: ``""``)
+* ``forbiddenPatterns`` (default: ``''``)
 
    reports imports which match the specified regular expression. For example `net.*R`.
 
@@ -412,7 +414,7 @@ as a `const val`.
 
    excluded functions
 
-* ``excludeAnnotatedFunction`` (default: ``"dagger.Provides"``)
+* ``excludeAnnotatedFunction`` (default: ``'dagger.Provides'``)
 
    allows to provide a list of annotations that disable this check
 
@@ -921,7 +923,7 @@ code.
 
    define the maximum number of return statements allowed per function
 
-* ``excludedFunctions`` (default: ``"equals"``)
+* ``excludedFunctions`` (default: ``'equals'``)
 
    define functions to be ignored by this check
 
@@ -1136,7 +1138,7 @@ refactored into concrete classes.
 
 #### Configuration options:
 
-* ``excludeAnnotatedClasses`` (default: ``"dagger.Module"``)
+* ``excludeAnnotatedClasses`` (default: ``'dagger.Module'``)
 
    Allows you to provide a list of annotations that disable
 this check.
@@ -1349,7 +1351,7 @@ can lead to confusion and potential bugs.
 
 #### Configuration options:
 
-* ``allowedNames`` (default: ``"(_|ignored|expected|serialVersionUID)"``)
+* ``allowedNames`` (default: ``'(_|ignored|expected|serialVersionUID)'``)
 
    unused private member names matching this regex are ignored
 
@@ -1418,7 +1420,7 @@ Read more about `data class`: https://kotlinlang.org/docs/reference/data-classes
 
 #### Configuration options:
 
-* ``excludeAnnotatedClasses`` (default: ``""``)
+* ``excludeAnnotatedClasses`` (default: ``''``)
 
    allows to provide a list of annotations that disable this check
 

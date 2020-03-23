@@ -1,7 +1,6 @@
 ---
 title: "Suppressing Issues"
 keywords: suppressing issues
-tags: 
 sidebar: 
 permalink: suppressing-rules.html
 summary:

@@ -73,7 +73,11 @@ abstract class FormattingRule(config: Config) : Rule(config) {
             // no direct parent which we can use to get the containing file needed to baseline or suppress findings.
             // For these reasons we do not report a KtElement which may lead to crashes when postprocessing it
             // e.g. reports (html), baseline etc.
-            val entity = Entity("", "", "", location, this.root)
+            val packageName = root.packageFqName.asString()
+                .takeIf { it.isNotEmpty() }
+                ?.plus(".")
+                ?: ""
+            val entity = Entity("", "", "$packageName${root.name}:$line", location, root)
             report(CorrectableCodeSmell(issue, entity, message, autoCorrectEnabled = autoCorrect))
         }
     }

@@ -67,6 +67,10 @@ to understand and implement.
 
    whether static declarations should be included
 
+* ``includePrivateDeclarations`` (default: ``false``)
+
+   whether private declarations should be included
+
 ### ComplexMethod
 
 Complex methods are hard to understand and read. It might not be obvious what side-effects a complex method has.
@@ -127,7 +131,7 @@ way to get the instance of an outer class from an inner class in Kotlin.
 
 #### Configuration options:
 
-* ``ignoredLabels`` (default: ``""``)
+* ``ignoredLabels`` (default: ``''``)
 
    allows to provide a list of label names which should be ignored by this rule
 

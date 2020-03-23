@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.ProjectMetric
 import io.gitlab.arturbosch.detekt.api.TextLocation
 import io.gitlab.arturbosch.detekt.cli.ClasspathResourceConverter
 import io.gitlab.arturbosch.detekt.cli.console.ComplexityReportGenerator
+import io.gitlab.arturbosch.detekt.core.whichDetekt
 import kotlinx.html.CommonAttributeGroupFacadeFlowInteractiveContent
 import kotlinx.html.FlowContent
 import kotlinx.html.FlowOrInteractiveContent
@@ -23,12 +24,17 @@ import kotlinx.html.span
 import kotlinx.html.stream.createHTML
 import kotlinx.html.ul
 import kotlinx.html.visit
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 import java.util.Locale
 
 private const val DEFAULT_TEMPLATE = "default-html-report-template.html"
 private const val PLACEHOLDER_METRICS = "@@@metrics@@@"
 private const val PLACEHOLDER_FINDINGS = "@@@findings@@@"
 private const val PLACEHOLDER_COMPLEXITY_REPORT = "@@@complexity@@@"
+private const val PLACEHOLDER_VERSION = "@@@version@@@"
+private const val PLACEHOLDER_DATE = "@@@date@@@"
 
 /**
  * Generates a HTML report containing rule violations and metrics.
@@ -41,9 +47,19 @@ class HtmlOutputReport : OutputReport() {
 
     override fun render(detektion: Detektion) =
         ClasspathResourceConverter().convert(DEFAULT_TEMPLATE).openStream().bufferedReader().use { it.readText() }
+            .replace(PLACEHOLDER_VERSION, renderVersion())
+            .replace(PLACEHOLDER_DATE, renderDate())
             .replace(PLACEHOLDER_METRICS, renderMetrics(detektion.metrics))
             .replace(PLACEHOLDER_COMPLEXITY_REPORT, renderComplexity(getComplexityMetrics(detektion)))
             .replace(PLACEHOLDER_FINDINGS, renderFindings(detektion.findings))
+
+    private fun renderVersion(): String = whichDetekt() ?: "unknown"
+
+    private fun renderDate(): String {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+        val now = OffsetDateTime.now(ZoneOffset.UTC).format(formatter) + " UTC"
+        return now
+    }
 
     private fun renderMetrics(metrics: Collection<ProjectMetric>) = createHTML().div {
         ul {

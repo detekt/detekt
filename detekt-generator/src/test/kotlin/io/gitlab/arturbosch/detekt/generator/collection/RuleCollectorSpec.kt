@@ -168,8 +168,8 @@ class RuleCollectorSpec : Spek({
             val code = """
                 /**
                  * description
-                 * @configuration config - description (default: `""`)
-                 * @configuration config2 - description2 (default: `""`)
+                 * @configuration config - description (default: `''`)
+                 * @configuration config2 - description2 (default: `''`)
                  */
                 class SomeRandomClass: Rule
             """

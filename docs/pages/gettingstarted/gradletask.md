@@ -1,7 +1,6 @@
 ---
 title: "Run detekt using Gradle Task"
 keywords: gradle task
-tags: [getting_started, gradle]
 sidebar: 
 permalink: gradletask.html
 folder: gettingstarted

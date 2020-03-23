@@ -6,7 +6,7 @@ build:
 
 config:
   validation: true
-  excludes: "test>.*"
+  excludes: 'test>.*'
 
 processors:
   active: true

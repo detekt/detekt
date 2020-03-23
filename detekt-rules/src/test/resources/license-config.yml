@@ -2,4 +2,4 @@ comments:
   active: true
   AbsentOrWrongFileLicense:
     active: true
-    licenseTemplateFile: "license.template"
+    licenseTemplateFile: 'license.template'
