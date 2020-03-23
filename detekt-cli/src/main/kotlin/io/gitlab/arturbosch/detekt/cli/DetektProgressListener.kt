@@ -10,7 +10,7 @@ import java.io.PrintStream
 
 class DetektProgressListener : FileProcessListener {
 
-    private lateinit var outPrinter: PrintStream
+    private var outPrinter: PrintStream by SingleAssign()
 
     @OptIn(UnstableApi::class)
     override fun init(context: SetupContext) {
