@@ -7,10 +7,9 @@ include(
     "detekt-test",
     "detekt-sample-extensions",
     "detekt-generator",
-    "detekt-formatting"
+    "detekt-formatting",
+    "detekt-gradle-plugin"
 )
-
-includeBuild("detekt-gradle-plugin")
 
 pluginManagement {
 
@@ -21,8 +20,15 @@ pluginManagement {
     val kotlinVersion: String by settings
     val shadowVersion: String by settings
     val sonarQubeVersion: String by settings
+    val detektAnalysisVersion: String by settings
+
+    repositories {
+        maven { setUrl("https://plugins.gradle.org/m2/") }
+        mavenLocal() // used to publish and test local gradle plugin changes
+    }
 
     plugins {
+        id("io.gitlab.arturbosch.detekt") version detektAnalysisVersion
         id("com.jfrog.artifactory") version artifactoryVersion
         id("com.jfrog.bintray") version bintrayVersion
         id("org.jetbrains.dokka") version dokkaVersion

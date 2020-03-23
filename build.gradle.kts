@@ -13,7 +13,6 @@ plugins {
     id("io.gitlab.arturbosch.detekt")
     jacoco
     `maven-publish`
-    // Plugin versions for these plugins are defined in gradle.properties and applied in settings.gradle.kts
     id("com.jfrog.artifactory") apply false
     id("com.jfrog.bintray")
     id("org.jetbrains.dokka") apply false
@@ -26,30 +25,6 @@ plugins {
 buildScan {
     termsOfServiceUrl = "https://gradle.com/terms-of-service"
     termsOfServiceAgree = "yes"
-}
-
-tasks.wrapper {
-    val gradleVersion: String by project
-    this.gradleVersion = gradleVersion
-    distributionType = Wrapper.DistributionType.ALL
-    doLast {
-        /*
-         * Copy the properties file into the detekt-gradle-plugin project.
-         * This allows IDEs like IntelliJ to import the detekt-gradle-plugin as a standalone project.
-         */
-        copy {
-            from(propertiesFile)
-            into(file("${gradle.includedBuild("detekt-gradle-plugin").projectDir}/gradle/wrapper"))
-        }
-    }
-}
-
-tasks.check {
-    dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":check"))
-}
-
-tasks.withType<Detekt> {
-    dependsOn(gradle.includedBuild("detekt-gradle-plugin").task(":detekt"))
 }
 
 val detektVersion: String by project
@@ -119,8 +94,6 @@ subprojects {
     val projectJvmTarget = "1.8"
 
     tasks.withType<Detekt> {
-        exclude("resources/")
-        exclude("build/")
         jvmTarget = projectJvmTarget
     }
 
