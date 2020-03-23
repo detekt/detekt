@@ -1,24 +1,20 @@
 package io.gitlab.arturbosch.detekt.cli.runners
 
-import io.gitlab.arturbosch.detekt.core.Detektor
+import io.gitlab.arturbosch.detekt.test.StringPrintStream
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
-import java.io.ByteArrayOutputStream
-import java.io.PrintStream
-import java.nio.charset.Charset
 
 class VersionPrinterSpec : Spek({
 
     describe("version printer") {
 
         it("prints the version") {
-            val byteArrayOutputStream = ByteArrayOutputStream()
+            val printStream = StringPrintStream()
 
-            VersionPrinter(PrintStream(byteArrayOutputStream)).execute()
+            VersionPrinter(printStream).execute()
 
-            assertThat(String(byteArrayOutputStream.toByteArray(), Charset.forName("UTF-8")))
-                .isEqualTo("1.6.0" + System.lineSeparator())
+            assertThat(printStream.toString()).isEqualTo("1.6.0" + System.lineSeparator())
         }
     }
 })
