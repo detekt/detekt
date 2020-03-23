@@ -1,7 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.rules.Case
+import io.gitlab.arturbosch.detekt.test.KtTestCompiler
 import io.gitlab.arturbosch.detekt.test.TestConfig
+import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
@@ -12,6 +14,11 @@ import java.util.regex.PatternSyntaxException
 class UnusedPrivateMemberSpec : Spek({
 
     val subject by memoized { UnusedPrivateMember() }
+
+    val wrapper by memoized(
+        factory = { KtTestCompiler.createEnvironment() },
+        destructor = { it.dispose() }
+    )
 
     val regexTestingCode = """
                 class Test {
@@ -996,6 +1003,68 @@ class UnusedPrivateMemberSpec : Spek({
                 }
             """
             assertThat(subject.lint(code)).isEmpty()
+        }
+    }
+
+    describe("same named functions") {
+
+        it("report it when the file has same named functions") {
+            val code = """
+                class Test {
+                    private fun f(): Int {
+                        return 5
+                    }
+                }
+
+                class Test2 {
+                    private fun f(): Int {
+                        return 5
+                    }
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(2)
+        }
+
+        it("report it when the class has same named functions") {
+            val code = """
+                class Test {
+                    val value = f(1)
+
+                    private fun f(): Int {
+                        return 5
+                    }
+
+                    private fun f(num: Int): Int {
+                        return num
+                    }
+
+                    private fun f(num: String): Int {
+                        return num.toInt()
+                    }
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(2)
+        }
+
+        it("report it when the class has same named extension functions") {
+            val code = """
+                class Test {
+                    val value = 1.f()
+                
+                    private fun f(): Int {
+                        return 5
+                    }
+                
+                    private fun Int.f(): Int {
+                        return this
+                    }
+                
+                    private fun String.f(): Int {
+                        return toInt()
+                    }
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(2)
         }
     }
 })
