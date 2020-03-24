@@ -38,7 +38,7 @@ class SingleRuleRunner(
                 excludeDefaultRuleSets = disableDefaultRuleSets,
                 pluginPaths = createPlugins(),
                 outPrinter = outPrinter,
-                errorPrinter = errPrinter)
+                errPrinter = errPrinter)
         }.use { settings ->
             val realProvider = requireNotNull(
                 RuleSetLocator(settings).load().find { it.ruleSetId == ruleSet }
@@ -51,7 +51,7 @@ class SingleRuleRunner(
             val result = DetektFacade.create(
                 settings,
                 listOf(provider),
-                listOf(DetektProgressListener())
+                listOf(DetektProgressListener().apply { init(settings) })
             ).run()
 
             OutputFacade(arguments, result, settings).run()

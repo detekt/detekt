@@ -38,8 +38,8 @@ class ProcessingSettings @Suppress("LongParameterList") constructor(
     val languageVersion: LanguageVersion? = null,
     val jvmTarget: JvmTarget = JvmTarget.DEFAULT,
     val executorService: ExecutorService? = null,
-    val outPrinter: PrintStream,
-    val errorPrinter: PrintStream,
+    override val outPrinter: PrintStream,
+    override val errPrinter: PrintStream,
     val autoCorrect: Boolean = false,
     val debug: Boolean = false,
     override val configUris: Collection<URI> = emptyList()
@@ -76,8 +76,8 @@ class ProcessingSettings @Suppress("LongParameterList") constructor(
     fun info(msg: String) = outPrinter.println(msg)
 
     fun error(msg: String, error: Throwable) {
-        errorPrinter.println(msg)
-        error.printStacktraceRecursively(errorPrinter)
+        errPrinter.println(msg)
+        error.printStacktraceRecursively(errPrinter)
     }
 
     fun debug(msg: () -> String) {

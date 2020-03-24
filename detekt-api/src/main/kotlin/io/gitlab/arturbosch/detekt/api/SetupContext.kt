@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
+import java.io.PrintStream
 import java.net.URI
 
 /**
@@ -16,4 +17,14 @@ interface SetupContext {
      * Configuration which is used to setup detekt.
      */
     val config: Config
+
+    /**
+     * The channel to log all the output.
+     */
+    val outPrinter: PrintStream
+
+    /**
+     * The channel to log all the errors.
+     */
+    val errPrinter: PrintStream
 }

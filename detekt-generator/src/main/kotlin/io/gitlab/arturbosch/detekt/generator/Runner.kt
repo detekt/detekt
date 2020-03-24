@@ -13,23 +13,20 @@ class Runner(
     private val outPrinter: PrintStream,
     private val errPrinter: PrintStream
 ) {
-    private val listeners = listOf(DetektProgressListener())
     private val collector = DetektCollector()
     private val printer = DetektPrinter(arguments)
 
     private fun createCompiler(path: Path) = KtTreeCompiler.instance(ProcessingSettings(
         listOf(path),
         outPrinter = outPrinter,
-        errorPrinter = errPrinter))
+        errPrinter = errPrinter))
 
     fun execute() {
         val time = measureTimeMillis {
             val ktFiles = arguments.inputPath
                 .flatMap { createCompiler(it).compile(it) }
-            listeners.forEach { it.onStart(ktFiles) }
 
             ktFiles.forEach { file ->
-                listeners.forEach { it.onProcess(file) }
                 collector.visit(file)
             }
 

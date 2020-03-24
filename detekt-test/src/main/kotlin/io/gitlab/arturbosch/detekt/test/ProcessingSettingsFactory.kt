@@ -27,7 +27,7 @@ fun createProcessingSettings(
     jvmTarget: JvmTarget = JvmTarget.DEFAULT,
     executorService: ExecutorService = ForkJoinPool.commonPool(),
     outPrinter: PrintStream = NullPrintStream(),
-    errorPrinter: PrintStream = NullPrintStream(),
+    errPrinter: PrintStream = NullPrintStream(),
     autoCorrect: Boolean = false,
     debug: Boolean = false,
     configUris: Collection<URI> = emptyList()
@@ -43,7 +43,7 @@ fun createProcessingSettings(
     jvmTarget = jvmTarget,
     executorService = executorService,
     outPrinter = outPrinter,
-    errorPrinter = errorPrinter,
+    errPrinter = errPrinter,
     autoCorrect = autoCorrect,
     debug = debug,
     configUris = configUris

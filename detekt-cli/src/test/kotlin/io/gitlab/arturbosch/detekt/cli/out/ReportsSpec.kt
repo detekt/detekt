@@ -65,7 +65,7 @@ internal class ReportsSpec : Spek({
             val extensions = ProcessingSettings(
                 listOf(),
                 outPrinter = NullPrintStream(),
-                errorPrinter = NullPrintStream()
+                errPrinter = NullPrintStream()
             ).use { ReportLocator(it).load() }
             val extensionsIds = extensions.mapTo(HashSet()) { it.id }
 
@@ -92,7 +92,7 @@ internal class ReportsSpec : Spek({
                     listOf(),
                     config,
                     outPrinter = NullPrintStream(),
-                    errorPrinter = NullPrintStream()
+                    errPrinter = NullPrintStream()
                 ).use { ReportLocator(it).load() }
                 assertThat(extensions).isEmpty()
             }
