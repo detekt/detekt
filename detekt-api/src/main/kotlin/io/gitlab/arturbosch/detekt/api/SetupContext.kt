@@ -24,7 +24,7 @@ interface SetupContext {
     val outPrinter: PrintStream
 
     /**
-     * The channel to lod all the errors
+     * The channel to log all the errors.
      */
     val errPrinter: PrintStream
 }
