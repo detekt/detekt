@@ -8,5 +8,5 @@ title: SetupContext.errPrinter - detekt-api
 
 `abstract val errPrinter: `[`PrintStream`](https://docs.oracle.com/javase/8/docs/api/java/io/PrintStream.html)
 
-The channel to lod all the errors
+The channel to log all the errors.
 
