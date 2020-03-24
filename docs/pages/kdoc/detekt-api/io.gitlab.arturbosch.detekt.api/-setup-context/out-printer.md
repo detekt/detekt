@@ -8,5 +8,5 @@ title: SetupContext.outPrinter - detekt-api
 
 `abstract val outPrinter: `[`PrintStream`](https://docs.oracle.com/javase/8/docs/api/java/io/PrintStream.html)
 
-The channel to log all the output
+The channel to log all the output.
 
