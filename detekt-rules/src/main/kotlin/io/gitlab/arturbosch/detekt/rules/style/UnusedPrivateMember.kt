@@ -84,15 +84,17 @@ private class UnusedFunctionVisitor(
     override fun getUnusedReports(issue: Issue): List<CodeSmell> {
         return functionDeclarations.flatMap { (name, functions) ->
             val references = functionReferences[name].orEmpty()
-            val unusedFunctions = if (functions.size > 1 && bindingContext != BindingContext.EMPTY) {
-                val referenceDescriptors = references.mapNotNull {
-                    it.getResolvedCall(bindingContext)?.resultingDescriptor
+            val unusedFunctions = when {
+                functions.size > 1 && bindingContext != BindingContext.EMPTY -> {
+                    val referenceDescriptors = references.mapNotNull {
+                        it.getResolvedCall(bindingContext)?.resultingDescriptor
+                    }
+                    functions.filter {
+                        bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, it] !in referenceDescriptors
+                    }
                 }
-                functions.filter {
-                    bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, it] !in referenceDescriptors
-                }
-            } else {
-                if (references.isEmpty()) functions else emptyList()
+                references.isEmpty() -> functions
+                else -> emptyList()
             }
             unusedFunctions.map {
                 CodeSmell(issue, Entity.from(it), "Private function $name is unused.")
