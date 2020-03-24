@@ -20,24 +20,6 @@ gradlePlugin {
     }
 }
 
-tasks.test {
-    useJUnitPlatform()
-    systemProperty("SPEK_TIMEOUT", 0) // disable test timeout
-    testLogging {
-        // set options for log level LIFECYCLE
-        events = setOf(
-            TestLogEvent.FAILED,
-            TestLogEvent.PASSED,
-            TestLogEvent.SKIPPED,
-            TestLogEvent.STANDARD_OUT
-        )
-        exceptionFormat = TestExceptionFormat.FULL
-        showExceptions = true
-        showCauses = true
-        showStackTraces = true
-    }
-}
-
 tasks.validatePlugins {
     enableStricterValidation.set(true)
 }
