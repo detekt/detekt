@@ -8,12 +8,16 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isOverride
+import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
+import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
+import org.jetbrains.kotlin.psi.KtDeclaration
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtObjectDeclaration
+import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * This rule reports a member that has the same as the containing class or object.
@@ -96,8 +100,22 @@ class MemberNameEqualsClassName(config: Config = Config.empty) : Rule(config) {
 
     private fun isFactoryMethod(function: KtNamedFunction, klass: KtClass): Boolean {
         val typeReference = function.typeReference
-        return typeReference == null && function.bodyExpression !is KtBlockExpression ||
-                typeReference?.text?.equals(klass.name) == true
+        return when {
+            typeReference != null -> typeReference.text == klass.name
+            function.bodyExpression !is KtBlockExpression -> {
+                val functionDescriptor = function.descriptor() as? FunctionDescriptor
+                functionDescriptor?.returnType?.constructor?.declarationDescriptor == klass.descriptor()
+            }
+            else -> false
+        }
+    }
+
+    private fun KtDeclaration.descriptor(): DeclarationDescriptor? {
+        return if (bindingContext == BindingContext.EMPTY) {
+            null
+        } else {
+            bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, this]
+        }
     }
 
     companion object {
