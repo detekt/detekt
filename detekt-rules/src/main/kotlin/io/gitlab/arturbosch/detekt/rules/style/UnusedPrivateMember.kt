@@ -15,7 +15,6 @@ import io.gitlab.arturbosch.detekt.rules.isMainFunction
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOperator
 import io.gitlab.arturbosch.detekt.rules.isOverride
-import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFunction
@@ -30,7 +29,8 @@ import org.jetbrains.kotlin.psi.KtReferenceExpression
 import org.jetbrains.kotlin.psi.KtSecondaryConstructor
 import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
-import org.jetbrains.kotlin.psi.psiUtil.referenceExpression
+import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
 
 /**
  * Reports unused private properties, function parameters and functions.
@@ -57,7 +57,7 @@ class UnusedPrivateMember(config: Config = Config.empty) : Rule(config) {
 
     override fun visit(root: KtFile) {
         super.visit(root)
-        root.acceptUnusedMemberVisitor(UnusedFunctionVisitor(allowedNames))
+        root.acceptUnusedMemberVisitor(UnusedFunctionVisitor(allowedNames, bindingContext))
         root.acceptUnusedMemberVisitor(UnusedParameterVisitor(allowedNames))
         root.acceptUnusedMemberVisitor(UnusedPropertyVisitor(allowedNames))
     }
@@ -73,19 +73,33 @@ private abstract class UnusedMemberVisitor(protected val allowedNames: Regex) : 
     abstract fun getUnusedReports(issue: Issue): List<CodeSmell>
 }
 
-private class UnusedFunctionVisitor(allowedNames: Regex) : UnusedMemberVisitor(allowedNames) {
+private class UnusedFunctionVisitor(
+    allowedNames: Regex,
+    private val bindingContext: BindingContext
+) : UnusedMemberVisitor(allowedNames) {
 
-    private val callExpressions = mutableSetOf<String>()
-    private val functions = mutableMapOf<String, KtFunction>()
+    private val functionDeclarations = mutableMapOf<String, MutableList<KtFunction>>()
+    private val functionReferences = mutableMapOf<String, MutableList<KtReferenceExpression>>()
 
     override fun getUnusedReports(issue: Issue): List<CodeSmell> {
-        for (call in callExpressions) {
-            if (functions.isEmpty()) {
-                break
+        return functionDeclarations.flatMap { (name, functions) ->
+            val references = functionReferences[name].orEmpty()
+            val unusedFunctions = when {
+                functions.size > 1 && bindingContext != BindingContext.EMPTY -> {
+                    val referenceDescriptors = references.mapNotNull {
+                        it.getResolvedCall(bindingContext)?.resultingDescriptor
+                    }
+                    functions.filter {
+                        bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, it] !in referenceDescriptors
+                    }
+                }
+                references.isEmpty() -> functions
+                else -> emptyList()
             }
-            functions.remove(call)
+            unusedFunctions.map {
+                CodeSmell(issue, Entity.from(it), "Private function $name is unused.")
+            }
         }
-        return functions.map { CodeSmell(issue, Entity.from(it.value), "Private function ${it.key} is unused.") }
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
@@ -107,7 +121,7 @@ private class UnusedFunctionVisitor(allowedNames: Regex) : UnusedMemberVisitor(a
     private fun collectFunction(function: KtNamedFunction) {
         val name = function.nameAsSafeName.identifier
         if (!allowedNames.matches(name)) {
-            functions[name] = function
+            functionDeclarations.getOrPut(name) { mutableListOf() }.add(function)
         }
     }
 
@@ -118,19 +132,12 @@ private class UnusedFunctionVisitor(allowedNames: Regex) : UnusedMemberVisitor(a
      */
     override fun visitReferenceExpression(expression: KtReferenceExpression) {
         super.visitReferenceExpression(expression)
-        when (expression) {
-            is KtOperationReferenceExpression -> callExpressions.add(expression.getReferencedName())
-            is KtNameReferenceExpression -> callExpressions.add(expression.getReferencedName())
-        }
-    }
-
-    override fun visitCallExpression(expression: KtCallExpression) {
-        super.visitCallExpression(expression)
-        val calledMethodName = expression.referenceExpression()?.text
-
-        if (calledMethodName != null) {
-            callExpressions.add(calledMethodName)
-        }
+        val name = when (expression) {
+            is KtOperationReferenceExpression -> expression.getReferencedName()
+            is KtNameReferenceExpression -> expression.getReferencedName()
+            else -> null
+        } ?: return
+        functionReferences.getOrPut(name) { mutableListOf() }.add(expression)
     }
 }
 
