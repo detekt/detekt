@@ -19,7 +19,7 @@ interface SetupContext {
     val config: Config
 
     /**
-     * The channel to log all the output
+     * The channel to log all the output.
      */
     val outPrinter: PrintStream
 
