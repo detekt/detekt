@@ -2,15 +2,22 @@ package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.rules.Case
+import io.gitlab.arturbosch.detekt.test.KtTestCompiler
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lint
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class MemberNameEqualsClassNameSpec : Spek({
     val subject by memoized { MemberNameEqualsClassName(Config.empty) }
+
+    val wrapper by memoized(
+        factory = { KtTestCompiler.createEnvironment() },
+        destructor = { it.dispose() }
+    )
 
     describe("MemberNameEqualsClassName rule") {
 
@@ -112,6 +119,50 @@ class MemberNameEqualsClassNameSpec : Spek({
                     }
                 """
                 assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
+            }
+
+            it("reports companion function which are named after the class and they are not a factory 3") {
+                val code = """
+                    class WrongFactoryClass3 {
+                    
+                        companion object {
+                            fun wrongFactoryClass3() = 0 // reports 1 - wrong return type
+                        }
+                    }
+                """
+                assertThat(MemberNameEqualsClassName().compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+            }
+
+            it("doesn't report companion function which are factory 1") {
+                val code = """
+                    open class A {
+                        companion object {
+                            fun a(condition: Boolean): A {
+                                return if (condition) B() else C()
+                            }
+                        }
+                    }
+                    
+                    class B: A()
+                    
+                    class C: A()
+                """
+                assertThat(MemberNameEqualsClassName().compileAndLintWithContext(wrapper.env, code)).isEmpty()
+            }
+
+            it("doesn't report companion function which are factory 2") {
+                val code = """
+                    open class A {
+                      companion object {
+                        fun a(condition: Boolean) = if (condition) B() else C()
+                      }
+                    }
+                    
+                    class B: A()
+
+                    class C: A()
+                """
+                assertThat(MemberNameEqualsClassName().compileAndLintWithContext(wrapper.env, code)).isEmpty()
             }
 
             it("doesn't report overridden methods which are named after the class") {
