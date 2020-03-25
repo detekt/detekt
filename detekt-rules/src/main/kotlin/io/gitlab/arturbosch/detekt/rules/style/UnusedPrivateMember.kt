@@ -15,6 +15,8 @@ import io.gitlab.arturbosch.detekt.rules.isMainFunction
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOperator
 import io.gitlab.arturbosch.detekt.rules.isOverride
+import org.jetbrains.kotlin.lexer.KtSingleValueToken
+import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFunction
@@ -31,6 +33,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
 import org.jetbrains.kotlin.psi.psiUtil.isPrivate
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
+import org.jetbrains.kotlin.types.expressions.OperatorConventions
 
 /**
  * Reports unused private properties, function parameters and functions.
@@ -83,10 +86,18 @@ private class UnusedFunctionVisitor(
 
     override fun getUnusedReports(issue: Issue): List<CodeSmell> {
         return functionDeclarations.flatMap { (name, functions) ->
+            val isOperator = functions.any { it.isOperator() }
             val references = functionReferences[name].orEmpty()
             val unusedFunctions = when {
-                functions.size > 1 && bindingContext != BindingContext.EMPTY -> {
-                    val referenceDescriptors = references.mapNotNull {
+                (functions.size > 1 || isOperator) && bindingContext != BindingContext.EMPTY -> {
+                    val referencesViaOperator = if (isOperator) {
+                        val operatorToken = OperatorConventions.getOperationSymbolForName(Name.identifier(name))
+                        val operatorValue = (operatorToken as? KtSingleValueToken)?.value
+                        operatorValue?.let { functionReferences[it] }.orEmpty()
+                    } else {
+                        emptyList()
+                    }
+                    val referenceDescriptors = (references + referencesViaOperator).mapNotNull {
                         it.getResolvedCall(bindingContext)?.resultingDescriptor
                     }
                     functions.filter {
@@ -103,15 +114,9 @@ private class UnusedFunctionVisitor(
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        if (!isDeclaredInsideAnInterface(function)) {
-            when {
-                function.isOperator() -> {
-                    // Resolution: we skip overloaded operators due to no symbol resolution #1444
-                }
-                function.isPrivate() -> collectFunction(function)
-            }
+        if (!isDeclaredInsideAnInterface(function) && function.isPrivate()) {
+            collectFunction(function)
         }
-
         super.visitNamedFunction(function)
     }
 
