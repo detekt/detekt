@@ -1002,7 +1002,21 @@ class UnusedPrivateMemberSpec : Spek({
                     }
                 }
             """
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+        }
+
+        it("report unused minus operator") {
+            val code = """
+                import java.util.Date
+                class Foo {
+                    val bla: Date = Date(System.currentTimeMillis()) + 300L
+                    companion object {
+                        private operator fun Date.plus(diff: Long): Date = Date(this.time + diff)
+                        private operator fun Date.minus(diff: Long): Date = Date(this.time - diff)
+                    }
+                }
+            """
+            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
         }
     }
 
