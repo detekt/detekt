@@ -11,20 +11,14 @@ data class Debt(val days: Int = 0, val hours: Int = 0, val mins: Int = 0) {
         require(!(days == 0 && hours == 0 && mins == 0))
     }
 
-    /** Adds the other debt to this debt. */
+    /**
+     * Adds the other debt to this debt.
+     * This recalculates the potential overflow resulting from the addition.
+     */
     operator fun plus(other: Debt): Debt {
-        return Debt(
-            this.days + other.days,
-            this.hours + other.hours,
-            this.mins + other.mins
-        )
-    }
-
-    /** Formats the debt time to a human readable format. */
-    fun formatDebtTime(): Debt {
-        var minutes = this.mins
-        var hours = this.hours
-        var days = this.days
+        var minutes = mins + other.mins
+        var hours = hours + other.hours
+        var days = days + other.days
         hours += minutes / MINUTES_PER_HOUR
         minutes %= MINUTES_PER_HOUR
         days += hours / HOURS_PER_DAY

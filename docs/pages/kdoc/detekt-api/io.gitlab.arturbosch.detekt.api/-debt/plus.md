@@ -9,4 +9,5 @@ title: Debt.plus - detekt-api
 `operator fun plus(other: `[`Debt`](index.html)`): `[`Debt`](index.html)
 
 Adds the other debt to this debt.
+This recalculates the potential overflow resulting from the addition.
 

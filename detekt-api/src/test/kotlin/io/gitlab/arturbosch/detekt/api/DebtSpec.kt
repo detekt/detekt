@@ -8,6 +8,7 @@ import org.spekframework.spek2.style.specification.describe
 class DebtSpec : Spek({
 
     describe("creating issues with custom debt values") {
+
         it("should fail on negative values") {
             assertThatIllegalArgumentException().isThrownBy { Debt(-1, 5, 5) }
             assertThatIllegalArgumentException().isThrownBy { Debt(5, -1, 5) }
@@ -32,27 +33,23 @@ class DebtSpec : Spek({
         }
     }
 
-    describe("debt minutes, hours and days") {
+    describe("add minutes, hours and days to debt") {
 
-        it("outputs correct minutes, hours and days") {
-            val debt = createFormattedDebtTime(1, 23, 62)
-            assertThat(debt).isEqualTo("2d 2min")
+        val debt = Debt(0, 22, 59)
+
+        it("adds 1 min") {
+            val result = debt + Debt(mins = 1)
+            assertThat(result.toString()).isEqualTo("23h")
         }
 
-        it("outputs correct minutes and hours") {
-            val debt = createFormattedDebtTime(hours = 0, mins = 62)
-            assertThat(debt).isEqualTo("1h 2min")
+        it("adds 1 h and 1 min") {
+            val result = debt + Debt(hours = 1, mins = 1)
+            assertThat(result.toString()).isEqualTo("1d")
         }
 
-        it("outputs correct minutes") {
-            val debt = createFormattedDebtTime(mins = 42)
-            assertThat(debt).isEqualTo("42min")
+        it("doubles the debt") {
+            val result = debt + debt
+            assertThat(result.toString()).isEqualTo("1d 21h 58min")
         }
     }
 })
-
-private fun createFormattedDebtTime(days: Int = 0, hours: Int = 0, mins: Int): String {
-    return Debt(days, hours, mins)
-        .formatDebtTime()
-        .toString()
-}
