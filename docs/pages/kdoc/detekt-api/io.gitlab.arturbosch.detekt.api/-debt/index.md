@@ -22,6 +22,7 @@ Debt describes the estimated amount of work needed to fix a given issue.
 
 ### Functions
 
+| [plus](plus.html) | Adds the other debt to this debt. This recalculates the potential overflow resulting from the addition.`operator fun plus(other: `[`Debt`](./index.html)`): `[`Debt`](./index.html) |
 | [toString](to-string.html) | `fun toString(): `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 
 ### Companion Object Properties

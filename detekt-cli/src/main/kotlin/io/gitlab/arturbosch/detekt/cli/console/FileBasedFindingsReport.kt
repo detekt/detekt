@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.ConsoleReport
 import io.gitlab.arturbosch.detekt.api.Detektion
 import io.gitlab.arturbosch.detekt.api.SingleAssign
-import io.gitlab.arturbosch.detekt.cli.filterAutoCorrectedIssues
+import io.gitlab.arturbosch.detekt.cli.filterEmptyIssues
 
 class FileBasedFindingsReport : ConsoleReport() {
 
@@ -17,32 +17,14 @@ class FileBasedFindingsReport : ConsoleReport() {
     }
 
     override fun render(detektion: Detektion): String? {
-        val findings = detektion
-            .filterAutoCorrectedIssues(config)
-            .filter { it.value.isNotEmpty() }
-
+        val findings = detektion.filterEmptyIssues(config)
         if (findings.isEmpty()) {
             return null
         }
 
-        val totalDebt = DebtSumming()
-        return with(StringBuilder()) {
-            findings.values
-                .flatten()
-                .groupBy { it.entity.location.file }
-                .forEach { (filename, issues) ->
-                    val fileDebt = DebtSumming(issues)
-                    val debt = fileDebt.calculateDebt()
-                    totalDebt.add(debt)
-                    append("$filename - $debt debt".format())
-                    val issuesString = issues.joinToString("") {
-                        it.compact().format("\t")
-                    }
-                    append(issuesString.yellow())
-                }
-            val debt = totalDebt.calculateDebt()
-            append("Overall debt: $debt".format("\n"))
-            toString()
-        }
+        val findingsPerFile = findings.values
+            .flatten()
+            .groupBy { it.entity.location.file }
+        return printFindings(findingsPerFile)
     }
 }
