@@ -2,24 +2,26 @@
 #
 # Deploy a jar, source jar, and javadoc jar to Sonatype's snapshot repo.
 #
-# Adapted from https://coderwall.com/p/9b_lfq and
+# The script was originally adapted from https://coderwall.com/p/9b_lfq and
 # http://benlimmer.com/2013/12/26/automatically-publish-javadoc-to-gh-pages-with-travis-ci/ and
 # https://github.com/JakeWharton/RxBinding/blob/master/.buildscript/deploy_snapshot.sh
+# 
+# Not is has been adapted to work with Github Actions
 
 SLUG="arturbosch/detekt"
-JDK="oraclejdk8"
-BRANCH="master"
+JDK="8"
+REF="refs/heads/master"
 
 set -e
 
-if [ "$TRAVIS_REPO_SLUG" != "$SLUG" ]; then
-  echo "Skipping snapshot deployment: wrong repository. Expected '$SLUG' but was '$TRAVIS_REPO_SLUG'."
-elif [ "$TRAVIS_JDK_VERSION" != "$JDK" ]; then
-  echo "Skipping snapshot deployment: wrong JDK. Expected '$JDK' but was '$TRAVIS_JDK_VERSION'."
-elif [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
-  echo "Skipping snapshot deployment: was pull request."
-elif [ "$TRAVIS_BRANCH" != "$BRANCH" ]; then
-  echo "Skipping snapshot deployment: wrong branch. Expected '$BRANCH' but was '$TRAVIS_BRANCH'."
+if [ "$GITHUB_REPOSITORY" != "$SLUG" ]; then
+  echo "Skipping snapshot deployment: wrong repository. Expected '$SLUG' but was '$GITHUB_REPOSITORY'."
+elif [ "$JDK_VERSION" != "$JDK" ]; then
+  echo "Skipping snapshot deployment: wrong JDK. Expected '$JDK' but was '$JDK_VERSION'."
+elif [ "$GITHUB_EVENT_NAME" != "push" ]; then
+  echo "Skipping snapshot deployment: was not a push triggered build."
+elif [ "$GITHUB_REF" != "$REF" ]; then
+  echo "Skipping snapshot deployment: wrong ref. Expected '$REF' but was '$GITHUB_REF'."
 else
   echo "Deploying snapshot..."
   ./gradlew artifactoryPublish -Dsnapshot=true --stacktrace

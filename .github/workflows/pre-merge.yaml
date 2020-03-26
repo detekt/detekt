@@ -1,0 +1,94 @@
+name: Pre Merge Checks
+
+on: 
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  gradle:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        jdk: [8, 11, 13]
+    runs-on: ${{ matrix.os }}
+    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    env:
+      COMPILE_TEST_SNIPPETS: true
+      JDK_VERSION:  ${{ matrix.jdk }}
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v2
+
+
+    - name: Cache Gradle Caches
+      uses: actions/cache@v1
+      env:
+        cache-name: cache-gradle-caches
+      with:
+        path: ~/.gradle/caches/
+        key: gradle-caches-${{ matrix.os }}-${{ matrix.jdk }}
+    - name: Cache Gradle Wrapper
+      uses: actions/cache@v1
+      env:
+        cache-name: cache-gradle-wrapper
+      with:
+        path: ~/.gradle/wrapper/
+        key: gradle-wrapper-${{ matrix.os }}-${{ matrix.jdk }}
+
+
+    - name: Setup Java
+      uses: actions/setup-java@v1
+      with:
+        java-version: ${{ matrix.jdk }}
+
+
+    - name: Build detekt (UNIX)
+      run: ./gradlew build shadowJar --build-cache --parallel -PwarningsAsErrors=true -Pcompile-test-snippets=$COMPILE_TEST_SNIPPETS --scan
+      if: matrix.os == 'macos-latest' || matrix.os == 'ubuntu-latest'
+    - name: Run detekt-cli --help (UNIX)
+      run: java -jar ./detekt-cli/build/libs/detekt-cli-*-all.jar --help
+      if: matrix.os == 'macos-latest' || matrix.os == 'ubuntu-latest'
+    - name: Run detekt-cli with argsfile (UNIX)
+      run: java -jar ./detekt-cli/build/libs/detekt-cli-*-all.jar @./config/detekt/argsfile_unix
+      if: matrix.os == 'macos-latest' || matrix.os == 'ubuntu-latest'
+
+
+    - name: Build detekt (WIN)
+      run: ./gradlew build installShadowDist --build-cache --parallel -PwarningsAsErrors=true -Pcompile-test-snippets=%COMPILE_TEST_SNIPPETS%
+      if: matrix.os == 'windows-latest'
+    - name: Run detekt-cli --help (WIN)
+      run: detekt-cli\build\install\detekt-cli-shadow\bin\detekt-cli --help
+      if: matrix.os == 'windows-latest'
+    - name: Run detekt-cli with argsfile (WIN)
+      run: detekt-cli\build\install\detekt-cli-shadow\bin\detekt-cli @config\detekt\argsfile_windows
+      if: matrix.os == 'windows-latest'
+
+
+    - name: Verify Generator Output
+      run: ./gradlew verifyGeneratorOutput
+
+
+    - name: Deploy Snapshot
+      run: .buildscript/deploy_snapshot.sh
+
+
+    - name: Generate Coverage Report
+      run: ./gradlew jacocoTestReport --scan
+    - name: Publish Coverage
+      uses: codecov/codecov-action@v1
+
+
+    - name: Cleanup Gradle Cache Folder (UNIX)
+      run: |
+        rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+        rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+      if: matrix.os == 'macos-latest' || matrix.os == 'ubuntu-latest'
+    - name: Cleanup Gradle Cache Folder (WIN)
+      run: |
+        del $HOME/.gradle/caches/modules-2/modules-2.lock
+        del -Recurse $HOME/.gradle/caches/*/plugin-resolution/
+      if: matrix.os == 'windows-latest'
