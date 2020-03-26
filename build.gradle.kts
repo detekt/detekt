@@ -351,7 +351,7 @@ val detektProjectBaseline by tasks.registering(DetektCreateBaselineTask::class) 
 // release section
 
 githubRelease {
-    token(project.property("github.token") as? String ?: "")
+    token(project.findProperty("github.token") as? String ?: "")
     owner.set("arturbosch")
     repo.set("detekt")
     overwrite.set(true)
