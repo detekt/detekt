@@ -96,7 +96,7 @@ class UnnecessaryAbstractClassSpec : Spek({
                     abstract class Base {
                         abstract val i: Int
                         abstract fun f()
-                        fun f1()
+                        fun f1() {}
                     }
                     
                     abstract class Sub : Base() {
