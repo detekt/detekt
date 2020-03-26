@@ -80,15 +80,3 @@ jobs:
       run: ./gradlew jacocoTestReport --scan
     - name: Publish Coverage
       uses: codecov/codecov-action@v1
-
-
-    - name: Cleanup Gradle Cache Folder (UNIX)
-      run: |
-        rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
-        rm -fr $HOME/.gradle/caches/*/plugin-resolution/
-      if: matrix.os == 'macos-latest' || matrix.os == 'ubuntu-latest'
-    - name: Cleanup Gradle Cache Folder (WIN)
-      run: |
-        del $HOME/.gradle/caches/modules-2/modules-2.lock
-        del -Recurse $HOME/.gradle/caches/*/plugin-resolution/
-      if: matrix.os == 'windows-latest'
