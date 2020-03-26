@@ -23,10 +23,9 @@ class LargeClassSpec : Spek({
 
         it("should not report anything in files without classes") {
             val code = """
-                const val const = 1
-                val prop = 0 
+                val i = 0 
 
-                fun test() {
+                fun f() {
                     println()
                 }
             """
