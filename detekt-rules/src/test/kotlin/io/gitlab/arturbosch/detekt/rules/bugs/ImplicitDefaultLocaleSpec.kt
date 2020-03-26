@@ -34,7 +34,7 @@ class ImplicitDefaultLocaleSpec : Spek({
             assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
         }
 
-        it("report String.toUpperCase() call without explicit locale") {
+        it("reports String.toUpperCase() call without explicit locale") {
             val code = """
                 fun x() {
                     val s = "deadbeef"
@@ -43,7 +43,7 @@ class ImplicitDefaultLocaleSpec : Spek({
             assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
         }
 
-        it("does not Sreport tring.toUpperCase() call with explicit locale") {
+        it("does not report String.toUpperCase() call with explicit locale") {
             val code = """
                 import java.util.Locale
                 fun x() {
@@ -54,7 +54,7 @@ class ImplicitDefaultLocaleSpec : Spek({
         }
 
 
-        it("report String.toLowerCase() call without explicit locale") {
+        it("reports String.toLowerCase() call without explicit locale") {
             val code = """
                 fun x() {
                     val s = "deadbeef"
@@ -73,7 +73,7 @@ class ImplicitDefaultLocaleSpec : Spek({
             assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
         }
 
-        it("report String?.toUpperCase() call without explicit locale") {
+        it("reports String?.toUpperCase() call without explicit locale") {
             val code = """
                 fun x() {
                     val s: String? = "deadbeef"
@@ -82,7 +82,7 @@ class ImplicitDefaultLocaleSpec : Spek({
             assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
         }
 
-        it("report String?.toLowerCase() call without explicit locale") {
+        it("reports String?.toLowerCase() call without explicit locale") {
             val code = """
                 fun x() {
                     val s: String? = "deadbeef"
