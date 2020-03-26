@@ -12,12 +12,16 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.rules.isAbstract
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import org.jetbrains.kotlin.descriptors.ClassDescriptor
+import org.jetbrains.kotlin.descriptors.MemberDescriptor
+import org.jetbrains.kotlin.descriptors.Modality
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.isAbstract
+import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
  * This rule inspects `abstract` classes. In case an `abstract class` does not have any concrete members it should be
@@ -64,13 +68,13 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
     }
 
     override fun visitClass(klass: KtClass) {
-        if (!klass.isInterface() && klass.isAbstract() && klass.superTypeListEntries.isEmpty()) {
+        if (!klass.isInterface() && klass.isAbstract()) {
             val body = klass.body
             if (body != null) {
                 val namedMembers = body.children.filter { it is KtProperty || it is KtNamedFunction }
                 val namedClassMembers = NamedClassMembers(klass, namedMembers)
                 namedClassMembers.detectAbstractAndConcreteType()
-            } else if (!hasNoConstructorParameter(klass)) {
+            } else if (klass.superTypeListEntries.isEmpty() && !hasNoConstructorParameter(klass)) {
                 report(CodeSmell(issue, Entity.from(klass), noAbstractMember), klass)
             }
         }
@@ -92,7 +96,7 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
 
         fun detectAbstractAndConcreteType() {
             val indexOfFirstAbstractMember = indexOfFirstMember(true)
-            if (indexOfFirstAbstractMember == -1) {
+            if (indexOfFirstAbstractMember == -1 && !hasInheritedAbstractMember()) {
                 report(CodeSmell(issue, Entity.from(klass), noAbstractMember), klass)
             } else if (isAbstractClassWithoutConcreteMembers(indexOfFirstAbstractMember)) {
                 report(CodeSmell(issue, Entity.from(klass), noConcreteMember), klass)
@@ -106,6 +110,19 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
                 indexOfFirstAbstractMember == 0 && hasNoConcreteMemberLeft() && hasNoConstructorParameter(klass)
 
         private fun hasNoConcreteMemberLeft() = indexOfFirstMember(false, namedMembers.drop(1)) == -1
+
+        private fun hasInheritedAbstractMember(): Boolean {
+            return when {
+                klass.superTypeListEntries.isEmpty() -> false
+                bindingContext == BindingContext.EMPTY -> true
+                else -> {
+                    val descriptor = bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, klass] as? ClassDescriptor
+                    descriptor?.unsubstitutedMemberScope?.getContributedDescriptors().orEmpty().any {
+                        (it as? MemberDescriptor)?.modality == Modality.ABSTRACT
+                    }
+                }
+            }
+        }
     }
 
     companion object {

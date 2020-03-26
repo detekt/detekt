@@ -19,10 +19,20 @@ abstract class EmptyAbstractClass1
 
 abstract class EmptyAbstractClass2()
 
-// This test case should be removed when type resolution is available - see issue #727
-abstract class AbstractClassDerivedFrom : EmptyAbstractClass1() {
+abstract class AbstractClassDerivedFrom1 : AbstractClassOk() {
+    fun g() {}
+}
 
-    fun f() {}
+abstract class AbstractClassDerivedFrom2 : AbstractClassWithPrimaryConstructorConcretePropertyOk(0) {
+    fun g() {}
+}
+
+abstract class AbstractClassDerivedFrom3 : Interface {
+    fun g() {}
+}
+
+interface Interface {
+    fun f()
 }
 
 @Ignore
