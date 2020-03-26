@@ -10,16 +10,17 @@ import org.jfrog.gradle.plugin.artifactory.dsl.PublisherConfig
 import java.util.Date
 
 plugins {
-    id("io.gitlab.arturbosch.detekt")
-    jacoco
+    kotlin("jvm")
     `maven-publish`
+    jacoco
+    id("io.gitlab.arturbosch.detekt")
     id("com.jfrog.artifactory") apply false
     id("com.jfrog.bintray")
     id("org.jetbrains.dokka") apply false
     id("com.github.ben-manes.versions")
-    kotlin("jvm")
     id("com.github.johnrengelman.shadow") apply false
     id("org.sonarqube")
+    id("com.github.breadmoirai.github-release")
 }
 
 buildScan {
@@ -345,4 +346,22 @@ val detektProjectBaseline by tasks.registering(DetektCreateBaselineTask::class) 
     include("**/*.kts")
     exclude("**/resources/**")
     exclude("**/build/**")
+}
+
+// release section
+
+githubRelease {
+    token(project.findProperty("github.token") as? String ?: "")
+    owner.set("arturbosch")
+    repo.set("detekt")
+    overwrite.set(true)
+    dryRun.set(false)
+    body {
+        var changelog = project.file("docs/pages/changelog 1.x.x.md").readText()
+        val sectionStart = "#### ${project.version}"
+        changelog = changelog.substring(changelog.indexOf(sectionStart) + sectionStart.length)
+        changelog = changelog.substring(0, changelog.indexOf("#### 1"))
+        changelog.trim()
+    }
+    releaseAssets.setFrom(project(":detekt-cli").buildDir.resolve("libs/detekt-cli-${project.version}-all.jar"))
 }

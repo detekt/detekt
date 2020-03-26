@@ -5,8 +5,45 @@ keywords: changelog, release-notes, migration
 permalink: changelog.html
 toc: true
 ---
+#### 1.7.1
 
-#### 1.7.0 - Upcoming
+##### Changelog
+
+- UnnecessaryAbstractClass: fix false positive when abstract class has abstract inherited members - [#2513](https://github.com/arturbosch/detekt/pull/2513)
+- UnusedPrivateMember: report unused overloaded operators - [#2510](https://github.com/arturbosch/detekt/pull/2510)
+- Fix build compile error resulted from merging two conflicting PRs - [#2508](https://github.com/arturbosch/detekt/pull/2508)
+- Update Kotlin to 1.3.71 - [#2507](https://github.com/arturbosch/detekt/pull/2507)
+- Remove duplicated test task setup for gradle plugin - [#2506](https://github.com/arturbosch/detekt/pull/2506)
+- Add LicenceHeaderExtension test to verify resource path loading is supported - [#2505](https://github.com/arturbosch/detekt/pull/2505)
+- Ensure filesystems are created so paths can be gotten - [#2504](https://github.com/arturbosch/detekt/pull/2504)
+- FileSystemNotFoundException in detekt 1.7.0 when using --config-resource - [#2503](https://github.com/arturbosch/detekt/issues/2503)
+- MemberNameEqualsClassName: fix false negative when function has no explicit return type - [#2502](https://github.com/arturbosch/detekt/pull/2502)
+- Use the system-dependent line separator in NotificationReport - [#2497](https://github.com/arturbosch/detekt/pull/2497)
+- Remove default print stream - [#2496](https://github.com/arturbosch/detekt/pull/2496)
+- Don't use System.out in the ProgressListeners - [#2495](https://github.com/arturbosch/detekt/pull/2495)
+- Make the gradle plugin a sub project again - [#2493](https://github.com/arturbosch/detekt/pull/2493)
+- Move test factory outside the main code - [#2491](https://github.com/arturbosch/detekt/pull/2491)
+- Single runner - [#2490](https://github.com/arturbosch/detekt/pull/2490)
+- ProcessingSettings - [#2489](https://github.com/arturbosch/detekt/pull/2489)
+- Don't use println :detekt-generator - [#2488](https://github.com/arturbosch/detekt/pull/2488)
+- Simplify tests with StringPrintStream - [#2487](https://github.com/arturbosch/detekt/pull/2487)
+- Improve tests - [#2486](https://github.com/arturbosch/detekt/pull/2486)
+- Use PrinterStream in AstPrinter - [#2485](https://github.com/arturbosch/detekt/pull/2485)
+- Errors running detekt in the detekt project - [#2484](https://github.com/arturbosch/detekt/issues/2484)
+- Unify yml strings - [#2482](https://github.com/arturbosch/detekt/pull/2482)
+- Use yml arrays to list the ForbiddenImports - [#2474](https://github.com/arturbosch/detekt/pull/2474)
+- Add date, detekt-version + link to HtmlReport - [#2470](https://github.com/arturbosch/detekt/pull/2470)
+- Refactor FindingsReport + FileBasedFindingsReport - [#2454](https://github.com/arturbosch/detekt/pull/2454)
+- The Detekt HTML Report should include date, version number, website link (Feature Request) - [#2416](https://github.com/arturbosch/detekt/issues/2416)
+- Added validation of constructors to LongParameterList - [#2410](https://github.com/arturbosch/detekt/pull/2410)
+- UnusedPrivateMember doesn't report the correct warning count - [#1981](https://github.com/arturbosch/detekt/issues/1981)
+- UnusedPrivateMember should consider overloaded operators - [#1444](https://github.com/arturbosch/detekt/issues/1444)
+- False positive on rule UnnecessaryAbstractClass - [#727](https://github.com/arturbosch/detekt/issues/727)
+- MemberNameEqualsClassName ignores functions which return a single expression - [#655](https://github.com/arturbosch/detekt/issues/655)
+
+See all issues at: [1.7.1](https://github.com/arturbosch/detekt/milestone/60)
+
+#### 1.7.0
 
 ##### Notable Changes
 
