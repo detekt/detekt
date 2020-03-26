@@ -1,9 +1,8 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatExceptionOfType
 import org.spekframework.spek2.Spek
@@ -17,7 +16,7 @@ class TooGenericExceptionCaughtSpec : Spek({
         it("should find one of each kind") {
             val rule = TooGenericExceptionCaught(Config.empty)
 
-            val findings = rule.lint(Case.TooGenericExceptions.path())
+            val findings = rule.compileAndLint(tooGenericExceptionCode)
 
             assertThat(findings).hasSize(caughtExceptionDefaults.size)
         }
@@ -25,11 +24,23 @@ class TooGenericExceptionCaughtSpec : Spek({
 
     describe("a file with a caught exception which is ignored") {
 
+        val code = """
+            class MyTooGenericException : RuntimeException()
+
+            fun f() {
+                try {
+                    throw Throwable()
+                } catch (myIgnore: MyTooGenericException) {
+                    throw Error()
+                }
+            }
+        """
+
         it("should not report an ignored catch blocks because of its exception name") {
             val config = TestConfig(mapOf(TooGenericExceptionCaught.ALLOWED_EXCEPTION_NAME_REGEX to "myIgnore"))
             val rule = TooGenericExceptionCaught(config)
 
-            val findings = rule.lint(Case.TooGenericExceptionsOptions.path())
+            val findings = rule.compileAndLint(code)
 
             assertThat(findings).isEmpty()
         }
@@ -38,7 +49,7 @@ class TooGenericExceptionCaughtSpec : Spek({
             val config = TestConfig(mapOf(TooGenericExceptionCaught.CAUGHT_EXCEPTIONS_PROPERTY to "[MyException]"))
             val rule = TooGenericExceptionCaught(config)
 
-            val findings = rule.lint(Case.TooGenericExceptionsOptions.path())
+            val findings = rule.compileAndLint(code)
 
             assertThat(findings).isEmpty()
         }
@@ -50,7 +61,7 @@ class TooGenericExceptionCaughtSpec : Spek({
             )
             val config = TestConfig(configRules)
             val rule = TooGenericExceptionCaught(config)
-            val findings = rule.lint(Case.TooGenericExceptions.path())
+            val findings = rule.compileAndLint(tooGenericExceptionCode)
 
             assertThat(findings).isEmpty()
         }
@@ -59,7 +70,7 @@ class TooGenericExceptionCaughtSpec : Spek({
             val config = TestConfig(mapOf(TooGenericExceptionCaught.ALLOWED_EXCEPTION_NAME_REGEX to "*Foo"))
             val rule = TooGenericExceptionCaught(config)
             assertThatExceptionOfType(PatternSyntaxException::class.java).isThrownBy {
-                rule.lint(Case.TooGenericExceptions.path())
+                rule.compileAndLint(tooGenericExceptionCode)
             }
         }
     }
