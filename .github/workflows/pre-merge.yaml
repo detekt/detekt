@@ -1,6 +1,6 @@
 name: Pre Merge Checks
 
-on: 
+on:
   push:
     branches:
       - master

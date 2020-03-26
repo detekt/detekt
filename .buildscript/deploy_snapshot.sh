@@ -5,7 +5,7 @@
 # The script was originally adapted from https://coderwall.com/p/9b_lfq and
 # http://benlimmer.com/2013/12/26/automatically-publish-javadoc-to-gh-pages-with-travis-ci/ and
 # https://github.com/JakeWharton/RxBinding/blob/master/.buildscript/deploy_snapshot.sh
-# 
+#
 # Not is has been adapted to work with Github Actions
 
 SLUG="arturbosch/detekt"
