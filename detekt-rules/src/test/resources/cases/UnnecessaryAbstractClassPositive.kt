@@ -31,3 +31,12 @@ interface AbstractInterface {
 abstract class OnlyConcreteMembersInAbstractClassWithPrimaryCtor1(val i: Int) {} // violation: no abstract members
 
 abstract class OnlyConcreteMembersInAbstractClassWithPrimaryCtor2(val i: Int) // violation: no abstract members
+
+abstract class AbstractClassDerivedFrom : OnlyAbstractMembersInAbstractClass() { // violation: no abstract members
+    override val i: Int
+        get() = 1
+
+    override fun f() {}
+
+    fun g() {}
+}

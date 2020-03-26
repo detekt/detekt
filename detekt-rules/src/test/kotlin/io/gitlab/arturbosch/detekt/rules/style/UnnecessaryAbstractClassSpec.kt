@@ -2,10 +2,9 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.rules.Case
+import io.gitlab.arturbosch.detekt.test.KtTestCompiler
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -17,6 +16,11 @@ class UnnecessaryAbstractClassSpec : Spek({
         )))
     }
 
+    val wrapper by memoized(
+        factory = { KtTestCompiler.createEnvironment() },
+        destructor = { it.dispose() }
+    )
+
     val noConcreteMemberDescription = "An abstract class without a concrete member can be refactored to an interface."
     val noAbstractMemberDescription = "An abstract class without an abstract member can be refactored to a concrete class."
 
@@ -27,11 +31,11 @@ class UnnecessaryAbstractClassSpec : Spek({
             lateinit var findings: List<Finding>
 
             beforeEachTest {
-                findings = subject.lint(Case.UnnecessaryAbstractClassPositive.path())
+                findings = subject.compileAndLintWithContext(wrapper.env, Case.UnnecessaryAbstractClassPositive.path())
             }
 
             it("has no abstract member violation") {
-                assertThat(countViolationsWithDescription(findings, noAbstractMemberDescription)).isEqualTo(5)
+                assertThat(countViolationsWithDescription(findings, noAbstractMemberDescription)).isEqualTo(6)
             }
 
             it("has no concrete member violation") {
@@ -42,7 +46,7 @@ class UnnecessaryAbstractClassSpec : Spek({
         context("abstract classes with members") {
 
             val path = Case.UnnecessaryAbstractClassNegative.path()
-            val findings by memoized { subject.lint(path) }
+            val findings by memoized { subject.compileAndLintWithContext(wrapper.env, path) }
 
             it("does not report no abstract member violation") {
                 assertThat(countViolationsWithDescription(findings, noAbstractMemberDescription)).isEqualTo(0)
