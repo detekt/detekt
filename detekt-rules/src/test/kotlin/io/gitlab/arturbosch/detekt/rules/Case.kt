@@ -41,8 +41,6 @@ enum class Case(val file: String) {
     NestedClasses("/cases/NestedClasses.kt"),
     NoClasses("/cases/NoClasses.kt"),
     UnreachableCode("/cases/UnreachableCode.kt"),
-    UnnecessaryAbstractClassPositive("/cases/UnnecessaryAbstractClassPositive.kt"),
-    UnnecessaryAbstractClassNegative("/cases/UnnecessaryAbstractClassNegative.kt"),
     UtilityClassesPositive("/cases/UtilityClassesPositive.kt"),
     UtilityClassesNegative("/cases/UtilityClassesNegative.kt"),
     SuppressedElements("/SuppressedByElementAnnotation.kt"),
