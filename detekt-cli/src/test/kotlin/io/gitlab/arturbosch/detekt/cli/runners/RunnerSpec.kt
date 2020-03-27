@@ -1,10 +1,10 @@
 package io.gitlab.arturbosch.detekt.cli.runners
 
 import io.gitlab.arturbosch.detekt.cli.BuildFailure
-import io.gitlab.arturbosch.detekt.test.StringPrintStream
 import io.gitlab.arturbosch.detekt.cli.config.InvalidConfig
 import io.gitlab.arturbosch.detekt.cli.createCliArgs
 import io.gitlab.arturbosch.detekt.test.NullPrintStream
+import io.gitlab.arturbosch.detekt.test.StringPrintStream
 import io.gitlab.arturbosch.detekt.test.createTempFileForTest
 import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
@@ -43,38 +43,6 @@ class RunnerSpec : Spek({
 
             assertThatThrownBy { Runner(cliArgs, NullPrintStream(), NullPrintStream()).execute() }
                 .isExactlyInstanceOf(BuildFailure::class.java)
-        }
-
-        it("should throw on invalid config property when validation=true") {
-            val cliArgs = createCliArgs(
-                "--input", inputPath.toString(),
-                "--config-resource", "/configs/invalid-config.yml"
-            )
-
-            assertThatThrownBy { Runner(cliArgs, NullPrintStream(), NullPrintStream()).execute() }
-                .isExactlyInstanceOf(InvalidConfig::class.java)
-                .hasMessageContaining("property")
-        }
-
-        it("should throw on invalid config properties when validation=true") {
-            val cliArgs = createCliArgs(
-                "--input", inputPath.toString(),
-                "--config-resource", "/configs/invalid-configs.yml"
-            )
-
-            assertThatThrownBy { Runner(cliArgs, NullPrintStream(), NullPrintStream()).execute() }
-                .isExactlyInstanceOf(InvalidConfig::class.java)
-                .hasMessageContaining("properties")
-        }
-
-        it("should not throw on invalid config property when validation=false") {
-            val cliArgs = createCliArgs(
-                "--input", inputPath.toString(),
-                "--config-resource", "/configs/invalid-config_no-validation.yml"
-            )
-
-            assertThatCode { Runner(cliArgs, NullPrintStream(), NullPrintStream()).execute() }
-                .doesNotThrowAnyException()
         }
 
         it("should never throw on maxIssues=-1") {
@@ -170,6 +138,51 @@ class RunnerSpec : Spek({
             it("does not write anything to error printer") {
                 assertThat(errPrintStream.toString()).isEmpty()
             }
+        }
+    }
+
+    describe("with config validation") {
+
+        it("should throw on invalid config property when validation=true") {
+            val cliArgs = createCliArgs(
+                "--input", inputPath.toString(),
+                "--config-resource", "/configs/invalid-config.yml"
+            )
+
+            assertThatThrownBy { Runner(cliArgs, NullPrintStream(), NullPrintStream()).execute() }
+                .isExactlyInstanceOf(InvalidConfig::class.java)
+                .hasMessageContaining("property")
+        }
+
+        it("should throw on invalid config properties when validation=true") {
+            val cliArgs = createCliArgs(
+                "--input", inputPath.toString(),
+                "--config-resource", "/configs/invalid-configs.yml"
+            )
+
+            assertThatThrownBy { Runner(cliArgs, NullPrintStream(), NullPrintStream()).execute() }
+                .isExactlyInstanceOf(InvalidConfig::class.java)
+                .hasMessageContaining("properties")
+        }
+
+        it("should not throw on invalid config property when validation=false") {
+            val cliArgs = createCliArgs(
+                "--input", inputPath.toString(),
+                "--config-resource", "/configs/invalid-config_no-validation.yml"
+            )
+
+            assertThatCode { Runner(cliArgs, NullPrintStream(), NullPrintStream()).execute() }
+                .doesNotThrowAnyException()
+        }
+
+        it("should not throw on deprecation warnings") {
+            val cliArgs = createCliArgs(
+                "--input", inputPath.toString(),
+                "--config-resource", "/configs/deprecated-property.yml"
+            )
+
+            assertThatCode { Runner(cliArgs, NullPrintStream(), NullPrintStream()).execute() }
+                .doesNotThrowAnyException()
         }
     }
 })
