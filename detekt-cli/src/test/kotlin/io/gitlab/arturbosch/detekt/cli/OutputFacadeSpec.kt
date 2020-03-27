@@ -17,37 +17,47 @@ import java.nio.file.Paths
 
 internal class OutputFacadeSpec : Spek({
 
-    val printStream = StringPrintStream()
-    val inputPath: Path = Paths.get(resource("/cases"))
-    val plainOutputPath = File.createTempFile("detekt", ".txt")
-    val htmlOutputPath = File.createTempFile("detekt", ".html")
-    val xmlOutputPath = File.createTempFile("detekt", ".xml")
+    describe("Running the output facade with multiple reports") {
 
-    val defaultDetektion = DetektResult(mapOf(Pair("Key", listOf(createFinding()))))
-    val defaultSettings = createProcessingSettings(inputPath, outPrinter = printStream)
+        val printStream = StringPrintStream()
+        val inputPath: Path = Paths.get(resource("/cases"))
+        lateinit var plainOutputPath: File
+        lateinit var htmlOutputPath: File
+        lateinit var xmlOutputPath: File
 
-    afterGroup { closeQuietly(defaultSettings) }
+        val defaultDetektion = DetektResult(mapOf(Pair("Key", listOf(createFinding()))))
+        val defaultSettings = createProcessingSettings(inputPath, outPrinter = printStream)
 
-    describe("Running the output facade") {
+        lateinit var cliArgs: CliArgs
 
-        describe("with multiple reports") {
-            val cliArgs = createCliArgs(
+        beforeEachTest {
+            plainOutputPath = File.createTempFile("detekt", ".txt")
+            htmlOutputPath = File.createTempFile("detekt", ".html")
+            xmlOutputPath = File.createTempFile("detekt", ".xml")
+            cliArgs = createCliArgs(
                 "--input", inputPath.toString(),
                 "--report", "xml:$xmlOutputPath",
                 "--report", "txt:$plainOutputPath",
                 "--report", "html:$htmlOutputPath"
             )
+        }
 
-            it("creates all output files") {
-                val subject = OutputFacade(cliArgs, defaultDetektion, defaultSettings)
+        afterEachTest {
+            plainOutputPath.delete()
+            htmlOutputPath.delete()
+            xmlOutputPath.delete()
+            closeQuietly(defaultSettings)
+        }
 
-                subject.run()
+        it("creates all output files") {
+            val subject = OutputFacade(cliArgs, defaultDetektion, defaultSettings)
 
-                assertThat(printStream.toString()).contains(
-                    "Successfully generated ${TxtOutputReport().name} at $plainOutputPath$LN",
-                    "Successfully generated ${XmlOutputReport().name} at $xmlOutputPath$LN",
-                    "Successfully generated ${HtmlOutputReport().name} at $htmlOutputPath$LN")
-            }
+            subject.run()
+
+            assertThat(printStream.toString()).contains(
+                "Successfully generated ${TxtOutputReport().name} at $plainOutputPath$LN",
+                "Successfully generated ${XmlOutputReport().name} at $xmlOutputPath$LN",
+                "Successfully generated ${HtmlOutputReport().name} at $htmlOutputPath$LN")
         }
     }
 })

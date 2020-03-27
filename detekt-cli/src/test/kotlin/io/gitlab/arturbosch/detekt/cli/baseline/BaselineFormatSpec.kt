@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.cli.baseline
 
+import io.gitlab.arturbosch.detekt.test.createTempFileForTest
 import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatIllegalStateException
@@ -46,7 +47,7 @@ class BaselineFormatSpec : Spek({
                 Whitelist(setOf("1", "2", "3")))
 
             it("has a new line at the end of the written baseline file") {
-                val tempFile = Files.createTempFile("baseline1", ".xml")
+                val tempFile = createTempFileForTest("baseline1", ".xml")
 
                 val format = BaselineFormat()
                 format.write(savedBaseline, tempFile)
@@ -57,7 +58,7 @@ class BaselineFormatSpec : Spek({
             }
 
             it("asserts that the saved and loaded baseline files are equal") {
-                val tempFile = Files.createTempFile("baseline-saved", ".xml")
+                val tempFile = createTempFileForTest("baseline-saved", ".xml")
 
                 val format = BaselineFormat()
                 format.write(savedBaseline, tempFile)

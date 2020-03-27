@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.test.StringPrintStream
 import io.gitlab.arturbosch.detekt.cli.config.InvalidConfig
 import io.gitlab.arturbosch.detekt.cli.createCliArgs
 import io.gitlab.arturbosch.detekt.test.NullPrintStream
+import io.gitlab.arturbosch.detekt.test.createTempFileForTest
 import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatCode
@@ -22,7 +23,7 @@ class RunnerSpec : Spek({
     describe("executes the runner with different maxIssues configurations") {
 
         it("should report one issue when maxIssues=2") {
-            val tmpReport = Files.createTempFile("RunnerSpec", ".txt")
+            val tmpReport = createTempFileForTest("RunnerSpec", ".txt")
             val cliArgs = createCliArgs(
                 "--input", inputPath.toString(),
                 "--report", "txt:$tmpReport",
@@ -77,7 +78,7 @@ class RunnerSpec : Spek({
         }
 
         it("should never throw on maxIssues=-1") {
-            val tmpReport = Files.createTempFile("RunnerSpec", ".txt")
+            val tmpReport = createTempFileForTest("RunnerSpec", ".txt")
             val cliArgs = createCliArgs(
                 "--input", inputPath.toString(),
                 "--report", "txt:$tmpReport",
@@ -92,7 +93,7 @@ class RunnerSpec : Spek({
         context("with additional baseline file") {
 
             it("should not throw on maxIssues=0 due to baseline blacklist") {
-                val tmpReport = Files.createTempFile("RunnerSpec", ".txt")
+                val tmpReport = createTempFileForTest("RunnerSpec", ".txt")
                 val cliArgs = createCliArgs(
                     "--input", inputPath.toString(),
                     "--report", "txt:$tmpReport",
@@ -110,7 +111,7 @@ class RunnerSpec : Spek({
     describe("executes the runner with create baseline") {
 
         it("should not throw on maxIssues=0") {
-            val tmpReport = Files.createTempFile("RunnerSpec", ".txt")
+            val tmpReport = createTempFileForTest("RunnerSpec", ".txt")
             val cliArgs = createCliArgs(
                 "--input", inputPath.toString(),
                 "--baseline", Paths.get(resource("configs/baseline-empty.xml")).toString(),

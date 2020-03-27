@@ -13,6 +13,7 @@ import io.gitlab.arturbosch.detekt.core.processors.logicalLinesKey
 import io.gitlab.arturbosch.detekt.core.processors.sourceLinesKey
 import io.gitlab.arturbosch.detekt.core.whichDetekt
 import io.gitlab.arturbosch.detekt.test.TestDetektion
+import io.gitlab.arturbosch.detekt.test.createTempFileForTest
 import io.gitlab.arturbosch.detekt.test.resource
 import io.mockk.every
 import io.mockk.mockk
@@ -134,8 +135,7 @@ class HtmlOutputReportSpec : Spek({
             var result = htmlReport.render(createTestDetektionWithMultipleSmells())
             result = generatedRegex.replace(result, replacement)
 
-            val actual = Files.createTempFile("actual-report", ".html")
-            actual.toFile().deleteOnExit()
+            val actual = createTempFileForTest("actual-report", ".html")
             Files.write(actual, result.toByteArray())
 
             assertThat(actual).hasSameTextualContentAs(expected)
@@ -220,8 +220,7 @@ private fun createReportWithFindings(findings: Array<Pair<String, List<Finding>>
     val detektion = createHtmlDetektion(*findings)
     var result = htmlReport.render(detektion)
     result = generatedRegex.replace(result, replacement)
-    val reportPath = Files.createTempFile("report", ".html")
-    reportPath.toFile().deleteOnExit()
+    val reportPath = createTempFileForTest("report", ".html")
     Files.write(reportPath, result.toByteArray())
     return reportPath
 }
