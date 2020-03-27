@@ -3,12 +3,12 @@ name: Deploy Snapshot
 on:
   push:
     branches:
-      - 'master'
+      - master
 
 jobs:
   gradle:
     runs-on: ubuntu-latest
-    if: "!contains(github.event.head_commit.message, 'ci skip')"
+    if: ${{ !contains(github.event.head_commit.message, 'ci skip') }}
     steps:
     - name: Checkout Repo
       uses: actions/checkout@v2
