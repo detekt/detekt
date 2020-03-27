@@ -17,8 +17,6 @@ enum class Case(val file: String) {
     EmptyDefaultConstructorPositive("/cases/EmptyDefaultConstructorPositive.kt"),
     EqualsAlwaysReturnsTrueOrFalsePositive("/cases/EqualsAlwaysReturnsTrueOrFalsePositive.kt"),
     EqualsAlwaysReturnsTrueOrFalseNegative("/cases/EqualsAlwaysReturnsTrueOrFalseNegative.kt"),
-    TooGenericExceptions("/cases/TooGenericExceptions.kt"),
-    TooGenericExceptionsOptions("/cases/TooGenericExceptionsOptions.kt"),
     ExceptionRaisedInMethodsNegative("/cases/ExceptionRaisedInMethodsNegative.kt"),
     ExceptionRaisedInMethodsPositive("/cases/ExceptionRaisedInMethodsPositive.kt"),
     FinalClassNegative("/cases/ProtectedMemberInFinalClassNegative.kt"),
