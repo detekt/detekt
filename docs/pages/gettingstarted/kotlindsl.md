@@ -36,7 +36,7 @@ plugins {
 
 detekt {
     toolVersion = "[version]"                             // Version of the Detekt CLI that will be used. When unspecified the latest detekt version found will be used. Override to stay on the same version.
-    source = files("src/main/java", "src/main/kotlin")    // The directories where detekt looks for source files. Defaults to `files("src/main/java", "src/main/kotlin")`.
+    input = files("src/main/java", "src/main/kotlin")    // The directories where detekt looks for source files. Defaults to `files("src/main/java", "src/main/kotlin")`.
     parallel = false                                      // Builds the AST in parallel. Rules are always executed in parallel. Can lead to speedups in larger projects. `false` by default.
     config = files("path/to/config.yml")                  // Define the detekt configuration(s) you want to use. Defaults to the default detekt configuration.
     buildUponDefaultConfig = false                        // Interpret config files as updates to the default config. `false` by default.
