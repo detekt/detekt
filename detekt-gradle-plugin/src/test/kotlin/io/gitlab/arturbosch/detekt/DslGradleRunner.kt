@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt
 
+import io.gitlab.arturbosch.detekt.test.createTempDirectoryForTest
 import org.gradle.testkit.runner.BuildResult
 import org.gradle.testkit.runner.GradleRunner
 import java.io.File
@@ -15,7 +16,7 @@ class DslGradleRunner @Suppress("LongParameterList") constructor(
     val dryRun: Boolean = false
 ) {
 
-    private val rootDir: File = createTempDir(prefix = "applyPlugin")
+    private val rootDir: File = createTempDirectoryForTest(prefix = "applyPlugin").toFile()
     private val randomString = UUID.randomUUID().toString()
 
     private val settingsContent = """

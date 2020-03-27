@@ -13,3 +13,14 @@ fun createTempFileForTest(prefix: String, suffix: String): Path {
     path.toFile().deleteOnExit()
     return path
 }
+
+/**
+ * Creates a new directory in the default temporary-file directory, using
+ * the given [prefix] to generate its name.
+ * The resulting directory in the returned path is automatically deleted on JVM exit.
+ */
+fun createTempDirectoryForTest(prefix: String): Path {
+    val dir = Files.createTempDirectory(prefix)
+    dir.toFile().deleteOnExit()
+    return dir
+}

@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.cli.baseline
 
 import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.cli.createFinding
+import io.gitlab.arturbosch.detekt.test.createTempDirectoryForTest
 import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
@@ -14,7 +15,7 @@ class BaselineFacadeSpec : Spek({
 
     describe("a baseline facade") {
 
-        val dir = Files.createTempDirectory("baseline_format")
+        val dir = createTempDirectoryForTest("baseline_format")
 
         it("creates a baseline file") {
             val fullPath = dir.resolve("baseline.xml")
