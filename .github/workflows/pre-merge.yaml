@@ -69,10 +69,6 @@ jobs:
       run: ./gradlew verifyGeneratorOutput
 
 
-    - name: Deploy Snapshot
-      run: .buildscript/deploy_snapshot.sh
-
-
     - name: Generate Coverage Report
       run: ./gradlew jacocoTestReport
     - name: Publish Coverage
