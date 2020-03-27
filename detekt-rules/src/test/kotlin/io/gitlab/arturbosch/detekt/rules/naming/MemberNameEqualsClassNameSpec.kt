@@ -1,13 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.KtTestCompiler
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
-import io.gitlab.arturbosch.detekt.test.lint
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
@@ -29,9 +27,37 @@ class MemberNameEqualsClassNameSpec : Spek({
 
         context("some classes with methods which don't have the same name") {
 
-            it("reports methods which are not named after the class") {
-                val path = Case.MemberNameEqualsClassNameNegative.path()
-                assertThat(subject.lint(path)).isEmpty()
+            it("does not report a nested function with the same name as the class") {
+                val code = """
+                    class MethodNameNotEqualsClassName {
+                        fun nestedFunction() {
+                            fun MethodNameNotEqualsClassName() {}
+                        }
+                    }
+                """
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+            }
+
+            it("does not report a function with same name in nested class") {
+                val code = """
+                    class MethodNameNotEqualsClassName {
+                        class NestedNameEqualsTopClassName {
+                            fun MethodNameNotEqualsClassName() {}
+                        }
+                    }
+                """
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+            }
+
+            it("does not report a function with the same name as a companion object") {
+                val code = """
+                    class StaticMethodNameEqualsObjectName {
+                        companion object A {
+                            fun A() {}
+                        }
+                    }
+                """
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
             }
         }
 
@@ -102,6 +128,15 @@ class MemberNameEqualsClassNameSpec : Spek({
                     }
                     abstract class BaseClassForMethodNameEqualsClassName {
                         abstract fun AbstractMethodNameEqualsClassName()
+                    }
+                """
+                assertThat(MemberNameEqualsClassName().compileAndLint(code)).isEmpty()
+            }
+
+            it("doesn't report an methods which are named after the interface") {
+                val code = """
+                    interface MethodNameEqualsInterfaceName {
+                        fun MethodNameEqualsInterfaceName() {}
                     }
                 """
                 assertThat(MemberNameEqualsClassName().compileAndLint(code)).isEmpty()
