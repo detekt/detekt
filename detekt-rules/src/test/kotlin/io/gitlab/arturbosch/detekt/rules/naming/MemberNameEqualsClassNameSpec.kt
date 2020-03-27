@@ -37,7 +37,7 @@ class MemberNameEqualsClassNameSpec : Spek({
 
         context("some classes with members which have the same name") {
 
-            it("reports method which are named after the class") {
+            it("reports a method which is named after the class") {
                 val code = """
                     class MethodNameEqualsClassName {
                         fun methodNameEqualsClassName() {}
@@ -46,7 +46,7 @@ class MemberNameEqualsClassNameSpec : Spek({
                 assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
             }
 
-            it("reports method which are named after the object") {
+            it("reports a method which is named after the object") {
                 val code = """
                     object MethodNameEqualsObjectName {
                         fun MethodNameEqualsObjectName() {}
@@ -55,7 +55,7 @@ class MemberNameEqualsClassNameSpec : Spek({
                 assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
             }
 
-            it("reports property which are named after the class") {
+            it("reports a property which is named after the class") {
                 val code = """
                     class PropertyNameEqualsClassName {
                         val propertyNameEqualsClassName = 0
@@ -64,7 +64,7 @@ class MemberNameEqualsClassNameSpec : Spek({
                 assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
             }
 
-            it("reports property which are named after the object") {
+            it("reports a property which is named after the object") {
                 val code = """
                     object PropertyNameEqualsObjectName {
                         val propertyNameEqualsObjectName = 0
@@ -73,7 +73,7 @@ class MemberNameEqualsClassNameSpec : Spek({
                 assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
             }
 
-            it("reports companion function which are named after the class") {
+            it("reports a companion object function which is named after the class") {
                 val code = """
                     class StaticMethodNameEqualsClassName {
                         companion object {
@@ -84,7 +84,7 @@ class MemberNameEqualsClassNameSpec : Spek({
                 assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
             }
 
-            it("reports method which are named after the class even when it's inside another one") {
+            it("reports a method which is named after the class even when it's inside another one") {
                 val code = """
                     class MethodNameContainer {
                         class MethodNameEqualsNestedClassName {
@@ -93,76 +93,6 @@ class MemberNameEqualsClassNameSpec : Spek({
                     }
                 """
                 assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
-            }
-
-            it("reports companion function which are named after the class and they are not a factory 1") {
-                val code = """
-                    class WrongFactoryClass1 {
-
-                        companion object {
-                            fun wrongFactoryClass1() {} // reports 1 - no return type
-                        }
-                    }
-                """
-                assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
-            }
-
-            it("reports companion function which are named after the class and they are not a factory 2") {
-                val code = """
-                    class WrongFactoryClass2 {
-
-                        companion object {
-                            fun wrongFactoryClass2(): Int { // reports 1 - wrong return type
-                                return 0
-                            }
-                        }
-                    }
-                """
-                assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
-            }
-
-            it("reports companion function which are named after the class and they are not a factory 3") {
-                val code = """
-                    class WrongFactoryClass3 {
-                    
-                        companion object {
-                            fun wrongFactoryClass3() = 0 // reports 1 - wrong return type
-                        }
-                    }
-                """
-                assertThat(MemberNameEqualsClassName().compileAndLintWithContext(wrapper.env, code)).hasSize(1)
-            }
-
-            it("doesn't report companion function which are factory 1") {
-                val code = """
-                    open class A {
-                        companion object {
-                            fun a(condition: Boolean): A {
-                                return if (condition) B() else C()
-                            }
-                        }
-                    }
-                    
-                    class B: A()
-                    
-                    class C: A()
-                """
-                assertThat(MemberNameEqualsClassName().compileAndLintWithContext(wrapper.env, code)).isEmpty()
-            }
-
-            it("doesn't report companion function which are factory 2") {
-                val code = """
-                    open class A {
-                      companion object {
-                        fun a(condition: Boolean) = if (condition) B() else C()
-                      }
-                    }
-                    
-                    class B: A()
-
-                    class C: A()
-                """
-                assertThat(MemberNameEqualsClassName().compileAndLintWithContext(wrapper.env, code)).isEmpty()
             }
 
             it("doesn't report overridden methods which are named after the class") {
@@ -211,6 +141,79 @@ class MemberNameEqualsClassNameSpec : Spek({
                     }
                 """
                 assertThat(MemberNameEqualsClassName(noIgnoreOverridden).compileAndLint(code)).hasSize(1)
+            }
+        }
+
+        context("some companion object functions named after the class (factory functions)") {
+
+            it("reports a function which has no return type") {
+                val code = """
+                    class WrongFactoryClass1 {
+
+                        companion object {
+                            fun wrongFactoryClass1() {}
+                        }
+                    }
+                """
+                assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
+            }
+
+            it("reports a function which has the wrong return type") {
+                val code = """
+                    class WrongFactoryClass2 {
+
+                        companion object {
+                            fun wrongFactoryClass2(): Int {
+                                return 0
+                            }
+                        }
+                    }
+                """
+                assertThat(MemberNameEqualsClassName().compileAndLint(code)).hasSize(1)
+            }
+
+            it("reports a body-less function which has the wrong return type") {
+                val code = """
+                    class WrongFactoryClass3 {
+                    
+                        companion object {
+                            fun wrongFactoryClass3() = 0
+                        }
+                    }
+                """
+                assertThat(MemberNameEqualsClassName().compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+            }
+
+            it("doesn't report a factory function") {
+                val code = """
+                    open class A {
+                        companion object {
+                            fun a(condition: Boolean): A {
+                                return if (condition) B() else C()
+                            }
+                        }
+                    }
+                    
+                    class B: A()
+                    
+                    class C: A()
+                """
+                assertThat(MemberNameEqualsClassName().compileAndLintWithContext(wrapper.env, code)).isEmpty()
+            }
+
+            it("doesn't report a body-less factory function") {
+                val code = """
+                    open class A {
+                      companion object {
+                        fun a(condition: Boolean) = if (condition) B() else C()
+                      }
+                    }
+                    
+                    class B: A()
+
+                    class C: A()
+                """
+                assertThat(MemberNameEqualsClassName().compileAndLintWithContext(wrapper.env, code)).isEmpty()
             }
         }
     }
