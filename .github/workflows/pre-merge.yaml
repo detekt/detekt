@@ -17,7 +17,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     if: "!contains(github.event.head_commit.message, 'ci skip')"
     env:
-      COMPILE_TEST_SNIPPETS: true
+      # We compile the test snippets only on Java 8.
+      COMPILE_TEST_SNIPPETS: ${{ matrix.jdk == 8 }}
       JDK_VERSION:  ${{ matrix.jdk }}
     steps:
     - name: Checkout Repo
