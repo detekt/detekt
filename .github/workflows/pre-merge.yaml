@@ -72,7 +72,7 @@ jobs:
     - name: Generate Coverage Report
       run: ./gradlew jacocoTestReport
     - name: Publish Coverage
-      uses: codecov/codecov-action@v1
+      run: bash <(curl -s https://codecov.io/bash)
 
     # We stop gradle at the end to make sure the cache folders
     # don't contain any lock files and are free to be cached.
