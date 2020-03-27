@@ -27,18 +27,14 @@ jobs:
 
     - name: Cache Gradle Caches
       uses: actions/cache@v1
-      env:
-        cache-name: cache-gradle-caches
       with:
         path: ~/.gradle/caches/
-        key: gradle-caches-${{ matrix.os }}-${{ matrix.jdk }}
+        key: cache-gradle-${{ matrix.os }}-${{ matrix.jdk }}
     - name: Cache Gradle Wrapper
       uses: actions/cache@v1
-      env:
-        cache-name: cache-gradle-wrapper
       with:
         path: ~/.gradle/wrapper/
-        key: gradle-wrapper-${{ matrix.os }}-${{ matrix.jdk }}
+        key: cache-wrapper-${{ matrix.os }}-${{ matrix.jdk }}
 
 
     - name: Setup Java
