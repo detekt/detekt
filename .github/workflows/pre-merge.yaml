@@ -77,5 +77,8 @@ jobs:
       run: ./gradlew jacocoTestReport
     - name: Publish Coverage
       uses: codecov/codecov-action@v1
+
+    # We stop gradle at the end to make sure the cache folders
+    # don't contain any lock files and are free to be cached.
     - name: Stop Gradle
       run: ./gradlew --stop
