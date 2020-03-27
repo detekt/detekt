@@ -1,9 +1,11 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.test.KtTestCompiler
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
 import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lint
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -11,6 +13,11 @@ import org.spekframework.spek2.style.specification.describe
 class UseDataClassSpec : Spek({
 
     val subject by memoized { UseDataClass(Config.empty) }
+
+    val wrapper by memoized(
+        factory = { KtTestCompiler.createEnvironment() },
+        destructor = { it.dispose() }
+    )
 
     describe("UseDataClass rule") {
 
@@ -134,6 +141,73 @@ class UseDataClassSpec : Spek({
                     }
                 """
                 assertThat(subject.compileAndLint(code)).hasSize(1)
+            }
+        }
+
+        describe("copy method") {
+
+            it("does report with copy method") {
+                val code = """
+                    class D(val a: Int, val b: String) {
+                        fun copy(a: Int, b: String): D = D(a, b)
+                    }
+                """
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+            }
+
+            it("does report with copy method which has implicit return type") {
+                val code = """
+                    class D(val a: Int, val b: String) {
+                        fun copy(a: Int, b: String) = D(a, b)
+                    }
+                """
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+            }
+
+            it("does not report with copy method which has no parameters") {
+                val code = """
+                    class D(val a: Int, val b: String) {
+                        fun copy(): D = D(0, "")
+                    }
+                """
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+            }
+
+            it("does not report with copy method which has parameters more than primary constructor") {
+                val code = """
+                    class D(val a: Int, val b: String) {
+                        fun copy(a: Int, b: String, c: String): D = D(a, b + c)
+                    }
+                """
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+            }
+
+            it("does not report with copy method which has different parameter types") {
+                val code = """
+                    class D(val a: Int, val b: String) {
+                        fun copy(a: Int, b: Int): D = D(a, b.toString())
+                    }
+                """
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+            }
+
+            it("does not report with copy method which has different parameter types 2") {
+                val code = """
+                    class D(val a: Int, val b: String) {
+                        fun copy(a: Int, b: String?): D = D(a, b.toString())
+                    }
+                """
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+            }
+
+            it("does not report with copy method which has different return type") {
+                val code = """
+                    class D(val a: Int, val b: String) {
+                        fun copy(a: Int, b: String) {
+                        }
+                    }
+                """
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
             }
         }
 
