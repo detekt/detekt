@@ -2,6 +2,7 @@ package io.gitlab.arturbosch.detekt.cli.runners
 
 import io.gitlab.arturbosch.detekt.cli.createCliArgs
 import io.gitlab.arturbosch.detekt.test.NullPrintStream
+import io.gitlab.arturbosch.detekt.test.createTempFileForTest
 import io.gitlab.arturbosch.detekt.test.resource
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -18,7 +19,7 @@ class SingleRuleRunnerSpec : Spek({
     describe("single rule runner") {
 
         it("should load and run custom rule") {
-            val tmp = Files.createTempFile("SingleRuleRunnerSpec", ".txt")
+            val tmp = createTempFileForTest("SingleRuleRunnerSpec", ".txt")
             val args = createCliArgs(
                 "--input", case.toString(),
                 "--report", "txt:$tmp",
