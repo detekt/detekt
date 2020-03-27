@@ -79,7 +79,7 @@ apply plugin: 'io.gitlab.arturbosch.detekt'
 ```groovy
 detekt {
     toolVersion = "[version]"                             // Version of the Detekt CLI that will be used. When unspecified the latest detekt version found will be used. Override to stay on the same version.
-    source = files(                                        // The directories where detekt looks for source files. Defaults to `files("src/main/java", "src/main/kotlin")`.
+    input = files(                                        // The directories where detekt looks for source files. Defaults to `files("src/main/java", "src/main/kotlin")`.
         "src/main/kotlin",
         "gensrc/main/kotlin"
     )
