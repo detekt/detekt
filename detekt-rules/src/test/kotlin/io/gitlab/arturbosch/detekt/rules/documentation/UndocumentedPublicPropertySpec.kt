@@ -11,9 +11,7 @@ class UndocumentedPublicPropertySpec : Spek({
     describe("UndocumentedPublicProperty rule") {
 
         it("reports undocumented public property") {
-            val code = """
-                val a = 1
-            """
+            val code = "val a = 1"
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
@@ -125,10 +123,12 @@ class UndocumentedPublicPropertySpec : Spek({
         it("does not report documented public properties in a primary constructor") {
             val code = """
                 /**
-                * @a int1
-                * [b] int2 
+                * @property a int1
+                * [b] int2
+                * @property [c] int3
+                * @param d int4
                 */
-                class Test(val a: Int, val b: Int)
+                class Test(val a: Int, val b: Int, val c: Int, val d: Int)
             """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
