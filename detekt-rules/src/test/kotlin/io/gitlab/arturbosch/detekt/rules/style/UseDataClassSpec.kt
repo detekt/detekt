@@ -155,7 +155,7 @@ class UseDataClassSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
             }
 
-            it("does report with copy method which has implicit return type") {
+            it("does report with copy method which has an implicit return type") {
                 val code = """
                     class D(val a: Int, val b: String) {
                         fun copy(a: Int, b: String) = D(a, b)
@@ -173,7 +173,7 @@ class UseDataClassSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
             }
 
-            it("does not report with copy method which has parameters more than primary constructor") {
+            it("does not report with copy method which has more parameters than the primary constructor") {
                 val code = """
                     class D(val a: Int, val b: String) {
                         fun copy(a: Int, b: String, c: String): D = D(a, b + c)
@@ -200,7 +200,7 @@ class UseDataClassSpec : Spek({
                 assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
             }
 
-            it("does not report with copy method which has different return type") {
+            it("does not report with copy method which has a different return type") {
                 val code = """
                     class D(val a: Int, val b: String) {
                         fun copy(a: Int, b: String) {
