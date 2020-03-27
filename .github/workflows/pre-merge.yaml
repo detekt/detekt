@@ -47,7 +47,7 @@ jobs:
 
 
     - name: Build detekt (UNIX)
-      run: ./gradlew build shadowJar --build-cache --parallel -PwarningsAsErrors=true -Pcompile-test-snippets=$COMPILE_TEST_SNIPPETS --scan
+      run: ./gradlew build shadowJar --build-cache --parallel -PwarningsAsErrors=true -Pcompile-test-snippets=$COMPILE_TEST_SNIPPETS
       if: matrix.os == 'macos-latest' || matrix.os == 'ubuntu-latest'
     - name: Run detekt-cli --help (UNIX)
       run: java -jar ./detekt-cli/build/libs/detekt-cli-*-all.jar --help
@@ -77,6 +77,6 @@ jobs:
 
 
     - name: Generate Coverage Report
-      run: ./gradlew jacocoTestReport --scan
+      run: ./gradlew jacocoTestReport
     - name: Publish Coverage
       uses: codecov/codecov-action@v1
