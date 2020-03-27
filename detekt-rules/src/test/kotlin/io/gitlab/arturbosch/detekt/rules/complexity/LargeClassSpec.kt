@@ -27,9 +27,11 @@ class LargeClassSpec : Spek({
 
                 fun f() {
                     println()
+                    println()
                 }
             """
-            assertThat(LargeClass().compileAndLint(code)).isEmpty()
+            val rule = LargeClass(threshold = 2)
+            assertThat(rule.compileAndLint(code)).isEmpty()
         }
     }
 })
