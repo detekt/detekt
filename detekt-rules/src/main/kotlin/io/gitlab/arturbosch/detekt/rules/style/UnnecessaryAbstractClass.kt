@@ -95,10 +95,10 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
     private inner class NamedClassMembers(val klass: KtClass, val namedMembers: List<PsiElement>) {
 
         fun detectAbstractAndConcreteType() {
-            val indexOfFirstAbstractMember = indexOfFirstMember(true)
-            if (indexOfFirstAbstractMember == -1 && !hasInheritedAbstractMember()) {
+            val firstAbstractMemberIndex = indexOfFirstMember(true)
+            if (firstAbstractMemberIndex == -1 && !hasInheritedMember(true)) {
                 report(CodeSmell(issue, Entity.from(klass), noAbstractMember), klass)
-            } else if (isAbstractClassWithoutConcreteMembers(indexOfFirstAbstractMember)) {
+            } else if (isAbstractClassWithoutConcreteMembers(firstAbstractMemberIndex) && !hasInheritedMember(false)) {
                 report(CodeSmell(issue, Entity.from(klass), noConcreteMember), klass)
             }
         }
@@ -111,14 +111,14 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
 
         private fun hasNoConcreteMemberLeft() = indexOfFirstMember(false, namedMembers.drop(1)) == -1
 
-        private fun hasInheritedAbstractMember(): Boolean {
+        private fun hasInheritedMember(isAbstract: Boolean): Boolean {
             return when {
                 klass.superTypeListEntries.isEmpty() -> false
                 bindingContext == BindingContext.EMPTY -> true
                 else -> {
                     val descriptor = bindingContext[BindingContext.DECLARATION_TO_DESCRIPTOR, klass] as? ClassDescriptor
                     descriptor?.unsubstitutedMemberScope?.getContributedDescriptors().orEmpty().any {
-                        (it as? MemberDescriptor)?.modality == Modality.ABSTRACT
+                        (it as? MemberDescriptor)?.modality == Modality.ABSTRACT == isAbstract
                     }
                 }
             }
