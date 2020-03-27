@@ -6,7 +6,7 @@
 # http://benlimmer.com/2013/12/26/automatically-publish-javadoc-to-gh-pages-with-travis-ci/ and
 # https://github.com/JakeWharton/RxBinding/blob/master/.buildscript/deploy_snapshot.sh
 #
-# Now is has been adapted to work with Github Actions.
+# Now it has been adapted to work with Github Actions.
 
 SLUG="arturbosch/detekt"
 JDK="8"
