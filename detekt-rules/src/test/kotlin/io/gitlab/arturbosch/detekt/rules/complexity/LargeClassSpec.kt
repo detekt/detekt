@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.complexity
 import io.gitlab.arturbosch.detekt.api.SourceLocation
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.test.assertThat
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.lint
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -20,8 +21,17 @@ class LargeClassSpec : Spek({
 
     describe("files without classes should not be considered") {
 
-        it("should not report anything in large files without classes") {
-            assertThat(LargeClass().lint(Case.NoClasses.path())).isEmpty()
+        it("should not report anything in files without classes") {
+            val code = """
+                val i = 0 
+
+                fun f() {
+                    println()
+                    println()
+                }
+            """
+            val rule = LargeClass(threshold = 2)
+            assertThat(rule.compileAndLint(code)).isEmpty()
         }
     }
 })
