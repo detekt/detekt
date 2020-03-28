@@ -24,17 +24,25 @@ jobs:
     - name: Checkout Repo
       uses: actions/checkout@v2
 
+      # Let's cleanup the gradle cache folders to make sure
+      # we don't accidentally cache stale files.
+    - name: Cleanup Gradle Folders
+      shell: bash
+      run: |
+        rm -rf ~/.gradle/caches/ && \
+        rm -rf ~/.gradle/wrapper/
+
 
     - name: Cache Gradle Caches
       uses: actions/cache@v1
       with:
         path: ~/.gradle/caches/
-        key: cache-gradle-${{ matrix.os }}-${{ matrix.jdk }}
+        key: cache-clean-gradle-${{ matrix.os }}-${{ matrix.jdk }}
     - name: Cache Gradle Wrapper
       uses: actions/cache@v1
       with:
         path: ~/.gradle/wrapper/
-        key: cache-wrapper-${{ matrix.os }}-${{ matrix.jdk }}
+        key: cache-clean-wrapper-${{ matrix.os }}-${{ matrix.jdk }}
 
 
     - name: Setup Java
