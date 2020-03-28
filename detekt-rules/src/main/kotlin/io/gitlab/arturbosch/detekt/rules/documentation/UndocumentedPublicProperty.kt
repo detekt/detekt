@@ -45,7 +45,12 @@ class UndocumentedPublicProperty(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun KtParameter.isUndocumented(comment: String?) =
-        comment == null || !comment.contains("[$nameAsSafeName]") && !comment.contains("@$nameAsSafeName")
+        comment == null || isNotReferenced(comment)
+
+    private fun KtParameter.isNotReferenced(comment: String): Boolean {
+        val name = nameAsSafeName
+        return !comment.contains("[$name]") && !comment.contains("@property $name") && !comment.contains("@param $name")
+    }
 
     private fun KtProperty.shouldBeDocumented() =
         (isTopLevel || containingClass()?.isPublic == true) && isPublicNotOverridden()
