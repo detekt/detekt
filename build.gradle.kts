@@ -28,33 +28,14 @@ buildScan {
     termsOfServiceAgree = "yes"
 }
 
+val projectJvmTarget = "1.8"
+
 val detektVersion: String by project
 val assertjVersion: String by project
 val spekVersion: String by project
 val reflectionsVersion: String by project
 val mockkVersion: String by project
 val junitPlatformVersion: String by project
-val jacocoVersion: String by project
-
-jacoco.toolVersion = jacocoVersion
-
-tasks {
-    jacocoTestReport {
-        executionData.setFrom(fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec"))
-
-        subprojects
-            .filterNot { it.name in listOf("detekt-test", "detekt-sample-extensions") }
-            .forEach {
-                this@jacocoTestReport.sourceSets(it.sourceSets.main.get())
-                this@jacocoTestReport.dependsOn(it.tasks.test)
-            }
-
-        reports {
-            xml.isEnabled = true
-            xml.destination = file("$buildDir/reports/jacoco/report.xml")
-        }
-    }
-}
 
 fun versionOrSnapshot(): String {
     if (System.getProperty("snapshot")?.toBoolean() == true) {
@@ -79,53 +60,6 @@ subprojects {
     apply {
         plugin("java-library")
         plugin("kotlin")
-        plugin("com.jfrog.bintray")
-        plugin("com.jfrog.artifactory")
-        plugin("maven-publish")
-        plugin("io.gitlab.arturbosch.detekt")
-    }
-
-    if (project.name !in listOf("detekt-test", "detekt-sample-extensions")) {
-        apply {
-            plugin("jacoco")
-        }
-        jacoco.toolVersion = jacocoVersion
-    }
-
-    val projectJvmTarget = "1.8"
-
-    tasks.withType<Detekt> {
-        jvmTarget = projectJvmTarget
-    }
-
-    val userHome = System.getProperty("user.home")
-
-    detekt {
-        buildUponDefaultConfig = true
-        baseline = file("$rootDir/config/detekt/baseline.xml")
-
-        reports {
-            xml.enabled = true
-            html.enabled = true
-            txt.enabled = true
-        }
-
-        idea {
-            path = "$userHome/.idea"
-            codeStyleScheme = "$userHome/.idea/idea-code-style.xml"
-            inspectionsProfile = "$userHome/.idea/inspect.xml"
-            report = "project.projectDir/reports"
-            mask = "*.kt"
-        }
-    }
-
-    val shadowedProjects = listOf("detekt-cli", "detekt-generator")
-
-    if (project.name in shadowedProjects) {
-        apply {
-            plugin("application")
-            plugin("com.github.johnrengelman.shadow")
-        }
     }
 
     tasks.withType<Test> {
@@ -154,18 +88,80 @@ subprojects {
 
     tasks.withType<KotlinCompile> {
         kotlinOptions.jvmTarget = projectJvmTarget
-        // https://youtrack.jetbrains.com/issue/KT-24946
         kotlinOptions.freeCompilerArgs = listOf(
             "-progressive",
-            "-Xskip-runtime-version-check",
-            "-Xdisable-default-scripting-plugin",
             "-Xopt-in=kotlin.RequiresOptIn"
         )
-        kotlinOptions.allWarningsAsErrors = shouldTreatCompilerWarningsAsErrors()
+        // Usage: <code>./gradlew build -PwarningsAsErrors=true</code>.
+        kotlinOptions.allWarningsAsErrors = project.findProperty("warningsAsErrors") == "true"
     }
 
-    val bintrayUser = findProperty("bintrayUser")?.toString() ?: System.getenv("BINTRAY_USER")
-    val bintrayKey = findProperty("bintrayKey")?.toString() ?: System.getenv("BINTRAY_API_KEY")
+    dependencies {
+        compileOnly(kotlin("stdlib-jdk8"))
+
+        testImplementation("org.assertj:assertj-core:$assertjVersion")
+        testImplementation("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
+        testImplementation("org.reflections:reflections:$reflectionsVersion")
+        testImplementation("io.mockk:mockk:$mockkVersion")
+
+        testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
+        testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spekVersion")
+    }
+}
+
+// fat jar applications
+
+configure(listOf(project(":detekt-cli"), project(":detekt-generator"))) {
+    apply {
+        plugin("application")
+        plugin("com.github.johnrengelman.shadow")
+    }
+}
+
+// jacoco code coverage section
+
+val jacocoVersion: String by project
+jacoco.toolVersion = jacocoVersion
+
+tasks {
+    jacocoTestReport {
+        executionData.setFrom(fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec"))
+
+        subprojects
+            .filterNot { it.name in setOf("detekt-test", "detekt-sample-extensions") }
+            .forEach {
+                this@jacocoTestReport.sourceSets(it.sourceSets.main.get())
+                this@jacocoTestReport.dependsOn(it.tasks.test)
+            }
+
+        reports {
+            xml.isEnabled = true
+            xml.destination = file("$buildDir/reports/jacoco/report.xml")
+        }
+    }
+}
+
+configure(listOf(project(":detekt-test"), project(":detekt-sample-extensions"))) {
+    apply {
+        plugin("jacoco")
+    }
+    jacoco.toolVersion = jacocoVersion
+}
+
+// publishing section
+
+subprojects {
+
+    apply {
+        plugin("com.jfrog.bintray")
+        plugin("com.jfrog.artifactory")
+        plugin("maven-publish")
+    }
+
+    val bintrayUser = findProperty("bintrayUser")?.toString()
+        ?: System.getenv("BINTRAY_USER")
+    val bintrayKey = findProperty("bintrayKey")?.toString()
+        ?: System.getenv("BINTRAY_API_KEY")
     val detektPublication = "DetektPublication"
 
     bintray {
@@ -269,47 +265,73 @@ subprojects {
             })
         })
     }
+}
 
-    dependencies {
-        compileOnly(kotlin("stdlib-jdk8"))
+// detekt self analysis section
 
-        detekt(project(":detekt-cli"))
-        detektPlugins(project(":detekt-formatting"))
+val analysisDir = files(projectDir)
+val baselineFile = file("$rootDir/config/detekt/baseline.xml")
+val formatConfigFile = files("$rootDir/config/detekt/format.yml")
+val configFiles = files("$rootDir/config/detekt/detekt.yml")
 
-        testImplementation("org.assertj:assertj-core:$assertjVersion")
-        testImplementation("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
-        testImplementation("org.reflections:reflections:$reflectionsVersion")
-        testImplementation("io.mockk:mockk:$mockkVersion")
+val kotlinFiles = "**/*.kt"
+val kotlinScriptFiles = "**/*.kts"
+val resourceFiles = "**/resources/**"
+val buildFiles = "**/build/**"
 
-        testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
-        testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spekVersion")
+subprojects {
+
+    apply {
+        plugin("io.gitlab.arturbosch.detekt")
+    }
+
+    tasks.withType<Detekt> {
+        jvmTarget = projectJvmTarget
+    }
+
+    val userHome = System.getProperty("user.home")
+
+    detekt {
+        buildUponDefaultConfig = true
+        baseline = baselineFile
+
+        reports {
+            xml.enabled = true
+            html.enabled = true
+            txt.enabled = true
+        }
+
+        idea {
+            path = "$userHome/.idea"
+            codeStyleScheme = "$userHome/.idea/idea-code-style.xml"
+            inspectionsProfile = "$userHome/.idea/inspect.xml"
+            report = "${project.projectDir}/reports"
+            mask = "*.kt"
+        }
     }
 }
 
-/**
- * Usage: <code>./gradlew build -PwarningsAsErrors=true</code>.
- */
-fun shouldTreatCompilerWarningsAsErrors(): Boolean {
-    return project.findProperty("warningsAsErrors") == "true"
-}
+allprojects {
 
-dependencies {
-    detekt(project(":detekt-cli"))
-    detektPlugins(project(":detekt-formatting"))
+    dependencies {
+        detekt(project(":detekt-cli"))
+        detektPlugins(project(":detekt-formatting"))
+    }
 }
 
 val detektFormat by tasks.registering(Detekt::class) {
-    description = "Reformats whole code base."
+    description = "Formats whole project."
     parallel = true
     disableDefaultRuleSets = true
     buildUponDefaultConfig = true
     autoCorrect = true
-    setSource(files(projectDir))
-    include("**/*.kt")
-    include("**/*.kts")
-    exclude("**/resources/**")
-    exclude("**/build/**")
-    config.setFrom(files("$rootDir/config/detekt/format.yml"))
+    setSource(analysisDir)
+    include(kotlinFiles)
+    include(kotlinScriptFiles)
+    exclude(resourceFiles)
+    exclude(buildFiles)
+    config.setFrom(formatConfigFile)
+    baseline.set(baselineFile)
     reports {
         xml.enabled = false
         html.enabled = false
@@ -318,15 +340,15 @@ val detektFormat by tasks.registering(Detekt::class) {
 }
 
 val detektAll by tasks.registering(Detekt::class) {
-    description = "Runs over whole code base without the starting overhead for each module."
+    description = "Runs the whole project at once."
     parallel = true
     buildUponDefaultConfig = true
-    setSource(files(projectDir))
-    include("**/*.kt")
-    include("**/*.kts")
-    exclude("**/resources/**")
-    exclude("**/build/**")
-    baseline.set(file("$rootDir/config/detekt/baseline.xml"))
+    setSource(analysisDir)
+    include(kotlinFiles)
+    include(kotlinScriptFiles)
+    exclude(resourceFiles)
+    exclude(buildFiles)
+    baseline.set(baselineFile)
     reports {
         xml.enabled = false
         html.enabled = false
@@ -339,13 +361,13 @@ val detektProjectBaseline by tasks.registering(DetektCreateBaselineTask::class) 
     buildUponDefaultConfig.set(true)
     ignoreFailures.set(true)
     parallel.set(true)
-    setSource(files(rootDir))
-    config.setFrom(files("$rootDir/config/detekt/detekt.yml"))
-    baseline.set(file("$rootDir/config/detekt/baseline.xml"))
-    include("**/*.kt")
-    include("**/*.kts")
-    exclude("**/resources/**")
-    exclude("**/build/**")
+    setSource(analysisDir)
+    include(kotlinFiles)
+    include(kotlinScriptFiles)
+    exclude(resourceFiles)
+    exclude(buildFiles)
+    baseline.set(baselineFile)
+    config.setFrom(configFiles)
 }
 
 // release section
