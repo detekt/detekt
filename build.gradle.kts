@@ -271,7 +271,7 @@ subprojects {
     }
 
     dependencies {
-        implementation(kotlin("stdlib"))
+        compileOnly(kotlin("stdlib-jdk8"))
 
         detekt(project(":detekt-cli"))
         detektPlugins(project(":detekt-formatting"))

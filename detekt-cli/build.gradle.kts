@@ -4,12 +4,16 @@ application {
 
 val jcommanderVersion: String by project
 val detektVersion: String by project
+val kotlinxHtmlJvmVersion: String by project
 
 dependencies {
+    implementation(kotlin("stdlib-jdk8"))
     implementation(project(":detekt-core"))
     runtimeOnly(project(":detekt-rules"))
     implementation("com.beust:jcommander:$jcommanderVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:$kotlinxHtmlJvmVersion") {
+        exclude(group = "org.jetbrains.kotlin")
+    }
 
     testImplementation(project(":detekt-test"))
     testImplementation(project(":detekt-rules"))

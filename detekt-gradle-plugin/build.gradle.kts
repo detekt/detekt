@@ -1,6 +1,3 @@
-import org.gradle.api.tasks.testing.logging.TestExceptionFormat
-import org.gradle.api.tasks.testing.logging.TestLogEvent
-
 plugins {
     `java-gradle-plugin`
     id("com.gradle.plugin-publish") version "0.11.0"
