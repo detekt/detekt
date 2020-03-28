@@ -87,17 +87,13 @@ Following warning is expected until [Jekyll](https://github.com/jekyll/jekyll/is
 - Make changes to the Gradle plugin and add tests
 - Verify with `gradle detekt`
 
-### Release checklist
+### Release process
 
-- add changes in CHANGELOG.md -> `groovy github-milestone-report.groovy arturbosch detekt [milestone-number]`
-- migrations expected? -> Add `Migration` sub-section
-- important non-breaking changes? Add `Notable Changes` sub-section
-- all new contributors mentioned? -> README.md>Contributors, Update `all contributors`-Badge
-
-#### Releasing process
-
+- `groovy scripts/github-milestone-report.groovy` - creates changelog
 - Increment `detektVersion` in `gradle.properties`
-- `gradle build publishToMavenLocal`
-- Increment version of the Gradle Plugin
-- `gradle bU` - uploads artifacts to Bintray
-- `gradle pluPub` - uploads the Gradle Plugin to the Plugin Repositories
+- `gradle build publishToMavenLocal -x detekt -x test`
+- `gradle test detekt`
+- `gradle bintrayUpload` - uploads artifacts to Bintray
+- `gradle publishPlugins` - uploads the Gradle Plugin to the Plugin Repositories
+- `gradle githubRelease` - creates a tag for the current version with changelog and cli jar
+- Increment `detektAnalysisVersion` in `gradle.properties` to use newest plugin version on CI
