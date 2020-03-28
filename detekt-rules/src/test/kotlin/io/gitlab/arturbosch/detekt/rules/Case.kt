@@ -33,7 +33,6 @@ enum class Case(val file: String) {
     MaxLineLength("/cases/MaxLineLength.kt"),
     MaxLineLengthSuppressed("/cases/MaxLineLengthSuppressed.kt"),
     MaxLineLengthWithLongComments("/cases/MaxLineLengthWithLongComments.kt"),
-    MemberNameEqualsClassNameNegative("/cases/MemberNameEqualsClassNameNegative.kt"),
     NestedClasses("/cases/NestedClasses.kt"),
     UnreachableCode("/cases/UnreachableCode.kt"),
     UtilityClassesPositive("/cases/UtilityClassesPositive.kt"),
