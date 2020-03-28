@@ -34,7 +34,7 @@ interface DetektInputPathConverter<T> : IStringConverter<List<T>> {
             .map { converter.convert(it) }
             .toList()
             .takeIf { it.isNotEmpty() }
-            ?: throw IllegalStateException("Given input '$value' was impossible to parse!")
+            ?: error("Given input '$value' was impossible to parse!")
 }
 
 class MultipleClasspathResourceConverter : DetektInputPathConverter<URL> {

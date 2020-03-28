@@ -59,7 +59,7 @@ class ConfigAssert(
     }
 
     private fun getYmlRuleConfig() = config.subConfig(name) as? YamlConfig
-        ?: throw IllegalStateException("yaml config expected but got ${config.javaClass}")
+        ?: error("yaml config expected but got ${config.javaClass}")
 
     private fun getRuleClasses(): List<Class<out Rule>> {
         return Reflections(packageName)

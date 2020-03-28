@@ -14,7 +14,7 @@ inline fun <reified T : Args> parseArguments(
     val cli = T::class.java.declaredConstructors
         .firstOrNull()
         ?.newInstance() as? T
-        ?: throw IllegalStateException("Could not create Args object for class ${T::class.java}")
+        ?: error("Could not create Args object for class ${T::class.java}")
 
     val jCommander = JCommander()
 

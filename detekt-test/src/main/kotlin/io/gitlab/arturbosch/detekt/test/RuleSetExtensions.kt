@@ -10,4 +10,4 @@ import io.gitlab.arturbosch.detekt.core.rules.createRuleSet
 inline fun <reified T : RuleSetProvider> loadRuleSet(config: Config = Config.empty) =
     (T::class.java.constructors[0].newInstance() as? T)
         ?.createRuleSet(config)
-        ?: throw IllegalStateException("Could not load RuleSet for '${T::class.java}'")
+        ?: error("Could not load RuleSet for '${T::class.java}'")

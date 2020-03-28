@@ -38,7 +38,7 @@ object KtTestCompiler : KtCompiler() {
             KotlinLanguage.INSTANCE,
             StringUtilRt.convertLineSeparators(content)) as? KtFile
         file?.putUserData(ABSOLUTE_PATH, filename)
-        return file ?: throw IllegalStateException("kotlin file expected")
+        return file ?: error("kotlin file expected")
     }
 
     fun getContextForPaths(environment: KotlinCoreEnvironment, paths: List<KtFile>) =

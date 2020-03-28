@@ -52,9 +52,12 @@ class StringLiteralDuplication(
     threshold: Int = DEFAULT_DUPLICATION
 ) : ThresholdRule(config, threshold) {
 
-    override val issue = Issue(javaClass.simpleName, Severity.Maintainability,
-            "Multiple occurrences of the same string literal within a single file detected.",
-            Debt.FIVE_MINS)
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Maintainability,
+        "Multiple occurrences of the same string literal within a single file detected.",
+        Debt.FIVE_MINS
+    )
 
     private val ignoreAnnotation = valueOrDefault(IGNORE_ANNOTATION, true)
     private val excludeStringsWithLessThan5Characters = valueOrDefault(EXCLUDE_SHORT_STRING, true)
@@ -67,10 +70,11 @@ class StringLiteralDuplication(
         for ((name, value) in visitor.getLiteralsOverThreshold()) {
             val (main, references) = visitor.entitiesForLiteral(name)
             report(ThresholdedCodeSmell(issue,
-                    main,
-                    Metric(type + name, value, threshold),
-                    issue.description,
-                    references))
+                main,
+                Metric(type + name, value, threshold),
+                issue.description,
+                references)
+            )
         }
     }
 
@@ -88,7 +92,7 @@ class StringLiteralDuplication(
                 val referenceEntities = references.subList(1, references.size)
                 return Entity.from(mainEntity) to referenceEntities.map { Entity.from(it) }
             }
-            throw IllegalStateException("No KtElements for literal '$literal' found!")
+            error("No KtElements for literal '$literal' found!")
         }
 
         override fun visitStringTemplateExpression(expression: KtStringTemplateExpression) {

@@ -42,7 +42,7 @@ open class KtCompiler(
             true, true, false,
             LightVirtualFile(path.toString())
         )
-        return psiFile as? KtFile ?: throw IllegalStateException("kotlin file expected")
+        return psiFile as? KtFile ?: error("kotlin file expected")
     }
 }
 
