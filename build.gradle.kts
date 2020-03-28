@@ -36,27 +36,6 @@ val spekVersion: String by project
 val reflectionsVersion: String by project
 val mockkVersion: String by project
 val junitPlatformVersion: String by project
-val jacocoVersion: String by project
-
-jacoco.toolVersion = jacocoVersion
-
-tasks {
-    jacocoTestReport {
-        executionData.setFrom(fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec"))
-
-        subprojects
-            .filterNot { it.name in setOf("detekt-test", "detekt-sample-extensions") }
-            .forEach {
-                this@jacocoTestReport.sourceSets(it.sourceSets.main.get())
-                this@jacocoTestReport.dependsOn(it.tasks.test)
-            }
-
-        reports {
-            xml.isEnabled = true
-            xml.destination = file("$buildDir/reports/jacoco/report.xml")
-        }
-    }
-}
 
 fun versionOrSnapshot(): String {
     if (System.getProperty("snapshot")?.toBoolean() == true) {
@@ -81,13 +60,6 @@ subprojects {
     apply {
         plugin("java-library")
         plugin("kotlin")
-    }
-
-    if (project.name !in setOf("detekt-test", "detekt-sample-extensions")) {
-        apply {
-            plugin("jacoco")
-        }
-        jacoco.toolVersion = jacocoVersion
     }
 
     tasks.withType<Test> {
@@ -144,6 +116,36 @@ configure(listOf(project(":detekt-cli"), project(":detekt-generator"))) {
         plugin("application")
         plugin("com.github.johnrengelman.shadow")
     }
+}
+
+// jacoco code coverage section
+
+val jacocoVersion: String by project
+jacoco.toolVersion = jacocoVersion
+
+tasks {
+    jacocoTestReport {
+        executionData.setFrom(fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec"))
+
+        subprojects
+            .filterNot { it.name in setOf("detekt-test", "detekt-sample-extensions") }
+            .forEach {
+                this@jacocoTestReport.sourceSets(it.sourceSets.main.get())
+                this@jacocoTestReport.dependsOn(it.tasks.test)
+            }
+
+        reports {
+            xml.isEnabled = true
+            xml.destination = file("$buildDir/reports/jacoco/report.xml")
+        }
+    }
+}
+
+configure(listOf(project(":detekt-test"), project(":detekt-sample-extensions"))) {
+    apply {
+        plugin("jacoco")
+    }
+    jacoco.toolVersion = jacocoVersion
 }
 
 // publishing section
