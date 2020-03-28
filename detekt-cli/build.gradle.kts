@@ -6,6 +6,7 @@ val jcommanderVersion: String by project
 val detektVersion: String by project
 
 dependencies {
+    implementation(kotlin("stdlib-jdk8"))
     implementation(project(":detekt-core"))
     runtimeOnly(project(":detekt-rules"))
     implementation("com.beust:jcommander:$jcommanderVersion")
