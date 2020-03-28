@@ -81,25 +81,13 @@ subprojects {
     apply {
         plugin("java-library")
         plugin("kotlin")
-        plugin("com.jfrog.bintray")
-        plugin("com.jfrog.artifactory")
-        plugin("maven-publish")
     }
 
-    if (project.name !in listOf("detekt-test", "detekt-sample-extensions")) {
+    if (project.name !in setOf("detekt-test", "detekt-sample-extensions")) {
         apply {
             plugin("jacoco")
         }
         jacoco.toolVersion = jacocoVersion
-    }
-
-    val shadowedProjects = listOf("detekt-cli", "detekt-generator")
-
-    if (project.name in shadowedProjects) {
-        apply {
-            plugin("application")
-            plugin("com.github.johnrengelman.shadow")
-        }
     }
 
     tasks.withType<Test> {
@@ -128,18 +116,50 @@ subprojects {
 
     tasks.withType<KotlinCompile> {
         kotlinOptions.jvmTarget = projectJvmTarget
-        // https://youtrack.jetbrains.com/issue/KT-24946
         kotlinOptions.freeCompilerArgs = listOf(
             "-progressive",
-            "-Xskip-runtime-version-check",
-            "-Xdisable-default-scripting-plugin",
             "-Xopt-in=kotlin.RequiresOptIn"
         )
-        kotlinOptions.allWarningsAsErrors = shouldTreatCompilerWarningsAsErrors()
+        // Usage: <code>./gradlew build -PwarningsAsErrors=true</code>.
+        kotlinOptions.allWarningsAsErrors = project.findProperty("warningsAsErrors") == "true"
     }
 
-    val bintrayUser = findProperty("bintrayUser")?.toString() ?: System.getenv("BINTRAY_USER")
-    val bintrayKey = findProperty("bintrayKey")?.toString() ?: System.getenv("BINTRAY_API_KEY")
+    dependencies {
+        compileOnly(kotlin("stdlib-jdk8"))
+
+        testImplementation("org.assertj:assertj-core:$assertjVersion")
+        testImplementation("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
+        testImplementation("org.reflections:reflections:$reflectionsVersion")
+        testImplementation("io.mockk:mockk:$mockkVersion")
+
+        testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
+        testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spekVersion")
+    }
+}
+
+// fat jar applications
+
+configure(listOf(project(":detekt-cli"), project(":detekt-generator"))) {
+    apply {
+        plugin("application")
+        plugin("com.github.johnrengelman.shadow")
+    }
+}
+
+// publishing section
+
+subprojects {
+
+    apply {
+        plugin("com.jfrog.bintray")
+        plugin("com.jfrog.artifactory")
+        plugin("maven-publish")
+    }
+
+    val bintrayUser = findProperty("bintrayUser")?.toString()
+        ?: System.getenv("BINTRAY_USER")
+    val bintrayKey = findProperty("bintrayKey")?.toString()
+        ?: System.getenv("BINTRAY_API_KEY")
     val detektPublication = "DetektPublication"
 
     bintray {
@@ -243,25 +263,7 @@ subprojects {
             })
         })
     }
-
-    dependencies {
-        compileOnly(kotlin("stdlib-jdk8"))
-
-        testImplementation("org.assertj:assertj-core:$assertjVersion")
-        testImplementation("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
-        testImplementation("org.reflections:reflections:$reflectionsVersion")
-        testImplementation("io.mockk:mockk:$mockkVersion")
-
-        testRuntimeOnly("org.junit.platform:junit-platform-launcher:$junitPlatformVersion")
-        testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:$spekVersion")
-    }
 }
-
-/**
- * Usage: <code>./gradlew build -PwarningsAsErrors=true</code>.
- */
-fun shouldTreatCompilerWarningsAsErrors(): Boolean =
-    project.findProperty("warningsAsErrors") == "true"
 
 // detekt self analysis section
 
