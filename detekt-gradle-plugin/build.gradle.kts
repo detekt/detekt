@@ -9,6 +9,8 @@ plugins {
 dependencies {
     implementation(kotlin("gradle-plugin"))
     implementation(kotlin("gradle-plugin-api"))
+
+    testImplementation(project(":detekt-test"))
 }
 
 gradlePlugin {

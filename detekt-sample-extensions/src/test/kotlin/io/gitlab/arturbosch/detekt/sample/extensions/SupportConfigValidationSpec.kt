@@ -5,16 +5,16 @@ import io.gitlab.arturbosch.detekt.cli.config.InvalidConfig
 import io.gitlab.arturbosch.detekt.cli.console.red
 import io.gitlab.arturbosch.detekt.cli.runners.Runner
 import io.gitlab.arturbosch.detekt.test.NullPrintStream
+import io.gitlab.arturbosch.detekt.test.createTempDirectoryForTest
 import org.assertj.core.api.Assertions.assertThatCode
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
-import java.nio.file.Files
 
 class SupportConfigValidationSpec : Spek({
 
     describe("support config validation") {
 
-        val testDir = Files.createTempDirectory("detekt-sample")
+        val testDir = createTempDirectoryForTest("detekt-sample")
 
         context("failing cases") {
             arrayOf(
