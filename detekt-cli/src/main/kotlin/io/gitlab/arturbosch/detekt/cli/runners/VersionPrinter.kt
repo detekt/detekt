@@ -10,7 +10,7 @@ class VersionPrinter(private val outputPrinter: PrintStream) : Executable {
         if (version != null) {
             outputPrinter.println(version)
         } else {
-            throw IllegalStateException("Can't find the detekt version")
+            error("Can't find the detekt version")
         }
     }
 }

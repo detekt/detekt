@@ -37,8 +37,12 @@ data class Metric(
      */
     fun doubleThreshold(): Double = threshold.convertAsDouble()
 
-    private fun Int.convertAsDouble(): Double = if (isDouble) this.toDouble() / conversionFactor
-    else throw IllegalStateException("This metric was not marked as double!")
+    private fun Int.convertAsDouble(): Double =
+        if (isDouble) {
+            this.toDouble() / conversionFactor
+        } else {
+            error("This metric was not marked as double!")
+        }
 
     override fun toString(): String = if (isDouble) "${doubleValue()}/${doubleThreshold()}" else "$value/$threshold"
 }
