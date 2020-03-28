@@ -5,6 +5,31 @@ keywords: changelog, release-notes, migration
 permalink: changelog.html
 toc: true
 ---
+
+#### 1.7.2
+
+##### Changelog
+
+- Remove ignore:AppVeyor from codecov config - [#2540](https://github.com/arturbosch/detekt/pull/2540)
+- Use kotlin-stdlib-jdk8 to reduce dependency conflicts - #2527 - [#2538](https://github.com/arturbosch/detekt/pull/2538)
+- Update Gradle plugin-publish to 0.11.0 - [#2537](https://github.com/arturbosch/detekt/pull/2537)
+- Delete created temp dir automatically on JVM exit - [#2536](https://github.com/arturbosch/detekt/pull/2536)
+- Delete created temp file automatically on JVM exit - [#2535](https://github.com/arturbosch/detekt/pull/2535)
+- Refactor MemberNameEqualsClassNameSpec tests - [#2534](https://github.com/arturbosch/detekt/pull/2534)
+- Fix UnnecessaryAbstractClass false-positive - [#2533](https://github.com/arturbosch/detekt/pull/2533)
+- Update GroovyDSL doc to mention input - [#2532](https://github.com/arturbosch/detekt/pull/2532)
+- Update KotlinDSL doc to mention input - [#2531](https://github.com/arturbosch/detekt/pull/2531)
+- Fix report for documented data classes property - [#2530](https://github.com/arturbosch/detekt/pull/2530)
+- UndocumentedPublicProperty reported for documented data classes property - [#2529](https://github.com/arturbosch/detekt/issues/2529)
+- Detekt using gradle documentation out of data - [#2528](https://github.com/arturbosch/detekt/issues/2528)
+- 1.7.1 does not depend on Kotlin 1.3.71 - [#2527](https://github.com/arturbosch/detekt/issues/2527)
+- UnnecessaryAbstractClass false positive for abstractproperties - [#2526](https://github.com/arturbosch/detekt/issues/2526)
+- Do not fail the build on config property warnings/deprecations - #2523 - [#2525](https://github.com/arturbosch/detekt/pull/2525)
+- regression 1.7.1, threshhold does not exist - [#2523](https://github.com/arturbosch/detekt/issues/2523)
+- Setup GitHub Actions - [#2512](https://github.com/arturbosch/detekt/pull/2512)
+
+See all issues at: [1.7.2](https://github.com/arturbosch/detekt/milestone/61)
+
 #### 1.7.1
 
 ##### Changelog
