@@ -45,7 +45,7 @@ tasks {
         executionData.setFrom(fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec"))
 
         subprojects
-            .filterNot { it.name in listOf("detekt-test", "detekt-sample-extensions") }
+            .filterNot { it.name in setOf("detekt-test", "detekt-sample-extensions") }
             .forEach {
                 this@jacocoTestReport.sourceSets(it.sourceSets.main.get())
                 this@jacocoTestReport.dependsOn(it.tasks.test)
@@ -267,6 +267,16 @@ subprojects {
 
 // detekt self analysis section
 
+val analysisDir = files(projectDir)
+val baselineFile = file("$rootDir/config/detekt/baseline.xml")
+val formatConfigFile = files("$rootDir/config/detekt/format.yml")
+val configFiles = files("$rootDir/config/detekt/detekt.yml")
+
+val kotlinFiles = "**/*.kt"
+val kotlinScriptFiles = "**/*.kts"
+val resourceFiles = "**/resources/**"
+val buildFiles = "**/build/**"
+
 subprojects {
 
     apply {
@@ -281,7 +291,7 @@ subprojects {
 
     detekt {
         buildUponDefaultConfig = true
-        baseline = file("$rootDir/config/detekt/baseline.xml")
+        baseline = baselineFile
 
         reports {
             xml.enabled = true
@@ -308,17 +318,18 @@ allprojects {
 }
 
 val detektFormat by tasks.registering(Detekt::class) {
-    description = "Reformats whole code base."
+    description = "Formats whole project."
     parallel = true
     disableDefaultRuleSets = true
     buildUponDefaultConfig = true
     autoCorrect = true
-    setSource(files(projectDir))
-    include("**/*.kt")
-    include("**/*.kts")
-    exclude("**/resources/**")
-    exclude("**/build/**")
-    config.setFrom(files("$rootDir/config/detekt/format.yml"))
+    setSource(analysisDir)
+    include(kotlinFiles)
+    include(kotlinScriptFiles)
+    exclude(resourceFiles)
+    exclude(buildFiles)
+    config.setFrom(formatConfigFile)
+    baseline.set(baselineFile)
     reports {
         xml.enabled = false
         html.enabled = false
@@ -327,15 +338,15 @@ val detektFormat by tasks.registering(Detekt::class) {
 }
 
 val detektAll by tasks.registering(Detekt::class) {
-    description = "Runs over whole code base without the starting overhead for each module."
+    description = "Runs the whole project at once."
     parallel = true
     buildUponDefaultConfig = true
-    setSource(files(projectDir))
-    include("**/*.kt")
-    include("**/*.kts")
-    exclude("**/resources/**")
-    exclude("**/build/**")
-    baseline.set(file("$rootDir/config/detekt/baseline.xml"))
+    setSource(analysisDir)
+    include(kotlinFiles)
+    include(kotlinScriptFiles)
+    exclude(resourceFiles)
+    exclude(buildFiles)
+    baseline.set(baselineFile)
     reports {
         xml.enabled = false
         html.enabled = false
@@ -348,13 +359,13 @@ val detektProjectBaseline by tasks.registering(DetektCreateBaselineTask::class) 
     buildUponDefaultConfig.set(true)
     ignoreFailures.set(true)
     parallel.set(true)
-    setSource(files(rootDir))
-    config.setFrom(files("$rootDir/config/detekt/detekt.yml"))
-    baseline.set(file("$rootDir/config/detekt/baseline.xml"))
-    include("**/*.kt")
-    include("**/*.kts")
-    exclude("**/resources/**")
-    exclude("**/build/**")
+    setSource(analysisDir)
+    include(kotlinFiles)
+    include(kotlinScriptFiles)
+    exclude(resourceFiles)
+    exclude(buildFiles)
+    baseline.set(baselineFile)
+    config.setFrom(configFiles)
 }
 
 // release section
