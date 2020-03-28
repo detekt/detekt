@@ -1,0 +1,82 @@
+name: Pre Merge Checks
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  gradle:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        jdk: [8, 11, 13]
+    runs-on: ${{ matrix.os }}
+    if: ${{ !contains(github.event.head_commit.message, 'ci skip') }}
+    env:
+      # We compile the test snippets only on Java 8.
+      COMPILE_TEST_SNIPPETS: ${{ matrix.os == 'ubuntu-latest' && matrix.jdk == 8 }}
+      JDK_VERSION:  ${{ matrix.jdk }}
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v2
+
+
+    - name: Cache Gradle Caches
+      uses: actions/cache@v1
+      with:
+        path: ~/.gradle/caches/
+        key: cache-gradle-${{ matrix.os }}-${{ matrix.jdk }}
+    - name: Cache Gradle Wrapper
+      uses: actions/cache@v1
+      with:
+        path: ~/.gradle/wrapper/
+        key: cache-wrapper-${{ matrix.os }}-${{ matrix.jdk }}
+
+
+    - name: Setup Java
+      uses: actions/setup-java@v1
+      with:
+        java-version: ${{ matrix.jdk }}
+
+
+    - name: Build detekt (UNIX)
+      run: ./gradlew build shadowJar --build-cache --parallel -PwarningsAsErrors=true -Pcompile-test-snippets=$COMPILE_TEST_SNIPPETS
+      if: matrix.os == 'macos-latest' || matrix.os == 'ubuntu-latest'
+    - name: Run detekt-cli --help (UNIX)
+      run: java -jar ./detekt-cli/build/libs/detekt-cli-*-all.jar --help
+      if: matrix.os == 'macos-latest' || matrix.os == 'ubuntu-latest'
+    - name: Run detekt-cli with argsfile (UNIX)
+      run: java -jar ./detekt-cli/build/libs/detekt-cli-*-all.jar @./config/detekt/argsfile_unix
+      if: matrix.os == 'macos-latest' || matrix.os == 'ubuntu-latest'
+
+
+    - name: Build detekt (WIN)
+      run: ./gradlew build installShadowDist --build-cache --parallel -PwarningsAsErrors=true -Pcompile-test-snippets=%COMPILE_TEST_SNIPPETS%
+      if: matrix.os == 'windows-latest'
+    - name: Run detekt-cli --help (WIN)
+      run: detekt-cli\build\install\detekt-cli-shadow\bin\detekt-cli --help
+      if: matrix.os == 'windows-latest'
+    - name: Run detekt-cli with argsfile (WIN)
+      run: detekt-cli\build\install\detekt-cli-shadow\bin\detekt-cli @config\detekt\argsfile_windows
+      if: matrix.os == 'windows-latest'
+
+
+    - name: Verify Generator Output
+      run: ./gradlew verifyGeneratorOutput
+
+
+    - name: Generate Coverage Report
+      run: ./gradlew jacocoTestReport
+    - name: Publish Coverage
+      if: success()
+      run: bash <(curl -s https://codecov.io/bash)
+      shell: bash
+
+    # We stop gradle at the end to make sure the cache folders
+    # don't contain any lock files and are free to be cached.
+    - name: Stop Gradle
+      run: ./gradlew --stop
