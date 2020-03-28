@@ -1,0 +1,3 @@
+complexity:
+  LongParameterList:
+    threshold: 10
