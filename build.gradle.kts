@@ -28,6 +28,8 @@ buildScan {
     termsOfServiceAgree = "yes"
 }
 
+val projectJvmTarget = "1.8"
+
 val detektVersion: String by project
 val assertjVersion: String by project
 val spekVersion: String by project
@@ -82,7 +84,6 @@ subprojects {
         plugin("com.jfrog.bintray")
         plugin("com.jfrog.artifactory")
         plugin("maven-publish")
-        plugin("io.gitlab.arturbosch.detekt")
     }
 
     if (project.name !in listOf("detekt-test", "detekt-sample-extensions")) {
@@ -90,33 +91,6 @@ subprojects {
             plugin("jacoco")
         }
         jacoco.toolVersion = jacocoVersion
-    }
-
-    val projectJvmTarget = "1.8"
-
-    tasks.withType<Detekt> {
-        jvmTarget = projectJvmTarget
-    }
-
-    val userHome = System.getProperty("user.home")
-
-    detekt {
-        buildUponDefaultConfig = true
-        baseline = file("$rootDir/config/detekt/baseline.xml")
-
-        reports {
-            xml.enabled = true
-            html.enabled = true
-            txt.enabled = true
-        }
-
-        idea {
-            path = "$userHome/.idea"
-            codeStyleScheme = "$userHome/.idea/idea-code-style.xml"
-            inspectionsProfile = "$userHome/.idea/inspect.xml"
-            report = "project.projectDir/reports"
-            mask = "*.kt"
-        }
     }
 
     val shadowedProjects = listOf("detekt-cli", "detekt-generator")
@@ -273,9 +247,6 @@ subprojects {
     dependencies {
         compileOnly(kotlin("stdlib-jdk8"))
 
-        detekt(project(":detekt-cli"))
-        detektPlugins(project(":detekt-formatting"))
-
         testImplementation("org.assertj:assertj-core:$assertjVersion")
         testImplementation("org.spekframework.spek2:spek-dsl-jvm:$spekVersion")
         testImplementation("org.reflections:reflections:$reflectionsVersion")
@@ -289,13 +260,49 @@ subprojects {
 /**
  * Usage: <code>./gradlew build -PwarningsAsErrors=true</code>.
  */
-fun shouldTreatCompilerWarningsAsErrors(): Boolean {
-    return project.findProperty("warningsAsErrors") == "true"
+fun shouldTreatCompilerWarningsAsErrors(): Boolean =
+    project.findProperty("warningsAsErrors") == "true"
+
+// detekt self analysis section
+
+subprojects {
+
+    apply {
+        plugin("io.gitlab.arturbosch.detekt")
+    }
+
+    tasks.withType<Detekt> {
+        jvmTarget = projectJvmTarget
+    }
+
+    val userHome = System.getProperty("user.home")
+
+    detekt {
+        buildUponDefaultConfig = true
+        baseline = file("$rootDir/config/detekt/baseline.xml")
+
+        reports {
+            xml.enabled = true
+            html.enabled = true
+            txt.enabled = true
+        }
+
+        idea {
+            path = "$userHome/.idea"
+            codeStyleScheme = "$userHome/.idea/idea-code-style.xml"
+            inspectionsProfile = "$userHome/.idea/inspect.xml"
+            report = "${project.projectDir}/reports"
+            mask = "*.kt"
+        }
+    }
 }
 
-dependencies {
-    detekt(project(":detekt-cli"))
-    detektPlugins(project(":detekt-formatting"))
+allprojects {
+
+    dependencies {
+        detekt(project(":detekt-cli"))
+        detektPlugins(project(":detekt-formatting"))
+    }
 }
 
 val detektFormat by tasks.registering(Detekt::class) {
