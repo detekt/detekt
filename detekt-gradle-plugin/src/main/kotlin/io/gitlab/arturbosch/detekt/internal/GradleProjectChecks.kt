@@ -15,8 +15,8 @@ internal fun checkRequiredRepositoriesAreConfiguredOn(project: Project) {
 
         if (missingJCenter) {
             project.logger.error(
-                "The project ${project.path} doesn't have the jcenter() repository in its repositories list; " +
-                        "this is required for Detekt to work correctly. Please add jcenter() to the project's " +
+                "The project ${project.path} doesn't have the jcenter() repository in its repositories list. " +
+                        "This is required for Detekt to work correctly. Please add jcenter() to the project's " +
                         "repositories { } closure and try again."
             )
         }
