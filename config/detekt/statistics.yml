@@ -1,0 +1,8 @@
+processors:
+  active: true
+  exclude: []
+
+console-reports:
+  active: true
+  exclude:
+    - 'FindingsReport'
