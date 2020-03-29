@@ -26,7 +26,7 @@ summary:
 
 ### Quick Start with Gradle
 
-Apply following configuration to your gradle build file and run `gradle detekt`:
+Apply the following configuration to your Gradle project build file:
 
 ```kotlin
 buildscript {
@@ -39,20 +39,30 @@ plugins {
     id("io.gitlab.arturbosch.detekt").version("[version]")
 }
 
-detekt {
-    toolVersion = "[version]"
-    source = files("src/main/kotlin")
-    config = files("path/to/config.yml")
+repositories {
+    jcenter()
 }
 ```
 
-If you want to change the default behaviour of detekt rules, first generate yourself a detekt configuration file and apply your changes:
+The format is very similar if you use the Gradle Groovy DSL. You can find what is the **latest version of detekt** in
+the [release notes](/detekt/changelog.html).
 
-`gradle detektGenerateConfig`
+Once you have set up detekt in your project, simply run `gradle detekt`.
 
-Then reference the config inside the defaultProfile-closure:
+To change the default behaviour of detekt rules, first generate yourself a detekt configuration file by running the
+`detektGenerateConfig` task and applying any changes to the generated file.
 
-`config = files("default-detekt-config.yml")`
+Don't forget to reference the newly generated config inside the `detekt { }` closure. Optionally, it is possible to
+slim down the configuration file to only the changes from the default configuration, by applying the
+`buildUponDefaultConfig` option:
+
+```kotlin
+detekt {
+    toolVersion = "[version]"
+    config = files("config/detekt/detekt.yml")
+    buildUponDefaultConfig = true
+}
+```
 
 To enable/disable detekt reports and to configure their output directories edit the `detekt { }` closure:
 ```kotlin
@@ -72,7 +82,7 @@ detekt {
         }
     }
 }
-``` 
+```
 
 ### Adding more rule sets
 
