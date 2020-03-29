@@ -23,7 +23,7 @@ data class ProjectLayout(
             srcDirs = srcDirs
         )
         return copy(
-            submodules = (submodules + submodule)
+            submodules = submodules + submodule
         )
     }
 }

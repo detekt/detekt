@@ -132,7 +132,7 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
 
     private fun isIgnoredByConfig(expression: KtConstantExpression) = when {
         ignorePropertyDeclaration && expression.isProperty() -> true
-        ignoreLocalVariables && (expression.isLocalProperty()) -> true
+        ignoreLocalVariables && expression.isLocalProperty() -> true
         ignoreConstantDeclaration && expression.isConstantProperty() -> true
         ignoreCompanionObjectPropertyDeclaration && expression.isCompanionObjectProperty() -> true
         ignoreAnnotation && expression.isPartOf<KtAnnotationEntry>() -> true
