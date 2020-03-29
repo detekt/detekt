@@ -76,7 +76,7 @@ detekt {
 
 ### Adding more rule sets
 
-detekt itself provides a wrapper over [KtLint](https://github.com/shyiko/ktlint) as a `formatting` rule set
+detekt itself provides a wrapper over [ktlint](https://github.com/pinterest/ktlint) as a `formatting` rule set
 which can be easily added to the gradle configuration:
 
 ```gradle

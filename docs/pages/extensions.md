@@ -210,7 +210,7 @@ java -jar detekt-cli-[version]-all.jar --input ... --plugins /path/to/my/jar
 
 ##### Integrate your extension with the detekt gradle plugin 
 
-For example `detekt` itself provides a wrapper over [KtLint](https://github.com/shyiko/ktlint) as a 
+For example `detekt` itself provides a wrapper over [ktlint](https://github.com/pinterest/ktlint) as a 
 custom `formatting` rule set.
 To enable it, we add the published dependency to `detekt` via the `detektPlugins` configuration:
 

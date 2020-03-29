@@ -1606,7 +1606,7 @@ which classes are imported and helps prevent naming conflicts.
 
 Library updates can introduce naming clashes with your own classes which might result in compilation errors.
 
-**NOTE:** This rule is effectively overridden by the `NoWildcardImports` formatting rule (a wrapped KtLint rule).
+**NOTE:** This rule is effectively overridden by the `NoWildcardImports` formatting rule (a wrapped ktlint rule).
 That rule will fail the check regardless of the whitelist configured here.
 Therefore if whitelist is needed `NoWildcardImports` rule should be disabled.
 

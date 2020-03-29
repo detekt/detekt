@@ -120,7 +120,7 @@ See [bintray](https://bintray.com/arturbosch/code-analysis/detekt) for releases 
 
 ### Adding more rule sets
 
-detekt itself provides a wrapper over [KtLint](https://github.com/shyiko/ktlint) as a `formatting` rule set
+detekt itself provides a wrapper over [ktlint](https://github.com/pinterest/ktlint) as a `formatting` rule set
 which can be easily added to the Gradle configuration:
 
 ```kotlin
@@ -244,4 +244,4 @@ Integrations:
 #### Credits
 
 - [JetBrains](https://github.com/jetbrains/) - Creating IntelliJ + Kotlin
-- [PMD](https://github.com/pmd/pmd) & [Checkstyle](https://github.com/checkstyle/checkstyle) & [KtLint](https://github.com/shyiko/ktlint) - Ideas for threshold values and style rules
+- [PMD](https://github.com/pmd/pmd) & [Checkstyle](https://github.com/checkstyle/checkstyle) & [ktlint](https://github.com/pinterest/ktlint) - Ideas for threshold values and style rules
