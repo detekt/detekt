@@ -120,7 +120,7 @@ See [bintray](https://bintray.com/arturbosch/code-analysis/detekt) for releases 
 
 ### Adding more rule sets
 
-detekt itself provides a wrapper over [KtLint](https://github.com/shyiko/ktlint) as a `formatting` rule set
+detekt itself provides a wrapper over [ktlint](https://github.com/pinterest/ktlint) as a `formatting` rule set
 which can be easily added to the Gradle configuration:
 
 ```kotlin
@@ -145,7 +145,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Sebastian Schuberth](https://github.com/sschuberth) - Active on Issues, Windows support
 - [Olivier Lemasle](https://github.com/olivierlemasle) - NP-Bugfix, rules fixes, Gradle plugin improvement
 - [Marc Prengemann](https://github.com/winterDroid) - Support for custom output formats, prototyped Rule-Context-Issue separation
-- [Sebastiano Poggi](https://github.com/rock3r) - Enhanced milestone report script, Magic number fixes
+- [Sebastiano Poggi](https://github.com/rock3r) - Build tooling improvements, rules improvements and fixes, docs fixes, Gradle plugin improvements
 - [Ilya Tretyakov](https://github.com/jvilya) - Sonar runs should not auto correct formatting.
 - [Andrey T](https://github.com/mr-procrastinator) - Readme fix
 - [Ivan Balaksha](https://github.com/tagantroy) - Rules: UnsafeCast, SpreadOperator, UnsafeCallOnNullableType, LabeledExpression
@@ -244,4 +244,4 @@ Integrations:
 #### Credits
 
 - [JetBrains](https://github.com/jetbrains/) - Creating IntelliJ + Kotlin
-- [PMD](https://github.com/pmd/pmd) & [Checkstyle](https://github.com/checkstyle/checkstyle) & [KtLint](https://github.com/shyiko/ktlint) - Ideas for threshold values and style rules
+- [PMD](https://github.com/pmd/pmd) & [Checkstyle](https://github.com/checkstyle/checkstyle) & [ktlint](https://github.com/pinterest/ktlint) - Ideas for threshold values and style rules

@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
+import io.gitlab.arturbosch.detekt.internal.checkRequiredRepositoriesAreConfiguredOn
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -19,6 +20,9 @@ class DetektPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
         project.pluginManager.apply(ReportingBasePlugin::class.java)
+
+        checkRequiredRepositoriesAreConfiguredOn(project)
+
         val extension = project.extensions.create(DETEKT_TASK_NAME, DetektExtension::class.java, project)
         extension.reportsDir = project.extensions.getByType(ReportingExtension::class.java).file("detekt")
 
