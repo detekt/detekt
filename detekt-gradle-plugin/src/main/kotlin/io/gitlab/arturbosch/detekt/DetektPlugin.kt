@@ -1,13 +1,12 @@
 package io.gitlab.arturbosch.detekt
 
 import io.gitlab.arturbosch.detekt.extensions.DetektExtension
+import io.gitlab.arturbosch.detekt.internal.checkRequiredRepositoriesAreConfiguredOn
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.artifacts.repositories.MavenArtifactRepository
 import org.gradle.api.file.FileCollection
 import org.gradle.api.internal.HasConvention
-import org.gradle.api.internal.artifacts.dsl.DefaultRepositoryHandler
 import org.gradle.api.plugins.JavaPluginConvention
 import org.gradle.api.plugins.ReportingBasePlugin
 import org.gradle.api.provider.Provider
@@ -16,7 +15,6 @@ import org.gradle.api.tasks.SourceSet
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet
 import java.io.File
-import java.net.URI
 
 class DetektPlugin : Plugin<Project> {
 
@@ -43,21 +41,6 @@ class DetektPlugin : Plugin<Project> {
         registerGenerateConfigTask(project)
 
         registerIdeaTasks(project, extension)
-    }
-
-    private fun checkRequiredRepositoriesAreConfiguredOn(project: Project) {
-        val bintrayJcenterUri = URI.create(DefaultRepositoryHandler.BINTRAY_JCENTER_URL)
-
-        val missingJCenter = project.repositories.none {
-            it is MavenArtifactRepository && it.url == bintrayJcenterUri
-        }
-
-        if (missingJCenter) {
-            project.logger.error(
-                "The project ${project.path} doesn't have the jcenter() repository in its repositories list; " +
-                        "this is required for Detekt to work correctly. Please add jcenter() to the project's " +
-                        "repositories { } closure and try again.")
-        }
     }
 
     private fun registerDetektTasks(project: Project, extension: DetektExtension) {
