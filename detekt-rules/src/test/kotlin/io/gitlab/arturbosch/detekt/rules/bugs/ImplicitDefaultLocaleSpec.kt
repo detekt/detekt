@@ -10,7 +10,7 @@ import org.spekframework.spek2.style.specification.describe
 class ImplicitDefaultLocaleSpec : Spek({
     val subject by memoized { ImplicitDefaultLocale(Config.empty) }
 
-    val wrapper by memoized (
+    val wrapper by memoized(
         factory = { KtTestCompiler.createEnvironment() },
         destructor = { it.dispose() }
     )
@@ -52,7 +52,6 @@ class ImplicitDefaultLocaleSpec : Spek({
                 }"""
             assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
         }
-
 
         it("reports String.toLowerCase() call without explicit locale") {
             val code = """
