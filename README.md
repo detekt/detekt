@@ -145,7 +145,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Sebastian Schuberth](https://github.com/sschuberth) - Active on Issues, Windows support
 - [Olivier Lemasle](https://github.com/olivierlemasle) - NP-Bugfix, rules fixes, Gradle plugin improvement
 - [Marc Prengemann](https://github.com/winterDroid) - Support for custom output formats, prototyped Rule-Context-Issue separation
-- [Sebastiano Poggi](https://github.com/rock3r) - Enhanced milestone report script, Magic number fixes
+- [Sebastiano Poggi](https://github.com/rock3r) - Build tooling improvements, rules improvements and fixes, docs fixes, Gradle plugin improvements
 - [Ilya Tretyakov](https://github.com/jvilya) - Sonar runs should not auto correct formatting.
 - [Andrey T](https://github.com/mr-procrastinator) - Readme fix
 - [Ivan Balaksha](https://github.com/tagantroy) - Rules: UnsafeCast, SpreadOperator, UnsafeCallOnNullableType, LabeledExpression
