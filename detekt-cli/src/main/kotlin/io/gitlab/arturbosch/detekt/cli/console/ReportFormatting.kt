@@ -16,10 +16,11 @@ internal fun printFindings(findings: Map<String, List<Finding>>): String? {
                 .reduce { acc, d -> acc + d }
             debtList.add(debt)
             append("$key - $debt debt".format())
-            val issuesString = issues.joinToString("") {
-                it.compact().format("\t")
+            issues.forEach {
+                append("\t")
+                append(it.compact().yellow())
+                append("\n")
             }
-            append(issuesString.yellow())
         }
         val overallDebt = debtList.reduce { acc, d -> acc + d }
         append("Overall debt: $overallDebt".format("\n"))
