@@ -5,7 +5,7 @@ import io.gitlab.arturbosch.detekt.api.RuleSet
 import io.gitlab.arturbosch.detekt.api.RuleSetProvider
 
 /**
- * This rule set provides wrappers for rules implemented by KtLint - https://ktlint.github.io/.
+ * This rule set provides wrappers for rules implemented by ktlint - https://ktlint.github.io/.
  *
  * Note: Issues reported by this rule set can only be suppressed on file level (@file:Suppress("detekt.rule").
  * Note: The formatting rule set is not included in the detekt-cli or gradle plugin.
