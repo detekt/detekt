@@ -12,8 +12,7 @@ class ProjectStatisticsReport : ConsoleReport() {
         if (metrics.isEmpty()) return null
         return with(StringBuilder()) {
             append("Project Statistics:\n")
-            metrics.sortedBy { it.priority }
-                .reversed()
+            metrics.sortedBy { -it.priority }
                 .forEach {
                     append("\t- ")
                     append(it)
