@@ -11,10 +11,14 @@ class ProjectStatisticsReport : ConsoleReport() {
         val metrics = detektion.metrics
         if (metrics.isEmpty()) return null
         return with(StringBuilder()) {
-            append("Project Statistics:".format())
+            append("Project Statistics:\n")
             metrics.sortedBy { it.priority }
-                    .reversed()
-                    .forEach { append(it.toString().format(PREFIX)) }
+                .reversed()
+                .forEach {
+                    append("\t- ")
+                    append(it)
+                    append("\n")
+                }
             toString()
         }
     }
