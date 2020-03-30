@@ -102,7 +102,7 @@ class UseCheckOrErrorSpec : Spek({
             assertThat(subject.lint(code)).hasSourceLocation(1, 17)
         }
 
-        it("does not report an issue if the exception thrown has a non-String argument") {
+        it("does not report if the exception thrown has a non-String argument") {
             val code = """
                 fun test(throwable: Throwable) {
                     when(throwable) {
@@ -110,8 +110,71 @@ class UseCheckOrErrorSpec : Spek({
                         else -> throw IllegalStateException(throwable)
                     }
                 }
-            """.trimIndent()
-            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+            """
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        it("does not report if the exception thrown has a String literal argument and a non-String argument") {
+            val code = """
+                fun test(throwable: Throwable) {
+                    when(throwable) {
+                        is NumberFormatException -> println("a")
+                        else -> throw IllegalStateException("b", throwable)
+                    }
+                }
+            """
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        it("does not report if the exception thrown has a non-String literal argument") {
+            val code = """
+                fun test(throwable: Throwable) {
+                    when(throwable) {
+                        is NumberFormatException -> println("a")
+                        else -> throw IllegalStateException(throwable.toString())
+                    }
+                }
+            """
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        context("with binding context") {
+
+            it("does not report if the exception thrown has a non-String argument") {
+                val code = """
+                    fun test(throwable: Throwable) {
+                        when(throwable) {
+                            is NumberFormatException -> println("a")
+                            else -> throw IllegalStateException(throwable)
+                        }
+                    }
+                """
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+            }
+
+            it("does not report if the exception thrown has a String literal argument and a non-String argument") {
+                val code = """
+                    fun test(throwable: Throwable) {
+                        when(throwable) {
+                            is NumberFormatException -> println("a")
+                            else -> throw IllegalStateException("b", throwable)
+                        }
+                    }
+                """
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
+            }
+
+            it("reports if the exception thrown has a non-String literal argument") {
+                val code = """
+                    fun test(throwable: Throwable) {
+                        when(throwable) {
+                            is NumberFormatException -> println("a")
+                            else -> throw IllegalStateException(throwable.toString())
+                        }
+                    }
+                """
+                assertThat(subject.compileAndLintWithContext(wrapper.env, code)).hasSize(1)
+            }
         }
     }
 })
