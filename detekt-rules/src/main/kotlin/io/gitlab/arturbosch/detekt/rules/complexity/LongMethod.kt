@@ -50,7 +50,7 @@ class LongMethod(
                 report(ThresholdedCodeSmell(issue,
                         Entity.from(function.nameIdentifier!!),
                         Metric("SIZE", lines, threshold),
-                        "The function ${function.nameAsSafeName} is too long. " +
+                        "The function ${function.nameAsSafeName} is too long ($lines). " +
                                 "The maximum length is $threshold."))
             }
         }
