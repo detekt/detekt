@@ -1,7 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.test.KtTestCompiler
 import io.gitlab.arturbosch.detekt.test.assertThat
+import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lint
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -9,6 +11,11 @@ import org.spekframework.spek2.style.specification.describe
 class UseCheckOrErrorSpec : Spek({
 
     val subject by memoized { UseCheckOrError(Config.empty) }
+
+    val wrapper by memoized(
+        factory = { KtTestCompiler.createEnvironment() },
+        destructor = { it.dispose() }
+    )
 
     describe("UseCheckOrError rule") {
 
@@ -93,6 +100,18 @@ class UseCheckOrErrorSpec : Spek({
         it("reports an issue if the exception thrown as the only action in a function block") {
             val code = """fun doThrow() { throw IllegalStateException("message") }"""
             assertThat(subject.lint(code)).hasSourceLocation(1, 17)
+        }
+
+        it("does not report an issue if the exception thrown has a non-String argument") {
+            val code = """
+                fun test(throwable: Throwable) {
+                    when(throwable) {
+                        is NumberFormatException -> println("a")
+                        else -> throw IllegalStateException(throwable)
+                    }
+                }
+            """.trimIndent()
+            assertThat(subject.compileAndLintWithContext(wrapper.env, code)).isEmpty()
         }
     }
 })
