@@ -80,7 +80,8 @@ class ComplexCondition(
                 report(ThresholdedCodeSmell(issue,
                         Entity.from(condition),
                         Metric("SIZE", count, threshold),
-                        "This condition is too complex."))
+                        "This condition is too complex ($count). " +
+                                "Defined complexity threshold for conditions is set to '$threshold'"))
             }
         }
     }

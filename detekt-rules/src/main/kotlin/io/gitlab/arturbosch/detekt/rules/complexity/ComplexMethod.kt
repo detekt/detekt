@@ -83,7 +83,8 @@ class ComplexMethod(
                     issue,
                     Entity.from(function.nameIdentifier!!),
                     Metric("MCC", complexity, threshold),
-                    "The function ${function.nameAsSafeName} appears to be too complex."
+                    "The function ${function.nameAsSafeName} appears to be too complex ($complexity). " +
+                            "Defined complexity threshold for methods is set to '$threshold'"
                 )
             )
         }
