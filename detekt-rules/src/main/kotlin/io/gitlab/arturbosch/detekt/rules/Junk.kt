@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules
 
-import io.gitlab.arturbosch.detekt.api.ConfigAware
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import io.gitlab.arturbosch.detekt.api.commaSeparatedPattern
 import org.jetbrains.kotlin.com.intellij.openapi.util.Key
@@ -37,7 +37,7 @@ fun KtClass.companionObject() = this.companionObjects.singleOrNull { it.isCompan
 
 inline fun <reified T : Any> Any.safeAs(): T? = this as? T
 
-internal fun ConfigAware.valueOrDefaultCommaSeparated(
+internal fun Config.valueOrDefaultCommaSeparated(
     key: String,
     default: List<String>,
     defaultString: String
@@ -45,6 +45,10 @@ internal fun ConfigAware.valueOrDefaultCommaSeparated(
     return try {
         valueOrDefault(key, default)
     } catch (_: IllegalStateException) {
+        valueOrDefault(key, defaultString)
+            .commaSeparatedPattern()
+            .toList()
+    } catch (_: ClassCastException) {
         valueOrDefault(key, defaultString)
             .commaSeparatedPattern()
             .toList()
