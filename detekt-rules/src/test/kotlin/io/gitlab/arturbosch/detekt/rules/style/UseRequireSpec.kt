@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.KtTestCompiler
 import io.gitlab.arturbosch.detekt.test.assertThat
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.compileAndLintWithContext
 import io.gitlab.arturbosch.detekt.test.lint
 import org.spekframework.spek2.Spek
@@ -96,7 +97,7 @@ class UseRequireSpec : Spek({
                     if (throwable !is NumberFormatException) throw IllegalArgumentException(throwable)
                 }
             """
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("does not report if the exception thrown has a String literal argument and a non-String argument") {
@@ -105,7 +106,7 @@ class UseRequireSpec : Spek({
                     if (throwable !is NumberFormatException) throw IllegalArgumentException("a", throwable)
                 }
             """
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("does not report if the exception thrown has a non-String literal argument") {
@@ -115,7 +116,7 @@ class UseRequireSpec : Spek({
                     if (throwable !is NumberFormatException) throw IllegalArgumentException(s)
                 }
             """
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         context("with binding context") {
