@@ -13,7 +13,7 @@ class ComplexityReport : ConsoleReport() {
             with(StringBuilder()) {
                 append("Complexity Report:\n")
                 list.forEach {
-                    append(PREFIX)
+                    append("\t- ")
                     append(it)
                     append("\n")
                 }
