@@ -269,10 +269,11 @@ subprojects {
 
 // detekt self analysis section
 
-val analysisDir = files(projectDir)
+val analysisDir = file(projectDir)
 val baselineFile = file("$rootDir/config/detekt/baseline.xml")
-val formatConfigFile = files("$rootDir/config/detekt/format.yml")
-val configFiles = files("$rootDir/config/detekt/detekt.yml")
+val configFile = file("$rootDir/config/detekt/detekt.yml")
+val formatConfigFile = file("$rootDir/config/detekt/format.yml")
+val statisticsConfigFile = file("$rootDir/config/detekt/statistics.yml")
 
 val kotlinFiles = "**/*.kt"
 val kotlinScriptFiles = "**/*.kts"
@@ -326,11 +327,11 @@ val detektFormat by tasks.registering(Detekt::class) {
     buildUponDefaultConfig = true
     autoCorrect = true
     setSource(analysisDir)
+    config.setFrom(listOf(statisticsConfigFile, formatConfigFile))
     include(kotlinFiles)
     include(kotlinScriptFiles)
     exclude(resourceFiles)
     exclude(buildFiles)
-    config.setFrom(formatConfigFile)
     baseline.set(baselineFile)
     reports {
         xml.enabled = false
@@ -344,6 +345,7 @@ val detektAll by tasks.registering(Detekt::class) {
     parallel = true
     buildUponDefaultConfig = true
     setSource(analysisDir)
+    config.setFrom(listOf(statisticsConfigFile, configFile))
     include(kotlinFiles)
     include(kotlinScriptFiles)
     exclude(resourceFiles)
@@ -362,12 +364,12 @@ val detektProjectBaseline by tasks.registering(DetektCreateBaselineTask::class) 
     ignoreFailures.set(true)
     parallel.set(true)
     setSource(analysisDir)
+    config.setFrom(listOf(statisticsConfigFile, configFile))
     include(kotlinFiles)
     include(kotlinScriptFiles)
     exclude(resourceFiles)
     exclude(buildFiles)
     baseline.set(baselineFile)
-    config.setFrom(configFiles)
 }
 
 // release section
