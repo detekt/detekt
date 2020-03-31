@@ -12,10 +12,6 @@ title: DisabledAutoCorrectConfig - detekt-api
 
 | [&lt;init&gt;](-init-.html) | `DisabledAutoCorrectConfig(wrapped: `[`Config`](../../io.gitlab.arturbosch.detekt.api/-config/index.html)`)` |
 
-### Properties
-
-| [wrapped](wrapped.html) | `val wrapped: `[`Config`](../../io.gitlab.arturbosch.detekt.api/-config/index.html) |
-
 ### Functions
 
 | [subConfig](sub-config.html) | Tries to retrieve part of the configuration based on given key.`fun subConfig(key: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`): `[`Config`](../../io.gitlab.arturbosch.detekt.api/-config/index.html) |
