@@ -12,8 +12,11 @@ import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtIsExpression
 import org.jetbrains.kotlin.psi.KtNameReferenceExpression
+import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtPsiUtil
 import org.jetbrains.kotlin.psi.psiUtil.forEachDescendantOfType
+import org.jetbrains.kotlin.resolve.BindingContext
+import org.jetbrains.kotlin.types.typeUtil.isSubtypeOf
 
 /**
  * This rule reports `catch` blocks which check for the type of an exception via `is` checks or casts.
@@ -48,18 +51,28 @@ class InstanceOfCheckForException(config: Config = Config.empty) : Rule(config) 
             Debt.TWENTY_MINS)
 
     override fun visitCatchSection(catchClause: KtCatchClause) {
-        catchClause.catchBody?.forEachDescendantOfType<KtIsExpression> {
-            if (isExceptionReferenced(it.leftHandSide, catchClause)) {
-                report(CodeSmell(issue, Entity.from(it), issue.description))
-            }
-        }
-        catchClause.catchBody?.forEachDescendantOfType<KtBinaryExpressionWithTypeRHS> {
-            if (KtPsiUtil.isUnsafeCast(it) && isExceptionReferenced(it.left, catchClause)) {
+        val catchParameter = catchClause.catchParameter ?: return
+        catchClause.catchBody?.forEachDescendantOfType<KtExpression> {
+            if (it.isCheckForSubTypeOf(catchParameter)) {
                 report(CodeSmell(issue, Entity.from(it), issue.description))
             }
         }
     }
 
-    private fun isExceptionReferenced(expression: KtExpression, catchClause: KtCatchClause) =
-            expression is KtNameReferenceExpression && expression.text == catchClause.catchParameter?.name
+    private fun KtExpression.isCheckForSubTypeOf(catchParameter: KtParameter): Boolean {
+        val (left, right) = when (this) {
+            is KtIsExpression -> leftHandSide to typeReference
+            is KtBinaryExpressionWithTypeRHS -> if (KtPsiUtil.isUnsafeCast(this)) left to right else null
+            else -> null
+        } ?: return false
+
+        val leftText = (left as? KtNameReferenceExpression)?.text
+        return if (leftText == catchParameter.name) {
+            val rightType = bindingContext[BindingContext.TYPE, right]
+            val catchType = bindingContext[BindingContext.TYPE, catchParameter.typeReference]
+            if (rightType != null && catchType != null) rightType.isSubtypeOf(catchType) else true
+        } else {
+            false
+        }
+    }
 }
