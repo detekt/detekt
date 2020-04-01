@@ -1,21 +1,9 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
-import io.gitlab.arturbosch.detekt.api.Config
-import io.gitlab.arturbosch.detekt.api.Debt
-import io.gitlab.arturbosch.detekt.api.Entity
-import io.gitlab.arturbosch.detekt.api.Issue
-import io.gitlab.arturbosch.detekt.api.Metric
-import io.gitlab.arturbosch.detekt.api.Rule
-import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
+import io.gitlab.arturbosch.detekt.api.*
 import io.gitlab.arturbosch.detekt.rules.isOverride
-import org.jetbrains.kotlin.psi.KtClass
-import org.jetbrains.kotlin.psi.KtConstructor
-import org.jetbrains.kotlin.psi.KtFunction
-import org.jetbrains.kotlin.psi.KtNamedFunction
-import org.jetbrains.kotlin.psi.KtParameterList
-import org.jetbrains.kotlin.psi.KtPrimaryConstructor
-import org.jetbrains.kotlin.psi.KtSecondaryConstructor
+import org.jetbrains.kotlin.psi.*
+import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 
 /**
  * Reports functions and constructors which have more parameters than a certain threshold.
@@ -26,6 +14,7 @@ import org.jetbrains.kotlin.psi.KtSecondaryConstructor
  * @configuration constructorThreshold - number of constructor parameters required to trigger the rule (default: `7`)
  * @configuration ignoreDefaultParameters - ignore parameters that have a default value (default: `false`)
  * @configuration ignoreDataClasses - ignore long constructor parameters list for data classes (default: `true`)
+ * @configuration ignoreAnnotated - ignore long parameters list for constructors or functions in the context of these comma-separated annotation class names (default: ``)
  *
  * @active since v1.0.0
  */
@@ -50,7 +39,13 @@ class LongParameterList(
 
     private val ignoreDataClasses = valueOrDefault(IGNORE_DATA_CLASSES, true)
 
+    private val ignoreAnnotated = SplitPattern(valueOrDefault(IGNORE_ANNOTATED, ""))
+
     override fun visitNamedFunction(function: KtNamedFunction) {
+        val owner = function.containingClassOrObject
+        if (owner is KtClass && owner.isIgnored()) {
+            return
+        }
         validateFunction(function, functionThreshold)
     }
 
@@ -62,16 +57,40 @@ class LongParameterList(
         validateConstructor(constructor)
     }
 
+    private fun KtFunction.isIgnored(): Boolean {
+        return annotationEntries.any {
+            ignoreAnnotated.contains(it.typeReference?.text)
+        }
+    }
+
+    private fun KtClass.isIgnored(): Boolean {
+        return annotationEntries.any {
+            ignoreAnnotated.contains(it.typeReference?.text)
+        }
+    }
+
+    private fun KtFile.isIgnored(): Boolean {
+        return annotationEntries.any {
+            ignoreAnnotated.contains(it.typeReference?.text)
+        }
+    }
+
     private fun validateConstructor(constructor: KtConstructor<*>) {
         val owner = constructor.getContainingClassOrObject()
-        val isDataClass = owner is KtClass && owner.isData()
-        if (!ignoreDataClasses || !isDataClass) {
-            validateFunction(constructor, constructorThreshold)
+        if (owner is KtClass) {
+            if (ignoreDataClasses && owner.isData()) {
+                return
+            } else if (owner.isIgnored()) {
+                return
+            }
         }
+        validateFunction(constructor, constructorThreshold)
     }
 
     private fun validateFunction(function: KtFunction, threshold: Int) {
         if (function.isOverride()) return
+        if (function.isIgnored()) return
+        if (function.containingKtFile.isIgnored()) return
         val parameterList = function.valueParameterList
         val parameters = parameterList?.parameterCount()
 
@@ -98,6 +117,7 @@ class LongParameterList(
         const val CONSTRUCTOR_THRESHOLD = "constructorThreshold"
         const val IGNORE_DEFAULT_PARAMETERS = "ignoreDefaultParameters"
         const val IGNORE_DATA_CLASSES = "ignoreDataClasses"
+        const val IGNORE_ANNOTATED = "ignoreAnnotated"
 
         const val DEFAULT_FUNCTION_THRESHOLD = 6
         const val DEFAULT_CONSTRUCTOR_THRESHOLD = 7
