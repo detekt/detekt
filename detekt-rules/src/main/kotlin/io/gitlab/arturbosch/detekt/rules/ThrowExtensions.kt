@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtContainerNodeForControlStructureBody
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtThrowExpression
+import org.jetbrains.kotlin.psi.KtValueArgument
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
 
 internal fun KtThrowExpression.isIllegalStateException() =
@@ -16,8 +17,8 @@ internal inline fun <reified T : Exception> KtThrowExpression.isExceptionOfType(
     return findDescendantOfType<KtCallExpression>()?.firstChild?.text == T::class.java.simpleName
 }
 
-internal val KtThrowExpression.argumentCount
-    get() = findDescendantOfType<KtCallExpression>()?.valueArgumentList?.children?.size ?: 0
+internal val KtThrowExpression.arguments: List<KtValueArgument>
+    get() = findDescendantOfType<KtCallExpression>()?.valueArguments.orEmpty()
 
 internal fun KtThrowExpression.isEnclosedByConditionalStatement(): Boolean {
     return parent is KtIfExpression || parent is KtContainerNodeForControlStructureBody

@@ -7,7 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.argumentCount
+import io.gitlab.arturbosch.detekt.rules.arguments
+import io.gitlab.arturbosch.detekt.rules.isEmptyOrSingleStringArgument
 import io.gitlab.arturbosch.detekt.rules.isEnclosedByConditionalStatement
 import io.gitlab.arturbosch.detekt.rules.isIllegalArgumentException
 import org.jetbrains.kotlin.psi.KtBlockExpression
@@ -19,12 +20,12 @@ import org.jetbrains.kotlin.psi.KtThrowExpression
  * IllegalArgumentException.
  *
  * <noncompliant>
- * if (value == null) throw new IllegalArgumentException("value should not be null")
- * if (value < 0) throw new IllegalArgumentException("value is $value but should be at least 0")
+ * if (value == null) throw IllegalArgumentException("value should not be null")
+ * if (value < 0) throw IllegalArgumentException("value is $value but should be at least 0")
  * </noncompliant>
  *
  * <compliant>
- * requireNotNull(value) {"value should not be null"}
+ * requireNotNull(value) { "value should not be null" }
  * require(value >= 0) { "value is $value but should be at least 0" }
  * </compliant>
  */
@@ -42,7 +43,7 @@ class UseRequire(config: Config = Config.empty) : Rule(config) {
         if (expression.isOnlyExpressionInBlock()) return
 
         if (expression.isEnclosedByConditionalStatement() &&
-            expression.argumentCount < 2) {
+            expression.arguments.isEmptyOrSingleStringArgument(bindingContext)) {
             report(CodeSmell(issue, Entity.from(expression), issue.description))
         }
     }
