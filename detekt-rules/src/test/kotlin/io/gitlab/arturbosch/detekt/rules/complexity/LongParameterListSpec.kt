@@ -78,7 +78,7 @@ class LongParameterListSpec : Spek({
         it("does not report long parameter list for functions if file is annotated with ignored annotation") {
             val config = TestConfig(mapOf(LongParameterList.IGNORE_ANNOTATED to "javax.annotation.Generated"))
             val rule = LongParameterList(config)
-            val code = "@file:javax.annotation.Generated class Data { fun foo(val a: Int, val b: Int, val c: Int, val d: Int, val e: Int, val f: Int, val g: Int) {} }"
+            val code = "@file:javax.annotation.Generated class Data { fun foo(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int) {} }"
             assertThat(rule.compileAndLint(code)).isEmpty()
         }
 
@@ -92,7 +92,7 @@ class LongParameterListSpec : Spek({
         it("does not report long parameter list for functions if class is annotated with ignored annotation") {
             val config = TestConfig(mapOf(LongParameterList.IGNORE_ANNOTATED to "javax.annotation.Generated"))
             val rule = LongParameterList(config)
-            val code = "@javax.annotation.Generated class Data { fun foo(val a: Int, val b: Int, val c: Int, val d: Int, val e: Int, val f: Int, val g: Int) {} }"
+            val code = "@javax.annotation.Generated class Data { fun foo(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int) {} }"
             assertThat(rule.compileAndLint(code)).isEmpty()
         }
 
@@ -106,7 +106,7 @@ class LongParameterListSpec : Spek({
         it("does not report long parameter list for functions if function is annotated with ignored annotation") {
             val config = TestConfig(mapOf(LongParameterList.IGNORE_ANNOTATED to "javax.inject.Inject"))
             val rule = LongParameterList(config)
-            val code = "class Data { @javax.inject.Inject fun foo(val a: Int, val b: Int, val c: Int, val d: Int, val e: Int, val f: Int, val g: Int) {} }"
+            val code = "class Data { @javax.inject.Inject fun foo(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int) {} }"
             assertThat(rule.compileAndLint(code)).isEmpty()
         }
     }
