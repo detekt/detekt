@@ -29,7 +29,7 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
  * @configuration constructorThreshold - number of constructor parameters required to trigger the rule (default: `7`)
  * @configuration ignoreDefaultParameters - ignore parameters that have a default value (default: `false`)
  * @configuration ignoreDataClasses - ignore long constructor parameters list for data classes (default: `true`)
- * @configuration ignoreAnnotated - ignore long parameters list for constructors or functions in the context of these comma-separated annotation class names (default: ``)
+ * @configuration ignoreAnnotated - ignore long parameters list for constructors or functions in the context of these comma-separated annotation class names (default: `''`)
  *
  * @active since v1.0.0
  */

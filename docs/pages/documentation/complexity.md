@@ -240,6 +240,10 @@ Reports functions and constructors which have more parameters than a certain thr
 
    ignore long constructor parameters list for data classes
 
+* ``ignoreAnnotated`` (default: ``''``)
+
+   ignore long parameters list for constructors or functions in the context of these comma-separated annotation class names
+
 ### MethodOverloading
 
 This rule reports methods which are overloaded often.
