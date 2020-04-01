@@ -4,7 +4,7 @@ import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Notification
 
 @Suppress("UNCHECKED_CAST")
-class DisabledAutoCorrectConfig(val wrapped: Config) : Config, ValidatableConfiguration {
+class DisabledAutoCorrectConfig(private val wrapped: Config) : Config, ValidatableConfiguration {
 
     override fun subConfig(key: String): Config = DisabledAutoCorrectConfig(wrapped.subConfig(key))
 
