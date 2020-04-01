@@ -9,6 +9,7 @@ import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.hasCommentInside
 import org.jetbrains.kotlin.psi.KtBlockExpression
+import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtWhenExpression
 
 /**
@@ -40,15 +41,16 @@ class OptionalWhenBraces(config: Config = Config.empty) : Rule(config) {
     override fun visitWhenExpression(expression: KtWhenExpression) {
         for (entry in expression.entries) {
             val blockExpression = entry.expression as? KtBlockExpression
-            if (hasOneStatement(blockExpression) && hasOptionalBrace(blockExpression)) {
+            if (blockExpression?.hasUnnecessaryBraces() == true) {
                 report(CodeSmell(issue, Entity.from(entry), issue.description))
             }
         }
     }
 
-    private fun hasOneStatement(blockExpression: KtBlockExpression?) =
-            blockExpression?.statements?.size == 1 && !blockExpression.hasCommentInside()
-
-    private fun hasOptionalBrace(blockExpression: KtBlockExpression?) =
-            blockExpression != null && blockExpression.lBrace != null && blockExpression.rBrace != null
+    private fun KtBlockExpression.hasUnnecessaryBraces(): Boolean {
+        val singleStatement = statements.singleOrNull()?.takeIf {
+            !(it is KtLambdaExpression && it.functionLiteral.arrow == null)
+        }
+        return singleStatement != null && !hasCommentInside() && lBrace != null && rBrace != null
+    }
 }

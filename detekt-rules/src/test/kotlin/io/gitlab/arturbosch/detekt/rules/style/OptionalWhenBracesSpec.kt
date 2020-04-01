@@ -38,5 +38,31 @@ class OptionalWhenBracesSpec : Spek({
                 }"""
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
+
+        context("the statement is a lambda expression") {
+            it("does not report if the lambda has no arrow") {
+                val code = """
+                    fun test(b: Boolean): (Int) -> Int {
+                        return when (b) {
+                            true -> { { it + 100 } }
+                            false -> { { it + 200  } }
+                        }
+                    }
+                """
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+
+            it("reports if the lambda has an arrow") {
+                val code = """
+                    fun test(b: Boolean): (Int) -> Int {
+                        return when (b) {
+                            true -> { { i -> i + 100 } }
+                            false -> { { i -> i + 200  } }
+                        }
+                    }
+                """
+                assertThat(subject.compileAndLint(code)).hasSize(2)
+            }
+        }
     }
 })
