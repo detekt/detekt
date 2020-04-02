@@ -10,9 +10,9 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.rules.isOverride
+import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtConstructor
-import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameterList
@@ -72,19 +72,7 @@ class LongParameterList(
         validateConstructor(constructor)
     }
 
-    private fun KtFunction.isIgnored(): Boolean {
-        return annotationEntries.any {
-            ignoreAnnotated.contains(it.typeReference?.text)
-        }
-    }
-
-    private fun KtClass.isIgnored(): Boolean {
-        return annotationEntries.any {
-            ignoreAnnotated.contains(it.typeReference?.text)
-        }
-    }
-
-    private fun KtFile.isIgnored(): Boolean {
+    private fun KtAnnotated.isIgnored(): Boolean {
         return annotationEntries.any {
             ignoreAnnotated.contains(it.typeReference?.text)
         }
