@@ -6,6 +6,35 @@ permalink: changelog.html
 toc: true
 ---
 
+#### 1.7.3
+
+##### Changelog
+
+- OptionalWhenBraces: fix false positive with lambda which has no arrow - [#2568](https://github.com/arturbosch/detekt/pull/2568)
+- OptionalWhenBraces: false positive with lambda which has no arrow - [#2567](https://github.com/arturbosch/detekt/issues/2567)
+- valueOrDefaultCommaSeparated throws a ClassCastException - [#2566](https://github.com/arturbosch/detekt/pull/2566)
+- 1.6.0 -> 1.7.2: java.lang.String cannot be cast to java.util.List - [#2561](https://github.com/arturbosch/detekt/issues/2561)
+- Display actual and threshold values for several metric rules - [#2559](https://github.com/arturbosch/detekt/pull/2559)
+- Return the actual values for complexity rules - [#2557](https://github.com/arturbosch/detekt/issues/2557)
+- UseCheckOrError/UseRequire: fix false positive with a non-String argument - [#2556](https://github.com/arturbosch/detekt/pull/2556)
+- InstanceOfCheckForException: do not report when catch blocks do not check for the subtype of an exception - [#2555](https://github.com/arturbosch/detekt/pull/2555)
+- Include statistics for our custom detekt tasks - [#2554](https://github.com/arturbosch/detekt/pull/2554)
+- Remove unnecesary parentheses - [#2553](https://github.com/arturbosch/detekt/pull/2553)
+- Fix console output indentation - [#2552](https://github.com/arturbosch/detekt/pull/2552)
+- Console output is not indented correctly - [#2551](https://github.com/arturbosch/detekt/issues/2551)
+- Check jcenter repository present in Gradle plugin - [#2550](https://github.com/arturbosch/detekt/pull/2550)
+- Adding Detekt to a project from scratch, detektGenerateConfig is broken - [#2549](https://github.com/arturbosch/detekt/issues/2549)
+- Validate Wrapper only on push to master - [#2548](https://github.com/arturbosch/detekt/pull/2548)
+- Cleanup Gradle Folders - [#2547](https://github.com/arturbosch/detekt/pull/2547)
+- Require CI to pass to run codecov - [#2546](https://github.com/arturbosch/detekt/pull/2546)
+- Export bintray key to publish snapshots - [#2544](https://github.com/arturbosch/detekt/pull/2544)
+- Activate UseErrorOrCheck rule - [#2542](https://github.com/arturbosch/detekt/pull/2542)
+- Refactor build file to sections - [#2541](https://github.com/arturbosch/detekt/pull/2541)
+- False positive: UseCheckOrError - [#2514](https://github.com/arturbosch/detekt/issues/2514)
+- InstanceOfCheckForException should be ignored for catch blocks that is more than an if expression - [#1927](https://github.com/arturbosch/detekt/issues/1927)
+
+See all issues at: [1.7.3](https://github.com/arturbosch/detekt/milestone/62)
+
 #### 1.7.2
 
 ##### Changelog
