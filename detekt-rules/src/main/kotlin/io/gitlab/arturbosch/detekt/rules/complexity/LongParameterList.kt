@@ -83,7 +83,6 @@ class LongParameterList(
         if (owner is KtClass && owner.isDataClassOrIgnored()) {
             return
         }
-        
         validateFunction(constructor, constructorThreshold)
     }
 
