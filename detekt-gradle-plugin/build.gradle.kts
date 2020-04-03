@@ -38,9 +38,10 @@ pluginBundle {
 }
 
 val generateDefaultDetektVersionFile by tasks.registering {
-    val defaultDetektVersionFile =
-        File("$buildDir/generated/src/io/gitlab/arturbosch/detekt", "PluginVersion.kt")
+    val name = "PluginVersion.kt"
+    val defaultDetektVersionFile = File("$buildDir/generated/src/io/gitlab/arturbosch/detekt", name)
 
+    inputs.property(name, project.version)
     outputs.file(defaultDetektVersionFile)
 
     doFirst {
