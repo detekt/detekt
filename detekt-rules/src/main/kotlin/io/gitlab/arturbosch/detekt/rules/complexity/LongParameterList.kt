@@ -80,14 +80,14 @@ class LongParameterList(
 
     private fun validateConstructor(constructor: KtConstructor<*>) {
         val owner = constructor.getContainingClassOrObject()
-        if (owner is KtClass && owner.isDataClassOrIgnored) {
+        if (owner is KtClass && owner.isDataClassOrIgnored()) {
             return
         }
         
-        fun KtClassOrObject.isDataClassOrIgnored() = isIgnored || ignoreDataClasses && owner.isData()
-        }
         validateFunction(constructor, constructorThreshold)
     }
+
+    private fun KtClass.isDataClassOrIgnored() = isIgnored() || ignoreDataClasses && isData()
 
     private fun validateFunction(function: KtFunction, threshold: Int) {
         if (function.isOverride() || function.isIgnored() || function.containingKtFile.isIgnored()) return
