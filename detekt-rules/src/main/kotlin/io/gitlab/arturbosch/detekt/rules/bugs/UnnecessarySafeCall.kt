@@ -45,8 +45,10 @@ class UnnecessarySafeCall(config: Config = Config.empty) : Rule(config) {
 
         if (bindingContext == BindingContext.EMPTY) return
 
-        val safeAccessElement = expression.getChildOfType<LeafPsiElement>() ?: return
-        if (safeAccessElement.elementType != KtTokens.SAFE_ACCESS) return
+        val safeAccessElement = expression.getChildOfType<LeafPsiElement>()
+        if (safeAccessElement == null || safeAccessElement.elementType != KtTokens.SAFE_ACCESS) {
+            return
+        }
 
         if (bindingContext.diagnostics.forElement(safeAccessElement)
                 .any { it.factory == Errors.UNNECESSARY_SAFE_CALL }

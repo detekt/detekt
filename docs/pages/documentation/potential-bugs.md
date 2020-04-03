@@ -484,9 +484,9 @@ for (i in 1..2) {
 }
 ```
 
-### UnnecessaryNotNullOperators
+### UnnecessarySafeCall
 
-Reports Unnecessary Not Null operators that can be removed by the user.
+Reports Unnecessary Safe call operators that can be removed by the user.
 
 **Severity**: Defect
 
@@ -496,8 +496,8 @@ Reports Unnecessary Not Null operators that can be removed by the user.
 
 ```kotlin
 fun foo(s: String) {
-    val a = 1
-    val b = a!!
+    val a: String = ""
+    val b = someValue?.length
 }
 ```
 
@@ -505,8 +505,8 @@ fun foo(s: String) {
 
 ```kotlin
 fun foo(s: String) {
-    val a = 1
-    val b = a
+    val a: String? = null
+    val b = someValue?.length
 }
 ```
 
