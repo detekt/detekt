@@ -6,6 +6,27 @@ permalink: changelog.html
 toc: true
 ---
 
+#### 1.7.4
+
+##### Notable Changes
+
+The last Gradle plugin version was referencing 1.7.2 instead of 1.7.3.
+This was fixed and specifying the `toolVersion` is not necessary anymore.
+
+```kotlin
+detekt {
+    toolversion = "1.7.3"
+}
+``` 
+
+##### Changelog
+
+- Revert warning: jcenter is missing (#2550) - [#2576](https://github.com/arturbosch/detekt/pull/2576)
+- Add additional task input for plugin version task - [#2575](https://github.com/arturbosch/detekt/pull/2575)
+- jcenter() requirement - [#2571](https://github.com/arturbosch/detekt/issues/2571)
+
+See all issues at: [1.7.4](https://github.com/arturbosch/detekt/milestone/64)
+
 #### 1.7.3
 
 ##### Changelog
