@@ -18,10 +18,8 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * Reports unnecessary safe call operators (`.?`) that can be removed by the user.
  *
  * <noncompliant>
- * fun foo(s: String) {
- *     val a: String = ""
- *     val b = someValue?.length
- * }
+ * val a: String = ""
+ * val b = someValue?.length
  * </noncompliant>
  *
  * <compliant>
