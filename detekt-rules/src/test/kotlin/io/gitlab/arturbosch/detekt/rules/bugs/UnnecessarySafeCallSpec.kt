@@ -52,7 +52,7 @@ class UnnecessarySafeCallSpec : Spek({
 
     describe("check valid safe operators usage") {
 
-        it("does not reports a simple safe operator usage on nullable type") {
+        it("does not report a simple safe operator usage on nullable type") {
             val code = """
                 fun test(s: String) {
                     val a : Int? = 1
