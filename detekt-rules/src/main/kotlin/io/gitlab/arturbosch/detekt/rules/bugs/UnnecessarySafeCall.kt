@@ -25,10 +25,8 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * </noncompliant>
  *
  * <compliant>
- * fun foo(s: String) {
- *     val a: String? = null
- *     val b = someValue?.length
- * }
+ * val a: String? = null
+ * val b = someValue?.length
  * </compliant>
  */
 class UnnecessarySafeCall(config: Config = Config.empty) : Rule(config) {
