@@ -484,6 +484,10 @@ for (i in 1..2) {
 }
 ```
 
+### UnnecessaryNotNullOperator
+
+Reports unnecessary not-null operator usage (!!) that can be removed by the user.
+
 **Severity**: Defect
 
 **Debt**: 5min
@@ -491,11 +495,37 @@ for (i in 1..2) {
 #### Noncompliant Code:
 
 ```kotlin
+val a = 1
+val b = a!!
 ```
 
 #### Compliant Code:
 
 ```kotlin
+val a = 1
+val b = a
+```
+
+### UnnecessarySafeCall
+
+Reports unnecessary safe call operators (`.?`) that can be removed by the user.
+
+**Severity**: Defect
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+val a: String = ""
+val b = someValue?.length
+```
+
+#### Compliant Code:
+
+```kotlin
+val a: String? = null
+val b = someValue?.length
 ```
 
 ### UnreachableCode

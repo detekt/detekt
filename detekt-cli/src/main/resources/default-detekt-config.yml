@@ -444,9 +444,9 @@ potential-bugs:
     active: true
   UnconditionalJumpStatementInLoop:
     active: false
-  UnnecessarySafeCall:
-    active: false
   UnnecessaryNotNullOperator:
+    active: false
+  UnnecessarySafeCall:
     active: false
   UnreachableCode:
     active: true
