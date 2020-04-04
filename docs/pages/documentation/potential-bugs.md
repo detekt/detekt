@@ -486,7 +486,7 @@ for (i in 1..2) {
 
 ### UnnecessarySafeCall
 
-Reports Unnecessary Safe call operators that can be removed by the user.
+Reports unnecessary safe call operators (`.?`) that can be removed by the user.
 
 **Severity**: Defect
 
@@ -495,19 +495,15 @@ Reports Unnecessary Safe call operators that can be removed by the user.
 #### Noncompliant Code:
 
 ```kotlin
-fun foo(s: String) {
-    val a: String = ""
-    val b = someValue?.length
-}
+val a: String = ""
+val b = someValue?.length
 ```
 
 #### Compliant Code:
 
 ```kotlin
-fun foo(s: String) {
-    val a: String? = null
-    val b = someValue?.length
-}
+val a: String? = null
+val b = someValue?.length
 ```
 
 ### UnreachableCode
