@@ -20,6 +20,7 @@ import io.gitlab.arturbosch.detekt.rules.bugs.RedundantElseInWhen
 import io.gitlab.arturbosch.detekt.rules.bugs.UnconditionalJumpStatementInLoop
 import io.gitlab.arturbosch.detekt.rules.bugs.UnreachableCode
 import io.gitlab.arturbosch.detekt.rules.bugs.UnsafeCallOnNullableType
+import io.gitlab.arturbosch.detekt.rules.bugs.UnnecessarySafeCall
 import io.gitlab.arturbosch.detekt.rules.bugs.UnsafeCast
 import io.gitlab.arturbosch.detekt.rules.bugs.UselessPostfixExpression
 import io.gitlab.arturbosch.detekt.rules.bugs.WrongEqualsTypeParameter
@@ -51,6 +52,7 @@ class PotentialBugProvider : DefaultRuleSetProvider {
                 MissingWhenCase(config),
                 RedundantElseInWhen(config),
                 UnconditionalJumpStatementInLoop(config),
+                UnnecessarySafeCall(config),
                 UnreachableCode(config),
                 UnsafeCallOnNullableType(config),
                 UnsafeCast(config),
