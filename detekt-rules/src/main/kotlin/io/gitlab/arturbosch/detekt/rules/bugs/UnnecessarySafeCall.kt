@@ -46,9 +46,8 @@ class UnnecessarySafeCall(config: Config = Config.empty) : Rule(config) {
             return
         }
 
-        if (bindingContext.diagnostics.forElement(safeAccessElement)
-                .any { it.factory == Errors.UNNECESSARY_SAFE_CALL }
-        ) {
+        val compilerReports = bindingContext.diagnostics.forElement(safeAccessElement)
+        if (compilerReports.any { it.factory == Errors.UNNECESSARY_SAFE_CALL }) {
             report(
                 CodeSmell(
                     issue, Entity.from(expression), "${expression.text} contains an unnecessary " +
