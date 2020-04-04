@@ -32,7 +32,7 @@ class UnnecessarySafeCall(config: Config = Config.empty) : Rule(config) {
     override val issue: Issue = Issue(
         "UnnecessarySafeCall",
         Severity.Defect,
-        "Unnecessary Safe call operators detected.",
+        "Unnecessary safe call operator detected.",
         Debt.FIVE_MINS
     )
 
