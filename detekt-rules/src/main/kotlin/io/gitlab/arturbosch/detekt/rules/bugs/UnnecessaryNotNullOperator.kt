@@ -12,7 +12,7 @@ import org.jetbrains.kotlin.psi.KtUnaryExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
- * Reports Unnecessary Not Null operator usage (!!) that can be removed by the user.
+ * Reports unnecessary not-null operator usage (!!) that can be removed by the user.
  *
  * <noncompliant>
  * val a = 1
@@ -28,7 +28,7 @@ class UnnecessaryNotNullOperator(config: Config = Config.empty) : Rule(config) {
 
     override val issue: Issue = Issue("UnnecessaryNotNullOperator",
             Severity.Defect,
-            "Unnecessary Not Null unary operator (!!) detected.",
+            "Unnecessary not-null unary operator (!!) detected.",
             Debt.FIVE_MINS)
 
     override fun visitUnaryExpression(expression: KtUnaryExpression) {
@@ -38,7 +38,7 @@ class UnnecessaryNotNullOperator(config: Config = Config.empty) : Rule(config) {
         val compilerReports = bindingContext.diagnostics.forElement(expression.operationReference)
         if (compilerReports.any { it.factory == Errors.UNNECESSARY_NOT_NULL_ASSERTION }) {
             report(CodeSmell(issue, Entity.from(expression), "${expression.text} contains an unnecessary " +
-                    "not null (!!) operators"))
+                    "not-null (!!) operators"))
         }
     }
 }
