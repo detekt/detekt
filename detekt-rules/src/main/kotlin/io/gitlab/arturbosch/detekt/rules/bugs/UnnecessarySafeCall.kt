@@ -15,7 +15,7 @@ import org.jetbrains.kotlin.psi.psiUtil.getChildOfType
 import org.jetbrains.kotlin.resolve.BindingContext
 
 /**
- * Reports Unnecessary Safe call operators that can be removed by the user.
+ * Reports unnecessary safe call operators (`.?`) that can be removed by the user.
  *
  * <noncompliant>
  * fun foo(s: String) {
