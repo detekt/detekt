@@ -9,11 +9,7 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class ExceptionRaisedInUnexpectedLocationSpec : Spek({
-    val subject by memoized {
-        ExceptionRaisedInUnexpectedLocation(
-                TestConfig(mapOf(ExceptionRaisedInUnexpectedLocation.METHOD_NAMES to "toString,hashCode,equals,finalize"))
-        )
-    }
+    val subject by memoized { ExceptionRaisedInUnexpectedLocation() }
 
     describe("ExceptionRaisedInUnexpectedLocation rule") {
 

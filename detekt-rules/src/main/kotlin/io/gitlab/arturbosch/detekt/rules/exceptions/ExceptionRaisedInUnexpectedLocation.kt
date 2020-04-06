@@ -37,7 +37,7 @@ class ExceptionRaisedInUnexpectedLocation(config: Config = Config.empty) : Rule(
             "This method is not expected to throw exceptions. This can cause weird behavior.",
             Debt.TWENTY_MINS)
 
-    private val methods = SplitPattern(valueOrDefault(METHOD_NAMES, ""))
+    private val methods = SplitPattern(valueOrDefault(METHOD_NAMES, "toString,hashCode,equals,finalize"))
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (isPotentialMethod(function) && hasThrowExpression(function.bodyExpression)) {
