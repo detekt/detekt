@@ -102,6 +102,11 @@ class ComplexMethodSpec : Spek({
                 val config = TestConfig(mapOf(ComplexMethod.NESTING_FUNCTIONS to "let,apply,also"))
                 execute(config, expectedValue = 2)
             }
+
+            it("skips 'forEach' as it is not specified list") {
+                val config = TestConfig(mapOf(ComplexMethod.NESTING_FUNCTIONS to listOf("let", "apply", "also")))
+                execute(config, expectedValue = 2)
+            }
         }
 
         context("several complex methods") {
