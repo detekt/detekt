@@ -35,7 +35,7 @@ class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
         Debt.TEN_MINS
     )
 
-    private val forbiddenImports = valueOrDefaultCommaSeparated(IMPORTS, emptyList(), "")
+    private val forbiddenImports = valueOrDefaultCommaSeparated(IMPORTS, emptyList())
         .distinct()
         .map { it.simplePatternToRegex() }
 
