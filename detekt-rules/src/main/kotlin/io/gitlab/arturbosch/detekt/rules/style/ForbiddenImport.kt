@@ -38,7 +38,6 @@ class ForbiddenImport(config: Config = Config.empty) : Rule(config) {
     private val forbiddenImports = valueOrDefaultCommaSeparated(IMPORTS, emptyList(), "")
         .distinct()
         .map { it.simplePatternToRegex() }
-        .toList()
 
     private val forbiddenPatterns: Regex = Regex(valueOrDefault(FORBIDDEN_PATTERNS, ""))
 
