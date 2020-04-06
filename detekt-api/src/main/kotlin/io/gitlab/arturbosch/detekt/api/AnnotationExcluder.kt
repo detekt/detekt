@@ -13,7 +13,7 @@ class AnnotationExcluder(
     private val excludes: SplitPattern
 ) {
 
-    private var resolvedAnnotations = root.importList
+    private val resolvedAnnotations = root.importList
             ?.imports
             ?.asSequence()
             ?.filterNot { it.isAllUnder }
@@ -30,11 +30,7 @@ class AnnotationExcluder(
 
     private fun isExcluded(annotation: KtAnnotationEntry): Boolean {
         val annotationText = annotation.typeReference?.text
-        val value = resolvedAnnotations[annotationText]
-        return if (value != null) {
-            excludes.contains(value)
-        } else {
-            excludes.contains(annotationText)
-        }
+        val value = resolvedAnnotations[annotationText] ?: annotationText
+        return excludes.contains(value)
     }
 }
