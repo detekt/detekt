@@ -59,12 +59,11 @@ class ComplexMethod(
     private val ignoreSingleWhenExpression = valueOrDefault(IGNORE_SINGLE_WHEN_EXPRESSION, false)
     private val ignoreSimpleWhenEntries = valueOrDefault(IGNORE_SIMPLE_WHEN_ENTRIES, false)
     private val ignoreNestingFunctions = valueOrDefault(IGNORE_NESTING_FUNCTIONS, false)
-    private val nestingFunctions =
-        CommaSeparatedPattern(valueOrDefault(NESTING_FUNCTIONS, ""))
-            .mapAll { it }
-            .toSet()
-            .takeIf { it.isNotEmpty() }
-            ?: CyclomaticComplexity.DEFAULT_NESTING_FUNCTIONS
+    private val nestingFunctions = CommaSeparatedPattern(valueOrDefault(
+            NESTING_FUNCTIONS,
+            CyclomaticComplexity.DEFAULT_NESTING_FUNCTIONS.joinToString(",")))
+        .mapAll { it }
+        .toSet()
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (ignoreSingleWhenExpression && hasSingleWhenExpression(function.bodyExpression)) {
