@@ -21,7 +21,7 @@ should not throw any exceptions.
 
 #### Configuration options:
 
-* ``methodNames`` (default: ``'toString,hashCode,equals,finalize'``)
+* ``methodNames`` (default: ``[toString, hashCode, equals, finalize]``)
 
    methods which should not throw exceptions
 
