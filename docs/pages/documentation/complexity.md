@@ -114,7 +114,7 @@ Each one of them adds one to the complexity count.
    Whether to ignore functions which are often used instead of an `if` or
 `for` statement
 
-* ``nestingFunctions`` (default: ``run,let,apply,with,also,use,forEach,isNotNull,ifNull``)
+* ``nestingFunctions`` (default: ``[run, let, apply, with, also, use, forEach, isNotNull, ifNull]``)
 
    Comma separated list of function names which add complexity
 
