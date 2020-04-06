@@ -87,6 +87,7 @@ complexity:
     constructorThreshold: 7
     ignoreDefaultParameters: false
     ignoreDataClasses: true
+    ignoreAnnotated: ''
   MethodOverloading:
     active: false
     threshold: 6
