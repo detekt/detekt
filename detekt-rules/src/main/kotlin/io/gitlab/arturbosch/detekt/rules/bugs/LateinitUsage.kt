@@ -57,7 +57,7 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
 
         super.visit(root)
 
-        val annotationExcluder = AnnotationExcluder(root, excludeAnnotatedProperties)
+        val annotationExcluder = AnnotationExcluder(root, excludeAnnotatedProperties.mapAll { it })
 
         properties.filterNot { annotationExcluder.shouldExclude(it.annotationEntries) }
                 .filterNot { it.containingClass()?.name?.matches(ignoreOnClassesPattern) == true }

@@ -63,7 +63,7 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
     private lateinit var annotationExcluder: AnnotationExcluder
 
     override fun visitKtFile(file: KtFile) {
-        annotationExcluder = AnnotationExcluder(file, excludeAnnotatedClasses)
+        annotationExcluder = AnnotationExcluder(file, excludeAnnotatedClasses.mapAll { it })
         super.visitKtFile(file)
     }
 

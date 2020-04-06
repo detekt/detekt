@@ -50,7 +50,7 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
     private lateinit var annotationExcluder: AnnotationExcluder
 
     override fun visit(root: KtFile) {
-        annotationExcluder = AnnotationExcluder(root, excludeAnnotatedFunctions)
+        annotationExcluder = AnnotationExcluder(root, excludeAnnotatedFunctions.mapAll { it })
         super.visit(root)
     }
 

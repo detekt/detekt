@@ -60,7 +60,7 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
 
     override fun visit(root: KtFile) {
         super.visit(root)
-        val annotationExcluder = AnnotationExcluder(root, excludeAnnotatedClasses)
+        val annotationExcluder = AnnotationExcluder(root, excludeAnnotatedClasses.mapAll { it })
         root.forEachDescendantOfType<KtClass> { visitKlass(it, annotationExcluder) }
     }
 
