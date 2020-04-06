@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
+import io.gitlab.arturbosch.detekt.api.AnnotationExcluder
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
@@ -13,6 +14,7 @@ import io.gitlab.arturbosch.detekt.rules.isOverride
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtConstructor
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameterList
@@ -56,6 +58,13 @@ class LongParameterList(
 
     private val ignoreAnnotated = SplitPattern(valueOrDefault(IGNORE_ANNOTATED, ""))
 
+    private lateinit var annotationExcluder: AnnotationExcluder
+
+    override fun visitKtFile(file: KtFile) {
+        annotationExcluder = AnnotationExcluder(file, ignoreAnnotated.mapAll { it })
+        super.visitKtFile(file)
+    }
+
     override fun visitNamedFunction(function: KtNamedFunction) {
         val owner = function.containingClassOrObject
         if (owner is KtClass && owner.isIgnored()) {
@@ -73,9 +82,7 @@ class LongParameterList(
     }
 
     private fun KtAnnotated.isIgnored(): Boolean {
-        return annotationEntries.any {
-            ignoreAnnotated.contains(it.typeReference?.text)
-        }
+        return annotationExcluder.shouldExclude(annotationEntries)
     }
 
     private fun validateConstructor(constructor: KtConstructor<*>) {
