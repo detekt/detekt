@@ -60,12 +60,14 @@ class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun reportIfUndocumented(element: KtClassOrObject) {
-        if (element.isPublicInherited() && element.isPublicNotOverridden() &&
-            element.notEnumEntry() && element.docComment == null) {
+        if (isPublicAndPublicInherited(element) && element.notEnumEntry() && element.docComment == null) {
             report(CodeSmell(issue, Entity.from(element),
                     "${element.nameAsSafeName} is missing required documentation."))
         }
     }
+
+    private fun isPublicAndPublicInherited(element: KtClassOrObject) =
+        element.isPublicInherited() && element.isPublicNotOverridden()
 
     private fun KtObjectDeclaration.isCompanionWithoutName() =
             isCompanion() && nameAsSafeName.asString() == "Companion"
