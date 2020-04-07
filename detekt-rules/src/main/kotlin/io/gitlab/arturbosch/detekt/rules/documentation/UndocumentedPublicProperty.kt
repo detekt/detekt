@@ -40,10 +40,8 @@ class UndocumentedPublicProperty(config: Config = Config.empty) : Rule(config) {
     }
 
     override fun visitProperty(property: KtProperty) {
-        if (property.isPublicInherited()) {
-            if (!property.isLocal && property.docComment == null && property.shouldBeDocumented()) {
-                report(property)
-            }
+        if (property.isPublicInherited() && !property.isLocal && property.shouldBeDocumented()) {
+            report(property)
         }
         super.visitProperty(property)
     }
@@ -57,7 +55,9 @@ class UndocumentedPublicProperty(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun KtProperty.shouldBeDocumented() =
-        (isTopLevel || containingClass()?.isPublic == true) && isPublicNotOverridden()
+        docComment == null && isTopLevelOrInPublicClass() && isPublicNotOverridden()
+
+    private fun KtProperty.isTopLevelOrInPublicClass() = isTopLevel || containingClass()?.isPublic == true
 
     private fun report(property: KtNamedDeclaration) {
         report(
