@@ -78,9 +78,10 @@ jobs:
 
 
     - name: Generate Coverage Report
+      if: matrix.os == 'ubuntu-latest' && matrix.jdk == 8
       run: ./gradlew jacocoTestReport
     - name: Publish Coverage
-      if: success()
+      if: success() && matrix.os == 'ubuntu-latest' && matrix.jdk == 8
       run: bash <(curl -s https://codecov.io/bash)
       shell: bash
 
