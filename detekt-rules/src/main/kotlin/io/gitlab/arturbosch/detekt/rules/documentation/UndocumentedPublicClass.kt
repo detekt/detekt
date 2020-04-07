@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.isPublicInherited
 import io.gitlab.arturbosch.detekt.rules.isPublicNotOverridden
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtClassOrObject
@@ -59,7 +60,8 @@ class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun reportIfUndocumented(element: KtClassOrObject) {
-        if (element.isPublicNotOverridden() && element.notEnumEntry() && element.docComment == null) {
+        if (element.isPublicInherited() && element.isPublicNotOverridden() &&
+            element.notEnumEntry() && element.docComment == null) {
             report(CodeSmell(issue, Entity.from(element),
                     "${element.nameAsSafeName} is missing required documentation."))
         }
