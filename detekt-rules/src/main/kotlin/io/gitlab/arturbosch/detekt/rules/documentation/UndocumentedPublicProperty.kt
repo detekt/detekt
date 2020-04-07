@@ -7,12 +7,14 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.isPublicInherited
 import io.gitlab.arturbosch.detekt.rules.isPublicNotOverridden
 import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.KtParameter
 import org.jetbrains.kotlin.psi.KtPrimaryConstructor
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
+import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 import org.jetbrains.kotlin.psi.psiUtil.isPublic
 
 /**
@@ -28,8 +30,8 @@ class UndocumentedPublicProperty(config: Config = Config.empty) : Rule(config) {
             "Public properties require documentation.", Debt.TWENTY_MINS)
 
     override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
-        if (constructor.containingClass()?.isPublic == true) {
-            val comment = constructor.getContainingClassOrObject().docComment?.text
+        if (constructor.isPublicInherited()) {
+            val comment = constructor.containingClassOrObject?.docComment?.text
             constructor.valueParameters
                 .filter { it.isPublicNotOverridden() && it.hasValOrVar() && it.isUndocumented(comment) }
                 .forEach { report(it) }
@@ -38,8 +40,10 @@ class UndocumentedPublicProperty(config: Config = Config.empty) : Rule(config) {
     }
 
     override fun visitProperty(property: KtProperty) {
-        if (!property.isLocal && property.docComment == null && property.shouldBeDocumented()) {
-            report(property)
+        if (property.isPublicInherited()) {
+            if (!property.isLocal && property.docComment == null && property.shouldBeDocumented()) {
+                report(property)
+            }
         }
         super.visitProperty(property)
     }
