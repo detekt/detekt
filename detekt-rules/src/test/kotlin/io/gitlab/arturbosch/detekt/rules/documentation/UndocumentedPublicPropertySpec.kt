@@ -131,11 +131,6 @@ class UndocumentedPublicPropertySpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report objects") {
-            val code = "object A {}"
-            assertThat(subject.compileAndLint(code)).isEmpty()
-        }
-
         it("does not report undocumented public properties in a primary constructor for an internal class") {
             val code = "internal class Test(val a: Int)"
             assertThat(subject.compileAndLint(code)).isEmpty()
