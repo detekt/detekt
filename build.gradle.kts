@@ -317,6 +317,7 @@ allprojects {
     dependencies {
         detekt(project(":detekt-cli"))
         detektPlugins(project(":detekt-formatting"))
+        detektPlugins("io.github.mkohm:detekt-hint:0.1.4")
     }
 }
 
@@ -356,6 +357,24 @@ val detektAll by tasks.registering(Detekt::class) {
         html.enabled = false
         txt.enabled = false
     }
+}
+
+task<Detekt>("detektHint") {
+    description = "Running detekt-hint and outputs report for Danger to consume."
+    setSource(analysisDir)
+    config.setFrom(file("$rootDir/config/detekt/detekt-hint.yml"))
+    classpath.setFrom(detektClasspath)
+    reports {
+        xml {
+            enabled = true
+            destination = file("$buildDir/reports/detekt-hint-report.xml")
+        }
+        html.enabled = false
+        txt.enabled = false
+    }
+    include(kotlinFiles)
+    exclude(resourceFiles)
+    exclude(buildFiles)
 }
 
 val detektProjectBaseline by tasks.registering(DetektCreateBaselineTask::class) {
