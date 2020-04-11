@@ -13,9 +13,6 @@ class AnnotationExcluder(
     private val excludes: List<String>
 ) {
 
-    @Deprecated(
-        message = "Use AnnotationExcluder(KtFile, List<String>) instead",
-        replaceWith = ReplaceWith("AnnotationExcluder(root, excludes.mapAll { it })"))
     constructor(root: KtFile, excludes: SplitPattern) : this(root, excludes.mapAll { it })
 
     private val resolvedAnnotations = root.importList
