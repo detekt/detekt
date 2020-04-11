@@ -51,9 +51,25 @@ class UndocumentedPublicPropertySpec : Spek({
             val code = """
                 class Test {
                     /**
-                    *
+                    * Comment
                     */
                     val a = 1
+                }
+            """
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        it("does not report undocumented, public and overridden property in class") {
+            val code = """
+                interface I {
+                    /**
+                     * Comment
+                     */
+                    val a: Int
+                }
+                
+                class Test : I {
+                    override val a = 1
                 }
             """
             assertThat(subject.compileAndLint(code)).isEmpty()
@@ -131,6 +147,118 @@ class UndocumentedPublicPropertySpec : Spek({
                 class Test(val a: Int, val b: Int, val c: Int, val d: Int)
             """
             assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        describe("public properties in nested classes") {
+
+            it("reports undocumented public properties in nested classes") {
+                val code = """
+                class Outer { 
+                    class Inner {
+                        val i = 0
+                        
+                        class InnerInner {
+                            val ii = 0
+                        }
+                    }
+                }
+            """
+                assertThat(subject.compileAndLint(code)).hasSize(2)
+            }
+
+            it("reports undocumented public properties in inner classes") {
+                val code = """
+                class Outer {
+                    inner class Inner {
+                        val i = 0
+                    }
+                }
+            """
+                assertThat(subject.compileAndLint(code)).hasSize(1)
+            }
+
+            it("reports undocumented public properties inside objects") {
+                val code = """
+                object Outer {
+                    class Inner {
+                        val i = 0
+                    }
+                }
+            """
+                assertThat(subject.compileAndLint(code)).hasSize(1)
+            }
+
+            it("does not report undocumented and non-public properties in nested classes") {
+                val code = """
+                internal class Outer {
+                    class Inner {
+                        val i = 0
+                    }
+                }
+            """
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+
+            it("does not report undocumented and non-public properties in inner classes") {
+                val code = """
+                internal class Outer {
+                    inner class Inner {
+                        val i = 0
+                    }
+                }
+            """
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+        }
+
+        describe("public properties in primary constructors inside nested classes") {
+
+            it("reports undocumented public properties in nested classes") {
+                val code = """
+                class Outer(val a: Int) {
+                    class Inner(val b: Int) {
+                        class InnerInner(val c: Int)
+                    }
+                }
+            """
+                assertThat(subject.compileAndLint(code)).hasSize(3)
+            }
+
+            it("reports undocumented public properties in inner classes") {
+                val code = """
+                class Outer(val a: Int) {
+                    inner class Inner(val b: Int)
+                }
+            """
+                assertThat(subject.compileAndLint(code)).hasSize(2)
+            }
+
+            it("reports undocumented public properties inside objects") {
+                val code = """
+                object Outer {
+                    class Inner(val a: Int)
+                }
+            """
+                assertThat(subject.compileAndLint(code)).hasSize(1)
+            }
+
+            it("does not report undocumented and non-public properties in nested classes") {
+                val code = """
+                internal class Outer(val a: Int) {
+                    class Inner(val b: Int)
+                }
+            """
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
+
+            it("does not report undocumented and non-public properties in inner classes") {
+                val code = """
+                internal class Outer(val a: Int) {
+                    inner class Inner(val b: Int)
+                }
+            """
+                assertThat(subject.compileAndLint(code)).isEmpty()
+            }
         }
     }
 })
