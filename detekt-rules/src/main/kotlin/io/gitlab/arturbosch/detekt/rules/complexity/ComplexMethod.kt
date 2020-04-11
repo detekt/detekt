@@ -8,8 +8,9 @@ import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.ThresholdRule
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
-import io.gitlab.arturbosch.detekt.api.internal.CommaSeparatedPattern
 import io.gitlab.arturbosch.detekt.api.internal.CyclomaticComplexity
+import io.gitlab.arturbosch.detekt.api.internal.CyclomaticComplexity.Companion.DEFAULT_NESTING_FUNCTIONS
+import io.gitlab.arturbosch.detekt.rules.valueOrDefaultCommaSeparated
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
@@ -42,7 +43,7 @@ import org.jetbrains.kotlin.psi.KtWhenExpression
  * @configuration ignoreNestingFunctions - Whether to ignore functions which are often used instead of an `if` or
  * `for` statement (default: `false`)
  * @configuration nestingFunctions - Comma separated list of function names which add complexity
- * (default: `run,let,apply,with,also,use,forEach,isNotNull,ifNull`)
+ * (default: `[run, let, apply, with, also, use, forEach, isNotNull, ifNull]`)
  *
  * @active since v1.0.0
  */
@@ -59,12 +60,8 @@ class ComplexMethod(
     private val ignoreSingleWhenExpression = valueOrDefault(IGNORE_SINGLE_WHEN_EXPRESSION, false)
     private val ignoreSimpleWhenEntries = valueOrDefault(IGNORE_SIMPLE_WHEN_ENTRIES, false)
     private val ignoreNestingFunctions = valueOrDefault(IGNORE_NESTING_FUNCTIONS, false)
-    private val nestingFunctions =
-        CommaSeparatedPattern(valueOrDefault(NESTING_FUNCTIONS, ""))
-            .mapAll { it }
-            .toSet()
-            .takeIf { it.isNotEmpty() }
-            ?: CyclomaticComplexity.DEFAULT_NESTING_FUNCTIONS
+    private val nestingFunctions = valueOrDefaultCommaSeparated(NESTING_FUNCTIONS, DEFAULT_NESTING_FUNCTIONS.toList())
+        .toSet()
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (ignoreSingleWhenExpression && hasSingleWhenExpression(function.bodyExpression)) {

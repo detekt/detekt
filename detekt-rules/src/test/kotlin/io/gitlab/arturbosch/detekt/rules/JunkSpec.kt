@@ -8,6 +8,30 @@ import org.spekframework.spek2.style.specification.describe
 
 class JunkSpec : Spek({
 
+    describe("valueOrDefaultCommaSeparated") {
+
+        it("returns the default when there is not a config value") {
+            val config = TestConfig()
+
+            assertThat(config.valueOrDefaultCommaSeparated("imports", listOf("java.utils.*")))
+                .isEqualTo(listOf("java.utils.*"))
+        }
+
+        it("returns the default when there is a config String value") {
+            val config = TestConfig("imports" to "butterknife.*,java.utils.*,")
+
+            assertThat(config.valueOrDefaultCommaSeparated("imports", listOf("java.utils.*")))
+                .isEqualTo(listOf("butterknife.*", "java.utils.*"))
+        }
+
+        it("returns the config value when there is a config List value") {
+            val config = TestConfig("imports" to listOf("butterknife.*"))
+
+            assertThat(config.valueOrDefaultCommaSeparated("imports", listOf("java.utils.*")))
+                .isEqualTo(listOf("butterknife.*"))
+        }
+    }
+
     describe("valueOrDefaultCommaSeparated works with CompositeConfig") {
 
         it("and empty String") {
@@ -16,7 +40,7 @@ class JunkSpec : Spek({
                 TestConfig(mapOf("imports" to emptyList<String>()))
             )
 
-            assertThat(config.valueOrDefaultCommaSeparated("imports", emptyList(), "")).isEmpty()
+            assertThat(config.valueOrDefaultCommaSeparated("imports", emptyList())).isEmpty()
         }
 
         it("and empty List") {
@@ -25,7 +49,7 @@ class JunkSpec : Spek({
                 TestConfig(mapOf("imports" to emptyList<String>()))
             )
 
-            assertThat(config.valueOrDefaultCommaSeparated("imports", emptyList(), "")).isEmpty()
+            assertThat(config.valueOrDefaultCommaSeparated("imports", emptyList())).isEmpty()
         }
 
         it("and String with values") {
@@ -34,7 +58,7 @@ class JunkSpec : Spek({
                 TestConfig(mapOf("imports" to emptyList<String>()))
             )
 
-            assertThat(config.valueOrDefaultCommaSeparated("imports", emptyList(), ""))
+            assertThat(config.valueOrDefaultCommaSeparated("imports", emptyList()))
                 .containsExactly("java.utils.*", "butterknife.*")
         }
 
@@ -44,7 +68,7 @@ class JunkSpec : Spek({
                 TestConfig(mapOf("imports" to emptyList<String>()))
             )
 
-            assertThat(config.valueOrDefaultCommaSeparated("imports", emptyList(), ""))
+            assertThat(config.valueOrDefaultCommaSeparated("imports", emptyList()))
                 .containsExactly("java.utils.*", "butterknife.*")
         }
     }

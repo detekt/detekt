@@ -39,18 +39,17 @@ inline fun <reified T : Any> Any.safeAs(): T? = this as? T
 
 internal fun Config.valueOrDefaultCommaSeparated(
     key: String,
-    default: List<String>,
-    defaultString: String
+    default: List<String>
 ): List<String> {
+    fun fallBack() = valueOrDefault(key, default.joinToString(","))
+        .commaSeparatedPattern()
+        .toList()
+
     return try {
         valueOrDefault(key, default)
     } catch (_: IllegalStateException) {
-        valueOrDefault(key, defaultString)
-            .commaSeparatedPattern()
-            .toList()
+        fallBack()
     } catch (_: ClassCastException) {
-        valueOrDefault(key, defaultString)
-            .commaSeparatedPattern()
-            .toList()
+        fallBack()
     }
 }

@@ -93,13 +93,18 @@ class ComplexMethodSpec : Spek({
                 execute(config, expectedValue = 2)
             }
 
-            it("defaults to a predefined set of nested functions for compatibility when empty") {
+            it("skips all if if the nested functions is empty") {
                 val config = TestConfig(mapOf(ComplexMethod.NESTING_FUNCTIONS to ""))
-                execute(config, expectedValue = 3)
+                execute(config, expectedValue = 2)
             }
 
             it("skips 'forEach' as it is not specified") {
                 val config = TestConfig(mapOf(ComplexMethod.NESTING_FUNCTIONS to "let,apply,also"))
+                execute(config, expectedValue = 2)
+            }
+
+            it("skips 'forEach' as it is not specified list") {
+                val config = TestConfig(mapOf(ComplexMethod.NESTING_FUNCTIONS to listOf("let", "apply", "also")))
                 execute(config, expectedValue = 2)
             }
         }

@@ -44,6 +44,6 @@ open class TestConfig(
     }
 
     companion object {
-        operator fun invoke(vararg pairs: Pair<String, String>) = TestConfig(mapOf(*pairs))
+        operator fun invoke(vararg pairs: Pair<String, Any>) = TestConfig(mapOf(*pairs))
     }
 }
