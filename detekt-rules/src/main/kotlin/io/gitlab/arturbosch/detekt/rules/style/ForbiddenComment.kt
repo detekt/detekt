@@ -7,6 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
+import io.gitlab.arturbosch.detekt.rules.valueOrDefaultCommaSeparated
 import org.jetbrains.kotlin.com.intellij.psi.PsiComment
 
 /**
@@ -20,9 +21,9 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiComment
  * // STOPSHIP:
  * </noncompliant>
  *
- * @configuration values - forbidden comment strings (default: `'TODO:,FIXME:,STOPSHIP:'`)
+ * @configuration values - forbidden comment strings (default: `['TODO:', 'FIXME:', 'STOPSHIP:']`)
  * @configuration allowedPatterns - ignores comments which match the specified regular expression.
-   For example `Ticket|Task`. (default: `''`)
+ * For example `Ticket|Task`. (default: `''`)
  * @active since v1.0.0
  */
 class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
@@ -32,10 +33,7 @@ class ForbiddenComment(config: Config = Config.empty) : Rule(config) {
             "Flags a forbidden comment. Defaults values are TODO:, FIXME: or STOPSHIP:",
             Debt.TEN_MINS)
 
-    private val values: List<String> =
-            valueOrDefault(VALUES, "TODO:,FIXME:,STOPSHIP:")
-                    .split(",")
-                    .filter { it.isNotBlank() }
+    private val values: List<String> = valueOrDefaultCommaSeparated(VALUES, listOf("TODO:", "FIXME:", "STOPSHIP:"))
 
     private val allowedPatterns: Regex = Regex(valueOrDefault(ALLOWED_PATTERNS, ""))
 

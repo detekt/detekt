@@ -74,34 +74,39 @@ class ForbiddenCommentSpec : Spek({
         }
 
         context("custom default values are configured") {
-            val banana = "// Banana."
-            val config = TestConfig(mapOf(ForbiddenComment.VALUES to "Banana"))
 
-            it("should not report TODO: usages") {
-                val findings = ForbiddenComment(config).compileAndLint(todoColon)
-                assertThat(findings).isEmpty()
-            }
+            listOf(
+                TestConfig(mapOf(ForbiddenComment.VALUES to "Banana")),
+                TestConfig(mapOf(ForbiddenComment.VALUES to listOf("Banana"))))
+                .forEach { config ->
+                    val banana = "// Banana."
 
-            it("should not report FIXME: usages") {
-                val findings = ForbiddenComment(config).compileAndLint(fixmeColon)
-                assertThat(findings).isEmpty()
-            }
+                    it("should not report TODO: usages") {
+                        val findings = ForbiddenComment(config).compileAndLint(todoColon)
+                        assertThat(findings).isEmpty()
+                    }
 
-            it("should not report STOPME: usages") {
-                val findings = ForbiddenComment(config).compileAndLint(stopShipColon)
-                assertThat(findings).isEmpty()
-            }
+                    it("should not report FIXME: usages") {
+                        val findings = ForbiddenComment(config).compileAndLint(fixmeColon)
+                        assertThat(findings).isEmpty()
+                    }
 
-            it("should report Banana usages") {
-                val findings = ForbiddenComment(config).compileAndLint(banana)
-                assertThat(findings).hasSize(1)
-            }
+                    it("should not report STOPME: usages") {
+                        val findings = ForbiddenComment(config).compileAndLint(stopShipColon)
+                        assertThat(findings).isEmpty()
+                    }
 
-            it("should report Banana usages regardless of case sensitive") {
-                val forbiddenComment = ForbiddenComment(TestConfig(mapOf(ForbiddenComment.VALUES to "bAnAnA")))
-                val findings = forbiddenComment.compileAndLint(banana)
-                assertThat(findings).hasSize(1)
-            }
+                    it("should report Banana usages") {
+                        val findings = ForbiddenComment(config).compileAndLint(banana)
+                        assertThat(findings).hasSize(1)
+                    }
+
+                    it("should report Banana usages regardless of case sensitive") {
+                        val forbiddenComment = ForbiddenComment(TestConfig(mapOf(ForbiddenComment.VALUES to "bAnAnA")))
+                        val findings = forbiddenComment.compileAndLint(banana)
+                        assertThat(findings).hasSize(1)
+                    }
+                }
         }
 
         context("custom default values with allowed patterns are configured") {

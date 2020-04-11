@@ -259,7 +259,7 @@ development. Offending code comments will then be reported.
 
 #### Configuration options:
 
-* ``values`` (default: ``'TODO:,FIXME:,STOPSHIP:'``)
+* ``values`` (default: ``['TODO:', 'FIXME:', 'STOPSHIP:']``)
 
    forbidden comment strings
 
