@@ -108,6 +108,34 @@ class UndocumentedPublicClassSpec : Spek({
             assertThat(subject.compileAndLint("object o")).hasSize(1)
         }
 
+        it("should not report non-public nested classes") {
+            val code = """
+            internal class Outer {
+                class Nested
+                inner class Inner
+            }
+        """
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        it("should not report non-public nested interfaces") {
+            val code = """
+            internal class Outer {
+                interface Inner
+            }
+        """
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        it("should not report non-public nested objects") {
+            val code = """
+            internal class Outer {
+                object Inner
+            }
+        """
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
         it("should not report for documented public object") {
             val code = """
             /**
@@ -124,7 +152,6 @@ class UndocumentedPublicClassSpec : Spek({
                 }
             }
         """
-
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -137,7 +164,6 @@ class UndocumentedPublicClassSpec : Spek({
                 }
             }
         """
-
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
@@ -157,7 +183,6 @@ class UndocumentedPublicClassSpec : Spek({
                 CONSTANT
             }
         """
-
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
