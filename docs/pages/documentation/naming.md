@@ -74,7 +74,7 @@ Examples for forbidden names might be too generic class names like `...Manager`.
 
 #### Configuration options:
 
-* ``forbiddenName`` (default: ``''``)
+* ``forbiddenName`` (default: ``[]``)
 
    forbidden class names
 
