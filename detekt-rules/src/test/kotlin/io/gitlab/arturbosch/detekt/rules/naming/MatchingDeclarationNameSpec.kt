@@ -160,7 +160,7 @@ internal class MatchingDeclarationNameSpec : Spek({
             it("""
                 should not pass for class declaration not as first declaration with utility functions
                 when mustBeFirst is false.
-            """) {
+            """.trimIndent()) {
                 val ktFile = compileContentForTest("""
                     fun a() = 5
                     fun C.b() = 5
