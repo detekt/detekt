@@ -59,7 +59,7 @@ class WildcardImport(config: Config = Config.empty) : Rule(config) {
 
     override fun visitImportDirective(importDirective: KtImportDirective) {
         val import = importDirective.importPath?.pathStr
-        import?.let {
+        if (import != null) {
             if (!import.contains("*")) {
                 return
             }
@@ -67,7 +67,7 @@ class WildcardImport(config: Config = Config.empty) : Rule(config) {
             if (excludedImports.contains(import)) {
                 return
             }
-            report(CodeSmell(issue, Entity.from(importDirective), "$it " +
+            report(CodeSmell(issue, Entity.from(importDirective), "$import " +
                     "is a wildcard import. Replace it with fully qualified imports."))
         }
     }
