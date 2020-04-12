@@ -1616,7 +1616,7 @@ Therefore if whitelist is needed `NoWildcardImports` rule should be disabled.
 
 #### Configuration options:
 
-* ``excludeImports`` (default: ``'java.util.*,kotlinx.android.synthetic.*'``)
+* ``excludeImports`` (default: ``['java.util.*', 'kotlinx.android.synthetic.*']``)
 
    Define a whitelist of package names that should be allowed to be imported
 with wildcard imports.
@@ -1624,8 +1624,6 @@ with wildcard imports.
 #### Noncompliant Code:
 
 ```kotlin
-package test
-
 import io.gitlab.arturbosch.detekt.*
 
 class DetektElements {
@@ -1637,8 +1635,6 @@ class DetektElements {
 #### Compliant Code:
 
 ```kotlin
-package test
-
 import io.gitlab.arturbosch.detekt.DetektElement1
 import io.gitlab.arturbosch.detekt.DetektElement2
 
