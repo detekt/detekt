@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.SplitPattern
+import io.gitlab.arturbosch.detekt.rules.valueOrDefaultCommaSeparated
 import org.jetbrains.kotlin.psi.KtImportDirective
 
 /**
@@ -40,7 +40,7 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  * </compliant>
  *
  * @configuration excludeImports - Define a whitelist of package names that should be allowed to be imported
- * with wildcard imports. (default: `'java.util.*,kotlinx.android.synthetic.*'`)
+ * with wildcard imports. (default: `['java.util.*', 'kotlinx.android.synthetic.*']`)
  *
  * @active since v1.0.0
  */
@@ -54,8 +54,9 @@ class WildcardImport(config: Config = Config.empty) : Rule(config) {
                     "results in compilation errors.",
             Debt.FIVE_MINS)
 
-    private val excludedImports = SplitPattern(
-        valueOrDefault(EXCLUDED_IMPORTS, "java.util.*,kotlinx.android.synthetic.*"))
+    private val excludedImports = valueOrDefaultCommaSeparated(
+            EXCLUDED_IMPORTS, listOf("java.util.*", "kotlinx.android.synthetic.*"))
+        .map { it.removePrefix("*").removeSuffix("*") }
 
     override fun visitImportDirective(importDirective: KtImportDirective) {
         val import = importDirective.importPath?.pathStr
@@ -64,7 +65,7 @@ class WildcardImport(config: Config = Config.empty) : Rule(config) {
                 return
             }
 
-            if (excludedImports.contains(import)) {
+            if (excludedImports.any { import.contains(it, ignoreCase = true) }) {
                 return
             }
             report(CodeSmell(issue, Entity.from(importDirective), "$import " +
