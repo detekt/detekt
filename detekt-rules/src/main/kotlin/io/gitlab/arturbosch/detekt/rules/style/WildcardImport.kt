@@ -21,8 +21,6 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  * Therefore if whitelist is needed `NoWildcardImports` rule should be disabled.
  *
  * <noncompliant>
- * package test
- *
  * import io.gitlab.arturbosch.detekt.*
  *
  * class DetektElements {
@@ -32,8 +30,6 @@ import org.jetbrains.kotlin.psi.KtImportDirective
  * </noncompliant>
  *
  * <compliant>
- * package test
- *
  * import io.gitlab.arturbosch.detekt.DetektElement1
  * import io.gitlab.arturbosch.detekt.DetektElement2
  *
