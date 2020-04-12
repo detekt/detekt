@@ -54,7 +54,8 @@ class WildcardImport(config: Config = Config.empty) : Rule(config) {
                     "results in compilation errors.",
             Debt.FIVE_MINS)
 
-    private val excludedImports = SplitPattern(valueOrDefault(EXCLUDED_IMPORTS, ""))
+    private val excludedImports = SplitPattern(
+        valueOrDefault(EXCLUDED_IMPORTS, "java.util.*,kotlinx.android.synthetic.*"))
 
     override fun visitImportDirective(importDirective: KtImportDirective) {
         val import = importDirective.importPath?.pathStr

@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.rules.style
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
+import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -56,6 +57,16 @@ class WildcardImportSpec : Spek({
 
                 val findings = rule.compileAndLint(code)
                 assertThat(findings).hasSize(2)
+            }
+
+            it("ignores the default values") {
+                val code2 = """
+                    import java.util.*
+                    import kotlinx.android.synthetic.*
+                """
+
+                val findings = WildcardImport().lint(code2)
+                assertThat(findings).isEmpty()
             }
         }
 
