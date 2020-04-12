@@ -25,10 +25,10 @@ class ForbiddenClassName(config: Config = Config.empty) : Rule(config) {
     private val forbiddenNames = SplitPattern(valueOrDefault(FORBIDDEN_NAME, ""))
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
-        val name = classOrObject.name ?: ""
-        val forbiddenEntries = forbiddenNames.matches(name)
+        val name = classOrObject.name
+        val forbiddenEntries = name?.let { forbiddenNames.matches(name) }
 
-        if (forbiddenEntries.isNotEmpty()) {
+        if (forbiddenEntries?.isNotEmpty() == true) {
             var message = "Class name $name is forbidden as it contains:"
             forbiddenEntries.forEach { message += " $it," }
             message.trimEnd { it == ',' }
