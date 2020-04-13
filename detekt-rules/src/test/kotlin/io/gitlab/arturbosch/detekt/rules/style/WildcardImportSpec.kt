@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.test.TestConfig
-import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
@@ -23,40 +22,38 @@ class WildcardImportSpec : Spek({
                 }
             """
 
-            val file = compileContentForTest(code).text
-
             it("should not report anything when the rule is turned off") {
                 val rule = WildcardImport(TestConfig(mapOf(Config.ACTIVE_KEY to "false")))
 
-                val findings = rule.lint(file)
+                val findings = rule.lint(code)
                 assertThat(findings).isEmpty()
             }
 
             it("should report all wildcard imports") {
                 val rule = WildcardImport()
 
-                val findings = rule.lint(file)
+                val findings = rule.lint(code)
                 assertThat(findings).hasSize(2)
             }
 
             it("should not report excluded wildcard imports") {
                 val rule = WildcardImport(TestConfig(mapOf(WildcardImport.EXCLUDED_IMPORTS to "test.test.*")))
 
-                val findings = rule.lint(file)
+                val findings = rule.lint(code)
                 assertThat(findings).hasSize(1)
             }
 
             it("should not report excluded wildcard imports when multiple are excluded") {
                 val rule = WildcardImport(TestConfig(mapOf(WildcardImport.EXCLUDED_IMPORTS to "test.test.*, io.gitlab.arturbosch.detekt")))
 
-                val findings = rule.lint(file)
+                val findings = rule.lint(code)
                 assertThat(findings).isEmpty()
             }
 
             it("ignores excludes that are not matching") {
                 val rule = WildcardImport(TestConfig(mapOf(WildcardImport.EXCLUDED_IMPORTS to "other.test.*")))
 
-                val findings = rule.lint(file)
+                val findings = rule.lint(code)
                 assertThat(findings).hasSize(2)
             }
         }
