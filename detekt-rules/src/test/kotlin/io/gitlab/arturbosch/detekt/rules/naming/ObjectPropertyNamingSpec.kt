@@ -2,7 +2,6 @@ package io.gitlab.arturbosch.detekt.rules.naming
 
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assertThat
-import io.gitlab.arturbosch.detekt.test.lint
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -19,7 +18,7 @@ class ObjectPropertyNamingSpec : Spek({
                     ${PublicConst.negative}
                 }
             """
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("should detect public constants not complying to the naming rules") {
@@ -28,7 +27,7 @@ class ObjectPropertyNamingSpec : Spek({
                     ${PublicConst.positive}
                 }
             """
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         it("should not detect private constants complying to the naming rules") {
@@ -37,7 +36,7 @@ class ObjectPropertyNamingSpec : Spek({
                     ${PrivateConst.negative}
                 }
             """
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("should detect private constants not complying to the naming rules") {
@@ -46,7 +45,7 @@ class ObjectPropertyNamingSpec : Spek({
                     ${PrivateConst.positive}
                 }
             """
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         it("should report constants not complying to the naming rules at the right position") {
@@ -55,7 +54,7 @@ class ObjectPropertyNamingSpec : Spek({
                     ${PublicConst.positive}
                 }
             """
-            assertThat(subject.lint(code)).hasSourceLocation(2, 5)
+            assertThat(subject.compileAndLint(code)).hasSourceLocation(2, 5)
         }
     }
 
@@ -71,7 +70,7 @@ class ObjectPropertyNamingSpec : Spek({
                     }
                 }
             """
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("should detect public constants not complying to the naming rules") {
@@ -82,7 +81,7 @@ class ObjectPropertyNamingSpec : Spek({
                     }
                 }
             """
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         it("should not detect private constants complying to the naming rules") {
@@ -93,7 +92,7 @@ class ObjectPropertyNamingSpec : Spek({
                     }
                 }
             """
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("should detect private constants not complying to the naming rules") {
@@ -104,7 +103,7 @@ class ObjectPropertyNamingSpec : Spek({
                     }
                 }
             """
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         it("should report constants not complying to the naming rules at the right position") {
@@ -115,7 +114,7 @@ class ObjectPropertyNamingSpec : Spek({
                     }
                 }
             """
-            assertThat(subject.lint(code)).hasSourceLocation(3, 9)
+            assertThat(subject.compileAndLint(code)).hasSourceLocation(3, 9)
         }
     }
 
@@ -129,7 +128,7 @@ class ObjectPropertyNamingSpec : Spek({
                     ${PublicVal.negative}
                 }
             """
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("should detect public variables not complying to the naming rules") {
@@ -138,7 +137,7 @@ class ObjectPropertyNamingSpec : Spek({
                     ${PublicVal.positive}
                 }
             """
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
         it("should not detect private variables complying to the naming rules") {
@@ -147,7 +146,7 @@ class ObjectPropertyNamingSpec : Spek({
                     ${PrivateVal.negative}
                 }
             """
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("should detect private variables not complying to the naming rules") {
@@ -156,7 +155,7 @@ class ObjectPropertyNamingSpec : Spek({
                     private val __NAME = "Artur"
                 }
             """
-            assertThat(subject.lint(code)).hasSize(1)
+            assertThat(subject.compileAndLint(code)).hasSize(1)
         }
     }
 
@@ -175,7 +174,7 @@ class ObjectPropertyNamingSpec : Spek({
                     const val _name = "Artur"
                 }
             """
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("should not detect private properties in object") {
@@ -185,7 +184,7 @@ class ObjectPropertyNamingSpec : Spek({
                     private val _1234 = "Artur"
                 }
             """
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
 
