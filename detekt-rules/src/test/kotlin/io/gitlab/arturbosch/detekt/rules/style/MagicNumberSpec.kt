@@ -278,17 +278,17 @@ class MagicNumberSpec : Spek({
                     3 -> return 3
                 }
             }
-        """.trimMargin())
+        """.trimIndent())
 
             it("should be reported") {
                 val findings = MagicNumber().lint(ktFile)
                 assertThat(findings).hasSourceLocations(
+                    SourceLocation(3, 9),
                     SourceLocation(3, 21),
-                    SourceLocation(3, 33),
+                    SourceLocation(4, 9),
                     SourceLocation(4, 21),
-                    SourceLocation(4, 33),
-                    SourceLocation(5, 21),
-                    SourceLocation(5, 33)
+                    SourceLocation(5, 9),
+                    SourceLocation(5, 21)
                 )
             }
         }
@@ -383,7 +383,7 @@ class MagicNumberSpec : Spek({
                     const val anotherBoringConstant = 93872
                 }
             }
-        """.trimMargin())
+        """.trimIndent())
 
             it("should report all without ignore flags") {
                 val config = TestConfig(
@@ -399,12 +399,12 @@ class MagicNumberSpec : Spek({
                 val findings = MagicNumber(config).lint(ktFile)
                 assertThat(findings)
                     .hasSourceLocations(
-                        SourceLocation(1, 29),
-                        SourceLocation(3, 36),
-                        SourceLocation(4, 45),
-                        SourceLocation(7, 38),
-                        SourceLocation(11, 47),
-                        SourceLocation(12, 55)
+                        SourceLocation(1, 17),
+                        SourceLocation(3, 24),
+                        SourceLocation(4, 33),
+                        SourceLocation(7, 26),
+                        SourceLocation(11, 35),
+                        SourceLocation(12, 43)
                     )
             }
 
@@ -433,7 +433,7 @@ class MagicNumberSpec : Spek({
                     const val anotherBoringConstant = 93872
                 }
             }
-        """.trimMargin())
+        """.trimIndent())
 
             it("should not report any issues by default") {
                 val findings = MagicNumber().lint(ktFile)
@@ -502,7 +502,7 @@ class MagicNumberSpec : Spek({
                 )
 
                 val findings = MagicNumber(config).lint(ktFile)
-                assertThat(findings).hasSourceLocation(4, 47)
+                assertThat(findings).hasSourceLocation(4, 35)
             }
 
             it("should report property and constant when not ignoring properties, constants nor companion objects") {
@@ -517,8 +517,8 @@ class MagicNumberSpec : Spek({
                 val findings = MagicNumber(config).lint(ktFile)
                 assertThat(findings)
                     .hasSourceLocations(
-                        SourceLocation(4, 47),
-                        SourceLocation(5, 55)
+                        SourceLocation(4, 35),
+                        SourceLocation(5, 43)
                     )
             }
         }

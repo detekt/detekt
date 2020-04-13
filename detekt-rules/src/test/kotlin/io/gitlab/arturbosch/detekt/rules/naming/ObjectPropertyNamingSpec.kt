@@ -55,8 +55,8 @@ class ObjectPropertyNamingSpec : Spek({
                 object O {
                     ${PublicConst.positive}
                 }
-            """)
-            assertThat(subject.lint(code)).hasSourceLocation(3, 21)
+            """.trimIndent())
+            assertThat(subject.lint(code)).hasSourceLocation(2, 5)
         }
     }
 
@@ -115,8 +115,8 @@ class ObjectPropertyNamingSpec : Spek({
                         ${PublicConst.positive}
                     }
                 }
-            """)
-            assertThat(subject.lint(code)).hasSourceLocation(4, 25)
+            """.trimIndent())
+            assertThat(subject.lint(code)).hasSourceLocation(3, 9)
         }
     }
 
