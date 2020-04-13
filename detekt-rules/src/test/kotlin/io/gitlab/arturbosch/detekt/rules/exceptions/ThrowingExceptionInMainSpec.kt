@@ -59,7 +59,7 @@ class ThrowingExceptionInMainSpec : Spek({
                 fun main() { }
                 fun mai() { }
                 fun main(args: String) { }"""
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("does not report top level main functions with expression body which throw no exception") {
@@ -67,7 +67,7 @@ class ThrowingExceptionInMainSpec : Spek({
                 fun main(args: Array<String>) = ""
                 fun main() = Unit
             """
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("does not report main functions with no @JvmStatic annotation inside a class") {
