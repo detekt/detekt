@@ -37,7 +37,7 @@ class EmptyBlocksMultiRuleSpec : Spek({
         }
 
         it("reports an empty kt file") {
-            assertThat(subject.lint("")).hasSize(1)
+            assertThat(subject.compileAndLint("")).hasSize(1)
         }
 
         it("reports no duplicated findings - issue #1605") {
