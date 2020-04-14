@@ -33,7 +33,7 @@ class ForbiddenClassName(config: Config = Config.empty) : Rule(config) {
             forbiddenEntries.forEach { message += " $it," }
             message.trimEnd { it == ',' }
 
-            report(CodeSmell(issue, Entity.from(classOrObject), message))
+            report(CodeSmell(issue, Entity.atName(classOrObject), message))
         }
     }
 

@@ -28,5 +28,6 @@ Stores information about a specific code fragment.
 
 ### Companion Object Functions
 
+| [atName](at-name.html) | Create an entity at the location of the identifier of given named declaration.`fun atName(element: KtNamedDeclaration): `[`Entity`](./index.html) |
 | [from](from.html) | Factory function which retrieves all needed information from the PsiElement itself.`fun from(element: PsiElement, offset: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html)` = 0): `[`Entity`](./index.html)<br>Use this factory method if the location can be calculated much more precisely than using the given PsiElement.`fun from(element: PsiElement, location: `[`Location`](../-location/index.html)`): `[`Entity`](./index.html) |
 
