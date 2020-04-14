@@ -5,6 +5,7 @@ import io.gitlab.arturbosch.detekt.api.internal.searchClass
 import io.gitlab.arturbosch.detekt.api.internal.searchName
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.psi.KtElement
+import org.jetbrains.kotlin.psi.KtNamedDeclaration
 import org.jetbrains.kotlin.psi.psiUtil.getNonStrictParentOfType
 
 /**
@@ -31,6 +32,11 @@ data class Entity(
             val location = Location.from(element, offset)
             return from(element, location)
         }
+
+        /**
+         * Create an entity at the location of the identifier of given named declaration.
+         */
+        fun atName(element: KtNamedDeclaration): Entity = from(element.nameIdentifier ?: element)
 
         /**
          * Use this factory method if the location can be calculated much more precisely than

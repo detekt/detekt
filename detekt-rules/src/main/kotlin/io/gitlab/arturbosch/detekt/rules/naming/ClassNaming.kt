@@ -29,7 +29,7 @@ class ClassNaming(config: Config = Config.empty) : Rule(config) {
         if (!classOrObject.identifierName().matches(classPattern)) {
             report(CodeSmell(
                     issue,
-                    Entity.from(classOrObject.nameIdentifier ?: classOrObject),
+                    Entity.atName(classOrObject),
                     message = "Class and Object names should match the pattern: $classPattern"))
         }
     }
