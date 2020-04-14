@@ -14,11 +14,15 @@ import org.jetbrains.kotlin.psi.KtExpression
 /**
  * Rule to detect empty blocks of code.
  */
-abstract class EmptyRule(config: Config) : Rule(config) {
+abstract class EmptyRule(
+    config: Config,
+    description: String = "Empty block of code detected. As they serve no purpose they should be removed.",
+    private val codeSmellMessage: String = "This empty block of code can be removed."
+) : Rule(config) {
 
     override val issue = Issue(javaClass.simpleName,
             Severity.Minor,
-            "Empty block of code detected. As they serve no purpose they should be removed.",
+            description,
             Debt.FIVE_MINS)
 
     fun KtExpression.addFindingIfBlockExprIsEmpty() {
@@ -36,7 +40,7 @@ abstract class EmptyRule(config: Config) : Rule(config) {
             return
         }
         if (children.isEmpty() && !hasComment) {
-            report(CodeSmell(issue, Entity.from(this), "This empty block of code can be removed."))
+            report(CodeSmell(issue, Entity.from(this), codeSmellMessage))
         }
     }
 }
