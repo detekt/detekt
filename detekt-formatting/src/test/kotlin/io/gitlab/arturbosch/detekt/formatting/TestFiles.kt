@@ -77,9 +77,19 @@ fun main() {
 """.trimIndent()
 
 val longLines = """
+/**
+ * These are class docs.
+ */
 class C {
+    /**
+     * These are function docs.
+     */
     fun getLoremIpsum() = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
+
     companion object {
+        /**
+         * This is a constant for "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
+         */
         val LOREM_IPSUM = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua."
     }
 }
