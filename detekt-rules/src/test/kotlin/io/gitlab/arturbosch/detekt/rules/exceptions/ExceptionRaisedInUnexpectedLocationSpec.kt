@@ -9,11 +9,7 @@ import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
 
 class ExceptionRaisedInUnexpectedLocationSpec : Spek({
-    val subject by memoized {
-        ExceptionRaisedInUnexpectedLocation(
-                TestConfig(mapOf(ExceptionRaisedInUnexpectedLocation.METHOD_NAMES to "toString,hashCode,equals,finalize"))
-        )
-    }
+    val subject by memoized { ExceptionRaisedInUnexpectedLocation() }
 
     describe("ExceptionRaisedInUnexpectedLocation rule") {
 
@@ -28,6 +24,15 @@ class ExceptionRaisedInUnexpectedLocationSpec : Spek({
         }
 
         it("reports the configured method") {
+            val config = TestConfig(mapOf(ExceptionRaisedInUnexpectedLocation.METHOD_NAMES to listOf("toDo", "todo2")))
+            val findings = ExceptionRaisedInUnexpectedLocation(config).compileAndLint("""
+            fun toDo() {
+                throw IllegalStateException()
+            }""")
+            assertThat(findings).hasSize(1)
+        }
+
+        it("reports the configured method with String") {
             val config = TestConfig(mapOf(ExceptionRaisedInUnexpectedLocation.METHOD_NAMES to "toDo,todo2"))
             val findings = ExceptionRaisedInUnexpectedLocation(config).compileAndLint("""
             fun toDo() {

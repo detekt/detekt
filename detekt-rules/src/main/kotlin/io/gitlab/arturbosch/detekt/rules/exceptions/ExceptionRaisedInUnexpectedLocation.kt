@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.SplitPattern
+import io.gitlab.arturbosch.detekt.rules.valueOrDefaultCommaSeparated
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtThrowExpression
@@ -29,7 +29,7 @@ import org.jetbrains.kotlin.psi.psiUtil.anyDescendantOfType
  * </noncompliant>
  *
  * @configuration methodNames - methods which should not throw exceptions
- * (default: `'toString,hashCode,equals,finalize'`)
+ * (default: `[toString, hashCode, equals, finalize]`)
  */
 class ExceptionRaisedInUnexpectedLocation(config: Config = Config.empty) : Rule(config) {
 
@@ -37,7 +37,9 @@ class ExceptionRaisedInUnexpectedLocation(config: Config = Config.empty) : Rule(
             "This method is not expected to throw exceptions. This can cause weird behavior.",
             Debt.TWENTY_MINS)
 
-    private val methods = SplitPattern(valueOrDefault(METHOD_NAMES, ""))
+    private val methods = valueOrDefaultCommaSeparated(
+        METHOD_NAMES,
+        listOf("toString", "hashCode", "equals", "finalize"))
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (isPotentialMethod(function) && hasThrowExpression(function.bodyExpression)) {
@@ -45,7 +47,7 @@ class ExceptionRaisedInUnexpectedLocation(config: Config = Config.empty) : Rule(
         }
     }
 
-    private fun isPotentialMethod(function: KtNamedFunction) = methods.any(function.name)
+    private fun isPotentialMethod(function: KtNamedFunction) = methods.any { function.name == it }
 
     private fun hasThrowExpression(declaration: KtExpression?) =
             declaration?.anyDescendantOfType<KtThrowExpression>() == true
