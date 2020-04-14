@@ -8,7 +8,7 @@ import org.jetbrains.kotlin.psi.KtCatchClause
 
 /**
  * Reports empty `catch` blocks. Empty catch blocks indicate that an exception is ignored and not handled.
- * In case exceptions are ignored intentionally, this should be made explicit 
+ * In case exceptions are ignored intentionally, this should be made explicit
  * by using the specified names in the `allowedExceptionNameRegex`.
  *
  * @configuration allowedExceptionNameRegex - ignores exception types which match this regex
@@ -17,7 +17,9 @@ import org.jetbrains.kotlin.psi.KtCatchClause
  */
 class EmptyCatchBlock(config: Config) : EmptyRule(
     config = config,
-    description = "Empty catch block detected. Empty catch blocks indicate an exception is ignored and not handled.",
+    description =
+        "Empty catch block detected. " +
+        "Empty catch blocks indicate that an exception is ignored and not handled.",
     codeSmellMessage =
         "Empty catch block detected. If the exception can be safely ignored, " +
         "name the exception according to one of the exemptions as per the configuration of this rule."
