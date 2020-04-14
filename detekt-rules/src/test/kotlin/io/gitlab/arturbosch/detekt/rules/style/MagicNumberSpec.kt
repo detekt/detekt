@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.style
 
 import io.gitlab.arturbosch.detekt.api.SourceLocation
+import io.gitlab.arturbosch.detekt.rules.style.MagicNumber.Companion.IGNORE_NUMBERS
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.assert
 import io.gitlab.arturbosch.detekt.test.assertThat
@@ -25,7 +26,7 @@ class MagicNumberSpec : Spek({
             }
 
             it("should be reported when ignoredNumbers is empty") {
-                val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
+                val findings = MagicNumber(TestConfig(mapOf(IGNORE_NUMBERS to emptyList<String>()))).lint(ktFile)
                 assertThat(findings).hasSourceLocation(1, 15)
             }
         }
@@ -39,7 +40,7 @@ class MagicNumberSpec : Spek({
             }
 
             it("should not be reported when ignoredNumbers is empty") {
-                val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
+                val findings = MagicNumber(TestConfig(mapOf(IGNORE_NUMBERS to emptyList<String>()))).lint(ktFile)
                 assertThat(findings).isEmpty()
             }
         }
@@ -53,7 +54,7 @@ class MagicNumberSpec : Spek({
             }
 
             it("should be reported when ignoredNumbers is empty") {
-                val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
+                val findings = MagicNumber(TestConfig(mapOf(IGNORE_NUMBERS to emptyList<String>()))).lint(ktFile)
                 assertThat(findings).hasSourceLocation(1, 13)
             }
         }
@@ -67,7 +68,7 @@ class MagicNumberSpec : Spek({
             }
 
             it("should not be reported when ignoredNumbers is empty") {
-                val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
+                val findings = MagicNumber(TestConfig(mapOf(IGNORE_NUMBERS to emptyList<String>()))).lint(ktFile)
                 assertThat(findings).isEmpty()
             }
         }
@@ -81,7 +82,7 @@ class MagicNumberSpec : Spek({
             }
 
             it("should be reported when ignoredNumbers is empty") {
-                val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
+                val findings = MagicNumber(TestConfig(mapOf(IGNORE_NUMBERS to emptyList<String>()))).lint(ktFile)
                 assertThat(findings).hasSourceLocation(1, 14)
             }
         }
@@ -95,7 +96,7 @@ class MagicNumberSpec : Spek({
             }
 
             it("should be reported when ignoredNumbers is empty") {
-                val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
+                val findings = MagicNumber(TestConfig(mapOf(IGNORE_NUMBERS to emptyList<String>()))).lint(ktFile)
                 assertThat(findings).hasSourceLocation(1, 15)
             }
         }
@@ -109,17 +110,24 @@ class MagicNumberSpec : Spek({
             }
 
             it("should be ignored when ignoredNumbers contains it verbatim") {
-                val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "-2L"))).lint(ktFile)
+                val findings = MagicNumber(TestConfig(mapOf(IGNORE_NUMBERS to listOf("-2L")))).lint(ktFile)
                 assertThat(findings).isEmpty()
             }
 
             it("should be ignored when ignoredNumbers contains it as floating point") {
-                val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "-2f"))).lint(ktFile)
+                val findings = MagicNumber(TestConfig(mapOf(IGNORE_NUMBERS to listOf("-2f")))).lint(ktFile)
                 assertThat(findings).isEmpty()
             }
 
             it("should not be ignored when ignoredNumbers contains 2 but not -2") {
-                val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "1,2,3,-1,0"))).lint(ktFile)
+                val findings = MagicNumber(TestConfig(mapOf(IGNORE_NUMBERS to listOf("1", "2", "3", "-1", "0"))))
+                    .lint(ktFile)
+                assertThat(findings).hasSourceLocation(1, 15)
+            }
+
+            it("should not be ignored when ignoredNumbers contains 2 but not -2 config with string") {
+                val findings = MagicNumber(TestConfig(mapOf(IGNORE_NUMBERS to "1,2,3,-1,0")))
+                    .lint(ktFile)
                 assertThat(findings).hasSourceLocation(1, 15)
             }
         }
@@ -133,7 +141,7 @@ class MagicNumberSpec : Spek({
             }
 
             it("should not be reported when ignoredNumbers is empty") {
-                val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
+                val findings = MagicNumber(TestConfig(mapOf(IGNORE_NUMBERS to emptyList<String>()))).lint(ktFile)
                 assertThat(findings).isEmpty()
             }
         }
@@ -147,7 +155,7 @@ class MagicNumberSpec : Spek({
             }
 
             it("should be reported when ignoredNumbers is empty") {
-                val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
+                val findings = MagicNumber(TestConfig(mapOf(IGNORE_NUMBERS to emptyList<String>()))).lint(ktFile)
                 assertThat(findings).hasSourceLocation(1, 16)
             }
         }
@@ -161,7 +169,7 @@ class MagicNumberSpec : Spek({
             }
 
             it("should not be reported when ignoredNumbers is empty") {
-                val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
+                val findings = MagicNumber(TestConfig(mapOf(IGNORE_NUMBERS to emptyList<String>()))).lint(ktFile)
                 assertThat(findings).isEmpty()
             }
         }
@@ -175,7 +183,7 @@ class MagicNumberSpec : Spek({
             }
 
             it("should be reported when ignoredNumbers is empty") {
-                val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
+                val findings = MagicNumber(TestConfig(mapOf(IGNORE_NUMBERS to emptyList<String>()))).lint(ktFile)
                 assertThat(findings).hasSourceLocation(1, 13)
             }
         }
@@ -189,7 +197,7 @@ class MagicNumberSpec : Spek({
             }
 
             it("should not be reported when ignoredNumbers is empty") {
-                val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ""))).lint(ktFile)
+                val findings = MagicNumber(TestConfig(mapOf(IGNORE_NUMBERS to emptyList<String>()))).lint(ktFile)
                 assertThat(findings).isEmpty()
             }
         }
@@ -198,12 +206,12 @@ class MagicNumberSpec : Spek({
             val ktFile = compileContentForTest("val myInt = 300")
 
             it("should not be reported when ignoredNumbers contains 300") {
-                val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "300"))).lint(ktFile)
+                val findings = MagicNumber(TestConfig(mapOf(IGNORE_NUMBERS to listOf("300")))).lint(ktFile)
                 assertThat(findings).isEmpty()
             }
 
             it("should not be reported when ignoredNumbers contains a floating point 300") {
-                val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "300.0"))).lint(ktFile)
+                val findings = MagicNumber(TestConfig(mapOf(IGNORE_NUMBERS to listOf("300.0")))).lint(ktFile)
                 assertThat(findings).isEmpty()
             }
         }
@@ -217,7 +225,7 @@ class MagicNumberSpec : Spek({
             }
 
             it("should not be reported when ignoredNumbers contains a binary literal 0b01001") {
-                val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "0b01001"))).lint(ktFile)
+                val findings = MagicNumber(TestConfig(mapOf(IGNORE_NUMBERS to listOf("0b01001")))).lint(ktFile)
                 assertThat(findings).isEmpty()
             }
         }
@@ -231,17 +239,17 @@ class MagicNumberSpec : Spek({
             }
 
             it("should not be reported when ignored verbatim") {
-                val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "100_000"))).lint(ktFile)
+                val findings = MagicNumber(TestConfig(mapOf(IGNORE_NUMBERS to listOf("100_000")))).lint(ktFile)
                 assertThat(findings).isEmpty()
             }
 
             it("should not be reported when ignored with different underscores") {
-                val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "10_00_00"))).lint(ktFile)
+                val findings = MagicNumber(TestConfig(mapOf(IGNORE_NUMBERS to listOf("10_00_00")))).lint(ktFile)
                 assertThat(findings).isEmpty()
             }
 
             it("should not be reported when ignored without underscores") {
-                val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "100000"))).lint(ktFile)
+                val findings = MagicNumber(TestConfig(mapOf(IGNORE_NUMBERS to listOf("100000")))).lint(ktFile)
                 assertThat(findings).isEmpty()
             }
         }
@@ -329,7 +337,7 @@ class MagicNumberSpec : Spek({
             }
 
             it("should not be reported when ignoredNumbers contains it") {
-                val findings = MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to ".5"))).lint(ktFile)
+                val findings = MagicNumber(TestConfig(mapOf(IGNORE_NUMBERS to listOf(".5")))).lint(ktFile)
                 assertThat(findings).isEmpty()
             }
         }
@@ -347,7 +355,7 @@ class MagicNumberSpec : Spek({
 
             it("throws a NumberFormatException") {
                 assertThatExceptionOfType(NumberFormatException::class.java).isThrownBy {
-                    MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "banana")))
+                    MagicNumber(TestConfig(mapOf(IGNORE_NUMBERS to listOf("banana"))))
                 }
             }
         }
@@ -355,7 +363,7 @@ class MagicNumberSpec : Spek({
         context("an empty ignoredNumber") {
 
             it("doesn't throw an exception") {
-                MagicNumber(TestConfig(mapOf(MagicNumber.IGNORE_NUMBERS to "")))
+                MagicNumber(TestConfig(mapOf(IGNORE_NUMBERS to emptyList<String>())))
             }
         }
 

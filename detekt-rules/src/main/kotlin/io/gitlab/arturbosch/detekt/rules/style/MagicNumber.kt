@@ -7,10 +7,10 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.commaSeparatedPattern
 import io.gitlab.arturbosch.detekt.rules.isConstant
 import io.gitlab.arturbosch.detekt.rules.isHashCodeFunction
 import io.gitlab.arturbosch.detekt.rules.isPartOf
+import io.gitlab.arturbosch.detekt.rules.valueOrDefaultCommaSeparated
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtAnnotationEntry
@@ -64,7 +64,7 @@ import java.util.Locale
  * }
  * </compliant>
  *
- * @configuration ignoreNumbers - numbers which do not count as magic numbers (default: `'-1,0,1,2'`)
+ * @configuration ignoreNumbers - numbers which do not count as magic numbers (default: `['-1', '0', '1', '2']`)
  * @configuration ignoreHashCodeFunction - whether magic numbers in hashCode functions should be ignored
  * (default: `true`)
  * @configuration ignorePropertyDeclaration - whether magic numbers in property declarations should be ignored
@@ -93,11 +93,9 @@ class MagicNumber(config: Config = Config.empty) : Rule(config) {
                     "It's better to declare such numbers as constants and give them a proper name. " +
                     "By default, -1, 0, 1, and 2 are not considered to be magic numbers.", Debt.TEN_MINS)
 
-    private val ignoredNumbers = valueOrDefault(IGNORE_NUMBERS, "-1,0,1,2")
-            .commaSeparatedPattern()
+    private val ignoredNumbers = valueOrDefaultCommaSeparated(IGNORE_NUMBERS, listOf("-1", "0", "1", "2"))
             .map { parseAsDouble(it) }
             .sorted()
-            .toList()
 
     private val ignoreAnnotation = valueOrDefault(IGNORE_ANNOTATION, false)
     private val ignoreHashCodeFunction = valueOrDefault(IGNORE_HASH_CODE, true)
