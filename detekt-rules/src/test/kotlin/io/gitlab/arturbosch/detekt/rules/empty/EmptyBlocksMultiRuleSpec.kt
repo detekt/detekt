@@ -5,7 +5,6 @@ import io.gitlab.arturbosch.detekt.core.rules.visitFile
 import io.gitlab.arturbosch.detekt.rules.Case
 import io.gitlab.arturbosch.detekt.rules.providers.EmptyCodeProvider
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.compileForTest
 import io.gitlab.arturbosch.detekt.test.lint
 import io.gitlab.arturbosch.detekt.test.yamlConfig
@@ -38,8 +37,7 @@ class EmptyBlocksMultiRuleSpec : Spek({
         }
 
         it("reports an empty kt file") {
-            val emptyFile = compileContentForTest("")
-            assertThat(subject.lint(emptyFile)).hasSize(1)
+            assertThat(subject.compileAndLint("")).hasSize(1)
         }
 
         it("reports no duplicated findings - issue #1605") {

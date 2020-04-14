@@ -1,7 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
 import io.gitlab.arturbosch.detekt.test.compileAndLint
-import io.gitlab.arturbosch.detekt.test.compileContentForTest
 import io.gitlab.arturbosch.detekt.test.lint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
@@ -45,32 +44,30 @@ class ThrowingExceptionInMainSpec : Spek({
         }
 
         it("does not report top level main functions with a wrong signature") {
-            val file = compileContentForTest("""
+            val code = """
                 private fun main(args: Array<String>) { throw IllegalArgumentException() }
                 private fun main() { throw IllegalArgumentException() }
                 fun mai() { throw IllegalArgumentException() }
                 fun main(args: String) { throw IllegalArgumentException() }
                 fun main(args: Array<String>, i: Int) { throw IllegalArgumentException() }"""
-            )
-            assertThat(subject.lint(file)).isEmpty()
+            assertThat(subject.lint(code)).isEmpty()
         }
 
         it("does not report top level main functions which throw no exception") {
-            val file = compileContentForTest("""
+            val code = """
                 fun main(args: Array<String>) { }
                 fun main() { }
                 fun mai() { }
                 fun main(args: String) { }"""
-            )
-            assertThat(subject.lint(file)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("does not report top level main functions with expression body which throw no exception") {
-            val file = compileContentForTest("""
+            val code = """
                 fun main(args: Array<String>) = ""
                 fun main() = Unit
-            """)
-            assertThat(subject.lint(file)).isEmpty()
+            """
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("does not report main functions with no @JvmStatic annotation inside a class") {
