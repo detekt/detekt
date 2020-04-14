@@ -44,9 +44,7 @@ abstract class FormattingRule(config: Config) : Rule(config) {
     override fun visit(root: KtFile) {
         this.root = root
         root.node.putUserData(KtLint.ANDROID_USER_DATA_KEY, isAndroid)
-        positionByOffset = calculateLineColByOffset(root.text).let {
-            return@let { offset: Int -> it(offset) }
-        }
+        positionByOffset = calculateLineColByOffset(normalizeText(root.text))
         editorConfigUpdater()?.let { updateFunc ->
             val oldEditorConfig = root.node.getUserData(KtLint.EDITOR_CONFIG_USER_DATA_KEY)
             root.node.putUserData(KtLint.EDITOR_CONFIG_USER_DATA_KEY, updateFunc(oldEditorConfig))
@@ -60,16 +58,16 @@ abstract class FormattingRule(config: Config) : Rule(config) {
         if (ruleShouldOnlyRunOnFileNode(node)) {
             return
         }
-        wrapping.visit(node, autoCorrect) { _, message, _ ->
-            val (line, column) = positionByOffset(node.startOffset)
+        wrapping.visit(node, autoCorrect) { offset, message, _ ->
+            val (line, column) = positionByOffset(offset)
             val location = Location(
                 SourceLocation(line, column),
                 TextLocation(node.startOffset, node.psi.endOffset),
                 "($line, $column)",
                 root.originalFilePath() ?: root.containingFile.name
             )
-            // The formatting rules report slightly wrong positions - #1843.
-            // Also nodes reported by 'NoConsecutiveBlankLines' are dangling whitespace nodes which means they have
+
+            // Nodes reported by 'NoConsecutiveBlankLines' are dangling whitespace nodes which means they have
             // no direct parent which we can use to get the containing file needed to baseline or suppress findings.
             // For these reasons we do not report a KtElement which may lead to crashes when postprocessing it
             // e.g. reports (html), baseline etc.

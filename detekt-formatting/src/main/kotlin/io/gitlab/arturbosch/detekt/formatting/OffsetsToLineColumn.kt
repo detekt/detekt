@@ -3,9 +3,26 @@ package io.gitlab.arturbosch.detekt.formatting
 import java.util.ArrayList
 
 /**
- * Extracted and adapted from KtLint.
+ * Extracted and adapted from KtLint, see
+ * https://github.com/pinterest/ktlint/blob/a86d1c7/ktlint-core/src/main/kotlin/com/pinterest/ktlint/core/KtLint.kt#L51
  */
+internal const val UTF8_BOM = "\uFEFF"
 
+/**
+ * Extracted and adapted from KtLint, see
+ * https://github.com/pinterest/ktlint/blob/a86d1c7/ktlint-core/src/main/kotlin/com/pinterest/ktlint/core/KtLint.kt#L173
+ */
+internal fun normalizeText(text: String): String {
+    return text
+        .replace("\r\n", "\n")
+        .replace("\r", "\n")
+        .replaceFirst(UTF8_BOM, "")
+}
+
+/**
+ * Extracted and adapted from KtLint, see
+ * https://github.com/pinterest/ktlint/blob/a86d1c7/ktlint-core/src/main/kotlin/com/pinterest/ktlint/core/KtLint.kt#L320
+ */
 internal fun calculateLineColByOffset(text: String): (offset: Int) -> Pair<Int, Int> {
     var i = -1
     val e = text.length
@@ -27,6 +44,10 @@ internal fun calculateLineColByOffset(text: String): (offset: Int) -> Pair<Int, 
     }
 }
 
+/**
+ * Extracted and adapted from KtLint, see
+ * https://github.com/pinterest/ktlint/blob/a86d1c7/ktlint-core/src/main/kotlin/com/pinterest/ktlint/core/KtLint.kt#L559
+ */
 internal class SegmentTree(sortedArray: IntArray) {
 
     private val segments: List<Segment>
@@ -49,4 +70,8 @@ internal class SegmentTree(sortedArray: IntArray) {
     }
 }
 
+/**
+ * Extracted and adapted from KtLint, see
+ * https://github.com/pinterest/ktlint/blob/a86d1c7/ktlint-core/src/main/kotlin/com/pinterest/ktlint/core/KtLint.kt#L583
+ */
 internal data class Segment(val left: Int, val right: Int)
