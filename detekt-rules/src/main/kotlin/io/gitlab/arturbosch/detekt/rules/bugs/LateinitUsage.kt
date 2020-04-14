@@ -9,8 +9,8 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.rules.isLateinit
+import io.gitlab.arturbosch.detekt.rules.valueOrDefaultCommaSeparated
 import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.psi.psiUtil.containingClass
@@ -29,7 +29,7 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
  * </noncompliant>
  *
  * @configuration excludeAnnotatedProperties - Allows you to provide a list of annotations that disable
- * this check. (default: `''`)
+ * this check. (default: `[]`)
  * @configuration ignoreOnClassesPattern - Allows you to disable the rule for a list of classes (default: `''`)
  */
 class LateinitUsage(config: Config = Config.empty) : Rule(config) {
@@ -40,7 +40,8 @@ class LateinitUsage(config: Config = Config.empty) : Rule(config) {
                     "is error prone, try using constructor injection or delegation.",
             Debt.TWENTY_MINS)
 
-    private val excludeAnnotatedProperties = SplitPattern(valueOrDefault(EXCLUDE_ANNOTATED_PROPERTIES, ""))
+    private val excludeAnnotatedProperties = valueOrDefaultCommaSeparated(EXCLUDE_ANNOTATED_PROPERTIES, emptyList())
+        .map { it.removePrefix("*").removeSuffix("*") }
 
     private val ignoreOnClassesPattern by LazyRegex(key = IGNORE_ON_CLASSES_PATTERN, default = "")
 

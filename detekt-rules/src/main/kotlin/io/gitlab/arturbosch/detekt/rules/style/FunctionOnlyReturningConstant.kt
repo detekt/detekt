@@ -11,6 +11,7 @@ import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.rules.isOpen
 import io.gitlab.arturbosch.detekt.rules.isOverride
+import io.gitlab.arturbosch.detekt.rules.valueOrDefaultCommaSeparated
 import org.jetbrains.kotlin.psi.KtConstantExpression
 import org.jetbrains.kotlin.psi.KtExpression
 import org.jetbrains.kotlin.psi.KtFile
@@ -33,7 +34,8 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClass
  *
  * @configuration ignoreOverridableFunction - if overriden functions should be ignored (default: `true`)
  * @configuration excludedFunctions - excluded functions (default: `'describeContents'`)
- * @configuration excludeAnnotatedFunction - allows to provide a list of annotations that disable this check (default: `'dagger.Provides'`)
+ * @configuration excludeAnnotatedFunction - allows to provide a list of annotations that disable this check
+ * (default: `['dagger.Provides']`)
  *
  * @active since v1.2.0
  */
@@ -46,7 +48,9 @@ class FunctionOnlyReturningConstant(config: Config = Config.empty) : Rule(config
 
     private val ignoreOverridableFunction = valueOrDefault(IGNORE_OVERRIDABLE_FUNCTION, true)
     private val excludedFunctions = SplitPattern(valueOrDefault(EXCLUDED_FUNCTIONS, ""))
-    private val excludeAnnotatedFunctions = SplitPattern(valueOrDefault(EXCLUDE_ANNOTATED_FUNCTION, "dagger.Provides"))
+    private val excludeAnnotatedFunctions = valueOrDefaultCommaSeparated(
+            EXCLUDE_ANNOTATED_FUNCTION, listOf("dagger.Provides"))
+        .map { it.removePrefix("*").removeSuffix("*") }
     private lateinit var annotationExcluder: AnnotationExcluder
 
     override fun visit(root: KtFile) {

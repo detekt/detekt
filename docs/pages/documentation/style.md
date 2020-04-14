@@ -414,7 +414,7 @@ as a `const val`.
 
    excluded functions
 
-* ``excludeAnnotatedFunction`` (default: ``'dagger.Provides'``)
+* ``excludeAnnotatedFunction`` (default: ``['dagger.Provides']``)
 
    allows to provide a list of annotations that disable this check
 
@@ -1138,7 +1138,7 @@ refactored into concrete classes.
 
 #### Configuration options:
 
-* ``excludeAnnotatedClasses`` (default: ``'dagger.Module'``)
+* ``excludeAnnotatedClasses`` (default: ``['dagger.Module']``)
 
    Allows you to provide a list of annotations that disable
 this check.
@@ -1420,7 +1420,7 @@ Read more about `data class`: https://kotlinlang.org/docs/reference/data-classes
 
 #### Configuration options:
 
-* ``excludeAnnotatedClasses`` (default: ``''``)
+* ``excludeAnnotatedClasses`` (default: ``[]``)
 
    allows to provide a list of annotations that disable this check
 

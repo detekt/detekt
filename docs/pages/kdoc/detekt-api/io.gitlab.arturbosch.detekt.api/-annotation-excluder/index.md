@@ -14,7 +14,7 @@ is present over the element.
 
 ### Constructors
 
-| [&lt;init&gt;](-init-.html) | Primary use case for an AnnotationExcluder is to decide if a KtElement should be excluded from further analysis. This is done by checking if a special annotation is present over the element.`AnnotationExcluder(root: KtFile, excludes: `[`SplitPattern`](../-split-pattern/index.html)`)` |
+| [&lt;init&gt;](-init-.html) | `AnnotationExcluder(root: KtFile, excludes: `[`SplitPattern`](../-split-pattern/index.html)`)`<br>Primary use case for an AnnotationExcluder is to decide if a KtElement should be excluded from further analysis. This is done by checking if a special annotation is present over the element.`AnnotationExcluder(root: KtFile, excludes: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html)`>)` |
 
 ### Functions
 

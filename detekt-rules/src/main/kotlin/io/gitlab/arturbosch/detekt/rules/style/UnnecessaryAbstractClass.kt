@@ -9,8 +9,8 @@ import io.gitlab.arturbosch.detekt.api.Finding
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.rules.isAbstract
+import io.gitlab.arturbosch.detekt.rules.valueOrDefaultCommaSeparated
 import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.MemberDescriptor
@@ -43,7 +43,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
  * </noncompliant>
  *
  * @configuration excludeAnnotatedClasses - Allows you to provide a list of annotations that disable
- * this check. (default: `'dagger.Module'`)
+ * this check. (default: `['dagger.Module']`)
  *
  * @active since v1.2.0
  */
@@ -59,7 +59,9 @@ class UnnecessaryAbstractClass(config: Config = Config.empty) : Rule(config) {
                             noConcreteMember + " " + noAbstractMember,
                     Debt.FIVE_MINS)
 
-    private val excludeAnnotatedClasses = SplitPattern(valueOrDefault(EXCLUDE_ANNOTATED_CLASSES, "dagger.Module"))
+    private val excludeAnnotatedClasses = valueOrDefaultCommaSeparated(
+            EXCLUDE_ANNOTATED_CLASSES, listOf("dagger.Module"))
+        .map { it.removePrefix("*").removeSuffix("*") }
     private lateinit var annotationExcluder: AnnotationExcluder
 
     override fun visitKtFile(file: KtFile) {

@@ -32,8 +32,12 @@ class FunctionOnlyReturningConstantSpec : Spek({
             assertThat(rule.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report excluded annotated function which returns a constant") {
-            val code = """
+        listOf(
+            TestConfig(mapOf(FunctionOnlyReturningConstant.EXCLUDE_ANNOTATED_FUNCTION to "kotlin.SinceKotlin")),
+            TestConfig(mapOf(FunctionOnlyReturningConstant.EXCLUDE_ANNOTATED_FUNCTION to listOf("kotlin.SinceKotlin")))
+        ).forEach { config ->
+            it("does not report excluded annotated function which returns a constant") {
+                val code = """
                 import kotlin.SinceKotlin
                 class Test {
                     @SinceKotlin("1.0.0")
@@ -42,9 +46,9 @@ class FunctionOnlyReturningConstantSpec : Spek({
                     }
                 }
             """.trimIndent()
-            val config = TestConfig(mapOf(FunctionOnlyReturningConstant.EXCLUDE_ANNOTATED_FUNCTION to "kotlin.SinceKotlin"))
-            val rule = FunctionOnlyReturningConstant(config)
-            assertThat(rule.compileAndLint(code)).isEmpty()
+                val rule = FunctionOnlyReturningConstant(config)
+                assertThat(rule.compileAndLint(code)).isEmpty()
+            }
         }
     }
 

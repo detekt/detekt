@@ -8,11 +8,11 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.rules.doesNotExtendAnything
 import io.gitlab.arturbosch.detekt.rules.extractDeclarations
 import io.gitlab.arturbosch.detekt.rules.isClosedForExtension
 import io.gitlab.arturbosch.detekt.rules.isInline
+import io.gitlab.arturbosch.detekt.rules.valueOrDefaultCommaSeparated
 import org.jetbrains.kotlin.descriptors.ClassConstructorDescriptor
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
 import org.jetbrains.kotlin.psi.KtClass
@@ -44,7 +44,7 @@ import org.jetbrains.kotlin.types.KotlinType
  * </compliant>
  *
  * @configuration excludeAnnotatedClasses - allows to provide a list of annotations that disable this check
- * (default: `''`)
+ * (default: `[]`)
  * @configuration allowVars - allows to relax this rule in order to exclude classes that contains one (or more) Vars (default: `false`)
  */
 class UseDataClass(config: Config = Config.empty) : Rule(config) {
@@ -54,7 +54,8 @@ class UseDataClass(config: Config = Config.empty) : Rule(config) {
             "Classes that do nothing but hold data should be replaced with a data class.",
             Debt.FIVE_MINS)
 
-    private val excludeAnnotatedClasses = SplitPattern(valueOrDefault(EXCLUDE_ANNOTATED_CLASSES, ""))
+    private val excludeAnnotatedClasses = valueOrDefaultCommaSeparated(EXCLUDE_ANNOTATED_CLASSES, emptyList())
+        .map { it.removePrefix("*").removeSuffix("*") }
     private val defaultFunctionNames = hashSetOf("hashCode", "equals", "toString", "copy")
     private val allowVars = valueOrDefault(ALLOW_VARS, false)
 

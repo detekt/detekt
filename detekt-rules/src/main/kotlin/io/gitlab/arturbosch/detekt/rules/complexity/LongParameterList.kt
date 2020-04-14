@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
+import io.gitlab.arturbosch.detekt.api.AnnotationExcluder
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
 import io.gitlab.arturbosch.detekt.api.Entity
@@ -7,12 +8,13 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Metric
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.api.ThresholdedCodeSmell
 import io.gitlab.arturbosch.detekt.rules.isOverride
+import io.gitlab.arturbosch.detekt.rules.valueOrDefaultCommaSeparated
 import org.jetbrains.kotlin.psi.KtAnnotated
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtConstructor
+import org.jetbrains.kotlin.psi.KtFile
 import org.jetbrains.kotlin.psi.KtFunction
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtParameterList
@@ -29,7 +31,8 @@ import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
  * @configuration constructorThreshold - number of constructor parameters required to trigger the rule (default: `7`)
  * @configuration ignoreDefaultParameters - ignore parameters that have a default value (default: `false`)
  * @configuration ignoreDataClasses - ignore long constructor parameters list for data classes (default: `true`)
- * @configuration ignoreAnnotated - ignore long parameters list for constructors or functions in the context of these comma-separated annotation class names (default: `''`)
+ * @configuration ignoreAnnotated - ignore long parameters list for constructors or functions in the context of these
+ * annotation class names (default: `[]`)
  *
  * @active since v1.0.0
  */
@@ -54,7 +57,15 @@ class LongParameterList(
 
     private val ignoreDataClasses = valueOrDefault(IGNORE_DATA_CLASSES, true)
 
-    private val ignoreAnnotated = SplitPattern(valueOrDefault(IGNORE_ANNOTATED, ""))
+    private val ignoreAnnotated = valueOrDefaultCommaSeparated(IGNORE_ANNOTATED, emptyList())
+        .map { it.removePrefix("*").removeSuffix("*") }
+
+    private lateinit var annotationExcluder: AnnotationExcluder
+
+    override fun visitKtFile(file: KtFile) {
+        annotationExcluder = AnnotationExcluder(file, ignoreAnnotated)
+        super.visitKtFile(file)
+    }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         val owner = function.containingClassOrObject
@@ -73,9 +84,7 @@ class LongParameterList(
     }
 
     private fun KtAnnotated.isIgnored(): Boolean {
-        return annotationEntries.any {
-            ignoreAnnotated.contains(it.typeReference?.text)
-        }
+        return annotationExcluder.shouldExclude(annotationEntries)
     }
 
     private fun validateConstructor(constructor: KtConstructor<*>) {

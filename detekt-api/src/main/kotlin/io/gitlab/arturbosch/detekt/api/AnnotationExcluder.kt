@@ -10,10 +10,12 @@ import org.jetbrains.kotlin.psi.KtFile
  */
 class AnnotationExcluder(
     root: KtFile,
-    private val excludes: SplitPattern
+    private val excludes: List<String>
 ) {
 
-    private var resolvedAnnotations = root.importList
+    constructor(root: KtFile, excludes: SplitPattern) : this(root, excludes.mapAll { it })
+
+    private val resolvedAnnotations = root.importList
             ?.imports
             ?.asSequence()
             ?.filterNot { it.isAllUnder }
@@ -30,11 +32,7 @@ class AnnotationExcluder(
 
     private fun isExcluded(annotation: KtAnnotationEntry): Boolean {
         val annotationText = annotation.typeReference?.text
-        val value = resolvedAnnotations[annotationText]
-        return if (value != null) {
-            excludes.contains(value)
-        } else {
-            excludes.contains(annotationText)
-        }
+        val value = resolvedAnnotations[annotationText] ?: annotationText
+        return if (value == null) false else excludes.any { value.contains(it, ignoreCase = true) }
     }
 }

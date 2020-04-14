@@ -12,7 +12,7 @@ class UnnecessaryAbstractClassSpec : Spek({
 
     val subject by memoized {
         UnnecessaryAbstractClass(TestConfig(mapOf(
-                UnnecessaryAbstractClass.EXCLUDE_ANNOTATED_CLASSES to "jdk.nashorn.internal.ir.annotations.Ignore"
+                UnnecessaryAbstractClass.EXCLUDE_ANNOTATED_CLASSES to listOf("jdk.nashorn.internal.ir.annotations.Ignore")
         )))
     }
 

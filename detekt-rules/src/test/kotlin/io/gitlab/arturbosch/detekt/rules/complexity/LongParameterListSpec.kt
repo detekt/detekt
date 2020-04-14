@@ -69,42 +69,42 @@ class LongParameterListSpec : Spek({
         }
 
         it("does not report long parameter list for constructors if file is annotated with ignored annotation") {
-            val config = TestConfig(mapOf(LongParameterList.IGNORE_ANNOTATED to "javax.annotation.Generated"))
+            val config = TestConfig(mapOf(LongParameterList.IGNORE_ANNOTATED to listOf("javax.annotation.Generated")))
             val rule = LongParameterList(config)
             val code = "@file:javax.annotation.Generated class Data(val a: Int, val b: Int, val c: Int, val d: Int, val e: Int, val f: Int, val g: Int)"
             assertThat(rule.compileAndLint(code)).isEmpty()
         }
 
         it("does not report long parameter list for functions if file is annotated with ignored annotation") {
-            val config = TestConfig(mapOf(LongParameterList.IGNORE_ANNOTATED to "javax.annotation.Generated"))
+            val config = TestConfig(mapOf(LongParameterList.IGNORE_ANNOTATED to listOf("javax.annotation.Generated")))
             val rule = LongParameterList(config)
             val code = "@file:javax.annotation.Generated class Data { fun foo(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int) {} }"
             assertThat(rule.compileAndLint(code)).isEmpty()
         }
 
         it("does not report long parameter list for constructors if class is annotated with ignored annotation") {
-            val config = TestConfig(mapOf(LongParameterList.IGNORE_ANNOTATED to "javax.annotation.Generated"))
+            val config = TestConfig(mapOf(LongParameterList.IGNORE_ANNOTATED to listOf("javax.annotation.Generated")))
             val rule = LongParameterList(config)
             val code = "@javax.annotation.Generated class Data(val a: Int, val b: Int, val c: Int, val d: Int, val e: Int, val f: Int, val g: Int)"
             assertThat(rule.compileAndLint(code)).isEmpty()
         }
 
         it("does not report long parameter list for functions if class is annotated with ignored annotation") {
-            val config = TestConfig(mapOf(LongParameterList.IGNORE_ANNOTATED to "javax.annotation.Generated"))
+            val config = TestConfig(mapOf(LongParameterList.IGNORE_ANNOTATED to listOf("javax.annotation.Generated")))
             val rule = LongParameterList(config)
             val code = "@javax.annotation.Generated class Data { fun foo(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int) {} }"
             assertThat(rule.compileAndLint(code)).isEmpty()
         }
 
         it("does not report long parameter list for constructors if constructor is annotated with ignored annotation") {
-            val config = TestConfig(mapOf(LongParameterList.IGNORE_ANNOTATED to "kotlin.Deprecated"))
+            val config = TestConfig(mapOf(LongParameterList.IGNORE_ANNOTATED to listOf("kotlin.Deprecated")))
             val rule = LongParameterList(config)
             val code = "class Data @kotlin.Deprecated(message = \"\") constructor(val a: Int, val b: Int, val c: Int, val d: Int, val e: Int, val f: Int, val g: Int)"
             assertThat(rule.compileAndLint(code)).isEmpty()
         }
 
         it("does not report long parameter list for functions if function is annotated with ignored annotation") {
-            val config = TestConfig(mapOf(LongParameterList.IGNORE_ANNOTATED to "kotlin.Deprecated"))
+            val config = TestConfig(mapOf(LongParameterList.IGNORE_ANNOTATED to listOf("kotlin.Deprecated")))
             val rule = LongParameterList(config)
             val code = "class Data { @kotlin.Deprecated(message = \"\") fun foo(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int) {} }"
             assertThat(rule.compileAndLint(code)).isEmpty()
