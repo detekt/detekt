@@ -7,13 +7,23 @@ import io.gitlab.arturbosch.detekt.rules.isAllowedExceptionName
 import org.jetbrains.kotlin.psi.KtCatchClause
 
 /**
- * Reports empty `catch` blocks. Empty blocks of code serve no purpose and should be removed.
+ * Reports empty `catch` blocks. Empty catch blocks indicate that an exception is ignored and not handled.
+ * In case exceptions are ignored intentionally, this should be made explicit
+ * by using the specified names in the `allowedExceptionNameRegex`.
  *
  * @configuration allowedExceptionNameRegex - ignores exception types which match this regex
  * (default: `'^(_|(ignore|expected).*)'`)
  * @active since v1.0.0
  */
-class EmptyCatchBlock(config: Config) : EmptyRule(config = config) {
+class EmptyCatchBlock(config: Config) : EmptyRule(
+    config = config,
+    description =
+        "Empty catch block detected. " +
+        "Empty catch blocks indicate that an exception is ignored and not handled.",
+    codeSmellMessage =
+        "Empty catch block detected. If the exception can be safely ignored, " +
+        "name the exception according to one of the exemptions as per the configuration of this rule."
+) {
 
     private val allowedExceptionNameRegex by LazyRegex(ALLOWED_EXCEPTION_NAME_REGEX, ALLOWED_EXCEPTION_NAME)
 
