@@ -493,7 +493,7 @@ style:
     methods: ''
   ForbiddenPublicDataClass:
     active: false
-    ignorePackages: '*.internal,*.internal.*'
+    ignorePackages: ['*.internal', '*.internal.*']
   ForbiddenVoid:
     active: false
     ignoreOverridden: false
