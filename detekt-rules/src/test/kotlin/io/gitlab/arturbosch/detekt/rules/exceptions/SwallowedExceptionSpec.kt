@@ -1,7 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.exceptions
 
-import io.gitlab.arturbosch.detekt.test.compileAndLint
 import io.gitlab.arturbosch.detekt.test.TestConfig
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -117,31 +117,33 @@ class SwallowedExceptionSpec : Spek({
             assertThat(subject.compileAndLint(code)).hasSize(1)
         }
 
-        context("ignores given exception types config") {
+        listOf(listOf("IllegalArgumentException"), "IllegalArgumentException").forEach { ignoredExceptionValue ->
+            context("ignores given exception types config") {
 
-            val config = TestConfig(mapOf(SwallowedException.IGNORED_EXCEPTION_TYPES to "IllegalArgumentException"))
-            val rule = SwallowedException(config)
+                val config = TestConfig(SwallowedException.IGNORED_EXCEPTION_TYPES to ignoredExceptionValue)
+                val rule = SwallowedException(config)
 
-            it("ignores given exception type in configuration") {
-                val code = """
+                it("ignores given exception type in configuration") {
+                    val code = """
                     fun f() {
                         try {
                         } catch (e: IllegalArgumentException) {
                         }
                     }
                 """
-                assertThat(rule.compileAndLint(code)).isEmpty()
-            }
+                    assertThat(rule.compileAndLint(code)).isEmpty()
+                }
 
-            it("reports exception type that is missing in the configuration") {
-                val code = """
+                it("reports exception type that is missing in the configuration") {
+                    val code = """
                     fun f() {
                         try {
                         } catch (e: Exception) {
                         }
                     }
                 """
-                assertThat(rule.compileAndLint(code)).hasSize(1)
+                    assertThat(rule.compileAndLint(code)).hasSize(1)
+                }
             }
         }
 
