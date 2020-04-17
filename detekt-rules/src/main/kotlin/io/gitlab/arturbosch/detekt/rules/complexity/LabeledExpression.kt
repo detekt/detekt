@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.SplitPattern
+import io.gitlab.arturbosch.detekt.rules.valueOrDefaultCommaSeparated
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtExpressionWithLabel
@@ -59,7 +59,7 @@ import org.jetbrains.kotlin.psi.psiUtil.isExtensionDeclaration
  * </compliant>
  *
  * @configuration ignoredLabels - allows to provide a list of label names which should be ignored by this rule
- * (default: `''`)
+ * (default: `[]`)
  */
 class LabeledExpression(config: Config = Config.empty) : Rule(config) {
 
@@ -68,13 +68,14 @@ class LabeledExpression(config: Config = Config.empty) : Rule(config) {
             "Expression with labels increase complexity and affect maintainability.",
             Debt.TWENTY_MINS)
 
-    private val ignoredLabels = SplitPattern(valueOrDefault(IGNORED_LABELS, ""))
+    private val ignoredLabels = valueOrDefaultCommaSeparated(IGNORED_LABELS, emptyList())
+        .map { it.removePrefix("*").removeSuffix("*") }
 
     override fun visitExpressionWithLabel(expression: KtExpressionWithLabel) {
         super.visitExpressionWithLabel(expression)
         if (expression !is KtThisExpression || isNotReferencingOuterClass(expression)) {
-            expression.getLabelName()?.let {
-                if (!ignoredLabels.contains(it)) {
+            expression.getLabelName()?.let { labelName ->
+                if (!ignoredLabels.any { labelName.contains(it, ignoreCase = true) }) {
                     report(CodeSmell(issue, Entity.from(expression), issue.description))
                 }
             }
