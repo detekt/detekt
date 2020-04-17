@@ -490,7 +490,7 @@ style:
     forbiddenPatterns: ''
   ForbiddenMethodCall:
     active: false
-    methods: ''
+    methods: []
   ForbiddenPublicDataClass:
     active: false
     ignorePackages: '*.internal,*.internal.*'
