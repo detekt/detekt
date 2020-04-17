@@ -96,7 +96,7 @@ class ForbiddenPublicDataClassSpec : Spek({
         it("public data class inside an internal package should pass") {
             val code = """
                 package com.example.internal
-                
+
                 data class C(val a: String)                
             """
 
@@ -106,7 +106,7 @@ class ForbiddenPublicDataClassSpec : Spek({
         it("public data class inside an internal subpackage should pass") {
             val code = """
                 package com.example.internal.other
-                
+
                 data class C(val a: String)                
             """
 
@@ -116,7 +116,7 @@ class ForbiddenPublicDataClassSpec : Spek({
         it("public data class inside an internalise package should fail") {
             val code = """
                 package com.example.internalise
-                
+
                 data class C(val a: String)                
             """
 
@@ -126,7 +126,7 @@ class ForbiddenPublicDataClassSpec : Spek({
         it("public data class inside a random package should fail") {
             val code = """
                 package com.example
-                
+
                 data class C(val a: String)                
             """
 
@@ -136,7 +136,20 @@ class ForbiddenPublicDataClassSpec : Spek({
         it("public data class inside an ignored package should pass") {
             val code = """
                 package com.example
-                
+
+                data class C(val a: String)                
+            """
+
+            val config = TestConfig(
+                "ignorePackages" to listOf("*.hello", "com.example"),
+                Config.INCLUDES_KEY to "*.kt")
+            assertThat(ForbiddenPublicDataClass(config).compileAndLint(code)).isEmpty()
+        }
+
+        it("public data class inside an ignored package should pass config as string") {
+            val code = """
+                package com.example
+
                 data class C(val a: String)                
             """
 
