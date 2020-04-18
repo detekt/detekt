@@ -47,7 +47,7 @@ summary:
                 <dependency>
                     <groupId>io.gitlab.arturbosch.detekt</groupId>
                     <artifactId>detekt-cli</artifactId>
-                    <version>[version]</version>
+                    <version>{{ site.detekt_version }}</version>
                 </dependency>
             </dependencies>
         </plugin>

@@ -36,7 +36,7 @@ buildscript {
 }
 
 plugins {
-    id("io.gitlab.arturbosch.detekt").version("[version]")
+    id("io.gitlab.arturbosch.detekt").version("{{ site.detekt_version }}")
 }
 
 repositories {
@@ -58,7 +58,7 @@ slim down the configuration file to only the changes from the default configurat
 
 ```kotlin
 detekt {
-    toolVersion = "[version]"
+    toolVersion = "{{ site.detekt_version }}"
     config = files("config/detekt/detekt.yml")
     buildUponDefaultConfig = true
 }
@@ -91,7 +91,7 @@ which can be easily added to the gradle configuration:
 
 ```gradle
 dependencies {
-    detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:[version]"
+    detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:{{ site.detekt_version }}"
 }
 ```
 

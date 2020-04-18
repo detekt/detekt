@@ -19,7 +19,7 @@ detekt [options]
 
 ### Unix, with the stand-alone executable:
 ```sh
-curl -sSLO https://github.com/arturbosch/detekt/releases/download/v[version]/detekt && chmod a+x detekt
+curl -sSLO https://github.com/arturbosch/detekt/releases/download/v{{ site.detekt_version }}/detekt && chmod a+x detekt
 ./detekt [options]
 ```
 You can add this file to your `PATH` so you can use it like `detekt [options]`.
@@ -27,7 +27,7 @@ For example, like this: `mv detekt /var/local/bin`
 
 ### Any OS:
 ```sh
-curl -sSLO https://github.com/arturbosch/detekt/releases/download/v[version]/detekt-cli-[version].zip && unzip detekt-cli-[version].zip
+curl -sSLO https://github.com/arturbosch/detekt/releases/download/v{{ site.detekt_version }}/detekt-cli-{{ site.detekt_version }}.zip && unzip detekt-cli-{{ site.detekt_version }}.zip
 ./bin/detekt [options]
 ```
 
