@@ -56,11 +56,12 @@ Visit [the project website](https://arturbosch.github.io/detekt/) for installati
 #### with the command-line interface
 
 ```shell script
-git clone https://github.com/arturbosch/detekt
-cd detekt
-./gradlew build shadowJar
-java -jar detekt-cli/build/libs/detekt-cli-[version]-all.jar --help
+```sh
+curl -sSLO https://github.com/arturbosch/detekt/releases/download/v[version]/detekt && chmod a+x detekt
+./detekt --help
 ```
+
+You can find [other ways to install detekt here](https://arturbosch.github.io/detekt/cli.html)
 
 #### with Gradle
 
