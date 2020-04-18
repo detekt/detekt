@@ -388,4 +388,5 @@ githubRelease {
         changelog.trim()
     }
     releaseAssets.setFrom(project(":detekt-cli").buildDir.resolve("libs/detekt-cli-${project.version}-all.jar"))
+    releaseAssets.setFrom(project(":detekt-cli").buildDir.resolve("run/detekt"))
 }
