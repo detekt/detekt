@@ -37,8 +37,8 @@ Starting with version **RC15** fine grained path filters can be defined for each
 complexity:
   TooManyFunctions:
     ...
-    excludes: "**/internal/**"
-    includes: "**/internal/util/NeedsToBeChecked.kt"
+    excludes: ['**/internal/**']
+    includes: ['**/internal/util/NeedsToBeChecked.kt']
 ```
 
 This gives the user more freedom in analyzing only specific files

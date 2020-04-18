@@ -10,17 +10,17 @@ comments:
     active: true
   UndocumentedPublicClass:
     active: true
-    excludes: '**/*.kt'
-    includes: '**/detekt-api/src/main/**/api/*.kt'
+    excludes: ['**/*.kt']
+    includes: ['**/detekt-api/src/main/**/api/*.kt']
   UndocumentedPublicFunction:
     active: true
-    excludes: '**/*.kt'
-    includes: '**/detekt-api/src/main/**/api/*.kt'
+    excludes: ['**/*.kt']
+    includes: ['**/detekt-api/src/main/**/api/*.kt']
 
 complexity:
   StringLiteralDuplication:
     active: true
-    excludes: '**/test/**,**/*.Test.kt,**/*.Spec.kt'
+    excludes: ['**/test/**', '**/*.Test.kt', '**/*.Spec.kt']
     threshold: 5
     ignoreAnnotation: true
     excludeStringsWithLessThan5Characters: true
@@ -91,7 +91,7 @@ potential-bugs:
     active: true
   UnsafeCast:
     active: true
-    excludes: '**/test/**,**/*.Test.kt,**/*.Spec.kt'
+    excludes: ['**/test/**', '**/*.Test.kt', '**/*.Spec.kt']
   UselessPostfixExpression:
     active: true
   WrongEqualsTypeParameter:
@@ -111,10 +111,10 @@ style:
     active: true
   LibraryCodeMustSpecifyReturnType:
     active: true
-    excludes: '**/*.kt'
-    includes: '**/detekt-api/src/main/**/api/*.kt'
+    excludes: ['**/*.kt']
+    includes: ['**/detekt-api/src/main/**/api/*.kt']
   MaxLineLength:
-    excludes: '**/test/**,**/*.Test.kt,**/*.Spec.kt'
+    excludes: ['**/test/**', '**/*.Test.kt', '**/*.Spec.kt']
     excludeCommentStatements: true
   MagicNumber:
     ignoreHashCodeFunction: true
