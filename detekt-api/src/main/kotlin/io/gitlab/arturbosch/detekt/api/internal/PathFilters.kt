@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.api.internal
 
+import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.SplitPattern
 import java.nio.file.Path
 import java.nio.file.PathMatcher
@@ -34,4 +35,10 @@ class PathFilters internal constructor(
 
         return isIncluded()?.not() ?: isExcluded() ?: true
     }
+}
+
+fun Config.createPathFilters(): PathFilters? {
+    val includes = valueOrNull<String>(Config.INCLUDES_KEY)?.trim()
+    val excludes = valueOrNull<String>(Config.EXCLUDES_KEY)?.trim()
+    return PathFilters.of(includes, excludes)
 }
