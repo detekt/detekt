@@ -7,9 +7,31 @@ folder: gettingstarted
 summary:
 ---
 
-1. `cd detekt`
-2. `gradle build`
-3. `java -jar detekt-cli/build/libs/detekt-cli-[version]-all.jar [parameters]*`
+# Install the cli
+
+There are different ways to install the Command Line Interface (CLI):
+
+### MacOS, with [Homebrew](https://brew.sh/):
+```sh
+brew install detekt
+detekt [options]
+```
+
+### Unix, with the stand-alone executable:
+```sh
+curl -sSLO https://github.com/arturbosch/detekt/releases/download/v[version]/detekt && chmod a+x detekt
+./detekt [options]
+```
+You can add this file to your `PATH` so you can use it like `detekt [options]`.
+For example, like this: `mv detekt /var/local/bin`
+
+### Any OS:
+```sh
+curl -sSLO https://github.com/arturbosch/detekt/releases/download/v[version]/detekt-cli-[version].zip && unzip detekt-cli-[version].zip
+./bin/detekt [options]
+```
+
+# Use the cli
 
 detekt will exit with one of the following exit codes:
 
