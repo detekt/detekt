@@ -1,6 +1,7 @@
 package io.gitlab.arturbosch.detekt.cli
 
 import io.gitlab.arturbosch.detekt.api.Config
+import io.gitlab.arturbosch.detekt.api.commaSeparatedPattern
 import io.gitlab.arturbosch.detekt.api.internal.CompositeConfig
 import io.gitlab.arturbosch.detekt.api.internal.DisabledAutoCorrectConfig
 import io.gitlab.arturbosch.detekt.api.internal.FailFastConfig
@@ -12,7 +13,15 @@ import java.nio.file.FileSystemNotFoundException
 import java.nio.file.FileSystems
 import java.nio.file.Path
 
-fun CliArgs.createFilters(): PathFilters? = PathFilters.of(includes, excludes)
+fun CliArgs.createFilters(): PathFilters? = PathFilters.of(
+    (includes ?: "")
+        .trim()
+        .commaSeparatedPattern(",", ";")
+        .toList(),
+    (excludes ?: "")
+        .trim()
+        .commaSeparatedPattern(",", ";")
+        .toList())
 
 fun CliArgs.createPlugins(): List<Path> = plugins.letIfNonEmpty {
     MultipleExistingPathConverter().convert(this)

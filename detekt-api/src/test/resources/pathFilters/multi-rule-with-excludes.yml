@@ -2,7 +2,7 @@ TestMultiRule:
   active: true
   TestRuleOne:
     active: true
-    excludes: '**/*.kt'
+    excludes: ['**/*.kt']
   TestRuleTwo:
     active: true
-    excludes: '**/*.kt'
+    excludes: ['**/*.kt']
