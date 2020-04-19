@@ -81,7 +81,8 @@ jobs:
       uses: mkohm/detekt-hint-docker-action@master
       with:
         github-api-token: ${{ secrets.GITHUB_TOKEN }}
-
+      if: matrix.os == 'ubuntu-latest'
+      
     - name: Generate Coverage Report
       run: ./gradlew jacocoTestReport
     - name: Publish Coverage
