@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm")
+    jacoco
 }
 
 allprojects {
@@ -22,7 +23,10 @@ subprojects {
     apply {
         plugin("java-library")
         plugin("kotlin")
+        plugin("jacoco")
     }
+
+    jacoco.toolVersion = Versions.JACOCO
 
     tasks.withType<Test> {
         useJUnitPlatform()
@@ -68,5 +72,25 @@ subprojects {
 
         testRuntimeOnly("org.junit.platform:junit-platform-launcher:${Versions.JUNIT}")
         testRuntimeOnly("org.spekframework.spek2:spek-runner-junit5:${Versions.SPEK}")
+    }
+}
+
+jacoco.toolVersion = Versions.JACOCO
+
+tasks {
+    jacocoTestReport {
+        executionData.setFrom(fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec"))
+
+        subprojects
+            .filterNot { it.name in setOf("detekt-test", "detekt-sample-extensions") }
+            .forEach {
+                this@jacocoTestReport.sourceSets(it.sourceSets.main.get())
+                this@jacocoTestReport.dependsOn(it.tasks.test)
+            }
+
+        reports {
+            xml.isEnabled = true
+            xml.destination = file("$buildDir/reports/jacoco/report.xml")
+        }
     }
 }

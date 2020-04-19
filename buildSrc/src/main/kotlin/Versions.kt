@@ -11,6 +11,7 @@ object Versions {
     const val SNAKEYAML: String = "1.26"
     const val KTLINT: String = "0.36.0"
     const val KOTLINX_HTML: String = "0.7.1"
+    const val JACOCO: String = "0.8.5"
 
     fun currentOrSnapshot(): String {
         if (System.getProperty("snapshot")?.toBoolean() == true) {
