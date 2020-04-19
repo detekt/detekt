@@ -38,6 +38,6 @@ fun updateVersion(increment: (Semver) -> Semver) {
     versionsFile.writeText("$newContent${System.lineSeparator()}")
 }
 
-val incrementPatch by tasks.registering { updateVersion { it.nextPatch() } }
-val incrementMinor by tasks.registering { updateVersion { it.nextMinor() } }
-val incrementMajor by tasks.registering { updateVersion { it.nextMajor() } }
+val incrementPatch by tasks.registering { doLast { updateVersion { it.nextPatch() } } }
+val incrementMinor by tasks.registering { doLast { updateVersion { it.nextMinor() } } }
+val incrementMajor by tasks.registering { doLast { updateVersion { it.nextMajor() } } }
