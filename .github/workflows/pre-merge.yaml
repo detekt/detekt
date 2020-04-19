@@ -77,8 +77,10 @@ jobs:
       run: ./gradlew verifyGeneratorOutput
 
 
-    - name: Run Danger
+    - name: Setup Ruby
       uses: actions/setup-ruby@v1.0.0
+    
+    - name: Run Danger
       uses: mkohm/detekt-hint-docker-action@master
       with:
         github-api-token: ${{ secrets.GITHUB_TOKEN }}
