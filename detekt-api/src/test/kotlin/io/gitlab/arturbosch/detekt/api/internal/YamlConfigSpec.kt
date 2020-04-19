@@ -46,7 +46,7 @@ class YamlConfigSpec : Spek({
             assertThatIllegalStateException().isThrownBy {
                 @Suppress("UNUSED_VARIABLE")
                 val ignored = config.valueOrDefault("style", "")
-            }.withMessage("Value \"{WildcardImport={active=true}, NoElseInWhenExpression={active=true}, MagicNumber={active=true, ignoreNumbers=-1,0,1,2}}\" set for config parameter \"style\" is not of required type String.")
+            }.withMessage("Value \"{WildcardImport={active=true}, NoElseInWhenExpression={active=true}, MagicNumber={active=true, ignoreNumbers=[-1, 0, 1, 2]}}\" set for config parameter \"style\" is not of required type String.")
         }
     }
 

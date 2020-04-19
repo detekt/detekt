@@ -32,8 +32,8 @@ class CompositeConfigTest : Spek({
 
         it("should return a string based on default value") {
             val config = compositeConfig.subConfig("style").subConfig("MagicNumber")
-            val value = config.valueOrDefault("ignoreNumbers", "-1,0,1,2")
-            assertThat(value).isEqualTo("-1,0,1,2,100,1000")
+            val value = config.valueOrDefault("ignoreNumbers", emptyList<String>())
+            assertThat(value).isEqualTo(listOf("-1", "0", "1", "2", "100", "1000"))
         }
     }
 })

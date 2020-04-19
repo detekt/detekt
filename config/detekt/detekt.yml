@@ -104,7 +104,7 @@ style:
     active: true
   ForbiddenComment:
     active: true
-    values: 'TODO:,FIXME:,STOPSHIP:,@author'
+    values: ['TODO:', 'FIXME:', 'STOPSHIP:', '@author']
   FunctionOnlyReturningConstant:
     active: true
   LoopWithTooManyJumpStatements:
@@ -121,7 +121,7 @@ style:
     ignorePropertyDeclaration: true
     ignoreAnnotation: true
     ignoreEnums: true
-    ignoreNumbers: '-1,0,1,2,100,1000'
+    ignoreNumbers: ['-1', '0', '1', '2', '100', '1000']
   MayBeConst:
     active: true
   NestedClassesVisibility:
