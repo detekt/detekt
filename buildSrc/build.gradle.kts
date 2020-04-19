@@ -22,6 +22,7 @@ object Plugins {
     const val VERSIONS = "0.28.0"
     const val SONAR = "2.8"
     const val DOKKA = "0.10.1"
+    const val SEMVER4J = "3.1.0"
 }
 
 dependencies {
@@ -34,4 +35,5 @@ dependencies {
     implementation("com.github.ben-manes:gradle-versions-plugin:${Plugins.VERSIONS}")
     implementation("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:${Plugins.SONAR}")
     implementation("org.jetbrains.dokka:dokka-gradle-plugin:${Plugins.DOKKA}")
+    implementation("com.vdurmont:semver4j:${Plugins.SEMVER4J}")
 }

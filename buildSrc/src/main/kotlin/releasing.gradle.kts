@@ -1,3 +1,5 @@
+import com.vdurmont.semver4j.Semver
+
 plugins {
     id("com.github.breadmoirai.github-release")
 }
@@ -19,3 +21,23 @@ githubRelease {
     releaseAssets.setFrom(cliBuildDir.resolve("libs/detekt-cli-${project.version}-all.jar"))
     releaseAssets.setFrom(cliBuildDir.resolve("run/detekt"))
 }
+
+fun updateVersion(increment: (Semver) -> Semver) {
+    val versionsFile = file("${rootProject.rootDir}/buildSrc/src/main/kotlin/Versions.kt")
+    val newContent = versionsFile.readLines()
+        .joinToString(System.lineSeparator()) {
+            if (it.contains("const val DETEKT: String")) {
+                val oldVersion = it.substringAfter("\"").substringBefore("\"")
+                val newVersion = Semver(oldVersion).let(increment)
+                println("Next release: $newVersion")
+                """    const val DETEKT: String = "$newVersion""""
+            } else {
+                it
+            }
+        }
+    versionsFile.writeText("$newContent${System.lineSeparator()}")
+}
+
+val incrementPatch by tasks.registering { updateVersion { it.nextPatch() } }
+val incrementMinor by tasks.registering { updateVersion { it.nextMinor() } }
+val incrementMajor by tasks.registering { updateVersion { it.nextMajor() } }
