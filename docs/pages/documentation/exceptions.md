@@ -214,7 +214,10 @@ passed into a newly thrown exception.
 
 #### Configuration options:
 
-* ``ignoredExceptionTypes`` (default: ``'InterruptedException,NumberFormatException,ParseException,MalformedURLException'``)
+* ``ignoredExceptionTypes`` (default: ``- InterruptedException
+    - NumberFormatException
+    - ParseException
+    - MalformedURLException``)
 
    exception types which should be ignored by this rule
 
