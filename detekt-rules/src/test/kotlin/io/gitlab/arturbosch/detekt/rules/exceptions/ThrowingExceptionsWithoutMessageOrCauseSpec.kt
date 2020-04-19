@@ -9,7 +9,7 @@ import org.spekframework.spek2.style.specification.describe
 class ThrowingExceptionsWithoutMessageOrCauseSpec : Spek({
     val subject by memoized {
         ThrowingExceptionsWithoutMessageOrCause(
-                TestConfig(mapOf(ThrowingExceptionsWithoutMessageOrCause.EXCEPTIONS to "IllegalArgumentException"))
+                TestConfig(ThrowingExceptionsWithoutMessageOrCause.EXCEPTIONS to listOf("IllegalArgumentException"))
         )
     }
 
@@ -29,7 +29,7 @@ class ThrowingExceptionsWithoutMessageOrCauseSpec : Spek({
             }
 
             it("does not report calls to the default constructor with empty configuration") {
-                val config = TestConfig(mapOf(ThrowingExceptionsWithoutMessageOrCause.EXCEPTIONS to ""))
+                val config = TestConfig(ThrowingExceptionsWithoutMessageOrCause.EXCEPTIONS to emptyList<String>())
                 val findings = ThrowingExceptionsWithoutMessageOrCause(config).compileAndLint(code)
                 assertThat(findings).isEmpty()
             }

@@ -8,9 +8,9 @@ import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.SplitPattern
 import io.gitlab.arturbosch.detekt.rules.ALLOWED_EXCEPTION_NAME
 import io.gitlab.arturbosch.detekt.rules.isAllowedExceptionName
+import io.gitlab.arturbosch.detekt.rules.valueOrDefaultCommaSeparated
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtDotQualifiedExpression
@@ -64,7 +64,10 @@ import org.jetbrains.kotlin.psi.psiUtil.getStrictParentOfType
  * </compliant>
  *
  * @configuration ignoredExceptionTypes - exception types which should be ignored by this rule
- * (default: `'InterruptedException,NumberFormatException,ParseException,MalformedURLException'`)
+ * (default: `- InterruptedException
+ *            - NumberFormatException
+ *            - ParseException
+ *            - MalformedURLException`)
  * @configuration allowedExceptionNameRegex - ignores too generic exception types which match this regex
  * (default: `'^(_|(ignore|expected).*)'`)
  */
@@ -74,13 +77,14 @@ class SwallowedException(config: Config = Config.empty) : Rule(config) {
         "The caught exception is swallowed. The original exception could be lost.",
         Debt.TWENTY_MINS)
 
-    private val ignoredExceptionTypes = SplitPattern(valueOrDefault(IGNORED_EXCEPTION_TYPES, ""))
+    private val ignoredExceptionTypes = valueOrDefaultCommaSeparated(IGNORED_EXCEPTION_TYPES, emptyList())
+        .map { it.removePrefix("*").removeSuffix("*") }
 
     private val allowedExceptionNameRegex by LazyRegex(ALLOWED_EXCEPTION_NAME_REGEX, ALLOWED_EXCEPTION_NAME)
 
     override fun visitCatchSection(catchClause: KtCatchClause) {
         val exceptionType = catchClause.catchParameter?.typeReference?.text
-        if (!ignoredExceptionTypes.contains(exceptionType) &&
+        if (!ignoredExceptionTypes.any { exceptionType?.contains(it, ignoreCase = true) == true } &&
             isExceptionSwallowedOrUnused(catchClause) &&
             !catchClause.isAllowedExceptionName(allowedExceptionNameRegex)) {
             report(CodeSmell(issue, Entity.from(catchClause), issue.description))

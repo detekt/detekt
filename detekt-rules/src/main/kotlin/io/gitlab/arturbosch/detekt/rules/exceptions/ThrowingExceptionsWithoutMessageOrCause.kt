@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.SplitPattern
+import io.gitlab.arturbosch.detekt.rules.valueOrDefaultCommaSeparated
 import org.jetbrains.kotlin.psi.KtCallExpression
 
 /**
@@ -35,7 +35,9 @@ import org.jetbrains.kotlin.psi.KtCallExpression
  * </compliant>
  *
  * @configuration exceptions - exceptions which should not be thrown without message or cause
- * (default: `'IllegalArgumentException,IllegalStateException,IOException'`)
+ * (default: `- IllegalArgumentException
+ *            - IllegalStateException
+ *            - IOException'`)
  */
 class ThrowingExceptionsWithoutMessageOrCause(config: Config = Config.empty) : Rule(config) {
 
@@ -45,11 +47,12 @@ class ThrowingExceptionsWithoutMessageOrCause(config: Config = Config.empty) : R
                     "This allows to provide more meaningful exceptions.",
             Debt.FIVE_MINS)
 
-    private val exceptions = SplitPattern(valueOrDefault(EXCEPTIONS, ""))
+    private val exceptions = valueOrDefaultCommaSeparated(EXCEPTIONS, emptyList())
 
     override fun visitCallExpression(expression: KtCallExpression) {
         val calleeExpressionText = expression.calleeExpression?.text
-        if (exceptions.any(calleeExpressionText) && expression.valueArguments.isEmpty()) {
+        if (exceptions.any { calleeExpressionText?.equals(it, ignoreCase = true) == true } &&
+            expression.valueArguments.isEmpty()) {
             report(CodeSmell(issue, Entity.from(expression), issue.description))
         }
         super.visitCallExpression(expression)

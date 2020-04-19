@@ -74,7 +74,7 @@ complexity:
     nestingFunctions: [run, let, apply, with, also, use, forEach, isNotNull, ifNull]
   LabeledExpression:
     active: false
-    ignoredLabels: ''
+    ignoredLabels: []
   LargeClass:
     active: true
     threshold: 600
@@ -174,7 +174,11 @@ exceptions:
     ignoreLabeled: false
   SwallowedException:
     active: false
-    ignoredExceptionTypes: 'InterruptedException,NumberFormatException,ParseException,MalformedURLException'
+    ignoredExceptionTypes:
+     - InterruptedException
+     - NumberFormatException
+     - ParseException
+     - MalformedURLException
     allowedExceptionNameRegex: '^(_|(ignore|expected).*)'
   ThrowingExceptionFromFinally:
     active: false
@@ -182,7 +186,10 @@ exceptions:
     active: false
   ThrowingExceptionsWithoutMessageOrCause:
     active: false
-    exceptions: 'IllegalArgumentException,IllegalStateException,IOException'
+    exceptions:
+     - IllegalArgumentException
+     - IllegalStateException
+     - IOException'
   ThrowingNewInstanceOfSameException:
     active: false
   TooGenericExceptionCaught:
@@ -335,7 +342,7 @@ naming:
   ForbiddenClassName:
     active: false
     excludes: ['**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt', '**/*.Spek.kt']
-    forbiddenName: ''
+    forbiddenName: []
   FunctionMaxLength:
     active: false
     excludes: ['**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt', '**/*.Spek.kt']
@@ -490,10 +497,10 @@ style:
     forbiddenPatterns: ''
   ForbiddenMethodCall:
     active: false
-    methods: ''
+    methods: []
   ForbiddenPublicDataClass:
     active: false
-    ignorePackages: '*.internal,*.internal.*'
+    ignorePackages: ['*.internal', '*.internal.*']
   ForbiddenVoid:
     active: false
     ignoreOverridden: false
@@ -617,4 +624,4 @@ style:
   WildcardImport:
     active: true
     excludes: ['**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt', '**/*.Spek.kt']
-    excludeImports: 'java.util.*,kotlinx.android.synthetic.*'
+    excludeImports: ['java.util.*', 'kotlinx.android.synthetic.*']

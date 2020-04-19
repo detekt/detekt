@@ -214,7 +214,10 @@ passed into a newly thrown exception.
 
 #### Configuration options:
 
-* ``ignoredExceptionTypes`` (default: ``'InterruptedException,NumberFormatException,ParseException,MalformedURLException'``)
+* ``ignoredExceptionTypes`` (default: ``- InterruptedException
+    - NumberFormatException
+    - ParseException
+    - MalformedURLException``)
 
    exception types which should be ignored by this rule
 
@@ -313,7 +316,9 @@ down an underlying issue in a better way.
 
 #### Configuration options:
 
-* ``exceptions`` (default: ``'IllegalArgumentException,IllegalStateException,IOException'``)
+* ``exceptions`` (default: ``- IllegalArgumentException
+    - IllegalStateException
+    - IOException'``)
 
    exceptions which should not be thrown without message or cause
 
