@@ -14,8 +14,6 @@ include(
 pluginManagement {
 
     val dokkaVersion: String by settings
-    val gradleVersionsPluginVersion: String by settings
-    val sonarQubeVersion: String by settings
 
     repositories {
         maven { setUrl("https://plugins.gradle.org/m2/") }
@@ -24,8 +22,6 @@ pluginManagement {
 
     plugins {
         id("org.jetbrains.dokka") version dokkaVersion
-        id("com.github.ben-manes.versions") version gradleVersionsPluginVersion
-        id("org.sonarqube") version sonarQubeVersion
     }
 }
 

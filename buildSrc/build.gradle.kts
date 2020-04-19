@@ -20,6 +20,7 @@ object Plugins {
     const val BINTRAY = "1.8.4"
     const val SHADOW = "5.2.0"
     const val VERSIONS = "0.28.0"
+    const val SONAR = "2.8"
 }
 
 dependencies {
@@ -30,4 +31,5 @@ dependencies {
     implementation("com.jfrog.bintray.gradle:gradle-bintray-plugin:${Plugins.BINTRAY}")
     implementation("com.github.jengelman.gradle.plugins:shadow:${Plugins.SHADOW}")
     implementation("com.github.ben-manes:gradle-versions-plugin:${Plugins.VERSIONS}")
+    implementation("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:${Plugins.SONAR}")
 }
