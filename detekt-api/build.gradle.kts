@@ -4,12 +4,8 @@ plugins {
     id("org.jetbrains.dokka")
 }
 
-val yamlVersion: String by project
-val junitPlatformVersion: String by project
-val spekVersion: String by project
-
 dependencies {
-    implementation("org.yaml:snakeyaml:$yamlVersion")
+    implementation("org.yaml:snakeyaml:${Versions.SNAKEYAML}")
     api(kotlin("compiler-embeddable"))
 
     testImplementation(project(":detekt-test"))

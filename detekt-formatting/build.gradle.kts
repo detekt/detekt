@@ -1,14 +1,12 @@
-val ktlintVersion: String by project
-
 dependencies {
     implementation(project(":detekt-api"))
-    implementation("com.pinterest.ktlint:ktlint-ruleset-standard:$ktlintVersion") {
+    implementation("com.pinterest.ktlint:ktlint-ruleset-standard:${Versions.KTLINT}") {
         exclude(group = "org.jetbrains.kotlin")
     }
-    implementation("com.pinterest.ktlint:ktlint-core:$ktlintVersion") {
+    implementation("com.pinterest.ktlint:ktlint-core:${Versions.KTLINT}") {
         exclude(group = "org.jetbrains.kotlin")
     }
-    implementation("com.pinterest.ktlint:ktlint-ruleset-experimental:$ktlintVersion") {
+    implementation("com.pinterest.ktlint:ktlint-ruleset-experimental:${Versions.KTLINT}") {
         exclude(group = "org.jetbrains.kotlin")
     }
 
