@@ -4,8 +4,9 @@ plugins {
     releasing
     jacoco
     detekt
-    housekeeping
     id("org.jetbrains.dokka") apply false
+    id("com.github.ben-manes.versions")
+    id("org.sonarqube")
 }
 
 buildScan {

@@ -13,15 +13,8 @@ include(
 
 pluginManagement {
 
-    val dokkaVersion: String by settings
-
     repositories {
-        maven { setUrl("https://plugins.gradle.org/m2/") }
-        mavenLocal() // used to publish and test local gradle plugin changes
-    }
-
-    plugins {
-        id("org.jetbrains.dokka") version dokkaVersion
+        gradlePluginPortal()
     }
 }
 
