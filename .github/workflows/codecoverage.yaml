@@ -1,0 +1,36 @@
+name: Code Coverage
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  gradle:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        jdk: [11]
+    runs-on: ${{ matrix.os }}
+    if: ${{ !contains(github.event.head_commit.message, 'coverage skip') }}
+    env:
+      JDK_VERSION:  ${{ matrix.jdk }}
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+
+      - name: Setup Java
+        uses: actions/setup-java@v1
+        with:
+          java-version: ${{ matrix.jdk }}
+
+      - name: Generate Coverage Report
+        run: ./gradlew jacocoTestReport -Dorg.gradle.caching=false
+
+      - name: Publish Coverage
+        if: success()
+        run: bash <(curl -s https://codecov.io/bash)
+        shell: bash
