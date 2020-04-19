@@ -186,7 +186,10 @@ exceptions:
     active: false
   ThrowingExceptionsWithoutMessageOrCause:
     active: false
-    exceptions: 'IllegalArgumentException,IllegalStateException,IOException'
+    exceptions:
+     - IllegalArgumentException
+     - IllegalStateException
+     - IOException'
   ThrowingNewInstanceOfSameException:
     active: false
   TooGenericExceptionCaught:
