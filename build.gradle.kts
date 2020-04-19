@@ -141,7 +141,7 @@ tasks {
     }
 }
 
-configure(listOf(project(":detekt-test"), project(":detekt-sample-extensions"))) {
+subprojects {
     apply {
         plugin("jacoco")
     }
