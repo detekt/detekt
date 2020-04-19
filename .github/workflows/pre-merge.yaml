@@ -78,7 +78,7 @@ jobs:
 
 
     - name: Run Danger
-      uses: mkohm/detekt-hint-docker-action@v1
+      uses: mkohm/detekt-hint-docker-action@master
       with:
         github-api-token: ${{ secrets.GITHUB_TOKEN }}
 
