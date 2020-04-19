@@ -1,8 +1,9 @@
 plugins {
     commons
     apps
-    detekt
+    packaging
     releasing
+    detekt
     id("org.jetbrains.dokka") apply false
     id("com.github.ben-manes.versions")
     id("org.sonarqube")
