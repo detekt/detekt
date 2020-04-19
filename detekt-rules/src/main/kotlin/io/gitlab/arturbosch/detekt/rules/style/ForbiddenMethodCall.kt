@@ -7,7 +7,7 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.commaSeparatedPattern
+import io.gitlab.arturbosch.detekt.rules.valueOrDefaultCommaSeparated
 import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.calls.callUtil.getResolvedCall
@@ -25,7 +25,7 @@ import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameOrNull
  * }
  * </noncompliant>
  *
- * @configuration methods - Comma separated list of fully qualified method signatures which are forbidden (default: `''`)
+ * @configuration methods - Comma separated list of fully qualified method signatures which are forbidden (default: `[]`)
  */
 class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
 
@@ -37,7 +37,7 @@ class ForbiddenMethodCall(config: Config = Config.empty) : Rule(config) {
         Debt.TEN_MINS
     )
 
-    private val forbiddenMethods = valueOrDefault(METHODS, "").commaSeparatedPattern().toList()
+    private val forbiddenMethods = valueOrDefaultCommaSeparated(METHODS, emptyList())
 
     override fun visitQualifiedExpression(expression: KtQualifiedExpression) {
         super.visitQualifiedExpression(expression)

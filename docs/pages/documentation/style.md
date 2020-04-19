@@ -317,7 +317,7 @@ Detekt will then report all methods invocation that are forbidden.
 
 #### Configuration options:
 
-* ``methods`` (default: ``''``)
+* ``methods`` (default: ``[]``)
 
    Comma separated list of fully qualified method signatures which are forbidden
 

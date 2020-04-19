@@ -50,7 +50,7 @@ class ForbiddenMethodCallSpec : Spek({
             }
             """
             val findings = ForbiddenMethodCall(
-                TestConfig(mapOf(ForbiddenMethodCall.METHODS to "java.lang.System.gc"))
+                TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("java.lang.System.gc")))
             ).compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).isEmpty()
         }
@@ -62,7 +62,7 @@ class ForbiddenMethodCallSpec : Spek({
             }
             """
             val findings = ForbiddenMethodCall(
-                TestConfig(mapOf(ForbiddenMethodCall.METHODS to "java.io.PrintStream.println"))
+                TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("java.io.PrintStream.println")))
             ).compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasTextLocations(13 to 50)
@@ -76,13 +76,28 @@ class ForbiddenMethodCallSpec : Spek({
             }
             """
             val findings = ForbiddenMethodCall(
-                TestConfig(mapOf(ForbiddenMethodCall.METHODS to "java.io.PrintStream.println"))
+                TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("java.io.PrintStream.println")))
             ).compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).hasSize(1)
             assertThat(findings).hasTextLocations(41 to 61)
         }
 
         it("should report multiple different methods") {
+            val code = """
+            import java.lang.System
+            fun main() {
+            System.out.println("hello")
+                System.gc()
+            }
+            """
+            val findings = ForbiddenMethodCall(
+                TestConfig(mapOf(ForbiddenMethodCall.METHODS to listOf("java.io.PrintStream.println", "java.lang.System.gc")))
+            ).compileAndLintWithContext(wrapper.env, code)
+            assertThat(findings).hasSize(2)
+            assertThat(findings).hasTextLocations(37 to 64, 69 to 80)
+        }
+
+        it("should report multiple different methods config with sting") {
             val code = """
             import java.lang.System
             fun main() {
