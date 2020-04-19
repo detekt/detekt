@@ -345,9 +345,9 @@ More info: https://jakewharton.com/public-api-challenges-in-kotlin/
 
 #### Configuration options:
 
-* ``ignorePackages`` (default: ``'*.internal,*.internal.*'``)
+* ``ignorePackages`` (default: ``['*.internal', '*.internal.*']``)
 
-   ignores classes in the specified packages. Split by commas ','
+   ignores classes in the specified packages.
 
 #### Noncompliant Code:
 

@@ -7,8 +7,8 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.api.commaSeparatedPattern
 import io.gitlab.arturbosch.detekt.api.simplePatternToRegex
+import io.gitlab.arturbosch.detekt.rules.valueOrDefaultCommaSeparated
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtClass
 import org.jetbrains.kotlin.psi.KtFile
@@ -30,8 +30,8 @@ import org.jetbrains.kotlin.psi.psiUtil.visibilityModifierTypeOrDefault
  * internal data class C(val a: String)
  * </compliant>
  *
- * @configuration ignorePackages - ignores classes in the specified packages. Split by commas ','
- * (default: `'*.internal,*.internal.*'`)
+ * @configuration ignorePackages - ignores classes in the specified packages.
+ * (default: `['*.internal', '*.internal.*']`)
  */
 class ForbiddenPublicDataClass(config: Config = Config.empty) : Rule(config) {
 
@@ -42,8 +42,7 @@ class ForbiddenPublicDataClass(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS
     )
 
-    private val ignorablePackages = valueOrDefault(IGNORE_PACKAGES, "*.internal,*.internal.*")
-        .commaSeparatedPattern()
+    private val ignorablePackages = valueOrDefaultCommaSeparated(IGNORE_PACKAGES, listOf("*.internal", "*.internal.*"))
         .distinct()
         .map { it.simplePatternToRegex() }
         .toList()
