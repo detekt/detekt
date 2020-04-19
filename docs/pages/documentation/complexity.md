@@ -131,7 +131,7 @@ way to get the instance of an outer class from an inner class in Kotlin.
 
 #### Configuration options:
 
-* ``ignoredLabels`` (default: ``''``)
+* ``ignoredLabels`` (default: ``[]``)
 
    allows to provide a list of label names which should be ignored by this rule
 
