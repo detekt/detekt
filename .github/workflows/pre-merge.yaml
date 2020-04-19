@@ -76,13 +76,11 @@ jobs:
     - name: Verify Generator Output
       run: ./gradlew verifyGeneratorOutput
 
-    - name: Setup Ruby for use with actions
-      uses: actions/setup-ruby@v1.0.0
 
     - name: Run Danger
-      run: gem install bundler && bundle install && bundle update danger && bundle exec danger --verbose
-      env:
-        DANGER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: Mkohm/detekt-hint-docker-action
+      with:
+        github-api-token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Generate Coverage Report
       run: ./gradlew jacocoTestReport
