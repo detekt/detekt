@@ -3,6 +3,7 @@ package io.gitlab.arturbosch.detekt.api
 import io.gitlab.arturbosch.detekt.api.internal.BaseRule
 import io.gitlab.arturbosch.detekt.api.internal.PathFilters
 import io.gitlab.arturbosch.detekt.api.internal.absolutePath
+import io.gitlab.arturbosch.detekt.api.internal.createPathFilters
 import io.gitlab.arturbosch.detekt.api.internal.isSuppressedBy
 import org.jetbrains.kotlin.psi.KtFile
 import java.nio.file.Paths
@@ -53,9 +54,7 @@ abstract class Rule(
      * Rules are aware of the paths they should run on via configuration properties.
      */
     open val filters: PathFilters? by lazy(LazyThreadSafetyMode.NONE) {
-        val includes = valueOrNull<String>(Config.INCLUDES_KEY)?.trim()
-        val excludes = valueOrNull<String>(Config.EXCLUDES_KEY)?.trim()
-        PathFilters.of(includes, excludes)
+        createPathFilters()
     }
 
     override fun visitCondition(root: KtFile): Boolean =

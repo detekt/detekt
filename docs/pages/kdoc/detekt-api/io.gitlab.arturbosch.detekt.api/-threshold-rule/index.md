@@ -19,3 +19,7 @@ but can be also obtained from within a configuration object.
 
 | [threshold](threshold.html) | The used threshold for this rule is loaded from the configuration or used from the constructor value.`val threshold: `[`Int`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html) |
 
+### Extension Functions
+
+| [createPathFilters](../../io.gitlab.arturbosch.detekt.api.internal/create-path-filters.html) | `fun `[`Config`](../-config/index.html)`.createPathFilters(): `[`PathFilters`](../../io.gitlab.arturbosch.detekt.api.internal/-path-filters/index.html)`?` |
+

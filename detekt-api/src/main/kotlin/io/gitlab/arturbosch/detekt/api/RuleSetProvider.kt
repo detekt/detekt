@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.api
 
-import io.gitlab.arturbosch.detekt.api.internal.PathFilters
+import io.gitlab.arturbosch.detekt.api.internal.createPathFilters
 
 /**
  * A rule set provider, as the name states, is responsible for creating rule sets.
@@ -28,9 +28,8 @@ interface RuleSetProvider {
         val subConfig = config.subConfig(ruleSetId)
         val active = subConfig.valueOrDefault("active", true)
         return if (active) {
-            val includes = subConfig.valueOrNull<String>(Config.INCLUDES_KEY)?.trim()
-            val excludes = subConfig.valueOrNull<String>(Config.EXCLUDES_KEY)?.trim()
-            instance(subConfig).apply { pathFilters = PathFilters.of(includes, excludes) }
+            val pathFilters = subConfig.createPathFilters()
+            instance(subConfig).apply { this.pathFilters = pathFilters }
         } else {
             null
         }

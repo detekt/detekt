@@ -20,6 +20,10 @@ It's main usage is to recreate the property-path which was taken when using the 
 
 | [parent](parent.html) | Returns the parent config which encloses this config part.`abstract val parent: Parent?` |
 
+### Extension Functions
+
+| [createPathFilters](../../io.gitlab.arturbosch.detekt.api.internal/create-path-filters.html) | `fun `[`Config`](../-config/index.html)`.createPathFilters(): `[`PathFilters`](../../io.gitlab.arturbosch.detekt.api.internal/-path-filters/index.html)`?` |
+
 ### Inheritors
 
 | [BaseConfig](../../io.gitlab.arturbosch.detekt.api.internal/-base-config/index.html) | Convenient base configuration which parses/casts the configuration value based on the type of the default value.`abstract class BaseConfig : `[`HierarchicalConfig`](./index.html) |

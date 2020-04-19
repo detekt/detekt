@@ -34,6 +34,10 @@ two predefined (preVisit/postVisit) functions which can be overridden to setup/t
 | [report](report.html) | Simplified version of [Context.report](../-context/report.html) with rule defaults.`fun report(finding: `[`Finding`](../-finding/index.html)`): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html)<br>`fun report(findings: `[`List`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-list/index.html)`<`[`Finding`](../-finding/index.html)`>): `[`Unit`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html) |
 | [visitCondition](visit-condition.html) | Basic mechanism to decide if a rule should run or not.`open fun visitCondition(root: KtFile): `[`Boolean`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html) |
 
+### Extension Functions
+
+| [createPathFilters](../../io.gitlab.arturbosch.detekt.api.internal/create-path-filters.html) | `fun `[`Config`](../-config/index.html)`.createPathFilters(): `[`PathFilters`](../../io.gitlab.arturbosch.detekt.api.internal/-path-filters/index.html)`?` |
+
 ### Inheritors
 
 | [ThresholdRule](../-threshold-rule/index.html) | Provides a threshold attribute for this rule, which is specified manually for default values but can be also obtained from within a configuration object.`abstract class ThresholdRule : `[`Rule`](./index.html) |

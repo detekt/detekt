@@ -33,6 +33,10 @@ A configuration holds information about how to configure specific rules.
 | [INCLUDES_KEY](-i-n-c-l-u-d-e-s_-k-e-y.html) | `const val INCLUDES_KEY: `[`String`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html) |
 | [PRIMITIVES](-p-r-i-m-i-t-i-v-e-s.html) | `val PRIMITIVES: `[`Set`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-set/index.html)`<`[`KClass`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html)`<out `[`Any`](https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html)`>>` |
 
+### Extension Functions
+
+| [createPathFilters](../../io.gitlab.arturbosch.detekt.api.internal/create-path-filters.html) | `fun `[`Config`](./index.html)`.createPathFilters(): `[`PathFilters`](../../io.gitlab.arturbosch.detekt.api.internal/-path-filters/index.html)`?` |
+
 ### Inheritors
 
 | [CompositeConfig](../../io.gitlab.arturbosch.detekt.api.internal/-composite-config/index.html) | Wraps two different configuration which should be considered when retrieving properties.`class CompositeConfig : `[`Config`](./index.html)`, `[`ValidatableConfiguration`](../../io.gitlab.arturbosch.detekt.api.internal/-validatable-configuration/index.html) |

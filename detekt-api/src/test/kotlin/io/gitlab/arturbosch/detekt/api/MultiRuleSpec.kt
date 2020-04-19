@@ -23,8 +23,18 @@ internal class MultiRuleSpec : Spek({
                 assertThat(loadRuleSet<MultiRuleProvider>(config).shouldAnalyzeFile(file, config)).isFalse()
             }
 
+            it("should not run any rules if rule set defines the filter with string") {
+                val config = yamlConfig("/pathFilters/multi-rule-with-excludes-on-ruleset-string.yml")
+                assertThat(loadRuleSet<MultiRuleProvider>(config).shouldAnalyzeFile(file, config)).isFalse()
+            }
+
             it("should only run one rule as the other is filtered") {
                 val config = yamlConfig("/pathFilters/multi-rule-with-one-exclude.yml")
+                assertThat(loadRuleSet<MultiRuleProvider>(config).visitFile(file)).hasSize(1)
+            }
+
+            it("should only run one rule as the other is filtered with string") {
+                val config = yamlConfig("/pathFilters/multi-rule-with-one-exclude-string.yml")
                 assertThat(loadRuleSet<MultiRuleProvider>(config).visitFile(file)).hasSize(1)
             }
 
@@ -35,6 +45,11 @@ internal class MultiRuleSpec : Spek({
 
             it("should run none when both rules are filtered") {
                 val config = yamlConfig("/pathFilters/multi-rule-with-excludes.yml")
+                assertThat(loadRuleSet<MultiRuleProvider>(config).visitFile(file)).isEmpty()
+            }
+
+            it("should run none when both rules are filtered with string") {
+                val config = yamlConfig("/pathFilters/multi-rule-with-excludes-string.yml")
                 assertThat(loadRuleSet<MultiRuleProvider>(config).visitFile(file)).isEmpty()
             }
         }

@@ -30,3 +30,7 @@ yaml specification.
 | [load](load.html) | Factory method to load a yaml configuration. Given path must exist and point to a readable file.`fun load(path: `[`Path`](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Path.html)`): `[`Config`](../../io.gitlab.arturbosch.detekt.api/-config/index.html) |
 | [loadResource](load-resource.html) | Factory method to load a yaml configuration from a URL.`fun loadResource(url: `[`URL`](https://docs.oracle.com/javase/8/docs/api/java/net/URL.html)`): `[`Config`](../../io.gitlab.arturbosch.detekt.api/-config/index.html) |
 
+### Extension Functions
+
+| [createPathFilters](../create-path-filters.html) | `fun `[`Config`](../../io.gitlab.arturbosch.detekt.api/-config/index.html)`.createPathFilters(): `[`PathFilters`](../-path-filters/index.html)`?` |
+
