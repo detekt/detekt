@@ -75,10 +75,7 @@ jobs:
 
     - name: Verify Generator Output
       run: ./gradlew verifyGeneratorOutput
-      
-      
-    - name: Setup Ruby
-      uses: actions/setup-ruby@v1.0.0
+ 
     
     - name: Run Danger
       uses: mkohm/detekt-hint-docker-action@master
