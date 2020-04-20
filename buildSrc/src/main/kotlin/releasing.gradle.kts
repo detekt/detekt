@@ -9,7 +9,7 @@ githubRelease {
     owner.set("arturbosch")
     repo.set("detekt")
     overwrite.set(true)
-    dryRun.set(true)
+    dryRun.set(false)
     body {
         var changelog = project.file("docs/pages/changelog 1.x.x.md").readText()
         val sectionStart = "#### ${project.version}"
