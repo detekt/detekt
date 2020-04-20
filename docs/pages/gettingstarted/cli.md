@@ -7,9 +7,31 @@ folder: gettingstarted
 summary:
 ---
 
-1. `cd detekt`
-2. `gradle build`
-3. `java -jar detekt-cli/build/libs/detekt-cli-[version]-all.jar [parameters]*`
+# Install the cli
+
+There are different ways to install the Command Line Interface (CLI):
+
+### MacOS, with [Homebrew](https://brew.sh/):
+```sh
+brew install detekt
+detekt [options]
+```
+
+### Unix, with the stand-alone executable:
+```sh
+curl -sSLO https://github.com/arturbosch/detekt/releases/download/v{{ site.detekt_version }}/detekt && chmod a+x detekt
+./detekt [options]
+```
+You can add this file to your `PATH` so you can use it like `detekt [options]`.
+For example, like this: `mv detekt /var/local/bin`
+
+### Any OS:
+```sh
+curl -sSLO https://github.com/arturbosch/detekt/releases/download/v{{ site.detekt_version }}/detekt-cli-{{ site.detekt_version }}.zip && unzip detekt-cli-{{ site.detekt_version }}.zip
+./bin/detekt [options]
+```
+
+# Use the cli
 
 detekt will exit with one of the following exit codes:
 
@@ -67,7 +89,8 @@ Usage: detekt [options]
       override rule properties which includes turning off specific rules.
       Default: false
     --generate-config, -gc
-      Export default config to default-detekt-config.yml.
+      Export default config. Path can be specified with --config option
+      (default path: default-detekt-config.yml)
       Default: false
     --help, -h
       Shows the usage.
@@ -77,19 +100,21 @@ Usage: detekt [options]
     --input, -i
       Input paths to analyze. Multiple paths are separated by comma. If not
       specified the current working directory is used.
-    --language-version
-      EXPERIMENTAL: Compatibility mode for Kotlin language version X.Y, reports
-      errors for all language features that came out later.
-      Default: latest stable
-      Possible Values: [1.0, 1.1, 1.2, 1.3, 1.4]
     --jvm-target
       EXPERIMENTAL: Target version of the generated JVM bytecode that was
       generated during compilation and is now being used for type resolution
-      Default: 1.6
-      Possible Values: [1.6, 1.8, 9, 10, 11, 12]
+      (1.6, 1.8, 9, 10, 11 or 12)
+      Default: JVM_1_6
+      Possible Values: [JVM_1_6, JVM_1_8, JVM_9, JVM_10, JVM_11, JVM_12, JVM_13]
+    --language-version
+      EXPERIMENTAL: Compatibility mode for Kotlin language version X.Y,
+      reports errors for all language features that came out later (1.0, 1.1,
+      1.2, 1.3, 1.4)
+      Possible Values: [1.0, 1.1, 1.2, 1.3, 1.4]
     --parallel
-      Enables parallel compilation of source files. Should only be used if the
-      analyzing project has more than ~200 Kotlin files.
+      Enables parallel compilation and analysis of source files. Do some
+      benchmarks first before enabling this flag. Heuristics show performance
+      benefits starting from 2000 lines of Kotlin code.
       Default: false
     --plugins, -p
       Extra paths to plugin jars separated by ',' or ';'.
@@ -100,4 +125,5 @@ Usage: detekt [options]
       other e.g. '-r txt:reports/detekt.txt -r xml:reports/detekt.xml'
     --version
       Prints the detekt CLI version.
+      Default: false
 ```

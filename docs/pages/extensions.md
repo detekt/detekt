@@ -205,7 +205,7 @@ Take a look at our [sample project](https://github.com/arturbosch/detekt/tree/ma
 
 Mention your `jar` with the `--plugins` flag when calling the cli fatjar:
 ```
-java -jar detekt-cli-[version]-all.jar --input ... --plugins /path/to/my/jar
+detekt --input ... --plugins /path/to/my/jar
 ```
 
 ##### Integrate your extension with the detekt gradle plugin 
@@ -214,9 +214,9 @@ For example `detekt` itself provides a wrapper over [ktlint](https://github.com/
 custom `formatting` rule set.
 To enable it, we add the published dependency to `detekt` via the `detektPlugins` configuration:
 
-```kotlin
+```groovy
 dependencies {
-    detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:[version]"
+    detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:{{ site.detekt_version }}"
 }
 ```
 

@@ -109,3 +109,5 @@ description: "Meet detekt, a static code analysis tool for Kotlin."
 # needed for sitemap.xml file only
 url: http://github.com/arturbosch/detekt
 baseurl: /
+
+detekt_version: 1.7.4

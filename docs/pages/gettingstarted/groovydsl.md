@@ -45,7 +45,7 @@ repositories {
 }
 
 plugins {
-    id "io.gitlab.arturbosch.detekt" version "[version]"
+    id "io.gitlab.arturbosch.detekt" version "{{ site.detekt_version }}"
 }
 ```
 
@@ -61,13 +61,13 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:[version]'
-        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:[version]"
+        classpath 'com.android.tools.build:gradle:{{ site.detekt_version }}'
+        classpath "io.gitlab.arturbosch.detekt:detekt-gradle-plugin:{{ site.detekt_version }}"
     }
 
 }
 plugins {
-    id "io.gitlab.arturbosch.detekt" version "[version]"
+    id "io.gitlab.arturbosch.detekt" version "{{ site.detekt_version }}"
 }
 
 apply plugin: 'io.gitlab.arturbosch.detekt'
@@ -78,7 +78,7 @@ apply plugin: 'io.gitlab.arturbosch.detekt'
 
 ```groovy
 detekt {
-    toolVersion = "[version]"                             // Version of the Detekt CLI that will be used. When unspecified the latest detekt version found will be used. Override to stay on the same version.
+    toolVersion = "{{ site.detekt_version }}"                                 // Version of the Detekt CLI that will be used. When unspecified the latest detekt version found will be used. Override to stay on the same version.
     input = files(                                        // The directories where detekt looks for source files. Defaults to `files("src/main/java", "src/main/kotlin")`.
         "src/main/kotlin",
         "gensrc/main/kotlin"
