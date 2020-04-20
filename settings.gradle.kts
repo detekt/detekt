@@ -18,8 +18,7 @@ pluginManagement {
     }
 }
 
+// build scan plugin can only be applied in settings file
 plugins {
-    val buildScanVersion: String by settings
-
-    id("com.gradle.enterprise") version buildScanVersion
+    id("com.gradle.enterprise") version "3.2.1"
 }
