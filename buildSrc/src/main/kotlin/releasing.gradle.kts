@@ -44,21 +44,14 @@ val incrementPatch by tasks.registering { doLast { updateVersion { it.nextPatch(
 val incrementMinor by tasks.registering { doLast { updateVersion { it.nextMinor() } } }
 val incrementMajor by tasks.registering { doLast { updateVersion { it.nextMajor() } } }
 
-val applyDocVersion by tasks.registering {
-    doLast {
-        val docConfigFile = file("${rootProject.rootDir}/docs/_config.yml")
-        val content = docConfigFile.useLines { lines ->
-            lines.mapNotNull {
-                if (it.contains("detekt_version:")) {
-                    null
-                } else {
-                    it
-                }
-            }
-                .joinToString(ln)
-                .trim()
-        }
-        println("Applied 'detekt_version: ${Versions.DETEKT}' to docs/_config.yml.")
-        docConfigFile.writeText("${content}$ln${ln}detekt_version: ${Versions.DETEKT}$ln")
-    }
+val applyDocVersion by tasks.registering(UpdateVersionInFileTask::class) {
+    fileToUpdate = file("${rootProject.rootDir}/docs/_config.yml")
+    linePartToFind = "detekt_version:"
+    lineTransformation = { "detekt_version: ${Versions.DETEKT}" }
+}
+
+val applySelfAnalysisVersion by tasks.registering(UpdateVersionInFileTask::class) {
+    fileToUpdate = file("${rootProject.rootDir}/buildSrc/build.gradle.kts")
+    linePartToFind = "const val DETEKT ="
+    lineTransformation = { """    const val DETEKT = "${Versions.DETEKT}"""" }
 }
