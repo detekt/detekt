@@ -49,15 +49,6 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: ${{ matrix.jdk }}
-        
-    - name: Setup Ruby
-      uses: actions/setup-ruby@v1.0.0
-    
-    - name: Run Danger
-      uses: mkohm/detekt-hint-docker-action@master
-      env:
-        DANGER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      if: matrix.os == 'ubuntu-latest'
 
 
     - name: Build detekt (UNIX)
@@ -84,6 +75,16 @@ jobs:
 
     - name: Verify Generator Output
       run: ./gradlew verifyGeneratorOutput
+      
+      
+    - name: Setup Ruby
+      uses: actions/setup-ruby@v1.0.0
+    
+    - name: Run Danger
+      uses: mkohm/detekt-hint-docker-action@master
+      env:
+        DANGER_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      if: matrix.os == 'ubuntu-latest'
       
     - name: Generate Coverage Report
       run: ./gradlew jacocoTestReport
