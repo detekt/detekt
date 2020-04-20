@@ -17,7 +17,7 @@ toc: true
 ##### Migration
 
 - Formatting rules get reported now on the correct lines. The baseline file may need to be adjusted/regenerated. 
-- Issues concerning classes and objects are not reported at the identifier. The baseline file may need to be adjusted/regenerated. 
+- Issues concerning classes and objects are now reported at the identifier. The baseline file may need to be adjusted/regenerated. 
 
 ##### Changelog
 
