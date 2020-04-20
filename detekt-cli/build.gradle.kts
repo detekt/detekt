@@ -2,16 +2,12 @@ application {
     mainClassName = "io.gitlab.arturbosch.detekt.cli.Main"
 }
 
-val jcommanderVersion: String by project
-val detektVersion: String by project
-val kotlinxHtmlJvmVersion: String by project
-
 dependencies {
     implementation(kotlin("stdlib-jdk8"))
     implementation(project(":detekt-core"))
     runtimeOnly(project(":detekt-rules"))
-    implementation("com.beust:jcommander:$jcommanderVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:$kotlinxHtmlJvmVersion") {
+    implementation("com.beust:jcommander:${Versions.JCOMMANDER}")
+    implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:${Versions.KOTLINX_HTML}") {
         exclude(group = "org.jetbrains.kotlin")
     }
 
@@ -22,7 +18,7 @@ dependencies {
 // bundle detekt's version for debug logging on rule exceptions
 tasks.withType<Jar> {
     manifest {
-        attributes(mapOf("DetektVersion" to detektVersion))
+        attributes(mapOf("DetektVersion" to Versions.DETEKT))
     }
 }
 

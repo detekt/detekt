@@ -3,6 +3,6 @@
 -b
 ./config/detekt/baseline.xml
 -ex
-**/resources/**,**/detekt*/build/**
+**/resources/**,**/detekt*/build/**,**/buildSrc/build/**
 -c
 ./detekt-cli/src/main/resources/default-detekt-config.yml,./config/detekt/detekt.yml

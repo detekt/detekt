@@ -1,5 +1,10 @@
 import java.io.ByteArrayOutputStream
 
+apply {
+    plugin("application")
+    plugin("com.github.johnrengelman.shadow")
+}
+
 application {
     mainClassName = "io.gitlab.arturbosch.detekt.generator.Main"
 }
@@ -10,8 +15,6 @@ val jar by tasks.getting(Jar::class) {
     }
 }
 
-val detektVersion: String by project
-
 val generateDocumentation by tasks.registering {
     dependsOn(tasks.shadowJar, ":detekt-api:dokka")
     description = "Generates detekt documentation and the default config.yml based on Rule KDoc"
@@ -19,7 +22,7 @@ val generateDocumentation by tasks.registering {
 
     inputs.files(
         fileTree("${rootProject.rootDir}/detekt-rules/src/main/kotlin"),
-        file("${rootProject.rootDir}/detekt-generator/build/libs/detekt-generator-$detektVersion-all.jar"))
+        file("${rootProject.rootDir}/detekt-generator/build/libs/detekt-generator-${Versions.DETEKT}-all.jar"))
     outputs.files(
         fileTree("${rootProject.rootDir}/detekt-generator/documentation"),
         file("${rootProject.rootDir}/detekt-cli/src/main/resources/default-detekt-config.yml"))
@@ -28,7 +31,7 @@ val generateDocumentation by tasks.registering {
         javaexec {
             main = "-jar"
             args = listOf(
-                "${rootProject.rootDir}/detekt-generator/build/libs/detekt-generator-$detektVersion-all.jar",
+                "${rootProject.rootDir}/detekt-generator/build/libs/detekt-generator-${Versions.DETEKT}-all.jar",
                 "--input",
                 "${rootProject.rootDir}/detekt-rules/src/main/kotlin" + "," +
                     "${rootProject.rootDir}/detekt-formatting/src/main/kotlin",
@@ -78,16 +81,12 @@ fun assertDocumentationUpToDate() {
     }
 }
 
-val junitPlatformVersion: String by project
-val spekVersion: String by project
-val jcommanderVersion: String by project
-
 dependencies {
     implementation(project(":detekt-cli"))
     implementation(project(":detekt-core"))
     implementation(project(":detekt-rules"))
     implementation(project(":detekt-formatting"))
-    implementation("com.beust:jcommander:$jcommanderVersion")
+    implementation("com.beust:jcommander:${Versions.JCOMMANDER}")
 
     testImplementation(project(":detekt-test"))
 }

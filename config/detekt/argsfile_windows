@@ -3,6 +3,6 @@
 --baseline
 config\detekt\baseline.xml
 --excludes
-**/resources/**,**/detekt*/build/**
+**/resources/**,**/detekt*/build/**,**/buildSrc/build/**
 --config
 detekt-cli\src\main\resources\default-detekt-config.yml,config\detekt\detekt.yml
