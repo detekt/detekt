@@ -110,4 +110,4 @@ description: "Meet detekt, a static code analysis tool for Kotlin."
 url: http://github.com/arturbosch/detekt
 baseurl: /
 
-detekt_version: 1.7.4
+detekt_version: 1.8.0
