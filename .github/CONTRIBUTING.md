@@ -90,10 +90,10 @@ Following warning is expected until [Jekyll](https://github.com/jekyll/jekyll/is
 ### Release process
 
 - `groovy scripts/github-milestone-report.groovy` - creates changelog
-- Increment `detektVersion` in `gradle.properties`
-- `gradle build publishToMavenLocal -x detekt -x test`
-- `gradle test detekt`
+- `gradle increment<Patch|Minor|Major>`
+- `gradle build publishToMavenLocal -x detekt -x test` - publish to local first
+- `gradle build` - now fully build with tests and self-analysis.
 - `gradle bintrayUpload` - uploads artifacts to Bintray
 - `gradle publishPlugins` - uploads the Gradle Plugin to the Plugin Repositories
 - `gradle githubRelease` - creates a tag for the current version with changelog and cli jar
-- Increment `detektAnalysisVersion` in `gradle.properties` to use newest plugin version on CI
+- `gradle applyDocVersion applySelfAnalysisVersion`

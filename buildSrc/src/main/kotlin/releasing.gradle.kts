@@ -18,8 +18,12 @@ githubRelease {
         changelog.trim()
     }
     val cliBuildDir = project(":detekt-cli").buildDir
-    releaseAssets.setFrom(cliBuildDir.resolve("libs/detekt-cli-${project.version}-all.jar"))
-    releaseAssets.setFrom(cliBuildDir.resolve("run/detekt"))
+    releaseAssets.setFrom(
+        files(
+            cliBuildDir.resolve("libs/detekt-cli-${project.version}-all.jar"),
+            cliBuildDir.resolve("run/detekt")
+        )
+    )
 }
 
 val ln: String = System.lineSeparator()

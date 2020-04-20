@@ -6,6 +6,62 @@ permalink: changelog.html
 toc: true
 ---
 
+#### 1.8.0
+
+##### Notable Changes
+
+- Most rule properties now support yaml lists next to string's with comma-separated-entries. 
+- Standalone `detekt` executable on GitHub release pages
+- New rules: `UnnecessaryNotNullOperator` and `UnnecessarySafeCall`
+
+##### Migration
+
+- Formatting rules get reported now on the correct lines. The baseline file may need to be adjusted/regenerated. 
+- Issues concerning classes and objects are now reported at the identifier. The baseline file may need to be adjusted/regenerated. 
+
+##### Changelog
+
+- Use yaml lists in our own configuration and tests - [#2623](https://github.com/arturbosch/detekt/pull/2623)
+- Run code coverage as an own action - [#2622](https://github.com/arturbosch/detekt/pull/2622)
+- Modularize build script by introducing buildSrc module - [#2621](https://github.com/arturbosch/detekt/pull/2621)
+- *>excludes allow yaml list - [#2620](https://github.com/arturbosch/detekt/pull/2620)
+- Kotlin to 1.3.72 - [#2619](https://github.com/arturbosch/detekt/pull/2619)
+- Set failfast to false for pre-merge - [#2618](https://github.com/arturbosch/detekt/pull/2618)
+- Update documentation - [#2617](https://github.com/arturbosch/detekt/pull/2617)
+- ThrowingExceptionsWithoutMessageOrCause>exceptions allow yaml list - [#2616](https://github.com/arturbosch/detekt/pull/2616)
+- SwallowedException>ignoredExceptionTypes allow yaml list - [#2615](https://github.com/arturbosch/detekt/pull/2615)
+- ForbiddenPublicDataClass>ignorePackages allow yaml list - [#2614](https://github.com/arturbosch/detekt/pull/2614)
+- LabeledExpression>ignoredLabels allow yaml list - [#2613](https://github.com/arturbosch/detekt/pull/2613)
+- ForbiddenMethodCall>methods allow yaml list - [#2612](https://github.com/arturbosch/detekt/pull/2612)
+- Generate the cli as a stand alone executable - [#2607](https://github.com/arturbosch/detekt/pull/2607)
+- Report class and object violations at the identifier - [#2606](https://github.com/arturbosch/detekt/pull/2606)
+- Fix formatting line reporting - [#2604](https://github.com/arturbosch/detekt/pull/2604)
+- Correct documentation/recommendation of EmptyCatchBlock rule - [#2603](https://github.com/arturbosch/detekt/pull/2603)
+- Incorrect (or unclear) EmptyCatchBlock rule - [#2602](https://github.com/arturbosch/detekt/issues/2602)
+- Use more lintAndCompile - [#2601](https://github.com/arturbosch/detekt/pull/2601)
+- MagicNumber>ignoredNumbers allow yaml list - [#2600](https://github.com/arturbosch/detekt/pull/2600)
+- Remove unnecesary symbolic link - [#2598](https://github.com/arturbosch/detekt/pull/2598)
+- WildcardImport>excludeImports allow yaml list - [#2596](https://github.com/arturbosch/detekt/pull/2596)
+- ForbiddenClassName>forbiddenName allow yaml list - [#2595](https://github.com/arturbosch/detekt/pull/2595)
+- Fix false positives in UndocumentedPublicProperty - [#2591](https://github.com/arturbosch/detekt/pull/2591)
+- Fix false positive in UndocumentedPublicClass - [#2588](https://github.com/arturbosch/detekt/pull/2588)
+- *>*Annotated* allow yaml lists - [#2587](https://github.com/arturbosch/detekt/pull/2587)
+- ForbiddenComment>values allow yaml list - [#2585](https://github.com/arturbosch/detekt/pull/2585)
+- ExceptionRaisedInUnexpectedLocation>methodNames allow yaml list - [#2584](https://github.com/arturbosch/detekt/pull/2584)
+- ComplexMethod>nestingFunctions allow yaml list - [#2583](https://github.com/arturbosch/detekt/pull/2583)
+- UndocumentedPublicClass false positive for inner types - [#2580](https://github.com/arturbosch/detekt/issues/2580)
+- New Rule: UnnecessaryNotNullOperator - [#2578](https://github.com/arturbosch/detekt/pull/2578)
+- New Rule: UnnecessarySafeCall - [#2574](https://github.com/arturbosch/detekt/pull/2574)
+- New Rule: UnnecessarySafeCall - [#2572](https://github.com/arturbosch/detekt/issues/2572)
+- Add ignoreAnnotated option to LongParameterList - [#2570](https://github.com/arturbosch/detekt/pull/2570)
+- Rule configuration request: Ignore based on annotations - [#2563](https://github.com/arturbosch/detekt/issues/2563)
+- codecov test coverage report doesn't work correctly - [#2558](https://github.com/arturbosch/detekt/issues/2558)
+- Support yaml lists in the configuration values - [#2498](https://github.com/arturbosch/detekt/issues/2498)
+- Baseline ignoring MaxLineLength: on 1.0.1 - [#1906](https://github.com/arturbosch/detekt/issues/1906)
+- Formatting rules are reported at wrong line (e.g. MaximumLineLength) - [#1843](https://github.com/arturbosch/detekt/issues/1843)
+
+See all issues at: [1.8.0](https://github.com/arturbosch/detekt/milestone/63)
+
 #### 1.7.4
 
 ##### Notable Changes
