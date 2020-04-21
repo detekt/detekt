@@ -6,7 +6,7 @@ topnav:
     - title: News
       url: /news
     - title: GitHub
-      external_url: https://github.com/arturbosch/detekt
+      external_url: https://github.com/detekt/detekt
     - title: Slack
       external_url: https://kotlinlang.slack.com/messages/C88E12QH4/convo/C88E12QH4-1518006028.000268/
 

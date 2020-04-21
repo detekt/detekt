@@ -1,4 +1,4 @@
-repository: arturbosch/detekt
+repository: detekt/detekt
 
 output: web
 # this property is useful for conditional filtering of content that is separate from the PDF.
@@ -12,7 +12,7 @@ site_title: A static code analyzer for Kotlin
 company_name: The detekt Team
 # this appears in the footer
 
-github_editme_path: arturbosch/detekt/tree/master/docs/
+github_editme_path: detekt/detekt/tree/master/docs/
 # if you're using Github, provide the basepath to the branch you've created for reviews, following the sample here. if not, leave this value blank.
 
 # gitlab_editme_path: tomjoht/documentation-theme-jekyll/blob/gh-pages/
@@ -107,7 +107,7 @@ description: "Meet detekt, a static code analysis tool for Kotlin."
 # the description is used in the feed.xml file
 
 # needed for sitemap.xml file only
-url: http://github.com/arturbosch/detekt
+url: http://github.com/detekt/detekt
 baseurl: /
 
 detekt_version: 1.8.0
