@@ -21,6 +21,7 @@ githubRelease {
     releaseAssets.setFrom(
         files(
             cliBuildDir.resolve("libs/detekt-cli-${project.version}-all.jar"),
+            cliBuildDir.resolve("distributions/detekt-cli-${project.version}.zip"),
             cliBuildDir.resolve("run/detekt")
         )
     )
