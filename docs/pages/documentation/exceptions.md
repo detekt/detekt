@@ -318,7 +318,7 @@ down an underlying issue in a better way.
 
 * ``exceptions`` (default: ``- IllegalArgumentException
     - IllegalStateException
-    - IOException'``)
+    - IOException``)
 
    exceptions which should not be thrown without message or cause
 

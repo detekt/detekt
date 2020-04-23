@@ -189,7 +189,7 @@ exceptions:
     exceptions:
      - IllegalArgumentException
      - IllegalStateException
-     - IOException'
+     - IOException
   ThrowingNewInstanceOfSameException:
     active: false
   TooGenericExceptionCaught:
