@@ -37,7 +37,7 @@ import org.jetbrains.kotlin.psi.KtCallExpression
  * @configuration exceptions - exceptions which should not be thrown without message or cause
  * (default: `- IllegalArgumentException
  *            - IllegalStateException
- *            - IOException'`)
+ *            - IOException`)
  */
 class ThrowingExceptionsWithoutMessageOrCause(config: Config = Config.empty) : Rule(config) {
 
