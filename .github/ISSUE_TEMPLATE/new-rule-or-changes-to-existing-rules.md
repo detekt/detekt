@@ -5,7 +5,7 @@ about: Suggest new rules for detekt or suggest changes to existing rules
 ---
 
 The rule or changes you're looking for might have already been suggested!
-Please search in the [issues](https://github.com/arturbosch/detekt/issues) before creating a new one.
+Please search in the [issues](https://github.com/detekt/detekt/issues) before creating a new one.
 
 ## Expected Behavior of the rule
 <!-- Explain the rule or changes to existing rules you're suggesting. -->
