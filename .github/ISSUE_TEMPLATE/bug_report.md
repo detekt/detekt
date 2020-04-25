@@ -5,7 +5,7 @@ about: Help make detekt better by reporting bugs, false positives and other issu
 ---
 
 The bug you're experiencing might have already be reported!
-Please search in the [issues](https://github.com/arturbosch/detekt/issues) before creating one.
+Please search in the [issues](https://github.com/detekt/detekt/issues) before creating one.
 
 ## Expected Behavior
 <!---Tell us what should happen -->
