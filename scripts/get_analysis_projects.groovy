@@ -24,8 +24,8 @@ def projects = [
 		"git@github.com:arturbosch/ksh.git",
 		"git@github.com:arturbosch/kutils.git",
 		"git@github.com:arturbosch/deps.git",
-		"git@github.com:arturbosch/detekt.git",
-		"git@github.com:arturbosch/sonar-kotlin.git"
+		"git@github.com:detekt/detekt.git",
+		"git@github.com:detekt/sonar-kotlin.git"
 ]
 
 if (args.size() == 0) {

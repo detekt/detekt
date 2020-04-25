@@ -5,7 +5,7 @@ import java.nio.file.Path
 import java.nio.file.Paths
 
 /* Do not add new elements to this file. Instead, use inline code snippets within the tests.
-   See https://github.com/arturbosch/detekt/issues/1089 */
+   See https://github.com/detekt/detekt/issues/1089 */
 enum class Case(val file: String) {
     CollapsibleIfsPositive("/cases/CollapsibleIfsPositive.kt"),
     CollapsibleIfsNegative("/cases/CollapsibleIfsNegative.kt"),

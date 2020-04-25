@@ -24,7 +24,7 @@ programming flaws like unused or too complex constructs. Think of it as *pmd* or
 - Gradle tasks to use local `IntelliJ` distribution for formatting and inspecting Kotlin code
 - [SonarQube integration](https://github.com/arturbosch/sonar-kotlin)
 - Extensibility by enabling incorporation of personal rule sets, `FileProcessListener's` and `OutputReport's`
-- [IntelliJ integration](https://github.com/arturbosch/detekt-intellij-plugin)
+- [IntelliJ integration](https://github.com/detekt/detekt-intellij-plugin)
 - Unofficial [Maven plugin](https://github.com/Ozsie/detekt-maven-plugin) by [Ozsie](https://github.com/Ozsie)
 
 <br>
@@ -74,4 +74,4 @@ Last but not least here is a worldmap of where detekt users are coming from.
 
 References:
 - https://bintray.com/arturbosch/code-analysis/detekt#statistics
-- https://github.com/arturbosch/detekt/graphs/contributors
+- https://github.com/detekt/detekt/graphs/contributors
