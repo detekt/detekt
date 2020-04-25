@@ -26,30 +26,30 @@ It operates on the abstract syntax tree provided by the Kotlin compiler.
 - Code Smell baseline and whitelisting for legacy projects
 - [Gradle plugin](#with-gradle) for code analysis via Gradle builds
 - Gradle tasks to use local `IntelliJ` distribution for formatting and inspecting Kotlin code
-- [SonarQube integration](https://github.com/arturbosch/sonar-kotlin)
+- [SonarQube integration](https://github.com/detekt/sonar-kotlin)
 - Extensibility by enabling incorporation of personal rule sets, `FileProcessListener's` and `OutputReport's`
-- [IntelliJ integration](https://github.com/arturbosch/detekt-intellij-plugin)
+- [IntelliJ integration](https://github.com/detekt/detekt-intellij-plugin)
 - Unofficial [Maven plugin](https://github.com/Ozsie/detekt-maven-plugin) by [Ozsie](https://github.com/Ozsie)
 
 ### Project Website
 
-Visit [the project website](https://arturbosch.github.io/detekt/) for installation guides, release notes, migration guides, rule descriptions and configuration options.
+Visit [the project website](https://detekt.github.io/detekt/) for installation guides, release notes, migration guides, rule descriptions and configuration options.
 
 #### Quick-Links
 
-- [Changelog and migration guides](https://arturbosch.github.io/detekt/changelog.html)
-- [Available CLI options](https://arturbosch.github.io/detekt/cli.html)
-- [Rule set and rule descriptions](https://arturbosch.github.io/detekt/complexity.html)
-- [Writing custom rules and extending detekt](https://arturbosch.github.io/detekt/extensions.html)
-- [Suppressing issues in code](https://arturbosch.github.io/detekt/suppressing-rules.html)
-- [Suppressing issues via baseline file](https://arturbosch.github.io/detekt/baseline.html)
-- [Configuring detekt](https://arturbosch.github.io/detekt/configurations.html)
+- [Changelog and migration guides](https://detekt.github.io/detekt/changelog.html)
+- [Available CLI options](https://detekt.github.io/detekt/cli.html)
+- [Rule set and rule descriptions](https://detekt.github.io/detekt/complexity.html)
+- [Writing custom rules and extending detekt](https://detekt.github.io/detekt/extensions.html)
+- [Suppressing issues in code](https://detekt.github.io/detekt/suppressing-rules.html)
+- [Suppressing issues via baseline file](https://detekt.github.io/detekt/baseline.html)
+- [Configuring detekt](https://detekt.github.io/detekt/configurations.html)
 - Sample Gradle integrations examples:
-    - [multi project (Kotlin DSL)](https://github.com/arturbosch/detekt/blob/master/build.gradle.kts)
+    - [multi project (Kotlin DSL)](https://github.com/detekt/detekt/blob/master/build.gradle.kts)
     - [single project (Groovy DSL)](https://github.com/arturbosch/kutils/blob/master/build.gradle)
-    - [single project (Unofficial Maven plugin)](https://github.com/arturbosch/sonar-kotlin/blob/master/pom.xml)
-    - [setup additional detekt task for all modules (Kotlin DSL)](https://github.com/arturbosch/detekt/blob/3357abba87e1550c65b6610012bb291e0fbb64ce/build.gradle.kts#L280-L295)
-    - [setup additional formatting task for all modules (Kotlin DSL)](https://github.com/arturbosch/detekt/blob/3357abba87e1550c65b6610012bb291e0fbb64ce/build.gradle.kts#L262-L278)
+    - [single project (Unofficial Maven plugin)](https://github.com/detekt/sonar-kotlin/blob/master/pom.xml)
+    - [setup additional detekt task for all modules (Kotlin DSL)](https://github.com/detekt/detekt/blob/3357abba87e1550c65b6610012bb291e0fbb64ce/build.gradle.kts#L280-L295)
+    - [setup additional formatting task for all modules (Kotlin DSL)](https://github.com/detekt/detekt/blob/3357abba87e1550c65b6610012bb291e0fbb64ce/build.gradle.kts#L262-L278)
 
 ### Quick Start ...
 
@@ -57,11 +57,11 @@ Visit [the project website](https://arturbosch.github.io/detekt/) for installati
 
 ```shell script
 ```sh
-curl -sSLO https://github.com/arturbosch/detekt/releases/download/v[version]/detekt && chmod a+x detekt
+curl -sSLO https://github.com/detekt/detekt/releases/download/v[version]/detekt && chmod a+x detekt
 ./detekt --help
 ```
 
-You can find [other ways to install detekt here](https://arturbosch.github.io/detekt/cli.html)
+You can find [other ways to install detekt here](https://detekt.github.io/detekt/cli.html)
 
 #### with Gradle
 
@@ -130,7 +130,7 @@ dependencies {
 }
 ```
 
-Likewise custom [extensions](https://arturbosch.github.io/detekt/extensions.html) can be added to detekt.
+Likewise custom [extensions](https://detekt.github.io/detekt/extensions.html) can be added to detekt.
 
 ### Contributors
 
@@ -206,6 +206,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Nuno Caro](https://github.com/Pak3nuh) - Adds TXT report support on Gradle plugin
 - [Minsuk Eom](https://github.com/boxresin) - Rule fix: PackageNaming
 - [Jonas Alves](https://github.com/jonasfa) - Rule fix: MagicNumber with ignoreNamedArgument and a negative value
+- [Natig Babayev](https://github.com/natiginfo) - Readme improvements
 
 ### Mentions
 
