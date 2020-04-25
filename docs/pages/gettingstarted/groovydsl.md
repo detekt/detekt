@@ -148,7 +148,7 @@ uses the type `Detekt`.
 task detektFailFast(type: io.gitlab.arturbosch.detekt.Detekt) {
     description = "Runs a failfast detekt build."
     source = files("src/main/java")
-    config = files("$rootDir/config.yml")
+    config.from(files("$rootDir/config.yml"))
     debug = true
     reports {
         xml {
