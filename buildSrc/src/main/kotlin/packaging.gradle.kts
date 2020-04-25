@@ -38,7 +38,7 @@ subprojects {
             name = "detekt"
             userOrg = "arturbosch"
             setLicenses("Apache-2.0")
-            vcsUrl = "https://github.com/arturbosch/detekt"
+            vcsUrl = "https://github.com/detekt/detekt"
 
             version(delegateClosureOf<BintrayExtension.VersionConfig> {
                 name = project.version as? String
@@ -104,7 +104,7 @@ subprojects {
                     }
                 }
                 scm {
-                    url.set("https://github.com/arturbosch/detekt")
+                    url.set("https://github.com/detekt/detekt")
                 }
             }
         }

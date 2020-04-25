@@ -10,7 +10,7 @@ When configuring _detekt_ for your _Gradle_ based project, you basically have tw
 - for each sub module a new gradle task should be created
 - or one __uber__-task analyzes your whole project
 
-For the first option, please see how [detekt](https://github.com/arturbosch/detekt) itself creates a task for each module:
+For the first option, please see how [detekt](https://github.com/detekt/detekt) itself creates a task for each module:
 ```gradle
 subprojecs {
 ...

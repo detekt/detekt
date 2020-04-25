@@ -21,7 +21,7 @@ summary:
 - Optionally configure detekt for each sub module by using [profiles](#closure) (gradle-plugin)
 - [SonarQube integration](https://github.com/arturbosch/sonar-kotlin)
 - Extensible by own rule sets and `FileProcessListener's`
-- [IntelliJ integration](https://github.com/arturbosch/detekt-intellij-plugin)
+- [IntelliJ integration](https://github.com/detekt/detekt-intellij-plugin)
 - Unofficial [Maven plugin](https://github.com/Ozsie/detekt-maven-plugin) by [Ozsie](https://github.com/Ozsie)
 
 ### Quick Start with Gradle

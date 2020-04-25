@@ -37,7 +37,7 @@ jobs:
         BINTRAY_USER: ${{ secrets.BINTRAY_USER }}
         BINTRAY_API_KEY: ${{ secrets.BINTRAY_API_KEY }}
       run: ./gradlew artifactoryPublish -Dsnapshot=true --stacktrace
-      if: ${{ github.repository == 'arturbosch/detekt'}}
+      if: ${{ github.repository == 'detekt/detekt'}}
 
     # We stop gradle at the end to make sure the cache folders
     # don't contain any lock files and are free to be cached.
