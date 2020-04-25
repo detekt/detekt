@@ -6,8 +6,8 @@
 [![gradle plugin](https://img.shields.io/maven-metadata/v/https/plugins.gradle.org/m2/io/gitlab/arturbosch/detekt/io.gitlab.arturbosch.detekt.gradle.plugin/maven-metadata.xml.svg?label=Gradle&style=flat-square)](https://plugins.gradle.org/plugin/io.gitlab.arturbosch.detekt)
 
 ![Pre Merge Checks](https://github.com/detekt/detekt/workflows/Pre%20Merge%20Checks/badge.svg?event=push)
-[![codecov](https://codecov.io/gh/arturbosch/detekt/branch/master/graph/badge.svg)](https://codecov.io/gh/arturbosch/detekt)
-[![CodeFactor](https://www.codefactor.io/repository/github/arturbosch/detekt/badge)](https://www.codefactor.io/repository/github/arturbosch/detekt)
+[![codecov](https://codecov.io/gh/detekt/detekt/branch/master/graph/badge.svg)](https://codecov.io/gh/detekt/detekt)
+[![CodeFactor](https://www.codefactor.io/repository/github/detekt/detekt/badge)](https://www.codefactor.io/repository/github/detekt/detekt)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Farturbosch%2Fdetekt-intellij-plugin.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Farturbosch%2Fdetekt?ref=badge_shield)
 [![Awesome Kotlin Badge](https://kotlin.link/awesome-kotlin.svg)](https://github.com/KotlinBy/awesome-kotlin)
 
