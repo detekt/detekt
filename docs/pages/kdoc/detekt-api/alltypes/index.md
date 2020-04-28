@@ -120,13 +120,6 @@ Represents a code smell for that can be auto corrected.
 
 |
 
-##### [io.gitlab.arturbosch.detekt.api.internal.CyclomaticComplexity](../io.gitlab.arturbosch.detekt.api.internal/-cyclomatic-complexity/index.html)
-
-Counts the cyclomatic complexity of nodes.
-
-
-|
-
 ##### [io.gitlab.arturbosch.detekt.api.Debt](../io.gitlab.arturbosch.detekt.api/-debt/index.html)
 
 Debt describes the estimated amount of work needed to fix a given issue.
