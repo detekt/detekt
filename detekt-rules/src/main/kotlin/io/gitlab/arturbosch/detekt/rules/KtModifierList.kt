@@ -1,3 +1,5 @@
+@file:Suppress("TooManyFunctions")
+
 package io.gitlab.arturbosch.detekt.rules
 
 import org.jetbrains.kotlin.lexer.KtTokens
@@ -24,3 +26,7 @@ fun KtModifierListOwner.isInternal() = hasModifier(KtTokens.INTERNAL_KEYWORD)
 fun KtModifierListOwner.isLateinit() = hasModifier(KtTokens.LATEINIT_KEYWORD)
 
 fun KtModifierListOwner.isInline() = hasModifier(KtTokens.INLINE_KEYWORD)
+
+fun KtModifierListOwner.isExpect() = hasModifier(KtTokens.EXPECT_KEYWORD)
+
+fun KtModifierListOwner.isActual() = hasModifier(KtTokens.ACTUAL_KEYWORD)
