@@ -26,9 +26,7 @@ class CognitiveComplexitySpec : Spek({
                 }
             """)
 
-            val actual = CognitiveComplexity.calculate(code)
-
-            assertThat(actual).isEqualTo(7)
+            assertThat(CognitiveComplexity.calculate(code)).isEqualTo(7)
         }
 
         it("sums one for getWords example for a single when expression") {
@@ -41,9 +39,16 @@ class CognitiveComplexitySpec : Spek({
                  }
              """.trimIndent())
 
-            val actual = CognitiveComplexity.calculate(code)
+            assertThat(CognitiveComplexity.calculate(code)).isEqualTo(1)
+        }
 
-            assertThat(actual).isEqualTo(1)
+        it("adds one for recursion") {
+            val code = compileContentForTest("""
+                fun factorial(n: Int): Int =
+                    if (n >= 1) n * factorial(n - 1) else 1
+            """.trimIndent())
+
+            assertThat(CognitiveComplexity.calculate(code)).isEqualTo(2)
         }
     }
 })

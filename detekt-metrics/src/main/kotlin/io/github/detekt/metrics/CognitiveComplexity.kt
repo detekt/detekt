@@ -2,6 +2,7 @@ package io.github.detekt.metrics
 
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import org.jetbrains.kotlin.psi.KtBreakExpression
+import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtContinueExpression
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtExpressionWithLabel
@@ -10,18 +11,22 @@ import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.KtWhenExpression
+import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 
 class CognitiveComplexity private constructor() : DetektVisitor() {
 
     private var complexity: Int = 0
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        val visitor = FunctionComplexity()
+        val visitor = FunctionComplexity(function)
         visitor.visitNamedFunction(function)
         complexity += visitor.complexity
     }
 
-    inner class FunctionComplexity : DetektVisitor() {
+    @Suppress("detekt.TooManyFunctions") // visitor pattern
+    inner class FunctionComplexity(
+        private val givenFunction: KtNamedFunction
+    ) : DetektVisitor() {
         internal var complexity: Int = 0
         private var nesting: Int = 0
 
@@ -39,6 +44,12 @@ class CognitiveComplexity private constructor() : DetektVisitor() {
             if (expression.labelQualifier != null) {
                 complexity++
             }
+        }
+
+        private fun KtCallExpression.isRecursion(): Boolean {
+            val args = lambdaArguments.size + valueArguments.size
+            return getCallNameExpression()?.getReferencedName() == givenFunction.name &&
+                args == givenFunction.valueParameters.size
         }
 
         override fun visitWhenExpression(expression: KtWhenExpression) {
@@ -69,6 +80,21 @@ class CognitiveComplexity private constructor() : DetektVisitor() {
         override fun visitReturnExpression(expression: KtReturnExpression) {
             testJumpWithLabel(expression)
             super.visitReturnExpression(expression)
+        }
+
+        override fun visitNamedFunction(function: KtNamedFunction) {
+            if (function != givenFunction) {
+                nestAround { super.visitNamedFunction(function) }
+            } else {
+                super.visitNamedFunction(function)
+            }
+        }
+
+        override fun visitCallExpression(expression: KtCallExpression) {
+            if (expression.isRecursion()) {
+                complexity++
+            }
+            super.visitCallExpression(expression)
         }
     }
 
