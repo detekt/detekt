@@ -10,7 +10,6 @@ import io.gitlab.arturbosch.detekt.api.LazyRegex
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
 import io.gitlab.arturbosch.detekt.rules.isAbstract
-import io.gitlab.arturbosch.detekt.rules.isActual
 import io.gitlab.arturbosch.detekt.rules.isExpect
 import io.gitlab.arturbosch.detekt.rules.isExternal
 import io.gitlab.arturbosch.detekt.rules.isMainFunction
@@ -204,7 +203,7 @@ private class UnusedParameterVisitor(allowedNames: Regex) : UnusedMemberVisitor(
     private fun KtNamedFunction.isRelevant() = !isAllowedToHaveUnusedParameters()
 
     private fun KtNamedFunction.isAllowedToHaveUnusedParameters() =
-            isAbstract() || isOpen() || isOverride() || isOperator() || isMainFunction() || isExternal() || isActual()
+            isAbstract() || isOpen() || isOverride() || isOperator() || isMainFunction() || isExternal() || isExpect()
 }
 
 private class UnusedPropertyVisitor(allowedNames: Regex) : UnusedMemberVisitor(allowedNames) {
