@@ -77,7 +77,8 @@ class UnusedPrivateMemberSpec : Spek({
 
         it("should not report parameters in expect class with constructor") {
             val code = """
-                expect class Foo(private val bar: String) {}
+                expect class Foo1(private val bar: String) {}
+                expect class Foo2(bar: String) {}
             """
             assertThat(subject.lint(code)).isEmpty()
         }
