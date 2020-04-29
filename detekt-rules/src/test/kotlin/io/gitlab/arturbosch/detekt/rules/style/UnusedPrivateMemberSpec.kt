@@ -55,6 +55,40 @@ class UnusedPrivateMemberSpec : Spek({
         }
     }
 
+    describe("expect functions") {
+
+        it("should not report parameters in expect class functions") {
+            val code = """
+                expect class Foo  {
+                    fun bar(i: Int)
+                    fun baz(i: Int, s: String)
+                }
+            """
+            assertThat(subject.lint(code)).isEmpty()
+        }
+
+        it("should not report parameters in expect functions") {
+            val code = """
+                expect fun bar(i: Int)
+                expect fun baz(i: Int, s: String)
+            """
+            assertThat(subject.lint(code)).isEmpty()
+        }
+    }
+
+    describe("actual functions") {
+
+        it("should not report parameters in actual functions") {
+            val code = """
+                actual class Foo {
+                    actual fun bar(i: Int) {}
+                    actual fun baz(i: Int, s: String) {}
+                }
+            """
+            assertThat(subject.lint(code)).hasSize(3)
+        }
+    }
+
     describe("external functions") {
 
         it("should not report parameters in external functions") {
