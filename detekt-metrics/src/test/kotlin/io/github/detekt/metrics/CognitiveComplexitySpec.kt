@@ -50,5 +50,65 @@ class CognitiveComplexitySpec : Spek({
 
             assertThat(CognitiveComplexity.calculate(code)).isEqualTo(2)
         }
+
+        it("ignores shorthand operators") {
+            val code = compileContentForTest("""
+                fun parse(args: Array<String>): Nothing = TODO()
+                fun main(args: Array<String>) {
+                   args.takeIf { it.size > 3 }?.let(::parse) ?: error("not enough arguments")
+                }
+            """.trimIndent())
+
+            assertThat(CognitiveComplexity.calculate(code)).isEqualTo(0)
+        }
+
+        it("adds one per catch clause") {
+            val code = compileContentForTest("""
+                fun main() {
+                    try {
+                    } catch (e: IllegalArgumentException) {
+                    } catch (e: IllegalStateException) {
+                    } catch (e: Throwable) {}
+                }
+            """.trimIndent())
+
+            assertThat(CognitiveComplexity.calculate(code)).isEqualTo(3)
+        }
+
+        it("adds extra complexity for nesting") {
+            val code = compileContentForTest("""
+                fun main() {
+                    try {
+                        if (true) { // +1
+                            for (i in 0..10) { // +2
+                                while(true) { // +3
+                                    // more code
+                                }
+                            }
+                        }
+                    } catch (e: Exception) { // +1
+                        do {} while(true) // +2
+                    }
+                }
+            """.trimIndent())
+
+            assertThat(CognitiveComplexity.calculate(code)).isEqualTo(9)
+        }
+
+        it("adds nesting for lambdas but not complexity") {
+            val code = compileContentForTest("""
+                fun main() { run { if (true) {} } }
+            """.trimIndent())
+
+            assertThat(CognitiveComplexity.calculate(code)).isEqualTo(2)
+        }
+
+        it("adds nesting for nested functions but not complexity") {
+            val code = compileContentForTest("""
+                fun main() { fun run() { if (true) {} } }
+            """.trimIndent())
+
+            assertThat(CognitiveComplexity.calculate(code)).isEqualTo(2)
+        }
     }
 })

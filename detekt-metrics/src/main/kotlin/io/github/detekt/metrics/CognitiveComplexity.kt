@@ -3,14 +3,18 @@ package io.github.detekt.metrics
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
 import org.jetbrains.kotlin.psi.KtBreakExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
+import org.jetbrains.kotlin.psi.KtCatchClause
 import org.jetbrains.kotlin.psi.KtContinueExpression
+import org.jetbrains.kotlin.psi.KtDoWhileExpression
 import org.jetbrains.kotlin.psi.KtElement
 import org.jetbrains.kotlin.psi.KtExpressionWithLabel
 import org.jetbrains.kotlin.psi.KtForExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
+import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.KtWhenExpression
+import org.jetbrains.kotlin.psi.KtWhileExpression
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 
 class CognitiveComplexity private constructor() : DetektVisitor() {
@@ -90,11 +94,30 @@ class CognitiveComplexity private constructor() : DetektVisitor() {
             }
         }
 
+        override fun visitCatchSection(catchClause: KtCatchClause) {
+            addComplexity()
+            nestAround { super.visitCatchSection(catchClause) }
+        }
+
+        override fun visitWhileExpression(expression: KtWhileExpression) {
+            addComplexity()
+            nestAround { super.visitWhileExpression(expression) }
+        }
+
+        override fun visitDoWhileExpression(expression: KtDoWhileExpression) {
+            addComplexity()
+            nestAround { super.visitDoWhileExpression(expression) }
+        }
+
         override fun visitCallExpression(expression: KtCallExpression) {
             if (expression.isRecursion()) {
                 complexity++
             }
             super.visitCallExpression(expression)
+        }
+
+        override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
+            nestAround { super.visitLambdaExpression(lambdaExpression) }
         }
     }
 
