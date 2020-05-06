@@ -55,7 +55,6 @@ Visit [the project website](https://detekt.github.io/detekt/) for installation g
 
 #### with the command-line interface
 
-```shell script
 ```sh
 curl -sSLO https://github.com/detekt/detekt/releases/download/v[version]/detekt && chmod a+x detekt
 ./detekt --help
