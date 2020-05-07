@@ -49,5 +49,5 @@ class MandatoryBracesForLoops(config: Config = Config.empty) : Rule(config) {
                     ?.filterIsInstance<PsiWhiteSpace>()
                     ?.firstOrNull { it.textContains('\n') } != null
 
-    private fun KtForExpression.isNotBlockExpression(): Boolean = body !is KtBlockExpression
+    private fun KtForExpression.isNotBlockExpression(): Boolean = this.body !is KtBlockExpression
 }
