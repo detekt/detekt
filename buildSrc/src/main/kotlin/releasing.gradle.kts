@@ -1,3 +1,4 @@
+import com.github.breadmoirai.githubreleaseplugin.GithubReleaseTask
 import com.vdurmont.semver4j.Semver
 
 plugins {
@@ -25,6 +26,10 @@ githubRelease {
             cliBuildDir.resolve("run/detekt")
         )
     )
+}
+
+tasks.withType<GithubReleaseTask> {
+    dependsOn(":detekt-cli:shadowJarExecutable")
 }
 
 val ln: String = System.lineSeparator()
