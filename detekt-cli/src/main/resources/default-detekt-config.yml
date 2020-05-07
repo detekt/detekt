@@ -528,6 +528,8 @@ style:
     ignoreNamedArgument: true
     ignoreEnums: false
     ignoreRanges: false
+  MandatoryBracesForLoops:
+    active: false
   MandatoryBracesIfStatements:
     active: false
   MaxLineLength:

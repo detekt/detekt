@@ -575,6 +575,32 @@ class User {
 }
 ```
 
+### MandatoryBracesForLoops
+
+This rule detects multi-line `for` loops which do not have braces.
+Adding braces would improve readability and avoid possible errors.
+
+**Severity**: Style
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+for (i in 0..10)
+    println(i)
+```
+
+#### Compliant Code:
+
+```kotlin
+for (i in 0..10) {
+    println(i)
+}
+
+for (i in 0..10) println(i)
+```
+
 ### MandatoryBracesIfStatements
 
 This rule detects multi-line `if` statements which do not have braces.
