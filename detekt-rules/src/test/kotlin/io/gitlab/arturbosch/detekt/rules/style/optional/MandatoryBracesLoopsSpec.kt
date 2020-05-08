@@ -142,9 +142,9 @@ class MandatoryBracesLoopsSpec : Spek({
                 // because if statements are expressions, this code properly prints "Odd" and "Even" 
                 for (i in 0..10) 
                     if (i % 2 == 0) {
-                        println("Odd")
-                    } else {
                         println("Even")
+                    } else {
+                        println("Odd")
                     }
             }
             """
@@ -287,12 +287,15 @@ class MandatoryBracesLoopsSpec : Spek({
         it("reports with multi-line if statement") {
             val code = """
             fun test() {
-                // because if statements are expressions, this code properly prints "Odd" and "Even" 
+                // because if statements are expressions, this code properly prints "Odd" and "Even"
+                var i = 0
                 while (true) 
                     if (i % 2 == 0) {
-                        println("Odd")
-                    } else {
                         println("Even")
+                        i++
+                    } else {
+                        println("Odd")
+                        i++
                     }
             }
             """
@@ -301,7 +304,7 @@ class MandatoryBracesLoopsSpec : Spek({
 
             assertThat(findings).hasSize(1)
             assertThat(findings[0].id).isEqualTo("MandatoryBracesLoops")
-            assertThat(findings[0].location.source).isEqualTo(SourceLocation(line = 4, column = 9))
+            assertThat(findings[0].location.source).isEqualTo(SourceLocation(line = 5, column = 9))
         }
     }
 })
