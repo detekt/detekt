@@ -575,7 +575,30 @@ class User {
 }
 ```
 
-### MandatoryBracesForLoops
+### MandatoryBracesIfStatements
+
+This rule detects multi-line `if` statements which do not have braces.
+Adding braces would improve readability and avoid possible errors.
+
+**Severity**: Style
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+val i = 1
+if (i > 0)
+    println(i)
+```
+
+#### Compliant Code:
+
+```kotlin
+val x = if (condition) 5 else 4
+```
+
+### MandatoryBracesLoops
 
 This rule detects multi-line `for` and `while` loops which do not have braces.
 Adding braces would improve readability and avoid possible errors.
@@ -608,29 +631,6 @@ while (true) {
 }
 
 while (true) println("Hello, world")
-```
-
-### MandatoryBracesIfStatements
-
-This rule detects multi-line `if` statements which do not have braces.
-Adding braces would improve readability and avoid possible errors.
-
-**Severity**: Style
-
-**Debt**: 5min
-
-#### Noncompliant Code:
-
-```kotlin
-val i = 1
-if (i > 0)
-    println(i)
-```
-
-#### Compliant Code:
-
-```kotlin
-val x = if (condition) 5 else 4
 ```
 
 ### MaxLineLength

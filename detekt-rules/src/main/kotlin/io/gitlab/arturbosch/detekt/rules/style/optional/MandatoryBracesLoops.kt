@@ -44,8 +44,8 @@ private const val DESCRIPTION = "Multi-line loop was found that does not have br
  * while (true) println("Hello, world")
  * </compliant>
  */
-class MandatoryBracesForLoops(config: Config = Config.empty) : Rule(config) {
-    override val issue = Issue("MandatoryBracesForLoops", Severity.Style, DESCRIPTION, Debt.FIVE_MINS)
+class MandatoryBracesLoops(config: Config = Config.empty) : Rule(config) {
+    override val issue = Issue("MandatoryBracesLoops", Severity.Style, DESCRIPTION, Debt.FIVE_MINS)
 
     override fun visitForExpression(expression: KtForExpression) {
         checkForBraces(expression)

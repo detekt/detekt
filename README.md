@@ -206,7 +206,7 @@ If you contributed to detekt but your name is not in the list, please feel free 
 - [Minsuk Eom](https://github.com/boxresin) - Rule fix: PackageNaming
 - [Jonas Alves](https://github.com/jonasfa) - Rule fix: MagicNumber with ignoreNamedArgument and a negative value
 - [Natig Babayev](https://github.com/natiginfo) - Readme improvements
-- [David Phillips](https://github.com/daphil19) - New rule: MandatoryBracesForLoops
+- [David Phillips](https://github.com/daphil19) - New rule: MandatoryBracesLoops
 
 ### Mentions
 
