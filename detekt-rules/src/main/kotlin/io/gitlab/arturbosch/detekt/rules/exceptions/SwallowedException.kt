@@ -77,9 +77,14 @@ class SwallowedException(config: Config = Config.empty) : Rule(config) {
         "The caught exception is swallowed. The original exception could be lost.",
         Debt.TWENTY_MINS)
 
-    private val ignoredExceptions = listOf("NumberFormatException", "InterruptedException", "ParseException", "MalformedURLException")
-    private val ignoredExceptionTypes = valueOrDefaultCommaSeparated(IGNORED_EXCEPTION_TYPES, ignoredExceptions)
-        .map { it.removePrefix("*").removeSuffix("*") }
+    private val defaultIgnoredExceptions = listOf(
+            DEFAULT_IGNORED_EXCEPTION_TYPES.INTERRUPTED_EXCEPTION,
+            DEFAULT_IGNORED_EXCEPTION_TYPES.NUMBER_FORMAT_EXCEPTION,
+            DEFAULT_IGNORED_EXCEPTION_TYPES.PARSE_EXCEPTION,
+            DEFAULT_IGNORED_EXCEPTION_TYPES.MALFORMED_URL_EXCEPTION
+    ).map { it.toString() }
+    private val ignoredExceptionTypes = valueOrDefaultCommaSeparated(IGNORED_EXCEPTION_TYPES, defaultIgnoredExceptions)
+            .map { it.removePrefix("*").removeSuffix("*") }
 
     private val allowedExceptionNameRegex by LazyRegex(ALLOWED_EXCEPTION_NAME_REGEX, ALLOWED_EXCEPTION_NAME)
 
@@ -160,5 +165,20 @@ class SwallowedException(config: Config = Config.empty) : Rule(config) {
     companion object {
         const val IGNORED_EXCEPTION_TYPES = "ignoredExceptionTypes"
         const val ALLOWED_EXCEPTION_NAME_REGEX = "allowedExceptionNameRegex"
+    }
+
+    enum class DEFAULT_IGNORED_EXCEPTION_TYPES {
+        NUMBER_FORMAT_EXCEPTION {
+            override fun toString() = "NumberFormatException"
+        },
+        INTERRUPTED_EXCEPTION {
+            override fun toString() = "InterruptedException"
+        },
+        PARSE_EXCEPTION {
+            override fun toString() = "ParseException"
+        },
+        MALFORMED_URL_EXCEPTION {
+            override fun toString() = "MalformedURLException"
+        }
     }
 }
