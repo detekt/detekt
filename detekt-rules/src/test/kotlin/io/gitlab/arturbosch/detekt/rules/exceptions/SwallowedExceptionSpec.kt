@@ -208,7 +208,7 @@ class SwallowedExceptionSpec : Spek({
                 fun f() {
                     try {
                     } catch (e: NumberFormatException) {
-                        throw MyCustomException()
+                        throw Exception()
                     }
                 }
             """
@@ -220,7 +220,7 @@ class SwallowedExceptionSpec : Spek({
                 fun f() {
                     try {
                     } catch (e: InterruptedException) {
-                        throw MyCustomException()
+                        throw Exception()
                     }
                 }
             """
@@ -232,7 +232,7 @@ class SwallowedExceptionSpec : Spek({
                 fun f() {
                     try {
                     } catch (e: ParseException) {
-                        throw MyCustomException()
+                        throw Exception()
                     }
                 }
             """
@@ -244,7 +244,7 @@ class SwallowedExceptionSpec : Spek({
                 fun f() {
                     try {
                     } catch (e: MalformedURLException) {
-                        throw MyCustomException()
+                        throw Exception()
                     }
                 }
             """
@@ -252,5 +252,3 @@ class SwallowedExceptionSpec : Spek({
         }
     }
 })
-
-class MyCustomException() : Exception()
