@@ -13,7 +13,7 @@ import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtForExpression
 import org.jetbrains.kotlin.psi.psiUtil.siblings
 
-private const val DESCRIPTION = "Multi-line for loop was found that does not have braces. " +
+private const val DESCRIPTION = "Multi-line loop was found that does not have braces. " +
         "These should be added to improve readability."
 
 /**
@@ -41,6 +41,8 @@ class MandatoryBracesForLoops(config: Config = Config.empty) : Rule(config) {
         if (expression.isNotBlockExpression() && hasNewLine(expression.rightParenthesis)) {
             report(CodeSmell(issue, Entity.from(expression.body ?: expression), message = DESCRIPTION))
         }
+
+        super.visitForExpression(expression)
     }
 
     private fun hasNewLine(element: PsiElement?): Boolean =
