@@ -13,6 +13,9 @@ import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.psiUtil.siblings
 
+private const val DESCRIPTION = "Multi-line if statement was found that does not have braces. " +
+        "These should be added to improve readability."
+
 /**
  * This rule detects multi-line `if` statements which do not have braces.
  * Adding braces would improve readability and avoid possible errors.
@@ -29,38 +32,30 @@ import org.jetbrains.kotlin.psi.psiUtil.siblings
  */
 class MandatoryBracesIfStatements(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue("MandatoryBracesIfStatements", Severity.Style,
-            "Multi-line if statement was found that does not have braces. " +
-                    "These should be added to improve readability.",
-            Debt.FIVE_MINS)
+    override val issue = Issue("MandatoryBracesIfStatements", Severity.Style, DESCRIPTION, Debt.FIVE_MINS)
 
     override fun visitIfExpression(expression: KtIfExpression) {
-        if (isNotBlockExpression(expression) && hasNewLine(expression.rightParenthesis)) {
-            report(CodeSmell(issue, Entity.from(expression.then ?: expression),
-                    message = "Multi-line if statement was found that does not have braces. " +
-                            "These should be added to improve readability."))
+        if (expression.isNotBlockExpression() && hasNewLine(expression.rightParenthesis)) {
+            report(CodeSmell(issue, Entity.from(expression.then ?: expression), DESCRIPTION))
         }
 
-        if (isNotBlockOrIfExpression(expression) && hasNewLine(expression.elseKeyword)) {
-            report(CodeSmell(issue, Entity.from(expression.`else` ?: expression),
-                    message = "Multi-line else statement was found that does not have braces." +
-                            "These should be added to improve readability"))
+        if (expression.isNotBlockOrIfExpression() && hasNewLine(expression.elseKeyword)) {
+            report(CodeSmell(issue, Entity.from(expression.`else` ?: expression), DESCRIPTION))
         }
 
         super.visitIfExpression(expression)
     }
 
     private fun hasNewLine(element: PsiElement?): Boolean =
-            element?.siblings(true, false)
+            element?.siblings(forward = true, withItself = false)
                     ?.takeWhile { it.text != "else" }
                     ?.filterIsInstance<PsiWhiteSpace>()
                     ?.firstOrNull { it.textContains('\n') } != null
 
-    private fun isNotBlockExpression(expression: KtIfExpression): Boolean =
-            expression.then !is KtBlockExpression
+    private fun KtIfExpression.isNotBlockExpression(): Boolean = this.then !is KtBlockExpression
 
-    private fun isNotBlockOrIfExpression(expression: KtIfExpression): Boolean =
-            expression.`else` != null &&
-                    expression.`else` !is KtIfExpression &&
-                    expression.`else` !is KtBlockExpression
+    private fun KtIfExpression.isNotBlockOrIfExpression(): Boolean =
+            this.`else` != null &&
+                    this.`else` !is KtIfExpression &&
+                    this.`else` !is KtBlockExpression
 }

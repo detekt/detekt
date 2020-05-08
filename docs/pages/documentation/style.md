@@ -598,6 +598,41 @@ if (i > 0)
 val x = if (condition) 5 else 4
 ```
 
+### MandatoryBracesLoops
+
+This rule detects multi-line `for` and `while` loops which do not have braces.
+Adding braces would improve readability and avoid possible errors.
+
+**Severity**: Style
+
+**Debt**: 5min
+
+#### Noncompliant Code:
+
+```kotlin
+for (i in 0..10)
+    println(i)
+
+while (true)
+    println("Hello, world")
+```
+
+#### Compliant Code:
+
+```kotlin
+for (i in 0..10) {
+    println(i)
+}
+
+for (i in 0..10) println(i)
+
+while (true) {
+    println("Hello, world")
+}
+
+while (true) println("Hello, world")
+```
+
 ### MaxLineLength
 
 This rule reports lines of code which exceed a defined maximum line length.

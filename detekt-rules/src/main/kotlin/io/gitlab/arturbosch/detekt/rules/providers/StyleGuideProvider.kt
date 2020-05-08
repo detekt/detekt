@@ -56,6 +56,7 @@ import io.gitlab.arturbosch.detekt.rules.style.UtilityClassWithPublicConstructor
 import io.gitlab.arturbosch.detekt.rules.style.VarCouldBeVal
 import io.gitlab.arturbosch.detekt.rules.style.WildcardImport
 import io.gitlab.arturbosch.detekt.rules.style.optional.MandatoryBracesIfStatements
+import io.gitlab.arturbosch.detekt.rules.style.optional.MandatoryBracesLoops
 import io.gitlab.arturbosch.detekt.rules.style.optional.OptionalUnit
 import io.gitlab.arturbosch.detekt.rules.style.optional.PreferToOverPairSyntax
 
@@ -118,6 +119,7 @@ class StyleGuideProvider : DefaultRuleSetProvider {
                 MayBeConst(config),
                 PreferToOverPairSyntax(config),
                 MandatoryBracesIfStatements(config),
+                MandatoryBracesLoops(config),
                 VarCouldBeVal(config),
                 ForbiddenVoid(config),
                 ExplicitItLambdaParameter(config),
