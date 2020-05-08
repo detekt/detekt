@@ -226,6 +226,18 @@ class SwallowedExceptionSpec : Spek({
             """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
+
+        it("ignores ParseException by default") {
+            val code = """
+                fun f() {
+                    try {
+                    } catch (e: ParseException) {
+                        throw MyCustomException()
+                    }
+                }
+            """
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
     }
 })
 
