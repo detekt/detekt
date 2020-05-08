@@ -1,6 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style.optional
 
-import io.gitlab.arturbosch.detekt.test.lint
+import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
 import org.spekframework.spek2.Spek
 import org.spekframework.spek2.style.specification.describe
@@ -19,7 +19,7 @@ class MandatoryBracesForLoopsSpec : Spek({
             }
             """
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
         it("does not report full loop on single line") {
@@ -29,10 +29,10 @@ class MandatoryBracesForLoopsSpec : Spek({
             }
             """
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does report multi-line without braces") {
+        it("reports multi-line without braces") {
             val code = """
             fun test() {
                 for (i in 0..10)
@@ -40,7 +40,7 @@ class MandatoryBracesForLoopsSpec : Spek({
             }
             """
 
-            val findings = subject.lint(code)
+            val findings = subject.compileAndLint(code)
 
             assertThat(findings).hasSize(1)
             assertThat(findings[0].id).isEqualTo("MandatoryBracesForLoops")
@@ -56,7 +56,7 @@ class MandatoryBracesForLoopsSpec : Spek({
             }
             """
 
-            assertThat(subject.lint(code)).isEmpty()
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
 })
