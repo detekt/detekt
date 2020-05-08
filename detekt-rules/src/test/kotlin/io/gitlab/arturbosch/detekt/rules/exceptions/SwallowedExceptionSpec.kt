@@ -238,6 +238,18 @@ class SwallowedExceptionSpec : Spek({
             """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
+
+        it("ignores MalformedURLException by default") {
+            val code = """
+                fun f() {
+                    try {
+                    } catch (e: MalformedURLException) {
+                        throw MyCustomException()
+                    }
+                }
+            """
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
     }
 })
 
