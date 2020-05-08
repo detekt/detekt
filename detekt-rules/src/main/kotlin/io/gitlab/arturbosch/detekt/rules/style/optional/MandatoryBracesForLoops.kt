@@ -11,18 +11,23 @@ import org.jetbrains.kotlin.com.intellij.psi.PsiElement
 import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtForExpression
+import org.jetbrains.kotlin.psi.KtLoopExpression
+import org.jetbrains.kotlin.psi.KtWhileExpression
 import org.jetbrains.kotlin.psi.psiUtil.siblings
 
 private const val DESCRIPTION = "Multi-line loop was found that does not have braces. " +
         "These should be added to improve readability."
 
 /**
- * This rule detects multi-line `for` loops which do not have braces.
+ * This rule detects multi-line `for` and `while` loops which do not have braces.
  * Adding braces would improve readability and avoid possible errors.
  *
  * <noncompliant>
  * for (i in 0..10)
  *     println(i)
+ *
+ * while (true)
+ *     println("Hello, world")
  * </noncompliant>
  *
  * <compliant>
@@ -31,18 +36,32 @@ private const val DESCRIPTION = "Multi-line loop was found that does not have br
  * }
  *
  * for (i in 0..10) println(i)
+ *
+ * while (true) {
+ *     println("Hello, world")
+ * }
+ *
+ * while (true) println("Hello, world")
  * </compliant>
  */
 class MandatoryBracesForLoops(config: Config = Config.empty) : Rule(config) {
     override val issue = Issue("MandatoryBracesForLoops", Severity.Style, DESCRIPTION, Debt.FIVE_MINS)
 
     override fun visitForExpression(expression: KtForExpression) {
+        checkForBraces(expression)
+        super.visitForExpression(expression)
+    }
+
+    override fun visitWhileExpression(expression: KtWhileExpression) {
+        checkForBraces(expression)
+        super.visitWhileExpression(expression)
+    }
+
+    private fun checkForBraces(expression: KtLoopExpression) {
         // block expressions are okay if and only if it's a single line
         if (expression.isNotBlockExpression() && hasNewLine(expression.rightParenthesis)) {
             report(CodeSmell(issue, Entity.from(expression.body ?: expression), message = DESCRIPTION))
         }
-
-        super.visitForExpression(expression)
     }
 
     private fun hasNewLine(element: PsiElement?): Boolean =
@@ -51,5 +70,5 @@ class MandatoryBracesForLoops(config: Config = Config.empty) : Rule(config) {
                     ?.filterIsInstance<PsiWhiteSpace>()
                     ?.firstOrNull { it.textContains('\n') } != null
 
-    private fun KtForExpression.isNotBlockExpression(): Boolean = this.body !is KtBlockExpression
+    private fun KtLoopExpression.isNotBlockExpression(): Boolean = this.body !is KtBlockExpression
 }

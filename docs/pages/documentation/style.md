@@ -577,7 +577,7 @@ class User {
 
 ### MandatoryBracesForLoops
 
-This rule detects multi-line `for` loops which do not have braces.
+This rule detects multi-line `for` and `while` loops which do not have braces.
 Adding braces would improve readability and avoid possible errors.
 
 **Severity**: Style
@@ -589,6 +589,9 @@ Adding braces would improve readability and avoid possible errors.
 ```kotlin
 for (i in 0..10)
     println(i)
+
+while (true)
+    println("Hello, world")
 ```
 
 #### Compliant Code:
@@ -599,6 +602,12 @@ for (i in 0..10) {
 }
 
 for (i in 0..10) println(i)
+
+while (true) {
+    println("Hello, world")
+}
+
+while (true) println("Hello, world")
 ```
 
 ### MandatoryBracesIfStatements
