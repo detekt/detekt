@@ -18,7 +18,7 @@ Reports when class or object names which do not follow the specified naming conv
 
 #### Configuration options:
 
-* ``classPattern`` (default: ``'[A-Z$][a-zA-Z0-9$]*'``)
+* ``classPattern`` (default: ``'[A-Z][a-zA-Z0-9]*'``)
 
    naming pattern
 
