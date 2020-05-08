@@ -214,6 +214,18 @@ class SwallowedExceptionSpec : Spek({
             """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
+
+        it("ignores InterruptedException by default") {
+            val code = """
+                fun f() {
+                    try {
+                    } catch (e: InterruptedException) {
+                        throw MyCustomException()
+                    }
+                }
+            """
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
     }
 })
 
