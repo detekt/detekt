@@ -77,7 +77,7 @@ class SwallowedException(config: Config = Config.empty) : Rule(config) {
         "The caught exception is swallowed. The original exception could be lost.",
         Debt.TWENTY_MINS)
 
-    private val ignoredExceptionTypes = valueOrDefaultCommaSeparated(IGNORED_EXCEPTION_TYPES, emptyList())
+    private val ignoredExceptionTypes = valueOrDefaultCommaSeparated(IGNORED_EXCEPTION_TYPES, listOf("NumberFormatException"))
         .map { it.removePrefix("*").removeSuffix("*") }
 
     private val allowedExceptionNameRegex by LazyRegex(ALLOWED_EXCEPTION_NAME_REGEX, ALLOWED_EXCEPTION_NAME)

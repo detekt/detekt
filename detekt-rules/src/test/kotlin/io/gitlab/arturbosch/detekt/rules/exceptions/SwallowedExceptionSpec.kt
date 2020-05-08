@@ -202,5 +202,19 @@ class SwallowedExceptionSpec : Spek({
             """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
+
+        it("ignores NumberFormatException by default") {
+            val code = """
+                fun f() {
+                    try {
+                    } catch (e: NumberFormatException) {
+                        throw MyCustomException()
+                    }
+                }
+            """
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
     }
 })
+
+class MyCustomException() : Exception()
