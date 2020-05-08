@@ -14,7 +14,7 @@ import org.jetbrains.kotlin.psi.KtClassOrObject
 /**
  * Reports when class or object names which do not follow the specified naming convention are used.
  *
- * @configuration classPattern - naming pattern (default: `'[A-Z$][a-zA-Z0-9$]*'`)
+ * @configuration classPattern - naming pattern (default: `'[A-Z][a-zA-Z0-9]*'`)
  * @active since v1.0.0
  */
 class ClassNaming(config: Config = Config.empty) : Rule(config) {
@@ -23,7 +23,7 @@ class ClassNaming(config: Config = Config.empty) : Rule(config) {
             Severity.Style,
             "A class or object's name should fit the naming pattern defined in the projects configuration.",
             debt = Debt.FIVE_MINS)
-    private val classPattern by LazyRegex(CLASS_PATTERN, "^[A-Z$][a-zA-Z0-9$]*")
+    private val classPattern by LazyRegex(CLASS_PATTERN, "[A-Z][a-zA-Z0-9]*")
 
     override fun visitClassOrObject(classOrObject: KtClassOrObject) {
         if (!classOrObject.identifierName().matches(classPattern)) {
