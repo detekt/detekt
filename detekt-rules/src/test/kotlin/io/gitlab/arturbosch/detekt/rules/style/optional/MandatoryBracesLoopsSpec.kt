@@ -155,6 +155,27 @@ class MandatoryBracesLoopsSpec : Spek({
             assertThat(findings[0].id).isEqualTo("MandatoryBracesLoops")
             assertThat(findings[0].location.source).isEqualTo(SourceLocation(line = 4, column = 9))
         }
+
+        it("reports inside of if statement without braces") {
+            val code = """
+            fun test() {
+                // this if statement would also be reported, but we're only checking the loop
+                val i = 2
+                if (i % 2 == 0)
+                    for (j in 0..10) 
+                        println(i)
+                else {
+                    println("Odd")
+                }
+            }
+            """
+
+            val findings = subject.compileAndLint(code)
+
+            assertThat(findings).hasSize(1)
+            assertThat(findings[0].id).isEqualTo("MandatoryBracesLoops")
+            assertThat(findings[0].location.source).isEqualTo(SourceLocation(line = 6, column = 13))
+        }
     }
 
     describe("MandatoryBracesLoops rule for `while` loops") {
@@ -305,6 +326,28 @@ class MandatoryBracesLoopsSpec : Spek({
             assertThat(findings).hasSize(1)
             assertThat(findings[0].id).isEqualTo("MandatoryBracesLoops")
             assertThat(findings[0].location.source).isEqualTo(SourceLocation(line = 5, column = 9))
+        }
+
+        it("reports inside of if statement without braces") {
+            val code = """
+            fun test() {
+                // this if statement would also be reported, but we're only checking the loop
+                var i = 2
+                if (i % 2 == 0)
+                    while(true) 
+                        i++
+                else {
+                    println("odd")
+                    i++
+                }
+            }
+            """
+
+            val findings = subject.compileAndLint(code)
+
+            assertThat(findings).hasSize(1)
+            assertThat(findings[0].id).isEqualTo("MandatoryBracesLoops")
+            assertThat(findings[0].location.source).isEqualTo(SourceLocation(line = 6, column = 13))
         }
     }
 })

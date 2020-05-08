@@ -66,7 +66,7 @@ class MandatoryBracesLoops(config: Config = Config.empty) : Rule(config) {
 
     private fun hasNewLine(element: PsiElement?): Boolean =
             element?.siblings(forward = true, withItself = false)
-                    ?.takeWhile { it.text != "else" }
+                    ?.map { println(it); it }
                     ?.filterIsInstance<PsiWhiteSpace>()
                     ?.firstOrNull { it.textContains('\n') } != null
 
