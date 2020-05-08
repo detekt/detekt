@@ -78,11 +78,11 @@ class SwallowedException(config: Config = Config.empty) : Rule(config) {
         Debt.TWENTY_MINS)
 
     private val defaultIgnoredExceptions = listOf(
-            DefaultIgnoredExceptionTypes.INTERRUPTED_EXCEPTION,
-            DefaultIgnoredExceptionTypes.NUMBER_FORMAT_EXCEPTION,
-            DefaultIgnoredExceptionTypes.PARSE_EXCEPTION,
-            DefaultIgnoredExceptionTypes.MALFORMED_URL_EXCEPTION
-    ).map { it.toString() }
+            "NumberFormatException",
+            "InterruptedException",
+            "ParseException",
+            "MalformedURLException"
+    )
     private val ignoredExceptionTypes = valueOrDefaultCommaSeparated(IGNORED_EXCEPTION_TYPES, defaultIgnoredExceptions)
             .map { it.removePrefix("*").removeSuffix("*") }
 
@@ -165,20 +165,5 @@ class SwallowedException(config: Config = Config.empty) : Rule(config) {
     companion object {
         const val IGNORED_EXCEPTION_TYPES = "ignoredExceptionTypes"
         const val ALLOWED_EXCEPTION_NAME_REGEX = "allowedExceptionNameRegex"
-    }
-
-    enum class DefaultIgnoredExceptionTypes {
-        NUMBER_FORMAT_EXCEPTION {
-            override fun toString() = "NumberFormatException"
-        },
-        INTERRUPTED_EXCEPTION {
-            override fun toString() = "InterruptedException"
-        },
-        PARSE_EXCEPTION {
-            override fun toString() = "ParseException"
-        },
-        MALFORMED_URL_EXCEPTION {
-            override fun toString() = "MalformedURLException"
-        }
     }
 }
