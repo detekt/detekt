@@ -33,6 +33,16 @@ class MandatoryBracesLoopsSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
+        it("does not report full loop on single line with multiple statements") {
+            val code = """
+            fun test() {
+                for (i in 0..10) println(i); print(' ')
+            }
+            """
+
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
         it("reports multi-line without braces") {
             val code = """
             fun test() {
@@ -236,6 +246,120 @@ class MandatoryBracesLoopsSpec : Spek({
                     while (true)
                         println()
                 }
+            }
+            """
+
+            val findings = subject.compileAndLint(code)
+
+            assertThat(findings).hasSize(1)
+            assertThat(findings[0].id).isEqualTo("MandatoryBracesLoops")
+        }
+    }
+
+    describe("MandatoryBracesLoops rule for `do while` loops") {
+
+        it("does not report with braces") {
+            val code = """
+            fun test() {
+                do {
+                    println()
+                } while(true)
+            }
+            """
+
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        it("does not report full loop on single line") {
+            val code = """
+            fun test() {
+                do println() while(true)
+            }
+            """
+
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        it("reports multi-line without braces") {
+            val code = """
+            fun test() {
+                do
+                    println()
+                while (true)
+            }
+            """
+
+            val findings = subject.compileAndLint(code)
+
+            assertThat(findings).hasSize(1)
+            assertThat(findings[0].id).isEqualTo("MandatoryBracesLoops")
+            assertThat(findings[0].entity.ktElement?.text).isEqualTo("println()")
+        }
+
+        it("does not report on suppression") {
+            val code = """
+            fun test() {
+                @Suppress("MandatoryBracesLoops")
+                do
+                    println()
+                while(true)
+            }
+            """
+
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        it("does not report nested loops with braces") {
+            val code = """		
+            fun test() {		
+                do {		
+                    while (true) {		
+                        println()		
+                    }		
+                } while (true)	
+            }		
+            """
+
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        it("does not report nested loops on single line") {
+            val code = """		
+            fun test() {		
+                var i = 0
+                do do i += 1 while(i < 5) while (i < 5)	
+            }		
+            """
+
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        it("reports in nested loop outer") {
+            val code = """		
+            fun test() {		
+                do 		
+                    do {		
+                        println()		
+                    } while (true)
+                while (true)
+            }
+            """
+
+            val findings = subject.compileAndLint(code)
+
+            assertThat(findings).hasSize(1)
+            assertThat(findings[0].id).isEqualTo("MandatoryBracesLoops")
+            assertThat(findings[0].location.source).isEqualTo(SourceLocation(line = 3, column = 9))
+        }
+
+        it("reports in nested loop inner") {
+            val code = """
+            fun test() {
+                do {
+                    do
+                        println()
+                    while(true)
+                } while (true)
             }
             """
 

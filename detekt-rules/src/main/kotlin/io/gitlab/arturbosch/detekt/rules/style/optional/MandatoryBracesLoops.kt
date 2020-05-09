@@ -7,9 +7,10 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import org.jetbrains.kotlin.com.intellij.psi.PsiElement
+import io.gitlab.arturbosch.detekt.rules.linesOfCode
 import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.psi.KtBlockExpression
+import org.jetbrains.kotlin.psi.KtDoWhileExpression
 import org.jetbrains.kotlin.psi.KtForExpression
 import org.jetbrains.kotlin.psi.KtLoopExpression
 import org.jetbrains.kotlin.psi.KtWhileExpression
@@ -28,6 +29,10 @@ private const val DESCRIPTION = "Multi-line loop was found that does not have br
  *
  * while (true)
  *     println("Hello, world")
+ *
+ * do
+ *     println("Hello, world")
+ * while (true)
  * </noncompliant>
  *
  * <compliant>
@@ -42,6 +47,12 @@ private const val DESCRIPTION = "Multi-line loop was found that does not have br
  * }
  *
  * while (true) println("Hello, world")
+ *
+ * do {
+ *     println("Hello, world")
+ * } while (true)
+ *
+ * do println("Hello, world") while (true)
  * </compliant>
  */
 class MandatoryBracesLoops(config: Config = Config.empty) : Rule(config) {
@@ -57,17 +68,36 @@ class MandatoryBracesLoops(config: Config = Config.empty) : Rule(config) {
         super.visitWhileExpression(expression)
     }
 
+    override fun visitDoWhileExpression(expression: KtDoWhileExpression) {
+        checkForBraces(expression)
+        super.visitDoWhileExpression(expression)
+    }
+
     private fun checkForBraces(expression: KtLoopExpression) {
         // block expressions are okay if and only if it's a single line
-        if (expression.isNotBlockExpression() && hasNewLine(expression.rightParenthesis)) {
-            report(CodeSmell(issue, Entity.from(expression.body ?: expression), message = DESCRIPTION))
+        if (expression.isNotBlockExpression()) {
+            val hasNoBraces = expression.rightParenthesis
+                ?.siblings(forward = true, withItself = false)
+                ?.filterIsInstance<PsiWhiteSpace>()
+                ?.firstOrNull { it.textContains('\n') } != null
+            if (hasNoBraces) {
+                report(CodeSmell(issue, Entity.from(expression.body ?: expression), message = DESCRIPTION))
+            }
         }
     }
 
-    private fun hasNewLine(element: PsiElement?): Boolean =
-            element?.siblings(forward = true, withItself = false)
-                    ?.filterIsInstance<PsiWhiteSpace>()
-                    ?.firstOrNull { it.textContains('\n') } != null
+    private fun checkForBraces(expression: KtDoWhileExpression) {
+        // block expressions are okay if and only if it's a single line
+        if (expression.isNotBlockExpression() && expression.linesOfCode() > 1) {
+            val hasNoBraces = expression.siblings(forward = true, withItself = false)
+                .takeWhile { it != expression.whileKeyword }
+                .filterIsInstance<PsiWhiteSpace>()
+                .firstOrNull { it.textContains('\n') } != null
+            if (hasNoBraces) {
+                report(CodeSmell(issue, Entity.from(expression.body ?: expression), message = DESCRIPTION))
+            }
+        }
+    }
 
     private fun KtLoopExpression.isNotBlockExpression(): Boolean = this.body !is KtBlockExpression
 }
