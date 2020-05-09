@@ -18,7 +18,7 @@ Reports when class or object names which do not follow the specified naming conv
 
 #### Configuration options:
 
-* ``classPattern`` (default: ``'[A-Z$][a-zA-Z0-9$]*'``)
+* ``classPattern`` (default: ``'[A-Z][a-zA-Z0-9]*'``)
 
    naming pattern
 
@@ -120,7 +120,7 @@ These factory functions can have the same name as the class being created.
 
 #### Configuration options:
 
-* ``functionPattern`` (default: ``'^([a-z$][a-zA-Z$0-9]*)|(`.*`)$'``)
+* ``functionPattern`` (default: ``'([a-z][a-zA-Z0-9]*)|(`.*`)'``)
 
    naming pattern
 
