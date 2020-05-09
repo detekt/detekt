@@ -229,47 +229,6 @@ class MandatoryBracesLoopsSpec : Spek({
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
 
-        it("does not report nested loops with braces") {
-            val code = """
-            fun test() {
-                while (true) {
-                    while (true) {
-                        println()
-                    }
-                }
-            }
-            """
-
-            assertThat(subject.compileAndLint(code)).isEmpty()
-        }
-
-        it("does not report nested loops on single line") {
-            val code = """
-            fun test() {
-                while (true) while (true) println()
-            }
-            """
-
-            assertThat(subject.compileAndLint(code)).isEmpty()
-        }
-
-        it("reports in nested loop outer") {
-            val code = """
-            fun test() {
-                while (true) 
-                    while (true) {
-                        println()
-                    }
-            }
-            """
-
-            val findings = subject.compileAndLint(code)
-
-            assertThat(findings).hasSize(1)
-            assertThat(findings[0].id).isEqualTo("MandatoryBracesLoops")
-            assertThat(findings[0].location.source).isEqualTo(SourceLocation(line = 3, column = 9))
-        }
-
         it("reports in nested loop inner") {
             val code = """
             fun test() {
@@ -284,70 +243,6 @@ class MandatoryBracesLoopsSpec : Spek({
 
             assertThat(findings).hasSize(1)
             assertThat(findings[0].id).isEqualTo("MandatoryBracesLoops")
-        }
-
-        it("reports both violations in nested loop") {
-            val code = """
-            fun test() {
-                while (true)
-                    while (true)
-                        println()
-            }
-            """
-
-            val findings = subject.compileAndLint(code)
-
-            assertThat(findings).hasSize(2)
-            for (finding in findings) {
-                assertThat(finding.id).isEqualTo("MandatoryBracesLoops")
-            }
-
-            io.gitlab.arturbosch.detekt.test.assertThat(findings).hasTextLocations(38 to 72, 63 to 72)
-        }
-
-        it("reports with multi-line if statement") {
-            val code = """
-            fun test() {
-                // because if statements are expressions, this code properly prints "Odd" and "Even"
-                var i = 0
-                while (true) 
-                    if (i % 2 == 0) {
-                        println("Even")
-                        i++
-                    } else {
-                        println("Odd")
-                        i++
-                    }
-            }
-            """
-
-            val findings = subject.compileAndLint(code)
-
-            assertThat(findings).hasSize(1)
-            assertThat(findings[0].id).isEqualTo("MandatoryBracesLoops")
-            assertThat(findings[0].location.source).isEqualTo(SourceLocation(line = 5, column = 9))
-        }
-
-        it("reports inside of if statement without braces") {
-            val code = """
-            fun test() {
-                // this if statement would also be reported, but we're only checking the loop
-                var i = 2
-                if (i % 2 == 0)
-                    while(true) 
-                        i++
-                else {
-                    println("odd")
-                    i++
-                }
-            }
-            """
-
-            val findings = subject.compileAndLint(code)
-
-            assertThat(findings).hasSize(1)
-            assertThat(findings[0].id).isEqualTo("MandatoryBracesLoops")
-            assertThat(findings[0].location.source).isEqualTo(SourceLocation(line = 6, column = 13))
         }
     }
 })
