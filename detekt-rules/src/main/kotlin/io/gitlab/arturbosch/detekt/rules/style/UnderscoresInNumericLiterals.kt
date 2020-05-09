@@ -41,7 +41,7 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
                     "should be underscore separated to increase readability. Underscores that do not make groups of " +
                     "3 digits are also reported.", Debt.FIVE_MINS)
 
-    private val underscoreNumberRegex = Regex("^[0-9]{1,3}(_[0-9]{3})*\$")
+    private val underscoreNumberRegex = Regex("[0-9]{1,3}(_[0-9]{3})*")
 
     private val acceptableDecimalLength = valueOrDefault(ACCEPTABLE_DECIMAL_LENGTH, DEFAULT_ACCEPTABLE_DECIMAL_LENGTH)
 

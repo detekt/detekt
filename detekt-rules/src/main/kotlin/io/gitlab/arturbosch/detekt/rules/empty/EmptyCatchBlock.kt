@@ -12,7 +12,7 @@ import org.jetbrains.kotlin.psi.KtCatchClause
  * by using the specified names in the `allowedExceptionNameRegex`.
  *
  * @configuration allowedExceptionNameRegex - ignores exception types which match this regex
- * (default: `'^(_|(ignore|expected).*)'`)
+ * (default: `'_|(ignore|expected).*'`)
  * @active since v1.0.0
  */
 class EmptyCatchBlock(config: Config) : EmptyRule(

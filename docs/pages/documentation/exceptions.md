@@ -221,7 +221,7 @@ passed into a newly thrown exception.
 
    exception types which should be ignored by this rule
 
-* ``allowedExceptionNameRegex`` (default: ``'^(_|(ignore|expected).*)'``)
+* ``allowedExceptionNameRegex`` (default: ``'_|(ignore|expected).*'``)
 
    ignores too generic exception types which match this regex
 
@@ -400,7 +400,7 @@ exception is too broad it can lead to unintended exceptions being caught.
 
    exceptions which are too generic and should not be caught
 
-* ``allowedExceptionNameRegex`` (default: ``'^(_|(ignore|expected).*)'``)
+* ``allowedExceptionNameRegex`` (default: ``'_|(ignore|expected).*'``)
 
    ignores too generic exception types which match this regex
 

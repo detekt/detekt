@@ -58,7 +58,7 @@ Reports when enum names which do not follow the specified naming convention are 
 
 #### Configuration options:
 
-* ``enumEntryPattern`` (default: ``'^[A-Z][_a-zA-Z0-9]*'``)
+* ``enumEntryPattern`` (default: ``'[A-Z][_a-zA-Z0-9]*'``)
 
    naming pattern
 
@@ -299,7 +299,7 @@ Reports when package names which do not follow the specified naming convention a
 
 #### Configuration options:
 
-* ``packagePattern`` (default: ``'^[a-z]+(\.[a-z][A-Za-z0-9]*)*$'``)
+* ``packagePattern`` (default: ``'[a-z]+(\.[a-z][A-Za-z0-9]*)*'``)
 
    naming pattern
 

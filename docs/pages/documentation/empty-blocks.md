@@ -21,7 +21,7 @@ by using the specified names in the `allowedExceptionNameRegex`.
 
 #### Configuration options:
 
-* ``allowedExceptionNameRegex`` (default: ``'^(_|(ignore|expected).*)'``)
+* ``allowedExceptionNameRegex`` (default: ``'_|(ignore|expected).*'``)
 
    ignores exception types which match this regex
 
