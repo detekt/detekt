@@ -615,6 +615,10 @@ for (i in 0..10)
 
 while (true)
     println("Hello, world")
+
+do
+    println("Hello, world")
+while (true)
 ```
 
 #### Compliant Code:
@@ -631,6 +635,12 @@ while (true) {
 }
 
 while (true) println("Hello, world")
+
+do {
+    println("Hello, world")
+} while (true)
+
+do println("Hello, world") while (true)
 ```
 
 ### MaxLineLength
