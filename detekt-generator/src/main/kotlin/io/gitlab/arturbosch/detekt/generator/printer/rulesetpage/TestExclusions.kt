@@ -8,7 +8,8 @@ import io.gitlab.arturbosch.detekt.generator.collection.Rule
  */
 object TestExclusions {
 
-    const val pattern = "['**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt', '**/*.Spek.kt']"
+    @Suppress("MaxLineLength")
+    const val pattern = "['**/test/**', '**/androidTest/**', '**/*.Test.kt', '**/*.Spec.kt', '**/*.Spek.kt', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**']"
     val ruleSets = setOf("comments")
     val rules = setOf(
         "NamingRules",
