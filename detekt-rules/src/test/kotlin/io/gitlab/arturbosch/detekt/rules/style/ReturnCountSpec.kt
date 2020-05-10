@@ -29,6 +29,28 @@ class ReturnCountSpec : Spek({
             }
         }
 
+        context("a file with an if condition guard clause with body and 2 returns") {
+            val code = """
+            fun test(x: Int): Int {
+                if (x < 4) {
+                    logger.debug("x is less than 4")
+                    return 0
+                }
+                when (x) {
+                    5 -> return 5
+                    4 -> return 4
+                }
+            }
+        """
+
+            it("should not get flagged for if condition guard clauses") {
+                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.EXCLUDE_GUARD_CLAUSES to "true")))
+                    .lint(code)
+                assertThat(findings).isEmpty()
+            }
+        }
+
+
         context("a file with an ELVIS operator guard clause and 2 returns") {
             val code = """
             fun test(x: Int): Int {

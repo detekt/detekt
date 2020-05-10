@@ -24,8 +24,8 @@ fun KtNamedFunction.yieldStatementsSkippingGuardClauses(): Sequence<KtExpression
 
 fun KtExpression.isGuardClause(): Boolean {
 
-    fun KtReturnExpression.isIfConditionGuardClause(): Boolean {
-        val ifExpr = this.parent?.parent as? KtIfExpression
+    fun KtReturnExpression.isIfConditionGuardClause(ancestorExpression: KtExpression): Boolean {
+        val ifExpr = ancestorExpression as? KtIfExpression
         return ifExpr != null && ifExpr.`else` == null
     }
 
@@ -35,5 +35,5 @@ fun KtExpression.isGuardClause(): Boolean {
     }
 
     val returnExpr = this.findDescendantOfType<KtReturnExpression>() ?: return false
-    return returnExpr.isIfConditionGuardClause() || returnExpr.isElvisOperatorGuardClause()
+    return returnExpr.isIfConditionGuardClause(this) || returnExpr.isElvisOperatorGuardClause()
 }
