@@ -155,17 +155,17 @@ class DetektPlugin : Plugin<Project> {
     }
 
     private fun setTaskDefaults(project: Project) {
-        project.tasks.withType(Detekt::class.java) {
+        project.tasks.withType(Detekt::class.java).configureEach {
             it.detektClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT))
             it.pluginClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT_PLUGINS))
         }
 
-        project.tasks.withType(DetektCreateBaselineTask::class.java) {
+        project.tasks.withType(DetektCreateBaselineTask::class.java).configureEach {
             it.detektClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT))
             it.pluginClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT_PLUGINS))
         }
 
-        project.tasks.withType(DetektGenerateConfigTask::class.java) {
+        project.tasks.withType(DetektGenerateConfigTask::class.java).configureEach {
             it.detektClasspath.setFrom(project.configurations.getAt(CONFIGURATION_DETEKT))
         }
     }
