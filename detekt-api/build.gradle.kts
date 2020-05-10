@@ -11,7 +11,7 @@ dependencies {
     testImplementation(project(":detekt-test"))
 }
 
-tasks.withType<DokkaTask> {
+tasks.withType<DokkaTask>().configureEach {
     outputFormat = "jekyll"
     outputDirectory = "$rootDir/docs/pages/kdoc"
     configuration {

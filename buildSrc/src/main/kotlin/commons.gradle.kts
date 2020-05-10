@@ -28,7 +28,7 @@ subprojects {
 
     jacoco.toolVersion = Versions.JACOCO
 
-    tasks.withType<Test> {
+    tasks.withType<Test>().configureEach {
         useJUnitPlatform()
         systemProperty("SPEK_TIMEOUT", 0) // disable test timeout
         val compileSnippetText: Boolean = if (project.hasProperty("compile-test-snippets")) {
@@ -52,7 +52,7 @@ subprojects {
         }
     }
 
-    tasks.withType<KotlinCompile> {
+    tasks.withType<KotlinCompile>().configureEach {
         kotlinOptions.jvmTarget = Versions.JVM_TARGET
         kotlinOptions.freeCompilerArgs = listOf(
             "-progressive",

@@ -14,7 +14,7 @@ dependencies {
     testImplementation(project(":detekt-core"))
 }
 
-tasks.withType<Jar> {
+tasks.withType<Jar>().configureEach {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE // allow duplicates
     dependsOn(configurations.runtimeClasspath)
     from({
