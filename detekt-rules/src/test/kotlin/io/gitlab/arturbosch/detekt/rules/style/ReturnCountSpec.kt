@@ -45,7 +45,7 @@ class ReturnCountSpec : Spek({
 
             it("should not get flagged for if condition guard clauses") {
                 val findings = ReturnCount(TestConfig(mapOf(ReturnCount.EXCLUDE_GUARD_CLAUSES to "true")))
-                    .lint(code)
+                    .compileAndLint(code)
                 assertThat(findings).isEmpty()
             }
         }
