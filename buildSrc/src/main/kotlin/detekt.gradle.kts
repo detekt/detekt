@@ -22,7 +22,7 @@ subprojects {
         plugin("io.gitlab.arturbosch.detekt")
     }
 
-    tasks.withType<Detekt> {
+    tasks.withType<Detekt>().configureEach {
         jvmTarget = "1.8"
     }
 

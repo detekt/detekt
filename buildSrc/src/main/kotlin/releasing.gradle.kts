@@ -28,7 +28,7 @@ githubRelease {
     )
 }
 
-tasks.withType<GithubReleaseTask> {
+tasks.withType<GithubReleaseTask>().configureEach {
     dependsOn(":detekt-cli:shadowJarExecutable")
 }
 
