@@ -7,6 +7,7 @@ import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
 import org.jetbrains.kotlin.psi.KtReturnExpression
 import org.jetbrains.kotlin.psi.psiUtil.findDescendantOfType
+import org.jetbrains.kotlin.psi.psiUtil.lastBlockStatementOrThis
 
 fun KtNamedFunction.yieldStatementsSkippingGuardClauses(): Sequence<KtExpression> = sequence {
     var firstNonGuardFound = false
@@ -24,9 +25,12 @@ fun KtNamedFunction.yieldStatementsSkippingGuardClauses(): Sequence<KtExpression
 
 fun KtExpression.isGuardClause(): Boolean {
 
-    fun KtReturnExpression.isIfConditionGuardClause(): Boolean {
-        val ifExpr = this.parent?.parent as? KtIfExpression
-        return ifExpr != null && ifExpr.`else` == null
+    fun isIfConditionGuardClause(returnExpr: KtReturnExpression): Boolean {
+        val ifExpr = this as? KtIfExpression
+            ?: return false
+
+        return ifExpr.`else` == null &&
+                returnExpr === ifExpr.then?.lastBlockStatementOrThis()
     }
 
     fun KtReturnExpression.isElvisOperatorGuardClause(): Boolean {
@@ -35,5 +39,5 @@ fun KtExpression.isGuardClause(): Boolean {
     }
 
     val returnExpr = this.findDescendantOfType<KtReturnExpression>() ?: return false
-    return returnExpr.isIfConditionGuardClause() || returnExpr.isElvisOperatorGuardClause()
+    return isIfConditionGuardClause(returnExpr) || returnExpr.isElvisOperatorGuardClause()
 }
