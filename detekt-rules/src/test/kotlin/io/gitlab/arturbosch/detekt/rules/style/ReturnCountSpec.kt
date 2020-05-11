@@ -33,7 +33,7 @@ class ReturnCountSpec : Spek({
             val code = """
             fun test(x: Int): Int {
                 if (x < 4) {
-                    logger.debug("x is less than 4")
+                    println("x x is less than 4")
                     return 0
                 }
                 when (x) {
@@ -48,7 +48,47 @@ class ReturnCountSpec : Spek({
                     .compileAndLint(code)
                 assertThat(findings).isEmpty()
             }
+
+            it("should get flagged without guard clauses") {
+                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.EXCLUDE_GUARD_CLAUSES to "false")))
+                    .compileAndLint(code)
+                assertThat(findings).hasSize(1)
+            }
+
         }
+
+        context("too-complicated if does not count as a guard clause") {
+            val code = """
+            fun test(x: Int): Int {
+                if (x < 4) {
+                    println("x x is less than 4")
+                    if (x < 2) {
+                      println("x is also less than 2")
+                      return 1
+                    }
+                    return 0
+                }
+                when (x) {
+                    5 -> return 5
+                    4 -> return 4
+                }
+            }
+        """
+
+            it("should get flagged for too-complicated guard clause, with EXCLUDE_GUARD_CLAUSES on") {
+                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.EXCLUDE_GUARD_CLAUSES to "true")))
+                    .compileAndLint(code)
+                assertThat(findings).hasSize(1)
+            }
+
+            it("should get flagged for too-complicated guard clause, with EXCLUDE_GUARD_CLAUSES off") {
+                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.EXCLUDE_GUARD_CLAUSES to "false")))
+                    .compileAndLint(code)
+                assertThat(findings).hasSize(1)
+            }
+
+        }
+
 
 
         context("a file with an ELVIS operator guard clause and 2 returns") {
@@ -111,7 +151,10 @@ class ReturnCountSpec : Spek({
                     if(a == null) return
                     val models = b as? Int ?: return
                     val position = c?.takeIf { it != -1 } ?: return
-                    if(b !is String) return
+                    if(b !is String) {
+                        println("b is not a String")
+                        return
+                    }
 
                     return
                 }
