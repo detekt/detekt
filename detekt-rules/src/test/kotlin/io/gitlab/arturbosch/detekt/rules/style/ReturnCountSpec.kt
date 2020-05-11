@@ -16,15 +16,16 @@ class ReturnCountSpec : Spek({
             fun test(x: Int): Int {
                 if (x < 4) return 0
                 when (x) {
-                    5 -> return 5
+                    5 -> println("x=5")
                     4 -> return 4
                 }
+                return 6
             }
         """
 
             it("should not get flagged for if condition guard clauses") {
                 val findings = ReturnCount(TestConfig(mapOf(ReturnCount.EXCLUDE_GUARD_CLAUSES to "true")))
-                    .lint(code)
+                    .compileAndLint(code)
                 assertThat(findings).isEmpty()
             }
         }
@@ -37,9 +38,10 @@ class ReturnCountSpec : Spek({
                     return 0
                 }
                 when (x) {
-                    5 -> return 5
+                    5 -> println("x=5")
                     4 -> return 4
                 }
+                return 6
             }
         """
 
@@ -69,9 +71,10 @@ class ReturnCountSpec : Spek({
                     return 0
                 }
                 when (x) {
-                    5 -> return 5
+                    5 -> println("x=5")
                     4 -> return 4
                 }
+                return 6
             }
         """
 
@@ -96,15 +99,16 @@ class ReturnCountSpec : Spek({
             fun test(x: Int): Int {
                 val y = x ?: return 0
                 when (x) {
-                    5 -> return 5
+                    5 -> println("x=5")
                     4 -> return 4
                 }
+                return 6
             }
         """
 
             it("should not get flagged for ELVIS operator guard clauses") {
                 val findings = ReturnCount(TestConfig(mapOf(ReturnCount.EXCLUDE_GUARD_CLAUSES to "true")))
-                    .lint(code)
+                    .compileAndLint(code)
                 assertThat(findings).isEmpty()
             }
         }
@@ -113,16 +117,17 @@ class ReturnCountSpec : Spek({
             val code = """
             fun test(x: Int): Int {
                 when (x) {
-                    5 -> return 5
+                    5 -> println("x=5")
                     4 -> return 4
                 }
                 if (x < 4) return 0
+                return 6
             }
         """
 
             it("should get flagged for an if condition guard clause which is not the first statement") {
                 val findings = ReturnCount(TestConfig(mapOf(ReturnCount.EXCLUDE_GUARD_CLAUSES to "true")))
-                    .lint(code)
+                    .compileAndLint(code)
                 assertThat(findings).hasSize(1)
             }
         }
@@ -131,16 +136,17 @@ class ReturnCountSpec : Spek({
             val code = """
             fun test(x: Int): Int {
                 when (x) {
-                    5 -> return 5
+                    5 -> println("x=5")
                     4 -> return 4
                 }
                 val y = x ?: return 0
+                return 6
             }
         """
 
             it("should get flagged for an ELVIS guard clause which is not the first statement") {
                 val findings = ReturnCount(TestConfig(mapOf(ReturnCount.EXCLUDE_GUARD_CLAUSES to "true")))
-                    .lint(code)
+                    .compileAndLint(code)
                 assertThat(findings).hasSize(1)
             }
         }
@@ -179,25 +185,26 @@ class ReturnCountSpec : Spek({
             val code = """
             fun test(x: Int): Int {
                 when (x) {
-                    5 -> return 5
+                    5 -> println("x=5")
                     4 -> return 4
                     3 -> return 3
                 }
+                return 6
             }
         """
 
             it("should get flagged by default") {
-                val findings = ReturnCount().lint(code)
+                val findings = ReturnCount().compileAndLint(code)
                 assertThat(findings).hasSize(1)
             }
 
             it("should not get flagged when max value is 3") {
-                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "3"))).lint(code)
+                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "3"))).compileAndLint(code)
                 assertThat(findings).isEmpty()
             }
 
             it("should get flagged when max value is 1") {
-                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "1"))).lint(code)
+                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "1"))).compileAndLint(code)
                 assertThat(findings).hasSize(1)
             }
         }
@@ -206,24 +213,25 @@ class ReturnCountSpec : Spek({
             val code = """
             fun test(x: Int): Int {
                 when (x) {
-                    5 -> return 5
+                    5 -> println("x=5")
                     4 -> return 4
                 }
+                return 6
             }
         """
 
             it("should not get flagged by default") {
-                val findings = ReturnCount().lint(code)
+                val findings = ReturnCount().compileAndLint(code)
                 assertThat(findings).isEmpty()
             }
 
             it("should not get flagged when max value is 2") {
-                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "2"))).lint(code)
+                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "2"))).compileAndLint(code)
                 assertThat(findings).isEmpty()
             }
 
             it("should get flagged when max value is 1") {
-                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "1"))).lint(code)
+                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "1"))).compileAndLint(code)
                 assertThat(findings).hasSize(1)
             }
         }
@@ -232,10 +240,11 @@ class ReturnCountSpec : Spek({
             val code = """
             fun test(x: Int): Int {
                 when (x) {
-                    5 -> return 5
+                    5 -> println("x=5")
                     4 -> return 4
                     3 -> return 3
                 }
+                return 6
             }
         """
 
@@ -243,7 +252,7 @@ class ReturnCountSpec : Spek({
                 val findings = ReturnCount(TestConfig(mapOf(
                     ReturnCount.MAX to "2",
                     ReturnCount.EXCLUDED_FUNCTIONS to "test")
-                )).lint(code)
+                )).compileAndLint(code)
                 assertThat(findings).isEmpty()
             }
         }
@@ -252,26 +261,29 @@ class ReturnCountSpec : Spek({
             val code = """
             fun test1(x: Int): Int {
                 when (x) {
-                    5 -> return 5
+                    5 -> println("x=5")
                     4 -> return 4
                     3 -> return 3
                 }
+                return 6
             }
 
             fun test2(x: Int): Int {
                 when (x) {
-                    5 -> return 5
+                    5 -> println("x=5")
                     4 -> return 4
                     3 -> return 3
                 }
+                return 6
             }
 
             fun test3(x: Int): Int {
                 when (x) {
-                    5 -> return 5
+                    5 -> println("x=5")
                     4 -> return 4
                     3 -> return 3
                 }
+                return 6
             }
         """
 
@@ -279,7 +291,7 @@ class ReturnCountSpec : Spek({
                 val findings = ReturnCount(TestConfig(mapOf(
                     ReturnCount.MAX to "2",
                     ReturnCount.EXCLUDED_FUNCTIONS to "test1,test2")
-                )).lint(code)
+                )).compileAndLint(code)
                 assertThat(findings).hasSize(1)
             }
         }
@@ -290,20 +302,22 @@ class ReturnCountSpec : Spek({
                 val a = object {
                     fun test2(x: Int): Int {
                         when (x) {
-                            5 -> return 5
+                            5 -> println("x=5")
                             else -> return 0
                         }
+                        return 6
                     }
                 }
                 when (x) {
-                    5 -> return 5
+                    5 -> println("x=5")
                     else -> return 0
                 }
+                return 6
             }
         """
 
             it("should not get flag when returns is in inner object") {
-                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "2"))).lint(code)
+                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "2"))).compileAndLint(code)
                 assertThat(findings).isEmpty()
             }
         }
@@ -316,26 +330,29 @@ class ReturnCountSpec : Spek({
                         val b = object {
                             fun test3(x: Int): Int {
                                 when (x) {
-                                    5 -> return 5
+                                    5 -> println("x=5")
                                     else -> return 0
                                 }
+                                return 6
                             }
                         }
                         when (x) {
-                            5 -> return 5
+                            5 -> println("x=5")
                             else -> return 0
                         }
+                        return 6
                     }
                 }
                 when (x) {
-                    5 -> return 5
+                    5 -> println("x=5")
                     else -> return 0
                 }
+                return 6
             }
         """
 
             it("should not get flag when returns is in inner object") {
-                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "2"))).lint(code)
+                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "2"))).compileAndLint(code)
                 assertThat(findings).isEmpty()
             }
         }
@@ -348,28 +365,31 @@ class ReturnCountSpec : Spek({
                         val b = object {
                             fun test3(x: Int): Int {
                                 when (x) {
-                                    5 -> return 5
+                                    5 -> println("x=5")
                                     else -> return 0
                                 }
+                                return 6
                             }
                         }
                         when (x) {
-                            5 -> return 5
+                            5 -> println("x=5")
                             else -> return 0
                         }
+                        return 6
                     }
                 }
                 when (x) {
-                    5 -> return 5
+                    5 -> println("x=5")
                     4 -> return 4
                     3 -> return 3
                     else -> return 0
                 }
+                return 6
             }
         """
 
             it("should get flagged when returns is in inner object") {
-                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "2"))).lint(code)
+                val findings = ReturnCount(TestConfig(mapOf(ReturnCount.MAX to "2"))).compileAndLint(code)
                 assertThat(findings).hasSize(1)
             }
         }
