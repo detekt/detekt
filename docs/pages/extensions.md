@@ -229,6 +229,10 @@ them in the `detekt` yaml configuration file.
 subproject is build before `gradle detekt` is run.
 In the `kotlin-dsl` you could add something like `tasks.withType<Detekt> { dependsOn(":my-rules:assemble") }` to explicitly run `detekt` only 
 after your extension sub project is built.
+- If you use detekt for your Android project, and if you want to integrate all your custom rules in a new module, please make sure that
+you created a pure kotlin module which has no Android dependencies. `apply plugin: "kotlin"` is enough to make it work.
+- Sometimes when you run detekt task, you may not see the violations detected by your custom rules. In this case open a terminal and run
+`./gradlew --stop` to stop gradle daemons and run the task again.
 
 #### autoCorrect property
 
