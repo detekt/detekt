@@ -7,7 +7,7 @@ plugins {
 
 githubRelease {
     token(project.findProperty("github.token") as? String ?: "")
-    owner.set("arturbosch")
+    owner.set("detekt")
     repo.set("detekt")
     overwrite.set(true)
     dryRun.set(false)

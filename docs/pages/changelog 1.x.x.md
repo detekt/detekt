@@ -6,6 +6,31 @@ permalink: changelog.html
 toc: true
 ---
 
+#### 1.9.0
+
+##### Changelog
+
+- Extra documentation added to pitfalls section - [#2675](https://github.com/detekt/detekt/pull/2675)
+- Use configuration avoidance for withType usages - [#2672](https://github.com/detekt/detekt/pull/2672)
+- GuardClause also matches if-with-body that contains a return - [#2671](https://github.com/detekt/detekt/pull/2671)
+- Simplify patterns - [#2668](https://github.com/detekt/detekt/pull/2668)
+- Include Kotlin multiplatform test folders to default exclude config - [#2667](https://github.com/detekt/detekt/pull/2667)
+- Remove duplicate MandatoryBracesLoops rule tests - [#2665](https://github.com/detekt/detekt/pull/2665)
+- Remove print statement in MandatoryBracesLoops - [#2664](https://github.com/detekt/detekt/pull/2664)
+- Remove $ as a valid char in class and method names - [#2662](https://github.com/detekt/detekt/pull/2662)
+- Build detekt executable before publishing it - #2654 - [#2659](https://github.com/detekt/detekt/pull/2659)
+- Add style rule for mandatory braces in for loop bodies - [#2658](https://github.com/detekt/detekt/pull/2658)
+- Asset in release 1.8.0 is not up-to-date - [#2654](https://github.com/detekt/detekt/issues/2654)
+- Rule: Mandatory braces for single-line for loop bodies - [#2652](https://github.com/detekt/detekt/issues/2652)
+- Use task configuration avoidance for detekt plugin - [#2651](https://github.com/detekt/detekt/pull/2651)
+- Add detekt GitHub action to readme - [#2650](https://github.com/detekt/detekt/pull/2650)
+- Don't report unused private properties in expect class - [#2646](https://github.com/detekt/detekt/pull/2646)
+- UnusedPrivateMember: don't report parameters in expect/actual functions - [#2643](https://github.com/detekt/detekt/pull/2643)
+- UnusedPrivateMembers on expect class - [#2636](https://github.com/detekt/detekt/issues/2636)
+- Include Kotlin multiplatform test folders to default exclude configuration - [#2608](https://github.com/detekt/detekt/issues/2608)
+
+See all issues at: [1.9.0](https://github.com/detekt/detekt/milestone/65)
+
 #### 1.8.0
 
 ##### Notable Changes

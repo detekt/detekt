@@ -14,7 +14,7 @@ final class Report {
 
 if (args.size() > 3) throw new IllegalArgumentException("Usage: [userId] [repositoryId] [milestoneId]")
 
-def user = args.size() > 0 ? args[0] : "arturbosch"
+def user = args.size() > 0 ? args[0] : "detekt"
 def repo = args.size() > 1 ? args[1] : "detekt"
 
 def github = GitHub.connectAnonymously()
