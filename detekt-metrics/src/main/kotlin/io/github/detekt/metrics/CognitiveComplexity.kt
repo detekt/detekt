@@ -1,6 +1,9 @@
 package io.github.detekt.metrics
 
 import io.gitlab.arturbosch.detekt.api.DetektVisitor
+import org.jetbrains.kotlin.com.intellij.psi.tree.IElementType
+import org.jetbrains.kotlin.lexer.KtTokens
+import org.jetbrains.kotlin.psi.KtBinaryExpression
 import org.jetbrains.kotlin.psi.KtBreakExpression
 import org.jetbrains.kotlin.psi.KtCallExpression
 import org.jetbrains.kotlin.psi.KtCatchClause
@@ -12,11 +15,23 @@ import org.jetbrains.kotlin.psi.KtForExpression
 import org.jetbrains.kotlin.psi.KtIfExpression
 import org.jetbrains.kotlin.psi.KtLambdaExpression
 import org.jetbrains.kotlin.psi.KtNamedFunction
+import org.jetbrains.kotlin.psi.KtParenthesizedExpression
+import org.jetbrains.kotlin.psi.KtQualifiedExpression
 import org.jetbrains.kotlin.psi.KtReturnExpression
+import org.jetbrains.kotlin.psi.KtThisExpression
 import org.jetbrains.kotlin.psi.KtWhenExpression
 import org.jetbrains.kotlin.psi.KtWhileExpression
+import org.jetbrains.kotlin.psi.psiUtil.collectDescendantsOfType
 import org.jetbrains.kotlin.psi.psiUtil.getCallNameExpression
 
+/**
+ * Kotlin implementation of the cognitive complexity metric.
+ *
+ * Please see the "Cognitive Complexity: A new way of measuring understandability" white paper
+ * by G. Ann Campbell of SonarSource for further detail.
+ *
+ * https://www.sonarsource.com/docs/CognitiveComplexity.pdf
+ */
 class CognitiveComplexity private constructor() : DetektVisitor() {
 
     private var complexity: Int = 0
@@ -27,11 +42,14 @@ class CognitiveComplexity private constructor() : DetektVisitor() {
         complexity += visitor.complexity
     }
 
+    data class BinExprHolder(val expr: KtBinaryExpression, val op: IElementType, val isEnclosed: Boolean)
+
     @Suppress("detekt.TooManyFunctions") // visitor pattern
     inner class FunctionComplexity(
         private val givenFunction: KtNamedFunction
     ) : DetektVisitor() {
         internal var complexity: Int = 0
+
         private var nesting: Int = 0
 
         private fun addComplexity() {
@@ -52,7 +70,10 @@ class CognitiveComplexity private constructor() : DetektVisitor() {
 
         private fun KtCallExpression.isRecursion(): Boolean {
             val args = lambdaArguments.size + valueArguments.size
-            return getCallNameExpression()?.getReferencedName() == givenFunction.name &&
+            val isInsideSameScope = parent !is KtQualifiedExpression ||
+                (parent as? KtQualifiedExpression)?.receiverExpression is KtThisExpression
+            return isInsideSameScope &&
+                getCallNameExpression()?.getReferencedName() == givenFunction.name &&
                 args == givenFunction.valueParameters.size
         }
 
@@ -119,9 +140,42 @@ class CognitiveComplexity private constructor() : DetektVisitor() {
         override fun visitLambdaExpression(lambdaExpression: KtLambdaExpression) {
             nestAround { super.visitLambdaExpression(lambdaExpression) }
         }
+
+        private var topMostBinExpr: KtBinaryExpression? = null
+
+        override fun visitBinaryExpression(expression: KtBinaryExpression) {
+            if (topMostBinExpr == null) {
+                topMostBinExpr = expression
+            }
+            super.visitBinaryExpression(expression)
+            if (topMostBinExpr == expression) {
+                val nestedBinExprs = expression.collectDescendantsOfType<KtBinaryExpression>()
+                    .asSequence()
+                    .map { BinExprHolder(it, it.operationToken, it.parent is KtParenthesizedExpression) }
+                    .filter { it.op in logicalOps }
+                    .sortedBy { it.expr.operationReference.textRange.startOffset }
+                    .toList()
+                calculateBinaryExprComplexity(nestedBinExprs)
+                topMostBinExpr = null
+            }
+        }
+
+        private fun calculateBinaryExprComplexity(usedExpr: List<BinExprHolder>) {
+            var lastOp: IElementType? = null
+            for (binExpr in usedExpr) {
+                if (lastOp == null) {
+                    complexity++
+                } else if (lastOp != binExpr.op || binExpr.isEnclosed) {
+                    complexity++
+                }
+                lastOp = binExpr.op
+            }
+        }
     }
 
     companion object {
+
+        private val logicalOps = setOf(KtTokens.ANDAND, KtTokens.OROR)
 
         fun calculate(element: KtElement): Int {
             val visitor = CognitiveComplexity()

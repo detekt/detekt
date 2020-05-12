@@ -42,13 +42,37 @@ class CognitiveComplexitySpec : Spek({
             assertThat(CognitiveComplexity.calculate(code)).isEqualTo(1)
         }
 
-        it("adds one for recursion") {
-            val code = compileContentForTest("""
-                fun factorial(n: Int): Int =
-                    if (n >= 1) n * factorial(n - 1) else 1
+        describe("recursion") {
+
+            it("adds one for recursion inside class") {
+                val code = compileContentForTest("""
+                    class A {
+                        fun factorial(n: Int): Int =
+                            if (n >= 1) n * this.factorial(n - 1) else 1
+                    }
             """.trimIndent())
 
-            assertThat(CognitiveComplexity.calculate(code)).isEqualTo(2)
+                assertThat(CognitiveComplexity.calculate(code)).isEqualTo(2)
+            }
+
+            it("adds one for top level recursion") {
+                val code = compileContentForTest("""
+                    fun factorial(n: Int): Int =
+                        if (n >= 1) n * factorial(n - 1) else 1
+                """.trimIndent())
+
+                assertThat(CognitiveComplexity.calculate(code)).isEqualTo(2)
+            }
+
+            it("does not add as it is only the same name") {
+                val code = compileContentForTest("""
+                    object O { fun factorial(i: Int): Int = i - 1 }
+                    fun factorial(n: Int): Int =
+                        if (n >= 1) n * O.factorial(n - 1) else 1
+                """.trimIndent())
+
+                assertThat(CognitiveComplexity.calculate(code)).isEqualTo(1)
+            }
         }
 
         it("ignores shorthand operators") {
@@ -109,6 +133,99 @@ class CognitiveComplexitySpec : Spek({
             """.trimIndent())
 
             assertThat(CognitiveComplexity.calculate(code)).isEqualTo(2)
+        }
+
+        describe("binary expressions") {
+
+            it("does not increment on just a condition") {
+                val code = compileContentForTest("""
+                    fun test(cond: Boolean) = !cond
+                """.trimIndent())
+
+                assertThat(CognitiveComplexity.calculate(code)).isEqualTo(0)
+            }
+
+            describe("increments for every non-like operator") {
+
+                it("adds one for just a &&") {
+                    val code = compileContentForTest("""
+                        fun test(cond: Boolean) = !cond && !cond
+                    """.trimIndent())
+
+                    assertThat(CognitiveComplexity.calculate(code)).isEqualTo(1)
+                }
+
+                it("adds only one for repeated &&") {
+                    val code = compileContentForTest("""
+                        fun test(cond: Boolean) = !cond && !cond && !cond
+                    """.trimIndent())
+
+                    assertThat(CognitiveComplexity.calculate(code)).isEqualTo(1)
+                }
+
+                it("adds one per logical alternate operator") {
+                    val code = compileContentForTest("""
+                        fun test(cond: Boolean) = !cond && !cond || cond
+                    """.trimIndent())
+
+                    assertThat(CognitiveComplexity.calculate(code)).isEqualTo(2)
+                }
+
+                it("adds one per logical alternate operator with like operators in between") {
+                    val code = compileContentForTest("""
+                        fun test(cond: Boolean) {
+                            if (                    // +1
+                                !cond 
+                                && !cond && !cond   // +1
+                                || cond || cond     // +1
+                                && cond             // +1
+                            ) {}
+                        }
+                    """.trimIndent())
+
+                    assertThat(CognitiveComplexity.calculate(code)).isEqualTo(4)
+                }
+
+                it("adds one for negated but similar operators") {
+                    val code = compileContentForTest("""
+                        fun test(cond: Boolean) {
+                            if (                    // +1
+                                !cond 
+                                && !(cond && cond)  // +2
+                            ) {}
+                        }
+                    """.trimIndent())
+
+                    assertThat(CognitiveComplexity.calculate(code)).isEqualTo(3)
+                }
+
+                it("adds only one for a negated chain of similar operators") {
+                    val code = compileContentForTest("""
+                        fun test(cond: Boolean) {
+                            if (                    // +1
+                                !cond 
+                                && !(cond && cond && cond)  // +2
+                            ) {}
+                        }
+                    """.trimIndent())
+
+                    assertThat(CognitiveComplexity.calculate(code)).isEqualTo(3)
+                }
+
+                it("adds one for every negated similar operator chain") {
+                    val code = compileContentForTest("""
+                        fun test(cond: Boolean) {
+                            if (                            // +1
+                                !cond 
+                                && !(cond && cond && cond)  // +2
+                                || !(cond || cond)          // +2
+                            ) {}
+                        }
+                    """.trimIndent())
+
+                    assertThat(CognitiveComplexity.calculate(code)).isEqualTo(5)
+                }
+            }
         }
     }
 })
