@@ -1,5 +1,7 @@
 package io.gitlab.arturbosch.detekt.rules.complexity
 
+import io.gitlab.arturbosch.detekt.rules.complexity.LongParameterList.Companion.DEFAULT_CONSTRUCTOR_THRESHOLD
+import io.gitlab.arturbosch.detekt.rules.complexity.LongParameterList.Companion.DEFAULT_FUNCTION_THRESHOLD
 import io.gitlab.arturbosch.detekt.test.TestConfig
 import io.gitlab.arturbosch.detekt.test.compileAndLint
 import org.assertj.core.api.Assertions.assertThat
@@ -12,9 +14,16 @@ class LongParameterListSpec : Spek({
 
     describe("LongParameterList rule") {
 
+        val reportMessageForFunction =
+            "The function long has too many parameters. The current threshold is set to $DEFAULT_FUNCTION_THRESHOLD."
+        val reportMessageForConstructor =
+            "The constructor has too many parameters. The current threshold is set to $DEFAULT_CONSTRUCTOR_THRESHOLD."
+
         it("reports too long parameter list") {
             val code = "fun long(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int) {}"
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings.first().message).isEqualTo(reportMessageForFunction)
         }
 
         it("does not report short parameter list") {
@@ -36,7 +45,9 @@ class LongParameterListSpec : Spek({
 
         it("reports too long parameter list for primary constructors") {
             val code = "class LongCtor(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int)"
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings.first().message).isEqualTo(reportMessageForConstructor)
         }
 
         it("does not report short parameter list for primary constructors") {
@@ -46,7 +57,9 @@ class LongParameterListSpec : Spek({
 
         it("reports too long parameter list for secondary constructors") {
             val code = "class LongCtor() { constructor(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int) : this() }"
-            assertThat(subject.compileAndLint(code)).hasSize(1)
+            val findings = subject.compileAndLint(code)
+            assertThat(findings).hasSize(1)
+            assertThat(findings.first().message).isEqualTo(reportMessageForConstructor)
         }
 
         it("does not report short parameter list for secondary constructors") {
