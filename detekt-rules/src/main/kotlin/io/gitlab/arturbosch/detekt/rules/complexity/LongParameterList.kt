@@ -72,7 +72,7 @@ class LongParameterList(
         if (owner is KtClass && owner.isIgnored()) {
             return
         }
-        validateFunction(function, functionThreshold)
+        checkLongParameterList(function, functionThreshold, "function ${function.nameAsSafeName}")
     }
 
     override fun visitPrimaryConstructor(constructor: KtPrimaryConstructor) {
@@ -92,12 +92,12 @@ class LongParameterList(
         if (owner is KtClass && owner.isDataClassOrIgnored()) {
             return
         }
-        validateFunction(constructor, constructorThreshold)
+        checkLongParameterList(constructor, constructorThreshold, "constructor")
     }
 
     private fun KtClass.isDataClassOrIgnored() = isIgnored() || ignoreDataClasses && isData()
 
-    private fun validateFunction(function: KtFunction, threshold: Int) {
+    private fun checkLongParameterList(function: KtFunction, threshold: Int, identifier: String) {
         if (function.isOverride() || function.isIgnored() || function.containingKtFile.isIgnored()) return
         val parameterList = function.valueParameterList
         val parameters = parameterList?.parameterCount()
@@ -106,8 +106,7 @@ class LongParameterList(
             report(ThresholdedCodeSmell(issue,
                     Entity.from(parameterList),
                     Metric("SIZE", parameters, threshold),
-                    "The function ${function.nameAsSafeName} has too many parameters. The current threshold" +
-                            " is set to $threshold."))
+                    "The $identifier has too many parameters. The current threshold is set to $threshold."))
         }
     }
 
