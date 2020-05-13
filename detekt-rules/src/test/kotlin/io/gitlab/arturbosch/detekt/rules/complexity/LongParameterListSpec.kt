@@ -15,9 +15,11 @@ class LongParameterListSpec : Spek({
     describe("LongParameterList rule") {
 
         val reportMessageForFunction =
-            "The function long has too many parameters. The current threshold is set to $DEFAULT_FUNCTION_THRESHOLD."
+            "The function long(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int) has too many parameters. " +
+                    "The current threshold is set to $DEFAULT_FUNCTION_THRESHOLD."
         val reportMessageForConstructor =
-            "The constructor has too many parameters. The current threshold is set to $DEFAULT_CONSTRUCTOR_THRESHOLD."
+            "The constructor(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int, g: Int) has too many parameters. " +
+                    "The current threshold is set to $DEFAULT_CONSTRUCTOR_THRESHOLD."
 
         it("reports too long parameter list") {
             val code = "fun long(a: Int, b: Int, c: Int, d: Int, e: Int, f: Int) {}"

@@ -99,14 +99,19 @@ class LongParameterList(
 
     private fun checkLongParameterList(function: KtFunction, threshold: Int, identifier: String) {
         if (function.isOverride() || function.isIgnored() || function.containingKtFile.isIgnored()) return
-        val parameterList = function.valueParameterList
-        val parameters = parameterList?.parameterCount()
+        val parameterList = function.valueParameterList ?: return
+        val parameterNumber = parameterList.parameterCount()
 
-        if (parameters != null && parameters >= threshold) {
+        if (parameterNumber >= threshold) {
+            val parameterPrint = function.valueParameters.joinToString(separator = ", ") {
+                    it.nameAsSafeName.identifier + ": " + it.typeReference?.text
+            }
+
             report(ThresholdedCodeSmell(issue,
                     Entity.from(parameterList),
-                    Metric("SIZE", parameters, threshold),
-                    "The $identifier has too many parameters. The current threshold is set to $threshold."))
+                    Metric("SIZE", parameterNumber, threshold),
+                    "The $identifier($parameterPrint) has too many parameters. " +
+                            "The current threshold is set to $threshold."))
         }
     }
 
