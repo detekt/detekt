@@ -11,9 +11,9 @@ import org.spekframework.spek2.style.specification.describe
 class MandatoryBracesIfStatementsSpec : Spek({
     val subject by memoized { MandatoryBracesIfStatements(Config.empty) }
 
-    describe("reports multi-line if statements should have braces") {
+    describe("if statements which should have braces") {
 
-        it("simple if") {
+        it("reports a simple if") {
             val findings = subject.compileAndLint("""
             fun f() {
                 if (true)
@@ -25,7 +25,7 @@ class MandatoryBracesIfStatementsSpec : Spek({
             assertThat(findings).hasTextLocations(32 to 41)
         }
 
-        it("if-else") {
+        it("reports if-else") {
             val findings = subject.compileAndLint("""
             fun f() {
                 if (true)
@@ -39,7 +39,7 @@ class MandatoryBracesIfStatementsSpec : Spek({
             assertThat(findings).hasTextLocations(32 to 41, 59 to 68)
         }
 
-        it("if-else with else-if") {
+        it("reports if-else with else-if") {
             val findings = subject.compileAndLint("""
             fun f() {
                 if (true)
@@ -55,7 +55,7 @@ class MandatoryBracesIfStatementsSpec : Spek({
             assertThat(findings).hasTextLocations(32 to 41, 70 to 79, 97 to 106)
         }
 
-        it("if with braces but else without") {
+        it("reports if with braces but else without") {
             val findings = subject.compileAndLint("""
             fun f() {
                 if (true) {
@@ -69,7 +69,7 @@ class MandatoryBracesIfStatementsSpec : Spek({
             assertThat(findings).hasTextLocations(63 to 72)
         }
 
-        it("else with braces but if without") {
+        it("reports else with braces but if without") {
             val findings = subject.compileAndLint("""
             fun f() {
                 if (true)
@@ -84,7 +84,7 @@ class MandatoryBracesIfStatementsSpec : Spek({
             assertThat(findings).hasTextLocations(32 to 41)
         }
 
-        it("else in new line") {
+        it("reports else in new line") {
             val findings = subject.compileAndLint("""
             fun f() {
                 if (true) println()
@@ -96,7 +96,7 @@ class MandatoryBracesIfStatementsSpec : Spek({
             assertThat(findings).hasTextLocations(24 to 33)
         }
 
-        it("only else body in new line") {
+        it("reports only else body on new line") {
             val findings = subject.compileAndLint("""
             fun f() {
                 if (true) println() else
@@ -109,11 +109,36 @@ class MandatoryBracesIfStatementsSpec : Spek({
         }
     }
 
-    describe("MandatoryBracesIfStatements rule") {
+    describe("if statements with braces") {
 
-        it("reports non multi-line if statements should have braces") {
-            val path = Case.MandatoryBracesIfStatementsNegative.path()
-            assertThat(subject.lint(path)).isEmpty()
+        it("does not report if statements with braces") {
+            val code = """
+                fun f() {
+                	if (true) {
+                		println()
+                	}
+                	if (true)
+                	{
+                		println()
+                	}
+                	if (true) { println() }
+                }
+            """
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+    }
+
+    describe("single-line if statements which don't need braces") {
+
+        it("does not report single-line if statements") {
+            val code = """
+                fun f() {
+                	if (true) println()
+                	if (true) println() else println()
+                	if (true) println() else if (false) println() else println()
+                }
+            """
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
 })
