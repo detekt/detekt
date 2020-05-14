@@ -231,6 +231,54 @@ class UnderscoresInNumericLiteralsSpec : Spek({
         }
     }
 
+    describe("a property named serialVersionUID in a companion object inside a serializable class") {
+
+        it("does not report a negative serialVersionUID number") {
+            val code = """
+                class Test : Serializable {
+                    companion object {
+                        private const val serialVersionUID = -43857148126114372L
+                    }
+                }"""
+            val findings = UnderscoresInNumericLiterals().lint(code)
+            assertThat(findings).hasSize(0)
+        }
+
+        it("does not report a positive serialVersionUID number") {
+            val code = """
+                class Test : Serializable {
+                    companion object {
+                        private const val serialVersionUID = 43857148126114372L
+                    }
+                }"""
+            val findings = UnderscoresInNumericLiterals().lint(code)
+            assertThat(findings).hasSize(0)
+        }
+    }
+
+    describe("a property named serialVersionUID number in a serializable class") {
+
+        it("does not report a negative serialVersionUID number") {
+            val code = """
+                class Test : Serializable {
+                    private const val serialVersionUID = -43857148126114372L
+                }
+            """
+            val findings = UnderscoresInNumericLiterals().lint(code)
+            assertThat(findings).hasSize(0)
+        }
+
+        it("does not report a positive serialVersionUID number") {
+            val code = """
+                class Test : Serializable {
+                    private const val serialVersionUID = 43857148126114372L
+                }
+            """
+            val findings = UnderscoresInNumericLiterals().lint(code)
+            assertThat(findings).hasSize(0)
+        }
+    }
+
     describe("an Int of 10000") {
         val code = "val myInt = 10000"
 
