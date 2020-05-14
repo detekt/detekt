@@ -1,6 +1,6 @@
 @file:Suppress("DEPRECATION") // FIXME remove PsiCoreCommentImpl in IntelliJ 2020.3
 
-package io.gitlab.arturbosch.detekt.rules
+package io.github.detekt.metrics
 
 import org.jetbrains.kotlin.com.intellij.lang.ASTNode
 import org.jetbrains.kotlin.com.intellij.psi.PsiComment
@@ -39,7 +39,8 @@ fun ASTNode.tokenSequence(skipTreesOf: Set<Class<out PsiElement>>): Sequence<AST
     } while (queue.isNotEmpty())
 }
 
-fun KtElement.linesOfCode(inFile: KtFile = this.containingKtFile): Int = node.tokenSequence(comments)
+fun KtElement.linesOfCode(inFile: KtFile = this.containingKtFile): Int =
+    node.tokenSequence(comments)
         .map { it.line(inFile) }
         .distinct()
         .count()
@@ -47,17 +48,17 @@ fun KtElement.linesOfCode(inFile: KtFile = this.containingKtFile): Int = node.to
 fun ASTNode.line(inFile: KtFile) = DiagnosticUtils.getLineAndColumnInPsiFile(inFile, this.textRange).line
 
 private val comments: Set<Class<out PsiElement>> = setOf(
-        PsiWhiteSpace::class.java,
-        PsiWhiteSpaceImpl::class.java,
-        PsiComment::class.java,
-        PsiCommentImpl::class.java,
-        PsiCoreCommentImpl::class.java,
-        KDoc::class.java,
-        KDocImpl::class.java,
-        KDocElementImpl::class.java,
-        KDocElement::class.java,
-        KDocLink::class.java,
-        KDocSection::class.java,
-        KDocTag::class.java,
-        KDocName::class.java
+    PsiWhiteSpace::class.java,
+    PsiWhiteSpaceImpl::class.java,
+    PsiComment::class.java,
+    PsiCommentImpl::class.java,
+    PsiCoreCommentImpl::class.java,
+    KDoc::class.java,
+    KDocImpl::class.java,
+    KDocElementImpl::class.java,
+    KDocElement::class.java,
+    KDocLink::class.java,
+    KDocSection::class.java,
+    KDocTag::class.java,
+    KDocName::class.java
 )

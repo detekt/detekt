@@ -1,5 +1,6 @@
 package io.gitlab.arturbosch.detekt.rules.style.optional
 
+import io.github.detekt.metrics.linesOfCode
 import io.gitlab.arturbosch.detekt.api.CodeSmell
 import io.gitlab.arturbosch.detekt.api.Config
 import io.gitlab.arturbosch.detekt.api.Debt
@@ -7,7 +8,6 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.linesOfCode
 import org.jetbrains.kotlin.com.intellij.psi.PsiWhiteSpace
 import org.jetbrains.kotlin.psi.KtBlockExpression
 import org.jetbrains.kotlin.psi.KtDoWhileExpression
@@ -17,7 +17,7 @@ import org.jetbrains.kotlin.psi.KtWhileExpression
 import org.jetbrains.kotlin.psi.psiUtil.siblings
 
 private const val DESCRIPTION = "Multi-line loop was found that does not have braces. " +
-        "These should be added to improve readability."
+    "These should be added to improve readability."
 
 /**
  * This rule detects multi-line `for` and `while` loops which do not have braces.

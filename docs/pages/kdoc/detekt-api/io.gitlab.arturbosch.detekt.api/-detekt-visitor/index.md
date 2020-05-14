@@ -18,5 +18,4 @@ Guarantees a better looking name as the extended base class :).
 ### Inheritors
 
 | [BaseRule](../../io.gitlab.arturbosch.detekt.api.internal/-base-rule/index.html) | `abstract class BaseRule : `[`DetektVisitor`](./index.html)`, `[`Context`](../-context/index.html) |
-| [CyclomaticComplexity](../../io.gitlab.arturbosch.detekt.api.internal/-cyclomatic-complexity/index.html) | Counts the cyclomatic complexity of nodes.`class CyclomaticComplexity : `[`DetektVisitor`](./index.html) |
 
