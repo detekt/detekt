@@ -7,10 +7,11 @@ import io.gitlab.arturbosch.detekt.api.Entity
 import io.gitlab.arturbosch.detekt.api.Issue
 import io.gitlab.arturbosch.detekt.api.Rule
 import io.gitlab.arturbosch.detekt.api.Severity
-import io.gitlab.arturbosch.detekt.rules.safeAs
-import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.psi.KtConstantExpression
+import org.jetbrains.kotlin.psi.KtObjectDeclaration
+import org.jetbrains.kotlin.psi.KtPrefixExpression
 import org.jetbrains.kotlin.psi.KtProperty
+import org.jetbrains.kotlin.psi.psiUtil.containingClassOrObject
 import java.util.Locale
 
 /**
@@ -72,10 +73,19 @@ class UnderscoresInNumericLiterals(config: Config = Config.empty) : Rule(config)
     }
 
     private fun KtConstantExpression.isSerialUidProperty(): Boolean {
-        return parent.safeAs<KtProperty>()?.name == SERIAL_UID_PROPERTY_NAME &&
-                parent.parent.parent.safeAs<KtClassOrObject>()
-                        ?.superTypeListEntries
-                        ?.any { it.text == SERIALIZABLE } == true
+        val propertyElement = if (parent is KtPrefixExpression) parent?.parent else parent
+        val property = propertyElement as? KtProperty
+        return property != null && property.name == SERIAL_UID_PROPERTY_NAME && isSerializable(property)
+    }
+
+    private fun isSerializable(property: KtProperty): Boolean {
+        var containingClassOrObject = property.containingClassOrObject
+        if (containingClassOrObject is KtObjectDeclaration && containingClassOrObject.isCompanion()) {
+            containingClassOrObject = containingClassOrObject.containingClassOrObject
+        }
+        return containingClassOrObject
+            ?.superTypeListEntries
+            ?.any { it.text == SERIALIZABLE } == true
     }
 
     private fun normalizeForMatching(text: String): String {
