@@ -174,7 +174,7 @@ class CliArgs : Args {
     var jvmTarget: JvmTarget = JvmTarget.DEFAULT
 
     @Parameter(
-        names = ["--version"],
+        names = ["--version", "-v"],
         description = "Prints the detekt CLI version."
     )
     var showVersion: Boolean = false
