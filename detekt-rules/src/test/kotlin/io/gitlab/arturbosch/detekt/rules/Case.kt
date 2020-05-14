@@ -29,7 +29,6 @@ enum class Case(val file: String) {
     LoopWithTooManyJumpStatementsNegative("cases/LoopWithTooManyJumpStatementsNegative.kt"),
     LoopWithTooManyJumpStatementsPositive("cases/LoopWithTooManyJumpStatementsPositive.kt"),
     MayBeConstNegative("cases/MayBeConstNegative.kt"),
-    MandatoryBracesIfStatementsNegative("cases/MandatoryBracesIfStatementsNegative.kt"),
     MaxLineLength("/cases/MaxLineLength.kt"),
     MaxLineLengthSuppressed("/cases/MaxLineLengthSuppressed.kt"),
     MaxLineLengthWithLongComments("/cases/MaxLineLengthWithLongComments.kt"),
