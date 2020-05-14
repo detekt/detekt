@@ -6,15 +6,14 @@ fun mandatoryBracesIfStatementNegative() {
         println()
     }
 
-    if (true) {
+    if (true)
+    {
         println()
     }
 
     if (true) println()
 
-    if (true) {
-        println()
-    }
+    if (true) { println() }
 
     if (true) println() else println()
 

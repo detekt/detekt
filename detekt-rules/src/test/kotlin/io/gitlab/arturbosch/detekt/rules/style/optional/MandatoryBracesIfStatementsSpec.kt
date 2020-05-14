@@ -11,7 +11,7 @@ import org.spekframework.spek2.style.specification.describe
 class MandatoryBracesIfStatementsSpec : Spek({
     val subject by memoized { MandatoryBracesIfStatements(Config.empty) }
 
-    describe("reports multi-line if statements should have braces") {
+    describe("if statements which should have braces") {
 
         it("simple if") {
             val findings = subject.compileAndLint("""
@@ -109,11 +109,36 @@ class MandatoryBracesIfStatementsSpec : Spek({
         }
     }
 
-    describe("MandatoryBracesIfStatements rule") {
+    describe("if statements with braces") {
 
-        it("reports non multi-line if statements should have braces") {
-            val path = Case.MandatoryBracesIfStatementsNegative.path()
-            assertThat(subject.lint(path)).isEmpty()
+        it("does not report if statements with braces") {
+            val code = """
+                fun f() {
+                	if (true) {
+                		println()
+                	}
+                	if (true)
+                	{
+                		println()
+                	}
+                	if (true) { println() }
+                }
+            """
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+    }
+
+    describe("single-line if statements which don't need braces") {
+
+        it("does not report single-line if statements") {
+            val code = """
+                fun f() {
+                	if (true) println()
+                	if (true) println() else println()
+                	if (true) println() else if (false) println() else println()
+                }
+            """
+            assertThat(subject.compileAndLint(code)).isEmpty()
         }
     }
 })
