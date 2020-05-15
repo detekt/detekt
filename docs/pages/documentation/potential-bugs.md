@@ -162,7 +162,7 @@ fun apiCall(): String = System.getProperty("propertyName")
 ### IgnoredReturnValue
 
 The Kotlin compiler gives no warning for when a function which returns a value is called but its returned
-value is ignored.  This rule warns on instances where a function returns a value but that value is not
+value is ignored. This rule warns on instances where a function returns a value but that value is not
 used in any way.
 
 fun returnsValue() = 42
