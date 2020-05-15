@@ -90,5 +90,30 @@ class UnreachableCodeSpec : Spek({
             """
             assertThat(subject.compileAndLint(code)).isEmpty()
         }
+
+        it("does not report reachable code after if") {
+            val code = """
+                fun f(i: Int) {
+                    if (i == 0) {
+                        println()
+                    }
+                    throw IllegalArgumentException()
+                }
+            """
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
+
+        it("does not report reachable code in if body") {
+            val code = """
+                fun f(i: Int) {
+                    if (i == 0) {
+                        println(i)
+                        throw IllegalArgumentException()
+                    }
+                    println()
+                }
+            """
+            assertThat(subject.compileAndLint(code)).isEmpty()
+        }
     }
 })
