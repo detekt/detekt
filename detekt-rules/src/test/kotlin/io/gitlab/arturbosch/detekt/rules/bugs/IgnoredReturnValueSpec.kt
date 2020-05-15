@@ -97,14 +97,14 @@ object IgnoredReturnValueSpec : Spek({
 
         it("reports when an extension function which returns a value is called and the return is ignored") {
             val code = """
-                fun Byte.setLastBit(): Byte = this or 0x1
-                fun foo(b: Byte) {
-                    b.setLastBit()
+                fun Int.isTheAnswer(): Boolean = this == 42
+                fun foo(input: Int) {
+                    input.isTheAnswer()
                 }
             """.trimIndent()
             val findings = subject.compileAndLintWithContext(wrapper.env, code)
             assertThat(findings).hasSize(1)
-            assertThat(findings).hasSourceLocation(3, 7)
+            assertThat(findings).hasSourceLocation(3, 11)
         }
     }
 
