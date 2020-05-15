@@ -12,6 +12,7 @@ class RuleSetLocator(private val settings: ProcessingSettings) {
         ServiceLoader.load(RuleSetProvider::class.java, settings.pluginLoader)
             .mapNotNull { it.nullIfDefaultAndExcluded() }
             .toList()
+            .also { settings.debug { "Registered rule sets: $it" } }
 
     private fun RuleSetProvider.nullIfDefaultAndExcluded() =
         if (excludeDefaultRuleSets && this is DefaultRuleSetProvider) null else this
