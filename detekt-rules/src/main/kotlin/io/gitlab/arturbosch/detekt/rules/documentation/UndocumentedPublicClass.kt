@@ -60,9 +60,16 @@ class UndocumentedPublicClass(config: Config = Config.empty) : Rule(config) {
     }
 
     private fun reportIfUndocumented(element: KtClassOrObject) {
-        if (isPublicAndPublicInherited(element) && element.notEnumEntry() && element.docComment == null) {
-            report(CodeSmell(issue, Entity.from(element),
-                    "${element.nameAsSafeName} is missing required documentation."))
+        if (isPublicAndPublicInherited(element) &&
+            element.notEnumEntry() &&
+            element.docComment == null) {
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.atName(element),
+                    "${element.nameAsSafeName} is missing required documentation."
+                )
+            )
         }
     }
 

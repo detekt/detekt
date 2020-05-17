@@ -54,7 +54,7 @@ class ObjectPropertyNamingSpec : Spek({
                     ${PublicConst.positive}
                 }
             """
-            assertThat(subject.compileAndLint(code)).hasSourceLocation(2, 5)
+            assertThat(subject.compileAndLint(code)).hasSourceLocation(2, 15)
         }
     }
 
@@ -114,7 +114,7 @@ class ObjectPropertyNamingSpec : Spek({
                     }
                 }
             """
-            assertThat(subject.compileAndLint(code)).hasSourceLocation(3, 9)
+            assertThat(subject.compileAndLint(code)).hasSourceLocation(3, 19)
         }
     }
 

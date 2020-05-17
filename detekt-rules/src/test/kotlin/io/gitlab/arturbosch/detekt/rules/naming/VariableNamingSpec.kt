@@ -21,9 +21,9 @@ class VariableNamingSpec : Spek({
             """
             assertThat(VariableNaming().compileAndLint(code))
                 .hasSourceLocations(
-                    SourceLocation(2, 5),
-                    SourceLocation(3, 5),
-                    SourceLocation(4, 5)
+                    SourceLocation(2, 17),
+                    SourceLocation(3, 9),
+                    SourceLocation(4, 9)
                 )
         }
 
@@ -68,8 +68,8 @@ class VariableNamingSpec : Spek({
             val config = TestConfig(mapOf(IGNORE_OVERRIDDEN to "false"))
             assertThat(VariableNaming(config).compileAndLint(code))
                 .hasSourceLocations(
-                    SourceLocation(2, 5),
-                    SourceLocation(5, 5)
+                    SourceLocation(2, 18),
+                    SourceLocation(5, 18)
                 )
         }
     }

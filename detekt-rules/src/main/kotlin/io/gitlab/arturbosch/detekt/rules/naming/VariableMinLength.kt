@@ -18,12 +18,15 @@ import org.jetbrains.kotlin.resolve.calls.util.isSingleUnderscore
  */
 class VariableMinLength(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName,
-            Severity.Style,
-            "Variable names should not be shorter than the minimum defined in the configuration.",
-            debt = Debt.FIVE_MINS)
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Style,
+        "Variable names should not be shorter than the minimum defined in the configuration.",
+        debt = Debt.FIVE_MINS
+    )
+
     private val minimumVariableNameLength =
-            valueOrDefault(MINIMUM_VARIABLE_NAME_LENGTH, DEFAULT_MINIMUM_VARIABLE_NAME_LENGTH)
+        valueOrDefault(MINIMUM_VARIABLE_NAME_LENGTH, DEFAULT_MINIMUM_VARIABLE_NAME_LENGTH)
 
     override fun visitProperty(property: KtProperty) {
         if (property.isSingleUnderscore) {
@@ -31,10 +34,13 @@ class VariableMinLength(config: Config = Config.empty) : Rule(config) {
         }
 
         if (property.identifierName().length < minimumVariableNameLength) {
-            report(CodeSmell(
+            report(
+                CodeSmell(
                     issue,
-                    Entity.from(property),
-                    message = "Variable names should be at least $minimumVariableNameLength characters long."))
+                    Entity.atName(property),
+                    message = "Variable names should be at least $minimumVariableNameLength characters long."
+                )
+            )
         }
     }
 

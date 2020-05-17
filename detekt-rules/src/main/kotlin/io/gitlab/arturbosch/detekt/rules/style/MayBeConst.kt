@@ -73,7 +73,13 @@ class MayBeConst(config: Config = Config.empty) : Rule(config) {
         super.visitProperty(property)
 
         if (property.canBeConst()) {
-            report(CodeSmell(issue, Entity.from(property), "${property.nameAsSafeName} can be a `const val`."))
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.atName(property),
+                    "${property.nameAsSafeName} can be a `const val`."
+                )
+            )
         }
     }
 

@@ -54,7 +54,7 @@ class LibraryCodeMustSpecifyReturnType(config: Config = Config.empty) : Rule(con
         if (!property.isLocal && property.isPublic && property.typeReference == null) {
             report(CodeSmell(
                 issue,
-                Entity.from(property),
+                Entity.atName(property),
                 "Library property '${property.nameAsSafeName}' without explicit return type."
             ))
         }

@@ -17,19 +17,25 @@ import org.jetbrains.kotlin.psi.KtProperty
  */
 class VariableMaxLength(config: Config = Config.empty) : Rule(config) {
 
-    override val issue = Issue(javaClass.simpleName,
-            Severity.Style,
-            "Variable names should not be longer than the maximum set in the configuration.",
-            debt = Debt.FIVE_MINS)
+    override val issue = Issue(
+        javaClass.simpleName,
+        Severity.Style,
+        "Variable names should not be longer than the maximum set in the configuration.",
+        debt = Debt.FIVE_MINS
+    )
+
     private val maximumVariableNameLength =
-            valueOrDefault(MAXIMUM_VARIABLE_NAME_LENGTH, DEFAULT_MAXIMUM_VARIABLE_NAME_LENGTH)
+        valueOrDefault(MAXIMUM_VARIABLE_NAME_LENGTH, DEFAULT_MAXIMUM_VARIABLE_NAME_LENGTH)
 
     override fun visitProperty(property: KtProperty) {
         if (property.identifierName().length > maximumVariableNameLength) {
-            report(CodeSmell(
+            report(
+                CodeSmell(
                     issue,
-                    Entity.from(property),
-                    message = "Variable names should be at most $maximumVariableNameLength characters long."))
+                    Entity.atName(property),
+                    message = "Variable names should be at most $maximumVariableNameLength characters long."
+                )
+            )
         }
     }
 
