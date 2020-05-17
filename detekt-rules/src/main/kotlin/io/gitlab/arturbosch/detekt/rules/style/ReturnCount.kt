@@ -77,11 +77,14 @@ class ReturnCount(config: Config = Config.empty) : Rule(config) {
             val numberOfReturns = countReturnStatements(function)
 
             if (numberOfReturns > max) {
-                report(CodeSmell(
-                    issue,
-                    Entity.from(function),
-                    "Function ${function.name} has $numberOfReturns return statements which exceeds the limit of $max."
-                ))
+                report(
+                    CodeSmell(
+                        issue,
+                        Entity.atName(function),
+                        "Function ${function.name} has $numberOfReturns return statements " +
+                            "which exceeds the limit of $max."
+                    )
+                )
             }
         }
     }

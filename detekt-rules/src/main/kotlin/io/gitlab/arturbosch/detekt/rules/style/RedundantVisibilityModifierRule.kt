@@ -34,12 +34,15 @@ import org.jetbrains.kotlin.psi.KtProperty
  * </compliant>
  */
 class RedundantVisibilityModifierRule(config: Config = Config.empty) : Rule(config) {
-    override val issue: Issue = Issue("RedundantVisibilityModifierRule",
-            Severity.Style,
-            "Checks for redundant visibility modifiers. " +
-                    "Public is the default visibility for classes. " +
-                    "The public modifier is redundant.",
-            Debt.FIVE_MINS)
+
+    override val issue: Issue = Issue(
+        "RedundantVisibilityModifierRule",
+        Severity.Style,
+        "Checks for redundant visibility modifiers. " +
+            "Public is the default visibility for classes. " +
+            "The public modifier is redundant.",
+        Debt.FIVE_MINS
+    )
 
     private val classVisitor = ClassVisitor()
     private val childrenVisitor = ChildrenVisitor()
@@ -60,10 +63,13 @@ class RedundantVisibilityModifierRule(config: Config = Config.empty) : Rule(conf
         override fun visitClass(klass: KtClass) {
             super.visitClass(klass)
             if (klass.isExplicitlyPublic()) {
-                report(CodeSmell(issue,
-                        Entity.from(klass),
+                report(
+                    CodeSmell(
+                        issue,
+                        Entity.atName(klass),
                         message = "${klass.name} is explicitly marked as public. " +
-                                "Public is the default visibility for classes. The public modifier is redundant.")
+                            "Public is the default visibility for classes. The public modifier is redundant."
+                    )
                 )
             }
         }
@@ -73,10 +79,12 @@ class RedundantVisibilityModifierRule(config: Config = Config.empty) : Rule(conf
         override fun visitNamedFunction(function: KtNamedFunction) {
             super.visitNamedFunction(function)
             if (function.isExplicitlyPublicNotOverridden()) {
-                report(CodeSmell(issue,
-                        Entity.from(function),
+                report(
+                    CodeSmell(issue,
+                        Entity.atName(function),
                         message = "${function.name} is explicitly marked as public. " +
-                                "Functions are public by default so this modifier is redundant.")
+                            "Functions are public by default so this modifier is redundant."
+                    )
                 )
             }
         }
@@ -84,10 +92,13 @@ class RedundantVisibilityModifierRule(config: Config = Config.empty) : Rule(conf
         override fun visitProperty(property: KtProperty) {
             super.visitProperty(property)
             if (property.isExplicitlyPublicNotOverridden()) {
-                report(CodeSmell(issue,
-                        Entity.from(property),
+                report(
+                    CodeSmell(
+                        issue,
+                        Entity.atName(property),
                         message = "${property.name} is explicitly marked as public. " +
-                                "Properties are public by default so this modifier is redundant.")
+                            "Properties are public by default so this modifier is redundant."
+                    )
                 )
             }
         }

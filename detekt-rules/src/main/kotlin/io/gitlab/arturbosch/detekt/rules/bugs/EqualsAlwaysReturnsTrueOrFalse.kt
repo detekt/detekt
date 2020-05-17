@@ -50,8 +50,13 @@ class EqualsAlwaysReturnsTrueOrFalse(config: Config = Config.empty) : Rule(confi
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (function.isEqualsFunction() && function.returnsBooleanConstant()) {
-            report(CodeSmell(issue, Entity.from(function), "This equals function always returns the same " +
-                    "result regardless of the input parameters."))
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.atName(function),
+                    "This equals function always returns the same " +
+                        "result regardless of the input parameters."
+                ))
         }
     }
 

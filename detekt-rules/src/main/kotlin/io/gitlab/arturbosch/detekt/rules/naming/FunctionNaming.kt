@@ -45,12 +45,14 @@ class FunctionNaming(config: Config = Config.empty) : Rule(config) {
         }
 
         if (!function.isContainingExcludedClassOrObject(excludeClassPattern) &&
-                !function.identifierName().matches(functionPattern) &&
-                function.identifierName() != function.typeReference?.name) {
-            report(CodeSmell(
+            !function.identifierName().matches(functionPattern) &&
+            function.identifierName() != function.typeReference?.name) {
+            report(
+                CodeSmell(
                     issue,
-                    Entity.from(function),
-                    message = "Function names should match the pattern: $functionPattern"))
+                    Entity.atName(function),
+                    message = "Function names should match the pattern: $functionPattern")
+            )
         }
     }
 

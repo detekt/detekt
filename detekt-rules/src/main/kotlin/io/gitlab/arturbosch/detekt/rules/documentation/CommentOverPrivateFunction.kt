@@ -30,8 +30,13 @@ class CommentOverPrivateFunction(config: Config = Config.empty) : Rule(config) {
 
     override fun visitNamedFunction(function: KtNamedFunction) {
         if (function.hasCommentInPrivateMember()) {
-            report(CodeSmell(issue, Entity.from(function), "The function ${function.nameAsSafeName} " +
-                    "has a comment. Prefer renaming the function giving it a more self-explanatory name."))
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.atName(function),
+                    "The function ${function.nameAsSafeName} " +
+                        "has a comment. Prefer renaming the function giving it a more self-explanatory name."
+                ))
         }
     }
 }

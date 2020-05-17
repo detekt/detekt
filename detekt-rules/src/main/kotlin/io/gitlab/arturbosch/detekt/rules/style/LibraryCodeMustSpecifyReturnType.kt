@@ -62,12 +62,16 @@ class LibraryCodeMustSpecifyReturnType(config: Config = Config.empty) : Rule(con
     }
 
     override fun visitNamedFunction(function: KtNamedFunction) {
-        if (!function.isLocal && function.isPublic && function.hasExpressionBodyWithoutExplicitReturnType()) {
-            report(CodeSmell(
-                issue,
-                Entity.from(function),
-                "Library function '${function.nameAsSafeName}' without explicit return type."
-            ))
+        if (!function.isLocal &&
+            function.isPublic &&
+            function.hasExpressionBodyWithoutExplicitReturnType()) {
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.atName(function),
+                    "Library function '${function.nameAsSafeName}' without explicit return type."
+                )
+            )
         }
         super.visitNamedFunction(function)
     }

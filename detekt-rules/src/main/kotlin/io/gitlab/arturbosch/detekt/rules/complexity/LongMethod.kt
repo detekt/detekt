@@ -47,11 +47,15 @@ class LongMethod(
     override fun postVisit(root: KtFile) {
         for ((function, lines) in functionToLinesCache) {
             if (lines >= threshold) {
-                report(ThresholdedCodeSmell(issue,
-                        Entity.from(function.nameIdentifier!!),
+                report(
+                    ThresholdedCodeSmell(
+                        issue,
+                        Entity.atName(function),
                         Metric("SIZE", lines, threshold),
                         "The function ${function.nameAsSafeName} is too long ($lines). " +
-                                "The maximum length is $threshold."))
+                            "The maximum length is $threshold."
+                    )
+                )
             }
         }
     }

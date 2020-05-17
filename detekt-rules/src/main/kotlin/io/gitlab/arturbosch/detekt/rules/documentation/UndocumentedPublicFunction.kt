@@ -27,8 +27,13 @@ class UndocumentedPublicFunction(config: Config = Config.empty) : Rule(config) {
         if (function.funKeyword == null && function.isLocal) return
 
         if (function.docComment == null && function.shouldBeDocumented()) {
-            report(CodeSmell(issue, Entity.from(function),
-                "The function ${function.nameAsSafeName} is missing documentation."))
+            report(
+                CodeSmell(
+                    issue,
+                    Entity.atName(function),
+                    "The function ${function.nameAsSafeName} is missing documentation."
+                )
+            )
         }
     }
 
