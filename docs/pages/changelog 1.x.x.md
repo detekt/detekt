@@ -6,6 +6,25 @@ permalink: changelog.html
 toc: true
 ---
 
+#### 1.9.1
+
+##### Changelog
+
+- Add negative tests to UnreachableCode rule - [#2697](https://github.com/detekt/detekt/pull/2697)
+- Inline test cases of CollapsibleIfStatements - [#2696](https://github.com/detekt/detekt/pull/2696)
+- Inline unreachable code - [#2695](https://github.com/detekt/detekt/pull/2695)
+- Fix wrong test cases for CollapsibleIfs rule - [#2694](https://github.com/detekt/detekt/pull/2694)
+- Print loaded rule set classes on debug - [#2691](https://github.com/detekt/detekt/pull/2691)
+- Fix wrong test cases for MandatoryBracesIfStatements - [#2689](https://github.com/detekt/detekt/pull/2689)
+- Simplify LongParameterList tests - [#2688](https://github.com/detekt/detekt/pull/2688)
+- Fix serialVersionUID false positive in UnderscoresInNumericLiteral - [#2687](https://github.com/detekt/detekt/pull/2687)
+- False positive UnderscoresInNumericLiterals in Serializable - [#2686](https://github.com/detekt/detekt/issues/2686)
+- Report a better message for LongParameterList - [#2685](https://github.com/detekt/detekt/pull/2685)
+- Report a better message for LongParameterList - [#2684](https://github.com/detekt/detekt/pull/2684)
+- Test against the newest Java version - [#2682](https://github.com/detekt/detekt/pull/2682)
+
+See all issues at: [1.9.1](https://github.com/detekt/detekt/milestone/66)
+
 #### 1.9.0
 
 ##### Changelog
