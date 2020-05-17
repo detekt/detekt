@@ -1,6 +1,6 @@
 object Versions {
 
-    const val DETEKT: String = "1.9.0"
+    const val DETEKT: String = "1.9.1"
     const val JVM_TARGET: String = "1.8"
     const val ASSERTJ: String = "3.15.0"
     const val SPEK: String = "2.0.10"
