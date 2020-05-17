@@ -59,7 +59,7 @@ class TooManyFunctions(config: Config = Config.empty) : Rule(config) {
         super.visitKtFile(file)
         if (amountOfTopLevelFunctions >= thresholdInFiles) {
             report(ThresholdedCodeSmell(issue,
-                    Entity.from(file),
+                    Entity.atPackageOrFirstDecl(file),
                     Metric("SIZE", amountOfTopLevelFunctions, thresholdInFiles),
                     "File '${file.name}' with '$amountOfTopLevelFunctions' functions detected. " +
                             "Defined threshold inside files is set to '$thresholdInFiles'"))
